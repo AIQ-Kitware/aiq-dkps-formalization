@@ -42,7 +42,6 @@ spectral one is `ℂ`-only, so it also carries the real-scalar surface in
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 section ComplexGeneralized
@@ -440,6 +439,5 @@ end SpectralPackages
 
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

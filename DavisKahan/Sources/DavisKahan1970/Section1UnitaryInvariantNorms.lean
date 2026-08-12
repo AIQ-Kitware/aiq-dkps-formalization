@@ -195,7 +195,7 @@ theorem equation1_12 (K : E →L[ℂ] F) {ν : ℕ}
         = ∑ i, ⟪u i, (ι ∘L K) (v i)⟫_ℂ :=
       Finset.sum_congr rfl fun i _ => by
         simp only [ContinuousLinearMap.comp_apply, hfix i]
-    have hle := DavisKahan.Experimental.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge
+    have hle := DavisKahan.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge
       ((ι ∘L K) ∘L (Submodule.span ℂ (Set.range v)).starProjection) hu hv
     rw [hpair] at hle
     have hcomp : kyFanApproximationGauge ν
@@ -243,7 +243,7 @@ theorem equation1_13_compressions (K : E →L[ℂ] F) {ν : ℕ}
       refine Finset.sum_congr rfl fun i _ => ?_
       simp only [ContinuousLinearMap.comp_apply, hfix i]
       rw [← Submodule.inner_starProjection_left_eq_right, hfixu i]
-    have hle := DavisKahan.Experimental.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge
+    have hle := DavisKahan.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge
       ((Submodule.span ℂ (Set.range u)).starProjection ∘L K ∘L
         (Submodule.span ℂ (Set.range v)).starProjection) hu hv
     rw [hpair] at hle
@@ -270,7 +270,7 @@ theorem equation1_13_reSum (K : E →L[ℂ] F) {ν : ℕ}
   obtain ⟨y, hy⟩ := hF
   constructor
   · rintro r ⟨v, u, hv, hu, rfl⟩
-    exact DavisKahan.Experimental.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge
+    exact DavisKahan.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge
       K hu hv
   · intro b hb
     refine le_of_forall_pos_le_add fun ε hε => ?_

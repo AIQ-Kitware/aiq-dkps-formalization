@@ -17,7 +17,6 @@ are still open and stay in
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -68,6 +67,5 @@ inductive CenteredIntervalExteriorWitness
           ContinuousLinearMap.id 𝕜 E))
       (hAnorm : ‖hA.inv‖ ≤ ((α - β) / 2 + δ)⁻¹)
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

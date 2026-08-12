@@ -65,7 +65,6 @@ open Filter
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactTanTheta
 
 open ExactSinTheta
@@ -854,6 +853,5 @@ theorem ideal_of_reducing_exists
 end UnboundedCompressionTrialData
 
 end ExactTanTheta
-end Experimental
 end DavisKahan
 end TauCeti

@@ -21,11 +21,10 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 universe v
 
@@ -116,6 +115,5 @@ theorem norm_tanTwoAngleOperatorC_apply_le_addBounded_of_intervalExterior
           (1 - 2 * directedGap U V ^ 2)) * ‖x‖ :=
       mul_le_mul_of_nonneg_right hop (norm_nonneg x)
 
-end Experimental
 end DavisKahan
 end TauCeti

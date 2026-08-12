@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.Section4
-import DavisKahan.Sources.DavisKahan1970.Section4BasisAngleEnergy
+import DavisKahan.Geometry.Angle.BasisAngleEnergy
 import DavisKahan.Geometry.Polar.DirectRotationReal
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
 
@@ -13,10 +13,10 @@ import DavisKahan.OperatorIdeal.ComplexificationApproximation
 
 Standing assumption 1 of the paper is that the Hilbert space is "real or
 complex", and Section 4 is written over an infinite orthonormal sequence, so its
-printed scope is a real *or* complex Hilbert space of arbitrary dimension.  The
-repository's infinite-dimensional Section 4 is proved over `ℂ`.  This module
-supplies the real half, in arbitrary dimension, with no loss of constant and with
-ideal membership concluded rather than assumed.
+printed scope is a real *or* complex Hilbert space of arbitrary dimension.
+This module supplies the real Section 4 statements in arbitrary dimension, with
+the same constants as the complex forms and with ideal membership concluded by
+the corresponding dominance theorem.
 
 ## Why no new analysis is needed
 
@@ -60,11 +60,11 @@ namespace TauCeti
 namespace DavisKahan1970
 
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
-open TauCeti.DavisKahan.Experimental.ExactSinTheta.ComplexificationApproximation
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -84,16 +84,16 @@ complexification of the real restricted displacement. -/
 theorem complexify_restrictedDisplacement (W : E →L[ℝ] E) :
     complexify ((1 - W) ∘L DavisKahan.projection U) =
       (1 - complexify W) ∘L DavisKahan.projection (complexifySubmodule U) := by
-  rw [complexify_comp, complexify_sub, Experimental.complexify_one,
-    Experimental.complexify_projection]
+  rw [complexify_comp, complexify_sub, TauCeti.DavisKahan.complexify_one,
+    TauCeti.DavisKahan.complexify_projection]
 
 /-- The squared full displacement of a complexified operator is the
 complexification of the real one. -/
 theorem complexify_displacementSquare (W : E →L[ℝ] E) :
     complexify ((1 - star W) * (1 - W)) =
       (1 - star (complexify W)) * (1 - complexify W) := by
-  rw [Experimental.complexify_mul, complexify_sub, complexify_sub, Experimental.complexify_one,
-    Experimental.complexify_star]
+  rw [TauCeti.DavisKahan.complexify_mul, complexify_sub, complexify_sub, TauCeti.DavisKahan.complexify_one,
+    TauCeti.DavisKahan.complexify_star]
 
 omit [CompleteSpace E] in
 /-- A real intertwining relation complexifies. -/
@@ -101,8 +101,8 @@ theorem complexify_intertwines {W : E →L[ℝ] E}
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
     complexify W * DavisKahan.projection (complexifySubmodule U) =
       DavisKahan.projection (complexifySubmodule V) * complexify W := by
-  rw [← Experimental.complexify_projection, ← Experimental.complexify_projection,
-    ← Experimental.complexify_mul, ← Experimental.complexify_mul, hWmap]
+  rw [← TauCeti.DavisKahan.complexify_projection, ← TauCeti.DavisKahan.complexify_projection,
+    ← TauCeti.DavisKahan.complexify_mul, ← TauCeti.DavisKahan.complexify_mul, hWmap]
 
 /-! ### Proposition 4.1 -/
 
@@ -117,15 +117,15 @@ theorem Proposition4_1_real (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) (n : ℕ) :
     ContinuousLinearMap.approximationNumber
-        ((1 - Experimental.directRotationR U V hacute) ∘L DavisKahan.projection U) n ≤
+        ((1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L DavisKahan.projection U) n ≤
       ContinuousLinearMap.approximationNumber ((1 - W) ∘L DavisKahan.projection U) n := by
   rw [← approximationNumber_complexify, ← approximationNumber_complexify,
     complexify_restrictedDisplacement, complexify_restrictedDisplacement,
-    Experimental.complexify_directRotationR]
-  exact MathAhead.Section4.proposition4_1_restrictedDisplacement_approximationNumbers_scratch
+    TauCeti.DavisKahan.complexify_directRotationR]
+  exact TauCeti.DavisKahan.Section4.proposition4_1_restrictedDisplacement_approximationNumbers
     (complexifySubmodule U) (complexifySubmodule V)
-    (Experimental.isUniformlyAcute_complexifySubmodule U V hacute) (complexify W)
-    (Experimental.complexify_mem_unitary hWunitary)
+    (TauCeti.DavisKahan.isUniformlyAcute_complexifySubmodule U V hacute) (complexify W)
+    (TauCeti.DavisKahan.complexify_mem_unitary hWunitary)
     (complexify_intertwines U V hWmap) n
 
 /-- The Proposition 4.1 certificate for a real pair, in the shape the ideal
@@ -133,8 +133,8 @@ bridge consumes. -/
 theorem restrictedDisplacementDominance_real (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
-    MathAhead.Section4.RestrictedDisplacementApproximationDominance
-      ((1 - Experimental.directRotationR U V hacute) ∘L DavisKahan.projection U)
+    TauCeti.DavisKahan.Section4.RestrictedDisplacementApproximationDominance
+      ((1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L DavisKahan.projection U)
       ((1 - W) ∘L DavisKahan.projection U) where
   approximation_le n := Proposition4_1_real U V hacute W hWunitary hWmap n
 
@@ -152,19 +152,19 @@ theorem Corollary4_1_real (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
     (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
-    N.Mem ((1 - Experimental.directRotationR U V hacute) ∘L DavisKahan.projection U) ∧
-      N.gauge ((1 - Experimental.directRotationR U V hacute) ∘L DavisKahan.projection U) ≤
+    N.Mem ((1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L DavisKahan.projection U) ∧
+      N.gauge ((1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L DavisKahan.projection U) ≤
         N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
-  MathAhead.Section4.restrictedDisplacement_idealGauge_le N
+  TauCeti.DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
     (restrictedDisplacementDominance_real U V hacute W hWunitary hWmap) hWmem
 
 /-- The operator-norm specialization of Corollary 4.1 over `ℝ`. -/
 theorem Corollary4_1_opNorm_real (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
-    ‖(1 - Experimental.directRotationR U V hacute) ∘L DavisKahan.projection U‖ ≤
+    ‖(1 - TauCeti.DavisKahan.directRotationR U V hacute) ∘L DavisKahan.projection U‖ ≤
       ‖(1 - W) ∘L DavisKahan.projection U‖ :=
-  MathAhead.Section4.restrictedDisplacement_opNorm_le
+  TauCeti.DavisKahan.Section4.restrictedDisplacement_opNorm_le
     (restrictedDisplacementDominance_real U V hacute W hWunitary hWmap)
 
 /-! ### Proposition 4.2 -/
@@ -178,9 +178,9 @@ omit [CompleteSpace E] in
 /-- The real displacement-angle cost is the complex one evaluated on the real
 copy. -/
 theorem displacementAngleSineSq_complexify (W : E →L[ℝ] E) (x : E) :
-    MathAhead.Section4.displacementAngleSineSq (complexify W) (ofReal x) =
+    TauCeti.DavisKahan.Section4.displacementAngleSineSq (complexify W) (ofReal x) =
       displacementAngleSineSqR W x := by
-  rw [MathAhead.Section4.displacementAngleSineSq, displacementAngleSineSqR, complexify_ofReal,
+  rw [TauCeti.DavisKahan.Section4.displacementAngleSineSq, displacementAngleSineSqR, complexify_ofReal,
     inner_ofReal]
   norm_num
 
@@ -190,16 +190,16 @@ theorem displacementAngleSineSq_ge_real
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
     {x : E} (hx : x ∈ U) (hxnorm : ‖x‖ = 1) :
-    1 - ‖Experimental.canonicalAbsoluteValueR U V x‖ ^ 2 ≤
+    1 - ‖TauCeti.DavisKahan.canonicalAbsoluteValueR U V x‖ ^ 2 ≤
       displacementAngleSineSqR W x := by
-  have h := MathAhead.Section4.displacementAngleSineSq_ge
+  have h := TauCeti.DavisKahan.Section4.displacementAngleSineSq_ge
     (complexifySubmodule U) (complexifySubmodule V)
-    (complexify W) (Experimental.complexify_mem_unitary hWunitary)
+    (complexify W) (TauCeti.DavisKahan.complexify_mem_unitary hWunitary)
     (complexify_intertwines U V hWmap)
     ((ofReal_mem_complexifySubmodule_iff U x).2 hx)
     (by rw [ofReal.norm_map]; exact hxnorm)
   rwa [displacementAngleSineSq_complexify,
-    ← Experimental.complexify_canonicalAbsoluteValueR, complexify_ofReal,
+    ← TauCeti.DavisKahan.complexify_canonicalAbsoluteValueR, complexify_ofReal,
     ofReal.norm_map] at h
 
 /-- **Davis--Kahan 1970, Proposition 4.2 over a real Hilbert space**, on an
@@ -211,7 +211,7 @@ theorem sum_displacementAngleSineSq_ge_of_mem_real
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
     {ι : Type*} (b : ι → E) (hb : ∀ i, b i ∈ U) (hbnorm : ∀ i, ‖b i‖ = 1)
     (s : Finset ι) :
-    ∑ i ∈ s, (1 - ‖Experimental.canonicalAbsoluteValueR U V (b i)‖ ^ 2) ≤
+    ∑ i ∈ s, (1 - ‖TauCeti.DavisKahan.canonicalAbsoluteValueR U V (b i)‖ ^ 2) ≤
       ∑ i ∈ s, displacementAngleSineSqR W (b i) :=
   Finset.sum_le_sum fun i _ =>
     displacementAngleSineSq_ge_real U V W hWunitary hWmap (hb i) (hbnorm i)
@@ -223,7 +223,7 @@ theorem tsum_displacementAngleSineSq_ge_of_mem_real
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
     {ι : Type*} (b : ι → E) (hb : ∀ i, b i ∈ U) (hbnorm : ∀ i, ‖b i‖ = 1) :
-    ∑' i, ENNReal.ofReal (1 - ‖Experimental.canonicalAbsoluteValueR U V (b i)‖ ^ 2) ≤
+    ∑' i, ENNReal.ofReal (1 - ‖TauCeti.DavisKahan.canonicalAbsoluteValueR U V (b i)‖ ^ 2) ≤
       ∑' i, ENNReal.ofReal (displacementAngleSineSqR W (b i)) :=
   ENNReal.tsum_le_tsum fun i =>
     ENNReal.ofReal_le_ofReal
@@ -252,12 +252,12 @@ This is `norm_absoluteValue_apply_eq_norm_projection` read on the real copy: the
 complexified real modulus is the modulus of the complexified pair, and both the
 projection and the vector complexify isometrically. -/
 theorem norm_canonicalAbsoluteValueR_apply_eq_norm_projection {x : E} (hx : x ∈ U) :
-    ‖Experimental.canonicalAbsoluteValueR U V x‖ = ‖DavisKahan.projection V x‖ := by
-  have h := MathAhead.Section4.norm_absoluteValue_apply_eq_norm_projection
+    ‖TauCeti.DavisKahan.canonicalAbsoluteValueR U V x‖ = ‖DavisKahan.projection V x‖ := by
+  have h := TauCeti.DavisKahan.Section4.norm_absoluteValue_apply_eq_norm_projection
     (complexifySubmodule U) (complexifySubmodule V)
     ((ofReal_mem_complexifySubmodule_iff U x).2 hx)
-  rw [← Experimental.complexify_canonicalAbsoluteValueR,
-    ← Experimental.complexify_projection, complexify_ofReal, complexify_ofReal,
+  rw [← TauCeti.DavisKahan.complexify_canonicalAbsoluteValueR,
+    ← TauCeti.DavisKahan.complexify_projection, complexify_ofReal, complexify_ofReal,
     ofReal.norm_map, ofReal.norm_map] at h
   exact h
 
@@ -271,16 +271,13 @@ with `C_ℝ` the real positive Halmos cosine and `sin θₖ` the principal sines
 `(U, V)` — the singular values of `P_{Vᗮ} P_U`.  In particular the left side does
 not depend on the basis, which is what the paper's basis-free statement asserts.
 
-This is **a narrowing** of `sum_displacementAngleSineSq_ge_of_mem_real`, which
-needs no finite dimensionality and accepts any index type: the principal-angle
-*sequence* is a finite-dimensional object, so the printed right-hand side can only
-be written once `E` is finite dimensional and the basis is indexed by
-`Fin (finrank ℝ U)`.  The inequality itself is unchanged and remains available in
-the general form. -/
+This is the finite-dimensional compatibility form of the arbitrary-dimensional
+identity `tsum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_tsum_sq_principalSineSequence`.
+It uses `TauCeti.principalSines` and a basis indexed by `Fin (finrank ℝ U)`. -/
 theorem sum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_sum_sq_principalSines
     [FiniteDimensional ℝ E]
     (b : OrthonormalBasis (Fin (Module.finrank ℝ U)) ℝ U) :
-    ∑ i, (1 - ‖Experimental.canonicalAbsoluteValueR U V ((b i : U) : E)‖ ^ 2) =
+    ∑ i, (1 - ‖TauCeti.DavisKahan.canonicalAbsoluteValueR U V ((b i : U) : E)‖ ^ 2) =
       ∑ i : Fin (Module.finrank ℝ U),
         TauCeti.principalSines U V (i : ℕ) ^ 2 := by
   rw [TauCeti.sum_sq_principalSines_eq_sum_one_sub_sq_norm_projection U V b]
@@ -297,10 +294,9 @@ For every orthonormal basis of `U` and every orthogonal `W` carrying `U` onto `V
 
   `∑ᵢ sin²(bᵢ, W bᵢ)  ≥  ∑ₖ sin² θₖ`.
 
-This is `sum_displacementAngleSineSq_ge_of_mem_real` composed with the
-identification `sum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_sum_sq_principalSines`;
-writing the right-hand side in the printed variables is **a narrowing** to finite
-dimensions, for the reason given on the identification lemma. -/
+This is the finite-dimensional compatibility form of
+`tsum_displacementAngleSineSqR_ge_tsum_sq_principalSineSequence`, expressed with
+the existing `TauCeti.principalSines` list. -/
 theorem sum_displacementAngleSineSqR_ge_sum_sq_principalSines
     [FiniteDimensional ℝ E]
     (b : OrthonormalBasis (Fin (Module.finrank ℝ U)) ℝ U) (W : E →L[ℝ] E)
@@ -315,6 +311,72 @@ theorem sum_displacementAngleSineSqR_ge_sum_sq_principalSines
   rw [h]
   exact b.orthonormal.1 i
 
+/-! ### Proposition 4.2 with the infinite principal-sine sequence -/
+
+/-- On a unit real source vector, the basis-free Proposition 4.2 summand is the
+squared norm of the directed sine operator. -/
+theorem ofReal_one_sub_sq_norm_canonicalAbsoluteValueR_eq_enorm_principalSineOperator
+    {x : E} (hx : x ∈ U) (hxnorm : ‖x‖ = 1) :
+    ENNReal.ofReal (1 - ‖TauCeti.DavisKahan.canonicalAbsoluteValueR U V x‖ ^ 2) =
+      ‖TauCeti.principalSineOperator U V ⟨x, hx⟩‖ₑ ^ 2 := by
+  have hC := norm_canonicalAbsoluteValueR_apply_eq_norm_projection U V hx
+  have hpy := V.norm_sq_eq_add_norm_sq_starProjection x
+  have hreal :
+      1 - ‖TauCeti.DavisKahan.canonicalAbsoluteValueR U V x‖ ^ 2 =
+        ‖Vᗮ.starProjection x‖ ^ 2 := by
+    rw [hxnorm, one_pow] at hpy
+    rw [hC]
+    linarith
+  rw [hreal, TauCeti.principalSineOperator_apply]
+  rw [← ofReal_norm, ← ENNReal.ofReal_pow (norm_nonneg _)]
+
+/-- For every Hilbert basis of a real source subspace, the basis-free energy in
+Proposition 4.2 is the squared principal-sine sequence, including the divergent
+case. -/
+theorem tsum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_tsum_sq_principalSineSequence
+    {ι : Type v} (b : HilbertBasis ι ℝ U) :
+    (∑' i, ENNReal.ofReal
+        (1 - ‖TauCeti.DavisKahan.canonicalAbsoluteValueR U V ((b i : U) : E)‖ ^ 2)) =
+      ∑' n : ℕ, ENNReal.ofReal (TauCeti.principalSineSequence U V n) ^ 2 := by
+  rw [TauCeti.tsum_sq_principalSineSequence_eq_tsum_enorm_projection U V b]
+  refine tsum_congr fun i => ?_
+  exact ofReal_one_sub_sq_norm_canonicalAbsoluteValueR_eq_enorm_principalSineOperator
+    U V (b i).property (b.orthonormal.1 i)
+
+/-- **Davis--Kahan 1970, Proposition 4.2 over a real Hilbert space, in arbitrary
+Hilbert dimension with the printed right-hand side.**
+
+The extended-real sums include the case where the sum of squared principal
+sines is infinite. -/
+theorem tsum_displacementAngleSineSqR_ge_tsum_sq_principalSineSequence
+    {ι : Type v} (b : HilbertBasis ι ℝ U) (W : E →L[ℝ] E)
+    (hWunitary : W ∈ unitary (E →L[ℝ] E))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (∑' n : ℕ, ENNReal.ofReal (TauCeti.principalSineSequence U V n) ^ 2) ≤
+      ∑' i, ENNReal.ofReal (displacementAngleSineSqR W ((b i : U) : E)) := by
+  rw [← tsum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_tsum_sq_principalSineSequence
+    U V b]
+  exact tsum_displacementAngleSineSq_ge_of_mem_real U V W hWunitary hWmap
+    (fun i => ((b i : U) : E)) (fun i => (b i).property)
+    (fun i => b.orthonormal.1 i)
+
+/-- **Davis--Kahan 1970, Proposition 4.2 over a real Hilbert space, literal
+principal-angle form.**
+
+For every Hilbert basis of `U` and every orthogonal `W` carrying `U` onto `V`,
+the total squared displacement sine dominates `∑ₙ sin² θₙ`.  The extended-real
+form includes a divergent right-hand side. -/
+theorem tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence
+    {ι : Type v} (b : HilbertBasis ι ℝ U) (W : E →L[ℝ] E)
+    (hWunitary : W ∈ unitary (E →L[ℝ] E))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (∑' n : ℕ, ENNReal.ofReal
+        (Real.sin (TauCeti.principalAngleSequence U V n)) ^ 2) ≤
+      ∑' i, ENNReal.ofReal (displacementAngleSineSqR W ((b i : U) : E)) := by
+  rw [TauCeti.tsum_sq_sin_principalAngleSequence_eq_tsum_sq_principalSineSequence]
+  exact tsum_displacementAngleSineSqR_ge_tsum_sq_principalSineSequence
+    U V b W hWunitary hWmap
+
 /-! ### Proposition 4.3 -/
 
 /-- **Davis--Kahan 1970, Proposition 4.3, over a real Hilbert space of arbitrary
@@ -328,16 +390,16 @@ theorem Proposition4_3_real (hacute : IsUniformlyAcute U V)
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) (k : ℕ) :
     kyFanApproximationGauge k
-        ((1 - star (Experimental.directRotationR U V hacute)) *
-          (1 - Experimental.directRotationR U V hacute)) ≤
+        ((1 - star (TauCeti.DavisKahan.directRotationR U V hacute)) *
+          (1 - TauCeti.DavisKahan.directRotationR U V hacute)) ≤
       kyFanApproximationGauge k ((1 - star W) * (1 - W)) := by
   rw [← kyFanApproximationGauge_complexify, ← kyFanApproximationGauge_complexify,
     complexify_displacementSquare, complexify_displacementSquare,
-    Experimental.complexify_directRotationR]
-  exact MathAhead.Section4.proposition4_3_squaredDisplacement_kyFan_scratch
+    TauCeti.DavisKahan.complexify_directRotationR]
+  exact TauCeti.DavisKahan.Section4.proposition4_3_squaredDisplacement_kyFan
     (complexifySubmodule U) (complexifySubmodule V)
-    (Experimental.isUniformlyAcute_complexifySubmodule U V hacute) (complexify W)
-    (Experimental.complexify_mem_unitary hWunitary)
+    (TauCeti.DavisKahan.isUniformlyAcute_complexifySubmodule U V hacute) (complexify W)
+    (TauCeti.DavisKahan.complexify_mem_unitary hWunitary)
     (complexify_intertwines U V hWmap) k
 
 /-- **Davis--Kahan 1970, Proposition 4.3 over a real Hilbert space of arbitrary
@@ -358,10 +420,10 @@ theorem Proposition4_3_real_idealGauge (N : KyFanDominantIdealFamily (𝕜 := �
     (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
     (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
     (hWmem : N.Mem ((1 - star W) * (1 - W))) :
-    N.Mem ((1 - star (Experimental.directRotationR U V hacute)) *
-        (1 - Experimental.directRotationR U V hacute)) ∧
-      N.gauge ((1 - star (Experimental.directRotationR U V hacute)) *
-          (1 - Experimental.directRotationR U V hacute)) ≤
+    N.Mem ((1 - star (TauCeti.DavisKahan.directRotationR U V hacute)) *
+        (1 - TauCeti.DavisKahan.directRotationR U V hacute)) ∧
+      N.gauge ((1 - star (TauCeti.DavisKahan.directRotationR U V hacute)) *
+          (1 - TauCeti.DavisKahan.directRotationR U V hacute)) ≤
         N.gauge ((1 - star W) * (1 - W)) :=
   N.majorization_mem_and_gauge_le hWmem
     (Proposition4_3_real U V hacute W hWunitary hWmap)

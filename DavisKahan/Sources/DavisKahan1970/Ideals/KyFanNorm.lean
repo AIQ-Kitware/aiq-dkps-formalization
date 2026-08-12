@@ -29,7 +29,6 @@ and using the existing zero-padding theorem for prefix sums.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
@@ -354,6 +353,5 @@ theorem all_mul_kyFan_le_of_every_paperNorm_gauge_le
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

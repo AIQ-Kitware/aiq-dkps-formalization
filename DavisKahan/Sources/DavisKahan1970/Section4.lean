@@ -4,49 +4,29 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.FiniteDimensional.DirectRotation
-import DavisKahan.MathAhead.Section4.All
+import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
+import DavisKahan.Geometry.Polar.DisplacementSquareExtremal
+import DavisKahan.Geometry.Angle.BasisAngleEnergy
 
 /-!
 # Davis--Kahan 1970, Section 4: extremal properties of the direct rotation
 
-Source-numbered names for the Section 4 results.  The mathematics is proved in
-`DavisKahan/FiniteDimensional/DirectRotation/`; this file only supplies statements carrying
-the paper's numbering, scope and hypotheses, so that the facade can cite them.
+Source-numbered names for the Section 4 results.  Section 4 inherits the
+matched-crossed-defect and compact-angle hypotheses of Theorem 3.1 and
+Corollary 3.1.  The source statements use infinite angle sequences and
+orthonormal bases; finite-dimensional aliases remain available as
+specializations.
 
-## Scope, stated honestly
+The arbitrary-dimensional complex API provides the approximation-number form
+of Proposition 4.1 for both the canonical acute direct rotation and a chosen
+matched-defect completion.  Proposition 4.2 uses the approximation-number
+principal-sine sequence of `P_{Vᗮ}|_U`, so its extended-real sum includes the
+case where the source right-hand side is infinite.  `Section4Real.lean` provides
+the corresponding real Proposition 4.2 statement and the established real
+Section 4 endpoints.
 
-**Corrected 2026-08-07.**  This docstring used to say that the finite-dimensional forms
-"is the scope Section 4 is written at".  That is not what the paper says.  Section 4 opens
-
-> We shall make the hypotheses of Theorem 3.1 and Corollary 3.1 (leaving to the reader the
-> modifications entailed in the absence of compactness).
-
-and then states its propositions over infinite orthonormal sequences `v₁, v₂, …` and
-infinite sums `∑_{k=1}^∞`.  So the printed scope is an arbitrary (separable) Hilbert space
-under Corollary 3.1's compactness hypothesis, with finite dimensionality only the special
-case that standing assumption 1 of Section 1 always allows.  The finite-dimensional aliases
-below are therefore *specializations*, not the source scope, and the infinite-dimensional
-aliases in the next section are the ones that carry the printed generality.
-
-Both infinite-dimensional modules were promoted out of `Experimental/` once their import
-closures became admission-free, so `lake build` guards them.  Proposition 4.2 is already
-stated at arbitrary Hilbert-space generality and lives in `Section4BasisAngleEnergy.lean`.
-The `Experimental` exposure through `DavisKahan/Experimental/Frontier/Section4.lean`
-remains, and that module still carries `sorry`s of its own.
-
-One axis is still open at source scope: every declaration here is over
-`InnerProductSpace ℂ`, while the paper's standing assumption 1 is "real or complex".  See
-the `real-scalar-infinite-dimensional-scope` blocker and the `scope_gap` fields on rows
-`DK-4.1-prop`, `DK-4.1-cor` and `DK-4.3-prop`.
-
-## Proposition 4.4 is excluded, and deliberately
-
-The published Proposition 4.4 asserts the same extremality for the **full** displacement
-`1 − W` rather than the restricted one.  This repository contains a compiled
-counterexample: an explicit competitor in `ℝ⁴` beats the direct rotation in trace norm
-(`shortRotation_fullDisplacement_refuted`, census row `DK-4.4-prop`).  Nothing in this file
-should be read as covering it, and anything phrased on the full displacement must be
-checked against that configuration.
+Proposition 4.4 is represented by its compiled counterexample, as required by
+the repository's source-coverage convention for a false printed claim.
 -/
 
 namespace TauCeti
@@ -94,22 +74,63 @@ alias Proposition4_3 := DavisKahanTheory.directRotation_displacementSquare_uiNor
 alias Proposition4_3_minimizer :=
   DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm
 
-/-! ## The printed infinite-dimensional scope
+/-! ## Infinite-dimensional source forms
 
-The aliases above are the finite-dimensional specializations.  These are the forms at the
-generality Section 4 is actually written at; see the scope note in the module docstring. -/
+The aliases above are finite-dimensional specializations.  The declarations
+below carry the arbitrary-dimensional source variables. -/
 
-/-- **Davis--Kahan 1970, Proposition 4.1, at the printed scope.**  In an arbitrary complex
-Hilbert space, for every unitary `W` carrying `U` onto `V`, every approximation number of
-the displacement restricted to `U` is minimized by the direct rotation.
-
-This is the printed statement — "among all such `V`, the singular values `λ₁ ≥ λ₂ ≥ ⋯` of
-`(1 − V)|_{PH}` are all minimized when `V = U`" — with approximation numbers standing in
-for singular values, which is the correct reading past the compact case.  It needs neither
-`[FiniteDimensional]` nor the compactness of `P Q̃ P`, so it is strictly more general than
-the hypotheses Section 4 inherits from Corollary 3.1. -/
+/-- **Davis--Kahan 1970, Proposition 4.1, acute arbitrary-dimensional form.**
+For every unitary `W` carrying `U` onto `V`, every approximation number of the
+restricted displacement is bounded below by the canonical acute direct
+rotation.  The chosen-defect declaration below carries the full nonacute scope
+of the paper. -/
 alias Proposition4_1_infiniteDimensional :=
-  DavisKahan.Experimental.MathAhead.Section4.proposition4_1_source_approximationNumbers
+  DavisKahan.Section4.proposition4_1_source_approximationNumbers
+
+
+/-- **Proposition 4.1 at the nonacute compact scope inherited from Corollary
+3.1.**  A crossed-defect isometry selects the direct rotation when `π/2`
+principal-angle blocks are present. -/
+alias Proposition4_1_infiniteDimensional_nonacute :=
+  DavisKahan.Section4.proposition4_1_nonacute_source_approximationNumbers
+
+section Corollary4_1Infinite
+
+open DavisKahan.ExactSinTheta (KyFanDominantIdealFamily)
+
+universe v
+
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- **Davis--Kahan 1970, Corollary 4.1 at the matched-crossed-defect scope.**
+Approximation-number minimality of a chosen direct rotation promotes to every
+Ky-Fan-dominant unitarily invariant ideal gauge. -/
+theorem Corollary4_1_infiniteDimensional_nonacute
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
+    N.Mem ((1 - DavisKahan.nonacuteDirectRotation
+          U V J) ∘L DavisKahan.projection U) ∧
+      N.gauge ((1 - DavisKahan.nonacuteDirectRotation
+          U V J) ∘L DavisKahan.projection U) ≤
+        N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
+  DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
+    (DavisKahan.Section4.nonacute_restrictedDisplacementDominance
+      U V J W hWunitary hWmap) hWmem
+
+end Corollary4_1Infinite
+
+/-- **Davis--Kahan 1970, Proposition 4.2, at the printed infinite-dimensional
+scope.**  The principal sines are the approximation numbers of
+`P_{Vᗮ}|_U`; the extended-real sum includes the case where the printed right
+side is infinite. -/
+alias Proposition4_2_infiniteDimensional :=
+  DavisKahan.Section4.tsum_displacementAngleSineSq_ge_tsum_sq_sin_principalAngleSequence
 
 /-- **Davis--Kahan 1970, Proposition 4.3, at the printed scope.**  In an arbitrary complex
 Hilbert space, the Ky Fan prefix sums of `(1 − W)⋆(1 − W)` are minimized by the direct
@@ -119,9 +140,9 @@ Ky Fan level is the honest scope here for the same reason as in `Proposition4_3_
 pointwise domination of the individual singular values would imply Proposition 4.4, which
 this repository refutes. -/
 alias Proposition4_3_infiniteDimensional :=
-  DavisKahan.Experimental.MathAhead.Section4.proposition4_3_squaredDisplacement_kyFan_scratch
+  DavisKahan.Section4.proposition4_3_squaredDisplacement_kyFan
 
-/-! ### Proposition 4.3 at the printed "every unitarily invariant norm" scope
+/-! ### Proposition 4.3 and unitarily invariant gauges
 
 The alias above stops at Ky Fan, which is where its proof stops.  The printed
 clause is about every unitarily invariant norm, and in infinite dimensions the
@@ -130,16 +151,15 @@ family, exactly as for Corollary 4.1.  The promotion is
 `KyFanDominantIdealFamily.majorization_mem_and_gauge_le`, whose hypothesis is
 the Ky Fan domination this alias supplies.
 
-**This is not pointwise domination and must never be replaced by it.**  Fan
-dominance constrains the *prefix sums* of the approximation numbers; the
-individual approximation numbers are not dominated, and asserting that they were
-would contradict this repository's compiled refutation of Proposition 4.4. -/
+Fan dominance constrains the prefix sums of the approximation numbers.  This is
+the source quantity used by the unitarily invariant gauge statement and is
+consistent with the compiled Proposition 4.4 counterexample. -/
 
 section IdealGauge
 
 open DavisKahan (IsUniformlyAcute)
-open DavisKahan.Experimental (spectraDirectRotation)
-open DavisKahan.Experimental.ExactSinTheta (KyFanDominantIdealFamily)
+open DavisKahan (spectraDirectRotation)
+open DavisKahan.ExactSinTheta (KyFanDominantIdealFamily)
 
 universe v
 

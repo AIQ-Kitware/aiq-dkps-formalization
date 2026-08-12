@@ -27,7 +27,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace TanTheta
 
 
@@ -182,6 +181,5 @@ theorem tanTheta_unbounded_graphAngle_trialBlock
   exact C.mul_norm_angularMap_le hδ (norm_nonneg D.residual) hvec
 
 end TanTheta
-end Experimental
 end DavisKahan
 end TauCeti

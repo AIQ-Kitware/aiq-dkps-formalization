@@ -19,7 +19,6 @@ namespace TauCeti
 
 open TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -390,6 +389,5 @@ theorem norm_add_opNorm_id_le_of_nonpos_direct
 
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

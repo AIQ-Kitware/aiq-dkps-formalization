@@ -52,7 +52,7 @@ open Set
 open scoped InnerProductSpace
 open DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.DavisKahan.Foundation
 open TauCeti.SpectralOrder.Complex
 
 noncomputable section
@@ -315,7 +315,7 @@ theorem theorem8_1_canonicalBranch
       exact hHP x hx
   have hquarter : IsQuarterAcute P Q := by
     have h : subspaceGap Pᗮ Qᗮ = subspaceGap P Q :=
-      TauCeti.DavisKahan.Experimental.subspaceGap_orthogonal P Q
+      TauCeti.DavisKahan.subspaceGap_orthogonal P Q
     show subspaceGap P Q < Real.sqrt 2 / 2
     rw [← h]
     exact hquarterPerp
@@ -413,12 +413,12 @@ theorem theorem8_1_eq_canonicalBranch_of_maximalAngle_le
   have hquarter : IsQuarterAcute P Q := hconc.quarter_acute
   have hquarterPerp : IsQuarterAcute Pᗮ Qᗮ := by
     show subspaceGap Pᗮ Qᗮ < Real.sqrt 2 / 2
-    rw [TauCeti.DavisKahan.Experimental.subspaceGap_orthogonal P Q]
+    rw [TauCeti.DavisKahan.subspaceGap_orthogonal P Q]
     exact hquarter
   have hgapM : subspaceGap P M ≤ Real.sqrt 2 / 2 :=
     (maximalAngle_le_pi_div_four_iff P M).1 hMangle
   have hgapMperp : subspaceGap Pᗮ Mᗮ ≤ Real.sqrt 2 / 2 := by
-    rw [TauCeti.DavisKahan.Experimental.subspaceGap_orthogonal P M]
+    rw [TauCeti.DavisKahan.subspaceGap_orthogonal P M]
     exact hgapM
   -- the branch projection
   set F : E →L[ℂ] E :=
@@ -564,7 +564,7 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
         exact hHP x hx
     have hquarter : IsQuarterAcute P M := by
       show subspaceGap P M < Real.sqrt 2 / 2
-      rw [← TauCeti.DavisKahan.Experimental.subspaceGap_orthogonal P M]
+      rw [← TauCeti.DavisKahan.subspaceGap_orthogonal P M]
       exact hquarterPerp
     exact le_of_lt ((maximalAngle_lt_pi_div_four_iff P M).2 hquarter)
 

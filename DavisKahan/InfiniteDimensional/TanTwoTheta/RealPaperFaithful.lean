@@ -76,8 +76,8 @@ namespace DavisKahan
 
 open scoped InnerProductSpace
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.Foundation.RealComplexification
+open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahanExt.Real
 

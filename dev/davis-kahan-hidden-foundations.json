@@ -10,107 +10,11 @@
   },
   "nodes": [
     {
-      "id": "polar-final-range",
-      "title": "Final range of the polar partial isometry",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIsometryFinal",
-      "file": "DavisKahan/Geometry/Polar/PolarIsometryFinal.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.polarFinalRange",
-      "kind": "construction",
-      "dependencies": [],
-      "frontier_nodes": [],
-      "confidence": "high",
-      "notes": ""
-    },
-    {
-      "id": "polar-final-surjective",
-      "title": "Polar partial isometry surjects onto its final range",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIsometryFinal",
-      "file": "DavisKahan/Geometry/Polar/PolarIsometryFinal.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.polarPartial_final_surjective",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "polar-final-range"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "polar-final-equivalence",
-      "title": "Initial-to-final polar isometric equivalence",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIsometryFinal",
-      "file": "DavisKahan/Geometry/Polar/PolarIsometryFinal.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.polarPartialFinalEquiv",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "polar-final-surjective"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "polar-final-projection",
-      "title": "Final projection identity for the polar isometry",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIsometryFinal",
-      "file": "DavisKahan/Geometry/Polar/PolarIsometryFinal.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.polarIsometry_comp_adjoint_self",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "polar-final-surjective"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "polar-adjoint-formula",
-      "title": "Adjoint formula for the bounded polar isometry",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIsometryFinal",
-      "file": "DavisKahan/Geometry/Polar/PolarIsometryFinal.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.adjoint_polarIsometry",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "polar-final-projection"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "polar-absolute-commutation",
-      "title": "Absolute value commutes with an intertwined projection",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIntertwining",
-      "file": "DavisKahan/Geometry/Polar/PolarIntertwining.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.absOp_commutes_of_projection_intertwining",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "polar-adjoint-formula"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "polar-intertwining",
-      "title": "Polar isometry inherits projection intertwinement",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.PolarIntertwining",
-      "file": "DavisKahan/Geometry/Polar/PolarIntertwining.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.polarIsometry_intertwines_of_projection_intertwining",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "polar-absolute-commutation"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
       "id": "orthogonal-sum-equivalence",
       "title": "Assemble isometries on complementary orthogonal summands",
       "module": "DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates",
       "file": "DavisKahan/Geometry/Polar/OrthogonalSummandCoordinates.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.orthogonalSumEquiv",
+      "declaration": "TauCeti.DavisKahan.orthogonalSumEquiv",
       "kind": "proof_candidate",
       "dependencies": [],
       "frontier_nodes": [],
@@ -118,107 +22,11 @@
       "notes": "Its underlying decomposition is no longer a hidden foundation: `orthogonal-decomposition-equivalence` tracked a private `orthogonalDecompositionEquiv`, which was deleted on 2026-07-29 in favour of Mathlib's `Submodule.orthogonalDecomposition` (`Analysis/InnerProductSpace/ProdL2.lean`). A foundation Mathlib supplies is discharged, not missing, so the node was removed rather than left permanently absent."
     },
     {
-      "id": "crossed-defect-quarter-turn",
-      "title": "Quarter-turn between crossed Halmos defect spaces",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute",
-      "file": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.crossedDefectQuarterTurn",
-      "kind": "construction",
-      "dependencies": [],
-      "frontier_nodes": [
-        "s3-prop3-2-existence"
-      ],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "nonacute-direct-rotation",
-      "title": "Construct the nonacute direct rotation",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute",
-      "file": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.nonacuteDirectRotation",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "polar-intertwining",
-        "crossed-defect-quarter-turn"
-      ],
-      "frontier_nodes": [
-        "s3-prop3-2-existence"
-      ],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "nonacute-direct-rotation-unitary",
-      "title": "Nonacute direct rotation is unitary",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute",
-      "file": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.nonacuteDirectRotation_mem_unitary",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "nonacute-direct-rotation",
-        "polar-final-projection"
-      ],
-      "frontier_nodes": [
-        "s3-prop3-2-existence"
-      ],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "nonacute-direct-rotation-paper",
-      "title": "Nonacute construction satisfies the paper direct-rotation predicate",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute",
-      "file": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.nonacuteDirectRotation_isPaperDirectRotation",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "nonacute-direct-rotation-unitary"
-      ],
-      "frontier_nodes": [
-        "s3-prop3-2-existence"
-      ],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "proposition3-2",
-      "title": "Davis--Kahan Proposition 3.2 existence criterion",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute",
-      "file": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.proposition3_2_completed",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "nonacute-direct-rotation-paper"
-      ],
-      "frontier_nodes": [
-        "s3-prop3-2-existence"
-      ],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "proposition3-2-parameterization",
-      "title": "Explicit parameterization and nonuniqueness freedom",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.Section3Nonacute",
-      "file": "DavisKahan/Geometry/Polar/Section3Nonacute.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.proposition3_2_parameterization_completed",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "proposition3-2"
-      ],
-      "frontier_nodes": [
-        "s3-prop3-2-parameter"
-      ],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
       "id": "two-projection-equivalence-data",
       "title": "Operator-level equivalence data for two projection pairs",
       "module": "DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification",
       "file": "DavisKahan/Geometry/Polar/TwoProjectionOperatorClassification.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.TwoProjectionOperatorEquivalence",
+      "declaration": "TauCeti.DavisKahan.TwoProjectionOperatorEquivalence",
       "kind": "construction",
       "dependencies": [],
       "frontier_nodes": [
@@ -232,7 +40,7 @@
       "title": "Assemble the ambient unitary from Halmos summands",
       "module": "DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification",
       "file": "DavisKahan/Geometry/Polar/TwoProjectionOperatorClassification.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.TwoProjectionOperatorEquivalence.ambient",
+      "declaration": "TauCeti.DavisKahan.TwoProjectionOperatorEquivalence.ambient",
       "kind": "proof_candidate",
       "dependencies": [
         "two-projection-equivalence-data",
@@ -249,7 +57,7 @@
       "title": "Modern operator-level two-projection classification",
       "module": "DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification",
       "file": "DavisKahan/Geometry/Polar/TwoProjectionOperatorClassification.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.twoProjection_operator_classification",
+      "declaration": "TauCeti.DavisKahan.twoProjection_operator_classification",
       "kind": "proof_candidate",
       "dependencies": [
         "two-projection-ambient-unitary"
@@ -265,7 +73,7 @@
       "title": "Abstract spectral-multiplicity classifier interface",
       "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
       "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation",
+      "declaration": "TauCeti.DavisKahan.SpectralMultiplicityFoundation",
       "kind": "interface",
       "dependencies": [],
       "frontier_nodes": [
@@ -281,7 +89,7 @@
       "title": "Multiplicity equality iff unitary equivalence",
       "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
       "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation.multiplicity_eq_iff",
+      "declaration": "TauCeti.DavisKahan.SpectralMultiplicityFoundation.multiplicity_eq_iff",
       "kind": "bridge",
       "dependencies": [
         "spectral-multiplicity-foundation"
@@ -298,7 +106,7 @@
       "title": "Compact positive operator eigenvalue-list classifier interface",
       "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
       "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.CompactPositiveListFoundation",
+      "declaration": "TauCeti.DavisKahan.CompactPositiveListFoundation",
       "kind": "interface",
       "dependencies": [],
       "frontier_nodes": [
@@ -313,7 +121,7 @@
       "title": "Eigenvalue list iff unitary equivalence",
       "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
       "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.CompactPositiveListFoundation.list_eq_iff_unitarilyEquivalent",
+      "declaration": "TauCeti.DavisKahan.CompactPositiveListFoundation.list_eq_iff_unitarilyEquivalent",
       "kind": "bridge",
       "dependencies": [
         "compact-positive-list-foundation"
@@ -629,7 +437,7 @@
       "title": "Completeness of the paper Hilbert--Schmidt gauge",
       "module": "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
       "file": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations.paperHilbertSchmidt_complete",
+      "declaration": "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_complete",
       "kind": "proof_candidate",
       "dependencies": [],
       "frontier_nodes": [],
@@ -641,7 +449,7 @@
       "title": "Complex rectangular Hilbert--Schmidt family",
       "module": "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
       "file": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations.hilbertSchmidtComplex",
+      "declaration": "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtComplex",
       "kind": "construction",
       "dependencies": [
         "hs-completeness"
@@ -655,7 +463,7 @@
       "title": "Approximation-number Schatten infrastructure contract",
       "module": "DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation",
       "file": "DavisKahan/OperatorIdeal/ApproximationNumbers/SchattenApproximationFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations.SchattenApproximationFoundation",
+      "declaration": "TauCeti.DavisKahan.ExactSinTheta.SchattenApproximationFoundation",
       "kind": "interface",
       "dependencies": [],
       "frontier_nodes": [],
@@ -681,7 +489,7 @@
       "title": "Explicit fourth-order free-beam mode solves the ODE",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.mode_fourth_derivative",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.mode_fourth_derivative",
       "kind": "proof_candidate",
       "dependencies": [],
       "frontier_nodes": [],
@@ -693,7 +501,7 @@
       "title": "Free-end boundary determinant is 2(1-cos beta cosh beta)",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.boundaryDet_eq",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.boundaryDet_eq",
       "kind": "proof_candidate",
       "dependencies": [
         "free-beam-mode-ode"
@@ -707,7 +515,7 @@
       "title": "Nontrivial free mode satisfies cos beta cosh beta = 1",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.characteristic_eq_zero_of_freeBoundary",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.characteristic_eq_zero_of_freeBoundary",
       "kind": "proof_candidate",
       "dependencies": [
         "free-beam-boundary-determinant"
@@ -721,7 +529,7 @@
       "title": "Exact arithmetic 4.73^4 > 500",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.four_seventy_three_pow_four_gt_five_hundred",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.four_seventy_three_pow_four_gt_five_hundred",
       "kind": "proof_candidate",
       "dependencies": [],
       "frontier_nodes": [],
@@ -733,7 +541,7 @@
       "title": "Interface for localizing the first positive characteristic root",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.PositiveRootLocalization",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.PositiveRootLocalization",
       "kind": "interface",
       "dependencies": [],
       "frontier_nodes": [],
@@ -745,7 +553,7 @@
       "title": "Positive characteristic root gives beta^4 > 500",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
       "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.positive_root_fourth_power_gt_five_hundred",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.positive_root_fourth_power_gt_five_hundred",
       "kind": "proof_candidate",
       "dependencies": [
         "free-beam-root-localization",
@@ -760,7 +568,7 @@
       "title": "Interval Sobolev trace, Green identity, self-adjointness, and compactness contract",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
       "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SobolevTraceFoundation",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.SobolevTraceFoundation",
       "kind": "interface",
       "dependencies": [],
       "frontier_nodes": [
@@ -776,7 +584,7 @@
       "title": "Closed fourth-derivative operator derived from the analytic contract",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
       "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SobolevTraceFoundation.operator",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.SobolevTraceFoundation.operator",
       "kind": "proof_candidate",
       "dependencies": [
         "free-beam-sobolev-foundation"
@@ -792,7 +600,7 @@
       "title": "Self-adjointness of the free-beam realization",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
       "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SobolevTraceFoundation.operator_isSelfAdjoint",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.SobolevTraceFoundation.operator_isSelfAdjoint",
       "kind": "proof_candidate",
       "dependencies": [
         "free-beam-closed-operator"
@@ -808,7 +616,7 @@
       "title": "First positive spectral value is greater than 500",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
       "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SobolevTraceFoundation.firstPositiveSpectralValue_gt_five_hundred",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.SobolevTraceFoundation.firstPositiveSpectralValue_gt_five_hundred",
       "kind": "proof_candidate",
       "dependencies": [
         "free-beam-sobolev-foundation",
@@ -825,7 +633,7 @@
       "title": "Spectrum is contained in {0} union (500,infinity)",
       "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
       "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.SobolevTraceFoundation.spectrum_subset_zero_union_Ioi_five_hundred",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.SobolevTraceFoundation.spectrum_subset_zero_union_Ioi_five_hundred",
       "kind": "proof_candidate",
       "dependencies": [
         "free-beam-third-eigenvalue"
@@ -841,22 +649,9 @@
   "campaigns": [
     {
       "id": "section3-nonacute",
-      "title": "Nonacute direct rotations and pair classification",
+      "title": "Two-projection pair classification foundations",
       "nodes": [
-        "polar-final-range",
-        "polar-final-surjective",
-        "polar-final-equivalence",
-        "polar-final-projection",
-        "polar-adjoint-formula",
-        "polar-absolute-commutation",
-        "polar-intertwining",
         "orthogonal-sum-equivalence",
-        "crossed-defect-quarter-turn",
-        "nonacute-direct-rotation",
-        "nonacute-direct-rotation-unitary",
-        "nonacute-direct-rotation-paper",
-        "proposition3-2",
-        "proposition3-2-parameterization",
         "two-projection-equivalence-data",
         "two-projection-ambient-unitary",
         "two-projection-classification",
@@ -925,5 +720,8 @@
     "policy": "A frontier node may be redirected to a hidden-foundation node only after the declaration elaborates and its own proof closure is verified. Interface nodes expose work but do not discharge frontier obligations."
   },
   "rebased_on_commit": "53297a486170",
-  "rebased_overlay": "pending-mathahead-rebased-53297a4-gpt56"
+  "rebased_overlay": "pending-mathahead-rebased-53297a4-gpt56",
+  "notes": [
+    "Promoted polar decomposition and nonacute Section 3 declarations are intentionally absent from this hidden-foundation manifest; their canonical owners are DavisKahan/Geometry/Polar modules."
+  ]
 }

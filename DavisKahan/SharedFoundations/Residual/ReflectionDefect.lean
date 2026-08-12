@@ -16,13 +16,13 @@ residual estimate without any spectral assumptions.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace Scratch
 namespace SharedFoundations
+namespace Residual
 
 open scoped InnerProductSpace
 open DavisKahanExt
 open TauCeti.DavisKahan
+open TauCeti.DavisKahan.BoundedOperator
 
 universe u
 
@@ -51,8 +51,7 @@ theorem norm_reflectionDefect_isometricRange_le_two_mul_residual
       gcongr
       exact norm_isometricRangeCrossBlock_le_residual A X M hX
 
+end Residual
 end SharedFoundations
-end Scratch
-end Experimental
 end DavisKahan
 end TauCeti

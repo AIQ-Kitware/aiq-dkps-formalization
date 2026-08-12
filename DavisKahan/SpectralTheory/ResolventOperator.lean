@@ -74,7 +74,7 @@ general PVM construction.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 
@@ -508,7 +508,7 @@ repository, in Mathlib, or in vendored Spectra, so the whole tail never
 compiled and kept every downstream module dark.
 
 The circle-only replacement is
-`DavisKahan.Experimental.Frontier.RieszCircle`, which builds the Riesz
+`DavisKahan.Frontier.RieszCircle`, which builds the Riesz
 projection from Mathlib's `circleIntegral` and identifies it with the existing
 `boundedSelfAdjointSpectralProjection`.  The single consumer of the removed
 tail, `SinTheta/Continuation.lean`, is rewired onto that surface.

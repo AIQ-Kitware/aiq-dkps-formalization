@@ -106,6 +106,23 @@ theorem vectorAngle_eq_angle_rclikeToReal (x y : E) :
   rw [vectorAngle_def, inner_re_symm (𝕜 := 𝕜) y x]
   rfl
 
+/-- **A real-inner-product upper bound gives a lower bound on vector angle.**
+
+For unit vectors, `Re ⟪y, x⟫ ≤ cos θ` with `θ ∈ [0, π]` implies
+`θ ≤ angle(x, y)`.  This is the comparison form used by the compact
+principal-vector proof of Davis--Kahan Proposition 4.1. -/
+theorem le_vectorAngle_of_unit_norm_of_re_inner_le_cos {x y : E} {θ : ℝ}
+    (hxnorm : ‖x‖ = 1) (hynorm : ‖y‖ = 1)
+    (hθ0 : 0 ≤ θ) (hθπ : θ ≤ Real.pi)
+    (hinner : RCLike.re (inner 𝕜 y x) ≤ Real.cos θ) :
+    θ ≤ vectorAngle 𝕜 x y := by
+  calc
+    θ = Real.arccos (Real.cos θ) := (Real.arccos_cos hθ0 hθπ).symm
+    _ ≤ Real.arccos (RCLike.re (inner 𝕜 y x)) := Real.arccos_le_arccos hinner
+    _ = vectorAngle 𝕜 x y := by
+      rw [vectorAngle_def, hxnorm, hynorm]
+      norm_num
+
 /-- **The angle is determined by the real part of the inner product.**
 
 The computational form used at call sites: given the two norms and the real part,

@@ -19,7 +19,6 @@ every Ky-Fan-dominant unitarily invariant ideal family.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -367,6 +366,5 @@ theorem mem_and_gauge_eq
 end PaperSinThetaRepresentative
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

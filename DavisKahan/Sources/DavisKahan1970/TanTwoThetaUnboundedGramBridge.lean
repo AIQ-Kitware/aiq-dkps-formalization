@@ -64,7 +64,7 @@ namespace DavisKahan1970
 
 open scoped InnerProductSpace
 
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.ApproximationNumber
 
 noncomputable section

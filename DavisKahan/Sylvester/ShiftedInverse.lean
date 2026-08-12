@@ -15,7 +15,6 @@ of a closed Sylvester equation in both interval/exterior orientations.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 
@@ -422,6 +421,5 @@ theorem norm_closedSylvester_le_of_exteriorInterval
 /-! ## The unbounded `sin Θ` theorem, operator norm -/
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

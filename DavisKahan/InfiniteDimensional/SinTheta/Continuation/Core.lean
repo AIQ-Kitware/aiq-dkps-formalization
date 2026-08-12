@@ -41,7 +41,7 @@ argument.  This prevents a cycle between continuity and spectral selection.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

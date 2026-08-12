@@ -20,7 +20,7 @@ hypotheses.  This replacement uses the repository's proof-carrying
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 
@@ -67,7 +67,7 @@ contour. -/
 structure ContinuedSpectralSelection
     (A V : H →L[ℂ] H) (s : Set ℝ)
     (Γ : PiecewiseC1ClosedContour) where
-  separating : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
+  separating : ∀ t (_ht : t ∈ Set.Icc (0 : ℝ) 1),
     SpectralSeparatingContour (operatorPath A V t) s
   geometric : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
     (separating t ht).geometric = Γ

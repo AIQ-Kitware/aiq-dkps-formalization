@@ -21,7 +21,6 @@ small end-to-end regression test for the source-norm correspondence.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators
@@ -172,6 +171,5 @@ theorem paperNuclearNorm_prefixGauge
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

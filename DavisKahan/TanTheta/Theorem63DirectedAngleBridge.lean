@@ -34,7 +34,6 @@ open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactTanTheta
 
 open ExactSinTheta
@@ -404,6 +403,5 @@ end
 
 end
 end ExactTanTheta
-end Experimental
 end DavisKahan
 end TauCeti

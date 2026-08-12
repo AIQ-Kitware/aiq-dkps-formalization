@@ -5,11 +5,16 @@ The checker enforces durable repository invariants that originated in the July
 2026 sine-theta reorganization and are now part of the maintained architecture:
 
 1. production modules are reachable from `DavisKahan.All` or the curated root;
-2. production modules do not import Experimental modules;
-3. Experimental modules remain visibly admission-dependent rather than being
-   mistaken for production proofs;
+2. production modules do not import staging or diagnostic modules;
+2c. production source does not declare or reference staging/scratch namespaces;
+3. Experimental scratch health is delegated to its dedicated checker;
 4. source facades are reachable from the curated root; and
 5. the full-paper sine-theta audit still points at existing endpoints.
+
+`Experimental`, `MathAhead`, and `Audits` are outside the production build
+closure.  `MathAhead` is a proof-staging tree and `Audits` is an explicit
+diagnostic tree; neither is a library dependency.  Production declarations also
+do not live under a `Scratch` namespace.
 
 Historical migration details live in
 `dev/flawless-sine-theta-reorganization-overnight-plan-2026-07-20.md`; current
@@ -26,6 +31,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 LIB_DIRS = ("DavisKahan",)
 EXPERIMENTAL = ".Experimental."
 EXPERIMENTAL_ROOT = "DavisKahan.Experimental"
+NONPRODUCTION_SEGMENTS = {"Experimental", "MathAhead", "Audits"}
 CURATED_ROOT = "DavisKahan"
 DEV_ROOT = "DavisKahan.All"
 AUDIT_SCRIPT = ROOT / "scripts/audit_full_paper_sine_theta.py"
@@ -50,10 +56,21 @@ DECLARATION = re.compile(
     r"(?:theorem|lemma|def|abbrev|instance|structure|class|inductive|opaque|axiom)\b",
     re.MULTILINE)
 
+STAGING_NAMESPACE_REF = re.compile(
+    r"\b(?:Experimental|MathAhead|HiddenFoundations|Scratch)\b"
+    r"|^\s*namespace\s+(?:Experimental|MathAhead|HiddenFoundations|Scratch)\b",
+    re.MULTILINE,
+)
+
 
 
 def is_experimental(module: str) -> bool:
     return module == EXPERIMENTAL_ROOT or EXPERIMENTAL in module
+
+
+def is_nonproduction(module: str) -> bool:
+    """Whether a module belongs to staging, scratch, or diagnostic source."""
+    return any(part in NONPRODUCTION_SEGMENTS for part in module.split("."))
 
 def load() -> tuple[dict[str, pathlib.Path], dict[str, list[str]], dict[str, bool]]:
     files: dict[str, pathlib.Path] = {}
@@ -143,11 +160,11 @@ def report(name: str, violations: list[str], limit: int = 12) -> bool:
 
 def main() -> None:
     files, imports, admitted = load()
-    production = [m for m in files if not is_experimental(m)]
+    production = [m for m in files if not is_nonproduction(m)]
     memo: dict[str, bool] = {}
 
     print(f"Library structure check over {len(files)} modules "
-          f"({len(production)} production, {len(files) - len(production)} experimental)")
+          f"({len(production)} production, {len(files) - len(production)} nonproduction)")
 
     covered = reachable(imports, [DEV_ROOT])
     check1 = report(
@@ -164,9 +181,25 @@ def main() -> None:
         f"{m} -> {dep}"
         for m in production
         for dep in imports.get(m, [])
-        if is_experimental(dep)
+        if is_nonproduction(dep)
     )
-    check2 = report("2. no production module imports Experimental", crossing)
+    check2 = report(
+        "2. no production module imports Experimental/MathAhead/Audits", crossing)
+
+    leaked = sorted(m for m in covered if is_nonproduction(m))
+    check2b = report(
+        "2b. DavisKahan.All reaches no staging or diagnostic modules", leaked)
+
+    staging_namespace_refs: list[str] = []
+    for module in production:
+        text = files[module].read_text()
+        body = LINE_COMMENT.sub("", BLOCK_COMMENT.sub("", text))
+        if STAGING_NAMESPACE_REF.search(body):
+            staging_namespace_refs.append(module)
+    check2c = report(
+        "2c. production source uses only stable namespaces (no Scratch)",
+        sorted(staging_namespace_refs),
+    )
 
     consumers: dict[str, set[str]] = {}
     for module, deps in imports.items():
@@ -179,26 +212,17 @@ def main() -> None:
         and not in_admission_closure(m, imports, admitted, memo)
         and not supports_admitted(m, consumers, admitted, up_memo)
     )
-    check3 = report(
-        "3. every Experimental module supports admission-bearing work", rule3)
     if rule3:
-        # Split the count so it is actionable.  An aggregate -- an `All.lean`,
-        # `PartIII.lean` or `GeometryAll.lean` with no declarations of its own --
-        # is a pure import list and cannot be promoted independently: moving one
-        # into production would make production import Experimental and break
-        # rule 2.  It can only follow its contents, so it duplicates a signal the
-        # contents already carry.  Reporting the two separately keeps the
-        # headline honest while showing how many findings are real modules.
-        aggregates = [m for m in rule3 if not DECLARATION.search(
-            files[m].read_text())]
-        modules = [m for m in rule3 if m not in set(aggregates)]
-        print(f"          ({len(modules)} real module(s), "
-              f"{len(aggregates)} aggregate(s) that can only follow their "
-              f"contents)")
+        print(f"  note  3. Experimental scratch hygiene: {len(rule3)} module(s) are "
+              "outside the admission-support closure; run "
+              "scripts/check_experimental_coverage.py for scratch-tree policy")
+    else:
+        print("  ok    3. Experimental scratch hygiene has no residual findings")
+    check3 = True
 
     curated = reachable(imports, [CURATED_ROOT])
     facades = [m for m in files if m.startswith("DavisKahan.Sources.")
-               and not m.endswith(".All")]
+               and not m.endswith(".All") and not is_nonproduction(m)]
     check4 = report(
         "4. source facades reachable from the curated DavisKahan root",
         sorted(m for m in facades if m not in curated),
@@ -220,7 +244,7 @@ def main() -> None:
             )
     check5 = report("5. full-paper audit paths and target count intact", audit_problems)
 
-    if all((check1, check2, check3, check4, check5)):
+    if all((check1, check2, check2b, check2c, check3, check4, check5)):
         print("Library structure: CLEAN")
         return
     print("Library structure: violations remain "

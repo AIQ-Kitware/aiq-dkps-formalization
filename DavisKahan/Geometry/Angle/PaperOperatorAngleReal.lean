@@ -59,7 +59,7 @@ namespace DavisKahanExt
 
 open DavisKahan
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 open scoped InnerProductSpace
 

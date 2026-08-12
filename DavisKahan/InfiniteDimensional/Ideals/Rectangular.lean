@@ -19,7 +19,6 @@ and stay here.  The Ky Fan family reuses the proved approximation-number package
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -116,6 +115,5 @@ noncomputable def kyFan [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v
 
 end RectangularSymmetricIdealFamily
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

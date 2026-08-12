@@ -30,7 +30,7 @@ manuscript.  The stable finite results remain available through `PartIII`.
 Every alias below is proved: each resolves to a declaration that depends on
 nothing beyond the three foundational assumptions Mathlib itself uses.  The
 manuscript components that are still open are named separately, in
-`DavisKahan.Experimental.PartIII`, so that importing this file cannot pull an
+`DavisKahan.PartIII`, so that importing this file cannot pull an
 unproved result into a production build.
 
 The mathematical dependency order and per-declaration repair ledger are in
@@ -51,43 +51,43 @@ alias canonical_generalizedSinTheta_complementaryBlock :=
 
 /-! ## Sylvester engine -/
 alias bounded_sylvester_neumann_solution :=
-  DavisKahan.Experimental.ExactSinTheta.sylvesterNeumannSolution_eq
+  DavisKahan.ExactSinTheta.sylvesterNeumannSolution_eq
 
 /-! ## Single-angle theorems -/
 alias unbounded_sinTheta_opNorm :=
-  DavisKahan.Experimental.ExactSinTheta.sinTheta_unbounded_opNorm
+  DavisKahan.ExactSinTheta.sinTheta_unbounded_opNorm
 alias unbounded_sylvester_intervalExterior_opNorm :=
-  DavisKahan.Experimental.ExactSinTheta.norm_closedSylvester_le_of_intervalExterior
+  DavisKahan.ExactSinTheta.norm_closedSylvester_le_of_intervalExterior
 alias unbounded_sylvester_exteriorInterval_opNorm :=
-  DavisKahan.Experimental.ExactSinTheta.norm_closedSylvester_le_of_exteriorInterval
+  DavisKahan.ExactSinTheta.norm_closedSylvester_le_of_exteriorInterval
 alias unbounded_sinTheta_uiNorm :=
-  DavisKahan.Experimental.ExactSinTheta.sinTheta_unbounded_gauge
+  DavisKahan.ExactSinTheta.sinTheta_unbounded_gauge
 alias unbounded_sinTheta_opNorm_genuineSpectrum :=
-  DavisKahan.Experimental.sinTheta_unbounded_opNorm_of_spectrum_gap
+  DavisKahan.sinTheta_unbounded_opNorm_of_spectrum_gap
 alias unbounded_boundedPerturbation_sinTheta_spectralSubspaces :=
-  DavisKahan.Experimental.sinTheta_addBounded_spectralSubspaces_opNorm_of_intervalExterior
+  DavisKahan.sinTheta_addBounded_spectralSubspaces_opNorm_of_intervalExterior
 alias unbounded_boundedPerturbation_sinTheta_directedGap :=
-  DavisKahan.Experimental.sinTheta_addBounded_directedGap_of_intervalExterior
+  DavisKahan.sinTheta_addBounded_directedGap_of_intervalExterior
 alias unbounded_boundedPerturbation_sinTheta_spectralProjections :=
-  DavisKahan.Experimental.sinTheta_addBounded_spectralProjection_sub_opNorm_of_spectrum_gap
+  DavisKahan.sinTheta_addBounded_spectralProjection_sub_opNorm_of_spectrum_gap
 alias unbounded_spectralRestriction_formBounds :=
-  DavisKahan.Experimental.selfAdjointSpectralRestriction_semibounded_of_subset_Icc
+  DavisKahan.selfAdjointSpectralRestriction_semibounded_of_subset_Icc
 alias unbounded_spectralRestriction_spectrum_exterior :=
-  DavisKahan.Experimental.selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
+  DavisKahan.selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
 alias unbounded_sinTheta_uiNorm_genuineSpectrum :=
-  DavisKahan.Experimental.sinTheta_unbounded_gauge_of_spectrum_gap
+  DavisKahan.sinTheta_unbounded_gauge_of_spectrum_gap
 alias unbounded_sylvester_exteriorInterval_uiNorm :=
-  DavisKahan.Experimental.ExactSinTheta.mem_and_gauge_le_of_exteriorLeft_intervalRight
+  DavisKahan.ExactSinTheta.mem_and_gauge_le_of_exteriorLeft_intervalRight
 alias unbounded_sylvester_intervalExterior_uiNorm :=
-  DavisKahan.Experimental.ExactSinTheta.mem_and_gauge_le_of_boundedLeft_exteriorRight
+  DavisKahan.ExactSinTheta.mem_and_gauge_le_of_boundedLeft_exteriorRight
 alias unbounded_boundedRealization_of_spectrum_Icc :=
-  DavisKahan.Experimental.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
+  DavisKahan.ExactSinTheta.exists_boundedRealization_of_spectrum_subset_Icc
 alias unbounded_semibounded_of_spectrum_Icc :=
-  DavisKahan.Experimental.semibounded_of_spectrum_subset_Icc
+  DavisKahan.semibounded_of_spectrum_subset_Icc
 alias unbounded_sylvester_exteriorInterval_uiNorm_genuineSpectrum :=
-  DavisKahan.Experimental.unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
+  DavisKahan.unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
 alias unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum :=
-  DavisKahan.Experimental.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
+  DavisKahan.unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
 alias real_sinTheta_symmetric_genuineSpectrum :=
   TauCeti.SpectralOrder.Real.opNorm_starProjection_sub_le_of_restriction_spectra
 alias real_upperFormBound_of_spectrum :=
@@ -126,15 +126,15 @@ alias bounded_sinTwoAngle_norm_eq :=
 
 /-! ## Direct rotation -/
 alias complex_directRotation :=
-  DavisKahan.Experimental.spectraDirectRotation
+  DavisKahan.spectraDirectRotation
 alias complex_directRotation_sq :=
-  DavisKahan.Experimental.spectraDirectRotation_sq
+  DavisKahan.spectraDirectRotation_sq
 alias complex_directRotation_reversal :=
-  DavisKahan.Experimental.spectraDirectRotation_reversal
+  DavisKahan.spectraDirectRotation_reversal
 alias complex_directRotation_unique :=
-  DavisKahan.Experimental.spectraDirectRotation_unique
+  DavisKahan.spectraDirectRotation_unique
 alias complex_directRotation_minimal :=
-  DavisKahan.Experimental.spectraDirectRotation_minimal
+  DavisKahan.spectraDirectRotation_minimal
 
 /-! ### Proposition 3.3, both directions
 
@@ -154,13 +154,13 @@ The diagonal-block aliases belong to Proposition 3.1, whose characterisation
 clause is "positivity of its diagonal blocks": both compressions of `W` to `U`
 and to `Uᗮ` are the positive Halmos cosine `|S|`. -/
 alias complex_directRotation_hermitianPart :=
-  DavisKahan.Experimental.spectraDirectRotation_add_star_eq_two_smul_absoluteValue
+  DavisKahan.spectraDirectRotation_add_star_eq_two_smul_absoluteValue
 alias complex_directRotation_principal_of_sq :=
-  DavisKahan.Experimental.spectraDirectRotation_unique_of_sq
+  DavisKahan.spectraDirectRotation_unique_of_sq
 alias complex_directRotation_diagonalBlock :=
-  DavisKahan.Experimental.projection_mul_spectraDirectRotation_mul_projection
+  DavisKahan.projection_mul_spectraDirectRotation_mul_projection
 alias complex_directRotation_complementaryDiagonalBlock :=
-  DavisKahan.Experimental.complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
+  DavisKahan.complementaryProjection_mul_spectraDirectRotation_mul_complementaryProjection
 
 /-! ### Proposition 3.1, the characterisation clause
 
@@ -182,11 +182,11 @@ separate sign conditions do add up.
 * `complex_directRotation_iff_diagonalBlocks` is Proposition 3.1's
   characterisation clause as a biconditional. -/
 alias complex_directRotation_reflectionConjugate :=
-  DavisKahan.Experimental.reflection_conjugate_eq_star_of_sq_of_intertwines
+  DavisKahan.reflection_conjugate_eq_star_of_sq_of_intertwines
 alias complex_directRotation_of_diagonalBlocks :=
-  DavisKahan.Experimental.spectraDirectRotation_unique_of_diagonalBlocks
+  DavisKahan.spectraDirectRotation_unique_of_diagonalBlocks
 alias complex_directRotation_iff_diagonalBlocks :=
-  DavisKahan.Experimental.eq_spectraDirectRotation_iff_diagonalBlocks_nonneg
+  DavisKahan.eq_spectraDirectRotation_iff_diagonalBlocks_nonneg
 
 /-! ### Proposition 3.1's third clause, from the printed hypotheses
 
@@ -203,15 +203,15 @@ compression, symmetry included.  Nonnegative *real part* is not enough once (3.8
 dropped: `diag (i, 1)` on `ℂ²` with `U = V = ℂ ⬝ e₀`, and the plane rotation by `π/3` on
 `ℝ⁴` with `U = V = span (e₀, e₁)`, are the two counterexamples. -/
 alias complex_directRotation_reflectionConjugate_of_positiveDiagonalBlocks :=
-  DavisKahan.Experimental.reflection_conjugate_eq_star_of_intertwines_of_diagonalBlocks_pos
+  DavisKahan.reflection_conjugate_eq_star_of_intertwines_of_diagonalBlocks_pos
 alias complex_directRotation_of_positiveDiagonalBlocks :=
-  DavisKahan.Experimental.spectraDirectRotation_unique_of_diagonalBlocks_pos
+  DavisKahan.spectraDirectRotation_unique_of_diagonalBlocks_pos
 alias complex_directRotation_iff_positiveDiagonalBlocks :=
-  DavisKahan.Experimental.eq_spectraDirectRotation_iff_diagonalBlocks_pos
+  DavisKahan.eq_spectraDirectRotation_iff_diagonalBlocks_pos
 alias real_directRotation_of_positiveDiagonalBlocks :=
-  DavisKahan.Experimental.directRotationR_unique_of_diagonalBlocks_pos
+  DavisKahan.directRotationR_unique_of_diagonalBlocks_pos
 alias real_directRotation_iff_positiveDiagonalBlocks :=
-  DavisKahan.Experimental.eq_directRotationR_iff_diagonalBlocks_pos
+  DavisKahan.eq_directRotationR_iff_diagonalBlocks_pos
 
 /-! ### Section 3 over a **real** Hilbert space of arbitrary dimension
 
@@ -222,30 +222,30 @@ by descent from the complexification: the complexified intertwiner is
 conjugation-fixed, so its modulus is, so the polar factor is, so the direct
 rotation of a complexified pair **is** the complexification of a bounded real
 operator. -/
-alias real_directRotation := DavisKahan.Experimental.directRotationR
+alias real_directRotation := DavisKahan.directRotationR
 alias real_directRotation_orthogonal :=
-  DavisKahan.Experimental.directRotationR_mem_unitary
+  DavisKahan.directRotationR_mem_unitary
 alias real_directRotation_intertwines :=
-  DavisKahan.Experimental.directRotationR_intertwines
+  DavisKahan.directRotationR_intertwines
 alias real_directRotation_maps_subspace :=
-  DavisKahan.Experimental.directRotationR_maps_subspace
+  DavisKahan.directRotationR_maps_subspace
 alias real_directRotation_maps_orthogonalComplement :=
-  DavisKahan.Experimental.directRotationR_maps_orthogonalComplement
-alias real_directRotation_sq := DavisKahan.Experimental.directRotationR_sq
+  DavisKahan.directRotationR_maps_orthogonalComplement
+alias real_directRotation_sq := DavisKahan.directRotationR_sq
 alias real_directRotation_hermitianPart :=
-  DavisKahan.Experimental.directRotationR_add_star
+  DavisKahan.directRotationR_add_star
 alias real_directRotation_diagonalBlock :=
-  DavisKahan.Experimental.projection_mul_directRotationR_mul_projection
+  DavisKahan.projection_mul_directRotationR_mul_projection
 alias real_directRotation_complementaryDiagonalBlock :=
-  DavisKahan.Experimental.complementaryProjection_mul_directRotationR_mul_complementaryProjection
+  DavisKahan.complementaryProjection_mul_directRotationR_mul_complementaryProjection
 alias real_directRotation_principal_of_sq :=
-  DavisKahan.Experimental.directRotationR_unique_of_sq
+  DavisKahan.directRotationR_unique_of_sq
 alias real_directRotation_of_diagonalBlocks :=
-  DavisKahan.Experimental.directRotationR_unique_of_diagonalBlocks
+  DavisKahan.directRotationR_unique_of_diagonalBlocks
 alias real_directRotation_iff_diagonalBlocks :=
-  DavisKahan.Experimental.eq_directRotationR_iff_diagonalBlocks_nonneg
+  DavisKahan.eq_directRotationR_iff_diagonalBlocks_nonneg
 alias real_directRotation_reversal :=
-  DavisKahan.Experimental.directRotationR_reversal
+  DavisKahan.directRotationR_reversal
 
 /-! ## Graph and Riccati theory -/
 /-! ### Theorem 5.1 at source generality
@@ -266,9 +266,9 @@ alias banach_sylvester_lower_bound :=
 alias banach_sylvester_lower_bound_uiNorm :=
   TauCeti.ContinuousLinearMap.opNorm_le_of_sylvester_of_leftInverse
 alias banach_sylvester_lower_bound_interchanged :=
-  DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_interchanged
+  DavisKahan.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_interchanged
 alias banach_sylvester_lower_bound_unboundedA :=
-  DavisKahan.Experimental.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_unboundedA
+  DavisKahan.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_unboundedA
 
 /-! ## Graph and Riccati theory (continued) -/
 alias bounded_coercive_isUnit :=
@@ -282,15 +282,15 @@ alias bounded_inverse_defect_norm :=
 
 /-! ## Unbounded and form theorems -/
 alias unbounded_boundedPerturbation_selfAdjoint_spectra :=
-  DavisKahan.Experimental.addBounded_isSelfAdjoint
+  DavisKahan.addBounded_isSelfAdjoint
 alias unbounded_spectralRestriction :=
-  DavisKahan.Experimental.selfAdjointSpectralRestriction
+  DavisKahan.selfAdjointSpectralRestriction
 alias unbounded_spectralRestriction_selfAdjoint :=
-  DavisKahan.Experimental.selfAdjointSpectralRestriction_isSelfAdjoint
+  DavisKahan.selfAdjointSpectralRestriction_isSelfAdjoint
 alias unbounded_sinTheta_boundedPerturbation_blockEmbeddings :=
-  DavisKahan.Experimental.sinTheta_addBounded_opNorm_of_spectrum_gap_isometric
+  DavisKahan.sinTheta_addBounded_opNorm_of_spectrum_gap_isometric
 alias unbounded_sinTheta_boundedPerturbation_spectralSubspaces :=
-  DavisKahan.Experimental.sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
+  DavisKahan.sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
 
 /-! ## Continuation, ideal, and sharpness package -/
 

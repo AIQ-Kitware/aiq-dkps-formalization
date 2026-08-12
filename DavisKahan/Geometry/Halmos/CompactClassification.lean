@@ -29,17 +29,14 @@ the generic angle data.
 
 ## Main results
 
-* `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SameCompactAngleData`
-* `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData`
+* `TauCeti.DavisKahan.SameCompactAngleData`
+* `TauCeti.DavisKahan.pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData`
 -/
 
 open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 open Frontier
 open Module (finrank)
@@ -227,8 +224,5 @@ theorem pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData
 
 end TwoSpaces
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

@@ -17,7 +17,6 @@ estimates below remain unresolved.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -167,6 +166,5 @@ theorem sylvester_mem_and_gauge_le_of_intervalExteriorGap
         (by simpa [c] using hcenter) hC
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

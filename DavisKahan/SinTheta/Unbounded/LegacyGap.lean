@@ -18,7 +18,6 @@ not enter either foundational import cone.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -198,6 +197,5 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_complex
 end Complex
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

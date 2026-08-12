@@ -19,7 +19,6 @@ facade, whose ordered half-line branch still depends on spectral-cutoff work.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -176,6 +175,5 @@ theorem linearPMap_sinTheta_unbounded_exact_of_intervalExteriorGap
   simpa using hGeneral
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

@@ -19,7 +19,7 @@ contour integral or continuous-functional-calculus expression.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

@@ -21,14 +21,11 @@ the printed Ritz and residual matrices are literal `L²` inner-product matrices.
 -/
 
 open MeasureTheory
-open TauCeti.DavisKahan.Experimental
+open TauCeti.DavisKahan
 open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 namespace Model
 namespace Real
@@ -537,8 +534,5 @@ end
 end Real
 end Model
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

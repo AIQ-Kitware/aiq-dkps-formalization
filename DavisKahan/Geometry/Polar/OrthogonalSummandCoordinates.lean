@@ -21,9 +21,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 noncomputable section
 
@@ -102,8 +99,5 @@ theorem orthogonalSumEquiv_intertwines_projection
 
 end
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

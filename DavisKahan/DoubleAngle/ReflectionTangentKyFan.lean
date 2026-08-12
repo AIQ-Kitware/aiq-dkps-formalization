@@ -31,7 +31,7 @@ namespace DavisKahan
 
 open scoped InnerProductSpace BigOperators
 open ApproximationNumber
-open Experimental.ExactSinTheta
+open ExactSinTheta
 
 noncomputable section
 
@@ -285,10 +285,10 @@ signed cosine blocks are where the two angle branches are absorbed. -/
 theorem reflectionTangent_approximate_pair
     (A0 : E0 →L[ℂ] E0) (A1 : E1 →L[ℂ] E1) (B T : E0 →L[ℂ] E1)
     (C0 : E0 →L[ℂ] E0) (C1 : E1 →L[ℂ] E1)
-    (hA0 : IsSelfAdjoint A0) (hA1 : IsSelfAdjoint A1)
+    (_hA0 : IsSelfAdjoint A0) (_hA1 : IsSelfAdjoint A1)
     (hC0 : IsSelfAdjoint C0) (hC1 : IsSelfAdjoint C1)
     (hC0unit : IsUnit C0) (hC1unit : IsUnit C1)
-    {a b : ℝ} (hab : a < b)
+    {a b : ℝ} (_hab : a < b)
     (hA0high : ∀ x : E0, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A0 x, x⟫_ℂ)
     (hA1low : ∀ y : E1, RCLike.re ⟪A1 y, y⟫_ℂ ≤ a * ‖y‖ ^ 2)
     (hgram0 : C0.adjoint ∘L C0 ∘L (1 + T.adjoint ∘L T) = 1)

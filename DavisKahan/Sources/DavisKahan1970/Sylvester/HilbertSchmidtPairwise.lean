@@ -22,7 +22,6 @@ square-norm Sylvester estimate used in Davis--Kahan Theorem 6.2.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -136,6 +135,5 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

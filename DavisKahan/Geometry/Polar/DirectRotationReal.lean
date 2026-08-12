@@ -60,10 +60,9 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -769,6 +768,5 @@ theorem directRotationR_reversal (hacute : IsUniformlyAcute U V) :
 
 end
 
-end Experimental
 end DavisKahan
 end TauCeti

@@ -161,13 +161,12 @@ open Module (finrank)
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace Section8
 
 open DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.DavisKahan.Foundation
 open TauCeti.ApproximationNumber
 
 universe u
@@ -480,7 +479,7 @@ theorem theorem8_2_sinTwoTheta_residual_source_all_kyFan
     (_hPred : Reduces A P) :
     ∀ k : ℕ,
       delta * kyFanApproximationGauge k
-          (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) ≤
+          (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
         2 * kyFanApproximationGauge k
           (residual (A + K) P.subtypeL (compressOperator P A)) := by
   have hAsa : IsSelfAdjoint A :=
@@ -514,8 +513,8 @@ theorem theorem8_2_sinTwoTheta_residual_source_paperUINorm
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (_hPred : Reduces A P)
     (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
-    N.Mem (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) ∧
-      delta * N.gauge (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) ≤
+    N.Mem (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ∧
+      delta * N.gauge (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
         2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
@@ -647,6 +646,5 @@ theorem theorem8_2_source [FiniteDimensional ℂ H]
 
 end Section8
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

@@ -23,7 +23,6 @@ orientation.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Foundation
 
 open scoped InnerProductSpace
@@ -114,6 +113,5 @@ theorem spectrumIn_Ici_of_le_re_inner_generic
     (fun z => hform (z : E) z.2)
 
 end Foundation
-end Experimental
 end DavisKahan
 end TauCeti

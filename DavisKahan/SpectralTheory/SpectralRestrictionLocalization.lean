@@ -48,9 +48,8 @@ open Complex Filter MeasureTheory Topology
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -107,6 +106,5 @@ theorem selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
   intro hnot
   exact hnot (TauCeti.LinearPMap.mem_resolventSet_specRestrict_of_gap hA B hB hε hgap)
 
-end Experimental
 end DavisKahan
 end TauCeti

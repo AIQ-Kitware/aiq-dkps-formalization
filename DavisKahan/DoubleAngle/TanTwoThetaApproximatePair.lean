@@ -61,7 +61,7 @@ namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
-open DavisKahan.Experimental.ExactSinTheta
+open DavisKahan.ExactSinTheta
 
 noncomputable section
 

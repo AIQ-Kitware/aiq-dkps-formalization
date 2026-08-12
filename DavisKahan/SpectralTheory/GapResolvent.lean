@@ -55,7 +55,6 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 /-- **A spectral gap gives a norm-bounded two-sided inverse.**  If the spectrum
 of a self-adjoint `A` avoids `(c - s, c + s)`, then `A - c` has a bounded
@@ -80,13 +79,12 @@ theorem twoSidedShiftedInverseBound_of_spectrum_gap
     (hA : IsSelfAdjoint A.toLinearPMap) {c s : ℝ} (hs : 0 < s)
     (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap) :
-    TauCeti.DavisKahan.Experimental.ExactSinTheta.TwoSidedShiftedInverseBound
+    TauCeti.DavisKahan.ExactSinTheta.TwoSidedShiftedInverseBound
       A c s := by
   obtain ⟨R, hnorm, hleft, hright⟩ :=
     exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs hgap
   exact ⟨R, fun z => (hright z).choose,
     fun x => hleft x, fun z => (hright z).choose_spec, hnorm⟩
 
-end Experimental
 end DavisKahan
 end TauCeti

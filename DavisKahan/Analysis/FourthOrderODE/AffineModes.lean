@@ -18,9 +18,6 @@ representation.  Together the two files identify the smooth kernel exactly.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 namespace Classical
 
@@ -156,8 +153,5 @@ end
 
 end Classical
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

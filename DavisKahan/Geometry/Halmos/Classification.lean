@@ -18,7 +18,7 @@ The forward direction is proved here in full: a pair-equivalence
 `e : H₁ ≃ₗᵢ[𝕜] H₂` restricts to isometric equivalences of the four elementary
 summands and, on the generic remainder, intertwines the cosine-square operator.
 
-The results live under `Experimental.MathAhead`; the frontier statement
+The results now live in the stable geometry API; the frontier statement
 `twoProjection_operator_classification` in `Frontier/Section3` is grounded by
 `:=` on top of these lemmas so there is a single source of truth.
 -/
@@ -27,9 +27,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 open  Frontier
 
@@ -203,8 +200,5 @@ theorem sameHalmosInvariant_of_pairEquiv
     _ = (halmosGenericPart U₂ V₂).starProjection (halmosCosineSq U₂ V₂ (e (x : H₁))) := by
         rw [intertwines_halmosCosineSq U₁ V₁ U₂ V₂ e hU hV]
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

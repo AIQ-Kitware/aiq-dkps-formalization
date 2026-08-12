@@ -16,7 +16,6 @@ the scalar-generic isometric input package.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -134,6 +133,5 @@ end FormBoundedIsometricSinThetaProblem
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

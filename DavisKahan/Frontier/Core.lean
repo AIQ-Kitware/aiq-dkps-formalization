@@ -23,7 +23,7 @@ import ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.MultiplicityModel
 # Experimental frontier interfaces for the remaining Davis--Kahan 1970 proof
 
 This module isolates reusable signatures needed by several uncompleted source
-results.  The declarations deliberately live under `Experimental.Frontier` and
+results.  The declarations form the stable frontier API and
 are not imported by the supported library target.
 
 The purpose is to make the remaining dependency graph explicit.  Each
@@ -35,7 +35,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 
 
@@ -76,7 +75,7 @@ carried in the structure only because that makes every hypothesis a plain `Measu
 canonical invariant: nothing here says the datum of an operator is unique, and uniqueness of the
 multiplicity decomposition remains an open obligation of this development.  In particular this
 does **not** inhabit
-`TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.SpectralMultiplicityFoundation`,
+`TauCeti.DavisKahan.SpectralMultiplicityFoundation`,
 whose `multiplicity` field is a *function* and therefore needs uniqueness as well as existence.
 See `dev/section3-multiplicity-plan-2026-08-06.md` §5. -/
 def SameSpectralMultiplicity
@@ -165,6 +164,5 @@ theorem sameSpectralMultiplicity_iff_unitarilyEquivalent
 end CrossSpaceClassification
 
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

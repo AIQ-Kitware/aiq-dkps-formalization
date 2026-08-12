@@ -17,7 +17,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 universe u v
@@ -55,6 +54,5 @@ theorem mul_subspaceGap_le_max_of_two_directedGap_le
   · exact hVU.trans (le_max_right _ _)
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

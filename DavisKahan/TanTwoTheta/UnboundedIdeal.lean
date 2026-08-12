@@ -26,11 +26,10 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 universe v
 
@@ -254,6 +253,5 @@ theorem tanTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
     N.toSymmetricOperatorIdealFamily A hA E hE B S hB hS
       hβα hδ hBsub hBcomplDisj hEmem hquarter
 
-end Experimental
 end DavisKahan
 end TauCeti

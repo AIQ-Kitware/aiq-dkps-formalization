@@ -22,11 +22,10 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 universe u v
 
@@ -224,7 +223,7 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     infer_instance
   let : CompleteSpace Wc :=
     (Wc.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
-  let e : Uc ≃ₗᵢ[ℂ] Wc := submoduleMapIsometry V.reflection Uc
+  let e : Uc ≃ₗᵢ[ℂ] Wc := unitarySubmoduleMapIsometry V.reflection Uc
   let ΛJ := unitaryConjugate e Λ hΛ
   let hΛJ : ΛJ.IsSelfAdjoint := unitaryConjugate_isSelfAdjoint e Λ hΛ
   let X : U →L[ℂ] H := U.subtypeL
@@ -562,6 +561,5 @@ theorem sinTwoTheta_addBounded_of_intervalExterior
   exact sinTwoTheta_addBounded_of_spectrum_gap
     A hA E hE B S hB hS hβα hδ hBlow hBhigh hBcomplSpec
 
-end Experimental
 end DavisKahan
 end TauCeti

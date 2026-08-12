@@ -45,7 +45,7 @@ this module provides.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: `DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean`
   (the `gauge_le_of_forall_kyFanApproximationGauge_le` field of
-  `TauCeti.DavisKahan.Experimental.ExactSinTheta.KyFanDominantIdealFamily`).
+  `TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily`).
 * Original authors / copyright: Jon Crall, OpenAI GPT-5.6 Thinking; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
 * Extraction class: **restructured**.  The condition is unchanged; it becomes a class over

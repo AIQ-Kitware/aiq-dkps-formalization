@@ -94,12 +94,12 @@ namespace Section8
 /-- **Theorem 8.1(i), upper block**, source-literal: `A₁ - α ≤ C₁(Λ₁ - α)C₁` as
 quadratic forms on the `Pᗮ` block, at the canonical branch. -/
 alias theorem8_1_upperCompressionRepulsion_source :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_1_upperCompressionRepulsion_source
+  DavisKahan.Frontier.Section8.theorem8_1_upperCompressionRepulsion_source
 
 /-- **Theorem 8.1(i), lower block**, the printed "with a similar relation for
 `A₀`": `(α + δ) - A₀ ≤ C₀((α + δ) - Λ₀)C₀` on the `P` block. -/
 alias theorem8_1_lowerCompressionRepulsion_source :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_1_lowerCompressionRepulsion_source
+  DavisKahan.Frontier.Section8.theorem8_1_lowerCompressionRepulsion_source
 
 /-! ### Theorem 8.2
 
@@ -110,51 +110,51 @@ deliberate and must not be collapsed. -/
 
 /-- **Theorem 8.2, perturbation alternative, dimension-free.** -/
 alias theorem8_2_perturbationHalfGap_source :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_perturbationHalfGap_source
+  DavisKahan.Frontier.Section8.theorem8_2_perturbationHalfGap_source
 
 /-- **Theorem 8.2, residual alternative, dimension-free.**  Krein's completion
 supplies a perturbation of the exact residual norm. -/
 alias theorem8_2_residualHalfGap_source :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_residualHalfGap_source
+  DavisKahan.Frontier.Section8.theorem8_2_residualHalfGap_source
 
 /-- **Theorem 8.2's printed disjunction, dimension-free.**  Either smallness
 alternative gives `directedGap P Q < √2/2`.  This is the strongest conclusion
 available from the explicit printed hypotheses alone. -/
 alias theorem8_2_branch_source_directed :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_branch_source
+  DavisKahan.Frontier.Section8.theorem8_2_branch_source
 
 /-- Equation (1.5) in its finite form: equal rank identifies the symmetric and
 directed projector gaps, so `‖sin Θ‖` may be computed from either. -/
 alias subspaceGap_eq_directedGap_of_finrank_eq :=
-  DavisKahan.Experimental.Frontier.Section8.subspaceGap_eq_directedGap_of_finrank_eq
+  DavisKahan.Frontier.Section8.subspaceGap_eq_directedGap_of_finrank_eq
 
 /-- The same identification of the two gaps under Section 3's standing
 assumption (3.5) instead of a dimension count: no finite dimensionality and no
 equal `finrank`, only a linear isometry between the two crossed defects. -/
 alias subspaceGap_eq_directedGap_of_crossedDefects :=
-  DavisKahan.Experimental.Frontier.Section8.subspaceGap_eq_directedGap_of_crossedDefects
+  DavisKahan.Frontier.Section8.subspaceGap_eq_directedGap_of_crossedDefects
 
 /-- **Theorem 8.2's printed conclusion `Θ < π/4` from the directed bound, in
 any dimension**, under Section 3's standing assumption (3.5). -/
 alias maximalAngle_lt_pi_div_four_of_crossedDefects :=
-  DavisKahan.Experimental.Frontier.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects
+  DavisKahan.Frontier.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects
 
 /-- **Theorem 8.2, perturbation alternative, printed conclusion `Θ < π/4`.** -/
 alias theorem8_2_perturbationHalfGap_source_maximalAngle_lt :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_perturbationHalfGap_source_maximalAngle_lt
+  DavisKahan.Frontier.Section8.theorem8_2_perturbationHalfGap_source_maximalAngle_lt
 
 /-- **Theorem 8.2, residual alternative, printed conclusion `Θ < π/4`.** -/
 alias theorem8_2_residualHalfGap_source_maximalAngle_lt :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_residualHalfGap_source_maximalAngle_lt
+  DavisKahan.Frontier.Section8.theorem8_2_residualHalfGap_source_maximalAngle_lt
 
 /-- **Theorem 8.2's printed disjunction, printed conclusion `Θ < π/4`.** -/
 alias theorem8_2_branch_source_maximalAngle_lt :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_branch_source_maximalAngle_lt
+  DavisKahan.Frontier.Section8.theorem8_2_branch_source_maximalAngle_lt
 
 /-- The `sin 2Θ` estimate Theorem 8.2 inherits, perturbation form
 `δ‖sin 2Θ‖ ≤ 2‖H‖`, at Theorem 8.2's own hypotheses. -/
 alias theorem8_2_sinTwoTheta_perturbation_source :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_perturbation_source
+  DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_perturbation_source
 
 /-- The `sin 2Θ` estimate Theorem 8.2 inherits, residual form, with `R` the
 printed residual (1.8): `δ‖sin 2Θ‖ ≤ 2‖R‖` at the **ambient** `sin 2Θ` of the
@@ -182,18 +182,18 @@ is used.  What remains genuinely unavailable at a general symmetric gauge is the
 **ambient** reading with the printed constant, and that is all.  The full
 measurement is at the head of section 2b of `Section8SourceTheorem82.lean`. -/
 alias theorem8_2_sinTwoTheta_residual_source :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source
+  DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source
 
 /-- **Davis--Kahan 1970, Theorem 8.2, exactly as printed.**  Both `sin 2Θ`
 estimates and `Θ < π/4`, from either smallness alternative, under the Section 1
 standing convention (1.5). -/
 alias theorem8_2_source :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_source
+  DavisKahan.Frontier.Section8.theorem8_2_source
 
 /-- **Krein's self-adjoint completion with the exact restriction norm**, the one
 external theorem the printed proof of the residual alternative cites. -/
 alias theorem8_2_krein_completion_source :=
-  DavisKahan.Experimental.Frontier.Krein.exists_selfAdjoint_completion_eq_norm_restriction
+  DavisKahan.Frontier.Krein.exists_selfAdjoint_completion_eq_norm_restriction
 
 /-! ### Theorem 8.2 at the printed norm scope
 
@@ -205,7 +205,7 @@ above are the `N = operator norm` reading. -/
 `delta * N(sin 2Theta) <= 2 * N(H)`, for **every** norm in the paper's own class
 of unitarily invariant norms, at Theorem 8.2's own hypotheses. -/
 alias theorem8_2_sinTwoTheta_perturbation_source_paperUINorm :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm
+  DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm
 
 /-- The directed `sin 2Theta_0` estimate Theorem 8.2 inherits, residual form,
 for **every** norm in the paper's own class of unitarily invariant norms, with
@@ -214,18 +214,18 @@ alternative: the conclusion is the canonical directed block, not the ambient
 `sin 2Theta`, which at a general symmetric gauge carries the same nonzero
 singular data twice. -/
 alias theorem8_2_sinTwoTheta_residual_source_paperUINorm :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm
+  DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm
 
 /-- The directed `sin 2Theta_0` estimate Theorem 8.2 inherits, residual form, at
 every Ky Fan level, with the printed factor two. -/
 alias theorem8_2_sinTwoTheta_residual_source_all_kyFan :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_all_kyFan
+  DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_all_kyFan
 
 /-- **Theorem 8.2's printed disjunction, printed `Theta < pi/4`, in any
 dimension**, under Section 3's standing assumption (3.5).  No
 finite-dimensionality and no rank hypothesis. -/
 alias theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects
+  DavisKahan.Frontier.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects
 
 /-! ### Theorem 8.2 over a real Hilbert space
 
@@ -240,61 +240,61 @@ at every source unitarily invariant norm -- exactly the scope available over
 
 /-- **Theorem 8.2, perturbation alternative, over a REAL Hilbert space.** -/
 alias theorem8_2_perturbationHalfGap_source_real :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_perturbationHalfGap_source_real
+  DavisKahan.Frontier.Section8.theorem8_2_perturbationHalfGap_source_real
 
 /-- **Theorem 8.2, residual alternative, over a REAL Hilbert space.** -/
 alias theorem8_2_residualHalfGap_source_real :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_residualHalfGap_source_real
+  DavisKahan.Frontier.Section8.theorem8_2_residualHalfGap_source_real
 
 /-- **Theorem 8.2's printed disjunction over a REAL Hilbert space**, with the
 dimension-free directed conclusion. -/
 alias theorem8_2_branch_source_directed_real :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_branch_source_directed_real
+  DavisKahan.Frontier.Section8.theorem8_2_branch_source_directed_real
 
 /-- **Theorem 8.2's printed `Theta < pi/4` over a REAL Hilbert space**, under the
 finite form of the standing convention (1.5). -/
 alias theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt
+  DavisKahan.Frontier.Section8.theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt
 
 /-- **Theorem 8.2's printed `Theta < pi/4` over a REAL Hilbert space, in any
 dimension**, under Section 3's standing assumption (3.5). -/
 alias theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects
+  DavisKahan.Frontier.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects
 
 /-- **Theorem 8.2's printed disjunction, printed `Theta < pi/4`, over a REAL
 Hilbert space**, under the finite form of the standing convention (1.5). -/
 alias theorem8_2_branch_source_real_maximalAngle_lt :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_branch_source_real_maximalAngle_lt
+  DavisKahan.Frontier.Section8.theorem8_2_branch_source_real_maximalAngle_lt
 
 /-- The `sin 2Theta` estimate Theorem 8.2 inherits over a REAL Hilbert space,
 perturbation form `delta ||sin 2Theta|| <= 2 ||H||`. -/
 alias theorem8_2_sinTwoTheta_perturbation_source_real :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_perturbation_source_real
+  DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_perturbation_source_real
 
 /-- The `sin 2Theta` estimate Theorem 8.2 inherits over a REAL Hilbert space,
 residual form, with `R` the printed residual (1.8).  As over `C`, the conclusion
 is at the ambient `sinTwoAngleOperator Q P`, not the directed `Theta_0`; see the
 complex alias above for what that does and does not say. -/
 alias theorem8_2_sinTwoTheta_residual_source_real :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real
+  DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real
 
 /-- The `sin 2Theta` estimate Theorem 8.2 inherits over a REAL Hilbert space,
 perturbation form, for **every** norm in the paper's own class of unitarily
 invariant norms. -/
 alias theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm
+  DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm
 
 /-- The directed `sin 2Theta_0` estimate Theorem 8.2 inherits over a REAL
 Hilbert space, residual form, for **every** norm in the paper's own class of
 unitarily invariant norms, with the printed factor two. -/
 alias theorem8_2_sinTwoTheta_residual_source_real_paperUINorm :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm
+  DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm
 
 /-- **Davis--Kahan 1970, Theorem 8.2 over a REAL Hilbert space, exactly as
 printed.**  Both `sin 2Theta` estimates and `Theta < pi/4`, from either smallness
 alternative, under the Section 1 standing convention (1.5). -/
 alias theorem8_2_source_real :=
-  DavisKahan.Experimental.Frontier.Section8.theorem8_2_source_real
+  DavisKahan.Frontier.Section8.theorem8_2_source_real
 
 end Section8
 end DavisKahan1970

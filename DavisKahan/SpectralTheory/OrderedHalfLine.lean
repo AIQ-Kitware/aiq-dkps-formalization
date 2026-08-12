@@ -31,9 +31,8 @@ open MeasureTheory
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 universe v
 
@@ -76,6 +75,5 @@ theorem semiboundedAbove_of_spectrum_subset_Iic
   simpa using
     TauCeti.LinearPMap.re_inner_le_of_specProjection_Ioi_eq_zero hA hzero x
 
-end Experimental
 end DavisKahan
 end TauCeti

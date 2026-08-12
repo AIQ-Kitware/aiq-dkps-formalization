@@ -26,7 +26,6 @@ open Filter
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 universe v
@@ -94,6 +93,5 @@ noncomputable def spectraSpectralCutoffInterface
   tendsto_identity := spectraSpectralCutoff_tendsto_identity A hA
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

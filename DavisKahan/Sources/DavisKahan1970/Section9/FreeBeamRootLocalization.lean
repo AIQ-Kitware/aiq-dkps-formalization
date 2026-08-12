@@ -22,34 +22,31 @@ finite set of scalar facts is sufficient for `PositiveRootLocalization`.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 namespace Classical
 
 noncomputable section
 
-open MathAhead.HiddenFoundations.FreeBeam
+open FreeBeam
 
 /-- Continuity of the characteristic function. -/
 theorem continuous_characteristic :
-    Continuous MathAhead.HiddenFoundations.FreeBeam.characteristic := by
-  unfold MathAhead.HiddenFoundations.FreeBeam.characteristic
+    Continuous FreeBeam.characteristic := by
+  unfold FreeBeam.characteristic
   exact (Real.continuous_cos.mul Real.continuous_cosh).sub continuous_const
 
 /-- The characteristic equation in its usual multiplicative form. -/
 theorem characteristic_eq_zero_iff (beta : ℝ) :
-    MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0 ↔
+    FreeBeam.characteristic beta = 0 ↔
       Real.cos beta * Real.cosh beta = 1 := by
-  unfold MathAhead.HiddenFoundations.FreeBeam.characteristic
+  unfold FreeBeam.characteristic
   exact sub_eq_zero
 
 /-- No root can occur where cosine is nonpositive. -/
 theorem characteristic_lt_zero_of_cos_nonpos
     {beta : ℝ} (hcos : Real.cos beta ≤ 0) :
-    MathAhead.HiddenFoundations.FreeBeam.characteristic beta < 0 := by
-  unfold MathAhead.HiddenFoundations.FreeBeam.characteristic
+    FreeBeam.characteristic beta < 0 := by
+  unfold FreeBeam.characteristic
   have hcosh : 0 < Real.cosh beta := Real.cosh_pos beta
   have hprod : Real.cos beta * Real.cosh beta ≤ 0 :=
     mul_nonpos_of_nonpos_of_nonneg hcos hcosh.le
@@ -58,21 +55,21 @@ theorem characteristic_lt_zero_of_cos_nonpos
 /-- Sign exclusion version of the preceding result. -/
 theorem characteristic_ne_zero_of_cos_nonpos
     {beta : ℝ} (hcos : Real.cos beta ≤ 0) :
-    MathAhead.HiddenFoundations.FreeBeam.characteristic beta ≠ 0 :=
+    FreeBeam.characteristic beta ≠ 0 :=
   ne_of_lt (characteristic_lt_zero_of_cos_nonpos hcos)
 
 /-- A strict upper bound on `cos beta * cosh beta` excludes a root. -/
 theorem characteristic_ne_zero_of_product_lt_one
     {beta : ℝ} (h : Real.cos beta * Real.cosh beta < 1) :
-    MathAhead.HiddenFoundations.FreeBeam.characteristic beta ≠ 0 := by
-  unfold MathAhead.HiddenFoundations.FreeBeam.characteristic
+    FreeBeam.characteristic beta ≠ 0 := by
+  unfold FreeBeam.characteristic
   linarith
 
 /-- A strict lower bound on `cos beta * cosh beta` excludes a root. -/
 theorem characteristic_ne_zero_of_one_lt_product
     {beta : ℝ} (h : 1 < Real.cos beta * Real.cosh beta) :
-    MathAhead.HiddenFoundations.FreeBeam.characteristic beta ≠ 0 := by
-  unfold MathAhead.HiddenFoundations.FreeBeam.characteristic
+    FreeBeam.characteristic beta ≠ 0 := by
+  unfold FreeBeam.characteristic
   linarith
 
 /-- Exact certificate that a displayed root is the first positive root. -/
@@ -80,17 +77,17 @@ structure FirstPositiveRootCertificate where
   root : ℝ
   root_pos : 0 < root
   root_equation :
-    MathAhead.HiddenFoundations.FreeBeam.characteristic root = 0
+    FreeBeam.characteristic root = 0
   no_smaller_positive_root : ∀ beta : ℝ,
     0 < beta → beta < root →
-      MathAhead.HiddenFoundations.FreeBeam.characteristic beta ≠ 0
+      FreeBeam.characteristic beta ≠ 0
   lower_bound : (473 : ℝ) / 100 < root
 
 /-- The scalar first-root certificate supplies the interface consumed by the
 operator-theoretic development. -/
 noncomputable def FirstPositiveRootCertificate.toPositiveRootLocalization
     (C : FirstPositiveRootCertificate) :
-    MathAhead.HiddenFoundations.FreeBeam.PositiveRootLocalization where
+    FreeBeam.PositiveRootLocalization where
   firstPositiveRoot := C.root
   firstPositiveRoot_pos := C.root_pos
   firstPositiveRoot_characteristic := C.root_equation
@@ -105,11 +102,11 @@ noncomputable def FirstPositiveRootCertificate.toPositiveRootLocalization
 noncomputable def firstPositiveRootCertificate_of_split_exclusion
     {root lower : ℝ}
     (hroot_pos : 0 < root)
-    (hroot : MathAhead.HiddenFoundations.FreeBeam.characteristic root = 0)
+    (hroot : FreeBeam.characteristic root = 0)
     (hsmall : ∀ beta : ℝ, 0 < beta → beta ≤ lower →
-      MathAhead.HiddenFoundations.FreeBeam.characteristic beta ≠ 0)
+      FreeBeam.characteristic beta ≠ 0)
     (hmiddle : ∀ beta : ℝ, lower < beta → beta < root →
-      MathAhead.HiddenFoundations.FreeBeam.characteristic beta ≠ 0)
+      FreeBeam.characteristic beta ≠ 0)
     (h473 : (473 : ℝ) / 100 < root) :
     FirstPositiveRootCertificate where
   root := root
@@ -130,7 +127,7 @@ theorem root_exclusion_of_pointwise_sign
       Real.cos beta * Real.cosh beta < 1 ∨
       1 < Real.cos beta * Real.cosh beta) :
     ∀ beta ∈ S,
-      MathAhead.HiddenFoundations.FreeBeam.characteristic beta ≠ 0 := by
+      FreeBeam.characteristic beta ≠ 0 := by
   intro beta hbeta
   rcases hsign beta hbeta with hcos | hlt | hgt
   · exact characteristic_ne_zero_of_cos_nonpos hcos
@@ -142,9 +139,9 @@ used by the free-beam application. -/
 theorem positive_root_pow_four_gt_five_hundred_of_certificate
     (C : FirstPositiveRootCertificate)
     {beta : ℝ} (hbeta : 0 < beta)
-    (hroot : MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0) :
+    (hroot : FreeBeam.characteristic beta = 0) :
     500 < beta ^ 4 :=
-  MathAhead.HiddenFoundations.FreeBeam.positive_root_fourth_power_gt_five_hundred
+  FreeBeam.positive_root_fourth_power_gt_five_hundred
     C.toPositiveRootLocalization hbeta hroot
 
 /-! ## The numerical estimate, unconditionally
@@ -165,7 +162,7 @@ records the reduction, but every consumer should prefer
 `(0, 4.73]`, so the characteristic function is negative there. -/
 theorem four_seventy_three_lt_of_characteristic_eq_zero {beta : ℝ}
     (hbeta : 0 < beta)
-    (hroot : MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0) :
+    (hroot : FreeBeam.characteristic beta = 0) :
     (473 : ℝ) / 100 < beta := by
   by_contra hcon
   exact absurd hroot (characteristic_ne_zero_of_product_lt_one
@@ -181,21 +178,18 @@ is the paper's `alpha_3 > 500` -- and the margin is genuinely thin, the first
 root being `4.7300407...` with `4.7300407^4 = 500.56...`. -/
 theorem five_hundred_lt_pow_four_of_characteristic_eq_zero {beta : ℝ}
     (hbeta : 0 < beta)
-    (hroot : MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0) :
+    (hroot : FreeBeam.characteristic beta = 0) :
     500 < beta ^ 4 := by
   have h473 := four_seventy_three_lt_of_characteristic_eq_zero hbeta hroot
   have hpow : ((473 : ℝ) / 100) ^ 4 < beta ^ 4 :=
     pow_lt_pow_left₀ h473 (by norm_num) (by norm_num)
   have hnum :=
-    MathAhead.HiddenFoundations.FreeBeam.four_seventy_three_pow_four_gt_five_hundred
+    FreeBeam.four_seventy_three_pow_four_gt_five_hundred
   linarith
 
 end
 
 end Classical
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

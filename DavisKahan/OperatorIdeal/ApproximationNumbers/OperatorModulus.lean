@@ -22,7 +22,6 @@ approximation number, while the square-root identity gives
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -54,6 +53,5 @@ theorem modulus_hasSameApproximationNumbers
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

@@ -34,7 +34,7 @@ namespace DavisKahan
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahanExt
-open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.DavisKahan.Foundation
 
 noncomputable section
 
@@ -53,7 +53,7 @@ theorem re_inner_reflection_comp_offDiagonal_eq_zero
     RCLike.re ⟪(U.reflectionOperator ∘L H) x, x⟫_ℂ = 0 := by
   have hJsa : IsSelfAdjoint (U.reflectionOperator) := by
     rw [isSelfAdjoint_iff]
-    exact TauCeti.DavisKahan.Experimental.star_reflectionOperator_complex U
+    exact TauCeti.DavisKahan.star_reflectionOperator_complex U
   have hJsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hJsa
   have hHsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hH
   have hanti :

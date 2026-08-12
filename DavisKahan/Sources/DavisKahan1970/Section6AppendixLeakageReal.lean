@@ -42,13 +42,12 @@ open Finset
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace Section6Appendix
 
 open ExactSinTheta
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 universe u v
 
@@ -153,6 +152,5 @@ theorem lemma6_3_singularValue_leakage_real
 
 end Section6Appendix
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

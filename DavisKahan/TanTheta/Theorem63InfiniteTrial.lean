@@ -57,7 +57,6 @@ open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactTanTheta
 
 open ExactSinTheta
@@ -906,6 +905,5 @@ theorem theorem6_3_infiniteTrial_spectral_exists
     hCompressionUpper hUnwantedLower hResidual
 
 end ExactTanTheta
-end Experimental
 end DavisKahan
 end TauCeti

@@ -58,12 +58,12 @@ theorem not_mistranscribedDimensionImpliesAcute :
   have hone : (1 : ℂ) = 0 := hacute.2 1 (by simp) (by simp)
   exact one_ne_zero hone
 
-#check TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem63DirectedSineBlock
-#check TauCeti.DavisKahan.Experimental.ExactTanTheta.HasTheorem63DirectedTangentApproximationNumbers
-#check TauCeti.DavisKahan.Experimental.ExactTanTheta.Theorem63KyFanCore
-#check TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core
+#check TauCeti.DavisKahan.ExactTanTheta.theorem63DirectedSineBlock
+#check TauCeti.DavisKahan.ExactTanTheta.HasTheorem63DirectedTangentApproximationNumbers
+#check TauCeti.DavisKahan.ExactTanTheta.Theorem63KyFanCore
+#check TauCeti.DavisKahan.ExactTanTheta.theorem6_3_ideal_of_kyFan_core
 #print axioms not_mistranscribedDimensionImpliesAcute
-#print axioms TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_ideal_of_kyFan_core
+#print axioms TauCeti.DavisKahan.ExactTanTheta.theorem6_3_ideal_of_kyFan_core
 
 end Theorem63DistillationAudit
 end DavisKahan1970

@@ -164,7 +164,7 @@ namespace DavisKahan1970
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 open scoped InnerProductSpace
 
@@ -616,6 +616,7 @@ private theorem doubleSecant_selfAdjoint :
   rw [star_sub, star_one, star_mul, two_star', star_mul,
     isSelfAdjoint_paperProjectorDifference.star_eq, two_comm']
 
+omit [CompleteSpace E] in
 private theorem doubleSecant_comm_lower :
     ((1 - U.starProjection) * paperProjectorDifference U V * U.starProjection) *
         paperDoubleSecant U V =
@@ -645,6 +646,7 @@ private theorem doubleSecant_comm_lower :
           ((1 - U.starProjection) * paperProjectorDifference U V *
             U.starProjection) := by noncomm_ring
 
+omit [CompleteSpace E] in
 private theorem doubleSecant_comm_upper :
     (U.starProjection * paperProjectorDifference U V *
           (1 - U.starProjection)) * paperDoubleSecant U V =
@@ -674,6 +676,7 @@ private theorem doubleSecant_comm_upper :
           (U.starProjection * paperProjectorDifference U V *
             (1 - U.starProjection)) := by noncomm_ring
 
+omit [CompleteSpace E] in
 /-- The block representative in the explicit `U ⊕ U^⊥` corner form. -/
 theorem paperTanTwoBlockRepresentative_eq :
     paperTanTwoBlockRepresentative U V =

@@ -24,7 +24,6 @@ identifications are recorded with the heterogeneous relation
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -369,6 +368,5 @@ theorem paperLemma61_converse
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

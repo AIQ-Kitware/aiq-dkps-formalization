@@ -39,9 +39,6 @@ open MeasureTheory TauCeti
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 namespace Model
 namespace Scalar
@@ -696,8 +693,5 @@ end
 end Scalar
 end Model
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

@@ -26,7 +26,6 @@ then identifies them with the raw projection blocks used in the paper.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -225,6 +224,5 @@ theorem spectrum_paperDirectedAngleOperatorC_subset_Icc
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

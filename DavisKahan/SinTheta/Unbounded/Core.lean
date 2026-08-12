@@ -19,7 +19,6 @@ them.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -401,6 +400,5 @@ theorem adjointResidualBlock_mem_and_gauge_le
 end GenericCore
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

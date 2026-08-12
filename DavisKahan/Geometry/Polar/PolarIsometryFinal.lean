@@ -14,7 +14,7 @@ The nonacute direct-rotation development needs the *final* projection identity
 together with the unitary `polarPartialFinalEquiv` between the two spaces.
 
 Both now come straight from
-`ForTauCeti/Analysis/InnerProductSpace/PolarPartialIsometry.lean`, which develops the
+`ForTauCeti/Analysis/InnerProductSpace/Polar/PartialIsometry.lean`, which develops the
 general bounded polar decomposition — rectangular, infinite-dimensional, no invertibility
 hypothesis — over our own `ContinuousLinearMap.modulus`.  This module is the thin
 square-case naming layer the Davis--Kahan geometry reads.
@@ -40,9 +40,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 noncomputable section
 
@@ -181,8 +178,5 @@ theorem adjoint_polarIsometry (T : H →L[𝕜] H) :
 
 end
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

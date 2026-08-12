@@ -22,12 +22,12 @@ versions.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 
 open scoped InnerProductSpace
-open DavisKahan.Experimental
+open DavisKahan
 
 set_option maxHeartbeats 1000000
 
@@ -60,7 +60,7 @@ only `BddAbove` / `BddBelow`, and those follow from `‖λ‖ ≤ ‖T‖` for `
 spectrum without any of the topology. -/
 private theorem abs_le_norm_of_mem_realSpectrum {G : Type v} [NormedAddCommGroup G]
     [InnerProductSpace 𝕜 G] [CompleteSpace G] {T : G →L[𝕜] G} {r : ℝ}
-    (hr : r ∈ TauCeti.DavisKahan.Experimental.Foundation.realSpectrum T) :
+    (hr : r ∈ TauCeti.DavisKahan.Foundation.realSpectrum T) :
     |r| ≤ ‖T‖ * ‖(1 : G →L[𝕜] G)‖ := by
   -- `norm_le_norm_of_mem` would give the cleaner `‖T‖`, but it wants
   -- `NormOneClass (G →L[𝕜] G)`, which fails when `G` is trivial.
@@ -78,33 +78,33 @@ private theorem exists_common_cut_of_orderedSeparation_rclike
     {A : F →L[𝕜] F} {B : E →L[𝕜] E} {d : ℝ}
     (hsep : OrderedSpectraSeparated B ⊤ A ⊤ d) :
     ∃ c : ℝ,
-      TauCeti.DavisKahan.Experimental.Foundation.realSpectrum B ⊆ Set.Iic c ∧
-      TauCeti.DavisKahan.Experimental.Foundation.realSpectrum A ⊆ Set.Ici (c + d) := by
+      TauCeti.DavisKahan.Foundation.realSpectrum B ⊆ Set.Iic c ∧
+      TauCeti.DavisKahan.Foundation.realSpectrum A ⊆ Set.Ici (c + d) := by
   obtain ⟨hInvB, hInvA, hord⟩ := hsep
-  have hkey : ∀ b ∈ TauCeti.DavisKahan.Experimental.Foundation.realSpectrum B,
-      ∀ a ∈ TauCeti.DavisKahan.Experimental.Foundation.realSpectrum A, b + d ≤ a := by
+  have hkey : ∀ b ∈ TauCeti.DavisKahan.Foundation.realSpectrum B,
+      ∀ a ∈ TauCeti.DavisKahan.Foundation.realSpectrum A, b + d ≤ a := by
     intro b hb a ha
     refine hord b ?_ a ?_
     · rw [restrictedSpectrum_top_eq_realSpectrum_general]; exact hb
     · rw [restrictedSpectrum_top_eq_realSpectrum_general]; exact ha
-  rcases (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum B).eq_empty_or_nonempty
+  rcases (TauCeti.DavisKahan.Foundation.realSpectrum B).eq_empty_or_nonempty
     with hB0 | hBne
-  · rcases (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum A).eq_empty_or_nonempty
+  · rcases (TauCeti.DavisKahan.Foundation.realSpectrum A).eq_empty_or_nonempty
       with hA0 | hAne
     · exact ⟨0, by simp [hB0], by simp [hA0]⟩
-    · refine ⟨sInf (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum A) - d,
+    · refine ⟨sInf (TauCeti.DavisKahan.Foundation.realSpectrum A) - d,
         by simp [hB0], fun a ha => ?_⟩
-      have hbdd : BddBelow (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum A) :=
+      have hbdd : BddBelow (TauCeti.DavisKahan.Foundation.realSpectrum A) :=
         ⟨-(‖A‖ * ‖(1 : F →L[𝕜] F)‖), fun r hr =>
           neg_le_of_abs_le (abs_le_norm_of_mem_realSpectrum hr)⟩
       have := csInf_le hbdd ha
       simp only [Set.mem_Ici]
       linarith
-  · refine ⟨sSup (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum B),
+  · refine ⟨sSup (TauCeti.DavisKahan.Foundation.realSpectrum B),
       fun b hb => ?_, fun a ha => ?_⟩
     · exact le_csSup ⟨‖B‖ * ‖(1 : E →L[𝕜] E)‖, fun r hr =>
         le_of_abs_le (abs_le_norm_of_mem_realSpectrum hr)⟩ hb
-    · have hsup : sSup (TauCeti.DavisKahan.Experimental.Foundation.realSpectrum B) ≤ a - d :=
+    · have hsup : sSup (TauCeti.DavisKahan.Foundation.realSpectrum B) ≤ a - d :=
         csSup_le hBne fun b hb => by linarith [hkey b hb a ha]
       simp only [Set.mem_Ici]
       linarith
@@ -150,7 +150,7 @@ theorem norm_sylvester_le_of_orderedSeparation_rclike
   exact hsolve.2
 
 open TauCeti.RealComplexification in
-open scoped TauCeti.DavisKahan.Experimental.Foundation.RealScalarRestriction in
+open scoped TauCeti.DavisKahan.Foundation.RealScalarRestriction in
 /-- **The universal `π/2` Sylvester estimate over a general `RCLike` field.**
 
 Proved by restricting scalars to `ℝ` and complexifying, which is the route the
@@ -203,7 +203,7 @@ theorem norm_sylvester_le_of_generalSeparation_rclike
       Foundation.realSpectrum (complexify (T.restrictScalars ℝ)) =
         Foundation.realSpectrum T := by
     intro G _ _ _ T
-    rw [TauCeti.DavisKahan.Experimental.Foundation.RealComplexification.realSpectrum_complexify (T.restrictScalars ℝ),
+    rw [TauCeti.DavisKahan.Foundation.RealComplexification.realSpectrum_complexify (T.restrictScalars ℝ),
       Foundation.realSpectrum_eq_spectrum_restrictScalars T]
     rfl
   have hsepc : SpectraSeparated (complexify (A.restrictScalars ℝ)) ⊤
@@ -261,13 +261,13 @@ theorem sinTheta_residual
     refine ⟨hM, fun x _ => Submodule.mem_top, ?_⟩
     intro a ha b hb
     refine hord a ha b ?_
-    have hb' : b ∈ TauCeti.DavisKahan.Experimental.Foundation.realSpectrum
+    have hb' : b ∈ TauCeti.DavisKahan.Foundation.realSpectrum
         (restrictToOrthogonal A U hU) :=
       (restrictedSpectrum_top_eq_realSpectrum_general
         (restrictToOrthogonal A U hU)) ▸ hb
-    have h2 : TauCeti.DavisKahan.Experimental.Foundation.restrictedSpectrum
+    have h2 : TauCeti.DavisKahan.Foundation.restrictedSpectrum
           A Uᗮ =
-        TauCeti.DavisKahan.Experimental.Foundation.realSpectrum
+        TauCeti.DavisKahan.Foundation.realSpectrum
           (restrictToOrthogonal A U hU) :=
       restrictedSpectrum_orthogonal_eq A U hU
     rw [h2]

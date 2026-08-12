@@ -84,10 +84,10 @@ namespace DavisKahan1970
 open scoped InnerProductSpace BigOperators
 
 open TauCeti.ApproximationNumber
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
-open TauCeti.DavisKahan.Experimental.ExactSinTheta.ComplexificationApproximation
+open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 

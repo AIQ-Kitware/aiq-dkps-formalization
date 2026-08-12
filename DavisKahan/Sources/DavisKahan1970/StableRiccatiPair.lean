@@ -21,7 +21,7 @@ namespace DavisKahan
 
 open scoped InnerProductSpace
 open DavisKahanExt
-open Experimental.ExactSinTheta
+open ExactSinTheta
 
 noncomputable section
 

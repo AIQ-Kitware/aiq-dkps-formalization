@@ -21,7 +21,6 @@ which engine supplies the Sylvester estimate.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -292,6 +291,5 @@ theorem isometricComplementaryBlock_mem_and_gauge_eq_directed
 end GenericExact
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

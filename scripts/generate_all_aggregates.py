@@ -5,8 +5,10 @@ Each directory's aggregate imports every module in that directory plus the
 aggregate of each immediate subdirectory, so that `DavisKahan.All` reaches the
 whole production tree by construction rather than by hand-maintained lists.
 
-Experimental directories are left alone: their aggregates are curated by hand
-because they must keep tracking which obligations remain open.
+Experimental, MathAhead, and audit directories are left out of production
+aggregates.  Experimental and MathAhead are staging trees; audit modules are
+diagnostic entry points.  Their aggregates are curated separately and are not
+part of `DavisKahan.All`.
 
 **Cross-library re-exports are preserved.** Since the Tau Ceti migration an
 aggregate legitimately imports modules that no longer live under `DavisKahan/` —
@@ -29,7 +31,7 @@ import re
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 BASE = ROOT / "DavisKahan"
-SKIP_DIRS = {"Experimental"}
+SKIP_DIRS = {"Experimental", "MathAhead", "Audits"}
 OWN_LIBRARY = "DavisKahan"
 IMPORT_RE = re.compile(r"^import\s+(\S+)\s*$", re.MULTILINE)
 

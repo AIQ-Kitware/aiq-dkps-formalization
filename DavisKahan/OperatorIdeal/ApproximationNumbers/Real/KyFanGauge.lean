@@ -36,7 +36,6 @@ open scoped InnerProductSpace Topology
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 namespace ApproximationNumbersReal
 
@@ -86,6 +85,5 @@ end
 
 end ApproximationNumbersReal
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

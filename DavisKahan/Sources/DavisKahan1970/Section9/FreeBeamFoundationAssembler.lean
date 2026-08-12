@@ -29,16 +29,13 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 namespace Analytic
 
 noncomputable section
 
 open Abstract
-open MathAhead.HiddenFoundations.FreeBeam
+open FreeBeam
 
 universe u v
 
@@ -104,7 +101,7 @@ theorem dense_freeDomain
 foundation. -/
 noncomputable def toSobolevTraceFoundation
     (D : BeamFoundationCompletionData (H := H) (V := V)) :
-    MathAhead.HiddenFoundations.FreeBeam.SobolevTraceFoundation (H := H) where
+    FreeBeam.SobolevTraceFoundation (H := H) where
   maximalDomain := D.traceModel.maximalAmbientDomain
   freeDomain := D.traceModel.freeAmbientDomain
   free_le_maximal := D.traceModel.freeAmbientDomain_le_maximalAmbientDomain
@@ -159,8 +156,5 @@ end
 
 end Analytic
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

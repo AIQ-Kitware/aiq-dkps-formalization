@@ -34,7 +34,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
@@ -782,6 +781,5 @@ theorem spectraCanonicalAbsoluteValue_sq_eq_halmosCosineSq
 
 end ComplexAbsoluteValue
 
-end Experimental
 end DavisKahan
 end TauCeti

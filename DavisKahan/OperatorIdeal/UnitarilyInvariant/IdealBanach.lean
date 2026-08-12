@@ -29,10 +29,8 @@ integration argument is needed for that family.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace ExactSinTheta
-namespace Scratch
-namespace IdealBanach
+namespace OperatorIdeal
+namespace UnitarilyInvariant
 
 open scoped InnerProductSpace
 open Filter Topology MeasureTheory
@@ -385,9 +383,7 @@ end IdealOperator
 
 end
 
-end IdealBanach
-end Scratch
-end ExactSinTheta
-end Experimental
+end UnitarilyInvariant
+end OperatorIdeal
 end DavisKahan
 end TauCeti

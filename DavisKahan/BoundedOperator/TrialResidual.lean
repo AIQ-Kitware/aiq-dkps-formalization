@@ -20,12 +20,10 @@ residual and `X*`.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace Scratch
-namespace SharedFoundations
+namespace BoundedOperator
 
 open scoped InnerProductSpace
-open ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 open DavisKahanExt
 open TauCeti.DavisKahan
 
@@ -178,8 +176,6 @@ theorem gauge_isometricRangeCrossBlock_le
     Vᗮ.starProjection X.adjoint hR
     Vᗮ.starProjection_norm_le (isometry_and_adjoint_norm_le_one X hX).2
 
-end SharedFoundations
-end Scratch
-end Experimental
+end BoundedOperator
 end DavisKahan
 end TauCeti

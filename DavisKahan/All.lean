@@ -13,7 +13,6 @@ import DavisKahan.Frontier.All
 import DavisKahan.Geometry.All
 import DavisKahan.InfiniteDimensional.All
 import DavisKahan.Interop.All
-import DavisKahan.MathAhead.All
 import DavisKahan.OperatorIdeal.All
 import DavisKahan.Riccati.All
 import DavisKahan.SharedFoundations.All

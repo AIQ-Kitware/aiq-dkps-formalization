@@ -26,7 +26,6 @@ the cross projection into `V`'s orthogonal complement.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -290,6 +289,5 @@ theorem paperSourceDirectedSin_same_paperSineBlock
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

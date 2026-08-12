@@ -20,7 +20,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 
 universe u v
@@ -200,7 +199,7 @@ theorem unitaryConjugate_spectrum_eq
 /-- Restriction of an ambient unitary to a submodule and its transported
 image.  This same-ambient-space form is exactly what reflection transport
 needs; it does not impose completeness on an arbitrary submodule. -/
-noncomputable def submoduleMapIsometry
+noncomputable def unitarySubmoduleMapIsometry
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     (W : E ≃ₗᵢ[ℂ] E) (U : Submodule ℂ E) :
     U ≃ₗᵢ[ℂ] U.map (W.toLinearEquiv : E →ₗ[ℂ] E) where
@@ -216,20 +215,19 @@ noncomputable def submoduleMapIsometry
     rfl
 
 /-- The induced submodule isometry acts as the underlying map. -/
-@[simp] theorem submoduleMapIsometry_coe_apply
+@[simp] theorem unitarySubmoduleMapIsometry_coe_apply
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     (W : E ≃ₗᵢ[ℂ] E) (U : Submodule ℂ E) (x : U) :
-    ((submoduleMapIsometry W U x :
+    ((unitarySubmoduleMapIsometry W U x :
       U.map (W.toLinearEquiv : E →ₗ[ℂ] E)) : E) = W (x : E) := rfl
 
 /-- Its inverse acts as the inverse map. -/
-@[simp] theorem submoduleMapIsometry_symm_coe_apply
+@[simp] theorem unitarySubmoduleMapIsometry_symm_coe_apply
     {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
     (W : E ≃ₗᵢ[ℂ] E) (U : Submodule ℂ E)
     (x : U.map (W.toLinearEquiv : E →ₗ[ℂ] E)) :
-    (((submoduleMapIsometry W U).symm x : U) : E) = W.symm (x : E) := rfl
+    (((unitarySubmoduleMapIsometry W U).symm x : U) : E) = W.symm (x : E) := rfl
 
 
-end Experimental
 end DavisKahan
 end TauCeti

@@ -16,7 +16,6 @@ that the lower singular-data layer remains independent of the norm package.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -98,6 +97,5 @@ theorem paperMem_iff_and_gauge_eq
 end PaperSinThetaRepresentativeAcross
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

@@ -31,7 +31,6 @@ is made; compactness follows afterwards from finite square energy.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
@@ -516,6 +515,5 @@ theorem hilbertSchmidtIdealFamily_gauge_eq_paperHilbertSchmidtNorm {G K : Type v
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

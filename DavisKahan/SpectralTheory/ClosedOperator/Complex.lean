@@ -14,7 +14,6 @@ vendored Spectra calculus, so it gets its own abbreviation.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 universe v
@@ -27,6 +26,5 @@ abbrev ComplexClosedOperatorH :=
   TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

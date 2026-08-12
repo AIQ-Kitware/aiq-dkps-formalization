@@ -44,8 +44,8 @@ written over `ℝ` at all.
 
 ## Main results
 
-* `TauCeti.DavisKahan.Experimental.sinTheta_addBounded_gauge_real_isometric`
-* `TauCeti.DavisKahan.Experimental.sinTwoTheta_reflectionResidual_gauge_real`
+* `TauCeti.DavisKahan.sinTheta_addBounded_gauge_real_isometric`
+* `TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_real`
 
 ## References
 
@@ -59,12 +59,11 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
-open TauCeti.DavisKahan.Experimental.RealSpectralRestriction
+open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.RealSpectralRestriction
 
 noncomputable section
 
@@ -452,6 +451,5 @@ end Perturbation
 
 end
 
-end Experimental
 end DavisKahan
 end TauCeti

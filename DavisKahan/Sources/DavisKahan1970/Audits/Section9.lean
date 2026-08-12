@@ -40,34 +40,34 @@ namespace Section9
 
 /-! ## Real analytic implementation audit -/
 
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamOperator_is_closure_of_classical_freeBeam_fourthDerivative
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.classicalFreeBeamCoreGraph_has_classical_representative
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.classicalFreeBeamGraph_subset_graph
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.closure_classicalFreeBeamGraph_eq_graph
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.realSpectrum_beamOperator_eq_insert_zero
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.exists_eigenpair_of_characteristic
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamEigenvalues_eq_characteristicFourthPowers
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealPositiveSpectrum_sourceFacts
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealZeroMode_sourceFacts
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamPerturbation_isSelfAdjoint
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamTrial_orthonormal
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRitz_matrix
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamResidualGram_matrix
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamFiniteDataCertificate
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealModel_sourceFacts
-#check DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealFiniteData_sourceFacts
+#check DavisKahan.FreeBeam.Model.Real.beamOperator_is_closure_of_classical_freeBeam_fourthDerivative
+#check DavisKahan.FreeBeam.Model.Real.classicalFreeBeamCoreGraph_has_classical_representative
+#check DavisKahan.FreeBeam.Model.Real.classicalFreeBeamGraph_subset_graph
+#check DavisKahan.FreeBeam.Model.Real.closure_classicalFreeBeamGraph_eq_graph
+#check DavisKahan.FreeBeam.Model.Real.realSpectrum_beamOperator_eq_insert_zero
+#check DavisKahan.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues
+#check DavisKahan.FreeBeam.Model.Real.exists_eigenpair_of_characteristic
+#check DavisKahan.FreeBeam.Model.Real.beamEigenvalues_eq_characteristicFourthPowers
+#check DavisKahan.FreeBeam.Model.Real.beamRealPositiveSpectrum_sourceFacts
+#check DavisKahan.FreeBeam.Model.Real.beamRealZeroMode_sourceFacts
+#check DavisKahan.FreeBeam.Model.Real.beamPerturbation_isSelfAdjoint
+#check DavisKahan.FreeBeam.Model.Real.beamTrial_orthonormal
+#check DavisKahan.FreeBeam.Model.Real.beamRitz_matrix
+#check DavisKahan.FreeBeam.Model.Real.beamResidualGram_matrix
+#check DavisKahan.FreeBeam.Model.Real.beamFiniteDataCertificate
+#check DavisKahan.FreeBeam.Model.Real.beamRealModel_sourceFacts
+#check DavisKahan.FreeBeam.Model.Real.beamRealFiniteData_sourceFacts
 
-#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamOperator_is_closure_of_classical_freeBeam_fourthDerivative
-#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.classicalFreeBeamGraph_subset_graph
-#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.realSpectrum_beamOperator_eq_insert_zero
-#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues
-#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.exists_eigenpair_of_characteristic
-#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamEigenvalues_eq_characteristicFourthPowers
-#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealPositiveSpectrum_sourceFacts
-#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealZeroMode_sourceFacts
-#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamFiniteDataCertificate
-#print axioms DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Model.Real.beamRealModel_sourceFacts
+#print axioms DavisKahan.FreeBeam.Model.Real.beamOperator_is_closure_of_classical_freeBeam_fourthDerivative
+#print axioms DavisKahan.FreeBeam.Model.Real.classicalFreeBeamGraph_subset_graph
+#print axioms DavisKahan.FreeBeam.Model.Real.realSpectrum_beamOperator_eq_insert_zero
+#print axioms DavisKahan.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues
+#print axioms DavisKahan.FreeBeam.Model.Real.exists_eigenpair_of_characteristic
+#print axioms DavisKahan.FreeBeam.Model.Real.beamEigenvalues_eq_characteristicFourthPowers
+#print axioms DavisKahan.FreeBeam.Model.Real.beamRealPositiveSpectrum_sourceFacts
+#print axioms DavisKahan.FreeBeam.Model.Real.beamRealZeroMode_sourceFacts
+#print axioms DavisKahan.FreeBeam.Model.Real.beamFiniteDataCertificate
+#print axioms DavisKahan.FreeBeam.Model.Real.beamRealModel_sourceFacts
 
 #check initial_residual_gram_from_affine_moments
 #check recentered_residual_gram_from_affine_moments

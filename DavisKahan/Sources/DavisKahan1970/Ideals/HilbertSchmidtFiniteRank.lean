@@ -23,7 +23,6 @@ basis choice.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
@@ -163,6 +162,5 @@ theorem opNorm_le_paperHilbertSchmidtNorm
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

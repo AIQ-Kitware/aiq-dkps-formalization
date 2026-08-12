@@ -95,7 +95,7 @@ its proof.
 
 ## Main results
 
-* `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.HalmosAngleDatum`
+* `TauCeti.DavisKahan.HalmosAngleDatum`
 * `..._starProjection_targetSubspace_apply` — the block matrix of (3.7)
 * `..._compress_source_eq` and `..._compress_sourceOrthogonal_eq` — the realized
   pair has the prescribed `cos² Θ₀` and `cos² Θ₁`
@@ -111,9 +111,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 universe u v
 
@@ -1214,8 +1211,5 @@ theorem HalmosAngleDatum.ofIntertwinedAngles_intertwiner :
 
 end OfIntertwinedAngles
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

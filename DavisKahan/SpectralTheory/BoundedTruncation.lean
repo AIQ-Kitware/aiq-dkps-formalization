@@ -35,7 +35,6 @@ open Filter
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 universe v
@@ -146,6 +145,5 @@ noncomputable def spectraBoundedTruncationInterface
   commutes_cutoff := spectraBoundedTruncation_commutes_cutoff A hA
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

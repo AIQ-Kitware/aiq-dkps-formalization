@@ -32,7 +32,6 @@ norm quantifier in the 1970 paper.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
@@ -419,6 +418,5 @@ end ModulusPaperNorms
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

@@ -48,7 +48,7 @@ Kahan state Theorem 3.1 for, and multiplicity theory left the critical path.
 
 ## Main results
 
-* `TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.genericTransport`:
+* `TauCeti.DavisKahan.genericTransport`:
   the extension `halmosGenericPart U₁ V₁ ≃ₗᵢ[𝕜] halmosGenericPart U₂ V₂`.
 * `..._mem_left_iff` and `..._mem_right_iff`: it carries `U₁` to `U₂` and `V₁`
   to `V₂`.
@@ -61,9 +61,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 open Frontier
 
@@ -503,8 +500,5 @@ theorem pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant :
 
 end Classification
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

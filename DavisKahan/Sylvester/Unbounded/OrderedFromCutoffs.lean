@@ -21,7 +21,6 @@ open Filter
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 universe v
@@ -397,6 +396,5 @@ theorem interfaceDoubleCutoff_sylvester_equation
 end ApproximationNumberEndpointAssumptions
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

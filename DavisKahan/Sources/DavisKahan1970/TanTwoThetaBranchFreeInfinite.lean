@@ -57,7 +57,7 @@ namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
-open DavisKahan.Experimental.ExactSinTheta
+open DavisKahan.ExactSinTheta
 open TauCeti.DavisKahan (exists_approximateLeadingSingularFamily)
 
 noncomputable section

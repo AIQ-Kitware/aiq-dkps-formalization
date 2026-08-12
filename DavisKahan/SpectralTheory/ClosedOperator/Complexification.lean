@@ -23,7 +23,6 @@ homeomorphism.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -38,7 +37,7 @@ namespace ClosedOperatorComplexification
 open TauCeti.RealComplexification
 -- `Basic` moved to `ForTauCeti`; `Subspace` (and `complexifySubmodule`) is still here, so the
 -- namespace is split across the two libraries and both halves have to be opened.
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
@@ -785,6 +784,5 @@ end ClosedOperatorComplexification
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

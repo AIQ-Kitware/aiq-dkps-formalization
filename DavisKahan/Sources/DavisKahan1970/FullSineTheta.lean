@@ -23,7 +23,7 @@ namespace DavisKahan1970
 
 -- Lean has no namespace-alias command, so the paper implementation namespace
 -- is opened directly; every unprefixed `Paper...` name below resolves into it.
-open DavisKahan.Experimental.ExactSinTheta
+open DavisKahan.ExactSinTheta
 
 /-! ## Source norm class -/
 

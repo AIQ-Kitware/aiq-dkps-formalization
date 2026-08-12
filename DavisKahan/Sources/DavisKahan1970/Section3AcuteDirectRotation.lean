@@ -40,15 +40,14 @@ open scoped InnerProductSpace ComplexOrder
 namespace TauCeti
 namespace DavisKahan1970
 
-open DavisKahan.Experimental
-open DavisKahan.Experimental.MathAhead.HiddenFoundations
+open DavisKahan
 
 /-! ## Definition 3.1's direct rotation, over any `RCLike` field -/
 
 /-- **The direct rotation of an acute pair**: the polar factor of the canonical
 intertwiner `S = P_V P_U + P_Vᗮ P_Uᗮ`.  The object carries no hypothesis; the
 theorems below say what acuteness makes of it. -/
-alias acute_directRotation := DavisKahan.Experimental.spectraCanonicalPolarFactor
+alias acute_directRotation := DavisKahan.spectraCanonicalPolarFactor
 
 section Generic
 
@@ -209,7 +208,7 @@ theorem complex_acute_directRotation_iff_positiveDiagonalBlocks
 /-- **The previously compiled complex endpoint is a special case.**
 
 Statement copied from
-`TauCeti.DavisKahan.Experimental.eq_spectraDirectRotation_iff_diagonalBlocks_pos`,
+`TauCeti.DavisKahan.eq_spectraDirectRotation_iff_diagonalBlocks_pos`,
 proof obtained from the printed-hypothesis biconditional through
 `TauCeti.isAcute_of_projectionGap_lt_one`.  Nothing that was compiled at
 `IsUniformlyAcute` is lost. -/
@@ -253,7 +252,7 @@ theorem real_directRotation_eq_acute_directRotation
 /-- **The previously compiled real endpoint is a special case.**
 
 Statement copied from
-`TauCeti.DavisKahan.Experimental.eq_directRotationR_iff_diagonalBlocks_pos`,
+`TauCeti.DavisKahan.eq_directRotationR_iff_diagonalBlocks_pos`,
 proof obtained from the printed-hypothesis biconditional. -/
 theorem eq_directRotationR_iff_diagonalBlocks_pos_of_isAcute
     (hacute : DavisKahan.IsUniformlyAcute U V) (W : E →L[ℝ] E) :

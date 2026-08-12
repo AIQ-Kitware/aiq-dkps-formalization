@@ -6,7 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.SpectralTheory.ClosedOperator.All
 import DavisKahan.SpectralTheory.Complexification.All
 import DavisKahan.SpectralTheory.FormMethod.All
-import DavisKahan.SpectralTheory.FormSpectrumBounds
 import DavisKahan.SpectralTheory.Real.All
 import DavisKahan.SpectralTheory.ReducingSubspace.All
 import DavisKahan.SpectralTheory.AbstractSpectrum
@@ -18,6 +17,7 @@ import DavisKahan.SpectralTheory.CircleRieszEndpoints
 import DavisKahan.SpectralTheory.CircleRieszProjection
 import DavisKahan.SpectralTheory.ContinuationContour
 import DavisKahan.SpectralTheory.ContinuationRieszIntegral
+import DavisKahan.SpectralTheory.FormSpectrumBounds
 import DavisKahan.SpectralTheory.GapResolvent
 import DavisKahan.SpectralTheory.GraphSubspace
 import DavisKahan.SpectralTheory.OperatorAngle

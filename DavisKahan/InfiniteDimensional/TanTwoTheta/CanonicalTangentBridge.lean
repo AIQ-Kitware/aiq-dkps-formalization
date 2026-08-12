@@ -49,7 +49,7 @@ namespace DavisKahan
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahanExt
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 -- `doubleAngleTangentOperator` and its denominator API live in the *sibling*
 -- namespace `TauCeti.FinishTanTwoTheta` (see `FunctionalCalculus/DoubleAngleTangent.lean`),
 -- not under `TauCeti.DavisKahan.FinishTanTwoTheta`, so they are not in scope here by

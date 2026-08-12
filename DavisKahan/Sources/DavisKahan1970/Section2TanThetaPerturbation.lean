@@ -48,8 +48,6 @@ open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
 namespace Section2
 
 open ExactSinTheta
@@ -217,7 +215,5 @@ theorem theorem6_3_perturbation_infiniteTrial
   exact hcore.trans hRE
 
 end Section2
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

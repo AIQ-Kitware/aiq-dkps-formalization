@@ -22,7 +22,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 namespace NaturalExamples
 
@@ -230,6 +229,5 @@ end
 
 end NaturalExamples
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

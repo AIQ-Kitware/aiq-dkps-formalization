@@ -35,9 +35,6 @@ open scoped Interval ComplexConjugate
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 
 noncomputable section
@@ -235,8 +232,5 @@ end ComplexFourthOrderData
 end
 
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

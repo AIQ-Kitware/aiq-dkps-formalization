@@ -17,7 +17,6 @@ ideal family as the complex generalized theorem.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -128,6 +127,5 @@ theorem directedSinThetaOperatorReal_eq_of_isometry
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

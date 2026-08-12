@@ -49,7 +49,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -174,6 +173,5 @@ theorem selfAdjoint_maps_spectralSubspace
       (selfAdjoint_apply_spectralProjection A hA hB x).symm
     _ = A.toLinearMap x := congrArg A.toLinearMap hsub
 
-end Experimental
 end DavisKahan
 end TauCeti

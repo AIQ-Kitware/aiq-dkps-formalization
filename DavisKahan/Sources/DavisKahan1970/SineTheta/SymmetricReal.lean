@@ -61,7 +61,6 @@ inequality occurs anywhere below.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -138,20 +137,20 @@ theorem approximationNumber_paperSourceFullSinR_eq_paperCrossSineSum
   -- the complexified projector difference.
   have hcomplex : SameApproximationSingularSequence
       (paperSourceFullSinR V U)
-      ((TauCeti.DavisKahan.Experimental.Foundation.RealComplexification.complexifySubmodule
+      ((TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule
           V).starProjection -
-        (TauCeti.DavisKahan.Experimental.Foundation.RealComplexification.complexifySubmodule
+        (TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule
           U).starProjection) :=
     paperSourceFullSin_same_projectionDifference _ _
   have hcx :
-      (TauCeti.DavisKahan.Experimental.Foundation.RealComplexification.complexifySubmodule
+      (TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule
           V).starProjection -
-        (TauCeti.DavisKahan.Experimental.Foundation.RealComplexification.complexifySubmodule
+        (TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule
           U).starProjection =
         TauCeti.RealComplexification.complexify
           (V.starProjection - U.starProjection) := by
-    rw [TauCeti.DavisKahan.Experimental.Foundation.RealComplexification.starProjection_complexifySubmodule,
-      TauCeti.DavisKahan.Experimental.Foundation.RealComplexification.starProjection_complexifySubmodule,
+    rw [TauCeti.DavisKahan.Foundation.RealComplexification.starProjection_complexifySubmodule,
+      TauCeti.DavisKahan.Foundation.RealComplexification.starProjection_complexifySubmodule,
       RealComplexification.complexify_sub]
   rw [hcx] at hcomplex
   intro n
@@ -510,6 +509,5 @@ end PaperRealSymmetricSinThetaProblem
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

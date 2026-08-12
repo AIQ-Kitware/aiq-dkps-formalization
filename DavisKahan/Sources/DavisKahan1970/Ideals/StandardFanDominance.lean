@@ -30,7 +30,7 @@ namespace TauCeti
 namespace SymmetricIdeal
 
 open scoped BigOperators
-open DavisKahan.Experimental.ExactSinTheta
+open DavisKahan.ExactSinTheta
 
 noncomputable section
 

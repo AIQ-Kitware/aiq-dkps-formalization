@@ -36,7 +36,6 @@ double-angle theorems, where a lossy transport would not close the gap.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Foundation
 namespace RealComplexification
 
@@ -113,6 +112,5 @@ theorem mapsTo_of_mem_orthogonal_complexifySubmodule
 
 end RealComplexification
 end Foundation
-end Experimental
 end DavisKahan
 end TauCeti

@@ -63,9 +63,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 open Frontier
 
@@ -582,8 +579,5 @@ theorem pairOfSubspacesUnitaryEquivalent_of_summandEquivs
     map_halmosGlobalEquiv_left U₁ V₁ U₂ V₂ ec' es' et' ee' eg hgU,
     map_halmosGlobalEquiv_right U₁ V₁ U₂ V₂ ec' es' et' ee' eg hgV⟩
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

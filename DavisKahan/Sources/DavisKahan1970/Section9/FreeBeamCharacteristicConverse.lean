@@ -21,15 +21,12 @@ the four-parameter classical mode with coefficients `(a,b,a,b)`.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 namespace Classical
 
 noncomputable section
 
-open MathAhead.HiddenFoundations.FreeBeam
+open FreeBeam
 
 /-- A singular matrix `[[A,B],[C,A]]` has a nonzero kernel vector. -/
 theorem exists_nontrivial_two_by_two_kernel
@@ -56,47 +53,47 @@ theorem exists_nontrivial_two_by_two_kernel
 up to the nonzero factor `beta^2`. -/
 theorem modeD2_right_eq_reduced
     (beta a b : ℝ) :
-    MathAhead.HiddenFoundations.FreeBeam.modeD2 beta a b a b 1 =
+    FreeBeam.modeD2 beta a b a b 1 =
       beta ^ 2 *
-        (MathAhead.HiddenFoundations.FreeBeam.boundaryA beta * a +
-          MathAhead.HiddenFoundations.FreeBeam.boundaryB beta * b) := by
-  simp only [MathAhead.HiddenFoundations.FreeBeam.modeD2,
-    MathAhead.HiddenFoundations.FreeBeam.boundaryA,
-    MathAhead.HiddenFoundations.FreeBeam.boundaryB, mul_one]
+        (FreeBeam.boundaryA beta * a +
+          FreeBeam.boundaryB beta * b) := by
+  simp only [FreeBeam.modeD2,
+    FreeBeam.boundaryA,
+    FreeBeam.boundaryB, mul_one]
   ring
 
 /-- The reduced second row is exactly the right endpoint third derivative,
 up to the nonzero factor `beta^3`. -/
 theorem modeD3_right_eq_reduced
     (beta a b : ℝ) :
-    MathAhead.HiddenFoundations.FreeBeam.modeD3 beta a b a b 1 =
+    FreeBeam.modeD3 beta a b a b 1 =
       beta ^ 3 *
-        (MathAhead.HiddenFoundations.FreeBeam.boundaryC beta * a +
-          MathAhead.HiddenFoundations.FreeBeam.boundaryA beta * b) := by
-  simp only [MathAhead.HiddenFoundations.FreeBeam.modeD3,
-    MathAhead.HiddenFoundations.FreeBeam.boundaryA,
-    MathAhead.HiddenFoundations.FreeBeam.boundaryC, mul_one]
+        (FreeBeam.boundaryC beta * a +
+          FreeBeam.boundaryA beta * b) := by
+  simp only [FreeBeam.modeD3,
+    FreeBeam.boundaryA,
+    FreeBeam.boundaryC, mul_one]
   ring
 
 /-- The coefficients `(a,b,a,b)` automatically satisfy both left endpoint
 conditions. -/
 theorem left_free_boundary_identified_coefficients
     (beta a b : ℝ) :
-    MathAhead.HiddenFoundations.FreeBeam.modeD2 beta a b a b 0 = 0 ∧
-    MathAhead.HiddenFoundations.FreeBeam.modeD3 beta a b a b 0 = 0 := by
+    FreeBeam.modeD2 beta a b a b 0 = 0 ∧
+    FreeBeam.modeD3 beta a b a b 0 = 0 := by
   constructor <;>
-    simp [MathAhead.HiddenFoundations.FreeBeam.modeD2,
-      MathAhead.HiddenFoundations.FreeBeam.modeD3]
+    simp [FreeBeam.modeD2,
+      FreeBeam.modeD3]
 
 /-- A reduced kernel vector gives the two right free endpoint conditions. -/
 theorem right_free_boundary_of_reduced_kernel
     {beta a b : ℝ}
-    (h1 : MathAhead.HiddenFoundations.FreeBeam.boundaryA beta * a +
-      MathAhead.HiddenFoundations.FreeBeam.boundaryB beta * b = 0)
-    (h2 : MathAhead.HiddenFoundations.FreeBeam.boundaryC beta * a +
-      MathAhead.HiddenFoundations.FreeBeam.boundaryA beta * b = 0) :
-    MathAhead.HiddenFoundations.FreeBeam.modeD2 beta a b a b 1 = 0 ∧
-    MathAhead.HiddenFoundations.FreeBeam.modeD3 beta a b a b 1 = 0 := by
+    (h1 : FreeBeam.boundaryA beta * a +
+      FreeBeam.boundaryB beta * b = 0)
+    (h2 : FreeBeam.boundaryC beta * a +
+      FreeBeam.boundaryA beta * b = 0) :
+    FreeBeam.modeD2 beta a b a b 1 = 0 ∧
+    FreeBeam.modeD3 beta a b a b 1 = 0 := by
   constructor
   · rw [modeD2_right_eq_reduced, h1, mul_zero]
   · rw [modeD3_right_eq_reduced, h2, mul_zero]
@@ -105,22 +102,22 @@ theorem right_free_boundary_of_reduced_kernel
 boundary determinant. -/
 theorem boundaryDet_eq_zero_of_characteristic_eq_zero
     {beta : ℝ}
-    (hroot : MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0) :
-    MathAhead.HiddenFoundations.FreeBeam.boundaryDet beta = 0 := by
-  rw [MathAhead.HiddenFoundations.FreeBeam.boundaryDet_eq]
-  unfold MathAhead.HiddenFoundations.FreeBeam.characteristic at hroot
+    (hroot : FreeBeam.characteristic beta = 0) :
+    FreeBeam.boundaryDet beta = 0 := by
+  rw [FreeBeam.boundaryDet_eq]
+  unfold FreeBeam.characteristic at hroot
   nlinarith
 
 /-- Every characteristic root produces nontrivial reduced coefficients. -/
 theorem exists_reduced_coefficients_of_characteristic
     {beta : ℝ}
-    (hroot : MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0) :
+    (hroot : FreeBeam.characteristic beta = 0) :
     ∃ a b : ℝ,
       (a ≠ 0 ∨ b ≠ 0) ∧
-      MathAhead.HiddenFoundations.FreeBeam.boundaryA beta * a +
-        MathAhead.HiddenFoundations.FreeBeam.boundaryB beta * b = 0 ∧
-      MathAhead.HiddenFoundations.FreeBeam.boundaryC beta * a +
-        MathAhead.HiddenFoundations.FreeBeam.boundaryA beta * b = 0 := by
+      FreeBeam.boundaryA beta * a +
+        FreeBeam.boundaryB beta * b = 0 ∧
+      FreeBeam.boundaryC beta * a +
+        FreeBeam.boundaryA beta * b = 0 := by
   apply exists_nontrivial_two_by_two_kernel
   exact boundaryDet_eq_zero_of_characteristic_eq_zero hroot
 
@@ -128,10 +125,10 @@ theorem exists_reduced_coefficients_of_characteristic
 free--free mode. -/
 theorem exists_nontrivial_freeBoundary_of_characteristic
     {beta : ℝ} (_hbeta : beta ≠ 0)
-    (hroot : MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0) :
+    (hroot : FreeBeam.characteristic beta = 0) :
     ∃ a b : ℝ,
       (a ≠ 0 ∨ b ≠ 0) ∧
-      MathAhead.HiddenFoundations.FreeBeam.FreeBoundary beta a b a b := by
+      FreeBeam.FreeBoundary beta a b a b := by
   obtain ⟨a, b, hab, h1, h2⟩ :=
     exists_reduced_coefficients_of_characteristic hroot
   obtain ⟨h20, h30⟩ := left_free_boundary_identified_coefficients beta a b
@@ -142,10 +139,10 @@ theorem exists_nontrivial_freeBoundary_of_characteristic
 to existence of a nontrivial free mode. -/
 theorem characteristic_iff_exists_nontrivial_freeBoundary
     {beta : ℝ} (hbeta : beta ≠ 0) :
-    MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0 ↔
+    FreeBeam.characteristic beta = 0 ↔
       ∃ a b c d : ℝ,
         (a ≠ 0 ∨ b ≠ 0 ∨ c ≠ 0 ∨ d ≠ 0) ∧
-        MathAhead.HiddenFoundations.FreeBeam.FreeBoundary beta a b c d := by
+        FreeBeam.FreeBoundary beta a b c d := by
   constructor
   · intro hroot
     obtain ⟨a, b, hab, hfree⟩ :=
@@ -153,15 +150,12 @@ theorem characteristic_iff_exists_nontrivial_freeBoundary
     refine ⟨a, b, a, b, ?_, hfree⟩
     tauto
   · rintro ⟨a, b, c, d, hnonzero, hfree⟩
-    exact MathAhead.HiddenFoundations.FreeBeam.characteristic_eq_zero_of_freeBoundary
+    exact FreeBeam.characteristic_eq_zero_of_freeBoundary
       hbeta hfree hnonzero
 
 end
 
 end Classical
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

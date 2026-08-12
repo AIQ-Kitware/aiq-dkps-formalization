@@ -34,7 +34,7 @@ so it was compiled by nothing but its own aggregate until now.  Nothing is resta
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

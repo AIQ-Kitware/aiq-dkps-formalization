@@ -70,14 +70,14 @@ symmetric-gauge representation theorem.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 
 open scoped InnerProductSpace
 -- `RectangularSymmetricIdealFamily` and its concrete instances live in the
 -- `ExactSinTheta` namespace of the rectangular-family module
-open DavisKahan.Experimental.ExactSinTheta
+open DavisKahan.ExactSinTheta
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]

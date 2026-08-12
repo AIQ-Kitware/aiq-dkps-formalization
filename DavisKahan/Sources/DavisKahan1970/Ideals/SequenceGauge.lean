@@ -31,7 +31,7 @@ namespace TauCeti
 namespace Majorization
 
 open scoped BigOperators ENNReal
-open DavisKahan.Experimental.ExactSinTheta
+open DavisKahan.ExactSinTheta
 
 noncomputable section
 

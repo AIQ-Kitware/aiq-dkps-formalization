@@ -23,7 +23,7 @@ finite-dimensional singular-value files.
 
 namespace TauCeti
 open Module _root_.TauCeti.LinearMap
-open DavisKahan.Experimental.ExactSinTheta
+open DavisKahan.ExactSinTheta
 open scoped InnerProductSpace
 
 variable {E F : Type*}

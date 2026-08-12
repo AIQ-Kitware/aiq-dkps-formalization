@@ -9,14 +9,14 @@ import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 -- promoted infinite-dimensional Proposition 4.1 approximation-number majorization
 -- and the Fan-dominant ideal bridge for Corollary 4.1.  This module depends only
 -- on source-facing analysis, never on this frontier file, so the edge is acyclic.
-import DavisKahan.MathAhead.Section4.InfiniteProposition41
+import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
 -- infinite-dimensional Proposition 4.3 by pinching and orthogonal block sums.  Same
 -- acyclicity argument as the line above: it depends only on source-facing analysis.
-import DavisKahan.MathAhead.Section4.InfiniteProposition43
+import DavisKahan.Geometry.Polar.DisplacementSquareExtremal
 -- production Proposition 4.2 (`Sources/DavisKahan1970/Section4BasisAngleEnergy`),
 -- which this file's statement is grounded on by `:=`.  Production never imports
 -- the frontier, so the edge is acyclic.
-import DavisKahan.Sources.DavisKahan1970.Section4BasisAngleEnergy
+import DavisKahan.Geometry.Angle.BasisAngleEnergy
 
 /-!
 # Section 4 frontier: valid extremal properties of the direct rotation
@@ -31,11 +31,10 @@ open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace Section4
 
--- `` is `TauCeti.DavisKahan.Experimental`, so it
+-- `` is `TauCeti.DavisKahan`, so it
 -- can only be opened once those namespaces are entered
 open ExactSinTheta
 
@@ -59,8 +58,23 @@ theorem proposition4_1_restrictedDisplacement_approximationNumbers
         ((1 - spectraDirectRotation U V hacute) ∘L projection U) n ≤
       ContinuousLinearMap.approximationNumber
         ((1 - W) ∘L projection U) n :=
-  MathAhead.Section4.proposition4_1_restrictedDisplacement_approximationNumbers_scratch
+  TauCeti.DavisKahan.Section4.proposition4_1_restrictedDisplacement_approximationNumbers
     U V hacute W hWunitary hWmap n
+
+/-- Proposition 4.1 at the full matched-crossed-defect scope inherited
+from Corollary 3.1.  The equivalence `J` selects the paper direct rotation on
+the crossed defect blocks. -/
+theorem proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
+    (J : halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * projection U = projection V * W) (n : ℕ) :
+    ContinuousLinearMap.approximationNumber
+        ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+          projection U) n ≤
+      ContinuousLinearMap.approximationNumber ((1 - W) ∘L projection U) n :=
+  TauCeti.DavisKahan.Section4.proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
+    U V J W hWunitary hWmap n
 
 /-- Davis--Kahan 1970, Corollary 4.1 at Fan-dominant ideal-gauge scope.
 
@@ -80,10 +94,28 @@ theorem corollary4_1_restrictedDisplacement_idealGauge
       N.gauge
           ((1 - spectraDirectRotation U V hacute) ∘L projection U) ≤
         N.gauge ((1 - W) ∘L projection U) :=
-  MathAhead.Section4.restrictedDisplacement_idealGauge_le N
-    (MathAhead.Section4.infinite_restrictedDisplacementDominance
+  TauCeti.DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
+    (TauCeti.DavisKahan.Section4.infinite_restrictedDisplacementDominance
       U V hacute W hWunitary hWmap)
     hWmem
+
+/-- Corollary 4.1 at the full matched-crossed-defect scope inherited
+from Corollary 3.1. -/
+theorem corollary4_1_nonacute_restrictedDisplacement_idealGauge
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (J : halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * projection U = projection V * W)
+    (hWmem : N.Mem ((1 - W) ∘L projection U)) :
+    N.Mem ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+        projection U) ∧
+      N.gauge ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+          projection U) ≤
+        N.gauge ((1 - W) ∘L projection U) :=
+  TauCeti.DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
+    (TauCeti.DavisKahan.Section4.nonacute_restrictedDisplacementDominance
+      U V J W hWunitary hWmap) hWmem
 
 /-- Squared sine cost of one unit source vector under a unitary competitor. -/
 noncomputable def basisAngleSquareCost (W : H →L[ℂ] H) (x : H) : ℝ :=
@@ -177,7 +209,7 @@ theorem proposition4_2_basisAngleSquareSum
     ∑ i, basisAngleSquareCost W ((b i : H)) ≥
       ∑ i, (1 - ‖spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
         ((b i : H))‖ ^ 2) :=
-  MathAhead.Section4.sum_displacementAngleSineSq_ge U V b W hWunitary hWmap
+  TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge U V b W hWunitary hWmap
 
 /-- **Proposition 4.2, infinite-dimensional form.**
 
@@ -193,8 +225,20 @@ theorem proposition4_2_basisAngleSquareSum_infinite
     ∑' i, ENNReal.ofReal (1 - ‖spectraOperatorAbsoluteValue
         (spectraCanonicalIntertwiner U V) (b i)‖ ^ 2) ≤
       ∑' i, ENNReal.ofReal (basisAngleSquareCost W (b i)) :=
-  MathAhead.Section4.tsum_displacementAngleSineSq_ge_of_mem U V W hWunitary
+  TauCeti.DavisKahan.Section4.tsum_displacementAngleSineSq_ge_of_mem U V W hWunitary
     hWmap b hb hbnorm
+
+/-- Proposition 4.2 in arbitrary Hilbert dimension with the printed
+principal-sine right-hand side.  The `ℝ≥0∞` sums include the case where the
+right-hand side diverges. -/
+theorem proposition4_2_basisAngleSquareSum_principalSines_infinite
+    {ι : Type u} (b : HilbertBasis ι ℂ U) (W : H →L[ℂ] H)
+    (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * projection U = projection V * W) :
+    (∑' n : ℕ, ENNReal.ofReal (TauCeti.principalSineSequence U V n) ^ 2) ≤
+      ∑' i, ENNReal.ofReal (basisAngleSquareCost W ((b i : U) : H)) :=
+  TauCeti.DavisKahan.Section4.tsum_displacementAngleSineSq_ge_tsum_sq_principalSineSequence
+    U V b W hWunitary hWmap
 
 /-- The bound of `proposition4_2_basisAngleSquareSum` is attained by the direct
 rotation at a principal vector, so it is the true minimum and the direct
@@ -206,7 +250,7 @@ theorem proposition4_2_attained_on_principal_vector
     basisAngleSquareCost (spectraDirectRotation U V hacute) x =
       1 - ‖spectraOperatorAbsoluteValue
         (spectraCanonicalIntertwiner U V) x‖ ^ 2 :=
-  MathAhead.Section4.displacementAngleSineSq_directRotation_eq_of_smul U V
+  TauCeti.DavisKahan.Section4.displacementAngleSineSq_directRotation_eq_of_smul U V
     hacute hμ hxnorm hCx
 
 /-- **Proposition 4.2 with the printed right-hand side `∑ₖ sin² θₖ`.**
@@ -229,7 +273,7 @@ theorem proposition4_2_basisAngleSquareSum_principalSines
     ∑ i, basisAngleSquareCost W ((b i : H)) ≥
       ∑ i : Fin (Module.finrank ℂ U),
         TauCeti.principalSines U V (i : ℕ) ^ 2 :=
-  MathAhead.Section4.sum_displacementAngleSineSq_ge_sum_sq_principalSines U V b W
+  TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge_sum_sq_principalSines U V b W
     hWunitary hWmap
 
 /-! ### Proposition 4.3, and a third refuted transcription
@@ -268,7 +312,7 @@ of squares and sums behave differently, which is exactly why 4.3 survives while
 
 The statement below is therefore at Ky Fan level, which is what a unitarily
 invariant norm sees.  **It is proved**, in
-`MathAhead/Section4/InfiniteProposition43.lean`.  The finite-dimensional proof
+`Geometry/Polar/DisplacementSquareExtremal.lean`.  The finite-dimensional proof
 (`directRotation_displacementSquare_uiNorm`) diagonalizes and applies
 Fan--Hoffman to the pinched competitor; that route does not survive to infinite
 dimensions, where `2 − 2C` need not be compact and has no eigenvalue list.  The
@@ -302,11 +346,10 @@ theorem proposition4_3_squaredDisplacement_kyFan
         ((1 - star (spectraDirectRotation U V hacute)) *
           (1 - spectraDirectRotation U V hacute)) ≤
       kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=
-  MathAhead.Section4.proposition4_3_squaredDisplacement_kyFan_scratch U V hacute W
+  TauCeti.DavisKahan.Section4.proposition4_3_squaredDisplacement_kyFan U V hacute W
     hWunitary hWmap k
 
 end Section4
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

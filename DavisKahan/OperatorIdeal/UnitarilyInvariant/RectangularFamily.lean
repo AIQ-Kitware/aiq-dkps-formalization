@@ -24,7 +24,6 @@ stronger `KyFanDominantIdealFamily` defined in `ApproximationNumbers.lean`.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -437,7 +436,6 @@ ideal-gauge counterpart instead of proved a second time. -/
 
 end RectangularSymmetricIdealFamily
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti
 
@@ -449,7 +447,7 @@ universe u v
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 
-open DavisKahan.Experimental.ExactSinTheta
+open DavisKahan.ExactSinTheta
 
 /-- The historical record built from a canonical symmetric ideal family:
 membership is finiteness of the gauge, the real gauge is the canonical gauge read

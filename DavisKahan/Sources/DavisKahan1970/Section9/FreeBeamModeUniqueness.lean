@@ -29,9 +29,6 @@ once bootstrapped to a classical solution with free boundary conditions, has `co
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 
 open Set
@@ -251,8 +248,5 @@ theorem exists_mode_eqOn_of_fourth_deriv_within (beta : ℝ) (hbeta : beta ≠ 0
       hm3 hj0.symm hj1.symm hj2.symm hj3.symm⟩
 
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

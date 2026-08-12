@@ -33,7 +33,7 @@ filtered net rather than a sequence, and the scalar field is generic rather than
 `HasApproximationNumberStrongCutoff`).  The paper's statement is the specialization to a
 sequence over `ℂ`. -/
 alias Lemma5_1 :=
-  DavisKahan.Experimental.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto
+  DavisKahan.ExactSinTheta.approximationSingularValue_comp_strongProjection_tendsto
 
 /-- **Davis--Kahan 1970, Theorem 5.2.**  For self-adjoint closed operators with the
 source's ordering `A ≥ c + δ > c ≥ B`, a bounded solution of the Sylvester equation
@@ -49,7 +49,7 @@ This is the *ordered* branch.  The interval/exterior separation hypothesis is a 
 theorem, `unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum`; do not substitute
 one for the other. -/
 alias Theorem5_2 :=
-  DavisKahan.Experimental.ExactSinTheta.directOrderedSylvesterEngine_lowerUpper
+  DavisKahan.ExactSinTheta.directOrderedSylvesterEngine_lowerUpper
 
 /-- **Davis--Kahan 1970, inequality (5.1).**  With `C = AX - XB` and the spectra of the
 self-adjoint operators `A` and `B` pairwise at distance at least `δ`,
@@ -61,7 +61,7 @@ spaces rather than finite dimensional, and Hilbert--Schmidt membership of `X` is
 conclusion rather than a hypothesis.  A real-scalar companion is
 `paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap`. -/
 alias Inequality5_1 :=
-  DavisKahan.Experimental.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap
+  DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap
 
 /-- **Davis--Kahan 1970, inequality (5.2).**  Under the hypotheses of (5.1),
 `δ ‖X‖₁ ≤ ‖C‖₁ √(rank C)` in the paper's subscript-one norm, which Section 1 fixes as the
@@ -73,7 +73,7 @@ with the genuine rank in finite dimensions.  The source's own `2 × 2` witness t
 constant `1` cannot replace `√(rank C)` is compiled as `sharp52_constant_one_too_small`.
 Whether `rank C` may be replaced by a constant is the source's open question. -/
 alias Inequality5_2 :=
-  DavisKahan.Experimental.ExactSinTheta.paperOperatorNorm_sylvester_le_of_pairwiseSpectrumGap
+  DavisKahan.ExactSinTheta.paperOperatorNorm_sylvester_le_of_pairwiseSpectrumGap
 
 end DavisKahan1970
 end TauCeti

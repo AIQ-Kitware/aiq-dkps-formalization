@@ -35,7 +35,6 @@ and should eventually be built from the closed range of an isometric embedding.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Foundation
 
 open scoped InnerProductSpace
@@ -460,6 +459,5 @@ theorem realSpectrum_eq_spectrum_restrictScalars
   rw [hfun]
 
 end Foundation
-end Experimental
 end DavisKahan
 end TauCeti

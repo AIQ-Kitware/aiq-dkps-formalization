@@ -24,7 +24,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -93,6 +92,5 @@ theorem norm_spectraSinAngleOperator
   exact norm_spectraOperatorAbsoluteValue
     (U.starProjection - V.starProjection)
 
-end Experimental
 end DavisKahan
 end TauCeti

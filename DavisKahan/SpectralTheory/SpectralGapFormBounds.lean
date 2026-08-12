@@ -36,8 +36,8 @@ namespace DavisKahanExt
 
 open scoped InnerProductSpace
 open DavisKahan
-open DavisKahan.Experimental
-open DavisKahan.Experimental.Foundation
+open DavisKahan
+open DavisKahan.Foundation
 
 noncomputable section
 

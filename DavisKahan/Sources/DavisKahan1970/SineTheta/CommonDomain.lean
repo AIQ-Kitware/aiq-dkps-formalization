@@ -23,7 +23,6 @@ general determine the closed-operator product used by the theorem.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -168,6 +167,5 @@ theorem unboundedSinThetaDataOfPaperCommonDomain_hasCommonDomain
   hcommon
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

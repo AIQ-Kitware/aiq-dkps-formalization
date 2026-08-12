@@ -9,10 +9,10 @@ import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
 import DavisKahan.SpectralTheory.ClosedOperator.Complexification
 
 /-!
-# Real rectangular Hilbert--Schmidt completeness by complexification
+# Real rectangular Hilbert--Schmidt family by complexification
 
-This scratch module isolates the missing real-scalar completion argument for
-`RectangularSymmetricIdealFamily.hilbertSchmidt`.
+This module supplies the real-scalar Hilbert--Schmidt family used by the
+Davis--Kahan source formalization.
 
 The complex family is already represented isometrically by the Hilbert tensor
 space.  A Cauchy sequence of complexified real operators therefore has a
@@ -21,17 +21,13 @@ maps the real copy into the real copy.  Restricting that limit to real vectors
 and taking real coordinates produces the required real operator, whose
 complexification is exactly the complex limit.
 
-The module is intentionally separate from the production declaration.  A
-compiler agent can repair the few topology and coercion spellings here, then
-promote `hilbertSchmidtReal` into the rectangular-family implementation.
+The construction is the real counterpart of `HilbertSchmidtComplexFamily`: the
+complex Hilbert--Schmidt completion is descended through the canonical real copy.
 -/
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
-namespace Scratch
-namespace RectangularHilbertSchmidt
 
 open scoped InnerProductSpace
 open Filter Topology
@@ -126,7 +122,7 @@ theorem tendsto_opNorm_of_paperHilbertSchmidt
   refine ⟨N, ?_⟩
   intro n hn
   have hsub : IsPaperHilbertSchmidt (T n - L) :=
-    HiddenFoundations.isPaperHilbertSchmidt_sub (hT n) hL
+    isPaperHilbertSchmidt_sub (hT n) hL
   have hop : ‖T n - L‖ ≤ paperHilbertSchmidtNorm (T n - L) :=
     opNorm_le_paperHilbertSchmidtNorm hsub
   simpa only [dist_eq_norm] using lt_of_le_of_lt hop (hN n hn)
@@ -158,7 +154,7 @@ theorem paperHilbertSchmidt_complete_real
     rw [paperHilbertSchmidtNorm_complexify]
     exact hN m n hm hn
   obtain ⟨Lc, hLc, hconvC⟩ :=
-    HiddenFoundations.paperHilbertSchmidt_complete Ac hAc hcauchyC
+    paperHilbertSchmidt_complete Ac hAc hcauchyC
   have hOp : Tendsto Ac atTop (𝓝 Lc) :=
     tendsto_opNorm_of_paperHilbertSchmidt Ac Lc hAc hLc hconvC
   have hreal : MapsRealCopy Lc :=
@@ -192,7 +188,7 @@ theorem isPaperHilbertSchmidt_add_real
     IsPaperHilbertSchmidt (A + B) := by
   rw [← isPaperHilbertSchmidt_complexify_iff]
   rw [complexify_add]
-  exact HiddenFoundations.isPaperHilbertSchmidt_add
+  exact isPaperHilbertSchmidt_add
     ((isPaperHilbertSchmidt_complexify_iff A).2 hA)
     ((isPaperHilbertSchmidt_complexify_iff B).2 hB)
 
@@ -211,7 +207,7 @@ theorem paperHilbertSchmidtNorm_add_le_real
           rw [complexify_add]
     _ ≤ paperHilbertSchmidtNorm (complexify A) +
           paperHilbertSchmidtNorm (complexify B) :=
-      HiddenFoundations.paperHilbertSchmidtNorm_add_le
+      paperHilbertSchmidtNorm_add_le
         ((isPaperHilbertSchmidt_complexify_iff A).2 hA)
         ((isPaperHilbertSchmidt_complexify_iff B).2 hB)
     _ = paperHilbertSchmidtNorm A + paperHilbertSchmidtNorm B := by
@@ -282,9 +278,6 @@ noncomputable def hilbertSchmidtReal :
 
 end
 
-end RectangularHilbertSchmidt
-end Scratch
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

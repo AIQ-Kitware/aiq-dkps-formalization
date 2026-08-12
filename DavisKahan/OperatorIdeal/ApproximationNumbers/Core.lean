@@ -11,14 +11,14 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core
 **Every declaration here is a forwarding name.**  The mathematics lives in
 `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Core.lean` under the generic
 namespace `TauCeti.ApproximationNumber`; this module re-exports it under
-`TauCeti.DavisKahan.Experimental.ExactSinTheta`, which is the name 339 references in this
+`TauCeti.DavisKahan.ExactSinTheta`, which is the name 339 references in this
 library already use.
 
 ## Why the split
 
 The module was lifted into `ForTauCeti` because its imports are `ForTauCeti` leaves and
 Mathlib — it is generic approximation-number theory.  But it carried the enclosing
-namespace `TauCeti.DavisKahan.Experimental.ExactSinTheta` with it: **a paper's name and a
+namespace `TauCeti.DavisKahan.ExactSinTheta` with it: **a paper's name and a
 staging word, inside the library staged for Tau Ceti.**  A submission reviewer reads
 `Experimental` as a warning.
 
@@ -41,7 +41,6 @@ add it to the `export` list below.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 export TauCeti.ApproximationNumber (
@@ -63,6 +62,5 @@ export TauCeti.ApproximationNumber (
 )
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

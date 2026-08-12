@@ -18,7 +18,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 
@@ -147,6 +146,5 @@ theorem sinTheta_unbounded_spectralSubspace_of_spectrumGap
     UnboundedSinThetaData.toPMap] using hmain
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

@@ -23,7 +23,6 @@ source statement that was intended only on a core.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -228,6 +227,5 @@ theorem unboundedSinThetaDataOfPaperCommonCore_residual
       hintertwines).residual = R := rfl
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

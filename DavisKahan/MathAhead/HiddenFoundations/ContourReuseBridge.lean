@@ -47,7 +47,7 @@ between the old circle frontier and the compiled generic contour theory. -/
 structure RealizedCircleContinuationData
     (D : CircleContinuationData A E s) where
   contour : PiecewiseC1ClosedContour
-  separating : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
+  separating : ∀ t (_ht : t ∈ Set.Icc (0 : ℝ) 1),
     SpectralSeparatingContour (operatorPath A E t) s
   geometric_eq : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
     (separating t ht).geometric = contour
@@ -149,13 +149,13 @@ structure CommonCircleGeometry
     (D : CircleContinuationData A E s) where
   geometric : PiecewiseC1ClosedContour
   geometric_is_circle : Prop
-  margin_from_circle : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
+  margin_from_circle : ∀ t (_ht : t ∈ Set.Icc (0 : ℝ) 1),
     ∀ x : unitInterval, ∀ lam ∈ realSpectrum (operatorPath A E t),
       D.margin ≤ ‖geometric.path x - (lam : ℂ)‖
-  winding_selected : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
+  winding_selected : ∀ t (_ht : t ∈ Set.Icc (0 : ℝ) 1),
     ∀ lam ∈ realSpectrum (operatorPath A E t), lam ∈ s →
       geometric.normalizedWinding (lam : ℂ) = 1
-  winding_complement : ∀ t (ht : t ∈ Set.Icc (0 : ℝ) 1),
+  winding_complement : ∀ t (_ht : t ∈ Set.Icc (0 : ℝ) 1),
     ∀ lam ∈ realSpectrum (operatorPath A E t), lam ∉ s →
       geometric.normalizedWinding (lam : ℂ) = 0
 
