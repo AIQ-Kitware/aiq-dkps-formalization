@@ -1055,6 +1055,21 @@ theorem classicalModeLp_ne_zero_of_identified_coefficients
     exact hzint
   exact (ne_of_gt hpos) hzinterval
 
+/-- Scaling the two reduced free-beam coefficients scales the corresponding
+`L²(0,1)` mode.  Keeping this bridge explicit lets the simplicity proof stay at
+the paper's two-by-two boundary system rather than at the quotient-space level. -/
+theorem classicalModeLp_smul_identified (beta c a b : ℝ) :
+    classicalModeLp beta (c * a) (c * b) (c * a) (c * b) =
+      c • classicalModeLp beta a b a b := by
+  apply Lp.ext
+  filter_upwards [
+    coeFn_classicalModeLp beta (c * a) (c * b) (c * a) (c * b),
+    coeFn_classicalModeLp beta a b a b,
+    Lp.coeFn_smul c (classicalModeLp beta a b a b)] with t hleft hright hsmul
+  rw [hleft, hsmul, Pi.smul_apply, smul_eq_mul, hright]
+  unfold mode
+  ring
+
 /-- A classical mode satisfying the four free-end boundary equations gives a point of the
 classical fourth-derivative graph, with output `beta^4` times its `L²` class. -/
 def classicalFreeBeamRepresentative_mode
@@ -1123,12 +1138,21 @@ theorem exists_eigenpair_of_characteristic {beta : ℝ} (hbeta : 0 < beta)
 
 /-! ## Positive eigenfunctions satisfy the characteristic equation -/
 
-/-- Every positive eigenvalue of the real beam is the fourth power of a positive free-beam
-characteristic root. -/
-theorem exists_characteristic_of_eigen {lam : ℝ} (hlam : 0 < lam)
+/-- Every positive eigenvector of the real beam is represented by an identified
+classical free-beam mode at the canonical positive fourth root of its eigenvalue.
+This strengthens the characteristic-equation classification with the actual mode
+representation needed to certify geometric multiplicity. -/
+theorem exists_characteristic_mode_of_eigen {lam : ℝ} (hlam : 0 < lam)
     {x : beamOperator.domain} (hx0 : (x : BeamL2) ≠ 0)
     (heig : beamOperator.toLinearMap x = lam • (x : BeamL2)) :
-    ∃ beta : ℝ, 0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4 := by
+    ∃ beta a b : ℝ,
+      beta = lam ^ ((1 : ℝ) / 4) ∧
+      0 < beta ∧
+      characteristic beta = 0 ∧
+      lam = beta ^ 4 ∧
+      (a ≠ 0 ∨ b ≠ 0) ∧
+      FreeBoundary beta a b a b ∧
+      (x : BeamL2) = classicalModeLp beta a b a b := by
   classical
   obtain ⟨p, hembed, hpair⟩ := exists_form_representative_of_beam_apply x
   set xfn : ℝ → ℝ := ((x : BeamL2) : ℝ → ℝ) with hxfn
@@ -1292,7 +1316,72 @@ theorem exists_characteristic_of_eigen {lam : ℝ} (hlam : 0 < lam)
       _ = (((0 : BeamL2) : ℝ → ℝ) t) := hzero.symm
   have hchar : characteristic beta = 0 :=
     characteristic_eq_zero_of_freeBoundary hβpos.ne' hbd hnontriv
-  exact ⟨beta, hβpos, hchar, hβ4.symm⟩
+  obtain ⟨hcR, hdR⟩ := left_boundary_coefficients hβpos.ne' hbd.1 hbd.2.1
+  have habR : aR ≠ 0 ∨ bR ≠ 0 := by
+    rcases hnontriv with ha | hb | hc | hd
+    · exact Or.inl ha
+    · exact Or.inr hb
+    · exact Or.inl (fun ha => hc (hcR.trans ha))
+    · exact Or.inr (fun hb => hd (hdR.trans hb))
+  have hbdR : FreeBoundary beta aR bR aR bR := by
+    simpa [hcR, hdR] using hbd
+  have hxmode : (x : BeamL2) = classicalModeLp beta aR bR aR bR := by
+    apply Lp.ext
+    filter_upwards [hxuae, ae_mem_unitIocMeasure,
+      coeFn_classicalModeLp beta aR bR aR bR] with t hxt htI hmode
+    have hu : u0 t = mode beta aR bR cR dR t := hm0 ⟨htI.1.le, htI.2⟩
+    rw [hcR, hdR] at hu
+    calc
+      (((x : BeamL2) : ℝ → ℝ) t) = xfn t := by rw [hxfn]
+      _ = u0 t := hxt
+      _ = mode beta aR bR aR bR t := hu
+      _ = ((classicalModeLp beta aR bR aR bR : BeamL2) : ℝ → ℝ) t := hmode.symm
+  exact ⟨beta, aR, bR, hbeta, hβpos, hchar, hβ4.symm, habR, hbdR, hxmode⟩
+
+/-- Every positive eigenvalue of the real beam is the fourth power of a positive free-beam
+characteristic root. -/
+theorem exists_characteristic_of_eigen {lam : ℝ} (hlam : 0 < lam)
+    {x : beamOperator.domain} (hx0 : (x : BeamL2) ≠ 0)
+    (heig : beamOperator.toLinearMap x = lam • (x : BeamL2)) :
+    ∃ beta : ℝ, 0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4 := by
+  obtain ⟨beta, _a, _b, _hbeta, hβpos, hchar, hβ4, _hab, _hfree, _hxmode⟩ :=
+    exists_characteristic_mode_of_eigen hlam hx0 heig
+  exact ⟨beta, hβpos, hchar, hβ4⟩
+
+/-- **Positive free-beam eigenvalues are geometrically simple.**  Any two
+nonzero eigenvectors with the same positive eigenvalue are scalar multiples.
+This is the multiplicity statement needed to justify the strict paper indexing
+`alpha_1 = alpha_2 = 0 < alpha_3 < alpha_4 < ...`; enumerating only the set of
+distinct positive spectral values is not enough. -/
+theorem positive_eigenvectors_eq_smul {lam : ℝ} (hlam : 0 < lam)
+    {x y : beamOperator.domain}
+    (hx0 : (x : BeamL2) ≠ 0) (hy0 : (y : BeamL2) ≠ 0)
+    (hx : beamOperator.toLinearMap x = lam • (x : BeamL2))
+    (hy : beamOperator.toLinearMap y = lam • (y : BeamL2)) :
+    ∃ c : ℝ, (y : BeamL2) = c • (x : BeamL2) := by
+  obtain ⟨betax, ax, bx, hbetax, hbetaxPos, _hcharx, _hpowx, habx, hfreex, hmodex⟩ :=
+    exists_characteristic_mode_of_eigen hlam hx0 hx
+  obtain ⟨betay, ay, byCoeff, hbetay, _hbetayPos, _hchary, _hpowy, _haby, hfreey, hmodey⟩ :=
+    exists_characteristic_mode_of_eigen hlam hy0 hy
+  have hfreey' : FreeBoundary betax ay byCoeff ay byCoeff := by
+    simpa [hbetay, hbetax] using hfreey
+  have hmodey' : (y : BeamL2) = classicalModeLp betax ay byCoeff ay byCoeff := by
+    simpa [hbetay, hbetax] using hmodey
+  obtain ⟨hrowx, _⟩ :=
+    right_boundary_reduced hbetaxPos.ne' hfreex.2.2.1 hfreex.2.2.2
+  obtain ⟨hrowy, _⟩ :=
+    right_boundary_reduced hbetaxPos.ne' hfreey'.2.2.1 hfreey'.2.2.2
+  obtain ⟨c, hay, hby⟩ :=
+    TauCeti.DavisKahan.FreeBeam.Classical.reduced_boundary_solution_eq_smul
+      hbetaxPos hrowx habx hrowy
+  refine ⟨c, ?_⟩
+  calc
+    (y : BeamL2) = classicalModeLp betax ay byCoeff ay byCoeff := hmodey'
+    _ = classicalModeLp betax (c * ax) (c * bx) (c * ax) (c * bx) := by
+      rw [hay, hby]
+    _ = c • classicalModeLp betax ax bx ax bx :=
+      classicalModeLp_smul_identified betax c ax bx
+    _ = c • (x : BeamL2) := by rw [hmodex]
 
 /-- Every positive eigenvalue of the real free-beam realization exceeds `500`. -/
 theorem eigenvalue_gt_five_hundred {lam : ℝ} (hlam : 0 < lam)
