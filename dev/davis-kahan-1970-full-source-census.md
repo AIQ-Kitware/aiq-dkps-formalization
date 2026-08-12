@@ -13,12 +13,12 @@ from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 34 |
+| `compiled_exact` | 32 |
 | `compiled_specialization` | 0 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 11 |
+| `partial_or_wrapper_missing` | 14 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -50,10 +50,10 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 18 |
+| `accepted` | 17 |
 | `reopened_source_spec` | 0 |
-| `reopened_math` | 10 |
-| `reopened_mapping` | 16 |
+| `reopened_math` | 13 |
+| `reopened_mapping` | 15 |
 | `mixed_disposition` | 2 |
 | `not_applicable` | 3 |
 
@@ -77,7 +77,7 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 47 |
+| `proved_in_build` | 48 |
 | `proved_conditional` | 0 |
 | `partially_in_build` | 0 |
 | `proved_outside_build` | 0 |
@@ -112,7 +112,7 @@ mathematics.
 
 The hostile review found a concrete mathematical assertion or scalar/dimension/scope clause for which no exact source-facing declaration was located. Some are likely short wrappers; they still block a 100% statement-level claim until compiled.
 
-Gates: S1-block-residual (proved_in_build), S1-ui-norms (proved_in_build), DK-3.2-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build), DK-10.4 (proved_in_build)
+Gates: S1-block-residual (proved_in_build), S1-ui-norms (proved_in_build), S2-sin-two-theta (proved_in_build), DK-3.2-prop (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-8.2-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build), DK-10.4 (proved_in_build)
 
 ### `hostile-source-spec-fidelity` -- mixed
 
@@ -323,12 +323,15 @@ The `next_action` prerequisite `first generalise PrescribedSequence.lean from C 
 #### Section 2, sin 2 theta theorem: Double-angle sine theorem
 
 - **Kind:** `unnumbered_theorem`
-- **Status:** `compiled_exact`
+- **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `accepted`
+- **Hostile completion certification:** `reopened_math`
 - **Mathematics:** Off-diagonal or fully separated perturbations give the printed residual and perturbation sin(2 Theta) bounds with factor two over real and complex Hilbert spaces at the maintained source norm scope. The Section 8 strict-dimension extension is explicitly exposed for the directed Theta_0 conclusion; the underlying directed theorem is stronger and has no dimension comparison at all.
+- **Blocked by:** `hostile-source-facing-gap`
 - **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `TauCeti.DavisKahan.sinTwoTheta_addBounded_of_spectrum_gap`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real`, `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_real`, `TauCeti.DavisKahan1970.sinTwoTheta_reflectionResidual_paperUINorm_real`, `TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_real`, `TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_real`, `TauCeti.DavisKahanExt.sinTwoTheta_perturbation`, `TauCeti.DavisKahanExt.sinTwoTheta_generalSeparation`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR`, `TauCeti.DavisKahanExt.complexify_paperSinTwoAngleOperatorR`, `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_all_kyFan`, `TauCeti.DavisKahan1970.symmetric_sinTheta_spectrum_all_kyFan`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub`, `TauCeti.DavisKahan.norm_sinTwoThetaIdealBlock_real`, `TauCeti.DavisKahan.sinTwoThetaIdealBlock_eq_comp`, `TauCeti.DavisKahan.complexify_sinTwoThetaIdealBlock`, `TauCeti.DavisKahanExt.norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC`, `TauCeti.DavisKahan1970.norm_sinTwoThetaBlock_real`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_opNorm_real`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_reflectionResidual_opNorm_real`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_unequalDimension`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real_unequalDimension`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real_unequalDimension`, `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_unequalDimension`
-- **Assessment:** Finite arbitrary-UI-norm forms are compiled; general Hilbert-space source forms are under repair.
+- **Assessment:** REOPENED 2026-08-12 (result inventory row `S2-sin-two-theta`): the registered unbounded directed endpoint uses a REFLECTION residual, not the printed trial residual R = (A+H)E_0 - E_0 A_0.  The trial-residual directed statement with the printed factor two exists only in the bounded theorem `sinTwoTheta_directedResidual_paperUINorm`.
+
+Finite arbitrary-UI-norm forms are compiled; general Hilbert-space source forms are under repair.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The UI-norm Part III double-angle theorem is compiled and axiom-clean; the source-general residual and perturbation forms are not yet certified (see next_action).
 
@@ -1227,6 +1230,17 @@ CORRECTION TO THE COORDINATOR'S OWN FRAMING, recorded because it nearly caused d
 **CAUTION ON USING IT AS A FALSIFIER, learned 2026-08-10.**  The coordinator instructed a subagent that any correct (3.5) theorem `must fail on that pair`.  THAT TEST IS ORDER-DEPENDENT AND GIVES A FALSE NEGATIVE IN ONE ORDER.  Read at `(P H, Q H)` the conclusion `subspaceGap = directedGap` HAPPENS TO BE TRUE -- both sides are 1, because the defect sits on the side that already realizes the max.  The honest refutation is at the SWAPPED pair `(Q H, P H)`, where it would assert `1 = 0`.  `Q H <= P H` (the cut at 1 has more vanishing constraints), which is why the reverse directed gap is exactly 0.  Always state which order you are testing.
 - **Next action:** Hostile re-audit reopened this row. The source passage says that on the two crossing subspaces every direct rotation satisfies U^2 x = -x. The hostile review did not find an exported source-facing theorem with that statement, although related reflection-product ingredients exist.
 
+#### Section 3, standing convention stated immediately after the proof of Proposition 3.2.: Standing crossing-dimension convention
+
+- **Kind:** `scope_claim`
+- **Status:** `compiled_exact`
+- **Verification:** `proved_in_build`
+- **Hostile completion certification:** `accepted`
+- **Mathematics:** From this point on the paper assumes (3.5) as well as (1.5) except where the contrary is stated, so a direct rotation always exists and the development uses its direct special case (3.6).
+- **Current Lean references:** `TauCeti.DavisKahan.Frontier.Section8.subspaceGap_eq_directedGap_of_crossedDefects`, `TauCeti.DavisKahan.Frontier.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects`
+- **Assessment:** ADDED 2026-08-12.  This organizational block exists because the standing convention is a source SCOPE assertion that governs later results and therefore cannot live inside the Proposition 3.2 result block, whose boundary partition is reserved for that proposition's own printed statement.  It mirrors `S2-unbounded-scope`.  Verified against the original paper: the sentence reads "We shall assume (3.5) as well as (1.5) except where stated otherwise.  Consequently the direct rotation will always exist, and rather than the more general V of (1.6) we shall deal mostly with its direct special case U ~ (C0, -S0*; S0, C1), Cj >= 0."  It is not a new result and does not enlarge the 29-result denominator.
+- **Next action:** None outstanding.  `CrossedDefectsEquivalent` is the repository spelling of (3.5); the two registered declarations are the places where it is load-bearing, namely the identification of the symmetric and directed subspace gaps and the ambient quarter-angle conclusion of Theorem 8.2.
+
 #### Proposition 3.3: Principal square-root characterization
 
 - **Kind:** `proposition`
@@ -1265,12 +1279,15 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 #### Proposition 3.4: Square as a direct rotation
 
 - **Kind:** `proposition`
-- **Status:** `compiled_exact`
+- **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `accepted`
+- **Hostile completion certification:** `reopened_math`
 - **Mathematics:** When the cosine block squared is at least one half, U squared is the direct rotation from the reflected subspace to the target subspace.
+- **Blocked by:** `hostile-source-facing-gap`
 - **Current Lean references:** `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`, `TauCeti.DavisKahan1970.proposition3_4_source_full_real`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source`, `TauCeti.DavisKahan.Frontier.Section3.crossedDefect_image_of_unitary_sq`, `TauCeti.DavisKahan.Frontier.Section3.norm_projection_apply_le_of_forall_mem_source`, `TauCeti.DavisKahan.Frontier.Section3.re_inner_halmosCosineSq_sub_half_nonneg_of_source`, `TauCeti.DavisKahan.Frontier.Section3.re_inner_halmosCosineSq_self`, `TauCeti.DavisKahan.Frontier.Section3.isSelfAdjoint_source_block_spectraDirectRotation`, `TauCeti.DavisKahan.Frontier.Section3.isSelfAdjoint_complement_block_spectraDirectRotation`, `TauCeti.DavisKahan.Frontier.Section3.nonneg_add_star_of_re_inner_nonneg`, `TauCeti.DavisKahan.Frontier.Section3.reflectionOperator_mul_projection_self`, `TauCeti.DavisKahan.Frontier.Section3.projection_mul_reflectionOperator_self`, `TauCeti.DavisKahanTheory.directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_square_is_reflected_directRotation`
-- **Assessment:** Square identities exist; exact source mapping between Q-minus and Q needs verification.
+- **Assessment:** REOPENED 2026-08-12 (result inventory row `DK-3.4-prop`): the complex source endpoint concludes only `IsPaperDirectRotation`, whose diagonal clauses are nonnegative real numerical range rather than the genuine operator positivity Definition 3.1 requires.  The real endpoint is already exact.
+
+Square identities exist; exact source mapping between Q-minus and Q needs verification.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The square-is-a-direct-rotation content is compiled and axiom-clean; an exact source wrapper is absent.
 
@@ -2603,15 +2620,17 @@ STATUS LEFT AT `compiled_exact` PENDING A HUMAN CALL on whether the surviving co
 #### Theorem 8.2 and final Section 8 extension remark: Smallness selects the acute branch and closing extension remark
 
 - **Kind:** `theorem`
-- **Status:** `compiled_exact`
+- **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_mapping`
+- **Hostile completion certification:** `reopened_math`
 - **Mathematics:** If the perturbation norm or the residual norm is below half the gap, and the unperturbed block's spectrum lies in the enlarged central interval, then the sine double-angle estimate is accompanied by Theta < pi/4.
-- **Blocked by:** `hostile-audit-atomization`
+- **Blocked by:** `hostile-audit-atomization`, `hostile-source-facing-gap`
 - **Known hostile-review holes:**
   - `audit_atomization`: A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions.
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_source`, `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_source`, `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed`, `TauCeti.DavisKahan1970.Section8.theorem8_2_krein_completion_source`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source`, `TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_finrank_eq`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_source_maximalAngle_lt`, `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_source_maximalAngle_lt`, `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt`, `TauCeti.DavisKahan1970.Section8.theorem8_2_source`, `TauCeti.DavisKahan.Frontier.Section8.theorem8_2_perturbationHalfGap_source_angle_lt`, `TauCeti.DavisKahan.Frontier.Section8.theorem8_2_residualHalfGap_source_angle_lt`, `TauCeti.DavisKahan.Frontier.Section8.residual_eq_comp_subtypeL`, `TauCeti.DavisKahan.Frontier.Krein.exists_selfAdjoint_completion_eq_norm_restriction`, `TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.ResidualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch`, `TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_crossedDefects`, `TauCeti.DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_source_real`, `TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_source_real`, `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real`, `TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_source_real_maximalAngle_lt`, `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`, `TauCeti.DavisKahan.Frontier.Section8.spectrum_compressOperator_subset_of_spectrumIn`, `TauCeti.DavisKahan.Frontier.Section8.norm_residual_complexify`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm`, `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt`, `TauCeti.DavisKahan1970.Section8.theorem8_2_source_real`, `TauCeti.DavisKahan.Frontier.Section8.spectrum_compressOperatorReal_subset_of_spectrumIn`, `TauCeti.DavisKahan.Frontier.Section8.complexify_sinTwoAngleOperator`, `TauCeti.DavisKahan.Frontier.Section8.norm_sinTwoAngleOperator_complexifySubmodule`, `TauCeti.DavisKahan.Frontier.Section8.theorem8_2_residualHalfGap_selectedBranch`, `TauCeti.DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_all_kyFan`, `TauCeti.DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm`, `TauCeti.DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm`, `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_all_kyFan`, `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects`
-- **Assessment:** `theorem8_2_perturbationHalfGap_selectedBranch` and `theorem8_2_residualHalfGap_selectedBranch` are proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` on the perturbation form gives [propext, Classical.choice, Quot.sound]. The half-gap bridges (`perturbationHalfGapBridge_of_sourceHypotheses`, `residualHalfGapBridge_of_sourceHypotheses`) are proved too.
+- **Assessment:** REOPENED 2026-08-12 (result inventory row `DK-8.2-thm`): the standing post-Proposition-3.2 assumption (3.5) was not represented as Theorem 8.2 source scope, and the selected quarter-angle evidence was the directed gap rather than the printed ambient Theta < pi/4.
+
+`theorem8_2_perturbationHalfGap_selectedBranch` and `theorem8_2_residualHalfGap_selectedBranch` are proved sorry-free in `DavisKahan/Experimental/Frontier/Section8.lean`; `#print axioms` on the perturbation form gives [propext, Classical.choice, Quot.sound]. The half-gap bridges (`perturbationHalfGapBridge_of_sourceHypotheses`, `residualHalfGapBridge_of_sourceHypotheses`) are proved too.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. All four declarations are compiled and axiom-clean, outside the default build. The audit of the two half-gap branches against the printed Theorem 8.2 has not been done, so this is not yet claimed as exact.
 

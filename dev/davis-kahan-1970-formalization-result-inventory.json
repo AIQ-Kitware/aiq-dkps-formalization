@@ -22,9 +22,9 @@
   "result_inventory_review": {
     "status": "accepted",
     "policy": "dk_established_results_only",
-    "source_fidelity_inventory_sha256": "99074a1aca65cf5d23691029057e9636a34ab3c79624a4706edf4d3958ecae66",
-    "distributable_specification_sha256": "0bb6850fcfd2c66a8efe868c652e4da0d8259913deb469b586a8545ca4cb1ad1",
-    "method": "Reviewed the source-fidelity inventory and the exact theorem/proposition/lemma/corollary environments in paper order. Selected exactly the four Section 2 headline theorems plus all named results Davis--Kahan actually establish; for every counted result, partitioned the primary source block into statement atoms versus adjacent setup/proof/example/consequence/remark atoms, and classified every fidelity atom with an explicit inclusion/exclusion reason.",
+    "source_fidelity_inventory_sha256": "3b6546de58c94889a7863ea60679d96439a7305480e27ec95c36a542508424b8",
+    "distributable_specification_sha256": "3be8c85a5de6554206757f983ba4a75ce7790002318ff5db428115e224213353",
+    "method": "Reviewed the source-fidelity inventory and the exact theorem/proposition/lemma/corollary environments in paper order. Selected exactly the four Section 2 headline theorems plus all named results Davis--Kahan actually establish; for every counted result, partitioned the primary source block into statement atoms versus adjacent setup/proof/example/consequence/remark atoms, and classified every fidelity atom with an explicit inclusion/exclusion reason.  RE-AUDITED 2026-08-12 for the standing post-Proposition-3.2 convention: the source states, immediately after the proof of Proposition 3.2, that (3.5) is assumed as well as (1.5) except where the contrary is stated.  That convention is now recorded in the distributable specification and carried as the source SCOPE atom `DK-3.2-prop.standing-assumption-3-5`.  It is deliberately NOT a new counted result and the denominator stays at 29.",
     "boundary_review_status": "accepted"
   },
   "result_count": 29,
@@ -157,9 +157,9 @@
         "S2-unbounded-scope.bounded-residual-needed",
         "S2-unbounded-scope.half-infinite-gap-intervals"
       ],
-      "disposition": "proved_exact",
+      "disposition": "reopened_pending_repair",
       "verification": "proved_in_build",
-      "semantic_certification": "accepted",
+      "semantic_certification": "reopened_pending_repair",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
         "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real",
@@ -168,7 +168,7 @@
         "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real",
         "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The bounded whole-space PaperUI wrappers give the ambient perturbation conclusion over complex and real Hilbert spaces. The four unbounded representative theorems give both ambient and directed-residual `sin 2Theta` conclusions over complex and real scalars for every paper unitary-invariant norm, with the source factor 2 and without finite-dimensional restrictions. This covers the counted Section 2 theorem at its shared unbounded scope.",
+      "review_note": "REOPENED 2026-08-12 before any repair work: the previously accepted result-only review overclaimed this row.  Missing unbounded directed arbitrary-PaperUI sin(2Theta_0) theorem using the paper trial residual R = (A+H)E_0 - E_0 A_0, rather than the reflection residual.  The registered unbounded directed endpoint `unbounded_sinTwoTheta_residual_uiNorm_representative` bounds delta * N(sin 2Theta_0) by N(R) for a self-adjoint REFLECTION residual R satisfying the reflection/intertwining relation (A + R) J_V = J_V A.  That right-hand-side operator is not the printed residual (1.8), so the stronger constant does not make the statement source-exact.  The trial-residual form with the printed factor two exists only in the BOUNDED theorem `sinTwoTheta_directedResidual_paperUINorm`; the unbounded scope the source claims for this theorem family has no trial-residual directed endpoint.  Previous accepted note retained in git history.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-sin-two-theta",
@@ -188,6 +188,17 @@
         ],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      },
+      "remaining_gap": {
+        "category": "wrong_residual_object_in_unbounded_directed_evidence",
+        "missing_surface": "Missing unbounded directed arbitrary-PaperUI sin(2Theta_0) theorem using the paper trial residual R = (A+H)E_0 - E_0 A_0, rather than the reflection residual.  The registered unbounded directed endpoint `unbounded_sinTwoTheta_residual_uiNorm_representative` bounds delta * N(sin 2Theta_0) by N(R) for a self-adjoint REFLECTION residual R satisfying the reflection/intertwining relation (A + R) J_V = J_V A.  That right-hand-side operator is not the printed residual (1.8), so the stronger constant does not make the statement source-exact.  The trial-residual form with the printed factor two exists only in the BOUNDED theorem `sinTwoTheta_directedResidual_paperUINorm`; the unbounded scope the source claims for this theorem family has no trial-residual directed endpoint.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative",
+          "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm",
+          "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm"
+        ],
+        "next_action": "Prove a public source-facing unbounded directed theorem at arbitrary `PaperUnitaryInvariantNorm` whose right-hand side is the printed trial residual R = (A+H)E_0 - E_0 A_0, with the printed Section 2 spectral separation, the directed angle Theta_0, the factor two, and no caller-visible hypothesis absent from the paper.  Bridge to the reflected operator internally.  Cover real and complex source scope."
       }
     },
     {
@@ -366,18 +377,18 @@
       "title": "Square as a direct rotation",
       "completion_obligation": true,
       "source_atom_ids": [
-        "DK-3.4-prop.u-square-direct-rotation"
+        "DK-3.4-prop.u-square-direct-rotation",
+        "S3-standing-scope.crossed-dimension-standing-assumption"
       ],
-      "disposition": "proved_exact",
+      "disposition": "reopened_pending_repair",
       "verification": "proved_in_build",
-      "semantic_certification": "accepted",
+      "semantic_certification": "reopened_pending_repair",
       "lean_declarations": [
         "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
         "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation",
         "TauCeti.DavisKahan1970.proposition3_4_source_full_real"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The existing complex `proposition3_4_source_full` and equality companion prove the printed nonacute Proposition 3.4 over complex Hilbert spaces. `TauCeti.DavisKahan1970.proposition3_4_source_full_real` now gives the exact real counterpart at the same printed scope: from the real direct-rotation clauses and the source half-angle condition `C0^2 >= 1/2`, it concludes that `W^2` is a direct rotation from the reflected subspace to the target, including genuine positive diagonal compressions and the crossed-block identity. The proof transports through canonical complexification and introduces no uniform-acuteness, finite-dimensional, separability, compactness, or extra branch hypothesis.",
-      "parent_claim_id": "DK-3.4-prop",
+      "review_note": "REOPENED 2026-08-12 before any repair work: the previously accepted result-only review overclaimed this row.  Complex Proposition 3.4 evidence concludes only the weaker `IsPaperDirectRotation` numerical-range predicate; the printed direct-rotation conclusion requires genuine positive diagonal compressions.  Definition 3.1 asks for C_0 >= 0 and C_1 >= 0 as operator positivity, and the source proof of Proposition 3.4 discharges exactly that (\"Q_- U^2 Q_- >= 0\").  `proposition3_4_source_full` instead concludes a predicate whose diagonal clauses are `0 <= re inner x (P * T * P) x`, which over C does not even force self-adjointness of the compression.  The real endpoint `proposition3_4_source_full_real` already concludes genuine `IsPositive`, so only the complex side is defective.  Previous accepted note retained in git history.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "DK-3.4-prop",
@@ -385,9 +396,21 @@
           "DK-3.4-prop.u-square-direct-rotation"
         ],
         "excluded_same_block_atom_ids": [],
-        "cross_block_scope_atom_ids": [],
+        "cross_block_scope_atom_ids": [
+          "S3-standing-scope.crossed-dimension-standing-assumption"
+        ],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      },
+      "remaining_gap": {
+        "category": "complex_conclusion_weaker_than_printed_direct_rotation",
+        "missing_surface": "Complex Proposition 3.4 evidence concludes only the weaker `IsPaperDirectRotation` numerical-range predicate; the printed direct-rotation conclusion requires genuine positive diagonal compressions.  Definition 3.1 asks for C_0 >= 0 and C_1 >= 0 as operator positivity, and the source proof of Proposition 3.4 discharges exactly that (\"Q_- U^2 Q_- >= 0\").  `proposition3_4_source_full` instead concludes a predicate whose diagonal clauses are `0 <= re inner x (P * T * P) x`, which over C does not even force self-adjointness of the compression.  The real endpoint `proposition3_4_source_full_real` already concludes genuine `IsPositive`, so only the complex side is defective.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan1970.proposition3_4_source_full_real",
+          "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
+          "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
+        ],
+        "next_action": "Add a public complex source-facing Proposition 3.4 theorem with exactly the printed hypothesis C_0^2 >= 1/2 and the genuine Definition 3.1 conclusion: unitarity, intertwining from the reflected subspace Q_- to Q, `IsPositive` for both diagonal compressions, and the crossed-block adjoint relation.  Reuse the real development\"s positivity upgrade rather than reproving the theory, and add no acuteness, compactness, finite-dimensional or separability hypothesis."
       }
     },
     {
@@ -1114,11 +1137,12 @@
       "source_atom_ids": [
         "DK-8.2-thm.smallness-alternative",
         "DK-8.2-thm.double-angle-bound-retained",
-        "DK-8.2-thm.acute-branch-conclusion"
+        "DK-8.2-thm.acute-branch-conclusion",
+        "S3-standing-scope.crossed-dimension-standing-assumption"
       ],
-      "disposition": "proved_exact",
+      "disposition": "reopened_pending_repair",
       "verification": "proved_in_build",
-      "semantic_certification": "accepted",
+      "semantic_certification": "reopened_pending_repair",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
@@ -1127,8 +1151,7 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm",
         "TauCeti.DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The Section 8 source surface exposes both printed half-gap alternatives: perturbation-small and residual-small. The complex and real branch theorems select the acute branch (`Theta < pi/4`), and the PaperUI perturbation/residual theorems retain the corresponding `sin 2Theta` estimate with no constant loss. The proof homotopy, unequal-dimension extension remark, and comment about a tangent extension are adjacent material outside the counted Theorem 8.2 boundary.",
-      "parent_claim_id": "DK-8.2-thm",
+      "review_note": "REOPENED 2026-08-12 before any repair work: the previously accepted result-only review overclaimed this row.  Standing post-Proposition-3.2 assumption (3.5) is missing from Theorem 8.2 source scope, and the selected quarter-angle evidence is directed rather than the printed ambient Theta < pi/4 conclusion.  The source states after Proposition 3.2 that (3.5) is assumed as well as (1.5) except where stated otherwise, and Theorem 8.2 does not state otherwise; the source-fidelity inventory carries no scope atom for that standing assumption, so the row silently omits it.  The selected Lean evidence names `theorem8_2_branch_source_directed`, whose conclusion is the directed gap, while the printed conclusion is the ambient maximal angle.  Previous accepted note retained in git history.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "DK-8.2-thm",
@@ -1143,21 +1166,36 @@
           "DK-8.2-thm.sin2-unequal-dimension-extension",
           "DK-8.2-thm.no-tan2-unequal-dimension-extension-known"
         ],
-        "cross_block_scope_atom_ids": [],
+        "cross_block_scope_atom_ids": [
+          "S3-standing-scope.crossed-dimension-standing-assumption"
+        ],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      },
+      "remaining_gap": {
+        "category": "missing_standing_source_scope_and_wrong_quarter_angle_evidence",
+        "missing_surface": "Standing post-Proposition-3.2 assumption (3.5) is missing from Theorem 8.2 source scope, and the selected quarter-angle evidence is directed rather than the printed ambient Theta < pi/4 conclusion.  The source states after Proposition 3.2 that (3.5) is assumed as well as (1.5) except where stated otherwise, and Theorem 8.2 does not state otherwise; the source-fidelity inventory carries no scope atom for that standing assumption, so the row silently omits it.  The selected Lean evidence names `theorem8_2_branch_source_directed`, whose conclusion is the directed gap, while the printed conclusion is the ambient maximal angle.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm"
+        ],
+        "next_action": "Record the standing (3.5) assumption as a source SCOPE atom (not a new result), link it to Theorem 8.2 and every other counted result it genuinely governs, refresh the affected hashes and boundary reviews, and select the ambient crossed-defect quarter-angle theorems `theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` and its real counterpart as the Theta < pi/4 evidence."
       }
     }
   ],
   "semantic_review_sweep": {
     "date": "2026-08-12",
     "upstream_main_minimum": "bf1334bdf7608783b9147447bd9786b168cb5233",
-    "method": "Audited each previously nonterminal counted result against only its accepted printed-result boundary; promoted a result only when concrete source-facing Lean declarations expose every counted hypothesis, conclusion, and scalar/dimension/norm scope. Proof-only and theorem-adjacent source atoms were not used as blockers. Proposition 3.3 is closed by the real nonacute principal-square-root bridge on main; Proposition 4.1 is additionally closed here by the compiler-validated arbitrary-dimensional compact/nonacute direct-rotation value bridge over complex and real scalars. Proposition 3.4 is additionally closed by the compiler-validated real full-scope bridge, which transports the exact nonacute source hypotheses and direct-rotation conclusion through canonical complexification.",
+    "method": "Audited each previously nonterminal counted result against only its accepted printed-result boundary; promoted a result only when concrete source-facing Lean declarations expose every counted hypothesis, conclusion, and scalar/dimension/norm scope. Proof-only and theorem-adjacent source atoms were not used as blockers. Proposition 3.3 is closed by the real nonacute principal-square-root bridge on main; Proposition 4.1 is additionally closed here by the compiler-validated arbitrary-dimensional compact/nonacute direct-rotation value bridge over complex and real scalars. Proposition 3.4 is additionally closed by the compiler-validated real full-scope bridge, which transports the exact nonacute source hypotheses and direct-rotation conclusion through canonical complexification.  REOPENED 2026-08-12: this sweep's acceptance of `S2-sin-two-theta`, `DK-3.4-prop`, and `DK-8.2-thm` is withdrawn.  Each row now carries a structured `remaining_gap` naming the exact source-to-Lean mismatch, and none of the three may be re-accepted until the mismatch is repaired and the printed statement re-audited.",
     "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-12.md",
-    "terminal_results": 28,
+    "terminal_results": 25,
     "remaining_results": [
-      "S2-tan-theta"
+      "S2-tan-theta",
+      "S2-sin-two-theta",
+      "DK-3.4-prop",
+      "DK-8.2-thm"
     ]
   }
 }

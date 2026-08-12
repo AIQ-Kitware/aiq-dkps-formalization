@@ -18,6 +18,7 @@ REQUIRED_IDS = {
     "S2-sin-theta", "S2-tan-theta", "S2-sin-two-theta", "S2-tan-two-theta",
     "S2-sharpness", "S2-unbounded-scope",
     "DK-3.1-def", "DK-3.2-def", "DK-3.1-prop", "DK-3.2-prop", "DK-3.3-prop",
+    "S3-standing-scope",
     "DK-3.4-prop", "DK-3.1-thm", "DK-3.1-cor", "DK-3.5-prop", "DK-3.2-cor",
     "DK-4.1-prop", "DK-4.1-cor", "DK-4.2-prop", "DK-4.3-prop", "DK-4.4-prop",
     "DK-5.1-thm", "DK-5-hermitian-inequalities", "DK-5.2-thm", "DK-5.1-lem",

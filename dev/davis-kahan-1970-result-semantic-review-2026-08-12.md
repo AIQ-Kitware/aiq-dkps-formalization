@@ -10,12 +10,13 @@ A hostile reviewer should use this report together with `prose/distilled_literat
 
 - Counted DK-established results: **29**
 - Printed-result boundaries reviewed: **29/29**
-- Semantically terminal: **28/29**
-- Genuine remaining result-scope gaps: **1**
+- Semantically terminal: **25/29**
+- Genuine remaining result-scope gaps: **4**
 - Pending results re-audited in the current sweep: **17**
 - False-positive pending statuses closed across the result-only sweep: **12**
 - Latest-main baseline for this promotion: `85a2f7abb1ae`. That baseline already closes Proposition 3.3 at the full nonacute real/complex scope; this promotion adds the compiler-validated compact/nonacute Proposition 4.1 direct-value bridge and advances the denominator from 26/29 to 27/29.
-- Post-promotion integration baseline: `535dab991eb2`. Proposition 3.4 is already terminal on this base. The compiler-validated unbounded ambient single-angle tangent assembly is now integrated under crossed-defect equivalence (3.5); the denominator remains **28/29** because the literal printed infinite-dimensional ambient clause omits (3.5) and still requires a production formal refutation.
+- **REOPENED 2026-08-12.** Three previously accepted rows are withdrawn after a hostile re-read of the printed statements against the selected Lean surface: `S2-sin-two-theta` (unbounded directed evidence uses a reflection residual, not the printed trial residual `R = (A+H)E_0 - E_0 A_0`), `DK-3.4-prop` (the complex endpoint concludes only the weaker `IsPaperDirectRotation` numerical-range predicate, not Definition 3.1 operator positivity), and `DK-8.2-thm` (the standing post-Proposition-3.2 assumption (3.5) was not represented as source scope, and the selected quarter-angle evidence was directed rather than the printed ambient `Theta < pi/4`). Each row now carries a structured `remaining_gap` in the result inventory.
+- Post-promotion integration baseline: `535dab991eb2`. The compiler-validated unbounded ambient single-angle tangent assembly is now integrated under crossed-defect equivalence (3.5); the denominator remains **28/29** because the literal printed infinite-dimensional ambient clause omits (3.5) and still requires a production formal refutation.
 
 ## All 29 counted results
 
@@ -68,7 +69,7 @@ This does **not** prove the literal printed infinite-dimensional Section 2 state
 
 ### 3. `S2-sin-two-theta` — Double-angle sine theorem
 
-**Verdict:** PASS exact. Re-audited in this sweep.
+**Verdict:** REOPENED 2026-08-12 — the unbounded directed evidence bounds `sin 2Theta_0` by the wrong residual object.
 
 **Counted source atoms:** `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.directed-conclusion`, `S2-sin-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`.
 
@@ -82,7 +83,7 @@ This does **not** prove the literal printed infinite-dimensional Section 2 state
 
 **Semantic review:**
 
-Accepted result-only semantic review 2026-08-12. The bounded whole-space PaperUI wrappers give the ambient perturbation conclusion over complex and real Hilbert spaces. The four unbounded representative theorems give both ambient and directed-residual `sin 2Theta` conclusions over complex and real scalars for every paper unitary-invariant norm, with the source factor 2 and without finite-dimensional restrictions. This covers the counted Section 2 theorem at its shared unbounded scope.
+REOPENED 2026-08-12. The printed directed conclusion is `delta * N(sin 2Theta_0) <= 2 N(R)` with `R = (A+H)E_0 - E_0 A_0`, the trial residual of equation (1.8). The registered unbounded directed endpoint `unbounded_sinTwoTheta_residual_uiNorm_representative` instead bounds `delta * N(sin 2Theta_0)` by `N(R)` for a **reflection** residual: a self-adjoint bounded `R` satisfying `(A + R) J_V = J_V A` on the domain. That is a different right-hand-side operator, and a better constant against a different object is not the printed statement. The trial-residual directed form with the printed factor two exists only in the bounded theorem `sinTwoTheta_directedResidual_paperUINorm`; at the unbounded scope this theorem family explicitly claims, there was no trial-residual directed endpoint. The ambient half and the perturbation-form endpoints were and remain fine.
 
 ### 4. `S2-tan-two-theta` — Double-angle tangent theorem
 
@@ -151,7 +152,7 @@ Accepted result-only semantic review 2026-08-12. The full nonacute complex forwa
 
 ### 8. `DK-3.4-prop` — Square as a direct rotation
 
-**Verdict:** TERMINAL EXACT.
+**Verdict:** REOPENED 2026-08-12 — the complex endpoint concludes a predicate weaker than Definition 3.1.
 
 **Counted source atoms:** `DK-3.4-prop.u-square-direct-rotation`.
 
@@ -162,7 +163,7 @@ Accepted result-only semantic review 2026-08-12. The full nonacute complex forwa
 
 **Semantic review:**
 
-Accepted result-only semantic review 2026-08-12. The existing complex `proposition3_4_source_full` and equality companion prove the printed nonacute Proposition 3.4 over complex Hilbert spaces. `TauCeti.DavisKahan1970.proposition3_4_source_full_real` now gives the exact real counterpart at the same printed scope: from the real direct-rotation clauses and the source half-angle condition `C0^2 >= 1/2`, it concludes that `W^2` is a direct rotation from the reflected subspace to the target, including genuine positive diagonal compressions and the crossed-block identity. The proof transports through canonical complexification and introduces no uniform-acuteness, finite-dimensional, separability, compactness, or extra branch hypothesis.
+REOPENED 2026-08-12. Definition 3.1 requires genuine operator positivity of the two diagonal blocks, `C_0 >= 0` and `C_1 >= 0`, and the source proof of Proposition 3.4 discharges exactly that ("we must still prove (i) and (ii), which for this case take the form `Q_- U^2 Q_- >= 0` ..."). The complex endpoint `proposition3_4_source_full` concludes only `IsPaperDirectRotation`, whose diagonal clauses are `0 <= re inner x ((P * T * P) x)`; over a complex Hilbert space that does not even force the compression to be self-adjoint, and the repository itself documents the predicate as weaker than Definition 3.1 in the complex setting. The real endpoint is unaffected: `proposition3_4_source_full_real`  gives the exact real counterpart at the printed scope: from the real direct-rotation clauses and the source half-angle condition `C0^2 >= 1/2`, it concludes that `W^2` is a direct rotation from the reflected subspace to the target, including genuine positive diagonal compressions and the crossed-block identity. The proof transports through canonical complexification and introduces no uniform-acuteness, finite-dimensional, separability, compactness, or extra branch hypothesis.
 
 ### 9. `DK-3.1-thm` — Classification of pairs of subspaces
 
@@ -480,7 +481,7 @@ Result-only hostile review accepted 2026-08-12. The compiled source surface cove
 
 ### 29. `DK-8.2-thm` — Smallness selects the acute branch
 
-**Verdict:** PASS exact. Re-audited in this sweep.
+**Verdict:** REOPENED 2026-08-12 — a standing source assumption is unrepresented and the quarter-angle evidence is the wrong angle.
 
 **Counted source atoms:** `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `DK-8.2-thm.acute-branch-conclusion`.
 
@@ -494,10 +495,11 @@ Result-only hostile review accepted 2026-08-12. The compiled source surface cove
 
 **Semantic review:**
 
-Accepted result-only semantic review 2026-08-12. The Section 8 source surface exposes both printed half-gap alternatives: perturbation-small and residual-small. The complex and real branch theorems select the acute branch (`Theta < pi/4`), and the PaperUI perturbation/residual theorems retain the corresponding `sin 2Theta` estimate with no constant loss. The proof homotopy, unequal-dimension extension remark, and comment about a tangent extension are adjacent material outside the counted Theorem 8.2 boundary.
+REOPENED 2026-08-12. Two defects, both in the accounting rather than in the mathematics. (1) Immediately after the proof of Proposition 3.2 the source states "We shall assume (3.5) as well as (1.5) except where stated otherwise"; Theorem 8.2 does not state otherwise, so (3.5) is part of its source scope, and the source-fidelity inventory carried no scope atom for it. (2) The printed conclusion is the **ambient** `Theta < pi/4`, but the selected quarter-angle evidence was `theorem8_2_branch_source_directed`, whose conclusion is the directed gap `directedGap P Q < sqrt 2 / 2`. The ambient theorems exist already; the row selected the wrong ones. The `sin 2Theta` estimates, the two smallness alternatives, and the real scope were and remain fine. The proof homotopy, unequal-dimension extension remark, and comment about a tangent extension are adjacent material outside the counted Theorem 8.2 boundary.
 
-## One remaining mathematical target
+## Remaining mathematical targets
 
+- **`S2-sin-two-theta`, `DK-3.4-prop`, `DK-8.2-thm`:** reopened 2026-08-12; see the verdicts above and the `remaining_gap` entries in `dev/davis-kahan-1970-formalization-result-inventory.json`.
 - **`S2-tan-theta` — Single-angle tangent theorem:** the sharp unbounded ambient inequality is now compiled under crossed-defect equivalence (3.5); exact source closure requires the production formal refutation of the literal infinite-dimensional Section 2 ambient clause, which omits (3.5) and admits the bilateral-shift pole witness.
 
 ## Reviewer reproduction

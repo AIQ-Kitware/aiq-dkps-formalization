@@ -240,7 +240,7 @@
       "source_kind": "unnumbered_theorem",
       "source_anchor": "Section 2, sin 2 theta theorem",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "partial_or_wrapper_missing",
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-sin-two-theta",
       "review_declarations": [
@@ -268,7 +268,7 @@
         }
       ],
       "source_specification_sha256": "7da711fdbd912b64b5aa6f2efc5c4255bcbe796831a18b99c92712024b81c70b",
-      "expected_completion_certification": "accepted",
+      "expected_completion_certification": "reopened_math",
       "known_completion_holes": [],
       "source_atom_ids": [
         "S2-sin-two-theta.gap-hypothesis",
@@ -604,6 +604,37 @@
       ]
     },
     {
+      "id": "S3-standing-scope",
+      "section": "3",
+      "title": "Standing crossing-dimension convention",
+      "source_kind": "scope_claim",
+      "source_anchor": "Section 3, standing convention stated immediately after the proof of Proposition 3.2.",
+      "completion_obligation": true,
+      "expected_status": "compiled_exact",
+      "expected_verification": "proved_in_build",
+      "tex_marker": "S3-standing-scope",
+      "review_declarations": [
+        "TauCeti.DavisKahan.Frontier.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
+        "TauCeti.DavisKahan.Frontier.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects"
+      ],
+      "audit_clauses": [
+        {
+          "id": "S3-standing-scope.whole",
+          "description": "Audit the standing convention as one scope assertion: (3.5) holds together with (1.5) for the rest of the paper unless a later statement says otherwise.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.Frontier.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
+            "TauCeti.DavisKahan.Frontier.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects"
+          ]
+        }
+      ],
+      "source_specification_sha256": "e2be440d287de93bc3777c68a11e7caf51d3a6423f18d78b9d802bc26dd12053",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
+      "source_atom_ids": [
+        "S3-standing-scope.crossed-dimension-standing-assumption"
+      ]
+    },
+    {
       "id": "DK-3.3-prop",
       "section": "3",
       "title": "Principal square-root characterization",
@@ -651,7 +682,7 @@
       "source_kind": "proposition",
       "source_anchor": "Proposition 3.4",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "partial_or_wrapper_missing",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.4-prop",
       "review_declarations": [
@@ -671,7 +702,7 @@
         }
       ],
       "source_specification_sha256": "a4914037fecd9b2f6193105f137f3a59d160e47ca70747bb4a6c430477038990",
-      "expected_completion_certification": "accepted",
+      "expected_completion_certification": "reopened_math",
       "known_completion_holes": [],
       "audit_warning": "RESULT-ONLY REVIEW ACCEPTED: full nonacute complex Proposition 3.4 plus exact real source-facing counterpart, with no strengthened acuteness or dimension assumptions.",
       "source_atom_ids": [
@@ -1726,7 +1757,7 @@
       "source_kind": "theorem",
       "source_anchor": "Theorem 8.2 and final Section 8 extension remark",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "partial_or_wrapper_missing",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-8.2-thm",
       "review_declarations": [
@@ -1748,7 +1779,7 @@
         }
       ],
       "source_specification_sha256": "8af6a38667dbf398e65e1b4460763ab627b559607ac519214c35402797c1b48e",
-      "expected_completion_certification": "reopened_mapping",
+      "expected_completion_certification": "reopened_math",
       "known_completion_holes": [
         {
           "kind": "audit_atomization",

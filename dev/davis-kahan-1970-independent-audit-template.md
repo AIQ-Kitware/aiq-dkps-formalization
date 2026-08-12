@@ -6,12 +6,12 @@ The repository does **not** claim that every mathematical sentence, proof equati
 
 The two accounting layers are deliberately both visible:
 
-- **Source fidelity:** `dev/davis-kahan-1970-source-atom-inventory.json` contains **266 atoms** in paper order, including all **64 numbered equations**. Every atom has an explicit result-boundary reason code and names any counted result(s) it supports.
+- **Source fidelity:** `dev/davis-kahan-1970-source-atom-inventory.json` contains **267 atoms** in paper order, including all **64 numbered equations**. Every atom has an explicit result-boundary reason code and names any counted result(s) it supports.
 - **Formalization denominator:** `dev/davis-kahan-1970-formalization-result-inventory.json` contains exactly **29 counted results**: the four Section 2 headline theorems plus every named theorem, proposition, lemma, and corollary Davis--Kahan actually establish.
 - Section 10 questions, explicitly deferred/unproved claims, definitions, proof-only derivations, examples, numerical working, historical/external results, and theorem-adjacent remarks remain visible in source fidelity but do not enlarge the denominator.
 - A false counted result remains in the denominator and requires exact formal refutation plus the repository's separate best-effort repair disposition.
 
-Current result-level status: **28/29 terminal**, **1 awaiting semantic closure**.
+Current result-level status: **25/29 terminal**, **4 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -238,9 +238,9 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `unnumbered_theorem`
 - **Exact source anchor:** Section 2, sin 2 theta theorem
-- **Result disposition:** `proved_exact`
+- **Result disposition:** `reopened_pending_repair`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `accepted`
+- **Hostile semantic certification:** `reopened_pending_repair`
 - **Boundary review:** `accepted`
 - **Organizational source-block hash:** `7da711fdbd912b64b5aa6f2efc5c4255bcbe796831a18b99c92712024b81c70b`
 
@@ -727,15 +727,16 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `proposition`
 - **Exact source anchor:** Proposition 3.4
-- **Result disposition:** `proved_exact`
+- **Result disposition:** `reopened_pending_repair`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `accepted`
+- **Hostile semantic certification:** `reopened_pending_repair`
 - **Boundary review:** `accepted`
 - **Organizational source-block hash:** `a4914037fecd9b2f6193105f137f3a59d160e47ca70747bb4a6c430477038990`
 
 ### Atoms inside the counted printed result
 
 - `DK-3.4-prop.u-square-direct-rotation` — **counted_result_statement** — If C0^2>=1/2, then U^2 is the direct rotation from Q_- to Q.
+- `S3-standing-scope.crossed-dimension-standing-assumption` — **counted_result_scope** *(shared/cross-block scope)* — Standing convention: (3.5) is assumed as well as (1.5) for the remainder of the paper, except where the contrary is explicitly stated, so a direct rotation always exists and the development uses its direct special case (3.6).
 
 ### Same-block material explicitly outside the counted result
 
@@ -2660,9 +2661,9 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `theorem`
 - **Exact source anchor:** Theorem 8.2
-- **Result disposition:** `proved_exact`
+- **Result disposition:** `reopened_pending_repair`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `accepted`
+- **Hostile semantic certification:** `reopened_pending_repair`
 - **Boundary review:** `accepted`
 - **Organizational source-block hash:** `8af6a38667dbf398e65e1b4460763ab627b559607ac519214c35402797c1b48e`
 
@@ -2671,6 +2672,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - `DK-8.2-thm.smallness-alternative` — **counted_result_hypothesis** — The theorem assumes either ||H||_1<delta/2 or ||R||_1<delta/2 plus the stated A0 interval.
 - `DK-8.2-thm.double-angle-bound-retained` — **counted_result_statement** — The corresponding sin2 double-angle estimate remains valid.
 - `DK-8.2-thm.acute-branch-conclusion` — **counted_result_statement** — Theta<pi/4.
+- `S3-standing-scope.crossed-dimension-standing-assumption` — **counted_result_scope** *(shared/cross-block scope)* — Standing convention: (3.5) is assumed as well as (1.5) for the remainder of the paper, except where the contrary is explicitly stated, so a direct rotation always exists and the development uses its direct special case (3.6).
 
 ### Same-block material explicitly outside the counted result
 
@@ -2790,7 +2792,7 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - `background_theory_not_designated_result`: **2**
 - `counted_result_hypothesis`: **10**
-- `counted_result_scope`: **8**
+- `counted_result_scope`: **9**
 - `counted_result_statement`: **49**
 - `deferred_unproved_claim`: **2**
 - `definition_not_result`: **9**
@@ -2905,191 +2907,192 @@ Every source atom remains visible here even when it is outside the 29-result den
 | 86 | `DK-3.2-prop.crossing-square-minus-one` | `DK-3.2-prop` | `proof_detail_not_in_printed_statement` | — | On the crossing subspaces U^2 x=-x. |
 | 87 | `DK-3.2-prop.bilateral-shift-counterexample` | `DK-3.2-prop` | `remark_or_example_not_result` | — | The bilateral-shift example shows the basic P/Q dimension conditions do not imply the crossing-dimension condition. |
 | 88 | `DK-3.2-prop.eq-3-5` | `DK-3.2-prop` | `counted_result_statement` | `DK-3.2-prop` | Exact mathematical content of source equation (3.5) as reconstructed in the distributable TeX. |
-| 89 | `DK-3.3-prop.reflection-conjugacy` | `DK-3.3-prop` | `pre_result_setup_not_in_printed_statement` | — | With X=P-Pperp and Q_-=XQX, U^{-1}=XUX. |
-| 90 | `DK-3.3-prop.principal-square-root` | `DK-3.3-prop` | `counted_result_statement` | `DK-3.3-prop` | Every direct rotation is the principal unitary square root of the product of the two reflections. |
-| 91 | `DK-3.3-prop.square-root-converse` | `DK-3.3-prop` | `counted_result_statement` | `DK-3.3-prop` | A principal square root is a direct rotation when it maps the two crossing subspaces appropriately. |
-| 92 | `DK-3.3-prop.eq-3-6` | `DK-3.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (3.6) as reconstructed in the distributable TeX. |
-| 93 | `DK-3.3-prop.eq-3-7` | `DK-3.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (3.7) as reconstructed in the distributable TeX. |
-| 94 | `DK-3.3-prop.eq-3-8` | `DK-3.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (3.8) as reconstructed in the distributable TeX. |
-| 95 | `DK-3.4-prop.u-square-direct-rotation` | `DK-3.4-prop` | `counted_result_statement` | `DK-3.4-prop` | If C0^2>=1/2, then U^2 is the direct rotation from Q_- to Q. |
-| 96 | `DK-3.1-thm.complete-invariant` | `DK-3.1-thm` | `counted_result_statement` | `DK-3.1-thm` | Spectral multiplicity functions of Theta0,Theta1 completely classify the pair under the stated dimension hypotheses. |
-| 97 | `DK-3.1-thm.converse-angle-data` | `DK-3.1-thm` | `counted_result_statement` | `DK-3.1-thm` | Conversely the angle operators may be arbitrary positive contractions in [0,pi/2] with matching spectral multiplicities away from zero and the stated dimensions. |
-| 98 | `DK-3.1-thm.reconstruction` | `DK-3.1-thm` | `proof_detail_not_in_printed_statement` | — | The pair is reconstructed from the angle data and J0. |
-| 99 | `DK-3.1-cor.compact-complete-invariants` | `DK-3.1-cor` | `counted_result_statement` | `DK-3.1-cor` | If PQperpP is compact, the eigenvalues of Theta0,Theta1 counted with multiplicity are complete invariants. |
-| 100 | `DK-3.1-cor.allowed-angle-sequence` | `DK-3.1-cor` | `counted_result_statement` | `DK-3.1-cor` | Theta0 eigenvalues may be any decreasing sequence in [0,pi/2] tending to zero plus possible zero eigenspace. |
-| 101 | `DK-3.1-cor.theta1-match` | `DK-3.1-cor` | `counted_result_statement` | `DK-3.1-cor` | Theta1 has the same nonzero eigenvalues and may differ only in zero multiplicity. |
-| 102 | `DK-3.5-prop.commutation` | `DK-3.5-prop` | `counted_result_statement` | `DK-3.5-prop` | Theta commutes with P,Q,J,U. |
-| 103 | `DK-3.5-prop.direct-rotation-exponential` | `DK-3.5-prop` | `pre_result_setup_not_in_printed_statement` | — | U=exp(J Theta). |
-| 104 | `DK-3.5-prop.cos-square-projector` | `DK-3.5-prop` | `pre_result_setup_not_in_printed_statement` | — | cos^2 Theta=PQP+Pperp Qperp Pperp. |
-| 105 | `DK-3.5-prop.eigenvector-rotation-angle` | `DK-3.5-prop` | `counted_result_statement` | `DK-3.5-prop` | If Theta x=theta x then angle(x,Ux)=theta. |
-| 106 | `DK-3.5-prop.acute-maximal-characterization` | `DK-3.5-prop` | `counted_result_statement` | `DK-3.5-prop` | In the acute case each theta-eigenspace is the unique maximal P/Q-reducing subspace with the stated constant-angle properties. |
-| 107 | `DK-3.2-cor.swap-invariance` | `DK-3.2-cor` | `counted_result_statement` | `DK-3.2-cor` | Swapping P and Q leaves Theta unchanged and sends J to -J. |
-| 108 | `DK-4.1-prop.vz-factorization` | `DK-4.1-prop` | `section_setup_not_result` | — | Every unitary V carrying P to Q is written V=UZ with Z block diagonal in the Section 4 setup. |
-| 109 | `DK-4.1-prop.orthonormal-angle-lower-bounds` | `DK-4.1-prop` | `counted_result_statement` | `DK-4.1-prop` | For every such V there are orthonormal v_k in P with angle(v_k,Vv_k)>=theta_k. |
-| 110 | `DK-4.1-prop.singular-value-minimality` | `DK-4.1-prop` | `counted_result_statement` | `DK-4.1-prop` | Each singular value of (1-V)\|P is minimized at V=U with value 2 sin(theta_k/2). |
-| 111 | `DK-4.1-prop.closest-q-vector-proof-step` | `DK-4.1-prop` | `proof_or_derivation_not_result` | — | The pointwise comparison uses Qx/\|\|Qx\|\| as the closest unit vector in Q-space. |
-| 112 | `DK-4.1-prop.eq-4-1` | `DK-4.1-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.1) as reconstructed in the distributable TeX. |
-| 113 | `DK-4.1-prop.eq-4-2` | `DK-4.1-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.2) as reconstructed in the distributable TeX. |
-| 114 | `DK-4.1-cor.ui-minimality-on-p` | `DK-4.1-cor` | `counted_result_statement` | `DK-4.1-cor` | For every UI norm, \|\|(1-V)P\|\| is minimized at V=U. |
-| 115 | `DK-4.2-prop.basis-sine-square-lower-bound` | `DK-4.2-prop` | `counted_result_statement` | `DK-4.2-prop` | For every orthonormal basis of P, sum sin^2 angle(v_k,Vv_k) >= sum sin^2 theta_k, including infinite RHS. |
-| 116 | `DK-4.2-prop.trace-identification` | `DK-4.2-prop` | `proof_or_derivation_not_result` | — | The lower bound is identified with tr(S0* S0). |
-| 117 | `DK-4.3-prop.plane-parameterization` | `DK-4.3-prop` | `proof_detail_not_in_printed_statement` | — | On each principal two-plane V has the displayed a_j,b_j parameterization. |
-| 118 | `DK-4.3-prop.squared-displacement-global-minimum` | `DK-4.3-prop` | `counted_result_statement` | `DK-4.3-prop` | \|\|(1-V*)(1-V)\|\| is minimized by U for every UI norm. |
-| 119 | `DK-4.3-prop.operator-norm-displacement-minimum` | `DK-4.3-prop` | `post_result_consequence_not_in_printed_statement` | — | The operator norm of 1-V is minimized by U. |
-| 120 | `DK-4.3-prop.hilbert-schmidt-displacement-minimum` | `DK-4.3-prop` | `post_result_consequence_not_in_printed_statement` | — | The Hilbert--Schmidt norm of 1-V is minimized by U. |
-| 121 | `DK-4.3-prop.arbitrary-ui-displacement-warning` | `DK-4.3-prop` | `post_result_consequence_not_in_printed_statement` | — | Arbitrary UI norms of 1-V need not be minimized by U. |
-| 122 | `DK-4.3-prop.eq-4-3` | `DK-4.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.3) as reconstructed in the distributable TeX. |
-| 123 | `DK-4.3-prop.eq-4-4` | `DK-4.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.4) as reconstructed in the distributable TeX. |
-| 124 | `DK-4.3-prop.eq-4-5` | `DK-4.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.5) as reconstructed in the distributable TeX. |
-| 125 | `DK-4.3-prop.eq-4-6` | `DK-4.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.6) as reconstructed in the distributable TeX. |
-| 126 | `DK-4.4-prop.example4-1-real-reflection` | `DK-4.4-prop` | `remark_or_example_not_result` | — | Example 4.1 gives a real reflection with singular values 2,0 versus two equal direct-rotation singular values and defeats the Ky Fan 2 norm for theta>pi/3. |
-| 127 | `DK-4.4-prop.example4-2-complex-phase` | `DK-4.4-prop` | `remark_or_example_not_result` | — | Example 4.2 uses V=e^{i delta}U and shows the full-displacement UI minimum can fail in complex space. |
-| 128 | `DK-4.4-prop.printed-proposition4-4` | `DK-4.4-prop` | `counted_result_statement` | `DK-4.4-prop` | The paper asserts that in real space with Theta<=pi/3, U minimizes \|\|1-V\|\| for every UI norm. |
-| 129 | `DK-4.4-prop.printed-sharp-threshold` | `DK-4.4-prop` | `sharpness_commentary_not_designated_result` | — | The paper asserts the pi/3 threshold is sharp in view of the examples. |
-| 130 | `DK-5.1-thm.banach-hypotheses` | `DK-5.1-thm` | `counted_result_hypothesis` | `DK-5.1-thm` | Banach-space theorem with \|\|B\|\|<=alpha and \|\|A^{-1}\|\|<=(alpha+delta)^{-1}, compatible cross norm. |
-| 131 | `DK-5.1-thm.sylvester-lower-bound` | `DK-5.1-thm` | `counted_result_statement` | `DK-5.1-thm` | AX-XB=C implies \|\|C\|\|>=delta\|\|X\|\|. |
-| 132 | `DK-5.1-thm.roles-interchange` | `DK-5.1-thm` | `post_result_scope_remark_not_in_printed_statement` | — | A and B roles/hypotheses may be interchanged. |
-| 133 | `DK-5.1-thm.one-sided-unbounded-extension` | `DK-5.1-thm` | `post_result_scope_remark_not_in_printed_statement` | — | The proof covers densely-defined unbounded A with bounded inverse hypothesis while B,X remain bounded. |
-| 134 | `DK-5-hermitian-inequalities.pairwise-gap-hypothesis` | `DK-5-hermitian-inequalities` | `background_theory_not_designated_result` | — | Hermitian A,B have pairwise spectral distance at least delta. |
-| 135 | `DK-5-hermitian-inequalities.operator-norm-constant-one-fails` | `DK-5-hermitian-inequalities` | `background_theory_not_designated_result` | — | The operator-norm analogue with constant 1 can fail. |
-| 136 | `DK-5-hermitian-inequalities.rank-factor-not-best` | `DK-5-hermitian-inequalities` | `sharpness_commentary_not_designated_result` | — | Equation (5.2) is not best possible unless rank C<=1. |
-| 137 | `DK-5-hermitian-inequalities.universal-constant-question` | `DK-5-hermitian-inequalities` | `open_question` | — | The source asks whether the rank factor can be replaced by a universal constant. |
-| 138 | `DK-5-hermitian-inequalities.constant-one-explicit-counterexample` | `DK-5-hermitian-inequalities` | `remark_or_example_not_result` | — | The displayed 2x2 A,B,X example rules out universal constant 1. |
-| 139 | `DK-5-hermitian-inequalities.eq-5-1` | `DK-5-hermitian-inequalities` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (5.1) as reconstructed in the distributable TeX. |
-| 140 | `DK-5-hermitian-inequalities.eq-5-2` | `DK-5-hermitian-inequalities` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (5.2) as reconstructed in the distributable TeX. |
-| 141 | `DK-5.2-thm.hilbert-unbounded-hypotheses` | `DK-5.2-thm` | `counted_result_hypothesis` | `DK-5.2-thm` | Theorem 5.2 gives the Hilbert-space unbounded Sylvester setup with separated spectra and domain/core hypotheses. |
-| 142 | `DK-5.2-thm.hilbert-unbounded-conclusion` | `DK-5.2-thm` | `counted_result_statement` | `DK-5.2-thm` | The corresponding delta\|\|X\|\| lower bound holds in the stated UI/ideal norm scope. |
-| 143 | `DK-5.1-lem.strong-cutoff-convergence` | `DK-5.1-lem` | `counted_result_statement` | `DK-5.1-lem` | The spectral-cutoff approximants converge strongly in the manner stated and support the unbounded proof. |
-| 144 | `DK-6.1-lem.ordered-sylvester-forward` | `DK-6.1-lem` | `counted_result_statement` | `DK-6.1-lem` | The ordered spectral separation implies the stated Sylvester/UI-norm lower bound. |
-| 145 | `DK-6.1-lem.ordered-sylvester-converse` | `DK-6.1-lem` | `counted_result_statement` | `DK-6.1-lem` | The source includes the converse characterization used in the single-angle proof. |
-| 146 | `DK-6.2-lem.pinching-contraction` | `DK-6.2-lem` | `counted_result_statement` | `DK-6.2-lem` | The reflection/pinching operation contracts every unitary-invariant norm in the stated setup. |
-| 147 | `DK-6.1-prop.sine-proof-residual-identity` | `DK-6.1-prop` | `proof_detail_not_in_printed_statement` | — | The symmetric sine proof rewrites the relevant off-diagonal block as the Sylvester residual identity. |
-| 148 | `DK-6.1-prop.symmetric-sine-theorem` | `DK-6.1-prop` | `counted_result_statement` | `DK-6.1-prop` | Proposition 6.1 gives the symmetric sine-theta conclusion under two-sided spectral placement. |
-| 149 | `DK-6.1-prop.source-counterexample-need-two-sided` | `DK-6.1-prop` | `remark_or_example_not_result` | — | The source exhibits the failure of the ambient/symmetric conclusion when the needed two-sided placement is dropped. |
-| 150 | `DK-6.1-prop.eq-6-1` | `DK-6.1-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.1) as reconstructed in the distributable TeX. |
-| 151 | `DK-6.1-thm.generalized-sine-hypotheses` | `DK-6.1-thm` | `counted_result_hypothesis` | `DK-6.1-thm` | The generalized sine theorem allows nonisometric E0 with E0*E0 >= epsilon^2 and the stated spectral separation. |
-| 152 | `DK-6.1-thm.generalized-sine-conclusion` | `DK-6.1-thm` | `counted_result_statement` | `DK-6.1-thm` | delta epsilon \|\|sin Theta0\|\| <= \|\|R\|\|. |
-| 153 | `DK-6.1-thm.unequal-dimension-scope` | `DK-6.1-thm` | `counted_result_scope` | `DK-6.1-thm` | The generalized theorem allows unequal-dimensional comparison subspaces as stated. |
-| 154 | `DK-6.2-thm.second-generalized-sine` | `DK-6.2-thm` | `counted_result_statement` | `DK-6.2-thm` | The second generalized sine theorem gives the Hilbert--Schmidt estimate under pairwise spectral separation. |
-| 155 | `DK-6.2-thm.rank-corrected-operator-consequence` | `DK-6.2-thm` | `post_result_consequence_not_in_printed_statement` | — | The stated rank-corrected operator-norm consequence follows. |
-| 156 | `DK-6.3-thm.tangent-setup-identities` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Equations (6.2)--(6.6) provide the block identities used in the generalized tangent proof. |
-| 157 | `DK-6.3-thm.example6-1` | `DK-6.3-thm` | `remark_or_example_not_result` | — | Example 6.1 gives the explicit 2x2 counterexample showing one-sided placement is essential for the tangent conclusion. |
-| 158 | `DK-6.3-thm.generalized-tangent-theorem` | `DK-6.3-thm` | `counted_result_statement` | `DK-6.3-thm` | Theorem 6.3 gives the generalized tangent residual bound with its exact source hypotheses. |
-| 159 | `DK-6.3-thm.eq-6-2` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.2) as reconstructed in the distributable TeX. |
-| 160 | `DK-6.3-thm.eq-6-3` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.3) as reconstructed in the distributable TeX. |
-| 161 | `DK-6.3-thm.eq-6-4` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.4) as reconstructed in the distributable TeX. |
-| 162 | `DK-6.3-thm.eq-6-5` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.5) as reconstructed in the distributable TeX. |
-| 163 | `DK-6.3-thm.eq-6-6` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.6) as reconstructed in the distributable TeX. |
-| 164 | `DK-6-appendix.unbounded-sine-extension` | `DK-6-appendix` | `expository_commentary_not_result` | — | The sine theorem extends to unbounded operators via bounded residual/common-domain hypotheses. |
-| 165 | `DK-6-appendix.unbounded-tangent-extension` | `DK-6-appendix` | `expository_commentary_not_result` | — | The tangent theorem requires the stronger approximation argument recorded in the Appendix. |
-| 166 | `DK-6-appendix.appendix-approximation-chain` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Equations (6.7)--(6.11) form the approximation chain controlling singular directions and passing to all UI norms. |
-| 167 | `DK-6-appendix.appendix-all-ui-limit` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | The epsilon-to-zero argument completes the bound-norm case and then all UI norms. |
-| 168 | `DK-6-appendix.eq-6-7` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.7) as reconstructed in the distributable TeX. |
-| 169 | `DK-6-appendix.eq-6-8` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.8) as reconstructed in the distributable TeX. |
-| 170 | `DK-6-appendix.eq-6-9` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.9) as reconstructed in the distributable TeX. |
-| 171 | `DK-6-appendix.eq-6-10` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.10) as reconstructed in the distributable TeX. |
-| 172 | `DK-6-appendix.eq-6-11` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.11) as reconstructed in the distributable TeX. |
-| 173 | `DK-6.3-lem.approximation-number-leakage` | `DK-6.3-lem` | `counted_result_statement` | `DK-6.3-lem` | Lemma 6.3 controls the approximation/singular-number leakage used in the Appendix, including the stated finite and real forms. |
-| 174 | `DK-7-sin2-proof.reflection-setup` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | The reflection construction converts the double-angle geometry into a single-angle comparison. |
-| 175 | `DK-7-sin2-proof.ambient-sin2` | `DK-7-sin2-proof` | `restatement_of_counted_result` | — | The Section 7 proof derives the ambient sin2Theta perturbation estimate. |
-| 176 | `DK-7-sin2-proof.directed-sin2` | `DK-7-sin2-proof` | `restatement_of_counted_result` | — | It separately derives the directed sin2Theta0 residual estimate. |
-| 177 | `DK-7-sin2-proof.factor-one-directed-residual-refinement` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | The directed block residual estimate has the source factor-one intermediate bound before the headline factor 2 form. |
-| 178 | `DK-7-sin2-proof.swap-asymmetry` | `DK-7-sin2-proof` | `expository_commentary_not_result` | — | The source records the asymmetry involved in swapping the two operators/subspaces in the residual form. |
-| 179 | `DK-7-sin2-proof.eq-7-1` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.1) as reconstructed in the distributable TeX. |
-| 180 | `DK-7-sin2-proof.eq-7-2` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.2) as reconstructed in the distributable TeX. |
-| 181 | `DK-7-sin2-proof.eq-7-3` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.3) as reconstructed in the distributable TeX. |
-| 182 | `DK-7-sin2-proof.eq-7-4` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.4) as reconstructed in the distributable TeX. |
-| 183 | `DK-7-sin2-proof.eq-7-5` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.5) as reconstructed in the distributable TeX. |
-| 184 | `DK-7-tan2-proof.tan2-block-identity` | `DK-7-tan2-proof` | `proof_or_derivation_not_result` | — | Equation (7.6) gives the decisive tangent double-angle block identity. |
-| 185 | `DK-7-tan2-proof.cos2-pole-exclusion` | `DK-7-tan2-proof` | `proof_or_derivation_not_result` | — | The singular-vector argument proves the relevant cos(2 theta_j) factors do not vanish from the source hypotheses. |
-| 186 | `DK-7-tan2-proof.ambient-tan2` | `DK-7-tan2-proof` | `restatement_of_counted_result` | — | The proof yields the ambient tan2Theta perturbation estimate. |
-| 187 | `DK-7-tan2-proof.directed-tan2` | `DK-7-tan2-proof` | `restatement_of_counted_result` | — | The proof yields the directed tan2Theta0 residual estimate. |
-| 188 | `DK-7-tan2-proof.eq-7-6` | `DK-7-tan2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.6) as reconstructed in the distributable TeX. |
-| 189 | `DK-8.1-thm.branch-problem` | `DK-8.1-thm` | `pre_result_motivation_not_result` | — | Small double-angle trigonometric quantities alone do not select angles near zero; the chosen reducing subspace matters. |
-| 190 | `DK-8.1-thm.acute-iff-spectral-placement` | `DK-8.1-thm` | `counted_result_statement` | `DK-8.1-thm` | Theta<=pi/4 iff the chosen perturbed reducing blocks lie on the corresponding sides of the gap. |
-| 191 | `DK-8.1-thm.existence-correct-q` | `DK-8.1-thm` | `counted_result_statement` | `DK-8.1-thm` | A reducing spectral projector Q with the required placement exists and is unique in the stated sense. |
-| 192 | `DK-8.1-thm.part-i-compression` | `DK-8.1-thm` | `counted_result_statement` | `DK-8.1-thm` | The upper/lower block compression inequalities of part (i). |
-| 193 | `DK-8.1-thm.part-ii-eigenvalue` | `DK-8.1-thm` | `counted_result_statement` | `DK-8.1-thm` | The finite-dimensional eigenvalue displacement inequalities of part (ii), with natural infinite-dimensional extensions. |
-| 194 | `DK-8.1-thm.part-iii-gauge` | `DK-8.1-thm` | `counted_result_statement` | `DK-8.1-thm` | The symmetric-gauge majorization inequalities of part (iii). |
-| 195 | `DK-8.1-thm.exclude-pi-over-four` | `DK-8.1-thm` | `proof_or_derivation_not_result` | — | Equations (8.1)--(8.2) exclude theta=pi/4 and then theta>pi/4 under the selected placement. |
-| 196 | `DK-8.1-thm.spectral-repulsion-interpretation` | `DK-8.1-thm` | `post_result_interpretation_not_result` | — | Strong off-diagonal eigenvector rotation forces definite eigenvalue displacement as described. |
-| 197 | `DK-8.1-thm.eq-8-1` | `DK-8.1-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (8.1) as reconstructed in the distributable TeX. |
-| 198 | `DK-8.1-thm.eq-8-2` | `DK-8.1-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (8.2) as reconstructed in the distributable TeX. |
-| 199 | `DK-8.2-thm.smallness-alternative` | `DK-8.2-thm` | `counted_result_hypothesis` | `DK-8.2-thm` | The theorem assumes either \|\|H\|\|_1<delta/2 or \|\|R\|\|_1<delta/2 plus the stated A0 interval. |
-| 200 | `DK-8.2-thm.double-angle-bound-retained` | `DK-8.2-thm` | `counted_result_statement` | `DK-8.2-thm` | The corresponding sin2 double-angle estimate remains valid. |
-| 201 | `DK-8.2-thm.acute-branch-conclusion` | `DK-8.2-thm` | `counted_result_statement` | `DK-8.2-thm` | Theta<pi/4. |
-| 202 | `DK-8.2-thm.homotopy-proof` | `DK-8.2-thm` | `proof_or_derivation_not_result` | — | The perturbation proof uses the continuous spectral-projector homotopy and the displayed arcsine bound. |
-| 203 | `DK-8.2-thm.residual-reduction` | `DK-8.2-thm` | `proof_or_derivation_not_result` | — | The residual form is reduced by changing the complementary perturbation block while preserving the residual/spectral data. |
-| 204 | `DK-8.2-thm.sin2-unequal-dimension-extension` | `DK-8.2-thm` | `post_result_scope_remark_not_in_printed_statement` | — | The source states a sin2 extension to unequal comparison dimensions. |
-| 205 | `DK-8.2-thm.no-tan2-unequal-dimension-extension-known` | `DK-8.2-thm` | `historical_knowledge_state` | — | No analogous tan2 extension was known. |
-| 206 | `DK-9-model.real-l2-model` | `DK-9-model` | `definition_not_result` | — | The numerical model is real L2(0,1) with the free-end fourth-derivative self-adjoint closure and multiplication perturbation epsilon t. |
-| 207 | `DK-9-model.perturbed-eigenproblem` | `DK-9-model` | `definition_not_result` | — | The displayed fourth-order perturbed boundary-value eigenproblem. |
-| 208 | `DK-9-model.unperturbed-strict-eigenvalue-order` | `DK-9-model` | `section9_worked_example_not_result` | — | The source orders alpha1=0=alpha2<alpha3<alpha4<... with multiplicity. |
-| 209 | `DK-9-model.positive-root-equation` | `DK-9-model` | `section9_worked_example_not_result` | — | For k>2, alpha_k are the positive roots of cos(alpha_k^(1/4)) cosh(alpha_k^(1/4))=1. |
-| 210 | `DK-9-model.positive-spectrum-over-500` | `DK-9-model` | `section9_worked_example_not_result` | — | All positive alpha_k exceed 500. |
-| 211 | `DK-9-model.zero-eigenfunctions` | `DK-9-model` | `section9_worked_example_not_result` | — | The displayed w1,w2 are orthonormal linear eigenfunctions for the zero eigenvalue. |
-| 212 | `DK-9-model.lambda3-lower-bound` | `DK-9-model` | `section9_worked_example_not_result` | — | H>=0 implies lambda3>=alpha3>500. |
-| 213 | `DK-9-model.initial-residual-formula` | `DK-9-model` | `section9_worked_example_not_result` | — | For A0=0, R=HE0 with the displayed residual functions r_k. |
-| 214 | `DK-9-model.residual-gram` | `DK-9-model` | `section9_worked_example_not_result` | — | The displayed 2x2 R*R matrix. |
-| 215 | `DK-9-model.residual-gram-eigenvalues` | `DK-9-model` | `section9_worked_example_not_result` | — | R*R has eigenvalues epsilon^2(11+-sqrt76)/30. |
-| 216 | `DK-9.1-9.4.sin-bound-comparison` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | The paper notes (9.1) is sharper than the easy sin2 bound (9.2). |
-| 217 | `DK-9.1-9.4.kyfan-two-term-scope` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | Equations (9.3)--(9.4) use the two-term Ky Fan norm to estimate both principal angles simultaneously. |
-| 218 | `DK-9.1-9.4.eq-9-1` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.1) as reconstructed in the distributable TeX. |
-| 219 | `DK-9.1-9.4.eq-9-2` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.2) as reconstructed in the distributable TeX. |
-| 220 | `DK-9.1-9.4.eq-9-3` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.3) as reconstructed in the distributable TeX. |
-| 221 | `DK-9.1-9.4.eq-9-4` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.4) as reconstructed in the distributable TeX. |
-| 222 | `DK-9.5-9.7.rayleigh-ritz-matrix` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | The displayed Rayleigh--Ritz matrix is E0*(A+H)E0. |
-| 223 | `DK-9.5-9.7.refined-residual-gram` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | The displayed refined residual Gram matrix and its one/two-term norm equal epsilon/sqrt15. |
-| 224 | `DK-9.5-9.7.tangent-gap` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | The tangent gap may be taken as 500-0.7887 epsilon. |
-| 225 | `DK-9.5-9.7.kyfan-tan-bound` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | The same RHS as (9.6) bounds tan theta1+tan theta2 in the two-term Ky Fan norm. |
-| 226 | `DK-9.5-9.7.offdiagonal-complement-choice` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | For tan2 the complementary block is chosen as E1*(A+H)E1>500 to obtain an off-diagonal comparison. |
-| 227 | `DK-9.5-9.7.kyfan-tan2-bound` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | The same RHS as (9.7) bounds tan2theta1+tan2theta2 in the two-term Ky Fan norm. |
-| 228 | `DK-9.5-9.7.eq-9-5` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.5) as reconstructed in the distributable TeX. |
-| 229 | `DK-9.5-9.7.eq-9-6` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.6) as reconstructed in the distributable TeX. |
-| 230 | `DK-9.5-9.7.eq-9-7` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.7) as reconstructed in the distributable TeX. |
-| 231 | `DK-9.8.weinberger-sine-square` | `DK-9.8` | `external_result_not_dk_result` | — | Weinberger method gives the displayed sine-square estimate from Ritz upper/lower bounds and the 500 separation. |
-| 232 | `DK-9.8.lehmann-best-lower-bounds` | `DK-9.8` | `external_result_not_dk_result` | — | The best lower bounds deducible from the stated 2+1 data are the two lower eigenvalues of the displayed 3x3 matrix. |
-| 233 | `DK-9.8.lower-bound-asymptotic` | `DK-9.8` | `external_result_not_dk_result` | — | The source records the strict inequality and O(epsilon^4) asymptotic for alpha_hat-alpha_check. |
-| 234 | `DK-9.8.angle-meaning-distinction` | `DK-9.8` | `section9_worked_example_not_result` | — | phi_k are individual trial-vector-to-subspace angles whereas theta1 is the largest subspace angle. |
-| 235 | `DK-9.8.sine-square-sum-identity` | `DK-9.8` | `section9_worked_example_not_result` | — | sin^2 phi1+sin^2 phi2 = sin^2 theta1+sin^2 theta2. |
-| 236 | `DK-9.8.direct-one-vector-sharper-bounds` | `DK-9.8` | `section9_worked_example_not_result` | — | Theorem 6.3 applied to each trial vector gives the displayed sharper tan phi_k bounds. |
-| 237 | `DK-9.8.methods-complementary` | `DK-9.8` | `section9_worked_example_not_result` | — | The source concludes the two methods are complementary rather than one supplanting the other. |
-| 238 | `DK-9.8.eq-9-8` | `DK-9.8` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.8) as reconstructed in the distributable TeX. |
-| 239 | `DK-9-infinite-residual-counterexample.l2-geometric-vector-example` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | The geometric sequence e and diagonal operator give a trial vector just outside the operator domain. |
-| 240 | `DK-9-infinite-residual-counterexample.arbitrarily-small-domain-repair` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | The source asserts an arbitrarily small modification repairs the domain defect. |
-| 241 | `DK-9-infinite-residual-counterexample.rayleigh-quotient` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | The formal Rayleigh quotient is 1+mu. |
-| 242 | `DK-9-infinite-residual-counterexample.residual-infinite` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | The residual has infinite norm so the paper residual theorems give no estimate. |
-| 243 | `DK-9-infinite-residual-counterexample.weinberger-still-applies` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | Independent lower eigenvalue bounds still allow the displayed Weinberger estimate. |
-| 244 | `DK-9-infinite-residual-counterexample.best-lower-bound-result` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | At the best lower bounds the true sin theta=mu satisfies mu<=mu/sqrt(1-mu). |
-| 245 | `DK-9.9-9.11.angle-factorization` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | cos omega_k=cos eta_k cos psi_k and omega_k^2<=psi_k^2+eta_k^2. |
-| 246 | `DK-9.9-9.11.schur-correction-bound` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | The Schur correction is bounded by the displayed off-diagonal 2x2 matrix and operator inequalities. |
-| 247 | `DK-9.9-9.11.tan2-psi-bound` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | The tan2 theorem yields the displayed bound for psi_k. |
-| 248 | `DK-9.9-9.11.acute-psi-selection` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Theorem 8.1 selects 0<=psi_k<pi/4 and yields the stated arctan bound. |
-| 249 | `DK-9.9-9.11.eta-bound` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Equation (9.10) yields the displayed tan eta_k bound. |
-| 250 | `DK-9.9-9.11.final-omega-bounds` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Combining psi_k and eta_k yields the two final omega_k bounds. |
-| 251 | `DK-9.9-9.11.best-possible-3x3-claim` | `DK-9.9-9.11` | `deferred_unproved_claim` | — | The source says the best possible bound from the stated data is the coordinate/eigenvector angle of the 3x3 comparison matrix. |
-| 252 | `DK-9.9-9.11.best-possible-proof-deferred` | `DK-9.9-9.11` | `deferred_unproved_claim` | — | Proof of that best-possible assertion is deferred to the unresolved three-way-subspace Question 10.2. |
-| 253 | `DK-9.9-9.11.eq-9-9` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.9) as reconstructed in the distributable TeX. |
-| 254 | `DK-9.9-9.11.eq-9-10` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.10) as reconstructed in the distributable TeX. |
-| 255 | `DK-9.9-9.11.eq-9-11` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.11) as reconstructed in the distributable TeX. |
-| 256 | `DK-10.1.question` | `DK-10.1` | `open_question` | — | With only pairwise spectral distance delta, how sharply can Theta0 be bounded in terms of R? |
-| 257 | `DK-10.2.three-way-setup` | `DK-10.2` | `definition_not_result` | — | Three-way orthogonal decompositions are encoded by the 3x3 block matrix E_i*F_j. |
-| 258 | `DK-10.2.question` | `DK-10.2` | `open_question` | — | Can nearby reducing three-way decompositions be estimated through off-diagonal blocks analogously to the two-way theory? |
-| 259 | `DK-10.3.question` | `DK-10.3` | `open_question` | — | Find best possible bounds combining eigenvalue and eigenvector changes. |
-| 260 | `DK-10.4.spectral-functional-calculus` | `DK-10.4` | `definition_not_result` | — | The source recalls f(A) from the spectral resolution of self-adjoint A. |
-| 261 | `DK-10.4.step-function-specialization` | `DK-10.4` | `section10_motivation_not_result` | — | For the gap step function under tan2 hypotheses, f(A)=P, f(A+H)=Q, f(A0)=I. |
-| 262 | `DK-10.4.ambient-functional-change` | `DK-10.4` | `section10_motivation_not_result` | — | \|\|f(A+H)-f(A)\|\|=\|\|Q-P\|\|=\|\|sin Theta\|\|. |
-| 263 | `DK-10.4.ambient-tan2-bound` | `DK-10.4` | `restatement_of_counted_result` | — | delta\|\|tan 2Theta\|\|<=2\|\|H\|\|. |
-| 264 | `DK-10.4.directed-functional-change` | `DK-10.4` | `section10_motivation_not_result` | — | \|\|(f(A+H)-f(A))E0\|\|=\|\|Qperp E0\|\|=\|\|sin Theta0\|\|. |
-| 265 | `DK-10.4.directed-tan2-bound` | `DK-10.4` | `restatement_of_counted_result` | — | delta\|\|tan 2Theta0\|\|<=2\|\|R\|\|. |
-| 266 | `DK-10.4.question` | `DK-10.4` | `open_question` | — | Seek analogous perturbation bounds for more general functions f. |
+| 89 | `S3-standing-scope.crossed-dimension-standing-assumption` | `S3-standing-scope` | `counted_result_scope` | `DK-3.4-prop`, `DK-8.2-thm` | Standing convention: (3.5) is assumed as well as (1.5) for the remainder of the paper, except where the contrary is explicitly stated, so a direct rotation always exists and the development uses its direct special case (3.6). |
+| 90 | `DK-3.3-prop.reflection-conjugacy` | `DK-3.3-prop` | `pre_result_setup_not_in_printed_statement` | — | With X=P-Pperp and Q_-=XQX, U^{-1}=XUX. |
+| 91 | `DK-3.3-prop.principal-square-root` | `DK-3.3-prop` | `counted_result_statement` | `DK-3.3-prop` | Every direct rotation is the principal unitary square root of the product of the two reflections. |
+| 92 | `DK-3.3-prop.square-root-converse` | `DK-3.3-prop` | `counted_result_statement` | `DK-3.3-prop` | A principal square root is a direct rotation when it maps the two crossing subspaces appropriately. |
+| 93 | `DK-3.3-prop.eq-3-6` | `DK-3.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (3.6) as reconstructed in the distributable TeX. |
+| 94 | `DK-3.3-prop.eq-3-7` | `DK-3.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (3.7) as reconstructed in the distributable TeX. |
+| 95 | `DK-3.3-prop.eq-3-8` | `DK-3.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (3.8) as reconstructed in the distributable TeX. |
+| 96 | `DK-3.4-prop.u-square-direct-rotation` | `DK-3.4-prop` | `counted_result_statement` | `DK-3.4-prop` | If C0^2>=1/2, then U^2 is the direct rotation from Q_- to Q. |
+| 97 | `DK-3.1-thm.complete-invariant` | `DK-3.1-thm` | `counted_result_statement` | `DK-3.1-thm` | Spectral multiplicity functions of Theta0,Theta1 completely classify the pair under the stated dimension hypotheses. |
+| 98 | `DK-3.1-thm.converse-angle-data` | `DK-3.1-thm` | `counted_result_statement` | `DK-3.1-thm` | Conversely the angle operators may be arbitrary positive contractions in [0,pi/2] with matching spectral multiplicities away from zero and the stated dimensions. |
+| 99 | `DK-3.1-thm.reconstruction` | `DK-3.1-thm` | `proof_detail_not_in_printed_statement` | — | The pair is reconstructed from the angle data and J0. |
+| 100 | `DK-3.1-cor.compact-complete-invariants` | `DK-3.1-cor` | `counted_result_statement` | `DK-3.1-cor` | If PQperpP is compact, the eigenvalues of Theta0,Theta1 counted with multiplicity are complete invariants. |
+| 101 | `DK-3.1-cor.allowed-angle-sequence` | `DK-3.1-cor` | `counted_result_statement` | `DK-3.1-cor` | Theta0 eigenvalues may be any decreasing sequence in [0,pi/2] tending to zero plus possible zero eigenspace. |
+| 102 | `DK-3.1-cor.theta1-match` | `DK-3.1-cor` | `counted_result_statement` | `DK-3.1-cor` | Theta1 has the same nonzero eigenvalues and may differ only in zero multiplicity. |
+| 103 | `DK-3.5-prop.commutation` | `DK-3.5-prop` | `counted_result_statement` | `DK-3.5-prop` | Theta commutes with P,Q,J,U. |
+| 104 | `DK-3.5-prop.direct-rotation-exponential` | `DK-3.5-prop` | `pre_result_setup_not_in_printed_statement` | — | U=exp(J Theta). |
+| 105 | `DK-3.5-prop.cos-square-projector` | `DK-3.5-prop` | `pre_result_setup_not_in_printed_statement` | — | cos^2 Theta=PQP+Pperp Qperp Pperp. |
+| 106 | `DK-3.5-prop.eigenvector-rotation-angle` | `DK-3.5-prop` | `counted_result_statement` | `DK-3.5-prop` | If Theta x=theta x then angle(x,Ux)=theta. |
+| 107 | `DK-3.5-prop.acute-maximal-characterization` | `DK-3.5-prop` | `counted_result_statement` | `DK-3.5-prop` | In the acute case each theta-eigenspace is the unique maximal P/Q-reducing subspace with the stated constant-angle properties. |
+| 108 | `DK-3.2-cor.swap-invariance` | `DK-3.2-cor` | `counted_result_statement` | `DK-3.2-cor` | Swapping P and Q leaves Theta unchanged and sends J to -J. |
+| 109 | `DK-4.1-prop.vz-factorization` | `DK-4.1-prop` | `section_setup_not_result` | — | Every unitary V carrying P to Q is written V=UZ with Z block diagonal in the Section 4 setup. |
+| 110 | `DK-4.1-prop.orthonormal-angle-lower-bounds` | `DK-4.1-prop` | `counted_result_statement` | `DK-4.1-prop` | For every such V there are orthonormal v_k in P with angle(v_k,Vv_k)>=theta_k. |
+| 111 | `DK-4.1-prop.singular-value-minimality` | `DK-4.1-prop` | `counted_result_statement` | `DK-4.1-prop` | Each singular value of (1-V)\|P is minimized at V=U with value 2 sin(theta_k/2). |
+| 112 | `DK-4.1-prop.closest-q-vector-proof-step` | `DK-4.1-prop` | `proof_or_derivation_not_result` | — | The pointwise comparison uses Qx/\|\|Qx\|\| as the closest unit vector in Q-space. |
+| 113 | `DK-4.1-prop.eq-4-1` | `DK-4.1-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.1) as reconstructed in the distributable TeX. |
+| 114 | `DK-4.1-prop.eq-4-2` | `DK-4.1-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.2) as reconstructed in the distributable TeX. |
+| 115 | `DK-4.1-cor.ui-minimality-on-p` | `DK-4.1-cor` | `counted_result_statement` | `DK-4.1-cor` | For every UI norm, \|\|(1-V)P\|\| is minimized at V=U. |
+| 116 | `DK-4.2-prop.basis-sine-square-lower-bound` | `DK-4.2-prop` | `counted_result_statement` | `DK-4.2-prop` | For every orthonormal basis of P, sum sin^2 angle(v_k,Vv_k) >= sum sin^2 theta_k, including infinite RHS. |
+| 117 | `DK-4.2-prop.trace-identification` | `DK-4.2-prop` | `proof_or_derivation_not_result` | — | The lower bound is identified with tr(S0* S0). |
+| 118 | `DK-4.3-prop.plane-parameterization` | `DK-4.3-prop` | `proof_detail_not_in_printed_statement` | — | On each principal two-plane V has the displayed a_j,b_j parameterization. |
+| 119 | `DK-4.3-prop.squared-displacement-global-minimum` | `DK-4.3-prop` | `counted_result_statement` | `DK-4.3-prop` | \|\|(1-V*)(1-V)\|\| is minimized by U for every UI norm. |
+| 120 | `DK-4.3-prop.operator-norm-displacement-minimum` | `DK-4.3-prop` | `post_result_consequence_not_in_printed_statement` | — | The operator norm of 1-V is minimized by U. |
+| 121 | `DK-4.3-prop.hilbert-schmidt-displacement-minimum` | `DK-4.3-prop` | `post_result_consequence_not_in_printed_statement` | — | The Hilbert--Schmidt norm of 1-V is minimized by U. |
+| 122 | `DK-4.3-prop.arbitrary-ui-displacement-warning` | `DK-4.3-prop` | `post_result_consequence_not_in_printed_statement` | — | Arbitrary UI norms of 1-V need not be minimized by U. |
+| 123 | `DK-4.3-prop.eq-4-3` | `DK-4.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.3) as reconstructed in the distributable TeX. |
+| 124 | `DK-4.3-prop.eq-4-4` | `DK-4.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.4) as reconstructed in the distributable TeX. |
+| 125 | `DK-4.3-prop.eq-4-5` | `DK-4.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.5) as reconstructed in the distributable TeX. |
+| 126 | `DK-4.3-prop.eq-4-6` | `DK-4.3-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (4.6) as reconstructed in the distributable TeX. |
+| 127 | `DK-4.4-prop.example4-1-real-reflection` | `DK-4.4-prop` | `remark_or_example_not_result` | — | Example 4.1 gives a real reflection with singular values 2,0 versus two equal direct-rotation singular values and defeats the Ky Fan 2 norm for theta>pi/3. |
+| 128 | `DK-4.4-prop.example4-2-complex-phase` | `DK-4.4-prop` | `remark_or_example_not_result` | — | Example 4.2 uses V=e^{i delta}U and shows the full-displacement UI minimum can fail in complex space. |
+| 129 | `DK-4.4-prop.printed-proposition4-4` | `DK-4.4-prop` | `counted_result_statement` | `DK-4.4-prop` | The paper asserts that in real space with Theta<=pi/3, U minimizes \|\|1-V\|\| for every UI norm. |
+| 130 | `DK-4.4-prop.printed-sharp-threshold` | `DK-4.4-prop` | `sharpness_commentary_not_designated_result` | — | The paper asserts the pi/3 threshold is sharp in view of the examples. |
+| 131 | `DK-5.1-thm.banach-hypotheses` | `DK-5.1-thm` | `counted_result_hypothesis` | `DK-5.1-thm` | Banach-space theorem with \|\|B\|\|<=alpha and \|\|A^{-1}\|\|<=(alpha+delta)^{-1}, compatible cross norm. |
+| 132 | `DK-5.1-thm.sylvester-lower-bound` | `DK-5.1-thm` | `counted_result_statement` | `DK-5.1-thm` | AX-XB=C implies \|\|C\|\|>=delta\|\|X\|\|. |
+| 133 | `DK-5.1-thm.roles-interchange` | `DK-5.1-thm` | `post_result_scope_remark_not_in_printed_statement` | — | A and B roles/hypotheses may be interchanged. |
+| 134 | `DK-5.1-thm.one-sided-unbounded-extension` | `DK-5.1-thm` | `post_result_scope_remark_not_in_printed_statement` | — | The proof covers densely-defined unbounded A with bounded inverse hypothesis while B,X remain bounded. |
+| 135 | `DK-5-hermitian-inequalities.pairwise-gap-hypothesis` | `DK-5-hermitian-inequalities` | `background_theory_not_designated_result` | — | Hermitian A,B have pairwise spectral distance at least delta. |
+| 136 | `DK-5-hermitian-inequalities.operator-norm-constant-one-fails` | `DK-5-hermitian-inequalities` | `background_theory_not_designated_result` | — | The operator-norm analogue with constant 1 can fail. |
+| 137 | `DK-5-hermitian-inequalities.rank-factor-not-best` | `DK-5-hermitian-inequalities` | `sharpness_commentary_not_designated_result` | — | Equation (5.2) is not best possible unless rank C<=1. |
+| 138 | `DK-5-hermitian-inequalities.universal-constant-question` | `DK-5-hermitian-inequalities` | `open_question` | — | The source asks whether the rank factor can be replaced by a universal constant. |
+| 139 | `DK-5-hermitian-inequalities.constant-one-explicit-counterexample` | `DK-5-hermitian-inequalities` | `remark_or_example_not_result` | — | The displayed 2x2 A,B,X example rules out universal constant 1. |
+| 140 | `DK-5-hermitian-inequalities.eq-5-1` | `DK-5-hermitian-inequalities` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (5.1) as reconstructed in the distributable TeX. |
+| 141 | `DK-5-hermitian-inequalities.eq-5-2` | `DK-5-hermitian-inequalities` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (5.2) as reconstructed in the distributable TeX. |
+| 142 | `DK-5.2-thm.hilbert-unbounded-hypotheses` | `DK-5.2-thm` | `counted_result_hypothesis` | `DK-5.2-thm` | Theorem 5.2 gives the Hilbert-space unbounded Sylvester setup with separated spectra and domain/core hypotheses. |
+| 143 | `DK-5.2-thm.hilbert-unbounded-conclusion` | `DK-5.2-thm` | `counted_result_statement` | `DK-5.2-thm` | The corresponding delta\|\|X\|\| lower bound holds in the stated UI/ideal norm scope. |
+| 144 | `DK-5.1-lem.strong-cutoff-convergence` | `DK-5.1-lem` | `counted_result_statement` | `DK-5.1-lem` | The spectral-cutoff approximants converge strongly in the manner stated and support the unbounded proof. |
+| 145 | `DK-6.1-lem.ordered-sylvester-forward` | `DK-6.1-lem` | `counted_result_statement` | `DK-6.1-lem` | The ordered spectral separation implies the stated Sylvester/UI-norm lower bound. |
+| 146 | `DK-6.1-lem.ordered-sylvester-converse` | `DK-6.1-lem` | `counted_result_statement` | `DK-6.1-lem` | The source includes the converse characterization used in the single-angle proof. |
+| 147 | `DK-6.2-lem.pinching-contraction` | `DK-6.2-lem` | `counted_result_statement` | `DK-6.2-lem` | The reflection/pinching operation contracts every unitary-invariant norm in the stated setup. |
+| 148 | `DK-6.1-prop.sine-proof-residual-identity` | `DK-6.1-prop` | `proof_detail_not_in_printed_statement` | — | The symmetric sine proof rewrites the relevant off-diagonal block as the Sylvester residual identity. |
+| 149 | `DK-6.1-prop.symmetric-sine-theorem` | `DK-6.1-prop` | `counted_result_statement` | `DK-6.1-prop` | Proposition 6.1 gives the symmetric sine-theta conclusion under two-sided spectral placement. |
+| 150 | `DK-6.1-prop.source-counterexample-need-two-sided` | `DK-6.1-prop` | `remark_or_example_not_result` | — | The source exhibits the failure of the ambient/symmetric conclusion when the needed two-sided placement is dropped. |
+| 151 | `DK-6.1-prop.eq-6-1` | `DK-6.1-prop` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.1) as reconstructed in the distributable TeX. |
+| 152 | `DK-6.1-thm.generalized-sine-hypotheses` | `DK-6.1-thm` | `counted_result_hypothesis` | `DK-6.1-thm` | The generalized sine theorem allows nonisometric E0 with E0*E0 >= epsilon^2 and the stated spectral separation. |
+| 153 | `DK-6.1-thm.generalized-sine-conclusion` | `DK-6.1-thm` | `counted_result_statement` | `DK-6.1-thm` | delta epsilon \|\|sin Theta0\|\| <= \|\|R\|\|. |
+| 154 | `DK-6.1-thm.unequal-dimension-scope` | `DK-6.1-thm` | `counted_result_scope` | `DK-6.1-thm` | The generalized theorem allows unequal-dimensional comparison subspaces as stated. |
+| 155 | `DK-6.2-thm.second-generalized-sine` | `DK-6.2-thm` | `counted_result_statement` | `DK-6.2-thm` | The second generalized sine theorem gives the Hilbert--Schmidt estimate under pairwise spectral separation. |
+| 156 | `DK-6.2-thm.rank-corrected-operator-consequence` | `DK-6.2-thm` | `post_result_consequence_not_in_printed_statement` | — | The stated rank-corrected operator-norm consequence follows. |
+| 157 | `DK-6.3-thm.tangent-setup-identities` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Equations (6.2)--(6.6) provide the block identities used in the generalized tangent proof. |
+| 158 | `DK-6.3-thm.example6-1` | `DK-6.3-thm` | `remark_or_example_not_result` | — | Example 6.1 gives the explicit 2x2 counterexample showing one-sided placement is essential for the tangent conclusion. |
+| 159 | `DK-6.3-thm.generalized-tangent-theorem` | `DK-6.3-thm` | `counted_result_statement` | `DK-6.3-thm` | Theorem 6.3 gives the generalized tangent residual bound with its exact source hypotheses. |
+| 160 | `DK-6.3-thm.eq-6-2` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.2) as reconstructed in the distributable TeX. |
+| 161 | `DK-6.3-thm.eq-6-3` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.3) as reconstructed in the distributable TeX. |
+| 162 | `DK-6.3-thm.eq-6-4` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.4) as reconstructed in the distributable TeX. |
+| 163 | `DK-6.3-thm.eq-6-5` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.5) as reconstructed in the distributable TeX. |
+| 164 | `DK-6.3-thm.eq-6-6` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.6) as reconstructed in the distributable TeX. |
+| 165 | `DK-6-appendix.unbounded-sine-extension` | `DK-6-appendix` | `expository_commentary_not_result` | — | The sine theorem extends to unbounded operators via bounded residual/common-domain hypotheses. |
+| 166 | `DK-6-appendix.unbounded-tangent-extension` | `DK-6-appendix` | `expository_commentary_not_result` | — | The tangent theorem requires the stronger approximation argument recorded in the Appendix. |
+| 167 | `DK-6-appendix.appendix-approximation-chain` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Equations (6.7)--(6.11) form the approximation chain controlling singular directions and passing to all UI norms. |
+| 168 | `DK-6-appendix.appendix-all-ui-limit` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | The epsilon-to-zero argument completes the bound-norm case and then all UI norms. |
+| 169 | `DK-6-appendix.eq-6-7` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.7) as reconstructed in the distributable TeX. |
+| 170 | `DK-6-appendix.eq-6-8` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.8) as reconstructed in the distributable TeX. |
+| 171 | `DK-6-appendix.eq-6-9` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.9) as reconstructed in the distributable TeX. |
+| 172 | `DK-6-appendix.eq-6-10` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.10) as reconstructed in the distributable TeX. |
+| 173 | `DK-6-appendix.eq-6-11` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.11) as reconstructed in the distributable TeX. |
+| 174 | `DK-6.3-lem.approximation-number-leakage` | `DK-6.3-lem` | `counted_result_statement` | `DK-6.3-lem` | Lemma 6.3 controls the approximation/singular-number leakage used in the Appendix, including the stated finite and real forms. |
+| 175 | `DK-7-sin2-proof.reflection-setup` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | The reflection construction converts the double-angle geometry into a single-angle comparison. |
+| 176 | `DK-7-sin2-proof.ambient-sin2` | `DK-7-sin2-proof` | `restatement_of_counted_result` | — | The Section 7 proof derives the ambient sin2Theta perturbation estimate. |
+| 177 | `DK-7-sin2-proof.directed-sin2` | `DK-7-sin2-proof` | `restatement_of_counted_result` | — | It separately derives the directed sin2Theta0 residual estimate. |
+| 178 | `DK-7-sin2-proof.factor-one-directed-residual-refinement` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | The directed block residual estimate has the source factor-one intermediate bound before the headline factor 2 form. |
+| 179 | `DK-7-sin2-proof.swap-asymmetry` | `DK-7-sin2-proof` | `expository_commentary_not_result` | — | The source records the asymmetry involved in swapping the two operators/subspaces in the residual form. |
+| 180 | `DK-7-sin2-proof.eq-7-1` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.1) as reconstructed in the distributable TeX. |
+| 181 | `DK-7-sin2-proof.eq-7-2` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.2) as reconstructed in the distributable TeX. |
+| 182 | `DK-7-sin2-proof.eq-7-3` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.3) as reconstructed in the distributable TeX. |
+| 183 | `DK-7-sin2-proof.eq-7-4` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.4) as reconstructed in the distributable TeX. |
+| 184 | `DK-7-sin2-proof.eq-7-5` | `DK-7-sin2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.5) as reconstructed in the distributable TeX. |
+| 185 | `DK-7-tan2-proof.tan2-block-identity` | `DK-7-tan2-proof` | `proof_or_derivation_not_result` | — | Equation (7.6) gives the decisive tangent double-angle block identity. |
+| 186 | `DK-7-tan2-proof.cos2-pole-exclusion` | `DK-7-tan2-proof` | `proof_or_derivation_not_result` | — | The singular-vector argument proves the relevant cos(2 theta_j) factors do not vanish from the source hypotheses. |
+| 187 | `DK-7-tan2-proof.ambient-tan2` | `DK-7-tan2-proof` | `restatement_of_counted_result` | — | The proof yields the ambient tan2Theta perturbation estimate. |
+| 188 | `DK-7-tan2-proof.directed-tan2` | `DK-7-tan2-proof` | `restatement_of_counted_result` | — | The proof yields the directed tan2Theta0 residual estimate. |
+| 189 | `DK-7-tan2-proof.eq-7-6` | `DK-7-tan2-proof` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (7.6) as reconstructed in the distributable TeX. |
+| 190 | `DK-8.1-thm.branch-problem` | `DK-8.1-thm` | `pre_result_motivation_not_result` | — | Small double-angle trigonometric quantities alone do not select angles near zero; the chosen reducing subspace matters. |
+| 191 | `DK-8.1-thm.acute-iff-spectral-placement` | `DK-8.1-thm` | `counted_result_statement` | `DK-8.1-thm` | Theta<=pi/4 iff the chosen perturbed reducing blocks lie on the corresponding sides of the gap. |
+| 192 | `DK-8.1-thm.existence-correct-q` | `DK-8.1-thm` | `counted_result_statement` | `DK-8.1-thm` | A reducing spectral projector Q with the required placement exists and is unique in the stated sense. |
+| 193 | `DK-8.1-thm.part-i-compression` | `DK-8.1-thm` | `counted_result_statement` | `DK-8.1-thm` | The upper/lower block compression inequalities of part (i). |
+| 194 | `DK-8.1-thm.part-ii-eigenvalue` | `DK-8.1-thm` | `counted_result_statement` | `DK-8.1-thm` | The finite-dimensional eigenvalue displacement inequalities of part (ii), with natural infinite-dimensional extensions. |
+| 195 | `DK-8.1-thm.part-iii-gauge` | `DK-8.1-thm` | `counted_result_statement` | `DK-8.1-thm` | The symmetric-gauge majorization inequalities of part (iii). |
+| 196 | `DK-8.1-thm.exclude-pi-over-four` | `DK-8.1-thm` | `proof_or_derivation_not_result` | — | Equations (8.1)--(8.2) exclude theta=pi/4 and then theta>pi/4 under the selected placement. |
+| 197 | `DK-8.1-thm.spectral-repulsion-interpretation` | `DK-8.1-thm` | `post_result_interpretation_not_result` | — | Strong off-diagonal eigenvector rotation forces definite eigenvalue displacement as described. |
+| 198 | `DK-8.1-thm.eq-8-1` | `DK-8.1-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (8.1) as reconstructed in the distributable TeX. |
+| 199 | `DK-8.1-thm.eq-8-2` | `DK-8.1-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (8.2) as reconstructed in the distributable TeX. |
+| 200 | `DK-8.2-thm.smallness-alternative` | `DK-8.2-thm` | `counted_result_hypothesis` | `DK-8.2-thm` | The theorem assumes either \|\|H\|\|_1<delta/2 or \|\|R\|\|_1<delta/2 plus the stated A0 interval. |
+| 201 | `DK-8.2-thm.double-angle-bound-retained` | `DK-8.2-thm` | `counted_result_statement` | `DK-8.2-thm` | The corresponding sin2 double-angle estimate remains valid. |
+| 202 | `DK-8.2-thm.acute-branch-conclusion` | `DK-8.2-thm` | `counted_result_statement` | `DK-8.2-thm` | Theta<pi/4. |
+| 203 | `DK-8.2-thm.homotopy-proof` | `DK-8.2-thm` | `proof_or_derivation_not_result` | — | The perturbation proof uses the continuous spectral-projector homotopy and the displayed arcsine bound. |
+| 204 | `DK-8.2-thm.residual-reduction` | `DK-8.2-thm` | `proof_or_derivation_not_result` | — | The residual form is reduced by changing the complementary perturbation block while preserving the residual/spectral data. |
+| 205 | `DK-8.2-thm.sin2-unequal-dimension-extension` | `DK-8.2-thm` | `post_result_scope_remark_not_in_printed_statement` | — | The source states a sin2 extension to unequal comparison dimensions. |
+| 206 | `DK-8.2-thm.no-tan2-unequal-dimension-extension-known` | `DK-8.2-thm` | `historical_knowledge_state` | — | No analogous tan2 extension was known. |
+| 207 | `DK-9-model.real-l2-model` | `DK-9-model` | `definition_not_result` | — | The numerical model is real L2(0,1) with the free-end fourth-derivative self-adjoint closure and multiplication perturbation epsilon t. |
+| 208 | `DK-9-model.perturbed-eigenproblem` | `DK-9-model` | `definition_not_result` | — | The displayed fourth-order perturbed boundary-value eigenproblem. |
+| 209 | `DK-9-model.unperturbed-strict-eigenvalue-order` | `DK-9-model` | `section9_worked_example_not_result` | — | The source orders alpha1=0=alpha2<alpha3<alpha4<... with multiplicity. |
+| 210 | `DK-9-model.positive-root-equation` | `DK-9-model` | `section9_worked_example_not_result` | — | For k>2, alpha_k are the positive roots of cos(alpha_k^(1/4)) cosh(alpha_k^(1/4))=1. |
+| 211 | `DK-9-model.positive-spectrum-over-500` | `DK-9-model` | `section9_worked_example_not_result` | — | All positive alpha_k exceed 500. |
+| 212 | `DK-9-model.zero-eigenfunctions` | `DK-9-model` | `section9_worked_example_not_result` | — | The displayed w1,w2 are orthonormal linear eigenfunctions for the zero eigenvalue. |
+| 213 | `DK-9-model.lambda3-lower-bound` | `DK-9-model` | `section9_worked_example_not_result` | — | H>=0 implies lambda3>=alpha3>500. |
+| 214 | `DK-9-model.initial-residual-formula` | `DK-9-model` | `section9_worked_example_not_result` | — | For A0=0, R=HE0 with the displayed residual functions r_k. |
+| 215 | `DK-9-model.residual-gram` | `DK-9-model` | `section9_worked_example_not_result` | — | The displayed 2x2 R*R matrix. |
+| 216 | `DK-9-model.residual-gram-eigenvalues` | `DK-9-model` | `section9_worked_example_not_result` | — | R*R has eigenvalues epsilon^2(11+-sqrt76)/30. |
+| 217 | `DK-9.1-9.4.sin-bound-comparison` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | The paper notes (9.1) is sharper than the easy sin2 bound (9.2). |
+| 218 | `DK-9.1-9.4.kyfan-two-term-scope` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | Equations (9.3)--(9.4) use the two-term Ky Fan norm to estimate both principal angles simultaneously. |
+| 219 | `DK-9.1-9.4.eq-9-1` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.1) as reconstructed in the distributable TeX. |
+| 220 | `DK-9.1-9.4.eq-9-2` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.2) as reconstructed in the distributable TeX. |
+| 221 | `DK-9.1-9.4.eq-9-3` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.3) as reconstructed in the distributable TeX. |
+| 222 | `DK-9.1-9.4.eq-9-4` | `DK-9.1-9.4` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.4) as reconstructed in the distributable TeX. |
+| 223 | `DK-9.5-9.7.rayleigh-ritz-matrix` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | The displayed Rayleigh--Ritz matrix is E0*(A+H)E0. |
+| 224 | `DK-9.5-9.7.refined-residual-gram` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | The displayed refined residual Gram matrix and its one/two-term norm equal epsilon/sqrt15. |
+| 225 | `DK-9.5-9.7.tangent-gap` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | The tangent gap may be taken as 500-0.7887 epsilon. |
+| 226 | `DK-9.5-9.7.kyfan-tan-bound` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | The same RHS as (9.6) bounds tan theta1+tan theta2 in the two-term Ky Fan norm. |
+| 227 | `DK-9.5-9.7.offdiagonal-complement-choice` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | For tan2 the complementary block is chosen as E1*(A+H)E1>500 to obtain an off-diagonal comparison. |
+| 228 | `DK-9.5-9.7.kyfan-tan2-bound` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | The same RHS as (9.7) bounds tan2theta1+tan2theta2 in the two-term Ky Fan norm. |
+| 229 | `DK-9.5-9.7.eq-9-5` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.5) as reconstructed in the distributable TeX. |
+| 230 | `DK-9.5-9.7.eq-9-6` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.6) as reconstructed in the distributable TeX. |
+| 231 | `DK-9.5-9.7.eq-9-7` | `DK-9.5-9.7` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.7) as reconstructed in the distributable TeX. |
+| 232 | `DK-9.8.weinberger-sine-square` | `DK-9.8` | `external_result_not_dk_result` | — | Weinberger method gives the displayed sine-square estimate from Ritz upper/lower bounds and the 500 separation. |
+| 233 | `DK-9.8.lehmann-best-lower-bounds` | `DK-9.8` | `external_result_not_dk_result` | — | The best lower bounds deducible from the stated 2+1 data are the two lower eigenvalues of the displayed 3x3 matrix. |
+| 234 | `DK-9.8.lower-bound-asymptotic` | `DK-9.8` | `external_result_not_dk_result` | — | The source records the strict inequality and O(epsilon^4) asymptotic for alpha_hat-alpha_check. |
+| 235 | `DK-9.8.angle-meaning-distinction` | `DK-9.8` | `section9_worked_example_not_result` | — | phi_k are individual trial-vector-to-subspace angles whereas theta1 is the largest subspace angle. |
+| 236 | `DK-9.8.sine-square-sum-identity` | `DK-9.8` | `section9_worked_example_not_result` | — | sin^2 phi1+sin^2 phi2 = sin^2 theta1+sin^2 theta2. |
+| 237 | `DK-9.8.direct-one-vector-sharper-bounds` | `DK-9.8` | `section9_worked_example_not_result` | — | Theorem 6.3 applied to each trial vector gives the displayed sharper tan phi_k bounds. |
+| 238 | `DK-9.8.methods-complementary` | `DK-9.8` | `section9_worked_example_not_result` | — | The source concludes the two methods are complementary rather than one supplanting the other. |
+| 239 | `DK-9.8.eq-9-8` | `DK-9.8` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.8) as reconstructed in the distributable TeX. |
+| 240 | `DK-9-infinite-residual-counterexample.l2-geometric-vector-example` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | The geometric sequence e and diagonal operator give a trial vector just outside the operator domain. |
+| 241 | `DK-9-infinite-residual-counterexample.arbitrarily-small-domain-repair` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | The source asserts an arbitrarily small modification repairs the domain defect. |
+| 242 | `DK-9-infinite-residual-counterexample.rayleigh-quotient` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | The formal Rayleigh quotient is 1+mu. |
+| 243 | `DK-9-infinite-residual-counterexample.residual-infinite` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | The residual has infinite norm so the paper residual theorems give no estimate. |
+| 244 | `DK-9-infinite-residual-counterexample.weinberger-still-applies` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | Independent lower eigenvalue bounds still allow the displayed Weinberger estimate. |
+| 245 | `DK-9-infinite-residual-counterexample.best-lower-bound-result` | `DK-9-infinite-residual-counterexample` | `section9_worked_example_not_result` | — | At the best lower bounds the true sin theta=mu satisfies mu<=mu/sqrt(1-mu). |
+| 246 | `DK-9.9-9.11.angle-factorization` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | cos omega_k=cos eta_k cos psi_k and omega_k^2<=psi_k^2+eta_k^2. |
+| 247 | `DK-9.9-9.11.schur-correction-bound` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | The Schur correction is bounded by the displayed off-diagonal 2x2 matrix and operator inequalities. |
+| 248 | `DK-9.9-9.11.tan2-psi-bound` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | The tan2 theorem yields the displayed bound for psi_k. |
+| 249 | `DK-9.9-9.11.acute-psi-selection` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Theorem 8.1 selects 0<=psi_k<pi/4 and yields the stated arctan bound. |
+| 250 | `DK-9.9-9.11.eta-bound` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Equation (9.10) yields the displayed tan eta_k bound. |
+| 251 | `DK-9.9-9.11.final-omega-bounds` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Combining psi_k and eta_k yields the two final omega_k bounds. |
+| 252 | `DK-9.9-9.11.best-possible-3x3-claim` | `DK-9.9-9.11` | `deferred_unproved_claim` | — | The source says the best possible bound from the stated data is the coordinate/eigenvector angle of the 3x3 comparison matrix. |
+| 253 | `DK-9.9-9.11.best-possible-proof-deferred` | `DK-9.9-9.11` | `deferred_unproved_claim` | — | Proof of that best-possible assertion is deferred to the unresolved three-way-subspace Question 10.2. |
+| 254 | `DK-9.9-9.11.eq-9-9` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.9) as reconstructed in the distributable TeX. |
+| 255 | `DK-9.9-9.11.eq-9-10` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.10) as reconstructed in the distributable TeX. |
+| 256 | `DK-9.9-9.11.eq-9-11` | `DK-9.9-9.11` | `section9_worked_example_not_result` | — | Exact mathematical content of source equation (9.11) as reconstructed in the distributable TeX. |
+| 257 | `DK-10.1.question` | `DK-10.1` | `open_question` | — | With only pairwise spectral distance delta, how sharply can Theta0 be bounded in terms of R? |
+| 258 | `DK-10.2.three-way-setup` | `DK-10.2` | `definition_not_result` | — | Three-way orthogonal decompositions are encoded by the 3x3 block matrix E_i*F_j. |
+| 259 | `DK-10.2.question` | `DK-10.2` | `open_question` | — | Can nearby reducing three-way decompositions be estimated through off-diagonal blocks analogously to the two-way theory? |
+| 260 | `DK-10.3.question` | `DK-10.3` | `open_question` | — | Find best possible bounds combining eigenvalue and eigenvector changes. |
+| 261 | `DK-10.4.spectral-functional-calculus` | `DK-10.4` | `definition_not_result` | — | The source recalls f(A) from the spectral resolution of self-adjoint A. |
+| 262 | `DK-10.4.step-function-specialization` | `DK-10.4` | `section10_motivation_not_result` | — | For the gap step function under tan2 hypotheses, f(A)=P, f(A+H)=Q, f(A0)=I. |
+| 263 | `DK-10.4.ambient-functional-change` | `DK-10.4` | `section10_motivation_not_result` | — | \|\|f(A+H)-f(A)\|\|=\|\|Q-P\|\|=\|\|sin Theta\|\|. |
+| 264 | `DK-10.4.ambient-tan2-bound` | `DK-10.4` | `restatement_of_counted_result` | — | delta\|\|tan 2Theta\|\|<=2\|\|H\|\|. |
+| 265 | `DK-10.4.directed-functional-change` | `DK-10.4` | `section10_motivation_not_result` | — | \|\|(f(A+H)-f(A))E0\|\|=\|\|Qperp E0\|\|=\|\|sin Theta0\|\|. |
+| 266 | `DK-10.4.directed-tan2-bound` | `DK-10.4` | `restatement_of_counted_result` | — | delta\|\|tan 2Theta0\|\|<=2\|\|R\|\|. |
+| 267 | `DK-10.4.question` | `DK-10.4` | `open_question` | — | Seek analogous perturbation bounds for more general functions f. |
 
 # Final independent conclusion
 
-- **All 266 source-fidelity atoms reviewed for omission/classification:** yes / no
+- **All 267 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **28 currently terminal results independently reconfirmed:** yes / no
-- **1 currently nonterminal/pending results resolved by this audit:** yes / no
+- **25 currently terminal results independently reconfirmed:** yes / no
+- **4 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no
