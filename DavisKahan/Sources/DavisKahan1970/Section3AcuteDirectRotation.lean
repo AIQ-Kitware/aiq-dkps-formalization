@@ -157,6 +157,39 @@ theorem acute_directRotation_existsUnique (hacute : TauCeti.IsAcute U V) :
     (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp hacute).1
     (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mp hacute).2
 
+/-- **Davis--Kahan 1970, Proposition 3.1, exact source-facing wrapper.**
+
+At the paper's printed acute-case hypothesis, the canonical polar factor is a
+unitary intertwiner, its two diagonal blocks are positive, it satisfies the
+direct-rotation crossed-block identity from Definition 3.1(ii), and property
+(i) alone characterizes it among unitary intertwiners.  Thus no projection-gap
+hypothesis, equation (3.8), standing dimension assumption (1.5), finite-
+dimensional hypothesis, or scalar-field specialization is present in the
+statement. -/
+theorem proposition3_1_source (hacute : TauCeti.IsAcute U V) :
+    acute_directRotation U V ∈ unitary (H →L[𝕜] H) ∧
+      acute_directRotation U V * U.starProjection =
+        V.starProjection * acute_directRotation U V ∧
+      (U.starProjection * acute_directRotation U V * U.starProjection).IsPositive ∧
+      (Uᗮ.starProjection * acute_directRotation U V * Uᗮ.starProjection).IsPositive ∧
+      Uᗮ.starProjection * acute_directRotation U V * U.starProjection =
+        -star (U.starProjection * acute_directRotation U V * Uᗮ.starProjection) ∧
+      ∀ W : H →L[𝕜] H,
+        W ∈ unitary (H →L[𝕜] H) →
+        W * U.starProjection = V.starProjection * W →
+        (U.starProjection * W * U.starProjection).IsPositive →
+        (Uᗮ.starProjection * W * Uᗮ.starProjection).IsPositive →
+        W = acute_directRotation U V := by
+  refine ⟨acute_directRotation_mem_unitary U V hacute,
+    acute_directRotation_intertwines U V,
+    acute_directRotation_positiveDiagonalBlock U V hacute,
+    acute_directRotation_positiveComplementaryDiagonalBlock U V hacute,
+    canonicalPolarFactor_crossed_blocks_general U V, ?_⟩
+  intro W hWunit hint hblockU hblockUperp
+  exact acute_directRotation_of_positiveDiagonalBlocks U V hacute W
+    hWunit hint hblockU hblockUperp
+
+
 end Generic
 
 /-! ## The complex endpoints, and the `IsUniformlyAcute` ones as a special case -/

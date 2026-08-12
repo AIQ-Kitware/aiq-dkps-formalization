@@ -50,10 +50,10 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 15 |
+| `accepted` | 16 |
 | `reopened_source_spec` | 0 |
 | `reopened_math` | 10 |
-| `reopened_mapping` | 19 |
+| `reopened_mapping` | 18 |
 | `mixed_disposition` | 2 |
 | `not_applicable` | 3 |
 
@@ -128,7 +128,7 @@ Gates: S1-ui-norms (proved_in_build), DK-3.3-prop (proved_in_build), DK-4.1-prop
 
 The row is likely mathematically complete, but a generic `.whole` clause or incomplete evidence selection does not statically demonstrate correspondence for every separable assertion in the hashed TeX passage. Atomize the source passage and bind each clause to exact evidence.
 
-Gates: S2-tan-theta (proved_in_build), S2-sharpness (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-3.1-prop (proved_in_build), DK-4.2-prop (proved_in_build), DK-4.3-prop (proved_in_build), DK-5.1-thm (proved_in_build), DK-5.2-thm (proved_in_build), DK-6.1-prop (proved_in_build), DK-6.2-thm (proved_in_build), DK-6-appendix (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build), DK-8.2-thm (proved_in_build), DK-9.1-9.4 (proved_in_build), DK-9.5-9.7 (proved_in_build)
+Gates: S2-tan-theta (proved_in_build), S2-sharpness (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-4.2-prop (proved_in_build), DK-4.3-prop (proved_in_build), DK-5.1-thm (proved_in_build), DK-5.2-thm (proved_in_build), DK-6.1-prop (proved_in_build), DK-6.2-thm (proved_in_build), DK-6-appendix (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build), DK-8.2-thm (proved_in_build), DK-9.1-9.4 (proved_in_build), DK-9.5-9.7 (proved_in_build)
 
 ### `hostile-mixed-disposition` -- mechanical
 
@@ -1079,12 +1079,9 @@ results are at the printed hypothesis exactly.
 - **Kind:** `proposition`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_mapping`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** In the acute case the direct rotation exists, is unique, and positivity of its diagonal blocks characterizes it.
-- **Blocked by:** `hostile-audit-atomization`
-- **Known hostile-review holes:**
-  - `audit_mapping`: Primary evidence is complex-centric even though the paper ambient convention is real or complex and real counterparts exist elsewhere in the census. Register exact real evidence explicitly.
-- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan1970.complex_directRotation_unique`, `TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock`, `TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock`, `TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate`, `TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks`, `TauCeti.DavisKahan1970.complex_directRotation_iff_diagonalBlocks`, `TauCeti.DavisKahan1970.real_directRotation`, `TauCeti.DavisKahan1970.real_directRotation_orthogonal`, `TauCeti.DavisKahan1970.real_directRotation_intertwines`, `TauCeti.DavisKahan1970.real_directRotation_maps_subspace`, `TauCeti.DavisKahan1970.real_directRotation_maps_orthogonalComplement`, `TauCeti.DavisKahan1970.real_directRotation_diagonalBlock`, `TauCeti.DavisKahan1970.real_directRotation_complementaryDiagonalBlock`, `TauCeti.DavisKahan1970.real_directRotation_principal_of_sq`, `TauCeti.DavisKahan1970.real_directRotation_of_diagonalBlocks`, `TauCeti.DavisKahan1970.real_directRotation_iff_diagonalBlocks`, `TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate_of_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.complex_directRotation_of_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.complex_directRotation_iff_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.real_directRotation_of_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.real_directRotation_iff_positiveDiagonalBlocks`, `TauCeti.DavisKahan.eq_directRotationR_iff_diagonalBlocks_pos`, `TauCeti.DavisKahan.isPositive_of_complexify`, `TauCeti.DavisKahan.isPositive_canonicalAbsoluteValueR`, `TauCeti.DavisKahan1970.acute_directRotation`, `TauCeti.DavisKahan1970.acute_directRotation_existsUnique`, `TauCeti.DavisKahan1970.acute_directRotation_iff_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.complex_acute_directRotation_iff_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.real_directRotation_eq_acute_directRotation`
+- **Current Lean references:** `TauCeti.DavisKahan1970.proposition3_1_source`, `TauCeti.DavisKahan1970.complex_directRotation`, `TauCeti.DavisKahan1970.complex_directRotation_unique`, `TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock`, `TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock`, `TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate`, `TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks`, `TauCeti.DavisKahan1970.complex_directRotation_iff_diagonalBlocks`, `TauCeti.DavisKahan1970.real_directRotation`, `TauCeti.DavisKahan1970.real_directRotation_orthogonal`, `TauCeti.DavisKahan1970.real_directRotation_intertwines`, `TauCeti.DavisKahan1970.real_directRotation_maps_subspace`, `TauCeti.DavisKahan1970.real_directRotation_maps_orthogonalComplement`, `TauCeti.DavisKahan1970.real_directRotation_diagonalBlock`, `TauCeti.DavisKahan1970.real_directRotation_complementaryDiagonalBlock`, `TauCeti.DavisKahan1970.real_directRotation_principal_of_sq`, `TauCeti.DavisKahan1970.real_directRotation_of_diagonalBlocks`, `TauCeti.DavisKahan1970.real_directRotation_iff_diagonalBlocks`, `TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate_of_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.complex_directRotation_of_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.complex_directRotation_iff_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.real_directRotation_of_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.real_directRotation_iff_positiveDiagonalBlocks`, `TauCeti.DavisKahan.eq_directRotationR_iff_diagonalBlocks_pos`, `TauCeti.DavisKahan.isPositive_of_complexify`, `TauCeti.DavisKahan.isPositive_canonicalAbsoluteValueR`, `TauCeti.DavisKahan1970.acute_directRotation`, `TauCeti.DavisKahan1970.acute_directRotation_existsUnique`, `TauCeti.DavisKahan1970.acute_directRotation_iff_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.complex_acute_directRotation_iff_positiveDiagonalBlocks`, `TauCeti.DavisKahan1970.real_directRotation_eq_acute_directRotation`
 - **Assessment:** The main acute construction and uniqueness are present; the exact characterization by positivity needs source-level verification.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `partial_or_wrapper_missing`. Existence and uniqueness in the acute case are compiled and axiom-clean; the positivity characterization that the printed Proposition 3.1 also asserts is neither proved nor wrapped, so the exact source theorem is not represented.
@@ -1154,7 +1151,9 @@ WHERE `IsUniformlyAcute` IS genuinely essential is the OTHER branch: `spectraDir
 **A COORDINATOR PREMISE WAS FALSE.**  The brief said "the repository itself proves these differ in infinite dimension".  IT DOES NOT: `isAcute_of_projectionGap_lt_one` is unconditional, but the converse `projectionGap_lt_one_of_isAcute` (`ForTauCeti/.../AngleGeometry.lean:346`) opens with `have : CompleteSpace E := FiniteDimensional.complete` -- it is finite-dimensional only.  **A compiled witness pair separating `IsAcute` from `IsUniformlyAcute` is still outstanding** (recorded on `DK-3.2-def`).  The narrowing was real regardless -- a theorem at a stronger hypothesis is formally weaker -- but "proves they differ" overstated the compiled state.
 
 ALSO SUPERSEDED: this row's "`IsUniformlyAcute` enters through clause (a) only" (false about signatures, as recorded earlier today) and the note that clause (c) at the printed predicate "is not yet on a declaration" even finite-dimensionally.  Both are now moot.
-- **Next action:** Hostile re-audit reopened this row. Primary evidence is complex-centric even though the paper ambient convention is real or complex and real counterparts exist elsewhere in the census. Register exact real evidence explicitly.
+
+**RESULT-ONLY HOSTILE REVIEW CLOSED 2026-08-12 (GPT-5.6 Sol).**  The newer 29-result inventory had accidentally regressed to the old complex/`IsUniformlyAcute` evidence even though the 2026-08-10 work had already proved Proposition 3.1 at the paper's own hypothesis.  Added `TauCeti.DavisKahan1970.proposition3_1_source`, a thin generic `RCLike` wrapper over the already-compiled acute polar-factor theorems.  Its telescope uses exactly `TauCeti.IsAcute`; it states unitarity, projection intertwining, positivity of both diagonal blocks, the Definition 3.1(ii) crossed-block identity, and uniqueness from property (i) alone.  No `IsUniformlyAcute`, (3.8), (1.5), finite-dimensional, or complex-only premise remains.  The compact result inventory now points directly at this wrapper and semantically certifies `DK-3.1-prop` as accepted.
+- **Next action:** None for Proposition 3.1. The 29-result audit now points at the exact generic `proposition3_1_source` wrapper and accepts its printed-scope semantics.
 
 #### Proposition 3.2: Nonacute existence criterion
 

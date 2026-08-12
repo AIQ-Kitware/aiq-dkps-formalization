@@ -11,7 +11,7 @@ The two accounting layers are deliberately both visible:
 - Section 10 questions, explicitly deferred/unproved claims, definitions, proof-only derivations, examples, numerical working, historical/external results, and theorem-adjacent remarks remain visible in source fidelity but do not enlarge the denominator.
 - A false counted result remains in the denominator and requires exact formal refutation plus the repository's separate best-effort repair disposition.
 
-Current result-level status: **11/29 terminal**, **18 awaiting semantic closure**.
+Current result-level status: **12/29 terminal**, **17 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -438,9 +438,9 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `proposition`
 - **Exact source anchor:** Proposition 3.1
-- **Result disposition:** `pending_result_only_review`
+- **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `pending_result_only_review`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Organizational source-block hash:** `ff945cb6247987becf0eec9e3c5fd945ba2df2d2b8756cea6df2c7ebd00213d4`
 
@@ -464,39 +464,9 @@ In the acute case, a direct rotation exists and is unique.  Moreover positivity 
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.complex_directRotation`
+#### `TauCeti.DavisKahan1970.proposition3_1_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:128`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.complex_directRotation_unique`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:134`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:160`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:162`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:184`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:186`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:169`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3100,8 +3070,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 266 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **11 currently terminal results independently reconfirmed:** yes / no
-- **18 currently nonterminal/pending results resolved by this audit:** yes / no
+- **12 currently terminal results independently reconfirmed:** yes / no
+- **17 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no
