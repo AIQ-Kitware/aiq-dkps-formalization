@@ -207,16 +207,20 @@
         "S2-unbounded-scope.bounded-residual-needed",
         "S2-unbounded-scope.half-infinite-gap-intervals"
       ],
-      "disposition": "pending_result_only_review",
+      "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "pending_result_only_review",
+      "semantic_certification": "accepted",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
-        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact"
+        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact",
+        "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exact",
+        "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact",
+        "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact",
+        "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact"
       ],
-      "review_note": "Result-only audit 2026-08-12: the bounded directed and ambient arbitrary-PaperUI conclusions are exact over real and complex scalars, with pole exclusion derived internally. Current main additionally proves the exact *complex unbounded directed residual* theorem `tanTwoTheta_unbounded_directedResidual_paperUINorm_exact`. The remaining source-scope work is the sharp unbounded ambient factor-two conclusion and the corresponding real unbounded source-facing surface (directed/ambient as needed). Existing unbounded ambient ideal estimates with quarter-acuteness or an extra denominator do not match the printed theorem and therefore do not discharge it.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The bounded complex and real source wrappers already expose both directed and ambient arbitrary-PaperUI conclusions from the printed Section 2 hypotheses with pole exclusion derived internally. The unbounded source surface now closes the advertised global scope as well: `tanTwoTheta_unbounded_directedResidual_paperUINorm_exact` and its real counterpart give the sharp directed residual inequality, while `tanTwoTheta_unbounded_ambient_paperUINorm_exact` and its real counterpart give the sharp ambient factor-two inequality for unbounded self-adjoint A in arbitrary Hilbert dimension. The ambient proof assembles the two reflection-tangent corners using the existing Section 7 directed estimate, skew-adjoint symmetry, Lemma 6.1 block assembly, and Fan dominance; the real endpoints descend exactly through the maintained complexification layer. No quarter-angle assumption, caller-supplied pole certificate, finite-dimensional restriction, compactness premise, or perturbed-Q spectral-placement hypothesis is added. The final implementation was compiler-verified by the user on the 7cc049b4 baseline before this census promotion.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-tan-two-theta",
@@ -240,16 +244,6 @@
         ],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
-      },
-      "remaining_gap": {
-        "category": "missing_unbounded_ambient_and_real_source_surface",
-        "missing_surface": "Sharp unbounded ambient factor-two tan(2Theta) theorem at paper UI-norm scope, plus real unbounded source-facing coverage corresponding to the printed global scope.",
-        "strongest_existing_evidence": [
-          "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
-          "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
-          "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exact"
-        ],
-        "next_action": "Extend the exact unbounded directed assembly to the ambient perturbation conclusion and real scalar surface without quarter-acuteness or denominator loss."
       }
     },
     {
@@ -1186,14 +1180,13 @@
   ],
   "semantic_review_sweep": {
     "date": "2026-08-12",
-    "upstream_main_minimum": "ce0f435a2f8acdf323e520048114378ea0855fd2",
+    "upstream_main_minimum": "7cc049b4f9aaf5754224ece9114abad04df44c57",
     "method": "Audited each previously nonterminal counted result against only its accepted printed-result boundary; promoted a result only when concrete source-facing Lean declarations expose every counted hypothesis, conclusion, and scalar/dimension/norm scope. Proof-only and theorem-adjacent source atoms were not used as blockers.",
     "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-12.md",
-    "terminal_results": 24,
+    "terminal_results": 25,
     "remaining_results": [
       "S2-tan-theta",
-      "S2-tan-two-theta",
       "DK-3.3-prop",
       "DK-3.4-prop",
       "DK-4.1-prop"
