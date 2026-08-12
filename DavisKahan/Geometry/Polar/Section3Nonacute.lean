@@ -141,6 +141,21 @@ noncomputable def swapCrossedDefectEquiv
     (LinearIsometryEquiv.ofEq _ _ (by
       simp only [halmosSourceDefect, halmosTargetDefect, inf_comm]))
 
+/-- The crossed-defect identification for the complementary pair.  Source and target defects
+exchange roles, and the extra minus sign makes the completed quarter-turn agree with the original
+one on both defect summands. -/
+noncomputable def orthogonalCrossedDefectEquiv
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    halmosSourceDefect U.orthogonal V.orthogonal ≃ₗᵢ[𝕜]
+      halmosTargetDefect U.orthogonal V.orthogonal :=
+  (LinearIsometryEquiv.ofEq _ _ (by
+      simp only [halmosSourceDefect, halmosTargetDefect,
+        Submodule.orthogonal_orthogonal])).trans
+    (J.symm.trans (LinearIsometryEquiv.neg 𝕜)) |>.trans
+      (LinearIsometryEquiv.ofEq _ _ (by
+        simp only [halmosSourceDefect, halmosTargetDefect,
+          Submodule.orthogonal_orthogonal]))
+
 omit [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
   [ContinuousFunctionalCalculus ℝ (H →L[𝕜] H) IsSelfAdjoint] in
 /-- The crossed defect map on a source vector. -/
@@ -773,6 +788,21 @@ noncomputable def nonacuteDirectRotation
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     H →L[𝕜] H :=
   spectraCanonicalPolarFactor U V + crossedDefectQuarterTurn U V J
+
+/-- The completed direct rotation for the complementary pair is the same operator when its
+crossed-defect identification is obtained by reversing `J` and changing sign. -/
+theorem nonacuteDirectRotation_orthogonal
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    nonacuteDirectRotation U.orthogonal V.orthogonal
+        (orthogonalCrossedDefectEquiv U V J) =
+      nonacuteDirectRotation U V J := by
+  rw [nonacuteDirectRotation, nonacuteDirectRotation]
+  congr 1
+  · simp only [spectraCanonicalPolarFactor, spectraCanonicalIntertwiner_orthogonal]
+  · ext x
+    simp [crossedDefectQuarterTurn, sourceToTargetDefect, targetToSourceDefect,
+      orthogonalCrossedDefectEquiv]
+    abel
 
 /-- Reversing the ordered pair sends the completed direct rotation to its
 adjoint when the crossed-defect choice is reversed. -/

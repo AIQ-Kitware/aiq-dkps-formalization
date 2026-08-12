@@ -169,6 +169,55 @@ theorem diagonalPart_directRotation_displacementSquare (U V : Submodule ℂ H)
     _ = (U.reflectionOperator * U.reflectionOperator) * A := by rw [mul_assoc]
     _ = A := by rw [hJJ, one_mul]
 
+/-- The squared displacement of a completed nonacute direct rotation is the same affine image of
+the canonical positive cosine as in the acute case. -/
+theorem nonacuteDirectRotation_displacementSquare_eq (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V) :
+    (1 - star (nonacuteDirectRotation U V J)) * (1 - nonacuteDirectRotation U V J) =
+      2 - (2 : ℂ) • spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) := by
+  have hunit := star_nonacuteDirectRotation_mul_self U V J
+  have hsum := nonacuteDirectRotation_add_star_eq_two_absoluteValue U V J
+  have hexp : (1 - star (nonacuteDirectRotation U V J)) *
+      (1 - nonacuteDirectRotation U V J) =
+      1 + star (nonacuteDirectRotation U V J) * nonacuteDirectRotation U V J -
+        (nonacuteDirectRotation U V J + star (nonacuteDirectRotation U V J)) := by
+    noncomm_ring
+  rw [hexp, hunit, hsum]
+  norm_num [two_smul ℂ]
+
+/-- The completed nonacute direct rotation's squared displacement is already block diagonal. -/
+theorem diagonalPart_nonacuteDirectRotation_displacementSquare (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V) :
+    U.diagonalPart ((1 - star (nonacuteDirectRotation U V J)) *
+        (1 - nonacuteDirectRotation U V J)) =
+      (1 - star (nonacuteDirectRotation U V J)) *
+        (1 - nonacuteDirectRotation U V J) := by
+  set C : H →L[ℂ] H :=
+    spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  set A : H →L[ℂ] H := (1 - star (nonacuteDirectRotation U V J)) *
+    (1 - nonacuteDirectRotation U V J)
+  have hAeq : A = 2 - (2 : ℂ) • C := nonacuteDirectRotation_displacementSquare_eq U V J
+  have hCcomm : C * U.starProjection = U.starProjection * C :=
+    (spectraCanonicalAbsoluteValue_commute_projection U V).eq
+  have hcomm : A * U.starProjection = U.starProjection * A := by
+    rw [hAeq, sub_mul, mul_sub, smul_mul_assoc, mul_smul_comm, hCcomm]
+    congr 1
+    rw [two_mul, mul_two]
+  apply Submodule.diagonalPart_eq_self_of_reflectionConjugate
+  have hAJ : A * U.reflectionOperator = U.reflectionOperator * A := by
+    rw [Submodule.reflectionOperator_eq_two_smul_sub_id, mul_sub, sub_mul,
+      smul_mul_assoc, mul_smul_comm, hcomm]
+    rw [show (ContinuousLinearMap.id ℂ H) = 1 from rfl, mul_one, one_mul]
+  have hJJ : U.reflectionOperator * U.reflectionOperator = (1 : H →L[ℂ] H) :=
+    Submodule.reflectionOperator_involutive (𝕜 := ℂ) (E := H) U
+  calc U.reflectionOperator ∘L A ∘L U.reflectionOperator
+      = U.reflectionOperator * (A * U.reflectionOperator) := rfl
+    _ = U.reflectionOperator * (U.reflectionOperator * A) := by rw [hAJ]
+    _ = (U.reflectionOperator * U.reflectionOperator) * A := by rw [mul_assoc]
+    _ = A := by rw [hJJ, one_mul]
+
 /-- **Infinite-dimensional Davis--Kahan Proposition 4.3, at Ky Fan scope.**
 
 Every Ky Fan sum of the approximation numbers of the squared full displacement is
@@ -244,6 +293,80 @@ theorem proposition4_3_squaredDisplacement_kyFan (U V : Submodule ℂ H)
     _ ≤ kyFanApproximationGauge k (continuousOrthogonalBlockSum
           (gramOperator ((1 - W) ∘L U.subtypeL))
           (gramOperator ((1 - W) ∘L Uᗮ.subtypeL))) := hblock
+    _ = kyFanApproximationGauge k
+          (U.diagonalPart ((1 - star W) * (1 - W))) := (hchart W).symm
+    _ ≤ kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=
+        kyFanApproximationGauge_diagonalPart_le U _ k
+
+/-- **Davis--Kahan Proposition 4.3 at the matched-crossed-defect nonacute scope.** -/
+theorem proposition4_3_nonacute_squaredDisplacement_kyFan (U V : Submodule ℂ H)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (J : halmosSourceDefect U V ≃ₗᵢ[ℂ] halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * projection U = projection V * W) (k : ℕ) :
+    kyFanApproximationGauge k
+        ((1 - star (nonacuteDirectRotation U V J)) *
+          (1 - nonacuteDirectRotation U V J)) ≤
+      kyFanApproximationGauge k ((1 - star W) * (1 - W)) := by
+  let : CompleteSpace (U : Type u) :=
+    (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+  let : CompleteSpace ((U.orthogonal : Submodule ℂ H) : Type u) :=
+    (Submodule.isComplete_coe_of_hasOrthogonalProjection U.orthogonal).completeSpace_coe
+  have hL : ‖(U.orthogonalDecomposition : H →L[ℂ] WithLp 2 (U × U.orthogonal))‖ ≤ 1 := by
+    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
+    rw [one_mul]
+    exact le_of_eq (U.orthogonalDecomposition.norm_map x)
+  have hR : ‖(U.orthogonalDecomposition.symm : WithLp 2 (U × U.orthogonal) →L[ℂ] H)‖ ≤ 1 := by
+    refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => ?_
+    rw [one_mul]
+    exact le_of_eq (U.orthogonalDecomposition.symm.norm_map x)
+  have hRL : (U.orthogonalDecomposition.symm : WithLp 2 (U × U.orthogonal) →L[ℂ] H) ∘L
+      (U.orthogonalDecomposition : H →L[ℂ] WithLp 2 (U × U.orthogonal)) =
+      ContinuousLinearMap.id ℂ H := by
+    ext x
+    simp
+  have hchart : ∀ T : H →L[ℂ] H,
+      kyFanApproximationGauge k (U.diagonalPart ((1 - star T) * (1 - T))) =
+        kyFanApproximationGauge k (continuousOrthogonalBlockSum
+          (gramOperator ((1 - T) ∘L U.subtypeL))
+          (gramOperator ((1 - T) ∘L U.orthogonal.subtypeL))) := by
+    intro T
+    have hst : (1 - star T) * (1 - T) = star (1 - T) * (1 - T) := by
+      rw [star_sub, star_one]
+    rw [hst,
+      ← kyFanApproximationGauge_conj_eq hL hR hRL
+        (U.diagonalPart (star (1 - T) * (1 - T))) k,
+      orthogonalDecomposition_conj_diagonalPart U (star (1 - T) * (1 - T)),
+      orthogonalProjectionOnto_comp_gram_comp_subtypeL,
+      orthogonalProjectionOnto_comp_gram_comp_subtypeL]
+  have hU : ∀ n,
+      ((1 - nonacuteDirectRotation U V J) ∘L U.subtypeL).approximationNumber n ≤
+        ((1 - W) ∘L U.subtypeL).approximationNumber n :=
+    proposition4_1_nonacute_source_approximationNumbers U V J W hWunitary hWmap
+  have hUperp : ∀ n,
+      ((1 - nonacuteDirectRotation U V J) ∘L U.orthogonal.subtypeL).approximationNumber n ≤
+        ((1 - W) ∘L U.orthogonal.subtypeL).approximationNumber n := by
+    intro n
+    have h := proposition4_1_nonacute_source_approximationNumbers U.orthogonal V.orthogonal
+      (orthogonalCrossedDefectEquiv U V J) W hWunitary
+      (competitor_admissible_orthogonal U V W hWmap) n
+    rwa [nonacuteDirectRotation_orthogonal U V J] at h
+  have hblock := kyFanApproximationGauge_blockSum_le
+    (fun j => kyFanApproximationGauge_gramOperator_mono _ _ hU j)
+    (fun j => kyFanApproximationGauge_gramOperator_mono _ _ hUperp j) k
+  calc kyFanApproximationGauge k
+        ((1 - star (nonacuteDirectRotation U V J)) *
+          (1 - nonacuteDirectRotation U V J))
+      = kyFanApproximationGauge k (U.diagonalPart
+          ((1 - star (nonacuteDirectRotation U V J)) *
+            (1 - nonacuteDirectRotation U V J))) := by
+        rw [diagonalPart_nonacuteDirectRotation_displacementSquare U V J]
+    _ = kyFanApproximationGauge k (continuousOrthogonalBlockSum
+          (gramOperator ((1 - nonacuteDirectRotation U V J) ∘L U.subtypeL))
+          (gramOperator ((1 - nonacuteDirectRotation U V J) ∘L U.orthogonal.subtypeL))) := hchart _
+    _ ≤ kyFanApproximationGauge k (continuousOrthogonalBlockSum
+          (gramOperator ((1 - W) ∘L U.subtypeL))
+          (gramOperator ((1 - W) ∘L U.orthogonal.subtypeL))) := hblock
     _ = kyFanApproximationGauge k
           (U.diagonalPart ((1 - star W) * (1 - W))) := (hchart W).symm
     _ ≤ kyFanApproximationGauge k ((1 - star W) * (1 - W)) :=

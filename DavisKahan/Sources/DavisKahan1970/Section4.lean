@@ -7,6 +7,8 @@ import DavisKahan.FiniteDimensional.DirectRotation
 import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
 import DavisKahan.Geometry.Polar.DisplacementSquareExtremal
 import DavisKahan.Geometry.Angle.BasisAngleEnergy
+import ForTauCeti.Analysis.InnerProductSpace.CompactSpectralDecomposition
+import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
 
 /-!
 # Davis--Kahan 1970, Section 4: extremal properties of the direct rotation
@@ -94,6 +96,176 @@ principal-angle blocks are present. -/
 alias Proposition4_1_infiniteDimensional_nonacute :=
   DavisKahan.Section4.proposition4_1_nonacute_source_approximationNumbers
 
+section Proposition41VectorForm
+
+open scoped InnerProductSpace
+open DavisKahan.ExactSinTheta
+open TauCeti.ApproximationNumber
+
+universe v
+
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- **Davis--Kahan 1970, Proposition 4.1, first formulation.**
+
+At the compact scope inherited from Section 3, every unitary `W` carrying `U` onto `V`
+admits an orthonormal family of source vectors, indexed by the nonzero principal-angle list,
+whose displacement angles dominate the corresponding principal angles.  Zero principal angles
+are absent from the index subtype because their asserted lower bound is automatic.
+
+The vectors are the compact Gram singular vectors of `P_{Vᗮ}|_U`.  Thus this declaration is
+the printed orthonormal-vector formulation, independently of the approximation-number
+minimality formulation above. -/
+theorem Proposition4_1_compact_orthonormalVectors
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    ∃ v : {n : ℕ // 0 < TauCeti.principalSineSequence U V n} → U,
+      Orthonormal ℂ v ∧ ∀ n : {n : ℕ // 0 < TauCeti.principalSineSequence U V n},
+        TauCeti.principalAngleSequence U V (n : ℕ) ≤
+          TauCeti.vectorAngle ℂ (v n : H) (W (v n : H)) := by
+  let _ : CompleteSpace U :=
+    (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+  let T : U →L[ℂ] H := TauCeti.principalSineOperator U V
+  let A : U →L[ℂ] U := gramOperator T
+  have hAc : IsCompactOperator A := hcompact.clm_comp T.adjoint
+  have hAs : IsSelfAdjoint A := by
+    exact ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr
+      (ContinuousLinearMap.isPositive_adjoint_comp_self T).isSymmetric
+  have hApos : ∀ x, 0 ≤ RCLike.re ⟪A x, x⟫_ℂ :=
+    fun x => (ContinuousLinearMap.isPositive_adjoint_comp_self T).re_inner_nonneg_left x
+  have hseq (n : ℕ) : A.approximationNumber n =
+      TauCeti.principalSineSequence U V n ^ 2 := by
+    simpa only [A, T, TauCeti.principalSineSequence] using
+      (TauCeti.ApproximationNumber.approximationNumber_gramOperator T n)
+  let e : {n : ℕ // 0 < TauCeti.principalSineSequence U V n} ≃
+      {n : ℕ // 0 < A.approximationNumber n} :=
+    { toFun := fun n => ⟨n, by rw [hseq]; nlinarith [n.2]⟩
+      invFun := fun n => ⟨n, by
+        have hn := n.2
+        rw [hseq] at hn
+        nlinarith [TauCeti.principalSineSequence_nonneg U V n]⟩
+      left_inv := fun n => Subtype.ext rfl
+      right_inv := fun n => Subtype.ext rfl }
+  let v : {n : ℕ // 0 < TauCeti.principalSineSequence U V n} → U := fun n =>
+    TauCeti.positiveApproximationEigenvector hAc hAs hApos (e n) (e n).2
+  have hvon : Orthonormal ℂ v := by
+    change Orthonormal ℂ
+      ((fun n : {n : ℕ // 0 < A.approximationNumber n} =>
+        TauCeti.positiveApproximationEigenvector hAc hAs hApos n n.2) ∘ e)
+    exact (TauCeti.orthonormal_positiveApproximationEigenvector hAc hAs hApos).comp
+      e e.injective
+  refine ⟨v, hvon, fun n => ?_⟩
+  let x : U := v n
+  let s : ℝ := TauCeti.principalSineSequence U V n
+  have hxnorm : ‖x‖ = 1 := hvon.1 n
+  have hAx := TauCeti.apply_positiveApproximationEigenvector hAc hAs hApos
+    (e n) (e n).2
+  have hTx : ‖T x‖ = s := by
+    have hen : ((e n : {n : ℕ // 0 < A.approximationNumber n}) : ℕ) = (n : ℕ) := rfl
+    have hnormsq : ‖T x‖ ^ 2 = s ^ 2 := by
+      calc
+        ‖T x‖ ^ 2 = RCLike.re ⟪A x, x⟫_ℂ := by
+          simpa only [A, gramOperator] using
+            ContinuousLinearMap.apply_norm_sq_eq_inner_adjoint_left T x
+        _ = s ^ 2 := by
+          rw [hAx, inner_smul_left, RCLike.conj_ofReal,
+            RCLike.re_ofReal_mul, inner_self_eq_norm_sq, hxnorm, one_pow]
+          rw [hseq, hen]
+          simp only [s, mul_one]
+    nlinarith [norm_nonneg (T x), n.2]
+  have hproj : ‖DavisKahan.Section4.sourceCosine U V x‖ =
+      Real.cos (TauCeti.principalAngleSequence U V n) := by
+    have hpy := V.norm_sq_eq_add_norm_sq_starProjection (x : H)
+    have hC := DavisKahan.Section4.norm_sourceCosine_eq_norm_targetProjection U V x
+    have hsin := TauCeti.sin_principalAngleSequence U V n
+    have htrig := Real.sin_sq_add_cos_sq (TauCeti.principalAngleSequence U V n)
+    have hcos0 : 0 ≤ Real.cos (TauCeti.principalAngleSequence U V n) :=
+      Real.cos_nonneg_of_neg_pi_div_two_le_of_le
+        ((neg_nonpos_of_nonneg Real.pi_div_two_pos.le).trans
+          (TauCeti.principalAngleSequence_nonneg U V n))
+        (TauCeti.principalAngleSequence_le_pi_div_two U V n)
+    have hTdef : ‖T x‖ = ‖Vᗮ.starProjection (x : H)‖ := by
+      dsimp only [T]
+      rw [TauCeti.principalSineOperator_apply]
+    have hxnormH : ‖(x : H)‖ = 1 := hxnorm
+    rw [hxnormH, one_pow, ← hTdef, hTx] at hpy
+    change 1 = ‖DavisKahan.projection V (x : H)‖ ^ 2 + s ^ 2 at hpy
+    dsimp only [s] at hpy
+    rw [hC]
+    rw [hsin] at htrig
+    rw [← sq_eq_sq₀ (norm_nonneg _) hcos0]
+    nlinarith [hpy, htrig]
+  have hinner := DavisKahan.Section4.competitor_real_inner_le_sourceCosine_norm
+    U V W hWunitary hWmap x
+  rw [hxnorm, mul_one, hproj] at hinner
+  apply TauCeti.le_vectorAngle_of_unit_norm_of_re_inner_le_cos
+  · exact hxnorm
+  · exact Unitary.norm_map (⟨W, hWunitary⟩ : unitary (H →L[ℂ] H)) (x : H) |>.trans hxnorm
+  · exact TauCeti.principalAngleSequence_nonneg U V n
+  · exact (TauCeti.principalAngleSequence_le_pi_div_two U V n).trans
+      (by linarith [Real.pi_pos])
+  · exact hinner
+
+end Proposition41VectorForm
+
+section ExactCompactNonacute
+
+open scoped InnerProductSpace
+open DavisKahan.ExactSinTheta (KyFanDominantIdealFamily)
+
+universe v
+
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- **Proposition 4.1 with both printed formulations and the inherited compact,
+matched-defect scope in one declaration.** -/
+theorem Proposition4_1_compact_nonacute
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (∃ v : {n : ℕ // 0 < TauCeti.principalSineSequence U V n} → U,
+      Orthonormal ℂ v ∧
+        ∀ n : {n : ℕ // 0 < TauCeti.principalSineSequence U V n},
+          TauCeti.principalAngleSequence U V (n : ℕ) ≤
+            TauCeti.vectorAngle ℂ (v n : H) (W (v n : H))) ∧
+      ∀ n : ℕ,
+        ContinuousLinearMap.approximationNumber
+            ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
+              DavisKahan.projection U) n ≤
+          ContinuousLinearMap.approximationNumber
+            ((1 - W) ∘L DavisKahan.projection U) n := by
+  refine ⟨Proposition4_1_compact_orthonormalVectors U V hcompact W hWunitary hWmap,
+    fun n => ?_⟩
+  exact DavisKahan.Section4.proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
+    U V J W hWunitary hWmap n
+
+/-- **Corollary 4.1 at the inherited compact, matched-defect scope.** -/
+theorem Corollary4_1_compact_nonacute
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
+    N.Mem ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) ∧
+      N.gauge ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
+          DavisKahan.projection U) ≤
+        N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
+  DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
+    (DavisKahan.Section4.nonacute_restrictedDisplacementDominance
+      U V J W hWunitary hWmap) hWmem
+
+end ExactCompactNonacute
+
 section Corollary4_1Infinite
 
 open DavisKahan.ExactSinTheta (KyFanDominantIdealFamily)
@@ -141,6 +313,11 @@ pointwise domination of the individual singular values would imply Proposition 4
 this repository refutes. -/
 alias Proposition4_3_infiniteDimensional :=
   DavisKahan.Section4.proposition4_3_squaredDisplacement_kyFan
+
+/-- **Davis--Kahan 1970, Proposition 4.3 at the compact matched-crossed-defect scope.**
+The chosen defect equivalence selects the paper direct rotation on the right-angle blocks. -/
+alias Proposition4_3_infiniteDimensional_nonacute :=
+  DavisKahan.Section4.proposition4_3_nonacute_squaredDisplacement_kyFan
 
 /-! ### Proposition 4.3 and unitarily invariant gauges
 
@@ -193,6 +370,44 @@ theorem Proposition4_3_infiniteDimensional_idealGauge
         N.gauge ((1 - star W) * (1 - W)) :=
   N.majorization_mem_and_gauge_le hWmem
     (Proposition4_3_infiniteDimensional U V hacute W hWunitary hWmap)
+
+/-- Proposition 4.3 promoted from Ky Fan sums to every ideal gauge at the full
+matched-crossed-defect scope inherited by Section 4. -/
+theorem Proposition4_3_infiniteDimensional_nonacute_idealGauge
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmem : N.Mem ((1 - star W) * (1 - W))) :
+    N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+        (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
+      N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+          (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
+        N.gauge ((1 - star W) * (1 - W)) :=
+  N.majorization_mem_and_gauge_le hWmem
+    (Proposition4_3_infiniteDimensional_nonacute U V J W hWunitary hWmap)
+
+/-- **Proposition 4.3 at the inherited compact, matched-defect source scope.**
+The compactness hypothesis records the paper's Section 3 setting; the Ky Fan proof is valid
+without it. -/
+theorem Proposition4_3_compact_nonacute_idealGauge
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmem : N.Mem ((1 - star W) * (1 - W))) :
+    N.Mem ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+        (1 - DavisKahan.nonacuteDirectRotation U V J)) ∧
+      N.gauge ((1 - star (DavisKahan.nonacuteDirectRotation U V J)) *
+          (1 - DavisKahan.nonacuteDirectRotation U V J)) ≤
+        N.gauge ((1 - star W) * (1 - W)) :=
+  Proposition4_3_infiniteDimensional_nonacute_idealGauge
+    N U V J W hWunitary hWmap hWmem
 
 end IdealGauge
 
