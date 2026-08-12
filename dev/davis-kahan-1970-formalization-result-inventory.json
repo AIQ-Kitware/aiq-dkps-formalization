@@ -242,18 +242,13 @@
         "DK-3.1-prop.uniqueness",
         "DK-3.1-prop.positive-diagonal-characterization"
       ],
-      "disposition": "pending_result_only_review",
+      "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "pending_result_only_review",
+      "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.complex_directRotation",
-        "TauCeti.DavisKahan1970.complex_directRotation_unique",
-        "TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock",
-        "TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock",
-        "TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate",
-        "TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks"
+        "TauCeti.DavisKahan1970.proposition3_1_source"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The exact generic RCLike wrapper `proposition3_1_source` uses the paper's printed `TauCeti.IsAcute` hypothesis, works in arbitrary dimension over real or complex Hilbert spaces, proves the Definition 3.1 crossed-block identity for the canonical direct rotation, and states that positivity of the two diagonal blocks alone characterizes it among unitary intertwiners. It assumes neither `IsUniformlyAcute`, equation (3.8), nor standing dimension assumption (1.5).",
       "parent_claim_id": "DK-3.1-prop",
       "boundary_review": {
         "status": "accepted",

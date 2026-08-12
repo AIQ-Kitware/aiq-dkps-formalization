@@ -525,36 +525,21 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.1-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.complex_directRotation",
-        "TauCeti.DavisKahan1970.complex_directRotation_unique",
-        "TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock",
-        "TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock",
-        "TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate",
-        "TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks"
+        "TauCeti.DavisKahan1970.proposition3_1_source"
       ],
       "audit_clauses": [
         {
           "id": "DK-3.1-prop.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "description": "Exact result-only audit of Proposition 3.1: acute-case existence, uniqueness, and characterization by positivity of the two diagonal blocks alone.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.complex_directRotation",
-            "TauCeti.DavisKahan1970.complex_directRotation_unique",
-            "TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock",
-            "TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock",
-            "TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate",
-            "TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks"
+            "TauCeti.DavisKahan1970.proposition3_1_source"
           ]
         }
       ],
       "source_specification_sha256": "ff945cb6247987becf0eec9e3c5fd945ba2df2d2b8756cea6df2c7ebd00213d4",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "audit_mapping",
-          "detail": "Primary evidence is complex-centric even though the paper ambient convention is real or complex and real counterparts exist elsewhere in the census. Register exact real evidence explicitly."
-        }
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: Primary evidence is complex-centric even though the paper ambient convention is real or complex and real counterparts exist elsewhere in the census. Register exact real evidence explicitly.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
+      "audit_warning": "RESULT-ONLY REVIEW ACCEPTED: exact generic RCLike wrapper at the printed TauCeti.IsAcute hypothesis; no IsUniformlyAcute, equation (3.8), standing dimension assumption (1.5), finite-dimensional, or complex-only narrowing.",
       "source_atom_ids": [
         "DK-3.1-prop.existence",
         "DK-3.1-prop.uniqueness",
