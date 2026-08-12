@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **10**
-- Awaiting result-statement semantic closure: **19**
+- Currently hostile-certified terminal: **11**
+- Awaiting result-statement semantic closure: **18**
 
 Each result below explicitly partitions its primary source block into atoms inside the printed result statement and adjacent fidelity-only atoms outside it. Cross-block atoms are shared scope clauses (not extra results).
 
@@ -40,7 +40,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `DK-6.2-thm` | theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `DK-6.3-thm` | theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `DK-6.3-lem` | lemma | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-8.1-thm` | theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-8.1-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-8.2-thm` | theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 
 ## Printed-statement boundary reviews
@@ -315,6 +315,8 @@ Each result below explicitly partitions its primary source block into atoms insi
 - Boundary method: Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.
 
 ### `DK-8.1-thm` — Branch selection and spectral repulsion
+
+- Result-only semantic review: **accepted**. Existing compiled source-facing declarations cover the full printed branch statement and parts (i)--(iii) over both source scalar fields; no new Lean theorem was required.
 
 - Exact source anchor: Theorem 8.1
 - Included same-block atoms: `DK-8.1-thm.acute-iff-spectral-placement`, `DK-8.1-thm.existence-correct-q`, `DK-8.1-thm.part-i-compression`, `DK-8.1-thm.part-ii-eigenvalue`, `DK-8.1-thm.part-iii-gauge`
