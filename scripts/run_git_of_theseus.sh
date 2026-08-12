@@ -1,67 +1,68 @@
+#!/usr/bin/env bash
+# Render Git-of-Theseus repository-history statistics for this checkout.
+#
+# Outputs are written to ./git-of-theseus/ by default (gitignored). Override
+# with GIT_OF_THESEUS_OUTDIR, GIT_OF_THESEUS_INTERVAL_SECONDS, or
+# GIT_OF_THESEUS_PROCS when a different view is useful.
 
-uv pip install git-of-theseus
+set -euo pipefail
 
-cd "$HOME/code/aiq-dkps-formalization"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+cd "$ROOT"
 
-OUTDIR="./git-of-theseus"
-WEEK_SECONDS=$((7 * 24 * 60 * 60))
+OUTDIR="${GIT_OF_THESEUS_OUTDIR:-$ROOT/git-of-theseus}"
+INTERVAL_SECONDS="${GIT_OF_THESEUS_INTERVAL_SECONDS:-86400}"
+PROCS="${GIT_OF_THESEUS_PROCS:-4}"
 
-git-of-theseus-analyze . \
-    --interval "$WEEK_SECONDS" \
-    --procs 4 \
+run_git_of_theseus() {
+    local command_name="$1"
+    shift
+    if command -v "$command_name" >/dev/null 2>&1; then
+        "$command_name" "$@"
+        return
+    fi
+    if command -v uv >/dev/null 2>&1; then
+        uv tool run --from git-of-theseus "$command_name" "$@"
+        return
+    fi
+    echo "Required command not found: $command_name" >&2
+    echo "Install git-of-theseus or uv, then rerun this script." >&2
+    exit 1
+}
+
+mkdir -p "$OUTDIR"
+
+echo "Analyzing repository history..." >&2
+run_git_of_theseus git-of-theseus-analyze . \
+    --interval "$INTERVAL_SECONDS" \
+    --procs "$PROCS" \
     --ignore-whitespace \
     --outdir "$OUTDIR"
 
-#git-of-theseus-line-plot \
-#    "$OUTDIR/authors.json" \
-#    --outfile "$OUTDIR/authors-line.png"
-
-#git-of-theseus-line-plot \
-#    "$OUTDIR/authors.json" \
-#    --normalize \
-#    --outfile "$OUTDIR/authors-line-norm.png"
-
-git-of-theseus-stack-plot \
+echo "Rendering repository-history plots..." >&2
+run_git_of_theseus git-of-theseus-line-plot \
+    "$OUTDIR/authors.json" \
+    --outfile "$OUTDIR/authors-line.png"
+run_git_of_theseus git-of-theseus-line-plot \
+    "$OUTDIR/authors.json" \
+    --normalize \
+    --outfile "$OUTDIR/authors-line-norm.png"
+run_git_of_theseus git-of-theseus-stack-plot \
     "$OUTDIR/cohorts.json" \
     --outfile "$OUTDIR/cohorts-stack.png"
-
-#git-of-theseus-stack-plot \
-#    "$OUTDIR/authors.json" \
-#    --outfile "$OUTDIR/authors-stack.png"
-
-#git-of-theseus-stack-plot \
-#    "$OUTDIR/authors.json" \
-#    --normalize \
-#    --outfile "$OUTDIR/authors-stack-norm.png"
-
-#git-of-theseus-stack-plot \
-#    "$OUTDIR/exts.json" \
-#    --outfile "$OUTDIR/ext-stack.png"
-
-git-of-theseus-survival-plot \
+run_git_of_theseus git-of-theseus-stack-plot \
+    "$OUTDIR/authors.json" \
+    --outfile "$OUTDIR/authors-stack.png"
+run_git_of_theseus git-of-theseus-stack-plot \
+    "$OUTDIR/authors.json" \
+    --normalize \
+    --outfile "$OUTDIR/authors-stack-norm.png"
+run_git_of_theseus git-of-theseus-stack-plot \
+    "$OUTDIR/exts.json" \
+    --outfile "$OUTDIR/ext-stack.png"
+run_git_of_theseus git-of-theseus-survival-plot \
     "$OUTDIR/survival.json" \
     --outfile "$OUTDIR/survival.png"
 
-
-
-cd "$HOME"/code/aiq-dkps-formalization
-
-
-git-of-theseus-analyze . \
-    --interval "86400" \
-    --procs 4 \
-    --ignore-whitespace \
-    --outdir ./git-of-theseus
-
-
-git-of-theseus-line-plot ./git-of-theseus/authors.json --outfile ./git-of-theseus/authors-line.png
-git-of-theseus-line-plot ./git-of-theseus/authors.json --outfile ./git-of-theseus/authors-line-norm.png --normalize
-
-git-of-theseus-stack-plot ./git-of-theseus/cohorts.json --outfile ./git-of-theseus/cohorts-stack.png
-git-of-theseus-stack-plot ./git-of-theseus/authors.json --outfile ./git-of-theseus/authors-stack.png
-git-of-theseus-stack-plot ./git-of-theseus/authors.json --normalize --outfile ./git-of-theseus/authors-stack-norm.png
-git-of-theseus-stack-plot ./git-of-theseus/exts.json --outfile ./git-of-theseus/ext-stack.png
-
-git-of-theseus-survival-plot ./git-of-theseus/survival.json --outfile ./git-of-theseus/survival-survival.png
-
-
+echo "Git-of-Theseus outputs: $OUTDIR" >&2

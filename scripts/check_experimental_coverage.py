@@ -48,8 +48,7 @@ IMPORT_RE = re.compile(r"^\s*(?:public\s+)?import\s+(\S+)\s*$", re.M)
 #: Modules deliberately outside the root's closure, each with the reason.
 #:
 #: All twenty-seven are one connected failure: six modules do not compile, and
-#: the rest reach one of the six.  Repairing or retiring them is lane
-#: `{lane:DK-EXPCOVER-REPAIR}`; until then they are excluded here rather than
+#: the rest reach one of the six.  Until they are repaired or retired, they are excluded here rather than
 #: imported, because importing them would make `lake build DavisKahan.Experimental`
 #: red for everyone without telling anybody anything new.
 EXCLUDED: dict[str, str] = {

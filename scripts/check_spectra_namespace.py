@@ -7,7 +7,7 @@ build and the file path says `Interop/Spectra/` — and it stops being survivabl
 the moment the dependency is removed, because then nothing at all points at the
 donor and the attribution ledger silently credits Spectra for our work.
 
-`AGENTS.md` ("Spectra collaboration and dependency policy") and `dev/LANES.md`
+`AGENTS.md` ("Spectra collaboration and dependency policy")
 both record the rule; this is the gate that enforces it.  Two files violated it
 until 2026-07-28 — see phase S0 of `dev/tauceti/spectra-removal-plan.md`.
 

@@ -17,8 +17,6 @@ Read `../AGENTS.md` first, then route by task instead of reading `dev/` linearly
 | [`tauceti/README.md`](tauceti/README.md) | Current Tau Ceti engineering authorities and the boundary between maintained status and migration history. |
 | [`davis-kahan-1970-full-source-census.md`](davis-kahan-1970-full-source-census.md) and [`davis-kahan-1970-frontier-status.md`](davis-kahan-1970-frontier-status.md) | Current Davis--Kahan source coverage and the remaining proof frontier. |
 
-`LANES.md` is retained only because one legacy consistency helper still parses it; it is not a work board.
-
 The governing policy is in [`../AGENTS.md`](../AGENTS.md), not here. It defines
 the dual-track split (Tau Ceti extraction primary, Davis--Kahan source fidelity
 maintenance), the dependency firewall, and the completion-claim discipline.
@@ -27,7 +25,6 @@ maintenance), the dependency firewall, and the completion-claim discipline.
 
 ```text
 dev/
-  LANES.md                          # Legacy machine-parsed retirement artifact
   SEARCH.md                         # How to search engineering memory
   lean-proof-engineering-lessons.md # Recurring Lean elaboration/API/parser traps
   mathlib-proof-polishing.md        # Reference: "folding" proofs to Mathlib style
@@ -53,7 +50,7 @@ do not hand-edit one without running its checker.
 
 ### Where a new note goes
 
-- A *current status claim* belongs in the source-owning README or a generated/checkable status artifact, not in `LANES.md`.
+- A *current status claim* belongs in the source-owning README or a generated/checkable status artifact.
 - A *postmortem* of a bug that took effort → `journals/`.
 - A *transferable trap* another model would also fall into → `benchmark-candidates/`.
 - *Tau Ceti engineering history or generated status* -> `tauceti/`; current package policy -> `../ForTauCeti/README.md`.
@@ -117,13 +114,14 @@ required to build** — the task is to promote the sketch into its source-facing
 home module and fix it *there*. The manifest states what each declaration
 proves, where it should land, and the likely elaboration seams.
 
-Only the manifests whose sketches are still unpromoted remain here; the delivery
-receipts for overlays already applied were purged. Two of these are load-bearing
-beyond documentation: `pending-mathahead-rebased-53297a4-gpt56.manifest.txt` is
-checked by `scripts/check_davis_kahan_rebased_mathahead.py` — which treats a
-sketch **promoted** out of `Experimental/` as success and fails only when a
-module is nowhere, so an entry may record a rename with `<scratch> -> <target>` — and
-`lemma63-promotion-scratch-7f9f562-gpt56.md` is cited from two Lean sources.
+This directory is curated rather than a delivery archive. A manifest remains only
+when it still guards live scratch work, records a promotion needed by a current
+checker, or is cited from live source/data. In particular,
+`pending-mathahead-rebased-53297a4-gpt56.manifest.txt` is checked by
+`scripts/check_davis_kahan_rebased_mathahead.py`; entries may record successful
+promotion with `<scratch> -> <target>`. `lemma63-promotion-scratch-7f9f562-gpt56.md`
+is retained because two Lean sources still cite it. Applied-overlay receipts with
+no live consumer belong in Git history instead.
 
 ## Quality bar
 

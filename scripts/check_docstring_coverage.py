@@ -63,7 +63,7 @@ ROOTS = ["ForTauCeti", "DavisKahan"]
 
 # Excluded by rule.  Each entry is a reason, not a convenience.
 EXCLUDED = [
-    # Outside `defaultTargets`; deliberately parked (see dev/LANES.md).
+    # Outside `defaultTargets`; deliberately parked in the Experimental registry.
     (re.compile(r"^DavisKahan/Experimental/"), "outside defaultTargets, parked"),
 ]
 

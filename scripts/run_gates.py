@@ -94,7 +94,6 @@ SLOW = {
     "check_davis_kahan_frontier",
     "check_davis_kahan_hidden_foundations",
     "check_experimental_root_status",
-    "check_full_part_iii_math_ahead",
 }
 
 #: Empty, and kept empty deliberately (2026-08-02).

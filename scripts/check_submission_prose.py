@@ -3,7 +3,7 @@
 
 `ForTauCeti` is a rehearsal for a Tau Ceti submission, and its module docstrings are
 read there, not here.  A docstring that says *"Lane SPLIT-1K divided it at its `end
-Reduce` seam"* or points at `dev/LANES.md` documents **our bookkeeping**, not the
+Reduce` seam"* or points at a retired coordination board documents **our bookkeeping**, not the
 mathematics, and names nothing a Tau Ceti maintainer can look up.  Worse, 31 of these
 point at `ForMathlib/`, a tree lane `FM-RETIRE` deleted -- those are broken references
 *today*, in this repository, before any question of submission arises.
@@ -91,7 +91,7 @@ LANE_ID = re.compile(
 #: Paths that do not exist in the destination repository, or at all.
 #:
 #: `dev/` is matched as a whole rather than by naming its subdirectories one at a time.
-#: The enumerated version listed `dev/LANES.md`, `dev/journals` and `dev/audit/`, and
+#: The enumerated version listed the retired lane board, `dev/journals`, and `dev/audit/`, and
 #: missed 15 references to `dev/tauceti/` for no reason other than that nobody had added
 #: it -- a gate that has to be extended every time a directory is created is a gate that
 #: is quietly wrong most of the time.  The whole `dev/` tree is our workflow and none of
@@ -205,7 +205,7 @@ def main(argv=None) -> int:
         print(f"submission-prose check: {' and '.join(which)}  ({summary})")
         print("  A module gained a lane id, an internal path, or dated move archaeology.")
         print("  Docstrings describe the mathematics for a reader of the destination repo;")
-        print("  lane bookkeeping belongs in dev/LANES.md and the commit message.")
+        print("  coordination bookkeeping belongs in Git history and the commit message.")
         print("  Provenance is NOT the target -- `Formalized by ...` stays.")
         print("  Run with --list to see them.")
         return 1 if args.check else 0
