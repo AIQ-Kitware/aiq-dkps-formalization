@@ -294,12 +294,12 @@ not a requirement to reproduce the paper's proof arguments or proof organization
   complete source-faithful formalization of Proposition 4.4 and counts fully
   toward 100% coverage. It is not an open obligation to prove the false printed
   conclusion.
-- A 100% full-paper claim means every mathematical claim tracked by the maintained
-  transcription and source census has one of these completed outcomes, with the
+- A 100% full-paper claim means every mathematical claim tracked by the checked-in distributable
+  source specification and source census has one of these completed outcomes, with the
   source-facing correspondence recorded. Internal helper statements and proof
   paths may differ freely from the paper.
 
-The modernized local transcription fixes the ambient scope:
+The checked-in distributable source specification fixes the ambient scope:
 
 - the paper works on a separable Hilbert space;
 - bounded Hermitian operators are an expository main-body specialization, not
@@ -341,23 +341,21 @@ Accordingly:
   unqualified source-facing name is reserved for the maximally general
   domain-aware result.
 - A full-paper completion claim requires a theorem-by-theorem audit against the
-  transcription, proof-complete Hilbert-space versions of the source results,
+  checked-in distributable source specification, proof-complete Hilbert-space versions of the source results,
   the source norm scope, the direct-rotation and spectral-selection theory,
   the unbounded passages, sharpness/equality content, and a fresh build and
   trusted-dependency audit.
-- Keep the readable Davis--Kahan mathematical reconstruction and the audit
-  specification distinct. `prose/distilled_literature/DavisKahan1970_part_III.tex`
-  is a self-contained mathematical walkthrough and should be edited only to
-  correct mathematics or materially stale formalization navigation. Exact
-  registered source excerpts belong in the companion
-  `DavisKahan1970_exact_source_register.tex`, bound to Lean declarations by
-  `dev/davis-kahan-1970-statement-map.json`.
+- `prose/distilled_literature/DavisKahan1970_part_III.tex` is both the readable
+  transformative reconstruction and the checked-in distributable semantic audit
+  specification. Its source-order `DK-CERT` claim passages are bound directly to
+  Lean declarations by `dev/davis-kahan-1970-statement-map.json`. A private
+  transcription or lawful copy of the paper is optional provenance evidence for
+  re-auditing the fidelity of this TeX; it is not an input to ordinary static
+  certification.
 - For independently checkable compiler evidence, run
-  `python3 scripts/certify_davis_kahan_1970.py --clean`. When the private
-  modernized transcription is locally available, pass `--transcription PATH`
-  so the certificate verifies registered excerpts against the recorded
-  full-source hash and line ranges. Add `--require-terminal` only when asking
-  the maintained census itself to be a hard 100%-coverage gate. The compiler
+  `python3 scripts/certify_davis_kahan_1970.py --clean`. Add `--require-terminal`
+  only when asking the maintained census itself to be a hard 100%-coverage gate.
+  The compiler
   certificate proves compilation and declaration resolution; semantic fidelity
   is judged independently with `dev/davis-kahan-1970-independent-audit-prompt.md`.
 - Keep print-heavy Lean audit modules out of ordinary aggregate imports.
