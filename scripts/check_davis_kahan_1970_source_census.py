@@ -12,15 +12,21 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 JSON_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.json"
 
-REQUIRED_ANCHORS = {
-    "Definition 3.1", "Definition 3.2",
-    "Proposition 3.1", "Proposition 3.2", "Proposition 3.3", "Proposition 3.4",
-    "Theorem 3.1", "Corollary 3.1", "Proposition 3.5", "Corollary 3.2",
-    "Proposition 4.1", "Corollary 4.1", "Proposition 4.2", "Proposition 4.3", "Proposition 4.4",
-    "Theorem 5.1", "Theorem 5.2", "Lemma 5.1",
-    "Lemma 6.1", "Lemma 6.2", "Proposition 6.1", "Theorem 6.1", "Theorem 6.2", "Theorem 6.3", "Lemma 6.3",
-    "Theorem 8.1", "Theorem 8.2",
-    "Question 10.1", "Question 10.2", "Question 10.3", "Question 10.4",
+REQUIRED_IDS = {
+    "S1-block-residual", "S1-ui-norms",
+    "S2-sin-theta", "S2-tan-theta", "S2-sin-two-theta", "S2-tan-two-theta",
+    "S2-sharpness", "S2-unbounded-scope",
+    "DK-3.1-def", "DK-3.2-def", "DK-3.1-prop", "DK-3.2-prop", "DK-3.3-prop",
+    "DK-3.4-prop", "DK-3.1-thm", "DK-3.1-cor", "DK-3.5-prop", "DK-3.2-cor",
+    "DK-4.1-prop", "DK-4.1-cor", "DK-4.2-prop", "DK-4.3-prop", "DK-4.4-prop",
+    "DK-5.1-thm", "DK-5-hermitian-inequalities", "DK-5.2-thm", "DK-5.1-lem",
+    "DK-6.1-lem", "DK-6.2-lem", "DK-6.1-prop", "DK-6.1-thm", "DK-6.2-thm",
+    "DK-6.3-thm", "DK-6-appendix", "DK-6.3-lem",
+    "DK-7-sin2-proof", "DK-7-tan2-proof",
+    "DK-8.1-thm", "DK-8.2-thm",
+    "DK-9-model", "DK-9.1-9.4", "DK-9.5-9.7", "DK-9.8",
+    "DK-9-infinite-residual-counterexample", "DK-9.9-9.11",
+    "DK-10.1", "DK-10.2", "DK-10.3", "DK-10.4",
 }
 ALLOWED_SECTIONS = {"1", "2", "3", "4", "5", "6", "6 appendix", "7", "8", "9", "10"}
 DECL_RE = re.compile(r"\b(?:alias|theorem|lemma|def|structure|abbrev|noncomputable def)\s+([A-Za-z0-9_']+)")
@@ -38,7 +44,6 @@ def main() -> int:
         fail("items must be a nonempty list")
     statuses = set(data.get("status_definitions", {}))
     ids: set[str] = set()
-    anchors: set[str] = set()
     for item in items:
         item_id = item.get("id")
         if not item_id or item_id in ids:
@@ -51,11 +56,13 @@ def main() -> int:
         for key in ("source_kind", "source_anchor", "title", "summary", "notes", "next_action"):
             if not isinstance(item.get(key), str) or not item[key].strip():
                 fail(f"{item_id} has empty {key}")
-        anchors.add(item["source_anchor"])
 
-    missing_anchors = sorted(REQUIRED_ANCHORS - anchors)
-    if missing_anchors:
-        fail("missing numbered source anchors: " + ", ".join(missing_anchors))
+    missing_ids = sorted(REQUIRED_IDS - ids)
+    extra_ids = sorted(ids - REQUIRED_IDS)
+    if missing_ids:
+        fail("missing required source claim ids: " + ", ".join(missing_ids))
+    if extra_ids:
+        fail("unregistered source claim ids in census: " + ", ".join(extra_ids))
 
     # Skip every dot-directory, not just `.lake`.  This census only *adds* to
     # `declared`, so a stray checkout inside the repo cannot make it fail -- it

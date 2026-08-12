@@ -7,8 +7,9 @@ The certificate separates two questions:
    declarations registered by the source census?
 2. Do those compiled types actually match the mathematical claims in the paper?
 
-This script answers (1), snapshots the exact source claim register, and produces
-an audit packet that an independent reviewer can use for (2).
+This script answers (1), snapshots the checked-in distributable source
+specification, and produces an audit packet that an independent reviewer can use
+for (2).
 
 Recommended compiler-evidence run:
     python3 scripts/certify_davis_kahan_1970.py --clean
@@ -40,8 +41,7 @@ BUILD_ROOT = ROOT / "build"
 MAP_PATH = ROOT / "dev/davis-kahan-1970-statement-map.json"
 CENSUS_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.json"
 FORMALIZATION_PATH = ROOT / "formalization.yaml"
-TEX_PATH = ROOT / "prose/distilled_literature/DavisKahan1970_exact_source_register.tex"
-EXPOSITION_PATH = ROOT / "prose/distilled_literature/DavisKahan1970_part_III.tex"
+TEX_PATH = ROOT / "prose/distilled_literature/DavisKahan1970_part_III.tex"
 SOURCE_MANIFEST_PATH = ROOT / "prose/distilled_literature/source_manifest.json"
 
 HASH_EXTENSIONS = {".lean", ".py", ".yaml", ".yml", ".toml", ".json", ".tex", ".md"}
@@ -274,13 +274,11 @@ def snapshot_inputs(outdir: pathlib.Path) -> dict[str, str]:
         MAP_PATH,
         CENSUS_PATH,
         TEX_PATH,
-        EXPOSITION_PATH,
         FORMALIZATION_PATH,
         SOURCE_MANIFEST_PATH,
         ROOT / "lean-toolchain",
         ROOT / "lakefile.toml",
         ROOT / "lake-manifest.json",
-        ROOT / "dev/davis-kahan-1970-closure-audit-2026-08-12.md",
         ROOT / "dev/davis-kahan-1970-independent-audit-prompt.md",
     ]
     target = outdir / "inputs"
@@ -346,11 +344,11 @@ sha256sum -c SHA256SUMS
 
 - `certificate.json`: toolchain, Git/source identity, command results, warning counts, and source-tree hash.
 - `signatures.json`: compiler-printed types for every declaration registered by the Davis--Kahan source census.
-- `statement-audit.md`: exact source excerpts paired with the primary Lean theorem types and a row-by-row audit checklist.
+- `statement-audit.md`: registered passages from the distributable source specification paired with the primary Lean theorem types and a row-by-row audit checklist.
 - `logs/`: complete output of each certification command and the theorem-signature probe.
-- `inputs/`: snapshots of the readable mathematical exposition, exact source register, statement map, census, formalization metadata, and audit prompt. The private modernized transcription is never copied into the bundle.
+- `inputs/`: snapshots of the distributable `DavisKahan1970_part_III.tex` source specification, statement map, census, formalization metadata, and audit prompt.
 
-The readable `DavisKahan1970_part_III.tex` snapshot is explanatory context for working through the mathematics. The exact-source register is the mechanical statement-level audit baseline; the certificate keeps these roles separate.
+`DavisKahan1970_part_III.tex` is both the readable transformative reconstruction and the mechanical statement-level semantic baseline. The certificate does not require or snapshot a private transcription.
 
 For a final 100% audit, require `clean_root_build: true`, `source_tree_stable_during_certificate: true`, zero unresolved registered signatures, a successful `DavisKahan.All` build, `source_coverage.source_coverage_terminal: true`, and then independently audit the mathematical statements row by row. Running the certificate with `--require-terminal` makes the maintained census terminality a hard gate; it still does not replace semantic review.
 """
@@ -399,11 +397,6 @@ def main() -> int:
         help="fail certification if the working tree is dirty",
     )
     parser.add_argument(
-        "--transcription",
-        type=pathlib.Path,
-        help="optional private modernized transcription; verify the registered exact excerpts against it by SHA-256 and recorded line ranges without copying the private source into the certificate bundle",
-    )
-    parser.add_argument(
         "--with-audits",
         action="store_true",
         help="also build DavisKahan.Audits.All (not part of the production build)",
@@ -443,14 +436,6 @@ def main() -> int:
     statement_map_command = [sys.executable, "scripts/check_davis_kahan_1970_statement_map.py"]
     if args.require_terminal:
         statement_map_command.append("--require-terminal")
-    transcription_path: pathlib.Path | None = None
-    transcription_sha256: str | None = None
-    if args.transcription is not None:
-        transcription_path = args.transcription.expanduser().resolve()
-        if transcription_path.exists():
-            transcription_sha256 = sha256_file(transcription_path)
-        statement_map_command += ["--transcription", str(transcription_path)]
-
     commands: list[tuple[str, list[str]]] = [
         ("01-aggregate-check", [sys.executable, "scripts/generate_all_aggregates.py", "--check"]),
         ("02-library-structure", [sys.executable, "scripts/check_library_structure.py"]),
@@ -533,11 +518,11 @@ def main() -> int:
         "production_build_warning_count": build_result["warning_count"],
         "git": git,
         "external_tauceti": tau,
-        "private_transcription_provenance": {
-            "provided": transcription_path is not None,
-            "path": str(transcription_path) if transcription_path is not None else None,
-            "sha256": transcription_sha256,
-            "copied_into_bundle": False,
+        "source_specification": {
+            "path": str(TEX_PATH.relative_to(ROOT)),
+            "sha256": sha256_file(TEX_PATH),
+            "authority": "checked_in_transformative_source_specification",
+            "private_transcription_required": False,
         },
         "source_tree_sha256": source_after,
         "source_tree_sha256_before_build": source_before,

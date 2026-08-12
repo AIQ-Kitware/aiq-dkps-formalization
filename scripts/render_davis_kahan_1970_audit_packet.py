@@ -2,9 +2,9 @@
 """Render a one-row-at-a-time Davis--Kahan 1970 statement audit packet.
 
 Without a compiler certificate this produces a static review template containing
-exact registered source excerpts plus the mapped Lean declaration names and
-best-effort source locations.  With `--certificate`, it also inserts the theorem
-types printed by the pinned Lean compiler during certification.
+the registered passages from the checked-in transformative source specification,
+plus mapped Lean declaration names and best-effort source locations.  With
+`--certificate`, it also inserts theorem types printed by the pinned Lean compiler.
 """
 from __future__ import annotations
 
@@ -98,7 +98,7 @@ def load_signatures(certificate_path: pathlib.Path | None) -> tuple[dict[str, di
 
 
 def md_code_block(text: str, language: str = "") -> str:
-    # The source transcription occasionally contains backticks, so use tildes.
+    # TeX passages can contain backticks, so use tildes.
     return f"~~~~{language}\n{text.rstrip()}\n~~~~"
 
 
@@ -121,12 +121,12 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
     lines += [
         "# Davis--Kahan 1970 independent statement audit packet",
         "",
-        "This packet is organized one source claim at a time. The TeX excerpts are the exact registered mathematical passages copied from the maintained modernized transcription. The census status is a claim to audit, not evidence of semantic fidelity.",
+        "This packet is organized one source claim at a time. The TeX passages come directly from the checked-in transformative, source-order reconstruction `DavisKahan1970_part_III.tex`; they are the repository's distributable semantic audit specification. The census status is a claim to audit, not evidence of semantic fidelity.",
         "",
         "Compiler evidence and mathematical-source fidelity are intentionally separate. A compiler certificate establishes that registered declarations elaborate against `DavisKahan.All`; the auditor must decide whether their types jointly match the source passage.",
         "",
         f"- Statement map: `{MAP_PATH.relative_to(ROOT)}`",
-        f"- Exact source register: `{tex_path.relative_to(ROOT)}`",
+        f"- Distributable source specification: `{tex_path.relative_to(ROOT)}`",
         f"- Census: `{CENSUS_PATH.relative_to(ROOT)}`",
         f"- Registered rows: **{len(statement_map['items'])}**",
         f"- Mathematical completion obligations: **{sum(bool(x['completion_obligation']) for x in statement_map['items'])}**",
@@ -148,9 +148,9 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
         "",
         "## Verdict vocabulary",
         "",
-        "Use one of: **PASS exact**, **PASS refuted**, **FAIL scope**, **FAIL conclusion**, **FAIL missing clause**, **FAIL source register**, or **UNCERTAIN**.",
+        "Use one of: **PASS exact**, **PASS refuted**, **FAIL scope**, **FAIL conclusion**, **FAIL missing clause**, **FAIL source specification**, or **UNCERTAIN**.",
         "",
-        "At the end, separately list any mathematical claim found in the source excerpts or surrounding source context that is not represented by a row in the register.",
+        "At the end, separately list any mathematical claim found in the distributable source specification that is not represented by a row in the statement map.",
         "",
     ]
 
@@ -165,10 +165,9 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
             f"- **Source kind:** `{mapped['source_kind']}`",
             f"- **Completion obligation:** `{str(mapped['completion_obligation']).lower()}`",
             f"- **Census claim:** `{c['status']}` / `{c['verification']}`",
-            f"- **Registered source excerpt SHA-256:** `{mapped['source_excerpt_sha256']}`",
-            f"- **Private-transcription provenance lines:** `{mapped['source_line_ranges_in_modernized_transcription']}`",
+            f"- **Source-specification passage SHA-256:** `{mapped['source_specification_sha256']}`",
             "",
-            "### Exact registered source passage",
+            "### Registered distributable source-specification passage",
             "",
             md_code_block(source, "tex"),
             "",

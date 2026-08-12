@@ -1,11 +1,11 @@
 # Davis--Kahan 1970 independent statement audit packet
 
-This packet is organized one source claim at a time. The TeX excerpts are the exact registered mathematical passages copied from the maintained modernized transcription. The census status is a claim to audit, not evidence of semantic fidelity.
+This packet is organized one source claim at a time. The TeX passages come directly from the checked-in transformative, source-order reconstruction `DavisKahan1970_part_III.tex`; they are the repository's distributable semantic audit specification. The census status is a claim to audit, not evidence of semantic fidelity.
 
 Compiler evidence and mathematical-source fidelity are intentionally separate. A compiler certificate establishes that registered declarations elaborate against `DavisKahan.All`; the auditor must decide whether their types jointly match the source passage.
 
 - Statement map: `dev/davis-kahan-1970-statement-map.json`
-- Exact source register: `prose/distilled_literature/DavisKahan1970_exact_source_register.tex`
+- Distributable source specification: `prose/distilled_literature/DavisKahan1970_part_III.tex`
 - Census: `dev/davis-kahan-1970-full-source-census.json`
 - Registered rows: **49**
 - Mathematical completion obligations: **45**
@@ -13,9 +13,9 @@ Compiler evidence and mathematical-source fidelity are intentionally separate. A
 
 ## Verdict vocabulary
 
-Use one of: **PASS exact**, **PASS refuted**, **FAIL scope**, **FAIL conclusion**, **FAIL missing clause**, **FAIL source register**, or **UNCERTAIN**.
+Use one of: **PASS exact**, **PASS refuted**, **FAIL scope**, **FAIL conclusion**, **FAIL missing clause**, **FAIL source specification**, or **UNCERTAIN**.
 
-At the end, separately list any mathematical claim found in the source excerpts or surrounding source context that is not represented by a row in the register.
+At the end, separately list any mathematical claim found in the distributable source specification that is not represented by a row in the statement map.
 
 ## 1. S1-block-residual — Two reducing decompositions and the residual
 
@@ -23,135 +23,81 @@ At the end, separately list any mathematical claim found in the source excerpts 
 - **Source kind:** `construction`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `db69a79e5384cf5ad0236a1f73abdccf8d9d8cc75422df74c0583d21f77fa816`
-- **Private-transcription provenance lines:** `[[202, 204], [241, 315], [461, 503]]`
+- **Source-specification passage SHA-256:** `fe0395b4f9940b40576035b37c919996ecae46afc37cd384d4c0ad4851992699`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-Throughout the paper, $\Hilbert$ will denote a separable Hilbert space and its vectors will be denoted by $x,y$, etc.; the inner product of $x$ with $y$, often written $(x,y)$, will here be written $y^{*}x$.
-(On the other hand, $[x,y]$ will denote the linear subspace spanned by $x$ and $y$.\,)
-It will usually not matter whether the space is real or complex, or whether its dimensionality is finite.
+Let $\Hsp$ be a separable Hilbert space, real or complex; finite dimensionality is not assumed.  In the main bounded setting $A=A^*$ and $A+H=(A+H)^*$ are bounded.  The paper also allows self-adjoint unbounded $A$ when the later domain conditions are met.
 
-Consequently we define
-\[
-  E_0:\Xspace(E_0)\to\Hilbert,
-  \qquad
-  E_1:\Xspace(E_1)\to\Hilbert,
-\]
-isometric mappings of new Hilbert spaces into $\Hilbert$, having ranges $E_0\Xspace(E_0)=P\Hilbert$ and $E_1\Xspace(E_1)=\tP\Hilbert$.
-(Here we have introduced the notation $\Xspace(\cdot)$ for the ``source space'' of an isometry.
-Later we shall also use the notations $\Null(\cdot)$ for null space and $\Range(\cdot)$ for range; $\Xspace(E_j)=\Range(E_j^{*})$.\,)
-Now $E_0E_0^{*}=P$ and $E_1E_1^{*}=\tP$; on the other hand, $E_0^{*}E_0$ is the identity operator on $\Xspace(E_0)$, $E_1^{*}E_0$ is the zero transformation from $\Xspace(E_0)$ to $\Xspace(E_1)$, and so on.
-Now we can write $x_0=E_0^{*}x$, $x_1=E_1^{*}x$, and
-\begin{equation*}
-  x=(E_0\ E_1)\binom{x_0}{x_1}=E_0x_0+E_1x_1,
-  \tag{1.1}\label{eq:1.1}
-\end{equation*}
-if we want to; or we can simply say $x$ is represented by $\binom{x_0}{x_1}$.
-Clearly $(E_0\ E_1)$ is an isometry onto $\Hilbert$, and
-\[
-  (E_0\ E_1)^{-1}=\binom{E_0^{*}}{E_1^{*}}.
-\]
+Let $P$ reduce $A$, with isometries $E_0,E_1$ onto $P\Hsp$ and $P^\perp\Hsp$.  Every $x\in\Hsp$ has the coordinate representation
+\begin{equation}
+ x=E_0x_0+E_1x_1,
+ \qquad x_j=E_j^*x.
+ \tag{1.1}
+\end{equation}
+Relative to this decomposition,
+\begin{equation}
+ A\sim\begin{pmatrix}A_0&0\\0&A_1\end{pmatrix},
+ \qquad
+ H\sim\begin{pmatrix}H_0&B^*\\B&H_1\end{pmatrix},
+ \qquad B=E_1^*HE_0.
+ \tag{1.2}
+\end{equation}
+Let $Q$ reduce $A+H$, with isometries $F_0,F_1$ onto $Q\Hsp,Q^\perp\Hsp$.  Then
+\begin{equation}
+ A+H\sim_F\begin{pmatrix}\Lambda_0&0\\0&\Lambda_1\end{pmatrix}.
+ \tag{1.3}
+\end{equation}
+No assumption is made here that $P$ or $Q$ is a spectral projector or that the two diagonal spectral sets are disjoint.
 
-The corresponding notation for operators is
-\begin{equation*}
-\begin{aligned}
-  A&=(E_0\ E_1)
-  \begin{pmatrix}A_0&0\\0&A_1\end{pmatrix}
-  \binom{E_0^{*}}{E_1^{*}},\\
-  H&=(E_0\ E_1)
-  \begin{pmatrix}H_0&B^{*}\\B&H_1\end{pmatrix}
-  \binom{E_0^{*}}{E_1^{*}}.
-\end{aligned}
-\tag{1.2}\label{eq:1.2}
-\end{equation*}
-These equations define the new operators appearing in them; for instance,
-$B=E_1^{*}HE_0$, an operator from $\Xspace(E_0)$ to $\Xspace(E_1)$.
-The $A_j$ and $H_j$ are automatically Hermitian.
-Equations like \eqref{eq:1.1} and \eqref{eq:1.2} can be written more clearly if we agree that the sign $\representedby$ is to be read as ``is represented by.''
-Then we write
-\[
-  x\representedby\binom{x_0}{x_1},
-  \qquad
-  A\representedby\begin{pmatrix}A_0&0\\0&A_1\end{pmatrix},
-  \qquad
-  P\representedby\begin{pmatrix}1&0\\0&0\end{pmatrix},
-\]
-and so on.
-The usual rules of matrix multiplication apply; for example,
-\[
-  PAP\representedby\begin{pmatrix}A_0&0\\0&0\end{pmatrix}
-\]
-(and neither member here is the same as $A_0$).
+A unitary $V$ carries $P\Hsp$ onto $Q\Hsp$ precisely through
+\begin{equation}
+ VP=QV \quad(\text{hence }VP^\perp=Q^\perp V),
+ \tag{1.4}
+\end{equation}
+which requires
+\begin{equation}
+ \dim P\Hsp=\dim Q\Hsp,
+ \qquad \dim P^\perp\Hsp=\dim Q^\perp\Hsp.
+ \tag{1.5}
+\end{equation}
+Writing $W_j=F_j^*VE_j$, the $W_j$ are unitary between the corresponding coordinate spaces, and conversely any such pair determines $V$.  In $E$-coordinates the block form is
+\begin{equation}
+ V\sim\begin{pmatrix}C_0&-S_1\\S_0&C_1\end{pmatrix},
+ \tag{1.6}
+\end{equation}
+with
+\begin{equation}
+ \begin{pmatrix}C_0&-S_1\\S_0&C_1\end{pmatrix}
+ =
+ \begin{pmatrix}E_0^*F_0&E_0^*F_1\\E_1^*F_0&E_1^*F_1\end{pmatrix}
+ \begin{pmatrix}W_0&0\\0&W_1\end{pmatrix}.
+ \tag{1.7}
+\end{equation}
+Thus changing the unitary $V$ only changes the within-subspace unitary coordinates $W_0,W_1$.
 
-When we decompose $\Hilbert$ according to a reducing subspace $Q\Hilbert$ of $A+H$ instead, then we shall want to define new isometries
+For the numerical-approximation interpretation, $E_0$ contains orthonormal trial vectors and $A_0$ is a trial/Ritz operator.  The residual is
+\begin{equation}
+ R=(A+H)E_0-E_0A_0.
+ \tag{1.8}
+\end{equation}
+When $A_0$ is the block inherited from $A$, this gives $R=HE_0$ and the $E$-coordinate column of $R$ is the first column of the block matrix for $H$.  If instead the Rayleigh--Ritz choice
 \[
-  F_0:\Xspace(F_0)\to\Hilbert,
-  \qquad
-  F_1:\Xspace(F_1)\to\Hilbert,
+ A_0=E_0^*(A+H)E_0
 \]
-with $F_0F_0^{*}=Q$ and $F_1F_1^{*}=\tQ=1-Q$.
-Now the notion of representing operators on $\Hilbert$ by $2\times2$ block matrices becomes treacherous, because there are more ways than one to represent them.
-The two ways of representing $A+H$ are
-\begin{equation*}
-\begin{aligned}
-  A+H
-  &=(E_0\ E_1)
-  \begin{pmatrix}A_0+H_0&B^{*}\\B&A_1+H_1\end{pmatrix}
-  \binom{E_0^{*}}{E_1^{*}}\\
-  &=(F_0\ F_1)
-  \begin{pmatrix}\Lambda_0&0\\0&\Lambda_1\end{pmatrix}
-  \binom{F_0^{*}}{F_1^{*}}.
-\end{aligned}
-\tag{1.3}\label{eq:1.3}
-\end{equation*}
-Nothing has been said about diagonalizing $A_0$ or $\Lambda_0$; choice of coordinate system in their respective spaces has not come up.
-No demand has been made that the reducing projectors $P$ and $Q$ be spectral projectors either; that is, so far $A_0$ may have spectrum in common with $A_1$, or $\Lambda_0$ with $\Lambda_1$.
+is made, then $H_0=0$ and
+\[
+ R^*R=H_0^2+B^*B=B^*B.
+\]
+More generally the identity $R^*R=H_0^2+B^*B$ shows that the Rayleigh--Ritz choice minimizes residual size among these block choices.  The source distinguishes this one-sided off-diagonality $H_0=0$ from the stronger condition $H_0=H_1=0$ used by a different main theorem.
 
-The numerical analyst also chooses, at each step, an $m\times m$ matrix intended to have eigenvalues approximating $\lambda_1,\ldots,\lambda_m$; this we call $A_0$.
-From this is computed the residual
-\begin{equation*}
-  R=(A+H)E_0-E_0A_0
-  \tag{1.8}\label{eq:1.8}
-\end{equation*}
-(if $E_0=F_0$ and $A_0=\Lambda_0$, then $R=0$).
-
-Any choice of $A_0$ which makes $R$ small will give good approximate eigenvalues.
-More explicitly, let the eigenvalues of $A_0$ in some order be $\alpha_1,\ldots,\alpha_m$ (since $m$ is relatively small, think of these also as easily computable).
-Kahan has shown~\cite{Kahan1967} that then there exists an ordered $m$-tuple $(\lambda_1,\ldots,\lambda_m)$ of eigenvalues of $A+H$ such that
+The paper also records the standard residual-to-eigenvalue consequence: if $\alpha_1,\ldots,\alpha_m$ are the eigenvalues of $A_0$, then an ordering of $m$ eigenvalues $\lambda_j$ of $A+H$ can be chosen so that
 \[
-  \sum_{j=1}^{m}(\alpha_j-\lambda_j)^2
-  \leq \norm{R}_{\mathrm{sq}}^2
-  \equiv \tr R^{*}R,
-  \qquad
-  \abs{\alpha_j-\lambda_j}\leq \norm{R}_1
-  \quad (j=1,\ldots,m).
+ \sum_j(\alpha_j-\lambda_j)^2\le \norm{R}_{\mathrm{sq}}^2,
+ \qquad
+ |\alpha_j-\lambda_j|\le \norm{R}_1.
 \]
-
-Thus in the numerical-analytic interpretation of the problem of rotation of eigenspaces, though the same operator-theoretic notation can be followed, there is a slight difference which will bear on the statements of our theorems.
-Instead of comparing a given operator $A+H$ to a simpler operator $A$ on the same space and saying that the difference $H$ between the two is small, we compare the given operator to an operator $A_0$ on a space of lower dimension and say that the residual $R$ is small.
-In our notation $A_0$ is isometric-equivalent to a part of $A$ (see \eqref{eq:1.2}), and the numerical analyst would rather talk about that part than about $A_1$, which he does not compute.
-Similarly, $R$ is essentially that part of the perturbation $H$ which he does compute.
-To see the point of the notation better, the reader may want to check formally from \eqref{eq:1.3} and \eqref{eq:1.8} that $R$, left-multiplied by the isometry $\binom{E_0^{*}}{E_1^{*}}$, gives the first column of
-\[
-  \begin{pmatrix}H_0&B^{*}\\B&H_1\end{pmatrix},
-\]
-which represents $H$ (see \eqref{eq:1.2}); or that $R=HE_0$.
-
-In two of our main theorems we shall make hypotheses that the perturbation is off-diagonal.
-In one theorem, this means the strong assertion that both the $H_j$ are zero; but the numerical analyst might prefer that nothing be said about the southeast corners of our block matrices; accordingly, another theorem has as its hypothesis of off-diagonality only $H_0=0$.
-It is a natural hypothesis because it means that, from the given $A+H$ and the computed vectors $E_0$, he obtains his $A_0$ by the simple rule
-\[
-  A_0=E_0^{*}(A+H)E_0,
-\]
-which is the $m\times m$ generalization of what, for $m=1$, is known as the Rayleigh quotient.
-This is often a good choice, particularly in view of the fact that
-\[
-  R^{*}R=H_0^2+B^{*}B,
-\]
-so that the size of $R$ is minimized when $H_0$ is taken to be zero.
-In the operator-theoretic interpretation of the problem we are less likely to have the option of declaring an $H_j$ to be zero.
 ~~~~
 
 ### Semantic audit clauses
@@ -224,97 +170,91 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 
 ---
 
-## 2. S1-ui-norms — Unitary-invariant norms and Fan dominance
+## 2. S1-ui-norms — Unitary-invariant norms, angle operators, and direct-rotation setup
 
-- **Source anchor:** Section 1, equations (1.9)–(1.13)
+- **Source anchor:** Section 1, equations (1.9)–(1.18)
 - **Source kind:** `framework`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `7cbf06e9a54408d0a6644b521befdf01fa99c88e2a0aaeed2378a3468e95773d`
-- **Private-transcription provenance lines:** `[[505, 583]]`
+- **Source-specification passage SHA-256:** `b640df622d247d4b4147214c265cd5ae876424d352b8bf1f0ea8e799c17aede2`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-The measures we have chosen to use for magnitudes of operators are arbitrary unitary-invariant norms.
-There are three good surveys~\cite[Chaps.~II--III]{GohbergKrein1965},\cite{Mirsky1960},\cite{Schatten1960} of the theory of such norms.
-However, we think it will be convenient to collect here some of the leading points.
+For bounded operators between Hilbert spaces, $\norm{\cdot}$ denotes an arbitrary normalized unitary-invariant norm: besides the norm axioms,
+\begin{equation}
+ \norm{VKW}=\norm{K}
+ \tag{1.9}
+\end{equation}
+for unitary $V,W$, rank-one operators satisfy $\norm{uv^*}=\norm{u}\norm{v}$, and left/right multiplication by contractions cannot increase the norm.
 
-The symbol $\norm{\cdot}$, applied to bounded operators $K$ from one Hilbert space to the same or another Hilbert space, stands for a norm which, beside having the usual properties
+For compact $K$, write its singular values as $\kappa_1\ge\kappa_2\ge\cdots$.  They satisfy the minimax characterization
+\begin{equation}
+ \kappa_k=\inf_{\dim\mathcal S=k-1}\ \sup_{\substack{\norm{x}=1\\x\perp\mathcal S}}\norm{Kx}.
+ \tag{1.10}
+\end{equation}
+The same minimax expression makes sense for general bounded operators; in the noncompact case the source warns that spectral-multiplicity language may be more appropriate.  The Hilbert--Schmidt norm is $\norm{K}_{\mathrm{sq}}^2=\sum_k\kappa_k^2=\operatorname{tr}(K^*K)$, and the Ky Fan norms are
+\begin{equation}
+ \norm{K}_\nu=\kappa_1+\cdots+\kappa_\nu.
+ \tag{1.11}
+\end{equation}
+Fan dominance is used in the strong form: $\norm{K}\le\norm{L}$ for every unitary-invariant norm iff the inequality holds for every Ky Fan norm.  The source also uses
+\begin{equation}
+ \norm{K}_\nu=\sup_{\Omega}\norm{K\Omega}_\nu
+ \tag{1.12}
+\end{equation}
+and
+\begin{equation}
+ \norm{K}_\nu
+ =\sup_{\Omega,\Upsilon}\norm{\Upsilon K\Omega}_\nu
+ =\sup\Re\sum_{k=1}^{\nu}y_k^*Kx_k,
+ \tag{1.13}
+\end{equation}
+where $\Omega,\Upsilon$ range over rank-$\nu$ orthogonal projectors and the last supremum ranges over orthonormal $\nu$-tuples $x_k,y_k$.
+
+For nonzero vectors the source uses
+\begin{equation}
+ \angle(x,y)=\arccos\frac{\Re(y^*x)}{\norm{x}\norm{y}},
+ \tag{1.14}
+\end{equation}
+while the angle between the one-dimensional subspaces they span is
+\begin{equation}
+ \arccos\frac{|y^*x|}{\norm{x}\norm{y}}.
+ \tag{1.15}
+\end{equation}
+For the pair $P,Q$, the intrinsic angle operators are
+\begin{equation}
+ \Theta_j=\arccos(C_jC_j^*)^{1/2},\qquad 0\le\Theta_j\le\pi/2,
+ \tag{1.16}
+\end{equation}
+and
+\begin{equation}
+ \Theta\sim\begin{pmatrix}\Theta_0&0\\0&\Theta_1\end{pmatrix}.
+ \tag{1.17}
+\end{equation}
+The singular values of $S_0$ are $\sin\theta_k$, where $\theta_k$ are the spectral/singular-angle data of $\Theta_0$; the nonzero angle data of $\Theta$ occur twice, once from each side.  In every unitary-invariant norm,
 \[
-\begin{gathered}
-  \norm{K}\geq 0,
-  \qquad
-  \norm{K}=0\Longleftrightarrow K=0,\\
-  \norm{\lambda K}=\abs{\lambda}\norm{K},
-  \qquad
-  \norm{K+L}\leq \norm{K}+\norm{L},
-\end{gathered}
+ \norm{Q^\perp P}=\norm{Q^\perp E_0}=\norm{\sin\Theta_0},
+ \qquad
+ \norm{P-Q}=\norm{\sin\Theta}.
 \]
-is unitary-invariant in the sense that
-\begin{equation*}
-  \norm{VKW}=\norm{K}
-  \tag{1.9}\label{eq:1.9}
-\end{equation*}
-whenever $V$ and $W$ are unitary operators (on the respective spaces).
+For the operator norm the source also identifies the largest one-sided distance with $\norm{\sin\Theta}_1$ and the closest-unit-vector distance with $2\norm{\sin(\Theta/2)}_1$.
 
-\emph{Normalization.}
-We assume that $\norm{uv^{*}}=\norm{u}\,\norm{v}$ for the operator $uv^{*}$ of rank $1$.
-(If this holds for one choice of nonzero $u$ and $v$, it holds for all.\,)
-
-\emph{Compatibility.}
-If $W$ is a contraction ($\norm{Wx}\leq\norm{x}$ for all $x$) and $V$ is a contraction, then $\norm{VKW}\leq\norm{K}$.
-This follows easily from \eqref{eq:1.10} below.
-
-We recall that, for compact $K$, the ``singular values'' $\kappa_1\geq\kappa_2\geq\cdots$ of $K$ are the square roots of the eigenvalues of $K^{*}K$.
-These are the same as the eigenvalues of $KK^{*}$, except perhaps for striking out a certain number of zeros.
-Now it follows from \eqref{eq:1.9} that for any unitary-invariant norm, the value of $\norm{K}$ depends only on the nonzero singular values of $K$.
-
-\emph{Minimax characterization of singular values.}
-\begin{equation*}
-  \kappa_k=\inf_{\mathcal S}\ \sup_x \norm{Kx},
-  \tag{1.10}\label{eq:1.10}
-\end{equation*}
-where the infimum is over $(k-1)$-dimensional subspaces $\mathcal S$ of the domain space, and the supremum is over unit vectors $x\perp\mathcal S$.
-In particular, $\kappa_1$ is equal to the bound norm of $K$, which we write $\norm{K}_1$, and we could write instead of \eqref{eq:1.10} that
+Section~3 constructs a partial isometry
 \[
-  \kappa_k=\inf_{\mathcal S}\norm{K\vert_{\mathcal S^{\perp}}}_1.
+ J\sim\begin{pmatrix}0&-J_0^*\\J_0&0\end{pmatrix}
 \]
-These formulations are applicable to general bounded operators, not only compact ones, but for noncompact operators it might be more appropriate to deal instead with the spectral multiplicity function~\cite{Halmos1951} of $K^{*}K$.
-Although we shall not assume our operators compact in most of this paper, we believe the most important applications are to compact operators.
-
-Every unitary-invariant norm is obtained as a ``symmetric gauge function'' of the singular values; the converse also holds.
-For the details, see the references cited.
-
-One of the most tractable of these norms is the Hilbert--Schmidt norm or square norm $\norm{\cdot}_{\mathrm{sq}}$:
-\[
-  \norm{K}_{\mathrm{sq}}^2=\sum_k\kappa_k^2=\tr K^{*}K.
-\]
-Particular unitary-invariant norms are
-\begin{equation*}
-  \norm{K}_{\nu}=\kappa_1+\kappa_2+\cdots+\kappa_{\nu},
-  \qquad \nu=1,2,\ldots,
-  \tag{1.11}\label{eq:1.11}
-\end{equation*}
-the sums of the $\nu$ highest singular values (whether or not there are that many nonzero ones).
-These include the bound norm $\norm{\cdot}_1$.
-The norms \eqref{eq:1.11} play a distinguished role: $K$ and $L$ being two operators, the inequality $\norm{K}\leq\norm{L}$ holds for arbitrary unitary-invariant norms if and only if it holds for all the norms $\norm{\cdot}_{\nu}$ (theorem of Ky Fan~\cite[Chap.~III, Section~3]{GohbergKrein1965}).
-
-The following analogue of the Rayleigh--Ritz principle therefore becomes interesting:
-\begin{equation*}
-  \norm{K}_{\nu}=\sup_{\Omega}\norm{K\Omega}_{\nu},
-  \tag{1.12}\label{eq:1.12}
-\end{equation*}
-the supremum being over all projectors $\Omega$ onto $\nu$-dimensional subspaces.
-For $\nu=1$ this is evident, but even for higher $\nu$ it is readily reduced to familiar statements.
-We shall also use the alternative form
-\begin{equation*}
-  \norm{K}_{\nu}
-  =\sup_{\Omega,\Upsilon}\norm{\Upsilon K\Omega}_{\nu}
-  =\sup \RePart\sum_{k=1}^{\nu}y_k^{*}Kx_k,
-  \tag{1.13}\label{eq:1.13}
-\end{equation*}
-the first supremum being over pairs of $\nu$-projectors $\Omega,\Upsilon$, and the second supremum being over all orthonormal $\nu$-tuples $\{x_1,\ldots,x_{\nu}\}$ and all orthonormal $\nu$-tuples $\{y_1,\ldots,y_{\nu}\}$.
+so that the distinguished direct rotation is
+\begin{equation}
+ U=e^{J\Theta}=\cos\Theta+J\sin\Theta
+ \sim
+ \begin{pmatrix}
+ \cos\Theta_0&-J_0^*\sin\Theta_1\\
+ J_0\sin\Theta_0&\cos\Theta_1
+ \end{pmatrix}.
+ \tag{1.18}
+\end{equation}
+Section~4 proves the stated extremal meaning of this $U$; the four main perturbation theorems themselves are formulated only through $\Theta,\Theta_0$ and trigonometric functions thereof.
 ~~~~
 
 ### Semantic audit clauses
@@ -410,19 +350,23 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `unnumbered_theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `21065969e0e5f2a4d5c4d48143b2464dc5e8d974ca80a53196f91f0fd7db57aa`
-- **Private-transcription provenance lines:** `[[719, 725]]`
+- **Source-specification passage SHA-256:** `8e5e36e64c718f1cdb002dd3c5a191c8919fa22bad64020bdbf8f22adb6a3f72`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{unnumberedtheorem}[The $\sin\theta$ theorem]
-Assume there is an interval $[\beta,\alpha]$ and a $\delta>0$ such that the spectrum of $A_0$ lies entirely in $[\beta,\alpha]$ while that of $\Lambda_1$ lies entirely outside of $\,]\beta-\delta,\alpha+\delta[\,$ (or such that the spectrum of $\Lambda_1$ lies entirely in $[\beta,\alpha]$ while that of $A_0$ lies entirely outside of $\,]\beta-\delta,\alpha+\delta[\,$).
-Then for every unitary-invariant norm,
+The four Section~2 statements are distinct theorem families; the source does not present them as cosmetic reformulations of one another.  Every displayed norm in these theorem statements is an arbitrary unitary-invariant norm in the source sense.
+
+Assume that for some interval $[\beta,\alpha]$ and $\delta>0$, either
 \[
-  \delta\norm{\sin\angles_0}\leq\norm{R}.
+ \spec(A_0)\subset[\beta,\alpha],
+ \qquad
+ \spec(\Lambda_1)\cap(\beta-\delta,\alpha+\delta)=\varnothing,
 \]
-\end{unnumberedtheorem}
+or the same condition with $A_0$ and $\Lambda_1$ interchanged.  Then, for every unitary-invariant norm,
+\[
+ \boxed{\delta\norm{\sin\Theta_0}\le\norm{R}.}
+\]
 ~~~~
 
 ### Semantic audit clauses
@@ -497,22 +441,25 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `unnumbered_theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `0958988cf989bf4bbc6ca34699d7b28cda3b68be4e455e12b43a4ad712b2c9a0`
-- **Private-transcription provenance lines:** `[[738, 747]]`
+- **Source-specification passage SHA-256:** `c85f8a2839187dd9ae4d020608816821c3b1f30e401eb5e52d4cbce093e82b3c`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{unnumberedtheorem}[The $\tan\theta$ theorem]
-Assume there is an interval $[\beta,\alpha]$ and a $\delta>0$ such that the spectrum of $A_0$ lies entirely in $[\beta,\alpha]$ while that of $\Lambda_1$ lies entirely in $[\alpha+\delta,\infty[$.
-Assume further that $H_0=0$.
-Then for every unitary-invariant norm,
+Assume
 \[
-  \delta\norm{\tan\angles_0}\leq\norm{R},
-  \qquad
-  \delta\norm{\tan\angles}\leq\norm{H}.
+ \spec(A_0)\subset[\beta,\alpha],
+ \qquad
+ \spec(\Lambda_1)\subset[\alpha+\delta,\infty),
+ \qquad \delta>0,
 \]
-\end{unnumberedtheorem}
+and impose the Rayleigh--Ritz/off-diagonal condition $H_0=0$ (equivalently $A_0=E_0^*(A+H)E_0$ in this setup).  Then for every unitary-invariant norm both conclusions hold:
+\[
+ \boxed{\delta\norm{\tan\Theta_0}\le\norm{R}},
+ \qquad
+ \boxed{\delta\norm{\tan\Theta}\le\norm{H}}.
+\]
+The first is directed and residual-based; the second uses the ambient angle and the full perturbation.
 ~~~~
 
 ### Semantic audit clauses
@@ -631,21 +578,24 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `unnumbered_theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `03db6ca98f2073a4f98a819b9a9460fb753e5587e78b8949b56a0668291fc4fb`
-- **Private-transcription provenance lines:** `[[753, 761]]`
+- **Source-specification passage SHA-256:** `7da711fdbd912b64b5aa6f2efc5c4255bcbe796831a18b99c92712024b81c70b`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{unnumberedtheorem}[The $\sin 2\theta$ theorem]
-Assume there is an interval $[\beta,\alpha]$ and a $\delta>0$ such that the spectrum of $\Lambda_0$ lies entirely in $[\beta,\alpha]$ while that of $\Lambda_1$ lies entirely outside of $\,]\beta-\delta,\alpha+\delta[\,$.
+Assume that for some $[\beta,\alpha]$ and $\delta>0$,
+\[
+ \spec(\Lambda_0)\subset[\beta,\alpha],
+ \qquad
+ \spec(\Lambda_1)\cap(\beta-\delta,\alpha+\delta)=\varnothing.
+\]
 Then for every unitary-invariant norm,
 \[
-  \delta\norm{\sin 2\angles_0}\leq2\norm{R},
-  \qquad
-  \delta\norm{\sin 2\angles}\leq2\norm{H}.
+ \boxed{\delta\norm{\sin(2\Theta_0)}\le2\norm{R}},
+ \qquad
+ \boxed{\delta\norm{\sin(2\Theta)}\le2\norm{H}}.
 \]
-\end{unnumberedtheorem}
+Again the source distinguishes the directed residual statement from the ambient perturbation statement.
 ~~~~
 
 ### Semantic audit clauses
@@ -754,22 +704,29 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `unnumbered_theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_specialization` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `13b00134126824e941e6a613a418da4b82b8cf629a7c1c406fa2e5b89eafcdd3`
-- **Private-transcription provenance lines:** `[[765, 774]]`
+- **Source-specification passage SHA-256:** `5c5b96c1cc563a42d13b8b4e06989c19ff82ec8ed6958f3da78d67dc9b2b7830`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{unnumberedtheorem}[The $\tan 2\theta$ theorem]
-Assume there is an interval $[\beta,\alpha]$ and a $\delta>0$ such that the spectrum of $A_0$ lies entirely in $[\beta,\alpha]$ while that of $A_1$ lies entirely in $[\alpha+\delta,\infty[$.
-Assume further that $H_0=0$, $H_1=0$.
-Then for every unitary-invariant norm,
+Assume the ordered gap
 \[
-  \delta\norm{\tan 2\angles_0}\leq2\norm{R},
-  \qquad
-  \delta\norm{\tan 2\angles}\leq2\norm{H}.
+ \spec(A_0)\subset[\beta,\alpha],
+ \qquad
+ \spec(A_1)\subset[\alpha+\delta,\infty),
+ \qquad \delta>0,
 \]
-\end{unnumberedtheorem}
+and the strong off-diagonal hypothesis
+\[
+ H_0=H_1=0.
+\]
+No independent hypothesis excluding the poles of $\tan(2\Theta)$, and no spectral placement hypothesis on the perturbed $Q$-blocks $\Lambda_0,\Lambda_1$, is part of the printed theorem.  For every unitary-invariant norm the two conclusions are
+\[
+ \boxed{\delta\norm{\tan(2\Theta_0)}\le2\norm{R}},
+ \qquad
+ \boxed{\delta\norm{\tan(2\Theta)}\le2\norm{H}}.
+\]
+Section~7 derives the nonvanishing of the relevant $\cos(2\theta_j)$ factors from these hypotheses during the proof rather than assuming it.
 ~~~~
 
 ### Semantic audit clauses
@@ -895,14 +852,12 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `source_claim`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `40c1bd8f533c1b0c08d7881fadb8617edfee2fcbfcd63ec6ca8100234a183c6e`
-- **Private-transcription provenance lines:** `[[776, 777]]`
+- **Source-specification passage SHA-256:** `fb0eaba8db2c7f46d5005c12d734b0dad4f4ad83097696e71a3954e68ffb8efb`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-It was mentioned earlier that the constants in all four theorems are best possible; this is seen from the $2$-dimensional case.
-Furthermore, one sees by taking a direct sum of $2$-dimensional examples that, in any one of the theorems, equality in the conclusion can be attained simultaneously for all unitary-invariant norms.
+The constants in all four theorem families are asserted to be best possible.  Two-dimensional examples attain the constants, and orthogonal direct sums of such examples can be arranged so that equality occurs simultaneously for all unitary-invariant norms.  When the perturbation depends linearly on a small parameter $\varepsilon$, the four estimates have the same first-order asymptotic behavior as $\varepsilon\to0$.
 ~~~~
 
 ### Semantic audit clauses
@@ -1042,21 +997,12 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `scope_claim`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `e25372d3c1f23d592684090e06ab59344253ceac7704650a868c0846d748272d`
-- **Private-transcription provenance lines:** `[[216, 218], [781, 785]]`
+- **Source-specification passage SHA-256:** `7f098b2419b68b1002016fbc6983ccd57639127da6c28456751248a9c33cf43a`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-The subject throughout will be a bounded Hermitian operator $A$ acting upon $\Hilbert$, together with a modified Hermitian operator $A+H$, where $H$ will usually be thought of as small.
-The results and proofs also apply to unbounded self-adjoint $A$, provided the domain of $H$ contains that of $A$.
-(Some of the results are vacuous when certain norms fail to exist, but we shall not need to make special mention of this.\,)
-
-Unbounded self-adjoint operators, important in several applications, are covered by our theorems or slight extensions thereof, although we must assume $H$ or $R$ bounded to draw useful inferences.
-The theorems above contain references to a finite interval $[\beta,\alpha]$; they remain valid after this interval is extended to $]-\infty,\alpha]$ and $]\beta-\delta,\alpha+\delta[$ to $]-\infty,\alpha+\delta[$.
-As long as the spectra of $A_i$ and $\Lambda_i$ satisfy their respective hypotheses concerning the gap $\delta$, they may be otherwise unbounded without invalidating the theorems.
-However, to free our theorems from all inessential boundedness hypotheses, we have had to complicate the proofs substantially.
-These complications have been confined to two passages---\TheoremRef{5.2}, and the \AppendixSixRef---in order to avoid distracting those readers not concerned with the utmost generality.
+The paper states the four main results for infinite as well as finite dimensional separable Hilbert spaces and for arbitrary unitary-invariant norms.  The main exposition begins with bounded Hermitian $A$ and $A+H$, but the results are also intended for unbounded self-adjoint $A$ when $\operatorname{dom}(H)$ contains $\operatorname{dom}(A)$ and the expressions used in the estimates are meaningful.  Useful unbounded conclusions require the pertinent perturbation or residual to extend boundedly.  The spectral intervals in the gap hypotheses may be half-infinite, and the remaining spectra may be unbounded.  The additional analytic work for these cases is concentrated in Theorem~5.2 and the Appendix to Section~6.
 ~~~~
 
 ### Semantic audit clauses
@@ -1165,28 +1111,59 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 
 ## 9. DK-3.1-def — Direct rotation
 
-- **Source anchor:** Definition 3.1
+- **Source anchor:** Section 3 setup, equations (3.1)--(3.4), and Definition 3.1
 - **Source kind:** `definition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `161814de6687dea957ba7408dd53b56c71b504b2d3065002a19efdcc026f94cc`
-- **Private-transcription provenance lines:** `[[834, 845]]`
+- **Source-specification passage SHA-256:** `a20649b8dd41ae1561494af20da1e2ea6ada223a3c5b2c4156bd2a795fdfd092`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{definition}\label{def:3.1}
-A unitary solution
+Section~3 ignores $A$ and $A+H$ and studies the two projectors $P=E_0E_0^*$ and $Q=F_0F_0^*$.  All block representations continue to use the $E_0\oplus E_1$ decomposition.  Thus
+\begin{equation}
+ Q\sim
+ \begin{pmatrix}
+ E_0^*QE_0&E_0^*QE_1\\
+ E_1^*QE_0&E_1^*QE_1
+ \end{pmatrix}.
+ \tag{3.1}
+\end{equation}
+For a unitary
 \[
-  V\representedby\begin{pmatrix}C_0&-S_1\\S_0&C_1\end{pmatrix}
+ V\sim\begin{pmatrix}C_0&-S_1\\S_0&C_1\end{pmatrix}
 \]
-of $VP=QV$ will be called a \emph{direct rotation} from $P\Hilbert$ to $Q\Hilbert$ if it satisfies the following additional conditions:
-\begin{enumerate}[label=(\roman*)]
-\item $C_0\geq0$, $C_1\geq0$;
-\item $S_1=S_0^{*}$.
-\end{enumerate}
-The symbol $U$ will be reserved for direct rotations.
-\end{definition}
+carrying $P\Hsp$ onto $Q\Hsp$, unitarity is equivalently expressed by
+\begin{equation}
+ \begin{pmatrix}
+ C_0^*C_0+S_0^*S_0&-C_0^*S_1+S_0^*C_1\\
+ -S_1^*C_0+C_1^*S_0&S_1^*S_1+C_1^*C_1
+ \end{pmatrix}
+ =\begin{pmatrix}I&0\\0&I\end{pmatrix},
+ \tag{3.2}
+\end{equation}
+\begin{equation}
+ \begin{pmatrix}
+ C_0C_0^*+S_1S_1^*&C_0S_0^*-S_1C_1^*\\
+ S_0C_0^*-C_1S_1^*&S_0S_0^*+C_1C_1^*
+ \end{pmatrix}
+ =\begin{pmatrix}I&0\\0&I\end{pmatrix}.
+ \tag{3.3}
+\end{equation}
+Consequently $S_0$ and $S_1$ have the same nonzero singular values, except that unequal nullities of $C_0$ and $C_0^*$ can contribute initial strings of singular values equal to $1$ on one side.
+
+A unitary solution of $VP=QV$ is a \emph{direct rotation} from $P\Hsp$ to $Q\Hsp$ when
+\[
+ C_0\ge0,\qquad C_1\ge0,\qquad S_1=S_0^*.
+\]
+The source reserves $U$ for direct rotations.  In the positive-diagonal case, equations (3.2)--(3.3) give
+\begin{equation}
+ C_0S_1=S_0^*C_1,
+ \qquad
+ C_0S_0^*=S_1C_1,
+ \tag{3.4}
+\end{equation}
+which are used in the existence and uniqueness analysis.
 ~~~~
 
 ### Semantic audit clauses
@@ -1289,15 +1266,17 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `definition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `565defff648c593393e79ca50a2ed8e93e969c41351f67ac63aed945ac77014f`
-- **Private-transcription provenance lines:** `[[847, 849]]`
+- **Source-specification passage SHA-256:** `62638f6ec5fe84cc6ddad8a423f99d5b024c0f6ff2e1aa7a37f3d9604a77b609`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{definition}\label{def:3.2}
-Subspaces $P\Hilbert$ and $Q\Hilbert$ are said to be in the \emph{acute case} if $P\Hilbert\cap\tQ\Hilbert$ and $\tP\Hilbert\cap Q\Hilbert$ are zero.
-\end{definition}
+The pair $P\Hsp,Q\Hsp$ is in the \emph{acute case} exactly when both crossing intersections vanish:
+\[
+ P\Hsp\cap Q^\perp\Hsp=\{0\},
+ \qquad
+ P^\perp\Hsp\cap Q\Hsp=\{0\}.
+\]
 ~~~~
 
 ### Semantic audit clauses
@@ -1371,15 +1350,12 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `46a75530e2d8da8c3c9f8871f2df1807511b073f02ed0208842730243a3c1f02`
-- **Private-transcription provenance lines:** `[[850, 852]]`
+- **Source-specification passage SHA-256:** `ff945cb6247987becf0eec9e3c5fd945ba2df2d2b8756cea6df2c7ebd00213d4`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{proposition}\label{prop:3.1}
-In the acute case the direct rotation exists, is unique, and is characterized by property~(i) alone.
-\end{proposition}
+In the acute case, a direct rotation exists and is unique.  Moreover positivity of the diagonal blocks, $C_0,C_1\ge0$, already characterizes it among unitaries carrying $P\Hsp$ onto $Q\Hsp$: the polar-decomposition relations force the off-diagonal condition $S_1=S_0^*$ because the relevant kernels vanish in the acute case.
 ~~~~
 
 ### Semantic audit clauses
@@ -1492,21 +1468,18 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `7fa0afb04717e112c11b6069c69102c2ea9cb3b29337c0a88464921f02a37777`
-- **Private-transcription provenance lines:** `[[901, 909]]`
+- **Source-specification passage SHA-256:** `3824155c8b919c0b61e9eb7bdc7b822214fbb6d6abfa95f7e7eb5eac2a73c09a`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{proposition}\label{prop:3.2}
-In the nonacute case, a direct rotation exists if and only if
-\begin{equation*}
-  \dim(P\Hilbert\cap\tQ\Hilbert)
-  =\dim(\tP\Hilbert\cap Q\Hilbert).
-  \tag{3.5}\label{eq:3.5}
-\end{equation*}
-It is not unique.
-\end{proposition}
+Outside the acute case a direct rotation exists iff the two crossing subspaces have the same dimension:
+\begin{equation}
+ \dim(P\Hsp\cap Q^\perp\Hsp)
+ =\dim(P^\perp\Hsp\cap Q\Hsp).
+ \tag{3.5}
+\end{equation}
+When it exists it need not be unique.  On the two crossing subspaces a direct rotation satisfies $U^2x=-x$.  The source also gives an infinite-dimensional bilateral-shift example showing that the equal-dimension conditions (1.5) for $P,Q$ do not by themselves imply (3.5).
 ~~~~
 
 ### Semantic audit clauses
@@ -1586,25 +1559,23 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `87620ffbc1a3ee6e3c1eb880ee359423e4cc4888b4e5c601f71c31b33ee7a8c5`
-- **Private-transcription provenance lines:** `[[961, 968], [1008, 1011]]`
+- **Source-specification passage SHA-256:** `0694cb7e2df9c35cd98c528b0ded3fea303834eb3366ae666c66e73b87a7e345`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
-Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
-\begin{equation*}
-  U\representedby
-  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
-  \qquad C_j\geq0.
-  \tag{3.6}\label{eq:3.6}
-\end{equation*}
-
-\begin{proposition}\label{prop:3.3}
-Any direct rotation of $P\Hilbert$ to $Q\Hilbert$ is a principal square root of $(Q-\tQ)(P-\tP)$, that is, a unitary square root with spectrum in the right half-plane.
-Any principal square root of $(Q-\tQ)(P-\tP)$ is a direct rotation of $P\Hilbert$ to $Q\Hilbert$ provided it takes $P\Hilbert\cap\tQ\Hilbert$ onto $\tP\Hilbert\cap Q\Hilbert$.
-\end{proposition}
+Assuming both the matching-dimension condition (1.5) and the crossing-dimension condition (3.5), write the direct rotation as
+\begin{equation}
+ U\sim\begin{pmatrix}C_0&-S_0^*\\S_0&C_1\end{pmatrix},
+ \qquad C_j\ge0.
+ \tag{3.6}
+\end{equation}
+Then $Q=UPU^{-1}$, and with the reflection $X=P-P^\perp$ and $Q_-=XQX$ one has $U^{-1}=XUX$.  In particular,
+\begin{equation}
+ U^2=(Q-Q^\perp)(P-P^\perp).
+ \tag{3.8}
+\end{equation}
+Every direct rotation is therefore the principal unitary square root of $(Q-Q^\perp)(P-P^\perp)$, with spectrum in the closed right half-plane.  Conversely, a principal square root of that product is a direct rotation provided it sends $P\Hsp\cap Q^\perp\Hsp$ onto $P^\perp\Hsp\cap Q\Hsp$.
 ~~~~
 
 ### Semantic audit clauses
@@ -1697,24 +1668,16 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `821c742e5042b7ae1d62ca7267f13353c0dc72719849ccb9e9b73519fa175575`
-- **Private-transcription provenance lines:** `[[961, 968], [1035, 1037]]`
+- **Source-specification passage SHA-256:** `a4914037fecd9b2f6193105f137f3a59d160e47ca70747bb4a6c430477038990`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
-Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
-\begin{equation*}
-  U\representedby
-  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
-  \qquad C_j\geq0.
-  \tag{3.6}\label{eq:3.6}
-\end{equation*}
-
-\begin{proposition}\label{prop:3.4}
-If $C_0^2\geq\tfrac12$, then $U^2$ is the direct rotation of $Q_-\Hilbert$ to $Q\Hilbert$.
-\end{proposition}
+Under the same direct-rotation setup, if
+\[
+ C_0^2\ge\tfrac12
+\]
+(equivalently, the relevant principal angles do not exceed $\pi/4$), then $U^2$ is itself the direct rotation carrying $Q_-\Hsp$ onto $Q\Hsp$.
 ~~~~
 
 ### Semantic audit clauses
@@ -1788,32 +1751,22 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `885d6b1c497533c6c2c1c0ef2940fd9f882249aaae51c85ea0392067b7dd5ed7`
-- **Private-transcription provenance lines:** `[[961, 968], [1083, 1093]]`
+- **Source-specification passage SHA-256:** `c596c36a00cab2889d9af204a420d6746d77273cc66e9a3268dc91891902987f`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
-Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
-\begin{equation*}
-  U\representedby
-  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
-  \qquad C_j\geq0.
-  \tag{3.6}\label{eq:3.6}
-\end{equation*}
-
-\begin{theorem}\label{thm:3.1}
-For a pair of subspaces $P\Hilbert,Q\Hilbert$, subject to
+Assume
 \[
-  \dim P\Hilbert=\dim Q\Hilbert,
-  \qquad
-  \dim(P\Hilbert\cap\tQ\Hilbert)=\dim(\tP\Hilbert\cap Q\Hilbert),
+ \dim P\Hsp=\dim Q\Hsp,
+ \qquad
+ \dim(P\Hsp\cap Q^\perp\Hsp)=\dim(P^\perp\Hsp\cap Q\Hsp).
 \]
-a complete system of invariants under isometric equivalence is afforded by the spectral multiplicity functions of $\angles_0,\angles_1$.
-These are arbitrary Hermitian operators satisfying the following conditions:
-$0\leq\angles_j\leq\pi/2$; the dimensionalities of their domains sum to that of $\Hilbert$; and the spectral multiplicity functions of the $\angles_j$ are the same except for a possible difference in the multiplicity of $\{0\}$.
-\end{theorem}
+A complete invariant of the pair $(P\Hsp,Q\Hsp)$ under isometric equivalence is given by the spectral multiplicity functions of $\Theta_0$ and $\Theta_1$.  Conversely, the angle operators may be arbitrary Hermitian operators satisfying
+\[
+ 0\le\Theta_j\le\pi/2,
+\]
+their domain dimensions sum to $\dim\Hsp$, and their spectral multiplicity functions agree except possibly at the eigenvalue/spectral point $0$.  The proof reconstructs the pair from these angle data and the corresponding partial isometry $J_0$.
 ~~~~
 
 ### Semantic audit clauses
@@ -1918,36 +1871,16 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `corollary`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `fa52f58d0a2c0378b7d41e22854d1b88b1d4e73c6906c9a5bd13affa588f2c38`
-- **Private-transcription provenance lines:** `[[961, 968], [1118, 1132]]`
+- **Source-specification passage SHA-256:** `2661dd05c08e61c06c54ce50c66032413a3c958bb7cda1b28638548253e30d2c`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
-Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
-\begin{equation*}
-  U\representedby
-  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
-  \qquad C_j\geq0.
-  \tag{3.6}\label{eq:3.6}
-\end{equation*}
-
-\begin{corollary}\label{cor:3.1}
-For a pair of subspaces $P\Hilbert,Q\Hilbert$, subject to
+Under the hypotheses of Theorem~3.1, if $PQ^\perp P$ is compact, the complete invariants reduce to the eigenvalues of $\Theta_0,\Theta_1$, counted with multiplicity.  The eigenvalues of $\Theta_0$ may be any sequence
 \[
-  \dim P\Hilbert=\dim Q\Hilbert,
-  \qquad
-  \dim(P\Hilbert\cap\tQ\Hilbert)=\dim(\tP\Hilbert\cap Q\Hilbert),
+ \pi/2\ge\theta_1\ge\theta_2\ge\cdots\to0,
 \]
-and such that $P\tQ P$ is compact, a complete system of invariants under isometric equivalence is afforded by the eigenvalues (multiplicity counted) of $\angles_0,\angles_1$.
-The eigenvalues $\theta_i$ of $\angles_0$ are an arbitrary sequence satisfying
-\[
-  \pi/2\geq\theta_1\geq\theta_2\geq\cdots
-\]
-and approaching $0$, together with a possible eigenvalue $0$.
-The eigenvalues of $\angles_1$ must be the same except perhaps for the multiplicity of $0$.
-\end{corollary}
+together with a possible eigenvalue $0$; $\Theta_1$ has the same nonzero eigenvalues and may differ only in the multiplicity of $0$.
 ~~~~
 
 ### Semantic audit clauses
@@ -2030,31 +1963,20 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `2b467fb17b6fbfdd563e339abcd67e54cbaad60faf4ff6a692dbb6916beceb70`
-- **Private-transcription provenance lines:** `[[961, 968], [1143, 1152]]`
+- **Source-specification passage SHA-256:** `bdabc4530ed8ad8040dfe34d4a1071b2b52d3563d3e0e5bb9de9868287999a4e`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
-Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
-\begin{equation*}
-  U\representedby
-  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
-  \qquad C_j\geq0.
-  \tag{3.6}\label{eq:3.6}
-\end{equation*}
-
-\begin{proposition}\label{prop:3.5}
-$\angles$ commutes with $P$, with $Q$, with $J$, and with $U$.
-For every eigenvalue $\theta$, the eigenvectors $x$ satisfy $\angle(x,Ux)=\theta$.
-In the acute case, for every eigenvalue $\theta$, the eigenspace $\Omega(\{\theta\})\Hilbert$ is the unique maximal subspace with the properties
-\begin{enumerate}[label=(\alph*)]
-\item it reduces $P$ and $Q$;
-\item for every nonzero vector $x$ of $P\Hilbert$ lying in it, $\angle(x,Qx)=\theta$;
-\item for every nonzero vector $x$ of $\tP\Hilbert$ lying in it, $\angle(x,\tQ x)=\theta$.
-\end{enumerate}
-\end{proposition}
+The angle operator $\Theta$ commutes with $P,Q,J,$ and $U$, and the direct rotation has $U=e^{J\Theta}$.  The source also records
+\[
+ \cos^2\Theta=PQP+P^\perp Q^\perp P^\perp.
+\]
+If $\Theta x=\theta x$, then
+\[
+ \angle(x,Ux)=\theta.
+\]
+In the acute case the $\theta$-eigenspace of $\Theta$ is the unique maximal subspace which reduces both $P$ and $Q$ and on which every nonzero $x\in P\Hsp$ has angle $\theta$ from $Qx$, while every nonzero $x\in P^\perp\Hsp$ has angle $\theta$ from $Q^\perp x$.
 ~~~~
 
 ### Semantic audit clauses
@@ -2198,24 +2120,12 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `corollary`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `c680a31852c56ff741530933bb1230243b41cf60da3333c60aca4a31e0ebda7d`
-- **Private-transcription provenance lines:** `[[961, 968], [1207, 1209]]`
+- **Source-specification passage SHA-256:** `6ef3d66483655d6bf428a2422d4d26494455fe9cba09939d61a2092809e68a9d`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-We shall assume \eqref{eq:3.5} as well as \eqref{eq:1.5} except where stated otherwise.
-Consequently the direct rotation will always exist, and rather than the more general $V$ of \eqref{eq:1.6} we shall deal mostly with its direct special case
-\begin{equation*}
-  U\representedby
-  \begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
-  \qquad C_j\geq0.
-  \tag{3.6}\label{eq:3.6}
-\end{equation*}
-
-\begin{corollary}\label{cor:3.2}
-If the roles of $P$ and $Q$ are interchanged, $\angles$ remains the same, while $J$ is replaced by $-J$.
-\end{corollary}
+Interchanging the roles of $P$ and $Q$ leaves the angle operator $\Theta$ unchanged and replaces $J$ by $-J$.
 ~~~~
 
 ### Semantic audit clauses
@@ -2307,39 +2217,26 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 
 ## 19. DK-4.1-prop — Pointwise and singular-value extremality of the direct rotation
 
-- **Source anchor:** Proposition 4.1
+- **Source anchor:** Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2)
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `09ada1a08832709c40382ecedb51bfaad20b3f6662d61ce7f4ca26c709c8fc64`
-- **Private-transcription provenance lines:** `[[1223, 1237], [1239, 1245]]`
+- **Source-specification passage SHA-256:** `bf3ccc8a5961a08a52de6724dd95561afa29412f0c4c4dfdb7a40ea81112f45f`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-The present section is not required for the rest of the paper.
+This section is logically independent of the later perturbation proofs.  Under the compact/classification setup, every unitary carrying $P\Hsp$ onto $Q\Hsp$ is written $V=UZ$ with $Z$ block diagonal relative to $P\oplus P^\perp$, and the principal angles are ordered $\theta_1\ge\theta_2\ge\cdots$.
 
-We shall make the hypotheses of \TheoremRef{3.1} and \CorollaryRef{3.1} (leaving to the reader the modifications entailed in the absence of compactness).
-The notation will be
+For any such unitary $V$, there are orthonormal vectors $v_k\in P\Hsp$ such that
 \[
-  U\representedby\begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
-  \qquad V=UZ,
-  \qquad Z\representedby\begin{pmatrix}Z_0&0\\0&Z_1\end{pmatrix}.
+ \angle(v_k,Vv_k)\ge\theta_k\qquad\text{for every }k.
 \]
-We have introduced the angles $\theta_1\geq\theta_2\geq\cdots$ associated with $P\Hilbert$ and $Q\Hilbert$.
-We showed how the sines of these angles can be recovered from any unitary taking $P\Hilbert$ to $Q\Hilbert$.
-Among these, the ``direct rotation'' $U$ of \DefinitionRef{3.1} was singled out in two respects: the simple canonical construction of it in terms of $P$ and $Q$ (see \eqref{eq:3.8}) and the decomposition of the space by \eqref{eq:1.18} and \TheoremRef{3.1}.
-But the motivation for the direct rotation was the notion of taking elements of $P\Hilbert$ to $Q\Hilbert$ by the most economical route.
-This notion cannot be taken naively, for if (say) $\theta_1=\pi/4$, $\theta_2=\pi/6$, then a unitary cannot take every unit vector in $P\Hilbert$ to the unit vector in $Q\Hilbert$ closest to it.
-It can almost do this, however, as we now show.
-
-\begin{proposition}\label{prop:4.1}
-Given any unitary $V$ which maps $P\Hilbert$ onto $Q\Hilbert$, there exist orthonormal $v_1,v_2,\ldots\in P\Hilbert$ such that for all $k$, $\angle(v_k,Vv_k)\geq\theta_k$.
-Equivalent statement: among all such $V$, the singular values $\lambda_1\geq\lambda_2\geq\cdots$ of $(1-V)|_{P\Hilbert}$ are all minimized when $V=U$, and their values then are
+Equivalently, if $\lambda_1\ge\lambda_2\ge\cdots$ are the singular values of $(1-V)|_{P\Hsp}$, then each $\lambda_k$ is minimized by the direct rotation $V=U$, with minimum
 \[
-  \lambda_k=2\sin(\theta_k/2).
+ \lambda_k=2\sin(\theta_k/2).
 \]
-\end{proposition}
+The proof uses the singular-value minimax principle (the paper's equation (4.1)) together with a pointwise angle comparison (4.2).
 ~~~~
 
 ### Semantic audit clauses
@@ -2433,31 +2330,16 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `corollary`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `7a3c0e3316724cc7e8f7639f2c9c23faf124a5bc657d8b16d4ad3efdf4b0b341`
-- **Private-transcription provenance lines:** `[[1223, 1237], [1247, 1249]]`
+- **Source-specification passage SHA-256:** `73cd6caf9a976a811e4836d656d566a66b0f57c7504ff38365d6891b3d75b9ba`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-The present section is not required for the rest of the paper.
-
-We shall make the hypotheses of \TheoremRef{3.1} and \CorollaryRef{3.1} (leaving to the reader the modifications entailed in the absence of compactness).
-The notation will be
+For every unitary-invariant norm,
 \[
-  U\representedby\begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
-  \qquad V=UZ,
-  \qquad Z\representedby\begin{pmatrix}Z_0&0\\0&Z_1\end{pmatrix}.
+ \norm{(1-V)P}
 \]
-We have introduced the angles $\theta_1\geq\theta_2\geq\cdots$ associated with $P\Hilbert$ and $Q\Hilbert$.
-We showed how the sines of these angles can be recovered from any unitary taking $P\Hilbert$ to $Q\Hilbert$.
-Among these, the ``direct rotation'' $U$ of \DefinitionRef{3.1} was singled out in two respects: the simple canonical construction of it in terms of $P$ and $Q$ (see \eqref{eq:3.8}) and the decomposition of the space by \eqref{eq:1.18} and \TheoremRef{3.1}.
-But the motivation for the direct rotation was the notion of taking elements of $P\Hilbert$ to $Q\Hilbert$ by the most economical route.
-This notion cannot be taken naively, for if (say) $\theta_1=\pi/4$, $\theta_2=\pi/6$, then a unitary cannot take every unit vector in $P\Hilbert$ to the unit vector in $Q\Hilbert$ closest to it.
-It can almost do this, however, as we now show.
-
-\begin{corollary}\label{cor:4.1}
-For every unitary-invariant norm, $\norm{(1-V)P}$ is minimized when $V=U$.
-\end{corollary}
+is minimized among unitaries carrying $P\Hsp$ onto $Q\Hsp$ by the direct rotation $V=U$.
 ~~~~
 
 ### Semantic audit clauses
@@ -2532,52 +2414,18 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `6076a83e13dd47c93f09465c856f90fa3e7010dad4d8710b122b70bc5b9a5835`
-- **Private-transcription provenance lines:** `[[1223, 1237], [1323, 1329], [1330, 1345]]`
+- **Source-specification passage SHA-256:** `a1d36230f960f5b48427a6c4fce26c28327cc9fdff714575e4261c76ae92c4f4`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-The present section is not required for the rest of the paper.
-
-We shall make the hypotheses of \TheoremRef{3.1} and \CorollaryRef{3.1} (leaving to the reader the modifications entailed in the absence of compactness).
-The notation will be
+For every unitary $V$ carrying $P\Hsp$ onto $Q\Hsp$ and every orthonormal basis $\{v_k\}$ of $P\Hsp$,
 \[
-  U\representedby\begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
-  \qquad V=UZ,
-  \qquad Z\representedby\begin{pmatrix}Z_0&0\\0&Z_1\end{pmatrix}.
+ \sum_{k=1}^{\infty}\sin^2\angle(v_k,Vv_k)
+ \ge
+ \sum_{k=1}^{\infty}\sin^2\theta_k,
 \]
-We have introduced the angles $\theta_1\geq\theta_2\geq\cdots$ associated with $P\Hilbert$ and $Q\Hilbert$.
-We showed how the sines of these angles can be recovered from any unitary taking $P\Hilbert$ to $Q\Hilbert$.
-Among these, the ``direct rotation'' $U$ of \DefinitionRef{3.1} was singled out in two respects: the simple canonical construction of it in terms of $P$ and $Q$ (see \eqref{eq:3.8}) and the decomposition of the space by \eqref{eq:1.18} and \TheoremRef{3.1}.
-But the motivation for the direct rotation was the notion of taking elements of $P\Hilbert$ to $Q\Hilbert$ by the most economical route.
-This notion cannot be taken naively, for if (say) $\theta_1=\pi/4$, $\theta_2=\pi/6$, then a unitary cannot take every unit vector in $P\Hilbert$ to the unit vector in $Q\Hilbert$ closest to it.
-It can almost do this, however, as we now show.
-
-\begin{proposition}\label{prop:4.2}
-Given any unitary $V$ which maps $P\Hilbert$ onto $Q\Hilbert$, and given any orthonormal basis $\{v_1,v_2,\ldots\}$ of $P\Hilbert$, we have
-\[
-  \sum_{k=1}^{\infty}\sin^2\angle(v_k,Vv_k)
-  \geq\sum_{k=1}^{\infty}\sin^2\theta_k.
-\]
-\end{proposition}
-
-\begin{proof}
-Writing again $v_k\representedby\binom{v_{0k}}{0}$, we have
-\[
-\begin{aligned}
-  \sum_k\sin^2\angle(v_k,Vv_k)
-  &=\sum_k\bigl(1-\cos^2\angle(v_k,Vv_k)\bigr)\\
-  &=\sum_k\bigl(1-(\RePart v_{0k}^{*}C_0Z_0v_{0k})^2\bigr)\\
-  &\geq\sum_k\bigl(1-\abs{v_{0k}^{*}C_0Z_0v_{0k}}^2\bigr)\\
-  &\geq\sum_k\left(1-\sum_l\abs{v_{0k}^{*}C_0Z_0v_{0l}}^2\right)\\
-  &=\sum_k(1-v_{0k}^{*}C_0^2v_{0k})
-   =\tr S_0^{*}S_0\\
-  &=\sum_k\sin^2\theta_k,
-\end{aligned}
-\]
-even if the rightmost member is infinite.
-This completes the proof.
+with the inequality also valid when the right-hand side is infinite.  The proof identifies the lower bound with $\operatorname{tr}(S_0^*S_0)$.
 ~~~~
 
 ### Semantic audit clauses
@@ -2659,31 +2507,66 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `6da0c42a78ae20ed9f7478a157b3f87bbb2699ea1c45ed0a2e09a8833d4a6c1d`
-- **Private-transcription provenance lines:** `[[1223, 1237], [1500, 1502]]`
+- **Source-specification passage SHA-256:** `efb61fbf15adb18ac47572bb82096f44ac2bd356072eaa15cd006cec8cc14dac`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-The present section is not required for the rest of the paper.
-
-We shall make the hypotheses of \TheoremRef{3.1} and \CorollaryRef{3.1} (leaving to the reader the modifications entailed in the absence of compactness).
-The notation will be
+The source next studies the full operator $1-V$.  For the two-dimensional reducing planes $\Omega_k\Hsp=[u_k,Ju_k]$, its Ky Fan comparisons specialize to
+\begin{equation}
+\begin{aligned}
+ \norm{K}_{\nu}&\ge\sum_{k=1}^{\nu/2}\norm{K\Omega_k}_2,
+ &&\nu\text{ even},\\
+ \norm{K}_{\nu}&\ge\sum_{k=1}^{\lfloor\nu/2\rfloor}\norm{K\Omega_k}_2
+ +\norm{K\Omega_{(\nu+1)/2}}_1,
+ &&\nu\text{ odd},
+\end{aligned}
+\tag{4.3}
+\end{equation}
+and, after compressing on both sides,
+\begin{equation}
+\begin{aligned}
+ \norm{K}_{\nu}&\ge\sum_{k=1}^{\nu/2}\norm{\Omega_kK\Omega_k}_2,
+ &&\nu\text{ even},\\
+ \norm{K}_{\nu}&\ge\sum_{k=1}^{\lfloor\nu/2\rfloor}\norm{\Omega_kK\Omega_k}_2
+ +\norm{\Omega_{(\nu+1)/2}K\Omega_{(\nu+1)/2}}_1,
+ &&\nu\text{ odd}.
+\end{aligned}
+\tag{4.4}
+\end{equation}
+For one such plane write
 \[
-  U\representedby\begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
-  \qquad V=UZ,
-  \qquad Z\representedby\begin{pmatrix}Z_0&0\\0&Z_1\end{pmatrix}.
+ Vu=a_0Uu+b_0w,
+ \qquad
+ VJu=a_1UJu+b_1x,
+ \qquad |a_j|^2+|b_j|^2=1,
 \]
-We have introduced the angles $\theta_1\geq\theta_2\geq\cdots$ associated with $P\Hilbert$ and $Q\Hilbert$.
-We showed how the sines of these angles can be recovered from any unitary taking $P\Hilbert$ to $Q\Hilbert$.
-Among these, the ``direct rotation'' $U$ of \DefinitionRef{3.1} was singled out in two respects: the simple canonical construction of it in terms of $P$ and $Q$ (see \eqref{eq:3.8}) and the decomposition of the space by \eqref{eq:1.18} and \TheoremRef{3.1}.
-But the motivation for the direct rotation was the notion of taking elements of $P\Hilbert$ to $Q\Hilbert$ by the most economical route.
-This notion cannot be taken naively, for if (say) $\theta_1=\pi/4$, $\theta_2=\pi/6$, then a unitary cannot take every unit vector in $P\Hilbert$ to the unit vector in $Q\Hilbert$ closest to it.
-It can almost do this, however, as we now show.
-
-\begin{proposition}\label{prop:4.3}
-For every unitary-invariant norm, $\norm{(1-V^{*})(1-V)}$ is minimized when $V=U$.
-\end{proposition}
+with $w,x$ orthogonal to that plane in the appropriate $Q$ and $Q^\perp$ subspaces.  If $\mu_1\ge\mu_2$ are the singular values of $(1-V)\Omega$, and
+\[
+ a_0+a_1=2c+2ie,
+ \qquad
+ a_0-a_1=2d-2if,
+\]
+then
+\begin{equation}
+\begin{aligned}
+ 1-\mu_1^2/2&=c\cos\theta-\sqrt{d^2+e^2\sin^2\theta},\\
+ 1-\mu_2^2/2&=c\cos\theta+\sqrt{d^2+e^2\sin^2\theta},
+\end{aligned}
+\tag{4.5}
+\end{equation}
+while unitarity implies
+\begin{equation}
+ (c+d)^2+(e-f)^2\le1,
+ \qquad
+ (c-d)^2+(e+f)^2\le1.
+ \tag{4.6}
+\end{equation}
+These formulas show term by term that the squared displacement has the source's global extremal property:
+\[
+ \boxed{\norm{(1-V^*)(1-V)}\ \text{is minimized when }V=U}
+\]
+for every unitary-invariant norm.  They also imply minimality of the operator norm and Hilbert--Schmidt norm of $1-V$, but the source warns that arbitrary unitary-invariant norms of $1-V$ need not be minimized by the direct rotation.
 ~~~~
 
 ### Semantic audit clauses
@@ -2747,40 +2630,29 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 
 ---
 
-## 23. DK-4.4-prop — Real-space full displacement minimality below pi/3
+## 23. DK-4.4-prop — Full-displacement counterexamples and Proposition 4.4 as printed
 
-- **Source anchor:** Proposition 4.4
+- **Source anchor:** Examples 4.1–4.2 and Proposition 4.4
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `refuted_as_transcribed` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `66ac9b6a665e40b0ce3946285d0891bb9b26bd01eb9d496dadbfa5cc0aed2aa1`
-- **Private-transcription provenance lines:** `[[1223, 1237], [1534, 1537], [1570, 1570]]`
+- **Source-specification passage SHA-256:** `1896dfda86994261bd007a6aeaf1fcd46b1b47e60a197caa7313cc5025ac1194`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-The present section is not required for the rest of the paper.
-
-We shall make the hypotheses of \TheoremRef{3.1} and \CorollaryRef{3.1} (leaving to the reader the modifications entailed in the absence of compactness).
-The notation will be
+The source exhibits failures of unrestricted full-displacement minimality.  In a real two-plane, a competing reflection has singular values $2,0$, whereas the direct rotation has both singular values $2\sin(\theta/2)$; the two-term Ky Fan comparison defeats the direct rotation once $\theta>\pi/3$.  In complex space, the competitors $V=e^{i\delta}U$ have singular values
 \[
-  U\representedby\begin{pmatrix}C_0&-S_0^{*}\\S_0&C_1\end{pmatrix},
-  \qquad V=UZ,
-  \qquad Z\representedby\begin{pmatrix}Z_0&0\\0&Z_1\end{pmatrix}.
+ 2\sin\frac{\theta+\delta}{2},\qquad
+ 2\sin\frac{\theta-\delta}{2},
 \]
-We have introduced the angles $\theta_1\geq\theta_2\geq\cdots$ associated with $P\Hilbert$ and $Q\Hilbert$.
-We showed how the sines of these angles can be recovered from any unitary taking $P\Hilbert$ to $Q\Hilbert$.
-Among these, the ``direct rotation'' $U$ of \DefinitionRef{3.1} was singled out in two respects: the simple canonical construction of it in terms of $P$ and $Q$ (see \eqref{eq:3.8}) and the decomposition of the space by \eqref{eq:1.18} and \TheoremRef{3.1}.
-But the motivation for the direct rotation was the notion of taking elements of $P\Hilbert$ to $Q\Hilbert$ by the most economical route.
-This notion cannot be taken naively, for if (say) $\theta_1=\pi/4$, $\theta_2=\pi/6$, then a unitary cannot take every unit vector in $P\Hilbert$ to the unit vector in $Q\Hilbert$ closest to it.
-It can almost do this, however, as we now show.
+and their sum is $4\sin(\theta/2)\cos(\delta/2)$, so the direct rotation is not generally minimizing.
 
-\begin{proposition}\label{prop:4.4}
-Assume $V$ a unitary taking $P\Hilbert$ onto $Q\Hilbert$ in a real space $\Hilbert$; assume also that $\angles\leq\pi/3$.
-Then $\norm{1-V}$ is minimized, for every unitary-invariant norm, when $V=U$.
-\end{proposition}
-
-If $\theta$ gets any larger, the conclusion fails because of Example~4.1; in complex space, it fails because of Example~4.2.
+After these examples the paper prints Proposition~4.4: if $\Hsp$ is real, $V$ is a unitary carrying $P\Hsp$ onto $Q\Hsp$, and
+\[
+ \Theta\le\pi/3,
+\]
+then $\norm{1-V}$ is asserted to be minimized by $V=U$ for every unitary-invariant norm.  The paper states the $\pi/3$ threshold is sharp in view of the examples.
 ~~~~
 
 ### Semantic audit clauses
@@ -2848,33 +2720,27 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `0137368cd5d5331a76f9afd4abbec946f3b6450ff0715418372f6776b52636bc`
-- **Private-transcription provenance lines:** `[[1576, 1590], [1607, 1607], [1648, 1650]]`
+- **Source-specification passage SHA-256:** `38590318e770b1eddea8bb6e6a45126b57c9652588f5e1c6991078f3dd8a6c4a`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{theorem}\label{thm:5.1}
-Let $\mathcal X$ and $\mathcal Y$ be Banach spaces; let operators $A$ on $\mathcal Y$ and $B$ on $\mathcal X$ satisfy
+Let $\mathcal X,\mathcal Y$ be Banach spaces.  Let $B$ be an operator on $\mathcal X$ and $A$ an operator on $\mathcal Y$ satisfying, in their bound norms,
 \[
-  \norm{B}\leq\alpha,
-  \qquad
-  \norm{A^{-1}}\leq(\alpha+\delta)^{-1}
+ \norm{B}\le\alpha,
+ \qquad
+ \norm{A^{-1}}\le(\alpha+\delta)^{-1},
+ \qquad \alpha\ge0,\ \delta>0.
 \]
-for some $\alpha\geq0$, $\delta>0$, and for the bound norms on the respective spaces.
-For linear transformations from $\mathcal X$ to $\mathcal Y$, use any norm compatible with the bound norms.
-Assume $AX-XB=C$.
-Then
+For maps $\mathcal X\to\mathcal Y$, use any norm compatible with those bound norms.  If
 \[
-  \norm{C}\geq\delta\norm{X}.
+ AX-XB=C,
 \]
-\end{theorem}
-
-Note that the roles of $A$ and $B$ are symmetrical, so the hypotheses upon them may be interchanged.
-
-Another variation upon the theme of \TheoremRef{5.1} concerns unbounded operators.
-Although that theorem was stated for bounded operators $B$ and $X$, its statement and proof encompass the case where $A$ is an unbounded operator with domain dense in $\mathcal Y$; for example, $A$ could be the inverse of a compact operator with dense range (so that $AA^{-1}=1$).
-Here is a further variation which allows $B$ to be unbounded too.
+then
+\[
+ \boxed{\norm{C}\ge\delta\norm{X}.}
+\]
+The roles and hypotheses of $A$ and $B$ may be interchanged.  The same proof also covers densely-defined unbounded $A$ provided the inverse hypothesis is meaningful/bounded while $B$ and $X$ remain bounded; the source then proceeds to a separate result allowing unbounded behavior on both sides in the Hilbert-space setting.
 ~~~~
 
 ### Semantic audit clauses
@@ -2955,45 +2821,30 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `equation`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `e276ec25f4fbc471721a7a8d9c50f6f761c02f785130051ccd3d724eeb2b01da`
-- **Private-transcription provenance lines:** `[[1613, 1646]]`
+- **Source-specification passage SHA-256:** `da41db53882bd87b7aba9f8e3b827b46a08f6e6ac0d2e6638d6251d93c20cb5f`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-Here is an adumbration of the difficulties.
-Suppose $A$ and $B$ are Hermitian matrices, possibly of different dimensions, and suppose $0<\delta\leq\abs{\lambda-\mu}$ for every eigenvalue $\lambda$ of $A$ and $\mu$ of $B$.
-Let $C=AX-XB$.
-Then the inequality
-\begin{equation*}
-  \norm{C}_{\mathrm{sq}}\geq\delta\norm{X}_{\mathrm{sq}}
-  \qquad\bigl(=\delta\sqrt{\tr X^{*}X}\bigr)
-  \tag{5.1}\label{eq:5.1}
-\end{equation*}
-is easy to prove via the unitary diagonalization of $A$ and $B$.
-However, sometimes $\norm{C}_1\ngeq\delta\norm{X}_1$.
-To be sure, we may infer from \eqref{eq:5.1} that
-\begin{equation*}
-  \norm{C}_1\sqrt{\rank C}\geq\delta\norm{X}_1;
-  \tag{5.2}\label{eq:5.2}
-\end{equation*}
-and this inequality has been discovered independently and applied by G.~W. Stewart III~\cite[Theorem~4.6]{Stewart1968} to obtain results similar to but slightly weaker than our $\sin\theta$ \TheoremRef{6.1} and \TheoremRef{6.2}.
-But inequality \eqref{eq:5.2} does not promise much help for infinite-dimensional applications.
-Besides, \eqref{eq:5.2} is not best possible unless $\rank C\leq1$, whereas \TheoremRef{5.1} and inequality \eqref{eq:5.1} are best possible in a nontrivial sense.
-Whether $\rank C$ in \eqref{eq:5.2} can be replaced by a constant is an open
-question; certainly the constant $1$ is too small, as can be seen from
+For Hermitian matrices $A,B$ (possibly of different dimensions) with pairwise spectral distance at least $\delta>0$, and $C=AX-XB$, diagonalization gives
+\begin{equation}
+ \norm{C}_{\mathrm{sq}}\ge\delta\norm{X}_{\mathrm{sq}}.
+ \tag{5.1}
+\end{equation}
+The corresponding operator-norm inequality with constant $1$ can fail.  From (5.1) one still obtains
+\begin{equation}
+ \norm{C}_1\sqrt{\operatorname{rank}C}\ge\delta\norm{X}_1.
+ \tag{5.2}
+\end{equation}
+The source says (5.2) is not best possible unless $\operatorname{rank}C\le1$, and asks whether the rank factor can be replaced by a universal constant.  Constant $1$ is ruled out by
 \[
-  X=\begin{pmatrix}3&-3\\-3&1\end{pmatrix},
-  \qquad
-  A=\begin{pmatrix}1&0\\0&-1\end{pmatrix},
-  \qquad
-  B=\begin{pmatrix}0&0\\0&2\end{pmatrix},
-  \qquad \delta=1,
+ X=\begin{pmatrix}3&-3\\-3&1\end{pmatrix},\quad
+ A=\begin{pmatrix}1&0\\0&-1\end{pmatrix},\quad
+ B=\begin{pmatrix}0&0\\0&2\end{pmatrix},\quad \delta=1,
 \]
 for which
 \[
-  \delta\norm{X}_1=2+\sqrt{10}=5.16\ldots
-  >\norm{AX-XB}_1=3\sqrt2=4.24\ldots.
+ \delta\norm{X}_1=2+\sqrt{10}>3\sqrt2=\norm{AX-XB}_1.
 \]
 ~~~~
 
@@ -3065,25 +2916,24 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `9b7653bd5df0f630c73e2b3b2963be6cb99f5907d7ef396e09c20c64b55707df`
-- **Private-transcription provenance lines:** `[[1652, 1664]]`
+- **Source-specification passage SHA-256:** `2078bb97672c50ca247554b198c575e381bd776725924f1333057a2a10fc3d8c`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{theorem}\label{thm:5.2}
-Let $\mathcal X$ and $\mathcal Y$ be Hilbert spaces; let $A$ on $\mathcal Y$ and $B$ on $\mathcal X$ be semibounded self-adjoint operators satisfying
+Let $\mathcal X,\mathcal Y$ be Hilbert spaces and let $A$ on $\mathcal Y$, $B$ on $\mathcal X$ be semibounded self-adjoint operators satisfying
 \[
-  A\geq\gamma+\delta>\gamma\geq B
+ A\ge\gamma+\delta>\gamma\ge B.
 \]
-for some scalars $\gamma$ and $\delta$.
-Assume $AX=XB+C$, where $X$ and $C$ are bounded operators from $\mathcal X$ to $\mathcal Y$.
-Then
+If $X,C:\mathcal X\to\mathcal Y$ are bounded and
 \[
-  \norm{C}\geq\delta\norm{X}
+ AX=XB+C,
 \]
-for every unitary-invariant norm.
-\end{theorem}
+then for every unitary-invariant norm
+\[
+ \boxed{\norm{C}\ge\delta\norm{X}.}
+\]
+This is the source's main Sylvester tool for the unbounded self-adjoint passages.
 ~~~~
 
 ### Semantic audit clauses
@@ -3147,16 +2997,16 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `lemma`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `fd5f92ac854b05b1737f4e121ce4de1d815a786d4f8966093a2479dad0408c81`
-- **Private-transcription provenance lines:** `[[1700, 1703]]`
+- **Source-specification passage SHA-256:** `4154e65f1eb46629c33da85de5866a2751ce9b5e21d9fa3956d2d6d0e677ecbd`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{lemma}\label{lem:5.1}
-Let $\Omega(\tau)$ be a family of projectors such that $\Omega(\tau)\to1$ strongly as $\tau\to\infty$; let $\kappa_\nu$ and $\kappa_\nu(\tau)$ be the $\nu$th singular values of $K$ and $K\Omega(\tau)$ respectively.
-Then $\kappa_\nu(\tau)\to\kappa_\nu$ also.
-\end{lemma}
+If orthogonal projectors $\Omega(\tau)$ converge strongly to the identity and $\kappa_\nu,\kappa_\nu(\tau)$ are the $\nu$th singular values of $K$ and $K\Omega(\tau)$, respectively, then
+\[
+ \kappa_\nu(\tau)\longrightarrow\kappa_\nu.
+\]
+This cutoff lemma lets finite spectral truncations recover the Ky Fan data required in the unbounded arguments.
 ~~~~
 
 ### Semantic audit clauses
@@ -3211,30 +3061,24 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `lemma`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `862500c7811f1974bb6ce020aec9cedba22f3f28f61e8981769fa615c530edac`
-- **Private-transcription provenance lines:** `[[1742, 1759]]`
+- **Source-specification passage SHA-256:** `3fcdb9152000100900fc421874565b2defe8ccb6cc2a8574154d146c509eb2d5`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{lemma}\label{lem:6.1}
-Let $\Omega$ and $\Upsilon$ be projectors.
-If
+Let $\Omega,\Upsilon$ be orthogonal projectors.  If, for every unitary-invariant norm,
 \[
-  \norm{\Omega K\Upsilon}\leq\norm{\Omega L\Upsilon}
-  \quad\text{and}\quad
-  \norm{\widetilde\Omega K\widetilde\Upsilon}
-  \leq\norm{\widetilde\Omega L\widetilde\Upsilon}
+ \norm{\Omega K\Upsilon}\le\norm{\Omega L\Upsilon},
+ \qquad
+ \norm{\Omega^\perp K\Upsilon^\perp}\le\norm{\Omega^\perp L\Upsilon^\perp},
 \]
-for all unitary-invariant norms, then
+then
 \[
-  \norm{\Omega K\Upsilon+\widetilde\Omega K\widetilde\Upsilon}
-  \leq
-  \norm{\Omega L\Upsilon+\widetilde\Omega L\widetilde\Upsilon}
+ \norm{\Omega K\Upsilon+\Omega^\perp K\Upsilon^\perp}
+ \le
+ \norm{\Omega L\Upsilon+\Omega^\perp L\Upsilon^\perp}
 \]
-for all unitary-invariant norms.
-The converse holds whenever $\Omega K\Upsilon$ has the same singular values as $\widetilde\Omega K\widetilde\Upsilon$ and $\Omega L\Upsilon$ has the same singular values as $\widetilde\Omega L\widetilde\Upsilon$.
-\end{lemma}
+for every unitary-invariant norm.  The converse holds when the two diagonal blocks of $K$ are equisingular and the two diagonal blocks of $L$ are equisingular.
 ~~~~
 
 ### Semantic audit clauses
@@ -3295,21 +3139,16 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `lemma`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `08a31e182ed2cc092d989a785ee0e01fe7a484f3e8748be4d9d0c35cee3b7760`
-- **Private-transcription provenance lines:** `[[1763, 1771]]`
+- **Source-specification passage SHA-256:** `fefd468fd43df7f2d9ecb643c21a78aa0f8471b3b3909472925d347e6aa26f63`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{lemma}\label{lem:6.2}
-Let $\Omega$ and $\Upsilon$ be projectors.
-Then
+For orthogonal projectors $\Omega,\Upsilon$ and every unitary-invariant norm,
 \[
-  \norm{\Omega K\Upsilon+\widetilde\Omega K\widetilde\Upsilon}
-  \leq\norm{K}
+ \boxed{\norm{\Omega K\Upsilon+\Omega^\perp K\Upsilon^\perp}\le\norm{K}.}
 \]
-for all unitary-invariant norms.
-\end{lemma}
+The proof is the reflection/pinching contraction obtained by averaging $K$ with suitable unitary reflections.
 ~~~~
 
 ### Semantic audit clauses
@@ -3357,24 +3196,37 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 
 ---
 
-## 30. DK-6.1-prop — Symmetric sine theorem
+## 30. DK-6.1-prop — Sine proof, ambient limitation, and symmetric sine theorem
 
-- **Source anchor:** Proposition 6.1
+- **Source anchor:** Section 6 sine proof and Proposition 6.1
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `0898b12bd89f52b80c9fb5be54d2b5f803254b87723e1d2907865f825332dd73`
-- **Private-transcription provenance lines:** `[[1831, 1836]]`
+- **Source-specification passage SHA-256:** `ec802eefcfa341b4268ff3fd35bdb06d38211ec9cf5c72138d53e1ffdf5d11ce`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{proposition}[Symmetric $\sin\theta$ theorem]\label{prop:6.1}
-For given $\delta>0$, assume that the spectra of $A_0$ and $\Lambda_1$ are separated as in the hypotheses of the $\sin\theta$ theorem, and assume that the spectra of $A_1$ and $\Lambda_0$ are also separated as in the hypotheses of the $\sin\theta$ theorem. Then for every unitary-invariant norm,
+Projecting the residual relation onto the complementary exact subspace gives the Sylvester equation
 \[
-  \delta\norm{\sin\angles}\leq \norm{H}.
+ R^*F_1=E_0^*F_1\Lambda_1-A_0E_0^*F_1.
 \]
-\end{proposition}
+Under the interval/exterior gap of the $\sin\theta$ theorem, Theorem~5.1/5.2 yields
+\begin{equation}
+ \norm{R^*F_1}\ge\delta\norm{E_0^*F_1},
+ \tag{6.1}
+\end{equation}
+whose singular values are the directed sines, proving $\delta\norm{\sin\Theta_0}\le\norm{R}$.
+
+The source explicitly warns that the same one-sided hypotheses do \emph{not} imply $\delta\norm{\sin\Theta}\le\norm{H}$ for every unitary-invariant norm.  A $2\times2$ example has $\delta=2$, $\theta=\pi/4$, and
+\[
+ \delta\norm{\sin\Theta}_{\mathrm{sq}}=2>\sqrt3=\norm{H}_{\mathrm{sq}}.
+\]
+
+The symmetric replacement is Proposition~6.1: if the $A_0$--$\Lambda_1$ spectra satisfy the sine-theorem separation of width $\delta$ and the $A_1$--$\Lambda_0$ spectra satisfy the analogous separation, then for every unitary-invariant norm
+\[
+ \boxed{\delta\norm{\sin\Theta}\le\norm{H}.}
+\]
 ~~~~
 
 ### Semantic audit clauses
@@ -3440,24 +3292,21 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `f97020c4ed2e67a8509af2e2985a797f8564a4d102e44a64b0e10f971609c68b`
-- **Private-transcription provenance lines:** `[[1859, 1870]]`
+- **Source-specification passage SHA-256:** `13e2036a72aaec0c5094f6014d3bfe1933167f1a43cf79f77716d5d7bf9726c7`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{theorem}[Generalized $\sin\theta$ theorem]\label{thm:6.1}
-Assume the Hermitian operator $A+H$ satisfies~\eqref{eq:1.3} and $R$ is given by~\eqref{eq:1.8}. Assume as before that $F_0$ and $F_1$ are isometries with
+Assume $A+H$ has the reducing decomposition (1.3) with exhaustive isometries $F_0,F_1$, and define $R$ by (1.8).  The trial map $E_0$ need not be isometric; assume only
 \[
-  F_0F_0^*+F_1F_1^*=1,
+ E_0^*E_0\ge\varepsilon^2 I\qquad(\varepsilon>0).
 \]
-but assume regarding $E_0$ only that $E_0^*E_0\geq \varepsilon^2$ for some $\varepsilon>0$. Let $P$ and $Q$ be the projectors onto $\Range(E_0)$ and $\Range(F_0)$, without any hypothesis upon the dimensionality of these subspaces. Let $\sin\angles_0$ be any operator with the same singular values as $P\tQ$.
+Let $P,Q$ be the projectors onto $\operatorname{Ran}(E_0)$ and $\operatorname{Ran}(F_0)$, with no equality-of-dimension hypothesis, and let $\sin\Theta_0$ be any operator having the same singular values as $PQ^\perp$.
 
-Assume there is an interval $[\beta,\alpha]$ and a $\delta>0$ such that the spectrum of $A_0$ lies entirely in $[\beta,\alpha]$ while that of $\Lambda_1$ lies entirely outside $({\beta-\delta},{\alpha+\delta})$; or such that the spectrum of $\Lambda_1$ lies entirely in $[\beta,\alpha]$ while that of $A_0$ lies entirely outside $({\beta-\delta},{\alpha+\delta})$. Then, for every unitary-invariant norm,
+If one of $A_0,\Lambda_1$ has spectrum in $[\beta,\alpha]$ and the other has spectrum outside $(\beta-\delta,\alpha+\delta)$, then for every unitary-invariant norm
 \[
-  \delta\varepsilon\norm{\sin\angles_0}\leq \norm{R}.
+ \boxed{\delta\varepsilon\norm{\sin\Theta_0}\le\norm{R}.}
 \]
-\end{theorem}
 ~~~~
 
 ### Semantic audit clauses
@@ -3532,23 +3381,26 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `b2dfa6c1c441067a8946addd9e2ccf11d6acb21bd084bbd3a1294e7f9b72b13d`
-- **Private-transcription provenance lines:** `[[1908, 1918]]`
+- **Source-specification passage SHA-256:** `3d339a183924f39cbfd71c81f3745c69442b26a631b3a25921093e05277bb58d`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{theorem}[Second generalized $\sin\theta$ theorem]\label{thm:6.2}
-Assume the same as in \TheoremRef{6.1}, except that the only restriction on the spectra is
+Under the same lower-frame and range assumptions as Theorem~6.1, replace the interval/exterior separation by only the pairwise distance condition
 \[
-  \abs{\lambda-a}\geq\delta>0
+ |\lambda-a|\ge\delta>0
+ \quad\text{for every }\lambda\in\spec(\Lambda_1),\ a\in\spec(A_0).
 \]
-for every $\lambda\in\spec(\Lambda_1)$ and $a\in\spec(A_0)$. Then
+Then the guaranteed norm is the Hilbert--Schmidt norm:
 \[
-  \delta\varepsilon\norm{\sin\angles_0}_{\mathrm{sq}}
-  \leq \norm{R}_{\mathrm{sq}}.
+ \boxed{\delta\varepsilon\norm{\sin\Theta_0}_{\mathrm{sq}}
+ \le\norm{R}_{\mathrm{sq}}.}
 \]
-\end{theorem}
+Combining this with (5.2) also yields the rank-corrected operator-norm estimate
+\[
+ \delta\varepsilon\norm{\sin\Theta_0}_1
+ \le\norm{R}_1\sqrt{\operatorname{rank}R}.
+\]
 ~~~~
 
 ### Semantic audit clauses
@@ -3619,32 +3471,70 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 
 ---
 
-## 33. DK-6.3-thm — Generalized tangent theorem
+## 33. DK-6.3-thm — Tangent proof machinery, Example 6.1, and generalized tangent theorem
 
-- **Source anchor:** Theorem 6.3
+- **Source anchor:** Section 6 equations (6.2)–(6.6), Example 6.1, and Theorem 6.3
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `53279da9472354f0db70b73667be22dae5fb2a3e8305f99310bdeed0b0d1a156`
-- **Private-transcription provenance lines:** `[[2060, 2073]]`
+- **Source-specification passage SHA-256:** `ca0097fc54e1567d7129b6da2a912399a2cb516b3ba5ddc306bf4ab65b746505`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{theorem}[Generalized $\tan\theta$ theorem]\label{thm:6.3}
-Assume the Hermitian operator $A+H$ satisfies~\eqref{eq:1.3}, and $R$ is given by~\eqref{eq:1.8} with $A_0=E_0^*(A+H)E_0$. Assume that $E_0,E_1,F_0,F_1$ are isometries satisfying
+Restore the Section~1--2 hypotheses and write the direct rotation as
+\begin{equation}
+ U\sim
+ \begin{pmatrix}C_0&-S_0^*\\S_0&C_1\end{pmatrix}
+ =
+ \begin{pmatrix}
+ \cos\Theta_0&-J_0^*\sin\Theta_1\\
+ J_0\sin\Theta_0&\cos\Theta_1
+ \end{pmatrix},
+ \qquad J_0\Theta_0=\Theta_1J_0,
+ \quad C_j\ge0.
+ \tag{6.2}
+\end{equation}
+The two reducing representations are related by
+\begin{equation}
+ \begin{pmatrix}A_0+H_0&B^*\\B&A_1+H_1\end{pmatrix}
+ \begin{pmatrix}C_0&-S_0^*\\S_0&C_1\end{pmatrix}
+ =
+ \begin{pmatrix}C_0&-S_0^*\\S_0&C_1\end{pmatrix}
+ \begin{pmatrix}\Lambda_0&0\\0&\Lambda_1\end{pmatrix},
+ \tag{6.3}
+\end{equation}
+so in particular
+\begin{equation}
+ (A_0+H_0)(-S_0^*)+B^*C_1=-S_0^*\Lambda_1.
+ \tag{6.4}
+\end{equation}
+Under $A_0\le\alpha$, $\Lambda_1\ge\alpha+\delta$, and $H_0=0$, transposing (6.4) gives
+\begin{equation}
+ C_1B=S_0A_0-\Lambda_1S_0.
+ \tag{6.5}
+\end{equation}
+Under $A_0\le\alpha$, $\Lambda_1\ge\alpha+\delta$, and $H_0=0$, singular vectors for $S_0$ give the scalar estimate
+\begin{equation}
+ \cos\theta_j\,|y_j^*Bx_j|\ge\delta\sin\theta_j,
+ \tag{6.6}
+\end{equation}
+so the relevant cosines are positive and Ky Fan/Fan dominance gives the tangent theorem.  The source then gives Example~6.1 showing the one-sided placement of $\Lambda_1$ is essential: a finite matrix example has $\delta=1$ and tangent quantity $1$ while the residual is only $1/\sqrt2$ if spectral mass is allowed on the wrong side.
+
+The generalized theorem retains exact Rayleigh--Ritz trial data.  Assume $E_0,E_1,F_0,F_1$ are exhaustive isometries whose ranges reduce $A$ and $A+H$, respectively, but allow
 \[
-  E_0E_0^*+E_1E_1^*=F_0F_0^*+F_1F_1^*=1,
+ \dim\mathcal X(E_0)<\dim\mathcal X(F_0).
 \]
-whose ranges are invariant subspaces of $A$ and $A+H$, respectively, but assume
+Set $A_0=E_0^*(A+H)E_0$, define $R$ by (1.8), and let the directed sine data have the singular values of $E_0^*F_1$.  If
 \[
-  \dim\Xspace(E_0)<\dim\Xspace(F_0)
+ \spec(A_0)\subset[\beta,\alpha],
+ \qquad
+ \spec(\Lambda_1)\subset[\alpha+\delta,\infty),
 \]
-instead of~\eqref{eq:1.5}. Let $\sin\angles_0$ be any operator whose singular values are the same as those of $E_0^*F_1$. Assume there is a gap of width $\delta>0$ between an interval $[\beta,\alpha]$ containing $A_0$'s spectrum and $[\alpha+\delta,\infty)$ containing the spectrum of $\Lambda_1=F_1^*(A+H)F_1$. Then, for every unitary-invariant norm,
+then the corresponding directed tangent operator satisfies, for every unitary-invariant norm,
 \[
-  \delta\norm{\tan\angles_0}\leq\norm{R}.
+ \boxed{\delta\norm{\tan\Theta_0}\le\norm{R}.}
 \]
-\end{theorem}
 ~~~~
 
 ### Semantic audit clauses
@@ -3736,131 +3626,44 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `appendix`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `90f1b6bc70ee4592d14153fc2d901df3e929d8f1638f7707a7fa0748a151f8af`
-- **Private-transcription provenance lines:** `[[2118, 2193], [2218, 2260]]`
+- **Source-specification passage SHA-256:** `c5bacffe42fb3c4e8e6bba5a6b28fc34f51bd04ec368afb41d9fee5e9de689aa`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-The $\sin\theta$ theorem as stated admits unbounded $\Lambda_1$ (or $A_0$, but not both). It remains valid in the following more general form: assume there is an interval containing the spectrum of $A_0$, while the spectrum of $\Lambda_1$ lies entirely at distance at least $\delta$ from that interval.
+For the sine theorem, one of $A_0,\Lambda_1$ may be unbounded.  More generally, one spectrum may lie in an interval while the other remains at distance at least $\delta$ from it.  For a finite interval Theorem~5.1 suffices.  For a half-infinite interval such as $(-\infty,\alpha]$, no useful conclusion follows unless the residual is bounded: the source assumes $(A+H)E_0$ and $E_0A_0$ share a dense domain on which (1.8) defines a bounded $R$, extends $R$ continuously, and then applies Theorem~5.2.  Proposition~6.1 and Theorem~6.1 admit the analogous relaxation.
 
-If the interval is finite, the conclusion $\delta\norm{\sin\angles_0}\leq\norm{R}$ follows from \TheoremRef{5.1}. If the interval is infinite, say $(-\infty,\alpha]$, there is no conclusion unless $R$ is bounded. We therefore assume that $(A+H)E_0$ and $E_0A_0$ have a common dense domain on which the $R$ defined by~\eqref{eq:1.8} is bounded, and extend $R$ by continuity. \TheoremRef{5.2} then applies exactly as \TheoremRef{5.1} did. The hypotheses of \PropositionRef{6.1} and \TheoremRef{6.1} may be relaxed similarly.
-
-The $\tan\theta$ theorem requires more care because we must both use the technique of \TheoremRef{5.2} and allow for noncompact $\angles$. We give the proof in the general case.
-
-As before, $A_0\leq\alpha$ and $\Lambda_1\geq\alpha+\delta$, but both may now be unbounded. We still have $\norm{R}=\norm{B}$, and only the finite case is interesting. Equation~\eqref{eq:6.5} holds on the common dense domain of $S_0A_0$ and $\Lambda_1S_0$.
-
-Fix $\nu=1,2,\ldots$ and $\varepsilon>0$. We shall choose a $\nu$-projector $\Upsilon$ on $\Xspace(E_0)$ such that the singular values
-\[
-  \sin\phi_1\geq\sin\phi_2\geq\cdots
-\]
-of $S_0\Upsilon$ satisfy
-\begin{equation*}
-  \sum_{k=1}^{\nu}\tan\phi_k
-  >\sum_{k=1}^{\nu}\tan\theta_k-\varepsilon
-\tag{6.7}\label{eq:6.7}
-\end{equation*}
-and
-\begin{equation*}
-  \sum_{k=1}^{\nu}\sin^2\phi_k
-  >\sum_{k=1}^{\nu}\sin^2\theta_k-\varepsilon^2.
-\tag{6.8}\label{eq:6.8}
-\end{equation*}
-We shall prove
-\[
-  \norm{B\Upsilon}_\nu
-  \geq\delta\sum_{k=1}^{\nu}\tan\phi_k-\gamma_\varepsilon,
-  \qquad \gamma_\varepsilon\to0.
-\]
-This implies the desired $\nu$-norm estimate and hence, by Ky Fan's theorem, the full result.
-
-By~\eqref{eq:1.13}, there is some $\nu$-projector $\Pi$ satisfying~\eqref{eq:6.8}. For the spectral resolution of $A_0$, write
-\[
-  -A_0=\int_{-\alpha}^{\infty}\lambda\,d\Omega(\lambda).
-\]
-Consider $\Omega(\tau)\Pi$ as $\tau\to\infty$. Since $\norm{\widetilde\Omega(\tau)\Pi}\to0$, the subspace $\Omega(\tau)\Pi\Xspace(E_0)$ is ultimately $\nu$-dimensional and approaches $\Pi\Xspace(E_0)$. Let $\Upsilon_\tau$ be its projector. The singular values of $S_0\Upsilon_\tau$ approach those of $S_0\Pi$, so for sufficiently large $\tau$ they satisfy~\eqref{eq:6.8}. Moreover,
-\[
-  \Upsilon_\tau=\Omega(\tau)\Upsilon_\tau,
-  \qquad
-  A_0\Upsilon_\tau=\Omega(\tau)A_0\Omega(\tau)\Upsilon_\tau,
-\]
-and the truncated self-adjoint operator $\Omega(\tau)A_0\Omega(\tau)$ has spectrum in $[-\tau,\alpha]$.
-
-Let $\sin\psi_1\geq\sin\psi_2\geq\cdots$ be the singular values of $S_0\Omega(\tau)$. Then
-\[
-  \sum_{k=1}^{\nu}\sin^2\psi_k
-  -\sum_{k=1}^{\nu}\sin^2\theta_k+\varepsilon^2>0.
-\]
-Choose $\eta>0$ with $\eta^2$ less than this quantity. Applying~\eqref{eq:1.13} once more, choose a $\nu$-projector $\Upsilon=\Omega(\tau)\Upsilon$ such that the singular values $\sin\phi_k$ of $S_0\Upsilon=S_0\Omega(\tau)\Upsilon$ satisfy
-\begin{equation*}
-  \sum_{k=1}^{\nu}\sin^2\phi_k
-  >\sum_{k=1}^{\nu}\sin^2\psi_k-\eta^2.
-\tag{6.9}\label{eq:6.9}
-\end{equation*}
-They then satisfy~\eqref{eq:6.8} as well.
-
-Choose an orthonormal basis $x_{01},\ldots,x_{0\nu}$ of $\Upsilon\Xspace(E_0)$ consisting of eigenvectors of $\Upsilon S_0^*S_0\Upsilon$, with $x_{0k}$ corresponding to $\sin^2\phi_k$. Choose orthonormal $y_{11},\ldots,y_{1\nu}$ satisfying
-\[
-  S_0x_{0k}=-\sin\phi_ky_{1k},
-  \qquad
-  \Upsilon S_0^*y_{1k}=-\sin\phi_kx_{0k},
-\]
-using vectors from $\Null(\Upsilon S_0^*)$ when necessary. Let
-\[
-  \Gamma=\sum_{k=1}^{\nu}y_{1k}y_{1k}^*.
-\]
-Then $S_0\Upsilon=\Gamma S_0\Upsilon$. Multiplying~\eqref{eq:6.5} on the left by $\Gamma$ and on the right by $\Upsilon$ gives
-\begin{equation*}
-  -\Gamma C_1B\Upsilon
-  +\Gamma S_0\bigl(\Omega(\tau)A_0\Omega(\tau)\bigr)\Upsilon
-  =(\Gamma\Lambda_1\Gamma)\Gamma S_0\Upsilon.
-\tag{6.10}\label{eq:6.10}
-\end{equation*}
-Both sides are bounded; thus $\Gamma\Lambda_1\Gamma$ is bounded on $\Gamma\Xspace(E_1)$ and has spectrum in $[\alpha+\delta,\infty)$.
-
-
-Decompose the second term of~\eqref{eq:6.10} as
-\[
-\begin{aligned}
- \Gamma S_0\bigl(\Omega(\tau)A_0\Omega(\tau)\bigr)\Upsilon
-  &=\Gamma S_0\Upsilon(\Upsilon A_0\Upsilon)\\
-  &\quad+
-  (\Gamma S_0\widetilde\Upsilon\Omega(\tau))
-  (\Omega(\tau)A_0\Omega(\tau)\Upsilon).
-\end{aligned}
-\]
-Call the second term $F$. By~\eqref{eq:6.9} and \LemmaRef{6.3},
-\[
-  \norm{\Gamma S_0\widetilde\Upsilon\Omega(\tau)}_1\leq\eta,
-\]
-so $\norm{F}_1\leq\eta\tau$. We may choose $\eta$ small enough that $\eta\tau\leq\varepsilon$.
-
-The first term is $\Gamma S_0\Upsilon$ multiplied by a self-adjoint operator whose spectrum is at most $\alpha$. Apply $y_{1k}^*$ on the left and $x_{0k}$ on the right in~\eqref{eq:6.10}, exactly as in~\eqref{eq:6.6}, to obtain
-\begin{equation*}
-  y_{1k}^*C_1Bx_{0k}+y_{1k}^*Fx_{0k}
-  \geq\delta\sin\phi_k.
-\tag{6.11}\label{eq:6.11}
-\end{equation*}
-We have $\abs{y_{1k}^*Fx_{0k}}\leq\varepsilon$.
-
-The Gram matrix of $C_1y_{11},\ldots,C_1y_{1\nu}$ has entries
-\[
-\begin{aligned}
- y_{1j}^*C_1^2y_{1k}
- &=y_{1j}^*(1-S_0S_0^*)y_{1k}\\
- &=y_{1j}^*(1-S_0\Upsilon S_0^*)y_{1k}
-   -y_{1j}^*S_0\widetilde\Upsilon S_0^*y_{1k}.
-\end{aligned}
-\]
-The first term is $\delta_{jk}\cos^2\phi_k$. By~\eqref{eq:6.8} and \LemmaRef{6.3}, $\norm{\Gamma S_0\widetilde\Upsilon}_1\leq\varepsilon$, so the second term is smaller than $\varepsilon^2$.
-
-From~\eqref{eq:6.11} we first obtain the crude estimate
-\[
-  \delta\sin\phi_k
-  \leq\norm{B}_1\norm{C_1y_{1k}}+\varepsilon
-  \leq\norm{B}_1(\cos\phi_k+\varepsilon)+\varepsilon.
-\]
-Letting $\varepsilon\to0$ proves the bound-norm case and provides a positive lower bound on every $\cos\phi_k$, independent of $\varepsilon$. Hence the vectors $(\sec\phi_k)C_1y_{1k}$ can be approximated by an orthonormal set with an error tending to zero. Together with~\eqref{eq:6.7}, this completes the proof for all unitary-invariant norms. The same method allows \TheoremRef{6.3} to be applied to unbounded operators.
+The tangent theorem requires both spectral truncation and noncompact-angle approximation.  For fixed $\nu$ and $\varepsilon>0$, choose a rank-$\nu$ projector $\Upsilon$ so that the singular angles $\phi_k$ of $S_0\Upsilon$ satisfy
+\begin{equation}
+ \sum_{k=1}^{\nu}\tan\phi_k
+ >\sum_{k=1}^{\nu}\tan\theta_k-\varepsilon,
+ \tag{6.7}
+\end{equation}
+\begin{equation}
+ \sum_{k=1}^{\nu}\sin^2\phi_k
+ >\sum_{k=1}^{\nu}\sin^2\theta_k-\varepsilon^2.
+ \tag{6.8}
+\end{equation}
+Using a spectral cutoff $\Omega(\tau)$ of $A_0$, a refined choice can be made with
+\begin{equation}
+ \sum_{k=1}^{\nu}\sin^2\phi_k
+ >\sum_{k=1}^{\nu}\sin^2\psi_k-\eta^2,
+ \tag{6.9}
+\end{equation}
+where $\psi_k$ are the singular angles of $S_0\Omega(\tau)$.  With corresponding left/right rank-$\nu$ projectors $\Gamma,\Upsilon$, the truncated block equation is
+\begin{equation}
+ -\Gamma C_1B\Upsilon
+ +\Gamma S_0\bigl(\Omega(\tau)A_0\Omega(\tau)\bigr)\Upsilon
+ =(\Gamma\Lambda_1\Gamma)\Gamma S_0\Upsilon.
+ \tag{6.10}
+\end{equation}
+The leakage term $F$ from inserting $\Upsilon+\Upsilon^\perp$ is controlled by Lemma~6.3, and the scalar compression gives
+\begin{equation}
+ y_{1k}^*C_1Bx_{0k}+y_{1k}^*Fx_{0k}
+ \ge\delta\sin\phi_k.
+ \tag{6.11}
+\end{equation}
+The source then lets the approximation error tend to zero, first obtaining the operator-norm tangent estimate and a uniform positive lower bound for the relevant cosines, then orthonormalizing the almost-orthonormal vectors to recover every Ky Fan norm and hence every unitary-invariant norm.  The same method is stated to extend Theorem~6.3 to unbounded operators.
 ~~~~
 
 ### Semantic audit clauses
@@ -3984,23 +3787,20 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `lemma`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `715e416fd75ce6791ef252fc199779397ebb66f9474ff506d7ae2d2b6b498677`
-- **Private-transcription provenance lines:** `[[2194, 2204]]`
+- **Source-specification passage SHA-256:** `6709c9fbf240ea7fc10d68b73cd0c746c59536127a66d13108ba14d114d52a45`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{lemma}\label{lem:6.3}
-Let $K$ have singular values $\kappa_1\geq\kappa_2\geq\cdots$. Let $\Gamma$ and $\Psi$ be $\nu$-projectors such that $K\Psi=\Gamma K\Psi$, and let $\eta>0$. If the singular values $\mu_1\geq\mu_2\geq\cdots$ of $K\Psi$ satisfy
+Let $K$ have singular values $\kappa_1\ge\kappa_2\ge\cdots$, let $\Gamma,\Psi$ be rank-$\nu$ projectors with $K\Psi=\Gamma K\Psi$, and let the singular values of $K\Psi$ be $\mu_1\ge\cdots\ge\mu_\nu$.  If
 \[
-  \sum_{k=1}^{\nu}\mu_k^2
-  >\sum_{k=1}^{\nu}\kappa_k^2-\eta^2,
+ \sum_{k=1}^{\nu}\mu_k^2
+ >\sum_{k=1}^{\nu}\kappa_k^2-\eta^2,
 \]
-then
+then the leakage outside $\Psi$ obeys
 \[
-  \norm{\Gamma K\widetilde\Psi}_1\leq\eta.
+ \boxed{\norm{\Gamma K\Psi^\perp}_1\le\eta.}
 \]
-\end{lemma}
 ~~~~
 
 ### Semantic audit clauses
@@ -4071,102 +3871,55 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proof_package`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `52d975254bf2edd6bf06bdb3b707e8d32d3d0ba2d8e30d1e257b34e59d0d7769`
-- **Private-transcription provenance lines:** `[[2263, 2352]]`
+- **Source-specification passage SHA-256:** `67854d13100c18b09c60f5af6e85a937281d1653a691c7f24357da4964f82cf2`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-The new idea is the symmetric perturbation. We use the notation of~\eqref{eq:6.2} and~\eqref{eq:6.3}.
-Recall the definitions $X=P-\tP$ and $Q_-=XQX$ and the discussion in \SectionRef{3}. Consider $A+H$ together with the symmetric perturbation
-\begin{equation*}
-  A+XHX\representedby
-  \begin{pmatrix}A_0+H_0&-B^*\\-B&A_1+H_1\end{pmatrix}.
-\tag{7.1}\label{eq:7.1}
-\end{equation*}
-Because it is obtained from $A+H$ by a unitary similarity, it has the same diagonal form; corresponding to~\eqref{eq:6.3},
-\begin{equation*}
-\begin{pmatrix}A_0+H_0&-B^*\\-B&A_1+H_1\end{pmatrix}
-\begin{pmatrix}C_0&S_0^*\\-S_0&C_1\end{pmatrix}
-=
-\begin{pmatrix}C_0&S_0^*\\-S_0&C_1\end{pmatrix}
-\begin{pmatrix}\Lambda_0&0\\0&\Lambda_1\end{pmatrix}.
-\tag{7.2}\label{eq:7.2}
-\end{equation*}
-The unitary appearing here is the inverse of the one in~\eqref{eq:6.2} and~\eqref{eq:6.3}.
-
-Combining~\eqref{eq:6.3} and~\eqref{eq:7.2},
-\begin{equation*}
-\begin{pmatrix}A_0+H_0&B^*\\B&A_1+H_1\end{pmatrix}
-\begin{pmatrix}C_0&-S_0^*\\S_0&C_1\end{pmatrix}^{2}
-=
-\begin{pmatrix}C_0&-S_0^*\\S_0&C_1\end{pmatrix}^{2}
-\begin{pmatrix}A_0+H_0&-B^*\\-B&A_1+H_1\end{pmatrix},
-\tag{7.3}\label{eq:7.3}
-\end{equation*}
-or simply
+Let $X=P-P^\perp$ and $Q_-=XQX$.  Conjugating by $X$ reverses the off-diagonal block of $H$:
+\begin{equation}
+ A+XHX\sim\begin{pmatrix}A_0+H_0&-B^*\\-B&A_1+H_1\end{pmatrix}.
+ \tag{7.1}
+\end{equation}
+The direct-rotation identities give the reflected diagonalization
+\begin{equation}
+ \begin{pmatrix}A_0+H_0&-B^*\\-B&A_1+H_1\end{pmatrix}
+ \begin{pmatrix}C_0&S_0^*\\-S_0&C_1\end{pmatrix}
+ =
+ \begin{pmatrix}C_0&S_0^*\\-S_0&C_1\end{pmatrix}
+ \begin{pmatrix}\Lambda_0&0\\0&\Lambda_1\end{pmatrix}.
+ \tag{7.2}
+\end{equation}
+Combining it with the original diagonalization yields
+\begin{equation}
+ (A+H)U^2=U^2(A+XHX).
+ \tag{7.3}
+\end{equation}
+Moreover the block form of $U^2$ contains $\cos(2\Theta_j)$ and $\sin(2\Theta_j)$:
+\begin{equation}
+ U^2\sim
+ \begin{pmatrix}
+ \cos2\Theta_0&-J_0^*\sin2\Theta_1\\
+ J_0\sin2\Theta_0&\cos2\Theta_1
+ \end{pmatrix}.
+ \tag{7.4}
+\end{equation}
+Applying the symmetric sine estimate to $A+H$ and $A+XHX$ yields
+\begin{equation}
+ \boxed{\delta\norm{\sin2\Theta}\le\norm{H-XHX}\le2\norm{H}.}
+ \tag{7.5}
+\end{equation}
+On the directed block, Lemma~6.1 converts the first inequality to the stronger source derivation
 \[
-  (A+H)U^2=U^2(A+XHX).
+ \boxed{\delta\norm{\sin2\Theta_0}\le\norm{B}\le\norm{R}.}
 \]
-The unitary is
-\begin{equation*}
-U^2\representedby
-\begin{pmatrix}
-  2C_0^2-1&-2C_0S_0^*\\
-  2S_0C_0&2C_1^2-1
-\end{pmatrix}
-=
-\begin{pmatrix}
-  \cos2\angles_0&-J_0^*\sin2\angles_1\\
-  J_0\sin2\angles_0&\cos2\angles_1
-\end{pmatrix}.
-\tag{7.4}\label{eq:7.4}
-\end{equation*}
-By \PropositionRef{3.4}, although this unitary need not be the direct rotation from $Q_-\Hilbert$ to $Q\Hilbert$, it satisfies $U^2Q_-=QU^2$.
-
-We obtain the $\sin2\theta$ theorem by regarding $A+H$ as a perturbation not of $A$, but of $A+XHX$. The perturbation is $H-XHX$. The parts of $A+H$ on $Q\Hilbert$ and $\tQ\Hilbert$ remain
+The paper also notes that the ambient estimate may be obtained from corresponding gaps in $A$ by swapping $A$ and $A+H$, but the residual inference is asymmetric.  Its counterexample
 \[
-  \Lambda_j=F_j^*(A+H)F_j.
+ A\sim\begin{pmatrix}0&0\\0&\delta\end{pmatrix},
+ \qquad
+ H\sim\begin{pmatrix}0&1\\1&-\delta\end{pmatrix}
 \]
-The roles of $A_0,A_1$ are now taken by the parts of $A+XHX$ on $Q_-\Hilbert$ and $\widetilde Q_-\Hilbert$:
-\[
-  \Lambda_j=(XF_j)^*(A+XHX)XF_j.
-\]
-Thus the hypotheses on the spectra of $\Lambda_0$ and $\Lambda_1$ permit us to invoke \PropositionRef{6.1}. In place of $E_0^*F_1$ we examine
-\[
-  (XF_0)^*F_1=2(F_0^*E_0)(E_0^*F_1),
-\]
-whose relevant singular values are those of $\sin2\angles_0$. \PropositionRef{6.1} yields
-\begin{equation*}
-  \delta\norm{\sin2\angles}
-  \leq\norm{H-XHX}
-  \leq\norm{H}+\norm{XHX}
-  =2\norm{H}.
-\tag{7.5}\label{eq:7.5}
-\end{equation*}
-To obtain the residual version, rewrite the first inequality as
-\[
-  \delta
-  \norm{\begin{pmatrix}
-    0&-\sin2\angles_0J_0^*\\
-    J_0\sin2\angles_0&0
-  \end{pmatrix}}
-  \leq
-  \norm{\begin{pmatrix}0&B^*\\B&0\end{pmatrix}}
-\]
-and invoke \LemmaRef{6.1}. Hence
-\[
-  \delta\norm{\sin2\angles_0}\leq\norm{B}\leq\norm{R}.
-\]
-This completes the proof of the $\sin2\theta$ theorem.
-
-The inference $\delta\norm{\sin2\angles}\leq2\norm{H}$ may also be drawn from one or two gaps of width $\delta$ in the spectrum of $A$ instead of $\Lambda$, by interchanging $A$ and $A+H$. The residual inference is asymmetric: if
-\[
-  A\representedby\begin{pmatrix}0&0\\0&\delta\end{pmatrix},
-  \qquad
-  H\representedby\begin{pmatrix}0&1\\1&-\delta\end{pmatrix},
-\]
-then $2\norm{R}=2$, whereas $\delta\norm{\sin2\angles_0}=\delta$ can be arbitrarily large.
+has $2\norm{R}=2$ while $\delta\norm{\sin2\Theta_0}=\delta$, which can be arbitrarily large under the wrong swap direction.
 ~~~~
 
 ### Semantic audit clauses
@@ -4178,7 +3931,7 @@ then $2\norm{R}=2$, whereas $\delta\norm{\sin2\angles_0}=\delta$ can be arbitrar
 - **`DK-7-sin2-proof.directed`:** Sharper directed residual conclusion: delta ||sin 2 Theta_0|| <= ||B|| <= ||R||, without the ambient factor two.
   - Review declarations: `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative`
 
-> **Audit warning:** The maintained modernized transcription records a factor-one directed residual step in Section 7, while the Section 2 theorem prints factor two and repository repair notes question the block normalization. Preserve the transcription in this register, but compare this passage against the original paper page image before deciding whether the factor-one line is an independent source obligation or a transcription/source defect.
+> **Audit warning:** The distributable source specification intentionally records both the Section 2 factor-two directed residual theorem and the Section 7 factor-one proof-derived residual step. Treat them as distinct source facts during source-to-Lean review. If the original paper or a private transcription is available, it may be used separately to re-audit this discrepancy; ordinary static certification does not depend on that private material.
 
 ### Primary Lean declarations for semantic review
 
@@ -4242,73 +3995,37 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `proof_package`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `a1c1d0ae88cf3ad76b63fe564b68e426cb2f6d0aeda61b4751598de187533786`
-- **Private-transcription provenance lines:** `[[2354, 2414]]`
+- **Source-specification passage SHA-256:** `59db32e78184895941dce6d1068875d12f24818a0c86b7a02a9f452d2324f226`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\paragraph{Proof of the $\tan2\theta$ theorem.}
-The proof imitates the $\tan\theta$ proof rather than applying a single-angle theorem. We give details for bounded operators and compact $S_0$; the extension is analogous to the one above.
-
-The hypotheses are
+Under the printed hypotheses
 \[
-  H_0=H_1=0,
-  \qquad A_0\leq\alpha,
-  \qquad \alpha+\delta\leq A_1.
+ H_0=H_1=0,
+ \qquad A_0\le\alpha,
+ \qquad A_1\ge\alpha+\delta,
 \]
-From~\eqref{eq:1.7},
+the relation $F_0^*(A+H)F_1=0$ yields
+\begin{equation}
+ -C_0B^*C_1+S_0^*BS_0^*
+ =S_0^*A_1C_1-C_0A_0S_0^*.
+ \tag{7.6}
+\end{equation}
+For paired singular vectors of $S_0$, the scalar consequence is
 \[
-  F_0^*(A+H)F_1
-  =(C_0\;S_0^*)
-  \begin{pmatrix}A_0&B^*\\B&A_1\end{pmatrix}
-  \begin{pmatrix}-S_0^*\\C_1\end{pmatrix}=0,
+ \pm2\cos(2\theta_j)\,\Re(y_j^*Bx_j)
+ \ge\delta\sin(2\theta_j).
 \]
-so
-\begin{equation*}
-  -C_0B^*C_1+S_0^*BS_0^*
-  =S_0^*A_1C_1-C_0A_0S_0^*.
-\tag{7.6}\label{eq:7.6}
-\end{equation*}
-Let $x_{01},\ldots,x_{0\nu}$ and $y_{11},\ldots,y_{1\nu}$ be orthonormal eigenvectors of $S_0^*S_0$ and $S_0S_0^*$, respectively, arranged so that
+Hence $\cos(2\theta_j)\ne0$ is a \emph{conclusion of the argument}, not an additional theorem hypothesis.  Choosing the sign appropriately gives
 \[
-  S_0x_{0j}=\mp\sin\theta_jy_{1j},
-  \qquad
-  S_0^*y_{1j}=\mp\sin\theta_jx_{0j}.
+ 2\Re(y_j^*Bx_j)\ge\delta|\tan(2\theta_j)|.
 \]
-The sign will be chosen momentarily. Applying these vectors to~\eqref{eq:7.6} yields
+Summing through Ky Fan's variational principle and using Fan dominance yields
 \[
-\begin{aligned}
- &\pm\bigl(\cos^2\theta_j\,x_{0j}^*B^*y_{1j}
-       -\sin^2\theta_j\,y_{1j}^*Bx_{0j}\bigr)\\
- &\qquad
- =\pm x_{0j}^*(C_0B^*C_1-S_0^*BS_0^*)y_{1j}\\
- &\qquad
- =\sin\theta_j\cos\theta_j
-   \bigl(y_{1j}^*A_1y_{1j}-x_{0j}^*A_0x_{0j}\bigr)\\
- &\qquad\geq\delta\sin\theta_j\cos\theta_j,
-\end{aligned}
+ \boxed{\delta\norm{\tan(2\Theta_0)}\le2\norm{R}}.
 \]
-and hence
-\[
-  \pm2\cos2\theta_j\,
-  \RePart(y_{1j}^*Bx_{0j})
-  \geq\delta\sin2\theta_j.
-\]
-Thus $\cos2\theta_j\ne0$. Choose the sign so that
-\[
-  2\RePart(y_{1j}^*Bx_{0j})
-  \geq\delta\abs{\tan2\theta_j}.
-\]
-Therefore
-\[
-  2\norm{B}_\nu\geq\delta\norm{\tan2\angles_0}_\nu.
-\]
-Ky Fan's theorem gives
-\[
-  \delta\norm{\tan2\angles_0}\leq2\norm{R}.
-\]
-The whole-space estimate follows by \LemmaRef{6.1}.
+Lemma~6.1 supplies the corresponding whole-space estimate, recovering the ambient conclusion of the Section~2 $\tan2\theta$ theorem from only the printed hypotheses.
 ~~~~
 
 ### Semantic audit clauses
@@ -4387,42 +4104,58 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `dad2a4e3936fd9e312e170375c57ed7fb19f3a0bd54b3f811fec8da4f477679a`
-- **Private-transcription provenance lines:** `[[2426, 2455]]`
+- **Source-specification passage SHA-256:** `ca616396d0bee7b303c7da3ad0904053b80ad6da1a13a172bbec402be84f7c57`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{theorem}\label{thm:8.1}
-Assume the hypotheses of the $\tan2\theta$ theorem. Then $\angles\leq\pi/4$ if and only if
+Small $\sin2\Theta$ or $\tan2\Theta$ does not by itself force all principal angles near $0$: some may lie near $\pi/2$.  The reason is that the double-angle theorems initially impose no distinguished choice of the reducing subspace $Q\Hsp$ of $A+H$; even when $H=0$, a poorly matched reducing subspace can require rotations near $\pi/2$.  Section~8 identifies the spectrally corresponding acute branch.
+
+Assume the hypotheses of the $\tan2\theta$ theorem.  Then
 \[
-  \Lambda_1\geq\alpha+\delta,
-  \qquad
-  \Lambda_0\leq\alpha.
+ \Theta\le\pi/4
 \]
-For fixed $A,P,H$, there always exists a reducing projector $Q$ with these properties. For this $Q$ the following stronger inequalities hold.
+if and only if the chosen reducing blocks of $A+H$ satisfy
+\[
+ \Lambda_1\ge\alpha+\delta,
+ \qquad
+ \Lambda_0\le\alpha.
+\]
+For fixed $A,P,H$ there exists a reducing projector $Q$ with these properties (take the spectral projector of $A+H$ on the appropriate side of $\alpha$).  For this $Q$:
 \begin{enumerate}[label=(\roman*)]
-\item
+\item the upper block obeys
 \[
-  A_1-\alpha\leq C_1(\Lambda_1-\alpha)C_1,
+ A_1-\alpha\le C_1(\Lambda_1-\alpha)C_1,
 \]
-with a similar relation for $A_0$.
-\item In finite dimensions, if $\lambda_1\leq\lambda_2\leq\cdots$ are the eigenvalues of $\Lambda_1$ and $\alpha_1\leq\alpha_2\leq\cdots$ those of $A_1$, then
+with the analogous lower-block inequality;
+\item in finite dimensions, if $\lambda_k$ are the ordered eigenvalues of $\Lambda_1$ and $\alpha_k$ those of $A_1$,
 \[
-  \alpha_k-\alpha\leq\norm{C_1}_1^2(\lambda_k-\alpha),
+ \alpha_k-\alpha\le\norm{C_1}_1^2(\lambda_k-\alpha),
 \]
-with a similar relation for $\Lambda_0$, and natural infinite-dimensional extensions.
-\item In finite dimensions,
+with the analogous lower-block statement and natural infinite-dimensional extensions;
+\item for every symmetric gauge function $\Phi$ in finite dimensions,
 \[
-  \Phi(\alpha_1-\alpha,\ldots,\alpha_n-\alpha)
-  \leq
-  \Phi\bigl((\lambda_1-\alpha)\cos^2\theta_1,
-             \ldots,
-             (\lambda_n-\alpha)\cos^2\theta_n\bigr)
+ \Phi(\alpha_1-\alpha,\ldots,\alpha_n-\alpha)
+ \le
+ \Phi((\lambda_1-\alpha)\cos^2\theta_1,\ldots,
+      (\lambda_n-\alpha)\cos^2\theta_n),
 \]
-for every symmetric gauge function $\Phi$, with a similar relation for $\Lambda_0$.
+again with the analogous lower-block relation.
 \end{enumerate}
-\end{theorem}
+The branch proof uses the two representations
+\begin{equation}
+ x_0^*\Lambda_0x_0
+ =x_0^*A_0x_0+\tan\theta\,x_0^*B^*y_1
+ =\cot\theta\,y_1^*Bx_0+y_1^*A_1y_1
+ \tag{8.1}
+\end{equation}
+and hence
+\begin{equation}
+ x_0^*B^*y_1(\tan\theta-\cot\theta)
+ =y_1^*A_1y_1-x_0^*A_0x_0\ge\delta>0.
+ \tag{8.2}
+\end{equation}
+These exclude $\theta=\pi/4$ and then $\theta>\pi/4$ under the chosen spectral placement.  The source interprets parts (ii)--(iii) as quantitative spectral repulsion: an off-diagonal perturbation that rotates all relevant eigenvectors strongly must also move eigenvalues by a definite amount.
 ~~~~
 
 ### Semantic audit clauses
@@ -4574,33 +4307,47 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 
 ---
 
-## 39. DK-8.2-thm — Smallness selects the acute branch
+## 39. DK-8.2-thm — Smallness selects the acute branch and closing extension remark
 
-- **Source anchor:** Theorem 8.2
+- **Source anchor:** Theorem 8.2 and final Section 8 extension remark
 - **Source kind:** `theorem`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `bd514c221ed24a8644c82ed2f1af807064b2ed250c875bebffe88c2d6fa76b31`
-- **Private-transcription provenance lines:** `[[2514, 2528]]`
+- **Source-specification passage SHA-256:** `8af6a38667dbf398e65e1b4460763ab627b559607ac519214c35402797c1b48e`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\begin{theorem}\label{thm:8.2}
 Add to the hypotheses of the $\sin2\theta$ theorem either
 \[
-  \norm{H}_1<\delta/2
-  \qquad\text{or}\qquad
-  \norm{R}_1<\delta/2,
+ \norm{H}_1<\delta/2
+ \quad\text{or}\quad
+ \norm{R}_1<\delta/2,
 \]
-and assume the spectrum of $A_0$ lies in $[\beta-\delta/2,\alpha+\delta/2]$. Then, in addition to
+and assume
 \[
-  \delta\norm{\sin2\angles}\leq2\norm{H}
-  \quad\text{or}\quad
-  \delta\norm{\sin2\angles_0}\leq2\norm{R},
+ \spec(A_0)\subset[\beta-\delta/2,\alpha+\delta/2].
 \]
-we have $\angles<\pi/4$.
-\end{theorem}
+Then the corresponding double-angle estimate remains valid,
+\[
+ \delta\norm{\sin2\Theta}\le2\norm H
+ \quad\text{or}\quad
+ \delta\norm{\sin2\Theta_0}\le2\norm R,
+\]
+and in addition the comparison is on the acute branch:
+\[
+ \boxed{\Theta<\pi/4.}
+\]
+For the perturbation form, the proof follows the homotopy $A(\sigma)=A+H-\sigma H$ and the continuously varying spectral projector $Q(\sigma)$.  If $\gamma=\norm H_1<\delta/2$, every ``close'' parameter satisfies
+\[
+ \theta(\sigma)
+ \le\tfrac12\arcsin(2\sigma\gamma/\delta)
+ \le\frac{\pi}{2}\frac{\sigma\gamma}{\delta}
+ <\pi/4,
+\]
+which propagates closeness from $\sigma=0$ to $1$.  The residual case is reduced to this by changing $H_1$ without changing the relevant residual or spectral blocks and choosing the replacement with $\norm H_1=\norm R_1$.
+
+The source closes Section~8 by stating that the $\sin2\theta$ theorem extends to $\dim\mathcal X(E_0)<\dim\mathcal X(F_0)$ analogously to Theorems~6.1 and~6.3, while no corresponding extension of the $\tan2\theta$ theorem was known.
 ~~~~
 
 ### Semantic audit clauses
@@ -4715,76 +4462,51 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `numerical_model`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `74832d3be5476a43a706c8866a795303c93d349c6094965d676b34545ffe1c41`
-- **Private-transcription provenance lines:** `[[2562, 2625]]`
+- **Source-specification passage SHA-256:** `bdc43ef4b79411c729d3004b3ffe56154fa83888d1bc3b2936afad9b2edf6d6d`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-The following example was used by H.~F. Weinberger to illustrate his eigenvector estimates. It illustrates our notation and theorems and permits comparison of bounds obtained by different procedures.
+Take the real Hilbert space $L^2(0,1)$ with inner product $u^*v=\int_0^1u(t)v(t)\,dt$.  The unperturbed operator is the self-adjoint closure of the fourth derivative with free-end boundary conditions
+\[
+ u''(0)=u'''(0)=u''(1)=u'''(1)=0,
+\]
+and $H$ is multiplication by $\varepsilon t$, with $0<\varepsilon<100$.  Thus the perturbed eigenproblem is
+\[
+ u^{(4)}+\varepsilon t u=\lambda u
+\]
+with the same boundary conditions.  The first two unperturbed eigenvalues are
+\[
+ \alpha_1=\alpha_2=0,
+\]
+while for $k>2$ the positive eigenvalues are determined by the free-beam equation
+\[
+ \cos(\alpha_k^{1/4})\cosh(\alpha_k^{1/4})=1
+\]
+and satisfy $\alpha_k>500$.  The source chooses the explicit orthonormal zero-eigenfunctions
+\[
+ w_k(t)=\frac{1+(-1)^k\sqrt3(2t-1)}{\sqrt2},
+ \qquad k=1,2,
+\]
+sets $e_k=w_k$, and takes $E_0=(e_1\ e_2):\mathbb R^2\to L^2(0,1)$.
 
-\paragraph{The problem.}
-Let $\Hilbert$ be the real space $L^2(0,1)$, with
+Since $H\ge0$, the third perturbed eigenvalue satisfies $\lambda_3\ge\alpha_3>500$.  With the initial comparison $A_0=0$, the residual is $R=HE_0=(r_1\ r_2)$ with
 \[
-  u^*v=\int_0^1u(t)v(t)\,dt.
+ r_k(t)=\varepsilon t e_k(t)
+ =\frac{\varepsilon t\bigl(1+(-1)^k\sqrt3(2t-1)\bigr)}{\sqrt2}.
 \]
-The operator $(d/dt)^4$ acting on functions satisfying
+Its Gram matrix is
 \[
-  u''(0)=u'''(0)=u''(1)=u'''(1)=0
+ R^*R=\frac{\varepsilon^2}{30}
+ \begin{pmatrix}
+ 11-\sqrt{75}&-1\\-1&11+\sqrt{75}
+ \end{pmatrix},
 \]
-has a self-adjoint closure, denoted by $A$. Let $H$ be multiplication by $\varepsilon t$, where $0<\varepsilon<100$.
-
-We study the two lowest eigenvalues of $A+H$ and their eigenvectors. In differential-equation notation,
+whose eigenvalues are
 \[
-  u^{(4)}+\varepsilon tu=\lambda u,
-  \qquad
-  u''(0)=u'''(0)=u''(1)=u'''(1)=0.
+ \frac{\varepsilon^2}{30}(11\pm\sqrt{76}).
 \]
-The comparison problem for $A$ is
-\[
-  w^{(4)}=\alpha w,
-  \qquad
-  w''(0)=w'''(0)=w''(1)=w'''(1)=0.
-\]
-The eigenvalues are
-\[
-  \alpha_1=0=\alpha_2<\alpha_3<\cdots,
-\]
-where, for $k>2$, the $\alpha_k$ are the positive roots of
-\[
-  \cos\alpha_k^{1/4}\cosh\alpha_k^{1/4}=1;
-\]
-all exceed $500$. Two orthonormal linear eigenfunctions for $\alpha_1,\alpha_2$ are
-\[
-  w_k(t)=\frac{1+(-1)^k\sqrt3(2t-1)}{\sqrt2},
-  \qquad k=1,2.
-\]
-We put $e_k=w_k$ and $E_0=(e_1\;e_2):\mathbb R^2\to\Hilbert$.
-
-Let $\lambda_1\leq\lambda_2\leq\cdots$ be the eigenvalues of $A+H$, with corresponding orthonormal eigenfunctions $f_1,f_2,\ldots$, and put $F_0=(f_1\;f_2)$. The problem is to bound the difference between $E_0\mathbb R^2$ and $F_0\mathbb R^2$.
-
-Since $H\geq0$, we have $\lambda_3\geq\alpha_3>500$, or $\Lambda_1>500$ in our notation. The straightforward comparison matrix is
-\[
-  A_0=E_0^*AE_0=\begin{pmatrix}0&0\\0&0\end{pmatrix}.
-\]
-The residual is
-\[
-  R=(A+H)E_0-E_0\cdot0=HE_0=(r_1\;r_2),
-\]
-where
-\[
-  r_k(t)=\varepsilon te_k(t)
-  =\frac{\varepsilon t\bigl(1+(-1)^k\sqrt3(2t-1)\bigr)}{\sqrt2}.
-\]
-A direct computation gives
-\[
-  R^*R=\frac{\varepsilon^2}{30}
-  \begin{pmatrix}
-    11-\sqrt{75}&-1\\
-    -1&11+\sqrt{75}
-  \end{pmatrix},
-\]
-with eigenvalues $\varepsilon^2(11\pm\sqrt{76})/30$.
+These data drive the first sine estimates.
 ~~~~
 
 ### Semantic audit clauses
@@ -4952,29 +4674,30 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `numerical_claims`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `5a3c208371c79e6baf9a2b9af2b75d955fe9ab6b884da7b8400cb39329dcba03`
-- **Private-transcription provenance lines:** `[[2627, 2643]]`
+- **Source-specification passage SHA-256:** `57ea978cfdbd641bfe2c257f686d449a42baa10cfba67fa9d593be8ca2ab9bf9`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-The $\sin\theta$ theorem applies with $\delta=500$. For the bound norm,
-\begin{equation*}
-  \sin\theta_1<0.001622\varepsilon.
-\tag{9.1}\label{eq:9.1}
-\end{equation*}
-The $\sin2\theta$ theorem, with $A$ and $A+H$ interchanged, gives the slightly weaker
-\begin{equation*}
-  \sin2\theta_1<0.004\varepsilon.
-\tag{9.2}\label{eq:9.2}
-\end{equation*}
-For the norm equal to the sum of the two largest singular values, the corresponding bounds are
-\begin{align*}
-  \sin\theta_1+\sin\theta_2&<0.00218\varepsilon,
-  \tag{9.3}\label{eq:9.3}\\
-  \sin2\theta_1+\sin2\theta_2&<0.008\varepsilon.
-  \tag{9.4}\label{eq:9.4}
-\end{align*}
+With gap $\delta=500$, the operator-norm $\sin\theta$ theorem gives
+\begin{equation}
+ \sin\theta_1<0.001622\,\varepsilon.
+ \tag{9.1}
+\end{equation}
+The $\sin2\theta$ theorem gives
+\begin{equation}
+ \sin2\theta_1<0.004\,\varepsilon.
+ \tag{9.2}
+\end{equation}
+Using the two-term Ky Fan norm gives the simultaneous subspace estimates
+\begin{equation}
+ \sin\theta_1+\sin\theta_2<0.00218\,\varepsilon,
+ \tag{9.3}
+\end{equation}
+\begin{equation}
+ \sin2\theta_1+\sin2\theta_2<0.008\,\varepsilon.
+ \tag{9.4}
+\end{equation}
 ~~~~
 
 ### Semantic audit clauses
@@ -5068,64 +4791,44 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `numerical_claims`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `c38f0b52a80497c632c09dda0635e326b35f0098cc1994a78a03e52673f53cc0`
-- **Private-transcription provenance lines:** `[[2645, 2696]]`
+- **Source-specification passage SHA-256:** `dfcd77c495e43593fcd6cd52f5719eacdda94902526d1117ca61dba086500774`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-A refinement is to choose the comparison matrix so that $H_0=0$. Keep the same subspaces but use the generalized Rayleigh--Ritz quotient
+Refine the comparison by taking the Rayleigh--Ritz matrix
 \[
-  \widehat A_0=E_0^*(A+H)E_0
-  =\frac{\varepsilon}{2}
-  \begin{pmatrix}
-    1-1/\sqrt3&0\\
-    0&1+1/\sqrt3
-  \end{pmatrix}.
+ \widehat A_0=E_0^*(A+H)E_0
+ =\frac{\varepsilon}{2}\operatorname{diag}(1-1/\sqrt3,\ 1+1/\sqrt3),
 \]
-Then
+with residual $\widehat R=(A+H)E_0-E_0\widehat A_0$.  Then
 \[
-  \widehat R=(A+H)E_0-E_0\widehat A_0
-  =R-E_0\widehat A_0=(\widehat r_1\;\widehat r_2),
+ \widehat R^*\widehat R
+ =\frac{\varepsilon^2}{30}\begin{pmatrix}1&-1\\-1&1\end{pmatrix},
+ \qquad
+ \norm{\widehat R}_1=\norm{\widehat R}_2=\frac{\varepsilon}{\sqrt{15}}.
 \]
-and, since $E_0^*\widehat R=0$,
-\[
-  \widehat R^*\widehat R
-  =R^*R-\widehat A_0^2
-  =\frac{\varepsilon^2}{30}
-   \begin{pmatrix}1&-1\\-1&1\end{pmatrix}.
-\]
-Thus
-\[
-  \norm{\widehat R}_1=\norm{\widehat R}_2
-  =\varepsilon/\sqrt{15}=0.2582\varepsilon.
-\]
-Let $\widehat\alpha_1<\widehat\alpha_2$ be the eigenvalues of $\widehat A_0$:
-\begin{equation*}
-  \widehat\alpha_k
-  =\frac{\varepsilon}{2}
-   \left(1+\frac{(-1)^k}{\sqrt3}\right).
-\tag{9.5}\label{eq:9.5}
-\end{equation*}
-Hence $\widehat A_0<0.7887\varepsilon$ and the $\tan\theta$ theorem may use $\delta=500-0.7887\varepsilon$. For the bound norm,
-\begin{equation*}
-  \tan\theta_1
-  <\frac{0.0005164\varepsilon}{1-0.0015774\varepsilon}.
-\tag{9.6}\label{eq:9.6}
-\end{equation*}
-The same bound applies to $\tan\theta_1+\tan\theta_2$ in the $2$-norm.
+The Ritz eigenvalues are
+\begin{equation}
+ \widehat\alpha_k
+ =\frac{\varepsilon}{2}\left(1+\frac{(-1)^k}{\sqrt3}\right).
+ \tag{9.5}
+\end{equation}
+Thus $\widehat A_0<0.7887\varepsilon$ and the tangent gap may be taken as $500-0.7887\varepsilon$.  The operator-norm tangent estimate is
+\begin{equation}
+ \tan\theta_1
+ <\frac{0.0005164\varepsilon}{1-0.0015774\varepsilon},
+ \tag{9.6}
+\end{equation}
+with the same right-hand side for $\tan\theta_1+\tan\theta_2$ in the two-term Ky Fan norm.
 
-For the $\tan2\theta$ theorem we also replace $A_1$ by
-\[
-  \widehat A_1=E_1^*(A+H)E_1.
-\]
-Since $\widehat A_1-A_1=E_1^*HE_1\geq0$, still $\widehat A_1>500$. The bound-norm result is
-\begin{equation*}
-  \tan2\theta_1
-  <\frac{0.0010328\varepsilon}{1-0.0015774\varepsilon},
-\tag{9.7}\label{eq:9.7}
-\end{equation*}
-with the same right side bounding $\tan2\theta_1+\tan2\theta_2$ in the $2$-norm.
+For the double-angle theorem replace the complementary comparison block by $\widehat A_1=E_1^*(A+H)E_1>500$.  Then
+\begin{equation}
+ \tan2\theta_1
+ <\frac{0.0010328\varepsilon}{1-0.0015774\varepsilon},
+ \tag{9.7}
+\end{equation}
+again with the same right-hand side for $\tan2\theta_1+\tan2\theta_2$ in the two-term Ky Fan norm.
 ~~~~
 
 ### Semantic audit clauses
@@ -5227,66 +4930,42 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `comparison_claim`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `740fea893adc19c56bcdc1bda015e9d6f1eab315d2c720cabc92482566c3da0c`
-- **Private-transcription provenance lines:** `[[2698, 2751]]`
+- **Source-specification passage SHA-256:** `1afeeefe736d746ac80fde7fcf57af04561e0d71121040113d8bdcd7654c98e7`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-We now compare these estimates with Weinberger's. His method uses the Rayleigh--Ritz upper bounds $\widehat\alpha_1,\widehat\alpha_2$, lower bounds $\check\alpha_1,\check\alpha_2$, and $\widehat\alpha_2<500<\lambda_3$. His theorem gives
+Weinberger's method combines Rayleigh--Ritz upper bounds $\widehat\alpha_k$, lower bounds $\check\alpha_k$, and the separation $\widehat\alpha_2<500<\lambda_3$ to obtain, for the angle $\phi_k$ from the trial vector $e_k$ to the exact two-dimensional eigenspace,
 \[
-  \sin^2\phi_k
-  \leq\frac{\widehat\alpha_k-\check\alpha_k}{500-\check\alpha_k},
-  \qquad k=1,2,
+ \sin^2\phi_k\le
+ \frac{\widehat\alpha_k-\check\alpha_k}{500-\check\alpha_k}.
 \]
-where $\phi_k$ is the angle between $e_k$ and $F_0\mathbb R^2$.
-
-The best lower bounds deducible from $\widehat A_0$, $\widehat R^*\widehat R$, and $\widehat A_1>500$ are the two lower eigenvalues of
+The best lower bounds from the available $2+1$ block information are the two lower eigenvalues of
 \[
-  \begin{pmatrix}
-    \widehat\alpha_1&0&\varepsilon/\sqrt{30}\\
-    0&\widehat\alpha_2&\varepsilon/\sqrt{30}\\
-    \varepsilon/\sqrt{30}&\varepsilon/\sqrt{30}&500
-  \end{pmatrix}.
+ \begin{pmatrix}
+ \widehat\alpha_1&0&\varepsilon/\sqrt{30}\\
+ 0&\widehat\alpha_2&\varepsilon/\sqrt{30}\\
+ \varepsilon/\sqrt{30}&\varepsilon/\sqrt{30}&500
+ \end{pmatrix}.
 \]
-The deduction follows Weinberger and Lehmann. For $0<\varepsilon<100$,
+For $0<\varepsilon<100$ this gives
+\begin{equation}
+ \tan\phi_1<\frac{0.0005164\varepsilon}{1-0.0004227\varepsilon},
+ \qquad
+ \tan\phi_2<\frac{0.0005164\varepsilon}{1-0.0015774\varepsilon}.
+ \tag{9.8}
+\end{equation}
+The paper stresses that $\phi_k$ and the largest subspace angle $\theta_1$ answer different questions, although
 \[
-  \frac{\varepsilon^2/30}{500-\widehat\alpha_k}
-  >\widehat\alpha_k-\check\alpha_k
-  =\frac{\varepsilon^2/30}{500-\widehat\alpha_k}-O(\varepsilon^4),
+ \sin^2\phi_1+\sin^2\phi_2=\sin^2\theta_1+\sin^2\theta_2.
 \]
-whence
-\begin{equation*}
-\begin{aligned}
-  \tan\phi_1&<\frac{0.0005164\varepsilon}{1-0.0004227\varepsilon},\\
-  \tan\phi_2&<\frac{0.0005164\varepsilon}{1-0.0015774\varepsilon}.
-\end{aligned}
-\tag{9.8}\label{eq:9.8}
-\end{equation*}
-These bounds answer a different question from ours: $\theta_1$ is the largest angle made by any vector in $E_0\mathbb R^2$ with $F_0\mathbb R^2$, whereas $\phi_k$ concerns the specific vector $e_k$. Thus $\theta_1\geq\phi_k$, although
+Applying Theorem~6.3 directly to each one-dimensional trial vector instead gives the sharper bounds
 \[
-  \sin^2\phi_1+\sin^2\phi_2
-  =\sin^2\theta_1+\sin^2\theta_2.
+ \tan\phi_1<\frac{0.0003652\varepsilon}{1-0.0004227\varepsilon},
+ \qquad
+ \tan\phi_2<\frac{0.0003652\varepsilon}{1-0.0015774\varepsilon}.
 \]
-
-To estimate $\phi_k$ directly by our method, apply \TheoremRef{6.3} with $E_0=e_k$, $A_0=\widehat\alpha_k=e_k^*(A+H)e_k$, and
-\[
-  R=(A+H)e_k-e_k\widehat\alpha_k=\widehat r_k.
-\]
-The gap is $500-\widehat\alpha_k$, giving
-\[
-  \tan\phi_1
-  <\frac{\varepsilon/\sqrt{30}}{500-\widehat\alpha_1}
-  =\frac{0.0003652\varepsilon}{1-0.0004227\varepsilon},
-\]
-\[
-  \tan\phi_2
-  <\frac{\varepsilon/\sqrt{30}}{500-\widehat\alpha_2}
-  =\frac{0.0003652\varepsilon}{1-0.0015774\varepsilon},
-\]
-which are sharper than~\eqref{eq:9.8}.
-
-Neither approach supplants the other. Our estimates are inferred from a residual or perturbation norm and a spectral gap. Weinberger's use both Rayleigh--Ritz upper and lower bounds, and can exploit independent lower-bound information that our results do not use.
+The source presents the methods as complementary rather than as one dominating the other.
 ~~~~
 
 ### Semantic audit clauses
@@ -5361,30 +5040,29 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `example`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `1c9a418ebfeb827fb472bf6229506bd73f5cb5a6077f98cb467f7255ef069cb3`
-- **Private-transcription provenance lines:** `[[2753, 2771]]`
+- **Source-specification passage SHA-256:** `2b28098ba69b0cd83e5755b950b4a4eda9cc7e80f3a2a6d95d46921271d8c91f`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-For example, take a small $\mu\ll0.6$ and
+For small $\mu$ take
 \[
-  e=(1,\mu,\mu^2,\ldots,\mu^n,\ldots)^*\in\ell_2,
-  \qquad
-  A+H=\diag(1,\mu^{-1},\mu^{-2},\ldots,\mu^{-n},\ldots).
+ e=(1,\mu,\mu^2,\ldots)^*\in\ell_2,
+ \qquad
+ A+H=\operatorname{diag}(1,\mu^{-1},\mu^{-2},\ldots).
 \]
-Strictly, $e$ is not in the domain of $A+H$ because $(A+H)e=(1,1,1,\ldots)^*$ has infinite norm, but an arbitrarily small change remedies this. We have
+As written, $e$ is just outside the domain because $(A+H)e=(1,1,1,\ldots)^*$; the source notes that an arbitrarily small modification fixes this domain defect.  Formally the Rayleigh quotient is
 \[
-  \widehat\alpha=e^*(A+H)e/e^*e=1+\mu,
+ \widehat\alpha=\frac{e^*(A+H)e}{e^*e}=1+\mu,
 \]
-but the residual has infinite norm, so none of our theorems applies. If, however, one knows lower bounds $\check\alpha_1\leq\lambda_1=1$ and $\check\alpha_2\leq\lambda_2=\mu^{-1}$ with $\check\alpha_2>\check\alpha_1$, Weinberger's theorem gives
+but the residual has infinite norm, so the paper's residual theorems give no estimate.  If independent lower eigenvalue bounds are known, Weinberger's method still yields
 \[
-  \sin^2\theta
-  \leq\frac{1+\mu-\check\alpha_1}{\check\alpha_2-\check\alpha_1}
+ \sin^2\theta\le
+ \frac{1+\mu-\check\alpha_1}{\check\alpha_2-\check\alpha_1},
 \]
-for the angle $\theta=\arcsin\mu$ between $e$ and the first eigenvector. With the best lower bounds,
+and at the best lower bounds, for the true $\theta=\arcsin\mu$,
 \[
-  (\mu=)\sin\theta\leq\frac{\mu}{\sqrt{1-\mu}}.
+ \mu=\sin\theta\le\frac{\mu}{\sqrt{1-\mu}}.
 \]
 ~~~~
 
@@ -5511,123 +5189,68 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `numerical_claims`
 - **Completion obligation:** `true`
 - **Census claim:** `compiled_exact` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `b363c295b3d268f41be6cab25ddb80342b4b24e029cacb81b6d648a75df9f061`
-- **Private-transcription provenance lines:** `[[2773, 2883]]`
+- **Source-specification passage SHA-256:** `0f9c97c3405ebbf348de1e40df437d08c8f1e129a0038987c7ed12e45061413f`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-So far neither approach has separately identified the eigenvectors $f_k$ within a cluster of nearly indistinguishable eigenvalues. Return to Weinberger's example. We know orthonormal $e_1,e_2$ spanning $\Range(E_0)$ and $f_1,f_2$ spanning $\Range(F_0)$. We estimated the subspace angles $\theta_1,\theta_2$ and the angles $\phi_i$ between $e_i$ and $\Range(F_0)$. We now estimate $\omega_k$, the angle between the one-dimensional subspaces $[e_k]$ and $[f_k]$.
-
-Let $g_k$ be the unit vector in $\Range(E_0)$ closest to $f_k$, and put
+Let $f_k$ be the exact eigenvectors and $g_k$ the closest unit vectors in the trial plane.  Define $\eta_k$ by $P f_k=(\cos\eta_k)g_k$, let $\psi_k$ be the angle from $g_k$ to the trial vector $e_k$, and let $\omega_k$ be the angle from $e_k$ to $f_k$.  Then
 \[
-  \eta_k=\arccos(g_k^*f_k),
-  \qquad
-  Pf_k=(\cos\eta_k)g_k.
+ \cos\omega_k=\cos\eta_k\cos\psi_k,
+ \qquad
+ \omega_k^2\le\psi_k^2+\eta_k^2.
 \]
-Let $\psi_k$ be the angle between $[g_k]$ and $[e_k]$. Then
+With coordinates $e_k\sim(u_k,0)^T$ and $f_k\sim(x_k,y_k)^T$, the eigenproblem is
+\begin{equation}
+ \begin{pmatrix}\widehat A_0&B^*\\B&\widehat A_1\end{pmatrix}
+ \begin{pmatrix}x_k\\y_k\end{pmatrix}
+ =\lambda_k\begin{pmatrix}x_k\\y_k\end{pmatrix}.
+ \tag{9.9}
+\end{equation}
+Since $\widehat A_1>500>\lambda_k$,
+\begin{equation}
+ y_k=(\lambda_k-\widehat A_1)^{-1}Bx_k,
+ \tag{9.10}
+\end{equation}
+and the two-dimensional Schur-complement eigenproblem is
+\begin{equation}
+ [\widehat A_0+B^*(\lambda_k-\widehat A_1)^{-1}B]x_k=\lambda_kx_k.
+ \tag{9.11}
+\end{equation}
+The correction can be bounded by an off-diagonal matrix
 \[
-  \cos\omega_k=\cos\eta_k\cos\psi_k,
+ \widehat H=\frac{\varepsilon^2}{30\gamma_k}
+ \begin{pmatrix}0&1\\1&0\end{pmatrix},
+ \qquad \gamma_k>500-\lambda_k,
 \]
-and, less precisely,
+with
 \[
-  \omega_k^2\leq\psi_k^2+\eta_k^2.
+ 0\le\frac{\varepsilon^2}{30\gamma_k}I-\widehat H
+ =B^*(\widehat A_1-\lambda_k)^{-1}B
+ \le\frac{B^*B}{500-\lambda_k}.
 \]
-
-Write
+The $\tan2\theta$ theorem gives
 \[
-  e_k\representedby\begin{pmatrix}u_k\\0\end{pmatrix},
-  \qquad
-  f_k\representedby\begin{pmatrix}x_k\\y_k\end{pmatrix},
-  \qquad
-  u_k,x_k\in\mathbb R^2.
+ (\widehat\alpha_2-\widehat\alpha_1)\tan2\psi_k
+ \le2\norm{\widehat H}_1
+ <\frac{\varepsilon^2}{15(500-\lambda_k)}.
 \]
-Then
-\begin{equation*}
-  \begin{pmatrix}\widehat A_0&B^*\\B&\widehat A_1\end{pmatrix}
-  \begin{pmatrix}x_k\\y_k\end{pmatrix}
-  =\lambda_k\begin{pmatrix}x_k\\y_k\end{pmatrix},
-\tag{9.9}\label{eq:9.9}
-\end{equation*}
-and
+Theorem~8.1 selects $0\le\psi_k<\pi/4$, hence
 \[
-  (\cos\eta_k)g_k=\begin{pmatrix}x_k\\0\end{pmatrix}.
+ 2\psi_k<\arctan\frac{\varepsilon}{\sqrt{75}(500-\widehat\alpha_k)}.
 \]
-Here $B^*B=\widehat R^*\widehat R$, $\widehat A_0=\diag(\widehat\alpha_1,\widehat\alpha_2)$, and $\widehat A_1>500$, while $\lambda_1,\lambda_2<500$. Thus
-\begin{align*}
-  y_k&=(\lambda_k-\widehat A_1)^{-1}Bx_k,
-  \tag{9.10}\label{eq:9.10}\\
-  \bigl[\widehat A_0+B^*(\lambda_k-\widehat A_1)^{-1}B\bigr]x_k
-  &=\lambda_kx_k.
-  \tag{9.11}\label{eq:9.11}
-\end{align*}
-Thus $\lambda_k$ and $x_k$ form the eigenproblem~\eqref{eq:9.11} in two-space.
-
-The matrix in~\eqref{eq:9.11} is the sum of the diagonal matrix
+Equation (9.10) gives
 \[
-  \widehat A_0-\frac{\varepsilon^2}{30\gamma_k}
+ \tan\eta_k
+ <\frac{\varepsilon}{\sqrt{15}(500-\widehat\alpha_k)}.
 \]
-and an off-diagonal perturbation
+Combining the two angles yields
 \[
-  \widehat H=\frac{\varepsilon^2}{30\gamma_k}
-  \begin{pmatrix}0&1\\1&0\end{pmatrix}
+ \omega_1<\frac{0.00053\varepsilon}{1-0.00043\varepsilon},
+ \qquad
+ \omega_2<\frac{0.00053\varepsilon}{1-0.0016\varepsilon}.
 \]
-for some $\gamma_k>500-\lambda_k$. Indeed,
-\[
-  0\leq\frac{\varepsilon^2}{30\gamma_k}-\widehat H
-  =B^*(\widehat A_1-\lambda_k)^{-1}B
-  \leq\frac{B^*B}{500-\lambda_k},
-\]
-and $B^*B$ has rank one.
-
-Here $\psi_k$ is the angle between $[x_k]$ and the eigenspace $[u_k]$ of the diagonal matrix. The $\tan2\theta$ theorem gives
-\[
-  (\widehat\alpha_2-\widehat\alpha_1)\tan2\psi_k
-  \leq2\norm{\widehat H}_1
-  <\frac{\varepsilon^2}{15(500-\lambda_k)}.
-\]
-For $0<\varepsilon<100$, \TheoremRef{8.1} also gives $0\leq\psi_k<\pi/4$, using the bounds
-\[
-  \widehat\alpha_k-\frac{\varepsilon^2}{15000-30\widehat\alpha_k}
-  <\check\alpha_k\leq\lambda_k\leq\widehat\alpha_k.
-\]
-Consequently,
-\[
-  2\psi_k
-  <\arctan\left(
-    \frac{\varepsilon}{\sqrt{75}(500-\widehat\alpha_k)}
-  \right).
-\]
-
-The angle $\eta_k$ is less than $\theta_1$, but a $\tan\theta$ estimate is more convenient. From~\eqref{eq:9.10},
-\[
-  \tan\eta_k
-  =\frac{\norm{y_k}}{\norm{x_k}}
-  <\frac{\norm{B}_1}{500-\lambda_k}
-  \leq\frac{\varepsilon}{\sqrt{15}(500-\widehat\alpha_k)}.
-\]
-Combining the estimates through
-\[
-  \omega_k^2\leq\psi_k^2+\eta_k^2
-  <\left(\frac12\tan2\psi_k\right)^2+\tan^2\eta_k,
-\]
-we obtain
-\[
-  \omega_1<\frac{0.00053\varepsilon}{1-0.00043\varepsilon},
-  \qquad
-  \omega_2<\frac{0.00053\varepsilon}{1-0.0016\varepsilon}.
-\]
-These surprisingly small bounds, despite the closeness of the eigenvalues compared with $\norm{H}_1=\varepsilon$, further support the use of Rayleigh--Ritz approximations.
-
-The bounds can be improved. The best possible bound on $\omega_k$ for $k=1,2$ is the angle between the $k$th coordinate vector and the $k$th eigenvector of
-\[
-  \begin{pmatrix}
-    \widehat\alpha_1&0&\varepsilon/\sqrt{30}\\
-    0&\widehat\alpha_2&\varepsilon/\sqrt{30}\\
-    \varepsilon/\sqrt{30}&\varepsilon/\sqrt{30}&500
-  \end{pmatrix},
-\]
-but the proof must await investigation of Question~10.2.
+Finally, the source says the best possible bound obtainable from the stated data is the angle between the $k$th coordinate vector and the $k$th eigenvector of the $3\times3$ comparison matrix used above, but proving that assertion is deferred to the unresolved three-way-subspace Question~10.2.
 ~~~~
 
 ### Semantic audit clauses
@@ -5752,14 +5375,12 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `open_question`
 - **Completion obligation:** `false`
 - **Census claim:** `resolved_by_modern_development` / `proved_in_build`
-- **Registered source excerpt SHA-256:** `868b898f474a0d303a83f6f0232f91baebb2edc1bf016994ac1629615ec9d1fe`
-- **Private-transcription provenance lines:** `[[2887, 2888]]`
+- **Source-specification passage SHA-256:** `31b6c36c9e33fb0d82afcfe7223d42b7558d1ba307b0b7823a2ff1e8ac23c764`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\paragraph{Question 10.1.}
-If the spectra of $A_0$ and $\Lambda_1$ are known only to be at distance at least $\delta$, how well can $\angles_0$ be bounded in terms of $R$? Compare the discussions after Theorems~5.1 and~6.2.
+If $\spec(A_0)$ and $\spec(\Lambda_1)$ are known only to have pairwise distance at least $\delta$, how sharply can $\Theta_0$ be bounded in terms of the residual $R$?  The paper points back to the limitations discussed after Theorem~5.1 and Theorem~6.2.
 ~~~~
 
 ### Semantic audit clauses
@@ -5813,26 +5434,18 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `open_question`
 - **Completion obligation:** `false`
 - **Census claim:** `not_a_completion_obligation` / `not_applicable`
-- **Registered source excerpt SHA-256:** `c8431b7396b6b7d629f0986f6ef0d71f011c957cf27023cffc47fae994844e1c`
-- **Private-transcription provenance lines:** `[[2890, 2903]]`
+- **Source-specification passage SHA-256:** `b86da1d92d84b2592690213b7f007b3a770bd42fe09dccca2c21756a36cd7dab`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\paragraph{Question 10.2.}
-Generalizing \SectionRef{1}, let $E_0,E_1,E_2$ be isometric mappings into $\Hilbert$ such that
+For three-way orthogonal decompositions represented by isometries $E_0,E_1,E_2$ and $F_0,F_1,F_2$ with
 \[
-  E_0E_0^*+E_1E_1^*+E_2E_2^*=1,
+ \sum_{j=0}^2E_jE_j^*=I,
+ \qquad
+ \sum_{j=0}^2F_jF_j^*=I,
 \]
-and let $F_0,F_1,F_2$ satisfy the analogous relation. The difference between the two decompositions might be measured by the off-diagonal entries of
-\[
-  \begin{pmatrix}
-    E_0^*F_0&E_0^*F_1&E_0^*F_2\\
-    E_1^*F_0&E_1^*F_1&E_1^*F_2\\
-    E_2^*F_0&E_2^*F_1&E_2^*F_2
-  \end{pmatrix},
-\]
-just as~\eqref{eq:1.7} was used here. If the decompositions are associated with reducing subspaces of two nearby operators, can estimates parallel to those in this paper be found?
+the relative position is encoded by the $3\times3$ block matrix $(E_i^*F_j)_{i,j=0}^2$.  The question asks whether, when these decompositions arise from reducing subspaces of two nearby operators, the off-diagonal blocks admit estimates analogous to the two-way estimates developed in the paper.
 ~~~~
 
 ### Semantic audit clauses
@@ -5882,14 +5495,12 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source kind:** `open_question`
 - **Completion obligation:** `false`
 - **Census claim:** `not_a_completion_obligation` / `not_applicable`
-- **Registered source excerpt SHA-256:** `3eef588dbf2a6d19dbb738db58853081f4ef70dbbe6223423b6f84cf8187bb33`
-- **Private-transcription provenance lines:** `[[2905, 2906]]`
+- **Source-specification passage SHA-256:** `4354f4d04ae31bb397e07edd9f6dc6d99d9b2edddc6fd44b0bcc6509a9d442cf`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\paragraph{Question 10.3.}
-Pursuing the remark after \TheoremRef{8.1}, seek best possible bounds on expressions involving both eigenvalue changes and eigenvector changes.
+Find best possible inequalities involving eigenvalue changes and eigenvector changes simultaneously, extending the Section~8 observations that relate spectral displacement to rotation.
 ~~~~
 
 ### Semantic audit clauses
@@ -5935,34 +5546,48 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 
 ## 49. DK-10.4 — Perturbation bounds for functional calculus
 
-- **Source anchor:** Question 10.4
+- **Source anchor:** Question 10.4, including ambient and directed functional-calculus specializations
 - **Source kind:** `open_question`
 - **Completion obligation:** `false`
 - **Census claim:** `not_a_completion_obligation` / `not_applicable`
-- **Registered source excerpt SHA-256:** `4969fbdfdb8b7a27fd5a31e5918f89c9601862cbf2f8c2fd3d254dbdb3c3630b`
-- **Private-transcription provenance lines:** `[[2908, 2925]]`
+- **Source-specification passage SHA-256:** `cb03063c7dac9729bde9e1594aca09f614de292828a9f3770c28061743fb3792`
 
-### Exact registered source passage
+### Registered distributable source-specification passage
 
 ~~~~tex
-\paragraph{Question 10.4.}
-The spectral decomposition
+For a self-adjoint spectral resolution
 \[
-  A=\int_{-\infty}^{\infty}\lambda\,d\Omega(\lambda)
+ A=\int_{-\infty}^{\infty}\lambda\,d\Omega(\lambda),
+ \qquad
+ f(A)=\int_{-\infty}^{\infty}f(\lambda)\,d\Omega(\lambda),
 \]
-defines
-\[
-  f(A)=\int_{-\infty}^{\infty}f(\lambda)\,d\Omega(\lambda)
-\]
-for many real functions $f$. The algebraic and topological properties of this functional calculus are well known, but little is known about bounds on $f(A+H)-f(A)$ in terms of $H$.
+the question asks for perturbation bounds on $f(A+H)-f(A)$ in terms of $H$ for useful classes of real functions $f$.
 
-For example, let $f(\xi)=1$ for $\xi\leq\alpha$ and $f(\xi)=0$ for $\alpha+\delta\leq\xi$. Under the $\tan2\theta$ hypotheses, $f(A)=P$, $f(A+H)=Q$, and $f(A_0)=1$, so
+The paper's model case takes a step function with $f(\xi)=1$ on $\xi\le\alpha$ and $f(\xi)=0$ on $\xi\ge\alpha+\delta$.  Under the $\tan2\theta$ hypotheses,
 \[
-  \norm{f(A+H)-f(A)}=\norm{Q-P}=\norm{\sin\angles},
+ f(A)=P,\qquad f(A+H)=Q,\qquad f(A_0)=I.
 \]
-where
+Thus the ambient functional-calculus change is exactly the subspace sine:
 \[
-  \delta\norm{\tan2\angles}\leq2\norm{H},
+ \norm{f(A+H)-f(A)}=\norm{Q-P}=\norm{\sin\Theta},
+\]
+with
+\[
+ \boxed{\delta\norm{\tan2\Theta}\le2\norm H}.
+\]
+The directed action on the trial subspace is likewise
+\[
+ \begin{aligned}
+ \norm{(f(A+H)-f(A))E_0}
+ &=\norm{f(A+H)E_0-E_0f(A_0)}\\
+ &=\norm{Q^\perp E_0}=\norm{\sin\Theta_0},
+ \end{aligned}
+\]
+with the residual estimate
+\[
+ \boxed{\delta\norm{\tan2\Theta_0}\le2\norm R}.
+\]
+Question~10.4 asks for analogous bounds for more general $f$.
 ~~~~
 
 ### Semantic audit clauses

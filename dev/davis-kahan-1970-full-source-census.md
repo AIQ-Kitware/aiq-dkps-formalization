@@ -3,9 +3,11 @@
 Base commit: `b967c62f`.
 
 This is the public, independently worded theorem-by-theorem ledger for the
-full paper. The maintained modernized transcription is used only as a local
-comparison source and is intentionally not distributed. The JSON file is
-authoritative; this Markdown file is generated from it.
+full paper. The checked-in `DavisKahan1970_part_III.tex` is the distributable
+source-order semantic specification used by the static statement audit. Private
+source material is optional provenance for re-auditing that reconstruction. The
+JSON file is authoritative for census status; this Markdown file is generated
+from it.
 
 ## Status summary
 
@@ -112,7 +114,7 @@ THIS ROW'S OWN PREMISE WAS ALSO PARTLY FALSE.  The `notes` said the Section 1 no
 WHAT M37 ADDED: `DavisKahan/Sources/DavisKahan1970/Section1.lean`, the source-numbered facade, in the established `Section5.lean` style -- the two existing results are cited by `:=` (`alias`), not restated, so there is a single source of truth.  The one Section 1 claim that was genuinely not compiled is now proved: `R⋆R = H₀² + B⋆B`, stated as the quadratic form `‖Ru‖² = ‖H₀u‖² + ‖Bu‖²` (over ℂ a self-adjoint operator is determined by its quadratic form, and this spelling needs neither of the paper's coordinate isometries), together with the consequence the paper draws from it -- the residual is smallest exactly when `H₀ = 0`, which is what makes the Rayleigh-quotient choice `A₀ = E₀⋆(A + H)E₀` a good one.  Both axiom-clean.
 - **Next action:** Nothing outstanding for equation (1.8) or for either Section 1 claim about it.  The block representations (1.2)--(1.3) are notation, and the way this repository spells them differs from the print; that difference is recorded in `scope_gap` rather than left as proof debt.  One residual clause is compiled in a weaker shape than printed, and is recorded here rather than left implicit: the remark that `‖R‖` is minimized by taking `H₀ = 0` quantifies over choices of the trial operator `A₀`, whereas `equation1_8_norm_offDiagonal_le` fixes `A₀` at the unperturbed compression and compares pointwise, with equality at `u` exactly when the diagonal block kills `u`.  That is the mechanism of the printed remark, not the optimization statement; ranging over `A₀` would make the trial operator a variable of the statement, which `DavisKahan.residual`'s signature does not.
 
-#### Section 1, equations (1.9)–(1.13): Unitary-invariant norms and Fan dominance
+#### Section 1, equations (1.9)–(1.18): Unitary-invariant norms, angle operators, and direct-rotation setup
 
 - **Kind:** `framework`
 - **Status:** `compiled_exact`
@@ -896,7 +898,7 @@ FOR THIS ROW: does not close.  The remaining obstruction is the ATTAINMENT claus
 
 ### Section 3
 
-#### Definition 3.1: Direct rotation
+#### Section 3 setup, equations (3.1)--(3.4), and Definition 3.1: Direct rotation
 
 - **Kind:** `definition`
 - **Status:** `compiled_exact`
@@ -1228,7 +1230,7 @@ THE DEFINITION.  Two operators have the same spectral multiplicity when each is 
 
 WHAT WAS BUILT, all in ForTauCeti and all admission-free: `MeasureClass.lean` (the measure-class relation), `LpComp.lean` (relabelling unitaries and the intertwining law), `LpRestrict.lean` (extension by zero, and `L^2` of a measure as the Hilbert sum over a countable measurable partition), `LpSliceSum.lean` (a countable family of measures assembled into one, which turns a direct sum of multiplication models into a single one), `MultiplicityLevels.lean` (dominating measure, rank, level sets, and the normal form), `OperatorUnitaryEquiv.lean`, `HilbertSumIntertwine.lean`, `BorelCalculus/SeparableCyclic.lean` and `BorelCalculus/MultiplicityModel.lean` (`exists_hasMultiplicityModel`, the existence half of Hahn--Hellinger).  See `dev/section3-multiplicity-plan-2026-08-06.md` section 7.
 
-SEPARABILITY, AND WHY IT IS NOT A WEAKENING.  The multiplicity phrasing carries `[TopologicalSpace.SeparableSpace H1]`.  (1) It is one of the paper's STANDING ASSUMPTIONS -- verified 2026-08-06 against the public source surrogate rather than inferred.  `prose/distilled_literature/DavisKahan1970_exact_source_register.tex`, "Standing assumptions from the transcription", anchored to the Introduction, Section 1 and Section 2, records "H is a separable Hilbert space, real or complex, with finite dimensionality only a special case"; it therefore governs Section 3.  The same list records that for noncompact operators the source itself expects singular-value lists to be replaced by SPECTRAL MULTIPLICITY LANGUAGE -- the phrasing proved here.  (This corrects the first justification offered for the hypothesis, which cited only the Section 6 rank hypothesis, where separability is used incidentally to force the trial coordinate space to be finite-dimensional; that is a consequence of the convention, not a statement of it.)  (2) Nothing already proved is weakened: `pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, this row's evidence and the grounding of the frontier node, is untouched -- arbitrary complex Hilbert spaces, no compactness, no finite dimension, no separability.  (3) It is confined to one direction and one space: `unitarilyEquivalent_of_sameSpectralMultiplicity` is separability-free, and `H2` needs nothing because `B` inherits `A`'s datum along the given unitary.  It is needed for exactly one reason: producing a model needs a COUNTABLE cyclic decomposition, because `rank S x n` counts earlier indices and so the index type must be linearly ordered.
+SEPARABILITY, AND WHY IT IS NOT A WEAKENING.  The multiplicity phrasing carries `[TopologicalSpace.SeparableSpace H1]`.  (1) It is one of the paper's STANDING ASSUMPTIONS -- verified 2026-08-06 against the public source surrogate rather than inferred.  `prose/distilled_literature/DavisKahan1970_part_III.tex`, in its source-order Section 1 reconstruction, records that the paper works on a separable real or complex Hilbert space with finite dimension only a special case; that standing convention therefore governs Section 3.  The same list records that for noncompact operators the source itself expects singular-value lists to be replaced by SPECTRAL MULTIPLICITY LANGUAGE -- the phrasing proved here.  (This corrects the first justification offered for the hypothesis, which cited only the Section 6 rank hypothesis, where separability is used incidentally to force the trial coordinate space to be finite-dimensional; that is a consequence of the convention, not a statement of it.)  (2) Nothing already proved is weakened: `pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, this row's evidence and the grounding of the frontier node, is untouched -- arbitrary complex Hilbert spaces, no compactness, no finite dimension, no separability.  (3) It is confined to one direction and one space: `unitarilyEquivalent_of_sameSpectralMultiplicity` is separability-free, and `H2` needs nothing because `B` inherits `A`'s datum along the given unitary.  It is needed for exactly one reason: producing a model needs a COUNTABLE cyclic decomposition, because `rank S x n` counts earlier indices and so the index type must be linearly ordered.
 
 WHY NOT THE CARDINAL-INDEXED (NON-SEPARABLE) FORM.  The uniform-multiplicity normal form over an arbitrary index type needs NON-sigma-finite base measures -- `H = sum over t in [0,1] of L^2(delta_t)` has uniform multiplicity one with counting measure on [0,1] as base -- and every Radon-Nikodym tool available, in Mathlib and in `ForTauCeti/MeasureTheory/RadonNikodymL2.lean`, is sigma-finite.  That form is not merely harder here; it is not expressible with the measure theory on hand.
 
@@ -1626,7 +1628,7 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is clos
 
 ### Section 4
 
-#### Proposition 4.1: Pointwise and singular-value extremality of the direct rotation
+#### Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2): Pointwise and singular-value extremality of the direct rotation
 
 - **Kind:** `proposition`
 - **Status:** `compiled_exact`
@@ -1804,7 +1806,7 @@ statements are left above as the historical record and are superseded by this pa
 SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization` because the infinite-dimensional declarations are acute while the printed Section 4 scope inherits matched crossed defects.
 - **Next action:** Nothing outstanding.  The block-pinching proof now handles the chosen matched-defect direct rotation without acuteness over both scalar fields, and the source wrappers expose its compact inherited scope for every Ky-Fan-dominant unitarily invariant gauge.
 
-#### Proposition 4.4: Real-space full displacement minimality below pi/3
+#### Examples 4.1–4.2 and Proposition 4.4: Full-displacement counterexamples and Proposition 4.4 as printed
 
 - **Kind:** `proposition`
 - **Status:** `refuted_as_transcribed`
@@ -1950,7 +1952,7 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 - **Assessment:** Part of the clean Section 6 surface.
 - **Next action:** No mathematical gap.
 
-#### Proposition 6.1: Symmetric sine theorem
+#### Section 6 sine proof and Proposition 6.1: Sine proof, ambient limitation, and symmetric sine theorem
 
 - **Kind:** `proposition`
 - **Status:** `compiled_exact`
@@ -2014,7 +2016,7 @@ is itself still absent as a Section 5 statement; that is tracked on `DK-5-hermit
 **M32, THE SECTION 6 SCALAR TRANCHE, 2026-08-09 (Claude Opus 5).**  THE `real-scalar-infinite-dimensional-scope` ENTRY IN `blocked_by` WAS STALE AND IS REMOVED, for the same reason as on `DK-6.1-thm`.  RE-MEASURED 2026-08-09 by elaboration: `Theorem6_2_real` is `[InnerProductSpace ℝ]`, `[CompleteSpace]`, no `[FiniteDimensional]`, over `PaperRealTheorem62Data`, concluding `IsPaperHilbertSchmidt S.operator ∧ gap * frameLowerBound * paperHilbertSchmidtNorm S.operator ≤ paperHilbertSchmidtNorm P.source.R` -- square-norm membership CONCLUDED.  `Theorem6_2_real_commonDomain`, `Theorem6_2_real_commonCore` and the printed rank variant `PaperRealTheorem62Data.operatorNorm_result_across_of_rank_le` likewise.  All axiom-clean.  Nothing was proved for this row today.
 - **Next action:** No mathematical gap.
 
-#### Theorem 6.3: Generalized tangent theorem
+#### Section 6 equations (6.2)–(6.6), Example 6.1, and Theorem 6.3: Tangent proof machinery, Example 6.1, and generalized tangent theorem
 
 - **Kind:** `theorem`
 - **Status:** `compiled_exact`
@@ -2428,7 +2430,7 @@ STATUS LEFT AT `compiled_exact` PENDING A HUMAN CALL on whether the surviving co
 
 The `..._of_rotatedBlockData` aliases remain listed as INTERNAL infrastructure: they take an abstract quadratic-data record and are not evidence about the printed theorem.
 
-#### Theorem 8.2: Smallness selects the acute branch
+#### Theorem 8.2 and final Section 8 extension remark: Smallness selects the acute branch and closing extension remark
 
 - **Kind:** `theorem`
 - **Status:** `compiled_exact`
@@ -3247,7 +3249,7 @@ general-UI-norm question is the paper's own open question.
 - **Assessment:** Open research question.
 - **Next action:** Document only.
 
-#### Question 10.4: Perturbation bounds for functional calculus
+#### Question 10.4, including ambient and directed functional-calculus specializations: Perturbation bounds for functional calculus
 
 - **Kind:** `open_question`
 - **Status:** `not_a_completion_obligation`

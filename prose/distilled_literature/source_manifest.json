@@ -12,7 +12,8 @@
     "transcription_only": "A transcription exists, but not a proof-level reconstruction.",
     "source_text_only": "Source prose/TeX exists, but not a proof-level reconstruction.",
     "core_note": "A broad core-arguments note exists and should be upgraded to the common manifest/anchor format.",
-    "transcription_sufficient": "An exact source-order transcription plus a maintained formalization-versus-literature ledger is sufficient; a second distilled note would be duplicative."
+    "transcription_sufficient": "An exact source-order transcription plus a maintained formalization-versus-literature ledger is sufficient; a second distilled note would be duplicative.",
+    "source_faithful_audit_specification": "A transformative source-order reconstruction preserves the mathematical source surface closely enough to serve as the checked-in semantic specification for a static source-to-formalization audit."
   },
   "works": {
     "HelmMehtaDuderstadtYangWhiteGeisaVogelsteinPriebe2020": {
@@ -811,7 +812,7 @@
       "tier": "primary",
       "priority": "P0",
       "formalization_status": "source-facing coverage is extensive and the tracked census is near-terminal, with Proposition 4.4 formally refuted as transcribed; an independent statement audit has identified a remaining unrestricted Section 2 tan(2 Theta) exact-wrapper gap, so the repository does not currently certify 100% source fidelity",
-      "distilled_status": "core_note",
+      "distilled_status": "source_faithful_audit_specification",
       "primary_url": "https://doi.org/10.1137/0707001",
       "target_note": "DavisKahan1970_part_III.tex",
       "repo_evidence": [
@@ -829,7 +830,6 @@
         "DavisKahan/TanTheta/Theorem63FiniteSource.lean",
         "dev/journals/davis-kahan-theorem63-distillation-error-2026-07-23.md",
         "DavisKahan/TanTheta/Theorem63FiniteSource.lean",
-        "prose/distilled_literature/DavisKahan1970_exact_source_register.tex",
         "dev/davis-kahan-1970-statement-map.json",
         "scripts/certify_davis_kahan_1970.py"
       ],
@@ -839,12 +839,11 @@
         "prose/InfiniteDimensionalDavisKahan.tex",
         "prose/distilled_literature/DavisKahan1970_section9_numerical_example.tex",
         "prose/distilled_literature/DavisKahan1970_section8_branch_selection.tex",
-        "prose/distilled_literature/DavisKahan1970_exact_source_register.tex",
         "dev/davis-kahan-1970-statement-map.json",
         "dev/davis-kahan-1970-independent-audit-prompt.md"
       ],
-      "scope": "Full Part III theory on separable Hilbert spaces: bounded Hermitian main body, four angle theorem families for arbitrary unitary-invariant norms, direct rotation, spectral selection, and unbounded self-adjoint extensions.",
-      "missing_work": "Close and compile the unrestricted Section 2 tan(2 Theta) source wrapper from only the printed hypotheses, then run the clean compiler certificate and an independent row-by-row semantic audit. Keep the readable mathematical distillation current, and keep exact source excerpts and source-to-Lean registration in the separate audit register/map so exposition and certification cannot drift together.",
+      "scope": "Full Part III theory on separable Hilbert spaces, reconstructed transformatively in source order: bounded Hermitian main body, four angle theorem families for arbitrary unitary-invariant norms, two-subspace/direct-rotation geometry, Sylvester estimates, unbounded self-adjoint extensions, branch selection, numerical example, and source questions.",
+      "missing_work": "Keep DavisKahan1970_part_III.tex mathematically faithful and in source order as the single distributable audit specification; keep its DK-CERT passage hashes and source-to-Lean registration synchronized. A private transcription may be used to re-audit the distillation but must never be required by repository checks.",
       "role": "primary_theorem_source",
       "bibliographic_status": "verified"
     },

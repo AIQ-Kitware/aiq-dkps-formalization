@@ -339,19 +339,20 @@ Accordingly:
   the source norm scope, the direct-rotation and spectral-selection theory,
   the unbounded passages, sharpness/equality content, and a fresh build and
   trusted-dependency audit.
-- Keep the readable Davis--Kahan mathematical reconstruction and the audit
-  specification distinct. `prose/distilled_literature/DavisKahan1970_part_III.tex`
-  is a self-contained mathematical walkthrough and should be edited only to
-  correct mathematics or materially stale formalization navigation. Exact
-  registered source excerpts belong in the companion
-  `DavisKahan1970_exact_source_register.tex`, bound to Lean declarations by
-  `dev/davis-kahan-1970-statement-map.json`.
-- For independently checkable compiler evidence, run
-  `python3 scripts/certify_davis_kahan_1970.py --clean`. When the private
-  modernized transcription is locally available, pass `--transcription PATH`
-  so the certificate verifies registered excerpts against the recorded
-  full-source hash and line ranges. Add `--require-terminal` only when asking
-  the maintained census itself to be a hard 100%-coverage gate. The compiler
+- `prose/distilled_literature/DavisKahan1970_part_III.tex` is both the readable
+  transformative reconstruction and the distributable semantic audit
+  specification. Keep it in the paper's presentation order and preserve exact
+  mathematical hypotheses, conclusions, equations needed to identify claims,
+  exceptional cases, counterexamples, and scope qualifications. Its marked
+  `DK-CERT-SOURCE` passages are hashed by
+  `dev/davis-kahan-1970-statement-map.json`; do not create a second copied
+  source register or make repository checks depend on a private transcription.
+- A private transcription or lawful source copy may be used only to re-audit
+  the fidelity of the checked-in distillation itself. For independently
+  checkable compiler evidence, run
+  `python3 scripts/certify_davis_kahan_1970.py --clean`; no private-source path
+  is required or accepted. Add `--require-terminal` only when asking the
+  maintained census itself to be a hard 100%-coverage gate. The compiler
   certificate proves compilation and declaration resolution; semantic fidelity
   is judged independently with `dev/davis-kahan-1970-independent-audit-prompt.md`.
 - Keep print-heavy Lean audit modules out of ordinary aggregate imports.
