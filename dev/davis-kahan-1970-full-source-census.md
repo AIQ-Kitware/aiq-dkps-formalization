@@ -11,8 +11,8 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 41 |
-| `compiled_specialization` | 3 |
+| `compiled_exact` | 44 |
+| `compiled_specialization` | 0 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
@@ -1620,10 +1620,10 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is clos
 #### Proposition 4.1: Pointwise and singular-value extremality of the direct rotation
 
 - **Kind:** `proposition`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** For any unitary carrying P to Q, an orthonormal sequence experiences angles at least the principal angles; equivalently the singular values of (1-V)|P are minimized by the direct rotation and equal 2 sin(theta_k/2).
-- **Current Lean references:** `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation`, `TauCeti.DavisKahan1970.Proposition4_1`, `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional`, `TauCeti.DavisKahan1970.Proposition4_1_real`, `TauCeti.DavisKahan1970.restrictedDisplacementDominance_real`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional_nonacute`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation`, `TauCeti.DavisKahan1970.Proposition4_1`, `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional`, `TauCeti.DavisKahan1970.Proposition4_1_real`, `TauCeti.DavisKahan1970.restrictedDisplacementDominance_real`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional_nonacute`, `TauCeti.positiveApproximationEigenvector`, `TauCeti.orthonormal_positiveApproximationEigenvector`, `TauCeti.apply_positiveApproximationEigenvector`, `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors`, `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`
 - **Assessment:** The finite pointwise singular-value theorem is compiled: every singular value of the restricted displacement (1-V)P is minimized by the direct rotation, whose values are the doubled half-angle sines 2 sin(theta_k/2).  A source-numbered wrapper and the infinite-dimensional scope remain open.
 
 **SOURCE WRAPPER ADDED 2026-08-05**, in `DavisKahan/Sources/DavisKahan1970/Section4.lean` (namespace `TauCeti.DavisKahan1970`), so the facade can cite the paper's numbering directly.  The wrappers are `alias`es over the already-compiled general theorems, so they carry the exact statements.  The infinite-dimensional form is proved in `Experimental/MathAhead/Section4/InfiniteProposition41.lean` by a spectral-cutoff min--max argument; it is NOT aliased here, because no production module may import `Experimental` and `lake build` does not yet guard that chain.
@@ -1646,15 +1646,15 @@ statements are left above as the historical record and are superseded by this pa
 THE ROUTE NOTE ON THE BLOCKER WAS WRONG ABOUT WHAT WAS NEEDED, AND THE CENSUS UNDERSTATED WHAT WAS ALREADY BUILT.  Both the `next_action` and the `scope_gap` here said the remedy was 'the complexification route rather than a reproof', implying machinery still to be written.  MEASURED 2026-08-09: `DavisKahan/OperatorIdeal/ComplexificationApproximation.lean` ALREADY PROVED, since before this tranche, that a real operator and its complexification have EQUAL approximation numbers (`approximationNumber_complexify`) and equal finite Ky Fan approximation gauges (`kyFanApproximationGauge_complexify`).  It was built for the real Ky Fan ideal work and was recorded on no Section 4 row.  The only genuinely missing ingredient was a real MINIMIZER, i.e. the real direct rotation, which is `DavisKahan/Geometry/Polar/DirectRotationReal.lean`.  With those two, the real Proposition 4.1 is three rewrites.
 
 SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`: the previous `next_action` incorrectly called the printed first formulation "beyond source".  It is part of Proposition 4.1 and remains an obligation.
-- **Next action:** Add the printed orthonormal-vector formulation from a compact singular-system/principal-vector theorem, then expose exact source wrappers at the compact matched-defect scope over both real and complex Hilbert spaces.  Do not restore `compiled_exact` from form B alone.
+- **Next action:** Nothing outstanding.  The compact positive spectral selector realizes every nonzero principal angle by an orthonormal principal vector; the zero-angle clauses are automatic.  The source wrappers combine this first formulation with restricted-displacement approximation-number dominance at the compact matched-crossed-defect nonacute scope over both scalar fields.
 
 #### Corollary 4.1: UI-norm minimality of direct rotation displacement
 
 - **Kind:** `corollary`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** The direct rotation minimizes the norm of (1-V)P for every unitary-invariant norm.
-- **Current Lean references:** `TauCeti.DavisKahanTheory.uiNorm_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm`, `TauCeti.DavisKahan1970.Corollary4_1`, `TauCeti.DavisKahan1970.Corollary4_1_minimizer`, `TauCeti.DavisKahan.Frontier.Section4.corollary4_1_restrictedDisplacement_idealGauge`, `TauCeti.DavisKahan1970.Corollary4_1_real`, `TauCeti.DavisKahan1970.Corollary4_1_opNorm_real`, `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.uiNorm_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm`, `TauCeti.DavisKahan1970.Corollary4_1`, `TauCeti.DavisKahan1970.Corollary4_1_minimizer`, `TauCeti.DavisKahan.Frontier.Section4.corollary4_1_restrictedDisplacement_idealGauge`, `TauCeti.DavisKahan1970.Corollary4_1_real`, `TauCeti.DavisKahan1970.Corollary4_1_opNorm_real`, `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute`, `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute`, `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real`
 - **Assessment:** Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
 
 **SOURCE WRAPPER ADDED 2026-08-05**, in `DavisKahan/Sources/DavisKahan1970/Section4.lean` (namespace `TauCeti.DavisKahan1970`), so the facade can cite the paper's numbering directly.  The wrappers are `alias`es over the already-compiled general theorems, so they carry the exact statements.
@@ -1674,7 +1674,7 @@ listed on the row.
 THE RECORDED OBSTRUCTION DOES NOT APPLY HERE.  The blocker's obstruction (1) says `KyFanDominantIdealFamily` is scalar-fixed and carries no `gauge_complexify`, so an endpoint stated over it 'cannot be transported as stated'.  True, and irrelevant on this row: the real statement is made over a REAL family and nothing about the family is transported.  What is transported is the approximation-number sequence, by `ComplexificationApproximation.approximationNumber_complexify`, and the certificate/bridge pair `RestrictedDisplacementApproximationDominance` / `restrictedDisplacement_idealGauge_le` is `RCLike`-generic, so a real certificate feeds a real family directly.
 
 SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization` because the arbitrary-dimensional endpoints recorded here were acute while the paper inherits the matched-crossed-defect nonacute case.
-- **Next action:** Finish and compile the complex chosen-defect endpoint, add the real chosen-defect transport, and expose source wrappers carrying the paper compact/matched-defect hypotheses exactly.
+- **Next action:** Nothing outstanding.  The source-numbered complex and real wrappers conclude ideal membership and minimality for every Ky-Fan-dominant unitarily invariant gauge at the compact matched-crossed-defect nonacute scope inherited by Section 4.
 
 #### Proposition 4.2: Basis-angle square-sum extremality
 
@@ -1746,10 +1746,10 @@ SOURCE-CLOSURE TRANCHE 2026-08-11.  Added the stable arbitrary-dimensional `TauC
 #### Proposition 4.3: Squared displacement UI-norm minimality
 
 - **Kind:** `proposition`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Mathematics:** The direct rotation minimizes the UI norm of (1-V*) (1-V).
-- **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_displacementSquare_kyFan`, `TauCeti.DavisKahanTheory.directRotation_displacementSquare_uiNorm`, `TauCeti.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm`, `TauCeti.DavisKahan1970.Proposition4_3`, `TauCeti.DavisKahan1970.Proposition4_3_kyFan`, `TauCeti.DavisKahan1970.Proposition4_3_minimizer`, `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional`, `TauCeti.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles`, `TauCeti.DavisKahan1970.Proposition4_3_real`, `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge`, `TauCeti.DavisKahan1970.Proposition4_3_real_idealGauge`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_displacementSquare_kyFan`, `TauCeti.DavisKahanTheory.directRotation_displacementSquare_uiNorm`, `TauCeti.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm`, `TauCeti.DavisKahan1970.Proposition4_3`, `TauCeti.DavisKahan1970.Proposition4_3_kyFan`, `TauCeti.DavisKahan1970.Proposition4_3_minimizer`, `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional`, `TauCeti.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles`, `TauCeti.DavisKahan1970.Proposition4_3_real`, `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge`, `TauCeti.DavisKahan1970.Proposition4_3_real_idealGauge`, `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_nonacute`, `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_nonacute_idealGauge`, `TauCeti.DavisKahan1970.Proposition4_3_nonacute_real`, `TauCeti.DavisKahan1970.Proposition4_3_nonacute_real_idealGauge`, `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge`, `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge`
 - **Assessment:** Compiled for every unitarily invariant norm over every RCLike field (finite dimension), via Fan-Hoffman majorization of the pinched competitor and two-block pinching contraction.
 
 VERIFIED 2026-08-04: the finite-dimensional UI-norm minimality is compiled, axiom-clean and in the default build. The **infinite-dimensional** form is stated in `DavisKahan/Experimental/Frontier/Section4.lean` and is `sorry` (`#print axioms` reaches `sorryAx`). Proposition 4.1's infinite form *is* proved, in `Experimental/MathAhead/Section4/InfiniteProposition41.lean`, by a spectral-cutoff min-max argument -- that is the pattern to follow.
@@ -1793,7 +1793,7 @@ statements are left above as the historical record and are superseded by this pa
 **M33, 2026-08-09 (Claude Opus 5).  THE REAL-SCALAR AXIS IS CLOSED ON THIS ROW.**  `Proposition4_3_real` (`DavisKahan/Sources/DavisKahan1970/Section4Real.lean`) is the Ky Fan statement over a REAL Hilbert space of arbitrary dimension: every Ky Fan sum of the approximation numbers of `(1 - W^T)(1 - W)` is minimized by the real direct rotation.  Transported by `ComplexificationApproximation.kyFanApproximationGauge_complexify`, which was already in the tree; see the M33 note on `DK-4.1-prop` for why no new analysis was required.  Ky Fan level remains the honest scope over `R` for the same reason as over `C`.
 
 SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization` because the infinite-dimensional declarations are acute while the printed Section 4 scope inherits matched crossed defects.
-- **Next action:** Generalize the pinching/block-sum proof from the canonical acute direct rotation to the chosen matched-defect direct rotation, over complex and real Hilbert spaces, and add exact compact-scope source wrappers.
+- **Next action:** Nothing outstanding.  The block-pinching proof now handles the chosen matched-defect direct rotation without acuteness over both scalar fields, and the source wrappers expose its compact inherited scope for every Ky-Fan-dominant unitarily invariant gauge.
 
 #### Proposition 4.4: Real-space full displacement minimality below pi/3
 
