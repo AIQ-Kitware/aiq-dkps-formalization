@@ -251,21 +251,24 @@ theorem theorem5_1_banach_sylvester_interchanged
 
 /-- **Davis--Kahan 1970, Theorem 5.1 with an unbounded left block.**
 
-The partial operator `A` has the dense domain stated in the paper and an
-everywhere-defined bounded inverse.  The bounded maps `T` and `C` satisfy the
-Sylvester equation on that domain.  The conclusion is the same compatible-norm
-bound as in the bounded theorem. -/
+The partial operator `A` is closed and densely defined as stated in the paper,
+and has an everywhere-defined bounded left inverse.  The bounded maps `T` and
+`C` satisfy the Sylvester equation on that domain.  No right inverse or
+surjectivity hypothesis is imposed: the proof uses only cancellation after
+applying `A` to `T x`.  The conclusion is the same compatible-norm bound as in
+the bounded theorem. -/
 theorem theorem5_1_banach_sylvester_unboundedA
     (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
     (A : Y →ₗ.[ℂ] Y) (_hAdense : Dense (A.domain : Set Y))
-    (hAinv : TauCeti.LinearPMap.BoundedEverywhereInverseData A)
+    (_hAclosed : A.IsClosed)
+    (hAinv : TauCeti.LinearPMap.BoundedEverywhereLeftInverseData A)
     (B : X →L[ℂ] X) (T C : X →L[ℂ] Y) {gamma delta : ℝ}
     (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
     (hAinvNorm : ‖hAinv.inv‖ ≤ (gamma + delta)⁻¹)
     (hB : ‖B‖ ≤ gamma)
     (hEq : TauCeti.LinearPMap.BoundedRightSylvesterEquation A B T C) :
     delta * N T ≤ N C :=
-  TauCeti.LinearPMap.opNorm_le_of_boundedRight_sylvester_of_everywhereInverse
+  TauCeti.LinearPMap.opNorm_le_of_boundedRight_sylvester_of_everywhereLeftInverse
     N.triangle
     (fun L S => N.comp_left_le_mul L S)
     (fun S R => N.comp_right_le_mul S R)

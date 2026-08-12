@@ -17,6 +17,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `S2-sharpness` — Section 2, paragraph after four theorems: Best constants and simultaneous equality | source_claim | `base-sharpness` | 0 / 1 | 100% | yes |
 | `S2-unbounded-scope` — Section 2, final paragraphs: Unbounded self-adjoint scope | scope_claim | `s2-unbounded-scope` | 0 / 10 | 100% | yes |
 | `DK-3.1-def` — Definition 3.1: Direct rotation | definition | `base-acute-direct-rotation` | 0 / 1 | 100% | yes |
+| `DK-3.2-def` — Definition 3.2: Acute case | definition | `s3-acute-nonuniform-counterexample` | 0 / 1 | 100% | yes |
 | `DK-3.1-prop` — Proposition 3.1: Acute direct rotation existence and uniqueness | proposition | `s3-prop3-1` | 0 / 3 | 100% | yes |
 | `DK-3.2-prop` — Proposition 3.2: Nonacute existence criterion | proposition | `s3-prop3-2-existence` | 0 / 6 | 100% | yes |
 | `DK-3.3-prop` — Proposition 3.3: Principal square-root characterization | proposition | `s3-prop3-3` | 0 / 5 | 100% | yes |
@@ -29,7 +30,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-4.1-cor` — Corollary 4.1: UI-norm minimality of direct rotation displacement | corollary | `s4-cor4-1` | 0 / 3 | 100% | yes |
 | `DK-4.2-prop` — Proposition 4.2: Basis-angle square-sum extremality | proposition | `s4-prop4-2` | 0 / 2 | 100% | yes |
 | `DK-4.3-prop` — Proposition 4.3: Squared displacement UI-norm minimality | proposition | `s4-prop4-3` | 0 / 2 | 100% | yes |
-| `DK-5.1-thm` — Theorem 5.1: Banach-space Sylvester lower bound | theorem | `s5-theorem5-1` | 0 / 2 | 100% | yes |
+| `DK-5.1-thm` — Theorem 5.1: Banach-space Sylvester lower bound | theorem | `s5-theorem5-1`, `s5-theorem5-1-interchanged`, `s5-theorem5-1-unbounded-left` | 0 / 4 | 100% | yes |
 | `DK-5-hermitian-inequalities` — Section 5, inequalities (5.1) and (5.2): Square-norm and rank-corrected Sylvester inequalities | equation | `s5-inequality-5-1` | 0 / 1 | 100% | yes |
 | `DK-5.2-thm` — Theorem 5.2: Semibounded self-adjoint Sylvester theorem | theorem | `base-theorem5-2` | 0 / 1 | 100% | yes |
 | `DK-6.3-thm` — Theorem 6.3: Generalized tangent theorem | theorem | `s6-theorem6-3` | 0 / 6 | 100% | yes |
@@ -39,27 +40,27 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-7-tan2-proof` — Section 7, equation (7.6) and following argument: Singular-vector proof of the tangent double-angle theorem | proof_package | `s7-tan2` | 0 / 3 | 100% | yes |
 | `DK-8.1-thm` — Theorem 8.1: Branch selection and spectral repulsion | theorem | `s8-theorem8-1` | 0 / 18 | 100% | yes |
 | `DK-8.2-thm` — Theorem 8.2: Smallness selects the acute branch | theorem | `s8-theorem8-2-perturbation`, `s8-theorem8-2-residual` | 0 / 14 | 100% | yes |
-| `DK-9-model` — Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model | numerical_model | `s9-finite-certificate`, `s9-final-certificate` | 1 / 23 | 95% | no |
-| `DK-9.1-9.4` — Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds | numerical_claims | `s9-initial-angle-bounds`, `s9-final-certificate` | 1 / 23 | 95% | no |
-| `DK-9.5-9.7` — Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements | numerical_claims | `s9-tangent-angle-bounds`, `s9-final-certificate` | 1 / 23 | 95% | no |
-| `DK-9.8` — Equation (9.8): Comparison with Weinberger bounds | comparison_claim | `s9-output-certificate`, `s9-final-certificate` | 1 / 23 | 95% | no |
+| `DK-9-model` — Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model | numerical_model | `s9-finite-certificate` | 0 / 6 | 100% | yes |
+| `DK-9.1-9.4` — Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds | numerical_claims | `s9-initial-angle-bounds` | 0 / 5 | 100% | yes |
+| `DK-9.5-9.7` — Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements | numerical_claims | `s9-tangent-angle-bounds` | 0 / 12 | 100% | yes |
+| `DK-9.8` — Equation (9.8): Comparison with Weinberger bounds | comparison_claim | `s9-weinberger-comparison` | 0 / 3 | 100% | yes |
 | `DK-9-infinite-residual-counterexample` — Section 9, l2 example after (9.8): Residual-infinite limitation example | example | `base-section9-infinite-residual-example` | 0 / 1 | 100% | yes |
-| `DK-9.9-9.11` — Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster | numerical_claims | `s9-output-certificate`, `s9-final-certificate` | 1 / 23 | 95% | no |
+| `DK-9.9-9.11` — Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster | numerical_claims | `s9-individual-eigenvector-bounds` | 0 / 3 | 100% | yes |
 
 ## Summary
 
-- Manifest nodes: **90**
-- Textually present: **90**
-- Paper result rows tracked by the frontier audit: **35**
+- Manifest nodes: **95**
+- Textually present: **95**
+- Paper result rows tracked by the frontier audit: **36**
 - Census rows requiring declaration mappings: **0**
 - Required census rows mapped: **0**
 - Census rows explicitly recording an absent declaration: **0**
-- Declarations resolving in Lean: **90**
-- Declarations with admission-free Lean closure: **90**
-- Recursively grounded manifest nodes: **88**
-- Paper results recursively grounded: **30 / 35**
-- Source-role endpoints resolving: **39 / 39**
-- Source-role endpoints recursively grounded: **38 / 39**
+- Declarations resolving in Lean: **95**
+- Declarations with admission-free Lean closure: **95**
+- Recursively grounded manifest nodes: **95**
+- Paper results recursively grounded: **36 / 36**
+- Source-role endpoints resolving: **43 / 43**
+- Source-role endpoints recursively grounded: **43 / 43**
 
 ## Manifest nodes
 
@@ -77,6 +78,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s3-paper-direct-rotation-predicate` | foundation | no |  | high | no | yes | yes | yes | yes |
 | `s3-crossed-defect-equivalence` | foundation | no |  | high | no | yes | yes | yes | yes |
 | `s3-generic-cosine-restriction` | foundation | no |  | high | no | yes | yes | yes | yes |
+| `s3-acute-nonuniform-counterexample` | source | yes | `DK-3.2-def` | medium | no | yes | yes | yes | yes |
 | `s3-generic-sine-restriction` | foundation | no |  | medium | no | yes | yes | yes | yes |
 | `s3-generic-pythagoras` | bridge | no |  | medium | no | yes | yes | yes | yes |
 | `s3-spectral-multiplicity-definition` | foundation | no |  | hard | no | yes | yes | yes | yes |
@@ -112,6 +114,8 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s5-compatible-cross-norm` | foundation | no |  | medium | no | yes | yes | yes | yes |
 | `s5-theorem5-1` | source | yes | `DK-5.1-thm` | medium | no | yes | yes | yes | yes |
 | `s5-inequality-5-1` | source | yes | `DK-5-hermitian-inequalities` | medium | no | yes | yes | yes | yes |
+| `s5-theorem5-1-interchanged` | source | yes | `DK-5.1-thm` | medium | no | yes | yes | yes | yes |
+| `s5-theorem5-1-unbounded-left` | source | yes | `DK-5.1-thm` | medium | no | yes | yes | yes | yes |
 | `s6-trial-residual` | foundation | no |  | high | no | yes | yes | yes | yes |
 | `s6-theorem6-3-directed-sine` | foundation | no |  | high | no | yes | yes | yes | yes |
 | `s6-theorem6-3-directed-tangent-data` | foundation | no |  | high | no | yes | yes | yes | yes |
@@ -152,8 +156,10 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `s9-finite-certificate` | bridge | yes | `DK-9-model` | high | no | yes | yes | yes | yes |
 | `s9-initial-angle-bounds` | source | yes | `DK-9.1-9.4` | high | no | yes | yes | yes | yes |
 | `s9-tangent-angle-bounds` | source | yes | `DK-9.5-9.7` | high | no | yes | yes | yes | yes |
-| `s9-output-certificate` | bridge | yes | `DK-9.8`, `DK-9.9-9.11` | hard | yes | yes | yes | yes | no |
-| `s9-final-certificate` | source | yes | `DK-9-model`, `DK-9.1-9.4`, `DK-9.5-9.7`, `DK-9.8`, `DK-9.9-9.11` | hard | yes | yes | yes | yes | no |
+| `s9-weinberger-comparison` | source | yes | `DK-9.8` | high | no | yes | yes | yes | yes |
+| `s9-individual-eigenvector-bounds` | source | yes | `DK-9.9-9.11` | high | no | yes | yes | yes | yes |
+| `s9-output-certificate` | bridge | no |  | hard | no | yes | yes | yes | yes |
+| `s9-final-certificate` | bridge | no |  | hard | no | yes | yes | yes | yes |
 | `s1-ui-norms-kyfan-suprema` | source | yes | `S1-ui-norms` | low | no | yes | yes | yes | yes |
 
 ## Dependency edges
@@ -188,6 +194,8 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 - `s6-appendix-tan2-kyfan` <- `s7-tan2`
 - `s6-appendix-tan2-kyfan-real` <- `s6-appendix-tan2-kyfan`
 - `s5-theorem5-1` <- `s5-compatible-cross-norm`
+- `s5-theorem5-1-interchanged` <- `s5-compatible-cross-norm`
+- `s5-theorem5-1-unbounded-left` <- `s5-compatible-cross-norm`
 - `s6-theorem6-3-directed-tangent-data` <- `s6-theorem6-3-directed-sine`
 - `s6-theorem6-3-kyfan-promotion` <- `s6-theorem6-3-directed-tangent-data`
 - `s6-theorem6-3-kyfan-core` <- `s6-trial-residual`, `s6-theorem6-3-directed-tangent-data`
@@ -220,5 +228,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 - `s9-finite-certificate` <- `s9-third-eigenvalue-bound`, `s9-exact-finite-data`
 - `s9-initial-angle-bounds` <- `s7-sin2`, `s9-represents-free-beam`
 - `s9-tangent-angle-bounds` <- `s6-theorem6-3`, `s7-tan2`, `s9-represents-free-beam`
+- `s9-weinberger-comparison` <- `s9-represents-free-beam`
+- `s9-individual-eigenvector-bounds` <- `s9-represents-free-beam`
 - `s9-output-certificate` <- `s9-initial-angle-bounds`, `s9-tangent-angle-bounds`, `s9-third-eigenvalue-bound`
 - `s9-final-certificate` <- `s9-canonical-model`, `s9-finite-certificate`, `s9-output-certificate`, `base-section9-arithmetic`

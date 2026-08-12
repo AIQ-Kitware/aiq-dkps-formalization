@@ -15,7 +15,6 @@ cannot accidentally regress the theorem completed at the base commit.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 #check TauCeti.DavisKahan1970.sinTheta
@@ -55,6 +54,5 @@ namespace ExactSinTheta
 #print axioms mul_subspaceGap_le_max_of_two_directedGap_le
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti
