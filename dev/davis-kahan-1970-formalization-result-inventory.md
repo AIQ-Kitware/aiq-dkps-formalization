@@ -47,19 +47,11 @@ Each result below explicitly partitions its primary source block into atoms insi
 
 ## Current semantic-closure queue
 
-The result-only hostile audit has reduced the remaining mathematical surface to three precisely scoped targets. Everything else in the 29-result denominator has an accepted source-vs-Lean semantic correspondence.
+The result-only hostile audit has reduced the remaining mathematical surface to one precisely scoped target. Everything else in the 29-result denominator has an accepted source-vs-Lean semantic correspondence.
 
 ### `S2-tan-theta` — Single-angle tangent theorem
 
-Result-only audit 2026-08-12: bounded directed and bounded ambient source theorems are present over complex and real Hilbert spaces, and the unbounded directed residual theorem is present over both scalar fields. The remaining source-scope gap is the *ambient unbounded* conclusion `delta * N(tan Theta) <= N(H)` for arbitrary paper UI norm under the printed hypotheses. No existing source-facing theorem was located that combines unbounded self-adjoint ambient scope with the sharp factor-one perturbation conclusion. Keep this result nonterminal until that theorem/wrapper exists and is registered.
-
-### `DK-3.4-prop` — Square as a direct rotation
-
-Accepted result-only semantic review 2026-08-12. The existing complex `proposition3_4_source_full` and equality companion prove the printed nonacute Proposition 3.4 over complex Hilbert spaces. `TauCeti.DavisKahan1970.proposition3_4_source_full_real` now gives the exact real counterpart at the same printed scope: from the real direct-rotation clauses and the source half-angle condition `C0^2 >= 1/2`, it concludes that `W^2` is a direct rotation from the reflected subspace to the target, including genuine positive diagonal compressions and the crossed-block identity. The proof transports through canonical complexification and introduces no uniform-acuteness, finite-dimensional, separability, compactness, or extra branch hypothesis.
-
-### `DK-4.1-prop` — Pointwise and singular-value extremality of the direct rotation
-
-Accepted result-only semantic review 2026-08-12. `Proposition4_1_compact_nonacute` and its real counterpart now bundle the printed orthonormal-vector angle lower bounds, the exact direct-rotation approximation values `2 sin(theta_k/2)`, and approximation-number minimality at the arbitrary-dimensional compact matched-defect scope. The exact-value bridge is exposed separately by `Proposition4_1_compact_nonacute_directRotationValues` and `Proposition4_1_compact_nonacute_directRotationValues_real` for direct auditing. Equations (4.1), (4.2), the VZ factorization, and the closest-vector step remain fidelity-only proof/setup material outside the counted proposition statement.
+Result-only audit 2026-08-12, updated after compiler validation of the unbounded ambient repair. `tanTheta_unbounded_ambient_paperUINorm_exact` proves the sharp factor-one unbounded ambient `delta * N(tan Theta) <= N(H)` conclusion for every paper UI norm once the crossed-defect equivalence (3.5) is supplied, reusing the arbitrary-trial unbounded Theorem 6.3 Ky-Fan core and the bounded Lemma-6.1/Lemma-6.2 two-corner assembly. This removes the analytic ambient-assembly gap. It does NOT prove the literal printed Section 2 infinite-dimensional statement: (3.5) is absent from that theorem statement and is not implied by the earlier matching-dimension condition (1.5). The repository challenge already specifies the bilateral-shift pole counterexample under the literal Section 2 hypotheses. Keep this result nonterminal until that exact source claim is formally refuted in production and registered; the compiled theorem here is then the sharp corrected repair.
 
 ## Printed-statement boundary reviews
 

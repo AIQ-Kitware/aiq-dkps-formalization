@@ -10,11 +10,12 @@ A hostile reviewer should use this report together with `prose/distilled_literat
 
 - Counted DK-established results: **29**
 - Printed-result boundaries reviewed: **29/29**
-- Semantically terminal: **27/29**
-- Genuine remaining result-scope gaps: **2**
+- Semantically terminal: **28/29**
+- Genuine remaining result-scope gaps: **1**
 - Pending results re-audited in the current sweep: **17**
 - False-positive pending statuses closed across the result-only sweep: **12**
 - Latest-main baseline for this promotion: `85a2f7abb1ae`. That baseline already closes Proposition 3.3 at the full nonacute real/complex scope; this promotion adds the compiler-validated compact/nonacute Proposition 4.1 direct-value bridge and advances the denominator from 26/29 to 27/29.
+- Post-promotion integration baseline: `535dab991eb2`. Proposition 3.4 is already terminal on this base. The compiler-validated unbounded ambient single-angle tangent assembly is now integrated under crossed-defect equivalence (3.5); the denominator remains **28/29** because the literal printed infinite-dimensional ambient clause omits (3.5) and still requires a production formal refutation.
 
 ## All 29 counted results
 
@@ -46,20 +47,24 @@ Accepted result-only semantic review 2026-08-12. `sinTheta` is the complex sourc
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real`
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`
+- `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
 
 **Semantic review:**
 
-Result-only audit 2026-08-12: bounded directed and bounded ambient source theorems are present over complex and real Hilbert spaces, and the unbounded directed residual theorem is present over both scalar fields. The remaining source-scope gap is the *ambient unbounded* conclusion `delta * N(tan Theta) <= N(H)` for arbitrary paper UI norm under the printed hypotheses. No existing source-facing theorem was located that combines unbounded self-adjoint ambient scope with the sharp factor-one perturbation conclusion. Keep this result nonterminal until that theorem/wrapper exists and is registered.
+Result-only audit 2026-08-12, updated after compiler validation of the unbounded ambient repair. `tanTheta_unbounded_ambient_paperUINorm_exact` proves the sharp factor-one unbounded ambient `delta * N(tan Theta) <= N(H)` conclusion for every paper UI norm once crossed-defect equivalence (3.5) is supplied. It reuses the arbitrary-trial unbounded Theorem 6.3 Ky-Fan core and the bounded Lemma-6.1/Lemma-6.2 two-corner assembly, so the analytic ambient-assembly gap is closed.
+
+This does **not** prove the literal printed infinite-dimensional Section 2 statement. Condition (3.5) is absent from that theorem statement and is not implied by the earlier matching-dimension condition (1.5); the repository challenge already specifies the bilateral-shift witness satisfying the literal gap/Rayleigh--Ritz hypotheses while the whole-space angle has a `pi/2` pole. Under the project repair policy, the counted row therefore stays nonterminal until that false source claim is formally refuted in production. The newly compiled theorem is the sharp corrected unbounded ambient repair.
 
 **Structured remaining gap:**
 
-- Category: `missing_unbounded_ambient_source_surface`
-- Missing surface: Unbounded self-adjoint ambient perturbation theorem delta * N(tan Theta) <= N(H) for every paper unitary-invariant norm under the printed Section 2 ordered-gap/Rayleigh-Ritz hypotheses.
-- Next action: Prove/register an unbounded ambient PaperUI source wrapper with the sharp factor-one perturbation conclusion; then re-run hostile semantic review.
+- Category: `formal_refutation_of_false_unbounded_ambient_claim`
+- Missing surface: A production, compiler-checked bilateral-shift refutation of the literal infinite-dimensional Section 2 ambient tan-Theta clause from only its printed hypotheses.
+- Next action: Promote the existing literal-Section-2 pole-counterexample challenge to a sorry-free production theorem; then register `S2-tan-theta` as refuted-as-transcribed and retain `tanTheta_unbounded_ambient_paperUINorm_exact` as the corrected (3.5)-qualified repair.
 - Strongest current evidence:
+  - `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
+  - `TauCeti.DavisKahan.Frontier.Section3.directedGap_asymmetric_coordinateHalfSpace`
+  - `TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses`
   - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`
-  - `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
-  - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real`
 
 ### 3. `S2-sin-two-theta` — Double-angle sine theorem
 
@@ -493,7 +498,7 @@ Accepted result-only semantic review 2026-08-12. The Section 8 source surface ex
 
 ## One remaining mathematical target
 
-- **`S2-tan-theta` — Single-angle tangent theorem:** Unbounded self-adjoint ambient perturbation theorem delta * N(tan Theta) <= N(H) for every paper unitary-invariant norm under the printed Section 2 ordered-gap/Rayleigh-Ritz hypotheses.
+- **`S2-tan-theta` — Single-angle tangent theorem:** the sharp unbounded ambient inequality is now compiled under crossed-defect equivalence (3.5); exact source closure requires the production formal refutation of the literal infinite-dimensional Section 2 ambient clause, which omits (3.5) and admits the bilateral-shift pole witness.
 
 ## Reviewer reproduction
 
