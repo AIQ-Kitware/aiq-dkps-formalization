@@ -150,6 +150,94 @@ private theorem real_approximationNumber_direct_le_competitor
   rw [← approximationNumber_complexify, ← approximationNumber_complexify]
   exact D.approximationNumber_direct_le_competitor n
 
+
+/-- Real form of the exact direct/sine cutoff identity.  Complexification
+preserves both approximation-number sequences and the quadratic source model. -/
+private theorem real_approximationNumber_direct_cosineCutoff_eq_sine
+    {X Y : Type*} [NormedAddCommGroup X] [InnerProductSpace ℝ X] [CompleteSpace X]
+    [NormedAddCommGroup Y] [InnerProductSpace ℝ Y] [CompleteSpace Y]
+    (C : X →L[ℝ] X) (A B S : X →L[ℝ] Y)
+    (hCsa : IsSelfAdjointOperator C)
+    (hCpos : ∀ x, 0 <= inner ℝ (C x) x)
+    (hAnorm : ‖A‖ <= Real.sqrt 2)
+    (hAsq : ∀ x, ‖A x‖ ^ 2 = 2 * ‖x‖ ^ 2 - 2 * inner ℝ (C x) x)
+    (hBsq : ∀ x, 2 * ‖x‖ ^ 2 - 2 * ‖C x‖ * ‖x‖ <= ‖B x‖ ^ 2)
+    (hSsq : ∀ x, ‖S x‖ ^ 2 = ‖x‖ ^ 2 - ‖C x‖ ^ 2)
+    (n : ℕ) :
+    1 - ((A.approximationNumber n : Real) ^ 2) / 2 =
+      Real.sqrt (1 - ((S.approximationNumber n : Real) ^ 2)) := by
+  let D : TauCeti.DavisKahan.Section4.CosineDisplacementData
+      (complexify C) (complexify A) (complexify B) := {
+    cosine_selfAdjoint :=
+      ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
+        ((complexify_isSelfAdjoint_iff C).2
+          (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hCsa))
+    cosine_nonnegative := by
+      intro z
+      rw [TauCeti.DavisKahan.Foundation.RealComplexification.re_inner_complexify]
+      exact add_nonneg (hCpos _) (hCpos _)
+    direct_norm_le_sqrt_two := by simpa only [norm_complexify] using hAnorm
+    direct_norm_sq := by
+      intro z
+      rw [TauCeti.RealComplexification.norm_sq,
+        TauCeti.DavisKahan.Foundation.RealComplexification.re_inner_complexify,
+        TauCeti.RealComplexification.norm_sq]
+      change ‖A (TauCeti.RealComplexification.re z)‖ ^ 2 +
+          ‖A (TauCeti.RealComplexification.im z)‖ ^ 2 = _
+      rw [hAsq, hAsq]
+      ring
+    competitor_norm_sq_lower := by
+      intro z
+      have hx := hBsq (TauCeti.RealComplexification.re z)
+      have hy := hBsq (TauCeti.RealComplexification.im z)
+      have hcs :
+          ‖C (TauCeti.RealComplexification.re z)‖ *
+              ‖TauCeti.RealComplexification.re z‖ +
+            ‖C (TauCeti.RealComplexification.im z)‖ *
+              ‖TauCeti.RealComplexification.im z‖ <=
+            ‖complexify C z‖ * ‖z‖ := by
+        have hsq :
+            (‖C (TauCeti.RealComplexification.re z)‖ *
+                ‖TauCeti.RealComplexification.re z‖ +
+              ‖C (TauCeti.RealComplexification.im z)‖ *
+                ‖TauCeti.RealComplexification.im z‖) ^ 2 <=
+              (‖complexify C z‖ * ‖z‖) ^ 2 := by
+          rw [mul_pow, TauCeti.RealComplexification.norm_sq,
+            TauCeti.RealComplexification.norm_sq]
+          change _ <=
+            (‖C (TauCeti.RealComplexification.re z)‖ ^ 2 +
+              ‖C (TauCeti.RealComplexification.im z)‖ ^ 2) *
+            (‖TauCeti.RealComplexification.re z‖ ^ 2 +
+              ‖TauCeti.RealComplexification.im z‖ ^ 2)
+          nlinarith [sq_nonneg
+            (‖C (TauCeti.RealComplexification.re z)‖ *
+                ‖TauCeti.RealComplexification.im z‖ -
+              ‖C (TauCeti.RealComplexification.im z)‖ *
+                ‖TauCeti.RealComplexification.re z‖)]
+        have hleft : 0 <=
+            ‖C (TauCeti.RealComplexification.re z)‖ *
+                ‖TauCeti.RealComplexification.re z‖ +
+              ‖C (TauCeti.RealComplexification.im z)‖ *
+                ‖TauCeti.RealComplexification.im z‖ := by positivity
+        have hright : 0 <= ‖complexify C z‖ * ‖z‖ := by positivity
+        exact (sq_le_sq₀ hleft hright).1 hsq
+      rw [TauCeti.RealComplexification.norm_sq,
+        TauCeti.RealComplexification.norm_sq]
+      simp only [re_complexify, im_complexify]
+      nlinarith }
+  have hSsqC : ∀ z,
+      ‖complexify S z‖ ^ 2 = ‖z‖ ^ 2 - ‖complexify C z‖ ^ 2 := by
+    intro z
+    rw [TauCeti.RealComplexification.norm_sq, TauCeti.RealComplexification.norm_sq,
+      TauCeti.RealComplexification.norm_sq]
+    simp only [re_complexify, im_complexify]
+    rw [hSsq, hSsq]
+    ring
+  have h :=
+    TauCeti.DavisKahan.Section4.CosineDisplacementData.approximationNumber_direct_cosineCutoff_eq_sine
+      D (S := complexify S) hSsqC n
+  simpa only [approximationNumber_complexify] using h
+
 variable (U V : Submodule ℝ E)
   [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
 
@@ -1070,6 +1158,98 @@ theorem Proposition4_1_compact_orthonormalVectors_real
       (by linarith [Real.pi_pos])
   · simpa only [RCLike.re_to_real] using hinner
 
+
+/-- The real directed sine and positive source cosine satisfy the source
+Pythagorean identity. -/
+theorem principalSineOperator_norm_sq_eq_one_sub_sourceCosineR_norm_sq
+    (x : U) :
+    ‖TauCeti.principalSineOperator U V x‖ ^ 2 =
+      ‖x‖ ^ 2 - ‖sourceCosineR U V x‖ ^ 2 := by
+  have hpy := V.norm_sq_eq_add_norm_sq_starProjection (x : E)
+  have hC := norm_sourceCosineR_eq_norm_targetProjection U V x
+  rw [TauCeti.principalSineOperator_apply, hC]
+  have hxnorm : ‖(x : E)‖ = ‖x‖ := rfl
+  rw [hxnorm] at hpy
+  nlinarith
+
+/-- **The exact real singular-value value in Proposition 4.1 at the inherited
+compact, matched-defect scope.** -/
+theorem Proposition4_1_compact_nonacute_directRotationValues_real
+    (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
+    (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (n : ℕ) :
+    (ContinuousLinearMap.approximationNumber
+        ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+          DavisKahan.projection U) n : Real) =
+      2 * Real.sin (TauCeti.principalAngleSequence U V n / 2) := by
+  let A : U →L[ℝ] E := sourceRestrictedDisplacementR U
+    (TauCeti.DavisKahan.nonacuteDirectRotation U V J)
+  let B : U →L[ℝ] E := sourceRestrictedDisplacementR U W
+  let S : U →L[ℝ] E := TauCeti.principalSineOperator U V
+  have hAnorm : ‖A‖ <= Real.sqrt 2 := by
+    refine ContinuousLinearMap.opNorm_le_bound _ (Real.sqrt_nonneg 2) fun x => ?_
+    have hsq := sourceRestrictedDisplacementR_nonacute_norm_sq U V J x
+    have hpos := sourceCosineR_nonnegative U V x
+    have hroot : (Real.sqrt 2) ^ 2 = 2 := by norm_num
+    have hleft := norm_nonneg
+      (sourceRestrictedDisplacementR U
+        (TauCeti.DavisKahan.nonacuteDirectRotation U V J) x)
+    have hright : 0 <= Real.sqrt 2 * ‖x‖ := by positivity
+    apply (sq_le_sq₀ hleft hright).1
+    rw [hsq, mul_pow, hroot]
+    nlinarith
+  have hcut := real_approximationNumber_direct_cosineCutoff_eq_sine
+    (sourceCosineR U V) A B S
+    (sourceCosineR_selfAdjoint U V) (sourceCosineR_nonnegative U V)
+    hAnorm (sourceRestrictedDisplacementR_nonacute_norm_sq U V J)
+    (sourceRestrictedDisplacementR_competitor_norm_sq_lower U V W hWunitary hWmap)
+    (principalSineOperator_norm_sq_eq_one_sub_sourceCosineR_norm_sq U V) n
+  have hDseq := sourceRestrictedDisplacementR_sameApproximationSingularSequence U
+    (TauCeti.DavisKahan.nonacuteDirectRotation U V J) n
+  let a : Real := (A.approximationNumber n : Real)
+  let theta : Real := TauCeti.principalAngleSequence U V n
+  let shalf : Real := Real.sin (theta / 2)
+  have hcos : Real.cos theta =
+      Real.sqrt (1 - (TauCeti.principalSineSequence U V n) ^ 2) := by
+    dsimp only [theta, TauCeti.principalAngleSequence]
+    rw [Real.cos_arcsin]
+  have hcosApprox : Real.cos theta =
+      Real.sqrt (1 - ((TauCeti.principalSineOperator U V).approximationNumber n : Real) ^ 2) := by
+    simpa only [TauCeti.principalSineSequence] using hcos
+  have hcutCos : 1 - a ^ 2 / 2 = Real.cos theta := by
+    simpa only [a, A, S] using hcut.trans hcosApprox.symm
+  have hdouble : Real.cos theta = 1 - 2 * shalf ^ 2 := by
+    have htrig := Real.sin_sq_add_cos_sq (theta / 2)
+    dsimp only [shalf]
+    calc
+      Real.cos theta = Real.cos (theta / 2 + theta / 2) := by congr 1; ring
+      _ = Real.cos (theta / 2) * Real.cos (theta / 2) -
+          Real.sin (theta / 2) * Real.sin (theta / 2) := by rw [Real.cos_add]
+      _ = 1 - 2 * Real.sin (theta / 2) ^ 2 := by nlinarith
+  have haSq : a ^ 2 = (2 * shalf) ^ 2 := by
+    rw [hdouble] at hcutCos
+    nlinarith
+  have htheta0 : 0 <= theta := TauCeti.principalAngleSequence_nonneg U V n
+  have hshalf0 : 0 <= shalf := by
+    dsimp only [shalf]
+    exact Real.sin_nonneg_of_nonneg_of_le_pi (by linarith)
+      (by linarith [TauCeti.principalAngleSequence_le_pi_div_two U V n, Real.pi_pos])
+  have ha0 : 0 <= a := by
+    dsimp only [a]
+    exact A.approximationNumber_nonneg n
+  have ha : a = 2 * shalf := (sq_eq_sq₀ ha0 (mul_nonneg (by norm_num) hshalf0)).1 haSq
+  change (ContinuousLinearMap.approximationNumber
+      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+        DavisKahan.projection U) n : Real) = _
+  have hD : ContinuousLinearMap.approximationNumber
+      ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+        DavisKahan.projection U) n = A.approximationNumber n := by
+    simpa only [A] using hDseq
+  rw [hD]
+  simpa only [a, shalf, theta] using ha
+
 /-- **Proposition 4.1 over `ℝ` with both printed formulations and the inherited
 compact, matched-defect scope in one declaration.** -/
 theorem Proposition4_1_compact_nonacute_real
@@ -1082,6 +1262,11 @@ theorem Proposition4_1_compact_nonacute_real
         ∀ n : {n : ℕ // 0 < TauCeti.principalSineSequence U V n},
           TauCeti.principalAngleSequence U V (n : ℕ) ≤
             TauCeti.vectorAngle ℝ (v n : E) (W (v n : E))) ∧
+      (∀ n : ℕ,
+        (ContinuousLinearMap.approximationNumber
+            ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
+              DavisKahan.projection U) n : Real) =
+          2 * Real.sin (TauCeti.principalAngleSequence U V n / 2)) ∧
       ∀ n : ℕ,
         ContinuousLinearMap.approximationNumber
             ((1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J) ∘L
@@ -1089,6 +1274,8 @@ theorem Proposition4_1_compact_nonacute_real
           ContinuousLinearMap.approximationNumber
             ((1 - W) ∘L DavisKahan.projection U) n :=
   ⟨Proposition4_1_compact_orthonormalVectors_real U V hcompact W hWunitary hWmap,
+    Proposition4_1_compact_nonacute_directRotationValues_real
+      U V hcompact J W hWunitary hWmap,
     Proposition4_1_nonacute_real U V J W hWunitary hWmap⟩
 
 /-- **Corollary 4.1 over `ℝ` at the inherited compact, matched-defect scope.** -/

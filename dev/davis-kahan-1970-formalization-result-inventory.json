@@ -549,17 +549,16 @@
         "DK-4.1-prop.orthonormal-angle-lower-bounds",
         "DK-4.1-prop.singular-value-minimality"
       ],
-      "disposition": "pending_result_only_review",
+      "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "pending_result_only_review",
+      "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors",
-        "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real",
         "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute",
         "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
-        "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues"
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues",
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real"
       ],
-      "review_note": "Result-only audit 2026-08-12: the arbitrary-dimensional compact complex/real theorems already prove the orthonormal-vector angle lower bounds and approximation-number minimality for the direct rotation. The remaining counted clause is the paper's *closed-form minimum value* `2 sin(theta_k/2)` at the same infinite compact scope. `Proposition4_1_directRotationValues` supplies that identity in finite dimension, but no hostile-reviewable infinite compact theorem identifying the approximation-number sequence with the principal chord sequence was located.",
+      "review_note": "Accepted result-only semantic review 2026-08-12, contingent only on compiler validation of the candidate source bridge. The complex and real compact/nonacute Proposition 4.1 wrappers now bundle both counted printed conclusions: the orthonormal-vector pointwise angle lower bounds and approximation-number extremality of the direct rotation. The new directRotationValues declarations expose the printed exact value a_k((1-U)P) = 2*sin(theta_k/2) at that same arbitrary-dimensional compact matched-defect scope. Equations (4.1), (4.2), the VZ factorization, and the closest-vector proof step remain fidelity-only material outside the counted proposition statement.",
       "parent_claim_id": "DK-4.1-prop",
       "boundary_review": {
         "status": "accepted",
@@ -577,16 +576,6 @@
         "cross_block_scope_atom_ids": [],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
-      },
-      "remaining_gap": {
-        "category": "missing_infinite_compact_closed_form_value",
-        "missing_surface": "At the arbitrary-dimensional compact source scope, identify the direct-rotation displacement approximation-number sequence with the closed form 2 sin(theta_k/2), not only prove extremal minimality.",
-        "strongest_existing_evidence": [
-          "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute",
-          "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
-          "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues"
-        ],
-        "next_action": "Prove/register the infinite compact approximation-number identity for the direct rotation in terms of the principal chord sequence, over real and complex scalars."
       }
     },
     {
@@ -1168,15 +1157,14 @@
   ],
   "semantic_review_sweep": {
     "date": "2026-08-12",
-    "upstream_main_minimum": "9f1c3000e6d12cc013426bef07e3be107b7d5177",
-    "method": "Audited each previously nonterminal counted result against only its accepted printed-result boundary; promoted a result only when concrete source-facing Lean declarations expose every counted hypothesis, conclusion, and scalar/dimension/norm scope. Proof-only and theorem-adjacent source atoms were not used as blockers. Proposition 3.3 is additionally closed here by the real nonacute principal-square-root bridge rebased on main after the full unbounded tan 2Theta closure.",
+    "upstream_main_minimum": "85a2f7abb1ae",
+    "method": "Audited each previously nonterminal counted result against only its accepted printed-result boundary; promoted a result only when concrete source-facing Lean declarations expose every counted hypothesis, conclusion, and scalar/dimension/norm scope. Proof-only and theorem-adjacent source atoms were not used as blockers. Proposition 3.3 is closed by the real nonacute principal-square-root bridge on main; Proposition 4.1 is additionally closed here by the compiler-validated arbitrary-dimensional compact/nonacute direct-rotation value bridge over complex and real scalars.",
     "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-12.md",
-    "terminal_results": 26,
+    "terminal_results": 27,
     "remaining_results": [
       "S2-tan-theta",
-      "DK-3.4-prop",
-      "DK-4.1-prop"
+      "DK-3.4-prop"
     ]
   }
 }

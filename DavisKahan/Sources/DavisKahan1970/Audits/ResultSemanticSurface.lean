@@ -14,7 +14,7 @@ single compiler-checkable surface for the Lean declarations selected by the main
 
 Each `#check` below is evidence only: the semantic correspondence to the printed source
 is recorded in `dev/davis-kahan-1970-formalization-result-inventory.json` and the
-human-readable result audit.  The three explicitly nonterminal results also list the
+human-readable result audit.  The two explicitly nonterminal results also list the
 strongest current declarations that delimit the remaining theorem-surface gap.
 
 Run:
@@ -221,14 +221,13 @@ Status: **TERMINAL EXACT**.
 
 /-! ## DK-4.1-prop: Pointwise and singular-value extremality of the direct rotation
 
-Status: **OPEN RESULT-SCOPE GAP**.
+Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors
-#check @TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real
 #check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute
 #check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real
-#check @TauCeti.DavisKahan1970.Proposition4_1_directRotationValues
+#check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues
+#check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real
 
 /-! ## DK-4.1-cor: UI-norm minimality of direct rotation displacement
 

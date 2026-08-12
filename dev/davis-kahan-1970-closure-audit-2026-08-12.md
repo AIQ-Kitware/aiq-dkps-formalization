@@ -17,7 +17,7 @@ This audit separates three independent axes:
 
 The 49 rows are organizational groups and the 266 atoms are a source-fidelity inventory. The 100% completion denominator is the separate 29-result inventory. The broader row/atom findings below remain useful adversarial evidence, but only defects in the exact statement or scope of one of those 29 results block the formalization claim.
 
-Current maintained result denominator: **29**. Exact printed-result boundary reviews: **29/29 accepted**. Current result-level semantic terminality: **26/29**; the remaining **3** are the mathematics/review queue. The old 46-row/32-reopened counts below are retained only as historical evidence from the broader pre-pivot hostile audit and are not the current completion metric.
+Current maintained result denominator: **29**. Exact printed-result boundary reviews: **29/29 accepted**. Current result-level semantic terminality: **27/29**; the remaining **2** are the mathematics/review queue. The old 46-row/32-reopened counts below are retained only as historical evidence from the broader pre-pivot hostile audit and are not the current completion metric.
 
 `DK-3.1-prop` is now result-level terminal: `TauCeti.DavisKahan1970.proposition3_1_source` packages the already-proved generic acute direct-rotation existence, uniqueness, positive diagonal blocks, crossed-block identity, and property-(i)-alone characterization at the paper's printed `TauCeti.IsAcute` hypothesis.
 
@@ -25,7 +25,7 @@ Current maintained result denominator: **29**. Exact printed-result boundary rev
 
 `S2-tan-two-theta` is now result-level terminal at the full shared Section 2 scope: the existing bounded exact wrappers are joined by compiler-verified complex/real unbounded directed and ambient `PaperUnitaryInvariantNorm` endpoints, with canonical cutoff/pole machinery and the two-corner assembly internal to the source-facing theorems.
 
-A result-only re-audit now also closes `DK-3.2-prop`, `DK-3.5-prop`, `DK-4.2-prop`, `DK-5.1-thm`, `DK-6.1-prop`, and `DK-6.2-thm` by selecting the already-compiled declarations that correspond exactly to their narrowed printed statements. `DK-4.1-prop` remains open for one specific source-scope bridge: the arbitrary-dimensional compact/nonacute identity giving the direct rotation approximation values as `2 * sin(theta_k / 2)`. Its pointwise and minimality clauses are already present.
+A result-only re-audit closes `DK-3.2-prop`, `DK-3.5-prop`, `DK-4.1-prop`, `DK-4.2-prop`, `DK-5.1-thm`, `DK-6.1-prop`, and `DK-6.2-thm`. For `DK-4.1-prop`, the compiler-validated arbitrary-dimensional compact/nonacute source bridge exposes the direct-rotation approximation values as `2 * sin(theta_k / 2)` over both complex and real Hilbert spaces, completing the previously established pointwise and minimality clauses.
 
 ### Agent 3 source-denominator update
 
@@ -109,7 +109,7 @@ Acceptance here means only that this hostile pass found no concrete semantic hol
 
 The concrete source-spec defects found by the hostile review are repaired in the distributable TeX: the cosine law after (1.14), equations (3.7), (4.1), and (4.2), the strict Section 9 eigenvalue ordering, and the asymptotic preceding (9.8). The source-side denominator is now recorded atomically in `dev/davis-kahan-1970-source-atom-inventory.json`.
 
-This does **not** certify the corresponding Lean mathematics. In particular `S1-ui-norms`, `DK-9-model`, and `DK-9.8` remain mathematical obligations, while `DK-3.3-prop` and `DK-4.1-prop` remain atom-to-evidence mapping obligations. A future source re-audit can still discover additional omissions; if it does, add an atom rather than shrinking the denominator.
+This does **not** certify the corresponding Lean mathematics. In particular `S1-ui-norms`, `DK-9-model`, and `DK-9.8` remain mathematical obligations, while the remaining legacy mapping findings are advisory source-fidelity bookkeeping rather than result-level blockers. A future source re-audit can still discover additional omissions; if it does, add an atom rather than shrinking the denominator.
 
 ### Source-facing mathematical statements still missing or too narrow
 
@@ -119,7 +119,7 @@ The highest-value examples are the Section 1 residual-to-eigenvalue consequence,
 
 ### Mathematics likely exists, but the certificate does not prove correspondence
 
-These rows are reopened for evidence-selection or atomization rather than a known deep theorem gap: `S2-tan-theta`, `S2-sharpness`, `S2-unbounded-scope`, `DK-3.1-def`, `DK-3.3-prop`, `DK-4.1-prop`, `DK-4.2-prop`, `DK-4.3-prop`, `DK-5.1-thm`, `DK-5.2-thm`, `DK-6.1-prop`, `DK-6.2-thm`, `DK-6-appendix`, `DK-7-sin2-proof`, `DK-7-tan2-proof`, `DK-8.2-thm`, `DK-9.1-9.4`, `DK-9.5-9.7`.
+These rows are reopened for evidence-selection or atomization rather than a known deep theorem gap: `S2-tan-theta`, `S2-sharpness`, `S2-unbounded-scope`, `DK-3.1-def`, `DK-4.2-prop`, `DK-4.3-prop`, `DK-5.1-thm`, `DK-5.2-thm`, `DK-6.1-prop`, `DK-6.2-thm`, `DK-6-appendix`, `DK-7-sin2-proof`, `DK-7-tan2-proof`, `DK-8.2-thm`, `DK-9.1-9.4`, `DK-9.5-9.7`.
 
 The recurring failure mode is a generic `.whole` audit clause covering several separable identities/conclusions while the row points at only a subset or at a conditional arithmetic wrapper rather than the source-facing model theorem. These should be repaired by atomic claim clauses and exact declaration bindings, not by declaring the entire row terminal on reputation.
 

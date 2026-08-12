@@ -11,7 +11,7 @@ The two accounting layers are deliberately both visible:
 - Section 10 questions, explicitly deferred/unproved claims, definitions, proof-only derivations, examples, numerical working, historical/external results, and theorem-adjacent remarks remain visible in source fidelity but do not enlarge the denominator.
 - A false counted result remains in the denominator and requires exact formal refutation plus the repository's separate best-effort repair disposition.
 
-Current result-level status: **26/29 terminal**, **3 awaiting semantic closure**.
+Current result-level status: **27/29 terminal**, **2 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -1124,9 +1124,9 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `proposition`
 - **Exact source anchor:** Proposition 4.1
-- **Result disposition:** `pending_result_only_review`
+- **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `pending_result_only_review`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Organizational source-block hash:** `2b3c6a4dc471284a2f9e4f7e4f091d30fd00d0c04ef03648ee469d6e9e110cb3`
 
@@ -1179,33 +1179,27 @@ The latter follows by comparing $Vx$ with the closest unit vector in $Q\Hsp$ and
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:120`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:965`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:226`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:310`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1075`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1255`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`
+#### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:47`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:242`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1177`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1267,19 +1261,19 @@ is minimized among unitaries carrying $P\Hsp$ onto $Q\Hsp$ by the direct rotatio
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:250`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:341`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1095`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1282`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:281`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:372`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1344,13 +1338,13 @@ with the inequality also valid when the right-hand side is infinite.  The proof 
 
 #### `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:304`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:395`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:696`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:784`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1477,13 +1471,13 @@ for every unitary-invariant norm.  They also imply minimality of the operator no
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:395`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:486`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1110`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1297`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3082,8 +3076,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 266 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **26 currently terminal results independently reconfirmed:** yes / no
-- **3 currently nonterminal/pending results resolved by this audit:** yes / no
+- **27 currently terminal results independently reconfirmed:** yes / no
+- **2 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

@@ -221,6 +221,90 @@ universe v
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
+
+/-- The directed sine and positive source cosine satisfy the Pythagorean
+identity on source coordinates. -/
+theorem principalSineOperator_norm_sq_eq_one_sub_sourceCosine_norm_sq
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (x : U) :
+    ‖TauCeti.principalSineOperator U V x‖ ^ 2 =
+      ‖x‖ ^ 2 - ‖DavisKahan.Section4.sourceCosine U V x‖ ^ 2 := by
+  have hpy := V.norm_sq_eq_add_norm_sq_starProjection (x : H)
+  have hC := DavisKahan.Section4.norm_sourceCosine_eq_norm_targetProjection U V x
+  rw [TauCeti.principalSineOperator_apply, hC]
+  have hxnorm : ‖(x : H)‖ = ‖x‖ := rfl
+  rw [hxnorm] at hpy
+  nlinarith
+
+/-- **The exact singular-value value in Proposition 4.1 at the inherited
+compact, matched-defect scope.**  The direct rotation realizes the principal
+chord `2 sin(theta_n / 2)` at every approximation-number index. -/
+theorem Proposition4_1_compact_nonacute_directRotationValues
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (n : ℕ) :
+    (ContinuousLinearMap.approximationNumber
+        ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
+          DavisKahan.projection U) n : Real) =
+      2 * Real.sin (TauCeti.principalAngleSequence U V n / 2) := by
+  let _ : CompleteSpace U :=
+    (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+  let A : U →L[ℂ] H := DavisKahan.Section4.sourceRestrictedDisplacement U
+    (DavisKahan.nonacuteDirectRotation U V J)
+  let S : U →L[ℂ] H := TauCeti.principalSineOperator U V
+  have hcut :=
+    (DavisKahan.Section4.proposition4_1_nonacuteCosineDisplacementData
+      U V J W hWunitary hWmap).approximationNumber_direct_cosineCutoff_eq_sine
+      (S := S)
+      (principalSineOperator_norm_sq_eq_one_sub_sourceCosine_norm_sq U V) n
+  have hDseq := DavisKahan.Section4.sourceRestrictedDisplacement_sameApproximationSingularSequence
+    U (DavisKahan.nonacuteDirectRotation U V J) n
+  let a : Real := (A.approximationNumber n : Real)
+  let theta : Real := TauCeti.principalAngleSequence U V n
+  let shalf : Real := Real.sin (theta / 2)
+  have hcos : Real.cos theta =
+      Real.sqrt (1 - (TauCeti.principalSineSequence U V n) ^ 2) := by
+    dsimp only [theta, TauCeti.principalAngleSequence]
+    rw [Real.cos_arcsin]
+  have hcosApprox : Real.cos theta =
+      Real.sqrt (1 - ((TauCeti.principalSineOperator U V).approximationNumber n : Real) ^ 2) := by
+    simpa only [TauCeti.principalSineSequence] using hcos
+  have hcutCos : 1 - a ^ 2 / 2 = Real.cos theta := by
+    simpa only [a, A, S] using hcut.trans hcosApprox.symm
+  have hdouble : Real.cos theta = 1 - 2 * shalf ^ 2 := by
+    have htrig := Real.sin_sq_add_cos_sq (theta / 2)
+    dsimp only [shalf]
+    calc
+      Real.cos theta = Real.cos (theta / 2 + theta / 2) := by congr 1; ring
+      _ = Real.cos (theta / 2) * Real.cos (theta / 2) -
+          Real.sin (theta / 2) * Real.sin (theta / 2) := by rw [Real.cos_add]
+      _ = 1 - 2 * Real.sin (theta / 2) ^ 2 := by nlinarith
+  have haSq : a ^ 2 = (2 * shalf) ^ 2 := by
+    rw [hdouble] at hcutCos
+    nlinarith
+  have htheta0 : 0 <= theta := TauCeti.principalAngleSequence_nonneg U V n
+  have hthetaPi : theta <= Real.pi :=
+    (TauCeti.principalAngleSequence_le_pi_div_two U V n).trans (by linarith [Real.pi_pos])
+  have hshalf0 : 0 <= shalf := by
+    dsimp only [shalf]
+    exact Real.sin_nonneg_of_nonneg_of_le_pi (by linarith) (by linarith [Real.pi_pos])
+  have ha0 : 0 <= a := by
+    dsimp only [a]
+    exact A.approximationNumber_nonneg n
+  have ha : a = 2 * shalf := (sq_eq_sq₀ ha0 (mul_nonneg (by norm_num) hshalf0)).1 haSq
+  change (ContinuousLinearMap.approximationNumber
+      ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) n : Real) = _
+  have hD : ContinuousLinearMap.approximationNumber
+      ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L DavisKahan.projection U) n =
+      A.approximationNumber n := by
+    simpa only [A] using hDseq
+  rw [hD]
+  simpa only [a, shalf, theta] using ha
+
 /-- **Proposition 4.1 with both printed formulations and the inherited compact,
 matched-defect scope in one declaration.** -/
 theorem Proposition4_1_compact_nonacute
@@ -235,6 +319,11 @@ theorem Proposition4_1_compact_nonacute
         ∀ n : {n : ℕ // 0 < TauCeti.principalSineSequence U V n},
           TauCeti.principalAngleSequence U V (n : ℕ) ≤
             TauCeti.vectorAngle ℂ (v n : H) (W (v n : H))) ∧
+      (∀ n : ℕ,
+        (ContinuousLinearMap.approximationNumber
+            ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
+              DavisKahan.projection U) n : Real) =
+          2 * Real.sin (TauCeti.principalAngleSequence U V n / 2)) ∧
       ∀ n : ℕ,
         ContinuousLinearMap.approximationNumber
             ((1 - DavisKahan.nonacuteDirectRotation U V J) ∘L
@@ -242,9 +331,11 @@ theorem Proposition4_1_compact_nonacute
           ContinuousLinearMap.approximationNumber
             ((1 - W) ∘L DavisKahan.projection U) n := by
   refine ⟨Proposition4_1_compact_orthonormalVectors U V hcompact W hWunitary hWmap,
-    fun n => ?_⟩
-  exact DavisKahan.Section4.proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
-    U V J W hWunitary hWmap n
+    ?_, fun n => ?_⟩
+  · exact Proposition4_1_compact_nonacute_directRotationValues
+      U V hcompact J W hWunitary hWmap
+  · exact DavisKahan.Section4.proposition4_1_nonacute_restrictedDisplacement_approximationNumbers
+      U V J W hWunitary hWmap n
 
 /-- **Corollary 4.1 at the inherited compact, matched-defect scope.** -/
 theorem Corollary4_1_compact_nonacute
