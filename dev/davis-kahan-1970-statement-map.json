@@ -1655,10 +1655,23 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-8.1-thm",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
         "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSandwichApproximation_source",
-        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSandwichApproximation_source"
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
+        "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real"
       ],
       "audit_clauses": [
         {
@@ -1666,7 +1679,9 @@
           "description": "Theta <= pi/4 iff the selected Lambda blocks lie on the prescribed sides of alpha, together with existence of a reducing projector Q having those properties.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch",
-            "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn"
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real"
           ]
         },
         {
@@ -1674,7 +1689,9 @@
           "description": "Part (i): operator compression/sandwich inequality for A_1-alpha and C_1(Lambda_1-alpha)C_1, and the analogous lower block.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
-            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source"
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real"
           ]
         },
         {
@@ -1682,27 +1699,26 @@
           "description": "Part (ii): finite-dimensional eigenvalue inequalities and their natural infinite-dimensional approximation-number extensions.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source",
-            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source"
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
+            "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive"
           ]
         },
         {
           "id": "DK-8.1-thm.iii",
           "description": "Part (iii): symmetric-gauge/weak-majorization inequalities with principal-cosine weights, plus the analogous lower-block relation.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_source",
-            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_source"
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
+            "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real"
           ]
         }
       ],
       "source_specification_sha256": "ca616396d0bee7b303c7da3ad0904053b80ad6da1a13a172bbec402be84f7c57",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "audit_mapping",
-          "detail": "The theorem is usefully split into branch/(i)/(ii)/(iii), but primary evidence remains complex-centric while real counterparts exist. Bind each source conclusion explicitly in both source scalar fields."
-        }
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The theorem is usefully split into branch/(i)/(ii)/(iii), but primary evidence remains complex-centric while real counterparts exist. Bind each source conclusion explicitly in both source scalar fields.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "source_atom_ids": [
         "DK-8.1-thm.branch-problem",
         "DK-8.1-thm.acute-iff-spectral-placement",
@@ -1770,55 +1786,40 @@
       "source_kind": "numerical_model",
       "source_anchor": "Section 9, problem setup",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "partial_or_wrapper_missing",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9-model",
       "review_declarations": [
         "TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_source",
         "TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_source",
-        "TauCeti.DavisKahan1970.Section9.real_freeBeam_paper_eigenvalue_indexing_source",
-        "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source",
         "TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source",
         "TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source",
-        "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source"
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source"
       ],
       "audit_clauses": [
         {
-          "id": "DK-9-model.operator-model",
-          "description": "The real L2 free-beam operator is self-adjoint and is the closure of the classical fourth derivative with the printed free-end boundary conditions.",
+          "id": "DK-9-model.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_source"
-          ]
-        },
-        {
-          "id": "DK-9-model.spectrum-and-indexing",
-          "description": "The zero eigenvalue has multiplicity two, the positive spectrum is strictly indexed with multiplicity as printed, every positive value exceeds 500, and positive eigenvectors are unique up to real scalar.",
-          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_source",
             "TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_source",
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_paper_eigenvalue_indexing_source",
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source"
-          ]
-        },
-        {
-          "id": "DK-9-model.zero-mode-and-trial-plane",
-          "description": "The printed affine functions span exactly the two-dimensional zero eigenspace and form the real trial plane used by the perturbation calculation.",
-          "review_declarations": [
             "TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source",
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source"
-          ]
-        },
-        {
-          "id": "DK-9-model.finite-data",
-          "description": "The multiplication perturbation and exact finite-dimensional Rayleigh-Ritz/residual data used by the Section 9 calculation are available without an analytic certificate hypothesis.",
-          "review_declarations": [
             "TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source",
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source"
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source"
           ]
         }
       ],
       "source_specification_sha256": "21ee160b940f7d4e04ca80a58a01e674c0e812dd3cc50a27ecc607b60fa22498",
-      "expected_completion_certification": "accepted",
-      "known_completion_holes": [],
+      "expected_completion_certification": "reopened_math",
+      "known_completion_holes": [
+        {
+          "kind": "math",
+          "detail": "PDF re-audit resolves the source-reading ambiguity: the paper prints alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ... and the distributable TeX now preserves that strict ordering. The source-specification defect is closed; the formalization must now justify that source scope, including the positive-eigenvalue multiplicity/simplicity content, rather than weaken the statement."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: PDF re-audit resolves the source-reading ambiguity: the paper prints alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ... and the distributable TeX now preserves that strict ordering. The source-specification defect is closed; the formalization must now justify that source scope, including the positive-eigenvalue multiplicity/simplicity content, rather than weaken the statement.",
       "source_atom_ids": [
         "DK-9-model.real-l2-model",
         "DK-9-model.perturbed-eigenproblem",
@@ -1843,44 +1844,32 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9.1-9.4",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Section9.equation_9_1_source",
-        "TauCeti.DavisKahan1970.Section9.equation_9_2_source",
-        "TauCeti.DavisKahan1970.Section9.equation_9_3_source",
-        "TauCeti.DavisKahan1970.Section9.equation_9_4_source"
+        "TauCeti.DavisKahan1970.Section9.equation_9_1",
+        "TauCeti.DavisKahan1970.Section9.equation_9_2",
+        "TauCeti.DavisKahan1970.Section9.equation_9_3",
+        "TauCeti.DavisKahan1970.Section9.equation_9_4"
       ],
       "audit_clauses": [
         {
-          "id": "DK-9.1-9.4.equation-9-1",
-          "description": "Equation (9.1): the genuine beam satisfies the printed operator-norm sin-theta bound.",
+          "id": "DK-9.1-9.4.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.equation_9_1_source"
-          ]
-        },
-        {
-          "id": "DK-9.1-9.4.equation-9-2",
-          "description": "Equation (9.2): the genuine beam satisfies the printed sin(2 theta) bound.",
-          "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.equation_9_2_source"
-          ]
-        },
-        {
-          "id": "DK-9.1-9.4.equation-9-3",
-          "description": "Equation (9.3): the two-term Ky Fan sine bound simultaneously controls both principal angles on the genuine beam.",
-          "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.equation_9_3_source"
-          ]
-        },
-        {
-          "id": "DK-9.1-9.4.equation-9-4",
-          "description": "Equation (9.4): the two-term Ky Fan sin(2 theta) bound simultaneously controls both principal angles on the genuine beam.",
-          "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.equation_9_4_source"
+            "TauCeti.DavisKahan1970.Section9.equation_9_1",
+            "TauCeti.DavisKahan1970.Section9.equation_9_2",
+            "TauCeti.DavisKahan1970.Section9.equation_9_3",
+            "TauCeti.DavisKahan1970.Section9.equation_9_4"
           ]
         }
       ],
       "source_specification_sha256": "57ea978cfdbd641bfe2c257f686d449a42baa10cfba67fa9d593be8ca2ab9bf9",
-      "expected_completion_certification": "accepted",
-      "known_completion_holes": [],
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions.",
       "source_atom_ids": [
         "DK-9.1-9.4.sin-bound-comparison",
         "DK-9.1-9.4.kyfan-two-term-scope",
@@ -1901,37 +1890,32 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9.5-9.7",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Section9.equation_9_5_source",
-        "TauCeti.DavisKahan1970.Section9.equation_9_6_source",
-        "TauCeti.DavisKahan1970.Section9.equation_9_7_source"
+        "TauCeti.DavisKahan1970.Section9.equation_9_5_low",
+        "TauCeti.DavisKahan1970.Section9.equation_9_5_high",
+        "TauCeti.DavisKahan1970.Section9.equation_9_6",
+        "TauCeti.DavisKahan1970.Section9.equation_9_7"
       ],
       "audit_clauses": [
         {
-          "id": "DK-9.5-9.7.ritz-data-and-equation-9-5",
-          "description": "The Rayleigh-Ritz values in equation (9.5) are exposed together at the printed real source scope; the recentered residual data are registered separately on the row.",
+          "id": "DK-9.5-9.7.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.equation_9_5_source",
-            "TauCeti.DavisKahan1970.Section9.recentered_residual_gram_from_affine_moments"
-          ]
-        },
-        {
-          "id": "DK-9.5-9.7.equation-9-6",
-          "description": "Equation (9.6), including the same bound for the two-term Ky Fan tangent sum, is proved for the genuine perturbed beam.",
-          "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.equation_9_6_source"
-          ]
-        },
-        {
-          "id": "DK-9.5-9.7.equation-9-7",
-          "description": "Equation (9.7), including the same bound for the two-term Ky Fan tan(2 theta) sum, is proved for the genuine perturbed beam.",
-          "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.equation_9_7_source"
+            "TauCeti.DavisKahan1970.Section9.equation_9_5_low",
+            "TauCeti.DavisKahan1970.Section9.equation_9_5_high",
+            "TauCeti.DavisKahan1970.Section9.equation_9_6",
+            "TauCeti.DavisKahan1970.Section9.equation_9_7"
           ]
         }
       ],
       "source_specification_sha256": "dfcd77c495e43593fcd6cd52f5719eacdda94902526d1117ca61dba086500774",
-      "expected_completion_certification": "accepted",
-      "known_completion_holes": [],
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "The current primary mapping emphasizes numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses. Rebind the row to the unconditional source-facing model results."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The current primary mapping emphasizes numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses. Rebind the row to the unconditional source-facing model results.",
       "source_atom_ids": [
         "DK-9.5-9.7.rayleigh-ritz-matrix",
         "DK-9.5-9.7.refined-residual-gram",
@@ -1951,50 +1935,32 @@
       "source_kind": "comparison_claim",
       "source_anchor": "Equation (9.8)",
       "completion_obligation": true,
-      "expected_status": "refuted_as_transcribed",
+      "expected_status": "partial_or_wrapper_missing",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9.8",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Section9.printed_weinberger_low_shift_inequality_reversed",
-        "TauCeti.DavisKahan1970.Section9.equation_9_8_source",
-        "TauCeti.DavisKahan1970.Section9.direct_individual_vector_bounds_source",
-        "TauCeti.DavisKahan1970.Section9.weinberger_sine_sq_le_of_coupled_energy",
-        "TauCeti.DavisKahan1970.Section9.naive_second_scalar_lower_bound_tripwire"
+        "TauCeti.DavisKahan1970.Section9.equation_9_8_lower",
+        "TauCeti.DavisKahan1970.Section9.equation_9_8_upper"
       ],
       "audit_clauses": [
         {
-          "id": "DK-9.8.weinberger-angle-boundary",
-          "description": "The attributed Weinberger sine-square step is recorded at its valid coupled-energy boundary, together with a formal tripwire showing that an independent scalar lower bound is insufficient for the second vector.",
+          "id": "DK-9.8.whole",
+          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.weinberger_sine_sq_le_of_coupled_energy",
-            "TauCeti.DavisKahan1970.Section9.naive_second_scalar_lower_bound_tripwire"
-          ]
-        },
-        {
-          "id": "DK-9.8.printed-lower-root-comparison",
-          "description": "The strict lower-root comparison printed immediately before (9.8) is false at the lower certified arrowhead root; Lean proves the opposite strict inequality throughout the printed parameter range.",
-          "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.printed_weinberger_low_shift_inequality_reversed"
-          ]
-        },
-        {
-          "id": "DK-9.8.equation-9-8",
-          "description": "Both numerical tangent bounds in equation (9.8) are nevertheless proved unconditionally for the genuine beam.",
-          "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.equation_9_8_source"
-          ]
-        },
-        {
-          "id": "DK-9.8.direct-one-vector-bounds",
-          "description": "The sharper Davis-Kahan one-vector bounds immediately following (9.8) are proved unconditionally for the two printed Ritz vectors.",
-          "review_declarations": [
-            "TauCeti.DavisKahan1970.Section9.direct_individual_vector_bounds_source"
+            "TauCeti.DavisKahan1970.Section9.equation_9_8_lower",
+            "TauCeti.DavisKahan1970.Section9.equation_9_8_upper"
           ]
         }
       ],
       "source_specification_sha256": "d07f312692410096396040b41f2fa512775f63b3dd9d52d4b81490409d68368d",
-      "expected_completion_certification": "accepted",
-      "known_completion_holes": [],
+      "expected_completion_certification": "reopened_math",
+      "known_completion_holes": [
+        {
+          "kind": "math",
+          "detail": "PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition."
+        }
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition.",
       "source_atom_ids": [
         "DK-9.8.weinberger-sine-square",
         "DK-9.8.lehmann-best-lower-bounds",

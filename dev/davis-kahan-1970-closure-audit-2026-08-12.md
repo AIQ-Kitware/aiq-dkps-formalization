@@ -17,7 +17,7 @@ This audit separates three independent axes:
 
 The 49 rows are organizational groups and the 266 atoms are a source-fidelity inventory. The 100% completion denominator is the separate 29-result inventory. The broader row/atom findings below remain useful adversarial evidence, but only defects in the exact statement or scope of one of those 29 results block the formalization claim.
 
-Current maintained result denominator: **29**. Exact printed-result boundary reviews: **29/29 accepted**. Current result-level semantic terminality: **10/29**; the remaining **19** are the mathematics/review queue. The old 46-row/32-reopened counts below are retained only as historical evidence from the broader pre-pivot hostile audit and are not the current completion metric.
+Current maintained result denominator: **29**. Exact printed-result boundary reviews: **29/29 accepted**. Current result-level semantic terminality: **11/29**; the remaining **18** are the mathematics/review queue. The old 46-row/32-reopened counts below are retained only as historical evidence from the broader pre-pivot hostile audit and are not the current completion metric.
 
 ### Agent 3 source-denominator update
 
@@ -85,7 +85,7 @@ Acceptance here means only that this hostile pass found no concrete semantic hol
 | `DK-6-appendix` | `compiled_exact` | `proved_in_build` | `reopened_mapping` | The TeX explicitly preserves equations (6.7)-(6.11) and the limiting proof chain. The row maps endpoint/common-domain machinery and historically treats parts of the chain as documentation fidelity; under statement-level 100% coverage, every preserved mathematical equation needs explicit evidence/disposition. |
 | `DK-7-sin2-proof` | `compiled_exact` | `proved_in_build` | `reopened_mapping` | The block contains equations (7.1)-(7.5), reflected diagonalization, the factor-one directed residual refinement, swap asymmetry, and a counterexample. The current clauses do not explicitly account for every separable identity/assertion. |
 | `DK-7-tan2-proof` | `compiled_exact` | `proved_in_build` | `reopened_mapping` | The exact directed/ambient tan(2 Theta) endpoints are now closed. The proof block still contains equation (7.6), scalar singular-vector inequality, pole exclusion as a conclusion, Fan-dominance steps, and both endpoints under one coarse audit clause; atomize these for static semantic certification. |
-| `DK-8.1-thm` | `compiled_exact` | `proved_in_build` | `reopened_mapping` | The theorem is usefully split into branch/(i)/(ii)/(iii), but primary evidence remains complex-centric while real counterparts exist. Bind each source conclusion explicitly in both source scalar fields. |
+| `DK-8.1-thm` | `compiled_exact` | `proved_in_build` | `accepted` | Result-only review confirms complete complex and real source-facing coverage of the branch characterization/existence and parts (i)--(iii); the earlier mapping blocker was stale. |
 | `DK-8.2-thm` | `compiled_exact` | `proved_in_build` | `reopened_mapping` | A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions. |
 | `DK-9-model` | `partial_or_wrapper_missing` | `proved_in_build` | `reopened_math` | PDF re-audit confirms the paper prints alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ...; the TeX now preserves that strict multiplicity-aware ordering. Formalization must justify the resulting positive-eigenvalue simplicity/multiplicity claim rather than weakening the source. |
 | `DK-9.1-9.4` | `compiled_exact` | `proved_in_build` | `reopened_mapping` | The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions. |
@@ -111,7 +111,7 @@ The highest-value examples are the Section 1 residual-to-eigenvalue consequence,
 
 ### Mathematics likely exists, but the certificate does not prove correspondence
 
-These rows are reopened for evidence-selection or atomization rather than a known deep theorem gap: `S2-tan-theta`, `S2-sharpness`, `S2-unbounded-scope`, `DK-3.1-def`, `DK-3.1-prop`, `DK-3.3-prop`, `DK-4.1-prop`, `DK-4.2-prop`, `DK-4.3-prop`, `DK-5.1-thm`, `DK-5.2-thm`, `DK-6.1-prop`, `DK-6.2-thm`, `DK-6-appendix`, `DK-7-sin2-proof`, `DK-7-tan2-proof`, `DK-8.1-thm`, `DK-8.2-thm`, `DK-9.1-9.4`, `DK-9.5-9.7`.
+These rows are reopened for evidence-selection or atomization rather than a known deep theorem gap: `S2-tan-theta`, `S2-sharpness`, `S2-unbounded-scope`, `DK-3.1-def`, `DK-3.1-prop`, `DK-3.3-prop`, `DK-4.1-prop`, `DK-4.2-prop`, `DK-4.3-prop`, `DK-5.1-thm`, `DK-5.2-thm`, `DK-6.1-prop`, `DK-6.2-thm`, `DK-6-appendix`, `DK-7-sin2-proof`, `DK-7-tan2-proof`, `DK-8.2-thm`, `DK-9.1-9.4`, `DK-9.5-9.7`.
 
 The recurring failure mode is a generic `.whole` audit clause covering several separable identities/conclusions while the row points at only a subset or at a conditional arithmetic wrapper rather than the source-facing model theorem. These should be repaired by atomic claim clauses and exact declaration bindings, not by declaring the entire row terminal on reputation.
 

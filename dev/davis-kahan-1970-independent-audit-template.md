@@ -11,7 +11,7 @@ The two accounting layers are deliberately both visible:
 - Section 10 questions, explicitly deferred/unproved claims, definitions, proof-only derivations, examples, numerical working, historical/external results, and theorem-adjacent remarks remain visible in source fidelity but do not enlarge the denominator.
 - A false counted result remains in the denominator and requires exact formal refutation plus the repository's separate best-effort repair disposition.
 
-Current result-level status: **10/29 terminal**, **19 awaiting semantic closure**.
+Current result-level status: **11/29 terminal**, **18 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -2471,9 +2471,9 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `theorem`
 - **Exact source anchor:** Theorem 8.1
-- **Result disposition:** `pending_result_only_review`
+- **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `pending_result_only_review`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Organizational source-block hash:** `ca616396d0bee7b303c7da3ad0904053b80ad6da1a13a172bbec402be84f7c57`
 
@@ -2554,6 +2554,30 @@ These exclude $\theta=\pi/4$ and then $\theta>\pi/4$ under the chosen spectral p
 
 ### Source-facing Lean declarations
 
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:249`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:494`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81Real.lean:78`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81Real.lean:240`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source`
 
 Source location candidates: `DavisKahan/Frontier/Section8.lean:1015`, `DavisKahan/Frontier/Section8SourceSurface.lean:96`
@@ -2566,15 +2590,69 @@ Source location candidates: `DavisKahan/Frontier/Section8.lean:1063`, `DavisKaha
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSandwichApproximation_source`
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real`
 
-Source location candidates: `DavisKahan/Frontier/Section8PartII.lean:339`
+Source location candidates: `DavisKahan/Frontier/Section8PartIIReal.lean:341`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSandwichApproximation_source`
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real`
 
-Source location candidates: `DavisKahan/Frontier/Section8PartII.lean:484`
+Source location candidates: `DavisKahan/Frontier/Section8PartIIReal.lean:404`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source`
+
+Source location candidates: `DavisKahan/Frontier/Section8PartII.lean:419`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source`
+
+Source location candidates: `DavisKahan/Frontier/Section8PartII.lean:548`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real`
+
+Source location candidates: `DavisKahan/Frontier/Section8PartIIReal.lean:536`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real`
+
+Source location candidates: `DavisKahan/Frontier/Section8PartIIReal.lean:622`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive`
+
+Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:147`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source`
+
+Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:437`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source`
+
+Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:490`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real`
+
+Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:715`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real`
+
+Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:770`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3022,8 +3100,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 266 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **10 currently terminal results independently reconfirmed:** yes / no
-- **19 currently nonterminal/pending results resolved by this audit:** yes / no
+- **11 currently terminal results independently reconfirmed:** yes / no
+- **18 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no
