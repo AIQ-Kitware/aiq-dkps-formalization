@@ -62,6 +62,38 @@ theorem real_freeBeam_spectrum_source :
     DavisKahan.FreeBeam.Model.Real.realSpectrum_beamOperator_eq_insert_zero,
     DavisKahan.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues⟩
 
+/-- **Paper-faithful multiplicity and indexing statement for the unperturbed
+free beam.**
+
+The zero eigenspace is exactly the two-dimensional affine trial plane.  The
+positive eigenvalues admit the strictly increasing enumeration printed after
+`alpha_1 = alpha_2 = 0`, with `f n` corresponding to the paper's
+`alpha_{n+3}`; and every positive eigenvalue is geometrically simple.  The last
+clause is essential: enumerating only the set of distinct positive spectral
+values would not justify the paper's strict multiplicity-sensitive indexing. -/
+theorem real_freeBeam_paper_eigenvalue_indexing_source :
+    Module.finrank ℝ DavisKahan.FreeBeam.Model.Real.beamTrial = 2 ∧
+      (∀ (x : RealBeamL2) (h : x ∈ realBeamOperator.domain),
+        realBeamOperator.toLinearMap ⟨x, h⟩ = 0 ↔
+          x ∈ DavisKahan.FreeBeam.Model.Real.beamTrial) ∧
+      (∃ f : ℕ → ℝ, StrictMono f ∧
+        Set.range f = DavisKahan.FreeBeam.Model.Real.beamEigenvalues ∧
+        ∀ n, 500 < f n ∧ f n ∈ realBeamOperator.realSpectrum) ∧
+      (∀ (lam : ℝ), 0 < lam →
+        ∀ (x y : realBeamOperator.domain),
+          (x : RealBeamL2) ≠ 0 →
+          (y : RealBeamL2) ≠ 0 →
+          realBeamOperator.toLinearMap x = lam • (x : RealBeamL2) →
+          realBeamOperator.toLinearMap y = lam • (y : RealBeamL2) →
+          ∃ c : ℝ, (y : RealBeamL2) = c • (x : RealBeamL2)) := by
+  refine ⟨DavisKahan.FreeBeam.Model.Real.finrank_beamTrial, ?_, ?_, ?_⟩
+  · intro x h
+    exact DavisKahan.FreeBeam.Model.Real.beamOperator_eq_zero_iff_mem_beamTrial h
+  · exact DavisKahan.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues
+  · intro lam hlam x y hx0 hy0 hx hy
+    exact DavisKahan.FreeBeam.Model.Real.positive_eigenvectors_eq_smul
+      hlam hx0 hy0 hx hy
+
 /-- The paper's positive free-beam spectral values are exactly the fourth powers of the
 positive roots of `cos beta * cosh beta = 1`. -/
 theorem real_freeBeam_positive_spectrum_source :
