@@ -48,9 +48,20 @@ inventory in paper order and ask only:
 - Does each selected result point at source atoms covering its exact hypotheses,
   conclusions, and stated scope?
 - Are all remaining source atoms explicitly classified as non-result material?
+- Does every fidelity atom carry a specific boundary reason rather than an
+  unexplained generic `non_result` label?
+- Do `formalization_result_ids` agree exactly with the result inventory's forward
+  `source_atom_ids` links?
+- For each counted result, does its accepted `boundary_review` correctly partition
+  the primary source block into atoms inside the printed statement and adjacent
+  setup/proof/example/consequence/remark material outside it?
+- Is any atom classified as proof/setup/consequence actually part of a printed
+  result hypothesis, conclusion, or scope? This is the primary omission attack.
 
 Do not reject the denominator merely because a proof equation or example lacks a
-Lean theorem. That is not the project definition of 100%.
+Lean theorem. That is not the project definition of 100%. Do reject it if an
+excluded atom is actually part of one of the printed 29 result statements, or if
+a result Davis--Kahan establish is absent from the 29-result inventory.
 
 ## Pass B — exact result-to-Lean semantic audit
 

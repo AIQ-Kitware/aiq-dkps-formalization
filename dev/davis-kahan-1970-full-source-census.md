@@ -59,12 +59,12 @@ completion obligations count toward hostile-certified 100% coverage.
 
 ## Completion-certification meanings
 
-- **`accepted`** -- A hostile semantic review found no concrete source-specification, source-scope, or source-to-Lean correspondence hole in this registered passage. Together with terminal status and proved_in_build verification, this row may count toward 100%.
-- **`reopened_source_spec`** -- The checked-in distributable TeX is known or strongly suspected to omit, weaken, or reinterpret source mathematics. Repair/re-audit the source specification before claiming exact coverage.
-- **`reopened_math`** -- The registered source passage contains a mathematical assertion for which the hostile review did not find a source-facing Lean statement at the required scope, or found a narrower signature.
-- **`reopened_mapping`** -- The mathematics appears to exist or be close to complete, but the current audit clauses/declaration mapping do not exhaustively certify every separable mathematical assertion in the hashed source passage.
-- **`mixed_disposition`** -- The source block mixes established mathematics with an open, attributed, or explicitly unproved assertion. Split the block into atomic audit clauses and give each an explicit disposition before the row can count toward 100%.
-- **`not_applicable`** -- A pure source open question. It is retained for source accounting but is not a theorem-completion obligation.
+- **`accepted`** -- Legacy row-level hostile review found no concrete issue in this organizational passage. This is useful diagnostic evidence but does not itself count toward 100%; only terminal entries in the 29-result formalization inventory count.
+- **`reopened_source_spec`** -- Legacy row-level diagnostic: the distributable TeX was known or suspected to omit, weaken, or reinterpret source mathematics. Current source-fidelity status is governed by the 266-atom inventory and its accepted selection hashes.
+- **`reopened_math`** -- Legacy row-level diagnostic: the broad source passage contained a mathematical assertion for which the historical hostile review did not find source-facing Lean evidence. This blocks 100% only if the assertion belongs to one of the 29 printed result statements.
+- **`reopened_mapping`** -- Legacy row-level diagnostic: evidence did not exhaustively account for the broad hashed passage. Proof/setup/example material outside the 29 printed result statements does not need Lean evidence merely to clear 100%.
+- **`mixed_disposition`** -- Legacy row-level diagnostic: the broad source block mixes established, attributed, open, deferred, or proof material. The source-atom boundary classification now records these distinctions explicitly; only atoms belonging to a counted result statement affect completion.
+- **`not_applicable`** -- Legacy row-level non-obligation marker. Current completion inclusion/exclusion is defined by the 29-result inventory and explicit atom boundary classifications.
 
 ## Verification summary
 

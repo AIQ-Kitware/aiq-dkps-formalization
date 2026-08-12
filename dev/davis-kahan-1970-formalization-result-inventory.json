@@ -3,23 +3,29 @@
   "purpose": "Hard denominator for the repository claim that Davis--Kahan 1970 is 100% formalized.",
   "source_fidelity_inventory": "dev/davis-kahan-1970-source-atom-inventory.json",
   "selection_definition": {
-    "counts_as_result": "Exactly the four unnumbered Section 2 headline theorems and every theorem, proposition, lemma, and corollary that Davis--Kahan actually establish in this paper.",
+    "counts_as_result": "Exactly the four unnumbered Section 2 headline theorems and every named theorem, proposition, lemma, and corollary that Davis--Kahan actually establish in this paper.",
+    "statement_boundary": "Only hypotheses, conclusions, and scope that belong to the printed result statement count. Setup, proof steps, examples, immediate consequences, extension remarks, and later restatements remain source-fidelity material unless they are themselves one of the designated results.",
     "does_not_count": [
       "definitions",
+      "section setup and introductory background",
       "proof equations and intermediate derivations",
       "examples and numerical working",
+      "sharpness or interpretation commentary outside a designated result",
+      "immediate consequences or scope remarks outside the printed result environment",
       "historical or externally attributed results",
-      "Section 10 open questions",
-      "claims explicitly left unresolved or whose proof is deferred to an open question"
+      "Section 10 open questions and their motivating special cases",
+      "claims explicitly left unresolved or whose proof is deferred to an open question",
+      "later proof-section restatements of a result already counted at its source statement"
     ],
     "false_printed_result_policy": "A designated result that is false remains in the denominator and is completed by exact formal refutation plus the repository best-effort repair obligation."
   },
   "result_inventory_review": {
     "status": "accepted",
-    "policy": "stated_results_only",
-    "source_fidelity_inventory_sha256": "e172a812532d8f75be7fe96bf14fd31cf2c3e5bf09dd154ab6554be63ca619b8",
+    "policy": "dk_established_results_only",
+    "source_fidelity_inventory_sha256": "99074a1aca65cf5d23691029057e9636a34ab3c79624a4706edf4d3958ecae66",
     "distributable_specification_sha256": "0bb6850fcfd2c66a8efe868c652e4da0d8259913deb469b586a8545ca4cb1ad1",
-    "method": "Reviewed the source-fidelity inventory and theorem environments in paper order. Selected exactly the four Section 2 headline theorems plus all named theorem/proposition/lemma/corollary environments that Davis--Kahan establish; excluded proof-only mathematics, examples, numerical working, historical attributions, Section 10 questions, and explicitly unresolved/deferred claims."
+    "method": "Reviewed the source-fidelity inventory and the exact theorem/proposition/lemma/corollary environments in paper order. Selected exactly the four Section 2 headline theorems plus all named results Davis--Kahan actually establish; for every counted result, partitioned the primary source block into statement atoms versus adjacent setup/proof/example/consequence/remark atoms, and classified every fidelity atom with an explicit inclusion/exclusion reason.",
+    "boundary_review_status": "accepted"
   },
   "result_count": 29,
   "results": [
@@ -48,7 +54,28 @@
         "TauCeti.DavisKahan1970.generalizedSinTheta",
         "TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically."
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "S2-sin-theta",
+        "included_same_block_atom_ids": [
+          "S2-sin-theta.ui-norm-scope",
+          "S2-sin-theta.gap-hypothesis",
+          "S2-sin-theta.directed-conclusion"
+        ],
+        "excluded_same_block_atom_ids": [
+          "S2-sin-theta.family-distinctness"
+        ],
+        "cross_block_scope_atom_ids": [
+          "S2-unbounded-scope.infinite-dimensional-scope",
+          "S2-unbounded-scope.arbitrary-ui-scope",
+          "S2-unbounded-scope.unbounded-selfadjoint-scope",
+          "S2-unbounded-scope.bounded-residual-needed",
+          "S2-unbounded-scope.half-infinite-gap-intervals"
+        ],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "S2-tan-theta",
@@ -78,7 +105,28 @@
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically."
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "S2-tan-theta",
+        "included_same_block_atom_ids": [
+          "S2-tan-theta.ordered-gap-hypothesis",
+          "S2-tan-theta.rayleigh-ritz-hypothesis",
+          "S2-tan-theta.directed-conclusion",
+          "S2-tan-theta.ambient-conclusion"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [
+          "S2-sin-theta.ui-norm-scope",
+          "S2-unbounded-scope.infinite-dimensional-scope",
+          "S2-unbounded-scope.arbitrary-ui-scope",
+          "S2-unbounded-scope.unbounded-selfadjoint-scope",
+          "S2-unbounded-scope.bounded-residual-needed",
+          "S2-unbounded-scope.half-infinite-gap-intervals"
+        ],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "S2-sin-two-theta",
@@ -107,7 +155,27 @@
         "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative",
         "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically."
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "S2-sin-two-theta",
+        "included_same_block_atom_ids": [
+          "S2-sin-two-theta.gap-hypothesis",
+          "S2-sin-two-theta.directed-conclusion",
+          "S2-sin-two-theta.ambient-conclusion"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [
+          "S2-sin-theta.ui-norm-scope",
+          "S2-unbounded-scope.infinite-dimensional-scope",
+          "S2-unbounded-scope.arbitrary-ui-scope",
+          "S2-unbounded-scope.unbounded-selfadjoint-scope",
+          "S2-unbounded-scope.bounded-residual-needed",
+          "S2-unbounded-scope.half-infinite-gap-intervals"
+        ],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "S2-tan-two-theta",
@@ -137,7 +205,31 @@
         "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact"
       ],
-      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically."
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "S2-tan-two-theta",
+        "included_same_block_atom_ids": [
+          "S2-tan-two-theta.ordered-gap-hypothesis",
+          "S2-tan-two-theta.strong-offdiagonal-hypothesis",
+          "S2-tan-two-theta.no-extra-pole-hypothesis",
+          "S2-tan-two-theta.directed-conclusion",
+          "S2-tan-two-theta.ambient-conclusion"
+        ],
+        "excluded_same_block_atom_ids": [
+          "S2-tan-two-theta.pole-exclusion-derived"
+        ],
+        "cross_block_scope_atom_ids": [
+          "S2-sin-theta.ui-norm-scope",
+          "S2-unbounded-scope.infinite-dimensional-scope",
+          "S2-unbounded-scope.arbitrary-ui-scope",
+          "S2-unbounded-scope.unbounded-selfadjoint-scope",
+          "S2-unbounded-scope.bounded-residual-needed",
+          "S2-unbounded-scope.half-infinite-gap-intervals"
+        ],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-3.1-prop",
@@ -162,7 +254,20 @@
         "TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-3.1-prop"
+      "parent_claim_id": "DK-3.1-prop",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-3.1-prop",
+        "included_same_block_atom_ids": [
+          "DK-3.1-prop.existence",
+          "DK-3.1-prop.uniqueness",
+          "DK-3.1-prop.positive-diagonal-characterization"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "DK-3.2-prop",
@@ -184,7 +289,23 @@
         "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-3.2-prop"
+      "parent_claim_id": "DK-3.2-prop",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-3.2-prop",
+        "included_same_block_atom_ids": [
+          "DK-3.2-prop.existence-iff-crossing-dimensions",
+          "DK-3.2-prop.nonuniqueness",
+          "DK-3.2-prop.eq-3-5"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-3.2-prop.crossing-square-minus-one",
+          "DK-3.2-prop.bilateral-shift-counterexample"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-3.3-prop",
@@ -208,7 +329,24 @@
         "TauCeti.DavisKahan1970.real_directRotation_principal_of_sq"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-3.3-prop"
+      "parent_claim_id": "DK-3.3-prop",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-3.3-prop",
+        "included_same_block_atom_ids": [
+          "DK-3.3-prop.principal-square-root",
+          "DK-3.3-prop.square-root-converse"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-3.3-prop.reflection-conjugacy",
+          "DK-3.3-prop.eq-3-6",
+          "DK-3.3-prop.eq-3-7",
+          "DK-3.3-prop.eq-3-8"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-3.4-prop",
@@ -227,7 +365,18 @@
         "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-3.4-prop"
+      "parent_claim_id": "DK-3.4-prop",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-3.4-prop",
+        "included_same_block_atom_ids": [
+          "DK-3.4-prop.u-square-direct-rotation"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "DK-3.1-thm",
@@ -248,7 +397,21 @@
         "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification_real"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
-      "parent_claim_id": "DK-3.1-thm"
+      "parent_claim_id": "DK-3.1-thm",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-3.1-thm",
+        "included_same_block_atom_ids": [
+          "DK-3.1-thm.complete-invariant",
+          "DK-3.1-thm.converse-angle-data"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-3.1-thm.reconstruction"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-3.1-cor",
@@ -270,7 +433,20 @@
         "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
-      "parent_claim_id": "DK-3.1-cor"
+      "parent_claim_id": "DK-3.1-cor",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-3.1-cor",
+        "included_same_block_atom_ids": [
+          "DK-3.1-cor.compact-complete-invariants",
+          "DK-3.1-cor.allowed-angle-sequence",
+          "DK-3.1-cor.theta1-match"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "DK-3.5-prop",
@@ -295,7 +471,23 @@
         "TauCeti.DavisKahan1970.proposition3_5_angleOperator"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-3.5-prop"
+      "parent_claim_id": "DK-3.5-prop",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-3.5-prop",
+        "included_same_block_atom_ids": [
+          "DK-3.5-prop.commutation",
+          "DK-3.5-prop.eigenvector-rotation-angle",
+          "DK-3.5-prop.acute-maximal-characterization"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-3.5-prop.direct-rotation-exponential",
+          "DK-3.5-prop.cos-square-projector"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-3.2-cor",
@@ -318,12 +510,23 @@
         "TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
-      "parent_claim_id": "DK-3.2-cor"
+      "parent_claim_id": "DK-3.2-cor",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-3.2-cor",
+        "included_same_block_atom_ids": [
+          "DK-3.2-cor.swap-invariance"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "DK-4.1-prop",
       "result_kind": "proposition",
-      "source_anchor": "Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2)",
+      "source_anchor": "Proposition 4.1",
       "title": "Pointwise and singular-value extremality of the direct rotation",
       "completion_obligation": true,
       "source_atom_ids": [
@@ -341,7 +544,24 @@
         "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-4.1-prop"
+      "parent_claim_id": "DK-4.1-prop",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-4.1-prop",
+        "included_same_block_atom_ids": [
+          "DK-4.1-prop.orthonormal-angle-lower-bounds",
+          "DK-4.1-prop.singular-value-minimality"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-4.1-prop.vz-factorization",
+          "DK-4.1-prop.closest-q-vector-proof-step",
+          "DK-4.1-prop.eq-4-1",
+          "DK-4.1-prop.eq-4-2"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-4.1-cor",
@@ -361,7 +581,18 @@
         "TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
-      "parent_claim_id": "DK-4.1-cor"
+      "parent_claim_id": "DK-4.1-cor",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-4.1-cor",
+        "included_same_block_atom_ids": [
+          "DK-4.1-cor.ui-minimality-on-p"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "DK-4.2-prop",
@@ -380,7 +611,20 @@
         "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-4.2-prop"
+      "parent_claim_id": "DK-4.2-prop",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-4.2-prop",
+        "included_same_block_atom_ids": [
+          "DK-4.2-prop.basis-sine-square-lower-bound"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-4.2-prop.trace-identification"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-4.3-prop",
@@ -398,12 +642,32 @@
         "TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-4.3-prop"
+      "parent_claim_id": "DK-4.3-prop",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-4.3-prop",
+        "included_same_block_atom_ids": [
+          "DK-4.3-prop.squared-displacement-global-minimum"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-4.3-prop.plane-parameterization",
+          "DK-4.3-prop.operator-norm-displacement-minimum",
+          "DK-4.3-prop.hilbert-schmidt-displacement-minimum",
+          "DK-4.3-prop.arbitrary-ui-displacement-warning",
+          "DK-4.3-prop.eq-4-3",
+          "DK-4.3-prop.eq-4-4",
+          "DK-4.3-prop.eq-4-5",
+          "DK-4.3-prop.eq-4-6"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-4.4-prop",
       "result_kind": "proposition",
-      "source_anchor": "Examples 4.1–4.2 and Proposition 4.4",
+      "source_anchor": "Proposition 4.4",
       "title": "Full-displacement counterexamples and Proposition 4.4 as printed",
       "completion_obligation": true,
       "source_atom_ids": [
@@ -425,6 +689,21 @@
           "TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm"
         ],
         "notes": "The printed real-space every-UI-norm full-displacement minimization claim is refuted exactly. The natural surviving Q-norm minimization theorem is proved by directRotation_fullDisplacement_qnorm."
+      },
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-4.4-prop",
+        "included_same_block_atom_ids": [
+          "DK-4.4-prop.printed-proposition4-4"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-4.4-prop.example4-1-real-reflection",
+          "DK-4.4-prop.example4-2-complex-phase",
+          "DK-4.4-prop.printed-sharp-threshold"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       }
     },
     {
@@ -446,7 +725,22 @@
         "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-5.1-thm"
+      "parent_claim_id": "DK-5.1-thm",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-5.1-thm",
+        "included_same_block_atom_ids": [
+          "DK-5.1-thm.banach-hypotheses",
+          "DK-5.1-thm.sylvester-lower-bound"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-5.1-thm.roles-interchange",
+          "DK-5.1-thm.one-sided-unbounded-extension"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-5.2-thm",
@@ -466,7 +760,19 @@
         "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-5.2-thm"
+      "parent_claim_id": "DK-5.2-thm",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-5.2-thm",
+        "included_same_block_atom_ids": [
+          "DK-5.2-thm.hilbert-unbounded-hypotheses",
+          "DK-5.2-thm.hilbert-unbounded-conclusion"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "DK-5.1-lem",
@@ -484,7 +790,18 @@
         "TauCeti.DavisKahan1970.Lemma5_1"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
-      "parent_claim_id": "DK-5.1-lem"
+      "parent_claim_id": "DK-5.1-lem",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-5.1-lem",
+        "included_same_block_atom_ids": [
+          "DK-5.1-lem.strong-cutoff-convergence"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "DK-6.1-lem",
@@ -504,7 +821,19 @@
         "TauCeti.DavisKahan1970.lemma6_1_converse"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
-      "parent_claim_id": "DK-6.1-lem"
+      "parent_claim_id": "DK-6.1-lem",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-6.1-lem",
+        "included_same_block_atom_ids": [
+          "DK-6.1-lem.ordered-sylvester-forward",
+          "DK-6.1-lem.ordered-sylvester-converse"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "DK-6.2-lem",
@@ -522,12 +851,23 @@
         "TauCeti.DavisKahan1970.lemma6_2"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
-      "parent_claim_id": "DK-6.2-lem"
+      "parent_claim_id": "DK-6.2-lem",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-6.2-lem",
+        "included_same_block_atom_ids": [
+          "DK-6.2-lem.pinching-contraction"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "DK-6.1-prop",
       "result_kind": "proposition",
-      "source_anchor": "Section 6 sine proof and Proposition 6.1",
+      "source_anchor": "Proposition 6.1",
       "title": "Sine proof, ambient limitation, and symmetric sine theorem",
       "completion_obligation": true,
       "source_atom_ids": [
@@ -541,7 +881,22 @@
         "TauCeti.DavisKahan1970.Proposition6_1_real"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-6.1-prop"
+      "parent_claim_id": "DK-6.1-prop",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-6.1-prop",
+        "included_same_block_atom_ids": [
+          "DK-6.1-prop.symmetric-sine-theorem"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-6.1-prop.sine-proof-residual-identity",
+          "DK-6.1-prop.source-counterexample-need-two-sided",
+          "DK-6.1-prop.eq-6-1"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-6.1-thm",
@@ -564,7 +919,20 @@
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
-      "parent_claim_id": "DK-6.1-thm"
+      "parent_claim_id": "DK-6.1-thm",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-6.1-thm",
+        "included_same_block_atom_ids": [
+          "DK-6.1-thm.generalized-sine-hypotheses",
+          "DK-6.1-thm.generalized-sine-conclusion",
+          "DK-6.1-thm.unequal-dimension-scope"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "DK-6.2-thm",
@@ -585,12 +953,25 @@
         "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-6.2-thm"
+      "parent_claim_id": "DK-6.2-thm",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-6.2-thm",
+        "included_same_block_atom_ids": [
+          "DK-6.2-thm.second-generalized-sine"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-6.2-thm.rank-corrected-operator-consequence"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-6.3-thm",
       "result_kind": "theorem",
-      "source_anchor": "Section 6 equations (6.2)–(6.6), Example 6.1, and Theorem 6.3",
+      "source_anchor": "Theorem 6.3",
       "title": "Tangent proof machinery, Example 6.1, and generalized tangent theorem",
       "completion_obligation": true,
       "source_atom_ids": [
@@ -606,7 +987,26 @@
         "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-6.3-thm"
+      "parent_claim_id": "DK-6.3-thm",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-6.3-thm",
+        "included_same_block_atom_ids": [
+          "DK-6.3-thm.generalized-tangent-theorem"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-6.3-thm.tangent-setup-identities",
+          "DK-6.3-thm.example6-1",
+          "DK-6.3-thm.eq-6-2",
+          "DK-6.3-thm.eq-6-3",
+          "DK-6.3-thm.eq-6-4",
+          "DK-6.3-thm.eq-6-5",
+          "DK-6.3-thm.eq-6-6"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-6.3-lem",
@@ -626,7 +1026,18 @@
         "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage_real"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
-      "parent_claim_id": "DK-6.3-lem"
+      "parent_claim_id": "DK-6.3-lem",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-6.3-lem",
+        "included_same_block_atom_ids": [
+          "DK-6.3-lem.approximation-number-leakage"
+        ],
+        "excluded_same_block_atom_ids": [],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
+      }
     },
     {
       "id": "DK-8.1-thm",
@@ -651,13 +1062,34 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSandwichApproximation_source"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-8.1-thm"
+      "parent_claim_id": "DK-8.1-thm",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-8.1-thm",
+        "included_same_block_atom_ids": [
+          "DK-8.1-thm.acute-iff-spectral-placement",
+          "DK-8.1-thm.existence-correct-q",
+          "DK-8.1-thm.part-i-compression",
+          "DK-8.1-thm.part-ii-eigenvalue",
+          "DK-8.1-thm.part-iii-gauge"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-8.1-thm.branch-problem",
+          "DK-8.1-thm.exclude-pi-over-four",
+          "DK-8.1-thm.spectral-repulsion-interpretation",
+          "DK-8.1-thm.eq-8-1",
+          "DK-8.1-thm.eq-8-2"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     },
     {
       "id": "DK-8.2-thm",
       "result_kind": "theorem",
-      "source_anchor": "Theorem 8.2 and final Section 8 extension remark",
-      "title": "Smallness selects the acute branch and closing extension remark",
+      "source_anchor": "Theorem 8.2",
+      "title": "Smallness selects the acute branch",
       "completion_obligation": true,
       "source_atom_ids": [
         "DK-8.2-thm.smallness-alternative",
@@ -674,7 +1106,25 @@
         "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed"
       ],
       "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
-      "parent_claim_id": "DK-8.2-thm"
+      "parent_claim_id": "DK-8.2-thm",
+      "boundary_review": {
+        "status": "accepted",
+        "primary_source_block": "DK-8.2-thm",
+        "included_same_block_atom_ids": [
+          "DK-8.2-thm.smallness-alternative",
+          "DK-8.2-thm.double-angle-bound-retained",
+          "DK-8.2-thm.acute-branch-conclusion"
+        ],
+        "excluded_same_block_atom_ids": [
+          "DK-8.2-thm.homotopy-proof",
+          "DK-8.2-thm.residual-reduction",
+          "DK-8.2-thm.sin2-unequal-dimension-extension",
+          "DK-8.2-thm.no-tan2-unequal-dimension-extension-known"
+        ],
+        "cross_block_scope_atom_ids": [],
+        "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
+        "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
+      }
     }
   ]
 }

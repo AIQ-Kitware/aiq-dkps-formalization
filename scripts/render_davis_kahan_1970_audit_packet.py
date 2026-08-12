@@ -1,14 +1,20 @@
 #!/usr/bin/env python3
-"""Render a one-row-at-a-time Davis--Kahan 1970 statement audit packet.
+"""Render the reviewer-facing Davis--Kahan 1970 result audit packet.
 
-Without a compiler certificate this produces a static review template containing
-the registered passages from the checked-in transformative source specification,
-plus mapped Lean declaration names and best-effort source locations.  With
-`--certificate`, it also inserts theorem types printed by the pinned Lean compiler.
+The packet makes the project's claim boundary explicit:
+
+* all 266 source-fidelity atoms remain visible and classified;
+* exactly 29 results Davis--Kahan establish form the 100% denominator; and
+* each result records the atoms inside its printed statement and the same-block
+  material deliberately excluded from that result boundary.
+
+With `--certificate`, compiler-printed theorem types are inserted for the
+registered source-facing Lean declarations.
 """
 from __future__ import annotations
 
 import argparse
+import collections
 import json
 import pathlib
 import re
@@ -20,6 +26,7 @@ from check_davis_kahan_1970_statement_map import extract_claims
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MAP_PATH = ROOT / "dev/davis-kahan-1970-statement-map.json"
 CENSUS_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.json"
+RESULT_PATH = ROOT / "dev/davis-kahan-1970-formalization-result-inventory.json"
 DEFAULT_OUTPUT = ROOT / "dev/davis-kahan-1970-independent-audit-template.md"
 
 DECL_LINE = re.compile(
@@ -28,17 +35,18 @@ DECL_LINE = re.compile(
 )
 
 CHECKLIST = [
+    "The selected source atoms are exactly the hypotheses, conclusions, and scope of the printed result statement.",
+    "Every same-block atom excluded by the boundary review is genuinely outside the printed result statement.",
     "The source hypotheses are all represented, with no stronger hidden hypothesis used as a substitute.",
-    "The Lean conclusion matches every mathematical clause in the registered source excerpt.",
-    "Real/complex scalar scope matches the source, including any source statement that is field-independent.",
+    "The Lean conclusion matches every conclusion of the counted result.",
+    "Real/complex scalar scope matches the source, including field-independent statements.",
     "Finite-dimensional versus arbitrary/separable Hilbert-space scope matches the source.",
     "Compactness, finite-rank, spectral-gap, domain, and bounded/unbounded assumptions match the source.",
     "Acute/nonacute, crossed-defect, branch, and direct-rotation existence hypotheses match the source.",
     "Existence/uniqueness assertions and quantifier order match the source rather than only a derived inequality.",
     "Indexing, eigenvalue/singular-value multiplicity, and finite-versus-infinite sequence semantics match the source.",
-    "Finite sums, infinite sums, extended-real divergence, and ideal-membership conclusions match the source where relevant.",
-    "Any claimed equivalent formulation is actually connected to the paper's notation by compiled dictionary theorems.",
-    "If this row is a refutation, the formal counterexample satisfies all printed hypotheses and falsifies the printed conclusion.",
+    "Norm class, constants, strictness, signs, interval orientation, and directed/ambient distinctions match exactly.",
+    "If the result is refuted, the counterexample satisfies all printed hypotheses and the separate repair record is terminal.",
 ]
 
 
@@ -51,16 +59,14 @@ def production_lean_files() -> Iterable[pathlib.Path]:
         rel = path.relative_to(ROOT)
         if any(part.startswith(".") for part in rel.parts):
             continue
-        if rel.parts and rel.parts[0] in {"build"}:
+        if rel.parts and rel.parts[0] == "build":
             continue
         yield path
 
 
 def declaration_locations(declarations: set[str]) -> dict[str, list[str]]:
     by_short: dict[str, list[str]] = {}
-    wanted_short: dict[str, set[str]] = {}
-    for decl in declarations:
-        wanted_short.setdefault(decl.rsplit(".", 1)[-1], set()).add(decl)
+    wanted_short = {decl.rsplit(".", 1)[-1] for decl in declarations}
     for path in production_lean_files():
         rel = path.relative_to(ROOT)
         try:
@@ -69,18 +75,13 @@ def declaration_locations(declarations: set[str]) -> dict[str, list[str]]:
             continue
         for lineno, line in enumerate(lines, start=1):
             match = DECL_LINE.match(line)
-            if not match:
+            if not match or match.group(1) not in wanted_short:
                 continue
-            short = match.group(1)
-            if short not in wanted_short:
-                continue
-            location = f"{rel}:{lineno}"
-            by_short.setdefault(short, []).append(location)
-    out: dict[str, list[str]] = {}
-    for decl in declarations:
-        locations = by_short.get(decl.rsplit(".", 1)[-1], [])
-        out[decl] = sorted(set(locations))
-    return out
+            by_short.setdefault(match.group(1), []).append(f"{rel}:{lineno}")
+    return {
+        decl: sorted(set(by_short.get(decl.rsplit(".", 1)[-1], [])))
+        for decl in declarations
+    }
 
 
 def load_signatures(certificate_path: pathlib.Path | None) -> tuple[dict[str, dict], dict | None]:
@@ -98,14 +99,20 @@ def load_signatures(certificate_path: pathlib.Path | None) -> tuple[dict[str, di
 
 
 def md_code_block(text: str, language: str = "") -> str:
-    # TeX passages can contain backticks, so use tildes.
     return f"~~~~{language}\n{text.rstrip()}\n~~~~"
 
 
 def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -> None:
     statement_map = load_json(MAP_PATH)
     census = load_json(CENSUS_PATH)
-    census_by_id = {x["id"]: x for x in census["items"]}
+    result_inventory = load_json(RESULT_PATH)
+    source_inventory_path = ROOT / result_inventory["source_fidelity_inventory"]
+    source_inventory = load_json(source_inventory_path)
+    atoms = source_inventory["atoms"]
+    atom_by_id = {atom["id"]: atom for atom in atoms}
+    map_by_id = {item["id"]: item for item in statement_map["items"]}
+    census_by_id = {item["id"]: item for item in census["items"]}
+    results = result_inventory["results"]
     tex_path = ROOT / statement_map["source"]["audit_tex"]
     claims = extract_claims(tex_path)
     signatures, certificate = load_signatures(certificate_path)
@@ -116,89 +123,117 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
         for decl in item.get("lean_declarations", [])
     }
     locations = declaration_locations(all_decls)
+    terminal = [
+        r for r in results
+        if r.get("verification") == "proved_in_build"
+        and r.get("semantic_certification") == "accepted"
+        and r.get("disposition") in {"proved_exact", "compiled_exact", "refuted_as_transcribed"}
+    ]
+    pending = [r for r in results if r not in terminal]
+    reason_counts = collections.Counter(atom["formalization_role_reason_code"] for atom in atoms)
 
-    lines: list[str] = []
-    lines += [
-        "# Davis--Kahan 1970 independent statement audit packet",
+    lines: list[str] = [
+        "# Davis--Kahan 1970 independent result audit packet",
         "",
-        "This packet is organized one source claim at a time. The TeX passages come directly from the checked-in transformative, source-order reconstruction `DavisKahan1970_part_III.tex`; they are the repository's distributable semantic audit specification. The census status is a claim to audit, not evidence of semantic fidelity.",
+        "## Claim boundary presented to the reviewer",
         "",
-        "Compiler evidence, source status, and hostile semantic certification are intentionally separate. A compiler certificate establishes that registered declarations elaborate against `DavisKahan.All`; the maintained `completion_certification` records whether the current passage has already survived an adversarial semantic review, and the auditor must independently confirm or overturn that judgement.",
+        "The repository does **not** claim that every mathematical sentence, proof equation, worked example, historical comparison, or open question in the paper is separately formalized as a Lean theorem. It claims exact formal coverage of every result that Davis and Kahan actually establish in the paper.",
         "",
-        f"- Statement map: `{MAP_PATH.relative_to(ROOT)}`",
+        "The two accounting layers are deliberately both visible:",
+        "",
+        f"- **Source fidelity:** `{source_inventory_path.relative_to(ROOT)}` contains **{len(atoms)} atoms** in paper order, including all **{source_inventory['coverage_summary']['numbered_equation_atoms']} numbered equations**. Every atom has an explicit result-boundary reason code and names any counted result(s) it supports.",
+        f"- **Formalization denominator:** `{RESULT_PATH.relative_to(ROOT)}` contains exactly **{len(results)} counted results**: the four Section 2 headline theorems plus every named theorem, proposition, lemma, and corollary Davis--Kahan actually establish.",
+        "- Section 10 questions, explicitly deferred/unproved claims, definitions, proof-only derivations, examples, numerical working, historical/external results, and theorem-adjacent remarks remain visible in source fidelity but do not enlarge the denominator.",
+        "- A false counted result remains in the denominator and requires exact formal refutation plus the repository's separate best-effort repair disposition.",
+        "",
+        f"Current result-level status: **{len(terminal)}/{len(results)} terminal**, **{len(pending)} awaiting semantic closure**.",
+        f"Result-selection/boundary review: **{result_inventory['result_inventory_review'].get('boundary_review_status')}** under policy `{result_inventory['result_inventory_review'].get('policy')}`.",
+        "",
+        "A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.",
+        "",
+        "## Authoritative checked-in materials",
+        "",
         f"- Distributable source specification: `{tex_path.relative_to(ROOT)}`",
-        f"- Census: `{CENSUS_PATH.relative_to(ROOT)}`",
-        f"- Registered rows: **{len(statement_map['items'])}**",
-        f"- Mathematical completion obligations: **{sum(bool(x['completion_obligation']) for x in statement_map['items'])}**",
+        f"- Source-fidelity inventory: `{source_inventory_path.relative_to(ROOT)}`",
+        f"- Formalization-result inventory: `{RESULT_PATH.relative_to(ROOT)}`",
+        f"- Source census: `{CENSUS_PATH.relative_to(ROOT)}`",
+        f"- Organizational statement map: `{MAP_PATH.relative_to(ROOT)}`",
     ]
     if certificate is None:
-        lines += [
-            "- Compiler certificate: **not supplied**. The theorem-type boxes below are placeholders; do not infer compilation from this static packet.",
-        ]
+        lines += ["- Compiler certificate: **not supplied**; theorem types below are placeholders."]
     else:
-        cert_status = certificate.get("overall_status", "unknown")
         lines += [
             f"- Compiler certificate: `{certificate_path}`",
-            f"- Certificate overall status: **{cert_status}**",
-            f"- Clean root build requested/performed: **{certificate.get('clean_root_build', False)}**",
+            f"- Certificate overall status: **{certificate.get('overall_status', 'unknown')}**",
             f"- Certified Git HEAD: `{certificate.get('git', {}).get('head', 'unknown')}`",
             f"- Certified source-tree SHA-256: `{certificate.get('source_tree_sha256', 'unknown')}`",
         ]
     lines += [
         "",
-        "## Verdict vocabulary",
+        "## Result-level verdict vocabulary",
         "",
-        "Use one of: **PASS exact**, **PASS refuted**, **FAIL scope**, **FAIL conclusion**, **FAIL missing clause**, **FAIL source specification**, or **UNCERTAIN**.",
-        "",
-        "At the end, separately list any mathematical claim found in the distributable source specification that is not represented by a row in the statement map.",
+        "Use one of: **PASS exact**, **PASS refuted + repair**, **FAIL boundary**, **FAIL scope**, **FAIL conclusion**, **FAIL missing clause**, **FAIL evidence**, or **UNCERTAIN**.",
         "",
     ]
 
-    for index, mapped in enumerate(statement_map["items"], start=1):
-        item_id = mapped["id"]
-        c = census_by_id[item_id]
-        source = claims[item_id]
+    for index, result in enumerate(results, start=1):
+        result_id = result["id"]
+        mapped = map_by_id[result_id]
+        census_row = census_by_id[result_id]
+        boundary = result["boundary_review"]
+        source_ids = result["source_atom_ids"]
+        same_included = boundary["included_same_block_atom_ids"]
+        same_excluded = boundary["excluded_same_block_atom_ids"]
+        cross_scope = boundary["cross_block_scope_atom_ids"]
+        source = claims[result_id]
+
         lines += [
-            f"## {index}. {item_id} — {mapped['title']}",
+            f"## {index}. {result_id} — {result['title']}",
             "",
-            f"- **Source anchor:** {mapped['source_anchor']}",
-            f"- **Source kind:** `{mapped['source_kind']}`",
-            f"- **Completion obligation:** `{str(mapped['completion_obligation']).lower()}`",
-            f"- **Census claim:** `{c['status']}` / `{c['verification']}`",
-            f"- **Hostile completion certification:** `{c.get('completion_certification', 'missing')}`",
-            f"- **Source-specification passage SHA-256:** `{mapped['source_specification_sha256']}`",
+            f"- **Counted result kind:** `{result['result_kind']}`",
+            f"- **Exact source anchor:** {result['source_anchor']}",
+            f"- **Result disposition:** `{result['disposition']}`",
+            f"- **Compiler verification:** `{result['verification']}`",
+            f"- **Hostile semantic certification:** `{result['semantic_certification']}`",
+            f"- **Boundary review:** `{boundary['status']}`",
+            f"- **Organizational source-block hash:** `{mapped['source_specification_sha256']}`",
             "",
-            "### Registered distributable source-specification passage",
+            "### Atoms inside the counted printed result",
+            "",
+        ]
+        for atom_id in source_ids:
+            atom = atom_by_id[atom_id]
+            source_parent = atom["parent_claim_id"]
+            cross = " *(shared/cross-block scope)*" if atom_id in cross_scope else ""
+            lines.append(
+                f"- `{atom_id}` — **{atom['formalization_role_reason_code']}**{cross} — {atom['summary']}"
+            )
+        lines += ["", "### Same-block material explicitly outside the counted result", ""]
+        if same_excluded:
+            for atom_id in same_excluded:
+                atom = atom_by_id[atom_id]
+                lines += [
+                    f"- `{atom_id}` — **{atom['formalization_role_reason_code']}** — {atom['summary']}",
+                    f"  - Boundary rationale: {atom['formalization_role_reason']}",
+                ]
+        else:
+            lines.append("- *(none; the primary source block contains only atoms belonging to the counted result statement)*")
+        lines += [
+            "",
+            f"Boundary method: {boundary['method']}",
+            "",
+            "### Full registered source block (for context and boundary challenge)",
             "",
             md_code_block(source, "tex"),
             "",
-            "### Semantic audit clauses",
+            "### Source-facing Lean declarations",
             "",
         ]
-        for clause in mapped.get("audit_clauses", []):
-            clause_decls = clause.get("review_declarations", [])
-            lines.append(f"- **`{clause['id']}`:** {clause['description']}")
-            if clause_decls:
-                lines.append("  - Review declarations: " + ", ".join(f"`{d}`" for d in clause_decls))
-            else:
-                lines.append("  - Review declarations: *(none; inspect the row mapping/source context)*")
-        holes = c.get("completion_holes") or []
-        if holes:
-            lines += ["", "### Known hostile-review holes", ""]
-            for hole in holes:
-                lines.append(f"- **`{hole.get('kind', 'unspecified')}`:** {hole.get('detail', '')}")
-        if mapped.get("audit_warning"):
-            lines += ["", f"> **Audit warning:** {mapped['audit_warning']}"]
-        lines += [
-            "",
-            "### Primary Lean declarations for semantic review",
-            "",
-        ]
-        review = mapped.get("review_declarations", [])
-        if not review:
-            lines.append("No primary Lean declaration is registered for this row. If it is a completion obligation, this is itself a blocking audit defect.")
+        declarations = result.get("lean_declarations", [])
+        if not declarations:
+            lines.append("**No source-facing declaration is registered. This is a blocking defect.**")
             lines.append("")
-        for decl in review:
+        for decl in declarations:
             locs = locations.get(decl) or []
             lines += [
                 f"#### `{decl}`",
@@ -208,38 +243,24 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
             ]
             sig = signatures.get(decl)
             if sig and sig.get("resolved"):
-                lines += [
-                    "Compiler-printed type:",
-                    "",
-                    md_code_block(sig.get("type", ""), "lean"),
-                    "",
-                ]
+                lines += ["Compiler-printed type:", "", md_code_block(sig.get("type", ""), "lean"), ""]
             elif certificate is not None:
-                lines += [
-                    "Compiler-printed type: **UNRESOLVED OR MISSING FROM CERTIFICATE**",
-                    "",
-                ]
+                lines += ["Compiler-printed type: **UNRESOLVED OR MISSING FROM CERTIFICATE**", ""]
             else:
-                lines += [
-                    "Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*",
-                    "",
-                ]
+                lines += ["Compiler-printed type: *inserted when a compiler certificate is supplied.*", ""]
 
-        lines += [
-            "<details>",
-            "<summary>Full census declaration mapping for this row</summary>",
-            "",
-            "When a compiler certificate is supplied, `signatures.json` contains the compiler-printed type for every declaration in this full mapping, not only the primary declarations displayed above.",
-            "",
-        ]
-        for decl in c.get("lean_declarations", []):
-            locs = locations.get(decl) or []
-            suffix = f" — {', '.join(locs[:3])}" if locs else ""
-            captured = " — compiler type captured" if certificate is not None and signatures.get(decl, {}).get("resolved") else ""
-            lines.append(f"- `{decl}`{suffix}{captured}")
-        if not c.get("lean_declarations"):
-            lines.append("- *(none)*")
-        lines += ["", "</details>", "", "### Independent audit checklist", ""]
+        if result.get("disposition") == "refuted_as_transcribed":
+            repair = result.get("repair", {})
+            lines += [
+                "### False-source repair disposition",
+                "",
+                f"- **Repair status:** `{repair.get('status', 'missing')}`",
+                f"- **Repair declarations:** " + (", ".join(f"`{x}`" for x in repair.get("lean_declarations", [])) or "*(none)*"),
+                f"- **Repair notes:** {repair.get('notes', 'missing')}",
+                "",
+            ]
+
+        lines += ["### Independent result audit checklist", ""]
         for check in CHECKLIST:
             lines.append(f"- [ ] {check}")
         lines += [
@@ -247,34 +268,52 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
             "### Auditor verdict",
             "",
             "- **Verdict:** _fill in_",
-            "- **Reasoning / mismatch details:** _fill in_",
-            "- **Additional Lean declaration(s) needed to establish coverage, if any:** _fill in_",
-            "- **Unregistered source clause discovered, if any:** _fill in_",
+            "- **Boundary challenge:** _confirm or identify an atom wrongly included/excluded_",
+            "- **Source/Lean mismatch:** _fill in_",
+            "- **Additional Lean declaration(s) needed, if any:** _fill in_",
             "",
             "---",
             "",
         ]
 
-    mapped_by_id = {x["id"]: x for x in statement_map["items"]}
-    completion_rows = [
-        c for c in census["items"]
-        if bool(mapped_by_id[c["id"]].get("completion_obligation"))
-    ]
-    accepted_rows = [c for c in completion_rows if c.get("completion_certification") == "accepted"]
-    reopened_rows = [c for c in completion_rows if c.get("completion_certification") != "accepted"]
-    accepted_exact = [c for c in accepted_rows if c.get("status") == "compiled_exact"]
-    accepted_refuted = [c for c in accepted_rows if c.get("status") == "refuted_as_transcribed"]
     lines += [
+        "# Appendix A — complete source-fidelity classification",
+        "",
+        "Every source atom remains visible here even when it is outside the 29-result denominator. This table is the project's explicit limitation statement: an excluded item is not hidden; it has a reason code that the reviewer may challenge.",
+        "",
+        "## Classification totals",
+        "",
+    ]
+    for code, count in sorted(reason_counts.items()):
+        lines.append(f"- `{code}`: **{count}**")
+    lines += [
+        "",
+        "## All source atoms in paper order",
+        "",
+        "| # | Atom | Parent block | Boundary classification | Counted result support | Source-fidelity summary |",
+        "|---:|---|---|---|---|---|",
+    ]
+    for atom in atoms:
+        support = ", ".join(f"`{x}`" for x in atom.get("formalization_result_ids", [])) or "—"
+        summary = atom["summary"].replace("|", "\\|").replace("\n", " ")
+        lines.append(
+            f"| {atom['order']} | `{atom['id']}` | `{atom['parent_claim_id']}` | "
+            f"`{atom['formalization_role_reason_code']}` | {support} | {summary} |"
+        )
+
+    lines += [
+        "",
         "# Final independent conclusion",
         "",
-        f"- **{len(completion_rows)} explicit mathematical completion obligations reviewed:** yes / no",
-        f"- **{len(accepted_exact)} currently hostile-certified exact obligations independently reconfirmed:** yes / no",
-        f"- **{len(accepted_refuted)} currently hostile-certified refuted obligations independently reconfirmed:** yes / no",
-        f"- **{len(reopened_rows)} currently reopened completion obligations resolved by this audit:** yes / no",
-        "- **Reopened rows at packet generation:** " + (", ".join(f"`{c['id']}` ({c.get('completion_certification')})" for c in reopened_rows) if reopened_rows else "none"),
-        "- **Any unregistered mathematical claims found:** yes / no",
+        f"- **All {len(atoms)} source-fidelity atoms reviewed for omission/classification:** yes / no",
+        f"- **All {len(results)} counted DK-established results reviewed against their exact printed boundaries:** yes / no",
+        f"- **{len(terminal)} currently terminal results independently reconfirmed:** yes / no",
+        f"- **{len(pending)} currently nonterminal/pending results resolved by this audit:** yes / no",
+        "- **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no",
+        "- **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no",
+        "- **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no",
         "- **Compiler certificate clean and complete:** yes / no",
-        "- **Is the repository's claim of 100% theorem-statement-level Davis--Kahan 1970 coverage justified?** yes / no / uncertain",
+        "- **Is the repository's explicitly limited claim of 100% result-level Davis--Kahan 1970 formalization justified?** yes / no / uncertain",
         "",
         "## Findings requiring action",
         "",
