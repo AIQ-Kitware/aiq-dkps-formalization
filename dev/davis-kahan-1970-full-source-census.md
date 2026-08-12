@@ -11,10 +11,10 @@ authoritative; this Markdown file is generated from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 40 |
+| `compiled_exact` | 41 |
 | `compiled_specialization` | 3 |
 | `compiled_general_infrastructure` | 0 |
-| `proof_written` | 1 |
+| `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
 | `partial_or_wrapper_missing` | 0 |
 | `not_represented` | 0 |
@@ -48,11 +48,11 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 40 |
+| `proved_in_build` | 46 |
 | `proved_conditional` | 0 |
 | `partially_in_build` | 0 |
 | `proved_outside_build` | 0 |
-| `compiler_pending` | 6 |
+| `compiler_pending` | 0 |
 | `not_compiling` | 0 |
 | `absent` | 0 |
 | `not_applicable` | 3 |
@@ -76,10 +76,6 @@ in front of it. This includes rows that are already
 the source-numbered wrapper is still missing. Obstructions marked
 `mechanical` need only wiring or a restatement; `hard_math` needs new
 mathematics.
-
-### Not attributed to a blocker
-
-DK-3.4-prop (compiler_pending), DK-3.2-cor (compiler_pending), DK-4.1-prop (compiler_pending), DK-4.1-cor (compiler_pending), DK-4.2-prop (compiler_pending), DK-4.3-prop (compiler_pending)
 
 
 ## Source ledger
@@ -1160,7 +1156,7 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 
 - **Kind:** `proposition`
 - **Status:** `compiled_exact`
-- **Verification:** `compiler_pending`
+- **Verification:** `proved_in_build`
 - **Mathematics:** When the cosine block squared is at least one half, U squared is the direct rotation from the reflected subspace to the target subspace.
 - **Current Lean references:** `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`, `TauCeti.DavisKahan.Frontier.Section3.crossedDefect_image_of_unitary_sq`, `TauCeti.DavisKahan.Frontier.Section3.norm_projection_apply_le_of_forall_mem_source`, `TauCeti.DavisKahan.Frontier.Section3.re_inner_halmosCosineSq_sub_half_nonneg_of_source`, `TauCeti.DavisKahan.Frontier.Section3.re_inner_halmosCosineSq_self`, `TauCeti.DavisKahan.Frontier.Section3.isSelfAdjoint_source_block_spectraDirectRotation`, `TauCeti.DavisKahan.Frontier.Section3.isSelfAdjoint_complement_block_spectraDirectRotation`, `TauCeti.DavisKahan.Frontier.Section3.nonneg_add_star_of_re_inner_nonneg`, `TauCeti.DavisKahan.Frontier.Section3.reflectionOperator_mul_projection_self`, `TauCeti.DavisKahan.Frontier.Section3.projection_mul_reflectionOperator_self`, `TauCeti.DavisKahanTheory.directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_square_is_reflected_directRotation`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`
 - **Assessment:** Square identities exist; exact source mapping between Q-minus and Q needs verification.
@@ -1591,7 +1587,7 @@ RESIDUAL FIDELITY NOTE: `fixedCosineSubspace` is `ker (cos^2 Theta - c^2)`, and 
 
 - **Kind:** `corollary`
 - **Status:** `compiled_exact`
-- **Verification:** `compiler_pending`
+- **Verification:** `proved_in_build`
 - **Mathematics:** Swapping P and Q leaves the angle operator unchanged and reverses the quarter-turn operator.
 - **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation_reversal`, `TauCeti.DavisKahanTheory.directRotation_symm`, `TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal`, `TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form`, `TauCeti.DavisKahan.Frontier.Section3.corollary3_2_sinAngleOperator_symm`, `TauCeti.DavisKahanTheory.angleComplexStructure_symm`, `TauCeti.DavisKahanTheory.angleOperator_comm`, `TauCeti.DavisKahanTheory.sinAngleOperator_comm`, `TauCeti.DavisKahanTheory.directRotationCosine_comm`, `TauCeti.DavisKahan1970.real_directRotation_reversal`, `TauCeti.DavisKahan1970.corollary3_2_source`, `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`, `TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm`
 - **Assessment:** Direct-rotation reversal is represented; the exact angle/J statement needs a source wrapper.
@@ -1625,7 +1621,7 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is clos
 
 - **Kind:** `proposition`
 - **Status:** `compiled_specialization`
-- **Verification:** `compiler_pending`
+- **Verification:** `proved_in_build`
 - **Mathematics:** For any unitary carrying P to Q, an orthonormal sequence experiences angles at least the principal angles; equivalently the singular values of (1-V)|P are minimized by the direct rotation and equal 2 sin(theta_k/2).
 - **Current Lean references:** `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation`, `TauCeti.DavisKahan1970.Proposition4_1`, `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional`, `TauCeti.DavisKahan1970.Proposition4_1_real`, `TauCeti.DavisKahan1970.restrictedDisplacementDominance_real`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional_nonacute`
 - **Assessment:** The finite pointwise singular-value theorem is compiled: every singular value of the restricted displacement (1-V)P is minimized by the direct rotation, whose values are the doubled half-angle sines 2 sin(theta_k/2).  A source-numbered wrapper and the infinite-dimensional scope remain open.
@@ -1656,7 +1652,7 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`
 
 - **Kind:** `corollary`
 - **Status:** `compiled_specialization`
-- **Verification:** `compiler_pending`
+- **Verification:** `proved_in_build`
 - **Mathematics:** The direct rotation minimizes the norm of (1-V)P for every unitary-invariant norm.
 - **Current Lean references:** `TauCeti.DavisKahanTheory.uiNorm_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.directRotation_minimizes_restrictedDisplacement_uiNorm`, `TauCeti.DavisKahan1970.Corollary4_1`, `TauCeti.DavisKahan1970.Corollary4_1_minimizer`, `TauCeti.DavisKahan.Frontier.Section4.corollary4_1_restrictedDisplacement_idealGauge`, `TauCeti.DavisKahan1970.Corollary4_1_real`, `TauCeti.DavisKahan1970.Corollary4_1_opNorm_real`, `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute`
 - **Assessment:** Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
@@ -1683,8 +1679,8 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`
 #### Proposition 4.2: Basis-angle square-sum extremality
 
 - **Kind:** `proposition`
-- **Status:** `proof_written`
-- **Verification:** `compiler_pending`
+- **Status:** `compiled_exact`
+- **Verification:** `proved_in_build`
 - **Mathematics:** For every orthonormal basis of P, the sum of squared displacement sines under V dominates the sum of squared principal sines.
 - **Current Lean references:** `TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge`, `TauCeti.DavisKahan.Section4.displacementAngleSineSq_directRotation_eq_of_smul`, `TauCeti.DavisKahan.Section4.norm_absoluteValue_apply_eq_norm_projection`, `TauCeti.DavisKahan.Section4.norm_inner_competitor_le`, `TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge_of_mem`, `TauCeti.DavisKahan.Section4.tsum_displacementAngleSineSq_ge_of_mem`, `TauCeti.DavisKahan1970.displacementAngleSineSqR`, `TauCeti.DavisKahan1970.displacementAngleSineSq_ge_real`, `TauCeti.DavisKahan1970.sum_displacementAngleSineSq_ge_of_mem_real`, `TauCeti.DavisKahan1970.tsum_displacementAngleSineSq_ge_of_mem_real`, `TauCeti.DavisKahan.Section4.sum_one_sub_sq_norm_absoluteValue_eq_sum_sq_principalSines`, `TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge_sum_sq_principalSines`, `TauCeti.DavisKahan.Frontier.Section4.proposition4_2_basisAngleSquareSum_principalSines`, `TauCeti.DavisKahan1970.norm_canonicalAbsoluteValueR_apply_eq_norm_projection`, `TauCeti.DavisKahan1970.sum_one_sub_sq_norm_canonicalAbsoluteValueR_eq_sum_sq_principalSines`, `TauCeti.DavisKahan1970.sum_displacementAngleSineSqR_ge_sum_sq_principalSines`, `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional`, `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_principalSineSequence`, `TauCeti.principalSineSequence`, `TauCeti.principalAngleSequence`, `TauCeti.sin_principalAngleSequence`, `TauCeti.DavisKahan.Section4.tsum_displacementAngleSineSq_ge_tsum_sq_sin_principalAngleSequence`, `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`
 - **Assessment:** The finite orthonormal-basis displacement-energy extremality is compiled via the nuclear-norm specialization of the displacement-square majorization.
@@ -1745,13 +1741,13 @@ THE STATUS DOES NOT MOVE, and for a reason that has nothing to do with scalars: 
 SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`.  The earlier sentence that finite dimension was the paper's own restriction is false; the transcription explicitly includes the infinite-series case.
 
 SOURCE-CLOSURE TRANCHE 2026-08-11.  Added the stable arbitrary-dimensional `TauCeti.principalAngleSequence U V n := arcsin (principalSineSequence U V n)` and proved `sin (principalAngleSequence U V n) = principalSineSequence U V n`.  The complex and real Proposition 4.2 endpoints are now stated literally with `sum_n sin^2 theta_n` in ENNReal, so the divergent right-hand side is included.  This matches the paper definition that the singular values of the directed sine block are `sin theta_n`; no finite-dimensional truncation or summability hypothesis remains.  Verification is compiler-pending for this tranche.
-- **Next action:** Compile the literal principal-angle endpoints; after success this row is source-complete.
+- **Next action:** Nothing outstanding. The literal principal-angle endpoints compile over real and complex Hilbert spaces in arbitrary dimension, including a divergent right-hand side.
 
 #### Proposition 4.3: Squared displacement UI-norm minimality
 
 - **Kind:** `proposition`
 - **Status:** `compiled_specialization`
-- **Verification:** `compiler_pending`
+- **Verification:** `proved_in_build`
 - **Mathematics:** The direct rotation minimizes the UI norm of (1-V*) (1-V).
 - **Current Lean references:** `TauCeti.DavisKahanTheory.directRotation_displacementSquare_kyFan`, `TauCeti.DavisKahanTheory.directRotation_displacementSquare_uiNorm`, `TauCeti.DavisKahanTheory.directRotation_minimizes_displacementSquare_uiNorm`, `TauCeti.DavisKahan1970.Proposition4_3`, `TauCeti.DavisKahan1970.Proposition4_3_kyFan`, `TauCeti.DavisKahan1970.Proposition4_3_minimizer`, `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional`, `TauCeti.DavisKahanTheory.directRotation_minimizes_sum_sq_basis_angles`, `TauCeti.DavisKahan1970.Proposition4_3_real`, `TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge`, `TauCeti.DavisKahan1970.Proposition4_3_real_idealGauge`
 - **Assessment:** Compiled for every unitarily invariant norm over every RCLike field (finite dimension), via Fan-Hoffman majorization of the pinched competitor and two-block pinching contraction.
