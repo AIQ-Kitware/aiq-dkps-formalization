@@ -103,9 +103,10 @@
         "TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
-        "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent"
+        "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
+        "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact"
       ],
-      "review_note": "Result-only audit 2026-08-12: bounded directed and bounded ambient source theorems are present over complex and real Hilbert spaces, and the unbounded directed residual theorem is present over both scalar fields. The remaining source-scope gap is the *ambient unbounded* conclusion `delta * N(tan Theta) <= N(H)` for arbitrary paper UI norm under the printed hypotheses. No existing source-facing theorem was located that combines unbounded self-adjoint ambient scope with the sharp factor-one perturbation conclusion. Keep this result nonterminal until that theorem/wrapper exists and is registered.",
+      "review_note": "Result-only audit 2026-08-12, updated after compiler validation of the unbounded ambient repair. `tanTheta_unbounded_ambient_paperUINorm_exact` proves the sharp factor-one unbounded ambient `delta * N(tan Theta) <= N(H)` conclusion for every paper UI norm once the crossed-defect equivalence (3.5) is supplied, reusing the arbitrary-trial unbounded Theorem 6.3 Ky-Fan core and the bounded Lemma-6.1/Lemma-6.2 two-corner assembly. This removes the analytic ambient-assembly gap. It does NOT prove the literal printed Section 2 infinite-dimensional statement: (3.5) is absent from that theorem statement and is not implied by the earlier matching-dimension condition (1.5). The repository challenge already specifies the bilateral-shift pole counterexample under the literal Section 2 hypotheses. Keep this result nonterminal until that exact source claim is formally refuted in production and registered; the compiled theorem here is then the sharp corrected repair.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-tan-theta",
@@ -128,14 +129,15 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "remaining_gap": {
-        "category": "missing_unbounded_ambient_source_surface",
-        "missing_surface": "Unbounded self-adjoint ambient perturbation theorem delta * N(tan Theta) <= N(H) for every paper unitary-invariant norm under the printed Section 2 ordered-gap/Rayleigh-Ritz hypotheses.",
+        "category": "formal_refutation_of_false_unbounded_ambient_claim",
+        "missing_surface": "A production, compiler-checked refutation of the literal infinite-dimensional Section 2 ambient tan-Theta clause from only its printed hypotheses. The intended bilateral-shift witness satisfies the matching-dimension, ordered-gap, and Rayleigh--Ritz/off-diagonal hypotheses while the whole-space angle has a pi/2 pole. The corrected unbounded ambient inequality is already proved under the load-bearing crossed-defect condition (3.5).",
         "strongest_existing_evidence": [
-          "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
-          "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists",
-          "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real"
+          "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact",
+          "TauCeti.DavisKahan.Frontier.Section3.directedGap_asymmetric_coordinateHalfSpace",
+          "TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses",
+          "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent"
         ],
-        "next_action": "Prove/register an unbounded ambient PaperUI source wrapper with the sharp factor-one perturbation conclusion; then re-run hostile semantic review."
+        "next_action": "Promote the existing literal-Section-2 bilateral-shift pole-counterexample challenge to a sorry-free production theorem. Then register S2-tan-theta as refuted-as-transcribed and cite tanTheta_unbounded_ambient_paperUINorm_exact as the corrected unbounded ambient repair."
       }
     },
     {

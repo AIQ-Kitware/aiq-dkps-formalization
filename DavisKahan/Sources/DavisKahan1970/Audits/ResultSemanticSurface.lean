@@ -113,6 +113,9 @@ Status: **OPEN RESULT-SCOPE GAP**.
 #check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm
 #check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real
 #check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent
+#check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact
+#check @TauCeti.DavisKahan.Frontier.Section3.directedGap_asymmetric_coordinateHalfSpace
+#check @TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses
 #check @TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral
 #check @TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral
 #check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists

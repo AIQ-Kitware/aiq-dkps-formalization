@@ -27,6 +27,8 @@ Current maintained result denominator: **29**. Exact printed-result boundary rev
 
 `S2-tan-two-theta` is now result-level terminal at the full shared Section 2 scope: the existing bounded exact wrappers are joined by compiler-verified complex/real unbounded directed and ambient `PaperUnitaryInvariantNorm` endpoints, with canonical cutoff/pole machinery and the two-corner assembly internal to the source-facing theorems.
 
+`S2-tan-theta` now has a compiler-validated sharp unbounded ambient repair under `CrossedDefectsEquivalent` (3.5): `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`. This resolves the analytic two-corner assembly but does **not** close the counted source result, because the literal infinite-dimensional Section 2 theorem omits (3.5). The existing bilateral-shift challenge exhibits the intended source-hypothesis pole counterexample; result-level closure now requires promoting that counterexample to a sorry-free production refutation, after which the h35-qualified theorem is the repair.
+
 A result-only re-audit closes `DK-3.2-prop`, `DK-3.5-prop`, `DK-4.1-prop`, `DK-4.2-prop`, `DK-5.1-thm`, `DK-6.1-prop`, and `DK-6.2-thm`. For `DK-4.1-prop`, the compiler-validated arbitrary-dimensional compact/nonacute source bridge exposes the direct-rotation approximation values as `2 * sin(theta_k / 2)` over both complex and real Hilbert spaces, completing the previously established pointwise and minimality clauses.
 
 ### Agent 3 source-denominator update

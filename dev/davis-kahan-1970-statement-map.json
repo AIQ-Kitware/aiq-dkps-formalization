@@ -196,7 +196,8 @@
         "TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
-        "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent"
+        "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
+        "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact"
       ],
       "audit_clauses": [
         {
@@ -211,19 +212,20 @@
           "description": "Ambient conclusion: delta * ||tan Theta|| <= ||H||, with the ambient angle rather than Theta_0.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
-            "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real"
+            "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
+            "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact"
           ]
         }
       ],
       "source_specification_sha256": "c85f8a2839187dd9ae4d020608816821c3b1f30e401eb5e52d4cbce093e82b3c",
-      "expected_completion_certification": "reopened_mapping",
+      "expected_completion_certification": "reopened_math",
       "known_completion_holes": [
         {
-          "kind": "audit_mapping",
-          "detail": "The mapped real ambient declaration accepts an explicit transversality premise. A source-hypotheses-only real theorem (`tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent`) exists, so this is evidence-selection debt rather than missing mathematics."
+          "kind": "math",
+          "detail": "The sharp unbounded ambient inequality now compiles under CrossedDefectsEquivalent (3.5), but the literal Section 2 infinite-dimensional ambient claim omits (3.5) and has a specified bilateral-shift pole counterexample. Exact source completion now requires a production formal refutation of that printed claim; the new h35-qualified theorem is the repair, not evidence that the false literal statement holds."
         }
       ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: The mapped real ambient declaration accepts an explicit transversality premise. A source-hypotheses-only real theorem (`tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent`) exists, so this is evidence-selection debt rather than missing mathematics.",
+      "audit_warning": "HOSTILE RE-AUDIT: the analytic unbounded ambient assembly is compiled at sharp factor one under CrossedDefectsEquivalent (3.5). Do not map that repaired theorem to the literal Section 2 claim: the printed infinite-dimensional ambient statement omits (3.5), and the bilateral-shift witness shows a pi/2 pole under the printed hypotheses. Keep this row reopened until the formal production counterexample is registered.",
       "source_atom_ids": [
         "S2-tan-theta.ordered-gap-hypothesis",
         "S2-tan-theta.rayleigh-ritz-hypothesis",

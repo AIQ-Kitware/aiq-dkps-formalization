@@ -204,6 +204,12 @@ Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:320`, `Da
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
+#### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:268`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 ### Independent result audit checklist
 
 - [ ] The selected source atoms are exactly the hypotheses, conclusions, and scope of the printed result statement.
