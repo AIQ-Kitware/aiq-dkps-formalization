@@ -7,6 +7,8 @@ import DavisKahan.DoubleAngle.ReflectionTangentKyFan
 import DavisKahan.InfiniteDimensional.DoubleAngle
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaWholeSpace
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReflectionBlocks
+import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
+import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 
 /-!
 # The branch-free ambient half of Davis--Kahan `tan 2Theta`
@@ -221,6 +223,25 @@ private theorem signedCosTwo_selfAdjoint
   rw [IsSelfAdjoint, star_sub, star_one, star_mul, star_mul,
     star_ofNat, hD.star_eq]
   noncomm_ring
+
+omit [CompleteSpace E] in
+/-- The diagonal block of the reflection through `V`, relative to `U`, is the
+reflection through `U` times the signed doubled cosine.  Squaring therefore
+removes the harmless reflection factor. -/
+private theorem diagonalPart_reflection_eq_reflection_mul_signedCosTwo
+    {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    U.diagonalPart V.reflectionOperator = U.reflectionOperator * signedCosTwo U V := by
+  unfold signedCosTwo
+  rw [Submodule.diagonalPart_eq,
+    Submodule.reflectionOperator_eq_two_smul_sub_id U,
+    Submodule.reflectionOperator_eq_two_smul_sub_id V]
+  simp only [two_smul, Submodule.starProjection_orthogonal', comp_eq_mul_reflection]
+  rw [paperProjectorDifference, ← ContinuousLinearMap.one_def]
+  have hp := starProjection_idem_reflection U
+  have hq := starProjection_idem_reflection V
+  simp only [two_mul, mul_add, add_mul, mul_sub, sub_mul, one_mul, mul_one,
+    ← mul_assoc, hp, hq]
+  abel
 
 omit [CompleteSpace E] in
 private theorem maps_mem_of_comm_starProjection
@@ -808,17 +829,8 @@ private theorem reflection_block_data
                     (1 - U.starProjection)) := by rw [hNR, mul_one]
     have hdiag : U.diagonalPart V.reflectionOperator =
         U.reflectionOperator * N := by
-      unfold N signedCosTwo
-      rw [Submodule.diagonalPart_eq,
-        Submodule.reflectionOperator_eq_two_smul_sub_id U,
-        Submodule.reflectionOperator_eq_two_smul_sub_id V]
-      simp only [two_smul, Submodule.starProjection_orthogonal', comp_eq_mul_reflection]
-      rw [paperProjectorDifference, ← ContinuousLinearMap.one_def]
-      have hp' := starProjection_idem_reflection U
-      have hq' := starProjection_idem_reflection V
-      simp only [two_mul, mul_add, add_mul, mul_sub, sub_mul, one_mul, mul_one,
-        ← mul_assoc, hp', hq']
-      abel
+      simpa only [N] using
+        (diagonalPart_reflection_eq_reflection_mul_signedCosTwo (U := U) (V := V))
     have hEq := bounded_reflection_equation_on_U hA hAU hHU hHUperp
       hcommZ hNL hdiag hNU hNUperp (x : E) x.property
     have h0 : ((C1 (T (A0 x)) : Uᗮ) : E) = N (L (A (x : E))) := by
@@ -847,6 +859,150 @@ private theorem reflection_block_data
   exact reflectionTangent_all_kyFan A0 A1 B T C0 C1
     hA0sa hA1sa hC0sa hC1sa hC0unit hC1unit hab hA0high hA1low
     hgram0 hgram1 heq76
+
+/-- **Section 7 pole exclusion from the printed ordered gap.**
+
+For a bounded self-adjoint `A`, the full-domain cutoff is simply `P_U`.  The
+unbounded Section 7 pole estimate therefore applies without an auxiliary
+limit construction and gives `‖offdiag_U(2P_V-1)‖ < 1`.  The reflection
+Pythagorean identity makes its diagonal square invertible; after removing the
+reflection through `U`, this is exactly invertibility of the signed
+`cos 2Θ = 1 - 2(P_V-P_U)^2`.  Hence no principal angle is `π/4`.
+
+This theorem is deliberately internal: the source-facing endpoint below
+states the spectral hypotheses printed in Section 2 and derives these form
+bounds before invoking it. -/
+private theorem cos_two_ne_zero_of_ordered_form_gap_offDiagonal
+    {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {a b : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    (hab : a < b)
+    (hUlow : ∀ x ∈ U, RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
+    (hUperpHigh : ∀ x ∈ Uᗮ, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
+    ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0 := by
+  let Ap : E →ₗ.[ℂ] E := A.toLinearMap.toPMap ⊤
+  have hAred : A.Reduces U := by
+    have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
+    exact reduces_orthogonalComplement hAsym hAU
+  have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
+  have hred : TauCeti.LinearPMap.ReducesSubspace Ap U := by
+    refine TauCeti.LinearPMap.ReducesSubspace.of_components ?_ ?_ ?_ ?_
+    · intro x
+      exact Submodule.mem_top
+    · intro x
+      exact Submodule.mem_top
+    · intro x hx
+      change A (x : E) ∈ U
+      exact hAU _ hx
+    · intro x hx
+      change A (x : E) ∈ Uᗮ
+      exact hAUperp _ hx
+  have hBodd : TauCeti.IsOddFor U H := ⟨hHU, hHUperp⟩
+  let Z : E →L[ℂ] E := V.reflectionOperator
+  have hZsa : IsSelfAdjoint Z := by
+    simpa only [Z] using isSelfAdjoint_reflectionOperator V
+  have hZ2 : Z * Z = 1 := by
+    dsimp [Z]
+    rw [ContinuousLinearMap.mul_def, Submodule.reflectionOperator_involutive,
+      ← ContinuousLinearMap.one_def]
+  have hZdom : TauCeti.LinearPMap.MapsDomainTo Ap Ap Z := by
+    intro x
+    exact Submodule.mem_top
+  have hAHsa : IsSelfAdjoint (A + H) := hA.add hH
+  have hAHsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hAHsa
+  have hVred : (A + H).Reduces V := reduces_orthogonalComplement hAHsym hAplusH_V
+  have hcomm : V.reflectionOperator ∘L (A + H) =
+      (A + H) ∘L V.reflectionOperator :=
+    reflectionOperator_comm_of_reduces (A + H) V hVred
+  have hZcomm : ∀ x : Ap.domain,
+      Ap ⟨Z (x : E), hZdom x⟩ + H (Z (x : E)) =
+        Z (Ap x) + Z (H (x : E)) := by
+    intro x
+    have hx := congrArg (fun T : E →L[ℂ] E => T (x : E)) hcomm
+    change A (Z (x : E)) + H (Z (x : E)) =
+      Z (A (x : E)) + Z (H (x : E))
+    simpa only [Z, ContinuousLinearMap.comp_apply, add_apply, map_add] using hx.symm
+  have hUa : ∀ x : Ap.domain, (x : E) ∈ U →
+      (⟪Ap x, (x : E)⟫_ℂ).re ≤ a * ‖(x : E)‖ ^ 2 := by
+    intro x hx
+    change RCLike.re ⟪A (x : E), (x : E)⟫_ℂ ≤ a * ‖(x : E)‖ ^ 2
+    exact hUlow _ hx
+  have hUb : ∀ x : Ap.domain, (x : E) ∈ Uᗮ →
+      b * ‖(x : E)‖ ^ 2 ≤ (⟪Ap x, (x : E)⟫_ℂ).re := by
+    intro x hx
+    change b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A (x : E), (x : E)⟫_ℂ
+    exact hUperpHigh _ hx
+  let Ω : TauCeti.BoundedCutoff Ap U ‖A‖ := {
+    toProj := U.starProjection
+    isSelfAdjoint := isSelfAdjoint_starProjection U
+    isIdempotentElem := U.isIdempotentElem_starProjection
+    mem_subspace := fun v => U.starProjection_apply_mem v
+    mem_domain := fun _ => Submodule.mem_top
+    norm_apply_le := fun v => by
+      change ‖A (U.starProjection v)‖ ≤ ‖A‖ * ‖U.starProjection v‖
+      exact A.le_opNorm _
+    apply_mem_range := fun v => by
+      change U.starProjection (A (U.starProjection v)) = A (U.starProjection v)
+      exact Submodule.starProjection_eq_self_iff.mpr
+        (hAU _ (U.starProjection_apply_mem v))
+  }
+  have hconv : ∀ x ∈ U,
+      Filter.Tendsto (fun _ : ℕ => Ω.toProj x) Filter.atTop (nhds x) := by
+    intro x hx
+    have hxproj : Ω.toProj x = x := by
+      change U.starProjection x = x
+      exact Submodule.starProjection_eq_self_iff.mpr hx
+    simpa only [hxproj] using
+      (tendsto_const_nhds : Filter.Tendsto (fun _ : ℕ => x) Filter.atTop (nhds x))
+  have hS1 : ‖U.offDiagonalPart Z‖ < 1 :=
+    TauCeti.norm_offDiagonalPart_lt_one_of_tendsto
+      hred hBodd hZsa hZ2 hZdom hZcomm hUa hUb
+      (fun _ : ℕ => ‖A‖) (fun _ => Ω) (fun _ => norm_nonneg A) hab hconv
+  have hSS : ‖U.offDiagonalPart Z * U.offDiagonalPart Z‖ < 1 := by
+    have hmul := norm_mul_le (U.offDiagonalPart Z) (U.offDiagonalPart Z)
+    nlinarith [norm_nonneg (U.offDiagonalPart Z)]
+  have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := by
+    have hsum := TauCeti.diagonalPart_sq_add_offDiagonalPart_sq (U := U) hZ2
+    have hrewrite : U.diagonalPart Z * U.diagonalPart Z =
+        1 - U.offDiagonalPart Z * U.offDiagonalPart Z := by
+      rw [← hsum]
+      abel
+    rw [hrewrite]
+    exact ⟨Units.oneSub _ hSS, rfl⟩
+  let N : E →L[ℂ] E := signedCosTwo U V
+  have hdiag : U.diagonalPart Z = U.reflectionOperator * N := by
+    simpa only [Z, N] using
+      (diagonalPart_reflection_eq_reflection_mul_signedCosTwo (U := U) (V := V))
+  have hNP : N * U.starProjection = U.starProjection * N := by
+    simpa only [N] using signedCosTwo_comm_starProjection (U := U) (V := V)
+  have hJN : U.reflectionOperator * N = N * U.reflectionOperator := by
+    rw [Submodule.reflectionOperator_eq_two_smul_sub_id U]
+    simp only [two_smul]
+    noncomm_ring [hNP]
+  have hJ2 : U.reflectionOperator * U.reflectionOperator = 1 := by
+    rw [ContinuousLinearMap.mul_def, Submodule.reflectionOperator_involutive,
+      ← ContinuousLinearMap.one_def]
+  have hdiagSq : U.diagonalPart Z * U.diagonalPart Z = N * N := by
+    rw [hdiag]
+    calc
+      (U.reflectionOperator * N) * (U.reflectionOperator * N) =
+          U.reflectionOperator * (N * U.reflectionOperator) * N := by
+            simp only [mul_assoc]
+      _ = U.reflectionOperator * (U.reflectionOperator * N) * N := by
+            rw [← hJN]
+      _ = (U.reflectionOperator * U.reflectionOperator) * N * N := by
+            simp only [mul_assoc]
+      _ = N * N := by
+            rw [hJ2, one_mul]
+  have hNN : IsUnit (N * N) := by
+    rw [← hdiagSq]
+    exact hCC
+  have hN : IsUnit N := ((Commute.refl N).isUnit_mul_iff.mp hNN).1
+  exact cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq
+    (by simpa only [N, signedCosTwo] using hN)
 
 /-- **Branch-free Section 7 directed-corner estimate, lower-residual form.** -/
 theorem tanTwoTheta_directedCorner_residual_all_kyFan_branchFree
@@ -942,6 +1098,151 @@ theorem tanTwoTheta_wholeSpace_paperUINorm_branchFree
   exact tanTwoTheta_wholeSpace_paperUINorm_of_corner N hH hab hcos
     (tanTwoTheta_directedCorner_residual_all_kyFan_branchFree_upper
       hA hH hAU hAplusH_V hab hUhigh hUperpLow hHU hHUperp hcos) hHmem
+
+/-- **Davis--Kahan 1970, Section 2 `tan 2Θ`, ambient conclusion, exactly from
+its printed hypotheses.**
+
+The source assumes an interval `[β, α]`, `δ > 0`,
+
+* `spectrum(A₀) ⊆ [β, α]`,
+* `spectrum(A₁) ⊆ [α + δ, ∞)`, and
+* `H₀ = H₁ = 0` (expressed here as the equivalent off-diagonal mapping
+  conditions).
+
+For an arbitrary reducing subspace `V` of `A+H`, it concludes, for every
+source unitarily invariant norm,
+
+`δ ‖tan 2Θ‖ ≤ 2 ‖H‖`.
+
+There is deliberately **no** `IsQuarterAcute`, no `cos (2θ) ≠ 0` hypothesis,
+and no spectral-placement hypothesis for the `V`-blocks of `A+H`.  Pole
+exclusion is derived above from the same ordered gap by the Section 7
+reflection argument.  The proof uses the branch-free positive representative
+internally, then the modulus identity in `TanTwoThetaWholeSpace` transfers the
+result back to the paper's literal signed `tan 2Θ`. -/
+theorem tanTwoTheta_wholeSpace_paperUINorm_exact
+    (N : PaperUnitaryInvariantNorm)
+    {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {β α δ : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc β α)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hHmem : N.Mem H) :
+    N.Mem (paperTanTwoAngleOperatorC U V) ∧
+      δ * N.gauge (paperTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
+  have hAred : A.Reduces U := by
+    have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
+    exact reduces_orthogonalComplement hAsym hAU
+  have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
+  have hA0sa : IsSelfAdjoint (compressOperator U A) :=
+    isSelfAdjoint_compressOperator hA U
+  have hA1sa : IsSelfAdjoint (compressOperator Uᗮ A) :=
+    isSelfAdjoint_compressOperator hA Uᗮ
+  have hA0upper : spectrum ℝ (compressOperator U A) ⊆ Set.Iic α :=
+    fun r hr => (hA0spec hr).2
+  have hUlow : ∀ x ∈ U,
+      RCLike.re ⟪A x, x⟫_ℂ ≤ α * ‖x‖ ^ 2 := by
+    intro x hx
+    let xu : U := ⟨x, hx⟩
+    have h := TauCeti.SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+      (compressOperator U A) hA0sa hA0upper xu
+    have hcoe : ((compressOperator U A xu : U) : E) = A (x : E) :=
+      coe_compressOperator_apply_of_maps A hAU xu
+    simpa [Submodule.coe_norm, Submodule.coe_inner, hcoe] using h
+  have hUperpHigh : ∀ x ∈ Uᗮ,
+      (α + δ) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ := by
+    intro x hx
+    let xu : Uᗮ := ⟨x, hx⟩
+    have h := TauCeti.SpectralOrder.Complex.le_re_inner_of_spectrum_subset_Ici
+      (compressOperator Uᗮ A) hA1sa hA1spec xu
+    have hcoe : ((compressOperator Uᗮ A xu : Uᗮ) : E) = A (x : E) :=
+      coe_compressOperator_apply_of_maps A hAUperp xu
+    simpa [Submodule.coe_norm, Submodule.coe_inner, hcoe] using h
+  have hgap : α < α + δ := by linarith
+  have hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V),
+      Real.cos (2 * t) ≠ 0 :=
+    cos_two_ne_zero_of_ordered_form_gap_offDiagonal
+      hA hH hAU hAplusH_V hgap hUlow hUperpHigh hHU hHUperp
+  have hAneg : IsSelfAdjoint (-A) := by
+    rw [IsSelfAdjoint, star_neg, hA.star_eq]
+  have hHneg : IsSelfAdjoint (-H) := by
+    rw [IsSelfAdjoint, star_neg, hH.star_eq]
+  have hAUneg : ∀ x ∈ U, (-A) x ∈ U := by
+    intro x hx
+    change -(A x) ∈ U
+    exact U.neg_mem (hAU x hx)
+  have hAplusH_V_neg : ∀ x ∈ V, ((-A) + (-H)) x ∈ V := by
+    intro x hx
+    have h := V.neg_mem (hAplusH_V x hx)
+    simpa [add_apply, add_comm] using h
+  have hUhighNeg : ∀ x ∈ U,
+      (-α) * ‖x‖ ^ 2 ≤ RCLike.re ⟪(-A) x, x⟫_ℂ := by
+    intro x hx
+    calc
+      (-α) * ‖x‖ ^ 2 = -(α * ‖x‖ ^ 2) := by ring
+      _ ≤ -RCLike.re ⟪A x, x⟫_ℂ := neg_le_neg (hUlow x hx)
+      _ = RCLike.re ⟪(-A) x, x⟫_ℂ := by simp
+  have hUperpLowNeg : ∀ x ∈ Uᗮ,
+      RCLike.re ⟪(-A) x, x⟫_ℂ ≤ (-(α + δ)) * ‖x‖ ^ 2 := by
+    intro x hx
+    calc
+      RCLike.re ⟪(-A) x, x⟫_ℂ = -RCLike.re ⟪A x, x⟫_ℂ := by simp
+      _ ≤ -((α + δ) * ‖x‖ ^ 2) := neg_le_neg (hUperpHigh x hx)
+      _ = (-(α + δ)) * ‖x‖ ^ 2 := by ring
+  have hHUNeg : ∀ x ∈ U, (-H) x ∈ Uᗮ := by
+    intro x hx
+    change -(H x) ∈ Uᗮ
+    exact Uᗮ.neg_mem (hHU x hx)
+  have hHUperpNeg : ∀ x ∈ Uᗮ, (-H) x ∈ U := by
+    intro x hx
+    change -(H x) ∈ U
+    exact U.neg_mem (hHUperp x hx)
+  have hnegGap : -(α + δ) < -α := by linarith
+  have hnegExt : N.extendedGauge (-H) = N.extendedGauge H := by
+    have h := N.extendedGauge_smul (-1 : ℂ) H
+    simpa using h
+  have hnegMem : N.Mem (-H) := by
+    unfold PaperUnitaryInvariantNorm.Mem at hHmem ⊢
+    rwa [hnegExt]
+  obtain ⟨habsMem, habsBound⟩ :=
+    tanTwoTheta_wholeSpace_paperUINorm_branchFree N
+      (A := -A) (H := -H) (U := U) (V := V)
+      (a := -(α + δ)) (b := -α)
+      hAneg hHneg hAUneg hAplusH_V_neg hnegGap hUhighNeg hUperpLowNeg
+      hHUNeg hHUperpNeg hcos hnegMem
+  have habsBound' :
+      δ * N.gauge (paperAbsTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
+    calc
+    δ * N.gauge (paperAbsTanTwoAngleOperatorC U V) =
+        ((-α) - (-(α + δ))) * N.gauge (paperAbsTanTwoAngleOperatorC U V) := by ring
+    _ ≤ 2 * N.gauge (-H) := habsBound
+    _ = 2 * N.gauge H := by
+      unfold PaperUnitaryInvariantNorm.gauge
+      rw [hnegExt]
+  have habsMod : paperAbsTanTwoAngleOperatorC U V =
+      (paperTanTwoAngleOperatorC U V).modulus :=
+    paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC hcos
+  have hext : N.extendedGauge (paperAbsTanTwoAngleOperatorC U V) =
+      N.extendedGauge (paperTanTwoAngleOperatorC U V) := by
+    calc
+      N.extendedGauge (paperAbsTanTwoAngleOperatorC U V) =
+          N.extendedGauge ((paperTanTwoAngleOperatorC U V).modulus) := by
+            rw [habsMod]
+      _ = N.extendedGauge (paperTanTwoAngleOperatorC U V) :=
+        paperNorm_modulus_eq N (paperTanTwoAngleOperatorC U V)
+  have htanMem : N.Mem (paperTanTwoAngleOperatorC U V) := by
+    unfold PaperUnitaryInvariantNorm.Mem at habsMem ⊢
+    rwa [← hext]
+  have hgauge : N.gauge (paperAbsTanTwoAngleOperatorC U V) =
+      N.gauge (paperTanTwoAngleOperatorC U V) := by
+    unfold PaperUnitaryInvariantNorm.gauge
+    rw [hext]
+  refine ⟨htanMem, ?_⟩
+  rwa [hgauge] at habsBound'
 
 end
 end DavisKahan1970
