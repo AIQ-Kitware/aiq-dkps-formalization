@@ -14,7 +14,7 @@ single compiler-checkable surface for the Lean declarations selected by the main
 
 Each `#check` below is evidence only: the semantic correspondence to the printed source
 is recorded in `dev/davis-kahan-1970-formalization-result-inventory.json` and the
-human-readable result audit.  The two explicitly nonterminal results also list the
+human-readable result audit.  The one explicitly nonterminal result also lists the
 strongest current declarations that delimit the remaining theorem-surface gap.
 
 Run:
@@ -173,11 +173,12 @@ Status: **TERMINAL EXACT**.
 
 /-! ## DK-3.4-prop: Square as a direct rotation
 
-Status: **OPEN RESULT-SCOPE GAP**.
+Status: **TERMINAL EXACT**.
 -/
 
 #check @TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full
 #check @TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation
+#check @TauCeti.DavisKahan1970.proposition3_4_source_full_real
 
 /-! ## DK-3.1-thm: Classification of pairs of subspaces
 

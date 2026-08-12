@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **27**
-- Awaiting result-statement semantic closure: **2**
+- Currently hostile-certified terminal: **28**
+- Awaiting result-statement semantic closure: **1**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
 
@@ -22,7 +22,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `DK-3.1-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.3-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-3.4-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-3.4-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-thm` | theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-cor` | corollary | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.5-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -55,7 +55,7 @@ Result-only audit 2026-08-12: bounded directed and bounded ambient source theore
 
 ### `DK-3.4-prop` — Square as a direct rotation
 
-Result-only audit 2026-08-12: `proposition3_4_source_full` and its equality-to-direct-rotation companion give the complete printed Proposition 3.4 over complex Hilbert spaces at the nonacute source scope. No real full-scope counterpart was located. The exact remaining task is the `R`-scalar theorem that under the printed `C0^2 >= 1/2` condition, `U^2` is the direct rotation from `Q_-` to `Q`, without replacing the source hypotheses by uniform acuteness.
+Accepted result-only semantic review 2026-08-12. The existing complex `proposition3_4_source_full` and equality companion prove the printed nonacute Proposition 3.4 over complex Hilbert spaces. `TauCeti.DavisKahan1970.proposition3_4_source_full_real` now gives the exact real counterpart at the same printed scope: from the real direct-rotation clauses and the source half-angle condition `C0^2 >= 1/2`, it concludes that `W^2` is a direct rotation from the reflected subspace to the target, including genuine positive diagonal compressions and the crossed-block identity. The proof transports through canonical complexification and introduces no uniform-acuteness, finite-dimensional, separability, compactness, or extra branch hypothesis.
 
 ### `DK-4.1-prop` — Pointwise and singular-value extremality of the direct rotation
 

@@ -649,32 +649,29 @@
       "source_kind": "proposition",
       "source_anchor": "Proposition 3.4",
       "completion_obligation": true,
-      "expected_status": "compiled_specialization",
+      "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.4-prop",
       "review_declarations": [
         "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
-        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation",
+        "TauCeti.DavisKahan1970.proposition3_4_source_full_real"
       ],
       "audit_clauses": [
         {
-          "id": "DK-3.4-prop.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "DK-3.4-prop.result",
+          "description": "Exact result-only audit of Proposition 3.4 over complex and real Hilbert spaces at the printed nonacute half-angle scope.",
           "review_declarations": [
             "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
-            "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
+            "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation",
+            "TauCeti.DavisKahan1970.proposition3_4_source_full_real"
           ]
         }
       ],
       "source_specification_sha256": "a4914037fecd9b2f6193105f137f3a59d160e47ca70747bb4a6c430477038990",
-      "expected_completion_certification": "reopened_math",
-      "known_completion_holes": [
-        {
-          "kind": "scope_gap",
-          "detail": "`proposition3_4_source_full` is explicitly complex-valued. The paper does not restrict Proposition 3.4 to the complex scalar field; an exact real source-facing counterpart was not located."
-        }
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: `proposition3_4_source_full` is explicitly complex-valued. The paper does not restrict Proposition 3.4 to the complex scalar field; an exact real source-facing counterpart was not located.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
+      "audit_warning": "RESULT-ONLY REVIEW ACCEPTED: full nonacute complex Proposition 3.4 plus exact real source-facing counterpart, with no strengthened acuteness or dimension assumptions.",
       "source_atom_ids": [
         "DK-3.4-prop.u-square-direct-rotation"
       ]

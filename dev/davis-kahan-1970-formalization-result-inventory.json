@@ -366,14 +366,15 @@
       "source_atom_ids": [
         "DK-3.4-prop.u-square-direct-rotation"
       ],
-      "disposition": "pending_result_only_review",
+      "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "pending_result_only_review",
+      "semantic_certification": "accepted",
       "lean_declarations": [
         "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
-        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation",
+        "TauCeti.DavisKahan1970.proposition3_4_source_full_real"
       ],
-      "review_note": "Result-only audit 2026-08-12: `proposition3_4_source_full` and its equality-to-direct-rotation companion give the complete printed Proposition 3.4 over complex Hilbert spaces at the nonacute source scope. No real full-scope counterpart was located. The exact remaining task is the `R`-scalar theorem that under the printed `C0^2 >= 1/2` condition, `U^2` is the direct rotation from `Q_-` to `Q`, without replacing the source hypotheses by uniform acuteness.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The existing complex `proposition3_4_source_full` and equality companion prove the printed nonacute Proposition 3.4 over complex Hilbert spaces. `TauCeti.DavisKahan1970.proposition3_4_source_full_real` now gives the exact real counterpart at the same printed scope: from the real direct-rotation clauses and the source half-angle condition `C0^2 >= 1/2`, it concludes that `W^2` is a direct rotation from the reflected subspace to the target, including genuine positive diagonal compressions and the crossed-block identity. The proof transports through canonical complexification and introduces no uniform-acuteness, finite-dimensional, separability, compactness, or extra branch hypothesis.",
       "parent_claim_id": "DK-3.4-prop",
       "boundary_review": {
         "status": "accepted",
@@ -385,15 +386,6 @@
         "cross_block_scope_atom_ids": [],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
-      },
-      "remaining_gap": {
-        "category": "missing_real_full_scope_source_surface",
-        "missing_surface": "Real-Hilbert-space full nonacute Proposition 3.4: under the printed C0^2 >= 1/2 condition, U^2 is the direct rotation from Q_- to Q.",
-        "strongest_existing_evidence": [
-          "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
-          "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
-        ],
-        "next_action": "Transport/generalize the full nonacute Proposition 3.4 argument to real scalars without strengthening the source hypotheses."
       }
     },
     {
@@ -1157,14 +1149,13 @@
   ],
   "semantic_review_sweep": {
     "date": "2026-08-12",
-    "upstream_main_minimum": "85a2f7abb1ae",
-    "method": "Audited each previously nonterminal counted result against only its accepted printed-result boundary; promoted a result only when concrete source-facing Lean declarations expose every counted hypothesis, conclusion, and scalar/dimension/norm scope. Proof-only and theorem-adjacent source atoms were not used as blockers. Proposition 3.3 is closed by the real nonacute principal-square-root bridge on main; Proposition 4.1 is additionally closed here by the compiler-validated arbitrary-dimensional compact/nonacute direct-rotation value bridge over complex and real scalars.",
+    "upstream_main_minimum": "bf1334bdf7608783b9147447bd9786b168cb5233",
+    "method": "Audited each previously nonterminal counted result against only its accepted printed-result boundary; promoted a result only when concrete source-facing Lean declarations expose every counted hypothesis, conclusion, and scalar/dimension/norm scope. Proof-only and theorem-adjacent source atoms were not used as blockers. Proposition 3.3 is closed by the real nonacute principal-square-root bridge on main; Proposition 4.1 is additionally closed here by the compiler-validated arbitrary-dimensional compact/nonacute direct-rotation value bridge over complex and real scalars. Proposition 3.4 is additionally closed by the compiler-validated real full-scope bridge, which transports the exact nonacute source hypotheses and direct-rotation conclusion through canonical complexification.",
     "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-12.md",
-    "terminal_results": 27,
+    "terminal_results": 28,
     "remaining_results": [
-      "S2-tan-theta",
-      "DK-3.4-prop"
+      "S2-tan-theta"
     ]
   }
 }

@@ -146,26 +146,18 @@ Accepted result-only semantic review 2026-08-12. The full nonacute complex forwa
 
 ### 8. `DK-3.4-prop` — Square as a direct rotation
 
-**Verdict:** OPEN — genuine result-scope theorem surface remains. Re-audited in this sweep.
+**Verdict:** TERMINAL EXACT.
 
 **Counted source atoms:** `DK-3.4-prop.u-square-direct-rotation`.
 
 **Selected source-facing Lean declarations:**
 - `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`
 - `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`
+- `TauCeti.DavisKahan1970.proposition3_4_source_full_real`
 
 **Semantic review:**
 
-Result-only audit 2026-08-12: `proposition3_4_source_full` and its equality-to-direct-rotation companion give the complete printed Proposition 3.4 over complex Hilbert spaces at the nonacute source scope. No real full-scope counterpart was located. The exact remaining task is the `R`-scalar theorem that under the printed `C0^2 >= 1/2` condition, `U^2` is the direct rotation from `Q_-` to `Q`, without replacing the source hypotheses by uniform acuteness.
-
-**Structured remaining gap:**
-
-- Category: `missing_real_full_scope_source_surface`
-- Missing surface: Real-Hilbert-space full nonacute Proposition 3.4: under the printed C0^2 >= 1/2 condition, U^2 is the direct rotation from Q_- to Q.
-- Next action: Transport/generalize the full nonacute Proposition 3.4 argument to real scalars without strengthening the source hypotheses.
-- Strongest current evidence:
-  - `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`
-  - `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`
+Accepted result-only semantic review 2026-08-12. The existing complex `proposition3_4_source_full` and equality companion prove the printed nonacute Proposition 3.4 over complex Hilbert spaces. `TauCeti.DavisKahan1970.proposition3_4_source_full_real` now gives the exact real counterpart at the same printed scope: from the real direct-rotation clauses and the source half-angle condition `C0^2 >= 1/2`, it concludes that `W^2` is a direct rotation from the reflected subspace to the target, including genuine positive diagonal compressions and the crossed-block identity. The proof transports through canonical complexification and introduces no uniform-acuteness, finite-dimensional, separability, compactness, or extra branch hypothesis.
 
 ### 9. `DK-3.1-thm` — Classification of pairs of subspaces
 
@@ -499,16 +491,13 @@ Result-only hostile review accepted 2026-08-12. The compiled source surface cove
 
 Accepted result-only semantic review 2026-08-12. The Section 8 source surface exposes both printed half-gap alternatives: perturbation-small and residual-small. The complex and real branch theorems select the acute branch (`Theta < pi/4`), and the PaperUI perturbation/residual theorems retain the corresponding `sin 2Theta` estimate with no constant loss. The proof homotopy, unequal-dimension extension remark, and comment about a tangent extension are adjacent material outside the counted Theorem 8.2 boundary.
 
-## Four remaining mathematical targets
+## One remaining mathematical target
 
 - **`S2-tan-theta` — Single-angle tangent theorem:** Unbounded self-adjoint ambient perturbation theorem delta * N(tan Theta) <= N(H) for every paper unitary-invariant norm under the printed Section 2 ordered-gap/Rayleigh-Ritz hypotheses.
-- **`DK-3.3-prop` — Principal square-root characterization:** Real-Hilbert-space full nonacute principal-square-root forward/converse characterization at the printed matched-crossed-defect scope.
-- **`DK-3.4-prop` — Square as a direct rotation:** Real-Hilbert-space full nonacute Proposition 3.4: under the printed C0^2 >= 1/2 condition, U^2 is the direct rotation from Q_- to Q.
-- **`DK-4.1-prop` — Pointwise and singular-value extremality of the direct rotation:** At the arbitrary-dimensional compact source scope, identify the direct-rotation displacement approximation-number sequence with the closed form 2 sin(theta_k/2), not only prove extremal minimality.
 
 ## Reviewer reproduction
 
-Compile the single theorem surface containing all selected declarations and the strongest evidence for the four red results:
+Compile the single theorem surface containing all selected declarations and the strongest evidence for the one red result:
 
 ```bash
 lake env lean DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean
@@ -521,7 +510,7 @@ python3 scripts/check_davis_kahan_1970_result_inventory.py
 python3 scripts/check_davis_kahan_1970_statement_map.py
 ```
 
-The hard 100% gate is intentionally red until the four structured gaps are removed:
+The hard 100% gate is intentionally red until the remaining structured gap are removed:
 
 ```bash
 python3 scripts/check_davis_kahan_1970_statement_map.py --require-terminal
