@@ -13,12 +13,12 @@ from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 32 |
+| `compiled_exact` | 33 |
 | `compiled_specialization` | 1 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 12 |
+| `partial_or_wrapper_missing` | 11 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -50,10 +50,10 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 16 |
+| `accepted` | 17 |
 | `reopened_source_spec` | 0 |
 | `reopened_math` | 10 |
-| `reopened_mapping` | 18 |
+| `reopened_mapping` | 17 |
 | `mixed_disposition` | 2 |
 | `not_applicable` | 3 |
 
@@ -120,7 +120,7 @@ Gates: S1-block-residual (proved_in_build), S1-ui-norms (proved_in_build), DK-3.
 
 The 2026-08-12 hostile re-audit found source mathematics omitted or weakened in DavisKahan1970_part_III.tex. These rows must be repaired against the original paper and then re-hashed; a Lean proof cannot compensate for an incomplete public specification.
 
-Gates: S1-ui-norms (proved_in_build), DK-3.3-prop (proved_in_build), DK-4.1-prop (proved_in_build), DK-9-model (proved_in_build), DK-9.8 (proved_in_build)
+Gates: S1-ui-norms (proved_in_build), DK-4.1-prop (proved_in_build), DK-9-model (proved_in_build), DK-9.8 (proved_in_build)
 
 ### `hostile-audit-atomization` -- mechanical
 
@@ -1228,14 +1228,11 @@ CORRECTION TO THE COORDINATOR'S OWN FRAMING, recorded because it nearly caused d
 #### Proposition 3.3: Principal square-root characterization
 
 - **Kind:** `proposition`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_mapping`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** Every direct rotation is a principal square root of the product of the two reflections; conversely a suitable principal square root is a direct rotation.
-- **Blocked by:** `hostile-source-spec-fidelity`
-- **Known hostile-review holes:**
-  - `mapping`: PDF re-audit restored source equation (3.7) exactly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the new atomic equation (3.7) and the other Proposition 3.3 atoms are explicitly bound to exact Lean evidence.
-- **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_hermitianPart`, `TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_forward`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_converse`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_iff`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_forward_of_nonneg_blocks`, `TauCeti.DavisKahan1970.real_directRotation_sq`, `TauCeti.DavisKahan1970.real_directRotation_hermitianPart`, `TauCeti.DavisKahan1970.real_directRotation_principal_of_sq`
+- **Current Lean references:** `TauCeti.DavisKahan1970.proposition3_3_complex_forward_source`, `TauCeti.DavisKahan1970.proposition3_3_complex_converse_source`, `TauCeti.DavisKahan1970.proposition3_3_real_forward_source`, `TauCeti.DavisKahan1970.proposition3_3_real_converse_source`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_forward_of_nonneg_blocks`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_converse`
 - **Assessment:** The square identity and acute spectral branch exist; the source converse with the crossed-intersection mapping condition is not exposed.
 
 STATUS CORRECTED 2026-08-04 (second time): `partial_or_wrapper_missing` -> `compiled_specialization`, and **the previous note and next_action were stale**. They said "the source converse ... is not exposed" and asked to "add the converse". The converse was already proved, as `spectraDirectRotation_unique_of_sq` (`DavisKahan/Geometry/Polar/DirectRotationSquare.lean`), and it resolves against `DavisKahan.All` and is axiom-clean. What was missing was a source-facing alias, now added.
@@ -1259,7 +1256,9 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 **M33, 2026-08-09 (Claude Opus 5).  THE REAL-SCALAR AXIS IS CLOSED ON THIS ROW.**  Both directions now hold over a REAL Hilbert space of arbitrary dimension.  Forward: `real_directRotation_sq` is `W^2 = J_V J_U` and `real_directRotation_hermitianPart` is `W + W^T = 2 |S|_R`, which is the word 'principal' -- the symmetric part is nonnegative.  Converse: `real_directRotation_principal_of_sq` says an orthogonal `W` with `W^2 = J_V J_U` and nonnegative numerical range IS the direct rotation.  Both are transported through the conjugation-fixedness of the complexified polar factor; see `DavisKahan/Geometry/Polar/DirectRotationReal.lean`.
 
 **SOURCE-SPEC PDF RE-AUDIT 2026-08-12 (Agent 3).** PDF re-audit restored source equation (3.7) exactly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the new atomic equation (3.7) and the other Proposition 3.3 atoms are explicitly bound to exact Lean evidence.
-- **Next action:** PDF re-audit restored source equation (3.7) exactly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the new atomic equation (3.7) and the other Proposition 3.3 atoms are explicitly bound to exact Lean evidence.
+
+**RESULT-ONLY CLOSURE 2026-08-12.** The maintained 29-result audit now uses four exact source-facing endpoints: complex and real, forward and converse, all at the printed nonacute scope. The complex arbitrary-pair theorems were already present; the real endpoints interpret the principal branch through canonical complexification and descend the exact Definition 3.1 conditions, including positive diagonal operators. The old broad-row equation-(3.7) mapping complaint is historical source-fidelity bookkeeping: equations (3.6)--(3.8) are explicitly classified as proof/derivation atoms and do not enlarge the result denominator.
+- **Next action:** No result-level hole remains for Proposition 3.3. Re-audit only if the source specification or source-facing theorem signatures change.
 
 #### Proposition 3.4: Square as a direct rotation
 

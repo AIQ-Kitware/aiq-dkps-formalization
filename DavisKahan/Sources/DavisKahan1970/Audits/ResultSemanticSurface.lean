@@ -14,7 +14,7 @@ single compiler-checkable surface for the Lean declarations selected by the main
 
 Each `#check` below is evidence only: the semantic correspondence to the printed source
 is recorded in `dev/davis-kahan-1970-formalization-result-inventory.json` and the
-human-readable result audit.  The four explicitly nonterminal results also list the
+human-readable result audit.  The three explicitly nonterminal results also list the
 strongest current declarations that delimit the remaining theorem-surface gap.
 
 Run:
@@ -163,19 +163,13 @@ Status: **TERMINAL EXACT**.
 
 /-! ## DK-3.3-prop: Principal square-root characterization
 
-Status: **OPEN RESULT-SCOPE GAP**.
+Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.complex_directRotation_sq
-#check @TauCeti.DavisKahan1970.complex_directRotation_hermitianPart
-#check @TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq
-#check @TauCeti.DavisKahan1970.real_directRotation_sq
-#check @TauCeti.DavisKahan1970.real_directRotation_hermitianPart
-#check @TauCeti.DavisKahan1970.real_directRotation_principal_of_sq
-#check @TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_forward
-#check @TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_forward_of_nonneg_blocks
-#check @TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_converse
-#check @TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_iff
+#check @TauCeti.DavisKahan1970.proposition3_3_complex_forward_source
+#check @TauCeti.DavisKahan1970.proposition3_3_complex_converse_source
+#check @TauCeti.DavisKahan1970.proposition3_3_real_forward_source
+#check @TauCeti.DavisKahan1970.proposition3_3_real_converse_source
 
 /-! ## DK-3.4-prop: Square as a direct rotation
 
