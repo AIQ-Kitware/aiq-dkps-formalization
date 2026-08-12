@@ -1,6 +1,6 @@
 {
-  "challenge_module": "Challenge.MathlibPending.RankFactorization.Conformance",
-  "solution_module": "Challenge.MathlibPending.RankFactorization.Leaderboard",
+  "challenge_module": "Challenge.RankFactorization.Conformance",
+  "solution_module": "Challenge.RankFactorization.Leaderboard",
   "theorem_names": [
     "TauCeti.Matrix.rank_le_iff_exists_eq_mul"
   ],

@@ -1,0 +1,13 @@
+{
+  "challenge_module": "Challenge.MatrixConcentration.Conformance",
+  "solution_module": "Challenge.MatrixConcentration.Leaderboard",
+  "theorem_names": [
+    "TauCeti.measure_forall_eigenvalues\u2080_ge_ge"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}

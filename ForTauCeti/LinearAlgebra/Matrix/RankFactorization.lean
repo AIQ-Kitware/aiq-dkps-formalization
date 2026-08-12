@@ -53,7 +53,7 @@ Only `exists_eq_mul_rank` needs it at all, for the `Pi.single j 1` witness that 
 
 That advice was resisted for one reason.  The same three signatures were restated, with the
 identical `variable {𝕜 m n : Type*} [Field 𝕜] [Fintype n] [DecidableEq n]` line, in
-`Challenge/MathlibPending/RankFactorization/Conformance.lean`, and the two have to agree —
+`Challenge/RankFactorization/Conformance.lean`, and the two have to agree —
 `Leaderboard.lean` names `TauCeti.Matrix.rank_le_iff_exists_eq_mul` in its dependency audit
 and the comparator checks that challenge and solution export the same statement.  The
 resolution is that a challenge statement **follows** the API rather than pinning it:

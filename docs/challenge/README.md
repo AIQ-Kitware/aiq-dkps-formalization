@@ -1,41 +1,29 @@
 # AIQ challenge package
 
-Comparator challenge files for the Mathlib-facing results extracted from the AIQ
-DKPS formalization. See [`Challenge/README.md`](../../Challenge/README.md) for the
-full manifest (the authoritative map).
+`Challenge/` is the repository's comparator, regression, and mathematical-
+exhibition surface.  Challenges freeze recognizable theorem statements and
+exercise dependency boundaries; they are not required to be proof-DAG leaves
+and they do not encode a Mathlib submission queue.
 
-The challenge files follow the pattern requested by the Mathlib community:
+The current layout is deliberately neutral:
 
-* `Challenge/*/*/Conformance.lean` imports only `Mathlib` and states the leaf
-  (top-level) theorem(s) with `sorry`.
-* `Challenge/*/*/Leaderboard.lean` imports the AIQ project code and supplies the
-  corresponding proofs (and runs `#print axioms`).
-* `comparator/*.json` tells `comparator` which challenge module, solution module,
-  theorem names, and permitted axioms to check.
+* `Challenge/DavisKahan1970/` is the source-oriented Davis--Kahan 1970
+  exhibition, including intentionally red exact-paper obligations.
+* `Challenge/MathlibCandidate/` is retained as historical provenance for the
+  three original candidate surfaces.
+* Other challenge packages live directly under `Challenge/<Name>/`.  The old
+  `Challenge/MathlibPending/` namespace has been removed.
 
-Only **leaf** theorems are listed: `#print axioms` on a leaf transitively
-certifies its whole proof tree, so supporting lemmas need not be listed.
+Each comparator package conventionally pairs a `Conformance.lean`, which states
+the challenge with intentional `sorry` placeholders, with a `Leaderboard.lean`,
+which imports production code and exposes matching proofs plus axiom audits.
+`comparator/*.json` names the modules and declarations to compare.  Some
+leaderboard-only dependency audits intentionally have no comparator config.
 
-## Two families
-
-* `Challenge/MathlibCandidate/` — the focused upstream push: drop-ready PRs.
-  * `GramRigidity` — Gram-matrix rigidity (`comparator/candidate-01-gram-rigidity.json`)
-  * `CourantFischerWeyl` — k-th eigenvalue min–max + Weyl perturbation (`candidate-02`)
-  * `DavisKahan` — cross-block / sin-Θ bound (`candidate-03`)
-* `Challenge/MathlibPending/` — proven (sorry-free, axiom-clean) but held back
-  pending further work before upstreaming: Berge, RankFactorization,
-  RankPsdRealization, RestrictCoverMeasurable, SampleMeanMSE, NearIsometry,
-  CfcMeasurable, MatrixConcentration, ProbabilityQoL, TendstoInMeasure
-  (`comparator/pending-*.json`), plus SpectralFunctionMeasurable as an
-  **axiom-audit leaderboard only** (its matrix-valued measurability statement is
-  not cleanly Mathlib-only expressible, so it has no comparator conformance).
-
-The four DKPS-family papers (`Acharyya2024`, `Acharyya2025`, `DkpsQuench2026`,
-`Helm2025`) are the repo's end states. They are documented in `Challenge/README.md`
-and each library's `README.md`, and were verified axiom-clean, but they are **not**
-comparator challenges: their statements are inherently in each paper's own
-vocabulary, and the comparator cannot certify those definitions faithfully model
-the paper (that is a human reading task).
+The four DKPS-family paper libraries (`Acharyya2024`, `Acharyya2025`,
+`DkpsQuench2026`, `Helm2025`) remain ordinary source-facing libraries rather than
+comparator challenges.  Davis--Kahan 1970 has a dedicated challenge because the
+repository uses it as an exhibition and an executable paper-faithfulness target.
 
 ## Running checks
 
@@ -55,7 +43,7 @@ Run one family:
 
 ```bash
 bash scripts/run_challenge_comparator.sh --config comparator/candidate-01-gram-rigidity.json
-bash scripts/run_challenge_comparator.sh --config comparator/pending-rank-factorization.json
+bash scripts/run_challenge_comparator.sh --config comparator/challenge-rank-factorization.json
 ```
 
 If real `landrun` is unavailable while debugging, use `--fake-landrun` (not the

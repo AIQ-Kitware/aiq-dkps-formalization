@@ -1,6 +1,6 @@
 {
-  "challenge_module": "Challenge.MathlibPending.Davis1963Rotation.Conformance",
-  "solution_module": "Challenge.MathlibPending.Davis1963Rotation.Leaderboard",
+  "challenge_module": "Challenge.Davis1963Rotation.Conformance",
+  "solution_module": "Challenge.Davis1963Rotation.Leaderboard",
   "theorem_names": [
     "TauCeti.rotation_add_displacement_le_hilbertSchmidt"
   ],

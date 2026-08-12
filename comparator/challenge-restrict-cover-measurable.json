@@ -1,6 +1,6 @@
 {
-  "challenge_module": "Challenge.MathlibPending.RestrictCoverMeasurable.Conformance",
-  "solution_module": "Challenge.MathlibPending.RestrictCoverMeasurable.Leaderboard",
+  "challenge_module": "Challenge.RestrictCoverMeasurable.Conformance",
+  "solution_module": "Challenge.RestrictCoverMeasurable.Leaderboard",
   "theorem_names": [
     "TauCeti.measurable_of_iUnion_restrict"
   ],
