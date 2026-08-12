@@ -19,6 +19,7 @@ import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
 import DavisKahan.Sources.DavisKahan1970.Section9.FullExample
 import DavisKahan.Sources.DavisKahan1970.Section9.IndividualAngles
 import DavisKahan.Sources.DavisKahan1970.Section9.NumericalBounds
+import DavisKahan.Sources.DavisKahan1970.Section9.PaperNumericalResults
 import DavisKahan.Sources.DavisKahan1970.Section9.RankOneCorrection
 import DavisKahan.Sources.DavisKahan1970.Section9.RealModel
 import DavisKahan.Sources.DavisKahan1970.Section9.SchurComplement
