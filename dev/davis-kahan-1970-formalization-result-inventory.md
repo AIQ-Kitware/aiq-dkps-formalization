@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **26**
-- Awaiting result-statement semantic closure: **3**
+- Currently hostile-certified terminal: **27**
+- Awaiting result-statement semantic closure: **2**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
 
@@ -27,7 +27,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `DK-3.1-cor` | corollary | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.5-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-cor` | corollary | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-4.1-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `DK-4.1-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-4.1-cor` | corollary | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-4.2-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-4.3-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -59,7 +59,7 @@ Result-only audit 2026-08-12: `proposition3_4_source_full` and its equality-to-d
 
 ### `DK-4.1-prop` — Pointwise and singular-value extremality of the direct rotation
 
-Result-only audit 2026-08-12: the arbitrary-dimensional compact complex/real theorems already prove the orthonormal-vector angle lower bounds and approximation-number minimality for the direct rotation. The remaining counted clause is the paper's *closed-form minimum value* `2 sin(theta_k/2)` at the same infinite compact scope. `Proposition4_1_directRotationValues` supplies that identity in finite dimension, but no hostile-reviewable infinite compact theorem identifying the approximation-number sequence with the principal chord sequence was located.
+Accepted result-only semantic review 2026-08-12. `Proposition4_1_compact_nonacute` and its real counterpart now bundle the printed orthonormal-vector angle lower bounds, the exact direct-rotation approximation values `2 sin(theta_k/2)`, and approximation-number minimality at the arbitrary-dimensional compact matched-defect scope. The exact-value bridge is exposed separately by `Proposition4_1_compact_nonacute_directRotationValues` and `Proposition4_1_compact_nonacute_directRotationValues_real` for direct auditing. Equations (4.1), (4.2), the VZ factorization, and the closest-vector step remain fidelity-only proof/setup material outside the counted proposition statement.
 
 ## Printed-statement boundary reviews
 

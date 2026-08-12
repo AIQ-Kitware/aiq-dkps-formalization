@@ -10,11 +10,11 @@ A hostile reviewer should use this report together with `prose/distilled_literat
 
 - Counted DK-established results: **29**
 - Printed-result boundaries reviewed: **29/29**
-- Semantically terminal: **26/29**
-- Genuine remaining result-scope gaps: **3**
+- Semantically terminal: **27/29**
+- Genuine remaining result-scope gaps: **2**
 - Pending results re-audited in the current sweep: **17**
 - False-positive pending statuses closed across the result-only sweep: **12**
-- Latest-main baseline for this promotion: `9f1c3000e6d12cc013426bef07e3be107b7d5177`. That baseline already contains the compiler-verified full unbounded tan-2Theta closure at 25/29; this promotion adds only the real nonacute Proposition 3.3 source surface and advances the denominator to 26/29.
+- Latest-main baseline for this promotion: `85a2f7abb1ae`. That baseline already closes Proposition 3.3 at the full nonacute real/complex scope; this promotion adds the compiler-validated compact/nonacute Proposition 4.1 direct-value bridge and advances the denominator from 26/29 to 27/29.
 
 ## All 29 counted results
 
@@ -233,30 +233,19 @@ Accepted by the hostile audit at the stated-result level.
 
 ### 13. `DK-4.1-prop` — Pointwise and singular-value extremality of the direct rotation
 
-**Verdict:** OPEN — genuine result-scope theorem surface remains. Re-audited in this sweep.
+**Verdict:** PASS exact. Re-audited and closed in this sweep.
 
 **Counted source atoms:** `DK-4.1-prop.orthonormal-angle-lower-bounds`, `DK-4.1-prop.singular-value-minimality`.
 
 **Selected source-facing Lean declarations:**
-- `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors`
-- `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real`
 - `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute`
 - `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`
-- `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`
+- `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues`
+- `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real`
 
 **Semantic review:**
 
-Result-only audit 2026-08-12: the arbitrary-dimensional compact complex/real theorems already prove the orthonormal-vector angle lower bounds and approximation-number minimality for the direct rotation. The remaining counted clause is the paper's *closed-form minimum value* `2 sin(theta_k/2)` at the same infinite compact scope. `Proposition4_1_directRotationValues` supplies that identity in finite dimension, but no hostile-reviewable infinite compact theorem identifying the approximation-number sequence with the principal chord sequence was located.
-
-**Structured remaining gap:**
-
-- Category: `missing_infinite_compact_closed_form_value`
-- Missing surface: At the arbitrary-dimensional compact source scope, identify the direct-rotation displacement approximation-number sequence with the closed form 2 sin(theta_k/2), not only prove extremal minimality.
-- Next action: Prove/register the infinite compact approximation-number identity for the direct rotation in terms of the principal chord sequence, over real and complex scalars.
-- Strongest current evidence:
-  - `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute`
-  - `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`
-  - `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`
+Accepted result-only semantic review 2026-08-12. The complex and real compact/nonacute Proposition 4.1 wrappers expose the orthonormal-vector pointwise angle lower bound, approximation-number minimality of the direct rotation, and the printed exact minimum value `2 sin(theta_k/2)` at the same arbitrary-dimensional compact matched-defect scope. The exact-value bridge is proved through a basis-free cosine/sine spectral-cutoff identity, with the real result descended by approximation-number-preserving complexification. Equations (4.1), (4.2), the VZ factorization, and the closest-vector proof step remain fidelity-only material outside the counted proposition statement.
 
 ### 14. `DK-4.1-cor` — UI-norm minimality of direct rotation displacement
 
