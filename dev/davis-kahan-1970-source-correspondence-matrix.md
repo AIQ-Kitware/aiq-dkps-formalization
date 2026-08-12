@@ -182,15 +182,3 @@ the completed defect-first pairwise-gap proof.  The discarded joint-PVM route is
 historical only; its old recovery note remains available in Git history and is
 not claimed as an additional proof.
 
-## Math-ahead full-Part-III repair batch
-
-A subsequent candidate overlay replaces the 78 previously dependency-tainted
-Part III aliases and their foundational obligations with 174 exact-signature
-historical proof bodies.  These are not yet added to the accepted correspondence
-surface: the source commit was work in progress, and every body must compile
-against the current APIs before its row changes status.
-
-The signature-preservation contract is
-`scripts/check_full_part_iii_math_ahead.py`.  The only deleted API is the unused
-speculative duplicate in `SinTheta/ContinuationRoadmap.lean`, whose mathematics
-is already represented by the completed proof-carrying continuation modules.

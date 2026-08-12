@@ -38,7 +38,7 @@ Zero are orphans — every one has a consumer.
 | `MathAhead.*` aggregates and singletons | ~9 |
 | `Experimental.{PartIII, FiniteDimensional.All, InfiniteDimensional.All}` | 3 |
 
-The FreeBeam block is the completed campaign recorded as done in `dev/LANES.md`.
+The FreeBeam block is a completed campaign; its coordination history is retained in Git history.
 The bounded-Riccati block is finished bounded Riccati theory.
 
 ## What this means for the gate

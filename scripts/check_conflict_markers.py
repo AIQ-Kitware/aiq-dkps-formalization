@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Refuse a tree with committed merge-conflict markers, anywhere.
 
-`dev/LANES.md` had been pushed with markers twice, which is where this started.
+The former coordination board had been pushed with markers twice, which is where this started.
 But the same failure is not specific to that file.
 On 2026-07-30 an integration merge left markers in **two `.lean` files**, and nothing
 noticed until `lake build` reported `unexpected token '<<<'` several minutes later.

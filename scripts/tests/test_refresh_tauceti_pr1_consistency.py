@@ -166,20 +166,5 @@ class RefreshManifestTest(unittest.TestCase):
                 M.dependency_closed_modules(["ForTauCeti.A"], root)
 
 
-class LaneClaimTest(unittest.TestCase):
-    def test_inserts_once(self) -> None:
-        text = (
-            "# Lane claims\n\n"
-            "| agent | file(s) | declarations | date | status |\n"
-            "|-------|---------|-------------|------|--------|\n"
-            "| edward | x | y | 2026-07-27 | claimed |\n"
-        )
-        once = M.refresh_lanes(text)
-        twice = M.refresh_lanes(once)
-        self.assertEqual(once, twice)
-        self.assertEqual(once.count(M.CLAIM_MARKER), 1)
-        self.assertIn("| edward |", once)
-
-
 if __name__ == "__main__":
     unittest.main()

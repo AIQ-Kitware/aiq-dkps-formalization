@@ -1,34 +1,27 @@
 #!/usr/bin/env python3
-"""Refresh Tau Ceti PR-1 integration metadata without touching theorem-name lanes.
+"""Refresh Tau Ceti PR-1 integration metadata from the current repository.
 
-The approximation-number API and its submission package evolve on parallel
-lanes. This tool deliberately preserves every ``source_declarations`` list in
-``dev/tauceti/extraction-manifest.json``; signature-polish agents own those
-name entries. It owns only repository-integration metadata:
+The approximation-number package changes as its reusable dependencies evolve.
+This tool deliberately preserves every ``source_declarations`` list in
+``dev/tauceti/extraction-manifest.json`` and owns only repository-integration
+metadata:
 
 * current Davis--Kahan and Tau Ceti revisions;
 * the dependency-closed approximation-number export module list;
-* the unified operator-modulus module path;
-* the cluster's validation status; and
-* the coordination-lane claim for this consistency-restoration pass.
+* the unified operator-modulus module path; and
+* the cluster validation status.
 
-The export module list is computed from actual ``ForTauCeti`` imports. This is
-important because the convergence work split out dependencies such as
-``BasisSpan``, ``SingularValues``, and the cardinal-lift helper after the July 24
-six-file export. If the concurrent Section 5.1 lane moves rank plumbing into a
-new ``RankCompLe`` module and imports it from ``Basic``, that module is included
-automatically without this tool editing any declaration-name entry.
+The export module list is computed from actual ``ForTauCeti`` imports, so newly
+introduced helper modules enter the package automatically without editing
+declaration-name records.
 
 Shared-main workflow::
 
     python3 scripts/refresh_tauceti_pr1_consistency.py --write
     python3 scripts/refresh_tauceti_pr1_consistency.py --check
 
-The refresh is safe to run repeatedly while other lanes advance. It preserves
-every ``source_declarations`` list, recomputes the live import closure, and treats
-the recorded Davis--Kahan revision as the last observed ancestor rather than a
-self-referential requirement that the metadata commit name itself. Re-run it
-after later integration commits before exporting the Tau Ceti cluster.
+The refresh is idempotent and contains no coordination-board or lane-claim
+behavior.
 """
 from __future__ import annotations
 
@@ -43,33 +36,12 @@ from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "dev/tauceti/extraction-manifest.json"
-LANES_PATH = ROOT / "dev/LANES.md"
-
 CLUSTER = "approximation-number"
 OLD_MODULUS = (
     "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.OperatorModulus"
 )
 NEW_MODULUS = "ForTauCeti.Analysis.InnerProductSpace.OperatorModulus"
 NEW_FINAL_MODULUS = "TauCeti.Analysis.InnerProductSpace.OperatorModulus"
-CLAIM_MARKER = "Tau Ceti PR-1 consistency restoration"
-CLAIM_ROW = (
-    "| jon (namek) | dev/tauceti/tauceti-pr1-approximation-numbers.md; "
-    "dev/tauceti/migration-build-log-2026-07-24.md; "
-    "dev/tauceti/extraction-cluster-classification.md; NEW "
-    "dev/tauceti/pr1-consistency-restoration-2026-07-27.md; NEW "
-    "scripts/refresh_tauceti_pr1_consistency.py and its test; "
-    "dev/tauceti/extraction-manifest.json **non-name integration metadata only** "
-    "(revisions, module paths, dependency-closed cluster membership, status; "
-    "preserves every `source_declarations` entry); dev/LANES.md this row only. "
-    "**Does NOT touch** any Lean theorem file, Section 5.1--5.4 signature work, "
-    "the active agent's manifest name entries, comparator JSON, Challenge, "
-    "or the Tau Ceti submodule pointer | **Tau Ceti PR-1 consistency "
-    "restoration.** Reconcile packaging with the real-valued approximation-number "
-    "API and unified `ContinuousLinearMap.modulus`; compute the actual transitive "
-    "ForTauCeti export closure; mark July 24 validation historical; and make the "
-    "fresh validation gates explicit. | 2026-07-27 | claimed |"
-)
-
 IMPORT_RE = re.compile(
     r"^\s*(?:(?:public|private|meta)\s+)*import\s+"
     r"(ForTauCeti(?:\.[A-Za-z0-9_]+)+)\s*$",
@@ -277,18 +249,6 @@ def refresh_manifest(
     return result
 
 
-def refresh_lanes(text: str) -> str:
-    """Insert the claim row once, preserving all concurrent claim text."""
-    if CLAIM_MARKER in text:
-        return text
-    lines = text.splitlines()
-    try:
-        header = lines.index("|-------|---------|-------------|------|--------|")
-    except ValueError as ex:
-        raise ConsistencyError("could not find the dev/LANES.md claim table") from ex
-    lines.insert(header + 1, CLAIM_ROW)
-    return "\n".join(lines) + "\n"
-
 
 def check_staging_files(manifest: dict[str, Any]) -> list[str]:
     """Return stale staging-path diagnostics for the PR-1 cluster."""
@@ -310,27 +270,13 @@ def write_json(path: pathlib.Path, data: dict[str, Any]) -> None:
 
 
 def run(mode: str) -> int:
-    if mode == "claim":
-        old = LANES_PATH.read_text(encoding="utf-8")
-        new = refresh_lanes(old)
-        if new != old:
-            LANES_PATH.write_text(new, encoding="utf-8")
-            print("UPDATED dev/LANES.md: claimed consistency-restoration lane")
-        else:
-            print("OK dev/LANES.md: lane already claimed")
-        return 0
-
     dk_commit, tc_commit = observed_revisions()
     old_manifest = load_manifest()
     expected_manifest = refresh_manifest(old_manifest, dk_commit, tc_commit)
-    old_lanes = LANES_PATH.read_text(encoding="utf-8")
-    expected_lanes = refresh_lanes(old_lanes)
     staging_errors = check_staging_files(expected_manifest)
 
     if mode == "write":
         write_json(MANIFEST_PATH, expected_manifest)
-        if expected_lanes != old_lanes:
-            LANES_PATH.write_text(expected_lanes, encoding="utf-8")
         cluster = _one(expected_manifest.get("clusters", []), "cluster", CLUSTER)
         print(f"UPDATED {MANIFEST_PATH.relative_to(ROOT)}")
         print(f"  Davis--Kahan revision: {dk_commit}")
@@ -358,8 +304,6 @@ def run(mode: str) -> int:
             "extraction manifest metadata or dependency closure is stale; "
             "run this tool with --write"
         )
-    if old_lanes != expected_lanes:
-        errors.append("consistency-restoration lane is not claimed; run --claim")
     errors.extend(staging_errors)
     if errors:
         for error in errors:
@@ -373,11 +317,10 @@ def run(mode: str) -> int:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--claim", action="store_true", help="claim the lane only")
-    group.add_argument("--write", action="store_true", help="refresh metadata and claim")
+    group.add_argument("--write", action="store_true", help="refresh integration metadata")
     group.add_argument("--check", action="store_true", help="check current consistency")
     args = parser.parse_args(argv)
-    mode = "claim" if args.claim else "write" if args.write else "check"
+    mode = "write" if args.write else "check"
     try:
         return run(mode)
     except ConsistencyError as ex:

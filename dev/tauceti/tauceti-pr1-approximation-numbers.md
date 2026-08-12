@@ -11,11 +11,9 @@
 >
 > **Status: DRAFT — API narrative synchronized; current validation pending.**
 >
-> The July 24 export/build log predates the real-valued approximation-number
-> conversion, the Courant--Fischer redesign, and the unified operator-modulus
-> API. It is historical evidence only. Do not submit this PR or copy its PASS
-> labels forward until the current validation sequence in
-> `pr1-consistency-restoration-2026-07-27.md` has completed.
+> Historical export/build results are not submission evidence. Before using this
+> narrative, refresh the extraction metadata from the current tree and run the
+> validation sequence below against the current Tau Ceti checkout.
 
 ## Proposed title
 
@@ -28,8 +26,8 @@ These values must be refreshed immediately before creating the Tau Ceti branch:
 - **Tau Ceti base:** freshly fetched `origin/main`, not the old detached
   submodule pin;
 - **Davis--Kahan source revision:** the value recorded by
-  `scripts/refresh_tauceti_pr1_consistency.py --write` after all PR-1 signature
-  lanes have landed;
+  `scripts/refresh_tauceti_pr1_consistency.py --write` after the relevant API
+  changes have landed;
 - **branch:** `approximation-numbers` or the branch required by current Tau Ceti
   coordination policy;
 - **roadmap marker:** replace the provisional marker below with the exact
@@ -63,34 +61,31 @@ Part B, approximation-number foundation. This is the first dependency-closed
 library PR supporting the later rectangular ideal and spectral-subspace
 perturbation layers.
 
-The exact `Basic.lean` declaration-name list is intentionally not frozen in this
-draft while the separately claimed §5.1 signature-polish lane is active. The
-final PR body must be regenerated from the resulting tree and extraction
-manifest after that lane is released.
+The exact `Basic.lean` declaration-name list is not duplicated in this narrative.
+The final PR body should be regenerated from the current tree and extraction
+manifest immediately before submission.
 
 ### Scope
 
 The export closure is computed from the actual `ForTauCeti` import graph by
-`scripts/refresh_tauceti_pr1_consistency.py`; the manifest must not carry only
-the historical six headline modules. In the corrected 2026-07-27 base the
-closure contains the headline modules plus `Cardinal.Lift`, `BasisSpan`, and
-`SingularValues`. If Section 5.1 moves rank plumbing to `RankCompLe.lean`, that
-module is included automatically once `Basic.lean` imports it.
+`scripts/refresh_tauceti_pr1_consistency.py`; the manifest must not be maintained
+as a hand-written headline list. Any helper imported by the seed modules is
+included automatically in dependency order.
 
 The headline modules are:
 
 - `TauCeti/SetTheory/Cardinal/Lift.lean`
   - the cardinal-lift helper required by the cross-universe approximation-number
     proof;
-- `TauCeti/LinearAlgebra/Dimension/RankCompLe.lean`, when present after the
-  separately owned Section 5.1 lane;
+- `TauCeti/LinearAlgebra/Dimension/RankComp.lean`
+  - the dependency-appropriate rank-composition helper imported by `Basic.lean`;
 - `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean`
   - the real-valued approximation-number definition;
   - zero-based operator-norm endpoint;
   - antitonicity and nonnegativity;
   - addition, scalar, and composition inequalities;
-  - only approximation-number declarations after generic rank plumbing has
-    been moved to its own dependency-appropriate module by the §5.1 lane.
+  - only approximation-number declarations; generic rank plumbing lives in its
+    own dependency-appropriate module.
 - `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/Adjoint.lean`
   - Hilbert-space adjoint invariance.
 - `TauCeti/Analysis/InnerProductSpace/BasisSpan.lean`
@@ -99,7 +94,7 @@ The headline modules are:
   - the current finite-dimensional min--max and eigenvalue-comparison support,
     centered on basis-span subspaces rather than the retired public
     `specSubspace` surface.
-- `TauCeti/Analysis/InnerProductSpace/SingularValues.lean`
+- `TauCeti/Analysis/InnerProductSpace/Singular/Values.lean`
   - the singular-value support imported by the finite-dimensional and min--max
     modules;
 - `TauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteDimensional.lean`
@@ -141,14 +136,14 @@ This PR does not include:
 - **Codomain:** `ℝ`, not `ℝ≥0`. Nonnegativity is a theorem. This matches the
   finite-dimensional singular-value API and removes repeated coercion layers in
   downstream Davis--Kahan code.
-- **Indexing:** zero-based. The §5.1 lane owns the final roadmap wording and any
-  concluding declaration rename required by that decision.
+- **Indexing:** zero-based. Submission prose and exported declaration names must
+  reflect the current API at the time of export.
 - **Namespace:** operator methods extend `ContinuousLinearMap` so dot notation is
   available. Generic spectral-subspace helpers remain in their natural Tau Ceti
   namespaces.
 - **Universes:** source and target spaces retain independent universes wherever
   possible. Cross-universe rank plumbing is not hidden in the operator-ideal
-  file; the §5.1 lane moves the reusable rank fact to its own module.
+  file; reusable rank facts live in dependency-appropriate modules.
 - **Operator modulus:** there is one rectangular
   `ContinuousLinearMap.modulus`, not separate square `operatorAbs` and
   rectangular `rectangularOperatorModulus` public APIs.
@@ -174,8 +169,8 @@ recorded rather than silently erased.
 
 ### Validation
 
-**Pending.** The current tree must be exported and validated after all PR-1
-signature lanes are complete.
+**Pending.** The current tree must be exported and validated immediately before
+submission.
 
 Required Davis--Kahan-side checks include:
 

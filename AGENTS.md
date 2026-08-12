@@ -31,10 +31,11 @@ given.
 Mathematics proved, stated the way an upstream reviewer would want to read it,
 and registered against the paper target it answers. Nothing else is progress.
 
-**One agent works this repository, on `main`.** The lane system — `dev/LANES.md`,
-claims, the nine-step loop, the branch protocol — is retired. It existed to keep
-four agents off each other's files; with one agent it is pure overhead. Do not
-claim lanes, do not write lane rows, do not maintain the board.
+**One agent works this repository, on `main`.** The former multi-agent lane
+system, claim board, nine-step loop, and branch protocol are retired. They existed
+to keep four agents off each other's files; with one agent they are pure overhead.
+Do not recreate lane claims or maintain a coordination board; Git history is the
+archive for that campaign.
 
 ### Do not build tooling to avoid maintaining the repository
 
@@ -51,9 +52,14 @@ Concretely, and these are rules, not suggestions:
   occurred and that a person cannot see by reading the file.
 - **Do not write tests for scripts.** They are maintenance tools, not products.
 - **A check that reports findings nobody acts on is worse than no check** — it
-  trains everyone to ignore output. Delete it rather than "fixing" it.
-- **Prefer deleting a script to repairing it.** If it broke because the tree moved
-  and nobody noticed, that is evidence it was not load-bearing.
+  trains everyone to ignore output. Remove it from active gates rather than
+  "fixing" it. Delete it when it has no plausible reuse value; when it still
+  contains useful checkpoint, recovery, or archaeological logic, move it under
+  `scripts/historical/` and label it explicitly as non-current.
+- **Prefer retiring a broken non-load-bearing checker to repairing it.** A script
+  that broke unnoticed is evidence that it is not a current contract. This does
+  not apply to useful optional utilities such as repository-statistics views:
+  repair those when their functionality is still wanted.
 - **Never automate what maintenance is supposed to do.** The censuses in `dev/`
   map paper results to Lean declarations. When a declaration is renamed or moved,
   **edit the census by hand in the same commit.** That is the job. Attempting to
@@ -339,20 +345,19 @@ Accordingly:
   the source norm scope, the direct-rotation and spectral-selection theory,
   the unbounded passages, sharpness/equality content, and a fresh build and
   trusted-dependency audit.
-- `prose/distilled_literature/DavisKahan1970_part_III.tex` is both the readable
-  transformative reconstruction and the distributable semantic audit
-  specification. Keep it in the paper's presentation order and preserve exact
-  mathematical hypotheses, conclusions, equations needed to identify claims,
-  exceptional cases, counterexamples, and scope qualifications. Its marked
-  `DK-CERT-SOURCE` passages are hashed by
-  `dev/davis-kahan-1970-statement-map.json`; do not create a second copied
-  source register or make repository checks depend on a private transcription.
-- A private transcription or lawful source copy may be used only to re-audit
-  the fidelity of the checked-in distillation itself. For independently
-  checkable compiler evidence, run
-  `python3 scripts/certify_davis_kahan_1970.py --clean`; no private-source path
-  is required or accepted. Add `--require-terminal` only when asking the
-  maintained census itself to be a hard 100%-coverage gate. The compiler
+- Keep the readable Davis--Kahan mathematical reconstruction and the audit
+  specification distinct. `prose/distilled_literature/DavisKahan1970_part_III.tex`
+  is a self-contained mathematical walkthrough and should be edited only to
+  correct mathematics or materially stale formalization navigation. Exact
+  registered source excerpts belong in the companion
+  `DavisKahan1970_exact_source_register.tex`, bound to Lean declarations by
+  `dev/davis-kahan-1970-statement-map.json`.
+- For independently checkable compiler evidence, run
+  `python3 scripts/certify_davis_kahan_1970.py --clean`. When the private
+  modernized transcription is locally available, pass `--transcription PATH`
+  so the certificate verifies registered excerpts against the recorded
+  full-source hash and line ranges. Add `--require-terminal` only when asking
+  the maintained census itself to be a hard 100%-coverage gate. The compiler
   certificate proves compilation and declaration resolution; semantic fidelity
   is judged independently with `dev/davis-kahan-1970-independent-audit-prompt.md`.
 - Keep print-heavy Lean audit modules out of ordinary aggregate imports.
