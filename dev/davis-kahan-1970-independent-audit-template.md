@@ -11,7 +11,7 @@ The two accounting layers are deliberately both visible:
 - Section 10 questions, explicitly deferred/unproved claims, definitions, proof-only derivations, examples, numerical working, historical/external results, and theorem-adjacent remarks remain visible in source fidelity but do not enlarge the denominator.
 - A false counted result remains in the denominator and requires exact formal refutation plus the repository's separate best-effort repair disposition.
 
-Current result-level status: **27/29 terminal**, **2 awaiting semantic closure**.
+Current result-level status: **28/29 terminal**, **1 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -721,9 +721,9 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `proposition`
 - **Exact source anchor:** Proposition 3.4
-- **Result disposition:** `pending_result_only_review`
+- **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `pending_result_only_review`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Organizational source-block hash:** `a4914037fecd9b2f6193105f137f3a59d160e47ca70747bb4a6c430477038990`
 
@@ -758,6 +758,12 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`
 
 Source location candidates: `DavisKahan/Frontier/Section3.lean:1981`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_4_source_full_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:188`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3076,8 +3082,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 266 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **27 currently terminal results independently reconfirmed:** yes / no
-- **2 currently nonterminal/pending results resolved by this audit:** yes / no
+- **28 currently terminal results independently reconfirmed:** yes / no
+- **1 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

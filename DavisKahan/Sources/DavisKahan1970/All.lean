@@ -25,6 +25,7 @@ import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
 import DavisKahan.Sources.DavisKahan1970.Section3AcuteCounterexample
 import DavisKahan.Sources.DavisKahan1970.Section3AcuteDirectRotation
 import DavisKahan.Sources.DavisKahan1970.Section3PrincipalSquareRoot
+import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Real
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
 import DavisKahan.Sources.DavisKahan1970.Section4
 import DavisKahan.Sources.DavisKahan1970.Section4BasisAngleEnergy

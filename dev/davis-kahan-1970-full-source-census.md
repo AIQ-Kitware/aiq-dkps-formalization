@@ -13,8 +13,8 @@ from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 33 |
-| `compiled_specialization` | 1 |
+| `compiled_exact` | 34 |
+| `compiled_specialization` | 0 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
@@ -50,9 +50,9 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 17 |
+| `accepted` | 18 |
 | `reopened_source_spec` | 0 |
-| `reopened_math` | 10 |
+| `reopened_math` | 9 |
 | `reopened_mapping` | 17 |
 | `mixed_disposition` | 2 |
 | `not_applicable` | 3 |
@@ -112,7 +112,7 @@ mathematics.
 
 The hostile review found a concrete mathematical assertion or scalar/dimension/scope clause for which no exact source-facing declaration was located. Some are likely short wrappers; they still block a 100% statement-level claim until compiled.
 
-Gates: S1-block-residual (proved_in_build), S1-ui-norms (proved_in_build), DK-3.2-prop (proved_in_build), DK-3.4-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build), DK-10.4 (proved_in_build)
+Gates: S1-block-residual (proved_in_build), S1-ui-norms (proved_in_build), DK-3.2-prop (proved_in_build), DK-3.5-prop (proved_in_build), DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build), DK-10.4 (proved_in_build)
 
 ### `hostile-source-spec-fidelity` -- mixed
 
@@ -1263,14 +1263,11 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 #### Proposition 3.4: Square as a direct rotation
 
 - **Kind:** `proposition`
-- **Status:** `compiled_specialization`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_math`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** When the cosine block squared is at least one half, U squared is the direct rotation from the reflected subspace to the target subspace.
-- **Blocked by:** `hostile-source-facing-gap`
-- **Known hostile-review holes:**
-  - `scope_gap`: `proposition3_4_source_full` is explicitly complex-valued. The paper does not restrict Proposition 3.4 to the complex scalar field; an exact real source-facing counterpart was not located.
-- **Current Lean references:** `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`, `TauCeti.DavisKahan.Frontier.Section3.crossedDefect_image_of_unitary_sq`, `TauCeti.DavisKahan.Frontier.Section3.norm_projection_apply_le_of_forall_mem_source`, `TauCeti.DavisKahan.Frontier.Section3.re_inner_halmosCosineSq_sub_half_nonneg_of_source`, `TauCeti.DavisKahan.Frontier.Section3.re_inner_halmosCosineSq_self`, `TauCeti.DavisKahan.Frontier.Section3.isSelfAdjoint_source_block_spectraDirectRotation`, `TauCeti.DavisKahan.Frontier.Section3.isSelfAdjoint_complement_block_spectraDirectRotation`, `TauCeti.DavisKahan.Frontier.Section3.nonneg_add_star_of_re_inner_nonneg`, `TauCeti.DavisKahan.Frontier.Section3.reflectionOperator_mul_projection_self`, `TauCeti.DavisKahan.Frontier.Section3.projection_mul_reflectionOperator_self`, `TauCeti.DavisKahanTheory.directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_square_is_reflected_directRotation`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`
+- **Current Lean references:** `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`, `TauCeti.DavisKahan1970.proposition3_4_source_full_real`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source`, `TauCeti.DavisKahan.Frontier.Section3.crossedDefect_image_of_unitary_sq`, `TauCeti.DavisKahan.Frontier.Section3.norm_projection_apply_le_of_forall_mem_source`, `TauCeti.DavisKahan.Frontier.Section3.re_inner_halmosCosineSq_sub_half_nonneg_of_source`, `TauCeti.DavisKahan.Frontier.Section3.re_inner_halmosCosineSq_self`, `TauCeti.DavisKahan.Frontier.Section3.isSelfAdjoint_source_block_spectraDirectRotation`, `TauCeti.DavisKahan.Frontier.Section3.isSelfAdjoint_complement_block_spectraDirectRotation`, `TauCeti.DavisKahan.Frontier.Section3.nonneg_add_star_of_re_inner_nonneg`, `TauCeti.DavisKahan.Frontier.Section3.reflectionOperator_mul_projection_self`, `TauCeti.DavisKahan.Frontier.Section3.projection_mul_reflectionOperator_self`, `TauCeti.DavisKahanTheory.directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_square_is_reflected_directRotation`
 - **Assessment:** Square identities exist; exact source mapping between Q-minus and Q needs verification.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_general_infrastructure`. The square-is-a-direct-rotation content is compiled and axiom-clean; an exact source wrapper is absent.
@@ -1302,7 +1299,9 @@ printed statement was too strong.
 `proposition3_4_square_is_reflected_directRotation` is KEPT, not replaced: it is true, axiom-clean, and it is the statement about the other reflected pair.  All eleven new declarations are axiom-clean `[propext, Classical.choice, Quot.sound]`.
 
 SOURCE-FIDELITY REFRESH 2026-08-11.  `proposition3_4_source_full` removes the remaining acute-constructor narrowing.  The row remains `compiled_exact`.
-- **Next action:** Hostile re-audit reopened this row. `proposition3_4_source_full` is explicitly complex-valued. The paper does not restrict Proposition 3.4 to the complex scalar field; an exact real source-facing counterpart was not located.
+
+**RESULT-ONLY CLOSURE 2026-08-12.** The complex full-scope Proposition 3.4 theorem is now paired with `TauCeti.DavisKahan1970.proposition3_4_source_full_real`, a compiler-validated real theorem at the same printed nonacute scope. The real theorem transports the printed direct-rotation hypotheses and the `C0^2 >= 1/2` condition through canonical complexification, invokes the existing complex theorem, and descends the exact real Definition 3.1 clauses including genuine positive diagonal blocks. No result-level hole remains on this row.
+- **Next action:** No result-level hole remains for Proposition 3.4. Re-audit only if the source specification or source-facing theorem signatures change.
 
 #### Theorem 3.1: Classification of pairs of subspaces
 
