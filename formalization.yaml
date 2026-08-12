@@ -142,13 +142,15 @@ fidelity:
     source specification. Davis--Kahan 1970 tracks three independent evidence axes:
     source-facing implementation status, compiler verification, and hostile semantic
     completion certification. The checked-in DavisKahan1970_part_III.tex is the
-    distributable source-order audit specification; the original paper remains the
-    authority for re-auditing that reconstruction.
+    distributable source-order audit specification, while
+    dev/davis-kahan-1970-source-atom-inventory.json is the atomic source-side
+    completeness denominator; the original paper remains the authority for re-auditing
+    that reconstruction and inventory.
   known_limitations:
     - "Comparator success does not substitute for semantic review of paper-specific definitions and theorem statements."
     - "Generated/checkable status artifacts should be preferred over prose snapshots when they disagree."
     - "A Davis--Kahan compilation certificate proves elaboration and declaration resolution, not source equivalence; 100% additionally requires completion_certification=accepted for every explicit completion obligation."
-    - "The 2026-08-12 hostile re-audit reopened source-specification, source-facing-mathematics, and audit-mapping holes. The raw compiled_exact count must not be reported as source completion."
+    - "The 2026-08-12 hostile re-audit reopened source-specification, source-facing-mathematics, and audit-mapping holes. The subsequent source-inventory pass repaired the concrete source-spec omissions and established a 266-atom denominator, but mathematical and atom-to-Lean mapping holes remain. The raw compiled_exact count must not be reported as source completion."
     - "Question 10.4 is a mixed block: its final general-f question is open, but its preceding step-function/projection identities and tan(2 Theta) specializations remain mathematical completion obligations."
     - "The exact directed and ambient Section 2 tan(2 Theta) source wrappers are now compiled in real and complex scope; that historical gap is closed and should not be reintroduced."
 
@@ -161,7 +163,8 @@ review:
     and other mechanical checks. Independent mathematical and external-library review
     remain distinct from those checks. For Davis--Kahan 1970, run
     `python3 scripts/certify_davis_kahan_1970.py --clean` to generate a self-contained
-    compiler-evidence bundle and one-row-at-a-time audit packet. No private transcription
+    compiler-evidence bundle and source-order audit packet. The 49 rows are organizational
+    groups; semantic completion is judged against their atomic source claims. No private transcription
     is a certificate input. Add `--require-terminal` only when requesting the hard 100%
     gate: every explicit completion obligation must have terminal source status,
     `proved_in_build` verification, and hostile semantic certification `accepted`.

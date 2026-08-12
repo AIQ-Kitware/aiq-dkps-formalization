@@ -183,9 +183,9 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Section 1, equations (1.9)–(1.18)
 - **Source kind:** `framework`
 - **Completion obligation:** `true`
-- **Census claim:** `source_spec_incomplete` / `proved_in_build`
-- **Hostile completion certification:** `reopened_source_spec`
-- **Source-specification passage SHA-256:** `b640df622d247d4b4147214c265cd5ae876424d352b8bf1f0ea8e799c17aede2`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `reopened_math`
+- **Source-specification passage SHA-256:** `c64c6651719e212086fce5c8b32caaea014ec323b5438335d8e3d3aba8f7ba9f`
 
 ### Registered distributable source-specification passage
 
@@ -226,7 +226,12 @@ For nonzero vectors the source uses
  \angle(x,y)=\arccos\frac{\Re(y^*x)}{\norm{x}\norm{y}},
  \tag{1.14}
 \end{equation}
-while the angle between the one-dimensional subspaces they span is
+and this convention preserves the cosine-law identity
+\[
+ \norm{x+y}^2=\norm{x}^2+\norm{y}^2
+ +2\norm{x}\norm{y}\cos\angle(x,y).
+\]
+The angle between the one-dimensional subspaces they span is
 \begin{equation}
  \arccos\frac{|y^*x|}{\norm{x}\norm{y}}.
  \tag{1.15}
@@ -273,10 +278,9 @@ Section~4 proves the stated extremal meaning of this $U$; the four main perturba
 
 ### Known hostile-review holes
 
-- **`source_spec_omission`:** The distributable TeX omits the unnumbered cosine-law identity immediately following source equation (1.14).
-- **`scope_gap`:** The TeX preserves U = exp(J Theta) = cos Theta + J sin Theta in the general Hilbert-space setup. The source-facing arbitrary-dimensional surface proves the cosine/sine resolution, while the explicit exponential identity located by the hostile review is finite-dimensional.
+- **`math`:** PDF re-audit restored the cosine-law identity after (1.14). The remaining hostile issue is mathematical/scope: the distributable source asserts U = exp(J Theta) = cos Theta + J sin Theta in general Hilbert-space scope, while the explicit exponential theorem located by the audit is finite-dimensional.
 
-> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The distributable TeX omits the unnumbered cosine-law identity immediately following source equation (1.14). The TeX preserves U = exp(J Theta) = cos Theta + J sin Theta in the general Hilbert-space setup. The source-facing arbitrary-dimensional surface proves the cosine/sine resolution, while the explicit exponential identity located by the hostile review is finite-dimensional.
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: PDF re-audit restored the cosine-law identity after (1.14). The remaining hostile issue is mathematical/scope: the distributable source asserts U = exp(J Theta) = cos Theta + J sin Theta in general Hilbert-space scope, while the explicit exponential theorem located by the audit is finite-dimensional.
 
 ### Primary Lean declarations for semantic review
 
@@ -1623,9 +1627,9 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Proposition 3.3
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
-- **Census claim:** `source_spec_incomplete` / `proved_in_build`
-- **Hostile completion certification:** `reopened_source_spec`
-- **Source-specification passage SHA-256:** `0694cb7e2df9c35cd98c528b0ded3fea303834eb3366ae666c66e73b87a7e345`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
+- **Source-specification passage SHA-256:** `dbc77fc4c71873dbd8c706d68f5bb4ea28064a4d930ccb58c91c2640ab7bf382`
 
 ### Registered distributable source-specification passage
 
@@ -1636,7 +1640,18 @@ Assuming both the matching-dimension condition (1.5) and the crossing-dimension 
  \qquad C_j\ge0.
  \tag{3.6}
 \end{equation}
-Then $Q=UPU^{-1}$, and with the reflection $X=P-P^\perp$ and $Q_-=XQX$ one has $U^{-1}=XUX$.  In particular,
+The corresponding projector has the block representation
+\begin{equation}
+ Q=UPU^{-1}
+ \sim
+ \binom{C_0}{S_0}(C_0\ \ S_0^*)
+ =\begin{pmatrix}
+ C_0^2&C_0S_0^*\\
+ S_0C_0&S_0S_0^*
+ \end{pmatrix}.
+ \tag{3.7}
+\end{equation}
+With the reflection $X=P-P^\perp$ and $Q_-=XQX$ one has $U^{-1}=XUX$.  In particular,
 \begin{equation}
  U^2=(Q-Q^\perp)(P-P^\perp).
  \tag{3.8}
@@ -1651,9 +1666,9 @@ Every direct rotation is therefore the principal unitary square root of $(Q-Q^\p
 
 ### Known hostile-review holes
 
-- **`source_spec_omission`:** The anchor promises equations (3.6)-(3.8), but the distributable TeX skips source equation (3.7), the explicit block formula for Q in terms of C_0 and S_0.
+- **`mapping`:** PDF re-audit restored source equation (3.7) exactly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the new atomic equation (3.7) and the other Proposition 3.3 atoms are explicitly bound to exact Lean evidence.
 
-> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The anchor promises equations (3.6)-(3.8), but the distributable TeX skips source equation (3.7), the explicit block formula for Q in terms of C_0 and S_0.
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: PDF re-audit restored source equation (3.7) exactly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the new atomic equation (3.7) and the other Proposition 3.3 atoms are explicitly bound to exact Lean evidence.
 
 ### Primary Lean declarations for semantic review
 
@@ -2309,9 +2324,9 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2)
 - **Source kind:** `proposition`
 - **Completion obligation:** `true`
-- **Census claim:** `source_spec_incomplete` / `proved_in_build`
-- **Hostile completion certification:** `reopened_source_spec`
-- **Source-specification passage SHA-256:** `bf3ccc8a5961a08a52de6724dd95561afa29412f0c4c4dfdb7a40ea81112f45f`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `reopened_mapping`
+- **Source-specification passage SHA-256:** `2b3c6a4dc471284a2f9e4f7e4f091d30fd00d0c04ef03648ee469d6e9e110cb3`
 
 ### Registered distributable source-specification passage
 
@@ -2326,7 +2341,20 @@ Equivalently, if $\lambda_1\ge\lambda_2\ge\cdots$ are the singular values of $(1
 \[
  \lambda_k=2\sin(\theta_k/2).
 \]
-The proof uses the singular-value minimax principle (the paper's equation (4.1)) together with a pointwise angle comparison (4.2).
+The singular values admit the minimax description
+\begin{equation}
+ \lambda_k
+ =\inf_{\substack{\mathcal Y\subset P\Hsp\\\dim\mathcal Y=k-1}}
+   \ \sup_{\substack{x\in P\Hsp\ominus\mathcal Y\\\norm{x}=1}}
+   \norm{(1-V)x},
+ \tag{4.1}
+\end{equation}
+and the proof selects a corresponding unit vector $x$ for which
+\begin{equation}
+ \angle(x,Vx)\ge\theta_k=\angle(u_k,Uu_k).
+ \tag{4.2}
+\end{equation}
+The latter follows by comparing $Vx$ with the closest unit vector in $Q\Hsp$ and using the block formula (3.7).
 ~~~~
 
 ### Semantic audit clauses
@@ -2338,9 +2366,9 @@ The proof uses the singular-value minimax principle (the paper's equation (4.1))
 
 ### Known hostile-review holes
 
-- **`source_spec_omission`:** The TeX anchor says it covers source equations (4.1)-(4.2) but only paraphrases them. The explicit minimax formula (4.1) and pointwise vector-angle inequality (4.2) are missing from the distributable specification.
+- **`mapping`:** PDF re-audit restored equations (4.1) and (4.2) explicitly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the minimax and pointwise-angle atoms and the headline proposition are explicitly bound to exact Lean evidence.
 
-> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The TeX anchor says it covers source equations (4.1)-(4.2) but only paraphrases them. The explicit minimax formula (4.1) and pointwise vector-angle inequality (4.2) are missing from the distributable specification.
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: PDF re-audit restored equations (4.1) and (4.2) explicitly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the minimax and pointwise-angle atoms and the headline proposition are explicitly bound to exact Lean evidence.
 
 ### Primary Lean declarations for semantic review
 
@@ -4654,9 +4682,9 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Section 9, problem setup
 - **Source kind:** `numerical_model`
 - **Completion obligation:** `true`
-- **Census claim:** `source_spec_incomplete` / `proved_in_build`
-- **Hostile completion certification:** `reopened_source_spec`
-- **Source-specification passage SHA-256:** `bdc43ef4b79411c729d3004b3ffe56154fa83888d1bc3b2936afad9b2edf6d6d`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `reopened_math`
+- **Source-specification passage SHA-256:** `21ee160b940f7d4e04ca80a58a01e674c0e812dd3cc50a27ecc607b60fa22498`
 
 ### Registered distributable source-specification passage
 
@@ -4669,11 +4697,11 @@ and $H$ is multiplication by $\varepsilon t$, with $0<\varepsilon<100$.  Thus th
 \[
  u^{(4)}+\varepsilon t u=\lambda u
 \]
-with the same boundary conditions.  The first two unperturbed eigenvalues are
+with the same boundary conditions.  The source orders the unperturbed eigenvalues, with multiplicity, as
 \[
- \alpha_1=\alpha_2=0,
+ \alpha_1=0=\alpha_2<\alpha_3<\alpha_4<\cdots,
 \]
-while for $k>2$ the positive eigenvalues are determined by the free-beam equation
+and for $k>2$ identifies $\alpha_k$ as the positive roots of the free-beam equation
 \[
  \cos(\alpha_k^{1/4})\cosh(\alpha_k^{1/4})=1
 \]
@@ -4710,9 +4738,9 @@ These data drive the first sine estimates.
 
 ### Known hostile-review holes
 
-- **`source_spec_weakening`:** The source transcription used in the hostile review has alpha_1=alpha_2=0 < alpha_3 < alpha_4 < ... . The distributable TeX weakens this to alpha_1=alpha_2=0 and says only that positive eigenvalues are determined by the free-beam equation and exceed 500. Re-audit the original PDF to decide whether the printed indexing asserts simplicity of all positive eigenvalues; do not choose the weaker reading to fit current Lean coverage.
+- **`math`:** PDF re-audit resolves the source-reading ambiguity: the paper prints alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ... and the distributable TeX now preserves that strict ordering. The source-specification defect is closed; the formalization must now justify that source scope, including the positive-eigenvalue multiplicity/simplicity content, rather than weaken the statement.
 
-> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The source transcription used in the hostile review has alpha_1=alpha_2=0 < alpha_3 < alpha_4 < ... . The distributable TeX weakens this to alpha_1=alpha_2=0 and says only that positive eigenvalues are determined by the free-beam equation and exceed 500. Re-audit the original PDF to decide whether the printed indexing asserts simplicity of all positive eigenvalues; do not choose the weaker reading to fit current Lean coverage.
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: PDF re-audit resolves the source-reading ambiguity: the paper prints alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ... and the distributable TeX now preserves that strict ordering. The source-specification defect is closed; the formalization must now justify that source scope, including the positive-eigenvalue multiplicity/simplicity content, rather than weaken the statement.
 
 ### Primary Lean declarations for semantic review
 
@@ -5143,9 +5171,9 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Equation (9.8)
 - **Source kind:** `comparison_claim`
 - **Completion obligation:** `true`
-- **Census claim:** `source_spec_incomplete` / `proved_in_build`
-- **Hostile completion certification:** `reopened_source_spec`
-- **Source-specification passage SHA-256:** `1afeeefe736d746ac80fde7fcf57af04561e0d71121040113d8bdcd7654c98e7`
+- **Census claim:** `partial_or_wrapper_missing` / `proved_in_build`
+- **Hostile completion certification:** `reopened_math`
+- **Source-specification passage SHA-256:** `d07f312692410096396040b41f2fa512775f63b3dd9d52d4b81490409d68368d`
 
 ### Registered distributable source-specification passage
 
@@ -5162,6 +5190,12 @@ The best lower bounds from the available $2+1$ block information are the two low
  0&\widehat\alpha_2&\varepsilon/\sqrt{30}\\
  \varepsilon/\sqrt{30}&\varepsilon/\sqrt{30}&500
  \end{pmatrix}.
+\]
+The source further records, for the small parameter range under discussion,
+\[
+ \frac{\varepsilon^2/30}{500-\widehat\alpha_k}
+ >\widehat\alpha_k-\check\alpha_k
+ =\frac{\varepsilon^2/30}{500-\widehat\alpha_k}-O(\varepsilon^4).
 \]
 For $0<\varepsilon<100$ this gives
 \begin{equation}
@@ -5190,10 +5224,9 @@ The source presents the methods as complementary rather than as one dominating t
 
 ### Known hostile-review holes
 
-- **`source_spec_omission`:** The source comparison includes the asymptotic alpha_hat_k - alpha_check_k = (eps^2/30)/(500-alpha_hat_k) - O(eps^4), which is absent from the distributable TeX; the Lean comparison module explicitly says this asymptotic is intentionally not encoded.
-- **`missing_source_facing_statement`:** The TeX asserts Weinberger's sine-square estimate and the Lehmann claim that the two lower arrowhead eigenvalues are the best lower bounds from the stated data. The repository proves the final (9.8) numbers by a sharper Davis--Kahan route and formalizes algebraic pieces conditionally, but explicitly leaves the historical Weinberger/Lehmann derivation/optimality unproved.
+- **`math`:** PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition.
 
-> **Audit warning:** HOSTILE RE-AUDIT REOPENED: The source comparison includes the asymptotic alpha_hat_k - alpha_check_k = (eps^2/30)/(500-alpha_hat_k) - O(eps^4), which is absent from the distributable TeX; the Lean comparison module explicitly says this asymptotic is intentionally not encoded. The TeX asserts Weinberger's sine-square estimate and the Lehmann claim that the two lower arrowhead eigenvalues are the best lower bounds from the stated data. The repository proves the final (9.8) numbers by a sharper Davis--Kahan route and formalizes algebraic pieces conditionally, but explicitly leaves the historical Weinberger/Lehmann derivation/optimality unproved.
+> **Audit warning:** HOSTILE RE-AUDIT REOPENED: PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition.
 
 ### Primary Lean declarations for semantic review
 
@@ -5915,7 +5948,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **13 currently hostile-certified exact obligations independently reconfirmed:** yes / no
 - **1 currently hostile-certified refuted obligations independently reconfirmed:** yes / no
 - **32 currently reopened completion obligations resolved by this audit:** yes / no
-- **Reopened rows at packet generation:** `S1-block-residual` (reopened_math), `S1-ui-norms` (reopened_source_spec), `S2-tan-theta` (reopened_mapping), `S2-sharpness` (reopened_mapping), `S2-unbounded-scope` (reopened_mapping), `DK-3.1-def` (reopened_mapping), `DK-3.1-prop` (reopened_mapping), `DK-3.2-prop` (reopened_math), `DK-3.3-prop` (reopened_source_spec), `DK-3.4-prop` (reopened_math), `DK-3.5-prop` (reopened_math), `DK-4.1-prop` (reopened_source_spec), `DK-4.2-prop` (reopened_mapping), `DK-4.3-prop` (reopened_mapping), `DK-5.1-thm` (reopened_mapping), `DK-5-hermitian-inequalities` (reopened_math), `DK-5.2-thm` (reopened_mapping), `DK-6.1-prop` (reopened_mapping), `DK-6.2-thm` (reopened_mapping), `DK-6.3-thm` (reopened_math), `DK-6-appendix` (reopened_mapping), `DK-7-sin2-proof` (reopened_mapping), `DK-7-tan2-proof` (reopened_mapping), `DK-8.1-thm` (reopened_mapping), `DK-8.2-thm` (reopened_mapping), `DK-9-model` (reopened_source_spec), `DK-9.1-9.4` (reopened_mapping), `DK-9.5-9.7` (reopened_mapping), `DK-9.8` (reopened_source_spec), `DK-9-infinite-residual-counterexample` (reopened_math), `DK-9.9-9.11` (mixed_disposition), `DK-10.4` (mixed_disposition)
+- **Reopened rows at packet generation:** `S1-block-residual` (reopened_math), `S1-ui-norms` (reopened_math), `S2-tan-theta` (reopened_mapping), `S2-sharpness` (reopened_mapping), `S2-unbounded-scope` (reopened_mapping), `DK-3.1-def` (reopened_mapping), `DK-3.1-prop` (reopened_mapping), `DK-3.2-prop` (reopened_math), `DK-3.3-prop` (reopened_mapping), `DK-3.4-prop` (reopened_math), `DK-3.5-prop` (reopened_math), `DK-4.1-prop` (reopened_mapping), `DK-4.2-prop` (reopened_mapping), `DK-4.3-prop` (reopened_mapping), `DK-5.1-thm` (reopened_mapping), `DK-5-hermitian-inequalities` (reopened_math), `DK-5.2-thm` (reopened_mapping), `DK-6.1-prop` (reopened_mapping), `DK-6.2-thm` (reopened_mapping), `DK-6.3-thm` (reopened_math), `DK-6-appendix` (reopened_mapping), `DK-7-sin2-proof` (reopened_mapping), `DK-7-tan2-proof` (reopened_mapping), `DK-8.1-thm` (reopened_mapping), `DK-8.2-thm` (reopened_mapping), `DK-9-model` (reopened_math), `DK-9.1-9.4` (reopened_mapping), `DK-9.5-9.7` (reopened_mapping), `DK-9.8` (reopened_math), `DK-9-infinite-residual-counterexample` (reopened_math), `DK-9.9-9.11` (mixed_disposition), `DK-10.4` (mixed_disposition)
 - **Any unregistered mathematical claims found:** yes / no
 - **Compiler certificate clean and complete:** yes / no
 - **Is the repository's claim of 100% theorem-statement-level Davis--Kahan 1970 coverage justified?** yes / no / uncertain

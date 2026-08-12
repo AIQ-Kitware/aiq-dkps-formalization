@@ -12,7 +12,7 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 
 | Paper item | Source kind | Census status | Semantic cert | Frontier endpoint(s) | Missing pieces | Graph complete | Grounded |
 |---|---|---|---|---|---:|---:|:---:|
-| `S1-ui-norms` — Section 1, equations (1.9)–(1.18): Unitary-invariant norms, angle operators, and direct-rotation setup | framework | `source_spec_incomplete` | `reopened_source_spec` | `s1-ui-norms-kyfan-suprema` | ? | ? | ? |
+| `S1-ui-norms` — Section 1, equations (1.9)–(1.18): Unitary-invariant norms, angle operators, and direct-rotation setup | framework | `partial_or_wrapper_missing` | `reopened_math` | `s1-ui-norms-kyfan-suprema` | ? | ? | ? |
 | `S2-tan-theta` — Section 2, tan theta theorem: Single-angle tangent theorem | unnumbered_theorem | `compiled_exact` | `reopened_mapping` | `s2-tan-theta` | ? | ? | ? |
 | `S2-sin-two-theta` — Section 2, sin 2 theta theorem: Double-angle sine theorem | unnumbered_theorem | `compiled_exact` | `accepted` | `s7-sin2` | ? | ? | ? |
 | `S2-tan-two-theta` — Section 2, tan 2 theta theorem: Double-angle tangent theorem | unnumbered_theorem | `compiled_exact` | `accepted` | `s7-tan2` | ? | ? | ? |
@@ -22,13 +22,13 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-3.2-def` — Definition 3.2: Acute case | definition | `compiled_exact` | `accepted` | `s3-acute-nonuniform-counterexample` | ? | ? | ? |
 | `DK-3.1-prop` — Proposition 3.1: Acute direct rotation existence and uniqueness | proposition | `compiled_exact` | `reopened_mapping` | `s3-prop3-1` | ? | ? | ? |
 | `DK-3.2-prop` — Proposition 3.2: Nonacute existence criterion | proposition | `partial_or_wrapper_missing` | `reopened_math` | `s3-prop3-2-existence` | ? | ? | ? |
-| `DK-3.3-prop` — Proposition 3.3: Principal square-root characterization | proposition | `source_spec_incomplete` | `reopened_source_spec` | `s3-prop3-3` | ? | ? | ? |
+| `DK-3.3-prop` — Proposition 3.3: Principal square-root characterization | proposition | `partial_or_wrapper_missing` | `reopened_mapping` | `s3-prop3-3` | ? | ? | ? |
 | `DK-3.4-prop` — Proposition 3.4: Square as a direct rotation | proposition | `compiled_specialization` | `reopened_math` | `s3-prop3-4` | ? | ? | ? |
 | `DK-3.1-thm` — Theorem 3.1: Classification of pairs of subspaces | theorem | `compiled_exact` | `accepted` | `s3-theorem3-1` | ? | ? | ? |
 | `DK-3.1-cor` — Corollary 3.1: Compact classification by angle eigenvalues | corollary | `compiled_exact` | `accepted` | `s3-cor3-1` | ? | ? | ? |
 | `DK-3.5-prop` — Proposition 3.5: Angle commutation and eigenspace geometry | proposition | `partial_or_wrapper_missing` | `reopened_math` | `s3-prop3-5` | ? | ? | ? |
 | `DK-3.2-cor` — Corollary 3.2: Reversal symmetry | corollary | `compiled_exact` | `accepted` | `s3-cor3-2` | ? | ? | ? |
-| `DK-4.1-prop` — Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2): Pointwise and singular-value extremality of the direct rotation | proposition | `source_spec_incomplete` | `reopened_source_spec` | `s4-prop4-1` | ? | ? | ? |
+| `DK-4.1-prop` — Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2): Pointwise and singular-value extremality of the direct rotation | proposition | `partial_or_wrapper_missing` | `reopened_mapping` | `s4-prop4-1` | ? | ? | ? |
 | `DK-4.1-cor` — Corollary 4.1: UI-norm minimality of direct rotation displacement | corollary | `compiled_exact` | `accepted` | `s4-cor4-1` | ? | ? | ? |
 | `DK-4.2-prop` — Proposition 4.2: Basis-angle square-sum extremality | proposition | `compiled_exact` | `reopened_mapping` | `s4-prop4-2` | ? | ? | ? |
 | `DK-4.3-prop` — Proposition 4.3: Squared displacement UI-norm minimality | proposition | `compiled_exact` | `reopened_mapping` | `s4-prop4-3` | ? | ? | ? |
@@ -42,10 +42,10 @@ A piece is one manifest node in the result's transitive dependency closure. Miss
 | `DK-7-tan2-proof` — Section 7, equation (7.6) and following argument: Singular-vector proof of the tangent double-angle theorem | proof_package | `compiled_exact` | `reopened_mapping` | `s7-tan2` | ? | ? | ? |
 | `DK-8.1-thm` — Theorem 8.1: Branch selection and spectral repulsion | theorem | `compiled_exact` | `reopened_mapping` | `s8-theorem8-1` | ? | ? | ? |
 | `DK-8.2-thm` — Theorem 8.2 and final Section 8 extension remark: Smallness selects the acute branch and closing extension remark | theorem | `compiled_exact` | `reopened_mapping` | `s8-theorem8-2-perturbation`, `s8-theorem8-2-residual` | ? | ? | ? |
-| `DK-9-model` — Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model | numerical_model | `source_spec_incomplete` | `reopened_source_spec` | `s9-finite-certificate` | ? | ? | ? |
+| `DK-9-model` — Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model | numerical_model | `partial_or_wrapper_missing` | `reopened_math` | `s9-finite-certificate` | ? | ? | ? |
 | `DK-9.1-9.4` — Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds | numerical_claims | `compiled_exact` | `reopened_mapping` | `s9-initial-angle-bounds` | ? | ? | ? |
 | `DK-9.5-9.7` — Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements | numerical_claims | `compiled_exact` | `reopened_mapping` | `s9-tangent-angle-bounds` | ? | ? | ? |
-| `DK-9.8` — Equation (9.8): Comparison with Weinberger bounds | comparison_claim | `source_spec_incomplete` | `reopened_source_spec` | `s9-weinberger-comparison` | ? | ? | ? |
+| `DK-9.8` — Equation (9.8): Comparison with Weinberger bounds | comparison_claim | `partial_or_wrapper_missing` | `reopened_math` | `s9-weinberger-comparison` | ? | ? | ? |
 | `DK-9-infinite-residual-counterexample` — Section 9, l2 example after (9.8): Residual-infinite limitation example | example | `partial_or_wrapper_missing` | `reopened_math` | `base-section9-infinite-residual-example` | ? | ? | ? |
 | `DK-9.9-9.11` — Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster | numerical_claims | `compiled_exact` | `mixed_disposition` | `s9-individual-eigenvector-bounds` | ? | ? | ? |
 

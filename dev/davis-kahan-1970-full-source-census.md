@@ -18,13 +18,13 @@ from it.
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 7 |
+| `partial_or_wrapper_missing` | 12 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
 | `not_a_completion_obligation` | 2 |
 | `refuted_as_transcribed` | 1 |
-| `source_spec_incomplete` | 5 |
+| `source_spec_incomplete` | 0 |
 
 ## Status meanings
 
@@ -51,9 +51,9 @@ completion obligations count toward hostile-certified 100% coverage.
 | Completion certification | Count |
 | --- | ---: |
 | `accepted` | 14 |
-| `reopened_source_spec` | 5 |
-| `reopened_math` | 7 |
-| `reopened_mapping` | 18 |
+| `reopened_source_spec` | 0 |
+| `reopened_math` | 10 |
+| `reopened_mapping` | 20 |
 | `mixed_disposition` | 2 |
 | `not_applicable` | 3 |
 
@@ -173,14 +173,13 @@ WHAT M37 ADDED: `DavisKahan/Sources/DavisKahan1970/Section1.lean`, the source-nu
 #### Section 1, equations (1.9)–(1.18): Unitary-invariant norms, angle operators, and direct-rotation setup
 
 - **Kind:** `framework`
-- **Status:** `source_spec_incomplete`
+- **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_source_spec`
+- **Hostile completion certification:** `reopened_math`
 - **Mathematics:** Norms determined by singular values, contraction laws, Ky Fan prefix norms, and dominance by all prefixes.
 - **Blocked by:** `hostile-source-spec-fidelity`, `hostile-source-facing-gap`
 - **Known hostile-review holes:**
-  - `source_spec_omission`: The distributable TeX omits the unnumbered cosine-law identity immediately following source equation (1.14).
-  - `scope_gap`: The TeX preserves U = exp(J Theta) = cos Theta + J sin Theta in the general Hilbert-space setup. The source-facing arbitrary-dimensional surface proves the cosine/sine resolution, while the explicit exponential identity located by the hostile review is finite-dimensional.
+  - `math`: PDF re-audit restored the cosine-law identity after (1.14). The remaining hostile issue is mathematical/scope: the distributable source asserts U = exp(J Theta) = cos Theta + J sin Theta in general Hilbert-space scope, while the explicit exponential theorem located by the audit is finite-dimensional.
 - **Current Lean references:** `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge_le_of_all_kyFan_le_hetero`, `TauCeti.DavisKahan.ExactSinTheta.paperKyFanNorm`, `TauCeti.DavisKahan.ExactSinTheta.paperKyFanNorm_gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperKyFanNorm_extendedGauge`, `TauCeti.DavisKahan.ExactSinTheta.all_kyFan_le_of_every_paperNorm_extendedGauge_le`, `TauCeti.DavisKahan.ExactSinTheta.all_mul_kyFan_le_of_every_paperNorm_gauge_le`, `TauCeti.DavisKahan.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge`, `TauCeti.DavisKahan1970.equation1_12`, `TauCeti.DavisKahan1970.equation1_12_gauge_comp_starProjection_le`, `TauCeti.DavisKahan1970.equation1_13_compressions`, `TauCeti.DavisKahan1970.equation1_13_reSum`, `TauCeti.DavisKahan1970.equation1_13_gauge_starProjection_comp_le`, `TauCeti.ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner`, `TauCeti.ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex`, `TauCeti.RectangularUnitarilyInvariantSeminorm.exists_orthonormal_re_sum_inner_map_eq_rectangularKyFanSum`, `ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse`, `ContinuousLinearMap.kyFanGauge_comp_eq_of_leftInverse`, `TauCeti.ApproximationNumber.kyFanApproximationGauge_comp_eq_of_leftInverse`
 - **Assessment:** The source norm correspondence is part of the clean Section 6 surface.
 
@@ -211,7 +210,9 @@ STATUS SET TO `compiled_specialization`, NOT `compiled_exact`, ON INTEGRATION 20
 **WHAT WORKED: PAD THE CODOMAIN.**  `hF` was an artifact of the attaining engine `exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex`, which returns an orthonormal `nu`-tuple in EACH space and therefore cannot run when `dim F < nu`.  The conclusion of (1.12) never mentions the codomain, so replace `F` by the L2 sum `WithLp 2 (F x EuclideanSpace C (Fin nu))` along the inclusion `iota` of `F` as the first summand.  The projection back is a left inverse and both maps are contractions, so every Ky Fan gauge is blind to the substitution and the epsilon-bound proved in the padded space is a bound in `F`.  No case split on `dim F`, no finrank arithmetic, no orthonormal extension.
 
 THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, and all three are now listed on this row: `ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse` (`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean`) -- over an arbitrary nontrivially normed field, with NO inner product, completeness or dimension hypothesis: if `||iota|| <= 1`, `||pi|| <= 1` and `pi . iota = id` then `(iota .L T).approximationNumber n = T.approximationNumber n`; `ContinuousLinearMap.kyFanGauge_comp_eq_of_leftInverse` (`.../KyFan.lean`), the same summed over the prefix; and `TauCeti.ApproximationNumber.kyFanApproximationGauge_comp_eq_of_leftInverse` (`.../Core.lean`), the spelling the source facade speaks.
-- **Next action:** Hostile re-audit reopened this row. The distributable TeX omits the unnumbered cosine-law identity immediately following source equation (1.14). The TeX preserves U = exp(J Theta) = cos Theta + J sin Theta in the general Hilbert-space setup. The source-facing arbitrary-dimensional surface proves the cosine/sine resolution, while the explicit exponential identity located by the hostile review is finite-dimensional.
+
+**SOURCE-SPEC PDF RE-AUDIT 2026-08-12 (Agent 3).** PDF re-audit restored the cosine-law identity after (1.14). The remaining hostile issue is mathematical/scope: the distributable source asserts U = exp(J Theta) = cos Theta + J sin Theta in general Hilbert-space scope, while the explicit exponential theorem located by the audit is finite-dimensional.
+- **Next action:** PDF re-audit restored the cosine-law identity after (1.14). The remaining hostile issue is mathematical/scope: the distributable source asserts U = exp(J Theta) = cos Theta + J sin Theta in general Hilbert-space scope, while the explicit exponential theorem located by the audit is finite-dimensional.
 
 ### Section 2
 
@@ -1226,13 +1227,13 @@ CORRECTION TO THE COORDINATOR'S OWN FRAMING, recorded because it nearly caused d
 #### Proposition 3.3: Principal square-root characterization
 
 - **Kind:** `proposition`
-- **Status:** `source_spec_incomplete`
+- **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_source_spec`
+- **Hostile completion certification:** `reopened_mapping`
 - **Mathematics:** Every direct rotation is a principal square root of the product of the two reflections; conversely a suitable principal square root is a direct rotation.
 - **Blocked by:** `hostile-source-spec-fidelity`
 - **Known hostile-review holes:**
-  - `source_spec_omission`: The anchor promises equations (3.6)-(3.8), but the distributable TeX skips source equation (3.7), the explicit block formula for Q in terms of C_0 and S_0.
+  - `mapping`: PDF re-audit restored source equation (3.7) exactly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the new atomic equation (3.7) and the other Proposition 3.3 atoms are explicitly bound to exact Lean evidence.
 - **Current Lean references:** `TauCeti.DavisKahan1970.complex_directRotation_sq`, `TauCeti.DavisKahan1970.complex_directRotation_hermitianPart`, `TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_forward`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_converse`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_iff`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_forward_of_nonneg_blocks`, `TauCeti.DavisKahan1970.real_directRotation_sq`, `TauCeti.DavisKahan1970.real_directRotation_hermitianPart`, `TauCeti.DavisKahan1970.real_directRotation_principal_of_sq`
 - **Assessment:** The square identity and acute spectral branch exist; the source converse with the crossed-intersection mapping condition is not exposed.
 
@@ -1255,7 +1256,9 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 **The self-adjointness hypotheses are gone in the printed form.**  `proposition3_3_principalSquareRoot_forward_of_nonneg_blocks` states the forward direction with the diagonal compressions *positive as operators*, which is what the source prints, and needs no side hypothesis: a positive operator is self-adjoint and has nonnegative numerical range, so both of the weaker conditions this repository's `IsPaperDirectRotation` records come for free.  It also returns `IsPaperDirectRotation` itself, so the printed hypotheses alone give the printed conclusion.
 
 **M33, 2026-08-09 (Claude Opus 5).  THE REAL-SCALAR AXIS IS CLOSED ON THIS ROW.**  Both directions now hold over a REAL Hilbert space of arbitrary dimension.  Forward: `real_directRotation_sq` is `W^2 = J_V J_U` and `real_directRotation_hermitianPart` is `W + W^T = 2 |S|_R`, which is the word 'principal' -- the symmetric part is nonnegative.  Converse: `real_directRotation_principal_of_sq` says an orthogonal `W` with `W^2 = J_V J_U` and nonnegative numerical range IS the direct rotation.  Both are transported through the conjugation-fixedness of the complexified polar factor; see `DavisKahan/Geometry/Polar/DirectRotationReal.lean`.
-- **Next action:** Hostile re-audit reopened this row. The anchor promises equations (3.6)-(3.8), but the distributable TeX skips source equation (3.7), the explicit block formula for Q in terms of C_0 and S_0.
+
+**SOURCE-SPEC PDF RE-AUDIT 2026-08-12 (Agent 3).** PDF re-audit restored source equation (3.7) exactly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the new atomic equation (3.7) and the other Proposition 3.3 atoms are explicitly bound to exact Lean evidence.
+- **Next action:** PDF re-audit restored source equation (3.7) exactly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the new atomic equation (3.7) and the other Proposition 3.3 atoms are explicitly bound to exact Lean evidence.
 
 #### Proposition 3.4: Square as a direct rotation
 
@@ -1736,13 +1739,13 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is clos
 #### Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2): Pointwise and singular-value extremality of the direct rotation
 
 - **Kind:** `proposition`
-- **Status:** `source_spec_incomplete`
+- **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_source_spec`
+- **Hostile completion certification:** `reopened_mapping`
 - **Mathematics:** For any unitary carrying P to Q, an orthonormal sequence experiences angles at least the principal angles; equivalently the singular values of (1-V)|P are minimized by the direct rotation and equal 2 sin(theta_k/2).
 - **Blocked by:** `hostile-source-spec-fidelity`
 - **Known hostile-review holes:**
-  - `source_spec_omission`: The TeX anchor says it covers source equations (4.1)-(4.2) but only paraphrases them. The explicit minimax formula (4.1) and pointwise vector-angle inequality (4.2) are missing from the distributable specification.
+  - `mapping`: PDF re-audit restored equations (4.1) and (4.2) explicitly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the minimax and pointwise-angle atoms and the headline proposition are explicitly bound to exact Lean evidence.
 - **Current Lean references:** `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation`, `TauCeti.DavisKahan1970.Proposition4_1`, `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional`, `TauCeti.DavisKahan1970.Proposition4_1_real`, `TauCeti.DavisKahan1970.restrictedDisplacementDominance_real`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional_nonacute`, `TauCeti.positiveApproximationEigenvector`, `TauCeti.orthonormal_positiveApproximationEigenvector`, `TauCeti.apply_positiveApproximationEigenvector`, `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors`, `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`
 - **Assessment:** The finite pointwise singular-value theorem is compiled: every singular value of the restricted displacement (1-V)P is minimized by the direct rotation, whose values are the doubled half-angle sines 2 sin(theta_k/2).  A source-numbered wrapper and the infinite-dimensional scope remain open.
 
@@ -1766,7 +1769,9 @@ statements are left above as the historical record and are superseded by this pa
 THE ROUTE NOTE ON THE BLOCKER WAS WRONG ABOUT WHAT WAS NEEDED, AND THE CENSUS UNDERSTATED WHAT WAS ALREADY BUILT.  Both the `next_action` and the `scope_gap` here said the remedy was 'the complexification route rather than a reproof', implying machinery still to be written.  MEASURED 2026-08-09: `DavisKahan/OperatorIdeal/ComplexificationApproximation.lean` ALREADY PROVED, since before this tranche, that a real operator and its complexification have EQUAL approximation numbers (`approximationNumber_complexify`) and equal finite Ky Fan approximation gauges (`kyFanApproximationGauge_complexify`).  It was built for the real Ky Fan ideal work and was recorded on no Section 4 row.  The only genuinely missing ingredient was a real MINIMIZER, i.e. the real direct rotation, which is `DavisKahan/Geometry/Polar/DirectRotationReal.lean`.  With those two, the real Proposition 4.1 is three rewrites.
 
 SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`: the previous `next_action` incorrectly called the printed first formulation "beyond source".  It is part of Proposition 4.1 and remains an obligation.
-- **Next action:** Hostile re-audit reopened this row. The TeX anchor says it covers source equations (4.1)-(4.2) but only paraphrases them. The explicit minimax formula (4.1) and pointwise vector-angle inequality (4.2) are missing from the distributable specification.
+
+**SOURCE-SPEC PDF RE-AUDIT 2026-08-12 (Agent 3).** PDF re-audit restored equations (4.1) and (4.2) explicitly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the minimax and pointwise-angle atoms and the headline proposition are explicitly bound to exact Lean evidence.
+- **Next action:** PDF re-audit restored equations (4.1) and (4.2) explicitly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the minimax and pointwise-angle atoms and the headline proposition are explicitly bound to exact Lean evidence.
 
 #### Corollary 4.1: UI-norm minimality of direct rotation displacement
 
@@ -2791,13 +2796,13 @@ THE FILE WAS SELF-CONTRADICTING, NOT MERELY STALE: the same module docstring alr
 #### Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model
 
 - **Kind:** `numerical_model`
-- **Status:** `source_spec_incomplete`
+- **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_source_spec`
+- **Hostile completion certification:** `reopened_math`
 - **Mathematics:** The free-beam fourth derivative on L2(0,1), perturbed by multiplication by epsilon t, with the two-dimensional linear trial eigenspace.
 - **Blocked by:** `hostile-source-spec-fidelity`
 - **Known hostile-review holes:**
-  - `source_spec_weakening`: The source transcription used in the hostile review has alpha_1=alpha_2=0 < alpha_3 < alpha_4 < ... . The distributable TeX weakens this to alpha_1=alpha_2=0 and says only that positive eigenvalues are determined by the free-beam equation and exceed 500. Re-audit the original PDF to decide whether the printed indexing asserts simplicity of all positive eigenvalues; do not choose the weaker reading to fit current Lean coverage.
+  - `math`: PDF re-audit resolves the source-reading ambiguity: the paper prints alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ... and the distributable TeX now preserves that strict ordering. The source-specification defect is closed; the formalization must now justify that source scope, including the positive-eigenvalue multiplicity/simplicity content, rather than weaken the statement.
 - **Current Lean references:** `TauCeti.DavisKahan.FreeBeam.Model.beamOperator`, `TauCeti.DavisKahan.FreeBeam.Model.beamOperator_isSelfAdjoint`, `TauCeti.DavisKahan.FreeBeam.Model.realSpectrum_beamOperator_subset_gap`, `TauCeti.DavisKahan.FreeBeam.Model.realSpectrum_beamOperator_subset_sharp`, `TauCeti.DavisKahan.FreeBeam.Model.beamTrial_orthonormal`, `TauCeti.DavisKahan.FreeBeam.Model.inner_centeredAffineLp`, `TauCeti.DavisKahan.FreeBeam.Model.inner_centeredAffineLp_mul`, `TauCeti.DavisKahan.FreeBeam.Model.inner_mul_centeredAffineLp_mul`, `TauCeti.DavisKahan.FreeBeam.Model.beamRitz_matrix`, `TauCeti.DavisKahan.FreeBeam.Model.beamResidualGram_matrix`, `TauCeti.DavisKahan.FreeBeam.Model.beamFiniteDataCertificate`, `TauCeti.DavisKahan1970.Section9.CenteredAffine`, `TauCeti.DavisKahan1970.Section9.ritz_matrix_from_affine_moments`, `TauCeti.DavisKahan1970.Section9.FreeBeamFiniteDataCertificate`, `TauCeti.DavisKahan.FreeBeam.Model.exists_pos_eigenpair_beamOperator`, `TauCeti.DavisKahan.FreeBeam.Model.exists_five_hundred_lt_mem_realSpectrum_beamOperator`, `TauCeti.DavisKahan.FreeBeam.Model.exists_mem_realSpectrum_beamOperator_ne_zero`, `TauCeti.DavisKahan.FreeBeam.Model.beamQuadLp`, `TauCeti.DavisKahan.FreeBeam.Model.inner_affineLp_beamQuadLp`, `TauCeti.DavisKahan.FreeBeam.Model.beamQuadLp_mem_beamTrial_orthogonal`, `TauCeti.DavisKahan.FreeBeam.Model.norm_beamQuadLp_sq`, `TauCeti.DavisKahan.FreeBeam.Model.beamQuadLp_ne_zero`, `TauCeti.DavisKahan.FreeBeam.Model.eigenspace_beamResolvent_one_le_beamTrial`, `TauCeti.DavisKahan.FreeBeam.Model.exists_beamOperator_apply_of_beamResolvent_smul`, `TauCeti.DavisKahan.FreeBeam.Model.exists_affine_of_beamResolvent_eq_self`, `TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector`, `TauCeti.exists_hasEigenvalue_eigenspace_not_le`, `TauCeti.DavisKahan.FreeBeam.Model.not_finiteDimensional_beamL2`, `TauCeti.DavisKahan.FreeBeam.Model.exists_pos_eigenpair_beamOperator_gt`, `TauCeti.DavisKahan.FreeBeam.Model.exists_lt_five_hundred_lt_mem_realSpectrum_beamOperator`, `TauCeti.DavisKahan.FreeBeam.Model.not_bddAbove_realSpectrum_beamOperator`, `TauCeti.DavisKahan.FreeBeam.Model.beamEigenvalues`, `TauCeti.DavisKahan.FreeBeam.Model.finite_beamEigenvalues_inter_Iic`, `TauCeti.DavisKahan.FreeBeam.Model.exists_lt_mem_beamEigenvalues`, `TauCeti.DavisKahan.FreeBeam.Model.exists_strictMono_mem_realSpectrum_beamOperator`, `TauCeti.DavisKahan.FreeBeam.Model.infinite_five_hundred_lt_mem_realSpectrum_beamOperator`, `TauCeti.DavisKahan.FreeBeam.Model.beamResolvent_apply_of_beamOperator_eigen`, `TauCeti.DavisKahan.FreeBeam.Model.eigenspace_beamResolvent_zero_eq_bot`, `TauCeti.not_finiteDimensional_lpTwo_unitIocMeasure`, `TauCeti.not_finiteDimensional_lpTwo_of_pairwise_disjoint`, `TauCeti.finite_setOf_hasEigenvalue_le_norm`, `TauCeti.exists_hasEigenvalue_norm_lt`, `TauCeti.exists_isLeast_of_finite_inter_Iic`, `TauCeti.nonempty_orderIso_nat_of_unbounded_of_finite_inter_Iic`, `TauCeti.exists_strictMono_range_eq_of_unbounded_of_finite_inter_Iic`, `TauCeti.DavisKahan.FreeBeam.Model.nonneg_of_beamOperator_eigen`, `TauCeti.DavisKahan.FreeBeam.Model.exists_eigenvector_of_mem_realSpectrum_beamOperator`, `TauCeti.DavisKahan.FreeBeam.Model.zero_mem_realSpectrum_beamOperator`, `TauCeti.DavisKahan.FreeBeam.Model.realSpectrum_beamOperator_eq_insert_zero`, `TauCeti.DavisKahan.FreeBeam.Model.finite_realSpectrum_beamOperator_inter_Iic`, `TauCeti.DavisKahan.FreeBeam.Model.nonempty_orderIso_nat_beamEigenvalues`, `TauCeti.DavisKahan.FreeBeam.Model.exists_strictMono_range_eq_beamEigenvalues`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_source`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_source`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source`, `TauCeti.DavisKahan1970.Section9.RealBeamL2`, `TauCeti.DavisKahan1970.Section9.realBeamOperator`, `TauCeti.DavisKahan1970.Section9.realClassicalFreeBeamGraph`, `TauCeti.DavisKahan.FreeBeam.Model.Real.BeamL2`, `TauCeti.DavisKahan.FreeBeam.Model.Real.beamOperator`, `TauCeti.DavisKahan.FreeBeam.Model.Real.ClassicalFreeBeamRepresentative`, `TauCeti.DavisKahan.FreeBeam.Model.Real.classicalFreeBeamGraph`, `TauCeti.DavisKahan.FreeBeam.Model.Real.beamOperator_is_closure_of_classical_freeBeam_fourthDerivative`, `TauCeti.DavisKahan.FreeBeam.Model.Real.closure_classicalFreeBeamGraph_eq_graph`, `TauCeti.DavisKahan.FreeBeam.Model.Real.classicalFreeBeamGraph_subset_graph`, `TauCeti.DavisKahan.FreeBeam.Model.Real.exists_characteristic_of_eigen`, `TauCeti.DavisKahan.FreeBeam.Model.Real.realSpectrum_beamOperator_subset`, `TauCeti.DavisKahan.FreeBeam.Model.Real.beamEigenvalues`, `TauCeti.DavisKahan.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues`, `TauCeti.DavisKahan.FreeBeam.Model.Real.five_hundred_lt_of_mem_beamEigenvalues`, `TauCeti.DavisKahan.FreeBeam.Model.Real.not_finiteDimensional_beamL2`, `TauCeti.DavisKahan.FreeBeam.Model.Real.beamFiniteDataCertificate`, `TauCeti.DavisKahan.FreeBeam.Model.Real.beamTrial_le_domain`, `TauCeti.DavisKahan.FreeBeam.Model.Real.beamOperator_apply_trial`, `TauCeti.DavisKahan.FreeBeam.Classical.characteristic_iff_exists_nontrivial_freeBoundary`, `TauCeti.DavisKahan.FreeBeam.Classical.exists_nontrivial_freeBoundary_of_characteristic`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_le_domain`, `TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_apply_trial`, `TauCeti.DavisKahan.FreeBeam.Model.Real.beamEigenvalues_eq_characteristicFourthPowers`, `TauCeti.DavisKahan.FreeBeam.Model.Real.pow_four_mem_beamEigenvalues_of_characteristic`, `TauCeti.DavisKahan.FreeBeam.Model.Real.exists_eigenpair_of_characteristic`, `TauCeti.DavisKahan.FreeBeam.Model.Real.beamRealPositiveSpectrum_sourceFacts`
 - **Assessment:** A source-facing candidate now reconstructs the affine trial basis through exact unit-interval moments and packages the remaining free-beam analytic facts behind an explicit certificate. The closed fourth-derivative operator and the bound alpha_3 > 500 are not yet proved.
 
@@ -2903,7 +2908,9 @@ TWO STANDING JUDGEMENTS IN THIS ROW ARE THEREFORE SUPERSEDED: "(ii) THE COST IS 
 **TWO BASELINES MOVED AND THE MOVEMENT IS RECORDED RATHER THAN ABSORBED.**  Dependency layers **7 -> 11**: the four new violations are `BeamClassicalReal` and `BeamTrialReal` importing Section 9 source facades (`FreeBeamModeUniqueness`, `FreeBeamRootLocalization`, `ExactData`, `TrialSubspace`).  They are the SAME SHAPE as the seven pre-existing ones (`BeamSpectrum`, `BeamSection9`, `BeamTangent`, `BeamEigenbasis`, `BeamInPlaneAngle` already do exactly this), so the real modules mirror their complex siblings' import structure -- a consistent architectural pattern, not a new defect class.  Docstring coverage **120 -> 154**.
 
 **STATUS DECISION DELIBERATELY NOT TAKEN.**  On the evidence this row is a strong candidate for `compiled_exact`: axis (A), axis (B) and the sequence residue are all now discharged.  It is LEFT at `compiled_specialization` pending a clause-by-clause fidelity read against the transcription, exactly as `DK-8.2-thm` was before its promotion -- the campaign owner's own assessment when pushing was "might finish section 9, still not done, but almost there".  **Do not promote from this entry; promote from a fidelity read.**  Note also that Section 9 as a whole is not complete regardless: `DK-9.5-9.7` remains open on the unbounded `tan 2Theta` extremality obstruction, which is not beam work.
-- **Next action:** Hostile re-audit reopened this row. The source transcription used in the hostile review has alpha_1=alpha_2=0 < alpha_3 < alpha_4 < ... . The distributable TeX weakens this to alpha_1=alpha_2=0 and says only that positive eigenvalues are determined by the free-beam equation and exceed 500. Re-audit the original PDF to decide whether the printed indexing asserts simplicity of all positive eigenvalues; do not choose the weaker reading to fit current Lean coverage.
+
+**SOURCE-SPEC PDF RE-AUDIT 2026-08-12 (Agent 3).** PDF re-audit resolves the source-reading ambiguity: the paper prints alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ... and the distributable TeX now preserves that strict ordering. The source-specification defect is closed; the formalization must now justify that source scope, including the positive-eigenvalue multiplicity/simplicity content, rather than weaken the statement.
+- **Next action:** PDF re-audit resolves the source-reading ambiguity: the paper prints alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ... and the distributable TeX now preserves that strict ordering. The source-specification defect is closed; the formalization must now justify that source scope, including the positive-eigenvalue multiplicity/simplicity content, rather than weaken the statement.
 
 #### Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds
 
@@ -3154,14 +3161,13 @@ FOR THIS ROW: does not close.  Its 2-norm sentence of (9.7) needs the same arbit
 #### Equation (9.8): Comparison with Weinberger bounds
 
 - **Kind:** `comparison_claim`
-- **Status:** `source_spec_incomplete`
+- **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_source_spec`
+- **Hostile completion certification:** `reopened_math`
 - **Mathematics:** Derive lower-eigenvalue estimates from a 3x3 comparison matrix and compare individual-vector angle bounds.
 - **Blocked by:** `hostile-source-spec-fidelity`, `hostile-source-facing-gap`
 - **Known hostile-review holes:**
-  - `source_spec_omission`: The source comparison includes the asymptotic alpha_hat_k - alpha_check_k = (eps^2/30)/(500-alpha_hat_k) - O(eps^4), which is absent from the distributable TeX; the Lean comparison module explicitly says this asymptotic is intentionally not encoded.
-  - `missing_source_facing_statement`: The TeX asserts Weinberger's sine-square estimate and the Lehmann claim that the two lower arrowhead eigenvalues are the best lower bounds from the stated data. The repository proves the final (9.8) numbers by a sharper Davis--Kahan route and formalizes algebraic pieces conditionally, but explicitly leaves the historical Weinberger/Lehmann derivation/optimality unproved.
+  - `math`: PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition.
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section9.ArrowheadThreeByThree`, `TauCeti.DavisKahan1970.Section9.tangent_sq_le_of_weinberger_sine_sq`, `TauCeti.DavisKahan1970.Section9.equation_9_8_lower`, `TauCeti.DavisKahan1970.Section9.equation_9_8_upper`, `TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_low_lt_printed`, `TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_high_lt_printed`, `TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_low_le`, `TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_high_le`, `TauCeti.DavisKahan.FreeBeam.Model.beamColumn_tangent_le`, `TauCeti.DavisKahan.FreeBeam.Model.norm_beamColumnResidual_low`, `TauCeti.DavisKahan.FreeBeam.Model.norm_beamColumnResidual_high`, `TauCeti.DavisKahan.FreeBeam.Model.beam_equation_9_8_lower`, `TauCeti.DavisKahan.FreeBeam.Model.beam_equation_9_8_upper`, `TauCeti.DavisKahan.FreeBeam.Model.beam_equation_9_8`, `TauCeti.DavisKahan1970.Section9.weinberger_sine_sq_le_of_coupled_energy`, `TauCeti.DavisKahan1970.Section9.naive_second_scalar_lower_bound_tripwire`
 - **Assessment:** The exact arrowhead characteristic polynomial and the algebraic conversion of Weinberger sine-square bounds to tangent bounds are represented. The historical lower-root theorem is deliberately an explicit certificate rather than an informal O(epsilon^4) assertion.
 
@@ -3204,7 +3210,9 @@ WHAT IS DELIBERATELY NOT CLAIMED, AND WHY IT IS NOT A DAVIS--KAHAN OBLIGATION.  
 Davis--Kahan themselves mark this boundary: "Weinberger's use both Rayleigh--Ritz upper and lower bounds, and can exploit independent lower-bound information that our results do not use."  Reproducing (a) and (b) means importing Weinberger 1960 and Lehmann, which is external mathematics -- see `dev/external-literature-references.md`.
 
 TRIPWIRE AGAINST THE TEMPTING FALSE SHORTCUT.  `naive_second_scalar_lower_bound_tripwire` compiles a rational counterexample showing that (a) does NOT follow from "alphacheck_k is some scalar lower bound for lambda_k" plus the exterior threshold.  For `T = diag(0, 10, 100)` with threshold `99`, the orthogonal Ritz vectors `w_1 = (18/35, -6/7, 1/35)` and `w_2 = (3/7, 2/7, 6/7)` are also `T`-orthogonal, with Ritz values `52/7` and `520/7`; the valid bound `alphacheck_2 = 10 = lambda_2` gives `(520/7 - 10)/(99 - 10) = 450/623`, while the actual squared defect of `w_2` is `36/49 > 450/623`.  It holds for `k = 1` and fails for `k = 2` because `P_F w_2` carries a component below `alphacheck_2`.  Do not replace Weinberger's coupled hypotheses by the scalar statement merely because the latter has the right type shape.
-- **Next action:** Hostile re-audit reopened this row. The source comparison includes the asymptotic alpha_hat_k - alpha_check_k = (eps^2/30)/(500-alpha_hat_k) - O(eps^4), which is absent from the distributable TeX; the Lean comparison module explicitly says this asymptotic is intentionally not encoded. The TeX asserts Weinberger's sine-square estimate and the Lehmann claim that the two lower arrowhead eigenvalues are the best lower bounds from the stated data. The repository proves the final (9.8) numbers by a sharper Davis--Kahan route and formalizes algebraic pieces conditionally, but explicitly leaves the historical Weinberger/Lehmann derivation/optimality unproved.
+
+**SOURCE-SPEC PDF RE-AUDIT 2026-08-12 (Agent 3).** PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition.
+- **Next action:** PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition.
 
 #### Section 9, l2 example after (9.8): Residual-infinite limitation example
 
