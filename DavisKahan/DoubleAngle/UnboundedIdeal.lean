@@ -178,9 +178,15 @@ theorem norm_sinTwoThetaIdealBlock
     ‖sinTwoThetaIdealBlock U V‖ = ‖sinTwoAngleOperatorC U V‖ := by
   exact norm_starProjection_reflectedComplementary_eq_sinTwoAngle U V
 
-/-- Residual reflection form of unbounded sine two theta at rectangular
-ideal-gauge scope. -/
-theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
+/-- **Block form of the residual reflection sine-two-theta estimate.**
+
+The right-hand side is a single block of the reflection residual, read between
+the exact spectral subspace and the mirror of its complement, rather than the
+whole residual.  `sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap` below
+contracts that block back to `R`; the sharp directed residual `sin 2Theta_0`
+estimate cannot afford the contraction, because it is exactly the block that the
+reflection-defect doubling identity halves. -/
+theorem sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
@@ -204,7 +210,10 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     N.Mem (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB) V) ∧
       δ * N.gaugeReal (sinTwoThetaIdealBlock
-        (selfAdjointSpectralSubspace A hA B hB) V) ≤ N.gaugeReal R := by
+        (selfAdjointSpectralSubspace A hA B hB) V) ≤
+        N.gaugeReal ((selfAdjointSpectralSubspace A hA B hB).starProjection ∘L R ∘L
+          ((selfAdjointSpectralSubspace A hA B hB)ᗮ.map
+            (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection) := by
   let U := selfAdjointSpectralSubspace A hA B hB
   let Uc := selfAdjointSpectralSubspace A hA Bᶜ hB.compl
   let Wc := Uc.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)
@@ -300,12 +309,13 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
     intro lam hlam
     rw [unitaryConjugate_spectrum_eq e Λ hΛ]
     exact hBcomplSpec lam hlam
-  have hraw := sinTheta_addBounded_gauge_of_spectrum_gap_isometric
+  have hraw := sinTheta_addBounded_gauge_block_of_spectrum_gap
     N A hA R hR A₀ hA₀ ΛJ hΛJ X F₁ hXdom hXint hFdom hFint
-      hXiso hFiso hβα hδ hBlow hBhigh hΛJspec hRmem
+      hβα hδ hBlow hBhigh hΛJspec hRmem
   change
     N.Mem (U.subtypeL.adjoint ∘L Wc.subtypeL) ∧
-      δ * N.gaugeReal (U.subtypeL.adjoint ∘L Wc.subtypeL) ≤ N.gaugeReal R at hraw
+      δ * N.gaugeReal (U.subtypeL.adjoint ∘L Wc.subtypeL) ≤
+        N.gaugeReal ((R ∘L U.subtypeL).adjoint ∘L Wc.subtypeL) at hraw
   have hambient := projectionProduct_mem_and_gauge_le_overlap
     N U Wc hraw.1
   -- Duplicated with `selfAdjointSpectralSubspace_compl_eq_orthogonal`'s own `hproj` in
@@ -338,13 +348,99 @@ theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
         U.starProjection ∘L Wc.starProjection := by
     unfold sinTwoThetaIdealBlock
     rw [hWcProjection]
+  have hRadj : R.adjoint = R :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hR
+  have hUadjProj : U.subtypeL.adjoint ∘L U.starProjection = U.subtypeL.adjoint := by
+    ext x
+    simp only [Submodule.adjoint_subtypeL, ContinuousLinearMap.comp_apply]
+    exact Submodule.starProjection_eq_self_iff.mpr
+      (U.starProjection_apply_mem x)
+  have hWcProj : (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection ∘L
+      Wc.subtypeL = Wc.subtypeL := by
+    ext v
+    change (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection (v : H)
+      = (v : H)
+    rw [← hWcProjection]
+    exact Wc.starProjection_eq_self_iff.mpr v.property
+  have hfac : (R ∘L U.subtypeL).adjoint ∘L Wc.subtypeL =
+      U.subtypeL.adjoint ∘L
+        (U.starProjection ∘L R ∘L
+          (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection) ∘L
+        Wc.subtypeL := by
+    rw [ContinuousLinearMap.adjoint_comp, hRadj]
+    calc
+      U.subtypeL.adjoint ∘L R ∘L Wc.subtypeL
+          = (U.subtypeL.adjoint ∘L U.starProjection) ∘L R ∘L
+              ((Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection ∘L
+                Wc.subtypeL) := by
+            rw [hUadjProj, hWcProj]
+      _ = U.subtypeL.adjoint ∘L
+            (U.starProjection ∘L R ∘L
+              (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection) ∘L
+            Wc.subtypeL := by
+            rfl
+  have hMidMem : N.Mem (U.starProjection ∘L R ∘L
+      (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection) :=
+    N.comp_mem U.starProjection
+      (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection hRmem
+  have hcontract : N.gaugeReal ((R ∘L U.subtypeL).adjoint ∘L Wc.subtypeL) ≤
+      N.gaugeReal (U.starProjection ∘L R ∘L
+        (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection) := by
+    rw [hfac]
+    have hUadjNorm : ‖U.subtypeL.adjoint‖ ≤ 1 := by
+      rw [ContinuousLinearMap.adjoint.norm_map]
+      exact opNorm_le_one_of_isometry (fun _ => rfl)
+    have hWcNorm : ‖Wc.subtypeL‖ ≤ 1 :=
+      opNorm_le_one_of_isometry (fun _ => rfl)
+    exact N.gaugeReal_comp_le_of_contractions U.subtypeL.adjoint Wc.subtypeL
+      hMidMem hUadjNorm hWcNorm
   rw [hblock]
   refine ⟨hambient.1, ?_⟩
   calc
     δ * N.gaugeReal (U.starProjection ∘L Wc.starProjection) ≤
         δ * N.gaugeReal (U.subtypeL.adjoint ∘L Wc.subtypeL) :=
       mul_le_mul_of_nonneg_left hambient.2 hδ.le
-    _ ≤ N.gaugeReal R := hraw.2
+    _ ≤ N.gaugeReal ((R ∘L U.subtypeL).adjoint ∘L Wc.subtypeL) := hraw.2
+    _ ≤ N.gaugeReal (U.starProjection ∘L R ∘L
+        (Uᗮ.map (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection) := hcontract
+
+/-- Residual reflection form of unbounded sine two theta at rectangular
+ideal-gauge scope.  The block form above, with the block contracted back to the
+whole reflection residual. -/
+theorem sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
+    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (R : H →L[ℂ] H) (hR : IsSelfAdjointOperator R)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (V : Submodule ℂ H) [V.HasOrthogonalProjection]
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hBlow : SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB) β)
+    (hBhigh : SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
+    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
+    (hJintertwines : ∀ x : A.domain,
+      (A.addBounded R).toLinearMap
+          ⟨V.reflectionOperator (x : H), hJdom x⟩ =
+        V.reflectionOperator (A.toLinearMap x))
+    (hRmem : N.Mem R) :
+    N.Mem (sinTwoThetaIdealBlock
+        (selfAdjointSpectralSubspace A hA B hB) V) ∧
+      δ * N.gaugeReal (sinTwoThetaIdealBlock
+        (selfAdjointSpectralSubspace A hA B hB) V) ≤ N.gaugeReal R := by
+  obtain ⟨hmem, hle⟩ := sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap
+    N A hA R hR B hB V hβα hδ hBlow hBhigh hBcomplSpec hJdom hJintertwines hRmem
+  refine ⟨hmem, hle.trans ?_⟩
+  exact N.gaugeReal_comp_le_of_contractions
+    (selfAdjointSpectralSubspace A hA B hB).starProjection
+    ((selfAdjointSpectralSubspace A hA B hB)ᗮ.map
+      (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection hRmem
+    (Submodule.starProjection_norm_le _)
+    (Submodule.starProjection_norm_le _)
 
 /-- Canonical bounded-perturbation unbounded sine-two-theta theorem at
 rectangular ideal-gauge scope. -/

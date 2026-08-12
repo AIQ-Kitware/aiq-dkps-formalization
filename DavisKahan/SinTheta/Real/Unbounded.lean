@@ -54,6 +54,33 @@ theorem sinTheta_unbounded_real
     N hA₀ hΛ₁ hδ hgap hEq hC.1
   exact ⟨hRaw.1, hRaw.2.trans hC.2⟩
 
+/-- **Block form of the real unbounded sine-theta estimate.**  The right-hand
+side is the residual block between the two coordinate spaces, before it is
+contracted back to the whole residual.  The sharp directed residual
+`sin 2Theta_0` estimate needs it at this stage. -/
+theorem sinTheta_unbounded_real_block
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
+    (hA : D.A.IsSelfAdjoint)
+    (hA₀ : D.A₀.IsSelfAdjoint)
+    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hF₁ : IsometricEmbedding D.F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hR : N.Mem D.residual) :
+    N.Mem (D.X.adjoint ∘L D.F₁) ∧
+      δ * N.gauge (D.X.adjoint ∘L D.F₁)
+        ≤ N.gauge (D.residual.adjoint ∘L D.F₁) := by
+  have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
+  have hC := adjointResidualBlock_mem_and_gauge_le N.toSymmetricOperatorIdealFamily D hF₁ hR
+  have hRaw := davisKahan1970_sylvester_real
+    N hA₀ hΛ₁ hδ hgap hEq hC.1
+  have hmem : N.Mem (D.residual.adjoint ∘L D.F₁) :=
+    N.toSymmetricOperatorIdealFamily.comp_right_mem D.F₁
+      (N.toSymmetricOperatorIdealFamily.adjoint_mem hR)
+  refine ⟨hRaw.1, hRaw.2.trans (le_of_eq ?_)⟩
+  exact N.toSymmetricOperatorIdealFamily.gaugeReal_neg hmem
+
 /-- Exact real isometric theorem in directed sine form. -/
 theorem sinTheta_unbounded_exact_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))

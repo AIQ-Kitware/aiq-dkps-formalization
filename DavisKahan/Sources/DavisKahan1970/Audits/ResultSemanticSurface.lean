@@ -132,6 +132,9 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative
 #check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real
 #check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm
+#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExterior
 
 /-! ## S2-tan-two-theta: Double-angle tangent theorem
 
@@ -179,9 +182,10 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
+#check @TauCeti.DavisKahan1970.proposition3_4_source_full_complex
+#check @TauCeti.DavisKahan1970.proposition3_4_source_full_real
 #check @TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full
 #check @TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation
-#check @TauCeti.DavisKahan1970.proposition3_4_source_full_real
 
 /-! ## DK-3.1-thm: Classification of pairs of subspaces
 
@@ -387,4 +391,6 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm
 #check @TauCeti.DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects
 

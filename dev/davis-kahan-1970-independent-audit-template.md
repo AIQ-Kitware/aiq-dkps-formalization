@@ -11,7 +11,7 @@ The two accounting layers are deliberately both visible:
 - Section 10 questions, explicitly deferred/unproved claims, definitions, proof-only derivations, examples, numerical working, historical/external results, and theorem-adjacent remarks remain visible in source fidelity but do not enlarge the denominator.
 - A false counted result remains in the denominator and requires exact formal refutation plus the repository's separate best-effort repair disposition.
 
-Current result-level status: **25/29 terminal**, **4 awaiting semantic closure**.
+Current result-level status: **28/29 terminal**, **1 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -238,9 +238,9 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `unnumbered_theorem`
 - **Exact source anchor:** Section 2, sin 2 theta theorem
-- **Result disposition:** `reopened_pending_repair`
+- **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `reopened_pending_repair`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Organizational source-block hash:** `7da711fdbd912b64b5aa6f2efc5c4255bcbe796831a18b99c92712024b81c70b`
 
@@ -284,7 +284,7 @@ Again the source distinguishes the directed residual statement from the ambient 
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:390`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:723`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:390`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:606`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -315,6 +315,24 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:404`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:207`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:201`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExterior`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:245`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -727,9 +745,9 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `proposition`
 - **Exact source anchor:** Proposition 3.4
-- **Result disposition:** `reopened_pending_repair`
+- **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `reopened_pending_repair`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Organizational source-block hash:** `a4914037fecd9b2f6193105f137f3a59d160e47ca70747bb4a6c430477038990`
 
@@ -756,6 +774,18 @@ Under the same direct-rotation setup, if
 
 ### Source-facing Lean declarations
 
+#### `TauCeti.DavisKahan1970.proposition3_4_source_full_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:138`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_4_source_full_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:119`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`
 
 Source location candidates: `DavisKahan/Frontier/Section3.lean:1830`
@@ -765,12 +795,6 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`
 
 Source location candidates: `DavisKahan/Frontier/Section3.lean:1981`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.proposition3_4_source_full_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:188`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2661,9 +2685,9 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `theorem`
 - **Exact source anchor:** Theorem 8.2
-- **Result disposition:** `reopened_pending_repair`
+- **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `reopened_pending_repair`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Organizational source-block hash:** `8af6a38667dbf398e65e1b4460763ab627b559607ac519214c35402797c1b48e`
 
@@ -2757,6 +2781,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm`
 
 Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:290`, `DavisKahan/Frontier/Section8SourceTheorem82Real.lean:608`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects`
+
+Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:227`, `DavisKahan/Frontier/Section8SourceTheorem82.lean:595`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`
+
+Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:261`, `DavisKahan/Frontier/Section8SourceTheorem82Real.lean:380`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3091,8 +3127,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 267 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **25 currently terminal results independently reconfirmed:** yes / no
-- **4 currently nonterminal/pending results resolved by this audit:** yes / no
+- **28 currently terminal results independently reconfirmed:** yes / no
+- **1 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

@@ -165,6 +165,7 @@ private theorem unboundedReflectionTangent_congr_unboundedExactReal
 
 /-! ## Shared real-to-complex hypothesis transport -/
 
+omit [CompleteSpace E] in
 /-- The domain commutation relation complexifies coordinatewise. -/
 private theorem complexified_reducing_commutation
     {A : E →ₗ.[ℝ] E} {B Z : E →L[ℝ] E}
