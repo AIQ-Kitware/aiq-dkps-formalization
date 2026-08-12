@@ -1,6 +1,0 @@
-DavisKahan/Experimental/Scratch/Section4/InfiniteIdealDominance.lean
-DavisKahan/Experimental/Scratch/Section4/FiniteSourceSurface.lean
-DavisKahan/Experimental/Scratch/Section4/All.lean
-dev/section4-scratch-candidates-7f9f562.json
-dev/overlays/section4-independent-scratch-7f9f562-gpt56.md
-dev/overlays/section4-independent-scratch-7f9f562-gpt56.manifest.txt

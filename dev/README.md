@@ -17,7 +17,7 @@ Read `../AGENTS.md` first, then route by task instead of reading `dev/` linearly
 | [`tauceti/README.md`](tauceti/README.md) | Current Tau Ceti engineering authorities and the boundary between maintained status and migration history. |
 | [`davis-kahan-1970-full-source-census.md`](davis-kahan-1970-full-source-census.md) and [`davis-kahan-1970-frontier-status.md`](davis-kahan-1970-frontier-status.md) | Current Davis--Kahan source coverage and the remaining proof frontier. |
 
-`LANES.md` is only a retirement notice for the former multi-agent lane system.
+`LANES.md` is retained only because one legacy consistency helper still parses it; it is not a work board.
 
 The governing policy is in [`../AGENTS.md`](../AGENTS.md), not here. It defines
 the dual-track split (Tau Ceti extraction primary, Davis--Kahan source fidelity
@@ -27,7 +27,7 @@ maintenance), the dependency firewall, and the completion-claim discipline.
 
 ```text
 dev/
-  LANES.md                          # Retirement notice for the former lane system
+  LANES.md                          # Legacy machine-parsed retirement artifact
   SEARCH.md                         # How to search engineering memory
   lean-proof-engineering-lessons.md # Recurring Lean elaboration/API/parser traps
   mathlib-proof-polishing.md        # Reference: "folding" proofs to Mathlib style
@@ -45,10 +45,11 @@ dev/
 ```
 
 Alongside those, `dev/` holds the Davis--Kahan source-fidelity ledgers:
-the maintained census/frontier data and generated views, plus historical design
-records that explain how difficult gaps were closed.  Dated completion plans are
-not current queues. Several `.json` files are read or written by
-`scripts/check_*.py` — do not hand-edit one without running its checker.
+the maintained census/frontier data and generated views, plus a small number of
+stable historical notes that are still cited by source files or checkers. Dated
+campaign handoffs and status snapshots belong in Git history rather than the
+working tree. Several `.json` files are read or written by `scripts/check_*.py` —
+do not hand-edit one without running its checker.
 
 ### Where a new note goes
 
@@ -60,12 +61,11 @@ not current queues. Several `.json` files are read or written by
 - Anything that is only useful with the user in the loop → agent auto-memory,
   not a file here.
 
-Resist adding a dated one-off note. The tree accumulated about ninety of them
-between 2026-07-18 and 07-24, they went stale within days, and reading them as
-current cost a later session two reversed lanes. They now sit in
-[`topurge/`](topurge/MANIFEST.md), which **stays** — jon decided on 2026-07-30
-not to delete it. Treat those files as a labelled archive, not as pending work. If a note is worth
-writing, it is worth putting in the file that already owns the topic.
+Resist adding a dated one-off note. The tree accumulated many of them during
+July campaigns, they went stale within days, and later sessions repeatedly read
+old work queues as current. Those historical prose archives have been removed
+from the working tree; Git history is the archive. If a note is worth writing,
+it is worth putting in the file that already owns the topic.
 
 ## `dev/benchmark-candidates/`
 

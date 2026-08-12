@@ -49,8 +49,8 @@ rg -n "provenance|claude-|backport|staging|fork|disclosure|grep.*comment|false.p
    journals. **Do not load the whole corpus** — it is a lookup memory, not a
    cold-start essay.
 5. When a lesson becomes durable project *policy*, promote it into the relevant
-   `docs/` doc (`docs/challenge/`, `docs/planning/pr-decisions.md`) and leave the
-   postmortem here.
+   maintained owner (`AGENTS.md`, a package README, or `docs/challenge/`) and leave
+   the postmortem here.
 
 ## The ground-truth checks (run these, don't guess)
 

@@ -1,4 +1,0 @@
-DavisKahan/Experimental/InfiniteDimensional/SinTheta/RestrictionCompat.lean
-DavisKahan/Experimental/InfiniteDimensional/SinTheta/General.lean
-dev/overlays/sintheta-general-current-api-ee5673e-gpt56.md
-dev/overlays/sintheta-general-current-api-ee5673e-gpt56.manifest.txt

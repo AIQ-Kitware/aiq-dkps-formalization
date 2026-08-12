@@ -1,7 +1,0 @@
-AGENTS.md
-dev/LANES.md
-docs/planning/tauceti-adaptation-and-spectra-extraction.md
-docs/planning/opus-next-paper-completion-campaign.md
-dev/opus-next-agent-prompt.md
-dev/overlays/milestone-first-opus-plan-dfd9d37-gpt56.md
-MILESTONE_FIRST_OPUS_PLAN_MANIFEST.txt
