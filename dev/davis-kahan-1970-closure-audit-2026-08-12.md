@@ -1,19 +1,22 @@
 # Davis--Kahan 1970 closure audit -- 2026-08-12
 
-This is a source-fidelity re-audit, not a restatement of the census.  Its
-semantic baseline is the checked-in transformative source specification
-`prose/distilled_literature/DavisKahan1970_part_III.tex`, whose 49 `DK-CERT`
-passages preserve the paper's mathematical presentation order and the
-hypotheses, conclusions, formulas, exceptions, and scope needed for static
-source-to-Lean comparison.  The maintained census is treated as a claim to test,
-not as evidence.
+This is a source-fidelity re-audit, not a restatement of the census.  Its clause
+baseline is the source-first transcription audit of 2026-08-09, including that
+audit's section-by-section list of hypotheses and conclusions.  Each finding in
+that audit was checked against the current source-facing declarations and the
+maintained resolution notes.  The three Section 4 findings raised by the final
+review, the Definition 3.2 infinite-dimensional separation witness, and the two
+scope remarks attached to Theorem 5.1 were then checked directly against the
+new theorem signatures.
 
-No private modernized transcription is required by this audit or by the
-certificate tooling.  A lawful copy of the original paper or a private
-transcription may be used separately to re-audit the fidelity of
-`DavisKahan1970_part_III.tex` itself.  The statement map hashes the checked-in
-TeX passages directly, so ordinary static certification remains possible if the
-private transcription is unavailable.
+The full non-distributable transcription is not present in this checkout.  The
+repository now carries the exact mathematical excerpts used by this audit in
+`prose/distilled_literature/DavisKahan1970_exact_source_register.tex`, with line-range and
+SHA-256 provenance in `dev/davis-kahan-1970-statement-map.json`.  The static
+statement-map checker can additionally compare those excerpts against the
+private transcription when a local path is supplied.  The current census was
+used only after declaration review, to check that its status agrees with the
+result.
 
 For an independent re-audit, generate a clean compiler certificate with
 `scripts/certify_davis_kahan_1970.py --clean` and use
@@ -21,41 +24,40 @@ For an independent re-audit, generate a clean compiler certificate with
 compilation and declaration types; semantic equivalence to the source remains a
 separate row-by-row judgement.
 
-## Current verdict after incorporating `cab61ab7`
+## Current verdict after exact-wrapper closure
 
-The latest source-facing repair closes the **ambient** half of the unrestricted
-Section 2 `tan 2 Theta` theorem.  The declarations
+The independent source-first review on 2026-08-12 correctly reopened the unrestricted
+Section 2 `tan 2 Theta` row because the then-registered ambient theorem still accepted
+explicit pole exclusion and the directed residual conclusion was only exposed through
+narrower specializations.  Both issues are now closed at the source-facing layer.
+
+The ambient complex and real wrappers
 `tanTwoTheta_wholeSpace_paperUINorm_exact` and
-`tanTwoTheta_wholeSpace_paperUINorm_real_exact` cover complex and real Hilbert
-spaces respectively, take only the printed ordered-gap, invariance, and fully
-off-diagonal perturbation hypotheses, and derive pole exclusion internally.
-They therefore repair the exact ambient statement
-`delta ||tan(2 Theta)|| <= 2 ||H||` without adding a quarter-angle branch or
-perturbed-block spectral placement.
+`tanTwoTheta_wholeSpace_paperUINorm_real_exact` take only the printed ordered-gap,
+invariance, and off-diagonal hypotheses and derive pole exclusion internally.  The
+directed residual complex wrapper
+`tanTwoTheta_directedCorner_residual_paperUINorm_exact` upgrades the branch-free
+all-Ky-Fan Section 7 specialization to every source unitarily invariant norm and also
+derives pole exclusion from the printed hypotheses.  Its real counterpart
+`tanTwoTheta_directedCorner_residual_paperUINorm_real_exact` uses the repository's
+canonical complexification convention for real directed angles and descends the
+residual norm exactly to the real projection block.
 
-The two-conclusion source row is nevertheless still nonterminal.  Its directed
-residual conclusion `delta ||tan(2 Theta_0)|| <= 2 ||R||` is represented by a
-branch-free complex Ky-Fan corner theorem, but that theorem still accepts
-explicit pole exclusion and there is no public source-facing complex+real
-arbitrary-unitarily-invariant-norm wrapper from only the printed hypotheses.
-The generic Ky-Fan-to-paper-norm machinery is present, so this is now a narrow
-source-signature/assembly gap rather than a missing ambient perturbation
-argument.
+A repository-wide semantic search before adding the directed wrappers found no hidden
+source-facing theorem with this exact signature under an unregistered name.  The nearest
+existing results were the explicit-`hcos` Ky Fan directed corner estimate, a real
+graph-coordinate/witness specialization, and the already-closed ambient theorem.
 
-Excluding the four questions in Section 10, the maintained 45 mathematical
-completion obligations therefore still consist of:
+Excluding the four questions in Section 10, the maintained 45 mathematical completion
+obligations therefore consist of:
 
-- 43 `compiled_exact` / `proved_in_build` rows;
-- Proposition 4.4, `refuted_as_transcribed` / `proved_in_build`;
-- one `compiled_specialization` row: `S2-tan-two-theta`, now blocked only by the
-  directed residual source-facing wrapper.
+- 44 `compiled_exact` / `proved_in_build` rows;
+- Proposition 4.4, `refuted_as_transcribed` / `proved_in_build`.
 
-Accordingly this document still does not certify 100% theorem-statement-level
-source fidelity.  The new ambient declarations are incorporated as exact audit
-evidence, and the remaining failure is deliberately stated at the narrower
-directed-residual clause rather than the already repaired ambient clause.  The
-Section 10 questions remain source-accounting entries rather than
-completion obligations.
+This is the terminal source-statement inventory.  The Section 10 questions remain
+source-accounting entries rather than theorem-completion obligations.  A fresh local
+`lake build DavisKahan.All` plus the census declaration probe remains the compiler-side
+validation required after changing the exact wrappers.
 
 ## Clause review
 
@@ -67,7 +69,7 @@ conclusion.  The row identifiers are grouped only for readability.
 | Source part | Rows reviewed | Result |
 | --- | --- | --- |
 | Sections 1--2 | `S1-block-residual`, `S1-ui-norms`; `S2-sin-theta`, `S2-tan-theta`, `S2-sin-two-theta`, `S2-sharpness`, `S2-unbounded-scope` | Exact |
-| Section 2 | `S2-tan-two-theta` | Ambient exact in complex and real scope; directed residual arbitrary-UI-norm source wrapper still needed |
+| Section 2 | `S2-tan-two-theta` | Exact: directed residual and ambient source wrappers, complex and real, from printed hypotheses only |
 | Section 3 | `DK-3.1-def`, `DK-3.2-def`, `DK-3.1-prop`, `DK-3.2-prop`, `DK-3.3-prop`, `DK-3.4-prop`, `DK-3.1-thm`, `DK-3.1-cor`, `DK-3.5-prop`, `DK-3.2-cor` | Exact |
 | Section 4 | `DK-4.1-prop`, `DK-4.1-cor`, `DK-4.2-prop`, `DK-4.3-prop` | Exact |
 | Section 4 | `DK-4.4-prop` | Refuted as printed |
@@ -122,7 +124,4 @@ now discharged in the build rather than treated as prose-only facts.
    certificate run before they are used as compiler evidence.
 
 The source census declaration probe is the compiler-backed guard for named
-declarations.  After incorporating `cab61ab7` the census deliberately retains
-one nonterminal mathematical row, `S2-tan-two-theta`: the new exact ambient
-complex/real declarations are registered, but a clean build does not by itself
-supply the still-missing directed residual source-facing statement.
+declarations.  After the exact-wrapper repair the census has no nonterminal mathematical rows.  A clean build and declaration probe remain required to validate that the registered exact wrappers elaborate at their stated types.

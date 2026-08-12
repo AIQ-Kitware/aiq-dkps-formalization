@@ -181,38 +181,39 @@
       "source_kind": "unnumbered_theorem",
       "source_anchor": "Section 2, tan 2 theta theorem",
       "completion_obligation": true,
-      "expected_status": "compiled_specialization",
+      "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-tan-two-theta",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
-        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact",
-        "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_all_kyFan_branchFree",
-        "TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative_lowerBlock",
-        "TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.mul_gauge_le_of_all_mul_kyFan_le",
-        "TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC"
+        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact"
       ],
       "audit_clauses": [
         {
           "id": "S2-tan-two-theta.hypotheses",
-          "description": "Printed source hypotheses only: ordered spectral gap between A_0 and A_1 plus H_0 = H_1 = 0; no independent pole-exclusion or perturbed-Q-block placement hypothesis. The new exact ambient complex and real wrappers satisfy this clause and derive pole exclusion internally.",
+          "description": "Printed source hypotheses only: ordered spectral gap between A_0 and A_1 plus H_0 = H_1 = 0; no independent pole-exclusion or perturbed-Q-block placement hypothesis. The exact directed and ambient wrappers derive pole exclusion internally from these hypotheses.",
           "review_declarations": [
+            "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact",
             "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
             "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact"
           ]
         },
         {
           "id": "S2-tan-two-theta.directed",
-          "description": "Directed conclusion: delta * ||tan(2 Theta_0)|| <= 2 ||R|| for every source unitarily invariant norm. The branch-free complex Ky Fan corner estimate and the generic Ky-Fan-to-paper-norm upgrade are compiled, but there is still no public source-facing complex+real wrapper deriving the required pole exclusion from only the printed hypotheses and stating this directed residual conclusion directly.",
+          "description": "Directed conclusion: delta * ||tan(2 Theta_0)|| <= 2 ||R|| for every source unitarily invariant norm. The complex source-facing wrapper upgrades the branch-free all-Ky-Fan directed-corner estimate to an arbitrary PaperUnitaryInvariantNorm and derives pole exclusion from the printed spectral hypotheses; the real exact wrapper transports the same statement through the canonical complexification convention already used for the paper's real directed angle while descending the residual norm to the real block.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_all_kyFan_branchFree",
-            "TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative_lowerBlock",
-            "TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.mul_gauge_le_of_all_mul_kyFan_le"
+            "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_branchFree",
+            "TauCeti.DavisKahan1970.paperTanTwoDirectedCornerR"
           ]
         },
         {
           "id": "S2-tan-two-theta.ambient",
-          "description": "Ambient conclusion: delta * ||tan(2 Theta)|| <= 2 ||H|| for every source unitarily invariant norm, from only the printed hypotheses. This clause is now represented by exact source-facing complex and real wrappers.",
+          "description": "Ambient conclusion: delta * ||tan(2 Theta)|| <= 2 ||H|| for every source unitarily invariant norm, from only the printed hypotheses. Exact source-facing complex and real wrappers derive the pole exclusion internally and the modulus bridge identifies the branch-free positive representative with the literal signed functional-calculus tan(2 Theta) at the level seen by source UI norms.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
             "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact",
