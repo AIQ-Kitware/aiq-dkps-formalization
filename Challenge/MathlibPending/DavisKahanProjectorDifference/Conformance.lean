@@ -3,6 +3,11 @@ import DavisKahan.FiniteDimensional.Core.All
 /-!
 # Sharp finite Davis--Kahan projector-difference theorems
 
+This is the canonical modern projector/subspace-distance presentation that sits
+alongside the four trigonometric headline challenges.  It is not a fifth named
+Section 2 trigonometric theorem; it is the familiar projector formulation of
+the same perturbation theory.
+
 The factor-one operator-norm theorem for two reducing subspaces carrying
 matching selected and complementary spectral gaps, followed by its canonical
 spectral-subspace specialization. No rank comparison is assumed.

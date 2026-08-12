@@ -2,7 +2,9 @@
   "challenge_module": "Challenge.MathlibPending.DavisKahanTanTheta.Conformance",
   "solution_module": "Challenge.MathlibPending.DavisKahanTanTheta.Leaderboard",
   "theorem_names": [
-    "TauCeti.DavisKahanTheory.partIII_tanTheta_vector"
+    "TauCeti.DavisKahanTheory.partIII_tanTheta_source_uiNorm",
+    "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm",
+    "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent"
   ],
   "permitted_axioms": [
     "propext",
