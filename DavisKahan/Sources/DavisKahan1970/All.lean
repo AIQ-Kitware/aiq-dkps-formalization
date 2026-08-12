@@ -25,6 +25,7 @@ import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
 import DavisKahan.Sources.DavisKahan1970.Section3AcuteCounterexample
 import DavisKahan.Sources.DavisKahan1970.Section3AcuteDirectRotation
 import DavisKahan.Sources.DavisKahan1970.Section3PrincipalSquareRoot
+import DavisKahan.Sources.DavisKahan1970.Section3Proposition34
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Real
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
 import DavisKahan.Sources.DavisKahan1970.Section4
@@ -39,6 +40,8 @@ import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
 import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaWholeSpace
 import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
 import DavisKahan.Sources.DavisKahan1970.TanTheta

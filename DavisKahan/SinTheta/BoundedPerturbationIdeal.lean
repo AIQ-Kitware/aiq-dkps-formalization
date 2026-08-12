@@ -100,5 +100,57 @@ theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
       _ = N.gaugeReal V := N.gaugeReal_adjoint hVmem
   exact ⟨hRaw'.1, hRaw'.2.trans hProjectedGauge⟩
 
+/-- **Block form of the ideal-gauge bounded-perturbation sine-theta estimate.**
+
+`sinTheta_addBounded_gauge_of_spectrum_gap_isometric` finishes by contracting the
+projected perturbation block back to the whole perturbation, which costs the
+sharpness that the double-angle argument needs.  This is the same estimate one
+step earlier: the right-hand side is the single block of the perturbation
+between the two subspaces, which is what the Sylvester engine actually produces.
+
+The isometry hypotheses are absent because only the contraction step used them.
+-/
+theorem sinTheta_addBounded_gauge_block_of_spectrum_gap
+    (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
+    [N.toOperatorIdealFamily.IsComplete]
+    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
+    (A₀ : DKClosedOperator (H := F)) (hA₀ : A₀.IsSelfAdjoint)
+    (Λ₁ : DKClosedOperator (H := G)) (hΛ₁ : Λ₁.IsSelfAdjoint)
+    (X : F →L[ℂ] H) (F₁ : G →L[ℂ] H)
+    (hXdom : ∀ x : A₀.domain, X (x : F) ∈ A.domain)
+    (hXintertwines : ∀ x : A₀.domain,
+      A.toLinearMap ⟨X (x : F), hXdom x⟩ = X (A₀.toLinearMap x))
+    (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
+    (hF₁intertwines : ∀ y : Λ₁.domain,
+      (A.addBounded V).toLinearMap ⟨F₁ (y : G), hF₁dom y⟩ =
+        F₁ (Λ₁.toLinearMap y))
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hA₀low : SemiboundedBelow A₀ β) (hA₀high : SemiboundedAbove A₀ α)
+    (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁.toLinearPMap)
+    (hVmem : N.Mem V) :
+    N.Mem (X.adjoint ∘L F₁) ∧
+      δ * N.gaugeReal (X.adjoint ∘L F₁) ≤
+        N.gaugeReal ((V ∘L X).adjoint ∘L F₁) := by
+  let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
+    hXdom hXintertwines hF₁dom hF₁intertwines
+  have hD : D.A.IsSelfAdjoint := by
+    change (A.addBounded V).IsSelfAdjoint
+    exact addBounded_isSelfAdjoint A hA V hV
+  have hVadj : N.Mem V.adjoint := N.adjoint_mem hVmem
+  have hLeftMem : N.Mem (X.adjoint ∘L V.adjoint) :=
+    N.comp_left_mem (E := H) (F := H) (G := F) X.adjoint hVadj
+  have hProjectedMem : N.Mem ((V ∘L X).adjoint ∘L F₁) := by
+    rw [ContinuousLinearMap.adjoint_comp]
+    exact N.comp_right_mem (E := H) (F := F) (H := G) F₁ hLeftMem
+  have hRaw := sinTheta_unbounded_gauge_of_spectrum_gap
+    N D hD hA₀ hΛ₁ hβα hδ hA₀low hA₀high hΛspec hProjectedMem
+  change
+    N.Mem (X.adjoint ∘L F₁) ∧
+      δ * N.gaugeReal (X.adjoint ∘L F₁) ≤
+        N.gaugeReal ((V ∘L X).adjoint ∘L F₁) at hRaw
+  exact hRaw
+
 end DavisKahan
 end TauCeti

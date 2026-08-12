@@ -3,14 +3,16 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Frontier.Section3
+import DavisKahan.Sources.DavisKahan1970.Section3Proposition34
 import DavisKahan.Geometry.Polar.DirectRotationReal
 
 /-!
 # Davis--Kahan 1970, Proposition 3.4 over real Hilbert spaces
 
-The full nonacute complex theorem is already compiled as
-`TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`.
+The full nonacute complex theorem with the genuine Definition 3.1 conclusion is
+`TauCeti.DavisKahan1970.proposition3_4_source_full_complex`, in the companion
+module `Section3Proposition34.lean`, which also owns the positivity upgrade
+`positiveDiagonalBlocks_of_sq` that both scalar fields use.
 This file transports that theorem to the real scalar field without identifying
 reflected submodules by dependent rewriting.  Instead, the projection onto the
 real reflected subspace is complexified directly and identified algebraically
@@ -104,77 +106,6 @@ private theorem halfAngle_complexify
   rw [starProjection_complexifySubmodule]
   simp only [norm_sq, re_complexify, im_complexify]
   linarith
-
-section ComplexBlockUpgrade
-
-variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-variable (K L : Submodule ℂ H) [K.HasOrthogonalProjection] [L.HasOrthogonalProjection]
-
-/-- For a complex paper direct rotation, a known square identity forces both
-diagonal compressions to be self-adjoint.  Their recorded numerical-range signs
-therefore upgrade to genuine operator positivity. -/
-private theorem positiveDiagonalBlocks_of_sq
-    (T : H →L[ℂ] H)
-    (hT : IsPaperDirectRotation K L T)
-    (hsq : T * T = spectraReflectionProduct K L) :
-    (K.starProjection * T * K.starProjection).IsPositive ∧
-      (Kᗮ.starProjection * T * Kᗮ.starProjection).IsPositive := by
-  have hintR : T * K.reflectionOperator = L.reflectionOperator * T := by
-    rw [DavisKahan.reflectionOperator_eq_projection_add_projection_sub_one K,
-      DavisKahan.reflectionOperator_eq_projection_add_projection_sub_one L,
-      mul_sub, mul_add, mul_one, sub_mul, add_mul, one_mul, hT.intertwines]
-  have hconj : K.reflectionOperator * T * K.reflectionOperator = star T :=
-    DavisKahan.reflection_conjugate_eq_star_of_sq_of_intertwines
-      K L T hT.unitary_mem hsq hintR
-  have hsource_sa : IsSelfAdjoint (K.starProjection * T * K.starProjection) := by
-    rw [IsSelfAdjoint, star_mul, star_mul,
-      (isSelfAdjoint_starProjection K).star_eq]
-    calc
-      K.starProjection * star T * K.starProjection =
-          K.starProjection * (K.reflectionOperator * T * K.reflectionOperator) *
-            K.starProjection := by rw [hconj]
-      _ = (K.starProjection * K.reflectionOperator) * T *
-            (K.reflectionOperator * K.starProjection) := by
-          simp only [mul_assoc]
-      _ = K.starProjection * T * K.starProjection := by
-          rw [projection_mul_reflectionOperator_self K,
-            reflectionOperator_mul_projection_self K]
-  have hRsub : K.reflectionOperator = K.starProjection - Kᗮ.starProjection := by
-    rw [DavisKahan.reflectionOperator_eq_projection_add_projection_sub_one K]
-    have hsum : K.starProjection + Kᗮ.starProjection = (1 : H →L[ℂ] H) := by
-      apply ContinuousLinearMap.ext
-      intro x
-      simpa only [add_apply, one_apply_eq_self] using
-        K.starProjection_add_starProjection_orthogonal x
-    rw [← hsum]
-    abel
-  have hPcR : Kᗮ.starProjection * K.reflectionOperator = -Kᗮ.starProjection := by
-    rw [hRsub, mul_sub, DavisKahan.complementaryProjection_mul_projection K,
-      DavisKahan.complementaryProjection_sq K, zero_sub]
-  have hRPc : K.reflectionOperator * Kᗮ.starProjection = -Kᗮ.starProjection := by
-    rw [hRsub, sub_mul, DavisKahan.projection_mul_complementaryProjection K,
-      DavisKahan.complementaryProjection_sq K, zero_sub]
-  have hcomplement_sa : IsSelfAdjoint (Kᗮ.starProjection * T * Kᗮ.starProjection) := by
-    rw [IsSelfAdjoint, star_mul, star_mul,
-      (isSelfAdjoint_starProjection Kᗮ).star_eq]
-    calc
-      Kᗮ.starProjection * star T * Kᗮ.starProjection =
-          Kᗮ.starProjection * (K.reflectionOperator * T * K.reflectionOperator) *
-            Kᗮ.starProjection := by rw [hconj]
-      _ = (Kᗮ.starProjection * K.reflectionOperator) * T *
-            (K.reflectionOperator * Kᗮ.starProjection) := by
-          simp only [mul_assoc]
-      _ = (-Kᗮ.starProjection) * T * (-Kᗮ.starProjection) := by rw [hPcR, hRPc]
-      _ = Kᗮ.starProjection * T * Kᗮ.starProjection := by noncomm_ring
-  constructor
-  · refine ContinuousLinearMap.isPositive_def'.mpr ⟨hsource_sa, fun x => ?_⟩
-    rw [ContinuousLinearMap.reApplyInnerSelf_apply, inner_re_symm (𝕜 := ℂ)]
-    exact hT.source_compression_nonnegative x
-  · refine ContinuousLinearMap.isPositive_def'.mpr ⟨hcomplement_sa, fun x => ?_⟩
-    rw [ContinuousLinearMap.reApplyInnerSelf_apply, inner_re_symm (𝕜 := ℂ)]
-    exact hT.complement_compression_nonnegative x
-
-end ComplexBlockUpgrade
 
 /-- **Davis--Kahan 1970, Proposition 3.4, full nonacute real source scope.**
 

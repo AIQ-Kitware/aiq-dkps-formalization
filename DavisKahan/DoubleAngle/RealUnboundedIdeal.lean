@@ -119,6 +119,40 @@ theorem sinTheta_addBounded_gauge_real_isometric
     exact N.toSymmetricOperatorIdealFamily.gaugeReal_comp_right_le X hVmem hXnorm
   exact ⟨hraw.1, hraw.2.trans hResGauge⟩
 
+/-- **Block form of the real ideal-gauge bounded-perturbation sine-theta
+estimate.**  The right-hand side is the single block of the perturbation between
+the two coordinate spaces, before it is contracted back to the whole
+perturbation.  The sharp directed residual `sin 2Theta_0` estimate needs it at
+this stage. -/
+theorem sinTheta_addBounded_gauge_real_block
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (A : ClosedOperator (𝕜 := ℝ) (E := E)) (hA : A.IsSelfAdjoint)
+    (V : E →L[ℝ] E) (hV : IsSelfAdjointOperator V)
+    (A₀ : ClosedOperator (𝕜 := ℝ) (E := F)) (hA₀ : A₀.IsSelfAdjoint)
+    (Λ₁ : ClosedOperator (𝕜 := ℝ) (E := G)) (hΛ₁ : Λ₁.IsSelfAdjoint)
+    (X : F →L[ℝ] E) (F₁ : G →L[ℝ] E)
+    (hXdom : ∀ x : A₀.domain, X (x : F) ∈ A.domain)
+    (hXintertwines : ∀ x : A₀.domain,
+      A.toLinearMap ⟨X (x : F), hXdom x⟩ = X (A₀.toLinearMap x))
+    (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
+    (hF₁intertwines : ∀ y : Λ₁.domain,
+      (A.addBounded V).toLinearMap ⟨F₁ (y : G), hF₁dom y⟩ =
+        F₁ (Λ₁.toLinearMap y))
+    (hF₁iso : IsometricEmbedding F₁)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
+    (hVmem : N.Mem V) :
+    N.Mem (X.adjoint ∘L F₁) ∧
+      δ * N.gauge (X.adjoint ∘L F₁) ≤ N.gauge ((V ∘L X).adjoint ∘L F₁) := by
+  let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
+    hXdom hXintertwines hF₁dom hF₁intertwines
+  have hD : D.A.IsSelfAdjoint := by
+    change (A.addBounded V).IsSelfAdjoint
+    exact addBounded_isSelfAdjoint A hA V hV
+  have hResMem : N.Mem D.residual := by
+    change N.Mem (V ∘L X)
+    exact N.toSymmetricOperatorIdealFamily.comp_right_mem X hVmem
+  exact sinTheta_unbounded_real_block N D hD hA₀ hΛ₁ hF₁iso hδ hgap hResMem
+
 /-! ## The real directed `sin 2Θ` theorem -/
 
 section SinTwoTheta
@@ -177,7 +211,7 @@ overlap block — the source's `sin 2Θ₀` — lies in the ideal and satisfies
 
 There is no dimension hypothesis and no compactness hypothesis; membership in
 the ideal is *concluded*, exactly as in the complex statement. -/
-theorem sinTwoTheta_reflectionResidual_gauge_real
+theorem sinTwoTheta_reflectionResidual_block_gauge_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (R : E →L[ℝ] E) (hR : IsSelfAdjointOperator R)
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
@@ -194,7 +228,10 @@ theorem sinTwoTheta_reflectionResidual_gauge_real
     N.Mem (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA S hS) V) ∧
       δ * N.gauge (sinTwoThetaIdealBlock
-        (realSelfAdjointSpectralSubspace A hA S hS) V) ≤ N.gauge R := by
+        (realSelfAdjointSpectralSubspace A hA S hS) V) ≤
+        N.gauge ((realSelfAdjointSpectralSubspace A hA S hS).starProjection ∘L R ∘L
+          ((realSelfAdjointSpectralSubspace A hA S hS)ᗮ.map
+            (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) := by
   set U := realSelfAdjointSpectralSubspace A hA S hS with hU
   set Uc := realSelfAdjointSpectralSubspace A hA Sᶜ hS.compl with hUc
   set A₀ := realSelfAdjointSpectralRestriction A hA S hS with hA₀def
@@ -230,10 +267,10 @@ theorem sinTwoTheta_reflectionResidual_gauge_real
   have hXiso : IsometricEmbedding X := fun _ => rfl
   have hF₁iso : IsometricEmbedding F₁ :=
     isometricEmbedding_reflection_comp V (fun _ => rfl)
-  have hraw := sinTheta_addBounded_gauge_real_isometric N A hA R hR
+  have hraw := sinTheta_addBounded_gauge_real_block N A hA R hR
     A₀ (realSelfAdjointSpectralRestriction_isSelfAdjoint A hA S hS)
     Λ (realSelfAdjointSpectralRestriction_isSelfAdjoint A hA Sᶜ hS.compl)
-    X F₁ hXdom hXint hF₁dom hF₁int hXiso hF₁iso hδ hgap hRmem
+    X F₁ hXdom hXint hF₁dom hF₁int hF₁iso hδ hgap hRmem
   -- the reflected complementary projection, read through the ambient reflection
   have hFproj : F₁ ∘L F₁.adjoint =
       (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection := by
@@ -260,11 +297,99 @@ theorem sinTwoTheta_reflectionResidual_gauge_real
   have hambient := projectionProduct_mem_and_gauge_le_isometric
     N.toSymmetricOperatorIdealFamily U
     (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)) F₁ hF₁iso hFproj hraw.1
+  -- contract the rectangular block to the ambient one
+  have hF₁adjF₁ : F₁.adjoint ∘L F₁ = ContinuousLinearMap.id ℝ Uc := by
+    have hUcadj : Uc.subtypeL.adjoint ∘L Uc.subtypeL = ContinuousLinearMap.id ℝ Uc := by
+      ext v
+      rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.id_apply,
+        Submodule.adjoint_subtypeL, Submodule.subtypeL_apply]
+      exact congrArg (fun z : Uc => (z : E))
+        (Submodule.orthogonalProjectionOnto_mem_subspace_eq_self v)
+    have hJJ : (J ∘L J : E →L[ℝ] E) = ContinuousLinearMap.id ℝ E :=
+      Submodule.reflectionOperator_involutive V
+    calc F₁.adjoint ∘L F₁
+        = (Uc.subtypeL.adjoint ∘L J.adjoint) ∘L (J ∘L Uc.subtypeL) := by
+          rw [hF₁, ContinuousLinearMap.adjoint_comp]
+      _ = Uc.subtypeL.adjoint ∘L (J ∘L J) ∘L Uc.subtypeL := by
+          rw [hJ, adjoint_reflectionOperator V]
+          rfl
+      _ = Uc.subtypeL.adjoint ∘L Uc.subtypeL := by
+          rw [hJJ, ContinuousLinearMap.id_comp]
+      _ = ContinuousLinearMap.id ℝ Uc := hUcadj
+  have hPF : (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection ∘L F₁
+      = F₁ := by
+    rw [← hFproj, ContinuousLinearMap.comp_assoc, hF₁adjF₁,
+      ContinuousLinearMap.comp_id]
+  have hPX : X.adjoint ∘L U.starProjection = X.adjoint := by
+    rw [hX]
+    ext x
+    rw [ContinuousLinearMap.comp_apply, Submodule.adjoint_subtypeL,
+      Submodule.coe_orthogonalProjectionOnto_apply,
+      Submodule.coe_orthogonalProjectionOnto_apply]
+    exact Submodule.starProjection_eq_self_iff.mpr (U.starProjection_apply_mem x)
+  have hRadj : R.adjoint = R :=
+    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hR
+  have hfac : (R ∘L X).adjoint ∘L F₁ =
+      X.adjoint ∘L (U.starProjection ∘L R ∘L
+        (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) ∘L F₁ := by
+    rw [ContinuousLinearMap.adjoint_comp, hRadj]
+    calc X.adjoint ∘L R ∘L F₁
+        = (X.adjoint ∘L U.starProjection) ∘L R ∘L
+            ((Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection ∘L
+              F₁) := by rw [hPX, hPF]
+      _ = X.adjoint ∘L (U.starProjection ∘L R ∘L
+            (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) ∘L
+            F₁ := rfl
+  have hMid : N.Mem (U.starProjection ∘L R ∘L
+      (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) :=
+    N.toSymmetricOperatorIdealFamily.comp_mem U.starProjection
+      (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection hRmem
+  have hcontract : N.gauge ((R ∘L X).adjoint ∘L F₁) ≤
+      N.gauge (U.starProjection ∘L R ∘L
+        (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) := by
+    rw [hfac]
+    have hXadjNorm : ‖X.adjoint‖ ≤ 1 := by
+      rw [ContinuousLinearMap.adjoint.norm_map]
+      exact opNorm_le_one_of_isometry hXiso
+    exact N.toSymmetricOperatorIdealFamily.gaugeReal_comp_le_of_contractions
+      X.adjoint F₁ hMid hXadjNorm (opNorm_le_one_of_isometry hF₁iso)
   refine ⟨hambient.1, ?_⟩
   calc
     δ * N.gauge (sinTwoThetaIdealBlock U V) ≤ δ * N.gauge (X.adjoint ∘L F₁) :=
       mul_le_mul_of_nonneg_left hambient.2 hδ.le
-    _ ≤ N.gauge R := hraw.2
+    _ ≤ N.gauge ((R ∘L X).adjoint ∘L F₁) := hraw.2
+    _ ≤ N.gauge (U.starProjection ∘L R ∘L
+        (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection) := hcontract
+
+/-- **Davis--Kahan 1970, the directed `sin 2Theta` theorem over a REAL Hilbert
+space, reflection-residual form.**  The block form above with the block
+contracted back to the whole reflection residual. -/
+theorem sinTwoTheta_reflectionResidual_gauge_real
+    (N : KyFanDominantIdealFamily (𝕜 := ℝ))
+    (R : E →L[ℝ] E) (hR : IsSelfAdjointOperator R)
+    (V : Submodule ℝ E) [V.HasOrthogonalProjection]
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA S hS)
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
+    (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
+    (hJintertwines : ∀ x : A.domain,
+      (A.addBounded R).toLinearMap
+          ⟨V.reflectionOperator (x : E), hJdom x⟩ =
+        V.reflectionOperator (A.toLinearMap x))
+    (hRmem : N.Mem R) :
+    N.Mem (sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA S hS) V) ∧
+      δ * N.gauge (sinTwoThetaIdealBlock
+        (realSelfAdjointSpectralSubspace A hA S hS) V) ≤ N.gauge R := by
+  obtain ⟨hmem, hle⟩ := sinTwoTheta_reflectionResidual_block_gauge_real
+    A hA S hS N R hR V hδ hgap hJdom hJintertwines hRmem
+  refine ⟨hmem, hle.trans ?_⟩
+  exact N.toSymmetricOperatorIdealFamily.gaugeReal_comp_le_of_contractions
+    (realSelfAdjointSpectralSubspace A hA S hS).starProjection
+    ((realSelfAdjointSpectralSubspace A hA S hS)ᗮ.map
+      (V.reflection.toLinearEquiv : E →ₗ[ℝ] E)).starProjection hRmem
+    (Submodule.starProjection_norm_le _) (Submodule.starProjection_norm_le _)
 
 end SinTwoTheta
 
