@@ -219,28 +219,33 @@ def main() -> int:
     if unproved:
         print("  not proved: " + ", ".join(unproved))
 
+    # Row-level hostile certification remains useful triage, but it is not the
+    # denominator for "100% formalized".  Source-fidelity atoms are likewise not
+    # proof obligations.  Delegate formalization completion to the compact
+    # stated-result inventory checker.
+    result_checker = subprocess.run(
+        [sys.executable, str(ROOT / "scripts/check_davis_kahan_1970_result_inventory.py")],
+        cwd=ROOT,
+    )
+    if result_checker.returncode:
+        return result_checker.returncode
+
     statement_map = json.loads(MAP_PATH.read_text())
-    obligation_ids = {
+    row_obligation_ids = {
         item["id"] for item in statement_map.get("items", [])
         if item.get("completion_obligation") is True
     }
     by_id = {item["id"]: item for item in items}
-    certified = [
-        by_id[item_id] for item_id in obligation_ids
+    row_accepted = [
+        by_id[item_id] for item_id in row_obligation_ids
         if by_id[item_id].get("completion_certification") == "accepted"
         and by_id[item_id].get("status") in {"compiled_exact", "refuted_as_transcribed"}
         and by_id[item_id].get("verification") == "proved_in_build"
     ]
-    reopened = sorted(
-        item_id for item_id in obligation_ids
-        if by_id[item_id] not in certified
-    )
     print(
-        f"  hostile semantic completion: {len(certified)}/{len(obligation_ids)} explicit obligations accepted; "
-        f"{len(reopened)} reopened"
+        f"  organizational-row semantic triage: {len(row_accepted)}/{len(row_obligation_ids)} legacy row flags accepted "
+        "(diagnostic only; not the formalization denominator)"
     )
-    if reopened:
-        print("  reopened semantic obligations: " + ", ".join(reopened))
     return 0
 
 

@@ -14,9 +14,10 @@ for (2).
 Recommended compiler-evidence run:
     python3 scripts/certify_davis_kahan_1970.py --clean
 
-Once every completion obligation has passed hostile semantic review, add
-`--require-terminal` to require terminal source status, compiler verification, and
-`completion_certification = accepted` for every registered obligation.
+Once every *stated result* has passed hostile semantic review, add
+`--require-terminal`. The hard denominator is the compact formalization-result
+inventory, not proof equations in the source-fidelity inventory and not the 49
+organizational statement-map rows.
 
 `--clean` removes only this repository's `.lake/build`; dependency caches remain
 intact. `--clean-tauceti` additionally removes `external/TauCeti/.lake/build`.
@@ -36,6 +37,11 @@ import sys
 import tarfile
 import time
 from collections import defaultdict
+
+from check_davis_kahan_1970_result_inventory import (
+    completion_summary as formalization_result_completion_summary,
+    discover_inventory as discover_result_inventory,
+)
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 BUILD_ROOT = ROOT / "build"
@@ -282,6 +288,13 @@ def snapshot_inputs(outdir: pathlib.Path) -> dict[str, str]:
         ROOT / "lake-manifest.json",
         ROOT / "dev/davis-kahan-1970-independent-audit-prompt.md",
     ]
+    statement_map = json.loads(MAP_PATH.read_text(encoding="utf-8"))
+    fidelity_rel = statement_map.get("source_atom_inventory")
+    if isinstance(fidelity_rel, str) and fidelity_rel.strip():
+        paths.append(ROOT / fidelity_rel)
+    result_inventory = discover_result_inventory()
+    if result_inventory is not None and result_inventory.exists():
+        paths.append(result_inventory)
     target = outdir / "inputs"
     target.mkdir(parents=True, exist_ok=True)
     hashes: dict[str, str] = {}
@@ -298,35 +311,8 @@ def snapshot_inputs(outdir: pathlib.Path) -> dict[str, str]:
 
 
 def census_completion_summary() -> dict:
-    census = json.loads(CENSUS_PATH.read_text(encoding="utf-8"))
-    statement_map = json.loads(MAP_PATH.read_text(encoding="utf-8"))
-    by_id = {item["id"]: item for item in census["items"]}
-    obligations = [item for item in statement_map["items"] if bool(item.get("completion_obligation"))]
-    completion = [by_id[item["id"]] for item in obligations]
-    terminal = [
-        item for item in completion
-        if item.get("verification") == "proved_in_build"
-        and item.get("status") in {"compiled_exact", "refuted_as_transcribed"}
-        and item.get("completion_certification") == "accepted"
-    ]
-    nonterminal = [
-        {
-            "id": item.get("id"),
-            "status": item.get("status"),
-            "verification": item.get("verification"),
-            "completion_certification": item.get("completion_certification"),
-            "completion_holes": item.get("completion_holes", []),
-            "scope_gap": item.get("scope_gap"),
-            "blocked_by": item.get("blocked_by", []),
-        }
-        for item in completion if item not in terminal
-    ]
-    return {
-        "completion_obligations": len(completion),
-        "terminal_completion_obligations": len(terminal),
-        "source_coverage_terminal": len(terminal) == len(completion),
-        "nonterminal_rows": nonterminal,
-    }
+    """Return result-level formalization terminality, not row/source-atom counts."""
+    return formalization_result_completion_summary(require_terminal=False)
 
 
 def write_bundle_readme(outdir: pathlib.Path, certificate: dict) -> None:
@@ -334,7 +320,7 @@ def write_bundle_readme(outdir: pathlib.Path, certificate: dict) -> None:
 
 Overall compiler-certificate status: **{certificate.get('overall_status', 'unknown')}**
 
-Hostile-certified source-coverage terminality: **{certificate.get('source_coverage', {}).get('source_coverage_terminal', 'unknown')}** ({certificate.get('source_coverage', {}).get('terminal_completion_obligations', '?')}/{certificate.get('source_coverage', {}).get('completion_obligations', '?')} completion obligations currently terminal on all three axes (source status, compiler verification, hostile semantic certification)).
+Hostile-certified stated-result terminality: **{certificate.get('source_coverage', {}).get('source_coverage_terminal', 'unknown')}** ({certificate.get('source_coverage', {}).get('terminal_completion_obligations', '?')}/{certificate.get('source_coverage', {}).get('completion_obligations', '?')} formalization-result obligations terminal). The fine-grained source-fidelity inventory is audited separately and does not enlarge this theorem/result denominator.
 
 This bundle certifies compilation/name-resolution evidence only. It does not certify semantic equivalence between the paper and the Lean theorem types. Use `statement-audit.md` with the independent audit prompt snapshot under `inputs/` for that review.
 
@@ -352,11 +338,11 @@ sha256sum -c SHA256SUMS
 - `signatures.json`: compiler-printed types for every declaration registered by the Davis--Kahan source census.
 - `statement-audit.md`: registered passages from the distributable source specification paired with the primary Lean theorem types and a row-by-row audit checklist.
 - `logs/`: complete output of each certification command and the theorem-signature probe.
-- `inputs/`: snapshots of the distributable `DavisKahan1970_part_III.tex` source specification, statement map, census, formalization metadata, and audit prompt.
+- `inputs/`: snapshots of the distributable source specification, source-fidelity inventory, formalization-result inventory when present, statement map, census, formalization metadata, and audit prompt.
 
 `DavisKahan1970_part_III.tex` is both the readable transformative reconstruction and the mechanical statement-level semantic baseline. The certificate does not require or snapshot a private transcription.
 
-For a final 100% audit, require `clean_root_build: true`, `source_tree_stable_during_certificate: true`, zero unresolved registered signatures, a successful `DavisKahan.All` build, and `source_coverage.source_coverage_terminal: true`. The latter now requires every explicit statement-map completion obligation to have terminal source status, `proved_in_build` verification, and hostile semantic certification `accepted`. Running with `--require-terminal` makes those three axes a hard gate.
+For a final 100% audit, require `clean_root_build: true`, `source_tree_stable_during_certificate: true`, zero unresolved registered signatures, a successful `DavisKahan.All` build, and `source_coverage.source_coverage_terminal: true`. The latter is derived only from the compact stated-result inventory: every theorem/proposition/lemma/corollary/headline/standalone result must have an exact or formally refuted source-facing disposition, compiler evidence, and accepted semantic review. Intermediate proof identities remain source-fidelity material and are not formalization obligations. Running with `--require-terminal` makes that result-level gate hard.
 """
     (outdir / "README.md").write_text(text, encoding="utf-8")
 
@@ -410,7 +396,7 @@ def main() -> int:
     parser.add_argument(
         "--require-terminal",
         action="store_true",
-        help="also require every explicit statement-map completion obligation to have terminal source status, proved_in_build verification, and hostile semantic certification=accepted",
+        help="also require every stated-result inventory obligation to be terminal; source-fidelity atoms and organizational rows are not the denominator",
     )
     args = parser.parse_args()
 
@@ -440,14 +426,16 @@ def main() -> int:
         cleaned_tau = True
 
     statement_map_command = [sys.executable, "scripts/check_davis_kahan_1970_statement_map.py"]
+    result_inventory_command = [sys.executable, "scripts/check_davis_kahan_1970_result_inventory.py"]
     if args.require_terminal:
-        statement_map_command.append("--require-terminal")
+        result_inventory_command.append("--require-terminal")
     commands: list[tuple[str, list[str]]] = [
         ("01-aggregate-check", [sys.executable, "scripts/generate_all_aggregates.py", "--check"]),
         ("02-library-structure", [sys.executable, "scripts/check_library_structure.py"]),
         ("03-namespace-policy", [sys.executable, "scripts/check_namespace_policy.py"]),
         ("04-duplicate-qualified-names", [sys.executable, "scripts/check_duplicate_qualified_names.py"]),
         ("05-statement-map", statement_map_command),
+        ("05b-formalization-result-inventory", result_inventory_command),
         ("06-distilled-literature-index", [sys.executable, "scripts/check_distilled_literature_index.py"]),
         ("07-production-build", ["lake", "build", "DavisKahan.All"]),
         ("08-source-census", [sys.executable, "scripts/check_davis_kahan_1970_source_census.py"]),
@@ -517,6 +505,7 @@ def main() -> int:
             "Independent mathematical review of source-vs-Lean statement fidelity is required."
         ),
         "source_coverage": source_coverage,
+        "formalization_denominator": "stated_results_only",
         "terminality_required_for_this_run": args.require_terminal,
         "clean_root_build": cleaned_root,
         "clean_tauceti_build": cleaned_tau,
@@ -581,7 +570,7 @@ def main() -> int:
     print(f"  clean root build: {cleaned_root}")
     print(f"  production build warnings: {build_result['warning_count']}")
     print(f"  registered declaration signatures: {len(signatures) - len(unresolved_signatures)}/{len(signatures)}")
-    print(f"  tracked source terminality: {source_coverage['terminal_completion_obligations']}/{source_coverage['completion_obligations']}")
+    print(f"  stated-result terminality: {source_coverage['terminal_completion_obligations']}/{source_coverage['completion_obligations']}")
     print(f"  source stable during run: {source_stable}")
     print(f"  certificate: {cert_path.relative_to(ROOT)}")
     print(f"  audit packet: {audit_path.relative_to(ROOT)}")

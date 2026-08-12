@@ -9,8 +9,14 @@ census agree on identity, source order, passage hashes, expected status, and
 review declarations.
 
 No private transcription, publisher PDF, or copied source register is required
-or accepted as an input to this check.  Those may be used separately to audit
+or accepted as an input to this check. Those may be used separately to audit
 the quality of the distributable reconstruction itself.
+
+The 49 statement-map rows are organizational groups. The fine-grained source
+atom inventory is checked here for source-fidelity coverage, but those atoms are
+not the denominator for "100% formalized". The hard completion gate delegates to
+`check_davis_kahan_1970_result_inventory.py`, whose compact stated-result
+inventory is the only formalization denominator.
 """
 from __future__ import annotations
 
@@ -36,6 +42,7 @@ SOURCE_END = "% DK-CERT-SOURCE-END"
 TERMINAL_COMPLETION_STATUSES = {"compiled_exact", "refuted_as_transcribed"}
 TERMINAL_COMPLETION_VERIFICATIONS = {"proved_in_build"}
 TERMINAL_COMPLETION_CERTIFICATIONS = {"accepted"}
+NUMBERED_EQUATION_RE = re.compile(r"\\tag\{([^}]+)\}")
 
 
 def fail(message: str) -> None:
@@ -138,12 +145,105 @@ def extract_claims(tex_path: pathlib.Path) -> dict[str, str]:
     return claims
 
 
+
+def validate_source_fidelity_inventory(
+    statement_map: dict,
+    map_items: list[dict],
+    tex_path: pathlib.Path,
+) -> dict:
+    """Validate Agent 3's fine-grained source inventory without making it proof debt."""
+    rel = statement_map.get("source_atom_inventory")
+    if not isinstance(rel, str) or not rel.strip():
+        fail("statement map does not declare source_atom_inventory")
+    path = ROOT / rel
+    if not path.exists():
+        fail(f"source-fidelity inventory does not exist: {rel}")
+    data = json.loads(path.read_text(encoding="utf-8"))
+    atoms = data.get("atoms")
+    if not isinstance(atoms, list) or not atoms:
+        fail("source-fidelity inventory must contain a nonempty atoms list")
+
+    row_ids = [item["id"] for item in map_items]
+    row_set = set(row_ids)
+    atom_ids: list[str] = []
+    by_id: dict[str, dict] = {}
+    orders: list[int] = []
+    for atom in atoms:
+        atom_id = atom.get("id")
+        if not isinstance(atom_id, str) or not atom_id or atom_id in by_id:
+            fail(f"source-fidelity inventory has missing/duplicate atom id: {atom_id!r}")
+        parent = atom.get("parent_claim_id")
+        if parent not in row_set:
+            fail(f"{atom_id}: parent_claim_id is not a statement-map group: {parent!r}")
+        order = atom.get("order")
+        if not isinstance(order, int) or order <= 0:
+            fail(f"{atom_id}: order must be a positive integer")
+        if atom.get("present_in_distributable_spec") is not True:
+            fail(f"{atom_id}: source-fidelity atom is not present in the distributable specification")
+        role = atom.get("source_role")
+        if role not in {"mathematical_assertion", "definition", "open_question", "historical_knowledge_state"}:
+            fail(f"{atom_id}: unsupported source_role {role!r}")
+        atom_ids.append(atom_id)
+        by_id[atom_id] = atom
+        orders.append(order)
+
+    if orders != list(range(1, len(atoms) + 1)):
+        fail("source-fidelity atom order must be exactly 1..N in paper order")
+
+    flattened: list[str] = []
+    for row in map_items:
+        ids = row.get("source_atom_ids")
+        if not isinstance(ids, list) or not ids or not all(isinstance(x, str) for x in ids):
+            fail(f"{row['id']}: source_atom_ids must be a nonempty list of strings")
+        if len(ids) != len(set(ids)):
+            fail(f"{row['id']}: duplicate source_atom_ids")
+        for atom_id in ids:
+            atom = by_id.get(atom_id)
+            if atom is None:
+                fail(f"{row['id']}: references unknown source-fidelity atom {atom_id!r}")
+            if atom.get("parent_claim_id") != row["id"]:
+                fail(
+                    f"{row['id']}: atom {atom_id} belongs to parent {atom.get('parent_claim_id')!r}"
+                )
+        flattened.extend(ids)
+
+    if flattened != atom_ids:
+        missing = sorted(set(atom_ids) - set(flattened))
+        duplicated = sorted({x for x in flattened if flattened.count(x) > 1})
+        extra = sorted(set(flattened) - set(atom_ids))
+        fail(
+            "statement-map source_atom_ids are not a source-order bijection onto the source-fidelity inventory; "
+            f"missing={missing}, duplicated={duplicated}, extra={extra}"
+        )
+
+    summary = data.get("coverage_summary", {})
+    if summary.get("source_blocks") != len(map_items):
+        fail("source-fidelity coverage_summary.source_blocks disagrees with statement-map group count")
+    if summary.get("total_atoms") != len(atoms):
+        fail("source-fidelity coverage_summary.total_atoms disagrees with atoms list")
+
+    numbered = [atom for atom in atoms if atom.get("kind") == "numbered-equation"]
+    if summary.get("numbered_equation_atoms") != len(numbered):
+        fail("source-fidelity numbered-equation summary disagrees with atoms list")
+    tex_tags = NUMBERED_EQUATION_RE.findall(tex_path.read_text(encoding="utf-8"))
+    if len(tex_tags) != len(numbered):
+        fail(
+            "distributable TeX numbered-equation count differs from source-fidelity inventory: "
+            f"TeX={len(tex_tags)}, inventory={len(numbered)}"
+        )
+
+    return {
+        "path": rel,
+        "atoms": len(atoms),
+        "numbered_equations": len(numbered),
+    }
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
         "--require-terminal",
         action="store_true",
-        help="require every registered completion obligation to have terminal source status, proved_in_build verification, and hostile semantic certification=accepted",
+        help="require the compact stated-result inventory (not source-fidelity atoms or row labels) to be terminal",
     )
     args = parser.parse_args()
 
@@ -187,6 +287,7 @@ def main() -> int:
     censused = by_id(census_items, "census")
     check_no_unregistered_source_prose(tex_path)
     claims = extract_claims(tex_path)
+    fidelity = validate_source_fidelity_inventory(statement_map, map_items, tex_path)
 
     census_order = [item["id"] for item in census_items]
     map_order = [item["id"] for item in map_items]
@@ -298,19 +399,6 @@ def main() -> int:
                     refuted_count += 1
             else:
                 reopened_count += 1
-                if args.require_terminal:
-                    if c.get("status") not in TERMINAL_COMPLETION_STATUSES:
-                        fail(f"{item_id}: completion obligation is not source-terminal: status={c.get('status')!r}")
-                    if c.get("verification") not in TERMINAL_COMPLETION_VERIFICATIONS:
-                        fail(
-                            f"{item_id}: terminal completion obligation is not compiler-certified: "
-                            f"verification={c.get('verification')!r}"
-                        )
-                    if cert not in TERMINAL_COMPLETION_CERTIFICATIONS:
-                        fail(
-                            f"{item_id}: hostile semantic certification is not accepted: "
-                            f"completion_certification={cert!r}"
-                        )
         else:
             nonobligation_count += 1
 
@@ -351,6 +439,14 @@ def main() -> int:
                     + ", ".join(missing_clause)
                 )
 
+    result_checker = ROOT / "scripts/check_davis_kahan_1970_result_inventory.py"
+    result_command = [sys.executable, str(result_checker)]
+    if args.require_terminal:
+        result_command.append("--require-terminal")
+    result_check = subprocess.run(result_command, cwd=ROOT)
+    if result_check.returncode:
+        return result_check.returncode
+
     renderer = ROOT / "scripts/render_davis_kahan_1970_audit_packet.py"
     if renderer.exists():
         rendered = subprocess.run([sys.executable, str(renderer), "--check"], cwd=ROOT)
@@ -359,10 +455,13 @@ def main() -> int:
 
     print(
         "Davis--Kahan statement map: CLEAN "
-        f"({len(mapped)} rows; {completion_count} completion obligations; "
-        f"{exact_count} hostile-certified exact + {refuted_count} hostile-certified refuted; "
-        f"{reopened_count} reopened obligations; {nonobligation_count} non-obligations; "
-        f"{questions} Section 10 rows; {review_count} primary review links)"
+        f"({len(mapped)} organizational rows; legacy row triage: "
+        f"{exact_count} accepted exact + {refuted_count} accepted refuted, "
+        f"{reopened_count} reopened; {questions} Section 10 rows; {review_count} primary review links)"
+    )
+    print(
+        f"  source fidelity: {fidelity['atoms']} atoms, {fidelity['numbered_equations']} numbered equations "
+        f"({fidelity['path']}); these are NOT the formalization denominator"
     )
     print(f"  distributable source specification: {tex_path.relative_to(ROOT)}")
     print(f"  statement map: {MAP_PATH.relative_to(ROOT)}")
