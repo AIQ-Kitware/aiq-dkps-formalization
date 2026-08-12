@@ -231,6 +231,7 @@ private theorem complexify_isSelfAdjointOperator {T : E →L[ℝ] E}
     ((complexify_isSelfAdjoint_iff T).2
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hT))
 
+omit [CompleteSpace E] in
 /-- A spectral placement for the perturbed operator on a real subspace becomes
 the same placement for the complexified pair on the complexified subspace. -/
 private theorem spectrumIn_complexify_add {A K : E →L[ℝ] E} {U : Submodule ℝ E}
@@ -241,6 +242,7 @@ private theorem spectrumIn_complexify_add {A K : E →L[ℝ] E} {U : Submodule �
     (complexify_add A K).symm]
   exact spectrumIn_complexifySubmodule U (A + K) _ h
 
+omit [CompleteSpace E] in
 /-- The same transport on the orthogonal complement, where complexification and
 orthogonal complementation have to be exchanged. -/
 private theorem spectrumIn_orthogonal_complexify_add {A K : E →L[ℝ] E}
