@@ -15,7 +15,7 @@ have silently broken during namespace migrations:
 2. ``Challenge/**`` is outside ``defaultTargets``, so ``lake build`` does not
    compile it. The 9.2 sorted-eigenvalue rename passed a green 9272-job default
    build and still left
-   ``Challenge.MathlibPending.RankPsdRealization.Leaderboard`` failing with
+   ``Challenge.RankPsdRealization.Leaderboard`` failing with
    ``Unknown constant``.
 
 Section 13 of ``dev/tauceti-signature-polish-todo.md`` asks for "a grep gate for
@@ -43,7 +43,11 @@ Checks
 ``pinned-name-unaudited``
     Every name a comparator config pins should also be audited by the paired
     leaderboard with ``#print axioms``. A pinned statement whose axioms nobody
-    audits is compared but not certified.
+    audits is compared but not certified.  A config may explicitly list
+    ``expected_missing_solution_theorems`` for source-faithfulness obligations
+    that are intentionally stated by the challenge but have no solution yet;
+    those remain red in the real signature/comparator check and are informational
+    rather than failures of this name-drift tripwire.
 
     The converse -- a leaderboard auditing *more* names than the config pins --
     is **not** a failure and is reported only as a note: a leaderboard may
@@ -264,8 +268,21 @@ def main() -> int:
             continue
 
         pinned = config.get("theorem_names", [])
+        expected_missing = set(config.get("expected_missing_solution_theorems", []))
         challenge_module = config.get("challenge_module", "")
         solution_module = config.get("solution_module", "")
+
+        for name in sorted(expected_missing - set(pinned)):
+            findings.append(
+                {
+                    "check": "expected-missing-not-pinned",
+                    "where": rel_config,
+                    "detail": (
+                        f"`{name}` is marked as an expected missing solution but is "
+                        "not listed in theorem_names"
+                    ),
+                }
+            )
 
         challenge_path = module_to_path(challenge_module) if challenge_module else ""
         challenge_decls = (
@@ -320,6 +337,18 @@ def main() -> int:
                     }
                 )
             for name in sorted(set(pinned) - audited):
+                if name in expected_missing:
+                    notes.append(
+                        {
+                            "check": "expected-missing-solution",
+                            "where": rel_config,
+                            "detail": (
+                                f"`{name}` is intentionally absent from the leaderboard; "
+                                "the signature/comparator gate is expected to stay red"
+                            ),
+                        }
+                    )
+                    continue
                 findings.append(
                     {
                         "check": "pinned-name-unaudited",
@@ -328,6 +357,17 @@ def main() -> int:
                             f"`{name}` is pinned by {rel_config} but the leaderboard "
                             "does not audit it with `#print axioms`, so its axiom "
                             "footprint is never certified"
+                        ),
+                    }
+                )
+            for name in sorted(expected_missing & audited):
+                findings.append(
+                    {
+                        "check": "stale-expected-missing-solution",
+                        "where": rel_config,
+                        "detail": (
+                            f"`{name}` is marked expected-missing but is now audited by "
+                            "the leaderboard; remove the exception and require it normally"
                         ),
                     }
                 )

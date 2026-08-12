@@ -1,10 +1,11 @@
 # Comparator tool setup
 
 `Challenge/` is the repository's comparator/regression surface for reusable
-theorem statements isolated during the formalization. The directory names
-`MathlibCandidate` and `MathlibPending` are historical; the direct Mathlib
-submission track is closed and reusable library work now targets Tau Ceti through
-`ForTauCeti`.
+theorem statements isolated during the formalization. The direct Mathlib submission track is closed and reusable library work now
+targets Tau Ceti through `ForTauCeti`.  The obsolete `MathlibPending` directory
+has been removed; neutral challenges live directly under `Challenge/<Name>/`.
+`MathlibCandidate` remains only as historical provenance for the original three
+candidate surfaces.
 
 - `Challenge/**/Conformance.lean` states comparator challenges using intentional
   proof placeholders.
@@ -50,14 +51,21 @@ Run one configuration with:
 
 ```bash
 bash scripts/run_challenge_comparator.sh --config comparator/candidate-01-gram-rigidity.json
-bash scripts/run_challenge_comparator.sh --config comparator/pending-davis-kahan-sin-theta.json
-bash scripts/run_challenge_comparator.sh --config comparator/pending-davis-kahan-tan-two-theta.json
+bash scripts/run_challenge_comparator.sh --config comparator/davis-kahan-1970.json
 ```
 
-The old monolithic `pending-davis-kahan-part-iii.json` configuration was removed.
-The Davis--Kahan endpoints now have dedicated comparator configurations for sine,
-tangent, double-angle, projector-difference, Sylvester, and sharp forms. Do not
-restore the aggregate config just because an older document names it.
+The Davis--Kahan 1970 source exhibition is consolidated in
+`comparator/davis-kahan-1970.json`; the old split `pending-davis-kahan-{sharp,
+sin-theta,sin-two-theta,tan-theta,tan-two-theta,projector-difference}.json` files
+were retired.  The later Sylvester `pi/2` infrastructure remains a separate
+historical comparator because it is not a theorem of the 1970 paper.
+
+The consolidated Davis--Kahan config is **intentionally red** while the literal
+directed-residual and ambient Section 2 `tan 2Theta` endpoints are not both
+available with exactly the printed hypotheses.  It is therefore not part of the
+runner's default green set.  Run it explicitly when auditing paper-faithful
+completion; failures on the two `*_exactPaper` tan-2Theta targets are currently
+expected.
 
 The runner's `DEFAULT_CONFIGS` array and the `formalization.yaml` comparator list
 are the current machine-readable inventory. `Challenge/README.md` explains the

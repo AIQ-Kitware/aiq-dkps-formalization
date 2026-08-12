@@ -8,18 +8,21 @@
 #   bash scripts/run_challenge_comparator.sh
 #   bash scripts/run_challenge_comparator.sh --fake-landrun
 #   bash scripts/run_challenge_comparator.sh --config comparator/candidate-01-gram-rigidity.json
-#   bash scripts/run_challenge_comparator.sh --config comparator/pending-rank-factorization.json
+#   bash scripts/run_challenge_comparator.sh --config comparator/challenge-rank-factorization.json
+#   bash scripts/run_challenge_comparator.sh --config comparator/davis-kahan-1970.json  # intentionally red while an exact paper endpoint is missing
 #   bash scripts/run_challenge_comparator.sh --only-comparator
 #
-# By default the script runs the retained comparator configs under the historical
-# MathlibCandidate / MathlibPending directory taxonomy. Those names no longer
-# describe a live Mathlib submission queue; see Challenge/README.md.
+# By default the script runs the retained green comparator configs.  Neutral
+# challenge packages live directly under Challenge/<Name>/; MathlibCandidate is
+# retained only for the original historical candidate surfaces.  The dedicated
+# Davis--Kahan 1970 exhibition is not in this default green set because its config
+# intentionally includes currently-unproved exact paper-faithful tan-2Theta targets.
 #
 # The script runs all requested configs, prints a final summary table, and exits
 # nonzero if any config fails.
 #
 # Pre-flight (no external tools, seconds not minutes): before running the full
-# comparator, check that each config's leaf theorems export a matching universe
+# comparator, check that each config's challenged theorems export a matching universe
 # signature and full type in the Conformance vs Leaderboard modules with
 #   python3 scripts/check_comparator_signatures.py
 # This catches the `statement do not match` class (universe-slot shifts,
@@ -35,25 +38,19 @@ DEFAULT_CONFIGS=(
     "comparator/candidate-01-gram-rigidity.json"
     "comparator/candidate-02-courant-fischer-weyl.json"
     "comparator/candidate-03-davis-kahan.json"
-    "comparator/pending-davis-kahan-sharp.json"
-    "comparator/pending-davis-kahan-sin-theta.json"
-    "comparator/pending-davis-kahan-sin-two-theta.json"
-    "comparator/pending-davis-kahan-tan-theta.json"
-    "comparator/pending-davis-kahan-tan-two-theta.json"
-    "comparator/pending-davis-kahan-projector-difference.json"
-    "comparator/pending-davis-kahan-sylvester-pi-over-two.json"
-    "comparator/pending-davis-1963-rotation.json"
-    "comparator/pending-yu-wang-samworth.json"
-    "comparator/pending-berge.json"
-    "comparator/pending-rank-factorization.json"
-    "comparator/pending-rank-psd-realization.json"
-    "comparator/pending-restrict-cover-measurable.json"
-    "comparator/pending-sample-mean-mse.json"
-    "comparator/pending-near-isometry.json"
-    "comparator/pending-cfc-measurable.json"
-    "comparator/pending-matrix-concentration.json"
-    "comparator/pending-probability-qol.json"
-    "comparator/pending-tendsto-in-measure.json"
+    "comparator/challenge-davis-kahan-sylvester-pi-over-two.json"
+    "comparator/challenge-davis-1963-rotation.json"
+    "comparator/challenge-yu-wang-samworth.json"
+    "comparator/challenge-berge.json"
+    "comparator/challenge-rank-factorization.json"
+    "comparator/challenge-rank-psd-realization.json"
+    "comparator/challenge-restrict-cover-measurable.json"
+    "comparator/challenge-sample-mean-mse.json"
+    "comparator/challenge-near-isometry.json"
+    "comparator/challenge-cfc-measurable.json"
+    "comparator/challenge-matrix-concentration.json"
+    "comparator/challenge-probability-qol.json"
+    "comparator/challenge-tendsto-in-measure.json"
 )
 
 while [ "$#" -gt 0 ]; do

@@ -1,6 +1,6 @@
 {
-  "challenge_module": "Challenge.MathlibPending.CfcMeasurable.Conformance",
-  "solution_module": "Challenge.MathlibPending.CfcMeasurable.Leaderboard",
+  "challenge_module": "Challenge.CfcMeasurable.Conformance",
+  "solution_module": "Challenge.CfcMeasurable.Leaderboard",
   "theorem_names": [
     "TauCeti.measurable_cfc_comp",
     "TauCeti.measurableSet_exists_mem_le"

@@ -8,7 +8,7 @@
 -- gate. Before it was added, the `[[lean_lib]] name = "Challenge"` block declared
 -- neither a root module nor globs, so the library target could never resolve and
 -- only individually named modules ever compiled. That is how
--- `Challenge/MathlibPending/DavisKahanSylvesterPiOverTwo/Conformance.lean` sat
+-- `Challenge/DavisKahanSylvesterPiOverTwo/Conformance.lean` sat
 -- broken from the day it was written without anyone noticing.
 --
 -- `Challenge` is still deliberately outside `defaultTargets`: these modules carry

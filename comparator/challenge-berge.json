@@ -1,6 +1,6 @@
 {
-  "challenge_module": "Challenge.MathlibPending.Berge.Conformance",
-  "solution_module": "Challenge.MathlibPending.Berge.Leaderboard",
+  "challenge_module": "Challenge.Berge.Conformance",
+  "solution_module": "Challenge.Berge.Leaderboard",
   "theorem_names": [
     "TauCeti.upperHemicontinuousAt_isMinOn",
     "TauCeti.continuous_iInf_of_isCompact",

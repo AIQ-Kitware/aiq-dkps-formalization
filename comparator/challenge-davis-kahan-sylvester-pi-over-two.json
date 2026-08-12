@@ -1,6 +1,6 @@
 {
-  "challenge_module": "Challenge.MathlibPending.DavisKahanSylvesterPiOverTwo.Conformance",
-  "solution_module": "Challenge.MathlibPending.DavisKahanSylvesterPiOverTwo.Leaderboard",
+  "challenge_module": "Challenge.DavisKahanSylvesterPiOverTwo.Conformance",
+  "solution_module": "Challenge.DavisKahanSylvesterPiOverTwo.Leaderboard",
   "theorem_names": [
     "TauCeti.uiNorm_sylvester_le_of_spectralDistance",
     "TauCeti.sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance"

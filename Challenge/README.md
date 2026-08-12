@@ -1,21 +1,28 @@
 # DKPS formalization - challenge manifest
 
-`Challenge/` is a comparator and regression surface for reusable results that
-were isolated during the formalization. The directory names `MathlibCandidate`
-and `MathlibPending` are historical: the direct Mathlib submission track is
-closed, and reusable mathematics is now packaged in `ForTauCeti` for Tau Ceti.
-The challenge files remain useful because they freeze theorem statements,
-exercise dependency boundaries, and support comparator/axiom checks.
+`Challenge/` is a comparator, regression, and mathematical-exhibition surface.
+The direct Mathlib submission track is closed; reusable mathematics is packaged
+in `ForTauCeti` for Tau Ceti, while source-specific formalizations may have
+dedicated challenge suites of their own.  The challenge files freeze theorem
+statements, exercise dependency boundaries, and support comparator/axiom checks.
 
 ```
 Challenge/
+  DavisKahan1970/    - source-oriented exhibition of the 1970 formalization
   MathlibCandidate/  - historical candidate statement/conformance surfaces
-  MathlibPending/    - additional statement/conformance and leaderboard surfaces
+  <Name>/            - neutral comparator/regression challenge packages
 ```
 
-The DKPS paper libraries are not comparator challenges. Their paper-specific
-vocabulary and source fidelity must be reviewed through their source maps,
-censuses, and ordinary Lean builds rather than inferred from comparator success.
+The obsolete `MathlibPending` layer has been removed.  Challenges that used to
+live there are ordinary `Challenge/<Name>/` packages now; their value is
+regression, dependency isolation, or mathematical exhibition, not a claim about
+Mathlib submission status.
+
+The four DKPS application-paper libraries are not comparator challenges. Their
+paper-specific vocabulary and source fidelity must be reviewed through their source
+maps, censuses, and ordinary Lean builds rather than inferred from comparator success.
+Davis--Kahan 1970 is intentionally different: its dedicated challenge is an
+exhibition/regression surface for the source formalization, not a Mathlib queue.
 
 Principles:
 
@@ -25,11 +32,11 @@ Principles:
   module and let the paired `Leaderboard.lean` plus Comparator verify statement
   equality and permitted dependencies. This follows Comparator's challenge /
   solution model: <https://github.com/leanprover/comparator>.
-- **Leaf theorems only.** Each challenge lists only the *leaf* (top-level) theorems
-  — those not used to prove any other listed theorem. `#print axioms` on a leaf
-  transitively certifies its entire proof tree, so the supporting lemmas need not
-  be listed. This is the same "expose only the entry point" rule a comparator
-  reviewer asked for.
+- **Recognizable endpoints, not graph leaves.** A challenge may expose a theorem
+  that later source results reuse.  Davis--Kahan's headline inequalities are
+  valuable precisely because they are useful downstream.  Selection is based on
+  mathematical recognizability, source fidelity, and exhibition value rather than
+  terminal position in the repository proof DAG.
 - **Axiom gate.** Every listed theorem is verified to depend only on
   `propext, Classical.choice, Quot.sound` — no `sorryAx`, no custom axioms.
 - **No false dependency arrows.** The reusable contributions are *independent*
@@ -44,7 +51,7 @@ Any Mathlib gap/readiness claims below are historical observations from the 2026
 
 These three theorem surfaces were the small opening set used by the historical Mathlib-readiness audit. Keep them for comparator/regression value; current reusable-library work targets Tau Ceti.
 
-| # | Challenge | Leaf theorem(s) | Destination | Why it clears the bar |
+| # | Challenge | Exhibited theorem(s) | Destination | Why it clears the bar |
 |---|---|---|---|---|
 | 01 | GramRigidity | `Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq` | `Analysis/InnerProductSpace/GramMatrix.lean` | canonical Gram-rigidity surface |
 | 02 | CourantFischerWeyl | `abs_eigenvalues_sub_le_opNorm` (k-th eigenvalue min–max + Weyl perturbation) | new `Analysis/InnerProductSpace/CourantFischer.lean` | Mathlib has only Rayleigh + the extremal eigenvalue; **Weyl & k-th min–max absent**. Canonical |
@@ -52,59 +59,49 @@ These three theorem surfaces were the small opening set used by the historical M
 
 ---
 
-## Family 2 - `MathlibPending/` (historical pending surfaces)
+## Davis--Kahan 1970 source exhibition
 
-These surfaces record results that were not in the historical opening set. Their old `pending` label is provenance only; it does not describe an active Mathlib promotion workflow.
+`Challenge/DavisKahan1970/` replaces the six separate historical split
+Davis--Kahan comparator directories.  One conformance module now
+shows the formalization as a coherent source-facing body rather than a collection
+of putative Mathlib submissions.
 
-### Advertising-level Davis--Kahan results
+The comparator includes the four classical trigonometric theorem families at
+the strongest source-facing surfaces that can be stated independently of their
+proof modules, plus two particularly useful exhibition results:
 
-This subsection is intentionally selective. A theorem appears here only when it
-is a recognizable literature endpoint or a genuinely reusable majorization
-result—not because it was difficult to formalize or useful internally. Routine
-corollaries, conditional harmonic reductions, notation bridges, and local
-transport lemmas are deliberately excluded.
-
-| Challenge | Leaf theorem(s) | Why it clears the advertising bar |
+| Surface | Comparator target(s) | Purpose |
 |---|---|---|
-| DavisKahanSharp | `DavisKahanTheory.sinAngleOperator_perturbation_le` | sharp full-space sin-Theta theorem for every unitarily invariant norm, obtained by coupling both directed blocks without a factor-two loss |
-| DavisKahanSinTheta | `DavisKahanTheory.partIII_sinTheta_residual_uiNorm`, `DavisKahanTheory.partIII_sinTheta_uiNorm`, `DavisKahan1970.sinTheta_wholeSpace_paperUINorm` | the finite directed/perturbation forms plus the arbitrary-Hilbert/source-UI full-angle form of the Part III sin Theta headline theorem |
-| DavisKahanSinTwoTheta | `DavisKahanTheory.partIII_sinTwoTheta_uiNorm`, `DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm`, `DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm` | the finite UI-norm plus arbitrary-Hilbert/source-UI directed-residual and ambient forms of the Part III sin 2Theta headline theorem |
-| DavisKahanTanTheta | `DavisKahanTheory.partIII_tanTheta_source_uiNorm`, `DavisKahan1970.tanTheta_directed_paperUINorm`, `DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent` | the finite source-shaped Ritz form plus arbitrary-Hilbert/source-UI directed and ambient forms of the Part III tan Theta headline theorem |
-| DavisKahanTanTwoTheta | `DavisKahanTheory.partIII_tanTwoTheta_opNorm`, `DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace`, `DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree` | the finite sharp operator-norm form plus arbitrary-Hilbert/source-UI directed and ambient forms; the latter still exposes pole exclusion explicitly |
-| DavisKahanProjectorDifference | `DavisKahanTheory.projector_difference_opNorm`, `DavisKahanTheory.spectralProjector_difference_opNorm` | the canonical modern projector/subspace-distance formulation, including the spectral-projector specialization |
-| DavisKahanSylvesterPiOverTwo | `DavisKahanTheory.uiNorm_sylvester_le_of_spectralDistance`, `DavisKahanTheory.sylvester_hasFiniteUnitaryOrbitCertificate_of_spectralDistance` | the arbitrary-disjoint-spectrum Bhatia--Davis--McIntosh bound for every rectangular UI norm and the exact solution-specific finite orbit certificate at mass pi/2 |
-| Davis1963Rotation | `rotation_add_displacement_le_hilbertSchmidt` | Davis's sharpened 1963 total-rotation theorem: eigenvalue motion and eigenvector rotation share one Frobenius perturbation budget |
-| YuWangSamworth | `sqrt_sum_cross_le_of_population_gap` | the exact population-gap Frobenius sin-Theta theorem used in modern statistical perturbation theory |
+| sin Theta | finite residual/UI specialization, finite perturbation/UI specialization, arbitrary-Hilbert source-UI ambient theorem | shows both the low-dependency finite API and the full Hilbert/source-norm endpoint |
+| tan Theta | finite source-shaped Ritz result, arbitrary-Hilbert directed theorem, arbitrary-Hilbert ambient theorem under the paper's standing crossed-defect condition | preserves the directed/ambient distinction and general Hilbert-space scope |
+| sin 2Theta | finite UI specialization, arbitrary-Hilbert directed residual theorem, arbitrary-Hilbert ambient theorem | exposes both printed geometries at source UI-norm scope |
+| tan 2Theta | finite sharp operator-norm theorem, branch-free arbitrary-Hilbert graph endpoint, best current branch-free ambient theorem, **literal directed-residual and ambient Section 2 targets** | the two exact source targets intentionally remain red until the directed residual UI-norm surface and ambient pole exclusion are obtained from only the printed hypotheses |
+| projector distance | `DavisKahanTheory.projectorDifference_restrictionSpectra_opNorm` | canonical modern projector/subspace-distance presentation on an arbitrary complex Hilbert space |
+| false Proposition 4.4 | `DavisKahanTheory.proposition4_4_counterexample` | exhibits source fidelity by formally refuting a false printed claim instead of silently dropping it |
 
-`RectangularFanDominance/Leaderboard.lean` separately audits the rectangular
-Ky Fan/orbit-majorization machinery. It is advertising-level mathematics, but
-leaderboard-only because its vocabulary and implementation still cohabit one
-large staging module. It is retained as a regression surface rather than as an
-active promotion task.
+The leaderboard also prints axiom audits for the definitive generalized sine
+Theorem 6.1 over both scalar fields, real-Hilbert counterparts of the source-
+faithful tan-Theta and sin-2Theta endpoints, the direct formal negation of
+Proposition 4.4, Section 8 branch selection, and the source-numbered Section 9
+equation (9.7).  These are exhibition sentinels rather than additional comparator
+holes.  No unrestricted real tan-2Theta sentinel is advertised while the same
+paper-faithfulness gap remains open in the complex source surface.
 
-`ApproximationNumbers/Leaderboard.lean` audits the infinite-dimensional
-approximation-number localization, strong-cutoff convergence, and finite Ky Fan
-triangle endpoints over both real and complex Hilbert spaces. It is leaderboard-only because the underlying approximation-number vocabulary
-remains project-staged. It is retained as a regression surface rather than as
-an active promotion task.
+The exact directed-residual and ambient Section 2 `tan 2Theta` targets are
+deliberately present in
+`comparator/davis-kahan-1970.json` even though no matching leaderboard
+declaration currently exists.  Thus `lake build Challenge` can remain a useful
+compile check while `scripts/check_comparator_signatures.py
+comparator/davis-kahan-1970.json` stays red on the genuine paper-faithfulness
+obligations.  Do not weaken the challenges merely to make the comparator green.
 
-The legacy `DavisKahanPartIII` aggregate was **removed on 2026-07-30**: it pinned exactly the four theorems the four dedicated Davis--Kahan
-challenges pin and nothing else, so five directories and five comparator
-configurations were maintained for four theorems, and the comparator ran each of
-those proofs twice.  The focused configurations above are now the only
-advertising surfaces.
+## Other comparator and exhibition challenges
 
-The four theorems themselves are unaffected -- they are `alias`es in
-`DavisKahan/Sources/DavisKahan1970/PartIII.lean`, the stable source-facing import
-surface for the finite Part III results, which each of the four dedicated
-challenges imports directly.  **That module, not the deleted challenge, is what
-to point at for the exact paper form of the Davis--Kahan proofs.**  The canonical spectral-projector wrapper is printed by the projector
-leaderboard but is not a second challenge leaf because it is a direct corollary
-of the reducing-subspace theorem.
+The remaining top-level challenge packages are older, mostly reusable theorem
+surfaces retained for regression and dependency checks.  They have no `pending`
+status in the repository.
 
-### Other pending results
-
-| Challenge | Leaf theorem(s) | Why pending |
+| Challenge | Exhibited theorem(s) | Historical context |
 |---|---|---|
 | Berge | `continuous_iInf_of_isCompact`, `upperHemicontinuousAt_isMinOn`, `exists_modulus_isMinOn` | likely proven in **too narrow a form** for a canonical Mathlib `Topology` contribution; needs generalization to holistic, reusable shape before it's maintainer-quality |
 | RankFactorization | `Matrix.rank_le_iff_exists_eq_mul` | matrix form absent but must be related to abstract `rank_le_iff_exists_linearMap`; confirm framing/value |

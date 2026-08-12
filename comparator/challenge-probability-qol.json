@@ -1,6 +1,6 @@
 {
-  "challenge_module": "Challenge.MathlibPending.ProbabilityQoL.Conformance",
-  "solution_module": "Challenge.MathlibPending.ProbabilityQoL.Leaderboard",
+  "challenge_module": "Challenge.ProbabilityQoL.Conformance",
+  "solution_module": "Challenge.ProbabilityQoL.Leaderboard",
   "theorem_names": [
     "TauCeti.one_sub_measure_compl_le",
     "TauCeti.meas_gt_le_ofReal_integral_sq_div_sq"

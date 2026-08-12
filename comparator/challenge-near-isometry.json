@@ -1,6 +1,6 @@
 {
-  "challenge_module": "Challenge.MathlibPending.NearIsometry.Conformance",
-  "solution_module": "Challenge.MathlibPending.NearIsometry.Leaderboard",
+  "challenge_module": "Challenge.NearIsometry.Conformance",
+  "solution_module": "Challenge.NearIsometry.Leaderboard",
   "theorem_names": [
     "TauCeti.LinearMap.exists_linearIsometryEquiv_norm_sub_le",
     "TauCeti.ContinuousLinearMap.exists_linearIsometryEquiv_norm_sub_le"

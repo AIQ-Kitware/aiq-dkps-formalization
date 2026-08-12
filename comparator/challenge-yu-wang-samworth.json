@@ -1,6 +1,6 @@
 {
-  "challenge_module": "Challenge.MathlibPending.YuWangSamworth.Conformance",
-  "solution_module": "Challenge.MathlibPending.YuWangSamworth.Leaderboard",
+  "challenge_module": "Challenge.YuWangSamworth.Conformance",
+  "solution_module": "Challenge.YuWangSamworth.Leaderboard",
   "theorem_names": [
     "TauCeti.sqrt_sum_cross_le_of_population_gap"
   ],

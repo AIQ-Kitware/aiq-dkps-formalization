@@ -101,8 +101,8 @@ be re-issued.  Reconciled on merge in favour of `TauCeti`, because the pins are
 not what immutability protects: `AGENTS.md`'s comparator rule forbids *filling the
 proof placeholders*, and its rename protocol explicitly requires a dedicated rename pass to
 update `Challenge/` and `comparator/*.json`, which is what was done — the three
-Berge names in `comparator/pending-berge.json`, the `#print axioms` lines in
-`Challenge/MathlibPending/Berge/Leaderboard.lean`, and the restated statements in
+Berge names in `comparator/challenge-berge.json`, the `#print axioms` lines in
+`Challenge/Berge/Leaderboard.lean`, and the restated statements in
 the paired `Conformance.lean` all read `TauCeti.*`.  Leaving `ForMathlib.*`
 declarations inside `ForTauCeti` would also contradict the package rule that its
 declarations live in their final `TauCeti.*` namespaces (`lakefile.toml`).

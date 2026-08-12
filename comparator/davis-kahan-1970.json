@@ -1,0 +1,32 @@
+{
+  "challenge_module": "Challenge.DavisKahan1970.Conformance",
+  "solution_module": "Challenge.DavisKahan1970.Leaderboard",
+  "theorem_names": [
+    "TauCeti.DavisKahanTheory.partIII_sinTheta_residual_uiNorm",
+    "TauCeti.DavisKahanTheory.partIII_sinTheta_uiNorm",
+    "TauCeti.DavisKahan1970.sinTheta_wholeSpace_paperUINorm",
+    "TauCeti.DavisKahanTheory.partIII_tanTheta_source_uiNorm",
+    "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm",
+    "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
+    "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
+    "TauCeti.DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm",
+    "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
+    "TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm",
+    "TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace",
+    "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree",
+    "TauCeti.DavisKahan1970.tanTwoTheta_directedResidual_paperUINorm_exactPaper",
+    "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exactPaper",
+    "TauCeti.DavisKahanTheory.projectorDifference_restrictionSpectra_opNorm",
+    "TauCeti.DavisKahanTheory.proposition4_4_counterexample"
+  ],
+  "expected_missing_solution_theorems": [
+    "TauCeti.DavisKahan1970.tanTwoTheta_directedResidual_paperUINorm_exactPaper",
+    "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exactPaper"
+  ],
+  "permitted_axioms": [
+    "propext",
+    "Quot.sound",
+    "Classical.choice"
+  ],
+  "enable_nanoda": false
+}
