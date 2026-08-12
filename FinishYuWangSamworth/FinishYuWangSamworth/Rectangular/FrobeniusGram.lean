@@ -25,7 +25,7 @@ namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators ENNReal
 
-open DavisKahan.Experimental.ExactSinTheta
+open DavisKahan.ExactSinTheta
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]

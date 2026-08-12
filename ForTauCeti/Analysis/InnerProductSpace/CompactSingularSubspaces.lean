@@ -64,7 +64,8 @@ theorem apply_mem_leftGram_eigenspace {μ : 𝕜} {x : E}
   rw [Module.End.mem_eigenspace_iff] at hx ⊢
   calc
     (T ∘L T.adjoint) (T x) = T ((T.adjoint ∘L T) x) := rfl
-    _ = μ • T x := by rw [hx, map_smul]
+    _ = T (μ • x) := congrArg T hx
+    _ = μ • T x := map_smul T μ x
 
 /-- `T⋆` maps each eigenspace of `TT⋆` into the same eigenspace of `T⋆T`. -/
 theorem adjoint_apply_mem_rightGram_eigenspace {μ : 𝕜} {y : F}
@@ -73,7 +74,8 @@ theorem adjoint_apply_mem_rightGram_eigenspace {μ : 𝕜} {y : F}
   rw [Module.End.mem_eigenspace_iff] at hy ⊢
   calc
     (T.adjoint ∘L T) (T.adjoint y) = T.adjoint ((T ∘L T.adjoint) y) := rfl
-    _ = μ • T.adjoint y := by rw [hy, map_smul]
+    _ = T.adjoint (μ • y) := congrArg T.adjoint hy
+    _ = μ • T.adjoint y := map_smul T.adjoint μ y
 
 /-- The nonzero `μ`-eigenspaces of `T⋆T` and `TT⋆` are linearly equivalent via `x ↦ T x`,
 with inverse `y ↦ μ⁻¹ • T⋆ y`. -/
@@ -93,7 +95,8 @@ noncomputable def nonzeroGramEigenspaceEquiv (μ : 𝕜) (hμ : μ ≠ 0) :
       T (μ⁻¹ • T.adjoint y.1) = μ⁻¹ • (T ∘L T.adjoint) y.1 := by
         rw [map_smul]
         rfl
-      _ = μ⁻¹ • μ • y.1 := by rw [hy]
+      _ = μ⁻¹ • (μ • y.1) := congrArg (fun z => μ⁻¹ • z) hy
+      _ = μ⁻¹ • μ • y.1 := by rw [smul_smul]
       _ = y.1 := inv_smul_smul₀ hμ y.1
   · ext x
     have hx := x.2
@@ -102,7 +105,8 @@ noncomputable def nonzeroGramEigenspaceEquiv (μ : 𝕜) (hμ : μ ≠ 0) :
       LinearMap.smul_apply]
     calc
       μ⁻¹ • T.adjoint (T x.1) = μ⁻¹ • (T.adjoint ∘L T) x.1 := rfl
-      _ = μ⁻¹ • μ • x.1 := by rw [hx]
+      _ = μ⁻¹ • (μ • x.1) := congrArg (fun z => μ⁻¹ • z) hx
+      _ = μ⁻¹ • μ • x.1 := by rw [smul_smul]
       _ = x.1 := inv_smul_smul₀ hμ x.1
 
 /-- If `T` is compact, every nonzero eigenspace of `T⋆T` is finite-dimensional. -/
