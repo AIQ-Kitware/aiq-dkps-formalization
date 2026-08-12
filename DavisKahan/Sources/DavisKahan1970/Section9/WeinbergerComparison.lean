@@ -384,7 +384,7 @@ theorem printed_weinberger_low_shift_inequality_reversed
   rw [weinbergerComparisonMatrix_charAt] at hroot
   have hroot' : d * e * (A + d) - q * e - q * d = 0 := by
     dsimp [d, e, A, q, a, b, r, C] at ⊢
-    convert hroot using 1 <;> ring
+    (convert hroot using 1; ring)
 
   have hd : 0 < d := by
     have hd0 : 0 ≤ d := by
