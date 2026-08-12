@@ -170,9 +170,18 @@ Mathlib      TauCeti
   holding area to drain into `external/TauCeti`.
 - Reusable mathematics is written for extraction: keep paper-specific wrappers
   downstream and record exact provenance.
-- A source claim shown false is completed by a machine-checked counterexample,
-  an explanation of the failure, and a corrected theorem when one is justified.
-  Proposition 4.4 is the known example; do not restore it as a theorem.
+- A source claim shown false is completed as a source-fidelity disposition by a
+  machine-checked counterexample or refutation satisfying the printed hypotheses.
+  **Refutation also creates a separate best-effort repair obligation.** Diagnose
+  the failure, preserve the source's mathematical intent as far as the evidence
+  permits, formulate the strongest natural corrected theorem (for example by
+  correcting a sign, constant, hypothesis, scope, or norm class), and prove that
+  repair when feasible. If no satisfactory corrected theorem can be justified,
+  record the strongest supported repair attempt and the remaining obstruction
+  explicitly; do not silently stop at the counterexample and do not silently
+  rewrite the source claim. Proposition 4.4 is the canonical model: the printed
+  proposition is formally refuted, while `directRotation_fullDisplacement_qnorm`
+  gives the compiled `Q`-norm repair.
 
 ### Convergence before submission
 
@@ -288,12 +297,15 @@ not a requirement to reproduce the paper's proof arguments or proof organization
   specializations, reductions, alternative arguments, and source-facing wrappers.
 - A false source claim is covered when compiled Lean gives a counterexample or
   refutation satisfying the source hypotheses and falsifying the source
-  conclusion. That outcome counts as complete formalization of the claim.
+  conclusion. That settles the disposition of the printed claim, but it does
+  **not** discharge the separate best-effort repair obligation above. A hostile
+  completion review should record both the refutation and the resulting repaired
+  theorem (or the documented reason no satisfactory repair could be established).
 - **Proposition 4.4 is the canonical example.** The exact transcribed source claim
-  is false. The repository's machine-checked counterexample/refutation is the
-  complete source-faithful formalization of Proposition 4.4 and counts fully
-  toward 100% coverage. It is not an open obligation to prove the false printed
-  conclusion.
+  is false. The repository both gives a machine-checked counterexample/refutation
+  and proves the natural `Q`-norm repair
+  `directRotation_fullDisplacement_qnorm`. The false printed conclusion is never
+  restored as a theorem; the refutation and repair are recorded side by side.
 - A 100% full-paper claim means every mathematical claim tracked by the checked-in distributable
   source specification and `dev/davis-kahan-1970-source-atom-inventory.json` has one of these
   completed outcomes, with the source-facing correspondence recorded. The 49 statement-map rows
