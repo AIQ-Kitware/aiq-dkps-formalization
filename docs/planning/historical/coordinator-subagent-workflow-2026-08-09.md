@@ -1,5 +1,7 @@
 # The coordinator / subagent workflow
 
+> **Historical process note (2026-08-09).** This records a coordinator/subagent campaign workflow that is no longer repository policy. Current operating policy is `AGENTS.md`; retain this only for reusable review and handoff lessons.
+
 How long-running formalization campaigns in this repository are run when a coordinating agent
 dispatches scoped work to subagents. Written 2026-08-09, from the Davis--Kahan 1970 completion
 campaign (missions M1--M38), which used this shape end to end. Everything below that reads like

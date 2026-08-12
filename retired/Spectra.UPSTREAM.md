@@ -1,28 +1,47 @@
-# Vendored Spectra upstream snapshot
+# Spectra upstream provenance (retired)
 
-`vendor/Spectra/` is an exact source snapshot of the public upstream repository:
+Spectra is no longer vendored or used as a build dependency. This file records
+the upstream identity of the former snapshot and the evidence retained after its
+removal.
+
+## Upstream snapshot identity
+
+The former `vendor/Spectra/` tree began as an exact `git archive` snapshot of:
 
 - Repository: `https://github.com/adambornemann-glitch/Spectra.git`
 - Commit: `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63`
 - Commit subject: `added more lean options to the lake file, fixed warnings.`
-- Snapshot format: `git archive` of the commit above
+- License: Apache-2.0
 
-The snapshot directory must remain byte-for-byte equivalent to the tracked
-files at that upstream commit. `external/Spectra/` is retained as a read-only
-reference submodule pinned to the same commit; it is not used by the build. Project-specific compatibility changes must not
-be edited into `vendor/Spectra/` as an undocumented fork. They belong in a
-separate patch recorded outside the snapshot and applied by a dedicated script.
+`retired/Spectra.SHA256SUMS` preserves the digest list for that pristine
+snapshot. The old `external/Spectra` reference submodule and the vendored source
+tree have both been removed from the maintained repository.
 
-## Update procedure
+## DKPS fork recovery
 
-1. Remove any applied compatibility patch.
-2. Fetch and inspect the desired commit in `external/Spectra/`.
-3. Replace `vendor/Spectra/` with `git archive <new-upstream-commit>`.
-4. Regenerate `vendor/Spectra.SHA256SUMS` from the clean snapshot.
-5. Run `python3 scripts/verify_vendored_spectra.py`.
-6. Update the `external/Spectra` gitlink to the same commit and run
-   `python3 scripts/verify_spectra_reference.py`.
-7. Rebase and regenerate the DKPS compatibility patch in a separate commit.
+The former source tree accumulated compatibility edits and DKPS-added modules.
+Before deleting it, the complete difference from the pristine upstream snapshot
+was captured in:
 
-This commit intentionally records only the clean upstream snapshot. A following
-commit may add the compatibility patch required by the DKPS Lean/Mathlib pin.
+`retired/patches-Spectra/0002-dkps-complete-fork.patch`
+
+and verified to reconstruct the deleted tree exactly. The authoritative recovery
+recipe and explanation of the earlier partial compatibility patch are in
+`retired/patches-Spectra/README.md`.
+
+The older
+`retired/patches-Spectra/0001-dkps-lean-v4.32-mathlib-compatibility.patch` is
+retained for historical provenance only; it does not contain the complete fork.
+
+## Historical snapshot contract
+
+While `vendor/Spectra/` existed, the intended contract was that the pristine
+snapshot remain byte-for-byte equivalent to the pinned upstream commit and that
+project-specific compatibility changes live in separately recorded patches. The
+working tree eventually drifted from that contract; the complete `0002` patch
+was created specifically so the drift and DKPS additions would not be lost when
+the source tree was retired.
+
+There is no current Spectra update procedure. A future need for old donor code
+should use the recovery patch for inspection rather than recreating a live
+vendored dependency by default.

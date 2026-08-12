@@ -1,5 +1,7 @@
 # Tau Ceti theorem naming and strength audit
 
+> **Historical API review (2026-07-27).** Declaration names and strengths have changed since this snapshot. Use it for design rationale and archaeology, not as a current defect list.
+
 **Snapshot reviewed:** `aiq-dkps-formalization` at merge snapshot `4285a6e`  
 **Purpose:** Identify public declarations whose names suggest a stronger or more canonical mathematical result than the implementation currently provides, and recommend Mathlib-style names that remain honest as the library grows.
 

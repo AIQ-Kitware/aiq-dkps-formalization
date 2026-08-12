@@ -114,10 +114,11 @@ The Spectra collaboration is over and **nothing here needs setting up**. This
 section previously told readers to create an `external/Spectra` submodule and
 enable a Lake dependency on it; both are gone.
 
-Final state: in-scope `import Spectra` is **0**, the vendored tree is
-`retired/Spectra`, and the `external/Spectra` submodule and its sixteen
-lifecycle scripts were removed. Attribution is preserved in
-`retired/Spectra.UPSTREAM.md` and `dev/tauceti/spectra-provenance-map.md`.
+Final state: in-scope `import Spectra` is **0**, the vendored source tree and
+`external/Spectra` submodule are gone, and the sixteen lifecycle scripts were
+removed. Attribution and exact recovery material remain under `retired/`,
+including `Spectra.UPSTREAM.md`, `Spectra.SHA256SUMS`, and the complete-fork
+patch; the live provenance map is `dev/tauceti/spectra-provenance-map.md`.
 
 For the record of the completed campaign see
 [`dev/spectra-integration-survey-2026-07-14.md`](dev/spectra-integration-survey-2026-07-14.md)

@@ -27,12 +27,15 @@ and intentionally not redistributed.
 **C. Davis and W. M. Kahan**, *The Rotation of Eigenvectors by a Perturbation. III*,
 SIAM J. Numer. Anal. **7**(1), 1970, 1–46. [doi:10.1137/0707001](https://doi.org/10.1137/0707001)
 
-The maintained modernized transcription is `non-distributable/davis-kahan-1970-modernized-transcription.tex`;
-the original scan is `non-distributable/DavisKahan-1970-original.pdf`. The transcription is
-ground truth for section and line references throughout `dev/`, but it is a transcription:
-at least one factor-of-2 defect has been located in it (see the `S2-sin-two-theta` census note),
-and separately the original itself appears to carry typesetting errors (see "Known source
-errata" below).
+The checked-in distributable semantic specification is
+`prose/distilled_literature/DavisKahan1970_part_III.tex`. Its source-order claim passages are
+the ordinary static source-to-Lean audit surface. A local modernized transcription
+(`non-distributable/davis-kahan-1970-modernized-transcription.tex`) and original scan
+(`non-distributable/DavisKahan-1970-original.pdf`) may be kept as private provenance for
+re-auditing that distillation against the paper, but neither is an input to ordinary static
+certification. The private transcription is itself fallible: at least one factor-of-2 defect
+has been located in it (see the `S2-sin-two-theta` census note), and the original appears to
+carry separate typesetting errors (see "Known source errata" below).
 
 ## Works Davis--Kahan cite that we must import rather than derive
 

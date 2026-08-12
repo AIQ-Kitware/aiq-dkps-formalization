@@ -1,5 +1,7 @@
 # Finite-dimensional Davis--Kahan Part III audit
 
+> **Historical formalization snapshot.** This records the finite-dimensional Part III surface at the stated baseline commit. It is not a current completeness statement; use the maintained Davis--Kahan census and source specification for current status.
+
 Baseline: `7463ca25c64a46c48411a2769b47714889974a97`.
 
 ## Precise claim
