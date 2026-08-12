@@ -72,28 +72,32 @@ proof modules, plus two particularly useful exhibition results:
 
 | Surface | Comparator target(s) | Purpose |
 |---|---|---|
-| sin Theta | finite residual/UI specialization, finite perturbation/UI specialization, arbitrary-Hilbert source-UI ambient theorem | shows both the low-dependency finite API and the full Hilbert/source-norm endpoint |
-| tan Theta | finite source-shaped Ritz result, arbitrary-Hilbert directed theorem, arbitrary-Hilbert ambient theorem under the paper's standing crossed-defect condition | preserves the directed/ambient distinction and general Hilbert-space scope |
+| sin Theta | finite residual/UI specialization, finite perturbation/UI specialization, arbitrary-Hilbert source-UI symmetric theorem | shows the low-dependency headline specialization plus the later Proposition 6.1-level generality; the finite/ambient entries must not be mistaken for one literal Section 2 statement |
+| tan Theta | finite source-shaped Ritz result, arbitrary-Hilbert directed spectral theorem, corrected ambient theorem under crossed-defect condition (3.5), **literal Section 2 pole-counterexample target** | preserves the directed/ambient distinction while making the apparent infinite-dimensional source-scope defect executable instead of silently adding (3.5) |
 | sin 2Theta | finite UI specialization, arbitrary-Hilbert directed residual theorem, arbitrary-Hilbert ambient theorem | exposes both printed geometries at source UI-norm scope |
-| tan 2Theta | finite sharp operator-norm theorem, branch-free arbitrary-Hilbert graph endpoint, best current branch-free ambient theorem, **literal directed-residual and ambient Section 2 targets** | the two exact source targets intentionally remain red until the directed residual UI-norm surface and ambient pole exclusion are obtained from only the printed hypotheses |
+| tan 2Theta | finite sharp operator-norm theorem, branch-free infrastructure, **exact directed residual Section 2 inequality**, **exact ambient Section 2 inequality**, **public pole-exclusion target**, and **unbounded arbitrary-UI directed target** | both bounded arbitrary-UI conclusions are now green from the printed hypotheses; the signature-visible pole/domain certificate and source-shaped unbounded arbitrary-UI assembly remain intentionally red |
 | projector distance | `DavisKahanTheory.projectorDifference_restrictionSpectra_opNorm` | canonical modern projector/subspace-distance presentation on an arbitrary complex Hilbert space |
 | false Proposition 4.4 | `DavisKahanTheory.proposition4_4_counterexample` | exhibits source fidelity by formally refuting a false printed claim instead of silently dropping it |
 
-The leaderboard also prints axiom audits for the definitive generalized sine
-Theorem 6.1 over both scalar fields, real-Hilbert counterparts of the source-
-faithful tan-Theta and sin-2Theta endpoints, the direct formal negation of
-Proposition 4.4, Section 8 branch selection, and the source-numbered Section 9
-equation (9.7).  These are exhibition sentinels rather than additional comparator
-holes.  No unrestricted real tan-2Theta sentinel is advertised while the same
-paper-faithfulness gap remains open in the complex source surface.
+The leaderboard also audits the definitive generalized sine Theorem 6.1 over
+both scalar fields, real-Hilbert counterparts of the corrected tangent and
+double-angle endpoints, the two-dimensional/direct-sum sharpness package and
+first-order asymptotics, the bilateral-shift separation of dimension conditions
+(1.5) and (3.5), the direct formal negation of Proposition 4.4, Section 8 branch
+selection, and source-numbered Section 9 equation (9.7).  These are exhibition
+sentinels rather than additional comparator holes.
 
-The exact directed-residual and ambient Section 2 `tan 2Theta` targets are
-deliberately present in
-`comparator/davis-kahan-1970.json` even though no matching leaderboard
-declaration currently exists.  Thus `lake build Challenge` can remain a useful
-compile check while `scripts/check_comparator_signatures.py
-comparator/davis-kahan-1970.json` stays red on the genuine paper-faithfulness
-obligations.  Do not weaken the challenges merely to make the comparator green.
+Three source-fidelity targets are deliberately present in
+`comparator/davis-kahan-1970.json` without matching leaderboard declarations:
+the literal Section 2 ambient `tan Theta` pole counterexample, a public
+pole-exclusion theorem for the bounded exact `tan 2Theta` results, and the
+unbounded directed arbitrary-UI `tan 2Theta` source wrapper.  The bounded
+directed residual and ambient arbitrary-UI `tan 2Theta` conclusions are both
+now green from the printed hypotheses.  Thus `lake build
+Challenge` remains a useful compile check while
+`scripts/check_comparator_signatures.py comparator/davis-kahan-1970.json` stays
+red exactly where the source treatment is not yet complete.  Do not weaken the
+challenges merely to make the comparator green.
 
 ## Other comparator and exhibition challenges
 

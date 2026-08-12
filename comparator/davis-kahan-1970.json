@@ -7,26 +7,72 @@
     "TauCeti.DavisKahan1970.sinTheta_wholeSpace_paperUINorm",
     "TauCeti.DavisKahanTheory.partIII_tanTheta_source_uiNorm",
     "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm",
+    "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral",
     "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
+    "TauCeti.DavisKahan1970.tanTheta_literalSection2_poleCounterexample",
     "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
     "TauCeti.DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm",
     "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
     "TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm",
     "TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace",
     "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree",
-    "TauCeti.DavisKahan1970.tanTwoTheta_directedResidual_paperUINorm_exactPaper",
-    "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exactPaper",
+    "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
+    "TauCeti.DavisKahan1970.tanTwoTheta_poleExclusion_exactPaper",
+    "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exactPaper",
+    "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
     "TauCeti.DavisKahanTheory.projectorDifference_restrictionSpectra_opNorm",
     "TauCeti.DavisKahanTheory.proposition4_4_counterexample"
   ],
   "expected_missing_solution_theorems": [
-    "TauCeti.DavisKahan1970.tanTwoTheta_directedResidual_paperUINorm_exactPaper",
-    "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exactPaper"
+    "TauCeti.DavisKahan1970.tanTheta_literalSection2_poleCounterexample",
+    "TauCeti.DavisKahan1970.tanTwoTheta_poleExclusion_exactPaper",
+    "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exactPaper"
   ],
   "permitted_axioms": [
     "propext",
     "Quot.sound",
     "Classical.choice"
   ],
-  "enable_nanoda": false
+  "enable_nanoda": false,
+  "source_fidelity_notes": {
+    "TauCeti.DavisKahan1970.tanTheta_literalSection2_poleCounterexample": "Expected resolution is a formal source-error counterexample: the Section 2 ambient tan Theta conclusion is printed before the later crossed-defect condition (3.5) is adopted as a standing assumption. The same witness has zero directed P-to-Q sine but a whole-space pi/2 pole, exposing the related unqualified Section 1 angle-doubling claim.",
+    "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact": "The ambient inequality is now implemented from the printed ordered-gap and off-diagonal hypotheses, with pole exclusion derived internally.",
+    "TauCeti.DavisKahan1970.tanTwoTheta_poleExclusion_exactPaper": "A public pole-exclusion consequence is required so signature-only semantic validation can certify the mathematical domain of the paper tangent despite Lean totalizing Real.tan.",
+    "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exactPaper": "Missing unbounded directed tan 2Theta wrapper at arbitrary source UI-norm scope from only the printed self-adjoint spectral-gap, bounded residual, and reducing-subspace data; the exact target also exposes invertibility of the double-angle cosine block so the tangent is not certified only through a totalized inverse. Existing ideal assembly still exposes cutoff/denominator hypotheses.",
+    "TauCeti.DavisKahanTheory.partIII_sinTheta_residual_uiNorm": "Finite-dimensional source specialization of the Section 2 directed sin Theta theorem; useful exhibition evidence but not the full Hilbert-space/unbounded source certificate by itself.",
+    "TauCeti.DavisKahanTheory.partIII_sinTheta_uiNorm": "Finite square perturbation formulation; a useful canonical Davis-Kahan bound, not the literal first Section 2 directed-residual theorem.",
+    "TauCeti.DavisKahan1970.sinTheta_wholeSpace_paperUINorm": "Source-facing later symmetric/full-space sine result (Proposition 6.1 family), included to exhibit arbitrary-Hilbert/source-UI scope; it should not be confused with the first Section 2 directed-residual statement.",
+    "TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm": "Finite sharp operator-norm specialization with additional finite theorem hypotheses; supporting evidence, not the unrestricted arbitrary-UI source signature.",
+    "TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace": "General graph-coordinate branch-free infrastructure with additional representation data; supporting evidence, not the literal source telescope.",
+    "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree": "Arbitrary-UI ambient specialization with explicit pole exclusion; supporting evidence superseded for source fidelity by tanTwoTheta_wholeSpace_paperUINorm_exact.",
+    "TauCeti.DavisKahanTheory.projectorDifference_restrictionSpectra_opNorm": "Canonical modern projector-distance formulation included for recognition/exhibition; it is not a fifth named Section 2 theorem in the 1970 paper.",
+    "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact": "Exact bounded Section 2 directed residual theorem from the printed spectral-gap and off-diagonal hypotheses at arbitrary source UI-norm scope; pole exclusion is derived internally. The canonical directed projection-block representative carries exactly the singular data seen by the paper norm."
+  },
+  "paper_fidelity_scope": {
+    "exact_or_source_treatment_targets": [
+      "TauCeti.DavisKahan1970.sinTheta_wholeSpace_paperUINorm",
+      "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral",
+      "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
+      "TauCeti.DavisKahan1970.tanTheta_literalSection2_poleCounterexample",
+      "TauCeti.DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm",
+      "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
+      "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
+      "TauCeti.DavisKahan1970.tanTwoTheta_poleExclusion_exactPaper",
+      "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
+      "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exactPaper",
+      "TauCeti.DavisKahanTheory.proposition4_4_counterexample"
+    ],
+    "supporting_exhibition_targets": [
+      "TauCeti.DavisKahanTheory.partIII_sinTheta_residual_uiNorm",
+      "TauCeti.DavisKahanTheory.partIII_sinTheta_uiNorm",
+      "TauCeti.DavisKahanTheory.partIII_tanTheta_source_uiNorm",
+      "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm",
+      "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
+      "TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm",
+      "TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace",
+      "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree",
+      "TauCeti.DavisKahanTheory.projectorDifference_restrictionSpectra_opNorm"
+    ],
+    "note": "Green supporting exhibition targets are useful specializations, infrastructure, or modern corollaries; they must not be counted as independent evidence that the corresponding full paper statement is exact. The source-treatment list is the subset intended to carry source-semantic weight in this exhibition."
+  }
 }

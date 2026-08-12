@@ -2,20 +2,21 @@
 # Davis--Kahan 1970 exhibition leaderboard
 
 This module exposes the production proofs corresponding to
-`Challenge.DavisKahan1970.Conformance` and prints a few additional source-facing
-results that are useful as an exhibition of the formalization.
+`Challenge.DavisKahan1970.Conformance` and prints additional source-facing
+results that make the scope and sharpness of the formalization visible.
 
-Two comparator targets are intentionally absent:
-`TauCeti.DavisKahan1970.tanTwoTheta_directedResidual_paperUINorm_exactPaper`
-and `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exactPaper`.
-The current production surface has strong branch-free graph/corner machinery,
-but the source-facing directed residual endpoint is not exposed at every paper
-norm from only the printed hypotheses, and the ambient wrapper still assumes
-explicit pole exclusion or selected-block spectral placement.  The comparator
-should remain red on those exact source signatures until they are genuinely
-proved.
+Four comparator targets are intentionally absent from the production side.
+The literal infinite-dimensional ambient `tan Theta` statement is challenged by
+a source-hypothesis pole counterexample, rather than by silently adding the later
+crossed-defect condition (3.5).  The directed residual `tan 2Theta` statement
+still lacks one source-facing arbitrary-UI-norm wrapper from only the printed
+hypotheses.  Finally, the newly proved ambient `tan 2Theta` inequality derives
+pole exclusion internally, but its source-hypothesis pole theorem is not yet
+exported as a public declaration for a signature-only semantic certificate.
+The paper's unbounded extension of the directed `tan 2Theta` estimate also lacks
+one arbitrary-source-UI wrapper that derives its cutoff/denominator assembly
+from only the printed unbounded hypotheses.
 -/
-
 import DavisKahan.Sources.DavisKahan1970.PartIII
 import DavisKahan.Sources.DavisKahan1970.FullSineTheta
 import DavisKahan.Sources.DavisKahan1970.Directed
@@ -27,6 +28,8 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
 import DavisKahan.BoundedOperator.Spectral.Complex
 import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
+import DavisKahan.FiniteDimensional.Sharpness
+import DavisKahan.Frontier.Section3BilateralShift
 import DavisKahan.Sources.DavisKahan1970.Section8.All
 import DavisKahan.Sources.DavisKahan1970.Section9.All
 
@@ -164,6 +167,7 @@ end TauCeti
 #print axioms TauCeti.DavisKahan1970.sinTheta_wholeSpace_paperUINorm
 #print axioms TauCeti.DavisKahanTheory.partIII_tanTheta_source_uiNorm
 #print axioms TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm
+#print axioms TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral
 #print axioms TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent
 #print axioms TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm
 #print axioms TauCeti.DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm
@@ -171,20 +175,21 @@ end TauCeti
 #print axioms TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm
 #print axioms TauCeti.DavisKahan1970.tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace
 #print axioms TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree
+#print axioms TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact
+#print axioms TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact
 #print axioms TauCeti.DavisKahanTheory.projectorDifference_restrictionSpectra_opNorm
 #print axioms TauCeti.DavisKahanTheory.proposition4_4_counterexample
 
 /-!
 ## Additional exhibition sentinels
 
-These are not extra comparator holes.  They make several high-value parts of
-the 1970 formalization visible in an ordinary challenge build: the definitive
-generalized sine theorem over both scalar fields, real-Hilbert counterparts of
-the source-faithful tangent and double-angle-sine endpoints, the formal
-refutation of the false printed Proposition 4.4, Section 8 branch selection,
-and a source-numbered Section 9 numerical consequence.  There is deliberately
-no real `tan 2Theta` exact-paper sentinel: its unrestricted source signature is
-part of the same unresolved gap as the complex target above.
+These are not extra comparator holes.  They make high-value parts of the 1970
+formalization visible in an ordinary challenge build: the definitive generalized
+sine theorem over both scalar fields, real-Hilbert counterparts of the corrected
+tangent and double-angle endpoints, source sharpness/asymptotics, the bilateral-
+shift separation of the paper's dimension conditions, the formal refutation of
+the false printed Proposition 4.4, Section 8 branch selection, and a source-
+numbered Section 9 numerical consequence.
 -/
 
 #print axioms TauCeti.DavisKahan1970.Theorem6_1
@@ -192,6 +197,11 @@ part of the same unresolved gap as the complex target above.
 #print axioms TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real
 #print axioms TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent
 #print axioms TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real
+#print axioms TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact
+#print axioms TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact
+#print axioms TauCeti.DavisKahanTheory.directSum_model_all_four_equalities
+#print axioms TauCeti.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one
+#print axioms TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses
 #print axioms TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite
 #print axioms TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch
 #print axioms TauCeti.DavisKahan1970.Section9.equation_9_7

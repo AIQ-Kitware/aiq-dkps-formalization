@@ -9,11 +9,12 @@ or because they exhibit an important formalization fact.  They need not be leaf
 nodes in the repository proof graph: headline theorems are useful precisely
 because later source results reuse them.
 
-The final `tan 2Theta` target is intentionally stronger than the currently
-available production wrappers: it states the ambient Section 2 theorem without
-an added pole-exclusion or selected-block spectral-placement premise.  Its
-presence in the comparator is an executable record of that remaining
-paper-faithfulness obligation.
+The source-facing targets distinguish an inequality from the domain facts that
+make the paper's tangent notation meaningful.  In Lean, `Real.tan` is totalized
+at poles, so a static source certificate must not silently replace a derived
+pole-exclusion fact by totalized evaluation.  Missing source-domain facts remain
+explicit red comparator obligations rather than being hidden by a nearby
+compiled specialization.
 -/
 
 import DavisKahan.FiniteDimensional.Core.All
@@ -27,8 +28,10 @@ import DavisKahan.Geometry.Angle.PaperOperatorAngle
 import DavisKahan.Geometry.Angle.PaperDoubleAngle
 import DavisKahan.Geometry.Angle.PaperTanAngle
 import DavisKahan.Geometry.Halmos.CrossedDefectGap
+import DavisKahan.Frontier.Section3BilateralShift
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
 import DavisKahan.BoundedOperator.TrialResidual
 import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
 import DavisKahan.Sylvester.Unbounded.LegacyGap
@@ -226,7 +229,7 @@ open scoped InnerProductSpace
 
 noncomputable section
 
-universe u v
+universe u v w
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
@@ -235,7 +238,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 complete.  The source theorem signatures use compressions to such subspaces,
 so the challenge installs the same local instance as the production modules. -/
 local instance instCompleteSpaceCoeOfHasOrthogonalProjectionChallenge
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+    {G : Type w} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     (W : Submodule ℂ G) [W.HasOrthogonalProjection] : CompleteSpace W :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
 
@@ -287,6 +290,31 @@ theorem tanTheta_directed_paperUINorm
         delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
   sorry
 
+/-- The directed `tan Theta` conclusion in the printed spectral orientation:
+the trial/Ritz compression lies in `[beta, alpha]` and the unwanted exact
+restriction lies in `[alpha + delta, infinity)`.  Unlike the form-bound wrapper
+above, this is the source-facing spectral telescope used by the audit. -/
+theorem tanTheta_directed_paperUINorm_spectral
+    {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [CompleteSpace H]
+    (N : PaperUnitaryInvariantNorm)
+    (T : H →L[ℂ] H) (hT : T.IsSymmetric)
+    (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
+    [CompleteSpace Z]
+    (hV : T.Reduces V)
+    {beta alpha delta : ℝ} (_hbetaalpha : beta ≤ alpha) (hdelta : 0 < delta)
+    (hCompressionSpectrum :
+      spectrum ℝ (theorem63Compression T Z) ⊆ Set.Icc beta alpha)
+    (hUnwantedSpectrum :
+      spectrum ℝ (T.restrict (hV.orthogonalComplement).1) ⊆
+        Set.Ici (alpha + delta))
+    (hResidual : N.Mem (theorem63Residual T Z)) :
+    ∃ tanTheta0 : Z →L[ℂ] H,
+      HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
+        N.Mem tanTheta0 ∧
+        delta * N.gauge tanTheta0 ≤ N.gauge (theorem63Residual T Z) := by
+  sorry
+
 /-- Ambient `tan Theta` theorem under the paper's standing crossed-defect
 condition (3.5), which supplies transversality rather than assuming it separately. -/
 theorem tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent
@@ -304,6 +332,40 @@ theorem tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent
     (hMem : N.Mem (T - A)) :
     N.Mem (paperTanAngleOperatorC U V) ∧
       delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge (T - A) := by
+  sorry
+
+/-- **Intentional red source-treatment target for the printed ambient `tan Theta`
+statement.**
+
+Section 2 prints the ambient tangent conclusion without the crossed-defect
+condition (3.5), while Section 3 later makes (3.5) a standing assumption before
+the tangent proof.  The bilateral-shift half-spaces show that the earlier
+ambient dimension condition (1.5) does not imply (3.5).  This challenge asks
+for the stronger, theorem-level counterexample: choose the later half-space as
+`P`, the earlier one as `Q`, let the unperturbed/perturbed operator be the
+orthogonal projection onto `Q perp`, and take zero perturbation.  The printed
+ordered spectral gap and `H_0 = 0` then hold, the directed `P`-to-`Q` sine
+operator is zero, but the whole-space angle has a `pi/2` pole.  Thus the same
+witness also challenges Section 1's unqualified claim that the nonzero
+whole-space angle data occur twice.  A faithful formalization should prove this
+counterexample rather than silently add (3.5) to the printed theorem. -/
+theorem tanTheta_literalSection2_poleCounterexample
+    {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+    [CompleteSpace H]
+    (b : HilbertBasis ℤ ℂ H) :
+    let P := DavisKahan.Frontier.Section3.coordinateHalfSpace b 1
+    let Q := DavisKahan.Frontier.Section3.coordinateHalfSpace b 0
+    let A : H →L[ℂ] H := Qᗮ.starProjection
+    let K : H →L[ℂ] H := 0
+    (Nonempty (P ≃ₗᵢ[ℂ] Q) ∧ Nonempty (Pᗮ ≃ₗᵢ[ℂ] Qᗮ)) ∧
+      IsSelfAdjoint A ∧
+      (∀ x ∈ P, A x ∈ P) ∧
+      (∀ x ∈ Q, (A + K) x ∈ Q) ∧
+      spectrum ℝ (compressOperator P A) ⊆ Set.Icc 0 0 ∧
+      spectrum ℝ (compressOperator Qᗮ (A + K)) ⊆ Set.Ici 1 ∧
+      (∀ x ∈ P, K x ∈ Pᗮ) ∧
+      sinAngleOperatorDirectedC P Q = 0 ∧
+      ∃ t ∈ spectrum ℝ (paperAngleOperatorC P Q), Real.cos t = 0 := by
   sorry
 
 /-- Full-Hilbert directed residual `sin 2Theta` theorem for every source UI norm. -/
@@ -367,39 +429,80 @@ theorem tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace
   sorry
 
 
-/-- **Intentional red comparator target:** literal directed Section 2
-`tan 2Theta` residual theorem at arbitrary Hilbert/source-UI scope.
+/-- **Davis--Kahan 1970, Section 2 `tan 2Theta_0`, directed residual
+conclusion, exactly from its printed hypotheses.**
 
-The directed angle is encoded independently of the source proof modules.  The
-operator `sinAngleOperatorDirectedC U V` has the directed principal sines on
-`U` and zero on `U perp`; applying `s ↦ |tan (2 * arcsin s)|` by continuous
-functional calculus therefore gives the source `|tan 2Theta_0|` singular-value
-sequence without choosing a graph chart or assuming the quarter-acute branch.
-The conclusion also returns pole exclusion explicitly, because Lean's
-`Real.tan` is totalized at the poles whereas the printed theorem asserts a
-finite tangent.  Under the printed off-diagonal hypothesis,
-`P_{U perp} H P_U` is the ambient extension of the source residual `R`.
-No independent pole-exclusion or selected-block placement premise is included. -/
-theorem tanTwoTheta_directedResidual_paperUINorm_exactPaper
+This challenge copies the public source-facing production telescope: the two
+compressed blocks of `A` satisfy the printed interval/half-line separation,
+`H` is fully off diagonal, and `V` is invariant for `A+H`.  There is no
+caller-supplied quarter-angle branch, pole-exclusion hypothesis, or perturbed
+block spectral-placement premise.  The left side is the canonical directed
+projection-block representative used by the source norm. -/
+theorem tanTwoTheta_directedCorner_residual_paperUINorm_exact
     (N : PaperUnitaryInvariantNorm)
     {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    {a b : ℝ}
+    {beta alpha delta : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
-    (hab : a < b)
-    (hUhigh : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
-    (hUperpLow : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
+    (hdelta : 0 < delta)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc beta alpha)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (alpha + delta))
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
-    (hRmem : N.Mem (Uᗮ.starProjection ∘L H ∘L U.starProjection)) :
-    let tanTwoTheta0 : E →L[ℂ] E :=
-      cfc (fun s : ℝ => |Real.tan (2 * Real.arcsin s)|)
-        (sinAngleOperatorDirectedC U V)
-    (∀ s ∈ spectrum ℝ (sinAngleOperatorDirectedC U V),
-        Real.cos (2 * Real.arcsin s) ≠ 0) ∧
-      N.Mem tanTwoTheta0 ∧
-      (b - a) * N.gauge tanTwoTheta0 ≤
-        2 * N.gauge (Uᗮ.starProjection ∘L H ∘L U.starProjection) := by
+    (hRmem : N.Mem (paperProjectionBlock Uᗮ U H)) :
+    N.Mem
+        (paperProjectionBlock Uᗮ U
+          (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ∧
+      delta * N.gauge
+          (paperProjectionBlock Uᗮ U
+            (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ≤
+        2 * N.gauge (paperProjectionBlock Uᗮ U H) := by
+  sorry
+
+
+/-- **Intentional red comparator target:** the paper's unbounded directed
+`tan 2Theta` residual theorem at arbitrary source-UI-norm scope, with no
+cutoff net or quarter-acuteness supplied by the caller.
+
+The printed Section 2 scope note says the four headline estimates remain valid
+for unbounded self-adjoint `A` when the residual/perturbation is bounded.  The
+repository proves the corresponding operator-norm estimate and the general
+ideal inequality once cutoff convergence and denominator control are supplied,
+but it does not yet expose one source-facing arbitrary-UI wrapper deriving that
+assembly from only the paper data. -/
+theorem tanTwoTheta_unbounded_directedResidual_paperUINorm_exactPaper
+    {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
+    [CompleteSpace G]
+    (N : PaperUnitaryInvariantNorm)
+    {A : G →ₗ.[ℂ] G} {B Z : G →L[ℂ] G} {a b c : ℝ}
+    (hA : IsSelfAdjoint A)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : G), hZdom x⟩ + B (Z (x : G)) = Z (A x) + Z (B (x : G)))
+    (hUa : ∀ x : A.domain,
+      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : G) ∈
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
+    (hab : a < b)
+    (hRmem : N.Mem (paperBlockCompression
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)) :
+    IsUnit
+        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z *
+          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z) ∧
+      N.Mem (reflectionTangentCorner
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ∧
+      (b - a) * N.gauge (reflectionTangentCorner
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ≤
+        2 * N.gauge (paperBlockCompression
+          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
+          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B) := by
   sorry
 
 /-- Best currently proved ambient branch-free `tan 2Theta` endpoint.  The
@@ -422,30 +525,45 @@ theorem tanTwoTheta_wholeSpace_paperUINorm_branchFree
       (b - a) * N.gauge (paperAbsTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
   sorry
 
-/-- **Intentional red comparator target:** literal ambient Section 2
-`tan 2Theta` theorem at arbitrary Hilbert/source-UI scope.
-
-Unlike the currently proved wrappers, this statement assumes neither explicit
-pole exclusion nor spectral placement of the selected `V` blocks.  The paper's
-proof is supposed to derive pole exclusion from the one-sided gap and the
-fully off-diagonal perturbation.  The pole-exclusion predicate is returned
-explicitly because Lean's `Real.tan` is totalized at poles; this prevents the
-formal statement from becoming accidentally weaker than the paper. -/
-theorem tanTwoTheta_wholeSpace_paperUINorm_exactPaper
+/-- The newly compiled ambient Section 2 `tan 2Theta` inequality from
+exactly the printed ordered spectral gap and fully off-diagonal perturbation
+hypotheses.  This mirrors the production theorem signature exactly. -/
+theorem tanTwoTheta_wholeSpace_paperUINorm_exact
     (N : PaperUnitaryInvariantNorm)
     {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    {a b : ℝ}
+    {β α δ : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
     (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
-    (hab : a < b)
-    (hUhigh : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
-    (hUperpLow : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
+    (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc β α)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
     (hHmem : N.Mem H) :
-    (∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0) ∧
-      N.Mem (paperAbsTanTwoAngleOperatorC U V) ∧
-      (b - a) * N.gauge (paperAbsTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
+    N.Mem (paperTanTwoAngleOperatorC U V) ∧
+      δ * N.gauge (paperTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
+  sorry
+
+/-- **Intentional red static-semantic certificate:** pole exclusion for the
+ambient Section 2 `tan 2Theta` theorem from only the printed hypotheses.
+
+The production proof of `tanTwoTheta_wholeSpace_paperUINorm_exact` derives this
+fact internally, but the deriving lemma is private.  Because Lean totalizes
+`Real.tan` at its poles, a signature-only paper audit cannot infer from the
+inequality theorem alone that the formal tangent has the source's intended
+mathematical domain.  This public source-hypothesis theorem is therefore kept
+red until that domain fact is exported. -/
+theorem tanTwoTheta_poleExclusion_exactPaper
+    {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {beta alpha delta : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    (hdelta : 0 < delta)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc beta alpha)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (alpha + delta))
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
+    ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0 := by
   sorry
 
 end
