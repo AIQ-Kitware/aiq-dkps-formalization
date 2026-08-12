@@ -295,8 +295,9 @@ not a requirement to reproduce the paper's proof arguments or proof organization
   toward 100% coverage. It is not an open obligation to prove the false printed
   conclusion.
 - A 100% full-paper claim means every mathematical claim tracked by the checked-in distributable
-  source specification and source census has one of these completed outcomes, with the
-  source-facing correspondence recorded. Internal helper statements and proof
+  source specification and `dev/davis-kahan-1970-source-atom-inventory.json` has one of these
+  completed outcomes, with the source-facing correspondence recorded. The 49 statement-map rows
+  are organizational groups, not the completeness denominator. Internal helper statements and proof
   paths may differ freely from the paper.
 
 The checked-in distributable source specification fixes the ambient scope:
@@ -345,14 +346,21 @@ Accordingly:
   the source norm scope, the direct-rotation and spectral-selection theory,
   the unbounded passages, sharpness/equality content, and a fresh build and
   trusted-dependency audit.
+- **The source-side denominator is atomic.** `dev/davis-kahan-1970-source-atom-inventory.json`
+  inventories the mathematical assertions in paper order, including every numbered equation,
+  distinct theorem conclusion, counterexample, scope/sharpness assertion, and established
+  mathematics embedded in a mixed open-question passage. Before declaring a row complete, verify
+  every completion-obligation atom listed in that row's `source_atom_ids`; if the source passage
+  contains an un-inventoried assertion, treat that as a source-inventory failure rather than silently
+  shrinking the denominator.
 - **Davis--Kahan completion has three independent axes.** `status` records the
   source-facing mathematical implementation judgement, `verification` records what
   the Lean build certifies for registered declarations, and `completion_certification`
   records whether a hostile semantic review has accepted the complete hashed source
-  passage. A row counts toward 100% only when the statement map marks it as a completion
-  obligation, its source status is terminal (`compiled_exact` or
-  `refuted_as_transcribed`), verification is `proved_in_build`, and hostile semantic
-  certification is `accepted`. Never infer 100% from a green build, a raw
+  passage. A row can be accepted only when every completion-obligation atom beneath it has a
+  terminal source-facing disposition, compiler evidence where required, and hostile semantic
+  acceptance; the row-level fields are a coarse projection of that atomic result. Never infer 100%
+  from a green build, a raw
   `compiled_exact` count, or a recursively grounded frontier graph.
 - Do not exempt a claim from completion merely because it occurs in Section 10. Pure
   open questions are non-obligations, but mixed blocks must split established

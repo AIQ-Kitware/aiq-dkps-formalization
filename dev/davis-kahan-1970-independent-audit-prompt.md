@@ -22,7 +22,8 @@ You should receive:
 The repository uses one distributable mathematical source specification:
 
 - `prose/distilled_literature/DavisKahan1970_part_III.tex` — transformative, source-order reconstruction and the authoritative checked-in semantic audit specification; its `DK-CERT` passages preserve the mathematical hypotheses, conclusions, formulas, exceptions, and scope needed for source-to-Lean comparison without reproducing the source prose continuously;
-- `dev/davis-kahan-1970-statement-map.json` — machine-readable source-specification-passage-to-Lean registration;
+- `dev/davis-kahan-1970-source-atom-inventory.json` — source-order atomic completeness denominator; every mathematical assertion to be dispositioned is a child of one of the 49 organizational source blocks;
+- `dev/davis-kahan-1970-statement-map.json` — machine-readable organizational-block-to-Lean registration, with `source_atom_ids` linking each block to its atomic source claims;
 - `dev/davis-kahan-1970-full-source-census.json` — the repository's claimed mathematical status;
 - `dev/davis-kahan-1970-independent-audit-template.md` — the same comparison format without compiler evidence;
 - `formalization.yaml` — project-level bookkeeping and validation policy.
@@ -61,11 +62,13 @@ Before reviewing mathematical fidelity:
 
 A successful build certificate proves elaboration and name resolution. It does **not** prove that any theorem means what the paper says, and it does not turn a `compiled_specialization` census row into an exact source theorem.
 
-## Second: audit every registered source row independently
+## Second: audit every registered source atom, using rows only as navigation
 
-Work through all 49 rows in `statement-audit.md` in order. Do not sample.
+Work through all 49 organizational rows in `statement-audit.md` in order, but use `dev/davis-kahan-1970-source-atom-inventory.json` as the source-side denominator. The current inventory contains 266 source atoms: 259 mathematical completion obligations and 7 non-completion source-state atoms. Do not sample, and do not infer that a row is complete merely because its headline theorem is covered.
 
-For each row:
+For each row, first verify that its `source_atom_ids` exactly identify the mathematical assertions in the registered source passage. Then audit every completion-obligation atom under that row. If the source passage contains a mathematical assertion with no atom, that is itself a **FAIL source inventory** even if all registered atoms have Lean evidence.
+
+For each row/atom:
 
 1. Read the registered distributable source-specification passage before reading the census notes.
 2. Treat the census status (`compiled_exact`, `refuted_as_transcribed`, etc.) as a proposition to test, not as evidence.
@@ -91,17 +94,18 @@ For every mathematical row, explicitly check these axes where applicable:
 - whether an “equivalent formulation” has a compiled dictionary theorem connecting the repository's notation to the paper's notation;
 - all symmetry/interchange clauses and textual extensions attached to a numbered theorem.
 
-Use exactly one verdict per row:
+Use exactly one verdict per completion-obligation atom, then derive the row verdict from its children:
 
 - **PASS exact** — the compiled Lean statement(s) jointly match the registered source claim at its actual scope;
 - **PASS refuted** — the printed claim is false and the compiled formal refutation is inside the source hypotheses;
 - **FAIL scope** — conclusion is related but Lean assumes more or covers less than the source;
 - **FAIL conclusion** — the Lean conclusion is not the same mathematical assertion;
 - **FAIL missing clause** — part of a multi-clause source statement is absent;
+- **FAIL source inventory** — a mathematical assertion in the source passage has no atomic inventory entry;
 - **FAIL source specification** — the registered source-specification passage is malformed, misleading, or omits context needed to state the claim correctly;
 - **UNCERTAIN** — evidence supplied is insufficient to decide.
 
-Do not upgrade an `UNCERTAIN` row merely because nearby infrastructure strongly suggests the intended theorem is true.
+Do not upgrade an `UNCERTAIN` atom or row merely because nearby infrastructure strongly suggests the intended theorem is true.
 
 The maintained census now has a third axis, `completion_certification`. Treat it as a prior hostile-review judgement to challenge, not as evidence. A row contributes to the repository's 100% claim only when it is an explicit statement-map completion obligation, has terminal source status, is compiler-verified, and its full registered passage is independently accepted. Generic `.whole` clauses are not sufficient when a passage contains separable mathematical assertions; split and audit those clauses explicitly.
 

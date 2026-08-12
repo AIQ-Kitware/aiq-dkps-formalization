@@ -10,10 +10,11 @@
 \item[Primary source] Chandler Davis and W. M. Kahan, \emph{The Rotation of Eigenvectors by a Perturbation. III}, SIAM Journal on Numerical Analysis 7(1) (1970), 1--46, DOI \href{https://doi.org/10.1137/0707001}{10.1137/0707001}.
 \item[Archival locator] An independently hosted copy has been observed in the Internet Archive scholarly-sources corpus at \href{https://ia600108.us.archive.org/view_archive.php?archive=/24/items/wikipedia-scholarly-sources-corpus/10.1137.zip\&file=10.1137\%252F0707001.pdf}{this archival locator}.  The DOI above remains the canonical identifier; this locator is provided only for source recovery, is not required by certification, and this repository makes no assertion about the locator's continued availability or the rights status of the hosted copy.
 \item[Role of this file] This checked-in document is the distributable mathematical source specification for the formalization audit.  It is a transformative reconstruction rather than a transcription: prose is compressed and rephrased, while hypotheses, conclusions, equations needed to identify claims, exceptional cases, counterexamples, scope qualifications, and presentation order are retained.
-\item[Audit markers] Text between \code{DK-CERT-SOURCE-BEGIN} and \code{DK-CERT-SOURCE-END} is the authoritative distributable passage for the corresponding claim ID.  \code{dev/davis-kahan-1970-statement-map.json} binds each ID to Lean declarations.  The static checker hashes these passages directly; it does not require a private or non-distributable transcription.
+\item[Audit markers] Text between \code{DK-CERT-SOURCE-BEGIN} and \code{DK-CERT-SOURCE-END} is the authoritative distributable passage for the corresponding claim ID.  \code{dev/davis-kahan-1970-statement-map.json} binds each organizational claim ID to Lean declarations.  The static checker hashes these passages directly; it does not require a private or non-distributable transcription.
+\item[Atomic completeness denominator] The 49 claim blocks are source-order organizational groups, not a claim that the paper has only 49 mathematical assertions.  \code{dev/davis-kahan-1970-source-atom-inventory.json} enumerates the finer mathematical atoms contained in those groups, including every numbered equation, distinct theorem conclusion, counterexample, sharpness/scope assertion, and established mathematical clause that occurs inside a mixed open-question passage.  Completion is ultimately judged against those atoms, not merely the 49 group labels.
 \item[External provenance] A private transcription or an image of the original paper may be used periodically to re-audit this reconstruction itself.  Such material is provenance evidence, not a dependency of the repository's static source-to-Lean certificate.
 \item[Editorial separation] Source-faithful mathematics is kept inside the marked passages.  Repository-status comments and known source/transcription discrepancies are explicitly labeled as editorial audit notes and are not silently substituted for what the paper states.
-\item[Completion semantics] A false printed assertion is still source content.  Formal coverage may therefore consist of an exact Lean proposition together with a machine-checked refutation.  Section 10 questions are retained for source completeness but are not theorem-completion obligations.
+\item[Completion semantics] A false printed assertion is still source content.  Formal coverage may therefore consist of an exact Lean proposition together with a machine-checked refutation.  A pure open question is retained for source completeness but is not a theorem-completion obligation; established mathematics stated in the same source passage as an open question remains an obligation.
 \end{sourceguide}
 
 \section*{Source-order synopsis}
@@ -138,7 +139,12 @@ For nonzero vectors the source uses
  \angle(x,y)=\arccos\frac{\Re(y^*x)}{\norm{x}\norm{y}},
  \tag{1.14}
 \end{equation}
-while the angle between the one-dimensional subspaces they span is
+and this convention preserves the cosine-law identity
+\[
+ \norm{x+y}^2=\norm{x}^2+\norm{y}^2
+ +2\norm{x}\norm{y}\cos\angle(x,y).
+\]
+The angle between the one-dimensional subspaces they span is
 \begin{equation}
  \arccos\frac{|y^*x|}{\norm{x}\norm{y}}.
  \tag{1.15}
@@ -380,7 +386,18 @@ Assuming both the matching-dimension condition (1.5) and the crossing-dimension 
  \qquad C_j\ge0.
  \tag{3.6}
 \end{equation}
-Then $Q=UPU^{-1}$, and with the reflection $X=P-P^\perp$ and $Q_-=XQX$ one has $U^{-1}=XUX$.  In particular,
+The corresponding projector has the block representation
+\begin{equation}
+ Q=UPU^{-1}
+ \sim
+ \binom{C_0}{S_0}(C_0\ \ S_0^*)
+ =\begin{pmatrix}
+ C_0^2&C_0S_0^*\\
+ S_0C_0&S_0S_0^*
+ \end{pmatrix}.
+ \tag{3.7}
+\end{equation}
+With the reflection $X=P-P^\perp$ and $Q_-=XQX$ one has $U^{-1}=XUX$.  In particular,
 \begin{equation}
  U^2=(Q-Q^\perp)(P-P^\perp).
  \tag{3.8}
@@ -471,7 +488,20 @@ Equivalently, if $\lambda_1\ge\lambda_2\ge\cdots$ are the singular values of $(1
 \[
  \lambda_k=2\sin(\theta_k/2).
 \]
-The proof uses the singular-value minimax principle (the paper's equation (4.1)) together with a pointwise angle comparison (4.2).
+The singular values admit the minimax description
+\begin{equation}
+ \lambda_k
+ =\inf_{\substack{\mathcal Y\subset P\Hsp\\\dim\mathcal Y=k-1}}
+   \ \sup_{\substack{x\in P\Hsp\ominus\mathcal Y\\\norm{x}=1}}
+   \norm{(1-V)x},
+ \tag{4.1}
+\end{equation}
+and the proof selects a corresponding unit vector $x$ for which
+\begin{equation}
+ \angle(x,Vx)\ge\theta_k=\angle(u_k,Uu_k).
+ \tag{4.2}
+\end{equation}
+The latter follows by comparing $Vx$ with the closest unit vector in $Q\Hsp$ and using the block formula (3.7).
 % DK-CERT-SOURCE-END
 % DK-CERT-CLAIM-END DK-4.1-prop
 
@@ -1079,11 +1109,11 @@ and $H$ is multiplication by $\varepsilon t$, with $0<\varepsilon<100$.  Thus th
 \[
  u^{(4)}+\varepsilon t u=\lambda u
 \]
-with the same boundary conditions.  The first two unperturbed eigenvalues are
+with the same boundary conditions.  The source orders the unperturbed eigenvalues, with multiplicity, as
 \[
- \alpha_1=\alpha_2=0,
+ \alpha_1=0=\alpha_2<\alpha_3<\alpha_4<\cdots,
 \]
-while for $k>2$ the positive eigenvalues are determined by the free-beam equation
+and for $k>2$ identifies $\alpha_k$ as the positive roots of the free-beam equation
 \[
  \cos(\alpha_k^{1/4})\cosh(\alpha_k^{1/4})=1
 \]
@@ -1196,6 +1226,12 @@ The best lower bounds from the available $2+1$ block information are the two low
  0&\widehat\alpha_2&\varepsilon/\sqrt{30}\\
  \varepsilon/\sqrt{30}&\varepsilon/\sqrt{30}&500
  \end{pmatrix}.
+\]
+The source further records, for the small parameter range under discussion,
+\[
+ \frac{\varepsilon^2/30}{500-\widehat\alpha_k}
+ >\widehat\alpha_k-\check\alpha_k
+ =\frac{\varepsilon^2/30}{500-\widehat\alpha_k}-O(\varepsilon^4).
 \]
 For $0<\varepsilon<100$ this gives
 \begin{equation}
