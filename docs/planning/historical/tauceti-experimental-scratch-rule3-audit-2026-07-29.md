@@ -1,5 +1,7 @@
 # What the 76 `check_library_structure` rule-3 violations actually are
 
+> **Historical structure audit (2026-07-29).** The measured counts below are intentionally preserved as a snapshot. Run `python3 scripts/check_library_structure.py` for current measurements.
+
 **Measured 2026-07-29 (edward, fable).**
 
 `scripts/check_library_structure.py` rule 3 — *"every Experimental module has an
@@ -115,7 +117,7 @@ Riccati was promotable by path alone **because its namespace was already
 production-shaped**. Every other block declares into a namespace containing
 `Experimental` or `Scratch`, so moving the file alone would leave production
 modules whose *declaration names* still say `Experimental`. That is precisely
-the class of defect `dev/TauCeti_theorem_naming_strength_audit_2026-07-27.md`
+the class of defect `docs/planning/historical/tauceti-theorem-naming-strength-audit-2026-07-27.md`
 exists to catch, and shipping it would be worse than leaving the modules where
 they are.
 

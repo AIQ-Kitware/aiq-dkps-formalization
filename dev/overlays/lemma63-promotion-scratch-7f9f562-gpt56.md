@@ -2,9 +2,8 @@
 
 Base: `7f9f562`.
 
-This lane was unclaimed in `dev/LANES.md` at the base revision.  It does not
-modify the active spectral, continuation, polar, rectangular-ideal, or Section
-8 source-assembly files.
+At the base revision this scratch work was isolated from the active spectral,
+continuation, polar, rectangular-ideal, and Section 8 source-assembly files.
 
 ## Mathematical finding
 

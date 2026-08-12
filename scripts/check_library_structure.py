@@ -130,7 +130,8 @@ def supports_admitted(module: str, consumers: dict[str, set[str]],
     whose only purpose is to support unfinished work.  Those are correctly
     placed, so the rule could never be satisfied by moving files: measured
     2026-07-29, 17 of its 74 findings were modules that should not move.
-    See `dev/tauceti/experimental-promotable-inventory.md`.
+    See `docs/planning/historical/tauceti-experimental-scratch-rule3-audit-2026-07-29.md`
+    for the historical rationale behind this rule.
     """
     if module in memo:
         return memo[module]

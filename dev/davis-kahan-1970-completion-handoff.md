@@ -1,10 +1,12 @@
 # Davis--Kahan 1970 completion handoff — mathematical and architectural edition
 
+> **Historical checkpoint, retained as source-audit evidence.** Current status and policy live in `AGENTS.md`, the maintained Davis--Kahan census/frontier, and the distributable source specification. Re-measure current HEAD before acting on any status claim below.
+
 State inspected 2026-08-09 from checkpoint HEAD `69d1655a` (`main`, clean working tree).
 
 This document is for an agent taking over the remaining Davis--Kahan 1970 campaign without prior context. It is intentionally more than a work list: it records the mathematical architecture, the proof routes already discovered, the routes already falsified, and the reusable infrastructure that now exists so that the next agent does not have to rediscover the campaign's hardest lessons.
 
-Read `dev/coordinator-subagent-workflow.md` for the mechanical coordinator loop and `AGENTS.md` for repository policy. Before substantial work under `ForTauCeti/Analysis/InnerProductSpace/`, also read `dev/lean-proof-engineering-lessons.md`.
+Read `docs/planning/historical/coordinator-subagent-workflow-2026-08-09.md` for the mechanical coordinator loop and `AGENTS.md` for repository policy. Before substantial work under `ForTauCeti/Analysis/InnerProductSpace/`, also read `dev/lean-proof-engineering-lessons.md`.
 
 The source census is `dev/davis-kahan-1970-full-source-census.json`. It is the durable record of source coverage, but do not treat any single status field, blocker name, or prose note as infallible. Re-measure the current declarations and current HEAD before acting. In particular, this checkpoint already contains work newer than the previous completion handoff, and one row (`DK-8.1-thm`) is still marked `compiled_exact` while also carrying a genuine real-scalar scope blocker.
 

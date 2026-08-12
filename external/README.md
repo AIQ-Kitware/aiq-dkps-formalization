@@ -24,15 +24,15 @@ demand at submission time. See [`../ForTauCeti/README.md`](../ForTauCeti/README.
 
 `external/Spectra` was the read-only upstream reference for the Spectra
 collaboration. **The Spectra dependency is retired**: in-scope `import Spectra`
-is 0, the vendored tree moved to `retired/Spectra`, and the submodule had no
-build role — `lakefile.toml` never required it. The gitlink and its `.gitmodules`
-stanza are gone.
+is 0, both the vendored source tree and this submodule are gone, and the
+submodule had no build role — `lakefile.toml` never required it. The gitlink
+and its `.gitmodules` stanza are gone.
 
 Nothing was lost with it. The pinned upstream commit
 `8dbaaf6728d1342ae16acf79fd7eef7c59b37e63` is still recorded in nine Lean
 provenance headers and in [`../dev/external-lean-references.md`](../dev/external-lean-references.md);
-upstream identity is in [`../retired/Spectra.UPSTREAM.md`](../retired/Spectra.UPSTREAM.md);
-and the attribution ledger survives as
+upstream identity, snapshot digests, and complete-fork recovery material are
+preserved under `../retired/`; the attribution ledger survives as
 [`../dev/tauceti/spectra-provenance-map.md`](../dev/tauceti/spectra-provenance-map.md)
 with its baseline `dev/tauceti/spectra-vendor-authorship-baseline.json`.
 

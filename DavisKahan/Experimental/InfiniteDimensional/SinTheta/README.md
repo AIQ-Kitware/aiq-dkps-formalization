@@ -179,8 +179,8 @@ Two mathematical cautions from the completed repair should guide further work:
   cannot prove exact approximation-number preservation at the same index.
 
 The full-paper goal remains larger than sine-theta.  After the optional API
-layer settles, use `dev/davis-kahan-open-debt-inventory-2026-07-19.md` to triage
-direct rotation, tangent and double-angle results, sharpness/equality content,
-and the remaining genuinely live unbounded obligations.  Do not treat the raw
-textual open-term count as a roadmap: it includes immutable challenges and
-superseded experimental infrastructure.
+layer settles, run `python3 scripts/inventory_davis_kahan_debt.py` for a current
+static triage of direct rotation, tangent and double-angle results,
+sharpness/equality content, and remaining genuinely live unbounded obligations.
+Do not treat the raw textual open-term count as a roadmap: it includes immutable
+challenges and superseded experimental infrastructure.
