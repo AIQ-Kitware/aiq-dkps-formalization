@@ -36,7 +36,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace TanTheta
 
 
@@ -424,6 +423,5 @@ theorem tanTheta_unbounded_exactSpectralIcc
       (by linarith) hδ hρ0 hZcoercive hcenter hρ
 
 end TanTheta
-end Experimental
 end DavisKahan
 end TauCeti

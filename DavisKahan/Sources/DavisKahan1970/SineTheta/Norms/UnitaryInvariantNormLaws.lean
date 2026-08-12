@@ -21,7 +21,6 @@ constructed from the single source gauge exactly as in the paper.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
@@ -344,6 +343,5 @@ end PaperUnitaryInvariantNorm
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

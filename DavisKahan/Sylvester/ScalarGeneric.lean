@@ -35,7 +35,6 @@ statements are already built.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -120,6 +119,5 @@ instance hasUnboundedSylvesterKyFan_real :
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

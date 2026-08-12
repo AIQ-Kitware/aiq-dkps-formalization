@@ -19,7 +19,6 @@ membership and the arbitrary-gauge estimate.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -94,6 +93,5 @@ theorem davisKahan1970_sylvester_real
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

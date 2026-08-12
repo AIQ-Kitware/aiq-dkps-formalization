@@ -22,7 +22,7 @@ Self-adjoint spectral restriction then supplies a real spectral point.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 
@@ -86,7 +86,7 @@ theorem restrictedSpectrum_nonempty_of_invariant
 /-- For nontrivial complementary subspaces, an ordered internal gap supplies one
 of the two oriented restricted-spectrum half-line configurations with no extra
 set-theoretic hypotheses. -/
-theorem _root_.TauCeti.DavisKahan.Experimental.Foundation.OrderedInternalGap.exists_oriented_halfLine_center_of_nontrivial
+theorem _root_.TauCeti.DavisKahan.Foundation.OrderedInternalGap.exists_oriented_halfLine_center_of_nontrivial
     (A : E →L[ℂ] E) (hA : IsSelfAdjointOperator A)
     (U : Submodule ℂ E) [U.HasOrthogonalProjection]
     [Nontrivial U] [Nontrivial Uᗮ]

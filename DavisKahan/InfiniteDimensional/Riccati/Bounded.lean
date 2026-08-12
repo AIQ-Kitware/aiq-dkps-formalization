@@ -25,7 +25,7 @@ form proved by the bounded existence and sharp-estimate leaves.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

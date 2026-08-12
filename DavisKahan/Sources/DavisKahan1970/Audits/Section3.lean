@@ -20,7 +20,7 @@ namespace TauCeti
 namespace DavisKahan1970
 namespace Section3Audit
 
-open DavisKahan.Experimental.MathAhead.HiddenFoundations
+open DavisKahan.HiddenFoundations
 
 #check proposition3_5_angleOperator
 #check proposition3_5_directRotation

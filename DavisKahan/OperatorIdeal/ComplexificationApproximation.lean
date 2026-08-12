@@ -23,14 +23,13 @@ Ky-Fan-dominant unitarily invariant ideal family.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 namespace ComplexificationApproximation
 
 open scoped InnerProductSpace
 open TauCeti.RealComplexification
 -- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -342,6 +341,5 @@ end
 
 end ComplexificationApproximation
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

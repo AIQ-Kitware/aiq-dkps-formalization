@@ -24,9 +24,6 @@ Weinberger-attribution question separate.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 namespace Model
 
@@ -79,8 +76,5 @@ theorem beam_equation_9_8 (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
 
 end Model
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

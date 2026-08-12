@@ -17,7 +17,7 @@ the real resolvent set and spectrum.
 Everything here is proved.  The declarations that remain open obligations --
 the bundled adjoint, the relatively bounded sum, the unbounded spectral
 projection, and the perturbation theorems that depend on them -- stay in
-`DavisKahan.Experimental.InfiniteDimensional.Core.Unbounded`, which imports
+`DavisKahan.InfiniteDimensional.Core.Unbounded`, which imports
 this file.  Splitting them apart is what lets the source-faithful sine-theta
 layer reach `ClosedOperator` without inheriting an admission closure.
 -/
@@ -25,7 +25,7 @@ layer reach `ClosedOperator` without inheriting an admission closure.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

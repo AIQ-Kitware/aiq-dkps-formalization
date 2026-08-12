@@ -54,7 +54,7 @@ coordinate datum from the spectral placement alone. Both were discharged and
 the note went stale; it is corrected here, 2026-08-09, after re-elaborating the
 endpoints.
 
-* `TauCeti.DavisKahan.Experimental.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`
+* `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`
   — arbitrary complete complex Hilbert space, arbitrary `KyFanDominantIdealFamily`,
   the source's one-sided spectral placement, with ideal membership of the tangent
   *concluded* rather than assumed.
@@ -110,37 +110,37 @@ the paper's objects with the domain bookkeeping made explicit. -/
 /-- Bundled Rayleigh--Ritz trial block for an unbounded operator: domain
 inclusion, self-adjoint compression, and bounded residual. -/
 alias TanThetaTrialBlock :=
-  DavisKahan.Experimental.TanTheta.UnboundedTrialBlock
+  DavisKahan.TanTheta.UnboundedTrialBlock
 
 /-- Proof-carrying transversality: the orthogonal projection restricts to a
 bounded linear equivalence from the trial subspace onto the exact subspace. -/
 alias TanThetaTransverseCoordinates :=
-  DavisKahan.Experimental.TanTheta.TrialExactCoordinates
+  DavisKahan.TanTheta.TrialExactCoordinates
 
 /-- The bounded tangent operator of the trial graph over the exact
 subspace: the source's `tan Θ` direction. -/
 alias tanThetaGraphOperator :=
-  DavisKahan.Experimental.TanTheta.TrialExactCoordinates.angularMap
+  DavisKahan.TanTheta.TrialExactCoordinates.angularMap
 
 /-- The graph of the tangent operator is exactly the trial subspace. -/
 alias tanThetaGraphOperator_range :=
-  DavisKahan.Experimental.TanTheta.TrialExactCoordinates.range_graphEmbedding
+  DavisKahan.TanTheta.TrialExactCoordinates.range_graphEmbedding
 
 /-- **Davis--Kahan 1970, Theorem 6.3, general Hilbert-space graph-angle
 form at operator norm.**  For an unbounded self-adjoint `A`, a genuine
 exterior Ritz spectrum, and transverse coordinates over the complement of the
 interval spectral subspace, `δ · ‖tan Θ‖ ≤ ‖R‖`. -/
 alias Theorem6_3_unbounded_graphAngle_opNorm :=
-  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
+  DavisKahan.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
 
 /-- Per-vector unbounded form with a genuine Ritz-spectrum hypothesis. -/
 alias Theorem6_3_unbounded_vector :=
-  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_exactSpectralIcc_trialBlock
+  DavisKahan.TanTheta.tanTheta_unbounded_exactSpectralIcc_trialBlock
 
 /-- Per-vector unbounded form with an explicit coercivity hypothesis on the
 compressed shifted operator. -/
 alias Theorem6_3_unbounded_vector_of_coercivity :=
-  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_exactSpectralIcc
+  DavisKahan.TanTheta.tanTheta_unbounded_exactSpectralIcc
 
 /-- Per-vector bounded form with genuine compression spectra. -/
 alias Theorem6_3_bounded_vector := DavisKahanExt.tanTheta_spectrum

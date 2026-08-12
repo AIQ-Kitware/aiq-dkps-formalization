@@ -51,9 +51,6 @@ SIAM J. Numer. Anal. 7 (1970), Corollary 3.1, second sentence.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 open Filter Topology
 open scoped InnerProductSpace
@@ -576,8 +573,5 @@ theorem ker_blockMap_angleSinOp (hθ0 : ∀ n, 0 ≤ θ n)
 
 end ZeroKernel
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

@@ -33,10 +33,9 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan1970
 
-open DavisKahan.Experimental
-open DavisKahan.Experimental.MathAhead.HiddenFoundations
-open DavisKahan.Experimental.Frontier.Section3
-open DavisKahan.Experimental.Proposition35
+open DavisKahan
+open DavisKahan.Frontier.Section3
+open DavisKahan.Proposition35
 
 noncomputable section
 

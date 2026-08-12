@@ -29,14 +29,13 @@ open scoped InnerProductSpace ComplexConjugate
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace RealSpectralRestriction
 
 open ExactSinTheta
 open ExactSinTheta.ClosedOperatorComplexification
 open TauCeti.RealComplexification
 -- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -710,6 +709,5 @@ theorem realSelfAdjointSpectralRestriction_inclusion_intertwines
 
 end
 end RealSpectralRestriction
-end Experimental
 end DavisKahan
 end TauCeti

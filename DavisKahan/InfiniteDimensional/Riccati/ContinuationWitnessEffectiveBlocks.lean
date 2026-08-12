@@ -28,7 +28,7 @@ input; exact diagonalization and spectrum union alone do not imply them.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open Set
 open scoped InnerProductSpace

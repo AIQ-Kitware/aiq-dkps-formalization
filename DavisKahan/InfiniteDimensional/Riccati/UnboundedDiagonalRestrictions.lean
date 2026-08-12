@@ -23,7 +23,7 @@ inherited from the corresponding property of the ambient map.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open scoped InnerProductSpace
 open Filter Topology

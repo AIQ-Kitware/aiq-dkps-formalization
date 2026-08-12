@@ -37,9 +37,6 @@ defined self-adjoint operator.  Both are open; this is the brick they rest on.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 
 noncomputable section
@@ -204,8 +201,5 @@ theorem integral_mode_sq_pos {beta a b c d x₀ : ℝ}
 end
 
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

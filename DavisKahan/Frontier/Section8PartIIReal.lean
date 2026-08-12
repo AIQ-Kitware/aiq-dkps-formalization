@@ -60,10 +60,10 @@ open Set
 open scoped InnerProductSpace
 open DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.DavisKahan.Foundation
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
-open TauCeti.DavisKahan.Experimental.ExactSinTheta.ComplexificationApproximation
+open TauCeti.DavisKahan.Foundation.RealComplexification
+open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
 
 noncomputable section
 
@@ -378,7 +378,7 @@ theorem theorem8_1_upperCompressionRepulsion_real
             (complexify A + complexify K) (Qcᗮ.starProjection (ofReal x))⟫_ℂ -
           alpha * ‖Qcᗮ.starProjection (ofReal x)‖ ^ 2 := by
     rintro Qc _ rfl
-    exact DavisKahan.Experimental.Frontier.Section8.theorem8_1_upperCompressionRepulsion_source
+    exact DavisKahan.Frontier.Section8.theorem8_1_upperCompressionRepulsion_source
       (complexify A) (complexify K) (complexifySubmodule P) hdelta hAc hKc
       (fun z hz => mapsTo_complexifySubmodule hAP hz)
       (fun z hz => re_inner_le_of_mem_complexifySubmodule hPlow hz)
@@ -441,7 +441,7 @@ theorem theorem8_1_lowerCompressionRepulsion_real
           RCLike.re ⟪Qc.starProjection (ofReal x),
             (complexify A + complexify K) (Qc.starProjection (ofReal x))⟫_ℂ := by
     rintro Qc _ rfl
-    exact DavisKahan.Experimental.Frontier.Section8.theorem8_1_lowerCompressionRepulsion_source
+    exact DavisKahan.Frontier.Section8.theorem8_1_lowerCompressionRepulsion_source
       (complexify A) (complexify K) (complexifySubmodule P) hdelta hAc hKc
       (fun z hz => mapsTo_complexifySubmodule hAP hz)
       (fun z hz => re_inner_le_of_mem_complexifySubmodule hPlow hz)

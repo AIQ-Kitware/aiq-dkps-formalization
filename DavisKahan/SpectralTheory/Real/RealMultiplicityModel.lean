@@ -48,11 +48,10 @@ open MeasureTheory
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace RealSpectralRestriction
 
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -95,6 +94,5 @@ theorem exists_hasMultiplicityModel_real [TopologicalSpace.SeparableSpace E]
 end
 
 end RealSpectralRestriction
-end Experimental
 end DavisKahan
 end TauCeti

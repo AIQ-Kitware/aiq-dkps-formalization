@@ -37,7 +37,6 @@ rename would repoint imports for a wording problem this paragraph fixes.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -269,6 +268,5 @@ theorem generalizedSinTheta_exact_of_polarData_of_raw
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

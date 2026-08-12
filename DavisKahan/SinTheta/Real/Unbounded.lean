@@ -18,7 +18,6 @@ ideal family.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -85,6 +84,5 @@ theorem sinTheta_unbounded_exact_real
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

@@ -49,7 +49,7 @@ namespace DavisKahan
 open scoped InnerProductSpace
 open DavisKahanExt
 open TauCeti.DavisKahan
-open Experimental.ExactSinTheta
+open ExactSinTheta
 
 noncomputable section
 

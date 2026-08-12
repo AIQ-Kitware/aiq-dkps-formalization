@@ -19,7 +19,6 @@ vendored Spectra calculus instead.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -209,6 +208,5 @@ theorem sinTheta_bounded_exact
 end GenericExact
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

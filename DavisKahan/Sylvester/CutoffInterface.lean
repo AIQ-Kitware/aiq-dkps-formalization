@@ -16,7 +16,6 @@ implementation while the legacy construction remains an open obligation.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace Topology
@@ -70,6 +69,5 @@ structure BoundedTruncationInterface
       P.cutoff τ ∘L truncation τ = truncation τ
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

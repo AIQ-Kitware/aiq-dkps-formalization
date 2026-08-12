@@ -18,7 +18,6 @@ used by Davis and Kahan.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace ENNReal
@@ -93,6 +92,5 @@ end PaperUnitaryInvariantNorm
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

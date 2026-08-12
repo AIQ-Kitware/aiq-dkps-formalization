@@ -33,9 +33,6 @@ open MeasureTheory TauCeti
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 namespace Model
 namespace Real
@@ -1097,7 +1094,7 @@ theorem exists_eigenpair_of_characteristic {beta : ℝ} (hbeta : 0 < beta)
     ∃ x : beamOperator.domain, (x : BeamL2) ≠ 0 ∧
       beamOperator.toLinearMap x = beta ^ 4 • (x : BeamL2) := by
   obtain ⟨a, b, hab, hfree⟩ :=
-    TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.FreeBeam.Classical.exists_nontrivial_freeBoundary_of_characteristic
+    TauCeti.DavisKahan.FreeBeam.Classical.exists_nontrivial_freeBoundary_of_characteristic
       hbeta.ne' hroot
   let u : BeamL2 := classicalModeLp beta a b a b
   have hu0 : u ≠ 0 := by
@@ -1323,8 +1320,5 @@ end
 end Real
 end Model
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

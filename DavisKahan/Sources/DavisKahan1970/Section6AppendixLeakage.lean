@@ -59,7 +59,6 @@ open Finset
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace Section6Appendix
 
@@ -394,6 +393,5 @@ end ComplexScalars
 
 end Section6Appendix
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

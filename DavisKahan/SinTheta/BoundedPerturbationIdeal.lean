@@ -20,9 +20,8 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 universe v
 
@@ -101,6 +100,5 @@ theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
       _ = N.gaugeReal V := N.gaugeReal_adjoint hVmem
   exact ⟨hRaw'.1, hRaw'.2.trans hProjectedGauge⟩
 
-end Experimental
 end DavisKahan
 end TauCeti

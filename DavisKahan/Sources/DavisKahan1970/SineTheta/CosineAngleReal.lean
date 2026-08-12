@@ -17,13 +17,12 @@ principal-angle data as the original real subspaces.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
 open TauCeti.RealComplexification
 -- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -70,6 +69,5 @@ theorem paperSourceDirectedSinR_eq
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

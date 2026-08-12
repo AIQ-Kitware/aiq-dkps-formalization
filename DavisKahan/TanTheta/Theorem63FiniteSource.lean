@@ -44,7 +44,6 @@ namespace TauCeti
 
 open TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactTanTheta
 
 open ExactSinTheta
@@ -1207,6 +1206,5 @@ theorem theorem6_3_generalizedTanTheta_equalRank_spectral
 end DirectedTangentExistence
 
 end ExactTanTheta
-end Experimental
 end DavisKahan
 end TauCeti

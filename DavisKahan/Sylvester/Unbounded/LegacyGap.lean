@@ -34,7 +34,6 @@ each name says which way.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -183,6 +182,5 @@ theorem formBoundedSylvesterGap_of_spectral
         (semiboundedBelow_of_spectrum_subset_Ici B hB hBspec)
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

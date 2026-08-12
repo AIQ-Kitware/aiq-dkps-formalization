@@ -29,11 +29,11 @@ namespace DavisKahan1970
 open scoped InnerProductSpace BigOperators
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
-open TauCeti.DavisKahan.Experimental.ExactSinTheta.ComplexificationApproximation
-open TauCeti.DavisKahan.Experimental.ExactTanTheta
+open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
+open TauCeti.DavisKahan.ExactTanTheta
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -662,7 +662,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent
     (hV : T.Reduces V) {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U, ⟪compressOperatorReal U T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
-    (h35 : DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent U V) :
+    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V) :
     ‖paperSinAngleOperatorR U V‖ < 1 := by
   have hdirected := approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
     T hT V U hV hdelta hCompressionUpper hUnwantedLower 0
@@ -679,7 +679,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent
             (ContinuousLinearMap.opNorm_nonneg (theorem63DirectedSineBlockReal U V))
       _ < 1 := by rwa [mul_one]
   rw [norm_paperSinAngleOperatorR,
-    DavisKahan.Experimental.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
+    DavisKahan.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
       U V h35]
   exact hnorm
 
@@ -697,7 +697,7 @@ theorem tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hCompressionUpper : ∀ z : U, ⟪compressOperatorReal U T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
-    (h35 : DavisKahan.Experimental.Frontier.CrossedDefectsEquivalent U V)
+    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
     (hMem : N.Mem (T - A)) :
     N.Mem (paperTanAngleOperatorR U V) ∧
       delta * N.gauge (paperTanAngleOperatorR U V) ≤ N.gauge (T - A) :=

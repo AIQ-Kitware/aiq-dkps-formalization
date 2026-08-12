@@ -34,10 +34,8 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Proposition35
 
-open MathAhead.HiddenFoundations
 open Frontier.Section3
 
 noncomputable section
@@ -830,6 +828,5 @@ theorem proposition3_5_angleEigenspace_maximal
 end
 
 end Proposition35
-end Experimental
 end DavisKahan
 end TauCeti

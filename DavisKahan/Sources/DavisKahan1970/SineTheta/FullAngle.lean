@@ -21,7 +21,6 @@ that of the projector difference.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -154,6 +153,5 @@ theorem paperSourceFullSin_mem_iff_and_gauge_eq
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

@@ -24,7 +24,7 @@ that input from a common family of spectral-separation witnesses.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

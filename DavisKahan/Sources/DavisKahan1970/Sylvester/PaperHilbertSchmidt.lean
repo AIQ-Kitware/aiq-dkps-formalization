@@ -23,7 +23,6 @@ solution and the sharp norm estimate; squaring and converting between finite
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace ENNReal
@@ -115,6 +114,5 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

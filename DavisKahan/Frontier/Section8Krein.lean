@@ -36,7 +36,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace Krein
 
@@ -283,6 +282,5 @@ end Ambient
 
 end Krein
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

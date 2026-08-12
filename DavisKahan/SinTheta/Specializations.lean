@@ -16,7 +16,6 @@ functional calculus.  The independent scalar-generic isometric theorem in
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -155,6 +154,5 @@ theorem intervalExteriorGap_to_unbounded
 end Generic
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

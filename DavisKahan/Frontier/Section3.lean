@@ -60,7 +60,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace Section3
 
@@ -707,11 +706,11 @@ theorem proposition3_1_positivity_characterization
     -- Accretivity fixes the square-root branch.
     have hre : ∀ x, 0 ≤ Complex.re ⟪T x, x⟫_ℂ := by
       intro x
-      have h := MathAhead.HiddenFoundations.re_inner_paperDirectRotation_nonneg U V T hT x
+      have h := TauCeti.DavisKahan.re_inner_paperDirectRotation_nonneg U V T hT x
       rwa [← inner_re_symm (𝕜 := ℂ) (T x) x, RCLike.re_eq_complex_re] at h
     exact spectraDirectRotation_unique_of_sq U V hacute T hunitary hsq hre
   · rintro rfl
-    exact MathAhead.Section3.spectraDirectRotation_isPaperDirectRotation U V hacute
+    exact TauCeti.DavisKahan.spectraDirectRotation_isPaperDirectRotation U V hacute
 
 omit [CompleteSpace H] [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection] in
@@ -1451,7 +1450,7 @@ theorem corollary3_2_reversal_source_form
     spectraDirectRotation V U
         (_root_.TauCeti.DavisKahan.IsUniformlyAcute.symm hacute) =
       star (spectraDirectRotation U V hacute) :=
-  MathAhead.Section3.corollary3_2_reversal_completed U V hacute
+  TauCeti.DavisKahan.corollary3_2_reversal_completed U V hacute
 
 /-- Davis--Kahan 1970, Corollary 3.2, angle half: interchanging the subspaces leaves the
 angle operator unchanged.  The two projections enter the angle operator only through
@@ -1540,7 +1539,7 @@ theorem norm_projection_apply_le_of_forall_mem_source
   set W := spectraDirectRotation U V hacute with hWdef
   have hcross : complementaryProjection U * W * projection U =
       -star (projection U * W * complementaryProjection U) :=
-    MathAhead.Section3.spectraDirectRotation_crossed_blocks U V hacute
+    TauCeti.DavisKahan.spectraDirectRotation_crossed_blocks U V hacute
   obtain ⟨-, -, h12, h21⟩ :=
     star_blocks_eq U W (isSelfAdjoint_source_block_spectraDirectRotation U V hacute)
       (isSelfAdjoint_complement_block_spectraDirectRotation U V hacute) hcross
@@ -1612,13 +1611,13 @@ theorem norm_projection_apply_le_of_paperDirectRotation
       complementaryProjection V z = T (complementaryProjection U (star T z)) := by
     intro z
     have h := congrArg (fun A : H →L[ℂ] H => A z)
-      (MathAhead.HiddenFoundations.paperDirectRotation_conjugates_complementaryProjection
+      (TauCeti.DavisKahan.paperDirectRotation_conjugates_complementaryProjection
         U V T hT)
     simpa only [mul_apply_eq_comp] using h.symm
   have hconj : ∀ z : H, projection V z = T (projection U (star T z)) := by
     intro z
     have h := congrArg (fun A : H →L[ℂ] H => A z)
-      (MathAhead.HiddenFoundations.paperDirectRotation_conjugates_projection U V T hT)
+      (TauCeti.DavisKahan.paperDirectRotation_conjugates_projection U V T hT)
     simpa only [mul_apply_eq_comp] using h.symm
   have hstarLbound : ∀ y : H, ‖star L y‖ ≤ r * ‖y‖ := by
     intro y
@@ -2039,7 +2038,7 @@ constructively by a linear isometric equivalence. -/
 theorem proposition3_2_exists_iff_crossedDefectsEquivalent :
     (∃ T : H →L[𝕜] H, IsPaperDirectRotation U V T) ↔
       CrossedDefectsEquivalent U V :=
-  MathAhead.HiddenFoundations.proposition3_2_completed U V
+  TauCeti.DavisKahan.proposition3_2_completed U V
 
 /-- Explicit parameterization of the freedom in Proposition 3.2.  Distinct
 unitaries between the crossed defect spaces must produce distinct direct
@@ -2051,7 +2050,7 @@ theorem proposition3_2_parameterized_nonuniqueness
           (H →L[𝕜] H),
       (∀ J, IsPaperDirectRotation U V (build J)) ∧
       Function.Injective build :=
-  MathAhead.HiddenFoundations.proposition3_2_parameterization_completed U V hdefect
+  TauCeti.DavisKahan.proposition3_2_parameterization_completed U V hdefect
 
 omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)] in
 /-- **In the nonacute case the crossed defect spaces are nonzero.**
@@ -2178,22 +2177,22 @@ mathematical reason.  Changed 2026-08-04, which is what closes
 structure SameHalmosOperatorInvariant : Prop where
   trivial : SameHalmosTrivialDimensions U₁ V₁ U₂ V₂
   generic : BoundedOperatorsUnitaryEquivalent
-    (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁)
-    (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂)
+    (genericCosineBlock U₁ V₁)
+    (genericCosineBlock U₂ V₂)
 
 /-- Forward direction of the operator-level Halmos classification: a unitary
 equivalence of the ordered pairs induces the complete operator invariant.  The
 restriction of the equivalence to each elementary Halmos summand is a linear
 isometric equivalence, and on the generic remainder it intertwines the
 cosine-square operator.  Proved axiom-clean in
-`MathAhead.HiddenFoundations.sameHalmosInvariant_of_pairEquiv`. -/
+`sameHalmosInvariant_of_pairEquiv`. -/
 theorem sameHalmosOperatorInvariant_of_pairEquiv
     (h : PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
     SameHalmosOperatorInvariant U₁ V₁ U₂ V₂ := by
   obtain ⟨hc, hs, ht, he, _⟩ :=
-    MathAhead.HiddenFoundations.sameHalmosInvariant_of_pairEquiv U₁ V₁ U₂ V₂ h
+    sameHalmosInvariant_of_pairEquiv U₁ V₁ U₂ V₂ h
   exact ⟨⟨hc, hs, ht, he⟩,
-    MathAhead.HiddenFoundations.exists_cosineBlockEquiv_of_pairEquiv U₁ V₁ U₂ V₂ h⟩
+    exists_cosineBlockEquiv_of_pairEquiv U₁ V₁ U₂ V₂ h⟩
 
 /-! ### Corollary 3.1 with the printed compactness hypothesis
 
@@ -2277,27 +2276,27 @@ polar decomposition of the Halmos cross block, so it carries the functional-calc
 hypotheses of `Geometry/Halmos/GenericReconstruction.lean`.  They are found by typeclass
 inference at `𝕜 = ℂ` and at `𝕜 = ℝ` alike. -/
 
-variable [Algebra ℝ (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ →L[𝕜]
-    MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁)]
-  [IsScalarTower ℝ 𝕜 (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ →L[𝕜]
-    MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁)]
+variable [Algebra ℝ (genericLeftHalf U₁ V₁ →L[𝕜]
+    genericLeftHalf U₁ V₁)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₁ V₁ →L[𝕜]
+    genericLeftHalf U₁ V₁)]
   [ContinuousFunctionalCalculus ℝ
-    (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ →L[𝕜]
-      MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁) IsSelfAdjoint]
-variable [Algebra ℝ (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ →L[𝕜]
-    MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂)]
-  [IsScalarTower ℝ 𝕜 (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ →L[𝕜]
-    MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂)]
+    (genericLeftHalf U₁ V₁ →L[𝕜]
+      genericLeftHalf U₁ V₁) IsSelfAdjoint]
+variable [Algebra ℝ (genericLeftHalf U₂ V₂ →L[𝕜]
+    genericLeftHalf U₂ V₂)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₂ V₂ →L[𝕜]
+    genericLeftHalf U₂ V₂)]
   [ContinuousFunctionalCalculus ℝ
-    (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ →L[𝕜]
-      MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂) IsSelfAdjoint]
+    (genericLeftHalf U₂ V₂ →L[𝕜]
+      genericLeftHalf U₂ V₂) IsSelfAdjoint]
 
 /-- **Operator-level Halmos classification, both directions.**  This is the
 constructive spine of Davis--Kahan Theorem 3.1 and needs no direct-integral
 presentation, no compactness, no finite dimension and no separability.
 
 Grounded by `:=` on
-`MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`,
+`pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`,
 so there is a single source of truth.  The forward direction restricts a
 pair-equivalence to the `U`-half of the generic part; the converse is bricks (1)
 and (2) — brick (1) reconstructs the generic-part unitary from the cosine block
@@ -2306,7 +2305,7 @@ elementary summand isometries (`Geometry/Halmos/Assembly`). -/
 theorem twoProjection_operator_classification :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosOperatorInvariant U₁ V₁ U₂ V₂ := by
-  rw [MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant
+  rw [pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant
     U₁ V₁ U₂ V₂]
   constructor
   · rintro ⟨hc, hs, ht, he, hg⟩
@@ -2385,18 +2384,18 @@ theorem corollary3_1_compact_angleList_classification
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁) =
+          (genericCosineBlock U₁ V₁) =
         compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂) := by
+          (genericCosineBlock U₂ V₂) := by
   have hpos₁ : ∀ x, 0 ≤ RCLike.re
-      ⟪MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ x, x⟫_𝕜 := by
+      ⟪genericCosineBlock U₁ V₁ x, x⟫_𝕜 := by
     intro x
-    rw [MathAhead.HiddenFoundations.re_inner_genericCosineBlock]
+    rw [re_inner_genericCosineBlock]
     positivity
   have hpos₂ : ∀ x, 0 ≤ RCLike.re
-      ⟪MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ x, x⟫_𝕜 := by
+      ⟪genericCosineBlock U₂ V₂ x, x⟫_𝕜 := by
     intro x
-    rw [MathAhead.HiddenFoundations.re_inner_genericCosineBlock]
+    rw [re_inner_genericCosineBlock]
     positivity
   rw [twoProjection_operator_classification U₁ V₁ U₂ V₂]
   constructor
@@ -2408,14 +2407,14 @@ theorem corollary3_1_compact_angleList_classification
     refine ⟨htriv, ?_⟩
     obtain ⟨W, hW⟩ :=
       TauCeti.exists_linearIsometryEquiv_intertwining_of_approximationNumber_eq
-        (MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock U₁ V₁ hcompact₁)
-        (MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₁ V₁)
+        (isCompactOperator_genericCosineBlock U₁ V₁ hcompact₁)
+        (isSelfAdjoint_genericCosineBlock U₁ V₁)
         hpos₁
-        (MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero U₁ V₁)
-        (MathAhead.HiddenFoundations.isCompactOperator_genericCosineBlock U₂ V₂ hcompact₂)
-        (MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₂ V₂)
+        (eigenspace_genericCosineBlock_zero U₁ V₁)
+        (isCompactOperator_genericCosineBlock U₂ V₂ hcompact₂)
+        (isSelfAdjoint_genericCosineBlock U₂ V₂)
         hpos₂
-        (MathAhead.HiddenFoundations.eigenspace_genericCosineBlock_zero U₂ V₂)
+        (eigenspace_genericCosineBlock_zero U₂ V₂)
         (fun n => congrFun hlist n)
     exact ⟨W, hW⟩
 
@@ -2442,20 +2441,20 @@ variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
 variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
   [V₂.HasOrthogonalProjection]
 
-variable [Algebra ℝ (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ →L[𝕜]
-    MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ)]
-  [IsScalarTower ℝ 𝕜 (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ →L[𝕜]
-    MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ)]
+variable [Algebra ℝ (genericLeftHalf U₁ V₁ᗮ →L[𝕜]
+    genericLeftHalf U₁ V₁ᗮ)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₁ V₁ᗮ →L[𝕜]
+    genericLeftHalf U₁ V₁ᗮ)]
   [ContinuousFunctionalCalculus ℝ
-    (MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ →L[𝕜]
-      MathAhead.HiddenFoundations.genericLeftHalf U₁ V₁ᗮ) IsSelfAdjoint]
-variable [Algebra ℝ (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ →L[𝕜]
-    MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ)]
-  [IsScalarTower ℝ 𝕜 (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ →L[𝕜]
-    MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ)]
+    (genericLeftHalf U₁ V₁ᗮ →L[𝕜]
+      genericLeftHalf U₁ V₁ᗮ) IsSelfAdjoint]
+variable [Algebra ℝ (genericLeftHalf U₂ V₂ᗮ →L[𝕜]
+    genericLeftHalf U₂ V₂ᗮ)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₂ V₂ᗮ →L[𝕜]
+    genericLeftHalf U₂ V₂ᗮ)]
   [ContinuousFunctionalCalculus ℝ
-    (MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ →L[𝕜]
-      MathAhead.HiddenFoundations.genericLeftHalf U₂ V₂ᗮ) IsSelfAdjoint]
+    (genericLeftHalf U₂ V₂ᗮ →L[𝕜]
+      genericLeftHalf U₂ V₂ᗮ) IsSelfAdjoint]
 
 /-- **Davis--Kahan 1970, Corollary 3.1, with the printed hypothesis.**
 
@@ -2472,9 +2471,9 @@ theorem corollary3_1_compact_defectBlock_angleList_classification
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ᗮ) =
+          (genericCosineBlock U₁ V₁ᗮ) =
         compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ᗮ) := by
+          (genericCosineBlock U₂ V₂ᗮ) := by
   have hperp₁ : projection V₁ᗮ =
       ContinuousLinearMap.id 𝕜 H₁ - projection V₁ := by
     show V₁ᗮ.starProjection = ContinuousLinearMap.id 𝕜 H₁ - V₁.starProjection
@@ -2507,7 +2506,6 @@ extension of the generic block by zero off `U`. -/
 
 section GenericAmbientBridge
 
-open MathAhead.HiddenFoundations
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
@@ -2640,13 +2638,13 @@ theorem theorem3_1_spectralMultiplicity_classification
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       SameSpectralMultiplicity
-        (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁)
-        (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂) := by
+        (genericCosineBlock U₁ V₁)
+        (genericCosineBlock U₂ V₂) := by
   rw [twoProjection_operator_classification]
   constructor
   · rintro ⟨htriv, hgen⟩
     refine ⟨htriv, sameSpectralMultiplicity_of_unitarilyEquivalent _ _ ?_ hgen⟩
-    exact MathAhead.HiddenFoundations.isSelfAdjoint_genericCosineBlock U₁ V₁
+    exact isSelfAdjoint_genericCosineBlock U₁ V₁
   · rintro ⟨htriv, hmult⟩
     exact ⟨htriv, unitarilyEquivalent_of_sameSpectralMultiplicity _ _ hmult⟩
 
@@ -2671,9 +2669,9 @@ theorem corollary3_1_compact_defectBlock_angleList_classification_complex
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ᗮ) =
+          (genericCosineBlock U₁ V₁ᗮ) =
         compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ᗮ) :=
+          (genericCosineBlock U₂ V₂ᗮ) :=
   corollary3_1_compact_defectBlock_angleList_classification U₁ V₁ U₂ V₂ hcompact₁ hcompact₂
 
 
@@ -2683,7 +2681,6 @@ end Classification
 
 section Realization
 
-open MathAhead.HiddenFoundations
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -2768,7 +2765,7 @@ condition "some isometry `J₀` of `closure (ran Θ₀)` onto `closure (ran Θ�
 that `J₀ Θ₀ J₀⁻¹` agrees on its domain with `Θ₁`".  So the printed data are two
 Hermitian operators and one intertwining partial isometry — and that is this
 statement's hypothesis list.  The datum is built inside the proof by
-`MathAhead.HiddenFoundations.HalmosAngleDatum.ofIntertwinedAngles`, and each
+`HalmosAngleDatum.ofIntertwinedAngles`, and each
 `cos Θⱼ`, `sin Θⱼ` in the conclusion is the continuous functional calculus of
 `Θⱼ` rather than an opaque field, so the seven conjuncts of
 `theorem3_1_realization` are read here directly off `Θ₀`, `Θ₁` and `J`.
@@ -3027,7 +3024,6 @@ they are carried by `SameHalmosTrivialDimensions` rather than by the list. -/
 
 section RealizationClassification
 
-open MathAhead.HiddenFoundations
 
 /-- **The realized pair's generic invariant is the prescribed angle list.**
 
@@ -3184,7 +3180,6 @@ unrestricted dimension.  Two of the seven conjuncts are read off below: the
 angle-`π/2` space on the `P`-side, and the isometry between the two crossed
 defects that forces the two `π/2` multiplicities to agree. -/
 
-open MathAhead.HiddenFoundations in
 example {Θ₀ : H₁ →L[ℝ] H₁} {Θ₁ : H₂ →L[ℝ] H₂}
     (hΘ₀ : IsSelfAdjoint Θ₀) (hΘ₁ : IsSelfAdjoint Θ₁)
     (hspec₀ : spectrum ℝ Θ₀ ⊆ Set.Icc 0 (Real.pi / 2))
@@ -3208,7 +3203,7 @@ example {Θ₀ : H₁ →L[ℝ] H₁} {Θ₁ : H₂ →L[ℝ] H₂}
 /-- **Davis--Kahan 1970, Corollary 3.1, over a real Hilbert space.**
 
 The `𝕜 = ℝ` instance of
-`MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData`:
+`pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData`:
 with `P_U P_V P_U` compact on both sides, the four elementary Halmos
 multiplicities together with the multiplicity of every angle are a complete
 invariant. -/
@@ -3216,8 +3211,8 @@ theorem corollary3_1_compact_classification_real
     (hc₁ : IsCompactOperator (projection U₁ ∘L projection V₁ ∘L projection U₁))
     (hc₂ : IsCompactOperator (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
-      MathAhead.HiddenFoundations.SameCompactAngleData U₁ V₁ U₂ V₂ :=
-  MathAhead.HiddenFoundations.pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData
+      SameCompactAngleData U₁ V₁ U₂ V₂ :=
+  pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData
     U₁ V₁ U₂ V₂ hc₁ hc₂
 
 /-- **Davis--Kahan 1970, Corollary 3.1 in the paper's decreasing eigenvalue-list
@@ -3245,9 +3240,9 @@ theorem corollary3_1_compact_angleList_classification_real
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁) =
+          (genericCosineBlock U₁ V₁) =
         compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂) :=
+          (genericCosineBlock U₂ V₂) :=
   corollary3_1_compact_angleList_classification U₁ V₁ U₂ V₂ hcompact₁ hcompact₂
 
 /-- **Davis--Kahan 1970, Corollary 3.1 with the printed hypothesis, over a real Hilbert
@@ -3271,12 +3266,11 @@ theorem corollary3_1_compact_defectBlock_angleList_classification_real
     PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
       compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₁ V₁ᗮ) =
+          (genericCosineBlock U₁ V₁ᗮ) =
         compactAngleEigenvalueList
-          (MathAhead.HiddenFoundations.genericCosineBlock U₂ V₂ᗮ) :=
+          (genericCosineBlock U₂ V₂ᗮ) :=
   corollary3_1_compact_defectBlock_angleList_classification U₁ V₁ U₂ V₂ hcompact₁ hcompact₂
 
-open MathAhead.HiddenFoundations in
 /-- **Davis--Kahan 1970, Corollary 3.1: the realization sentence composed with the
 classification sentence, over a real Hilbert space.**
 
@@ -3379,6 +3373,5 @@ end RealScalars
 
 end Section3
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

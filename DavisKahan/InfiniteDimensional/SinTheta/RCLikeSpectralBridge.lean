@@ -42,7 +42,6 @@ self-adjoint case, which is `norm_le_of_selfAdjoint_spectrum_subset_closedBall`.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -359,6 +358,5 @@ theorem inverse_isNormal {T : E →L[𝕜] E} (hTself : T.IsSymmetric) (hunit : 
 
 end RCLikeSpectralBridge
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

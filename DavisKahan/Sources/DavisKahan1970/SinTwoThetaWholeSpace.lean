@@ -72,9 +72,8 @@ namespace DavisKahan1970
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
-open TauCeti.DavisKahan.Experimental
-open TauCeti.DavisKahan.Experimental.Scratch.SharedFoundations
+open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan
 
 open scoped InnerProductSpace
 
@@ -647,7 +646,8 @@ theorem sinTwoTheta_directedResidual_all_kyFan
         have hproj : ‖(Vᗮ.starProjection : E →L[ℂ] E)‖ ≤ 1 :=
           Vᗮ.starProjection_norm_le
         have hadj : ‖V.subtypeL.adjoint‖ ≤ 1 :=
-          (isometry_and_adjoint_norm_le_one V.subtypeL hX).2
+          (TauCeti.DavisKahan.BoundedOperator.isometry_and_adjoint_norm_le_one
+            V.subtypeL hX).2
         have hnonneg : 0 ≤ kyFanApproximationGauge k (residual A V.subtypeL M) :=
           kyFanApproximationGauge_nonneg k (residual A V.subtypeL M)
         have hleft :

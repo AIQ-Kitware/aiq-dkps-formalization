@@ -24,7 +24,7 @@ for nontrivial subspaces.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open scoped InnerProductSpace
 
@@ -41,11 +41,11 @@ theorem restrictedSpectrum_eq_realSpectrum_compressOperator
     (hU : InvariantFor A U) :
     restrictedSpectrum A U = realSpectrum (compressOperator U A) := by
   calc
-    DavisKahan.Experimental.Foundation.restrictedSpectrum A U =
+    DavisKahan.Foundation.restrictedSpectrum A U =
         {r : ℝ | (r : ℂ) ∈ spectrum ℂ (A.restrict hU)} :=
-      DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum A U hU
-    _ = DavisKahan.Experimental.Foundation.realSpectrum (A.restrict hU) := rfl
-    _ = DavisKahan.Experimental.Foundation.realSpectrum (compressOperator U A) := by
+      DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum A U hU
+    _ = DavisKahan.Foundation.realSpectrum (A.restrict hU) := rfl
+    _ = DavisKahan.Foundation.realSpectrum (compressOperator U A) := by
       rw [compressOperator_eq_restrict_of_invariant A U hU]
 
 /-- The real spectrum of a bounded operator is bounded above by its norm. -/

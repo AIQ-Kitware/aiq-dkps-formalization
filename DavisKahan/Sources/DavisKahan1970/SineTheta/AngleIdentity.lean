@@ -18,13 +18,12 @@ produce exactly the same angle operator.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
 open TauCeti.RealComplexification
 -- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -135,6 +134,5 @@ end Real
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

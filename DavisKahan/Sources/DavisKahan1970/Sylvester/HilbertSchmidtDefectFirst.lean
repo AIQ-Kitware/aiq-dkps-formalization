@@ -40,7 +40,6 @@ inputs came from Spectra's Born-rule stack.  Both are now native:
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -140,6 +139,5 @@ theorem paperHilbertSchmidt_sylvester_defectFirst
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

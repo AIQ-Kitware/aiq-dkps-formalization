@@ -19,7 +19,6 @@ with the closed-operator basics rather than with any particular criterion.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -39,6 +38,5 @@ structure BoundedRealization
   agrees : ∀ x : A.domain, operator (x : E) = A.toLinearMap x
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

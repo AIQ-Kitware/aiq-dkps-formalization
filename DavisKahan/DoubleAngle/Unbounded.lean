@@ -27,11 +27,10 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 universe v
 
@@ -96,6 +95,5 @@ theorem norm_reflectedComplementaryOverlap_eq_sinTwoAngle
   exact norm_starProjection_reflectedComplementary_eq_sinTwoAngle U V
 
 
-end Experimental
 end DavisKahan
 end TauCeti

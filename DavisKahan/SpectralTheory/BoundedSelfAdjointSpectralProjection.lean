@@ -31,8 +31,8 @@ open DavisKahan
 
 open Set
 open scoped InnerProductSpace
-open DavisKahan.Experimental
-open DavisKahan.Experimental.Foundation
+open DavisKahan
+open DavisKahan.Foundation
 
 universe v
 

@@ -29,15 +29,12 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 namespace Analytic
 
 noncomputable section
 
-open MathAhead.HiddenFoundations.FreeBeam
+open FreeBeam
 
 universe u
 
@@ -62,7 +59,7 @@ structure PositiveClassicalModeCertificate (lambda : ℝ) where
   d : ℝ
   coefficients_nontrivial : a ≠ 0 ∨ b ≠ 0 ∨ c ≠ 0 ∨ d ≠ 0
   free_boundary :
-    MathAhead.HiddenFoundations.FreeBeam.FreeBoundary beta a b c d
+    FreeBeam.FreeBoundary beta a b c d
 
 namespace PositiveClassicalModeCertificate
 
@@ -70,18 +67,18 @@ namespace PositiveClassicalModeCertificate
 equation. -/
 theorem characteristic_eq_zero
     {lambda : ℝ} (C : PositiveClassicalModeCertificate lambda) :
-    MathAhead.HiddenFoundations.FreeBeam.characteristic C.beta = 0 := by
-  exact MathAhead.HiddenFoundations.FreeBeam.characteristic_eq_zero_of_freeBoundary
+    FreeBeam.characteristic C.beta = 0 := by
+  exact FreeBeam.characteristic_eq_zero_of_freeBoundary
     C.beta_pos.ne' C.free_boundary C.coefficients_nontrivial
 
 /-- A localized first root forces every certified positive eigenvalue above
 `500`. -/
 theorem eigenvalue_gt_five_hundred
-    (L : MathAhead.HiddenFoundations.FreeBeam.PositiveRootLocalization)
+    (L : FreeBeam.PositiveRootLocalization)
     {lambda : ℝ} (C : PositiveClassicalModeCertificate lambda) :
     500 < lambda := by
   rw [C.eigenvalue_eq]
-  exact MathAhead.HiddenFoundations.FreeBeam.positive_root_fourth_power_gt_five_hundred
+  exact FreeBeam.positive_root_fourth_power_gt_five_hundred
     L C.beta_pos C.characteristic_eq_zero
 
 end PositiveClassicalModeCertificate
@@ -106,7 +103,7 @@ theorem eigenpair_characteristic
     (hx : ClosedOperatorEigenpair A lambda x) :
     ∃ beta : ℝ,
       0 < beta ∧
-      MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0 ∧
+      FreeBeam.characteristic beta = 0 ∧
       lambda = beta ^ 4 := by
   let C := R.classify hlambda hx
   exact ⟨C.beta, C.beta_pos, C.characteristic_eq_zero, C.eigenvalue_eq⟩
@@ -132,7 +129,7 @@ theorem positive_spectrum_characterization_of_pointSpectrum_and_regularity
       lambda ∈ A.realSpectrum → 0 < lambda →
       ∃ beta : ℝ,
         0 < beta ∧
-        MathAhead.HiddenFoundations.FreeBeam.characteristic beta = 0 ∧
+        FreeBeam.characteristic beta = 0 ∧
         lambda = beta ^ 4 := by
   intro lambda hlambda hpositive
   obtain ⟨x, hx⟩ := hpoint lambda hlambda hpositive
@@ -143,7 +140,7 @@ omit [CompleteSpace H] in
 `500`. -/
 theorem positive_spectrum_gt_five_hundred_of_pointSpectrum_and_regularity
     (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
-    (L : MathAhead.HiddenFoundations.FreeBeam.PositiveRootLocalization)
+    (L : FreeBeam.PositiveRootLocalization)
     (hpoint : PositiveSpectrumIsPointSpectrum A)
     (hregular : PositiveEigenmodeRegularity A)
     {lambda : ℝ} (hlambda : lambda ∈ A.realSpectrum)
@@ -153,15 +150,12 @@ theorem positive_spectrum_gt_five_hundred_of_pointSpectrum_and_regularity
     positive_spectrum_characterization_of_pointSpectrum_and_regularity
       A hpoint hregular lambda hlambda hpositive
   rw [hlambda_beta]
-  exact MathAhead.HiddenFoundations.FreeBeam.positive_root_fourth_power_gt_five_hundred
+  exact FreeBeam.positive_root_fourth_power_gt_five_hundred
     L hbeta hroot
 
 end
 
 end Analytic
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

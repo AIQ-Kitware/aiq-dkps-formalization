@@ -43,7 +43,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 
 open TauCeti.DavisKahan
@@ -103,7 +102,6 @@ end RealTransfer
 
 namespace Section3
 
-open MathAhead.HiddenFoundations
 
 section RealClassification
 
@@ -149,6 +147,5 @@ end RealClassification
 end Section3
 
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

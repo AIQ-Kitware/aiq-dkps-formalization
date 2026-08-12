@@ -319,7 +319,7 @@ theorem sinTwoTheta_spectrum_sinAngle
 
 section IdealScope
 
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 /-- **The genuine-spectrum `sin 2Θ` theorem at unitary-invariant ideal
 scope** (directed form).  Under the genuine internal configuration of `A`

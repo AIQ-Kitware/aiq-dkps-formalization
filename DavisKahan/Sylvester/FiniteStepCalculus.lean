@@ -22,7 +22,7 @@ restated: every declaration keeps its name and its namespace
 
 **Why this one and not its six siblings.**  Promotion is not "the module
 compiles"; `check_dependency_layers.py` rule 4 forbids production importing
-`DavisKahan.Experimental.*`, so the test is that the module's *transitive import
+`DavisKahan.*`, so the test is that the module's *transitive import
 closure contains no Experimental module*.  Measured across the seven modules the
 lane row listed as promotable, this is the only one that passes: it imports
 `DavisKahan.SpectralTheory.SelfAdjointBorelCalculus` and nothing else.  The other
@@ -33,7 +33,7 @@ they are until those clear.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

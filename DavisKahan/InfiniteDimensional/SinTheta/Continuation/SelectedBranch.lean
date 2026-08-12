@@ -23,7 +23,7 @@ the already green contour, subdivision, or rotation-chain proofs.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

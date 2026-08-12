@@ -68,10 +68,10 @@ namespace DavisKahan1970
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 open scoped InnerProductSpace
 

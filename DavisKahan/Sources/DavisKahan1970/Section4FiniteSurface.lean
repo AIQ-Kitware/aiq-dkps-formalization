@@ -5,14 +5,14 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.FiniteDimensional.DirectRotation
-import DavisKahan.Sources.DavisKahan1970.Section4Dominance
+import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
 
 /-!
-# Certified finite-dimensional Section 4 surface
+# Finite-dimensional Section 4 source surface
 
 The finite-dimensional Davis--Kahan direct-rotation development already proves
 the valid content of Propositions 4.1--4.3 and Corollary 4.1.  This module gives
-those results a compact scratch source surface and records the exact bridge
+those results a compact source-facing surface and records the exact bridge
 from ordinary singular values to approximation singular values.
 
 The infinite-dimensional frontier must not be discharged merely by importing
@@ -23,13 +23,11 @@ number dominance for the restricted displacement in arbitrary Hilbert space.
 open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
-namespace DavisKahan
-namespace Experimental
-namespace Scratch
+namespace DavisKahan1970
 namespace Section4
 
-open ExactSinTheta
-open MathAhead.Section4
+open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.Section4
 
 universe u v
 
@@ -125,7 +123,5 @@ theorem finite_proposition4_2_fullBasisEnergy
     U V hacute b W hmap
 
 end Section4
-end Scratch
-end Experimental
-end DavisKahan
+end DavisKahan1970
 end TauCeti

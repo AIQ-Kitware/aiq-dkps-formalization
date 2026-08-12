@@ -66,13 +66,12 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace Section8
 
 open DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.DavisKahan.Foundation
 
 universe u
 
@@ -266,6 +265,5 @@ end Residual
 
 end Section8
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

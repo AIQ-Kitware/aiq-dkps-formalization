@@ -46,8 +46,8 @@ namespace DavisKahan1970
 open scoped InnerProductSpace BigOperators
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
-open TauCeti.DavisKahan.Experimental.ExactTanTheta
+open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.ExactTanTheta
 
 noncomputable section
 

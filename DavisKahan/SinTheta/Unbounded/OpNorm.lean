@@ -11,7 +11,6 @@ import DavisKahan.Sylvester.ShiftedInverse
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 
@@ -79,6 +78,5 @@ theorem linearPMap_sinTheta_unbounded_opNorm
   simpa [norm_neg] using h
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

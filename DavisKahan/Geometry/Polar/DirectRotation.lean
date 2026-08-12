@@ -56,7 +56,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
@@ -247,12 +246,10 @@ theorem spectraDirectRotation_decomposition
       spectraCanonicalIntertwiner U V :=
   spectraCanonicalPolarFactor_decomposition U V
 
-end Experimental
 end DavisKahan
 end TauCeti
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
@@ -1287,6 +1284,5 @@ theorem spectraDirectRotation_commute_reflectionProduct
       (spectraReflectionProduct U V) :=
   spectraCanonicalPolarFactor_commute_reflectionProduct U V hacute
 
-end Experimental
 end DavisKahan
 end TauCeti

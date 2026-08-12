@@ -32,7 +32,6 @@ open Set
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace RemainingSourceSurface
 
@@ -258,7 +257,7 @@ Sylvester equation on that domain.  The conclusion is the same compatible-norm
 bound as in the bounded theorem. -/
 theorem theorem5_1_banach_sylvester_unboundedA
     (N : CompatibleCrossOperatorNorm (X := X) (Y := Y))
-    (A : Y →ₗ.[ℂ] Y) (hAdense : Dense (A.domain : Set Y))
+    (A : Y →ₗ.[ℂ] Y) (_hAdense : Dense (A.domain : Set Y))
     (hAinv : TauCeti.LinearPMap.BoundedEverywhereInverseData A)
     (B : X →L[ℂ] X) (T C : X →L[ℂ] Y) {gamma delta : ℝ}
     (hgamma : 0 ≤ gamma) (hdelta : 0 < delta)
@@ -321,7 +320,7 @@ alias theorem6_3_equalRank_finite_tanTheta_ideal :=
 partial source coverage but does not discharge the paper's arbitrary
 unitarily-invariant-norm statement. -/
 alias theorem6_3_unbounded_graphAngle_opNorm_partial :=
-  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
+  DavisKahan.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
 
 /-- Unique frontier marker for the arbitrary-ideal unbounded scope.
 
@@ -344,7 +343,7 @@ alias theorem6_3_unbounded_tanTheta_ideal :=
 /-- Retained: the operator-norm graph-angle companion.  Useful partial coverage, and
 **not** the arbitrary-unitarily-invariant-norm scope claim -- that is the alias above. -/
 alias theorem6_3_unbounded_graphAngle_opNorm_companion :=
-  DavisKahan.Experimental.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
+  DavisKahan.TanTheta.tanTheta_unbounded_graphAngle_trialBlock
 
 /-- Completed finite-trial/arbitrary-ambient Ky Fan root of Theorem 6.3. -/
 alias theorem6_3_all_kyFan_core :=
@@ -436,7 +435,7 @@ alias theorem6_3_equalDimension_tanTheta_ideal_formBounds :=
 /-- Section 2 tangent theorem, perturbation half, at arbitrary trial dimension and
 ideal-gauge scope. -/
 alias theorem6_3_equalDimension_tanTheta_perturbation :=
-  MathAhead.Section2.theorem6_3_perturbation_infiniteTrial
+  TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial
 
 end GeneralizedTangent
 
@@ -522,6 +521,5 @@ end DoubleAngleSourceWrappers
 
 end RemainingSourceSurface
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

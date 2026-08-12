@@ -28,7 +28,6 @@ No triangle estimate is used in the coupling step.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -394,6 +393,5 @@ end PaperSymmetricSinThetaProblem
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

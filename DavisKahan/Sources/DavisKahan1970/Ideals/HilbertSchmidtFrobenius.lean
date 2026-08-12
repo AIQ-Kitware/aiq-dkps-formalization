@@ -28,7 +28,6 @@ with one produced by `letI : CompleteSpace E := FiniteDimensional.complete 𝕜 
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
@@ -103,6 +102,5 @@ theorem paperHilbertSchmidtNorm_eq_frobenius
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

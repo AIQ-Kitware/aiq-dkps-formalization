@@ -21,7 +21,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
@@ -636,6 +635,5 @@ theorem add_reflectionPerturbation_intertwines
       rw [map_add]
     _ = J (A.toLinearMap x) := add_sub_cancel_right _ _
 
-end Experimental
 end DavisKahan
 end TauCeti

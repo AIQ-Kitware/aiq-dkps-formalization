@@ -25,13 +25,12 @@ open Set
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace CircleContour
 
 open DavisKahanExt
 open TauCeti.DavisKahan
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 universe u
 
@@ -312,6 +311,5 @@ theorem margin_le_norm_sub_of_inverse_bound
 
 end CircleContour
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

@@ -8,24 +8,18 @@ import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 import DavisKahan.Geometry.Polar.DirectRotationSquare
 
 /-!
-# Mathematics-ahead completion of the elementary Section 3 bridge
+# Elementary Section 3 bridge
 
 This file contains the Section 3 results that can be completed directly from
 the production Halmos and acute direct-rotation developments without first
 building spectral multiplicity theory.
 
-The declarations deliberately use distinct names.  Once they elaborate, the
-compiler/promoter agent can replace the corresponding frontier declarations by
-aliases and promote the admission-free results.
 -/
 
 open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace Section3
 
 open Frontier
 
@@ -365,8 +359,5 @@ theorem corollary3_2_reversal_completed
       star (spectraDirectRotation U V hacute) :=
   spectraDirectRotation_reversal U V hacute
 
-end Section3
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

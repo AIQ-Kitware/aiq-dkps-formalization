@@ -29,14 +29,13 @@ real and imaginary coordinates both lie in `U`.  The main results prove that:
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Foundation
 namespace RealComplexification
 
 open scoped InnerProductSpace
 open TauCeti.RealComplexification
 -- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -357,6 +356,5 @@ end
 
 end RealComplexification
 end Foundation
-end Experimental
 end DavisKahan
 end TauCeti

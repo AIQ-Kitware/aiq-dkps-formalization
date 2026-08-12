@@ -23,7 +23,7 @@ are nontrivial.  Degenerate subspaces remain a separate final leaf.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

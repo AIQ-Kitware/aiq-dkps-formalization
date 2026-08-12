@@ -24,7 +24,7 @@ model before invoking the bounded Riccati reduction theorem.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

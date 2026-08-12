@@ -17,7 +17,6 @@ Sylvester estimate built from it.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 
@@ -197,6 +196,5 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     A.toLinearPMap_isClosed B.toLinearPMap_dense hβα hδ hBsym hBlow hBhigh hAres hEq hC
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

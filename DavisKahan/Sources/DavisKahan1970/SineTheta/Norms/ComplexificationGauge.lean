@@ -39,7 +39,6 @@ Everything here is stated for `E` and `F` in a single universe because
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 namespace PaperUnitaryInvariantNorm
@@ -95,6 +94,5 @@ theorem gauge_complexify (N : PaperUnitaryInvariantNorm) (T : E →L[ℝ] F) :
 end PaperUnitaryInvariantNorm
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

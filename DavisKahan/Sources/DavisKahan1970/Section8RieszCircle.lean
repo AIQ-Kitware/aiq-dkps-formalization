@@ -24,7 +24,6 @@ open Set Filter
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace RieszCircle
 
@@ -550,6 +549,5 @@ theorem continuous_circleRieszProjection_path
 
 end RieszCircle
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

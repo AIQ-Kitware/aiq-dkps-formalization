@@ -52,13 +52,13 @@ namespace DavisKahan1970
 open scoped InnerProductSpace BigOperators
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
-open TauCeti.DavisKahan.Experimental.ExactSinTheta.ComplexificationApproximation
-open TauCeti.DavisKahan.Experimental.ExactTanTheta
-open TauCeti.DavisKahan.Experimental.TanTheta
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
+open TauCeti.DavisKahan.ExactTanTheta
+open TauCeti.DavisKahan.TanTheta
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -81,13 +81,13 @@ carried across unchanged. -/
 theorem semiboundedAbove_unitaryConjugate {G K : Type v}
     [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
-    (W : G ≃ₗᵢ[ℂ] K) (A : Experimental.DKClosedOperator (H := G))
+    (W : G ≃ₗᵢ[ℂ] K) (A : TauCeti.DavisKahan.DKClosedOperator (H := G))
     (hA : A.IsSelfAdjoint) {c : ℝ} (hc : SemiboundedAbove A c) :
-    SemiboundedAbove (Experimental.unitaryConjugate W A hA) c := by
+    SemiboundedAbove (TauCeti.DavisKahan.unitaryConjugate W A hA) c := by
   intro x
   have hx : W.symm (x : K) ∈ A.toLinearPMap.domain := x.property
   have hbound := hc ⟨W.symm (x : K), hx⟩
-  have hinner : ⟪(Experimental.unitaryConjugate W A hA).toLinearPMap x, (x : K)⟫_ℂ =
+  have hinner : ⟪(TauCeti.DavisKahan.unitaryConjugate W A hA).toLinearPMap x, (x : K)⟫_ℂ =
       ⟪A.toLinearPMap ⟨W.symm (x : K), hx⟩, W.symm (x : K)⟫_ℂ := by
     have hxx : (x : K) = W (W.symm (x : K)) := (W.apply_symm_apply (x : K)).symm
     conv_lhs => rw [hxx]
@@ -110,12 +110,12 @@ def complexifyUnboundedCompressionTrialData
     (D : UnboundedCompressionTrialData Z) :
     UnboundedCompressionTrialData (complexifySubmodule Z) where
   compression :=
-    Experimental.unitaryConjugate (complexifySubmoduleEquiv Z)
+    TauCeti.DavisKahan.unitaryConjugate (complexifySubmoduleEquiv Z)
       (ExactSinTheta.ClosedOperatorComplexification.complexify D.compression)
       (ExactSinTheta.ClosedOperatorComplexification.isSelfAdjoint_complexify
         D.compression_isSelfAdjoint)
   compression_isSelfAdjoint :=
-    Experimental.unitaryConjugate_isSelfAdjoint _ _ _
+    TauCeti.DavisKahan.unitaryConjugate_isSelfAdjoint _ _ _
   residual :=
     complexify D.residual ∘L
       (complexifySubmoduleEquiv Z).symm.toContinuousLinearEquiv.toContinuousLinearMap

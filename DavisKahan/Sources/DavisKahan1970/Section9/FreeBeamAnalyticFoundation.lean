@@ -39,9 +39,6 @@ open Set
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 
 noncomputable section
@@ -204,8 +201,5 @@ end SobolevTraceFoundation
 
 end
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

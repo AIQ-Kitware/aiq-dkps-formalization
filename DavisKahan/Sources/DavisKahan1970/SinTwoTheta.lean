@@ -51,8 +51,8 @@ theorem; no new mathematics is introduced in this facade.
 namespace TauCeti
 namespace DavisKahan1970
 
-open DavisKahan.Experimental.ExactSinTheta
-open DavisKahan.Experimental
+open DavisKahan.ExactSinTheta
+open DavisKahan
 
 /-! ## The mirror proof package, equations (7.1)--(7.3)
 
@@ -83,7 +83,7 @@ alias sinTwoTheta_mirrorDefect_le_two_mul :=
 /-- Ideal-gauge form of equation (7.3): the reflected perturbation stays in
 every rectangular symmetric ideal with gauge cost at most two. -/
 alias sinTwoTheta_mirrorPerturbation_mem_and_gauge_le :=
-  DavisKahan.Experimental.reflectionPerturbation_mem_and_gauge_le
+  DavisKahan.reflectionPerturbation_mem_and_gauge_le
 
 /-! ## Identification of the double angle, equations (7.4)--(7.5)
 
@@ -95,21 +95,21 @@ double-angle conclusion. -/
 /-- Equations (7.4)--(7.5), ambient form: the reflected complementary overlap
 block has exactly the norm of `sin 2Θ`. -/
 alias sinTwoTheta_reflectedOverlap_norm :=
-  DavisKahan.Experimental.norm_starProjection_reflectedComplementary_eq_sinTwoAngle
+  DavisKahan.norm_starProjection_reflectedComplementary_eq_sinTwoAngle
 
 /-- The canonical reflected overlap block whose complete singular-value data
 realizes the source's `sin 2Θ₀` in the unbounded ideal theorem. -/
 alias sinTwoThetaBlock :=
-  DavisKahan.Experimental.sinTwoThetaIdealBlock
+  DavisKahan.sinTwoThetaIdealBlock
 
 /-- The canonical block has operator norm exactly `‖sin 2Θ‖`. -/
 alias norm_sinTwoThetaBlock :=
-  DavisKahan.Experimental.norm_sinTwoThetaIdealBlock
+  DavisKahan.norm_sinTwoThetaIdealBlock
 
 /-- Equations (7.4)--(7.5) over a **real** Hilbert space: the canonical block
 has operator norm exactly `‖sin 2Θ‖` of the real pair. -/
 alias norm_sinTwoThetaBlock_real :=
-  DavisKahan.Experimental.norm_sinTwoThetaIdealBlock_real
+  DavisKahan.norm_sinTwoThetaIdealBlock_real
 
 /-! ## Unbounded forms
 
@@ -121,31 +121,31 @@ the source interval/exterior hypothesis. -/
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, unbounded perturbation form at
 operator norm.** -/
 alias unbounded_sinTwoTheta_opNorm :=
-  DavisKahan.Experimental.sinTwoTheta_addBounded_of_spectrum_gap
+  DavisKahan.sinTwoTheta_addBounded_of_spectrum_gap
 
 /-- Set-localized interval/exterior form of the unbounded operator-norm
 theorem. -/
 alias unbounded_sinTwoTheta_intervalExterior_opNorm :=
-  DavisKahan.Experimental.sinTwoTheta_addBounded_of_intervalExterior
+  DavisKahan.sinTwoTheta_addBounded_of_intervalExterior
 
 /-- **Reflection-residual form** of the unbounded operator-norm theorem: the
 bounded operator `R` implements the mirrored system on the full domain and
 controls `sin 2Θ` with constant one. -/
 alias unbounded_sinTwoTheta_reflectionResidual_opNorm :=
-  DavisKahan.Experimental.sinTwoTheta_reflectionResidual_of_spectrum_gap
+  DavisKahan.sinTwoTheta_reflectionResidual_of_spectrum_gap
 
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, unbounded perturbation form for
 every source unitary-invariant ideal family.** -/
 alias unbounded_sinTwoTheta_uiNorm :=
-  DavisKahan.Experimental.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
+  DavisKahan.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
 
 /-- Set-localized interval/exterior form at unitary-invariant ideal scope. -/
 alias unbounded_sinTwoTheta_intervalExterior_uiNorm :=
-  DavisKahan.Experimental.sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
+  DavisKahan.sinTwoTheta_addBounded_unitaryInvariant_of_intervalExterior
 
 /-- Reflection-residual form at rectangular symmetric ideal-gauge scope. -/
 alias unbounded_sinTwoTheta_reflectionResidual_gauge :=
-  DavisKahan.Experimental.sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
+  DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_spectrum_gap
 
 /-! ## Literal source forms with the paper's `sin 2Θ₀` freedom
 
@@ -159,7 +159,7 @@ universe v
 variable {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-open DavisKahan.Experimental in
+open DavisKahan in
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, literal unbounded perturbation
 form.**  The chosen `sin 2Θ₀` may be any operator with the complete
 singular-value sequence of the canonical reflected overlap block. -/
@@ -207,7 +207,7 @@ extension: it has no dimension comparison at all.  The corollaries below keep
 the strict rank hypothesis explicitly so the final Section 8 sentence has a
 literal source-facing declaration over both scalar fields. -/
 
-open DavisKahan.Experimental in
+open DavisKahan in
 /-- **Davis--Kahan 1970, Section 8 closing unequal-dimension extension of the
 directed `sin 2Θ₀` theorem, perturbation form.**
 
@@ -245,7 +245,7 @@ theorem unbounded_sinTwoTheta_uiNorm_representative_unequalDimension
   exact unbounded_sinTwoTheta_uiNorm_representative N A hA E hE B S hB hS
     hβα hδ hBlow hBhigh hBcomplSpec hEmem sinTwoTheta₀
 
-open DavisKahan.Experimental in
+open DavisKahan in
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, literal reflection-residual
 form.**  The bounded operator `R` implements the mirrored system on the full
 domain; the chosen `sin 2Θ₀` may be any operator with the complete
@@ -285,7 +285,7 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative
   rw [hgauge]
   exact hcanonical.2
 
-open DavisKahan.Experimental in
+open DavisKahan in
 /-- **Section 8 closing unequal-dimension extension of the directed
 `sin 2Θ₀` theorem, reflection-residual form.**  The strict dimension comparison
 is recorded exactly as printed; the proof is a
@@ -337,7 +337,7 @@ The ambient (whole-space) half `δ ‖sin 2Θ‖ ≤ 2‖H‖` over the reals is
 variable {Er : Type v}
   [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
 
-open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+open DavisKahan DavisKahan.RealSpectralRestriction in
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, literal unbounded perturbation form
 over a REAL Hilbert space.**  The chosen `sin 2Θ₀` may be any operator with the
 complete singular-value sequence of the canonical reflected overlap block. -/
@@ -366,7 +366,7 @@ theorem unbounded_sinTwoTheta_uiNorm_representative_real
   rw [hgauge]
   exact hcanonical.2
 
-open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+open DavisKahan DavisKahan.RealSpectralRestriction in
 /-- **Real-scalar Section 8 closing unequal-dimension extension of the
 directed `sin 2Θ₀` theorem, perturbation form.**  As over `ℂ`, the underlying theorem is
 dimension-free; this declaration records the printed strict-dimension case. -/
@@ -395,7 +395,7 @@ theorem unbounded_sinTwoTheta_uiNorm_representative_real_unequalDimension
   exact unbounded_sinTwoTheta_uiNorm_representative_real N A hA Eop hEop B S hB hS
     hδ hgap hEmem sinTwoTheta₀
 
-open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+open DavisKahan DavisKahan.RealSpectralRestriction in
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem, literal reflection-residual form
 over a REAL Hilbert space.**  The bounded operator `R` implements the mirrored
 system on the full domain; the chosen `sin 2Θ₀` may be any operator with the
@@ -430,7 +430,7 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative_real
   rw [hgauge]
   exact hcanonical.2
 
-open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+open DavisKahan DavisKahan.RealSpectralRestriction in
 /-- **Real-scalar Section 8 closing unequal-dimension extension of the
 directed `sin 2Θ₀` theorem, reflection-residual form.** -/
 theorem unbounded_sinTwoTheta_residual_uiNorm_representative_real_unequalDimension
@@ -475,7 +475,7 @@ private theorem kyFanApproximationGauge_zero_real {Fr : Type v}
     (T : Er →L[ℝ] Fr) : kyFanApproximationGauge 0 T = 0 := by
   simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
 
-open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+open DavisKahan DavisKahan.RealSpectralRestriction in
 /-- **Davis--Kahan 1970, directed `sin 2Θ` theorem over a REAL Hilbert space,
 reflection-residual form, for every source unitarily invariant norm**:
 `δ ‖sin 2Θ₀‖ ≤ ‖R‖`. -/
@@ -511,7 +511,7 @@ theorem sinTwoTheta_reflectionResidual_paperUINorm_real
       KyFanDominantIdealFamily.kyFan_gauge] at h
     exact h.2
 
-open DavisKahan.Experimental DavisKahan.Experimental.RealSpectralRestriction in
+open DavisKahan DavisKahan.RealSpectralRestriction in
 /-- **Davis--Kahan 1970, directed `sin 2Θ` theorem over a REAL Hilbert space,
 bounded-perturbation form, for every source unitarily invariant norm**:
 `δ ‖sin 2Θ₀‖ ≤ 2‖E‖`, with the paper's sharp factor two. -/
@@ -562,12 +562,12 @@ operator-norm conclusions with `sin 2Θ` itself, over a real Hilbert space. -/
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem over a REAL Hilbert space, unbounded
 bounded-perturbation form at the operator norm**: `δ ‖sin 2Θ‖ ≤ 2‖E‖`. -/
 alias unbounded_sinTwoTheta_opNorm_real :=
-  DavisKahan.Experimental.sinTwoTheta_addBounded_opNorm_real
+  DavisKahan.sinTwoTheta_addBounded_opNorm_real
 
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem over a REAL Hilbert space, unbounded
 reflection-residual form at the operator norm**: `δ ‖sin 2Θ‖ ≤ ‖R‖`. -/
 alias unbounded_sinTwoTheta_reflectionResidual_opNorm_real :=
-  DavisKahan.Experimental.sinTwoTheta_reflectionResidual_opNorm_real
+  DavisKahan.sinTwoTheta_reflectionResidual_opNorm_real
 
 end DavisKahan1970
 end TauCeti

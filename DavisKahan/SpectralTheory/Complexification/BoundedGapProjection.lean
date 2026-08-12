@@ -32,7 +32,6 @@ source theorem.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Foundation
 namespace RealComplexification
 
@@ -174,6 +173,5 @@ end
 
 end RealComplexification
 end Foundation
-end Experimental
 end DavisKahan
 end TauCeti

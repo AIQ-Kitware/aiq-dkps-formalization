@@ -47,7 +47,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 
 universe u
@@ -115,6 +114,5 @@ theorem subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
     (halmosSourceDefect_eq_bot_iff_halmosTargetDefect_eq_bot U V h)
 
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

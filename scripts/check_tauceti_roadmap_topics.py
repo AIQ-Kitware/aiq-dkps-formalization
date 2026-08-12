@@ -196,7 +196,8 @@ TOPICS: list[tuple[str, str, list[str]]] = [
  # it, so it constrains no topic ordering; it is filed here because its consumers are the
  # discrete-spectrum statements this topic collects.
  [A+"CompactSelfAdjointClassification",A+"CompactApproximationEigenvalues",
-  A+"CompactSpectralDecomposition",A+"CompactSingularSubspaces",
+  A+"CompactSpectralDecomposition",A+"CompactSingularSubspaces",A+"PrincipalSineSequence",
+  A+"PrincipalAngleSequence",
   "Order.DiscreteEnumeration"]),
 ("T27","Measure classes, L-two transport, and the multiplicity normal form",
  ["MeasureTheory."+x for x in ["MeasureClass","RadonNikodymL2","LpComp","LpRestrict","LpStar",

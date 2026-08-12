@@ -28,7 +28,6 @@ operators together with the basis-permutation unitary.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators
@@ -446,6 +445,5 @@ end PaperSymmetricNormingFunction
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

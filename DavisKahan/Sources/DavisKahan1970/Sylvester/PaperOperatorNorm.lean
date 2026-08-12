@@ -52,7 +52,6 @@ open question and is not an obligation of this development.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
@@ -357,6 +356,5 @@ end Sharpness
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

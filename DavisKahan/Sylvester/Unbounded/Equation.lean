@@ -16,7 +16,6 @@ verbatim.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -38,6 +37,5 @@ abbrev HasUnboundedBoundedSylvesterEquation
   TauCeti.LinearPMap.UnboundedBoundedSylvesterEquation A.toLinearPMap B X C
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

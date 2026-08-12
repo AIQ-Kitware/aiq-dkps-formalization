@@ -32,7 +32,7 @@ proved here.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 
@@ -264,9 +264,9 @@ theorem realSpectrum_compressOperator_eq_restrictedSpectrum
   rw [compressOperator_eq_restrict_of_invariant T U hU]
   change
     {r : ℝ | (r : ℂ) ∈ spectrum ℂ (T.restrict hU)} =
-      DavisKahan.Experimental.Foundation.restrictedSpectrum T U
+      DavisKahan.Foundation.restrictedSpectrum T U
   exact
-    (DavisKahan.Experimental.Foundation.restrictedSpectrum_eq_restrictionSpectrum
+    (DavisKahan.Foundation.restrictedSpectrum_eq_restrictionSpectrum
       T U hU).symm
 
 omit [CompleteSpace H] in

@@ -29,9 +29,6 @@ Sobolev realization of the fourth-derivative operator.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 
 noncomputable section
@@ -272,8 +269,5 @@ theorem positive_root_fourth_power_gt_five_hundred
 
 end
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

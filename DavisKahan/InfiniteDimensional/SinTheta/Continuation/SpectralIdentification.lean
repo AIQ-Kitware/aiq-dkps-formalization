@@ -34,7 +34,7 @@ open DavisKahan
 open Set
 open MeasureTheory
 open scoped InnerProductSpace
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 universe v
 

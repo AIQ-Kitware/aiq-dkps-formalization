@@ -17,7 +17,6 @@ passages and Fan dominance endpoint.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace Topology
@@ -532,6 +531,5 @@ theorem unbounded_sylvester_mem_and_gauge_le_direct_swapped
 end ApproximationNumberEndpointAssumptions
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

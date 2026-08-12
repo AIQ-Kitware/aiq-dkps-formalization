@@ -25,7 +25,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 universe v
@@ -257,6 +256,5 @@ theorem sinTheta_unbounded_exact_of_spectrumGap
 
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

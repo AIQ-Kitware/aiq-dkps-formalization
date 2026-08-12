@@ -21,7 +21,6 @@ The constant is one: the estimate is `δ * gauge X ≤ gauge C`, with no loss.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -516,6 +515,5 @@ theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
     (Λ := Λ.toLinearPMap) N hρ hδ hSnorm hdom hres hJnorm hEq hC
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

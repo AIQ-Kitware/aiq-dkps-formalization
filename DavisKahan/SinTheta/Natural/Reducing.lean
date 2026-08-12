@@ -24,7 +24,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 noncomputable section
@@ -556,6 +555,5 @@ end Real
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

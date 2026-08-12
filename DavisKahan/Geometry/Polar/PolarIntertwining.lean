@@ -23,11 +23,8 @@ open scoped InnerProductSpace InnerProduct
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 noncomputable section
 
@@ -221,8 +218,5 @@ theorem canonicalPolarFactor_adjoint_swap_from_polar
 
 end
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

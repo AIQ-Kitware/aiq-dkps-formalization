@@ -24,7 +24,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open RealSpectralRestriction
@@ -194,6 +193,5 @@ theorem generalizedSinTheta_unbounded_real_spectralSubspace
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

@@ -6,8 +6,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import ForTauCeti.Analysis.InnerProductSpace.Complexification.Basic
 import DavisKahan.SpectralTheory.Complexification.BoundedGapProjection
 import DavisKahan.SpectralTheory.Complexification.FormTransport
-import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
 import ForTauCeti.Analysis.InnerProductSpace.Complexification.FunctionalCalculus
+import DavisKahan.SpectralTheory.Complexification.LinearPMapSpectralDescent
 import DavisKahan.SpectralTheory.Complexification.Spectrum
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 import DavisKahan.SpectralTheory.Complexification.Subspace

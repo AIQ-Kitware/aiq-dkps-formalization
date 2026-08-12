@@ -18,7 +18,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 noncomputable section
@@ -30,7 +29,7 @@ section Complex
 -- `open ` would resolve to the nested
 -- `ExactSinTheta` namespace introduced by `RealSpectrumBridge`,
 -- which shadows the intended one, so the full path is spelled out here.
-open TauCeti.DavisKahan.Experimental
+open TauCeti.DavisKahan
 
 variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -237,6 +236,5 @@ end Real
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

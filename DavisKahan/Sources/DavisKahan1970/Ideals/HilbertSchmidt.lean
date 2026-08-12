@@ -25,7 +25,6 @@ compatible with every singular-value transport theorem in the repository.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
@@ -411,6 +410,5 @@ theorem sq_paperHilbertSchmidtNorm
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

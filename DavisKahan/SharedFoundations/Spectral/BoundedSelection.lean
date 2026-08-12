@@ -17,9 +17,8 @@ Riesz-projection campaigns.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace Scratch
 namespace SharedFoundations
+namespace Spectral
 
 open scoped InnerProductSpace
 open DavisKahanExt
@@ -118,8 +117,7 @@ theorem orthogonal_reduces
 
 end BoundedSpectralSelection
 
+end Spectral
 end SharedFoundations
-end Scratch
-end Experimental
 end DavisKahan
 end TauCeti

@@ -29,7 +29,7 @@ restated; names and namespace are unchanged.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open Set
 open MeasureTheory

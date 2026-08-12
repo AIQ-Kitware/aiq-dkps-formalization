@@ -50,7 +50,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
@@ -159,6 +158,5 @@ theorem adjoint_spectraPolarIsometry_comp (T : H →L[𝕜] H) :
       = T.polarInitial.starProjection :=
   T.adjoint_comp_polarPartial
 
-end Experimental
 end DavisKahan
 end TauCeti

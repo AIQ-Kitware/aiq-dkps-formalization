@@ -37,9 +37,9 @@ of `sin 2Θ` have the same norm, because both equal the projection gap between
 
 ## Main results
 
-* `TauCeti.DavisKahan.Experimental.norm_sinTwoThetaIdealBlock_real`
-* `TauCeti.DavisKahan.Experimental.sinTwoTheta_reflectionResidual_opNorm_real`
-* `TauCeti.DavisKahan.Experimental.sinTwoTheta_addBounded_opNorm_real`
+* `TauCeti.DavisKahan.norm_sinTwoThetaIdealBlock_real`
+* `TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_opNorm_real`
+* `TauCeti.DavisKahan.sinTwoTheta_addBounded_opNorm_real`
 
 ## References
 
@@ -71,21 +71,20 @@ theorem norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC
     ‖paperSinTwoAngleOperatorC U V‖ = ‖sinTwoAngleOperatorC U V‖ := by
   rw [paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub,
     ContinuousLinearMap.norm_modulus, norm_sub_rev]
-  exact DavisKahan.Experimental.subspaceGap_map_reflection_eq_norm_sinTwoAngle U V
+  exact DavisKahan.subspaceGap_map_reflection_eq_norm_sinTwoAngle U V
 
 end
 
 end DavisKahanExt
 
 namespace DavisKahan
-namespace Experimental
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
-open TauCeti.DavisKahan.Experimental.RealSpectralRestriction
+open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.RealSpectralRestriction
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -221,6 +220,5 @@ end Real
 
 end
 
-end Experimental
 end DavisKahan
 end TauCeti

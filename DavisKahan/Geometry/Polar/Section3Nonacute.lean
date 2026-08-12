@@ -27,9 +27,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 open Frontier
 
@@ -695,7 +692,7 @@ because `W + W⋆ = 2|C|` and `|C| ≥ 0`. -/
 theorem canonicalPolarFactor_sourceCompression_nonnegative (x : H) :
     0 ≤ RCLike.re
       ⟪x, (projection U * spectraCanonicalPolarFactor U V * projection U) x⟫_𝕜 := by
-  rw [Section3.re_inner_projection_compression U (spectraCanonicalPolarFactor U V) x,
+  rw [re_inner_projection_compression U (spectraCanonicalPolarFactor U V) x,
     re_inner_polarFactor_eq_absoluteValue U V (projection U x)]
   have hnonneg : (0 : H →L[𝕜] H) ≤
       spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V) :=
@@ -831,6 +828,28 @@ theorem nonacuteDirectRotation_add_star_eq_two_absoluteValue
     star_crossedDefectQuarterTurn U V J]
   rw [← polarFactor_add_star_eq_two_absoluteValue U V]
   abel
+
+/-- The real quadratic form of a completed nonacute direct rotation is the
+quadratic form of the canonical positive cosine. -/
+theorem re_inner_nonacuteDirectRotation_eq_absoluteValue
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) (x : H) :
+    RCLike.re ⟪nonacuteDirectRotation U V J x, x⟫_𝕜 =
+      RCLike.re ⟪spectraOperatorAbsoluteValue
+        (spectraCanonicalIntertwiner U V) x, x⟫_𝕜 := by
+  let W := nonacuteDirectRotation U V J
+  let A := spectraOperatorAbsoluteValue (spectraCanonicalIntertwiner U V)
+  have hsum : W + star W = A + A := by
+    simpa [W, A] using nonacuteDirectRotation_add_star_eq_two_absoluteValue U V J
+  have hkey : ⟪(W + star W) x, x⟫_𝕜 = ⟪(A + A) x, x⟫_𝕜 := by rw [hsum]
+  rw [add_apply, add_apply, inner_add_left, inner_add_left] at hkey
+  have hstar : ⟪star W x, x⟫_𝕜 = ⟪x, W x⟫_𝕜 := by
+    rw [ContinuousLinearMap.star_eq_adjoint, ContinuousLinearMap.adjoint_inner_left]
+  have hreStar : RCLike.re ⟪star W x, x⟫_𝕜 = RCLike.re ⟪W x, x⟫_𝕜 := by
+    rw [hstar]
+    exact inner_re_symm (𝕜 := 𝕜) x (W x)
+  have hre := congrArg RCLike.re hkey
+  rw [map_add, map_add, hreStar] at hre
+  linarith
 
 omit [CompleteSpace H] [Algebra ℝ (H →L[𝕜] H)]
   [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)]
@@ -1243,8 +1262,5 @@ theorem proposition3_2_parameterization_completed
 
 end
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

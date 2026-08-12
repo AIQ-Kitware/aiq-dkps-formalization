@@ -28,9 +28,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 open Frontier
 
@@ -927,8 +924,5 @@ theorem modulus_genericCrossBlock_mul_self :
 
 end RCLikePolarRelations
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

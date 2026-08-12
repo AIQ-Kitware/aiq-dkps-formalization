@@ -40,7 +40,6 @@ The bridge is `TauCeti.SymmetricOperatorIdealFamily.gaugeReal`; see the
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -555,6 +554,5 @@ theorem kyFanApproximationGauge_proj_comp_eq_adjoint_comp
   rw [hP.2.clm_adjoint_eq]
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

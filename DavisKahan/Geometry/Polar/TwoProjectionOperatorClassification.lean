@@ -21,9 +21,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 
 noncomputable section
@@ -296,8 +293,5 @@ theorem twoProjection_operator_classification
 
 end
 
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

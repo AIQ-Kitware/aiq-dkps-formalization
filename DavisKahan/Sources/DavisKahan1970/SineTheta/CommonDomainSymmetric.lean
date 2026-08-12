@@ -81,7 +81,6 @@ and `result_every_unitarilyInvariantNorm` keep the statements they always had.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -671,6 +670,5 @@ end Real
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

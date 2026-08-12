@@ -64,7 +64,7 @@ or that `R = HE₀`".  The hypothesis is the printed one: `Pℋ` reduces the unp
 operator, so on it the compression `A₀` is the honest restriction and the two `A` terms
 cancel. -/
 alias equation1_8_eq_perturbation_comp :=
-  DavisKahan.Experimental.Frontier.Section8.residual_eq_comp_subtypeL
+  DavisKahan.Frontier.Section8.residual_eq_comp_subtypeL
 
 /-- **Davis--Kahan 1970, Section 1: `R⋆R = H₀² + B⋆B`.**
 
@@ -82,7 +82,7 @@ theorem equation1_8_norm_sq_eq_diagonal_add_offDiagonal
         (DavisKahanExt.compressOperator P A) u‖ ^ 2 =
       ‖P.starProjection (K (u : H))‖ ^ 2 + ‖Pᗮ.starProjection (K (u : H))‖ ^ 2 := by
   have hR := congrArg (fun T : P →L[𝕜] H => T u)
-    (DavisKahan.Experimental.Frontier.Section8.residual_eq_comp_subtypeL A K P hPinv)
+    (DavisKahan.Frontier.Section8.residual_eq_comp_subtypeL A K P hPinv)
   have hRu : DavisKahan.residual (A + K) P.subtypeL
       (DavisKahanExt.compressOperator P A) u = K (u : H) := hR
   rw [hRu]

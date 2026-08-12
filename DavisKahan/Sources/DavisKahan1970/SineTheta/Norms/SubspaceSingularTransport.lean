@@ -23,7 +23,6 @@ spaces, the statements use the heterogeneous relation
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -145,6 +144,5 @@ theorem sameApproximationSingularValues_ambientSubspaceBlock
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

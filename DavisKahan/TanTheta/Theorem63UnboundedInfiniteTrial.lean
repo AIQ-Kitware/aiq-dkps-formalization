@@ -32,7 +32,6 @@ open scoped InnerProductSpace BigOperators
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactTanTheta
 
 open ExactSinTheta
@@ -660,6 +659,5 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists
     (crossed_lower_of_spectralGap A hA D hgap) hResidual
 
 end ExactTanTheta
-end Experimental
 end DavisKahan
 end TauCeti

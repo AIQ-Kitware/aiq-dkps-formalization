@@ -49,13 +49,12 @@ open Filter
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace RealSpectralRestriction
 
 open ExactSinTheta
 open ExactSinTheta.ClosedOperatorComplexification
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -165,6 +164,5 @@ noncomputable def realSpectraSpectralCutoffInterface
 
 end
 end RealSpectralRestriction
-end Experimental
 end DavisKahan
 end TauCeti

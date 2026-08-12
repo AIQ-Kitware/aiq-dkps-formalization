@@ -17,7 +17,6 @@ substituted.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -382,6 +381,5 @@ end Real
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

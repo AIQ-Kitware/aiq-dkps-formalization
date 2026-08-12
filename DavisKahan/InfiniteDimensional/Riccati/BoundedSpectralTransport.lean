@@ -28,7 +28,7 @@ two diagonal blocks.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace ℂ E]
 

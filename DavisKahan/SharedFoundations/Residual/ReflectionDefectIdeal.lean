@@ -18,14 +18,14 @@ ideal interface.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace Scratch
 namespace SharedFoundations
+namespace Residual
 
 open scoped InnerProductSpace
-open ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 open DavisKahanExt
 open TauCeti.DavisKahan
+open TauCeti.DavisKahan.BoundedOperator
 
 universe u
 
@@ -102,8 +102,7 @@ theorem RectangularSymmetricIdealFamily.gauge_reflectionDefect_isometricRange_le
     _ = 4 * N.gaugeReal T := by rw [hadj]; ring
     _ ≤ 4 * N.gaugeReal (residual A X M) := by gcongr
 
+end Residual
 end SharedFoundations
-end Scratch
-end Experimental
 end DavisKahan
 end TauCeti

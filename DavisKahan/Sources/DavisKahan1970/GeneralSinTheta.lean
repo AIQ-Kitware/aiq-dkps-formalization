@@ -24,75 +24,75 @@ namespace DavisKahan1970
 
 /-- Complete generalized 1970 target, including ordered half-lines. -/
 alias FormBoundedGeneralSinThetaProblem :=
-  DavisKahan.Experimental.ExactSinTheta.FormBoundedGeneralSinThetaProblem
+  DavisKahan.ExactSinTheta.FormBoundedGeneralSinThetaProblem
 
 /-- Completed genuine-spectrum finite interval/exterior problem. -/
 alias FiniteIntervalGeneralSinThetaProblem :=
-  DavisKahan.Experimental.ExactSinTheta.FiniteIntervalGeneralSinThetaProblem
+  DavisKahan.ExactSinTheta.FiniteIntervalGeneralSinThetaProblem
 
 alias FormBoundedIsometricSinThetaProblem :=
-  DavisKahan.Experimental.ExactSinTheta.FormBoundedIsometricSinThetaProblem
+  DavisKahan.ExactSinTheta.FormBoundedIsometricSinThetaProblem
 
 /-- Real lower-frame version of the complete source-shaped problem. -/
 alias RealGeneralSinThetaProblem :=
-  DavisKahan.Experimental.ExactSinTheta.RealGeneralSinThetaProblem
+  DavisKahan.ExactSinTheta.RealGeneralSinThetaProblem
 
 alias generalizedSinTheta :=
-  DavisKahan.Experimental.ExactSinTheta.FormBoundedGeneralSinThetaProblem.result
+  DavisKahan.ExactSinTheta.FormBoundedGeneralSinThetaProblem.result
 alias generalizedSinTheta_complementaryBlock :=
-  DavisKahan.Experimental.ExactSinTheta.FormBoundedGeneralSinThetaProblem.complementaryBlock_result
+  DavisKahan.ExactSinTheta.FormBoundedGeneralSinThetaProblem.complementaryBlock_result
 
 /-- Completed generalized finite interval/exterior theorem. -/
 alias generalizedSinTheta_finiteInterval :=
-  DavisKahan.Experimental.ExactSinTheta.FiniteIntervalGeneralSinThetaProblem.result
+  DavisKahan.ExactSinTheta.FiniteIntervalGeneralSinThetaProblem.result
 
 /-- Complementary-overlap form of the completed finite interval/exterior theorem. -/
 alias generalizedSinTheta_finiteInterval_complementaryBlock :=
-  DavisKahan.Experimental.ExactSinTheta.FiniteIntervalGeneralSinThetaProblem.complementaryBlock_result
+  DavisKahan.ExactSinTheta.FiniteIntervalGeneralSinThetaProblem.complementaryBlock_result
 
 alias sinTheta :=
-  DavisKahan.Experimental.ExactSinTheta.FormBoundedIsometricSinThetaProblem.result_complex
+  DavisKahan.ExactSinTheta.FormBoundedIsometricSinThetaProblem.result_complex
 
 /-- Explicit complex name for the manuscript's default scalar convention. -/
 alias sinTheta_complex :=
-  DavisKahan.Experimental.ExactSinTheta.FormBoundedIsometricSinThetaProblem.result_complex
+  DavisKahan.ExactSinTheta.FormBoundedIsometricSinThetaProblem.result_complex
 
 /-- Real source-facing isometric theorem. -/
 alias sinTheta_real :=
-  DavisKahan.Experimental.ExactSinTheta.FormBoundedIsometricSinThetaProblem.result_real
+  DavisKahan.ExactSinTheta.FormBoundedIsometricSinThetaProblem.result_real
 
 /-- Real unbounded isometric theorem from a measurable exact spectral set. -/
 alias sinTheta_real_spectralSubspace :=
-  DavisKahan.Experimental.ExactSinTheta.sinTheta_unbounded_real_spectralSubspace
+  DavisKahan.ExactSinTheta.sinTheta_unbounded_real_spectralSubspace
 
 /-- Real source-facing generalized theorem. -/
 alias generalizedSinTheta_real :=
-  DavisKahan.Experimental.ExactSinTheta.RealGeneralSinThetaProblem.result
+  DavisKahan.ExactSinTheta.RealGeneralSinThetaProblem.result
 
 /-- Real generalized unbounded theorem from a measurable exact spectral set. -/
 alias generalizedSinTheta_real_spectralSubspace :=
-  DavisKahan.Experimental.ExactSinTheta.generalizedSinTheta_unbounded_real_spectralSubspace
+  DavisKahan.ExactSinTheta.generalizedSinTheta_unbounded_real_spectralSubspace
 
 /-- Real complementary-overlap form of the generalized theorem. -/
 alias generalizedSinTheta_real_complementaryBlock :=
-  DavisKahan.Experimental.ExactSinTheta.RealGeneralSinThetaProblem.complementaryBlock_result
+  DavisKahan.ExactSinTheta.RealGeneralSinThetaProblem.complementaryBlock_result
 
 /-- Bounded generalized problem, derived through the full-domain closed-operator
 bridge rather than owning the canonical proof. -/
 alias BoundedGeneralSinThetaProblem :=
-  DavisKahan.Experimental.ExactSinTheta.BoundedGeneralSinThetaProblem
+  DavisKahan.ExactSinTheta.BoundedGeneralSinThetaProblem
 
 /-- Bounded specialization derived from the canonical generalized theorem. -/
 alias generalizedSinTheta_boundedSpecialization :=
-  DavisKahan.Experimental.ExactSinTheta.BoundedGeneralSinThetaProblem.result
+  DavisKahan.ExactSinTheta.BoundedGeneralSinThetaProblem.result
 
 /-- Bounded real lower-frame problem. -/
 alias RealBoundedGeneralSinThetaProblem :=
-  DavisKahan.Experimental.ExactSinTheta.RealBoundedGeneralSinThetaProblem
+  DavisKahan.ExactSinTheta.RealBoundedGeneralSinThetaProblem
 
 /-- Bounded real generalized specialization. -/
 alias generalizedSinTheta_boundedSpecialization_real :=
-  DavisKahan.Experimental.ExactSinTheta.RealBoundedGeneralSinThetaProblem.result
+  DavisKahan.ExactSinTheta.RealBoundedGeneralSinThetaProblem.result
 
 end DavisKahan1970
 end TauCeti

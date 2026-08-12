@@ -278,10 +278,10 @@ theorem commute_paperAngleOperatorC_starProjection_right (U V : Submodule ℂ E)
 
 section Real
 
-open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.DavisKahan.Foundation
 open TauCeti.RealComplexification
 -- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 open TauCeti.DavisKahanExt.Real
 
 variable {ER : Type*} [NormedAddCommGroup ER] [InnerProductSpace ℝ ER]

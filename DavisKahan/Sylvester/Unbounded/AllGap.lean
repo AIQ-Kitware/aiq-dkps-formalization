@@ -27,7 +27,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 universe v
@@ -100,6 +99,5 @@ theorem davisKahan1970_sylvester_of_spectrumGap
           hEq hC
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

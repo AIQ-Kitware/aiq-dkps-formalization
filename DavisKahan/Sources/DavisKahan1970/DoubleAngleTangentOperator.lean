@@ -31,7 +31,7 @@ namespace DavisKahan
 open ApproximationNumber
 open scoped InnerProductSpace BigOperators
 open Set
-open DavisKahan.Experimental.ExactSinTheta
+open DavisKahan.ExactSinTheta
 
 noncomputable section
 

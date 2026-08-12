@@ -28,7 +28,7 @@ namespace DavisKahan1970
 
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 open scoped InnerProductSpace
 
@@ -176,6 +176,7 @@ private def signedCosTwo (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
   1 - 2 * (paperProjectorDifference U V * paperProjectorDifference U V)
 
+omit [CompleteSpace E] in
 private theorem signedCosTwo_comm_starProjection
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     signedCosTwo U V * U.starProjection = U.starProjection * signedCosTwo U V := by
@@ -198,6 +199,7 @@ private theorem signedCosTwo_comm_starProjection
     noncomm_ring
   rw [htwo, htwo', hsq]
 
+omit [CompleteSpace E] in
 private theorem signedCosTwo_comm_starProjection_orthogonal
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     signedCosTwo U V * Uᗮ.starProjection = Uᗮ.starProjection * signedCosTwo U V := by

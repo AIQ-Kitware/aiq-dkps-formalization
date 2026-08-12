@@ -24,9 +24,7 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
-namespace HiddenFoundations
 
 noncomputable section
 
@@ -201,8 +199,6 @@ abbrev HilbertSchmidtApproximationFoundation :=
   SchattenApproximationFoundation.{u, v} (k := k) (2 : ℝ) (by norm_num)
 
 end
-end HiddenFoundations
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

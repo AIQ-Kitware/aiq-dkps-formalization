@@ -47,15 +47,12 @@ relation exhibits a genuine eigenvalue of `beamOperator` above `500`.
 -/
 
 open MeasureTheory
-open TauCeti.DavisKahan.Experimental
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.ExactSinTheta
 open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 namespace FreeBeam
 namespace Model
 
@@ -2084,8 +2081,5 @@ end
 
 end Model
 end FreeBeam
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

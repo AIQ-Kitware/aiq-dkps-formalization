@@ -53,12 +53,12 @@ namespace DavisKahan1970
 open scoped InnerProductSpace BigOperators
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
-open TauCeti.DavisKahan.Experimental.ExactSinTheta.ComplexificationApproximation
-open TauCeti.DavisKahan.Experimental.ExactTanTheta
-open TauCeti.DavisKahan.Experimental.TanTheta
+open TauCeti.DavisKahan.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta.ComplexificationApproximation
+open TauCeti.DavisKahan.ExactTanTheta
+open TauCeti.DavisKahan.TanTheta
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -423,7 +423,7 @@ supplied by the real spectral layer of
 
 section SpectralGap
 
-open TauCeti.DavisKahan.Experimental.RealSpectralRestriction
+open TauCeti.DavisKahan.RealSpectralRestriction
 
 variable (A : ClosedOperator (𝕜 := ℝ) (E := E)) (hA : A.IsSelfAdjoint)
 
@@ -503,14 +503,14 @@ theorem le_re_inner_of_mem_orthogonal_realSelfAdjointSpectralSubspace_of_gap
     (ClosedOperatorComplexification.ofRealDomain A ⟨y, hy⟩).2
   -- The real copy of `y` is orthogonal to the complex spectral subspace of `Iic α`.
   have hyVC : ofReal y ∈
-      (_root_.TauCeti.DavisKahan.Experimental.selfAdjointSpectralSubspace Ac hAc
+      (_root_.TauCeti.DavisKahan.selfAdjointSpectralSubspace Ac hAc
         (Set.Iic alpha) measurableSet_Iic)ᗮ := by
     rw [← complexifySubmodule_realSelfAdjointSpectralSubspace A hA (Set.Iic alpha)
       measurableSet_Iic, ← complexifySubmodule_orthogonal,
       ofReal_mem_complexifySubmodule_iff]
     exact hyV
   have hC :=
-    _root_.TauCeti.DavisKahan.Experimental.ExactTanTheta.le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap
+    _root_.TauCeti.DavisKahan.ExactTanTheta.le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap
       Ac hAc hgapC (ofReal y) hyVC hydC
   -- Read the complex bound back on the real copy.
   have hact : Ac.toLinearMap ⟨ofReal y, hydC⟩ = ofReal (A.toLinearMap ⟨y, hy⟩) :=

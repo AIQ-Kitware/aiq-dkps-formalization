@@ -34,7 +34,6 @@ namespace TauCeti
 
 open TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -327,6 +326,5 @@ noncomputable def sinThetaBlockReal
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

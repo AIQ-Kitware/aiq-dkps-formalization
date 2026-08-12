@@ -20,11 +20,10 @@ arbitrary unitarily invariant ideal gauge.  Both are Spectra-free since
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 section SinTheta
 
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 universe v
 
@@ -154,6 +153,5 @@ theorem linearPMap_sinTheta_unbounded_gauge_of_spectrum_gap
 end SinTheta
 
 
-end Experimental
 end DavisKahan
 end TauCeti

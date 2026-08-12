@@ -23,7 +23,7 @@ block operator and comparison with the block-coordinate graph API.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

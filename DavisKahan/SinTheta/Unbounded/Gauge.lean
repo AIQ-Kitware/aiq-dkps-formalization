@@ -13,7 +13,6 @@ import DavisKahan.SinTheta.Unbounded.OpNorm
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 
@@ -132,6 +131,5 @@ theorem linearPMap_sinTheta_unbounded_gauge
     _ = N.gaugeReal (D.residual.adjoint ∘L D.F₁) := hgC
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

@@ -34,7 +34,6 @@ scalar field, so the transport above is exactly a statement that `realSpectrum` 
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Foundation
 
 namespace RealComplexification
@@ -121,6 +120,5 @@ theorem realSpectrum_complexify (T : E →L[ℝ] E) :
 end RealComplexification
 
 end Foundation
-end Experimental
 end DavisKahan
 end TauCeti

@@ -40,7 +40,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace Section3
 
@@ -465,6 +464,5 @@ end RealScalars
 
 end Section3
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

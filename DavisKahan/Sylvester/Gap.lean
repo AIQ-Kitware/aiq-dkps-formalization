@@ -54,7 +54,6 @@ it is; each name says how its ordered configurations are given.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -158,6 +157,5 @@ alias leftBelowRightAbove := linearPMap_FormBoundedSylvesterGap.leftBelowRightAb
 end FormBoundedSylvesterGap
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

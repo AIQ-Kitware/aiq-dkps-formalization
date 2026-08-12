@@ -41,7 +41,6 @@ available directly, so it is that family.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace ENNReal
@@ -118,6 +117,5 @@ theorem paperHilbertSchmidtNorm_toOperator (f : lp (fun _ : PaperHSIndex F => E)
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

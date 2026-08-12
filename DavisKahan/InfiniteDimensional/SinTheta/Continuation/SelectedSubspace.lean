@@ -26,7 +26,7 @@ conclusion that still has to be proved in the spectral-identification branch.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 

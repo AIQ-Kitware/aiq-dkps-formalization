@@ -26,7 +26,6 @@ literal paper norm represented by `PaperUnitaryInvariantNorm`.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -270,6 +269,5 @@ theorem paperCrossSineSum_same_projectionDiff
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

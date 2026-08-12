@@ -50,7 +50,7 @@ namespace TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
-open DavisKahan.Experimental.ExactSinTheta
+open DavisKahan.ExactSinTheta
 open Module (finrank)
 
 variable {𝕜 : Type*} [RCLike 𝕜]

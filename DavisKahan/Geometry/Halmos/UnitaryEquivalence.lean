@@ -19,7 +19,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 
 
@@ -57,6 +56,5 @@ def BoundedOperatorsUnitaryEquivalent
 end CrossSpaceClassification
 
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

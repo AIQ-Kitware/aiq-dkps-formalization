@@ -15,13 +15,12 @@ canonical complexification, exactly paralleling the complex source definition.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
 open TauCeti.RealComplexification
 -- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -43,6 +42,5 @@ noncomputable def paperSourceFullSinR
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

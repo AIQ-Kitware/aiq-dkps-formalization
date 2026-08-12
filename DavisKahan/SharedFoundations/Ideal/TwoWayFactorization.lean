@@ -18,12 +18,11 @@ and zero-extended rectangular blocks.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace Scratch
 namespace SharedFoundations
+namespace Ideal
 
 open scoped InnerProductSpace
-open ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 universe u
 
@@ -164,8 +163,7 @@ theorem RectangularSymmetricIdealFamily.gauge_le_of_contraction_factorization
 
 end Rectangular
 
+end Ideal
 end SharedFoundations
-end Scratch
-end Experimental
 end DavisKahan
 end TauCeti

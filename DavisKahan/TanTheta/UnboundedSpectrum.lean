@@ -26,7 +26,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace TanTheta
 
 
@@ -203,6 +202,5 @@ theorem tanTheta_unbounded_exactSpectralIcc_trialBlock
     A hA hαβ hδ (norm_nonneg D.residual) D.domain_le hZcoercive hρ
 
 end TanTheta
-end Experimental
 end DavisKahan
 end TauCeti

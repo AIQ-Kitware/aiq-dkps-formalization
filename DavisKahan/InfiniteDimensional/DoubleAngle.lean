@@ -18,7 +18,7 @@ spectral-separation form.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 
@@ -334,10 +334,10 @@ mirror image of an invariant subspace carries the same restricted spectrum
 for the conjugated operator. -/
 theorem restrictedSpectrum_reflection_conjugate
     (A : E →L[𝕜] E) (U V : Submodule 𝕜 E) [V.HasOrthogonalProjection] :
-    DavisKahan.Experimental.Foundation.restrictedSpectrum
+    DavisKahan.Foundation.restrictedSpectrum
         (reflectionOperator V ∘L A ∘L reflectionOperator V)
         (reflectedSubspace V U) =
-      DavisKahan.Experimental.Foundation.restrictedSpectrum A U := by
+      DavisKahan.Foundation.restrictedSpectrum A U := by
   ext r
   constructor
   · rintro ⟨hU', hr⟩

@@ -68,7 +68,7 @@ is expected to follow by a norm-preserving complexification transfer.
 namespace TauCeti
 namespace DavisKahanExt
 
-open DavisKahan.Experimental.Foundation
+open DavisKahan.Foundation
 
 open DavisKahan
 
@@ -378,7 +378,7 @@ theorem sinTheta_spectrum_symmetric
 
 section IdealScope
 
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 universe v'
 
@@ -456,7 +456,7 @@ end IdealScope
 
 section SinThetaIdealScope
 
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 /-- **The bounded Davis--Kahan `sin Θ` theorem at unitary-invariant ideal
 scope, genuine spectra.**  Under the directed spectral configuration of

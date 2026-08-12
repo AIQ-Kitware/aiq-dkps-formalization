@@ -24,13 +24,10 @@ needs to invent direct-integral machinery once these interfaces are available.
 
 open scoped InnerProductSpace
 
-open TauCeti.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations
+open TauCeti.DavisKahan.ExactSinTheta
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace MathAhead
-namespace HiddenFoundations
 
 noncomputable section
 
@@ -160,8 +157,5 @@ theorem list_eq_iff_unitarilyEquivalent
 end CompactPositiveListFoundation
 
 end
-end HiddenFoundations
-end MathAhead
-end Experimental
 end DavisKahan
 end TauCeti

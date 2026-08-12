@@ -47,7 +47,6 @@ namespace TauCeti
 
 open TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -479,6 +478,5 @@ theorem lowerFrame_sinThetaBlock_mem_and_gauge_le
 end Complex
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

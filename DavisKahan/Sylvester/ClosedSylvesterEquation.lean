@@ -14,12 +14,11 @@ import Mathlib.MeasureTheory.Measure.MeasureSpaceDef
 The proved front of the unbounded spectral development: the closed Sylvester
 equation interface, closed resolvent data, and everywhere-defined bounded
 inverses.  The spectral projection and truncation theory that is still open
-stays in `DavisKahan.Experimental.InfiniteDimensional.Core.UnboundedSpectral`.
+stays in `DavisKahan.InfiniteDimensional.Core.UnboundedSpectral`.
 -/
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -106,6 +105,5 @@ abbrev HasBoundedEverywhereInverse
   TauCeti.LinearPMap.HasBoundedEverywhereInverse A.toLinearPMap
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

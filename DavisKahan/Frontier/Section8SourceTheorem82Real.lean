@@ -99,15 +99,14 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace Section8
 
 open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.RealComplexification
-open TauCeti.DavisKahan.Experimental.Foundation
-open TauCeti.DavisKahan.Experimental.Foundation.RealComplexification
+open TauCeti.DavisKahan.Foundation
+open TauCeti.DavisKahan.Foundation.RealComplexification
 
 noncomputable section
 
@@ -613,8 +612,8 @@ theorem theorem8_2_sinTwoTheta_residual_source_real_paperUINorm
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : A.Reduces P)
     (hRmem : N.Mem (residual (A + K) P.subtypeL (compressOperator P A))) :
-    N.Mem (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) ∧
-      delta * N.gauge (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) ≤
+    N.Mem (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ∧
+      delta * N.gauge (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) ≤
         2 * N.gauge (residual (A + K) P.subtypeL (compressOperator P A)) := by
   have hseq := sameApproximationSingularSequence_residual_complexify A K P hPred.1
   have htransport := hseq.paperMem_iff_and_gauge_eq N
@@ -633,10 +632,10 @@ theorem theorem8_2_sinTwoTheta_residual_source_real_paperUINorm
       (spectrumIn_orthogonal_complexify_add hQperp)
       ((complexify_reduces_iff A P).2 hPred) hRmemC
   have hBlockEq :=
-    TauCeti.DavisKahan.Experimental.complexify_sinTwoThetaIdealBlock Q P
+    TauCeti.DavisKahan.complexify_sinTwoThetaIdealBlock Q P
   rw [← hBlockEq] at hBlockMemC hboundC
   have hBlockMem :
-      N.Mem (TauCeti.DavisKahan.Experimental.sinTwoThetaIdealBlock Q P) :=
+      N.Mem (TauCeti.DavisKahan.sinTwoThetaIdealBlock Q P) :=
     (ExactSinTheta.PaperUnitaryInvariantNorm.mem_complexify_iff N _).1 hBlockMemC
   refine ⟨hBlockMem, ?_⟩
   have hResidualGauge :
@@ -697,6 +696,5 @@ end
 
 end Section8
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

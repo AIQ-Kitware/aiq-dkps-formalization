@@ -14,7 +14,6 @@ sent through the real canonical unbounded theorem.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -127,6 +126,5 @@ end RealBoundedGeneralSinThetaProblem
 end
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

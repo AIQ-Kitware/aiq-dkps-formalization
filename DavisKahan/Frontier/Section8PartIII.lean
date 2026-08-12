@@ -89,7 +89,7 @@ namespace Section8
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.Frontier.Section8
+open TauCeti.DavisKahan.Frontier.Section8
 
 universe u
 

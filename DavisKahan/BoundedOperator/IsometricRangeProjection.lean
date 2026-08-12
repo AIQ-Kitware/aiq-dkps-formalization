@@ -16,9 +16,7 @@ generalized tangent, reflection-defect, and finite-rank comparison arguments.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace Scratch
-namespace SharedFoundations
+namespace BoundedOperator
 
 open scoped InnerProductSpace
 
@@ -123,8 +121,6 @@ theorem adjoint_apply_isometry_apply
     (adjoint_comp_isometry_eq_id X hX)
   simpa using h
 
-end SharedFoundations
-end Scratch
-end Experimental
+end BoundedOperator
 end DavisKahan
 end TauCeti

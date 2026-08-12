@@ -69,9 +69,7 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
-open MathAhead.HiddenFoundations
 
 noncomputable section
 
@@ -473,6 +471,5 @@ theorem existsUnique_spectraCanonicalPolarFactor
 
 end
 
-end Experimental
 end DavisKahan
 end TauCeti

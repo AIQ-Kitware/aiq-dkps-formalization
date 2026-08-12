@@ -28,9 +28,7 @@ The real family is intended to be obtained by exact complexification transport.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
-namespace HiddenFoundations
 
 open scoped InnerProductSpace
 open Filter
@@ -103,17 +101,6 @@ theorem paperHilbertSchmidtNorm_eq_zero
   have hrepr := toOperator_paperHilbertSchmidtTensor A hA
   rw [hz, ofLp_zero] at hrepr
   exact hrepr.symm
-
-/-- The operator norm is bounded by the paper Hilbert--Schmidt norm. -/
-theorem opNorm_le_paperHilbertSchmidtNorm
-    {A : E →L[ℂ] F} (hA : IsPaperHilbertSchmidt A) :
-    ‖A‖ ≤ paperHilbertSchmidtNorm A := by
-  let z := paperHilbertSchmidtTensor A hA
-  have hrepr := toOperator_paperHilbertSchmidtTensor A hA
-  calc
-    ‖A‖ = ‖ofLp (paperHSBasis _) z‖ := by rw [hrepr]
-    _ ≤ ‖z‖ := norm_ofLp_le (paperHSBasis _) z
-    _ = paperHilbertSchmidtNorm A := norm_paperHilbertSchmidtTensor A hA
 
 /-- Subtraction preserves the paper Hilbert--Schmidt class. -/
 theorem isPaperHilbertSchmidt_sub
@@ -251,8 +238,6 @@ noncomputable def hilbertSchmidtComplex :
 
 end
 
-end HiddenFoundations
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

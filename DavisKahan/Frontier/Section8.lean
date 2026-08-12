@@ -28,13 +28,12 @@ namespace TauCeti
 
 open TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Frontier
 namespace Section8
 
 open DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Experimental.Foundation
+open TauCeti.DavisKahan.Foundation
 open RieszCircle
 
 universe u v
@@ -1096,6 +1095,5 @@ end CanonicalBranchCompression
 
 end Section8
 end Frontier
-end Experimental
 end DavisKahan
 end TauCeti

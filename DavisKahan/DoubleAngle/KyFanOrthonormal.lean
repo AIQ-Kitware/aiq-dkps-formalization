@@ -28,7 +28,6 @@ upstream home is `DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean`.
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
@@ -349,6 +348,5 @@ theorem sum_le_kyFanApproximationGauge_of_contraction
   exact Finset.sum_le_sum fun i _ => ht i
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti

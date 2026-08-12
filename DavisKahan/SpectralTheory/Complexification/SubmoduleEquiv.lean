@@ -47,7 +47,6 @@ It is the shared adapter for two separate open lifts:
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace Foundation
 namespace RealComplexification
 
@@ -238,6 +237,7 @@ theorem restrict_complexifySubmodule_conjEquiv
   apply Subtype.ext
   apply TauCeti.RealComplexification.ext <;> rfl
 
+omit [CompleteSpace E] in
 /-- The actual restricted spectrum is preserved by simultaneous operator and
 subspace complexification. -/
 theorem restrictedSpectrum_complexifySubmodule
@@ -255,6 +255,7 @@ theorem restrictedSpectrum_complexifySubmodule
   rw [restrict_complexifySubmodule_conjEquiv Z A hZ,
     realSpectrum_conjEquiv, realSpectrum_complexify]
 
+omit [CompleteSpace E] in
 /-- Restricted-spectrum containment is preserved and reflected by simultaneous
 operator and subspace complexification. -/
 theorem spectrumIn_complexifySubmodule_iff
@@ -277,6 +278,7 @@ theorem spectrumIn_complexifySubmodule_iff
     rw [restrictedSpectrum_complexifySubmodule Z A hZ]
     exact hspec
 
+omit [CompleteSpace E] in
 /-- Forward spelling of `spectrumIn_complexifySubmodule_iff`. -/
 theorem spectrumIn_complexifySubmodule
     (Z : Submodule ℝ E) (A : E →L[ℝ] E) (S : Set ℝ)
@@ -288,6 +290,5 @@ end RestrictionTransport
 
 end RealComplexification
 end Foundation
-end Experimental
 end DavisKahan
 end TauCeti

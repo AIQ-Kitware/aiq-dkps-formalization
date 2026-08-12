@@ -26,9 +26,8 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
-open TauCeti.DavisKahan.Experimental.ExactSinTheta
+open TauCeti.DavisKahan.ExactSinTheta
 
 universe v
 
@@ -321,6 +320,5 @@ theorem sinTheta_addBounded_spectralProjection_sub_opNorm_of_spectrum_gap
     A hA V hV B S hB hS hβα hβ'α' hδ
     hBlow hBhigh hScomplSpec hSlow hShigh hBcomplSpec
 
-end Experimental
 end DavisKahan
 end TauCeti

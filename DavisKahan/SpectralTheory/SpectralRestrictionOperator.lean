@@ -41,7 +41,6 @@ open Filter Topology
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
@@ -95,6 +94,5 @@ noncomputable def selfAdjointSpectralSubspaceUnitaryGroup
   TauCeti.LinearPMap.genToGroup
     (TauCeti.LinearPMap.isSelfAdjoint_specRestrict hA B hB)
 
-end Experimental
 end DavisKahan
 end TauCeti

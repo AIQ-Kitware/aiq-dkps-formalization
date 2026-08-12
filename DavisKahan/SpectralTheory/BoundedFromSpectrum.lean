@@ -39,7 +39,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
 namespace ExactSinTheta
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
@@ -160,6 +159,5 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
       _ ≤ (α - β) / 2 * ‖φ‖ := h
 
 end ExactSinTheta
-end Experimental
 end DavisKahan
 end TauCeti
