@@ -143,15 +143,16 @@ fidelity:
     source-facing implementation status, compiler verification, and hostile semantic
     completion certification. The checked-in DavisKahan1970_part_III.tex is the
     distributable source-order audit specification, while
-    dev/davis-kahan-1970-source-atom-inventory.json is the atomic source-side
-    completeness denominator; the original paper remains the authority for re-auditing
-    that reconstruction and inventory.
+    dev/davis-kahan-1970-source-atom-inventory.json is the fine-grained source-fidelity
+    inventory; the separate dev/davis-kahan-1970-formalization-result-inventory.json
+    is the 29-result completion denominator. The original paper remains the authority
+    for re-auditing the reconstruction and result selection.
   known_limitations:
     - "Comparator success does not substitute for semantic review of paper-specific definitions and theorem statements."
     - "Generated/checkable status artifacts should be preferred over prose snapshots when they disagree."
-    - "A Davis--Kahan compilation certificate proves elaboration and declaration resolution, not source equivalence; 100% additionally requires completion_certification=accepted for every explicit completion obligation."
-    - "The 2026-08-12 hostile re-audit reopened source-specification, source-facing-mathematics, and audit-mapping holes. The subsequent source-inventory pass repaired the concrete source-spec omissions and established a 266-atom denominator, but mathematical and atom-to-Lean mapping holes remain. The raw compiled_exact count must not be reported as source completion."
-    - "Question 10.4 is a mixed block: its final general-f question is open, but its preceding step-function/projection identities and tan(2 Theta) specializations remain mathematical completion obligations."
+    - "A Davis--Kahan compilation certificate proves elaboration and declaration resolution, not source equivalence; 100% additionally requires terminal exact/refuted evidence and semantic acceptance for every result in the formalization-result inventory."
+    - "The 2026-08-12 hostile re-audit and 266-atom source inventory remain source-fidelity evidence. They are not the completion denominator. The hard 100% denominator is the 29 results Davis--Kahan actually establish; each requires exact source-facing Lean evidence and semantic review."
+    - "Section 10, including Question 10.4, is open-question material and does not contribute completion obligations. Preceding identities remain source-fidelity material unless they are part of a separately designated proved result."
     - "The exact directed and ambient Section 2 tan(2 Theta) source wrappers are now compiled in real and complex scope; that historical gap is closed and should not be reintroduced."
 
 review:

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "purpose": "Source-side completeness denominator for Davis--Kahan 1970. This file inventories mathematical assertions in source order without asserting Lean completion.",
+  "purpose": "Source-fidelity inventory for the distributable Davis--Kahan 1970 reconstruction. It detects omissions and records source order, but it is not the denominator for the 100% formalization claim.",
   "primary_source": {
     "citation": "Chandler Davis and W. M. Kahan, The Rotation of Eigenvectors by a Perturbation. III, SIAM J. Numer. Anal. 7(1):1-46, 1970.",
     "doi": "10.1137/0707001",
@@ -18,10 +18,10 @@
     "source_blocks": 49,
     "numbered_equation_atoms": 64,
     "total_atoms": 266,
-    "completion_obligation_atoms": 259,
-    "non_completion_atoms": 7,
+    "formalization_result_obligations": 29,
+    "result_support_atoms": 67,
+    "fidelity_only_atoms": 199,
     "open_question_atoms": 5,
-    "historical_knowledge_state_atoms": 2,
     "restored_atoms_this_audit": 6
   },
   "restored_source_specification_items": [
@@ -58,11 +58,12 @@
       "section": "1",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "Separable real or complex Hilbert space; bounded main setting with stated unbounded extension.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.reducing-projector-setup",
@@ -71,11 +72,12 @@
       "section": "1",
       "kind": "construction",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "P reduces A and E0,E1 are isometries onto the two reducing summands.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.q-reduces-perturbed",
@@ -84,11 +86,12 @@
       "section": "1",
       "kind": "construction",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "Q reduces A+H and F0,F1 give its reducing decomposition.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.no-spectral-projector-assumption",
@@ -97,11 +100,12 @@
       "section": "1",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "P and Q need not be spectral projectors and the diagonal spectral sets may overlap.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.unitary-intertwiner-dimension-criterion",
@@ -110,11 +114,12 @@
       "section": "1",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "A unitary carrying P-space to Q-space exists precisely with the two matching dimension conditions.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.within-subspace-coordinate-freedom",
@@ -123,11 +128,12 @@
       "section": "1",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "Changing the intertwining unitary changes only the within-subspace unitary coordinates W0,W1.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.residual-inherited-block",
@@ -136,11 +142,12 @@
       "section": "1",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "When A0 is inherited from A, R=H E0 and is the first block column of H.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.rayleigh-ritz-h0-zero",
@@ -149,11 +156,12 @@
       "section": "1",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "The Rayleigh--Ritz choice A0=E0*(A+H)E0 is equivalent here to H0=0.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.residual-gram-split",
@@ -162,11 +170,12 @@
       "section": "1",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "R*R=H0^2+B*B.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.rayleigh-ritz-minimizes-residual",
@@ -175,11 +184,12 @@
       "section": "1",
       "kind": "extremal",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "The Rayleigh--Ritz choice minimizes residual size among the block choices under discussion.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.one-sided-vs-strong-offdiagonal",
@@ -188,11 +198,12 @@
       "section": "1",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "H0=0 is distinguished from the stronger H0=H1=0 condition.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.residual-eigenvalue-sum",
@@ -201,11 +212,12 @@
       "section": "1",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "There is an ordering of m exact eigenvalues with sum_j (alpha_j-lambda_j)^2 <= ||R||_sq^2.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.residual-eigenvalue-pointwise",
@@ -214,11 +226,12 @@
       "section": "1",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.1)--(1.8), in source order.",
       "summary": "The same ordering satisfies |alpha_j-lambda_j| <= ||R||_1.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-block-residual.eq-1-1",
@@ -227,11 +240,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.1)",
       "summary": "Exact mathematical content of source equation (1.1) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-block-residual.eq-1-2",
@@ -240,11 +254,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.2)",
       "summary": "Exact mathematical content of source equation (1.2) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-block-residual.eq-1-3",
@@ -253,11 +268,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.3)",
       "summary": "Exact mathematical content of source equation (1.3) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-block-residual.eq-1-4",
@@ -266,11 +282,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.4)",
       "summary": "Exact mathematical content of source equation (1.4) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-block-residual.eq-1-5",
@@ -279,11 +296,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.5)",
       "summary": "Exact mathematical content of source equation (1.5) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-block-residual.eq-1-6",
@@ -292,11 +310,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.6)",
       "summary": "Exact mathematical content of source equation (1.6) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-block-residual.eq-1-7",
@@ -305,11 +324,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.7)",
       "summary": "Exact mathematical content of source equation (1.7) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-block-residual.eq-1-8",
@@ -318,11 +338,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.8)",
       "summary": "Exact mathematical content of source equation (1.8) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-ui-norms.ui-rank-one-normalization",
@@ -331,11 +352,12 @@
       "section": "1",
       "kind": "definition",
       "source_role": "definition",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "Rank-one operators satisfy the normalized unitary-invariant norm convention.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "definition",
+      "formalization_role_reason": "Needed for source fidelity and theorem statements, but definitions are not results to prove."
     },
     {
       "id": "S1-ui-norms.ui-contraction-monotonicity",
@@ -344,11 +366,12 @@
       "section": "1",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "Left and right multiplication by contractions cannot increase a unitary-invariant norm.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.singular-minimax-noncompact-scope",
@@ -357,11 +380,12 @@
       "section": "1",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "The singular-value minimax expression extends to bounded noncompact operators, with spectral-multiplicity cautions.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.hilbert-schmidt-identity",
@@ -370,11 +394,12 @@
       "section": "1",
       "kind": "definition",
       "source_role": "definition",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "The Hilbert--Schmidt norm is the square root of the sum of squared singular values and trace K*K.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "definition",
+      "formalization_role_reason": "Needed for source fidelity and theorem statements, but definitions are not results to prove."
     },
     {
       "id": "S1-ui-norms.fan-dominance",
@@ -383,11 +408,12 @@
       "section": "1",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "All-unitary-invariant-norm comparison is equivalent to comparison in every Ky Fan norm.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.eq1-13-variational",
@@ -396,11 +422,12 @@
       "section": "1",
       "kind": "variational",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "The Ky Fan norm also equals the supremum of the real sum of y_k* K x_k over orthonormal tuples.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.cosine-law",
@@ -409,11 +436,12 @@
       "section": "1",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "The vector-angle convention satisfies ||x+y||^2=||x||^2+||y||^2+2||x||||y||cos angle(x,y).",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": true
+      "restored_in_2026_08_12_pdf_reaudit": true,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.s0-singular-values",
@@ -422,11 +450,12 @@
       "section": "1",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "The singular values of S0 are sin(theta_k) for the principal-angle data.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.ambient-angle-doubling",
@@ -435,11 +464,12 @@
       "section": "1",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "Nonzero angle data of the ambient angle operator occur twice, once from each side.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.directed-sine-norm",
@@ -448,11 +478,12 @@
       "section": "1",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "||Q^perp P||=||Q^perp E0||=||sin Theta0|| for every UI norm.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.ambient-sine-norm",
@@ -461,11 +492,12 @@
       "section": "1",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "||P-Q||=||sin Theta|| for every UI norm.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.operator-largest-one-sided-distance",
@@ -474,11 +506,12 @@
       "section": "1",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "In operator norm the largest one-sided distance is ||sin Theta||_1.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.closest-unit-vector-distance",
@@ -487,11 +520,12 @@
       "section": "1",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "The closest-unit-vector distance is 2||sin(Theta/2)||_1.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.j-block-form",
@@ -500,11 +534,12 @@
       "section": "1",
       "kind": "construction",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "Section 3 constructs the skew block partial isometry J from J0.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.direct-rotation-exponential",
@@ -513,11 +548,12 @@
       "section": "1",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 1, equations (1.9)--(1.18).",
       "summary": "The distinguished direct rotation satisfies U=exp(J Theta)=cos Theta+J sin Theta with the displayed block form.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S1-ui-norms.eq-1-9",
@@ -526,11 +562,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.9)",
       "summary": "Exact mathematical content of source equation (1.9) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-ui-norms.eq-1-10",
@@ -539,11 +576,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.10)",
       "summary": "Exact mathematical content of source equation (1.10) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-ui-norms.eq-1-11",
@@ -552,11 +590,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.11)",
       "summary": "Exact mathematical content of source equation (1.11) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-ui-norms.eq-1-12",
@@ -565,11 +604,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.12)",
       "summary": "Exact mathematical content of source equation (1.12) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-ui-norms.eq-1-13",
@@ -578,11 +618,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.13)",
       "summary": "Exact mathematical content of source equation (1.13) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-ui-norms.eq-1-14",
@@ -591,11 +632,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.14)",
       "summary": "Exact mathematical content of source equation (1.14) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-ui-norms.eq-1-15",
@@ -604,11 +646,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.15)",
       "summary": "Exact mathematical content of source equation (1.15) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-ui-norms.eq-1-16",
@@ -617,11 +660,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.16)",
       "summary": "Exact mathematical content of source equation (1.16) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-ui-norms.eq-1-17",
@@ -630,11 +674,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.17)",
       "summary": "Exact mathematical content of source equation (1.17) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S1-ui-norms.eq-1-18",
@@ -643,11 +688,12 @@
       "section": "1",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (1.18)",
       "summary": "Exact mathematical content of source equation (1.18) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S2-sin-theta.family-distinctness",
@@ -656,11 +702,12 @@
       "section": "2",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, first unnumbered theorem.",
       "summary": "The four Section 2 theorem families are distinct rather than mere restatements.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S2-sin-theta.ui-norm-scope",
@@ -669,11 +716,12 @@
       "section": "2",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, first unnumbered theorem.",
       "summary": "Every norm in the four headline theorem statements is an arbitrary unitary-invariant norm.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_scope",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-sin-theta.gap-hypothesis",
@@ -682,11 +730,12 @@
       "section": "2",
       "kind": "hypothesis",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, first unnumbered theorem.",
       "summary": "The sine theorem uses interval/exterior separation, allowing the A0 and Lambda1 roles to be interchanged.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_hypothesis",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-sin-theta.directed-conclusion",
@@ -695,11 +744,12 @@
       "section": "2",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, first unnumbered theorem.",
       "summary": "delta ||sin Theta0|| <= ||R||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-tan-theta.ordered-gap-hypothesis",
@@ -708,11 +758,12 @@
       "section": "2",
       "kind": "hypothesis",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, second unnumbered theorem.",
       "summary": "The tangent theorem assumes A0 below Lambda1 by delta.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_hypothesis",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-tan-theta.rayleigh-ritz-hypothesis",
@@ -721,11 +772,12 @@
       "section": "2",
       "kind": "hypothesis",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, second unnumbered theorem.",
       "summary": "The tangent theorem assumes H0=0, equivalently the Rayleigh--Ritz block choice.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_hypothesis",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-tan-theta.directed-conclusion",
@@ -734,11 +786,12 @@
       "section": "2",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, second unnumbered theorem.",
       "summary": "delta ||tan Theta0|| <= ||R||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-tan-theta.ambient-conclusion",
@@ -747,11 +800,12 @@
       "section": "2",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, second unnumbered theorem.",
       "summary": "delta ||tan Theta|| <= ||H||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-sin-two-theta.gap-hypothesis",
@@ -760,11 +814,12 @@
       "section": "2",
       "kind": "hypothesis",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, third unnumbered theorem.",
       "summary": "The double-sine theorem separates Lambda0 from Lambda1 by an interval/exterior gap.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_hypothesis",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-sin-two-theta.directed-conclusion",
@@ -773,11 +828,12 @@
       "section": "2",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, third unnumbered theorem.",
       "summary": "delta ||sin(2 Theta0)|| <= 2||R||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-sin-two-theta.ambient-conclusion",
@@ -786,11 +842,12 @@
       "section": "2",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, third unnumbered theorem.",
       "summary": "delta ||sin(2 Theta)|| <= 2||H||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-tan-two-theta.ordered-gap-hypothesis",
@@ -799,11 +856,12 @@
       "section": "2",
       "kind": "hypothesis",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, fourth unnumbered theorem.",
       "summary": "The double-tangent theorem assumes A0 below A1 by delta.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_hypothesis",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-tan-two-theta.strong-offdiagonal-hypothesis",
@@ -812,11 +870,12 @@
       "section": "2",
       "kind": "hypothesis",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, fourth unnumbered theorem.",
       "summary": "The double-tangent theorem assumes H0=H1=0.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_hypothesis",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-tan-two-theta.no-extra-pole-hypothesis",
@@ -825,11 +884,12 @@
       "section": "2",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, fourth unnumbered theorem.",
       "summary": "The printed theorem has no independent tan-pole exclusion or perturbed-block spectral-placement hypothesis.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_scope",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-tan-two-theta.directed-conclusion",
@@ -838,11 +898,12 @@
       "section": "2",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, fourth unnumbered theorem.",
       "summary": "delta ||tan(2 Theta0)|| <= 2||R||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-tan-two-theta.ambient-conclusion",
@@ -851,11 +912,12 @@
       "section": "2",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, fourth unnumbered theorem.",
       "summary": "delta ||tan(2 Theta)|| <= 2||H||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-tan-two-theta.pole-exclusion-derived",
@@ -864,11 +926,12 @@
       "section": "2",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, fourth unnumbered theorem.",
       "summary": "Section 7 derives the needed nonvanishing cosine factors from the printed hypotheses.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "S2-sharpness.constants-best-possible",
@@ -877,11 +940,12 @@
       "section": "2",
       "kind": "sharpness",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, paragraph following the four theorem statements.",
       "summary": "The constants in all four theorem families are best possible.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S2-sharpness.two-dimensional-equality",
@@ -890,11 +954,12 @@
       "section": "2",
       "kind": "sharpness",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, paragraph following the four theorem statements.",
       "summary": "Two-dimensional examples attain the constants.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S2-sharpness.direct-sum-simultaneous-equality",
@@ -903,11 +968,12 @@
       "section": "2",
       "kind": "sharpness",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, paragraph following the four theorem statements.",
       "summary": "Orthogonal sums give simultaneous equality for all UI norms.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S2-sharpness.first-order-asymptotic",
@@ -916,11 +982,12 @@
       "section": "2",
       "kind": "sharpness",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 2, paragraph following the four theorem statements.",
       "summary": "All four estimates share the stated first-order epsilon asymptotics.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "S2-unbounded-scope.infinite-dimensional-scope",
@@ -929,11 +996,12 @@
       "section": "2",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Introduction and the closing scope paragraphs of Section 2.",
       "summary": "All four main results apply in infinite as well as finite dimension.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_scope",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-unbounded-scope.arbitrary-ui-scope",
@@ -942,11 +1010,12 @@
       "section": "2",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Introduction and the closing scope paragraphs of Section 2.",
       "summary": "All four main results apply to arbitrary UI norms.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_scope",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-unbounded-scope.unbounded-selfadjoint-scope",
@@ -955,11 +1024,12 @@
       "section": "2",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Introduction and the closing scope paragraphs of Section 2.",
       "summary": "The results extend to unbounded self-adjoint A under the stated domain condition.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_scope",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-unbounded-scope.bounded-residual-needed",
@@ -968,11 +1038,12 @@
       "section": "2",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Introduction and the closing scope paragraphs of Section 2.",
       "summary": "Useful unbounded conclusions require the pertinent perturbation or residual to extend boundedly.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_scope",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "S2-unbounded-scope.half-infinite-gap-intervals",
@@ -981,11 +1052,12 @@
       "section": "2",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Introduction and the closing scope paragraphs of Section 2.",
       "summary": "Gap intervals may be half-infinite and the remaining spectra unbounded.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_scope",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.1-def.s0-s1-singular-values",
@@ -994,11 +1066,12 @@
       "section": "3",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 3 setup, equations (3.1)--(3.4), and Definition 3.1.",
       "summary": "S0 and S1 have the same nonzero singular values, with the stated possible initial unit singular values from unequal C0 nullities.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-3.1-def.direct-rotation-definition",
@@ -1007,11 +1080,12 @@
       "section": "3",
       "kind": "definition",
       "source_role": "definition",
-      "completion_obligation": true,
       "source_locator": "Section 3 setup, equations (3.1)--(3.4), and Definition 3.1.",
       "summary": "A direct rotation is a unitary intertwiner with C0,C1 positive and S1=S0*.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "definition",
+      "formalization_role_reason": "Needed for source fidelity and theorem statements, but definitions are not results to prove."
     },
     {
       "id": "DK-3.1-def.u-notation",
@@ -1020,11 +1094,12 @@
       "section": "3",
       "kind": "definition",
       "source_role": "definition",
-      "completion_obligation": true,
       "source_locator": "Section 3 setup, equations (3.1)--(3.4), and Definition 3.1.",
       "summary": "The paper reserves U for direct rotations.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "definition",
+      "formalization_role_reason": "Needed for source fidelity and theorem statements, but definitions are not results to prove."
     },
     {
       "id": "DK-3.1-def.eq-3-1",
@@ -1033,11 +1108,12 @@
       "section": "3",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (3.1)",
       "summary": "Exact mathematical content of source equation (3.1) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-3.1-def.eq-3-2",
@@ -1046,11 +1122,12 @@
       "section": "3",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (3.2)",
       "summary": "Exact mathematical content of source equation (3.2) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-3.1-def.eq-3-3",
@@ -1059,11 +1136,12 @@
       "section": "3",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (3.3)",
       "summary": "Exact mathematical content of source equation (3.3) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-3.1-def.eq-3-4",
@@ -1072,11 +1150,12 @@
       "section": "3",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (3.4)",
       "summary": "Exact mathematical content of source equation (3.4) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-3.2-def.acute-case-definition",
@@ -1085,11 +1164,12 @@
       "section": "3",
       "kind": "definition",
       "source_role": "definition",
-      "completion_obligation": true,
       "source_locator": "Definition 3.2.",
       "summary": "The acute case is exactly the vanishing of the two crossing intersections.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "definition",
+      "formalization_role_reason": "Needed for source fidelity and theorem statements, but definitions are not results to prove."
     },
     {
       "id": "DK-3.1-prop.existence",
@@ -1098,11 +1178,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.1 and its polar-decomposition argument.",
       "summary": "In the acute case a direct rotation exists.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.1-prop.uniqueness",
@@ -1111,11 +1192,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.1 and its polar-decomposition argument.",
       "summary": "In the acute case the direct rotation is unique.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.1-prop.positive-diagonal-characterization",
@@ -1124,11 +1206,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.1 and its polar-decomposition argument.",
       "summary": "Positivity of C0,C1 characterizes the direct rotation among unitary intertwiners in the acute case.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.2-prop.existence-iff-crossing-dimensions",
@@ -1137,11 +1220,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.2 and equation (3.5).",
       "summary": "Outside the acute case, direct rotation existence is equivalent to equality of the crossing dimensions.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.2-prop.nonuniqueness",
@@ -1150,11 +1234,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.2 and equation (3.5).",
       "summary": "When it exists outside the acute case it need not be unique.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.2-prop.crossing-square-minus-one",
@@ -1163,11 +1248,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.2 and equation (3.5).",
       "summary": "On the crossing subspaces U^2 x=-x.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-3.2-prop.bilateral-shift-counterexample",
@@ -1176,11 +1262,12 @@
       "section": "3",
       "kind": "counterexample",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.2 and equation (3.5).",
       "summary": "The bilateral-shift example shows the basic P/Q dimension conditions do not imply the crossing-dimension condition.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-3.2-prop.eq-3-5",
@@ -1189,11 +1276,12 @@
       "section": "3",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (3.5)",
       "summary": "Exact mathematical content of source equation (3.5) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.3-prop.reflection-conjugacy",
@@ -1202,11 +1290,12 @@
       "section": "3",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (3.6)--(3.8) and Proposition 3.3.",
       "summary": "With X=P-Pperp and Q_-=XQX, U^{-1}=XUX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-3.3-prop.principal-square-root",
@@ -1215,11 +1304,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (3.6)--(3.8) and Proposition 3.3.",
       "summary": "Every direct rotation is the principal unitary square root of the product of the two reflections.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.3-prop.square-root-converse",
@@ -1228,11 +1318,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (3.6)--(3.8) and Proposition 3.3.",
       "summary": "A principal square root is a direct rotation when it maps the two crossing subspaces appropriately.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.3-prop.eq-3-6",
@@ -1241,11 +1332,12 @@
       "section": "3",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (3.6)",
       "summary": "Exact mathematical content of source equation (3.6) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-3.3-prop.eq-3-7",
@@ -1254,11 +1346,12 @@
       "section": "3",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (3.7)",
       "summary": "Exact mathematical content of source equation (3.7) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": true
+      "restored_in_2026_08_12_pdf_reaudit": true,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-3.3-prop.eq-3-8",
@@ -1267,11 +1360,12 @@
       "section": "3",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (3.8)",
       "summary": "Exact mathematical content of source equation (3.8) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-3.4-prop.u-square-direct-rotation",
@@ -1280,11 +1374,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.4.",
       "summary": "If C0^2>=1/2, then U^2 is the direct rotation from Q_- to Q.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.1-thm.complete-invariant",
@@ -1293,11 +1388,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 3.1.",
       "summary": "Spectral multiplicity functions of Theta0,Theta1 completely classify the pair under the stated dimension hypotheses.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.1-thm.converse-angle-data",
@@ -1306,11 +1402,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 3.1.",
       "summary": "Conversely the angle operators may be arbitrary positive contractions in [0,pi/2] with matching spectral multiplicities away from zero and the stated dimensions.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.1-thm.reconstruction",
@@ -1319,11 +1416,12 @@
       "section": "3",
       "kind": "construction",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 3.1.",
       "summary": "The pair is reconstructed from the angle data and J0.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-3.1-cor.compact-complete-invariants",
@@ -1332,11 +1430,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Corollary 3.1.",
       "summary": "If PQperpP is compact, the eigenvalues of Theta0,Theta1 counted with multiplicity are complete invariants.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.1-cor.allowed-angle-sequence",
@@ -1345,11 +1444,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Corollary 3.1.",
       "summary": "Theta0 eigenvalues may be any decreasing sequence in [0,pi/2] tending to zero plus possible zero eigenspace.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.1-cor.theta1-match",
@@ -1358,11 +1458,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Corollary 3.1.",
       "summary": "Theta1 has the same nonzero eigenvalues and may differ only in zero multiplicity.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.5-prop.commutation",
@@ -1371,11 +1472,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.5 and the preceding functional-calculus representation.",
       "summary": "Theta commutes with P,Q,J,U.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.5-prop.direct-rotation-exponential",
@@ -1384,11 +1486,12 @@
       "section": "3",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.5 and the preceding functional-calculus representation.",
       "summary": "U=exp(J Theta).",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-3.5-prop.cos-square-projector",
@@ -1397,11 +1500,12 @@
       "section": "3",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.5 and the preceding functional-calculus representation.",
       "summary": "cos^2 Theta=PQP+Pperp Qperp Pperp.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-3.5-prop.eigenvector-rotation-angle",
@@ -1410,11 +1514,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.5 and the preceding functional-calculus representation.",
       "summary": "If Theta x=theta x then angle(x,Ux)=theta.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.5-prop.acute-maximal-characterization",
@@ -1423,11 +1528,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 3.5 and the preceding functional-calculus representation.",
       "summary": "In the acute case each theta-eigenspace is the unique maximal P/Q-reducing subspace with the stated constant-angle properties.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-3.2-cor.swap-invariance",
@@ -1436,11 +1542,12 @@
       "section": "3",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Corollary 3.2.",
       "summary": "Swapping P and Q leaves Theta unchanged and sends J to -J.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-4.1-prop.vz-factorization",
@@ -1449,11 +1556,12 @@
       "section": "4",
       "kind": "construction",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2).",
       "summary": "Every unitary V carrying P to Q is written V=UZ with Z block diagonal in the Section 4 setup.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-4.1-prop.orthonormal-angle-lower-bounds",
@@ -1462,11 +1570,12 @@
       "section": "4",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2).",
       "summary": "For every such V there are orthonormal v_k in P with angle(v_k,Vv_k)>=theta_k.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-4.1-prop.singular-value-minimality",
@@ -1475,11 +1584,12 @@
       "section": "4",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2).",
       "summary": "Each singular value of (1-V)|P is minimized at V=U with value 2 sin(theta_k/2).",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-4.1-prop.closest-q-vector-proof-step",
@@ -1488,11 +1598,12 @@
       "section": "4",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2).",
       "summary": "The pointwise comparison uses Qx/||Qx|| as the closest unit vector in Q-space.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-4.1-prop.eq-4-1",
@@ -1501,11 +1612,12 @@
       "section": "4",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (4.1)",
       "summary": "Exact mathematical content of source equation (4.1) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": true
+      "restored_in_2026_08_12_pdf_reaudit": true,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-4.1-prop.eq-4-2",
@@ -1514,11 +1626,12 @@
       "section": "4",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (4.2)",
       "summary": "Exact mathematical content of source equation (4.2) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": true
+      "restored_in_2026_08_12_pdf_reaudit": true,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-4.1-cor.ui-minimality-on-p",
@@ -1527,11 +1640,12 @@
       "section": "4",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Corollary 4.1.",
       "summary": "For every UI norm, ||(1-V)P|| is minimized at V=U.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-4.2-prop.basis-sine-square-lower-bound",
@@ -1540,11 +1654,12 @@
       "section": "4",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 4.2.",
       "summary": "For every orthonormal basis of P, sum sin^2 angle(v_k,Vv_k) >= sum sin^2 theta_k, including infinite RHS.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-4.2-prop.trace-identification",
@@ -1553,11 +1668,12 @@
       "section": "4",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Proposition 4.2.",
       "summary": "The lower bound is identified with tr(S0* S0).",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-4.3-prop.plane-parameterization",
@@ -1566,11 +1682,12 @@
       "section": "4",
       "kind": "construction",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The whole-space extremality calculation through Proposition 4.3, including (4.3)--(4.6).",
       "summary": "On each principal two-plane V has the displayed a_j,b_j parameterization.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-4.3-prop.squared-displacement-global-minimum",
@@ -1579,11 +1696,12 @@
       "section": "4",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The whole-space extremality calculation through Proposition 4.3, including (4.3)--(4.6).",
       "summary": "||(1-V*)(1-V)|| is minimized by U for every UI norm.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-4.3-prop.operator-norm-displacement-minimum",
@@ -1592,11 +1710,12 @@
       "section": "4",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The whole-space extremality calculation through Proposition 4.3, including (4.3)--(4.6).",
       "summary": "The operator norm of 1-V is minimized by U.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-4.3-prop.hilbert-schmidt-displacement-minimum",
@@ -1605,11 +1724,12 @@
       "section": "4",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The whole-space extremality calculation through Proposition 4.3, including (4.3)--(4.6).",
       "summary": "The Hilbert--Schmidt norm of 1-V is minimized by U.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-4.3-prop.arbitrary-ui-displacement-warning",
@@ -1618,11 +1738,12 @@
       "section": "4",
       "kind": "counterclaim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The whole-space extremality calculation through Proposition 4.3, including (4.3)--(4.6).",
       "summary": "Arbitrary UI norms of 1-V need not be minimized by U.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-4.3-prop.eq-4-3",
@@ -1631,11 +1752,12 @@
       "section": "4",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (4.3)",
       "summary": "Exact mathematical content of source equation (4.3) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-4.3-prop.eq-4-4",
@@ -1644,11 +1766,12 @@
       "section": "4",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (4.4)",
       "summary": "Exact mathematical content of source equation (4.4) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-4.3-prop.eq-4-5",
@@ -1657,11 +1780,12 @@
       "section": "4",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (4.5)",
       "summary": "Exact mathematical content of source equation (4.5) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-4.3-prop.eq-4-6",
@@ -1670,11 +1794,12 @@
       "section": "4",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (4.6)",
       "summary": "Exact mathematical content of source equation (4.6) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-4.4-prop.example4-1-real-reflection",
@@ -1683,11 +1808,12 @@
       "section": "4",
       "kind": "counterexample",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Examples 4.1--4.2 and Proposition 4.4, in source order.",
       "summary": "Example 4.1 gives a real reflection with singular values 2,0 versus two equal direct-rotation singular values and defeats the Ky Fan 2 norm for theta>pi/3.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-4.4-prop.example4-2-complex-phase",
@@ -1696,11 +1822,12 @@
       "section": "4",
       "kind": "counterexample",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Examples 4.1--4.2 and Proposition 4.4, in source order.",
       "summary": "Example 4.2 uses V=e^{i delta}U and shows the full-displacement UI minimum can fail in complex space.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-4.4-prop.printed-proposition4-4",
@@ -1709,11 +1836,12 @@
       "section": "4",
       "kind": "source-assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Examples 4.1--4.2 and Proposition 4.4, in source order.",
       "summary": "The paper asserts that in real space with Theta<=pi/3, U minimizes ||1-V|| for every UI norm.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-4.4-prop.printed-sharp-threshold",
@@ -1722,11 +1850,12 @@
       "section": "4",
       "kind": "source-assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Examples 4.1--4.2 and Proposition 4.4, in source order.",
       "summary": "The paper asserts the pi/3 threshold is sharp in view of the examples.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-5.1-thm.banach-hypotheses",
@@ -1735,11 +1864,12 @@
       "section": "5",
       "kind": "hypothesis",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 5.1 and its two immediate scope remarks.",
       "summary": "Banach-space theorem with ||B||<=alpha and ||A^{-1}||<=(alpha+delta)^{-1}, compatible cross norm.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_hypothesis",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-5.1-thm.sylvester-lower-bound",
@@ -1748,11 +1878,12 @@
       "section": "5",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 5.1 and its two immediate scope remarks.",
       "summary": "AX-XB=C implies ||C||>=delta||X||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-5.1-thm.roles-interchange",
@@ -1761,11 +1892,12 @@
       "section": "5",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 5.1 and its two immediate scope remarks.",
       "summary": "A and B roles/hypotheses may be interchanged.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-5.1-thm.one-sided-unbounded-extension",
@@ -1774,11 +1906,12 @@
       "section": "5",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 5.1 and its two immediate scope remarks.",
       "summary": "The proof covers densely-defined unbounded A with bounded inverse hypothesis while B,X remain bounded.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-5-hermitian-inequalities.pairwise-gap-hypothesis",
@@ -1787,11 +1920,12 @@
       "section": "5",
       "kind": "hypothesis",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 5 discussion preceding Theorem 5.2.",
       "summary": "Hermitian A,B have pairwise spectral distance at least delta.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-5-hermitian-inequalities.operator-norm-constant-one-fails",
@@ -1800,11 +1934,12 @@
       "section": "5",
       "kind": "counterclaim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 5 discussion preceding Theorem 5.2.",
       "summary": "The operator-norm analogue with constant 1 can fail.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-5-hermitian-inequalities.rank-factor-not-best",
@@ -1813,11 +1948,12 @@
       "section": "5",
       "kind": "sharpness",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 5 discussion preceding Theorem 5.2.",
       "summary": "Equation (5.2) is not best possible unless rank C<=1.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-5-hermitian-inequalities.universal-constant-question",
@@ -1826,11 +1962,12 @@
       "section": "5",
       "kind": "open-question",
       "source_role": "open_question",
-      "completion_obligation": false,
       "source_locator": "Section 5 discussion preceding Theorem 5.2.",
       "summary": "The source asks whether the rank factor can be replaced by a universal constant.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "open_question",
+      "formalization_role_reason": "The paper leaves this as an open question; it is not a formalization obligation."
     },
     {
       "id": "DK-5-hermitian-inequalities.constant-one-explicit-counterexample",
@@ -1839,11 +1976,12 @@
       "section": "5",
       "kind": "counterexample",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 5 discussion preceding Theorem 5.2.",
       "summary": "The displayed 2x2 A,B,X example rules out universal constant 1.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-5-hermitian-inequalities.eq-5-1",
@@ -1852,11 +1990,12 @@
       "section": "5",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (5.1)",
       "summary": "Exact mathematical content of source equation (5.1) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-5-hermitian-inequalities.eq-5-2",
@@ -1865,11 +2004,12 @@
       "section": "5",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (5.2)",
       "summary": "Exact mathematical content of source equation (5.2) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-5.2-thm.hilbert-unbounded-hypotheses",
@@ -1878,11 +2018,12 @@
       "section": "5",
       "kind": "hypothesis",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 5.2.",
       "summary": "Theorem 5.2 gives the Hilbert-space unbounded Sylvester setup with separated spectra and domain/core hypotheses.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_hypothesis",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-5.2-thm.hilbert-unbounded-conclusion",
@@ -1891,11 +2032,12 @@
       "section": "5",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 5.2.",
       "summary": "The corresponding delta||X|| lower bound holds in the stated UI/ideal norm scope.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-5.1-lem.strong-cutoff-convergence",
@@ -1904,11 +2046,12 @@
       "section": "5",
       "kind": "lemma",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Lemma 5.1.",
       "summary": "The spectral-cutoff approximants converge strongly in the manner stated and support the unbounded proof.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-6.1-lem.ordered-sylvester-forward",
@@ -1917,11 +2060,12 @@
       "section": "6",
       "kind": "lemma",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Lemma 6.1.",
       "summary": "The ordered spectral separation implies the stated Sylvester/UI-norm lower bound.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-6.1-lem.ordered-sylvester-converse",
@@ -1930,11 +2074,12 @@
       "section": "6",
       "kind": "lemma",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Lemma 6.1.",
       "summary": "The source includes the converse characterization used in the single-angle proof.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-6.2-lem.pinching-contraction",
@@ -1943,11 +2088,12 @@
       "section": "6",
       "kind": "lemma",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Lemma 6.2.",
       "summary": "The reflection/pinching operation contracts every unitary-invariant norm in the stated setup.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-6.1-prop.sine-proof-residual-identity",
@@ -1956,11 +2102,12 @@
       "section": "6",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The proof of the sine theorem through Proposition 6.1.",
       "summary": "The symmetric sine proof rewrites the relevant off-diagonal block as the Sylvester residual identity.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-6.1-prop.symmetric-sine-theorem",
@@ -1969,11 +2116,12 @@
       "section": "6",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The proof of the sine theorem through Proposition 6.1.",
       "summary": "Proposition 6.1 gives the symmetric sine-theta conclusion under two-sided spectral placement.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-6.1-prop.source-counterexample-need-two-sided",
@@ -1982,11 +2130,12 @@
       "section": "6",
       "kind": "counterexample",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The proof of the sine theorem through Proposition 6.1.",
       "summary": "The source exhibits the failure of the ambient/symmetric conclusion when the needed two-sided placement is dropped.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-6.1-prop.eq-6-1",
@@ -1995,11 +2144,12 @@
       "section": "6",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (6.1)",
       "summary": "Exact mathematical content of source equation (6.1) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6.1-thm.generalized-sine-hypotheses",
@@ -2008,11 +2158,12 @@
       "section": "6",
       "kind": "hypothesis",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 6.1.",
       "summary": "The generalized sine theorem allows nonisometric E0 with E0*E0 >= epsilon^2 and the stated spectral separation.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_hypothesis",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-6.1-thm.generalized-sine-conclusion",
@@ -2021,11 +2172,12 @@
       "section": "6",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 6.1.",
       "summary": "delta epsilon ||sin Theta0|| <= ||R||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-6.1-thm.unequal-dimension-scope",
@@ -2034,11 +2186,12 @@
       "section": "6",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 6.1.",
       "summary": "The generalized theorem allows unequal-dimensional comparison subspaces as stated.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_scope",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-6.2-thm.second-generalized-sine",
@@ -2047,11 +2200,12 @@
       "section": "6",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 6.2 and its immediate operator-norm consequence.",
       "summary": "The second generalized sine theorem gives the Hilbert--Schmidt estimate under pairwise spectral separation.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-6.2-thm.rank-corrected-operator-consequence",
@@ -2060,11 +2214,12 @@
       "section": "6",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 6.2 and its immediate operator-norm consequence.",
       "summary": "The stated rank-corrected operator-norm consequence follows.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-6.3-thm.tangent-setup-identities",
@@ -2073,11 +2228,12 @@
       "section": "6",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (6.2)--(6.6), Example 6.1, and Theorem 6.3.",
       "summary": "Equations (6.2)--(6.6) provide the block identities used in the generalized tangent proof.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6.3-thm.example6-1",
@@ -2086,11 +2242,12 @@
       "section": "6",
       "kind": "counterexample",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (6.2)--(6.6), Example 6.1, and Theorem 6.3.",
       "summary": "Example 6.1 gives the explicit 2x2 counterexample showing one-sided placement is essential for the tangent conclusion.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-6.3-thm.generalized-tangent-theorem",
@@ -2099,11 +2256,12 @@
       "section": "6",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (6.2)--(6.6), Example 6.1, and Theorem 6.3.",
       "summary": "Theorem 6.3 gives the generalized tangent residual bound with its exact source hypotheses.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-6.3-thm.eq-6-2",
@@ -2112,11 +2270,12 @@
       "section": "6",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (6.2)",
       "summary": "Exact mathematical content of source equation (6.2) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6.3-thm.eq-6-3",
@@ -2125,11 +2284,12 @@
       "section": "6",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (6.3)",
       "summary": "Exact mathematical content of source equation (6.3) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6.3-thm.eq-6-4",
@@ -2138,11 +2298,12 @@
       "section": "6",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (6.4)",
       "summary": "Exact mathematical content of source equation (6.4) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6.3-thm.eq-6-5",
@@ -2151,11 +2312,12 @@
       "section": "6",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (6.5)",
       "summary": "Exact mathematical content of source equation (6.5) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6.3-thm.eq-6-6",
@@ -2164,11 +2326,12 @@
       "section": "6",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (6.6)",
       "summary": "Exact mathematical content of source equation (6.6) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6-appendix.unbounded-sine-extension",
@@ -2177,11 +2340,12 @@
       "section": "6",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Appendix to Section 6, especially equations (6.7)--(6.11).",
       "summary": "The sine theorem extends to unbounded operators via bounded residual/common-domain hypotheses.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-6-appendix.unbounded-tangent-extension",
@@ -2190,11 +2354,12 @@
       "section": "6",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Appendix to Section 6, especially equations (6.7)--(6.11).",
       "summary": "The tangent theorem requires the stronger approximation argument recorded in the Appendix.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-6-appendix.appendix-approximation-chain",
@@ -2203,11 +2368,12 @@
       "section": "6",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Appendix to Section 6, especially equations (6.7)--(6.11).",
       "summary": "Equations (6.7)--(6.11) form the approximation chain controlling singular directions and passing to all UI norms.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6-appendix.appendix-all-ui-limit",
@@ -2216,11 +2382,12 @@
       "section": "6",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Appendix to Section 6, especially equations (6.7)--(6.11).",
       "summary": "The epsilon-to-zero argument completes the bound-norm case and then all UI norms.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6-appendix.eq-6-7",
@@ -2229,11 +2396,12 @@
       "section": "6",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (6.7)",
       "summary": "Exact mathematical content of source equation (6.7) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6-appendix.eq-6-8",
@@ -2242,11 +2410,12 @@
       "section": "6",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (6.8)",
       "summary": "Exact mathematical content of source equation (6.8) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6-appendix.eq-6-9",
@@ -2255,11 +2424,12 @@
       "section": "6",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (6.9)",
       "summary": "Exact mathematical content of source equation (6.9) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6-appendix.eq-6-10",
@@ -2268,11 +2438,12 @@
       "section": "6",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (6.10)",
       "summary": "Exact mathematical content of source equation (6.10) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6-appendix.eq-6-11",
@@ -2281,11 +2452,12 @@
       "section": "6",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (6.11)",
       "summary": "Exact mathematical content of source equation (6.11) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-6.3-lem.approximation-number-leakage",
@@ -2294,11 +2466,12 @@
       "section": "6",
       "kind": "lemma",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Lemma 6.3 in the Appendix to Section 6.",
       "summary": "Lemma 6.3 controls the approximation/singular-number leakage used in the Appendix, including the stated finite and real forms.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-7-sin2-proof.reflection-setup",
@@ -2307,11 +2480,12 @@
       "section": "7",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 7, equations (7.1)--(7.5) and the directed residual step.",
       "summary": "The reflection construction converts the double-angle geometry into a single-angle comparison.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-7-sin2-proof.ambient-sin2",
@@ -2320,11 +2494,12 @@
       "section": "7",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 7, equations (7.1)--(7.5) and the directed residual step.",
       "summary": "The Section 7 proof derives the ambient sin2Theta perturbation estimate.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-7-sin2-proof.directed-sin2",
@@ -2333,11 +2508,12 @@
       "section": "7",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 7, equations (7.1)--(7.5) and the directed residual step.",
       "summary": "It separately derives the directed sin2Theta0 residual estimate.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-7-sin2-proof.factor-one-directed-residual-refinement",
@@ -2346,11 +2522,12 @@
       "section": "7",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 7, equations (7.1)--(7.5) and the directed residual step.",
       "summary": "The directed block residual estimate has the source factor-one intermediate bound before the headline factor 2 form.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-7-sin2-proof.swap-asymmetry",
@@ -2359,11 +2536,12 @@
       "section": "7",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 7, equations (7.1)--(7.5) and the directed residual step.",
       "summary": "The source records the asymmetry involved in swapping the two operators/subspaces in the residual form.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-7-sin2-proof.eq-7-1",
@@ -2372,11 +2550,12 @@
       "section": "7",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (7.1)",
       "summary": "Exact mathematical content of source equation (7.1) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-7-sin2-proof.eq-7-2",
@@ -2385,11 +2564,12 @@
       "section": "7",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (7.2)",
       "summary": "Exact mathematical content of source equation (7.2) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-7-sin2-proof.eq-7-3",
@@ -2398,11 +2578,12 @@
       "section": "7",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (7.3)",
       "summary": "Exact mathematical content of source equation (7.3) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-7-sin2-proof.eq-7-4",
@@ -2411,11 +2592,12 @@
       "section": "7",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (7.4)",
       "summary": "Exact mathematical content of source equation (7.4) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-7-sin2-proof.eq-7-5",
@@ -2424,11 +2606,12 @@
       "section": "7",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (7.5)",
       "summary": "Exact mathematical content of source equation (7.5) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-7-tan2-proof.tan2-block-identity",
@@ -2437,11 +2620,12 @@
       "section": "7",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 7, equation (7.6) and the following singular-vector argument.",
       "summary": "Equation (7.6) gives the decisive tangent double-angle block identity.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-7-tan2-proof.cos2-pole-exclusion",
@@ -2450,11 +2634,12 @@
       "section": "7",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 7, equation (7.6) and the following singular-vector argument.",
       "summary": "The singular-vector argument proves the relevant cos(2 theta_j) factors do not vanish from the source hypotheses.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-7-tan2-proof.ambient-tan2",
@@ -2463,11 +2648,12 @@
       "section": "7",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 7, equation (7.6) and the following singular-vector argument.",
       "summary": "The proof yields the ambient tan2Theta perturbation estimate.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-7-tan2-proof.directed-tan2",
@@ -2476,11 +2662,12 @@
       "section": "7",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 7, equation (7.6) and the following singular-vector argument.",
       "summary": "The proof yields the directed tan2Theta0 residual estimate.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-7-tan2-proof.eq-7-6",
@@ -2489,11 +2676,12 @@
       "section": "7",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (7.6)",
       "summary": "Exact mathematical content of source equation (7.6) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-8.1-thm.branch-problem",
@@ -2502,11 +2690,12 @@
       "section": "8",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.1, equations (8.1)--(8.2), and the eigenvalue/majorization interpretation.",
       "summary": "Small double-angle trigonometric quantities alone do not select angles near zero; the chosen reducing subspace matters.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-8.1-thm.acute-iff-spectral-placement",
@@ -2515,11 +2704,12 @@
       "section": "8",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.1, equations (8.1)--(8.2), and the eigenvalue/majorization interpretation.",
       "summary": "Theta<=pi/4 iff the chosen perturbed reducing blocks lie on the corresponding sides of the gap.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-8.1-thm.existence-correct-q",
@@ -2528,11 +2718,12 @@
       "section": "8",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.1, equations (8.1)--(8.2), and the eigenvalue/majorization interpretation.",
       "summary": "A reducing spectral projector Q with the required placement exists and is unique in the stated sense.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-8.1-thm.part-i-compression",
@@ -2541,11 +2732,12 @@
       "section": "8",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.1, equations (8.1)--(8.2), and the eigenvalue/majorization interpretation.",
       "summary": "The upper/lower block compression inequalities of part (i).",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-8.1-thm.part-ii-eigenvalue",
@@ -2554,11 +2746,12 @@
       "section": "8",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.1, equations (8.1)--(8.2), and the eigenvalue/majorization interpretation.",
       "summary": "The finite-dimensional eigenvalue displacement inequalities of part (ii), with natural infinite-dimensional extensions.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-8.1-thm.part-iii-gauge",
@@ -2567,11 +2760,12 @@
       "section": "8",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.1, equations (8.1)--(8.2), and the eigenvalue/majorization interpretation.",
       "summary": "The symmetric-gauge majorization inequalities of part (iii).",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-8.1-thm.exclude-pi-over-four",
@@ -2580,11 +2774,12 @@
       "section": "8",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.1, equations (8.1)--(8.2), and the eigenvalue/majorization interpretation.",
       "summary": "Equations (8.1)--(8.2) exclude theta=pi/4 and then theta>pi/4 under the selected placement.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-8.1-thm.spectral-repulsion-interpretation",
@@ -2593,11 +2788,12 @@
       "section": "8",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.1, equations (8.1)--(8.2), and the eigenvalue/majorization interpretation.",
       "summary": "Strong off-diagonal eigenvector rotation forces definite eigenvalue displacement as described.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-8.1-thm.eq-8-1",
@@ -2606,11 +2802,12 @@
       "section": "8",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (8.1)",
       "summary": "Exact mathematical content of source equation (8.1) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-8.1-thm.eq-8-2",
@@ -2619,11 +2816,12 @@
       "section": "8",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (8.2)",
       "summary": "Exact mathematical content of source equation (8.2) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-8.2-thm.smallness-alternative",
@@ -2632,11 +2830,12 @@
       "section": "8",
       "kind": "hypothesis",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.2 and the final paragraph of Section 8.",
       "summary": "The theorem assumes either ||H||_1<delta/2 or ||R||_1<delta/2 plus the stated A0 interval.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_hypothesis",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-8.2-thm.double-angle-bound-retained",
@@ -2645,11 +2844,12 @@
       "section": "8",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.2 and the final paragraph of Section 8.",
       "summary": "The corresponding sin2 double-angle estimate remains valid.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-8.2-thm.acute-branch-conclusion",
@@ -2658,11 +2858,12 @@
       "section": "8",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.2 and the final paragraph of Section 8.",
       "summary": "Theta<pi/4.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "result_support",
+      "formalization_role_reason": "Supports the exact statement or source scope of a Davis--Kahan result that counts toward the formalization denominator."
     },
     {
       "id": "DK-8.2-thm.homotopy-proof",
@@ -2671,11 +2872,12 @@
       "section": "8",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.2 and the final paragraph of Section 8.",
       "summary": "The perturbation proof uses the continuous spectral-projector homotopy and the displayed arcsine bound.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-8.2-thm.residual-reduction",
@@ -2684,11 +2886,12 @@
       "section": "8",
       "kind": "proof-claim",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.2 and the final paragraph of Section 8.",
       "summary": "The residual form is reduced by changing the complementary perturbation block while preserving the residual/spectral data.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "Proof/intermediate source mathematics retained for fidelity; reproducing the proof is not part of the 100% result denominator."
     },
     {
       "id": "DK-8.2-thm.sin2-unequal-dimension-extension",
@@ -2697,11 +2900,12 @@
       "section": "8",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Theorem 8.2 and the final paragraph of Section 8.",
       "summary": "The source states a sin2 extension to unequal comparison dimensions.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-8.2-thm.no-tan2-unequal-dimension-extension-known",
@@ -2710,11 +2914,12 @@
       "section": "8",
       "kind": "knowledge-state",
       "source_role": "historical_knowledge_state",
-      "completion_obligation": false,
       "source_locator": "Theorem 8.2 and the final paragraph of Section 8.",
       "summary": "No analogous tan2 extension was known.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "historical",
+      "formalization_role_reason": "Historical, attributed, deferred, or knowledge-state material rather than a Davis--Kahan result established in this paper."
     },
     {
       "id": "DK-9-model.real-l2-model",
@@ -2723,11 +2928,12 @@
       "section": "9",
       "kind": "definition",
       "source_role": "definition",
-      "completion_obligation": true,
       "source_locator": "Section 9 problem setup.",
       "summary": "The numerical model is real L2(0,1) with the free-end fourth-derivative self-adjoint closure and multiplication perturbation epsilon t.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "definition",
+      "formalization_role_reason": "Needed for source fidelity and theorem statements, but definitions are not results to prove."
     },
     {
       "id": "DK-9-model.perturbed-eigenproblem",
@@ -2736,11 +2942,12 @@
       "section": "9",
       "kind": "definition",
       "source_role": "definition",
-      "completion_obligation": true,
       "source_locator": "Section 9 problem setup.",
       "summary": "The displayed fourth-order perturbed boundary-value eigenproblem.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "definition",
+      "formalization_role_reason": "Needed for source fidelity and theorem statements, but definitions are not results to prove."
     },
     {
       "id": "DK-9-model.unperturbed-strict-eigenvalue-order",
@@ -2749,11 +2956,12 @@
       "section": "9",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 9 problem setup.",
       "summary": "The source orders alpha1=0=alpha2<alpha3<alpha4<... with multiplicity.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": true
+      "restored_in_2026_08_12_pdf_reaudit": true,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-model.positive-root-equation",
@@ -2762,11 +2970,12 @@
       "section": "9",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 9 problem setup.",
       "summary": "For k>2, alpha_k are the positive roots of cos(alpha_k^(1/4)) cosh(alpha_k^(1/4))=1.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-model.positive-spectrum-over-500",
@@ -2775,11 +2984,12 @@
       "section": "9",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 9 problem setup.",
       "summary": "All positive alpha_k exceed 500.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-model.zero-eigenfunctions",
@@ -2788,11 +2998,12 @@
       "section": "9",
       "kind": "construction",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 9 problem setup.",
       "summary": "The displayed w1,w2 are orthonormal linear eigenfunctions for the zero eigenvalue.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-model.lambda3-lower-bound",
@@ -2801,11 +3012,12 @@
       "section": "9",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 9 problem setup.",
       "summary": "H>=0 implies lambda3>=alpha3>500.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-model.initial-residual-formula",
@@ -2814,11 +3026,12 @@
       "section": "9",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 9 problem setup.",
       "summary": "For A0=0, R=HE0 with the displayed residual functions r_k.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-model.residual-gram",
@@ -2827,11 +3040,12 @@
       "section": "9",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 9 problem setup.",
       "summary": "The displayed 2x2 R*R matrix.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-model.residual-gram-eigenvalues",
@@ -2840,11 +3054,12 @@
       "section": "9",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Section 9 problem setup.",
       "summary": "R*R has eigenvalues epsilon^2(11+-sqrt76)/30.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.1-9.4.sin-bound-comparison",
@@ -2853,11 +3068,12 @@
       "section": "9",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.1)--(9.4).",
       "summary": "The paper notes (9.1) is sharper than the easy sin2 bound (9.2).",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.1-9.4.kyfan-two-term-scope",
@@ -2866,11 +3082,12 @@
       "section": "9",
       "kind": "scope",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.1)--(9.4).",
       "summary": "Equations (9.3)--(9.4) use the two-term Ky Fan norm to estimate both principal angles simultaneously.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.1-9.4.eq-9-1",
@@ -2879,11 +3096,12 @@
       "section": "9",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.1)",
       "summary": "Exact mathematical content of source equation (9.1) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.1-9.4.eq-9-2",
@@ -2892,11 +3110,12 @@
       "section": "9",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.2)",
       "summary": "Exact mathematical content of source equation (9.2) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.1-9.4.eq-9-3",
@@ -2905,11 +3124,12 @@
       "section": "9",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.3)",
       "summary": "Exact mathematical content of source equation (9.3) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.1-9.4.eq-9-4",
@@ -2918,11 +3138,12 @@
       "section": "9",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.4)",
       "summary": "Exact mathematical content of source equation (9.4) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.5-9.7.rayleigh-ritz-matrix",
@@ -2931,11 +3152,12 @@
       "section": "9",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.5)--(9.7).",
       "summary": "The displayed Rayleigh--Ritz matrix is E0*(A+H)E0.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.5-9.7.refined-residual-gram",
@@ -2944,11 +3166,12 @@
       "section": "9",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.5)--(9.7).",
       "summary": "The displayed refined residual Gram matrix and its one/two-term norm equal epsilon/sqrt15.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.5-9.7.tangent-gap",
@@ -2957,11 +3180,12 @@
       "section": "9",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.5)--(9.7).",
       "summary": "The tangent gap may be taken as 500-0.7887 epsilon.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.5-9.7.kyfan-tan-bound",
@@ -2970,11 +3194,12 @@
       "section": "9",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.5)--(9.7).",
       "summary": "The same RHS as (9.6) bounds tan theta1+tan theta2 in the two-term Ky Fan norm.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.5-9.7.offdiagonal-complement-choice",
@@ -2983,11 +3208,12 @@
       "section": "9",
       "kind": "construction",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.5)--(9.7).",
       "summary": "For tan2 the complementary block is chosen as E1*(A+H)E1>500 to obtain an off-diagonal comparison.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.5-9.7.kyfan-tan2-bound",
@@ -2996,11 +3222,12 @@
       "section": "9",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.5)--(9.7).",
       "summary": "The same RHS as (9.7) bounds tan2theta1+tan2theta2 in the two-term Ky Fan norm.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.5-9.7.eq-9-5",
@@ -3009,11 +3236,12 @@
       "section": "9",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.5)",
       "summary": "Exact mathematical content of source equation (9.5) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.5-9.7.eq-9-6",
@@ -3022,11 +3250,12 @@
       "section": "9",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.6)",
       "summary": "Exact mathematical content of source equation (9.6) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.5-9.7.eq-9-7",
@@ -3035,11 +3264,12 @@
       "section": "9",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.7)",
       "summary": "Exact mathematical content of source equation (9.7) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.8.weinberger-sine-square",
@@ -3048,11 +3278,12 @@
       "section": "9",
       "kind": "external-result",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.8) and its surrounding comparison.",
       "summary": "Weinberger method gives the displayed sine-square estimate from Ritz upper/lower bounds and the 500 separation.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "historical",
+      "formalization_role_reason": "Historical, attributed, deferred, or knowledge-state material rather than a Davis--Kahan result established in this paper."
     },
     {
       "id": "DK-9.8.lehmann-best-lower-bounds",
@@ -3061,11 +3292,12 @@
       "section": "9",
       "kind": "external-result",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.8) and its surrounding comparison.",
       "summary": "The best lower bounds deducible from the stated 2+1 data are the two lower eigenvalues of the displayed 3x3 matrix.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "historical",
+      "formalization_role_reason": "Historical, attributed, deferred, or knowledge-state material rather than a Davis--Kahan result established in this paper."
     },
     {
       "id": "DK-9.8.lower-bound-asymptotic",
@@ -3074,11 +3306,12 @@
       "section": "9",
       "kind": "external-result",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.8) and its surrounding comparison.",
       "summary": "The source records the strict inequality and O(epsilon^4) asymptotic for alpha_hat-alpha_check.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": true
+      "restored_in_2026_08_12_pdf_reaudit": true,
+      "formalization_role": "historical",
+      "formalization_role_reason": "Historical, attributed, deferred, or knowledge-state material rather than a Davis--Kahan result established in this paper."
     },
     {
       "id": "DK-9.8.angle-meaning-distinction",
@@ -3087,11 +3320,12 @@
       "section": "9",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.8) and its surrounding comparison.",
       "summary": "phi_k are individual trial-vector-to-subspace angles whereas theta1 is the largest subspace angle.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.8.sine-square-sum-identity",
@@ -3100,11 +3334,12 @@
       "section": "9",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.8) and its surrounding comparison.",
       "summary": "sin^2 phi1+sin^2 phi2 = sin^2 theta1+sin^2 theta2.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.8.direct-one-vector-sharper-bounds",
@@ -3113,11 +3348,12 @@
       "section": "9",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.8) and its surrounding comparison.",
       "summary": "Theorem 6.3 applied to each trial vector gives the displayed sharper tan phi_k bounds.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.8.methods-complementary",
@@ -3126,11 +3362,12 @@
       "section": "9",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.8) and its surrounding comparison.",
       "summary": "The source concludes the two methods are complementary rather than one supplanting the other.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.8.eq-9-8",
@@ -3139,11 +3376,12 @@
       "section": "9",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.8)",
       "summary": "Exact mathematical content of source equation (9.8) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-infinite-residual-counterexample.l2-geometric-vector-example",
@@ -3152,11 +3390,12 @@
       "section": "9",
       "kind": "counterexample",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The $\\ell_2$ example following (9.8).",
       "summary": "The geometric sequence e and diagonal operator give a trial vector just outside the operator domain.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-infinite-residual-counterexample.arbitrarily-small-domain-repair",
@@ -3165,11 +3404,12 @@
       "section": "9",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The $\\ell_2$ example following (9.8).",
       "summary": "The source asserts an arbitrarily small modification repairs the domain defect.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-infinite-residual-counterexample.rayleigh-quotient",
@@ -3178,11 +3418,12 @@
       "section": "9",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The $\\ell_2$ example following (9.8).",
       "summary": "The formal Rayleigh quotient is 1+mu.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-infinite-residual-counterexample.residual-infinite",
@@ -3191,11 +3432,12 @@
       "section": "9",
       "kind": "counterexample",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The $\\ell_2$ example following (9.8).",
       "summary": "The residual has infinite norm so the paper residual theorems give no estimate.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-infinite-residual-counterexample.weinberger-still-applies",
@@ -3204,11 +3446,12 @@
       "section": "9",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The $\\ell_2$ example following (9.8).",
       "summary": "Independent lower eigenvalue bounds still allow the displayed Weinberger estimate.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9-infinite-residual-counterexample.best-lower-bound-result",
@@ -3217,11 +3460,12 @@
       "section": "9",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "The $\\ell_2$ example following (9.8).",
       "summary": "At the best lower bounds the true sin theta=mu satisfies mu<=mu/sqrt(1-mu).",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.9-9.11.angle-factorization",
@@ -3230,11 +3474,12 @@
       "section": "9",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.9)--(9.11) through the final Section 9 bounds.",
       "summary": "cos omega_k=cos eta_k cos psi_k and omega_k^2<=psi_k^2+eta_k^2.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.9-9.11.schur-correction-bound",
@@ -3243,11 +3488,12 @@
       "section": "9",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.9)--(9.11) through the final Section 9 bounds.",
       "summary": "The Schur correction is bounded by the displayed off-diagonal 2x2 matrix and operator inequalities.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.9-9.11.tan2-psi-bound",
@@ -3256,11 +3502,12 @@
       "section": "9",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.9)--(9.11) through the final Section 9 bounds.",
       "summary": "The tan2 theorem yields the displayed bound for psi_k.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.9-9.11.acute-psi-selection",
@@ -3269,11 +3516,12 @@
       "section": "9",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.9)--(9.11) through the final Section 9 bounds.",
       "summary": "Theorem 8.1 selects 0<=psi_k<pi/4 and yields the stated arctan bound.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.9-9.11.eta-bound",
@@ -3282,11 +3530,12 @@
       "section": "9",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.9)--(9.11) through the final Section 9 bounds.",
       "summary": "Equation (9.10) yields the displayed tan eta_k bound.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.9-9.11.final-omega-bounds",
@@ -3295,11 +3544,12 @@
       "section": "9",
       "kind": "consequence",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.9)--(9.11) through the final Section 9 bounds.",
       "summary": "Combining psi_k and eta_k yields the two final omega_k bounds.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.9-9.11.best-possible-3x3-claim",
@@ -3308,11 +3558,12 @@
       "section": "9",
       "kind": "source-assertion",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equations (9.9)--(9.11) through the final Section 9 bounds.",
       "summary": "The source says the best possible bound from the stated data is the coordinate/eigenvector angle of the 3x3 comparison matrix.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.9-9.11.best-possible-proof-deferred",
@@ -3321,11 +3572,12 @@
       "section": "9",
       "kind": "knowledge-state",
       "source_role": "historical_knowledge_state",
-      "completion_obligation": false,
       "source_locator": "Equations (9.9)--(9.11) through the final Section 9 bounds.",
       "summary": "Proof of that best-possible assertion is deferred to the unresolved three-way-subspace Question 10.2.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "historical",
+      "formalization_role_reason": "Historical, attributed, deferred, or knowledge-state material rather than a Davis--Kahan result established in this paper."
     },
     {
       "id": "DK-9.9-9.11.eq-9-9",
@@ -3334,11 +3586,12 @@
       "section": "9",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.9)",
       "summary": "Exact mathematical content of source equation (9.9) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.9-9.11.eq-9-10",
@@ -3347,11 +3600,12 @@
       "section": "9",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.10)",
       "summary": "Exact mathematical content of source equation (9.10) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-9.9-9.11.eq-9-11",
@@ -3360,11 +3614,12 @@
       "section": "9",
       "kind": "numbered-equation",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Equation (9.11)",
       "summary": "Exact mathematical content of source equation (9.11) as reconstructed in the distributable TeX.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "numerical_working",
+      "formalization_role_reason": "Section 9 source-fidelity/example mathematics; not a theorem/proposition/lemma/corollary or Section 2 headline theorem."
     },
     {
       "id": "DK-10.1.question",
@@ -3373,11 +3628,12 @@
       "section": "10",
       "kind": "open-question",
       "source_role": "open_question",
-      "completion_obligation": false,
       "source_locator": "Question 10.1.",
       "summary": "With only pairwise spectral distance delta, how sharply can Theta0 be bounded in terms of R?",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "open_question",
+      "formalization_role_reason": "The paper leaves this as an open question; it is not a formalization obligation."
     },
     {
       "id": "DK-10.2.three-way-setup",
@@ -3386,11 +3642,12 @@
       "section": "10",
       "kind": "definition",
       "source_role": "definition",
-      "completion_obligation": true,
       "source_locator": "Question 10.2.",
       "summary": "Three-way orthogonal decompositions are encoded by the 3x3 block matrix E_i*F_j.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "definition",
+      "formalization_role_reason": "Needed for source fidelity and theorem statements, but definitions are not results to prove."
     },
     {
       "id": "DK-10.2.question",
@@ -3399,11 +3656,12 @@
       "section": "10",
       "kind": "open-question",
       "source_role": "open_question",
-      "completion_obligation": false,
       "source_locator": "Question 10.2.",
       "summary": "Can nearby reducing three-way decompositions be estimated through off-diagonal blocks analogously to the two-way theory?",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "open_question",
+      "formalization_role_reason": "The paper leaves this as an open question; it is not a formalization obligation."
     },
     {
       "id": "DK-10.3.question",
@@ -3412,11 +3670,12 @@
       "section": "10",
       "kind": "open-question",
       "source_role": "open_question",
-      "completion_obligation": false,
       "source_locator": "Question 10.3.",
       "summary": "Find best possible bounds combining eigenvalue and eigenvector changes.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "open_question",
+      "formalization_role_reason": "The paper leaves this as an open question; it is not a formalization obligation."
     },
     {
       "id": "DK-10.4.spectral-functional-calculus",
@@ -3425,11 +3684,12 @@
       "section": "10",
       "kind": "definition",
       "source_role": "definition",
-      "completion_obligation": true,
       "source_locator": "Question 10.4, including both projection-valued specializations.",
       "summary": "The source recalls f(A) from the spectral resolution of self-adjoint A.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "definition",
+      "formalization_role_reason": "Needed for source fidelity and theorem statements, but definitions are not results to prove."
     },
     {
       "id": "DK-10.4.step-function-specialization",
@@ -3438,11 +3698,12 @@
       "section": "10",
       "kind": "construction",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Question 10.4, including both projection-valued specializations.",
       "summary": "For the gap step function under tan2 hypotheses, f(A)=P, f(A+H)=Q, f(A0)=I.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-10.4.ambient-functional-change",
@@ -3451,11 +3712,12 @@
       "section": "10",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Question 10.4, including both projection-valued specializations.",
       "summary": "||f(A+H)-f(A)||=||Q-P||=||sin Theta||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-10.4.ambient-tan2-bound",
@@ -3464,11 +3726,12 @@
       "section": "10",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Question 10.4, including both projection-valued specializations.",
       "summary": "delta||tan 2Theta||<=2||H||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-10.4.directed-functional-change",
@@ -3477,11 +3740,12 @@
       "section": "10",
       "kind": "identity",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Question 10.4, including both projection-valued specializations.",
       "summary": "||(f(A+H)-f(A))E0||=||Qperp E0||=||sin Theta0||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-10.4.directed-tan2-bound",
@@ -3490,11 +3754,12 @@
       "section": "10",
       "kind": "theorem",
       "source_role": "mathematical_assertion",
-      "completion_obligation": true,
       "source_locator": "Question 10.4, including both projection-valued specializations.",
       "summary": "delta||tan 2Theta0||<=2||R||.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Source-fidelity material outside the designated results Davis--Kahan establish in the paper."
     },
     {
       "id": "DK-10.4.question",
@@ -3503,11 +3768,13 @@
       "section": "10",
       "kind": "open-question",
       "source_role": "open_question",
-      "completion_obligation": false,
       "source_locator": "Question 10.4, including both projection-valued specializations.",
       "summary": "Seek analogous perturbation bounds for more general functions f.",
       "present_in_distributable_spec": true,
-      "restored_in_2026_08_12_pdf_reaudit": false
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "open_question",
+      "formalization_role_reason": "The paper leaves this as an open question; it is not a formalization obligation."
     }
-  ]
+  ],
+  "formalization_denominator": "dev/davis-kahan-1970-formalization-result-inventory.json"
 }

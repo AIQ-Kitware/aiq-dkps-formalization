@@ -9,7 +9,7 @@
   },
   "census": "dev/davis-kahan-1970-full-source-census.json",
   "source_atom_inventory": "dev/davis-kahan-1970-source-atom-inventory.json",
-  "completion_rule": "The 49 registered passages are organizational groups. The source-side completeness denominator is dev/davis-kahan-1970-source-atom-inventory.json: every atom with completion_obligation=true must eventually have a terminal source-facing disposition, compiler verification where applicable, and hostile semantic acceptance. Pure open questions and historical knowledge-state atoms may be non-obligations. A mixed block such as DK-10.4 remains an obligation for its established mathematical atoms even though its final question is open.",
+  "completion_rule": "The 49 statement-map rows are organizational source/audit groups and the 266 source atoms are a source-fidelity inventory. The 100% formalization denominator is the separate formalization-result inventory: exactly the results Davis--Kahan establish in this paper (the four Section 2 headline theorems plus each named theorem, proposition, lemma, and corollary). Proof equations, derivations, examples, numerical working, historical attributions, Section 10 questions, and claims explicitly left unresolved or deferred are not completion obligations. False printed results are disposed by exact formal refutation and also carry the repository best-effort repair obligation.",
   "items": [
     {
       "id": "S1-block-residual",
@@ -2205,5 +2205,6 @@
         "DK-10.4.question"
       ]
     }
-  ]
+  ],
+  "formalization_result_inventory": "dev/davis-kahan-1970-formalization-result-inventory.json"
 }

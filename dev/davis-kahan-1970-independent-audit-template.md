@@ -2828,6 +2828,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted` — DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:610
 - `TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite` — DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:639
 - `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite` — DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:663
+- `TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm` — DavisKahan/FiniteDimensional/DirectRotation/QNorm.lean:69
 
 </details>
 
@@ -4758,25 +4759,25 @@ Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a
 
 #### `TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:88`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:120`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:97`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:129`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:103`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:135`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:67`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:99`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
@@ -4830,7 +4831,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.exists_isLeast_of_finite_inter_Iic` — ForTauCeti/Order/DiscreteEnumeration.lean:56
 - `TauCeti.nonempty_orderIso_nat_of_unbounded_of_finite_inter_Iic` — ForTauCeti/Order/DiscreteEnumeration.lean:73
 - `TauCeti.exists_strictMono_range_eq_of_unbounded_of_finite_inter_Iic` — ForTauCeti/Order/DiscreteEnumeration.lean:101
-- `TauCeti.DavisKahan.FreeBeam.Model.nonneg_of_beamOperator_eigen` — DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean:1307, DavisKahan/SpectralTheory/FormMethod/BeamSpectrum.lean:747
+- `TauCeti.DavisKahan.FreeBeam.Model.nonneg_of_beamOperator_eigen` — DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean:1396, DavisKahan/SpectralTheory/FormMethod/BeamSpectrum.lean:747
 - `TauCeti.DavisKahan.FreeBeam.Model.exists_eigenvector_of_mem_realSpectrum_beamOperator` — DavisKahan/SpectralTheory/FormMethod/BeamSpectrum.lean:917, DavisKahan/SpectralTheory/FormMethod/BeamSpectrumReal.lean:125
 - `TauCeti.DavisKahan.FreeBeam.Model.zero_mem_realSpectrum_beamOperator` — DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequence.lean:309, DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequenceReal.lean:237
 - `TauCeti.DavisKahan.FreeBeam.Model.realSpectrum_beamOperator_eq_insert_zero` — DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequence.lean:327, DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequenceReal.lean:249
@@ -4839,9 +4840,9 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahan.FreeBeam.Model.exists_strictMono_range_eq_beamEigenvalues` — DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequence.lean:367, DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequenceReal.lean:278
 - `TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_source` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:44
 - `TauCeti.DavisKahan1970.Section9.real_freeBeam_spectrum_source` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:54
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:88
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:97
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:103
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:120
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:129
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:135
 - `TauCeti.DavisKahan1970.Section9.RealBeamL2` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:27
 - `TauCeti.DavisKahan1970.Section9.realBeamOperator` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:31
 - `TauCeti.DavisKahan1970.Section9.realClassicalFreeBeamGraph` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:36
@@ -4852,7 +4853,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.beamOperator_is_closure_of_classical_freeBeam_fourthDerivative` — DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean:945
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.closure_classicalFreeBeamGraph_eq_graph` — DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean:934
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.classicalFreeBeamGraph_subset_graph` — DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean:887
-- `TauCeti.DavisKahan.FreeBeam.Model.Real.exists_characteristic_of_eigen` — DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean:1128, DavisKahan/SpectralTheory/FormMethod/BeamSpectrum.lean:490
+- `TauCeti.DavisKahan.FreeBeam.Model.Real.exists_characteristic_of_eigen` — DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean:1343, DavisKahan/SpectralTheory/FormMethod/BeamSpectrum.lean:490
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.realSpectrum_beamOperator_subset` — DavisKahan/SpectralTheory/FormMethod/BeamSpectrum.lean:1041, DavisKahan/SpectralTheory/FormMethod/BeamSpectrumReal.lean:238
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.beamEigenvalues` — DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequence.lean:163, DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequenceReal.lean:115
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues` — DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequence.lean:367, DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequenceReal.lean:278
@@ -4861,14 +4862,14 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.beamFiniteDataCertificate` — DavisKahan/SpectralTheory/FormMethod/BeamSection9.lean:1067, DavisKahan/SpectralTheory/FormMethod/BeamSection9Real.lean:33
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.beamTrial_le_domain` — DavisKahan/SpectralTheory/FormMethod/BeamSection9.lean:106, DavisKahan/SpectralTheory/FormMethod/BeamTrialReal.lean:67
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.beamOperator_apply_trial` — DavisKahan/SpectralTheory/FormMethod/BeamSection9.lean:112, DavisKahan/SpectralTheory/FormMethod/BeamTrialReal.lean:73
-- `TauCeti.DavisKahan.FreeBeam.Classical.characteristic_iff_exists_nontrivial_freeBoundary` — DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristicConverse.lean:140
-- `TauCeti.DavisKahan.FreeBeam.Classical.exists_nontrivial_freeBoundary_of_characteristic` — DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristicConverse.lean:126
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:67
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_le_domain` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:75
-- `TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_apply_trial` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:81
+- `TauCeti.DavisKahan.FreeBeam.Classical.characteristic_iff_exists_nontrivial_freeBoundary` — DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristicConverse.lean:190
+- `TauCeti.DavisKahan.FreeBeam.Classical.exists_nontrivial_freeBoundary_of_characteristic` — DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristicConverse.lean:176
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:99
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_le_domain` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:107
+- `TauCeti.DavisKahan1970.Section9.real_freeBeam_operator_apply_trial` — DavisKahan/Sources/DavisKahan1970/Section9/RealModel.lean:113
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.beamEigenvalues_eq_characteristicFourthPowers` — DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequenceReal.lean:128
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.pow_four_mem_beamEigenvalues_of_characteristic` — DavisKahan/SpectralTheory/FormMethod/BeamEigenvalueSequenceReal.lean:121
-- `TauCeti.DavisKahan.FreeBeam.Model.Real.exists_eigenpair_of_characteristic` — DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean:1092
+- `TauCeti.DavisKahan.FreeBeam.Model.Real.exists_eigenpair_of_characteristic` — DavisKahan/SpectralTheory/FormMethod/BeamClassicalReal.lean:1107
 - `TauCeti.DavisKahan.FreeBeam.Model.Real.beamRealPositiveSpectrum_sourceFacts` — DavisKahan/SpectralTheory/FormMethod/BeamSection9Real.lean:68
 
 </details>
@@ -5232,13 +5233,13 @@ The source presents the methods as complementary rather than as one dominating t
 
 #### `TauCeti.DavisKahan1970.Section9.equation_9_8_lower`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:136`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:140`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section9.equation_9_8_upper`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:149`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:153`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
@@ -5247,10 +5248,10 @@ Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a
 
 When a compiler certificate is supplied, `signatures.json` contains the compiler-printed type for every declaration in this full mapping, not only the primary declarations displayed above.
 
-- `TauCeti.DavisKahan1970.Section9.ArrowheadThreeByThree` — DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:30
-- `TauCeti.DavisKahan1970.Section9.tangent_sq_le_of_weinberger_sine_sq` — DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:84
-- `TauCeti.DavisKahan1970.Section9.equation_9_8_lower` — DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:136
-- `TauCeti.DavisKahan1970.Section9.equation_9_8_upper` — DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:149
+- `TauCeti.DavisKahan1970.Section9.ArrowheadThreeByThree` — DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:34
+- `TauCeti.DavisKahan1970.Section9.tangent_sq_le_of_weinberger_sine_sq` — DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:88
+- `TauCeti.DavisKahan1970.Section9.equation_9_8_lower` — DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:140
+- `TauCeti.DavisKahan1970.Section9.equation_9_8_upper` — DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean:153
 - `TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_low_lt_printed` — DavisKahan/SpectralTheory/FormMethod/BeamTangent.lean:859
 - `TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_high_lt_printed` — DavisKahan/SpectralTheory/FormMethod/BeamTangent.lean:866
 - `TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_low_le` — DavisKahan/SpectralTheory/FormMethod/BeamTangent.lean:796

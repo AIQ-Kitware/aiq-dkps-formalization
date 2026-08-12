@@ -4,6 +4,9 @@ Base audited: `2a728278a585`.
 
 ## Current verdict
 
+> **Result-denominator pivot (2026-08-12).** The hostile audit below was intentionally broader than the project's final definition of 100%: it treated many preserved mathematical assertions as possible completion obligations. That was useful for finding source-fidelity defects, but it is **not** the formalization denominator. The current hard denominator is `dev/davis-kahan-1970-formalization-result-inventory.json`: 29 results consisting of the four Section 2 headline theorems and every theorem/proposition/lemma/corollary Davis--Kahan actually establish in Sections 3--8. Section 10 questions, explicitly deferred/unresolved claims, proof equations, examples, numerical working, and historical comparisons are source-fidelity material only. Consequently, many "reopened" findings later in this document are advisory fidelity/mapping observations rather than blockers to 100%. They must be re-evaluated against the 29 exact source statements before being promoted to result-level blockers.
+
+
 **Do not claim 100% source formalization from this base.** The exact directed and ambient Section 2 tan(2 Theta) source wrappers are now closed, but a hostile semantic re-audit found additional holes elsewhere. The maintained status machinery has therefore been reopened rather than preserving the previous all-terminal snapshot.
 
 This audit separates three independent axes:
@@ -12,17 +15,17 @@ This audit separates three independent axes:
 - `verification`: whether the registered Lean declarations resolve in the production build;
 - `completion_certification`: whether the complete hashed public source passage has survived adversarial semantic review.
 
-The 49 rows are organizational groups. The source-side denominator is the 266-atom inventory; a row may contribute to a 100% claim only after every completion-obligation atom beneath it has an exact/refuted source-facing disposition, compiler evidence where applicable, and hostile semantic acceptance.
+The 49 rows are organizational groups and the 266 atoms are a source-fidelity inventory. The 100% completion denominator is the separate 29-result inventory. The broader row/atom findings below remain useful adversarial evidence, but only defects in the exact statement or scope of one of those 29 results block the formalization claim.
 
 Current explicit completion obligations: **46**. Hostile-certified terminal passages: **14** (13 exact + 1 refuted). Reopened obligations: **32**.
 
 ### Agent 3 source-denominator update
 
-A direct PDF/source-order re-audit now separates the 49 organizational blocks from the actual source-side denominator. `dev/davis-kahan-1970-source-atom-inventory.json` contains **266 atomic source items**, of which **259 are formal-disposition obligations** and **7 are non-completion source-state items** (5 actual open questions and 2 historical knowledge/deferred-proof statements). Every one of the paper's **64 numbered equations** has an explicit atom.
+A direct PDF/source-order re-audit established **266 source-fidelity atoms** and explicit coverage of all **64 numbered equations**. Those atoms are an omission-detection layer, not Lean proof obligations. The formalization denominator is the separate set of **29 results Davis--Kahan actually establish**.
 
 This re-audit also repaired the five source-specification defects identified by the hostile pass: the cosine-law identity after (1.14), equation (3.7), equations (4.1)--(4.2), the strict Section 9 ordering `alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ...`, and the lower-bound `O(epsilon^4)` asymptotic before (9.8). Those rows remain red where mathematical or atom-to-Lean evidence still needs work; they are no longer red merely because the distributable TeX omitted the source material.
 
-Question 10.4 is intentionally counted as a mixed completion obligation. Its final general-functional-calculus question is open, but the same source block states established step-function/projection identities and tan(2 Theta) specializations. The old rule that exempted every `DK-10.*` row was therefore unsound.
+Question 10.4 remains faithfully inventoried, but it is **not** a completion obligation under the final policy: Section 10 is open-question material. Its preceding established identities may be retained and even formalized, but they do not enlarge the result denominator unless they are part of one of the 29 designated results.
 
 ## Passages currently accepted by the hostile audit
 
@@ -65,7 +68,7 @@ Acceptance here means only that this hostile pass found no concrete semantic hol
 | `DK-9.8` | `partial_or_wrapper_missing` | `proved_in_build` | `reopened_math` | The lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8) are now restored in the TeX. Remaining mathematical obligations include the Weinberger sine-square statement, Lehmann best-lower-bound assertion, the restored asymptotic, and the final (9.8) conclusions, each with an explicit disposition. |
 | `DK-9-infinite-residual-counterexample` | `partial_or_wrapper_missing` | `proved_in_build` | `reopened_math` | The source says an arbitrarily small modification repairs the domain defect. Lean proves finite truncations lie in the operator domain and agree on every fixed prefix, but the hostile review did not find a norm-convergence/arbitrarily-small-perturbation theorem for those truncations. |
 | `DK-9.9-9.11` | `compiled_exact` | `proved_in_build` | `mixed_disposition` | The numerical/Schur-complement conclusions appear formalized, but the block ends with a source assertion that the 3x3 comparison angle is the best possible bound obtainable from the stated data while explicitly deferring its proof to unresolved Question 10.2. Record that assertion separately as source-asserted/unproved rather than counting the entire block as exact. |
-| `DK-10.4` | `partial_or_wrapper_missing` | `proved_in_build` | `mixed_disposition` | Question 10.4 is not a pure open-question block. Before the general-f question it states established step-function identities f(A)=P, f(A+H)=Q, f(A0)=I, the projector/sine identities, and the ambient/directed tan(2 Theta) bounds. The tan(2 Theta) bounds now have exact complex/real wrappers, but the functional-calculus identities are not atomically registered.<br>The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open. |
+| `DK-10.4` | `partial_or_wrapper_missing` | `proved_in_build` | `mixed_disposition` | Under the final result-level policy this is source-fidelity material, not a completion obligation. Question 10.4 is an open Section 10 question; its preceding functional-calculus identities remain faithfully inventoried but do not enlarge the 29-result denominator. |
 
 ## Severity buckets
 

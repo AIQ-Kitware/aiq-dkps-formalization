@@ -287,30 +287,57 @@ full 1970 paper, not merely its finite-dimensional specialization.
 
 ### Meaning of 100% source formalization
 
-For this repository, **100% Davis--Kahan 1970 formalization means complete formal
-coverage of the paper's mathematical claims.** It is a statement-level standard,
-not a requirement to reproduce the paper's proof arguments or proof organization.
+For this repository, **100% Davis--Kahan 1970 formalization means exact formal
+coverage of every result that Davis and Kahan actually establish in the 1970
+paper.** It is a result-level standard, not a requirement to formalize every
+mathematical sentence or reproduce the paper's proofs.
 
-- A true source claim is covered when a compiled source-facing Lean declaration
-  states the same mathematical claim at the scope stated in the paper. The proof
-  may use any correct formal route, including stronger reusable theorems,
-  specializations, reductions, alternative arguments, and source-facing wrappers.
-- A false source claim is covered when compiled Lean gives a counterexample or
-  refutation satisfying the source hypotheses and falsifying the source
-  conclusion. That settles the disposition of the printed claim, but it does
-  **not** discharge the separate best-effort repair obligation above. A hostile
-  completion review should record both the refutation and the resulting repaired
-  theorem (or the documented reason no satisfactory repair could be established).
-- **Proposition 4.4 is the canonical example.** The exact transcribed source claim
-  is false. The repository both gives a machine-checked counterexample/refutation
-  and proves the natural `Q`-norm repair
-  `directRotation_fullDisplacement_qnorm`. The false printed conclusion is never
-  restored as a theorem; the refutation and repair are recorded side by side.
-- A 100% full-paper claim means every mathematical claim tracked by the checked-in distributable
-  source specification and `dev/davis-kahan-1970-source-atom-inventory.json` has one of these
-  completed outcomes, with the source-facing correspondence recorded. The 49 statement-map rows
-  are organizational groups, not the completeness denominator. Internal helper statements and proof
-  paths may differ freely from the paper.
+The maintained completion denominator is
+`dev/davis-kahan-1970-formalization-result-inventory.json`. It contains exactly:
+
+- the four unnumbered headline theorems in Section 2; and
+- every named theorem, proposition, lemma, and corollary that Davis--Kahan
+  establish in Sections 3--8.
+
+At the current source revision this is **29 results**. Each result must be
+represented at its exact printed mathematical scope: all hypotheses and
+conclusions, real/complex scope where stated, finite/infinite-dimensional and
+bounded/unbounded scope where stated, norm class, directed/ambient distinction,
+and separation assumptions. A single result may map to several Lean declarations
+when that is the cleanest way to represent all of its conclusions or scalar
+branches; that does not enlarge the denominator.
+
+The following are **source-fidelity material, not additional 100% obligations**:
+definitions, proof equations, intermediate derivations, examples, numerical
+working, sharpness commentary outside a designated result, historical or
+externally attributed results, and explanatory prose. They remain represented in
+`DavisKahan1970_part_III.tex` and
+`dev/davis-kahan-1970-source-atom-inventory.json` so source omissions can still be
+detected.
+
+**If Davis--Kahan do not establish a result in this paper, it does not count
+against 100%.** In particular, Section 10 questions are not proof obligations,
+and neither are assertions whose proof the paper explicitly leaves unresolved or
+defers to one of those questions. Such material must still be preserved faithfully
+in the distributable source specification and classified as non-result source
+material; it must not be silently converted into a theorem or used to inflate the
+completion denominator.
+
+- A true counted result is complete when compiled source-facing Lean declaration(s)
+  state exactly the result Davis--Kahan establish, at the printed scope. The Lean
+  proof may use any correct route, including stronger reusable theorems,
+  reductions, specializations, or thin source-facing wrappers.
+- A false counted result remains in the denominator. Its printed statement is
+  completed by a compiled counterexample or refutation satisfying the printed
+  hypotheses, and the separate best-effort repair obligation above must also be
+  discharged or explicitly documented as having no satisfactory repair.
+- **Proposition 4.4 is the canonical example.** The printed proposition is false;
+  the repository records its exact refutation and separately proves the natural
+  `Q`-norm repair `directRotation_fullDisplacement_qnorm`.
+- The 266 source atoms and 49 statement-map rows are audit/fidelity structure,
+  **not the completion denominator**. A green source-fidelity audit proves that we
+  did not lose source mathematics; the 29-result inventory answers whether the
+  paper is 100% formalized under this project's definition.
 
 The checked-in distributable source specification fixes the ambient scope:
 

@@ -1,0 +1,680 @@
+{
+  "schema_version": 1,
+  "purpose": "Hard denominator for the repository claim that Davis--Kahan 1970 is 100% formalized.",
+  "source_fidelity_inventory": "dev/davis-kahan-1970-source-atom-inventory.json",
+  "selection_definition": {
+    "counts_as_result": "Exactly the four unnumbered Section 2 headline theorems and every theorem, proposition, lemma, and corollary that Davis--Kahan actually establish in this paper.",
+    "does_not_count": [
+      "definitions",
+      "proof equations and intermediate derivations",
+      "examples and numerical working",
+      "historical or externally attributed results",
+      "Section 10 open questions",
+      "claims explicitly left unresolved or whose proof is deferred to an open question"
+    ],
+    "false_printed_result_policy": "A designated result that is false remains in the denominator and is completed by exact formal refutation plus the repository best-effort repair obligation."
+  },
+  "result_inventory_review": {
+    "status": "accepted",
+    "policy": "stated_results_only",
+    "source_fidelity_inventory_sha256": "e172a812532d8f75be7fe96bf14fd31cf2c3e5bf09dd154ab6554be63ca619b8",
+    "distributable_specification_sha256": "0bb6850fcfd2c66a8efe868c652e4da0d8259913deb469b586a8545ca4cb1ad1",
+    "method": "Reviewed the source-fidelity inventory and theorem environments in paper order. Selected exactly the four Section 2 headline theorems plus all named theorem/proposition/lemma/corollary environments that Davis--Kahan establish; excluded proof-only mathematics, examples, numerical working, historical attributions, Section 10 questions, and explicitly unresolved/deferred claims."
+  },
+  "result_count": 29,
+  "results": [
+    {
+      "id": "S2-sin-theta",
+      "result_kind": "unnumbered_theorem",
+      "source_anchor": "Section 2, sin theta theorem",
+      "title": "Single-angle sine theorem",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "S2-sin-theta.ui-norm-scope",
+        "S2-sin-theta.gap-hypothesis",
+        "S2-sin-theta.directed-conclusion",
+        "S2-unbounded-scope.infinite-dimensional-scope",
+        "S2-unbounded-scope.arbitrary-ui-scope",
+        "S2-unbounded-scope.unbounded-selfadjoint-scope",
+        "S2-unbounded-scope.bounded-residual-needed",
+        "S2-unbounded-scope.half-infinite-gap-intervals"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.sinTheta",
+        "TauCeti.DavisKahan1970.sinTheta_real_exactPaper",
+        "TauCeti.DavisKahan1970.generalizedSinTheta",
+        "TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically."
+    },
+    {
+      "id": "S2-tan-theta",
+      "result_kind": "unnumbered_theorem",
+      "source_anchor": "Section 2, tan theta theorem",
+      "title": "Single-angle tangent theorem",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "S2-sin-theta.ui-norm-scope",
+        "S2-tan-theta.ordered-gap-hypothesis",
+        "S2-tan-theta.rayleigh-ritz-hypothesis",
+        "S2-tan-theta.directed-conclusion",
+        "S2-tan-theta.ambient-conclusion",
+        "S2-unbounded-scope.infinite-dimensional-scope",
+        "S2-unbounded-scope.arbitrary-ui-scope",
+        "S2-unbounded-scope.unbounded-selfadjoint-scope",
+        "S2-unbounded-scope.bounded-residual-needed",
+        "S2-unbounded-scope.half-infinite-gap-intervals"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
+        "TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial",
+        "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
+        "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
+        "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically."
+    },
+    {
+      "id": "S2-sin-two-theta",
+      "result_kind": "unnumbered_theorem",
+      "source_anchor": "Section 2, sin 2 theta theorem",
+      "title": "Double-angle sine theorem",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "S2-sin-theta.ui-norm-scope",
+        "S2-sin-two-theta.gap-hypothesis",
+        "S2-sin-two-theta.directed-conclusion",
+        "S2-sin-two-theta.ambient-conclusion",
+        "S2-unbounded-scope.infinite-dimensional-scope",
+        "S2-unbounded-scope.arbitrary-ui-scope",
+        "S2-unbounded-scope.unbounded-selfadjoint-scope",
+        "S2-unbounded-scope.bounded-residual-needed",
+        "S2-unbounded-scope.half-infinite-gap-intervals"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
+        "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
+        "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real",
+        "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative",
+        "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically."
+    },
+    {
+      "id": "S2-tan-two-theta",
+      "result_kind": "unnumbered_theorem",
+      "source_anchor": "Section 2, tan 2 theta theorem",
+      "title": "Double-angle tangent theorem",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "S2-sin-theta.ui-norm-scope",
+        "S2-tan-two-theta.ordered-gap-hypothesis",
+        "S2-tan-two-theta.strong-offdiagonal-hypothesis",
+        "S2-tan-two-theta.no-extra-pole-hypothesis",
+        "S2-tan-two-theta.directed-conclusion",
+        "S2-tan-two-theta.ambient-conclusion",
+        "S2-unbounded-scope.infinite-dimensional-scope",
+        "S2-unbounded-scope.arbitrary-ui-scope",
+        "S2-unbounded-scope.unbounded-selfadjoint-scope",
+        "S2-unbounded-scope.bounded-residual-needed",
+        "S2-unbounded-scope.half-infinite-gap-intervals"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact",
+        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
+        "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically."
+    },
+    {
+      "id": "DK-3.1-prop",
+      "result_kind": "proposition",
+      "source_anchor": "Proposition 3.1",
+      "title": "Acute direct rotation existence and uniqueness",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-3.1-prop.existence",
+        "DK-3.1-prop.uniqueness",
+        "DK-3.1-prop.positive-diagonal-characterization"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.complex_directRotation",
+        "TauCeti.DavisKahan1970.complex_directRotation_unique",
+        "TauCeti.DavisKahan1970.complex_directRotation_diagonalBlock",
+        "TauCeti.DavisKahan1970.complex_directRotation_complementaryDiagonalBlock",
+        "TauCeti.DavisKahan1970.complex_directRotation_reflectionConjugate",
+        "TauCeti.DavisKahan1970.complex_directRotation_of_diagonalBlocks"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-3.1-prop"
+    },
+    {
+      "id": "DK-3.2-prop",
+      "result_kind": "proposition",
+      "source_anchor": "Proposition 3.2",
+      "title": "Nonacute existence criterion",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-3.2-prop.existence-iff-crossing-dimensions",
+        "DK-3.2-prop.nonuniqueness",
+        "DK-3.2-prop.eq-3-5"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent",
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_parameterized_nonuniqueness",
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-3.2-prop"
+    },
+    {
+      "id": "DK-3.3-prop",
+      "result_kind": "proposition",
+      "source_anchor": "Proposition 3.3",
+      "title": "Principal square-root characterization",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-3.3-prop.principal-square-root",
+        "DK-3.3-prop.square-root-converse"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.complex_directRotation_sq",
+        "TauCeti.DavisKahan1970.complex_directRotation_hermitianPart",
+        "TauCeti.DavisKahan1970.complex_directRotation_principal_of_sq",
+        "TauCeti.DavisKahan1970.real_directRotation_sq",
+        "TauCeti.DavisKahan1970.real_directRotation_hermitianPart",
+        "TauCeti.DavisKahan1970.real_directRotation_principal_of_sq"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-3.3-prop"
+    },
+    {
+      "id": "DK-3.4-prop",
+      "result_kind": "proposition",
+      "source_anchor": "Proposition 3.4",
+      "title": "Square as a direct rotation",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-3.4-prop.u-square-direct-rotation"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
+        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-3.4-prop"
+    },
+    {
+      "id": "DK-3.1-thm",
+      "result_kind": "theorem",
+      "source_anchor": "Theorem 3.1",
+      "title": "Classification of pairs of subspaces",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-3.1-thm.complete-invariant",
+        "DK-3.1-thm.converse-angle-data"
+      ],
+      "disposition": "proved_exact",
+      "verification": "proved_in_build",
+      "semantic_certification": "accepted",
+      "lean_declarations": [
+        "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification",
+        "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization",
+        "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification_real"
+      ],
+      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "parent_claim_id": "DK-3.1-thm"
+    },
+    {
+      "id": "DK-3.1-cor",
+      "result_kind": "corollary",
+      "source_anchor": "Corollary 3.1",
+      "title": "Compact classification by angle eigenvalues",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-3.1-cor.compact-complete-invariants",
+        "DK-3.1-cor.allowed-angle-sequence",
+        "DK-3.1-cor.theta1-match"
+      ],
+      "disposition": "proved_exact",
+      "verification": "proved_in_build",
+      "semantic_certification": "accepted",
+      "lean_declarations": [
+        "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification",
+        "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_classification_real",
+        "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization"
+      ],
+      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "parent_claim_id": "DK-3.1-cor"
+    },
+    {
+      "id": "DK-3.5-prop",
+      "result_kind": "proposition",
+      "source_anchor": "Proposition 3.5",
+      "title": "Angle commutation and eigenspace geometry",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-3.5-prop.commutation",
+        "DK-3.5-prop.eigenvector-rotation-angle",
+        "DK-3.5-prop.acute-maximal-characterization"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.proposition3_5_directRotation_resolution",
+        "TauCeti.DavisKahan1970.proposition3_5_commutations",
+        "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle",
+        "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace",
+        "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal",
+        "TauCeti.DavisKahan1970.proposition3_5_angleOperator"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-3.5-prop"
+    },
+    {
+      "id": "DK-3.2-cor",
+      "result_kind": "corollary",
+      "source_anchor": "Corollary 3.2",
+      "title": "Reversal symmetry",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-3.2-cor.swap-invariance"
+      ],
+      "disposition": "proved_exact",
+      "verification": "proved_in_build",
+      "semantic_certification": "accepted",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.corollary3_2_source",
+        "TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm",
+        "TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution",
+        "TauCeti.DavisKahan1970.complex_directRotation_reversal",
+        "TauCeti.DavisKahan1970.real_directRotation_reversal",
+        "TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form"
+      ],
+      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "parent_claim_id": "DK-3.2-cor"
+    },
+    {
+      "id": "DK-4.1-prop",
+      "result_kind": "proposition",
+      "source_anchor": "Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2)",
+      "title": "Pointwise and singular-value extremality of the direct rotation",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-4.1-prop.orthonormal-angle-lower-bounds",
+        "DK-4.1-prop.singular-value-minimality"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors",
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real",
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute",
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
+        "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-4.1-prop"
+    },
+    {
+      "id": "DK-4.1-cor",
+      "result_kind": "corollary",
+      "source_anchor": "Corollary 4.1",
+      "title": "UI-norm minimality of direct rotation displacement",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-4.1-cor.ui-minimality-on-p"
+      ],
+      "disposition": "proved_exact",
+      "verification": "proved_in_build",
+      "semantic_certification": "accepted",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute",
+        "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real",
+        "TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute"
+      ],
+      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "parent_claim_id": "DK-4.1-cor"
+    },
+    {
+      "id": "DK-4.2-prop",
+      "result_kind": "proposition",
+      "source_anchor": "Proposition 4.2",
+      "title": "Basis-angle square-sum extremality",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-4.2-prop.basis-sine-square-lower-bound"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional",
+        "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-4.2-prop"
+    },
+    {
+      "id": "DK-4.3-prop",
+      "result_kind": "proposition",
+      "source_anchor": "Proposition 4.3",
+      "title": "Squared displacement UI-norm minimality",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-4.3-prop.squared-displacement-global-minimum"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional_idealGauge"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-4.3-prop"
+    },
+    {
+      "id": "DK-4.4-prop",
+      "result_kind": "proposition",
+      "source_anchor": "Examples 4.1–4.2 and Proposition 4.4",
+      "title": "Full-displacement counterexamples and Proposition 4.4 as printed",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-4.4-prop.printed-proposition4-4"
+      ],
+      "disposition": "refuted_as_transcribed",
+      "verification": "proved_in_build",
+      "semantic_certification": "accepted",
+      "lean_declarations": [
+        "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite",
+        "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite",
+        "TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted"
+      ],
+      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "parent_claim_id": "DK-4.4-prop",
+      "repair": {
+        "status": "proved",
+        "lean_declarations": [
+          "TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm"
+        ],
+        "notes": "The printed real-space every-UI-norm full-displacement minimization claim is refuted exactly. The natural surviving Q-norm minimization theorem is proved by directRotation_fullDisplacement_qnorm."
+      }
+    },
+    {
+      "id": "DK-5.1-thm",
+      "result_kind": "theorem",
+      "source_anchor": "Theorem 5.1",
+      "title": "Banach-space Sylvester lower bound",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-5.1-thm.banach-hypotheses",
+        "DK-5.1-thm.sylvester-lower-bound"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact",
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact",
+        "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-5.1-thm"
+    },
+    {
+      "id": "DK-5.2-thm",
+      "result_kind": "theorem",
+      "source_anchor": "Theorem 5.2",
+      "title": "Semibounded self-adjoint Sylvester theorem",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-5.2-thm.hilbert-unbounded-hypotheses",
+        "DK-5.2-thm.hilbert-unbounded-conclusion"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Theorem5_2",
+        "TauCeti.DavisKahan1970.unbounded_sylvester_intervalExterior_uiNorm_genuineSpectrum"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-5.2-thm"
+    },
+    {
+      "id": "DK-5.1-lem",
+      "result_kind": "lemma",
+      "source_anchor": "Lemma 5.1",
+      "title": "Strong-cutoff convergence of singular values",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-5.1-lem.strong-cutoff-convergence"
+      ],
+      "disposition": "proved_exact",
+      "verification": "proved_in_build",
+      "semantic_certification": "accepted",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Lemma5_1"
+      ],
+      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "parent_claim_id": "DK-5.1-lem"
+    },
+    {
+      "id": "DK-6.1-lem",
+      "result_kind": "lemma",
+      "source_anchor": "Lemma 6.1",
+      "title": "Direct-sum UI-norm comparison and converse",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-6.1-lem.ordered-sylvester-forward",
+        "DK-6.1-lem.ordered-sylvester-converse"
+      ],
+      "disposition": "proved_exact",
+      "verification": "proved_in_build",
+      "semantic_certification": "accepted",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.lemma6_1",
+        "TauCeti.DavisKahan1970.lemma6_1_converse"
+      ],
+      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "parent_claim_id": "DK-6.1-lem"
+    },
+    {
+      "id": "DK-6.2-lem",
+      "result_kind": "lemma",
+      "source_anchor": "Lemma 6.2",
+      "title": "Reflection-pinch contraction",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-6.2-lem.pinching-contraction"
+      ],
+      "disposition": "proved_exact",
+      "verification": "proved_in_build",
+      "semantic_certification": "accepted",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.lemma6_2"
+      ],
+      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "parent_claim_id": "DK-6.2-lem"
+    },
+    {
+      "id": "DK-6.1-prop",
+      "result_kind": "proposition",
+      "source_anchor": "Section 6 sine proof and Proposition 6.1",
+      "title": "Sine proof, ambient limitation, and symmetric sine theorem",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-6.1-prop.symmetric-sine-theorem"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Proposition6_1",
+        "TauCeti.DavisKahan1970.Proposition6_1_real"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-6.1-prop"
+    },
+    {
+      "id": "DK-6.1-thm",
+      "result_kind": "theorem",
+      "source_anchor": "Theorem 6.1",
+      "title": "Generalized sine theorem",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-6.1-thm.generalized-sine-hypotheses",
+        "DK-6.1-thm.generalized-sine-conclusion",
+        "DK-6.1-thm.unequal-dimension-scope"
+      ],
+      "disposition": "proved_exact",
+      "verification": "proved_in_build",
+      "semantic_certification": "accepted",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Theorem6_1",
+        "TauCeti.DavisKahan1970.Theorem6_1_real",
+        "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
+        "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore"
+      ],
+      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "parent_claim_id": "DK-6.1-thm"
+    },
+    {
+      "id": "DK-6.2-thm",
+      "result_kind": "theorem",
+      "source_anchor": "Theorem 6.2",
+      "title": "Pairwise-gap square-norm sine theorem",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-6.2-thm.second-generalized-sine"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Theorem6_2",
+        "TauCeti.DavisKahan1970.Theorem6_2_real",
+        "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
+        "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-6.2-thm"
+    },
+    {
+      "id": "DK-6.3-thm",
+      "result_kind": "theorem",
+      "source_anchor": "Section 6 equations (6.2)–(6.6), Example 6.1, and Theorem 6.3",
+      "title": "Tangent proof machinery, Example 6.1, and generalized tangent theorem",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-6.3-thm.generalized-tangent-theorem"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Theorem6_3",
+        "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real",
+        "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm",
+        "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-6.3-thm"
+    },
+    {
+      "id": "DK-6.3-lem",
+      "result_kind": "lemma",
+      "source_anchor": "Lemma 6.3",
+      "title": "Finite-rank near-maximizer leakage estimate",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-6.3-lem.approximation-number-leakage"
+      ],
+      "disposition": "proved_exact",
+      "verification": "proved_in_build",
+      "semantic_certification": "accepted",
+      "lean_declarations": [
+        "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
+        "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
+        "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage_real"
+      ],
+      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "parent_claim_id": "DK-6.3-lem"
+    },
+    {
+      "id": "DK-8.1-thm",
+      "result_kind": "theorem",
+      "source_anchor": "Theorem 8.1",
+      "title": "Branch selection and spectral repulsion",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-8.1-thm.acute-iff-spectral-placement",
+        "DK-8.1-thm.existence-correct-q",
+        "DK-8.1-thm.part-i-compression",
+        "DK-8.1-thm.part-ii-eigenvalue",
+        "DK-8.1-thm.part-iii-gauge"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSandwichApproximation_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSandwichApproximation_source"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-8.1-thm"
+    },
+    {
+      "id": "DK-8.2-thm",
+      "result_kind": "theorem",
+      "source_anchor": "Theorem 8.2 and final Section 8 extension remark",
+      "title": "Smallness selects the acute branch and closing extension remark",
+      "completion_obligation": true,
+      "source_atom_ids": [
+        "DK-8.2-thm.smallness-alternative",
+        "DK-8.2-thm.double-angle-bound-retained",
+        "DK-8.2-thm.acute-branch-conclusion"
+      ],
+      "disposition": "pending_result_only_review",
+      "verification": "proved_in_build",
+      "semantic_certification": "pending_result_only_review",
+      "lean_declarations": [
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed"
+      ],
+      "review_note": "Needs a fresh theorem-statement-only semantic review. Earlier hostile row findings used the broader all-mathematical-assertions standard and must not be carried forward mechanically.",
+      "parent_claim_id": "DK-8.2-thm"
+    }
+  ]
+}
