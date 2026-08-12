@@ -17,8 +17,12 @@ eigenvalue lower bounds: for the second vector in a cluster that implication is
 false without the coupled variational information retained by Weinberger's
 argument.  See `WeinbergerAngle.lean` for the executable boundary and tripwire.
 
-The asymptotic expansion mentioned in Davis--Kahan is intentionally not
-encoded; the exact comparison roots are certified directly below.
+The exact comparison roots are certified directly below.  The source's
+pre-(9.8) asymptotic display is not accepted on faith: the theorem
+`printed_weinberger_low_shift_inequality_reversed` proves that its leading
+strict inequality is actually reversed at the lower root throughout the
+printed parameter range.  The source assertion must therefore be treated as a
+formal refutation obligation rather than as an omitted proof.
 -/
 
 namespace TauCeti
@@ -309,6 +313,126 @@ theorem ritzLow_sub_weinbergerLowerRoots_le (ε : ℝ) (hε : 0 < ε) (hε100 : 
       = (exists_weinbergerLowerRootCertificate ε hε hε100).choose.lower₀ := rfl
   rw [hrfl]
   linarith
+
+/-- **The printed pre-(9.8) strict comparison has the wrong direction at the
+lower arrowhead root.**
+
+Davis--Kahan print, for both `k = 1,2`,
+
+`(ε²/30) / (500 - α̂_k) > α̂_k - α̌_k`.
+
+For the lower certified root of the exact three-by-three comparison matrix the
+characteristic equation gives the opposite strict inequality.  This is not a
+numerical-rounding issue: it holds for every `0 < ε < 100`.
+
+Indeed, writing `a = α̂₁`, `b = α̂₂`, `r = α̌₁`, `d = a-r`,
+`e = b-r`, and `A = 500-a`, the root equation is
+
+`d e (A+d) = (ε²/30) (e+d)`.
+
+The certified root satisfies `d > 0`, while `e < A` on the source range.
+Therefore
+
+`d A (e+d) - d e (A+d) = d² (A-e) > 0`,
+
+so `(ε²/30) < d A`.  Dividing by `A > 0` proves the result.
+
+This theorem is source-fidelity evidence: the formalization should preserve and
+refute the printed comparison rather than silently repair its direction. -/
+theorem printed_weinberger_low_shift_inequality_reversed
+    (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
+    (ε ^ 2 / 30) / (500 - ritzLow ε) <
+      ritzLow ε - (weinbergerLowerRoots ε hε hε100).lower₀ := by
+  set C := weinbergerLowerRoots ε hε hε100
+  set a := ritzLow ε
+  set b := ritzHigh ε
+  set r := C.lower₀
+  set d := a - r
+  set e := b - r
+  set A := 500 - a
+  set q := ε ^ 2 / 30
+
+  have hc0 : 0 < ritzLowCoefficient := ritzLowCoefficient_pos
+  have hapos : 0 < a := by
+    rw [show a = ritzLow ε from rfl, ritzLow]
+    positivity
+  have halt : a < 25 := by
+    rw [show a = ritzLow ε from rfl, ritzLow]
+    nlinarith [ritzLowCoefficient_lt_printed]
+  have hblt : b < 100 := by
+    rw [show b = ritzHigh ε from rfl, ritzHigh]
+    nlinarith [ritzHighCoefficient_lt_printed]
+  have hab : a < b := by
+    rw [show a = ritzLow ε from rfl, show b = ritzHigh ε from rfl]
+    have hgap := ritzHigh_sub_ritzLow ε
+    have hsqrt : 0 < Real.sqrt 3 := Real.sqrt_pos.2 (by norm_num)
+    nlinarith
+  have hq : 0 < q := by
+    dsimp [q]
+    positivity
+  have hA : 0 < A := by
+    dsimp [A]
+    linarith
+  have hrle : r ≤ a := by
+    dsimp [r, a, C]
+    exact (weinbergerLowerRoots ε hε hε100).lower₀_le_ritz
+  have he : 0 < e := by
+    dsimp [e]
+    linarith
+
+  have hroot := (weinbergerLowerRoots ε hε hε100).lower₀_is_root
+  rw [weinbergerComparisonMatrix_charAt] at hroot
+  have hroot' : d * e * (A + d) - q * e - q * d = 0 := by
+    dsimp [d, e, A, q, a, b, r, C] at ⊢
+    convert hroot using 1 <;> ring
+
+  have hd : 0 < d := by
+    have hd0 : 0 ≤ d := by
+      dsimp [d]
+      linarith
+    rcases hd0.eq_or_lt with hd0eq | hdpos
+    · have hzero : -(q * e) = 0 := by
+        rw [← hd0eq] at hroot'
+        simpa using hroot'
+      have hqe : 0 < q * e := mul_pos hq he
+      linarith
+    · exact hdpos
+
+  have hclose : d ≤ ε ^ 2 / 7500 := by
+    dsimp [d, a, r, C]
+    exact ritzLow_sub_weinbergerLowerRoots_le ε hε hε100
+  have hsquare : ε ^ 2 < 10000 := by
+    have hsum : 0 < 100 + ε := by linarith
+    have hprod := mul_pos (sub_pos.mpr hε100) hsum
+    nlinarith
+  have hcloseSmall : d < 4 / 3 := by
+    nlinarith
+  have heA : e < A := by
+    dsimp [e, A, d] at hcloseSmall ⊢
+    linarith
+
+  have heqd : q * (e + d) = d * e * (A + d) := by
+    nlinarith [hroot']
+  have hpositiveRemainder : 0 < d ^ 2 * (A - e) := by positivity
+  have hfactorIdentity :
+      (d * A - q) * (e + d) = d ^ 2 * (A - e) := by
+    calc
+      (d * A - q) * (e + d)
+          = d * A * (e + d) - q * (e + d) := by ring
+      _ = d * A * (e + d) - d * e * (A + d) := by rw [heqd]
+      _ = d ^ 2 * (A - e) := by ring
+  have hfactorProduct : 0 < (d * A - q) * (e + d) := by
+    rw [hfactorIdentity]
+    exact hpositiveRemainder
+  have hsumPos : 0 < e + d := by positivity
+  have hfactorPos : 0 < d * A - q := by
+    rcases (mul_pos_iff.mp hfactorProduct) with hpos | hneg
+    · exact hpos.1
+    · linarith [hneg.2, hsumPos]
+  have hq_lt : q < d * A := by linarith
+
+  apply (div_lt_iff₀ hA).2
+  simpa [d, A, q, a, r, C] using hq_lt
 
 /-- **The first line of equation (9.8), from the certified root.**
 
