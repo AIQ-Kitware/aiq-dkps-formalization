@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **24**
-- Awaiting result-statement semantic closure: **5**
+- Currently hostile-certified terminal: **25**
+- Awaiting result-statement semantic closure: **4**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
 
@@ -18,7 +18,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `S2-sin-theta` | unnumbered_theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-theta` | unnumbered_theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
 | `S2-sin-two-theta` | unnumbered_theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `S2-tan-two-theta` | unnumbered_theorem | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
+| `S2-tan-two-theta` | unnumbered_theorem | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-prop` | proposition | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.3-prop` | proposition | `pending_result_only_review` | `proved_in_build` | `pending_result_only_review` | `accepted` |
@@ -47,15 +47,11 @@ Each result below explicitly partitions its primary source block into atoms insi
 
 ## Current semantic-closure queue
 
-The result-only hostile audit has reduced the remaining mathematical surface to five precisely scoped targets. Everything else in the 29-result denominator has an accepted source-vs-Lean semantic correspondence.
+The result-only hostile audit has reduced the remaining mathematical surface to four precisely scoped targets. Everything else in the 29-result denominator has an accepted source-vs-Lean semantic correspondence.
 
 ### `S2-tan-theta` — Single-angle tangent theorem
 
 Result-only audit 2026-08-12: bounded directed and bounded ambient source theorems are present over complex and real Hilbert spaces, and the unbounded directed residual theorem is present over both scalar fields. The remaining source-scope gap is the *ambient unbounded* conclusion `delta * N(tan Theta) <= N(H)` for arbitrary paper UI norm under the printed hypotheses. No existing source-facing theorem was located that combines unbounded self-adjoint ambient scope with the sharp factor-one perturbation conclusion. Keep this result nonterminal until that theorem/wrapper exists and is registered.
-
-### `S2-tan-two-theta` — Double-angle tangent theorem
-
-Result-only audit 2026-08-12: the bounded directed and ambient arbitrary-PaperUI conclusions are exact over real and complex scalars, with pole exclusion derived internally. Current main additionally proves the exact *complex unbounded directed residual* theorem `tanTwoTheta_unbounded_directedResidual_paperUINorm_exact`. The remaining source-scope work is the sharp unbounded ambient factor-two conclusion and the corresponding real unbounded source-facing surface (directed/ambient as needed). Existing unbounded ambient ideal estimates with quarter-acuteness or an extra denominator do not match the printed theorem and therefore do not discharge it.
 
 ### `DK-3.3-prop` — Principal square-root characterization
 

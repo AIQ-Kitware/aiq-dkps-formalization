@@ -14,7 +14,7 @@ single compiler-checkable surface for the Lean declarations selected by the main
 
 Each `#check` below is evidence only: the semantic correspondence to the printed source
 is recorded in `dev/davis-kahan-1970-formalization-result-inventory.json` and the
-human-readable result audit.  The five explicitly nonterminal results also list the
+human-readable result audit.  The four explicitly nonterminal results also list the
 strongest current declarations that delimit the remaining theorem-surface gap.
 
 Run:
@@ -132,7 +132,7 @@ Status: **TERMINAL EXACT**.
 
 /-! ## S2-tan-two-theta: Double-angle tangent theorem
 
-Status: **OPEN RESULT-SCOPE GAP**.
+Status: **TERMINAL EXACT**.
 -/
 
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact
@@ -140,6 +140,9 @@ Status: **OPEN RESULT-SCOPE GAP**.
 #check @TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exact
+#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact
+#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact
+#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact
 
 /-! ## DK-3.1-prop: Acute direct rotation existence and uniqueness
 

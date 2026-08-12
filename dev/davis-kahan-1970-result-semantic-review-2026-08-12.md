@@ -10,11 +10,11 @@ A hostile reviewer should use this report together with `prose/distilled_literat
 
 - Counted DK-established results: **29**
 - Printed-result boundaries reviewed: **29/29**
-- Semantically terminal: **24/29**
-- Genuine remaining result-scope gaps: **5**
+- Semantically terminal: **25/29**
+- Genuine remaining result-scope gaps: **4**
 - Pending results re-audited in the current sweep: **17**
 - False-positive pending statuses closed across the result-only sweep: **12**
-- Latest-main baseline audited before this handoff: `ce0f435a2f8acdf323e520048114378ea0855fd2` (five of its six new promotions were already semantically sound; Theorem 5.1 required scalar-scope evidence correction, supplied below without reopening the result)
+- Latest-main baseline for this promotion: `7cc049b4f9aaf5754224ece9114abad04df44c57`. The self-contained unbounded tan-2Theta implementation was applied to this base and its complex ambient, real directed, real ambient, and aggregate `DavisKahan.All` builds were reported green before semantic promotion.
 
 ## All 29 counted results
 
@@ -81,7 +81,7 @@ Accepted result-only semantic review 2026-08-12. The bounded whole-space PaperUI
 
 ### 4. `S2-tan-two-theta` — Double-angle tangent theorem
 
-**Verdict:** OPEN — genuine result-scope theorem surface remains. Re-audited in this sweep.
+**Verdict:** PASS exact. Closed at the full advertised unbounded source scope in this promotion.
 
 **Counted source atoms:** `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.directed-conclusion`, `S2-tan-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`.
 
@@ -90,20 +90,14 @@ Accepted result-only semantic review 2026-08-12. The bounded whole-space PaperUI
 - `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact`
 - `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`
 - `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`
+- `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exact`
+- `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact`
+- `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact`
+- `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact`
 
 **Semantic review:**
 
-Result-only audit 2026-08-12: the bounded directed and ambient arbitrary-PaperUI conclusions are exact over real and complex scalars, with pole exclusion derived internally. Current main additionally proves the exact *complex unbounded directed residual* theorem `tanTwoTheta_unbounded_directedResidual_paperUINorm_exact`. The remaining source-scope work is the sharp unbounded ambient factor-two conclusion and the corresponding real unbounded source-facing surface (directed/ambient as needed). Existing unbounded ambient ideal estimates with quarter-acuteness or an extra denominator do not match the printed theorem and therefore do not discharge it.
-
-**Structured remaining gap:**
-
-- Category: `missing_unbounded_ambient_and_real_source_surface`
-- Missing surface: Sharp unbounded ambient factor-two tan(2Theta) theorem at paper UI-norm scope, plus real unbounded source-facing coverage corresponding to the printed global scope.
-- Next action: Extend the exact unbounded directed assembly to the ambient perturbation conclusion and real scalar surface without quarter-acuteness or denominator loss.
-- Strongest current evidence:
-  - `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`
-  - `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`
-  - `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exact`
+Accepted result-only semantic review 2026-08-12. The bounded exact wrappers already give both printed conclusions over real and complex Hilbert spaces for every `PaperUnitaryInvariantNorm`, deriving pole exclusion internally from the source hypotheses. The new unbounded wrappers close the shared Section 2 scope explicitly: the directed complex theorem uses the canonical spectral-cutoff/Ky-Fan/Fan-dominance engine; the complex ambient theorem assembles its two complementary reflection-tangent corners with skew-adjoint symmetry and Davis--Kahan Lemma 6.1; and the real directed and ambient wrappers descend these statements through the repository's exact complexification layer. The resulting theorems are arbitrary-dimensional, allow the source's unbounded self-adjoint `A` with bounded residual/perturbation data, retain the sharp factor two, and add no quarter-angle premise, explicit pole certificate, compactness/finite-dimensionality condition, or perturbed-Q spectral placement. The user reported the self-contained implementation compiling successfully on the `7cc049b4` base before this census promotion.
 
 ### 5. `DK-3.1-prop` — Acute direct rotation existence and uniqueness
 
@@ -528,17 +522,16 @@ Result-only hostile review accepted 2026-08-12. The compiled source surface cove
 
 Accepted result-only semantic review 2026-08-12. The Section 8 source surface exposes both printed half-gap alternatives: perturbation-small and residual-small. The complex and real branch theorems select the acute branch (`Theta < pi/4`), and the PaperUI perturbation/residual theorems retain the corresponding `sin 2Theta` estimate with no constant loss. The proof homotopy, unequal-dimension extension remark, and comment about a tangent extension are adjacent material outside the counted Theorem 8.2 boundary.
 
-## Five remaining mathematical targets
+## Four remaining mathematical targets
 
 - **`S2-tan-theta` — Single-angle tangent theorem:** Unbounded self-adjoint ambient perturbation theorem delta * N(tan Theta) <= N(H) for every paper unitary-invariant norm under the printed Section 2 ordered-gap/Rayleigh-Ritz hypotheses.
-- **`S2-tan-two-theta` — Double-angle tangent theorem:** Sharp unbounded ambient factor-two tan(2Theta) theorem at paper UI-norm scope, plus real unbounded source-facing coverage corresponding to the printed global scope.
 - **`DK-3.3-prop` — Principal square-root characterization:** Real-Hilbert-space full nonacute principal-square-root forward/converse characterization at the printed matched-crossed-defect scope.
 - **`DK-3.4-prop` — Square as a direct rotation:** Real-Hilbert-space full nonacute Proposition 3.4: under the printed C0^2 >= 1/2 condition, U^2 is the direct rotation from Q_- to Q.
 - **`DK-4.1-prop` — Pointwise and singular-value extremality of the direct rotation:** At the arbitrary-dimensional compact source scope, identify the direct-rotation displacement approximation-number sequence with the closed form 2 sin(theta_k/2), not only prove extremal minimality.
 
 ## Reviewer reproduction
 
-Compile the single theorem surface containing all selected declarations and the strongest evidence for the five red results:
+Compile the single theorem surface containing all selected declarations and the strongest evidence for the four red results:
 
 ```bash
 lake env lean DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean
@@ -551,7 +544,7 @@ python3 scripts/check_davis_kahan_1970_result_inventory.py
 python3 scripts/check_davis_kahan_1970_statement_map.py
 ```
 
-The hard 100% gate is intentionally red until the five structured gaps are removed:
+The hard 100% gate is intentionally red until the four structured gaps are removed:
 
 ```bash
 python3 scripts/check_davis_kahan_1970_statement_map.py --require-terminal
