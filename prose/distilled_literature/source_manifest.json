@@ -811,7 +811,7 @@
       "group": "Spectral perturbation, principal angles, and matrix inequalities",
       "tier": "primary",
       "priority": "P0",
-      "formalization_status": "source-facing coverage is extensive and the tracked census is near-terminal, with Proposition 4.4 formally refuted as transcribed; an independent statement audit has identified a remaining unrestricted Section 2 tan(2 Theta) exact-wrapper gap, so the repository does not currently certify 100% source fidelity",
+      "formalization_status": "the maintained source-to-Lean audit records all 45 mathematical completion obligations as terminal: 44 compiled exact source-facing rows plus the formally refuted false printed Proposition 4.4; the four Section 10 questions remain source-accounting entries rather than proof obligations",
       "distilled_status": "source_faithful_audit_specification",
       "primary_url": "https://doi.org/10.1137/0707001",
       "archival_locator": "https://ia600108.us.archive.org/view_archive.php?archive=/24/items/wikipedia-scholarly-sources-corpus/10.1137.zip&file=10.1137%252F0707001.pdf",
@@ -844,7 +844,7 @@
         "dev/davis-kahan-1970-independent-audit-prompt.md"
       ],
       "scope": "Full Part III theory on separable Hilbert spaces, reconstructed transformatively in source order: bounded Hermitian main body, four angle theorem families for arbitrary unitary-invariant norms, two-subspace/direct-rotation geometry, Sylvester estimates, unbounded self-adjoint extensions, branch selection, numerical example, and source questions.",
-      "missing_work": "Keep DavisKahan1970_part_III.tex mathematically faithful and in source order as the single distributable audit specification; keep its DK-CERT passage hashes and source-to-Lean registration synchronized. A private transcription may be used to re-audit the distillation but must never be required by repository checks.",
+      "missing_work": "Keep DavisKahan1970_part_III.tex mathematically faithful and in source order as the single distributable audit specification; keep its DK-CERT passage hashes and source-to-Lean registration synchronized, and keep the terminal statement map compiler-certified. A private transcription may be used to re-audit the distillation but must never be required by repository checks.",
       "role": "primary_theorem_source",
       "bibliographic_status": "verified"
     },

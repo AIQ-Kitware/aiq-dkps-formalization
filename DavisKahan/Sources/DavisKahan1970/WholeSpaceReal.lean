@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, Claude Opus 5
+Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Geometry.Angle.PaperOperatorAngleReal
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaWholeSpace
@@ -13,21 +13,24 @@ import DavisKahan.SpectralTheory.Complexification.Spectrum
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 
 /-!
-# The ambient halves of the Section 2 theorems over a **real** Hilbert space
+# Source-facing Section 2 angle bounds over a **real** Hilbert space
 
 Standing assumption 1 of Davis--Kahan 1970 is that the Hilbert space is "real or
-complex".  The three ambient (whole-space) conclusions
+complex".  The ambient (whole-space) conclusions
 
-`δ ‖tan Θ‖ ≤ ‖H‖`,  `δ ‖sin 2Θ‖ ≤ 2‖H‖`,  `δ ‖tan 2Θ‖ ≤ 2‖H‖`
+`δ ‖tan Θ‖ ≤ ‖H‖`,  `δ ‖sin 2Θ‖ ≤ 2‖H‖`,  `δ ‖tan 2Θ‖ ≤ 2‖H‖`,
 
-are proved over `ℂ` in `TanThetaWholeSpace.lean`, `SinTwoThetaWholeSpace.lean`
-and `TanTwoThetaWholeSpace.lean`.  This module states and proves them over a real
-Hilbert space, with **no** loss:
+and the directed residual conclusion
 
-* the space, the operators, the subspaces and the angle operators are all real
-  (`DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean` supplies the real
-  angle operators, and proves they are the real restrictions of the complex
-  ones);
+`δ ‖tan 2Θ₀‖ ≤ 2‖R‖`
+
+are proved over `ℂ` in the corresponding source modules.  This module states and
+proves their real-Hilbert-space counterparts with **no** loss:
+
+* the space, operators, and subspaces are real; ambient angle operators use
+  `DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean`, while the directed
+  `Θ₀` convention follows `paperSourceDirectedAngleR` and is represented on the
+  canonical complexification, which preserves its complete singular data;
 * the constants `δ`, `1` and `2` are unchanged;
 * ideal membership is *concluded*, exactly as in the complex statements, not
   assumed;
@@ -44,8 +47,8 @@ kinds of hypothesis have to travel, and all three were already available:
 * quadratic form bounds and invariance/off-diagonality conditions, by
   `DavisKahan/SpectralTheory/Complexification/FormTransport.lean`;
 * compressions to a subspace, by `complexifySubmoduleEquiv` — the adapter
-  identifying `RealComplexification ↥Z` with `↥(complexifySubmodule Z)`, whose
-  module docstring names the two lifts this file performs;
+  identifying `RealComplexification ↥Z` with `↥(complexifySubmodule Z)`, which
+  supports the source-facing real lifts in this file;
 * the real spectrum of a compression, by `realSpectrum_conjEquiv` and
   `realSpectrum_complexify`, assembled here as
   `spectrum_compressOperator_complexifySubmodule`.
@@ -54,6 +57,7 @@ kinds of hypothesis have to travel, and all three were already available:
 
 * `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real`
 * `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`
+* `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact`
 * `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`
 
 ## References
@@ -157,6 +161,37 @@ theorem re_inner_compressOperator_le (A : E →L[ℝ] E) {alpha : ℝ}
     _ = alpha * (‖re w‖ ^ 2 + ‖im w‖ ^ 2) := by ring
 
 end Compression
+
+/-! ### The real directed `tan 2Θ₀` source representative -/
+
+/-- The canonical source-norm representative of the real directed
+`tan(2Θ₀)` corner.
+
+As with `paperSourceDirectedAngleR`, the real source geometry is represented on
+its canonical complexification.  This loses no source information: every
+`PaperUnitaryInvariantNorm` is defined from singular values and complexification
+preserves those values exactly.  Keeping the representative here avoids
+introducing a second real functional-calculus implementation solely for an
+operator whose only source use is through a unitarily invariant norm. -/
+noncomputable def paperTanTwoDirectedCornerR
+    (U V : Submodule ℝ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    RealComplexification E →L[ℂ] RealComplexification E :=
+  paperProjectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
+    (2 * (paperProjectorDifference (complexifySubmodule U) (complexifySubmodule V) *
+      paperDoubleSecant (complexifySubmodule U) (complexifySubmodule V)))
+
+omit [CompleteSpace E] in
+/-- The real directed residual projection block commutes with complexification.
+This is the square-ambient version needed to descend the exact source norm. -/
+theorem paperProjectionBlock_complexifySubmodule_real
+    (U : Submodule ℝ E) [U.HasOrthogonalProjection] (K : E →L[ℝ] E) :
+    paperProjectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
+        (complexify K) =
+      complexify (paperProjectionBlock Uᗮ U K) := by
+  rw [paperProjectionBlock, paperProjectionBlock,
+    starProjection_complexifySubmodule_orthogonal, starProjection_complexifySubmodule,
+    complexify_comp, complexify_comp]
 
 /-! ### The three ambient theorems over a real Hilbert space -/
 
@@ -310,6 +345,81 @@ theorem tanTwoTheta_wholeSpace_paperUINorm_real
   refine ⟨(PaperUnitaryInvariantNorm.mem_complexify_iff N _).1 hmemC, ?_⟩
   rwa [PaperUnitaryInvariantNorm.gauge_complexify,
     PaperUnitaryInvariantNorm.gauge_complexify] at hboundC
+
+/-- **Davis--Kahan 1970, Section 2 `tan 2Θ₀`, directed residual
+conclusion over a REAL Hilbert space, exactly from the printed hypotheses.**
+
+This is the real-scalar counterpart of
+`tanTwoTheta_directedCorner_residual_paperUINorm_exact`.  It assumes only the
+paper's interval/half-line separation for the two blocks of `A`, positivity of
+`δ`, `H₀ = H₁ = 0`, and invariance of the comparison subspace for `A+H`.
+There is no quarter-angle branch, no caller-supplied pole exclusion, and no
+spectral-placement hypothesis on the `A+H` blocks.
+
+The left side uses `paperTanTwoDirectedCornerR`, the same canonical
+complexification convention already used for the paper's real directed angle.
+The residual norm on the right is genuinely real. -/
+theorem tanTwoTheta_directedCorner_residual_paperUINorm_real_exact
+    (N : PaperUnitaryInvariantNorm)
+    {A H : E →L[ℝ] E} {U V : Submodule ℝ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {β α δ : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperatorReal U A) ⊆ Set.Icc β α)
+    (hA1spec : spectrum ℝ (compressOperatorReal Uᗮ A) ⊆ Set.Ici (α + δ))
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hRmem : N.Mem (paperProjectionBlock Uᗮ U H)) :
+    N.Mem (paperTanTwoDirectedCornerR U V) ∧
+      δ * N.gauge (paperTanTwoDirectedCornerR U V) ≤
+        2 * N.gauge (paperProjectionBlock Uᗮ U H) := by
+  have hsum : complexify A + complexify H = complexify (A + H) :=
+    (complexify_add A H).symm
+  have hRblock :
+      paperProjectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
+          (complexify H) =
+        complexify (paperProjectionBlock Uᗮ U H) :=
+    paperProjectionBlock_complexifySubmodule_real U H
+  have hRmemC : N.Mem
+      (paperProjectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
+        (complexify H)) := by
+    rw [hRblock]
+    exact (PaperUnitaryInvariantNorm.mem_complexify_iff N _).2 hRmem
+  obtain ⟨hmemC, hboundC⟩ :=
+    tanTwoTheta_directedCorner_residual_paperUINorm_exact
+      (E := RealComplexification E) N
+      (A := complexify A) (H := complexify H)
+      (U := complexifySubmodule U) (V := complexifySubmodule V)
+      ((complexify_isSelfAdjoint_iff A).2 hA)
+      ((complexify_isSelfAdjoint_iff H).2 hH)
+      (fun z hz => mapsTo_complexifySubmodule hAU hz)
+      (fun z hz => by
+        rw [hsum]
+        exact mapsTo_complexifySubmodule hAplusH_V hz)
+      hδ
+      (fun r hr => by
+        have hr' : r ∈ realSpectrum
+            (compressOperator (complexifySubmodule U) (complexify A)) := hr
+        rw [realSpectrum_compressOperator_complexifySubmodule U A rfl] at hr'
+        exact hA0spec hr')
+      (fun r hr => by
+        have hr' : r ∈ realSpectrum
+            (compressOperator (complexifySubmodule U)ᗮ (complexify A)) := hr
+        rw [realSpectrum_compressOperator_complexifySubmodule (E := E) Uᗮ A
+          (W := (complexifySubmodule U)ᗮ)
+          (complexifySubmodule_orthogonal U).symm] at hr'
+        exact hA1spec hr')
+      (fun z hz => mapsTo_orthogonal_complexifySubmodule U hHU hz)
+      (fun z hz => mapsTo_of_mem_orthogonal_complexifySubmodule U hHUperp hz)
+      hRmemC
+  change N.Mem (paperTanTwoDirectedCornerR U V) at hmemC
+  change δ * N.gauge (paperTanTwoDirectedCornerR U V) ≤
+      2 * N.gauge
+        (paperProjectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
+          (complexify H)) at hboundC
+  rw [hRblock, PaperUnitaryInvariantNorm.gauge_complexify] at hboundC
+  exact ⟨hmemC, hboundC⟩
 
 /-- **Davis--Kahan 1970, Section 2 `tan 2Θ`, ambient conclusion over a REAL
 Hilbert space, exactly from the printed hypotheses.**

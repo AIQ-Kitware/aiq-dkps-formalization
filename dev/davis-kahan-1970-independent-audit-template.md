@@ -491,7 +491,7 @@ Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a
 
 #### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:175`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:210`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
@@ -533,7 +533,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm` — DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1186
 - `TauCeti.DavisKahanExt.paperTanAngleOperatorR` — DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:127
 - `TauCeti.DavisKahanExt.complexify_paperTanAngleOperatorR` — DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:164
-- `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:175
+- `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:210
 - `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_infinite` — DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:457
 - `TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real` — DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:189
 - `TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal` — DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:54
@@ -621,7 +621,7 @@ Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:217`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:252`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
@@ -655,7 +655,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahanExt.sinTwoTheta_perturbation` — DavisKahan/InfiniteDimensional/DoubleAngle.lean:937
 - `TauCeti.DavisKahanExt.sinTwoTheta_generalSeparation` — DavisKahan/InfiniteDimensional/DoubleAngle.lean:970
 - `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm` — Challenge/DavisKahan1970/Conformance.lean:328, DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:723
-- `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:217
+- `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:252
 - `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR` — DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:122
 - `TauCeti.DavisKahanExt.complexify_paperSinTwoAngleOperatorR` — DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:156
 - `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_all_kyFan` — DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:364
@@ -703,7 +703,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - **Source anchor:** Section 2, tan 2 theta theorem
 - **Source kind:** `unnumbered_theorem`
 - **Completion obligation:** `true`
-- **Census claim:** `compiled_specialization` / `proved_in_build`
+- **Census claim:** `compiled_exact` / `proved_in_build`
 - **Source-specification passage SHA-256:** `5c5b96c1cc563a42d13b8b4e06989c19ff82ec8ed6958f3da78d67dc9b2b7830`
 
 ### Registered distributable source-specification passage
@@ -731,48 +731,36 @@ Section~7 derives the nonvanishing of the relevant $\cos(2\theta_j)$ factors fro
 
 ### Semantic audit clauses
 
-- **`S2-tan-two-theta.hypotheses`:** Printed source hypotheses only: ordered spectral gap between A_0 and A_1 plus H_0 = H_1 = 0; no independent pole-exclusion or perturbed-Q-block placement hypothesis. The new exact ambient complex and real wrappers satisfy this clause and derive pole exclusion internally.
-  - Review declarations: `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`
-- **`S2-tan-two-theta.directed`:** Directed conclusion: delta * ||tan(2 Theta_0)|| <= 2 ||R|| for every source unitarily invariant norm. The branch-free complex Ky Fan corner estimate and the generic Ky-Fan-to-paper-norm upgrade are compiled, but there is still no public source-facing complex+real wrapper deriving the required pole exclusion from only the printed hypotheses and stating this directed residual conclusion directly.
-  - Review declarations: `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_all_kyFan_branchFree`, `TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative_lowerBlock`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.mul_gauge_le_of_all_mul_kyFan_le`
-- **`S2-tan-two-theta.ambient`:** Ambient conclusion: delta * ||tan(2 Theta)|| <= 2 ||H|| for every source unitarily invariant norm, from only the printed hypotheses. This clause is now represented by exact source-facing complex and real wrappers.
+- **`S2-tan-two-theta.hypotheses`:** Printed source hypotheses only: ordered spectral gap between A_0 and A_1 plus H_0 = H_1 = 0; no independent pole-exclusion or perturbed-Q-block placement hypothesis. The exact directed and ambient wrappers derive pole exclusion internally from these hypotheses.
+  - Review declarations: `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`
+- **`S2-tan-two-theta.directed`:** Directed conclusion: delta * ||tan(2 Theta_0)|| <= 2 ||R|| for every source unitarily invariant norm. The complex source-facing wrapper upgrades the branch-free all-Ky-Fan directed-corner estimate to an arbitrary PaperUnitaryInvariantNorm and derives pole exclusion from the printed spectral hypotheses; the real exact wrapper transports the same statement through the canonical complexification convention already used for the paper's real directed angle while descending the residual norm to the real block.
+  - Review declarations: `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_branchFree`, `TauCeti.DavisKahan1970.paperTanTwoDirectedCornerR`
+- **`S2-tan-two-theta.ambient`:** Ambient conclusion: delta * ||tan(2 Theta)|| <= 2 ||H|| for every source unitarily invariant norm, from only the printed hypotheses. Exact source-facing complex and real wrappers derive the pole exclusion internally and the modulus bridge identifies the branch-free positive representative with the literal signed functional-calculus tan(2 Theta) at the level seen by source UI norms.
   - Review declarations: `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`, `TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC`
 
 ### Primary Lean declarations for semantic review
 
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160`
+
+Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:362`
+
+Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
+
 #### `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1123`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:323`
-
-Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_all_kyFan_branchFree`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1008`
-
-Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.paperTanTwoBlockRepresentative_lowerBlock`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:1119`
-
-Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
-
-#### `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.mul_gauge_le_of_all_mul_kyFan_le`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:324`
-
-Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:572`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:433`
 
 Compiler-printed type: *inserted by `scripts/certify_davis_kahan_1970.py` when a certificate is supplied.*
 
@@ -815,7 +803,7 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:1567
 - `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorR` — DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:132
 - `TauCeti.DavisKahanExt.complexify_paperTanTwoAngleOperatorR` — DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:172
-- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:269
+- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:304
 - `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC` — DavisKahan/Geometry/Angle/PaperTanAngle.lean:188
 - `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC_nonneg` — DavisKahan/Geometry/Angle/PaperTanAngle.lean:201
 - `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC` — DavisKahan/Geometry/Angle/PaperTanAngle.lean:209
@@ -824,14 +812,17 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 - `TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:875
 - `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan_of_corner` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:1424
 - `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_of_corner` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:1531
-- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan_branchFree` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1064
-- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree` — Challenge/DavisKahan1970/Conformance.lean:408, DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1083
-- `TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:572
-- `TauCeti.DavisKahan1970.cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:421
-- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1123
-- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:323
+- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_all_kyFan_branchFree` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1107
+- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_branchFree` — Challenge/DavisKahan1970/Conformance.lean:408, DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1126
 - `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_all_kyFan_branchFree` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1008
-- `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.mul_gauge_le_of_all_mul_kyFan_le` — DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:324
+- `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_branchFree` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1043
+- `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160
+- `TauCeti.DavisKahan1970.paperTanTwoDirectedCornerR` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:176
+- `TauCeti.DavisKahan1970.paperProjectionBlock_complexifySubmodule_real` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:187
+- `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:362
+- `TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaWholeSpace.lean:572
+- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact` — DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297
+- `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact` — DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:433
 
 </details>
 
@@ -5646,9 +5637,9 @@ When a compiler certificate is supplied, `signatures.json` contains the compiler
 # Final independent conclusion
 
 - **45 mathematical completion obligations reviewed:** yes / no
-- **43 census-claimed exact obligations independently accepted:** yes / no
+- **44 census-claimed exact obligations independently accepted:** yes / no
 - **1 census-claimed refuted obligations independently accepted:** yes / no
-- **Nonterminal census rows:** `S2-tan-two-theta` (compiled_specialization)
+- **Nonterminal census rows:** none
 - **Any unregistered mathematical claims found:** yes / no
 - **Compiler certificate clean and complete:** yes / no
 - **Is the repository's claim of 100% theorem-statement-level Davis--Kahan 1970 coverage justified?** yes / no / uncertain

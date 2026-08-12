@@ -1031,6 +1031,49 @@ theorem tanTwoTheta_directedCorner_residual_all_kyFan_branchFree
     ← (paperProjectionBlock_same_compression Uᗮ U H).kyFanApproximationGauge_eq k] at h
   exact h
 
+/-- **Branch-free Section 7 directed-corner estimate for every source
+unitarily invariant norm.**
+
+This is the arbitrary-UI-norm upgrade of
+`tanTwoTheta_directedCorner_residual_all_kyFan_branchFree`.  The operator on the
+left is the paper's directed `tan 2Θ₀` corner representative and the operator on
+the right is the directed residual corner.  Pole exclusion is still an explicit
+input at this layer; the source-facing theorem below derives it from the printed
+ordered spectral gap and off-diagonal hypotheses. -/
+theorem tanTwoTheta_directedCorner_residual_paperUINorm_branchFree
+    (N : PaperUnitaryInvariantNorm)
+    {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {a b : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    (hab : a < b)
+    (hUhigh : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
+    (hUperpLow : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0)
+    (hRmem : N.Mem (paperProjectionBlock Uᗮ U H)) :
+    N.Mem
+        (paperProjectionBlock Uᗮ U
+          (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ∧
+      (b - a) * N.gauge
+          (paperProjectionBlock Uᗮ U
+            (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ≤
+        2 * N.gauge (paperProjectionBlock Uᗮ U H) := by
+  have hhalf : (0 : ℝ) < (b - a) / 2 := by linarith
+  have hscaled : ∀ k : ℕ,
+      (b - a) / 2 * kyFanApproximationGauge k
+          (paperProjectionBlock Uᗮ U
+            (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ≤
+        kyFanApproximationGauge k (paperProjectionBlock Uᗮ U H) := by
+    intro k
+    have h := tanTwoTheta_directedCorner_residual_all_kyFan_branchFree
+      hA hH hAU hAplusH_V hab hUhigh hUperpLow hHU hHUperp hcos k
+    linarith
+  obtain ⟨hmem, hbound⟩ :=
+    N.mul_gauge_le_of_all_mul_kyFan_le hhalf hRmem hscaled
+  exact ⟨hmem, by linarith⟩
+
 /-- The same branch-free corner estimate in the upper-residual orientation
 consumed by the ambient Lemma-6.1 assembly.  This rewrite costs **no factor**:
 it is only adjoint invariance of approximation numbers. -/
@@ -1098,6 +1141,137 @@ theorem tanTwoTheta_wholeSpace_paperUINorm_branchFree
   exact tanTwoTheta_wholeSpace_paperUINorm_of_corner N hH hab hcos
     (tanTwoTheta_directedCorner_residual_all_kyFan_branchFree_upper
       hA hH hAU hAplusH_V hab hUhigh hUperpLow hHU hHUperp hcos) hHmem
+
+/-- **Davis--Kahan 1970, Section 2 `tan 2Θ₀`, directed residual
+conclusion, exactly from its printed hypotheses.**
+
+The source assumes `spectrum(A₀) ⊆ [β, α]`,
+`spectrum(A₁) ⊆ [α + δ, ∞)`, `δ > 0`, and `H₀ = H₁ = 0`.  For every source
+unitarily invariant norm it concludes
+
+`δ ‖tan(2Θ₀)‖ ≤ 2 ‖R‖`.
+
+Here the two displayed operators are the canonical directed projection-block
+representatives of `tan(2Θ₀)` and of the residual.  They have exactly the
+singular data seen by the paper's norm.  There is deliberately no caller
+supplied quarter-angle branch, no `cos (2θ) ≠ 0` hypothesis, and no placement
+hypothesis on the blocks of `A+H`; pole exclusion is derived internally by the
+Section 7 reflection argument. -/
+theorem tanTwoTheta_directedCorner_residual_paperUINorm_exact
+    (N : PaperUnitaryInvariantNorm)
+    {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    {β α δ : ℝ}
+    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc β α)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hRmem : N.Mem (paperProjectionBlock Uᗮ U H)) :
+    N.Mem
+        (paperProjectionBlock Uᗮ U
+          (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ∧
+      δ * N.gauge
+          (paperProjectionBlock Uᗮ U
+            (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ≤
+        2 * N.gauge (paperProjectionBlock Uᗮ U H) := by
+  have hAred : A.Reduces U := by
+    have hAsym := ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA
+    exact reduces_orthogonalComplement hAsym hAU
+  have hAUperp : ∀ x ∈ Uᗮ, A x ∈ Uᗮ := hAred.2
+  have hA0sa : IsSelfAdjoint (compressOperator U A) :=
+    isSelfAdjoint_compressOperator hA U
+  have hA1sa : IsSelfAdjoint (compressOperator Uᗮ A) :=
+    isSelfAdjoint_compressOperator hA Uᗮ
+  have hA0upper : spectrum ℝ (compressOperator U A) ⊆ Set.Iic α :=
+    fun r hr => (hA0spec hr).2
+  have hUlow : ∀ x ∈ U,
+      RCLike.re ⟪A x, x⟫_ℂ ≤ α * ‖x‖ ^ 2 := by
+    intro x hx
+    let xu : U := ⟨x, hx⟩
+    have h := TauCeti.SpectralOrder.Complex.re_inner_le_of_spectrum_subset_Iic
+      (compressOperator U A) hA0sa hA0upper xu
+    have hcoe : ((compressOperator U A xu : U) : E) = A (x : E) :=
+      coe_compressOperator_apply_of_maps A hAU xu
+    simpa [Submodule.coe_norm, Submodule.coe_inner, hcoe] using h
+  have hUperpHigh : ∀ x ∈ Uᗮ,
+      (α + δ) * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ := by
+    intro x hx
+    let xu : Uᗮ := ⟨x, hx⟩
+    have h := TauCeti.SpectralOrder.Complex.le_re_inner_of_spectrum_subset_Ici
+      (compressOperator Uᗮ A) hA1sa hA1spec xu
+    have hcoe : ((compressOperator Uᗮ A xu : Uᗮ) : E) = A (x : E) :=
+      coe_compressOperator_apply_of_maps A hAUperp xu
+    simpa [Submodule.coe_norm, Submodule.coe_inner, hcoe] using h
+  have hgap : α < α + δ := by linarith
+  have hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V),
+      Real.cos (2 * t) ≠ 0 :=
+    cos_two_ne_zero_of_ordered_form_gap_offDiagonal
+      hA hH hAU hAplusH_V hgap hUlow hUperpHigh hHU hHUperp
+  have hAneg : IsSelfAdjoint (-A) := by
+    rw [IsSelfAdjoint, star_neg, hA.star_eq]
+  have hHneg : IsSelfAdjoint (-H) := by
+    rw [IsSelfAdjoint, star_neg, hH.star_eq]
+  have hAUneg : ∀ x ∈ U, (-A) x ∈ U := by
+    intro x hx
+    change -(A x) ∈ U
+    exact U.neg_mem (hAU x hx)
+  have hAplusH_V_neg : ∀ x ∈ V, ((-A) + (-H)) x ∈ V := by
+    intro x hx
+    have h := V.neg_mem (hAplusH_V x hx)
+    simpa [add_apply, add_comm] using h
+  have hUhighNeg : ∀ x ∈ U,
+      (-α) * ‖x‖ ^ 2 ≤ RCLike.re ⟪(-A) x, x⟫_ℂ := by
+    intro x hx
+    calc
+      (-α) * ‖x‖ ^ 2 = -(α * ‖x‖ ^ 2) := by ring
+      _ ≤ -RCLike.re ⟪A x, x⟫_ℂ := neg_le_neg (hUlow x hx)
+      _ = RCLike.re ⟪(-A) x, x⟫_ℂ := by simp
+  have hUperpLowNeg : ∀ x ∈ Uᗮ,
+      RCLike.re ⟪(-A) x, x⟫_ℂ ≤ (-(α + δ)) * ‖x‖ ^ 2 := by
+    intro x hx
+    calc
+      RCLike.re ⟪(-A) x, x⟫_ℂ = -RCLike.re ⟪A x, x⟫_ℂ := by simp
+      _ ≤ -((α + δ) * ‖x‖ ^ 2) := neg_le_neg (hUperpHigh x hx)
+      _ = (-(α + δ)) * ‖x‖ ^ 2 := by ring
+  have hHUNeg : ∀ x ∈ U, (-H) x ∈ Uᗮ := by
+    intro x hx
+    change -(H x) ∈ Uᗮ
+    exact Uᗮ.neg_mem (hHU x hx)
+  have hHUperpNeg : ∀ x ∈ Uᗮ, (-H) x ∈ U := by
+    intro x hx
+    change -(H x) ∈ U
+    exact U.neg_mem (hHUperp x hx)
+  have hnegGap : -(α + δ) < -α := by linarith
+  have hRneg : paperProjectionBlock Uᗮ U (-H) =
+      -(paperProjectionBlock Uᗮ U H) := by
+    ext x
+    simp [paperProjectionBlock]
+  have hRnegExt :
+      N.extendedGauge (-(paperProjectionBlock Uᗮ U H)) =
+        N.extendedGauge (paperProjectionBlock Uᗮ U H) := by
+    have h := N.extendedGauge_smul (-1 : ℂ) (paperProjectionBlock Uᗮ U H)
+    simpa using h
+  have hRnegMem : N.Mem (paperProjectionBlock Uᗮ U (-H)) := by
+    rw [hRneg]
+    unfold PaperUnitaryInvariantNorm.Mem at hRmem ⊢
+    rwa [hRnegExt]
+  obtain ⟨hmem, hbound⟩ :=
+    tanTwoTheta_directedCorner_residual_paperUINorm_branchFree N
+      (A := -A) (H := -H) (U := U) (V := V)
+      (a := -(α + δ)) (b := -α)
+      hAneg hHneg hAUneg hAplusH_V_neg hnegGap hUhighNeg hUperpLowNeg
+      hHUNeg hHUperpNeg hcos hRnegMem
+  refine ⟨hmem, ?_⟩
+  have hRnegGauge :
+      N.gauge (-(paperProjectionBlock Uᗮ U H)) =
+        N.gauge (paperProjectionBlock Uᗮ U H) := by
+    unfold PaperUnitaryInvariantNorm.gauge
+    rw [hRnegExt]
+  rw [hRneg, hRnegGauge] at hbound
+  have hgapEq : (-α) - (-(α + δ)) = δ := by ring
+  rwa [hgapEq] at hbound
 
 /-- **Davis--Kahan 1970, Section 2 `tan 2Θ`, ambient conclusion, exactly from
 its printed hypotheses.**
