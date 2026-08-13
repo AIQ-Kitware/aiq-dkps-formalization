@@ -140,7 +140,7 @@
           "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real",
           "TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses"
         ],
-        "next_action": "Prove the real-scalar unbounded ambient endpoint, following the maintained complexification descent used by `tanTheta_wholeSpace_paperUINorm_real` and by the real unbounded directed endpoint, and register it here and in the Lean semantic audit surface. Then re-audit this row for terminality; the interpretation review does not need to be reopened unless the source specification or a supporting atom changes."
+        "next_action": "Prove the real-scalar unbounded ambient endpoint, following the maintained complexification descent used by `tanTheta_wholeSpace_paperUINorm_real` and by the real unbounded directed endpoint, and register it here and in the Lean semantic audit surface. Then re-audit this row for terminality; the interpretation review does not need to be reopened unless the source specification or a supporting atom changes.  The verified execution contract for this endpoint -- API inventory, proof architecture, accounting steps, and gates -- is `dev/davis-kahan-1970-real-unbounded-ambient-handoff.md`."
       },
       "semantic_alignment": "paper_faithful_nonlocal_source_interpretation",
       "local_statement_self_contained": false,
