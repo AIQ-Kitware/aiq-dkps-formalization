@@ -227,7 +227,7 @@ Accepted by the hostile audit at the stated-result level.
 
 ### 11. `DK-3.5-prop` — Angle commutation and eigenspace geometry
 
-**Verdict:** REOPENED (mapping). The earlier PASS was granted against evidence that did not match the printed scope.
+**Verdict:** PASS exact. Independently re-audited against the repaired source-facing signatures on 2026-08-13.
 
 **Counted source atoms:** `DK-3.5-prop.commutation`, `DK-3.5-prop.eigenvector-rotation-angle`, `DK-3.5-prop.acute-maximal-characterization`.
 
@@ -242,13 +242,13 @@ Accepted by the hostile audit at the stated-result level.
 
 **Semantic review:**
 
-The 2026-08-12 acceptance recorded here was **wrong about the clause structure**, and is withdrawn.
+The earlier 2026-08-12 acceptance was **wrong about the clause structure** and was withdrawn before the repaired signatures were independently re-audited.
 
 Proposition 3.5 reads: "`Θ` commutes with `P`, with `Q`, with `J`, and with `U`. For every eigenvalue `θ`, the eigenvectors `x` satisfy `∠(x, Ux) = θ`. *In the acute case*, for every eigenvalue `θ`, the eigenspace `Ω({θ})𝓗` is the unique maximal subspace with the properties (a)--(c)." The qualifier governs the third clause only. The first two are printed under the standing Section 3 hypotheses, which admit the completed direct rotation in the nonacute case. The declarations accepted here required `IsAcute` for all three, so the acceptance certified a strictly weaker theorem than the paper's.
 
 The mathematics has since been repaired. `proposition3_5_commutations` and `proposition3_5_eigenvector_angle` now quantify over the completed direct rotation selected by a crossed-defect isometry — the paper's matched-crossing condition (3.5) — and carry no acuteness, no finite dimensionality, and no restriction to `θ < π/2`. The eigenvector clause covers the right-angle eigenspace `θ = π/2` uniformly: every angle eigenvalue lies in `[0, π/2]`, and the proof consumes only `re ⟪Wx, x⟫ = cos θ ‖x‖²` together with `‖Wx‖ = ‖x‖`, which at `θ = π/2` says exactly that the completed rotation carries `x` to a vector orthogonal to it. The maximality clause correctly keeps `IsAcute`.
 
-This row stays nonterminal until an **independent** reviewer re-audits the repaired signatures against the printed clause structure; the agent that repaired them cannot also grant the hostile acceptance. The preceding exponential and cosine-square representations remain outside the Proposition 3.5 result boundary and do not block it.
+An independent hostile re-audit on 2026-08-13 confirmed the repaired signatures against the printed clause structure: clauses 1 and 2 are nonacute, clause 2 includes the right-angle eigenspace `θ = π/2`, and clause 3 alone remains acute. The row is therefore terminal and accepted. The preceding exponential and cosine-square representations remain outside the Proposition 3.5 result boundary and do not block it.
 
 ### 12. `DK-3.2-cor` — Reversal symmetry
 
