@@ -101,16 +101,17 @@ local instance instCompleteSpaceCoeOfHasOrthogonalProjection
 
 /-! ### The block presentation the gap theorem consumes -/
 
-omit [CompleteSpace E] in
 /-- On an invariant subspace the compression intertwines with the inclusion, which is the
-paper's relation `A E₀ = E₀ A₀`. -/
+paper's relation `A E₀ = E₀ A₀`.  Scalar-generic: it is projection geometry, with no functional
+calculus in it, so the real branch below reuses it unchanged. -/
 theorem subtypeL_comp_compressOperator_of_invariant
-    (A : E →L[ℂ] E) (U : Submodule ℂ E) [U.HasOrthogonalProjection]
+    {𝕜 : Type*} [RCLike 𝕜] {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    (A : G →L[𝕜] G) (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
     (hAU : ∀ x ∈ U, A x ∈ U) :
     U.subtypeL ∘L compressOperator U A = A ∘L U.subtypeL := by
   refine ContinuousLinearMap.ext fun x => ?_
   simp only [ContinuousLinearMap.comp_apply, compressOperator, Submodule.subtypeL_apply]
-  exact Submodule.starProjection_eq_self_iff.mpr (hAU (x : E) x.2)
+  exact Submodule.starProjection_eq_self_iff.mpr (hAU (x : G) x.2)
 
 /-- **The gap step function of a reduced self-adjoint operator is its reducing projection.**
 
@@ -288,6 +289,171 @@ theorem Question10_4_directed_functionalChange_paperForm
   rw [hmid, ← ContinuousLinearMap.sub_comp]
   exact Question10_4_directed_functionalChange U V hA hH hAU hAplusH_V hδ hA0spec hA1spec
     hL0spec hL1spec hHU hHUperp hf1 hf0
+
+/-! ## The real branch
+
+Davis and Kahan work on a real *or* complex Hilbert space, and the `tan 2θ` estimates these
+identities feed into already have real endpoints
+(`tanTwoTheta_wholeSpace_paperUINorm_real_exact` and the directed sibling).  The same five
+claims over `ℝ`, on `TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap_real`.
+
+The ambient identity is stated as `Q − P` directly rather than through
+`paperProjectorDifference`, which is a complex-only definition; the norm form then reads
+`‖Q − P‖ = ‖sin Θ‖` through `TauCeti.DavisKahanExt.Real.sinAngleOperatorRC`, the real sine
+operator evaluated in the canonical complexification. -/
+
+section RealScalars
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+
+/-- A real subspace admitting an orthogonal projection is complete; local for the same reason
+as the complex instance above. -/
+local instance instCompleteSpaceCoeOfHasOrthogonalProjectionReal
+    (U : Submodule ℝ E) [U.HasOrthogonalProjection] : CompleteSpace (U : Type v) :=
+  (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
+
+/-- **The gap step function of a reduced real self-adjoint operator is its reducing
+projection.**  Real twin of `cfc_gapStep_eq_starProjection`. -/
+theorem cfc_gapStep_eq_starProjection_real
+    {A : E →L[ℝ] E} (hA : IsSelfAdjoint A)
+    (U : Submodule ℝ E) [U.HasOrthogonalProjection]
+    (hAU : ∀ x ∈ U, A x ∈ U)
+    {α δ : ℝ} (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Iic α)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
+    {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
+    cfc f A = U.starProjection := by
+  have hAred : A.Reduces U :=
+    DavisKahan.reduces_orthogonalComplement
+      (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hA) hAU
+  exact TauCeti.SpectralGap.cfc_eq_starProjection_of_blockGap_real hA
+    (subtypeL_comp_compressOperator_of_invariant A U hAU)
+    (subtypeL_comp_compressOperator_of_invariant A Uᗮ hAred.2)
+    hδ hA0spec hA1spec hf1 hf0
+
+variable (U V : Submodule ℝ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
+/-- **Question 10.4 over `ℝ`: `f(A) = P`.** -/
+theorem Question10_4_stepFunction_unperturbed_real
+    {A H : E →L[ℝ] E} (hA : IsSelfAdjoint A) (_hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U)
+    {β α δ : ℝ} (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc β α)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
+    (_hHU : ∀ x ∈ U, H x ∈ Uᗮ) (_hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
+    cfc f A = U.starProjection :=
+  cfc_gapStep_eq_starProjection_real hA U hAU hδ (fun _ hr => (hA0spec hr).2) hA1spec hf1 hf0
+
+/-- **Question 10.4 over `ℝ`: `f(A + H) = Q`.**  Same reading of `Q` as the complex branch;
+see the module docstring. -/
+theorem Question10_4_stepFunction_perturbed_real
+    {A H : E →L[ℝ] E} (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    {α δ : ℝ} (hδ : 0 < δ)
+    (hL0spec : spectrum ℝ (compressOperator V (A + H)) ⊆ Set.Iic α)
+    (hL1spec : spectrum ℝ (compressOperator Vᗮ (A + H)) ⊆ Set.Ici (α + δ))
+    {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
+    cfc f (A + H) = V.starProjection :=
+  cfc_gapStep_eq_starProjection_real (hA.add hH) V hAplusH_V hδ hL0spec hL1spec hf1 hf0
+
+/-- **Question 10.4 over `ℝ`: `f(A₀) = 1`.** -/
+theorem Question10_4_stepFunction_trialBlock_real
+    {A : E →L[ℝ] E} (hA : IsSelfAdjoint A) {β α : ℝ}
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc β α)
+    {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) :
+    cfc f (compressOperator U A) = 1 := by
+  have hA0sa : IsSelfAdjoint (compressOperator U A) := isSelfAdjoint_compressOperator hA U
+  rw [cfc_congr (g := fun _ : ℝ => (1 : ℝ)) (a := compressOperator U A)
+    fun t ht => hf1 t (hA0spec ht).2]
+  exact cfc_one ℝ (compressOperator U A)
+
+/-- **Question 10.4 over `ℝ`: the ambient functional change is the projector difference.** -/
+theorem Question10_4_ambient_functionalChange_real
+    {A H : E →L[ℝ] E} (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    {β α δ : ℝ} (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc β α)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
+    (hL0spec : spectrum ℝ (compressOperator V (A + H)) ⊆ Set.Iic α)
+    (hL1spec : spectrum ℝ (compressOperator Vᗮ (A + H)) ⊆ Set.Ici (α + δ))
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
+    cfc f (A + H) - cfc f A = V.starProjection - U.starProjection := by
+  rw [Question10_4_stepFunction_perturbed_real V hA hH hAplusH_V hδ hL0spec hL1spec hf1 hf0,
+    Question10_4_stepFunction_unperturbed_real U hA hH hAU hδ hA0spec hA1spec hHU hHUperp
+      hf1 hf0]
+
+/-- **The source's displayed ambient chain over `ℝ`**, `‖f(A+H) − f(A)‖ = ‖Q − P‖ = ‖sin Θ‖`. -/
+theorem Question10_4_ambient_norm_eq_sinTheta_real
+    {A H : E →L[ℝ] E} (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    {β α δ : ℝ} (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc β α)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
+    (hL0spec : spectrum ℝ (compressOperator V (A + H)) ⊆ Set.Iic α)
+    (hL1spec : spectrum ℝ (compressOperator Vᗮ (A + H)) ⊆ Set.Ici (α + δ))
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
+    ‖cfc f (A + H) - cfc f A‖ = ‖V.starProjection - U.starProjection‖ ∧
+      ‖V.starProjection - U.starProjection‖ =
+        ‖TauCeti.DavisKahanExt.Real.sinAngleOperatorRC U V‖ := by
+  refine ⟨by rw [Question10_4_ambient_functionalChange_real U V hA hH hAU hAplusH_V hδ
+      hA0spec hA1spec hL0spec hL1spec hHU hHUperp hf1 hf0], ?_⟩
+  rw [TauCeti.DavisKahanExt.Real.norm_sinAngleOperatorRC U V]
+  show ‖V.starProjection - U.starProjection‖ = U.projectionGap V
+  rw [Submodule.projectionGap,
+    show V.starProjection - U.starProjection = -(U.starProjection - V.starProjection) by abel,
+    norm_neg]
+
+/-- **Question 10.4 over `ℝ`: the directed functional change is the directed sine.** -/
+theorem Question10_4_directed_functionalChange_real
+    {A H : E →L[ℝ] E} (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    {β α δ : ℝ} (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc β α)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
+    (hL0spec : spectrum ℝ (compressOperator V (A + H)) ⊆ Set.Iic α)
+    (hL1spec : spectrum ℝ (compressOperator Vᗮ (A + H)) ⊆ Set.Ici (α + δ))
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
+    (cfc f (A + H) - cfc f A) ∘L U.subtypeL = -TauCeti.principalSineOperator U V := by
+  rw [Question10_4_ambient_functionalChange_real U V hA hH hAU hAplusH_V hδ hA0spec hA1spec
+    hL0spec hL1spec hHU hHUperp hf1 hf0]
+  refine ContinuousLinearMap.ext fun x => ?_
+  have hx : U.starProjection (x : E) = (x : E) :=
+    Submodule.starProjection_eq_self_iff.mpr x.2
+  simp only [ContinuousLinearMap.comp_apply, Submodule.subtypeL_apply, sub_apply, hx,
+    neg_apply, TauCeti.principalSineOperator_apply,
+    Submodule.starProjection_orthogonal_val]
+  abel
+
+/-- **The source's displayed directed chain over `ℝ`**, in the paper's own middle spelling. -/
+theorem Question10_4_directed_functionalChange_paperForm_real
+    {A H : E →L[ℝ] E} (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U) (hAplusH_V : ∀ x ∈ V, (A + H) x ∈ V)
+    {β α δ : ℝ} (hδ : 0 < δ)
+    (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc β α)
+    (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (α + δ))
+    (hL0spec : spectrum ℝ (compressOperator V (A + H)) ⊆ Set.Iic α)
+    (hL1spec : spectrum ℝ (compressOperator Vᗮ (A + H)) ⊆ Set.Ici (α + δ))
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    {f : ℝ → ℝ} (hf1 : ∀ t ≤ α, f t = 1) (hf0 : ∀ t, α + δ ≤ t → f t = 0) :
+    (cfc f (A + H)) ∘L U.subtypeL -
+        U.subtypeL ∘L cfc f (compressOperator U A) =
+      -TauCeti.principalSineOperator U V := by
+  have hP := Question10_4_stepFunction_unperturbed_real U hA hH hAU hδ hA0spec hA1spec hHU
+    hHUperp hf1 hf0
+  have h1 := Question10_4_stepFunction_trialBlock_real U hA hA0spec hf1
+  have hmid : U.subtypeL ∘L cfc f (compressOperator U A) = (cfc f A) ∘L U.subtypeL := by
+    rw [h1, hP]
+    refine ContinuousLinearMap.ext fun x => ?_
+    simp [Submodule.starProjection_eq_self_iff.mpr x.2]
+  rw [hmid, ← ContinuousLinearMap.sub_comp]
+  exact Question10_4_directed_functionalChange_real U V hA hH hAU hAplusH_V hδ hA0spec
+    hA1spec hL0spec hL1spec hHU hHUperp hf1 hf0
+
+end RealScalars
 
 end
 

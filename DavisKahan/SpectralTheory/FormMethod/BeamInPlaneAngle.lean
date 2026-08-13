@@ -751,11 +751,20 @@ The two ingredients are the branch information carried by
 `beamLowEigenvector_individual_angle_le` -- the branch is decided by the position
 of the eigenvalue relative to `ritzLow ε` -- and the fact that two orthonormal
 vectors cannot both sit within `pi / 4` of one unit vector.  No eigenvalue lower
-bound, no angle theorem and no external comparison result is used. -/
+bound, no angle theorem and no external comparison result is used.
+
+**The eigenvalue placement is part of the conclusion, not just of the proof.**  The surviving
+branch is the one where the smaller eigenvalue sits at or below `ritzLow ε` and the larger one
+strictly above it, and that placement is what lets Section 9 read the lower envelope at the
+*lower* Ritz value.  Davis and Kahan print two different denominators for the two vectors --
+`omega_1 < 0.00053 eps / (1 - 0.00043 eps)` against `omega_2 < 0.00053 eps / (1 - 0.0016 eps)`
+-- and without `lambda_j <= ritzLow eps` only the weaker of the two is available for both. -/
 theorem beamLowEigenvector_ritz_pairing (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100)
     {j k : Fin 2} (hjk : j ≠ k)
     (hle : beamLowEigenvalue ε hε.le hε100 j ≤ beamLowEigenvalue ε hε.le hε100 k) :
-    Real.arccos ‖⟪centeredAffineLp trialOne, beamLowEigenvector ε hε.le hε100 j⟫_ℂ‖
+    beamLowEigenvalue ε hε.le hε100 j ≤ ritzLow ε
+      ∧ ritzLow ε < beamLowEigenvalue ε hε.le hε100 k
+      ∧ Real.arccos ‖⟪centeredAffineLp trialOne, beamLowEigenvector ε hε.le hε100 j⟫_ℂ‖
         ≤ Real.sqrt 7 / 10 * ε / (500 - beamLowEigenvalue ε hε.le hε100 j)
       ∧ Real.arccos ‖⟪centeredAffineLp trialTwo, beamLowEigenvector ε hε.le hε100 k⟫_ℂ‖
         ≤ Real.sqrt 7 / 10 * ε / (500 - beamLowEigenvalue ε hε.le hε100 k) := by
@@ -777,7 +786,7 @@ theorem beamLowEigenvector_ritz_pairing (ε : ℝ) (hε : 0 < ε) (hε100 : ε <
     rcases beamLowEigenvector_individual_angle_le ε hε hε100 k with ⟨bk, ak⟩ | ⟨bk, ak⟩
   · exact (beamLowEigenvector_not_both_near ε hε.le hε100 hone hjk
       (lt_of_le_of_lt aj (hb j)) (lt_of_le_of_lt ak (hb k))).elim
-  · exact ⟨aj, ak⟩
+  · exact ⟨bj, bk, aj, ak⟩
   · exact absurd hle (not_le.2 (by linarith))
   · exact (beamLowEigenvector_not_both_near ε hε.le hε100 htwo hjk
       (lt_of_le_of_lt aj (hb j)) (lt_of_le_of_lt ak (hb k))).elim
