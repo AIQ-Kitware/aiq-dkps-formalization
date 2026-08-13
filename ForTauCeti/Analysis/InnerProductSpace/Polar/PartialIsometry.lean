@@ -1,7 +1,7 @@
 /-
 Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
-Authors: Jon Crall, Claude Opus 5
+Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
 module
 
@@ -59,6 +59,10 @@ subspace gives `polarPartial`.
   the initial space;
 * `ContinuousLinearMap.polarInitial_orthogonal_eq_ker`: the orthogonal complement of the
   initial space is exactly `ker M`, so the initial space is `(ker M)ᗮ`;
+* `ContinuousLinearMap.commute_polarPartial_of_commute`: an endomorphism commuting with both
+  `M` and `|M|` also commutes with the polar partial isometry;
+* `ContinuousLinearMap.polarPartial_comp_self_eq_neg_starProjection_of_adjoint_eq_neg`:
+  for skew-adjoint `M`, the polar phase squares to minus the initial-space projection;
 * `ContinuousLinearMap.range_polarPartial` and
   `ContinuousLinearMap.isClosed_range_polarPartial`: the range of `W` is closed and is the
   closure of `range M` — the **final** space;
@@ -89,8 +93,8 @@ which is why `PolarIsometry.lean` no longer carries the request it once did.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: authored directly in `ForTauCeti`; it has had no prior home.
 * Extraction class: **authored in place** for the Tau Ceti staging layer.
-* Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026 Kitware, Inc.;
-  Apache 2.0.
+* Original authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol.
+* Copyright (c) 2026 Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none** in the proof.  The *motivation* is that
   `DavisKahan/Geometry/Polar/{PolarIsometryFinal,Section3Nonacute}.lean` currently obtain
   the general bounded polar decomposition from `Spectra.QuantumMechanics.Channels`, and
@@ -205,8 +209,9 @@ theorem denseRange_modulusCorestrict (M : E →L[𝕜] F) :
         Submodule.topologicalClosure_coe _
     _ ⊆ closure (Subtype.val '' Set.range M.modulusCorestrict) := closure_mono hsub
 
-/-- The isometry bound that makes the extension possible: `‖M x‖ ≤ 1 * ‖ |M| x ‖`, which is
-an equality, by `ContinuousLinearMap.norm_modulus_apply`. -/
+/-- The isometry bound that makes the extension possible:
+`‖M x‖ ≤ 1 * ‖ |M| x ‖`, which is an equality by
+`ContinuousLinearMap.norm_modulus_apply`. -/
 theorem norm_apply_le_norm_modulusCorestrict (M : E →L[𝕜] F) (x : E) :
     ‖M.toLinearMap x‖ ≤ 1 * ‖M.modulusCorestrict x‖ := by
   rw [one_mul]
@@ -318,6 +323,60 @@ theorem polarInitial_orthogonal_eq_ker (M : E →L[𝕜] F) :
     have := hle hu
     rw [Submodule.mem_orthogonal_singleton_iff_inner_left] at this
     exact this
+
+/-- The initial space is exactly the orthogonal complement of the kernel. -/
+theorem polarInitial_eq_orthogonal_ker (M : E →L[𝕜] F) :
+    M.polarInitial = (LinearMap.ker M.toLinearMap)ᗮ := by
+  rw [← M.polarInitial_orthogonal_eq_ker, Submodule.orthogonal_orthogonal]
+
+/-- Commutation passes from an operator and its modulus to the polar partial isometry.
+
+This is the dimension-free support argument behind the usual statement that a symmetry of both
+`M` and `|M|` also preserves the phase in the polar decomposition.  No injectivity or closed-range
+hypothesis is needed: on `M.polarInitial` the result follows by density of the modulus range, and
+on its orthogonal complement both sides vanish because commutation with `M` preserves `ker M`. -/
+theorem commute_polarPartial_of_commute
+    {A M : E →L[𝕜] E} (hAM : Commute A M) (hAmod : Commute A M.modulus) :
+    Commute A M.polarPartial := by
+  rw [commute_iff_eq]
+  ext x
+  obtain ⟨p, hp, q, hq, rfl⟩ :=
+    Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) x
+  have hJq : M.polarPartial q = 0 := M.polarPartial_eq_zero_of_mem_orthogonal hq
+  have hAqker : A q ∈ LinearMap.ker M.toLinearMap := by
+    rw [LinearMap.mem_ker]
+    have hq' : q ∈ LinearMap.ker M.toLinearMap := by
+      rwa [← M.polarInitial_orthogonal_eq_ker]
+    have hqker : M q = 0 := hq'
+    have h := congrArg (fun T : E →L[𝕜] E => T q) hAM.eq
+    simp only [mul_apply_eq_comp] at h
+    rw [hqker, map_zero] at h
+    exact h.symm
+  have hAq : A q ∈ M.polarInitialᗮ := by
+    rwa [M.polarInitial_orthogonal_eq_ker]
+  have hJAq : M.polarPartial (A q) = 0 := M.polarPartial_eq_zero_of_mem_orthogonal hAq
+  have hagree : A (M.polarPartial p) = M.polarPartial (A p) := by
+    have hclosed : IsClosed {z : M.polarInitial |
+        A (M.polarPartial z) = M.polarPartial (A z)} :=
+      isClosed_eq (by fun_prop) (by fun_prop)
+    have hgen : ∀ y : E,
+        A (M.polarPartial (M.modulusCorestrict y)) =
+          M.polarPartial (A (M.modulusCorestrict y)) := by
+      intro y
+      have hleft : A (M y) = M (A y) := by
+        have h := congrArg (fun T : E →L[𝕜] E => T y) hAM.eq
+        simpa only [mul_apply_eq_comp] using h
+      have hmodApp : A (M.modulus y) = M.modulus (A y) := by
+        have h := congrArg (fun T : E →L[𝕜] E => T y) hAmod.eq
+        simpa only [mul_apply_eq_comp] using h
+      change A (M.polarPartial (M.modulus y)) =
+        M.polarPartial (A (M.modulus y))
+      rw [M.polarPartial_apply_modulus, hmodApp, M.polarPartial_apply_modulus, hleft]
+    exact M.denseRange_modulusCorestrict.induction_on
+      (p := fun z : M.polarInitial =>
+        A (M.polarPartial z) = M.polarPartial (A z)) ⟨p, hp⟩ hclosed hgen
+  simp only [mul_apply_eq_comp, map_add, hJq, hJAq, map_zero, add_zero]
+  exact hagree
 
 /-- The kernel of the polar partial isometry is exactly the orthogonal complement of the
 initial space — it kills nothing else. -/
@@ -451,7 +510,8 @@ theorem isIdempotentElem_polarPartial_comp_adjoint (M : E →L[𝕜] F) :
     _ = M.polarPartial ∘L M.polarPartial.adjoint := by rw [h]
 
 /-- The partial isometry, bundled as a `LinearIsometry` on the initial space. -/
-noncomputable def polarLinearIsometryAux (M : E →L[𝕜] F) : M.polarInitial →ₗᵢ[𝕜] F where
+noncomputable def polarLinearIsometryAux (M : E →L[𝕜] F) :
+    M.polarInitial →ₗᵢ[𝕜] F where
   toLinearMap := M.polarPartialAux.toLinearMap
   norm_map' := M.norm_polarPartialAux_apply
 
@@ -651,7 +711,8 @@ theorem starProjection_comp_adjoint_polarPartial (M : E →L[𝕜] F) :
 
 /-- **`W(M⋆) = W(M)⋆`**: the partial isometry of the adjoint is the adjoint of the partial
 isometry.  By uniqueness, since `W⋆ |M⋆| = M⋆` and `W⋆` vanishes on `ker M⋆`. -/
-theorem polarPartial_adjoint [Algebra ℝ (F →L[𝕜] F)] [IsScalarTower ℝ 𝕜 (F →L[𝕜] F)]
+theorem polarPartial_adjoint [Algebra ℝ (F →L[𝕜] F)]
+    [IsScalarTower ℝ 𝕜 (F →L[𝕜] F)]
     [ContinuousFunctionalCalculus ℝ (F →L[𝕜] F) IsSelfAdjoint] (M : E →L[𝕜] F) :
     M.adjoint.polarPartial = M.polarPartial.adjoint := by
   refine (M.adjoint.eq_polarPartial_of_comp_modulus M.polarPartial.adjoint ?_ ?_).symm
@@ -685,6 +746,39 @@ theorem polarPartial_adjoint [Algebra ℝ (F →L[𝕜] F)] [IsScalarTower ℝ �
       rw [← h]
       exact Submodule.starProjection_apply_mem _ _
     exact inner_self_eq_zero.mp (hperp _ hmem)
+
+/-- The polar partial isometry of a skew-adjoint endomorphism is skew-adjoint. -/
+theorem adjoint_polarPartial_eq_neg_of_adjoint_eq_neg
+    {M : E →L[𝕜] E} (hM : M.adjoint = -M) :
+    M.polarPartial.adjoint = -M.polarPartial := by
+  rw [← M.polarPartial_adjoint, hM, M.polarPartial_neg]
+
+/-- For a skew-adjoint endomorphism, the square of the polar partial isometry is minus the
+orthogonal projection onto its initial space.  This is the global form of the statement that the
+polar phase is a quarter turn on the support of the operator and vanishes on its kernel. -/
+theorem polarPartial_comp_self_eq_neg_starProjection_of_adjoint_eq_neg
+    {M : E →L[𝕜] E} (hM : M.adjoint = -M) :
+    M.polarPartial ∘L M.polarPartial = -M.polarInitial.starProjection := by
+  have hstar := adjoint_polarPartial_eq_neg_of_adjoint_eq_neg (M := M) hM
+  ext x
+  have hproj := congrArg (fun T : E →L[𝕜] E => T x) M.adjoint_comp_polarPartial
+  simp only [ContinuousLinearMap.comp_apply] at hproj ⊢
+  rw [hstar] at hproj
+  simp only [neg_apply] at hproj ⊢
+  calc
+    M.polarPartial (M.polarPartial x) = -(-M.polarPartial (M.polarPartial x)) := by simp
+    _ = -(M.polarInitial.starProjection x) := by rw [hproj]
+
+/-- On the initial space of a skew-adjoint endomorphism, applying its polar partial isometry twice
+is exactly negation. -/
+theorem polarPartial_apply_polarPartial_apply_of_mem_of_adjoint_eq_neg
+    {M : E →L[𝕜] E} (hM : M.adjoint = -M) {x : E} (hx : x ∈ M.polarInitial) :
+    M.polarPartial (M.polarPartial x) = -x := by
+  have hsquare := polarPartial_comp_self_eq_neg_starProjection_of_adjoint_eq_neg
+    (M := M) hM
+  have happ := congrArg (fun T : E →L[𝕜] E => T x) hsquare
+  simpa only [ContinuousLinearMap.comp_apply, neg_apply,
+    Submodule.starProjection_eq_self_iff.mpr hx] using happ
 
 /-- The **final space** of the polar decomposition: the closure of the range of `M`,
 equivalently the range of `W` (`range_polarPartial`). -/

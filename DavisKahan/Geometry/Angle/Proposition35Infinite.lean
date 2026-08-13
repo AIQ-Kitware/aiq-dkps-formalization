@@ -186,6 +186,35 @@ theorem cfc_sin_section3AngleOperator :
       exact Real.sin_arcsin (by linarith [hxi.1]) (by linarith [hxi.2])
     _ = section3SinAngleOperator U V := cfc_id' ℝ _
 
+/-- The operator angle and its sine have the same kernel.  This records the zero-angle
+support without any pure-point-spectrum assumption. -/
+theorem ker_section3AngleOperator_eq_ker_sine :
+    LinearMap.ker (section3AngleOperator U V).toLinearMap =
+      LinearMap.ker (section3SinAngleOperator U V).toLinearMap := by
+  ext x
+  rw [LinearMap.mem_ker, LinearMap.mem_ker]
+  constructor
+  · intro hθ
+    by_cases hx0 : x = 0
+    · simp [hx0]
+    have hθ' : section3AngleOperator U V x = ((0 : ℝ) : 𝕜) • x := by
+      simpa using hθ
+    have hs := TauCeti.LinearPMap.cfc_apply_of_apply_eq_real_smul
+      (section3AngleOperator_isSelfAdjoint U V) hx0 hθ'
+      Real.sin Real.continuous_sin
+    rw [cfc_sin_section3AngleOperator U V] at hs
+    simpa using hs
+  · intro hs
+    by_cases hx0 : x = 0
+    · simp [hx0]
+    have hs' : section3SinAngleOperator U V x = ((0 : ℝ) : 𝕜) • x := by
+      simpa using hs
+    have hθ := TauCeti.LinearPMap.cfc_apply_of_apply_eq_real_smul
+      (section3SinAngleOperator_isSelfAdjoint U V) hx0 hs'
+      Real.arcsin Real.continuous_arcsin
+    rw [section3AngleOperator]
+    simpa using hθ
+
 /-- The angle spectrum lies in the canonical interval `[0, π/2]`. -/
 theorem spectrum_section3AngleOperator_subset_Icc :
     spectrum ℝ (section3AngleOperator U V) ⊆ Set.Icc 0 (Real.pi / 2) := by
@@ -524,49 +553,6 @@ theorem section3DirectRotation_eq_cos_add_quarterTurn_sin (hacute : TauCeti.IsAc
   dsimp [D]
   abel
 
-private theorem commute_polarPartial_of_commute
-    {A M : H →L[𝕜] H} (hAM : Commute A M) (hAmod : Commute A M.modulus) :
-    Commute A M.polarPartial := by
-  rw [commute_iff_eq]
-  ext x
-  obtain ⟨p, hp, q, hq, rfl⟩ :=
-    Submodule.exists_add_mem_mem_orthogonal (K := M.polarInitial) x
-  have hJq : M.polarPartial q = 0 := M.polarPartial_eq_zero_of_mem_orthogonal hq
-  have hAqker : A q ∈ LinearMap.ker M.toLinearMap := by
-    rw [LinearMap.mem_ker]
-    have hq' : q ∈ LinearMap.ker M.toLinearMap := by
-      rwa [← M.polarInitial_orthogonal_eq_ker]
-    have hqker : M q = 0 := hq'
-    have h := congrArg (fun T : H →L[𝕜] H => T q) hAM.eq
-    simp only [mul_apply_eq_comp] at h
-    rw [hqker, map_zero] at h
-    exact h.symm
-  have hAq : A q ∈ M.polarInitialᗮ := by
-    rwa [M.polarInitial_orthogonal_eq_ker]
-  have hJAq : M.polarPartial (A q) = 0 := M.polarPartial_eq_zero_of_mem_orthogonal hAq
-  have hagree : A (M.polarPartial p) = M.polarPartial (A p) := by
-    have hclosed : IsClosed {z : M.polarInitial |
-        A (M.polarPartial z) = M.polarPartial (A z)} :=
-      isClosed_eq (by fun_prop) (by fun_prop)
-    have hgen : ∀ y : H,
-        A (M.polarPartial (M.modulusCorestrict y)) =
-          M.polarPartial (A (M.modulusCorestrict y)) := by
-      intro y
-      have hleft : A (M y) = M (A y) := by
-        have h := congrArg (fun T : H →L[𝕜] H => T y) hAM.eq
-        simpa only [mul_apply_eq_comp] using h
-      have hmodApp : A (M.modulus y) = M.modulus (A y) := by
-        have h := congrArg (fun T : H →L[𝕜] H => T y) hAmod.eq
-        simpa only [mul_apply_eq_comp] using h
-      change A (M.polarPartial (M.modulus y)) =
-        M.polarPartial (A (M.modulus y))
-      rw [M.polarPartial_apply_modulus, hmodApp, M.polarPartial_apply_modulus, hleft]
-    exact M.denseRange_modulusCorestrict.induction_on
-      (p := fun z : M.polarInitial =>
-        A (M.polarPartial z) = M.polarPartial (A z)) ⟨p, hp⟩ hclosed hgen
-  simp only [mul_apply_eq_comp, map_add, hJq, hJAq, map_zero, add_zero]
-  exact hagree
-
 /-- Proposition 3.5: `Θ` commutes with the quarter turn `J`. -/
 theorem section3AngleOperator_comm_quarterTurn (hacute : TauCeti.IsAcute U V) :
     Commute (section3AngleOperator U V) (section3QuarterTurn U V) := by
@@ -582,7 +568,7 @@ theorem section3AngleOperator_comm_quarterTurn (hacute : TauCeti.IsAcute U V) :
     rw [hmod]
     rw [section3AngleOperator]
     exact Commute.cfc_real (Commute.refl (section3SinAngleOperator U V)) Real.arcsin
-  have h := commute_polarPartial_of_commute hθD hθmod
+  have h := ContinuousLinearMap.commute_polarPartial_of_commute hθD hθmod
   simpa [D, section3QuarterTurn] using h
 
 /-! ## Eigenvectors -/

@@ -3,8 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Angle.Proposition35Infinite
-import DavisKahan.Geometry.Polar.Section3Nonacute
+import DavisKahan.Geometry.Angle.Proposition35Nonacute
 
 /-!
 # Davis--Kahan 1970, Proposition 3.5, in arbitrary Hilbert dimension
@@ -99,54 +98,15 @@ It is defined by the same polar construction as on the acute branch. -/
 noncomputable def corollary3_2_paperQuarterTurn
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     H →L[𝕜] H :=
-  (nonacuteDirectRotation U V J - section3CosAngleOperator U V).polarPartial
+  section3NonacuteQuarterTurn U V J
 
 /-- The skew part of every completed nonacute direct rotation has modulus
 exactly `sin Theta`. -/
 theorem corollary3_2_nonacute_skew_modulus
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     (nonacuteDirectRotation U V J - section3CosAngleOperator U V).modulus =
-      section3SinAngleOperator U V := by
-  let W := nonacuteDirectRotation U V J
-  let C := section3CosAngleOperator U V
-  let S := section3SinAngleOperator U V
-  let D := W - C
-  have hunit : W ∈ unitary (H →L[𝕜] H) :=
-    nonacuteDirectRotation_mem_unitary U V J
-  have hCeq := section3CosAngleOperator_eq_canonicalAbsoluteValue U V
-  have hsum0 := nonacuteDirectRotation_add_star_eq_two_absoluteValue U V J
-  have hsum : W + star W = C + C := by
-    simpa [W, C, hCeq] using hsum0
-  have hcommAbs := nonacuteDirectRotation_comm_absoluteValue U V J
-  have hWC : Commute W C := by
-    simpa [W, C, hCeq] using hcommAbs
-  have hWC' : W * C = C * W := hWC.eq
-  have hstarW : star W = C + C - W := by
-    apply eq_sub_iff_add_eq.mpr
-    simpa only [add_comm] using hsum
-  have hWstarW : (C + C - W) * W = 1 := by
-    rw [← hstarW]
-    exact Unitary.star_mul_self_of_mem hunit
-  have hpy := section3Sin_sq_add_cos_sq U V
-  have hpy' : S * S + C * C = 1 := by
-    simpa [S, C] using hpy
-  have hCsa : star C = C :=
-    (cfc_predicate Real.cos (section3AngleOperator U V)).star_eq
-  have hgram : star D * D = S * S := by
-    dsimp [D]
-    rw [star_sub, hCsa, hstarW]
-    calc
-      (C + C - W - C) * (W - C) = (C + C - W) * W - C * C := by
-        noncomm_ring [hWC']
-      _ = 1 - C * C := by rw [hWstarW]
-      _ = S * S := (eq_sub_of_add_eq hpy').symm
-  have hS0 : 0 ≤ S := section3SinAngleOperator_nonneg U V
-  have hmod : S = D.modulus := by
-    refine ContinuousLinearMap.eq_modulus_of_nonneg_of_mul_self_eq hS0 ?_
-    have hgram' : S * S = star D * D := hgram.symm
-    rw [ContinuousLinearMap.star_eq_adjoint] at hgram'
-    simpa only [ContinuousLinearMap.mul_def] using hgram'
-  exact hmod.symm
+      section3SinAngleOperator U V :=
+  modulus_nonacuteDirectRotation_sub_cosine U V J
 
 /-- The full nonacute polar resolution from the paper: `W = cos Theta + J sin Theta`. -/
 theorem corollary3_2_nonacute_directRotation_resolution
@@ -154,16 +114,8 @@ theorem corollary3_2_nonacute_directRotation_resolution
     nonacuteDirectRotation U V J =
       section3CosAngleOperator U V +
         corollary3_2_paperQuarterTurn U V J ∘L section3SinAngleOperator U V := by
-  let D := nonacuteDirectRotation U V J - section3CosAngleOperator U V
-  have hmod := corollary3_2_nonacute_skew_modulus U V J
-  have hpolar := D.polarPartial_comp_modulus
-  have hD : corollary3_2_paperQuarterTurn U V J ∘L
-      section3SinAngleOperator U V = D := by
-    rw [corollary3_2_paperQuarterTurn, ← hmod]
-    exact hpolar
-  rw [hD]
-  dsimp [D]
-  abel
+  simpa [corollary3_2_paperQuarterTurn] using
+    nonacuteDirectRotation_eq_cos_add_quarterTurn_sin U V J
 
 /-- Reversing the ordered pair and the crossed-defect choice negates the paper's
 quarter turn. -/
@@ -171,7 +123,8 @@ theorem corollary3_2_paperQuarterTurn_symm
     (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
     corollary3_2_paperQuarterTurn V U (swapCrossedDefectEquiv U V J) =
       -corollary3_2_paperQuarterTurn U V J := by
-  rw [corollary3_2_paperQuarterTurn, corollary3_2_paperQuarterTurn]
+  rw [corollary3_2_paperQuarterTurn, corollary3_2_paperQuarterTurn,
+    section3NonacuteQuarterTurn, section3NonacuteQuarterTurn]
   have hW := nonacuteDirectRotation_swap U V J
   have hC := section3CosAngleOperator_symm U V
   have hsum0 := nonacuteDirectRotation_add_star_eq_two_absoluteValue U V J
