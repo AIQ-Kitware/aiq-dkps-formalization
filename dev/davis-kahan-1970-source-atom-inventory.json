@@ -13,18 +13,31 @@
     "Compared the distributable specification against the public 46-page PDF in source order.",
     "Used the non-distributable modernized transcription only as an auxiliary readability aid for formula recovery; it is not a repository or certificate dependency.",
     "Required every numbered equation, named source result, counterexample, scope/sharpness claim, and mixed mathematical/open-question passage to have an explicit source atom or parent atom.",
-    "Classified every source atom against the 29-result completion boundary and recorded the counted result IDs, if any, that each atom supports; generic exclusion without a reason code is not accepted."
+    "Classified every source atom against the 29-result completion boundary and recorded the counted result IDs, if any, that each atom supports; generic exclusion without a reason code is not accepted.",
+    "RE-AUDITED 2026-08-12 for nonlocal source semantics: the Section 1 norm-existence/vacuity convention, the Proposition 3.2 remark's finite-dimensional automatic case, the Section 3 angle-operator/J_0 construction, and the Section 6 whole-space assembly step of the tangent proof were added to the distributable specification and inventoried. These are source-fidelity and interpretation evidence; the 29-result denominator is unchanged."
   ],
+  "nonlocal_semantics_reaudit_2026_08_12": {
+    "reason": "The printed Section 2 tan Theta theorem is not locally self-contained: its faithful reading depends on the paper-wide vacuity convention and on the standing condition (3.5) introduced only in Section 3. That dependency was previously visible only in prose review notes.",
+    "added_atoms": [
+      "S1-block-residual.norm-existence-vacuity-convention",
+      "DK-3.2-prop.finite-crossing-automatic",
+      "DK-3.1-thm.angle-operator-partial-isometry",
+      "DK-6.3-thm.tangent-proof-temporary-boundedness",
+      "DK-6.3-thm.ambient-wholeSpace-assembly"
+    ],
+    "interpretation_support_link": "Atoms carrying an `interpretation_support` block are reverse-linked to the counted result whose nonlocal reading they support. That link is deliberately separate from `formalization_result_ids`, which remains the printed-statement boundary: an interpretation-support atom is NOT part of the counted result statement.",
+    "denominator_effect": "none; the completion denominator remains the 29 established results"
+  },
   "coverage_summary": {
     "source_blocks": 50,
     "numbered_equation_atoms": 64,
-    "total_atoms": 267,
+    "total_atoms": 272,
     "formalization_result_obligations": 29,
     "result_support_atoms": 68,
-    "fidelity_only_atoms": 199,
+    "fidelity_only_atoms": 204,
     "open_question_atoms": 5,
     "restored_atoms_this_audit": 7,
-    "boundary_classified_atoms": 267,
+    "boundary_classified_atoms": 272,
     "boundary_reason_counts": {
       "background_theory_not_designated_result": 2,
       "counted_result_hypothesis": 10,
@@ -37,20 +50,22 @@
       "historical_knowledge_state": 1,
       "introductory_background_not_designated_result": 26,
       "open_question": 5,
+      "paper_wide_semantic_convention_not_result": 1,
       "post_result_consequence_not_in_printed_statement": 4,
       "post_result_interpretation_not_result": 1,
-      "post_result_scope_remark_not_in_printed_statement": 3,
+      "post_result_scope_remark_not_in_printed_statement": 4,
       "pre_result_motivation_not_result": 1,
-      "pre_result_setup_not_in_printed_statement": 3,
+      "pre_result_setup_not_in_printed_statement": 4,
       "proof_detail_not_in_printed_statement": 4,
-      "proof_or_derivation_not_result": 65,
+      "proof_or_derivation_not_result": 67,
       "remark_or_example_not_result": 6,
       "restatement_of_counted_result": 6,
       "section10_motivation_not_result": 3,
       "section9_worked_example_not_result": 43,
       "section_setup_not_result": 2,
       "sharpness_commentary_not_designated_result": 6
-    }
+    },
+    "nonlocal_interpretation_support_atoms": 11
   },
   "restored_source_specification_items": [
     {
@@ -96,8 +111,31 @@
       "formalization_result_ids": []
     },
     {
-      "id": "S1-block-residual.reducing-projector-setup",
+      "id": "S1-block-residual.norm-existence-vacuity-convention",
       "order": 2,
+      "parent_claim_id": "S1-block-residual",
+      "section": "1",
+      "kind": "scope",
+      "source_role": "mathematical_assertion",
+      "source_locator": "Section 1, paper-wide convention stated with the bounded/unbounded scope sentences preceding (1.1).",
+      "summary": "Paper-wide convention: some of the paper's results are vacuous when certain norms occurring in them fail to exist, and the source will not repeat that qualification at the individual statements.",
+      "present_in_distributable_spec": true,
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "A global semantic reading convention for the paper's statements, not one of the four Section 2 headline theorems or a named theorem/proposition/lemma/corollary. It is not a completion obligation, but it is load-bearing evidence for how the printed Section 2 tangent theorem is to be read when a displayed norm does not exist.",
+      "formalization_role_reason_code": "paper_wide_semantic_convention_not_result",
+      "formalization_result_ids": [],
+      "interpretation_support": {
+        "result_ids": [
+          "S2-tan-theta"
+        ],
+        "role": "paper_wide_convention",
+        "note": "Supplies the source's own semantics for a printed conclusion whose displayed norm need not exist; the ambient tangent conclusion is exactly such a case when the perturbed crossing subspace is nonzero."
+      }
+    },
+    {
+      "id": "S1-block-residual.reducing-projector-setup",
+      "order": 3,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "construction",
@@ -113,7 +151,7 @@
     },
     {
       "id": "S1-block-residual.q-reduces-perturbed",
-      "order": 3,
+      "order": 4,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "construction",
@@ -129,7 +167,7 @@
     },
     {
       "id": "S1-block-residual.no-spectral-projector-assumption",
-      "order": 4,
+      "order": 5,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "scope",
@@ -145,7 +183,7 @@
     },
     {
       "id": "S1-block-residual.unitary-intertwiner-dimension-criterion",
-      "order": 5,
+      "order": 6,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "assertion",
@@ -161,7 +199,7 @@
     },
     {
       "id": "S1-block-residual.within-subspace-coordinate-freedom",
-      "order": 6,
+      "order": 7,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "assertion",
@@ -177,7 +215,7 @@
     },
     {
       "id": "S1-block-residual.residual-inherited-block",
-      "order": 7,
+      "order": 8,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "identity",
@@ -193,7 +231,7 @@
     },
     {
       "id": "S1-block-residual.rayleigh-ritz-h0-zero",
-      "order": 8,
+      "order": 9,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "identity",
@@ -209,7 +247,7 @@
     },
     {
       "id": "S1-block-residual.residual-gram-split",
-      "order": 9,
+      "order": 10,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "identity",
@@ -225,7 +263,7 @@
     },
     {
       "id": "S1-block-residual.rayleigh-ritz-minimizes-residual",
-      "order": 10,
+      "order": 11,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "extremal",
@@ -241,7 +279,7 @@
     },
     {
       "id": "S1-block-residual.one-sided-vs-strong-offdiagonal",
-      "order": 11,
+      "order": 12,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "scope",
@@ -257,7 +295,7 @@
     },
     {
       "id": "S1-block-residual.residual-eigenvalue-sum",
-      "order": 12,
+      "order": 13,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "consequence",
@@ -273,7 +311,7 @@
     },
     {
       "id": "S1-block-residual.residual-eigenvalue-pointwise",
-      "order": 13,
+      "order": 14,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "consequence",
@@ -289,7 +327,7 @@
     },
     {
       "id": "S1-block-residual.eq-1-1",
-      "order": 14,
+      "order": 15,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "numbered-equation",
@@ -305,7 +343,7 @@
     },
     {
       "id": "S1-block-residual.eq-1-2",
-      "order": 15,
+      "order": 16,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "numbered-equation",
@@ -321,7 +359,7 @@
     },
     {
       "id": "S1-block-residual.eq-1-3",
-      "order": 16,
+      "order": 17,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "numbered-equation",
@@ -337,7 +375,7 @@
     },
     {
       "id": "S1-block-residual.eq-1-4",
-      "order": 17,
+      "order": 18,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "numbered-equation",
@@ -353,7 +391,7 @@
     },
     {
       "id": "S1-block-residual.eq-1-5",
-      "order": 18,
+      "order": 19,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "numbered-equation",
@@ -365,11 +403,18 @@
       "formalization_role": "proof_only",
       "formalization_role_reason": "This atom occurs in a proof, derivation, or proof-only equation rather than in a counted result statement. Source fidelity preserves it, but 100% does not require a separate Lean theorem for it.",
       "formalization_role_reason_code": "proof_or_derivation_not_result",
-      "formalization_result_ids": []
+      "formalization_result_ids": [],
+      "interpretation_support": {
+        "result_ids": [
+          "S2-tan-theta"
+        ],
+        "role": "related_dimension_condition",
+        "note": "The matching-dimension condition (1.5) is the only dimension condition available when the Section 2 tangent theorem is printed; the Proposition 3.2 remark shows it does not imply (3.5)."
+      }
     },
     {
       "id": "S1-block-residual.eq-1-6",
-      "order": 19,
+      "order": 20,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "numbered-equation",
@@ -385,7 +430,7 @@
     },
     {
       "id": "S1-block-residual.eq-1-7",
-      "order": 20,
+      "order": 21,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "numbered-equation",
@@ -401,7 +446,7 @@
     },
     {
       "id": "S1-block-residual.eq-1-8",
-      "order": 21,
+      "order": 22,
       "parent_claim_id": "S1-block-residual",
       "section": "1",
       "kind": "numbered-equation",
@@ -417,7 +462,7 @@
     },
     {
       "id": "S1-ui-norms.ui-rank-one-normalization",
-      "order": 22,
+      "order": 23,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "definition",
@@ -433,7 +478,7 @@
     },
     {
       "id": "S1-ui-norms.ui-contraction-monotonicity",
-      "order": 23,
+      "order": 24,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "assertion",
@@ -449,7 +494,7 @@
     },
     {
       "id": "S1-ui-norms.singular-minimax-noncompact-scope",
-      "order": 24,
+      "order": 25,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "scope",
@@ -465,7 +510,7 @@
     },
     {
       "id": "S1-ui-norms.hilbert-schmidt-identity",
-      "order": 25,
+      "order": 26,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "definition",
@@ -481,7 +526,7 @@
     },
     {
       "id": "S1-ui-norms.fan-dominance",
-      "order": 26,
+      "order": 27,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "theorem",
@@ -497,7 +542,7 @@
     },
     {
       "id": "S1-ui-norms.eq1-13-variational",
-      "order": 27,
+      "order": 28,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "variational",
@@ -513,7 +558,7 @@
     },
     {
       "id": "S1-ui-norms.cosine-law",
-      "order": 28,
+      "order": 29,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "identity",
@@ -529,7 +574,7 @@
     },
     {
       "id": "S1-ui-norms.s0-singular-values",
-      "order": 29,
+      "order": 30,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "assertion",
@@ -545,23 +590,30 @@
     },
     {
       "id": "S1-ui-norms.ambient-angle-doubling",
-      "order": 30,
+      "order": 31,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "assertion",
       "source_role": "mathematical_assertion",
       "source_locator": "Section 1, equations (1.9)--(1.18).",
-      "summary": "Nonzero angle data of the ambient angle operator occur twice, once from each side.",
+      "summary": "Section 1 states, in anticipation of the Section 3 direct-rotation construction and without restating a dimension hypothesis, that the nonzero angle data of the ambient angle operator are those of Theta_0 occurring twice, once from each side.",
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This is Section 1 introductory setup/background or an introductory consequence, not one of the four Section 2 headline theorems or a named theorem/proposition/lemma/corollary counted by the project.",
+      "formalization_role_reason": "Section 1 background stated in anticipation of the Section 3 direct-rotation construction, not a designated result. It is recorded as interpretation evidence because the same infinite-dimensional configuration that makes the ambient tangent norm fail to exist also qualifies this doubling sentence.",
       "formalization_role_reason_code": "introductory_background_not_designated_result",
-      "formalization_result_ids": []
+      "formalization_result_ids": [],
+      "interpretation_support": {
+        "result_ids": [
+          "S2-tan-theta"
+        ],
+        "role": "related_unqualified_claim",
+        "note": "Section 1 asserts the doubling of the nonzero ambient angle data without a dimension hypothesis; the same bilateral-shift configuration qualifies this sentence, so the omitted qualification is not peculiar to the tangent theorem."
+      }
     },
     {
       "id": "S1-ui-norms.directed-sine-norm",
-      "order": 31,
+      "order": 32,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "identity",
@@ -577,7 +629,7 @@
     },
     {
       "id": "S1-ui-norms.ambient-sine-norm",
-      "order": 32,
+      "order": 33,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "identity",
@@ -593,7 +645,7 @@
     },
     {
       "id": "S1-ui-norms.operator-largest-one-sided-distance",
-      "order": 33,
+      "order": 34,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "identity",
@@ -609,7 +661,7 @@
     },
     {
       "id": "S1-ui-norms.closest-unit-vector-distance",
-      "order": 34,
+      "order": 35,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "identity",
@@ -625,7 +677,7 @@
     },
     {
       "id": "S1-ui-norms.j-block-form",
-      "order": 35,
+      "order": 36,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "construction",
@@ -641,7 +693,7 @@
     },
     {
       "id": "S1-ui-norms.direct-rotation-exponential",
-      "order": 36,
+      "order": 37,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "identity",
@@ -657,7 +709,7 @@
     },
     {
       "id": "S1-ui-norms.eq-1-9",
-      "order": 37,
+      "order": 38,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "numbered-equation",
@@ -673,7 +725,7 @@
     },
     {
       "id": "S1-ui-norms.eq-1-10",
-      "order": 38,
+      "order": 39,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "numbered-equation",
@@ -689,7 +741,7 @@
     },
     {
       "id": "S1-ui-norms.eq-1-11",
-      "order": 39,
+      "order": 40,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "numbered-equation",
@@ -705,7 +757,7 @@
     },
     {
       "id": "S1-ui-norms.eq-1-12",
-      "order": 40,
+      "order": 41,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "numbered-equation",
@@ -721,7 +773,7 @@
     },
     {
       "id": "S1-ui-norms.eq-1-13",
-      "order": 41,
+      "order": 42,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "numbered-equation",
@@ -737,7 +789,7 @@
     },
     {
       "id": "S1-ui-norms.eq-1-14",
-      "order": 42,
+      "order": 43,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "numbered-equation",
@@ -753,7 +805,7 @@
     },
     {
       "id": "S1-ui-norms.eq-1-15",
-      "order": 43,
+      "order": 44,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "numbered-equation",
@@ -769,7 +821,7 @@
     },
     {
       "id": "S1-ui-norms.eq-1-16",
-      "order": 44,
+      "order": 45,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "numbered-equation",
@@ -785,7 +837,7 @@
     },
     {
       "id": "S1-ui-norms.eq-1-17",
-      "order": 45,
+      "order": 46,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "numbered-equation",
@@ -801,7 +853,7 @@
     },
     {
       "id": "S1-ui-norms.eq-1-18",
-      "order": 46,
+      "order": 47,
       "parent_claim_id": "S1-ui-norms",
       "section": "1",
       "kind": "numbered-equation",
@@ -817,7 +869,7 @@
     },
     {
       "id": "S2-sin-theta.family-distinctness",
-      "order": 47,
+      "order": 48,
       "parent_claim_id": "S2-sin-theta",
       "section": "2",
       "kind": "scope",
@@ -833,7 +885,7 @@
     },
     {
       "id": "S2-sin-theta.ui-norm-scope",
-      "order": 48,
+      "order": 49,
       "parent_claim_id": "S2-sin-theta",
       "section": "2",
       "kind": "scope",
@@ -854,7 +906,7 @@
     },
     {
       "id": "S2-sin-theta.gap-hypothesis",
-      "order": 49,
+      "order": 50,
       "parent_claim_id": "S2-sin-theta",
       "section": "2",
       "kind": "hypothesis",
@@ -872,7 +924,7 @@
     },
     {
       "id": "S2-sin-theta.directed-conclusion",
-      "order": 50,
+      "order": 51,
       "parent_claim_id": "S2-sin-theta",
       "section": "2",
       "kind": "theorem",
@@ -890,7 +942,7 @@
     },
     {
       "id": "S2-tan-theta.ordered-gap-hypothesis",
-      "order": 51,
+      "order": 52,
       "parent_claim_id": "S2-tan-theta",
       "section": "2",
       "kind": "hypothesis",
@@ -908,7 +960,7 @@
     },
     {
       "id": "S2-tan-theta.rayleigh-ritz-hypothesis",
-      "order": 52,
+      "order": 53,
       "parent_claim_id": "S2-tan-theta",
       "section": "2",
       "kind": "hypothesis",
@@ -926,7 +978,7 @@
     },
     {
       "id": "S2-tan-theta.directed-conclusion",
-      "order": 53,
+      "order": 54,
       "parent_claim_id": "S2-tan-theta",
       "section": "2",
       "kind": "theorem",
@@ -944,7 +996,7 @@
     },
     {
       "id": "S2-tan-theta.ambient-conclusion",
-      "order": 54,
+      "order": 55,
       "parent_claim_id": "S2-tan-theta",
       "section": "2",
       "kind": "theorem",
@@ -958,11 +1010,18 @@
       "formalization_role_reason_code": "counted_result_statement",
       "formalization_result_ids": [
         "S2-tan-theta"
-      ]
+      ],
+      "interpretation_support": {
+        "result_ids": [
+          "S2-tan-theta"
+        ],
+        "role": "printed_statement_clause",
+        "note": "This is the printed clause whose faithful reading depends on nonlocal source material; the directed conclusion is unaffected."
+      }
     },
     {
       "id": "S2-sin-two-theta.gap-hypothesis",
-      "order": 55,
+      "order": 56,
       "parent_claim_id": "S2-sin-two-theta",
       "section": "2",
       "kind": "hypothesis",
@@ -980,7 +1039,7 @@
     },
     {
       "id": "S2-sin-two-theta.directed-conclusion",
-      "order": 56,
+      "order": 57,
       "parent_claim_id": "S2-sin-two-theta",
       "section": "2",
       "kind": "theorem",
@@ -998,7 +1057,7 @@
     },
     {
       "id": "S2-sin-two-theta.ambient-conclusion",
-      "order": 57,
+      "order": 58,
       "parent_claim_id": "S2-sin-two-theta",
       "section": "2",
       "kind": "theorem",
@@ -1016,7 +1075,7 @@
     },
     {
       "id": "S2-tan-two-theta.ordered-gap-hypothesis",
-      "order": 58,
+      "order": 59,
       "parent_claim_id": "S2-tan-two-theta",
       "section": "2",
       "kind": "hypothesis",
@@ -1034,7 +1093,7 @@
     },
     {
       "id": "S2-tan-two-theta.strong-offdiagonal-hypothesis",
-      "order": 59,
+      "order": 60,
       "parent_claim_id": "S2-tan-two-theta",
       "section": "2",
       "kind": "hypothesis",
@@ -1052,7 +1111,7 @@
     },
     {
       "id": "S2-tan-two-theta.no-extra-pole-hypothesis",
-      "order": 60,
+      "order": 61,
       "parent_claim_id": "S2-tan-two-theta",
       "section": "2",
       "kind": "scope",
@@ -1070,7 +1129,7 @@
     },
     {
       "id": "S2-tan-two-theta.directed-conclusion",
-      "order": 61,
+      "order": 62,
       "parent_claim_id": "S2-tan-two-theta",
       "section": "2",
       "kind": "theorem",
@@ -1088,7 +1147,7 @@
     },
     {
       "id": "S2-tan-two-theta.ambient-conclusion",
-      "order": 62,
+      "order": 63,
       "parent_claim_id": "S2-tan-two-theta",
       "section": "2",
       "kind": "theorem",
@@ -1106,7 +1165,7 @@
     },
     {
       "id": "S2-tan-two-theta.pole-exclusion-derived",
-      "order": 63,
+      "order": 64,
       "parent_claim_id": "S2-tan-two-theta",
       "section": "2",
       "kind": "proof-claim",
@@ -1122,7 +1181,7 @@
     },
     {
       "id": "S2-sharpness.constants-best-possible",
-      "order": 64,
+      "order": 65,
       "parent_claim_id": "S2-sharpness",
       "section": "2",
       "kind": "sharpness",
@@ -1138,7 +1197,7 @@
     },
     {
       "id": "S2-sharpness.two-dimensional-equality",
-      "order": 65,
+      "order": 66,
       "parent_claim_id": "S2-sharpness",
       "section": "2",
       "kind": "sharpness",
@@ -1154,7 +1213,7 @@
     },
     {
       "id": "S2-sharpness.direct-sum-simultaneous-equality",
-      "order": 66,
+      "order": 67,
       "parent_claim_id": "S2-sharpness",
       "section": "2",
       "kind": "sharpness",
@@ -1170,7 +1229,7 @@
     },
     {
       "id": "S2-sharpness.first-order-asymptotic",
-      "order": 67,
+      "order": 68,
       "parent_claim_id": "S2-sharpness",
       "section": "2",
       "kind": "sharpness",
@@ -1186,7 +1245,7 @@
     },
     {
       "id": "S2-unbounded-scope.infinite-dimensional-scope",
-      "order": 68,
+      "order": 69,
       "parent_claim_id": "S2-unbounded-scope",
       "section": "2",
       "kind": "scope",
@@ -1207,7 +1266,7 @@
     },
     {
       "id": "S2-unbounded-scope.arbitrary-ui-scope",
-      "order": 69,
+      "order": 70,
       "parent_claim_id": "S2-unbounded-scope",
       "section": "2",
       "kind": "scope",
@@ -1228,7 +1287,7 @@
     },
     {
       "id": "S2-unbounded-scope.unbounded-selfadjoint-scope",
-      "order": 70,
+      "order": 71,
       "parent_claim_id": "S2-unbounded-scope",
       "section": "2",
       "kind": "scope",
@@ -1249,7 +1308,7 @@
     },
     {
       "id": "S2-unbounded-scope.bounded-residual-needed",
-      "order": 71,
+      "order": 72,
       "parent_claim_id": "S2-unbounded-scope",
       "section": "2",
       "kind": "scope",
@@ -1270,7 +1329,7 @@
     },
     {
       "id": "S2-unbounded-scope.half-infinite-gap-intervals",
-      "order": 72,
+      "order": 73,
       "parent_claim_id": "S2-unbounded-scope",
       "section": "2",
       "kind": "scope",
@@ -1291,7 +1350,7 @@
     },
     {
       "id": "DK-3.1-def.s0-s1-singular-values",
-      "order": 73,
+      "order": 74,
       "parent_claim_id": "DK-3.1-def",
       "section": "3",
       "kind": "assertion",
@@ -1307,7 +1366,7 @@
     },
     {
       "id": "DK-3.1-def.direct-rotation-definition",
-      "order": 74,
+      "order": 75,
       "parent_claim_id": "DK-3.1-def",
       "section": "3",
       "kind": "definition",
@@ -1323,7 +1382,7 @@
     },
     {
       "id": "DK-3.1-def.u-notation",
-      "order": 75,
+      "order": 76,
       "parent_claim_id": "DK-3.1-def",
       "section": "3",
       "kind": "definition",
@@ -1339,7 +1398,7 @@
     },
     {
       "id": "DK-3.1-def.eq-3-1",
-      "order": 76,
+      "order": 77,
       "parent_claim_id": "DK-3.1-def",
       "section": "3",
       "kind": "numbered-equation",
@@ -1355,7 +1414,7 @@
     },
     {
       "id": "DK-3.1-def.eq-3-2",
-      "order": 77,
+      "order": 78,
       "parent_claim_id": "DK-3.1-def",
       "section": "3",
       "kind": "numbered-equation",
@@ -1371,7 +1430,7 @@
     },
     {
       "id": "DK-3.1-def.eq-3-3",
-      "order": 78,
+      "order": 79,
       "parent_claim_id": "DK-3.1-def",
       "section": "3",
       "kind": "numbered-equation",
@@ -1387,7 +1446,7 @@
     },
     {
       "id": "DK-3.1-def.eq-3-4",
-      "order": 79,
+      "order": 80,
       "parent_claim_id": "DK-3.1-def",
       "section": "3",
       "kind": "numbered-equation",
@@ -1403,7 +1462,7 @@
     },
     {
       "id": "DK-3.2-def.acute-case-definition",
-      "order": 80,
+      "order": 81,
       "parent_claim_id": "DK-3.2-def",
       "section": "3",
       "kind": "definition",
@@ -1419,7 +1478,7 @@
     },
     {
       "id": "DK-3.1-prop.existence",
-      "order": 81,
+      "order": 82,
       "parent_claim_id": "DK-3.1-prop",
       "section": "3",
       "kind": "theorem",
@@ -1437,7 +1496,7 @@
     },
     {
       "id": "DK-3.1-prop.uniqueness",
-      "order": 82,
+      "order": 83,
       "parent_claim_id": "DK-3.1-prop",
       "section": "3",
       "kind": "theorem",
@@ -1455,7 +1514,7 @@
     },
     {
       "id": "DK-3.1-prop.positive-diagonal-characterization",
-      "order": 83,
+      "order": 84,
       "parent_claim_id": "DK-3.1-prop",
       "section": "3",
       "kind": "theorem",
@@ -1473,7 +1532,7 @@
     },
     {
       "id": "DK-3.2-prop.existence-iff-crossing-dimensions",
-      "order": 84,
+      "order": 85,
       "parent_claim_id": "DK-3.2-prop",
       "section": "3",
       "kind": "theorem",
@@ -1491,7 +1550,7 @@
     },
     {
       "id": "DK-3.2-prop.nonuniqueness",
-      "order": 85,
+      "order": 86,
       "parent_claim_id": "DK-3.2-prop",
       "section": "3",
       "kind": "theorem",
@@ -1509,7 +1568,7 @@
     },
     {
       "id": "DK-3.2-prop.crossing-square-minus-one",
-      "order": 86,
+      "order": 87,
       "parent_claim_id": "DK-3.2-prop",
       "section": "3",
       "kind": "theorem",
@@ -1524,24 +1583,54 @@
       "formalization_result_ids": []
     },
     {
+      "id": "DK-3.2-prop.finite-crossing-automatic",
+      "order": 88,
+      "parent_claim_id": "DK-3.2-prop",
+      "section": "3",
+      "kind": "scope",
+      "source_role": "mathematical_assertion",
+      "source_locator": "Remark following Proposition 3.2 and equation (3.5).",
+      "summary": "Under the assumed (1.5), condition (3.5) holds automatically whenever either dim P-space or dim P-perp-space is finite.",
+      "present_in_distributable_spec": true,
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "A scope remark attached to Proposition 3.2 rather than part of its printed statement. It records exactly when the crossed-defect condition is automatic, and therefore delimits the configurations in which the Section 2 ambient tangent reading is at issue at all.",
+      "formalization_role_reason_code": "post_result_scope_remark_not_in_printed_statement",
+      "formalization_result_ids": [],
+      "interpretation_support": {
+        "result_ids": [
+          "S2-tan-theta"
+        ],
+        "role": "automatic_case",
+        "note": "Shows the interpretive difficulty is genuinely infinite-dimensional: with either summand finite-dimensional, (1.5) already gives (3.5)."
+      }
+    },
+    {
       "id": "DK-3.2-prop.bilateral-shift-counterexample",
-      "order": 87,
+      "order": 89,
       "parent_claim_id": "DK-3.2-prop",
       "section": "3",
       "kind": "counterexample",
       "source_role": "mathematical_assertion",
       "source_locator": "Proposition 3.2 and equation (3.5).",
-      "summary": "The bilateral-shift example shows the basic P/Q dimension conditions do not imply the crossing-dimension condition.",
+      "summary": "The bilateral-shift example on two-sided square-summable sequences satisfies (1.5) with nested P-space and Q-space, has crossing subspaces of dimensions 1 and 0, and therefore fails (3.5): the matching-dimension conditions do not imply the crossing-dimension condition in infinite dimension.",
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This atom belongs to a remark, example, or counterexample outside a counted result statement. It is retained for fidelity but is not a separate result obligation.",
+      "formalization_role_reason": "The bilateral-shift example demonstrates that the matching-dimension conditions (1.5) do not imply the crossed-dimension condition (3.5) in infinite dimension. It is a remark/example attached to Proposition 3.2 rather than a designated result. It is not a counterexample to any counted result; its role in this repository is to show that the qualification omitted from the printed Section 2 tangent statement is mathematically substantive.",
       "formalization_role_reason_code": "remark_or_example_not_result",
-      "formalization_result_ids": []
+      "formalization_result_ids": [],
+      "interpretation_support": {
+        "result_ids": [
+          "S2-tan-theta"
+        ],
+        "role": "scope_separating_example",
+        "note": "Proves that (1.5) does not imply (3.5) in infinite dimension, hence that the omitted qualification is substantive rather than cosmetic."
+      }
     },
     {
       "id": "DK-3.2-prop.eq-3-5",
-      "order": 88,
+      "order": 90,
       "parent_claim_id": "DK-3.2-prop",
       "section": "3",
       "kind": "numbered-equation",
@@ -1555,11 +1644,18 @@
       "formalization_role_reason_code": "counted_result_statement",
       "formalization_result_ids": [
         "DK-3.2-prop"
-      ]
+      ],
+      "interpretation_support": {
+        "result_ids": [
+          "S2-tan-theta"
+        ],
+        "role": "omitted_qualification",
+        "note": "Equation (3.5) is exactly the equality of the two crossing-subspace dimensions, i.e. of the right-angle parts of Theta_0 and Theta_1. It is the qualification the Section 2 statement does not carry."
+      }
     },
     {
       "id": "S3-standing-scope.crossed-dimension-standing-assumption",
-      "order": 89,
+      "order": 91,
       "parent_claim_id": "S3-standing-scope",
       "section": "3",
       "kind": "scope",
@@ -1574,11 +1670,18 @@
       "formalization_result_ids": [
         "DK-3.4-prop",
         "DK-8.2-thm"
-      ]
+      ],
+      "interpretation_support": {
+        "result_ids": [
+          "S2-tan-theta"
+        ],
+        "role": "later_standing_assumption",
+        "note": "From immediately after Proposition 3.2 onward, (3.5) as well as (1.5) is assumed except where the contrary is stated; the Section 6 proof of the printed tangent theorem is inside that scope."
+      }
     },
     {
       "id": "DK-3.3-prop.reflection-conjugacy",
-      "order": 90,
+      "order": 92,
       "parent_claim_id": "DK-3.3-prop",
       "section": "3",
       "kind": "identity",
@@ -1594,7 +1697,7 @@
     },
     {
       "id": "DK-3.3-prop.principal-square-root",
-      "order": 91,
+      "order": 93,
       "parent_claim_id": "DK-3.3-prop",
       "section": "3",
       "kind": "theorem",
@@ -1612,7 +1715,7 @@
     },
     {
       "id": "DK-3.3-prop.square-root-converse",
-      "order": 92,
+      "order": 94,
       "parent_claim_id": "DK-3.3-prop",
       "section": "3",
       "kind": "theorem",
@@ -1630,7 +1733,7 @@
     },
     {
       "id": "DK-3.3-prop.eq-3-6",
-      "order": 93,
+      "order": 95,
       "parent_claim_id": "DK-3.3-prop",
       "section": "3",
       "kind": "numbered-equation",
@@ -1646,7 +1749,7 @@
     },
     {
       "id": "DK-3.3-prop.eq-3-7",
-      "order": 94,
+      "order": 96,
       "parent_claim_id": "DK-3.3-prop",
       "section": "3",
       "kind": "numbered-equation",
@@ -1662,7 +1765,7 @@
     },
     {
       "id": "DK-3.3-prop.eq-3-8",
-      "order": 95,
+      "order": 97,
       "parent_claim_id": "DK-3.3-prop",
       "section": "3",
       "kind": "numbered-equation",
@@ -1678,7 +1781,7 @@
     },
     {
       "id": "DK-3.4-prop.u-square-direct-rotation",
-      "order": 96,
+      "order": 98,
       "parent_claim_id": "DK-3.4-prop",
       "section": "3",
       "kind": "theorem",
@@ -1695,8 +1798,31 @@
       ]
     },
     {
+      "id": "DK-3.1-thm.angle-operator-partial-isometry",
+      "order": 99,
+      "parent_claim_id": "DK-3.1-thm",
+      "section": "3",
+      "kind": "construction",
+      "source_role": "mathematical_assertion",
+      "source_locator": "Section 3, the angle-operator/polar passage preceding Theorem 3.1, under the standing conventions fixed after Proposition 3.2.",
+      "summary": "For the direct rotation, Theta_j = arccos C_j, the two angle operators are isometric-equivalent apart from the dimensionalities of their null spaces, and the polar resolution S_0 = J_0 sin Theta_0 gives a partial isometry J_0 of the closed range of Theta_0 onto that of Theta_1 with J_0 Theta_0 = Theta_1 J_0.",
+      "present_in_distributable_spec": true,
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "non_result",
+      "formalization_role_reason": "Section 3 setup preceding the printed Theorem 3.1 statement rather than part of it. It is recorded because the Section 6 ambient tangent proof compares its two corners through exactly this J_0, which exists as described only in the direct-rotation setting fixed by the standing (3.5).",
+      "formalization_role_reason_code": "pre_result_setup_not_in_printed_statement",
+      "formalization_result_ids": [],
+      "interpretation_support": {
+        "result_ids": [
+          "S2-tan-theta"
+        ],
+        "role": "proof_context_dependency",
+        "note": "The equinormality of the two ambient tangent corners is a property of the direct-rotation partial isometry J_0, constructed under the standing crossed-defect convention."
+      }
+    },
+    {
       "id": "DK-3.1-thm.complete-invariant",
-      "order": 97,
+      "order": 100,
       "parent_claim_id": "DK-3.1-thm",
       "section": "3",
       "kind": "theorem",
@@ -1714,7 +1840,7 @@
     },
     {
       "id": "DK-3.1-thm.converse-angle-data",
-      "order": 98,
+      "order": 101,
       "parent_claim_id": "DK-3.1-thm",
       "section": "3",
       "kind": "theorem",
@@ -1732,7 +1858,7 @@
     },
     {
       "id": "DK-3.1-thm.reconstruction",
-      "order": 99,
+      "order": 102,
       "parent_claim_id": "DK-3.1-thm",
       "section": "3",
       "kind": "construction",
@@ -1748,7 +1874,7 @@
     },
     {
       "id": "DK-3.1-cor.compact-complete-invariants",
-      "order": 100,
+      "order": 103,
       "parent_claim_id": "DK-3.1-cor",
       "section": "3",
       "kind": "theorem",
@@ -1766,7 +1892,7 @@
     },
     {
       "id": "DK-3.1-cor.allowed-angle-sequence",
-      "order": 101,
+      "order": 104,
       "parent_claim_id": "DK-3.1-cor",
       "section": "3",
       "kind": "theorem",
@@ -1784,7 +1910,7 @@
     },
     {
       "id": "DK-3.1-cor.theta1-match",
-      "order": 102,
+      "order": 105,
       "parent_claim_id": "DK-3.1-cor",
       "section": "3",
       "kind": "theorem",
@@ -1802,7 +1928,7 @@
     },
     {
       "id": "DK-3.5-prop.commutation",
-      "order": 103,
+      "order": 106,
       "parent_claim_id": "DK-3.5-prop",
       "section": "3",
       "kind": "theorem",
@@ -1820,7 +1946,7 @@
     },
     {
       "id": "DK-3.5-prop.direct-rotation-exponential",
-      "order": 104,
+      "order": 107,
       "parent_claim_id": "DK-3.5-prop",
       "section": "3",
       "kind": "identity",
@@ -1836,7 +1962,7 @@
     },
     {
       "id": "DK-3.5-prop.cos-square-projector",
-      "order": 105,
+      "order": 108,
       "parent_claim_id": "DK-3.5-prop",
       "section": "3",
       "kind": "identity",
@@ -1852,7 +1978,7 @@
     },
     {
       "id": "DK-3.5-prop.eigenvector-rotation-angle",
-      "order": 106,
+      "order": 109,
       "parent_claim_id": "DK-3.5-prop",
       "section": "3",
       "kind": "theorem",
@@ -1870,7 +1996,7 @@
     },
     {
       "id": "DK-3.5-prop.acute-maximal-characterization",
-      "order": 107,
+      "order": 110,
       "parent_claim_id": "DK-3.5-prop",
       "section": "3",
       "kind": "theorem",
@@ -1888,7 +2014,7 @@
     },
     {
       "id": "DK-3.2-cor.swap-invariance",
-      "order": 108,
+      "order": 111,
       "parent_claim_id": "DK-3.2-cor",
       "section": "3",
       "kind": "theorem",
@@ -1906,7 +2032,7 @@
     },
     {
       "id": "DK-4.1-prop.vz-factorization",
-      "order": 109,
+      "order": 112,
       "parent_claim_id": "DK-4.1-prop",
       "section": "4",
       "kind": "construction",
@@ -1922,7 +2048,7 @@
     },
     {
       "id": "DK-4.1-prop.orthonormal-angle-lower-bounds",
-      "order": 110,
+      "order": 113,
       "parent_claim_id": "DK-4.1-prop",
       "section": "4",
       "kind": "theorem",
@@ -1940,7 +2066,7 @@
     },
     {
       "id": "DK-4.1-prop.singular-value-minimality",
-      "order": 111,
+      "order": 114,
       "parent_claim_id": "DK-4.1-prop",
       "section": "4",
       "kind": "theorem",
@@ -1958,7 +2084,7 @@
     },
     {
       "id": "DK-4.1-prop.closest-q-vector-proof-step",
-      "order": 112,
+      "order": 115,
       "parent_claim_id": "DK-4.1-prop",
       "section": "4",
       "kind": "proof-claim",
@@ -1974,7 +2100,7 @@
     },
     {
       "id": "DK-4.1-prop.eq-4-1",
-      "order": 113,
+      "order": 116,
       "parent_claim_id": "DK-4.1-prop",
       "section": "4",
       "kind": "numbered-equation",
@@ -1990,7 +2116,7 @@
     },
     {
       "id": "DK-4.1-prop.eq-4-2",
-      "order": 114,
+      "order": 117,
       "parent_claim_id": "DK-4.1-prop",
       "section": "4",
       "kind": "numbered-equation",
@@ -2006,7 +2132,7 @@
     },
     {
       "id": "DK-4.1-cor.ui-minimality-on-p",
-      "order": 115,
+      "order": 118,
       "parent_claim_id": "DK-4.1-cor",
       "section": "4",
       "kind": "theorem",
@@ -2024,7 +2150,7 @@
     },
     {
       "id": "DK-4.2-prop.basis-sine-square-lower-bound",
-      "order": 116,
+      "order": 119,
       "parent_claim_id": "DK-4.2-prop",
       "section": "4",
       "kind": "theorem",
@@ -2042,7 +2168,7 @@
     },
     {
       "id": "DK-4.2-prop.trace-identification",
-      "order": 117,
+      "order": 120,
       "parent_claim_id": "DK-4.2-prop",
       "section": "4",
       "kind": "proof-claim",
@@ -2058,7 +2184,7 @@
     },
     {
       "id": "DK-4.3-prop.plane-parameterization",
-      "order": 118,
+      "order": 121,
       "parent_claim_id": "DK-4.3-prop",
       "section": "4",
       "kind": "construction",
@@ -2074,7 +2200,7 @@
     },
     {
       "id": "DK-4.3-prop.squared-displacement-global-minimum",
-      "order": 119,
+      "order": 122,
       "parent_claim_id": "DK-4.3-prop",
       "section": "4",
       "kind": "theorem",
@@ -2092,7 +2218,7 @@
     },
     {
       "id": "DK-4.3-prop.operator-norm-displacement-minimum",
-      "order": 120,
+      "order": 123,
       "parent_claim_id": "DK-4.3-prop",
       "section": "4",
       "kind": "consequence",
@@ -2108,7 +2234,7 @@
     },
     {
       "id": "DK-4.3-prop.hilbert-schmidt-displacement-minimum",
-      "order": 121,
+      "order": 124,
       "parent_claim_id": "DK-4.3-prop",
       "section": "4",
       "kind": "consequence",
@@ -2124,7 +2250,7 @@
     },
     {
       "id": "DK-4.3-prop.arbitrary-ui-displacement-warning",
-      "order": 122,
+      "order": 125,
       "parent_claim_id": "DK-4.3-prop",
       "section": "4",
       "kind": "counterclaim",
@@ -2140,7 +2266,7 @@
     },
     {
       "id": "DK-4.3-prop.eq-4-3",
-      "order": 123,
+      "order": 126,
       "parent_claim_id": "DK-4.3-prop",
       "section": "4",
       "kind": "numbered-equation",
@@ -2156,7 +2282,7 @@
     },
     {
       "id": "DK-4.3-prop.eq-4-4",
-      "order": 124,
+      "order": 127,
       "parent_claim_id": "DK-4.3-prop",
       "section": "4",
       "kind": "numbered-equation",
@@ -2172,7 +2298,7 @@
     },
     {
       "id": "DK-4.3-prop.eq-4-5",
-      "order": 125,
+      "order": 128,
       "parent_claim_id": "DK-4.3-prop",
       "section": "4",
       "kind": "numbered-equation",
@@ -2188,7 +2314,7 @@
     },
     {
       "id": "DK-4.3-prop.eq-4-6",
-      "order": 126,
+      "order": 129,
       "parent_claim_id": "DK-4.3-prop",
       "section": "4",
       "kind": "numbered-equation",
@@ -2204,7 +2330,7 @@
     },
     {
       "id": "DK-4.4-prop.example4-1-real-reflection",
-      "order": 127,
+      "order": 130,
       "parent_claim_id": "DK-4.4-prop",
       "section": "4",
       "kind": "counterexample",
@@ -2220,7 +2346,7 @@
     },
     {
       "id": "DK-4.4-prop.example4-2-complex-phase",
-      "order": 128,
+      "order": 131,
       "parent_claim_id": "DK-4.4-prop",
       "section": "4",
       "kind": "counterexample",
@@ -2236,7 +2362,7 @@
     },
     {
       "id": "DK-4.4-prop.printed-proposition4-4",
-      "order": 129,
+      "order": 132,
       "parent_claim_id": "DK-4.4-prop",
       "section": "4",
       "kind": "source-assertion",
@@ -2254,7 +2380,7 @@
     },
     {
       "id": "DK-4.4-prop.printed-sharp-threshold",
-      "order": 130,
+      "order": 133,
       "parent_claim_id": "DK-4.4-prop",
       "section": "4",
       "kind": "source-assertion",
@@ -2270,7 +2396,7 @@
     },
     {
       "id": "DK-5.1-thm.banach-hypotheses",
-      "order": 131,
+      "order": 134,
       "parent_claim_id": "DK-5.1-thm",
       "section": "5",
       "kind": "hypothesis",
@@ -2288,7 +2414,7 @@
     },
     {
       "id": "DK-5.1-thm.sylvester-lower-bound",
-      "order": 132,
+      "order": 135,
       "parent_claim_id": "DK-5.1-thm",
       "section": "5",
       "kind": "theorem",
@@ -2306,7 +2432,7 @@
     },
     {
       "id": "DK-5.1-thm.roles-interchange",
-      "order": 133,
+      "order": 136,
       "parent_claim_id": "DK-5.1-thm",
       "section": "5",
       "kind": "scope",
@@ -2322,7 +2448,7 @@
     },
     {
       "id": "DK-5.1-thm.one-sided-unbounded-extension",
-      "order": 134,
+      "order": 137,
       "parent_claim_id": "DK-5.1-thm",
       "section": "5",
       "kind": "scope",
@@ -2338,7 +2464,7 @@
     },
     {
       "id": "DK-5-hermitian-inequalities.pairwise-gap-hypothesis",
-      "order": 135,
+      "order": 138,
       "parent_claim_id": "DK-5-hermitian-inequalities",
       "section": "5",
       "kind": "hypothesis",
@@ -2354,7 +2480,7 @@
     },
     {
       "id": "DK-5-hermitian-inequalities.operator-norm-constant-one-fails",
-      "order": 136,
+      "order": 139,
       "parent_claim_id": "DK-5-hermitian-inequalities",
       "section": "5",
       "kind": "counterclaim",
@@ -2370,7 +2496,7 @@
     },
     {
       "id": "DK-5-hermitian-inequalities.rank-factor-not-best",
-      "order": 137,
+      "order": 140,
       "parent_claim_id": "DK-5-hermitian-inequalities",
       "section": "5",
       "kind": "sharpness",
@@ -2386,7 +2512,7 @@
     },
     {
       "id": "DK-5-hermitian-inequalities.universal-constant-question",
-      "order": 138,
+      "order": 141,
       "parent_claim_id": "DK-5-hermitian-inequalities",
       "section": "5",
       "kind": "open-question",
@@ -2402,7 +2528,7 @@
     },
     {
       "id": "DK-5-hermitian-inequalities.constant-one-explicit-counterexample",
-      "order": 139,
+      "order": 142,
       "parent_claim_id": "DK-5-hermitian-inequalities",
       "section": "5",
       "kind": "counterexample",
@@ -2418,7 +2544,7 @@
     },
     {
       "id": "DK-5-hermitian-inequalities.eq-5-1",
-      "order": 140,
+      "order": 143,
       "parent_claim_id": "DK-5-hermitian-inequalities",
       "section": "5",
       "kind": "numbered-equation",
@@ -2434,7 +2560,7 @@
     },
     {
       "id": "DK-5-hermitian-inequalities.eq-5-2",
-      "order": 141,
+      "order": 144,
       "parent_claim_id": "DK-5-hermitian-inequalities",
       "section": "5",
       "kind": "numbered-equation",
@@ -2450,7 +2576,7 @@
     },
     {
       "id": "DK-5.2-thm.hilbert-unbounded-hypotheses",
-      "order": 142,
+      "order": 145,
       "parent_claim_id": "DK-5.2-thm",
       "section": "5",
       "kind": "hypothesis",
@@ -2468,7 +2594,7 @@
     },
     {
       "id": "DK-5.2-thm.hilbert-unbounded-conclusion",
-      "order": 143,
+      "order": 146,
       "parent_claim_id": "DK-5.2-thm",
       "section": "5",
       "kind": "theorem",
@@ -2486,7 +2612,7 @@
     },
     {
       "id": "DK-5.1-lem.strong-cutoff-convergence",
-      "order": 144,
+      "order": 147,
       "parent_claim_id": "DK-5.1-lem",
       "section": "5",
       "kind": "lemma",
@@ -2504,7 +2630,7 @@
     },
     {
       "id": "DK-6.1-lem.ordered-sylvester-forward",
-      "order": 145,
+      "order": 148,
       "parent_claim_id": "DK-6.1-lem",
       "section": "6",
       "kind": "lemma",
@@ -2522,7 +2648,7 @@
     },
     {
       "id": "DK-6.1-lem.ordered-sylvester-converse",
-      "order": 146,
+      "order": 149,
       "parent_claim_id": "DK-6.1-lem",
       "section": "6",
       "kind": "lemma",
@@ -2540,7 +2666,7 @@
     },
     {
       "id": "DK-6.2-lem.pinching-contraction",
-      "order": 147,
+      "order": 150,
       "parent_claim_id": "DK-6.2-lem",
       "section": "6",
       "kind": "lemma",
@@ -2558,7 +2684,7 @@
     },
     {
       "id": "DK-6.1-prop.sine-proof-residual-identity",
-      "order": 148,
+      "order": 151,
       "parent_claim_id": "DK-6.1-prop",
       "section": "6",
       "kind": "identity",
@@ -2574,7 +2700,7 @@
     },
     {
       "id": "DK-6.1-prop.symmetric-sine-theorem",
-      "order": 149,
+      "order": 152,
       "parent_claim_id": "DK-6.1-prop",
       "section": "6",
       "kind": "theorem",
@@ -2592,7 +2718,7 @@
     },
     {
       "id": "DK-6.1-prop.source-counterexample-need-two-sided",
-      "order": 150,
+      "order": 153,
       "parent_claim_id": "DK-6.1-prop",
       "section": "6",
       "kind": "counterexample",
@@ -2608,7 +2734,7 @@
     },
     {
       "id": "DK-6.1-prop.eq-6-1",
-      "order": 151,
+      "order": 154,
       "parent_claim_id": "DK-6.1-prop",
       "section": "6",
       "kind": "numbered-equation",
@@ -2624,7 +2750,7 @@
     },
     {
       "id": "DK-6.1-thm.generalized-sine-hypotheses",
-      "order": 152,
+      "order": 155,
       "parent_claim_id": "DK-6.1-thm",
       "section": "6",
       "kind": "hypothesis",
@@ -2642,7 +2768,7 @@
     },
     {
       "id": "DK-6.1-thm.generalized-sine-conclusion",
-      "order": 153,
+      "order": 156,
       "parent_claim_id": "DK-6.1-thm",
       "section": "6",
       "kind": "theorem",
@@ -2660,7 +2786,7 @@
     },
     {
       "id": "DK-6.1-thm.unequal-dimension-scope",
-      "order": 154,
+      "order": 157,
       "parent_claim_id": "DK-6.1-thm",
       "section": "6",
       "kind": "scope",
@@ -2678,7 +2804,7 @@
     },
     {
       "id": "DK-6.2-thm.second-generalized-sine",
-      "order": 155,
+      "order": 158,
       "parent_claim_id": "DK-6.2-thm",
       "section": "6",
       "kind": "theorem",
@@ -2696,7 +2822,7 @@
     },
     {
       "id": "DK-6.2-thm.rank-corrected-operator-consequence",
-      "order": 156,
+      "order": 159,
       "parent_claim_id": "DK-6.2-thm",
       "section": "6",
       "kind": "consequence",
@@ -2712,7 +2838,7 @@
     },
     {
       "id": "DK-6.3-thm.tangent-setup-identities",
-      "order": 157,
+      "order": 160,
       "parent_claim_id": "DK-6.3-thm",
       "section": "6",
       "kind": "proof-claim",
@@ -2727,8 +2853,54 @@
       "formalization_result_ids": []
     },
     {
+      "id": "DK-6.3-thm.tangent-proof-temporary-boundedness",
+      "order": 161,
+      "parent_claim_id": "DK-6.3-thm",
+      "section": "6",
+      "kind": "proof-claim",
+      "source_role": "mathematical_assertion",
+      "source_locator": "Section 6, proof of the tangent theorem, immediately before the Ky Fan estimate.",
+      "summary": "The Section 6 tangent proof temporarily supposes that all operators are bounded and that S_0 is compact, and defers the removal of both restrictions to the Appendix to Section 6.",
+      "present_in_distributable_spec": true,
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "A temporary proof-technical restriction inside the Section 6 argument, not a hypothesis of the printed Section 2 theorem. It is part of the inherited proof context under which the printed tangent statement is actually settled.",
+      "formalization_role_reason_code": "proof_or_derivation_not_result",
+      "formalization_result_ids": [],
+      "interpretation_support": {
+        "result_ids": [
+          "S2-tan-theta"
+        ],
+        "role": "proof_context_dependency",
+        "note": "Records that the printed statement is proved under successively relaxed working assumptions supplied outside Section 2."
+      }
+    },
+    {
+      "id": "DK-6.3-thm.ambient-wholeSpace-assembly",
+      "order": 162,
+      "parent_claim_id": "DK-6.3-thm",
+      "section": "6",
+      "kind": "proof-claim",
+      "source_role": "mathematical_assertion",
+      "source_locator": "Section 6, the whole-space step of the tangent proof, following the directed Ky Fan estimate.",
+      "summary": "The ambient conclusion is assembled from the directed one: tan Theta has the two-corner block form built from J_0, tan Theta_0 and tan Theta_1, the two corners have equal unitarily invariant norms through J_0, and Lemmas 6.1 and 6.2 then give delta ||tan Theta|| <= ||H||.",
+      "present_in_distributable_spec": true,
+      "restored_in_2026_08_12_pdf_reaudit": false,
+      "formalization_role": "proof_only",
+      "formalization_role_reason": "The proof of the counted ambient conclusion rather than an additional printed result. It is recorded separately because it is the exact place where the Section 2 statement inherits the direct-rotation geometry available only under the later standing conditions.",
+      "formalization_role_reason_code": "proof_or_derivation_not_result",
+      "formalization_result_ids": [],
+      "interpretation_support": {
+        "result_ids": [
+          "S2-tan-theta"
+        ],
+        "role": "proof_context_dependency",
+        "note": "The proof of the printed ambient conclusion runs in Section 6, where (3.5) has been standing since Section 3, and it uses the direct-rotation corner comparison rather than the Section 2 hypotheses alone."
+      }
+    },
+    {
       "id": "DK-6.3-thm.example6-1",
-      "order": 158,
+      "order": 163,
       "parent_claim_id": "DK-6.3-thm",
       "section": "6",
       "kind": "counterexample",
@@ -2744,7 +2916,7 @@
     },
     {
       "id": "DK-6.3-thm.generalized-tangent-theorem",
-      "order": 159,
+      "order": 164,
       "parent_claim_id": "DK-6.3-thm",
       "section": "6",
       "kind": "theorem",
@@ -2762,7 +2934,7 @@
     },
     {
       "id": "DK-6.3-thm.eq-6-2",
-      "order": 160,
+      "order": 165,
       "parent_claim_id": "DK-6.3-thm",
       "section": "6",
       "kind": "numbered-equation",
@@ -2778,7 +2950,7 @@
     },
     {
       "id": "DK-6.3-thm.eq-6-3",
-      "order": 161,
+      "order": 166,
       "parent_claim_id": "DK-6.3-thm",
       "section": "6",
       "kind": "numbered-equation",
@@ -2794,7 +2966,7 @@
     },
     {
       "id": "DK-6.3-thm.eq-6-4",
-      "order": 162,
+      "order": 167,
       "parent_claim_id": "DK-6.3-thm",
       "section": "6",
       "kind": "numbered-equation",
@@ -2810,7 +2982,7 @@
     },
     {
       "id": "DK-6.3-thm.eq-6-5",
-      "order": 163,
+      "order": 168,
       "parent_claim_id": "DK-6.3-thm",
       "section": "6",
       "kind": "numbered-equation",
@@ -2826,7 +2998,7 @@
     },
     {
       "id": "DK-6.3-thm.eq-6-6",
-      "order": 164,
+      "order": 169,
       "parent_claim_id": "DK-6.3-thm",
       "section": "6",
       "kind": "numbered-equation",
@@ -2842,7 +3014,7 @@
     },
     {
       "id": "DK-6-appendix.unbounded-sine-extension",
-      "order": 165,
+      "order": 170,
       "parent_claim_id": "DK-6-appendix",
       "section": "6",
       "kind": "scope",
@@ -2858,7 +3030,7 @@
     },
     {
       "id": "DK-6-appendix.unbounded-tangent-extension",
-      "order": 166,
+      "order": 171,
       "parent_claim_id": "DK-6-appendix",
       "section": "6",
       "kind": "scope",
@@ -2874,7 +3046,7 @@
     },
     {
       "id": "DK-6-appendix.appendix-approximation-chain",
-      "order": 167,
+      "order": 172,
       "parent_claim_id": "DK-6-appendix",
       "section": "6",
       "kind": "proof-claim",
@@ -2890,7 +3062,7 @@
     },
     {
       "id": "DK-6-appendix.appendix-all-ui-limit",
-      "order": 168,
+      "order": 173,
       "parent_claim_id": "DK-6-appendix",
       "section": "6",
       "kind": "proof-claim",
@@ -2906,7 +3078,7 @@
     },
     {
       "id": "DK-6-appendix.eq-6-7",
-      "order": 169,
+      "order": 174,
       "parent_claim_id": "DK-6-appendix",
       "section": "6",
       "kind": "numbered-equation",
@@ -2922,7 +3094,7 @@
     },
     {
       "id": "DK-6-appendix.eq-6-8",
-      "order": 170,
+      "order": 175,
       "parent_claim_id": "DK-6-appendix",
       "section": "6",
       "kind": "numbered-equation",
@@ -2938,7 +3110,7 @@
     },
     {
       "id": "DK-6-appendix.eq-6-9",
-      "order": 171,
+      "order": 176,
       "parent_claim_id": "DK-6-appendix",
       "section": "6",
       "kind": "numbered-equation",
@@ -2954,7 +3126,7 @@
     },
     {
       "id": "DK-6-appendix.eq-6-10",
-      "order": 172,
+      "order": 177,
       "parent_claim_id": "DK-6-appendix",
       "section": "6",
       "kind": "numbered-equation",
@@ -2970,7 +3142,7 @@
     },
     {
       "id": "DK-6-appendix.eq-6-11",
-      "order": 173,
+      "order": 178,
       "parent_claim_id": "DK-6-appendix",
       "section": "6",
       "kind": "numbered-equation",
@@ -2986,7 +3158,7 @@
     },
     {
       "id": "DK-6.3-lem.approximation-number-leakage",
-      "order": 174,
+      "order": 179,
       "parent_claim_id": "DK-6.3-lem",
       "section": "6",
       "kind": "lemma",
@@ -3004,7 +3176,7 @@
     },
     {
       "id": "DK-7-sin2-proof.reflection-setup",
-      "order": 175,
+      "order": 180,
       "parent_claim_id": "DK-7-sin2-proof",
       "section": "7",
       "kind": "proof-claim",
@@ -3020,7 +3192,7 @@
     },
     {
       "id": "DK-7-sin2-proof.ambient-sin2",
-      "order": 176,
+      "order": 181,
       "parent_claim_id": "DK-7-sin2-proof",
       "section": "7",
       "kind": "theorem",
@@ -3036,7 +3208,7 @@
     },
     {
       "id": "DK-7-sin2-proof.directed-sin2",
-      "order": 177,
+      "order": 182,
       "parent_claim_id": "DK-7-sin2-proof",
       "section": "7",
       "kind": "theorem",
@@ -3052,7 +3224,7 @@
     },
     {
       "id": "DK-7-sin2-proof.factor-one-directed-residual-refinement",
-      "order": 178,
+      "order": 183,
       "parent_claim_id": "DK-7-sin2-proof",
       "section": "7",
       "kind": "proof-claim",
@@ -3068,7 +3240,7 @@
     },
     {
       "id": "DK-7-sin2-proof.swap-asymmetry",
-      "order": 179,
+      "order": 184,
       "parent_claim_id": "DK-7-sin2-proof",
       "section": "7",
       "kind": "scope",
@@ -3084,7 +3256,7 @@
     },
     {
       "id": "DK-7-sin2-proof.eq-7-1",
-      "order": 180,
+      "order": 185,
       "parent_claim_id": "DK-7-sin2-proof",
       "section": "7",
       "kind": "numbered-equation",
@@ -3100,7 +3272,7 @@
     },
     {
       "id": "DK-7-sin2-proof.eq-7-2",
-      "order": 181,
+      "order": 186,
       "parent_claim_id": "DK-7-sin2-proof",
       "section": "7",
       "kind": "numbered-equation",
@@ -3116,7 +3288,7 @@
     },
     {
       "id": "DK-7-sin2-proof.eq-7-3",
-      "order": 182,
+      "order": 187,
       "parent_claim_id": "DK-7-sin2-proof",
       "section": "7",
       "kind": "numbered-equation",
@@ -3132,7 +3304,7 @@
     },
     {
       "id": "DK-7-sin2-proof.eq-7-4",
-      "order": 183,
+      "order": 188,
       "parent_claim_id": "DK-7-sin2-proof",
       "section": "7",
       "kind": "numbered-equation",
@@ -3148,7 +3320,7 @@
     },
     {
       "id": "DK-7-sin2-proof.eq-7-5",
-      "order": 184,
+      "order": 189,
       "parent_claim_id": "DK-7-sin2-proof",
       "section": "7",
       "kind": "numbered-equation",
@@ -3164,7 +3336,7 @@
     },
     {
       "id": "DK-7-tan2-proof.tan2-block-identity",
-      "order": 185,
+      "order": 190,
       "parent_claim_id": "DK-7-tan2-proof",
       "section": "7",
       "kind": "proof-claim",
@@ -3180,7 +3352,7 @@
     },
     {
       "id": "DK-7-tan2-proof.cos2-pole-exclusion",
-      "order": 186,
+      "order": 191,
       "parent_claim_id": "DK-7-tan2-proof",
       "section": "7",
       "kind": "proof-claim",
@@ -3196,7 +3368,7 @@
     },
     {
       "id": "DK-7-tan2-proof.ambient-tan2",
-      "order": 187,
+      "order": 192,
       "parent_claim_id": "DK-7-tan2-proof",
       "section": "7",
       "kind": "theorem",
@@ -3212,7 +3384,7 @@
     },
     {
       "id": "DK-7-tan2-proof.directed-tan2",
-      "order": 188,
+      "order": 193,
       "parent_claim_id": "DK-7-tan2-proof",
       "section": "7",
       "kind": "theorem",
@@ -3228,7 +3400,7 @@
     },
     {
       "id": "DK-7-tan2-proof.eq-7-6",
-      "order": 189,
+      "order": 194,
       "parent_claim_id": "DK-7-tan2-proof",
       "section": "7",
       "kind": "numbered-equation",
@@ -3244,7 +3416,7 @@
     },
     {
       "id": "DK-8.1-thm.branch-problem",
-      "order": 190,
+      "order": 195,
       "parent_claim_id": "DK-8.1-thm",
       "section": "8",
       "kind": "scope",
@@ -3260,7 +3432,7 @@
     },
     {
       "id": "DK-8.1-thm.acute-iff-spectral-placement",
-      "order": 191,
+      "order": 196,
       "parent_claim_id": "DK-8.1-thm",
       "section": "8",
       "kind": "theorem",
@@ -3278,7 +3450,7 @@
     },
     {
       "id": "DK-8.1-thm.existence-correct-q",
-      "order": 192,
+      "order": 197,
       "parent_claim_id": "DK-8.1-thm",
       "section": "8",
       "kind": "theorem",
@@ -3296,7 +3468,7 @@
     },
     {
       "id": "DK-8.1-thm.part-i-compression",
-      "order": 193,
+      "order": 198,
       "parent_claim_id": "DK-8.1-thm",
       "section": "8",
       "kind": "theorem",
@@ -3314,7 +3486,7 @@
     },
     {
       "id": "DK-8.1-thm.part-ii-eigenvalue",
-      "order": 194,
+      "order": 199,
       "parent_claim_id": "DK-8.1-thm",
       "section": "8",
       "kind": "theorem",
@@ -3332,7 +3504,7 @@
     },
     {
       "id": "DK-8.1-thm.part-iii-gauge",
-      "order": 195,
+      "order": 200,
       "parent_claim_id": "DK-8.1-thm",
       "section": "8",
       "kind": "theorem",
@@ -3350,7 +3522,7 @@
     },
     {
       "id": "DK-8.1-thm.exclude-pi-over-four",
-      "order": 196,
+      "order": 201,
       "parent_claim_id": "DK-8.1-thm",
       "section": "8",
       "kind": "proof-claim",
@@ -3366,7 +3538,7 @@
     },
     {
       "id": "DK-8.1-thm.spectral-repulsion-interpretation",
-      "order": 197,
+      "order": 202,
       "parent_claim_id": "DK-8.1-thm",
       "section": "8",
       "kind": "consequence",
@@ -3382,7 +3554,7 @@
     },
     {
       "id": "DK-8.1-thm.eq-8-1",
-      "order": 198,
+      "order": 203,
       "parent_claim_id": "DK-8.1-thm",
       "section": "8",
       "kind": "numbered-equation",
@@ -3398,7 +3570,7 @@
     },
     {
       "id": "DK-8.1-thm.eq-8-2",
-      "order": 199,
+      "order": 204,
       "parent_claim_id": "DK-8.1-thm",
       "section": "8",
       "kind": "numbered-equation",
@@ -3414,7 +3586,7 @@
     },
     {
       "id": "DK-8.2-thm.smallness-alternative",
-      "order": 200,
+      "order": 205,
       "parent_claim_id": "DK-8.2-thm",
       "section": "8",
       "kind": "hypothesis",
@@ -3432,7 +3604,7 @@
     },
     {
       "id": "DK-8.2-thm.double-angle-bound-retained",
-      "order": 201,
+      "order": 206,
       "parent_claim_id": "DK-8.2-thm",
       "section": "8",
       "kind": "theorem",
@@ -3450,7 +3622,7 @@
     },
     {
       "id": "DK-8.2-thm.acute-branch-conclusion",
-      "order": 202,
+      "order": 207,
       "parent_claim_id": "DK-8.2-thm",
       "section": "8",
       "kind": "theorem",
@@ -3468,7 +3640,7 @@
     },
     {
       "id": "DK-8.2-thm.homotopy-proof",
-      "order": 203,
+      "order": 208,
       "parent_claim_id": "DK-8.2-thm",
       "section": "8",
       "kind": "proof-claim",
@@ -3484,7 +3656,7 @@
     },
     {
       "id": "DK-8.2-thm.residual-reduction",
-      "order": 204,
+      "order": 209,
       "parent_claim_id": "DK-8.2-thm",
       "section": "8",
       "kind": "proof-claim",
@@ -3500,7 +3672,7 @@
     },
     {
       "id": "DK-8.2-thm.sin2-unequal-dimension-extension",
-      "order": 205,
+      "order": 210,
       "parent_claim_id": "DK-8.2-thm",
       "section": "8",
       "kind": "scope",
@@ -3516,7 +3688,7 @@
     },
     {
       "id": "DK-8.2-thm.no-tan2-unequal-dimension-extension-known",
-      "order": 206,
+      "order": 211,
       "parent_claim_id": "DK-8.2-thm",
       "section": "8",
       "kind": "knowledge-state",
@@ -3532,7 +3704,7 @@
     },
     {
       "id": "DK-9-model.real-l2-model",
-      "order": 207,
+      "order": 212,
       "parent_claim_id": "DK-9-model",
       "section": "9",
       "kind": "definition",
@@ -3548,7 +3720,7 @@
     },
     {
       "id": "DK-9-model.perturbed-eigenproblem",
-      "order": 208,
+      "order": 213,
       "parent_claim_id": "DK-9-model",
       "section": "9",
       "kind": "definition",
@@ -3564,7 +3736,7 @@
     },
     {
       "id": "DK-9-model.unperturbed-strict-eigenvalue-order",
-      "order": 209,
+      "order": 214,
       "parent_claim_id": "DK-9-model",
       "section": "9",
       "kind": "assertion",
@@ -3580,7 +3752,7 @@
     },
     {
       "id": "DK-9-model.positive-root-equation",
-      "order": 210,
+      "order": 215,
       "parent_claim_id": "DK-9-model",
       "section": "9",
       "kind": "assertion",
@@ -3596,7 +3768,7 @@
     },
     {
       "id": "DK-9-model.positive-spectrum-over-500",
-      "order": 211,
+      "order": 216,
       "parent_claim_id": "DK-9-model",
       "section": "9",
       "kind": "assertion",
@@ -3612,7 +3784,7 @@
     },
     {
       "id": "DK-9-model.zero-eigenfunctions",
-      "order": 212,
+      "order": 217,
       "parent_claim_id": "DK-9-model",
       "section": "9",
       "kind": "construction",
@@ -3628,7 +3800,7 @@
     },
     {
       "id": "DK-9-model.lambda3-lower-bound",
-      "order": 213,
+      "order": 218,
       "parent_claim_id": "DK-9-model",
       "section": "9",
       "kind": "assertion",
@@ -3644,7 +3816,7 @@
     },
     {
       "id": "DK-9-model.initial-residual-formula",
-      "order": 214,
+      "order": 219,
       "parent_claim_id": "DK-9-model",
       "section": "9",
       "kind": "identity",
@@ -3660,7 +3832,7 @@
     },
     {
       "id": "DK-9-model.residual-gram",
-      "order": 215,
+      "order": 220,
       "parent_claim_id": "DK-9-model",
       "section": "9",
       "kind": "identity",
@@ -3676,7 +3848,7 @@
     },
     {
       "id": "DK-9-model.residual-gram-eigenvalues",
-      "order": 216,
+      "order": 221,
       "parent_claim_id": "DK-9-model",
       "section": "9",
       "kind": "assertion",
@@ -3692,7 +3864,7 @@
     },
     {
       "id": "DK-9.1-9.4.sin-bound-comparison",
-      "order": 217,
+      "order": 222,
       "parent_claim_id": "DK-9.1-9.4",
       "section": "9",
       "kind": "consequence",
@@ -3708,7 +3880,7 @@
     },
     {
       "id": "DK-9.1-9.4.kyfan-two-term-scope",
-      "order": 218,
+      "order": 223,
       "parent_claim_id": "DK-9.1-9.4",
       "section": "9",
       "kind": "scope",
@@ -3724,7 +3896,7 @@
     },
     {
       "id": "DK-9.1-9.4.eq-9-1",
-      "order": 219,
+      "order": 224,
       "parent_claim_id": "DK-9.1-9.4",
       "section": "9",
       "kind": "numbered-equation",
@@ -3740,7 +3912,7 @@
     },
     {
       "id": "DK-9.1-9.4.eq-9-2",
-      "order": 220,
+      "order": 225,
       "parent_claim_id": "DK-9.1-9.4",
       "section": "9",
       "kind": "numbered-equation",
@@ -3756,7 +3928,7 @@
     },
     {
       "id": "DK-9.1-9.4.eq-9-3",
-      "order": 221,
+      "order": 226,
       "parent_claim_id": "DK-9.1-9.4",
       "section": "9",
       "kind": "numbered-equation",
@@ -3772,7 +3944,7 @@
     },
     {
       "id": "DK-9.1-9.4.eq-9-4",
-      "order": 222,
+      "order": 227,
       "parent_claim_id": "DK-9.1-9.4",
       "section": "9",
       "kind": "numbered-equation",
@@ -3788,7 +3960,7 @@
     },
     {
       "id": "DK-9.5-9.7.rayleigh-ritz-matrix",
-      "order": 223,
+      "order": 228,
       "parent_claim_id": "DK-9.5-9.7",
       "section": "9",
       "kind": "identity",
@@ -3804,7 +3976,7 @@
     },
     {
       "id": "DK-9.5-9.7.refined-residual-gram",
-      "order": 224,
+      "order": 229,
       "parent_claim_id": "DK-9.5-9.7",
       "section": "9",
       "kind": "identity",
@@ -3820,7 +3992,7 @@
     },
     {
       "id": "DK-9.5-9.7.tangent-gap",
-      "order": 225,
+      "order": 230,
       "parent_claim_id": "DK-9.5-9.7",
       "section": "9",
       "kind": "assertion",
@@ -3836,7 +4008,7 @@
     },
     {
       "id": "DK-9.5-9.7.kyfan-tan-bound",
-      "order": 226,
+      "order": 231,
       "parent_claim_id": "DK-9.5-9.7",
       "section": "9",
       "kind": "consequence",
@@ -3852,7 +4024,7 @@
     },
     {
       "id": "DK-9.5-9.7.offdiagonal-complement-choice",
-      "order": 227,
+      "order": 232,
       "parent_claim_id": "DK-9.5-9.7",
       "section": "9",
       "kind": "construction",
@@ -3868,7 +4040,7 @@
     },
     {
       "id": "DK-9.5-9.7.kyfan-tan2-bound",
-      "order": 228,
+      "order": 233,
       "parent_claim_id": "DK-9.5-9.7",
       "section": "9",
       "kind": "consequence",
@@ -3884,7 +4056,7 @@
     },
     {
       "id": "DK-9.5-9.7.eq-9-5",
-      "order": 229,
+      "order": 234,
       "parent_claim_id": "DK-9.5-9.7",
       "section": "9",
       "kind": "numbered-equation",
@@ -3900,7 +4072,7 @@
     },
     {
       "id": "DK-9.5-9.7.eq-9-6",
-      "order": 230,
+      "order": 235,
       "parent_claim_id": "DK-9.5-9.7",
       "section": "9",
       "kind": "numbered-equation",
@@ -3916,7 +4088,7 @@
     },
     {
       "id": "DK-9.5-9.7.eq-9-7",
-      "order": 231,
+      "order": 236,
       "parent_claim_id": "DK-9.5-9.7",
       "section": "9",
       "kind": "numbered-equation",
@@ -3932,7 +4104,7 @@
     },
     {
       "id": "DK-9.8.weinberger-sine-square",
-      "order": 232,
+      "order": 237,
       "parent_claim_id": "DK-9.8",
       "section": "9",
       "kind": "external-result",
@@ -3948,7 +4120,7 @@
     },
     {
       "id": "DK-9.8.lehmann-best-lower-bounds",
-      "order": 233,
+      "order": 238,
       "parent_claim_id": "DK-9.8",
       "section": "9",
       "kind": "external-result",
@@ -3964,7 +4136,7 @@
     },
     {
       "id": "DK-9.8.lower-bound-asymptotic",
-      "order": 234,
+      "order": 239,
       "parent_claim_id": "DK-9.8",
       "section": "9",
       "kind": "external-result",
@@ -3980,7 +4152,7 @@
     },
     {
       "id": "DK-9.8.angle-meaning-distinction",
-      "order": 235,
+      "order": 240,
       "parent_claim_id": "DK-9.8",
       "section": "9",
       "kind": "assertion",
@@ -3996,7 +4168,7 @@
     },
     {
       "id": "DK-9.8.sine-square-sum-identity",
-      "order": 236,
+      "order": 241,
       "parent_claim_id": "DK-9.8",
       "section": "9",
       "kind": "identity",
@@ -4012,7 +4184,7 @@
     },
     {
       "id": "DK-9.8.direct-one-vector-sharper-bounds",
-      "order": 237,
+      "order": 242,
       "parent_claim_id": "DK-9.8",
       "section": "9",
       "kind": "consequence",
@@ -4028,7 +4200,7 @@
     },
     {
       "id": "DK-9.8.methods-complementary",
-      "order": 238,
+      "order": 243,
       "parent_claim_id": "DK-9.8",
       "section": "9",
       "kind": "assertion",
@@ -4044,7 +4216,7 @@
     },
     {
       "id": "DK-9.8.eq-9-8",
-      "order": 239,
+      "order": 244,
       "parent_claim_id": "DK-9.8",
       "section": "9",
       "kind": "numbered-equation",
@@ -4060,7 +4232,7 @@
     },
     {
       "id": "DK-9-infinite-residual-counterexample.l2-geometric-vector-example",
-      "order": 240,
+      "order": 245,
       "parent_claim_id": "DK-9-infinite-residual-counterexample",
       "section": "9",
       "kind": "counterexample",
@@ -4076,7 +4248,7 @@
     },
     {
       "id": "DK-9-infinite-residual-counterexample.arbitrarily-small-domain-repair",
-      "order": 241,
+      "order": 246,
       "parent_claim_id": "DK-9-infinite-residual-counterexample",
       "section": "9",
       "kind": "assertion",
@@ -4092,7 +4264,7 @@
     },
     {
       "id": "DK-9-infinite-residual-counterexample.rayleigh-quotient",
-      "order": 242,
+      "order": 247,
       "parent_claim_id": "DK-9-infinite-residual-counterexample",
       "section": "9",
       "kind": "identity",
@@ -4108,7 +4280,7 @@
     },
     {
       "id": "DK-9-infinite-residual-counterexample.residual-infinite",
-      "order": 243,
+      "order": 248,
       "parent_claim_id": "DK-9-infinite-residual-counterexample",
       "section": "9",
       "kind": "counterexample",
@@ -4124,7 +4296,7 @@
     },
     {
       "id": "DK-9-infinite-residual-counterexample.weinberger-still-applies",
-      "order": 244,
+      "order": 249,
       "parent_claim_id": "DK-9-infinite-residual-counterexample",
       "section": "9",
       "kind": "consequence",
@@ -4140,7 +4312,7 @@
     },
     {
       "id": "DK-9-infinite-residual-counterexample.best-lower-bound-result",
-      "order": 245,
+      "order": 250,
       "parent_claim_id": "DK-9-infinite-residual-counterexample",
       "section": "9",
       "kind": "consequence",
@@ -4156,7 +4328,7 @@
     },
     {
       "id": "DK-9.9-9.11.angle-factorization",
-      "order": 246,
+      "order": 251,
       "parent_claim_id": "DK-9.9-9.11",
       "section": "9",
       "kind": "identity",
@@ -4172,7 +4344,7 @@
     },
     {
       "id": "DK-9.9-9.11.schur-correction-bound",
-      "order": 247,
+      "order": 252,
       "parent_claim_id": "DK-9.9-9.11",
       "section": "9",
       "kind": "assertion",
@@ -4188,7 +4360,7 @@
     },
     {
       "id": "DK-9.9-9.11.tan2-psi-bound",
-      "order": 248,
+      "order": 253,
       "parent_claim_id": "DK-9.9-9.11",
       "section": "9",
       "kind": "consequence",
@@ -4204,7 +4376,7 @@
     },
     {
       "id": "DK-9.9-9.11.acute-psi-selection",
-      "order": 249,
+      "order": 254,
       "parent_claim_id": "DK-9.9-9.11",
       "section": "9",
       "kind": "consequence",
@@ -4220,7 +4392,7 @@
     },
     {
       "id": "DK-9.9-9.11.eta-bound",
-      "order": 250,
+      "order": 255,
       "parent_claim_id": "DK-9.9-9.11",
       "section": "9",
       "kind": "consequence",
@@ -4236,7 +4408,7 @@
     },
     {
       "id": "DK-9.9-9.11.final-omega-bounds",
-      "order": 251,
+      "order": 256,
       "parent_claim_id": "DK-9.9-9.11",
       "section": "9",
       "kind": "consequence",
@@ -4252,7 +4424,7 @@
     },
     {
       "id": "DK-9.9-9.11.best-possible-3x3-claim",
-      "order": 252,
+      "order": 257,
       "parent_claim_id": "DK-9.9-9.11",
       "section": "9",
       "kind": "source-assertion",
@@ -4268,7 +4440,7 @@
     },
     {
       "id": "DK-9.9-9.11.best-possible-proof-deferred",
-      "order": 253,
+      "order": 258,
       "parent_claim_id": "DK-9.9-9.11",
       "section": "9",
       "kind": "knowledge-state",
@@ -4284,7 +4456,7 @@
     },
     {
       "id": "DK-9.9-9.11.eq-9-9",
-      "order": 254,
+      "order": 259,
       "parent_claim_id": "DK-9.9-9.11",
       "section": "9",
       "kind": "numbered-equation",
@@ -4300,7 +4472,7 @@
     },
     {
       "id": "DK-9.9-9.11.eq-9-10",
-      "order": 255,
+      "order": 260,
       "parent_claim_id": "DK-9.9-9.11",
       "section": "9",
       "kind": "numbered-equation",
@@ -4316,7 +4488,7 @@
     },
     {
       "id": "DK-9.9-9.11.eq-9-11",
-      "order": 256,
+      "order": 261,
       "parent_claim_id": "DK-9.9-9.11",
       "section": "9",
       "kind": "numbered-equation",
@@ -4332,7 +4504,7 @@
     },
     {
       "id": "DK-10.1.question",
-      "order": 257,
+      "order": 262,
       "parent_claim_id": "DK-10.1",
       "section": "10",
       "kind": "open-question",
@@ -4348,7 +4520,7 @@
     },
     {
       "id": "DK-10.2.three-way-setup",
-      "order": 258,
+      "order": 263,
       "parent_claim_id": "DK-10.2",
       "section": "10",
       "kind": "definition",
@@ -4364,7 +4536,7 @@
     },
     {
       "id": "DK-10.2.question",
-      "order": 259,
+      "order": 264,
       "parent_claim_id": "DK-10.2",
       "section": "10",
       "kind": "open-question",
@@ -4380,7 +4552,7 @@
     },
     {
       "id": "DK-10.3.question",
-      "order": 260,
+      "order": 265,
       "parent_claim_id": "DK-10.3",
       "section": "10",
       "kind": "open-question",
@@ -4396,7 +4568,7 @@
     },
     {
       "id": "DK-10.4.spectral-functional-calculus",
-      "order": 261,
+      "order": 266,
       "parent_claim_id": "DK-10.4",
       "section": "10",
       "kind": "definition",
@@ -4412,7 +4584,7 @@
     },
     {
       "id": "DK-10.4.step-function-specialization",
-      "order": 262,
+      "order": 267,
       "parent_claim_id": "DK-10.4",
       "section": "10",
       "kind": "construction",
@@ -4428,7 +4600,7 @@
     },
     {
       "id": "DK-10.4.ambient-functional-change",
-      "order": 263,
+      "order": 268,
       "parent_claim_id": "DK-10.4",
       "section": "10",
       "kind": "identity",
@@ -4444,7 +4616,7 @@
     },
     {
       "id": "DK-10.4.ambient-tan2-bound",
-      "order": 264,
+      "order": 269,
       "parent_claim_id": "DK-10.4",
       "section": "10",
       "kind": "theorem",
@@ -4460,7 +4632,7 @@
     },
     {
       "id": "DK-10.4.directed-functional-change",
-      "order": 265,
+      "order": 270,
       "parent_claim_id": "DK-10.4",
       "section": "10",
       "kind": "identity",
@@ -4476,7 +4648,7 @@
     },
     {
       "id": "DK-10.4.directed-tan2-bound",
-      "order": 266,
+      "order": 271,
       "parent_claim_id": "DK-10.4",
       "section": "10",
       "kind": "theorem",
@@ -4492,7 +4664,7 @@
     },
     {
       "id": "DK-10.4.question",
-      "order": 267,
+      "order": 272,
       "parent_claim_id": "DK-10.4",
       "section": "10",
       "kind": "open-question",

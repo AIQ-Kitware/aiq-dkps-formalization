@@ -11,7 +11,7 @@
 \item[Archival locator] An independently hosted copy has been observed in the Internet Archive scholarly-sources corpus at \href{https://ia600108.us.archive.org/view_archive.php?archive=/24/items/wikipedia-scholarly-sources-corpus/10.1137.zip\&file=10.1137\%252F0707001.pdf}{this archival locator}.  The DOI above remains the canonical identifier; this locator is provided only for source recovery, is not required by certification, and this repository makes no assertion about the locator's continued availability or the rights status of the hosted copy.
 \item[Role of this file] This checked-in document is the distributable mathematical source specification for the formalization audit.  It is a transformative reconstruction rather than a transcription: prose is compressed and rephrased, while hypotheses, conclusions, equations needed to identify claims, exceptional cases, counterexamples, scope qualifications, and presentation order are retained.
 \item[Audit markers] Text between \code{DK-CERT-SOURCE-BEGIN} and \code{DK-CERT-SOURCE-END} is the authoritative distributable passage for the corresponding claim ID.  \code{dev/davis-kahan-1970-statement-map.json} binds each organizational claim ID to Lean declarations.  The static checker hashes these passages directly; it does not require a private or non-distributable transcription.
-\item[Atomic completeness denominator] The 49 claim blocks are source-order organizational groups, not a claim that the paper has only 49 mathematical assertions.  \code{dev/davis-kahan-1970-source-atom-inventory.json} enumerates the finer mathematical atoms contained in those groups, including every numbered equation, distinct theorem conclusion, counterexample, sharpness/scope assertion, and established mathematical clause that occurs inside a mixed open-question passage.  Completion is ultimately judged against those atoms, not merely the 49 group labels.
+\item[Atomic completeness denominator] The 50 claim blocks are source-order organizational groups, not a claim that the paper has only 50 mathematical assertions.  \code{dev/davis-kahan-1970-source-atom-inventory.json} enumerates the finer mathematical atoms contained in those groups, including every numbered equation, distinct theorem conclusion, counterexample, sharpness/scope assertion, and established mathematical clause that occurs inside a mixed open-question passage.  Source fidelity is judged against those atoms; the separate 29-result completion denominator in \code{dev/davis-kahan-1970-formalization-result-inventory.json} is what the 100\% formalization claim is measured against.
 \item[External provenance] A private transcription or an image of the original paper may be used periodically to re-audit this reconstruction itself.  Such material is provenance evidence, not a dependency of the repository's static source-to-Lean certificate.
 \item[Editorial separation] Source-faithful mathematics is kept inside the marked passages.  Repository-status comments and known source/transcription discrepancies are explicitly labeled as editorial audit notes and are not silently substituted for what the paper states.
 \item[Completion semantics] A false printed assertion is still source content.  Formal coverage may therefore consist of an exact Lean proposition together with a machine-checked refutation.  A pure open question is retained for source completeness but is not a theorem-completion obligation; established mathematics stated in the same source passage as an open question remains an obligation.
@@ -26,7 +26,9 @@ The registered passages below follow the paper's presentation order from Section
 \subsection*{S1-block-residual: two reducing decompositions and the residual}
 \sourceanchor{Section 1, equations (1.1)--(1.8), in source order.}
 % DK-CERT-SOURCE-BEGIN
-Let $\Hsp$ be a separable Hilbert space, real or complex; finite dimensionality is not assumed.  In the main bounded setting $A=A^*$ and $A+H=(A+H)^*$ are bounded.  The paper also allows self-adjoint unbounded $A$ when the later domain conditions are met.
+Let $\Hsp$ be a separable Hilbert space, real or complex; finite dimensionality is not assumed.  In the main bounded setting $A=A^*$ and $A+H=(A+H)^*$ are bounded.  The paper also allows self-adjoint unbounded $A$ when the later domain conditions are met, specifically when the domain of $H$ contains that of $A$.
+
+At this same point the source fixes a paper-wide semantic convention: some of its results are vacuous when certain norms occurring in them fail to exist, and it announces that it will not make special mention of this at the individual statements.
 
 Let $P$ reduce $A$, with isometries $E_0,E_1$ onto $P\Hsp$ and $P^\perp\Hsp$.  Every $x\in\Hsp$ has the coordinate representation
 \begin{equation}
@@ -159,7 +161,7 @@ and
  \Theta\sim\begin{pmatrix}\Theta_0&0\\0&\Theta_1\end{pmatrix}.
  \tag{1.17}
 \end{equation}
-The singular values of $S_0$ are $\sin\theta_k$, where $\theta_k$ are the spectral/singular-angle data of $\Theta_0$; the nonzero angle data of $\Theta$ occur twice, once from each side.  In every unitary-invariant norm,
+The singular values of $S_0$ are $\sin\theta_k$, where $\theta_k$ are the spectral/singular-angle data of $\Theta_0$.  The source states here, in anticipation of the Section~3 construction and without restating a dimension hypothesis, that the nonzero angle data of $\Theta$ are the same as those of $\Theta_0$ but occur twice, once from each side.  In every unitary-invariant norm,
 \[
  \norm{Q^\perp P}=\norm{Q^\perp E_0}=\norm{\sin\Theta_0},
  \qquad
@@ -372,7 +374,9 @@ Outside the acute case a direct rotation exists iff the two crossing subspaces h
  =\dim(P^\perp\Hsp\cap Q\Hsp).
  \tag{3.5}
 \end{equation}
-When it exists it need not be unique.  On the two crossing subspaces a direct rotation satisfies $U^2x=-x$.  The source also gives an infinite-dimensional bilateral-shift example showing that the equal-dimension conditions (1.5) for $P,Q$ do not by themselves imply (3.5).
+When it exists it need not be unique.  On the two crossing subspaces a direct rotation satisfies $U^2x=-x$.
+
+The source appends a remark comparing (3.5) with the earlier matching-dimension condition (1.5).  Since (1.5) is being assumed, (3.5) holds automatically whenever either $\dim P\Hsp$ or $\dim P^\perp\Hsp$ is finite.  In infinite dimensions it can fail: let $\Hsp$ be the two-sided square-summable sequences $(\ldots,a_{-1},a_0,a_1,\ldots)$, let $P\Hsp$ be those with $a_n=0$ for $n<0$, and let $Q\Hsp$ be those with $a_n=0$ for $n\le0$.  The bilateral shift $V(a_n)=(b_n)$ with $b_n=a_{n-1}$ is a unitary satisfying (1.4), so (1.5) holds; but $PQ^\perp$ is the projector onto the sequences vanishing off $n=0$ while $P^\perp Q=0$, so the two crossing subspaces of (3.5) have dimensions $1$ and $0$ and (3.5) fails.  Hence (1.5) does not imply (3.5), and by this proposition the shift pair admits no direct rotation at all.
 % DK-CERT-SOURCE-END
 % DK-CERT-CLAIM-END DK-3.2-prop
 
@@ -430,6 +434,8 @@ Under the same direct-rotation setup, if
 \subsection*{DK-3.1-thm: Theorem 3.1, classification of pairs of subspaces}
 \sourceanchor{Theorem 3.1.}
 % DK-CERT-SOURCE-BEGIN
+Before the classification the source brings in the angle operators (1.16)--(1.17) for the direct rotation, under the standing conventions just fixed: $\Theta_j=\arccos C_j$.  Because the unitarity relations give $S_0^*S_0=1-C_0^2$ on $\mathcal X(E_0)$ and $S_0S_0^*=1-C_1^2$ on $\mathcal X(E_1)$, the two operators $\Theta_0$ and $\Theta_1$ are isometric-equivalent except perhaps for different dimensionalities of their null spaces.  The polar resolution of $S_0$ is $S_0=J_0\sin\Theta_0$, where $J_0$ carries $\overline{\operatorname{Ran}\Theta_0}$ isometrically onto $\overline{\operatorname{Ran}\Theta_1}$ and satisfies $J_0\Theta_0=\Theta_1J_0$; the skew block operator $J$ of (1.18) is built from $J_0$, is unitary on $\overline{\operatorname{Ran}\Theta}$ with $J^2=-1$ there, and is set to $0$ on $\operatorname{Null}\Theta$.
+
 Assume
 \[
  \dim P\Hsp=\dim Q\Hsp,
@@ -846,7 +852,29 @@ Under $A_0\le\alpha$, $\Lambda_1\ge\alpha+\delta$, and $H_0=0$, singular vectors
  \cos\theta_j\,|y_j^*Bx_j|\ge\delta\sin\theta_j,
  \tag{6.6}
 \end{equation}
-so the relevant cosines are positive and Ky Fan/Fan dominance gives the tangent theorem.  The source then gives Example~6.1 showing the one-sided placement of $\Lambda_1$ is essential: a finite matrix example has $\delta=1$ and tangent quantity $1$ while the residual is only $1/\sqrt2$ if spectral mass is allowed on the wrong side.
+so the relevant cosines are positive and Ky Fan/Fan dominance gives the directed tangent conclusion $\delta\norm{\tan\Theta_0}\le\norm{R}$.  In this argument the source temporarily supposes that all the operators are bounded and that $S_0$ is compact, and states that the Appendix to Section~6 removes both restrictions.
+
+The ambient conclusion of the $\tan\theta$ theorem is then assembled from the directed one through the direct-rotation geometry of (6.2).  The source observes that
+\[
+ \tan\Theta\sim
+ \begin{pmatrix}
+ 0&-J_0^*\tan\Theta_1\\
+ J_0\tan\Theta_0&0
+ \end{pmatrix},
+ \qquad
+ \norm{J_0\tan\Theta_0}
+ =\norm{J_0^*\tan\Theta_1}
+ =\norm{\tan\Theta_0}
+ \le\norm B/\delta,
+\]
+the two off-diagonal corners being compared through the same partial isometry $J_0$ of the direct rotation.  Lemmas~6.1 and~6.2 then give
+\[
+ \delta\norm{\tan\Theta}
+ \le\norm{\begin{pmatrix}0&B^*\\B&0\end{pmatrix}}
+ \le\norm{\begin{pmatrix}0&B^*\\B&H_1\end{pmatrix}}
+ =\norm H,
+\]
+which is the ambient conclusion $\delta\norm{\tan\Theta}\le\norm H$.  The source then gives Example~6.1 showing the one-sided placement of $\Lambda_1$ is essential: a finite matrix example has $\delta=1$ and tangent quantity $1$ while the residual is only $1/\sqrt2$ if spectral mass is allowed on the wrong side.
 
 The generalized theorem retains exact Rayleigh--Ritz trial data.  Assume $E_0,E_1,F_0,F_1$ are exhaustive isometries whose ranges reduce $A$ and $A+H$, respectively, but allow
 \[
@@ -1426,6 +1454,46 @@ Question~10.4 asks for analogous bounds for more general $f$.
 
 \section*{Added-in-proof provenance note}
 The source adds bibliographic references for an independently introduced angle operator related to $J_0$, and a Krein perturbation-theory reference relevant to Question~10.4.  These are bibliographic provenance rather than additional theorem-completion obligations.
+
+\section*{Editorial audit note: nonlocal source semantics of the Section 2 ambient tangent conclusion}
+
+This section is a repository editorial note, not source mathematics.  It is deliberately placed outside every registered claim passage, so that no hashed source block carries repository commentary.  It exists because one of the four counted Section~2 results --- the $\tan\theta$ theorem --- is \emph{not locally self-contained}, and a reviewer reading only its printed statement would otherwise have to discover that unaided.  The three layers below are kept apart on purpose: what the source explicitly states, what follows only from combining separated source passages, and what this repository concludes.
+
+\subsection*{(a) What the source explicitly states, and where}
+
+\begin{enumerate}[leftmargin=2em]
+\item \code{S1-block-residual}: a paper-wide convention that some results are vacuous when certain norms fail to exist, with the announcement that this will not be mentioned again at the individual statements.
+\item \code{S1-ui-norms}: the angle operators $\Theta_0,\Theta_1,\Theta$ of (1.16)--(1.17), defined from $C_jC_j^*$ for any unitary $V$ carrying $P\Hsp$ to $Q\Hsp$; and the anticipatory assertion that the nonzero angle data of $\Theta$ are those of $\Theta_0$ occurring twice.
+\item \code{S2-tan-theta}: the printed theorem.  Its hypotheses are the ordered spectral gap and $H_0=0$; its conclusions are $\delta\norm{\tan\Theta_0}\le\norm R$ and $\delta\norm{\tan\Theta}\le\norm H$.  \emph{Neither} (1.5) nor (3.5) appears in this statement, and (3.5) has not yet been introduced at this point in the paper.
+\item \code{DK-3.2-prop}: outside the acute case a direct rotation exists if and only if (3.5); (3.5) is automatic when either $\dim P\Hsp$ or $\dim P^\perp\Hsp$ is finite; and the bilateral-shift pair satisfies (1.5) while failing (3.5).
+\item \code{S3-standing-scope}: immediately after that proof, (3.5) as well as (1.5) is assumed for the remainder of the paper, except where the contrary is stated.
+\item \code{DK-3.1-thm}: under those standing conventions, $\Theta_0$ and $\Theta_1$ are isometric-equivalent apart from their null spaces, and $J_0$ carries $\overline{\operatorname{Ran}\Theta_0}$ onto $\overline{\operatorname{Ran}\Theta_1}$ with $J_0\Theta_0=\Theta_1J_0$.
+\item \code{DK-6.3-thm}: the Section~6 proof of the ambient conclusion writes $\tan\Theta$ in the two-corner form built from $J_0,\tan\Theta_0,\tan\Theta_1$, equates the norms of the two corners through $J_0$, and finishes with Lemmas~6.1 and~6.2.
+\end{enumerate}
+
+\subsection*{(b) What follows from combining those passages}
+
+\begin{enumerate}[leftmargin=2em]
+\item The chronology is mismatched.  The $\tan\theta$ theorem is \emph{printed} in Section~2, before (3.5) exists in the exposition, but it is \emph{proved} in Section~6, where (3.5) has been standing since Section~3.
+\item Condition (3.5) says exactly that the two crossing subspaces $P\Hsp\cap Q^\perp\Hsp$ and $P^\perp\Hsp\cap Q\Hsp$ have equal dimension.  These are precisely the right-angle ($\pi/2$) parts of $\Theta_0$ and of $\Theta_1$.
+\item The directed conclusion needs no dimension condition: the source's own estimate (6.6) forces the relevant cosines to be positive, so a right angle cannot occur on the $\Theta_0$ side when the residual is finite.
+\item Nothing in the printed hypotheses constrains the other crossing subspace $P^\perp\Hsp\cap Q\Hsp$.  If it is nonzero, $\Theta_1$, and hence the ambient $\Theta$, has a right angle, $\tan\Theta$ is not a bounded operator, and $\norm{\tan\Theta}$ is not a finite quantity while $\norm H$ may be finite.  This is the configuration in which the ambient conclusion depends on the Section~1 vacuity convention rather than on an inequality between finite numbers.
+\item Such a configuration is realizable in infinite dimension.  The two half-spaces of the Proposition~3.2 remark are nested, so of their two crossing subspaces one is a line and the other is zero; taking the \emph{later} half-space as $P\Hsp$ and the earlier one as $Q\Hsp$ puts the line on the $P^\perp\Hsp\cap Q\Hsp$ side, which is precisely the case of item~4: the directed angle operator $\Theta_0$ vanishes while the ambient $\Theta$ has a right angle.  By item~4 of~(a), (1.5) alone does not exclude this; by the same remark, no such configuration exists when either $P\Hsp$ or $P^\perp\Hsp$ is finite-dimensional, so the difficulty is genuinely infinite-dimensional.
+\item The Section~1 angle-doubling sentence is subject to the same qualification: in that configuration the nonzero angle data of $\Theta$ do not occur twice.
+\end{enumerate}
+
+\subsection*{(c) This repository's interpretation}
+
+The repository reads the printed $\tan\theta$ theorem under the paper's own global semantics: the Section~1 vacuity convention governs the existence of the displayed norms, and the standing condition~(3.5) is in force in the section where the theorem is proved.  On that reading, a Lean statement that carries a crossed-defect hypothesis corresponding to~(3.5), and that \emph{concludes} rather than assumes that the tangent operator lies in the ideal of the norm, is a faithful formalization of semantics the paper already imposes --- not an assertion that the Section~2 display literally contains~(3.5).
+
+The strongest competing reading is the literal one: take only the printed Section~2 hypotheses and read $\norm{\tan\Theta}$ as $+\infty$ when $\tan\Theta$ is unbounded.  On that reading the nested infinite-dimensional configuration of~(b) satisfies every printed hypothesis with $\norm H$ finite, and the ambient conclusion fails; the printed statement would then be false as transcribed, with the (3.5)-qualified theorem as its repair.
+
+This repository does not adopt the literal reading, for a reason internal to the source: the paper declares in advance that results of this kind are vacuous when the norms they display fail to exist, and the same literal reading would equally convict the Section~1 angle-doubling sentence and every later development that silently uses the direct rotation.  The classification is therefore \emph{paper-faithful under a nonlocal source interpretation}, and it is deliberately kept distinct from the repository's one genuine refutation (Proposition~4.4), where all objects exist, the compared quantities are finite, and the printed conclusion is false.
+
+A reviewer who disagrees should challenge this at
+\code{dev/davis-kahan-1970-formalization-result-inventory.json}, entry
+\code{S2-tan-theta}, field \code{nonlocal\_source\_interpretation}; the generated
+audit packet reproduces the same evidence and asks for an explicit verdict on it.
 
 \section*{Static audit workflow}
 The repository's static source-to-Lean statement audit is intentionally based on this file.  Run

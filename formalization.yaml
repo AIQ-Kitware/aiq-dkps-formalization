@@ -151,7 +151,8 @@ fidelity:
     - "Comparator success does not substitute for semantic review of paper-specific definitions and theorem statements."
     - "Generated/checkable status artifacts should be preferred over prose snapshots when they disagree."
     - "A Davis--Kahan compilation certificate proves elaboration and declaration resolution, not source equivalence; 100% additionally requires terminal exact/refuted evidence and semantic acceptance for every result in the formalization-result inventory."
-    - "The 2026-08-12 hostile re-audit and 266-atom source inventory remain source-fidelity evidence. They are not the completion denominator. The hard 100% denominator is the 29 results Davis--Kahan actually establish; each requires exact source-facing Lean evidence and semantic review."
+    - "The 2026-08-12 hostile re-audit and 272-atom source inventory remain source-fidelity evidence. They are not the completion denominator. The hard 100% denominator is the 29 results Davis--Kahan actually establish; each requires exact source-facing Lean evidence and semantic review."
+    - "One counted result, S2-tan-theta, has a printed statement that is not locally self-contained: the Section 2 ambient tan(Theta) conclusion does not state the crossed-defect condition (3.5), which the source introduces in Section 3, then assumes as standing, and relies on when proving the theorem in Section 6. The row is classified paper-faithful under an accepted, hash-pinned nonlocal source interpretation, NOT as refuted; the bilateral-shift construction is a vacuity/nonvacuity witness rather than a counterexample to it. The generated audit packet discloses the dependency and asks an independent reviewer to adjudicate it."
     - "Section 10, including Question 10.4, is open-question material and does not contribute completion obligations. Preceding identities remain source-fidelity material unless they are part of a separately designated proved result."
     - "The exact directed and ambient Section 2 tan(2 Theta) source wrappers are now compiled in real and complex scope; that historical gap is closed and should not be reintroduced."
 
@@ -164,8 +165,8 @@ review:
     and other mechanical checks. Independent mathematical and external-library review
     remain distinct from those checks. For Davis--Kahan 1970, run
     `python3 scripts/certify_davis_kahan_1970.py --clean` to generate a self-contained
-    compiler-evidence bundle and source-order audit packet. The 49 rows are organizational
-    groups and the 266 atoms are an exhaustive source-fidelity/disclosure surface; neither is
+    compiler-evidence bundle and source-order audit packet. The 50 rows are organizational
+    groups and the 272 atoms are an exhaustive source-fidelity/disclosure surface; neither is
     the formalization denominator. Every fidelity atom has an explicit boundary reason and
     reverse link to any counted result it supports, and all 29 counted results have accepted
     printed-statement boundary reviews. No private transcription is a certificate input. Add

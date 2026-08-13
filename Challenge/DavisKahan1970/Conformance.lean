@@ -334,22 +334,32 @@ theorem tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent
       delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge (T - A) := by
   sorry
 
-/-- **Intentional red source-treatment target for the printed ambient `tan Theta`
-statement.**
+/-- **Intentional red target: the omitted nonvacuity qualification of the printed
+ambient `tan Theta` statement is substantive.**
 
 Section 2 prints the ambient tangent conclusion without the crossed-defect
 condition (3.5), while Section 3 later makes (3.5) a standing assumption before
-the tangent proof.  The bilateral-shift half-spaces show that the earlier
-ambient dimension condition (1.5) does not imply (3.5).  This challenge asks
-for the stronger, theorem-level counterexample: choose the later half-space as
-`P`, the earlier one as `Q`, let the unperturbed/perturbed operator be the
-orthogonal projection onto `Q perp`, and take zero perturbation.  The printed
-ordered spectral gap and `H_0 = 0` then hold, the directed `P`-to-`Q` sine
-operator is zero, but the whole-space angle has a `pi/2` pole.  Thus the same
-witness also challenges Section 1's unqualified claim that the nonzero
-whole-space angle data occur twice.  A faithful formalization should prove this
-counterexample rather than silently add (3.5) to the printed theorem. -/
-theorem tanTheta_literalSection2_poleCounterexample
+the tangent proof runs in Section 6.  The bilateral-shift half-spaces show that
+the earlier ambient dimension condition (1.5) does not imply (3.5).  This
+challenge asks for the theorem-level strengthening of that separation: choose
+the later half-space as `P`, the earlier one as `Q`, let the
+unperturbed/perturbed operator be the orthogonal projection onto `Q perp`, and
+take zero perturbation.  The printed ordered spectral gap and `H_0 = 0` then
+hold, the directed `P`-to-`Q` sine operator is zero, and the whole-space angle
+has a right-angle component, so the ambient `tan Theta` is not a bounded
+operator and its displayed norm does not exist.  The same witness qualifies
+Section 1's unrestated claim that the nonzero whole-space angle data occur
+twice.
+
+This is a **vacuity/nonvacuity witness, not a counterexample to the counted
+result**.  Under the paper's own Section 1 convention, a statement whose
+displayed norm fails to exist is vacuous, so the witness shows that the
+qualification the printed statement omits is mathematically substantive --- it
+does not exhibit a finite-valued failure of the inequality.  The repository's
+accepted reading, the competing literal reading, and the evidence for both are
+recorded under `nonlocal_source_interpretation` for `S2-tan-theta` in
+`dev/davis-kahan-1970-formalization-result-inventory.json`. -/
+theorem tanTheta_literalSection2_admits_ambientRightAngle
     {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     [CompleteSpace H]
     (b : HilbertBasis ℤ ℂ H) :

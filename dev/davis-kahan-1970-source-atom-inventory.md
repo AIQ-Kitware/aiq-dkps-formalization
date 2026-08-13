@@ -2,21 +2,24 @@
 
 **Purpose: exhaustive source fidelity and explicit claim-boundary accounting, not the 100% formalization denominator.** Every source atom remains visible so a hostile reviewer can challenge either an omission or the reason an item is outside the counted result set.
 
-- Source blocks: **49**
-- Source-fidelity atoms: **266**
+- Source blocks: **50**
+- Source-fidelity atoms: **272**
 - Numbered equations represented: **64/64**
-- Atoms supporting one or more of the 29 counted results: **67**
-- Fidelity-only atoms: **199**
-- Boundary-classified atoms: **266/266**
+- Atoms supporting one or more of the 29 counted results: **68**
+- Fidelity-only atoms: **204**
+- Boundary-classified atoms: **272/272**
+- Atoms carrying a nonlocal-interpretation link: **11**
 - Formalization-result denominator: **29 results**, maintained separately in `dev/davis-kahan-1970-formalization-result-inventory.json`.
 
 The result denominator consists only of the four Section 2 headline theorems and the named theorems, propositions, lemmas, and corollaries Davis--Kahan actually establish. Definitions, proof derivations, examples, numerical work, historical/external results, Section 10, and explicitly unresolved/deferred claims remain here with explicit exclusion reasons but do not become Lean theorem obligations.
+
+Two different links appear below and must not be confused. **Counted result support** is the printed-statement boundary: the atom is part of the hypotheses, conclusions, or scope of a counted result. **Nonlocal interpretation support** is evidence about how a printed statement is to be *read* — a global convention, a later standing assumption, a separating example, an inherited proof context. An interpretation-support atom is deliberately *not* part of the counted statement and adds nothing to the 29-result denominator.
 
 ## Boundary-classification vocabulary
 
 - `background_theory_not_designated_result` — **2 atoms**
 - `counted_result_hypothesis` — **10 atoms**
-- `counted_result_scope` — **8 atoms**
+- `counted_result_scope` — **9 atoms**
 - `counted_result_statement` — **49 atoms**
 - `deferred_unproved_claim` — **2 atoms**
 - `definition_not_result` — **9 atoms**
@@ -25,13 +28,14 @@ The result denominator consists only of the four Section 2 headline theorems and
 - `historical_knowledge_state` — **1 atoms**
 - `introductory_background_not_designated_result` — **26 atoms**
 - `open_question` — **5 atoms**
+- `paper_wide_semantic_convention_not_result` — **1 atoms**
 - `post_result_consequence_not_in_printed_statement` — **4 atoms**
 - `post_result_interpretation_not_result` — **1 atoms**
-- `post_result_scope_remark_not_in_printed_statement` — **3 atoms**
+- `post_result_scope_remark_not_in_printed_statement` — **4 atoms**
 - `pre_result_motivation_not_result` — **1 atoms**
-- `pre_result_setup_not_in_printed_statement` — **3 atoms**
+- `pre_result_setup_not_in_printed_statement` — **4 atoms**
 - `proof_detail_not_in_printed_statement` — **4 atoms**
-- `proof_or_derivation_not_result` — **65 atoms**
+- `proof_or_derivation_not_result` — **67 atoms**
 - `remark_or_example_not_result` — **6 atoms**
 - `restatement_of_counted_result` — **6 atoms**
 - `section10_motivation_not_result` — **3 atoms**
@@ -48,6 +52,20 @@ The result denominator consists only of the four Section 2 headline theorems and
 - `DK-9-model.unperturbed-strict-eigenvalue-order` — Restored the source ordering alpha1=0=alpha2<alpha3<alpha4<... rather than weakening it to positivity of the later roots.
 - `DK-9.8.lower-bound-asymptotic` — Restored the source lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8).
 
+## Source material added by the 2026-08-12 nonlocal-semantics re-audit
+
+The printed Section 2 tan Theta theorem is not locally self-contained: its faithful reading depends on the paper-wide vacuity convention and on the standing condition (3.5) introduced only in Section 3. That dependency was previously visible only in prose review notes.
+
+- `S1-block-residual.norm-existence-vacuity-convention`
+- `DK-3.2-prop.finite-crossing-automatic`
+- `DK-3.1-thm.angle-operator-partial-isometry`
+- `DK-6.3-thm.tangent-proof-temporary-boundedness`
+- `DK-6.3-thm.ambient-wholeSpace-assembly`
+
+Atoms carrying an `interpretation_support` block are reverse-linked to the counted result whose nonlocal reading they support. That link is deliberately separate from `formalization_result_ids`, which remains the printed-statement boundary: an interpretation-support atom is NOT part of the counted result statement.
+
+Effect on the completion denominator: none; the completion denominator remains the 29 established results.
+
 ## Atoms in source order
 
 ### `S1-block-residual`
@@ -55,6 +73,10 @@ The result denominator consists only of the four Section 2 headline theorems and
 - `S1-block-residual.setup-hilbert-scope` — **scope / introductory_background_not_designated_result** — Separable real or complex Hilbert space; bounded main setting with stated unbounded extension.
   - Counted result support: none
   - Boundary rationale: This is Section 1 introductory setup/background or an introductory consequence, not one of the four Section 2 headline theorems or a named theorem/proposition/lemma/corollary counted by the project.
+- `S1-block-residual.norm-existence-vacuity-convention` — **scope / paper_wide_semantic_convention_not_result** — Paper-wide convention: some of the paper's results are vacuous when certain norms occurring in them fail to exist, and the source will not repeat that qualification at the individual statements.
+  - Counted result support: none
+  - Boundary rationale: A global semantic reading convention for the paper's statements, not one of the four Section 2 headline theorems or a named theorem/proposition/lemma/corollary. It is not a completion obligation, but it is load-bearing evidence for how the printed Section 2 tangent theorem is to be read when a displayed norm does not exist.
+  - Nonlocal interpretation support for `S2-tan-theta` (`paper_wide_convention`): Supplies the source's own semantics for a printed conclusion whose displayed norm need not exist; the ambient tangent conclusion is exactly such a case when the perturbed crossing subspace is nonzero.
 - `S1-block-residual.reducing-projector-setup` — **construction / introductory_background_not_designated_result** — P reduces A and E0,E1 are isometries onto the two reducing summands.
   - Counted result support: none
   - Boundary rationale: This is Section 1 introductory setup/background or an introductory consequence, not one of the four Section 2 headline theorems or a named theorem/proposition/lemma/corollary counted by the project.
@@ -106,6 +128,7 @@ The result denominator consists only of the four Section 2 headline theorems and
 - `S1-block-residual.eq-1-5` — **numbered-equation / proof_or_derivation_not_result** — Exact mathematical content of source equation (1.5) as reconstructed in the distributable TeX.
   - Counted result support: none
   - Boundary rationale: This atom occurs in a proof, derivation, or proof-only equation rather than in a counted result statement. Source fidelity preserves it, but 100% does not require a separate Lean theorem for it.
+  - Nonlocal interpretation support for `S2-tan-theta` (`related_dimension_condition`): The matching-dimension condition (1.5) is the only dimension condition available when the Section 2 tangent theorem is printed; the Proposition 3.2 remark shows it does not imply (3.5).
 - `S1-block-residual.eq-1-6` — **numbered-equation / proof_or_derivation_not_result** — Exact mathematical content of source equation (1.6) as reconstructed in the distributable TeX.
   - Counted result support: none
   - Boundary rationale: This atom occurs in a proof, derivation, or proof-only equation rather than in a counted result statement. Source fidelity preserves it, but 100% does not require a separate Lean theorem for it.
@@ -141,9 +164,10 @@ The result denominator consists only of the four Section 2 headline theorems and
 - `S1-ui-norms.s0-singular-values` — **assertion / introductory_background_not_designated_result** — The singular values of S0 are sin(theta_k) for the principal-angle data.
   - Counted result support: none
   - Boundary rationale: This is Section 1 introductory setup/background or an introductory consequence, not one of the four Section 2 headline theorems or a named theorem/proposition/lemma/corollary counted by the project.
-- `S1-ui-norms.ambient-angle-doubling` — **assertion / introductory_background_not_designated_result** — Nonzero angle data of the ambient angle operator occur twice, once from each side.
+- `S1-ui-norms.ambient-angle-doubling` — **assertion / introductory_background_not_designated_result** — Section 1 states, in anticipation of the Section 3 direct-rotation construction and without restating a dimension hypothesis, that the nonzero angle data of the ambient angle operator are those of Theta_0 occurring twice, once from each side.
   - Counted result support: none
-  - Boundary rationale: This is Section 1 introductory setup/background or an introductory consequence, not one of the four Section 2 headline theorems or a named theorem/proposition/lemma/corollary counted by the project.
+  - Boundary rationale: Section 1 background stated in anticipation of the Section 3 direct-rotation construction, not a designated result. It is recorded as interpretation evidence because the same infinite-dimensional configuration that makes the ambient tangent norm fail to exist also qualifies this doubling sentence.
+  - Nonlocal interpretation support for `S2-tan-theta` (`related_unqualified_claim`): Section 1 asserts the doubling of the nonzero ambient angle data without a dimension hypothesis; the same bilateral-shift configuration qualifies this sentence, so the omitted qualification is not peculiar to the tangent theorem.
 - `S1-ui-norms.directed-sine-norm` — **identity / introductory_background_not_designated_result** — ||Q^perp P||=||Q^perp E0||=||sin Theta0|| for every UI norm.
   - Counted result support: none
   - Boundary rationale: This is Section 1 introductory setup/background or an introductory consequence, not one of the four Section 2 headline theorems or a named theorem/proposition/lemma/corollary counted by the project.
@@ -220,6 +244,7 @@ The result denominator consists only of the four Section 2 headline theorems and
 - `S2-tan-theta.ambient-conclusion` — **theorem / counted_result_statement** — delta ||tan Theta|| <= ||H||.
   - Counted result support: `S2-tan-theta`
   - Boundary rationale: This atom is part of the printed statement/conclusion of a counted Davis--Kahan result and supports that result in the 29-result denominator.
+  - Nonlocal interpretation support for `S2-tan-theta` (`printed_statement_clause`): This is the printed clause whose faithful reading depends on nonlocal source material; the directed conclusion is unaffected.
 ### `S2-sin-two-theta`
 
 - `S2-sin-two-theta.gap-hypothesis` — **hypothesis / counted_result_hypothesis** — The double-sine theorem separates Lambda0 from Lambda1 by an interval/exterior gap.
@@ -332,12 +357,24 @@ The result denominator consists only of the four Section 2 headline theorems and
 - `DK-3.2-prop.crossing-square-minus-one` — **theorem / proof_detail_not_in_printed_statement** — On the crossing subspaces U^2 x=-x.
   - Counted result support: none
   - Boundary rationale: This atom is established or used inside the proof of the neighboring named result, but is not part of that result's printed statement.
-- `DK-3.2-prop.bilateral-shift-counterexample` — **counterexample / remark_or_example_not_result** — The bilateral-shift example shows the basic P/Q dimension conditions do not imply the crossing-dimension condition.
+- `DK-3.2-prop.finite-crossing-automatic` — **scope / post_result_scope_remark_not_in_printed_statement** — Under the assumed (1.5), condition (3.5) holds automatically whenever either dim P-space or dim P-perp-space is finite.
   - Counted result support: none
-  - Boundary rationale: This atom belongs to a remark, example, or counterexample outside a counted result statement. It is retained for fidelity but is not a separate result obligation.
+  - Boundary rationale: A scope remark attached to Proposition 3.2 rather than part of its printed statement. It records exactly when the crossed-defect condition is automatic, and therefore delimits the configurations in which the Section 2 ambient tangent reading is at issue at all.
+  - Nonlocal interpretation support for `S2-tan-theta` (`automatic_case`): Shows the interpretive difficulty is genuinely infinite-dimensional: with either summand finite-dimensional, (1.5) already gives (3.5).
+- `DK-3.2-prop.bilateral-shift-counterexample` — **counterexample / remark_or_example_not_result** — The bilateral-shift example on two-sided square-summable sequences satisfies (1.5) with nested P-space and Q-space, has crossing subspaces of dimensions 1 and 0, and therefore fails (3.5): the matching-dimension conditions do not imply the crossing-dimension condition in infinite dimension.
+  - Counted result support: none
+  - Boundary rationale: The bilateral-shift example demonstrates that the matching-dimension conditions (1.5) do not imply the crossed-dimension condition (3.5) in infinite dimension. It is a remark/example attached to Proposition 3.2 rather than a designated result. It is not a counterexample to any counted result; its role in this repository is to show that the qualification omitted from the printed Section 2 tangent statement is mathematically substantive.
+  - Nonlocal interpretation support for `S2-tan-theta` (`scope_separating_example`): Proves that (1.5) does not imply (3.5) in infinite dimension, hence that the omitted qualification is substantive rather than cosmetic.
 - `DK-3.2-prop.eq-3-5` — **numbered-equation / counted_result_statement** — Exact mathematical content of source equation (3.5) as reconstructed in the distributable TeX.
   - Counted result support: `DK-3.2-prop`
   - Boundary rationale: This atom is part of the printed statement/conclusion of a counted Davis--Kahan result and supports that result in the 29-result denominator.
+  - Nonlocal interpretation support for `S2-tan-theta` (`omitted_qualification`): Equation (3.5) is exactly the equality of the two crossing-subspace dimensions, i.e. of the right-angle parts of Theta_0 and Theta_1. It is the qualification the Section 2 statement does not carry.
+### `S3-standing-scope`
+
+- `S3-standing-scope.crossed-dimension-standing-assumption` — **scope / counted_result_scope** — Standing convention: (3.5) is assumed as well as (1.5) for the remainder of the paper, except where the contrary is explicitly stated, so a direct rotation always exists and the development uses its direct special case (3.6).
+  - Counted result support: `DK-3.4-prop`, `DK-8.2-thm`
+  - Boundary rationale: This atom records a standing source-scope convention, not a result. It is linked to the counted results whose printed reading needs it: Theorem 8.2, whose printed conclusion is the AMBIENT Theta < pi/4 obtained from a directed estimate, and Proposition 3.4, whose source block reads "under the same direct-rotation setup" instead of restating the dimension conditions. It is NOT linked to counted results that restate the conditions in their own printed statement (Theorem 3.1 and, through it, Corollary 3.1), to results that do not involve the pair (P,Q) at all (Sections 5 and 6 lemmas and the Sylvester theorems), or to Theorem 8.1, whose ambient quarter-angle characterization is proved with no dimension or crossed-defect hypothesis at all.
+  - Nonlocal interpretation support for `S2-tan-theta` (`later_standing_assumption`): From immediately after Proposition 3.2 onward, (3.5) as well as (1.5) is assumed except where the contrary is stated; the Section 6 proof of the printed tangent theorem is inside that scope.
 ### `DK-3.3-prop`
 
 - `DK-3.3-prop.reflection-conjugacy` — **identity / pre_result_setup_not_in_printed_statement** — With X=P-Pperp and Q_-=XQX, U^{-1}=XUX.
@@ -365,6 +402,10 @@ The result denominator consists only of the four Section 2 headline theorems and
   - Boundary rationale: This atom is part of the printed statement/conclusion of a counted Davis--Kahan result and supports that result in the 29-result denominator.
 ### `DK-3.1-thm`
 
+- `DK-3.1-thm.angle-operator-partial-isometry` — **construction / pre_result_setup_not_in_printed_statement** — For the direct rotation, Theta_j = arccos C_j, the two angle operators are isometric-equivalent apart from the dimensionalities of their null spaces, and the polar resolution S_0 = J_0 sin Theta_0 gives a partial isometry J_0 of the closed range of Theta_0 onto that of Theta_1 with J_0 Theta_0 = Theta_1 J_0.
+  - Counted result support: none
+  - Boundary rationale: Section 3 setup preceding the printed Theorem 3.1 statement rather than part of it. It is recorded because the Section 6 ambient tangent proof compares its two corners through exactly this J_0, which exists as described only in the direct-rotation setting fixed by the standing (3.5).
+  - Nonlocal interpretation support for `S2-tan-theta` (`proof_context_dependency`): The equinormality of the two ambient tangent corners is a property of the direct-rotation partial isometry J_0, constructed under the standing crossed-defect convention.
 - `DK-3.1-thm.complete-invariant` — **theorem / counted_result_statement** — Spectral multiplicity functions of Theta0,Theta1 completely classify the pair under the stated dimension hypotheses.
   - Counted result support: `DK-3.1-thm`
   - Boundary rationale: This atom is part of the printed statement/conclusion of a counted Davis--Kahan result and supports that result in the 29-result denominator.
@@ -584,6 +625,14 @@ The result denominator consists only of the four Section 2 headline theorems and
 - `DK-6.3-thm.tangent-setup-identities` — **proof-claim / proof_or_derivation_not_result** — Equations (6.2)--(6.6) provide the block identities used in the generalized tangent proof.
   - Counted result support: none
   - Boundary rationale: This atom occurs in a proof, derivation, or proof-only equation rather than in a counted result statement. Source fidelity preserves it, but 100% does not require a separate Lean theorem for it.
+- `DK-6.3-thm.tangent-proof-temporary-boundedness` — **proof-claim / proof_or_derivation_not_result** — The Section 6 tangent proof temporarily supposes that all operators are bounded and that S_0 is compact, and defers the removal of both restrictions to the Appendix to Section 6.
+  - Counted result support: none
+  - Boundary rationale: A temporary proof-technical restriction inside the Section 6 argument, not a hypothesis of the printed Section 2 theorem. It is part of the inherited proof context under which the printed tangent statement is actually settled.
+  - Nonlocal interpretation support for `S2-tan-theta` (`proof_context_dependency`): Records that the printed statement is proved under successively relaxed working assumptions supplied outside Section 2.
+- `DK-6.3-thm.ambient-wholeSpace-assembly` — **proof-claim / proof_or_derivation_not_result** — The ambient conclusion is assembled from the directed one: tan Theta has the two-corner block form built from J_0, tan Theta_0 and tan Theta_1, the two corners have equal unitarily invariant norms through J_0, and Lemmas 6.1 and 6.2 then give delta ||tan Theta|| <= ||H||.
+  - Counted result support: none
+  - Boundary rationale: The proof of the counted ambient conclusion rather than an additional printed result. It is recorded separately because it is the exact place where the Section 2 statement inherits the direct-rotation geometry available only under the later standing conditions.
+  - Nonlocal interpretation support for `S2-tan-theta` (`proof_context_dependency`): The proof of the printed ambient conclusion runs in Section 6, where (3.5) has been standing since Section 3, and it uses the direct-rotation corner comparison rather than the Section 2 hypotheses alone.
 - `DK-6.3-thm.example6-1` — **counterexample / remark_or_example_not_result** — Example 6.1 gives the explicit 2x2 counterexample showing one-sided placement is essential for the tangent conclusion.
   - Counted result support: none
   - Boundary rationale: This atom belongs to a remark, example, or counterexample outside a counted result statement. It is retained for fidelity but is not a separate result obligation.
