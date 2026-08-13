@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import FinishYuWangSamworth.Symmetric.Theorem1
 import FinishYuWangSamworth.Symmetric.MixedGap
+import FinishYuWangSamworth.Symmetric.Corollary1
 import FinishYuWangSamworth.Symmetric.AngleIdentity
 import FinishYuWangSamworth.Symmetric.OrthogonalSharpness
 import FinishYuWangSamworth.Symmetric.MiddleBlockSharpness
