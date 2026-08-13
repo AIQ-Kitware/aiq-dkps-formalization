@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
-import DavisKahan.Geometry.Angle.Proposition35Nonacute
+import DavisKahan.Geometry.Angle.Proposition35Exponential
 
 /-!
 # Davis--Kahan 1970, Proposition 3.5, in arbitrary Hilbert dimension
@@ -17,14 +17,19 @@ constructs the literal bounded angle
 
 `Theta = arcsin |P - Q|`,
 
-the acute direct rotation `W`, and the quarter turn `J` from the polar
-resolution
+the acute direct rotation `W`, and the quarter turn `J` from the polar resolution
 
 `W = cos Theta + J sin Theta`.
 
-The theorems below expose the six printed assertions: the four commutations,
-the vector-angle identity on an angle eigenvector, and the unique maximality of
-the corresponding angle eigenspace under the paper's conditions (a)--(c).
+`DavisKahan.Geometry.Angle.Proposition35Exponential` further proves the
+arbitrary-dimensional exponential form `W = exp (J Theta)` from that resolution,
+using only the supported identity `J^2 Theta = -Theta` rather than a global
+`J^2 = -1` assumption.
+
+The theorems below expose that functional-calculus representation together with
+the six printed assertions: the four commutations, the vector-angle identity on
+an angle eigenvector, and the unique maximality of the corresponding angle
+eigenspace under the paper's conditions (a)--(c).
 -/
 
 open scoped InnerProductSpace
@@ -74,6 +79,35 @@ variable [Algebra ℝ (H →L[𝕜] H)] [IsScalarTower ℝ 𝕜 (H →L[𝕜] H)
 variable (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
   [V.HasOrthogonalProjection]
 
+/-- The paper's quarter turn for a chosen completed nonacute direct rotation.
+It is defined by the same polar construction as on the acute branch. -/
+noncomputable def corollary3_2_paperQuarterTurn
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    H →L[𝕜] H :=
+  section3NonacuteQuarterTurn U V J
+
+/-- Equation (1.18), exponential form of a chosen distinguished direct rotation in arbitrary
+Hilbert dimension: `U = exp (J Theta)`.  The crossed-defect isometry selects the completion
+when the pair is not acute. -/
+theorem equation1_18_directRotation_exponential
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    nonacuteDirectRotation U V J =
+      NormedSpace.exp
+        (corollary3_2_paperQuarterTurn U V J * proposition3_5_angleOperator U V) := by
+  change nonacuteDirectRotation U V J =
+    NormedSpace.exp
+      (section3NonacuteQuarterTurn U V J * section3AngleOperator U V)
+  exact nonacuteDirectRotation_eq_exp_nonacuteQuarterTurn_mul_angleOperator U V J
+
+/-- Equation (1.18), trigonometric form of a chosen distinguished direct rotation. -/
+theorem equation1_18_directRotation_resolution
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    nonacuteDirectRotation U V J =
+      section3CosAngleOperator U V +
+        corollary3_2_paperQuarterTurn U V J ∘L section3SinAngleOperator U V := by
+  simpa [corollary3_2_paperQuarterTurn] using
+    nonacuteDirectRotation_eq_cos_add_quarterTurn_sin U V J
+
 /-- The defining polar resolution of the quarter turn used by Proposition 3.5:
 `W = cos Theta + J sin Theta`. -/
 theorem proposition3_5_directRotation_resolution (hacute : TauCeti.IsAcute U V) :
@@ -81,6 +115,14 @@ theorem proposition3_5_directRotation_resolution (hacute : TauCeti.IsAcute U V) 
       section3CosAngleOperator U V +
         proposition3_5_quarterTurn U V ∘L section3SinAngleOperator U V :=
   section3DirectRotation_eq_cos_add_quarterTurn_sin U V hacute
+
+/-- The functional-calculus representation immediately preceding Proposition 3.5:
+`U = exp (J Theta)` for the canonical direct rotation of an acute pair. -/
+theorem proposition3_5_directRotation_exponential (hacute : TauCeti.IsAcute U V) :
+    proposition3_5_directRotation U V =
+      NormedSpace.exp
+        (proposition3_5_quarterTurn U V * proposition3_5_angleOperator U V) :=
+  section3DirectRotation_eq_exp_quarterTurn_mul_angleOperator U V hacute
 
 /-- Interchanging the subspaces leaves the arbitrary-dimensional bounded angle unchanged. -/
 theorem corollary3_2_angleOperator_symm :
@@ -92,13 +134,6 @@ resolution changes sign when the subspaces are interchanged. -/
 theorem corollary3_2_quarterTurn_symm :
     proposition3_5_quarterTurn V U = -proposition3_5_quarterTurn U V :=
   section3QuarterTurn_symm U V
-
-/-- The paper's quarter turn for the completed nonacute direct rotation.
-It is defined by the same polar construction as on the acute branch. -/
-noncomputable def corollary3_2_paperQuarterTurn
-    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
-    H →L[𝕜] H :=
-  section3NonacuteQuarterTurn U V J
 
 /-- The skew part of every completed nonacute direct rotation has modulus
 exactly `sin Theta`. -/
@@ -116,6 +151,15 @@ theorem corollary3_2_nonacute_directRotation_resolution
         corollary3_2_paperQuarterTurn U V J ∘L section3SinAngleOperator U V := by
   simpa [corollary3_2_paperQuarterTurn] using
     nonacuteDirectRotation_eq_cos_add_quarterTurn_sin U V J
+
+
+/-- Exponential form for a chosen completed direct rotation outside the acute case. -/
+theorem corollary3_2_nonacute_directRotation_exponential
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    nonacuteDirectRotation U V J =
+      NormedSpace.exp
+        (corollary3_2_paperQuarterTurn U V J * proposition3_5_angleOperator U V) :=
+  equation1_18_directRotation_exponential U V J
 
 /-- Reversing the ordered pair and the crossed-defect choice negates the paper's
 quarter turn. -/
