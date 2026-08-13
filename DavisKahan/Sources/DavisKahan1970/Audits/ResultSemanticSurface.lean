@@ -14,8 +14,8 @@ single compiler-checkable surface for the Lean declarations selected by the main
 
 Each `#check` below is evidence only: the semantic correspondence to the printed source
 is recorded in `dev/davis-kahan-1970-formalization-result-inventory.json` and the
-human-readable result audit.  The one explicitly nonterminal result also lists the
-strongest current declarations that delimit the remaining theorem-surface gap.
+human-readable result audit.  The maintained result inventory is terminal; this surface
+keeps source-facing headline declarations and their scope companions compiler-visible.
 
 Run:
 
@@ -106,7 +106,7 @@ Status: **TERMINAL EXACT**.
 
 /-! ## S2-tan-theta: Single-angle tangent theorem
 
-Status: **OPEN RESULT-SCOPE GAP** — the real-scalar unbounded ambient endpoint.
+Status: **TERMINAL EXACT** under the accepted nonlocal source interpretation.
 
 The printed Section 2 statement is not locally self-contained: it does not state the
 crossed-defect condition (3.5), which the source introduces in Section 3 and then
@@ -122,6 +122,7 @@ The transversality-form declarations assume `‖sin Θ‖ < 1`, which is strictl
 than (3.5); they are registered as specializations, not as the source-shaped form.
 -/
 
+#check @TauCeti.DavisKahan1970.tanTheta_headline_generic_directed
 #check @TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm
 #check @TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial
 #check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm
@@ -144,6 +145,7 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 Status: **TERMINAL EXACT**.
 -/
 
+#check @TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed
 #check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm
 #check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real
 #check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative
@@ -159,6 +161,7 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
+#check @TauCeti.DavisKahan1970.tanTwoTheta_headline_generic
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact

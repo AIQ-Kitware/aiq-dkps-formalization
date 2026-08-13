@@ -16,6 +16,7 @@ import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 import DavisKahan.Sources.DavisKahan1970.FullPartIII
 import DavisKahan.Sources.DavisKahan1970.FullPartIIIExtensions
 import DavisKahan.Sources.DavisKahan1970.FullSineTheta
+import DavisKahan.Sources.DavisKahan1970.HeadlineGeneric
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
 import DavisKahan.Sources.DavisKahan1970.PartIII
@@ -30,7 +31,6 @@ import DavisKahan.Sources.DavisKahan1970.Section3PrincipalSquareRoot
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Real
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
-import DavisKahan.Sources.DavisKahan1970.Section3Proposition32Crossing
 import DavisKahan.Sources.DavisKahan1970.Section4
 import DavisKahan.Sources.DavisKahan1970.Section4Examples
 import DavisKahan.Sources.DavisKahan1970.Section4BasisAngleEnergy
@@ -44,7 +44,6 @@ import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
 import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
 import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Sources.DavisKahan1970.SharpKyFan
-import DavisKahan.Sources.DavisKahan1970.Section7SwapAsymmetry
 import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
