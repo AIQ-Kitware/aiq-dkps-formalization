@@ -49,12 +49,13 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
+        "TauCeti.DavisKahan1970.sinTheta_headline_generic",
         "TauCeti.DavisKahan1970.sinTheta",
         "TauCeti.DavisKahan1970.sinTheta_real_exactPaper",
         "TauCeti.DavisKahan1970.generalizedSinTheta",
         "TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. `sinTheta` is the complex source-shaped unbounded form-bounded isometric theorem and `sinTheta_real_exactPaper` exposes the real paper UI-norm surface; the generalized complex/real endpoints record the same unbounded closed-operator engine with the source lower-frame formulation. Together they cover the printed interval/exterior gap, arbitrary unitary-invariant norm, real/complex, infinite-dimensional, and unbounded-self-adjoint scope with bounded residual. No proof-only Section 1/6 material is used as part of the counted result.",
+      "review_note": "Accepted semantic review, refreshed 2026-08-13. `sinTheta_headline_generic` is the primary source-facing witness: it is generic over RCLike 𝕜, uses the literal `PaperUnitaryInvariantNorm`, exposes A, A0, Lambda1, E0, F0, F1, R and their domain/intertwining identities directly, writes the interval/exterior spectral alternative literally, has no finite-dimensional hypothesis, and concludes the factor-one directed sine bound. The scalar capability classes in its signature have proved instances for both ℝ and ℂ. Older complex/real and generalized declarations remain supporting implementation/scope witnesses rather than the canonical alignment statement.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-sin-theta",
