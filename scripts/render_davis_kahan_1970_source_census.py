@@ -174,6 +174,7 @@ def render(data: dict) -> str:
             f"#### {item['source_anchor']}: {item['title']}",
             "",
             f"- **Kind:** `{item['source_kind']}`",
+            f"- **Review importance:** `{item['importance']}`",
             f"- **Status:** `{item['status']}`",
             f"- **Verification:** `{item['verification']}`",
             f"- **Hostile completion certification:** `{item.get('completion_certification', 'missing')}`",
