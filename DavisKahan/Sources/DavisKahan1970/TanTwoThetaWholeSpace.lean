@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Geometry.Angle.PaperTanAngle
+import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
 import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
 import DavisKahan.InfiniteDimensional.TanTwoTheta.PaperFaithfulUINorm
 import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
@@ -274,12 +275,6 @@ section Representative
 
 variable (U V : Submodule ℂ E)
   [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-
-/-- The ambient `cos 2Θ` as an inverse: `(1 − 2 sin²Θ)⁻¹`.  Under uniform
-quarter transversality this is the honest inverse; the `Ring.inverse` spelling
-keeps the definition total. -/
-def paperDoubleSecant : E →L[ℂ] E :=
-  Ring.inverse (1 - 2 * (paperProjectorDifference U V * paperProjectorDifference U V))
 
 /-- **The off-diagonal block representative of the ambient double-angle
 tangent.**  It is supported entirely on the two cross blocks of `U ⊕ U^⊥`, and

@@ -39,6 +39,8 @@ import DavisKahan.Sylvester.Spectrum
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 import DavisKahan.TanTheta.Theorem63FiniteSource
 import DavisKahan.TanTheta.Theorem63InfiniteTrial
+import DavisKahan.FiniteDimensional.DirectRotation.Basic
+import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
 
 /-!
 ## Comparator maintenance rule
@@ -187,7 +189,7 @@ theorem projectorDifference_restrictionSpectra_opNorm
     {A B : H →L[ℂ] H} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule ℂ H} [U.HasOrthogonalProjection]
     [W.HasOrthogonalProjection]
-    (hU : Reduces A U) (hW : Reduces B W)
+    (hU : A.Reduces U) (hW : B.Reduces W)
     {c g : ℝ} (hg : 0 < g)
     (hUhi : spectrum ℝ (A.restrict hU.1) ⊆ Set.Ici (c + g))
     (hUlo : spectrum ℝ (A.restrict hU.2) ⊆ Set.Iic c)
@@ -390,10 +392,10 @@ theorem sinTwoTheta_directedResidual_paperUINorm
     (hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Uᗮ A),
       x ≤ a - d ∨ b + d ≤ x)
     (M : V →L[ℂ] V)
-    (hMem : N.Mem (residual A V.subtypeL M)) :
+    (hMem : N.Mem (DavisKahan.residual A V.subtypeL M)) :
     N.Mem (sinTwoThetaIdealBlock U V) ∧
       d * N.gauge (sinTwoThetaIdealBlock U V) ≤
-        2 * N.gauge (residual A V.subtypeL M) := by
+        2 * N.gauge (DavisKahan.residual A V.subtypeL M) := by
   sorry
 
 /-- Full-Hilbert ambient `sin 2Theta` theorem for every source UI norm. -/
