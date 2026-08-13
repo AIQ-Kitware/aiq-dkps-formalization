@@ -27,13 +27,17 @@ namespace Section3Audit
 #check proposition3_5_angleEigenspace
 #check proposition3_5_directRotation_resolution
 #check proposition3_5_commutations
+#check proposition3_5_commutations_acute
 #check proposition3_5_eigenvector_angle
+#check proposition3_5_eigenvector_angle_acute
 #check proposition3_5_angleEigenspace_eq_fixedCosineSubspace
 #check proposition3_5_angleEigenspace_uniqueMaximal
 
 #print axioms proposition3_5_directRotation_resolution
 #print axioms proposition3_5_commutations
+#print axioms proposition3_5_commutations_acute
 #print axioms proposition3_5_eigenvector_angle
+#print axioms proposition3_5_eigenvector_angle_acute
 #print axioms proposition3_5_angleEigenspace_eq_fixedCosineSubspace
 #print axioms proposition3_5_angleEigenspace_uniqueMaximal
 
@@ -60,7 +64,18 @@ example (hacute : TauCeti.IsAcute U V) :
       Commute (proposition3_5_angleOperator U V) (V.starProjection : H →L[ℝ] H) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_quarterTurn U V) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_directRotation U V) :=
-  proposition3_5_commutations U V hacute
+  proposition3_5_commutations_acute U V hacute
+
+-- The printed commutation clause carries no acuteness hypothesis; only a crossed-defect
+-- isometry, which is the paper's matched-crossing condition (3.5).
+example (J : TauCeti.DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℝ]
+      TauCeti.DavisKahan.halmosTargetDefect U V) :
+    Commute (proposition3_5_angleOperator U V) (U.starProjection : H →L[ℝ] H) ∧
+      Commute (proposition3_5_angleOperator U V) (V.starProjection : H →L[ℝ] H) ∧
+      Commute (proposition3_5_angleOperator U V) (corollary3_2_paperQuarterTurn U V J) ∧
+      Commute (proposition3_5_angleOperator U V)
+        (TauCeti.DavisKahan.nonacuteDirectRotation U V J) :=
+  proposition3_5_commutations U V J
 
 end Real
 
@@ -76,7 +91,18 @@ example (hacute : TauCeti.IsAcute U V) :
       Commute (proposition3_5_angleOperator U V) (V.starProjection : H →L[ℂ] H) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_quarterTurn U V) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_directRotation U V) :=
-  proposition3_5_commutations U V hacute
+  proposition3_5_commutations_acute U V hacute
+
+-- The printed commutation clause carries no acuteness hypothesis; only a crossed-defect
+-- isometry, which is the paper's matched-crossing condition (3.5).
+example (J : TauCeti.DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      TauCeti.DavisKahan.halmosTargetDefect U V) :
+    Commute (proposition3_5_angleOperator U V) (U.starProjection : H →L[ℂ] H) ∧
+      Commute (proposition3_5_angleOperator U V) (V.starProjection : H →L[ℂ] H) ∧
+      Commute (proposition3_5_angleOperator U V) (corollary3_2_paperQuarterTurn U V J) ∧
+      Commute (proposition3_5_angleOperator U V)
+        (TauCeti.DavisKahan.nonacuteDirectRotation U V J) :=
+  proposition3_5_commutations U V J
 
 end Complex
 

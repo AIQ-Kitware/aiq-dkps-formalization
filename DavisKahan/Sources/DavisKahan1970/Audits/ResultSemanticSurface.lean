@@ -225,10 +225,18 @@ Status: **TERMINAL EXACT**.
 /-! ## DK-3.5-prop: Angle commutation and eigenspace geometry
 
 Status: **TERMINAL EXACT**.
+
+The three printed clauses do not share a scope, and the signatures below show it.  The source
+attaches "in the acute case" to the maximal-eigenspace clause only, so the commutation and
+eigenvector-angle clauses are stated for the completed direct rotation selected by a
+crossed-defect isometry and carry no acuteness hypothesis; the maximality clause keeps it.
 -/
 
 #check @TauCeti.DavisKahan1970.proposition3_5_commutations
 #check @TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle
+#check @TauCeti.DavisKahan1970.proposition3_5_commutations_acute
+#check @TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute
+#check @TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply
 #check @TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace
 #check @TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal
 

@@ -8,9 +8,26 @@ import DavisKahan.Geometry.Angle.Proposition35Exponential
 /-!
 # Davis--Kahan 1970, Proposition 3.5, in arbitrary Hilbert dimension
 
-This file is the paper-facing surface for Proposition 3.5.  The proposition is
-stated in Section 3 for an acute pair of closed subspaces in a real or complex
-Hilbert space, without a finite-dimensional hypothesis.
+This file is the paper-facing surface for Proposition 3.5, for closed subspaces of a real or
+complex Hilbert space, without a finite-dimensional hypothesis.
+
+**The proposition is not acute throughout, and the three clauses do not share a scope.**  The
+source reads: "`Θ` commutes with `P`, with `Q`, with `J`, and with `U`.  For every eigenvalue
+`θ`, the eigenvectors `x` satisfy `∠(x, Ux) = θ`.  *In the acute case*, for every eigenvalue
+`θ`, the eigenspace `Ω({θ})𝓗` is the unique maximal subspace with the properties (a)--(c)."
+The acute restriction is attached to the third clause only.  Accordingly:
+
+* the commutation clause (`proposition3_5_commutations`) and the eigenvector-angle clause
+  (`proposition3_5_eigenvector_angle`) are stated at the standing Section 3 scope, for the
+  completed direct rotation selected by a crossed-defect isometry — the paper's matched-crossing
+  condition (3.5).  Neither requires acuteness, and the eigenvector clause genuinely covers the
+  right-angle eigenspace `θ = π/2`;
+* the maximal-eigenspace clause (`proposition3_5_angleEigenspace_uniqueMaximal`) keeps the acute
+  hypothesis, because the source puts it there.
+
+`proposition3_5_commutations_acute` and `proposition3_5_eigenvector_angle_acute` read the same
+two clauses on the canonical acute direct rotation, for consumers that hold `IsAcute` rather
+than a crossed-defect isometry.
 
 The implementation in `DavisKahan.Geometry.Angle.Proposition35Infinite`
 constructs the literal bounded angle
@@ -226,10 +243,46 @@ theorem corollary3_2_directRotation_swap
       star (nonacuteDirectRotation U V J) :=
   nonacuteDirectRotation_swap U V J
 
-/-- **Davis--Kahan 1970, Proposition 3.5, the four commutation assertions.**
-In the acute case `Theta` commutes with `P`, `Q`, the quarter turn `J`, and the
-direct rotation `W`. -/
-theorem proposition3_5_commutations (hacute : TauCeti.IsAcute U V) :
+/-! ### The first two clauses, at the paper's own scope
+
+Davis and Kahan write Proposition 3.5 as three assertions and restrict **only the third** to
+the acute case: "`Θ` commutes with `P`, with `Q`, with `J`, and with `U`.  For every eigenvalue
+`θ`, the eigenvectors `x` satisfy `∠(x, Ux) = θ`.  *In the acute case*, for every eigenvalue
+`θ`, the eigenspace `Ω({θ})𝓗` is the unique maximal subspace with the properties (a)--(c)."
+
+So the first two clauses live at the standing Section 3 scope, where a crossed-defect isometry
+`J` selects a completed direct rotation and the pair need not be acute.  That is the scope the
+two theorems below carry: the only hypothesis beyond the ambient Section 3 setting is the
+isometry `J` itself, which is the paper's matched-crossing condition (3.5) in Lean form.
+
+The `*_acute` twins below are the same two clauses read on the *canonical acute* direct
+rotation `section3DirectRotation` and its quarter turn, rather than on a completed rotation.
+They are kept because acute-only consumers hold `IsAcute` rather than a crossed-defect
+isometry.  They are not corollaries of the nonacute theorems: this repository does not
+currently prove that a completed rotation agrees with the canonical acute one when the pair is
+acute, so the two families are about different (if morally identical) operators. -/
+
+/-- **Davis--Kahan 1970, Proposition 3.5, the four commutation assertions**, at the standing
+Section 3 scope.
+
+`Θ` commutes with `P`, with `Q`, with the quarter turn `J`, and with the direct rotation `U`.
+No acuteness: `J` here is the quarter turn of the completed direct rotation selected by the
+crossed-defect isometry, and the commutations for `P` and `Q` never needed acuteness at all. -/
+theorem proposition3_5_commutations
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) :
+    Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection U) ∧
+      Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection V) ∧
+      Commute (proposition3_5_angleOperator U V) (corollary3_2_paperQuarterTurn U V J) ∧
+      Commute (proposition3_5_angleOperator U V) (nonacuteDirectRotation U V J) :=
+  ⟨section3AngleOperator_comm_projection U V,
+    section3AngleOperator_comm_projection_right U V,
+    section3AngleOperator_comm_nonacuteQuarterTurn U V J,
+    section3AngleOperator_comm_nonacuteDirectRotation U V J⟩
+
+/-- The four commutations read on the canonical acute direct rotation and its quarter turn.
+Kept for acute-only consumers; see the section note on why this is not a corollary of
+`proposition3_5_commutations`. -/
+theorem proposition3_5_commutations_acute (hacute : TauCeti.IsAcute U V) :
     Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection U) ∧
       Commute (proposition3_5_angleOperator U V) (TauCeti.DavisKahan.projection V) ∧
       Commute (proposition3_5_angleOperator U V) (proposition3_5_quarterTurn U V) ∧
@@ -239,11 +292,28 @@ theorem proposition3_5_commutations (hacute : TauCeti.IsAcute U V) :
     section3AngleOperator_comm_quarterTurn U V hacute,
     section3AngleOperator_comm_directRotation U V hacute⟩
 
-/-- **Davis--Kahan 1970, Proposition 3.5, eigenvector assertion.**
-If `x` is a nonzero eigenvector of `Theta` with eigenvalue `theta`, the vector
-angle from `x` to its direct rotation is exactly `theta`.  `vectorAngle` is the
-paper's vector angle (1.14), using the real part of the inner product. -/
-theorem proposition3_5_eigenvector_angle (hacute : TauCeti.IsAcute U V)
+/-- **Davis--Kahan 1970, Proposition 3.5, eigenvector assertion**, at the standing Section 3
+scope.
+
+If `x ≠ 0` is an eigenvector of `Theta` with eigenvalue `theta`, the vector angle from `x` to
+its direct rotation is exactly `theta`.  `vectorAngle` is the paper's vector angle (1.14),
+using the real part of the inner product.
+
+No acuteness.  The direct rotation is the completion selected by the crossed-defect isometry,
+so the statement covers the right-angle eigenspace `theta = pi/2` that acuteness exists to
+exclude; see `vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply` for why that
+endpoint needs no separate argument. -/
+theorem proposition3_5_eigenvector_angle
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V)
+    {x : H} (hx0 : x ≠ 0) {θ : ℝ}
+    (hx : proposition3_5_angleOperator U V x = ((θ : ℝ) : 𝕜) • x) :
+    TauCeti.vectorAngle 𝕜 x (nonacuteDirectRotation U V J x) = θ :=
+  vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply U V J hx0 hx
+
+/-- The eigenvector clause read on the canonical acute direct rotation.  Kept for acute-only
+consumers; see the section note on why this is not a corollary of
+`proposition3_5_eigenvector_angle`. -/
+theorem proposition3_5_eigenvector_angle_acute (hacute : TauCeti.IsAcute U V)
     {x : H} (hx0 : x ≠ 0) {θ : ℝ}
     (hx : proposition3_5_angleOperator U V x = ((θ : ℝ) : 𝕜) • x) :
     TauCeti.vectorAngle 𝕜 x (proposition3_5_directRotation U V x) = θ :=

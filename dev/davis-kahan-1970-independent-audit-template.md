@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **29/29 terminal**, **0 awaiting semantic closure**.
+Current result-level status: **28/29 terminal**, **1 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -657,7 +657,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:347`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:346`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1461,7 +1461,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Proposition 3.5
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `accepted`
+- **Hostile semantic certification:** `reopened_mapping`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -1500,25 +1500,43 @@ In the acute case the $\theta$-eigenspace of $\Theta$ is the unique maximal subs
 
 #### `TauCeti.DavisKahan1970.proposition3_5_commutations`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:232`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:271`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:246`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:306`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:254`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:324`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:265`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:335`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_5_commutations_acute`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:285`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:316`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply`
+
+Source location candidates: `DavisKahan/Geometry/Angle/Proposition35Nonacute.lean:283`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1578,19 +1596,19 @@ Interchanging the roles of $P$ and $Q$ leaves the angle operator $\Theta$ unchan
 
 #### `TauCeti.DavisKahan1970.corollary3_2_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:197`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:214`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:166`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:183`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:147`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:164`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1699,7 +1717,7 @@ The latter follows by comparing $Vx$ with the closest unit vector in $Q\Hsp$ and
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:310`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:311`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1711,7 +1729,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:242`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:243`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1781,7 +1799,7 @@ is minimized among unitaries carrying $P\Hsp$ onto $Q\Hsp$ by the direct rotatio
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:341`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:342`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1793,7 +1811,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:372`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:373`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1860,7 +1878,7 @@ with the inequality also valid when the right-hand side is infinite.  The proof 
 
 #### `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:395`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:396`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1995,7 +2013,7 @@ for every unitary-invariant norm.  They also imply minimality of the operator no
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:486`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:487`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3672,8 +3690,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 272 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **29 currently terminal results independently reconfirmed:** yes / no
-- **0 currently nonterminal/pending results resolved by this audit:** yes / no
+- **28 currently terminal results independently reconfirmed:** yes / no
+- **1 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no
