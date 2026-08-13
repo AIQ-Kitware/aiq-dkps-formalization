@@ -45,9 +45,9 @@ asserting that two unnamed frames of the same spans exist.
 * direct right and left rank-one singular-vector corollaries;
 * exact operator/Frobenius minimum and aligned-frame constants;
 * all three Section 2 sharpness constructions, including the *published*
-  middle-block one, over the full parameter range `0 < ε < 3` — which is
-  maximal, since at `ε = 3` the perturbed level `2+ε` merges with `5` and its
-  multiplicity jumps from `d` to `p−d`;
+  middle-block one, over the full parameter range `0 < ε < 3` — maximal whenever
+  `2d < p`, since at `ε = 3` the perturbed level `2+ε` merges with `5` and its
+  multiplicity becomes `p−d` rather than `d`;
 * the Section 1 numerical illustration that Theorem 1's separation `δ` can
   vanish, together with the operator-level population gap at the same block;
 * the deterministic content of the Section 3 diagnosis: the Weyl recovery of a
@@ -142,7 +142,10 @@ Four things moved, none of them a new numbered result.
    `TauCeti.adjoint_comp_self_eq_id` spells that out as `ÔᵀÔ = I`.
 3. **The published sharpness range.**  `ε < 1` was an artifact of the first
    proof.  The construction needs `2 < 2 + ε < 5`, and every lemma now carries
-   `0 < ε < 3`; `card_middleSharpnessSample_level_three` records the breakpoint.
+   `0 < ε < 3`; `card_middleSharpnessSample_level_three` records the breakpoint,
+   which bites exactly when `2d < p` — at `p = 2d` there is no leading level `5`
+   and the constraint is vacuous, so `ε < 3` is sufficient everywhere and
+   necessary only for `2d < p`.
    The headline theorem also concludes the achieved distance `√(2d)`, so its
    statement carries the sharpness claim its docstring makes.
 4. **The sample-degeneracy witness.**
