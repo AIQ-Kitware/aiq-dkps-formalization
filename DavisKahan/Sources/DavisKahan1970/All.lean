@@ -31,12 +31,14 @@ import DavisKahan.Sources.DavisKahan1970.Section3Proposition34
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Real
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
 import DavisKahan.Sources.DavisKahan1970.Section4
+import DavisKahan.Sources.DavisKahan1970.Section4Examples
 import DavisKahan.Sources.DavisKahan1970.Section4BasisAngleEnergy
 import DavisKahan.Sources.DavisKahan1970.Section4Dominance
 import DavisKahan.Sources.DavisKahan1970.Section4FiniteSurface
 import DavisKahan.Sources.DavisKahan1970.Section4Real
 import DavisKahan.Sources.DavisKahan1970.Section5
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
+import DavisKahan.Sources.DavisKahan1970.Section6Example61
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
 import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
 import DavisKahan.Sources.DavisKahan1970.SharpIdeal
