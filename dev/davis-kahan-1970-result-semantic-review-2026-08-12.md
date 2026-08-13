@@ -29,7 +29,6 @@ A hostile reviewer should use this report together with `prose/distilled_literat
 **Counted source atoms:** `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-sin-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`.
 
 **Selected source-facing Lean declarations:**
-- `TauCeti.DavisKahan1970.sinTheta_headline_generic`
 - `TauCeti.DavisKahan1970.sinTheta`
 - `TauCeti.DavisKahan1970.sinTheta_real_exactPaper`
 - `TauCeti.DavisKahan1970.generalizedSinTheta`
@@ -46,6 +45,7 @@ Accepted result-only semantic review 2026-08-12. `sinTheta_headline_generic` is 
 **Counted source atoms:** `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`.
 
 **Selected source-facing Lean declarations:**
+- `TauCeti.DavisKahan1970.tanTheta_headline_generic_directed`
 - `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`
 - `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial`
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`
@@ -75,18 +75,15 @@ The repository therefore classifies this result as **paper-faithful under a nonl
 
 Two things about the final proof are worth a reviewer's attention. First, the Appendix path does not complexify the source ambient closed operator. The real unbounded Ritz-compression bundle is complexified as trial data, where the existing complex spectral cutoff proves the finite-Ky-Fan lower-corner estimate; the bounded ambient Lemma-6.1/Lemma-6.2 assembly then applies. Second, (3.5) is consumed on the real side to derive ambient transversality before descent of the final PaperUI statement, so no crossed-defect transport theorem is needed.
 
+The new `tanTheta_headline_generic_directed` facade is the canonical scalar-generic directed review surface.  It quantifies over `RCLike 𝕜`, uses the literal `PaperUnitaryInvariantNorm`, and writes the Ritz-compression and unwanted-spectrum hypotheses directly in its public type.  The arbitrary-dimensional/unbounded ambient endpoint remains a separately selected scope companion because the generic finite-dimensional singular-value engine and the source's unbounded ambient construction are distinct implementation routes.
+
 The transversality-form declarations (`‖sin Theta‖ < 1`) remain registered as strictly stronger specializations, not as the source-shaped statement.
 
-**Structured remaining gap:**
+**Historical structured gap (closed):**
 
-- Category: `missing_real_scalar_unbounded_ambient_endpoint`
-- Missing surface: the real-scalar unbounded ambient tangent endpoint. `tanTheta_unbounded_ambient_paperUINorm_exact` exists only over `ℂ`.
-- Next action: prove the real endpoint by the maintained complexification descent, register it here and in the Lean semantic audit surface, and re-audit for terminality. The accepted interpretation does not need reopening unless the source specification or a cited atom changes — the checker fails closed on both.
-- Strongest current evidence:
-  - `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
-  - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real`
-  - `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real`
-  - `TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses`
+- Former category: `missing_real_scalar_unbounded_ambient_endpoint`.
+- Closed by: `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact` and the stronger unbounded-compression real endpoint.
+- Current audit surface: scalar-generic directed headline facade plus separately certified real/complex arbitrary-dimensional and unbounded ambient companions.
 
 ### 3. `S2-sin-two-theta` — Double-angle sine theorem
 
@@ -95,6 +92,7 @@ The transversality-form declarations (`‖sin Theta‖ < 1`) remain registered a
 **Counted source atoms:** `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.directed-conclusion`, `S2-sin-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`.
 
 **Selected source-facing Lean declarations:**
+- `TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed`
 - `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`
 - `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`
 - `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative`
@@ -111,6 +109,8 @@ REOPENED 2026-08-12, and the reopening was correct. The printed directed conclus
 
 REPAIRED 2026-08-12 by `sinTwoTheta_unbounded_directedResidual_paperUINorm` and its real sibling `..._paperUINorm_real`. Both take an unbounded self-adjoint closed operator `A`, an arbitrary closed trial subspace `V` inside its domain, a trial operator `M = A_0`, and the printed residual identity `A E_0 v = R v + E_0 A_0 v`; they conclude ideal membership of the canonical `sin 2Theta_0` representative together with `delta * N(sin 2Theta_0) <= 2 N(R)` for every `PaperUnitaryInvariantNorm`. There is no finite-dimensionality, compactness, acuteness, separability, residual-self-adjointness or reflection hypothesis visible to the caller: the reflected comparison system `D = -2 (X + X*)` is built internally from the trial data and shown to intertwine by `trialReflection_intertwines`. The sharp factor two is obtained blockwise from the scalar-generic doubling identity `kyFan_reflectionDefectBlock_le_two_mul` rather than from a triangle inequality on the reflection defect, which would yield four.
 
+The new `sinTwoTheta_headline_generic_directed` facade is the canonical scalar-generic directed review surface.  It uses `RCLike 𝕜` and the literal `PaperUnitaryInvariantNorm`, and exposes the trial block, residual and interval/exterior spectral placement directly in the theorem type.  The source's arbitrary-dimensional/unbounded forms remain selected as scope companions.
+
 Separation scope: the complex endpoint carries the printed interval/exterior separation as semiboundedness of the exact block together with resolvent-set avoidance for the complementary block. `TauCeti.LinearPMap.spectrum` does not exist over `R`, so the real endpoint carries the scalar-generic `FormBoundedSylvesterGap`, which is the weaker of this tree's two spellings of separation — hence the stronger theorem — and covers all three of the source's configurations; `..._paperUINorm_real_of_intervalExterior` restates the same conclusion at the printed interval/exterior separation itself. The ambient half `delta * N(sin 2Theta) <= 2 N(H)` was and remains covered over both fields by `sinTwoTheta_wholeSpace_paperUINorm` and `sinTwoTheta_wholeSpace_paperUINorm_real`.
 
 ### 4. `S2-tan-two-theta` — Double-angle tangent theorem
@@ -120,6 +120,7 @@ Separation scope: the complex endpoint carries the printed interval/exterior sep
 **Counted source atoms:** `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.directed-conclusion`, `S2-tan-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`.
 
 **Selected source-facing Lean declarations:**
+- `TauCeti.DavisKahan1970.tanTwoTheta_headline_generic`
 - `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`
 - `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact`
 - `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`
@@ -131,7 +132,7 @@ Separation scope: the complex endpoint carries the printed interval/exterior sep
 
 **Semantic review:**
 
-Accepted result-only semantic review 2026-08-12. The bounded exact wrappers already give both printed conclusions over real and complex Hilbert spaces for every `PaperUnitaryInvariantNorm`, deriving pole exclusion internally from the source hypotheses. The new unbounded wrappers close the shared Section 2 scope explicitly: the directed complex theorem uses the canonical spectral-cutoff/Ky-Fan/Fan-dominance engine; the complex ambient theorem assembles its two complementary reflection-tangent corners with skew-adjoint symmetry and Davis--Kahan Lemma 6.1; and the real directed and ambient wrappers descend these statements through the repository's exact complexification layer. The resulting theorems are arbitrary-dimensional, allow the source's unbounded self-adjoint `A` with bounded residual/perturbation data, retain the sharp factor two, and add no quarter-angle premise, explicit pole certificate, compactness/finite-dimensionality condition, or perturbed-Q spectral placement. The user reported the self-contained implementation compiling successfully on the `7cc049b4` base before this census promotion.
+Accepted result-only semantic review 2026-08-12. `tanTwoTheta_headline_generic` now names the already-proved scalar-generic branch-free PaperUI theorem as the canonical generic audit surface; its public type makes the ordered form gap, off-diagonal perturbation, invariant graph coordinate, and factor-two tangent conclusion explicit over `RCLike 𝕜`.  The more directly source-shaped `U,V` corner and whole-space endpoints remain selected as field-specific scope companions. The bounded exact wrappers already give both printed conclusions over real and complex Hilbert spaces for every `PaperUnitaryInvariantNorm`, deriving pole exclusion internally from the source hypotheses. The new unbounded wrappers close the shared Section 2 scope explicitly: the directed complex theorem uses the canonical spectral-cutoff/Ky-Fan/Fan-dominance engine; the complex ambient theorem assembles its two complementary reflection-tangent corners with skew-adjoint symmetry and Davis--Kahan Lemma 6.1; and the real directed and ambient wrappers descend these statements through the repository's exact complexification layer. The resulting theorems are arbitrary-dimensional, allow the source's unbounded self-adjoint `A` with bounded residual/perturbation data, retain the sharp factor two, and add no quarter-angle premise, explicit pole certificate, compactness/finite-dimensionality condition, or perturbed-Q spectral placement. The user reported the self-contained implementation compiling successfully on the `7cc049b4` base before this census promotion.
 
 ### 5. `DK-3.1-prop` — Acute direct rotation existence and uniqueness
 

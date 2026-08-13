@@ -302,6 +302,7 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
+        "TauCeti.DavisKahan1970.tanTheta_headline_generic_directed",
         "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
         "TauCeti.DavisKahanExt.tanTheta_spectrum",
         "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank",
@@ -379,59 +380,73 @@
           ]
         },
         "canonical_declarations": [
-          "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
+          "TauCeti.DavisKahan1970.tanTheta_headline_generic_directed",
           "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact"
         ],
         "supporting_declarations": [
+          "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
           "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral",
-          "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact"
+          "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
+          "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent",
+          "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact",
+          "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact",
+          "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact"
         ],
         "context_declarations": [
           {
-            "name": "TauCeti.DavisKahanTheory.TanThetaIntervalGap",
-            "mathematical_role": "The one-sided spectral hypothesis: the Ritz compression lies in [beta,alpha] and the unwanted exact spectrum lies in [alpha+delta,infinity)."
+            "name": "TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm",
+            "mathematical_role": "The literal dimension-coherent source unitary-invariant norm. The new generic directed headline theorem uses it directly over arbitrary RCLike scalars."
+          },
+          {
+            "name": "TauCeti.DavisKahanTheory.principalTangents",
+            "mathematical_role": "The directed principal-tangent singular-value sequence used in the paper definition of tan Theta0."
+          },
+          {
+            "name": "TauCeti.DavisKahanTheory.ritzResidual",
+            "mathematical_role": "The Rayleigh--Ritz residual. In the generic headline theorem it appears directly on the right-hand side rather than through a bundled problem record."
           },
           {
             "name": "TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent",
-            "mathematical_role": "The standing nonacute direct-rotation existence condition: the two crossed defect spaces are unitarily isomorphic."
-          },
-          {
-            "name": "TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm",
-            "mathematical_role": "The paper-faithful arbitrary unitary-invariant norm used by the infinite-dimensional ambient theorem."
+            "mathematical_role": "The paper-wide nonacute direct-rotation existence condition (3.5), needed only for the ambient whole-space tangent semantics in the general infinite-dimensional case."
           },
           {
             "name": "TauCeti.DavisKahanExt.paperTanAngleOperatorC",
-            "mathematical_role": "The canonical ambient tan(Theta) operator whose approximation singular values are the tangents of the principal angles."
+            "mathematical_role": "The canonical complex ambient tan(Theta) operator used by the unbounded whole-space scope companion."
           }
         ],
         "clause_map": [
           {
+            "source_clause": "The scalar field is real or complex.",
+            "lean_realization": "The canonical directed theorem quantifies over 𝕜 with [RCLike 𝕜]; no ℂ specialization appears in that headline type. Field-specific unbounded ambient declarations remain scope companions.",
+            "status": "claimed_exact"
+          },
+          {
             "source_clause": "spec(A0) subset [beta,alpha] and unwanted exact spectrum subset [alpha+delta,infinity).",
-            "lean_realization": "TanThetaIntervalGap unfolds to exactly those two spectral containments for the directed theorem.",
+            "lean_realization": "hCompressionSpectrum and hUnwantedSpectrum are literal SpectrumIn hypotheses in tanTheta_headline_generic_directed; TanThetaIntervalGap is constructed only inside the proof and is not part of the public signature.",
             "status": "claimed_exact"
           },
           {
             "source_clause": "H0=0 / Rayleigh--Ritz choice.",
-            "lean_realization": "The canonical directed theorem is stated directly for ritzResidual A X, i.e. the off-diagonal residual of the Rayleigh--Ritz compression.",
+            "lean_realization": "The public conclusion is written directly in terms of ritzResidual A X, where X is the trial isometry and the coordinate compression is the Rayleigh--Ritz compression.",
             "status": "claimed_exact"
           },
           {
             "source_clause": "delta ||tan Theta0|| <= ||R||.",
-            "lean_realization": "The first canonical declaration concludes delta * N.toFun tanTheta0 <= N.toFun (ritzResidual A X), with tanTheta0 constrained to have the principal tangent singular values.",
+            "lean_realization": "tanTheta_headline_generic_directed concludes δ * N.gauge tanTheta0.toContinuousLinearMap <= N.gauge (ritzResidual A X).toContinuousLinearMap, with tanTheta0 constrained to have the principal-tangent singular values.",
             "status": "claimed_exact"
           },
           {
             "source_clause": "delta ||tan Theta|| <= ||H||.",
-            "lean_realization": "The second canonical declaration concludes delta * N.gauge (paperTanAngleOperatorC U V) <= N.gauge H.",
-            "status": "claimed_exact"
+            "lean_realization": "The unbounded ambient source companion concludes the factor-one estimate for paperTanAngleOperatorC; its real sibling is compiler-checked as supporting scalar scope.",
+            "status": "scope_companion"
           },
           {
             "source_clause": "No separately assumed tangent-pole exclusion in the printed theorem.",
-            "lean_realization": "The finite directed theorem derives transversality from TanThetaIntervalGap; the ambient unbounded theorem instead exposes the paper-wide crossed-defect/direct-rotation existence condition.",
+            "lean_realization": "The scalar-generic directed theorem assumes only the spectral placement and derives transversality in its engine. The ambient source companion uses the accepted nonlocal (3.5) semantics rather than a numerical pole hypothesis.",
             "status": "claimed_exact"
           }
         ],
-        "note": "Two canonical declarations are shown because the printed theorem has two genuinely different conclusions: a directed residual estimate and an ambient perturbation estimate."
+        "note": "The directed residual half now has a scalar-generic, PaperUnitaryInvariantNorm, source-shaped canonical theorem whose public signature exposes the Ritz spectral placement instead of TanThetaIntervalGap. The harder ambient/unbounded half remains represented by the accepted source-shaped complex theorem plus its real companion because the current whole-space angle-operator implementation is field-specific."
       }
     },
     {
@@ -445,6 +460,7 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
+        "TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed",
         "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
         "TauCeti.DavisKahan.sinTwoTheta_addBounded_of_spectrum_gap",
         "TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative",
@@ -508,10 +524,11 @@
           ]
         },
         "canonical_declarations": [
-          "TauCeti.DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm",
+          "TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed",
           "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm"
         ],
         "supporting_declarations": [
+          "TauCeti.DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm",
           "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real",
           "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm",
           "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real"
@@ -519,40 +536,49 @@
         "context_declarations": [
           {
             "name": "TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm",
-            "mathematical_role": "The source-faithful arbitrary unitary-invariant norm used for the paper endpoint."
+            "mathematical_role": "The literal source unitary-invariant norm. The new directed headline theorem evaluates it over generic RCLike scalars."
           },
           {
-            "name": "TauCeti.DavisKahan.sinTwoThetaIdealBlock",
-            "mathematical_role": "The directed doubled-angle block; its singular-value sequence represents sin(2 Theta0)."
+            "name": "TauCeti.DavisKahanTheory.sinTwoThetaEmbedding",
+            "mathematical_role": "The rectangular directed sin(2 Theta0) representative used by the scalar-generic headline theorem."
+          },
+          {
+            "name": "TauCeti.DavisKahanTheory.residual",
+            "mathematical_role": "The literal residual A X - X M appearing on the right-hand side of the directed theorem."
           },
           {
             "name": "TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC",
-            "mathematical_role": "The ambient doubled-angle sine operator representing sin(2 Theta)."
+            "mathematical_role": "The complex whole-space sin(2 Theta) operator used by the ambient perturbation scope companion."
           }
         ],
         "clause_map": [
           {
+            "source_clause": "The scalar field is real or complex.",
+            "lean_realization": "The canonical directed theorem quantifies over 𝕜 with [RCLike 𝕜] and uses PaperUnitaryInvariantNorm directly.",
+            "status": "claimed_exact"
+          },
+          {
             "source_clause": "Interval/exterior spectral separation by delta.",
-            "lean_realization": "Both canonical declarations state the selected spectrum in [a,b] and the complementary spectrum outside (a-d,b+d).",
+            "lean_realization": "hCompressionSpectrum places M in [beta,alpha] and hUnwantedSpectrum literally places the unwanted A-spectrum outside (beta-delta,alpha+delta); no local gap structure is visible in the headline type.",
             "status": "claimed_exact"
           },
           {
             "source_clause": "delta ||sin(2 Theta0)|| <= 2 ||R||.",
-            "lean_realization": "sinTwoTheta_directedResidual_paperUINorm concludes d * N.gauge (sinTwoThetaIdealBlock U V) <= 2 * N.gauge residual.",
+            "lean_realization": "sinTwoTheta_headline_generic_directed concludes the factor-two PaperUnitaryInvariantNorm estimate for sinTwoThetaEmbedding U X against residual A X M.",
             "status": "claimed_exact"
           },
           {
             "source_clause": "delta ||sin(2 Theta)|| <= 2 ||H||.",
-            "lean_realization": "sinTwoTheta_wholeSpace_paperUINorm concludes the factor-two perturbation estimate for paperSinTwoAngleOperatorC.",
-            "status": "claimed_exact"
+            "lean_realization": "sinTwoTheta_wholeSpace_paperUINorm supplies the ambient source endpoint, with the real whole-space theorem compiler-checked as a scalar companion.",
+            "status": "scope_companion"
           },
           {
-            "source_clause": "Real/infinite/unbounded scope.",
-            "lean_realization": "Real whole-space and real/complex unbounded directed-residual companions are compiler-checked below.",
+            "source_clause": "Infinite-dimensional and unbounded directed-residual scope.",
+            "lean_realization": "The generic headline facade is finite-dimensional; the real and complex unbounded directed-residual theorems remain explicit supporting declarations and carry the full source scope.",
             "status": "scope_companion"
           }
         ],
-        "note": "The canonical surface shows one declaration for each printed conclusion rather than mixing them with the later unequal-dimension and helper variants."
+        "note": "The directed residual conclusion now has a scalar-generic PaperUnitaryInvariantNorm facade with the interval/exterior hypotheses and residual written directly in its type. The ambient whole-space endpoint remains field-specific internally, so the complex source-shaped theorem stays as the second canonical declaration and its real sibling is a supporting scalar companion."
       }
     },
     {
@@ -566,6 +592,7 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
+        "TauCeti.DavisKahan1970.tanTwoTheta_headline_generic",
         "TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm",
         "TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine",
         "TauCeti.DavisKahan.sharp_paperUnitaryInvariantNorm",
@@ -653,60 +680,73 @@
           ]
         },
         "canonical_declarations": [
-          "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
-          "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact"
+          "TauCeti.DavisKahan1970.tanTwoTheta_headline_generic",
+          "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact"
         ],
         "supporting_declarations": [
           "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact",
-          "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact",
-          "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact"
+          "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
+          "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact",
+          "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exact",
+          "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact",
+          "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact",
+          "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact"
         ],
         "context_declarations": [
           {
             "name": "TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm",
-            "mathematical_role": "The source-faithful arbitrary unitary-invariant norm used in the paper endpoint."
+            "mathematical_role": "The literal source unitary-invariant norm; tanTwoTheta_headline_generic is already generic over RCLike 𝕜 at this norm scope."
+          },
+          {
+            "name": "TauCeti.DavisKahanTheory.absDoubleAngleTangent",
+            "mathematical_role": "The branch-free scalar function 2 t / |1-t^2| applied to graph-coordinate singular values; this is the generic theorem’s representation of |tan(2 Theta)|."
+          },
+          {
+            "name": "TauCeti.approximationSingularValue",
+            "mathematical_role": "The approximation-number singular-value sequence used to express the branch-free tangent representative in arbitrary Hilbert space."
           },
           {
             "name": "TauCeti.DavisKahan1970.paperDoubleSecant",
-            "mathematical_role": "The secant factor used to realize the absolute tangent of twice the principal angle without introducing a source-extraneous pole hypothesis."
+            "mathematical_role": "The source-shaped U,V directed-corner implementation used by the second canonical theorem; its invertibility is derived internally rather than assumed."
           },
           {
             "name": "TauCeti.DavisKahan1970.paperProjectorDifference",
-            "mathematical_role": "The projector-difference operator used to build the ambient/direct doubled-angle tangent representative."
-          },
-          {
-            "name": "TauCeti.DavisKahan1970.unboundedReflectionTangent",
-            "mathematical_role": "The unbounded ambient reflection/tangent representative used in the source-scope endpoint."
+            "mathematical_role": "The projector-difference factor used to build the source-shaped directed tan(2 Theta0) representative."
           }
         ],
         "clause_map": [
           {
-            "source_clause": "Ordered gap: A0 below A1 by delta.",
-            "lean_realization": "The directed canonical theorem states the U-compression spectrum in [beta,alpha] and the U^perp compression spectrum in [alpha+delta,infinity).",
+            "source_clause": "The scalar field is real or complex.",
+            "lean_realization": "tanTwoTheta_headline_generic is an alias of the already proved branch-free theorem quantified over 𝕜 with [RCLike 𝕜] and the literal PaperUnitaryInvariantNorm.",
             "status": "claimed_exact"
           },
           {
-            "source_clause": "H0=H1=0.",
-            "lean_realization": "The directed theorem has the two literal off-diagonal mapping assumptions H(U) subset U^perp and H(U^perp) subset U; the unbounded theorem uses IsOddFor the spectral splitting.",
+            "source_clause": "A has an ordered block gap and H is fully off diagonal.",
+            "lean_realization": "The generic theorem writes the form bounds hUb/hUa and the two literal off-diagonal mapping hypotheses hHU/hHUperp directly; no named gap or oddness predicate hides them.",
             "status": "claimed_exact"
           },
           {
-            "source_clause": "No independent tan(2 Theta) pole hypothesis.",
-            "lean_realization": "The canonical directed theorem has no transversality/invertibility premise; the needed secant invertibility is obtained internally. The unbounded ambient theorem returns IsUnit as part of its conclusion before the tangent estimate.",
-            "status": "claimed_exact"
-          },
-          {
-            "source_clause": "delta ||tan(2 Theta0)|| <= 2 ||R||.",
-            "lean_realization": "The directed canonical theorem concludes the factor-two gauge estimate for the directed corner representative.",
+            "source_clause": "The perturbed invariant subspace is arbitrary and no independent tan(2 Theta) pole hypothesis is assumed.",
+            "lean_realization": "The generic theorem describes the invariant perturbed graph by hTmem, hTzero and hinv and uses the branch-free absDoubleAngleTangent singular values; it has no T<1, IsQuarterAcute, or cos(2 theta) premise.",
             "status": "claimed_exact"
           },
           {
             "source_clause": "delta ||tan(2 Theta)|| <= 2 ||H||.",
-            "lean_realization": "The unbounded ambient canonical theorem concludes (b-a) * gauge(unboundedReflectionTangent) <= 2 * gauge(B).",
+            "lean_realization": "With delta = b-a, tanTwoTheta_headline_generic concludes (b-a) * N.gauge tanTwoTheta <= 2 * N.gauge H for every source norm.",
             "status": "claimed_exact"
+          },
+          {
+            "source_clause": "delta ||tan(2 Theta0)|| <= 2 ||R|| in the source-shaped U,V corner notation.",
+            "lean_realization": "The second canonical declaration gives the literal compression-spectrum/off-diagonal directed-corner theorem with no caller-supplied pole certificate.",
+            "status": "claimed_exact"
+          },
+          {
+            "source_clause": "Infinite-dimensional/unbounded scope.",
+            "lean_realization": "The generic branch-free canonical theorem removes ambient finite-dimensionality but still assumes a finite-dimensional graph base U; the full arbitrary-dimensional and unbounded real/complex endpoints remain compiler-checked supporting declarations.",
+            "status": "scope_companion"
           }
         ],
-        "note": "The packet deliberately prints the local doubled-angle tangent representatives so the reviewer can inspect that no hidden pole/separation hypothesis has been smuggled into their definitions."
+        "note": "Unlike tan Theta and sin 2Theta, the branch-free tan 2Theta paper-norm theorem was already scalar-generic. The review now promotes it to the canonical headline name. Its generic proof is necessarily graph-coordinate shaped, so the source-shaped U,V directed-corner theorem remains canonical alongside it and the report prints absDoubleAngleTangent/approximationSingularValue context explicitly."
       }
     },
     {
