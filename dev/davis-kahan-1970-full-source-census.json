@@ -144,6 +144,8 @@
       "verification": "proved_in_build",
       "blocked_by": [],
       "lean_declarations": [
+        "TauCeti.DavisKahan1970.sinTheta_headline_generic",
+        "TauCeti.DavisKahan1970.sinTheta_unbounded_exact_generic",
         "TauCeti.DavisKahan1970.sinTheta",
         "TauCeti.DavisKahan1970.generalizedSinTheta",
         "TauCeti.DavisKahan1970.sinTheta_real_exactPaper",
@@ -178,55 +180,74 @@
           ]
         },
         "canonical_declarations": [
-          "TauCeti.DavisKahan1970.sinTheta_spectralSubspace"
+          "TauCeti.DavisKahan1970.sinTheta_headline_generic"
         ],
         "supporting_declarations": [
+          "TauCeti.DavisKahan1970.sinTheta_unbounded_exact_generic",
+          "TauCeti.DavisKahan1970.sinTheta_spectralSubspace",
           "TauCeti.DavisKahan1970.sinTheta_real_spectralSubspace",
-          "TauCeti.DavisKahan1970.sinTheta_bounded_spectralSubspace",
-          "TauCeti.DavisKahan1970.sinTheta_real_exactPaper"
+          "TauCeti.DavisKahan1970.sinTheta_bounded_spectralSubspace"
         ],
         "context_declarations": [
           {
-            "name": "TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily",
-            "mathematical_role": "The scalar-generic ideal/norm family used by the natural-input sine theorem; its gauge is the quantity written as a unitary-invariant norm."
+            "name": "TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm",
+            "mathematical_role": "The literal dimension-coherent unitary-invariant norm quantified over by Davis--Kahan; the generic headline theorem uses this source definition directly."
           },
           {
-            "name": "TauCeti.DavisKahan.ExactSinTheta.SpectralSylvesterGap",
-            "mathematical_role": "Exactly packages the three allowed spectral-separation configurations, including the interval/exterior hypothesis used in Section 2 and the two ordered half-line variants."
+            "name": "TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan",
+            "mathematical_role": "A scalar-field capability used to state one theorem over generic RCLike 𝕜. The repository proves instances for both scalar fields in the paper, ℝ and ℂ; it is implementation evidence, not an additional paper hypothesis."
           },
           {
-            "name": "TauCeti.DavisKahan.ExactSinTheta.generalResidual",
-            "mathematical_role": "The residual A X - X A0 appearing on the right side of the theorem."
+            "name": "ContinuousLinearMap.HasMinMaxLowerBoundEverywhere",
+            "mathematical_role": "The approximation-number min--max capability needed by the universal norm machinery. It likewise has proved ℝ and ℂ instances and is not an extra mathematical restriction on the paper theorem."
+          },
+          {
+            "name": "TauCeti.DavisKahanExt.ClosedOperator",
+            "mathematical_role": "The repository representation of a densely defined closed operator used for the paper's possibly unbounded self-adjoint operators."
+          },
+          {
+            "name": "TauCeti.LinearPMap.realSpectrum",
+            "mathematical_role": "The real spectrum of a self-adjoint partial/closed operator. The interval/exterior alternative is written directly in the canonical theorem rather than hidden behind a local gap structure."
           }
         ],
         "clause_map": [
           {
-            "source_clause": "A0 is self-adjoint and the exact complementary block Lambda1 is self-adjoint.",
-            "lean_realization": "The canonical theorem takes self-adjoint closed operators A0 and A and constructs the complementary self-adjoint spectral restriction of A internally.",
+            "source_clause": "The scalar field is real or complex.",
+            "lean_realization": "The canonical theorem quantifies over 𝕜 with [RCLike 𝕜]. The only extra scalar capability binders are HasUnboundedSylvesterKyFan and HasMinMaxLowerBoundEverywhere, for which the repository has proved ℝ and ℂ instances.",
             "status": "claimed_exact"
           },
           {
-            "source_clause": "Interval/exterior separation by delta, allowing the two spectral roles to be interchanged.",
-            "lean_realization": "hgap : SpectralSylvesterGap A0 (selfAdjointSpectralRestriction A ... Sᶜ ...) delta; the printed #print of SpectralSylvesterGap exposes its intervalExterior constructor and both ordered alternatives.",
+            "source_clause": "A, A0, and Lambda1 are self-adjoint, with E0 the trial isometry and F0,F1 orthogonal exact-space coordinates.",
+            "lean_realization": "A, A₀, Λ₁, E₀, F₀, and F₁ are explicit arguments. Self-adjointness, isometry of all three coordinate maps, F₀†F₁=0, and F₀F₀†+F₁F₁†=I are explicit hypotheses rather than fields of a bundled problem structure.",
             "status": "claimed_exact"
           },
           {
-            "source_clause": "R = A X - X A0.",
-            "lean_realization": "hReq states the residual identity pointwise on the domain, with Rop the bounded residual operator.",
+            "source_clause": "R = A E0 - E0 A0 on the operator domain, while F1 intertwines Lambda1 with A.",
+            "lean_realization": "hE₀dom, hF₁dom, hresidual, and hintertwines state the domain compatibility, residual equation, and complementary intertwining pointwise in the theorem signature.",
+            "status": "claimed_exact"
+          },
+          {
+            "source_clause": "For beta <= alpha and delta > 0, one of spec(A0), spec(Lambda1) lies in [beta,alpha] and the other avoids (beta-delta,alpha+delta), with the roles interchangeable.",
+            "lean_realization": "hβα and hδ are explicit, and hspectral is literally the disjunction of the two real-spectrum inclusions; no named gap predicate hides the interval/exterior condition.",
+            "status": "claimed_exact"
+          },
+          {
+            "source_clause": "The norm is an arbitrary source unitary-invariant norm and R has finite norm.",
+            "lean_realization": "N : PaperUnitaryInvariantNorm and hR : N.Mem R appear directly.",
             "status": "claimed_exact"
           },
           {
             "source_clause": "delta ||sin Theta0|| <= ||R||.",
-            "lean_realization": "The conclusion is delta * N.gauge ((I - E E*) X) <= N.gauge Rop; for an isometric trial map this operator carries the directed sine singular values.",
+            "lean_realization": "The conclusion is δ * N.gauge ((I - F₀F₀†) E₀) <= N.gauge R, together with membership of that directed sine operator in the same source norm ideal.",
             "status": "claimed_exact"
           },
           {
-            "source_clause": "Infinite-dimensional/unbounded scope.",
-            "lean_realization": "The canonical declaration is the unbounded closed-operator spectral-subspace theorem; bounded and real companions are separately compiler-checked below.",
-            "status": "scope_companion"
+            "source_clause": "Infinite-dimensional and unbounded self-adjoint scope.",
+            "lean_realization": "There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are ClosedOperator values and the residual/intertwining equations carry their domain hypotheses explicitly.",
+            "status": "claimed_exact"
           }
         ],
-        "note": "The primary review theorem uses natural spectral inputs instead of the older bundled FormBoundedIsometricSinThetaProblem, specifically so that the hypothesis surface is visible to an external reviewer."
+        "note": "The canonical review declaration is now scalar-generic and deliberately unbundled: its type exposes the paper operators, coordinate maps, domain equations, interval/exterior spectral alternative, source unitary-invariant norm, and conclusion directly. Field-specific and more abstract natural-input theorems remain supporting declarations rather than the primary semantic-review object."
       },
       "semantic_review_variants": [
         {

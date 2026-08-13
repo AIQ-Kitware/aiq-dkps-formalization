@@ -29,6 +29,7 @@ A hostile reviewer should use this report together with `prose/distilled_literat
 **Counted source atoms:** `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-sin-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`.
 
 **Selected source-facing Lean declarations:**
+- `TauCeti.DavisKahan1970.sinTheta_headline_generic`
 - `TauCeti.DavisKahan1970.sinTheta`
 - `TauCeti.DavisKahan1970.sinTheta_real_exactPaper`
 - `TauCeti.DavisKahan1970.generalizedSinTheta`
@@ -36,7 +37,7 @@ A hostile reviewer should use this report together with `prose/distilled_literat
 
 **Semantic review:**
 
-Accepted result-only semantic review 2026-08-12. `sinTheta` is the complex source-shaped unbounded form-bounded isometric theorem and `sinTheta_real_exactPaper` exposes the real paper UI-norm surface; the generalized complex/real endpoints record the same unbounded closed-operator engine with the source lower-frame formulation. Together they cover the printed interval/exterior gap, arbitrary unitary-invariant norm, real/complex, infinite-dimensional, and unbounded-self-adjoint scope with bounded residual. No proof-only Section 1/6 material is used as part of the counted result.
+Accepted result-only semantic review 2026-08-12. `sinTheta_headline_generic` is now the primary source-shaped witness: one theorem is generic over `RCLike 𝕜`, uses the literal `PaperUnitaryInvariantNorm`, exposes the paper operators/residual/domain equations and interval/exterior spectral alternative directly, and has no finite-dimensional hypothesis. The older complex/real and generalized endpoints remain supporting implementation and scope witnesses. Together they cover the printed interval/exterior gap, arbitrary unitary-invariant norm, real/complex, infinite-dimensional, and unbounded-self-adjoint scope with bounded residual. No proof-only Section 1/6 material is used as part of the counted result.
 
 ### 2. `S2-tan-theta` — Single-angle tangent theorem
 
