@@ -61,10 +61,17 @@ python3 scripts/render_semantic_alignment_review.py \
     --output build/semantic-alignment/headline-review.md
 ```
 
-The command invokes Lean and embeds compiler-printed theorem types.  Use
-`--no-lean` only for a layout preview.  `--importance major` expands the packet
-to the next review-priority tier without changing the full-paper completeness
-census.
+The command invokes Lean and embeds compiler-printed theorem types.  Headline
+census rows also carry a curated semantic-review contract: a normalized source
+statement, canonical and supporting Lean declarations, a clause-by-clause
+source/Lean map, and the small set of project-local definitions whose bodies
+must be shown for an outsider to understand the theorem type.  The renderer
+uses `#check` for theorem statements and `#print` for that semantic dictionary;
+it intentionally does **not** recursively dump every `TauCeti.*` dependency.
+
+Use `--no-lean` only for a layout preview.  `--importance major` expands the
+packet to the next review-priority tier without changing the full-paper
+completeness census.
 
 ### Where a new note goes
 
