@@ -285,41 +285,15 @@ theorem sinThetaFrobenius_orthogonalSharpness (hε : 0 < ε) (hd : 1 ≤ d)
         (eigenspace (orthogonalSharpnessSample b d ε) ((2 : ℝ) : 𝕜)) =
       Real.sqrt d := by
   classical
-  set U := eigenspace (orthogonalSharpnessPopulation b d) ((3 : ℝ) : 𝕜) with hUdef
-  set V := eigenspace (orthogonalSharpnessSample b d ε) ((2 : ℝ) : 𝕜) with hVdef
-  have hperp : U ≤ Vᗮ := orthogonal_orthogonalSharpness b hε hdp
-  -- On `U` the complementary projector of `V` is the identity, so `sinΘ = P_U`.
-  have hsin : sinThetaMap U V = projection U := by
-    refine LinearMap.ext fun x => ?_
-    have hmem : projection U x ∈ Vᗮ := hperp (Submodule.starProjection_apply_mem U x)
-    change Vᗮ.starProjection (U.starProjection x) = U.starProjection x
-    exact Submodule.starProjection_eq_self_iff.mpr hmem
-  rw [sinThetaFrobenius, hsin,
-    UnitarilyInvariantSeminorm.frobenius_apply 𝕜 E _ (finrank_of_orthonormalBasis b) b]
-  -- `P_U` keeps the leading basis vectors and kills the rest.
-  have hUspan : U = Submodule.span 𝕜
-      (b '' ((Finset.univ.filter (fun i : Fin p => (i : ℕ) < d) : Finset (Fin p)) :
-        Set (Fin p))) := by
-    rw [hUdef, eigenspace_orthogonalSharpnessPopulation,
-      OrthonormalBasis.spanIndices_eq_span]
-    congr 2
-    ext i
-    simp
-  have hcol : ∀ i : Fin p, ‖projection U (b i)‖ ^ 2 =
-      if i ∈ (Finset.univ.filter (fun j : Fin p => (j : ℕ) < d)) then (1 : ℝ) else 0 := by
-    intro i
-    have hproj : U.starProjection (b i) =
-        if i ∈ (Finset.univ.filter (fun j : Fin p => (j : ℕ) < d)) then b i else 0 := by
-      rw [hUspan]
-      exact Orthonormal.starProjection_span_image_apply_self b.orthonormal _ i
-    change ‖U.starProjection (b i)‖ ^ 2 = _
-    rw [hproj]
-    split_ifs
-    · rw [b.orthonormal.norm_eq_one i, one_pow]
-    · simp
-  rw [Finset.sum_congr rfl fun i _ => hcol i, Finset.sum_ite_mem,
-    Finset.univ_inter, Finset.sum_const, card_filter_val_lt p d (by omega)]
-  simp
+  rw [eigenspace_orthogonalSharpnessPopulation, eigenspace_orthogonalSharpnessSample b hε,
+    sinThetaFrobenius_spanIndices_of_subset_compl b (finrank_of_orthonormalBasis b) _ _
+      (fun i hi => by
+        simp only [Set.mem_ofPred_eq] at hi
+        simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_not]
+        omega)]
+  congr 1
+  rw [Set.toFinset_ofPred]
+  exact_mod_cast card_filter_val_lt p d (by omega)
 
 omit [FiniteDimensional 𝕜 E] in
 /-- **Every aligned orthonormal pair is at distance exactly `√(2d)`.**  This is
@@ -333,20 +307,10 @@ theorem dist_orthogonalSharpness_aligned (hε : 0 < ε)
     (hspanV : Submodule.span 𝕜 (Set.range v) =
       eigenspace (orthogonalSharpnessSample b d ε) ((2 : ℝ) : 𝕜)) :
     Real.sqrt (∑ i, ‖v i - u i‖ ^ 2) = Real.sqrt (2 * d) := by
-  have hperp := orthogonal_orthogonalSharpness (b := b) (d := d) (ε := ε) hε hdp
-  have hcol : ∀ i, ‖v i - u i‖ ^ 2 = (2 : ℝ) := by
-    intro i
-    have huU : u i ∈ eigenspace (orthogonalSharpnessPopulation b d) ((3 : ℝ) : 𝕜) :=
-      hspanU ▸ Submodule.subset_span ⟨i, rfl⟩
-    have hvV : v i ∈ eigenspace (orthogonalSharpnessSample b d ε) ((2 : ℝ) : 𝕜) :=
-      hspanV ▸ Submodule.subset_span ⟨i, rfl⟩
-    have hzero : ⟪v i, u i⟫_𝕜 = 0 :=
-      (Submodule.mem_orthogonal _ _).mp (hperp huU) (v i) hvV
-    rw [@norm_sub_sq 𝕜, hu.norm_eq_one i, hv.norm_eq_one i, hzero]
-    norm_num
-  rw [Finset.sum_congr rfl fun i _ => hcol i, Finset.sum_const, Finset.card_univ,
-    Fintype.card_fin, nsmul_eq_mul]
-  ring_nf
+  rw [sum_sq_norm_sub_eq_of_le_orthogonal
+    (orthogonal_orthogonalSharpness (b := b) (d := d) (ε := ε) hε hdp) hu hv
+    (fun i => hspanU ▸ Submodule.subset_span ⟨i, rfl⟩)
+    (fun i => hspanV ▸ Submodule.subset_span ⟨i, rfl⟩)]
 
 /-! ## The sharpness statement -/
 

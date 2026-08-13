@@ -9,6 +9,7 @@ or a new file next to `OrthonormalBasis` in `PiL2`.
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BasisSpan
+public import ForTauCeti.Analysis.InnerProductSpace.EigenblockSpan
 public import ForTauCeti.Analysis.InnerProductSpace.Spectral.Subspace
 public import Mathlib.Analysis.InnerProductSpace.Spectrum
 
@@ -202,6 +203,56 @@ theorem eigenvalues_basisDiagonal_le {n : ℕ} (b : OrthonormalBasis ι 𝕜 E)
     (isSymmetric_basisDiagonal b c).eigenvalues hn i ≤ M :=
   le_of_hasEigenvalue_basisDiagonal b c hc
     ((isSymmetric_basisDiagonal b c).hasEigenvalue_eigenvalues hn i)
+
+/-- **Counting eigenvalues above a level is reading the data.**
+
+Mathlib's sorted eigenvalue list of a diagonal operator is a rearrangement of
+the coefficients, so the number of sorted eigenvalues exceeding `α` is the
+number of coefficients exceeding `α`.  The proof avoids exhibiting the
+rearrangement: both counts are the dimension of one subspace — the span of the
+eigenvectors with eigenvalue above `α` — which the two orthonormal eigenbases
+describe by their own index sets.
+
+Together with `LinearMap.IsSymmetric.eigenvalues_level_eq_Ico` this locates any
+eigenspace of a diagonal operator inside the sorted eigenbasis, which is what a
+concrete example needs in order to produce a block-selection hypothesis for a
+*middle* eigenvalue rather than only for the largest one. -/
+theorem card_filter_lt_eigenvalues_basisDiagonal {n : ℕ}
+    (b : OrthonormalBasis ι 𝕜 E) (c : ι → ℝ) (hn : finrank 𝕜 E = n) (α : ℝ) :
+    ({i | α < (isSymmetric_basisDiagonal b c).eigenvalues hn i} :
+        Finset (Fin n)).card =
+      ({i | α < c i} : Finset ι).card := by
+  classical
+  have hsym := isSymmetric_basisDiagonal b c
+  -- The two descriptions of the span of the eigenvectors above `α` agree.
+  have hspan : (hsym.eigenvectorBasis hn).spanIndices
+      {i : Fin n | α < hsym.eigenvalues hn i} = b.spanIndices {i : ι | α < c i} := by
+    refine le_antisymm ?_ ?_
+    · rw [OrthonormalBasis.spanIndices_eq_span]
+      refine Submodule.span_le.mpr ?_
+      rintro _ ⟨i, hi, rfl⟩
+      have hmem : hsym.eigenvectorBasis hn i ∈
+          eigenspace (basisDiagonal b c) ((hsym.eigenvalues hn i : ℝ) : 𝕜) :=
+        (hsym.hasEigenvector_eigenvectorBasis hn i).1
+      rw [eigenspace_basisDiagonal] at hmem
+      refine OrthonormalBasis.spanIndices_mono b (fun j hj => ?_) hmem
+      have hcj : c j = hsym.eigenvalues hn i := by exact_mod_cast hj
+      simp only [Set.mem_ofPred_eq] at hi ⊢
+      exact hcj ▸ hi
+    · rw [OrthonormalBasis.spanIndices_eq_span]
+      refine Submodule.span_le.mpr ?_
+      rintro _ ⟨j, hj, rfl⟩
+      have hmem : b j ∈ eigenspace (basisDiagonal b c) ((c j : ℝ) : 𝕜) := by
+        rw [Module.End.mem_eigenspace_iff, basisDiagonal_apply_basis]
+      rw [← hsym.spanIndices_eigenvalueLevel hn ((c j : ℝ) : 𝕜)] at hmem
+      refine OrthonormalBasis.spanIndices_mono _ (fun i hi => ?_) hmem
+      have hci : hsym.eigenvalues hn i = c j := by exact_mod_cast hi
+      simp only [Set.mem_ofPred_eq] at hj ⊢
+      exact hci ▸ hj
+  have h1 := (hsym.eigenvectorBasis hn).finrank_spanIndices_set
+    {i : Fin n | α < hsym.eigenvalues hn i}
+  rw [hspan, b.finrank_spanIndices_set {i : ι | α < c i}] at h1
+  simpa using h1.symm
 
 end FiniteDimensional
 

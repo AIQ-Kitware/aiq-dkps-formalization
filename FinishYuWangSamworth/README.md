@@ -25,10 +25,13 @@ each is stated at the printed generality:
 3. Corollary 1, both displays, including the literal real sign-aligned bound;
 4. Theorem 3, right and left, including aligned frames, in its corrected form;
 5. Lemma A1 in a basis-free compression API;
-6. both Section 2 sharpness examples.
+6. all three Section 2 sharpness examples, including the published middle-block
+   construction.
 
 It additionally exposes direct right and left rank-one singular-vector
-corollaries.
+corollaries, the Section 1 numerical illustration that Theorem 1's separation
+can vanish, and the deterministic core of the Section 3 diagnosis of the
+statistical literature.
 
 ## Two source defects, both machine checked
 
@@ -59,18 +62,26 @@ See `ELEGANCE_AUDIT.md` for the in-place API and factoring review.
 
 ## Sharpness
 
-Both of the paper's sharpness constructions are formalized against the *same*
-hypotheses the theorems carry, so each is a genuine instance rather than a
+All three of the paper's sharpness constructions are formalized against the
+*same* hypotheses the theorems carry, so each is a genuine instance rather than a
 numerical coincidence.
 
 `Symmetric/OrthogonalSharpness.lean` — orthogonal top-`d` eigenspaces.  Every
 aligned orthonormal pair is at distance exactly `√(2d)` and `‖sin Θ‖_F = √d`,
 against a bound of `√(2d)(1+ε)`: the aligned-basis constant `2^{3/2}` and the
 `√d` dimension dependence are unimprovable.  This is the *preprint's*
-construction; the published article uses a middle block over three levels
-`5 > 3 > 1`, so that the population gap is two-sided.  Both establish the same
-printed conclusion; the published instance itself is not formalized, and the
-census records that under gap `published-sharpness-example`.
+construction.
+
+`Symmetric/MiddleBlockSharpness.lean` — the *published* construction, a middle
+block over three levels `5 > 3 > 1`, so that the population gap `min(5−3, 3−1)`
+is genuinely two-sided.  It proves the same printed conclusion, and it was the
+harder of the two: its block sits in the middle of both spectra, so the
+branch-selection hypothesis cannot be produced by any "leading `d` eigenvectors"
+argument.  Closing it needed the position of an arbitrary eigenvalue level set
+inside Mathlib's sorted eigenbasis — `eigenvalues_level_eq_Ico`,
+`card_filter_lt_eigenvalues_basisDiagonal`, and the general
+`correspondingEigenblock_eigenvalueLevel`, of which the earlier top-eigenspace
+constructor is now the case `m = 0`.
 
 `Symmetric/PlanarSharpness.lean` — two nearby lines.  Stated without
 coordinates: `diag(3,1)` is `twoLevelOperator 1 3` on a line, conjugation moves
@@ -79,11 +90,11 @@ The sine bound is tight up to *exactly* the factor `2` at every angle, so the
 constant is pinned in the small-angle regime too — which the orthogonal-blocks
 example cannot do.
 
-Building it required the first-ever *constructor* for `CorrespondingEigenblock`
-(`ForTauCeti/.../YuWangSamworth/TopEigenblock.lean`): that hypothesis is
-consumed by every theorem in the package and had no instance anywhere in the
-repository, so no concrete pair of covariance operators had ever been checked
-against it.
+Building the first of them required the first-ever *constructor* for
+`CorrespondingEigenblock` (`ForTauCeti/.../YuWangSamworth/TopEigenblock.lean`):
+that hypothesis is consumed by every theorem in the package and had no instance
+anywhere in the repository, so no concrete pair of covariance operators had ever
+been checked against it.
 
 This is a root Lake library with no nested workspace, and a **default** build
 target since 2026-08-02.
@@ -93,6 +104,8 @@ target since 2026-08-02.
 ```bash
 lake build FinishYuWangSamworth.Symmetric.Theorem1
 lake build FinishYuWangSamworth.Symmetric.OrthogonalSharpness
+lake build FinishYuWangSamworth.Symmetric.MiddleBlockSharpness
+lake build FinishYuWangSamworth.Symmetric.MixedGap
 lake build FinishYuWangSamworth.Symmetric.AngleIdentity
 lake build FinishYuWangSamworth.Appendix.Lemma5
 lake build FinishYuWangSamworth.Rectangular.RankOne
