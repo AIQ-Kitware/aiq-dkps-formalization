@@ -9,6 +9,7 @@ import DavisKahan.Geometry.Polar.DisplacementSquareExtremal
 import DavisKahan.Geometry.Angle.BasisAngleEnergy
 import ForTauCeti.Analysis.InnerProductSpace.CompactSpectralDecomposition
 import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
+import ForTauCeti.Analysis.OperatorIdeal.Family.GramGauge
 
 /-!
 # Davis--Kahan 1970, Section 4: extremal properties of the direct rotation
@@ -501,6 +502,101 @@ theorem Proposition4_3_compact_nonacute_idealGauge
     N U V J W hWunitary hWmap hWmem
 
 end IdealGauge
+
+/-! ## The two full-displacement consequences the source draws from Proposition 4.3
+
+Immediately after Proposition 4.3 the source observes that whenever a norm of `1 − V` is the
+square root of a unitarily invariant norm of `(1 − V⋆)(1 − V)`, the proposition also makes
+`1 − V` itself minimal; and it names the operator norm and the Hilbert--Schmidt (square) norm
+as two such norms.  It warns in the same breath that an *arbitrary* unitarily invariant norm
+of `1 − V` need not be minimized by the direct rotation — that failure is Proposition 4.4,
+which this repository refutes as printed and repairs in `QNorm.lean`.
+
+These are conclusions the source draws, not conjectures it leaves open, so they are stated
+here at the scope Section 4 actually inherits: an arbitrary complex Hilbert space with the
+matched-crossed-defect completion of Theorem 3.1 and Corollary 3.1, and therefore **no**
+acuteness hypothesis.  The acute and finite-dimensional forms are strictly weaker and do not
+stand in for them.
+
+Both come from the same identity, `aₙ(X⋆X) = aₙ(X)²`, read at the two ends of the Schatten
+scale: at `p = ∞` it is the C⋆-identity `‖X⋆X‖ = ‖X‖²`, and at `p = 1` it is
+`‖X⋆X‖₁ = ‖X‖_HS²`.  Both are `TauCeti.ApproximationNumber` results and neither mentions
+Davis--Kahan. -/
+
+section FullDisplacement
+
+open DavisKahan (spectraDirectRotation)
+open TauCeti.ApproximationNumber (gramOperator norm_gramOperator nuclearENorm_gramOperator)
+
+universe v
+
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- The squared full displacement is the Gram operator of the full displacement.
+
+`(1 − W⋆)(1 − W)` is how Proposition 4.3 spells it and `gramOperator (1 − W)` is how the
+approximation-number layer spells it; this is the one-line bridge between them. -/
+theorem displacementSquare_eq_gramOperator (W : H →L[ℂ] H) :
+    (1 - star W) * (1 - W) = gramOperator (1 - W) := by
+  rw [show (1 : H →L[ℂ] H) - star W = star (1 - W) by rw [star_sub, star_one]]
+  rfl
+
+/-- **Davis--Kahan 1970, the operator-norm consequence of Proposition 4.3**, at the
+matched-crossed-defect scope Section 4 inherits.
+
+`‖1 − U‖ ≤ ‖1 − W‖` for every unitary `W` carrying `U` onto `V`: the operator norm of the
+*full* displacement, not only of its square, is minimized by the direct rotation.
+
+The operator norm is the first Ky Fan gauge, so the single Ky Fan level `k = 1` of
+Proposition 4.3 already carries this; the C⋆-identity `‖X⋆X‖ = ‖X‖²` then removes the
+square.  No unitarily invariant norm beyond the operator norm is claimed, and by
+Proposition 4.4 none is available in general. -/
+theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_opNorm
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    ‖1 - DavisKahan.nonacuteDirectRotation U V J‖ ≤ ‖1 - W‖ := by
+  have hk := Proposition4_3_infiniteDimensional_nonacute U V J W hWunitary hWmap 1
+  rw [displacementSquare_eq_gramOperator, displacementSquare_eq_gramOperator] at hk
+  simp only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
+    ContinuousLinearMap.kyFanGauge_one, norm_gramOperator] at hk
+  exact le_of_sq_le_sq hk (norm_nonneg _)
+
+/-- **Davis--Kahan 1970, the Hilbert--Schmidt consequence of Proposition 4.3**, at the
+matched-crossed-defect scope Section 4 inherits.
+
+`‖1 − U‖_HS ≤ ‖1 − W‖_HS`, the source's "square norm" half of the same observation.
+
+Stated in `ℝ≥0∞`, so there is no Hilbert--Schmidt hypothesis on the competitor: when `1 − W`
+fails to be Hilbert--Schmidt the right side is `∞` and the bound is vacuous, exactly as the
+source's convention that a result is vacuous when its norms do not exist.
+
+Where the operator norm needed one Ky Fan level, this needs all of them: the nuclear norm is
+the supremum of the Ky Fan gauges, and `‖X⋆X‖₁ = ‖X‖_HS²`. -/
+theorem Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_hilbertSchmidt
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (J : DavisKahan.halmosSourceDefect U V ≃ₗᵢ[ℂ]
+      DavisKahan.halmosTargetDefect U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (1 - DavisKahan.nonacuteDirectRotation U V J).hilbertSchmidtENorm ≤
+      (1 - W).hilbertSchmidtENorm := by
+  have hnuc : (gramOperator (1 - DavisKahan.nonacuteDirectRotation U V J)).nuclearENorm ≤
+      (gramOperator (1 - W)).nuclearENorm := by
+    rw [ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge,
+      ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge]
+    refine iSup_mono fun k => ENNReal.ofReal_le_ofReal ?_
+    have hk := Proposition4_3_infiniteDimensional_nonacute U V J W hWunitary hWmap k
+    rw [displacementSquare_eq_gramOperator, displacementSquare_eq_gramOperator] at hk
+    simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge] using hk
+  rw [nuclearENorm_gramOperator, nuclearENorm_gramOperator] at hnuc
+  rw [← ENNReal.rpow_natCast _ 2, ← ENNReal.rpow_natCast _ 2] at hnuc
+  exact (ENNReal.rpow_le_rpow_iff (by norm_num)).mp hnuc
+
+end FullDisplacement
 
 end DavisKahan1970
 end TauCeti

@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
 import DavisKahan.SpectralTheory.FormMethod.BeamWeinberger
+import DavisKahan.SpectralTheory.FormMethod.BeamInPlaneAngle
 import DavisKahan.Sources.DavisKahan1970.Section9.BeamDoubleTangentKyFan
 
 /-!
@@ -20,9 +21,22 @@ wrapper below instead uses the unconditional beam theorem already proved from th
 subsequent, sharper one-vector Davis--Kahan argument, so the printed conclusion is
 proved rather than imported as a hypothesis.
 
-The final individual-eigenvector `omega_k` estimates are intentionally not exposed
-here yet: their current operator-level theorem has the needed mathematics but still
-requires a source-facing eigenvalue-order labeling wrapper.
+The final individual-eigenvector `omega_k` estimates are exposed by
+`final_individual_eigenvector_angles_source` below, on the genuine perturbed beam:
+`BeamInPlaneAngle.beamLowEigenvector_ritz_pairing` supplies the in-plane argument the
+source performs after (9.9)--(9.11), pairing each Ritz vector with the eigenvector of the
+matching eigenvalue and bounding the angle by the `sqrt 7 / 10` envelope, and
+`NumericalBounds.final_upper_individual_angle_bound` converts that envelope into the
+printed decimal form.
+
+One thing is weaker here than in the source, and deliberately stated rather than hidden.
+The source prints two different constants, `omega_1 < 0.00053 eps / (1 - 0.00043 eps)` and
+`omega_2 < 0.00053 eps / (1 - 0.0016 eps)`, the first of which reads the envelope at the
+*lower* Ritz value.  Reaching it needs the Rayleigh--Ritz placement
+`beamLowEigenvalue ... j <= ritzLow eps` for the smaller eigenvalue, which this repository
+does not yet prove; only `beam_eigenvalue_le_ritzHigh` is available.  So the wrapper below
+proves the second, weaker constant for *both* vectors.  That is a genuine remaining gap in
+Section 9 and is the whole of it.
 -/
 
 namespace TauCeti
@@ -98,6 +112,59 @@ theorem equation_9_8_source (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
         < ((1291 : ℝ) / 2500000 * ε) /
             (1 - (7887 : ℝ) / 5000000 * ε) :=
   beam_equation_9_8 ε hε hε100
+
+/-- Read an individual-angle bound at an eigenvalue against the exact envelope taken at the
+upper Ritz value.  Monotonicity of `c / (500 - x)` in `x`, nothing more. -/
+private theorem le_upperIndividualAngleExactBound {ε lam a : ℝ} (hε : 0 < ε) (hε100 : ε < 100)
+    (hlam : lam ≤ ritzHigh ε) (_hlam500 : lam < 500)
+    (h : a ≤ Real.sqrt 7 / 10 * ε / (500 - lam)) :
+    a ≤ upperIndividualAngleExactBound ε := by
+  have h3 : Real.sqrt 3 / 3 < 1 := by
+    nlinarith [Real.sq_sqrt (by norm_num : (3 : ℝ) ≥ 0),
+      Real.sqrt_nonneg 3]
+  have hrh : ritzHigh ε < 100 := by
+    unfold ritzHigh ritzHighCoefficient
+    nlinarith
+  have hd : (0 : ℝ) < 500 - ritzHigh ε := by linarith
+  have hnum : (0 : ℝ) ≤ Real.sqrt 7 / 10 * ε := by positivity
+  refine h.trans ?_
+  have hmono : Real.sqrt 7 / 10 * ε / (500 - lam) ≤ Real.sqrt 7 / 10 * ε / (500 - ritzHigh ε) :=
+    div_le_div_of_nonneg_left hnum hd (by linarith)
+  have hd' : (0 : ℝ) < 500 - ε * ritzHighCoefficient := by
+    unfold ritzHigh at hd; linarith
+  have hd2 : (0 : ℝ) < 1 - ritzHighCoefficient / 500 * ε := by nlinarith
+  refine hmono.trans (le_of_eq ?_)
+  unfold upperIndividualAngleExactBound ritzHigh
+  rw [div_eq_div_iff hd'.ne' hd2.ne']
+  ring
+
+/-- **Davis--Kahan 1970, Section 9, the final individual-eigenvector `omega_k` bounds**, on
+the genuine perturbed free beam.
+
+Each trial Ritz vector is paired with the eigenvector of the correspondingly ordered
+eigenvalue, and the angle between them is bounded by the printed decimal form.  See the
+module docstring for why both bounds carry the source's `omega_2` constant rather than the
+sharper `omega_1` one. -/
+theorem final_individual_eigenvector_angles_source (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100)
+    {j k : Fin 2} (hjk : j ≠ k)
+    (hle : beamLowEigenvalue ε hε.le hε100 j ≤ beamLowEigenvalue ε hε.le hε100 k) :
+    Real.arccos ‖inner ℂ (centeredAffineLp trialOne) (beamLowEigenvector ε hε.le hε100 j)‖
+        < ((53 : ℝ) / 100000 * ε) / (1 - (1 : ℝ) / 625 * ε) ∧
+      Real.arccos ‖inner ℂ (centeredAffineLp trialTwo) (beamLowEigenvector ε hε.le hε100 k)‖
+        < ((53 : ℝ) / 100000 * ε) / (1 - (1 : ℝ) / 625 * ε) := by
+  obtain ⟨hj, hk⟩ := beamLowEigenvector_ritz_pairing ε hε hε100 hjk hle
+  have hridge : ∀ i : Fin 2, beamLowEigenvalue ε hε.le hε100 i ≤ ritzHigh ε := by
+    intro i
+    exact beam_eigenvalue_le_ritzHigh ε hε (beamLowEigenvector_mem_domain ε hε.le hε100 i)
+      (beamPerturbed_apply_beamLowEigenvector ε hε.le hε100 i)
+      (by linarith [beamLowEigenvalue_lt_five_hundred ε hε.le hε100 i])
+      (norm_beamLowEigenvector ε hε.le hε100 i)
+  exact ⟨final_upper_individual_angle_bound ε _ hε hε100
+      (le_upperIndividualAngleExactBound hε hε100 (hridge j)
+        (beamLowEigenvalue_lt_five_hundred ε hε.le hε100 j) hj),
+    final_upper_individual_angle_bound ε _ hε hε100
+      (le_upperIndividualAngleExactBound hε hε100 (hridge k)
+        (beamLowEigenvalue_lt_five_hundred ε hε.le hε100 k) hk)⟩
 
 /-- **The sharper one-vector Davis--Kahan bounds immediately following (9.8).**
 These are the paper's two displayed `0.0003652` estimates for the specific Ritz
