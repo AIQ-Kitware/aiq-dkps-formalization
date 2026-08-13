@@ -10,14 +10,15 @@ A hostile reviewer should use this report together with `prose/distilled_literat
 
 - Counted DK-established results: **29**
 - Printed-result boundaries reviewed: **29/29**
-- Semantically terminal: **28/29**
-- Genuine remaining result-scope gaps: **1** (the real-scalar unbounded ambient tangent endpoint)
+- Semantically terminal: **29/29**
+- Genuine remaining result-scope gaps: **0**
 - Pending results re-audited in the current sweep: **17**
 - False-positive pending statuses closed across the result-only sweep: **12**
 - Latest-main baseline for this promotion: `85a2f7abb1ae`. That baseline already closes Proposition 3.3 at the full nonacute real/complex scope; this promotion adds the compiler-validated compact/nonacute Proposition 4.1 direct-value bridge and advances the denominator from 26/29 to 27/29.
 - **REOPENED THEN REPAIRED 2026-08-12.** Three previously accepted rows were withdrawn after a hostile re-read of the printed statements against the selected Lean surface: `S2-sin-two-theta` (unbounded directed evidence used a reflection residual, not the printed trial residual `R = (A+H)E_0 - E_0 A_0`), `DK-3.4-prop` (the complex endpoint concluded only the weaker `IsPaperDirectRotation` numerical-range predicate, not Definition 3.1 operator positivity), and `DK-8.2-thm` (the standing post-Proposition-3.2 assumption (3.5) was not represented as source scope, and the selected quarter-angle evidence was directed rather than the printed ambient `Theta < pi/4`). All three defects have since been repaired and the printed statements re-audited; the verdicts below record the repair. The reopened state is retained in git history at commit `7001ed05`.
 - Post-promotion integration baseline: `535dab991eb2`. The compiler-validated unbounded ambient single-angle tangent assembly is integrated under crossed-defect equivalence (3.5).
-- **NONLOCAL-SEMANTICS AUDIT 2026-08-12.** `S2-tan-theta` was previously queued for closure by refuting its printed ambient clause. That plan is withdrawn: the omission of (3.5) from the Section 2 display is a nonlocal-semantics dependency, not a false theorem, and the row now carries an accepted `nonlocal_source_interpretation` record that the generated audit packet puts in front of the reviewer for adjudication. The denominator remains **28/29**, now because the real-scalar unbounded ambient endpoint is missing.
+- **CLOSED 2026-08-13.** `tanTheta_unbounded_ambient_paperUINorm_real_exact` supplies the last missing endpoint — the unbounded ambient tangent conclusion over a real Hilbert space, at the printed constant and at every paper unitarily invariant norm — and `S2-tan-theta` is accepted. The denominator is **29/29** on all three axes.
+- **NONLOCAL-SEMANTICS AUDIT 2026-08-12.** `S2-tan-theta` was previously queued for closure by refuting its printed ambient clause. That plan is withdrawn: the omission of (3.5) from the Section 2 display is a nonlocal-semantics dependency, not a false theorem, and the row now carries an accepted `nonlocal_source_interpretation` record that the generated audit packet puts in front of the reviewer for adjudication. The denominator stood at **28/29** on that date, then because the real-scalar unbounded ambient endpoint was missing.
 
 ## All 29 counted results
 
@@ -39,7 +40,7 @@ Accepted result-only semantic review 2026-08-12. `sinTheta` is the complex sourc
 
 ### 2. `S2-tan-theta` — Single-angle tangent theorem
 
-**Verdict:** OPEN — a real-scalar unbounded ambient endpoint is missing. The source-interpretation question is separately **accepted**. Re-audited 2026-08-12 after the nonlocal-semantics audit.
+**Verdict:** PASS exact, under an accepted nonlocal source interpretation. Re-audited 2026-08-12 after the nonlocal-semantics audit; the last endpoint landed 2026-08-13.
 
 **Counted source atoms:** `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`.
 
@@ -51,6 +52,7 @@ Accepted result-only semantic review 2026-08-12. `sinTheta` is the complex sourc
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent`
 - `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
+- `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`
 
 **Semantic review:**
 
@@ -66,7 +68,11 @@ The substantive content of the omission is exact: (3.5) is the equality of the d
 
 The repository therefore classifies this result as **paper-faithful under a nonlocal source interpretation**, not as refuted. The competing literal reading — read `‖tan Theta‖` as `+infinity` and take only the Section 2 hypotheses — is stated at full strength in the result inventory and in the generated audit packet, together with the reason the repository rejects it: the source declares such instances vacuous in advance, and the same reading would equally convict the Section 1 angle-doubling sentence. The bilateral-shift construction is recorded as a **vacuity/nonvacuity witness**, and the challenge-surface statement has been renamed `tanTheta_literalSection2_admits_ambientRightAngle` so that no reviewer-facing name calls it a counterexample to this result. This category is kept strictly distinct from `DK-4.4-prop`, where every object exists, the compared quantities are finite, and the printed conclusion is false.
 
-What remains is a scalar-scope gap and nothing else. The directed conclusion is closed bounded and unbounded, complex and real. The ambient conclusion is closed at bounded scope over both fields in the source-shaped (3.5)-qualified form, and at unbounded scope over complex scalars. The transversality-form declarations (`‖sin Theta‖ < 1`) remain registered as strictly stronger specializations, not as the source-shaped statement.
+**The last scalar-scope gap is closed, 2026-08-13.** `tanTheta_unbounded_ambient_paperUINorm_real_exact` states the ambient conclusion for a closed unbounded *real* self-adjoint operator, an arbitrary closed real trial subspace inside its domain, an arbitrary chosen reducing subspace, the printed `A_0 ≤ α` and `α + δ ≤ Λ_1` form bounds, the printed Rayleigh–Ritz condition in operator-block form, the standing (3.5), the printed constant `δ`, and every `PaperUnitaryInvariantNorm`, with ideal membership concluded rather than assumed. Both conclusions are therefore closed at bounded and unbounded scope over both scalar fields.
+
+Two things about that proof are worth a reviewer's attention. First, it introduces no theory of complexifying unbounded closed operators: the unbounded chain touches its ambient operator only through the bounded `Theorem63TrialData` bundle plus the two form bounds, so `complexifyTrialData` carries the configuration across and the existing complex two-corner assembly applies unchanged. Second, (3.5) is consumed entirely on the real side — real directed no-pole plus (3.5) gives real ambient `‖sin Θ‖ < 1`, and only that consequence crosses the complexification — so the crossed-defect condition is never transported across fields.
+
+The transversality-form declarations (`‖sin Theta‖ < 1`) remain registered as strictly stronger specializations, not as the source-shaped statement.
 
 **Structured remaining gap:**
 
@@ -525,7 +531,11 @@ REPAIRED 2026-08-12. (1) The standing convention is now inventoried as the sourc
 
 ## Remaining mathematical targets
 
-- **`S2-tan-theta` — Single-angle tangent theorem:** the printed statement is accepted as true under a documented nonlocal source interpretation, not queued for refutation. The only remaining mathematical target is the real-scalar unbounded ambient endpoint; the complex one is compiled and the directed conclusion is closed over both fields.
+None. All 29 counted results are terminal on all three axes.
+
+`S2-tan-theta` was the last open row. Its printed statement is accepted as true under a documented nonlocal source interpretation — not refuted, and not rewritten to contain (3.5) — and its final Lean-coverage blocker, the real-scalar unbounded ambient endpoint, is discharged by `tanTheta_unbounded_ambient_paperUINorm_real_exact` (2026-08-13).
+
+This is a statement about the **29-result completion denominator** defined in `CLAUDE.md`, not about the 272-atom source-fidelity inventory, which continues to record proof equations, examples, and open questions that are deliberately outside the denominator.
 
 ## Reviewer reproduction
 
@@ -542,7 +552,7 @@ python3 scripts/check_davis_kahan_1970_result_inventory.py
 python3 scripts/check_davis_kahan_1970_statement_map.py
 ```
 
-The hard 100% gate is intentionally red until the remaining structured gap are removed:
+The hard 100% gate now passes:
 
 ```bash
 python3 scripts/check_davis_kahan_1970_statement_map.py --require-terminal

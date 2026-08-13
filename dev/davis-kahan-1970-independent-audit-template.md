@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **28/29 terminal**, **1 awaiting semantic closure**.
+Current result-level status: **29/29 terminal**, **0 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -140,9 +140,9 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - **Counted result kind:** `unnumbered_theorem`
 - **Exact source anchor:** Section 2, tan theta theorem
-- **Result disposition:** `pending_scope_endpoint`
+- **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `pending_scope_endpoint`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `paper_faithful_nonlocal_source_interpretation`
 - **Printed statement locally self-contained:** `False`
@@ -511,6 +511,8 @@ The theorem is printed in Section 2, before (3.5) exists in the exposition, and 
   - Carries `h35 : CrossedDefectsEquivalent U V`, the constructive form of (3.5) (an isometric equivalence of the two crossed defect spaces), and concludes both `N.Mem (paperTanAngleOperatorC U V)` and the sharp inequality. Membership in the norm's ideal is a conclusion, which is the explicit form of the source's vacuity convention.
 - `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
   - Same (3.5) hypothesis at unbounded self-adjoint scope over complex scalars, with the norm-ideal membership again concluded.
+- `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`
+  - Same (3.5) hypothesis at unbounded self-adjoint scope over REAL scalars, closing the printed real/complex scope of the ambient conclusion. Uniform transversality is derived from the printed form bounds together with (3.5) rather than assumed, so the crossed-defect condition is consumed on the real side and never transported across complexification; norm-ideal membership is again concluded.
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`
   - Alternative bounded route assuming uniform transversality `‖sin Theta‖ < 1` instead of (3.5). This is a strictly stronger hypothesis than the source's standing condition and is registered as a specialization, not as the source-shaped form.
 - `TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses`
@@ -530,7 +532,7 @@ In that configuration tan Theta is not a bounded operator and the displayed unit
 
 #### 9. Semantic conclusion recorded by the repository
 
-S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted; it does not by itself make the row terminal, and the remaining_gap records the separate Lean-coverage blocker.
+S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. It was never the reason the row was nonterminal: the separate Lean-coverage blocker was the missing real-scalar unbounded ambient endpoint, and that endpoint is now proved (`tanTheta_unbounded_ambient_paperUINorm_real_exact`), so the row is terminal on this accepted reading.
 
 #### Independent interpretation checklist
 
@@ -632,7 +634,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:268`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:306`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:207`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3647,8 +3655,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 272 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **28 currently terminal results independently reconfirmed:** yes / no
-- **1 currently nonterminal/pending results resolved by this audit:** yes / no
+- **29 currently terminal results independently reconfirmed:** yes / no
+- **0 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

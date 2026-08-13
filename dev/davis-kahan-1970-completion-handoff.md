@@ -1,6 +1,8 @@
 # Davis--Kahan 1970 completion handoff — mathematical and architectural edition
 
 > **Historical checkpoint, retained as source-audit evidence.** Current status and policy live in `AGENTS.md`, the maintained Davis--Kahan census/frontier, and the distributable source specification. Re-measure current HEAD before acting on any status claim below.
+>
+> **Superseded on the completion question, 2026-08-13.** All 29 counted results of the maintained denominator are now terminal on all three axes; `S2-tan-theta` was the last open row and closed with `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`. The work-list sections below are historical. The architectural sections — complexification as a proof technique, `LinearPMap` as the canonical unbounded carrier, paper facades exposing paper hypotheses — remain current guidance.
 
 State inspected 2026-08-09 from checkpoint HEAD `69d1655a` (`main`, clean working tree).
 
