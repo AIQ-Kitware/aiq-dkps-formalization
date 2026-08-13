@@ -206,6 +206,171 @@ def get_probe(results: dict[str, dict], mode: str, name: str) -> dict:
     })
 
 
+DECL_KINDS = ("theorem", "lemma", "def", "abbrev", "structure", "class", "alias")
+
+
+def _declaration_pattern(short_name: str) -> re.Pattern[str]:
+    kinds = "|".join(DECL_KINDS)
+    return re.compile(rf"^\s*(?:{kinds})\s+{re.escape(short_name)}\b(?!\.)")
+
+
+def _source_header(lines: list[str], start: int) -> str:
+    """Return the declaration header, stopping at a top-level body/proof."""
+    out: list[str] = []
+    paren = bracket = brace = 0
+    for line in lines[start:]:
+        cut: int | None = None
+        i = 0
+        while i < len(line):
+            ch = line[i]
+            if ch == "(": paren += 1
+            elif ch == ")": paren = max(0, paren - 1)
+            elif ch == "[": bracket += 1
+            elif ch == "]": bracket = max(0, bracket - 1)
+            elif ch == "{": brace += 1
+            elif ch == "}": brace = max(0, brace - 1)
+            if paren == bracket == brace == 0:
+                if line.startswith(":=", i):
+                    cut = i
+                    break
+                if line.startswith("where", i) and (i == 0 or line[i-1].isspace()):
+                    after = i + len("where")
+                    if after == len(line) or line[after].isspace():
+                        cut = i
+                        break
+            i += 1
+        if cut is not None:
+            prefix = line[:cut].rstrip()
+            if prefix:
+                out.append(prefix)
+            break
+        out.append(line.rstrip())
+    return "\n".join(out).rstrip()
+
+
+def _variable_blocks_before(lines: list[str], decl_line: int) -> list[str]:
+    blocks: list[str] = []
+    i = 0
+    while i < decl_line:
+        if re.match(r"^\s*variable\b", lines[i]):
+            block = [lines[i].rstrip()]
+            i += 1
+            while i < decl_line:
+                st = lines[i].strip()
+                if not st:
+                    break
+                if re.match(r"^(?:variable|theorem|lemma|def|abbrev|structure|class|alias|section|end|namespace|/-|/--)", st):
+                    break
+                if lines[i][:1].isspace():
+                    block.append(lines[i].rstrip())
+                    i += 1
+                    continue
+                break
+            blocks.append("\n".join(block))
+            continue
+        i += 1
+    return blocks
+
+
+def _binder_names(block: str) -> set[str]:
+    # This intentionally targets the ordinary variable declarations used in
+    # the paper-facing modules; it need not be a full Lean parser.
+    names: set[str] = set()
+    for group in re.findall(r"[\{\(]\s*([^:}\)]+?)\s*:(?!=)", block):
+        for name in group.split():
+            if re.match(r"^[A-Za-z_𝕜ℝℂ][\w₀-₉𝕜ℝℂ]*$", name):
+                names.add(name)
+    return names
+
+
+def _ambient_variables(lines: list[str], decl_line: int, declaration: str) -> str:
+    used = set(re.findall(r"\b[A-Za-z_][A-Za-z_0-9₀-₉]*\b|[𝕜ℝℂ]", declaration))
+    explicitly_bound = _binder_names(declaration)
+    missing = used - explicitly_bound
+    chosen: list[str] = []
+    covered: set[str] = set()
+    # Walk backwards so the nearest binder for a name wins even if an earlier
+    # section reused the same variable name.
+    for block in reversed(_variable_blocks_before(lines, decl_line)):
+        names = _binder_names(block)
+        relevant = (names & missing) - covered
+        if relevant:
+            chosen.append(block)
+            covered |= names
+    chosen.reverse()
+    return "\n".join(chosen).rstrip()
+
+
+def _source_score(path: pathlib.Path) -> tuple[int, int, str]:
+    rel = str(path.relative_to(ROOT))
+    # Prefer the production source over conformance/audit mirrors when the
+    # same short theorem name intentionally exists in both places.
+    if rel.startswith("DavisKahan/Sources/"):
+        rank = 0
+    elif rel.startswith("ForTauCeti/") or rel.startswith("FinishYuWangSamworth/"):
+        rank = 1
+    elif rel.startswith("DavisKahan/"):
+        rank = 2
+    elif rel.startswith("Challenge/"):
+        rank = 8
+    else:
+        rank = 5
+    return (rank, len(path.parts), rel)
+
+
+def source_declaration(name: str) -> dict[str, str | int] | None:
+    """Locate a named Lean declaration and return its human-written header."""
+    short = name.rsplit(".", 1)[-1]
+    pat = _declaration_pattern(short)
+    candidates: list[tuple[pathlib.Path, int, list[str]]] = []
+    for path in ROOT.rglob("*.lean"):
+        if any(part in {".lake", "build"} for part in path.parts):
+            continue
+        try:
+            lines = path.read_text(encoding="utf-8").splitlines()
+        except UnicodeDecodeError:
+            continue
+        for i, line in enumerate(lines):
+            if pat.match(line):
+                candidates.append((path, i, lines))
+    if not candidates:
+        return None
+    candidates.sort(key=lambda item: _source_score(item[0]))
+    path, i, lines = candidates[0]
+    declaration = _source_header(lines, i)
+    return {
+        "file": str(path.relative_to(ROOT)),
+        "line": i + 1,
+        "ambient": _ambient_variables(lines, i, declaration),
+        "declaration": declaration,
+    }
+
+
+def render_source_declarations(names: list[str], results: dict[str, dict]) -> list[str]:
+    if not names:
+        return []
+    lines = [
+        "**Canonical Lean statement as written in the source**", "",
+        "This is the primary Lean text for semantic review.  Relevant ambient `variable` binders inherited by the declaration are shown immediately above it.  The compiler-expanded type is retained below only as verification evidence.", "",
+    ]
+    for name in names:
+        src = source_declaration(name)
+        lines += [f"`{name}`", ""]
+        if src is None:
+            lines += ["> **SOURCE DECLARATION NOT LOCATED.** Use the compiler verification below.", ""]
+        else:
+            lines += [f"Source: `{src['file']}:{src['line']}`", ""]
+            pieces: list[str] = []
+            ambient = str(src.get("ambient", "")).strip()
+            if ambient:
+                pieces += ["-- Ambient variables inherited by this declaration", ambient, ""]
+            pieces += [str(src["declaration"])]
+            lines += [lean_block("\n".join(pieces)), ""]
+        lines += render_checks("Compiler-expanded verification", [name], results, details=True)
+    return lines
+
+
+
 def render_source_statement(statement: dict) -> list[str]:
     lines = ["**Normalized source statement**", ""]
     for key, label in (
@@ -232,16 +397,27 @@ def render_context(review: dict, results: dict[str, dict]) -> list[str]:
         return []
     lines = [
         "**Local semantic dictionary**", "",
-        "These are the project-local notions in the canonical theorem type whose mathematical content is relevant to alignment. They are curated explicitly; unrelated implementation dependencies are not expanded.", "",
+        "These are the project-local notions in the canonical theorem type whose mathematical content is relevant to alignment.  The short mathematical gloss is the reading guide; source syntax is shown when it can be located uniquely, and the compiler's complete `#print` output is kept in details.", "",
     ]
     for entry in entries:
         name = entry["name"]
         data = get_probe(results, "print", name)
         lines += [f"`{name}` — {entry['mathematical_role']}", ""]
+        src = source_declaration(name)
+        if src is not None:
+            lines += [f"Source: `{src['file']}:{src['line']}`", ""]
+            pieces = []
+            ambient = str(src.get("ambient", "")).strip()
+            if ambient:
+                pieces += ["-- Ambient variables in scope", ambient, ""]
+            pieces += [str(src["declaration"])]
+            lines += [lean_block("\n".join(pieces)), ""]
+        lines += ["<details>", "<summary><strong>Compiler-expanded definition</strong></summary>", ""]
         if data.get("resolved"):
             lines += [lean_block(data["text"]), ""]
         else:
             lines += [f"> **UNRESOLVED DEFINITION:** {data.get('raw') or 'no compiler output'}", ""]
+        lines += ["</details>", ""]
     return lines
 
 
@@ -278,7 +454,7 @@ def render_checks(title: str, names: list[str], results: dict[str, dict], *, det
 def render_review_body(review: dict, results: dict[str, dict]) -> list[str]:
     lines = [review["claim"], ""]
     lines += render_source_statement(review["source_statement"])
-    lines += render_checks("Canonical compiler-resolved Lean statement(s)", review.get("canonical_declarations", []), results)
+    lines += render_source_declarations(review.get("canonical_declarations", []), results)
     lines += render_context(review, results)
     lines += render_clause_map(review)
     lines += render_checks("Supporting scope declarations", review.get("supporting_declarations", []), results, details=True)
@@ -304,8 +480,8 @@ def render(groups: list[dict], variants: list[dict], results: dict[str, dict], *
         "",
         "## Review purpose", "",
         "This is a deliberately small semantic-review surface, not a full-paper census. For each selected headline claim it contains enough of both sides of the translation to let a mathematically knowledgeable reviewer decide whether the Lean theorem states the same claim under the same hypotheses and scope.", "",
-        "The **normalized source statement and correspondence table are maintained claims of this project**. The Lean theorem types and local-definition bodies are obtained from the compiler on this commit. The reviewer's job is to challenge the correspondence between them.", "",
-        "Project-local definitions are expanded only when they hide mathematically relevant content in a headline theorem type. The packet does not recursively dump implementation dependencies.", "",
+        "The **normalized source statement and correspondence table are maintained claims of this project**.  The primary Lean evidence is the human-written source declaration from this commit; the compiler-expanded `#check` type is retained in a details block immediately below it.  The reviewer's job is to challenge the correspondence between the source claim and that declaration.", "",
+        "Project-local definitions are expanded only when they hide mathematically relevant content in a headline theorem type.  Their mathematical role and source declaration are shown first, with full compiler `#print` output in details.  The packet does not recursively dump implementation dependencies.", "",
     ]
 
     current_paper = None

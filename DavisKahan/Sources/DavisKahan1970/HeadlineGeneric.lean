@@ -167,10 +167,43 @@ theorem sinTwoTheta_headline_generic_directed
 
 end FiniteGeneric
 
-/-! The branch-free `tan 2Theta` source theorem was already scalar-generic at
-the literal paper norm.  Give it the same canonical headline naming convention
-rather than adding a duplicate proof. -/
-alias tanTwoTheta_headline_generic := tanTwoTheta_branchFree_paperUINorm
+/-- **Davis--Kahan 1970, Section 2 `tan (2 Theta)`, scalar-generic headline
+form.**
+
+This is a source-facing restatement of `tanTwoTheta_branchFree_paperUINorm`.
+It keeps the paper data visible in the declaration: a self-adjoint unperturbed
+operator `A`, a fully off-diagonal self-adjoint perturbation `H`, the ordered
+form gap `[a,b]`, an invariant graph coordinate `T` for the perturbed subspace,
+and an operator representing the branch-free `tan (2 Theta)` singular values.
+The conclusion is the paper's factor-two estimate for every source
+unitary-invariant norm. -/
+theorem tanTwoTheta_headline_generic
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    (N : PaperUnitaryInvariantNorm)
+    {A H T : E →L[𝕜] E}
+    {U : Submodule 𝕜 E} [FiniteDimensional 𝕜 U]
+    {a b : ℝ}
+    (hA : IsSelfAdjoint A)
+    (hH : IsSelfAdjoint H)
+    (hAU : ∀ x ∈ U, A x ∈ U)
+    (hHU : ∀ x ∈ U, H x ∈ Uᗮ)
+    (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
+    (hTmem : ∀ x, T x ∈ Uᗮ)
+    (hTzero : ∀ x ∈ Uᗮ, T x = 0)
+    (hab : a < b)
+    (hUb : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
+    (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
+    (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
+    (tanTwoTheta : E →L[𝕜] E)
+    (π : ℕ ≃ ℕ)
+    (htan : ∀ n, approximationSingularValue (π n) tanTwoTheta =
+      DavisKahanTheory.absDoubleAngleTangent (approximationSingularValue n T))
+    (hHmem : N.Mem H) :
+    N.Mem tanTwoTheta ∧
+      (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H :=
+  tanTwoTheta_branchFree_paperUINorm N hA hH hAU hHU hHUperp hTmem hTzero
+    hab hUb hUa hinv tanTwoTheta π htan hHmem
 
 end
 
