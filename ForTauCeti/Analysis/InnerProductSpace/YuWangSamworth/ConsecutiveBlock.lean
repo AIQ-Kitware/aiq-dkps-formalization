@@ -121,6 +121,8 @@ theorem orderedBlockBoundaryGap_iff {n : ℕ} {T : E →ₗ[𝕜] E} {hT : T.IsS
           Δ ≤ hT.eigenvalues hn q - hT.eigenvalues hn p)) :=
   Iff.rfl
 
+namespace OrderedBlockBoundaryGap
+
 /-- **The two boundary gaps propagate to the whole complement.**
 
 The sorted eigenvalues are antitone, so an index below the block has eigenvalue
@@ -128,7 +130,7 @@ at least `λ_{r-1}` while every selected eigenvalue is at most `λ_r`, and duall
 above the block.  This is the bridge from the source's hypothesis to the
 intrinsic separation the general theorems consume, and it is the only place the
 contiguity of the block is used. -/
-theorem OrderedBlockBoundaryGap.indexGap {n d r : ℕ} {T : E →ₗ[𝕜] E}
+theorem indexGap {n d r : ℕ} {T : E →ₗ[𝕜] E}
     {hT : T.IsSymmetric} {hn : finrank 𝕜 E = n} {Δ : ℝ}
     (h : OrderedBlockBoundaryGap hT hn r d Δ) (hrd : r + d ≤ n)
     (i : Fin d) (k : Fin n) (hk : k ∉ Set.range (consecutiveEmb hrd)) :
@@ -164,7 +166,7 @@ theorem OrderedBlockBoundaryGap.indexGap {n d r : ℕ} {T : E →ₗ[𝕜] E}
 the single index `j`, the boundary hypothesis is the source's
 `Δⱼ = min(λ_{j-1} − λⱼ, λⱼ − λ_{j+1})`, and it separates `λⱼ` from every other
 sorted eigenvalue — the hypothesis Corollary 1 is stated with. -/
-theorem OrderedBlockBoundaryGap.gap_of_singleton {n : ℕ} {T : E →ₗ[𝕜] E}
+theorem gap_of_singleton {n : ℕ} {T : E →ₗ[𝕜] E}
     {hT : T.IsSymmetric} {hn : finrank 𝕜 E = n} {Δ : ℝ} {j : Fin n}
     (h : OrderedBlockBoundaryGap hT hn (j : ℕ) 1 Δ) (k : Fin n) (hk : k ≠ j) :
     Δ ≤ |hT.eigenvalues hn j - hT.eigenvalues hn k| := by
@@ -175,6 +177,8 @@ theorem OrderedBlockBoundaryGap.gap_of_singleton {n : ℕ} {T : E →ₗ[𝕜] E
     rintro ⟨h1, h2⟩
     exact hk (Fin.ext (by omega)))
   rwa [hj0] at hgap
+
+end OrderedBlockBoundaryGap
 
 /-! ## Theorem 2 with the source's indexing -/
 

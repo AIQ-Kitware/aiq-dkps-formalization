@@ -127,10 +127,11 @@ vectors; and the printed hypothesis
 `min(σ_0² − σ_1², σ_s² − σ_{s+1}²) > 0` holds under the printed conventions
 `σ_0² := ∞`, `σ_{rank(A)+1}² := −∞`, which also make the denominator infinite.
 
-Yet the two right singular subspaces are orthogonal, so `‖sin Θ‖_F = 1`, and no
-finite denominator — a fortiori not an infinite one — makes the printed bound
-true.  The correct denominator here is `σ_1² − σ_2² = 1 − 0 = 1`, which is what
-the intrinsic gap of `A⋆A` supplies. -/
+Yet the two right singular subspaces are orthogonal, so `‖sin Θ‖_F = 1` — stated
+as its own conclusion below — and no finite denominator, a fortiori not an
+infinite one, makes the printed bound true.  The correct denominator here is
+`σ_1² − σ_2² = 1 − 0 = 1`, which is what the intrinsic gap of `A⋆A` supplies and
+what `singularBoundaryGap_of_rank_le` records in singular-value notation. -/
 theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation
     {v w : E} (hv : ‖v‖ = 1) (hw : ‖w‖ = 1) (horth : ⟪v, w⟫ = 0) :
     ∃ A Â : E →ₗ[ℝ] E,
@@ -138,6 +139,7 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation
       finrank ℝ (LinearMap.range Â) = 1 ∧
       rightGram A v = (1 : ℝ) • v ∧
       rightGram Â w = (1 : ℝ) • w ∧
+      sinThetaFrobenius (Submodule.span ℝ {v}) (Submodule.span ℝ {w}) = 1 ∧
       ¬ ∀ Δ : ℝ, 0 < Δ →
           sinThetaFrobenius (Submodule.span ℝ {v}) (Submodule.span ℝ {w}) ≤
             2 * (2 * ‖A.toContinuousLinearMap‖ + ‖(Â - A).toContinuousLinearMap‖) *
@@ -147,7 +149,7 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation
   have hv0 : v ≠ 0 := by rw [← norm_ne_zero_iff, hv]; norm_num
   have hw0 : w ≠ 0 := by rw [← norm_ne_zero_iff, hw]; norm_num
   refine ⟨projection (Submodule.span ℝ {v}), projection (Submodule.span ℝ {w}),
-    ?_, ?_, ?_, ?_, ?_⟩
+    ?_, ?_, ?_, ?_, sinThetaFrobenius_orthogonal_lines hv hw horth, ?_⟩
   · rw [range_projection, finrank_span_singleton hv0]
   · rw [range_projection, finrank_span_singleton hw0]
   · rw [rightGram_projection, one_smul]
@@ -194,6 +196,9 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation_euclidean :
         = (1 : ℝ) • EuclideanSpace.single (0 : Fin 2) (1 : ℝ) ∧
       rightGram Â (EuclideanSpace.single (1 : Fin 2) (1 : ℝ))
         = (1 : ℝ) • EuclideanSpace.single (1 : Fin 2) (1 : ℝ) ∧
+      sinThetaFrobenius
+          (Submodule.span ℝ {EuclideanSpace.single (0 : Fin 2) (1 : ℝ)})
+          (Submodule.span ℝ {EuclideanSpace.single (1 : Fin 2) (1 : ℝ)}) = 1 ∧
       ¬ ∀ Δ : ℝ, 0 < Δ →
           sinThetaFrobenius
               (Submodule.span ℝ {EuclideanSpace.single (0 : Fin 2) (1 : ℝ)})
