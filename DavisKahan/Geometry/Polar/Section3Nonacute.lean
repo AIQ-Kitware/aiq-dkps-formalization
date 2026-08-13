@@ -1233,6 +1233,91 @@ theorem paperDirectRotation_star_mapsto_sourceDefect
   rw [hsTy]
   exact Submodule.neg_mem _ hTyVp
 
+/-- On the source crossed defect, every paper direct rotation agrees with the
+negative of its adjoint.  This is the quarter-turn identity used in the proof
+of Davis--Kahan Proposition 3.2. -/
+theorem paperDirectRotation_apply_sourceDefect_eq_neg_star
+    (T : H →L[𝕜] H) (hT : IsPaperDirectRotation U V T) {x : H}
+    (hx : x ∈ halmosSourceDefect U V) :
+    T x = - star T x := by
+  obtain ⟨hxU, hxVp⟩ := mem_halmosSourceDefect.mp hx
+  have hTxV : T x ∈ V := by
+    have hPx : projection U x = x := Submodule.starProjection_eq_self_iff.mpr hxU
+    have h := congrArg (fun f : H →L[𝕜] H => f x) hT.intertwines
+    simp only [mul_apply_eq_comp, hPx] at h
+    exact Submodule.starProjection_eq_self_iff.mp h.symm
+  have hsTxUp : star T x ∈ Uᗮ := by
+    have h := congrArg (fun f : H →L[𝕜] H => f x)
+      (starIntertwines_of_intertwines U V hT.intertwines)
+    simp only [mul_apply_eq_comp,
+      (Submodule.starProjection_apply_eq_zero_iff _).mpr hxVp, map_zero] at h
+    exact (Submodule.starProjection_apply_eq_zero_iff _).mp h
+  have hHx : (T + star T) x = 0 := by
+    refine apply_eq_zero_of_nonneg_inner_self_eq_zero
+      (paperDirectRotation_add_star_nonneg U V T hT) ?_
+    rw [add_apply, inner_add_right,
+      Submodule.inner_left_of_mem_orthogonal hTxV hxVp,
+      Submodule.inner_right_of_mem_orthogonal hxU hsTxUp, add_zero]
+  exact eq_neg_of_add_eq_zero_left (by rw [← add_apply]; exact hHx)
+
+/-- On the target crossed defect, the adjoint of every paper direct rotation
+agrees with the negative of the rotation. -/
+theorem paperDirectRotation_star_apply_targetDefect_eq_neg
+    (T : H →L[𝕜] H) (hT : IsPaperDirectRotation U V T) {y : H}
+    (hy : y ∈ halmosTargetDefect U V) :
+    star T y = - T y := by
+  obtain ⟨hyUp, hyV⟩ := mem_halmosTargetDefect.mp hy
+  have hsTyU : star T y ∈ U := by
+    have h := congrArg (fun f : H →L[𝕜] H => f y)
+      (starIntertwines_of_intertwines U V hT.intertwines)
+    simp only [mul_apply_eq_comp,
+      Submodule.starProjection_eq_self_iff.mpr hyV] at h
+    exact Submodule.starProjection_eq_self_iff.mp h
+  have hTyVp : T y ∈ Vᗮ := by
+    have h := congrArg (fun f : H →L[𝕜] H => f y) hT.intertwines
+    simp only [mul_apply_eq_comp,
+      (Submodule.starProjection_apply_eq_zero_iff _).mpr hyUp, map_zero] at h
+    exact (Submodule.starProjection_apply_eq_zero_iff _).mp h.symm
+  have hHy : (T + star T) y = 0 := by
+    refine apply_eq_zero_of_nonneg_inner_self_eq_zero
+      (paperDirectRotation_add_star_nonneg U V T hT) ?_
+    rw [add_apply, inner_add_right,
+      Submodule.inner_right_of_mem_orthogonal hyV hTyVp,
+      Submodule.inner_left_of_mem_orthogonal hsTyU hyUp, add_zero]
+  exact eq_neg_of_add_eq_zero_right (by rw [← add_apply]; exact hHy)
+
+/-- Every paper direct rotation squares to minus the identity on the source
+crossed defect. -/
+theorem paperDirectRotation_sq_apply_sourceDefect
+    (T : H →L[𝕜] H) (hT : IsPaperDirectRotation U V T) {x : H}
+    (hx : x ∈ halmosSourceDefect U V) :
+    T (T x) = -x := by
+  have hstar : T (star T x) = x := by
+    have h := DFunLike.congr_fun hT.unitary_mem.2 x
+    simpa [mul_apply_eq_comp] using h
+  calc
+    T (T x) = T (-star T x) := by
+      rw [paperDirectRotation_apply_sourceDefect_eq_neg_star U V T hT hx]
+    _ = -T (star T x) := by rw [map_neg]
+    _ = -x := by rw [hstar]
+
+/-- Every paper direct rotation squares to minus the identity on the target
+crossed defect. -/
+theorem paperDirectRotation_sq_apply_targetDefect
+    (T : H →L[𝕜] H) (hT : IsPaperDirectRotation U V T) {y : H}
+    (hy : y ∈ halmosTargetDefect U V) :
+    T (T y) = -y := by
+  have hrel := paperDirectRotation_star_apply_targetDefect_eq_neg U V T hT hy
+  have hTy : T y = -star T y := by
+    rw [hrel, neg_neg]
+  have hstar : T (star T y) = y := by
+    have h := DFunLike.congr_fun hT.unitary_mem.2 y
+    simpa [mul_apply_eq_comp] using h
+  calc
+    T (T y) = T (-star T y) := by rw [hTy]
+    _ = -T (star T y) := by rw [map_neg]
+    _ = -y := by rw [hstar]
+
 /-- A paper direct rotation restricts to a linear isometric equivalence between
 the two crossed defects. -/
 noncomputable def crossedDefectEquivOfPaperDirectRotation
