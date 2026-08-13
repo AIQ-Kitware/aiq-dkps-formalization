@@ -21,6 +21,7 @@ import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
 import DavisKahan.Sources.DavisKahan1970.PartIII
 import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface
 import DavisKahan.Sources.DavisKahan1970.Section1
+import DavisKahan.Sources.DavisKahan1970.Section10FunctionalCalculus
 import DavisKahan.Sources.DavisKahan1970.Section1UnitaryInvariantNorms
 import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
 import DavisKahan.Sources.DavisKahan1970.Section3AcuteCounterexample
