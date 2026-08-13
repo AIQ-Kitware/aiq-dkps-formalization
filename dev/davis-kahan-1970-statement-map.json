@@ -199,7 +199,8 @@
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent",
-        "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact"
+        "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact",
+        "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact"
       ],
       "audit_clauses": [
         {
@@ -216,20 +217,16 @@
             "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
             "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent",
             "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact",
+            "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact",
             "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
             "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real"
           ]
         }
       ],
       "source_specification_sha256": "c85f8a2839187dd9ae4d020608816821c3b1f30e401eb5e52d4cbce093e82b3c",
-      "expected_completion_certification": "reopened_math",
-      "known_completion_holes": [
-        {
-          "kind": "math",
-          "detail": "The printed Section 2 tangent theorem is accepted as a true counted result read under the documented nonlocal source interpretation (Section 1 vacuity convention plus the standing (3.5) of Section 3); see `nonlocal_source_interpretation` in the formalization-result inventory. It is NOT classified as refuted, and the bilateral-shift construction is a vacuity/nonvacuity witness separating (1.5) from (3.5) rather than a counterexample to this result. What remains is a scalar-scope gap: the unbounded ambient conclusion is proved only over complex scalars by tanTheta_unbounded_ambient_paperUINorm_exact, with no real counterpart, while the unbounded directed conclusion and the bounded ambient conclusion are closed over both fields."
-        }
-      ],
-      "audit_warning": "NONLOCAL SOURCE SEMANTICS: the printed Section 2 ambient tangent clause does not state the crossed-defect condition (3.5), which the source introduces only in Section 3 and then assumes as standing before proving this theorem in Section 6. The repository reads the printed statement under that standing convention and under the Section 1 norm-existence/vacuity convention, and says so explicitly in the result inventory and the generated audit packet. Do NOT describe the bilateral-shift witness as a counterexample to this result: it proves that (1.5) does not imply (3.5), i.e. that the omitted qualification is substantive. The row remains open only for the real-scalar unbounded ambient endpoint.",
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
+      "audit_warning": "NONLOCAL SOURCE SEMANTICS: the printed Section 2 ambient tangent clause does not state the crossed-defect condition (3.5), which the source introduces only in Section 3 and then assumes as standing before proving this theorem in Section 6. The repository reads the printed statement under that standing convention and under the Section 1 norm-existence/vacuity convention, and says so explicitly in the result inventory and the generated audit packet. Do NOT describe the bilateral-shift witness as a counterexample to this result: it proves that (1.5) does not imply (3.5), i.e. that the omitted qualification is substantive. The row is closed: the last blocker, the real-scalar unbounded ambient endpoint, is proved by tanTheta_unbounded_ambient_paperUINorm_real_exact, so both conclusions now hold at bounded and unbounded scope over real and complex scalars.",
       "source_atom_ids": [
         "S2-tan-theta.ordered-gap-hypothesis",
         "S2-tan-theta.rayleigh-ritz-hypothesis",

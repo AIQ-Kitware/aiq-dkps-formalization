@@ -1,5 +1,24 @@
 # Handoff: the real unbounded ambient `tan Θ` endpoint (closes `S2-tan-theta`)
 
+> **DISCHARGED 2026-08-13.** `tanTheta_unbounded_ambient_paperUINorm_real_exact` is proved in
+> `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean`, with the required
+> signature and standard axioms, and `S2-tan-theta` is accepted terminal — the denominator is
+> 29/29. This document is retained as the record of the plan and of what the execution
+> actually needed. Two deviations from the plan below are worth carrying forward:
+>
+> - **Step 6 was not needed.** Rather than rebuilding the complex lower-corner Ky Fan
+>   estimate, the complex `tanTheta_unbounded_ambient_paperUINorm_of_data` was split into
+>   `..._of_data_of_transversality` (the assembly half, taking `‖sin Θ‖ < 1` directly) plus
+>   the unchanged original, which now derives transversality from (3.5) and calls it. The
+>   real endpoint consumes the assembly half. No corner argument is duplicated.
+> - **Step 5 was one `ext`.** The residual-block transport is
+>   `complexifyTrialData_residual_eq_projectionBlock`, proved from
+>   `starProjection_complexifySubmodule_orthogonal` and
+>   `coe_complexifySubmoduleEquiv_eq_complexify_subtypeL`; no hypothesis was added.
+>
+> Everything else — the architecture, the API inventory, the stop conditions, the accounting
+> steps — held as written.
+
 **Written 2026-08-12, immediately after the `S2-tan-theta` nonlocal-source-semantics work.**
 Everything described below is verified against the checkout at commit `5bfa2624`; every
 declaration named here was resolved in the tree, not recalled.

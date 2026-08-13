@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **28**
-- Awaiting closure: **1**
+- Currently hostile-certified terminal: **29**
+- Awaiting closure: **0**
 - Printed statements that are NOT locally self-contained: **1**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
@@ -23,7 +23,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | Result | Kind | Alignment | Self-contained | Disposition | Compiler | Semantic review | Boundary |
 |---|---|---|---|---|---|---|---|
 | `S2-sin-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `S2-tan-theta` | unnumbered_theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `pending_scope_endpoint` | `proved_in_build` | `pending_scope_endpoint` | `accepted` |
+| `S2-tan-theta` | unnumbered_theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -102,19 +102,15 @@ Each result below explicitly partitions its primary source block into atoms insi
 
 **Why this is not a refutation.** In that configuration tan Theta is not a bounded operator and the displayed unitarily invariant norm does not exist, so the witness exhibits a missing nonvacuity qualification rather than a finite-valued failure of the inequality. The paper declares such cases vacuous in advance. The literal reading would equally convict the Section 1 angle-doubling sentence and later developments that silently use the direct rotation. This is therefore deliberately not classified as refuted_as_transcribed; contrast DK-4.4-prop, where all objects exist, the compared quantities are finite, and the printed conclusion is false.
 
-**Semantic conclusion.** S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted; it does not by itself make the row terminal, and the remaining_gap records the separate Lean-coverage blocker.
+**Semantic conclusion.** S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. It was never the reason the row was nonterminal: the separate Lean-coverage blocker was the missing real-scalar unbounded ambient endpoint, and that endpoint is now proved (`tanTheta_unbounded_ambient_paperUINorm_real_exact`), so the row is terminal on this accepted reading.
 
 The accepted reading is hash-pinned to the distributable specification, the source-fidelity inventory, and the cited atoms; any edit to that material makes it stale and the result checker fails closed.
 
 ## Current closure queue
 
-### `S2-tan-theta` — Single-angle tangent theorem
+Empty. All 29 counted results are terminal on all three axes.
 
-Result-only audit 2026-08-12, superseding the earlier plan to classify this row as refuted-as-transcribed. The printed Section 2 tangent theorem is accepted as a TRUE counted result read under nonlocal source semantics; see `nonlocal_source_interpretation`. The directed conclusion is closed at full source scope (bounded and unbounded, complex and real, arbitrary paper UI norm). The ambient conclusion is closed at bounded scope over both fields in the source-shaped (3.5)-qualified form, and at unbounded scope over complex scalars by `tanTheta_unbounded_ambient_paperUINorm_exact`. The bilateral-shift material is recorded as a vacuity/nonvacuity witness proving that (1.5) does not imply (3.5); it is NOT a counterexample to this result and must not be described as one. The row stays nonterminal only for the missing real-scalar unbounded ambient endpoint recorded in `remaining_gap`; that blocker is independent of the interpretation question. The transversality-form declarations `tanTheta_wholeSpace_paperUINorm` and its real counterpart are retained as registered specializations: `‖sin Theta‖ < 1` is strictly stronger than the source's standing (3.5), so they are alternative routes rather than the source-shaped statement.
-
-- Remaining gap category: `missing_real_scalar_unbounded_ambient_endpoint`
-- Missing surface: The paper advertises all four Section 2 results for unbounded self-adjoint A with bounded residual, over real as well as complex Hilbert spaces. For this result the unbounded AMBIENT conclusion exists only over complex scalars (`tanTheta_unbounded_ambient_paperUINorm_exact`); there is no real counterpart. The unbounded DIRECTED conclusion is already closed over both fields, and the bounded ambient conclusion is closed over both fields, so the gap is exactly the real unbounded ambient endpoint. This is a Lean coverage gap and is deliberately NOT conflated with the accepted nonlocal source interpretation.
-- Next action: Prove the real-scalar unbounded ambient endpoint, following the maintained complexification descent used by `tanTheta_wholeSpace_paperUINorm_real` and by the real unbounded directed endpoint, and register it here and in the Lean semantic audit surface. Then re-audit this row for terminality; the interpretation review does not need to be reopened unless the source specification or a supporting atom changes.
+`S2-tan-theta` was the last open row, and it closed on 2026-08-13. Its final blocker — the real-scalar unbounded ambient tangent endpoint — is discharged by `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`: a closed unbounded real self-adjoint operator, an arbitrary closed real trial subspace inside its domain, an arbitrary chosen reducing subspace, the printed form bounds and Rayleigh--Ritz condition, the standing (3.5), the printed constant, and every paper unitarily invariant norm, with ideal membership concluded rather than assumed.
 
 ## Printed-statement boundary reviews
 

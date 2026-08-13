@@ -181,17 +181,19 @@ theorem tanTheta_ambient_paperUINorm_of_lowerCorner
   N.mul_gauge_le_of_all_mul_kyFan_le hdelta hMem
     (tanTheta_ambient_all_kyFan_of_lowerCorner hH hdelta htr hlower)
 
-/-- **Unbounded-data ambient `tan Theta` theorem, complex form.**
+/-- **Unbounded-data ambient `tan Theta` theorem with transversality supplied.**
+
+This is the assembly half of `tanTheta_unbounded_ambient_paperUINorm_of_data`:
+everything except the derivation of `‖sin Theta‖ < 1` from the printed standing
+assumption (3.5).  Separating the two lets the real-scalar counterpart consume
+this half after establishing transversality natively on the real side, so the
+crossed-defect condition never has to be transported across complexification.
 
 `data` is the bounded trial-block data extracted from an unbounded self-adjoint
 problem.  Its residual is assumed to be exactly the lower `U -> U-perp` block of
 the bounded perturbation `H`; this is the operator form of the printed
-Rayleigh--Ritz condition `H_0 = 0`.  The form bounds are precisely the two
-inputs already consumed by the unbounded arbitrary-trial Theorem 6.3 chain.
-
-The conclusion is the missing sharp ambient inequality
-`delta * N(tan Theta) <= N(H)` for every paper unitary-invariant norm. -/
-theorem tanTheta_unbounded_ambient_paperUINorm_of_data
+Rayleigh--Ritz condition `H_0 = 0`. -/
+theorem tanTheta_unbounded_ambient_paperUINorm_of_data_of_transversality
     (N : PaperUnitaryInvariantNorm)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -204,25 +206,12 @@ theorem tanTheta_unbounded_ambient_paperUINorm_of_data
       (alpha + delta) * ‖Vᗮ.starProjection ((z : U) : E)‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection ((z : U) : E),
           Vᗮ.starProjection (data.action z)⟫_ℂ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (htr : ‖sinAngleOperatorC U V‖ < 1)
     (hResidual :
       data.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
     N.Mem (paperTanAngleOperatorC U V) ∧
       delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H := by
-  have hdirected :
-      approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
-    data.approximationSingularValue_sineBlock_lt_one_infiniteData
-      hdelta hCompression hcross 0
-  have hambient : ‖paperDirectedSineAmbient U V‖ < 1 := by
-    have h := approximationNumber_paperDirectedSineAmbient_le (U := U) (V := V) 0
-    rw [(paperDirectedSineAmbient U V).approximationNumber_index_zero] at h
-    exact lt_of_le_of_lt h hdirected
-  have htr : ‖sinAngleOperatorC U V‖ < 1 := by
-    rw [norm_sinAngleOperatorC U V,
-      DavisKahan.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
-        U V h35]
-    exact hambient
   have hblock :
       paperProjectionBlock Uᗮ U H =
         data.residual ∘L U.subtypeL.adjoint := by
@@ -261,6 +250,55 @@ theorem tanTheta_unbounded_ambient_paperUINorm_of_data
       _ ≤ kyFanApproximationGauge k data.residual := hcore
       _ = kyFanApproximationGauge k (paperProjectionBlock Uᗮ U H) := hresKy
   exact tanTheta_ambient_paperUINorm_of_lowerCorner N hH hdelta htr hlower hMem
+
+/-- **Unbounded-data ambient `tan Theta` theorem, complex form.**
+
+`data` is the bounded trial-block data extracted from an unbounded self-adjoint
+problem.  Its residual is assumed to be exactly the lower `U -> U-perp` block of
+the bounded perturbation `H`; this is the operator form of the printed
+Rayleigh--Ritz condition `H_0 = 0`.  The form bounds are precisely the two
+inputs already consumed by the unbounded arbitrary-trial Theorem 6.3 chain.
+
+Uniform transversality is not assumed: the directed sine values are already
+strictly below one under those form bounds, and the printed standing assumption
+(3.5) identifies the symmetric gap with the directed one.
+
+The conclusion is the missing sharp ambient inequality
+`delta * N(tan Theta) <= N(H)` for every paper unitary-invariant norm. -/
+theorem tanTheta_unbounded_ambient_paperUINorm_of_data
+    (N : PaperUnitaryInvariantNorm)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (data : Theorem63TrialData U V)
+    (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hCompression : ∀ z : U,
+      RCLike.re ⟪data.compression z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hcross : ∀ z : U,
+      (alpha + delta) * ‖Vᗮ.starProjection ((z : U) : E)‖ ^ 2 ≤
+        RCLike.re ⟪Vᗮ.starProjection ((z : U) : E),
+          Vᗮ.starProjection (data.action z)⟫_ℂ)
+    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (hResidual :
+      data.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (hMem : N.Mem H) :
+    N.Mem (paperTanAngleOperatorC U V) ∧
+      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H := by
+  have hdirected :
+      approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
+    data.approximationSingularValue_sineBlock_lt_one_infiniteData
+      hdelta hCompression hcross 0
+  have hambient : ‖paperDirectedSineAmbient U V‖ < 1 := by
+    have h := approximationNumber_paperDirectedSineAmbient_le (U := U) (V := V) 0
+    rw [(paperDirectedSineAmbient U V).approximationNumber_index_zero] at h
+    exact lt_of_le_of_lt h hdirected
+  have htr : ‖sinAngleOperatorC U V‖ < 1 := by
+    rw [norm_sinAngleOperatorC U V,
+      DavisKahan.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
+        U V h35]
+    exact hambient
+  exact tanTheta_unbounded_ambient_paperUINorm_of_data_of_transversality N data H hH
+    hdelta hCompression hcross htr hResidual hMem
 
 /-- The same theorem specialized to an actual unbounded trial block and an
 arbitrary chosen reducing subspace.  All domain-sensitive crossed-form work is
