@@ -22,21 +22,13 @@ subsequent, sharper one-vector Davis--Kahan argument, so the printed conclusion 
 proved rather than imported as a hypothesis.
 
 The final individual-eigenvector `omega_k` estimates are exposed by
-`final_individual_eigenvector_angles_source` below, on the genuine perturbed beam:
-`BeamInPlaneAngle.beamLowEigenvector_ritz_pairing` supplies the in-plane argument the
-source performs after (9.9)--(9.11), pairing each Ritz vector with the eigenvector of the
-matching eigenvalue and bounding the angle by the `sqrt 7 / 10` envelope, and
-`NumericalBounds.final_upper_individual_angle_bound` converts that envelope into the
-printed decimal form.
-
-One thing is weaker here than in the source, and deliberately stated rather than hidden.
-The source prints two different constants, `omega_1 < 0.00053 eps / (1 - 0.00043 eps)` and
-`omega_2 < 0.00053 eps / (1 - 0.0016 eps)`, the first of which reads the envelope at the
-*lower* Ritz value.  Reaching it needs the Rayleigh--Ritz placement
-`beamLowEigenvalue ... j <= ritzLow eps` for the smaller eigenvalue, which this repository
-does not yet prove; only `beam_eigenvalue_le_ritzHigh` is available.  So the wrapper below
-proves the second, weaker constant for *both* vectors.  That is a genuine remaining gap in
-Section 9 and is the whole of it.
+`final_individual_eigenvector_angles_source` below, on the genuine perturbed beam, at the two
+distinct constants the source prints.  `BeamInPlaneAngle.beamLowEigenvector_ritz_pairing`
+supplies the in-plane argument the source performs after (9.9)--(9.11): it pairs each Ritz
+vector with the eigenvector of the matching eigenvalue, bounds the angle by the `sqrt 7 / 10`
+envelope, and — this is what makes the two printed denominators differ — records that the
+smaller eigenvalue sits at or below `ritzLow eps`.  `NumericalBounds` then converts each
+envelope into its printed decimal form.
 -/
 
 namespace TauCeti
@@ -113,58 +105,68 @@ theorem equation_9_8_source (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
             (1 - (7887 : ℝ) / 5000000 * ε) :=
   beam_equation_9_8 ε hε hε100
 
-/-- Read an individual-angle bound at an eigenvalue against the exact envelope taken at the
-upper Ritz value.  Monotonicity of `c / (500 - x)` in `x`, nothing more. -/
-private theorem le_upperIndividualAngleExactBound {ε lam a : ℝ} (hε : 0 < ε) (hε100 : ε < 100)
-    (hlam : lam ≤ ritzHigh ε) (_hlam500 : lam < 500)
+/-- Read an individual-angle bound at an eigenvalue against the exact envelope taken at a Ritz
+value.  Monotonicity of `c / (500 - x)` in `x`, nothing more; the Ritz coefficient is a
+parameter so that the lower and upper envelopes are the same lemma. -/
+private theorem le_individualAngleExactBound {ε lam a c : ℝ} (hε : 0 < ε) (hε100 : ε < 100)
+    (_hc0 : 0 ≤ c) (hc1 : c ≤ 1) (hlam : lam ≤ ε * c)
     (h : a ≤ Real.sqrt 7 / 10 * ε / (500 - lam)) :
-    a ≤ upperIndividualAngleExactBound ε := by
-  have h3 : Real.sqrt 3 / 3 < 1 := by
-    nlinarith [Real.sq_sqrt (by norm_num : (3 : ℝ) ≥ 0),
-      Real.sqrt_nonneg 3]
-  have hrh : ritzHigh ε < 100 := by
-    unfold ritzHigh ritzHighCoefficient
-    nlinarith
-  have hd : (0 : ℝ) < 500 - ritzHigh ε := by linarith
+    a ≤ ((Real.sqrt 7 / 10) / 500 * ε) / (1 - (c / 500) * ε) := by
+  have hd : (0 : ℝ) < 500 - ε * c := by nlinarith
+  have hd2 : (0 : ℝ) < 1 - c / 500 * ε := by nlinarith
   have hnum : (0 : ℝ) ≤ Real.sqrt 7 / 10 * ε := by positivity
   refine h.trans ?_
-  have hmono : Real.sqrt 7 / 10 * ε / (500 - lam) ≤ Real.sqrt 7 / 10 * ε / (500 - ritzHigh ε) :=
+  have hmono : Real.sqrt 7 / 10 * ε / (500 - lam) ≤ Real.sqrt 7 / 10 * ε / (500 - ε * c) :=
     div_le_div_of_nonneg_left hnum hd (by linarith)
-  have hd' : (0 : ℝ) < 500 - ε * ritzHighCoefficient := by
-    unfold ritzHigh at hd; linarith
-  have hd2 : (0 : ℝ) < 1 - ritzHighCoefficient / 500 * ε := by nlinarith
   refine hmono.trans (le_of_eq ?_)
-  unfold upperIndividualAngleExactBound ritzHigh
-  rw [div_eq_div_iff hd'.ne' hd2.ne']
+  rw [div_eq_div_iff hd.ne' hd2.ne']
   ring
 
+private theorem ritzLowCoefficient_mem : 0 ≤ ritzLowCoefficient ∧ ritzLowCoefficient ≤ 1 := by
+  have h3 : Real.sqrt 3 / 3 ≤ 1 := by
+    nlinarith [Real.sq_sqrt (by norm_num : (3 : ℝ) ≥ 0), Real.sqrt_nonneg 3]
+  have h0 : (0 : ℝ) ≤ Real.sqrt 3 / 3 := by positivity
+  constructor <;> · unfold ritzLowCoefficient; linarith
+
+private theorem ritzHighCoefficient_mem : 0 ≤ ritzHighCoefficient ∧ ritzHighCoefficient ≤ 1 := by
+  have h3 : Real.sqrt 3 / 3 ≤ 1 := by
+    nlinarith [Real.sq_sqrt (by norm_num : (3 : ℝ) ≥ 0), Real.sqrt_nonneg 3]
+  have h0 : (0 : ℝ) ≤ Real.sqrt 3 / 3 := by positivity
+  constructor <;> · unfold ritzHighCoefficient; linarith
+
 /-- **Davis--Kahan 1970, Section 9, the final individual-eigenvector `omega_k` bounds**, on
-the genuine perturbed free beam.
+the genuine perturbed free beam, at the two distinct constants the source prints.
 
 Each trial Ritz vector is paired with the eigenvector of the correspondingly ordered
-eigenvalue, and the angle between them is bounded by the printed decimal form.  See the
-module docstring for why both bounds carry the source's `omega_2` constant rather than the
-sharper `omega_1` one. -/
+eigenvalue, and the angle between them satisfies the printed decimal bound:
+
+```
+omega_1 < 0.00053 eps / (1 - 0.00043 eps),      omega_2 < 0.00053 eps / (1 - 0.0016 eps).
+```
+
+The two denominators differ because the two envelopes are read at different Ritz values.  The
+lower one needs `lambda_j <= ritzLow eps` for the smaller eigenvalue, which is the eigenvalue
+placement `beamLowEigenvector_ritz_pairing` carries; the upper one needs only
+`lambda_k <= ritzHigh eps`, from `beam_eigenvalue_le_ritzHigh`. -/
 theorem final_individual_eigenvector_angles_source (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100)
     {j k : Fin 2} (hjk : j ≠ k)
     (hle : beamLowEigenvalue ε hε.le hε100 j ≤ beamLowEigenvalue ε hε.le hε100 k) :
     Real.arccos ‖inner ℂ (centeredAffineLp trialOne) (beamLowEigenvector ε hε.le hε100 j)‖
-        < ((53 : ℝ) / 100000 * ε) / (1 - (1 : ℝ) / 625 * ε) ∧
+        < ((53 : ℝ) / 100000 * ε) / (1 - (43 : ℝ) / 100000 * ε) ∧
       Real.arccos ‖inner ℂ (centeredAffineLp trialTwo) (beamLowEigenvector ε hε.le hε100 k)‖
         < ((53 : ℝ) / 100000 * ε) / (1 - (1 : ℝ) / 625 * ε) := by
-  obtain ⟨hj, hk⟩ := beamLowEigenvector_ritz_pairing ε hε hε100 hjk hle
-  have hridge : ∀ i : Fin 2, beamLowEigenvalue ε hε.le hε100 i ≤ ritzHigh ε := by
-    intro i
-    exact beam_eigenvalue_le_ritzHigh ε hε (beamLowEigenvector_mem_domain ε hε.le hε100 i)
-      (beamPerturbed_apply_beamLowEigenvector ε hε.le hε100 i)
-      (by linarith [beamLowEigenvalue_lt_five_hundred ε hε.le hε100 i])
-      (norm_beamLowEigenvector ε hε.le hε100 i)
-  exact ⟨final_upper_individual_angle_bound ε _ hε hε100
-      (le_upperIndividualAngleExactBound hε hε100 (hridge j)
-        (beamLowEigenvalue_lt_five_hundred ε hε.le hε100 j) hj),
-    final_upper_individual_angle_bound ε _ hε hε100
-      (le_upperIndividualAngleExactBound hε hε100 (hridge k)
-        (beamLowEigenvalue_lt_five_hundred ε hε.le hε100 k) hk)⟩
+  obtain ⟨hjlow, -, hj, hk⟩ := beamLowEigenvector_ritz_pairing ε hε hε100 hjk hle
+  have hkhigh : beamLowEigenvalue ε hε.le hε100 k ≤ ritzHigh ε :=
+    beam_eigenvalue_le_ritzHigh ε hε (beamLowEigenvector_mem_domain ε hε.le hε100 k)
+      (beamPerturbed_apply_beamLowEigenvector ε hε.le hε100 k)
+      (by linarith [beamLowEigenvalue_lt_five_hundred ε hε.le hε100 k])
+      (norm_beamLowEigenvector ε hε.le hε100 k)
+  refine ⟨final_lower_individual_angle_bound ε _ hε hε100 ?_,
+    final_upper_individual_angle_bound ε _ hε hε100 ?_⟩
+  · exact le_individualAngleExactBound hε hε100 ritzLowCoefficient_mem.1
+      ritzLowCoefficient_mem.2 (by simpa [ritzLow] using hjlow) hj
+  · exact le_individualAngleExactBound hε hε100 ritzHighCoefficient_mem.1
+      ritzHighCoefficient_mem.2 (by simpa [ritzHigh] using hkhigh) hk
 
 /-- **The sharper one-vector Davis--Kahan bounds immediately following (9.8).**
 These are the paper's two displayed `0.0003652` estimates for the specific Ritz

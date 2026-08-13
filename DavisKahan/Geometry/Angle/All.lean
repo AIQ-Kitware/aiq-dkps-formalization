@@ -10,9 +10,9 @@ import DavisKahan.Geometry.Angle.PaperDoubleAngle
 import DavisKahan.Geometry.Angle.PaperOperatorAngle
 import DavisKahan.Geometry.Angle.PaperOperatorAngleReal
 import DavisKahan.Geometry.Angle.PaperTanAngle
+import DavisKahan.Geometry.Angle.Proposition35Exponential
 import DavisKahan.Geometry.Angle.Proposition35Infinite
 import DavisKahan.Geometry.Angle.Proposition35Nonacute
-import DavisKahan.Geometry.Angle.Proposition35Exponential
 import DavisKahan.Geometry.Angle.SinAngle
 
 /-! # `DavisKahan/Geometry/Angle` -/
