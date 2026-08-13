@@ -38,17 +38,24 @@ sample eigenvalue, sits at coordinates `p-d …p-1`.
 
 ## The parameter range
 
-Everything below is proved for the full range `0 < ε < 3`, and that range is
-maximal.  The construction needs exactly `2 < 2 + ε < 5`: the strict inequality
-on the right is what puts `2+ε` *second* in the sorted sample spectrum, so that
-the perturbed block occupies the same ordered positions as the population block
-of threes, and the strict inequality on the left is what separates it from the
-`d` sample eigenvalues equal to `2`.  At `ε = 3` the level `2+ε` merges with the
-leading level `5` and its multiplicity jumps from `d` to `p-d`, which
-`card_middleSharpnessSample_level_three` records; at `ε = 0` it merges downwards
-with the `2`s instead.  Neither endpoint is a corresponding eigenblock of
-dimension `d`, so neither is a counterexample to the sharpness claim — the
-construction simply stops describing what it claims to describe.
+Everything below is proved for the full range `0 < ε < 3`.  The construction
+needs `2 < 2 + ε < 5`: the inequality on the right is what puts `2+ε` *second*
+in the sorted sample spectrum, so that the perturbed block occupies the same
+ordered positions as the population block of threes, and the inequality on the
+left is what separates it from the `d` sample eigenvalues equal to `2`.
+
+That range is maximal **when `2 * d < p`**, which is the case the example is
+about.  `card_middleSharpnessSample_level_three` computes the multiplicity of
+the level `2+ε` at `ε = 3` to be `p - d`: it has merged with the leading level
+`5`, so for `2 * d < p` it differs from the population block's `d` and the two
+blocks are no longer a corresponding eigenblock.  At `ε = 0` the level merges
+downwards with the `2`s instead.  Neither endpoint is a counterexample to the
+sharpness claim — the construction simply stops describing what it claims to.
+
+In the degenerate case `p = 2 * d` there is no leading level `5` at all, `p - d`
+*is* `d`, and the ordering constraint disappears: every `ε > 0` would do.  The
+uniform hypothesis `ε < 3` carried below is therefore sufficient everywhere and
+necessary only for `2 * d < p`.
 
 As in the preprint example the model is stated over an arbitrary orthonormal
 basis of an arbitrary finite-dimensional `RCLike` inner product space, which
@@ -182,14 +189,16 @@ theorem card_middleSharpnessSample_level (hε : 0 < ε) (hε1 : ε < 3) (hdp : 2
   omega
 
 open scoped Classical in
-/-- **The upper endpoint `ε = 3` breaks the construction.**
+/-- **The multiplicity of the perturbed level at the upper endpoint `ε = 3`.**
 
-At `ε = 3` the perturbed level `2+ε` coincides with the leading level `5`, so the
+At `ε = 3` the perturbed level `2+ε` coincides with the leading level `5`, so its
 level set is no longer the trailing `d` indices but the `p-d` indices outside the
-middle range.  Its multiplicity therefore differs from the population block's `d`
-and `correspondingEigenblock_basisDiagonal_level` no longer applies: the range
-`0 < ε < 3` used throughout this file is the exact range in which the published
-model means what it says, not a convenience. -/
+middle range.  Whenever `2 * d < p` that differs from the population block's `d`,
+so `correspondingEigenblock_basisDiagonal_level` no longer applies and the
+construction breaks: `0 < ε < 3` is then the exact range in which the published
+model means what it says, not a convenience.  (When `p = 2 * d` the count `p - d`
+is `d` and nothing breaks; see the parameter-range discussion in the module
+docstring.) -/
 theorem card_middleSharpnessSample_level_three (hdp : 2 * d ≤ p) :
     ({i | ((middleSharpnessSampleData p d 3 i : ℝ) : 𝕜) = ((2 + 3 : ℝ) : 𝕜)} :
       Finset (Fin p)).card = p - d := by

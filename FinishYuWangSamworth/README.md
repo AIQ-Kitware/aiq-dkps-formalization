@@ -84,10 +84,11 @@ construction.
 
 `Symmetric/MiddleBlockSharpness.lean` — the *published* construction, a middle
 block over three levels `5 > 3 > 1`, so that the population gap `min(5−3, 3−1)`
-is genuinely two-sided, over the full parameter range `0 < ε < 3`.  That range is
-maximal: the model needs `2 < 2 + ε < 5` so that `2 + ε` is the *second* level of
-the sorted sample spectrum, and at `ε = 3` it merges with `5` and its
-multiplicity jumps from `d` to `p − d`.  It proves the same printed conclusion,
+is genuinely two-sided, over the full parameter range `0 < ε < 3`.  The model
+needs `2 < 2 + ε < 5` so that `2 + ε` is the *second* level of the sorted sample
+spectrum; at `ε = 3` it merges with `5` and its multiplicity becomes `p − d`, so
+the range is maximal whenever `2d < p` and merely sufficient in the degenerate
+case `p = 2d`, where there is no leading level `5` at all.  It proves the same printed conclusion,
 and it was the
 harder of the two: its block sits in the middle of both spectra, so the
 branch-selection hypothesis cannot be produced by any "leading `d` eigenvectors"
