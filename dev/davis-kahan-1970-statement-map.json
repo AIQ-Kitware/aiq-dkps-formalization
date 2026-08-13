@@ -9,7 +9,7 @@
   },
   "census": "dev/davis-kahan-1970-full-source-census.json",
   "source_atom_inventory": "dev/davis-kahan-1970-source-atom-inventory.json",
-  "completion_rule": "The 49 statement-map rows are organizational source/audit groups and the 266 source atoms are a source-fidelity inventory. The 100% formalization denominator is the separate formalization-result inventory: exactly the results Davis--Kahan establish in this paper (the four Section 2 headline theorems plus each named theorem, proposition, lemma, and corollary). Proof equations, derivations, examples, numerical working, historical attributions, Section 10 questions, and claims explicitly left unresolved or deferred are not completion obligations. False printed results are disposed by exact formal refutation and also carry the repository best-effort repair obligation.",
+  "completion_rule": "The 50 statement-map rows are organizational source/audit groups and the 272 source atoms are a source-fidelity inventory. The 100% formalization denominator is the separate formalization-result inventory: exactly the results Davis--Kahan establish in this paper (the four Section 2 headline theorems plus each named theorem, proposition, lemma, and corollary). Proof equations, derivations, examples, numerical working, historical attributions, Section 10 questions, and claims explicitly left unresolved or deferred are not completion obligations. False printed results are disposed by exact formal refutation and also carry the repository best-effort repair obligation.",
   "items": [
     {
       "id": "S1-block-residual",
@@ -39,7 +39,7 @@
           ]
         }
       ],
-      "source_specification_sha256": "fe0395b4f9940b40576035b37c919996ecae46afc37cd384d4c0ad4851992699",
+      "source_specification_sha256": "752a3b6a00a1d2060eeb19b7fc218f4431e81b6a7ffcd85e4a1838c95a9a3104",
       "expected_completion_certification": "reopened_math",
       "known_completion_holes": [
         {
@@ -54,6 +54,7 @@
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: The registered TeX includes the standard residual-to-eigenvalue consequence: ordered eigenvalues lambda_j with sum_j (alpha_j-lambda_j)^2 <= ||R||_sq^2 and |alpha_j-lambda_j| <= ||R||_1. The hostile review found no source-facing Lean declaration for these displayed conclusions. `equation1_8_residual_norm_minimized_by_rayleighQuotient` now proves the printed Rayleigh--Ritz minimization statement but is not registered as primary evidence for this row.",
       "source_atom_ids": [
         "S1-block-residual.setup-hilbert-scope",
+        "S1-block-residual.norm-existence-vacuity-convention",
         "S1-block-residual.reducing-projector-setup",
         "S1-block-residual.q-reduces-perturbed",
         "S1-block-residual.no-spectral-projector-assumption",
@@ -106,7 +107,7 @@
           ]
         }
       ],
-      "source_specification_sha256": "c64c6651719e212086fce5c8b32caaea014ec323b5438335d8e3d3aba8f7ba9f",
+      "source_specification_sha256": "cd58187e67139c2c52628f3af493e3d9541c02583514ea9cae0b9414950cb82a",
       "expected_completion_certification": "reopened_math",
       "known_completion_holes": [
         {
@@ -197,6 +198,7 @@
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
+        "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent",
         "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact"
       ],
       "audit_clauses": [
@@ -209,11 +211,13 @@
         },
         {
           "id": "S2-tan-theta.ambient",
-          "description": "Ambient conclusion: delta * ||tan Theta|| <= ||H||, with the ambient angle rather than Theta_0.",
+          "description": "Ambient conclusion: delta * ||tan Theta|| <= ||H||, with the ambient angle rather than Theta_0. The source-shaped form carries the crossed-defect condition (3.5), which Section 2 does not print and Section 3 makes standing; see the nonlocal source interpretation recorded for this result.",
           "review_declarations": [
+            "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
+            "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent",
+            "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact",
             "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
-            "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
-            "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact"
+            "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real"
           ]
         }
       ],
@@ -222,10 +226,10 @@
       "known_completion_holes": [
         {
           "kind": "math",
-          "detail": "The sharp unbounded ambient inequality now compiles under CrossedDefectsEquivalent (3.5), but the literal Section 2 infinite-dimensional ambient claim omits (3.5) and has a specified bilateral-shift pole counterexample. Exact source completion now requires a production formal refutation of that printed claim; the new h35-qualified theorem is the repair, not evidence that the false literal statement holds."
+          "detail": "The printed Section 2 tangent theorem is accepted as a true counted result read under the documented nonlocal source interpretation (Section 1 vacuity convention plus the standing (3.5) of Section 3); see `nonlocal_source_interpretation` in the formalization-result inventory. It is NOT classified as refuted, and the bilateral-shift construction is a vacuity/nonvacuity witness separating (1.5) from (3.5) rather than a counterexample to this result. What remains is a scalar-scope gap: the unbounded ambient conclusion is proved only over complex scalars by tanTheta_unbounded_ambient_paperUINorm_exact, with no real counterpart, while the unbounded directed conclusion and the bounded ambient conclusion are closed over both fields."
         }
       ],
-      "audit_warning": "HOSTILE RE-AUDIT: the analytic unbounded ambient assembly is compiled at sharp factor one under CrossedDefectsEquivalent (3.5). Do not map that repaired theorem to the literal Section 2 claim: the printed infinite-dimensional ambient statement omits (3.5), and the bilateral-shift witness shows a pi/2 pole under the printed hypotheses. Keep this row reopened until the formal production counterexample is registered.",
+      "audit_warning": "NONLOCAL SOURCE SEMANTICS: the printed Section 2 ambient tangent clause does not state the crossed-defect condition (3.5), which the source introduces only in Section 3 and then assumes as standing before proving this theorem in Section 6. The repository reads the printed statement under that standing convention and under the Section 1 norm-existence/vacuity convention, and says so explicitly in the result inventory and the generated audit packet. Do NOT describe the bilateral-shift witness as a counterexample to this result: it proves that (1.5) does not imply (3.5), i.e. that the omitted qualification is substantive. The row remains open only for the real-scalar unbounded ambient endpoint.",
       "source_atom_ids": [
         "S2-tan-theta.ordered-gap-hypothesis",
         "S2-tan-theta.rayleigh-ritz-hypothesis",
@@ -586,7 +590,7 @@
           ]
         }
       ],
-      "source_specification_sha256": "3824155c8b919c0b61e9eb7bdc7b822214fbb6d6abfa95f7e7eb5eac2a73c09a",
+      "source_specification_sha256": "9005afb318f41b78326c808b678267b64c6019ba67fb9cde9103197e4b25d749",
       "expected_completion_certification": "reopened_math",
       "known_completion_holes": [
         {
@@ -599,6 +603,7 @@
         "DK-3.2-prop.existence-iff-crossing-dimensions",
         "DK-3.2-prop.nonuniqueness",
         "DK-3.2-prop.crossing-square-minus-one",
+        "DK-3.2-prop.finite-crossing-automatic",
         "DK-3.2-prop.bilateral-shift-counterexample",
         "DK-3.2-prop.eq-3-5"
       ]
@@ -735,10 +740,11 @@
           ]
         }
       ],
-      "source_specification_sha256": "c596c36a00cab2889d9af204a420d6746d77273cc66e9a3268dc91891902987f",
+      "source_specification_sha256": "b4aa9b881e659bd021c3575c5475079f172a9c5d0983d82303b2a1a5832b32d8",
       "expected_completion_certification": "accepted",
       "known_completion_holes": [],
       "source_atom_ids": [
+        "DK-3.1-thm.angle-operator-partial-isometry",
         "DK-3.1-thm.complete-invariant",
         "DK-3.1-thm.converse-angle-data",
         "DK-3.1-thm.reconstruction"
@@ -1449,7 +1455,7 @@
           ]
         }
       ],
-      "source_specification_sha256": "ca0097fc54e1567d7129b6da2a912399a2cb516b3ba5ddc306bf4ab65b746505",
+      "source_specification_sha256": "3cb15263f92a74f7f5bcd986093f2a8113abc206243a8876510705b926d35919",
       "expected_completion_certification": "reopened_math",
       "known_completion_holes": [
         {
@@ -1460,6 +1466,8 @@
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: The generalized tangent theorem itself appears covered, but the same hashed passage preserves Example 6.1: delta=1, tangent quantity 1, residual 1/sqrt(2) when spectral mass lies on the wrong side. The hostile review did not find an exact source-facing formalization of that explicit counterexample.",
       "source_atom_ids": [
         "DK-6.3-thm.tangent-setup-identities",
+        "DK-6.3-thm.tangent-proof-temporary-boundedness",
+        "DK-6.3-thm.ambient-wholeSpace-assembly",
         "DK-6.3-thm.example6-1",
         "DK-6.3-thm.generalized-tangent-theorem",
         "DK-6.3-thm.eq-6-2",

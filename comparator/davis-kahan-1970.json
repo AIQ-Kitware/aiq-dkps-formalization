@@ -9,7 +9,7 @@
     "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm",
     "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral",
     "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
-    "TauCeti.DavisKahan1970.tanTheta_literalSection2_poleCounterexample",
+    "TauCeti.DavisKahan1970.tanTheta_literalSection2_admits_ambientRightAngle",
     "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
     "TauCeti.DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm",
     "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
@@ -24,7 +24,7 @@
     "TauCeti.DavisKahanTheory.proposition4_4_counterexample"
   ],
   "expected_missing_solution_theorems": [
-    "TauCeti.DavisKahan1970.tanTheta_literalSection2_poleCounterexample",
+    "TauCeti.DavisKahan1970.tanTheta_literalSection2_admits_ambientRightAngle",
     "TauCeti.DavisKahan1970.tanTwoTheta_poleExclusion_exactPaper",
     "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exactPaper"
   ],
@@ -35,7 +35,7 @@
   ],
   "enable_nanoda": false,
   "source_fidelity_notes": {
-    "TauCeti.DavisKahan1970.tanTheta_literalSection2_poleCounterexample": "Expected resolution is a formal source-error counterexample: the Section 2 ambient tan Theta conclusion is printed before the later crossed-defect condition (3.5) is adopted as a standing assumption. The same witness has zero directed P-to-Q sine but a whole-space pi/2 pole, exposing the related unqualified Section 1 angle-doubling claim.",
+    "TauCeti.DavisKahan1970.tanTheta_literalSection2_admits_ambientRightAngle": "Expected resolution is a nonvacuity witness, NOT a counterexample to the Section 2 tangent theorem. The ambient tan Theta conclusion is printed before the crossed-defect condition (3.5) is adopted as a standing assumption in Section 3, and the Section 6 proof runs inside that standing scope. The witness has zero directed P-to-Q sine but a right-angle whole-space component, so the ambient tangent is unbounded and its displayed norm does not exist; under the paper's Section 1 vacuity convention that instance is vacuous rather than false. It establishes that the omitted qualification is substantive, and it also qualifies the unrestated Section 1 angle-doubling claim. See nonlocal_source_interpretation for S2-tan-theta in dev/davis-kahan-1970-formalization-result-inventory.json.",
     "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact": "The ambient inequality is now implemented from the printed ordered-gap and off-diagonal hypotheses, with pole exclusion derived internally.",
     "TauCeti.DavisKahan1970.tanTwoTheta_poleExclusion_exactPaper": "A public pole-exclusion consequence is required so signature-only semantic validation can certify the mathematical domain of the paper tangent despite Lean totalizing Real.tan.",
     "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exactPaper": "Missing unbounded directed tan 2Theta wrapper at arbitrary source UI-norm scope from only the printed self-adjoint spectral-gap, bounded residual, and reducing-subspace data; the exact target also exposes invertibility of the double-angle cosine block so the tangent is not certified only through a totalized inverse. Existing ideal assembly still exposes cutoff/denominator hypotheses.",
@@ -53,7 +53,7 @@
       "TauCeti.DavisKahan1970.sinTheta_wholeSpace_paperUINorm",
       "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral",
       "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
-      "TauCeti.DavisKahan1970.tanTheta_literalSection2_poleCounterexample",
+      "TauCeti.DavisKahan1970.tanTheta_literalSection2_admits_ambientRightAngle",
       "TauCeti.DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm",
       "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
       "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",

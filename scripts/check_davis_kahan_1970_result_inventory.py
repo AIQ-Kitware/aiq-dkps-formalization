@@ -82,7 +82,39 @@ BOUNDARY_REASON_CODES = {
     "deferred_unproved_claim",
     "open_question",
     "section10_motivation_not_result",
+    "paper_wide_semantic_convention_not_result",
 }
+
+# Reviewer-facing source-alignment taxonomy.  It is deliberately three-valued:
+# a locally self-contained exact match, a true result whose exact formalization
+# depends on nonlocal source semantics, and a meaningful printed statement that
+# is mathematically false.  The middle category must never be used to soften the
+# third one.
+SEMANTIC_ALIGNMENTS = {
+    "locally_exact",
+    "paper_faithful_nonlocal_source_interpretation",
+    "refuted_as_transcribed",
+}
+NONLOCAL_INTERPRETATION_STATUSES = {"accepted", "pending", "rejected"}
+NONLOCAL_INTERPRETATION_ROLES = {
+    "printed_statement_clause",
+    "paper_wide_convention",
+    "later_standing_assumption",
+    "omitted_qualification",
+    "related_dimension_condition",
+    "scope_separating_example",
+    "automatic_case",
+    "proof_context_dependency",
+    "related_unqualified_claim",
+}
+NONLOCAL_INTERPRETATION_PROSE_FIELDS = (
+    "reviewer_issue",
+    "awkwardness",
+    "accepted_reading",
+    "alternative_literal_reading",
+    "why_not_refutation",
+    "semantic_conclusion",
+)
 
 
 def fail(message: str) -> None:
@@ -379,6 +411,228 @@ def _validate_boundary_accounting(
             value = boundary.get(key)
             if not isinstance(value, str) or not value.strip():
                 fail(f"{result_id}: boundary_review.{key} must explain the boundary audit")
+
+def _supporting_atom_digest(atom_ids: list[str], source_atoms: dict[str, dict[str, Any]]) -> str:
+    """Digest the exact interpretation evidence an accepted reading was built on.
+
+    The whole-inventory hash already fails closed on any atom edit; this narrower
+    digest names *which* evidence moved, so a stale accepted reading points the
+    reviewer at the passage that changed rather than at the file.
+    """
+    payload = [
+        {
+            "id": atom_id,
+            "summary": source_atoms[atom_id]["summary"],
+            "reason_code": source_atoms[atom_id]["formalization_role_reason_code"],
+            "role": (source_atoms[atom_id].get("interpretation_support") or {}).get("role"),
+        }
+        for atom_id in atom_ids
+    ]
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, ensure_ascii=False).encode("utf-8")
+    ).hexdigest()
+
+
+def _validate_nonlocal_interpretation(
+    items: list[dict[str, Any]],
+    source_atoms: dict[str, dict[str, Any]],
+    source_inventory_path: Path,
+    census_declarations: set[str],
+    audit_text: str,
+) -> dict[str, Any]:
+    """Check the first-class record of results that are not locally self-contained.
+
+    Most counted results are locally exact: the printed statement carries its own
+    hypotheses and Lean matches it directly.  A few are not, because the paper
+    imposes semantics elsewhere -- a global existence/vacuity convention, a later
+    standing assumption, an inherited proof context.  For those, Lean necessarily
+    says something the printed display does not literally say, and the repository
+    must expose that to a hostile reviewer instead of letting them discover it.
+
+    This validation exists so the record cannot decay into decorative prose: the
+    reading must be explicit, its evidence must be real source atoms that link
+    back, its Lean explicitation must be registered and compiler-visible, and any
+    edit to the source specification or to the cited evidence makes the accepted
+    reading stale.
+    """
+    exceptional: list[str] = []
+    linked_back: dict[str, set[str]] = {}
+
+    for item in items:
+        result_id = item["id"]
+        alignment = item.get("semantic_alignment")
+        if alignment not in SEMANTIC_ALIGNMENTS:
+            fail(
+                f"{result_id}: semantic_alignment must be one of "
+                + ", ".join(sorted(SEMANTIC_ALIGNMENTS))
+                + f"; got {alignment!r}"
+            )
+        self_contained = item.get("local_statement_self_contained")
+        if not isinstance(self_contained, bool):
+            fail(f"{result_id}: local_statement_self_contained must be an explicit boolean")
+        block = item.get("nonlocal_source_interpretation")
+
+        if alignment == "refuted_as_transcribed" and _result_disposition(item) != "refuted_as_transcribed":
+            fail(
+                f"{result_id}: semantic_alignment='refuted_as_transcribed' requires the refuted disposition; "
+                "a nonlocal-interpretation result must not be recorded as a refutation"
+            )
+        if _result_disposition(item) == "refuted_as_transcribed" and alignment != "refuted_as_transcribed":
+            fail(f"{result_id}: refuted disposition requires semantic_alignment='refuted_as_transcribed'")
+
+        if self_contained:
+            if block is not None:
+                fail(
+                    f"{result_id}: locally self-contained result must not carry nonlocal_source_interpretation"
+                )
+            if alignment == "paper_faithful_nonlocal_source_interpretation":
+                fail(
+                    f"{result_id}: nonlocal-interpretation alignment requires "
+                    "local_statement_self_contained=false"
+                )
+            continue
+
+        exceptional.append(result_id)
+        if alignment != "paper_faithful_nonlocal_source_interpretation":
+            fail(
+                f"{result_id}: local_statement_self_contained=false requires "
+                "semantic_alignment='paper_faithful_nonlocal_source_interpretation'"
+            )
+        if not isinstance(block, dict):
+            fail(
+                f"{result_id}: a result whose printed statement is not locally self-contained must carry a "
+                "structured nonlocal_source_interpretation record"
+            )
+        status = block.get("status")
+        if status not in NONLOCAL_INTERPRETATION_STATUSES:
+            fail(f"{result_id}: nonlocal_source_interpretation.status must be one of "
+                 + ", ".join(sorted(NONLOCAL_INTERPRETATION_STATUSES)) + f"; got {status!r}")
+        if block.get("classification") != "paper_faithful_nonlocal_source_interpretation":
+            fail(
+                f"{result_id}: nonlocal_source_interpretation.classification must be "
+                "'paper_faithful_nonlocal_source_interpretation'"
+            )
+        if block.get("local_statement_self_contained") is not False:
+            fail(
+                f"{result_id}: nonlocal_source_interpretation.local_statement_self_contained must be false "
+                "and agree with the result entry"
+            )
+        for field in NONLOCAL_INTERPRETATION_PROSE_FIELDS:
+            value = block.get(field)
+            if not isinstance(value, str) or len(value.split()) < 12:
+                fail(
+                    f"{result_id}: nonlocal_source_interpretation.{field} must be a substantive "
+                    "reviewer-facing explanation"
+                )
+        dependencies = block.get("nonlocal_dependencies")
+        if not isinstance(dependencies, list) or not dependencies or not all(
+            isinstance(x, str) and x.strip() for x in dependencies
+        ):
+            fail(f"{result_id}: nonlocal_source_interpretation.nonlocal_dependencies must be a nonempty list")
+        if block.get("distinct_from_refutation") not in {item["id"] for item in items}:
+            fail(
+                f"{result_id}: nonlocal_source_interpretation.distinct_from_refutation must name the counted "
+                "result that is the repository's canonical refutation, so the two categories stay separable"
+            )
+
+        atom_ids = block.get("supporting_atom_ids")
+        if not isinstance(atom_ids, list) or not atom_ids or not all(isinstance(x, str) for x in atom_ids):
+            fail(f"{result_id}: nonlocal_source_interpretation.supporting_atom_ids must be a nonempty list")
+        if len(atom_ids) != len(set(atom_ids)):
+            fail(f"{result_id}: duplicate nonlocal_source_interpretation.supporting_atom_ids")
+        for atom_id in atom_ids:
+            atom = source_atoms.get(atom_id)
+            if atom is None:
+                fail(f"{result_id}: nonlocal interpretation cites unknown source atom {atom_id!r}")
+            support = atom.get("interpretation_support")
+            if not isinstance(support, dict):
+                fail(
+                    f"{result_id}: source atom {atom_id} is cited as interpretation evidence but carries no "
+                    "interpretation_support link back to the counted result"
+                )
+            if result_id not in (support.get("result_ids") or []):
+                fail(
+                    f"{result_id}: source atom {atom_id} does not link back to this result in "
+                    "interpretation_support.result_ids"
+                )
+            linked_back.setdefault(atom_id, set()).add(result_id)
+
+        explicitation = block.get("lean_explicitation")
+        if not isinstance(explicitation, list) or not explicitation:
+            fail(
+                f"{result_id}: nonlocal_source_interpretation.lean_explicitation must name the declarations that "
+                "make the implicit source semantics explicit"
+            )
+        for entry in explicitation:
+            if not isinstance(entry, dict):
+                fail(f"{result_id}: lean_explicitation entries must be objects")
+            declaration = entry.get("declaration")
+            mechanism = entry.get("mechanism")
+            if not isinstance(declaration, str) or declaration not in census_declarations:
+                fail(
+                    f"{result_id}: lean_explicitation declaration {declaration!r} is not registered in the "
+                    "source census"
+                )
+            if not isinstance(mechanism, str) or len(mechanism.split()) < 8:
+                fail(
+                    f"{result_id}: lean_explicitation for {declaration} must say exactly which hypothesis or "
+                    "conclusion carries the implicit source semantics"
+                )
+            if f"#check @{declaration}" not in audit_text and f"#check {declaration}" not in audit_text:
+                fail(
+                    f"{result_id}: lean_explicitation declaration {declaration} is missing from the compiler "
+                    "audit surface"
+                )
+
+        expected_tex = sha256_file(TEX_PATH)
+        expected_atoms = sha256_file(source_inventory_path)
+        expected_digest = _supporting_atom_digest(atom_ids, source_atoms)
+        for field, expected in (
+            ("distributable_specification_sha256", expected_tex),
+            ("source_fidelity_inventory_sha256", expected_atoms),
+            ("supporting_atom_digest_sha256", expected_digest),
+        ):
+            actual = block.get(field)
+            if actual != expected:
+                fail(
+                    f"{result_id}: accepted nonlocal source interpretation is stale ({field} differs); "
+                    f"expected {expected}, got {actual!r}. Re-audit the reading against the changed source "
+                    "material before re-accepting it."
+                )
+        if not isinstance(block.get("reviewed_on"), str) or not block["reviewed_on"].strip():
+            fail(f"{result_id}: nonlocal_source_interpretation.reviewed_on must record the review date")
+
+    # Reverse direction: no atom may claim to support a reading that does not cite it.
+    for atom_id, atom in source_atoms.items():
+        support = atom.get("interpretation_support")
+        if support is None:
+            continue
+        if not isinstance(support, dict):
+            fail(f"{atom_id}: interpretation_support must be an object")
+        role = support.get("role")
+        if role not in NONLOCAL_INTERPRETATION_ROLES:
+            fail(
+                f"{atom_id}: interpretation_support.role must be one of "
+                + ", ".join(sorted(NONLOCAL_INTERPRETATION_ROLES))
+                + f"; got {role!r}"
+            )
+        note = support.get("note")
+        if not isinstance(note, str) or len(note.split()) < 8:
+            fail(f"{atom_id}: interpretation_support.note must explain what the atom contributes to the reading")
+        result_ids = support.get("result_ids")
+        if not isinstance(result_ids, list) or not result_ids or not all(isinstance(x, str) for x in result_ids):
+            fail(f"{atom_id}: interpretation_support.result_ids must be a nonempty list of counted result ids")
+        if set(result_ids) != linked_back.get(atom_id, set()):
+            fail(
+                f"{atom_id}: interpretation_support.result_ids {sorted(result_ids)!r} disagree with the results "
+                f"that actually cite this atom {sorted(linked_back.get(atom_id, set()))!r}"
+            )
+
+    return {
+        "exceptional_results": exceptional,
+        "interpretation_support_atoms": sorted(linked_back),
+    }
+
 
 def _repair_terminal(item: dict[str, Any], census_declarations: set[str]) -> tuple[bool, str | None]:
     repair = item.get("repair")
@@ -687,6 +941,10 @@ def completion_summary(
     semantic_audit = _validate_semantic_audit_surface(
         data, items, terminal=terminal, nonterminal=nonterminal
     )
+    audit_text = (ROOT / semantic_audit["compiler_audit_surface"]).read_text(encoding="utf-8")
+    nonlocal_interpretation = _validate_nonlocal_interpretation(
+        items, source_atoms, source_inventory_path, census_declarations, audit_text
+    )
     _validate_boundary_accounting(source_atoms, items)
     classification_complete, classification_note = _validate_total_source_classification(
         data, source_atoms, obligation_source_atoms, require_terminal=require_terminal
@@ -721,6 +979,7 @@ def completion_summary(
         "terminal_completion_obligations": terminal,
         "source_coverage_terminal": source_coverage_terminal,
         "semantic_audit": semantic_audit,
+        "nonlocal_source_interpretation": nonlocal_interpretation,
         "nonterminal_results": nonterminal,
     }
 
@@ -757,6 +1016,12 @@ def main() -> int:
     print(f"  source fidelity: {summary['source_fidelity_inventory']}")
     print(f"  semantic audit surface: {summary['semantic_audit']['compiler_audit_surface']}")
     print(f"  semantic review report: {summary['semantic_audit']['human_report']}")
+    exceptional = summary["nonlocal_source_interpretation"]["exceptional_results"]
+    if exceptional:
+        print(
+            "  results accepted under a nonlocal source interpretation (printed statement not locally "
+            "self-contained): " + ", ".join(exceptional)
+        )
     if summary["nonterminal_results"]:
         print("  first nonterminal results:")
         for item in summary["nonterminal_results"][:10]:

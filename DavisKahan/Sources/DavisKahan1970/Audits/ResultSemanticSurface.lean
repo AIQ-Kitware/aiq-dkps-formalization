@@ -105,7 +105,20 @@ Status: **TERMINAL EXACT**.
 
 /-! ## S2-tan-theta: Single-angle tangent theorem
 
-Status: **OPEN RESULT-SCOPE GAP**.
+Status: **OPEN RESULT-SCOPE GAP** — the real-scalar unbounded ambient endpoint.
+
+The printed Section 2 statement is not locally self-contained: it does not state the
+crossed-defect condition (3.5), which the source introduces in Section 3 and then
+assumes as standing before proving this theorem in Section 6.  The source-shaped
+ambient declarations therefore carry a crossed-defect hypothesis and *conclude*
+membership of the tangent operator in the norm's ideal, which is the explicit form of
+the paper's own convention that a result is vacuous when a displayed norm fails to
+exist.  The reading, its evidence, and the competing literal reading are recorded in
+`dev/davis-kahan-1970-formalization-result-inventory.json` under
+`nonlocal_source_interpretation`.
+
+The transversality-form declarations assume `‖sin Θ‖ < 1`, which is strictly stronger
+than (3.5); they are registered as specializations, not as the source-shaped form.
 -/
 
 #check @TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm
@@ -113,6 +126,7 @@ Status: **OPEN RESULT-SCOPE GAP**.
 #check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm
 #check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real
 #check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent
+#check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent
 #check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact
 #check @TauCeti.DavisKahan.Frontier.Section3.directedGap_asymmetric_coordinateHalfSpace
 #check @TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses

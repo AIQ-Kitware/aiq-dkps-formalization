@@ -3,7 +3,7 @@
 
 The packet makes the project's claim boundary explicit:
 
-* all 266 source-fidelity atoms remain visible and classified;
+* every source-fidelity atom remains visible and classified;
 * exactly 29 results Davis--Kahan establish form the 100% denominator; and
 * each result records the atoms inside its printed statement and the same-block
   material deliberately excluded from that result boundary.
@@ -47,6 +47,17 @@ CHECKLIST = [
     "Indexing, eigenvalue/singular-value multiplicity, and finite-versus-infinite sequence semantics match the source.",
     "Norm class, constants, strictness, signs, interval orientation, and directed/ambient distinctions match exactly.",
     "If the result is refuted, the counterexample satisfies all printed hypotheses and the separate repair record is terminal.",
+]
+
+NONLOCAL_CHECKLIST = [
+    "The printed statement really does omit the qualification the repository says it omits.",
+    "The cited earlier/later source passages really say what the repository reports them as saying.",
+    "The paper-wide existence/vacuity convention plausibly governs the displayed norm in this statement.",
+    "The later standing assumption is genuinely in force where the source proves this result.",
+    "The extra Lean hypothesis corresponds to the omitted source qualification and to nothing stronger.",
+    "The competing literal reading is stated at its strongest, not as a straw man.",
+    "The decision not to classify this result as refuted is justified by the source's own semantics.",
+    "The distinction from the repository's canonical refutation is real, not a softening of it.",
 ]
 
 
@@ -102,6 +113,127 @@ def md_code_block(text: str, language: str = "") -> str:
     return f"~~~~{language}\n{text.rstrip()}\n~~~~"
 
 
+def render_nonlocal_section(
+    block: dict,
+    atom_by_id: dict[str, dict],
+    claims: dict[str, str],
+) -> list[str]:
+    """Put a nonlocal source-semantics dependency in front of the reviewer.
+
+    The failure mode this defends against is a reviewer discovering, on their own,
+    that a Lean statement carries a hypothesis the printed source display does not
+    mention.  Here the repository says it first, shows the exact source passages it
+    used to justify the reading, states the strongest competing reading against
+    itself, and asks for a verdict on precisely that question.
+    """
+    lines = [
+        "### ⚠ NONLOCAL SOURCE-SEMANTICS DEPENDENCY",
+        "",
+        "**This printed result is not locally self-contained. Read this section before the Lean evidence.**",
+        "",
+        f"- **Interpretation review status:** `{block.get('status', 'missing')}`",
+        f"- **Classification:** `{block.get('classification', 'missing')}`",
+        f"- **Reviewed on:** {block.get('reviewed_on', 'missing')}",
+        f"- **Kept distinct from the repository's canonical refutation:** `{block.get('distinct_from_refutation', 'missing')}`",
+        "",
+        "#### 1. What the printed statement actually says",
+        "",
+        "The full registered source block appears below under *Full registered source block*. The clause at issue and the qualification it does not carry:",
+        "",
+        f"{block.get('reviewer_issue', 'missing')}",
+        "",
+        "#### 2. Where the paper supplies the missing semantics",
+        "",
+    ]
+    for dependency in block.get("nonlocal_dependencies", []):
+        lines.append(f"- {dependency}")
+    lines += [
+        "",
+        "#### 3. Exact source atoms used to interpret the statement",
+        "",
+        "| Atom | Interpretive role | Source location | Content |",
+        "|---|---|---|---|",
+    ]
+    for atom_id in block.get("supporting_atom_ids", []):
+        atom = atom_by_id.get(atom_id)
+        if atom is None:
+            lines.append(f"| `{atom_id}` | **MISSING ATOM — BLOCKING DEFECT** | | |")
+            continue
+        support = atom.get("interpretation_support") or {}
+        summary = atom["summary"].replace("|", "\\|").replace("\n", " ")
+        locator = atom["source_locator"].replace("|", "\\|").replace("\n", " ")
+        lines.append(
+            f"| `{atom_id}` | `{support.get('role', 'unrecorded')}` | {locator} | {summary} |"
+        )
+    lines += [
+        "",
+        "The source passages that carry these atoms are reproduced verbatim here so the reading can be checked without the original paper:",
+        "",
+    ]
+    seen_blocks: list[str] = []
+    for atom_id in block.get("supporting_atom_ids", []):
+        atom = atom_by_id.get(atom_id)
+        if atom is None:
+            continue
+        parent = atom["parent_claim_id"]
+        if parent in seen_blocks or parent not in claims:
+            continue
+        seen_blocks.append(parent)
+        lines += [f"<details><summary>Source block <code>{parent}</code></summary>", ""]
+        lines += [md_code_block(claims[parent], "tex"), "", "</details>", ""]
+    lines += [
+        "#### 4. The chronological mismatch",
+        "",
+        f"{block.get('awkwardness', 'missing')}",
+        "",
+        "#### 5. What Lean says, and exactly where the implicit semantics became explicit",
+        "",
+    ]
+    for entry in block.get("lean_explicitation", []):
+        lines += [
+            f"- `{entry.get('declaration', 'missing')}`",
+            f"  - {entry.get('mechanism', 'missing')}",
+        ]
+    lines += [
+        "",
+        "#### 6. The repository's accepted reading",
+        "",
+        f"{block.get('accepted_reading', 'missing')}",
+        "",
+        "#### 7. The strongest competing literal reading",
+        "",
+        f"{block.get('alternative_literal_reading', 'missing')}",
+        "",
+        "#### 8. Why this is not classified as a refutation",
+        "",
+        f"{block.get('why_not_refutation', 'missing')}",
+        "",
+        "#### 9. Semantic conclusion recorded by the repository",
+        "",
+        f"{block.get('semantic_conclusion', 'missing')}",
+        "",
+        "#### Independent interpretation checklist",
+        "",
+    ]
+    for check in NONLOCAL_CHECKLIST:
+        lines.append(f"- [ ] {check}")
+    lines += [
+        "",
+        "#### Interpretation question put to the independent reviewer",
+        "",
+        "> Is the extra explicit Lean structure a faithful formalization of nonlocal semantics already imposed by the paper, or an unjustified strengthening of the printed result?",
+        "",
+        "- **Interpretation verdict** (choose one): `PASS paper-faithful nonlocal interpretation` / `FAIL illicit strengthening` / `UNCERTAIN source interpretation`",
+        "- **Verdict:** _fill in_",
+        "- **If FAIL or UNCERTAIN, which specific source passage or Lean hypothesis is the problem:** _fill in_",
+        "- **Would you instead classify this printed result as false as transcribed? Why:** _fill in_",
+        "",
+        "---",
+        "",
+    ]
+    return lines
+
+
 def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -> None:
     statement_map = load_json(MAP_PATH)
     census = load_json(CENSUS_PATH)
@@ -146,6 +278,14 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
         "- Section 10 questions, explicitly deferred/unproved claims, definitions, proof-only derivations, examples, numerical working, historical/external results, and theorem-adjacent remarks remain visible in source fidelity but do not enlarge the denominator.",
         "- A false counted result remains in the denominator and requires exact formal refutation plus the repository's separate best-effort repair disposition.",
         "",
+        "Each counted result carries a **source-alignment classification**, and the three values are not interchangeable:",
+        "",
+        "1. `locally_exact` — the printed statement is self-contained and Lean matches it directly.",
+        "2. `paper_faithful_nonlocal_source_interpretation` — the result is true and Lean is faithful, but the correspondence relies on source semantics stated elsewhere in the paper (a global convention, a later standing assumption, an inherited proof context). Lean therefore says something the printed display does not literally say, and the packet discloses exactly what.",
+        "3. `refuted_as_transcribed` — the printed statement is meaningful and mathematically false; an exact counterexample and a separate repair record are required.",
+        "",
+        "Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.",
+        "",
         f"Current result-level status: **{len(terminal)}/{len(results)} terminal**, **{len(pending)} awaiting semantic closure**.",
         f"Result-selection/boundary review: **{result_inventory['result_inventory_review'].get('boundary_review_status')}** under policy `{result_inventory['result_inventory_review'].get('policy')}`.",
         "",
@@ -174,6 +314,15 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
         "",
         "Use one of: **PASS exact**, **PASS refuted + repair**, **FAIL boundary**, **FAIL scope**, **FAIL conclusion**, **FAIL missing clause**, **FAIL evidence**, or **UNCERTAIN**.",
         "",
+        "A result whose printed statement is **not locally self-contained** carries an extra section headed **NONLOCAL SOURCE-SEMANTICS DEPENDENCY**, with its own verdict: **PASS paper-faithful nonlocal interpretation**, **FAIL illicit strengthening**, or **UNCERTAIN source interpretation**. That section discloses, before you read the Lean evidence, exactly which qualification the printed statement omits and which nonlocal source material the repository used to read it. Those results are listed here so they cannot be missed: "
+        + (
+            ", ".join(
+                f"`{r['id']}`" for r in results if r.get("local_statement_self_contained") is False
+            )
+            or "*(none)*"
+        )
+        + ".",
+        "",
     ]
 
     for index, result in enumerate(results, start=1):
@@ -196,8 +345,17 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
             f"- **Compiler verification:** `{result['verification']}`",
             f"- **Hostile semantic certification:** `{result['semantic_certification']}`",
             f"- **Boundary review:** `{boundary['status']}`",
+            f"- **Source alignment:** `{result.get('semantic_alignment', 'unrecorded')}`",
+            f"- **Printed statement locally self-contained:** `{result.get('local_statement_self_contained', 'unrecorded')}`",
             f"- **Organizational source-block hash:** `{mapped['source_specification_sha256']}`",
             "",
+        ]
+
+        nonlocal_block = result.get("nonlocal_source_interpretation")
+        if isinstance(nonlocal_block, dict):
+            lines += render_nonlocal_section(nonlocal_block, atom_by_id, claims)
+
+        lines += [
             "### Atoms inside the counted printed result",
             "",
         ]
@@ -312,6 +470,8 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
         "- **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no",
         "- **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no",
         "- **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no",
+        "- **Every nonlocal source-semantics dependency adjudicated (paper-faithful / illicit strengthening / uncertain):** yes / no",
+        "- **Any Lean statement carrying a hypothesis the printed source does not impose, that the packet did NOT disclose:** yes / no",
         "- **Compiler certificate clean and complete:** yes / no",
         "- **Is the repository's explicitly limited claim of 100% result-level Davis--Kahan 1970 formalization justified?** yes / no / uncertain",
         "",

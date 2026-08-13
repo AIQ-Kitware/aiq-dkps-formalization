@@ -42,7 +42,7 @@ separately claiming faithful accounting of the broader mathematical surface.
 
 ## Explicit boundary accounting
 
-Every one of the 266 source-fidelity atoms must carry:
+Every one of the 272 source-fidelity atoms must carry:
 
 1. a `formalization_role`;
 2. a specific `formalization_role_reason_code` and explanatory
@@ -77,6 +77,61 @@ selection review becomes stale. The current denominator size is also hard-checke
 at 29; changing it requires a fresh original-paper result-selection audit rather
 than an incidental metadata edit.
 
+## Source-alignment taxonomy and nonlocal source interpretations
+
+Every counted result carries two extra fields, and the checker rejects a row that
+omits either:
+
+- `semantic_alignment` — one of `locally_exact`,
+  `paper_faithful_nonlocal_source_interpretation`, or `refuted_as_transcribed`;
+- `local_statement_self_contained` — an explicit boolean.
+
+Most printed statements are locally self-contained: everything Lean needs is in
+the printed environment. A few are not, because the paper imposes semantics
+elsewhere — a global convention, a later standing assumption, an inherited proof
+context. For those, Lean necessarily states something the printed display does
+not literally state, and hiding that from a reviewer would be the worst possible
+outcome. Such a row must carry a `nonlocal_source_interpretation` record with:
+
+- `status`, `classification`, and a `local_statement_self_contained` that agrees
+  with the row;
+- `reviewer_issue`, `awkwardness`, `accepted_reading`,
+  `alternative_literal_reading`, `why_not_refutation`, `semantic_conclusion` —
+  each a substantive reviewer-facing explanation, with the competing literal
+  reading stated at its strongest;
+- `nonlocal_dependencies` — the source material that supplies the missing
+  semantics;
+- `supporting_atom_ids` — real source-fidelity atoms, each of which must carry an
+  `interpretation_support` block naming this result. The checker verifies both
+  directions, so an atom cannot claim to support a reading that does not cite it;
+- `lean_explicitation` — the declarations that make the implicit semantics
+  explicit, each with the exact hypothesis or conclusion that does it. Every such
+  declaration must be registered in the census and `#check`ed in the compiler
+  audit surface;
+- `distinct_from_refutation` — the counted result that is the repository's
+  canonical refutation, so the two categories stay visibly separate;
+- three staleness hashes: the distributable TeX, the source-fidelity inventory,
+  and a digest of the cited atoms. Any edit to the source specification or to the
+  cited evidence makes the accepted reading stale and the checker fails closed.
+
+`interpretation_support` on an atom is **not** `formalization_result_ids`. The
+latter is the printed-statement boundary and feeds the 29-result denominator; the
+former is evidence about how a printed statement is read and adds nothing to the
+denominator.
+
+The middle category is never a softened refutation. `refuted_as_transcribed`
+keeps its full meaning: all objects exist, the printed hypotheses hold, the
+compared quantities are finite and meaningful, and the printed conclusion is
+false. Proposition 4.4 remains the canonical case. A result is placed in the
+middle category only when the printed statement is true under the paper's own
+semantics and the formalization merely makes those semantics explicit.
+
+The generated audit packet renders a **NONLOCAL SOURCE-SEMANTICS DEPENDENCY**
+section for every such row, reproduces the cited source passages so the reading
+can be checked without the original paper, and asks the reviewer for one of
+`PASS paper-faithful nonlocal interpretation`, `FAIL illicit strengthening`, or
+`UNCERTAIN source interpretation`.
+
 ## Terminal result semantics
 
 A counted true result is terminal only when:
@@ -98,7 +153,7 @@ canonical example: exact refutation plus the proved `Q`-norm repair.
 
 A final certificate should make both layers explicit:
 
-- **266/266 source items accounted for** does *not* mean 266 theorems were proved;
+- **272/272 source items accounted for** does *not* mean 272 theorems were proved;
 - **29/29 established results exact/refuted and accepted** is the 100% formalization
   claim; and
 - every excluded source item remains displayed with its boundary rationale so a
@@ -140,5 +195,5 @@ Hard 100% gate:
 python3 scripts/check_davis_kahan_1970_statement_map.py --require-terminal
 ```
 
-A green build, 266/266 source-fidelity atoms, or 49/49 organizational rows cannot
+A green build, 272/272 source-fidelity atoms, or 50/50 organizational rows cannot
 substitute for terminal coverage of the 29 counted results.

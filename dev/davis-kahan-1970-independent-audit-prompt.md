@@ -22,6 +22,25 @@ A false designated result still counts: its exact printed proposition must be
 formally refuted, and repository policy separately requires a best-effort
 mathematical repair. Proposition 4.4 is the canonical example.
 
+## Three source-alignment categories
+
+Each counted result carries a `semantic_alignment`:
+
+1. `locally_exact` — the printed statement is self-contained and Lean matches it
+   directly.
+2. `paper_faithful_nonlocal_source_interpretation` — the result is true, but its
+   exact formalization depends on source semantics stated **elsewhere** in the
+   paper: a global convention, a later standing assumption, an inherited proof
+   context. Such a row carries `local_statement_self_contained = false` and an
+   accepted `nonlocal_source_interpretation` record, and Lean necessarily says
+   something the printed display does not literally say.
+3. `refuted_as_transcribed` — the printed statement is meaningful and false.
+
+Category 2 is **not** a softened category 3, and auditing it is a required part
+of this review rather than an optional extra. `S2-tan-theta` is the current
+instance: the printed Section 2 ambient tangent conclusion does not state the
+crossed-defect condition (3.5), and the Lean statements do.
+
 ## Authoritative materials
 
 1. `prose/distilled_literature/DavisKahan1970_part_III.tex` — distributable,
@@ -83,6 +102,32 @@ source-facing Lean declaration(s). Check all of the following:
 Multiple Lean declarations may jointly cover one source result. That is fine if
 their union is exactly the source statement at full scope.
 
+## Pass C — nonlocal source-interpretation audit
+
+For every result with `local_statement_self_contained = false`, read the
+**NONLOCAL SOURCE-SEMANTICS DEPENDENCY** section of
+`dev/davis-kahan-1970-independent-audit-template.md`. It reproduces the printed
+statement, names the qualification the statement does not carry, quotes the
+earlier and later source passages the repository used to read it, and states the
+strongest competing literal reading against the repository's own position.
+
+Answer this question explicitly:
+
+> Is the extra explicit Lean structure a faithful formalization of nonlocal
+> semantics already imposed by the paper, or an unjustified strengthening of the
+> printed result?
+
+Record one of `PASS paper-faithful nonlocal interpretation`,
+`FAIL illicit strengthening`, or `UNCERTAIN source interpretation`, and say which
+source passage or Lean hypothesis drove the verdict. If you conclude the printed
+result is actually false as transcribed, say so — that is a FAIL, and the
+repository is asking to be told rather than defending the classification.
+
+The repository must never be in a position where a reviewer discovers, unaided,
+that a Lean theorem carries a hypothesis the printed source does not impose. If
+you find such a case that the packet did **not** disclose, report it as a
+first-order defect.
+
 For a false counted result, verify that the refutation satisfies the printed
 hypotheses and actually negates the printed conclusion. Then separately inspect
 the repair record and its theorem.
@@ -94,6 +139,7 @@ A 100% verdict is allowed only if:
 - the 29-result selection review is accepted and fresh with respect to both the
   source-fidelity inventory and the distributable TeX;
 - every counted result is semantically accepted;
+- every nonlocal source-interpretation record is adjudicated and passes;
 - every counted result has compiler-verified source-facing evidence;
 - every false counted result has an exact refutation and terminal repair record;
 - the hard result-level gate passes.
