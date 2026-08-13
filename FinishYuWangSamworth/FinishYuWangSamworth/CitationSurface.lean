@@ -24,8 +24,31 @@ Every numbered result of the paper is represented, at the printed generality:
 4. right and left singular-subspace Theorem 3, in its corrected form;
 5. Appendix Lemma A1.
 
+## Finding the source-shaped statement
+
+The general theorems select their block by an index embedding and take the
+intrinsic separation as hypothesis.  Statements in the paper's own shape —
+a contiguous block `r..s` with the two-sided boundary gap
+`min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`, under the printed conventions
+`λ_0 = +∞`, `λ_{p+1} = −∞` — are:
+
+* `TauCeti.yuWangSamworth_sinTheta_block_le` and
+  `TauCeti.yuWangSamworth_alignedFrame_block_le` for Theorem 2, the second with
+  an explicit orthogonal `Ô` and the supplied population frame, so the
+  conclusion is literally `‖V̂Ô − V‖_F ≤ 2^{3/2} min(…)/Δ`;
+* `TauCeti.yuWangSamworth_sinTheta_block_le_residual` and
+  `TauCeti.yuWangSamworth_alignedFrame_block_le_residual` for the sharper
+  residual numerators the paper says its proof establishes,
+  `‖V̂Λ − ΣV̂‖_F` in place of the perturbation norm;
+* `yuWangSamworth_corollary1_sinTheta_le` and
+  `yuWangSamworth_corollary1_real_le` for Corollary 1;
+* `yuWangSamworth_rightSingularSubspace_block_le` and its three siblings for
+  Theorem 3, in singular-value notation with the corrected boundary convention.
+
 The surface also includes direct rank-one singular-vector corollaries, the
 rank-one algebraic identity recorded as equation (4), all three Section 2
 sharpness constructions, the Section 1 illustration that Theorem 1's separation
-can vanish, and the deterministic core of the Section 3 diagnosis.
+can vanish, the deterministic core of the Section 3 diagnosis, and
+`yuWangSamworth_corollary1_scalarSample`, the witness that the sample side
+genuinely admits an arbitrary unit eigenvector at a repeated sample eigenvalue.
 -/

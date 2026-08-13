@@ -19,10 +19,12 @@ This aggregate exposes:
 * Theorem 1 in general unitarily invariant, Frobenius, and operator norms;
 * Theorem 2 and its aligned-basis conclusion from
   `DavisKahan.Specialized.Statistics`;
-* rank-one Corollary 3;
+* rank-one Corollary 1, in both the intrinsic and the printed
+  neighbouring-eigenvalue-gap forms, with a sample-degeneracy witness;
 * the exact rank-one double-angle identity recorded as equation (4);
 * the Section 2 sharpness examples: orthogonal blocks in both the preprint's
-  top-block and the published middle-block form, which exhibit the aligned-basis
+  top-block and the published middle-block form -- the latter over its full
+  parameter range `0 < ε < 3` -- which exhibit the aligned-basis
   constant `2^{3/2}` and the `√d` dimension dependence as unimprovable, and the
   planar rotation, which pins the sine bound's factor `2` at every angle
   including the small-angle regime.

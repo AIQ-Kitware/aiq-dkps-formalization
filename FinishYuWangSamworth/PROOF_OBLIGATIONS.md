@@ -23,17 +23,31 @@ them is stated at the printed generality:
 * Theorem 3, right and left, in the corrected form (see below);
 * Lemma A1, both halves.
 
+Since 2026-08-15 the population-gap results are also stated with the source's
+own indexing: a contiguous block `r..s` and the two-sided boundary gap
+`min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`, with the printed conventions
+`λ_0 = +∞` and `λ_{p+1} = −∞` modelled by vacuous quantification, so the
+interior, top and bottom blocks need no separate statements.  The bridge
+constrains only the population spectrum, so `λ̂_s = λ̂_{s+1}` remains admissible:
+the wrappers do not smuggle a sample eigengap back in.  Theorem 2's second
+conclusion now also exhibits the orthogonal `Ô` acting on the block's coordinate
+space and compares `V̂Ô` against the *supplied* population frame, rather than
+asserting that two unnamed frames of the same spans exist.
+
 ## Additional completed source material
 
 * the sharper residual-numerator forms of Theorem 2 that the paper says its
   proof establishes — `‖sin Θ‖_F ≤ ‖V̂Λ − ΣV̂‖_F / Δ` and the aligned form with
   the factor `2^{1/2}`;
 * corrected equation (4), with the printed polynomial refuted;
-* the refutation of Theorem 3's printed rank-boundary convention;
+* the refutation of Theorem 3's printed rank-boundary convention, and the
+  corrected boundary condition in singular-value notation;
 * direct right and left rank-one singular-vector corollaries;
 * exact operator/Frobenius minimum and aligned-frame constants;
 * all three Section 2 sharpness constructions, including the *published*
-  middle-block one;
+  middle-block one, over the full parameter range `0 < ε < 3` — which is
+  maximal, since at `ε = 3` the perturbed level `2+ε` merges with `5` and its
+  multiplicity jumps from `d` to `p−d`;
 * the Section 1 numerical illustration that Theorem 1's separation `δ` can
   vanish, together with the operator-level population gap at the same block;
 * the deterministic content of the Section 3 diagnosis: the Weyl recovery of a
@@ -59,12 +73,19 @@ checked in both directions.
 
 ## Remaining non-numbered source-fidelity work
 
-* optional wrappers whose hypotheses are literal contiguous matrix indices
-  `r..s` with the gap read off as `min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`, rather
-  than an index embedding plus an ordered eigenframe;
+* equation (1) — the `r = s = j` display of **Theorem 1** — has no wrapper with
+  a literal index and its *mixed* gap
+  `min(|λ̂_{j-1} − λⱼ|, |λ̂_{j+1} − λⱼ|)`.  The boundary-gap machinery does not
+  reach it: it converts a boundary condition on one sorted spectrum into an
+  intrinsic separation of that same spectrum, whereas equation (1) compares the
+  population eigenvalue against the **sample** spectrum, and with `λ̂ⱼ` repeated
+  the mixed exterior gap is zero.  A literal wrapper therefore needs a
+  simplicity hypothesis the source does not print at that display.  Theorem 1
+  itself is proved here in a strictly more general unitarily invariant interval
+  form;
 * migrate reusable results from this completion lane into canonical modules.
 
-None of these is a gap in a numbered result.
+Neither is a gap in a numbered result.
 
 ## Build guard
 
@@ -73,7 +94,7 @@ on 2026-08-02, so `lake build` compiles everything here and a regression cannot
 land unnoticed.  The library also carries `warningAsError` under the Mathlib
 standard linter set, matching the option set Tau Ceti's own `lean_lib` applies.
 
-## Census state (2026-08-14)
+## Census state (2026-08-15)
 
 `dev/yu-wang-samworth-2015-full-source-census.json`: **24 of 24 rows proved in
 the default build.**  The two rows that were short on 2026-08-13 are closed:
@@ -103,3 +124,29 @@ eigenvalue — the exact case removing the sample eigengap exists to cover.
 `compiled_exact`, because the printed convention they were claimed to match is
 false.  A census that reports `compiled_exact` for a statement it has not
 compared clause by clause with the printed one is worth less than no census.
+
+## Source-shape work of 2026-08-15
+
+Four things moved, none of them a new numbered result.
+
+1. **The source's indexing.**  `TauCeti.consecutiveEmb` and
+   `TauCeti.OrderedBlockBoundaryGap` state the paper's `r..s` block and its
+   two-sided boundary gap; `OrderedBlockBoundaryGap.indexGap` propagates it to
+   the intrinsic separation the general theorems consume, and antitonicity of
+   the sorted spectrum is the only mathematics in it.  Theorem 2's two
+   conclusions, both residual forms, Corollary 1 and Theorem 3 on both sides now
+   have statements in that shape.
+2. **The alignment.**  `TauCeti.frameComp hv O` is the matrix product `V̂Ô`, and
+   the aligned conclusions exhibit `Ô`.  A bundled linear isometry equivalence
+   of the coordinate space is exactly an element of `O(d)`;
+   `TauCeti.adjoint_comp_self_eq_id` spells that out as `ÔᵀÔ = I`.
+3. **The published sharpness range.**  `ε < 1` was an artifact of the first
+   proof.  The construction needs `2 < 2 + ε < 5`, and every lemma now carries
+   `0 < ε < 3`; `card_middleSharpnessSample_level_three` records the breakpoint.
+   The headline theorem also concludes the achieved distance `√(2d)`, so its
+   statement carries the sharpness claim its docstring makes.
+4. **The sample-degeneracy witness.**
+   `yuWangSamworth_corollary1_scalarSample` instantiates Corollary 1 at
+   `Σ = diag(1, 0)`, `Σ̂ = I/2`: every unit vector of the plane is an admissible
+   `v̂₁` and the corollary bounds each of them.  A statement pinning `v̂` to a
+   chosen eigenbasis of `Σ̂` would cover exactly one.

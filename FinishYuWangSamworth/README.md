@@ -23,7 +23,8 @@ each is stated at the printed generality:
    point of the paper — together with the sharper residual-numerator forms its
    proof establishes;
 3. Corollary 1, both displays, including the literal real sign-aligned bound;
-4. Theorem 3, right and left, including aligned frames, in its corrected form;
+4. Theorem 3, right and left, including aligned frames, in its corrected form,
+   and in the paper's own singular-value notation;
 5. Lemma A1 in a basis-free compression API;
 6. all three Section 2 sharpness examples, including the published middle-block
    construction.
@@ -32,6 +33,15 @@ It additionally exposes direct right and left rank-one singular-vector
 corollaries, the Section 1 numerical illustration that Theorem 1's separation
 can vanish, and the deterministic core of the Section 3 diagnosis of the
 statistical literature.
+
+Since 2026-08-15 the population-gap results are also available in the source's
+*shape*: a contiguous block `r..s` with the two-sided boundary gap
+`min(λ_{r-1} − λ_r, λ_s − λ_{s+1})` and the printed endpoint conventions, and an
+aligned conclusion that exhibits the orthogonal `Ô` and compares `V̂Ô` against
+the supplied population frame.  `Symmetric/Corollary1.lean` carries the rank-one
+case together with `yuWangSamworth_corollary1_scalarSample`, the witness that
+the sample eigenvector is genuinely arbitrary: for `Σ = diag(1, 0)` and
+`Σ̂ = I/2` every unit vector of the plane is admissible.
 
 ## Two source defects, both machine checked
 
@@ -74,7 +84,11 @@ construction.
 
 `Symmetric/MiddleBlockSharpness.lean` — the *published* construction, a middle
 block over three levels `5 > 3 > 1`, so that the population gap `min(5−3, 3−1)`
-is genuinely two-sided.  It proves the same printed conclusion, and it was the
+is genuinely two-sided, over the full parameter range `0 < ε < 3`.  That range is
+maximal: the model needs `2 < 2 + ε < 5` so that `2 + ε` is the *second* level of
+the sorted sample spectrum, and at `ε = 3` it merges with `5` and its
+multiplicity jumps from `d` to `p − d`.  It proves the same printed conclusion,
+and it was the
 harder of the two: its block sits in the middle of both spectra, so the
 branch-selection hypothesis cannot be produced by any "leading `d` eigenvectors"
 argument.  Closing it needed the position of an arbitrary eigenvalue level set
@@ -107,9 +121,11 @@ lake build FinishYuWangSamworth.Symmetric.OrthogonalSharpness
 lake build FinishYuWangSamworth.Symmetric.MiddleBlockSharpness
 lake build FinishYuWangSamworth.Symmetric.MixedGap
 lake build FinishYuWangSamworth.Symmetric.AngleIdentity
+lake build FinishYuWangSamworth.Symmetric.Corollary1
 lake build FinishYuWangSamworth.Appendix.Lemma5
 lake build FinishYuWangSamworth.Rectangular.RankOne
 lake build FinishYuWangSamworth.Rectangular.RankBoundary
+lake build FinishYuWangSamworth.Rectangular.SingularBlock
 lake build FinishYuWangSamworth
 ```
 
