@@ -33,8 +33,13 @@ endpoint conventions modelled by *vacuity* rather than by an extended real line:
 which there are none when `r = 0`.  That is exactly `λ_0 = +∞`, and likewise
 `λ_{p+1} = −∞` at the other end.
 
-Indices here are `0`-based, so the paper's `r ≤ j ≤ s` is `r ≤ j < r + d` and the
-paper's `s + 1` is `r + d`.
+The theorems below are stated in the source's own variables: `r`, `s`, and the
+block size `d` tied to them by `r + d = s + 1`, which is the paper's
+`d = s − r + 1` written without truncated subtraction.  `d` cannot be eliminated
+— it is the index type of the frames `V, V̂ : Fin d → E` — but it is pinned by
+that hypothesis, and both the gap and the bound are written at `r` and `s`.
+Indices are `0`-based, so the paper's `r ≤ j ≤ s` is `r ≤ j < r + d` and the
+paper's `s ≤ p` is `s + 1 ≤ n`.
 
 Nothing in this file constrains the *perturbed* spectrum, so the wrappers below
 still allow `λ̂_{r-1} = λ̂_r` and `λ̂_s = λ̂_{s+1}`: removing the sample eigengap is
@@ -42,16 +47,20 @@ the source's contribution and it survives the change of hypothesis.
 
 ## Main results
 
-* `TauCeti.consecutiveEmb`: the block `r, …, r + d - 1` as an index embedding.
+* `TauCeti.consecutiveEmb`: the block `r, …, s` as an index embedding.
 * `TauCeti.OrderedBlockBoundaryGap` and
   `TauCeti.OrderedBlockBoundaryGap.indexGap`: the source's two-sided boundary
-  hypothesis, and its propagation to the intrinsic separation.
+  hypothesis `Δ ≤ min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`, and its propagation to the
+  intrinsic separation.
 * `TauCeti.yuWangSamworth_sinTheta_block_le`,
   `TauCeti.yuWangSamworth_alignedFrame_block_le`: Theorem 2's two conclusions
   with the source's indexing and gap.
 * `TauCeti.yuWangSamworth_sinTheta_block_le_residual`,
   `TauCeti.yuWangSamworth_alignedFrame_block_le_residual`: the sharper residual
   forms with the same indexing.
+* `TauCeti.yuWangSamworth_alignedFrame_block_real_le`: over `ℝ`, the same
+  conclusion with `Ô` an element of `Matrix.orthogonalGroup (Fin d) ℝ` — every
+  symbol of the printed second conclusion.
 -/
 
 public section
@@ -95,29 +104,29 @@ theorem mem_range_consecutiveEmb {n d r : ℕ} (h : r + d ≤ n) (k : Fin n) :
 
 /-! ## The source's two-sided boundary gap -/
 
-/-- **The population boundary gap of the block `r, …, r + d - 1`**, exactly as
-printed: `Δ ≤ min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`.
+/-- **The population boundary gap of the block `r, …, s`**, exactly as printed:
+`Δ ≤ min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`.
 
 The printed conventions `λ_0 = +∞` and `λ_{p+1} = −∞` are modelled by vacuous
-quantification — when `r = 0` there is no index `q` with `q + 1 = r`, so the
-first clause is automatic, and when `r + d = n` there is no index `p` with
-`p = r + d`, so the second is.  No extended arithmetic is needed and the two
-endpoint cases require no separate theorem. -/
+quantification — when `r` is the first index there is no `q` with `q + 1 = r`, so
+the first clause is automatic, and when `s` is the last index there is no `p`
+with `p = s + 1`, so the second is.  No extended arithmetic is needed and the
+interior, top and bottom blocks require no separate theorems. -/
 def OrderedBlockBoundaryGap {n : ℕ} {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
-    (hn : finrank 𝕜 E = n) (r d : ℕ) (Δ : ℝ) : Prop :=
+    (hn : finrank 𝕜 E = n) (r s : ℕ) (Δ : ℝ) : Prop :=
   (∀ q p : Fin n, (q : ℕ) + 1 = r → (p : ℕ) = r →
       Δ ≤ hT.eigenvalues hn q - hT.eigenvalues hn p) ∧
-    (∀ q p : Fin n, (q : ℕ) + 1 = r + d → (p : ℕ) = r + d →
+    (∀ q p : Fin n, (q : ℕ) = s → (p : ℕ) = s + 1 →
       Δ ≤ hT.eigenvalues hn q - hT.eigenvalues hn p)
 
 /-- **The characteristic lemma.**  The body is not exposed; this is how a caller
 builds or uses the boundary gap. -/
 theorem orderedBlockBoundaryGap_iff {n : ℕ} {T : E →ₗ[𝕜] E} {hT : T.IsSymmetric}
-    {hn : finrank 𝕜 E = n} {r d : ℕ} {Δ : ℝ} :
-    OrderedBlockBoundaryGap hT hn r d Δ ↔
+    {hn : finrank 𝕜 E = n} {r s : ℕ} {Δ : ℝ} :
+    OrderedBlockBoundaryGap hT hn r s Δ ↔
       ((∀ q p : Fin n, (q : ℕ) + 1 = r → (p : ℕ) = r →
           Δ ≤ hT.eigenvalues hn q - hT.eigenvalues hn p) ∧
-        (∀ q p : Fin n, (q : ℕ) + 1 = r + d → (p : ℕ) = r + d →
+        (∀ q p : Fin n, (q : ℕ) = s → (p : ℕ) = s + 1 →
           Δ ≤ hT.eigenvalues hn q - hT.eigenvalues hn p)) :=
   Iff.rfl
 
@@ -125,15 +134,19 @@ namespace OrderedBlockBoundaryGap
 
 /-- **The two boundary gaps propagate to the whole complement.**
 
-The sorted eigenvalues are antitone, so an index below the block has eigenvalue
+The sorted eigenvalues are antitone, so an index above the block has eigenvalue
 at least `λ_{r-1}` while every selected eigenvalue is at most `λ_r`, and dually
-above the block.  This is the bridge from the source's hypothesis to the
+below the block.  This is the bridge from the source's hypothesis to the
 intrinsic separation the general theorems consume, and it is the only place the
-contiguity of the block is used. -/
-theorem indexGap {n d r : ℕ} {T : E →ₗ[𝕜] E}
+contiguity of the block is used.
+
+`hd : r + d = s + 1` is the paper's `d = s − r + 1`, written without truncated
+subtraction. -/
+theorem indexGap {n d r s : ℕ} {T : E →ₗ[𝕜] E}
     {hT : T.IsSymmetric} {hn : finrank 𝕜 E = n} {Δ : ℝ}
-    (h : OrderedBlockBoundaryGap hT hn r d Δ) (hrd : r + d ≤ n)
-    (i : Fin d) (k : Fin n) (hk : k ∉ Set.range (consecutiveEmb hrd)) :
+    (h : OrderedBlockBoundaryGap hT hn r s Δ) (hrd : r + d ≤ n)
+    (hd : r + d = s + 1) (i : Fin d) (k : Fin n)
+    (hk : k ∉ Set.range (consecutiveEmb hrd)) :
     Δ ≤ |hT.eigenvalues hn (consecutiveEmb hrd i) - hT.eigenvalues hn k| := by
   have hi : (i : ℕ) < d := i.isLt
   have hkn : (k : ℕ) < n := k.isLt
@@ -152,9 +165,8 @@ theorem indexGap {n d r : ℕ} {T : E →ₗ[𝕜] E}
     exact le_abs.mpr (Or.inr (by linarith))
   · -- `k` sits below the block: `λ_{e i} ≥ λ_s ≥ λ_{s+1} + Δ ≥ λ_k + Δ`.
     have hkge : r + d ≤ (k : ℕ) := by omega
-    obtain ⟨q, hq⟩ : ∃ q : Fin n, (q : ℕ) + 1 = r + d :=
-      ⟨⟨r + d - 1, by omega⟩, show r + d - 1 + 1 = r + d by omega⟩
-    obtain ⟨p, hp⟩ : ∃ p : Fin n, (p : ℕ) = r + d := ⟨⟨r + d, by omega⟩, rfl⟩
+    obtain ⟨q, hq⟩ : ∃ q : Fin n, (q : ℕ) = s := ⟨⟨s, by omega⟩, rfl⟩
+    obtain ⟨p, hp⟩ : ∃ p : Fin n, (p : ℕ) = s + 1 := ⟨⟨s + 1, by omega⟩, rfl⟩
     have hbound := h.2 q p hq hp
     have h1 : hT.eigenvalues hn q ≤ hT.eigenvalues hn (consecutiveEmb hrd i) :=
       hT.eigenvalues_antitone hn (Fin.le_def.mpr (by omega))
@@ -162,17 +174,17 @@ theorem indexGap {n d r : ℕ} {T : E →ₗ[𝕜] E}
       hT.eigenvalues_antitone hn (Fin.le_def.mpr (by omega))
     exact le_abs.mpr (Or.inl (by linarith))
 
-/-- **The single-eigenvector case of the propagation.**  With `d = 1` the block is
-the single index `j`, the boundary hypothesis is the source's
+/-- **The single-eigenvector case of the propagation.**  At `r = s = j` the block
+is the single index `j`, the boundary hypothesis is the source's
 `Δⱼ = min(λ_{j-1} − λⱼ, λⱼ − λ_{j+1})`, and it separates `λⱼ` from every other
 sorted eigenvalue — the hypothesis Corollary 1 is stated with. -/
 theorem gap_of_singleton {n : ℕ} {T : E →ₗ[𝕜] E}
     {hT : T.IsSymmetric} {hn : finrank 𝕜 E = n} {Δ : ℝ} {j : Fin n}
-    (h : OrderedBlockBoundaryGap hT hn (j : ℕ) 1 Δ) (k : Fin n) (hk : k ≠ j) :
+    (h : OrderedBlockBoundaryGap hT hn (j : ℕ) (j : ℕ) Δ) (k : Fin n) (hk : k ≠ j) :
     Δ ≤ |hT.eigenvalues hn j - hT.eigenvalues hn k| := by
   have hrd : (j : ℕ) + 1 ≤ n := j.isLt
   have hj0 : consecutiveEmb hrd (0 : Fin 1) = j := Fin.ext (by simp)
-  have hgap := h.indexGap hrd 0 k (by
+  have hgap := h.indexGap hrd rfl 0 k (by
     rw [mem_range_consecutiveEmb hrd k]
     rintro ⟨h1, h2⟩
     exact hk (Fin.ext (by omega)))
@@ -180,74 +192,121 @@ theorem gap_of_singleton {n : ℕ} {T : E →ₗ[𝕜] E}
 
 end OrderedBlockBoundaryGap
 
-/-! ## Theorem 2 with the source's indexing -/
+/-! ## Theorem 2 with the source's indexing
+
+The four statements below fix `r ≤ s` and `d = s − r + 1`, written `r + d = s + 1`
+to avoid truncated subtraction, and take the gap in the printed form
+`Δ ≤ min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`.  The paper's `r ≤ s` is exactly `1 ≤ d`
+here and is not needed for the conclusion: at `d = 0` the frames are empty and
+the bound is trivial, so it is not imposed. -/
 
 /-- **Yu--Wang--Samworth Theorem 2, first conclusion, as printed.**
 
-`1 ≤ r ≤ s ≤ p` (here `0`-based: the block is `r, …, r + d - 1`), `V` and `V̂`
-arbitrary orthonormal eigenframes at those indices, no sample separation
-whatever, and only the two-sided *population* boundary gap
-`Δ ≤ min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`.  Then
+`r ≤ s`, `d = s − r + 1`, `V` and `V̂` arbitrary orthonormal eigenframes at the
+indices `r, …, s`, no sample separation whatever, and only the two-sided
+*population* boundary gap `Δ ≤ min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`.  Then
 
-`‖sin Θ(V̂, V)‖_F ≤ 2 min(√d ‖Σ̂ − Σ‖_op, ‖Σ̂ − Σ‖_F) / Δ`. -/
+`‖sin Θ(V̂, V)‖_F ≤ 2 min(√d ‖Σ̂ − Σ‖_op, ‖Σ̂ − Σ‖_F) / Δ`.
+
+Indices are `0`-based, so `s + 1 ≤ n` is the paper's `s ≤ p`. -/
 theorem yuWangSamworth_sinTheta_block_le
     {A B : E →ₗ[𝕜] E} {hA : A.IsSymmetric} {hB : B.IsSymmetric}
-    {n d r : ℕ} {hn : finrank 𝕜 E = n} (hrd : r + d ≤ n) {u v : Fin d → E}
-    (hu : IsOrderedEigenframe hA hn (consecutiveEmb hrd) u)
-    (hv : IsOrderedEigenframe hB hn (consecutiveEmb hrd) v)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r d Δ) :
+    {n d r s : ℕ} {hn : finrank 𝕜 E = n} (hsn : s + 1 ≤ n) (hd : r + d = s + 1)
+    {u v : Fin d → E}
+    (hu : IsOrderedEigenframe hA hn (consecutiveEmb (hd.trans_le hsn)) u)
+    (hv : IsOrderedEigenframe hB hn (consecutiveEmb (hd.trans_le hsn)) v)
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r s Δ) :
     sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) ≤
       2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
         (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ :=
-  yuWangSamworth_sinTheta_frame_le hu hv hΔ (hgap.indexGap hrd)
+  yuWangSamworth_sinTheta_frame_le hu hv hΔ (hgap.indexGap _ hd)
 
 /-- **Yu--Wang--Samworth Theorem 2, second conclusion, as printed.**
 With the same hypotheses there is an orthogonal `Ô` on the block's coordinate
 space with `‖V̂ Ô − V‖_F ≤ 2^{3/2} min(√d ‖Σ̂ − Σ‖_op, ‖Σ̂ − Σ‖_F) / Δ`. -/
 theorem yuWangSamworth_alignedFrame_block_le
     {A B : E →ₗ[𝕜] E} {hA : A.IsSymmetric} {hB : B.IsSymmetric}
-    {n d r : ℕ} {hn : finrank 𝕜 E = n} (hrd : r + d ≤ n) {u v : Fin d → E}
-    (hu : IsOrderedEigenframe hA hn (consecutiveEmb hrd) u)
-    (hv : IsOrderedEigenframe hB hn (consecutiveEmb hrd) v)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r d Δ) :
+    {n d r s : ℕ} {hn : finrank 𝕜 E = n} (hsn : s + 1 ≤ n) (hd : r + d = s + 1)
+    {u v : Fin d → E}
+    (hu : IsOrderedEigenframe hA hn (consecutiveEmb (hd.trans_le hsn)) u)
+    (hv : IsOrderedEigenframe hB hn (consecutiveEmb (hd.trans_le hsn)) v)
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r s Δ) :
     ∃ O : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d),
       (∀ x y, ⟪O x, O y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
         Real.sqrt (∑ i, ‖frameComp hv.orthonormal O i - u i‖ ^ 2) ≤
           2 * Real.sqrt 2 *
             min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
               (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ :=
-  yuWangSamworth_alignedFrame_le hu hv hΔ (hgap.indexGap hrd)
+  yuWangSamworth_alignedFrame_le hu hv hΔ (hgap.indexGap _ hd)
 
 /-- **The residual form of Theorem 2 with the source's indexing.**
 `Δ ‖sin Θ(V̂, V)‖_F ≤ ‖V̂ Λ − Σ V̂‖_F`, with `Λ = diag(λ_r, …, λ_s)` the
 *population* eigenvalues of the block. -/
 theorem yuWangSamworth_sinTheta_block_le_residual
     {A B : E →ₗ[𝕜] E} {hA : A.IsSymmetric} {hB : B.IsSymmetric}
-    {n d r : ℕ} {hn : finrank 𝕜 E = n} (hrd : r + d ≤ n) {u v : Fin d → E}
-    (hu : IsOrderedEigenframe hA hn (consecutiveEmb hrd) u)
-    (hv : IsOrderedEigenframe hB hn (consecutiveEmb hrd) v)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r d Δ) :
+    {n d r s : ℕ} {hn : finrank 𝕜 E = n} (hsn : s + 1 ≤ n) (hd : r + d = s + 1)
+    {u v : Fin d → E}
+    (hu : IsOrderedEigenframe hA hn (consecutiveEmb (hd.trans_le hsn)) u)
+    (hv : IsOrderedEigenframe hB hn (consecutiveEmb (hd.trans_le hsn)) v)
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r s Δ) :
     sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
         (Submodule.span 𝕜 (Set.range v)) ≤
-      Real.sqrt (∑ i, ‖(hA.eigenvalues hn (consecutiveEmb hrd i) : 𝕜) • v i - A (v i)‖ ^ 2)
+      Real.sqrt (∑ i,
+        ‖(hA.eigenvalues hn (consecutiveEmb (hd.trans_le hsn) i) : 𝕜) • v i - A (v i)‖ ^ 2)
         / Δ :=
-  yuWangSamworth_sinTheta_le_residual hu hv hΔ (hgap.indexGap hrd)
+  yuWangSamworth_sinTheta_le_residual hu hv hΔ (hgap.indexGap _ hd)
 
 /-- **The residual form of the aligned conclusion with the source's indexing.**
 `‖V̂ Ô − V‖_F ≤ 2^{1/2} ‖V̂ Λ − Σ V̂‖_F / Δ`. -/
 theorem yuWangSamworth_alignedFrame_block_le_residual
     {A B : E →ₗ[𝕜] E} {hA : A.IsSymmetric} {hB : B.IsSymmetric}
-    {n d r : ℕ} {hn : finrank 𝕜 E = n} (hrd : r + d ≤ n) {u v : Fin d → E}
-    (hu : IsOrderedEigenframe hA hn (consecutiveEmb hrd) u)
-    (hv : IsOrderedEigenframe hB hn (consecutiveEmb hrd) v)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r d Δ) :
+    {n d r s : ℕ} {hn : finrank 𝕜 E = n} (hsn : s + 1 ≤ n) (hd : r + d = s + 1)
+    {u v : Fin d → E}
+    (hu : IsOrderedEigenframe hA hn (consecutiveEmb (hd.trans_le hsn)) u)
+    (hv : IsOrderedEigenframe hB hn (consecutiveEmb (hd.trans_le hsn)) v)
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r s Δ) :
     ∃ O : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d),
       (∀ x y, ⟪O x, O y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
         Real.sqrt (∑ i, ‖frameComp hv.orthonormal O i - u i‖ ^ 2) ≤
           Real.sqrt 2 *
             Real.sqrt (∑ i,
-              ‖(hA.eigenvalues hn (consecutiveEmb hrd i) : 𝕜) • v i - A (v i)‖ ^ 2) / Δ :=
-  yuWangSamworth_alignedFrame_le_residual hu hv hΔ (hgap.indexGap hrd)
+              ‖(hA.eigenvalues hn (consecutiveEmb (hd.trans_le hsn) i) : 𝕜) • v i
+                - A (v i)‖ ^ 2) / Δ :=
+  yuWangSamworth_alignedFrame_le_residual hu hv hΔ (hgap.indexGap _ hd)
+
+/-! ## The fully literal real statement -/
+
+section Real
+
+variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+  [FiniteDimensional ℝ F]
+
+/-- **Yu--Wang--Samworth Theorem 2, second conclusion, exactly as printed.**
+
+Real symmetric `Σ`, `Σ̂`; a block `r, …, s` with `d = s − r + 1`; arbitrary
+orthonormal eigenframes `V`, `V̂` at those indices with no sample separation; and
+the two-sided population boundary gap `Δ ≤ min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`.
+Then there is an orthogonal matrix `Ô ∈ O(d)` with
+
+`‖V̂ Ô − V‖_F ≤ 2^{3/2} min(√d ‖Σ̂ − Σ‖_op, ‖Σ̂ − Σ‖_F) / Δ`,
+
+the `i`-th column of `V̂ Ô` being `∑ⱼ Ôⱼᵢ v̂ⱼ`.  Every symbol of the printed
+conclusion appears here; the `RCLike` forms above are its generalizations. -/
+theorem yuWangSamworth_alignedFrame_block_real_le
+    {A B : F →ₗ[ℝ] F} {hA : A.IsSymmetric} {hB : B.IsSymmetric}
+    {n d r s : ℕ} {hn : finrank ℝ F = n} (hsn : s + 1 ≤ n) (hd : r + d = s + 1)
+    {u v : Fin d → F}
+    (hu : IsOrderedEigenframe hA hn (consecutiveEmb (hd.trans_le hsn)) u)
+    (hv : IsOrderedEigenframe hB hn (consecutiveEmb (hd.trans_le hsn)) v)
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r s Δ) :
+    ∃ O : Matrix (Fin d) (Fin d) ℝ, O ∈ Matrix.orthogonalGroup (Fin d) ℝ ∧
+      Real.sqrt (∑ i, ‖(∑ j, O j i • v j) - u i‖ ^ 2) ≤
+        2 * Real.sqrt 2 *
+          min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
+            (UnitarilyInvariantSeminorm.frobenius ℝ F (B - A)) / Δ :=
+  yuWangSamworth_alignedFrame_real_le hu hv hΔ (hgap.indexGap _ hd)
+
+end Real
 
 end TauCeti

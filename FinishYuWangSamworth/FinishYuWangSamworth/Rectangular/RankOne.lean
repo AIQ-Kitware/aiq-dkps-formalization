@@ -8,10 +8,11 @@ import FinishYuWangSamworth.Rectangular.Theorem4
 /-!
 # Rank-one singular-vector corollaries
 
-These are the direct singular-vector analogues of Corollary 3.  They are not
-separately numbered in the paper, but are a common forward-citation use of
-Theorem 4.  The proof reuses the existing rank-one symmetric theorem on the
-right and left Gram operators, then applies the exact Gram perturbation bound.
+These are the direct singular-vector analogues of Corollary 1 (Corollary 3 in
+the 2014 preprint).  They are not separately numbered in the paper, but are a
+common forward-citation use of Theorem 3 (Theorem 4 in that preprint).  The
+proof reuses the existing rank-one symmetric theorem on the right and left Gram
+operators, then applies the exact Gram perturbation bound.
 -/
 
 namespace TauCeti

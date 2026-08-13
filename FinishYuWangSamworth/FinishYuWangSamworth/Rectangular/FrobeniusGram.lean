@@ -91,7 +91,8 @@ theorem frobenius_comp_rectangular_le_opNorm_mul
   rwa [hcomp] at h'
 
 /-- Two-sided rectangular Frobenius ideal inequality.  This is the reusable
-operator-ideal statement behind both the Gram estimates and Appendix Lemma 5. -/
+operator-ideal statement behind both the Gram estimates and Appendix Lemma A1
+(Lemma 5 in the 2014 preprint). -/
 theorem rectangularFrobenius_twoSided_comp_le
     {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
       [FiniteDimensional 𝕜 G]
@@ -227,7 +228,7 @@ theorem sum_opNorm_le_paperCoefficient (A Â : E →ₗ[𝕜] F) :
   linarith
 
 /-- Operator-norm perturbation bound with the exact coefficient displayed in
-Yu--Wang--Samworth Theorem 4. -/
+Yu--Wang--Samworth Theorem 3 (Theorem 4 in the 2014 preprint). -/
 theorem opNorm_rightGram_sub_le_paperCoefficient
     (A Â : E →ₗ[𝕜] F) :
     ‖(rightGram Â - rightGram A).toContinuousLinearMap‖ ≤
@@ -250,7 +251,8 @@ theorem opNorm_leftGram_sub_le_paperCoefficient
     (sum_opNorm_le_paperCoefficient A Â) (norm_nonneg _)
 
 /-- Frobenius perturbation bound for the right Gram operator with the exact
-coefficient displayed in Yu--Wang--Samworth Theorem 4. -/
+coefficient displayed in Yu--Wang--Samworth Theorem 3 (Theorem 4 in the 2014
+preprint). -/
 theorem frobenius_rightGram_sub_le_paperCoefficient
     (A Â : E →ₗ[𝕜] F) :
     UnitarilyInvariantSeminorm.frobenius 𝕜 E

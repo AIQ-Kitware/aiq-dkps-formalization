@@ -55,7 +55,7 @@ theorem yuWangSamworth_corollary1_sinTheta_le
     (hu : ‖u‖ = 1) (hv : ‖v‖ = 1)
     (hAu : A u = (hA.eigenvalues hn j : 𝕜) • u)
     (hBv : B v = (hB.eigenvalues hn j : 𝕜) • v)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn (j : ℕ) 1 Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn (j : ℕ) (j : ℕ) Δ) :
     sinThetaFrobenius (Submodule.span 𝕜 {u}) (Submodule.span 𝕜 {v}) ≤
       2 * ‖(B - A).toContinuousLinearMap‖ / Δ :=
   yuWangSamworth_eigenvector_frame_sinTheta_le hu hv hAu hBv hΔ
@@ -82,7 +82,7 @@ theorem yuWangSamworth_corollary1_real_le
     (hAu : A u = (hA.eigenvalues hn j : ℝ) • u)
     (hBv : B v = (hB.eigenvalues hn j : ℝ) • v)
     (hsign : 0 ≤ ⟪v, u⟫)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn (j : ℕ) 1 Δ) :
+    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn (j : ℕ) (j : ℕ) Δ) :
     ‖v - u‖ ≤ 2 * Real.sqrt 2 * ‖(B - A).toContinuousLinearMap‖ / Δ :=
   yuWangSamworth_eigenvector_real_le hu hv hAu hBv hsign hΔ
     fun k hk => hgap.gap_of_singleton k hk
@@ -194,7 +194,7 @@ theorem yuWangSamworth_corollary1_scalarSample (w : E) (hw : ‖w‖ = 1) :
     rw [scalarSampleSample, basisDiagonal_const, eigenvalues_scalarSampleSample b]
   -- The population boundary gap at `j = 0` is `λ₁ − λ₂ = 1`.
   have hgap : OrderedBlockBoundaryGap
-      (isSymmetric_basisDiagonal b scalarSamplePopulationData) hn 0 1 1 := by
+      (isSymmetric_basisDiagonal b scalarSamplePopulationData) hn 0 0 1 := by
     refine orderedBlockBoundaryGap_iff.mpr ⟨fun q p hq _ => absurd hq (by omega), ?_⟩
     intro q p hq hp
     have hq0 : q = 0 := Fin.ext (by omega)

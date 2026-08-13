@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
+public import Mathlib.LinearAlgebra.UnitaryGroup
 public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
 
 /-! # The one-sided Procrustes alignment `V̂ Ô`
@@ -36,6 +37,10 @@ spells that out as `Ôᵀ Ô = I`.
 * `TauCeti.yuWangSamworth_alignedFrame_le` and
   `TauCeti.yuWangSamworth_alignedFrame_le_residual`: Theorem 2's second
   conclusion and its sharper residual form, both with an explicit `Ô`.
+* `TauCeti.frameAlignMatrix` and
+  `TauCeti.yuWangSamworth_alignedFrame_real_le`: over `ℝ`, the same conclusion
+  with `Ô` an honest element of `Matrix.orthogonalGroup (Fin d) ℝ` and the
+  columns of `V̂Ô` written as the matrix products `∑ⱼ Ôⱼᵢ v̂ⱼ`.
 -/
 
 public section
@@ -193,5 +198,82 @@ theorem yuWangSamworth_alignedFrame_le_residual
     _ = Real.sqrt 2 *
           Real.sqrt (∑ i, ‖(hA.eigenvalues hn (e i) : 𝕜) • v i - A (v i)‖ ^ 2) / Δ := by
         ring
+
+/-! ## Over `ℝ`: `Ô` as an element of `O(d)`
+
+The source is a real-matrix paper, and its `Ô` is an orthogonal matrix.  A
+bundled `EuclideanSpace ℝ (Fin d) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin d)` is exactly
+that, but a reader should not have to know it, so the real statement below
+produces the matrix itself, together with its membership in
+`Matrix.orthogonalGroup (Fin d) ℝ`. -/
+
+section Real
+
+variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+  [FiniteDimensional ℝ F]
+
+/-- **The matrix of a coordinate isometry** in the standard basis:
+`Ôⱼᵢ = (Ô eᵢ)ⱼ`.  Over `ℝ` this is the paper's orthogonal matrix. -/
+@[expose]
+noncomputable def frameAlignMatrix
+    (O : EuclideanSpace ℝ (Fin d) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin d)) :
+    Matrix (Fin d) (Fin d) ℝ :=
+  Matrix.of fun j i => O (EuclideanSpace.single i 1) j
+
+@[simp] theorem frameAlignMatrix_apply
+    (O : EuclideanSpace ℝ (Fin d) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin d)) (j i : Fin d) :
+    frameAlignMatrix O j i = O (EuclideanSpace.single i 1) j := rfl
+
+/-- **`Ô ∈ O(d)`.**  The columns of `frameAlignMatrix O` are the images of an
+orthonormal basis under an isometry, so `ÔᵀÔ = I`. -/
+theorem frameAlignMatrix_mem_orthogonalGroup
+    (O : EuclideanSpace ℝ (Fin d) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin d)) :
+    frameAlignMatrix O ∈ Matrix.orthogonalGroup (Fin d) ℝ := by
+  refine (Matrix.mem_orthogonalGroup_iff' (Fin d) ℝ).mpr ?_
+  ext i k
+  have hO := O.inner_map_map (EuclideanSpace.single i (1 : ℝ))
+    (EuclideanSpace.single k (1 : ℝ))
+  have hsingle : ⟪(EuclideanSpace.single i (1 : ℝ)),
+      (EuclideanSpace.single k (1 : ℝ))⟫_ℝ = if i = k then 1 else 0 :=
+    orthonormal_iff_ite.mp EuclideanSpace.orthonormal_single i k
+  rw [Matrix.mul_apply, Matrix.one_apply, ← hsingle, ← hO, PiLp.inner_apply]
+  exact Finset.sum_congr rfl fun j _ => by
+    simp [Matrix.transpose_apply, RCLike.inner_apply, mul_comm]
+
+omit [FiniteDimensional ℝ F] in
+/-- The columns of `V̂Ô` in matrix notation. -/
+theorem frameComp_eq_sum_frameAlignMatrix {v : Fin d → F} (hv : Orthonormal ℝ v)
+    (O : EuclideanSpace ℝ (Fin d) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin d)) (i : Fin d) :
+    frameComp hv O i = ∑ j, frameAlignMatrix O j i • v j :=
+  frameComp_apply hv O i
+
+/-- **Yu--Wang--Samworth Theorem 2, second conclusion, over `ℝ` with `Ô ∈ O(d)`.**
+
+The literal printed statement: there is an orthogonal `d × d` matrix `Ô` with
+
+`‖V̂ Ô − V‖_F ≤ 2^{3/2} min(√d ‖Σ̂ − Σ‖_op, ‖Σ̂ − Σ‖_F) / Δ`,
+
+where the `i`-th column of `V̂ Ô` is `∑ⱼ Ôⱼᵢ v̂ⱼ` and `V` is the supplied
+population frame.  This is `yuWangSamworth_alignedFrame_le` at `𝕜 = ℝ`, with the
+coordinate isometry replaced by its matrix. -/
+theorem yuWangSamworth_alignedFrame_real_le
+    {A B : F →ₗ[ℝ] F} {hA : A.IsSymmetric} {hB : B.IsSymmetric}
+    {n : ℕ} {hn : finrank ℝ F = n} {e : Fin d ↪ Fin n} {u v : Fin d → F}
+    (hu : IsOrderedEigenframe hA hn e u) (hv : IsOrderedEigenframe hB hn e v)
+    {Δ : ℝ} (hΔ : 0 < Δ)
+    (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
+      Δ ≤ |hA.eigenvalues hn (e i) - hA.eigenvalues hn k|) :
+    ∃ O : Matrix (Fin d) (Fin d) ℝ, O ∈ Matrix.orthogonalGroup (Fin d) ℝ ∧
+      Real.sqrt (∑ i, ‖(∑ j, O j i • v j) - u i‖ ^ 2) ≤
+        2 * Real.sqrt 2 *
+          min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
+            (UnitarilyInvariantSeminorm.frobenius ℝ F (B - A)) / Δ := by
+  obtain ⟨O, -, hbound⟩ := yuWangSamworth_alignedFrame_le hu hv hΔ hgap
+  refine ⟨frameAlignMatrix O, frameAlignMatrix_mem_orthogonalGroup O, ?_⟩
+  have hcols : ∀ i, (∑ j, frameAlignMatrix O j i • v j) = frameComp hv.orthonormal O i :=
+    fun i => (frameComp_eq_sum_frameAlignMatrix hv.orthonormal O i).symm
+  simpa only [hcols] using hbound
+
+end Real
 
 end TauCeti
