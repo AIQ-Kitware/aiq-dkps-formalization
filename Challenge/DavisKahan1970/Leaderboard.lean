@@ -7,8 +7,13 @@ results that make the scope and sharpness of the formalization visible.
 
 Four comparator targets are intentionally absent from the production side.
 The literal infinite-dimensional ambient `tan Theta` statement is challenged by
-a source-hypothesis pole counterexample, rather than by silently adding the later
-crossed-defect condition (3.5).  The directed residual `tan 2Theta` statement
+a source-hypothesis witness exhibiting a right-angle ambient component, which
+shows that the crossed-defect condition (3.5) — introduced only in Section 3 and
+standing thereafter — is a substantive qualification that the Section 2 display
+does not carry.  It is a vacuity/nonvacuity witness, not a counterexample to the
+counted result; the repository's reading of that printed statement is recorded
+under `nonlocal_source_interpretation` for `S2-tan-theta` in
+`dev/davis-kahan-1970-formalization-result-inventory.json`.  The directed residual `tan 2Theta` statement
 still lacks one source-facing arbitrary-UI-norm wrapper from only the printed
 hypotheses.  Finally, the newly proved ambient `tan 2Theta` inequality derives
 pole exclusion internally, but its source-hypothesis pole theorem is not yet
@@ -73,7 +78,7 @@ theorem projectorDifference_restrictionSpectra_opNorm
     {A B : H →L[ℂ] H} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U W : Submodule ℂ H} [U.HasOrthogonalProjection]
     [W.HasOrthogonalProjection]
-    (hU : Reduces A U) (hW : Reduces B W)
+    (hU : A.Reduces U) (hW : B.Reduces W)
     {c g : ℝ} (hg : 0 < g)
     (hUhi : spectrum ℝ (A.restrict hU.1) ⊆ Set.Ici (c + g))
     (hUlo : spectrum ℝ (A.restrict hU.2) ⊆ Set.Iic c)
