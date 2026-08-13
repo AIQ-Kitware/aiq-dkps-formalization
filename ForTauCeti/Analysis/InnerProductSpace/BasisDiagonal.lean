@@ -147,6 +147,16 @@ theorem finrank_eigenspace_basisDiagonal (b : OrthonormalBasis ι 𝕜 E)
   ext i
   simp
 
+/-- **A constant diagonal is a scalar.**  `basisDiagonal b (fun _ => c) = c • id`,
+so *every* vector is an eigenvector — the extreme case of a repeated
+eigenvalue. -/
+theorem basisDiagonal_const (b : OrthonormalBasis ι 𝕜 E) (c : ℝ) (x : E) :
+    basisDiagonal b (fun _ => c) x = (c : 𝕜) • x := by
+  refine b.repr.injective ?_
+  ext i
+  rw [repr_basisDiagonal, map_smul]
+  simp [RCLike.real_smul_eq_coe_mul]
+
 /-- **A bound on the data is a bound on the spectrum.**  Every eigenvalue of a
 diagonal operator is one of its coefficients. -/
 theorem le_of_hasEigenvalue_basisDiagonal (b : OrthonormalBasis ι 𝕜 E)
@@ -253,6 +263,51 @@ theorem card_filter_lt_eigenvalues_basisDiagonal {n : ℕ}
     {i : Fin n | α < hsym.eigenvalues hn i}
   rw [hspan, b.finrank_spanIndices_set {i : ι | α < c i}] at h1
   simpa using h1.symm
+
+open scoped Classical in
+/-- **The sorted eigenvalue at a given index, by counting alone.**
+
+`μ` occupies the sorted positions `[m, m + k)` where `m` is the number of
+coefficients above `μ` and `k` the number equal to it, so any index in that range
+carries eigenvalue `μ`.  This is the computational form of
+`LinearMap.IsSymmetric.eigenvalues_level_eq_Ico` for a diagonal operator: it
+identifies a specific entry of Mathlib's sorted list without exhibiting the
+sorting permutation, which is what a concrete example needs in order to state an
+ordered-eigenframe hypothesis. -/
+theorem eigenvalues_basisDiagonal_eq_of_card {n : ℕ} (b : OrthonormalBasis ι 𝕜 E)
+    (c : ι → ℝ) (hn : finrank 𝕜 E = n) (μ : ℝ) (i : Fin n)
+    (hlo : ({j | μ < c j} : Finset ι).card ≤ (i : ℕ))
+    (hhi : (i : ℕ) < ({j | μ < c j} : Finset ι).card
+      + ({j | (c j : 𝕜) = ((μ : ℝ) : 𝕜)} : Finset ι).card) :
+    (isSymmetric_basisDiagonal b c).eigenvalues hn i = μ := by
+  classical
+  have hsym := isSymmetric_basisDiagonal b c
+  have hmem : i ∈ {k : Fin n | hsym.eigenvalues hn k = μ} := by
+    rw [hsym.eigenvalues_level_eq_Ico hn μ]
+    simp only [Set.mem_ofPred_eq]
+    rw [card_filter_lt_eigenvalues_basisDiagonal b c hn μ,
+      finrank_eigenspace_basisDiagonal b c ((μ : ℝ) : 𝕜)]
+    exact ⟨hlo, hhi⟩
+  simpa using hmem
+
+open scoped Classical in
+/-- **The sorted eigenvalues of a scalar operator are all equal to its scalar.**
+The extreme degenerate case: `c • id` has one eigenvalue of full multiplicity, so
+*every* orthonormal family is an ordered eigenframe for it. -/
+theorem eigenvalues_basisDiagonal_const {n : ℕ} (b : OrthonormalBasis ι 𝕜 E)
+    (c : ℝ) (hn : finrank 𝕜 E = n) (i : Fin n) :
+    (isSymmetric_basisDiagonal b fun _ => c).eigenvalues hn i = c := by
+  classical
+  have hcard : Fintype.card ι = n := by
+    rw [← hn, Module.finrank_eq_card_basis b.toBasis]
+  have habove : ({j | c < (fun _ : ι => c) j} : Finset ι).card = 0 := by
+    simp
+  have hlevel : ({j | (((fun _ : ι => c) j : ℝ) : 𝕜) = ((c : ℝ) : 𝕜)} : Finset ι).card
+      = Fintype.card ι := by
+    simp
+  refine eigenvalues_basisDiagonal_eq_of_card b _ hn c i (by rw [habove]; exact Nat.zero_le _) ?_
+  rw [habove, hlevel, hcard, Nat.zero_add]
+  exact i.isLt
 
 end FiniteDimensional
 

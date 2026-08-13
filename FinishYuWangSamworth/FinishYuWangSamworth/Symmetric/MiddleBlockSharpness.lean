@@ -36,6 +36,20 @@ population block sits at coordinates `p-2d …p-d-1` while the perturbed block,
 which occupies the same *ordered* positions because `2+ε` is the second largest
 sample eigenvalue, sits at coordinates `p-d …p-1`.
 
+## The parameter range
+
+Everything below is proved for the full range `0 < ε < 3`, and that range is
+maximal.  The construction needs exactly `2 < 2 + ε < 5`: the strict inequality
+on the right is what puts `2+ε` *second* in the sorted sample spectrum, so that
+the perturbed block occupies the same ordered positions as the population block
+of threes, and the strict inequality on the left is what separates it from the
+`d` sample eigenvalues equal to `2`.  At `ε = 3` the level `2+ε` merges with the
+leading level `5` and its multiplicity jumps from `d` to `p-d`, which
+`card_middleSharpnessSample_level_three` records; at `ε = 0` it merges downwards
+with the `2`s instead.  Neither endpoint is a corresponding eigenblock of
+dimension `d`, so neither is a counterexample to the sharpness claim — the
+construction simply stops describing what it claims to describe.
+
 As in the preprint example the model is stated over an arbitrary orthonormal
 basis of an arbitrary finite-dimensional `RCLike` inner product space, which
 covers the paper's real `p × p` matrices at `EuclideanSpace ℝ (Fin p)`.
@@ -111,7 +125,7 @@ theorem card_middleSharpnessPopulation_gt (hdp : 2 * d ≤ p) :
 open scoped Classical in
 /-- The perturbed eigenvalues strictly above `2+ε` are the same leading
 `p - 2d` indices — which is why the two blocks correspond. -/
-theorem card_middleSharpnessSample_gt (hε : 0 < ε) (hε1 : ε < 1) (hdp : 2 * d ≤ p) :
+theorem card_middleSharpnessSample_gt (hε : 0 < ε) (hε1 : ε < 3) (hdp : 2 * d ≤ p) :
     ({i | (2 + ε : ℝ) < middleSharpnessSampleData p d ε i} : Finset (Fin p)).card
       = p - 2 * d := by
   classical
@@ -149,7 +163,7 @@ theorem card_middleSharpnessPopulation_level (hdp : 2 * d ≤ p) :
 
 open scoped Classical in
 /-- The perturbed level set at `2+ε` is the trailing `d` indices. -/
-theorem card_middleSharpnessSample_level (hε : 0 < ε) (hε1 : ε < 1) (hdp : 2 * d ≤ p) :
+theorem card_middleSharpnessSample_level (hε : 0 < ε) (hε1 : ε < 3) (hdp : 2 * d ≤ p) :
     ({i | ((middleSharpnessSampleData p d ε i : ℝ) : 𝕜) = ((2 + ε : ℝ) : 𝕜)} :
       Finset (Fin p)).card = d := by
   classical
@@ -165,6 +179,35 @@ theorem card_middleSharpnessSample_level (hε : 0 < ε) (hε1 : ε < 1) (hdp : 2
     · exact iff_of_false (by linarith) (by omega)
     · exact iff_of_true rfl ⟨by omega, i.2⟩
   rw [hset, card_filter_val_Ico p (p - d) p le_rfl]
+  omega
+
+open scoped Classical in
+/-- **The upper endpoint `ε = 3` breaks the construction.**
+
+At `ε = 3` the perturbed level `2+ε` coincides with the leading level `5`, so the
+level set is no longer the trailing `d` indices but the `p-d` indices outside the
+middle range.  Its multiplicity therefore differs from the population block's `d`
+and `correspondingEigenblock_basisDiagonal_level` no longer applies: the range
+`0 < ε < 3` used throughout this file is the exact range in which the published
+model means what it says, not a convenience. -/
+theorem card_middleSharpnessSample_level_three (hdp : 2 * d ≤ p) :
+    ({i | ((middleSharpnessSampleData p d 3 i : ℝ) : 𝕜) = ((2 + 3 : ℝ) : 𝕜)} :
+      Finset (Fin p)).card = p - d := by
+  classical
+  have hset :
+      ({i | ((middleSharpnessSampleData p d 3 i : ℝ) : 𝕜) = ((2 + 3 : ℝ) : 𝕜)} :
+        Finset (Fin p))
+      = (Finset.univ.filter
+          (fun i : Fin p => p - 2 * d ≤ (i : ℕ) ∧ (i : ℕ) < p - d))ᶜ := by
+    ext i
+    simp only [Finset.mem_compl, Finset.mem_filter, Finset.mem_univ, true_and,
+      middleSharpnessSampleData, RCLike.ofReal_inj]
+    split_ifs with h1 h2
+    · exact iff_of_true (by norm_num) (by omega)
+    · exact iff_of_false (by norm_num) (by omega)
+    · exact iff_of_true (by norm_num) (by omega)
+  rw [hset, Finset.card_compl, card_filter_val_Ico p (p - 2 * d) (p - d) (by omega),
+    Fintype.card_fin]
   omega
 
 variable (b : OrthonormalBasis (Fin p) 𝕜 E)
@@ -193,7 +236,7 @@ theorem eigenspace_middleSharpnessPopulation :
 
 omit [FiniteDimensional 𝕜 E] in
 /-- The perturbed block at `2+ε` is the trailing index range. -/
-theorem eigenspace_middleSharpnessSample (hε : 0 < ε) (hε1 : ε < 1) :
+theorem eigenspace_middleSharpnessSample (hε : 0 < ε) (hε1 : ε < 3) :
     eigenspace (middleSharpnessSample b d ε) ((2 + ε : ℝ) : 𝕜) =
       b.spanIndices {i : Fin p | p - d ≤ (i : ℕ)} := by
   rw [middleSharpnessSample, eigenspace_basisDiagonal]
@@ -218,7 +261,7 @@ Both are selected by the index range `[p-2d, p-d)` of their own sorted
 eigenbasis: `p - 2d` eigenvalues lie above `3` in `Σ` and above `2+ε` in `Σ̂`,
 and each level has multiplicity `d`.  This is the instance that the published
 construction needs and that no top-eigenspace constructor can supply. -/
-theorem correspondingEigenblock_middleSharpness (hε : 0 < ε) (hε1 : ε < 1)
+theorem correspondingEigenblock_middleSharpness (hε : 0 < ε) (hε1 : ε < 3)
     (hdp : 2 * d ≤ p) :
     CorrespondingEigenblock
       (isSymmetric_basisDiagonal b (middleSharpnessPopulationData p d))
@@ -235,7 +278,7 @@ omit [FiniteDimensional 𝕜 E] in
 /-- **The two blocks are orthogonal** — the point of the construction.  The
 population block is the middle `d` indices and the perturbed block is the
 trailing `d`. -/
-theorem orthogonal_middleSharpness (hε : 0 < ε) (hε1 : ε < 1) :
+theorem orthogonal_middleSharpness (hε : 0 < ε) (hε1 : ε < 3) :
     eigenspace (middleSharpnessPopulation b d) ((3 : ℝ) : 𝕜) ≤
       (eigenspace (middleSharpnessSample b d ε) ((2 + ε : ℝ) : 𝕜))ᗮ := by
   rw [eigenspace_middleSharpnessPopulation b,
@@ -306,7 +349,7 @@ theorem opNorm_middleSharpness_perturbation (hε : 0 < ε) (hd : 1 ≤ d)
 
 /-- **`‖sin Θ(V̂, V)‖_F = √d`.**  The two blocks are disjoint coordinate ranges,
 so every principal angle is a right angle. -/
-theorem sinThetaFrobenius_middleSharpness (hε : 0 < ε) (hε1 : ε < 1)
+theorem sinThetaFrobenius_middleSharpness (hε : 0 < ε) (hε1 : ε < 3)
     (hdp : 2 * d ≤ p) :
     sinThetaFrobenius (eigenspace (middleSharpnessPopulation b d) ((3 : ℝ) : 𝕜))
         (eigenspace (middleSharpnessSample b d ε) ((2 + ε : ℝ) : 𝕜)) =
@@ -323,7 +366,7 @@ theorem sinThetaFrobenius_middleSharpness (hε : 0 < ε) (hε1 : ε < 1)
 omit [FiniteDimensional 𝕜 E] in
 /-- **Every aligned orthonormal pair is at distance exactly `√(2d)`.**  This is
 the paper's `‖V̂O − V‖_F = √(2d)` for every `O ∈ O(d)`. -/
-theorem dist_middleSharpness_aligned (hε : 0 < ε) (hε1 : ε < 1)
+theorem dist_middleSharpness_aligned (hε : 0 < ε) (hε1 : ε < 3)
     {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
     (hspanU : Submodule.span 𝕜 (Set.range u) =
       eigenspace (middleSharpnessPopulation b d) ((3 : ℝ) : 𝕜))
@@ -339,18 +382,28 @@ theorem dist_middleSharpness_aligned (hε : 0 < ε) (hε1 : ε < 1)
 
 /-- **Yu--Wang--Samworth Section 2, published middle-block sharpness.**
 
-The model satisfies every hypothesis of `TauCeti.yuWangSamworth_alignedBasis_le`
-with a genuinely two-sided population gap `min(5-3, 3-1) = 2`, every aligned
-orthonormal pair realizes distance exactly `√(2d)`, and the theorem's
-operator-norm branch `2^{3/2} √d ‖E‖_op / Δ` equals `√(2d)(1+ε)`.  Letting
-`ε ↓ 0` shows the constant `2^{3/2}` and the `√d` dimension dependence cannot be
-uniformly improved. -/
-theorem yuWangSamworth_sharpness_middleBlock (hε : 0 < ε) (hd : 1 ≤ d)
-    (hdp : 2 * d ≤ p) :
-    2 * Real.sqrt 2 *
-        (Real.sqrt d * ‖(middleSharpnessSample b d ε -
-          middleSharpnessPopulation b d).toContinuousLinearMap‖) / 2 =
-      Real.sqrt (2 * d) * (1 + ε) := by
+For every `0 < ε < 3` the model satisfies the hypotheses of
+`TauCeti.yuWangSamworth_alignedBasis_le` — a corresponding eigenblock
+(`correspondingEigenblock_middleSharpness`) of dimension `d`
+(`finrank_eigenspace_middleSharpnessPopulation`) with the genuinely two-sided
+population gap `min(5-3, 3-1) = 2` (`internalGap_middleSharpness`) — and this
+theorem is the resulting comparison: *every* aligned orthonormal pair of the two
+blocks realizes distance exactly `√(2d)`, against a bound of `√(2d)(1+ε)`.
+
+Letting `ε ↓ 0` shows the aligned-basis constant `2^{3/2}` and the `√d` dimension
+dependence cannot be uniformly improved. -/
+theorem yuWangSamworth_sharpness_middleBlock (hε : 0 < ε) (hε1 : ε < 3) (hd : 1 ≤ d)
+    (hdp : 2 * d ≤ p) {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
+    (hspanU : Submodule.span 𝕜 (Set.range u) =
+      eigenspace (middleSharpnessPopulation b d) ((3 : ℝ) : 𝕜))
+    (hspanV : Submodule.span 𝕜 (Set.range v) =
+      eigenspace (middleSharpnessSample b d ε) ((2 + ε : ℝ) : 𝕜)) :
+    Real.sqrt (∑ i, ‖v i - u i‖ ^ 2) = Real.sqrt (2 * d) ∧
+      2 * Real.sqrt 2 *
+          (Real.sqrt d * ‖(middleSharpnessSample b d ε -
+            middleSharpnessPopulation b d).toContinuousLinearMap‖) / 2 =
+        Real.sqrt (2 * d) * (1 + ε) := by
+  refine ⟨dist_middleSharpness_aligned b hε hε1 hu hv hspanU hspanV, ?_⟩
   rw [opNorm_middleSharpness_perturbation b hε hd hdp,
     Real.sqrt_mul (by norm_num : (0:ℝ) ≤ 2)]
   ring

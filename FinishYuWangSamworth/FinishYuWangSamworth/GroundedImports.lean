@@ -7,6 +7,8 @@ import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
 import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
 import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace
 import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.TopEigenblock
+import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Procrustes
+import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.ConsecutiveBlock
 import ForTauCeti.Analysis.InnerProductSpace.TwoLevelOperator
 import ForTauCeti.Analysis.InnerProductSpace.RankOneSinTheta
 import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
