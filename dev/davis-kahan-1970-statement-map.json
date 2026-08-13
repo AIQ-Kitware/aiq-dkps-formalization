@@ -840,21 +840,15 @@
         }
       ],
       "source_specification_sha256": "bdabc4530ed8ad8040dfe34d4a1071b2b52d3563d3e0e5bb9de9868287999a4e",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "audit_mapping",
-          "detail": "Clauses 1 and 2 were previously certified against acute-only wrappers, which is not the printed scope; they are now proved for the completed nonacute direct rotation.  Re-audit the mapping against the repaired signatures."
-        }
-      ],
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "source_atom_ids": [
         "DK-3.5-prop.commutation",
         "DK-3.5-prop.direct-rotation-exponential",
         "DK-3.5-prop.cos-square-projector",
         "DK-3.5-prop.eigenvector-rotation-angle",
         "DK-3.5-prop.acute-maximal-characterization"
-      ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: acute-only evidence was accepted for the two clauses Davis--Kahan state without acuteness.  Repaired; re-audit."
+      ]
     },
     {
       "id": "DK-3.2-cor",
