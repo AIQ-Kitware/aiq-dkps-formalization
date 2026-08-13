@@ -628,7 +628,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent`
 
-Source location candidates: *not found by static short-name locator*
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:691`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -640,7 +640,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`
 
-Source location candidates: *not found by static short-name locator*
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:207`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -998,7 +998,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
-- **Organizational source-block hash:** `3824155c8b919c0b61e9eb7bdc7b822214fbb6d6abfa95f7e7eb5eac2a73c09a`
+- **Organizational source-block hash:** `9005afb318f41b78326c808b678267b64c6019ba67fb9cde9103197e4b25d749`
 
 ### Atoms inside the counted printed result
 
@@ -1282,7 +1282,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
-- **Organizational source-block hash:** `c596c36a00cab2889d9af204a420d6746d77273cc66e9a3268dc91891902987f`
+- **Organizational source-block hash:** `b4aa9b881e659bd021c3575c5475079f172a9c5d0983d82303b2a1a5832b32d8`
 
 ### Atoms inside the counted printed result
 
@@ -2747,7 +2747,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
-- **Organizational source-block hash:** `ca0097fc54e1567d7129b6da2a912399a2cb516b3ba5ddc306bf4ab65b746505`
+- **Organizational source-block hash:** `3cb15263f92a74f7f5bcd986093f2a8113abc206243a8876510705b926d35919`
 
 ### Atoms inside the counted printed result
 

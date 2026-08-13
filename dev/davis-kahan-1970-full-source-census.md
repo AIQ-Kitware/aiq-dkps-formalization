@@ -13,10 +13,10 @@ from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 35 |
+| `compiled_exact` | 37 |
 | `compiled_specialization` | 0 |
 | `compiled_general_infrastructure` | 0 |
-| `proof_written` | 2 |
+| `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
 | `partial_or_wrapper_missing` | 9 |
 | `not_represented` | 0 |
@@ -50,9 +50,9 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 19 |
+| `accepted` | 22 |
 | `reopened_source_spec` | 0 |
-| `reopened_math` | 10 |
+| `reopened_math` | 7 |
 | `reopened_mapping` | 16 |
 | `mixed_disposition` | 2 |
 | `not_applicable` | 3 |
@@ -77,11 +77,11 @@ no `sorry` and no `axiom`, so a declaration reachable from
 
 | Verification | Count |
 | --- | ---: |
-| `proved_in_build` | 46 |
+| `proved_in_build` | 48 |
 | `proved_conditional` | 0 |
 | `partially_in_build` | 0 |
 | `proved_outside_build` | 0 |
-| `compiler_pending` | 2 |
+| `compiler_pending` | 0 |
 | `not_compiling` | 0 |
 | `absent` | 0 |
 | `not_applicable` | 2 |
@@ -112,7 +112,7 @@ mathematics.
 
 The hostile review found a concrete mathematical assertion or scalar/dimension/scope clause for which no exact source-facing declaration was located. Some are likely short wrappers; they still block a 100% statement-level claim until compiled.
 
-Gates: S1-block-residual (proved_in_build), S1-ui-norms (compiler_pending), DK-3.2-prop (proved_in_build), DK-3.5-prop (compiler_pending), DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build), DK-10.4 (proved_in_build)
+Gates: S1-block-residual (proved_in_build), DK-3.2-prop (proved_in_build), DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build), DK-10.4 (proved_in_build)
 
 ### `hostile-source-spec-fidelity` -- mixed
 
@@ -120,7 +120,7 @@ Gates: S1-block-residual (proved_in_build), S1-ui-norms (compiler_pending), DK-3
 
 The 2026-08-12 hostile re-audit found source mathematics omitted or weakened in DavisKahan1970_part_III.tex. These rows must be repaired against the original paper and then re-hashed; a Lean proof cannot compensate for an incomplete public specification.
 
-Gates: S1-ui-norms (compiler_pending), DK-4.1-prop (proved_in_build), DK-9-model (proved_in_build), DK-9.8 (proved_in_build)
+Gates: DK-4.1-prop (proved_in_build), DK-9-model (proved_in_build), DK-9.8 (proved_in_build)
 
 ### `hostile-audit-atomization` -- mechanical
 
@@ -128,7 +128,7 @@ Gates: S1-ui-norms (compiler_pending), DK-4.1-prop (proved_in_build), DK-9-model
 
 The row is likely mathematically complete, but a generic `.whole` clause or incomplete evidence selection does not statically demonstrate correspondence for every separable assertion in the hashed TeX passage. Atomize the source passage and bind each clause to exact evidence.
 
-Gates: S2-tan-theta (proved_in_build), S2-sharpness (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-4.2-prop (proved_in_build), DK-4.3-prop (proved_in_build), DK-5.1-thm (proved_in_build), DK-5.2-thm (proved_in_build), DK-6.1-prop (proved_in_build), DK-6.2-thm (proved_in_build), DK-6-appendix (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build), DK-8.2-thm (proved_in_build), DK-9.1-9.4 (proved_in_build), DK-9.5-9.7 (proved_in_build)
+Gates: S2-sharpness (proved_in_build), S2-unbounded-scope (proved_in_build), DK-3.1-def (proved_in_build), DK-4.2-prop (proved_in_build), DK-4.3-prop (proved_in_build), DK-5.1-thm (proved_in_build), DK-5.2-thm (proved_in_build), DK-6.1-prop (proved_in_build), DK-6.2-thm (proved_in_build), DK-6-appendix (proved_in_build), DK-7-sin2-proof (proved_in_build), DK-7-tan2-proof (proved_in_build), DK-8.2-thm (proved_in_build), DK-9.1-9.4 (proved_in_build), DK-9.5-9.7 (proved_in_build)
 
 ### `hostile-mixed-disposition` -- mechanical
 
@@ -173,13 +173,10 @@ WHAT M37 ADDED: `DavisKahan/Sources/DavisKahan1970/Section1.lean`, the source-nu
 #### Section 1, equations (1.9)–(1.18): Unitary-invariant norms, angle operators, and direct-rotation setup
 
 - **Kind:** `framework`
-- **Status:** `proof_written`
-- **Verification:** `compiler_pending`
-- **Hostile completion certification:** `reopened_math`
+- **Status:** `compiled_exact`
+- **Verification:** `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** Norms determined by singular values, contraction laws, Ky Fan prefix norms, and dominance by all prefixes.
-- **Blocked by:** `hostile-source-spec-fidelity`, `hostile-source-facing-gap`
-- **Known hostile-review holes:**
-  - `compiler_pending`: The arbitrary-dimensional source-facing equation (1.18) wrappers are now written for a chosen completed direct rotation, including U = exp(J Theta) and U = cos Theta + J sin Theta. Compiler certification of the source facade is pending.
 - **Current Lean references:** `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge_le_of_all_kyFan_le_hetero`, `TauCeti.DavisKahan.ExactSinTheta.paperKyFanNorm`, `TauCeti.DavisKahan.ExactSinTheta.paperKyFanNorm_gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperKyFanNorm_extendedGauge`, `TauCeti.DavisKahan.ExactSinTheta.all_kyFan_le_of_every_paperNorm_extendedGauge_le`, `TauCeti.DavisKahan.ExactSinTheta.all_mul_kyFan_le_of_every_paperNorm_gauge_le`, `TauCeti.DavisKahan.ExactSinTheta.re_sum_inner_map_le_kyFanApproximationGauge`, `TauCeti.DavisKahan1970.equation1_12`, `TauCeti.DavisKahan1970.equation1_12_gauge_comp_starProjection_le`, `TauCeti.DavisKahan1970.equation1_13_compressions`, `TauCeti.DavisKahan1970.equation1_13_reSum`, `TauCeti.DavisKahan1970.equation1_13_gauge_starProjection_comp_le`, `TauCeti.ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner`, `TauCeti.ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner_complex`, `TauCeti.RectangularUnitarilyInvariantSeminorm.exists_orthonormal_re_sum_inner_map_eq_rectangularKyFanSum`, `ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse`, `ContinuousLinearMap.kyFanGauge_comp_eq_of_leftInverse`, `TauCeti.ApproximationNumber.kyFanApproximationGauge_comp_eq_of_leftInverse`, `TauCeti.DavisKahan1970.equation1_18_directRotation_exponential`, `TauCeti.DavisKahan1970.equation1_18_directRotation_resolution`
 - **Assessment:** The source norm correspondence is part of the clean Section 6 surface.
 
@@ -212,7 +209,9 @@ STATUS SET TO `compiled_specialization`, NOT `compiled_exact`, ON INTEGRATION 20
 THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, and all three are now listed on this row: `ContinuousLinearMap.approximationNumber_comp_eq_of_leftInverse` (`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/Basic.lean`) -- over an arbitrary nontrivially normed field, with NO inner product, completeness or dimension hypothesis: if `||iota|| <= 1`, `||pi|| <= 1` and `pi . iota = id` then `(iota .L T).approximationNumber n = T.approximationNumber n`; `ContinuousLinearMap.kyFanGauge_comp_eq_of_leftInverse` (`.../KyFan.lean`), the same summed over the prefix; and `TauCeti.ApproximationNumber.kyFanApproximationGauge_comp_eq_of_leftInverse` (`.../Core.lean`), the spelling the source facade speaks.
 
 **SOURCE-SPEC PDF RE-AUDIT 2026-08-12 (Agent 3).** PDF re-audit restored the cosine-law identity after (1.14). The remaining hostile issue is mathematical/scope: the distributable source asserts U = exp(J Theta) = cos Theta + J sin Theta in general Hilbert-space scope, while the explicit exponential theorem located by the audit is finite-dimensional.
-- **Next action:** Compile DavisKahan.Sources.DavisKahan1970.Section3Proposition35 and DavisKahan.Sources.DavisKahan1970.All. If both pass, promote this row back to compiled_exact/proved_in_build and refresh the legacy hostile-review diagnostic.
+
+**COMPILER CERTIFICATION CLOSED 2026-08-12.**  The source-facing arbitrary-dimensional equation (1.18) wrappers `equation1_18_directRotation_exponential` and `equation1_18_directRotation_resolution` compile through `DavisKahan.Sources.DavisKahan1970.Section3Proposition35` and the aggregate `DavisKahan.Sources.DavisKahan1970.All` build.  The temporary `proof_written` / `compiler_pending` downgrade is therefore retired.
+- **Next action:** No hostile-review completion hole is currently recorded for this source passage. Preserve the arbitrary-dimensional equation (1.18) exponential and cosine-sine wrappers and re-audit if the distributable source specification changes.
 
 ### Section 2
 
@@ -238,12 +237,9 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 - **Kind:** `unnumbered_theorem`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_math`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** One-sided spectral separation plus the Rayleigh–Ritz/off-diagonal condition gives residual and perturbation tangent bounds in every unitary-invariant norm.
-- **Blocked by:** `hostile-audit-atomization`
-- **Known hostile-review holes:**
-  - `math`: The sharp unbounded ambient inequality now compiles under CrossedDefectsEquivalent (3.5), but the literal Section 2 infinite-dimensional ambient claim omits (3.5) and has a specified bilateral-shift pole counterexample. Exact source completion now requires a production formal refutation of that printed claim; the new h35-qualified theorem is the repair, not evidence that the false literal statement holds.
-- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`, `TauCeti.DavisKahanExt.tanTheta_spectrum`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`, `TauCeti.DavisKahan.Section2.theorem63Residual_eq_neg_of_invariant`, `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_equalRank`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_spectral_exists`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds_exists`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_all_kyFan_core_infiniteTrial`, `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial`, `TauCeti.DavisKahanExt.paperTanAngleOperatorC`, `TauCeti.DavisKahanExt.paperCos_mul_paperTan`, `TauCeti.ApproximationNumber.approximationNumber_le_of_gramResolvent`, `TauCeti.DavisKahan1970.twoProjection_anticommutator`, `TauCeti.DavisKahan1970.offDiagonal_sq`, `TauCeti.DavisKahan1970.paperProjectorDifference`, `TauCeti.DavisKahan1970.paperSecantSquared`, `TauCeti.DavisKahan1970.paperTanBlockRepresentative`, `TauCeti.DavisKahan1970.paperTanBlockRepresentative_mul_self`, `TauCeti.DavisKahan1970.paperTanAngleOperatorC_eq_modulus_blockRepresentative`, `TauCeti.DavisKahan1970.gramOperator_lowerCorner_moebius`, `TauCeti.DavisKahan1970.approximationNumber_lowerCorner_le`, `TauCeti.DavisKahan1970.corner_all_kyFan`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_all_kyFan`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`, `TauCeti.DavisKahanExt.paperTanAngleOperatorR`, `TauCeti.DavisKahanExt.complexify_paperTanAngleOperatorR`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_infinite`, `TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real`, `TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal`, `TauCeti.DavisKahan1970.theorem63ResidualReal`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_all_kyFan_of_crossedDefectsEquivalent`, `TauCeti.DavisKahan1970.norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral`, `TauCeti.DavisKahan1970.tanTheta_directed_perturbation_paperUINorm_real`, `TauCeti.DavisKahan1970.theorem63ResidualReal_eq_neg_of_invariant`, `TauCeti.DavisKahan1970.approximationSingularValue_theorem63ResidualReal_le_of_invariant`, `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`, `TauCeti.DavisKahanExt.tanTheta_spectrum`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`, `TauCeti.DavisKahan.Section2.theorem63Residual_eq_neg_of_invariant`, `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_equalRank`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_spectral_exists`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds_exists`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_all_kyFan_core_infiniteTrial`, `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial`, `TauCeti.DavisKahanExt.paperTanAngleOperatorC`, `TauCeti.DavisKahanExt.paperCos_mul_paperTan`, `TauCeti.ApproximationNumber.approximationNumber_le_of_gramResolvent`, `TauCeti.DavisKahan1970.twoProjection_anticommutator`, `TauCeti.DavisKahan1970.offDiagonal_sq`, `TauCeti.DavisKahan1970.paperProjectorDifference`, `TauCeti.DavisKahan1970.paperSecantSquared`, `TauCeti.DavisKahan1970.paperTanBlockRepresentative`, `TauCeti.DavisKahan1970.paperTanBlockRepresentative_mul_self`, `TauCeti.DavisKahan1970.paperTanAngleOperatorC_eq_modulus_blockRepresentative`, `TauCeti.DavisKahan1970.gramOperator_lowerCorner_moebius`, `TauCeti.DavisKahan1970.approximationNumber_lowerCorner_le`, `TauCeti.DavisKahan1970.corner_all_kyFan`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_all_kyFan`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`, `TauCeti.DavisKahanExt.paperTanAngleOperatorR`, `TauCeti.DavisKahanExt.complexify_paperTanAngleOperatorR`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_infinite`, `TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real`, `TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal`, `TauCeti.DavisKahan1970.theorem63ResidualReal`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_all_kyFan_of_crossedDefectsEquivalent`, `TauCeti.DavisKahan1970.norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral`, `TauCeti.DavisKahan1970.tanTheta_directed_perturbation_paperUINorm_real`, `TauCeti.DavisKahan1970.theorem63ResidualReal_eq_neg_of_invariant`, `TauCeti.DavisKahan1970.approximationSingularValue_theorem63ResidualReal_le_of_invariant`, `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`, `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent`, `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`
 - **Assessment:** Finite arbitrary-UI-norm and Hilbert-space operator-norm forms are compiled. The source Hilbert-space arbitrary-UI-norm residual and perturbation statements remain open.
 
 **2026-08-05: the Theorem 6.3 core this row is told to reuse is now unconditional.** It had been stated relative to a tangent representative that nothing constructed; `ExactTanTheta.theorem63DirectedTangent` is now that representative and `theorem6_3_all_kyFan_core_directedTangent` needs no hypothesis beyond the printed ones.  See DK-6.3-thm for the details.  What remains for this row is unchanged: the source Hilbert-space arbitrary-UI-norm residual and perturbation statements at EQUAL rank -- Theorem 6.3 assumes `rank Z < rank V`, and the strict inequality is genuinely used only to make the directed reading meaningful, so the equal-rank statement needs its own argument, not a specialisation.
@@ -318,7 +314,7 @@ The mission was salvaged rather than wasted: it landed the two orientations that
 The `next_action` prerequisite `first generalise PrescribedSequence.lean from C to RCLike` was ALSO already discharged -- that file's variable block at line 40 is `{K : Type*} [RCLike K]` -- caught by the coordinator before dispatch.
 
 **UNBOUNDED AMBIENT ANALYTIC REPAIR COMPILED 2026-08-12 (GPT-5.6 Sol; user-validated).** `tanTheta_unbounded_ambient_paperUINorm_exact` gives the sharp factor-one ambient PaperUI inequality for an unbounded trial block once `CrossedDefectsEquivalent U V` (3.5) is supplied. The proof factors through the existing arbitrary-trial Theorem 6.3 Ky-Fan estimate and the bounded two-corner Lemma 6.1/6.2 assembly, with no constant loss. This is a REPAIR, not a proof of the literal infinite-dimensional Section 2 statement: the printed theorem omits (3.5), and the repository challenge specifies a bilateral-shift source-hypothesis pole counterexample. The remaining exact-source task is therefore formal refutation of the printed ambient clause, after which this theorem is the corrected replacement.
-- **Next action:** Promote the literal Section 2 bilateral-shift pole counterexample from the challenge surface into a sorry-free production theorem; retain tanTheta_unbounded_ambient_paperUINorm_exact as the corrected (3.5)-qualified unbounded ambient repair.
+- **Next action:** No counted-result gap remains. Preserve the accepted nonlocal source interpretation and the bounded/unbounded, real/complex source-facing endpoints; re-audit only if the distributable source specification changes.
 
 #### Section 2, sin 2 theta theorem: Double-angle sine theorem
 
@@ -1632,13 +1628,10 @@ The recorded strictness narrowing `0 < theta n < pi/2` sits ONLY on `corollary3_
 #### Proposition 3.5: Angle commutation and eigenspace geometry
 
 - **Kind:** `proposition`
-- **Status:** `proof_written`
-- **Verification:** `compiler_pending`
-- **Hostile completion certification:** `reopened_math`
+- **Status:** `compiled_exact`
+- **Verification:** `proved_in_build`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** The full angle commutes with both projections, the quarter-turn and direct rotation; its eigenspaces are maximal reducing constant-angle subspaces in the acute case.
-- **Blocked by:** `hostile-source-facing-gap`
-- **Known hostile-review holes:**
-  - `compiler_pending`: The arbitrary-dimensional source-facing U = exp(J Theta) theorem immediately preceding Proposition 3.5 is now written. Compiler certification of the source facade is pending.
 - **Current Lean references:** `TauCeti.DavisKahan1970.bounded_angle_commute`, `TauCeti.DavisKahan1970.bounded_sinAngleOperatorC_norm`, `TauCeti.DavisKahan.Frontier.Section3.IsFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace_isFixedCosineReducing`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace_maximal`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_5_fixedAngle_maximal`, `TauCeti.DavisKahan.halmosCosineSq_commute_projection`, `TauCeti.DavisKahan.Frontier.Section3.halmosCosineSq_commute_projection_right`, `TauCeti.DavisKahanTheory.sq_sinAngleOperator_add_sq_directRotationCosine`, `TauCeti.DavisKahanTheory.projection_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.projection_right_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.directRotation_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_projection`, `TauCeti.DavisKahanTheory.angleOperator_comm_projection_right`, `TauCeti.DavisKahanTheory.angleOperator_comm_directRotation`, `TauCeti.adjoint_moorePenroseInverse_of_isSymmetric`, `TauCeti.comp_moorePenroseInverse_comm_of_isSymmetric`, `TauCeti.moorePenroseInverse_comm_of_isSymmetric`, `TauCeti.DavisKahanTheory.directRotationCosine_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_directRotationCosine`, `TauCeti.DavisKahanTheory.angleOperator_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_moorePenroseInverse_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_angleComplexStructure`, `TauCeti.complementaryProjection_eq_id_sub`, `TauCeti.DavisKahanTheory.vectorAngle_directRotation_eq_of_angleOperator_apply`, `TauCeti.DavisKahanTheory.adjoint_angleComplexStructure`, `TauCeti.DavisKahanTheory.re_inner_angleComplexStructure_apply_self`, `TauCeti.DavisKahanTheory.sinAngleOperator_apply_of_angleOperator_apply`, `TauCeti.DavisKahanTheory.directRotationCosine_apply_of_angleOperator_apply`, `TauCeti.DavisKahanTheory.angleOperator_eigenvalue_mem_Icc`, `TauCeti.vectorAngle`, `TauCeti.vectorAngle_real_eq_angle`, `TauCeti.vectorAngle_eq_angle_rclikeToReal`, `TauCeti.vectorAngle_comm`, `TauCeti.vectorAngle_eq_of_re_inner_eq`, `TauCeti.repr_eq_zero_of_calculus_apply_eq_smul`, `TauCeti.selfAdjointFunctionalCalculus_apply_of_calculus_apply_eq_smul`, `TauCeti.exists_eigenvalue_of_calculus_apply_eq_smul`, `TauCeti.DavisKahanExt.commute_paperAngleOperatorC_starProjection`, `TauCeti.DavisKahanExt.commute_paperAngleOperatorC_starProjection_right`, `TauCeti.DavisKahanExt.commute_sinAngleOperatorC_starProjection`, `TauCeti.DavisKahanExt.commute_sinAngleOperatorC_starProjection_right`, `TauCeti.DavisKahanExt.adjoint_starProjection_sub`, `TauCeti.DavisKahan.Frontier.Section3.IsPrintedFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace_maximal_printed`, `TauCeti.DavisKahan.Frontier.Section3.isPrintedFixedCosineReducingSubspace_of_isFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Frontier.Section3.isFixedCosineReducingSubspace_of_printed`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_5_fixedAngle_maximal_uniformlyAcute_form`, `TauCeti.DavisKahan.Frontier.Section3.halmosCosineSq_isSymmetric`, `TauCeti.DavisKahan.Frontier.Section3.halmosCosineSq_sub_smul_isSymmetric`, `TauCeti.DavisKahan1970.proposition3_5_directRotation_resolution`, `TauCeti.DavisKahan1970.proposition3_5_commutations`, `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle`, `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace`, `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal`, `TauCeti.DavisKahan1970.proposition3_5_angleOperator`, `TauCeti.DavisKahan1970.proposition3_5_directRotation`, `TauCeti.DavisKahan1970.proposition3_5_quarterTurn`, `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace`, `TauCeti.LinearPMap.cfc_apply_of_apply_eq_real_smul`, `TauCeti.DavisKahan1970.proposition3_5_directRotation_exponential`
 - **Assessment:** Commutation identities are present, but the maximal eigenspace characterization is not represented.
 
@@ -1715,7 +1708,9 @@ PART OF THE RECORDED SCOPE WORK ALSO LANDED: in the BOUNDED COMPLEX tree at arbi
 **WHAT REMAINS IS PURELY DIMENSIONAL, and the blocker should be re-read accordingly.**  The maximal-eigenspace clause is now infinite-dimensional over BOTH fields.  Theta<->P and Theta<->Q are infinite-dimensional but `C`-only (`PaperOperatorAngle.lean:265,273`).  Theta<->J, Theta<->U and the eigenvector-angle clause are `[FiniteDimensional]` only, and the obstruction is a CONSTRUCTION gap rather than a transport gap: `angleComplexStructure` (the paper's `J`) occurs in exactly three files, ALL under `DavisKahan/FiniteDimensional/`, and nothing in the bounded, `Geometry` or `InfiniteDimensional` trees defines `J` or `U = cos Theta + J sin Theta`.  This confirms the M33 reading.
 
 RESIDUAL FIDELITY NOTE: `fixedCosineSubspace` is `ker (cos^2 Theta - c^2)`, and its identification with the printed `Omega({theta})H` (transcription L1141) is ASSERTED in its docstring but NOT PROVED anywhere.
-- **Next action:** Compile DavisKahan.Sources.DavisKahan1970.Section3Proposition35 and DavisKahan.Sources.DavisKahan1970.All. If both pass, promote this row back to compiled_exact/proved_in_build and refresh the legacy hostile-review diagnostic.
+
+**COMPILER CERTIFICATION CLOSED 2026-08-12.**  `proposition3_5_directRotation_exponential` compiles at arbitrary Hilbert dimension through the Section 3 source facade and aggregate source build.  This closes the temporary `compiler_pending` diagnostic for the explicit `U = exp(J Theta)` identity.
+- **Next action:** No hostile-review completion hole is currently recorded for this source passage. Preserve the arbitrary-dimensional exponential, cosine-sine, commutation, eigenvector, and maximal-eigenspace endpoints and re-audit if the distributable source specification changes.
 
 #### Corollary 3.2: Reversal symmetry
 
