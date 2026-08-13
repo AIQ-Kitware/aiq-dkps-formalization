@@ -1357,6 +1357,87 @@ theorem Proposition4_3_real_idealGauge (N : KyFanDominantIdealFamily (𝕜 := �
   N.majorization_mem_and_gauge_le hWmem
     (Proposition4_3_real U V hacute W hWunitary hWmap)
 
+/-! ### The two full-displacement consequences over `ℝ`
+
+Davis and Kahan work on a real *or* complex Hilbert space, and the two consequences they draw
+immediately after Proposition 4.3 — that the operator norm and the Hilbert--Schmidt norm of
+`1 - V` itself are minimized by the direct rotation — inherit that scope.  The complex
+endpoints are `Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_opNorm` and
+`..._hilbertSchmidt` in `Section4.lean`; these are their real twins, at the same nonacute
+matched-crossed-defect scope.
+
+The one ingredient that is not scalar-generic is `aₙ(X⋆X) = aₙ(X)²`, whose proof runs through
+complex spectral theory.  `approximationNumber_gramOperator_real` above already descends it to
+`ℝ` through canonical complexification, so both consequences follow from the real Ky Fan
+Proposition 4.3 exactly as they do over `ℂ`. -/
+
+/-- The squared full displacement is the real Gram operator of the full displacement. -/
+private theorem displacementSquare_eq_gramOperatorR (W : E →L[ℝ] E) :
+    (1 - star W) * (1 - W) = gramOperatorR (1 - W) := by
+  rw [show (1 : E →L[ℝ] E) - star W = star (1 - W) by rw [star_sub, star_one]]
+  rfl
+
+/-- `‖X⋆X‖₁ = ‖X‖_HS²` over `ℝ`, the real twin of
+`TauCeti.ApproximationNumber.nuclearENorm_gramOperator`. -/
+private theorem nuclearENorm_gramOperatorR {X Y : Type v}
+    [NormedAddCommGroup X] [InnerProductSpace ℝ X] [CompleteSpace X]
+    [NormedAddCommGroup Y] [InnerProductSpace ℝ Y] [CompleteSpace Y]
+    (A : X →L[ℝ] Y) :
+    (gramOperatorR A).nuclearENorm = A.hilbertSchmidtENorm ^ 2 := by
+  have hsum : (gramOperatorR A).nuclearENorm =
+      ∑' n : ℕ, ENNReal.ofReal (A.approximationNumber n) ^ (2 : ℝ) := by
+    rw [ContinuousLinearMap.nuclearENorm]
+    refine tsum_congr fun n => ?_
+    rw [approximationNumber_gramOperator_real A n,
+      ← Real.rpow_natCast (A.approximationNumber n) 2,
+      ← ENNReal.ofReal_rpow_of_nonneg (A.approximationNumber_nonneg n) (by norm_num)]
+    norm_num
+  rw [hsum, ← ContinuousLinearMap.schattenENorm_two A, ContinuousLinearMap.schattenENorm,
+    ← ENNReal.rpow_natCast _ 2, ← ENNReal.rpow_mul]
+  norm_num
+
+/-- **Davis--Kahan 1970, the operator-norm consequence of Proposition 4.3, over `ℝ`**, at the
+matched-crossed-defect scope Section 4 inherits.
+
+`‖1 − U‖ ≤ ‖1 − W‖` for every real orthogonal `W` carrying `U` onto `V`.  The real twin of
+`Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_opNorm`. -/
+theorem Proposition4_3_nonacute_real_fullDisplacement_opNorm
+    (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
+    (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    ‖1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J‖ ≤ ‖1 - W‖ := by
+  have hk := Proposition4_3_nonacute_real U V J W hWunitary hWmap 1
+  rw [displacementSquare_eq_gramOperatorR, displacementSquare_eq_gramOperatorR] at hk
+  simp only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge,
+    ContinuousLinearMap.kyFanGauge_one, gramOperatorR,
+    ContinuousLinearMap.norm_adjoint_comp_self] at hk
+  nlinarith [norm_nonneg (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J),
+    norm_nonneg (1 - W)]
+
+/-- **Davis--Kahan 1970, the Hilbert--Schmidt consequence of Proposition 4.3, over `ℝ`**, at
+the matched-crossed-defect scope Section 4 inherits.
+
+`‖1 − U‖_HS ≤ ‖1 − W‖_HS`, in `ℝ≥0∞`, so no Hilbert--Schmidt hypothesis on the competitor.
+The real twin of `Proposition4_3_infiniteDimensional_nonacute_fullDisplacement_hilbertSchmidt`. -/
+theorem Proposition4_3_nonacute_real_fullDisplacement_hilbertSchmidt
+    (J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
+    (W : E →L[ℝ] E) (hWunitary : W ∈ unitary (E →L[ℝ] E))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J).hilbertSchmidtENorm ≤
+      (1 - W).hilbertSchmidtENorm := by
+  have hnuc :
+      (gramOperatorR (1 - TauCeti.DavisKahan.nonacuteDirectRotation U V J)).nuclearENorm ≤
+        (gramOperatorR (1 - W)).nuclearENorm := by
+    rw [ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge,
+      ContinuousLinearMap.nuclearENorm_eq_iSup_kyFanGauge]
+    refine iSup_mono fun k => ENNReal.ofReal_le_ofReal ?_
+    have hk := Proposition4_3_nonacute_real U V J W hWunitary hWmap k
+    rw [displacementSquare_eq_gramOperatorR, displacementSquare_eq_gramOperatorR] at hk
+    simpa only [TauCeti.ApproximationNumber.kyFanApproximationGauge_eq_kyFanGauge] using hk
+  rw [nuclearENorm_gramOperatorR, nuclearENorm_gramOperatorR] at hnuc
+  rw [← ENNReal.rpow_natCast _ 2, ← ENNReal.rpow_natCast _ 2] at hnuc
+  exact (ENNReal.rpow_le_rpow_iff (by norm_num)).mp hnuc
+
 end
 
 end DavisKahan1970

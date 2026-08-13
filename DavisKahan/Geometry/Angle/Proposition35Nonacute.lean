@@ -238,6 +238,70 @@ theorem section3AngleOperator_comm_nonacuteQuarterTurn
   have h := ContinuousLinearMap.commute_polarPartial_of_commute hθD hθmod
   simpa [D, section3NonacuteQuarterTurn] using h
 
+/-! ## The eigenvector clause at the completed nonacute scope
+
+Davis and Kahan restrict only the *third* clause of Proposition 3.5 to the acute case.  The
+statement that an angle eigenvector is rotated through exactly its eigenvalue is made under the
+standing Section 3 hypotheses, which admit the completed direct rotation selected by a
+crossed-defect isometry.  These two theorems supply it at that scope. -/
+
+/-- The skew part of a completed nonacute direct rotation has vanishing real quadratic form.
+
+This is the nonacute twin of `re_inner_section3DirectRotation_sub_cosine_apply_self`, and it is
+where skew-adjointness of `W - cos Θ` (`star_nonacuteDirectRotation_sub_cosine`) enters: a
+skew-adjoint operator has purely imaginary quadratic form, so its real part vanishes. -/
+theorem re_inner_nonacuteDirectRotation_sub_cosine_apply_self
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V) (x : H) :
+    RCLike.re ⟪(nonacuteDirectRotation U V J - section3CosAngleOperator U V) x, x⟫_𝕜 = 0 := by
+  let D := nonacuteDirectRotation U V J - section3CosAngleOperator U V
+  have hstar : star D = -D := star_nonacuteDirectRotation_sub_cosine U V J
+  have h1 : ⟪D x, x⟫_𝕜 = ⟪x, star D x⟫_𝕜 := by
+    rw [ContinuousLinearMap.star_eq_adjoint]
+    exact (ContinuousLinearMap.adjoint_inner_right D x x).symm
+  rw [hstar, neg_apply, inner_neg_right] at h1
+  have hre := congrArg RCLike.re h1
+  have hsym : RCLike.re ⟪x, D x⟫_𝕜 = RCLike.re ⟪D x, x⟫_𝕜 :=
+    inner_re_symm (𝕜 := 𝕜) x (D x)
+  rw [map_neg, hsym] at hre
+  linarith
+
+/-- **Davis--Kahan 1970, Proposition 3.5, eigenvector clause, at the completed nonacute
+scope.**
+
+If `Θ x = θ x` with `x ≠ 0`, then the vector angle from `x` to `W x` is exactly `θ`, for
+**every** completed direct rotation `W = nonacuteDirectRotation U V J`.  No acuteness, no
+finite dimensionality, no restriction to `θ < π/2`, and no weakening to an inequality.
+
+The right-angle endpoint `θ = π/2` needs no separate argument, and it is worth saying why,
+since that is the case acuteness exists to exclude.  Every genuine angle eigenvalue lies in
+`[0, π/2]` (`section3AngleOperator_eigenvalue_mem_Icc`), and the proof only ever uses
+`re ⟪W x, x⟫ = cos θ ‖x‖²` together with `‖W x‖ = ‖x‖`.  At `θ = π/2` that reads
+`re ⟪W x, x⟫ = 0`, which is exactly what the completed rotation does on the crossed defect
+spaces: it carries `x` to a vector orthogonal to it, and `arccos 0 = π/2`.  The clause is
+therefore uniform in `θ`, and the crossed-defect isometry `J` enters only through the
+unitarity of `W` and the skew-adjointness of `W - cos Θ`. -/
+theorem vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply
+    (J : halmosSourceDefect U V ≃ₗᵢ[𝕜] halmosTargetDefect U V)
+    {x : H} (hx0 : x ≠ 0) {θ : ℝ}
+    (hx : section3AngleOperator U V x = ((θ : ℝ) : 𝕜) • x) :
+    TauCeti.vectorAngle 𝕜 x (nonacuteDirectRotation U V J x) = θ := by
+  have hIcc := section3AngleOperator_eigenvalue_mem_Icc U V hx0 hx
+  have hCx := section3CosAngleOperator_apply_of_angleOperator_apply U V hx0 hx
+  have hWx : nonacuteDirectRotation U V J x =
+      ((Real.cos θ : ℝ) : 𝕜) • x +
+        (nonacuteDirectRotation U V J - section3CosAngleOperator U V) x := by
+    rw [sub_apply, hCx]
+    abel
+  have hinner : RCLike.re ⟪nonacuteDirectRotation U V J x, x⟫_𝕜 =
+      Real.cos θ * ‖x‖ ^ 2 := by
+    rw [hWx, inner_add_left, inner_smul_left, RCLike.conj_ofReal, map_add,
+      RCLike.re_ofReal_mul, inner_self_eq_norm_sq,
+      re_inner_nonacuteDirectRotation_sub_cosine_apply_self U V J x, add_zero]
+  refine TauCeti.vectorAngle_eq_of_re_inner_eq hx0
+    (ContinuousLinearMap.norm_map_of_mem_unitary
+      (nonacuteDirectRotation_mem_unitary U V J) x) hIcc.1 ?_ hinner
+  linarith [hIcc.2, Real.pi_pos]
+
 end
 
 end Proposition35

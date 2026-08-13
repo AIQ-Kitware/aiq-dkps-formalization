@@ -795,33 +795,66 @@
         "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace",
         "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal",
         "TauCeti.DavisKahan1970.proposition3_5_angleOperator",
-        "TauCeti.DavisKahan1970.proposition3_5_directRotation_exponential"
+        "TauCeti.DavisKahan1970.proposition3_5_directRotation_exponential",
+        "TauCeti.DavisKahan1970.proposition3_5_commutations_acute",
+        "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute",
+        "TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply",
+        "TauCeti.DavisKahan.Proposition35.re_inner_nonacuteDirectRotation_sub_cosine_apply_self",
+        "TauCeti.DavisKahan.Proposition35.section3AngleOperator_comm_nonacuteDirectRotation",
+        "TauCeti.DavisKahan.Proposition35.section3AngleOperator_comm_nonacuteQuarterTurn"
       ],
       "audit_clauses": [
         {
-          "id": "DK-3.5-prop.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "DK-3.5-prop.commutation",
+          "description": "Printed clause 1: Theta commutes with P, with Q, with J, and with U.  The source states this without an acuteness hypothesis, so the registered declaration must quantify over a completed direct rotation selected by a crossed-defect isometry (the paper's matched-crossing condition (3.5)).  The acute-branch twin is registered alongside but does not discharge the clause.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.proposition3_5_directRotation_resolution",
             "TauCeti.DavisKahan1970.proposition3_5_commutations",
+            "TauCeti.DavisKahan1970.proposition3_5_commutations_acute"
+          ]
+        },
+        {
+          "id": "DK-3.5-prop.eigenvector-angle",
+          "description": "Printed clause 2: if Theta x = theta x with x nonzero then the angle between x and U x is exactly theta.  Also stated without acuteness, and it must cover the right-angle eigenspace theta = pi/2 that acuteness would exclude.  The acute-branch twin is registered alongside but does not discharge the clause.",
+          "review_declarations": [
             "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle",
+            "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute",
+            "TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply"
+          ]
+        },
+        {
+          "id": "DK-3.5-prop.acute-maximality",
+          "description": "Printed clause 3, and the only one the source restricts to the acute case: each angle eigenspace is the unique maximal subspace reducing P and Q on which the printed constant-angle conditions (a)-(c) hold.  The acute hypothesis belongs here and must not be removed.",
+          "review_declarations": [
             "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace",
-            "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal",
+            "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal"
+          ]
+        },
+        {
+          "id": "DK-3.5-prop.representations",
+          "description": "The functional-calculus representations registered with the passage: the angle operator itself, the polar resolution, and U = exp(J Theta).",
+          "review_declarations": [
             "TauCeti.DavisKahan1970.proposition3_5_angleOperator",
+            "TauCeti.DavisKahan1970.proposition3_5_directRotation_resolution",
             "TauCeti.DavisKahan1970.proposition3_5_directRotation_exponential"
           ]
         }
       ],
       "source_specification_sha256": "bdabc4530ed8ad8040dfe34d4a1071b2b52d3563d3e0e5bb9de9868287999a4e",
-      "expected_completion_certification": "accepted",
-      "known_completion_holes": [],
+      "expected_completion_certification": "reopened_mapping",
+      "known_completion_holes": [
+        {
+          "kind": "audit_mapping",
+          "detail": "Clauses 1 and 2 were previously certified against acute-only wrappers, which is not the printed scope; they are now proved for the completed nonacute direct rotation.  Re-audit the mapping against the repaired signatures."
+        }
+      ],
       "source_atom_ids": [
         "DK-3.5-prop.commutation",
         "DK-3.5-prop.direct-rotation-exponential",
         "DK-3.5-prop.cos-square-projector",
         "DK-3.5-prop.eigenvector-rotation-angle",
         "DK-3.5-prop.acute-maximal-characterization"
-      ]
+      ],
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: acute-only evidence was accepted for the two clauses Davis--Kahan state without acuteness.  Repaired; re-audit."
     },
     {
       "id": "DK-3.2-cor",
