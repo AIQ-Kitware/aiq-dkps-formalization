@@ -6,7 +6,13 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import FinishYuWangSamworth.Rectangular.FrobeniusGram
 
 /-!
-# Yu--Wang--Samworth Appendix Lemma 5
+# Yu--Wang--Samworth Appendix Lemma A1
+
+Lemma A1 of the published Biometrika article; Lemma 5 of the 2014 preprint,
+which is the numbering the module and declaration names here still spell.  They
+are pinned by `comparator/*.json` and are deliberately not renamed; the
+translation table lives in `dev/yu-wang-samworth-2015-full-source-census.json`
+under gap `preprint-numbering-aliases`.
 
 The paper states the result for matrices with orthonormal columns or rows.  The
 basis-free formulation is a two-sided ideal estimate for the rectangular
@@ -25,7 +31,7 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
   [FiniteDimensional 𝕜 F]
-/-- Lemma 5, orthonormal-column/contraction form:
+/-- Lemma A1, orthonormal-column/contraction form:
 `‖U⋆ A W‖_F ≤ ‖A‖_F`. -/
 theorem yuWangSamworth_lemma5_columns
     {P : Type*} [NormedAddCommGroup P] [InnerProductSpace 𝕜 P]
@@ -59,7 +65,7 @@ theorem yuWangSamworth_lemma5_columns
       exact mul_le_mul_of_nonneg_left hW (by simpa using hF)
     _ = RectangularUnitarilyInvariantSeminorm.frobenius A := by ring
 
-/-- Lemma 5 with the source's orthonormal-column hypotheses expressed
+/-- Lemma A1 with the source's orthonormal-column hypotheses expressed
 coordinate-freely as pointwise norm preservation. -/
 theorem yuWangSamworth_lemma5_isometricColumns
     {P : Type*} [NormedAddCommGroup P] [InnerProductSpace 𝕜 P]
@@ -101,7 +107,7 @@ private theorem linearIsometry_opNorm_le_one
   change ‖U x‖ ≤ 1 * ‖x‖
   rw [U.norm_map, one_mul]
 
-/-- Lemma 5 in the literal orthonormal-column API: bundled linear isometries
+/-- Lemma A1 in the literal orthonormal-column API: bundled linear isometries
 encode matrices whose columns are orthonormal. -/
 theorem yuWangSamworth_lemma5_orthonormalColumns
     {P : Type*} [NormedAddCommGroup P] [InnerProductSpace 𝕜 P]
@@ -115,7 +121,7 @@ theorem yuWangSamworth_lemma5_orthonormalColumns
   exact yuWangSamworth_lemma5_columns A U.toLinearMap W.toLinearMap
     (linearIsometry_opNorm_le_one U) (linearIsometry_opNorm_le_one W)
 
-/-- Lemma 5, orthonormal-row recovery form.  This lower-level theorem accepts
+/-- Lemma A1, orthonormal-row recovery form.  This lower-level theorem accepts
 exactly the contraction and recovery facts used by the ideal proof. -/
 theorem yuWangSamworth_lemma5_rows
     {P : Type*} [NormedAddCommGroup P] [InnerProductSpace 𝕜 P]
@@ -188,7 +194,7 @@ private theorem rectangularFrobenius_comp_adjoint_linearIsometry
     _ = RectangularUnitarilyInvariantSeminorm.frobenius A :=
       rectangularFrobenius_adjoint A
 
-/-- Lemma 5 in the literal orthonormal-row API.  Here `U` and `W` bundle the
+/-- Lemma A1 in the literal orthonormal-row API.  Here `U` and `W` bundle the
 transposed row maps, whose columns are orthonormal.
 
 The proof factors into the two one-sided invariance laws rather than recovering

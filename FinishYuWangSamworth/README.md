@@ -34,11 +34,12 @@ corollaries, the Section 1 numerical illustration that Theorem 1's separation
 can vanish, and the deterministic core of the Section 3 diagnosis of the
 statistical literature.
 
-Since 2026-08-15 the population-gap results are also available in the source's
-*shape*: a contiguous block `r..s` with the two-sided boundary gap
+The population-gap results are also available in the source's *shape*: the block
+`r, …, s` with `d` tied to them by `r + d = s + 1`, the two-sided boundary gap
 `min(λ_{r-1} − λ_r, λ_s − λ_{s+1})` and the printed endpoint conventions, and an
 aligned conclusion that exhibits the orthogonal `Ô` and compares `V̂Ô` against
-the supplied population frame.  `Symmetric/Corollary1.lean` carries the rank-one
+the supplied population frame — over `ℝ`, with `Ô` an element of
+`Matrix.orthogonalGroup (Fin d) ℝ`.  `Symmetric/Corollary1.lean` carries the rank-one
 case together with `yuWangSamworth_corollary1_scalarSample`, the witness that
 the sample eigenvector is genuinely arbitrary: for `Σ = diag(1, 0)` and
 `Σ̂ = I/2` every unit vector of the plane is admissible.

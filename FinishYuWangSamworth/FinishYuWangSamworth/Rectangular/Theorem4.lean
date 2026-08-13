@@ -132,7 +132,7 @@ private theorem gram_min_le_scaled_min {d : ℕ}
   · rw [min_eq_right hmin]
     exact (min_le_right _ _).trans hfrob
 
-/-- Generic Gram transport for the sine-distance part of Theorem 4. -/
+/-- Generic Gram transport for the sine-distance part of Theorem 3. -/
 private theorem yuWangSamworth_gram_sinTheta_le
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
@@ -162,7 +162,7 @@ private theorem yuWangSamworth_gram_sinTheta_le
             (mul_le_mul_of_nonneg_left hmin (by norm_num)) hΔ.le
     _ = 2 * c * min (Real.sqrt d * perturbOp) perturbFrob / Δ := by ring
 
-/-- Generic Gram transport for the aligned-frame part of Theorem 4. -/
+/-- Generic Gram transport for the aligned-frame part of Theorem 3. -/
 private theorem yuWangSamworth_gram_alignedBasis_le
     {H : Type*} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     [FiniteDimensional 𝕜 H]
@@ -203,7 +203,13 @@ private theorem yuWangSamworth_gram_alignedBasis_le
     _ = 2 * Real.sqrt 2 * c *
           min (Real.sqrt d * perturbOp) perturbFrob / Δ := by ring
 
-/-- Exact right-singular-subspace Theorem 4, in intrinsic operator-norm form. -/
+/-- Theorem 3, right singular subspaces, index-block form with the intrinsic
+operator-norm coefficient.
+
+This is the **corrected** theorem, not the printed one: its gap hypothesis is the
+intrinsic separation of the sorted spectrum of `A⋆A`, and the printed convention
+`σ²_{rank(A)+1} := −∞` is false.  See the module header and
+`FinishYuWangSamworth.Rectangular.RankBoundary`. -/
 theorem yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
     {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -223,7 +229,8 @@ theorem yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
   · exact opNorm_rightGram_sub_le_paperCoefficient A Â
   · exact frobenius_rightGram_sub_le_paperCoefficient A Â
 
-/-- Exact left-singular-subspace Theorem 4, in intrinsic operator-norm form. -/
+/-- Theorem 3, left singular subspaces, index-block form with the intrinsic
+operator-norm coefficient.  Corrected, as on the right; see the module header. -/
 theorem yuWangSamworth_leftSingularSubspace_opNormCoefficient_le
     {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 F}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
