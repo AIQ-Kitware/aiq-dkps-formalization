@@ -51,20 +51,27 @@ PROBE_PATH = ROOT / "dev/.yws-census-probe.lean"
 # Every numbered result and every unnumbered mathematical assertion in the
 # paper must have a row.  Losing one is how a census silently becomes a list of
 # what someone happened to formalize.
+# Anchors use the PUBLISHED Biometrika numbering (checked against the article on
+# 2026-08-13): Theorem 1, Theorem 2, Corollary 1, Theorem 3, Lemma A1.  The 2014
+# preprint shares one counter and numbers the last three Corollary 3, Theorem 4
+# and Lemma 5; many Lean names still spell that, which the census records as gap
+# `preprint-numbering-aliases` rather than by renaming pinned declarations.
 REQUIRED_ANCHORS = {
     "Section 1, principal angles and sin-Theta",
     "Section 1, equation (1)",
+    "Section 1, numerical illustration that delta can vanish",
     "Theorem 1",
     "Theorem 2",
     "Theorem 2, residual form",
     "Section 2, sharpness example with orthogonal target subspaces",
     "Section 2, sharpness scale for nearby one-dimensional eigenspaces",
     "Equation (4)",
-    "Corollary 3",
+    "Corollary 1",
     "Section 3, audit of statistical applications",
-    "Theorem 4",
-    "Appendix, equations (10)-(12)",
-    "Lemma 5",
+    "Theorem 3",
+    "Theorem 3, rank-boundary convention",
+    "Appendix, equations (A7)-(A8)",
+    "Lemma A1",
 }
 
 ALLOWED_SECTIONS = {"1", "2", "3", "4", "appendix"}
