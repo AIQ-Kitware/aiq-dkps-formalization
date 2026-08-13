@@ -1,15 +1,15 @@
 {
   "schema": "llm-resource-tally/v3",
-  "through": "2026-08-13T05:29:00.572880+00:00",
-  "ledger_rows": 1640,
-  "commits_accounted": 1476,
-  "turns": 41249,
+  "through": "2026-08-13T13:42:08.284537+00:00",
+  "ledger_rows": 1643,
+  "commits_accounted": 1478,
+  "turns": 41345,
   "tokens": {
-    "input": 8181909,
-    "cache_write": 148943222,
-    "cache_read": 15288858397,
-    "output": 44213222,
-    "billable_input": 15445983528
+    "input": 8182101,
+    "cache_write": 149262527,
+    "cache_read": 15309321641,
+    "output": 44359408,
+    "billable_input": 15466766269
   },
   "by_model": {
     "claude-fable-5": {
@@ -37,10 +37,10 @@
       "output": 327440
     },
     "claude-opus-5": {
-      "input": 105537,
-      "cache_write": 63791687,
-      "cache_read": 9557402113,
-      "output": 19891496
+      "input": 105729,
+      "cache_write": 64110992,
+      "cache_read": 9577865357,
+      "output": 20037682
     },
     "gpt-5.6-terra": {
       "input": 3590620,
@@ -57,10 +57,10 @@
       "output": 10700449
     },
     "unlabeled": {
-      "input": 7333170,
-      "cache_write": 95384902,
-      "cache_read": 10373682582,
-      "output": 31223968
+      "input": 7333362,
+      "cache_write": 95704207,
+      "cache_read": 10394145826,
+      "output": 31370154
     },
     "implementation": {
       "input": 79782,
@@ -77,10 +77,10 @@
   },
   "by_agent": {
     "claude-code": {
-      "input": 1153817,
-      "cache_write": 148943222,
-      "cache_read": 14748096797,
-      "output": 43346457
+      "input": 1154009,
+      "cache_write": 149262527,
+      "cache_read": 14768560041,
+      "output": 43492643
     },
     "codex": {
       "input": 7028092,
@@ -94,12 +94,12 @@
     "web_fetch": 0
   },
   "time": {
-    "wall_clock_s": 3469860.7
+    "wall_clock_s": 3499390.5
   },
   "compaction_signals": {
-    "events": 63,
-    "peak_context_tokens": 43994217,
-    "summary_chars": 1095764
+    "events": 64,
+    "peak_context_tokens": 44487355,
+    "summary_chars": 1118119
   },
   "modeled_post_hoc": "inference_seconds, energy_kwh, carbon_gco2e, usd — derived from the measurements above by `estimate`; not stored here."
 }
