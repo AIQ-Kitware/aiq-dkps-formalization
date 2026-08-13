@@ -102,7 +102,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 
 **Why this is not a refutation.** In that configuration tan Theta is not a bounded operator and the displayed unitarily invariant norm does not exist, so the witness exhibits a missing nonvacuity qualification rather than a finite-valued failure of the inequality. The paper declares such cases vacuous in advance. The literal reading would equally convict the Section 1 angle-doubling sentence and later developments that silently use the direct rotation. This is therefore deliberately not classified as refuted_as_transcribed; contrast DK-4.4-prop, where all objects exist, the compared quantities are finite, and the printed conclusion is false.
 
-**Semantic conclusion.** S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. It was never the reason the row was nonterminal: the separate Lean-coverage blocker was the missing real-scalar unbounded ambient endpoint, and that endpoint is now proved (`tanTheta_unbounded_ambient_paperUINorm_real_exact`), so the row is terminal on this accepted reading.
+**Semantic conclusion.** S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. A later hostile scope audit found that the first pair of `unbounded ambient` endpoints still kept the Ritz compression bounded; the Appendix explicitly allows both `A_0` and `Lambda_1` to be unbounded. That stronger scope is now represented by `tanTheta_unboundedCompression_ambient_paperUINorm_exact` and `tanTheta_unboundedCompression_ambient_paperUINorm_real_exact`.
 
 The accepted reading is hash-pinned to the distributable specification, the source-fidelity inventory, and the cited atoms; any edit to that material makes it stale and the result checker fails closed.
 
@@ -110,7 +110,7 @@ The accepted reading is hash-pinned to the distributable specification, the sour
 
 Empty. All 29 counted results are terminal on all three axes.
 
-`S2-tan-theta` was the last open row, and it closed on 2026-08-13. Its final blocker — the real-scalar unbounded ambient tangent endpoint — is discharged by `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`: a closed unbounded real self-adjoint operator, an arbitrary closed real trial subspace inside its domain, an arbitrary chosen reducing subspace, the printed form bounds and Rayleigh--Ritz condition, the standing (3.5), the printed constant, and every paper unitarily invariant norm, with ideal membership concluded rather than assumed.
+`S2-tan-theta` is terminal after a hostile Appendix-scope correction. The earlier `tanTheta_unbounded_ambient_*_exact` declarations cover an unbounded ambient operator with a bounded Ritz compression. The Appendix-complete declarations `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact` and `..._real_exact` additionally allow the Ritz compression `A_0` itself to be a genuinely unbounded self-adjoint closed operator semibounded above in form, while retaining a bounded residual/perturbation and the sharp factor-one ambient inequality.
 
 ## Printed-statement boundary reviews
 

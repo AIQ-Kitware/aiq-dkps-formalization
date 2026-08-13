@@ -509,10 +509,14 @@ The theorem is printed in Section 2, before (3.5) exists in the exposition, and 
 
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`
   - Carries `h35 : CrossedDefectsEquivalent U V`, the constructive form of (3.5) (an isometric equivalence of the two crossed defect spaces), and concludes both `N.Mem (paperTanAngleOperatorC U V)` and the sharp inequality. Membership in the norm's ideal is a conclusion, which is the explicit form of the source's vacuity convention.
+- `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact`
+  - Appendix-complete complex ambient endpoint. The Ritz compression is a genuinely unbounded self-adjoint closed operator semibounded above in form; the residual and perturbation are bounded. The lower-corner Ky Fan estimate is supplied by the Appendix truncation/release theorem, (3.5) supplies ambient transversality, and norm-ideal membership is concluded.
+- `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact`
+  - Real Appendix-complete ambient endpoint with a genuinely unbounded Ritz compression. The unbounded compression data are complexified only for the spectral-cutoff/Ky-Fan proof, while the source angle operator, perturbation, crossed-defect condition, and final PaperUI statement are real; the sharp factor-one inequality and ideal membership descend exactly.
 - `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
-  - Same (3.5) hypothesis at unbounded self-adjoint scope over complex scalars, with the norm-ideal membership again concluded.
+  - Complex specialization with an unbounded ambient self-adjoint operator but bounded Ritz compression. It retains the same (3.5) explicitation and sharp ambient conclusion; the stronger Appendix case is certified separately by the unboundedCompression endpoint.
 - `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`
-  - Same (3.5) hypothesis at unbounded self-adjoint scope over REAL scalars, closing the printed real/complex scope of the ambient conclusion. Uniform transversality is derived from the printed form bounds together with (3.5) rather than assumed, so the crossed-defect condition is consumed on the real side and never transported across complexification; norm-ideal membership is again concluded.
+  - Real specialization with an unbounded ambient self-adjoint operator but bounded Ritz compression. Uniform transversality is derived from the form bounds and (3.5); the stronger Appendix case is certified separately by the real unboundedCompression endpoint.
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`
   - Alternative bounded route assuming uniform transversality `‖sin Theta‖ < 1` instead of (3.5). This is a strictly stronger hypothesis than the source's standing condition and is registered as a specialization, not as the source-shaped form.
 - `TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses`
@@ -532,7 +536,7 @@ In that configuration tan Theta is not a bounded operator and the displayed unit
 
 #### 9. Semantic conclusion recorded by the repository
 
-S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. It was never the reason the row was nonterminal: the separate Lean-coverage blocker was the missing real-scalar unbounded ambient endpoint, and that endpoint is now proved (`tanTheta_unbounded_ambient_paperUINorm_real_exact`), so the row is terminal on this accepted reading.
+S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. Mathematical coverage now also includes the Appendix's genuinely unbounded Ritz-compression scope over both complex and real scalars through `tanTheta_unboundedCompression_ambient_paperUINorm_exact` and its real sibling.
 
 #### Independent interpretation checklist
 
@@ -568,6 +572,7 @@ S2-tan-theta is a true counted result whose exact formal representation requires
 - `S2-unbounded-scope.unbounded-selfadjoint-scope` — **counted_result_scope** *(shared/cross-block scope)* — The results extend to unbounded self-adjoint A under the stated domain condition.
 - `S2-unbounded-scope.bounded-residual-needed` — **counted_result_scope** *(shared/cross-block scope)* — Useful unbounded conclusions require the pertinent perturbation or residual to extend boundedly.
 - `S2-unbounded-scope.half-infinite-gap-intervals` — **counted_result_scope** *(shared/cross-block scope)* — Gap intervals may be half-infinite and the remaining spectra unbounded.
+- `DK-6-appendix.unbounded-tangent-extension` — **counted_result_scope** *(shared/cross-block scope)* — The Appendix states the tan theta theorem in the general ordered case A0 <= alpha and Lambda1 >= alpha + delta and explicitly allows both A0 and Lambda1 to be unbounded, while the residual used by the norm estimate remains bounded.
 
 ### Same-block material explicitly outside the counted result
 
@@ -634,13 +639,25 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:306`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:459`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:207`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:212`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:427`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:347`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3350,11 +3367,11 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - `background_theory_not_designated_result`: **2**
 - `counted_result_hypothesis`: **10**
-- `counted_result_scope`: **9**
+- `counted_result_scope`: **10**
 - `counted_result_statement`: **49**
 - `deferred_unproved_claim`: **2**
 - `definition_not_result`: **9**
-- `expository_commentary_not_result`: **4**
+- `expository_commentary_not_result`: **3**
 - `external_result_not_dk_result`: **3**
 - `historical_knowledge_state`: **1**
 - `introductory_background_not_designated_result`: **26**
@@ -3548,7 +3565,7 @@ Every source atom remains visible here even when it is outside the 29-result den
 | 168 | `DK-6.3-thm.eq-6-5` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.5) as reconstructed in the distributable TeX. |
 | 169 | `DK-6.3-thm.eq-6-6` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.6) as reconstructed in the distributable TeX. |
 | 170 | `DK-6-appendix.unbounded-sine-extension` | `DK-6-appendix` | `expository_commentary_not_result` | — | The sine theorem extends to unbounded operators via bounded residual/common-domain hypotheses. |
-| 171 | `DK-6-appendix.unbounded-tangent-extension` | `DK-6-appendix` | `expository_commentary_not_result` | — | The tangent theorem requires the stronger approximation argument recorded in the Appendix. |
+| 171 | `DK-6-appendix.unbounded-tangent-extension` | `DK-6-appendix` | `counted_result_scope` | `S2-tan-theta` | The Appendix states the tan theta theorem in the general ordered case A0 <= alpha and Lambda1 >= alpha + delta and explicitly allows both A0 and Lambda1 to be unbounded, while the residual used by the norm estimate remains bounded. |
 | 172 | `DK-6-appendix.appendix-approximation-chain` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Equations (6.7)--(6.11) form the approximation chain controlling singular directions and passing to all UI norms. |
 | 173 | `DK-6-appendix.appendix-all-ui-limit` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | The epsilon-to-zero argument completes the bound-norm case and then all UI norms. |
 | 174 | `DK-6-appendix.eq-6-7` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.7) as reconstructed in the distributable TeX. |

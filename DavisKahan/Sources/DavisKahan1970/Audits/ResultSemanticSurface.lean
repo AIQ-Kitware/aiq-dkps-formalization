@@ -129,6 +129,8 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent
 #check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact
 #check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact
+#check @TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact
+#check @TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact
 #check @TauCeti.DavisKahan.Frontier.Section3.directedGap_asymmetric_coordinateHalfSpace
 #check @TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses
 #check @TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral

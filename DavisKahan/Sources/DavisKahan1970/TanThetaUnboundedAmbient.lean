@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Sources.DavisKahan1970.TanThetaWholeSpace
 import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
+import DavisKahan.TanTheta.Theorem63UnboundedCompression
 
 /-!
 # Unbounded ambient single-angle tangent assembly
@@ -12,11 +13,15 @@ import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
 This file isolates the missing ambient half of the Section 2 `tan Theta`
 theorem from the already-proved unbounded directed Theorem 6.3 estimate.
 
-The unbounded/domain-sensitive mathematics stays entirely inside
-`Theorem63TrialData`: once the trial block has a bounded residual, the ambient
-step is bounded operator geometry.  The lower tangent corner is dominated by
-the directed tangent singular-value sequence, the upper corner is its adjoint,
-and Davis--Kahan Lemmas 6.1 and 6.2 assemble the two corners without loss.
+The ambient step is bounded operator geometry once a sharp lower-corner
+Ky Fan estimate is available.  Two data paths supply that estimate:
+`Theorem63TrialData` covers an unbounded ambient operator with bounded Ritz
+compression, while `UnboundedCompressionTrialData` supplies the full Appendix
+scope in which the Ritz compression itself may be unbounded.  In the latter
+case the Appendix spectral truncation/release argument is consumed through
+`UnboundedCompressionTrialData.all_kyFan_core`.  The upper tangent corner is the
+adjoint of the lower one, and Davis--Kahan Lemmas 6.1 and 6.2 assemble the two
+corners without loss.
 -/
 
 namespace TauCeti
@@ -299,6 +304,154 @@ theorem tanTheta_unbounded_ambient_paperUINorm_of_data
     exact hambient
   exact tanTheta_unbounded_ambient_paperUINorm_of_data_of_transversality N data H hH
     hdelta hCompression hcross htr hResidual hMem
+
+/-! ## Appendix scope: the Ritz compression itself may be unbounded -/
+
+/-- **Ambient `tan Theta` assembly with a genuinely unbounded Ritz compression,
+with transversality supplied.**
+
+This is the Appendix counterpart of
+`tanTheta_unbounded_ambient_paperUINorm_of_data_of_transversality`.  The crucial
+difference is that `D.compression` is a densely defined self-adjoint closed
+operator on the trial space, not a bounded continuous endomorphism.  Only the
+residual is bounded.  The lower-corner estimate therefore comes from
+`UnboundedCompressionTrialData.all_kyFan_core`, which performs the Appendix
+spectral truncation and release argument.  Once that estimate is available, the
+whole-space assembly is again purely bounded operator geometry. -/
+theorem tanTheta_unboundedCompression_ambient_paperUINorm_of_data_of_transversality
+    (N : PaperUnitaryInvariantNorm)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (D : UnboundedCompressionTrialData U)
+    (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : SemiboundedAbove D.compression alpha)
+    (hcross : ∀ z : D.compression.domain,
+      (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
+        RCLike.re ⟪Vᗮ.starProjection (((z : U) : E)),
+          Vᗮ.starProjection (D.action z)⟫_ℂ)
+    (htr : ‖sinAngleOperatorC U V‖ < 1)
+    (hResidual :
+      D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (hMem : N.Mem H) :
+    N.Mem (paperTanAngleOperatorC U V) ∧
+      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H := by
+  have hblock :
+      paperProjectionBlock Uᗮ U H =
+        D.residual ∘L U.subtypeL.adjoint := by
+    rw [hResidual, paperProjectionBlock]
+    apply ContinuousLinearMap.ext
+    intro x
+    simp only [ContinuousLinearMap.comp_apply]
+    have hproj :
+        U.subtypeL ∘L U.subtypeL.adjoint = U.starProjection :=
+      subtypeL_comp_adjoint_subtypeL_unboundedTanThetaAmbient U
+    have happ := congrArg (fun L : E →L[ℂ] E => L x) hproj
+    simpa only [ContinuousLinearMap.comp_apply] using
+      (congrArg (fun y : E => Uᗮ.starProjection (H y)) happ).symm
+  have hlower : ∀ k : ℕ,
+      delta * kyFanApproximationGauge k
+          (paperProjectionBlock Uᗮ U
+            (paperProjectorDifference U V * paperSecantSquared U V)) ≤
+        kyFanApproximationGauge k (paperProjectionBlock Uᗮ U H) := by
+    intro k
+    have hcorner := kyFan_lowerCorner_le (U := U) (V := V) htr k
+    have hcore := D.all_kyFan_core V hdelta hupper hcross k
+    have hresKy :
+        kyFanApproximationGauge k D.residual =
+          kyFanApproximationGauge k (paperProjectionBlock Uᗮ U H) := by
+      rw [hblock]
+      have hs := sameApproximationSingularValues_extendDomainByZero U D.residual
+      exact (hs.kyFanApproximationGauge_eq k).symm
+    calc
+      delta * kyFanApproximationGauge k
+          (paperProjectionBlock Uᗮ U
+            (paperProjectorDifference U V * paperSecantSquared U V))
+          ≤ delta * ∑ n ∈ Finset.range k, Real.tan (Real.arcsin
+              (approximationSingularValue n (theorem63DirectedSineBlock U V))) :=
+        mul_le_mul_of_nonneg_left hcorner hdelta.le
+      _ ≤ kyFanApproximationGauge k D.residual := hcore
+      _ = kyFanApproximationGauge k (paperProjectionBlock Uᗮ U H) := hresKy
+  exact tanTheta_ambient_paperUINorm_of_lowerCorner N hH hdelta htr hlower hMem
+
+/-- **Davis--Kahan's ambient `tan Theta` estimate with an unbounded Ritz
+compression, complex form.**
+
+The Appendix explicitly allows `A₀ ≤ alpha` and `Lambda₁ ≥ alpha + delta` to
+*both* be unbounded.  Here `D.compression` is that unbounded self-adjoint Ritz
+operator and `D.residual` is the bounded residual.  Uniform transversality is
+derived from the Appendix no-pole theorem plus the paper's standing condition
+(3.5), not assumed by the caller. -/
+theorem tanTheta_unboundedCompression_ambient_paperUINorm_of_data
+    (N : PaperUnitaryInvariantNorm)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (D : UnboundedCompressionTrialData U)
+    (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : SemiboundedAbove D.compression alpha)
+    (hcross : ∀ z : D.compression.domain,
+      (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
+        RCLike.re ⟪Vᗮ.starProjection (((z : U) : E)),
+          Vᗮ.starProjection (D.action z)⟫_ℂ)
+    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (hResidual :
+      D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (hMem : N.Mem H) :
+    N.Mem (paperTanAngleOperatorC U V) ∧
+      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H := by
+  have hdirected :
+      approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
+    D.approximationSingularValue_sineBlock_lt_one V hdelta hupper hcross 0
+  have hambient : ‖paperDirectedSineAmbient U V‖ < 1 := by
+    have h := approximationNumber_paperDirectedSineAmbient_le (U := U) (V := V) 0
+    rw [(paperDirectedSineAmbient U V).approximationNumber_index_zero] at h
+    exact lt_of_le_of_lt h hdirected
+  have htr : ‖sinAngleOperatorC U V‖ < 1 := by
+    rw [norm_sinAngleOperatorC U V,
+      DavisKahan.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
+        U V h35]
+    exact hambient
+  exact tanTheta_unboundedCompression_ambient_paperUINorm_of_data_of_transversality
+    N D H hH hdelta hupper hcross htr hResidual hMem
+
+/-- **Davis--Kahan 1970, Appendix-complete ambient `tan Theta` theorem.**
+
+This is the source-shaped wrapper for the genuinely unbounded Ritz-compression
+case.  The ambient self-adjoint operator and the Ritz compression may both be
+unbounded; the residual and perturbation `H` are bounded.  The hypotheses
+`hZA`/`haction` identify the abstract Ritz data with the ambient operator on the
+Ritz domain, `hVdom`/`hVcomm` say the unwanted subspace reduces the ambient
+operator, `hupper` and `hUnwanted` are the two printed form bounds, and `h35` is
+the standing condition (3.5). -/
+theorem tanTheta_unboundedCompression_ambient_paperUINorm_exact
+    (N : PaperUnitaryInvariantNorm)
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (D : UnboundedCompressionTrialData U)
+    (A : DKClosedOperator (H := E))
+    (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hZA : ∀ z : D.compression.domain, ((z : U) : E) ∈ A.domain)
+    (haction : ∀ z : D.compression.domain,
+      D.action z = A.toLinearMap ⟨((z : U) : E), hZA z⟩)
+    (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)
+    (hVcomm : ∀ x : A.domain,
+      Vᗮ.starProjection (A.toLinearMap x) =
+        A.toLinearMap ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
+    (hupper : SemiboundedAbove D.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤
+        RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
+    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (hMem : N.Mem H) :
+    N.Mem (paperTanAngleOperatorC U V) ∧
+      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H := by
+  refine tanTheta_unboundedCompression_ambient_paperUINorm_of_data
+    N D H hH hdelta hupper ?_ h35 hResidual hMem
+  intro z
+  exact D.crossed_lower_of_reducing V A hZA haction hVdom hVcomm hUnwanted z
 
 /-- The same theorem specialized to an actual unbounded trial block and an
 arbitrary chosen reducing subspace.  All domain-sensitive crossed-form work is
