@@ -608,7 +608,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1186`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1176`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -620,7 +620,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:320`, `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1275`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:322`, `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -712,7 +712,7 @@ Again the source distinguishes the directed residual statement from the ambient 
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:400`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:606`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:402`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:606`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -848,7 +848,7 @@ Section~7 derives the nonvanishing of the relevant $\cos(2\theta_j)$ factors fro
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:451`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:453`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -860,7 +860,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:541`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:543`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2864,7 +2864,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:297`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:122`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:299`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:122`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

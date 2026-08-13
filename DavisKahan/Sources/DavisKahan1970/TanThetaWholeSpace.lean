@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Geometry.Angle.PaperTanAngle
+import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
 import DavisKahan.Geometry.Halmos.CrossedDefectGap
 -- supplies the standing assumption (3.5) and the gap identity it buys, which is what
 -- turns this file's directed sine estimate into the ambient uniform transversality the
@@ -360,17 +361,6 @@ section Representative
 
 variable (U V : Submodule ℂ E)
   [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-
-/-- The projector difference `D = P_V − P_U`, the operator whose modulus is
-`sin Θ`. -/
-def paperProjectorDifference : E →L[ℂ] E :=
-  V.starProjection - U.starProjection
-
-/-- The ambient `cos²Θ` as an inverse: `(1 − sin²Θ)⁻¹`.  Under uniform
-transversality this is the honest inverse; the `Ring.inverse` spelling keeps the
-definition total. -/
-def paperSecantSquared : E →L[ℂ] E :=
-  Ring.inverse (1 - paperProjectorDifference U V * paperProjectorDifference U V)
 
 /-- **The off-diagonal block representative of the ambient tangent.**  It is
 supported entirely on the two cross blocks of `U ⊕ U^⊥`, and under uniform
