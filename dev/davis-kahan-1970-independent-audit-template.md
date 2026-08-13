@@ -1483,25 +1483,25 @@ In the acute case the $\theta$-eigenspace of $\Theta$ is the unique maximal subs
 
 #### `TauCeti.DavisKahan1970.proposition3_5_commutations`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:235`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:188`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:249`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:202`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:257`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:210`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:268`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:221`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1561,19 +1561,19 @@ Interchanging the roles of $P$ and $Q$ leaves the angle operator $\Theta$ unchan
 
 #### `TauCeti.DavisKahan1970.corollary3_2_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:200`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:153`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:170`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:122`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:152`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:112`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
