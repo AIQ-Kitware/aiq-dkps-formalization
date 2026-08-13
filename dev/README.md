@@ -48,6 +48,24 @@ campaign handoffs and status snapshots belong in Git history rather than the
 working tree. Several `.json` files are read or written by `scripts/check_*.py` —
 do not hand-edit one without running its checker.
 
+### External semantic-alignment review packet
+
+The exhaustive source censuses carry an `importance` field that is independent
+of proof status.  To generate the deliberately small external-review surface
+(the four Davis--Kahan trigonometric headline theorems, the derived sharp
+projector theorem, and Yu--Wang--Samworth Theorem 2), run:
+
+```bash
+python3 scripts/render_semantic_alignment_review.py \
+    --importance headline \
+    --output build/semantic-alignment/headline-review.md
+```
+
+The command invokes Lean and embeds compiler-printed theorem types.  Use
+`--no-lean` only for a layout preview.  `--importance major` expands the packet
+to the next review-priority tier without changing the full-paper completeness
+census.
+
 ### Where a new note goes
 
 - A *current status claim* belongs in the source-owning README or a generated/checkable status artifact.

@@ -1,5 +1,5 @@
 {
-  "schema_version": 4,
+  "schema_version": 5,
   "base_commit": "2a728278a585",
   "primary_source": {
     "citation": "C. Davis and W. M. Kahan, The Rotation of Eigenvectors by a Perturbation. III, SIAM J. Numer. Anal. 7(1), 1970, 1–46.",
@@ -7,7 +7,7 @@
     "private_comparison_source": "A private modernized transcription or lawful copy of the paper may be used to re-audit the checked-in distillation itself; no repository check or certificate depends on it.",
     "distributable_source_specification": "prose/distilled_literature/DavisKahan1970_part_III.tex"
   },
-  "how_to_use": "Independent statement audit and Lean-evidence registry. `prose/distilled_literature/DavisKahan1970_part_III.tex` is the checked-in distributable source-order mathematical specification. Its `DK-CERT` passages are independently worded, source-faithful reconstructions; `dev/davis-kahan-1970-statement-map.json` hashes those passages and binds the 49 organizational rows to Lean evidence. `scripts/check_davis_kahan_1970_statement_map.py` validates that checked-in relationship without any private transcription, and `scripts/certify_davis_kahan_1970.py --clean` adds compiler-printed declaration types. A private transcription or lawful copy of the paper may be used separately to re-audit the distillation itself, but is not a repository-check dependency.\n\nThe 49 row statuses and completion_certification fields below are retained as legacy diagnostic triage from the broader hostile audit; they DO NOT define the 100% denominator. The exhaustive disclosure surface is `dev/davis-kahan-1970-source-atom-inventory.json` (266 atoms, including all 64 numbered equations). Every atom has a specific boundary reason and reverse link to counted results. The sole completion denominator is `dev/davis-kahan-1970-formalization-result-inventory.json`: exactly 29 results Davis--Kahan actually establish (four Section 2 headline theorems plus every named theorem/proposition/lemma/corollary in Sections 3--8). Each result has an accepted printed-statement boundary review.\n\nFor the 100% claim, only those 29 result entries matter. A true result must have exact source-facing Lean evidence at full printed scope, `proved_in_build`, and hostile semantic acceptance. A false counted result requires exact formal refutation plus the repository best-effort repair disposition. Definitions, proof equations, examples, Section 9 worked calculations, historical/external claims, Section 10 questions, and explicitly unresolved/deferred assertions remain visible source-fidelity material but are not additional proof obligations. Question 10.4 is therefore fidelity-only despite the established identities in its motivating discussion. Use `scripts/check_davis_kahan_1970_result_inventory.py` for the maintained denominator and boundary accounting; use `--require-terminal` on the statement-map checker for the final hard 29-result gate.",
+  "how_to_use": "Independent statement audit and Lean-evidence registry. `prose/distilled_literature/DavisKahan1970_part_III.tex` is the checked-in distributable source-order mathematical specification. Its `DK-CERT` passages are independently worded, source-faithful reconstructions; `dev/davis-kahan-1970-statement-map.json` hashes those passages and binds the 49 organizational rows to Lean evidence. `scripts/check_davis_kahan_1970_statement_map.py` validates that checked-in relationship without any private transcription, and `scripts/certify_davis_kahan_1970.py --clean` adds compiler-printed declaration types. A private transcription or lawful copy of the paper may be used separately to re-audit the distillation itself, but is not a repository-check dependency.\n\nThe 49 row statuses and completion_certification fields below are retained as legacy diagnostic triage from the broader hostile audit; they DO NOT define the 100% denominator. The exhaustive disclosure surface is `dev/davis-kahan-1970-source-atom-inventory.json` (266 atoms, including all 64 numbered equations). Every atom has a specific boundary reason and reverse link to counted results. The sole completion denominator is `dev/davis-kahan-1970-formalization-result-inventory.json`: exactly 29 results Davis--Kahan actually establish (four Section 2 headline theorems plus every named theorem/proposition/lemma/corollary in Sections 3--8). Each result has an accepted printed-statement boundary review.\n\nFor the 100% claim, only those 29 result entries matter. A true result must have exact source-facing Lean evidence at full printed scope, `proved_in_build`, and hostile semantic acceptance. A false counted result requires exact formal refutation plus the repository best-effort repair disposition. Definitions, proof equations, examples, Section 9 worked calculations, historical/external claims, Section 10 questions, and explicitly unresolved/deferred assertions remain visible source-fidelity material but are not additional proof obligations. Question 10.4 is therefore fidelity-only despite the established identities in its motivating discussion. Use `scripts/check_davis_kahan_1970_result_inventory.py` for the maintained denominator and boundary accounting; use `--require-terminal` on the statement-map checker for the final hard 29-result gate.\n\nThe `importance` field is an external-review priority, not a proof-status axis. `headline` is the deliberately small default semantic-alignment surface; `major` expands it to other important named results without changing the full census.",
   "status_definitions": {
     "compiled_exact": "An exact source-facing theorem or construction is compiled on the base.",
     "compiled_specialization": "A useful compiled specialization exists, but not the full source scope.",
@@ -90,7 +90,8 @@
           "kind": "audit_mapping",
           "detail": "`equation1_8_residual_norm_minimized_by_rayleighQuotient` now proves the printed Rayleigh--Ritz minimization statement but is not registered as primary evidence for this row."
         }
-      ]
+      ],
+      "importance": "technical"
     },
     {
       "id": "S1-ui-norms",
@@ -129,7 +130,8 @@
       "next_action": "No hostile-review completion hole is currently recorded for this source passage. Preserve the arbitrary-dimensional equation (1.18) exponential and cosine-sine wrappers and re-audit if the distributable source specification changes.",
       "scope_gap": "**No narrowing remains.**  The (1.12) codomain-room narrowing was REMOVED 2026-08-09 (Claude Opus 5, coordinator integration).  `equation1_12` now assumes only `hE : exists x : Fin nu -> E, Orthonormal C x`, which is the nonemptiness of the family the printed supremum ranges over, not an addition to the printed claim; the codomain carries no hypothesis at all and `dim F < nu` is allowed.  No replacement hypothesis was introduced: no `[FiniteDimensional]`, no compactness, no rank bound.  `equation1_13_compressions` and `equation1_13_reSum` keep both room hypotheses, which for printed (1.13) ARE the printed claim, since (1.13) quantifies over projectors on both sides.\n\n**Not narrowings, but worth knowing.**  (i) The three equations are `IsLUB`, not attained maxima -- forced by the mathematics, see `notes`; the printed statements say `sup`, so this is fidelity rather than weakening.  (ii) The facade is stated over `C`, the paper's field, because the min--max localization behind the attaining half is available in this library for `R` and `C` but not for an abstract `RCLike` field; the `RCLike`-generic form carrying that localization as a hypothesis is `ApproximationNumber.exists_orthonormal_kyFanApproximationGauge_sub_le_re_sum_inner`.  (iii) `||K||_nu` is spelled `kyFanApproximationGauge nu`, the sum of the first `nu` approximation numbers, which is defined for every bounded operator and agrees with the sum of the `nu` largest singular values whenever those exist (`rectangularKyFanSum_eq_kyFanApproximationGauge`); the paper defines it by singular values, which presumes compactness it does not otherwise assume.\n\n**THE FRONTIER NODE'S STALE FLAG IS CLEARED 2026-08-11 (Claude Opus 5, coordinator, task #9 strand 2).**  `s1-ui-norms-kyfan-suprema` still carried `open_obligation: true` for the (1.12) codomain-room hypothesis that was removed on 2026-08-09; its own note had said 'when it lands, this node stops being an open obligation and the row returns to compiled_exact', and only the second half happened.\n\nSEPARATELY, AND WORTH KNOWING FOR ANY FUTURE READING OF THAT DOCUMENT: `dev/davis-kahan-1970-frontier-status.md` is regenerated only when the gate is run with `--write-report`, and the committed copy had drifted -- it reported 82 manifest nodes against a manifest holding 83, and THIS ROW WAS MISSING FROM ITS PAPER TABLE ENTIRELY.  Regenerating added it, already grounded at 100%.  So the document can understate coverage by omitting a row, not only by scoring one low; rerun it with `--write-report` after any manifest edit.",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "technical"
     },
     {
       "id": "S2-sin-theta",
@@ -150,7 +152,32 @@
       "notes": "The definitive source form is Theorem 6.1; real, complex, bounded, unbounded, and arbitrary-representative forms are present.\n\n**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.\n\n**AUDIT METHOD CORRECTED 2026-08-07 (Claude Opus 5).**  The scalar-scope audit earlier the same day inspected only the declarations already LISTED on this row, which answers \"does this row list a real theorem?\" and not \"does the repository HAVE one?\".  Re-audited by searching the whole stable repo and elaborating candidate signatures.  FALSE POSITIVE, restored to `compiled_exact`.  `sinTheta_real_exactPaper` and `generalizedSinTheta_real_exactPaper` elaborate over `[InnerProductSpace ℝ]` with `[CompleteSpace]` and NO `[FiniteDimensional]`, i.e. a real Hilbert space of arbitrary dimension.  Their `PaperRealIsometricTheoremData` / `PaperRealTheorem61Data` parameters were checked field by field against the conclusion-as-hypothesis failure mode: every field is a printed hypothesis (self-adjointness of the ambient/trial/complement operators, orthogonal exact decomposition, `0 < gap`, lower frame bound, `FormBoundedSylvesterGap`).  `PaperSinThetaRepresentativeAcross` carries only `operator` plus `SameApproximationSingularSequence operator canonical`, which is the paper's own freedom in naming `sin Theta_0`, and `.canonical` inhabits it with the canonical block, so it generalizes the conclusion rather than assuming it.\n\n**BLOCKER REMOVED 2026-08-09 (Claude Opus 5, M34): `real-scalar-infinite-dimensional-scope` was a STALE entry on this row.**  The 2026-08-07 correction recorded directly above had already restored the status to `compiled_exact` and set `next_action` to \"No mathematical gap\", but the `blocked_by` reference was never dropped with it, so for two days the row reported a scalar gap that its own notes said it did not have.  RE-VERIFIED by elaboration at this HEAD, not by reading the note: `sinTheta_real_exactPaper` and `generalizedSinTheta_real_exactPaper` carry `[NormedAddCommGroup _] [InnerProductSpace R _] [CompleteSpace _]` on every one of `E`, `F`, `G`, `H`, `E_0`, `F_0`, with NO `[FiniteDimensional]` anywhere, and conclude `N.Mem S.operator AND P.gap * N.gauge S.operator <= N.gauge P.data.residual` for an arbitrary `PaperUnitaryInvariantNorm`, with ideal membership CONCLUDED.  That is a real Hilbert space of arbitrary dimension at every source unitarily invariant norm, which is exactly what the blocker asks for.",
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "headline",
+      "semantic_review": {
+        "group": "DK-S2-sin-theta",
+        "group_title": "Davis--Kahan single-angle sin theta theorem",
+        "claim": "Interval/exterior spectral separation gives delta times the directed sine norm bounded by the residual norm for every source unitary-invariant norm.",
+        "declarations": [
+          "TauCeti.DavisKahan1970.sinTheta",
+          "TauCeti.DavisKahan1970.sinTheta_real_exactPaper",
+          "TauCeti.DavisKahan1970.generalizedSinTheta",
+          "TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper"
+        ],
+        "note": "The report also lists the source-fidelity atoms counted for the Section 2 theorem, including the paper-wide unbounded/UI-norm scope."
+      },
+      "semantic_review_variants": [
+        {
+          "id": "DK-sharp-projector-difference",
+          "title": "Sharp Davis--Kahan projector-difference theorem",
+          "claim": "For self-adjoint operators with a common two-sided spectral/form gap g around a cut c, and reducing selected subspaces U and W on the high side with their orthogonal complements on the low side, the orthogonal projectors satisfy ||P_U - P_W|| <= ||B - A|| / g. The canonical spectral-subspace specialization has the same factor-one conclusion.",
+          "declarations": [
+            "Submodule.opNorm_starProjection_sub_le_of_coercive",
+            "TauCeti.opNorm_spectralSubspace_sub_le"
+          ],
+          "provenance_note": "This is a canonical sharp projector form derived from the Davis--Kahan sin-theta machinery plus the two-projection norm identity; it is intentionally presented as a derived review target, not as a fifth separately printed headline theorem in Part III."
+        }
+      ]
     },
     {
       "id": "S2-tan-theta",
@@ -216,7 +243,20 @@
       ],
       "scope_gap": null,
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "headline",
+      "semantic_review": {
+        "group": "DK-S2-tan-theta",
+        "group_title": "Davis--Kahan single-angle tan theta theorem",
+        "claim": "One-sided spectral separation plus the Rayleigh–Ritz/off-diagonal condition gives residual and perturbation tangent bounds in every unitary-invariant norm.",
+        "declarations": [
+          "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
+          "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral",
+          "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact",
+          "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact"
+        ],
+        "note": "This theorem has nonlocal source semantics: the report should be read together with the registered source-fidelity clauses, especially the standing crossed-defect condition and the paper's norm-existence convention."
+      }
     },
     {
       "id": "S2-sin-two-theta",
@@ -269,7 +309,20 @@
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "scope_gap": "None. The real/complex and directed/ambient scalar-scope obligations are compiled. The final Section 8 sentence asserting the extension to dim X(E_0) < dim X(F_0) is covered by the four strict-rank source-facing directed wrappers. Under that strict inequality the paper's ambient Hermitian angle Theta, whose construction uses the matched-dimension condition (1.5), is not available; accordingly the sentence extends the directed Theta_0 conclusion, as signaled by its comparison with Theorems 6.1 and 6.3, and does not require a Theta_0-to-Theta bridge.",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "headline",
+      "semantic_review": {
+        "group": "DK-S2-sin-two-theta",
+        "group_title": "Davis--Kahan double-angle sin 2 theta theorem",
+        "claim": "Off-diagonal or fully separated perturbations give the printed residual and perturbation sin(2 Theta) bounds with factor two over real and complex Hilbert spaces at the maintained source norm scope. The Section 8 strict-dimension extension is explicitly exposed for the directed Theta_0 conclusion; the underlying directed theorem is stronger and has no dimension comparison at all.",
+        "declarations": [
+          "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
+          "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real",
+          "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm",
+          "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real"
+        ],
+        "note": "The chosen declarations expose both whole-space and printed directed-residual forms over complex and real scalars without reproducing every internal representative theorem."
+      }
     },
     {
       "id": "S2-tan-two-theta",
@@ -345,7 +398,20 @@
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "scope_gap": "",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "headline",
+      "semantic_review": {
+        "group": "DK-S2-tan-two-theta",
+        "group_title": "Davis--Kahan double-angle tan 2 theta theorem",
+        "claim": "Fully off-diagonal perturbations across an ordered gap give residual and perturbation tan(2 Theta) bounds with factor two.",
+        "declarations": [
+          "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
+          "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact",
+          "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact",
+          "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact"
+        ],
+        "note": "The selected surface keeps the sharp directed residual and ambient unbounded endpoints while omitting proof machinery and branch-free helper formulations."
+      }
     },
     {
       "id": "S2-sharpness",
@@ -427,7 +493,8 @@
           "kind": "audit_atomization",
           "detail": "The hashed passage asserts optimal constants, two-dimensional equality models, direct-sum simultaneous equality for all unitary-invariant norms, and first-order sharpness. Existing sharpness machinery is richer than the current review mapping, but these separable claims are not individually certified."
         }
-      ]
+      ],
+      "importance": "supporting"
     },
     {
       "id": "S2-unbounded-scope",
@@ -482,7 +549,8 @@
           "kind": "audit_atomization",
           "detail": "The passage asserts the full infinite-dimensional/unbounded/arbitrary-UI-norm scope for all four headline theorem families. The current evidence is a sample of endpoints rather than an explicit clause-by-clause four-family scope certificate."
         }
-      ]
+      ],
+      "importance": "technical"
     },
     {
       "id": "DK-3.1-def",
@@ -527,7 +595,8 @@
           "kind": "audit_atomization",
           "detail": "The block contains equations (3.1)-(3.4), unitarity block identities, singular-value/nullity assertions, and the direct-rotation definition. The current generic `.whole` clause does not certify those assertions individually."
         }
-      ]
+      ],
+      "importance": "supporting"
     },
     {
       "id": "DK-3.2-def",
@@ -554,7 +623,8 @@
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "scope_gap": null,
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "supporting"
     },
     {
       "id": "DK-3.1-prop",
@@ -603,7 +673,8 @@
       "next_action": "None for Proposition 3.1. The 29-result audit now points at the exact generic `proposition3_1_source` wrapper and accepts its printed-scope semantics.",
       "scope_gap": null,
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "supporting"
     },
     {
       "id": "DK-3.2-prop",
@@ -643,7 +714,8 @@
           "kind": "missing_source_facing_statement",
           "detail": "The source passage says that on the two crossing subspaces every direct rotation satisfies U^2 x = -x. The hostile review did not find an exported source-facing theorem with that statement, although related reflection-product ingredients exist."
         }
-      ]
+      ],
+      "importance": "supporting"
     },
     {
       "id": "S3-standing-scope",
@@ -662,7 +734,8 @@
       "notes": "ADDED 2026-08-12.  This organizational block exists because the standing convention is a source SCOPE assertion that governs later results and therefore cannot live inside the Proposition 3.2 result block, whose boundary partition is reserved for that proposition's own printed statement.  It mirrors `S2-unbounded-scope`.  Verified against the original paper: the sentence reads \"We shall assume (3.5) as well as (1.5) except where stated otherwise.  Consequently the direct rotation will always exist, and rather than the more general V of (1.6) we shall deal mostly with its direct special case U ~ (C0, -S0*; S0, C1), Cj >= 0.\"  It is not a new result and does not enlarge the 29-result denominator.",
       "next_action": "None outstanding.  `CrossedDefectsEquivalent` is the repository spelling of (3.5); the two registered declarations are the places where it is load-bearing, namely the identification of the symmetric and directed subspace gaps and the ambient quarter-angle conclusion of Theorem 8.2.",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "technical"
     },
     {
       "id": "DK-3.3-prop",
@@ -686,7 +759,8 @@
       "next_action": "No result-level hole remains for Proposition 3.3. Re-audit only if the source specification or source-facing theorem signatures change.",
       "scope_gap": null,
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "supporting"
     },
     {
       "id": "DK-3.4-prop",
@@ -721,7 +795,8 @@
       "next_action": "No result-level hole remains for Proposition 3.4. Re-audit only if the source specification or source-facing theorem signatures change.",
       "scope_gap": null,
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "supporting"
     },
     {
       "id": "DK-3.1-thm",
@@ -779,7 +854,8 @@
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "scope_gap": "**THIS FIELD WAS REWRITTEN 2026-08-10 AFTER A READ-ONLY CONSUMER CHECK; ITS TWO PREDECESSORS WERE BOTH WRONG.**  The first claimed every declaration on this row is `InnerProductSpace C` only (23 of 28 are `RCLike`-generic or `R` instances).  The second named `MultiplicityDatum` and `OperatorUnitaryEquiv` as the two definitions hardcoding `C`; `OperatorUnitaryEquiv` is `RCLike`-generic, and `MultiplicityDatum`'s blocking hardcode is `operator`'s `Lp C 2` / `->L[C]`, NOT `base : Measure C`.\n\n**THE ACTUAL REMAINING GAP IS ONE SENTENCE OF THE PRINTED THEOREM, IN THE NONCOMPACT CASE ONLY.**  Real and axiom-clean today, coordinator-probed: `twoProjection_operator_classification_real` (the full biconditional, no compactness, no separability, no finite dimension), `theorem3_1_realization` at `k = R`, and Corollary 3.1 in all three real forms -- which IS the paper's own multiplicity phrasing in the compact case.  What is missing over `R` is only the phrase \"spectral multiplicity function\" for NONCOMPACT operators, i.e. Hahn--Hellinger over a real Hilbert space, which Mathlib does not have and which the paper itself imports from Halmos 1951 rather than proving.\n\nTHE BLOCKER REFERENCE IS RETAINED AND HONEST -- the printed sentence is not yet real at noncompact -- but it should be read as **\"real Hahn--Hellinger for the noncompact multiplicity phrasing\"**, NOT as \"real scalars\", and NOT as anything about the SPECTRUM parameter.  `MultiplicityDatum.base : Measure C` is the spectrum parameter and is already off-paper at COMPLEX `H`, since the paper's multiplicity function is a function of a real parameter at either scalar.  **NO CONSUMER IN THE REPOSITORY NEEDS A REAL-PARAMETER DATUM: measured, zero.**  See `notes` for the consumer census, for why the six-module real-spectrum transport layer is disjoint from this axis, and for four false statements in this row that the check retracted.\n\n**THE REMAINING ITEM IS MEASURED AND SCOPED, 2026-08-11 (Claude Opus 5; measurement mission, NOTHING BUILT, baseline reproduced exactly: build 9623 jobs BUILD_EXIT=0, seven checks EXIT=0, four ratchets flat at 165/51/51/91, baselines flat at 13/154/16).**\n\n**WHAT THE CLASSIFICATION CLAUSE ACTUALLY CONSUMES IS THREE DECLARATIONS.**  `Section3.theorem3_1_spectralMultiplicity_classification` (`DavisKahan/Frontier/Section3.lean:2443`) has an EIGHT-LINE proof and uses only `Frontier.SameSpectralMultiplicity`, `Frontier.sameSpectralMultiplicity_of_unitarilyEquivalent` and `Frontier.unitarilyEquivalent_of_sameSpectralMultiplicity` (`Frontier/Core.lean:82,112,97`).  `SameSpectralMultiplicity` has EXACTLY ONE CONSUMER in the repository, and that consumer has none.  It does NOT consume `SpectralMultiplicityFoundation`, `MultiplicityDatum.multiplicity`, `mem_level_iff`, `measurable_multiplicity`, or ANY uniqueness result -- the consumer-check rule paid off for a third time on this repository.\n\n**AND THE CLASSIFICATION CONTENT IS ALREADY AT REAL SCALARS.**  `Section3.twoProjection_operator_classification` is `RCLike`-generic carrying the `[Algebra R ...] [IsScalarTower R 𝕜 ...] [ContinuousFunctionalCalculus R ... IsSelfAdjoint]` triple, and `Section3.twoProjection_operator_classification_real` (`Section3.lean:2973`) already instantiates it -- no separability, no compactness, no finite dimension.  **What is missing over R is only the TRANSLATION of that invariant into MULTIPLICITY language.**\n\n**THE GAP IS ONE AXIS, NOT TWO, AND THE COORDINATOR'S FRAMING WAS WRONG.**  The symbol domain is not an axis: `Lp R 2` over a `Measure C` is type-legal.  The blocker is `MultiplicityDatum.operator`, whose type is `Lp C 2 D.measure ->L[C] Lp C 2 D.measure`.  Since `OperatorUnitaryEquiv` (already `RCLike`-generic) requires both operators over the SAME 𝕜, `A` is pinned to C **by the model, not by the definition's binders**.  Removing C means making `operator` field-indexed -- a RESTATEMENT of `MultiplicityDatum`, not a generalization in place.  `MeasureEquiv` is field-free.\n\n**THE FIVE `RealSpectrum*` MODULES GENUINELY DO NOT COMPOSE, AND THE FAILURE IS EARLIER THAN GOVERNANCE.**  Machine-checked: `failed to synthesize Algebra C (E ->L[R] E)`.  The stack fails at the VERY FIRST typeclass at a real Hilbert space, before any CFC question arises.  `RealSpectrum` there means real spectral PARAMETER, not real scalar field -- their own headers say so.\n\n**THE COORDINATOR'S `Measure R` HYPOTHESIS IS WRONG AS A LEVER, AND WAS ALREADY REJECTED.**  `dev/failed-proof-directions-2026-08-10.md` section 1.2 states verbatim that a real parameter is neither necessary nor sufficient; `MultiplicityDatum : Type` takes no parameters at all.  The two CFC facts the coordinator cited are individually TRUE and were re-verified (`ContinuousFunctionalCalculus C (H ->L[C] H) IsSelfAdjoint` really does fail to synthesize; the R-symbol class really is present at both fields), but the conclusion drawn from them had already been measured and rejected.\n\n**DESCENT IS OBSTRUCTED HERE FOR A REAL REASON.**  The repo's two working descent precedents both succeed because the complex object is CANONICAL -- a Hausdorff limit, or a polar factor with invertible modulus.  A unitary-equivalence WITNESS is not canonical: it is unique only up to the commutant of `A_C`, so an arbitrary intertwiner need not commute with the conjugations and nothing forces it to.  Mathematics, not a Lean difficulty.\n\n**WHAT IS ACTUALLY MISSING IS REAL HAHN-HELLINGER, AND MATHLIB HAS IT FOR NO FIELD.**  No Borel functional calculus, no cyclic-vector theory, no multiplication model; its only 𝕜-generic spectral theorem is finite-dimensional.  This repository DOES have a real CFC in unrestricted dimension, so the route is not blocked at the CFC layer -- but nothing between the CFC and the multiplication model exists over R.  Sizing: `BorelCalculus` is 18 modules / 5989 lines plus ~905 lines of `Lp C 2`-hardcoded measure theory.\n\nNAMED BASE-LAYER MISSION IF THE OWNER WANTS THE PROGRAMME: *conjugation-equivariant cyclic decomposition* -- run the complexification's countable cyclic decomposition with cyclic vectors drawn from the real copy, so each cyclic isometry intertwines `conjugation` on `E_C` with complex conjugation on `Lp C 2 mu`, where `BorelCalculus.map_ofReal_realSpectrumDiagMeasure` already puts mu on the real spectrum; deliverable, a real analogue of `exists_countable_isHilbertSum_lp_diagMeasure`.  **THIS IS AN ESTIMATE, NOT A FINDING**, and section 5 of the failed-directions doc records that estimates on this row have been false in BOTH directions.\n\nPROCESS NOTE WORTH KEEPING: `BorelCalculus.map_ofReal_realSpectrumDiagMeasure` is **not reachable from `DavisKahan.All`** -- it is a `ForTauCeti` module built only by the lakefile glob, so an axiom probe importing `DavisKahan.All` alone silently MISSES it.\n\n**PROMOTED TO `compiled_exact` AND THE BLOCKER COMES OFF, 2026-08-11.  REAL HAHN-HELLINGER IS BUILT (coordinator-verified: build 9626 -> 9629 jobs, BUILD_EXIT=0 read from the echoed log line after waiting for it, zero errors, seven checks EXIT=0, four ratchets flat at 165/51/51/94, baselines flat at 13/154/16).**  Closing declaration: `Section3.theorem3_1_spectralMultiplicity_classification_real`.  The owner directed that the missing theory be BUILT rather than adjudicated around, and it was, in four missions.\n\nM1 `exists_countable_isHilbertSum_lp_diagMeasure_real` -- countable cyclic decomposition with all cyclic vectors in the real copy, each isometry intertwining `conjugation` with `star`.  M2 `starFixedLpEquivRealLp : starFixedSubmodule K p mu ≃ₗᵢ[R] Lp R p mu`, absent from Mathlib.  M3 `starFixedInvariant_iff_base_im_eq_zero` -- a BICONDITIONAL -- plus star-equivariance of every assembly step.  M4 the transport and the row.\n\n**THE PROBE THAT GATED M4 CAME BACK FAVOURABLE, AND THE REASON IS REUSABLE.**  `star_linearIsometryEquiv_trans_symm_of_isHilbertSum` shows the Hilbert-sum unitary's equivariance needs only ADDITIVITY AND CONTINUITY of the structure maps -- no conjugate-linearity, no involutivity, no inner-product compatibility -- because `Submodule.iSup_induction` generates the supremum of the summand ranges under ADDITION ALONE, each range being already C-stable, so the scalar structure of the supremum is never re-examined.  **No field-change of `IsHilbertSum` was needed**, which was the feared bleed.\n\n**THE SECOND TRANSFER DIRECTION WAS UNEXPECTEDLY CHEAP AND REFUTES A RECORDED CLAIM.**  `Frontier/Core.lean`'s docstring said the `<-` direction is stuck because `operatorUnitaryEquiv_of_measureEquiv` uses the complex `rnDerivL2Equiv` API and generalizing it is `separate mathematics'.  That inference is WRONG: `operatorUnitaryEquiv_of_measureEquiv_real` runs the COMPLEX `rnDerivL2Equiv` against the symbol `Complex.ofReal . coordTruncField R R . Prod.fst`, which is real-valued and therefore commutes with `star` for ANY base measure, and descends.  Nothing was generalized.  It needs neither separability nor reality of the base.\n\n**THE RISK RANKING IN THE COORDINATOR'S BRIEF WAS INVERTED, and the reason is worth keeping.**  E3, named highest risk, was free once the probe landed.  E4, estimated at ~40 lines, was the expensive step: **`Module R (RealComplexification E)` has TWO NON-DEFEQ INSTANCES** -- `instModuleReal` and `NormedSpace.complexToReal.toModule` -- bridged only by the theorem `coe_real_smul`, so any bundled `→ₗᵢ[R]` crossing that boundary is rejected.  The descent lemma therefore takes its inclusions UNBUNDLED, with homogeneity stated as `jE (c . x) = (c : C) . jE x`, mentioning only the complex action.\n\nALSO CORRECTED: `MultiplicityDatum` no longer has exactly one construction site -- there are now two plus `retype` -- though the substance stands, that `base_supported_real` as a FIELD would make `exists_hasMultiplicityModel` unprovable.  `D.base {z | im z != 0} = 0` is delivered as a CONCLUSION by `exists_hasMultiplicityModel_star`, from `IsSelfAdjoint.im_eq_zero_of_mem_spectrum`, never as a field.  And this row's note that `DavisKahan.Experimental.Frontier` `is built by no default target' is FALSE today: `DavisKahan/Frontier/All.lean` is imported by `DavisKahan/All.lean`, proved by a sentinel that errored under plain `lake build`.\n\nCENSUS-GATE NOTE 2026-08-11: `TauCeti.MultiplicityDatum.retype` is deliberately NOT in `lean_declarations`.  It elaborates and is axiom-clean, but `MultiplicityDatum.measure`/`.operator`/`.retype` are not `@[expose]`, so the census declaration probe does not resolve it -- and exposing them to satisfy the probe would raise the expose ratchet off 165 for bookkeeping reasons.  The row's obligations are carried by the `*_real` endpoints regardless.  Same shape as the `HasUnboundedSylvesterKyFan` note on `DK-6-appendix`.",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "major"
     },
     {
       "id": "DK-3.1-cor",
@@ -815,7 +891,8 @@
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "scope_gap": "**THE PREVIOUS TEXT OF THIS FIELD WAS FALSE AND CONTRADICTED THE ROW'S OWN DECLARATION LIST.**  It read `every declaration is InnerProductSpace C only, so no declaration on this row covers a real Hilbert space of infinite dimension`, and `blocked_by` carried `real-scalar-infinite-dimensional-scope` -- while `lean_declarations` ALREADY listed `corollary3_1_compact_classification_real` and `corollary3_1_compact_angleList_classification_real` and the notes recorded both as landed.  Both fields corrected 2026-08-10; `blocked_by` is now empty.\n\n**THE REAL-SCALAR AXIS IS CLOSED.**  Dimension-function, decreasing-eigenvalue-list, defect-block and the composed prescribed-sequence classification all exist over `R`.\n\n**WHAT REMAINS, three items, none of them scalars.**  (a) The composition against `corollary3_1_realization_zeroMultiplicity`, where the elementary Halmos summands are DELIBERATELY nontrivial so the bridge as stated does not apply; a multiplicity-aware version needs the ambient list to be the generic list merged with `1`s of multiplicity `dim (U inf Vperp)`.  (b) The `P(I-Q)P` versus `PQP` compact-object question, untouched and recorded above as INCOMPARABLE in infinite dimension.  (c) NEW 2026-08-10, and it is an UPSTREAM DEFECT rather than Davis-Kahan mathematics: at the CONCRETE realized pair the instance `ContinuousFunctionalCalculus R ... IsSelfAdjoint` FAILS TO SYNTHESIZE, while `CompleteSpace`, `Algebra C`, `CStarAlgebra` and `ContinuousFunctionalCalculus C ... IsStarNormal` all succeed at the same type and the SAME instance succeeds for an ABSTRACT pair.  MEASURED NOT TO BE A BUDGET: it fails at `maxSynthPendingDepth` 3, 6 and 10, `synthInstance.maxSize 800`, `synthInstance.maxHeartbeats 2000000`, with the trace showing `IsSelfAdjoint.instContinuousFunctionalCalculus` failing at `tryResolve` without ever reaching its `IsStarNormal` subgoal -- a defeq/diamond failure.  That is why the defect-block classification now has separate `_complex` and `_real` named instances with the calculus already discharged, instead of one generic composed corollary; the pre-existing complex composition compiled only because its instances were baked in abstractly.  The per-field split is an honest WORKAROUND, not a narrowing.",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "supporting"
     },
     {
       "id": "DK-3.5-prop",
@@ -907,7 +984,8 @@
           "detail": "Clauses 1 and 2 were previously certified against acute-only wrappers, which is not the printed scope; they are now proved for the completed nonacute direct rotation.  Re-audit the mapping against the repaired signatures."
         }
       ],
-      "audit_warning": "HOSTILE RE-AUDIT REOPENED: the commutation and eigenvector-angle clauses of Proposition 3.5 were certified against acute-only wrappers.  They are now proved at the printed nonacute scope; re-audit the mapping."
+      "audit_warning": "HOSTILE RE-AUDIT REOPENED: the commutation and eigenvector-angle clauses of Proposition 3.5 were certified against acute-only wrappers.  They are now proved at the printed nonacute scope; re-audit the mapping.",
+      "importance": "supporting"
     },
     {
       "id": "DK-3.2-cor",
@@ -938,7 +1016,8 @@
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "scope_gap": null,
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "supporting"
     },
     {
       "id": "DK-4.1-prop",
@@ -980,7 +1059,8 @@
           "kind": "mapping",
           "detail": "PDF re-audit restored equations (4.1) and (4.2) explicitly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the minimax and pointwise-angle atoms and the headline proposition are explicitly bound to exact Lean evidence."
         }
-      ]
+      ],
+      "importance": "supporting"
     },
     {
       "id": "DK-4.1-cor",
@@ -1008,7 +1088,8 @@
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "scope_gap": null,
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "supporting"
     },
     {
       "id": "DK-4.2-prop",
@@ -1056,7 +1137,8 @@
           "kind": "audit_atomization",
           "detail": "The main inequality appears formalized, but the source block also records the trace/basis identification used in the proof. The terminal row does not separately bind that preserved mathematical assertion to Lean evidence."
         }
-      ]
+      ],
+      "importance": "supporting"
     },
     {
       "id": "DK-4.3-prop",
@@ -1098,7 +1180,8 @@
           "kind": "audit_mapping",
           "detail": "Broader nonacute and real source theorems exist, but the primary row evidence is narrower and the hashed block contains equations (4.3)-(4.6) plus the precise UI-norm limitation. Rebind/atomize the complete source scope."
         }
-      ]
+      ],
+      "importance": "major"
     },
     {
       "id": "DK-4.4-prop",
@@ -1119,7 +1202,8 @@
       "notes": "The transcribed claim is false: a compiled R^4 counterexample exhibits an acute pair with both principal angles pi/4 and a competitor unitary carrying P to Q whose full displacement 1-V has trace norm 2 sqrt 2, strictly below the direct rotation value 4 sqrt(2 - sqrt 2).  The competitor mixes the equal-angle multiplicity space (rotation angles 0 and pi/2), an obstruction available at every angle threshold; the same family refutes the closing conjecture of Davis 1958.  Operator-norm and squared-displacement consequences survive via 4.1/4.3.\n\n**SOURCE-VERIFIED AGAINST THE FULL TRANSCRIPTION 2026-08-07 (Claude Opus 5).**  The refutation is INSIDE the printed scope, which matters because `refuted_as_transcribed` is the strongest claim in this census.  Proposition 4.4 is printed \"in a real space `H`\" with `Theta <= pi/3`; the counterexample is in `R^4` with both principal angles `pi/4 <= pi/3`, so it meets both printed hypotheses.  The printed proof reduces to the 2-by-2 blocks (`e = f = 0` because the space is real, then a `pi/3` trigonometric inequality on `mu_1 + mu_2`) and then sums over blocks -- which is exactly the invalid step this row already localizes at equation (4.3).  The paper itself notes the conclusion fails beyond `pi/3` by Example 4.1 and fails in complex space by Example 4.2, so the real-space and `pi/3` restrictions are deliberate and the counterexample is not exploiting an unintended reading.\n\n**RESULT-INVENTORY REPAIR REGISTRATION 2026-08-12.** The printed Proposition 4.4 remains formally refuted. `directRotation_fullDisplacement_qnorm` is registered separately as the natural Q-norm repair required by repository policy; it is not evidence that the false printed conclusion is true.",
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "supporting"
     },
     {
       "id": "DK-5.1-thm",
@@ -1155,7 +1239,8 @@
           "kind": "audit_mapping",
           "detail": "The source block includes the Banach-space inverse-norm form, A/B interchange, and unbounded-left extension. The repository contains strong infrastructure and literal wrappers, but the audit row does not atomically show that every printed clause is represented at real/complex source scope."
         }
-      ]
+      ],
+      "importance": "major"
     },
     {
       "id": "DK-5-hermitian-inequalities",
@@ -1197,7 +1282,8 @@
           "kind": "mixed_disposition",
           "detail": "The same block asks whether the rank factor can be replaced by a universal constant. That open question should be atomically dispositioned instead of being swallowed by a terminal `.whole` clause."
         }
-      ]
+      ],
+      "importance": "technical"
     },
     {
       "id": "DK-5.2-thm",
@@ -1226,7 +1312,8 @@
           "kind": "audit_mapping",
           "detail": "The theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope."
         }
-      ]
+      ],
+      "importance": "major"
     },
     {
       "id": "DK-5.1-lem",
@@ -1245,7 +1332,8 @@
       "notes": "The modern approximation-number theorem is stronger and scalar-generic.\n\n**SOURCE WRAPPER ADDED 2026-08-05**: `Lemma5_1`, in `DavisKahan/Sources/DavisKahan1970/Section5.lean`.  The compiled statement is stronger than the printed one on two axes, and the wrapper's docstring says which: the index is an arbitrary filtered net rather than a sequence, and the scalar field is generic rather than complex.  The paper's lemma is the specialization to a sequence over the complex field.",
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "technical"
     },
     {
       "id": "DK-6.1-lem",
@@ -1265,7 +1353,8 @@
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "scope_gap": null,
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "technical"
     },
     {
       "id": "DK-6.2-lem",
@@ -1283,7 +1372,8 @@
       "notes": "Part of the clean Section 6 surface.",
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "technical"
     },
     {
       "id": "DK-6.1-prop",
@@ -1315,7 +1405,8 @@
           "kind": "audit_mapping",
           "detail": "The source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails. The counterexample exists elsewhere but is not registered as evidence for this row."
         }
-      ]
+      ],
+      "importance": "supporting"
     },
     {
       "id": "DK-6.1-thm",
@@ -1336,7 +1427,8 @@
       "notes": "This is the canonical source-general sine theorem.\n\n**STATUS LOWERED 2026-08-07 (Claude Opus 5): `compiled_exact` -> `compiled_specialization`, on scalar scope, not on any doubt about the mathematics.**  Every declaration on this row is stated for `InnerProductSpace ℂ`.  Standing assumption 1 of the transcription says the space is real OR complex and assumption 4 says the headline theorems apply in infinite as well as finite dimension, so the compiled statement is a specialization of the printed one.  `compiled_specialization` is defined as exactly that: 'a useful compiled specialization exists, but not the full source scope'.  The remedy is a real wrapper through the complexification route, not a reproof; see blocker `real-scalar-infinite-dimensional-scope`.\n\n**AUDIT METHOD CORRECTED 2026-08-07 (Claude Opus 5).**  The scalar-scope audit earlier the same day inspected only the declarations already LISTED on this row, which answers \"does this row list a real theorem?\" and not \"does the repository HAVE one?\".  Re-audited by searching the whole stable repo and elaborating candidate signatures.  FALSE POSITIVE, restored to `compiled_exact`.  Theorem 6.1 has a real infinite-dimensional source theorem already: `Theorem6_1_real` elaborates over `[InnerProductSpace ℝ]`, `[CompleteSpace]`, no `[FiniteDimensional]`, and the common-domain and common-core unbounded variants `Theorem6_1_real_commonDomain` / `Theorem6_1_real_commonCore` do too.  The row's declaration list simply omitted them; the mathematics was never missing.\n\n**M32, THE SECTION 6 SCALAR TRANCHE, 2026-08-09 (Claude Opus 5).**  THE `real-scalar-infinite-dimensional-scope` ENTRY IN `blocked_by` WAS STALE AND IS REMOVED.  The 2026-08-07 note above already recorded the false positive and restored the status, but the blocker was left on the row, so the blocker's own tally counted this row.  RE-MEASURED 2026-08-09 by elaborating the signature: `Theorem6_1_real` is `[InnerProductSpace ℝ]` on four spaces with `[CompleteSpace]` and NO `[FiniteDimensional]` anywhere, over `PaperRealTheorem61Data` and an arbitrary `PaperUnitaryInvariantNorm`, concluding `N.Mem S.operator ∧ gap * frameLowerBound * N.gauge S.operator ≤ N.gauge P.data.residual` -- membership CONCLUDED, constant intact.  `Theorem6_1_real_commonDomain` and `Theorem6_1_real_commonCore` likewise.  All axiom-clean (`[propext, Classical.choice, Quot.sound]`).  Nothing was proved for this row today; the row was already correct.",
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "major"
     },
     {
       "id": "DK-6.2-thm",
@@ -1366,7 +1458,8 @@
           "kind": "audit_mapping",
           "detail": "The source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence. Exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses."
         }
-      ]
+      ],
+      "importance": "supporting"
     },
     {
       "id": "DK-6.3-thm",
@@ -1412,7 +1505,8 @@
           "kind": "missing_source_facing_statement",
           "detail": "The generalized tangent theorem itself appears covered, but the same hashed passage preserves Example 6.1: delta=1, tangent quantity 1, residual 1/sqrt(2) when spectral mass lies on the wrong side. The hostile review did not find an exact source-facing formalization of that explicit counterexample."
         }
-      ]
+      ],
+      "importance": "major"
     },
     {
       "id": "DK-6-appendix",
@@ -1480,7 +1574,8 @@
           "kind": "audit_atomization",
           "detail": "The TeX explicitly preserves equations (6.7)-(6.11) and the limiting proof chain. The row maps endpoint/common-domain machinery and historically treats parts of the chain as documentation fidelity; under statement-level 100% coverage, every preserved mathematical equation needs explicit evidence/disposition."
         }
-      ]
+      ],
+      "importance": "technical"
     },
     {
       "id": "DK-6.3-lem",
@@ -1504,7 +1599,8 @@
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "scope_gap": "CLOSED 2026-08-09 (Claude Opus 5).  The gap recorded below was real and is now discharged: `lemma6_3_approximationNumber_leakage_real` and `lemma6_3_singularValue_leakage_real` (`DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakageReal.lean`) are Lemma 6.3 over a REAL Hilbert space of arbitrary dimension -- real operator `K : E →L[ℝ] F`, real subspaces `P`, `Q`, real approximation numbers, real operator norm -- with the source-faithful block hypothesis `K ∘ P = Q ∘ K ∘ P` unchanged and no dimension hypothesis on the approximation-number form.  PRIOR TEXT, for the record: real-scalar/infinite-dimensional: every declaration was `InnerProductSpace ℂ` only, confirmed by elaboration 2026-08-07 under the corrected repo-wide method, with no real endpoint anywhere in the repo.",
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "technical"
     },
     {
       "id": "DK-7-sin2-proof",
@@ -1533,7 +1629,8 @@
           "kind": "audit_atomization",
           "detail": "The block contains equations (7.1)-(7.5), reflected diagonalization, the factor-one directed residual refinement, swap asymmetry, and a counterexample. The current clauses do not explicitly account for every separable identity/assertion."
         }
-      ]
+      ],
+      "importance": "technical"
     },
     {
       "id": "DK-7-tan2-proof",
@@ -1565,7 +1662,8 @@
           "kind": "audit_atomization",
           "detail": "The exact directed/ambient tan(2 Theta) endpoints are now closed. The proof block still contains equation (7.6), scalar singular-vector inequality, pole exclusion as a conclusion, Fan-dominance steps, and both endpoints under one coarse audit clause; atomize these for static semantic certification."
         }
-      ]
+      ],
+      "importance": "technical"
     },
     {
       "id": "DK-8.1-thm",
@@ -1665,7 +1763,8 @@
       "declarations_outside_build": [],
       "scope_gap": null,
       "completion_certification": "accepted",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "major"
     },
     {
       "id": "DK-8.2-thm",
@@ -1735,7 +1834,8 @@
           "kind": "audit_atomization",
           "detail": "A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions."
         }
-      ]
+      ],
+      "importance": "major"
     },
     {
       "id": "DK-9-model",
@@ -1845,7 +1945,8 @@
           "kind": "math",
           "detail": "PDF re-audit resolves the source-reading ambiguity: the paper prints alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ... and the distributable TeX now preserves that strict ordering. The source-specification defect is closed; the formalization must now justify that source scope, including the positive-eigenvalue multiplicity/simplicity content, rather than weaken the statement."
         }
-      ]
+      ],
+      "importance": "technical"
     },
     {
       "id": "DK-9.1-9.4",
@@ -1893,7 +1994,8 @@
           "kind": "audit_mapping",
           "detail": "The primary mapped `equation_9_*` declarations are largely arithmetic wrappers conditional on analytic bounds. Genuine unconditional beam-model sine/sin(2 Theta) theorems exist elsewhere and should be the source evidence for the actual Section 9 conclusions."
         }
-      ]
+      ],
+      "importance": "technical"
     },
     {
       "id": "DK-9.5-9.7",
@@ -1949,7 +2051,8 @@
           "kind": "audit_mapping",
           "detail": "The current primary mapping emphasizes numerical wrappers rather than the genuine beam tangent/double-tangent theorems that discharge the analytic hypotheses. Rebind the row to the unconditional source-facing model results."
         }
-      ]
+      ],
+      "importance": "technical"
     },
     {
       "id": "DK-9.8",
@@ -1990,7 +2093,8 @@
           "kind": "math",
           "detail": "PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition."
         }
-      ]
+      ],
+      "importance": "technical"
     },
     {
       "id": "DK-9-infinite-residual-counterexample",
@@ -2057,7 +2161,8 @@
           "kind": "missing_source_facing_statement",
           "detail": "The source says an arbitrarily small modification repairs the domain defect. Lean proves finite truncations lie in the operator domain and agree on every fixed prefix, but the hostile review did not find a norm-convergence/arbitrarily-small-perturbation theorem for those truncations."
         }
-      ]
+      ],
+      "importance": "supporting"
     },
     {
       "id": "DK-9.9-9.11",
@@ -2135,7 +2240,8 @@
           "kind": "mixed_disposition",
           "detail": "The numerical/Schur-complement conclusions appear formalized, but the block ends with a source assertion that the 3x3 comparison angle is the best possible bound obtainable from the stated data while explicitly deferring its proof to unresolved Question 10.2. Record that assertion separately as source-asserted/unproved rather than counting the entire block as exact."
         }
-      ]
+      ],
+      "importance": "technical"
     },
     {
       "id": "DK-10.1",
@@ -2153,7 +2259,8 @@
       "notes": "The paper resolves the square norm; the repository has the sharp pairwise Hilbert–Schmidt theorem. The all-UI-norm version remains a distinct question.\n\n**NORM CLASSES RECORDED 2026-08-07 (Opus 5), closing this row's standing next_action.**\n\n* RESOLVED, under the weak hypothesis Question 10.1 actually asks about (the two spectra\n  only known to be at pairwise distance `delta`, with no interval/exterior separation):\n  the **Hilbert--Schmidt / Frobenius** class.  `DavisKahan/Sources/DavisKahan1970/SineTheta/Theorem62.lean`\n  states Theorem 6.2 with exactly that weaker pairwise spectral-distance hypothesis and\n  concludes `frameLowerBound * paperHilbertSchmidtNorm (canonicalSinTheta) <= ...`, over\n  `paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct`; the real-scalar form is\n  `PaperRealTheorem62Data.result_across`.\n* RESOLVED, but under the *stronger* interval/exterior hypothesis, hence not an answer to\n  this question: **every** unitarily invariant norm, with constant one -- that is Theorem 6.1\n  and its ideal-gauge forms (rows DK-6.1-thm and S2-*).\n* OPEN, and this is precisely Question 10.1: any unitarily invariant norm other than the\n  Hilbert--Schmidt one under the pairwise-distance hypothesis alone.  The paper poses it and\n  the repository does not answer it; the Hilbert--Schmidt proof is a Sylvester/Frobenius\n  argument that does not transfer to a general gauge.\n\nThis row stays `resolved_by_modern_development`: one norm class is answered, the general\nquestion is not, and it is the paper's own open question rather than proof debt.\n\n**M18 ADJUDICATION 2026-08-09 (Claude Opus 5), against `dev/davis-kahan-1970-final-audit-2026-08-09.md`.**  Disagreement 27 is UPHELD as a CLASSIFICATION point,\nand it is worth stating precisely because the status word is `resolved_by_modern_development`.\nTheorem 6.2 and inequality (5.1) are IN THE PAPER, so they cannot themselves resolve the paper's own\nopen question -- Davis and Kahan knew them when they posed Question 10.1, which asks for the best\nunitarily-invariant-norm estimate under pairwise spectral distance alone.  What is genuinely modern\nhere is the SCOPE at which the repository proves the Hilbert--Schmidt answer: over self-adjoint CLOSED\n(hence possibly unbounded) operators on arbitrary complete inner product spaces, over real as well as\ncomplex scalars, with Hilbert--Schmidt membership concluded rather than assumed -- see the new row\n`DK-5-hermitian-inequalities`, which now claims (5.1) itself.  The status therefore stands, on that\nreading and not on the reading the notes above invite.  Either way this row is NOT proof debt: the\ngeneral-UI-norm question is the paper's own open question.",
       "next_action": "Retain as a source open-question record. It is not theorem proof debt; do not use it to hide established mathematical clauses from mixed neighboring/source blocks.",
       "completion_certification": "not_applicable",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "technical"
     },
     {
       "id": "DK-10.2",
@@ -2169,7 +2276,8 @@
       "notes": "This is explicitly an open research direction, not a theorem required to formalize the 1970 paper.",
       "next_action": "Retain as a source open-question record. It is not theorem proof debt; do not use it to hide established mathematical clauses from mixed neighboring/source blocks.",
       "completion_certification": "not_applicable",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "technical"
     },
     {
       "id": "DK-10.3",
@@ -2185,7 +2293,8 @@
       "notes": "Open research question.",
       "next_action": "Retain as a source open-question record. It is not theorem proof debt; do not use it to hide established mathematical clauses from mixed neighboring/source blocks.",
       "completion_certification": "not_applicable",
-      "completion_holes": []
+      "completion_holes": [],
+      "importance": "technical"
     },
     {
       "id": "DK-10.4",
@@ -2218,7 +2327,8 @@
           "kind": "checker_loophole",
           "detail": "The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open."
         }
-      ]
+      ],
+      "importance": "technical"
     }
   ],
   "retired_blockers": {
@@ -2241,5 +2351,11 @@
     "reopened_mapping": "Legacy row-level diagnostic: evidence did not exhaustively account for the broad hashed passage. Proof/setup/example material outside the 29 printed result statements does not need Lean evidence merely to clear 100%.",
     "mixed_disposition": "Legacy row-level diagnostic: the broad source block mixes established, attributed, open, deferred, or proof material. The source-atom boundary classification now records these distinctions explicitly; only atoms belonging to a counted result statement affect completion.",
     "not_applicable": "Legacy row-level non-obligation marker. Current completion inclusion/exclusion is defined by the 29-result inventory and explicit atom boundary classifications."
+  },
+  "importance_definitions": {
+    "headline": "Default external semantic-alignment surface: the small set of central paper claims a reviewer should inspect first.",
+    "major": "Important named theorem or major consequence, included when requesting a broader review than the default headline surface.",
+    "supporting": "Mathematically substantive supporting result, example, corollary, or structural statement, normally omitted from the concise external packet.",
+    "technical": "Definition, proof ingredient, numerical working, appendix machinery, or other source item retained for full-paper completeness rather than the concise semantic-alignment packet."
   }
 }

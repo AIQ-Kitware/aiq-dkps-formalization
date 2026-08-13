@@ -43,6 +43,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from source_census_importance import validate_importance_schema
+
 ROOT = Path(__file__).resolve().parents[1]
 JSON_PATH = ROOT / "dev/yu-wang-samworth-2015-full-source-census.json"
 MD_PATH = ROOT / "dev/yu-wang-samworth-2015-full-source-census.md"
@@ -108,6 +110,7 @@ def check_schema(data: dict) -> list[dict]:
     items = data.get("items")
     if not isinstance(items, list) or not items:
         fail("items must be a nonempty list")
+    validate_importance_schema(data, items, fail)
     statuses = set(data.get("status_definitions", {}))
     verifications = set(data.get("verification_definitions", {}))
     if not statuses:
@@ -312,11 +315,11 @@ def render(data: dict) -> str:
     for key in sorted(counts):
         out.append(f"| `{key}` | {counts[key]} |")
     out += ["", "## Items", "",
-            "| id | section | source anchor | title | status | verification |",
-            "| --- | --- | --- | --- | --- | --- |"]
+            "| id | importance | section | source anchor | title | status | verification |",
+            "| --- | --- | --- | --- | --- | --- | --- |"]
     for item in items:
         out.append(
-            f"| `{item['id']}` | {item['section']} | {item['source_anchor']} | "
+            f"| `{item['id']}` | `{item['importance']}` | {item['section']} | {item['source_anchor']} | "
             f"{item['title']} | `{item['status']}` | `{item['verification']}` |"
         )
     out += ["", "## Gaps", ""]
@@ -329,6 +332,7 @@ def render(data: dict) -> str:
                 f"* **source anchor**: {item['source_anchor']} "
                 f"({item['source_kind']}, section {item['section']})",
                 f"* **summary**: {item['summary']}",
+                f"* **review importance**: `{item['importance']}`",
                 f"* **status**: `{item['status']}` / "
                 f"**verification**: `{item['verification']}`"]
         for label, key in (("lean declarations", "lean_declarations"),

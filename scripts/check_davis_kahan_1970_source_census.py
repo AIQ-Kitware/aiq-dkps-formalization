@@ -9,6 +9,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from source_census_importance import validate_importance_schema
+
 ROOT = Path(__file__).resolve().parents[1]
 JSON_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.json"
 MAP_PATH = ROOT / "dev/davis-kahan-1970-statement-map.json"
@@ -44,6 +46,7 @@ def main() -> int:
     items = data.get("items")
     if not isinstance(items, list) or not items:
         fail("items must be a nonempty list")
+    validate_importance_schema(data, items, fail)
     statuses = set(data.get("status_definitions", {}))
     certifications = set(data.get("completion_certification_definitions", {}))
     if not certifications:

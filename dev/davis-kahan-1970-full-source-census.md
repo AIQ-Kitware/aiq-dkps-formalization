@@ -50,10 +50,10 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 22 |
+| `accepted` | 21 |
 | `reopened_source_spec` | 0 |
 | `reopened_math` | 7 |
-| `reopened_mapping` | 16 |
+| `reopened_mapping` | 17 |
 | `mixed_disposition` | 2 |
 | `not_applicable` | 3 |
 
@@ -146,6 +146,7 @@ Gates: DK-5-hermitian-inequalities (proved_in_build), DK-9.9-9.11 (proved_in_bui
 #### Section 1, equations (1.1)–(1.8): Two reducing decompositions and the residual
 
 - **Kind:** `construction`
+- **Review importance:** `technical`
 - **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_math`
@@ -173,6 +174,7 @@ WHAT M37 ADDED: `DavisKahan/Sources/DavisKahan1970/Section1.lean`, the source-nu
 #### Section 1, equations (1.9)–(1.18): Unitary-invariant norms, angle operators, and direct-rotation setup
 
 - **Kind:** `framework`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -218,6 +220,7 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 #### Section 2, sin theta theorem: Single-angle sine theorem
 
 - **Kind:** `unnumbered_theorem`
+- **Review importance:** `headline`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -235,6 +238,7 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 #### Section 2, tan theta theorem: Single-angle tangent theorem
 
 - **Kind:** `unnumbered_theorem`
+- **Review importance:** `headline`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -321,6 +325,7 @@ The `next_action` prerequisite `first generalise PrescribedSequence.lean from C 
 #### Section 2, sin 2 theta theorem: Double-angle sine theorem
 
 - **Kind:** `unnumbered_theorem`
+- **Review importance:** `headline`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -452,6 +457,7 @@ This resolves the contradiction introduced by the later 2026-08-10 audit paragra
 #### Section 2, tan 2 theta theorem: Double-angle tangent theorem
 
 - **Kind:** `unnumbered_theorem`
+- **Review importance:** `headline`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -774,6 +780,7 @@ DECLARATION LIST COMPLETED 2026-08-09 (Claude Opus 5, integrating M30).  The M30
 #### Section 2, paragraph after four theorems: Best constants and simultaneous equality
 
 - **Kind:** `source_claim`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -834,6 +841,7 @@ AUDIT, corrected in place: `modelTanTwoThetaPerturbation`'s docstring stated the
 #### Section 2, final paragraphs: Unbounded self-adjoint scope
 
 - **Kind:** `scope_claim`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -983,6 +991,7 @@ FOR THIS ROW: does not close.  The remaining obstruction is the ATTAINMENT claus
 #### Section 3 setup, equations (3.1)--(3.4), and Definition 3.1: Direct rotation
 
 - **Kind:** `definition`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -1021,6 +1030,7 @@ What is left on this row is the DIMENSION axis on `J`, which is a different bloc
 #### Definition 3.2: Acute case
 
 - **Kind:** `definition`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -1081,6 +1091,7 @@ results are at the printed hypothesis exactly.
 #### Proposition 3.1: Acute direct rotation existence and uniqueness
 
 - **Kind:** `proposition`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -1162,6 +1173,7 @@ ALSO SUPERSEDED: this row's "`IsUniformlyAcute` enters through clause (a) only" 
 #### Proposition 3.2: Nonacute existence criterion
 
 - **Kind:** `proposition`
+- **Review importance:** `supporting`
 - **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_math`
@@ -1230,6 +1242,7 @@ CORRECTION TO THE COORDINATOR'S OWN FRAMING, recorded because it nearly caused d
 #### Section 3, standing convention stated immediately after the proof of Proposition 3.2.: Standing crossing-dimension convention
 
 - **Kind:** `scope_claim`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -1241,6 +1254,7 @@ CORRECTION TO THE COORDINATOR'S OWN FRAMING, recorded because it nearly caused d
 #### Proposition 3.3: Principal square-root characterization
 
 - **Kind:** `proposition`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -1276,6 +1290,7 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 #### Proposition 3.4: Square as a direct rotation
 
 - **Kind:** `proposition`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -1321,6 +1336,7 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  `proposition3_4_source_full` removes the re
 #### Theorem 3.1: Classification of pairs of subspaces
 
 - **Kind:** `theorem`
+- **Review importance:** `major`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -1544,6 +1560,7 @@ AN ELABORATION TRAP WORTH KEEPING: `(cfc Real.sin Theta_0 : E ->l[k] E)` does NO
 #### Corollary 3.1: Compact classification by angle eigenvalues
 
 - **Kind:** `corollary`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -1630,11 +1647,14 @@ The recorded strictness narrowing `0 < theta n < pi/2` sits ONLY on `corollary3_
 #### Proposition 3.5: Angle commutation and eigenspace geometry
 
 - **Kind:** `proposition`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `accepted`
-- **Mathematics:** The full angle commutes with both projections, the quarter-turn and direct rotation; its eigenspaces are maximal reducing constant-angle subspaces in the acute case.
-- **Current Lean references:** `TauCeti.DavisKahan1970.bounded_angle_commute`, `TauCeti.DavisKahan1970.bounded_sinAngleOperatorC_norm`, `TauCeti.DavisKahan.Frontier.Section3.IsFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace_isFixedCosineReducing`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace_maximal`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_5_fixedAngle_maximal`, `TauCeti.DavisKahan.halmosCosineSq_commute_projection`, `TauCeti.DavisKahan.Frontier.Section3.halmosCosineSq_commute_projection_right`, `TauCeti.DavisKahanTheory.sq_sinAngleOperator_add_sq_directRotationCosine`, `TauCeti.DavisKahanTheory.projection_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.projection_right_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.directRotation_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_projection`, `TauCeti.DavisKahanTheory.angleOperator_comm_projection_right`, `TauCeti.DavisKahanTheory.angleOperator_comm_directRotation`, `TauCeti.adjoint_moorePenroseInverse_of_isSymmetric`, `TauCeti.comp_moorePenroseInverse_comm_of_isSymmetric`, `TauCeti.moorePenroseInverse_comm_of_isSymmetric`, `TauCeti.DavisKahanTheory.directRotationCosine_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_directRotationCosine`, `TauCeti.DavisKahanTheory.angleOperator_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_moorePenroseInverse_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_angleComplexStructure`, `TauCeti.complementaryProjection_eq_id_sub`, `TauCeti.DavisKahanTheory.vectorAngle_directRotation_eq_of_angleOperator_apply`, `TauCeti.DavisKahanTheory.adjoint_angleComplexStructure`, `TauCeti.DavisKahanTheory.re_inner_angleComplexStructure_apply_self`, `TauCeti.DavisKahanTheory.sinAngleOperator_apply_of_angleOperator_apply`, `TauCeti.DavisKahanTheory.directRotationCosine_apply_of_angleOperator_apply`, `TauCeti.DavisKahanTheory.angleOperator_eigenvalue_mem_Icc`, `TauCeti.vectorAngle`, `TauCeti.vectorAngle_real_eq_angle`, `TauCeti.vectorAngle_eq_angle_rclikeToReal`, `TauCeti.vectorAngle_comm`, `TauCeti.vectorAngle_eq_of_re_inner_eq`, `TauCeti.repr_eq_zero_of_calculus_apply_eq_smul`, `TauCeti.selfAdjointFunctionalCalculus_apply_of_calculus_apply_eq_smul`, `TauCeti.exists_eigenvalue_of_calculus_apply_eq_smul`, `TauCeti.DavisKahanExt.commute_paperAngleOperatorC_starProjection`, `TauCeti.DavisKahanExt.commute_paperAngleOperatorC_starProjection_right`, `TauCeti.DavisKahanExt.commute_sinAngleOperatorC_starProjection`, `TauCeti.DavisKahanExt.commute_sinAngleOperatorC_starProjection_right`, `TauCeti.DavisKahanExt.adjoint_starProjection_sub`, `TauCeti.DavisKahan.Frontier.Section3.IsPrintedFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace_maximal_printed`, `TauCeti.DavisKahan.Frontier.Section3.isPrintedFixedCosineReducingSubspace_of_isFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Frontier.Section3.isFixedCosineReducingSubspace_of_printed`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_5_fixedAngle_maximal_uniformlyAcute_form`, `TauCeti.DavisKahan.Frontier.Section3.halmosCosineSq_isSymmetric`, `TauCeti.DavisKahan.Frontier.Section3.halmosCosineSq_sub_smul_isSymmetric`, `TauCeti.DavisKahan1970.proposition3_5_directRotation_resolution`, `TauCeti.DavisKahan1970.proposition3_5_commutations`, `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle`, `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace`, `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal`, `TauCeti.DavisKahan1970.proposition3_5_angleOperator`, `TauCeti.DavisKahan1970.proposition3_5_directRotation`, `TauCeti.DavisKahan1970.proposition3_5_quarterTurn`, `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace`, `TauCeti.LinearPMap.cfc_apply_of_apply_eq_real_smul`, `TauCeti.DavisKahan1970.proposition3_5_directRotation_exponential`
+- **Hostile completion certification:** `reopened_mapping`
+- **Mathematics:** The full angle commutes with both projections, the quarter turn and the direct rotation, and an angle eigenvector is rotated through exactly its eigenvalue; both clauses hold at the standing Section 3 scope for a completed direct rotation, with no acuteness hypothesis.  Only the third clause -- that each eigenspace is the maximal reducing constant-angle subspace -- is restricted by the source to the acute case.
+- **Known hostile-review holes:**
+  - `audit_mapping`: Clauses 1 and 2 were previously certified against acute-only wrappers, which is not the printed scope; they are now proved for the completed nonacute direct rotation.  Re-audit the mapping against the repaired signatures.
+- **Current Lean references:** `TauCeti.DavisKahan1970.bounded_angle_commute`, `TauCeti.DavisKahan1970.bounded_sinAngleOperatorC_norm`, `TauCeti.DavisKahan.Frontier.Section3.IsFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace_isFixedCosineReducing`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace_maximal`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_5_fixedAngle_maximal`, `TauCeti.DavisKahan.halmosCosineSq_commute_projection`, `TauCeti.DavisKahan.Frontier.Section3.halmosCosineSq_commute_projection_right`, `TauCeti.DavisKahanTheory.sq_sinAngleOperator_add_sq_directRotationCosine`, `TauCeti.DavisKahanTheory.projection_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.projection_right_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.directRotation_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_projection`, `TauCeti.DavisKahanTheory.angleOperator_comm_projection_right`, `TauCeti.DavisKahanTheory.angleOperator_comm_directRotation`, `TauCeti.adjoint_moorePenroseInverse_of_isSymmetric`, `TauCeti.comp_moorePenroseInverse_comm_of_isSymmetric`, `TauCeti.moorePenroseInverse_comm_of_isSymmetric`, `TauCeti.DavisKahanTheory.directRotationCosine_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_directRotationCosine`, `TauCeti.DavisKahanTheory.angleOperator_comm_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_moorePenroseInverse_sinAngleOperator`, `TauCeti.DavisKahanTheory.angleOperator_comm_angleComplexStructure`, `TauCeti.complementaryProjection_eq_id_sub`, `TauCeti.DavisKahanTheory.vectorAngle_directRotation_eq_of_angleOperator_apply`, `TauCeti.DavisKahanTheory.adjoint_angleComplexStructure`, `TauCeti.DavisKahanTheory.re_inner_angleComplexStructure_apply_self`, `TauCeti.DavisKahanTheory.sinAngleOperator_apply_of_angleOperator_apply`, `TauCeti.DavisKahanTheory.directRotationCosine_apply_of_angleOperator_apply`, `TauCeti.DavisKahanTheory.angleOperator_eigenvalue_mem_Icc`, `TauCeti.vectorAngle`, `TauCeti.vectorAngle_real_eq_angle`, `TauCeti.vectorAngle_eq_angle_rclikeToReal`, `TauCeti.vectorAngle_comm`, `TauCeti.vectorAngle_eq_of_re_inner_eq`, `TauCeti.repr_eq_zero_of_calculus_apply_eq_smul`, `TauCeti.selfAdjointFunctionalCalculus_apply_of_calculus_apply_eq_smul`, `TauCeti.exists_eigenvalue_of_calculus_apply_eq_smul`, `TauCeti.DavisKahanExt.commute_paperAngleOperatorC_starProjection`, `TauCeti.DavisKahanExt.commute_paperAngleOperatorC_starProjection_right`, `TauCeti.DavisKahanExt.commute_sinAngleOperatorC_starProjection`, `TauCeti.DavisKahanExt.commute_sinAngleOperatorC_starProjection_right`, `TauCeti.DavisKahanExt.adjoint_starProjection_sub`, `TauCeti.DavisKahan.Frontier.Section3.IsPrintedFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace_maximal_printed`, `TauCeti.DavisKahan.Frontier.Section3.isPrintedFixedCosineReducingSubspace_of_isFixedCosineReducingSubspace`, `TauCeti.DavisKahan.Frontier.Section3.isFixedCosineReducingSubspace_of_printed`, `TauCeti.DavisKahan.Frontier.Section3.proposition3_5_fixedAngle_maximal_uniformlyAcute_form`, `TauCeti.DavisKahan.Frontier.Section3.halmosCosineSq_isSymmetric`, `TauCeti.DavisKahan.Frontier.Section3.halmosCosineSq_sub_smul_isSymmetric`, `TauCeti.DavisKahan1970.proposition3_5_directRotation_resolution`, `TauCeti.DavisKahan1970.proposition3_5_commutations`, `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle`, `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace`, `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal`, `TauCeti.DavisKahan1970.proposition3_5_angleOperator`, `TauCeti.DavisKahan1970.proposition3_5_directRotation`, `TauCeti.DavisKahan1970.proposition3_5_quarterTurn`, `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace`, `TauCeti.LinearPMap.cfc_apply_of_apply_eq_real_smul`, `TauCeti.DavisKahan1970.proposition3_5_directRotation_exponential`, `TauCeti.DavisKahan1970.proposition3_5_commutations_acute`, `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute`, `TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply`, `TauCeti.DavisKahan.Proposition35.re_inner_nonacuteDirectRotation_sub_cosine_apply_self`, `TauCeti.DavisKahan.Proposition35.section3AngleOperator_comm_nonacuteDirectRotation`, `TauCeti.DavisKahan.Proposition35.section3AngleOperator_comm_nonacuteQuarterTurn`
 - **Assessment:** Commutation identities are present, but the maximal eigenspace characterization is not represented.
 
 **ROW WAS STALE.  CORRECTED 2026-08-06: the maximal eigenspace characterisation IS represented, and is proved.**  The note above -- "the maximal eigenspace characterization is not represented" -- was written when the Section 3 frontier was unbuilt and was never revisited.  `proposition3_5_fixedAngle_maximal` states both halves: the fixed-cosine eigenspace `ker (cos^2 Theta - c^2)` is itself a fixed-cosine reducing subspace, and every such subspace is contained in it.  `#print axioms` gives exactly [propext, Classical.choice, Quot.sound] on it and on both halves, and since the Frontier promotion the same day it resolves against `DavisKahan.All`, so `lake build` guards it.  The frontier gate had been reporting `s3-prop3-5` as recursively grounded throughout; the census and the manifest disagreed and the manifest was right.
@@ -1717,6 +1737,7 @@ RESIDUAL FIDELITY NOTE: `fixedCosineSubspace` is `ker (cos^2 Theta - c^2)`, and 
 #### Corollary 3.2: Reversal symmetry
 
 - **Kind:** `corollary`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -1752,6 +1773,7 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is clos
 #### Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2): Pointwise and singular-value extremality of the direct rotation
 
 - **Kind:** `proposition`
+- **Review importance:** `supporting`
 - **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -1791,6 +1813,7 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`
 #### Corollary 4.1: UI-norm minimality of direct rotation displacement
 
 - **Kind:** `corollary`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -1820,6 +1843,7 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`
 #### Proposition 4.2: Basis-angle square-sum extremality
 
 - **Kind:** `proposition`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -1891,6 +1915,7 @@ SOURCE-CLOSURE TRANCHE 2026-08-11.  Added the stable arbitrary-dimensional `TauC
 #### Proposition 4.3: Squared displacement UI-norm minimality
 
 - **Kind:** `proposition`
+- **Review importance:** `major`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -1947,6 +1972,7 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`
 #### Examples 4.1–4.2 and Proposition 4.4: Full-displacement counterexamples and Proposition 4.4 as printed
 
 - **Kind:** `proposition`
+- **Review importance:** `supporting`
 - **Status:** `refuted_as_transcribed`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -1964,6 +1990,7 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`
 #### Theorem 5.1: Banach-space Sylvester lower bound
 
 - **Kind:** `theorem`
+- **Review importance:** `major`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -2003,6 +2030,7 @@ scope that the formalization does not carry.
 #### Section 5, inequalities (5.1) and (5.2): Square-norm and rank-corrected Sylvester inequalities
 
 - **Kind:** `equation`
+- **Review importance:** `technical`
 - **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_math`
@@ -2030,6 +2058,7 @@ CONSEQUENTLY THE RECORDED ROUTE WAS WRONG: it is NOT Cauchy-Schwarz between Scha
 #### Theorem 5.2: Semibounded self-adjoint Sylvester theorem
 
 - **Kind:** `theorem`
+- **Review importance:** `major`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -2066,6 +2095,7 @@ is not part of the real-scalar gap the blocker describes.
 #### Lemma 5.1: Strong-cutoff convergence of singular values
 
 - **Kind:** `lemma`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -2081,6 +2111,7 @@ is not part of the real-scalar gap the blocker describes.
 #### Lemma 6.1: Direct-sum UI-norm comparison and converse
 
 - **Kind:** `lemma`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -2101,6 +2132,7 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 #### Lemma 6.2: Reflection-pinch contraction
 
 - **Kind:** `lemma`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -2112,6 +2144,7 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 #### Section 6 sine proof and Proposition 6.1: Sine proof, ambient limitation, and symmetric sine theorem
 
 - **Kind:** `proposition`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -2137,6 +2170,7 @@ The theorem's own statement mentions no complexification, no functional calculus
 #### Theorem 6.1: Generalized sine theorem
 
 - **Kind:** `theorem`
+- **Review importance:** `major`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -2154,6 +2188,7 @@ The theorem's own statement mentions no complexification, no functional calculus
 #### Theorem 6.2: Pairwise-gap square-norm sine theorem
 
 - **Kind:** `theorem`
+- **Review importance:** `supporting`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -2185,6 +2220,7 @@ is itself still absent as a Section 5 statement; that is tracked on `DK-5-hermit
 #### Section 6 equations (6.2)–(6.6), Example 6.1, and Theorem 6.3: Tangent proof machinery, Example 6.1, and generalized tangent theorem
 
 - **Kind:** `theorem`
+- **Review importance:** `major`
 - **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_math`
@@ -2243,6 +2279,7 @@ ALSO CORRECTED: `theorem6_3_all_kyFan_core` is the FINITE-TRIAL core and carries
 #### Appendix to Section 6, equations (6.7)–(6.11): Unbounded-operator passage
 
 - **Kind:** `appendix`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -2429,6 +2466,7 @@ FOR THIS ROW: item (b) does not close.  Its obstruction is now the attainment cl
 #### Lemma 6.3: Finite-rank near-maximizer leakage estimate
 
 - **Kind:** `lemma`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -2450,6 +2488,7 @@ So `Section6AppendixLeakage.lean` was generalized to `RCLike 𝕜` (`approximati
 #### Section 7, equations (7.1)–(7.5): Reflection proof of the sine double-angle theorem
 
 - **Kind:** `proof_package`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -2472,6 +2511,7 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'source wrapper pr
 #### Section 7, equation (7.6) and following argument: Singular-vector proof of the tangent double-angle theorem
 
 - **Kind:** `proof_package`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -2502,6 +2542,7 @@ ROW WAS STALE; CORRECTED 2026-08-07 (Fable 5).  The requested 'exact source norm
 #### Theorem 8.1: Branch selection and spectral repulsion
 
 - **Kind:** `theorem`
+- **Review importance:** `major`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `accepted`
@@ -2617,6 +2658,7 @@ STATUS LEFT AT `compiled_exact` PENDING A HUMAN CALL on whether the surviving co
 #### Theorem 8.2 and final Section 8 extension remark: Smallness selects the acute branch and closing extension remark
 
 - **Kind:** `theorem`
+- **Review importance:** `major`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -2814,6 +2856,7 @@ THE FILE WAS SELF-CONTRADICTING, NOT MERELY STALE: the same module docstring alr
 #### Section 9, problem setup: Fourth-derivative Rayleigh–Ritz model
 
 - **Kind:** `numerical_model`
+- **Review importance:** `technical`
 - **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_math`
@@ -2933,6 +2976,7 @@ TWO STANDING JUDGEMENTS IN THIS ROW ARE THEREFORE SUPERSEDED: "(ii) THE COST IS 
 #### Equations (9.1)–(9.4): Initial sine and sine-double-angle bounds
 
 - **Kind:** `numerical_claims`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -3035,6 +3079,7 @@ and the row's judgement was already correct.
 #### Equations (9.5)–(9.7): Rayleigh–Ritz tangent refinements
 
 - **Kind:** `numerical_claims`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_mapping`
@@ -3179,6 +3224,7 @@ FOR THIS ROW: does not close.  Its 2-norm sentence of (9.7) needs the same arbit
 #### Equation (9.8): Comparison with Weinberger bounds
 
 - **Kind:** `comparison_claim`
+- **Review importance:** `technical`
 - **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_math`
@@ -3235,6 +3281,7 @@ TRIPWIRE AGAINST THE TEMPTING FALSE SHORTCUT.  `naive_second_scalar_lower_bound_
 #### Section 9, l2 example after (9.8): Residual-infinite limitation example
 
 - **Kind:** `example`
+- **Review importance:** `supporting`
 - **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `reopened_math`
@@ -3290,6 +3337,7 @@ RECORDED, not a regression: this work moves the per-declaration `@[expose]` coun
 #### Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster
 
 - **Kind:** `numerical_claims`
+- **Review importance:** `technical`
 - **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `mixed_disposition`
@@ -3404,6 +3452,7 @@ which say what the record cannot.  What still blocks the four remaining Section 
 #### Question 10.1: Sine bounds under arbitrary pairwise spectral distance
 
 - **Kind:** `open_question`
+- **Review importance:** `technical`
 - **Status:** `resolved_by_modern_development`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `not_applicable`
@@ -3447,6 +3496,7 @@ general-UI-norm question is the paper's own open question.
 #### Question 10.2: Three-way subspace decompositions
 
 - **Kind:** `open_question`
+- **Review importance:** `technical`
 - **Status:** `not_a_completion_obligation`
 - **Verification:** `not_applicable`
 - **Hostile completion certification:** `not_applicable`
@@ -3458,6 +3508,7 @@ general-UI-norm question is the paper's own open question.
 #### Question 10.3: Joint eigenvalue–eigenvector bounds
 
 - **Kind:** `open_question`
+- **Review importance:** `technical`
 - **Status:** `not_a_completion_obligation`
 - **Verification:** `not_applicable`
 - **Hostile completion certification:** `not_applicable`
@@ -3469,6 +3520,7 @@ general-UI-norm question is the paper's own open question.
 #### Question 10.4, including ambient and directed functional-calculus specializations: Perturbation bounds for functional calculus
 
 - **Kind:** `mixed_open_question`
+- **Review importance:** `technical`
 - **Status:** `partial_or_wrapper_missing`
 - **Verification:** `proved_in_build`
 - **Hostile completion certification:** `mixed_disposition`
