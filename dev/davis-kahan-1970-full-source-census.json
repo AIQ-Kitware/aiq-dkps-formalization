@@ -380,10 +380,10 @@
           ]
         },
         "canonical_declarations": [
-          "TauCeti.DavisKahan1970.tanTheta_headline_generic_directed",
-          "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact"
+          "TauCeti.DavisKahan1970.tanTheta_headline_generic_directed"
         ],
         "supporting_declarations": [
+          "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact",
           "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
           "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral",
           "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
@@ -446,7 +446,7 @@
             "status": "claimed_exact"
           }
         ],
-        "note": "The directed residual half now has a scalar-generic, PaperUnitaryInvariantNorm, source-shaped canonical theorem whose public signature exposes the Ritz spectral placement instead of TanThetaIntervalGap. The harder ambient/unbounded half remains represented by the accepted source-shaped complex theorem plus its real companion because the current whole-space angle-operator implementation is field-specific."
+        "note": "The directed residual half now has a scalar-generic, PaperUnitaryInvariantNorm, source-shaped canonical theorem whose public signature exposes the Ritz spectral placement instead of TanThetaIntervalGap. The harder ambient/unbounded half remains represented by the accepted source-shaped complex theorem plus its real companion because the current whole-space angle-operator implementation is field-specific. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope."
       }
     },
     {
@@ -524,10 +524,10 @@
           ]
         },
         "canonical_declarations": [
-          "TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed",
-          "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm"
+          "TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed"
         ],
         "supporting_declarations": [
+          "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
           "TauCeti.DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm",
           "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real",
           "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm",
@@ -578,7 +578,7 @@
             "status": "scope_companion"
           }
         ],
-        "note": "The directed residual conclusion now has a scalar-generic PaperUnitaryInvariantNorm facade with the interval/exterior hypotheses and residual written directly in its type. The ambient whole-space endpoint remains field-specific internally, so the complex source-shaped theorem stays as the second canonical declaration and its real sibling is a supporting scalar companion."
+        "note": "The directed residual conclusion now has a scalar-generic PaperUnitaryInvariantNorm facade with the interval/exterior hypotheses and residual written directly in its type. The ambient whole-space endpoint remains field-specific internally, so the complex source-shaped theorem stays as the second canonical declaration and its real sibling is a supporting scalar companion. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope."
       }
     },
     {
@@ -680,10 +680,10 @@
           ]
         },
         "canonical_declarations": [
-          "TauCeti.DavisKahan1970.tanTwoTheta_headline_generic",
-          "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact"
+          "TauCeti.DavisKahan1970.tanTwoTheta_headline_generic"
         ],
         "supporting_declarations": [
+          "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
           "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact",
           "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
           "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact",
@@ -746,7 +746,7 @@
             "status": "scope_companion"
           }
         ],
-        "note": "Unlike tan Theta and sin 2Theta, the branch-free tan 2Theta paper-norm theorem was already scalar-generic. The review now promotes it to the canonical headline name. Its generic proof is necessarily graph-coordinate shaped, so the source-shaped U,V directed-corner theorem remains canonical alongside it and the report prints absDoubleAngleTangent/approximationSingularValue context explicitly."
+        "note": "Unlike tan Theta and sin 2Theta, the branch-free tan 2Theta paper-norm theorem was already scalar-generic. The review now promotes it to the canonical headline name. Its generic proof is necessarily graph-coordinate shaped, so the source-shaped U,V directed-corner theorem remains canonical alongside it and the report prints absDoubleAngleTangent/approximationSingularValue context explicitly. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope."
       }
     },
     {

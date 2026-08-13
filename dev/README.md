@@ -61,12 +61,15 @@ python3 scripts/render_semantic_alignment_review.py \
     --output build/semantic-alignment/headline-review.md
 ```
 
-The command invokes Lean and embeds compiler-printed theorem types.  Headline
-census rows also carry a curated semantic-review contract: a normalized source
-statement, canonical and supporting Lean declarations, a clause-by-clause
-source/Lean map, and the small set of project-local definitions whose bodies
-must be shown for an outsider to understand the theorem type.  The renderer
-uses `#check` for theorem statements and `#print` for that semantic dictionary;
+The command invokes Lean, but the primary reviewer-facing Lean evidence is the
+canonical theorem declaration exactly as written in the repository, together
+with the relevant ambient `variable` binders inherited from its source section.
+The fully elaborated `#check` output is retained in a collapsible verification
+block.  Headline census rows also carry a curated semantic-review contract: a
+normalized source statement, canonical and supporting Lean declarations, a
+clause-by-clause source/Lean map, and the small set of project-local definitions
+needed to interpret the theorem.  For those definitions the renderer shows the
+mathematical gloss and source form first, with full `#print` output in details;
 it intentionally does **not** recursively dump every `TauCeti.*` dependency.
 
 Use `--no-lean` only for a layout preview.  `--importance major` expands the
