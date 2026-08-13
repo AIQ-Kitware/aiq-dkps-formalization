@@ -1,22 +1,19 @@
 #!/usr/bin/env python3
-"""Render a concise, compiler-resolved semantic-alignment review packet.
+"""Render a compact, self-contained semantic-alignment review packet.
 
-The full source censuses stay exhaustive.  This renderer selects only rows at or
-above an `importance` threshold, groups rows that are clauses of the same paper
-theorem, and pairs the maintained source-aligned prose with compiler-printed
-Lean theorem types.
+The full source censuses remain exhaustive.  This renderer selects an external
+review surface by census `importance`.  Headline rows are intentionally curated:
 
-Default external packet:
+* a normalized mathematical source statement;
+* one or more canonical Lean declarations whose compiler-resolved types carry
+  the alignment claim;
+* supporting declarations used only to certify additional scope;
+* a *small curated semantic dictionary* of project-local definitions that hide
+  mathematical content in those types; and
+* a clause-by-clause source/Lean correspondence table.
 
-    python3 scripts/render_semantic_alignment_review.py
-
-Expanded important-result packet:
-
-    python3 scripts/render_semantic_alignment_review.py --importance major
-
-Static preview without invoking Lean:
-
-    python3 scripts/render_semantic_alignment_review.py --no-lean
+The tool deliberately does not recursively expand every `TauCeti.*` dependency.
+The census author chooses the semantic closure an external reviewer needs.
 """
 from __future__ import annotations
 
@@ -27,28 +24,20 @@ import json
 import pathlib
 import re
 import subprocess
-import sys
 import tempfile
 
 from source_census_importance import IMPORTANCE_ORDER, selected_by_importance
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DK_CENSUS = ROOT / "dev/davis-kahan-1970-full-source-census.json"
-DK_RESULTS = ROOT / "dev/davis-kahan-1970-formalization-result-inventory.json"
 YWS_CENSUS = ROOT / "dev/yu-wang-samworth-2015-full-source-census.json"
 DEFAULT_OUTPUT = ROOT / "build/semantic-alignment/headline-review.md"
 BEGIN = "SEMANTIC_REVIEW_BEGIN|"
 END = "SEMANTIC_REVIEW_END|"
 
 PAPER_SPECS = {
-    "dk": {
-        "label": "Davis--Kahan 1970",
-        "census": DK_CENSUS,
-    },
-    "yws": {
-        "label": "Yu--Wang--Samworth 2015",
-        "census": YWS_CENSUS,
-    },
+    "dk": {"label": "Davis--Kahan 1970", "census": DK_CENSUS},
+    "yws": {"label": "Yu--Wang--Samworth 2015", "census": YWS_CENSUS},
 }
 
 
@@ -61,31 +50,40 @@ def git_value(*args: str) -> str:
     return p.stdout.strip() if p.returncode == 0 else "unavailable"
 
 
+def fallback_review(row: dict) -> dict:
+    decls = row.get("lean_declarations", [])
+    return {
+        "group": row["id"],
+        "group_title": row["title"],
+        "claim": row["summary"],
+        "source_statement": {
+            "setup": [],
+            "hypotheses": ["See the full source census for the uncurated source hypotheses."],
+            "conclusions": [row["summary"]],
+            "scope": [],
+        },
+        "canonical_declarations": decls[:1],
+        "supporting_declarations": decls[1:],
+        "context_declarations": [],
+        "clause_map": [{
+            "source_clause": row["summary"],
+            "lean_realization": "No curated headline correspondence is registered for this broader-tier row.",
+            "status": "claimed_exact",
+        }],
+        "note": "This row is outside the curated headline surface; showing the census fallback.",
+    }
+
+
 def collect(papers: list[str], threshold: str) -> tuple[list[dict], list[dict]]:
     groups: collections.OrderedDict[tuple[str, str], dict] = collections.OrderedDict()
     variants: list[dict] = []
     for paper in papers:
         spec = PAPER_SPECS[paper]
         data = load(spec["census"])
-        rows = selected_by_importance(data["items"], threshold)
-        for row in rows:
+        for row in selected_by_importance(data["items"], threshold):
             review = row.get("semantic_review")
-            # Supporting/technical rows may become selected only with a very broad
-            # threshold and intentionally fall back to the census summary + all
-            # declarations. Headline rows are schema-checked to be curated.
             if not isinstance(review, dict):
-                curated = None
-                if paper == "dk" and DK_RESULTS.exists():
-                    inv = load(DK_RESULTS)
-                    curated = next((r for r in inv.get("results", []) if r.get("id") == row["id"]), None)
-                review = {
-                    "group": row["id"],
-                    "group_title": row["title"],
-                    "claim": row["summary"],
-                    "declarations": (curated or {}).get("lean_declarations", row.get("lean_declarations", [])),
-                    "note": ((curated or {}).get("review_note")
-                             or "No curated semantic-review surface is registered; showing the census row directly."),
-                }
+                review = fallback_review(row)
             key = (paper, review["group"])
             if key not in groups:
                 groups[key] = {
@@ -101,46 +99,54 @@ def collect(papers: list[str], threshold: str) -> tuple[list[dict], list[dict]]:
                 group["importance"] = row["importance"]
             group["rows"].append({"row": row, "review": review})
             for variant in row.get("semantic_review_variants", []):
-                variants.append({
-                    "paper": paper,
-                    "paper_label": spec["label"],
-                    "parent_row": row,
-                    **variant,
-                })
+                variants.append({"paper": paper, "parent_row": row, **variant})
     return list(groups.values()), variants
 
 
-def declarations(groups: list[dict], variants: list[dict]) -> list[str]:
-    out: list[str] = []
-    seen: set[str] = set()
+def query_key(mode: str, name: str) -> str:
+    return f"{mode}:{name}"
+
+
+def probe_queries(groups: list[dict], variants: list[dict]) -> list[tuple[str, str]]:
+    out: list[tuple[str, str]] = []
+    seen: set[tuple[str, str]] = set()
+
+    def add(mode: str, name: str) -> None:
+        key = (mode, name)
+        if key not in seen:
+            seen.add(key)
+            out.append(key)
+
+    def add_review(review: dict) -> None:
+        for name in review.get("canonical_declarations", []):
+            add("check", name)
+        for name in review.get("supporting_declarations", []):
+            add("check", name)
+        for entry in review.get("context_declarations", []):
+            add("print", entry["name"])
+
     for group in groups:
         for entry in group["rows"]:
-            for decl in entry["review"].get("declarations", []):
-                if decl not in seen:
-                    out.append(decl); seen.add(decl)
+            add_review(entry["review"])
     for variant in variants:
-        for decl in variant.get("declarations", []):
-            if decl not in seen:
-                out.append(decl); seen.add(decl)
+        add_review(variant)
     return out
 
 
-def write_probe(path: pathlib.Path, decls: list[str], papers: list[str]) -> None:
+def write_probe(path: pathlib.Path, queries: list[tuple[str, str]], papers: list[str]) -> None:
     imports = ["import DavisKahan.All"]
     if "yws" in papers:
         imports.append("import FinishYuWangSamworth")
-    lines = [*imports, "", "-- Generated semantic-alignment signature probe.", ""]
-    for i, decl in enumerate(decls):
-        lines += [
-            f'#eval IO.println "{BEGIN}{i}"',
-            f"#check @{decl}",
-            f'#eval IO.println "{END}{i}"',
-            "",
-        ]
+    lines = [*imports, "", "-- Generated semantic-alignment compiler probe.", ""]
+    for i, (mode, name) in enumerate(queries):
+        lines.append(f'#eval IO.println "{BEGIN}{i}"')
+        lines.append(f"#check @{name}" if mode == "check" else f"#print {name}")
+        lines.append(f'#eval IO.println "{END}{i}"')
+        lines.append("")
     path.write_text("\n".join(lines), encoding="utf-8")
 
 
-def parse_probe(text: str, decls: list[str]) -> dict[str, dict]:
+def parse_probe(text: str, queries: list[tuple[str, str]]) -> dict[str, dict]:
     blocks: dict[int, list[str]] = {}
     current: int | None = None
     for line in text.splitlines():
@@ -156,207 +162,246 @@ def parse_probe(text: str, decls: list[str]) -> dict[str, dict]:
             continue
         if current is not None:
             blocks[current].append(line)
-    out = {}
-    for i, decl in enumerate(decls):
+
+    out: dict[str, dict] = {}
+    for i, (mode, name) in enumerate(queries):
         raw = "\n".join(blocks.get(i, [])).strip()
         resolved = bool(raw) and not re.search(r"(^|\n).*\berror(?:\(|:)", raw, re.I)
-        out[decl] = {"resolved": resolved, "type": raw if resolved else "", "raw": raw}
+        out[query_key(mode, name)] = {
+            "mode": mode,
+            "name": name,
+            "resolved": resolved,
+            "text": raw if resolved else "",
+            "raw": raw,
+        }
     return out
 
 
-def resolve(decls: list[str], papers: list[str]) -> tuple[dict[str, dict], str, int]:
+def resolve(queries: list[tuple[str, str]], papers: list[str]) -> tuple[dict[str, dict], str, int]:
+    (ROOT / "build").mkdir(exist_ok=True)
     with tempfile.NamedTemporaryFile(
         mode="w", suffix=".lean", prefix="semantic-review-", dir=ROOT / "build", delete=False
     ) as tmp:
         probe = pathlib.Path(tmp.name)
     try:
-        write_probe(probe, decls, papers)
+        write_probe(probe, queries, papers)
         p = subprocess.run(
             ["lake", "env", "lean", str(probe.relative_to(ROOT))],
             cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
         )
-        parsed = parse_probe(p.stdout, decls)
-        return parsed, p.stdout, p.returncode
+        return parse_probe(p.stdout, queries), p.stdout, p.returncode
     finally:
         probe.unlink(missing_ok=True)
 
 
-def dk_atom_summaries(result_id: str) -> list[tuple[str, str]]:
-    if not DK_RESULTS.exists():
-        return []
-    results = load(DK_RESULTS)
-    result = next((r for r in results.get("results", []) if r.get("id") == result_id), None)
-    if result is None:
-        return []
-    fidelity = ROOT / results["source_fidelity_inventory"]
-    atoms = {a["id"]: a for a in load(fidelity).get("atoms", [])}
-    out = []
-    for atom_id in result.get("source_atom_ids", []):
-        atom = atoms.get(atom_id)
-        if atom is not None:
-            out.append((atom_id, atom["summary"]))
-    return out
-
-
-def code(text: str) -> str:
+def lean_block(text: str) -> str:
     return "~~~~lean\n" + text.rstrip() + "\n~~~~"
 
 
-def render(groups: list[dict], variants: list[dict], sigs: dict[str, dict], *,
+def get_probe(results: dict[str, dict], mode: str, name: str) -> dict:
+    return results.get(query_key(mode, name), {
+        "resolved": False,
+        "raw": "compiler probe not run",
+        "text": "",
+    })
+
+
+def render_source_statement(statement: dict) -> list[str]:
+    lines = ["**Normalized source statement**", ""]
+    for key, label in (
+        ("setup", "Setup"),
+        ("hypotheses", "Hypotheses"),
+        ("conclusions", "Conclusion"),
+        ("scope", "Scope"),
+    ):
+        values = statement.get(key, [])
+        if values:
+            lines += [f"*{label}:*", ""]
+            lines.extend(f"- {x}" for x in values)
+            lines.append("")
+    return lines
+
+
+def md_cell(text: str) -> str:
+    return text.replace("|", "\\|").replace("\n", " ")
+
+
+def render_context(review: dict, results: dict[str, dict]) -> list[str]:
+    entries = review.get("context_declarations", [])
+    if not entries:
+        return []
+    lines = [
+        "**Local semantic dictionary**", "",
+        "These are the project-local notions in the canonical theorem type whose mathematical content is relevant to alignment. They are curated explicitly; unrelated implementation dependencies are not expanded.", "",
+    ]
+    for entry in entries:
+        name = entry["name"]
+        data = get_probe(results, "print", name)
+        lines += [f"`{name}` — {entry['mathematical_role']}", ""]
+        if data.get("resolved"):
+            lines += [lean_block(data["text"]), ""]
+        else:
+            lines += [f"> **UNRESOLVED DEFINITION:** {data.get('raw') or 'no compiler output'}", ""]
+    return lines
+
+
+def render_clause_map(review: dict) -> list[str]:
+    lines = ["**Clause-by-clause alignment claim**", "", "| Source clause | Lean realization | Status |", "|---|---|---|"]
+    for entry in review.get("clause_map", []):
+        lines.append(
+            f"| {md_cell(entry['source_clause'])} | {md_cell(entry['lean_realization'])} | `{entry.get('status','claimed_exact')}` |"
+        )
+    lines.append("")
+    return lines
+
+
+def render_checks(title: str, names: list[str], results: dict[str, dict], *, details: bool = False) -> list[str]:
+    if not names:
+        return []
+    lines: list[str] = []
+    if details:
+        lines += ["<details>", f"<summary><strong>{title}</strong></summary>", ""]
+    else:
+        lines += [f"**{title}**", ""]
+    for name in names:
+        data = get_probe(results, "check", name)
+        lines += [f"`{name}`", ""]
+        if data.get("resolved"):
+            lines += [lean_block(data["text"]), ""]
+        else:
+            lines += [f"> **UNRESOLVED:** {data.get('raw') or 'no compiler output'}", ""]
+    if details:
+        lines += ["</details>", ""]
+    return lines
+
+
+def render_review_body(review: dict, results: dict[str, dict]) -> list[str]:
+    lines = [review["claim"], ""]
+    lines += render_source_statement(review["source_statement"])
+    lines += render_checks("Canonical compiler-resolved Lean statement(s)", review.get("canonical_declarations", []), results)
+    lines += render_context(review, results)
+    lines += render_clause_map(review)
+    lines += render_checks("Supporting scope declarations", review.get("supporting_declarations", []), results, details=True)
+    if review.get("note"):
+        lines += [f"**Maintainer note:** {review['note']}", ""]
+    return lines
+
+
+def render(groups: list[dict], variants: list[dict], results: dict[str, dict], *,
            threshold: str, papers: list[str], lean_run: bool, probe_rc: int | None) -> str:
     head = git_value("rev-parse", "HEAD")
     dirty = git_value("status", "--porcelain")
     now = dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
     lines = [
-        "# Semantic alignment review: headline mathematical statements",
-        "",
+        "# Semantic alignment review: headline mathematical statements", "",
         f"Generated: `{now}`",
         f"Repository commit: `{head}`",
         f"Working tree clean: `{'yes' if not dirty else 'no'}`",
-        f"Importance threshold: `{threshold}` (includes equally or more important rows)",
+        f"Importance threshold: `{threshold}`",
         f"Papers: {', '.join(PAPER_SPECS[p]['label'] for p in papers)}",
-        f"Compiler signature probe run: `{'yes' if lean_run else 'no'}`",
-        *( [f"Compiler probe exit code: `{probe_rc}`"] if lean_run else [] ),
+        f"Compiler semantic probe run: `{'yes' if lean_run else 'no'}`",
+        *([f"Compiler probe exit code: `{probe_rc}`"] if lean_run else []),
         "",
-        "## Review purpose",
-        "",
-        "This packet is intentionally **not** a full-paper census. It is a small external-review surface selected by the `importance` field in each paper's source census. For every selected claim it presents the project-maintained prose statement that is claimed to match the source and the compiler-resolved Lean theorem type(s) chosen to realize that claim.",
-        "",
-        "The review question is semantic, not proof-theoretic: **does the Lean type state the same mathematical claim, under the same hypotheses and scope, without weakening the conclusion?** Proof bodies and supporting lemmas are deliberately omitted.",
-        "",
+        "## Review purpose", "",
+        "This is a deliberately small semantic-review surface, not a full-paper census. For each selected headline claim it contains enough of both sides of the translation to let a mathematically knowledgeable reviewer decide whether the Lean theorem states the same claim under the same hypotheses and scope.", "",
+        "The **normalized source statement and correspondence table are maintained claims of this project**. The Lean theorem types and local-definition bodies are obtained from the compiler on this commit. The reviewer's job is to challenge the correspondence between them.", "",
+        "Project-local definitions are expanded only when they hide mathematically relevant content in a headline theorem type. The packet does not recursively dump implementation dependencies.", "",
     ]
+
     current_paper = None
     for group in groups:
         if group["paper"] != current_paper:
             current_paper = group["paper"]
             lines += [f"## {group['paper_label']}", ""]
-        lines += [
-            f"### {group['title']}", "",
-            f"Review priority: `{group['importance']}`", "",
-        ]
+        lines += [f"### {group['title']}", "", f"Review priority: `{group['importance']}`", ""]
         for entry in group["rows"]:
             row, review = entry["row"], entry["review"]
-            lines += [
-                f"#### Claimed source-aligned prose — `{row['id']}`", "",
-                f"**Source anchor:** {row['source_anchor']}", "",
-                review["claim"], "",
-            ]
-            if review.get("note"):
-                lines += [f"**Maintainer note:** {review['note']}", ""]
-            if group["paper"] == "dk":
-                atoms = dk_atom_summaries(row["id"])
-                if atoms:
-                    lines += ["**Registered source-fidelity clauses counted for this result:**", ""]
-                    for atom_id, summary in atoms:
-                        lines.append(f"- `{atom_id}` — {summary}")
-                    lines.append("")
-            lines += ["**Resolved Lean statement(s):**", ""]
-            for decl in review.get("declarations", []):
-                data = sigs.get(decl, {"resolved": False, "raw": "signature probe not run"})
-                lines += [f"`{decl}`", ""]
-                if data.get("resolved"):
-                    lines += [code(data["type"]), ""]
-                else:
-                    lines += [f"> **UNRESOLVED:** {data.get('raw') or 'no compiler output'}", ""]
+            if len(group["rows"]) > 1:
+                lines += [f"#### Source clause `{row['id']}`", ""]
+            lines += [f"**Source anchor:** {row['source_anchor']}", ""]
+            lines += render_review_body(review, results)
+
         lines += [
             "**Independent reviewer verdict:** `PASS exact alignment` / `FAIL mismatch` / `UNCERTAIN`", "",
             "- Verdict: _fill in_",
-            "- Hypothesis/scope mismatch, if any: _fill in_",
-            "- Conclusion mismatch, if any: _fill in_",
-            "- Suggested replacement Lean statement, if needed: _fill in_",
+            "- Hidden or stronger Lean hypothesis, if any: _fill in_",
+            "- Missing or weakened conclusion, if any: _fill in_",
+            "- Is every project-local notion needed to judge the theorem expanded above? _fill in_",
+            "- Suggested replacement theorem/context, if needed: _fill in_",
             "", "---", "",
         ]
 
-        # Variants attached to a selected row in this group are rendered as their
-        # own review target immediately after the source theorem that motivates them.
-        for variant in [v for v in variants if v["paper"] == group["paper"] and
-                        any(e["row"]["id"] == v["parent_row"]["id"] for e in group["rows"])]:
+        parent_ids = {e["row"]["id"] for e in group["rows"]}
+        for variant in [v for v in variants if v["paper"] == group["paper"] and v["parent_row"]["id"] in parent_ids]:
             lines += [
                 f"### {variant['title']}", "",
                 "Review priority: `headline` (derived review target)", "",
                 f"**Provenance:** {variant['provenance_note']}", "",
-                "#### Claimed mathematical statement", "",
-                variant["claim"], "",
-                "**Resolved Lean statement(s):**", "",
             ]
-            for decl in variant["declarations"]:
-                data = sigs.get(decl, {"resolved": False, "raw": "signature probe not run"})
-                lines += [f"`{decl}`", ""]
-                if data.get("resolved"):
-                    lines += [code(data["type"]), ""]
-                else:
-                    lines += [f"> **UNRESOLVED:** {data.get('raw') or 'no compiler output'}", ""]
+            lines += render_review_body(variant, results)
             lines += [
-                "**Independent reviewer verdict:** `PASS mathematically faithful derived form` / `FAIL` / `UNCERTAIN`", "",
+                "**Independent reviewer verdict:** `PASS faithful derived form` / `FAIL` / `UNCERTAIN`", "",
                 "- Verdict: _fill in_",
-                "- Is the stated provenance from the source theorem to this projector form legitimate? _fill in_",
+                "- Is the claimed derivation from the source theorem legitimate? _fill in_",
                 "- Any stronger hidden hypothesis in Lean? _fill in_",
                 "", "---", "",
             ]
+
     lines += [
-        "## Scope intentionally omitted",
-        "",
-        "Rows marked `major`, `supporting`, or `technical` are excluded from the default `headline` packet. Increase the threshold with `--importance major` when a broader expert audit is desired. The exhaustive source censuses remain the authority for full-paper coverage and are not replaced by this packet.",
-        "",
+        "## Scope intentionally omitted", "",
+        "Rows marked `major`, `supporting`, or `technical` are excluded from the default `headline` packet. Use `--importance major` for the broader tier. The exhaustive paper censuses remain the authority for full-paper coverage.", "",
     ]
     return "\n".join(lines)
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--papers", default="dk,yws",
-                    help="comma-separated subset of: dk,yws (default: dk,yws)")
+    ap.add_argument("--papers", default="dk,yws", help="comma-separated subset of dk,yws")
     ap.add_argument("--importance", choices=list(IMPORTANCE_ORDER), default="headline",
-                    help="include this review-priority tier and all more-important tiers")
+                    help="include this priority tier and all more-important tiers")
     ap.add_argument("--output", type=pathlib.Path, default=DEFAULT_OUTPUT)
-    ap.add_argument("--no-lean", action="store_true",
-                    help="render a static preview without compiler-resolving theorem types")
+    ap.add_argument("--no-lean", action="store_true", help="render without compiler probes")
     ap.add_argument("--allow-unresolved", action="store_true",
-                    help="write the packet and exit 0 even if a selected declaration does not resolve")
+                    help="write packet and exit 0 even if a selected compiler probe fails")
     args = ap.parse_args()
 
     papers = [p.strip() for p in args.papers.split(",") if p.strip()]
-    bad = [p for p in papers if p not in PAPER_SPECS]
-    if bad or not papers:
+    if not papers or any(p not in PAPER_SPECS for p in papers):
         ap.error("--papers must be a nonempty comma-separated subset of dk,yws")
 
     groups, variants = collect(papers, args.importance)
-    decls = declarations(groups, variants)
-    sigs: dict[str, dict]
-    probe_output = ""
-    probe_rc: int | None = None
+    queries = probe_queries(groups, variants)
     if args.no_lean:
-        sigs = {d: {"resolved": False, "raw": "signature probe not run (--no-lean)"} for d in decls}
+        results = {
+            query_key(mode, name): {"resolved": False, "raw": "compiler probe not run (--no-lean)", "text": ""}
+            for mode, name in queries
+        }
+        probe_output = ""
+        probe_rc = None
     else:
-        (ROOT / "build").mkdir(exist_ok=True)
-        sigs, probe_output, probe_rc = resolve(decls, papers)
+        results, probe_output, probe_rc = resolve(queries, papers)
 
-    args.output = args.output if args.output.is_absolute() else ROOT / args.output
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(
-        render(groups, variants, sigs, threshold=args.importance, papers=papers,
-               lean_run=not args.no_lean, probe_rc=probe_rc),
-        encoding="utf-8",
-    )
+    output = args.output if args.output.is_absolute() else ROOT / args.output
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(render(groups, variants, results, threshold=args.importance, papers=papers,
+                             lean_run=not args.no_lean, probe_rc=probe_rc), encoding="utf-8")
 
-    unresolved = [d for d in decls if not sigs.get(d, {}).get("resolved")]
-    print(f"semantic alignment review: {args.output.relative_to(ROOT)}")
-    print(f"  groups: {len(groups)}; derived variants: {len(variants)}; declarations: {len(decls)}")
+    unresolved = [(mode, name) for mode, name in queries if not get_probe(results, mode, name).get("resolved")]
+    print(f"semantic alignment review: {output.relative_to(ROOT)}")
+    print(f"  groups: {len(groups)}; derived variants: {len(variants)}; compiler probes: {len(queries)}")
     if args.no_lean:
-        print("  Lean signatures: not resolved (--no-lean preview)")
+        print("  compiler probes: not run (--no-lean preview)")
     else:
-        print(f"  Lean signatures: {len(decls)-len(unresolved)}/{len(decls)} resolved")
+        print(f"  compiler probes: {len(queries)-len(unresolved)}/{len(queries)} resolved")
         if unresolved:
             print("  unresolved:")
-            for d in unresolved:
-                print(f"    {d}")
+            for mode, name in unresolved:
+                print(f"    {mode}: {name}")
             if probe_output:
-                log = args.output.with_suffix(args.output.suffix + ".lean.log")
+                log = output.with_suffix(output.suffix + ".lean.log")
                 log.write_text(probe_output, encoding="utf-8")
                 print(f"  probe log: {log.relative_to(ROOT)}")
-    if unresolved and not args.allow_unresolved and not args.no_lean:
-        return 1
-    return 0
+    return 1 if unresolved and not args.allow_unresolved and not args.no_lean else 0
 
 
 if __name__ == "__main__":

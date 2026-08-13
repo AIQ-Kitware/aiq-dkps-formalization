@@ -222,12 +222,74 @@
       "semantic_review": {
         "group": "YWS-Theorem-2",
         "group_title": "Yu--Wang--Samworth Theorem 2",
-        "claim": "With only the two exterior POPULATION gaps Delta = min(lambda_{r-1} - lambda_r, lambda_s - lambda_{s+1}) > 0, ‖sin Theta(V-hat, V)‖_F <= 2 min(sqrt d ‖E‖_op, ‖E‖_F) / Delta.",
-        "declarations": [
-          "TauCeti.yuWangSamworth_sinTheta_le",
+        "claim": "Theorem 2, first conclusion: the population two-sided exterior gap alone controls the Frobenius sine distance by 2 min(sqrt(d)||E||op,||E||F)/Delta, with no sample eigengap.",
+        "source_statement": {
+          "setup": [
+            "Sigma and Sigma-hat are real symmetric p x p matrices with ordered eigenvalues lambda_1>=...>=lambda_p and corresponding d-column eigenvector blocks V and V-hat at indices r,...,s; d=s-r+1; E=Sigma-hat-Sigma."
+          ],
+          "hypotheses": [
+            "Delta = min(lambda_{r-1}-lambda_r, lambda_s-lambda_{s+1}) > 0, with lambda_0=+infinity and lambda_{p+1}=-infinity.",
+            "No sample-eigenvalue separation hypothesis is assumed."
+          ],
+          "conclusions": [
+            "||sin Theta(V-hat,V)||_F <= 2 min(sqrt(d)||E||_op, ||E||_F) / Delta."
+          ],
+          "scope": [
+            "The headline packet uses the source-shaped consecutive-block theorem; the library also proves an RCLike generalization."
+          ]
+        },
+        "canonical_declarations": [
           "TauCeti.yuWangSamworth_sinTheta_block_le"
         ],
-        "note": "This row is one clause or proof-strength refinement of the paper's central Theorem 2; the renderer groups all headline Theorem 2 rows into one review section."
+        "supporting_declarations": [
+          "TauCeti.yuWangSamworth_sinTheta_le"
+        ],
+        "context_declarations": [
+          {
+            "name": "TauCeti.OrderedBlockBoundaryGap",
+            "mathematical_role": "The literal two population boundary gaps around the consecutive block r,...,s; it contains no sample-gap condition."
+          },
+          {
+            "name": "TauCeti.IsOrderedEigenframe",
+            "mathematical_role": "Says the supplied frame consists of orthonormal eigenvectors at the specified positions in the sorted eigenvalue list."
+          },
+          {
+            "name": "TauCeti.consecutiveEmb",
+            "mathematical_role": "The index embedding selecting exactly the consecutive positions r,...,s."
+          },
+          {
+            "name": "TauCeti.sinThetaFrobenius",
+            "mathematical_role": "The Frobenius norm of the sine/cross-projection operator between the two subspaces."
+          }
+        ],
+        "clause_map": [
+          {
+            "source_clause": "The block is the consecutive ordered indices r,...,s and d=s-r+1.",
+            "lean_realization": "hd : r + d = s + 1 and consecutiveEmb (hd.trans_le hsn) select precisely those indices (0-based Lean indexing).",
+            "status": "claimed_exact"
+          },
+          {
+            "source_clause": "Only the population exterior gaps enter Delta.",
+            "lean_realization": "hgap : OrderedBlockBoundaryGap hA hn r s Delta; its printed #print contains only eigenvalues of A (the population operator), never B.",
+            "status": "claimed_exact"
+          },
+          {
+            "source_clause": "V and V-hat are eigenvector blocks at the same ordered indices.",
+            "lean_realization": "hu/hv : IsOrderedEigenframe ... (consecutiveEmb ...) u/v.",
+            "status": "claimed_exact"
+          },
+          {
+            "source_clause": "No sample eigengap.",
+            "lean_realization": "There is no gap predicate involving hB/B in the canonical theorem type.",
+            "status": "claimed_exact"
+          },
+          {
+            "source_clause": "Frobenius sine bound with min(sqrt(d)||E||op,||E||F) and constant 2.",
+            "lean_realization": "The conclusion of yuWangSamworth_sinTheta_block_le is literal up to A/B notation for Sigma/Sigma-hat.",
+            "status": "claimed_exact"
+          }
+        ],
+        "note": "The canonical declaration is the consecutive-block wrapper, not the more abstract CorrespondingEigenblock theorem, so the reviewer sees the paper indices and population boundary gap directly."
       }
     },
     {
@@ -258,12 +320,64 @@
       "semantic_review": {
         "group": "YWS-Theorem-2",
         "group_title": "Yu--Wang--Samworth Theorem 2",
-        "claim": "There exists O-hat in O(d) with ‖V-hat O-hat - V‖_F <= 2^{3/2} min(sqrt d ‖E‖_op, ‖E‖_F) / Delta.",
-        "declarations": [
-          "TauCeti.yuWangSamworth_alignedBasis_le",
-          "TauCeti.yuWangSamworth_alignedFrame_real_le"
+        "claim": "Theorem 2, second conclusion: under the same population-gap hypotheses, there is an orthogonal matrix O-hat aligning the supplied sample frame to the supplied population frame with the printed 2^(3/2) Frobenius bound.",
+        "source_statement": {
+          "setup": [
+            "The same Sigma, Sigma-hat, consecutive block r,...,s, supplied eigenvector frames V,V-hat, perturbation E, and d=s-r+1 as in the first conclusion."
+          ],
+          "hypotheses": [
+            "The same Delta>0 population boundary-gap hypothesis and no sample eigengap."
+          ],
+          "conclusions": [
+            "There exists O-hat in O(d) such that ||V-hat O-hat - V||_F <= 2^(3/2) min(sqrt(d)||E||_op,||E||_F)/Delta."
+          ],
+          "scope": [
+            "The canonical review declaration is the real-matrix statement so O-hat appears literally as a matrix in the orthogonal group."
+          ]
+        },
+        "canonical_declarations": [
+          "TauCeti.yuWangSamworth_alignedFrame_block_real_le"
         ],
-        "note": "This row is one clause or proof-strength refinement of the paper's central Theorem 2; the renderer groups all headline Theorem 2 rows into one review section."
+        "supporting_declarations": [
+          "TauCeti.yuWangSamworth_alignedFrame_block_le"
+        ],
+        "context_declarations": [
+          {
+            "name": "TauCeti.OrderedBlockBoundaryGap",
+            "mathematical_role": "The two population boundary gaps and no sample gap."
+          },
+          {
+            "name": "TauCeti.IsOrderedEigenframe",
+            "mathematical_role": "The supplied population and sample frames at the same sorted consecutive indices."
+          },
+          {
+            "name": "TauCeti.consecutiveEmb",
+            "mathematical_role": "The consecutive block r,...,s."
+          }
+        ],
+        "clause_map": [
+          {
+            "source_clause": "Same population-only gap and consecutive eigenvector blocks as the first conclusion.",
+            "lean_realization": "The canonical theorem repeats the same hd, hu, hv, hDelta and OrderedBlockBoundaryGap hypotheses.",
+            "status": "claimed_exact"
+          },
+          {
+            "source_clause": "There exists O-hat in O(d).",
+            "lean_realization": "The conclusion existentially returns O : Matrix (Fin d) (Fin d) R with O in Matrix.orthogonalGroup.",
+            "status": "claimed_exact"
+          },
+          {
+            "source_clause": "V-hat O-hat is compared to the supplied V, not to a reselected population basis.",
+            "lean_realization": "The left side is sqrt(sum_i ||sum_j O j i • v j - u i||^2), with u and v exactly the supplied frames from the hypotheses.",
+            "status": "claimed_exact"
+          },
+          {
+            "source_clause": "Constant 2^(3/2) and the same min numerator.",
+            "lean_realization": "The conclusion is 2 * sqrt 2 * min(sqrt d * ||B-A||op, ||B-A||F) / Delta.",
+            "status": "claimed_exact"
+          }
+        ],
+        "note": "Using the real source-shaped wrapper makes every symbol in the printed aligned-frame conclusion visible in the theorem type."
       }
     },
     {
