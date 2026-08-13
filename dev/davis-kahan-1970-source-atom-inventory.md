@@ -5,8 +5,8 @@
 - Source blocks: **50**
 - Source-fidelity atoms: **272**
 - Numbered equations represented: **64/64**
-- Atoms supporting one or more of the 29 counted results: **68**
-- Fidelity-only atoms: **204**
+- Atoms supporting one or more of the 29 counted results: **69**
+- Fidelity-only atoms: **203**
 - Boundary-classified atoms: **272/272**
 - Atoms carrying a nonlocal-interpretation link: **11**
 - Formalization-result denominator: **29 results**, maintained separately in `dev/davis-kahan-1970-formalization-result-inventory.json`.
@@ -19,11 +19,11 @@ Two different links appear below and must not be confused. **Counted result supp
 
 - `background_theory_not_designated_result` — **2 atoms**
 - `counted_result_hypothesis` — **10 atoms**
-- `counted_result_scope` — **9 atoms**
+- `counted_result_scope` — **10 atoms**
 - `counted_result_statement` — **49 atoms**
 - `deferred_unproved_claim` — **2 atoms**
 - `definition_not_result` — **9 atoms**
-- `expository_commentary_not_result` — **4 atoms**
+- `expository_commentary_not_result` — **3 atoms**
 - `external_result_not_dk_result` — **3 atoms**
 - `historical_knowledge_state` — **1 atoms**
 - `introductory_background_not_designated_result` — **26 atoms**
@@ -659,9 +659,9 @@ Effect on the completion denominator: none; the completion denominator remains t
 - `DK-6-appendix.unbounded-sine-extension` — **scope / expository_commentary_not_result** — The sine theorem extends to unbounded operators via bounded residual/common-domain hypotheses.
   - Counted result support: none
   - Boundary rationale: This atom is explanatory/source-scope commentary rather than a counted Davis--Kahan result statement.
-- `DK-6-appendix.unbounded-tangent-extension` — **scope / expository_commentary_not_result** — The tangent theorem requires the stronger approximation argument recorded in the Appendix.
-  - Counted result support: none
-  - Boundary rationale: This atom is explanatory/source-scope commentary rather than a counted Davis--Kahan result statement.
+- `DK-6-appendix.unbounded-tangent-extension` — **scope / counted_result_scope** — The Appendix states the tan theta theorem in the general ordered case A0 <= alpha and Lambda1 >= alpha + delta and explicitly allows both A0 and Lambda1 to be unbounded, while the residual used by the norm estimate remains bounded.
+  - Counted result support: `S2-tan-theta`
+  - Boundary rationale: This is an explicit source-scope extension of the counted Section 2 tan theta theorem. Full-scope formalization must therefore cover the case where the Ritz compression A0 itself is a genuinely unbounded self-adjoint operator, not merely an unbounded ambient operator with bounded compression.
 - `DK-6-appendix.appendix-approximation-chain` — **proof-claim / proof_or_derivation_not_result** — Equations (6.7)--(6.11) form the approximation chain controlling singular directions and passing to all UI norms.
   - Counted result support: none
   - Boundary rationale: This atom occurs in a proof, derivation, or proof-only equation rather than in a counted result statement. Source fidelity preserves it, but 100% does not require a separate Lean theorem for it.

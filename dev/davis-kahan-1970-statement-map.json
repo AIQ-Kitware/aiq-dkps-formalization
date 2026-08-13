@@ -196,7 +196,9 @@
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
-        "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact"
+        "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact",
+        "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact",
+        "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact"
       ],
       "audit_clauses": [
         {
@@ -208,11 +210,13 @@
         },
         {
           "id": "S2-tan-theta.ambient",
-          "description": "Ambient conclusion: delta * ||tan Theta|| <= ||H||, with the ambient angle rather than Theta_0.",
+          "description": "Ambient conclusion: delta * ||tan Theta|| <= ||H||, including the Appendix scope in which the Ritz compression A0 and the unwanted block may both be genuinely unbounded while the residual/perturbation norm remains bounded.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
             "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real",
-            "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact"
+            "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact",
+            "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact",
+            "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact"
           ]
         }
       ],
@@ -1478,7 +1482,9 @@
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
         "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
-        "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
+        "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore",
+        "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact",
+        "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact"
       ],
       "audit_clauses": [
         {
@@ -1490,11 +1496,13 @@
             "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
             "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
             "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
-            "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore"
+            "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore",
+            "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact",
+            "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact"
           ]
         }
       ],
-      "source_specification_sha256": "c5bacffe42fb3c4e8e6bba5a6b28fc34f51bd04ec368afb41d9fee5e9de689aa",
+      "source_specification_sha256": "eb706099b9fc454eb032f0b29807625e74f536e156ab8693ffdd4d92d9c1f450",
       "expected_completion_certification": "reopened_mapping",
       "known_completion_holes": [
         {
