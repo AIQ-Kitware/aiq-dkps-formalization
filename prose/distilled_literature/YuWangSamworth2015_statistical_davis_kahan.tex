@@ -118,6 +118,16 @@ If $\delta>0$, then
 \end{theorem}
 The source states that both Frobenius norms may be replaced simultaneously by the operator norm or, more generally, by any orthogonally invariant norm.
 
+\sourceanchor{Section 1, numerical illustration that $\delta$ can vanish.}
+
+The source immediately illustrates that $\delta$ can vanish even when the population eigenvalues are well separated. With
+\[
+  \Sigma=\diag(50,40,30,20,10),
+  \qquad
+  \widehat\Sigma=\diag(54,37,32,23,21),
+\]
+and the block $r=s=4$, the population eigenvalue $\lambda_4=20$ lies inside the ray $(-\infty,\widehat\lambda_5]=(-\infty,21]$, so $\delta=0$ and the displayed theorem has no content there --- while the population gap at the same block is $\min(\lambda_3-\lambda_4,\lambda_4-\lambda_5)=10$. This is the motivation for the population-gap theorem of the next section.
+
 For a single eigenvector, $r=s=j$, this specializes to
 \[
   \sin\Theta(\widehat v_j,v_j)
@@ -196,7 +206,7 @@ The displayed theorem replaces the residual by a directly usable perturbation bo
 
 \subsection{Sharpness example with orthogonal target subspaces}
 
-\sourcecomment{The construction reproduced below is the \emph{preprint's}: the block of interest is the top $d$ eigenvectors of $\Sigma=\diag(3,\dots,3,1,\dots,1)$. The published article replaces it by a middle block over three levels: $\Sigma=\diag(\lambda_1,\dots,\lambda_p)$ with $\lambda_1=\dots=\lambda_{p-2d}=5$, $\lambda_{p-2d+1}=\dots=\lambda_{p-d}=3$ and $\lambda_{p-d+1}=\dots=\lambda_p=1$, and $\widehat\Sigma$ diagonal with first $p-2d$ entries $5$, next $d$ entries $2$ and last $d$ entries $2+\epsilon$, the block of interest being the eigenvectors for the eigenvalue $3$. The population gap is then genuinely two-sided, $\min(5-3,3-1)=2$. Both constructions give orthogonal blocks, $\norm{\widehat V\widehat O-V}_{\F}=\sqrt2\norm{\sin\Theta}_{\F}=\sqrt{2d}$ against a bound of $\sqrt{2d}(1+\epsilon)$, so both prove the same sharpness claim. Recorded as gap \code{published-sharpness-example}.}
+\sourcecomment{The construction reproduced below is the \emph{preprint's}: the block of interest is the top $d$ eigenvectors of $\Sigma=\diag(3,\dots,3,1,\dots,1)$. The published article replaces it by a middle-block construction: $\Sigma=\diag(\lambda_1,\dots,\lambda_p)$ with $\lambda_1=\dots=\lambda_{p-2d}=5$, $\lambda_{p-2d+1}=\dots=\lambda_{p-d}=3$ and $\lambda_{p-d+1}=\dots=\lambda_p=1$, and $\widehat\Sigma$ diagonal with first $p-2d$ entries $5$, next $d$ entries $2$ and last $d$ entries $2+\epsilon$, the block of interest being the eigenvectors for the eigenvalue $3$. The population gap is then genuinely two-sided, $\min(5-3,3-1)=2$. Both constructions give orthogonal blocks, $\norm{\widehat V\widehat O-V}_{\F}=\sqrt2\norm{\sin\Theta}_{\F}=\sqrt{2d}$ against a bound of $\sqrt{2d}(1+\epsilon)$, so both prove the same sharpness claim. \textbf{Both are now formalized}: the preprint's in \code{Symmetric/OrthogonalSharpness.lean} and the published one in \code{Symmetric/MiddleBlockSharpness.lean}. The published instance was the harder of the two because its block sits in the middle of both spectra, so the branch-selection hypothesis cannot be produced by any ``leading $d$ eigenvectors'' argument; the missing foundation was the position of an arbitrary eigenvalue level set inside the sorted eigenbasis.}
 
 Let
 \[
@@ -330,6 +340,8 @@ This section of the paper does not introduce a new perturbation theorem. It make
 \end{enumerate}
 
 These are literature-comparison claims rather than independent formal theorem statements. They motivate the theorem's interface and explain why its denominator is useful in probabilistic applications.
+
+\sourcecomment{The claims about what other authors wrote are prose and stay prose, but their deterministic mathematical content is formalized. \code{TauCeti.mixedGap\_of\_populationGap\_weyl} is the recovery step of item 1 --- a population gap $\Delta$ at the selected index block becomes a mixed gap $\Delta-\epsilon$ once the perturbation is $\epsilon$-operator-small --- and \code{yuWangSamworth\_weylRecovered\_le\_populationGap\_bound} shows that on the event $2\epsilon\le\Delta$ the two-step route lands on exactly the constant the population-gap theorem proves with no event at all, which is item 3. That the event is not automatic is witnessed by the paper's own Section 1 data, where $\Delta=10$ and $\norm{E}_{\op}=11$; and in that same example no sample eigenvalue lies in the interval spanned by the population block, so the interval-counting requirement of item 2 fails there too.}
 
 \section{Extension to rectangular matrices and singular subspaces}
 
@@ -625,7 +637,10 @@ Equation (4) & Corrected double-angle identity, with the printed polynomial refu
 Theorem 3 & Right and left singular-subspace bounds through the Gram operators, for arbitrary ordered singular frames. & \code{FinishYuWangSamworth/Rectangular/Theorem4.lean}: \code{yuWangSamworth_rightSingularSubspace_frame_le}, \code{yuWangSamworth_leftSingularSubspace_frame_le}, and the aligned-frame counterparts. Proved in the corrected form. \\
 Theorem 3's rank-boundary convention & The printed $\sigma_{\rank(A)+1}^2:=-\infty$ is refuted; the ambient-dimension convention is the repair. & \code{FinishYuWangSamworth/Rectangular/RankBoundary.lean}: \code{yuWangSamworth_theorem3_printed_rankBoundary_refutation}. \\
 Lemma A1 & Orthonormal compression cannot increase the Frobenius norm; orthonormal rows give equality. & \code{FinishYuWangSamworth/Appendix/Lemma5.lean} (preprint numbering in the name), plus the column-sum form \code{TauCeti.sum_sq_norm_apply_orthonormal_le} that the Theorem 2 proof consumes. \\
-Sharpness & Both Section 2 constructions, against the theorems' own hypotheses. & \code{FinishYuWangSamworth/Symmetric/OrthogonalSharpness.lean} (preprint's top-block form), \code{Symmetric/PlanarSharpness.lean}. \\
+Theorem 1's mixed separation, and the Section 1 illustration & The printed $\delta$ as an infimum over the two rays, and the printed five-by-five pair at which it vanishes while the population gap is $10$. & \code{FinishYuWangSamworth/Symmetric/MixedGap.lean}: \code{mixedSeparation}, \code{section1\_mixedSeparation\_eq\_zero}, \code{section1\_populationGap}, \code{internalGap\_section1}. Fully proved. \\
+Section 3's diagnosis & The deterministic content of the mixed-gap-then-Weyl pattern: the recovery step, its side condition, and the fact that on that side condition it lands on the population-gap constant. & \code{Statistics.lean}: \code{mixedGap\_of\_populationGap\_weyl}; \code{Symmetric/MixedGap.lean}: \code{yuWangSamworth\_weylRecovered\_le\_populationGap\_bound}, \code{section1\_weylRecovery\_fails}, \code{section1\_no\_sample\_eigenvalue\_in\_block}. Fully proved. \\
+Sharpness & All three Section 2 constructions, against the theorems' own hypotheses. & \code{FinishYuWangSamworth/Symmetric/OrthogonalSharpness.lean} (preprint's top-block form), \code{Symmetric/MiddleBlockSharpness.lean} (the published middle-block form), \code{Symmetric/PlanarSharpness.lean}. \\
+Middle-block branch selection & The position of an arbitrary eigenvalue level set inside Mathlib's sorted eigenbasis, which is what a middle block needs. & \code{ForTauCeti/.../EigenblockSpan.lean}: \code{eigenvalues\_level\_eq\_Ico}, \code{spanIndices\_Ico\_eq\_eigenspace}; \code{BasisDiagonal.lean}: \code{card\_filter\_lt\_eigenvalues\_basisDiagonal}; \code{YuWangSamworth/TopEigenblock.lean}: \code{correspondingEigenblock\_eigenvalueLevel}. Fully proved. \\
 \end{formalizationmap}
 
 \section{Source-faithfulness and transcription audit}

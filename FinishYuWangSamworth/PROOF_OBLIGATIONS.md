@@ -32,7 +32,13 @@ them is stated at the printed generality:
 * the refutation of Theorem 3's printed rank-boundary convention;
 * direct right and left rank-one singular-vector corollaries;
 * exact operator/Frobenius minimum and aligned-frame constants;
-* both Section 2 sharpness constructions.
+* all three Section 2 sharpness constructions, including the *published*
+  middle-block one;
+* the Section 1 numerical illustration that Theorem 1's separation `δ` can
+  vanish, together with the operator-level population gap at the same block;
+* the deterministic content of the Section 3 diagnosis: the Weyl recovery of a
+  mixed gap, the fact that on the event it needs it reproduces Theorem 2's
+  constant, and a witness that the event can fail.
 
 ## Source defects recorded
 
@@ -53,14 +59,6 @@ checked in both directions.
 
 ## Remaining non-numbered source-fidelity work
 
-* the published Section 2 sharpness example is a **middle**-block construction
-  over three levels `5 > 3 > 1`; what is formalized is the preprint's
-  **top**-block construction.  Both prove the same printed conclusion and the
-  same sharpness of `2`, `2^{3/2}` and `√d`, but the published instance itself
-  would need a middle-index `CorrespondingEigenblock` constructor;
-* the Section 1 numerical illustration that Theorem 1's separation `δ` can
-  vanish (`Σ = diag(50,40,30,20,10)`, `Σ̂ = diag(54,37,32,23,21)`) is
-  inventoried and not formalized;
 * optional wrappers whose hypotheses are literal contiguous matrix indices
   `r..s` with the gap read off as `min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`, rather
   than an index embedding plus an ordered eigenframe;
@@ -75,11 +73,25 @@ on 2026-08-02, so `lake build` compiles everything here and a regression cannot
 land unnoticed.  The library also carries `warningAsError` under the Mathlib
 standard linter set, matching the option set Tau Ceti's own `lean_lib` applies.
 
-## Census state (2026-08-13)
+## Census state (2026-08-14)
 
-`dev/yu-wang-samworth-2015-full-source-census.json`: **22 of 24 rows proved in
-the default build.**  Of the remaining two, one is the Section 3 exposition row,
-which is not proof debt, and one is the Section 1 numerical illustration above.
+`dev/yu-wang-samworth-2015-full-source-census.json`: **24 of 24 rows proved in
+the default build.**  The two rows that were short on 2026-08-13 are closed:
+the Section 1 numerical illustration is formalized, and the Section 3 row —
+exposition, and still not proof debt — now carries the compiled deterministic
+core of its claims.  Two gaps were retired with them, `section1-toy-example`
+and `published-sharpness-example`.
+
+Closing the published sharpness example needed new mathematics rather than new
+bookkeeping.  Its block sits in the *middle* of both spectra, so the
+branch-selection hypothesis cannot come from any "leading `d` eigenvectors"
+argument, and the missing foundation was the position of an arbitrary
+eigenvalue level set inside Mathlib's sorted eigenbasis:
+`LinearMap.IsSymmetric.eigenvalues_level_eq_Ico` (every level set is the
+contiguous index range `[m, m+d)`), `TauCeti.card_filter_lt_eigenvalues_basisDiagonal`
+(for a diagonal operator `m` is read off the coefficient list), and
+`TauCeti.correspondingEigenblock_eigenvalueLevel`, of which the earlier
+top-eigenspace constructor is now the case `m = 0`.
 
 The census was rekeyed to the published numbering on 2026-08-13 and three of its
 judgements were corrected in the process.  `YWS-T2-sinTheta`,

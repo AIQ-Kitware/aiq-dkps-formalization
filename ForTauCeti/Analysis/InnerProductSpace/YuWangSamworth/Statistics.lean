@@ -915,6 +915,108 @@ theorem yuWangSamworth_eigenvector_frame_le
     (min_le_left _ _).trans_eq (by rw [Nat.cast_one, Real.sqrt_one, one_mul])
   gcongr
 
+/-! ## Recovering a mixed gap from a population gap
+
+The proof pattern the population-gap theorems above are designed to replace: a
+mixed-gap theorem is applied first, and Weyl's inequality then converts the
+random mixed separation into a population one on a high-probability event.  The
+deterministic core of that step is the triangle inequality, recorded here so
+that comparing the two routes is a statement about two proved theorems. -/
+
+/-- **Weyl recovery of a mixed gap.**
+
+A population exterior gap `Δ` at the selected index block becomes a mixed
+population/sample gap `Δ − ε` as soon as the perturbation is `ε`-operator-small,
+because Weyl's inequality moves each sorted eigenvalue by at most `ε`.
+
+The recovered gap is worthless unless `ε < Δ`, and that side condition is
+exactly the event the two-step argument has to carry through the rest of its
+proof.  `yuWangSamworth_sinTheta_frame_le` reaches the same denominator with no
+such hypothesis, which is the whole point of the population-gap formulation. -/
+theorem mixedGap_of_populationGap_weyl {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
+    (hB : B.IsSymmetric) {n : ℕ} (hn : finrank 𝕜 E = n) {d : ℕ} {e : Fin d ↪ Fin n}
+    {Δ ε : ℝ} (hε : ∀ x : E, ‖(B - A) x‖ ≤ ε * ‖x‖)
+    (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range e →
+      Δ ≤ |hA.eigenvalues hn (e i) - hA.eigenvalues hn k|)
+    (i : Fin d) (k : Fin n) (hk : k ∉ Set.range e) :
+    Δ - ε ≤ |hA.eigenvalues hn (e i) - hB.eigenvalues hn k| := by
+  have hweyl : |hB.eigenvalues hn k - hA.eigenvalues hn k| ≤ ε :=
+    abs_eigenvalue_sub_eigenvalue_le hB hA hn hε k
+  have htri : |hA.eigenvalues hn (e i) - hA.eigenvalues hn k|
+      ≤ |hA.eigenvalues hn (e i) - hB.eigenvalues hn k|
+        + |hB.eigenvalues hn k - hA.eigenvalues hn k| := abs_sub_le _ _ _
+  have hpop := hgap i k hk
+  linarith
+
+/-! ## Orthogonal coordinate blocks
+
+Every sharpness example for the theorems above has the same shape: two operators
+diagonal in one orthonormal basis, with the two selected blocks occupying
+*disjoint* index sets.  The two facts such an example needs are recorded here
+once, for arbitrary index sets, so that no example has to recompute them. -/
+
+/-- **The sine distance between disjoint coordinate blocks.**
+
+Disjoint index sets span orthogonal subspaces, so every principal angle is a
+right angle: the sine cross-projection is the projector onto the first block and
+its Frobenius norm is the square root of that block's dimension. -/
+theorem sinThetaFrobenius_spanIndices_of_subset_compl {n : ℕ}
+    (b : OrthonormalBasis (Fin n) 𝕜 E) (hn : finrank 𝕜 E = n)
+    (S T : Set (Fin n)) [DecidablePred (· ∈ S)] (hdisj : S ⊆ Tᶜ) :
+    sinThetaFrobenius (b.spanIndices S) (b.spanIndices T) =
+      Real.sqrt S.toFinset.card := by
+  classical
+  have hperp : b.spanIndices S ≤ (b.spanIndices T)ᗮ := by
+    rw [OrthonormalBasis.orthogonal_spanIndices]
+    exact OrthonormalBasis.spanIndices_mono b hdisj
+  -- On the first block the complementary projector of the second is the identity.
+  have hsin : sinThetaMap (b.spanIndices S) (b.spanIndices T) =
+      projection (b.spanIndices S) := by
+    refine LinearMap.ext fun x => ?_
+    have hmem : projection (b.spanIndices S) x ∈ (b.spanIndices T)ᗮ :=
+      hperp (Submodule.starProjection_apply_mem _ x)
+    change ((b.spanIndices T)ᗮ).starProjection ((b.spanIndices S).starProjection x) =
+      (b.spanIndices S).starProjection x
+    exact Submodule.starProjection_eq_self_iff.mpr hmem
+  rw [sinThetaFrobenius, hsin, UnitarilyInvariantSeminorm.frobenius_apply 𝕜 E _ hn b]
+  have hspan : b.spanIndices S =
+      Submodule.span 𝕜 (b '' (↑S.toFinset : Set (Fin n))) := by
+    rw [OrthonormalBasis.spanIndices_eq_span, Set.coe_toFinset]
+  have hcol : ∀ i : Fin n, ‖projection (b.spanIndices S) (b i)‖ ^ 2 =
+      if i ∈ S.toFinset then (1 : ℝ) else 0 := by
+    intro i
+    have hproj : (b.spanIndices S).starProjection (b i) =
+        if i ∈ S.toFinset then b i else 0 := by
+      rw [hspan]
+      exact Orthonormal.starProjection_span_image_apply_self b.orthonormal _ i
+    change ‖(b.spanIndices S).starProjection (b i)‖ ^ 2 = _
+    rw [hproj]
+    split_ifs
+    · rw [b.orthonormal.norm_eq_one i, one_pow]
+    · simp
+  rw [Finset.sum_congr rfl fun i _ => hcol i, Finset.sum_ite_mem, Finset.univ_inter,
+    Finset.sum_const, nsmul_eq_mul, mul_one]
+
+omit [FiniteDimensional 𝕜 E] in
+/-- **Aligned pairs drawn from orthogonal blocks are at distance `√(2d)`.**
+
+If `U ⟂ V` then every unit vector of `U` is at distance `√2` from every unit
+vector of `V`, so no alignment of two orthonormal `d`-frames can do better than
+`∑ᵢ ‖vᵢ − uᵢ‖² = 2d`.  This is why an orthogonal-blocks example pins the
+aligned-basis constant. -/
+theorem sum_sq_norm_sub_eq_of_le_orthogonal {U V : Submodule 𝕜 E} (hperp : U ≤ Vᗮ)
+    {d : ℕ} {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
+    (hUu : ∀ i, u i ∈ U) (hVv : ∀ i, v i ∈ V) :
+    ∑ i, ‖v i - u i‖ ^ 2 = 2 * d := by
+  have hcol : ∀ i, ‖v i - u i‖ ^ 2 = (2 : ℝ) := by
+    intro i
+    have hzero : ⟪v i, u i⟫_𝕜 = 0 :=
+      (Submodule.mem_orthogonal _ _).mp (hperp (hUu i)) (v i) (hVv i)
+    rw [@norm_sub_sq 𝕜, hu.norm_eq_one i, hv.norm_eq_one i, hzero]
+    norm_num
+  rw [Finset.sum_congr rfl fun i _ => hcol i, Finset.sum_const, Finset.card_univ,
+    Fintype.card_fin, nsmul_eq_mul, mul_comm]
+
 end TauCeti
 
 namespace TauCeti

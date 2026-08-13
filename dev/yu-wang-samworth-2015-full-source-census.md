@@ -12,9 +12,7 @@ Two independent axes. `status` is the mathematical judgement against the printed
 
 | verification | items |
 | --- | --- |
-| `absent` | 1 |
-| `not_applicable` | 1 |
-| `proved_in_build` | 22 |
+| `proved_in_build` | 24 |
 
 ## Items
 
@@ -25,16 +23,16 @@ Two independent axes. `status` is the mathematical judgement against the printed
 | `YWS-S1-procrustes` | 1 | Section 1, Procrustes alignment | Procrustes alignment: ‖V-hat O - V‖_F <= sqrt 2 ‖sin Theta‖_F | `compiled_generalized` | `proved_in_build` |
 | `YWS-T1-baseline` | 1 | Theorem 1 | Theorem 1 -- the statistical Davis--Kahan baseline (mixed gap) | `compiled_generalized` | `proved_in_build` |
 | `YWS-T1-eq1` | 1 | Section 1, equation (1) | Equation (1) -- the eigenvector specialization of the baseline | `compiled_specialization` | `proved_in_build` |
-| `YWS-S1-toy-example` | 1 | Section 1, numerical illustration that delta can vanish | Section 1 -- the five-by-five illustration that Theorem 1's separation can vanish | `not_represented` | `absent` |
+| `YWS-S1-toy-example` | 1 | Section 1, numerical illustration that delta can vanish | Section 1 -- the five-by-five illustration that Theorem 1's separation can vanish | `compiled_exact` | `proved_in_build` |
 | `YWS-T2-sinTheta` | 2 | Theorem 2 | Theorem 2, first conclusion -- the population-gap sine bound | `compiled_exact` | `proved_in_build` |
 | `YWS-T2-alignedBasis` | 2 | Theorem 2, aligned-basis conclusion | Theorem 2, second conclusion -- existence of an aligned orthogonal frame | `compiled_exact` | `proved_in_build` |
 | `YWS-T2-residual` | 2 | Theorem 2, residual form | Theorem 2's sharper residual forms | `compiled_exact` | `proved_in_build` |
 | `YWS-T2-opnorm-numerator` | 2 | Section 2, operator-norm numerator | The residual is bounded by 2 sqrt d ‖E‖_op | `compiled_exact` | `proved_in_build` |
-| `YWS-S2-sharpness-orthogonal` | 2 | Section 2, sharpness example with orthogonal target subspaces | Sharpness example: orthogonal top-d eigenspaces | `compiled_generalized` | `proved_in_build` |
+| `YWS-S2-sharpness-orthogonal` | 2 | Section 2, sharpness example with orthogonal target subspaces | Sharpness example: orthogonal blocks, in both the preprint and published forms | `compiled_generalized` | `proved_in_build` |
 | `YWS-S2-sharpness-planar` | 2 | Section 2, sharpness scale for nearby one-dimensional eigenspaces | Sharpness example: planar rotation, nearby one-dimensional eigenspaces | `compiled_generalized` | `proved_in_build` |
 | `YWS-EQ4-double-angle` | 2 | Equation (4) | Equation (4) -- the double-angle identity, FALSE AS PRINTED | `compiled_corrected` | `proved_in_build` |
 | `YWS-C1-rankone` | 2 | Corollary 1 | Corollary 1 -- the single-eigenvector case, both displays | `compiled_exact` | `proved_in_build` |
-| `YWS-S3-applications` | 3 | Section 3, audit of statistical applications | Section 3 -- audit of how statisticians actually apply Davis--Kahan | `not_proof_debt` | `not_applicable` |
+| `YWS-S3-applications` | 3 | Section 3, audit of statistical applications | Section 3 -- audit of how statisticians actually apply Davis--Kahan | `compiled_generalized` | `proved_in_build` |
 | `YWS-T3-right` | 4 | Theorem 3 | Theorem 3 -- right singular subspaces, population squared-singular gap | `compiled_corrected` | `proved_in_build` |
 | `YWS-T3-left` | 4 | Theorem 3, left singular blocks | Theorem 3 -- the identical statement for left singular subspaces | `compiled_corrected` | `proved_in_build` |
 | `YWS-T3-aligned` | 4 | Theorem 3, aligned-frame conclusion | Theorem 3 -- the aligned-frame conclusion, both sides | `compiled_corrected` | `proved_in_build` |
@@ -53,7 +51,7 @@ The source-general theorems now take an index embedding `e : Fin d -> Fin n` int
 
 ### `not-proof-debt` (not_proof_debt) — Exposition and literature comparison
 
-Section 3's audit of statistical applications makes claims about other authors' proof patterns, not new perturbation theorems. It should be documented and must not be counted as a formalization gap.
+Section 3's audit of statistical applications makes claims about other authors' proof patterns, not new perturbation theorems, and the appendix's self-adjoint dilation route is an alternative proof rather than a source obligation. Neither is a formalization gap. Since 2026-08-14 the deterministic mathematical content of the Section 3 diagnosis is nevertheless compiled -- see row `YWS-S3-applications` -- so the row's `verification` is now `proved_in_build`; that does not make it proof debt, and it must still not be counted as a gap.
 
 ### `private-helper-only` (mechanical) — Some source content exists only as a `private` helper
 
@@ -66,14 +64,6 @@ RESOLVED as a source question on 2026-08-13 by reading the published Biometrika 
 ### `theorem3-rank-boundary` (source_audit) — The printed rank-boundary convention of Theorem 3 is false
 
 Published Theorem 3 fixes `1 <= r <= s <= rank(A)` and defines `sigma_0^2 = inf` and `sigma_{rank(A)+1}^2 = -inf`. The second convention is wrong. The paper's own proof passes to `A^T A in R^{q x q}` -- 'with eigenvalues sigma_1^2 >= ... >= sigma_q^2' -- and applies Theorem 2, whose convention is `lambda_{q+1} = -inf`, at the AMBIENT index `q`. When `rank(A) < q` the Gram operator still has a zero eigenspace and the two conventions disagree there. Taking `s = rank(A)` then makes the printed denominator infinite, so the printed bound asserts `||sin Theta||_F <= 0` while the two right singular subspaces can be orthogonal. Machine-checked refutation: `TauCeti.DavisKahanTheory.yuWangSamworth_theorem3_printed_rankBoundary_refutation` and its `ℝ^2` instance. The repair -- read the convention at the ambient dimension, with `sigma_j = 0` for `min(p,q) < j` -- is what the repository proves, because its gap hypothesis is the intrinsic separation of the sorted spectrum of `A*A`. Found 2026-08-13; no erratum is known.
-
-### `published-sharpness-example` (mechanical) — The orthogonal-blocks sharpness example is formalized in its preprint form
-
-`FinishYuWangSamworth/Symmetric/OrthogonalSharpness.lean` formalizes the 2014 preprint's construction: `Sigma = diag(3,...,3,1,...,1)` with the top `d` eigenvalues equal to 3, and `Sigma-hat = diag(2-eps,...,2-eps,2,...,2)`, with the block of interest the TOP `d` eigenvectors. The published article replaces it by a middle-block construction: `Sigma = diag(5,...,5,3,...,3,1,...,1)` with `p-2d` fives, `d` threes and `d` ones, and `Sigma-hat` diagonal with first `p-2d` entries 5, next `d` entries 2 and last `d` entries `2+eps`, with the block of interest the MIDDLE `d` eigenvectors, so that the population gap `min(5-3, 3-1) = 2` is genuinely two-sided. Both constructions establish the same printed conclusion -- the blocks are orthogonal, every aligned pair is at distance exactly `(2d)^{1/2}`, and the bound is `(2d)^{1/2}(1+eps)` -- so the sharpness CLAIM is proved and the constants `2` and `2^{3/2}` and the `d^{1/2}` dependence are shown unimprovable. What is not formalized is the published instance itself, which would need a middle-index `CorrespondingEigenblock` constructor (the existing one, `correspondingEigenblock_topEigenspace`, only builds top blocks). Recorded rather than silently treated as the same example.
-
-### `section1-toy-example` (mechanical) — The Section 1 numerical illustration of `delta = 0` is not formalized
-
-Immediately after Theorem 1 the published article gives a five-by-five numerical illustration -- `Sigma = diag(50,40,30,20,10)` and `Sigma-hat = diag(54,37,32,23,21)` -- whose point is that the mixed separation `delta` of Theorem 1 can vanish while the population eigenvalues are well separated. That is a checkable arithmetic assertion about a concrete pair of matrices, so it is inventoried; it is motivation rather than a step in any proof, and nothing downstream depends on it.
 
 ## Detail
 
@@ -129,10 +119,14 @@ Source note added 2026-08-13. The published article prints the mixed separation 
 
 * **source anchor**: Section 1, numerical illustration that delta can vanish (example, section 1)
 * **summary**: Sigma = diag(50,40,30,20,10) and Sigma-hat = diag(54,37,32,23,21): the population eigenvalues are well separated, yet Theorem 1's mixed separation delta is zero for the block of interest, which is the motivation for Theorem 2.
-* **status**: `not_represented` / **verification**: `absent`
-* **gaps**: `section1-toy-example`
-* **notes**: Inventoried on 2026-08-13 after reading the published article, where it appears immediately after Theorem 1. It is a checkable arithmetic assertion about two concrete matrices, so a census that omitted it would be hiding a source claim; it is motivation and nothing downstream depends on it.
-* **next action**: Optional: a numerical row computing delta = 0 for the printed pair, which needs only `norm_num` once the eigenvalues are read off a diagonal model.
+* **status**: `compiled_exact` / **verification**: `proved_in_build`
+* **lean declarations**: `TauCeti.DavisKahanTheory.mixedSeparationSet`, `TauCeti.DavisKahanTheory.mixedSeparation`, `TauCeti.DavisKahanTheory.mixedSeparation_eq_zero_of_le`, `TauCeti.DavisKahanTheory.section1PopulationData`, `TauCeti.DavisKahanTheory.section1SampleData`, `TauCeti.DavisKahanTheory.section1_mixedSeparation_eq_zero`, `TauCeti.DavisKahanTheory.section1_populationGap`, `TauCeti.DavisKahanTheory.internalGap_section1`, `TauCeti.DavisKahanTheory.opNorm_section1_perturbation`
+* **notes**: Inventoried on 2026-08-13 after reading the published article, where it appears immediately after Theorem 1; formalized on 2026-08-14 in `FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/MixedGap.lean`.
+
+Theorem 1's separation is defined over the two RAYS `(-inf, lambda-hat_{s+1}]` and `[lambda-hat_{r-1}, inf)`, not over the sample eigenvalues themselves, and `mixedSeparation` records exactly that: `sInf {|lambda-hat - lambda| : lambda in [a,b], lambda-hat in Iic lo u Ici hi}`. At the block `r = s = 4` the population eigenvalue `lambda_4 = 20` lies inside `(-inf, lambda-hat_5] = (-inf, 21]`, so the infimum is attained at zero and Theorem 1 has no content -- `section1_mixedSeparation_eq_zero`. The population gap at the same block is `min(30-20, 20-10) = 10`, both numerically (`section1_populationGap`) and at the operator level (`internalGap_section1`, an `InternalGap` for the diagonal model, so the population-gap theorems genuinely apply to this pair). `opNorm_section1_perturbation` records `||E||_op = 11`, which is what row `YWS-S3-applications` uses to show the literature's Weyl-recovery step fails here.
+
+The illustration is motivation rather than a step in any proof, and nothing downstream depends on it; it is formalized because a census that leaves a checkable printed assertion unformalized is recording a smaller claim than it appears to.
+* **next action**: None.
 
 ### `YWS-T2-sinTheta` — Theorem 2, first conclusion -- the population-gap sine bound
 
@@ -176,19 +170,18 @@ Corrected 2026-08-13 with `YWS-T2-sinTheta`: the same `CorrespondingEigenblock` 
 * **notes**: This is the half of the proof that produces the `d^{1/2}`, and therefore the half that explains why the paper's numerator is a minimum rather than a single norm. At frame generality the two ingredients are Weyl at the selected INDEX (`e i`, not the chosen eigenvector) and the orthonormal-compression estimate `sum_sq_norm_apply_orthonormal_le`, which is Lemma A1's inequality half stated basis-free in `ForTauCeti`.
 * **next action**: None.
 
-### `YWS-S2-sharpness-orthogonal` — Sharpness example: orthogonal top-d eigenspaces
+### `YWS-S2-sharpness-orthogonal` — Sharpness example: orthogonal blocks, in both the preprint and published forms
 
 * **source anchor**: Section 2, sharpness example with orthogonal target subspaces (example, section 2)
-* **summary**: Sigma = diag(3,...,3,1,...,1) and Sigma-hat = diag(2-eps,...,2-eps,2,...,2) have orthogonal top-d eigenspaces, forcing ‖V-hat O - V‖_F = sqrt(2d) for every O and matching the aligned-basis constant up to (1+eps).
+* **summary**: Preprint form: `Sigma = diag(3,...,3,1,...,1)` and `Sigma-hat = diag(2-eps,...,2-eps,2,...,2)` have orthogonal top-d eigenspaces. Published form: `Sigma = diag(5,...,5,3,...,3,1,...,1)` and `Sigma-hat` with entries `5,...,5,2,...,2,(2+eps),...,(2+eps)`, the block of interest being the MIDDLE d eigenvectors, so the population gap `min(5-3,3-1) = 2` is two-sided. Both force `||V-hat O - V||_F = sqrt(2d)` for every O and match the aligned-basis constant up to `(1+eps)`.
 * **status**: `compiled_generalized` / **verification**: `proved_in_build`
-* **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_sharpness_orthogonalBlocks`, `TauCeti.DavisKahanTheory.dist_orthogonalSharpness_aligned`, `TauCeti.DavisKahanTheory.sinThetaFrobenius_orthogonalSharpness`, `TauCeti.DavisKahanTheory.orthogonal_orthogonalSharpness`, `TauCeti.DavisKahanTheory.correspondingEigenblock_orthogonalSharpness`, `TauCeti.DavisKahanTheory.internalGap_orthogonalSharpness`, `TauCeti.DavisKahanTheory.opNorm_orthogonalSharpness_perturbation`
-* **gaps**: `published-sharpness-example`
-* **notes**: Formalized 2026-08-04 in `FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/OrthogonalSharpness.lean`. `compiled_generalized` rather than `compiled_exact`: the model is stated for an arbitrary orthonormal basis of an arbitrary finite-dimensional RCLike inner product space, which specializes to the paper's real `p x p` matrices at `EuclideanSpace R (Fin p)`. The example is checked against the theorem's own hypotheses -- `correspondingEigenblock_orthogonalSharpness` supplies the branch-selection datum and `internalGap_orthogonalSharpness` the population gap -- so it is an instance of `yuWangSamworth_alignedBasis_le`, not a numerical coincidence. Both printed equalities are proved: every aligned orthonormal pair is at distance exactly sqrt(2d), and ||sin Theta||_F = sqrt d. The bound's operator-norm branch equals sqrt(2d)(1+eps).
+* **lean declarations**: `TauCeti.DavisKahanTheory.yuWangSamworth_sharpness_orthogonalBlocks`, `TauCeti.DavisKahanTheory.dist_orthogonalSharpness_aligned`, `TauCeti.DavisKahanTheory.sinThetaFrobenius_orthogonalSharpness`, `TauCeti.DavisKahanTheory.orthogonal_orthogonalSharpness`, `TauCeti.DavisKahanTheory.correspondingEigenblock_orthogonalSharpness`, `TauCeti.DavisKahanTheory.internalGap_orthogonalSharpness`, `TauCeti.DavisKahanTheory.opNorm_orthogonalSharpness_perturbation`, `TauCeti.DavisKahanTheory.yuWangSamworth_sharpness_middleBlock`, `TauCeti.DavisKahanTheory.correspondingEigenblock_middleSharpness`, `TauCeti.DavisKahanTheory.orthogonal_middleSharpness`, `TauCeti.DavisKahanTheory.internalGap_middleSharpness`, `TauCeti.DavisKahanTheory.sinThetaFrobenius_middleSharpness`, `TauCeti.DavisKahanTheory.dist_middleSharpness_aligned`, `TauCeti.DavisKahanTheory.opNorm_middleSharpness_perturbation`, `LinearMap.IsSymmetric.eigenvalues_level_eq_Ico`, `LinearMap.IsSymmetric.spanIndices_Ico_eq_eigenspace`, `TauCeti.card_filter_lt_eigenvalues_basisDiagonal`, `TauCeti.correspondingEigenblock_eigenvalueLevel`, `TauCeti.correspondingEigenblock_basisDiagonal_level`, `TauCeti.sinThetaFrobenius_spanIndices_of_subset_compl`, `TauCeti.sum_sq_norm_sub_eq_of_le_orthogonal`
+* **notes**: Preprint construction formalized 2026-08-04 in `FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/OrthogonalSharpness.lean`; the PUBLISHED middle-block construction formalized 2026-08-14 in `FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/MiddleBlockSharpness.lean`, closing what this census recorded as gap `published-sharpness-example`.
 
-This row is what forced the `CorrespondingEigenblock` constructor: the hypothesis had no instance anywhere in the repository until `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/TopEigenblock.lean`, so no concrete pair of covariance operators had ever been checked against it.
+`compiled_generalized` rather than `compiled_exact`: both models are stated for an arbitrary orthonormal basis of an arbitrary finite-dimensional RCLike inner product space, which specializes to the paper's real `p x p` matrices at `EuclideanSpace R (Fin p)`. Each example is checked against the theorems' own hypotheses -- `correspondingEigenblock_*` supplies the branch-selection datum and `internalGap_*` the population gap -- so both are genuine instances of `yuWangSamworth_alignedBasis_le`, not numerical coincidences. Both printed equalities are proved in each model: every aligned orthonormal pair is at distance exactly sqrt(2d), and ||sin Theta||_F = sqrt d, against a bound of sqrt(2d)(1+eps).
 
-Source note added 2026-08-13. The construction formalized here is the 2014 preprint's TOP-block example. The published article replaces it with a MIDDLE-block example over three levels `5 > 3 > 1`, so that the population gap is two-sided. Both establish the same printed conclusion and the same sharpness of `2`, `2^{3/2}` and `d^{1/2}`; the published instance itself is not formalized. See gap `published-sharpness-example`.
-* **next action**: Optional: formalize the published middle-block instance, which needs a middle-index `CorrespondingEigenblock` constructor.
+The preprint row is what forced the first `CorrespondingEigenblock` CONSTRUCTOR (`correspondingEigenblock_topEigenspace`): the hypothesis had no instance anywhere in the repository, so no concrete pair of covariance operators had ever been checked against it. The published row forced the general one. Its block sits in the MIDDLE of both spectra, so no 'leading d eigenvectors' argument can select it, and the missing foundation was the position of an arbitrary eigenvalue level set inside Mathlib's sorted eigenbasis: `eigenvalues_level_eq_Ico` (every level set is the contiguous index range `[m, m+d)`), `card_filter_lt_eigenvalues_basisDiagonal` (for a diagonal operator, `m` is read off the coefficient list), and `correspondingEigenblock_eigenvalueLevel`, of which the earlier top-eigenspace constructor is now the case `m = 0`.
+* **next action**: None.
 
 ### `YWS-S2-sharpness-planar` — Sharpness example: planar rotation, nearby one-dimensional eigenspaces
 
@@ -232,10 +225,17 @@ The published article numbers this Corollary 1; the preprint numbers it Corollar
 
 * **source anchor**: Section 3, audit of statistical applications (exposition, section 3)
 * **summary**: A diagnosis of existing proof patterns: authors apply a mixed-gap theorem then invoke Weyl to recover a population gap; spectral-clustering variants hide an interval-counting requirement; Theorem 2 removes both steps.
-* **status**: `not_proof_debt` / **verification**: `not_applicable`
+* **status**: `compiled_generalized` / **verification**: `proved_in_build`
+* **lean declarations**: `TauCeti.mixedGap_of_populationGap_weyl`, `TauCeti.DavisKahanTheory.yuWangSamworth_weylRecovered_le_populationGap_bound`, `TauCeti.DavisKahanTheory.section1_weylRecovery_fails`, `TauCeti.DavisKahanTheory.section1_no_sample_eigenvalue_in_block`
 * **gaps**: `not-proof-debt`
-* **notes**: Literature comparison, not a theorem. It is recorded because a census that silently omits a section cannot be read as a coverage claim -- the reader cannot tell an omission from an absence.
-* **next action**: None. Do not count this row as a gap.
+* **notes**: This row is literature comparison and is NOT part of the completion denominator; it is recorded because a census that silently omits a section cannot be read as a coverage claim. What changed on 2026-08-14 is that the DETERMINISTIC MATHEMATICAL CONTENT of its claims is now compiled, so the comparison between the two proof routes is a statement about two proved theorems rather than about prose. The claims about what other authors wrote remain prose and are not formalizable.
+
+Claim 1, the mixed-gap-then-Weyl pattern: `mixedGap_of_populationGap_weyl` is the recovery step -- a population exterior gap `Delta` at the selected index block becomes a mixed gap `Delta - eps` once the perturbation is eps-operator-small -- and it is stated for an arbitrary index embedding, so it is more general than the printed prose. `yuWangSamworth_weylRecovered_le_populationGap_bound` then shows `c/(Delta-eps) <= 2c/Delta` when `2 eps <= Delta`: on the event the Weyl step needs, the two-step route lands exactly on the constant that `yuWangSamworth_sinTheta_frame_le` proves with no event at all. What Theorem 2 removes is the hypothesis, not the constant, which is precisely the paper's claim 3.
+
+That the event is not automatic is witnessed by the paper's own Section 1 data: `section1_weylRecovery_fails` records `Delta - ||E||_op = 10 - 11 < 0`, so the recovery yields nothing there, while `internalGap_section1` shows the population-gap theorems still apply.
+
+Claim 2, the hidden interval-counting requirement: `section1_no_sample_eigenvalue_in_block` shows that in that same model no sample eigenvalue lies in the interval spanned by the population block, so a variant assuming a population gap AND equal interval counts is assuming something this example violates.
+* **next action**: None. This row is not a formalization gap and must not be counted as one.
 
 ### `YWS-T3-right` — Theorem 3 -- right singular subspaces, population squared-singular gap
 

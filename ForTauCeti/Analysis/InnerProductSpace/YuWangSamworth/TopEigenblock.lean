@@ -27,12 +27,22 @@ indices for both once the eigenvalues are sorted.  The only inputs are spectral
 facts a reader can check on a concrete operator — an upper bound attained, and
 its multiplicity.
 
+`correspondingEigenblock_eigenvalueLevel` is the general rule behind it: two
+eigenspaces correspond exactly when the same number of eigenvalues lies above
+each and their multiplicities agree.  The leading case is `m = 0`; the general
+case selects a block in the *middle* of the spectrum, which is what the
+published Yu--Wang--Samworth sharpness example needs.
+
 ## Main results
 
+* `TauCeti.correspondingEigenblock_eigenvalueLevel`: eigenspaces at matching
+  positions in the two spectra correspond.
 * `TauCeti.correspondingEigenblock_topEigenspace`: leading eigenspaces of equal
-  multiplicity correspond.
-* `TauCeti.correspondingEigenblock_basisDiagonal`: the same for two operators
-  presented diagonally, with the hypotheses reduced to arithmetic on the data.
+  multiplicity correspond; the case `m = 0`.
+* `TauCeti.correspondingEigenblock_basisDiagonal` and
+  `TauCeti.correspondingEigenblock_basisDiagonal_level`: the same for two
+  operators presented diagonally, with the hypotheses reduced to arithmetic on
+  the data.
 -/
 
 public section
@@ -46,12 +56,47 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
+open scoped Classical in
+/-- **Eigenspaces at matching positions in the two spectra correspond.**
+
+The general block-selection constructor.  `eigenspace A α` and `eigenspace B β`
+occupy the *same* index range of their own sorted eigenbases exactly when the
+same number of eigenvalues lies strictly above each and their multiplicities
+agree; that common range is `[m, m + d)`.
+
+Only the counts matter, not the values `α` and `β`, which is what the
+Yu--Wang--Samworth setting needs: the perturbed block sits at the same ordered
+position as the population block while carrying entirely different eigenvalues.
+`correspondingEigenblock_topEigenspace` is the special case `m = 0`. -/
+theorem correspondingEigenblock_eigenvalueLevel {A B : E →ₗ[𝕜] E}
+    (hA : A.IsSymmetric) (hB : B.IsSymmetric) {n : ℕ} (hn : finrank 𝕜 E = n)
+    {α β : ℝ} {m d : ℕ}
+    (hAcount : ({j | α < hA.eigenvalues hn j} : Finset (Fin n)).card = m)
+    (hAmult : finrank 𝕜 (eigenspace A (α : 𝕜)) = d)
+    (hBcount : ({j | β < hB.eigenvalues hn j} : Finset (Fin n)).card = m)
+    (hBmult : finrank 𝕜 (eigenspace B (β : 𝕜)) = d) :
+    CorrespondingEigenblock hA hB (eigenspace A (α : 𝕜)) (eigenspace B (β : 𝕜)) := by
+  classical
+  refine correspondingEigenblock_of_spanIndices hn
+    {i : Fin n | m ≤ (i : ℕ) ∧ (i : ℕ) < m + d} ?_ ?_
+  · rw [← hA.spanIndices_Ico_eq_eigenspace hn hAcount hAmult]
+    congr 1
+    ext i
+    simp
+  · rw [← hB.spanIndices_Ico_eq_eigenspace hn hBcount hBmult]
+    congr 1
+    ext i
+    simp
+
 /-- **Leading eigenspaces of equal multiplicity are corresponding eigenblocks.**
 
 If `α` bounds every eigenvalue of `A` and `β` bounds every eigenvalue of `B`,
 and both attained eigenspaces have dimension `d`, then those eigenspaces are
 selected by the same index set `{i | i < d}` in the two sorted eigenvector
-bases — which is exactly `CorrespondingEigenblock`. -/
+bases — which is exactly `CorrespondingEigenblock`.
+
+This is `correspondingEigenblock_eigenvalueLevel` at `m = 0`: a bound that the
+spectrum attains has nothing above it, so its block starts at index `0`. -/
 theorem correspondingEigenblock_topEigenspace {A B : E →ₗ[𝕜] E}
     (hA : A.IsSymmetric) (hB : B.IsSymmetric) {n : ℕ} (hn : finrank 𝕜 E = n)
     {α β : ℝ} {d : ℕ}
@@ -62,15 +107,14 @@ theorem correspondingEigenblock_topEigenspace {A B : E →ₗ[𝕜] E}
     CorrespondingEigenblock hA hB (eigenspace A (α : 𝕜))
       (eigenspace B (β : 𝕜)) := by
   classical
-  refine correspondingEigenblock_of_spanIndices hn {i : Fin n | (i : ℕ) < d} ?_ ?_
-  · rw [← hA.spanIndices_Iio_eq_topEigenspace hn hAmax hAmult]
-    congr 1
-    ext i
-    simp
-  · rw [← hB.spanIndices_Iio_eq_topEigenspace hn hBmax hBmult]
-    congr 1
-    ext i
-    simp
+  have hzero : ∀ (C : E →ₗ[𝕜] E) (hC : C.IsSymmetric) (γ : ℝ),
+      (∀ i, hC.eigenvalues hn i ≤ γ) →
+      ({j | γ < hC.eigenvalues hn j} : Finset (Fin n)).card = 0 := by
+    intro C hC γ hmax
+    refine Finset.card_eq_zero.mpr (Finset.filter_eq_empty_iff.mpr fun {j} _ => ?_)
+    exact not_lt.mpr (hmax j)
+  exact correspondingEigenblock_eigenvalueLevel hA hB hn (hzero A hA α hAmax) hAmult
+    (hzero B hB β hBmax) hBmult
 
 open scoped Classical in
 /-- **The diagonal case.**  For operators presented in orthonormal bases the
@@ -91,5 +135,30 @@ theorem correspondingEigenblock_basisDiagonal {n : ℕ}
     (by rw [finrank_eigenspace_basisDiagonal, hcard])
     (eigenvalues_basisDiagonal_le b' c' hc' hn)
     (by rw [finrank_eigenspace_basisDiagonal, hcard'])
+
+open scoped Classical in
+/-- **The diagonal case at an arbitrary level.**  The hypotheses of
+`correspondingEigenblock_eigenvalueLevel` become arithmetic on the two
+coefficient lists: equally many coefficients lie strictly above the two chosen
+levels, and equally many lie at them.
+
+Unlike `correspondingEigenblock_basisDiagonal` this places no maximality demand
+on `α` and `β`, so it selects a block anywhere in the spectrum. -/
+theorem correspondingEigenblock_basisDiagonal_level {n : ℕ}
+    (b b' : OrthonormalBasis (Fin n) 𝕜 E) (c c' : Fin n → ℝ)
+    (hn : finrank 𝕜 E = n) {α β : ℝ}
+    (hcount : ({i | α < c i} : Finset (Fin n)).card
+      = ({i | β < c' i} : Finset (Fin n)).card)
+    (hmult : ({i | (c i : 𝕜) = (α : 𝕜)} : Finset (Fin n)).card
+      = ({i | (c' i : 𝕜) = (β : 𝕜)} : Finset (Fin n)).card) :
+    CorrespondingEigenblock (isSymmetric_basisDiagonal b c)
+      (isSymmetric_basisDiagonal b' c')
+      (eigenspace (basisDiagonal b c) (α : 𝕜))
+      (eigenspace (basisDiagonal b' c') (β : 𝕜)) :=
+  correspondingEigenblock_eigenvalueLevel _ _ hn
+    (card_filter_lt_eigenvalues_basisDiagonal b c hn α)
+    (finrank_eigenspace_basisDiagonal b c (α : 𝕜))
+    ((card_filter_lt_eigenvalues_basisDiagonal b' c' hn β).trans hcount.symm)
+    ((finrank_eigenspace_basisDiagonal b' c' (β : 𝕜)).trans hmult.symm)
 
 end TauCeti
