@@ -237,8 +237,13 @@ def probe(items: list[dict]) -> dict[str, str]:
             lines.append(f"-- probe {index}\n#check @{decl}\n")
         lines.append(f"-- probe {len(pending)}\n#check @{CANARY}\n")
         PROBE_PATH.write_text("".join(lines), encoding="utf8")
+        # `maxErrors` defaults to 100.  Every declaration this target does not
+        # carry is one error, and there are more than a hundred of those in the
+        # first pass, so without the override Lean stops reporting partway
+        # through the file -- including at the canary line, which then looks
+        # like a resolution and fails the run outright.
         result = subprocess.run(
-            ["lake", "env", "lean", str(PROBE_PATH)],
+            ["lake", "env", "lean", "-DmaxErrors=100000", str(PROBE_PATH)],
             cwd=ROOT, capture_output=True, text=True,
         )
         output = result.stdout + result.stderr

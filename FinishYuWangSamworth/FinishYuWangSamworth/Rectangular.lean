@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import FinishYuWangSamworth.Rectangular.Theorem4
 import FinishYuWangSamworth.Rectangular.RankOne
 import FinishYuWangSamworth.Rectangular.RankBoundary
+import FinishYuWangSamworth.Rectangular.SingularBlock
 
 /-!
 # Rectangular Yu--Wang--Samworth surface
@@ -13,5 +14,7 @@ import FinishYuWangSamworth.Rectangular.RankBoundary
 This aggregate exposes the right and left forms of the singular-subspace theorem
 (Theorem 3 of the published article, Theorem 4 of the preprint) at the printed
 generality, their aligned-frame conclusions, direct rank-one singular-vector
-corollaries, and the refutation of the printed rank-boundary convention.
+corollaries, the same theorems restated in consecutive singular-value notation
+with the corrected boundary convention, and the refutation of the printed
+rank-boundary convention.
 -/
