@@ -3,10 +3,13 @@
 \usepackage[margin=1in]{geometry}
 \usepackage{amsmath,amssymb,amsthm,mathtools}
 \usepackage{booktabs,tabularx,array}
+\usepackage[section]{placeins}
+\usepackage{float}
 \usepackage{microtype}
 \usepackage{graphicx}
 \usepackage[numbers,sort&compress]{natbib}
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\usepackage{pdfcomment}
 \usepackage[nameinlink]{cleveref}
 \usepackage{xcolor}
 \setlength{\emergencystretch}{3em}
@@ -15,6 +18,8 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{remark}[theorem]{Remark}
 
+\input{generated/census_macros.tex}
+\input{generated/provenance_macros.tex}
 \input{generated/accounting_macros.tex}
 \input{generated/interaction_macros.tex}
 
@@ -26,7 +31,9 @@
 \title{Formalizing Yu--Wang--Samworth:\\
 Source Auditing, Davis--Kahan, and the Cost of Building\\
 Spectral Perturbation Theory in Lean}
-\author{Author list TBD}
+% Additional authors are expected; keep the confirmed ordering below stable.
+\author{Jonathan Crall\thanks{Kitware, Inc.; \texttt{jon.crall@kitware.com}}
+\and Edward Wang\thanks{Johns Hopkins University; \texttt{ewang43@jhu.edu}}}
 \date{Draft scaffold -- August 2026}
 
 \begin{document}
@@ -35,12 +42,17 @@ Spectral Perturbation Theory in Lean}
 \begin{abstract}
 We report a source-faithful \Lean{} 4 formalization of Yu, Wang, and Samworth's
 widely used statistical variant of the Davis--Kahan theorem.  The formalization
-covers all 24 rows of a paper-level source census, including the population-gap
-perturbation results, aligned-frame conclusions, rectangular singular-subspace
-results, appendix lemma, and sharpness examples.  Treating the source as an
-object to audit rather than merely a theorem to restate exposed two false
-printed statements in YWS and, in a deeper audit of the 1970 source, an explicit
-finite-dimensional counterexample to Davis--Kahan Proposition 4.4.
+uses a paper-keyed source census: a progress-and-audit instrument constructed
+from the source rather than from the Lean tree, so that missing formalizations
+remain visible.  The current census has \YWSCensusEntryCount{} tracking entries,
+covering named results, equations, identities, examples, source conventions,
+and explicitly labeled extensions beyond the printed paper.  All
+\YWSCensusVerifiedCount{} entries currently resolve to declarations in the
+default build; this is a verification statement about the census, not a claim
+that YWS contains that many named theorems.  Treating the source as an object to audit rather than
+merely a theorem to restate exposed two printed source defects in YWS and, in a
+deeper audit of the 1970 source, an explicit finite-dimensional counterexample
+to Davis--Kahan Proposition 4.4.
 
 The effort also required a substantial prerequisite layer of operator theory,
 principal-angle geometry, singular-value machinery, unitarily invariant norms,
@@ -87,9 +99,12 @@ reusable mathematical layer for later statistical formalizations.
 The intended contribution list is:
 \begin{enumerate}
   \item A source-faithful formalization of YWS at the published theorem numbering
-        and generality, with a 24/24 source census in the default build.
-  \item Machine-checked diagnoses and repairs of two false printed YWS
-        statements: equation (4) and the rank-boundary convention in Theorem 3.
+        and generality, tracked by a paper-keyed census whose
+        \YWSCensusEntryCount{} entries make absent, corrected, generalized, and
+        deliberately extra material visible.
+  \item Machine-checked diagnoses and repairs of two printed YWS source defects:
+        the false polynomial identity in equation (4) and the rank-boundary
+        convention in Theorem 3.
   \item A source audit of \DK{} Proposition 4.4, including an explicit
         $\mathbb{R}^4$ trace-norm counterexample and a repaired theorem surface.
   \item A demonstration that the resulting spectral machinery is reusable in a
@@ -133,7 +148,7 @@ Mathlib, and staging work intended for \TauCeti{}.
 This is the amortization argument for foundational formalization.  Informally,
 a later paper can cite Davis--Kahan in one sentence.  Formally, somebody must
 first pay for the interfaces that make that sentence meaningful and reusable.
-The cost analysis in \cref{sec:accounting} gives a partially observed empirical
+The cost analysis in \cref{sec:process-study} gives a partially observed empirical
 view of that prerequisite burden.
 
 \section{A Source-Faithful Formalization of YWS}
@@ -141,10 +156,34 @@ view of that prerequisite burden.
 
 The package \texttt{FinishYuWangSamworth} is organized around the published
 Biometrika numbering rather than around whichever auxiliary theorem was easiest
-to expose in Lean.  Its source census records 24/24 rows proved in the default
-build.  Coverage includes Theorems 1--3, Corollary 1, Lemma A1, equations and
-appendix displays needed for source alignment, and all three Section 2 sharpness
-examples.
+to expose in Lean.  Formalization progress is tracked by a \emph{paper-keyed
+source census}: its rows are created from claims and audit obligations in the
+source document, not discovered by enumerating declarations already present in
+the Lean tree.  Consequently a missing formalization remains a visible row
+instead of disappearing from a coverage report.
+
+The current census contains \YWSCensusEntryCount{} entries.  They are not
+\YWSCensusEntryCount{} named theorems: the rows include theorem conclusions,
+lemmas, corollaries, equations, identities, examples, a definition, source
+scope/convention checks, and exposition/audit material.  It also records
+\YWSCensusExplicitAdditionCount{} items explicitly marked as additions beyond
+the printed paper, so that repository extensions are not accidentally
+attributed to YWS.  All \YWSCensusVerifiedCount{} entries currently have
+\texttt{verification=proved\_in\_build}.  The independent census status field
+records whether a row matches the source exactly, is generalized or
+specialized, is a compiled correction to a defective source statement, or is
+not source proof debt.
+
+\begin{table}[t]
+\centering
+\input{generated/yws_census_kind_table.tex}
+\caption{What the \YWSCensusEntryCount{} census entries count.  This is a
+progress/audit inventory, not a theorem count.  The complete row-level inventory,
+including source anchor, Lean declarations, verification state, and whether an
+entry is an explicit non-source addition, is generated as
+\texttt{yws\_census\_items.csv}.}
+\label{tab:yws-census-kinds}
+\end{table}
 
 \subsection{The population-gap theorem}
 
@@ -162,25 +201,49 @@ code.
 
 \subsection{Sharpness as part of source fidelity}
 
-All three sharpness constructions are represented against the same hypotheses
-as the theorem surfaces.  This matters because source faithfulness includes the
-claims about constants and dimension dependence, not only the upper bounds.
+The census also tracks the paper's sharpness constructions against the same
+hypotheses as the theorem surfaces.  This matters because source faithfulness
+includes claims about constants and dimension dependence, not only upper
+bounds.
 
 \textbf{TODO:} select one short sharpness example for the main text and move the
 middle-block construction details to an appendix.
+
+\subsection{Proof provenance and borrowed formal ideas}
+
+Source faithfulness applies to the provenance of the formal development as well
+as to the theorem statements.  Supporting layers were not all independently
+invented in this repository: some code and proof ideas have ancestry in the
+Spectra collaboration; other arguments were adapted from, or designed after
+reading, external Lean libraries and Mathlib pull requests.  The repository
+already records much of this information in module-level provenance blocks and
+external-source registries.
+
+The final paper should cite those sources at the mathematical points where their
+ideas are used, and should distinguish at least four relationships: copied or
+closely adapted code, ported mathematics with substantial API rewriting, a proof
+strategy used for an independent re-derivation, and an ordinary upstream
+Mathlib dependency.  These are different scholarly claims and should not be
+collapsed into a generic acknowledgment.  A paper-local provenance inventory is
+regenerated by \path{scripts/build_provenance.py}.
+
+\textbf{TODO:} complete a declaration-level audit for every proof discussed in
+the paper and add BibTeX entries for all cited donors before submission.
 
 \section{Formalization as Source Audit}
 \label{sec:audit}
 
 \subsection{Two defects in YWS}
 
-The formalization does not silently repair false statements.  First, printed
-equation (4) is missing a square; the repository contains both a counterexample
-to the printed polynomial identity and the corrected identity.  Second, the
-printed convention $\sigma^2_{\operatorname{rank}(A)+1}:=-\infty$ in Theorem 3
-makes a boundary denominator infinite and can force a zero upper bound when the
-sample and population singular subspaces are in fact orthogonal.  The formalized
-repair uses the ambient-dimension boundary convention used by the proof itself.
+The formalization does not silently repair source defects.  First, printed
+equation (4) is a false polynomial identity: it is missing a square, and the
+repository contains both a concrete counterexample to the printed formula and a
+proof of the corrected identity.  Second, the printed convention
+$\sigma^2_{\operatorname{rank}(A)+1}:=-\infty$ in Theorem 3 is incorrect at the
+rank boundary.  When $s=\operatorname{rank}(A)$ it makes a denominator infinite
+and can force a zero upper bound even when the sample and population singular
+subspaces are orthogonal.  The intended theorem is repaired by the ambient-index
+boundary convention used in the paper's own Gram-matrix proof.
 
 \textbf{TODO:} give minimal numerical counterexamples and exact corrected
 statements, with declaration-level references.
@@ -216,140 +279,77 @@ rebuild it.
 \path{DkpsQuench2026/Geometry/AlignedCMDS.lean} and quantify which YWS/DK
 interfaces are reused directly.
 
-\section{What Did the Formalization Cost?}
-\label{sec:accounting}
+\section{Resource and Interaction Study}
+\label{sec:process-study}
 
-\subsection{Observation model}
+The mathematical development was unusually well instrumented, but not from its
+beginning and not in every interface.  We therefore treat resource accounting as
+a partially observed historical process rather than as a single project bill.
+The analysis snapshot is \AccountingSnapshot{}.  Commit-level coverage is
+computed on the primary formalization repository, while measured token totals
+also include an author-confirmed cross-repository contribution associated with
+the Tau Ceti foundations work.  Commits that touch only
+\path{papers/formalization_draft2/} are excluded from the formalization-history
+corpus, preventing the production of this manuscript from being charged back to
+the development it studies.
 
-Resource telemetry is incomplete by construction.  Instrumentation was added
-at commit \texttt{9f59916f1c7a}; \CommitsBeforeInstrumentation{} commits in the
-pinned history precede it.  Some earlier agent transcripts were later backfilled,
-but backfill does not restore sessions that were never retained.  In addition,
-some formalization work took place through chat interfaces for which the local
-agent-harness accounting system had no equivalent token telemetry.
+At this snapshot, \ExactMeasuredCommitCount{} of \HistoryCommitCount{} included
+primary-repository commits have exact commit-level telemetry.  The program-wide
+ledger nevertheless provides a strict measured lower bound of \LedgerTurns{}
+model turns, \LedgerOutputTokens{} output tokens, and
+\LedgerBillableInputTokens{} tokens in its billable-input accounting measure.
+The larger program total includes \LedgerRepositoryCount{} explicitly allowlisted
+ledger repositories; the commit-coverage denominator does not pretend that the
+other repository's Git history is present in this checkout.  Measured-but-
+unallocated \texttt{pending@...} segments and genuinely unmeasured work are kept
+as separate evidence classes.  Detailed scope, reconciliation, and missing-data
+methods are given in \cref{app:accounting}.
 
-We therefore distinguish:
-\begin{enumerate}
-  \item \emph{exact commit-attributed measurements}, where the ledger names a
-        commit SHA;
-  \item \emph{measured but commit-unattributed usage}, represented by
-        \texttt{pending@...} session summaries; and
-  \item \emph{unmeasured work}, including pre-instrumentation and
-        non-instrumented-interface development.
-\end{enumerate}
+\subsection{Tokens must be resolved by model before pricing}
 
-At analysis cutoff \AccountingCutoffCommit{}, only \ExactMeasuredCommitCount{}
-of \HistoryCommitCount{} commits have exact commit-level telemetry.  The raw
-ledger nevertheless contains a larger measured lower bound because
-\PendingSegmentCount{} pending segments preserve \PendingTurns{} model turns
-whose per-commit allocation is unresolved.
-
-\begin{table}[t]
-\centering
-\input{generated/accounting_state_table.tex}
-\caption{Commit-level accounting coverage.  A commit is ``exact'' only when a
-ledger row names its SHA. Pending session windows are kept as a separate
-allocation-candidate relation and do not upgrade a commit to measured status.}
-\label{tab:accounting-state}
-\end{table}
-
-\subsection{Measured lower bounds}
-
-From the current append-only ledger, the pipeline recomputes a measured lower
-bound of \LedgerTurns{} model turns, \LedgerOutputTokens{} output tokens, and
-\LedgerBillableInputTokens{} tokens in the ledger's billable-input accounting
-measure.  We report ordinary input, cache write, cache read, and output
-separately rather than collapsing them into a provider-price estimate.
+Token count alone is not a cost measure.  The ledger records an exact per-model
+vector for ordinary input, cache writes, cache reads, and output, so measured
+usage can be priced model-by-model once historically applicable rates are
+verified.  The analysis checks that every per-model vector sums to its row-level
+total and never applies one global average token price.
 
 \begin{table}[t]
 \centering
 \small
-\input{generated/measured_token_breakdown_table.tex}
-\caption{Measured token accounting from the current ledger. ``Exact-attributed''
-includes ledger rows naming a commit SHA (including the small set not reachable
-from the pinned history); ``Pending'' is measured session-level usage lacking a
-defensible per-commit allocation. The billable-input measure is the ledger sum of
-ordinary input, cache-write, and cache-read tokens, not a dollar cost.}
-\label{tab:token-breakdown}
+\input{generated/model_token_table.tex}
+\caption{Exactly measured program-wide tokens by model and token class at the
+\AccountingSnapshot{} snapshot.  Monetary cost is computed only after
+historically applicable model- and token-class-specific rates are supplied.}
+\label{tab:model-tokens}
 \end{table}
 
-\textbf{Important:} these numbers are not a total project cost.  The committed
-\texttt{lifetime-totals.json} snapshot can also lag the append-only ledger; the
-analysis reports that reconciliation and treats the ledger itself as the source
-for measured totals.
+Git co-author trailers provide a second, independent provenance signal.  We keep
+raw trailer labels, exact ledger model attribution, and study-specific
+normalizations separate.  In particular, an author-confirmed historical rule
+maps unledgered GPT-5.6 ``High'' and ``Thinking'' chat-interface labels to
+GPT-5.6 Sol only within the recorded study interval; the rule matched
+\BoundedGPTChatRuleCommitCount{} commits in this snapshot and is explicitly
+bounded so that it cannot silently classify future history.  Exact ledger
+attribution takes precedence.  Anthropic trailer/ledger differences are treated
+as review signals rather than errors because model switches within a session can
+leave a commit trailer that does not describe every model used in the preceding
+work.  The full reconciliation is in \cref{app:model-provenance}.
 
-\subsection{Coverage by mathematical component}
+\subsection{Human steering is a secondary empirical object}
 
-\begin{table}[t]
-\centering
-\small
-\input{generated/component_accounting_table.tex}
-\caption{Path-based accounting coverage for major project components. Components
-overlap: for example, a Tau Ceti staging commit may also be classified as YWS. A
-pending-window overlap is only a possible allocation candidate.}
-\label{tab:component-accounting}
-\end{table}
-
-The component table is intended to support two later analyses.  First, it lets
-us quantify how much measured work accrued in foundational layers compared with
-the final paper-facing YWS package.  Second, it exposes where missing telemetry
-is concentrated, which is necessary before any cost comparison is interpreted.
-
-\subsection{Extrapolating unmeasured work}
-\label{sec:imputation}
-
-A complete historical estimate is a missing-data problem with non-random
-missingness.  Agent-harness work, chat-interface work, pre-instrumentation work,
-and manual commits have different observation mechanisms.  Our pipeline
-therefore emits an auditable commit-level feature table and an exploratory
-log-ridge model rather than hard-coding a scalar multiplier.
-
-The current model predicts model turns, output tokens, and the ledger's
-billable-input measure from change size, Lean-file share, commit-message class,
-path component, and explicit model-provenance signals.  It is evaluated with
-rolling-origin temporal validation.  Only positive-evidence LLM-assisted commits
-outside pending measured windows are counted in the default extrapolated total;
-known chat-interface work can be entered explicitly in
-\path{data/accounting_overrides.csv}.
-
-\textbf{TODO before quoting modeled totals:} audit the override file, inspect
-\path{generated/imputation_validation.csv}, compare alternative model
-families, and perform sensitivity analyses for the non-random missingness
-mechanism.  The manuscript should always display measured and modeled quantities
-separately.
-
-\section{How Humans Interacted with the LLM Systems}
-\label{sec:interactions}
-
-The retained post-hoc corpus currently contains \InteractionPromptCount{}
-deduplicated human prompts across \InteractionSessionCount{} sessions and
-\InteractionActiveDays{} active days.  The median prompt length is only
-\InteractionMedianPromptChars{} characters, while the median response following
-a prompt contains \InteractionMedianToolCalls{} tool calls.  The median filtered
-within-session interval between human interventions is
-\InteractionMedianGapMinutes{} minutes.  The harness logs also contain
-\InteractionInterruptCount{} explicit interrupt events and
-\InteractionDroppedQueuedPromptCount{} queued prompts that were later dropped.
-
-\begin{table}[t]
-\centering
-\input{generated/interaction_group_table.tex}
-\caption{Heuristic grouping of retained human steering prompts. Taxonomy rules
-must be manually audited before publication; the table is generated to make that
-a reproducible review task rather than a prose impression.}
-\label{tab:interaction-groups}
-\end{table}
-
-The qualitative analysis should distinguish at least: multi-agent logistics,
-work orders, gap-filling for agents that lack local context, editorial requests,
-and irreducibly human judgment such as rejecting a mathematically invalid path
-or changing the priority of the development.
-
-A particularly important measurement lesson is that ordinary transcript ``user
-message'' counts can miss steering.  Queued prompts that are subsequently
-removed from the queue are interaction events even though they do not become
-normal model turns.  This is one reason to analyze the harness event stream in
-addition to final chat transcripts.
+The retained interaction corpus contains \InteractionPromptCount{} deduplicated
+human prompts across \InteractionSessionCount{} sessions and
+\InteractionActiveDays{} active days.  These traces support analyses of
+intervention type, interruption, coordination, and the evolution of project
+management tools such as the paper-keyed source census.  They also expose an
+important provenance limitation: retrospective author memory does not reliably
+recover every operational request made during a long-running agentic project.
+Where contemporaneous traces survive, we therefore privilege them over later
+recollection when reconstructing who requested or elaborated a tool.  The
+quantitative taxonomy, the census chronology, and the ``interaction archaeology''
+case study are intentionally developed in \cref{app:interactions}; much of that
+material is appendix/cut material unless it changes the interpretation of the
+mathematical results.
 
 \section{From Project Infrastructure to Shared Infrastructure}
 \label{sec:tauceti}
@@ -393,10 +393,16 @@ human--AI process required to obtain the formalization.
         retention limits how much of the earlier period can be reconstructed.
   \item Chat-interface work is not recoverable from the local harness ledger;
         historical attribution depends on separate evidence and author review.
+        Missing chat logs also limit reconstruction of initiative and steering,
+        not merely token totals.
   \item Pending transcript spans can be broad.  Timestamp overlap identifies
         candidate commits but does not justify a per-commit token allocation.
   \item Missingness is not random, so extrapolated totals are model-dependent and
         should be presented with sensitivity analyses rather than as ground truth.
+        Some model variants have no direct measured calibration in the ledger.
+  \item Dollar costs depend on historically applicable model- and token-class
+        rates.  Measured token counts remain primary evidence; monetary totals
+        should be reported only with sourced rates and effective dates.
   \item Path-based component labels overlap and are only a first approximation
         to mathematical dependency-level cost attribution.
   \item Formal verification establishes the Lean statement.  Claims that a
@@ -422,6 +428,9 @@ development process falsifiable and inspectable.  Where telemetry exists we
 report measurements; where it is only session-level we preserve that ambiguity;
 and where it is missing we model it explicitly as missing data rather than
 retroactively treating an incomplete ledger as a complete project bill.
+
+\appendix
+\input{appendix_process.tex}
 
 \begin{thebibliography}{9}
 

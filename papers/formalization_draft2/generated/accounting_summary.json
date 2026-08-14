@@ -1,14 +1,25 @@
 {
-  "schema": "formalization-draft2/accounting-summary/v1",
+  "schema": "formalization-draft2/accounting-summary/v3",
   "history_cutoff_commit": "7aeff6b62ccab2f96ee64606bc87e368a1650502",
+  "history_cutoff_date": "2026-08-13",
+  "history_cutoff_date_label": "August 13, 2026",
+  "primary_repository": "aiq-dkps-formalization",
+  "included_ledger_repositories": {
+    "aiq-dkps-formalization": "primary formalization repository",
+    "aiq-gpu-docs": "author-confirmed cross-repository work in scope as part of the TauCeti foundations contribution"
+  },
+  "repository_history_commit_count": 4637,
+  "excluded_paper_only_commits": 0,
   "history_commit_count": 4637,
   "instrumentation_commit": "9f59916f1c7af3f06b6b0f24e31e2431a7e259d7",
   "instrumentation_time_utc": "2026-07-04T00:58:13+00:00",
+  "primary_repository_exact_commit_ids": 939,
   "ledger_exact_commit_ids": 1485,
-  "ledger_exact_commits_on_history": 1475,
-  "ledger_exact_commits_off_history": 10,
+  "ledger_exact_commits_on_history": 933,
+  "ledger_exact_commits_off_history": 6,
+  "cross_repository_exact_commit_ids": 546,
   "commits_before_instrumentation": 193,
-  "commits_without_exact_accounting": 3162,
+  "commits_without_exact_accounting": 3704,
   "commits_overlapping_pending_windows": 1381,
   "pending_segments": 96,
   "pending_segments_turns": 10204,
@@ -34,42 +45,123 @@
     "snapshot_is_stale": true
   },
   "exact_on_history": {
-    "turns": 31622,
-    "input_tokens": 7381953,
-    "cache_write_tokens": 93839558,
-    "cache_read_tokens": 11294708326,
-    "output_tokens": 30648120,
-    "billable_input_tokens": 11395929837
+    "turns": 25698,
+    "input_tokens": 7370856,
+    "cache_write_tokens": 81471405,
+    "cache_read_tokens": 8206070275,
+    "output_tokens": 26208591,
+    "billable_input_tokens": 8294912536
   },
   "accounting_states": {
     "unmeasured_pre_instrumentation": 193,
     "instrumentation_commit_unmeasured": 1,
-    "exact_measured": 1475,
-    "unmeasured_post_instrumentation": 2968
+    "exact_measured": 933,
+    "unmeasured_post_instrumentation": 3510
   },
   "assistance_evidence": {
-    "none": 1411,
-    "llm_coauthor_trailer": 3032,
-    "agent_author": 194
+    "none": 1185,
+    "llm_coauthor_trailer": 2166,
+    "exact_ledger": 933,
+    "bounded_gpt_chat_trailer_rule": 217,
+    "agent_author": 136
   },
-  "llm_evidence_commits": 3226,
-  "llm_evidence_unmeasured_commits": 1968,
-  "extrapolation_eligible_commits": 1296,
+  "model_provenance_status": {
+    "no_model_evidence": 1321,
+    "declared_model_without_exact_ledger": 2383,
+    "exact_match": 746,
+    "partial_overlap": 20,
+    "disjoint_signals": 59,
+    "ledger_only": 108
+  },
+  "model_provenance_disagreement_commits": 79,
+  "chat_interface_review_candidates": 87,
+  "confirmed_chat_interface_commits": 217,
+  "bounded_gpt_chat_rule_commits": 217,
+  "measured_models": [
+    "claude-opus-5",
+    "claude-opus-4-8",
+    "claude-fable-5",
+    "gpt-5.6-terra",
+    "gpt-5.6-sol"
+  ],
+  "priced_measured_models": 0,
+  "model_measured_tokens": {
+    "claude-opus-5": {
+      "input_tokens": 107162,
+      "cache_write_tokens": 65515682,
+      "cache_read_tokens": 9860226338,
+      "output_tokens": 20629210,
+      "billable_input_tokens": 9925849182
+    },
+    "claude-opus-4-8": {
+      "input_tokens": 693366,
+      "cache_write_tokens": 58990139,
+      "cache_read_tokens": 3744966700,
+      "output_tokens": 15967324,
+      "billable_input_tokens": 3804650205
+    },
+    "claude-fable-5": {
+      "input_tokens": 354914,
+      "cache_write_tokens": 26161396,
+      "cache_read_tokens": 1445727984,
+      "output_tokens": 7487637,
+      "billable_input_tokens": 1472244294
+    },
+    "gpt-5.6-terra": {
+      "input_tokens": 3590620,
+      "cache_write_tokens": 0,
+      "cache_read_tokens": 373341440,
+      "output_tokens": 539325,
+      "billable_input_tokens": 376932060
+    },
+    "gpt-5.6-sol": {
+      "input_tokens": 3437472,
+      "cache_write_tokens": 0,
+      "cache_read_tokens": 167420160,
+      "output_tokens": 327440,
+      "billable_input_tokens": 170857632
+    },
+    "<synthetic>": {
+      "input_tokens": 0,
+      "cache_write_tokens": 0,
+      "cache_read_tokens": 0,
+      "output_tokens": 0,
+      "billable_input_tokens": 0
+    }
+  },
+  "llm_evidence_commits": 3452,
+  "llm_evidence_unmeasured_commits": 2519,
+  "extrapolation_eligible_commits": 1826,
   "exploratory_extrapolation": {
     "turns": {
-      "point": 21334.469,
-      "p05": 18319.578667124184,
-      "p95": 26255.710741385734
+      "point": 33235.49,
+      "p05": 28270.79103277022,
+      "p95": 39430.392861146276
+    },
+    "input_tokens": {
+      "point": 6797025.971,
+      "p05": 4021219.1882856456,
+      "p95": 12809216.929324573
+    },
+    "cache_write_tokens": {
+      "point": 38542772.781,
+      "p05": 30366983.207470927,
+      "p95": 50665776.89048098
+    },
+    "cache_read_tokens": {
+      "point": 8737201457.461,
+      "p05": 7074950829.759167,
+      "p95": 10891879093.714394
     },
     "output_tokens": {
-      "point": 16927223.967,
-      "p05": 14324752.741213411,
-      "p95": 21183455.946188167
+      "point": 24896765.498,
+      "p05": 20791463.0544435,
+      "p95": 29582184.680343784
     },
     "billable_input_tokens": {
-      "point": 6842269704.189,
-      "p05": 5806171262.919833,
-      "p95": 8512169189.634122
+      "point": 8831882493.129,
+      "p05": 7233347040.912775,
+      "p95": 11241379424.923256
     }
   },
   "model": {
@@ -83,6 +175,13 @@
       "claude_trailer",
       "openai_trailer",
       "agent_author",
+      "model_claude_opus_5",
+      "model_claude_opus_4_8",
+      "model_claude_fable_5",
+      "model_gpt_5_6_sol",
+      "model_gpt_5_6_terra",
+      "model_gpt_other",
+      "model_multiple",
       "subject_docs",
       "subject_plan",
       "subject_proof",
@@ -99,6 +198,6 @@
     "ridge_alpha": 5.0,
     "rolling_validation_folds": 5,
     "bootstrap_draws": 1000,
-    "warning": "Exploratory missing-cost model; missingness is not random, pending session windows are only allocation candidates, and chat-interface provenance requires manual overrides."
+    "warning": "Exploratory missing-cost model; missingness is not random, pending session windows are only allocation candidates, and chat-interface provenance is a mix of manual overrides and one explicit time-bounded GPT trailer rule."
   }
 }

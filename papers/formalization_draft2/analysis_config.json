@@ -1,6 +1,27 @@
 {
-  "schema": "formalization-draft2/accounting-config/v1",
+  "schema": "formalization-draft2/accounting-config/v2",
   "history_cutoff_commit": "7aeff6b62ccab2f96ee64606bc87e368a1650502",
+  "study_start_date": "2026-06-03",
+  "primary_repository": "aiq-dkps-formalization",
+  "included_ledger_repositories": {
+    "aiq-dkps-formalization": "primary formalization repository",
+    "aiq-gpu-docs": "author-confirmed cross-repository work in scope as part of the TauCeti foundations contribution"
+  },
+  "exclude_commits_if_only_touch": [
+    "papers/formalization_draft2/"
+  ],
+  "gpt_chat_trailer_rule": {
+    "start_date": "2026-06-03",
+    "end_date": "2026-08-14",
+    "raw_models": [
+      "gpt-5.6-high",
+      "gpt-5.6-thinking"
+    ],
+    "resolved_model": "gpt-5.6-sol",
+    "channel": "chat_interface",
+    "apply_only_without_exact_ledger": true,
+    "rationale": "Author-confirmed study-window convention: GPT-5.6 High and Thinking co-author labels were chat-interface setting labels for GPT-5.6 Sol. Exact ledger model attribution, when present, remains authoritative. The rule is deliberately time-bounded and must not be projected onto future commits."
+  },
   "pending_window_minutes": 0,
   "ridge_alpha": 5.0,
   "rolling_validation_folds": 5,
@@ -33,5 +54,6 @@
       "dev/",
       ".llm_resource_tally/"
     ]
-  }
+  },
+  "git_date_basis": "Git author timestamp local date; do not convert to UTC before applying date-bounded provenance rules or presenting snapshot dates"
 }
