@@ -1,0 +1,37 @@
+{
+  "schema": "formalization-draft2/accounting-config/v1",
+  "history_cutoff_commit": "7aeff6b62ccab2f96ee64606bc87e368a1650502",
+  "pending_window_minutes": 0,
+  "ridge_alpha": 5.0,
+  "rolling_validation_folds": 5,
+  "bootstrap_draws": 1000,
+  "bootstrap_seed": 20260814,
+  "component_patterns": {
+    "yws": [
+      "FinishYuWangSamworth/",
+      "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/"
+    ],
+    "davis_kahan": [
+      "DavisKahan/",
+      "ForTauCeti/Analysis/InnerProductSpace/DavisKahan/",
+      "papers/davis_kahan_prop_4_4_counterexample.tex"
+    ],
+    "quench": [
+      "DkpsQuench2026/"
+    ],
+    "tauceti_staging": [
+      "ForTauCeti/"
+    ],
+    "papers_docs": [
+      "papers/",
+      "docs/",
+      "prose/"
+    ],
+    "tooling": [
+      "scripts/",
+      "tools/",
+      "dev/",
+      ".llm_resource_tally/"
+    ]
+  }
+}

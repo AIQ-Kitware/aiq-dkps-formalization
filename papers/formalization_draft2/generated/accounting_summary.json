@@ -1,0 +1,104 @@
+{
+  "schema": "formalization-draft2/accounting-summary/v1",
+  "history_cutoff_commit": "7aeff6b62ccab2f96ee64606bc87e368a1650502",
+  "history_commit_count": 4637,
+  "instrumentation_commit": "9f59916f1c7af3f06b6b0f24e31e2431a7e259d7",
+  "instrumentation_time_utc": "2026-07-04T00:58:13+00:00",
+  "ledger_exact_commit_ids": 1485,
+  "ledger_exact_commits_on_history": 1475,
+  "ledger_exact_commits_off_history": 10,
+  "commits_before_instrumentation": 193,
+  "commits_without_exact_accounting": 3162,
+  "commits_overlapping_pending_windows": 1381,
+  "pending_segments": 96,
+  "pending_segments_turns": 10204,
+  "pending_segments_output_tokens": 13937162,
+  "pending_segments_billable_input_tokens": 4281362440,
+  "measured_lower_bound": {
+    "turns": 42090,
+    "input_tokens": 8183534,
+    "cache_write_tokens": 150667217,
+    "cache_read_tokens": 15591682622,
+    "output_tokens": 44950936,
+    "billable_input_tokens": 15750533373
+  },
+  "lifetime_snapshot_reconciliation": {
+    "ledger_rows_current": 1698,
+    "lifetime_ledger_rows": 1651,
+    "ledger_turns_current": 42090,
+    "lifetime_turns": 41485,
+    "ledger_output_tokens_current": 44950936,
+    "lifetime_output_tokens": 44560833,
+    "ledger_billable_input_current": 15750533373,
+    "lifetime_billable_input": 15513207189,
+    "snapshot_is_stale": true
+  },
+  "exact_on_history": {
+    "turns": 31622,
+    "input_tokens": 7381953,
+    "cache_write_tokens": 93839558,
+    "cache_read_tokens": 11294708326,
+    "output_tokens": 30648120,
+    "billable_input_tokens": 11395929837
+  },
+  "accounting_states": {
+    "unmeasured_pre_instrumentation": 193,
+    "instrumentation_commit_unmeasured": 1,
+    "exact_measured": 1475,
+    "unmeasured_post_instrumentation": 2968
+  },
+  "assistance_evidence": {
+    "none": 1411,
+    "llm_coauthor_trailer": 3032,
+    "agent_author": 194
+  },
+  "llm_evidence_commits": 3226,
+  "llm_evidence_unmeasured_commits": 1968,
+  "extrapolation_eligible_commits": 1296,
+  "exploratory_extrapolation": {
+    "turns": {
+      "point": 21334.469,
+      "p05": 18319.578667124184,
+      "p95": 26255.710741385734
+    },
+    "output_tokens": {
+      "point": 16927223.967,
+      "p05": 14324752.741213411,
+      "p95": 21183455.946188167
+    },
+    "billable_input_tokens": {
+      "point": 6842269704.189,
+      "p05": 5806171262.919833,
+      "p95": 8512169189.634122
+    }
+  },
+  "model": {
+    "features": [
+      "log1p_additions",
+      "log1p_deletions",
+      "log1p_files_changed",
+      "log1p_lean_changes",
+      "lean_file_share",
+      "llm_trailer",
+      "claude_trailer",
+      "openai_trailer",
+      "agent_author",
+      "subject_docs",
+      "subject_plan",
+      "subject_proof",
+      "subject_fix",
+      "subject_chore",
+      "subject_test",
+      "component_yws",
+      "component_davis_kahan",
+      "component_quench",
+      "component_tauceti_staging",
+      "component_papers_docs",
+      "component_tooling"
+    ],
+    "ridge_alpha": 5.0,
+    "rolling_validation_folds": 5,
+    "bootstrap_draws": 1000,
+    "warning": "Exploratory missing-cost model; missingness is not random, pending session windows are only allocation candidates, and chat-interface provenance requires manual overrides."
+  }
+}

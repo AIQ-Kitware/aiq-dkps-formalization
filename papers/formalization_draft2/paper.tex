@@ -1,0 +1,465 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx,array}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\usepackage[nameinlink]{cleveref}
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+
+\input{generated/accounting_macros.tex}
+\input{generated/interaction_macros.tex}
+
+\newcommand{\Lean}{\textsc{Lean}}
+\newcommand{\YWS}{Yu--Wang--Samworth}
+\newcommand{\DK}{Davis--Kahan}
+\newcommand{\TauCeti}{Tau Ceti}
+
+\title{Formalizing Yu--Wang--Samworth:\\
+Source Auditing, Davis--Kahan, and the Cost of Building\\
+Spectral Perturbation Theory in Lean}
+\author{Author list TBD}
+\date{Draft scaffold -- August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We report a source-faithful \Lean{} 4 formalization of Yu, Wang, and Samworth's
+widely used statistical variant of the Davis--Kahan theorem.  The formalization
+covers all 24 rows of a paper-level source census, including the population-gap
+perturbation results, aligned-frame conclusions, rectangular singular-subspace
+results, appendix lemma, and sharpness examples.  Treating the source as an
+object to audit rather than merely a theorem to restate exposed two false
+printed statements in YWS and, in a deeper audit of the 1970 source, an explicit
+finite-dimensional counterexample to Davis--Kahan Proposition 4.4.
+
+The effort also required a substantial prerequisite layer of operator theory,
+principal-angle geometry, singular-value machinery, unitarily invariant norms,
+and spectral perturbation infrastructure that was not available at the required
+interface in Mathlib.  These results are open source, are reused by a formalized
+contemporary statistical theorem family, and are being organized for contribution
+through an operator-theory roadmap in \TauCeti{}.
+
+Finally, we study what this development cost and how human--LLM collaboration
+actually occurred.  The repository contains a partially observed resource ledger
+and retained interaction traces.  At the pinned analysis snapshot, the current
+ledger records at least \LedgerTurns{} model turns, \LedgerOutputTokens{} output
+tokens, and \LedgerBillableInputTokens{} tokens in its billable-input accounting
+measure.  These are strict measured lower bounds: \CommitsWithoutExactAccounting{}
+of \HistoryCommitCount{} commits lack exact commit-level accounting, and
+\CommitsBeforeInstrumentation{} commits precede the instrumentation commit.
+We therefore distinguish measured commit-attributed usage, measured but
+commit-unattributed session usage, and genuinely unmeasured work, and we treat
+extrapolation as a missing-data problem rather than reporting a single total.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+
+The Davis--Kahan sine-theta theorem is a standard tool for turning perturbations
+of a symmetric operator into perturbation bounds for eigenspaces
+\citep{davis1970rotation,chen2021spectral}.  In statistics, the variant of
+\citet{yu2015davis} is particularly useful because it replaces an awkward
+sample-and-population separation condition with a population eigengap and gives
+aligned-frame and singular-subspace forms suited to statistical estimation.
+A one-line citation to these results conceals substantial mathematical
+infrastructure: spectral subspaces, principal angles, singular-value comparison,
+orthogonal alignment, unitarily invariant norms, and the interfaces connecting
+finite-dimensional matrix statements to operator theory.
+
+This paper asks what happens when that entire chain is made executable in a
+proof assistant.  Our main object is not an isolated convenient ``Davis--Kahan
+lemma,'' but the published YWS paper as a source document.  The resulting
+formalization serves three roles: a verification of a central statistical
+perturbation result, an audit that can expose defects in the literature, and a
+reusable mathematical layer for later statistical formalizations.
+
+\paragraph{Contributions.}
+The intended contribution list is:
+\begin{enumerate}
+  \item A source-faithful formalization of YWS at the published theorem numbering
+        and generality, with a 24/24 source census in the default build.
+  \item Machine-checked diagnoses and repairs of two false printed YWS
+        statements: equation (4) and the rank-boundary convention in Theorem 3.
+  \item A source audit of \DK{} Proposition 4.4, including an explicit
+        $\mathbb{R}^4$ trace-norm counterexample and a repaired theorem surface.
+  \item A demonstration that the resulting spectral machinery is reusable in a
+        contemporary end-to-end statistical theorem family (Quench), rather than
+        being an isolated verification artifact.
+  \item A quantitative and qualitative study of the human--LLM development
+        process, with explicit treatment of incomplete telemetry, session-level
+        backfill, chat-interface work, and extrapolation uncertainty.
+\end{enumerate}
+
+\paragraph{Paper thesis.}
+The broader claim we aim to support is that source-faithful formalization can be
+\emph{executable scholarship for mathematical statistics}: it both verifies and
+audits the literature, while converting prerequisite work into an amortizable
+formal substrate for subsequent results.
+
+\section{Why Formalize Davis--Kahan and YWS?}
+\label{sec:why}
+
+\subsection{Statistical importance}
+
+\textbf{TODO:} quantify citation/use evidence for Davis--Kahan and YWS using a
+reproducible bibliometric source appropriate for the venue.  Explain why the
+population-gap formulation is the form statisticians routinely need.
+
+\subsection{The visible theorem sits on a missing formal stack}
+
+The practical motivation turned out to be stronger than citation count.  To
+state and reuse the desired sine-theta results at paper-level generality, the
+development had to construct foundational layers that were absent from the
+needed Mathlib interface.  These include, among others, partial-isometry and
+polar-decomposition machinery, principal-angle geometry, singular systems,
+majorization and Ky Fan tools, unitarily invariant norm interfaces, spectral
+subspace APIs, and perturbation lemmas for self-adjoint operators.
+
+\textbf{TODO figure:} dependency DAG from Mathlib $\rightarrow$ foundational
+operator theory $\rightarrow$ Davis--Kahan $\rightarrow$ YWS $\rightarrow$
+Quench.  The figure should distinguish code newly developed here, pre-existing
+Mathlib, and staging work intended for \TauCeti{}.
+
+This is the amortization argument for foundational formalization.  Informally,
+a later paper can cite Davis--Kahan in one sentence.  Formally, somebody must
+first pay for the interfaces that make that sentence meaningful and reusable.
+The cost analysis in \cref{sec:accounting} gives a partially observed empirical
+view of that prerequisite burden.
+
+\section{A Source-Faithful Formalization of YWS}
+\label{sec:yws}
+
+The package \texttt{FinishYuWangSamworth} is organized around the published
+Biometrika numbering rather than around whichever auxiliary theorem was easiest
+to expose in Lean.  Its source census records 24/24 rows proved in the default
+build.  Coverage includes Theorems 1--3, Corollary 1, Lemma A1, equations and
+appendix displays needed for source alignment, and all three Section 2 sharpness
+examples.
+
+\subsection{The population-gap theorem}
+
+\textbf{TODO:} state the exact YWS Theorem 2 surface in mathematical notation,
+then give the corresponding Lean declaration(s).  Emphasize that the sample
+eigenframe remains arbitrary at repeated sample eigenvalues: the formal wrapper
+does not silently reintroduce a sample eigengap.
+
+\subsection{Aligned frames and rectangular singular subspaces}
+
+\textbf{TODO:} describe the orthogonal alignment conclusion and the generic
+Gram-transport factoring used to obtain the left/right singular-subspace forms.
+Explain which parts required new reusable API rather than theorem-specific proof
+code.
+
+\subsection{Sharpness as part of source fidelity}
+
+All three sharpness constructions are represented against the same hypotheses
+as the theorem surfaces.  This matters because source faithfulness includes the
+claims about constants and dimension dependence, not only the upper bounds.
+
+\textbf{TODO:} select one short sharpness example for the main text and move the
+middle-block construction details to an appendix.
+
+\section{Formalization as Source Audit}
+\label{sec:audit}
+
+\subsection{Two defects in YWS}
+
+The formalization does not silently repair false statements.  First, printed
+equation (4) is missing a square; the repository contains both a counterexample
+to the printed polynomial identity and the corrected identity.  Second, the
+printed convention $\sigma^2_{\operatorname{rank}(A)+1}:=-\infty$ in Theorem 3
+makes a boundary denominator infinite and can force a zero upper bound when the
+sample and population singular subspaces are in fact orthogonal.  The formalized
+repair uses the ambient-dimension boundary convention used by the proof itself.
+
+\textbf{TODO:} give minimal numerical counterexamples and exact corrected
+statements, with declaration-level references.
+
+\subsection{Davis--Kahan Proposition 4.4 is false as printed}
+
+A separate audit of the 1970 source produced an explicit four-dimensional
+counterexample to Proposition 4.4 for the trace norm.  With two principal angles
+$\pi/4$, the direct rotation has trace displacement
+$4\sqrt{2-\sqrt{2}}$, while an admissible orthogonal competitor has trace
+displacement $2\sqrt{2}$.  Thus the claimed minimizing property fails inside the
+stated $\Theta\leq\pi/3$ regime.
+
+The repository also contains a repaired result for the $Q$-norm class.
+\textbf{TODO:} synchronize this section with the standalone technical note,
+including the historical priority search and the precise semantic-alignment
+audit between the 1970 prose definitions and the Lean objects.
+
+\section{Reuse: the Quench Formalization}
+\label{sec:quench}
+
+The spectral layer is already consumed by the formalization of a 2026
+query-efficiency theorem family \citep{helm2026query}.  The Quench package
+contains paper-facing Theorem 2 statements, spectral/CMDS alignment bridges,
+finite and asymptotic query-efficiency variants, and explicit evaluation bridges.
+
+The role of this section is not to make Quench a second main theorem.  It is an
+integration test for the central methodological claim: once the foundational
+spectral stack exists, a new statistical formalization can import it rather than
+rebuild it.
+
+\textbf{TODO:} isolate the exact dependency path through
+\path{DkpsQuench2026/Geometry/AlignedCMDS.lean} and quantify which YWS/DK
+interfaces are reused directly.
+
+\section{What Did the Formalization Cost?}
+\label{sec:accounting}
+
+\subsection{Observation model}
+
+Resource telemetry is incomplete by construction.  Instrumentation was added
+at commit \texttt{9f59916f1c7a}; \CommitsBeforeInstrumentation{} commits in the
+pinned history precede it.  Some earlier agent transcripts were later backfilled,
+but backfill does not restore sessions that were never retained.  In addition,
+some formalization work took place through chat interfaces for which the local
+agent-harness accounting system had no equivalent token telemetry.
+
+We therefore distinguish:
+\begin{enumerate}
+  \item \emph{exact commit-attributed measurements}, where the ledger names a
+        commit SHA;
+  \item \emph{measured but commit-unattributed usage}, represented by
+        \texttt{pending@...} session summaries; and
+  \item \emph{unmeasured work}, including pre-instrumentation and
+        non-instrumented-interface development.
+\end{enumerate}
+
+At analysis cutoff \AccountingCutoffCommit{}, only \ExactMeasuredCommitCount{}
+of \HistoryCommitCount{} commits have exact commit-level telemetry.  The raw
+ledger nevertheless contains a larger measured lower bound because
+\PendingSegmentCount{} pending segments preserve \PendingTurns{} model turns
+whose per-commit allocation is unresolved.
+
+\begin{table}[t]
+\centering
+\input{generated/accounting_state_table.tex}
+\caption{Commit-level accounting coverage.  A commit is ``exact'' only when a
+ledger row names its SHA. Pending session windows are kept as a separate
+allocation-candidate relation and do not upgrade a commit to measured status.}
+\label{tab:accounting-state}
+\end{table}
+
+\subsection{Measured lower bounds}
+
+From the current append-only ledger, the pipeline recomputes a measured lower
+bound of \LedgerTurns{} model turns, \LedgerOutputTokens{} output tokens, and
+\LedgerBillableInputTokens{} tokens in the ledger's billable-input accounting
+measure.  We report ordinary input, cache write, cache read, and output
+separately rather than collapsing them into a provider-price estimate.
+
+\begin{table}[t]
+\centering
+\small
+\input{generated/measured_token_breakdown_table.tex}
+\caption{Measured token accounting from the current ledger. ``Exact-attributed''
+includes ledger rows naming a commit SHA (including the small set not reachable
+from the pinned history); ``Pending'' is measured session-level usage lacking a
+defensible per-commit allocation. The billable-input measure is the ledger sum of
+ordinary input, cache-write, and cache-read tokens, not a dollar cost.}
+\label{tab:token-breakdown}
+\end{table}
+
+\textbf{Important:} these numbers are not a total project cost.  The committed
+\texttt{lifetime-totals.json} snapshot can also lag the append-only ledger; the
+analysis reports that reconciliation and treats the ledger itself as the source
+for measured totals.
+
+\subsection{Coverage by mathematical component}
+
+\begin{table}[t]
+\centering
+\small
+\input{generated/component_accounting_table.tex}
+\caption{Path-based accounting coverage for major project components. Components
+overlap: for example, a Tau Ceti staging commit may also be classified as YWS. A
+pending-window overlap is only a possible allocation candidate.}
+\label{tab:component-accounting}
+\end{table}
+
+The component table is intended to support two later analyses.  First, it lets
+us quantify how much measured work accrued in foundational layers compared with
+the final paper-facing YWS package.  Second, it exposes where missing telemetry
+is concentrated, which is necessary before any cost comparison is interpreted.
+
+\subsection{Extrapolating unmeasured work}
+\label{sec:imputation}
+
+A complete historical estimate is a missing-data problem with non-random
+missingness.  Agent-harness work, chat-interface work, pre-instrumentation work,
+and manual commits have different observation mechanisms.  Our pipeline
+therefore emits an auditable commit-level feature table and an exploratory
+log-ridge model rather than hard-coding a scalar multiplier.
+
+The current model predicts model turns, output tokens, and the ledger's
+billable-input measure from change size, Lean-file share, commit-message class,
+path component, and explicit model-provenance signals.  It is evaluated with
+rolling-origin temporal validation.  Only positive-evidence LLM-assisted commits
+outside pending measured windows are counted in the default extrapolated total;
+known chat-interface work can be entered explicitly in
+\path{data/accounting_overrides.csv}.
+
+\textbf{TODO before quoting modeled totals:} audit the override file, inspect
+\path{generated/imputation_validation.csv}, compare alternative model
+families, and perform sensitivity analyses for the non-random missingness
+mechanism.  The manuscript should always display measured and modeled quantities
+separately.
+
+\section{How Humans Interacted with the LLM Systems}
+\label{sec:interactions}
+
+The retained post-hoc corpus currently contains \InteractionPromptCount{}
+deduplicated human prompts across \InteractionSessionCount{} sessions and
+\InteractionActiveDays{} active days.  The median prompt length is only
+\InteractionMedianPromptChars{} characters, while the median response following
+a prompt contains \InteractionMedianToolCalls{} tool calls.  The median filtered
+within-session interval between human interventions is
+\InteractionMedianGapMinutes{} minutes.  The harness logs also contain
+\InteractionInterruptCount{} explicit interrupt events and
+\InteractionDroppedQueuedPromptCount{} queued prompts that were later dropped.
+
+\begin{table}[t]
+\centering
+\input{generated/interaction_group_table.tex}
+\caption{Heuristic grouping of retained human steering prompts. Taxonomy rules
+must be manually audited before publication; the table is generated to make that
+a reproducible review task rather than a prose impression.}
+\label{tab:interaction-groups}
+\end{table}
+
+The qualitative analysis should distinguish at least: multi-agent logistics,
+work orders, gap-filling for agents that lack local context, editorial requests,
+and irreducibly human judgment such as rejecting a mathematically invalid path
+or changing the priority of the development.
+
+A particularly important measurement lesson is that ordinary transcript ``user
+message'' counts can miss steering.  Queued prompts that are subsequently
+removed from the queue are interaction events even though they do not become
+normal model turns.  This is one reason to analyze the harness event stream in
+addition to final chat transcripts.
+
+\section{From Project Infrastructure to Shared Infrastructure}
+\label{sec:tauceti}
+
+The project currently stages substantial reusable operator-theory code under
+\texttt{ForTauCeti/}.  The intended endpoint is not a private theorem stack but a
+shared operator-theory substrate organized against the \TauCeti{} roadmap.
+
+\textbf{TODO:} describe the contribution status accurately at submission time:
+which modules have merely been staged, which have open upstream PRs, and which
+have landed.  Do not phrase planned contributions as completed upstream work.
+
+This section should connect the empirical ``we paid the price'' observation to
+its mathematical payoff: the foundational cost becomes valuable precisely when
+future formalizations can import these results without repeating the same
+interface-building work.
+
+\section{Related Work}
+\label{sec:related}
+
+There is rapidly growing work on LLM-assisted theorem proving, document-scale
+autoformalization, formalization of research mathematics, and human interaction
+with proof assistants.  There are also increasingly large formal developments
+in statistics.  The closest methodological comparison for the process-analysis
+portion is the public Anthropic Riemann-zeta case study \citep{anthropic2026zeta},
+which reports resource usage and multi-agent development traces for a research
+mathematics task.
+
+\textbf{TODO: fresh literature search immediately before submission.}  The
+novelty claim should not be ``LLMs can formalize a paper'' or ``first
+Davis--Kahan theorem in Lean.''  The intended distinction is the combination of
+source-faithful YWS coverage, mathematical corrections discovered by audit,
+reusable downstream statistical use, and unusually granular evidence about the
+human--AI process required to obtain the formalization.
+
+\section{Limitations}
+\label{sec:limitations}
+
+\begin{itemize}
+  \item Resource accounting begins after substantial development, and transcript
+        retention limits how much of the earlier period can be reconstructed.
+  \item Chat-interface work is not recoverable from the local harness ledger;
+        historical attribution depends on separate evidence and author review.
+  \item Pending transcript spans can be broad.  Timestamp overlap identifies
+        candidate commits but does not justify a per-commit token allocation.
+  \item Missingness is not random, so extrapolated totals are model-dependent and
+        should be presented with sensitivity analyses rather than as ground truth.
+  \item Path-based component labels overlap and are only a first approximation
+        to mathematical dependency-level cost attribution.
+  \item Formal verification establishes the Lean statement.  Claims that a
+        formal result corrects a prose source require a separate semantic-alignment
+        argument, which we make explicit in the YWS and Davis--Kahan audits.
+  \item The AI-formalization literature is changing rapidly; related-work and
+        priority claims need a final contemporaneous search.
+\end{itemize}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+The paper's intended conclusion is not that Davis--Kahan can be ``prompted into
+existence.''  The development history instead shows the cost of making a
+classical statistical citation executable at source-level fidelity.  That cost
+produced more than sine-theta theorem statements: it exposed defects in the
+literature, forced foundational mathematical interfaces into existence, enabled
+a downstream statistical formalization, and created open-source infrastructure
+that can be amortized by later work.
+
+The accounting analysis complements the mathematical contribution by making the
+development process falsifiable and inspectable.  Where telemetry exists we
+report measurements; where it is only session-level we preserve that ambiguity;
+and where it is missing we model it explicitly as missing data rather than
+retroactively treating an incomplete ledger as a complete project bill.
+
+\begin{thebibliography}{9}
+
+\bibitem[Davis and Kahan(1970)]{davis1970rotation}
+Chandler Davis and W.~M. Kahan.
+\newblock The rotation of eigenvectors by a perturbation. III.
+\newblock \emph{SIAM Journal on Numerical Analysis}, 7(1):1--46, 1970.
+
+\bibitem[Yu et~al.(2015)Yu, Wang, and Samworth]{yu2015davis}
+Yi Yu, Tengyao Wang, and Richard~J. Samworth.
+\newblock A useful variant of the Davis--Kahan theorem for statisticians.
+\newblock \emph{Biometrika}, 102(2):315--323, 2015.
+
+\bibitem[Chen et~al.(2021)Chen, Chi, Fan, and Ma]{chen2021spectral}
+Yuxin Chen, Yuejie Chi, Jianqing Fan, and Cong Ma.
+\newblock Spectral methods for data science: A statistical perspective.
+\newblock \emph{Foundations and Trends in Machine Learning}, 14(5):566--806, 2021.
+
+\bibitem[de~Moura et~al.(2015)de~Moura, Kong, Avigad, van Doorn, and von Raumer]{demoura2015lean}
+Leonardo de~Moura, Soonho Kong, Jeremy Avigad, Floris van Doorn, and Jakob von Raumer.
+\newblock The Lean theorem prover.
+\newblock In \emph{Automated Deduction -- CADE-25}, 2015.
+
+\bibitem[Mathlib Community(2020)]{mathlib2020}
+The Mathlib Community.
+\newblock The Lean mathematical library.
+\newblock In \emph{Certified Programs and Proofs (CPP)}, pages 367--381, 2020.
+
+\bibitem[Helm et~al.(2026)Helm, Johnson, and Priebe]{helm2026query}
+Hayden Helm, Ben Johnson, and Carey~E. Priebe.
+\newblock Query-efficient model evaluation using cached responses.
+\newblock arXiv:2605.07096, 2026.
+
+\bibitem[Anthropic(2026)]{anthropic2026zeta}
+Anthropic.
+\newblock Advancing mathematics with the Riemann zeta function.
+\newblock Research report / web publication, 2026. Bibliographic metadata to recheck before submission.
+
+\end{thebibliography}
+
+\end{document}
