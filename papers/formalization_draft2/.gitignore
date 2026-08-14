@@ -1,9 +1,33 @@
-paper.aux
-paper.bbl
-paper.blg
-paper.fdb_latexmk
-paper.fls
-paper.log
-paper.out
-paper.pdf
-paper.synctex.gz
+# Python bytecode and caches
+__pycache__/
+*.py[cod]
+
+# Reproducible paper-analysis outputs.  These are rebuilt from repository
+# evidence by scripts/build_all.py and should never be committed.
+generated/
+
+# LaTeX / latexmk build products.  Source .tex/.bib files remain tracked.
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.ps
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+*.xdv
+*.pdf
+
+# Editor / OS noise
+*~
+.DS_Store

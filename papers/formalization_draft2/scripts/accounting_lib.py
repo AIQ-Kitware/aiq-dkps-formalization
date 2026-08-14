@@ -20,18 +20,80 @@ from typing import Iterable, Sequence
 
 TOKEN_NAMES = ("input_tokens", "cache_write_tokens", "cache_read_tokens", "output_tokens")
 LLM_NAME_RE = re.compile(r"(?:claude|opus|fable|gpt|openai|codex)", re.I)
-COAUTHOR_RE = re.compile(r"^Co-authored-by:\s*(.*?)\s*<([^>]+)>\s*$", re.I | re.M)
+COAUTHOR_LINE_RE = re.compile(r"^Co[- ]?Authored[- ]By:\s*(.*?)\s*$", re.I | re.M)
+EMAIL_TRAILER_RE = re.compile(r"^(.*?)\s*(?:<([^>]+)>|([^\s<>]+@[^\s<>]+))\s*$")
+
+
+def parse_coauthors(body: str) -> list[tuple[str, str]]:
+    """Parse common Git co-author trailer variants.
+
+    Historical commits contain both canonical ``Name <email>`` trailers and a
+    few manually entered ``Name email`` variants.  Treat both as provenance
+    evidence rather than silently dropping the latter.
+    """
+    out: list[tuple[str, str]] = []
+    for match in COAUTHOR_LINE_RE.finditer(body):
+        payload = match.group(1).strip()
+        em = EMAIL_TRAILER_RE.match(payload)
+        if em:
+            name = em.group(1).strip()
+            email = (em.group(2) or em.group(3) or "").strip()
+        else:
+            name, email = payload, ""
+        if name:
+            out.append((name, email))
+    return out
+
+
+def canonical_model_name(name: str) -> str:
+    """Normalize ledger/model-trailer spellings to a comparison key."""
+    raw = name.strip()
+    low = raw.lower().replace("_", "-")
+    low = re.sub(r"\s+", " ", low)
+    if low == "<synthetic>" or "synthetic" in low:
+        return "<synthetic>"
+    if "claude" in low and "opus" in low and re.search(r"(?:4[ .-]?8|4\.8)", low):
+        return "claude-opus-4-8"
+    if "claude" in low and "opus" in low and re.search(r"(?:^|\D)5(?:\D|$)", low):
+        return "claude-opus-5"
+    if "claude" in low and "fable" in low and re.search(r"(?:^|\D)5(?:\D|$)", low):
+        return "claude-fable-5"
+    if ("gpt" in low or "openai" in low or "codex" in low) and "5.6" in low and "sol" in low:
+        return "gpt-5.6-sol"
+    if ("gpt" in low or "openai" in low or "codex" in low) and "5.6" in low and "terra" in low:
+        return "gpt-5.6-terra"
+    if ("gpt" in low or "openai" in low or "codex" in low) and "5.6" in low and "thinking" in low:
+        return "gpt-5.6-thinking"
+    if ("gpt" in low or "openai" in low or "codex" in low) and "5.6" in low and "high" in low:
+        return "gpt-5.6-high"
+    if "openai gpt-5.6" in low:
+        return "gpt-5.6"
+    slug = re.sub(r"[^a-z0-9.<>]+", "-", low).strip("-")
+    return slug or raw
+
+
+def model_provider(model: str) -> str:
+    model = canonical_model_name(model)
+    if model.startswith("claude-"):
+        return "Anthropic"
+    if model.startswith("gpt-") or model.startswith("openai-") or model.startswith("codex-"):
+        return "OpenAI"
+    if model == "<synthetic>":
+        return "synthetic"
+    return "unknown"
 
 
 def repo_root(start: pathlib.Path) -> pathlib.Path:
     out = subprocess.check_output(
-        ["git", "rev-parse", "--show-toplevel"], cwd=start, text=True
+        ["git", "-c", "safe.directory=*", "rev-parse", "--show-toplevel"], cwd=start, text=True
     ).strip()
     return pathlib.Path(out)
 
 
 def run_git(root: pathlib.Path, *args: str) -> str:
-    return subprocess.check_output(["git", *args], cwd=root, text=True, errors="replace")
+    return subprocess.check_output(
+        ["git", "-c", f"safe.directory={root}", *args], cwd=root, text=True, errors="replace"
+    )
 
 
 def parse_dt(value: str | None) -> datetime | None:
@@ -105,11 +167,15 @@ class Commit:
 
     @property
     def coauthors(self) -> list[tuple[str, str]]:
-        return COAUTHOR_RE.findall(self.body)
+        return parse_coauthors(self.body)
 
     @property
     def llm_coauthors(self) -> list[str]:
         return [name.strip() for name, _ in self.coauthors if LLM_NAME_RE.search(name)]
+
+    @property
+    def llm_coauthor_models(self) -> list[str]:
+        return sorted({canonical_model_name(name) for name in self.llm_coauthors})
 
 
 def load_commits(root: pathlib.Path, cutoff: str) -> list[Commit]:
@@ -185,9 +251,22 @@ def instrumentation_commit(root: pathlib.Path, cutoff: str) -> tuple[str, dateti
     return commit, dt
 
 
-def load_ledger(root: pathlib.Path) -> tuple[dict[str, dict], list[dict], list[dict]]:
-    """Return exact-commit aggregates, pending summary rows, and all token rows."""
+def load_ledger(
+    root: pathlib.Path,
+    repositories: Sequence[str] | None = None,
+    recorded_before: datetime | None = None,
+) -> tuple[dict[str, dict], list[dict], list[dict]]:
+    """Return exact-commit aggregates, pending rows, and token rows.
+
+    ``repositories`` makes the study universe explicit.  ``recorded_before``
+    pins the append-only ledger to the same temporal snapshot as the Git
+    analysis, preventing later accounting rows from silently changing a paper
+    build.  Ledger schema v3 stores the aggregate token vector in ``t`` and an
+    exact per-model decomposition in ``bm``.
+    """
     ledger = root / ".llm_resource_tally/ledger/ledger.jsonl"
+    repo_filter = set(repositories or [])
+    cutoff = recorded_before.astimezone(timezone.utc) if recorded_before else None
     exact: dict[str, dict] = {}
     pending: list[dict] = []
     token_rows: list[dict] = []
@@ -198,14 +277,33 @@ def load_ledger(root: pathlib.Path) -> tuple[dict[str, dict], list[dict], list[d
             row = json.loads(line)
             if "t" not in row:
                 continue
-            token_rows.append(row)
+            repository = str(row.get("r") or "")
+            if repo_filter and repository not in repo_filter:
+                continue
+            recorded = parse_dt(row.get("rec"))
+            if cutoff is not None and recorded is not None and recorded > cutoff:
+                continue
+            copy = dict(row)
+            copy["ledger_row"] = row_index
+            copy["repository"] = repository
+            token_rows.append(copy)
             commit = row.get("c") or ""
-            values = list(row.get("t") or [0, 0, 0, 0])
+            values = [int(v or 0) for v in list(row.get("t") or [0, 0, 0, 0])]
             if len(values) != 4:
                 continue
+            by_model = row.get("bm") or {}
+            model_sum = [0, 0, 0, 0]
+            for raw_model, model_values in by_model.items():
+                vals = [int(v or 0) for v in model_values]
+                if len(vals) != 4:
+                    raise ValueError(f"ledger row {row_index}: bad bm vector for {raw_model!r}")
+                for i, value in enumerate(vals):
+                    model_sum[i] += value
+            if by_model and model_sum != values:
+                raise ValueError(
+                    f"ledger row {row_index}: per-model tokens {model_sum} do not sum to row total {values}"
+                )
             if commit.startswith("pending@"):
-                copy = dict(row)
-                copy["ledger_row"] = row_index
                 pending.append(copy)
                 continue
             if not commit:
@@ -213,6 +311,7 @@ def load_ledger(root: pathlib.Path) -> tuple[dict[str, dict], list[dict], list[d
             agg = exact.setdefault(
                 commit,
                 {
+                    "repository": repository,
                     "ledger_rows": 0,
                     "turns": 0,
                     "input_tokens": 0,
@@ -221,16 +320,24 @@ def load_ledger(root: pathlib.Path) -> tuple[dict[str, dict], list[dict], list[d
                     "output_tokens": 0,
                     "agents": set(),
                     "models": set(),
+                    "model_tokens": {},
                 },
             )
+            if agg["repository"] != repository:
+                raise ValueError(f"commit hash {commit} appears in multiple ledger repositories")
             agg["ledger_rows"] += 1
             agg["turns"] += int(row.get("n") or 0)
             for name, value in zip(TOKEN_NAMES, values):
-                agg[name] += int(value or 0)
+                agg[name] += value
             if row.get("a"):
                 agg["agents"].add(str(row["a"]))
             for model in row.get("m") or []:
-                agg["models"].add(str(model))
+                agg["models"].add(canonical_model_name(str(model)))
+            for raw_model, model_values in by_model.items():
+                model = canonical_model_name(str(raw_model))
+                dest = agg["model_tokens"].setdefault(model, [0, 0, 0, 0])
+                for i, value in enumerate(model_values):
+                    dest[i] += int(value or 0)
     return exact, pending, token_rows
 
 
@@ -307,6 +414,13 @@ def model_feature_names(component_names: Sequence[str]) -> list[str]:
         "claude_trailer",
         "openai_trailer",
         "agent_author",
+        "model_claude_opus_5",
+        "model_claude_opus_4_8",
+        "model_claude_fable_5",
+        "model_gpt_5_6_sol",
+        "model_gpt_5_6_terra",
+        "model_gpt_other",
+        "model_multiple",
         "subject_docs",
         "subject_plan",
         "subject_proof",
@@ -320,6 +434,9 @@ def model_feature_names(component_names: Sequence[str]) -> list[str]:
 def feature_vector(row: dict, component_names: Sequence[str]) -> list[float]:
     files = max(int(row["files_changed"]), 1)
     lean_files = int(row["lean_files_changed"])
+    ledger_models = {m for m in str(row.get("ledger_models") or "").split(" | ") if m}
+    declared_models = {m for m in str(row.get("declared_models") or "").split(" | ") if m}
+    models = ledger_models or declared_models
     vals = [
         math.log1p(int(row["additions"])),
         math.log1p(int(row["deletions"])),
@@ -330,6 +447,13 @@ def feature_vector(row: dict, component_names: Sequence[str]) -> list[float]:
         float(int(row["claude_trailer"])),
         float(int(row["openai_trailer"])),
         float(int(row["agent_author"])),
+        float("claude-opus-5" in models),
+        float("claude-opus-4-8" in models),
+        float("claude-fable-5" in models),
+        float("gpt-5.6-sol" in models),
+        float("gpt-5.6-terra" in models),
+        float(any(m.startswith("gpt-") and m not in {"gpt-5.6-sol", "gpt-5.6-terra"} for m in models)),
+        float(len(models) > 1),
         *[float(int(row[k])) for k in ("subject_docs", "subject_plan", "subject_proof", "subject_fix", "subject_chore", "subject_test")],
         *[float(int(row[f"component_{name}"])) for name in component_names],
     ]

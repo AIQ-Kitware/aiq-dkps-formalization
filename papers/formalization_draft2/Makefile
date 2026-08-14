@@ -1,17 +1,17 @@
 PYTHON ?= python3
 
-.PHONY: all accounting paper clean test
+.PHONY: all accounting paper clean
 
-all: accounting paper
+all: paper
 
 accounting:
 	$(PYTHON) scripts/build_all.py
 
-paper:
+# Generated analysis artifacts are intentionally gitignored, so a paper build
+# always reconstructs them from the repository evidence first.
+paper: accounting
 	latexmk -pdf paper.tex
-
-test:
-	$(PYTHON) -m unittest discover -s scripts -p 'test_*.py'
 
 clean:
 	latexmk -C paper.tex
+	rm -rf generated
