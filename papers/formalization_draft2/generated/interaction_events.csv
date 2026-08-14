@@ -1,0 +1,11 @@
+event,count
+stop_hook_replay,515
+task_notification,471
+slash_command,263
+queued_prompt_dropped,219
+command_stdout,167
+interrupt,130
+compact_continuation,79
+stop_hook_set,76
+slash_body,14
+resume_continuation,1
