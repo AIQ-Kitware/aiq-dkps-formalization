@@ -24,6 +24,8 @@ generated/
 *.snm
 *.synctex.gz
 *.toc
+*.upa
+*.upb
 *.vrb
 *.xdv
 *.pdf

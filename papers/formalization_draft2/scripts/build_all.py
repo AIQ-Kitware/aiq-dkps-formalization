@@ -15,6 +15,7 @@ def run(name: str) -> None:
 
 
 def main() -> None:
+    run("build_dependency_analysis.py")
     run("build_source_census.py")
     run("build_provenance.py")
     run("build_accounting.py")

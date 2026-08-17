@@ -1,7 +1,10 @@
 # formalization_draft2
 
-Second paper scaffold centered on the source-faithful Lean formalization of
-Yu--Wang--Samworth (YWS), with three supporting stories:
+Second paper scaffold for the source-faithful Lean formalization of the
+Davis--Kahan / Yu--Wang--Samworth perturbation lineage.  The final manuscript
+may emphasize Davis--Kahan more strongly than YWS; the source intentionally
+keeps that framing question open while the mathematical and dependency evidence
+is audited.  The current scaffold has three supporting stories:
 
 1. formalization as mathematical audit: two printed YWS source defects and the
    false Davis--Kahan Proposition 4.4;
@@ -40,6 +43,39 @@ make -C papers/formalization_draft2 accounting
 
 `make -C papers/formalization_draft2 clean` removes both LaTeX build products
 and the paper-local `generated/` tree.
+
+### Literature-review memo
+
+`literature_review.tex` is a standalone, deliberately over-complete literature
+and positioning memo.  It is a superset of what should eventually appear in
+`paper.tex`: mathematical perturbation lineage, pre-LLM formalization practice,
+AI theorem proving and project-scale formalization, semantic/source-fidelity
+work, statistics and applied-science formalization, human--AI process studies,
+proof provenance, and open novelty checks.  Whole subsections are expected to be
+cut when the eventual Related Work section is written.
+
+Build it from a clean checkout with:
+
+```bash
+make -C papers/formalization_draft2 literature
+```
+
+The literature search is date-stamped in the memo because the nearby 2026
+literature is changing rapidly.
+
+## Dependency analysis for framing
+
+`scripts/build_dependency_analysis.py` parses local Lean import statements and
+computes conservative source-level import closures for the YWS citation surface,
+the Davis--Kahan umbrella, and the Quench umbrella.  The generated report is
+used to test framing claims rather than assume that every foundational module
+built during the Davis--Kahan effort was required by YWS.
+
+The present source-level result is directionally important: the YWS citation
+surface closes over 60 local modules, whereas `DavisKahan.All` closes over 711;
+the two closures overlap in 37 modules.  Import closure is only an upper bound
+on declaration-level proof dependence, so these counts should not be presented
+as a proof-dependency census without a stronger environment/declaration graph.
 
 ## Source-census design
 
@@ -153,6 +189,13 @@ the snapshot **date**, not the Git hash; the full hash is retained in generated
 source and attached to the displayed date as PDF tooltip metadata.
 
 ## Generated artifacts
+
+`generated/dependency_import_closure.csv`, `generated/dependency_target_summary.csv`,
+`generated/dependency_target_overlap.csv`
+: Conservative local Lean source-import closures and target overlaps used to
+  distinguish the YWS dependency surface from the much larger Davis--Kahan
+  development.  These are source-level upper bounds, not declaration-level use
+  graphs.
 
 `generated/yws_census_items.csv`, `generated/yws_census_by_kind.csv`
 : Full paper-keyed YWS tracking inventory and a compact explanation of what its
