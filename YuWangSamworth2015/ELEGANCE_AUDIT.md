@@ -28,6 +28,6 @@ built with warnings treated as errors.
 * Literal contiguous-index `r..s` wrappers remain optional source-fidelity
   work; the intrinsic corresponding-block predicates are the cleaner theorem
   foundation.
-* Reusable lemmas have not yet been migrated out of the completion lane.
+* Reusable lemmas have not yet been migrated out of the paper package.
 * The public theorem names have not been shortened before production
   integration, avoiding premature compatibility aliases.

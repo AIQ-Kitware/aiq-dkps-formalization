@@ -29,7 +29,7 @@
   "bootstrap_seed": 20260814,
   "component_patterns": {
     "yws": [
-      "FinishYuWangSamworth/",
+      "YuWangSamworth2015/",
       "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/"
     ],
     "davis_kahan": [

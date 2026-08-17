@@ -16,9 +16,9 @@ import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 import ForTauCeti.Analysis.InnerProductSpace.TwoDimensionalSingularValues
 
 /-!
-# Grounded imports for the Yu--Wang--Samworth completion lane
+# Grounded imports for the Yu--Wang--Samworth 2015 paper package
 
-This module centralizes the existing repository results on which the lane is
+This module centralizes the existing repository results on which the paper package is
 allowed to build. New paper-facing proofs should import this module rather than
 silently reaching through unrelated experimental trees.
 -/

@@ -21,7 +21,7 @@ OUT = PAPER_DIR / "generated"
 OUT.mkdir(parents=True, exist_ok=True)
 
 TARGETS = [
-    ("YWS citation surface", "FinishYuWangSamworth.CitationSurface"),
+    ("YWS citation surface", "YuWangSamworth2015.CitationSurface"),
     ("Davis--Kahan umbrella", "DavisKahan.All"),
     ("Quench umbrella", "DkpsQuench2026"),
 ]
@@ -82,8 +82,8 @@ def imports_of(path: pathlib.Path) -> list[str]:
 
 def family(path: pathlib.Path) -> str:
     rel = path.relative_to(REPO).as_posix()
-    if rel.startswith("FinishYuWangSamworth/"):
-        return "FinishYuWangSamworth"
+    if rel.startswith("YuWangSamworth2015/"):
+        return "YuWangSamworth2015"
     if rel.startswith("DavisKahan/") or rel == "DavisKahan.lean":
         return "DavisKahan"
     if rel.startswith("ForTauCeti/") or rel == "ForTauCeti.lean":
@@ -108,7 +108,7 @@ def closure(root_module: str, resolve) -> tuple[dict[pathlib.Path, str], list[tu
             if dep is None:
                 # Usually Mathlib/Lean imports. Keep only project-looking names
                 # in the report so a renamed/missing local module is visible.
-                if imported.startswith(("DavisKahan", "ForTauCeti", "FinishYuWangSamworth", "DkpsQuench2026")):
+                if imported.startswith(("DavisKahan", "ForTauCeti", "YuWangSamworth2015", "DkpsQuench2026")):
                     missing_localish.append((src.relative_to(REPO).as_posix(), imported))
                 continue
             if dep not in seen:
@@ -157,7 +157,7 @@ def main() -> None:
                 "target": label,
                 "root_module": module,
                 "local_modules": len(paths),
-                "FinishYuWangSamworth": counts["FinishYuWangSamworth"],
+                "YuWangSamworth2015": counts["YuWangSamworth2015"],
                 "DavisKahan": counts["DavisKahan"],
                 "ForTauCeti": counts["ForTauCeti"],
                 "DkpsQuench2026": counts["DkpsQuench2026"],
@@ -185,7 +185,7 @@ def main() -> None:
     write_csv(
         OUT / "dependency_target_summary.csv",
         summary_rows,
-        ["target", "root_module", "local_modules", "FinishYuWangSamworth", "DavisKahan", "ForTauCeti", "DkpsQuench2026", "OtherLocal"],
+        ["target", "root_module", "local_modules", "YuWangSamworth2015", "DavisKahan", "ForTauCeti", "DkpsQuench2026", "OtherLocal"],
     )
     write_csv(OUT / "dependency_unresolved_project_imports.csv", unresolved, ["target", "source", "module"])
 
@@ -209,7 +209,7 @@ def main() -> None:
         for row in summary_rows:
             file.write(
                 f"{latex_escape(str(row['target']))} & {row['local_modules']} & "
-                f"{row['FinishYuWangSamworth']} & {row['DavisKahan']} & "
+                f"{row['YuWangSamworth2015']} & {row['DavisKahan']} & "
                 f"{row['ForTauCeti']} & {row['DkpsQuench2026']} & {row['OtherLocal']} \\\\\n"
             )
         file.write("\\bottomrule\n\\end{tabular}\n\\end{table}\n")
@@ -236,7 +236,7 @@ def main() -> None:
     for row in summary_rows:
         report.append(
             f"- **{row['target']}**: {row['local_modules']} local modules "
-            f"({row['FinishYuWangSamworth']} YWS, {row['DavisKahan']} DavisKahan, "
+            f"({row['YuWangSamworth2015']} YWS, {row['DavisKahan']} DavisKahan, "
             f"{row['ForTauCeti']} ForTauCeti, {row['DkpsQuench2026']} Quench, "
             f"{row['OtherLocal']} other local)."
         )

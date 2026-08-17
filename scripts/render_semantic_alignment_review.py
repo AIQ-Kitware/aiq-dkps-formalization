@@ -136,7 +136,7 @@ def probe_queries(groups: list[dict], variants: list[dict]) -> list[tuple[str, s
 def write_probe(path: pathlib.Path, queries: list[tuple[str, str]], papers: list[str]) -> None:
     imports = ["import DavisKahan.All"]
     if "yws" in papers:
-        imports.append("import FinishYuWangSamworth")
+        imports.append("import YuWangSamworth2015")
     lines = [*imports, "", "-- Generated semantic-alignment compiler probe.", ""]
     for i, (mode, name) in enumerate(queries):
         lines.append(f'#eval IO.println "{BEGIN}{i}"')
@@ -307,7 +307,7 @@ def _source_score(path: pathlib.Path) -> tuple[int, int, str]:
     # same short theorem name intentionally exists in both places.
     if rel.startswith("DavisKahan/Sources/"):
         rank = 0
-    elif rel.startswith("ForTauCeti/") or rel.startswith("FinishYuWangSamworth/"):
+    elif rel.startswith("ForTauCeti/") or rel.startswith("YuWangSamworth2015/"):
         rank = 1
     elif rel.startswith("DavisKahan/"):
         rank = 2

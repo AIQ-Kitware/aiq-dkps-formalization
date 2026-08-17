@@ -8,7 +8,7 @@ import YuWangSamworth2015.CitationSurface
 /-!
 # YuWangSamworth2015
 
-Citation-priority completion lane for Yi Yu, Tengyao Wang, and Richard
+Paper-facing formalization package for Yi Yu, Tengyao Wang, and Richard
 Samworth's population-gap Davis--Kahan paper.
 
 The library is a default build target (since 2026-08-02), so `lake build`

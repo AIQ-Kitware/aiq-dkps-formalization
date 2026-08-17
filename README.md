@@ -17,7 +17,7 @@ report "proved in the default build" rather than "proved".
 | --- | --- |
 | `ForTauCeti` | **The product.** The elegant, paper-independent operator-theory library staged for upstream, with declarations already carrying their final `TauCeti.*` namespaces. Polished roadmaps are generated *from* it. |
 | `DavisKahan` | The paper-facing Davis--Kahan library, targeting the full Hilbert-space 1970 theory rather than its finite-dimensional specialization. May consume `ForTauCeti`. |
-| `FinishYuWangSamworth` | Yu--Wang--Samworth (2015): Theorem 1, both halves of Theorem 4, Lemma 5 and the appendix Gram identities. Sorry-free. |
+| `YuWangSamworth2015` | Yu--Wang--Samworth (2015): Theorems 1--3, Corollary 1, Lemma A1, and the appendix identities, with source defects recorded explicitly. Sorry-free. |
 | `RoadmapBridge` | Discharges roadmap signatures with the delivered declarations, so "delivered" is a claim the compiler checks rather than a name match. |
 | `Acharyya2024` | Asymptotic DKPS/raw-stress MDS consistency for model representations. |
 | `Acharyya2025` | Finite-sample concentration for response-based vector embeddings, including a proved CMDS spectral-perturbation bridge. |
@@ -69,7 +69,7 @@ automatically is what previously produced status that looked healthy and was not
 ├── DavisKahan.lean          # root module for the paper-facing Davis--Kahan library
 ├── DavisKahan/              # Sources/ (source-faithful 1970), FiniteDimensional/, SinTheta/,
 │                            #   Sylvester/, SpectralTheory/, Experimental/ (the frontier)
-├── FinishYuWangSamworth/    # Yu--Wang--Samworth completion package (sorry-free)
+├── YuWangSamworth2015/      # Yu--Wang--Samworth 2015 paper-facing package (sorry-free)
 ├── FinishTanTwoTheta/       # compatibility/regression surface; bounded result promoted to DavisKahan
 ├── Acharyya2024{.lean,/}    # raw-stress MDS, probability, second moments, consistency
 ├── Acharyya2025{.lean,/}    # CMDS, Weyl/Davis--Kahan, Gram rigidity, finite-sample rates

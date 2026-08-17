@@ -301,7 +301,7 @@ proves has a row whether or not anything formalizes it. A census assembled from
 the Lean side enumerates what someone happened to write and cannot report an
 absence; this one can, and does.
 
-The checker prints the current source-obligation summary. `FinishYuWangSamworth`
+The checker prints the current source-obligation summary. `YuWangSamworth2015`
 is now a default target, so old notes describing its proved theorems as unguarded
 are historical. Use `--probe` when Lean is available to verify declaration
 resolution, and do not duplicate the current counts in this README.
@@ -329,12 +329,12 @@ worth knowing before quoting this paper:
 - **The printed equation (4) is false.** It omits a square on `2 - ‖v̂ - v‖²`.
   The corrected identity and a `norm_num` refutation of the printed polynomial
   are both formalized.
-- **The repository carries two incompatible numberings for this paper.** The
-  Lean names and `FinishYuWangSamworth` use a flat sequence (Theorem 1,
-  Theorem 2, Corollary 3, Theorem 4, Lemma 5); the distilled tex restarts the
-  counter per environment type and calls the same results Corollary 1,
-  Theorem 3 and Appendix Lemma 1. They agree only on Theorems 1 and 2.
-  Resolving it needs one look at the published article.
+- **The repository preserves two numberings for this paper.** The published
+  Biometrika source, distilled reconstruction, and source census use Theorem 1,
+  Theorem 2, Corollary 1, Theorem 3, and Lemma A1. Several older Lean file and
+  declaration names retain the 2014 preprint's flat sequence: Theorem 1,
+  Theorem 2, Corollary 3, Theorem 4, and Lemma 5. The census records the
+  translation explicitly rather than silently renaming pinned declarations.
 
 ## The `@[expose]` ratchet
 
@@ -376,7 +376,7 @@ lower the corresponding baseline in the same commit.
 
 ## Paper-library grounding audits
 
-`FinishYuWangSamworth/scripts/verify_grounding.py` checks that package's recorded
+`YuWangSamworth2015/scripts/verify_grounding.py` checks that package's recorded
 repository pins. The similarly named `FinishTanTwoTheta` script is legacy: it
 recursively scans the deliberately separate unbounded research file and therefore
 its exit status is not a bounded-target completion gate. The promoted bounded
