@@ -60,6 +60,7 @@ structure IsTrialResidual
     A.toLinearMap ⟨E₀ (x : F), mapsDomain x⟩ -
       E₀ (A₀.toLinearMap x) = R (x : F)
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Fully expanded mathematical meaning of `IsTrialResidual`. -/
 theorem isTrialResidual_iff
     (A : ClosedOperator (𝕜 := 𝕜) (E := E))
@@ -67,7 +68,7 @@ theorem isTrialResidual_iff
     (E₀ : F →L[𝕜] E)
     (R : F →L[𝕜] E) :
     IsTrialResidual A A₀ E₀ R ↔
-      ∃ hE₀ : IsometricEmbedding E₀,
+      IsometricEmbedding E₀ ∧
         ∃ hdom : ∀ x : A₀.domain, E₀ (x : F) ∈ A.domain,
           ∀ x : A₀.domain,
             A.toLinearMap ⟨E₀ (x : F), hdom x⟩ -
@@ -106,8 +107,8 @@ theorem isExactSpectralDecomposition_iff
     (F₀ : H →L[𝕜] E)
     (F₁ : G →L[𝕜] E) :
     IsExactSpectralDecomposition A Λ₁ F₀ F₁ ↔
-      ∃ hF₀ : IsometricEmbedding F₀,
-        ∃ hF₁ : IsometricEmbedding F₁,
+      IsometricEmbedding F₀ ∧
+        IsometricEmbedding F₁ ∧
           F₀.adjoint ∘L F₁ = 0 ∧
             F₀ ∘L F₀.adjoint + F₁ ∘L F₁.adjoint =
               ContinuousLinearMap.id 𝕜 E ∧

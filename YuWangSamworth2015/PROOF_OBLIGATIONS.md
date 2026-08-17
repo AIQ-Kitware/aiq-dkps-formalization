@@ -32,8 +32,11 @@ source denominator: outside the full-space endpoint case it is the greatest
 real satisfying `PopulationBoundaryGap`, hence the printed finite minimum; the
 full-space branch represents the source's `+infinity` convention.  The semantic
 alignment dictionary expands both gap predicates so neither a weaker population
-gap nor any sample separation can be hidden.  The aligned conclusion returns
-`O : Matrix (Fin d) (Fin d) Real` in the orthogonal group and compares the
+gap nor any sample separation can be hidden.  The sine conclusion names the
+source quantities `sinThetaNorm` and `perturbationFrobeniusNorm` explicitly and
+ties them to their Lean realizations by equality hypotheses; the aligned
+conclusion uses the same named perturbation Frobenius norm and returns
+`O : Matrix (Fin d) (Fin d) Real` in the orthogonal group, comparing the
 supplied `Vhat O` against the supplied `V`.
 
 The older source-indexed `RCLike` wrappers remain as implementation-oriented

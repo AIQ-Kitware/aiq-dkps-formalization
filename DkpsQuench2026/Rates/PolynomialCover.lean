@@ -179,7 +179,7 @@ theorem exists_polynomial_perspective_covers_of_isCompact_range
               linarith
           have habs_div : |(ψ (rep k) i - ψ f i) / δ| < 1 := by
             convert habs_scaled using 1
-            ring
+            ring_nf
           rw [abs_div, abs_of_pos hδ] at habs_div
           have := (div_lt_iff₀ hδ).mp habs_div
           simpa using this
