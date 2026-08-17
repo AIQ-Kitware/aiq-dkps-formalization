@@ -39,6 +39,7 @@ NODES_PATH = DATA / "formalization_dependency_nodes_20260817.csv"
 EDGES_PATH = DATA / "formalization_dependency_edges_20260817.csv"
 REACH_PATH = DATA / "formalization_result_reachability_20260817.csv"
 MODULE_MAP_PATH = DATA / "formalization_module_theory_map_20260817.csv"
+DECL_OVERRIDE_PATH = DATA / "formalization_declaration_theory_overrides_20260817.csv"
 MODULE_INVENTORY_PATH = DATA / "formalization_module_inventory_20260817.csv"
 EVIDENCE_PATH = DATA / "formalization_theory_evidence_links_20260817.csv"
 MANIFEST_PATH = DATA / "formalization_trace_manifest_20260817.json"
@@ -254,8 +255,38 @@ def trace_source_units(
     return node_rows, edge_rows, reach_rows
 
 
+def validate_declaration_overrides(
+    nodes: list[dict[str, str]], module_map: dict[str, str], theories: dict[str, Any]
+) -> dict[str, str]:
+    rows = read_csv(DECL_OVERRIDE_PATH)
+    by_decl = {r["declaration"]: r for r in nodes}
+    mapping: dict[str, str] = {}
+    for row in rows:
+        decl = row["declaration"]
+        tid = row["theory_id"]
+        if decl in mapping:
+            raise SystemExit(f"duplicate declaration theory override: {decl}")
+        if decl not in by_decl:
+            raise SystemExit(f"declaration theory override is stale or outside the trace: {decl}")
+        if tid not in theories:
+            raise SystemExit(f"declaration theory override references unknown theory {tid}: {decl}")
+        default_tid = module_map[by_decl[decl]["module"]]
+        if tid == default_tid:
+            raise SystemExit(f"redundant declaration theory override agrees with module default: {decl}")
+        mapping[decl] = tid
+    return mapping
+
+
+def declaration_theory(
+    declaration: str, node_by_decl: dict[str, dict[str, str]],
+    module_map: dict[str, str], declaration_overrides: dict[str, str],
+) -> str:
+    return declaration_overrides.get(declaration, module_map[node_by_decl[declaration]["module"]])
+
+
 def joined_evidence(
-    nodes: list[dict[str, str]], reach: list[dict[str, str]], module_map: dict[str, str]
+    nodes: list[dict[str, str]], reach: list[dict[str, str]],
+    module_map: dict[str, str], declaration_overrides: dict[str, str],
 ) -> list[dict[str, str]]:
     by_decl = {r["declaration"]: r for r in nodes}
     rows = []
@@ -264,7 +295,7 @@ def joined_evidence(
         rows.append({
             "corpus": r["corpus"],
             "source_id": r["source_id"],
-            "theory_id": module_map[n["module"]],
+            "theory_id": declaration_theory(r["declaration"], by_decl, module_map, declaration_overrides),
             "declaration": r["declaration"],
             "module": n["module"],
             "min_distance": r["min_distance"],
@@ -300,12 +331,14 @@ def refresh_snapshot(scope: dict[str, Any], *, skip_build: bool) -> None:
     index = compiler_index(scope)
     nodes, edges, reach = trace_source_units(roots, index)
     module_rows = read_csv(MODULE_MAP_PATH)
-    mapping = validate_exact_module_map(
-        [{k: str(v) for k, v in r.items()} for r in nodes], module_rows
-    )
+    taxonomy = json.loads(TAXONOMY_PATH.read_text(encoding="utf-8"))
+    theories = {t["id"]: t for t in taxonomy["theories"]}
+    string_nodes = [{k: str(v) for k, v in r.items()} for r in nodes]
+    mapping = validate_exact_module_map(string_nodes, module_rows)
+    declaration_overrides = validate_declaration_overrides(string_nodes, mapping, theories)
     evidence = joined_evidence(
-        [{k: str(v) for k, v in r.items()} for r in nodes],
-        [{k: str(v) for k, v in r.items()} for r in reach], mapping,
+        string_nodes,
+        [{k: str(v) for k, v in r.items()} for r in reach], mapping, declaration_overrides,
     )
     reached_per_module = collections.Counter(str(r["module"]) for r in nodes)
     indexed_per_module: collections.Counter[str] = collections.Counter()
@@ -390,6 +423,7 @@ def generate() -> None:
     edges = read_csv(EDGES_PATH)
     reach = read_csv(REACH_PATH)
     mapping = validate_exact_module_map(nodes, module_rows)
+    declaration_overrides = validate_declaration_overrides(nodes, mapping, theories)
     inv_by_module = {r["module"]: r for r in module_inventory}
     if set(inv_by_module) != {r["module"] for r in nodes}:
         raise SystemExit("checked-in module inventory is stale relative to dependency nodes")
@@ -404,7 +438,7 @@ def generate() -> None:
     if canon(expected) != canon(roots):
         raise SystemExit("checked-in source root snapshot differs from canonical registries; run with --refresh-trace")
 
-    computed_evidence = joined_evidence(nodes, reach, mapping)
+    computed_evidence = joined_evidence(nodes, reach, mapping, declaration_overrides)
     checked_evidence = read_csv(EVIDENCE_PATH)
     ev_fields = ["corpus", "source_id", "theory_id", "declaration", "module", "min_distance", "is_root"]
     if sorted(tuple(r[k] for k in ev_fields) for r in computed_evidence) != sorted(tuple(r[k] for k in ev_fields) for r in checked_evidence):
@@ -471,12 +505,45 @@ def generate() -> None:
         ["corpus", "source_id", "title", "source_anchor", "source_unit_role", "source_relation", "theory_id", "theory", "basic_theory", "reached_declarations", "min_distance", "root_declarations"],
     )
 
+    # Compact source-surface coverage.  This describes what corpus units are in scope;
+    # it is separate from prerequisite-theory breadth.
+    units = list(unit_meta.values())
+    coverage_rows = []
+    disposition_rows = []
+    for corpus in sorted({r["corpus"] for r in units}):
+        us = [r for r in units if r["corpus"] == corpus]
+        coverage_rows.append({
+            "corpus": corpus,
+            "source_units": len(us),
+            "published_units": sum(r["source_relation"] != "extension" for r in us),
+            "extension_units": sum(r["source_relation"] == "extension" for r in us),
+            "result_units": sum(r["source_unit_role"] == "result" for r in us),
+            "supporting_source_surface_units": sum(r["source_unit_role"] == "supporting_source_surface" for r in us),
+            "verified_in_build_units": sum(r["verification"] == "proved_in_build" for r in us),
+            "corrected_printed_units": sum("corrected" in r["disposition"] for r in us),
+            "refuted_as_transcribed_units": sum("refuted_as_transcribed" in r["disposition"] for r in us),
+        })
+        counts = collections.Counter(r["disposition"] for r in us)
+        for disposition, count in sorted(counts.items()):
+            disposition_rows.append({"corpus": corpus, "disposition": disposition, "source_units": count})
+    write_csv(
+        GENERATED / "formalization_source_coverage.csv", coverage_rows,
+        ["corpus", "source_units", "published_units", "extension_units", "result_units",
+         "supporting_source_surface_units", "verified_in_build_units",
+         "corrected_printed_units", "refuted_as_transcribed_units"],
+    )
+    write_csv(
+        GENERATED / "formalization_source_dispositions.csv", disposition_rows,
+        ["corpus", "disposition", "source_units"],
+    )
+
     edge_counts: collections.Counter[tuple[str, str]] = collections.Counter()
     edge_examples: dict[tuple[str, str], tuple[str, str]] = {}
     for e in edges:
         a = node_by_decl[e["dependent"]]
         b = node_by_decl[e["prerequisite"]]
-        ta, tb = mapping[a["module"]], mapping[b["module"]]
+        ta = declaration_theory(e["dependent"], node_by_decl, mapping, declaration_overrides)
+        tb = declaration_theory(e["prerequisite"], node_by_decl, mapping, declaration_overrides)
         if ta != tb:
             edge_counts[(ta, tb)] += 1
             edge_examples.setdefault((ta, tb), (e["dependent"], e["prerequisite"]))
@@ -610,11 +677,11 @@ def generate() -> None:
         "`coverage_level` is a qualitative assessment of the repository subsystem, not a percentage of a mathematical field. "
         "Declaration/module counts are evidence about the local development and proof graph, not an automatic completeness score.",
         "",
-        "Every generated theory link is recoverable from exact source IDs, exact Lean declaration names, the exact module classification map, and compiler-derived declaration dependencies.",
+        "Every generated theory link is recoverable from exact source IDs, exact Lean declaration names, compiler-derived declaration dependencies, explicit module defaults, and any exact declaration-level classification overrides.",
     ]
     (GENERATED / "FORMALIZATION_THEORY_REPORT.md").write_text("\n".join(report) + "\n", encoding="utf-8")
 
-    input_paths = [SCOPE_PATH, TAXONOMY_PATH, ROOTS_PATH, NODES_PATH, EDGES_PATH, REACH_PATH, MODULE_MAP_PATH, MODULE_INVENTORY_PATH, EVIDENCE_PATH, MANIFEST_PATH]
+    input_paths = [SCOPE_PATH, TAXONOMY_PATH, ROOTS_PATH, NODES_PATH, EDGES_PATH, REACH_PATH, MODULE_MAP_PATH, DECL_OVERRIDE_PATH, MODULE_INVENTORY_PATH, EVIDENCE_PATH, MANIFEST_PATH]
     generation_manifest = {
         "schema": "formalization-draft2/theory-generation/v1",
         "inputs_sha256": {p.relative_to(REPO).as_posix(): sha256_file(p) for p in input_paths},
@@ -634,6 +701,8 @@ def generate() -> None:
         "formalization_theory_summary.csv",
         "formalization_result_theory_links.csv",
         "formalization_theory_edges.csv",
+        "formalization_source_coverage.csv",
+        "formalization_source_dispositions.csv",
         "formalization_basic_theories.csv",
         "formalization_basic_theory_list.tex",
         "formalization_paper_groups.csv",
@@ -643,7 +712,7 @@ def generate() -> None:
         "FORMALIZATION_THEORY_REPORT.md",
         "formalization_theory_generation_manifest.json",
     ]
-    raw_paths = [SCOPE_PATH, TAXONOMY_PATH, ROOTS_PATH, NODES_PATH, EDGES_PATH, REACH_PATH, MODULE_MAP_PATH, MODULE_INVENTORY_PATH, EVIDENCE_PATH, MANIFEST_PATH]
+    raw_paths = [SCOPE_PATH, TAXONOMY_PATH, ROOTS_PATH, NODES_PATH, EDGES_PATH, REACH_PATH, MODULE_MAP_PATH, DECL_OVERRIDE_PATH, MODULE_INVENTORY_PATH, EVIDENCE_PATH, MANIFEST_PATH]
     with zipfile.ZipFile(bundle, "w", compression=zipfile.ZIP_DEFLATED) as zf:
         for name in generated_names:
             path = GENERATED / name
