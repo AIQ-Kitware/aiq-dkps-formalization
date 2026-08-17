@@ -1,7 +1,7 @@
 # Semantic alignment review: headline mathematical statements
 
-Generated: `2026-08-17T17:12:48+00:00`
-Repository commit: `6c7741125d3b025e7ac1ef2c13bf992711a9e1be`
+Generated: `2026-08-17T17:33:10+00:00`
+Repository commit: `9f20a859ec7c8f94d40b65d4207df90a9f6eddc0`
 Working tree clean: `no`
 Importance threshold: `headline`
 Papers: Yu--Wang--Samworth 2015
@@ -53,7 +53,7 @@ This is the primary Lean text for semantic review.  Relevant ambient `variable` 
 
 `YuWangSamworth2015.theorem2_sinTheta`
 
-Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:285`
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:341`
 
 ~~~~lean
 theorem theorem2_sinTheta
@@ -66,7 +66,7 @@ theorem theorem2_sinTheta
     (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
     (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
     (Delta : Real) (hDelta : 0 < Delta)
-    (hgap : PopulationBoundaryGap Sigma hSigma r s Delta) :
+    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
     sinThetaFrobenius (Submodule.span Real (Set.range V))
         (Submodule.span Real (Set.range Vhat)) ≤
       2 * min (Real.sqrt d * ‖(SigmaHat - Sigma).toContinuousLinearMap‖)
@@ -88,7 +88,7 @@ theorem theorem2_sinTheta
     YuWangSamworth2015.IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat →
       ∀ (Delta : ℝ),
         0 < Delta →
-          YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta →
+          YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta →
             TauCeti.sinThetaFrobenius (Submodule.span ℝ (Set.range V)) (Submodule.span ℝ (Set.range Vhat)) ≤
               2 *
                   min (√↑d * ‖LinearMap.toContinuousLinearMap (SigmaHat - Sigma)‖)
@@ -136,7 +136,38 @@ fun {p d r s} {Sigma} {hSigma} {hr} {hs} {hd} {V} => Iff.rfl
 
 </details>
 
-`YuWangSamworth2015.populationBoundaryGap_iff` — Expands PopulationBoundaryGap completely into the two population boundary inequalities, with endpoint conventions represented by vacuity and no condition on SigmaHat.
+`YuWangSamworth2015.sourcePopulationGap_iff` — Characterizes the source Delta itself: the full-space block is the +infinity endpoint case; otherwise Delta is the greatest real satisfying the two population boundary inequalities, hence exactly their finite minimum.
+
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:301`
+
+~~~~lean
+theorem sourcePopulationGap_iff
+    {p : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric} {r s : Nat} {Delta : Real} :
+    SourcePopulationGap Sigma hSigma r s Delta ↔
+      (r = 0 ∧ s + 1 = p) ∨
+        (PopulationBoundaryGap Sigma hSigma r s Delta ∧
+          ∀ delta : Real,
+            PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta)
+~~~~
+
+<details>
+<summary><strong>Compiler-expanded definition</strong></summary>
+
+~~~~lean
+theorem YuWangSamworth2015.sourcePopulationGap_iff : ∀ {p : ℕ}
+  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {r s : ℕ} {Delta : ℝ},
+  YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta ↔
+    r = 0 ∧ s + 1 = p ∨
+      YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta ∧
+        ∀ (delta : ℝ), YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta :=
+fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
+~~~~
+
+</details>
+
+`YuWangSamworth2015.populationBoundaryGap_iff` — Expands the lower-bound predicate used inside SourcePopulationGap into the two population boundary inequalities, with endpoint conventions represented by vacuity and no condition on SigmaHat.
 
 Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:245`
 
@@ -209,6 +240,36 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [
 
 </details>
 
+`TauCeti.singularValues_sinThetaMap` — Identifies the singular values of the sine/cross-projection operator with Tau Ceti principalSines, the principal-angle sine sequence.
+
+Source: `ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean:504`
+
+~~~~lean
+-- Ambient variables in scope
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
+  [FiniteDimensional 𝕜 E]
+
+theorem singularValues_sinThetaMap (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    (sinThetaMap U V).singularValues = principalSines U V
+~~~~
+
+<details>
+<summary><strong>Compiler-expanded definition</strong></summary>
+
+~~~~lean
+@[defeq] theorem TauCeti.singularValues_sinThetaMap.{u_1, u_2} : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
+  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E]
+  (U V : Submodule 𝕜 E) [inst_4 : U.HasOrthogonalProjection] [inst_5 : V.HasOrthogonalProjection],
+  (TauCeti.sinThetaMap U V).singularValues = TauCeti.principalSines U V :=
+fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] U V
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] =>
+  rfl
+~~~~
+
+</details>
+
 **Clause-by-clause alignment claim**
 
 | Source clause | Lean realization | Status |
@@ -216,8 +277,8 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [
 | Sigma and Sigma-hat are real symmetric p by p matrices. | Sigma and SigmaHat are symmetric endomorphisms of EuclideanSpace Real (Fin p), the coordinate-free Real^p representation of real symmetric p by p matrices. | `claimed_exact` |
 | The block is the consecutive ordered indices r,...,s with r <= s, s <= p, and d=s-r+1. | The canonical theorem displays hr : r <= s, hs : s < p under zero-based indexing, and hd : d = s - r + 1 literally. | `claimed_exact` |
 | V and V-hat are arbitrary orthonormal eigenvector blocks at those ordered indices. | hV and hVhat use IsEigenvectorBlock, whose displayed definition is orthonormality plus Sigma(V_i)=lambda_(r+i)V_i and SigmaHat(Vhat_i)=lambdaHat_(r+i)Vhat_i. | `claimed_exact` |
-| Only the population exterior gaps enter Delta; no sample eigengap is assumed. | hgap : PopulationBoundaryGap Sigma hSigma r s Delta. Its displayed definition mentions only Sigma and its sorted eigenvalues; there is no gap hypothesis involving SigmaHat. | `claimed_exact` |
-| Frobenius sine bound with 2 min(sqrt(d)\|\|SigmaHat-Sigma\|\|op,\|\|SigmaHat-Sigma\|\|F)/Delta. | The conclusion of theorem2_sinTheta displays exactly that bound, with the operator norm as the norm of the associated continuous linear map and the Frobenius norm as the TauCeti unitarily-invariant Frobenius seminorm. | `claimed_exact` |
+| Only the population exterior gaps enter Delta; no sample eigengap is assumed. | hgap : SourcePopulationGap Sigma hSigma r s Delta. Its displayed characteristic theorem makes Delta the greatest real satisfying the two population boundary inequalities (the printed finite minimum), with an explicit full-space branch for the +infinity endpoint convention. Neither it nor PopulationBoundaryGap mentions SigmaHat. | `claimed_exact` |
+| Frobenius sine bound with 2 min(sqrt(d)\|\|SigmaHat-Sigma\|\|op,\|\|SigmaHat-Sigma\|\|F)/Delta. | The conclusion of theorem2_sinTheta displays the printed bound. The semantic dictionary identifies sinThetaFrobenius with the Frobenius norm of sinThetaMap and the singular values of sinThetaMap with the principal-sine sequence. | `claimed_exact` |
 
 <details>
 <summary><strong>Supporting scope declarations</strong></summary>
@@ -265,7 +326,7 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [
 
 </details>
 
-**Maintainer note:** The canonical declaration is intentionally a thin Real^p wrapper over the more general proved block theorem. Its only project-local hypothesis abbreviations are printed in the semantic dictionary, so the review surface does not require chasing consecutiveEmb or IsOrderedEigenframe.
+**Maintainer note:** The canonical declaration is a thin Real^p wrapper over the more general proved block theorem. SourcePopulationGap makes the printed denominator exact before a one-way bridge forgets exactness for the implementation theorem; the semantic dictionary also closes sinThetaFrobenius to the principal-sine sequence.
 
 #### Source clause `YWS-T2-alignedBasis`
 
@@ -297,7 +358,7 @@ This is the primary Lean text for semantic review.  Relevant ambient `variable` 
 
 `YuWangSamworth2015.theorem2_alignedFrame`
 
-Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:317`
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:374`
 
 ~~~~lean
 theorem theorem2_alignedFrame
@@ -310,7 +371,7 @@ theorem theorem2_alignedFrame
     (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
     (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
     (Delta : Real) (hDelta : 0 < Delta)
-    (hgap : PopulationBoundaryGap Sigma hSigma r s Delta) :
+    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
     ∃ O : Matrix (Fin d) (Fin d) Real,
       O ∈ Matrix.orthogonalGroup (Fin d) Real ∧
         Real.sqrt (∑ i, ‖(∑ j, O j i • Vhat j) - V i‖ ^ 2) ≤
@@ -334,7 +395,7 @@ theorem theorem2_alignedFrame
     YuWangSamworth2015.IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat →
       ∀ (Delta : ℝ),
         0 < Delta →
-          YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta →
+          YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta →
             ∃ O ∈ Matrix.orthogonalGroup (Fin d) ℝ,
               √(∑ i, ‖∑ j, O j i • Vhat j - V i‖ ^ 2) ≤
                 2 * √2 *
@@ -383,7 +444,38 @@ fun {p d r s} {Sigma} {hSigma} {hr} {hs} {hd} {V} => Iff.rfl
 
 </details>
 
-`YuWangSamworth2015.populationBoundaryGap_iff` — Expands the gap hypothesis into the two population boundary inequalities and shows that no sample-gap condition is hidden.
+`YuWangSamworth2015.sourcePopulationGap_iff` — Characterizes the source Delta itself as the exact finite population boundary minimum, with an explicit full-space +infinity endpoint case.
+
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:301`
+
+~~~~lean
+theorem sourcePopulationGap_iff
+    {p : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric} {r s : Nat} {Delta : Real} :
+    SourcePopulationGap Sigma hSigma r s Delta ↔
+      (r = 0 ∧ s + 1 = p) ∨
+        (PopulationBoundaryGap Sigma hSigma r s Delta ∧
+          ∀ delta : Real,
+            PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta)
+~~~~
+
+<details>
+<summary><strong>Compiler-expanded definition</strong></summary>
+
+~~~~lean
+theorem YuWangSamworth2015.sourcePopulationGap_iff : ∀ {p : ℕ}
+  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {r s : ℕ} {Delta : ℝ},
+  YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta ↔
+    r = 0 ∧ s + 1 = p ∨
+      YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta ∧
+        ∀ (delta : ℝ), YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta :=
+fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
+~~~~
+
+</details>
+
+`YuWangSamworth2015.populationBoundaryGap_iff` — Expands the lower-bound predicate used inside SourcePopulationGap into the two population-only boundary inequalities and shows that no sample-gap condition is hidden.
 
 Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:245`
 
@@ -425,7 +517,7 @@ fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
 
 | Source clause | Lean realization | Status |
 |---|---|---|
-| The second conclusion has the same real symmetric matrices, consecutive eigenvector blocks, and population-only gap as the first. | theorem2_alignedFrame repeats the same Sigma, SigmaHat, hr, hs, hd, IsEigenvectorBlock, Delta>0, and PopulationBoundaryGap hypotheses as theorem2_sinTheta. | `claimed_exact` |
+| The second conclusion has the same real symmetric matrices, consecutive eigenvector blocks, and population-only gap as the first. | theorem2_alignedFrame repeats the same Sigma, SigmaHat, hr, hs, hd, IsEigenvectorBlock, Delta>0, and exact SourcePopulationGap hypotheses as theorem2_sinTheta. | `claimed_exact` |
 | There exists O-hat in O(d). | The conclusion existentially returns O : Matrix (Fin d) (Fin d) Real with O in Matrix.orthogonalGroup (Fin d) Real. | `claimed_exact` |
 | V-hat O-hat is compared with the supplied V. | The left side is sqrt(sum_i \|\|sum_j O j i * Vhat j - V i\|\|^2), using exactly the V and Vhat arguments from the hypotheses. | `claimed_exact` |
 | The constant is 2^(3/2) with the same minimum numerator and Delta denominator. | The conclusion is 2 * sqrt 2 * min(sqrt d * \|\|SigmaHat-Sigma\|\|op, \|\|SigmaHat-Sigma\|\|F) / Delta. | `claimed_exact` |
@@ -475,7 +567,7 @@ fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
 
 </details>
 
-**Maintainer note:** The aligned headline wrapper shares the exact hypothesis surface of theorem2_sinTheta and exposes the source orthogonal matrix directly. The semantic dictionary expands the only two YWS-specific predicates in that type.
+**Maintainer note:** The aligned headline wrapper shares the exact SourcePopulationGap hypothesis of theorem2_sinTheta and exposes the source orthogonal matrix directly. The semantic dictionary expands the exact gap through its lower-bound components.
 
 **Independent reviewer verdict:** `PASS exact alignment` / `FAIL mismatch` / `UNCERTAIN`
 

@@ -27,10 +27,12 @@ The canonical paper-facing Theorem 2 surface is now
 `theorem2_sinTheta` / `theorem2_alignedFrame`.  It specializes to real operators
 on `Real^p` and displays the source arithmetic directly as `r ≤ s`, `s < p`, and
 `d = s - r + 1`.  `IsEigenvectorBlock` means exactly orthonormal columns plus the
-ordered eigenvector equations, and `PopulationBoundaryGap` contains exactly the
-two population boundary inequalities; their characteristic lemmas are included
-in the semantic-alignment dictionary so no hidden sample separation can be
-smuggled into the paper-facing statement.  The aligned conclusion returns
+ordered eigenvector equations.  `SourcePopulationGap` makes `Delta` the exact
+source denominator: outside the full-space endpoint case it is the greatest
+real satisfying `PopulationBoundaryGap`, hence the printed finite minimum; the
+full-space branch represents the source's `+infinity` convention.  The semantic
+alignment dictionary expands both gap predicates so neither a weaker population
+gap nor any sample separation can be hidden.  The aligned conclusion returns
 `O : Matrix (Fin d) (Fin d) Real` in the orthogonal group and compares the
 supplied `Vhat O` against the supplied `V`.
 
