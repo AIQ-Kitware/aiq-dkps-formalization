@@ -89,7 +89,7 @@ checked in both directions.
   simplicity hypothesis the source does not print at that display.  Theorem 1
   itself is proved here in a strictly more general unitarily invariant interval
   form;
-* migrate reusable results from this completion lane into canonical modules.
+* migrate reusable results from this paper package into canonical foundation modules.
 
 Neither is a gap in a numbered result.
 

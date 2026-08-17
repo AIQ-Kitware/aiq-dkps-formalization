@@ -20,13 +20,15 @@ Two independent axes, following the Davis--Kahan 1970 census:
     so *resolved* means *reachable from a target that is actually built*, not
     *a string that appears somewhere in the tree*.
 
-``FinishYuWangSamworth`` used not to be a default target, so its theorems were
-proved but unguarded: a refactor could break them and CI would stay green.  Nine
-rows sat in ``proved_outside_build``, including Theorem 1, both halves of
-Theorem 4, Lemma 5 and the appendix Gram identities -- the paper's headline
-results, none of them protected.  It joined ``defaultTargets`` on 2026-08-02
-(sorry-free across all 12 files), so "the lane represents every numbered result"
-and "CI protects every numbered result" are now the same claim.
+Before 2026-08-02, the YWS paper package -- then named
+``FinishYuWangSamworth`` -- was not a default target, so its theorems were proved
+but unguarded: a refactor could break them and CI would stay green.  Nine rows
+sat in ``proved_outside_build``, including Theorem 1, both halves of the
+preprint-numbered Theorem 4, Lemma 5 and the appendix Gram identities.  The
+package joined ``defaultTargets`` on 2026-08-02 and was renamed
+``YuWangSamworth2015`` on 2026-08-17. It remains a default target, so "the paper
+package represents every numbered result" and "CI protects every numbered
+result" are now the same claim.
 
 Usage:
     python3 scripts/check_yu_wang_samworth_source_census.py           # fast gate
@@ -80,10 +82,10 @@ ALLOWED_SECTIONS = {"1", "2", "3", "4", "appendix"}
 
 # Targets the probe imports.  Order matters only for the report: a declaration
 # is attributed to the first target that resolves it, so a name reachable from
-# the default build is never mis-reported as completion-lane-only.
+# the default build is never mis-reported as paper-package-only.
 PROBE_TARGETS = [
     ("in_build", "DavisKahan.All"),
-    ("completion_lane", "FinishYuWangSamworth"),
+    ("paper_package", "YuWangSamworth2015"),
 ]
 
 # A name that must never resolve.  If Lean's diagnostics change shape the
@@ -277,13 +279,13 @@ def derive_verification(item: dict, resolved: dict[str, str]) -> str:
     where = {resolved.get(d, "unresolved") for d in decls}
     if "unresolved" in where:
         return "partially_in_build" if where - {"unresolved"} else "absent"
-    # `FinishYuWangSamworth` joined `defaultTargets` on 2026-08-02, so a
+    # `YuWangSamworth2015` joined `defaultTargets` on 2026-08-02, so a
     # declaration reachable from it is guarded by `lake build` exactly as one in
     # `DavisKahan.All` is.  The two keys are still probed separately because
     # knowing *which* library carries a result is useful, but neither is
     # "outside the build" any more, and `proved_outside_build` is now
     # unreachable from this function rather than merely unused.
-    if where <= {"in_build", "completion_lane"}:
+    if where <= {"in_build", "paper_package"}:
         return "proved_in_build"
     return "partially_in_build"
 

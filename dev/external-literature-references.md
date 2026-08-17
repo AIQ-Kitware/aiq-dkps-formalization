@@ -94,7 +94,7 @@ Under the gitignored `non-distributable/`:
 * **R. A. Horn and C. R. Johnson**, *Matrix Analysis* — general majorization and
   unitarily-invariant-norm background.
 * **Y. Yu, T. Wang and R. J. Samworth** (2014/2015), *A useful variant of the Davis--Kahan
-  theorem for statisticians* — the source for the `FinishYuWangSamworth` library; that library
+  theorem for statisticians* — the source for the `YuWangSamworth2015` library; that library
   additionally maintains its own `CitationSurface.lean`.
 
 ## Known source errata

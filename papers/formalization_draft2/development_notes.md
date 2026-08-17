@@ -84,7 +84,7 @@ provenance evidence:
 - `dev/external-lean-references.md`;
 - `dev/external-literature-references.md`;
 - module-level `## Provenance` blocks throughout `ForTauCeti`, `DavisKahan`,
-  `FinishYuWangSamworth`, and `DkpsQuench2026`;
+  `YuWangSamworth2015`, and `DkpsQuench2026`;
 - `papers/formalization_draft1/model_provenance.md`.
 
 `generated/proof_provenance_inventory.csv` inventories the module-level blocks

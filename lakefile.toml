@@ -3,7 +3,7 @@ version = "0.1.0"
 keywords = ["math", "formalization", "DKPS", "MDS", "spectral-perturbation"]
 # The ordinary build is the complete claimed-mathematics build.  Admission-
 # dependent API experiments are available explicitly as DavisKahan.Experimental.
-defaultTargets = ["ForTauCeti", "RoadmapBridge", "DavisKahan.All", "FinishYuWangSamworth", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
+defaultTargets = ["ForTauCeti", "RoadmapBridge", "DavisKahan.All", "YuWangSamworth2015", "Acharyya2024", "Acharyya2025", "DkpsQuench2026", "Helm2025"]
 
 # Standalone Lean workspace for Davis--Kahan and four DKPS paper developments.
 # The libraries share one Mathlib checkout/build and are intentionally kept as
@@ -88,12 +88,12 @@ srcDir = "FinishTanTwoTheta"
 # is isolated organizationally but shares the root dependency graph and .lake.
 #
 # Kept in `defaultTargets` so the paper's headline results and grounding ledger
-# remain guarded by the ordinary build. See FinishYuWangSamworth/README.md and the
+# remain guarded by the ordinary build. See YuWangSamworth2015/README.md and the
 # maintained source census for current coverage.
 [[lean_lib]]
-name = "FinishYuWangSamworth"
-srcDir = "FinishYuWangSamworth"
-globs = ["FinishYuWangSamworth.*"]
+name = "YuWangSamworth2015"
+srcDir = "YuWangSamworth2015"
+globs = ["YuWangSamworth2015.*"]
 # Measured against the option set Tau Ceti's own `lean_lib` applies, not this
 # repository's default: `warningAsError` alone says nothing about whether an
 # upstream PR would be accepted. Mirrors the `ForTauCeti` block above, including

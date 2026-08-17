@@ -52,7 +52,7 @@ sources:
     authors: ["Yu", "Wang", "Samworth"]
     id: "Yu, Wang, and Samworth 2015"
     type: "research paper"
-    prior_work: "Source-facing completion package and maintained census in FinishYuWangSamworth/."
+    prior_work: "Paper-facing formalization package in YuWangSamworth2015/ with a maintained source census in dev/."
 
 status:
   repository_build:

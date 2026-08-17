@@ -18,7 +18,7 @@ PAPER = HERE.parent
 GENERATED = PAPER / "generated"
 ROOT = pathlib.Path(subprocess.check_output(["git", "rev-parse", "--show-toplevel"], cwd=PAPER, text=True).strip())
 
-SCAN_ROOTS = ["ForTauCeti", "DavisKahan", "FinishYuWangSamworth", "DkpsQuench2026"]
+SCAN_ROOTS = ["ForTauCeti", "DavisKahan", "YuWangSamworth2015", "DkpsQuench2026"]
 SOURCE_REGISTRIES = [
     ("spectra_map", "dev/tauceti/spectra-provenance-map.md"),
     ("external_lean", "dev/external-lean-references.md"),

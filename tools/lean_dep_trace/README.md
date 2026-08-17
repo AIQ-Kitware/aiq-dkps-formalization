@@ -13,7 +13,7 @@ name, so relying on defaults would omit current reusable-library declarations.
 ```bash
 python -m pip install networkx
 python tools/lean_dep_trace/trace_deps.py . \
-  --include ForTauCeti DavisKahan FinishYuWangSamworth \
+  --include ForTauCeti DavisKahan YuWangSamworth2015 \
             Acharyya2024 Acharyya2025 DkpsQuench2026 Helm2025 \
   --outdir build/lean-dep-trace \
   --target DkpsQuench2026.QueryEfficiency.infiniteFixedSubset

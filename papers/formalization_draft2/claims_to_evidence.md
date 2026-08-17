@@ -6,11 +6,11 @@ audited before submission.
 
 | Claim | Primary repository evidence | Paper role |
 |---|---|---|
-| YWS is represented source-faithfully at published numbering/generality | `FinishYuWangSamworth/README.md`, `FinishYuWangSamworth/PROOF_OBLIGATIONS.md`, `dev/yu-wang-samworth-2015-full-source-census.json` | Main mathematical contribution |
+| YWS is represented source-faithfully at published numbering/generality | `YuWangSamworth2015/README.md`, `YuWangSamworth2015/PROOF_OBLIGATIONS.md`, `dev/yu-wang-samworth-2015-full-source-census.json` | Main mathematical contribution |
 | The paper-keyed YWS tracking census has 24 entries and all currently resolve in the default build | `generated/yws_census_items.csv`, `generated/CENSUS_REPORT.md`, source census JSON | Coverage statement; explicitly explain what the entries count |
 | The 24-entry census is not a count of named YWS theorems and includes two explicitly marked non-source additions | `generated/yws_census_items.csv`, `generated/yws_census_by_kind.csv` | Prevent misleading coverage language |
-| Printed YWS equation (4) is false and corrected | `FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/AngleIdentity.lean` | Formalization-as-audit case study |
-| Printed YWS Theorem 3 rank-boundary convention is false and corrected | `FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/RankBoundary.lean`, source census row `YWS-T3-rankBoundary` | Formalization-as-audit case study |
+| Printed YWS equation (4) is false and corrected | `YuWangSamworth2015/YuWangSamworth2015/Symmetric/AngleIdentity.lean` | Formalization-as-audit case study |
+| Printed YWS Theorem 3 rank-boundary convention is false and corrected | `YuWangSamworth2015/YuWangSamworth2015/Rectangular/RankBoundary.lean`, source census row `YWS-T3-rankBoundary` | Formalization-as-audit case study |
 | Davis--Kahan Proposition 4.4 is false as printed | `papers/davis_kahan_prop_4_4_counterexample.tex`, corresponding Lean source under `DavisKahan/` | Independent source-audit result |
 | The formal spectral stack supports a contemporary downstream theorem | `DkpsQuench2026/README.md`, `DkpsQuench2026/Paper/Theorem2.lean`, `DkpsQuench2026/Geometry/AlignedCMDS.lean` | Reuse / integration case study |
 | DK/YWS development forced foundational operator-theory layers absent from the needed Mathlib surface | `ForTauCeti/`, `DavisKahan/`, Tau Ceti roadmap submodule and migration notes | Motivation and amortization argument |
