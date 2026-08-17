@@ -6,7 +6,7 @@ audited before submission.
 
 | Claim | Primary repository evidence | Paper role |
 |---|---|---|
-| YWS is represented source-faithfully at published numbering/generality | `YuWangSamworth2015/README.md`, `YuWangSamworth2015/PROOF_OBLIGATIONS.md`, `dev/yu-wang-samworth-2015-full-source-census.json` | Main mathematical contribution |
+| YWS theorem-level claims are formalized at the published numbering and stated generality | `YuWangSamworth2015/README.md`, `YuWangSamworth2015/PROOF_OBLIGATIONS.md`, `dev/yu-wang-samworth-2015-full-source-census.json` | Main mathematical contribution |
 | All 29 Davis--Kahan results established in the 1970 paper are covered by the formalization-result inventory; 28 are proved at source scope and Proposition 4.4 is formally refuted and repaired | `dev/davis-kahan-1970-formalization-result-inventory.json`, `dev/davis-kahan-1970-full-source-census.json` | Main mathematical contribution |
 | YWS theorem-level coverage includes all tracked claims from Theorems 1--3, with supporting source units and corrections recorded separately | `dev/yu-wang-samworth-2015-full-source-census.json`, `YuWangSamworth2015/PROOF_OBLIGATIONS.md` | Main mathematical contribution |
 | The paper-keyed YWS tracking census has 24 entries and all currently resolve in the default build | `generated/yws_census_items.csv`, `generated/CENSUS_REPORT.md`, source census JSON | Coverage statement; explicitly explain what the entries count |

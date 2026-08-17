@@ -1,195 +1,160 @@
-\section{Source coverage and machine-readable audit}
+\section{Source coverage and formalization evidence}
 \label{app:source-coverage}
 
-The main text summarizes mathematical coverage without reproducing the
-bookkeeping used to establish it.  For Davis--Kahan, the counted result set is
-fixed at \FormalizationDKResultCount{}: the four unnumbered Section~2 theorems
-and every named theorem, proposition, lemma, and corollary that the paper
-establishes.  Definitions, proof steps, examples, open questions, and externally
-attributed results remain source-audit material outside that denominator.  Of
-the counted results, 28 are proved at the scope stated in the source and
-Proposition~4.4 is formally refuted as printed and accompanied by a repair.
+For Davis--Kahan, the denominator used in the paper is
+\FormalizationDKResultCount{} results: the four unnumbered Section~2 theorems and
+every named theorem, proposition, lemma, and corollary established in the paper.
+Definitions, examples, open questions, proof steps, and results attributed to
+other sources are excluded.  Twenty-eight counted results are proved at the
+scope stated in the source.  Proposition~4.4 remains in the denominator and is
+formally refuted as printed, with a repaired result proved separately.
 
-YWS coverage is maintained in a paper-keyed source inventory whose obligations
-are created from the published document.  At the analysis snapshot it contains
-\YWSCensusEntryCount{} entries spanning theorem-level claims, lemmas, equations,
-identities, examples, conventions, and audit material, with
-\YWSCensusExplicitAdditionCount{} explicitly labeled additions beyond the
-printed paper.  All \YWSCensusVerifiedCount{} entries resolve to declarations in
-the default build.  Status fields record exact matches, generalizations or
-specializations, and compiled corrections.
+For YWS, the source audit contains \YWSCensusEntryCount{} entries spanning the
+three theorem-level claims and the lemmas, equations, identities, examples,
+conventions, and corrections used to verify them.  Of these,
+\YWSCensusExplicitAdditionCount{} are explicitly marked additions beyond the
+printed paper, and all \YWSCensusVerifiedCount{} entries resolve to declarations
+in the default build.
 
 \begin{table}[H]
 \centering
 \small
 \input{snapshots/yws_census_kind_table.tex}
-\caption{Composition of the YWS source-coverage inventory.  Row-level source
-anchors, Lean declarations, verification state, and extension status are
-preserved in the generated source-coverage data.}
+\caption{Composition of the YWS source audit.  The generated data retain the
+source location, Lean declaration, verification state, and extension status for
+each row.}
 \label{tab:yws-census-kinds}
 \end{table}
 
-\begin{flushleft}
-The whole-formalization dependency analysis roots
-\FormalizationYWSUnitCount{} maintained YWS units
-(\FormalizationYWSPublishedUnitCount{} from the published source and
-\FormalizationYWSExtensionUnitCount{} explicitly labeled extensions) together
-with all \FormalizationDKResultCount{} counted Davis--Kahan results at exact Lean
-declarations.  The checked-in
-raw data are
-\path{data/formalization_result_roots_20260817.csv},
-\path{data/formalization_dependency_edges_20260817.csv}, and
-\path{data/formalization_result_reachability_20260817.csv}.  Reviewed theory
-assignments are stored in
-\path{data/formalization_module_theory_map_20260817.csv} with declaration-level
-overrides in
-\path{data/formalization_declaration_theory_overrides_20260817.csv}.  The
-program \path{scripts/build_formalization_theory_graph.py} joins these layers and
-regenerates the manuscript summaries.  A reached module without a reviewed
-classification causes generation to fail.
-
-Formalization provenance is represented by positive external-source claims in
-\path{data/formalization_formal_provenance_claims_20260817.csv} under the policy
-in \path{data/formalization_formal_provenance_policy_20260817.json}.  The program
-\path{scripts/build_formalization_provenance_credit.py} joins those claims to the
-declaration inventory.  A project-local declaration receives project
-formalization credit when no positive formal-source claim applies; ordinary
-Mathlib and Lean dependencies remain outside the project-local denominator.
-\end{flushleft}
-
-For the two YWS defects discussed in \cref{sec:audit}, the exact machine-checked
-artifacts are as follows.  Equation~(4) is refuted by
-\path{yuWangSamworth_equation4_printed_counterexample} and repaired by
-\path{yuWangSamworth_equation4}, both in
-\path{YuWangSamworth2015/Symmetric/AngleIdentity.lean}.  The rank-boundary defect
-is witnessed by
-\path{yuWangSamworth_theorem3_printed_rankBoundary_refutation_euclidean} in
-\path{YuWangSamworth2015/Rectangular/RankBoundary.lean}; the boundary reduction
-\path{singularBoundaryGap_of_rank_le} and the corrected right- and left-singular
-subspace theorems
-\path{yuWangSamworth_rightSingularSubspace_block_le} and
-\path{yuWangSamworth_leftSingularSubspace_block_le} are in the rectangular
-singular-block development.
+The dependency analysis starts from \FormalizationYWSUnitCount{} maintained YWS
+units and all \FormalizationDKResultCount{} counted Davis--Kahan results.  Its
+conservative imported-environment trace reaches
+\FormalizationTraceDeclarationCount{} declarations through
+\FormalizationTraceEdgeCount{} named-declaration edges across
+\FormalizationTraceModuleCount{} modules.  Imported opaque theorem proofs can
+hide some proof-internal references, so these counts are a lower bound on named
+dependence.  The raw result roots, edges, reachability data, reviewed module
+classification, and declaration-level overrides are stored under
+\path{data/}; \path{scripts/build_formalization_theory_graph.py} regenerates the
+summary tables and rejects unclassified reached modules.
 
 \begin{table}[H]
 \centering
 \scriptsize
 \input{snapshots/formalization_basic_theory_audit_table.tex}
-\caption{Appendix-level reachability evidence for the basic theory
-classification.  The main text reports only theory name and scoped coverage.}
+\caption{Reachability evidence behind the theory classification in
+\cref{tab:formalized-theories}.}
 \label{tab:formalized-theories-audit}
 \end{table}
+
+Most reached declarations were formalized in this project.  The ancestry
+records identify the smaller set copied, adapted, generalized, or informed by
+external Lean developments.  Spectra is the direct donor represented in the
+reached dependency set \citep{bornemann2026spectra}; ordinary Mathlib and Lean
+dependencies are credited upstream \citep{mathlib2020}.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Formalization ancestry within the reached declaration set.  The
+underlying rows identify the exact local declaration and external source for
+each externally derived or influenced declaration.}
+\label{tab:formalization-provenance-credit}
+\input{snapshots/formalization_provenance_credit_table.tex}
+\end{table}
+
+The declaration-level ancestry records are stored in
+\path{data/formalization_formal_provenance_claims_20260817.csv};
+\path{scripts/build_formalization_provenance_credit.py} joins them to the
+reached declarations.  The source-audit data also retain the exact Lean
+counterexamples and corrected statements discussed in \cref{sec:audit},
+including the YWS equation~(4) correction and rank-boundary repair.
 
 \section{Resource-accounting methodology}
 \label{app:accounting}
 
-\subsection{Study universe and snapshot semantics}
+\subsection{Accounting scope}
 
-Commit-level coverage is computed from the primary formalization repository.
-Program-wide token totals additionally include measured work from explicitly
-allowlisted repositories; at this snapshot the allowlist contains the primary
-repository and cross-repository Tau Ceti foundations work.  The Git history is
-pinned at \AccountingSnapshot{}.  Manuscript-only commits are excluded from the
-formalization-history corpus.
+Commit coverage is computed from the primary formalization repository.  The
+program-level token totals also include measured Tau Ceti foundations work that
+was developed in a separate repository and used by this formalization.  The Git
+history is pinned at \AccountingSnapshot{}, and manuscript-only commits are
+excluded from the coverage denominator.
 
 \begin{table}[H]
 \centering
 \small
 \input{snapshots/ledger_repository_table.tex}
-\caption{Measured lower-bound program-wide resource usage by allowlisted ledger
-repository.  These observed quantities omit work for which no telemetry was
-recovered.  Commit-coverage statistics use the primary formalization repository.}
+\caption{Measured lower-bound resource usage by included repository.  Work for
+which telemetry was not recovered is absent from these totals.  Commit coverage
+uses the primary formalization repository.}
 \label{tab:ledger-repositories}
 \end{table}
 
-\subsection{Observation classes}
+\subsection{Measurement coverage}
 
-Exact commit-level instrumentation was introduced on \InstrumentationSnapshot{}.
-There are \CommitsBeforeInstrumentation{} included primary-repository commits
-before that point.  Backfilled harness transcripts recover some earlier usage;
-other earlier work has no equivalent telemetry.
-
-We retain three evidence classes:
-\begin{enumerate}
-  \item \textbf{Exact commit-attributed measurement.}  A ledger row names a Git
-        commit in the included primary history.  There are
-        \ExactMeasuredCommitCount{} such commits at the current snapshot.
-  \item \textbf{Measured but commit-unattributed usage.}  A retained
-        \texttt{pending@...} ledger segment contains measured tokens but lacks a
-        defensible one-to-one commit assignment.  There are
-        \PendingSegmentCount{} such measured segments, containing
-        \PendingTurns{} model turns.  Timestamp overlap is retained only as an
-        allocation candidate, with allocation left unresolved.
-  \item \textbf{Unmeasured work.}  This includes unrecovered pre-instrumentation
-        work and work performed through interfaces, including chat interfaces,
-        for which equivalent local harness telemetry is unavailable.
-\end{enumerate}
+Exact commit-level instrumentation began on \InstrumentationSnapshot{};
+\CommitsBeforeInstrumentation{} included commits precede that date.  Backfilled
+harness transcripts recover some earlier usage.  The retained data therefore
+contain exact commit-attributed measurements, measured session usage without a
+one-to-one commit assignment, and periods with no recovered telemetry.
 
 \begin{table}[H]
 \centering
 \small
 \input{snapshots/accounting_state_table.tex}
-\caption{Commit-level accounting state for the included primary-repository Git
-history.  Pending session measurements remain separate from exact commit
-attribution.}
+\caption{Commit-level measurement coverage in the primary-repository history.
+Pending measurements contain observed tokens without exact commit attribution.}
 \label{tab:accounting-states}
 \end{table}
 
-\subsection{Measured lower bound and token classes}
-
-All observed quantities in the manuscript are lower bounds computed from retained
-ledger values.  Unobserved work is excluded from the token, dollar, and energy
-valuations.  At \AccountingSnapshot{} the allowlisted program ledger records
+All token totals reported in the paper are lower bounds over the retained
+measurements.  At \AccountingSnapshot{} the included ledger contains
 \LedgerTurns{} model turns and \LedgerOutputTokens{} output tokens.  Its
-\LedgerBillableInputTokens{} billable-input accounting measure aggregates
-ordinary input, cache-write, and cache-read quantities according to the local
-ledger schema.  For reproducibility we preserve the primitive token classes as
-well:
+\LedgerBillableInputTokens{} billable-input measure combines ordinary input,
+cache-write, and cache-read quantities according to the ledger schema.
 
 \begin{table}[H]
 \centering
 \small
 \input{snapshots/measured_token_breakdown_table.tex}
-\caption{Measured lower-bound program-wide token quantities.  The ledger-total
-column is a lower bound on project-wide usage; exact-attributed and pending
+\caption{Measured lower-bound token quantities.  Exact-attributed and pending
 columns partition the retained measurements by attribution status.}
 \label{tab:measured-token-breakdown}
 \end{table}
 
-\subsection{Model-resolved accounting and pricing}
+\subsection{Model-resolved tokens, pricing, and energy}
 
-Each token-bearing ledger row contains a per-model vector for ordinary input,
-cache writes, cache reads, and output.  The analysis verifies that these vectors
-sum to the row-level totals.  Historical API prices are stored as dated inputs
-and applied after token accounting.
+Each token-bearing row records ordinary input, cache writes, cache reads, and
+output by model.  Historical API prices are applied after token accounting.
+Using the dated public price inputs gives an API-equivalent list-price value of
+\MeasuredApiEquivalentCost{} for the observed lower-bound usage; valuing every
+recorded Anthropic cache write at the one-hour rate gives
+\MeasuredApiEquivalentCostOneHour{}.
 
 \begin{table}[H]
 \centering
 \scriptsize
 \input{snapshots/model_token_table.tex}
-\caption{Model-resolved measured lower-bound token counts.  Every numeric column
-contains retained telemetry and therefore understates project-wide usage when
-unobserved work is present.}
+\caption{Model-resolved measured lower-bound token counts.  The totals omit
+formalization work for which no telemetry was recovered.}
 \label{tab:model-tokens-appendix}
 \end{table}
 
-The energy calculation uses a versioned serving scenario with throughput, server
+The energy calculation uses a versioned serving model with throughput, server
 power, cache-work factors, per-turn overhead, and datacenter power usage
-effectiveness \citep{crall2026llmresource}.  The manuscript reports its central
-value and a separate per-token cross-check.  The operational boundary covers LLM
+effectiveness \citep{crall2026llmresource}.  The operational boundary covers LLM
 serving and excludes model training, embodied hardware, client devices, and
-network energy.
+network energy.  The paper reports both the central serving-model value and a
+separate per-token cross-check.
 
 \subsection{Coverage proxies and project-scale extrapolation}
 
 Exact telemetry covers \ExactMeasuredCommitCount{} of \HistoryCommitCount{}
-included primary-repository commits (\ExactMeasuredCommitShare{}).  Those commits
-also account for \ExactMeasuredLeanLineChurn{} of \TotalLeanLineChurn{} cumulative
-Lean-line insertions and deletions (\ExactMeasuredLeanLineChurnShare{}).
-
-The extrapolations in \cref{tab:resource-extrapolation} divide the exact
-primary-repository token subset by each coverage fraction.  The first gives equal
-weight to commits; the second uses changed Lean lines as a coarse text-volume
-proxy.  Both assume comparable token intensity between observed and unobserved
-portions under the selected denominator.
-
+primary-repository commits (\ExactMeasuredCommitShare{}).  Those commits account
+for \ExactMeasuredLeanLineChurn{} of \TotalLeanLineChurn{} cumulative Lean-line
+insertions and deletions (\ExactMeasuredLeanLineChurnShare{}).  The extrapolations
+in \cref{tab:resource-extrapolation} divide the exact primary-repository token
+subset by each fraction.  One weights commits equally; the other uses changed
+Lean lines as a coarse text-volume proxy.  Both assume comparable token
+intensity between observed and unobserved work under the selected denominator.

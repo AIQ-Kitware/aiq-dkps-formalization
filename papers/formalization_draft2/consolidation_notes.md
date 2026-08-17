@@ -92,3 +92,33 @@ Should rename this "Davis–Kahan Sine Theta Theorem in Lean". And then we shoul
 > source-faithful
 
 We likely should not be using "development names" like this in the research paper.
+
+
+> We track mathematical provenance and formalization provenance separately. Literature citations identify the mathematical source of a theorem.
+
+It feels like this doesn't need to be said like this. 
+
+> The latter include documented ancestry in Spectra [13] and route-map or cross-check use of other Lean developments such as Zhang et al. [14]. 
+
+You are writing this from your perspective where you've discovered content in the repo I gave you. But this is our work together. We say what the ancestry was, not that it was documented, we treat written things in this repo as claims we are making in the paper too.
+
+Note that these and prior comments, also give you license to do other revisions around the paper. Based on what we have discussed so far, what else would you recommend cutting, shrinking, rewording, or reorganizing?
+
+
+* We likely need some "materials and methods" for formalization or
+  formalization process, which can likely be discussed in the appendix with the
+table of models that we used, and we can just say we used a ChatGPT chat
+interface, Claude Code, and Codex, and no other special tooling. The rough
+formalization process was giving the LLM a paper, asking it to transcribe it,
+having it decompose the problem in to a roadmaps, fill in the proofs, and then
+run it through semantic alignment audits via other LLMs and via humans (i.e. we
+looked at a theorem and asked ourselves or an LLM if it mapped to the paper in
+full generality, and often the answer was no so we had to continue the cycle),
+there was also a search for existing theorems and formalizations component.
+
+we can note we also asked the LLMs to build census tooling after the project started to become large.
+
+
+In the YWS section, I think it would help if we had theorm -> lean, theorem -> lean structure. 
+
+So we could say: The main contribution has two parts, the first is: then do the theorem and then the lean section for it, and then do section 3.2 and give equation 3 there. We likely move the definition of Define, into the top part of section 3 before 3.1, so 3.1 and 3.2 are focused on the theorems and demonstrating the semantic alignment (without actually saying the words semantic alignment).
