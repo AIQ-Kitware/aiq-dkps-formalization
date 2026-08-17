@@ -1,11 +1,14 @@
 PYTHON ?= python3
 
-.PHONY: all accounting paper literature clean
+.PHONY: all accounting bibliometrics paper literature clean
 
 all: paper
 
 accounting:
 	$(PYTHON) scripts/build_all.py
+
+bibliometrics:
+	$(PYTHON) scripts/fetch_openalex_bibliometrics.py
 
 # Generated analysis artifacts are intentionally gitignored, so a paper build
 # always reconstructs them from the repository evidence first.
