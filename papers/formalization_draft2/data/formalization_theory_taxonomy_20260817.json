@@ -4,7 +4,8 @@
   "interpretation": {
     "coverage_level": "Qualitative scope assessment of the subsystem formalized in this repository; never a percentage of the corresponding mathematical field.",
     "basic_theory": "If true, eligible for the compact A, B, C, ... foundation list in the paper.",
-    "module_map": "Every compiler-reached project module is assigned exactly once by the checked-in exact module map; no regex classification is used in the generated evidence."
+    "module_map": "Every compiler-reached project module has an explicit checked-in default theory. Mixed modules may additionally have exact declaration-level overrides; declaration overrides take precedence. No pathname regex classification is used in generated evidence.",
+    "declaration_overrides": "Exact named declarations that live in mixed/source-facing modules but are mathematically part of a reusable foundation. Each override is checked in with a rationale and is validated against the compiler snapshot."
   },
   "coverage_levels": {
     "focused_reusable_slice": "A reusable but deliberately narrow interface/construction slice.",

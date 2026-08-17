@@ -1,0 +1,11 @@
+declaration,theory_id,rationale
+TauCeti.DavisKahan.IsSelfAdjointOperator,borel_spectral_calculus,Generic bounded self-adjoint operator compatibility predicate used by the spectral-calculus foundation; it is not source-result assembly.
+TauCeti.DavisKahan.IsUniformlyAcute,direct_rotation_two_projection,Generic acute-pair predicate used by direct-rotation and two-projection geometry; it is not source-result assembly.
+TauCeti.DavisKahan.projection,hilbert_subspace_geometry,Generic projection constructor/notation used by reusable subspace geometry.
+TauCeti.DavisKahan.complementaryProjection,hilbert_subspace_geometry,Generic complementary-projection construction used by reusable subspace geometry.
+TauCeti.DavisKahan.subspaceGap,hilbert_subspace_geometry,Generic subspace-gap quantity used by reusable angle/projection geometry.
+YuWangSamworth2015.CorrespondingEigenblock,spectral_gap_variational,Reusable eigenblock/gap interface used by downstream spectral-gap lemmas rather than merely a theorem wrapper.
+YuWangSamworth2015.DavisKahanTheory.CorrespondingLeftSingularBlock,singular_subspace_gram_geometry,Reusable singular-block interface used by the singular-subspace development.
+YuWangSamworth2015.DavisKahanTheory.CorrespondingRightSingularBlock,singular_subspace_gram_geometry,Reusable singular-block interface used by the singular-subspace development.
+YuWangSamworth2015.DavisKahanTheory.IsOrderedLeftSingularFrame,singular_subspace_gram_geometry,Reusable ordered singular-frame predicate used by the singular-subspace development.
+YuWangSamworth2015.DavisKahanTheory.IsOrderedRightSingularFrame,singular_subspace_gram_geometry,Reusable ordered singular-frame predicate used by the singular-subspace development.
