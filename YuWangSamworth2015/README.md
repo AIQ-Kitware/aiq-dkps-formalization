@@ -47,6 +47,11 @@ as the greatest real satisfying the two population boundary inequalities --
 exactly their finite minimum -- with an explicit full-space branch for the
 paper's `+infinity` convention.  The audit packet expands both it and the
 underlying `PopulationBoundaryGap`, so no weaker gap assumption is hidden.
+The headline inequality additionally names `sinThetaNorm` and
+`perturbationFrobeniusNorm` as theorem parameters and identifies both by
+literal equality hypotheses, so the text after the theorem colon mirrors
+the printed bound while the concrete Lean meanings remain in the same
+signature.
 
 The more general `RCLike` block wrappers remain available underneath that paper
 surface, and `Symmetric/Corollary1.lean` carries the rank-one case together with

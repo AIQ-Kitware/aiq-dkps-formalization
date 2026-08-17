@@ -1,12 +1,12 @@
 # Semantic alignment review: headline mathematical statements
 
-Generated: `2026-08-17T17:33:10+00:00`
-Repository commit: `9f20a859ec7c8f94d40b65d4207df90a9f6eddc0`
+Generated: `2026-08-17T18:50:24+00:00`
+Repository commit: `448189cd7cd943fbb768a7805f1f577a19e7dd2f`
 Working tree clean: `no`
 Importance threshold: `headline`
 Papers: Yu--Wang--Samworth 2015
 Compiler semantic probe run: `yes`
-Compiler probe exit code: `0`
+Compiler probe exit code: `1`
 
 ## Review purpose
 
@@ -53,7 +53,7 @@ This is the primary Lean text for semantic review.  Relevant ambient `variable` 
 
 `YuWangSamworth2015.theorem2_sinTheta`
 
-Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:341`
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:346`
 
 ~~~~lean
 theorem theorem2_sinTheta
@@ -65,13 +65,21 @@ theorem theorem2_sinTheta
     (V Vhat : Fin d → EuclideanSpace Real (Fin p))
     (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
     (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
+    (sinThetaNorm : Real)
+    (hSinThetaNorm :
+      sinThetaNorm =
+        sinThetaFrobenius (Submodule.span Real (Set.range V))
+          (Submodule.span Real (Set.range Vhat)))
+    (perturbationFrobeniusNorm : Real)
+    (hPerturbationFrobeniusNorm :
+      perturbationFrobeniusNorm =
+        UnitarilyInvariantSeminorm.frobenius Real
+          (EuclideanSpace Real (Fin p)) (SigmaHat - Sigma))
     (Delta : Real) (hDelta : 0 < Delta)
     (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
-    sinThetaFrobenius (Submodule.span Real (Set.range V))
-        (Submodule.span Real (Set.range Vhat)) ≤
+    sinThetaNorm ≤
       2 * min (Real.sqrt d * ‖(SigmaHat - Sigma).toContinuousLinearMap‖)
-        (UnitarilyInvariantSeminorm.frobenius Real (EuclideanSpace Real (Fin p))
-          (SigmaHat - Sigma)) / Delta
+        perturbationFrobeniusNorm / Delta
 ~~~~
 
 <details>
@@ -79,23 +87,7 @@ theorem theorem2_sinTheta
 
 `YuWangSamworth2015.theorem2_sinTheta`
 
-~~~~lean
-@YuWangSamworth2015.theorem2_sinTheta : ∀ {p d r s : ℕ}
-  (Sigma SigmaHat : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)) (hSigma : Sigma.IsSymmetric)
-  (hSigmaHat : SigmaHat.IsSymmetric) (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
-  (V Vhat : Fin d → EuclideanSpace ℝ (Fin p)),
-  YuWangSamworth2015.IsEigenvectorBlock Sigma hSigma hr hs hd V →
-    YuWangSamworth2015.IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat →
-      ∀ (Delta : ℝ),
-        0 < Delta →
-          YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta →
-            TauCeti.sinThetaFrobenius (Submodule.span ℝ (Set.range V)) (Submodule.span ℝ (Set.range Vhat)) ≤
-              2 *
-                  min (√↑d * ‖LinearMap.toContinuousLinearMap (SigmaHat - Sigma)‖)
-                    ((TauCeti.UnitarilyInvariantSeminorm.frobenius ℝ (EuclideanSpace ℝ (Fin p))).toFun
-                      (SigmaHat - Sigma)) /
-                Delta
-~~~~
+> **UNRESOLVED:** no compiler output
 
 </details>
 
@@ -125,14 +117,7 @@ theorem isEigenvectorBlock_iff
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-~~~~lean
-theorem YuWangSamworth2015.isEigenvectorBlock_iff : ∀ {p d r s : ℕ}
-  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {hr : r ≤ s}
-  {hs : s < p} {hd : d = s - r + 1} {V : Fin d → EuclideanSpace ℝ (Fin p)},
-  YuWangSamworth2015.IsEigenvectorBlock Sigma hSigma hr hs hd V ↔
-    Orthonormal ℝ V ∧ ∀ (i : Fin d), Sigma (V i) = hSigma.eigenvalues ⋯ ⟨r + ↑i, ⋯⟩ • V i :=
-fun {p d r s} {Sigma} {hSigma} {hr} {hs} {hd} {V} => Iff.rfl
-~~~~
+> **UNRESOLVED DEFINITION:** no compiler output
 
 </details>
 
@@ -155,15 +140,7 @@ theorem sourcePopulationGap_iff
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-~~~~lean
-theorem YuWangSamworth2015.sourcePopulationGap_iff : ∀ {p : ℕ}
-  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {r s : ℕ} {Delta : ℝ},
-  YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta ↔
-    r = 0 ∧ s + 1 = p ∨
-      YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta ∧
-        ∀ (delta : ℝ), YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta :=
-fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
-~~~~
+> **UNRESOLVED DEFINITION:** no compiler output
 
 </details>
 
@@ -194,14 +171,7 @@ theorem populationBoundaryGap_iff
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-~~~~lean
-theorem YuWangSamworth2015.populationBoundaryGap_iff : ∀ {p : ℕ}
-  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {r s : ℕ} {Delta : ℝ},
-  YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta ↔
-    (∀ (q j : Fin p), ↑q + 1 = r → ↑j = r → Delta ≤ hSigma.eigenvalues ⋯ q - hSigma.eigenvalues ⋯ j) ∧
-      ∀ (j q : Fin p), ↑j = s → ↑q = s + 1 → Delta ≤ hSigma.eigenvalues ⋯ j - hSigma.eigenvalues ⋯ q :=
-fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
-~~~~
+> **UNRESOLVED DEFINITION:** no compiler output
 
 </details>
 
@@ -224,19 +194,7 @@ theorem sinThetaFrobenius_eq (U V : Submodule 𝕜 E)
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-~~~~lean
-theorem TauCeti.sinThetaFrobenius_eq.{u_1, u_2} : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
-  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E]
-  (U V : Submodule 𝕜 E) [inst_4 : U.HasOrthogonalProjection] [inst_5 : V.HasOrthogonalProjection],
-  TauCeti.sinThetaFrobenius U V = (TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (TauCeti.sinThetaMap U V) :=
-fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] U V
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] =>
-  Eq.mpr
-    (id
-      (congrArg (fun _a => _a = (TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (TauCeti.sinThetaMap U V))
-        (TauCeti.sinThetaFrobenius.eq_1✝ U V)))
-    (Eq.refl ((TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (TauCeti.sinThetaMap U V)))
-~~~~
+> **UNRESOLVED DEFINITION:** no compiler output
 
 </details>
 
@@ -258,15 +216,7 @@ theorem singularValues_sinThetaMap (U V : Submodule 𝕜 E)
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-~~~~lean
-@[defeq] theorem TauCeti.singularValues_sinThetaMap.{u_1, u_2} : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
-  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E]
-  (U V : Submodule 𝕜 E) [inst_4 : U.HasOrthogonalProjection] [inst_5 : V.HasOrthogonalProjection],
-  (TauCeti.sinThetaMap U V).singularValues = TauCeti.principalSines U V :=
-fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] U V
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] =>
-  rfl
-~~~~
+> **UNRESOLVED DEFINITION:** no compiler output
 
 </details>
 
@@ -278,55 +228,22 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [
 | The block is the consecutive ordered indices r,...,s with r <= s, s <= p, and d=s-r+1. | The canonical theorem displays hr : r <= s, hs : s < p under zero-based indexing, and hd : d = s - r + 1 literally. | `claimed_exact` |
 | V and V-hat are arbitrary orthonormal eigenvector blocks at those ordered indices. | hV and hVhat use IsEigenvectorBlock, whose displayed definition is orthonormality plus Sigma(V_i)=lambda_(r+i)V_i and SigmaHat(Vhat_i)=lambdaHat_(r+i)Vhat_i. | `claimed_exact` |
 | Only the population exterior gaps enter Delta; no sample eigengap is assumed. | hgap : SourcePopulationGap Sigma hSigma r s Delta. Its displayed characteristic theorem makes Delta the greatest real satisfying the two population boundary inequalities (the printed finite minimum), with an explicit full-space branch for the +infinity endpoint convention. Neither it nor PopulationBoundaryGap mentions SigmaHat. | `claimed_exact` |
-| Frobenius sine bound with 2 min(sqrt(d)\|\|SigmaHat-Sigma\|\|op,\|\|SigmaHat-Sigma\|\|F)/Delta. | The conclusion of theorem2_sinTheta displays the printed bound. The semantic dictionary identifies sinThetaFrobenius with the Frobenius norm of sinThetaMap and the singular values of sinThetaMap with the principal-sine sequence. | `claimed_exact` |
+| Frobenius sine bound with 2 min(sqrt(d)\|\|SigmaHat-Sigma\|\|op,\|\|SigmaHat-Sigma\|\|F)/Delta. | The conclusion is `sinThetaNorm <= 2 * min(sqrt d * \|\|SigmaHat-Sigma\|\|op, perturbationFrobeniusNorm) / Delta`.  Immediately above the colon, hSinThetaNorm identifies sinThetaNorm with sinThetaFrobenius of the spans of V and Vhat, and hPerturbationFrobeniusNorm identifies perturbationFrobeniusNorm with the Frobenius seminorm of SigmaHat-Sigma.  The semantic dictionary then identifies sinThetaFrobenius with the sine cross-projection norm and its singular values with the principal-sine sequence. | `claimed_exact` |
 
 <details>
 <summary><strong>Supporting scope declarations</strong></summary>
 
 `YuWangSamworth2015.yuWangSamworth_sinTheta_block_le`
 
-~~~~lean
-@YuWangSamworth2015.yuWangSamworth_sinTheta_block_le : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
-  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E] {A B : E →ₗ[𝕜] E}
-  {hA : A.IsSymmetric} {hB : B.IsSymmetric} {n d r s : ℕ} {hn : Module.finrank 𝕜 E = n} (hsn : s + 1 ≤ n)
-  (hd : r + d = s + 1) {u v : Fin d → E},
-  TauCeti.IsOrderedEigenframe hA hn (YuWangSamworth2015.consecutiveEmb ⋯) u →
-    TauCeti.IsOrderedEigenframe hB hn (YuWangSamworth2015.consecutiveEmb ⋯) v →
-      ∀ {Δ : ℝ},
-        0 < Δ →
-          YuWangSamworth2015.OrderedBlockBoundaryGap hA hn r s Δ →
-            TauCeti.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u)) (Submodule.span 𝕜 (Set.range v)) ≤
-              2 *
-                  min (√↑d * ‖LinearMap.toContinuousLinearMap (B - A)‖)
-                    ((TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (B - A)) /
-                Δ
-~~~~
+> **UNRESOLVED:** no compiler output
 
 `YuWangSamworth2015.yuWangSamworth_sinTheta_le`
 
-~~~~lean
-@YuWangSamworth2015.yuWangSamworth_sinTheta_le : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
-  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E] {A B : E →ₗ[𝕜] E}
-  (hA : A.IsSymmetric) (hB : B.IsSymmetric) {U V : Submodule 𝕜 E} [inst_4 : U.HasOrthogonalProjection]
-  [inst_5 : V.HasOrthogonalProjection],
-  TauCeti.IsInvariant A U →
-    TauCeti.IsInvariant B V →
-      YuWangSamworth2015.CorrespondingEigenblock hA hB U V →
-        ∀ {d : ℕ},
-          Module.finrank 𝕜 ↥U = d →
-            ∀ {Δ : ℝ},
-              0 < Δ →
-                TauCeti.InternalGap A U Δ →
-                  TauCeti.sinThetaFrobenius U V ≤
-                    2 *
-                        min (√↑d * ‖LinearMap.toContinuousLinearMap (B - A)‖)
-                          ((TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (B - A)) /
-                      Δ
-~~~~
+> **UNRESOLVED:** no compiler output
 
 </details>
 
-**Maintainer note:** The canonical declaration is a thin Real^p wrapper over the more general proved block theorem. SourcePopulationGap makes the printed denominator exact before a one-way bridge forgets exactness for the implementation theorem; the semantic dictionary also closes sinThetaFrobenius to the principal-sine sequence.
+**Maintainer note:** The canonical theorem is both the presentation and audit surface: its claim uses source-readable scalar names, while equality hypotheses in the same signature expose their exact Lean meanings.  The context dictionary closes the sine quantity through to the principal-sine sequence.
 
 #### Source clause `YWS-T2-alignedBasis`
 
@@ -358,7 +275,7 @@ This is the primary Lean text for semantic review.  Relevant ambient `variable` 
 
 `YuWangSamworth2015.theorem2_alignedFrame`
 
-Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:374`
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:390`
 
 ~~~~lean
 theorem theorem2_alignedFrame
@@ -370,6 +287,11 @@ theorem theorem2_alignedFrame
     (V Vhat : Fin d → EuclideanSpace Real (Fin p))
     (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
     (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
+    (perturbationFrobeniusNorm : Real)
+    (hPerturbationFrobeniusNorm :
+      perturbationFrobeniusNorm =
+        UnitarilyInvariantSeminorm.frobenius Real
+          (EuclideanSpace Real (Fin p)) (SigmaHat - Sigma))
     (Delta : Real) (hDelta : 0 < Delta)
     (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
     ∃ O : Matrix (Fin d) (Fin d) Real,
@@ -377,8 +299,7 @@ theorem theorem2_alignedFrame
         Real.sqrt (∑ i, ‖(∑ j, O j i • Vhat j) - V i‖ ^ 2) ≤
           2 * Real.sqrt 2 *
             min (Real.sqrt d * ‖(SigmaHat - Sigma).toContinuousLinearMap‖)
-              (UnitarilyInvariantSeminorm.frobenius Real
-                (EuclideanSpace Real (Fin p)) (SigmaHat - Sigma)) / Delta
+              perturbationFrobeniusNorm / Delta
 ~~~~
 
 <details>
@@ -386,24 +307,7 @@ theorem theorem2_alignedFrame
 
 `YuWangSamworth2015.theorem2_alignedFrame`
 
-~~~~lean
-@YuWangSamworth2015.theorem2_alignedFrame : ∀ {p d r s : ℕ}
-  (Sigma SigmaHat : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)) (hSigma : Sigma.IsSymmetric)
-  (hSigmaHat : SigmaHat.IsSymmetric) (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
-  (V Vhat : Fin d → EuclideanSpace ℝ (Fin p)),
-  YuWangSamworth2015.IsEigenvectorBlock Sigma hSigma hr hs hd V →
-    YuWangSamworth2015.IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat →
-      ∀ (Delta : ℝ),
-        0 < Delta →
-          YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta →
-            ∃ O ∈ Matrix.orthogonalGroup (Fin d) ℝ,
-              √(∑ i, ‖∑ j, O j i • Vhat j - V i‖ ^ 2) ≤
-                2 * √2 *
-                    min (√↑d * ‖LinearMap.toContinuousLinearMap (SigmaHat - Sigma)‖)
-                      ((TauCeti.UnitarilyInvariantSeminorm.frobenius ℝ (EuclideanSpace ℝ (Fin p))).toFun
-                        (SigmaHat - Sigma)) /
-                  Delta
-~~~~
+> **UNRESOLVED:** no compiler output
 
 </details>
 
@@ -433,14 +337,7 @@ theorem isEigenvectorBlock_iff
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-~~~~lean
-theorem YuWangSamworth2015.isEigenvectorBlock_iff : ∀ {p d r s : ℕ}
-  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {hr : r ≤ s}
-  {hs : s < p} {hd : d = s - r + 1} {V : Fin d → EuclideanSpace ℝ (Fin p)},
-  YuWangSamworth2015.IsEigenvectorBlock Sigma hSigma hr hs hd V ↔
-    Orthonormal ℝ V ∧ ∀ (i : Fin d), Sigma (V i) = hSigma.eigenvalues ⋯ ⟨r + ↑i, ⋯⟩ • V i :=
-fun {p d r s} {Sigma} {hSigma} {hr} {hs} {hd} {V} => Iff.rfl
-~~~~
+> **UNRESOLVED DEFINITION:** no compiler output
 
 </details>
 
@@ -463,15 +360,7 @@ theorem sourcePopulationGap_iff
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-~~~~lean
-theorem YuWangSamworth2015.sourcePopulationGap_iff : ∀ {p : ℕ}
-  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {r s : ℕ} {Delta : ℝ},
-  YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta ↔
-    r = 0 ∧ s + 1 = p ∨
-      YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta ∧
-        ∀ (delta : ℝ), YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta :=
-fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
-~~~~
+> **UNRESOLVED DEFINITION:** no compiler output
 
 </details>
 
@@ -502,14 +391,7 @@ theorem populationBoundaryGap_iff
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-~~~~lean
-theorem YuWangSamworth2015.populationBoundaryGap_iff : ∀ {p : ℕ}
-  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {r s : ℕ} {Delta : ℝ},
-  YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta ↔
-    (∀ (q j : Fin p), ↑q + 1 = r → ↑j = r → Delta ≤ hSigma.eigenvalues ⋯ q - hSigma.eigenvalues ⋯ j) ∧
-      ∀ (j q : Fin p), ↑j = s → ↑q = s + 1 → Delta ≤ hSigma.eigenvalues ⋯ j - hSigma.eigenvalues ⋯ q :=
-fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
-~~~~
+> **UNRESOLVED DEFINITION:** no compiler output
 
 </details>
 
@@ -517,57 +399,25 @@ fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
 
 | Source clause | Lean realization | Status |
 |---|---|---|
-| The second conclusion has the same real symmetric matrices, consecutive eigenvector blocks, and population-only gap as the first. | theorem2_alignedFrame repeats the same Sigma, SigmaHat, hr, hs, hd, IsEigenvectorBlock, Delta>0, and exact SourcePopulationGap hypotheses as theorem2_sinTheta. | `claimed_exact` |
+| The second conclusion has the same real symmetric matrices, consecutive eigenvector blocks, and population-only gap as the first. | theorem2_alignedFrame repeats the same Sigma, SigmaHat, hr, hs, hd, IsEigenvectorBlock, Delta>0, and exact SourcePopulationGap mathematical hypotheses as theorem2_sinTheta; its additional hPerturbationFrobeniusNorm is a definitional equality naming the source Frobenius perturbation quantity. | `claimed_exact` |
 | There exists O-hat in O(d). | The conclusion existentially returns O : Matrix (Fin d) (Fin d) Real with O in Matrix.orthogonalGroup (Fin d) Real. | `claimed_exact` |
 | V-hat O-hat is compared with the supplied V. | The left side is sqrt(sum_i \|\|sum_j O j i * Vhat j - V i\|\|^2), using exactly the V and Vhat arguments from the hypotheses. | `claimed_exact` |
-| The constant is 2^(3/2) with the same minimum numerator and Delta denominator. | The conclusion is 2 * sqrt 2 * min(sqrt d * \|\|SigmaHat-Sigma\|\|op, \|\|SigmaHat-Sigma\|\|F) / Delta. | `claimed_exact` |
+| The constant is 2^(3/2) with the same minimum numerator and Delta denominator. | The conclusion is 2 * sqrt 2 * min(sqrt d * \|\|SigmaHat-Sigma\|\|op, perturbationFrobeniusNorm) / Delta, and the same theorem signature identifies perturbationFrobeniusNorm with the Frobenius seminorm of SigmaHat-Sigma. | `claimed_exact` |
 
 <details>
 <summary><strong>Supporting scope declarations</strong></summary>
 
 `YuWangSamworth2015.yuWangSamworth_alignedFrame_block_real_le`
 
-~~~~lean
-@YuWangSamworth2015.yuWangSamworth_alignedFrame_block_real_le : ∀ {F : Type u_1} [inst : NormedAddCommGroup F]
-  [inst_1 : InnerProductSpace ℝ F] [inst_2 : FiniteDimensional ℝ F] {A B : F →ₗ[ℝ] F} {hA : A.IsSymmetric}
-  {hB : B.IsSymmetric} {n d r s : ℕ} {hn : Module.finrank ℝ F = n} (hsn : s + 1 ≤ n) (hd : r + d = s + 1)
-  {u v : Fin d → F},
-  TauCeti.IsOrderedEigenframe hA hn (YuWangSamworth2015.consecutiveEmb ⋯) u →
-    TauCeti.IsOrderedEigenframe hB hn (YuWangSamworth2015.consecutiveEmb ⋯) v →
-      ∀ {Δ : ℝ},
-        0 < Δ →
-          YuWangSamworth2015.OrderedBlockBoundaryGap hA hn r s Δ →
-            ∃ O ∈ Matrix.orthogonalGroup (Fin d) ℝ,
-              √(∑ i, ‖∑ j, O j i • v j - u i‖ ^ 2) ≤
-                2 * √2 *
-                    min (√↑d * ‖LinearMap.toContinuousLinearMap (B - A)‖)
-                      ((TauCeti.UnitarilyInvariantSeminorm.frobenius ℝ F).toFun (B - A)) /
-                  Δ
-~~~~
+> **UNRESOLVED:** no compiler output
 
 `YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le`
 
-~~~~lean
-@YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
-  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E] {A B : E →ₗ[𝕜] E}
-  {hA : A.IsSymmetric} {hB : B.IsSymmetric} {n d r s : ℕ} {hn : Module.finrank 𝕜 E = n} (hsn : s + 1 ≤ n)
-  (hd : r + d = s + 1) {u v : Fin d → E},
-  TauCeti.IsOrderedEigenframe hA hn (YuWangSamworth2015.consecutiveEmb ⋯) u →
-    ∀ (hv : TauCeti.IsOrderedEigenframe hB hn (YuWangSamworth2015.consecutiveEmb ⋯) v) {Δ : ℝ},
-      0 < Δ →
-        YuWangSamworth2015.OrderedBlockBoundaryGap hA hn r s Δ →
-          ∃ O,
-            (∀ (x y : EuclideanSpace 𝕜 (Fin d)), inner 𝕜 (O x) (O y) = inner 𝕜 x y) ∧
-              √(∑ i, ‖YuWangSamworth2015.frameComp ⋯ O i - u i‖ ^ 2) ≤
-                2 * √2 *
-                    min (√↑d * ‖LinearMap.toContinuousLinearMap (B - A)‖)
-                      ((TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (B - A)) /
-                  Δ
-~~~~
+> **UNRESOLVED:** no compiler output
 
 </details>
 
-**Maintainer note:** The aligned headline wrapper shares the exact SourcePopulationGap hypothesis of theorem2_sinTheta and exposes the source orthogonal matrix directly. The semantic dictionary expands the exact gap through its lower-bound components.
+**Maintainer note:** The aligned headline wrapper exposes the orthogonal matrix and aligned frame distance directly.  Only the source Frobenius perturbation quantity is named, with its concrete Lean value given by a literal equality hypothesis in the same theorem signature.
 
 **Independent reviewer verdict:** `PASS exact alignment` / `FAIL mismatch` / `UNCERTAIN`
 
