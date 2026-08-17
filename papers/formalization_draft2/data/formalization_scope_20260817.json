@@ -1,0 +1,39 @@
+{
+  "schema": "formalization-draft2/formalization-scope/v1",
+  "snapshot_date": "2026-08-17",
+  "description": "Auditable scope for the whole-result prerequisite inventory. The paper-level summary is downstream of this source-facing scope, not a hand-selected theorem list.",
+  "build_targets": [
+    "YuWangSamworth2015",
+    "DavisKahan.All"
+  ],
+  "import_modules": [
+    "YuWangSamworth2015",
+    "DavisKahan.All"
+  ],
+  "project_module_prefixes": [
+    "YuWangSamworth2015",
+    "DavisKahan",
+    "ForTauCeti"
+  ],
+  "corpora": [
+    {
+      "id": "YWS2015",
+      "registry_path": "dev/yu-wang-samworth-2015-full-source-census.json",
+      "items_key": "items",
+      "scope_policy": "all_registered_units",
+      "description": "All 24 maintained YWS source-census rows. This deliberately includes theorem/conclusion rows and supporting source-surface rows because the contribution is the full source formalization, not only the paper's displayed headline theorem.",
+      "result_source_kinds": ["theorem", "lemma", "corollary"],
+      "extension_ids": [
+        "YWS-T3-rankone",
+        "YWS-A-dilation-alternative"
+      ]
+    },
+    {
+      "id": "DK1970",
+      "registry_path": "dev/davis-kahan-1970-formalization-result-inventory.json",
+      "items_key": "results",
+      "scope_policy": "all_registered_results",
+      "description": "All 29 maintained Davis--Kahan formalization-result entries, the repository's exhaustive counted result denominator. This includes the exact formal refutation of Proposition 4.4 rather than pretending the false printed proposition was proved."
+    }
+  ]
+}

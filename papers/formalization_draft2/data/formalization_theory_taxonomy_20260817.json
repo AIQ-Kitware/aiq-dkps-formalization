@@ -1,0 +1,175 @@
+{
+  "schema": "formalization-draft2/theory-taxonomy/v1",
+  "snapshot_date": "2026-08-17",
+  "interpretation": {
+    "coverage_level": "Qualitative scope assessment of the subsystem formalized in this repository; never a percentage of the corresponding mathematical field.",
+    "basic_theory": "If true, eligible for the compact A, B, C, ... foundation list in the paper.",
+    "module_map": "Every compiler-reached project module is assigned exactly once by the checked-in exact module map; no regex classification is used in the generated evidence."
+  },
+  "coverage_levels": {
+    "focused_reusable_slice": "A reusable but deliberately narrow interface/construction slice.",
+    "substantial_focused_subsystem": "Multiple mutually supporting definitions/results around a focused mathematical topic.",
+    "substantial_reusable_subsystem": "A coherent reusable subsystem with significant results independent of the final source theorem wrappers.",
+    "broad_partial_development": "Broad coverage across several aspects of the topic, with no claim of field-level completeness.",
+    "source_specific_development": "Formalization specific to assembling, translating, or auditing the target source results."
+  },
+  "theories": [
+    {
+      "id": "hilbert_subspace_geometry",
+      "label": "Hilbert-space subspaces, projections, and principal angles",
+      "basic_theory": true,
+      "coverage_level": "substantial_reusable_subsystem",
+      "scope_note": "Reusable projection/subspace geometry, principal-angle and sine-angle interfaces, aligned bases, and finite-frame structure.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": "subspace_spectral_geometry"
+    },
+    {
+      "id": "singular_subspace_gram_geometry",
+      "label": "Singular values, Gram operators, and singular-subspace geometry",
+      "basic_theory": true,
+      "coverage_level": "substantial_reusable_subsystem",
+      "scope_note": "Reusable rectangular/singular-value and Gram-operator infrastructure supporting the YWS development.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": "subspace_spectral_geometry"
+    },
+    {
+      "id": "spectral_gap_variational",
+      "label": "Spectral gaps, spectral subspaces, and variational eigenvalue arguments",
+      "basic_theory": true,
+      "coverage_level": "focused_reusable_slice",
+      "scope_note": "A focused reusable slice for spectral ordering, eigenframes, gap hypotheses, and finite-dimensional spectral-subspace reasoning.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": "subspace_spectral_geometry"
+    },
+    {
+      "id": "operator_ideals_uinorms",
+      "label": "Unitarily invariant norms and operator ideals",
+      "basic_theory": true,
+      "coverage_level": "broad_partial_development",
+      "scope_note": "A broad partial development covering UIN seminorms, symmetric-gauge/majorization interfaces, approximation numbers, and Ky Fan/Schatten/Hilbert--Schmidt style machinery.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": "uin_operator_ideals"
+    },
+    {
+      "id": "borel_spectral_calculus",
+      "label": "Projection-valued measures and Borel spectral calculus",
+      "basic_theory": true,
+      "coverage_level": "substantial_reusable_subsystem",
+      "scope_note": "A coherent reusable bounded Borel functional-calculus/PVM subsystem, including spectral-projection constructions.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": "spectral_calculus_operator_theory"
+    },
+    {
+      "id": "unbounded_selfadjoint_spectral",
+      "label": "Closed and unbounded self-adjoint spectral theory",
+      "basic_theory": true,
+      "coverage_level": "broad_partial_development",
+      "scope_note": "A broad partial development of closed operators, resolvents, spectral measures/restrictions, and related self-adjoint spectral infrastructure required by the infinite-dimensional DK results.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": "spectral_calculus_operator_theory"
+    },
+    {
+      "id": "real_complex_transfer",
+      "label": "Real/complex Hilbert-space transfer",
+      "basic_theory": true,
+      "coverage_level": "substantial_reusable_subsystem",
+      "scope_note": "Reusable complexification, spectral transfer, and descent machinery allowing source results to be stated over real Hilbert spaces while using complex spectral tools internally.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": "spectral_calculus_operator_theory"
+    },
+    {
+      "id": "direct_rotation_two_projection",
+      "label": "Polar decomposition, direct rotations, and two-projection geometry",
+      "basic_theory": true,
+      "coverage_level": "broad_partial_development",
+      "scope_note": "A broad partial development around polar decomposition, partial isometries, direct rotations, Halmos two-projection geometry, nonacute configurations, and classification/realization tools.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": "projection_angle_geometry"
+    },
+    {
+      "id": "operator_angle_double_angle",
+      "label": "Operator angles and double-angle geometry",
+      "basic_theory": true,
+      "coverage_level": "substantial_focused_subsystem",
+      "scope_note": "A focused but substantial theory of operator angles, tangent/sine transforms, reflections, and double-angle constructions used by Parts II--III.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": "projection_angle_geometry"
+    },
+    {
+      "id": "sylvester_intertwiner",
+      "label": "Sylvester equations and separated intertwiners",
+      "basic_theory": true,
+      "coverage_level": "substantial_focused_subsystem",
+      "scope_note": "A substantial focused subsystem for Sylvester equations, spectral separation, and operator-equation estimates.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": "operator_equations"
+    },
+    {
+      "id": "residual_ritz_geometry",
+      "label": "Residual, Ritz, and compression geometry",
+      "basic_theory": true,
+      "coverage_level": "focused_reusable_slice",
+      "scope_note": "Reusable residual and Ritz-compression identities connecting approximate invariant subspaces to angle bounds.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": "subspace_spectral_geometry"
+    },
+    {
+      "id": "yws_result_layer",
+      "label": "Yu--Wang--Samworth result development",
+      "basic_theory": false,
+      "coverage_level": "source_specific_development",
+      "scope_note": "Paper-specific theorem statements, sharpness examples, residual/Procrustes reductions, and source-facing YWS proof assembly.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": null
+    },
+    {
+      "id": "dk_result_layer",
+      "label": "Davis--Kahan result development and source semantics",
+      "basic_theory": false,
+      "coverage_level": "source_specific_development",
+      "scope_note": "Paper-specific DK theorem implementations, source-numbered facades, real/source dictionaries, and semantic-alignment wrappers.",
+      "known_omissions": "Not a claim of completeness for the mathematical field; refine after theory-specific audit.",
+      "assessment_status": "provisional_full_trace_classification",
+      "paper_group_id": null
+    }
+  ],
+  "paper_groups": [
+    {
+      "id": "subspace_spectral_geometry",
+      "label": "Subspace, singular-subspace, and spectral-gap geometry",
+      "description": "Principal-angle/projection geometry, singular-subspace and Gram machinery, spectral-gap/eigenframe arguments, and residual/Ritz geometry."
+    },
+    {
+      "id": "uin_operator_ideals",
+      "label": "Unitarily invariant norms and operator ideals",
+      "description": "UIN seminorms, symmetric gauges, majorization, approximation numbers, and related operator ideals."
+    },
+    {
+      "id": "spectral_calculus_operator_theory",
+      "label": "Spectral calculus and self-adjoint operator theory",
+      "description": "Projection-valued measures, Borel functional calculus, closed/unbounded self-adjoint spectral theory, and real/complex transfer."
+    },
+    {
+      "id": "projection_angle_geometry",
+      "label": "Polar/direct-rotation and operator-angle geometry",
+      "description": "Polar decomposition, direct rotations, two-projection geometry, operator angles, and double-angle constructions."
+    },
+    {
+      "id": "operator_equations",
+      "label": "Sylvester and separated-intertwiner equations",
+      "description": "Sylvester equations, spectral separation, and operator-equation estimates."
+    }
+  ]
+}
