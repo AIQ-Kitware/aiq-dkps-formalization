@@ -16,6 +16,7 @@ import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 import DavisKahan.Sources.DavisKahan1970.FullPartIII
 import DavisKahan.Sources.DavisKahan1970.FullPartIIIExtensions
 import DavisKahan.Sources.DavisKahan1970.FullSineTheta
+import DavisKahan.Sources.DavisKahan1970.SineTheta.PaperSurface
 import DavisKahan.Sources.DavisKahan1970.HeadlineGeneric
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
