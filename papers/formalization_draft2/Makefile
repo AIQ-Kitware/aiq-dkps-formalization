@@ -4,18 +4,22 @@ PYTHON ?= python3
 
 all: paper
 
+# Refresh ignored working analyses plus the small tracked manuscript snapshots
+# derived from them. This is explicit so an ordinary paper build never dirties
+# tracked snapshot files.
 accounting:
 	$(PYTHON) scripts/build_all.py
 
+# Networked, explicit refresh of the OpenAlex raw response and its tracked
+# compact/TeX snapshots. The normal manuscript build never contacts OpenAlex.
 bibliometrics:
 	$(PYTHON) scripts/fetch_openalex_bibliometrics.py
 
-# Generated analysis artifacts are intentionally gitignored, so a paper build
-# always reconstructs them from the repository evidence first.
-paper: accounting
+# Manuscript builds consume the checked-in snapshots and are offline.
+paper:
 	latexmk -pdf paper.tex
 
-literature: accounting
+literature:
 	latexmk -pdf literature_review.tex
 
 clean:

@@ -16,6 +16,7 @@ import subprocess
 HERE = pathlib.Path(__file__).resolve().parent
 PAPER = HERE.parent
 GENERATED = PAPER / "generated"
+SNAPSHOTS = PAPER / "snapshots"
 ROOT = pathlib.Path(subprocess.check_output(["git", "rev-parse", "--show-toplevel"], cwd=PAPER, text=True).strip())
 
 SCAN_ROOTS = ["ForTauCeti", "DavisKahan", "YuWangSamworth2015", "DkpsQuench2026"]
@@ -75,6 +76,7 @@ def relationship_flags(block: str) -> dict[str, int]:
 
 def main() -> None:
     GENERATED.mkdir(parents=True, exist_ok=True)
+    SNAPSHOTS.mkdir(parents=True, exist_ok=True)
     rows: list[dict] = []
     for root_name in SCAN_ROOTS:
         base = ROOT / root_name
@@ -152,7 +154,7 @@ def main() -> None:
         f"\\newcommand{{\\ProvenanceBlockCount}}{{{len(rows)}}}",
         f"\\newcommand{{\\SpectraInfluenceBlockCount}}{{{spectra_declared}}}",
     ]
-    (GENERATED / "provenance_macros.tex").write_text("\n".join(macros) + "\n", encoding="utf-8")
+    (SNAPSHOTS / "provenance_macros.tex").write_text("\n".join(macros) + "\n", encoding="utf-8")
     print(f"provenance: {len(rows)} blocks, {spectra_declared} declaring Spectra influence")
 
 

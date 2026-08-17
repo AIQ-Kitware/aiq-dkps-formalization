@@ -2,8 +2,9 @@
 __pycache__/
 *.py[cod]
 
-# Reproducible paper-analysis outputs.  These are rebuilt from repository
-# evidence by scripts/build_all.py and should never be committed.
+# Disposable paper-analysis outputs and raw API responses. These are rebuilt
+# from repository evidence and should never be committed. Small manuscript-facing
+# artifacts live in the tracked snapshots/ directory instead.
 generated/
 
 # LaTeX / latexmk build products.  Source .tex/.bib files remain tracked.
@@ -33,4 +34,3 @@ generated/
 # Editor / OS noise
 *~
 .DS_Store
-generated

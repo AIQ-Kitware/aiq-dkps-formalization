@@ -84,10 +84,10 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{remark}[theorem]{Remark}
 
-\input{generated/census_macros.tex}
-\input{generated/provenance_macros.tex}
-\input{generated/accounting_macros.tex}
-\input{generated/interaction_macros.tex}
+\input{snapshots/census_macros.tex}
+\input{snapshots/provenance_macros.tex}
+\input{snapshots/accounting_macros.tex}
+\input{snapshots/interaction_macros.tex}
 
 \newcommand{\Lean}{\textsc{Lean}}
 \newcommand{\YWS}{Yu--Wang--Samworth}
@@ -404,7 +404,7 @@ not source proof debt.
 
 \begin{table}[t]
 \centering
-\input{generated/yws_census_kind_table.tex}
+\input{snapshots/yws_census_kind_table.tex}
 \caption{What the \YWSCensusEntryCount{} census entries count.  This is a
 progress/audit inventory, not a theorem count.  The complete row-level inventory,
 including source anchor, Lean declarations, verification state, and whether an
@@ -797,7 +797,7 @@ total and never applies one global average token price.
 \begin{table}[t]
 \centering
 \small
-\input{generated/model_token_table.tex}
+\input{snapshots/model_token_table.tex}
 \caption{Exactly measured program-wide tokens by model and token class at the
 \AccountingSnapshot{} snapshot.  Monetary cost is computed only after
 historically applicable model- and token-class-specific rates are supplied.}

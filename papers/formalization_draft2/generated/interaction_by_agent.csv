@@ -1,5 +1,0 @@
-agent,prompts,sessions,active_days,first_day,last_day,median_prompt_chars,median_tool_calls,median_gap_minutes
-aiq-gpu-edward,292,21,13,2026-07-28,2026-08-11,104.0,11.0,11.0
-aivm-2404-edward,110,10,17,2026-07-07,2026-08-06,61.0,27.0,23.5
-aivm-2404-jon,114,10,8,2026-07-27,2026-08-10,79.5,14.0,23.6
-toothbrush-jon,197,21,17,2026-07-04,2026-08-06,113,18,21.5
