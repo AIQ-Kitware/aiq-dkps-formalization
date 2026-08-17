@@ -98,6 +98,7 @@ end TauCeti.DavisKahan1970.Audits
 Status: **TERMINAL EXACT**.
 -/
 
+#check @DavisKahan1970.sinTheta_headline
 #check @TauCeti.DavisKahan1970.sinTheta_headline_generic
 #check @TauCeti.DavisKahan1970.sinTheta
 #check @TauCeti.DavisKahan1970.sinTheta_real_exactPaper

@@ -49,13 +49,14 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
+        "DavisKahan1970.sinTheta_headline",
         "TauCeti.DavisKahan1970.sinTheta_headline_generic",
         "TauCeti.DavisKahan1970.sinTheta",
         "TauCeti.DavisKahan1970.sinTheta_real_exactPaper",
         "TauCeti.DavisKahan1970.generalizedSinTheta",
         "TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper"
       ],
-      "review_note": "Accepted semantic review, refreshed 2026-08-13. `sinTheta_headline_generic` is the primary source-facing witness: it is generic over RCLike 𝕜, uses the literal `PaperUnitaryInvariantNorm`, exposes A, A0, Lambda1, E0, F0, F1, R and their domain/intertwining identities directly, writes the interval/exterior spectral alternative literally, has no finite-dimensional hypothesis, and concludes the factor-one directed sine bound. The scalar capability classes in its signature have proved instances for both ℝ and ℂ. Older complex/real and generalized declarations remain supporting implementation/scope witnesses rather than the canonical alignment statement.",
+      "review_note": "Accepted semantic review. `DavisKahan1970.sinTheta_headline` is the primary presentation- and audit-facing witness: it remains generic over RCLike 𝕜, names the source unitary-invariant norm with the public `UnitaryInvariantNorm` spelling, makes `sinTheta₀` an explicit parameter tied by a literal equality to `(I - F₀F₀†)E₀`, writes the interval/exterior spectral alternative literally, has no finite-dimensional hypothesis, and places exactly the factor-one source inequality after the theorem colon. The two domain-heavy setup predicates have characteristic theorems that fully expand their contents. `sinTheta_headline_generic` remains the stronger supporting certificate and additionally proves norm-ideal membership of the sine block.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-sin-theta",
