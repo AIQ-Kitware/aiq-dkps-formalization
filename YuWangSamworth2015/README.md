@@ -1,4 +1,4 @@
-# FinishYuWangSamworth
+# YuWangSamworth2015
 
 A paper-facing formalization package for:
 
@@ -118,17 +118,17 @@ target since 2026-08-02.
 ## Build
 
 ```bash
-lake build FinishYuWangSamworth.Symmetric.Theorem1
-lake build FinishYuWangSamworth.Symmetric.OrthogonalSharpness
-lake build FinishYuWangSamworth.Symmetric.MiddleBlockSharpness
-lake build FinishYuWangSamworth.Symmetric.MixedGap
-lake build FinishYuWangSamworth.Symmetric.AngleIdentity
-lake build FinishYuWangSamworth.Symmetric.Corollary1
-lake build FinishYuWangSamworth.Appendix.Lemma5
-lake build FinishYuWangSamworth.Rectangular.RankOne
-lake build FinishYuWangSamworth.Rectangular.RankBoundary
-lake build FinishYuWangSamworth.Rectangular.SingularBlock
-lake build FinishYuWangSamworth
+lake build YuWangSamworth2015.Symmetric.Theorem1
+lake build YuWangSamworth2015.Symmetric.OrthogonalSharpness
+lake build YuWangSamworth2015.Symmetric.MiddleBlockSharpness
+lake build YuWangSamworth2015.Symmetric.MixedGap
+lake build YuWangSamworth2015.Symmetric.AngleIdentity
+lake build YuWangSamworth2015.Symmetric.Corollary1
+lake build YuWangSamworth2015.Appendix.Lemma5
+lake build YuWangSamworth2015.Rectangular.RankOne
+lake build YuWangSamworth2015.Rectangular.RankBoundary
+lake build YuWangSamworth2015.Rectangular.SingularBlock
+lake build YuWangSamworth2015
 ```
 
 Warnings are errors for this library.

@@ -3,12 +3,12 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import FinishYuWangSamworth.Rectangular.RankBoundary
+import YuWangSamworth2015.Rectangular.RankBoundary
 
 /-!
 # Theorem 3 in singular-value notation, with the corrected boundary convention
 
-`FinishYuWangSamworth/Rectangular/Theorem4.lean` proves the singular-subspace
+`YuWangSamworth2015/Rectangular/Theorem4.lean` proves the singular-subspace
 theorem with the gap hypothesis phrased as the intrinsic separation of the sorted
 spectrum of `A⋆A`.  That is the mathematically correct hypothesis, and it is not
 the paper's notation.  This module states the same theorems in the notation the
@@ -24,7 +24,7 @@ so that a reader can see exactly which part of the printed theorem is true.
 The printed conventions are `σ_0² := +∞` and `σ_{rank(A)+1}² := −∞`.  The first
 is fine and is modelled here, as in `TauCeti.OrderedBlockBoundaryGap`, by vacuous
 quantification.  **The second is false**, and
-`FinishYuWangSamworth/Rectangular/RankBoundary.lean` refutes it: it makes the
+`YuWangSamworth2015/Rectangular/RankBoundary.lean` refutes it: it makes the
 denominator infinite at `s = rank(A)`, so the printed bound asserts that the
 sample and population right singular subspaces coincide when they can be
 orthogonal.

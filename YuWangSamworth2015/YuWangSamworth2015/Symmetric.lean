@@ -3,13 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishYuWangSamworth.Symmetric.Theorem1
-import FinishYuWangSamworth.Symmetric.MixedGap
-import FinishYuWangSamworth.Symmetric.Corollary1
-import FinishYuWangSamworth.Symmetric.AngleIdentity
-import FinishYuWangSamworth.Symmetric.OrthogonalSharpness
-import FinishYuWangSamworth.Symmetric.MiddleBlockSharpness
-import FinishYuWangSamworth.Symmetric.PlanarSharpness
+import YuWangSamworth2015.Symmetric.Theorem1
+import YuWangSamworth2015.Symmetric.MixedGap
+import YuWangSamworth2015.Symmetric.Corollary1
+import YuWangSamworth2015.Symmetric.AngleIdentity
+import YuWangSamworth2015.Symmetric.OrthogonalSharpness
+import YuWangSamworth2015.Symmetric.MiddleBlockSharpness
+import YuWangSamworth2015.Symmetric.PlanarSharpness
 
 /-!
 # Symmetric Yu--Wang--Samworth surface

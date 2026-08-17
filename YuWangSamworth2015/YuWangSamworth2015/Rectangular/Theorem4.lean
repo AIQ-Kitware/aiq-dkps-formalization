@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishYuWangSamworth.Rectangular.FrobeniusGram
+import YuWangSamworth2015.Rectangular.FrobeniusGram
 
 /-!
 # The Yu--Wang--Samworth singular-subspace theorem
@@ -36,7 +36,7 @@ Two deliberate departures from the printed statement, both recorded in
   *intrinsic* separation of the sorted spectrum of `A⋆A`, which counts the zero
   eigenvalues and is the correct reading (`σ²_{q+1} := −∞` at the ambient
   dimension, as the paper's own proof requires).  See
-  `FinishYuWangSamworth.Rectangular.RankBoundary` for the machine-checked
+  `YuWangSamworth2015.Rectangular.RankBoundary` for the machine-checked
   refutation of the printed convention.
 * **`CorrespondingRightSingularBlock` is narrower than the printed
   hypothesis.**  It pins both blocks to Mathlib's chosen Gram eigenbases,
@@ -209,7 +209,7 @@ operator-norm coefficient.
 This is the **corrected** theorem, not the printed one: its gap hypothesis is the
 intrinsic separation of the sorted spectrum of `A⋆A`, and the printed convention
 `σ²_{rank(A)+1} := −∞` is false.  See the module header and
-`FinishYuWangSamworth.Rectangular.RankBoundary`. -/
+`YuWangSamworth2015.Rectangular.RankBoundary`. -/
 theorem yuWangSamworth_rightSingularSubspace_opNormCoefficient_le
     {A Â : E →ₗ[𝕜] F} {U V : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -487,7 +487,7 @@ private theorem yuWangSamworth_gram_alignedBasis_frame_le
 index block, with a gap only on the population squared singular values.  The
 denominator is the *intrinsic* gap of `A⋆A`, which — unlike the paper's printed
 `σ_{rank(A)+1}² := −∞` convention — sees the zero part of the spectrum; see
-`FinishYuWangSamworth.Rectangular.RankBoundary` for why that matters. -/
+`YuWangSamworth2015.Rectangular.RankBoundary` for why that matters. -/
 theorem yuWangSamworth_rightSingularSubspace_frame_le
     {A Â : E →ₗ[𝕜] F} [Nontrivial E] {n d : ℕ} {hn : finrank 𝕜 E = n}
     {e : Fin d ↪ Fin n} {v vHat : Fin d → E}

@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishYuWangSamworth.Rectangular.FrobeniusGram
+import YuWangSamworth2015.Rectangular.FrobeniusGram
 
 /-!
 # Yu--Wang--Samworth Appendix Lemma A1

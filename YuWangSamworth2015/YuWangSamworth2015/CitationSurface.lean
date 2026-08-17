@@ -3,9 +3,9 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import FinishYuWangSamworth.Symmetric
-import FinishYuWangSamworth.Rectangular
-import FinishYuWangSamworth.Appendix
+import YuWangSamworth2015.Symmetric
+import YuWangSamworth2015.Rectangular
+import YuWangSamworth2015.Appendix
 
 /-!
 # Citation-priority Yu--Wang--Samworth API
