@@ -52,11 +52,11 @@ Exact ledger rows establish measured harness model usage. Git co-author trailers
 ## Exploratory extrapolation
 
 The current model has 1,826 extrapolation-eligible commits. These are positive-evidence LLM-assisted commits with neither exact accounting nor overlap with a measured pending segment.
-- turns: point **33,235**, residual-bootstrap 5--95% sensitivity interval **28,271--39,430**
-- input_tokens: point **6,797,026**, residual-bootstrap 5--95% sensitivity interval **4,021,219--12,809,217**
-- cache_write_tokens: point **38,542,773**, residual-bootstrap 5--95% sensitivity interval **30,366,983--50,665,777**
-- cache_read_tokens: point **8,737,201,457**, residual-bootstrap 5--95% sensitivity interval **7,074,950,830--10,891,879,094**
-- output_tokens: point **24,896,765**, residual-bootstrap 5--95% sensitivity interval **20,791,463--29,582,185**
-- billable_input_tokens: point **8,831,882,493**, residual-bootstrap 5--95% sensitivity interval **7,233,347,041--11,241,379,425**
+- turns: point **33,090**, residual-bootstrap 5--95% sensitivity interval **28,133--39,269**
+- input_tokens: point **6,775,663**, residual-bootstrap 5--95% sensitivity interval **4,010,808--12,749,226**
+- cache_write_tokens: point **38,385,080**, residual-bootstrap 5--95% sensitivity interval **30,292,928--50,617,456**
+- cache_read_tokens: point **8,703,086,035**, residual-bootstrap 5--95% sensitivity interval **7,031,298,202--10,842,026,085**
+- output_tokens: point **24,790,047**, residual-bootstrap 5--95% sensitivity interval **20,622,765--29,491,891**
+- billable_input_tokens: point **8,797,300,601**, residual-bootstrap 5--95% sensitivity interval **7,201,304,703--11,179,959,867**
 
 These model-based values are not part of the measured lower bound and should not be quoted without first auditing the override file, the validation table, model calibration coverage, and the missingness assumptions.

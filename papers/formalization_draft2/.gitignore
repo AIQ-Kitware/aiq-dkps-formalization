@@ -33,3 +33,4 @@ generated/
 # Editor / OS noise
 *~
 .DS_Store
+generated

@@ -331,6 +331,21 @@ theorem toPopulationBoundaryGap
 
 end SourcePopulationGap
 
+/-- Frobenius norm spelling used by the paper-facing Theorem 2 statements.
+
+This is a reducible abbreviation for the existing unitarily invariant Frobenius
+seminorm, so the source notation can appear directly in the theorem statement
+without introducing an opaque application-specific quantity. -/
+noncomputable abbrev frobeniusNorm {p : Nat}
+    (A : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)) : Real :=
+  UnitarilyInvariantSeminorm.frobenius Real (EuclideanSpace Real (Fin p)) A
+
+/-- Source-facing operator norm notation for the YWS headline statements. -/
+local notation "‖" A "‖_op" => ‖LinearMap.toContinuousLinearMap A‖
+
+/-- Source-facing Frobenius norm notation for the YWS headline statements. -/
+local notation "‖" A "‖_F" => frobeniusNorm A
+
 /-- **Yu--Wang--Samworth 2015, Theorem 2, first conclusion.**
 
 This is the paper-facing and semantic-review statement.  `Sigma` and `SigmaHat`
@@ -339,10 +354,12 @@ orthonormal eigenvector blocks at the ordered indices `r,...,s`; and `Delta` is
 the source's exact population gap, not merely a chosen lower bound.  No sample
 eigengap is assumed.
 
-The two norms that the paper writes symbolically are explicit theorem
-parameters.  Their equality hypotheses identify them with the concrete Lean
-realizations in the same signature, so the claim after the colon reads like the
-printed inequality without hiding either quantity behind a local definition. -/
+The sine norm is an explicit theorem parameter whose equality hypothesis identifies
+it with the concrete Lean realization in the same signature.  The perturbation
+norms use local source-facing notation, with `‖A‖_op` expanding to the operator
+norm of `A.toContinuousLinearMap` and `‖A‖_F` expanding through the reducible
+abbreviation `frobeniusNorm`.  Thus the claim after the colon reads like the
+printed inequality without extra scalar naming hypotheses. -/
 theorem theorem2_sinTheta
     {p d r s : Nat}
     (Sigma SigmaHat :
@@ -357,17 +374,13 @@ theorem theorem2_sinTheta
       sinThetaNorm =
         sinThetaFrobenius (Submodule.span Real (Set.range V))
           (Submodule.span Real (Set.range Vhat)))
-    (perturbationFrobeniusNorm : Real)
-    (hPerturbationFrobeniusNorm :
-      perturbationFrobeniusNorm =
-        UnitarilyInvariantSeminorm.frobenius Real
-          (EuclideanSpace Real (Fin p)) (SigmaHat - Sigma))
     (Delta : Real) (hDelta : 0 < Delta)
     (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
     sinThetaNorm ≤
-      2 * min (Real.sqrt d * ‖(SigmaHat - Sigma).toContinuousLinearMap‖)
-        perturbationFrobeniusNorm / Delta := by
-  rw [hSinThetaNorm, hPerturbationFrobeniusNorm]
+      2 * min
+        (Real.sqrt d * ‖SigmaHat - Sigma‖_op)
+        ‖SigmaHat - Sigma‖_F / Delta := by
+  rw [hSinThetaNorm]
   have hsn : s + 1 ≤ p := by omega
   have hrd : r + d = s + 1 := by omega
   exact yuWangSamworth_sinTheta_block_le
@@ -385,8 +398,8 @@ theorem theorem2_sinTheta
 Under the same mathematical source hypotheses, an orthogonal matrix aligns the
 supplied sample frame `Vhat` to the supplied population frame `V` with the
 printed `2^(3/2)` Frobenius bound.  As in the first conclusion, the perturbation
-Frobenius norm is named explicitly and tied to its concrete Lean realization by
-an equality hypothesis. -/
+operator and Frobenius norms use the local source-facing `‖A‖_op` and `‖A‖_F`
+notations. -/
 theorem theorem2_alignedFrame
     {p d r s : Nat}
     (Sigma SigmaHat :
@@ -396,20 +409,15 @@ theorem theorem2_alignedFrame
     (V Vhat : Fin d → EuclideanSpace Real (Fin p))
     (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
     (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
-    (perturbationFrobeniusNorm : Real)
-    (hPerturbationFrobeniusNorm :
-      perturbationFrobeniusNorm =
-        UnitarilyInvariantSeminorm.frobenius Real
-          (EuclideanSpace Real (Fin p)) (SigmaHat - Sigma))
     (Delta : Real) (hDelta : 0 < Delta)
     (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
     ∃ O : Matrix (Fin d) (Fin d) Real,
       O ∈ Matrix.orthogonalGroup (Fin d) Real ∧
         Real.sqrt (∑ i, ‖(∑ j, O j i • Vhat j) - V i‖ ^ 2) ≤
           2 * Real.sqrt 2 *
-            min (Real.sqrt d * ‖(SigmaHat - Sigma).toContinuousLinearMap‖)
-              perturbationFrobeniusNorm / Delta := by
-  rw [hPerturbationFrobeniusNorm]
+            min
+              (Real.sqrt d * ‖SigmaHat - Sigma‖_op)
+              ‖SigmaHat - Sigma‖_F / Delta := by
   have hsn : s + 1 ≤ p := by omega
   have hrd : r + d = s + 1 := by omega
   exact yuWangSamworth_alignedFrame_block_real_le

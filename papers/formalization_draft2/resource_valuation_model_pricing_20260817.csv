@@ -1,0 +1,11 @@
+model,provider,input_usd_per_million,cache_write_usd_per_million,cache_read_usd_per_million,output_usd_per_million,effective_date,source,notes
+claude-opus-4-8,Anthropic,5,6.25,0.5,25,2026-05-28,https://www.anthropic.com/news/claude-opus-4-8,"Public Claude API standard-global rates; launch announcement confirms $5/M input and $25/M output. Cache rates use Anthropic's published 5m-write (1.25x) and hit (0.1x) multipliers."
+claude-opus-5,Anthropic,5,6.25,0.5,25,2026-07-24,https://www.anthropic.com/news/claude-opus-5,"Public Claude API standard-global rates at launch; 5m cache-write valuation."
+claude-fable-5,Anthropic,10,12.5,1,50,2026-06-09,https://www.anthropic.com/news/claude-fable-5-mythos-5,"Public Claude API standard-global launch rates; 5m cache-write valuation."
+gpt-5.6-sol,OpenAI,5,6.25,0.5,30,2026-07-09,https://openai.com/index/gpt-5-6/,"Public API launch rates. Cache writes are 1.25x base input and cache reads receive a 90% discount. Observed Sol usage is on 2026-07-13."
+gpt-5.6-terra,OpenAI,2.5,3.125,0.25,15,2026-07-09,https://openai.com/index/gpt-5-6/,"Historical public API launch rates. All observed Terra usage is on 2026-07-28, before the 2026-07-30 reduction to $2/M input and $12/M output."
+gpt-5.6-thinking,OpenAI,,,,,,,Raw Git provenance label. On unledgered commits in the configured 2026-06-03--2026-08-14 study window this is resolved to GPT-5.6 Sol chat-interface work; preserve the raw label and do not price it separately unless exact measured usage appears.
+gpt-5.6-high,OpenAI,,,,,,,Raw Git provenance label. On unledgered commits in the configured 2026-06-03--2026-08-14 study window this is resolved to GPT-5.6 Sol chat-interface work; preserve the raw label and do not price it separately unless exact measured usage appears.
+gpt-5.6-codex,OpenAI,,,,,,,Git provenance contains this model even though the local ledger currently has no direct measured tokens for it.
+gpt-5-codex,OpenAI,,,,,,,Git provenance contains this model even though the local ledger currently has no direct measured tokens for it.
+<synthetic>,synthetic,0,0,0,0,2026-08-14,ledger schema,Synthetic bookkeeping carries no model tokens in the current ledger.

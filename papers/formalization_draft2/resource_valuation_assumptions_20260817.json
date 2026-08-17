@@ -1,0 +1,38 @@
+{
+  "schema": "formalization-draft2/resource-valuation/v1",
+  "version": "2026-08-17-generic-wide-v1",
+  "description": "Versioned post-hoc valuation assumptions. Measured ledger rows remain immutable; all dollar, energy, and carbon figures are regenerated from those measurements plus this file and resource_valuation_model_pricing_20260817.csv.",
+  "scope": "Operational LLM serving only. Excludes training, embodied hardware, client devices, network energy, and other lifecycle effects.",
+  "serving_stack": {
+    "source_pack": "llm_resource_tally generic-wide-v1",
+    "source_url": "https://github.com/Erotemic/llm_resource_tally/blob/main/llm_resource_tally/modeling/assumptions/generic-wide-pack.json",
+    "retrieved": "2026-08-17",
+    "scenario_semantics": "Arrays are [low, central, high] scenarios, not confidence intervals.",
+    "pue": [1.05, 1.25, 2.0],
+    "grid_gco2e_per_kwh": [20.0, 350.0, 1000.0],
+    "prefill_tokens_per_second": [5000.0, 50000.0, 250000.0],
+    "decode_tokens_per_second": [10.0, 60.0, 250.0],
+    "server_power_kw": [0.25, 1.5, 12.0],
+    "fixed_seconds_per_turn": [0.0, 0.25, 3.0],
+    "cache_write_work_factor": [0.25, 0.75, 1.0],
+    "cache_read_work_factor": [0.01, 0.1, 0.5],
+    "summary_chars_per_token": [2.5, 4.0, 6.0]
+  },
+  "cross_check_per_token": {
+    "source_pack": "llm_resource_tally 0.2.0-baseline",
+    "source_url": "https://github.com/Erotemic/llm_resource_tally/blob/main/llm_resource_tally/modeling/assumptions/default-pack.json",
+    "retrieved": "2026-08-17",
+    "wh_per_output_token": 0.0003,
+    "wh_per_input_token": 0.00003,
+    "pue": 1.2,
+    "grid_gco2e_per_kwh": 475.0,
+    "note": "Independent simple per-token order-of-magnitude cross-check; cache reads and writes receive no serving-efficiency discount in this model."
+  },
+  "pricing_sensitivity": {
+    "anthropic_cache_write": {
+      "central_assumption": "All recorded Anthropic cache-creation tokens are valued at the public 5-minute cache-write rate (1.25x base input). The ledger does not record cache TTL.",
+      "one_hour_multiplier_of_base_input": 2.0,
+      "note": "The generated sensitivity total revalues all Anthropic cache writes at the 1-hour rate; it is a billing-assumption sensitivity, not a confidence interval."
+    }
+  }
+}

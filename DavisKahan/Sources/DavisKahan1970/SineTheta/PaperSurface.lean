@@ -32,6 +32,7 @@ noncomputable section
 
 universe u v
 
+open TauCeti
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.DavisKahanExt
@@ -158,11 +159,11 @@ theorem sinTheta_headline
     (hβα : β ≤ α)
     (hδ : 0 < δ)
     (hspectral :
-      (TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆
+      (LinearPMap.realSpectrum A₀.toLinearPMap ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}) ∨
-        (TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆
+        (LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum A₀.toLinearPMap ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}))
     (hR : N.Mem R) :
     δ * N.gauge sinTheta₀ ≤ N.gauge R := by

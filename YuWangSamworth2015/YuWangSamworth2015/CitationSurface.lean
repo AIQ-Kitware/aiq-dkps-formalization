@@ -37,9 +37,10 @@ a contiguous block `r..s` with the two-sided boundary gap
   Theorem 2 declarations.  They use `Real^p`, source-style names, the literal
   conditions `r ≤ s`, `s < p`, `d = s - r + 1`, arbitrary supplied eigenvector
   blocks, and the exact source population gap `SourcePopulationGap`.  The sine
-  and perturbation Frobenius quantities are explicit parameters tied to their
-  concrete Lean realizations by equality hypotheses, and the aligned conclusion
-  exposes its orthogonal matrix directly.  The more general
+  quantity is an explicit parameter tied to its concrete Lean realization by an
+  equality hypothesis, while the perturbation Frobenius norm is written through
+  the reducible application-level abbreviation `frobeniusNorm`.  The aligned
+  conclusion exposes its orthogonal matrix directly.  The more general
   `yuWangSamworth_sinTheta_block_le` and `yuWangSamworth_alignedFrame_block_le`
   remain the implementation-oriented `RCLike` forms;
 * `YuWangSamworth2015.yuWangSamworth_sinTheta_block_le_residual` and
