@@ -1,0 +1,67 @@
+{
+  "schema": "formalization-draft2/prerequisite-trace-roots/v1",
+  "description": "Compiler-traced root declarations for reconstructing project-local foundations actually used by the paper-facing YWS and Davis--Kahan headline results.",
+  "build_targets": [
+    "YuWangSamworth2015",
+    "DavisKahan.All"
+  ],
+  "import_modules": [
+    "YuWangSamworth2015",
+    "DavisKahan.All"
+  ],
+  "project_module_prefixes": [
+    "YuWangSamworth2015",
+    "DavisKahan",
+    "ForTauCeti"
+  ],
+  "root_groups": [
+    {
+      "id": "yws-theorem-2",
+      "label": "Yu--Wang--Samworth (2015), Theorem 2",
+      "source_evidence": "dev/yu-wang-samworth-2015-full-source-census.json: YWS-T2-sinTheta and YWS-T2-alignedBasis canonical declarations",
+      "declarations": [
+        "YuWangSamworth2015.theorem2_sinTheta",
+        "YuWangSamworth2015.theorem2_alignedFrame"
+      ]
+    },
+    {
+      "id": "dk-theorem-8-1",
+      "label": "Davis--Kahan (1970), Theorem 8.1",
+      "source_evidence": "dev/davis-kahan-1970-formalization-result-inventory.json: DK-8.1-thm accepted Lean evidence",
+      "declarations": [
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
+        "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real"
+      ]
+    },
+    {
+      "id": "dk-theorem-8-2",
+      "label": "Davis--Kahan (1970), Theorem 8.2",
+      "source_evidence": "dev/davis-kahan-1970-formalization-result-inventory.json: DK-8.2-thm accepted Lean evidence",
+      "declarations": [
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm",
+        "TauCeti.DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects"
+      ]
+    }
+  ]
+}
