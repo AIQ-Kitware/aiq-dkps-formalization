@@ -39,12 +39,14 @@ The canonical source-facing Theorem 2 declarations are
 `YuWangSamworth2015.theorem2_alignedFrame`.  They are intentionally optimized for
 semantic review: real operators on `Real^p`, source-style names, the visible
 conditions `r ≤ s`, `s < p`, and `d = s - r + 1`, arbitrary supplied population
-and sample eigenvector blocks, and a population-only boundary gap.  The aligned
-conclusion exhibits the orthogonal matrix and compares `Vhat O` against the
-supplied `V`.  The smaller predicates `IsEigenvectorBlock` and
-`PopulationBoundaryGap` expand directly to the orthonormal/eigenvector equations
-and the two population boundary inequalities, respectively, so the audit packet
-can show their complete mathematical content next to the theorem.
+and sample eigenvector blocks, and the source's exact population denominator.  The
+aligned conclusion exhibits the orthogonal matrix and compares `Vhat O` against
+the supplied `V`.  `IsEigenvectorBlock` expands directly to the
+orthonormal/eigenvector equations.  `SourcePopulationGap` characterizes `Delta`
+as the greatest real satisfying the two population boundary inequalities --
+exactly their finite minimum -- with an explicit full-space branch for the
+paper's `+infinity` convention.  The audit packet expands both it and the
+underlying `PopulationBoundaryGap`, so no weaker gap assumption is hidden.
 
 The more general `RCLike` block wrappers remain available underneath that paper
 surface, and `Symmetric/Corollary1.lean` carries the rank-one case together with

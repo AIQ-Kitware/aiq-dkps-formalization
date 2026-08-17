@@ -276,12 +276,68 @@ theorem toOrderedBlockBoundaryGap
 
 end PopulationBoundaryGap
 
+/-- The source's exact population gap `Delta` for Theorem 2.
+
+For every non-full block, `Delta` is the greatest real number satisfying the two
+population boundary inequalities, hence exactly
+`min (lambda_(r-1) - lambda_r) (lambda_s - lambda_(s+1))` with the missing
+endpoint omitted.  For the full block `r = 0`, `s + 1 = p`, the first disjunct
+models the source convention that both exterior gaps are `+infinity`.  In that
+case every positive real `Delta` is an admissible finite lower surrogate, so the
+headline theorem is available for arbitrarily large `Delta`. -/
+def SourcePopulationGap
+    {p : Nat}
+    (Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
+    (hSigma : Sigma.IsSymmetric) (r s : Nat) (Delta : Real) : Prop :=
+  (r = 0 ∧ s + 1 = p) ∨
+    (PopulationBoundaryGap Sigma hSigma r s Delta ∧
+      ∀ delta : Real,
+        PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta)
+
+/-- Characteristic form of the exact source-gap predicate.
+
+Outside the full-space endpoint case, this says precisely that `Delta` is the
+largest common lower bound of the finite population boundary gaps. -/
+theorem sourcePopulationGap_iff
+    {p : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric} {r s : Nat} {Delta : Real} :
+    SourcePopulationGap Sigma hSigma r s Delta ↔
+      (r = 0 ∧ s + 1 = p) ∨
+        (PopulationBoundaryGap Sigma hSigma r s Delta ∧
+          ∀ delta : Real,
+            PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta) :=
+  Iff.rfl
+
+namespace SourcePopulationGap
+
+/-- Forget exactness and retain the lower-bound form consumed by the proof. -/
+theorem toPopulationBoundaryGap
+    {p : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric} {r s : Nat} {Delta : Real}
+    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
+    PopulationBoundaryGap Sigma hSigma r s Delta := by
+  rcases hgap with hfull | hfinite
+  · rcases hfull with ⟨hr, hs⟩
+    rw [populationBoundaryGap_iff]
+    constructor
+    · intro q j hq _
+      omega
+    · intro j q _ hq
+      have hq_lt : (q : Nat) < p := q.isLt
+      omega
+  · exact hfinite.1
+
+end SourcePopulationGap
+
 /-- **Yu--Wang--Samworth 2015, Theorem 2, first conclusion.**
 
 This is the paper-facing semantic-review statement.  `Sigma` and `SigmaHat` are
 real symmetric operators on `Real^p`; `V` and `Vhat` are arbitrary orthonormal
-eigenvector blocks at the ordered indices `r,...,s`; and `Delta` is controlled
-only by the two population boundary gaps.  No sample eigengap is assumed. -/
+eigenvector blocks at the ordered indices `r,...,s`; and `Delta` is the
+source's exact population gap, not merely a chosen lower bound.  No sample
+eigengap is assumed. -/
 theorem theorem2_sinTheta
     {p d r s : Nat}
     (Sigma SigmaHat :
@@ -292,7 +348,7 @@ theorem theorem2_sinTheta
     (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
     (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
     (Delta : Real) (hDelta : 0 < Delta)
-    (hgap : PopulationBoundaryGap Sigma hSigma r s Delta) :
+    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
     sinThetaFrobenius (Submodule.span Real (Set.range V))
         (Submodule.span Real (Set.range Vhat)) ≤
       2 * min (Real.sqrt d * ‖(SigmaHat - Sigma).toContinuousLinearMap‖)
@@ -307,7 +363,8 @@ theorem theorem2_sinTheta
     hsn hrd
     (IsEigenvectorBlock.toIsOrderedEigenframe hV)
     (IsEigenvectorBlock.toIsOrderedEigenframe hVhat) hDelta
-    (PopulationBoundaryGap.toOrderedBlockBoundaryGap hgap)
+    (PopulationBoundaryGap.toOrderedBlockBoundaryGap
+      (SourcePopulationGap.toPopulationBoundaryGap hgap))
 
 /-- **Yu--Wang--Samworth 2015, Theorem 2, second conclusion.**
 
@@ -324,7 +381,7 @@ theorem theorem2_alignedFrame
     (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
     (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
     (Delta : Real) (hDelta : 0 < Delta)
-    (hgap : PopulationBoundaryGap Sigma hSigma r s Delta) :
+    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
     ∃ O : Matrix (Fin d) (Fin d) Real,
       O ∈ Matrix.orthogonalGroup (Fin d) Real ∧
         Real.sqrt (∑ i, ‖(∑ j, O j i • Vhat j) - V i‖ ^ 2) ≤
@@ -341,7 +398,8 @@ theorem theorem2_alignedFrame
     hsn hrd
     (IsEigenvectorBlock.toIsOrderedEigenframe hV)
     (IsEigenvectorBlock.toIsOrderedEigenframe hVhat) hDelta
-    (PopulationBoundaryGap.toOrderedBlockBoundaryGap hgap)
+    (PopulationBoundaryGap.toOrderedBlockBoundaryGap
+      (SourcePopulationGap.toPopulationBoundaryGap hgap))
 
 end PaperFacing
 
