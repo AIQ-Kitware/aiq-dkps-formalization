@@ -40,7 +40,8 @@ not affect any displayed quantity — all three depend on `v̂` only through
 convention.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open Module (finrank)
@@ -157,7 +158,7 @@ theorem norm_sub_sq_planarSharpness (hv : ‖v‖ = 1) (hw : ‖w‖ = 1)
 /-- **Yu--Wang--Samworth Section 2, small-angle sharpness.**
 
 Writing `ε := √(1 - c²)` for the sine of the angle between the two lines, the
-model satisfies every hypothesis of `TauCeti.yuWangSamworth_sinTheta_le` at
+model satisfies every hypothesis of `YuWangSamworth2015.yuWangSamworth_sinTheta_le` at
 `d = 1` and `Δ = 2`, achieves `‖sin Θ(v̂, v)‖_F = ε`, and the theorem's
 operator-norm branch `2 √d ‖E‖_op / Δ` equals `2ε`.
 
@@ -176,4 +177,4 @@ theorem yuWangSamworth_sharpness_planarRotation (hv : ‖v‖ = 1) (hw : ‖w‖
   ring
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

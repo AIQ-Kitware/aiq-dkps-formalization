@@ -22,7 +22,7 @@ so that a reader can see exactly which part of the printed theorem is true.
 ## What changes, and why
 
 The printed conventions are `σ_0² := +∞` and `σ_{rank(A)+1}² := −∞`.  The first
-is fine and is modelled here, as in `TauCeti.OrderedBlockBoundaryGap`, by vacuous
+is fine and is modelled here, as in `YuWangSamworth2015.OrderedBlockBoundaryGap`, by vacuous
 quantification.  **The second is false**, and
 `YuWangSamworth2015/Rectangular/RankBoundary.lean` refutes it: it makes the
 denominator infinite at `s = rank(A)`, so the printed bound asserts that the
@@ -51,14 +51,15 @@ printed one is false exactly where these two differ.
 
 ## Main results
 
-* `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_block_le` and
+* `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_block_le` and
   `..._leftSingularSubspace_block_le`: the sine bound with consecutive singular
   indices and the squared boundary gap.
-* `TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularAlignedBasis_block_le`
+* `YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularAlignedBasis_block_le`
   and `..._leftSingularAlignedBasis_block_le`: the aligned-frame conclusions.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -138,7 +139,7 @@ theorem singularBoundaryGap_of_rank_le {A : E →ₗ[𝕜] F} {n s : ℕ} {Δ : 
 
 /-! ## Theorem 3 with the source's indexing
 
-As in `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/ConsecutiveBlock.lean`,
+As in `YuWangSamworth2015/YuWangSamworth2015/Core/ConsecutiveBlock.lean`,
 the block is `r, …, s` with `d` tied to them by `r + d = s + 1`, the paper's
 `d = s − r + 1`, and `s + 1 ≤ n` is the paper's `s ≤ q` (respectively `s ≤ p` on
 the left). -/
@@ -236,4 +237,4 @@ theorem yuWangSamworth_leftSingularAlignedBasis_block_le
     ((orderedBlockBoundaryGap_leftGram hm hlo hhi).indexGap _ hd)
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

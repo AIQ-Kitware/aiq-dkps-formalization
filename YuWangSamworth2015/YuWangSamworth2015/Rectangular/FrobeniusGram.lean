@@ -20,7 +20,8 @@ uses the finite-dimensional Frobenius realization.  This avoids duplicating a
 basis expansion and works uniformly over every `RCLike` scalar field.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators ENNReal
@@ -279,4 +280,4 @@ theorem frobenius_leftGram_sub_le_paperCoefficient
     ((RectangularUnitarilyInvariantSeminorm.frobenius (𝕜 := 𝕜)).nonneg _)
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

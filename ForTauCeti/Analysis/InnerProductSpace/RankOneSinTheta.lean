@@ -8,7 +8,7 @@ Staged for Tau Ceti: additions to the principal-angle API.
 module
 
 public import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
-public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius
 
 /-! # The single-angle case: sine norms of a line against a subspace
 

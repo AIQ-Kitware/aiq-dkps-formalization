@@ -61,6 +61,19 @@ has a proved repair; neither is silently corrected.
 
 ## Architecture
 
+This package is deliberately downstream of `ForTauCeti`.  Reusable angle,
+spectral, Hilbert--Schmidt, Gram, and singular-subspace infrastructure stays in
+`ForTauCeti` under the `TauCeti` namespace.  YWS-specific population-gap
+bookkeeping and perturbation arguments live in `YuWangSamworth2015.Core`, while
+`Symmetric`, `Rectangular`, and `Appendix` expose paper-facing results.  There is
+no reverse dependency from `ForTauCeti` or `DavisKahan` into this package.
+
+One definition extracted during this split is genuinely foundational:
+`TauCeti.sinThetaFrobenius`, now in
+`ForTauCeti/Analysis/InnerProductSpace/SinTheta/Frobenius.lean`.  It is used by
+non-YWS foundation code, so application-specific statistics machinery no longer
+has to be imported merely to name the Frobenius sine distance.
+
 Theorem 3 is factored through one generic Gram transport result, at both index
 and frame generality.  The `FrobeniusGram` module owns the shared
 finite-dimensional Hilbert--Schmidt foundation and the general two-sided ideal
@@ -107,7 +120,7 @@ constant is pinned in the small-angle regime too — which the orthogonal-blocks
 example cannot do.
 
 Building the first of them required the first-ever *constructor* for
-`CorrespondingEigenblock` (`ForTauCeti/.../YuWangSamworth/TopEigenblock.lean`):
+`CorrespondingEigenblock` (`YuWangSamworth2015/Core/TopEigenblock.lean`):
 that hypothesis is consumed by every theorem in the package and had no instance
 anywhere in the repository, so no concrete pair of covariance operators had ever
 been checked against it.

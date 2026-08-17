@@ -67,7 +67,7 @@ variable {𝕜 E : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpac
 
 Containment gives one inequality and `finrank_span_eq_card` gives equality of
 dimensions, which is all `Submodule.eq_of_le_of_finrank_eq` needs.  Written out
-four times across `AngleGeometry` and `YuWangSamworth/Statistics`, once per
+four times across `AngleGeometry` and the YWS application statistics layer, once per
 subspace in each. -/
 theorem span_range_eq_of_orthonormal_of_mem {V : Submodule 𝕜 E}
     [FiniteDimensional 𝕜 V] {v : Fin d → E} (hv : Orthonormal 𝕜 v)

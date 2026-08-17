@@ -32,12 +32,12 @@ a contiguous block `r..s` with the two-sided boundary gap
 `min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`, under the printed conventions
 `λ_0 = +∞`, `λ_{p+1} = −∞` — are:
 
-* `TauCeti.yuWangSamworth_sinTheta_block_le` and
-  `TauCeti.yuWangSamworth_alignedFrame_block_le` for Theorem 2, the second with
+* `YuWangSamworth2015.yuWangSamworth_sinTheta_block_le` and
+  `YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le` for Theorem 2, the second with
   an explicit orthogonal `Ô` and the supplied population frame, so the
   conclusion is literally `‖V̂Ô − V‖_F ≤ 2^{3/2} min(…)/Δ`;
-* `TauCeti.yuWangSamworth_sinTheta_block_le_residual` and
-  `TauCeti.yuWangSamworth_alignedFrame_block_le_residual` for the sharper
+* `YuWangSamworth2015.yuWangSamworth_sinTheta_block_le_residual` and
+  `YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le_residual` for the sharper
   residual numerators the paper says its proof establishes,
   `‖V̂Λ − ΣV̂‖_F` in place of the perturbation norm;
 * `yuWangSamworth_corollary1_sinTheta_le` and

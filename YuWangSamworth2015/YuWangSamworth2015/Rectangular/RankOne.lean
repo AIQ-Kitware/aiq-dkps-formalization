@@ -15,7 +15,8 @@ proof reuses the existing rank-one symmetric theorem on the right and left Gram
 operators, then applies the exact Gram perturbation bound.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -149,4 +150,4 @@ theorem yuWangSamworth_leftSingularVector_le
       hu hv hAu hÂv hcorr hΔ hgap
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

@@ -21,7 +21,7 @@ Everything on that line is proved here, against the *same* hypotheses the
 theorem carries: `correspondingEigenblock_orthogonalSharpness` supplies the
 branch-selection datum and `internalGap_orthogonalSharpness` the population
 gap, so the example is a genuine instance of
-`TauCeti.yuWangSamworth_alignedBasis_le` rather than a numerical coincidence.
+`YuWangSamworth2015.yuWangSamworth_alignedBasis_le` rather than a numerical coincidence.
 The conclusion is that the constant `2^{3/2}` and the `√d` dimension dependence
 of that theorem cannot be improved: the achieved distance is `√(2d)` and the
 bound is `√(2d)(1+ε)` for arbitrarily small `ε`.
@@ -32,7 +32,8 @@ costs nothing and covers the paper's real matrices by taking
 `EuclideanSpace ℝ (Fin p)` with its standard basis.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open Module (finrank)
@@ -316,7 +317,7 @@ theorem dist_orthogonalSharpness_aligned (hε : 0 < ε)
 
 /-- **Yu--Wang--Samworth Section 2, orthogonal-blocks sharpness.**
 
-The aligned-basis bound of `TauCeti.yuWangSamworth_alignedBasis_le` is attained
+The aligned-basis bound of `YuWangSamworth2015.yuWangSamworth_alignedBasis_le` is attained
 up to the factor `1 + ε`: the model satisfies every hypothesis of that theorem,
 every aligned orthonormal pair realizes distance exactly `√(2d)`, and the
 theorem's operator-norm branch `2^{3/2} √d ‖E‖_op / Δ` equals `√(2d)(1+ε)`.
@@ -335,4 +336,4 @@ theorem yuWangSamworth_sharpness_orthogonalBlocks (hε : 0 < ε) (hd : 1 ≤ d)
 end Model
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

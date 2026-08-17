@@ -5,13 +5,15 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 
 REQUIRED_FILES = [
-    "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Residual.lean",
-    "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean",
-    "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/SingularSubspace.lean",
+    "YuWangSamworth2015/YuWangSamworth2015/Core/Residual.lean",
+    "YuWangSamworth2015/YuWangSamworth2015/Core/Statistics.lean",
+    "YuWangSamworth2015/YuWangSamworth2015/Core/SingularSubspace.lean",
+    "ForTauCeti/Analysis/InnerProductSpace/SinTheta/Frobenius.lean",
     "ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean",
     "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
     "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean",
     "YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem1.lean",
+    "YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean",
     "YuWangSamworth2015/YuWangSamworth2015/Symmetric/AngleIdentity.lean",
     "YuWangSamworth2015/YuWangSamworth2015/Rectangular/FrobeniusGram.lean",
     "YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean",
@@ -20,7 +22,7 @@ REQUIRED_FILES = [
 ]
 
 REQUIRED_DECLARATIONS = {
-    "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean": [
+    "YuWangSamworth2015/YuWangSamworth2015/Core/Statistics.lean": [
         "theorem yuWangSamworth_sinTheta_le",
         "theorem yuWangSamworth_alignedBasis_le",
         "theorem yuWangSamworth_eigenvector_le",
@@ -28,6 +30,11 @@ REQUIRED_DECLARATIONS = {
     "ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean": [
         "theorem sinTheta_perturbation_le",
         "theorem opNorm_sinThetaMap_le_of_intervalGap",
+    ],
+    "YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean": [
+        "theorem yuWangSamworth_sinTheta_block_le",
+        "theorem yuWangSamworth_alignedFrame_block_le",
+        "theorem yuWangSamworth_alignedFrame_block_real_le",
     ],
     "YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem1.lean": [
         "theorem yuWangSamworth_theorem1_uiNorm_le",

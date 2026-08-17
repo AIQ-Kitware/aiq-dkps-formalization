@@ -8,15 +8,15 @@ import YuWangSamworth2015.GroundedImports
 /-!
 # Corollary 1 with the source's neighbouring-eigenvalue gap
 
-`TauCeti.yuWangSamworth_eigenvector_frame_sinTheta_le` and
-`TauCeti.yuWangSamworth_eigenvector_real_le` prove Corollary 1 with the
+`YuWangSamworth2015.yuWangSamworth_eigenvector_frame_sinTheta_le` and
+`YuWangSamworth2015.yuWangSamworth_eigenvector_real_le` prove Corollary 1 with the
 *intrinsic* separation hypothesis `Δ ≤ |λⱼ − λ_k|` for every `k ≠ j`.  The source
 assumes only
 
 `Δⱼ = min(λ_{j-1} − λⱼ, λⱼ − λ_{j+1}) > 0`,
 
 with `λ_0 = +∞` and `λ_{p+1} = −∞`.  For a sorted spectrum the two are the same
-condition, and `TauCeti.OrderedBlockBoundaryGap.gap_of_singleton` is the
+condition, and `YuWangSamworth2015.OrderedBlockBoundaryGap.gap_of_singleton` is the
 implication; this module records the corollary as printed.
 
 ## Sample degeneracy
@@ -30,7 +30,8 @@ them.  A formulation that pinned `v̂₁` to a chosen eigenbasis of `Σ̂` would
 nothing about all but one of them.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open Module (finrank)
@@ -234,4 +235,4 @@ theorem yuWangSamworth_corollary1_scalarSample (w : E) (hw : ‖w‖ = 1) :
 end Degenerate
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

@@ -117,7 +117,7 @@ eigenvalue level set inside Mathlib's sorted eigenbasis:
 `LinearMap.IsSymmetric.eigenvalues_level_eq_Ico` (every level set is the
 contiguous index range `[m, m+d)`), `TauCeti.card_filter_lt_eigenvalues_basisDiagonal`
 (for a diagonal operator `m` is read off the coefficient list), and
-`TauCeti.correspondingEigenblock_eigenvalueLevel`, of which the earlier
+`YuWangSamworth2015.correspondingEigenblock_eigenvalueLevel`, of which the earlier
 top-eigenspace constructor is now the case `m = 0`.
 
 The census was rekeyed to the published numbering on 2026-08-13 and three of its
@@ -135,18 +135,18 @@ compared clause by clause with the printed one is worth less than no census.
 
 Four things moved, none of them a new numbered result.
 
-1. **The source's indexing.**  `TauCeti.consecutiveEmb` and
-   `TauCeti.OrderedBlockBoundaryGap` state the paper's `r..s` block and its
+1. **The source's indexing.**  `YuWangSamworth2015.consecutiveEmb` and
+   `YuWangSamworth2015.OrderedBlockBoundaryGap` state the paper's `r..s` block and its
    two-sided boundary gap; `OrderedBlockBoundaryGap.indexGap` propagates it to
    the intrinsic separation the general theorems consume, and antitonicity of
    the sorted spectrum is the only mathematics in it.  Theorem 2's two
    conclusions, both residual forms, Corollary 1 and Theorem 3 on both sides now
    have statements in that shape.
-2. **The alignment.**  `TauCeti.frameComp hv O` is the matrix product `V̂Ô`, and
+2. **The alignment.**  `YuWangSamworth2015.frameComp hv O` is the matrix product `V̂Ô`, and
    the aligned conclusions exhibit `Ô`.  A bundled linear isometry equivalence
    of the coordinate space is exactly an element of `O(d)`;
-   `TauCeti.adjoint_comp_self_eq_id` spells that out as `ÔᵀÔ = I`, and over `ℝ`
-   `TauCeti.frameAlignMatrix` produces the matrix itself, with
+   `YuWangSamworth2015.adjoint_comp_self_eq_id` spells that out as `ÔᵀÔ = I`, and over `ℝ`
+   `YuWangSamworth2015.frameAlignMatrix` produces the matrix itself, with
    `frameAlignMatrix_mem_orthogonalGroup` placing it in
    `Matrix.orthogonalGroup (Fin d) ℝ`.
 3. **The published sharpness range.**  `ε < 1` was an artifact of the first

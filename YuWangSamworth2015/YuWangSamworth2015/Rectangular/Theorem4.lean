@@ -46,7 +46,8 @@ Two deliberate departures from the printed statement, both recorded in
   already hold that datum.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace BigOperators
@@ -578,4 +579,4 @@ theorem yuWangSamworth_leftSingularAlignedBasis_frame_le
       (frobenius_leftGram_sub_le_paperCoefficient A Â)
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

@@ -5,8 +5,8 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation
-public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
+public import ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius
+public import YuWangSamworth2015.Core.Residual
 public import ForTauCeti.Analysis.InnerProductSpace.AlignedBasis
 
 /-!
@@ -24,21 +24,20 @@ records the full interval-block, aligned-basis, and single-vector surfaces.
 
 ## Provenance
 
-*Moved, not restated.*  This file was `DavisKahan/Specialized/Statistics.lean`
-before the last three `DavisKahan` modules of
-the Yu--Wang--Samworth payload into the staging layer, finishing Y3.  Statements,
-proofs, signatures and namespaces are unchanged; the declarations already lived
-in `TauCeti.*`.
-
-Y3(b2)/(b3)/(b4) are what made it possible: they took the sin-Θ perturbation
-closure this file rests on out of `ForMathlib` and `DavisKahan` entirely, so the
-last edge to sever was this one.
+This theorem layer was previously staged under
+`ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean`.  On
+2026-08-17 the YWS-specific population-gap statements moved downstream into
+`YuWangSamworth2015.Core`.  The reusable Frobenius sine distance was separated
+from them as `TauCeti.sinThetaFrobenius` in
+`ForTauCeti/Analysis/InnerProductSpace/SinTheta/Frobenius.lean`, so foundation
+clients do not depend on this application package.
 
 -/
 
 public section
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -65,7 +64,7 @@ needs is the `obtain` in `yuWangSamworth_sinTheta_le`, which is in this file and
 so can see the definition.  A caller outside the file could not build one at
 all: the body is not exposed, and there was no introduction rule — which is why
 the hypothesis had no instance anywhere in the repository until
-`ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/TopEigenblock.lean`.
+`YuWangSamworth2015/YuWangSamworth2015/Core/TopEigenblock.lean`.
 
 Supplying the rule rather than `@[expose]`-ing the definition keeps the index
 bookkeeping an implementation detail; see the general rule against exposing
@@ -78,19 +77,6 @@ theorem correspondingEigenblock_of_spanIndices {A B : E →ₗ[𝕜] E}
     CorrespondingEigenblock hA hB U V :=
   ⟨n, hn, s, hU, hV⟩
 
-/-- Frobenius sine distance in canonical subspace notation. -/
-noncomputable def sinThetaFrobenius (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : ℝ :=
-  UnitarilyInvariantSeminorm.frobenius 𝕜 E (sinThetaMap U V)
-
-/-- **The characteristic lemma.**  `sinThetaFrobenius` is a name for the
-Frobenius norm of the sine cross-projection; the definition is not exposed, so a
-consumer outside this file needs this equation to compute with it. -/
-theorem sinThetaFrobenius_eq (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    sinThetaFrobenius U V =
-      UnitarilyInvariantSeminorm.frobenius 𝕜 E (sinThetaMap U V) := by
-  rw [sinThetaFrobenius]
 
 /-- **The complement identity.**  The canonical Frobenius sine of two equally
 indexed eigenblocks is exactly the square root of the cross-block overlap sum
@@ -113,7 +99,7 @@ theorem sinThetaFrobenius_eq_sqrt_sum_cross {n : ℕ}
   let V : Submodule 𝕜 E := Submodule.span 𝕜 (bS '' (↑s : Set (Fin n)))
   have hn : finrank 𝕜 E = n := by
     rw [Module.finrank_eq_card_basis bT.toBasis, Fintype.card_fin]
-  rw [sinThetaFrobenius, UnitarilyInvariantSeminorm.frobenius_apply 𝕜 E _ hn bT]
+  rw [sinThetaFrobenius_eq, UnitarilyInvariantSeminorm.frobenius_apply 𝕜 E _ hn bT]
   congr 1
   have hcol : ∀ i : Fin n,
       ‖sinThetaMap U V (bT i)‖ ^ 2 =
@@ -366,7 +352,7 @@ theorem yuWangSamworth_sinTheta_le_residual
       hΔ.le (hu.internalGap_span hΔ hgap) v (fun i => hA.eigenvalues hn (e i))
       fun i => hu.toIsEigenFamily.eigenvalue_mem_restrictedSpectrum i
   have hs0 : 0 ≤ sinThetaFrobenius U V :=
-    (UnitarilyInvariantSeminorm.frobenius 𝕜 E).nonneg _
+    sinThetaFrobenius_nonneg U V
   rw [le_div_iff₀ hΔ]
   nlinarith [hkey, hs0, Real.sq_sqrt hR0, Real.sqrt_nonneg R,
     sq_nonneg (sinThetaFrobenius U V * Δ - Real.sqrt R),
@@ -608,7 +594,7 @@ theorem yuWangSamworth_alignedBasis_frame_le
   have hsine := yuWangSamworth_sinTheta_frame_le hu hv hΔ hgap
   have hsnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
       (Submodule.span 𝕜 (Set.range v)) :=
-    (UnitarilyInvariantSeminorm.frobenius 𝕜 E).nonneg _
+    sinThetaFrobenius_nonneg _ _
   calc Real.sqrt (∑ i, ‖v' i - u' i‖ ^ 2)
       ≤ Real.sqrt (2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum
@@ -643,7 +629,7 @@ theorem yuWangSamworth_alignedBasis_le_residual
   have hsine := yuWangSamworth_sinTheta_le_residual hu hv hΔ hgap
   have hsnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
       (Submodule.span 𝕜 (Set.range v)) :=
-    (UnitarilyInvariantSeminorm.frobenius 𝕜 E).nonneg _
+    sinThetaFrobenius_nonneg _ _
   calc Real.sqrt (∑ i, ‖v' i - u' i‖ ^ 2)
       ≤ Real.sqrt (2 * sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
           (Submodule.span 𝕜 (Set.range v)) ^ 2) := Real.sqrt_le_sqrt hsum
@@ -682,7 +668,7 @@ theorem yuWangSamworth_alignedBasis_le
   refine ⟨u, v, hu, hv, hspanU, hspanV, ?_⟩
   have hsine := yuWangSamworth_sinTheta_le hA hB hU hV hcorr hrankU hΔ hgap
   have hsnn : (0 : ℝ) ≤ sinThetaFrobenius U V :=
-    (UnitarilyInvariantSeminorm.frobenius 𝕜 E).nonneg _
+    sinThetaFrobenius_nonneg U V
   calc Real.sqrt (∑ i, ‖v i - u i‖ ^ 2)
       ≤ Real.sqrt (2 * sinThetaFrobenius U V ^ 2) := Real.sqrt_le_sqrt hsum
     _ = Real.sqrt 2 * sinThetaFrobenius U V := by
@@ -978,7 +964,7 @@ theorem sinThetaFrobenius_spanIndices_of_subset_compl {n : ℕ}
     change ((b.spanIndices T)ᗮ).starProjection ((b.spanIndices S).starProjection x) =
       (b.spanIndices S).starProjection x
     exact Submodule.starProjection_eq_self_iff.mpr hmem
-  rw [sinThetaFrobenius, hsin, UnitarilyInvariantSeminorm.frobenius_apply 𝕜 E _ hn b]
+  rw [sinThetaFrobenius_eq, hsin, UnitarilyInvariantSeminorm.frobenius_apply 𝕜 E _ hn b]
   have hspan : b.spanIndices S =
       Submodule.span 𝕜 (b '' (↑S.toFinset : Set (Fin n))) := by
     rw [OrthonormalBasis.spanIndices_eq_span, Set.coe_toFinset]
@@ -1017,9 +1003,10 @@ theorem sum_sq_norm_sub_eq_of_le_orthogonal {U V : Submodule 𝕜 E} (hperp : U 
   rw [Finset.sum_congr rfl fun i _ => hcol i, Finset.sum_const, Finset.card_univ,
     Fintype.card_fin, nsmul_eq_mul, mul_comm]
 
-end TauCeti
+end YuWangSamworth2015
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 
 open scoped InnerProductSpace RealInnerProductSpace
 open Module (finrank)
@@ -1076,4 +1063,4 @@ theorem yuWangSamworth_eigenvector_real_le
     yuWangSamworth_eigenvector_frame_le hu hv hAu hBv hΔ hgap
   exact (norm_sub_le_norm_smul_sub hu hv hc hsign).trans hbound
 
-end TauCeti
+end YuWangSamworth2015

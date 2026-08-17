@@ -24,7 +24,7 @@ exercises a two-sided population gap, and that is exactly what made it hard to
 formalize: its block sits in the *middle* of both spectra, so the branch
 selection cannot be produced by "leading `d` eigenvectors" reasoning.
 
-`TauCeti.correspondingEigenblock_basisDiagonal_level` is the constructor that
+`YuWangSamworth2015.correspondingEigenblock_basisDiagonal_level` is the constructor that
 closes that gap.  It rests on
 `LinearMap.IsSymmetric.eigenvalues_level_eq_Ico` — every eigenvalue level set of
 a symmetric operator is a contiguous range of sorted indices — and on
@@ -62,7 +62,8 @@ basis of an arbitrary finite-dimensional `RCLike` inner product space, which
 covers the paper's real `p × p` matrices at `EuclideanSpace ℝ (Fin p)`.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open Module (finrank)
@@ -392,7 +393,7 @@ theorem dist_middleSharpness_aligned (hε : 0 < ε) (hε1 : ε < 3)
 /-- **Yu--Wang--Samworth Section 2, published middle-block sharpness.**
 
 For every `0 < ε < 3` the model satisfies the hypotheses of
-`TauCeti.yuWangSamworth_alignedBasis_le` — a corresponding eigenblock
+`YuWangSamworth2015.yuWangSamworth_alignedBasis_le` — a corresponding eigenblock
 (`correspondingEigenblock_middleSharpness`) of dimension `d`
 (`finrank_eigenspace_middleSharpnessPopulation`) with the genuinely two-sided
 population gap `min(5-3, 3-1) = 2` (`internalGap_middleSharpness`) — and this
@@ -420,4 +421,4 @@ theorem yuWangSamworth_sharpness_middleBlock (hε : 0 < ε) (hε1 : ε < 3) (hd 
 end Model
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

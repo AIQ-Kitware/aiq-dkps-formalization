@@ -14,7 +14,8 @@ The theorem below records the corrected rank-one algebraic identity; its left
 side is `sin²(2θ)` when `⟪v,u⟫_ℝ = cos θ`.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -45,4 +46,4 @@ theorem yuWangSamworth_equation4_printed_counterexample :
   norm_num
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

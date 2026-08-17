@@ -7,15 +7,15 @@ module
 
 public import ForTauCeti.Analysis.InnerProductSpace.BasisDiagonal
 public import ForTauCeti.Analysis.InnerProductSpace.EigenblockSpan
-public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
+public import YuWangSamworth2015.Core.Statistics
 
 /-! # Constructing the corresponding-eigenblock hypothesis
 
-`TauCeti.CorrespondingEigenblock` is the branch-selection datum of the
+`YuWangSamworth2015.CorrespondingEigenblock` is the branch-selection datum of the
 Yu--Wang--Samworth population-gap theorems: the population block `U` and the
 perturbed block `V` are spanned by the *same ordered indices* of the two sorted
 eigenvector bases.  Every theorem in
-`ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean` consumes
+`YuWangSamworth2015/YuWangSamworth2015/Core/Statistics.lean` consumes
 it, and until this file nothing produced one — the hypothesis had no instance
 anywhere in the repository, so no concrete pair of covariance operators had ever
 been checked against it.
@@ -35,12 +35,12 @@ published Yu--Wang--Samworth sharpness example needs.
 
 ## Main results
 
-* `TauCeti.correspondingEigenblock_eigenvalueLevel`: eigenspaces at matching
+* `YuWangSamworth2015.correspondingEigenblock_eigenvalueLevel`: eigenspaces at matching
   positions in the two spectra correspond.
-* `TauCeti.correspondingEigenblock_topEigenspace`: leading eigenspaces of equal
+* `YuWangSamworth2015.correspondingEigenblock_topEigenspace`: leading eigenspaces of equal
   multiplicity correspond; the case `m = 0`.
-* `TauCeti.correspondingEigenblock_basisDiagonal` and
-  `TauCeti.correspondingEigenblock_basisDiagonal_level`: the same for two
+* `YuWangSamworth2015.correspondingEigenblock_basisDiagonal` and
+  `YuWangSamworth2015.correspondingEigenblock_basisDiagonal_level`: the same for two
   operators presented diagonally, with the hypotheses reduced to arithmetic on
   the data.
 -/
@@ -50,7 +50,8 @@ public section
 open Module (finrank)
 open Module.End (eigenspace)
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -161,4 +162,4 @@ theorem correspondingEigenblock_basisDiagonal_level {n : ℕ}
     ((card_filter_lt_eigenvalues_basisDiagonal b' c' hn β).trans hcount.symm)
     ((finrank_eigenspace_basisDiagonal b' c' (β : 𝕜)).trans hmult.symm)
 
-end TauCeti
+end YuWangSamworth2015

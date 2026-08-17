@@ -1,18 +1,13 @@
 /-
-Staged for Tau Ceti, roadmap topic T18.  Mathlib is not the destination
-(`ForTauCeti/README.md`); what follows is where this material would have gone on
-the closed Mathlib track —
-additions to `Mathlib/Analysis/InnerProductSpace/` (new file
-`YuWangSamworth.lean`).
+Copyright (c) 2026 Kitware, Inc. All rights reserved.
+Released under Apache 2.0 license as described in the file LICENSE.
+Authors: Jon Crall, Claude Opus 4.8
 
-Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
-
-The Yu–Wang–Samworth variant of the Davis–Kahan theorem: a sin-Θ bound whose
-denominator is a *population-only* eigengap `Δ` (formed from `T` alone), with the
-statistician-friendly constant `2`.  The deterministic core is a residual
-sandwich `Δ ‖sinΘ‖_F ≤ ‖R‖_F ≤ 2 ‖S − T‖_F`, where the lower bound is a
-population-gap separation estimate (both eigenvalue multipliers come from `T`)
-and the upper bound is Hoffman–Wielandt.
+Application-owned formalization of the Yu--Wang--Samworth population-gap
+residual argument.  This material intentionally lives downstream of
+`ForTauCeti`: its hypotheses and constants are specialized to the 2015 paper,
+while the reusable spectral and Hilbert-space infrastructure it consumes stays
+in the foundation library.
 -/
 module
 
@@ -48,9 +43,9 @@ The proof is the residual sandwich around `Rⱼ = λⱼ(T) wⱼ − T wⱼ`:
 
 ## Main results
 
-* `TauCeti.sq_gap_mul_sum_cross_le_of_population_gap`: the squared bound
+* `YuWangSamworth2015.sq_gap_mul_sum_cross_le_of_population_gap`: the squared bound
   `Δ² · overlap ≤ 4 · ∑ₖ ‖(S − T) uₖ‖²`.
-* `TauCeti.sqrt_sum_cross_le_of_population_gap`: the `‖sinΘ‖_F` form
+* `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap`: the `‖sinΘ‖_F` form
   `√overlap ≤ 2 · √(∑ₖ ‖(S − T) uₖ‖²) / Δ`.
 
 ## References
@@ -60,21 +55,19 @@ The proof is the residual sandwich around `Rⱼ = λⱼ(T) wⱼ − T wⱼ`:
 
 ## Provenance
 
-*Moved, not restated.*  This file was `DavisKahan/Sources/YuWangSamworth2015.lean`
-before the last three `DavisKahan` modules of
-the Yu--Wang--Samworth payload into the staging layer, finishing Y3.  Statements,
-proofs, signatures and namespaces are unchanged; the declarations already lived
-in `TauCeti.*`.
-
-Y3(b2)/(b3)/(b4) are what made it possible: they took the sin-Θ perturbation
-closure this file rests on out of `ForMathlib` and `DavisKahan` entirely, so the
-last edge to sever was this one.
+The residual argument was previously staged under
+`ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Residual.lean`.  On
+2026-08-17 it moved into `YuWangSamworth2015.Core` because the population-only
+gap sandwich is paper-specific application theory rather than foundation API.
+Its reusable inputs remain in `ForTauCeti`; the move changes package ownership
+and namespace, not the mathematical statement.
 
 -/
 
 public section
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
 
@@ -425,4 +418,4 @@ theorem sum_sq_norm_frameResidual_le_of_opNorm (hT : T.IsSymmetric) (hS : S.IsSy
 
 end Frame
 
-end TauCeti
+end YuWangSamworth2015

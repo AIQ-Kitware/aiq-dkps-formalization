@@ -5,10 +5,10 @@ Authors: Jon Crall, GPT 5.6 High
 -/
 module
 
-public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
+public import YuWangSamworth2015.Core.Statistics
 public import ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace
 public import ForTauCeti.Analysis.InnerProductSpace.Gram.Operator
-public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
+public import YuWangSamworth2015.Core.Residual
 
 /-!
 # Singular-subspace Davis--Kahan and Wedin-style corollaries
@@ -24,27 +24,23 @@ Literature map:
 
 The right singular subspaces are spectral subspaces of `A⋆A`, the left ones
 are spectral subspaces of `AA⋆`, and the Hermitian dilation packages both at
-once.  `ForMathlib.Analysis.InnerProductSpace.SingularSubspace` contains much
-of the scalar and Frobenius infrastructure; this file records the final
-canonical subspace API.
+once.  Reusable singular-subspace and Gram infrastructure lives in
+`ForTauCeti`; this file records the YWS-specific application API built on it.
 
 ## Provenance
 
-*Moved, not restated.*  This file was `DavisKahan/Specialized/SingularSubspace.lean`
-before the last three `DavisKahan` modules of
-the Yu--Wang--Samworth payload into the staging layer, finishing Y3.  Statements,
-proofs, signatures and namespaces are unchanged; the declarations already lived
-in `TauCeti.*`.
-
-Y3(b2)/(b3)/(b4) are what made it possible: they took the sin-Θ perturbation
-closure this file rests on out of `ForMathlib` and `DavisKahan` entirely, so the
-last edge to sever was this one.
+This application layer was previously staged under
+`ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/SingularSubspace.lean`.
+On 2026-08-17 it moved to `YuWangSamworth2015.Core` so the foundation library
+contains the reusable singular-subspace primitives but not the paper-specific
+YWS corollaries.
 
 -/
 
 public section
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -233,4 +229,4 @@ theorem sq_gap_mul_sum_cross_singularVectors_le
     A.isSymmetric_adjoint_comp_self Â.isSymmetric_adjoint_comp_self hn s hΓ hgap
     (fun x => norm_gram_sub_gram_apply_le hâ hε hA hÂ hE x)
 
-end TauCeti
+end YuWangSamworth2015

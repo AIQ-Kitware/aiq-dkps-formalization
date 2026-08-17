@@ -419,7 +419,7 @@
       "repo_evidence": [
         "Acharyya2025/AlignedPipeline.lean",
         "ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean"
+        "YuWangSamworth2015/YuWangSamworth2015/Core/Statistics.lean"
       ],
       "existing_assets": [],
       "scope": "The orthogonal Procrustes minimizer and its SVD/polar-factor representation.",
@@ -665,7 +665,7 @@
       "target_note": "HoffmanWielandt1953_spectral_variation.tex",
       "repo_evidence": [
         "ForTauCeti/Analysis/InnerProductSpace/HoffmanWielandt.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Residual.lean"
+        "YuWangSamworth2015/YuWangSamworth2015/Core/Residual.lean"
       ],
       "existing_assets": [],
       "scope": "The normal/symmetric Hoffman--Wielandt eigenvalue matching inequality and its use in the exact YWS proof.",
@@ -863,7 +863,7 @@
       "primary_url": "",
       "target_note": "Wedin1972_svd_perturbation.tex",
       "repo_evidence": [
-        "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/SingularSubspace.lean",
+        "YuWangSamworth2015/YuWangSamworth2015/Core/SingularSubspace.lean",
         "DavisKahan/Experimental/InfiniteDimensional/Ideals/CompactAndSingular.lean"
       ],
       "existing_assets": [],
@@ -1171,9 +1171,9 @@
       "primary_url": "https://arxiv.org/abs/1405.0680",
       "target_note": "YuWangSamworth2015_statistical_davis_kahan.tex",
       "repo_evidence": [
-        "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Residual.lean",
+        "YuWangSamworth2015/YuWangSamworth2015/Core/Residual.lean",
         "ForTauCeti/Analysis/InnerProductSpace/AlignedBasis.lean",
-        "ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/Statistics.lean"
+        "YuWangSamworth2015/YuWangSamworth2015/Core/Statistics.lean"
       ],
       "existing_assets": [
         "prose/core-arguments/Yu-Wang-Samworth-2014-core-arguments.tex",
