@@ -11,8 +11,74 @@
 \usepackage[colorlinks=true,allcolors=blue]{hyperref}
 \usepackage{pdfcomment}
 \usepackage[nameinlink]{cleveref}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 \usepackage{xcolor}
+\usepackage{listings}
+\usepackage{listingsutf8}
 \setlength{\emergencystretch}{3em}
+
+% ArXiv-friendly Lean listings: no shell escape, minted, or external highlighter.
+\definecolor{leankeyword}{rgb}{0.0,0.0,0.55}
+\definecolor{leancomment}{rgb}{0.0,0.48,0.15}
+\definecolor{leannumber}{rgb}{0.45,0.45,0.45}
+\definecolor{leanbackground}{rgb}{0.965,0.965,0.945}
+\lstdefinelanguage{lean}{%
+  sensitive=true,
+  morecomment=[l]{--},
+  morecomment=[s]{/-}{-/},
+  morekeywords=[1]{import,open,namespace,section,end,noncomputable,variable,variables,
+    theorem,lemma,def,abbrev,example,instance,structure,class,inductive,notation,local,
+    by,where,let,have,show,fun,match,with,if,then,else,do,return,in,forall},
+  morekeywords=[2]{simp,simpa,rw,erw,dsimp,unfold,ring,ring_nf,nlinarith,linarith,
+    positivity,norm_num,field_simp,omega,exact,refine,apply,assumption,intro,intros,
+    ext,funext,cases,rcases,obtain,constructor,left,right,classical,by_contra,
+    contrapose,convert,using,suffices,calc},
+}
+\lstdefinestyle{leanpaper}{%
+  language=lean,
+  columns=fullflexible,
+  backgroundcolor=\color{leanbackground},
+  commentstyle=\color{leancomment},
+  keywordstyle=\color{leankeyword},
+  numberstyle=\tiny\color{leannumber},
+  basicstyle=\ttfamily\scriptsize,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=5pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=2,
+  aboveskip=0.8em,
+  belowskip=0.8em,
+  literate=
+    {\\KField}{{$\Bbbk$}}1
+    {ℝ}{{$\mathbb{R}$}}1
+    {₀}{{$_0$}}1
+    {₁}{{$_1$}}1
+    {ₗ}{{$_\ell$}}1
+    {Λ}{{$\Lambda$}}1
+    {α}{{$\alpha$}}1
+    {β}{{$\beta$}}1
+    {δ}{{$\delta$}}1
+    {→}{{$\to$}}1
+    {∘}{{$\circ$}}1
+    {∧}{{$\land$}}1
+    {∨}{{$\lor$}}1
+    {≤}{{$\le$}}1
+    {⊆}{{$\subseteq$}}1
+    {‖}{{$\Vert$}}1
+    {•}{{$\bullet$}}1
+    {∃}{{$\exists$}}1
+    {∈}{{$\in$}}1
+    {∑}{{$\sum$}}1
+}
+\crefname{lstlisting}{listing}{listings}
+\Crefname{lstlisting}{Listing}{Listings}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}[theorem]{Proposition}
@@ -153,6 +219,100 @@ first pay for the interfaces that make that sentence meaningful and reusable.
 The cost analysis in \cref{sec:process-study} gives a partially observed empirical
 view of that prerequisite burden.
 
+\subsection{The Davis--Kahan headline theorem as an auditable Lean statement}
+\label{sec:dk-headline}
+
+The first headline result in Section~2 of \citet{davis1970rotation} is the
+sine-theta theorem.  In the paper's coordinate setup, let $E_0$ parameterize a
+trial subspace with restricted operator $A_0$, let $F_0$ parameterize the exact
+comparison subspace, let $F_1$ parameterize its orthogonal complement with
+$AF_1=F_1\Lambda_1$, and let
+\[
+  R=AE_0-E_0A_0,
+  \qquad
+  \sin\Theta_0=(I-F_0F_0^*)E_0.
+\]
+If, for some $\beta\leq\alpha$ and $\delta>0$, either
+\[
+  \operatorname{spec}(A_0)\subset[\beta,\alpha],
+  \qquad
+  \operatorname{spec}(\Lambda_1)\cap
+    (\beta-\delta,\alpha+\delta)=\varnothing,
+\]
+or the same condition holds with $A_0$ and $\Lambda_1$ interchanged, then for
+every unitarily invariant norm
+\begin{equation}
+  \delta\,\lVert\sin\Theta_0\rVert\leq\lVert R\rVert.
+  \label{eq:dk-sintheta-headline}
+\end{equation}
+The source states this in the real/complex, infinite-dimensional setting and
+allows the relevant self-adjoint operators to be unbounded when the residual is
+bounded.  Our headline declaration retains that scope.  In the Lean listings
+below, the declaration text through its opening \texttt{:= by} is copied
+verbatim from the corresponding \texttt{.lean} source file; only the
+\texttt{listings} glyph substitutions needed for pdf\LaTeX{} rendering are
+applied.  Imports, namespace/open commands, ambient section variables, and proof
+bodies remain available in the source file but are not repeated here.
+
+\begin{lstlisting}[style=leanpaper,
+  caption={Canonical Lean surface for the Davis--Kahan sine-theta theorem.},
+  label={lst:dk-sintheta-headline}]
+theorem sinTheta_headline
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} \KField]
+    [HasUnboundedSylvesterKyFan.{u, v} \KField]
+    (N : UnitaryInvariantNorm)
+    (A : ClosedOperator (\KField := \KField) (E := E))
+    (A₀ : ClosedOperator (\KField := \KField) (E := F))
+    (Λ₁ : ClosedOperator (\KField := \KField) (E := G))
+    (E₀ : F →L[\KField] E)
+    (F₀ : H →L[\KField] E)
+    (F₁ : G →L[\KField] E)
+    (sinTheta₀ : F →L[\KField] E)
+    (R : F →L[\KField] E)
+    (hSinTheta₀ :
+      sinTheta₀ =
+        (ContinuousLinearMap.id \KField E - F₀ ∘L F₀.adjoint) ∘L E₀)
+    (hA : A.IsSelfAdjoint)
+    (hA₀ : A₀.IsSelfAdjoint)
+    (hΛ₁ : Λ₁.IsSelfAdjoint)
+    (htrial : IsTrialResidual A A₀ E₀ R)
+    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    {β α δ : ℝ}
+    (hβα : β ≤ α)
+    (hδ : 0 < δ)
+    (hspectral :
+      (LinearPMap.realSpectrum A₀.toLinearPMap ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆
+            {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}) ∨
+        (LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum A₀.toLinearPMap ⊆
+            {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}))
+    (hR : N.Mem R) :
+    δ * N.gauge sinTheta₀ ≤ N.gauge R := by
+\end{lstlisting}
+
+\Cref{lst:dk-sintheta-headline} is both the presentation-facing theorem and the
+declaration selected by our semantic-alignment audit.  The reader can therefore
+read the proposition after the final colon first---it is the source inequality
+in \cref{eq:dk-sintheta-headline}---and then scan upward to see how each named
+object is tied to the source setup.  In particular, \texttt{sinTheta\textsubscript{0}}
+is an explicit parameter rather than an opaque local definition, and the
+hypothesis \texttt{hSinTheta\textsubscript{0}} identifies it literally with
+$(I-F_0F_0^*)E_0$.  The two predicates \texttt{IsTrialResidual} and
+\texttt{IsExactSpectralDecomposition} package the domain-heavy unbounded
+operator bookkeeping; the audit expands both through characteristic theorems,
+so they do not hide extra mathematical assumptions.  The bracketed typeclass
+arguments are library-level capabilities for the generic real/complex scalar
+setting, rather than additional hypotheses on the operators appearing in the
+source statement.
+
+The underlying proof theorem additionally certifies that \texttt{sinTheta0}
+belongs to the norm ideal.  That fact is mathematically implicit when the source
+writes a finite unitarily invariant norm, but it is kept explicit in the lower
+formal layer because the implementation totalizes the real-valued gauge outside
+its ideal.  The headline declaration above projects that stronger certificate
+to the literal source inequality rather than changing its mathematical content.
+
 \section{A Source-Faithful Formalization of YWS}
 \label{sec:yws}
 
@@ -189,17 +349,119 @@ entry is an explicit non-source addition, is generated as
 
 \subsection{The population-gap theorem}
 
-\textbf{TODO:} state the exact YWS Theorem 2 surface in mathematical notation,
-then give the corresponding Lean declaration(s).  Emphasize that the sample
-eigenframe remains arbitrary at repeated sample eigenvalues: the formal wrapper
-does not silently reintroduce a sample eigengap.
+Let $\Sigma,\widehat\Sigma\in\mathbb{R}^{p\times p}$ be symmetric, with
+population eigenvalues $\lambda_1\geq\cdots\geq\lambda_p$.  For
+$1\leq r\leq s\leq p$, let $d=s-r+1$ and let $V,\widehat V\in\mathbb{R}^{p\times d}$
+contain orthonormal eigenvectors at the ordered indices $r,\ldots,s$.  Define
+\[
+  \Delta=
+  \min\{\lambda_{r-1}-\lambda_r,\lambda_s-\lambda_{s+1}\},
+  \qquad
+  \lambda_0=+\infty,\quad \lambda_{p+1}=-\infty.
+\]
+The main contribution of \citet{yu2015davis}, Theorem~2, states that if
+$\Delta>0$, then
+\begin{equation}
+  \lVert\sin\Theta(\widehat V,V)\rVert_{\mathrm F}
+  \leq
+  \frac{2\min\{\sqrt d\,\lVert\widehat\Sigma-\Sigma\rVert_{\mathrm{op}},
+                    \lVert\widehat\Sigma-\Sigma\rVert_{\mathrm F}\}}
+       {\Delta},
+  \label{eq:yws-sintheta}
+\end{equation}
+and there exists $\widehat O\in O(d)$ such that
+\begin{equation}
+  \lVert\widehat V\widehat O-V\rVert_{\mathrm F}
+  \leq
+  \frac{2^{3/2}\min\{\sqrt d\,\lVert\widehat\Sigma-\Sigma\rVert_{\mathrm{op}},
+                         \lVert\widehat\Sigma-\Sigma\rVert_{\mathrm F}\}}
+       {\Delta}.
+  \label{eq:yws-aligned}
+\end{equation}
+Only the population spectrum enters $\Delta$; the supplied sample eigenframe may
+therefore be chosen arbitrarily inside a repeated sample eigenspace.
+
+The Lean statement in \cref{lst:yws-theorem2-sintheta} is again the same
+canonical declaration used by the semantic-alignment audit.  Lean uses
+zero-based indices, so \texttt{r <= s}, \texttt{s < p}, and
+\texttt{d = s - r + 1} encode the same consecutive block.  The sine quantity
+\texttt{sinThetaNorm} is tied to its concrete realization by the equality
+hypothesis immediately above the claim.  The right-hand side literally uses the
+local source spellings \texttt{\textbardbl SigmaHat - Sigma\textbardbl\_op}
+and \texttt{\textbardbl SigmaHat - Sigma\textbardbl\_F}; their exact
+notation context is reproduced in \cref{app:lean-listing-context}.  Thus a
+reader who starts after the final colon sees essentially
+\cref{eq:yws-sintheta}.  The predicates \texttt{IsEigenvectorBlock} and
+\texttt{SourcePopulationGap} are expanded in the generated audit; the latter
+pins \texttt{Delta} to the exact source denominator (with an explicit full-space
+endpoint convention), rather than merely assuming an arbitrary lower bound.
+
+\begin{lstlisting}[style=leanpaper,
+  caption={Canonical Lean surface for the first conclusion of YWS Theorem 2.},
+  label={lst:yws-theorem2-sintheta}]
+theorem theorem2_sinTheta
+    {p d r s : Nat}
+    (Sigma SigmaHat :
+      EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
+    (hSigma : Sigma.IsSymmetric) (hSigmaHat : SigmaHat.IsSymmetric)
+    (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
+    (V Vhat : Fin d → EuclideanSpace Real (Fin p))
+    (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
+    (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
+    (sinThetaNorm : Real)
+    (hSinThetaNorm :
+      sinThetaNorm =
+        sinThetaFrobenius (Submodule.span Real (Set.range V))
+          (Submodule.span Real (Set.range Vhat)))
+    (Delta : Real) (hDelta : 0 < Delta)
+    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
+    sinThetaNorm ≤
+      2 * min
+        (Real.sqrt d * ‖SigmaHat - Sigma‖_op)
+        ‖SigmaHat - Sigma‖_F / Delta := by
+\end{lstlisting}
 
 \subsection{Aligned frames and rectangular singular subspaces}
 
-\textbf{TODO:} describe the orthogonal alignment conclusion and the generic
-Gram-transport factoring used to obtain the left/right singular-subspace forms.
-Explain which parts required new reusable API rather than theorem-specific proof
-code.
+The second conclusion is represented just as literally.  In
+\cref{lst:yws-theorem2-aligned}, the existentially quantified matrix is required
+to belong to the orthogonal group, and the aligned-frame Frobenius distance is
+left expanded in the proposition rather than hidden behind a local distance
+definition.  The same local \texttt{\textbardbl A\textbardbl\_op} and
+\texttt{\textbardbl A\textbardbl\_F} spellings appear directly in the
+right-hand side.
+
+\begin{lstlisting}[style=leanpaper,
+  caption={Canonical Lean surface for the aligned-frame conclusion of YWS Theorem 2.},
+  label={lst:yws-theorem2-aligned}]
+theorem theorem2_alignedFrame
+    {p d r s : Nat}
+    (Sigma SigmaHat :
+      EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
+    (hSigma : Sigma.IsSymmetric) (hSigmaHat : SigmaHat.IsSymmetric)
+    (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
+    (V Vhat : Fin d → EuclideanSpace Real (Fin p))
+    (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
+    (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
+    (Delta : Real) (hDelta : 0 < Delta)
+    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
+    ∃ O : Matrix (Fin d) (Fin d) Real,
+      O ∈ Matrix.orthogonalGroup (Fin d) Real ∧
+        Real.sqrt (∑ i, ‖(∑ j, O j i • Vhat j) - V i‖ ^ 2) ≤
+          2 * Real.sqrt 2 *
+            min
+              (Real.sqrt d * ‖SigmaHat - Sigma‖_op)
+              ‖SigmaHat - Sigma‖_F / Delta := by
+\end{lstlisting}
+
+The rectangular singular-subspace theorem is built downstream from these
+symmetric statements through Gram operators and transport between left/right
+singular spaces.  That factoring is useful evidence for reuse of the spectral
+API rather than a second semantic complication in Theorem~2 itself.
+
+\textbf{TODO:} explain the generic Gram-transport factoring used to obtain the
+left/right singular-subspace forms and identify which pieces were new reusable
+API rather than theorem-specific proof code.
 
 \subsection{Sharpness as part of source fidelity}
 
@@ -276,10 +538,9 @@ For the counterexample, however,
   \quad\text{while}\quad
   \lVert K\Omega_1\rVert_2=\lVert K\Omega_2\rVert_2=2,
 \]
-so the asserted inequality would require $2\sqrt2\geq4$.  The Lean declarations
-\texttt{kyFanSum\_paperEquation43Block1},
-\texttt{kyFanSum\_paperEquation43Block2}, and
-\texttt{davisKahanEquation4\_3\_refuted} machine-check this concrete failure.
+so the asserted inequality would require $2\sqrt2\geq4$.  The Lean theorem
+\texttt{davisKahanEquation4\_3\_\hspace{0pt}refuted} machine-checks these block values and
+the resulting contradiction.
 The underlying issue is that orthogonality of the domain planes does not imply
 orthogonality of their images under $K$, so their singular-value sums need not
 add.  On this witness, the later blockwise calculation where the $\pi/3$ bound
@@ -491,6 +752,42 @@ and where it is missing we model it explicitly as missing data rather than
 retroactively treating an incomplete ledger as a complete project bill.
 
 \appendix
+\section{Lean listing context}
+\label{app:lean-listing-context}
+
+The theorem declarations printed in the main text are literal source text: we
+do not shorten qualifiers, rename binders, or substitute presentation-only Lean
+syntax.  What the listings omit is the surrounding module context that a reader
+would see by opening the referenced source file.  In particular,
+\texttt{DavisKahan1970.sinTheta\_headline} is declared in a module with
+\texttt{open TauCeti}; consequently the source itself spells the proposed
+Tau-Ceti extension \texttt{TauCeti.LinearPMap.realSpectrum} as
+\texttt{LinearPMap.realSpectrum}.  The underlying \texttt{LinearPMap} partial
+linear-map type is Mathlib's; the real-spectrum API used here is part of the
+operator-theory layer currently proposed for Tau Ceti.  Likewise,
+\texttt{UnitaryInvariantNorm} is the public source-facing norm interface in the
+Davis--Kahan development.  These namespace and import choices are context, not
+text silently removed from the displayed theorem declaration.
+
+For the YWS headline statements, the application package introduces the
+following reducible abbreviation and local notations so that the two
+perturbation norms have the same visible roles as in the printed theorem:
+\begin{lstlisting}[style=leanpaper,
+  caption={Exact local norm context used by the YWS headline declarations.},
+  label={lst:yws-frobenius-abbrev}]
+noncomputable abbrev frobeniusNorm {p : Nat}
+    (A : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)) : Real :=
+  UnitarilyInvariantSeminorm.frobenius Real (EuclideanSpace Real (Fin p)) A
+
+local notation "‖" A "‖_op" => ‖LinearMap.toContinuousLinearMap A‖
+local notation "‖" A "‖_F" => frobeniusNorm A
+\end{lstlisting}
+Because \texttt{frobeniusNorm} is an \texttt{abbrev} and the two notations
+expand directly to their displayed right-hand sides, this context introduces no
+additional mathematical hypothesis.  It only gives the compiling theorem the
+source spellings \texttt{\textbardbl A\textbardbl\_op} and
+\texttt{\textbardbl A\textbardbl\_F}.
+
 \input{appendix_process.tex}
 
 \begin{thebibliography}{9}
