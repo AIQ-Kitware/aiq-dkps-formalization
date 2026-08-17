@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Trace compiled project-local prerequisites of selected headline theorems.
+"""Trace environment-visible project-local prerequisites of selected declarations.
 
-This tool is intentionally downstream of Lean elaboration.  It reuses the repository's
-``tools/leanq/src/leanq/lean/decl_index.lean`` indexer, which records the direct constants
-used by each declaration's type and proof/value expression.  The resulting closure is
-therefore a declaration-level dependency trace, not an import-closure approximation.
+This tool is intentionally downstream of Lean elaboration. It reuses the repository's
+``tools/leanq/src/leanq/lean/decl_index.lean`` indexer, which records constants exposed by
+imported declaration types and retained values. This is substantially more specific than
+import closure, but imported theorem proof terms can be opaque or otherwise omit named
+proof-internal helpers. The resulting reachability graph is therefore a conservative
+lower bound on named declaration dependence, not a complete proof-body trace.
 
 The tool does *not* infer that a reached declaration constitutes a whole mathematical
-"theory", and it does not turn declaration counts into a completeness percentage.  It
+"theory", and it does not turn declaration counts into a completeness percentage. It
 emits an annotation template so those scientific judgments can be made explicitly from
 compiler-backed evidence after inspecting the graph.
 """
@@ -34,7 +36,7 @@ REPO = PAPER_DIR.parent.parent
 DEFAULT_CONFIG = PAPER_DIR / "data" / "formalization_prerequisite_roots_20260817.json"
 DECL_INDEX = REPO / "tools" / "leanq" / "src" / "leanq" / "lean" / "decl_index.lean"
 OUT = PAPER_DIR / "generated"
-OUTPUT_STEM = "formalization_prerequisite"
+DEFAULT_OUTPUT_STEM = "formalization_prerequisite"
 
 
 def sha256_file(path: pathlib.Path) -> str:
@@ -290,7 +292,14 @@ def main() -> None:
         "--skip-build", action="store_true",
         help="do not run lake build first; use only after the configured targets already build",
     )
+    parser.add_argument(
+        "--output-stem", default=DEFAULT_OUTPUT_STEM,
+        help="basename for generated artifacts (default: formalization_prerequisite)",
+    )
     args = parser.parse_args()
+    output_stem = args.output_stem.strip()
+    if not output_stem or any(c not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-" for c in output_stem):
+        raise SystemExit("--output-stem must contain only letters, digits, underscore, or hyphen")
 
     config_path = args.config.resolve()
     config = load_config(config_path)
@@ -353,9 +362,9 @@ def main() -> None:
         "schema": "formalization-draft2/prerequisite-declaration-graph/v1",
         "semantics": {
             "node": "A project-local Lean declaration reached from at least one configured headline root.",
-            "edge": "dependent -> prerequisite, where the prerequisite constant occurs in the elaborated type or proof/value expression of the dependent declaration.",
+            "edge": "dependent -> prerequisite, where the prerequisite constant is exposed by the imported elaborated declaration type or retained value of the dependent declaration.",
             "external_boundary": "A direct prerequisite constant not defined in one of the configured project module prefixes; external dependencies are recorded but not traversed.",
-            "warning": "Reachability is compiler-backed proof dependence. Mathematical theory labels and completeness judgments require separate human annotation and are not inferred from declaration counts. Lean module metadata can associate one global declaration with multiple modules; such cases are retained explicitly as module_candidates and are never silently assigned for aggregation."
+            "warning": "Reachability is a compiler-backed conservative lower bound on named declaration dependence, not a complete proof-body trace: imported theorem bodies can hide named helpers. Mathematical theory labels and completeness judgments require separate human annotation and are not inferred from declaration counts. Lean module metadata can associate one global declaration with multiple modules; such cases are retained explicitly as module_candidates and are never silently assigned for aggregation."
         },
         "root_groups": config["root_groups"],
         "nodes": nodes,
@@ -366,12 +375,12 @@ def main() -> None:
             {"dependent": a, "prerequisite": b} for a, b in sorted(boundary_edges_all)
         ],
     }
-    graph_path = OUT / f"{OUTPUT_STEM}_graph.json"
+    graph_path = OUT / f"{output_stem}_graph.json"
     graph_path.write_text(json.dumps(graph, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     # Preserve the local compiler index as an audit artifact.  This includes unreachable
     # project declarations, allowing later questions about reached-vs-available scope.
-    index_path = OUT / f"{OUTPUT_STEM}_local_decl_index.jsonl"
+    index_path = OUT / f"{output_stem}_local_decl_index.jsonl"
     with index_path.open("w", encoding="utf-8") as f:
         for name in sorted(index):
             f.write(json.dumps(index[name], sort_keys=True) + "\n")
@@ -392,7 +401,7 @@ def main() -> None:
             }
         )
     write_csv(
-        OUT / f"{OUTPUT_STEM}_module_ambiguities.csv",
+        OUT / f"{output_stem}_module_ambiguities.csv",
         ambiguity_rows,
         ["declaration", "kind", "module_candidates", "index_prefixes", "reached_from_headline_roots"],
     )
@@ -410,7 +419,7 @@ def main() -> None:
             }
         )
     write_csv(
-        OUT / f"{OUTPUT_STEM}_edges.csv", edge_rows,
+        OUT / f"{output_stem}_edges.csv", edge_rows,
         ["dependent", "dependent_module", "prerequisite", "prerequisite_module", "root_groups"],
     )
 
@@ -426,7 +435,7 @@ def main() -> None:
             }
         )
     write_csv(
-        OUT / f"{OUTPUT_STEM}_external_boundary.csv", boundary_rows,
+        OUT / f"{output_stem}_external_boundary.csv", boundary_rows,
         ["dependent", "dependent_module", "external_prerequisite", "root_groups"],
     )
 
@@ -446,7 +455,7 @@ def main() -> None:
                 }
             )
     write_csv(
-        OUT / f"{OUTPUT_STEM}_reachability.csv", reach_rows,
+        OUT / f"{output_stem}_reachability.csv", reach_rows,
         ["root_group", "root_group_label", "declaration", "module", "kind", "distance", "is_group_root"],
     )
 
@@ -476,7 +485,7 @@ def main() -> None:
             }
         )
     write_csv(
-        OUT / f"{OUTPUT_STEM}_modules.csv", module_rows,
+        OUT / f"{output_stem}_modules.csv", module_rows,
         ["module", "family", "reached_declarations", "indexed_declarations_in_module", "reached_theorems", "reached_defs", "reached_opaque", "root_groups"],
     )
 
@@ -494,7 +503,7 @@ def main() -> None:
         for row in module_rows
     ]
     write_csv(
-        OUT / f"{OUTPUT_STEM}_theory_annotation_template.csv", theory_rows,
+        OUT / f"{output_stem}_theory_annotation_template.csv", theory_rows,
         [
             "module", "family", "reached_declarations", "indexed_declarations_in_module",
             "reached_theorems", "reached_defs", "reached_opaque", "root_groups",
@@ -514,11 +523,11 @@ def main() -> None:
         for (p, d), count in sorted(module_edges.items())
     ]
     write_csv(
-        OUT / f"{OUTPUT_STEM}_module_edges.csv", module_edge_rows,
+        OUT / f"{output_stem}_module_edges.csv", module_edge_rows,
         ["prerequisite_module", "dependent_module", "declaration_edges"],
     )
 
-    dot_path = OUT / f"{OUTPUT_STEM}_module_graph.dot"
+    dot_path = OUT / f"{output_stem}_module_graph.dot"
     with dot_path.open("w", encoding="utf-8") as f:
         f.write("digraph FormalizationPrerequisites {\n")
         f.write("  rankdir=LR;\n")
@@ -570,29 +579,29 @@ def main() -> None:
         "external_boundary_edges": len(boundary_edges_all),
         "root_group_summary": group_summary,
         "outputs": [
-            f"generated/{OUTPUT_STEM}_graph.json",
-            f"generated/{OUTPUT_STEM}_local_decl_index.jsonl",
-            f"generated/{OUTPUT_STEM}_module_ambiguities.csv",
-            f"generated/{OUTPUT_STEM}_edges.csv",
-            f"generated/{OUTPUT_STEM}_external_boundary.csv",
-            f"generated/{OUTPUT_STEM}_reachability.csv",
-            f"generated/{OUTPUT_STEM}_modules.csv",
-            f"generated/{OUTPUT_STEM}_module_edges.csv",
-            f"generated/{OUTPUT_STEM}_module_graph.dot",
-            f"generated/{OUTPUT_STEM}_theory_annotation_template.csv",
-            f"generated/{OUTPUT_STEM}_run_manifest.json",
-            f"generated/{OUTPUT_STEM}_summary.md",
-            f"generated/{OUTPUT_STEM}_artifacts.zip",
+            f"generated/{output_stem}_graph.json",
+            f"generated/{output_stem}_local_decl_index.jsonl",
+            f"generated/{output_stem}_module_ambiguities.csv",
+            f"generated/{output_stem}_edges.csv",
+            f"generated/{output_stem}_external_boundary.csv",
+            f"generated/{output_stem}_reachability.csv",
+            f"generated/{output_stem}_modules.csv",
+            f"generated/{output_stem}_module_edges.csv",
+            f"generated/{output_stem}_module_graph.dot",
+            f"generated/{output_stem}_theory_annotation_template.csv",
+            f"generated/{output_stem}_run_manifest.json",
+            f"generated/{output_stem}_summary.md",
+            f"generated/{output_stem}_artifacts.zip",
         ],
     }
-    (OUT / f"{OUTPUT_STEM}_run_manifest.json").write_text(
+    (OUT / f"{output_stem}_run_manifest.json").write_text(
         json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
 
     summary = [
         "# Compiler-traced formalization prerequisites",
         "",
-        "This report follows direct constants occurring in elaborated Lean declaration types and proof/value expressions. It therefore records declaration-level proof dependence rather than mere import availability.",
+        "This report follows constants exposed by imported elaborated Lean declaration types and retained values. It is substantially more specific than import availability, but it is a conservative lower bound on named declaration dependence because imported theorem proof bodies can hide proof-internal helpers.",
         "",
         "External constants are retained as boundary edges but are not traversed. The project-local closure is restricted to the module prefixes named in the root configuration.",
         "",
@@ -609,7 +618,7 @@ def main() -> None:
         "",
         "## Interpretation guardrail",
         "",
-        "The graph can support claims of the form 'the proof depended on formalized declarations in these areas.' It does not by itself establish that an entire mathematical theory was formalized, nor does reached/available declaration count define a meaningful completeness percentage. The generated theory-annotation template is intentionally blank in those fields so scope and omissions can be reviewed explicitly.",
+        "The graph can support conservative claims of the form 'the imported declaration environment exposes dependence on formalized declarations in these areas.' It does not establish that every proof-internal helper was recovered, that an entire mathematical theory was formalized, or that reached/available declaration count defines a meaningful completeness percentage. The generated theory-annotation template is intentionally blank in those fields so scope and omissions can be reviewed explicitly.",
         "",
         f"Project-local union: {len(reached_all)} declarations, {len(local_edges_all)} local dependency edges, {len(boundary_edges_all)} external-boundary edges.",
         f"Lean module-attribution ambiguities: {len(ambiguity_rows)} indexed declarations, of which {sum(1 for row in ambiguity_rows if row['reached_from_headline_roots'])} are in the headline-root closure. These are preserved explicitly rather than silently assigned to a module.",
@@ -617,22 +626,22 @@ def main() -> None:
         "Return the generated files with prefix `formalization_prerequisite_` for theory-level classification and paper-graph construction.",
         "",
     ]
-    summary_path = OUT / f"{OUTPUT_STEM}_summary.md"
+    summary_path = OUT / f"{output_stem}_summary.md"
     summary_path.write_text("\n".join(summary), encoding="utf-8")
 
-    bundle_path = OUT / f"{OUTPUT_STEM}_artifacts.zip"
+    bundle_path = OUT / f"{output_stem}_artifacts.zip"
     bundle_members = [
-        OUT / f"{OUTPUT_STEM}_graph.json",
-        OUT / f"{OUTPUT_STEM}_local_decl_index.jsonl",
-        OUT / f"{OUTPUT_STEM}_module_ambiguities.csv",
-        OUT / f"{OUTPUT_STEM}_edges.csv",
-        OUT / f"{OUTPUT_STEM}_external_boundary.csv",
-        OUT / f"{OUTPUT_STEM}_reachability.csv",
-        OUT / f"{OUTPUT_STEM}_modules.csv",
-        OUT / f"{OUTPUT_STEM}_module_edges.csv",
-        OUT / f"{OUTPUT_STEM}_module_graph.dot",
-        OUT / f"{OUTPUT_STEM}_theory_annotation_template.csv",
-        OUT / f"{OUTPUT_STEM}_run_manifest.json",
+        OUT / f"{output_stem}_graph.json",
+        OUT / f"{output_stem}_local_decl_index.jsonl",
+        OUT / f"{output_stem}_module_ambiguities.csv",
+        OUT / f"{output_stem}_edges.csv",
+        OUT / f"{output_stem}_external_boundary.csv",
+        OUT / f"{output_stem}_reachability.csv",
+        OUT / f"{output_stem}_modules.csv",
+        OUT / f"{output_stem}_module_edges.csv",
+        OUT / f"{output_stem}_module_graph.dot",
+        OUT / f"{output_stem}_theory_annotation_template.csv",
+        OUT / f"{output_stem}_run_manifest.json",
         summary_path,
         config_path,
     ]

@@ -1,41 +1,96 @@
-% Detailed process-study material.  This appendix is intentionally expansive:
-% retain the evidence here while the main paper is edited down around the
-% mathematical contribution.  Sections/subsections may be cut wholesale later.
+\section{Source coverage and machine-readable audit}
+\label{app:source-coverage}
 
-\section{Detailed resource-accounting methodology}
+The main text summarizes mathematical coverage without reproducing the
+bookkeeping used to establish it.  YWS coverage is maintained in a paper-keyed
+source census whose obligations are created from the published document.  At
+the analysis snapshot it contains \YWSCensusEntryCount{} entries spanning named
+results, equations, identities, examples, conventions, audit material, and
+\YWSCensusExplicitAdditionCount{} explicitly labeled additions beyond the
+printed paper.  All \YWSCensusVerifiedCount{} entries resolve to declarations in
+the default build.  Status fields separately record exact matches,
+generalizations or specializations, compiled corrections, and entries that carry
+no source proof debt.
+
+\begin{table}[H]
+\centering
+\small
+\input{snapshots/yws_census_kind_table.tex}
+\caption{Composition of the YWS source-coverage inventory.  Row-level source
+anchors, Lean declarations, verification state, and extension status are
+preserved in the generated source-coverage data.}
+\label{tab:yws-census-kinds}
+\end{table}
+
+\begin{flushleft}
+The whole-formalization dependency analysis roots
+\FormalizationYWSUnitCount{} maintained YWS units
+(\FormalizationYWSPublishedUnitCount{} from the published source and
+\FormalizationYWSExtensionUnitCount{} explicitly labeled extensions) together
+with all \FormalizationDKResultCount{} counted Davis--Kahan results at exact Lean
+declarations.  The checked-in
+raw data are
+\path{data/formalization_result_roots_20260817.csv},
+\path{data/formalization_dependency_edges_20260817.csv}, and
+\path{data/formalization_result_reachability_20260817.csv}.  Reviewed theory
+assignments are stored in
+\path{data/formalization_module_theory_map_20260817.csv} with declaration-level
+overrides in
+\path{data/formalization_declaration_theory_overrides_20260817.csv}.  The
+program \path{scripts/build_formalization_theory_graph.py} joins these layers and
+regenerates the paper-facing summaries.  A reached module without a reviewed
+classification causes generation to fail.
+
+Formalization provenance is represented by positive external-source claims in
+\path{data/formalization_formal_provenance_claims_20260817.csv} under the policy
+in \path{data/formalization_formal_provenance_policy_20260817.json}.  The program
+\path{scripts/build_formalization_provenance_credit.py} joins those claims to the
+declaration inventory.  A project-local declaration receives project
+formalization credit when no positive formal-source claim applies; ordinary
+Mathlib and Lean dependencies remain outside the project-local denominator.
+\end{flushleft}
+
+For the two YWS defects discussed in \cref{sec:audit}, the exact machine-checked
+artifacts are as follows.  Equation~(4) is refuted by
+\path{yuWangSamworth_equation4_printed_counterexample} and repaired by
+\path{yuWangSamworth_equation4}, both in
+\path{YuWangSamworth2015/Symmetric/AngleIdentity.lean}.  The rank-boundary defect
+is witnessed by
+\path{yuWangSamworth_theorem3_printed_rankBoundary_refutation_euclidean} in
+\path{YuWangSamworth2015/Rectangular/RankBoundary.lean}; the boundary reduction
+\path{singularBoundaryGap_of_rank_le} and the corrected right- and left-singular
+subspace theorems
+\path{yuWangSamworth_rightSingularSubspace_block_le} and
+\path{yuWangSamworth_leftSingularSubspace_block_le} are in the rectangular
+singular-block development.
+
+\begin{table}[H]
+\centering
+\scriptsize
+\input{snapshots/formalization_basic_theory_audit_table.tex}
+\caption{Appendix-level reachability evidence for the basic theory
+classification.  The main text reports only theory name and scoped coverage.}
+\label{tab:formalized-theories-audit}
+\end{table}
+
+\section{Resource-accounting methodology}
 \label{app:accounting}
 
 \subsection{Study universe and snapshot semantics}
 
-The resource study uses a deliberately explicit study universe rather than
-identifying ``the project'' with one Git repository.  Commit-level coverage is
-computed from the primary formalization repository.  Program-wide measured token
-usage additionally includes ledger rows from the explicitly allowlisted
-repositories in \texttt{analysis\_config.json}; at the current snapshot these
-include the primary repository and cross-repository work that the authors identify
-as part of the Tau Ceti foundations contribution.  This distinction matters
-because the ledger can observe useful formalization work performed outside the
-Git history available in the present checkout.
-
-The Git history is pinned at \AccountingSnapshot{}.  The full commit identifier is
-retained in generated source metadata and exposed as a PDF tooltip on the date,
-but is not used as a presentation value.  The pinned primary-repository history
-contains \RepositoryHistoryCommitCount{} commits before study exclusions and
-\HistoryCommitCount{} after them.  A configurable path rule excludes a commit
-only when \emph{all} of its touched paths lie under
-\path{papers/formalization_draft2/}; mixed commits remain in scope.  At this
-snapshot the rule excludes \ExcludedPaperOnlyCommitCount{} commits.  The purpose
-is prospective as well as retrospective: advancing the analysis snapshot during
-paper preparation should not silently charge manuscript production to the
-formalization whose cost is being studied.
+Commit-level coverage is computed from the primary formalization repository.
+Program-wide token totals additionally include measured work from explicitly
+allowlisted repositories; at this snapshot the allowlist contains the primary
+repository and cross-repository Tau Ceti foundations work.  The Git history is
+pinned at \AccountingSnapshot{}.  Manuscript-only commits are excluded from the
+formalization-history corpus.
 
 \begin{table}[H]
 \centering
 \small
 \input{snapshots/ledger_repository_table.tex}
 \caption{Measured program-wide resource usage by allowlisted ledger repository.
-The table describes the accounting program, whereas commit-coverage statistics
-are computed only on the primary Git history available to this analysis.}
+Commit-coverage statistics use the primary formalization repository.}
 \label{tab:ledger-repositories}
 \end{table}
 
@@ -43,12 +98,10 @@ are computed only on the primary Git history available to this analysis.}
 
 Exact commit-level instrumentation was introduced on \InstrumentationSnapshot{}.
 There are \CommitsBeforeInstrumentation{} included primary-repository commits
-before that instrumentation point.  Backfilled harness transcripts recover some
-usage from the earlier period, but they do not make the historical record
-complete.
+before that point.  Backfilled harness transcripts recover some earlier usage;
+other earlier work has no equivalent telemetry.
 
-We retain three evidence classes rather than collapsing them into one estimated
-project total:
+We retain three evidence classes:
 \begin{enumerate}
   \item \textbf{Exact commit-attributed measurement.}  A ledger row names a Git
         commit in the included primary history.  There are
@@ -58,10 +111,10 @@ project total:
         defensible one-to-one commit assignment.  There are
         \PendingSegmentCount{} such measured segments, containing
         \PendingTurns{} model turns.  Timestamp overlap is retained only as an
-        allocation candidate; it is not treated as an allocation.
+        allocation candidate, with allocation left unresolved.
   \item \textbf{Unmeasured work.}  This includes unrecovered pre-instrumentation
         work and work performed through interfaces, including chat interfaces,
-        for which equivalent local harness telemetry was not retained.
+        for which equivalent local harness telemetry is unavailable.
 \end{enumerate}
 
 \begin{table}[H]
@@ -69,23 +122,16 @@ project total:
 \small
 \input{snapshots/accounting_state_table.tex}
 \caption{Commit-level accounting state for the included primary-repository Git
-history.  Session-level pending measurements are intentionally not promoted to
-exact commit attribution.}
+history.  Pending session measurements remain separate from exact commit
+attribution.}
 \label{tab:accounting-states}
 \end{table}
 
-The program-wide ledger currently contains \ProgramExactLedgerCommitIdCount{}
-distinct exact commit identifiers.  Of these, \PrimaryExactLedgerCommitIdCount{}
-are associated with the primary repository and
-\CrossRepositoryExactLedgerCommitIdCount{} with the other allowlisted repository.
-Only identifiers that occur in the included primary Git history contribute to
-\ExactMeasuredCommitCount{}.  These numbers answer different questions and are
-therefore not forced to agree.
-
 \subsection{Measured lower bound and token classes}
 
-The primary empirical quantity is the measured lower bound, not an extrapolated
-``total cost.''  At \AccountingSnapshot{} the allowlisted program ledger records
+All quantitative valuations in the manuscript are computed from measured ledger
+values.  Unobserved work is excluded from the token, dollar, energy, and
+emissions totals.  At \AccountingSnapshot{} the allowlisted program ledger records
 \LedgerTurns{} model turns and \LedgerOutputTokens{} output tokens.  Its
 \LedgerBillableInputTokens{} billable-input accounting measure aggregates
 ordinary input, cache-write, and cache-read quantities according to the local
@@ -97,187 +143,35 @@ well:
 \small
 \input{snapshots/measured_token_breakdown_table.tex}
 \caption{Measured program-wide token quantities.  Exact-attributed and pending
-columns partition measurement by attribution status; they should not be confused
-with measured versus imputed usage.}
+columns partition measured usage by attribution status.}
 \label{tab:measured-token-breakdown}
 \end{table}
-
-The committed lifetime rollup is treated as a cache rather than an authority:
-the analysis recomputes totals from the append-only ledger and reports any
-reconciliation discrepancy.  This protects the manuscript from silently
-inheriting a stale aggregate.
 
 \subsection{Model-resolved accounting and pricing}
 
 Every token-bearing ledger row contains a per-model token vector.  The analysis
 verifies that the model-level ordinary-input, cache-write, cache-read, and output
 counts sum exactly to the row-level totals.  Consequently a session that changes
-models need not be assigned wholesale to whichever model happened to make the
-commit.  Measured usage is first resolved by model and token class; monetary cost
+model attribution follows the measured per-model vectors associated with the
+work.  Measured usage is first resolved by model and token class; monetary cost
 is a separate transformation.
 
-Historical prices are therefore stored as explicit, dated inputs in
-\path{data/model_pricing.csv}.  The scripts emit no dollar figure for a model
-unless all required token-class rates for the applicable interval are supplied.
-This avoids the especially misleading practice of multiplying a heterogeneous
-multi-model token total by one average token price.
+Historical prices are stored as explicit, dated inputs.  A model contributes
+to the dollar estimate only when the required token-class rates for its
+applicable interval are available.
 
-\subsection{Exploratory reconstruction of unmeasured usage}
+\subsection{Revisable valuation of measured usage}
 
-The missingness mechanisms are not exchangeable.  Pre-instrumentation work,
-unretained chat-interface work, harness failures, and genuinely manual commits
-have different observation processes.  The current script therefore treats
-extrapolation as exploratory.  It fits a regularized model only to exactly
-measured primary-repository commits, validates temporally using rolling-origin
-splits, and emits predictions only for commits with positive LLM provenance that
-are neither exactly measured nor overlapped by a measured pending segment.
-Model identity is retained as a stratum/predictor when evidence supports it, and
-outputs explicitly record how many directly measured commits calibrate each
-resolved model label.
+The valuation layer consumes the measured model-resolved token vectors and a
+versioned assumptions file.  Public API prices carry provider, effective date,
+token class, and source URL.  Cache-write duration is absent from the ledger, so
+the central calculation uses the five-minute cache-write rate and reports an
+all-one-hour-cache sensitivity.
 
-Any final quantitative result based on extrapolation should present at least:
-(i) the measured lower bound; (ii) measured pending usage without forced
-commit-level allocation; and (iii) a modeled range with validation and
-sensitivity analyses.  The third quantity must not replace the first two.
-
-\begin{table}[H]
-\centering
-\small
-\input{snapshots/component_accounting_table.tex}
-\caption{Commit-level accounting coverage for path-defined mathematical and
-project components.  Components can overlap; these rows are diagnostics for
-where cost appears in the history, not a disjoint decomposition of mathematical
-work.}
-\label{tab:component-accounting}
-\end{table}
-
-\section{Git and ledger model provenance}
-\label{app:model-provenance}
-
-Git \texttt{Co-authored-by} trailers and exact ledger rows answer related but
-nonidentical questions.  A trailer records contribution provenance chosen at
-commit time; a ledger row records models actually observed by an instrumented
-harness.  The analysis therefore stores the raw trailer string, a canonicalized
-trailer label, any study-specific historical interpretation, and exact ledger
-models separately before deriving a resolved provenance label.
-
-\begin{table}[H]
-\centering
-\small
-\input{snapshots/model_provenance_table.tex}
-\caption{Raw Git model provenance, study-resolved provenance, exact ledger
-coverage, and commits classified as chat-interface work.  Exact ledger
-attribution takes precedence over trailer-based heuristics.}
-\label{tab:model-provenance}
-\end{table}
-
-\subsection{A bounded GPT-5.6 chat-interface rule}
-
-For this study only, the first author identified a historical convention in the
-Git trailers: on unledgered commits dated from June 3 through August 14, 2026,
-GPT-5.6 ``High'' and ``Thinking'' were chat-interface setting labels for the
-GPT-5.6 Sol model.  The analysis therefore maps those two raw labels to
-GPT-5.6 Sol and marks the interaction channel as chat interface \emph{only} when
-there is no exact ledger model attribution.  The rule matches
-\BoundedGPTChatRuleCommitCount{} commits at the pinned snapshot.  The date bound
-is part of the rule so that this project-specific historical knowledge cannot be
-silently projected onto future naming conventions.
-
-Raw trailer labels remain in the generated manifest.  If an exact ledger row is
-present, it is authoritative for measured model use regardless of the trailer.
-Raw GPT-5.6 Sol trailers are not automatically classified as chat-interface work;
-they remain review candidates unless contemporaneous evidence or an author
-annotation establishes the channel.
-
-\subsection{Why Anthropic trailer disagreements are not normalized away}
-
-The authors observed a different failure mode for Anthropic model trailers:
-within a long-running harness session the active model could be changed without
-also changing the commit-time co-author instruction.  A Fable-attributed commit
-can therefore contain work performed partly by Opus, or conversely.  Because the
-ledger's per-model vector directly observes measured use, the analysis does not
-rewrite Anthropic trailer labels to force agreement.  Instead, partial or
-disjoint trailer/ledger model sets are retained in
-\path{model_provenance_disagreements.csv} as provenance-review signals.
-
-This distinction also guards against an incorrect inference in the other
-direction: a Git trailer can corroborate LLM involvement in an unmeasured commit
-without establishing a token count or proving which interface generated the
-work.
-
-\section{Detailed human--LLM interaction analysis}
-\label{app:interactions}
-
-% This section is deliberately appendix/cut material unless the empirical story
-% changes the interpretation of the mathematical contribution.
-
-The retained post-hoc interaction corpus contains \InteractionPromptCount{}
-deduplicated human prompts across \InteractionSessionCount{} sessions and
-\InteractionActiveDays{} active days.  The current taxonomy groups prompts by
-operational role rather than by mathematical topic, allowing questions such as
-how often the human supplied judgment, issued a work order, coordinated agents,
-filled an information gap, or performed editorial steering.
-
-\begin{table}[H]
-\centering
-\small
-\input{snapshots/interaction_group_table.tex}
-\caption{High-level categories in the retained human-prompt corpus.  Counts
-characterize the observed interaction record; missing chat-interface transcripts
-mean they are not a complete census of human steering.}
-\label{tab:interaction-groups}
-\end{table}
-
-The logs also distinguish ordinary submitted prompts from explicit interrupts
-and from typed steering that was removed before becoming an ordinary model turn.
-This matters methodologically: counting only transcript ``user messages'' can
-miss some of the most interventionist human behavior.  Final reporting should
-state exactly which event classes survive in each interface and avoid comparing
-raw counts across interfaces as though capture were uniform.
-
-\subsection{Coordination tooling and the YWS source census}
-
-The paper-keyed YWS source census illustrates why process provenance can require
-more than retrospective recollection.  In later discussion the first author did
-not initially remember whether he had explicitly asked for formalization
-tracking.  A contemporaneous commit record showed that he had requested a
-manifest and programmatic coverage check.  The resulting implementation then
-went substantially beyond a simple checklist: it keyed obligations on the paper,
-separated mathematical status from build-backed verification, detected missing
-and private declarations, and added generated/checked workflow machinery.  The
-human subsequently refined the tooling, constrained its scope, and incorporated
-it into progress review.
-
-The point is not to assign a binary ``human'' or ``agent'' origin to the census.
-Rather, the record shows an iterative division of initiative: a human request,
-agent elaboration into coordination infrastructure, and later human adoption and
-constraint.  This is precisely the sort of development history that becomes
-difficult to reconstruct from memory after many short-lived operational
-interactions.
-
-\subsection{Interaction archaeology and incomplete recollection}
-
-For this project, retained traces sometimes function as \emph{interaction
-archaeology}: they allow later reconstruction of what was requested, what was
-elaborated by an LLM, and how an artifact entered the working process.  We treat
-contemporaneous records as stronger provenance evidence than later recollection
-when they conflict.  Author recollection remains useful evidence, especially for
-unlogged chat interactions, but should be labeled as such.
-
-This observation is deliberately narrow.  A single long-running project does
-not establish a general cognitive claim about memory.  It does establish a
-practical reproducibility limitation: missing chat logs remove not only token
-telemetry but also evidence about initiative, correction, and decision history.
-
-\section{Process-study limitations and possible cuts}
-\label{app:process-limitations}
-
-The detailed process analysis is intentionally broader than the material likely
-to survive in the main paper.  Before submission we expect to retain only
-results that change the interpretation of the mathematical contribution or make
-resource claims reproducible.  Candidate appendix-only or removable material
-includes fine-grained prompt taxonomies, individual model-provenance mismatch
-cases, detailed imputation diagnostics, and the interaction-archaeology case
-study.  The generated artifacts remain useful even if the corresponding prose is
-cut: they provide an auditable evidence base for any quantitative statements
-that remain.
+Operational energy and carbon use a versioned serving-stack scenario
+\citep{crall2026llmresource} with throughput, server power, per-turn overhead,
+cache factors, PUE, and grid carbon intensity.  Low, central, and high settings
+provide sensitivity scenarios.  A simpler per-token model provides an
+order-of-magnitude cross-check.  The operational boundary excludes model
+training, embodied hardware, client devices, network energy, and other lifecycle
+effects.
