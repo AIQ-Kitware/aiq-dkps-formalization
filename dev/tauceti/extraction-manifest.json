@@ -355,6 +355,7 @@
         "ForTauCeti.Analysis.InnerProductSpace.Residual.TrialMap",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius",
         "ForTauCeti.Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant",
         "ForTauCeti.Analysis.InnerProductSpace.Spectral.Gap",
         "ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex",
@@ -366,20 +367,6 @@
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.SpectralDistance",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Bound",
         "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Operator"
-      ]
-    },
-    {
-      "cluster": "yu-wang-samworth",
-      "roadmap_target": "The Yu-Wang-Samworth population-gap variant of Davis-Kahan: the residual-column sandwich, the Frobenius sine and aligned-basis bounds, the rank-one corollary, and the rectangular singular-subspace extension.",
-      "roadmap_focus": "yu-wang-samworth",
-      "status": "staged-unreviewed",
-      "upstream_pr": null,
-      "tauceti_population": "Staged in `ForTauCeti`, not yet exported. The module list is the import closure of the cluster's roots, so exporting it yields a self-contained Tau Ceti subtree. Declared 2026-07-29 by lane M-MANIFEST: these modules existed on disk and were invisible to `scripts/export_for_tauceti.py`, which refuses to export an undeclared module.",
-      "tauceti_target_marker": null,
-      "staging_modules": [
-        "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual",
-        "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace",
-        "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics"
       ]
     },
     {
@@ -647,7 +634,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.Basic",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/OperatorIdeals, Part B: representation of an operator ideal family)",
-      "provenance_class": "redesigned: the free-data presentation (membership plus a total real gauge constrained only on members, one universe, hand-rolled completeness, fourteen fields) is replaced by a single `\u211d\u22650\u221e` gauge with the ideal derived as its finiteness domain, giving structural extensionality and unconditional laws; space parameters are Hilbert, see the module docstring for why the Banach setting has no instance beyond the operator norm",
+      "provenance_class": "redesigned: the free-data presentation (membership plus a total real gauge constrained only on members, one universe, hand-rolled completeness, fourteen fields) is replaced by a single `ℝ≥0∞` gauge with the ideal derived as its finiteness domain, giving structural extensionality and unconditional laws; space parameters are Hilbert, see the module docstring for why the Banach setting has no instance beyond the operator norm",
       "direct_dependencies": [
         "Mathlib"
       ],
@@ -668,7 +655,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.OperatorNorm",
       "ownership_class": "tauceti",
       "roadmap_target": "Part B / PR 1 (roadmap area ForTauCetiRoadmap/OperatorIdeals, Part B: first instance of the canonical family; the Ky Fan instance is the second and is still parked in DavisKahan)",
-      "provenance_class": "redesigned alongside `Family.Basic`: the operator norm as an `OperatorIdealFamily` and a `SymmetricOperatorIdealFamily`, with the ideal-norm isometry to `E \u2192L[\ud835\udd5c] F` and the resulting `IsComplete` instance replacing the hand-rolled Cauchy criterion",
+      "provenance_class": "redesigned alongside `Family.Basic`: the operator norm as an `OperatorIdealFamily` and a `SymmetricOperatorIdealFamily`, with the ideal-norm isometry to `E →L[𝕜] F` and the resulting `IsComplete` instance replacing the hand-rolled Cauchy criterion",
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.OperatorIdeal.Family.Basic"
@@ -1982,7 +1969,7 @@
       "final_tauceti_module": "TauCeti.Analysis.OperatorIdeal.Family.KyFan",
       "ownership_class": "tauceti",
       "roadmap_target": "symmetric-operator-ideals",
-      "provenance_class": "copied and specialised 2026-07-28: the Ky Fan symmetric ideal family at \ud835\udd5c = \u2102, with the HasKyFanApproximationGaugeTriangle capability hypothesis discharged rather than assumed; rfl-equal to the generic construction it came from",
+      "provenance_class": "copied and specialised 2026-07-28: the Ky Fan symmetric ideal family at 𝕜 = ℂ, with the HasKyFanApproximationGaugeTriangle capability hypothesis discharged rather than assumed; rfl-equal to the generic construction it came from",
       "direct_dependencies": [
         "Mathlib",
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.KyFan",
@@ -3558,34 +3545,6 @@
       "upstream_pr": null
     },
     {
-      "source_module": "DavisKahan/Specialized/SingularSubspace.lean",
-      "source_declarations": [
-        "isSymmetric_leftGram",
-        "isSymmetric_rightGram",
-        "leftGram",
-        "leftGram_sub_leftGram",
-        "opNorm_leftGram_sub_le",
-        "opNorm_rightGram_sub_le",
-        "rightGram",
-        "rightGram_sub_rightGram"
-      ],
-      "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.Gram.Operator",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.GramOperator",
-      "ownership_class": "tauceti",
-      "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
-      "provenance_class": "staged in ForTauCeti",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace"
-      ],
-      "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace"
-      ],
-      "status": "staged",
-      "upstream_pr": null
-    },
-    {
       "source_module": "ForMathlib",
       "source_declarations": [
         "IsOffDiagonal",
@@ -3893,7 +3852,29 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics"
+        "YuWangSamworth2015.Core.Statistics"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "DavisKahan/Specialized/Statistics.lean",
+      "source_declarations": [
+        "sinThetaFrobenius",
+        "sinThetaFrobenius_eq"
+      ],
+      "current_namespace": "TauCeti",
+      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius",
+      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius",
+      "ownership_class": "tauceti",
+      "roadmap_target": "The finite-dimensional Davis-Kahan sin-Theta core: spectral subspaces and gaps, angle geometry, Ritz residuals, the Sylvester interval and spectral-distance machinery, and the sin/tan two-theta perturbation theorems.",
+      "provenance_class": "extracted as paper-independent API from the former YWS statistics staging module",
+      "direct_dependencies": [
+        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation"
+      ],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.InnerProductSpace.RankOneSinTheta"
       ],
       "status": "staged",
       "upstream_pr": null
@@ -4274,107 +4255,6 @@
       ],
       "blocked_dependencies": [],
       "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
-    },
-    {
-      "source_module": "DavisKahan/Sources/YuWangSamworth2015.lean",
-      "source_declarations": [
-        "inner_eigenvectorBasis_residualColumn",
-        "residualColumn",
-        "residualColumn_eq",
-        "sq_gap_mul_sum_cross_le_of_population_gap",
-        "sq_gap_mul_sum_cross_le_of_population_gap_opNorm",
-        "sq_gap_mul_sum_cross_le_sum_sq_norm_residualColumn",
-        "sq_norm_inner_eigenvectorBasis_residualColumn",
-        "sqrt_sum_cross_le_of_population_gap",
-        "sum_sq_norm_residualColumn_le",
-        "sum_sq_norm_residualColumn_le_of_opNorm"
-      ],
-      "current_namespace": "TauCeti",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual",
-      "ownership_class": "tauceti",
-      "roadmap_target": "The Yu-Wang-Samworth population-gap variant of Davis-Kahan: the residual-column sandwich, the Frobenius sine and aligned-basis bounds, the rank-one corollary, and the rectangular singular-subspace extension.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.CourantFischer",
-        "ForTauCeti.Analysis.InnerProductSpace.HoffmanWielandt"
-      ],
-      "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace",
-        "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics"
-      ],
-      "status": "staged",
-      "upstream_pr": null
-    },
-    {
-      "source_module": "DavisKahan/Specialized/SingularSubspace.lean",
-      "source_declarations": [
-        "gramBlockDiagonal",
-        "gramBlockDiagonalProd",
-        "gramBlockDiagonal_apply",
-        "hermitianDilation",
-        "hermitianDilationProd",
-        "hermitianDilation_apply",
-        "hermitianDilation_sq",
-        "isSymmetric_hermitianDilation",
-        "leftSingularSubspace",
-        "leftSingularSubspace_sinTheta_le",
-        "nonempty_rightSingularSubspace_isometry",
-        "rightSingularSubspace",
-        "rightSingularSubspace_sinTheta_le",
-        "singularSubspace_dilation_sinTheta_le",
-        "sq_gap_mul_sum_cross_singularVectors_le"
-      ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace",
-      "ownership_class": "tauceti",
-      "roadmap_target": "The Yu-Wang-Samworth population-gap variant of Davis-Kahan: the residual-column sandwich, the Frobenius sine and aligned-basis bounds, the rank-one corollary, and the rectangular singular-subspace extension.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.Gram.Operator",
-        "ForTauCeti.Analysis.InnerProductSpace.Singular.Subspace",
-        "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual",
-        "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics"
-      ],
-      "blocked_dependencies": [],
-      "downstream_users": [],
-      "status": "staged",
-      "upstream_pr": null
-    },
-    {
-      "source_module": "DavisKahan/Specialized/Statistics.lean",
-      "source_declarations": [
-        "CorrespondingEigenblock",
-        "PopulationGap",
-        "exists_aligned_orthonormalBasis",
-        "reduces_spanIndices",
-        "sinThetaFrobenius",
-        "sinThetaFrobenius_eq_sqrt_sum_cross",
-        "sinThetaSq_eq_sinThetaFrobenius_sq_of_spans",
-        "yuWangSamworth_alignedBasis_le",
-        "yuWangSamworth_eigenvector_le",
-        "yuWangSamworth_intervalBlock_le",
-        "yuWangSamworth_sinTheta_le"
-      ],
-      "current_namespace": "TauCeti.DavisKahanTheory",
-      "staging_module": "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics",
-      "final_tauceti_module": "TauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics",
-      "ownership_class": "tauceti",
-      "roadmap_target": "The Yu-Wang-Samworth population-gap variant of Davis-Kahan: the residual-column sandwich, the Frobenius sine and aligned-basis bounds, the rank-one corollary, and the rectangular singular-subspace extension.",
-      "provenance_class": "moved verbatim; statements, proofs, signatures and namespaces unchanged",
-      "direct_dependencies": [
-        "ForTauCeti.Analysis.InnerProductSpace.AlignedBasis",
-        "ForTauCeti.Analysis.InnerProductSpace.SinTheta.Perturbation",
-        "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual"
-      ],
-      "blocked_dependencies": [],
-      "downstream_users": [
-        "ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace"
-      ],
       "status": "staged",
       "upstream_pr": null
     },

@@ -15,7 +15,8 @@ that result a source-facing name and then exposes the Frobenius and operator
 norm specializations appearing in the paper.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -47,8 +48,8 @@ theorem yuWangSamworth_theorem1_frobenius_le
     (hgap : IntervalExteriorGap A B U V a b δ) :
     sinThetaFrobenius U V ≤
       UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A) / δ := by
-  simpa only [sinThetaFrobenius] using
-    yuWangSamworth_theorem1_uiNorm_le
+  rw [sinThetaFrobenius_eq]
+  exact yuWangSamworth_theorem1_uiNorm_le
       (UnitarilyInvariantSeminorm.frobenius 𝕜 E)
       hA hB hU hV hδ hgap
 
@@ -66,4 +67,4 @@ theorem yuWangSamworth_theorem1_opNorm_le
     opNorm_sinThetaMap_le_of_intervalGap hA hB hU hV hδ hgap
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

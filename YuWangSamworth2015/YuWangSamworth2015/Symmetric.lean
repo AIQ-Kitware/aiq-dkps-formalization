@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import YuWangSamworth2015.Symmetric.Theorem1
+import YuWangSamworth2015.Symmetric.Theorem2
 import YuWangSamworth2015.Symmetric.MixedGap
 import YuWangSamworth2015.Symmetric.Corollary1
 import YuWangSamworth2015.Symmetric.AngleIdentity
@@ -18,7 +19,7 @@ This aggregate exposes:
 
 * Theorem 1 in general unitarily invariant, Frobenius, and operator norms;
 * Theorem 2 and its aligned-basis conclusion from
-  `DavisKahan.Specialized.Statistics`;
+  `YuWangSamworth2015.Symmetric.Theorem2`;
 * rank-one Corollary 1, in both the intrinsic and the printed
   neighbouring-eigenvalue-gap forms, with a sample-degeneracy witness;
 * the exact rank-one double-angle identity recorded as equation (4);

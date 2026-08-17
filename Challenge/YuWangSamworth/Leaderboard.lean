@@ -3,6 +3,6 @@
   -- solution / dependency audit
 -/
 
-import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Residual
+import YuWangSamworth2015.Core.Residual
 
-#print axioms TauCeti.sqrt_sum_cross_le_of_population_gap
+#print axioms YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap

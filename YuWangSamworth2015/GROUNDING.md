@@ -9,7 +9,7 @@ The package builds only on repository-local, machine-checked results.
 
 ## Symmetric results
 
-* `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics`
+* `YuWangSamworth2015.Core.Statistics`
   * `yuWangSamworth_sinTheta_le`
   * `yuWangSamworth_alignedBasis_le`
   * `yuWangSamworth_eigenvector_le`
@@ -21,7 +21,7 @@ The package builds only on repository-local, machine-checked results.
 
 * `YuWangSamworth2015.Rectangular.FrobeniusGram`
 * `YuWangSamworth2015.Rectangular.Theorem4`
-* `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace`
+* `YuWangSamworth2015.Core.SingularSubspace`
 
 ## Appendix compression
 

@@ -34,7 +34,7 @@ positive `Δ` in the denominator.  It fails, because the angle is a fixed
 positive number and the numerator is a fixed finite one.
 
 **The repository's own theorem is not affected**, and is the natural repair:
-`TauCeti.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_frame_le` takes
+`YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_frame_le` takes
 the gap as an intrinsic separation of the sorted spectrum of `A⋆A`, which counts
 the zero eigenvalues.  So the corrected reading of the printed convention is
 `σ_{q+1}² := −∞` for the right blocks (and `σ_{p+1}² := −∞` for the left), with
@@ -42,7 +42,8 @@ the zero eigenvalues.  So the corrected reading of the printed convention is
 and is exactly what this repository proves.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open Module (finrank)
@@ -107,7 +108,7 @@ theorem sinThetaFrobenius_orthogonal_lines {v w : E} (hv : ‖v‖ = 1) (hw : �
   have hsq : sinThetaFrobenius (Submodule.span 𝕜 {v}) (Submodule.span 𝕜 {w}) ^ 2 = 1 := by
     rw [hbridge, Fin.sum_univ_one, hproj, hw, one_pow]
   have hnn : (0 : ℝ) ≤ sinThetaFrobenius (Submodule.span 𝕜 {v}) (Submodule.span 𝕜 {w}) :=
-    (UnitarilyInvariantSeminorm.frobenius 𝕜 E).nonneg _
+    sinThetaFrobenius_nonneg _ _
   nlinarith [hsq, hnn]
 
 end Projections
@@ -219,4 +220,4 @@ theorem yuWangSamworth_theorem3_printed_rankBoundary_refutation_euclidean :
 end Refutation
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

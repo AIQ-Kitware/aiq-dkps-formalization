@@ -35,7 +35,7 @@ hide a requirement that the two matrices have the same number of eigenvalues in
 the selected interval.  Those are claims about other papers, and as such are not
 formalizable; their deterministic mathematical content is, and is proved here:
 
-* `TauCeti.mixedGap_of_populationGap_weyl` is the recovery step, and it costs the
+* `YuWangSamworth2015.mixedGap_of_populationGap_weyl` is the recovery step, and it costs the
   side condition `ε < Δ`;
 * `yuWangSamworth_weylRecovered_le_populationGap_bound` shows that on the event
   `2ε ≤ Δ` the recovered route lands exactly on Theorem 2's constant, so the
@@ -47,7 +47,8 @@ formalizable; their deterministic mathematical content is, and is proved here:
   too.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open Module (finrank)
@@ -89,7 +90,7 @@ theorem mixedSeparation_eq_zero_of_le {a b lo hi : ℝ} (hab : a ≤ b) (h : a �
 
 `c/(Δ − ε) ≤ 2c/Δ` whenever `2ε ≤ Δ`.  Reading it with `c = ‖Σ̂ − Σ‖_F`: the
 literature's mixed-gap-then-Weyl route reaches, on the event `‖E‖_op ≤ Δ/2`,
-the very bound `2‖E‖_F/Δ` that `TauCeti.yuWangSamworth_sinTheta_frame_le`
+the very bound `2‖E‖_F/Δ` that `YuWangSamworth2015.yuWangSamworth_sinTheta_frame_le`
 proves with no event at all.  What Theorem 2 removes is the hypothesis, not the
 constant. -/
 theorem yuWangSamworth_weylRecovered_le_populationGap_bound {c Δ ε : ℝ}
@@ -158,7 +159,7 @@ theorem eigenspace_section1Population :
 omit [FiniteDimensional 𝕜 E] in
 /-- **The population gap of the block is `10`, at the operator level.**  The
 block carries only `20`, and its complement carries `50`, `40`, `30` and `10`,
-each at distance at least `10`.  So `TauCeti.yuWangSamworth_alignedBasis_le`
+each at distance at least `10`.  So `YuWangSamworth2015.yuWangSamworth_alignedBasis_le`
 applies to this pair while Theorem 1 does not. -/
 theorem internalGap_section1 :
     InternalGap (section1Population b)
@@ -189,7 +190,7 @@ theorem opNorm_section1_perturbation :
 
 /-- **The Weyl recovery fails on the paper's own example.**
 
-`TauCeti.mixedGap_of_populationGap_weyl` turns the population gap `Δ = 10` into a
+`YuWangSamworth2015.mixedGap_of_populationGap_weyl` turns the population gap `Δ = 10` into a
 mixed gap `Δ − ε`, and here `ε = 11`: the recovered separation is negative, so
 the two-step route yields nothing whatever.  Theorem 2 is unaffected, by
 `internalGap_section1`. -/
@@ -211,4 +212,4 @@ theorem section1_no_sample_eigenvalue_in_block (i : Fin 5) :
   fin_cases i <;> norm_num [section1SampleData, section1PopulationData]
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015

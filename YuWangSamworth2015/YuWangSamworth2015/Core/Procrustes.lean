@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 module
 
 public import Mathlib.LinearAlgebra.UnitaryGroup
-public import ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.Statistics
+public import YuWangSamworth2015.Core.Statistics
 
 /-! # The one-sided Procrustes alignment `V̂ Ô`
 
@@ -15,7 +15,7 @@ inside its own span, against the population frame left where it is:
 
 `‖V̂ Ô − V‖_F ≤ 2^{3/2} min(√d ‖Σ̂ − Σ‖_op, ‖Σ̂ − Σ‖_F) / Δ`, with `Ô ∈ O(d)`.
 
-`TauCeti.exists_aligned_orthonormalBasis` records the weaker existential in which
+`YuWangSamworth2015.exists_aligned_orthonormalBasis` records the weaker existential in which
 *both* frames are replaced by new ones spanning the same subspaces.  That is
 enough to derive the numerical bound and nothing else: a reader cannot tell from
 it that the population frame is untouched, nor recover the `d × d` alignment.
@@ -30,22 +30,23 @@ spells that out as `Ôᵀ Ô = I`.
 
 ## Main results
 
-* `TauCeti.frameComp`: the rotated frame `V̂ Ô`, with its expansion, orthonormality
+* `YuWangSamworth2015.frameComp`: the rotated frame `V̂ Ô`, with its expansion, orthonormality
   and span.
-* `TauCeti.exists_unitary_sum_sq_norm_frameComp_sub_le`: the Procrustes step
+* `YuWangSamworth2015.exists_unitary_sum_sq_norm_frameComp_sub_le`: the Procrustes step
   `‖V̂ Ô − V‖²_F ≤ 2 ‖sin Θ‖²_F` with the alignment exhibited.
-* `TauCeti.yuWangSamworth_alignedFrame_le` and
-  `TauCeti.yuWangSamworth_alignedFrame_le_residual`: Theorem 2's second
+* `YuWangSamworth2015.yuWangSamworth_alignedFrame_le` and
+  `YuWangSamworth2015.yuWangSamworth_alignedFrame_le_residual`: Theorem 2's second
   conclusion and its sharper residual form, both with an explicit `Ô`.
-* `TauCeti.frameAlignMatrix` and
-  `TauCeti.yuWangSamworth_alignedFrame_real_le`: over `ℝ`, the same conclusion
+* `YuWangSamworth2015.frameAlignMatrix` and
+  `YuWangSamworth2015.yuWangSamworth_alignedFrame_real_le`: over `ℝ`, the same conclusion
   with `Ô` an honest element of `Matrix.orthogonalGroup (Fin d) ℝ` and the
   columns of `V̂Ô` written as the matrix products `∑ⱼ Ôⱼᵢ v̂ⱼ`.
 -/
 
 public section
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
@@ -276,4 +277,4 @@ theorem yuWangSamworth_alignedFrame_real_le
 
 end Real
 
-end TauCeti
+end YuWangSamworth2015

@@ -21,7 +21,8 @@ for the row case the displayed recovery identity gives the reverse inequality.
 This formulation is both source recognizable and reusable across dimensions.
 -/
 
-namespace TauCeti
+namespace YuWangSamworth2015
+open TauCeti
 namespace DavisKahanTheory
 
 open scoped InnerProductSpace
@@ -220,4 +221,4 @@ theorem yuWangSamworth_lemma5_orthonormalRows
       rectangularFrobenius_comp_adjoint_linearIsometry A W
 
 end DavisKahanTheory
-end TauCeti
+end YuWangSamworth2015
