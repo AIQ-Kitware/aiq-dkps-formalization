@@ -23,22 +23,22 @@ them is stated at the printed generality:
 * Theorem 3, right and left, in the corrected form (see below);
 * Lemma A1, both halves.
 
-The population-gap results are also stated with the source's own indexing: the
-block `r, …, s`, the frame size tied to them by `r + d = s + 1` (the paper's
-`d = s − r + 1`, without truncated subtraction), and the two-sided boundary gap
-`min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`, with the printed conventions `λ_0 = +∞` and
-`λ_{p+1} = −∞` modelled by vacuous quantification, so the interior, top and
-bottom blocks need no separate statements.  `d` cannot be eliminated — it is the
-index type of `V, V̂ : Fin d → E` — but it is pinned by that hypothesis, and both
-the gap and the bound are written at `r` and `s`.  The bridge
-constrains only the population spectrum, so `λ̂_s = λ̂_{s+1}` remains admissible:
-the wrappers do not smuggle a sample eigengap back in.  Theorem 2's second
-conclusion now also exhibits the orthogonal `Ô` acting on the block's coordinate
-space and compares `V̂Ô` against the *supplied* population frame, rather than
-asserting that two unnamed frames of the same spans exist.  Over `ℝ`,
-`yuWangSamworth_alignedFrame_block_real_le` produces `Ô` as an element of
-`Matrix.orthogonalGroup (Fin d) ℝ` with `(V̂Ô)ᵢ = ∑ⱼ Ôⱼᵢ v̂ⱼ`: every symbol of the
-printed conclusion.
+The canonical paper-facing Theorem 2 surface is now
+`theorem2_sinTheta` / `theorem2_alignedFrame`.  It specializes to real operators
+on `Real^p` and displays the source arithmetic directly as `r ≤ s`, `s < p`, and
+`d = s - r + 1`.  `IsEigenvectorBlock` means exactly orthonormal columns plus the
+ordered eigenvector equations, and `PopulationBoundaryGap` contains exactly the
+two population boundary inequalities; their characteristic lemmas are included
+in the semantic-alignment dictionary so no hidden sample separation can be
+smuggled into the paper-facing statement.  The aligned conclusion returns
+`O : Matrix (Fin d) (Fin d) Real` in the orthogonal group and compares the
+supplied `Vhat O` against the supplied `V`.
+
+The older source-indexed `RCLike` wrappers remain as implementation-oriented
+generalizations.  There the same block arithmetic is normalized to
+`r + d = s + 1` and `s + 1 ≤ n`, and the endpoint conventions `λ_0 = +∞` and
+`λ_{p+1} = −∞` are modelled by vacuous quantification.  The bridge constrains
+only the population spectrum, so `λ̂_s = λ̂_{s+1}` remains admissible.
 
 ## Additional completed source material
 

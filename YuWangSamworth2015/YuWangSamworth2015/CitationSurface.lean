@@ -32,10 +32,14 @@ a contiguous block `r..s` with the two-sided boundary gap
 `min(λ_{r-1} − λ_r, λ_s − λ_{s+1})`, under the printed conventions
 `λ_0 = +∞`, `λ_{p+1} = −∞` — are:
 
-* `YuWangSamworth2015.yuWangSamworth_sinTheta_block_le` and
-  `YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le` for Theorem 2, the second with
-  an explicit orthogonal `Ô` and the supplied population frame, so the
-  conclusion is literally `‖V̂Ô − V‖_F ≤ 2^{3/2} min(…)/Δ`;
+* `YuWangSamworth2015.theorem2_sinTheta` and
+  `YuWangSamworth2015.theorem2_alignedFrame` are the canonical paper-facing
+  Theorem 2 declarations.  They use `Real^p`, source-style names, the literal
+  conditions `r ≤ s`, `s < p`, `d = s - r + 1`, arbitrary supplied eigenvector
+  blocks, a population-only boundary-gap predicate, and an explicit orthogonal
+  matrix in the aligned conclusion.  The more general
+  `yuWangSamworth_sinTheta_block_le` and `yuWangSamworth_alignedFrame_block_le`
+  remain the implementation-oriented `RCLike` forms;
 * `YuWangSamworth2015.yuWangSamworth_sinTheta_block_le_residual` and
   `YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le_residual` for the sharper
   residual numerators the paper says its proof establishes,
