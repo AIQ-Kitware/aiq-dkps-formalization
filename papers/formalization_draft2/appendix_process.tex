@@ -32,7 +32,7 @@ formalization whose cost is being studied.
 \begin{table}[H]
 \centering
 \small
-\input{generated/ledger_repository_table.tex}
+\input{snapshots/ledger_repository_table.tex}
 \caption{Measured program-wide resource usage by allowlisted ledger repository.
 The table describes the accounting program, whereas commit-coverage statistics
 are computed only on the primary Git history available to this analysis.}
@@ -67,7 +67,7 @@ project total:
 \begin{table}[H]
 \centering
 \small
-\input{generated/accounting_state_table.tex}
+\input{snapshots/accounting_state_table.tex}
 \caption{Commit-level accounting state for the included primary-repository Git
 history.  Session-level pending measurements are intentionally not promoted to
 exact commit attribution.}
@@ -95,7 +95,7 @@ well:
 \begin{table}[H]
 \centering
 \small
-\input{generated/measured_token_breakdown_table.tex}
+\input{snapshots/measured_token_breakdown_table.tex}
 \caption{Measured program-wide token quantities.  Exact-attributed and pending
 columns partition measurement by attribution status; they should not be confused
 with measured versus imputed usage.}
@@ -143,7 +143,7 @@ sensitivity analyses.  The third quantity must not replace the first two.
 \begin{table}[H]
 \centering
 \small
-\input{generated/component_accounting_table.tex}
+\input{snapshots/component_accounting_table.tex}
 \caption{Commit-level accounting coverage for path-defined mathematical and
 project components.  Components can overlap; these rows are diagnostics for
 where cost appears in the history, not a disjoint decomposition of mathematical
@@ -164,7 +164,7 @@ models separately before deriving a resolved provenance label.
 \begin{table}[H]
 \centering
 \small
-\input{generated/model_provenance_table.tex}
+\input{snapshots/model_provenance_table.tex}
 \caption{Raw Git model provenance, study-resolved provenance, exact ledger
 coverage, and commits classified as chat-interface work.  Exact ledger
 attribution takes precedence over trailer-based heuristics.}
@@ -221,7 +221,7 @@ filled an information gap, or performed editorial steering.
 \begin{table}[H]
 \centering
 \small
-\input{generated/interaction_group_table.tex}
+\input{snapshots/interaction_group_table.tex}
 \caption{High-level categories in the retained human-prompt corpus.  Counts
 characterize the observed interaction record; missing chat-interface transcripts
 mean they are not a complete census of human steering.}

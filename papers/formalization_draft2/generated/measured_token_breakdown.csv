@@ -1,6 +1,0 @@
-token_kind,label,ledger_total,exact_commit_attributed_all,pending_session_level,exact_on_pinned_history
-input_tokens,ordinary input,8183534,7382473,801061,7370856
-cache_write_tokens,cache write,150667217,95367159,55300058,81471405
-cache_read_tokens,cache read,15591682622,11366421301,4225261321,8206070275
-output_tokens,output,44950936,31013774,13937162,26208591
-billable_input_tokens,billable-input measure,15750533373,11469170933,4281362440,8294912536

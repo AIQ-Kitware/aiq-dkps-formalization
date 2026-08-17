@@ -1,5 +1,0 @@
-accounting_state,commits,share
-exact_measured,933,0.20120767737761483
-instrumentation_commit_unmeasured,1,0.00021565667457407807
-unmeasured_post_instrumentation,3510,0.756954927755014
-unmeasured_pre_instrumentation,193,0.04162173819279707

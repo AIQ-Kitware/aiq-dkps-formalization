@@ -22,10 +22,11 @@ but are not yet manuscript claims.
 
 ## Build
 
-All paper-local analysis outputs under `generated/` are reproducible and are
-therefore gitignored. LaTeX/latexmk build products (including `paper.pdf`) are
-also gitignored; source `.tex` and `.bib` files remain tracked. This keeps a
-plain `git add papers/formalization_draft2` limited to durable source inputs.
+Paper-local artifacts are split deliberately by durability. `generated/` holds
+disposable working analyses and raw API responses and is gitignored. `snapshots/`
+holds the small manuscript-facing artifacts derived from those analyses (for
+example TeX macros/tables and compact bibliometric summaries) and is tracked.
+LaTeX/latexmk build products (including `paper.pdf`) remain gitignored.
 
 Build the manuscript from a clean checkout with:
 
@@ -33,16 +34,18 @@ Build the manuscript from a clean checkout with:
 make -C papers/formalization_draft2 paper
 ```
 
-The `paper` target first rebuilds every required generated analysis artifact via
-`scripts/build_all.py`, then runs `latexmk`. To regenerate the analysis without
-building the PDF, use:
+The `paper` target is offline and consumes the checked-in `snapshots/` artifacts;
+it does not refresh analyses or modify tracked files. To refresh the local
+analysis and the tracked manuscript snapshots explicitly, use:
 
 ```bash
 make -C papers/formalization_draft2 accounting
 ```
 
-`make -C papers/formalization_draft2 clean` removes both LaTeX build products
-and the paper-local `generated/` tree.
+Review and commit the resulting `snapshots/` changes when advancing the paper's
+evidence snapshot. `make -C papers/formalization_draft2 clean` removes LaTeX
+build products and the ignored `generated/` tree, but leaves tracked snapshots
+alone.
 
 ### Literature-review memo
 
@@ -191,10 +194,12 @@ source and attached to the displayed date as PDF tooltip metadata.
 ## Citation-count snapshots
 
 Citation counts used for motivation in the manuscript are collected separately
-from the normal paper build.  OpenAlex is queried by the two published DOIs in
-`data/bibliometrics/openalex_works.json`; the network utility writes a dated,
-tracked source snapshot to `data/bibliometrics/openalex_snapshot.json` and TeX
-macros to `generated/openalex_bibliometrics_macros.tex`.
+from the normal paper build. OpenAlex is queried by the two published DOIs in
+`data/bibliometrics/openalex_works.json`. The selected API response is written to
+ignored `generated/openalex_response.json`; compact reviewable artifacts are
+written to tracked `snapshots/`: `openalex_bibliometrics.json`,
+`openalex_bibliometrics_macros.tex`, `openalex_citation_trends.csv`, and
+`openalex_citation_trend_table.tex`.
 
 OpenAlex currently requires an API key.  Obtain a free key from OpenAlex, then
 run:
@@ -210,10 +215,11 @@ For an audit of the exact requests without making a network call:
 python3 papers/formalization_draft2/scripts/fetch_openalex_bibliometrics.py --dry-run
 ```
 
-The snapshot deliberately records the retrieval timestamp, DOI, OpenAlex work
-identifier, total `cited_by_count`, `counts_by_year`, and OpenAlex `updated_date`,
-but never records the API key.  The regular `paper` and `accounting` targets do
-not contact OpenAlex.
+The compact snapshot deliberately records the retrieval timestamp, DOI, OpenAlex
+work identifier, total `cited_by_count`, `counts_by_year`, and OpenAlex
+`updated_date`, but never records the API key. The trend CSV and TeX table are
+derived from `counts_by_year`; the retrieval year is marked as partial. The
+regular `paper` and `accounting` targets do not contact OpenAlex.
 
 Google Scholar counts are intentionally not scraped by repository tooling.  If
 we report them, record the visible `Cited by` values and observation date
@@ -221,7 +227,7 @@ manually in the manuscript or a tracked bibliometric note, alongside the dated
 OpenAlex snapshot.  Both sources should be named explicitly because citation
 counts are database- and date-dependent.
 
-## Generated artifacts
+## Working and snapshot artifacts
 
 `generated/dependency_import_closure.csv`, `generated/dependency_target_summary.csv`,
 `generated/dependency_target_overlap.csv`
@@ -299,8 +305,15 @@ counts are database- and date-dependent.
 `generated/interaction_*.csv`
 : Deduplicated post-hoc human-prompt, taxonomy, event, and per-agent summaries.
 
-`generated/*_macros.tex` and `generated/*_table.tex`
-: Small LaTeX fragments consumed by `paper.tex`.
+`snapshots/*_macros.tex` and `snapshots/*_table.tex`
+: Small tracked LaTeX fragments consumed by the manuscript. They are refreshed
+  explicitly by the corresponding analysis script and reviewed in Git like
+  other paper evidence.
+
+`generated/`
+: Ignored working data: detailed CSV/JSON inventories, diagnostic reports, and
+  raw API responses. These files support regeneration and audit but are not part
+  of the committed manuscript snapshot.
 
 ## Important limitations to retain in the paper
 

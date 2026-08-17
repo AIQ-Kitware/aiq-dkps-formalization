@@ -1,7 +1,0 @@
-component,commits,exact_measured,pending_window_overlap,unmeasured_pre_instrumentation,unmeasured_post_instrumentation,llm_evidence_unmeasured,exact_output_tokens,exact_billable_input_tokens
-yws,27,7,2,0,20,17,659755,162380502
-davis_kahan,1126,303,272,0,823,750,11524309,3912828063
-quench,22,2,3,0,20,13,10189,4370149
-tauceti_staging,687,64,195,0,623,582,2304057,571816914
-papers_docs,219,50,68,45,124,122,1726488,403787859
-tooling,2562,529,679,20,2012,1609,13997593,4722112395

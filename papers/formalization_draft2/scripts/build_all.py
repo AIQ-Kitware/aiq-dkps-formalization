@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Rebuild every generated accounting/interaction artifact for the paper."""
+"""Refresh paper-local working analyses and tracked manuscript snapshots."""
 
 from __future__ import annotations
 
