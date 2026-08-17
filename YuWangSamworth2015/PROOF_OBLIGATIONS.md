@@ -95,7 +95,7 @@ Neither is a gap in a numbered result.
 
 ## Build guard
 
-`FinishYuWangSamworth` **is** a default build target: it joined `defaultTargets`
+`YuWangSamworth2015` **is** a default build target: it joined `defaultTargets`
 on 2026-08-02, so `lake build` compiles everything here and a regression cannot
 land unnoticed.  The library also carries `warningAsError` under the Mathlib
 standard linter set, matching the option set Tau Ceti's own `lean_lib` applies.

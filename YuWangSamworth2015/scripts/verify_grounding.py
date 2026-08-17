@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static grounding checks for the FinishYuWangSamworth lane."""
+"""Static grounding checks for the YuWangSamworth2015 lane."""
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -11,12 +11,12 @@ REQUIRED_FILES = [
     "ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean",
     "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean",
     "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean",
-    "FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/Theorem1.lean",
-    "FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/AngleIdentity.lean",
-    "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/FrobeniusGram.lean",
-    "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/Theorem4.lean",
-    "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/RankOne.lean",
-    "FinishYuWangSamworth/FinishYuWangSamworth/Appendix/Lemma5.lean",
+    "YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem1.lean",
+    "YuWangSamworth2015/YuWangSamworth2015/Symmetric/AngleIdentity.lean",
+    "YuWangSamworth2015/YuWangSamworth2015/Rectangular/FrobeniusGram.lean",
+    "YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean",
+    "YuWangSamworth2015/YuWangSamworth2015/Rectangular/RankOne.lean",
+    "YuWangSamworth2015/YuWangSamworth2015/Appendix/Lemma5.lean",
 ]
 
 REQUIRED_DECLARATIONS = {
@@ -29,26 +29,26 @@ REQUIRED_DECLARATIONS = {
         "theorem sinTheta_perturbation_le",
         "theorem opNorm_sinThetaMap_le_of_intervalGap",
     ],
-    "FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/Theorem1.lean": [
+    "YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem1.lean": [
         "theorem yuWangSamworth_theorem1_uiNorm_le",
         "theorem yuWangSamworth_theorem1_frobenius_le",
         "theorem yuWangSamworth_theorem1_opNorm_le",
     ],
-    "FinishYuWangSamworth/FinishYuWangSamworth/Symmetric/AngleIdentity.lean": [
+    "YuWangSamworth2015/YuWangSamworth2015/Symmetric/AngleIdentity.lean": [
         "theorem yuWangSamworth_equation4",
         "theorem yuWangSamworth_equation4_printed_counterexample",
     ],
-    "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/Theorem4.lean": [
+    "YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean": [
         "theorem yuWangSamworth_rightSingularSubspace_le",
         "theorem yuWangSamworth_leftSingularSubspace_le",
         "theorem yuWangSamworth_rightSingularAlignedBasis_le",
         "theorem yuWangSamworth_leftSingularAlignedBasis_le",
     ],
-    "FinishYuWangSamworth/FinishYuWangSamworth/Rectangular/RankOne.lean": [
+    "YuWangSamworth2015/YuWangSamworth2015/Rectangular/RankOne.lean": [
         "theorem yuWangSamworth_rightSingularVector_le",
         "theorem yuWangSamworth_leftSingularVector_le",
     ],
-    "FinishYuWangSamworth/FinishYuWangSamworth/Appendix/Lemma5.lean": [
+    "YuWangSamworth2015/YuWangSamworth2015/Appendix/Lemma5.lean": [
         "theorem yuWangSamworth_lemma5_columns",
         "theorem yuWangSamworth_lemma5_isometricColumns",
         "theorem yuWangSamworth_lemma5_orthonormalColumns",
@@ -68,11 +68,11 @@ for rel, needles in REQUIRED_DECLARATIONS.items():
         if needle not in text:
             raise SystemExit(f"missing grounded declaration in {rel}: {needle}")
 
-lane = ROOT / "FinishYuWangSamworth"
+lane = ROOT / "YuWangSamworth2015"
 for path in lane.rglob("*.lean"):
     text = path.read_text()
     for forbidden in ("sorry", "axiom "):
         if forbidden in text:
             raise SystemExit(f"forbidden placeholder in {path.relative_to(ROOT)}: {forbidden}")
 
-print("FinishYuWangSamworth grounding audit: OK")
+print("YuWangSamworth2015 grounding audit: OK")

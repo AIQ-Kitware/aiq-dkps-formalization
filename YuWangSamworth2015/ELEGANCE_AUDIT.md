@@ -1,6 +1,6 @@
 # In-place elegance audit
 
-This audit was performed after the complete `FinishYuWangSamworth` aggregate
+This audit was performed after the complete `YuWangSamworth2015` aggregate
 built with warnings treated as errors.
 
 ## Changes made

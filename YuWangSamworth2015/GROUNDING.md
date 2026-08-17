@@ -1,7 +1,7 @@
 # Grounding ledger
 
 This package is checked by
-`FinishYuWangSamworth/scripts/verify_grounding.py` and is part of the default
+`YuWangSamworth2015/scripts/verify_grounding.py` and is part of the default
 build.  The source census is the current paper-coverage authority:
 `dev/yu-wang-samworth-2015-full-source-census.json`.
 
@@ -19,8 +19,8 @@ The package builds only on repository-local, machine-checked results.
 
 ## Rectangular results
 
-* `FinishYuWangSamworth.Rectangular.FrobeniusGram`
-* `FinishYuWangSamworth.Rectangular.Theorem4`
+* `YuWangSamworth2015.Rectangular.FrobeniusGram`
+* `YuWangSamworth2015.Rectangular.Theorem4`
 * `ForTauCeti.Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace`
 
 ## Appendix compression
@@ -34,7 +34,7 @@ The grounding audit rejects proof placeholders or ungrounded external results in
 the package closure.  Run it rather than relying on a dated audit statement:
 
 ```bash
-python3 FinishYuWangSamworth/scripts/verify_grounding.py
+python3 YuWangSamworth2015/scripts/verify_grounding.py
 ```
 
 ## Source audit: equation (4)

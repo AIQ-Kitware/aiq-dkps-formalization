@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import FinishYuWangSamworth.GroundedImports
+import YuWangSamworth2015.GroundedImports
 
 /-!
 # Yu--Wang--Samworth Section 2: the published middle-block sharpness example
@@ -17,7 +17,7 @@ discussion after Theorem 2:
 > entries `2+ε`.  The block of interest is the eigenvectors for the eigenvalue
 > `3`, so the population gap is two-sided, `min(5-3, 3-1) = 2`.
 
-`FinishYuWangSamworth/Symmetric/OrthogonalSharpness.lean` formalizes the 2014
+`YuWangSamworth2015/Symmetric/OrthogonalSharpness.lean` formalizes the 2014
 preprint's earlier construction, in which the block of interest is the *top*
 eigenspace.  Both prove the same sharpness claim, but only the published one
 exercises a two-sided population gap, and that is exactly what made it hard to
