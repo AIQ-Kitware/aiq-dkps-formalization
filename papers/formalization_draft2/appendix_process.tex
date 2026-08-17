@@ -2,15 +2,22 @@
 \label{app:source-coverage}
 
 The main text summarizes mathematical coverage without reproducing the
-bookkeeping used to establish it.  YWS coverage is maintained in a paper-keyed
-source census whose obligations are created from the published document.  At
-the analysis snapshot it contains \YWSCensusEntryCount{} entries spanning named
-results, equations, identities, examples, conventions, audit material, and
+bookkeeping used to establish it.  For Davis--Kahan, the counted result set is
+fixed at \FormalizationDKResultCount{}: the four unnumbered Section~2 theorems
+and every named theorem, proposition, lemma, and corollary that the paper
+establishes.  Definitions, proof steps, examples, open questions, and externally
+attributed results remain source-audit material outside that denominator.  Of
+the counted results, 28 are proved at the scope stated in the source and
+Proposition~4.4 is formally refuted as printed and accompanied by a repair.
+
+YWS coverage is maintained in a paper-keyed source inventory whose obligations
+are created from the published document.  At the analysis snapshot it contains
+\YWSCensusEntryCount{} entries spanning theorem-level claims, lemmas, equations,
+identities, examples, conventions, and audit material, with
 \YWSCensusExplicitAdditionCount{} explicitly labeled additions beyond the
 printed paper.  All \YWSCensusVerifiedCount{} entries resolve to declarations in
-the default build.  Status fields separately record exact matches,
-generalizations or specializations, compiled corrections, and entries that carry
-no source proof debt.
+the default build.  Status fields record exact matches, generalizations or
+specializations, and compiled corrections.
 
 \begin{table}[H]
 \centering
@@ -38,7 +45,7 @@ assignments are stored in
 overrides in
 \path{data/formalization_declaration_theory_overrides_20260817.csv}.  The
 program \path{scripts/build_formalization_theory_graph.py} joins these layers and
-regenerates the paper-facing summaries.  A reached module without a reviewed
+regenerates the manuscript summaries.  A reached module without a reviewed
 classification causes generation to fail.
 
 Formalization provenance is represented by positive external-source claims in
@@ -89,8 +96,9 @@ formalization-history corpus.
 \centering
 \small
 \input{snapshots/ledger_repository_table.tex}
-\caption{Measured program-wide resource usage by allowlisted ledger repository.
-Commit-coverage statistics use the primary formalization repository.}
+\caption{Measured lower-bound program-wide resource usage by allowlisted ledger
+repository.  These observed quantities omit work for which no telemetry was
+recovered.  Commit-coverage statistics use the primary formalization repository.}
 \label{tab:ledger-repositories}
 \end{table}
 
@@ -129,9 +137,9 @@ attribution.}
 
 \subsection{Measured lower bound and token classes}
 
-All quantitative valuations in the manuscript are computed from measured ledger
-values.  Unobserved work is excluded from the token, dollar, energy, and
-emissions totals.  At \AccountingSnapshot{} the allowlisted program ledger records
+All observed quantities in the manuscript are lower bounds computed from retained
+ledger values.  Unobserved work is excluded from the token, dollar, and energy
+valuations.  At \AccountingSnapshot{} the allowlisted program ledger records
 \LedgerTurns{} model turns and \LedgerOutputTokens{} output tokens.  Its
 \LedgerBillableInputTokens{} billable-input accounting measure aggregates
 ordinary input, cache-write, and cache-read quantities according to the local
@@ -142,36 +150,46 @@ well:
 \centering
 \small
 \input{snapshots/measured_token_breakdown_table.tex}
-\caption{Measured program-wide token quantities.  Exact-attributed and pending
-columns partition measured usage by attribution status.}
+\caption{Measured lower-bound program-wide token quantities.  The ledger-total
+column is a lower bound on project-wide usage; exact-attributed and pending
+columns partition the retained measurements by attribution status.}
 \label{tab:measured-token-breakdown}
 \end{table}
 
 \subsection{Model-resolved accounting and pricing}
 
-Every token-bearing ledger row contains a per-model token vector.  The analysis
-verifies that the model-level ordinary-input, cache-write, cache-read, and output
-counts sum exactly to the row-level totals.  Consequently a session that changes
-model attribution follows the measured per-model vectors associated with the
-work.  Measured usage is first resolved by model and token class; monetary cost
-is a separate transformation.
+Each token-bearing ledger row contains a per-model vector for ordinary input,
+cache writes, cache reads, and output.  The analysis verifies that these vectors
+sum to the row-level totals.  Historical API prices are stored as dated inputs
+and applied after token accounting.
 
-Historical prices are stored as explicit, dated inputs.  A model contributes
-to the dollar estimate only when the required token-class rates for its
-applicable interval are available.
+\begin{table}[H]
+\centering
+\scriptsize
+\input{snapshots/model_token_table.tex}
+\caption{Model-resolved measured lower-bound token counts.  Every numeric column
+contains retained telemetry and therefore understates project-wide usage when
+unobserved work is present.}
+\label{tab:model-tokens-appendix}
+\end{table}
 
-\subsection{Revisable valuation of measured usage}
+The energy calculation uses a versioned serving scenario with throughput, server
+power, cache-work factors, per-turn overhead, and datacenter power usage
+effectiveness \citep{crall2026llmresource}.  The manuscript reports its central
+value and a separate per-token cross-check.  The operational boundary covers LLM
+serving and excludes model training, embodied hardware, client devices, and
+network energy.
 
-The valuation layer consumes the measured model-resolved token vectors and a
-versioned assumptions file.  Public API prices carry provider, effective date,
-token class, and source URL.  Cache-write duration is absent from the ledger, so
-the central calculation uses the five-minute cache-write rate and reports an
-all-one-hour-cache sensitivity.
+\subsection{Coverage proxies and project-scale extrapolation}
 
-Operational energy and carbon use a versioned serving-stack scenario
-\citep{crall2026llmresource} with throughput, server power, per-turn overhead,
-cache factors, PUE, and grid carbon intensity.  Low, central, and high settings
-provide sensitivity scenarios.  A simpler per-token model provides an
-order-of-magnitude cross-check.  The operational boundary excludes model
-training, embodied hardware, client devices, network energy, and other lifecycle
-effects.
+Exact telemetry covers \ExactMeasuredCommitCount{} of \HistoryCommitCount{}
+included primary-repository commits (\ExactMeasuredCommitShare{}).  Those commits
+also account for \ExactMeasuredLeanLineChurn{} of \TotalLeanLineChurn{} cumulative
+Lean-line insertions and deletions (\ExactMeasuredLeanLineChurnShare{}).
+
+The extrapolations in \cref{tab:resource-extrapolation} divide the exact
+primary-repository token subset by each coverage fraction.  The first gives equal
+weight to commits; the second uses changed Lean lines as a coarse text-volume
+proxy.  Both assume comparable token intensity between observed and unobserved
+portions under the selected denominator.
+

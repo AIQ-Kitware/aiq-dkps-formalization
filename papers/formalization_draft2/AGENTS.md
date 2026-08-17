@@ -7,9 +7,11 @@ Before editing prose in this directory, read [BANNED_WORDS_AND_PHRASES.md](BANNE
 ## Manuscript structure
 
 - Keep mathematical exposition in the main text and move audit bookkeeping, exact Lean declaration names, file paths, registry mechanics, and regeneration details to the appendix.
-- The main text may reproduce the two designated Lean theorem surfaces. Avoid additional code-facing names in surrounding prose unless a mathematical point requires them.
+- The main text may reproduce the two designated Lean theorem signatures. Refer to them as code or Lean signatures, never as listings, surfaces, or canonical declarations. Explain non-obvious predicates in mathematical language near the code. Do not discuss rendering substitutions. Avoid additional code-facing names in surrounding prose unless a mathematical point requires them.
+- Keep the short reader guide to Lean theorem signatures in the appendix and point to it before the first displayed Lean theorem. Use that guide for parameters, hypotheses, typeclass arguments, theorem conclusions, and proof irrelevance instead of repeating syntax explanations around each theorem.
 - Treat the prerequisite-theory and formalization-provenance sections as the authoritative summaries of what was formalized. Avoid duplicating the same accounting elsewhere.
 - Source-coverage registries are evidence infrastructure. Present their construction and exact counts in the appendix.
+- Resource telemetry with incomplete historical coverage must be labeled as a lower bound wherever numeric tables are rendered. Put the lower-bound qualification in table headers and captions, and keep coverage-based extrapolations in separate columns from observed values.
 - Write for the mathematical reader. Repository workflow history and agent-facing reminders belong in project documentation rather than manuscript prose.
 - Preserve the distinction between mathematical provenance and formalization provenance. Explicit formal-source citations receive credit; uncited project-local formalization receives project credit under the documented policy.
 

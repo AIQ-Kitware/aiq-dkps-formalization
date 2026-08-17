@@ -27,6 +27,8 @@ SNAPSHOTS = DRAFT / "snapshots"
 CONFIG = json.loads((DRAFT / "analysis_config.json").read_text())
 ASSUMPTIONS_PATH = DRAFT / "resource_valuation_assumptions_20260817.json"
 PRICING_PATH = DRAFT / "resource_valuation_model_pricing_20260817.csv"
+ACCOUNTING_SUMMARY_PATH = GENERATED / "accounting_summary.json"
+ACCOUNTING_MANIFEST_PATH = GENERATED / "commit_accounting_manifest.csv"
 PRIMARY_REPOSITORY = CONFIG.get("primary_repository", "aiq-dkps-formalization")
 LEDGER_REPOSITORIES = set(CONFIG.get("included_ledger_repositories", {PRIMARY_REPOSITORY: ""}))
 EXCLUDED_ONLY_PREFIXES = tuple(CONFIG.get("exclude_commits_if_only_touch", []))
@@ -159,6 +161,13 @@ def main() -> None:
     GENERATED.mkdir(parents=True, exist_ok=True)
     SNAPSHOTS.mkdir(parents=True, exist_ok=True)
     assumptions = json.loads(ASSUMPTIONS_PATH.read_text())
+    accounting_summary = json.loads(ACCOUNTING_SUMMARY_PATH.read_text())
+    coverage = accounting_summary["coverage_proxies"]
+    with ACCOUNTING_MANIFEST_PATH.open(newline="", encoding="utf-8") as f:
+        exact_primary_shas = {
+            row["commit"] for row in csv.DictReader(f)
+            if row.get("accounting_state") == "exact_measured"
+        }
     stack_cfg = assumptions["serving_stack"]
     stack = {
         "pue": stack_cfg["pue"],
@@ -177,6 +186,9 @@ def main() -> None:
     excluded_sha = {c.commit for c in commits if commit_is_excluded(c)}
 
     stats: dict[str, dict] = {}
+    exact_primary_tokens = {k: 0 for k in TOKEN_KEYS}
+    exact_primary_turns = 0.0
+    exact_primary_energy = ZERO
 
     def stat_for(model: str) -> dict:
         return stats.setdefault(
@@ -206,6 +218,7 @@ def main() -> None:
             commit = str(row.get("c") or "")
             if repo == PRIMARY_REPOSITORY and commit in excluded_sha:
                 continue
+            is_exact_primary = repo == PRIMARY_REPOSITORY and commit in exact_primary_shas
 
             if row.get("k") == "cx":
                 model = canonical_model_name(str((row.get("m") or ["<unknown>"])[0]))
@@ -222,6 +235,8 @@ def main() -> None:
                 add_metric(stat, "seconds", _seconds)
                 add_metric(stat, "energy_kwh", energy)
                 add_metric(stat, "carbon_gco2e", carbon)
+                if is_exact_primary:
+                    exact_primary_energy += energy
                 continue
 
             if "t" not in row:
@@ -255,6 +270,11 @@ def main() -> None:
                 add_metric(stat, "seconds", seconds)
                 add_metric(stat, "energy_kwh", energy)
                 add_metric(stat, "carbon_gco2e", carbon)
+                if is_exact_primary:
+                    exact_primary_turns += turns
+                    for kind in TOKEN_KEYS:
+                        exact_primary_tokens[kind] += tokens[kind]
+                    exact_primary_energy += energy
 
     prices = load_prices()
     rows = []
@@ -314,6 +334,34 @@ def main() -> None:
     cross_energy = cross_wh * float(cross["pue"]) * 0.001
     cross_carbon_kg = cross_energy * float(cross["grid_gco2e_per_kwh"]) / 1000.0
 
+    expected_exact = accounting_summary["exact_on_history"]
+    exact_billable_input = (
+        exact_primary_tokens["input"]
+        + exact_primary_tokens["cache_write"]
+        + exact_primary_tokens["cache_read"]
+    )
+    if exact_billable_input != int(expected_exact["billable_input_tokens"]):
+        raise ValueError("resource valuation exact-primary billable-input total disagrees with accounting summary")
+    if exact_primary_tokens["output"] != int(expected_exact["output_tokens"]):
+        raise ValueError("resource valuation exact-primary output total disagrees with accounting summary")
+
+    commit_share = float(coverage["exact_commit_share"])
+    lean_churn_share = float(coverage["exact_lean_line_churn_share"])
+    if not (0 < commit_share <= 1 and 0 < lean_churn_share <= 1):
+        raise ValueError("coverage shares must lie in (0, 1]")
+    extrapolation = {
+        "commit_scaled": {
+            "billable_input_tokens": exact_billable_input / commit_share,
+            "output_tokens": exact_primary_tokens["output"] / commit_share,
+            "energy_kwh_central": exact_primary_energy.central / commit_share,
+        },
+        "lean_churn_scaled": {
+            "billable_input_tokens": exact_billable_input / lean_churn_share,
+            "output_tokens": exact_primary_tokens["output"] / lean_churn_share,
+            "energy_kwh_central": exact_primary_energy.central / lean_churn_share,
+        },
+    }
+
     assumptions_sha = hashlib.sha256(ASSUMPTIONS_PATH.read_bytes()).hexdigest()
     out = {
         "schema": "formalization-draft2/resource-valuation-output/v1",
@@ -342,6 +390,13 @@ def main() -> None:
                 "energy_kwh": cross_energy,
                 "carbon_kgco2e": cross_carbon_kg,
             },
+            "exact_primary_subset": {
+                **{f"{k}_tokens": exact_primary_tokens[k] for k in TOKEN_KEYS},
+                "billable_input_tokens": exact_billable_input,
+                "turns": exact_primary_turns,
+                "energy_kwh_central": exact_primary_energy.central,
+            },
+            "coverage_scaled_extrapolation": extrapolation,
         },
         "method": "measured ledger x versioned pricing/serving assumptions; scenario bounds are not confidence intervals",
     }
@@ -358,27 +413,42 @@ def main() -> None:
         f"\\newcommand{{\\ResourceAssumptionsVersion}}{{{latex_escape(assumptions['version'])}}}",
         f"\\newcommand{{\\ResourceAssumptionsSHA}}{{{assumptions_sha}}}",
         f"\\newcommand{{\\MeasuredApiEquivalentCost}}{{\\${fmt_usd(total_cost)}}}" if total_cost_complete else "\\newcommand{\\MeasuredApiEquivalentCost}{unpriced}",
-        f"\\newcommand{{\\MeasuredApiEquivalentCostScientific}}{{{truncated_scientific(total_cost)}}}" if total_cost_complete else "\\newcommand{\\MeasuredApiEquivalentCostScientific}{unpriced}",
         f"\\newcommand{{\\MeasuredApiEquivalentCostOneHour}}{{\\${fmt_usd(one_hour_total)}}}" if one_hour_total is not None else "\\newcommand{\\MeasuredApiEquivalentCostOneHour}{unpriced}",
         f"\\newcommand{{\\ModeledOperationalEnergy}}{{{fmt_one(total_energy.central)}~kWh}}",
-        f"\\newcommand{{\\ModeledOperationalCarbon}}{{{fmt_one(total_carbon.central / 1000.0)}~kg~CO$_2$e}}",
-        f"\\newcommand{{\\ModeledOperationalCarbonScientific}}{{{truncated_scientific(total_carbon.central / 1000.0)}}}",
         f"\\newcommand{{\\PerTokenCrossCheckEnergy}}{{{fmt_one(cross_energy)}~kWh}}",
-        f"\\newcommand{{\\PerTokenCrossCheckCarbon}}{{{fmt_one(cross_carbon_kg)}~kg~CO$_2$e}}",
+        f"\\newcommand{{\\ExactPrimaryOperationalEnergy}}{{{fmt_one(exact_primary_energy.central)}~kWh}}",
+        f"\\newcommand{{\\CommitScaledOperationalEnergy}}{{{fmt_one(extrapolation['commit_scaled']['energy_kwh_central'])}~kWh}}",
+        f"\\newcommand{{\\LeanChurnScaledOperationalEnergy}}{{{fmt_one(extrapolation['lean_churn_scaled']['energy_kwh_central'])}~kWh}}",
+        f"\\newcommand{{\\CommitScaledBillableInputTokens}}{{{extrapolation['commit_scaled']['billable_input_tokens']:,.0f}}}",
+        f"\\newcommand{{\\LeanChurnScaledBillableInputTokens}}{{{extrapolation['lean_churn_scaled']['billable_input_tokens']:,.0f}}}",
+        f"\\newcommand{{\\CommitScaledOutputTokens}}{{{extrapolation['commit_scaled']['output_tokens']:,.0f}}}",
+        f"\\newcommand{{\\LeanChurnScaledOutputTokens}}{{{extrapolation['lean_churn_scaled']['output_tokens']:,.0f}}}",
         f"\\newcommand{{\\ResourceEnergyScenarioLow}}{{{fmt_one(total_energy.low)}~kWh}}",
         f"\\newcommand{{\\ResourceEnergyScenarioHigh}}{{{fmt_one(total_energy.high)}~kWh}}",
-        f"\\newcommand{{\\ResourceCarbonScenarioLow}}{{{fmt_one(total_carbon.low / 1000.0)}~kg~CO$_2$e}}",
-        f"\\newcommand{{\\ResourceCarbonScenarioHigh}}{{{fmt_one(total_carbon.high / 1000.0)}~kg~CO$_2$e}}",
     ]
     (SNAPSHOTS / "resource_valuation_macros.tex").write_text("\n".join(macros) + "\n")
 
+    summary_table = [
+        "% Generated by build_resource_valuation_20260817.py; do not edit by hand.",
+        r"\begin{tabular}{lrrr}",
+        r"\toprule",
+        r"Quantity & Observed lower bound & Commit-scaled & Lean-churn-scaled \\",
+        r"\midrule",
+        fr"Billable input (B tokens) & {billable_input / 1e9:.2f} & {extrapolation['commit_scaled']['billable_input_tokens'] / 1e9:.2f} & {extrapolation['lean_churn_scaled']['billable_input_tokens'] / 1e9:.2f} \\",
+        fr"Output (M tokens) & {total_tokens['output'] / 1e6:.1f} & {extrapolation['commit_scaled']['output_tokens'] / 1e6:.1f} & {extrapolation['lean_churn_scaled']['output_tokens'] / 1e6:.1f} \\",
+        fr"Modeled operational energy (kWh) & {total_energy.central:,.0f} & {extrapolation['commit_scaled']['energy_kwh_central']:,.0f} & {extrapolation['lean_churn_scaled']['energy_kwh_central']:,.0f} \\",
+        r"\bottomrule",
+        r"\end{tabular}",
+    ]
+    (SNAPSHOTS / "resource_coverage_extrapolation_table.tex").write_text("\n".join(summary_table) + "\n")
+
     table = [
         "% Generated by build_resource_valuation_20260817.py; do not edit by hand.",
-        "\\begin{tabular}{lrrrrr}",
-        "\\toprule",
-        "Model & Billable input & Output & API-equiv. & Energy & CO$_2$e \\\\",
-        " & (B tokens) & (M tokens) & (USD) & (kWh) & (kg) \\\\",
-        "\\midrule",
+        r"\begin{tabular}{lrrrr}",
+        r"\toprule",
+        r"Model & Lower-bound input & Lower-bound output & Lower-bound API-equiv. & Modeled energy \\",
+        r" & (B tokens) & (M tokens) & (USD) & (kWh) \\",
+        r"\midrule",
     ]
     for row in rows:
         cost = row["api_equivalent_usd"]
@@ -386,17 +456,17 @@ def main() -> None:
         table.append(
             f"{latex_escape(row['model'])} & {row['billable_input_tokens'] / 1e9:.3f} & "
             f"{row['output_tokens'] / 1e6:.3f} & {cost_text} & "
-            f"{row['energy_kwh_central']:.1f} & {row['carbon_kgco2e_central']:.1f} \\\\" 
-        )
+            + fr"{row['energy_kwh_central']:.1f} \\")
     table += [
-        "\\midrule",
+        r"\midrule",
         f"Total & {billable_input / 1e9:.3f} & {total_tokens['output'] / 1e6:.3f} & "
         + (f"{total_cost:,.0f}" if total_cost_complete else "--")
-        + f" & {total_energy.central:.1f} & {total_carbon.central / 1000.0:.1f} \\\\",
-        "\\bottomrule",
-        "\\end{tabular}",
+        + fr" & {total_energy.central:.1f} \\",
+        r"\bottomrule",
+        r"\end{tabular}",
     ]
     (SNAPSHOTS / "resource_valuation_table.tex").write_text("\n".join(table) + "\n")
+
 
 
 if __name__ == "__main__":
