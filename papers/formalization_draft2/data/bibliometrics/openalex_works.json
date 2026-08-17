@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "works": [
+    {
+      "key": "davis_kahan_1970",
+      "macro_stem": "DavisKahan",
+      "citation_key": "davis1970rotation",
+      "doi": "10.1137/0707001",
+      "expected_title": "The Rotation of Eigenvectors by a Perturbation. III"
+    },
+    {
+      "key": "yu_wang_samworth_2015",
+      "macro_stem": "YuWangSamworth",
+      "citation_key": "yu2015davis",
+      "doi": "10.1093/biomet/asv008",
+      "expected_title": "A Useful Variant of the Davis--Kahan Theorem for Statisticians"
+    }
+  ]
+}

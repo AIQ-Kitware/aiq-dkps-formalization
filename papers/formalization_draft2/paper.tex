@@ -94,6 +94,8 @@
 \newcommand{\DK}{Davis--Kahan}
 \newcommand{\TauCeti}{Tau Ceti}
 
+\newcommand{\note}[1]{\textcolor{red}{\textbf{NOTE:} #1}}
+
 \title{Formalizing Yu--Wang--Samworth:\\
 Source Auditing, Davis--Kahan, and the Cost of Building\\
 Spectral Perturbation Theory in Lean}
@@ -197,6 +199,70 @@ formal substrate for subsequent results.
 \textbf{TODO:} quantify citation/use evidence for Davis--Kahan and YWS using a
 reproducible bibliometric source appropriate for the venue.  Explain why the
 population-gap formulation is the form statisticians routinely need.
+
+\input{snapshots/openalex_bibliometrics_macros.tex}
+
+% Manually populated.
+\newcommand{\GoogleScholarRetrievedDate}{17 August 2026}
+\newcommand{\GoogleScholarDavisKahanCitations}{2086}
+\newcommand{\GoogleScholarYuWangSamworthCitations}{1067}
+
+\paragraph{Use and continued relevance.}
+Both results remain widely used.
+To make this claim quantitative without making the paper build depend on a live
+  bibliographic service, we record a dated OpenAlex snapshot keyed by the
+  articles' DOIs.
+In the snapshot retrieved on \OpenAlexRetrievedDate, OpenAlex records
+  \OpenAlexDavisKahanCitations{} citing works for Davis--Kahan
+  \citep{davis1970rotation} and \OpenAlexYuWangSamworthCitations{} for Yu, Wang,
+  and Samworth \citep{yu2015useful}.
+The repository contains the query code and the small generated \LaTeX{} snapshot
+  used for these numbers; the larger raw API response is treated as disposable
+  generated data.
+As an independent, broader bibliographic cross-check, Google Scholar reported
+  \GoogleScholarDavisKahanCitations{} and
+  \GoogleScholarYuWangSamworthCitations{} citations, respectively, on
+  \GoogleScholarRetrievedDate{}.
+
+\paragraph{The importance of the population gap in statistics.}
+The change made by Yu, Wang, and Samworth is small syntactically but important
+for statistical use.  In a typical application, $\Sigma$ is a population
+matrix determined by the statistical model, while $\widehat{\Sigma}$ is a
+random estimator.  Consequently, the population eigengap
+\[
+  \Delta
+  =
+  \min\{
+    \lambda_{r-1}(\Sigma)-\lambda_r(\Sigma),
+    \lambda_s(\Sigma)-\lambda_{s+1}(\Sigma)
+  \}
+\]
+is a deterministic property of the model, whereas gaps involving eigenvalues
+of $\widehat{\Sigma}$ are themselves random quantities.  A perturbation theorem
+whose separation hypothesis mixes the population and sample spectra therefore
+creates an additional probabilistic obligation: before using the eigenspace
+bound, one must first prove that the random sample eigenvalues remain suitably
+separated.
+
+Theorem~2 of Yu, Wang, and Samworth removes that intermediate dependence.  Once
+a population gap $\Delta>0$ is assumed, a bound on
+$\widehat{\Sigma}-\Sigma$ can be converted directly into a bound on the
+estimated eigenspace.  This gives the modular form routinely needed in
+statistical arguments:
+\[
+  \text{population separation}
+  \;+\;
+  \text{stochastic matrix-estimation error}
+  \quad\Longrightarrow\quad
+  \text{eigenspace-estimation error}.
+\]
+The denominator is supplied by assumptions on the population model, while
+  concentration or random-matrix arguments control the numerator.
+This distinction highlights the importance of semantic alignment: a
+  formalization that silently introduced a sample-eigengap assumption could
+  still prove a valid perturbation theorem, but it would miss much of the
+  statistical content of the Yu--Wang--Samworth result.
+
 
 \subsection{The visible theorem sits on a missing formal stack}
 
@@ -509,8 +575,101 @@ and can force a zero upper bound even when the sample and population singular
 subspaces are orthogonal.  The intended theorem is repaired by the ambient-index
 boundary convention used in the paper's own Gram-matrix proof.
 
-\textbf{TODO:} give minimal numerical counterexamples and exact corrected
-statements, with declaration-level references.
+\textbf{TODO:} AUDIT THESE minimal numerical counterexamples:
+
+For equation~(4), a two-dimensional numerical example already exposes the
+error.  Take
+\[
+u=(1,0),\qquad v=(3/5,4/5).
+\]
+Then $\|u\|=\|v\|=1$, $\langle v,u\rangle=3/5$, and
+$\|v-u\|^2=4/5$.  The two sides of the identity as printed are therefore
+\[
+(2\langle v,u\rangle)^2(1-\langle v,u\rangle^2)
+   = \frac{576}{625},
+\qquad
+\frac14\|v-u\|^2
+  (2-\|v-u\|^2)
+  (4-\|v-u\|^2)
+   = \frac{96}{125},
+\]
+so they are unequal.  The correction is exactly one square:
+\begin{equation}
+\label{eq:yws-equation4-corrected}
+(2\langle v,u\rangle)^2(1-\langle v,u\rangle^2)
+=
+\frac14\|v-u\|^2
+  (2-\|v-u\|^2)^2
+  (4-\|v-u\|^2).
+\end{equation}
+The counterexample is machine checked by
+\path{yuWangSamworth_equation4_printed_counterexample}, while
+\path{yuWangSamworth_equation4} proves
+\cref{eq:yws-equation4-corrected} for arbitrary real unit vectors; both
+declarations are in
+\path{YuWangSamworth2015/Symmetric/AngleIdentity.lean}.
+
+The rank-boundary defect in Theorem~3 also occurs in the smallest nontrivial
+dimension.  Let
+\[
+A=
+\begin{pmatrix}
+1&0\\0&0
+\end{pmatrix},
+\qquad
+\widehat A=
+\begin{pmatrix}
+0&0\\0&1
+\end{pmatrix}.
+\]
+Both matrices have rank one.  Taking $r=s=1$, their population and sample top
+right singular subspaces are the perpendicular coordinate axes, and hence
+\[
+\|\sin\Theta(\widehat V,V)\|_F=1.
+\]
+Under the printed conventions
+$\sigma_0^2:=+\infty$ and
+$\sigma_{\operatorname{rank}(A)+1}^2:=-\infty$, however, both boundary
+separations are infinite:
+\[
+\sigma_0^2-\sigma_1^2=+\infty,
+\qquad
+\sigma_1^2-\sigma_2^2=+\infty.
+\]
+Thus the printed denominator is infinite and its asserted upper bound collapses
+to zero, contradicting the displayed value above.  This concrete $2\times2$
+example is formalized as
+\path{yuWangSamworth_theorem3_printed_rankBoundary_refutation_euclidean}
+in \path{YuWangSamworth2015/Rectangular/RankBoundary.lean}.
+
+The correction is to take the boundary in the ambient Gram spectrum, as the
+proof of Theorem~3 itself does.  For right singular subspaces of
+$A\in\mathbb{R}^{p\times q}$, extend the singular values by
+$\sigma_j(A)=0$ for
+$\operatorname{rank}(A)<j\le q$ and place the terminal convention at
+$\sigma_{q+1}^2:=-\infty$; for left singular subspaces the corresponding
+ambient endpoint is $p+1$.  Consequently the theorem uses a finite
+$\Delta>0$ satisfying
+\[
+\Delta
+\le
+\min\left\{
+  \sigma_{r-1}^2-\sigma_r^2,\,
+  \sigma_s^2-\sigma_{s+1}^2
+\right\},
+\]
+with the singular values interpreted at the appropriate ambient dimension.
+For the example above, the lower boundary is therefore the genuine Gram
+eigenvalue gap
+\[
+\sigma_1^2-\sigma_2^2=1-0=1,
+\]
+rather than $+\infty$.  The corrected boundary reduction is formalized by
+\path{singularBoundaryGap_of_rank_le}; the corrected right- and left-singular
+subspace statements are
+\path{yuWangSamworth_rightSingularSubspace_block_le} and
+\path{yuWangSamworth_leftSingularSubspace_block_le}, respectively, in
+\path{YuWangSamworth2015/Rectangular/SingularBlock.lean}.
 
 \subsection{Davis--Kahan Proposition 4.4 is false as printed}
 
@@ -673,8 +832,10 @@ case study are intentionally developed in \cref{app:interactions}; much of that
 material is appendix/cut material unless it changes the interpretation of the
 mathematical results.
 
-\section{From Project Infrastructure to Shared Infrastructure}
+\section{Contribution of Reusable Foundations}
 \label{sec:tauceti}
+
+\note{this section can problem be a note where we describe the contributions or moved to the appendix.}
 
 The project currently stages substantial reusable operator-theory code under
 \texttt{ForTauCeti/}.  The intended endpoint is not a private theorem stack but a

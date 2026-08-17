@@ -188,6 +188,39 @@ The analysis history is pinned in `analysis_config.json`. The rendered PDF shows
 the snapshot **date**, not the Git hash; the full hash is retained in generated
 source and attached to the displayed date as PDF tooltip metadata.
 
+## Citation-count snapshots
+
+Citation counts used for motivation in the manuscript are collected separately
+from the normal paper build.  OpenAlex is queried by the two published DOIs in
+`data/bibliometrics/openalex_works.json`; the network utility writes a dated,
+tracked source snapshot to `data/bibliometrics/openalex_snapshot.json` and TeX
+macros to `generated/openalex_bibliometrics_macros.tex`.
+
+OpenAlex currently requires an API key.  Obtain a free key from OpenAlex, then
+run:
+
+```bash
+export OPENALEX_API_KEY=...
+make -C papers/formalization_draft2 bibliometrics
+```
+
+For an audit of the exact requests without making a network call:
+
+```bash
+python3 papers/formalization_draft2/scripts/fetch_openalex_bibliometrics.py --dry-run
+```
+
+The snapshot deliberately records the retrieval timestamp, DOI, OpenAlex work
+identifier, total `cited_by_count`, `counts_by_year`, and OpenAlex `updated_date`,
+but never records the API key.  The regular `paper` and `accounting` targets do
+not contact OpenAlex.
+
+Google Scholar counts are intentionally not scraped by repository tooling.  If
+we report them, record the visible `Cited by` values and observation date
+manually in the manuscript or a tracked bibliometric note, alongside the dated
+OpenAlex snapshot.  Both sources should be named explicitly because citation
+counts are database- and date-dependent.
+
 ## Generated artifacts
 
 `generated/dependency_import_closure.csv`, `generated/dependency_target_summary.csv`,
