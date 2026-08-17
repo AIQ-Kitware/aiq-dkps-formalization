@@ -34,15 +34,23 @@ corollaries, the Section 1 numerical illustration that Theorem 1's separation
 can vanish, and the deterministic core of the Section 3 diagnosis of the
 statistical literature.
 
-The population-gap results are also available in the source's *shape*: the block
-`r, …, s` with `d` tied to them by `r + d = s + 1`, the two-sided boundary gap
-`min(λ_{r-1} − λ_r, λ_s − λ_{s+1})` and the printed endpoint conventions, and an
-aligned conclusion that exhibits the orthogonal `Ô` and compares `V̂Ô` against
-the supplied population frame — over `ℝ`, with `Ô` an element of
-`Matrix.orthogonalGroup (Fin d) ℝ`.  `Symmetric/Corollary1.lean` carries the rank-one
-case together with `yuWangSamworth_corollary1_scalarSample`, the witness that
-the sample eigenvector is genuinely arbitrary: for `Σ = diag(1, 0)` and
-`Σ̂ = I/2` every unit vector of the plane is admissible.
+The canonical source-facing Theorem 2 declarations are
+`YuWangSamworth2015.theorem2_sinTheta` and
+`YuWangSamworth2015.theorem2_alignedFrame`.  They are intentionally optimized for
+semantic review: real operators on `Real^p`, source-style names, the visible
+conditions `r ≤ s`, `s < p`, and `d = s - r + 1`, arbitrary supplied population
+and sample eigenvector blocks, and a population-only boundary gap.  The aligned
+conclusion exhibits the orthogonal matrix and compares `Vhat O` against the
+supplied `V`.  The smaller predicates `IsEigenvectorBlock` and
+`PopulationBoundaryGap` expand directly to the orthonormal/eigenvector equations
+and the two population boundary inequalities, respectively, so the audit packet
+can show their complete mathematical content next to the theorem.
+
+The more general `RCLike` block wrappers remain available underneath that paper
+surface, and `Symmetric/Corollary1.lean` carries the rank-one case together with
+`yuWangSamworth_corollary1_scalarSample`, the witness that the sample eigenvector
+is genuinely arbitrary: for `Σ = diag(1, 0)` and `Σ̂ = I/2` every unit vector of
+the plane is admissible.
 
 ## Two source defects, both machine checked
 

@@ -145,4 +145,205 @@ theorem yuWangSamworth_alignedFrame_block_real_le
 
 end Real
 
+/-! ## Paper-facing Theorem 2 surface
+
+The declarations in this section are intentionally written for semantic review.
+They specialize the source theorem to `Real^p`, use the source variable names,
+and state the block conditions as `r ≤ s`, `s < p`, and `d = s - r + 1`.
+The two small predicates below hide only representation details: their definitions
+are meant to be printed next to the theorem by the semantic-alignment review.
+-/
+
+section PaperFacing
+
+/-- A source-shaped eigenvector block for Theorem 2.
+
+`V` has orthonormal columns, and column `i` is an eigenvector of `Sigma` for the
+`(r+i)`-th eigenvalue in nonincreasing order.  Lean indices are zero-based, so
+this is the paper's block `r,...,s` after subtracting one from its indices. -/
+def IsEigenvectorBlock
+    {p d r s : Nat}
+    (Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
+    (hSigma : Sigma.IsSymmetric)
+    (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
+    (V : Fin d → EuclideanSpace Real (Fin p)) : Prop :=
+  Orthonormal Real V ∧
+    ∀ i, Sigma (V i) =
+      hSigma.eigenvalues
+        (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp)
+        (Fin.mk (r + (i : Nat)) (by omega)) • V i
+
+/-- Characteristic form of the paper-facing eigenvector-block predicate. -/
+theorem isEigenvectorBlock_iff
+    {p d r s : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric}
+    {hr : r ≤ s} {hs : s < p} {hd : d = s - r + 1}
+    {V : Fin d → EuclideanSpace Real (Fin p)} :
+    IsEigenvectorBlock Sigma hSigma hr hs hd V ↔
+      Orthonormal Real V ∧
+        ∀ i, Sigma (V i) =
+          hSigma.eigenvalues
+            (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp)
+            (Fin.mk (r + (i : Nat)) (by omega)) • V i :=
+  Iff.rfl
+
+namespace IsEigenvectorBlock
+
+/-- Bridge from the paper-facing eigenvector-block predicate to the general
+ordered-eigenframe interface used by the proof. -/
+theorem toIsOrderedEigenframe
+    {p d r s : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric}
+    {hr : r ≤ s} {hs : s < p} {hd : d = s - r + 1}
+    {V : Fin d → EuclideanSpace Real (Fin p)}
+    (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V) :
+    IsOrderedEigenframe hSigma
+      (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp)
+      (consecutiveEmb (show r + d ≤ p by omega)) V := by
+  simp only [IsEigenvectorBlock] at hV
+  apply isOrderedEigenframe_iff.mpr
+  refine { orthonormal := hV.1, apply_eq := ?_ }
+  intro i
+  have hidx :
+      consecutiveEmb (show r + d ≤ p by omega) i =
+        Fin.mk (r + (i : Nat)) (by omega) := by
+    apply Fin.ext
+    rfl
+  rw [hidx]
+  exact hV.2 i
+
+end IsEigenvectorBlock
+
+/-- The source's population-only boundary gap around `r,...,s`.
+
+At an interior boundary this says
+`Delta ≤ lambda_(r-1) - lambda_r` and
+`Delta ≤ lambda_s - lambda_(s+1)`.  At the first or last index the
+corresponding quantified clause is vacuous, implementing the paper's
+`lambda_0 = +infinity` and `lambda_(p+1) = -infinity` conventions.  Only the
+population operator `Sigma` occurs here; there is no sample eigengap. -/
+def PopulationBoundaryGap
+    {p : Nat}
+    (Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
+    (hSigma : Sigma.IsSymmetric) (r s : Nat) (Delta : Real) : Prop :=
+  (∀ q j : Fin p, (q : Nat) + 1 = r → (j : Nat) = r →
+      Delta ≤
+        hSigma.eigenvalues
+            (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) q -
+          hSigma.eigenvalues
+            (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) j) ∧
+    (∀ j q : Fin p, (j : Nat) = s → (q : Nat) = s + 1 →
+      Delta ≤
+        hSigma.eigenvalues
+            (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) j -
+          hSigma.eigenvalues
+            (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) q)
+
+/-- Characteristic form of the paper-facing population boundary gap. -/
+theorem populationBoundaryGap_iff
+    {p : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric} {r s : Nat} {Delta : Real} :
+    PopulationBoundaryGap Sigma hSigma r s Delta ↔
+      ((∀ q j : Fin p, (q : Nat) + 1 = r → (j : Nat) = r →
+          Delta ≤
+            hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) q -
+              hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) j) ∧
+        (∀ j q : Fin p, (j : Nat) = s → (q : Nat) = s + 1 →
+          Delta ≤
+            hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) j -
+              hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) q)) :=
+  Iff.rfl
+
+namespace PopulationBoundaryGap
+
+/-- Bridge from the paper-facing gap predicate to the implementation predicate. -/
+theorem toOrderedBlockBoundaryGap
+    {p : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric} {r s : Nat} {Delta : Real}
+    (hgap : PopulationBoundaryGap Sigma hSigma r s Delta) :
+    OrderedBlockBoundaryGap hSigma
+      (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) r s Delta := by
+  apply orderedBlockBoundaryGap_iff.mpr
+  simpa only [PopulationBoundaryGap] using hgap
+
+end PopulationBoundaryGap
+
+/-- **Yu--Wang--Samworth 2015, Theorem 2, first conclusion.**
+
+This is the paper-facing semantic-review statement.  `Sigma` and `SigmaHat` are
+real symmetric operators on `Real^p`; `V` and `Vhat` are arbitrary orthonormal
+eigenvector blocks at the ordered indices `r,...,s`; and `Delta` is controlled
+only by the two population boundary gaps.  No sample eigengap is assumed. -/
+theorem theorem2_sinTheta
+    {p d r s : Nat}
+    (Sigma SigmaHat :
+      EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
+    (hSigma : Sigma.IsSymmetric) (hSigmaHat : SigmaHat.IsSymmetric)
+    (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
+    (V Vhat : Fin d → EuclideanSpace Real (Fin p))
+    (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
+    (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
+    (Delta : Real) (hDelta : 0 < Delta)
+    (hgap : PopulationBoundaryGap Sigma hSigma r s Delta) :
+    sinThetaFrobenius (Submodule.span Real (Set.range V))
+        (Submodule.span Real (Set.range Vhat)) ≤
+      2 * min (Real.sqrt d * ‖(SigmaHat - Sigma).toContinuousLinearMap‖)
+        (UnitarilyInvariantSeminorm.frobenius Real (EuclideanSpace Real (Fin p))
+          (SigmaHat - Sigma)) / Delta := by
+  have hsn : s + 1 ≤ p := by omega
+  have hrd : r + d = s + 1 := by omega
+  exact yuWangSamworth_sinTheta_block_le
+    (A := Sigma) (B := SigmaHat) (hA := hSigma) (hB := hSigmaHat)
+    (n := p) (d := d) (r := r) (s := s)
+    (hn := show finrank Real (EuclideanSpace Real (Fin p)) = p by simp)
+    hsn hrd
+    (IsEigenvectorBlock.toIsOrderedEigenframe hV)
+    (IsEigenvectorBlock.toIsOrderedEigenframe hVhat) hDelta
+    (PopulationBoundaryGap.toOrderedBlockBoundaryGap hgap)
+
+/-- **Yu--Wang--Samworth 2015, Theorem 2, second conclusion.**
+
+Under exactly the same source-shaped hypotheses, an orthogonal matrix aligns
+the supplied sample frame `Vhat` to the supplied population frame `V` with the
+printed `2^(3/2)` Frobenius bound. -/
+theorem theorem2_alignedFrame
+    {p d r s : Nat}
+    (Sigma SigmaHat :
+      EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
+    (hSigma : Sigma.IsSymmetric) (hSigmaHat : SigmaHat.IsSymmetric)
+    (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
+    (V Vhat : Fin d → EuclideanSpace Real (Fin p))
+    (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
+    (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
+    (Delta : Real) (hDelta : 0 < Delta)
+    (hgap : PopulationBoundaryGap Sigma hSigma r s Delta) :
+    ∃ O : Matrix (Fin d) (Fin d) Real,
+      O ∈ Matrix.orthogonalGroup (Fin d) Real ∧
+        Real.sqrt (∑ i, ‖(∑ j, O j i • Vhat j) - V i‖ ^ 2) ≤
+          2 * Real.sqrt 2 *
+            min (Real.sqrt d * ‖(SigmaHat - Sigma).toContinuousLinearMap‖)
+              (UnitarilyInvariantSeminorm.frobenius Real
+                (EuclideanSpace Real (Fin p)) (SigmaHat - Sigma)) / Delta := by
+  have hsn : s + 1 ≤ p := by omega
+  have hrd : r + d = s + 1 := by omega
+  exact yuWangSamworth_alignedFrame_block_real_le
+    (A := Sigma) (B := SigmaHat) (hA := hSigma) (hB := hSigmaHat)
+    (n := p) (d := d) (r := r) (s := s)
+    (hn := show finrank Real (EuclideanSpace Real (Fin p)) = p by simp)
+    hsn hrd
+    (IsEigenvectorBlock.toIsOrderedEigenframe hV)
+    (IsEigenvectorBlock.toIsOrderedEigenframe hVhat) hDelta
+    (PopulationBoundaryGap.toOrderedBlockBoundaryGap hgap)
+
+end PaperFacing
+
+
 end YuWangSamworth2015

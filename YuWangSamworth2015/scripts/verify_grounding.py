@@ -32,6 +32,12 @@ REQUIRED_DECLARATIONS = {
         "theorem opNorm_sinThetaMap_le_of_intervalGap",
     ],
     "YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean": [
+        "def IsEigenvectorBlock",
+        "theorem isEigenvectorBlock_iff",
+        "def PopulationBoundaryGap",
+        "theorem populationBoundaryGap_iff",
+        "theorem theorem2_sinTheta",
+        "theorem theorem2_alignedFrame",
         "theorem yuWangSamworth_sinTheta_block_le",
         "theorem yuWangSamworth_alignedFrame_block_le",
         "theorem yuWangSamworth_alignedFrame_block_real_le",

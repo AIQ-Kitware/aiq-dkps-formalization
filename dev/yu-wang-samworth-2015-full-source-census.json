@@ -213,10 +213,15 @@
         "YuWangSamworth2015.OrderedBlockBoundaryGap",
         "YuWangSamworth2015.orderedBlockBoundaryGap_iff",
         "YuWangSamworth2015.OrderedBlockBoundaryGap.indexGap",
-        "YuWangSamworth2015.yuWangSamworth_sinTheta_block_le"
+        "YuWangSamworth2015.yuWangSamworth_sinTheta_block_le",
+        "YuWangSamworth2015.IsEigenvectorBlock",
+        "YuWangSamworth2015.PopulationBoundaryGap",
+        "YuWangSamworth2015.theorem2_sinTheta",
+        "YuWangSamworth2015.isEigenvectorBlock_iff",
+        "YuWangSamworth2015.populationBoundaryGap_iff"
       ],
       "gap_refs": [],
-      "notes": "`||sin Theta(V-hat, V)||_F <= 2 min(d^{1/2} ||E||_op, ||E||_F) / Delta` with only the two exterior POPULATION gaps in the denominator. The min is proved as printed, not as one branch.\n\n**Corrected 2026-08-13, and this was a real scope defect.** Until that date the only statement carrying this row was `yuWangSamworth_sinTheta_le`, whose hypothesis `CorrespondingEigenblock hA hB U V` requires BOTH blocks to be spans of the same index set in Mathlib's chosen eigenbases. Yu, Wang and Samworth require only that `V-hat` have orthonormal columns with `Sigma-hat v-hat_j = lambda-hat_j v-hat_j`, and they impose NO sample eigengap -- removing it is the paper's entire contribution. At a repeated sample eigenvalue the two hypotheses differ: the paper admits every orthonormal choice inside the degenerate sample eigenspace, `CorrespondingEigenblock` admits only the one Mathlib happened to pick. Marking the row `compiled_exact` in that state was wrong.\n\nThe printed statement is now `yuWangSamworth_sinTheta_frame_le`, whose hypothesis is an arbitrary `IsOrderedEigenframe` on each side at a common index embedding. `yuWangSamworth_sinTheta_le` is derived from it and kept for callers who already hold the index datum. `IsOrderedEigenframe.span_eq_spanIndices` records the asymmetry that makes this correct rather than merely more general: under the population gap the POPULATION block is forced to be the canonical one whatever eigenvectors are chosen, and without a gap -- the sample side -- it is not.\n\n**Indexing closed 2026-08-13.** Until then the only source-general statement was `yuWangSamworth_sinTheta_frame_le`, whose block is an arbitrary index embedding `e : Fin d -> Fin n` and whose gap hypothesis is the intrinsic separation `Delta <= |lambda_{e i} - lambda_k|` for every unselected `k`. That is the right hypothesis for a general theorem but it is not the printed one: the source fixes `1 <= r <= s <= p`, `d = s - r + 1`, and assumes only the two BOUNDARY gaps `min(lambda_{r-1} - lambda_r, lambda_s - lambda_{s+1})`, under the conventions `lambda_0 = +inf` and `lambda_{p+1} = -inf`. `consecutiveEmb` is that block and `OrderedBlockBoundaryGap` is that hypothesis, with the endpoint conventions modelled by VACUOUS QUANTIFICATION (there is no index `q` with `q + 1 = r` when `r = 0`) rather than by extended reals, so the interior, top and bottom blocks need no separate statements. `OrderedBlockBoundaryGap.indexGap` is the bridge, and antitonicity of the sorted spectrum is the only mathematics in it. `yuWangSamworth_sinTheta_block_le` is the printed theorem. The bridge constrains only the POPULATION spectrum, so `lambda-hat_s = lambda-hat_{s+1}` remains admissible -- the wrapper does not smuggle a sample eigengap back in.\n\nThe wrappers take the source's own variables `r` and `s`, with the frame size tied to them by `r + d = s + 1` -- the paper's `d = s - r + 1` written without truncated subtraction. `d` cannot be eliminated, since it is the index type of the frames `V, V-hat : Fin d -> E`, but it is pinned by that hypothesis and both the gap and the bound are written at `r` and `s`. The paper's `r <= s` is exactly `1 <= d` here and is not imposed: at `d = 0` the frames are empty and the bound is trivial.",
+      "notes": "`||sin Theta(V-hat, V)||_F <= 2 min(d^{1/2} ||E||_op, ||E||_F) / Delta` with only the two exterior POPULATION gaps in the denominator. The min is proved as printed, not as one branch.\n\n**Corrected 2026-08-13, and this was a real scope defect.** Until that date the only statement carrying this row was `yuWangSamworth_sinTheta_le`, whose hypothesis `CorrespondingEigenblock hA hB U V` requires BOTH blocks to be spans of the same index set in Mathlib's chosen eigenbases. Yu, Wang and Samworth require only that `V-hat` have orthonormal columns with `Sigma-hat v-hat_j = lambda-hat_j v-hat_j`, and they impose NO sample eigengap -- removing it is the paper's entire contribution. At a repeated sample eigenvalue the two hypotheses differ: the paper admits every orthonormal choice inside the degenerate sample eigenspace, `CorrespondingEigenblock` admits only the one Mathlib happened to pick. Marking the row `compiled_exact` in that state was wrong.\n\nThe printed statement is now `yuWangSamworth_sinTheta_frame_le`, whose hypothesis is an arbitrary `IsOrderedEigenframe` on each side at a common index embedding. `yuWangSamworth_sinTheta_le` is derived from it and kept for callers who already hold the index datum. `IsOrderedEigenframe.span_eq_spanIndices` records the asymmetry that makes this correct rather than merely more general: under the population gap the POPULATION block is forced to be the canonical one whatever eigenvectors are chosen, and without a gap -- the sample side -- it is not.\n\n**Indexing closed 2026-08-13.** Until then the only source-general statement was `yuWangSamworth_sinTheta_frame_le`, whose block is an arbitrary index embedding `e : Fin d -> Fin n` and whose gap hypothesis is the intrinsic separation `Delta <= |lambda_{e i} - lambda_k|` for every unselected `k`. That is the right hypothesis for a general theorem but it is not the printed one: the source fixes `1 <= r <= s <= p`, `d = s - r + 1`, and assumes only the two BOUNDARY gaps `min(lambda_{r-1} - lambda_r, lambda_s - lambda_{s+1})`, under the conventions `lambda_0 = +inf` and `lambda_{p+1} = -inf`. `consecutiveEmb` is that block and `OrderedBlockBoundaryGap` is that hypothesis, with the endpoint conventions modelled by VACUOUS QUANTIFICATION (there is no index `q` with `q + 1 = r` when `r = 0`) rather than by extended reals, so the interior, top and bottom blocks need no separate statements. `OrderedBlockBoundaryGap.indexGap` is the bridge, and antitonicity of the sorted spectrum is the only mathematics in it. `yuWangSamworth_sinTheta_block_le` is the printed theorem. The bridge constrains only the POPULATION spectrum, so `lambda-hat_s = lambda-hat_{s+1}` remains admissible -- the wrapper does not smuggle a sample eigengap back in.\n\nThe wrappers take the source's own variables `r` and `s`, with the frame size tied to them by `r + d = s + 1` -- the paper's `d = s - r + 1` written without truncated subtraction. `d` cannot be eliminated, since it is the index type of the frames `V, V-hat : Fin d -> E`, but it is pinned by that hypothesis and both the gap and the bound are written at `r` and `s`. The paper's `r <= s` is exactly `1 <= d` here and is not imposed: at `d = 0` the frames are empty and the bound is trivial.\n\n**Paper-facing semantic surface added 2026-08-17.** `theorem2_sinTheta` is now the canonical review declaration. It specializes to real operators on `Real^p`, uses the source names `Sigma`, `SigmaHat`, `V`, `Vhat`, and `Delta`, and states the block arithmetic visibly as `r <= s`, `s < p`, `d = s - r + 1`. `IsEigenvectorBlock` expands directly to orthonormality plus the ordered eigenvalue equations, while `PopulationBoundaryGap` expands directly to the two population boundary inequalities with endpoint vacuity. The previous `yuWangSamworth_sinTheta_block_le` remains the more general implementation-oriented `RCLike` wrapper.",
       "next_action": "None.",
       "importance": "headline",
       "semantic_review": {
@@ -235,61 +240,58 @@
             "||sin Theta(V-hat,V)||_F <= 2 min(sqrt(d)||E||_op, ||E||_F) / Delta."
           ],
           "scope": [
-            "The headline packet uses the source-shaped consecutive-block theorem; the library also proves an RCLike generalization."
+            "The canonical Lean declaration is specialized to Real^p to mirror the real symmetric matrix statement; the supporting implementation theorem is RCLike-generic."
           ]
         },
         "canonical_declarations": [
-          "YuWangSamworth2015.yuWangSamworth_sinTheta_block_le"
+          "YuWangSamworth2015.theorem2_sinTheta"
         ],
         "supporting_declarations": [
+          "YuWangSamworth2015.yuWangSamworth_sinTheta_block_le",
           "YuWangSamworth2015.yuWangSamworth_sinTheta_le"
         ],
         "context_declarations": [
           {
-            "name": "YuWangSamworth2015.OrderedBlockBoundaryGap",
-            "mathematical_role": "The literal two population boundary gaps around the consecutive block r,...,s; it contains no sample-gap condition."
+            "name": "YuWangSamworth2015.isEigenvectorBlock_iff",
+            "mathematical_role": "Expands IsEigenvectorBlock completely: orthonormal columns and the ordered eigenvector equation at index r+i. This leaves the sample eigenvectors arbitrary inside repeated eigenspaces."
           },
           {
-            "name": "TauCeti.IsOrderedEigenframe",
-            "mathematical_role": "Says the supplied frame consists of orthonormal eigenvectors at the specified positions in the sorted eigenvalue list."
+            "name": "YuWangSamworth2015.populationBoundaryGap_iff",
+            "mathematical_role": "Expands PopulationBoundaryGap completely into the two population boundary inequalities, with endpoint conventions represented by vacuity and no condition on SigmaHat."
           },
           {
-            "name": "YuWangSamworth2015.consecutiveEmb",
-            "mathematical_role": "The index embedding selecting exactly the consecutive positions r,...,s."
-          },
-          {
-            "name": "TauCeti.sinThetaFrobenius",
-            "mathematical_role": "The Frobenius norm of the sine/cross-projection operator between the two subspaces."
+            "name": "TauCeti.sinThetaFrobenius_eq",
+            "mathematical_role": "Identifies sinThetaFrobenius with the Frobenius norm of the sine/cross-projection operator between the two spanned subspaces."
           }
         ],
         "clause_map": [
           {
-            "source_clause": "The block is the consecutive ordered indices r,...,s and d=s-r+1.",
-            "lean_realization": "hd : r + d = s + 1 and consecutiveEmb (hd.trans_le hsn) select precisely those indices (0-based Lean indexing).",
+            "source_clause": "Sigma and Sigma-hat are real symmetric p by p matrices.",
+            "lean_realization": "Sigma and SigmaHat are symmetric endomorphisms of EuclideanSpace Real (Fin p), the coordinate-free Real^p representation of real symmetric p by p matrices.",
             "status": "claimed_exact"
           },
           {
-            "source_clause": "Only the population exterior gaps enter Delta.",
-            "lean_realization": "hgap : OrderedBlockBoundaryGap hA hn r s Delta; its printed #print contains only eigenvalues of A (the population operator), never B.",
+            "source_clause": "The block is the consecutive ordered indices r,...,s with r <= s, s <= p, and d=s-r+1.",
+            "lean_realization": "The canonical theorem displays hr : r <= s, hs : s < p under zero-based indexing, and hd : d = s - r + 1 literally.",
             "status": "claimed_exact"
           },
           {
-            "source_clause": "V and V-hat are eigenvector blocks at the same ordered indices.",
-            "lean_realization": "hu/hv : IsOrderedEigenframe ... (consecutiveEmb ...) u/v.",
+            "source_clause": "V and V-hat are arbitrary orthonormal eigenvector blocks at those ordered indices.",
+            "lean_realization": "hV and hVhat use IsEigenvectorBlock, whose displayed definition is orthonormality plus Sigma(V_i)=lambda_(r+i)V_i and SigmaHat(Vhat_i)=lambdaHat_(r+i)Vhat_i.",
             "status": "claimed_exact"
           },
           {
-            "source_clause": "No sample eigengap.",
-            "lean_realization": "There is no gap predicate involving hB/B in the canonical theorem type.",
+            "source_clause": "Only the population exterior gaps enter Delta; no sample eigengap is assumed.",
+            "lean_realization": "hgap : PopulationBoundaryGap Sigma hSigma r s Delta. Its displayed definition mentions only Sigma and its sorted eigenvalues; there is no gap hypothesis involving SigmaHat.",
             "status": "claimed_exact"
           },
           {
-            "source_clause": "Frobenius sine bound with min(sqrt(d)||E||op,||E||F) and constant 2.",
-            "lean_realization": "The conclusion of yuWangSamworth_sinTheta_block_le is literal up to A/B notation for Sigma/Sigma-hat.",
+            "source_clause": "Frobenius sine bound with 2 min(sqrt(d)||SigmaHat-Sigma||op,||SigmaHat-Sigma||F)/Delta.",
+            "lean_realization": "The conclusion of theorem2_sinTheta displays exactly that bound, with the operator norm as the norm of the associated continuous linear map and the Frobenius norm as the TauCeti unitarily-invariant Frobenius seminorm.",
             "status": "claimed_exact"
           }
         ],
-        "note": "The canonical declaration is the consecutive-block wrapper, not the more abstract CorrespondingEigenblock theorem, so the reviewer sees the paper indices and population boundary gap directly."
+        "note": "The canonical declaration is intentionally a thin Real^p wrapper over the more general proved block theorem. Its only project-local hypothesis abbreviations are printed in the semantic dictionary, so the review surface does not require chasing consecutiveEmb or IsOrderedEigenframe."
       }
     },
     {
@@ -311,10 +313,15 @@
         "YuWangSamworth2015.exists_unitary_sum_sq_norm_frameComp_sub_le",
         "YuWangSamworth2015.yuWangSamworth_alignedFrame_real_le",
         "YuWangSamworth2015.yuWangSamworth_alignedFrame_block_real_le",
-        "YuWangSamworth2015.frameAlignMatrix_mem_orthogonalGroup"
+        "YuWangSamworth2015.frameAlignMatrix_mem_orthogonalGroup",
+        "YuWangSamworth2015.IsEigenvectorBlock",
+        "YuWangSamworth2015.PopulationBoundaryGap",
+        "YuWangSamworth2015.theorem2_alignedFrame",
+        "YuWangSamworth2015.isEigenvectorBlock_iff",
+        "YuWangSamworth2015.populationBoundaryGap_iff"
       ],
       "gap_refs": [],
-      "notes": "Stated as the existence of two orthonormal frames spanning the two blocks with the bound on the sum of squared differences, which is the basis-free content of 'there exists an orthogonal alignment `O-hat`'. Constant `2 * sqrt 2 = 2^{3/2}` as printed.\n\nCorrected 2026-08-13 with `YWS-T2-sinTheta`: the same `CorrespondingEigenblock` scope restriction applied here, and `yuWangSamworth_alignedBasis_frame_le` is the printed statement.\n\n**Alignment exposed 2026-08-13.** The earlier statements conclude that there EXIST orthonormal frames of the two blocks with the bound on the sum of squared differences. That is the basis-free content of the printed conclusion and it does prove the numerical claim, but it is weaker in shape than what the paper says: the paper rotates `V-hat` by an orthogonal `O-hat` and compares against `V` itself. `yuWangSamworth_alignedFrame_le` and its consecutive-index form `yuWangSamworth_alignedFrame_block_le` now conclude exactly that -- an explicit orthogonal `O-hat` on the block's coordinate space, the supplied population frame, and `||V-hat O-hat - V||_F <= 2^{3/2} min(...) / Delta`. The row is `compiled_exact` for that reason now, not for the constant alone.\n\n`yuWangSamworth_alignedFrame_block_real_le` is the fully literal form: real symmetric operators, the block `r..s`, the printed boundary gap, and `O-hat` an element of `Matrix.orthogonalGroup (Fin d) R` whose columns give `(V-hat O-hat)_i = sum_j O-hat_{ji} v-hat_j`. Every symbol of the printed second conclusion appears in it; the `RCLike` forms are its generalizations.",
+      "notes": "Stated as the existence of two orthonormal frames spanning the two blocks with the bound on the sum of squared differences, which is the basis-free content of 'there exists an orthogonal alignment `O-hat`'. Constant `2 * sqrt 2 = 2^{3/2}` as printed.\n\nCorrected 2026-08-13 with `YWS-T2-sinTheta`: the same `CorrespondingEigenblock` scope restriction applied here, and `yuWangSamworth_alignedBasis_frame_le` is the printed statement.\n\n**Alignment exposed 2026-08-13.** The earlier statements conclude that there EXIST orthonormal frames of the two blocks with the bound on the sum of squared differences. That is the basis-free content of the printed conclusion and it does prove the numerical claim, but it is weaker in shape than what the paper says: the paper rotates `V-hat` by an orthogonal `O-hat` and compares against `V` itself. `yuWangSamworth_alignedFrame_le` and its consecutive-index form `yuWangSamworth_alignedFrame_block_le` now conclude exactly that -- an explicit orthogonal `O-hat` on the block's coordinate space, the supplied population frame, and `||V-hat O-hat - V||_F <= 2^{3/2} min(...) / Delta`. The row is `compiled_exact` for that reason now, not for the constant alone.\n\n`yuWangSamworth_alignedFrame_block_real_le` is the fully literal form: real symmetric operators, the block `r..s`, the printed boundary gap, and `O-hat` an element of `Matrix.orthogonalGroup (Fin d) R` whose columns give `(V-hat O-hat)_i = sum_j O-hat_{ji} v-hat_j`. Every symbol of the printed second conclusion appears in it; the `RCLike` forms are its generalizations.\n\n**Paper-facing semantic surface added 2026-08-17.** `theorem2_alignedFrame` is now the canonical review declaration and shares exactly the same source-shaped hypotheses as `theorem2_sinTheta`. Its conclusion returns `O : Matrix (Fin d) (Fin d) Real` in the orthogonal group and compares the supplied `Vhat O` directly to the supplied `V`. The previous real and `RCLike` block wrappers remain supporting implementation declarations.",
       "next_action": "None.",
       "importance": "headline",
       "semantic_review": {
@@ -332,52 +339,49 @@
             "There exists O-hat in O(d) such that ||V-hat O-hat - V||_F <= 2^(3/2) min(sqrt(d)||E||_op,||E||_F)/Delta."
           ],
           "scope": [
-            "The canonical review declaration is the real-matrix statement so O-hat appears literally as a matrix in the orthogonal group."
+            "The canonical review declaration is the Real^p paper-facing wrapper; the older real block theorem and RCLike generalization remain supporting proof surfaces."
           ]
         },
         "canonical_declarations": [
-          "YuWangSamworth2015.yuWangSamworth_alignedFrame_block_real_le"
+          "YuWangSamworth2015.theorem2_alignedFrame"
         ],
         "supporting_declarations": [
+          "YuWangSamworth2015.yuWangSamworth_alignedFrame_block_real_le",
           "YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le"
         ],
         "context_declarations": [
           {
-            "name": "YuWangSamworth2015.OrderedBlockBoundaryGap",
-            "mathematical_role": "The two population boundary gaps and no sample gap."
+            "name": "YuWangSamworth2015.isEigenvectorBlock_iff",
+            "mathematical_role": "Expands the supplied population and sample eigenvector blocks into orthonormality plus their ordered eigenvector equations."
           },
           {
-            "name": "TauCeti.IsOrderedEigenframe",
-            "mathematical_role": "The supplied population and sample frames at the same sorted consecutive indices."
-          },
-          {
-            "name": "YuWangSamworth2015.consecutiveEmb",
-            "mathematical_role": "The consecutive block r,...,s."
+            "name": "YuWangSamworth2015.populationBoundaryGap_iff",
+            "mathematical_role": "Expands the gap hypothesis into the two population boundary inequalities and shows that no sample-gap condition is hidden."
           }
         ],
         "clause_map": [
           {
-            "source_clause": "Same population-only gap and consecutive eigenvector blocks as the first conclusion.",
-            "lean_realization": "The canonical theorem repeats the same hd, hu, hv, hDelta and OrderedBlockBoundaryGap hypotheses.",
+            "source_clause": "The second conclusion has the same real symmetric matrices, consecutive eigenvector blocks, and population-only gap as the first.",
+            "lean_realization": "theorem2_alignedFrame repeats the same Sigma, SigmaHat, hr, hs, hd, IsEigenvectorBlock, Delta>0, and PopulationBoundaryGap hypotheses as theorem2_sinTheta.",
             "status": "claimed_exact"
           },
           {
             "source_clause": "There exists O-hat in O(d).",
-            "lean_realization": "The conclusion existentially returns O : Matrix (Fin d) (Fin d) R with O in Matrix.orthogonalGroup.",
+            "lean_realization": "The conclusion existentially returns O : Matrix (Fin d) (Fin d) Real with O in Matrix.orthogonalGroup (Fin d) Real.",
             "status": "claimed_exact"
           },
           {
-            "source_clause": "V-hat O-hat is compared to the supplied V, not to a reselected population basis.",
-            "lean_realization": "The left side is sqrt(sum_i ||sum_j O j i • v j - u i||^2), with u and v exactly the supplied frames from the hypotheses.",
+            "source_clause": "V-hat O-hat is compared with the supplied V.",
+            "lean_realization": "The left side is sqrt(sum_i ||sum_j O j i * Vhat j - V i||^2), using exactly the V and Vhat arguments from the hypotheses.",
             "status": "claimed_exact"
           },
           {
-            "source_clause": "Constant 2^(3/2) and the same min numerator.",
-            "lean_realization": "The conclusion is 2 * sqrt 2 * min(sqrt d * ||B-A||op, ||B-A||F) / Delta.",
+            "source_clause": "The constant is 2^(3/2) with the same minimum numerator and Delta denominator.",
+            "lean_realization": "The conclusion is 2 * sqrt 2 * min(sqrt d * ||SigmaHat-Sigma||op, ||SigmaHat-Sigma||F) / Delta.",
             "status": "claimed_exact"
           }
         ],
-        "note": "Using the real source-shaped wrapper makes every symbol in the printed aligned-frame conclusion visible in the theorem type."
+        "note": "The aligned headline wrapper shares the exact hypothesis surface of theorem2_sinTheta and exposes the source orthogonal matrix directly. The semantic dictionary expands the only two YWS-specific predicates in that type."
       }
     },
     {
