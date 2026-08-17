@@ -21,6 +21,11 @@ def main() -> None:
     run("build_provenance.py")
     run("build_formalization_provenance_credit.py")
     run("build_accounting.py")
+    subprocess.run(
+        [sys.executable, str(HERE.parent / "build_resource_valuation_20260817.py")],
+        check=True,
+        cwd=HERE.parent,
+    )
     run("build_interactions.py")
 
 

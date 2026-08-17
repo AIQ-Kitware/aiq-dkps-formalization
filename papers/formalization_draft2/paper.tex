@@ -84,12 +84,11 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{remark}[theorem]{Remark}
 
-\input{snapshots/census_macros.tex}
 \input{snapshots/provenance_macros.tex}
 \input{snapshots/accounting_macros.tex}
-\input{snapshots/interaction_macros.tex}
 \input{snapshots/formalization_theory_macros.tex}
 \input{snapshots/formalization_provenance_macros.tex}
+\input{snapshots/resource_valuation_macros.tex}
 
 \newcommand{\Lean}{\textsc{Lean}}
 \newcommand{\YWS}{Yu--Wang--Samworth}
@@ -104,48 +103,40 @@ Spectral Perturbation Theory in Lean}
 % Additional authors are expected; keep the confirmed ordering below stable.
 \author{Jonathan Crall\thanks{Kitware, Inc.; \texttt{jon.crall@kitware.com}}
 \and Edward Wang\thanks{Johns Hopkins University; \texttt{ewang43@jhu.edu}}}
-\date{Draft scaffold -- August 2026}
+\date{Draft -- August 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
 We report a source-faithful \Lean{} 4 formalization of Yu, Wang, and Samworth's
-widely used statistical variant of the Davis--Kahan theorem.  The formalization
-uses a paper-keyed source census: a progress-and-audit instrument constructed
-from the source rather than from the Lean tree, so that missing formalizations
-remain visible.  The current census has \YWSCensusEntryCount{} tracking entries,
-covering named results, equations, identities, examples, source conventions,
-and explicitly labeled extensions beyond the printed paper.  All
-\YWSCensusVerifiedCount{} entries currently resolve to declarations in the
-default build; this is a verification statement about the census, not a claim
-that YWS contains that many named theorems.  Treating the source as an object to audit rather than
-merely a theorem to restate exposed two printed source defects in YWS and, in a
-deeper audit of the 1970 source, an explicit finite-dimensional counterexample
-to Davis--Kahan Proposition 4.4.
+widely used statistical variant of the Davis--Kahan theorem, together with the
+Davis--Kahan results needed to support and audit that development.  Comparing
+the formal statements with the published sources exposed two printed defects in
+YWS and produced an explicit finite-dimensional counterexample to Davis--Kahan
+Proposition 4.4.
 
-The effort also required a substantial prerequisite layer.  A compiler-backed
-inventory rooted in the complete maintained YWS and Davis--Kahan source registries
-identifies \FormalizationBasicTheoryCount{} basic theory areas, ranging from
-principal-angle and singular-subspace geometry to Borel spectral calculus,
-unbounded self-adjoint operator theory, unitarily invariant norms, direct
-rotations, operator angles, and Sylvester equations.  We report scoped qualitative
-coverage rather than field-level completeness percentages.  These results are open
-source, are reused by a formalized contemporary statistical theorem family, and
-are being organized for contribution through an operator-theory roadmap in
-\TauCeti{}.
+The development required a substantial prerequisite layer.  A compiler-backed
+inventory of the formalized YWS and Davis--Kahan result surfaces identifies
+\FormalizationBasicTheoryCount{} basic theory areas, including principal-angle
+and singular-subspace geometry, Borel spectral calculus, unbounded
+self-adjoint operator theory, unitarily invariant norms, direct rotations,
+operator angles, and Sylvester equations.  We report the scope of these local
+theories qualitatively and record formalization provenance so that adapted or
+ported material receives explicit credit.
 
-Finally, we study what this development cost and how human--LLM collaboration
-actually occurred.  The repository contains a partially observed resource ledger
-and retained interaction traces.  At the pinned analysis snapshot, the current
-ledger records at least \LedgerTurns{} model turns, \LedgerOutputTokens{} output
-tokens, and \LedgerBillableInputTokens{} tokens in its billable-input accounting
-measure.  These are strict measured lower bounds: \CommitsWithoutExactAccounting{}
-of \HistoryCommitCount{} commits lack exact commit-level accounting, and
-\CommitsBeforeInstrumentation{} commits precede the instrumentation commit.
-We therefore distinguish measured commit-attributed usage, measured but
-commit-unattributed session usage, and genuinely unmeasured work, and we treat
-extrapolation as a missing-data problem rather than reporting a single total.
+We also quantify the resources used by the formalization.  At the pinned
+analysis snapshot, the retained ledger records at least \LedgerTurnsScientific{}
+model turns, \LedgerOutputTokensScientific{} output tokens, and
+\LedgerBillableInputTokensScientific{} tokens in its billable-input accounting
+measure.  Exact commit-level telemetry is unavailable for about
+\CommitsWithoutExactAccountingScientific{} commits, and some earlier or
+chat-interface work has no equivalent telemetry.  Under versioned public-price
+and operational-serving assumptions, the measured usage has API-equivalent
+value on the order of \MeasuredApiEquivalentCostScientific{}~USD and central
+modeled operational emissions on the order of
+\ModeledOperationalCarbonScientific{}~kg~CO$_2$e.  The ledger measurements are
+preserved separately from the valuation assumptions.
 \end{abstract}
 
 \section{Introduction}
@@ -157,25 +148,22 @@ of a symmetric operator into perturbation bounds for eigenspaces
 \citet{yu2015davis} is particularly useful because it replaces an awkward
 sample-and-population separation condition with a population eigengap and gives
 aligned-frame and singular-subspace forms suited to statistical estimation.
-A one-line citation to these results conceals substantial mathematical
-infrastructure: spectral subspaces, principal angles, singular-value comparison,
-orthogonal alignment, unitarily invariant norms, and the interfaces connecting
-finite-dimensional matrix statements to operator theory.
+Formalizing these statements at their published scope required spectral
+subspaces, principal angles, singular-value comparison, orthogonal alignment,
+unitarily invariant norms, and interfaces between finite-dimensional matrix
+statements and operator theory.
 
-This paper asks what happens when that entire chain is made executable in a
-proof assistant.  Our main object is not an isolated convenient ``Davis--Kahan
-lemma,'' but the published YWS paper as a source document.  The resulting
-formalization serves three roles: a verification of a central statistical
-perturbation result, an audit that can expose defects in the literature, and a
-reusable mathematical layer for later statistical formalizations.
+We formalize the published YWS paper as a source document and develop the
+operator-theoretic prerequisites needed to state and prove its results at their
+published scope.  The development verifies the statistical perturbation results,
+identifies source defects through formal audit, and supplies reusable
+spectral-perturbation foundations.
 
 \paragraph{Contributions.}
-The intended contribution list is:
 \begin{enumerate}
   \item A source-faithful formalization of YWS at the published theorem numbering
-        and generality, tracked by a paper-keyed census whose
-        \YWSCensusEntryCount{} entries make absent, corrected, generalized, and
-        deliberately extra material visible.
+        and generality, with explicit dispositions for defective printed
+        statements and clearly separated extensions beyond the source.
   \item Machine-checked diagnoses and repairs of two printed YWS source defects:
         the false polynomial identity in equation (4) and the rank-boundary
         convention in Theorem 3.
@@ -183,32 +171,27 @@ The intended contribution list is:
         $\mathbb{R}^4$ trace-norm counterexample, a machine-checked localization
         of the proof defect to the printed equation (4.3), and a repaired theorem
         surface.
-  \item A compiler-backed account of the prerequisite formalization, linking the
-        maintained source registries to exact Lean declarations and classifying
-        their project-local proof dependencies into \FormalizationBasicTheoryCount{}
-        basic mathematical theory areas with explicit scope assessments.
-  \item A demonstration that the resulting spectral machinery is reusable in a
-        contemporary end-to-end statistical theorem family (Quench), rather than
-        being an isolated verification artifact.
-  \item A quantitative and qualitative study of the human--LLM development
-        process, with explicit treatment of incomplete telemetry, session-level
-        backfill, chat-interface work, and extrapolation uncertainty.
+  \item A compiler-backed account of the prerequisite formalization, classifying
+        project-local named-declaration dependencies into
+        \FormalizationBasicTheoryCount{} basic mathematical theory areas with
+        explicit scope and provenance assessments.
+  \item A resource-accounting study of the formalization, including
+        model-resolved token measurements and revisable estimates of API-equivalent
+        cost and operational energy and emissions.
 \end{enumerate}
 
-\paragraph{Paper thesis.}
-The broader claim we aim to support is that source-faithful formalization can be
-\emph{executable scholarship for mathematical statistics}: it both verifies and
-audits the literature, while converting prerequisite work into an amortizable
-formal substrate for subsequent results.
+The formalization is used here as verification, source audit, and reusable
+mathematical infrastructure.  The breadth of the prerequisite layer provides an
+additional reason to formalize these classical results: source-scale proofs force
+interfaces that can support later work in spectral perturbation and operator
+theory.  Resource accounting records the computational expenditure associated
+with producing that infrastructure and permits economic and environmental
+estimates to be revised when better measurements or models become available.
 
 \section{Why Formalize Davis--Kahan and YWS?}
 \label{sec:why}
 
 \subsection{Statistical importance}
-
-\textbf{TODO:} quantify citation/use evidence for Davis--Kahan and YWS using a
-reproducible bibliometric source appropriate for the venue.  Explain why the
-population-gap formulation is the form statisticians routinely need.
 
 \input{snapshots/openalex_bibliometrics_macros.tex}
 
@@ -218,25 +201,18 @@ population-gap formulation is the form statisticians routinely need.
 \newcommand{\GoogleScholarYuWangSamworthCitations}{1067}
 
 \paragraph{Use and continued relevance.}
-Both results remain widely used.
-To make this claim quantitative without making the paper build depend on a live
-  bibliographic service, we record a dated OpenAlex snapshot keyed by the
-  articles' DOIs.
-In the snapshot retrieved on \OpenAlexRetrievedDate, OpenAlex records
-  \OpenAlexDavisKahanCitations{} citing works for Davis--Kahan
-  \citep{davis1970rotation} and \OpenAlexYuWangSamworthCitations{} for Yu, Wang,
-  and Samworth \citep{yu2015davis}.
-The repository contains the query code and the small generated \LaTeX{} snapshot
-  used for these numbers; the larger raw API response is treated as disposable
-  generated data.
-As an independent, broader bibliographic cross-check, Google Scholar reported
-  \GoogleScholarDavisKahanCitations{} and
-  \GoogleScholarYuWangSamworthCitations{} citations, respectively, on
-  \GoogleScholarRetrievedDate{}.
+Both results remain widely used.  A dated OpenAlex snapshot keyed by the
+articles' DOIs records \OpenAlexDavisKahanCitations{} citing works for
+Davis--Kahan \citep{davis1970rotation} and
+\OpenAlexYuWangSamworthCitations{} for Yu, Wang, and Samworth
+\citep{yu2015davis} as of \OpenAlexRetrievedDate{}.  As an independent
+bibliographic cross-check, Google Scholar reported
+\GoogleScholarDavisKahanCitations{} and \GoogleScholarYuWangSamworthCitations{}
+citations, respectively, on \GoogleScholarRetrievedDate{}.
 
-\paragraph{The importance of the population gap in statistics.}
-The change made by Yu, Wang, and Samworth is small syntactically but important
-for statistical use.  In a typical application, $\Sigma$ is a population
+\paragraph{Population-gap formulation in statistics.}
+Yu, Wang, and Samworth change little notation while changing how the
+perturbation bound enters a statistical argument.  In a typical application, $\Sigma$ is a population
 matrix determined by the statistical model, while $\widehat{\Sigma}$ is a
 random estimator.  Consequently, the population eigengap
 \[
@@ -268,36 +244,30 @@ statistical arguments:
 \]
 The denominator is supplied by assumptions on the population model, while
   concentration or random-matrix arguments control the numerator.
-This distinction highlights the importance of semantic alignment: a
-  formalization that silently introduced a sample-eigengap assumption could
-  still prove a valid perturbation theorem, but it would miss much of the
-  statistical content of the Yu--Wang--Samworth result.
+Introducing a sample-eigengap assumption would change the statistical content
+even if the resulting perturbation theorem were valid.  The displayed YWS theorem also depends on a
+broader collection of spectral, geometric, and operator-theoretic foundations;
+\cref{sec:foundations} summarizes those foundations and their formalization
+provenance.
 
+\subsection{Reusable mathematical foundations}
 
-\subsection{The visible theorem sits on a missing formal stack}
+A second motivation comes from the prerequisite structure of the source
+results.  Formalizing Davis--Kahan at the breadth of the 1970 paper and YWS at
+its statistical scope requires a connected collection of projection geometry,
+principal angles, singular-subspace comparison, unitarily invariant norms,
+operator ideals, spectral calculus, real/complex transfer, direct rotations,
+and Sylvester-type arguments.  The resulting interfaces have scope beyond the
+individual source theorems and provide reusable components for later
+formalizations in spectral perturbation and operator theory.
 
-The practical motivation turned out to be stronger than citation count.  To
-state and reuse the desired sine-theta results at paper-level generality, the
-development had to construct foundational layers that were absent from the
-needed Mathlib interface.  These include, among others, partial-isometry and
-polar-decomposition machinery, principal-angle geometry, singular systems,
-majorization and Ky Fan tools, unitarily invariant norm interfaces, spectral
-subspace APIs, and perturbation lemmas for self-adjoint operators.
+The prerequisite work therefore produces outputs beyond the source theorems.  A
+later development can inherit definitions, spectral constructions, geometric
+lemmas, and proof interfaces whose construction absorbed much of the work here.
+\Cref{sec:foundations} gives the compiler-backed inventory and scoped coverage
+assessment for these foundations.
 
-\Cref{sec:foundations} makes this prerequisite burden explicit.  Rather than
-using import closure, it starts from every maintained YWS source-census unit and
-every counted Davis--Kahan result and follows constants occurring in elaborated
-Lean declaration types and proof bodies.  The resulting declaration graph is then
-collapsed through a checked-in mathematical taxonomy for presentation; the exact
-source-unit--declaration links remain auditable in the repository.
-
-This is the amortization argument for foundational formalization.  Informally,
-a later paper can cite Davis--Kahan in one sentence.  Formally, somebody must
-first pay for the interfaces that make that sentence meaningful and reusable.
-The cost analysis in \cref{sec:process-study} gives a partially observed empirical
-view of that prerequisite burden.
-
-\subsection{The Davis--Kahan headline theorem as an auditable Lean statement}
+\subsection{The Davis--Kahan headline theorem in Lean}
 \label{sec:dk-headline}
 
 The first headline result in Section~2 of \citet{davis1970rotation} is the
@@ -325,12 +295,9 @@ every unitarily invariant norm
 \end{equation}
 The source states this in the real/complex, infinite-dimensional setting and
 allows the relevant self-adjoint operators to be unbounded when the residual is
-bounded.  Our headline declaration retains that scope.  In the Lean listings
-below, the declaration text through its opening \texttt{:= by} is copied
-verbatim from the corresponding \texttt{.lean} source file; only the
-\texttt{listings} glyph substitutions needed for pdf\LaTeX{} rendering are
-applied.  Imports, namespace/open commands, ambient section variables, and proof
-bodies remain available in the source file but are not repeated here.
+bounded.  Our headline declaration retains that scope.  The Lean listing reproduces the source declaration through the beginning of
+its proof, with only the glyph substitutions needed for pdf\LaTeX{} rendering.
+Imports, ambient section variables, and the proof body are omitted.
 
 \begin{lstlisting}[style=leanpaper,
   caption={Canonical Lean surface for the Davis--Kahan sine-theta theorem.},
@@ -369,61 +336,23 @@ theorem sinTheta_headline
     δ * N.gauge sinTheta₀ ≤ N.gauge R := by
 \end{lstlisting}
 
-\Cref{lst:dk-sintheta-headline} is both the presentation-facing theorem and the
-declaration selected by our semantic-alignment audit.  The reader can therefore
-read the proposition after the final colon first---it is the source inequality
-in \cref{eq:dk-sintheta-headline}---and then scan upward to see how each named
-object is tied to the source setup.  In particular, \texttt{sinTheta\textsubscript{0}}
-is an explicit parameter rather than an opaque local definition, and the
-hypothesis \texttt{hSinTheta\textsubscript{0}} identifies it literally with
-$(I-F_0F_0^*)E_0$.  The two predicates \texttt{IsTrialResidual} and
-\texttt{IsExactSpectralDecomposition} package the domain-heavy unbounded
-operator bookkeeping; the audit expands both through characteristic theorems,
-so they do not hide extra mathematical assumptions.  The bracketed typeclass
-arguments are library-level capabilities for the generic real/complex scalar
-setting, rather than additional hypotheses on the operators appearing in the
-source statement.
+\Cref{lst:dk-sintheta-headline} is the presentation-facing declaration selected
+by the semantic-alignment audit.  Its conclusion is exactly
+\cref{eq:dk-sintheta-headline}.  The sine-angle operator is explicitly tied to
+$(I-F_0F_0^*)E_0$, while bundled residual and exact-spectral-decomposition
+hypotheses collect the domain bookkeeping required for the unbounded setting.
+The audit expands those bundled hypotheses through their characteristic
+properties.  The bracketed typeclass arguments supply library capabilities for
+the generic real/complex scalar setting and add no operator hypothesis beyond
+the published theorem.
 
-The underlying proof theorem additionally certifies that \texttt{sinTheta0}
-belongs to the norm ideal.  That fact is mathematically implicit when the source
-writes a finite unitarily invariant norm, but it is kept explicit in the lower
-formal layer because the implementation totalizes the real-valued gauge outside
-its ideal.  The headline declaration above projects that stronger certificate
-to the literal source inequality rather than changing its mathematical content.
+A lower formal layer also certifies membership in the relevant norm ideal.  The
+source leaves that condition implicit when it writes a finite unitarily
+invariant norm; the displayed declaration presents the published inequality
+while retaining the stronger certificate internally.
 
 \section{A Source-Faithful Formalization of YWS}
 \label{sec:yws}
-
-The package \texttt{YuWangSamworth2015} is organized around the published
-Biometrika numbering rather than around whichever auxiliary theorem was easiest
-to expose in Lean.  Formalization progress is tracked by a \emph{paper-keyed
-source census}: its rows are created from claims and audit obligations in the
-source document, not discovered by enumerating declarations already present in
-the Lean tree.  Consequently a missing formalization remains a visible row
-instead of disappearing from a coverage report.
-
-The current census contains \YWSCensusEntryCount{} entries.  They are not
-\YWSCensusEntryCount{} named theorems: the rows include theorem conclusions,
-lemmas, corollaries, equations, identities, examples, a definition, source
-scope/convention checks, and exposition/audit material.  It also records
-\YWSCensusExplicitAdditionCount{} items explicitly marked as additions beyond
-the printed paper, so that repository extensions are not accidentally
-attributed to YWS.  All \YWSCensusVerifiedCount{} entries currently have
-\texttt{verification=proved\_in\_build}.  The independent census status field
-records whether a row matches the source exactly, is generalized or
-specialized, is a compiled correction to a defective source statement, or is
-not source proof debt.
-
-\begin{table}[t]
-\centering
-\input{snapshots/yws_census_kind_table.tex}
-\caption{What the \YWSCensusEntryCount{} census entries count.  This is a
-progress/audit inventory, not a theorem count.  The complete row-level inventory,
-including source anchor, Lean declarations, verification state, and whether an
-entry is an explicit non-source addition, is generated as
-\texttt{yws\_census\_items.csv}.}
-\label{tab:yws-census-kinds}
-\end{table}
 
 \subsection{The population-gap theorem}
 
@@ -459,20 +388,14 @@ and there exists $\widehat O\in O(d)$ such that
 Only the population spectrum enters $\Delta$; the supplied sample eigenframe may
 therefore be chosen arbitrarily inside a repeated sample eigenspace.
 
-The Lean statement in \cref{lst:yws-theorem2-sintheta} is again the same
-canonical declaration used by the semantic-alignment audit.  Lean uses
-zero-based indices, so \texttt{r <= s}, \texttt{s < p}, and
-\texttt{d = s - r + 1} encode the same consecutive block.  The sine quantity
-\texttt{sinThetaNorm} is tied to its concrete realization by the equality
-hypothesis immediately above the claim.  The right-hand side literally uses the
-local source spellings \texttt{\textbardbl SigmaHat - Sigma\textbardbl\_op}
-and \texttt{\textbardbl SigmaHat - Sigma\textbardbl\_F}; their exact
-notation context is reproduced in \cref{app:lean-listing-context}.  Thus a
-reader who starts after the final colon sees essentially
-\cref{eq:yws-sintheta}.  The predicates \texttt{IsEigenvectorBlock} and
-\texttt{SourcePopulationGap} are expanded in the generated audit; the latter
-pins \texttt{Delta} to the exact source denominator (with an explicit full-space
-endpoint convention), rather than merely assuming an arbitrary lower bound.
+The Lean statement in \cref{lst:yws-theorem2-sintheta} is the canonical
+declaration used by the semantic-alignment audit.  Its indexing convention
+represents the same consecutive eigenvector block as the paper, the sine-angle
+quantity is equated to its principal-angle realization, and the population-gap
+hypothesis expands to the denominator in \cref{eq:yws-sintheta}, including the
+full-space endpoint convention.  The symbols $\lVert\cdot\rVert_{\mathrm{op}}$
+and $\lVert\cdot\rVert_F$ in the listing denote the operator and Frobenius
+norms.
 
 \begin{lstlisting}[style=leanpaper,
   caption={Canonical Lean surface for the first conclusion of YWS Theorem 2.},
@@ -501,92 +424,25 @@ theorem theorem2_sinTheta
 
 \subsection{Aligned frames and rectangular singular subspaces}
 
-The second conclusion is represented just as literally.  In
-\cref{lst:yws-theorem2-aligned}, the existentially quantified matrix is required
-to belong to the orthogonal group, and the aligned-frame Frobenius distance is
-left expanded in the proposition rather than hidden behind a local distance
-definition.  The same local \texttt{\textbardbl A\textbardbl\_op} and
-\texttt{\textbardbl A\textbardbl\_F} spellings appear directly in the
-right-hand side.
+The second conclusion of YWS Theorem~2 gives the aligned-frame bound in
+\cref{eq:yws-aligned}, with an orthogonal alignment matrix in $O(d)$.  The
+companion Lean declaration retains that existential orthogonality condition and
+the expanded Frobenius distance; its source surface is reproduced in
+\cref{app:yws-aligned-listing}.
 
-\begin{lstlisting}[style=leanpaper,
-  caption={Canonical Lean surface for the aligned-frame conclusion of YWS Theorem 2.},
-  label={lst:yws-theorem2-aligned}]
-theorem theorem2_alignedFrame
-    {p d r s : Nat}
-    (Sigma SigmaHat :
-      EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
-    (hSigma : Sigma.IsSymmetric) (hSigmaHat : SigmaHat.IsSymmetric)
-    (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
-    (V Vhat : Fin d → EuclideanSpace Real (Fin p))
-    (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
-    (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
-    (Delta : Real) (hDelta : 0 < Delta)
-    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
-    ∃ O : Matrix (Fin d) (Fin d) Real,
-      O ∈ Matrix.orthogonalGroup (Fin d) Real ∧
-        Real.sqrt (∑ i, ‖(∑ j, O j i • Vhat j) - V i‖ ^ 2) ≤
-          2 * Real.sqrt 2 *
-            min
-              (Real.sqrt d * ‖SigmaHat - Sigma‖_op)
-              ‖SigmaHat - Sigma‖_F / Delta := by
-\end{lstlisting}
-
-The rectangular singular-subspace theorem is built downstream from these
-symmetric statements through Gram operators and transport between left/right
-singular spaces.  That factoring is useful evidence for reuse of the spectral
-API rather than a second semantic complication in Theorem~2 itself.
-
-\textbf{TODO:} explain the generic Gram-transport factoring used to obtain the
-left/right singular-subspace forms and identify which pieces were new reusable
-API rather than theorem-specific proof code.
-
-\subsection{Sharpness as part of source fidelity}
-
-The census also tracks the paper's sharpness constructions against the same
-hypotheses as the theorem surfaces.  This matters because source faithfulness
-includes claims about constants and dimension dependence, not only upper
-bounds.
-
-\textbf{TODO:} select one short sharpness example for the main text and move the
-middle-block construction details to an appendix.
-
-\subsection{Proof provenance and borrowed formal ideas}
-\label{sec:proof-provenance}
-
-Source faithfulness applies to the provenance of the formal development as well
-as to the theorem statements.  We distinguish \emph{mathematical provenance}
-(the literature source of a theorem) from \emph{formalization provenance}
-(the source of a Lean construction or proof).  The repository has maintained
-formal-source citations during development: where code, a construction, theorem
-selection, or proof architecture came from an existing formal library, the
-relevant module records that relationship explicitly.  In particular, several
-operator-theoretic components have documented ancestry in the Spectra
-formalization project \citep{bornemann2026spectra}; source comments also credit
-other Lean developments when they served as route maps or cross-checks, including
-the statistical-learning development of Zhang, Lee, and Liu
-\citep{zhang2026sltrepo}.
-
-For formalization credit we therefore use an explicit default rule.  A declaration
-inside the project-local dependency inventory is credited as formalized in this
-project unless a positive external formal-provenance citation applies to that exact
-declaration.  Positive claims distinguish copied/re-homed material, adapted or
-ported material, and cases in which an external formal development influenced
-theorem selection or historical architecture but the current proof or construction
-was independently developed here.  Ordinary Mathlib dependencies are different
-again: they lie outside the project-local denominator and are credited upstream
-rather than treated as project formalizations \citep{mathlib2020}.  The raw positive
-claims, evidence file/line ranges, and the default policy are checked in under
-\path{data/formalization_formal_provenance_*_20260817.*};
-\path{scripts/build_formalization_provenance_credit.py} joins them to the exact
-named declarations in the formalization graph.
+The rectangular singular-subspace theorem is derived from the symmetric theory
+through the two Gram operators.  Self-adjoint spectral perturbation is applied
+to those operators, after which the aligned spectral frames are transported to
+the left and right singular spaces.  The reusable Gram, singular-value, and
+frame-transport results belong to the singular-subspace theory summarized in
+\cref{tab:formalized-theories}.
 
 \section{Formalization as Source Audit}
 \label{sec:audit}
 
 \subsection{Two defects in YWS}
 
-The formalization does not silently repair source defects.  First, printed
+The formalization records source defects explicitly.  First, printed
 equation (4) is a false polynomial identity: it is missing a square, and the
 repository contains both a concrete counterexample to the printed formula and a
 proof of the corrected identity.  Second, the printed convention
@@ -595,8 +451,6 @@ rank boundary.  When $s=\operatorname{rank}(A)$ it makes a denominator infinite
 and can force a zero upper bound even when the sample and population singular
 subspaces are orthogonal.  The intended theorem is repaired by the ambient-index
 boundary convention used in the paper's own Gram-matrix proof.
-
-\textbf{TODO:} AUDIT THESE minimal numerical counterexamples:
 
 For equation~(4), a two-dimensional numerical example already exposes the
 error.  Take
@@ -623,12 +477,9 @@ so they are unequal.  The correction is exactly one square:
   (2-\|v-u\|^2)^2
   (4-\|v-u\|^2).
 \end{equation}
-The counterexample is machine checked by
-\path{yuWangSamworth_equation4_printed_counterexample}, while
-\path{yuWangSamworth_equation4} proves
-\cref{eq:yws-equation4-corrected} for arbitrary real unit vectors; both
-declarations are in
-\path{YuWangSamworth2015/Symmetric/AngleIdentity.lean}.
+Both the numerical counterexample and the corrected identity for arbitrary
+real unit vectors are machine checked.  The corresponding declarations and
+source locations are recorded in \cref{app:source-coverage}.
 
 The rank-boundary defect in Theorem~3 also occurs in the smallest nontrivial
 dimension.  Let
@@ -658,10 +509,8 @@ separations are infinite:
 \sigma_1^2-\sigma_2^2=+\infty.
 \]
 Thus the printed denominator is infinite and its asserted upper bound collapses
-to zero, contradicting the displayed value above.  This concrete $2\times2$
-example is formalized as
-\path{yuWangSamworth_theorem3_printed_rankBoundary_refutation_euclidean}
-in \path{YuWangSamworth2015/Rectangular/RankBoundary.lean}.
+to zero, contradicting the displayed value above.  This concrete $2\times2$ example is machine checked; the exact declaration is
+listed in \cref{app:source-coverage}.
 
 The correction is to take the boundary in the ambient Gram spectrum, as the
 proof of Theorem~3 itself does.  For right singular subspaces of
@@ -685,12 +534,9 @@ eigenvalue gap
 \[
 \sigma_1^2-\sigma_2^2=1-0=1,
 \]
-rather than $+\infty$.  The corrected boundary reduction is formalized by
-\path{singularBoundaryGap_of_rank_le}; the corrected right- and left-singular
-subspace statements are
-\path{yuWangSamworth_rightSingularSubspace_block_le} and
-\path{yuWangSamworth_leftSingularSubspace_block_le}, respectively, in
-\path{YuWangSamworth2015/Rectangular/SingularBlock.lean}.
+in place of $+\infty$.  The corrected boundary reduction and the corresponding
+right- and left-singular-subspace statements are machine checked; exact Lean
+names are given in \cref{app:source-coverage}.
 
 \subsection{Davis--Kahan Proposition 4.4 is false as printed}
 
@@ -701,9 +547,9 @@ $4\sqrt{2-\sqrt{2}}$, while an admissible orthogonal competitor has trace
 displacement $2\sqrt{2}$.  Thus the claimed minimizing property fails inside the
 stated $\Theta\leq\pi/3$ regime.
 
-The same witness also localizes a specific defect in the published proof.  This
-should not be confused with \emph{Proposition 4.3}, which is a separate and valid result: the defect is the
-paper's displayed \emph{equation (4.3)} inside the proof of Proposition 4.4.
+The same witness also localizes a specific defect in the published proof.
+Proposition~4.3 is a separate valid result.  The defective step is the displayed
+\emph{equation (4.3)} inside the proof of Proposition~4.4.
 Writing $K=I-W$ and taking the two principal-plane projectors
 $\Omega_1E=\operatorname{span}\{e_0,e_3\}$ and
 $\Omega_2E=\operatorname{span}\{e_1,e_2\}$, the source passes from its valid
@@ -718,215 +564,82 @@ For the counterexample, however,
   \quad\text{while}\quad
   \lVert K\Omega_1\rVert_2=\lVert K\Omega_2\rVert_2=2,
 \]
-so the asserted inequality would require $2\sqrt2\geq4$.  The Lean theorem
-\texttt{davisKahanEquation4\_3\_\hspace{0pt}refuted} machine-checks these block values and
-the resulting contradiction.
-The underlying issue is that orthogonality of the domain planes does not imply
-orthogonality of their images under $K$, so their singular-value sums need not
-add.  On this witness, the later blockwise calculation where the $\pi/3$ bound
+so the asserted inequality would require $2\sqrt2\geq4$.  The block values and
+the resulting contradiction are machine checked.
+The two domain planes are orthogonal, while their images under $K$ overlap;
+the corresponding singular-value sums therefore fail to add.  On this witness, the later blockwise calculation where the $\pi/3$ bound
 is consumed behaves as claimed; the invalid step is the earlier summation
 across blocks.
 
-This proof defect explains where the published argument for Proposition 4.4
-breaks, but the theorem-level refutation does not depend on that diagnosis: the
-strict trace-norm comparison above directly falsifies Proposition 4.4.  By
-contrast, Proposition 4.3 concerns the \emph{squared} displacement
-$(I-W)^*(I-W)$ and survives.  It is proved in the finite-dimensional formalization
-as \texttt{directRotation\_displacementSquare\_uiNorm} and at the paper-facing
-Ky Fan level as \texttt{proposition4\_3\_squaredDisplacement\_kyFan}.  The
-counterexample illustrates the distinction: the relevant partial sums of
-squared singular values are dominated even though the corresponding partial
-sums of singular values are not.
+The strict trace-norm comparison directly falsifies Proposition~4.4,
+independently of the diagnosis of its printed proof.  Proposition~4.3 concerns
+the squared displacement $(I-W)^*(I-W)$ and remains valid.  The
+finite-dimensional formalization proves that result both at the unitarily
+invariant norm level and at the paper-facing Ky Fan level.  On the counterexample,
+the relevant partial sums of squared singular values satisfy the required
+domination while the corresponding partial sums of singular values fail it.
 
 The repository also contains a repaired result for the $Q$-norm class.  We
-separately investigated whether the trace-norm failure inside the advertised
-short-angle regime had already been identified in the mathematical literature.
-The search, last updated 14 August 2026, included exact theorem-number and
-$\pi/3$ queries; direct rotation combined with trace, nuclear, and Schatten-norm
-terminology; the concrete angle pattern $(\pi/4,\pi/4)$ versus $(\pi/2,0)$ and
-its displacement costs; erratum/correction/counterexample terminology; publisher
-records; and citation snowballing.
-
-That search found important nearby prior work but not the same correction.
-Bolotnikov, Li, and Rodman showed by 2001 that canonical completion can fail for
-Schatten $p<2$ norms, including the trace norm, but their explicit negative
-example is the orthogonal-subspace endpoint $\theta=\pi/2$, outside the
-Davis--Kahan hypothesis $\theta_{\max}\leq\pi/3$ \citep{bolotnikov2001minimal}.
-Qiu, Zhang, and Li later repeated the Davis--Kahan short-angle minimality claim
-rather than flagging it as false \citep{qiu2006grassmann}.  We also found no
-SIAM-recorded correction attached to the original article.  We therefore do
-not make an unconditional priority claim: the narrower historical conclusion is
-that we found no indexed or widely recognized correction, or equivalent
-counterexample, showing failure of Proposition~4.4 within its stated real
-short-angle regime.  Non-digitized material, subscriber-only citation databases,
-and private correspondence remain limitations, and this search should be
-repeated immediately before submission.  The standalone technical note and
-historical-search supplement preserve the fuller semantic-alignment and search
-audit.
-
-\section{Reuse: the Quench Formalization}
-\label{sec:quench}
-
-The spectral layer is already consumed by the formalization of a 2026
-query-efficiency theorem family \citep{helm2026query}.  The Quench package
-contains paper-facing Theorem 2 statements, spectral/CMDS alignment bridges,
-finite and asymptotic query-efficiency variants, and explicit evaluation bridges.
-
-The role of this section is not to make Quench a second main theorem.  It is an
-integration test for the central methodological claim: once the foundational
-spectral stack exists, a new statistical formalization can import it rather than
-rebuild it.
-
-\textbf{TODO:} isolate the exact dependency path through
-\path{DkpsQuench2026/Geometry/AlignedCMDS.lean} and quantify which YWS/DK
-interfaces are reused directly.
-
-\section{Resource and Interaction Study}
-\label{sec:process-study}
-
-The mathematical development was unusually well instrumented, but not from its
-beginning and not in every interface.  We therefore treat resource accounting as
-a partially observed historical process rather than as a single project bill.
-The analysis snapshot is \AccountingSnapshot{}.  Commit-level coverage is
-computed on the primary formalization repository, while measured token totals
-also include an author-confirmed cross-repository contribution associated with
-the Tau Ceti foundations work.  Commits that touch only
-\path{papers/formalization_draft2/} are excluded from the formalization-history
-corpus, preventing the production of this manuscript from being charged back to
-the development it studies.
-
-At this snapshot, \ExactMeasuredCommitCount{} of \HistoryCommitCount{} included
-primary-repository commits have exact commit-level telemetry.  The program-wide
-ledger nevertheless provides a strict measured lower bound of \LedgerTurns{}
-model turns, \LedgerOutputTokens{} output tokens, and
-\LedgerBillableInputTokens{} tokens in its billable-input accounting measure.
-The larger program total includes \LedgerRepositoryCount{} explicitly allowlisted
-ledger repositories; the commit-coverage denominator does not pretend that the
-other repository's Git history is present in this checkout.  Measured-but-
-unallocated \texttt{pending@...} segments and genuinely unmeasured work are kept
-as separate evidence classes.  Detailed scope, reconciliation, and missing-data
-methods are given in \cref{app:accounting}.
-
-\subsection{Tokens must be resolved by model before pricing}
-
-Token count alone is not a cost measure.  The ledger records an exact per-model
-vector for ordinary input, cache writes, cache reads, and output, so measured
-usage can be priced model-by-model once historically applicable rates are
-verified.  The analysis checks that every per-model vector sums to its row-level
-total and never applies one global average token price.
-
-\begin{table}[t]
-\centering
-\small
-\input{snapshots/model_token_table.tex}
-\caption{Exactly measured program-wide tokens by model and token class at the
-\AccountingSnapshot{} snapshot.  Monetary cost is computed only after
-historically applicable model- and token-class-specific rates are supplied.}
-\label{tab:model-tokens}
-\end{table}
-
-Git co-author trailers provide a second, independent provenance signal.  We keep
-raw trailer labels, exact ledger model attribution, and study-specific
-normalizations separate.  In particular, an author-confirmed historical rule
-maps unledgered GPT-5.6 ``High'' and ``Thinking'' chat-interface labels to
-GPT-5.6 Sol only within the recorded study interval; the rule matched
-\BoundedGPTChatRuleCommitCount{} commits in this snapshot and is explicitly
-bounded so that it cannot silently classify future history.  Exact ledger
-attribution takes precedence.  Anthropic trailer/ledger differences are treated
-as review signals rather than errors because model switches within a session can
-leave a commit trailer that does not describe every model used in the preceding
-work.  The full reconciliation is in \cref{app:model-provenance}.
-
-\subsection{Human steering is a secondary empirical object}
-
-The retained interaction corpus contains \InteractionPromptCount{} deduplicated
-human prompts across \InteractionSessionCount{} sessions and
-\InteractionActiveDays{} active days.  These traces support analyses of
-intervention type, interruption, coordination, and the evolution of project
-management tools such as the paper-keyed source census.  They also expose an
-important provenance limitation: retrospective author memory does not reliably
-recover every operational request made during a long-running agentic project.
-Where contemporaneous traces survive, we therefore privilege them over later
-recollection when reconstructing who requested or elaborated a tool.  The
-quantitative taxonomy, the census chronology, and the ``interaction archaeology''
-case study are intentionally developed in \cref{app:interactions}; much of that
-material is appendix/cut material unless it changes the interpretation of the
-mathematical results.
+searched for prior treatments of the trace-norm failure inside the advertised
+short-angle regime.  Bolotnikov, Li, and Rodman showed by 2001 that canonical
+completion can fail for Schatten $p<2$ norms, including the trace norm, but their
+explicit negative example is the orthogonal-subspace endpoint $\theta=\pi/2$,
+outside the Davis--Kahan hypothesis $\theta_{\max}\leq\pi/3$
+\citep{bolotnikov2001minimal}.  Qiu, Zhang, and Li later repeated the
+Davis--Kahan short-angle minimality claim \citep{qiu2006grassmann}.  To the best
+of our knowledge, no published correction or equivalent counterexample
+identifies failure of Proposition~4.4 within its stated real short-angle regime.
 
 \section{What Had to Be Formalized}
 \label{sec:foundations}
 \label{sec:tauceti}
 
-The mathematical contribution is larger than the two theorem statements emphasized
-in the exposition.  To make that statement auditable, we derive the inventory in
-this section from a compiler-backed dependency snapshot rather than from module
-names or retrospective author memory.  The roots are the complete maintained
-source registries: \FormalizationYWSUnitCount{} YWS census units
-(\FormalizationYWSPublishedUnitCount{} units from the published source plus
-\FormalizationYWSExtensionUnitCount{} explicitly labeled extensions) and all
-\FormalizationDKResultCount{} counted results from \citet{davis1970rotation}.
-Those registries resolve to \FormalizationRootDeclarationCount{} distinct Lean
+The mathematical contribution extends well beyond the two theorem statements
+emphasized in the exposition.  We characterize the prerequisite layer using a
+compiler-backed snapshot rooted at the formalized YWS and Davis--Kahan result
+surfaces.  The snapshot resolves to \FormalizationRootDeclarationCount{} Lean
 root declarations.  Following project-local constants exposed by imported
-declaration types and retained values gives a closure of
-\FormalizationTraceDeclarationCount{} declarations connected by
-\FormalizationTraceEdgeCount{} dependency edges across
-\FormalizationTraceModuleCount{} project modules.  This is substantially more
-specific than import closure, but it is conservative: imported theorem proof terms
-can be opaque to this environment-level index, so we do not claim that it recovers
-every proof-internal helper.  The graph is therefore an auditable lower bound on
-named declaration dependence, supplemented by the source census and provenance
-audit below.
+declaration types and retained values reaches \FormalizationTraceDeclarationCount{}
+declarations connected by \FormalizationTraceEdgeCount{} dependency edges across
+\FormalizationTraceModuleCount{} project modules.  Imported theorem proof terms
+can be opaque to this environment-level index, so these counts form a
+conservative lower bound on named declaration dependence.
 
-The checked-in raw layer records exact source IDs, exact Lean declaration names,
-direct declaration dependencies, and per-source-unit reachability in
-\path{data/formalization_result_roots_20260817.csv},
-\path{data/formalization_dependency_edges_20260817.csv}, and
-\path{data/formalization_result_reachability_20260817.csv}.  Mathematical labels
-are a separate auditable layer in
-\path{data/formalization_module_theory_map_20260817.csv} and
-\path{data/formalization_declaration_theory_overrides_20260817.csv}.  The generator
-\path{scripts/build_formalization_theory_graph.py} joins those layers and emits both
-the compact summaries used here and machine-readable declaration- and theory-level
-graphs.  A newly reached unclassified module is an error rather than an invitation
-to guess its subject from its pathname.
+Theory assignments are maintained separately from dependency extraction and are
+joined programmatically.  The generator rejects newly reached modules that lack
+a reviewed classification.  The appendix gives the exact source-result scope,
+raw declaration tables, classification files, and regeneration procedure.
 
 \subsection{Basic theory areas}
 
-For presentation, we collapse the compiler graph to \FormalizationBasicTheoryCount{}
-basic mathematical areas.  The names are intentionally more specific than
-``operator theory'' but much less granular than individual Lean modules.  The
-coverage column is qualitative and scoped to the subsystem developed in this
-repository.  ``Broad partial'', for example, means that several aspects of the
-topic were developed and reused; it does not mean that any fixed percentage of
-the mathematical field has been formalized.  The last two columns count source
-units whose project-local proof closure reaches the area; YWS counts census units,
-whereas DK counts published results.
+For presentation, we collapse the compiler graph to
+\FormalizationBasicTheoryCount{} mathematical areas.  The labels are more
+specific than ``operator theory'' and much coarser than individual Lean modules.
+The scope column describes the local subsystem developed in this repository.
+``Broad partial'' indicates work across several aspects of a topic with explicit
+remaining gaps; it carries no field-level percentage interpretation.
 
 \begin{table}[H]
 \centering
 \small
-\caption{Compiler-backed inventory of the basic prerequisite theories reached by
-the maintained YWS and Davis--Kahan formalizations.  Counts describe source-unit
-reachability, not theorem importance or field-level completeness.}
+\caption{Basic prerequisite theories in the YWS and Davis--Kahan formalization,
+with reviewed qualitative descriptions of local scope.  Source-result
+reachability and declaration-level evidence are reported in the appendix.}
 \label{tab:formalized-theories}
 \input{snapshots/formalization_basic_theory_table.tex}
 \end{table}
 
-The first group in \cref{tab:formalized-theories} is finite-dimensional subspace
-and spectral geometry: orthogonal projections and principal angles, singular
-values and Gram operators, spectral gaps and variational eigenvalue arguments,
-and residual/Ritz compression identities.  These are the interfaces closest to
+The finite-dimensional foundations in \cref{tab:formalized-theories} include
+orthogonal projections and principal angles, singular values and Gram operators,
+spectral gaps and variational eigenvalue arguments, and residual/Ritz
+compression identities.  These are the interfaces closest to
 the statistical statements of \citet{yu2015davis}, while also sitting in the
 classical perturbation-theory lineage of Davis--Kahan, Wedin, and Stewart--Sun
-\citep{davis1970rotation,wedin1972perturbation,stewart1990matrix}.  The YWS corpus
-reaches \FormalizationYWSTheoryCount{} of the \FormalizationBasicTheoryCount{}
-basic areas, with particularly broad use of projection/principal-angle geometry,
+\citep{davis1970rotation,wedin1972perturbation,stewart1990matrix}.  YWS draws most heavily on projection and principal-angle geometry,
 singular-subspace machinery, spectral-gap reasoning, and unitarily invariant
 norms.
 
-The full Davis--Kahan development is substantially broader: its result closures
-reach all \FormalizationDKTheoryCount{} basic areas.  In addition to the common
-subspace geometry, this required unitarily invariant norm and operator-ideal
+The full Davis--Kahan development uses a broader range of foundations, including unitarily invariant norm and operator-ideal
 machinery, polar decomposition and direct rotations, two-projection geometry,
 operator angles and double-angle constructions, and Sylvester/separated-intertwiner
 equations.  These topics are already part of the mathematical architecture of the
@@ -934,8 +647,8 @@ equations.  These topics are already part of the mathematical architecture of th
 useful comparison points for direct-rotation minimality and angle/Sylvester
 methods \citep{bolotnikov2001minimal,qiu2006grassmann,grubisic2005sylvester,grubisic2010tan}.
 
-The infinite-dimensional DK results also forced a spectral-analysis layer that is
-mostly invisible in the displayed YWS theorem: projection-valued measures and
+The infinite-dimensional DK results also required a spectral-analysis layer that
+is mostly absent from the displayed YWS theorem: projection-valued measures and
 bounded Borel functional calculus, closed and unbounded self-adjoint spectral
 theory, spectral restrictions and resolvents, and transfer between real and
 complex Hilbert spaces.  The classical mathematical reference point is Kato's
@@ -947,263 +660,229 @@ actually depends on.
 
 \subsection{Degree of formalization}
 
-We deliberately do not report percentages such as ``$x\%$ of spectral theory.''
-There is no natural denominator, and declaration counts are highly sensitive to
-API design.  Instead the checked-in taxonomy uses four scoped descriptions:
-\emph{focused reusable slice}, \emph{substantial focused subsystem},
-\emph{substantial reusable subsystem}, and \emph{broad partial development}.
-The labels in \cref{tab:formalized-theories} are judgments about the local theory
-actually developed: whether it consists of a narrow reusable interface, a coherent
-cluster around one problem, a substantial independently reusable subsystem, or a
-broader but explicitly incomplete development.  The raw graph and the number of
-reached declarations/modules provide evidence for those judgments, but do not
-compute them automatically.
+Coverage is described with four scoped labels: \emph{focused reusable slice},
+\emph{substantial focused subsystem}, \emph{substantial reusable subsystem}, and
+\emph{broad partial development}.  Field-level percentages lack a natural denominator, and declaration counts are
+sensitive to API design.  The labels therefore describe the local theory:
+a narrow reusable interface, a coherent cluster around one problem, a
+substantial independently reusable subsystem, or a broader development with
+known gaps.  The declaration graph and module inventory provide quantitative
+evidence for those reviewed labels.
 
-This distinction matters because final proof dependence and historical development
-are not identical.  A foundation may contain auxiliary lemmas that made the final
-API possible but are not themselves on a shortest path to a source result; conversely,
-a declaration may be reached by many results while remaining mathematically small.
-The present graph therefore supports the claim ``these theories occur in the
-formalized prerequisite stack'' exactly, while the qualitative coverage labels
-state the more interpretive claim about how much reusable local theory was built.
-Both layers are retained so that the latter can be revised without changing the
-former.
+Final named-declaration dependence and historical development can differ.  Some
+auxiliary results support API construction without remaining on a traced path to
+a source result, while a small declaration may be reused by many results.  The
+compiler graph records the first quantity conservatively; the scope labels
+summarize the second at the level of mathematical theory.  Both layers are
+retained so that future evidence can revise the qualitative assessment without
+changing the recorded dependency snapshot.
 
 \subsection{Formalization provenance and reuse}
+\label{sec:proof-provenance}
 
-``Formalized in this project'' is not synonymous with ``invented in this project.''
-The provenance policy in \cref{sec:proof-provenance} is joined to the exact named
-local declarations underlying \cref{tab:formalized-theories}.  Within this
-compiler-reached inventory, \FormalizationProjectNativeDeclarationCount{} of
+We track mathematical provenance and formalization provenance separately.
+Literature citations identify the mathematical source of a theorem.  Positive
+formal-source citations identify Lean code, constructions, theorem selection,
+or proof architecture derived from an existing formal development.  The latter
+include documented ancestry in Spectra \citep{bornemann2026spectra} and
+route-map or cross-check use of other Lean developments such as
+\citet{zhang2026sltrepo}.  A project-local declaration receives project
+formalization credit when no positive external formal-provenance citation
+applies.  Ordinary Mathlib and Lean dependencies remain credited upstream
+\citep{mathlib2020}.  Exact declaration-level claims and evidence locations are
+reported in the appendix.
+
+Within the compiler-reached inventory,
+\FormalizationProjectNativeDeclarationCount{} of
 \FormalizationTraceDeclarationCount{} declarations have no positive external
-formal-donor citation and therefore receive project formalization credit under the
-stated policy.  Another \FormalizationProjectReferencedDeclarationCount{} are
-explicitly documented as independently developed/current local replacements while
-crediting an external formal development for theorem selection, comparison, or
-historical ancestry.  The remaining \FormalizationExternalOriginDeclarationCount{}
-are directly donor-derived at the level recorded by the source: 
-\FormalizationAdaptedDeclarationCount{} adapted/ported declarations and
-\FormalizationCopiedDeclarationCount{} copied or essentially verbatim declarations.
-The positive donor ancestry that survives in this dependency inventory is Spectra
-\citep{bornemann2026spectra}; \FormalizationDKDonorAffectedUnitCount{} of the
-counted Davis--Kahan source results reach at least one directly donor-derived local
-declaration, while the maintained YWS census reaches none.
+formal-donor citation.  Another \FormalizationProjectReferencedDeclarationCount{}
+are locally developed declarations whose documentation credits an external
+formal development for theorem selection, comparison, or ancestry.  The
+remaining \FormalizationExternalOriginDeclarationCount{} are directly
+donor-derived at the documented level:
+\FormalizationAdaptedDeclarationCount{} adapted or ported declarations and
+\FormalizationCopiedDeclarationCount{} copied or essentially verbatim
+declarations.  Spectra supplies the positive donor ancestry that survives in
+this dependency inventory \citep{bornemann2026spectra}.
 
 \begin{table}[H]
 \centering
 \small
-\caption{Formalization-provenance accounting within the compiler-reached project-local
-inventory.  Absence of a positive external formal-source citation defaults to
-project formalization; ordinary Mathlib/Lean dependencies are outside this denominator.}
+\caption{Formalization provenance within the compiler-reached project-local
+inventory.  Project formalization is the default when no positive external
+formal-source citation applies; ordinary Mathlib and Lean dependencies lie
+outside this denominator.}
 \label{tab:formalization-provenance-credit}
 \input{snapshots/formalization_provenance_credit_table.tex}
 \end{table}
 
-These declaration counts are provenance accounting, not an originality metric and
-not a division of token cost declaration by declaration.  A copied or adapted
-formal artifact can still require substantial local integration work; conversely,
-a project-local declaration can formalize mathematics originating in the published
-literature.  The point of the table is narrower: external formal work receives
-explicit credit rather than disappearing inside a project-local namespace, while
-uncited project-local formalization is not silently attributed to an unspecified
-prior library.
+These counts record formalization provenance.  Originality and declaration-level
+token allocation fall outside their interpretation.  Adapted material can require
+substantial integration, and locally formalized declarations can encode
+mathematics originating in the published literature.  The accounting gives
+external formal work explicit credit and assigns uncited project-local
+formalization to this project under the stated policy.
 
-The project currently stages the reusable portion of this mathematics under
-\texttt{ForTauCeti/}.  The intended endpoint is not a private theorem stack but a
-shared operator-theory substrate organized against the \TauCeti{} roadmap.  This
-is the mathematical payoff of the prerequisite cost: later formalizations can
-reuse stable interfaces rather than rebuilding the same spectral, geometric, and
-operator-theoretic foundations.  The Quench case study in \cref{sec:quench} already
-provides one downstream example of that reuse.
+The reusable mathematics is being prepared for upstream contribution as a
+shared operator-theory foundation, so later formalizations can consume stable
+spectral, geometric, and operator-theoretic interfaces.
+
+\section{Resource Accounting}
+\label{sec:process-study}
+
+Instrumentation was introduced after the project was underway, and some work
+performed through chat interfaces has no equivalent telemetry.  We therefore
+report observed usage without imputing a project-wide total.  The analysis
+snapshot is \AccountingSnapshot{}.  Commit-level coverage is computed on the
+primary formalization repository, while measured token totals also include an
+author-confirmed cross-repository contribution associated with the Tau Ceti
+foundations work.  Manuscript-only commits are excluded from the
+formalization-history corpus.
+
+At this snapshot, \ExactMeasuredCommitCount{} of \HistoryCommitCount{} included
+primary-repository commits have exact commit-level telemetry.  Across the
+allowlisted program repositories, the retained ledger records \LedgerTurns{}
+model turns, \LedgerOutputTokens{} output tokens, and
+\LedgerBillableInputTokens{} tokens in its billable-input accounting measure.
+Measured session-level usage without commit attribution remains part of these
+program totals and is excluded from commit-level analyses.  The appendix gives
+the accounting scope and token-class definitions in \cref{app:accounting}.
+
+\subsection{Model-resolved token accounting}
+
+The ledger records model-resolved ordinary input, cache-write, cache-read, and
+output tokens.  The analysis verifies that the per-model vectors sum to the
+row-level totals and applies prices by model and token class.
+
+\begin{table}[t]
+\centering
+\small
+\input{snapshots/model_token_table.tex}
+\caption{Measured program-wide tokens by model and token class at the
+\AccountingSnapshot{} snapshot.}
+\label{tab:model-tokens}
+\end{table}
+
+\subsection{Economic and environmental valuation}
+
+Applying the versioned public API price inputs used by this study gives an
+API-equivalent list-price value of \MeasuredApiEquivalentCost{} for the measured
+usage.  Revaluing all recorded Anthropic cache writes at the one-hour cache rate
+gives \MeasuredApiEquivalentCostOneHour{}, providing a billing sensitivity
+check.
+
+Operational energy and greenhouse-gas emissions require serving assumptions.
+The central serving-stack scenario gives \ModeledOperationalEnergy{} and
+\ModeledOperationalCarbon{}.  A separate per-token calculation gives
+\PerTokenCrossCheckEnergy{} and \PerTokenCrossCheckCarbon{}.  These are
+order-of-magnitude estimates because provider meter readings are unavailable.
+The assumptions are versioned outside the ledger, allowing the valuation to be
+recomputed from the same measured usage as better empirical estimates become
+available \citep{crall2026llmresource}.
+
+The ledger does not cover all project work.  The token, dollar, energy, and
+emissions figures above apply to observed usage; commit-level comparisons use
+exact telemetry.  Dollar estimates depend on dated public rates, while energy
+and carbon estimates depend on the serving assumptions recorded with the
+analysis.  Source correspondence is established separately by the YWS and
+Davis--Kahan audits.
 
 \section{Related Work}
 \label{sec:related}
 
-There is rapidly growing work on LLM-assisted theorem proving, document-scale
-autoformalization, formalization of research mathematics, and human interaction
-with proof assistants.  There are also increasingly large formal developments
-in statistics.  The closest methodological comparison for the process-analysis
-portion is the public Anthropic Riemann-zeta case study \citep{anthropic2026zeta},
-which reports resource usage and multi-agent development traces for a research
-mathematics task.
+Large formal developments provide precedents for source-driven mathematical
+verification and reusable library construction, including Flyspeck, the Liquid
+Tensor Experiment, and Mathlib itself
+\citep{hales2017kepler,scholze2022liquid,mathlib2020}.  LLM-assisted
+formalization has progressed from natural-language autoformalization and
+sketch-guided proving \citep{wu2022autoformalization,jiang2023dsp} to
+long-horizon Lean workflows \citep{zhang2026leanmarathon}.  Recent statistical
+formalization develops empirical-process infrastructure in Lean
+\citep{zhang2026slt}; its public repository also contains later Davis--Kahan
+extensions \citep{zhang2026sltrepo}.
 
-\textbf{TODO: fresh literature search immediately before submission.}  The
-novelty claim should not be ``LLMs can formalize a paper'' or ``first
-Davis--Kahan theorem in Lean.''  The intended distinction is the combination of
-source-faithful YWS coverage, mathematical corrections discovered by audit,
-reusable downstream statistical use, and unusually granular evidence about the
-human--AI process required to obtain the formalization.
-
-\section{Limitations}
-\label{sec:limitations}
-
-\begin{itemize}
-  \item Resource accounting begins after substantial development, and transcript
-        retention limits how much of the earlier period can be reconstructed.
-  \item Chat-interface work is not recoverable from the local harness ledger;
-        historical attribution depends on separate evidence and author review.
-        Missing chat logs also limit reconstruction of initiative and steering,
-        not merely token totals.
-  \item Pending transcript spans can be broad.  Timestamp overlap identifies
-        candidate commits but does not justify a per-commit token allocation.
-  \item Missingness is not random, so extrapolated totals are model-dependent and
-        should be presented with sensitivity analyses rather than as ground truth.
-        Some model variants have no direct measured calibration in the ledger.
-  \item Dollar costs depend on historically applicable model- and token-class
-        rates.  Measured token counts remain primary evidence; monetary totals
-        should be reported only with sourced rates and effective dates.
-  \item Path-based component labels overlap and are only a first approximation
-        to mathematical dependency-level cost attribution.
-  \item Formal verification establishes the Lean statement.  Claims that a
-        formal result corrects a prose source require a separate semantic-alignment
-        argument, which we make explicit in the YWS and Davis--Kahan audits.
-  \item The AI-formalization literature is changing rapidly; related-work and
-        priority claims need a final contemporaneous search.
-\end{itemize}
+Human use of AI during formalization has also become an object of study
+\citep{collins2026humanai}.  The Anthropic Riemann-zeta case study reports
+resource usage and multi-agent development traces for a research mathematics
+task \citep{anthropic2026zeta}.  Recent formalization agents expose alternative
+workflow choices that can be compared experimentally.  MathCode combines a
+persistent Lean environment with reusable theorem libraries, planning, and
+parallel subgoal work \citep{mathcode2026}; AutoLean provides logged
+formalization and proving loops with compiler feedback, semantic evaluation, and
+replanning \citep{autolean2026}.  Our resource study contributes a longitudinal
+measured-usage record from a source-audited spectral-perturbation formalization.
 
 \section{Conclusion}
 \label{sec:conclusion}
 
-The paper's intended conclusion is not that Davis--Kahan can be ``prompted into
-existence.''  The development history instead shows the cost of making a
-classical statistical citation executable at source-level fidelity.  That cost
-produced more than sine-theta theorem statements: it exposed defects in the
-literature, forced foundational mathematical interfaces into existence, enabled
-a downstream statistical formalization, and created open-source infrastructure
-that can be amortized by later work.
+The YWS and Davis--Kahan formalization includes the published theorem surfaces
+and the spectral, geometric, and operator-theoretic interfaces needed to prove
+them.  Formal source audit identified defects in both sources, while the
+prerequisite development produced reusable foundations for later formal work.
+That reusable layer is part of the scientific return from formalizing these
+sources at their published breadth.
 
-The accounting analysis complements the mathematical contribution by making the
-development process falsifiable and inspectable.  Where telemetry exists we
-report measurements; where it is only session-level we preserve that ambiguity;
-and where it is missing we model it explicitly as missing data rather than
-retroactively treating an incomplete ledger as a complete project bill.
+The resource analysis records substantial computational expenditure for the
+observed portion of the project.  Token measurements are stored independently of
+commit-level attribution and post-hoc valuation, so revised price or emissions
+assumptions can be applied to the same ledger as empirical estimates improve.
 
+The commit-linked portion of the ledger also suggests a direct experiment for
+future work.  Selected pre-commit repository states can be paired with the
+formalization obligations solved by the corresponding commits and rerun under
+alternative agent workflows such as MathCode and AutoLean
+\citep{mathcode2026,autolean2026}.  The original commit-associated token usage
+provides an imperfect historical baseline.  Comparisons would need to control
+model choice, available context, stopping criteria, and semantic acceptance, and
+commit attribution alone cannot establish causal per-task cost.  Such a study
+could test whether persistent Lean sessions, theorem retrieval, planning and
+replanning, or other orchestration choices reduce token and API expenditure for
+comparable mathematical coverage and proof quality.
+
+Our hope is that the reusable foundations developed here reduce the work
+required by later formalizations.  This project still required substantial
+computational expenditure, and the preserved record leaves a concrete open
+question: how much of that expenditure can future workflows avoid while reaching
+comparable source fidelity, mathematical coverage, and proof checking?
+
+\bibliographystyle{unsrtnat}
+\bibliography{references}
+
+\clearpage
 \appendix
-\section{Lean listing context}
-\label{app:lean-listing-context}
+\input{snapshots/census_macros.tex}
 
-The theorem declarations printed in the main text are literal source text: we
-do not shorten qualifiers, rename binders, or substitute presentation-only Lean
-syntax.  What the listings omit is the surrounding module context that a reader
-would see by opening the referenced source file.  In particular,
-\texttt{DavisKahan1970.sinTheta\_headline} is declared in a module with
-\texttt{open TauCeti}; consequently the source itself spells the proposed
-Tau-Ceti extension \texttt{TauCeti.LinearPMap.realSpectrum} as
-\texttt{LinearPMap.realSpectrum}.  The underlying \texttt{LinearPMap} partial
-linear-map type is Mathlib's; the real-spectrum API used here is part of the
-operator-theory layer currently proposed for Tau Ceti.  Likewise,
-\texttt{UnitaryInvariantNorm} is the public source-facing norm interface in the
-Davis--Kahan development.  These namespace and import choices are context, not
-text silently removed from the displayed theorem declaration.
+\section{Supplementary YWS declaration}
+\label{app:yws-aligned-listing}
 
-For the YWS headline statements, the application package introduces the
-following reducible abbreviation and local notations so that the two
-perturbation norms have the same visible roles as in the printed theorem:
+The second conclusion of YWS Theorem~2 aligns the estimated and population
+frames by an orthogonal matrix.  In the following declaration,
+$\lVert\cdot\rVert_{\mathrm{op}}$ and $\lVert\cdot\rVert_F$ denote the operator
+and Frobenius norms used in the published theorem.
+
 \begin{lstlisting}[style=leanpaper,
-  caption={Exact local norm context used by the YWS headline declarations.},
-  label={lst:yws-frobenius-abbrev}]
-noncomputable abbrev frobeniusNorm {p : Nat}
-    (A : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)) : Real :=
-  UnitarilyInvariantSeminorm.frobenius Real (EuclideanSpace Real (Fin p)) A
-
-local notation "‖" A "‖_op" => ‖LinearMap.toContinuousLinearMap A‖
-local notation "‖" A "‖_F" => frobeniusNorm A
+  caption={Lean surface for the aligned-frame conclusion of YWS Theorem 2.},
+  label={lst:yws-theorem2-aligned}]
+theorem theorem2_alignedFrame
+    {p d r s : Nat}
+    (Sigma SigmaHat :
+      EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
+    (hSigma : Sigma.IsSymmetric) (hSigmaHat : SigmaHat.IsSymmetric)
+    (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
+    (V Vhat : Fin d → EuclideanSpace Real (Fin p))
+    (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
+    (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
+    (Delta : Real) (hDelta : 0 < Delta)
+    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
+    ∃ O : Matrix (Fin d) (Fin d) Real,
+      O ∈ Matrix.orthogonalGroup (Fin d) Real ∧
+        Real.sqrt (∑ i, ‖(∑ j, O j i • Vhat j) - V i‖ ^ 2) ≤
+          2 * Real.sqrt 2 *
+            min
+              (Real.sqrt d * ‖SigmaHat - Sigma‖_op)
+              ‖SigmaHat - Sigma‖_F / Delta := by
 \end{lstlisting}
-Because \texttt{frobeniusNorm} is an \texttt{abbrev} and the two notations
-expand directly to their displayed right-hand sides, this context introduces no
-additional mathematical hypothesis.  It only gives the compiling theorem the
-source spellings \texttt{\textbardbl A\textbardbl\_op} and
-\texttt{\textbardbl A\textbardbl\_F}.
 
 \input{appendix_process.tex}
-
-\begin{thebibliography}{9}
-
-\bibitem[Davis and Kahan(1970)]{davis1970rotation}
-Chandler Davis and W.~M. Kahan.
-\newblock The rotation of eigenvectors by a perturbation. III.
-\newblock \emph{SIAM Journal on Numerical Analysis}, 7(1):1--46, 1970.
-
-\bibitem[Wedin(1972)]{wedin1972perturbation}
-Per-{\AA}ke Wedin.
-\newblock Perturbation bounds in connection with singular value decomposition.
-\newblock \emph{BIT Numerical Mathematics}, 12(1):99--111, 1972.
-
-\bibitem[Kato(1976)]{kato1976perturbation}
-Tosio Kato.
-\newblock \emph{Perturbation Theory for Linear Operators}.
-\newblock Springer, second edition, 1976.
-
-\bibitem[Stewart and Sun(1990)]{stewart1990matrix}
-G.~W. Stewart and Ji-Guang Sun.
-\newblock \emph{Matrix Perturbation Theory}.
-\newblock Academic Press, 1990.
-
-\bibitem[Yu et~al.(2015)Yu, Wang, and Samworth]{yu2015davis}
-Yi Yu, Tengyao Wang, and Richard~J. Samworth.
-\newblock A useful variant of the Davis--Kahan theorem for statisticians.
-\newblock \emph{Biometrika}, 102(2):315--323, 2015.
-
-\bibitem[Chen et~al.(2021)Chen, Chi, Fan, and Ma]{chen2021spectral}
-Yuxin Chen, Yuejie Chi, Jianqing Fan, and Cong Ma.
-\newblock Spectral methods for data science: A statistical perspective.
-\newblock \emph{Foundations and Trends in Machine Learning}, 14(5):566--806, 2021.
-
-\bibitem[de~Moura et~al.(2015)de~Moura, Kong, Avigad, van Doorn, and von Raumer]{demoura2015lean}
-Leonardo de~Moura, Soonho Kong, Jeremy Avigad, Floris van Doorn, and Jakob von Raumer.
-\newblock The Lean theorem prover.
-\newblock In \emph{Automated Deduction -- CADE-25}, 2015.
-
-\bibitem[Mathlib Community(2020)]{mathlib2020}
-The Mathlib Community.
-\newblock The Lean mathematical library.
-\newblock In \emph{Certified Programs and Proofs (CPP)}, pages 367--381, 2020.
-
-\bibitem[Helm et~al.(2026)Helm, Johnson, and Priebe]{helm2026query}
-Hayden Helm, Ben Johnson, and Carey~E. Priebe.
-\newblock Query-efficient model evaluation using cached responses.
-\newblock arXiv:2605.07096, 2026.
-
-\bibitem[Grubi\v{s}i\'c and Veseli\'c(2005)]{grubisic2005sylvester}
-Luka Grubi\v{s}i\'c and Kre\v{s}imir Veseli\'c.
-\newblock On weakly formulated Sylvester equations and applications.
-\newblock \emph{Integral Equations and Operator Theory}, 2005.
-
-\bibitem[Grubi\v{s}i\'c et~al.(2010)Grubi\v{s}i\'c, Kostrykin, Makarov, and Veseli\'c]{grubisic2010tan}
-Luka Grubi\v{s}i\'c, Vadim Kostrykin, Konstantin~A. Makarov, and Kre\v{s}imir Veseli\'c.
-\newblock The TAN $2\Theta$ theorem for indefinite quadratic forms.
-\newblock \emph{Integral Equations and Operator Theory}, 2010.
-
-\bibitem[Dedecker and Loreaux(2025)]{dedecker2025cfc}
-Anatole Dedecker and Jireh Loreaux.
-\newblock The continuous functional calculus in Lean.
-\newblock arXiv:2501.15639, 2025.
-
-\bibitem[Bolotnikov et~al.(2001)Bolotnikov, Li, and Rodman]{bolotnikov2001minimal}
-Vladimir Bolotnikov, Chi-Kwong Li, and Leiba Rodman.
-\newblock Minimal distortion problems for classes of unitary matrices.
-\newblock \emph{Electronic Journal of Linear Algebra}, 8:26--46, 2001.
-
-\bibitem[Qiu et~al.(2005)Qiu, Zhang, and Li]{qiu2006grassmann}
-Li Qiu, Yanxia Zhang, and Chi-Kwong Li.
-\newblock Unitarily invariant metrics on the Grassmann space.
-\newblock \emph{SIAM Journal on Matrix Analysis and Applications}, 27(2):507--531, 2005; published online 2006.
-
-\bibitem[Bornemann and Spectra Formalization Project(2026)]{bornemann2026spectra}
-Adam Bornemann and the Spectra Formalization Project.
-\newblock \emph{Spectra}: formalized spectral and operator theory in Lean.
-\newblock GitHub repository, audited revision \texttt{8dbaaf6728d1342ae16acf79fd7eef7c59b37e63}, 2026.
-
-\bibitem[Zhang et~al.(2026)Zhang, Lee, and Liu]{zhang2026sltrepo}
-Yuanhe Zhang, Jason~D. Lee, and Fanghui Liu.
-\newblock Statistical Learning Theory in Lean 4: public repository.
-\newblock GitHub repository, 2026.
-
-\bibitem[Anthropic(2026)]{anthropic2026zeta}
-Anthropic.
-\newblock Advancing mathematics with the Riemann zeta function.
-\newblock Research report / web publication, 2026. Bibliographic metadata to recheck before submission.
-
-\end{thebibliography}
 
 \end{document}
