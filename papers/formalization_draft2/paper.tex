@@ -88,6 +88,8 @@
 \input{snapshots/provenance_macros.tex}
 \input{snapshots/accounting_macros.tex}
 \input{snapshots/interaction_macros.tex}
+\input{snapshots/formalization_theory_macros.tex}
+\input{snapshots/formalization_provenance_macros.tex}
 
 \newcommand{\Lean}{\textsc{Lean}}
 \newcommand{\YWS}{Yu--Wang--Samworth}
@@ -122,12 +124,16 @@ merely a theorem to restate exposed two printed source defects in YWS and, in a
 deeper audit of the 1970 source, an explicit finite-dimensional counterexample
 to Davis--Kahan Proposition 4.4.
 
-The effort also required a substantial prerequisite layer of operator theory,
-principal-angle geometry, singular-value machinery, unitarily invariant norms,
-and spectral perturbation infrastructure that was not available at the required
-interface in Mathlib.  These results are open source, are reused by a formalized
-contemporary statistical theorem family, and are being organized for contribution
-through an operator-theory roadmap in \TauCeti{}.
+The effort also required a substantial prerequisite layer.  A compiler-backed
+inventory rooted in the complete maintained YWS and Davis--Kahan source registries
+identifies \FormalizationBasicTheoryCount{} basic theory areas, ranging from
+principal-angle and singular-subspace geometry to Borel spectral calculus,
+unbounded self-adjoint operator theory, unitarily invariant norms, direct
+rotations, operator angles, and Sylvester equations.  We report scoped qualitative
+coverage rather than field-level completeness percentages.  These results are open
+source, are reused by a formalized contemporary statistical theorem family, and
+are being organized for contribution through an operator-theory roadmap in
+\TauCeti{}.
 
 Finally, we study what this development cost and how human--LLM collaboration
 actually occurred.  The repository contains a partially observed resource ledger
@@ -177,6 +183,10 @@ The intended contribution list is:
         $\mathbb{R}^4$ trace-norm counterexample, a machine-checked localization
         of the proof defect to the printed equation (4.3), and a repaired theorem
         surface.
+  \item A compiler-backed account of the prerequisite formalization, linking the
+        maintained source registries to exact Lean declarations and classifying
+        their project-local proof dependencies into \FormalizationBasicTheoryCount{}
+        basic mathematical theory areas with explicit scope assessments.
   \item A demonstration that the resulting spectral machinery is reusable in a
         contemporary end-to-end statistical theorem family (Quench), rather than
         being an isolated verification artifact.
@@ -215,7 +225,7 @@ To make this claim quantitative without making the paper build depend on a live
 In the snapshot retrieved on \OpenAlexRetrievedDate, OpenAlex records
   \OpenAlexDavisKahanCitations{} citing works for Davis--Kahan
   \citep{davis1970rotation} and \OpenAlexYuWangSamworthCitations{} for Yu, Wang,
-  and Samworth \citep{yu2015useful}.
+  and Samworth \citep{yu2015davis}.
 The repository contains the query code and the small generated \LaTeX{} snapshot
   used for these numbers; the larger raw API response is treated as disposable
   generated data.
@@ -274,10 +284,12 @@ polar-decomposition machinery, principal-angle geometry, singular systems,
 majorization and Ky Fan tools, unitarily invariant norm interfaces, spectral
 subspace APIs, and perturbation lemmas for self-adjoint operators.
 
-\textbf{TODO figure:} dependency DAG from Mathlib $\rightarrow$ foundational
-operator theory $\rightarrow$ Davis--Kahan $\rightarrow$ YWS $\rightarrow$
-Quench.  The figure should distinguish code newly developed here, pre-existing
-Mathlib, and staging work intended for \TauCeti{}.
+\Cref{sec:foundations} makes this prerequisite burden explicit.  Rather than
+using import closure, it starts from every maintained YWS source-census unit and
+every counted Davis--Kahan result and follows constants occurring in elaborated
+Lean declaration types and proof bodies.  The resulting declaration graph is then
+collapsed through a checked-in mathematical taxonomy for presentation; the exact
+source-unit--declaration links remain auditable in the repository.
 
 This is the amortization argument for foundational formalization.  Informally,
 a later paper can cite Davis--Kahan in one sentence.  Formally, somebody must
@@ -540,25 +552,34 @@ bounds.
 middle-block construction details to an appendix.
 
 \subsection{Proof provenance and borrowed formal ideas}
+\label{sec:proof-provenance}
 
 Source faithfulness applies to the provenance of the formal development as well
-as to the theorem statements.  Supporting layers were not all independently
-invented in this repository: some code and proof ideas have ancestry in the
-Spectra collaboration; other arguments were adapted from, or designed after
-reading, external Lean libraries and Mathlib pull requests.  The repository
-already records much of this information in module-level provenance blocks and
-external-source registries.
+as to the theorem statements.  We distinguish \emph{mathematical provenance}
+(the literature source of a theorem) from \emph{formalization provenance}
+(the source of a Lean construction or proof).  The repository has maintained
+formal-source citations during development: where code, a construction, theorem
+selection, or proof architecture came from an existing formal library, the
+relevant module records that relationship explicitly.  In particular, several
+operator-theoretic components have documented ancestry in the Spectra
+formalization project \citep{bornemann2026spectra}; source comments also credit
+other Lean developments when they served as route maps or cross-checks, including
+the statistical-learning development of Zhang, Lee, and Liu
+\citep{zhang2026sltrepo}.
 
-The final paper should cite those sources at the mathematical points where their
-ideas are used, and should distinguish at least four relationships: copied or
-closely adapted code, ported mathematics with substantial API rewriting, a proof
-strategy used for an independent re-derivation, and an ordinary upstream
-Mathlib dependency.  These are different scholarly claims and should not be
-collapsed into a generic acknowledgment.  A paper-local provenance inventory is
-regenerated by \path{scripts/build_provenance.py}.
-
-\textbf{TODO:} complete a declaration-level audit for every proof discussed in
-the paper and add BibTeX entries for all cited donors before submission.
+For formalization credit we therefore use an explicit default rule.  A declaration
+inside the project-local dependency inventory is credited as formalized in this
+project unless a positive external formal-provenance citation applies to that exact
+declaration.  Positive claims distinguish copied/re-homed material, adapted or
+ported material, and cases in which an external formal development influenced
+theorem selection or historical architecture but the current proof or construction
+was independently developed here.  Ordinary Mathlib dependencies are different
+again: they lie outside the project-local denominator and are credited upstream
+rather than treated as project formalizations \citep{mathlib2020}.  The raw positive
+claims, evidence file/line ranges, and the default policy are checked in under
+\path{data/formalization_formal_provenance_*_20260817.*};
+\path{scripts/build_formalization_provenance_credit.py} joins them to the exact
+named declarations in the formalization graph.
 
 \section{Formalization as Source Audit}
 \label{sec:audit}
@@ -832,23 +853,168 @@ case study are intentionally developed in \cref{app:interactions}; much of that
 material is appendix/cut material unless it changes the interpretation of the
 mathematical results.
 
-\section{Contribution of Reusable Foundations}
+\section{What Had to Be Formalized}
+\label{sec:foundations}
 \label{sec:tauceti}
 
-\note{this section can problem be a note where we describe the contributions or moved to the appendix.}
+The mathematical contribution is larger than the two theorem statements emphasized
+in the exposition.  To make that statement auditable, we derive the inventory in
+this section from a compiler-backed dependency snapshot rather than from module
+names or retrospective author memory.  The roots are the complete maintained
+source registries: \FormalizationYWSUnitCount{} YWS census units
+(\FormalizationYWSPublishedUnitCount{} units from the published source plus
+\FormalizationYWSExtensionUnitCount{} explicitly labeled extensions) and all
+\FormalizationDKResultCount{} counted results from \citet{davis1970rotation}.
+Those registries resolve to \FormalizationRootDeclarationCount{} distinct Lean
+root declarations.  Following project-local constants exposed by imported
+declaration types and retained values gives a closure of
+\FormalizationTraceDeclarationCount{} declarations connected by
+\FormalizationTraceEdgeCount{} dependency edges across
+\FormalizationTraceModuleCount{} project modules.  This is substantially more
+specific than import closure, but it is conservative: imported theorem proof terms
+can be opaque to this environment-level index, so we do not claim that it recovers
+every proof-internal helper.  The graph is therefore an auditable lower bound on
+named declaration dependence, supplemented by the source census and provenance
+audit below.
 
-The project currently stages substantial reusable operator-theory code under
+The checked-in raw layer records exact source IDs, exact Lean declaration names,
+direct declaration dependencies, and per-source-unit reachability in
+\path{data/formalization_result_roots_20260817.csv},
+\path{data/formalization_dependency_edges_20260817.csv}, and
+\path{data/formalization_result_reachability_20260817.csv}.  Mathematical labels
+are a separate auditable layer in
+\path{data/formalization_module_theory_map_20260817.csv} and
+\path{data/formalization_declaration_theory_overrides_20260817.csv}.  The generator
+\path{scripts/build_formalization_theory_graph.py} joins those layers and emits both
+the compact summaries used here and machine-readable declaration- and theory-level
+graphs.  A newly reached unclassified module is an error rather than an invitation
+to guess its subject from its pathname.
+
+\subsection{Basic theory areas}
+
+For presentation, we collapse the compiler graph to \FormalizationBasicTheoryCount{}
+basic mathematical areas.  The names are intentionally more specific than
+``operator theory'' but much less granular than individual Lean modules.  The
+coverage column is qualitative and scoped to the subsystem developed in this
+repository.  ``Broad partial'', for example, means that several aspects of the
+topic were developed and reused; it does not mean that any fixed percentage of
+the mathematical field has been formalized.  The last two columns count source
+units whose project-local proof closure reaches the area; YWS counts census units,
+whereas DK counts published results.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Compiler-backed inventory of the basic prerequisite theories reached by
+the maintained YWS and Davis--Kahan formalizations.  Counts describe source-unit
+reachability, not theorem importance or field-level completeness.}
+\label{tab:formalized-theories}
+\input{snapshots/formalization_basic_theory_table.tex}
+\end{table}
+
+The first group in \cref{tab:formalized-theories} is finite-dimensional subspace
+and spectral geometry: orthogonal projections and principal angles, singular
+values and Gram operators, spectral gaps and variational eigenvalue arguments,
+and residual/Ritz compression identities.  These are the interfaces closest to
+the statistical statements of \citet{yu2015davis}, while also sitting in the
+classical perturbation-theory lineage of Davis--Kahan, Wedin, and Stewart--Sun
+\citep{davis1970rotation,wedin1972perturbation,stewart1990matrix}.  The YWS corpus
+reaches \FormalizationYWSTheoryCount{} of the \FormalizationBasicTheoryCount{}
+basic areas, with particularly broad use of projection/principal-angle geometry,
+singular-subspace machinery, spectral-gap reasoning, and unitarily invariant
+norms.
+
+The full Davis--Kahan development is substantially broader: its result closures
+reach all \FormalizationDKTheoryCount{} basic areas.  In addition to the common
+subspace geometry, this required unitarily invariant norm and operator-ideal
+machinery, polar decomposition and direct rotations, two-projection geometry,
+operator angles and double-angle constructions, and Sylvester/separated-intertwiner
+equations.  These topics are already part of the mathematical architecture of the
+1970 paper \citep{davis1970rotation}; later operator-theoretic developments provide
+useful comparison points for direct-rotation minimality and angle/Sylvester
+methods \citep{bolotnikov2001minimal,qiu2006grassmann,grubisic2005sylvester,grubisic2010tan}.
+
+The infinite-dimensional DK results also forced a spectral-analysis layer that is
+mostly invisible in the displayed YWS theorem: projection-valued measures and
+bounded Borel functional calculus, closed and unbounded self-adjoint spectral
+theory, spectral restrictions and resolvents, and transfer between real and
+complex Hilbert spaces.  The classical mathematical reference point is Kato's
+operator perturbation theory \citep{kato1976perturbation}.  On the formal side,
+Mathlib already supplies a substantial continuous functional-calculus foundation
+\citep{mathlib2020,dedecker2025cfc}; the compiler trace here records the additional
+project-local interfaces and constructions that the source-faithful DK development
+actually depends on.
+
+\subsection{Degree of formalization}
+
+We deliberately do not report percentages such as ``$x\%$ of spectral theory.''
+There is no natural denominator, and declaration counts are highly sensitive to
+API design.  Instead the checked-in taxonomy uses four scoped descriptions:
+\emph{focused reusable slice}, \emph{substantial focused subsystem},
+\emph{substantial reusable subsystem}, and \emph{broad partial development}.
+The labels in \cref{tab:formalized-theories} are judgments about the local theory
+actually developed: whether it consists of a narrow reusable interface, a coherent
+cluster around one problem, a substantial independently reusable subsystem, or a
+broader but explicitly incomplete development.  The raw graph and the number of
+reached declarations/modules provide evidence for those judgments, but do not
+compute them automatically.
+
+This distinction matters because final proof dependence and historical development
+are not identical.  A foundation may contain auxiliary lemmas that made the final
+API possible but are not themselves on a shortest path to a source result; conversely,
+a declaration may be reached by many results while remaining mathematically small.
+The present graph therefore supports the claim ``these theories occur in the
+formalized prerequisite stack'' exactly, while the qualitative coverage labels
+state the more interpretive claim about how much reusable local theory was built.
+Both layers are retained so that the latter can be revised without changing the
+former.
+
+\subsection{Formalization provenance and reuse}
+
+``Formalized in this project'' is not synonymous with ``invented in this project.''
+The provenance policy in \cref{sec:proof-provenance} is joined to the exact named
+local declarations underlying \cref{tab:formalized-theories}.  Within this
+compiler-reached inventory, \FormalizationProjectNativeDeclarationCount{} of
+\FormalizationTraceDeclarationCount{} declarations have no positive external
+formal-donor citation and therefore receive project formalization credit under the
+stated policy.  Another \FormalizationProjectReferencedDeclarationCount{} are
+explicitly documented as independently developed/current local replacements while
+crediting an external formal development for theorem selection, comparison, or
+historical ancestry.  The remaining \FormalizationExternalOriginDeclarationCount{}
+are directly donor-derived at the level recorded by the source: 
+\FormalizationAdaptedDeclarationCount{} adapted/ported declarations and
+\FormalizationCopiedDeclarationCount{} copied or essentially verbatim declarations.
+The positive donor ancestry that survives in this dependency inventory is Spectra
+\citep{bornemann2026spectra}; \FormalizationDKDonorAffectedUnitCount{} of the
+counted Davis--Kahan source results reach at least one directly donor-derived local
+declaration, while the maintained YWS census reaches none.
+
+\begin{table}[H]
+\centering
+\small
+\caption{Formalization-provenance accounting within the compiler-reached project-local
+inventory.  Absence of a positive external formal-source citation defaults to
+project formalization; ordinary Mathlib/Lean dependencies are outside this denominator.}
+\label{tab:formalization-provenance-credit}
+\input{snapshots/formalization_provenance_credit_table.tex}
+\end{table}
+
+These declaration counts are provenance accounting, not an originality metric and
+not a division of token cost declaration by declaration.  A copied or adapted
+formal artifact can still require substantial local integration work; conversely,
+a project-local declaration can formalize mathematics originating in the published
+literature.  The point of the table is narrower: external formal work receives
+explicit credit rather than disappearing inside a project-local namespace, while
+uncited project-local formalization is not silently attributed to an unspecified
+prior library.
+
+The project currently stages the reusable portion of this mathematics under
 \texttt{ForTauCeti/}.  The intended endpoint is not a private theorem stack but a
-shared operator-theory substrate organized against the \TauCeti{} roadmap.
-
-\textbf{TODO:} describe the contribution status accurately at submission time:
-which modules have merely been staged, which have open upstream PRs, and which
-have landed.  Do not phrase planned contributions as completed upstream work.
-
-This section should connect the empirical ``we paid the price'' observation to
-its mathematical payoff: the foundational cost becomes valuable precisely when
-future formalizations can import these results without repeating the same
-interface-building work.
+shared operator-theory substrate organized against the \TauCeti{} roadmap.  This
+is the mathematical payoff of the prerequisite cost: later formalizations can
+reuse stable interfaces rather than rebuilding the same spectral, geometric, and
+operator-theoretic foundations.  The Quench case study in \cref{sec:quench} already
+provides one downstream example of that reuse.
 
 \section{Related Work}
 \label{sec:related}
@@ -958,6 +1124,21 @@ Chandler Davis and W.~M. Kahan.
 \newblock The rotation of eigenvectors by a perturbation. III.
 \newblock \emph{SIAM Journal on Numerical Analysis}, 7(1):1--46, 1970.
 
+\bibitem[Wedin(1972)]{wedin1972perturbation}
+Per-{\AA}ke Wedin.
+\newblock Perturbation bounds in connection with singular value decomposition.
+\newblock \emph{BIT Numerical Mathematics}, 12(1):99--111, 1972.
+
+\bibitem[Kato(1976)]{kato1976perturbation}
+Tosio Kato.
+\newblock \emph{Perturbation Theory for Linear Operators}.
+\newblock Springer, second edition, 1976.
+
+\bibitem[Stewart and Sun(1990)]{stewart1990matrix}
+G.~W. Stewart and Ji-Guang Sun.
+\newblock \emph{Matrix Perturbation Theory}.
+\newblock Academic Press, 1990.
+
 \bibitem[Yu et~al.(2015)Yu, Wang, and Samworth]{yu2015davis}
 Yi Yu, Tengyao Wang, and Richard~J. Samworth.
 \newblock A useful variant of the Davis--Kahan theorem for statisticians.
@@ -983,6 +1164,21 @@ Hayden Helm, Ben Johnson, and Carey~E. Priebe.
 \newblock Query-efficient model evaluation using cached responses.
 \newblock arXiv:2605.07096, 2026.
 
+\bibitem[Grubi\v{s}i\'c and Veseli\'c(2005)]{grubisic2005sylvester}
+Luka Grubi\v{s}i\'c and Kre\v{s}imir Veseli\'c.
+\newblock On weakly formulated Sylvester equations and applications.
+\newblock \emph{Integral Equations and Operator Theory}, 2005.
+
+\bibitem[Grubi\v{s}i\'c et~al.(2010)Grubi\v{s}i\'c, Kostrykin, Makarov, and Veseli\'c]{grubisic2010tan}
+Luka Grubi\v{s}i\'c, Vadim Kostrykin, Konstantin~A. Makarov, and Kre\v{s}imir Veseli\'c.
+\newblock The TAN $2\Theta$ theorem for indefinite quadratic forms.
+\newblock \emph{Integral Equations and Operator Theory}, 2010.
+
+\bibitem[Dedecker and Loreaux(2025)]{dedecker2025cfc}
+Anatole Dedecker and Jireh Loreaux.
+\newblock The continuous functional calculus in Lean.
+\newblock arXiv:2501.15639, 2025.
+
 \bibitem[Bolotnikov et~al.(2001)Bolotnikov, Li, and Rodman]{bolotnikov2001minimal}
 Vladimir Bolotnikov, Chi-Kwong Li, and Leiba Rodman.
 \newblock Minimal distortion problems for classes of unitary matrices.
@@ -992,6 +1188,16 @@ Vladimir Bolotnikov, Chi-Kwong Li, and Leiba Rodman.
 Li Qiu, Yanxia Zhang, and Chi-Kwong Li.
 \newblock Unitarily invariant metrics on the Grassmann space.
 \newblock \emph{SIAM Journal on Matrix Analysis and Applications}, 27(2):507--531, 2005; published online 2006.
+
+\bibitem[Bornemann and Spectra Formalization Project(2026)]{bornemann2026spectra}
+Adam Bornemann and the Spectra Formalization Project.
+\newblock \emph{Spectra}: formalized spectral and operator theory in Lean.
+\newblock GitHub repository, audited revision \texttt{8dbaaf6728d1342ae16acf79fd7eef7c59b37e63}, 2026.
+
+\bibitem[Zhang et~al.(2026)Zhang, Lee, and Liu]{zhang2026sltrepo}
+Yuanhe Zhang, Jason~D. Lee, and Fanghui Liu.
+\newblock Statistical Learning Theory in Lean 4: public repository.
+\newblock GitHub repository, 2026.
 
 \bibitem[Anthropic(2026)]{anthropic2026zeta}
 Anthropic.
