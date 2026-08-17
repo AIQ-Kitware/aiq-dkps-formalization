@@ -257,10 +257,31 @@ $4\sqrt{2-\sqrt{2}}$, while an admissible orthogonal competitor has trace
 displacement $2\sqrt{2}$.  Thus the claimed minimizing property fails inside the
 stated $\Theta\leq\pi/3$ regime.
 
-The repository also contains a repaired result for the $Q$-norm class.
-\textbf{TODO:} synchronize this section with the standalone technical note,
-including the historical priority search and the precise semantic-alignment
-audit between the 1970 prose definitions and the Lean objects.
+The repository also contains a repaired result for the $Q$-norm class.  We
+separately investigated whether the trace-norm failure inside the advertised
+short-angle regime had already been identified in the mathematical literature.
+The search, last updated 14 August 2026, included exact theorem-number and
+$\pi/3$ queries; direct rotation combined with trace, nuclear, and Schatten-norm
+terminology; the concrete angle pattern $(\pi/4,\pi/4)$ versus $(\pi/2,0)$ and
+its displacement costs; erratum/correction/counterexample terminology; publisher
+records; and citation snowballing.
+
+That search found important nearby prior work but not the same correction.
+Bolotnikov, Li, and Rodman showed by 2001 that canonical completion can fail for
+Schatten $p<2$ norms, including the trace norm, but their explicit negative
+example is the orthogonal-subspace endpoint $\theta=\pi/2$, outside the
+Davis--Kahan hypothesis $\theta_{\max}\leq\pi/3$ \citep{bolotnikov2001minimal}.
+Qiu, Zhang, and Li later repeated the Davis--Kahan short-angle minimality claim
+rather than flagging it as false \citep{qiu2006grassmann}.  We also found no
+SIAM-recorded correction attached to the original article.  We therefore do
+not make an unconditional priority claim: the narrower historical conclusion is
+that we found no indexed or widely recognized correction, or equivalent
+counterexample, showing failure of Proposition~4.4 within its stated real
+short-angle regime.  Non-digitized material, subscriber-only citation databases,
+and private correspondence remain limitations, and this search should be
+repeated immediately before submission.  The standalone technical note and
+historical-search supplement preserve the fuller semantic-alignment and search
+audit.
 
 \section{Reuse: the Quench Formalization}
 \label{sec:quench}
@@ -463,6 +484,16 @@ The Mathlib Community.
 Hayden Helm, Ben Johnson, and Carey~E. Priebe.
 \newblock Query-efficient model evaluation using cached responses.
 \newblock arXiv:2605.07096, 2026.
+
+\bibitem[Bolotnikov et~al.(2001)Bolotnikov, Li, and Rodman]{bolotnikov2001minimal}
+Vladimir Bolotnikov, Chi-Kwong Li, and Leiba Rodman.
+\newblock Minimal distortion problems for classes of unitary matrices.
+\newblock \emph{Electronic Journal of Linear Algebra}, 8:26--46, 2001.
+
+\bibitem[Qiu et~al.(2005)Qiu, Zhang, and Li]{qiu2006grassmann}
+Li Qiu, Yanxia Zhang, and Chi-Kwong Li.
+\newblock Unitarily invariant metrics on the Grassmann space.
+\newblock \emph{SIAM Journal on Matrix Analysis and Applications}, 27(2):507--531, 2005; published online 2006.
 
 \bibitem[Anthropic(2026)]{anthropic2026zeta}
 Anthropic.
