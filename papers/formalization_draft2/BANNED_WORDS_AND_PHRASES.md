@@ -1,59 +1,115 @@
 # Banned words, phrases, and LLM writing habits
 
-These rules apply to manuscript prose, captions, headings, and appendix prose. They are editorial constraints, not suggestions.
+These rules apply to manuscript prose, captions, headings, and appendix prose. This file is the negative companion to [STYLE_GUIDE.md](STYLE_GUIDE.md): it records vocabulary and constructions to remove.
 
-## Banned words
+## Banned rhetorical words
 
-Do not use the following words as rhetorical emphasis:
+Do not use these words as rhetorical emphasis:
 
-- `matters` (or constructions that say a fact or distinction "matters")
+- `matters`
 - `silently`
 - `quietly`
 - `unusually`
 
-Use a concrete consequence instead.
+Do not replace them with a synonym that performs the same empty emphasis. State the concrete consequence.
 
 ## Banned contrast template
 
-Avoid the formula **"X is not Y; it is Z"** and close variants such as:
+Do not use the formula **"X is not Y; it is Z"** or routine variants such as:
 
 - "This is X, not Y."
 - "The point is not X but Y."
 - "Our contribution is not X; rather, it is Y."
 - "This should not be understood as X, but as Y."
 
-Ordinary mathematical negation remains fine when the sentence genuinely requires it. Prefer a direct affirmative description in expository prose.
+Mathematical negation is fine when it is mathematically required. The prohibition is on the rhetorical template.
 
 ## Banned slogan style
 
-Avoid slogan-like sentences, taglines, and compressed rhetorical morals. Examples of patterns to replace include:
+Do not use:
 
-- dramatic one-line summaries of what the paper "really" shows;
-- metaphorical labels for ordinary methodology when literal prose is available;
-- punchy oppositions designed mainly for cadence;
-- self-congratulatory adjectives about the scale, rigor, novelty, or instrumentation of the work.
+- taglines or dramatic one-line morals;
+- punchy oppositions written for cadence;
+- metaphorical names for ordinary methodology when literal prose is available;
+- self-congratulatory adjectives about scale, rigor, novelty, or instrumentation;
+- sentences announcing what the paper "really" shows instead of stating the result.
 
-State the observation, evidence, consequence, or limitation directly.
+## Banned note-to-self prose
 
-## Preferred manuscript style
+Do not leave editorial or agent-facing instructions in the manuscript, including formulations such as:
 
-- Use concrete mathematical nouns and verbs.
-- State consequences instead of announcing importance.
-- Keep claims proportional to the evidence and name uncertainty directly.
-- Keep implementation names and file paths in appendices unless a displayed Lean theorem requires them.
-- Use short transitions that describe logical relationships without rhetorical framing.
-- When discussing coverage, describe the scoped theory that was developed and known gaps. Avoid field-level completeness percentages without a defensible denominator.
-## Reader-facing prose
+- "should be repeated before submission";
+- "needs a final refresh";
+- "final reporting should";
+- "the appendix should eventually";
+- explanations of why the authors are being cautious about wording.
 
-- Do not leave editorial instructions or future-agent reminders in manuscript prose. Avoid phrases such as "should be repeated before submission", "needs a final refresh", or "final reporting should". State the evidence available at the manuscript date.
-- Prefer concrete descriptions of missing observations. Avoid abstract phrases such as "the missingness mechanism" when the omitted source can be named directly.
-- Keep coordination-tool history, workflow anecdotes, and implementation provenance out of the paper unless they support a reported scientific result.
-- Limit methodological caveats to the assumptions that change interpretation of a reported quantity. Use concise statements of scope.
-## Lean code terminology
+State the current evidence and claim.
 
-- Call displayed Lean declarations **code** or **Lean signatures**. Do not call them listings or surfaces.
-- Do not call a Lean declaration canonical unless a mathematical uniqueness statement has actually established that term.
-- Do not discuss glyph substitutions or other TeX rendering accommodations in manuscript prose.
-- Explain non-obvious Lean predicates by stating the mathematical data or hypotheses they encode.
-- Use `presentation` only when it denotes a mathematical representation or another substantive technical object; remove prose about choices made merely for the reader-facing layout.
+## Banned vague methodology language
 
+Do not use abstract phrases when the concrete source can be named. Examples include:
+
+- "the missingness mechanism is structured";
+- "coordination-tooling provenance";
+- unexplained interaction categories;
+- vague references to "presentation choices";
+- generic claims that a distinction "matters" without giving its consequence.
+
+## Banned repository-development vocabulary in the main text
+
+Do not use repository-internal development labels as scientific terminology in the main body when direct mathematical prose is available. This includes:
+
+- `source-faithful`;
+- `project-local`;
+- `inventory` when it refers to internal bookkeeping;
+- `dependency snapshot`;
+- `machine-readable correspondence`;
+- `positive formal-source claim`;
+- `census` when discussing the scientific result rather than the appendix audit method;
+- `canonical declaration` or `canonical Lean surface` without a mathematical uniqueness statement supporting "canonical".
+
+These terms may appear in appendices when they identify reproduction machinery precisely.
+
+## Banned external-auditor voice for our own work
+
+Do not write as though repository notes were discovered by an outside observer. Avoid formulations such as:
+
+- "the repository documents ancestry in Spectra";
+- "we found a note saying the proof was adapted";
+- "the data records that we used..." when the manuscript can state directly what we used.
+
+State the ancestry, adaptation, workflow, or methodological choice as an authorial claim and cite the source.
+
+## Lean terminology restrictions
+
+Do not:
+
+- call displayed Lean code a `listing` or `surface`;
+- call a Lean declaration `canonical` without a mathematical reason;
+- discuss glyph substitutions or TeX rendering accommodations;
+- repeat implementation identifiers in prose when a mathematical description suffices;
+- explain generic Lean syntax around each theorem after the appendix reader guide has been cited.
+
+## Resource-accounting restrictions
+
+Do not:
+
+- place modeled USD, CO2e, or kWh estimates in the abstract as though they were direct measurements;
+- show incomplete observed telemetry without `lower bound` in the relevant table header and caption;
+- put observed lower bounds and project-total extrapolations in an unlabeled shared column;
+- describe extrapolations as confidence intervals unless a statistical model actually supports that interpretation;
+- use CO2e in the current manuscript unless the authors explicitly decide to restore it.
+
+## Citation and appendix restrictions
+
+Do not:
+
+- use a hand-written `thebibliography` block in `paper.tex`;
+- leave a vague sentence such as "the appendix gives..." when an explicit section reference can be used;
+- put census construction, exact source registries, file paths, or declaration-level provenance tables in the main body;
+- place appendices before the references.
+
+## Word to use sparingly
+
+Reduce uses of `presentation`. Retain it only when it names a substantive mathematical representation or another technical object. Remove sentences whose only purpose is to explain reader-facing layout choices.

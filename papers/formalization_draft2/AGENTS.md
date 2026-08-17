@@ -2,25 +2,29 @@
 
 This directory contains the manuscript and its generated analysis snapshots.
 
-Before editing prose in this directory, read [BANNED_WORDS_AND_PHRASES.md](BANNED_WORDS_AND_PHRASES.md). Its style constraints apply to the main text, appendices, captions, and generated prose intended for the paper.
+Before editing manuscript prose, read both:
 
-## Manuscript structure
+- [STYLE_GUIDE.md](STYLE_GUIDE.md), which describes the writing style and manuscript structure we want;
+- [BANNED_WORDS_AND_PHRASES.md](BANNED_WORDS_AND_PHRASES.md), which lists prohibited vocabulary and recurring LLM writing patterns.
 
-- Keep mathematical exposition in the main text and move audit bookkeeping, exact Lean declaration names, file paths, registry mechanics, and regeneration details to the appendix.
-- The main text may reproduce the two designated Lean theorem signatures. Refer to them as code or Lean signatures, never as listings, surfaces, or canonical declarations. Explain non-obvious predicates in mathematical language near the code. Do not discuss rendering substitutions. Avoid additional code-facing names in surrounding prose unless a mathematical point requires them.
-- Keep the short reader guide to Lean theorem signatures in the appendix and point to it before the first displayed Lean theorem. Use that guide for parameters, hypotheses, typeclass arguments, theorem conclusions, and proof irrelevance instead of repeating syntax explanations around each theorem.
-- Treat the prerequisite-theory and formalization-provenance sections as the authoritative summaries of what was formalized. Avoid duplicating the same accounting elsewhere.
-- Source-coverage registries are evidence infrastructure. Present their construction and exact counts in the appendix.
-- Resource telemetry with incomplete historical coverage must be labeled as a lower bound wherever numeric tables are rendered. Put the lower-bound qualification in table headers and captions, and keep coverage-based extrapolations in separate columns from observed values.
-- Write for the mathematical reader. Repository workflow history and agent-facing reminders belong in project documentation rather than manuscript prose.
-- Preserve the distinction between mathematical provenance and formalization provenance. Explicit formal-source citations receive credit; uncited project-local formalization receives project credit under the documented policy.
+Both apply to the main text, appendices, captions, and generated prose intended for the paper.
+
+## Manuscript operating rules
+
+- Keep the main text centered on the mathematics, formalization results, source-audit findings, foundational theory, and reported resource measurements.
+- Put source-coverage bookkeeping, declaration graphs, provenance tables, exact Lean names beyond the displayed signatures, file paths, registry mechanics, and regeneration details in the appendices.
+- When comparing a source theorem with Lean, state the theorem first and place its Lean signature immediately afterward. Keep shared notation above theorem-specific subsections.
+- Keep the general Lean-reader guide in the appendix and refer to it before the first displayed signature.
+- Keep the formalization-process description in the methods appendix. State the tools and recurring workflow without turning the manuscript into an agent handoff.
+- Put references before the appendices.
+- Cross-reference appendix sections explicitly whenever the main text sends a reader to supplementary evidence.
+- Label incomplete observed resource telemetry as a lower bound in table headers and captions, and keep observed values separate from modeled or extrapolated values.
 
 ## Citations and bibliography
 
 - Put bibliographic metadata in `references.bib` and cite entries from the manuscript with Natbib commands.
-- Do not add a hand-written `thebibliography` block to `paper.tex`.
-- Prefer published metadata and DOI records when a paper has appeared in a journal or proceedings; retain arXiv metadata when it is the available publication record.
-- Repository and web references should identify the source URL and, when the manuscript depends on a pinned state, the audited revision or access date.
+- Use published metadata and DOI records when available.
+- Cite external Lean developments when their formal work was copied, ported, adapted, generalized, or used as a substantive reference.
 
 ## Generated data
 
