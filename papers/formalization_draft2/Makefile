@@ -1,6 +1,6 @@
 PYTHON ?= python3
 
-.PHONY: all accounting paper clean
+.PHONY: all accounting paper literature clean
 
 all: paper
 
@@ -12,6 +12,10 @@ accounting:
 paper: accounting
 	latexmk -pdf paper.tex
 
+literature: accounting
+	latexmk -pdf literature_review.tex
+
 clean:
 	latexmk -C paper.tex
+	latexmk -C literature_review.tex
 	rm -rf generated

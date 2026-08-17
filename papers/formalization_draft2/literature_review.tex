@@ -1,0 +1,1029 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs,tabularx,array,longtable}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{pdflscape}
+\usepackage[numbers,sort&compress]{natbib}
+\usepackage[colorlinks=true,allcolors=blue]{hyperref}
+\usepackage[nameinlink]{cleveref}
+\usepackage{xcolor}
+\usepackage{ragged2e}
+\setlength{\emergencystretch}{3em}
+\setlist[itemize]{leftmargin=1.5em}
+\setlist[enumerate]{leftmargin=1.7em}
+
+\input{generated/dependency_macros.tex}
+
+\newcommand{\Lean}{\textsc{Lean}}
+\newcommand{\YWS}{Yu--Wang--Samworth}
+\newcommand{\DK}{Davis--Kahan}
+\newcommand{\TauCeti}{Tau Ceti}
+\newcommand{\OurProject}{the present formalization project}
+
+\title{Literature Review and Positioning Memo:\\
+Formalizing the Davis--Kahan / Yu--Wang--Samworth\\
+Perturbation Lineage}
+\author{Internal working document for the formalization paper}
+\date{Literature searched through 14 August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document is deliberately broader than the related-work section intended for
+\texttt{paper.tex}.  Its purpose is to record the current literature, identify
+nearby claims that have already become crowded, and preserve candidate
+positioning arguments before the paper is compressed for submission.  The main
+conclusion is that the project should not be positioned merely as a formalization
+of one convenient statistical form of the Davis--Kahan theorem, nor merely as a
+large language model (LLM) autoformalization case study.  A more defensible
+object is the \emph{Davis--Kahan / Yu--Wang--Samworth perturbation lineage}:
+a deep formal audit of the 1970 Davis--Kahan source and its statistical
+specialization, the foundational operator-theoretic infrastructure exposed by
+that audit, source corrections including a finite-dimensional counterexample to
+Davis--Kahan Proposition~4.4, and downstream reuse in contemporary statistical
+formalization.  The human--LLM interaction and cost study is potentially novel
+as an unusually instrumented record of such work, but should remain secondary
+to the mathematics unless later analysis yields a particularly sharp empirical
+result.
+\end{abstract}
+
+\tableofcontents
+\clearpage
+
+\section{Purpose, scope, and how to use this memo}
+\label{sec:purpose}
+
+This is an intentionally over-complete research memo.  It is not intended to be
+copied wholesale into the eventual paper.  It serves four functions.
+
+\begin{enumerate}
+  \item It records the mathematical lineage around Davis--Kahan, Wedin, YWS,
+        and later statistical perturbation theory, so that the paper's main
+        contribution is located in its mathematical domain rather than only in
+        the AI-formalization literature.
+  \item It surveys the rapidly changing literature on large-scale and
+        AI-assisted formalization through the current search date.  Several
+        claims that would have sounded novel in early 2025---formalizing a whole
+        paper, constructing missing library foundations, using blueprints,
+        discovering source defects, or reporting token usage---now have direct
+        precedents.
+  \item It separates claims about \emph{formal proof capability},
+        \emph{formalization workflow}, \emph{semantic/source fidelity}, and
+        \emph{new mathematics}.  These are different contribution classes and
+        should not be conflated.
+  \item It records open comparison work that must be completed before a final
+        novelty claim is made, especially a declaration-level comparison with
+        the Davis--Kahan results recently added to the public Statistical
+        Learning Theory in Lean repository.
+\end{enumerate}
+
+The review is current through 14 August 2026.  This date matters: large-scale
+formalization is changing on a timescale of weeks, and some of the closest
+papers discussed below appeared only days before this memo was written.
+
+\subsection{Search procedure and confidence}
+\label{sec:search-procedure}
+
+This memo was assembled by a broad, non-systematic search followed by citation
+snowballing.  Search surfaces included arXiv and publisher pages for primary
+papers, public Lean repositories and project blueprints, and targeted web/code
+searches.  Query families included the classical source names and theorem
+terminology (Davis--Kahan, Yu--Wang--Samworth, Wedin, principal angles,
+spectral subspaces, trace norm, unitarily invariant norms, Sylvester equations),
+formalization terms (Lean, Coq, Isabelle, HOL, Mathlib, source fidelity,
+autoformalization, blueprint, formal audit), and process terms (human--AI,
+agents, prompts, tokens, cost, provenance, expert review).  Current 2026 papers
+were checked against their primary arXiv records where possible rather than
+relying on secondary summaries.
+
+Two negative searches are worth recording but should not be treated as priority
+proofs.  First, exact-string and theorem-number searches conducted on 14 August
+2026 did not surface a discussion of the trace-norm failure of Davis--Kahan
+Proposition~4.4 or an equivalent published counterexample.  Second, searches for
+Yu--Wang--Samworth together with Lean/Coq/Isabelle/formalization terms did not
+surface an obvious public full formalization of the paper.  Both conclusions are
+fragile: theorem-number indexing is poor for older literature, code search does
+not cover every repository or proof assistant, and an observation may appear
+under different terminology.  The novelty claims remain open audit tasks in
+\Cref{sec:open-search}.
+
+\section{Executive positioning}
+\label{sec:positioning}
+
+\subsection{The safest high-level thesis}
+
+A robust current framing is:
+
+\begin{quote}
+\emph{Source-faithful formalization of the Davis--Kahan perturbation lineage as
+executable scholarship for mathematical statistics: verifying the cited
+results, auditing the original sources, exposing and repairing incorrect
+statements, and converting a large prerequisite burden into reusable formal
+operator-theory and spectral-perturbation infrastructure.}
+\end{quote}
+
+This framing leaves open whether YWS or Davis--Kahan receives the most space in
+the final paper.  It also makes the role of LLMs methodological rather than the
+sole reason the mathematics is publishable.
+
+\subsection{Why an exclusively YWS-centered story may be too narrow}
+
+YWS is an excellent statistical endpoint: it is compact, widely useful, and its
+population-gap formulation explains directly why statisticians often cite it
+instead of the 1970 source \citep{yu2015davis,chen2021spectral}.  It is also a
+clean object for a paper-keyed source census.  However, the repository history
+and mathematical architecture indicate that the Davis--Kahan development is a
+much larger object.  The hardest formal work includes principal-angle geometry,
+unitarily invariant norms, direct rotations, spectral subspaces, Sylvester
+machinery, compact/self-adjoint spectral infrastructure, and extensions across
+finite- and infinite-dimensional settings.  The Proposition~4.4 counterexample
+also belongs to the 1970 source, not to YWS.
+
+The source-level dependency analysis in this repository supports this
+qualification.  The YWS citation surface has a conservative local import
+closure of \YWSImportClosure{} modules, including \YWSDKImports{} modules in the
+DavisKahan tree and \YWSTauCetiImports{} modules in the \TauCeti{} staging tree.
+By contrast, the Davis--Kahan umbrella closes over \DKUmbrellaImportClosure{}
+local modules.  The two closures overlap in \YWSDKOverlap{} modules.
+\Cref{tab:import-closures} gives the family-level counts.
+
+\input{generated/dependency_target_table.tex}
+
+An import closure is an upper bound on declaration-level dependence: a module
+may be imported without every declaration being used.  Nevertheless, the gross
+asymmetry is informative.  YWS clearly reuses meaningful foundations developed
+in the broader Davis--Kahan effort, but it does \emph{not} depend on the whole
+Davis--Kahan development.  The eventual paper should therefore avoid the claim
+that all of the deep foundational work was necessary merely to obtain YWS.  A
+better statement is that the project formalized a broader perturbation-theory
+lineage, within which YWS is a statistically important and source-auditable
+endpoint.
+
+\subsection{Claims that appear defensible, and claims that have become crowded}
+
+The strongest prospective contribution bundle is the combination of:
+
+\begin{itemize}
+  \item a deep and source-faithful treatment of the classical Davis--Kahan
+        development, together with a complete paper-level treatment of YWS;
+  \item an explicit small finite-dimensional counterexample to the printed
+        Davis--Kahan Proposition~4.4 and a repaired theorem surface;
+  \item two documented printed defects in YWS, carefully distinguished from
+        wholesale failure of its main theorem;
+  \item substantial reusable foundations in spectral/operator theory and matrix
+        analysis, with an explicit upstreaming path through \TauCeti{};
+  \item verified downstream statistical reuse (the Quench theorem family);
+  \item and, secondarily, an unusually detailed but explicitly incomplete record
+        of model usage, resource cost, git provenance, and human intervention.
+\end{itemize}
+
+By contrast, current literature makes the following generic claims poor novelty
+claims on their own: ``LLMs can write Lean,'' ``we formalized a whole paper or
+textbook,'' ``the target needed missing Mathlib infrastructure,'' ``we used a
+blueprint or dependency graph,'' ``formalization found source errors,'' ``we
+preserved provenance,'' ``we report tokens/cost,'' or ``we performed a
+source-faithful formalization.''  Each has substantial contemporary precedent;
+several have multiple precedents in 2026 alone
+\citep{milikic2026leanflow,nie2026formatheoria,zhang2026slt,wei2026asymptotic}.
+
+\section{The mathematical perturbation lineage}
+\label{sec:math-lineage}
+
+\subsection{Classical operator and matrix perturbation theory}
+
+The Davis--Kahan paper sits in a broader perturbation-theoretic tradition.
+Kato's monograph supplies the classical operator-theoretic framework for
+perturbations of spectra, spectral projections, and invariant subspaces
+\citep{kato1976perturbation}.  Davis and Kahan's 1970 paper develops several
+``sin $\Theta$,'' ``tan $\Theta$,'' and related rotation results for spectral
+subspaces of self-adjoint operators \citep{davis1970rotation}.  Wedin's 1972
+work gives the corresponding singular-subspace perturbation theory for the SVD
+\citep{wedin1972perturbation}.  Stewart and Sun's later monograph organizes a
+large body of matrix perturbation theory and became a standard reference for
+numerical linear algebra \citep{stewart1990matrix}.
+
+This lineage matters for positioning because ``the Davis--Kahan theorem'' is not
+one theorem with one canonical statement.  There are multiple separation
+conditions, norms, subspace representations, finite- versus infinite-dimensional
+forms, and operator versus matrix surfaces.  Later work sharpened or reframed
+parts of this theory.  Xie, for example, derived refinements of a Davis--Kahan
+sin-$\Theta$ theorem using singular-value inequalities \citep{xie1997note};
+Grubi\v{s}i\'c and Veseli\'c used weak Sylvester equations to derive spectral
+subspace rotation bounds \citep{grubisic2005sylvester}; and Grubi\v{s}i\'c,
+Kostrykin, Makarov, and Veseli\'c proved a tan-$2\Theta$ theorem for indefinite
+quadratic forms \citep{grubisic2010tan}.  These are especially relevant to a
+formal development whose dependency tree contains Sylvester-equation and
+infinite-dimensional operator-theory branches.
+
+The paper should therefore be precise about which Davis--Kahan statements it
+formalizes, which are direct transcriptions of the 1970 source, which are
+reusable modern interfaces, and which are strengthened or repaired results.  A
+source census or theorem crosswalk is useful precisely because theorem names
+such as ``Davis--Kahan'' are otherwise too coarse to support a fidelity claim.
+
+\subsection{YWS as a statistical reformulation, not a replacement for the 1970 source}
+
+Yu, Wang, and Samworth isolate a practical difficulty with direct statistical
+use of Davis--Kahan: a common separation hypothesis is expressed using both
+population and sample eigenvalues.  Their variant replaces this by a population
+eigengap, gives explicit constants, and treats singular-vector subspaces for
+rectangular matrices \citep{yu2015davis}.  In statistical applications this is
+not a cosmetic restatement.  The population-only gap can be controlled at the
+model level, whereas sample separation is itself random and may require a
+second perturbation argument.
+
+This is why YWS is a compelling paper-level formalization target.  It is small
+enough that source fidelity can be stated concretely, but consequential enough
+that subtle changes in hypotheses or constants matter.  It is also explicitly a
+bridge from classical operator perturbation to modern statistics.  However,
+that role should not erase the mathematically richer Davis--Kahan source from
+which the present project grew.
+
+\subsection{Modern statistical geometry around eigenspaces and singular subspaces}
+
+Perturbation theory remains a central interface between random-matrix error
+bounds and statistical conclusions.  The survey of Chen, Chi, Fan, and Ma
+reviews spectral methods throughout high-dimensional statistics and data
+science, with Davis--Kahan/Wedin-type bounds serving as standard tools for
+turning matrix estimation error into eigenspace error \citep{chen2021spectral}.
+Cape, Tang, and Priebe develop finer two-to-infinity norm geometry for singular
+subspaces, motivated by high-dimensional statistical problems where Frobenius
+or operator norm control can be too coarse \citep{cape2019two}.  Such work
+illustrates why a formal library should expose the geometry of subspaces and
+alignments as reusable mathematics, not hide it behind a single theorem
+specialized to one norm.
+
+For the final related-work section, one paragraph on this statistical lineage is
+probably enough.  For the paper's mathematical introduction, however, it may be
+worth showing explicitly how YWS sits between classical Davis--Kahan/Wedin and
+later statistical spectral methods.
+
+\section{Foundational formalization before the current LLM wave}
+\label{sec:prellm}
+
+Large formalization projects already established several practices that should
+not be attributed to LLM agents.
+
+\subsection{Scale and the cost of foundations}
+
+Flyspeck's formal proof of the Kepler conjecture demonstrated that a major
+mathematical result could require a large, carefully engineered formal corpus,
+including auxiliary mathematics and substantial software infrastructure
+\citep{hales2017kepler}.  The point relevant here is not simply scale: major
+formalizations routinely uncover a long prerequisite chain that is invisible in
+a concise informal proof.
+
+The Liquid Tensor Experiment is even closer to the ``foundational debt'' story.
+Scholze's challenge concerned a particular theorem in condensed mathematics
+\citep{scholze2022liquid}, but the Lean project necessarily formalized a broad
+supporting theory.  Its interactive blueprint linked mathematical exposition to
+Lean declarations and exposed dependency graphs to track the project
+\citep{liquidblueprint2023}.  The project also maintained a \texttt{for\_mathlib}
+area for material intended to migrate upstream.  This is a direct historical
+precedent for three aspects of the present project: source-linked tracking,
+large prerequisite spillover, and separating project-local staging from reusable
+library contribution.
+
+The Lean Polynomial Freiman--Ruzsa (PFR) project likewise uses a blueprint and
+dependency graph as a project-management and exposition layer
+\citep{pfrblueprint2024}.  Thus a census, manifest, blueprint, or progress graph
+is not intrinsically an AI contribution.  What may be empirically interesting
+in our case is the interaction history by which tracking tools emerged and were
+then adopted into human review---but the mechanism itself belongs to an
+established formalization tradition.
+
+\subsection{Library design is itself mathematical work}
+
+Formalization papers frequently contribute interfaces and abstractions whose
+value exceeds the original target.  Dedecker and Loreaux's formalization of the
+continuous functional calculus emphasizes design decisions made for usability
+and has been merged into Mathlib \citep{dedecker2025cfc}.  Marion's Ionescu--Tulcea
+formalization similarly develops probability infrastructure that then supports
+more general constructions \citep{marion2025ionescu}.  Recent matrix work
+abstracts a common recursive schema across many matrix decompositions rather
+than proving each decomposition in isolation \citep{ma2026matrixdecompositions}.
+
+These examples strengthen, rather than weaken, the argument for reporting the
+operator-theory foundations produced by the Davis--Kahan effort.  The right
+claim is not that prerequisite spillover is unprecedented.  It is that the
+formal audit identifies a concrete missing layer in spectral perturbation and
+operator geometry, the project has already paid the construction cost, and the
+resulting layer is being organized for reuse and upstream contribution.
+
+\section{From theorem-proving benchmarks to LLM autoformalization}
+\label{sec:llm-history}
+
+\subsection{Benchmarks and local theorem proving}
+
+Modern AI theorem proving developed initially around relatively local tasks.
+MiniF2F provided a cross-system set of Olympiad-level formal statements
+\citep{zheng2022minif2f}.  ProofNet coupled undergraduate-level natural-language
+statements and proofs with Lean statements, explicitly targeting both
+formalization and proving \citep{azerbayev2023proofnet}.  LeanDojo provided
+programmatic access, extracted training data, a large theorem benchmark, and a
+retrieval-augmented prover \citep{yang2023leandojo}.
+
+Wu et al. showed that large language models could autoformalize a nontrivial
+fraction of competition statements and use the resulting synthetic data to
+improve theorem proving \citep{wu2022autoformalization}.  Draft, Sketch, and
+Prove used informal proofs to guide formal proof search through generated
+formal sketches \citep{jiang2023dsp}.  DeepSeek-Prover scaled synthetic Lean data
+generation to millions of formal examples \citep{xin2024deepseek}.  A 2025
+survey documents the rapidly expanding autoformalization landscape
+\citep{weng2025survey}.
+
+AlphaProof represents a different but equally important trajectory: formal
+mathematics as a reinforcement-learning environment.  It trained on very large
+numbers of autoformalized problems and reached medal-level combined performance
+on the 2024 IMO with AlphaGeometry 2, demonstrating the power of kernel-checked
+formal feedback at scale \citep{hubert2026alphaproof}.
+
+These works make one point decisive for our paper: demonstrating that frontier
+models can produce Lean code or close difficult proof obligations is no longer a
+sufficient contribution.  The formalization itself, its fidelity, its
+mathematical audit, its library contribution, or the empirical development
+record has to carry the paper.
+
+\subsection{Statement generation and proof generation are different problems}
+
+A recurring lesson in the newer literature is that proving a fixed formal
+statement and deciding what formal statement accurately represents a source are
+distinct tasks.  A theorem prover can be perfectly sound about the wrong
+translation.  This distinction becomes central for a project claiming to
+formalize named results from Davis--Kahan and YWS rather than merely prove
+related perturbation lemmas.
+
+The eventual paper should exploit this distinction explicitly.  The source
+census, theorem-number crosswalks, recorded corrections, and provenance review
+address the translation boundary; the Lean kernel addresses proof validity
+\emph{after} that boundary has been crossed.
+
+\section{Document- and project-scale AI formalization in 2026}
+\label{sec:scale2026}
+
+This is the most rapidly changing related-work category and the strongest reason
+not to make scale itself the headline claim.
+
+\subsection{M2F, Automatic Textbook Formalization, and Atlas}
+
+M2F presents an agentic two-stage framework for project-scale formalization,
+first compiling a source into a coherent project with placeholder proofs and
+then repairing the proofs under fixed signatures.  It reports 153,853 lines of
+Lean generated from 479 pages of source material \citep{wang2026m2f}.  Automatic
+Textbook Formalization reports a graduate textbook exceeding 500 pages,
+approximately 130,000 lines, and 5,900 declarations produced by a very large
+parallel population of agents \citep{gloeckle2026textbook}.  Formalizing
+Mathematics at Scale generalizes this direction through AutoformBot and Atlas,
+reporting 26 textbooks, more than 45,000 declarations, and about half a million
+lines of Lean \citep{rammal2026scale}.
+
+These projects establish that document-scale and textbook-scale formalization is
+technically feasible with contemporary models.  Our paper should therefore not
+compete on line count or number of agents.  A classical source audit in
+operator/matrix perturbation theory is a different scientific object.
+
+\subsection{LeanFlow: workflow ablations and token accounting}
+
+LeanFlow is especially close to our prospective empirical process section.  It
+formalizes two previously unformalized papers and experimentally varies model,
+workflow, and tool access; importantly, it reports API calls and input/output
+token usage \citep{milikic2026leanflow}.  Thus ``we counted tokens'' is already
+an explicit research contribution in paper-to-Lean formalization.
+
+Our dataset can still be complementary.  It spans a longer, organically evolving
+project; includes multiple model families and interfaces; contains commit and
+interaction traces; and has missingness mechanisms that themselves need to be
+modeled.  But the comparison must be disciplined: token accounting conventions,
+cache accounting, model pricing, and session structure differ.  A raw token
+ratio between projects should not be presented as an efficiency ranking.
+
+\subsection{LeanMarathon: long-horizon fidelity and an evolving blueprint}
+
+LeanMarathon argues that long-horizon formalization fails through statement
+drift, tangled dependencies, context decay, and nonlocal regressions, and uses
+an evolving blueprint as both proof skeleton and shared system of record
+\citep{zhang2026leanmarathon}.  This is a very close methodological precedent
+for the project's emergent census/coordination tooling.  It also reinforces the
+value of separating local theorem proving from long-horizon artifact
+maintenance.
+
+The paper can still report the census history if the interaction logs support an
+interesting human--agent division of initiative.  It should not describe
+``agents developed tracking tools'' as though project tracking itself were a
+novel formalization method.
+
+\subsection{Beyond the Library: constructing missing formal vocabulary}
+
+Beyond the Library addresses research formalization in which the source uses
+concepts absent from Mathlib.  Its agents dynamically extend the available
+definitions and auxiliary lemmas before proving the target theorems, and the
+system was applied to research papers from STOC \citep{moakhar2026beyondlibrary}.
+This is the nearest generic precedent for the claim that research-level targets
+force construction of missing formal foundations.
+
+The distinction for our work should be mathematical and architectural: what
+specific spectral/operator-theory substrate was missing, why it was required by
+the Davis--Kahan source, how much is source-specific versus reusable, and what
+portion is being upstreamed.  A dependency DAG and a carefully curated list of
+foundational contributions would be more persuasive than a raw count of helper
+lemmas.
+
+\subsection{FormaTheoria: the closest current generic framing}
+
+FormaTheoria, submitted 11 August 2026, is particularly important because its
+problem statement overlaps several phrases we might otherwise have used as
+headline novelty.  It describes large-scale Lean theory construction from
+heterogeneous mathematical literature in terms of implicit dependency
+discovery, correction of source defects, semantic fidelity, cross-source
+misalignment, provenance preservation, structured review, and empirical process
+analysis \citep{nie2026formatheoria}.
+
+This is strong novelty pressure.  It means the final paper should not claim that
+``formalization as executable scholarship'' is unique simply because the
+workflow discovers dependencies and corrects sources.  Instead, the paper should
+locate those general phenomena in a mathematically important statistical
+perturbation lineage and emphasize the specific mathematical discoveries and
+reusable theory produced.  If Proposition~4.4's trace-norm counterexample is new
+to the mathematical literature, that fact is qualitatively different from the
+generic observation that formalization can expose defects.
+
+\section{Semantic fidelity, source audit, and counterexample-guided repair}
+\label{sec:fidelity}
+
+\subsection{Compilation is not semantic fidelity}
+
+Beyond Compilation directly evaluates the gap between Lean compilation and
+semantic faithfulness.  On its benchmark, the full tool-augmented agent achieves
+much higher compile success than consensus semantic faithfulness, demonstrating
+that a type-correct declaration can still omit hypotheses, alter domains, or
+formalize a vacuous or otherwise incorrect claim \citep{zhang2026beyondcompilation}.
+CriticLean similarly elevates semantic-fidelity criticism to a first-class part
+of autoformalization \citep{peng2025criticlean}.  FormalScience studies semantic
+drift in scientific formalization, including abstraction changes and notation
+collapse \citep{meadows2026formalscience}.
+
+These papers strongly support our insistence on source-level tracking.  A
+paper-keyed census is useful not because it proves faithfulness by itself, but
+because it creates reviewable obligations: theorem number, source statement,
+formal declaration, status, correction/generalization flag, and provenance can
+all be audited independently of compilation.
+
+\subsection{Expert review after the sorries are gone}
+
+Sorries Are Not the Hard Part reports an expert review of a semi-autonomous
+formalization that compiled without placeholders but still had serious problems
+with definitions, generality, file organization, and API design
+\citep{ilin2026sorries}.  This is directly relevant to our paper's claims about
+library quality and eventual \TauCeti{} contribution.  ``No sorry'' establishes
+proof completion, not that the declarations form a good reusable mathematical
+library.
+
+A useful implication for our evaluation is that source fidelity and library
+quality should be reported separately.  The YWS census can assess source
+coverage.  A \TauCeti{} upstreaming/review process can assess API and library
+quality.  Conflating them would overclaim both.
+
+\subsection{Blueprint validation and synchronized source/formal metadata}
+
+LeanArchitect generates and synchronizes blueprint information from annotations
+in Lean declarations, infers dependency data, and exposes inconsistencies in
+existing blueprints \citep{zhu2026leanarchitect}.  This provides another
+precedent for compile-aware source/formal progress tooling.  It also suggests a
+future improvement to our own census: over time, source identifiers and
+provenance fields could migrate from paper-local scripts into declaration-level
+metadata from which paper tables are generated automatically.
+
+\subsection{Formal refutation and repaired statements}
+
+MechGeo is a particularly relevant neighbor because it does not treat a failed
+proof attempt as merely a search failure.  For historical geometry problems it
+constructs Lean-checked counterexamples for statements that cannot be proved and
+then proves expert-corrected versions \citep{shen2026mechgeo}.  This means the
+generic pattern ``formalization exposed a false source statement and we repaired
+it'' now has an explicit AI-formalization precedent.
+
+The Davis--Kahan Proposition~4.4 result can nevertheless be a significant
+mathematical contribution if the counterexample and repair are new to the
+perturbation literature.  The paper should establish that novelty by searching
+mathematical references and known errata, not by comparing only to formalization
+papers.  It should also distinguish several levels of source problems:
+
+\begin{itemize}
+  \item a typographical/algebraic identity that is false as printed but locally
+        repaired without changing the intended theorem;
+  \item a boundary convention that makes a theorem specialization false or
+        ill-posed but has a clear intended indexing repair;
+  \item an invalid proof step with a correct theorem statement; and
+  \item a genuinely false proposition requiring a counterexample and a changed
+        theorem surface.
+\end{itemize}
+
+This taxonomy would prevent the YWS equation (4) typo, the YWS Theorem~3
+boundary convention, the known Davis--Kahan Section~7 proof-line error, and
+Proposition~4.4 from being rhetorically flattened into ``four false theorems.''
+
+\section{Statistics and applied-science formalization}
+\label{sec:stats}
+
+This is the most important recent neighborhood for a math/statistics venue.
+
+\subsection{Statistical Learning Theory in Lean 4}
+
+Zhang, Lee, and Liu formalize empirical-process foundations for statistical
+learning theory, including concentration and applications to regression.  They
+explicitly report missing Mathlib infrastructure, human--AI collaboration, and
+implicit assumptions exposed by formalization \citep{zhang2026slt}.  This is a
+strong precedent for the claim that formalization of statistics forces
+foundational mathematical work rather than merely encoding textbook statements.
+
+The public repository has expanded beyond the February paper artifact.  Its July
+2026 release advertises matrix spectral and perturbation theory including SVD,
+Courant--Fischer, Eckart--Young--Mirsky, Weyl, and Davis--Kahan
+\citep{zhang2026sltrepo}.  Therefore we should \textbf{not} claim ``the first
+Lean formalization of Davis--Kahan'' without a much narrower qualifier.
+
+A declaration-level comparison is still needed.  Questions to answer before
+submission include:
+
+\begin{enumerate}
+  \item Which Davis--Kahan variant does the SLT repository state (eigenvector,
+        projection, or general subspace; operator or Frobenius norm; which gap
+        hypothesis)?
+  \item Is its mathematical source the original 1970 paper, a textbook such as
+        Vershynin, YWS, or another modern restatement?
+  \item Does it cover the unitarily invariant norm/direct-rotation material,
+        infinite-dimensional surfaces, or only the modern finite-dimensional
+        statistical corollary?
+  \item Does it make any source-fidelity claim about the 1970 paper or address
+        Proposition~4.4?
+\end{enumerate}
+
+The likely outcome is that both projects contain valid Davis--Kahan results but
+are formalizing different objects.  Our novelty language should be written only
+after this comparison is complete.
+
+\subsection{Source discipline in asymptotic statistics}
+
+Wei et al. present a multi-agent formalization of asymptotic statistical theory
+with an explicit ``hypothesis-disciplined'' audit: main-theorem assumptions must
+be anchored to source prose, justified as encoding adapters, source-implied, or
+rejected as unsupported strengthening \citep{wei2026asymptotic}.  This is very
+close to the philosophy of a paper-keyed source census.  It further narrows the
+novelty claim: source-faithful statistical formalization itself is now an active
+subfield.
+
+What remains distinctive is the particular mathematical lineage being audited,
+the depth of the operator-theory prerequisite stack, and the specific source
+corrections and downstream applications.
+
+\subsection{Paper-organized applied mathematics libraries}
+
+EconCSLib organizes Lean developments around research papers, retains
+paper-facing statements, separates reusable shared infrastructure, and uses
+post-formalization validation reports, dependency graphs, and human verification
+of the translation boundary \citep{garg2026econcs}.  Again, paper-level
+organization and dependency reports are no longer enough to distinguish a new
+paper.
+
+The Vlasov mean-field formalization is methodologically close in a different
+way.  Miller describes the human as scoping definitions, steering decomposition,
+and triaging library gaps while the AI executes the formal construction, and
+explicitly distinguishes proving the statement as written from judging whether
+that statement is the intended theorem \citep{miller2026vlasov}.  The work also
+extracts a reusable optimal-transport layer from the application-specific
+formalization.  This is a useful comparison for the relation between the
+Davis--Kahan target and the reusable \TauCeti{} foundations.
+
+Tensor-network formalization provides another close analogue from theoretical
+physics: a multi-agent blueprint, periodic human review, extensive new
+quantum/tensor infrastructure, and an explicit conclusion that preserving
+mathematical intent is the main bottleneck \citep{lu2026tensor}.  Probability
+formalization projects likewise emphasize the interface between source-facing
+statements and Mathlib's more general abstractions
+\citep{deng2026probability,marion2025ionescu}.
+
+\subsection{Why a mathematical-statistics audience may still care}
+
+The saturation of AI-formalization methodology does not imply saturation of
+formalized statistics.  The relevant question for a mathematical-statistics
+paper is whether a machine-checked development teaches us something concrete
+about an important statistical tool.  A Davis--Kahan/YWS paper can answer yes if
+it provides:
+
+\begin{itemize}
+  \item a trustworthy theorem map for variants statisticians actually cite;
+  \item a correction to a classical source that affects a mathematically
+        meaningful norm statement;
+  \item reusable spectral-geometry interfaces for later statistical work;
+  \item a demonstration that those interfaces shorten or clarify a downstream
+        statistical formalization; and
+  \item a quantitative account of what it cost to construct the missing formal
+        layer, presented as supporting evidence rather than spectacle.
+\end{itemize}
+
+That is a domain contribution even if the underlying workflow uses techniques
+that now have many AI-formalization precedents.
+
+\section{Human--AI formalization process and resource studies}
+\label{sec:process-literature}
+
+\subsection{Controlled studies of formalization workflows}
+
+Collins et al. study how people want to use AI for formalization and how they
+actually use it in a controlled setting.  They report heterogeneous workflows
+but a recurring desire to preserve high-level human control, and participants
+frequently combine multiple AI tools \citep{collins2026humanai}.  This provides
+an external framework for interpreting our prompt/interaction taxonomy: human
+interventions are not merely failures of autonomy; they may be the mechanism by
+which mathematical intent and project-level priorities remain under human
+control.
+
+\subsection{Case studies with public prompts and commits}
+
+Ilin's Vlasov--Maxwell--Landau equilibrium formalization is one of the closest
+comparators for transparent process reporting.  It reports ten days of work,
+\$200 in cost, 229 human prompts, 213 git commits, zero human-written code, and
+public process artifacts, together with failure modes including hypothesis creep
+and definition alignment \citep{ilin2026vml}.  It therefore establishes a clear
+precedent for reporting prompts, commits, cost, and human review in an
+AI-assisted formalization.
+
+Our process dataset differs in scale and messiness.  It spans multiple machines,
+agents, models, model switches, chat surfaces, periods before instrumentation,
+and measured sessions whose tokens cannot be defensibly assigned to individual
+commits.  That messiness can itself be informative if modeled honestly, but it
+means our results should not be compared to cleaner case studies as if every
+``token'' or ``prompt'' were defined identically.
+
+\subsection{Anthropic's Riemann-zeta case study}
+
+Anthropic's August 2026 case study on Claude's mathematical capabilities is a
+particularly salient comparison because it reports a long-running mathematical
+agent workflow with released process information.  The report describes two
+Claude Code sessions totaling 31 million output tokens, roughly 60 subagents,
+and about 2,400 shell commands, with the human interaction characterized as
+comparatively light \citep{anthropic2026zeta}.
+
+Our likely contribution is not to beat those counts.  Rather, our records may
+support a contrasting model of collaboration in which human interventions
+include mathematical correction, theorem-scope decisions, source-fidelity
+judgment, coordination, infrastructure constraints, and adoption/rejection of
+agent-created management tools.  A useful empirical comparison would therefore
+be about \emph{types of intervention and observability}, not only raw scale.
+
+\subsection{Autonomy, interruption, and expertise in deployed coding agents}
+
+Anthropic's large observational study of agent autonomy reports that experienced
+Claude Code users approve actions more automatically while also interrupting
+more often, shifting from action-by-action approval toward monitoring and
+intervention \citep{mccain2026autonomy}.  Its later study of roughly 400,000
+Claude Code sessions reports a division in which humans make more planning
+choices while the agent makes more execution choices, and argues that domain
+expertise continues to predict effective use \citep{anthropic2026expertise}.
+
+These findings are unusually relevant to our interaction logs.  If our prompt
+analysis finds that many human interventions are short corrections, priority
+changes, missing-context injections, or coordination messages rather than
+step-by-step Lean instructions, that pattern would fit a broader transition from
+micro-management to supervisory steering.  The analysis should still be framed
+as a case study, not as a causal result.
+
+\subsection{Ephemeral interaction history as a provenance problem}
+
+The present project's logs reveal a qualitative issue that is less prominent in
+the current literature: the human participant does not reliably remember who
+initiated every tool or project-management mechanism.  This is unsurprising in a
+long-running agentic workflow.  Many instructions are operational, acted on
+immediately, and never rehearsed as facts that the human expects to recall.
+
+The source-census history gives a concrete example.  Retrospective memory
+suggested that the agents had spontaneously created tracking machinery; the git
+record shows that the human explicitly requested at least a manifest and
+programmatic check, after which the agents elaborated the mechanism and the
+human refined and incorporated it into review practice.  The contemporaneous
+trace supports a more nuanced attribution than either memory alone or a simple
+``human requested it'' label.
+
+This motivates the phrase \emph{interaction archaeology}: logs can reconstruct
+initiative, adoption, correction, and evolution that are otherwise ephemeral.
+Whether this deserves space in the final paper depends on page budget and the
+strength of the systematic evidence.  It is nevertheless worth preserving in
+this memo because it affects how retrospective claims should be written:
+contemporaneous traces should be preferred over unaided memory when available.
+
+\subsection{Token accounting as an economic measurement problem}
+
+Token usage is only meaningful economically when tied to the model and pricing
+regime that consumed it.  LeanFlow already reports input/output tokens
+\citep{milikic2026leanflow}; Anthropic's broader economic analysis also notes
+that token use is a measure of compute whose interpretation can vary with task
+and model \citep{anthropic2026expertise}.  Our ledger's per-model vectors allow
+measured ordinary input, cache write, cache read, and output tokens to remain
+separate.  That is preferable to a single project-wide token count or an average
+cost per token.
+
+The manuscript should report at least three layers separately:
+
+\begin{enumerate}
+  \item directly measured usage, by model and token class;
+  \item measured but commit-unattributed session usage, which may be allocated
+        only at coarser temporal/project resolution; and
+  \item extrapolated usage for unmeasured work, with a missing-data model and
+        uncertainty rather than a single reconstructed ``truth.''
+\end{enumerate}
+
+The limitation is scientifically important: work before telemetry and work in
+chat interfaces may be absent not only from token counts but also from the
+qualitative history of human intervention.  Missingness is therefore both a
+resource-accounting problem and a provenance problem.
+
+\section{Proof provenance, reuse, and upstreaming}
+\label{sec:provenance}
+
+\subsection{Formal proof reuse requires more than a bibliography}
+
+The project records that proof ideas and implementation patterns were borrowed
+from a former Spectra collaboration, external Lean libraries, and Mathlib pull
+requests.  The eventual paper must cite these sources at the level needed to
+make intellectual and code provenance clear.  A generic sentence saying that
+``we used Mathlib'' is not enough when a particular proof architecture or block
+of code was adapted from another formal development.
+
+A useful audit taxonomy is:
+
+\begin{enumerate}
+  \item \textbf{close code adaptation}: code structure or proof terms closely
+        follow an external formal source;
+  \item \textbf{mathematical port}: the same formal mathematical strategy is
+        ported but substantial API/type/universe rewriting makes the code new;
+  \item \textbf{strategy donor}: an external proof suggested a route, but the
+        final formal proof was independently re-derived in the local API;
+  \item \textbf{ordinary library dependency}: the development invokes a public
+        Mathlib theorem through its intended interface.
+\end{enumerate}
+
+The repository already has provenance blocks and external-source registries that
+can seed this audit.  Before submission, the central theorems discussed in the
+paper should each have a source/provenance check.  This is especially important
+because LLM agents can reproduce patterns without the human remembering which
+external code was inspected during the session.
+
+\subsection{Upstreaming as evidence of reusable value}
+
+A project-local proof of a famous theorem is useful, but a well-designed library
+layer that survives upstream review has a different kind of value.  The Liquid
+Tensor Experiment's \texttt{for\_mathlib} staging and recent formalization work
+such as the continuous functional calculus provide precedents for treating
+upstreamability as part of the engineering story
+\citep{liquidblueprint2023,dedecker2025cfc}.
+
+The current \TauCeti{} operator-theory roadmap can therefore be presented as an
+ongoing reuse path rather than a novelty claim.  If major components are merged
+before submission, the paper can report that as concrete evidence that the
+foundational spillover is not merely auxiliary code needed to make one local
+artifact compile.
+
+\section{Closest-neighbor comparison}
+\label{sec:neighbors}
+
+\Cref{tab:neighbors} is intentionally qualitative.  Its purpose is to identify
+which aspects of the project already have clear precedents and where the
+combination may still be distinctive.  ``Source audit'' means an explicit
+attempt to preserve/verify the claims of an informal source, not merely that a
+paper motivated the formalization.  ``Process data'' means quantitative or
+archived information about the construction process, not only a statement that
+AI was used.
+
+\begin{landscape}
+\begin{table}[p]
+\centering
+\caption{Qualitative comparison with selected closest neighbors.  This is an
+internal positioning table, not yet a submission-ready empirical claim.}
+\label{tab:neighbors}
+\small
+\renewcommand{\arraystretch}{1.22}
+\begin{tabularx}{\linewidth}{@{}p{3.0cm}p{6.2cm}p{6.2cm}X@{}}
+\toprule
+Work & What it establishes & Main overlap with the present project & Remaining distinction to investigate \\
+\midrule
+LeanFlow \citep{milikic2026leanflow}
+ & Document-to-project formalization with source-fidelity concerns, workflow ablations, and API/token reporting.
+ & Large source-grounded Lean development; missing project APIs; quantitative process/resource evidence.
+ & Our strongest distinction must be mathematical audit and domain contribution, not token reporting or project scale. \\
+FormaTheoria \citep{nie2026formatheoria}
+ & Long-horizon theory construction with implicit-dependency discovery, semantic fidelity, provenance, source defects, and empirical process analysis.
+ & Extremely close generic methodology and framing.
+ & Perturbation-theory mathematics, the specific Davis--Kahan correction, complete YWS audit, and downstream statistical reuse must carry the distinction. \\
+SLT in Lean \citep{zhang2026slt,zhang2026sltrepo}
+ & Large statistical-learning formalization with foundational matrix/probability infrastructure; the public repository now includes a Davis--Kahan extension.
+ & Closest statistics-domain neighbor and direct overlap in matrix perturbation.
+ & Exact theorem-surface, source coverage, norm/generality, and provenance comparison is mandatory before any priority claim. \\
+Asymptotic statistics \citep{wei2026asymptotic}
+ & Source-grounded asymptotic statistics with explicit hypothesis discipline and multi-agent auditing.
+ & Establishes source-faithful AI-assisted statistical formalization as an active category.
+ & Our candidate distinction is the classical spectral-perturbation source audit, correction of a published statement, and operator-theory substrate. \\
+Vlasov strategy game \citep{miller2026vlasov}
+ & Long-horizon human-directed/AI-executed research formalization with reusable foundations and quantitative workflow observations.
+ & Similar supervisory collaboration and foundational spillover.
+ & Different mathematical domain (PDE/optimal transport); compare the types of human intervention rather than raw scale. \\
+VML equilibrium \citep{ilin2026vml}
+ & Transparent case study reporting prompts, commits, dollar cost, human review, and formalization failure modes.
+ & Strong precedent for process/cost reporting tied to a mathematical artifact.
+ & Our trace is larger and richer but substantially more incomplete; the value must come from observability and missing-data treatment, not cleaner accounting. \\
+Tensor networks \citep{lu2026tensor}
+ & Blueprint-driven, human-reviewed research formalization with substantial new library infrastructure and some new proof routes.
+ & Close precedent for infrastructure growth and research-scale agent assistance.
+ & Our source-audit/correction story and perturbation/statistics lineage remain the candidate mathematical differentiators. \\
+Present project
+ & Paper-keyed Davis--Kahan/YWS audit, extensive foundations, source repairs, downstream Quench reuse, and partial model-resolved process telemetry.
+ & ---
+ & Candidate novelty is the combination of a classical statistics/perturbation source audit, a potentially new Davis--Kahan correction, reusable operator-theory foundations, and verified downstream statistical use. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+\end{landscape}
+
+\section{Novelty pressure: claims to avoid, claims to investigate}
+\label{sec:novelty-pressure}
+
+\subsection{Claims we should not make without a narrow qualifier}
+
+\begin{enumerate}
+  \item \textbf{``The first Lean formalization of Davis--Kahan.''}
+        The public SLT repository now advertises Davis--Kahan results
+        \citep{zhang2026sltrepo}.  A narrower source/theorem/generality claim may
+        be valid, but requires comparison.
+  \item \textbf{``The first full-paper LLM formalization.''}
+        M2F, LeanFlow, Beyond the Library, EconCSLib, and others already work at
+        paper/project scale \citep{wang2026m2f,milikic2026leanflow,moakhar2026beyondlibrary,garg2026econcs}.
+  \item \textbf{``The first project where formalization forced substantial new
+        foundations.''}  This is a longstanding phenomenon and is explicit in
+        recent AI-assisted work \citep{liquidblueprint2023,zhang2026slt,lu2026tensor}.
+  \item \textbf{``The first use of a blueprint/census/dependency graph for
+        formalization.''}  Liquid Tensor, PFR, LeanArchitect, LeanMarathon, and
+        EconCSLib provide clear precedents
+        \citep{liquidblueprint2023,pfrblueprint2024,zhu2026leanarchitect,zhang2026leanmarathon,garg2026econcs}.
+  \item \textbf{``The first source-faithful AI formalization.''}
+        LeanFlow, asymptotic statistics, FormaTheoria, and Beyond Compilation
+        make fidelity an explicit object of study
+        \citep{milikic2026leanflow,wei2026asymptotic,nie2026formatheoria,zhang2026beyondcompilation}.
+  \item \textbf{``The first formalization to find a source error.''}
+        Formalization has long exposed errors and missing assumptions; recent AI
+        systems such as MechGeo and FormaTheoria explicitly center diagnosis and
+        correction \citep{shen2026mechgeo,nie2026formatheoria}.
+  \item \textbf{``The first AI formalization process study with token/cost
+        reporting.''}  LeanFlow, VML, Anthropic's zeta case study, and broader
+        agent-use studies are direct precedents
+        \citep{milikic2026leanflow,ilin2026vml,anthropic2026zeta,mccain2026autonomy}.
+\end{enumerate}
+
+\subsection{Claims that may survive careful verification}
+
+The following are plausible but should be treated as research questions until
+checked.
+
+\begin{enumerate}
+  \item \textbf{A source-faithful formal treatment of the 1970 Davis--Kahan
+        paper at unusual breadth.}  The exact scope should be described by a
+        source census rather than a vague ``full paper'' label.
+  \item \textbf{A new correction to Davis--Kahan Proposition~4.4.}  Search the
+        perturbation literature, known errata, citation graph, and later papers
+        that invoke the proposition.  Establish whether the trace-norm
+        counterexample or equivalent observation has appeared previously.
+  \item \textbf{A source-faithful complete YWS formalization including its
+        sharpness examples and source repairs.}  We have not yet found another
+        public full YWS formalization, but absence from search results is not a
+        proof of priority.
+  \item \textbf{An unusually broad reusable formal spectral-perturbation layer
+        motivated by one classical source.}  Quantify breadth through a theorem
+        crosswalk and dependency architecture, not raw line count.
+  \item \textbf{An integrated audit-to-reuse story:} classical source
+        $\rightarrow$ correction $\rightarrow$ modern statistical variant
+        $\rightarrow$ contemporary downstream statistical theorem.  The
+        combination may be more distinctive than any one step.
+  \item \textbf{A uniquely granular naturalistic interaction dataset for
+        research-mathematics formalization.}  Compare the actual fields and
+        missingness mechanisms to published prompt/agent studies before making a
+        priority claim.
+\end{enumerate}
+
+\section{Recommended eventual related-work cut}
+\label{sec:recommended-cut}
+
+If the final venue affords only roughly one page of related work, the material
+above can be compressed into five paragraphs.
+
+\paragraph{1. Perturbation theory and statistics.}
+Davis--Kahan, Wedin, YWS, and one modern statistical spectral reference.  This
+establishes the mathematical lineage and explains why YWS is statistically
+important without implying that it subsumes the full 1970 source
+\citep{davis1970rotation,wedin1972perturbation,yu2015davis,chen2021spectral}.
+
+\paragraph{2. Large formalization and foundational spillover.}
+One pre-LLM precedent (Liquid Tensor or Flyspeck) plus one operator/library paper
+such as the continuous functional calculus.  The purpose is to acknowledge that
+large prerequisite layers, dependency tracking, and upstreaming are established
+formalization practice \citep{hales2017kepler,liquidblueprint2023,dedecker2025cfc}.
+
+\paragraph{3. Project-scale AI formalization.}
+Cite a small representative set: M2F/Atlas for scale, LeanFlow for workflow and
+tokens, and FormaTheoria for the closest source-audit/provenance framing
+\citep{wang2026m2f,rammal2026scale,milikic2026leanflow,nie2026formatheoria}.
+Do not enumerate every 2026 system in the main paper.
+
+\paragraph{4. Semantic fidelity and statistics.}
+Use Beyond Compilation plus the two statistics neighbors: SLT in Lean and
+hypothesis-disciplined asymptotic statistics
+\citep{zhang2026beyondcompilation,zhang2026slt,wei2026asymptotic}.  This both
+motivates our source census and acknowledges that source fidelity in statistics
+is no longer unique.
+
+\paragraph{5. Human--AI process.}
+If the empirical section survives: LeanFlow, VML, Collins et al., and Anthropic's
+zeta/autonomy work are enough to locate token accounting and interaction analysis
+\citep{milikic2026leanflow,ilin2026vml,collins2026humanai,anthropic2026zeta,mccain2026autonomy}.
+The appendix can hold the broader process literature.
+
+The main paper should spend the citations saved here on the specific mathematical
+literature needed to establish the novelty of the Proposition~4.4 correction and
+the exact Davis--Kahan theorem surfaces.
+
+\section{Open searches and comparison work before submission}
+\label{sec:open-search}
+
+This review is deep enough for positioning but not yet the final systematic
+literature audit.  The following tasks remain.
+
+\begin{enumerate}
+  \item \textbf{Davis--Kahan Proposition~4.4 citation audit.}  Search by
+        proposition number, distinctive theorem language, direct-rotation
+        terminology, Fan--Hoffman/trace-norm formulations, and later errata.
+        Trace citations backward and forward from papers that use Section~4 of
+        Davis--Kahan.  This is the highest-priority mathematical novelty check.
+  \item \textbf{Exact comparison to the SLT repository.}  Record theorem
+        signatures, source references, norm/gap assumptions, and dependencies.
+        A public repository claiming Davis--Kahan makes a vague priority claim
+        untenable, but it may be mathematically far narrower than our source
+        development.
+  \item \textbf{Search other proof assistants.}  Current web searches did not
+        reveal an obvious Coq or Isabelle formalization of Davis--Kahan/YWS, but
+        negative keyword search is weak evidence.  Search AFP, Coq packages,
+        HOL Light corpora, and theorem-name variants directly.
+  \item \textbf{YWS priority search.}  Search GitHub/code indexes, Mathlib PRs,
+        Lean projects, and supplementary artifacts for Yu--Wang--Samworth by
+        theorem content as well as title/authors.
+  \item \textbf{Perturbation-theory formalization beyond Davis--Kahan.}
+        Search for formal Weyl, Courant--Fischer, principal angles, Wedin,
+        Stewart--Sun, Kato spectral projections, Riccati/subspace rotation, and
+        unitarily invariant norm results.  These determine which foundational
+        contributions are genuinely new to formal libraries.
+  \item \textbf{Proof-provenance citations.}  Complete the declaration-level
+        audit of Spectra-derived proofs, Mathlib PR strategies, and external Lean
+        code before writing the implementation section.
+  \item \textbf{Bibliometrics.}  If the introduction says Davis--Kahan or YWS
+        is ``highly cited,'' use a reproducible bibliometric snapshot and date.
+        Citation counts are unstable and should not be copied from a search-engine
+        sidebar without provenance.
+  \item \textbf{Venue-specific review.}  Before submission, repeat the search
+        for papers posted after 14 August 2026 and for accepted MathStat/AI-for-Math
+        papers not yet indexed by arXiv search.
+\end{enumerate}
+
+\section{Working conclusion}
+\label{sec:conclusion}
+
+The literature does not suggest that this project has become unpublishable
+because AI formalization is exploding.  It suggests that the paper has to be
+more mathematically specific than it would have needed to be a year earlier.
+Scale, agentic workflow, source fidelity, gap discovery, foundational spillover,
+and process telemetry are now all active research themes.  None should be sold
+as the sole novelty.
+
+The project is strongest when treated as a formal mathematical investigation of
+a classical perturbation-theory lineage with direct statistical importance.  In
+that framing, the hard Davis--Kahan work matters on its own; YWS supplies a
+source-faithful statistical endpoint rather than the only reason the
+foundations exist; the Proposition~4.4 counterexample can stand as a potentially
+new mathematical correction; the \TauCeti{} work demonstrates reusable
+spillover; and Quench demonstrates downstream statistical use.  The interaction
+and accounting study then answers a secondary but genuinely interesting
+question: what did it take, in practice, for a human and contemporary LLM agents
+to construct and audit this much formal mathematics?
+
+That combination remains meaningfully different from benchmark theorem proving,
+textbook-scale translation, and generic agentic formalization frameworks.  The
+next novelty-critical step is not more AI-literature collection; it is a careful
+mathematical citation audit of Proposition~4.4 and a theorem-by-theorem
+comparison with the newly public Davis--Kahan material in adjacent Lean
+projects.
+
+\clearpage
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+\end{document}
