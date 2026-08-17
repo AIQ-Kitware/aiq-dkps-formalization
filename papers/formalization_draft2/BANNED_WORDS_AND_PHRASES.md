@@ -49,4 +49,11 @@ State the observation, evidence, consequence, or limitation directly.
 - Prefer concrete descriptions of missing observations. Avoid abstract phrases such as "the missingness mechanism" when the omitted source can be named directly.
 - Keep coordination-tool history, workflow anecdotes, and implementation provenance out of the paper unless they support a reported scientific result.
 - Limit methodological caveats to the assumptions that change interpretation of a reported quantity. Use concise statements of scope.
+## Lean code terminology
+
+- Call displayed Lean declarations **code** or **Lean signatures**. Do not call them listings or surfaces.
+- Do not call a Lean declaration canonical unless a mathematical uniqueness statement has actually established that term.
+- Do not discuss glyph substitutions or other TeX rendering accommodations in manuscript prose.
+- Explain non-obvious Lean predicates by stating the mathematical data or hypotheses they encode.
+- Use `presentation` only when it denotes a mathematical representation or another substantive technical object; remove prose about choices made merely for the reader-facing layout.
 
