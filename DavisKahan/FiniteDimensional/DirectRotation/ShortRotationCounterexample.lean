@@ -525,6 +525,205 @@ theorem kyFanSum_displacement_W :
     Real.sqrt_zero]
   ring
 
+/-! ### The printed equation (4.3) fails on the same witness
+
+For the equal-angle configuration the two Davis--Kahan principal planes may be
+chosen as `span{e₀,e₃}` and `span{e₁,e₂}`.  If `K = I - W` and `Ω₁, Ω₂` are
+the corresponding orthogonal projections, the printed proof of Proposition 4.4
+uses the inequality
+
+`kyFanSum 4 K ≥ kyFanSum 2 (K ∘ Ω₁) + kyFanSum 2 (K ∘ Ω₂)`.
+
+The declarations below certify the opposite strict inequality: each block has
+Ky Fan two sum `2`, while the full displacement has Ky Fan four sum `2√2`.
+This localizes the source-proof defect independently of the theorem-level
+refutation below. -/
+
+/-- The first principal plane used to test Davis--Kahan equation (4.3). -/
+def paperOmega1 : Submodule ℝ E4 := Submodule.span ℝ {sv 0, sv 3}
+
+/-- The second principal plane used to test Davis--Kahan equation (4.3). -/
+def paperOmega2 : Submodule ℝ E4 := Submodule.span ℝ {sv 1, sv 2}
+
+private theorem mem_paperOmega1 {x : E4} (hx : x ∈ paperOmega1) :
+    x = x 0 • sv 0 + x 3 • sv 3 := by
+  obtain ⟨a, b, rfl⟩ := Submodule.mem_span_pair.mp hx
+  ext i
+  fin_cases i <;> simp [sv]
+
+private theorem mem_paperOmega2 {x : E4} (hx : x ∈ paperOmega2) :
+    x = x 1 • sv 1 + x 2 • sv 2 := by
+  obtain ⟨a, b, rfl⟩ := Submodule.mem_span_pair.mp hx
+  ext i
+  fin_cases i <;> simp [sv]
+
+private theorem projection_paperOmega1_apply (x : E4) :
+    projection paperOmega1 x = x 0 • sv 0 + x 3 • sv 3 := by
+  show paperOmega1.starProjection x = _
+  apply Submodule.eq_starProjection_of_mem_orthogonal
+  · exact add_mem
+      (Submodule.smul_mem _ _ (Submodule.subset_span (by simp)))
+      (Submodule.smul_mem _ _ (Submodule.subset_span (by simp)))
+  · rw [Submodule.mem_orthogonal]
+    intro u hu
+    rw [mem_paperOmega1 hu]
+    simp [sv, inner_add_left, inner_sub_right, real_inner_smul_left,
+      EuclideanSpace.inner_single_left]
+
+private theorem projection_paperOmega2_apply (x : E4) :
+    projection paperOmega2 x = x 1 • sv 1 + x 2 • sv 2 := by
+  show paperOmega2.starProjection x = _
+  apply Submodule.eq_starProjection_of_mem_orthogonal
+  · exact add_mem
+      (Submodule.smul_mem _ _ (Submodule.subset_span (by simp)))
+      (Submodule.smul_mem _ _ (Submodule.subset_span (by simp)))
+  · rw [Submodule.mem_orthogonal]
+    intro u hu
+    rw [mem_paperOmega2 hu]
+    simp [sv, inner_add_left, inner_sub_right, real_inner_smul_left,
+      EuclideanSpace.inner_single_left]
+
+private theorem projection_paperOmega1_coord (x : E4) (i : Fin 4) :
+    projection paperOmega1 x i =
+      if i = 0 then x 0 else if i = 3 then x 3 else 0 := by
+  rw [projection_paperOmega1_apply]
+  fin_cases i <;> simp [sv]
+
+private theorem projection_paperOmega2_coord (x : E4) (i : Fin 4) :
+    projection paperOmega2 x i =
+      if i = 1 then x 1 else if i = 2 then x 2 else 0 := by
+  rw [projection_paperOmega2_apply]
+  fin_cases i <;> simp [sv]
+
+/-- The first block `K Ω₁` from the printed equation (4.3), for `K = I-W`. -/
+def paperEquation43Block1 : E4 →ₗ[ℝ] E4 :=
+  (LinearMap.id - Wlin) ∘ₗ projection paperOmega1
+
+/-- The second block `K Ω₂` from the printed equation (4.3), for `K = I-W`. -/
+def paperEquation43Block2 : E4 →ₗ[ℝ] E4 :=
+  (LinearMap.id - Wlin) ∘ₗ projection paperOmega2
+
+private theorem gram_paperEquation43Block1 :
+    LinearMap.adjoint paperEquation43Block1 ∘ₗ paperEquation43Block1 =
+      projection paperOmega1 := by
+  apply LinearMap.ext
+  intro x
+  ext i
+  rw [paperEquation43Block1, LinearMap.adjoint_comp, projection_adjoint,
+    map_sub, LinearMap.adjoint_id, Wlin_adjoint]
+  simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply]
+  fin_cases i <;>
+    simp [projection_paperOmega1_coord, Wlin_apply, Wlin'_apply, Wmat,
+      Fin.sum_univ_four, Matrix.smul_apply] <;> ring
+
+private theorem gram_paperEquation43Block2 :
+    LinearMap.adjoint paperEquation43Block2 ∘ₗ paperEquation43Block2 =
+      projection paperOmega2 := by
+  apply LinearMap.ext
+  intro x
+  ext i
+  rw [paperEquation43Block2, LinearMap.adjoint_comp, projection_adjoint,
+    map_sub, LinearMap.adjoint_id, Wlin_adjoint]
+  simp only [LinearMap.comp_apply, LinearMap.sub_apply, LinearMap.id_apply]
+  fin_cases i <;>
+    simp [projection_paperOmega2_coord, Wlin_apply, Wlin'_apply, Wmat,
+      Fin.sum_univ_four, Matrix.smul_apply] <;> ring
+
+private noncomputable def paperOmega1Basis : OrthonormalBasis (Fin 4) ℝ E4 :=
+  (EuclideanSpace.basisFun (Fin 4) ℝ).reindex (Equiv.swap (1 : Fin 4) 3)
+
+private noncomputable def paperOmega2Basis : OrthonormalBasis (Fin 4) ℝ E4 :=
+  paperOmega1Basis.reindex Fin.revPerm
+
+private theorem paperOmega1Basis_projection (i : Fin 4) :
+    projection paperOmega1 (paperOmega1Basis i) =
+      ((![1, 1, 0, 0] : Fin 4 → ℝ) i) • paperOmega1Basis i := by
+  have hswap0 : (Equiv.swap (1 : Fin 4) 3) 0 = 0 := by decide
+  have hswap1 : (Equiv.swap (1 : Fin 4) 3) 1 = 3 := by decide
+  have hswap2 : (Equiv.swap (1 : Fin 4) 3) 2 = 2 := by decide
+  have hswap3 : (Equiv.swap (1 : Fin 4) 3) 3 = 1 := by decide
+  fin_cases i <;>
+    ext j <;> fin_cases j <;>
+    simp [paperOmega1Basis, projection_paperOmega1_coord,
+      EuclideanSpace.basisFun_apply, hswap0, hswap1, hswap2, hswap3]
+
+private theorem paperOmega2Basis_projection (i : Fin 4) :
+    projection paperOmega2 (paperOmega2Basis i) =
+      ((![1, 1, 0, 0] : Fin 4 → ℝ) i) • paperOmega2Basis i := by
+  have hswap0 : (Equiv.swap (1 : Fin 4) 3) 0 = 0 := by decide
+  have hswap1 : (Equiv.swap (1 : Fin 4) 3) 1 = 3 := by decide
+  have hswap2 : (Equiv.swap (1 : Fin 4) 3) 2 = 2 := by decide
+  have hswap3 : (Equiv.swap (1 : Fin 4) 3) 3 = 1 := by decide
+  fin_cases i <;>
+    ext j <;> fin_cases j <;>
+    simp [paperOmega2Basis, paperOmega1Basis, projection_paperOmega2_coord,
+      EuclideanSpace.basisFun_apply, hswap0, hswap1, hswap2, hswap3]
+
+private theorem antitone_one_one_zero_zero :
+    Antitone (![1, 1, 0, 0] : Fin 4 → ℝ) := by
+  intro i j hij
+  fin_cases i <;> fin_cases j <;> simp_all
+
+private theorem singularValues_paperEquation43Block1 (j : Fin 4) :
+    paperEquation43Block1.singularValues (j : ℕ) =
+      Real.sqrt ((![1, 1, 0, 0] : Fin 4 → ℝ) j) := by
+  have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
+  have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
+    paperEquation43Block1.isSymmetric_adjoint_comp_self hfr paperOmega1Basis
+    (μ := ![1, 1, 0, 0]) antitone_one_one_zero_zero
+    (fun i => by rw [gram_paperEquation43Block1]; exact paperOmega1Basis_projection i)
+  rw [paperEquation43Block1.singularValues_of_lt hfr j.isLt,
+    congrFun heig ⟨(j : ℕ), j.isLt⟩]
+
+private theorem singularValues_paperEquation43Block2 (j : Fin 4) :
+    paperEquation43Block2.singularValues (j : ℕ) =
+      Real.sqrt ((![1, 1, 0, 0] : Fin 4 → ℝ) j) := by
+  have hfr : finrank ℝ E4 = 4 := finrank_euclideanSpace_fin
+  have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis
+    paperEquation43Block2.isSymmetric_adjoint_comp_self hfr paperOmega2Basis
+    (μ := ![1, 1, 0, 0]) antitone_one_one_zero_zero
+    (fun i => by rw [gram_paperEquation43Block2]; exact paperOmega2Basis_projection i)
+  rw [paperEquation43Block2.singularValues_of_lt hfr j.isLt,
+    congrFun heig ⟨(j : ℕ), j.isLt⟩]
+
+/-- The first principal-plane block in equation (4.3) has Ky Fan two sum `2`. -/
+theorem kyFanSum_paperEquation43Block1 : kyFanSum 2 paperEquation43Block1 = 2 := by
+  have h0 : paperEquation43Block1.singularValues 0 = 1 := by
+    simpa using singularValues_paperEquation43Block1 (0 : Fin 4)
+  have h1 : paperEquation43Block1.singularValues 1 = 1 := by
+    simpa using singularValues_paperEquation43Block1 (1 : Fin 4)
+  rw [kyFanSum_eq_sum_fin, Fin.sum_univ_two]
+  change paperEquation43Block1.singularValues 0 +
+      paperEquation43Block1.singularValues 1 = 2
+  rw [h0, h1]
+  norm_num
+
+/-- The second principal-plane block in equation (4.3) has Ky Fan two sum `2`. -/
+theorem kyFanSum_paperEquation43Block2 : kyFanSum 2 paperEquation43Block2 = 2 := by
+  have h0 : paperEquation43Block2.singularValues 0 = 1 := by
+    simpa using singularValues_paperEquation43Block2 (0 : Fin 4)
+  have h1 : paperEquation43Block2.singularValues 1 = 1 := by
+    simpa using singularValues_paperEquation43Block2 (1 : Fin 4)
+  rw [kyFanSum_eq_sum_fin, Fin.sum_univ_two]
+  change paperEquation43Block2.singularValues 0 +
+      paperEquation43Block2.singularValues 1 = 2
+  rw [h0, h1]
+  norm_num
+
+/-- **Davis--Kahan 1970, equation (4.3), is false in the generality used in the
+proof of Proposition 4.4.**  For the same `ℝ⁴` witness as the proposition-level
+counterexample, the global Ky Fan four sum is `2√2`, whereas the two Ky Fan two
+principal-plane terms sum to `4`; hence the printed lower bound points in the
+wrong direction on this admissible configuration. -/
+theorem davisKahanEquation4_3_refuted :
+    kyFanSum 4 (LinearMap.id - Wlin) <
+      kyFanSum 2 paperEquation43Block1 + kyFanSum 2 paperEquation43Block2 := by
+  rw [kyFanSum_displacement_W, kyFanSum_paperEquation43Block1,
+    kyFanSum_paperEquation43Block2]
+  have hsqrt : Real.sqrt 2 < 2 := by
+    nlinarith [sqrt_two_mul_self, Real.sqrt_nonneg 2]
+  nlinarith
+
 /-! ### The principal angles are `π/4` -/
 
 /-- The Gram operator of the directed sine map acts diagonally on the standard

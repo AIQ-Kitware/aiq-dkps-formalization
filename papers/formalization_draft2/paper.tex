@@ -106,7 +106,9 @@ The intended contribution list is:
         the false polynomial identity in equation (4) and the rank-boundary
         convention in Theorem 3.
   \item A source audit of \DK{} Proposition 4.4, including an explicit
-        $\mathbb{R}^4$ trace-norm counterexample and a repaired theorem surface.
+        $\mathbb{R}^4$ trace-norm counterexample, a machine-checked localization
+        of the proof defect to the printed equation (4.3), and a repaired theorem
+        surface.
   \item A demonstration that the resulting spectral machinery is reusable in a
         contemporary end-to-end statistical theorem family (Quench), rather than
         being an isolated verification artifact.
@@ -256,6 +258,44 @@ $\pi/4$, the direct rotation has trace displacement
 $4\sqrt{2-\sqrt{2}}$, while an admissible orthogonal competitor has trace
 displacement $2\sqrt{2}$.  Thus the claimed minimizing property fails inside the
 stated $\Theta\leq\pi/3$ regime.
+
+The same witness also localizes a specific defect in the published proof.  This
+should not be confused with \emph{Proposition 4.3}, which is a separate and valid result: the defect is the
+paper's displayed \emph{equation (4.3)} inside the proof of Proposition 4.4.
+Writing $K=I-W$ and taking the two principal-plane projectors
+$\Omega_1E=\operatorname{span}\{e_0,e_3\}$ and
+$\Omega_2E=\operatorname{span}\{e_1,e_2\}$, the source passes from its valid
+Ky Fan variational identity to the asserted lower bound
+\[
+  \lVert K\rVert_4 \geq
+  \lVert K\Omega_1\rVert_2+\lVert K\Omega_2\rVert_2.
+\]
+For the counterexample, however,
+\[
+  \lVert K\rVert_4=2\sqrt2
+  \quad\text{while}\quad
+  \lVert K\Omega_1\rVert_2=\lVert K\Omega_2\rVert_2=2,
+\]
+so the asserted inequality would require $2\sqrt2\geq4$.  The Lean declarations
+\texttt{kyFanSum\_paperEquation43Block1},
+\texttt{kyFanSum\_paperEquation43Block2}, and
+\texttt{davisKahanEquation4\_3\_refuted} machine-check this concrete failure.
+The underlying issue is that orthogonality of the domain planes does not imply
+orthogonality of their images under $K$, so their singular-value sums need not
+add.  On this witness, the later blockwise calculation where the $\pi/3$ bound
+is consumed behaves as claimed; the invalid step is the earlier summation
+across blocks.
+
+This proof defect explains where the published argument for Proposition 4.4
+breaks, but the theorem-level refutation does not depend on that diagnosis: the
+strict trace-norm comparison above directly falsifies Proposition 4.4.  By
+contrast, Proposition 4.3 concerns the \emph{squared} displacement
+$(I-W)^*(I-W)$ and survives.  It is proved in the finite-dimensional formalization
+as \texttt{directRotation\_displacementSquare\_uiNorm} and at the paper-facing
+Ky Fan level as \texttt{proposition4\_3\_squaredDisplacement\_kyFan}.  The
+counterexample illustrates the distinction: the relevant partial sums of
+squared singular values are dominated even though the corresponding partial
+sums of singular values are not.
 
 The repository also contains a repaired result for the $Q$-norm class.  We
 separately investigated whether the trace-norm failure inside the advertised
