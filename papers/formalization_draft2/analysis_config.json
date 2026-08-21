@@ -55,5 +55,17 @@
       ".llm_resource_tally/"
     ]
   },
-  "git_date_basis": "Git author timestamp local date; do not convert to UTC before applying date-bounded provenance rules or presenting snapshot dates"
+  "git_date_basis": "Git author timestamp local date; do not convert to UTC before applying date-bounded provenance rules or presenting snapshot dates",
+  "lean_churn_coverage_adjustments": [
+    {
+      "commit": "cd47c879fe146c2be6f698f4dea8161ac294001a",
+      "label": "Pristine Spectra vendor import",
+      "reason": "Bulk import of the pinned third-party Spectra snapshot; excluded only from the adjusted formalization-text coverage proxy."
+    },
+    {
+      "commit": "d503a2101672859154a55efa9a92bba41a60efec",
+      "label": "Retired Spectra fork deletion",
+      "reason": "Bulk deletion of the former Spectra tree after the project-specific fork was preserved as a patch; excluded only from the adjusted formalization-text coverage proxy."
+    }
+  ]
 }

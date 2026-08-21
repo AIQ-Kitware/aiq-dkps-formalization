@@ -1,3 +1,55 @@
+\section{Formalization process}
+\label{app:formalization-process}
+
+The formalization was developed in Lean~4 with Mathlib
+\citep{demoura2021lean4,mathlib2020}.  The AI-facing tools were the ChatGPT chat interface, Claude Code, and Codex.
+We did not use a separate formalization-agent framework.  The repository itself
+was compiled with the ordinary Lean and Lake toolchain.
+
+The formalization used the following recurring cycle.
+\begin{enumerate}
+  \item We supplied the source paper to an LLM and asked it to transcribe the
+        mathematical statements and decompose the proof into intermediate
+        obligations.
+  \item Before building missing theory, we searched Mathlib, other Lean
+        developments, and the mathematical literature for existing definitions,
+        lemmas, or formalizations that could be reused or adapted.
+  \item The LLM implemented definitions and intermediate lemmas, filled theorem
+        proofs, compiled the result, and revised failed proofs using compiler
+        feedback.  Larger arguments were commonly organized into written proof
+        roadmaps before implementation.
+  \item We repeatedly compared each Lean theorem with the source statement,
+        including hypotheses, endpoint conventions, ambient dimension, norm
+        class, and operator domain.  These checks were performed both by humans
+        and by additional LLM reviews.  A narrower or otherwise mismatched
+        statement was revised and checked again.
+\end{enumerate}
+
+As the development grew, we also asked the LLMs to build repository scripts that
+enumerated source claims and linked them to Lean declarations.  Those tools were
+introduced after substantial formalization had already been completed and were
+used to check coverage and to revisit earlier statements systematically.  The
+resulting source-coverage evidence is summarized in
+Appendix~\ref{app:source-coverage}.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{>{\raggedright\arraybackslash}p{0.18\linewidth}>{\raggedright\arraybackslash}p{0.35\linewidth}>{\raggedright\arraybackslash}p{0.39\linewidth}}
+\toprule
+System & Models used & Typical use \\
+\midrule
+ChatGPT chat interface & GPT-5.6 Sol & Mathematical planning, source comparison, review, and generation of proposed repository changes. \\
+Claude Code & Claude Opus 4.8; Claude Opus 5; Claude Fable 5 & Repository search, Lean implementation, compilation, proof repair, and long-running formalization tasks. \\
+Codex & GPT-5.6 Sol; GPT-5.6 Terra; GPT-5 Codex; GPT-5.6 Codex & Repository search, Lean implementation, compilation, repair, and review. \\
+\bottomrule
+\end{tabular}
+\caption{AI systems and models used during the formalization.  Exact token
+measurements were recovered for five model labels; the measured subset is given
+in \cref{tab:model-tokens-appendix}.}
+\label{tab:formalization-systems}
+\end{table}
+
 \section{Source coverage and formalization evidence}
 \label{app:source-coverage}
 
@@ -153,8 +205,29 @@ separate per-token cross-check.
 Exact telemetry covers \ExactMeasuredCommitCount{} of \HistoryCommitCount{}
 primary-repository commits (\ExactMeasuredCommitShare{}).  Those commits account
 for \ExactMeasuredLeanLineChurn{} of \TotalLeanLineChurn{} cumulative Lean-line
-insertions and deletions (\ExactMeasuredLeanLineChurnShare{}).  The extrapolations
-in \cref{tab:resource-extrapolation} divide the exact primary-repository token
-subset by each fraction.  One weights commits equally; the other uses changed
-Lean lines as a coarse text-volume proxy.  Both assume comparable token
-intensity between observed and unobserved work under the selected denominator.
+insertions and deletions (\ExactMeasuredLeanLineChurnShare{}).  This raw Git
+quantity is the directly measured text-volume proxy.  We also report an adjusted
+proxy that removes \LeanLineChurnAdjustmentTotal{} known non-LLM line changes
+from bulk repository operations.  The adjusted denominator is
+\AdjustedTotalLeanLineChurn{} Lean-line changes, of which
+\AdjustedExactMeasuredLeanLineChurn{} have exact telemetry, giving
+\AdjustedExactMeasuredLeanLineChurnShare{} coverage.
+
+\begin{table}[H]
+\centering
+\small
+\input{snapshots/lean_churn_coverage_adjustment_table.tex}
+\caption{Raw and adjusted Lean-line-change coverage.  The raw row is the direct
+Git-history count; the adjusted row removes known non-LLM line changes from bulk
+repository operations.}
+\label{tab:lean-churn-adjustment}
+\end{table}
+
+The project-scale estimates in \cref{tab:resource-extrapolation} use the linear
+model $q_{\mathrm{project}}=q_{\mathrm{exact}}/c$, where $c$ is commit coverage or
+adjusted text coverage.  Using the raw \ExactMeasuredLeanLineChurnShare{} text
+proxy would give \RawLeanChurnScaledOperationalEnergy{} under the central
+serving model; the adjusted \AdjustedExactMeasuredLeanLineChurnShare{} proxy
+gives \AdjustedLeanChurnScaledOperationalEnergy{}.  The model assumes comparable
+token intensity between observed and unobserved work under the selected
+denominator.

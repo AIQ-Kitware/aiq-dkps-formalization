@@ -13,6 +13,12 @@ Do not use these words as rhetorical emphasis:
 
 Do not replace them with a synonym that performs the same empty emphasis. State the concrete consequence.
 
+
+## Banned phrases
+
+- "The X is worth" stating / saying out loud / clarifying / etc..
+- "X bites" 
+
 ## Banned contrast template
 
 Do not use the formula **"X is not Y; it is Z"** or routine variants such as:
