@@ -53,12 +53,12 @@ Unbounded carrier, in `TauCeti.LinearPMap` — this is the deliverable:
 
 * `mem_resolventSet_of_lowerFormBound` — the resolvent exists, so nothing below
   is vacuous.
-* `coercive_resolvent_of_lowerFormBound` — the resolvent satisfies the
+* `coercive_neg_resolvent_of_lowerFormBound` — the resolvent satisfies the
   coercivity estimate with `c = β - lam`.
-* `resolvent_nonneg_of_lowerFormBound` and
-  `resolvent_le_smul_one_of_lowerFormBound` — **the sandwich**, in Mathlib's
-  Loewner order; `resolvent_sandwich_of_lowerFormBound` packages both.
-* `adjoint_conj_resolvent_le_of_lowerFormBound` — the conjugated form
+* `neg_resolvent_nonneg_of_lowerFormBound` and
+  `neg_resolvent_le_smul_one_of_lowerFormBound` — **the sandwich**, in Mathlib's
+  Loewner order; `neg_resolvent_sandwich_of_lowerFormBound` packages both.
+* `adjoint_conj_neg_resolvent_le_of_lowerFormBound` — the conjugated form
   `B⋆ R B ≤ (β - lam)⁻¹ • B⋆ B`.
 * `lowerFormBound_of_spectrum_subset_Ici` — the bridge from the spectral
   hypothesis `spectrum A ⊆ [β, ∞)` to the form hypothesis actually used, so a
@@ -342,16 +342,29 @@ theorem mem_resolventSet_of_lowerFormBound [CompleteSpace E]
 Everything else in this section is this estimate plus the carrier-free core.
 The proof is `re_inner_self_sub_smul` at the domain point `x = R φ`, where
 `A x - lam x = φ` is the defining property of the resolvent. -/
-theorem coercive_resolvent_of_lowerFormBound {β lam : ℝ}
+theorem coercive_neg_resolvent_of_lowerFormBound {β lam : ℝ}
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re)
     (hlam : (lam : ℂ) ∈ resolventSet A) (φ : E) :
-    (β - lam) * ‖resolvent A hlam φ‖ ^ 2 ≤ (⟪resolvent A hlam φ, φ⟫_ℂ).re := by
-  have key := re_inner_self_sub_smul (A := A) lam (resolvent_mem_domain hlam φ)
-  rw [sub_smul_resolvent hlam φ] at key
-  have hb : β * ‖resolvent A hlam φ‖ ^ 2
-      ≤ (⟪A ⟨resolvent A hlam φ, resolvent_mem_domain hlam φ⟩,
-          resolvent A hlam φ⟫_ℂ).re :=
-    hform ⟨resolvent A hlam φ, resolvent_mem_domain hlam φ⟩
+    (β - lam) * ‖(-resolvent A (lam : ℂ)) φ‖ ^ 2
+      ≤ (⟪(-resolvent A (lam : ℂ)) φ, φ⟫_ℂ).re := by
+  simp only [_root_.neg_apply]
+  have hmem : -(resolvent A (lam : ℂ) φ) ∈ A.domain :=
+    neg_mem (resolvent_mem_domain hlam φ)
+  have key := re_inner_self_sub_smul (A := A) lam hmem
+  -- `A v - lam v = φ` at `v = -R φ`, because `lam • R φ - A (R φ) = φ`
+  have hAv : A (⟨-(resolvent A (lam : ℂ) φ), hmem⟩ : A.domain)
+      - (lam : ℂ) • (-(resolvent A (lam : ℂ) φ)) = φ := by
+    have h := smul_sub_apply_resolvent hlam φ
+    have hneg : A (⟨-(resolvent A (lam : ℂ) φ), hmem⟩ : A.domain)
+        = -(A ⟨resolvent A (lam : ℂ) φ, resolvent_mem_domain hlam φ⟩) :=
+      _root_.LinearPMap.map_neg A ⟨resolvent A (lam : ℂ) φ, resolvent_mem_domain hlam φ⟩
+    rw [hneg]
+    linear_combination (norm := module) h
+  rw [hAv] at key
+  have hb : β * ‖-(resolvent A (lam : ℂ) φ)‖ ^ 2
+      ≤ (⟪A ⟨-(resolvent A (lam : ℂ) φ), hmem⟩,
+          -(resolvent A (lam : ℂ) φ)⟫_ℂ).re :=
+    hform ⟨-(resolvent A (lam : ℂ) φ), hmem⟩
   rw [key]
   linarith
 
@@ -362,91 +375,94 @@ Loewner order.  The form-bound versions carry no completeness hypothesis; the
 order versions do, because self-adjointness of the resolvent does. -/
 
 /-- **Positivity of the resolvent, as a form bound.** -/
-theorem lowerFormBoundOn_resolvent_of_lowerFormBound {β lam : ℝ} (hlt : lam < β)
+theorem lowerFormBoundOn_neg_resolvent_of_lowerFormBound {β lam : ℝ} (hlt : lam < β)
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re)
     (hlam : (lam : ℂ) ∈ resolventSet A) :
-    (resolvent A hlam).LowerFormBoundOn ⊤ 0 :=
+    (-resolvent A (lam : ℂ)).LowerFormBoundOn ⊤ 0 :=
   ContinuousLinearMap.lowerFormBoundOn_top_of_coercive (by linarith)
-    (coercive_resolvent_of_lowerFormBound hform hlam)
+    (coercive_neg_resolvent_of_lowerFormBound hform hlam)
 
 /-- **The upper bound on the resolvent, as a form bound.**  The constant is
 sharp: for the scalar operator `A = β` on `ℂ` the two sides agree. -/
-theorem upperFormBoundOn_resolvent_of_lowerFormBound {β lam : ℝ} (hlt : lam < β)
+theorem upperFormBoundOn_neg_resolvent_of_lowerFormBound {β lam : ℝ} (hlt : lam < β)
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re)
     (hlam : (lam : ℂ) ∈ resolventSet A) :
-    (resolvent A hlam).UpperFormBoundOn ⊤ (β - lam)⁻¹ :=
+    (-resolvent A (lam : ℂ)).UpperFormBoundOn ⊤ (β - lam)⁻¹ :=
   ContinuousLinearMap.upperFormBoundOn_top_of_coercive (by linarith)
-    (coercive_resolvent_of_lowerFormBound hform hlam)
+    (coercive_neg_resolvent_of_lowerFormBound hform hlam)
 
 section Order
 
 variable [CompleteSpace E]
 
 /-- **The resolvent is a positive operator.** -/
-theorem isPositive_resolvent_of_lowerFormBound (hA : IsSelfAdjoint A) {β lam : ℝ}
+theorem isPositive_neg_resolvent_of_lowerFormBound (hA : IsSelfAdjoint A) {β lam : ℝ}
     (hlt : lam < β)
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re)
     (hlam : (lam : ℂ) ∈ resolventSet A) :
-    (resolvent A hlam).IsPositive :=
+    (-resolvent A (lam : ℂ)).IsPositive :=
   TauCeti.ContinuousLinearMap.isPositive_of_lowerFormBoundOn_top
-    ((isSelfAdjoint_resolvent_ofReal hA hlam).isSymmetric)
-    (lowerFormBoundOn_resolvent_of_lowerFormBound hlt hform hlam)
+    ((isSelfAdjoint_resolvent_ofReal hA hlam).neg.isSymmetric)
+    (lowerFormBoundOn_neg_resolvent_of_lowerFormBound hlt hform hlam)
 
-/-- **The lower half of the sandwich, in the Loewner order**: `0 ≤ (A - lam)⁻¹`. -/
-theorem resolvent_nonneg_of_lowerFormBound (hA : IsSelfAdjoint A) {β lam : ℝ}
+/-- **The lower half of the sandwich, in the Loewner order**: `0 ≤ -R(lam)`, i.e.
+`0 ≤ (A - lam)⁻¹`. -/
+theorem neg_resolvent_nonneg_of_lowerFormBound (hA : IsSelfAdjoint A) {β lam : ℝ}
     (hlt : lam < β)
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re)
     (hlam : (lam : ℂ) ∈ resolventSet A) :
-    (0 : E →L[ℂ] E) ≤ resolvent A hlam :=
+    (0 : E →L[ℂ] E) ≤ -resolvent A (lam : ℂ) :=
   (_root_.ContinuousLinearMap.nonneg_iff_isPositive _).mpr
-    (isPositive_resolvent_of_lowerFormBound hA hlt hform hlam)
+    (isPositive_neg_resolvent_of_lowerFormBound hA hlt hform hlam)
 
-/-- The difference `(β - lam)⁻¹ • 1 - (A - lam)⁻¹` is a positive operator.  This
-is the content of the upper bound; `resolvent_le_smul_one_of_lowerFormBound`
+/-- The difference `(β - lam)⁻¹ • 1 - (-R(lam))` is a positive operator.  This
+is the content of the upper bound; `neg_resolvent_le_smul_one_of_lowerFormBound`
 reads it as an order relation, and the conjugated corollary consumes it in this
 form. -/
-theorem isPositive_smul_one_sub_resolvent_of_lowerFormBound (hA : IsSelfAdjoint A)
+theorem isPositive_smul_one_sub_neg_resolvent_of_lowerFormBound (hA : IsSelfAdjoint A)
     {β lam : ℝ} (hlt : lam < β)
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re)
     (hlam : (lam : ℂ) ∈ resolventSet A) :
-    ((((β - lam)⁻¹ : ℝ) : ℂ) • (1 : E →L[ℂ] E) - resolvent A hlam).IsPositive :=
+    ((((β - lam)⁻¹ : ℝ) : ℂ) • (1 : E →L[ℂ] E) - -resolvent A (lam : ℂ)).IsPositive :=
   TauCeti.ContinuousLinearMap.isPositive_smul_one_sub_of_upperFormBoundOn_top
-    ((isSelfAdjoint_resolvent_ofReal hA hlam).isSymmetric)
-    (upperFormBoundOn_resolvent_of_lowerFormBound hlt hform hlam)
+    ((isSelfAdjoint_resolvent_ofReal hA hlam).neg.isSymmetric)
+    (upperFormBoundOn_neg_resolvent_of_lowerFormBound hlt hform hlam)
 
 /-- **The Loewner-order resolvent sandwich, upper half.**
 
-`(A - lam)⁻¹ ≤ (β - lam)⁻¹ • 1` whenever `A` is self-adjoint with form lower
+`-R(lam) = (A - lam)⁻¹ ≤ (β - lam)⁻¹ • 1` whenever `A` is self-adjoint with form lower
 bound `β` and `lam < β` is a resolvent point.  Together with
-`resolvent_nonneg_of_lowerFormBound` this is the statement
+`neg_resolvent_nonneg_of_lowerFormBound` this is the statement
 
 ```text
-0 ≤ (A - lam)⁻¹ ≤ (β - lam)⁻¹ • 1 .
+0 ≤ -R(lam) = (A - lam)⁻¹ ≤ (β - lam)⁻¹ • 1 .
 ```
 
 An operator-norm estimate does not substitute for this: the consumer needs the
 order relation, which is what survives conjugation. -/
-theorem resolvent_le_smul_one_of_lowerFormBound (hA : IsSelfAdjoint A) {β lam : ℝ}
+theorem neg_resolvent_le_smul_one_of_lowerFormBound (hA : IsSelfAdjoint A) {β lam : ℝ}
     (hlt : lam < β)
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re)
     (hlam : (lam : ℂ) ∈ resolventSet A) :
-    resolvent A hlam ≤ (((β - lam)⁻¹ : ℝ) : ℂ) • (1 : E →L[ℂ] E) :=
+    -resolvent A (lam : ℂ) ≤ (((β - lam)⁻¹ : ℝ) : ℂ) • (1 : E →L[ℂ] E) :=
   TauCeti.ContinuousLinearMap.le_smul_one_of_upperFormBoundOn_top
-    ((isSelfAdjoint_resolvent_ofReal hA hlam).isSymmetric)
-    (upperFormBoundOn_resolvent_of_lowerFormBound hlt hform hlam)
+    ((isSelfAdjoint_resolvent_ofReal hA hlam).neg.isSymmetric)
+    (upperFormBoundOn_neg_resolvent_of_lowerFormBound hlt hform hlam)
 
 /-- **The sandwich, both halves at once.**  Stated so a consumer can name one
 theorem, and with the resolvent point obtained from the hypotheses rather than
 assumed, so the statement cannot be vacuous. -/
-theorem resolvent_sandwich_of_lowerFormBound (hA : IsSelfAdjoint A) {β lam : ℝ}
+theorem neg_resolvent_sandwich_of_lowerFormBound (hA : IsSelfAdjoint A) {β lam : ℝ}
     (hlt : lam < β)
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re) :
     (0 : E →L[ℂ] E)
-        ≤ resolvent A (mem_resolventSet_of_lowerFormBound hA hlt hform) ∧
-      resolvent A (mem_resolventSet_of_lowerFormBound hA hlt hform)
+        ≤ -resolvent A (lam : ℂ) ∧
+      -resolvent A (lam : ℂ)
         ≤ (((β - lam)⁻¹ : ℝ) : ℂ) • (1 : E →L[ℂ] E) :=
-  ⟨resolvent_nonneg_of_lowerFormBound hA hlt hform _,
-    resolvent_le_smul_one_of_lowerFormBound hA hlt hform _⟩
+  ⟨neg_resolvent_nonneg_of_lowerFormBound hA hlt hform
+      (mem_resolventSet_of_lowerFormBound hA hlt hform),
+    neg_resolvent_le_smul_one_of_lowerFormBound hA hlt hform
+      (mem_resolventSet_of_lowerFormBound hA hlt hform)⟩
 
 end Order
 
@@ -461,34 +477,34 @@ section Conjugate
 variable [CompleteSpace E]
 variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-/-- **The conjugated sandwich, lower half**: `0 ≤ B⋆ (A - lam)⁻¹ B`. -/
-theorem adjoint_conj_resolvent_nonneg_of_lowerFormBound (hA : IsSelfAdjoint A)
+/-- **The conjugated sandwich, lower half**: `0 ≤ -B⋆ R(lam) B`. -/
+theorem adjoint_conj_neg_resolvent_nonneg_of_lowerFormBound (hA : IsSelfAdjoint A)
     {β lam : ℝ} (hlt : lam < β)
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re)
     (hlam : (lam : ℂ) ∈ resolventSet A) (B : F →L[ℂ] E) :
     (0 : F →L[ℂ] F)
-      ≤ ContinuousLinearMap.adjoint B ∘L resolvent A hlam ∘L B :=
+      ≤ ContinuousLinearMap.adjoint B ∘L (-resolvent A (lam : ℂ)) ∘L B :=
   (_root_.ContinuousLinearMap.nonneg_iff_isPositive _).mpr
-    ((isPositive_resolvent_of_lowerFormBound hA hlt hform hlam).adjoint_conj B)
+    ((isPositive_neg_resolvent_of_lowerFormBound hA hlt hform hlam).adjoint_conj B)
 
 /-- **The conjugated sandwich, upper half**:
-`B⋆ (A - lam)⁻¹ B ≤ (β - lam)⁻¹ • B⋆ B`.
+`-B⋆ R(lam) B ≤ (β - lam)⁻¹ • B⋆ B`.
 
 This is one application of `ContinuousLinearMap.IsPositive.adjoint_conj` to the
 difference `(β - lam)⁻¹ • 1 - (A - lam)⁻¹`, after identifying
 `B⋆ ((β - lam)⁻¹ • 1) B` with `(β - lam)⁻¹ • (B⋆ B)`. -/
-theorem adjoint_conj_resolvent_le_of_lowerFormBound (hA : IsSelfAdjoint A)
+theorem adjoint_conj_neg_resolvent_le_of_lowerFormBound (hA : IsSelfAdjoint A)
     {β lam : ℝ} (hlt : lam < β)
     (hform : ∀ x : A.domain, β * ‖(x : E)‖ ^ 2 ≤ (⟪A x, (x : E)⟫_ℂ).re)
     (hlam : (lam : ℂ) ∈ resolventSet A) (B : F →L[ℂ] E) :
-    ContinuousLinearMap.adjoint B ∘L resolvent A hlam ∘L B
+    ContinuousLinearMap.adjoint B ∘L (-resolvent A (lam : ℂ)) ∘L B
       ≤ (((β - lam)⁻¹ : ℝ) : ℂ) • (ContinuousLinearMap.adjoint B ∘L B) := by
   have hpos :=
-    (isPositive_smul_one_sub_resolvent_of_lowerFormBound hA hlt hform hlam).adjoint_conj B
+    (isPositive_smul_one_sub_neg_resolvent_of_lowerFormBound hA hlt hform hlam).adjoint_conj B
   have hexp : ContinuousLinearMap.adjoint B
-        ∘L ((((β - lam)⁻¹ : ℝ) : ℂ) • (1 : E →L[ℂ] E) - resolvent A hlam) ∘L B
+        ∘L ((((β - lam)⁻¹ : ℝ) : ℂ) • (1 : E →L[ℂ] E) - (-resolvent A (lam : ℂ))) ∘L B
       = (((β - lam)⁻¹ : ℝ) : ℂ) • (ContinuousLinearMap.adjoint B ∘L B)
-        - ContinuousLinearMap.adjoint B ∘L resolvent A hlam ∘L B := by
+        - ContinuousLinearMap.adjoint B ∘L (-resolvent A (lam : ℂ)) ∘L B := by
     ext u
     simp only [ContinuousLinearMap.comp_apply, _root_.sub_apply, _root_.smul_apply,
       _root_.one_apply_eq_self, map_sub, map_smul]
@@ -526,18 +542,16 @@ theorem lowerFormBound_of_spectrum_subset_Ici (hA : IsSelfAdjoint A) {β : ℝ}
   exact absurd (Set.mem_Ici.mp hl') (not_le.mpr (Set.mem_Iio.mp hl))
 
 /-- **The sandwich under the spectral hypothesis.**  The same statement as
-`resolvent_sandwich_of_lowerFormBound`, with `spectrum A ⊆ [β, ∞)` in place of
+`neg_resolvent_sandwich_of_lowerFormBound`, with `spectrum A ⊆ [β, ∞)` in place of
 the form bound. -/
-theorem resolvent_sandwich_of_spectrum_subset_Ici (hA : IsSelfAdjoint A)
+theorem neg_resolvent_sandwich_of_spectrum_subset_Ici (hA : IsSelfAdjoint A)
     {β lam : ℝ} (hlt : lam < β)
     (hσ : spectrum A ⊆ (RCLike.ofReal (K := ℂ) '' Set.Ici β)) :
     (0 : E →L[ℂ] E)
-        ≤ resolvent A (mem_resolventSet_of_lowerFormBound hA hlt
-            (lowerFormBound_of_spectrum_subset_Ici hA hσ)) ∧
-      resolvent A (mem_resolventSet_of_lowerFormBound hA hlt
-          (lowerFormBound_of_spectrum_subset_Ici hA hσ))
+        ≤ -resolvent A (lam : ℂ) ∧
+      -resolvent A (lam : ℂ)
         ≤ (((β - lam)⁻¹ : ℝ) : ℂ) • (1 : E →L[ℂ] E) :=
-  resolvent_sandwich_of_lowerFormBound hA hlt
+  neg_resolvent_sandwich_of_lowerFormBound hA hlt
     (lowerFormBound_of_spectrum_subset_Ici hA hσ)
 
 end Spectral

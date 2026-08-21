@@ -66,8 +66,22 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
     ∃ R : H →L[ℂ] H, ‖R‖ ≤ s⁻¹ ∧
       (∀ ψ : A.domain, R (A ψ - (c : ℂ) • (ψ : H)) = (ψ : H)) ∧
       ∀ φ : H, ∃ hmem : R φ ∈ A.domain,
-        A ⟨R φ, hmem⟩ - (c : ℂ) • R φ = φ :=
-  TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs hgap
+        A ⟨R φ, hmem⟩ - (c : ℂ) • R φ = φ := by
+  -- The upstream theorem inverts `c • I - A`; the Davis--Kahan statement is about `A - c`,
+  -- so the witness is the negated resolvent.  The norm bound is unaffected.
+  obtain ⟨R, hnorm, hleft, hright⟩ :=
+    TauCeti.LinearPMap.exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap hA hs hgap
+  refine ⟨-R, by simpa using hnorm, fun ψ => ?_, fun φ => ?_⟩
+  · have h := hleft ψ
+    have harg : A ψ - (c : ℂ) • (ψ : H) = -((c : ℂ) • (ψ : H) - A ψ) := by module
+    rw [_root_.neg_apply, harg, map_neg, h, neg_neg]
+  · obtain ⟨hmem, hsolve⟩ := hright φ
+    refine ⟨neg_mem hmem, ?_⟩
+    have hneg : A (⟨(-R) φ, neg_mem hmem⟩ : A.domain) = -(A ⟨R φ, hmem⟩) :=
+      _root_.LinearPMap.map_neg A ⟨R φ, hmem⟩
+    rw [hneg]
+    simp only [_root_.neg_apply]
+    linear_combination (norm := module) hsolve
 
 /-- **Genuine spectra discharge the shifted-inverse hypothesis.**  For a DK
 closed operator whose canonical `LinearPMap` view is self-adjoint and whose

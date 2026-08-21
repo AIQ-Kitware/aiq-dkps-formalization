@@ -10,6 +10,7 @@ Adapted from: Spectra (https://github.com/adambornemann-glitch/Spectra),
 -/
 module
 
+public import ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded
 public import Mathlib.Analysis.Normed.Module.Basic
 public import Mathlib.Analysis.RCLike.Basic
 public import Mathlib.Analysis.Normed.Operator.ContinuousLinearMap
@@ -18,11 +19,16 @@ public import Mathlib.Topology.Algebra.Module.LinearPMap
 /-!
 # Resolvent set and spectrum of an unbounded operator
 
-For a partially defined operator `A : E →ₗ.[𝕜] E`, the **resolvent set** is the
-set of `z : 𝕜` for which `A - z` has a two-sided *bounded* inverse: a
-`R : E →L[𝕜] E` that inverts `A - z` on `dom A` and solves `(A - z) x = φ` for
-every `φ`, with the solution landing back in `dom A`.  The **spectrum** is its
-complement.
+For a partially defined operator `A : E →ₗ.[𝕜] E`, the **resolvent set**
+`TauCeti.LinearPMap.resolventSet` is the set of `z : 𝕜` for which `z • I - A`
+has a two-sided *bounded* inverse.  It is defined in
+`ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded`, which is the
+canonical home of the resolvent core; this file adds the **spectrum**, its
+complement, which that core does not define.
+
+The set does not depend on the convention: `A - z` is invertible exactly when
+`z • I - A` is, the two inverses differing by a sign.  Only the *resolvent
+operator* is convention-sensitive, and this file does not define one.
 
 Mathlib's `spectrum R a` is defined for an element of an algebra, via
 `¬IsUnit (algebraMap R A z - a)`.  A `LinearPMap` is not an algebra element —
@@ -34,15 +40,10 @@ can be read side by side.
 
 ## Main definitions
 
-* `TauCeti.LinearPMap.resolventSet`: the `z` admitting a bounded two-sided
-  inverse of `A - z`.
 * `TauCeti.LinearPMap.spectrum`: the complement of the resolvent set.
 
 ## Main results
 
-* `TauCeti.LinearPMap.resolvent_unique`: the bounded inverse, when it exists, is
-  unique.  It is a genuine inverse, not merely a one-sided one, and the
-  right-inverse condition pins it on all of `E`.
 * the `mem_spectrum_iff` / `notMem_spectrum_iff` complement dictionary.
 
 ## Provenance
@@ -57,9 +58,16 @@ can be read side by side.
   `LICENSE`).  Apache 2.0 §4(b): **the definitions below are modified** — see
   "Semantic differences".  Apache 2.0 §4(c): the notices above are retained here
   and in the file header.
-* **Extraction class:** *adapted*.  The predicate defining `resolventSet` is
-  Spectra's, essentially verbatim; the surrounding API is new and the codomain of
-  `spectrum` is changed.
+* **Extraction class:** *adapted*.  The surrounding API is new and the codomain
+  of `spectrum` is changed.
+* **Note on scope.**  The `resolventSet` predicate that this file used to define
+  (following Spectra, in the `A - z` convention) has been **removed**: the
+  canonical `TauCeti.LinearPMap.resolventSet` now lives in
+  `ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded`, in the `z • I - A`
+  convention that agrees with Mathlib's Banach-algebra `resolventSet`.  The two
+  predicates define the same set.  What remains here, and what this provenance
+  record covers, is the **spectrum** machinery, which the canonical core does not
+  provide.
 * **Semantic differences from the donor:**
   1. **`spectrum` returns `Set 𝕜`, not `Set ℝ`.**  Spectra defines
      `spectrum (A : H →ₗ.[ℂ] H) : Set ℝ := {lam | (lam : ℂ) ∉ resolventSet A}`,
@@ -90,16 +98,6 @@ namespace LinearPMap
 variable {𝕜 : Type*} [NontriviallyNormedField 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [NormedSpace 𝕜 E]
 
-/-- The **resolvent set** of `A`: those `z` for which `A - z` admits a two-sided
-bounded inverse `R : E →L[𝕜] E` — a left inverse on `dom A`, and a right inverse
-on all of `E` whose values land back in `dom A`. -/
-@[expose]
-def resolventSet (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
-  { z | ∃ R : E →L[𝕜] E,
-      (∀ ψ : A.domain, R (A ψ - z • (ψ : E)) = (ψ : E)) ∧
-      (∀ φ : E, ∃ h : R φ ∈ A.domain, A ⟨R φ, h⟩ - z • R φ = φ) }
-
-
 /-- The **spectrum** of `A`: the complement of the resolvent set.
 
 Unlike Spectra's `Set ℝ` version this makes no self-adjointness assumption; for a
@@ -109,14 +107,6 @@ part of the definition. -/
 def spectrum (A : E →ₗ.[𝕜] E) : Set 𝕜 :=
   (resolventSet A)ᶜ
 
-/-- Unfolds membership in the resolvent set: `z` is a resolvent point exactly when `A - z` has a
-bounded two-sided inverse. -/
-theorem mem_resolventSet_iff {A : E →ₗ.[𝕜] E} {z : 𝕜} :
-    z ∈ resolventSet A ↔
-      ∃ R : E →L[𝕜] E,
-        (∀ ψ : A.domain, R (A ψ - z • (ψ : E)) = (ψ : E)) ∧
-        (∀ φ : E, ∃ h : R φ ∈ A.domain, A ⟨R φ, h⟩ - z • R φ = φ) :=
-  (Iff.rfl)
 /-- Unfolds membership in the spectrum: `z` is spectral exactly when `A - z` fails to have a
 bounded two-sided inverse. -/
 @[simp]
@@ -178,22 +168,6 @@ theorem subset_ofReal_image_of_forall {A : E' →ₗ.[𝕜'] E'} {s : Set ℝ}
   exact ⟨x, h x hz, rfl⟩
 
 end RealInclusion
-
-/-- **The bounded inverse witnessing membership in the resolvent set is unique.**
-
-The right-inverse clause says `R` hits every `φ : E`, so the left-inverse clause
-determines `R` everywhere: apply it to the preimage `R φ`. -/
-theorem resolvent_unique {A : E →ₗ.[𝕜] E} {z : 𝕜} {R S : E →L[𝕜] E}
-    (hR : (∀ ψ : A.domain, R (A ψ - z • (ψ : E)) = (ψ : E)) ∧
-      (∀ φ : E, ∃ h : R φ ∈ A.domain, A ⟨R φ, h⟩ - z • R φ = φ))
-    (hS : ∀ ψ : A.domain, S (A ψ - z • (ψ : E)) = (ψ : E)) :
-    R = S := by
-  ext φ
-  obtain ⟨hmem, hsolve⟩ := hR.2 φ
-  have hRφ : R (A ⟨R φ, hmem⟩ - z • R φ) = R φ := hR.1 ⟨R φ, hmem⟩
-  have hSφ : S (A ⟨R φ, hmem⟩ - z • R φ) = R φ := hS ⟨R φ, hmem⟩
-  rw [hsolve] at hRφ hSφ
-  rw [hSφ, hRφ]
 
 end LinearPMap
 end TauCeti

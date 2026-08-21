@@ -106,28 +106,13 @@ theorem mem_resolventSet_toPMap_top_iff
     (A : H →L[ℂ] H) (z : ℂ) :
     z ∈ TauCeti.LinearPMap.resolventSet ((A : H →ₗ[ℂ] H).toPMap ⊤) ↔
       IsUnit (A - z • (1 : H →L[ℂ] H)) := by
-  constructor
-  · rintro ⟨R, hleft, hright⟩
-    refine ⟨⟨A - z • (1 : H →L[ℂ] H), R, ?_, ?_⟩, rfl⟩
-    · apply ContinuousLinearMap.ext
-      intro φ
-      obtain ⟨h, hφ⟩ := hright φ
-      exact hφ
-    · apply ContinuousLinearMap.ext
-      intro x
-      exact hleft ⟨x, Submodule.mem_top⟩
-  · rintro ⟨u, hu⟩
-    have hval : (u : H →L[ℂ] H) = A - z • (1 : H →L[ℂ] H) := hu
-    refine ⟨↑u⁻¹, ?_, ?_⟩
-    · intro ψ
-      have hinv : (↑u⁻¹ : H →L[ℂ] H) * (A - z • (1 : H →L[ℂ] H)) = 1 := by
-        rw [← hval]; exact u.inv_mul
-      exact ContinuousLinearMap.ext_iff.mp hinv (ψ : H)
-    · intro φ
-      refine ⟨Submodule.mem_top, ?_⟩
-      have hinv : (A - z • (1 : H →L[ℂ] H)) * (↑u⁻¹ : H →L[ℂ] H) = 1 := by
-        rw [← hval]; exact u.mul_inv
-      exact ContinuousLinearMap.ext_iff.mp hinv φ
+  -- The canonical resolvent core already provides the bounded bridge, to Mathlib's
+  -- `resolventSet`, i.e. to `IsUnit (z • 1 - A)`.  This statement is the `A - z`
+  -- orientation, which differs from it by a sign, and `IsUnit` is sign-blind.
+  rw [TauCeti.LinearPMap.mem_resolventSet_toPMap_top_iff, spectrum.mem_resolventSet_iff,
+    Algebra.algebraMap_eq_smul_one,
+    show z • (1 : H →L[ℂ] H) - A = -(A - z • (1 : H →L[ℂ] H)) by abel,
+    IsUnit.neg_iff]
 
 omit [CompleteSpace H] in
 /-- The real spectrum of the bounded map agrees with the `LinearPMap` spectrum

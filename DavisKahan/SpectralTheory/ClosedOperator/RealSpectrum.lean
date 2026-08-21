@@ -28,23 +28,71 @@ variable {E : Type v}
 
 omit [CompleteSpace E] in
 /-- Membership in the closed-operator real resolvent is exactly membership of
-the real scalar in the Spectra resolvent. -/
+the real scalar in the canonical resolvent set.
+
+The two predicates invert opposite shifts — `realResolventSet` asks for a bounded
+two-sided inverse of `A - lam`, while `TauCeti.LinearPMap.resolventSet` asks for one of
+`lam • I - A` — so they are *not* definitionally equal, and this was a `rfl` only while the
+resolvent core used the `A - z` convention.  They do describe the same set: the two shifts
+differ by a sign, and negating a bounded two-sided inverse gives a bounded two-sided inverse
+of the negated map.  That negation is the whole content of the proof. -/
 theorem mem_realResolventSet_iff_mem_spectraResolvent
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
     (lam : ℝ) :
     lam ∈ A.realResolventSet ↔
       (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A.toLinearPMap := by
-  rfl
+  rw [TauCeti.LinearPMap.mem_realResolventSet_iff, TauCeti.LinearPMap.mem_resolventSet_iff]
+  constructor
+  · rintro ⟨R, hleft, hright⟩
+    refine ⟨-R, fun y => neg_mem (hright y).choose, fun y => ?_, fun x => ?_⟩
+    · have h := (hright y).choose_spec
+      have hneg : A.toLinearPMap
+            (⟨(-R) y, neg_mem (hright y).choose⟩ : A.toLinearPMap.domain)
+          = -(A.toLinearPMap ⟨R y, (hright y).choose⟩) :=
+        _root_.LinearPMap.map_neg A.toLinearPMap ⟨R y, (hright y).choose⟩
+      rw [hneg]
+      simp only [_root_.neg_apply]
+      linear_combination (norm := module) h
+    · have h := hleft x
+      have harg : (lam : ℂ) • (x : E) - A.toLinearPMap x
+          = -(A.toLinearPMap x - (lam : ℂ) • (x : E)) := by module
+      simp only [_root_.neg_apply, harg, map_neg, neg_neg]
+      exact h
+  · rintro ⟨R, hR⟩
+    refine ⟨-R, fun x => ?_, fun y => ?_⟩
+    · -- the scalar is abstracted so that the `RCLike` coercion of `realResolventSet` and the
+      -- `ℂ` coercion of `IsResolventAt`, which are defeq but not syntactically equal, unify
+      have hstep : ∀ c : ℂ, R (c • (x : E) - A.toLinearPMap x) = (x : E) →
+          (-R) (A.toLinearPMap x - c • (x : E)) = (x : E) := by
+        intro c hc
+        have harg : A.toLinearPMap x - c • (x : E)
+            = -(c • (x : E) - A.toLinearPMap x) := by module
+        rw [_root_.neg_apply, harg, map_neg, hc, neg_neg]
+      exact hstep _ (hR.apply_smul_sub x)
+    · refine ⟨neg_mem (hR.mem_domain y), ?_⟩
+      have h := hR.smul_sub_apply y
+      have hneg : A.toLinearPMap
+            (⟨(-R) y, neg_mem (hR.mem_domain y)⟩ : A.toLinearPMap.domain)
+          = -(A.toLinearPMap ⟨R y, hR.mem_domain y⟩) :=
+        _root_.LinearPMap.map_neg A.toLinearPMap ⟨R y, hR.mem_domain y⟩
+      rw [hneg]
+      simp only [_root_.neg_apply]
+      linear_combination (norm := module) h
 
 omit [CompleteSpace E] in
-/-- The generic closed-operator real spectrum agrees with the genuine Spectra
-spectrum after specializing the scalar field to `ℂ`. -/
+/-- The generic closed-operator real spectrum agrees with the genuine spectrum
+after specializing the scalar field to `ℂ`.
+
+Complementation of `mem_realResolventSet_iff_mem_spectraResolvent`; like it, this was a
+`rfl` only under the `A - z` convention. -/
 theorem realSpectrum_eq_spectraSpectrum
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)) :
     A.realSpectrum
       = Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap := by
   ext lam
-  rfl
+  rw [Set.mem_preimage, TauCeti.LinearPMap.mem_spectrum_iff,
+    TauCeti.LinearPMap.mem_realSpectrum_iff,
+    mem_realResolventSet_iff_mem_spectraResolvent A lam]
 
 /-! ## The spectrum of a self-adjoint operator is real
 

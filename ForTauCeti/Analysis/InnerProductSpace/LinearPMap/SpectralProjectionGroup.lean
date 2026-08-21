@@ -55,11 +55,13 @@ is a linear combination of two resolvents. -/
 theorem specProjection_comm_yosidaApproxSym (n : ℕ+) :
     Commute (specProjection hA B hB) (yosidaApproximantSym hA n) := by
   have h1 : Commute (specProjection hA B hB) (resolventAtIn hA n) :=
-    specProjection_comm_resolvent' hA (I_mul_pnat_im_ne_zero n) _ B hB
+    specProjection_comm_resolvent' hA (I_mul_pnat_im_ne_zero n)
+      (mem_resolventSet_of_im_ne_zero hA (I_mul_pnat_im_ne_zero n)) B hB
   have h2 : Commute (specProjection hA B hB) (resolventAtNegIn hA n) :=
-    specProjection_comm_resolvent' hA (neg_I_mul_pnat_im_ne_zero n) _ B hB
+    specProjection_comm_resolvent' hA (neg_I_mul_pnat_im_ne_zero n)
+      (mem_resolventSet_of_im_ne_zero hA (neg_I_mul_pnat_im_ne_zero n)) B hB
   rw [yosidaApproximantSym]
-  exact (h1.add_right h2).smul_right ((n : ℂ) ^ 2 / 2)
+  exact (h1.add_right h2).smul_right (-((n : ℂ) ^ 2 / 2))
 
 /-- A spectral projection commutes with each bounded exponential approximant. -/
 theorem specProjection_comm_expApprox (n : ℕ+) (t : ℝ) :

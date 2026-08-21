@@ -118,9 +118,22 @@ theorem mem_resolventSet_of_lower_bound (hA : IsSelfAdjoint A)
     intro y
     have hyK : y ∈ K := hKtop ▸ Submodule.mem_top
     exact hyK
-  -- the algebraic inverse, made bounded by the same estimate
-  set e : A.domain ≃ₗ[ℂ] E := LinearEquiv.ofBijective (shiftMap A z) ⟨hinj, hsurj⟩ with he
-  have heapp : ∀ x : A.domain, e x = A x - z • (x : E) := fun x => rfl
+  -- the algebraic inverse, made bounded by the same estimate.  The canonical resolvent
+  -- inverts `z • I - A`, which is `-(shiftMap A z)`; negation preserves bijectivity.
+  set sm : A.domain →ₗ[ℂ] E := -(shiftMap A z) with hsm
+  have hsmapp : ∀ x : A.domain, sm x = z • (x : E) - A x := by
+    intro x
+    rw [hsm]
+    simp only [LinearMap.neg_apply, shiftMap_apply]
+    module
+  have hinj' : Function.Injective sm :=
+    fun a b hab => hinj (neg_injective (by simpa [hsm] using hab))
+  have hsurj' : Function.Surjective sm := by
+    intro y
+    obtain ⟨x, hx⟩ := hsurj (-y)
+    exact ⟨x, by rw [hsm]; simp [hx]⟩
+  set e : A.domain ≃ₗ[ℂ] E := LinearEquiv.ofBijective sm ⟨hinj', hsurj'⟩ with he
+  have heapp : ∀ x : A.domain, e x = z • (x : E) - A x := hsmapp
   -- Stated in exactly the shape `LinearMap.mkContinuous` expects below.  The `Subtype.val`
   -- form is only definitionally that shape, and the resulting `mkContinuous` term is then
   -- not type-correct at `implicit` transparency, which stops `simp` from firing on it.
@@ -129,23 +142,26 @@ theorem mem_resolventSet_of_lower_bound (hA : IsSelfAdjoint A)
     intro φ
     change ‖((e.symm φ : A.domain) : E)‖ ≤ c⁻¹ * ‖φ‖
     have h := hbd (e.symm φ)
-    rw [show A (e.symm φ) - z • ((e.symm φ : A.domain) : E) = e (e.symm φ) from
-      (heapp _).symm, e.apply_symm_apply] at h
+    have hflip : A (e.symm φ) - z • ((e.symm φ : A.domain) : E) = -φ := by
+      have h0 := e.apply_symm_apply φ
+      rw [heapp] at h0
+      linear_combination (norm := module) -h0
+    rw [hflip, norm_neg] at h
     rw [inv_mul_eq_div, le_div_iff₀ hc, mul_comm]
     exact h
-  refine ⟨LinearMap.mkContinuous
-    ((A.domain.subtype).comp (e.symm : E →ₗ[ℂ] A.domain)) c⁻¹ hinvbd, ?_, ?_⟩
+  refine mem_resolventSet_iff.mpr ⟨LinearMap.mkContinuous
+    ((A.domain.subtype).comp (e.symm : E →ₗ[ℂ] A.domain)) c⁻¹ hinvbd,
+    fun φ => (e.symm φ).2, ?_, ?_⟩
+  · intro φ
+    have h := e.apply_symm_apply φ
+    rw [heapp] at h
+    exact h
   · intro ψ
-    have hsym : e ψ = A ψ - z • (ψ : E) := heapp ψ
+    have hsym : e ψ = z • (ψ : E) - A ψ := heapp ψ
     simp only [LinearMap.mkContinuous_apply, LinearMap.coe_comp, Function.comp_apply,
       Submodule.coe_subtype]
     rw [← hsym]
     exact congrArg Subtype.val (e.symm_apply_apply ψ)
-  · intro φ
-    refine ⟨(e.symm φ).2, ?_⟩
-    have h := e.apply_symm_apply φ
-    rw [heapp] at h
-    exact h
 
 end LinearPMap
 end TauCeti
