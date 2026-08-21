@@ -10,6 +10,13 @@ Use concrete nouns and verbs. Give the theorem, construction, counterexample, fo
 
 Keep the main text focused on the scientific claims. Put exact file paths, Lean declaration inventories, registry mechanics, generator details, and audit bookkeeping in the appendices.
 
+
+## Structure the opening around motivation, Lean, and results
+
+Use the Introduction to establish the mathematical importance of Davis--Kahan and YWS, give concise dated citation counts, and explain why the population-gap formulation is useful. Introduce Lean 4 and Mathlib before explaining what formalization means in this project. Then motivate the source audit, reusable foundational development, and resource study, followed by the contribution list.
+
+Use the next section to state the formalization coverage prominently and exhibit the central source theorems beside their Lean signatures. State the complete Davis--Kahan coverage and the narrower YWS coverage directly; put the detailed counting rule and full source correspondence in the referenced appendix.
+
 ## Organize around mathematical claims
 
 Lead sections with the mathematical question or result. Let the source theorems provide the organizational spine of the exposition.
@@ -22,13 +29,15 @@ For theorem-to-Lean comparisons:
 4. explain only the Lean predicates whose mathematical meaning is not evident from the signature;
 5. continue with the mathematical interpretation or consequence.
 
+Define each mathematical symbol once, at its first mathematical occurrence. Treat nearby prose, equations, and captions as one continuous explanation: when a symbol or relation has already been defined, refer to it without defining it again. Use the caption to explain genuinely new Lean-specific names or encodings needed to connect the signature to the mathematics.
+
 Keep the short general guide to Lean syntax in the appendix. Refer readers there before the first displayed Lean signature. Around each theorem, explain only the mathematical meaning specific to that theorem.
 
 The Davis--Kahan and YWS coverage claims should be stated at the strongest scope supported by the source audit. Define detailed denominators and correspondence rules in the appendix.
 
 ## Explain Lean in mathematical language
 
-Call a displayed declaration **code** or a **Lean signature**. Describe bundled predicates by the mathematical assumptions they encode. For example, explain that a predicate supplies an exact spectral decomposition or a residual relation.
+Number displayed theorem signatures as **Formalization 1**, **Formalization 2**, and so on. In prose, call the displayed declaration **code** or a **Lean signature**. Define theorem-specific mathematical names at first use, then carry those definitions through the surrounding prose, equation, signature, and caption without repetition. Define new domain-specific Lean names when they first appear; keep general Lean notation such as linear-map arrows, index types, typeclass syntax, and implementation abstractions in the appendix guide.
 
 Captions should say that surrounding Lean context is omitted when appropriate and should help a reader map the important arguments and hypotheses to the mathematical statement.
 
@@ -62,7 +71,7 @@ When referring readers to supplementary material, use an explicit section or app
 
 ## Report resource use in layers
 
-Separate directly observed telemetry from quantities inferred with a model and from project-scale extrapolations.
+Separate directly observed telemetry from quantities inferred with a model and from project-scale extrapolations. Name the extrapolation model explicitly; for the current resource analysis, describe the project-scale calculation as a simple linear extrapolation and state its formula.
 
 Use **lower bound** in the header and caption of every table containing incomplete observed telemetry so a skim reader cannot mistake those values for project totals. State the fraction of the project represented by the observations using transparent denominators such as commit coverage and cumulative Lean-line churn.
 

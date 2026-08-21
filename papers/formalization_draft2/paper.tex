@@ -77,9 +77,9 @@
     {∈}{{$\in$}}1
     {∑}{{$\sum$}}1
 }
-\crefname{lstlisting}{code}{code}
-\Crefname{lstlisting}{Code}{Code}
-\renewcommand{\lstlistingname}{Code}
+\crefname{lstlisting}{formalization}{formalizations}
+\Crefname{lstlisting}{Formalization}{Formalizations}
+\renewcommand{\lstlistingname}{Formalization}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{proposition}[theorem]{Proposition}
@@ -128,26 +128,71 @@ The retained records contain at least \LedgerTurnsScientific{} model turns,
 \LedgerOutputTokensScientific{} output tokens, and
 \LedgerBillableInputTokensScientific{} tokens in the billable-input accounting
 measure.  Exact commit-attributed measurements cover \ExactMeasuredCommitShare{}
-of the primary-repository commits and \ExactMeasuredLeanLineChurnShare{} of
-cumulative Lean source-line changes, providing two transparent scales for rough
-project-level extrapolation.
+of the primary-repository commits.  A direct Git-churn proxy covers
+\ExactMeasuredLeanLineChurnShare{} of cumulative Lean source-line changes, and
+an adjustment for known non-LLM line changes gives
+\AdjustedExactMeasuredLeanLineChurnShare{}.
 \end{abstract}
+
+\input{snapshots/openalex_bibliometrics_macros.tex}
+
+% Manually populated from Google Scholar on the same date as the OpenAlex observation.
+\newcommand{\GoogleScholarDavisKahanCitations}{2086}
+\newcommand{\GoogleScholarYuWangSamworthCitations}{1067}
 
 \section{Introduction}
 \label{sec:introduction}
 
-The Davis--Kahan sine-theta theorem is a standard tool for turning perturbations
-of a symmetric operator into perturbation bounds for eigenspaces
-\citep{davis1970rotation,chen2021spectral}.  In statistics, the variant of
-\citet{yu2015davis} is especially useful because its separation condition uses a
-population eigengap and its conclusions include aligned-frame and
-singular-subspace bounds suited to estimation problems.
+The Davis--Kahan sine-theta theorem is a standard tool for converting
+perturbations of a self-adjoint operator into perturbation bounds for its
+spectral subspaces \citep{davis1970rotation,chen2021spectral}.  In statistics,
+the variant of \citet{yu2015davis} is widely used because its separation
+condition depends only on the population spectrum and its conclusions include
+aligned-frame and singular-subspace bounds suited to estimation problems.  On 17 August 2026, OpenAlex recorded
+\OpenAlexDavisKahanCitations{} and \OpenAlexYuWangSamworthCitations{} citing works
+for Davis--Kahan and YWS, respectively, while Google Scholar recorded
+\GoogleScholarDavisKahanCitations{} and \GoogleScholarYuWangSamworthCitations{}
+citations.
 
-Our formalization covers the complete set of mathematical results established in
-the Davis--Kahan paper and the theorem-level claims of YWS Theorems~1--3.  At
-this scope, the proofs require a broad layer of spectral geometry and operator
-theory that was not available in the Lean libraries we used.  Formal comparison
-with the sources also exposed errors in both papers.
+The population-gap formulation in YWS is especially useful in statistical
+arguments.  If $\Sigma$ is a population matrix and $\widehat\Sigma$ is a random
+estimator, a gap defined from the spectrum of $\Sigma$ is fixed by the model,
+while a gap involving $\widehat\Sigma$ is random and requires an additional
+probabilistic argument.  YWS Theorem~2 converts a bound on
+$\widehat\Sigma-\Sigma$ directly into an eigenspace bound under a population gap.
+This yields the common pattern
+\[
+  \text{population separation}
+  \;+\;
+  \text{matrix-estimation error}
+  \quad\Longrightarrow\quad
+  \text{eigenspace-estimation error}.
+\]
+
+\paragraph{Lean and formalization.}
+Lean 4 is an interactive theorem prover based on dependent type theory
+\citep{demoura2021lean4}.  Mathematical definitions, theorem statements, and
+proofs are represented as typed expressions that are checked by Lean's kernel;
+Mathlib supplies a large shared library of formalized mathematics
+\citep{mathlib2020}.  In this work, formalizing a source theorem means encoding
+its mathematical objects and hypotheses in Lean and constructing a proof of the
+corresponding proposition at the scope asserted by the source.  The formalization
+was developed with LLM assistance through the ChatGPT chat interface, Claude
+Code, and Codex, with repeated comparison of the Lean statements against the
+papers.  Appendix~\ref{app:formalization-process} describes the process.
+
+Davis--Kahan and YWS provide useful targets for this kind of formalization for
+two related reasons.  First, translating the papers into checked statements and
+proofs provides a detailed audit of hypotheses, boundary conventions, and
+intermediate identities; in this project that process exposed errors in both
+sources.  Second, the published results rely on a broad layer of projection
+geometry, principal angles, singular-subspace comparison, unitarily invariant
+norms, spectral calculus, real/complex transfer, direct rotations, operator
+angles, and Sylvester equations.  Formalizing the papers therefore required
+building reusable mathematical infrastructure beyond the final perturbation
+inequalities.  We also retained lower-bound LLM resource measurements so that
+the computational scale of the formalization, and possible improvements in AI
+formalization workflows, can be studied quantitatively.
 
 \paragraph{Contributions.}
 \begin{enumerate}
@@ -172,86 +217,25 @@ with the sources also exposed errors in both papers.
         extrapolations.
 \end{enumerate}
 
-\section{Why Formalize Davis--Kahan and YWS?}
-\label{sec:why}
+\section{Main Results in Mathematics and Lean}
+\label{sec:main-results}
 
-\subsection{Statistical importance}
+\textbf{We formalize every one of the \FormalizationDKResultCount{} mathematical
+results established in the Davis--Kahan paper.}  Twenty-eight are proved at the
+scope asserted by Davis and Kahan; Proposition~4.4 is false as printed, and we
+formalize both its refutation and a repaired result.  We also
+formalize the theorem-level claims of YWS Theorems~1--3, including both
+conclusions of Theorem~2 and the right-, left-, and aligned-frame conclusions of
+Theorem~3.
 
-\input{snapshots/openalex_bibliometrics_macros.tex}
-
-% Manually populated.
-\newcommand{\GoogleScholarRetrievedDate}{17 August 2026}
-\newcommand{\GoogleScholarDavisKahanCitations}{2086}
-\newcommand{\GoogleScholarYuWangSamworthCitations}{1067}
-
-\paragraph{Use and continued relevance.}
-Both results remain widely used.  A dated OpenAlex snapshot keyed by the
-articles' DOIs records \OpenAlexDavisKahanCitations{} citing works for
-Davis--Kahan \citep{davis1970rotation} and
-\OpenAlexYuWangSamworthCitations{} for Yu, Wang, and Samworth
-\citep{yu2015davis} as of \OpenAlexRetrievedDate{}.  As an independent
-bibliographic cross-check, Google Scholar reported
-\GoogleScholarDavisKahanCitations{} and \GoogleScholarYuWangSamworthCitations{}
-citations, respectively, on \GoogleScholarRetrievedDate{}.
-
-\paragraph{Population-gap formulation in statistics.}
-Yu, Wang, and Samworth change little notation while changing how the
-perturbation bound enters a statistical argument.  In a typical application, $\Sigma$ is a population
-matrix determined by the statistical model, while $\widehat{\Sigma}$ is a
-random estimator.  Consequently, the population eigengap
-\[
-  \Delta
-  =
-  \min\{
-    \lambda_{r-1}(\Sigma)-\lambda_r(\Sigma),
-    \lambda_s(\Sigma)-\lambda_{s+1}(\Sigma)
-  \}
-\]
-is a deterministic property of the model, whereas gaps involving eigenvalues
-of $\widehat{\Sigma}$ are themselves random quantities.  A perturbation theorem
-whose separation hypothesis mixes the population and sample spectra therefore
-creates an additional probabilistic obligation: before using the eigenspace
-bound, one must first prove that the random sample eigenvalues remain suitably
-separated.
-
-Theorem~2 of Yu, Wang, and Samworth removes that intermediate dependence.  Once
-a population gap $\Delta>0$ is assumed, a bound on
-$\widehat{\Sigma}-\Sigma$ can be converted directly into a bound on the
-estimated eigenspace.  This gives the modular form routinely needed in
-statistical arguments:
-\[
-  \text{population separation}
-  \;+\;
-  \text{stochastic matrix-estimation error}
-  \quad\Longrightarrow\quad
-  \text{eigenspace-estimation error}.
-\]
-The denominator is supplied by assumptions on the population model, while
-  concentration or random-matrix arguments control the numerator.
-Introducing a sample-eigengap assumption would change the statistical content
-even if the resulting perturbation theorem were valid.  The displayed YWS theorem also depends on a
-broader collection of spectral, geometric, and operator-theoretic foundations;
-\cref{sec:foundations} summarizes those foundations and their formalization
-provenance.
-
-\subsection{Reusable mathematical foundations}
-
-The source theorems require much more than their final perturbation inequalities.
-At their published breadth they draw on projection geometry, principal angles,
-singular-subspace comparison, unitarily invariant norms, spectral calculus,
-real/complex transfer, direct rotations, and Sylvester equations.  Formalizing
-these prerequisites produced reusable mathematical infrastructure whose scope
-extends beyond the two source papers; \cref{sec:foundations} describes the main
-theory developed for this purpose.
+This section exhibits the central perturbation statements beside their Lean
+signatures.  The examples show how the mathematical hypotheses and conclusions
+are represented without reproducing the full formal development.  The complete
+source correspondence and the precise coverage conventions are given in
+Appendix~\ref{app:source-coverage}.
 
 \subsection{The Davis--Kahan Sine Theta Theorem in Lean}
 \label{sec:dk-headline}
-
-The sine-theta theorem below is representative of the
-\FormalizationDKResultCount{} Davis--Kahan results formalized in this work.  For
-each result we retain the scalar field, dimensional assumptions, bounded or
-unbounded operator setting, and norm class asserted by the source.  The complete
-correspondence is given in Appendix~\ref{app:source-coverage}.
 
 The first headline result in Section~2 of \citet{davis1970rotation} is the
 sine-theta theorem.  In the paper's coordinate setup, let $E_0$ parameterize a
@@ -278,18 +262,20 @@ every unitarily invariant norm
 \end{equation}
 The source states this in the real/complex, infinite-dimensional setting and
 allows the relevant self-adjoint operators to be unbounded when the residual is
-bounded.  The Lean signature retains that scope.  Readers unfamiliar with Lean
-syntax can consult Appendix~\ref{app:reading-lean} for a short guide to the signatures
-shown here.
+bounded.  The Lean signature retains that scope.  In \Cref{lst:dk-sintheta-headline},
+$\Bbbk$ is the real or complex scalar field.  The types $E,F,G,H$ are complete
+Hilbert spaces over $\Bbbk$: $E$ is the ambient space, while $F,H,G$ carry the
+trial, exact, and complementary exact coordinates, respectively.  The symbol
+$N$ names the unitarily invariant norm, and the two square-bracketed assumptions
+provide the min--max and unbounded Sylvester estimates used by the proof.
+Appendix~\ref{app:reading-lean} summarizes the general Lean notation used in the
+formalizations.
 
 \begin{lstlisting}[style=leanpaper,
-  caption={Lean signature for the Davis--Kahan sine-theta theorem.  The predicate
-  \texttt{IsTrialResidual} packages the residual identity
-  $R=AE_0-E_0A_0$ with its domain conditions; \texttt{IsExactSpectralDecomposition}
-  records the exact spectral subspace, its orthogonal complement, and
-  $AF_1=F_1\Lambda_1$; \texttt{N.Mem R} records membership in the norm ideal on
-  which \texttt{N.gauge} evaluates the unitarily invariant norm.  Surrounding
-  Lean context is omitted.},
+  caption={Lean signature for the Davis--Kahan sine-theta theorem.
+  \texttt{IsTrialResidual} supplies the residual-domain conditions,
+  \texttt{IsExactSpectralDecomposition} supplies the exact-subspace conditions,
+  and \texttt{N.Mem R} states that the residual belongs to the norm ideal.},
   label={lst:dk-sintheta-headline}]
 theorem sinTheta_headline
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} \KField]
@@ -325,70 +311,41 @@ theorem sinTheta_headline
     δ * N.gauge sinTheta₀ ≤ N.gauge R := by
 \end{lstlisting}
 
-\Cref{lst:dk-sintheta-headline} formalizes \cref{eq:dk-sintheta-headline}.
-Its equality hypothesis identifies the sine-angle operator with
-$(I-F_0F_0^*)E_0$, while the bundled residual and spectral hypotheses include the
-domain conditions required for unbounded operators.  The signature also makes
-norm-ideal membership explicit.
-
-\section{Yu--Wang--Samworth in Lean}
-\label{sec:yws}
-
-We formalize the theorem-level claims of YWS Theorems~1--3, including both
-conclusions of Theorem~2 and the right-, left-, and aligned-frame forms of
-Theorem~3, together with the supporting arguments needed for those results.  The
-precise source coverage is given in Appendix~\ref{app:source-coverage}.
-
-\subsection{The population-gap theorem}
-
-Let $\Sigma,\widehat\Sigma\in\mathbb{R}^{p\times p}$ be symmetric, with
-population eigenvalues $\lambda_1\geq\cdots\geq\lambda_p$.  For
-$1\leq r\leq s\leq p$, let $d=s-r+1$ and let $V,\widehat V\in\mathbb{R}^{p\times d}$
-contain orthonormal eigenvectors at the ordered indices $r,\ldots,s$.  Define
+The central statistical result of YWS, Theorem~2, has two conclusions.  For the
+next two subsections, let $\Sigma,\widehat\Sigma\in\mathbb{R}^{p\times p}$ be
+symmetric, with population eigenvalues
+$\lambda_1\geq\cdots\geq\lambda_p$.  For $1\leq r\leq s\leq p$, set
+$d=s-r+1$ and let $V,\widehat V\in\mathbb{R}^{p\times d}$ contain orthonormal
+eigenvectors at the ordered indices $r,\ldots,s$.  Define
 \[
   \Delta=
   \min\{\lambda_{r-1}-\lambda_r,\lambda_s-\lambda_{s+1}\},
   \qquad
   \lambda_0=+\infty,\quad \lambda_{p+1}=-\infty.
 \]
-The main contribution of \citet{yu2015davis}, Theorem~2, states that if
-$\Delta>0$, then
+Only the population spectrum enters $\Delta$, so the sample eigenframe may be
+chosen arbitrarily inside a repeated sample eigenspace.
+
+\subsection{Yu--Wang--Samworth sine-angle bound}
+\label{sec:yws-sintheta}
+
+The first conclusion of YWS Theorem~2 states that, when $\Delta>0$,
 \begin{equation}
   \lVert\sin\Theta(\widehat V,V)\rVert_{\mathrm F}
   \leq
   \frac{2\min\{\sqrt d\,\lVert\widehat\Sigma-\Sigma\rVert_{\mathrm{op}},
                     \lVert\widehat\Sigma-\Sigma\rVert_{\mathrm F}\}}
-       {\Delta},
+       {\Delta}.
   \label{eq:yws-sintheta}
 \end{equation}
-and there exists $\widehat O\in O(d)$ such that
-\begin{equation}
-  \lVert\widehat V\widehat O-V\rVert_{\mathrm F}
-  \leq
-  \frac{2^{3/2}\min\{\sqrt d\,\lVert\widehat\Sigma-\Sigma\rVert_{\mathrm{op}},
-                         \lVert\widehat\Sigma-\Sigma\rVert_{\mathrm F}\}}
-       {\Delta}.
-  \label{eq:yws-aligned}
-\end{equation}
-Only the population spectrum enters $\Delta$; the supplied sample eigenframe may
-therefore be chosen arbitrarily inside a repeated sample eigenspace.
-
-The Lean signature in \cref{lst:yws-theorem2-sintheta} uses the same consecutive
-eigenvector block as the paper.  Each frame is represented by an ordered
-orthonormal eigenvector family, while a bundled hypothesis encodes the two
-population boundary gaps and the endpoint convention.  The left-hand side is
-the Frobenius norm of the sine principal angles between the two spanned
-subspaces.
+In \Cref{lst:yws-theorem2-sintheta}, \texttt{IsEigenvectorBlock} packages the
+ordered orthonormal eigenvector conditions, \texttt{SourcePopulationGap}
+encodes the population-gap condition, and \texttt{hSinThetaNorm} identifies the
+auxiliary scalar \texttt{sinThetaNorm} with the left side of
+\cref{eq:yws-sintheta}.
 
 \begin{lstlisting}[style=leanpaper,
-  caption={Lean signature for the first conclusion of YWS Theorem 2.
-  \texttt{Sigma} and \texttt{SigmaHat} are the population and perturbed symmetric
-  operators; \texttt{V} and \texttt{Vhat} are their ordered eigenvector blocks.
-  \texttt{IsEigenvectorBlock} certifies the corresponding orthonormal
-  eigenvector relations, \texttt{SourcePopulationGap} encodes the population
-  gap $\Delta$, and \texttt{hSinThetaNorm} identifies \texttt{sinThetaNorm} with
-  the Frobenius sine-angle quantity in \cref{eq:yws-sintheta}.  Surrounding Lean
-  context is omitted.},
+  caption={Lean signature for the sine-angle conclusion (2) of YWS Theorem 2.},
   label={lst:yws-theorem2-sintheta}]
 theorem theorem2_sinTheta
     {p d r s : Nat}
@@ -412,20 +369,61 @@ theorem theorem2_sinTheta
         ‖SigmaHat - Sigma‖_F / Delta := by
 \end{lstlisting}
 
-\subsection{Aligned frames and rectangular singular subspaces}
+\subsection{Yu--Wang--Samworth aligned-frame bound}
+\label{sec:yws-aligned}
 
-The second conclusion of YWS Theorem~2 gives the aligned-frame bound in
-\cref{eq:yws-aligned}, with an orthogonal alignment matrix in $O(d)$.  The
-companion Lean signature retains that existential orthogonality condition and
-the expanded Frobenius distance; it is given in
-Appendix~\ref{app:yws-aligned-signature}.
+The second conclusion of YWS Theorem~2 states that there exists an orthogonal
+matrix $\widehat O\in O(d)$ such that
+\begin{equation}
+  \lVert\widehat V\widehat O-V\rVert_{\mathrm F}
+  \leq
+  \frac{2\sqrt{2}\,\min\{\sqrt d\,\lVert\widehat\Sigma-\Sigma\rVert_{\mathrm{op}},
+                         \lVert\widehat\Sigma-\Sigma\rVert_{\mathrm F}\}}
+       {\Delta}.
+  \label{eq:yws-aligned}
+\end{equation}
+\Cref{lst:yws-theorem2-aligned} uses the same hypotheses as
+\cref{lst:yws-theorem2-sintheta}; its conclusion constructs the alignment in
+\cref{eq:yws-aligned} and proves the stated Frobenius bound.
 
-The rectangular singular-subspace theorem is derived from the symmetric theory
-through the two Gram operators.  Self-adjoint spectral perturbation is applied
-to those operators, after which the aligned spectral frames are transported to
-the left and right singular spaces.  The reusable Gram, singular-value, and
-frame-transport results belong to the singular-subspace theory summarized in
-\cref{tab:formalized-theories}.
+\begin{lstlisting}[style=leanpaper,
+  caption={Lean signature for the aligned-frame conclusion (3) of YWS Theorem 2.},
+  label={lst:yws-theorem2-aligned}]
+theorem theorem2_alignedFrame
+    {p d r s : Nat}
+    (Sigma SigmaHat :
+      EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
+    (hSigma : Sigma.IsSymmetric) (hSigmaHat : SigmaHat.IsSymmetric)
+    (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
+    (V Vhat : Fin d → EuclideanSpace Real (Fin p))
+    (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
+    (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
+    (Delta : Real) (hDelta : 0 < Delta)
+    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
+    ∃ O : Matrix (Fin d) (Fin d) Real,
+      O ∈ Matrix.orthogonalGroup (Fin d) Real ∧
+        Real.sqrt (∑ i, ‖(∑ j, O j i • Vhat j) - V i‖ ^ 2) ≤
+          2 * Real.sqrt 2 *
+            min
+              (Real.sqrt d * ‖SigmaHat - Sigma‖_op)
+              ‖SigmaHat - Sigma‖_F / Delta := by
+\end{lstlisting}
+
+\subsection{Yu--Wang--Samworth rectangular extension}
+\label{sec:yws-rectangular}
+
+YWS Theorem~3 extends the same population-gap principle to singular subspaces of
+rectangular matrices.  For $D=\widehat A-A$ and a block of $d$ consecutive
+singular values, the right-singular-subspace bound has numerator
+\[
+  2(2\sigma_1+\lVert D\rVert_{\mathrm{op}})
+  \min\{\sqrt d\,\lVert D\rVert_{\mathrm{op}},\lVert D\rVert_{\mathrm F}\},
+\]
+and denominator given by the corresponding population gap between squared
+singular values; the same bound holds for left singular subspaces, with an
+aligned-frame conclusion as well.  The formal proof follows the argument in the
+paper through the Gram operators $A^*A$ and $AA^*$.  The boundary convention in
+the printed theorem requires the correction described in \cref{sec:audit}.
 
 \section{Formalization as Source Audit}
 \label{sec:audit}
@@ -524,8 +522,7 @@ $\Delta>0$ satisfying
 \right\},
 \]
 with the singular values interpreted at the appropriate ambient dimension.
-For the example above, the lower boundary is therefore the genuine Gram
-eigenvalue gap
+For the example above, the lower boundary is therefore the Gram eigenvalue gap
 \[
 \sigma_1^2-\sigma_2^2=1-0=1,
 \]
@@ -638,12 +635,13 @@ full dependency analysis are given in Appendix~\ref{app:source-coverage}.
 Instrumentation began after formalization was underway, so the observed totals
 are lower bounds.  Exact commit-attributed measurements cover
 \ExactMeasuredCommitCount{} of \HistoryCommitCount{} primary-repository commits
-(\ExactMeasuredCommitShare{}) and \ExactMeasuredLeanLineChurnShare{} of cumulative
-Lean source-line insertions and deletions.  The retained measurements contain at
-least \LedgerTurns{} model turns, \LedgerOutputTokens{} output tokens, and
+(\ExactMeasuredCommitShare{}).  The same commits account for
+\ExactMeasuredLeanLineChurnShare{} of raw cumulative Lean source-line changes.
+Adjusting the text proxy for known non-LLM line changes gives
+\AdjustedExactMeasuredLeanLineChurnShare{} coverage.  The retained measurements
+contain at least \LedgerTurns{} model turns, \LedgerOutputTokens{} output tokens, and
 \LedgerBillableInputTokens{} tokens in the billable-input accounting measure.
-The measurement boundary and model-resolved totals are described in
-Appendix~\ref{app:accounting}.
+Appendix~\ref{app:accounting} gives the adjustment and the model-resolved totals.
 
 Converting the observed token usage to operational energy requires assumptions
 about serving throughput, hardware power, cache work, per-turn overhead, and
@@ -652,20 +650,23 @@ observed lower-bound usage corresponds to \ModeledOperationalEnergy{}; a separat
 per-token calculation gives \PerTokenCrossCheckEnergy{}.  Provider energy meter readings are unavailable, so these values are
 order-of-magnitude operational estimates \citep{crall2026llmresource}.
 
-To indicate plausible project scale, we also extrapolate the exact
-primary-repository subset using the two coverage fractions.  Scaling by commit
-coverage gives \CommitScaledOperationalEnergy{} and scaling by cumulative Lean
-line changes gives \LeanChurnScaledOperationalEnergy{} under the same serving
-model.
+To indicate plausible project scale, we use a simple linear extrapolation model.
+For an observed quantity $q$ measured over coverage fraction $c$, the model
+estimates the corresponding project total as $q/c$.  Applying it to the exact
+primary-repository subset gives \CommitScaledOperationalEnergy{} from commit
+coverage and \AdjustedLeanChurnScaledOperationalEnergy{} from adjusted
+formalization-text coverage under the same serving model.
 
 \begin{table}[H]
 \centering
 \small
 \input{snapshots/resource_coverage_extrapolation_table.tex}
-\caption{Observed lower bounds and two rough project-scale extrapolations.  The
-observed column uses retained telemetry.  The other columns scale the exact
-primary-repository subset by commit coverage or cumulative Lean-line-change
-coverage.  All energy values use the same central serving assumptions.}
+\caption{Observed lower bounds and two rough linear project-scale
+extrapolations.  The observed column uses retained telemetry.  The extrapolated
+columns apply $q/c$ to the exact primary-repository subset using commit coverage
+or the adjusted Lean-line-change coverage defined in
+Appendix~\ref{app:accounting}.  All energy values use the same central serving
+assumptions.}
 \label{tab:resource-extrapolation}
 \end{table}
 
@@ -695,6 +696,23 @@ formalization and the resource demands of long-running mathematical agents have
 also been studied directly \citep{collins2026humanai,anthropic2026zeta}.  The
 resource record in \cref{sec:process-study} provides a historical baseline for
 comparing such workflow choices on parts of this formalization.
+
+\section{Remarks}
+\label{sec:remarks}
+
+At the outset, the authors carrying out the formalization had effectively no
+prior experience with formal theorem proving.  The primary author had also not
+studied most of the spectral and operator theory used here beyond basic linear
+algebra and set theory.  AI assistance supported both learning the necessary
+mathematics and constructing the Lean development.
+
+Formalization itself became part of that learning process: making hypotheses,
+definitions, and proof obligations explicit provided a structured way to study
+unfamiliar material.  By repeatedly comparing the Lean statements with the
+source papers, reviewing them with humans and other models, and checking the
+proofs in Lean, we learned enough to evaluate the correspondence with
+confidence.  The scale of the resulting formalization is striking given that
+starting point.
 
 \section{Conclusion}
 \label{sec:conclusion}
@@ -740,44 +758,31 @@ that provide ambient algebraic or analytic structure.  The proposition after
 the final colon is the theorem's conclusion; the term after \texttt{:=} is its
 proof \citep{demoura2021lean4}.
 
+\paragraph{Notation used in the displayed formalizations.}
+The scalar type $\Bbbk$ in \Cref{lst:dk-sintheta-headline} is constrained by
+\texttt{RCLike}, the Mathlib abstraction covering $\mathbb R$ and $\mathbb C$.
+The notation \texttt{Fin n} is an $n$-element index type, and \texttt{Nat} and
+\texttt{Real} are the natural and real numbers.  In Lean, a type of the form
+\lstinline[style=leanpaper]!F →L[\KField] E! is a continuous linear map and
+\lstinline[style=leanpaper]!E →ₗ[\KField] E! is a linear map.
+\texttt{ClosedOperator} is a possibly unbounded closed linear operator;
+\texttt{.IsSelfAdjoint} asserts self-adjointness; \texttt{.adjoint} is the
+adjoint; and \lstinline[style=leanpaper]!F₀ ∘L F₀.adjoint! denotes composition
+with an adjoint continuous linear map.  In the YWS formalizations,
+\texttt{EuclideanSpace Real (Fin p)} is $\mathbb R^p$,
+\texttt{Matrix (Fin d) (Fin d) Real} is a real $d\times d$ matrix,
+\texttt{Matrix.orthogonalGroup} is $O(d)$, \texttt{\ensuremath{\bullet}} is
+scalar multiplication, and \texttt{\ensuremath{\sum}} is finite summation.
+For the Davis--Kahan norm, \texttt{N : UnitaryInvariantNorm} specifies the norm,
+\texttt{N.Mem T} asserts that $T$ lies in its norm ideal, and \texttt{N.gauge T}
+is its value on $T$.  Standard logical and set symbols retain their usual
+mathematical meanings.
+
 Lean treats proofs of the same proposition as definitionally equal.  Thus a
 hypothesis contributes the fact that its proposition holds, without creating a
 mathematical distinction between different proof terms.  This proof-irrelevance
 principle is also why later theorems can use a proved proposition without
 depending on the internal form of its proof \citep{demoura2021lean4}.
-
-\section{Supplementary YWS declaration}
-\label{app:yws-aligned-signature}
-
-The second conclusion of YWS Theorem~2 aligns the estimated and population
-frames by an orthogonal matrix.
-
-\begin{lstlisting}[style=leanpaper,
-  caption={Lean signature for the aligned-frame conclusion of YWS Theorem 2.
-  The predicate \texttt{IsEigenvectorBlock} has the same meaning as in
-  \cref{lst:yws-theorem2-sintheta}; the conclusion produces an orthogonal matrix
-  and the corresponding Frobenius alignment bound.  Surrounding Lean context is
-  omitted.},
-  label={lst:yws-theorem2-aligned}]
-theorem theorem2_alignedFrame
-    {p d r s : Nat}
-    (Sigma SigmaHat :
-      EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
-    (hSigma : Sigma.IsSymmetric) (hSigmaHat : SigmaHat.IsSymmetric)
-    (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
-    (V Vhat : Fin d → EuclideanSpace Real (Fin p))
-    (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
-    (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
-    (Delta : Real) (hDelta : 0 < Delta)
-    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
-    ∃ O : Matrix (Fin d) (Fin d) Real,
-      O ∈ Matrix.orthogonalGroup (Fin d) Real ∧
-        Real.sqrt (∑ i, ‖(∑ j, O j i • Vhat j) - V i‖ ^ 2) ≤
-          2 * Real.sqrt 2 *
-            min
-              (Real.sqrt d * ‖SigmaHat - Sigma‖_op)
-              ‖SigmaHat - Sigma‖_F / Delta := by
-\end{lstlisting}
 
 \input{appendix_process.tex}
 
