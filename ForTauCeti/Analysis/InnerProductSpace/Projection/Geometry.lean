@@ -86,7 +86,7 @@ theorem Orthonormal.starProjection_span_image_apply {ι : Type*} {w : ι → F}
       have hj' : j ∈ s := by exact_mod_cast hj
       rw [inner_sub_left, sum_inner, Finset.sum_congr rfl (fun i _ => by
         rw [inner_smul_left, orthonormal_iff_ite.mp hw i j, mul_ite, mul_one, mul_zero])]
-      rw [Finset.sum_ite_eq' s j fun i => (starRingEnd 𝕜) ⟪w i, x⟫_𝕜, if_pos hj',
+      rw [Finset.sum_ite_eq' s j fun i => (starRingEnd 𝕜) ⟪w i, x⟫_𝕜, ite_eq_left hj',
         inner_conj_symm, sub_self]
     | zero => simp
     | add a b _ _ ha hb => rw [inner_add_right, ha, hb, add_zero]
@@ -204,8 +204,8 @@ theorem sum_norm_sub_starProjection_span_sq_eq (u v : OrthonormalBasis (Fin m) �
       rw [sub_zero, hQnorm k]
   -- Sum the per-`k` formula and swap the two cross blocks into each other.
   rw [Finset.sum_congr rfl fun k _ => hterm k, ← Finset.sum_add_sum_compl s]
-  rw [Finset.sum_congr rfl fun k (hk : k ∈ s) => if_pos hk,
-    Finset.sum_congr rfl fun k (hk : k ∈ sᶜ) => if_neg (Finset.mem_compl.mp hk)]
+  rw [Finset.sum_congr rfl fun k (hk : k ∈ s) => ite_eq_left hk,
+    Finset.sum_congr rfl fun k (hk : k ∈ sᶜ) => ite_eq_right (Finset.mem_compl.mp hk)]
   -- First block is the target cross sum (after swapping the inner-product slots).
   have hswap : ∀ (i j : Fin m), ‖⟪v j, u i⟫_𝕜‖ = ‖⟪u i, v j⟫_𝕜‖ := fun i j =>
     norm_inner_symm (v j) (u i)

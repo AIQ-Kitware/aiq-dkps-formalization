@@ -182,7 +182,7 @@ theorem norm_sub_truncDiagOpLp_le (c : ℕ → 𝕜) (N : ℕ) {K : ℝ} (hK : 0
     rw [hsub, hrhs]
     by_cases h : i < N
     · simp [h, mul_nonneg hε (norm_nonneg _)]
-    · rw [if_neg h, sub_zero, norm_mul]
+    · rw [ite_eq_right h, sub_zero, norm_mul]
       exact mul_le_mul_of_nonneg_right (htail i (Nat.le_of_not_lt h)) (norm_nonneg _)
   calc ‖(diagOpLp c hK hc - truncDiagOpLp c N hK hc) x‖
       ≤ ‖((ε : 𝕜) • x : lp (fun _ : ℕ => 𝕜) 2)‖ := lp.norm_mono (by norm_num) key

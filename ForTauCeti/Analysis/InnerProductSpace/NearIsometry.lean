@@ -262,8 +262,8 @@ private theorem inner_map_eigenvectorBasis {M : E →ₗ[ℝ] E} {d : ℕ}
     rw [Module.End.mul_apply, LinearMap.adjoint_inner_left]
   rw [hadj, hGbasis j, real_inner_smul_left]
   by_cases hjk : j = k
-  · subst hjk; rw [hunit j, if_pos rfl, mul_one]
-  · rw [b.inner_eq_zero hjk, if_neg hjk, mul_zero]
+  · subst hjk; rw [hunit j, ite_eq_left rfl, mul_one]
+  · rw [b.inner_eq_zero hjk, ite_eq_right hjk, mul_zero]
 
 /-- Rescaling the eigenbasis images by `(√ μ k)⁻¹` turns the Gram matrix of `M` into the
 identity: a map sending `b k` to `(√ μ k)⁻¹ • M (b k)` preserves the inner products *between
@@ -281,13 +281,13 @@ private theorem inner_basis_of_smul_inv_sqrt {M W : E →ₗ[ℝ] E} {d : ℕ}
     inner_map_eigenvectorBasis b μ hunit hGbasis]
   by_cases hjk : j = k
   · subst hjk
-    rw [if_pos rfl, hunit j]
+    rw [ite_eq_left rfl, hunit j]
     have hsj : 0 < Real.sqrt (μ j) := Real.sqrt_pos.mpr (hμpos j)
     have hsqj : Real.sqrt (μ j) * Real.sqrt (μ j) = μ j :=
       Real.mul_self_sqrt (le_of_lt (hμpos j))
     field_simp
     exact (Real.sq_sqrt (le_of_lt (hμpos j))).symm
-  · rw [if_neg hjk, b.inner_eq_zero hjk, mul_zero, mul_zero]
+  · rw [ite_eq_right hjk, b.inner_eq_zero hjk, mul_zero, mul_zero]
 
 /-- An eigenvalue of the Gram operator `Mᵀ ∘ M` at a **unit** eigenvector lies within `δ` of `1`.
 

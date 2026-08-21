@@ -298,14 +298,14 @@ theorem basisTruncation_apply_basis {ι : Type*} [DecidableEq ι] (b : HilbertBa
   classical
   rw [basisTruncation_apply]
   by_cases hj : j ∈ s
-  · rw [if_pos hj, Finset.sum_eq_single j]
-    · rw [orthonormal_iff_ite.mp b.orthonormal, if_pos rfl, one_smul]
+  · rw [ite_eq_left hj, Finset.sum_eq_single j]
+    · rw [orthonormal_iff_ite.mp b.orthonormal, ite_eq_left rfl, one_smul]
     · intro i _ hij
-      rw [orthonormal_iff_ite.mp b.orthonormal, if_neg hij, zero_smul]
+      rw [orthonormal_iff_ite.mp b.orthonormal, ite_eq_right hij, zero_smul]
     · intro h; exact absurd hj h
-  · rw [if_neg hj, Finset.sum_eq_zero]
+  · rw [ite_eq_right hj, Finset.sum_eq_zero]
     intro i hi
-    rw [orthonormal_iff_ite.mp b.orthonormal, if_neg (by rintro rfl; exact hj hi), zero_smul]
+    rw [orthonormal_iff_ite.mp b.orthonormal, ite_eq_right (by rintro rfl; exact hj hi), zero_smul]
 
 
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace 𝕜' H] [CompleteSpace H]

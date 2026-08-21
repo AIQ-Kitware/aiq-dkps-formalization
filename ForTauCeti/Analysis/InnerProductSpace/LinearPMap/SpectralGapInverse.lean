@@ -89,7 +89,7 @@ theorem coord_mul_gapSymbol {δ : ℝ} {s : ℝ} (hs : δ ≤ |s|) (hδ : 0 < δ
   have hs0 : (s : ℂ) ≠ 0 := by
     have : (0 : ℝ) < |s| := lt_of_lt_of_le hδ hs
     exact_mod_cast abs_pos.mp this
-  rw [gapSymbol, if_pos hs, mul_inv_cancel₀ hs0]
+  rw [gapSymbol, ite_eq_left hs, mul_inv_cancel₀ hs0]
 
 end GapSymbol
 
@@ -245,7 +245,7 @@ theorem coord_mul_gapSymbolCayley {δ : ℝ} (hδ : 0 < δ) (w : _root_.spectrum
   · have hmem : δ ≤ |cayleyInv hA w| := hw
     rw [Set.indicator_of_mem hw, gapSymbolCayley, coord_mul_gapSymbol hmem hδ]
   · have hnot : ¬ δ ≤ |cayleyInv hA w| := hw
-    rw [Set.indicator_of_notMem hw, gapSymbolCayley, gapSymbol, if_neg hnot, mul_zero]
+    rw [Set.indicator_of_notMem hw, gapSymbolCayley, gapSymbol, ite_eq_right hnot, mul_zero]
 
 /-- **Inversion across a vector spectral gap.**  If the diagonal measure of `ξ`
 avoids `(-δ, δ)` then `ξ` is in the range of `A`, and the preimage

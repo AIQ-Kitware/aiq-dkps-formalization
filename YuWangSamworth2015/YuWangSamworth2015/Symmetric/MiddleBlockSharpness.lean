@@ -324,7 +324,7 @@ theorem internalGap_middleSharpness (hdp : 2 * d ≤ p) :
       restrictedSpectrum_basisDiagonal_subset b _ _ hlam
     simp only [Set.mem_ofPred_eq] at hi
     simp only [middleSharpnessPopulationData]
-    rw [if_neg (by omega), if_pos (by omega)]
+    rw [ite_eq_right (by omega), ite_eq_left (by omega)]
   have hout : μ = 5 ∨ μ = 1 := by
     rw [OrthonormalBasis.orthogonal_spanIndices] at hμ
     obtain ⟨i, hi, rfl⟩ :=
@@ -332,8 +332,8 @@ theorem internalGap_middleSharpness (hdp : 2 * d ≤ p) :
     simp only [Set.mem_compl_iff, Set.mem_ofPred_eq] at hi
     simp only [middleSharpnessPopulationData]
     by_cases h1 : (i : ℕ) < p - 2 * d
-    · exact Or.inl (by rw [if_pos h1])
-    · exact Or.inr (by rw [if_neg h1, if_neg (by omega)])
+    · exact Or.inl (by rw [ite_eq_left h1])
+    · exact Or.inr (by rw [ite_eq_right h1, ite_eq_right (by omega)])
   rw [h3]
   rcases hout with h | h <;> rw [h] <;> norm_num
 
@@ -352,7 +352,8 @@ theorem opNorm_middleSharpness_perturbation (hε : 0 < ε) (hd : 1 ≤ d)
       abs_le]
     split_ifs <;> constructor <;> linarith
   · simp only [Pi.sub_apply, middleSharpnessSampleData, middleSharpnessPopulationData]
-    rw [if_neg (by omega), if_neg (by omega), if_neg (by omega), if_neg (by omega)]
+    rw [ite_eq_right (by omega), ite_eq_right (by omega), ite_eq_right (by omega),
+      ite_eq_right (by omega)]
     rw [show (2 + ε) - 1 = 1 + ε by ring, abs_of_pos (by linarith)]
 
 /-! ## The achieved distances -/

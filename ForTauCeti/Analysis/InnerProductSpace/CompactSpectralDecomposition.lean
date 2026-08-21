@@ -233,7 +233,7 @@ private theorem inner_positiveEigenspaceVector
       positiveEigenspaceVector hAc hAs μ hμ j⟫_𝕜 = if i = j then 1 else 0 := by
   classical
   unfold positiveEigenspaceVector
-  simp only [dif_pos hi, dif_pos hj]
+  simp only [dite_eq_left hi, dite_eq_left hj]
   change ⟪(positiveEigenspaceBasis hAc hAs μ hμ) ⟨i, hi⟩,
       (positiveEigenspaceBasis hAc hAs μ hμ) ⟨j, hj⟩⟫_𝕜 = _
   simpa only [Fin.mk.injEq] using orthonormal_iff_ite.mp
@@ -247,7 +247,7 @@ private theorem positiveEigenspaceVector_mem
       eigenspace A.toLinearMap ((μ : ℝ) : 𝕜) := by
   classical
   unfold positiveEigenspaceVector
-  rw [dif_pos hj]
+  rw [dite_eq_left hj]
   exact Subtype.property _
 
 private theorem norm_positiveEigenspaceVector
@@ -257,7 +257,7 @@ private theorem norm_positiveEigenspaceVector
     ‖positiveEigenspaceVector hAc hAs μ hμ j‖ = 1 := by
   classical
   unfold positiveEigenspaceVector
-  rw [dif_pos hj]
+  rw [dite_eq_left hj]
   exact (positiveEigenspaceBasis hAc hAs μ hμ).orthonormal.1 _
 
 private theorem positiveApproximation_index_lt
@@ -336,10 +336,10 @@ theorem orthonormal_positiveApproximationEigenvector
   intro n m
   by_cases hnm : n = m
   · subst m
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     exact inner_self_eq_one_of_norm_eq_one
       (norm_positiveApproximationEigenvector hAc hAs hApos n n.2)
-  · rw [if_neg hnm]
+  · rw [ite_eq_right hnm]
     let μ := A.approximationNumber n
     let ν := A.approximationNumber m
     by_cases hμν : μ = ν
@@ -378,7 +378,7 @@ theorem orthonormal_positiveApproximationEigenvector
           eigenSpan A (Set.Ioi (A.approximationNumber m)) := by rw [hμν]
       rw [hspan]
       rw [inner_positiveEigenspaceVector hAc hAs ν (by simpa only [ν] using m.2) hi hj]
-      rw [if_neg]
+      rw [ite_eq_right]
       intro heq
       have : (n : ℕ) = m := by omega
       exact hnm (Subtype.ext this)

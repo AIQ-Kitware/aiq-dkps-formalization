@@ -171,7 +171,7 @@ disjoint in the index. -/
 theorem rank_lt_rank_of_mem (S : ℕ → Set X) {x : X} {m n : ℕ} (hmn : m < n) (h : x ∈ S m) :
     rank S x m < rank S x n := by
   have hstep : rank S x m < rank S x (m + 1) := by
-    rw [rank_succ, if_pos h]
+    rw [rank_succ, ite_eq_left h]
     omega
   exact lt_of_lt_of_le hstep (rank_le_rank S x hmn)
 
@@ -187,9 +187,9 @@ theorem exists_mem_rank_eq_of_rank_eq_succ (S : ℕ → Set X) {x : X} {n k : �
   | succ n ih =>
     rw [rank_succ] at h
     by_cases hx : x ∈ S n
-    · rw [if_pos hx] at h
+    · rw [ite_eq_left hx] at h
       exact ⟨n, hx, by omega⟩
-    · rw [if_neg hx] at h
+    · rw [ite_eq_right hx] at h
       exact ih (by omega)
 
 /-- The rank is measurable, by induction on the index: each step adds the indicator of a
@@ -327,14 +327,14 @@ theorem measurable_invIdx [MeasurableSpace X] {S : ℕ → Set X} (hS : ∀ n, M
       · by_cases hn0 : n = 0
         · subst hn0
           exact invIdx_eq_zero_of_notMem fun m hm => hx (Set.mem_iUnion.mpr ⟨m, hm⟩)
-        · rw [if_neg hn0] at hx
+        · rw [ite_eq_right hn0] at hx
           exact absurd hx (Set.notMem_empty x)
   rw [hset]
   refine (measurableSet_levelPiece hS n k).union ?_
   by_cases hn0 : n = 0
-  · rw [if_pos hn0]
+  · rw [ite_eq_left hn0]
     exact (measurableSet_levelSet hS k).compl
-  · rw [if_neg hn0]
+  · rw [ite_eq_right hn0]
     exact MeasurableSet.empty
 
 /-- The fibrewise relabelling `(x, n) ↦ (x, rank S x n)`. -/

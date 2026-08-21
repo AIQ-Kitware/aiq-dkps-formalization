@@ -411,17 +411,17 @@ theorem not_spectralGeneratedLE_mulLp_datumSymbol (D : MultiplicityDatum ℂ) {S
       intro j
       by_cases hj : j = ⟨n, hn⟩
       · subst hj
-        rw [if_pos rfl]
+        rw [ite_eq_left rfl]
         exact Set.indicator_of_mem
           (show ((z, n) : ℂ × ℕ) ∈ slice ((⟨n, hn⟩ : Fin (k + 1)) : ℕ) from
             mem_slice.mpr rfl) _
-      · rw [if_neg hj]
+      · rw [ite_eq_right hj]
         refine Set.indicator_of_notMem (fun hmem => hj ?_) _
         rw [mem_slice] at hmem
         exact Fin.ext hmem.symm
     simp only [hWdef]
     rw [Finset.sum_congr rfl fun j _ => hterm j, Finset.sum_ite_eq' Finset.univ,
-      if_pos (Finset.mem_univ _)]
+      ite_eq_left (Finset.mem_univ _)]
   have hWval' : ∀ (z : ℂ) (n : ℕ), k < n → W (z, n) = 0 := by
     intro z n hn
     simp only [hWdef]

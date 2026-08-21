@@ -176,7 +176,7 @@ private theorem solveSylvester_eq_of_bijective
     solveSylvester A B C =
       (LinearEquiv.ofBijective (sylvesterOperator A B) h).symm C := by
   classical
-  simp only [solveSylvester, dif_pos h]
+  simp only [solveSylvester, dite_eq_left h]
 
 /-- The chosen solution satisfies the Sylvester equation under separation.
 

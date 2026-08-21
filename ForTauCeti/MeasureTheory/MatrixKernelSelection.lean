@@ -199,7 +199,7 @@ theorem exists_tendsto_kernel_matrix {d : ℕ} {B : Matrix (Fin d) (Fin d) ℂ}
           intro k
           rw [h0, Complex.ofReal_zero, zero_add,
             mul_inv_cancel₀ (Complex.ofReal_ne_zero.mpr (by positivity))]
-        simp only [hind, if_pos h0]
+        simp only [hind, ite_eq_left h0]
         exact Filter.Tendsto.congr (fun k => (hval k).symm) tendsto_const_nhds
       · have h1 : Filter.Tendsto (fun k : ℕ => ((((k : ℝ) + 1)⁻¹ : ℝ) : ℂ))
             Filter.atTop (nhds 0) := by
@@ -213,7 +213,7 @@ theorem exists_tendsto_kernel_matrix {d : ℕ} {B : Matrix (Fin d) (Fin d) ℂ}
           simpa using tendsto_const_nhds.add h1
         have h4 := h1.mul h3
         rw [zero_mul] at h4
-        simpa only [hind, if_neg h0] using h4
+        simpa only [hind, ite_eq_right h0] using h4
     exact Filter.Tendsto.congr (fun k => (hterm k).symm) ((hφ.tendsto ind).comp hc)
   · -- Annihilation: the eigenvalue and its kernel indicator never overlap.
     rw [hspec, hsandwich]

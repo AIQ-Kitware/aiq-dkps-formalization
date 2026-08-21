@@ -261,12 +261,12 @@ theorem familyMap_inner_map_map {v : Fin d → E} (hv : Orthonormal 𝕜 v)
   rw [familyMap_apply, familyMap_apply, sum_inner, PiLp.inner_apply]
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [inner_sum, Finset.sum_eq_single i]
-  · rw [inner_smul_left, inner_smul_right, orthonormal_iff_ite.mp hv i i, if_pos rfl, mul_one,
+  · rw [inner_smul_left, inner_smul_right, orthonormal_iff_ite.mp hv i i, ite_eq_left rfl, mul_one,
       RCLike.inner_apply]
     ring
   · intro j _ hji
-    rw [inner_smul_left, inner_smul_right, orthonormal_iff_ite.mp hv i j, if_neg (Ne.symm hji),
-      mul_zero, mul_zero]
+    rw [inner_smul_left, inner_smul_right, orthonormal_iff_ite.mp hv i j,
+      ite_eq_right (Ne.symm hji), mul_zero, mul_zero]
   · intro hi; exact absurd (Finset.mem_univ i) hi
 
 /-- The bundled coordinate isometry `EuclideanSpace 𝕜 (Fin d) →ₗᵢ[𝕜] E` of an
@@ -285,8 +285,8 @@ noncomputable def familyIsometry {v : Fin d → E} (hv : Orthonormal 𝕜 v) :
     familyIsometry hv (EuclideanSpace.single k 1) = v k := by
   rw [familyIsometry_apply]
   rw [Finset.sum_eq_single k]
-  · rw [PiLp.single_apply, if_pos rfl, one_smul]
-  · intro i _ hik; rw [PiLp.single_apply, if_neg hik, zero_smul]
+  · rw [PiLp.single_apply, ite_eq_left rfl, one_smul]
+  · intro i _ hik; rw [PiLp.single_apply, ite_eq_right hik, zero_smul]
   · intro hk; exact absurd (Finset.mem_univ k) hk
 
 end CoordinateFamily

@@ -95,16 +95,16 @@ theorem obstruction_gap {n : ℕ} (i j : Fin n) :
     1 ≤ |obstructionAlpha i - obstructionBeta j| := by
   unfold obstructionAlpha obstructionBeta
   by_cases hi : (i : ℕ) = 0 <;> by_cases hj : (j : ℕ) = 0
-  · rw [if_pos hi, if_pos hj, le_abs]
+  · rw [ite_eq_left hi, ite_eq_left hj, le_abs]
     right
     norm_num
-  · rw [if_pos hi, if_neg hj, le_abs]
+  · rw [ite_eq_left hi, ite_eq_right hj, le_abs]
     right
     norm_num
-  · rw [if_neg hi, if_pos hj, le_abs]
+  · rw [ite_eq_right hi, ite_eq_left hj, le_abs]
     left
     norm_num
-  · rw [if_neg hi, if_neg hj, le_abs]
+  · rw [ite_eq_right hi, ite_eq_right hj, le_abs]
     right
     norm_num
 

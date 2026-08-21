@@ -277,7 +277,7 @@ theorem extend_eq_iSup_cappedTruncate (Φ : SymmetricGauge) (a : ℕ → ℝ≥0
     refine (ENNReal.coe_le_coe).2 (Φ.mono (Finsupp.le_def.2 fun n => ?_))
     simp only [cappedTruncate_apply]
     by_cases hn : n < k
-    · simp only [hn, if_true]
+    · simp only [hn, ite_true]
       have hb : (b.1 n : ℝ≥0∞) ≤ min (a n) ((b.1.support.sup b.1 : ℝ≥0) : ℝ≥0∞) := by
         refine le_min (b.2 n) ?_
         by_cases hmem : n ∈ b.1.support
@@ -390,13 +390,13 @@ noncomputable def ofFin {n : ℕ} (x : Fin n → ℝ) : ℕ →₀ ℝ≥0 :=
 @[simp]
 theorem ofFin_apply {n : ℕ} (x : Fin n → ℝ) {i : ℕ} (h : i < n) :
     (ofFin x) i = Real.nnabs (x ⟨i, h⟩) := by
-  simp only [ofFin, Finsupp.onFinset_apply, h, dif_pos]
+  simp only [ofFin, Finsupp.onFinset_apply, h, dite_eq_left]
 
 /-- `ofFin` vanishes outside the range. -/
 @[simp]
 theorem ofFin_apply_of_le {n : ℕ} (x : Fin n → ℝ) {i : ℕ} (h : ¬ i < n) :
     (ofFin x) i = 0 := by
-  simp only [ofFin, Finsupp.onFinset_apply, h, dif_neg, not_false_iff]
+  simp only [ofFin, Finsupp.onFinset_apply, h, dite_eq_right, not_false_iff]
 
 /-- `ofFin` is monotone in the componentwise order on absolute values. -/
 theorem ofFin_le_ofFin {n : ℕ} {x y : Fin n → ℝ}
@@ -447,12 +447,12 @@ theorem cappedTruncate_le_ofFin {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) (k : �
   refine Finsupp.le_def.2 fun i => ?_
   simp only [cappedTruncate_apply]
   by_cases hi : i < k
-  · rw [if_pos hi, ofFin_apply _ hi]
+  · rw [ite_eq_left hi, ofFin_apply _ hi]
     have h2 : (min (ENNReal.ofReal (a i)) ((m : ℝ≥0∞))).toNNReal ≤ (a i).toNNReal := by
       refine (ENNReal.toNNReal_mono (by simp) (min_le_left _ _)).trans ?_
       rw [← ENNReal.ofNNReal_toNNReal, ENNReal.toNNReal_coe]
     rwa [Real.nnabs_of_nonneg (ha i)]
-  · rw [if_neg hi, ofFin_apply_of_le _ hi]
+  · rw [ite_eq_right hi, ofFin_apply_of_le _ hi]
 
 /-- Each `Fin k` view is below the extension of the sequence. -/
 theorem ofFin_le_extend (Φ : SymmetricGauge) {a : ℕ → ℝ} (ha : ∀ n, 0 ≤ a n) (k : ℕ) :
@@ -467,13 +467,13 @@ theorem ofFin_le_extend (Φ : SymmetricGauge) {a : ℕ → ℝ} (ha : ∀ n, 0 �
     refine Finsupp.ext fun i => ?_
     simp only [cappedTruncate_apply]
     by_cases hi : i < k
-    · rw [if_pos hi, ofFin_apply _ hi]
+    · rw [ite_eq_left hi, ofFin_apply _ hi]
       have hle : ENNReal.ofReal (a i) ≤ (m : ℝ≥0∞) := by
         rw [← ENNReal.ofNNReal_toNNReal, ENNReal.coe_le_coe]
         exact hm ⟨i, hi⟩
       rw [min_eq_left hle, ← ENNReal.ofNNReal_toNNReal, ENNReal.toNNReal_coe,
         Real.nnabs_of_nonneg (ha i)]
-    · rw [if_neg hi, ofFin_apply_of_le _ hi]
+    · rw [ite_eq_right hi, ofFin_apply_of_le _ hi]
   rw [heq, Φ.extend_eq_iSup_cappedTruncate]
   exact le_iSup_of_le k (le_iSup
     (fun m : ℝ≥0 => ((Φ (cappedTruncate (fun n => ENNReal.ofReal (a n)) k m) : ℝ≥0) : ℝ≥0∞)) m)
@@ -501,12 +501,12 @@ def natPerm {n : ℕ} (π : Equiv.Perm (Fin n)) : Equiv.Perm ℕ where
   invFun i := if h : i < n then (π.symm ⟨i, h⟩ : ℕ) else i
   left_inv i := by
     by_cases h : i < n
-    · simp only [dif_pos h, dif_pos (π ⟨i, h⟩).isLt]
+    · simp only [dite_eq_left h, dite_eq_left (π ⟨i, h⟩).isLt]
       simp
     · simp [h]
   right_inv i := by
     by_cases h : i < n
-    · simp only [dif_pos h, dif_pos (π.symm ⟨i, h⟩).isLt]
+    · simp only [dite_eq_left h, dite_eq_left (π.symm ⟨i, h⟩).isLt]
       simp
     · simp [h]
 
@@ -619,7 +619,7 @@ noncomputable def truncate (a : ℕ → ℝ≥0∞) (_ha : ∀ n, a n ≠ ⊤) (
 theorem truncate_le (a : ℕ → ℝ≥0∞) (ha : ∀ n, a n ≠ ⊤) (N : ℕ) (i : ℕ) :
     ((truncate a ha N) i : ℝ≥0∞) ≤ a i := by
   by_cases h : i < N
-  · simp only [truncate, Finsupp.onFinset_apply, h, if_pos]
+  · simp only [truncate, Finsupp.onFinset_apply, h, ite_eq_left]
     rw [ENNReal.coe_toNNReal (ha i)]
   · simp [truncate, h]
 
@@ -693,7 +693,7 @@ theorem ofFin_finView (a : ℕ → ℝ≥0∞) (ha : ∀ n, a n ≠ ⊤) (N : �
     have hn : Real.nnabs ((a i).toNNReal : ℝ) = (a i).toNNReal := by
       rw [← NNReal.coe_inj, Real.coe_nnabs]
       exact abs_of_nonneg (a i).toNNReal.coe_nonneg
-    simp only [finView, truncate, Finsupp.onFinset_apply, hi, if_pos]
+    simp only [finView, truncate, Finsupp.onFinset_apply, hi, ite_eq_left]
     exact_mod_cast hn
   · rw [ofFin_apply_of_le _ hi]
     simp [truncate, hi]

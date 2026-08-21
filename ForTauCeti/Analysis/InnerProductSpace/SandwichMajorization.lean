@@ -190,7 +190,7 @@ theorem sum_re_inner_apply_comp_le_sum_range_mul_sq
   set d : ℕ → ℝ := fun j => if j < k then D.singularValues j ^ 2 else 0 with hd
   have hpvfin : ∀ j : Fin (finrank 𝕜 E), pv (j : ℕ) = p j := by
     intro j
-    simp only [hpv, dif_pos j.isLt, Fin.eta]
+    simp only [hpv, dite_eq_left j.isLt, Fin.eta]
   -- Rewriting a `p`-coordinate of `D wᵢ` into the shape Bessel's inequality wants.
   have hcoord : ∀ (i : Fin k) (j : Fin (finrank 𝕜 E)),
       ‖p.repr (D (w i)) j‖ ^ 2 = ‖⟪w i, D.adjoint (pv (j : ℕ))⟫_𝕜‖ ^ 2 := by
@@ -232,7 +232,7 @@ theorem sum_re_inner_apply_comp_le_sum_range_mul_sq
         _ ≤ ∑ j ∈ Finset.range m, D.adjoint.singularValues j ^ 2 := hkyfan
         _ = ∑ j ∈ Finset.range m, d j := by
             refine Finset.sum_congr rfl fun j hj => ?_
-            simp only [hd, if_pos (lt_of_lt_of_le (Finset.mem_range.mp hj) hmk),
+            simp only [hd, ite_eq_left (lt_of_lt_of_le (Finset.mem_range.mp hj) hmk),
               LinearMap.singularValues_adjoint_apply]
     · -- Above the cut: Parseval, then Ky Fan for `D⋆ D` on `w` itself.
       have htot : ∑ j ∈ Finset.range (finrank 𝕜 E), c j = ∑ i : Fin k, ‖D (w i)‖ ^ 2 := by
@@ -260,9 +260,9 @@ theorem sum_re_inner_apply_comp_le_sum_range_mul_sq
           Finset.mem_range.mpr ((Finset.mem_range.mp hx).trans hmk)
         rw [← Finset.sum_subset hsubk (fun j _ hj => by
           have hjk : ¬ j < k := by simpa using hj
-          simp only [hd, if_neg hjk])]
+          simp only [hd, ite_eq_right hjk])]
         exact Finset.sum_congr rfl fun j hj => by
-          simp only [hd, if_pos (Finset.mem_range.mp hj)]
+          simp only [hd, ite_eq_left (Finset.mem_range.mp hj)]
       rw [hdk]
       exact (hmono.trans (le_of_eq htot)).trans hkyfan
   -- Step 3: Abel summation against the decreasing weights `σ(M)`.
@@ -275,9 +275,9 @@ theorem sum_re_inner_apply_comp_le_sum_range_mul_sq
     Finset.mem_range.mpr ((Finset.mem_range.mp hx).trans_le hk)
   rw [← Finset.sum_subset hsubk (fun j _ hj => by
     have hjk : ¬ j < k := by simpa using hj
-    simp only [hd, if_neg hjk, mul_zero])]
+    simp only [hd, ite_eq_right hjk, mul_zero])]
   exact Finset.sum_congr rfl fun j hj => by
-    simp only [hd, if_pos (Finset.mem_range.mp hj)]
+    simp only [hd, ite_eq_left (Finset.mem_range.mp hj)]
 
 /-- The prefix estimate at an index below the dimension. -/
 private theorem sum_range_singularValues_adjoint_sandwich_le_aux

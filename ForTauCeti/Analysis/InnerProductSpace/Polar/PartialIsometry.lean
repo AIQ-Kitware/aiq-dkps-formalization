@@ -537,7 +537,7 @@ theorem isClosed_range_polarPartial (M : E →L[𝕜] F) :
   have hrange : Set.range M.polarPartialAux = Set.range M.polarLinearIsometryAux := (rfl)
   rw [hrange, ← Set.image_univ]
   exact ((LinearIsometry.isComplete_image_iff M.polarLinearIsometryAux).mpr
-    complete_univ).isClosed
+    isComplete_univ).isClosed
 
 /-- **The range of the partial isometry is the closure of the range of `M`** — the *final*
 space of the polar decomposition. -/

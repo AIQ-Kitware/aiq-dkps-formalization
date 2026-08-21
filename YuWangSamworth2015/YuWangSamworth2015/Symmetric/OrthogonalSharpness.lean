@@ -272,7 +272,7 @@ theorem opNorm_orthogonalSharpness_perturbation (hε : 0 < ε) (hd : 1 ≤ d)
     have h0pd : (0 : ℕ) < p - d := by omega
     simp only [Pi.sub_apply, orthogonalSharpnessSampleData,
       orthogonalSharpnessPopulationData]
-    rw [if_pos (by simpa using h0pd), if_pos (by simpa using h0d)]
+    rw [ite_eq_left (by simpa using h0pd), ite_eq_left (by simpa using h0d)]
     rw [show (2 - ε) - 3 = -(1 + ε) by ring, abs_neg, abs_of_pos (by linarith)]
 
 /-! ## The achieved distances -/
