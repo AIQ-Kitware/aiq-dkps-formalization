@@ -152,12 +152,25 @@ theorem borelCalculus_mem_domain_of_coord_mul
   set hU := isStarNormal_cayley hA with hhU
   set hni := negI_mem_resolventSet hA with hhni
   set κ := cayleyInv hA with hκ
+  -- The canonical resolvent's symbol is `(w - 1)/(2i)`; the symbol that inverts `κ + i`
+  -- pointwise is its negative, so the calculus below is `-R(-i)`.
+  set gcan : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
+    (2 * Complex.I)⁻¹ • (cayleyCoord hA - 1) with hgcan
+  have hgcb : BorelCalculus.IsBddMeasurable (fun w => gcan w) :=
+    BorelCalculus.IsBddMeasurable.of_continuous gcan
+  have hRcan : resolvent A (-Complex.I) = BorelCalculus.borelCalculus hU hgcb :=
+    resolvent_negI_eq_borelCalculus hA hgcb
   set gsym : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
     (2 * Complex.I)⁻¹ • (1 - cayleyCoord hA) with hgsym
   have hgb : BorelCalculus.IsBddMeasurable (fun w => gsym w) :=
     BorelCalculus.IsBddMeasurable.of_continuous gsym
-  have hRg : resolvent A hni = BorelCalculus.borelCalculus hU hgb :=
-    resolvent_negI_eq_borelCalculus hA hgb
+  have hgbEq : BorelCalculus.borelCalculus hU hgb
+      = BorelCalculus.borelCalculus hU (hgcb.const_smul (-1)) :=
+    BorelCalculus.borelCalculus_congr_ae hU _ _ fun η =>
+      Filter.Eventually.of_forall fun w => by simp [hgsym, hgcan]; ring
+  have hRg : BorelCalculus.borelCalculus hU hgb = -(resolvent A (-Complex.I)) := by
+    rw [hgbEq, BorelCalculus.borelCalculus_const_smul hU (-1) hgcb, ← hRcan]
+    module
   -- `gsym · ((κ + i) h) = h` off the Cayley singularity, which is null
   have hprod : BorelCalculus.borelCalculus hU (hgb.mul hq)
       = BorelCalculus.borelCalculus hU hh := by
@@ -169,20 +182,23 @@ theorem borelCalculus_mem_domain_of_coord_mul
     rw [hgval, ← mul_assoc,
       inv_two_I_mul_one_sub_mul_cayleyInv_add_I hA hw1, one_mul]
   set T := BorelCalculus.borelCalculus hU hq with hT
-  have hPy : resolvent A hni (T ξ)
-      = BorelCalculus.borelCalculus hU hh ξ := by
+  have hPy : resolvent A (-Complex.I) (T ξ)
+      = -(BorelCalculus.borelCalculus hU hh ξ) := by
     have hmul := congrArg (fun L : H →L[ℂ] H => L ξ)
       ((BorelCalculus.borelCalculus_mul hU hgb hq).symm.trans hprod)
     simp only [_root_.mul_apply_eq_comp] at hmul
-    rw [hRg]
-    exact hmul
-  have hmem : BorelCalculus.borelCalculus hU hh ξ ∈ A.domain := by
+    rw [← hmul, hRg]
+    simp only [_root_.neg_apply, neg_neg]
+    rw [hT]
+  have hmemneg : -(BorelCalculus.borelCalculus hU hh ξ) ∈ A.domain := by
     rw [← hPy]; exact resolvent_mem_domain hni (T ξ)
+  have hmem : BorelCalculus.borelCalculus hU hh ξ ∈ A.domain := by
+    simpa using neg_mem hmemneg
   refine ⟨hmem, ?_⟩
-  have hsolve := sub_smul_resolvent hni (T ξ)
-  have hcongr : (⟨resolvent A hni (T ξ), resolvent_mem_domain hni (T ξ)⟩ : A.domain)
-      = ⟨BorelCalculus.borelCalculus hU hh ξ, hmem⟩ := Subtype.ext hPy
-  rw [hcongr, hPy] at hsolve
+  have hsolve := smul_sub_apply_resolvent hni (T ξ)
+  have hcongr : (⟨resolvent A (-Complex.I) (T ξ), resolvent_mem_domain hni (T ξ)⟩ : A.domain)
+      = -(⟨BorelCalculus.borelCalculus hU hh ξ, hmem⟩ : A.domain) := Subtype.ext hPy
+  rw [hcongr, _root_.LinearPMap.map_neg, hPy] at hsolve
   linear_combination (norm := module) hsolve
 
 /-! ## The vector spectral gap -/

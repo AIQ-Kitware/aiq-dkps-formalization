@@ -88,21 +88,22 @@ section Cayley
 
 variable {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
 
-/-- `1 - U = 2i · R(-i)`: immediate from the definition of the Cayley
-transform. -/
+/-- `1 - U = -(2i · R(-i))`: immediate from the definition of the Cayley
+transform, which in the canonical convention reads `U = 1 + 2i · R(-i)`. -/
 theorem one_sub_cayley_apply (ξ : H) :
     ((1 : H →L[ℂ] H) - cayley hA) ξ
-      = (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA) ξ := by
+      = -((2 * Complex.I) • resolvent A (-Complex.I) ξ) := by
   simp [cayley_def]
 
+include hA in
 /-- The resolvent at `-i` is injective — it inverts the bijection
 `A + i : dom A → H`. -/
 theorem injective_resolvent_negI :
-    Function.Injective (resolvent A (negI_mem_resolventSet hA)) := by
+    Function.Injective (resolvent A (-Complex.I)) := by
   rw [injective_iff_map_eq_zero]
   intro φ hφ
-  have hsub := sub_smul_resolvent (negI_mem_resolventSet hA) φ
-  have hz : (⟨resolvent A (negI_mem_resolventSet hA) φ,
+  have hsub := smul_sub_apply_resolvent (negI_mem_resolventSet hA) φ
+  have hz : (⟨resolvent A (-Complex.I) φ,
       resolvent_mem_domain (negI_mem_resolventSet hA) φ⟩ : A.domain) = 0 :=
     Subtype.ext (by simpa using hφ)
   rw [hz, _root_.LinearPMap.map_zero, hφ] at hsub
@@ -113,9 +114,9 @@ theorem injective_one_sub_cayley :
     Function.Injective ((1 : H →L[ℂ] H) - cayley hA) := by
   rw [injective_iff_map_eq_zero]
   intro φ hφ
-  rw [one_sub_cayley_apply] at hφ
+  rw [one_sub_cayley_apply, neg_eq_zero] at hφ
   have h2 : (2 * Complex.I : ℂ) ≠ 0 := by simp
-  have hR : resolvent A (negI_mem_resolventSet hA) φ = 0 := by
+  have hR : resolvent A (-Complex.I) φ = 0 := by
     rcases smul_eq_zero.mp hφ with h | h
     · exact absurd h h2
     · exact h
@@ -279,17 +280,21 @@ noncomputable def cayleyDenomCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
 /-- The resolvent symbol's denominator, unfolded. -/
 @[simp] theorem cayleyDenomCM_apply (w : _root_.spectrum ℂ (cayley hA)) :
     cayleyDenomCM hA (z := z) w = (Complex.I - z) + (Complex.I + z) * (w : ℂ) := (rfl)
-/-- The **resolvent symbol** `g_z(w) = (1 - w) / ((i - z) + (i + z) w)`.  For
+/-- The **resolvent symbol** `g_z(w) = (w - 1) / ((i - z) + (i + z) w)`.  For
 non-real `z` it is continuous on the whole spectrum of the Cayley transform:
-its only pole is the Cayley image of `z`, which is off the unit circle. -/
+its only pole is the Cayley image of `z`, which is off the unit circle.
+
+Under the relabelling `s = i(1 + w)/(1 - w)` this is `(z - s)⁻¹`, the symbol of
+the canonical resolvent `(z • I - A)⁻¹`.  The `A - z` convention has the
+numerator `1 - w` instead, giving `(s - z)⁻¹`. -/
 noncomputable def resolventSymbol : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
-  ⟨fun w => (1 - (w : ℂ)) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)),
+  ⟨fun w => ((w : ℂ) - 1) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)),
     Continuous.div (by fun_prop) (by fun_prop) (cayleyDenom_ne_zero hA hz)⟩
 
 /-- The resolvent symbol, unfolded. -/
 @[simp] theorem resolventSymbol_apply (w : _root_.spectrum ℂ (cayley hA)) :
     resolventSymbol hA hz w
-      = (1 - (w : ℂ)) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := (rfl)
+      = ((w : ℂ) - 1) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) := (rfl)
 /-- The reciprocal of the denominator symbol, scaled by `2i`. -/
 noncomputable def cayleyDenomInvCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
   ⟨fun w => (2 * Complex.I) / ((Complex.I - z) + (Complex.I + z) * (w : ℂ)),
@@ -302,18 +307,25 @@ noncomputable def cayleyDenomInvCM : C(_root_.spectrum ℂ (cayley hA), ℂ) :=
 /-- `2i ≠ 0`, needed to divide by it when inverting the Cayley symbol. -/
 theorem two_I_ne_zero : (2 * Complex.I : ℂ) ≠ 0 := by simp
 
-/-- `R(-i)` is the functional calculus of `(1 - w)/(2i)`. -/
+/-- `R(-i)` is the functional calculus of `(w - 1)/(2i)`. -/
 theorem resolvent_negI_eq_cfcHom :
-    resolvent A (negI_mem_resolventSet hA)
-      = cfcHom (isStarNormal_cayley hA) ((2 * Complex.I)⁻¹ • (1 - cayleyCoord hA)) := by
+    resolvent A (-Complex.I)
+      = cfcHom (isStarNormal_cayley hA) ((2 * Complex.I)⁻¹ • (cayleyCoord hA - 1)) := by
   rw [map_smul, map_sub, map_one, cayleyCoord, cfcHom_id]
   refine ContinuousLinearMap.ext fun ξ => ?_
-  rw [_root_.smul_apply, one_sub_cayley_apply, smul_smul, inv_mul_cancel₀ two_I_ne_zero,
-    one_smul]
+  have h := one_sub_cayley_apply hA ξ
+  rw [_root_.sub_apply, one_apply_eq_self] at h
+  rw [_root_.smul_apply, _root_.sub_apply, one_apply_eq_self,
+    show cayley hA ξ - ξ = (2 * Complex.I) • resolvent A (-Complex.I) ξ by
+      linear_combination (norm := module) -h,
+    smul_smul, inv_mul_cancel₀ two_I_ne_zero, one_smul]
 
-/-- `1 - (z + i) R(-i)` is the functional calculus of `((i - z) + (i + z)w)/(2i)`. -/
-theorem one_sub_smul_resolvent_eq_cfcHom :
-    (1 : H →L[ℂ] H) - (z + Complex.I) • resolvent A (negI_mem_resolventSet hA)
+/-- `1 + (z + i) R(-i)` is the functional calculus of `((i - z) + (i + z)w)/(2i)`.
+
+In the `A - z` convention this operator reads `1 - (z + i) Q(-i)`; the canonical
+resolvent is `-Q`, so the same operator is written with a `+` here. -/
+theorem one_add_smul_resolvent_eq_cfcHom :
+    (1 : H →L[ℂ] H) + (z + Complex.I) • resolvent A (-Complex.I)
       = cfcHom (isStarNormal_cayley hA) ((2 * Complex.I)⁻¹ • cayleyDenomCM hA (z := z)) := by
   have hsplit : cayleyDenomCM hA (z := z)
       = (Complex.I - z) • 1 + (Complex.I + z) • cayleyCoord hA := by
@@ -322,11 +334,11 @@ theorem one_sub_smul_resolvent_eq_cfcHom :
   simp only [hsplit, map_smul, map_add, map_one, cayleyCoord, cfcHom_id]
   refine ContinuousLinearMap.ext fun ξ => ?_
   have h2 : (2 * Complex.I : ℂ) ≠ 0 := two_I_ne_zero
-  have hU : cayley hA ξ = ξ - (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA) ξ := by
+  have hU : cayley hA ξ = ξ + (2 * Complex.I) • resolvent A (-Complex.I) ξ := by
     have h := one_sub_cayley_apply hA ξ
     rw [_root_.sub_apply, one_apply_eq_self] at h
     linear_combination (norm := module) -h
-  simp only [_root_.sub_apply, one_apply_eq_self, _root_.smul_apply, _root_.add_apply, hU]
+  simp only [one_apply_eq_self, _root_.smul_apply, _root_.add_apply, hU]
   match_scalars <;> (field_simp; try ring)
 
 include hz in
@@ -334,7 +346,7 @@ include hz in
 through the first resolvent identity, so no statement about `dom A` is
 needed. -/
 theorem resolvent_eq_cfcHom (hzr : z ∈ resolventSet A) :
-    resolvent A hzr = cfcHom (isStarNormal_cayley hA) (resolventSymbol hA hz) := by
+    resolvent A z = cfcHom (isStarNormal_cayley hA) (resolventSymbol hA hz) := by
   set hni := negI_mem_resolventSet hA with hhni
   set hU := isStarNormal_cayley hA with hhU
   -- the two functional-calculus factors are mutually inverse
@@ -350,19 +362,19 @@ theorem resolvent_eq_cfcHom (hzr : z ∈ resolventSet A) :
       * cfcHom hU (cayleyDenomInvCM hA hz) = 1 := by
     rw [← map_mul, hprod, map_one]
   -- the first resolvent identity, in operator form
-  have hVid : resolvent A hzr * ((1 : H →L[ℂ] H) - (z + Complex.I) • resolvent A hni)
-      = resolvent A hni := by
+  have hVid : resolvent A z * ((1 : H →L[ℂ] H) + (z + Complex.I) • resolvent A (-Complex.I))
+      = resolvent A (-Complex.I) := by
     refine ContinuousLinearMap.ext fun φ => ?_
-    have h := resolvent_sub_resolvent hzr hni φ
-    have hz' : z - -Complex.I = z + Complex.I := by ring
+    have h := resolvent_sub_resolvent_apply hzr hni φ
+    have hz' : -Complex.I - z = -(z + Complex.I) := by ring
     rw [hz'] at h
-    simp only [_root_.mul_apply_eq_comp, _root_.sub_apply, one_apply_eq_self,
-      _root_.smul_apply, map_sub, map_smul]
+    simp only [_root_.mul_apply_eq_comp, _root_.add_apply, one_apply_eq_self,
+      _root_.smul_apply, map_add, map_smul]
     linear_combination (norm := module) h
   -- combine
-  have hR : resolvent A hzr
-      = resolvent A hni * cfcHom hU (cayleyDenomInvCM hA hz) := by
-    rw [← hVid, one_sub_smul_resolvent_eq_cfcHom hA (z := z), mul_assoc, hinv, mul_one]
+  have hR : resolvent A z
+      = resolvent A (-Complex.I) * cfcHom hU (cayleyDenomInvCM hA hz) := by
+    rw [← hVid, one_add_smul_resolvent_eq_cfcHom hA (z := z), mul_assoc, hinv, mul_one]
   rw [hR, resolvent_negI_eq_cfcHom hA, ← map_mul]
   congr 1
   ext w
@@ -393,20 +405,20 @@ include hz in
 /-- **The resolvent formula** — the property that characterises the spectral
 measure. -/
 theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
-    ⟪ξ, resolvent A hzr ξ⟫_ℂ
-      = ∫ s, ((s : ℂ) - z)⁻¹ ∂((spectralPVM hA).diag ξ) := by
+    ⟪ξ, resolvent A z ξ⟫_ℂ
+      = ∫ s, (z - (s : ℂ))⁻¹ ∂((spectralPVM hA).diag ξ) := by
   set hU := isStarNormal_cayley hA with hhU
-  have hlhs : ⟪ξ, resolvent A hzr ξ⟫_ℂ
+  have hlhs : ⟪ξ, resolvent A z ξ⟫_ℂ
       = ∫ w, resolventSymbol hA hz w ∂(BorelCalculus.diagMeasure hU ξ) := by
     rw [resolvent_eq_cfcHom hA hz hzr, BorelCalculus.integral_diagMeasure]
   have hdiag : (spectralPVM hA).diag ξ
       = Measure.map (cayleyInv hA) (BorelCalculus.diagMeasure hU ξ) := by
     rw [spectralPVM_def, BorelCalculus.toProjValMeasure_diag,
       BorelCalculus.specDiag_def]
-  have hne : ∀ s : ℝ, (s : ℂ) - z ≠ 0 := by
+  have hne : ∀ s : ℝ, z - (s : ℂ) ≠ 0 := by
     intro s hc
-    exact hz (by simpa using congrArg Complex.im (sub_eq_zero.mp hc).symm)
-  have hcont : Continuous (fun s : ℝ => ((s : ℂ) - z)⁻¹) :=
+    exact hz (by simpa using congrArg Complex.im (sub_eq_zero.mp hc))
+  have hcont : Continuous (fun s : ℝ => (z - (s : ℂ))⁻¹) :=
     Continuous.inv₀ (by fun_prop) hne
   rw [hlhs, hdiag, integral_map (measurable_cayleyInv hA).aemeasurable
     hcont.aestronglyMeasurable]
@@ -420,11 +432,13 @@ theorem spectralPVM_resolvent_formula (hzr : z ∈ resolventSet A) (ξ : H) :
   have hnorm : ‖(w : ℂ)‖ = 1 :=
     spectrum.norm_eq_one_of_unitary (cayley_mem_unitary hA) w.2
   have hd : (1 : ℂ) - (w : ℂ) ≠ 0 := sub_ne_zero.mpr (Ne.symm hw1)
+  have hd' : (w : ℂ) - 1 ≠ 0 := sub_ne_zero.mpr hw1
   have hden := cayleyDenom_ne_zero hA hz w
   have hcast : ((cayleyInv hA w : ℝ) : ℂ) = Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) :=
     Complex.ext rfl (by simpa using (inverseCayley_im_eq_zero hnorm hw1).symm)
-  have key : Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ)) - z
-      = ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) / (1 - (w : ℂ)) := by
+  -- `z - s = -((i - z) + (i + z)w)/(1 - w) = ((i - z) + (i + z)w)/(w - 1)`
+  have key : z - Complex.I * (1 + (w : ℂ)) / (1 - (w : ℂ))
+      = ((Complex.I - z) + (Complex.I + z) * (w : ℂ)) / ((w : ℂ) - 1) := by
     field_simp
     ring
   rw [resolventSymbol_apply, hcast, key, inv_div]
@@ -468,17 +482,17 @@ theorem specProjection_eq_borelCalculus (B : Set ℝ) (hB : MeasurableSet B) :
 transform — the bridge that makes spectral projections commute with it. -/
 theorem resolvent_negI_eq_borelCalculus
     (hs : BorelCalculus.IsBddMeasurable
-      (fun w => ((2 * Complex.I)⁻¹ • (1 - cayleyCoord hA)) w)) :
-    resolvent A (negI_mem_resolventSet hA)
+      (fun w => ((2 * Complex.I)⁻¹ • (cayleyCoord hA - 1)) w)) :
+    resolvent A (-Complex.I)
       = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs := by
   rw [BorelCalculus.borelCalculus_of_continuous, resolvent_negI_eq_cfcHom hA]
 
 /-- **Spectral projections commute with the resolvent.** -/
 theorem specProjection_comm_resolvent (B : Set ℝ) (hB : MeasurableSet B) :
-    specProjection hA B hB * resolvent A (negI_mem_resolventSet hA)
-      = resolvent A (negI_mem_resolventSet hA) * specProjection hA B hB := by
+    specProjection hA B hB * resolvent A (-Complex.I)
+      = resolvent A (-Complex.I) * specProjection hA B hB := by
   have hs : BorelCalculus.IsBddMeasurable
-      (fun w => ((2 * Complex.I)⁻¹ • (1 - cayleyCoord hA)) w) :=
+      (fun w => ((2 * Complex.I)⁻¹ • (cayleyCoord hA - 1)) w) :=
     BorelCalculus.IsBddMeasurable.of_continuous _
   rw [resolvent_negI_eq_borelCalculus hA hs, specProjection, spectralPVM,
     BorelCalculus.toProjValMeasure_proj, BorelCalculus.specProj_def]
@@ -486,15 +500,16 @@ theorem specProjection_comm_resolvent (B : Set ℝ) (hB : MeasurableSet B) :
 
 /-- Pointwise form: `P (R φ) = R (P φ)`. -/
 theorem specProjection_resolvent_apply (B : Set ℝ) (hB : MeasurableSet B) (φ : H) :
-    specProjection hA B hB (resolvent A (negI_mem_resolventSet hA) φ)
-      = resolvent A (negI_mem_resolventSet hA) (specProjection hA B hB φ) := by
+    specProjection hA B hB (resolvent A (-Complex.I) φ)
+      = resolvent A (-Complex.I) (specProjection hA B hB φ) := by
   have h := congrArg (fun T : H →L[ℂ] H => T φ) (specProjection_comm_resolvent hA B hB)
   simpa only [_root_.mul_apply_eq_comp] using h
 
+include hA in
 /-- Every vector of the domain is a resolvent image. -/
 theorem exists_resolvent_eq_of_mem_domain (x : A.domain) :
-    resolvent A (negI_mem_resolventSet hA) (A x - (-Complex.I) • (x : H)) = (x : H) :=
-  resolvent_apply_sub_smul (negI_mem_resolventSet hA) x
+    resolvent A (-Complex.I) ((-Complex.I) • (x : H) - A x) = (x : H) :=
+  resolvent_smul_sub_apply (negI_mem_resolventSet hA) x
 
 /-- **Spectral projections preserve the domain.** -/
 theorem specProjection_mem_domain (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
@@ -509,30 +524,30 @@ theorem specProjection_apply_domain (B : Set ℝ) (hB : MeasurableSet B) (x : A.
       = specProjection hA B hB (A x) := by
   set hni := negI_mem_resolventSet hA with hhni
   set P := specProjection hA B hB with hP
-  set φ : H := A x - (-Complex.I) • (x : H) with hφ
-  have hx : resolvent A hni φ = (x : H) := exists_resolvent_eq_of_mem_domain hA x
+  set φ : H := (-Complex.I) • (x : H) - A x with hφ
+  have hx : resolvent A (-Complex.I) φ = (x : H) := exists_resolvent_eq_of_mem_domain hA x
   -- `P x` is the resolvent image of `P φ`
-  have hPx : resolvent A hni (P φ) = P (x : H) := by
+  have hPx : resolvent A (-Complex.I) (P φ) = P (x : H) := by
     rw [← hx, specProjection_resolvent_apply]
-  have hsolve := sub_smul_resolvent hni (P φ)
-  have hcongr : (⟨resolvent A hni (P φ), resolvent_mem_domain hni (P φ)⟩ : A.domain)
+  have hsolve := smul_sub_apply_resolvent hni (P φ)
+  have hcongr : (⟨resolvent A (-Complex.I) (P φ), resolvent_mem_domain hni (P φ)⟩ : A.domain)
       = ⟨P (x : H), specProjection_mem_domain hA B hB x⟩ := Subtype.ext hPx
   rw [hcongr, hPx] at hsolve
-  -- and `P φ = P (A x) + i • P x`
-  have hPφ : P φ = P (A x) - (-Complex.I) • P (x : H) := by
+  -- and `P φ = -i • P x - P (A x)`
+  have hPφ : P φ = (-Complex.I) • P (x : H) - P (A x) := by
     rw [hφ, map_sub, map_smul]
   rw [hPφ] at hsolve
-  linear_combination (norm := module) hsolve
+  linear_combination (norm := module) -hsolve
 
 /-- Spectral projections commute with the resolvent at **every** non-real
 point, not just at `-i`. -/
 theorem specProjection_comm_resolvent' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ resolventSet A)
     (B : Set ℝ) (hB : MeasurableSet B) :
-    specProjection hA B hB * resolvent A hzr
-      = resolvent A hzr * specProjection hA B hB := by
+    specProjection hA B hB * resolvent A z
+      = resolvent A z * specProjection hA B hB := by
   have hs : BorelCalculus.IsBddMeasurable (fun w => resolventSymbol hA hz w) :=
     BorelCalculus.IsBddMeasurable.of_continuous _
-  have hR : resolvent A hzr = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs := by
+  have hR : resolvent A z = BorelCalculus.borelCalculus (isStarNormal_cayley hA) hs := by
     rw [BorelCalculus.borelCalculus_of_continuous, resolvent_eq_cfcHom hA hz hzr]
   rw [hR, specProjection, spectralPVM, BorelCalculus.toProjValMeasure_proj,
     BorelCalculus.specProj_def]
@@ -543,8 +558,8 @@ theorem specProjection_comm_resolvent' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ 
 reducing-subspace arguments use. -/
 theorem specProjection_resolvent_apply' {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ resolventSet A)
     (B : Set ℝ) (hB : MeasurableSet B) (φ : H) :
-    specProjection hA B hB (resolvent A hzr φ)
-      = resolvent A hzr (specProjection hA B hB φ) := by
+    specProjection hA B hB (resolvent A z φ)
+      = resolvent A z (specProjection hA B hB φ) := by
   have h := congrArg (fun T : H →L[ℂ] H => T φ)
     (specProjection_comm_resolvent' hA hz hzr B hB)
   simpa only [_root_.mul_apply_eq_comp] using h
@@ -735,8 +750,8 @@ range. -/
 theorem exists_specRestrict_resolvent {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ resolventSet A)
     (φ : specRange hA B hB) :
     ∃ ψ : (specRestrict hA B hB).domain,
-      (specRestrict hA B hB ψ : specRange hA B hB) - z • (ψ : specRange hA B hB) = φ := by
-  set x : H := resolvent A hzr (φ : H) with hx
+      z • (ψ : specRange hA B hB) - (specRestrict hA B hB ψ : specRange hA B hB) = φ := by
+  set x : H := resolvent A z (φ : H) with hx
   have hxK : x ∈ specRange hA B hB := by
     rw [mem_specRange_iff, hx, specProjection_resolvent_apply' hA hz hzr]
     congr 1
@@ -744,7 +759,7 @@ theorem exists_specRestrict_resolvent {z : ℂ} (hz : z.im ≠ 0) (hzr : z ∈ r
   have hxdom : x ∈ A.domain := resolvent_mem_domain hzr (φ : H)
   refine ⟨⟨⟨x, hxK⟩, hxdom⟩, ?_⟩
   apply Subtype.ext
-  have h := sub_smul_resolvent hzr (φ : H)
+  have h := smul_sub_apply_resolvent hzr (φ : H)
   simpa only [Submodule.coe_sub, Submodule.coe_smul, specRestrict_apply] using h
 
 /-- The restricted domain is dense in the spectral range.  This is the non-obvious half of the
@@ -780,14 +795,16 @@ resolvent, which preserves the range because it commutes with the projection. -/
 theorem isSelfAdjoint_specRestrict : IsSelfAdjoint (specRestrict hA B hB) := by
   refine TauCeti.OneParameterUnitaryGroup.isSelfAdjoint_of_surjective_addSub _
     (isFormalAdjoint_specRestrict hA B hB) (dense_specRestrict_domain hA B hB) ?_ ?_
+  -- the canonical resolvent solves `z • ψ - T ψ = φ`; the surjectivity criterion wants
+  -- `T ψ ± i • ψ = φ`, so solve at `-φ` and negate
   · intro φ
     obtain ⟨ψ, hψ⟩ := exists_specRestrict_resolvent hA B hB (z := -Complex.I) (by simp)
-      (negI_mem_resolventSet hA) φ
-    exact ⟨ψ, by simpa using hψ⟩
+      (negI_mem_resolventSet hA) (-φ)
+    exact ⟨ψ, by linear_combination (norm := module) -hψ⟩
   · intro φ
     obtain ⟨ψ, hψ⟩ := exists_specRestrict_resolvent hA B hB (z := Complex.I) (by simp)
-      (I_mem_resolventSet hA) φ
-    exact ⟨ψ, hψ⟩
+      (I_mem_resolventSet hA) (-φ)
+    exact ⟨ψ, by linear_combination (norm := module) -hψ⟩
 
 
 end Reduce

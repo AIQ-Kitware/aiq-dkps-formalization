@@ -65,7 +65,7 @@ theorem specProjection_eq_zero_of_norm_resolvent_mul_lt_one
     (B : Set ℝ) (hB : MeasurableSet B) {M c r : ℝ}
     (hbnd : ∀ s ∈ B, |s| ≤ M) (hr : 0 ≤ r) (hcr : ∀ s ∈ B, |s - c| ≤ r)
     (hc : (c : ℂ) ∈ resolventSet A)
-    (hsmall : r * ‖resolvent A hc‖ < 1) :
+    (hsmall : r * ‖resolvent A (c : ℂ)‖ < 1) :
     specProjection hA B hB = 0 := by
   refine ContinuousLinearMap.ext fun y => ?_
   set x : H := specProjection hA B hB y with hxdef
@@ -74,18 +74,20 @@ theorem specProjection_eq_zero_of_norm_resolvent_mul_lt_one
     mem_domain_of_mem_specRange_of_bounded hA B hB hbnd hxrange
   have hb : ‖A ⟨x, hmem⟩ - (c : ℂ) • x‖ ≤ r * ‖x‖ :=
     norm_sub_smul_le_of_mem_specRange hA B hB hbnd hr hcr hxrange hmem
-  have hrec : resolvent A hc (A ⟨x, hmem⟩ - (c : ℂ) • (x : H)) = x :=
-    resolvent_apply_sub_smul hc ⟨x, hmem⟩
-  have hnx : ‖x‖ ≤ ‖resolvent A hc‖ * (r * ‖x‖) := by
-    calc ‖x‖ = ‖resolvent A hc (A ⟨x, hmem⟩ - (c : ℂ) • (x : H))‖ := by rw [hrec]
-      _ ≤ ‖resolvent A hc‖ * ‖A ⟨x, hmem⟩ - (c : ℂ) • x‖ :=
-          (resolvent A hc).le_opNorm _
-      _ ≤ ‖resolvent A hc‖ * (r * ‖x‖) :=
-          mul_le_mul_of_nonneg_left hb (norm_nonneg _)
+  have hrec : resolvent A (c : ℂ) ((c : ℂ) • (x : H) - A ⟨x, hmem⟩) = x :=
+    resolvent_smul_sub_apply hc ⟨x, hmem⟩
+  have hb' : ‖(c : ℂ) • x - A ⟨x, hmem⟩‖ ≤ r * ‖x‖ := by
+    rwa [norm_sub_rev]
+  have hnx : ‖x‖ ≤ ‖resolvent A (c : ℂ)‖ * (r * ‖x‖) := by
+    calc ‖x‖ = ‖resolvent A (c : ℂ) ((c : ℂ) • (x : H) - A ⟨x, hmem⟩)‖ := by rw [hrec]
+      _ ≤ ‖resolvent A (c : ℂ)‖ * ‖(c : ℂ) • x - A ⟨x, hmem⟩‖ :=
+          (resolvent A (c : ℂ)).le_opNorm _
+      _ ≤ ‖resolvent A (c : ℂ)‖ * (r * ‖x‖) :=
+          mul_le_mul_of_nonneg_left hb' (norm_nonneg _)
   have hx0 : ‖x‖ = 0 := by
     by_contra hne
     have hpos : 0 < ‖x‖ := lt_of_le_of_ne (norm_nonneg _) (Ne.symm hne)
-    nlinarith [norm_nonneg (resolvent A hc)]
+    nlinarith [norm_nonneg (resolvent A (c : ℂ))]
   simpa [hxdef] using norm_eq_zero.mp hx0
 
 /-- **The diagonal measures are supported on the spectrum.**  A Borel set of
@@ -101,7 +103,7 @@ theorem diag_eq_zero_of_subset_resolventSet
     ((spectralPVM hA).diag ξ) B = 0 := by
   refine measure_null_of_locally_null (μ := (spectralPVM hA).diag ξ) B ?_
   intro lam hlam
-  set R := resolvent A (hres lam hlam) with hRdef
+  set R := resolvent A (lam : ℂ) with hRdef
   have hRnn : (0 : ℝ) ≤ ‖R‖ := norm_nonneg _
   set r : ℝ := (‖R‖ + 1)⁻¹ with hrdef
   have hden : (0 : ℝ) < ‖R‖ + 1 := by linarith

@@ -136,29 +136,29 @@ theorem conjugateOperator_tauCetiResolvent
     (hzbr : (starRingEnd ℂ) z ∈ TauCeti.LinearPMap.resolventSet
       (ClosedOperatorComplexification.complexify A).toLinearPMap) :
     conjugateOperator (TauCeti.LinearPMap.resolvent
-        (ClosedOperatorComplexification.complexify A).toLinearPMap hzr)
+        (ClosedOperatorComplexification.complexify A).toLinearPMap z)
       = TauCeti.LinearPMap.resolvent
-          (ClosedOperatorComplexification.complexify A).toLinearPMap hzbr := by
+          (ClosedOperatorComplexification.complexify A).toLinearPMap ((starRingEnd ℂ) z) := by
   apply ContinuousLinearMap.ext
   intro ξ
   set Aℂ := (ClosedOperatorComplexification.complexify A).toLinearPMap with hAc
-  set r : Eℂ := TauCeti.LinearPMap.resolvent Aℂ hzr (conjugation ξ) with hr
+  set r : Eℂ := TauCeti.LinearPMap.resolvent Aℂ z (conjugation ξ) with hr
   have hrdom : r ∈ Aℂ.domain :=
     TauCeti.LinearPMap.resolvent_mem_domain hzr (conjugation ξ)
-  have hsolve : Aℂ ⟨r, hrdom⟩ - z • r = conjugation ξ :=
-    TauCeti.LinearPMap.sub_smul_resolvent hzr (conjugation ξ)
+  have hsolve : z • r - Aℂ ⟨r, hrdom⟩ = conjugation ξ :=
+    TauCeti.LinearPMap.smul_sub_apply_resolvent hzr (conjugation ξ)
   set jr : Aℂ.domain := conjugationDomain A ⟨r, hrdom⟩ with hjr
   have happ : Aℂ jr = conjugation (Aℂ ⟨r, hrdom⟩) :=
     complexify_apply_conjugationDomain A ⟨r, hrdom⟩
-  have hjsolve : Aℂ jr - (starRingEnd ℂ) z • (jr : Eℂ) = ξ := by
-    have h1 : Aℂ jr - (starRingEnd ℂ) z • (jr : Eℂ)
-        = conjugation (Aℂ ⟨r, hrdom⟩ - z • r) := by
+  have hjsolve : (starRingEnd ℂ) z • (jr : Eℂ) - Aℂ jr = ξ := by
+    have h1 : (starRingEnd ℂ) z • (jr : Eℂ) - Aℂ jr
+        = conjugation (z • r - Aℂ ⟨r, hrdom⟩) := by
       rw [map_sub, conjugation_complex_smul, ← happ]
       rfl
     rw [h1, hsolve, conjugation_involutive]
-  have hleft := TauCeti.LinearPMap.resolvent_apply_sub_smul hzbr jr
+  have hleft := TauCeti.LinearPMap.resolvent_smul_sub_apply hzbr jr
   rw [hjsolve] at hleft
-  change conjugation (TauCeti.LinearPMap.resolvent Aℂ hzr (conjugation ξ)) = _
+  change conjugation (TauCeti.LinearPMap.resolvent Aℂ z (conjugation ξ)) = _
   exact hleft.symm
 
 /-- The Cayley transform of a complexified real self-adjoint operator is sent to
@@ -175,14 +175,14 @@ theorem conjugateOperator_cayley (A : RealClosedOperator) (hA : A.IsSelfAdjoint)
       (ClosedOperatorComplexification.complexify A).toLinearPMap := by simpa using hi
   have hkey : conjugateOperator
       (TauCeti.LinearPMap.resolvent
-        (ClosedOperatorComplexification.complexify A).toLinearPMap hni)
+        (ClosedOperatorComplexification.complexify A).toLinearPMap (-Complex.I))
       = ContinuousLinearMap.adjoint
         (TauCeti.LinearPMap.resolvent
-          (ClosedOperatorComplexification.complexify A).toLinearPMap hni) := by
+          (ClosedOperatorComplexification.complexify A).toLinearPMap (-Complex.I)) := by
     rw [conjugateOperator_tauCetiResolvent A hA (by simp) hni hconjI,
       TauCeti.LinearPMap.adjoint_resolvent hAℂ hni hconjI]
-  simp only [TauCeti.LinearPMap.cayley, conjugateOperator_sub, conjugateOperator_one,
-    conjugateOperator_complex_smul, hkey, star_sub, star_one, star_smul,
+  simp only [TauCeti.LinearPMap.cayley, conjugateOperator_add, conjugateOperator_one,
+    conjugateOperator_complex_smul, hkey, star_add, star_one, star_smul,
     ContinuousLinearMap.star_eq_adjoint]
   rfl
 

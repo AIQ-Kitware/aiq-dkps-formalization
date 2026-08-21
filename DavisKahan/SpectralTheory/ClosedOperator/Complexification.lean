@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
+import DavisKahan.SpectralTheory.ClosedOperator.RealSpectrum
 import DavisKahan.SpectralTheory.Complexification.Subspace
 import DavisKahan.Sylvester.Gap
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
@@ -732,9 +733,10 @@ theorem realSpectrum_complexify
     A.realSpectrum
       = Complex.ofReal ⁻¹'
           TauCeti.LinearPMap.spectrum (complexify A).toLinearPMap := by
+  -- `realSpectrum` inverts `A - lam` while `spectrum` inverts `lam • I - A`, so this is no
+  -- longer a definitional identity; `realSpectrum_eq_spectraSpectrum` is the bridge.
   rw [← closed_realSpectrum_complexify A]
-  ext lam
-  rfl
+  exact realSpectrum_eq_spectraSpectrum (complexify A)
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Complexification preserves every constructor of the manuscript gap

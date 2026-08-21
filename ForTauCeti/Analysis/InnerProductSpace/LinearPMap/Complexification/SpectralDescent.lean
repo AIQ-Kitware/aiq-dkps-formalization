@@ -105,36 +105,36 @@ theorem conjugateOperator_resolvent_complexifyReal
     (A : E →ₗ.[ℝ] E) {z : ℂ}
     (hz : z ∈ resolventSet (complexifyReal A))
     (hzc : (starRingEnd ℂ) z ∈ resolventSet (complexifyReal A)) :
-    conjugateOperator (resolvent (complexifyReal A) hz) =
-      resolvent (complexifyReal A) hzc := by
+    conjugateOperator (resolvent (complexifyReal A) z) =
+      resolvent (complexifyReal A) ((starRingEnd ℂ) z) := by
   apply ContinuousLinearMap.ext
   intro ξ
-  let r : Eℂ := resolvent (complexifyReal A) hz (conjugation ξ)
+  let r : Eℂ := resolvent (complexifyReal A) z (conjugation ξ)
   have hrdom : r ∈ (complexifyReal A).domain := resolvent_mem_domain hz (conjugation ξ)
-  have hsolve : complexifyReal A ⟨r, hrdom⟩ - z • r = conjugation ξ :=
-    sub_smul_resolvent hz (conjugation ξ)
+  have hsolve : z • r - complexifyReal A ⟨r, hrdom⟩ = conjugation ξ :=
+    smul_sub_apply_resolvent hz (conjugation ξ)
   let jr : (complexifyReal A).domain :=
     complexifyRealConjugationDomain A ⟨r, hrdom⟩
   have happ : complexifyReal A jr =
       conjugation (complexifyReal A ⟨r, hrdom⟩) :=
     complexifyReal_apply_conjugationDomain A ⟨r, hrdom⟩
-  have hjsolve : complexifyReal A jr - (starRingEnd ℂ) z • (jr : Eℂ) = ξ := by
-    have h1 : complexifyReal A jr - (starRingEnd ℂ) z • (jr : Eℂ) =
-        conjugation (complexifyReal A ⟨r, hrdom⟩ - z • r) := by
+  have hjsolve : (starRingEnd ℂ) z • (jr : Eℂ) - complexifyReal A jr = ξ := by
+    have h1 : (starRingEnd ℂ) z • (jr : Eℂ) - complexifyReal A jr =
+        conjugation (z • r - complexifyReal A ⟨r, hrdom⟩) := by
       rw [map_sub, conjugation_complex_smul, ← happ,
         complexifyRealConjugationDomain_coe]
     rw [h1, hsolve, conjugation_involutive]
-  have hleft := resolvent_apply_sub_smul hzc jr
+  have hleft := resolvent_smul_sub_apply hzc jr
   rw [hjsolve] at hleft
   rw [conjugateOperator_apply]
-  change conjugation r = resolvent (complexifyReal A) hzc ξ
+  change conjugation r = resolvent (complexifyReal A) ((starRingEnd ℂ) z) ξ
   calc
     conjugation r = (jr : Eℂ) := by
       change conjugation r =
         ((complexifyRealConjugationDomain A ⟨r, hrdom⟩ :
           (complexifyReal A).domain) : Eℂ)
       exact (complexifyRealConjugationDomain_coe A ⟨r, hrdom⟩).symm
-    _ = resolvent (complexifyReal A) hzc ξ := hleft.symm
+    _ = resolvent (complexifyReal A) ((starRingEnd ℂ) z) ξ := hleft.symm
 
 /-- The Cayley transform of a complexified real self-adjoint partial map is sent
 to its adjoint by canonical conjugation. -/
@@ -147,12 +147,12 @@ theorem conjugateOperator_cayley_complexifyReal
   have hi := I_mem_resolventSet hAℂ
   have hconjI : ((starRingEnd ℂ) (-Complex.I)) ∈ resolventSet (complexifyReal A) := by
     simpa using hi
-  have hkey : conjugateOperator (resolvent (complexifyReal A) hni) =
-      ContinuousLinearMap.adjoint (resolvent (complexifyReal A) hni) := by
+  have hkey : conjugateOperator (resolvent (complexifyReal A) (-Complex.I)) =
+      ContinuousLinearMap.adjoint (resolvent (complexifyReal A) (-Complex.I)) := by
     rw [conjugateOperator_resolvent_complexifyReal A hni hconjI,
       adjoint_resolvent hAℂ hni hconjI]
-  simp only [cayley_def, conjugateOperator_sub, conjugateOperator_one,
-    conjugateOperator_complex_smul, hkey, star_sub, star_one, star_smul,
+  simp only [cayley_def, conjugateOperator_add, conjugateOperator_one,
+    conjugateOperator_complex_smul, hkey, star_add, star_one, star_smul,
     ContinuousLinearMap.star_eq_adjoint]
   rfl
 

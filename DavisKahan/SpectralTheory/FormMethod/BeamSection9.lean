@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
+import DavisKahan.SpectralTheory.ClosedOperator.RealSpectrum
 import DavisKahan.SpectralTheory.FormMethod.BeamSpectrum
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
@@ -755,7 +756,11 @@ theorem beamOperator_mem_resolventSet_of_mem_lowSet_diff {lam : ℝ}
     (hlam : lam ∈ beamLowSet \ ({0} : Set ℝ)) :
     (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet beamOperator.toLinearPMap := by
   by_contra hcon
-  have hmem : lam ∈ beamOperator.realSpectrum := fun hr => hcon hr
+  -- `realSpectrum` is the complement of `realResolventSet`, which inverts `A - lam`; the
+  -- canonical `resolventSet` inverts `lam • I - A`.  The two agree, but only through the
+  -- bridge -- this step used to be `fun hr => hcon hr` by definitional unfolding.
+  have hmem : lam ∈ beamOperator.realSpectrum := fun hr =>
+    hcon ((mem_realResolventSet_iff_mem_spectraResolvent beamOperator lam).mp hr)
   rcases realSpectrum_beamOperator_subset_sharp hmem with h0 | hgt
   · exact hlam.2 h0
   · have hle : lam ≤ (1001 : ℝ) / 2 := hlam.1

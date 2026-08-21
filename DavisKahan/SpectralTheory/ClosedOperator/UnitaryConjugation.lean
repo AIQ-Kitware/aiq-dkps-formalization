@@ -113,26 +113,22 @@ theorem mem_resolventSet_unitaryConj_of_mem
     (hz : z ∈ TauCeti.LinearPMap.resolventSet A) :
     z ∈ TauCeti.LinearPMap.resolventSet
       (TauCeti.LinearPMap.unitaryConj W A) := by
-  obtain ⟨R, hleft, hright⟩ := hz
-  refine ⟨unitaryConjugateBounded W R, ?_, ?_⟩
-  · intro ψ
-    let x : A.domain := ⟨W.symm (ψ : K), ψ.property⟩
-    have hx := congrArg W (hleft x)
-    simpa only [x, unitaryConjugateBounded_apply,
-      TauCeti.LinearPMap.unitaryConj_apply, map_sub, map_smul,
-      W.symm_apply_apply, W.apply_symm_apply] using hx
-  · intro φ
-    obtain ⟨hmem, hrightφ⟩ := hright (W.symm φ)
-    have htransport : W (R (W.symm φ)) ∈
-        (TauCeti.LinearPMap.unitaryConj W A).domain := by
-      rw [TauCeti.LinearPMap.mem_unitaryConj_domain_iff,
-        W.symm_apply_apply]
-      exact hmem
-    refine ⟨htransport, ?_⟩
-    have hφ := congrArg W hrightφ
+  obtain ⟨R, hR⟩ := hz
+  -- `IsResolventAt` has three fields: the domain condition, the right inverse, and the
+  -- left inverse.  Each transports by conjugating with `W`.
+  refine ⟨unitaryConjugateBounded W R, fun φ => ?_, fun φ => ?_, fun ψ => ?_⟩
+  · rw [unitaryConjugateBounded_apply,
+      TauCeti.LinearPMap.mem_unitaryConj_domain_iff, W.symm_apply_apply]
+    exact hR.mem_domain _
+  · have hφ := congrArg W (hR.smul_sub_apply (W.symm φ))
     simpa only [TauCeti.LinearPMap.unitaryConj_apply,
       unitaryConjugateBounded_apply, map_sub, map_smul,
       W.symm_apply_apply, W.apply_symm_apply] using hφ
+  · let x : A.domain := ⟨W.symm (ψ : K), ψ.property⟩
+    have hx := congrArg W (hR.apply_smul_sub x)
+    simpa only [x, unitaryConjugateBounded_apply,
+      TauCeti.LinearPMap.unitaryConj_apply, map_sub, map_smul,
+      W.symm_apply_apply, W.apply_symm_apply] using hx
 
 omit [CompleteSpace H] [CompleteSpace K] in
 /-- Conjugation first by `W` and then by `W⁻¹` returns the original partial

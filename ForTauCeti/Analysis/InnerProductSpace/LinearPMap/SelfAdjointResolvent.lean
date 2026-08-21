@@ -280,31 +280,49 @@ theorem mem_resolventSet_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoin
     have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
     rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
   have habs : 0 < |z.im| := abs_pos.mpr hz
-  let e : A.domain ≃ₗ[ℂ] E :=
-    LinearEquiv.ofBijective (shiftMap A z)
-      ⟨injective_shiftMap hsym hz, surjective_shiftMap hA hz⟩
-  have hesymm : ∀ y : E, shiftMap A z (e.symm y) = y := fun y => e.apply_symm_apply y
+  -- The canonical resolvent inverts `z • I - A`, which is `-(shiftMap A z)`; negating a
+  -- bijection is a bijection, so the equivalence is the one built from `shiftMap` composed
+  -- with negation.
+  set sm : A.domain →ₗ[ℂ] E := -(shiftMap A z) with hsm
+  have hsmapp : ∀ x : A.domain, sm x = z • (x : E) - A x := by
+    intro x
+    rw [hsm]
+    simp only [LinearMap.neg_apply, shiftMap_apply]
+    module
+  have hbij : Function.Bijective sm := by
+    constructor
+    · intro a b hab
+      exact injective_shiftMap hsym hz (neg_injective (by simpa [hsm] using hab))
+    · intro y
+      obtain ⟨x, hx⟩ := surjective_shiftMap hA hz (-y)
+      exact ⟨x, by rw [hsm]; simp [hx]⟩
+  let e : A.domain ≃ₗ[ℂ] E := LinearEquiv.ofBijective sm hbij
+  have hesymm : ∀ y : E, sm (e.symm y) = y := fun y => e.apply_symm_apply y
   set Rlin : E →ₗ[ℂ] E := A.domain.subtype ∘ₗ (e.symm : E →ₗ[ℂ] A.domain) with hRlin
   have hbound : ∀ y : E, ‖Rlin y‖ ≤ |z.im|⁻¹ * ‖y‖ := by
     intro y
     have h := norm_sub_smul_ge_abs_im hsym z (e.symm y)
-    rw [show A (e.symm y) - z • ((e.symm y : A.domain) : E) = shiftMap A z (e.symm y) from rfl,
-      hesymm] at h
-    have : ‖Rlin y‖ = ‖((e.symm y : A.domain) : E)‖ := (rfl)
-    rw [this]
+    have hy : A (e.symm y) - z • ((e.symm y : A.domain) : E) = -y := by
+      have h0 := hesymm y
+      rw [hsmapp] at h0
+      linear_combination (norm := module) -h0
+    rw [hy, norm_neg] at h
+    have hRn : ‖Rlin y‖ = ‖((e.symm y : A.domain) : E)‖ := (rfl)
+    rw [hRn]
     rw [inv_mul_eq_div, le_div_iff₀ habs, mul_comm]
     exact h
-  refine mem_resolventSet_iff.mpr ⟨Rlin.mkContinuous (|z.im|⁻¹) hbound, ?_, ?_⟩
-  · intro ψ
-    have hinv : e.symm ((shiftMap A z) ψ) = ψ := e.symm_apply_apply ψ
+  refine mem_resolventSet_iff.mpr
+    ⟨Rlin.mkContinuous (|z.im|⁻¹) hbound, fun φ => (e.symm φ).2, fun φ => ?_, fun ψ => ?_⟩
+  · -- right inverse: `(z • I - A) (R φ) = φ`, which is `sm (e.symm φ) = φ`
+    have h := hesymm φ
+    rw [hsmapp] at h
+    exact h
+  · -- left inverse on the domain: `R ((z • I - A) ψ) = ψ`
+    have hinv : e.symm (sm ψ) = ψ := e.symm_apply_apply ψ
     -- states the goal with the definition unfolded, in the shape the next step needs;
     -- there is no `_apply` lemma to rewrite with here.
-    change ((e.symm (A ψ - z • (ψ : E)) : A.domain) : E) = (ψ : E)
-    rw [show (A ψ - z • (ψ : E)) = (shiftMap A z) ψ from rfl, hinv]
-  · intro φ
-    -- `(mkContinuous …) φ` is definitionally `↑(e.symm φ)`, so the whole goal is
-    -- definitionally `shiftMap A z (e.symm φ) = φ`.
-    exact ⟨(e.symm φ).2, hesymm φ⟩
+    change ((e.symm (z • (ψ : E) - A ψ) : A.domain) : E) = (ψ : E)
+    rw [show z • (ψ : E) - A ψ = sm ψ from (hsmapp ψ).symm, hinv]
 
 /-- **The spectrum of a self-adjoint operator is real.** -/
 theorem spectrum_subset_real {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
@@ -319,19 +337,21 @@ theorem spectrum_subset_real {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
 the reciprocal distance to the real axis. -/
 theorem norm_resolvent_le_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
     {z : ℂ} (hz : z.im ≠ 0) :
-    ‖resolvent A (mem_resolventSet_of_im_ne_zero hA hz)‖ ≤ |z.im|⁻¹ := by
+    ‖resolvent A z‖ ≤ |z.im|⁻¹ := by
   have hsym : A.IsFormalAdjoint A := by
     have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
     rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
   have habs : 0 < |z.im| := abs_pos.mpr hz
   set hmem := mem_resolventSet_of_im_ne_zero hA hz
   refine ContinuousLinearMap.opNorm_le_bound _ (by positivity) fun y => ?_
-  have hdom : resolvent A hmem y ∈ A.domain := resolvent_mem_domain hmem y
-  have hsolve : A ⟨resolvent A hmem y, hdom⟩ - z • resolvent A hmem y = y :=
-    sub_smul_resolvent hmem y
-  have h := norm_sub_smul_ge_abs_im hsym z ⟨resolvent A hmem y, hdom⟩
-  rw [show A (⟨resolvent A hmem y, hdom⟩ : A.domain)
-      - z • ((⟨resolvent A hmem y, hdom⟩ : A.domain) : E) = y from hsolve] at h
+  have hdom : resolvent A z y ∈ A.domain := resolvent_mem_domain hmem y
+  have hsolve : z • resolvent A z y - A ⟨resolvent A z y, hdom⟩ = y :=
+    smul_sub_apply_resolvent hmem y
+  have h := norm_sub_smul_ge_abs_im hsym z ⟨resolvent A z y, hdom⟩
+  have hflip : A (⟨resolvent A z y, hdom⟩ : A.domain)
+      - z • ((⟨resolvent A z y, hdom⟩ : A.domain) : E) = -y := by
+    linear_combination (norm := module) -hsolve
+  rw [hflip, norm_neg] at h
   rw [inv_mul_eq_div, le_div_iff₀ habs, mul_comm]
   exact h
 
@@ -339,7 +359,7 @@ theorem norm_resolvent_le_of_im_ne_zero {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoi
 self-adjoint bounded operator. -/
 theorem isSelfAdjoint_resolvent_ofReal {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
     {c : ℝ} (hc : (c : ℂ) ∈ resolventSet A) :
-    _root_.IsSelfAdjoint (resolvent A hc) := by
+    _root_.IsSelfAdjoint (resolvent A (c : ℂ)) := by
   have hsym : A.IsFormalAdjoint A := by
     have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
     rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
@@ -347,82 +367,85 @@ theorem isSelfAdjoint_resolvent_ofReal {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoin
   symm
   rw [ContinuousLinearMap.eq_adjoint_iff]
   intro x y
-  -- write both arguments as `(A - c)` of a domain point and use symmetry
-  set px : A.domain := ⟨resolvent A hc x, resolvent_mem_domain hc x⟩ with hpx
-  set py : A.domain := ⟨resolvent A hc y, resolvent_mem_domain hc y⟩ with hpy
-  have hx : A px - (c : ℂ) • (px : E) = x := sub_smul_resolvent hc x
-  have hy : A py - (c : ℂ) • (py : E) = y := sub_smul_resolvent hc y
-  have hstep : ⟪(px : E), A py - (c : ℂ) • (py : E)⟫_ℂ
-      = ⟪A px - (c : ℂ) • (px : E), (py : E)⟫_ℂ := by
+  -- write both arguments as `(c • I - A)` of a domain point and use symmetry
+  set px : A.domain := ⟨resolvent A (c : ℂ) x, resolvent_mem_domain hc x⟩ with hpx
+  set py : A.domain := ⟨resolvent A (c : ℂ) y, resolvent_mem_domain hc y⟩ with hpy
+  have hx : (c : ℂ) • (px : E) - A px = x := smul_sub_apply_resolvent hc x
+  have hy : (c : ℂ) • (py : E) - A py = y := smul_sub_apply_resolvent hc y
+  have hstep : ⟪(px : E), (c : ℂ) • (py : E) - A py⟫_ℂ
+      = ⟪(c : ℂ) • (px : E) - A px, (py : E)⟫_ℂ := by
     rw [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right,
       Complex.conj_ofReal, hsym px py]
-  calc ⟪resolvent A hc x, y⟫_ℂ
-      = ⟪(px : E), A py - (c : ℂ) • (py : E)⟫_ℂ := by rw [hy]
-    _ = ⟪A px - (c : ℂ) • (px : E), (py : E)⟫_ℂ := hstep
-    _ = ⟪x, resolvent A hc y⟫_ℂ := by rw [hx]
+  calc ⟪resolvent A (c : ℂ) x, y⟫_ℂ
+      = ⟪(px : E), (c : ℂ) • (py : E) - A py⟫_ℂ := by rw [hy]
+    _ = ⟪(c : ℂ) • (px : E) - A px, (py : E)⟫_ℂ := hstep
+    _ = ⟪x, resolvent A (c : ℂ) y⟫_ℂ := by rw [hx]
 
 /-- **The adjoint of the resolvent is the resolvent at the conjugate point:**
 `R(z)⋆ = R(z̄)`.
 
 Both sides are pinned by the two-sided inverse property: writing `u = R(z) x` and
-`v = R(z̄) y`, symmetry of `A` turns `⟪u, (A - z̄) v⟫` into `⟪(A - z) u, v⟫`. -/
+`v = R(z̄) y`, symmetry of `A` turns `⟪u, (z • I - A) v⟫` into `⟪(z̄ • I - A) u, v⟫`. -/
 theorem adjoint_resolvent {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) {z : ℂ}
     (hz : z ∈ resolventSet A) (hzc : (starRingEnd ℂ) z ∈ resolventSet A) :
-    ContinuousLinearMap.adjoint (resolvent A hz) = resolvent A hzc := by
+    ContinuousLinearMap.adjoint (resolvent A z) = resolvent A ((starRingEnd ℂ) z) := by
   have hsym : A.IsFormalAdjoint A := by
     have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
     rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
   symm
   rw [ContinuousLinearMap.eq_adjoint_iff]
   intro x y
-  set u : A.domain := ⟨resolvent A hzc x, resolvent_mem_domain hzc x⟩ with hu
-  set v : A.domain := ⟨resolvent A hz y, resolvent_mem_domain hz y⟩ with hv
-  have hux : A u - (starRingEnd ℂ) z • (u : E) = x := sub_smul_resolvent hzc x
-  have hvy : A v - z • (v : E) = y := sub_smul_resolvent hz y
-  calc ⟪resolvent A hzc x, y⟫_ℂ
-      = ⟪(u : E), A v - z • (v : E)⟫_ℂ := by rw [hvy]
-    _ = ⟪A u - (starRingEnd ℂ) z • (u : E), (v : E)⟫_ℂ := by
+  set u : A.domain := ⟨resolvent A ((starRingEnd ℂ) z) x, resolvent_mem_domain hzc x⟩ with hu
+  set v : A.domain := ⟨resolvent A z y, resolvent_mem_domain hz y⟩ with hv
+  have hux : (starRingEnd ℂ) z • (u : E) - A u = x := smul_sub_apply_resolvent hzc x
+  have hvy : z • (v : E) - A v = y := smul_sub_apply_resolvent hz y
+  calc ⟪resolvent A ((starRingEnd ℂ) z) x, y⟫_ℂ
+      = ⟪(u : E), z • (v : E) - A v⟫_ℂ := by rw [hvy]
+    _ = ⟪(starRingEnd ℂ) z • (u : E) - A u, (v : E)⟫_ℂ := by
         rw [inner_sub_left, inner_sub_right, inner_smul_left, inner_smul_right,
           starRingEnd_self_apply, hsym u v]
-    _ = ⟪x, resolvent A hz y⟫_ℂ := by rw [hux]
+    _ = ⟪x, resolvent A z y⟫_ℂ := by rw [hux]
 
 /-- **The Davis--Kahan gap-resolvent bound.**  If the spectrum of a self-adjoint
-`A` avoids the open interval `(c - s, c + s)` then `A - c` has a bounded
+`A` avoids the open interval `(c - s, c + s)` then `c • I - A` has a bounded
 two-sided inverse of norm at most `s⁻¹`.
 
+The inverse exhibited is the canonical resolvent `resolvent A c`, which inverts
+`c • I - A`; the norm bound is insensitive to that choice of sign.
+
 The proof is a C⋆-algebra argument about the *bounded* operator `R`: spectral
-mapping puts `spectrum R \ {0}` inside `(· - c)⁻¹ '' spectrum A`, the gap bounds
+mapping puts `spectrum R \ {0}` inside `(c - ·)⁻¹ '' spectrum A`, the gap bounds
 that by `s⁻¹`, and for a self-adjoint element the norm *is* the spectral radius.
 No projection-valued measure and no functional calculus appear. -/
 theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
     {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) {c s : ℝ} (hs : 0 < s)
     (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s), (lam : ℂ) ∉ spectrum A) :
     ∃ R : E →L[ℂ] E, ‖R‖ ≤ s⁻¹ ∧
-      (∀ ψ : A.domain, R (A ψ - (c : ℂ) • (ψ : E)) = (ψ : E)) ∧
+      (∀ ψ : A.domain, R ((c : ℂ) • (ψ : E) - A ψ) = (ψ : E)) ∧
       ∀ φ : E, ∃ hmem : R φ ∈ A.domain,
-        A ⟨R φ, hmem⟩ - (c : ℂ) • R φ = φ := by
+        (c : ℂ) • R φ - A ⟨R φ, hmem⟩ = φ := by
   have hcmem : c ∈ Set.Ioo (c - s) (c + s) := ⟨by linarith, by linarith⟩
   have hc : (c : ℂ) ∈ resolventSet A := notMem_spectrum_iff.mp (hgap c hcmem)
-  refine ⟨resolvent A hc, ?_, fun ψ => resolvent_apply_sub_smul hc ψ, fun φ =>
-    ⟨resolvent_mem_domain hc φ, sub_smul_resolvent hc φ⟩⟩
+  refine ⟨resolvent A (c : ℂ), ?_, fun ψ => resolvent_smul_sub_apply hc ψ, fun φ =>
+    ⟨resolvent_mem_domain hc φ, smul_sub_apply_resolvent hc φ⟩⟩
   -- every spectral point of the bounded resolvent has modulus at most `s⁻¹`
-  have hspec : ∀ μ ∈ _root_.spectrum ℂ (resolvent A hc), ‖μ‖ ≤ s⁻¹ := by
+  have hspec : ∀ μ ∈ _root_.spectrum ℂ (resolvent A (c : ℂ)), ‖μ‖ ≤ s⁻¹ := by
     intro μ hμ
     rcases eq_or_ne μ 0 with rfl | hμ0
     · simpa using (by positivity : (0:ℝ) ≤ s⁻¹)
     · -- `c + μ⁻¹` is a spectral point of `A`, hence real and outside the gap
-      have hnot : (c : ℂ) + μ⁻¹ ∉ resolventSet A := fun hmem =>
+      have hnot : (c : ℂ) - μ⁻¹ ∉ resolventSet A := fun hmem =>
         notMem_spectrum_resolvent hc hμ0 hmem hμ
       obtain ⟨r, -, hr⟩ := spectrum_subset_real hA (mem_spectrum_iff.mpr hnot)
       have hrspec : (r : ℂ) ∈ spectrum A := by rw [hr]; exact mem_spectrum_iff.mpr hnot
       have hrgap : r ∉ Set.Ioo (c - s) (c + s) := fun hmem => hgap r hmem hrspec
-      have hge : s ≤ |r - c| := by
+      have hge : s ≤ |c - r| := by
         rw [Set.mem_Ioo, not_and_or, not_lt, not_lt] at hrgap
         rcases hrgap with h | h
-        · rw [abs_of_nonpos (by linarith)]; linarith
         · rw [abs_of_nonneg (by linarith)]; linarith
-      have hinvnorm : ‖μ‖⁻¹ = |r - c| := by
-        rw [← norm_inv, show μ⁻¹ = (r : ℂ) - (c : ℂ) by rw [hr]; ring,
+        · rw [abs_of_nonpos (by linarith)]; linarith
+      have hinvnorm : ‖μ‖⁻¹ = |c - r| := by
+        rw [← norm_inv, show μ⁻¹ = (c : ℂ) - (r : ℂ) by rw [hr]; ring,
           ← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
       have hpos : 0 < ‖μ‖ := norm_pos_iff.mpr hμ0
       have hsle : s ≤ ‖μ‖⁻¹ := hinvnorm ▸ hge
@@ -430,14 +453,14 @@ theorem exists_norm_le_two_sided_shifted_inverse_of_spectrum_gap
       rw [show s⁻¹ = 1 / s by ring, le_div_iff₀ hs]
       nlinarith [hsle, hpos, hcancel]
   -- for a self-adjoint element the norm *is* the spectral radius
-  have hsa : _root_.IsSelfAdjoint (resolvent A hc) := isSelfAdjoint_resolvent_ofReal hA hc
-  have hrad : spectralRadius ℂ (resolvent A hc) ≤ ENNReal.ofReal s⁻¹ := by
+  have hsa : _root_.IsSelfAdjoint (resolvent A (c : ℂ)) := isSelfAdjoint_resolvent_ofReal hA hc
+  have hrad : spectralRadius ℂ (resolvent A (c : ℂ)) ≤ ENNReal.ofReal s⁻¹ := by
     refine iSup₂_le fun μ hμ => ?_
     calc (‖μ‖₊ : ℝ≥0∞) = ENNReal.ofReal ‖μ‖ := by
           rw [← ENNReal.ofReal_coe_nnreal]; norm_cast
       _ ≤ ENNReal.ofReal s⁻¹ := ENNReal.ofReal_le_ofReal (hspec μ hμ)
-  calc ‖resolvent A hc‖
-      = (spectralRadius ℂ (resolvent A hc)).toReal :=
+  calc ‖resolvent A (c : ℂ)‖
+      = (spectralRadius ℂ (resolvent A (c : ℂ))).toReal :=
         hsa.toReal_spectralRadius_complex_eq_norm.symm
     _ ≤ s⁻¹ := ENNReal.toReal_le_of_le_ofReal (by positivity) hrad
 
@@ -459,38 +482,41 @@ theorem I_mem_resolventSet {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
   mem_resolventSet_of_im_ne_zero hA (by simp)
 
 /-- **The Cayley transform** `(A - i)(A + i)⁻¹`, in the manifestly bounded form
-`1 - 2i·R(-i)`. -/
+`1 + 2i·R(-i)`.
+
+The canonical resolvent inverts `-i • I - A`, so `(A + i)⁻¹ = -R(-i)` and the
+`-2i` of the `(A - z)` convention becomes `+2i` here. -/
 @[expose]
-noncomputable def cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) : E →L[ℂ] E :=
-  1 - (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA)
+noncomputable def cayley {A : E →ₗ.[ℂ] E} (_hA : IsSelfAdjoint A) : E →L[ℂ] E :=
+  1 + (2 * Complex.I) • resolvent A (-Complex.I)
 
 /-- Rewrite form of `cayley`, so call sites need not unfold the definition.
 
 Added 2026-07-30: `SpectralMeasure/Construction` was doing `simp [cayley]`, which needs
 the body exposed. Tau Ceti's `api-design` rubric asks for the lemma instead. -/
 theorem cayley_def {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
-    cayley hA = 1 - (2 * Complex.I) • resolvent A (negI_mem_resolventSet hA) := (rfl)
+    cayley hA = 1 + (2 * Complex.I) • resolvent A (-Complex.I) := (rfl)
 
-/-- On a vector, `U ξ = (A + i) R(-i) ξ - 2i R(-i) ξ`, i.e. `(A - i)` applied to
-the preimage of `ξ` under `A + i`.
+/-- On a vector, `U ξ = (i • I - A) R(-i) ξ`, i.e. `(A - i)` applied to the
+preimage of `ξ` under `A + i`, that preimage being `-R(-i) ξ`.
 
 Deliberately **not** `@[simp]`: it rewrites the Cayley
 transform into a resolvent expression, which is not a normal form — downstream proofs
 work with `cayley` folded and unfold it by name where they mean to. -/
 theorem cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E) :
     cayley hA ξ
-      = A ⟨resolvent A (negI_mem_resolventSet hA) ξ,
-            resolvent_mem_domain (negI_mem_resolventSet hA) ξ⟩
-        - Complex.I • resolvent A (negI_mem_resolventSet hA) ξ := by
+      = Complex.I • resolvent A (-Complex.I) ξ
+        - A ⟨resolvent A (-Complex.I) ξ,
+            resolvent_mem_domain (negI_mem_resolventSet hA) ξ⟩ := by
   set h := negI_mem_resolventSet hA with hh
-  set x := resolvent A h ξ with hx
+  set x := resolvent A (-Complex.I) ξ with hx
   have hmem : x ∈ A.domain := resolvent_mem_domain h ξ
-  have hsolve : A ⟨x, hmem⟩ - (-Complex.I) • x = ξ := sub_smul_resolvent h ξ
-  have hAx : A ⟨x, hmem⟩ = ξ - Complex.I • x := by
+  have hsolve : (-Complex.I) • x - A ⟨x, hmem⟩ = ξ := smul_sub_apply_resolvent h ξ
+  have hAx : A ⟨x, hmem⟩ = -(Complex.I • x) - ξ := by
     rw [← hsolve]; module
   -- states the goal with the definition unfolded, in the shape the next step needs;
   -- there is no `_apply` lemma to rewrite with here.
-  change ξ - (2 * Complex.I) • x = A ⟨x, hmem⟩ - Complex.I • x
+  change ξ + (2 * Complex.I) • x = Complex.I • x - A ⟨x, hmem⟩
   rw [hAx]
   module
 
@@ -503,9 +529,9 @@ theorem norm_cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E)
     have h := _root_.LinearPMap.adjoint_isFormalAdjoint (T := A) hA.dense_domain
     rwa [_root_.LinearPMap.isSelfAdjoint_def.mp hA] at h
   set h := negI_mem_resolventSet hA with hh
-  set x := resolvent A h ξ with hx
+  set x := resolvent A (-Complex.I) ξ with hx
   have hmem : x ∈ A.domain := resolvent_mem_domain h ξ
-  have hsolve : A ⟨x, hmem⟩ - (-Complex.I) • x = ξ := sub_smul_resolvent h ξ
+  have hsolve : (-Complex.I) • x - A ⟨x, hmem⟩ = ξ := smul_sub_apply_resolvent h ξ
   -- both shifts have the same norm, by the exact identity at `z = ±i`
   have hplus := norm_sub_smul_sq hsym (-Complex.I) ⟨x, hmem⟩
   have hminus := norm_sub_smul_sq hsym Complex.I ⟨x, hmem⟩
@@ -513,8 +539,9 @@ theorem norm_cayley_apply {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ : E)
     Complex.ofReal_zero, zero_smul, sub_zero, neg_one_sq, one_pow, one_mul] at hplus hminus
   have hsq : ‖cayley hA ξ‖ ^ 2 = ‖ξ‖ ^ 2 := by
     -- do not rewrite `ξ` in the goal: it occurs inside `x = R(-i) ξ`
-    have hxi : ‖ξ‖ ^ 2 = ‖A ⟨x, hmem⟩ - (-Complex.I) • x‖ ^ 2 := by rw [hsolve]
-    rw [cayley_apply hA ξ, hxi, hminus, hplus]
+    have hxi : ‖ξ‖ ^ 2 = ‖A ⟨x, hmem⟩ - (-Complex.I) • x‖ ^ 2 := by
+      rw [← hsolve, norm_sub_rev]
+    rw [cayley_apply hA ξ, norm_sub_rev, hxi, hminus, hplus]
   have h2 := congrArg Real.sqrt hsq
   rwa [Real.sqrt_sq (norm_nonneg _), Real.sqrt_sq (norm_nonneg _)] at h2
 
@@ -526,24 +553,25 @@ theorem inner_cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (ξ η : E) :
       norm_map' := norm_cayley_apply hA }
   exact L.inner_map_map ξ η
 
-/-- **The Cayley transform is surjective.**  Given `η`, solve `(A - i) y = η` —
-possible because `i` is a resolvent point — and take `ξ = (A + i) y`. -/
+/-- **The Cayley transform is surjective.**  Given `η`, solve `(i • I - A) y = η` —
+possible because `i` is a resolvent point — and take `ξ = (-i • I - A) y`, which is
+`-(A + i) y`. -/
 theorem surjective_cayley {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) :
     Function.Surjective (cayley hA) := by
   intro η
   set hi := I_mem_resolventSet hA with hhi
   set hni := negI_mem_resolventSet hA with hhni
-  set y : E := resolvent A hi η with hy
+  set y : E := resolvent A Complex.I η with hy
   have hymem : y ∈ A.domain := resolvent_mem_domain hi η
-  have hsolve : A ⟨y, hymem⟩ - Complex.I • y = η := sub_smul_resolvent hi η
-  -- `ξ := (A + i) y`
-  refine ⟨A ⟨y, hymem⟩ - (-Complex.I) • y, ?_⟩
-  -- `R(-i)` inverts `A + i` on the domain
-  have hR : resolvent A hni (A ⟨y, hymem⟩ - (-Complex.I) • y) = y :=
-    resolvent_apply_sub_smul hni ⟨y, hymem⟩
+  have hsolve : Complex.I • y - A ⟨y, hymem⟩ = η := smul_sub_apply_resolvent hi η
+  -- `ξ := (-i • I - A) y`
+  refine ⟨(-Complex.I) • y - A ⟨y, hymem⟩, ?_⟩
+  -- `R(-i)` inverts `-i • I - A` on the domain
+  have hR : resolvent A (-Complex.I) ((-Complex.I) • y - A ⟨y, hymem⟩) = y :=
+    resolvent_smul_sub_apply hni ⟨y, hymem⟩
   rw [cayley_apply hA]
   -- both the operator application and the shift collapse via `hR`
-  have hdom : (⟨resolvent A hni (A ⟨y, hymem⟩ - (-Complex.I) • y),
+  have hdom : (⟨resolvent A (-Complex.I) ((-Complex.I) • y - A ⟨y, hymem⟩),
       resolvent_mem_domain hni _⟩ : A.domain) = ⟨y, hymem⟩ := Subtype.ext hR
   rw [hdom, hR]
   exact hsolve
