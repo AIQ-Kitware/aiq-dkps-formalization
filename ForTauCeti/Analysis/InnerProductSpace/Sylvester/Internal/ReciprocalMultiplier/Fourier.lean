@@ -348,7 +348,7 @@ private theorem norm_mul_phaseOf (f : ℝ → ℂ) (t : ℝ) :
     (‖f t‖ : ℂ) * phaseOf f t = f t := by
   by_cases ht : f t = 0
   · simp [phaseOf, ht]
-  · simp only [phaseOf, if_neg ht]
+  · simp only [phaseOf, ite_eq_right ht]
     field_simp [norm_ne_zero_iff.mpr ht]
 
 /-- **The `‖f‖`-weighted measure has real total mass `∫ ‖f‖`.**  A general fact

@@ -128,7 +128,7 @@ theorem moorePenroseInverse_apply_apply_rightSingularBasis
     have hinner : inner 𝕜 (TauCeti.rightSingularBasis A i)
         (TauCeti.rightSingularBasis A k) = 0 := by
       simp [orthonormal_iff_ite.mp
-        (TauCeti.rightSingularBasis A).orthonormal i k, if_neg hik]
+        (TauCeti.rightSingularBasis A).orthonormal i k, ite_eq_right hik]
     rw [hinner, mul_zero, zero_smul, smul_zero]
   · intro hkmem
     exact absurd (Finset.mem_univ k) hkmem
@@ -168,10 +168,10 @@ theorem moorePenroseInverse_comp_apply_rightSingularBasis
     (moorePenroseInverse A ∘ₗ A) (TauCeti.rightSingularBasis A i) =
       if A.singularValues i = 0 then 0 else TauCeti.rightSingularBasis A i := by
   by_cases hi : A.singularValues i = 0
-  · rw [if_pos hi, LinearMap.comp_apply,
+  · rw [ite_eq_left hi, LinearMap.comp_apply,
       TauCeti.apply_rightSingularBasis_eq_zero_of_singularValue_eq_zero A hi,
       map_zero]
-  · rw [if_neg hi, LinearMap.comp_apply,
+  · rw [ite_eq_right hi, LinearMap.comp_apply,
       moorePenroseInverse_apply_apply_rightSingularBasis A hi]
 
 /-- **The fourth Penrose identity: `A⁺A` is self-adjoint.**
@@ -194,13 +194,13 @@ theorem isSymmetric_moorePenroseInverse_comp (A : E →ₗ[𝕜] F) :
       moorePenroseInverse_comp_apply_rightSingularBasis]
     by_cases hi : A.singularValues i = 0
     · by_cases hj : A.singularValues j = 0
-      · rw [if_pos hi, if_pos hj, inner_zero_left, inner_zero_right]
+      · rw [ite_eq_left hi, ite_eq_left hj, inner_zero_left, inner_zero_right]
       · have hne : j ≠ i := fun h => hj (h ▸ hi)
-        rw [if_pos hi, if_neg hj, inner_zero_right, horth, if_neg hne]
+        rw [ite_eq_left hi, ite_eq_right hj, inner_zero_right, horth, ite_eq_right hne]
     · by_cases hj : A.singularValues j = 0
       · have hne : j ≠ i := fun h => hi (h ▸ hj)
-        rw [if_neg hi, if_pos hj, inner_zero_left, horth, if_neg hne]
-      · rw [if_neg hi, if_neg hj]
+        rw [ite_eq_right hi, ite_eq_left hj, inner_zero_left, horth, ite_eq_right hne]
+      · rw [ite_eq_right hi, ite_eq_right hj]
   intro x y
   rw [← v.sum_repr x, ← v.sum_repr y]
   simp only [map_sum, map_smul, sum_inner, inner_sum, inner_smul_left,
@@ -234,9 +234,9 @@ theorem moorePenroseInverse_comp_comp (A : E →ₗ[𝕜] F) :
   refine Finset.sum_congr rfl fun i _ => ?_
   rw [map_smul, map_smul, moorePenroseInverse_comp_apply_rightSingularBasis]
   by_cases hi : A.singularValues i = 0
-  · rw [if_pos hi]
+  · rw [ite_eq_left hi]
     simp [hi]
-  · rw [if_neg hi]
+  · rw [ite_eq_right hi]
 
 /-- **The third Penrose identity: `A A⁺` is self-adjoint.**
 

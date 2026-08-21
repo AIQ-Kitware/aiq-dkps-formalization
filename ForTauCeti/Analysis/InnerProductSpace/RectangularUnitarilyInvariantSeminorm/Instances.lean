@@ -418,9 +418,9 @@ theorem orthonormal_unimodular_smul {ι : Type*} {u : ι → F}
   rw [inner_smul_left, inner_smul_right, hu i j]
   by_cases h : i = j
   · subst h
-    rw [if_pos rfl, mul_one, RCLike.conj_mul, hc i]
+    rw [ite_eq_left rfl, mul_one, RCLike.conj_mul, hc i]
     norm_num
-  · rw [if_neg h, mul_zero, mul_zero]
+  · rw [ite_eq_right h, mul_zero, mul_zero]
 
 /-- **Absolute-value witness form of the rectangular Ky Fan upper bound.**
 Because the two orthonormal families may be rephased independently, the Ky Fan
@@ -496,7 +496,7 @@ theorem exists_orthonormal_re_sum_inner_map_eq_rectangularKyFanSum
   have hnorm : ∀ i : Fin k, ‖A (v i)‖ = A.singularValues (i : ℕ) := by
     intro i
     have h := hgram i i
-    rw [if_pos rfl, mul_one] at h
+    rw [ite_eq_left rfl, mul_one] at h
     have h2 : ‖A (v i)‖ ^ 2 = A.singularValues (i : ℕ) ^ 2 := by
       have := congrArg (RCLike.re (K := 𝕜)) h
       rw [inner_self_eq_norm_sq_to_K] at this
@@ -546,7 +546,7 @@ theorem exists_orthonormal_re_sum_inner_map_eq_rectangularKyFanSum
     · have hlt : ((Fin.castLE hkF i : Fin (finrank 𝕜 F)) : ℕ) < k := i.isLt
       have hmem : (Fin.castLE hkF i) ∈ s := ⟨hlt, hz⟩
       have hwv : w (Fin.castLE hkF i) = ((A.singularValues (i : ℕ) : ℝ) : 𝕜)⁻¹ • A (v i) := by
-        simp only [hwdef, dif_pos hlt]
+        simp only [hwdef, dite_eq_left hlt]
         rfl
       have h0 : ((A.singularValues (i : ℕ) : ℝ) : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr hz
       change ⟪c (Fin.castLE hkF i), A (v i)⟫_𝕜 = _

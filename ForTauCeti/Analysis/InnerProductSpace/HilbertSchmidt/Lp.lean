@@ -272,8 +272,8 @@ theorem columns_ofLp (b : HilbertBasis ι 𝕜 F)
     by_cases h : j = i <;> simp [h, lp.single_apply]
   have hzero : ∀ j, j ≠ i → (b.repr (b i) j) • f j = 0 := by
     intro j hj
-    rw [hrepr j, if_neg hj, zero_smul]
-  rw [tsum_eq_single i hzero, hrepr i, if_pos rfl, one_smul]
+    rw [hrepr j, ite_eq_right hj, zero_smul]
+  rw [tsum_eq_single i hzero, hrepr i, ite_eq_left rfl, one_smul]
 
 end OfLp
 

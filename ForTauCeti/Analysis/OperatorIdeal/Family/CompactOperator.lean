@@ -83,10 +83,10 @@ noncomputable def compactOperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
     by_cases hA : IsCompactOperator A
     · by_cases hB : IsCompactOperator B
       · have hAB : IsCompactOperator (A + B) := hA.add hB
-        simp only [if_pos hA, if_pos hB, if_pos hAB]
+        simp only [ite_eq_left hA, ite_eq_left hB, ite_eq_left hAB]
         simpa [enorm_eq_nnnorm, ← ENNReal.coe_add] using nnnorm_add_le A B
-      · simp [if_neg hB]
-    · simp [if_neg hA]
+      · simp [ite_eq_right hB]
+    · simp [ite_eq_right hA]
   gauge_smul c A := by
     classical
     rcases eq_or_ne c 0 with rfl | hc
@@ -95,33 +95,33 @@ noncomputable def compactOperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
       have h1 : ‖((0 : 𝕜) • A)‖ₑ = 0 := by
         rw [zero_smul]; simp [enorm_eq_nnnorm]
       have h2 : ‖(0 : 𝕜)‖ₑ = 0 := by simp [enorm_eq_nnnorm]
-      rw [if_pos hz, h1, h2, zero_mul]
+      rw [ite_eq_left hz, h1, h2, zero_mul]
     · by_cases hA : IsCompactOperator A
       · have hcA : IsCompactOperator (c • A) := hA.smul c
-        simp only [if_pos hA, if_pos hcA]
+        simp only [ite_eq_left hA, ite_eq_left hcA]
         simp [enorm_eq_nnnorm, nnnorm_smul]
       · have hcA : ¬ IsCompactOperator (c • A) := by
           intro h
           refine hA ?_
           have h' : IsCompactOperator (c⁻¹ • (c • A)) := h.smul c⁻¹
           rwa [smul_smul, inv_mul_cancel₀ hc, one_smul] at h'
-        -- The `if` condition normalises to the bare-function form `c • ⇑A`, which `if_neg hcA`
-        -- no longer matches.
+        -- The `if` condition normalises to the bare-function form `c • ⇑A`, which
+        -- `ite_eq_right hcA` no longer matches.
         have hcA' : ¬ IsCompactOperator (c • ⇑A) := by simpa using hcA
-        simp [if_neg hA, if_neg hcA', ENNReal.mul_top, hc]
+        simp [ite_eq_right hA, ite_eq_right hcA', ENNReal.mul_top, hc]
   enorm_le_gauge A := by
     classical
     by_cases hA : IsCompactOperator A
-    · simp [if_pos hA]
-    · simp [if_neg hA]
+    · simp [ite_eq_left hA]
+    · simp [ite_eq_right hA]
   gauge_comp_le L A R := by
     classical
     by_cases hA : IsCompactOperator A
     · have hcomp : IsCompactOperator (L ∘L A ∘L R) :=
         (hA.comp_clm R).clm_comp L
-      simp only [if_pos hA, if_pos hcomp]
+      simp only [ite_eq_left hA, ite_eq_left hcomp]
       exact (operatorNormIdealFamily.{u, v, w} 𝕜).gauge_comp_le L A R
-    · simp only [if_neg hA]
+    · simp only [ite_eq_right hA]
       by_cases hL : L = 0
       · have hzero : L ∘L A ∘L R = 0 := by
           rw [hL, ContinuousLinearMap.zero_comp]
@@ -129,7 +129,7 @@ noncomputable def compactOperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
           rw [hzero]; exact isCompactOperator_zero
         have hz0 : ‖L ∘L A ∘L R‖ₑ = 0 := by
           rw [hzero]; simp [enorm_eq_nnnorm]
-        rw [if_pos hz, hz0]
+        rw [ite_eq_left hz, hz0]
         exact zero_le
       by_cases hR : R = 0
       · have hzero : L ∘L A ∘L R = 0 := by
@@ -138,7 +138,7 @@ noncomputable def compactOperatorIdealFamily (𝕜 : Type u) [RCLike 𝕜] :
           rw [hzero]; exact isCompactOperator_zero
         have hz0 : ‖L ∘L A ∘L R‖ₑ = 0 := by
           rw [hzero]; simp [enorm_eq_nnnorm]
-        rw [if_pos hz, hz0]
+        rw [ite_eq_left hz, hz0]
         exact zero_le
       · have hLe : ‖L‖ₑ ≠ 0 := by
           simp only [enorm_eq_nnnorm, ne_eq, ENNReal.coe_eq_zero, nnnorm_eq_zero]
@@ -162,7 +162,7 @@ theorem mem_carrier_compactOperatorIdealFamily {A : E →L[𝕜] F} :
   classical
   rw [OperatorIdealFamily.mem_carrier_iff, gauge_compactOperatorIdealFamily]
   by_cases hA : IsCompactOperator A
-  · simp only [if_pos hA, ne_eq, enorm_ne_top, not_false_eq_true, true_iff]
+  · simp only [ite_eq_left hA, ne_eq, enorm_ne_top, not_false_eq_true, true_iff]
     exact hA
   · simp [hA]
 
@@ -172,7 +172,7 @@ theorem gauge_compactOperatorIdealFamily_of_isCompactOperator
     {A : E →L[𝕜] F} (hA : IsCompactOperator A) :
     (compactOperatorIdealFamily.{u, v, w} 𝕜).gauge A = ‖A‖ₑ := by
   classical
-  rw [gauge_compactOperatorIdealFamily, if_pos hA]
+  rw [gauge_compactOperatorIdealFamily, ite_eq_left hA]
 
 /-- The ideal of the compact family, as a normed space, is isometric to Mathlib's
 submodule of compact operators.  This is what carries completeness across: the
@@ -247,12 +247,12 @@ noncomputable def compactOperatorFamily (𝕜 : Type u) [RCLike 𝕜] :
     · have hAdj : IsCompactOperator (ContinuousLinearMap.adjoint A) :=
         ContinuousLinearMap.isCompactOperator_adjoint hA
       rw [gauge_compactOperatorIdealFamily, gauge_compactOperatorIdealFamily,
-        if_pos hAdj, if_pos hA, ← ofReal_norm, ← ofReal_norm,
+        ite_eq_left hAdj, ite_eq_left hA, ← ofReal_norm, ← ofReal_norm,
         ContinuousLinearMap.adjoint.norm_map]
     · have hAdj : ¬ IsCompactOperator (ContinuousLinearMap.adjoint A) := fun h =>
         hA (ContinuousLinearMap.isCompactOperator_adjoint_iff.mp h)
       rw [gauge_compactOperatorIdealFamily, gauge_compactOperatorIdealFamily,
-        if_neg hAdj, if_neg hA]
+        ite_eq_right hAdj, ite_eq_right hA]
 
 /-- Completeness transfers to the symmetric view, which shares its underlying
 family.  Restated rather than inherited for the reason recorded on

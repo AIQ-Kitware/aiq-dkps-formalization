@@ -296,12 +296,12 @@ theorem prefixSum_transfer {q : Fin n → ℝ} {j l : Fin n} (hjl : j ≠ l) (δ
     funext i
     simp only [Pi.add_apply]
     rcases eq_or_ne i j with rfl | hij
-    · rw [transfer_apply_left hjl, if_pos rfl, if_neg hjl]
+    · rw [transfer_apply_left hjl, ite_eq_left rfl, ite_eq_right hjl]
       ring
     rcases eq_or_ne i l with rfl | hil
-    · rw [transfer_apply_right, if_neg hij, if_pos rfl]
+    · rw [transfer_apply_right, ite_eq_right hij, ite_eq_left rfl]
       ring
-    · rw [transfer_apply_of_ne hij hil, if_neg hij, if_neg hil]
+    · rw [transfer_apply_of_ne hij hil, ite_eq_right hij, ite_eq_right hil]
       ring
   have hj : prefixSum k (fun i : Fin n => if i = j then -δ else 0) =
       if (j : ℕ) < k then -δ else 0 := by
@@ -425,12 +425,12 @@ theorem exists_isTTransform_of_not_forall_le {z q : Fin n → ℝ}
     rcases lt_or_ge (j : ℕ) k with hjk | hjk
     · rcases lt_or_ge (l : ℕ) k with hlk | hlk
       · -- Both coordinates lie in the prefix: the transform is sum-preserving there.
-        rw [if_pos hjk, if_pos hlk]
+        rw [ite_eq_left hjk, ite_eq_left hlk]
         linarith [hpre k]
       · -- Only `j` lies in the prefix, so the prefix of `q` loses exactly `δ`.  But the
         -- prefix gap was already at least `q j - z j ≥ δ`, since `q` dominates `z`
         -- coordinatewise below `l`.
-        rw [if_pos hjk, if_neg (by omega : ¬ (l : ℕ) < k)]
+        rw [ite_eq_left hjk, ite_eq_right (by omega : ¬ (l : ℕ) < k)]
         have hjmem : j ∈ Finset.univ.filter fun i : Fin n => (i : ℕ) < k :=
           Finset.mem_filter.mpr ⟨Finset.mem_univ _, hjk⟩
         have hterm : q j - z j ≤
@@ -442,7 +442,7 @@ theorem exists_isTTransform_of_not_forall_le {z q : Fin n → ℝ}
         simp only [prefixSum]
         linarith
     · -- Neither coordinate lies in the prefix: the sums are unchanged.
-      rw [if_neg (by omega), if_neg (by omega : ¬ (l : ℕ) < k)]
+      rw [ite_eq_right (by omega), ite_eq_right (by omega : ¬ (l : ℕ) < k)]
       linarith [hpre k]
   · -- (iii) the transform kills at least one disagreement and creates none.
     refine Finset.card_lt_card ((Finset.ssubset_iff_of_subset ?_).mpr ?_)

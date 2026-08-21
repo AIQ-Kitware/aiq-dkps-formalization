@@ -123,11 +123,12 @@ theorem orthonormal_leftSingularVector_subtype (A : E →ₗ[𝕜] F) :
     orthonormal_iff_ite.mp (rightSingularBasis A).orthonormal]
   rcases eq_or_ne i j with h | h
   · subst h
-    rw [if_pos rfl, if_pos rfl]
+    rw [ite_eq_left rfl, ite_eq_left rfl]
     have hσ : ((A.singularValues i.1 : ℝ) : 𝕜) ≠ 0 := RCLike.ofReal_ne_zero.mpr i.2
     rw [mul_one, RCLike.ofReal_pow]
     field_simp
-  · rw [if_neg (fun hc : (i.1 : Fin (finrank 𝕜 E)) = j.1 => h (Subtype.ext hc)), if_neg h]
+  · rw [ite_eq_right (fun hc : (i.1 : Fin (finrank 𝕜 E)) = j.1 => h (Subtype.ext hc)),
+      ite_eq_right h]
     ring
 
 /-- The image of a right singular basis vector has norm equal to its singular value. -/

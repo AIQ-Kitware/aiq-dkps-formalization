@@ -507,7 +507,7 @@ private noncomputable def isometryPad (ι : D →ₗᵢ[𝕜] E)
 private theorem isometryPad_of_lt (ι : D →ₗᵢ[𝕜] E)
     (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) {i : Fin (finrank 𝕜 E)}
     (h : (i : ℕ) < finrank 𝕜 D) : isometryPad ι v i = ι (v ⟨(i : ℕ), h⟩) :=
-  dif_pos h
+  dite_eq_left h
 
 private theorem isometryPad_of_ge (ι : D →ₗᵢ[𝕜] E)
     (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) {i : Fin (finrank 𝕜 E)}
@@ -516,7 +516,7 @@ private theorem isometryPad_of_ge (ι : D →ₗᵢ[𝕜] E)
       = (stdOrthonormalBasis 𝕜 ((LinearMap.range ι.toLinearMap)ᗮ : Submodule 𝕜 E)
           (Fin.cast (finrank_orthogonal_range_linearIsometry ι).symm
             ⟨(i : ℕ) - finrank 𝕜 D, by have := i.isLt; omega⟩) : E) :=
-  dif_neg h
+  dite_eq_right h
 
 private theorem isometryPad_mem_range (ι : D →ₗᵢ[𝕜] E)
     (v : OrthonormalBasis (Fin (finrank 𝕜 D)) 𝕜 D) {i : Fin (finrank 𝕜 E)}
@@ -542,21 +542,22 @@ private theorem orthonormal_isometryPad (ι : D →ₗᵢ[𝕜] E)
     · rw [isometryPad_of_lt ι v hi, isometryPad_of_lt ι v hj, ι.inner_map_map,
         orthonormal_iff_ite.mp v.orthonormal]
       by_cases hij : i = j
-      · subst hij; rw [if_pos rfl, if_pos rfl]
-      · rw [if_neg (fun hc => hij (Fin.ext (by simpa using congrArg Fin.val hc))), if_neg hij]
-    · rw [if_neg (fun hc : i = j => hj (hc ▸ hi))]
+      · subst hij; rw [ite_eq_left rfl, ite_eq_left rfl]
+      · rw [ite_eq_right (fun hc => hij (Fin.ext (by simpa using congrArg Fin.val hc))),
+          ite_eq_right hij]
+    · rw [ite_eq_right (fun hc : i = j => hj (hc ▸ hi))]
       exact Submodule.inner_right_of_mem_orthogonal (isometryPad_mem_range ι v hi)
         (isometryPad_mem_orthogonal ι v hj)
   · by_cases hj : (j : ℕ) < finrank 𝕜 D
-    · rw [if_neg (fun hc : i = j => hi (hc ▸ hj))]
+    · rw [ite_eq_right (fun hc : i = j => hi (hc ▸ hj))]
       exact Submodule.inner_left_of_mem_orthogonal (isometryPad_mem_range ι v hj)
         (isometryPad_mem_orthogonal ι v hi)
     · rw [isometryPad_of_ge ι v hi, isometryPad_of_ge ι v hj, ← Submodule.coe_inner,
         orthonormal_iff_ite.mp (stdOrthonormalBasis 𝕜
           ((LinearMap.range ι.toLinearMap)ᗮ : Submodule 𝕜 E)).orthonormal]
       by_cases hij : i = j
-      · subst hij; rw [if_pos rfl, if_pos rfl]
-      · rw [if_neg (fun hc => ?_), if_neg hij]
+      · subst hij; rw [ite_eq_left rfl, ite_eq_left rfl]
+      · rw [ite_eq_right (fun hc => ?_), ite_eq_right hij]
         rw [Fin.cast_inj] at hc
         have hval : (i : ℕ) - finrank 𝕜 D = (j : ℕ) - finrank 𝕜 D := by
           simpa using congrArg Fin.val hc
@@ -589,12 +590,12 @@ private theorem antitone_padZero {n m : ℕ} {μ : Fin n → ℝ} (hanti : Antit
   dsimp only
   by_cases hj : (j : ℕ) < n
   · have hi : (i : ℕ) < n := lt_of_le_of_lt hvij hj
-    rw [dif_pos hi, dif_pos hj]
+    rw [dite_eq_left hi, dite_eq_left hj]
     exact hanti (Fin.mk_le_mk.mpr hvij)
-  · rw [dif_neg hj]
+  · rw [dite_eq_right hj]
     by_cases hi : (i : ℕ) < n
-    · rw [dif_pos hi]; exact hnonneg _
-    · rw [dif_neg hi]
+    · rw [dite_eq_left hi]; exact hnonneg _
+    · rw [dite_eq_right hi]
 
 /-- **The padded basis is an eigenbasis of the conjugated operator.**  If `v` diagonalises
 `G` on `D`, then `ι ∘ G ∘ ι⋆` is diagonalised on `E` by the padded basis, with the extra
@@ -609,9 +610,9 @@ private theorem isometryPadBasis_conj_apply [FiniteDimensional 𝕜 D] (ι : D �
   classical
   rw [isometryPadBasis_apply]
   by_cases h : (i : ℕ) < finrank 𝕜 D
-  · simp only [dif_pos h, isometryPad_of_lt ι v h, LinearMap.comp_apply,
+  · simp only [dite_eq_left h, isometryPad_of_lt ι v h, LinearMap.comp_apply,
       LinearIsometry.adjoint_apply_apply, hv, map_smul, LinearIsometry.coe_toLinearMap]
-  · simp only [dif_neg h, isometryPad_of_ge ι v h, LinearMap.comp_apply,
+  · simp only [dite_eq_right h, isometryPad_of_ge ι v h, LinearMap.comp_apply,
       LinearIsometry.adjoint_eq_zero_of_mem_orthogonal ι (SetLike.coe_mem _),
       map_zero, zero_smul]
 
@@ -653,10 +654,10 @@ theorem singularValues_comp_adjoint_linearIsometry
   rcases lt_or_ge i (finrank 𝕜 D) with hid | hid
   · have hin : i < finrank 𝕜 E := lt_of_lt_of_le hid (finrank_le_of_linearIsometry ι)
     rw [Y.singularValues_of_lt rfl hin, X.singularValues_of_lt rfl hid, heq]
-    simp only [dif_pos hid]
+    simp only [dite_eq_left hid]
   · rcases lt_or_ge i (finrank 𝕜 E) with hin | hin
     · rw [Y.singularValues_of_lt rfl hin, X.singularValues_of_finrank_le hid, heq]
-      simp only [dif_neg (not_lt.mpr hid)]
+      simp only [dite_eq_right (not_lt.mpr hid)]
       exact Real.sqrt_zero
     · rw [Y.singularValues_of_finrank_le hin, X.singularValues_of_finrank_le hid]
 

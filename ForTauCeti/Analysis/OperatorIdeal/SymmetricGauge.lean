@@ -345,7 +345,7 @@ theorem extend_eq_iSup_dominated (Φ : TruncationGauge) (a : ℕ → ℝ≥0∞)
     refine (ENNReal.coe_le_coe).2 (Φ.mono (Finsupp.le_def.2 fun n => ?_))
     simp only [truncate_apply]
     by_cases hn : n < k
-    · simp only [hn, if_true]
+    · simp only [hn, ite_true]
       have hb : (b.1 n : ℝ≥0∞) ≤ min (a n) ((b.1.support.sup b.1 : ℝ≥0) : ℝ≥0∞) := by
         refine le_min (b.2 n) ?_
         by_cases hmem : n ∈ b.1.support
@@ -583,7 +583,7 @@ noncomputable def toFinite (Φ : TruncationGauge) (n : ℕ) : FiniteSymmetricGau
     have h : ofFin (x + y) ≤ ofFin x + ofFin y := by
       refine Finsupp.le_def.2 fun i => ?_
       by_cases hi : i < n
-      · simp only [ofFin_apply, Finsupp.add_apply, dif_pos hi, Pi.add_apply]
+      · simp only [ofFin_apply, Finsupp.add_apply, dite_eq_left hi, Pi.add_apply]
         exact_mod_cast abs_add_le (x ⟨i, hi⟩) (y ⟨i, hi⟩)
       · simp [hi]
     exact_mod_cast (Φ.mono h).trans (Φ.add_le _ _)
@@ -591,7 +591,7 @@ noncomputable def toFinite (Φ : TruncationGauge) (n : ℕ) : FiniteSymmetricGau
     have h : ofFin (c • x) = Real.nnabs c • ofFin x := by
       refine Finsupp.ext fun i => ?_
       by_cases hi : i < n
-      · simp only [ofFin_apply, dif_pos hi, Finsupp.smul_apply, smul_eq_mul,
+      · simp only [ofFin_apply, dite_eq_left hi, Finsupp.smul_apply, smul_eq_mul,
           Pi.smul_apply, smul_eq_mul]
         exact map_mul Real.nnabs c (x ⟨i, hi⟩)
       · simp [hi]

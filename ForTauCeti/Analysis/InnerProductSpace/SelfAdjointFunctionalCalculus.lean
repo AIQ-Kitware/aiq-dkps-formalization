@@ -88,7 +88,7 @@ theorem selfAdjointFunctionalCalculus_apply_eigenvectorBasis
   · intro i _ hik
     simp [InnerProductSpace.rankOne_apply,
       orthonormal_iff_ite.mp (hT.eigenvectorBasis rfl).orthonormal i k,
-      if_neg hik]
+      ite_eq_right hik]
   · intro hk
     exact absurd (Finset.mem_univ k) hk
   · simp [InnerProductSpace.rankOne_apply]
@@ -445,13 +445,13 @@ noncomputable def extendSymbol {S : Set ℝ} (g : C(S, ℝ)) : ℝ → ℝ :=
 open scoped Classical in
 /-- On `S` the extension by zero agrees with the symbol. -/
 @[simp] theorem extendSymbol_apply_of_mem {S : Set ℝ} (g : C(S, ℝ)) {x : ℝ} (hx : x ∈ S) :
-    extendSymbol g x = g ⟨x, hx⟩ := dif_pos hx
+    extendSymbol g x = g ⟨x, hx⟩ := dite_eq_left hx
 
 open scoped Classical in
 /-- Off `S` the extension is zero.  With `extendSymbol_apply_of_mem` this determines
 `extendSymbol` pointwise, so a consumer never has to reduce through the body. -/
 @[simp] theorem extendSymbol_apply_of_not_mem {S : Set ℝ} (g : C(S, ℝ)) {x : ℝ} (hx : x ∉ S) :
-    extendSymbol g x = 0 := dif_neg hx
+    extendSymbol g x = 0 := dite_eq_right hx
 
 /-- `extendSymbol` as a set indicator, the form the calculus bridge consumes. -/
 theorem extendSymbol_eq_indicator {S : Set ℝ} (g : C(S, ℝ)) (f : ℝ → ℝ)

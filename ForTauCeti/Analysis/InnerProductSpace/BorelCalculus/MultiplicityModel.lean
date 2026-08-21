@@ -88,7 +88,7 @@ theorem norm_coordTrunc_le {R : ℝ} (hR : 0 ≤ R) (z : ℂ) : ‖coordTrunc R 
 
 /-- Inside the ball the truncation does nothing, so a model whose measure lives there multiplies
 by the coordinate itself. -/
-theorem coordTrunc_eq_self {R : ℝ} {z : ℂ} (h : ‖z‖ ≤ R) : coordTrunc R z = z := if_pos h
+theorem coordTrunc_eq_self {R : ℝ} {z : ℂ} (h : ‖z‖ ≤ R) : coordTrunc R z = z := ite_eq_left h
 
 /-- The truncated spectral coordinate, interpreted in the scalar field of the model.
 
