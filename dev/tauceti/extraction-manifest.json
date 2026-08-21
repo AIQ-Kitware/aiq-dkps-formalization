@@ -2,7 +2,7 @@
   "_schema": "tauceti-extraction-manifest/v1",
   "_comment": "Machine-readable record of the Tau Ceti extraction. `clusters` drives scripts/check_dependency_layers.py (rule 6, closure) and scripts/export_for_tauceti.py (staging->TauCeti copy). `records` carries the per-module provenance and ownership detail required by the campaign spec.",
   "davis_kahan_commit": "2667c2c7fce94ebc208abc7d616bf672c7d6663e",
-  "tauceti_submodule_commit": "92c79e5e0a618f8c5c2b9909be1ce50f6891dde7",
+  "tauceti_submodule_commit": "1b39d420ac84ed9a5a7d536ce19b37818ad29c39",
   "clusters": [
     {
       "cluster": "approximation-number",
@@ -2319,12 +2319,9 @@
       "source_declarations": [
         "disjoint_spectrum_resolventSet",
         "mem_of_subset_ofReal_image",
-        "mem_resolventSet_iff",
         "mem_spectrum_iff",
         "notMem_spectrum_iff",
-        "resolventSet",
         "resolventSet_eq_compl",
-        "resolvent_unique",
         "spectrum",
         "spectrum_eq_compl",
         "subset_ofReal_image_of_forall",
@@ -2351,15 +2348,8 @@
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
       "source_declarations": [
         "notMem_spectrum_resolvent",
-        "resolvent",
-        "resolvent_apply_sub_smul",
-        "resolvent_comm",
-        "resolvent_comm'",
         "resolvent_commute",
-        "resolvent_comp_resolvent",
-        "resolvent_mem_domain",
-        "resolvent_sub_resolvent",
-        "sub_smul_resolvent"
+        "resolvent_comp_resolvent"
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
@@ -2600,8 +2590,8 @@
         "norm_sub_smul_le_of_mem_specRange",
         "norm_truncSymbol_le",
         "norm_truncation_apply_le",
+        "one_add_smul_resolvent_eq_cfcHom",
         "one_sub_cayley_apply",
-        "one_sub_smul_resolvent_eq_cfcHom",
         "re_inner_apply_bounds_of_subset_Icc",
         "resolventSymbol",
         "resolventSymbol_apply",
@@ -3165,15 +3155,9 @@
     {
       "source_module": "new -- authored directly in ForTauCeti (no `## Provenance` origin recorded)",
       "source_declarations": [
-        "commute_resolvent_neumannFactor",
         "isClosed_realSpectrum",
         "isClosed_spectrum",
-        "isOpen_resolventSet",
-        "measurableSet_realSpectrum",
-        "neumannFactor",
-        "neumannFactor_apply",
-        "resolvent_sub_smul_shift",
-        "sub_smul_resolvent_shift"
+        "measurableSet_realSpectrum"
       ],
       "current_namespace": "TauCeti.LinearPMap",
       "staging_module": "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
@@ -4415,6 +4399,57 @@
       "blocked_dependencies": [],
       "downstream_users": [
         "ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Compact"
+      ],
+      "status": "staged",
+      "upstream_pr": null
+    },
+    {
+      "source_module": "TauCeti/Analysis/Normed/Operator/Resolvent/Unbounded.lean at upstream main 1b39d420ac84ed9a5a7d536ce19b37818ad29c39 -- generalized, not newly authored",
+      "source_declarations": [
+        "IsResolventAt",
+        "IsResolventAt.unique",
+        "IsResolventAt.smul_sub_injective",
+        "IsResolventAt.smul_sub_surjective",
+        "IsResolventAt.smul_sub_bijective",
+        "resolventSet",
+        "mem_resolventSet_iff",
+        "IsResolventAt.mem_resolventSet",
+        "exists_isResolventAt_of_mem",
+        "resolvent",
+        "isResolventAt_resolvent",
+        "resolvent_eq_of_isResolventAt",
+        "resolvent_mem_domain",
+        "smul_sub_apply_resolvent",
+        "resolvent_smul_sub_apply",
+        "apply_resolvent",
+        "smul_sub_bijective",
+        "eq_of_le_of_mem_resolventSet",
+        "resolvent_apply_comm",
+        "resolvent_sub_resolvent_apply",
+        "resolvent_sub_resolvent",
+        "resolvent_comm",
+        "exists_inverse_one_sub_smul_resolvent",
+        "mem_resolventSet_of_norm_mul_lt_one",
+        "isOpen_resolventSet",
+        "algebraMap_sub_apply",
+        "isUnit_of_isResolventAt_toPMap_top",
+        "isResolventAt_toPMap_top_of_isUnit",
+        "mem_resolventSet_toPMap_top_iff",
+        "resolvent_toPMap_top"
+      ],
+      "current_namespace": "TauCeti.LinearPMap",
+      "staging_module": "ForTauCeti.Analysis.Normed.Operator.Resolvent.Unbounded",
+      "final_tauceti_module": "TauCeti.Analysis.Normed.Operator.Resolvent.Unbounded",
+      "ownership_class": "tauceti",
+      "roadmap_target": "SelfAdjointSpectralTheory Part D (resolvents of self-adjoint LinearPMap operators). Answers the TauCetiRoadmap#126 review request that Part D consume and generalize the landed resolvent core rather than redefine it under the opposite sign convention.",
+      "provenance_class": "generalized",
+      "direct_dependencies": [],
+      "blocked_dependencies": [],
+      "downstream_users": [
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventBound",
+        "ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ResolventOpen",
+        "RoadmapBridge.TauCetiResolventConservativity"
       ],
       "status": "staged",
       "upstream_pr": null
