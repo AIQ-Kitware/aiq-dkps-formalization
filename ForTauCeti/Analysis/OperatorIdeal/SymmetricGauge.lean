@@ -806,7 +806,7 @@ laws below are three of the five `OperatorIdealFamily` fields.
 
 **`gauge_add_le` is not here**, and the structure is therefore not assembled: a
 `SymmetricOperatorIdealFamily` with four of five fields is not a thing that can
-exist, and a `sorry` would fail `check_tauceti_readiness`.
+exist, and an undischarged placeholder would fail `check_tauceti_readiness`.
 
 **Its route is settled, and it is `Family/Schatten.lean`'s, generalised.**  That
 module solves the identical problem for the `ℓᵖ` gauge in
