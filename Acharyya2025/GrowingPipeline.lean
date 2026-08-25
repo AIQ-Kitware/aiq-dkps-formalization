@@ -56,6 +56,66 @@ theorem abs_pairwiseDistance_sub_le_two_configError
       have hj := norm_config_le_ConfigError (fun k => W (zhat k)) z j
       linarith
 
+/-- Pairwise distances are controlled directly by Frobenius configuration
+error.  This is the growing-dimension route used by Quench: each individual row
+error is bounded by `ConfigFrobError`, so no `sqrt n` conversion is needed. -/
+theorem abs_pairwiseDistance_sub_le_two_configFrobError
+    {n d : Nat}
+    (W : EuclideanSpace Real (Fin d) →ₗ[Real] EuclideanSpace Real (Fin d))
+    (hW : ∀ x y, ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ)
+    (zhat z : Config n d) (i j : Fin n) :
+    |‖zhat i - zhat j‖ - ‖z i - z j‖| ≤
+      2 * ConfigFrobError (fun k => W (zhat k)) z := by
+  have hnorm : ∀ x, ‖W x‖ = ‖x‖ := by
+    intro x
+    have hsq : ‖W x‖ ^ 2 = ‖x‖ ^ 2 := by
+      rw [← real_inner_self_eq_norm_sq, ← real_inner_self_eq_norm_sq, hW x x]
+    nlinarith [norm_nonneg (W x), norm_nonneg x]
+  have hdist : ‖zhat i - zhat j‖ = ‖W (zhat i) - W (zhat j)‖ := by
+    rw [← map_sub, hnorm]
+  rw [hdist]
+  calc
+    |‖W (zhat i) - W (zhat j)‖ - ‖z i - z j‖|
+        ≤ ‖(W (zhat i) - W (zhat j)) - (z i - z j)‖ :=
+          abs_norm_sub_norm_le _ _
+    _ = ‖(W (zhat i) - z i) - (W (zhat j) - z j)‖ := by
+          congr 1
+          abel
+    _ ≤ ‖W (zhat i) - z i‖ + ‖W (zhat j) - z j‖ := norm_sub_le _ _
+    _ ≤ 2 * ConfigFrobError (fun k => W (zhat k)) z := by
+      have hi := norm_config_le_ConfigFrobError (fun k => W (zhat k)) z i
+      have hj := norm_config_le_ConfigFrobError (fun k => W (zhat k)) z j
+      linarith
+
+/-- Frobenius form of the pairwise spectral perturbation theorem.  Unlike the
+legacy `configBound` result below, this theorem does not introduce the final
+ambient `sqrt n` factor. -/
+theorem abs_pairwiseDistance_spectralConfig_sub_le_two_configFrobBound
+    {n d : Nat} (hd : d ≤ n)
+    (B Bhat : Matrix (Fin n) (Fin n) Real)
+    (hB : B.PosSemidef) (hBhat : Bhat.IsHermitian)
+    (hrank : B.rank ≤ d)
+    {α Λ η : Real} (hα_pos : 0 < α) (hη_nonneg : 0 ≤ η)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : Nat) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ i : Fin (Fintype.card (Fin n)), hB.isHermitian.eigenvalues₀ i ≤ Λ)
+    (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)
+    (hsmall : (n : Real) * η ≤ α / 2)
+    (hpolar : (d : Real) * (4 * (d : Real) * ((n : Real) * η)^2 / α^2) ≤ 1 / 2)
+    (z : Config n d)
+    (hz : ∀ i j, (∑ k, z i k * z j k) = B i j)
+    (i j : Fin n) :
+    |‖spectralConfig (Matrix.toEuclideanLin Bhat) (opSym hBhat) hd i -
+          spectralConfig (Matrix.toEuclideanLin Bhat) (opSym hBhat) hd j‖ -
+        ‖z i - z j‖| ≤
+      2 * configFrobBound d α Λ ((n : Real) * η) := by
+  obtain ⟨W, hW, hconfig⟩ :=
+    exists_isometry_configFrobError_le_of_entrywise_close hd B Bhat hB hBhat
+      hrank hα_pos hη_nonneg hfloor hΛ hentry hsmall hpolar z hz
+  exact (abs_pairwiseDistance_sub_le_two_configFrobError W hW
+    (spectralConfig (Matrix.toEuclideanLin Bhat) (opSym hBhat) hd) z i j).trans
+      (mul_le_mul_of_nonneg_left hconfig (by norm_num))
+
 /-- Entrywise CMDS closeness controls every pairwise distance in the raw sample
 spectral configuration.  No aligning map appears in the conclusion because
 pairwise distances are invariant under the map supplied by the deterministic
@@ -143,14 +203,12 @@ theorem abs_pairwiseDistance_spectralConfig_sub_le_two_configBound_canonical
 /-- A deterministic certificate for a varying matrix size.  It separates the
 three asymptotic requirements actually consumed by the finite spectral theorem:
 entrywise nonnegativity, eventual local side conditions, and a vanishing
-deterministic envelope for the resulting `configBound`.
+Frobenius configuration envelope.
 
-This is the correct interface for a joint model-count/response-budget schedule.
-With the selected-block Davis--Kahan estimate, the polar side condition is now
-a fixed multiple of the square of `(count u) * entryRate u`, so its vanishing
-follows at the same scale as the spectral-smallness term.  The separate
-`bound_zero` field is still needed when `count u` grows because `configBound`
-has a final `√count` factor and a growing spectral ceiling. -/
+The selected-block Davis--Kahan estimate makes the polar side condition a fixed
+multiple of the square of `(count u) * entryRate u`.  The final error field now
+tracks `configFrobBound` directly, so growing Quench no longer pays the legacy
+`ConfigError ≤ sqrt(count) * ConfigFrobError` conversion. -/
 structure GrowingConfigControl
     (count : Nat → Nat) (d : Nat) (α : Real)
     (ceiling entryRate : Nat → Real) where
@@ -164,14 +222,14 @@ structure GrowingConfigControl
   bound : Nat → Real
   bound_nonneg : ∀ u, 0 ≤ bound u
   bound_zero : Tendsto bound atTop (𝓝 0)
-  configBound_le : ∀ᶠ u in atTop,
-    configBound (count u) d α (ceiling u)
+  configFrobBound_le : ∀ᶠ u in atTop,
+    configFrobBound d α (ceiling u)
       ((count u : Real) * entryRate u) ≤ bound u
 
 
 /-- Build a growing control certificate directly from the three vanishing
 quantities exposed by a joint asymptotic calculation.  The final envelope is
-taken to be the exact `configBound`. -/
+taken to be the exact `configFrobBound`. -/
 noncomputable def GrowingConfigControl.of_tendsto
     {count : Nat → Nat} {d : Nat} {α : Real}
     {ceiling entryRate : Nat → Real}
@@ -184,7 +242,7 @@ noncomputable def GrowingConfigControl.of_tendsto
         (4 * (d : Real) *
           (((count u : Real) * entryRate u)^2) / α^2)) atTop (𝓝 0))
     (hbound : Tendsto
-      (fun u => configBound (count u) d α (ceiling u)
+      (fun u => configFrobBound d α (ceiling u)
         ((count u : Real) * entryRate u)) atTop (𝓝 0)) :
     GrowingConfigControl count d α ceiling entryRate where
   entry_nonneg := hentry
@@ -194,14 +252,14 @@ noncomputable def GrowingConfigControl.of_tendsto
   polar_eventually := by
     have hhalf : (0 : Real) < 1 / 2 := by norm_num
     exact (hpolar.eventually (Iio_mem_nhds hhalf)).mono fun _ hu => hu.le
-  bound := fun u => configBound (count u) d α (ceiling u)
+  bound := fun u => configFrobBound d α (ceiling u)
     ((count u : Real) * entryRate u)
   bound_nonneg := by
     intro u
-    unfold configBound
+    unfold configFrobBound
     positivity
   bound_zero := hbound
-  configBound_le := Filter.Eventually.of_forall fun _ => le_rfl
+  configFrobBound_le := Filter.Eventually.of_forall fun _ => le_rfl
 
 /-- All finite spectral side conditions and the final error domination hold
 simultaneously eventually. -/
@@ -214,9 +272,9 @@ theorem GrowingConfigControl.eventually_all
       (d : Real) *
         (4 * (d : Real) *
           (((count u : Real) * entryRate u)^2) / α^2) ≤ 1 / 2 ∧
-      configBound (count u) d α (ceiling u)
+      configFrobBound d α (ceiling u)
         ((count u : Real) * entryRate u) ≤ H.bound u := by
-  filter_upwards [H.small_eventually, H.polar_eventually, H.configBound_le]
+  filter_upwards [H.small_eventually, H.polar_eventually, H.configFrobBound_le]
     with u hsmall hpolar hbound
   exact ⟨hsmall, hpolar, hbound⟩
 

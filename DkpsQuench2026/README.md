@@ -100,8 +100,12 @@ Acharyya's `configFrobBound` directly and uses the elementary row bound
 `‖error_i‖ ≤ ConfigFrobError`, so Quench's uniform embedding-error premise no
 longer needs the extra `√n` introduced by the older row-sum `ConfigError` API.
 
-The Frobenius route now reaches the raw-response query-efficiency capstone as
-well: `quench_part2_from_aligned_configFrobError_hp`,
+The Frobenius route now reaches both fixed-population and growing target-augmented
+query-efficiency capstones.  `GrowingConfigControl` tracks `configFrobBound`,
+and the pairwise-distance engine bounds each target/reference radial error
+straight from `ConfigFrobError`; the growing path therefore no longer
+reintroduces the legacy `sqrt(n+1)` factor.  For the fixed-population route,
+`quench_part2_from_aligned_configFrobError_hp`,
 `queryEfficient_nn_of_response_mean_frob`, and
 `queryEfficient_nn_of_second_moment_frob` use the DK-sharpened Acharyya bound
 all the way to Quench's uniform embedding-error premise.  The core Frobenius

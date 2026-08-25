@@ -510,12 +510,61 @@ theorem safe_configBound_zero
   rw [hfun]
   simpa using (hsq1.add hsq2).add hsq3
 
+/-- The sharpened Frobenius configuration envelope also vanishes under the
+existing conservative schedule.  This follows from the legacy result because
+`configBound = sqrt(n+1) * configFrobBound` and `sqrt(n+1) >= 1`.
+
+This theorem is the compatibility bridge used while the schedule itself is
+retuned to the weaker Frobenius requirement. -/
+theorem safe_configFrobBound_zero
+    (m d : Nat) (hm : 0 < m)
+    (populationResponseBound perspectiveBound κ : Real)
+    (hκ : 0 < κ) :
+    Tendsto (fun n =>
+      configFrobBound d (κ / 2)
+        (4 * ((n + 1 : Nat) : Real) * perspectiveBound ^ 2)
+        (((n + 1 : Nat) : Real) *
+          cmdsEntrywiseRate (n + 1) m
+            (responseDistBound m
+              (populationResponseBound + safeResponseTolerance n))
+            (safeResponseTolerance n))) atTop (𝓝 0) := by
+  have hlegacy := safe_configBound_zero m d hm
+    populationResponseBound perspectiveBound κ hκ
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le
+    tendsto_const_nhds hlegacy (fun n => ?_) (fun n => ?_)
+  · unfold configFrobBound
+    positivity
+  · let ε : Real := ((n + 1 : Nat) : Real) *
+        cmdsEntrywiseRate (n + 1) m
+          (responseDistBound m
+            (populationResponseBound + safeResponseTolerance n))
+          (safeResponseTolerance n)
+    let Λ : Real := 4 * ((n + 1 : Nat) : Real) * perspectiveBound ^ 2
+    have hfrob_nonneg : 0 ≤ configFrobBound d (κ / 2) Λ ε := by
+      unfold configFrobBound
+      positivity
+    have hN : (1 : Real) ≤ ((n + 1 : Nat) : Real) := by
+      exact_mod_cast Nat.succ_le_succ (Nat.zero_le n)
+    have hsqrt : 1 ≤ Real.sqrt ((n + 1 : Nat) : Real) := by
+      rw [← Real.sqrt_one]
+      exact Real.sqrt_le_sqrt hN
+    calc
+      configFrobBound d (κ / 2) Λ ε
+          = 1 * configFrobBound d (κ / 2) Λ ε := by ring
+      _ ≤ Real.sqrt ((n + 1 : Nat) : Real) *
+          configFrobBound d (κ / 2) Λ ε :=
+        mul_le_mul_of_nonneg_right hsqrt hfrob_nonneg
+      _ = configBound (n + 1) d (κ / 2) Λ ε := by
+        rw [configBound_eq_sqrt_mul_configFrobBound]
+
 /-- The conservative tolerance and linear spectral ceiling satisfy every field
 of `GrowingConfigControl` for the current proved CMDS perturbation bound.
 
-Completing this theorem removes `Hrate`, entrywise nonnegativity, the local
-smallness inequality, the polar inequality, and the vanishing configuration
-bound from the final public theorem.  This is intentionally a safe-rate result;
+The certificate now controls the Frobenius configuration bound directly, so
+the growing Quench path avoids the legacy `sqrt(n+1)` conversion.  Completing
+this theorem removes `Hrate`, entrywise nonnegativity, the local smallness
+inequality, the polar inequality, and the vanishing configuration bound from
+the final public theorem.  This is intentionally a safe-rate result;
 a later sharp Davis--Kahan theorem may improve the exponent without changing
 the raw-response Quench interface.
 -/
@@ -537,6 +586,6 @@ noncomputable def safe_growingConfigControl
       positivity)
     (safe_scaled_cmdsEntrywiseRate_zero m hm populationResponseBound)
     (safe_polar_expression_zero m d hm populationResponseBound κ hκ)
-    (safe_configBound_zero m d hm populationResponseBound perspectiveBound κ hκ)
+    (safe_configFrobBound_zero m d hm populationResponseBound perspectiveBound κ hκ)
 
 end DkpsQuench2026

@@ -175,13 +175,16 @@ proved and true as written. The full chain is formally connected:
 > iid responses → second moments (`trace(Σ)/r`) → Chebyshev + union bound →
 > dissimilarity entrywise events → CMDS double-centering → Weyl /
 > Davis–Kahan / polar-factor perturbation → aligned embedding error
-> (`alignedSpectralConfig`, explicit `configBound`) → Quench's uniform
+> (`alignedSpectralConfigFrob`, explicit `configFrobBound`) → Quench's uniform
 > embedding-error hypothesis and Helm's alignment consistency,
 
 with the explicit fixed-dimension end-to-end rate composed in `RateChain.lean`.
 `GrowingPipeline.lean` additionally removes coordinate alignment from
-nearest-neighbor consumers by proving pairwise-distance control directly and
-packages the extra rate obligations that appear when the matrix dimension grows.
+nearest-neighbor consumers by proving pairwise-distance control directly.  Its
+`GrowingConfigControl` now tracks `configFrobBound` rather than the legacy
+`configBound`, so the growing Quench path also avoids the extra `sqrt(count)`
+row-sum conversion while retaining the older `ConfigError` pairwise theorems as
+compatibility results.
 Four legacy scaffold statements that were false as written were retired (kept
 as prose records pointing at their proved replacements; originals in git history). See
 [`../docs/planning/acharyya-plan.md`](../docs/planning/acharyya-plan.md) for the

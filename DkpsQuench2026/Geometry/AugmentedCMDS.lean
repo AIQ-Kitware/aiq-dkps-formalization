@@ -210,7 +210,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds
     (d : Real) *
       (4 * (d : Real) *
         ((((n + 1 : Nat) : Real) * entryRate n)^2) / α^2) ≤ 1 / 2 ∧
-    configBound (n + 1) d α (ceiling n)
+    configFrobBound d α (ceiling n)
       (((n + 1 : Nat) : Real) * entryRate n) ≤ Hrate.bound n
   let Eg : Nat → Set Ω := fun n => E n ∩ {ω | good n}
   have hgood : ∀ᶠ n in atTop, good n := by
@@ -246,7 +246,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds
     -- retained because the reusable principal-angle layer does not yet expose
     -- the polar-displacement estimate needed to remove `hpolar`.
     have hpair :=
-      abs_pairwiseDistance_spectralConfig_sub_le_two_configBound
+      abs_pairwiseDistance_spectralConfig_sub_le_two_configFrobBound
         hdim
         (disMatToMatrix (classicalMDSMatrix (D n ω f)))
         (disMatToMatrix (classicalMDSMatrix (Dhat n ω f)))
