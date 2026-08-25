@@ -429,6 +429,43 @@ theorem sum_cross_norm_inner_eigenvectorBasis_sq_le_of_rank_floor
             (by positivity : (0 : ℝ) < α / 2) hgap hε
     _ = 4 * (n : ℝ) * ε ^ 2 / α ^ 2 := by field_simp; ring
 
+/--
+**Operator-norm rank-floor specialization with the selected-block factor.**
+Under the same rank-`d` population structure as
+`sum_cross_norm_inner_eigenvectorBasis_sq_le_of_rank_floor`, the residual
+operator-norm branch pays for only the `d` selected population eigenvectors,
+rather than all `n` ambient basis vectors:
+`∑_{i<d,j≥d} ‖⟪uᵢ,v̂ⱼ⟫‖² ≤ 4 d ε² / α²`.
+
+This is the rank-floor form of
+`sum_cross_norm_inner_eigenvectorBasis_sq_le_opNorm` and is the natural
+operator-norm endpoint for low-rank statistical applications.  The older
+`..._of_rank_floor` theorem is retained as the source-compatible crude
+`4 n ε² / α²` specialization. -/
+theorem sum_cross_norm_inner_eigenvectorBasis_sq_le_of_rank_floor_opNorm
+    (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hn : finrank 𝕜 E = n)
+    (d : ℕ) {α ε : ℝ} (hα_pos : 0 < α)
+    (hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues hn i)
+    (htail : ∀ j : Fin n, d ≤ (j : ℕ) → hT.eigenvalues hn j = 0)
+    (hε : ∀ x : E, ‖(S - T) x‖ ≤ ε * ‖x‖)
+    (hsmall : ε ≤ α / 2) :
+    ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < d),
+      ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : ℕ)),
+        ‖⟪hT.eigenvectorBasis hn i, hS.eigenvectorBasis hn j⟫_𝕜‖ ^ 2
+      ≤ 4 * (d : ℝ) * ε ^ 2 / α ^ 2 := by
+  have hε' : ∀ x : E, ‖(T - S) x‖ ≤ ε * ‖x‖ := fun x => by
+    rw [LinearMap.sub_apply, ← norm_neg, neg_sub, ← LinearMap.sub_apply]
+    exact hε x
+  have hgap := gap_of_rank_floor hT hS hn d hα htail hε' hsmall
+  calc
+    ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < d),
+      ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : ℕ)),
+        ‖⟪hT.eigenvectorBasis hn i, hS.eigenvectorBasis hn j⟫_𝕜‖ ^ 2
+        ≤ (d : ℝ) * ε ^ 2 / (α / 2) ^ 2 :=
+          sum_cross_norm_inner_eigenvectorBasis_sq_le_opNorm hT hS hn d
+            (by positivity : (0 : ℝ) < α / 2) hgap hε
+    _ = 4 * (d : ℝ) * ε ^ 2 / α ^ 2 := by field_simp; ring
+
 /-! ### General spectral intervals
 
 Instead of a sorted leading cutoff, select the `T`-block by an interval:

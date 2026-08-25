@@ -372,12 +372,12 @@ theorem eventually_spectral_side_conditions
     {e : Nat → Real} (he : Tendsto e atTop (𝓝 0)) :
     ∀ᶠ u in atTop,
       e u ≤ α / 2 ∧
-      (d : Real) * (4 * (n : Real) * (e u)^2 / α^2) ≤ 1 / 2 := by
+      (d : Real) * (4 * (d : Real) * (e u)^2 / α^2) ≤ 1 / 2 := by
   have hhalf_pos : 0 < α / 2 := by positivity
   have hsmall : ∀ᶠ u in atTop, e u < α / 2 :=
     he.eventually (Iio_mem_nhds hhalf_pos)
   let polar : Real → Real := fun x =>
-    (d : Real) * (4 * (n : Real) * x^2 / α^2)
+    (d : Real) * (4 * (d : Real) * x^2 / α^2)
   have hpolar_tend : Tendsto (fun u => polar (e u)) atTop (𝓝 0) := by
     have hcont : Continuous polar := by
       dsimp [polar]
@@ -419,7 +419,7 @@ theorem alignExists_of_entrywiseClose {Ω : Type}
     (rate : Nat → Real) (u : Nat)
     (hrate_nonneg : 0 ≤ rate u)
     (hsmall : (n : Real) * rate u ≤ α / 2)
-    (hpolar : (d : Real) * (4 * (n : Real) * ((n : Real) * rate u)^2 / α^2) ≤ 1/2)
+    (hpolar : (d : Real) * (4 * (d : Real) * ((n : Real) * rate u)^2 / α^2) ≤ 1/2)
     (ω : Ω)
     (hω : Acharyya2025.Bridge.EntrywiseClose
       (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)) :
@@ -750,7 +750,7 @@ theorem alignExists_of_entrywiseClose_topEigenvalue {Ω : Type}
     (rate : Nat → Real) (u : Nat)
     (hrate_nonneg : 0 ≤ rate u)
     (hsmall : (n : Real) * rate u ≤ α / 2)
-    (hpolar : (d : Real) * (4 * (n : Real) * ((n : Real) * rate u)^2 / α^2) ≤ 1/2)
+    (hpolar : (d : Real) * (4 * (d : Real) * ((n : Real) * rate u)^2 / α^2) ≤ 1/2)
     (ω : Ω)
     (hω : Acharyya2025.Bridge.EntrywiseClose
       (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)) :

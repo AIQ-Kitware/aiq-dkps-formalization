@@ -237,7 +237,7 @@ theorem quench_part2_from_aligned_configError_hp
   -- local spectral side conditions hold.  This loses only finitely many budgets.
   let side : Nat → Prop := fun k =>
     (n : Real) * rate k ≤ α / 2 ∧
-      (d : Real) * (4 * (n : Real) * ((n : Real) * rate k)^2 / α^2) ≤ 1 / 2
+      (d : Real) * (4 * (d : Real) * ((n : Real) * rate k)^2 / α^2) ≤ 1 / 2
   set E : Nat → Set Ω := fun k => {ω |
     Acharyya2025.Bridge.EntrywiseClose
       (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat k ω))

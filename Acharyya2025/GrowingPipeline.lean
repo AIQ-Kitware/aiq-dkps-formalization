@@ -71,7 +71,7 @@ theorem abs_pairwiseDistance_spectralConfig_sub_le_two_configBound
     (hΛ : ∀ i : Fin (Fintype.card (Fin n)), hB.isHermitian.eigenvalues₀ i ≤ Λ)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)
     (hsmall : (n : Real) * η ≤ α / 2)
-    (hpolar : (d : Real) * (4 * (n : Real) * ((n : Real) * η)^2 / α^2) ≤ 1 / 2)
+    (hpolar : (d : Real) * (4 * (d : Real) * ((n : Real) * η)^2 / α^2) ≤ 1 / 2)
     (z : Config n d)
     (hz : ∀ i j, (∑ k, z i k * z j k) = B i j)
     (i j : Fin n) :
@@ -97,7 +97,7 @@ theorem abs_pairwiseDistance_spectralConfig_sub_le_two_configBound_topEigenvalue
       α ≤ hB.isHermitian.eigenvalues₀ i)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)
     (hsmall : (n : Real) * η ≤ α / 2)
-    (hpolar : (d : Real) * (4 * (n : Real) * ((n : Real) * η)^2 / α^2) ≤ 1 / 2)
+    (hpolar : (d : Real) * (4 * (d : Real) * ((n : Real) * η)^2 / α^2) ≤ 1 / 2)
     (z : Config n d)
     (hz : ∀ i j, (∑ k, z i k * z j k) = B i j)
     (i j : Fin n) :
@@ -122,7 +122,7 @@ theorem abs_pairwiseDistance_spectralConfig_sub_le_two_configBound_canonical
     (hentry : Acharyya2025.Bridge.EntrywiseClose
       (classicalMDSMatrix Dhat) (classicalMDSMatrix D) η)
     (hsmall : (n : Real) * η ≤ α / 2)
-    (hpolar : (d : Real) * (4 * (n : Real) * ((n : Real) * η)^2 / α^2) ≤ 1 / 2)
+    (hpolar : (d : Real) * (4 * (d : Real) * ((n : Real) * η)^2 / α^2) ≤ 1 / 2)
     (i j : Fin n) :
     |‖spectralConfig
           (Matrix.toEuclideanLin (disMatToMatrix (classicalMDSMatrix Dhat)))
@@ -146,9 +146,11 @@ entrywise nonnegativity, eventual local side conditions, and a vanishing
 deterministic envelope for the resulting `configBound`.
 
 This is the correct interface for a joint model-count/response-budget schedule.
-In particular, merely knowing `(count u) * entryRate u → 0` is not enough when
-`count u` itself grows, because the polar term and the final `√count` factor
-must also vanish. -/
+With the selected-block Davis--Kahan estimate, the polar side condition is now
+a fixed multiple of the square of `(count u) * entryRate u`, so its vanishing
+follows at the same scale as the spectral-smallness term.  The separate
+`bound_zero` field is still needed when `count u` grows because `configBound`
+has a final `√count` factor and a growing spectral ceiling. -/
 structure GrowingConfigControl
     (count : Nat → Nat) (d : Nat) (α : Real)
     (ceiling entryRate : Nat → Real) where
@@ -157,7 +159,7 @@ structure GrowingConfigControl
     (count u : Real) * entryRate u ≤ α / 2
   polar_eventually : ∀ᶠ u in atTop,
     (d : Real) *
-      (4 * (count u : Real) *
+      (4 * (d : Real) *
         (((count u : Real) * entryRate u)^2) / α^2) ≤ 1 / 2
   bound : Nat → Real
   bound_nonneg : ∀ u, 0 ≤ bound u
@@ -179,7 +181,7 @@ noncomputable def GrowingConfigControl.of_tendsto
       (fun u => (count u : Real) * entryRate u) atTop (𝓝 0))
     (hpolar : Tendsto
       (fun u => (d : Real) *
-        (4 * (count u : Real) *
+        (4 * (d : Real) *
           (((count u : Real) * entryRate u)^2) / α^2)) atTop (𝓝 0))
     (hbound : Tendsto
       (fun u => configBound (count u) d α (ceiling u)
@@ -210,7 +212,7 @@ theorem GrowingConfigControl.eventually_all
     ∀ᶠ u in atTop,
       (count u : Real) * entryRate u ≤ α / 2 ∧
       (d : Real) *
-        (4 * (count u : Real) *
+        (4 * (d : Real) *
           (((count u : Real) * entryRate u)^2) / α^2) ≤ 1 / 2 ∧
       configBound (count u) d α (ceiling u)
         ((count u : Real) * entryRate u) ≤ H.bound u := by

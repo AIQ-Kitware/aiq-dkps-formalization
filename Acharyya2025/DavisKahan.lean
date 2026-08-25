@@ -6,10 +6,11 @@ This file develops the elementary finite-dimensional "cross-term" route to a
 Davis–Kahan-type bound: given two symmetric operators `T`, `S` that are close in
 operator norm (`∀ x, ‖(S − T) x‖ ≤ ε ‖x‖`) and an eigenvalue gap separating the
 first `d` eigenvalues of `T` from the trailing eigenvalues of `S`, the squared
-inner products between the corresponding eigenvectors are controlled by
-`(n · ε²) / gap²`.  The constant here is the crude `n · ε² / gap²` obtained by
-summing the per-coordinate cross-energy bound; no attempt is made at the sharp
-operator-norm constant of the classical sin-Θ theorem.
+inner products between the corresponding eigenvectors are controlled by a
+Davis--Kahan cross-energy estimate.  The source-facing theorem retains the
+original crude `(n · ε²) / gap²` bound, while
+`sum_cross_inner_sq_le_opNorm` reuses the selected-block residual theorem from
+the general DavisKahan package and pays only `(d · ε²) / gap²`.
 
 The argument is purely linear-algebraic and resolvent-free.  For a cross pair of
 eigenvectors `uᵢ` (of `T`, eigenvalue `λᵢ`) and `ûⱼ` (of `S`, eigenvalue `λ̂ⱼ`)
@@ -144,6 +145,31 @@ theorem sum_cross_inner_sq_le
       ≤ (n : ℝ) * ε^2 / gap^2 := by
   -- Thin ℝ-instantiation of the Mathlib-staged RCLike version.
   have h := TauCeti.sum_cross_norm_inner_eigenvectorBasis_sq_le hT hS hn d hgap_pos hgap hε
+  simpa [Real.norm_eq_abs, sq_abs] using h
+
+/-- **Davis--Kahan sin-Theta bound, selected-block operator-norm form.**
+This has the same hypotheses and cross-block quantity as
+`sum_cross_inner_sq_le`, but uses the residual/operator-norm branch of the
+reusable Davis--Kahan development.  The dimension factor is the selected block
+size `d`, rather than the ambient dimension `n`:
+`sum cross <= d * epsilon^2 / gap^2`.
+
+The crude `sum_cross_inner_sq_le` theorem remains available for source-facing
+uses that intentionally mirror the older ambient-Frobenius argument. -/
+theorem sum_cross_inner_sq_le_opNorm
+    (hT : T.IsSymmetric) (hS : S.IsSymmetric)
+    (hn : finrank ℝ E = n)
+    (d : Nat)
+    {gap : ℝ} (hgap_pos : 0 < gap)
+    (hgap : ∀ i j : Fin n, (i : Nat) < d → d ≤ (j : Nat) →
+      gap ≤ |hT.eigenvalues hn i - hS.eigenvalues hn j|)
+    {ε : ℝ} (hε : ∀ x : E, ‖(S - T) x‖ ≤ ε * ‖x‖) :
+    ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : Nat) < d),
+      ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : Nat)),
+        (⟪hT.eigenvectorBasis hn i, hS.eigenvectorBasis hn j⟫_ℝ)^2
+      ≤ (d : ℝ) * ε^2 / gap^2 := by
+  have h := TauCeti.sum_cross_norm_inner_eigenvectorBasis_sq_le_opNorm
+    hT hS hn d hgap_pos hgap hε
   simpa [Real.norm_eq_abs, sq_abs] using h
 
 end Acharyya2025.DavisKahan

@@ -28,9 +28,10 @@ Chebyshev hypothesis `n · σ2 u / (t u)² = δ'² → 0` holds along any `δ' �
 slow enough, and the resulting bound is
 `configBound n d α Λ (n · cmdsEntrywiseRate n m R (t u))` with
 `cmdsEntrywiseRate n m R η = 16 R n² m⁻¹ · η` linear in `η = t u`.  Since
-`configBound n d α Λ ε` is, for small `ε`, dominated by its linear-in-`ε`
-Davis–Kahan term `√n · d · ε / √(α/2)` (the polar term is `O(ε²)` and the
-commutator term `O(ε)`), the formal rate is
+`configBound n d α Λ ε` has linear terms of order
+`√(n d) · ε / √(α/2)` (commutator) and
+`√(n d Λ) · ε / α` (Davis--Kahan reconstruction), while the polar term is
+`O(ε²)`.  Thus the formal rate is
 `poly(n, d, m⁻¹, R, Λ, 1/α) · √(γ / r(u))` — matching the paper's `r^{−1/2+δ}`
 dependence (the `δ`-loss is exactly the Chebyshev slack `1/δ'` above) and a
 polynomial constant in the structural parameters.  What differs is bookkeeping:

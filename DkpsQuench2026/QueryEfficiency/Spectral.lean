@@ -97,7 +97,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSub
     d ≤ n + 1 ∧
     ((n + 1 : Nat) : Real) * entryRate n ≤ α / 2 ∧
     (d : Real) *
-      (4 * ((n + 1 : Nat) : Real) *
+      (4 * (d : Real) *
         ((((n + 1 : Nat) : Real) * entryRate n)^2) / α^2) ≤ 1 / 2 ∧
     configBound (n + 1) d α (ceiling n)
       (((n + 1 : Nat) : Real) * entryRate n) ≤ Hrate.bound n

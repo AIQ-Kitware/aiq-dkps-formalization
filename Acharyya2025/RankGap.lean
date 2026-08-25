@@ -92,4 +92,28 @@ theorem sum_cross_inner_sq_le_of_rank_floor
     hT hS hn d hα_pos hα htail hε hsmall
   simpa [Real.norm_eq_abs, sq_abs] using h
 
+/-- **Selected-block operator-norm rank-floor bound.**
+Under the same rank-`d` population assumptions as
+`sum_cross_inner_sq_le_of_rank_floor`, the reusable residual form of
+Davis--Kahan gives the sharper low-rank estimate
+`sum cross <= 4 * d * epsilon^2 / alpha^2`.
+
+The older theorem with ambient factor `n` is retained for source fidelity; new
+low-rank consumers should prefer this declaration. -/
+theorem sum_cross_inner_sq_le_of_rank_floor_opNorm
+    (hT : T.IsSymmetric) (hS : S.IsSymmetric)
+    (hn : finrank ℝ E = n)
+    (d : Nat) {α ε : ℝ} (hα_pos : 0 < α)
+    (hα : ∀ i : Fin n, (i : Nat) < d → α ≤ hT.eigenvalues hn i)
+    (htail : ∀ j : Fin n, d ≤ (j : Nat) → hT.eigenvalues hn j = 0)
+    (hε : ∀ x : E, ‖(S - T) x‖ ≤ ε * ‖x‖)
+    (hsmall : ε ≤ α / 2) :
+    ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : Nat) < d),
+      ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : Nat)),
+        (⟪hT.eigenvectorBasis hn i, hS.eigenvectorBasis hn j⟫_ℝ)^2
+      ≤ 4 * (d : ℝ) * ε^2 / α^2 := by
+  have h := TauCeti.sum_cross_norm_inner_eigenvectorBasis_sq_le_of_rank_floor_opNorm
+    hT hS hn d hα_pos hα htail hε hsmall
+  simpa [Real.norm_eq_abs, sq_abs] using h
+
 end Acharyya2025.RankGap
