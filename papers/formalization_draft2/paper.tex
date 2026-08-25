@@ -16,6 +16,7 @@
 \usepackage{xcolor}
 \usepackage{listings}
 \usepackage{listingsutf8}
+\usepackage{authblk}
 \setlength{\emergencystretch}{3em}
 
 % ArXiv-friendly Lean code: no shell escape, minted, or external highlighter.
@@ -98,8 +99,24 @@
 
 \title{Formalizing Davis--Kahan and Yu--Wang--Samworth in Lean}
 % Additional authors are expected; keep the confirmed ordering below stable.
-\author{Jonathan Crall\thanks{Kitware, Inc.; \texttt{jon.crall@kitware.com}}
-\and Edward Wang\thanks{Johns Hopkins University; \texttt{ewang43@jhu.edu}}}
+
+\author[1]{Jonathan Crall}
+\author[2]{Edward Wang}
+\author[1]{Brian Hu}
+\author[2]{Carey E. Priebe}
+
+\affil[1]{%
+  Kitware, Inc.\\
+  \texttt{jon.crall@kitware.com},
+  \texttt{brian.hu@kitware.com}
+}
+
+\affil[2]{%
+  Johns Hopkins University\\
+  \texttt{ewang43@jhu.edu},
+  \texttt{cep@jhu.edu}
+}
+
 \date{Draft -- August 2026}
 
 \begin{document}
@@ -123,15 +140,13 @@ including principal angles, singular-subspace geometry, unitarily invariant
 norms, Borel spectral calculus, unbounded self-adjoint operators, direct
 rotations, operator angles, and Sylvester equations.
 
-We also preserve lower-bound LLM resource measurements for the formalization.
-The retained records contain at least \LedgerTurnsScientific{} model turns,
-\LedgerOutputTokensScientific{} output tokens, and
-\LedgerBillableInputTokensScientific{} tokens in the billable-input accounting
-measure.  Exact commit-attributed measurements cover \ExactMeasuredCommitShare{}
-of the primary-repository commits.  A direct Git-churn proxy covers
-\ExactMeasuredLeanLineChurnShare{} of cumulative Lean source-line changes, and
-an adjustment for known non-LLM line changes gives
-\AdjustedExactMeasuredLeanLineChurnShare{}.
+We also report lower bounds on LLM resource use as baselines for comparing
+  formalization efficiency, and extrapolate to obtain an order of magnitude
+  estimate of resource usage.
+Although records do not capture the full formalization cost, commit-level
+  provenance enables fine-grained comparison of resources used for individual
+  proof developments.
+
 \end{abstract}
 
 \input{snapshots/openalex_bibliometrics_macros.tex}
@@ -733,6 +748,10 @@ experiments with alternative workflows such as MathCode and AutoLean
 stopping criteria, and proof-acceptance criteria would help quantify how far the
 computational cost of large formalization projects can be reduced while
 retaining comparable theorem coverage and proof checking.
+
+\section*{Acknowledgments}
+
+This material is based upon work supported by the Defense Advanced Research Project Agency (DARPA) under Contract No. HR001125CE017. Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the Defense Advanced Research Project Agency (DARPA).
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
