@@ -208,7 +208,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds
     d ≤ n + 1 ∧
     ((n + 1 : Nat) : Real) * entryRate n ≤ α / 2 ∧
     (d : Real) *
-      (4 * ((n + 1 : Nat) : Real) *
+      (4 * (d : Real) *
         ((((n + 1 : Nat) : Real) * entryRate n)^2) / α^2) ≤ 1 / 2 ∧
     configBound (n + 1) d α (ceiling n)
       (((n + 1 : Nat) : Real) * entryRate n) ≤ Hrate.bound n
@@ -241,10 +241,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds
     intro n ω hω f i
     rcases hω with ⟨hentryEvent, hdim, hsmall, hpolar, hbound⟩
     have hentry := hEsub n hentryEvent f
-    -- This low-level step deliberately retains the proved bespoke
-    -- cross-energy/polar argument.  The newer sharp projector theory should
-    -- replace it only when that replacement removes a caller-side condition
-    -- such as polar smallness; a cleanup-only refactor is deferred.
+    -- The low-level perturbation theorem now uses the selected-block
+    -- Davis--Kahan cross-energy estimate.  Its local polar construction is
+    -- retained because the reusable principal-angle layer does not yet expose
+    -- the polar-displacement estimate needed to remove `hpolar`.
     have hpair :=
       abs_pairwiseDistance_spectralConfig_sub_le_two_configBound
         hdim

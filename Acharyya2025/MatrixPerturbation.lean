@@ -330,7 +330,7 @@ theorem exists_isometry_configError_le_of_entrywise_close
     (hΛ : ∀ l : Fin (Fintype.card (Fin n)), hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)   -- entrywise closeness: |B̂ᵢⱼ − Bᵢⱼ| ≤ η
     (hsmall : (n : ℝ) * η ≤ α / 2)              -- smallness: perturbation ≤ half the floor (Weyl/gap)
-    (hpolar : (d : ℝ) * (4 * (n : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2) -- polar-factor smallness (Davis–Kahan term ≤ 1/2)
+    (hpolar : (d : ℝ) * (4 * (d : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2) -- polar-factor smallness (Davis–Kahan term ≤ 1/2)
     (ψ : Acharyya2024.Config n d)               -- any external configuration realizing B
     (hψ : ∀ i j, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :  -- ψ has Gram matrix B
     -- Conclusion: ∃ a linear isometry W (an aligning isometry playing the role of the paper's `W*`;
@@ -418,7 +418,7 @@ theorem exists_isometry_configError_le_of_entrywise_close_topEigenvalue
       α ≤ hB.isHermitian.eigenvalues₀ i)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)
     (hsmall : (n : ℝ) * η ≤ α / 2)
-    (hpolar : (d : ℝ) * (4 * (n : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2)
+    (hpolar : (d : ℝ) * (4 * (d : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2)
     (ψ : Acharyya2024.Config n d)
     (hψ : ∀ i j, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :
     ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),

@@ -85,12 +85,28 @@ The result is assembled in layers; read them in this order:
 | **Theorem 2**, high-probability form | `highProb_aligned_configError_of_entrywise_close`, `…_of_response_mean` | `AlignedPipeline.lean` |
 | **Corollary 2** — vanishing rate as budgets grow | `endToEndRate`, `tendsto_endToEndRate_zero`, `tendsto_configBound_zero` | `RateChain.lean` |
 | Weyl's eigenvalue inequality | `abs_eigenvalues_sub_le` | `Weyl.lean` |
-| Davis–Kahan sin-Θ bound; rank-`d` eigengap | `sum_cross_inner_sq_le`; rank-gap lemmas | `DavisKahan.lean`, `RankGap.lean` |
+| Davis–Kahan sin-Θ bound; rank-`d` eigengap | `sum_cross_inner_sq_le_opNorm`, `sum_cross_inner_sq_le_of_rank_floor_opNorm`; source-facing crude siblings | `DavisKahan.lean`, `RankGap.lean` |
 | The aligning orthogonal map `W*` | `alignedSpectralConfig`, `AlignExists`; Gram rigidity / polar factor | `AlignedPipeline.lean`, `GramRigidity.lean`, `PolarFactor.lean`, `Overlap.lean` |
 | PSD rank-`≤d` ⇒ Gram of a `d`-config (produces the population `ψ`) | `exists_config_gram_eq_of_posSemidef_rank_le` | `GramRealization.lean` |
 | Matrix-world capstone (entrywise `η` ⇒ aligned `ConfigError`) | `exists_isometry_configError_le_of_entrywise_close` | `MatrixPerturbation.lean` |
 
 ---
+
+
+### Reuse with DavisKahan / YWS / TauCeti
+
+`ConfigPerturbation.lean` now consumes the selected-block operator-norm
+Davis--Kahan endpoint from the reusable `TauCeti`/`DavisKahan` layer and keeps
+the exact eigenvalue-commutator residual through a Bessel/Parseval sum.  The
+older ambient-`n` wrapper theorems remain available for source fidelity.
+
+The current proof still uses the local near-isometry/polar theorem and therefore
+retains `hpolar`.  The YWS aligned-frame API already supplies the canonical
+`choosePolarUnitary (overlapOp ...)` construction, but replacing `hpolar`
+cleanly also needs a reusable Frobenius estimate comparing that polar unitary
+to the overlap operator in terms of principal-angle energy.  That lemma is not
+yet part of the reusable TauCeti surface, so this layer does not introduce a
+cross-paper YWS dependency merely to duplicate the existing local polar step.
 
 ## What to scrutinize: assumptions beyond the paper
 
@@ -109,8 +125,10 @@ The result is assembled in layers; read them in this order:
 - **Rates are loose, not sharp.** `cmdsEntrywiseRate` / `configBound` /
   `endToEndRate` are *valid but non-optimal* propagation rates (the module
   docstrings compare them with the paper's `Poly₃((n³/r)^{1/2−δ})` bookkeeping).
-  The qualitative content — bounds that vanish in the stated regime — matches;
-  the constants/exponents are not claimed to be the paper's sharp ones.
+  The deterministic spectral layer does use the reusable selected-block
+  Davis--Kahan bound (`n → d`) and residual/Parseval summation for the CMDS
+  square-root commutator (`d² → d`), but the constants/exponents are still not
+  claimed to be the paper's sharp ones.
 - **Response boundedness in growing bridges.** The preferred Quench-facing
   response theorem no longer assumes separate uniform bounds for every sample
   and population dissimilarity. A population response-norm envelope, together
