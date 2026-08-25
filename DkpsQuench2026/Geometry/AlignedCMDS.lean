@@ -68,6 +68,40 @@ theorem quench_uniform_embedding_error_of_finite_configError
             norm_config_le_ConfigError (ψhatFinite u ω) ψFinite (indexOf f)
       _ ≤ c u := hω)
 
+/-- Frobenius finite-configuration concentration gives Quench's uniform
+model-space embedding concentration without passing through the legacy
+`ConfigError` row-sum metric. -/
+theorem quench_uniform_embedding_error_of_finite_configFrobError
+    (μ : Nat → Measure Ω)
+    (hμ : ∀ n, IsProbabilityMeasure (μ n))
+    {n d : Nat}
+    (indexOf : Model Q X → Fin n)
+    (ψFinite : Config n d)
+    (ψhatFinite : Nat → Ω → Config n d)
+    (ψ : Model Q X → Vec d)
+    (ψHat : Nat → Ω → Model Q X → Vec d)
+    (c : Nat → Real)
+    (hψ : ∀ f, ψ f = ψFinite (indexOf f))
+    (hψHat : ∀ u ω f, ψHat u ω f = ψhatFinite u ω (indexOf f))
+    (hfinite : Acharyya2024.HighProbAtTop μ
+      (fun u => {ω |
+        Acharyya2025.ConfigPerturbation.ConfigFrobError (ψhatFinite u ω) ψFinite ≤ c u})) :
+    _root_.HighProbAtTop μ hμ
+      (fun u => {ω | ∀ f, ‖ψHat u ω f - ψ f‖ ≤ c u}) := by
+  intro δ hδ
+  obtain ⟨N, hN⟩ := hfinite δ hδ
+  refine ⟨N, fun u hu => ?_⟩
+  exact (hN u hu).trans (MeasureTheory.measure_mono fun ω hω f => by
+    calc
+      ‖ψHat u ω f - ψ f‖
+          = ‖ψhatFinite u ω (indexOf f) - ψFinite (indexOf f)‖ := by
+            simp [hψ f, hψHat u ω f]
+      _ ≤ Acharyya2025.ConfigPerturbation.ConfigFrobError
+            (ψhatFinite u ω) ψFinite :=
+          Acharyya2025.ConfigPerturbation.norm_config_le_ConfigFrobError
+            (ψhatFinite u ω) ψFinite (indexOf f)
+      _ ≤ c u := hω)
+
 /--
 **Quench uniform embedding error from the aligned CMDS spectral estimator.**
 
@@ -140,6 +174,63 @@ theorem quench_uniform_embedding_error_of_aligned_spectral
         ((n : Real) * rate u)))
     ψ ψHat
     (fun u => Acharyya2025.ConfigPerturbation.configBound n d α Λ
+      ((n : Real) * rate u))
+    hψ hψHat haligned
+
+/-- Quench uniform embedding concentration from the paper-facing Frobenius
+Acharyya spectral bound.
+
+Compared with `quench_uniform_embedding_error_of_aligned_spectral`, the final
+uniform per-model conclusion is the same shape, but its rate is
+`configFrobBound` rather than `configBound = √n · configFrobBound`. -/
+theorem quench_uniform_embedding_error_of_aligned_spectral_frob
+    (μ : Nat → Measure Ω)
+    (hμ : ∀ k, IsProbabilityMeasure (μ k))
+    {n d : Nat} (hd : d ≤ n)
+    (Dhat : Nat → Ω → Acharyya2024.DisMat n) (D : Acharyya2024.DisMat n)
+    (hsym : ∀ u ω,
+      (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat u ω))).IsHermitian)
+    (hB : (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix D)).PosSemidef)
+    (hrank : (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix D)).rank ≤ d)
+    {α Λ : Real} (hα_pos : 0 < α)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
+    (ψFinite : Config n d)
+    (hψFinite : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
+      = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
+    (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
+    (hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
+    (hcenter : Acharyya2024.HighProbAtTop μ (fun u => {ω |
+      Acharyya2025.Bridge.EntrywiseClose
+        (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat u ω))
+        (Acharyya2025.Deterministic.classicalMDSMatrix D) (rate u)}))
+    (indexOf : Model Q X → Fin n)
+    (ψ : Model Q X → Vec d)
+    (ψHat : Nat → Ω → Model Q X → Vec d)
+    (hψ : ∀ f, ψ f = ψFinite (indexOf f))
+    (hψHat : ∀ u ω f, ψHat u ω f =
+      Acharyya2025.AlignedPipeline.alignedSpectralConfigFrob hd Dhat hsym ψFinite
+        (fun u => Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+          ((n : Real) * rate u)) u ω (indexOf f)) :
+    _root_.HighProbAtTop μ hμ
+      (fun u => {ω | ∀ f, ‖ψHat u ω f - ψ f‖ ≤
+        Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+          ((n : Real) * rate u)}) := by
+  have haligned :=
+    Acharyya2025.AlignedPipeline.highProb_aligned_configFrobError_of_entrywise_close
+      μ hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψFinite hψFinite
+      rate hrate_nonneg hrate_zero hcenter
+  exact quench_uniform_embedding_error_of_finite_configFrobError
+    μ hμ indexOf ψFinite
+    (Acharyya2025.AlignedPipeline.alignedSpectralConfigFrob hd Dhat hsym ψFinite
+      (fun u => Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+        ((n : Real) * rate u)))
+    ψ ψHat
+    (fun u => Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
       ((n : Real) * rate u))
     hψ hψHat haligned
 

@@ -61,12 +61,15 @@ The result is assembled in layers; read them in this order:
    content (the centered dissimilarity matrix `B̂` concentrates entrywise
    around `B`).
 2. **[`ConfigPerturbation.lean`](ConfigPerturbation.lean)** —
-   `exists_isometry_configError_spectralConfig_le` and the explicit
-   `configBound`: the **deterministic core of Theorem 2** — an orthogonal `W*`
-   with `‖ψ̂W* − ψ‖ ≤ configBound`, via Weyl + Davis–Kahan.
+   `exists_isometry_configFrobError_spectralConfig_le` and the explicit
+   `configFrobBound`: the paper-facing **Frobenius deterministic core of
+   Theorem 2** — an orthogonal `W*` with a Frobenius configuration error bound,
+   via Weyl + Davis–Kahan.  The older `ConfigError` / `configBound` theorem is a
+   compatibility corollary and pays an additional `√n` conversion.
 3. **[`AlignedPipeline.lean`](AlignedPipeline.lean)** —
-   `highProb_aligned_configError_of_entrywise_close`: the **high-probability
-   Theorem 2** (feed the Theorem-1 event through the deterministic bound).
+   `highProb_aligned_configFrobError_of_entrywise_close`: the paper-facing
+   **high-probability Theorem 2** route (feed the Theorem-1 event through the
+   Frobenius deterministic bound), alongside the legacy `ConfigError` route.
 4. **[`RateChain.lean`](RateChain.lean)** — `endToEndRate` /
    `tendsto_endToEndRate_zero`: the **Corollary 2** vanishing rate as the
    replicate budget grows.
@@ -81,14 +84,14 @@ The result is assembled in layers; read them in this order:
 | **Corollary 1** — spectral-norm bound `‖B̂ − B‖` | `MatrixOperatorNormClose` (predicate shape) | `MathlibBridge.lean` |
 | **Assumption 1** (`rank B = d`) | rank-`≤ d` hypotheses; `CMDSpectralAssumptions` | `ConfigPerturbation.lean`, `SpectralPipeline.lean` |
 | **Assumption 2** (eigenvalue stability `λ_d > C₁`, `λ₁ < C₂`) | eigenvalue floor `α` / cap `Λ` hypotheses | `ConfigPerturbation.lean`, `MatrixPerturbation.lean` |
-| **Theorem 2**, deterministic core — `∃ W*∈O(d)`, `‖ψ̂W*−ψ‖ ≤ configBound` | `exists_isometry_configError_spectralConfig_le`, `configBound` | `ConfigPerturbation.lean` |
-| **Theorem 2**, high-probability form | `highProb_aligned_configError_of_entrywise_close`, `…_of_response_mean` | `AlignedPipeline.lean` |
+| **Theorem 2**, deterministic Frobenius core — `∃ W*∈O(d)` | `exists_isometry_configFrobError_spectralConfig_le`, `configFrobBound`; legacy `ConfigError` corollary | `ConfigPerturbation.lean` |
+| **Theorem 2**, high-probability Frobenius form | `highProb_aligned_configFrobError_of_entrywise_close`, `…_of_response_mean`; legacy `ConfigError` siblings | `AlignedPipeline.lean` |
 | **Corollary 2** — vanishing rate as budgets grow | `endToEndRate`, `tendsto_endToEndRate_zero`, `tendsto_configBound_zero` | `RateChain.lean` |
 | Weyl's eigenvalue inequality | `abs_eigenvalues_sub_le` | `Weyl.lean` |
 | Davis–Kahan sin-Θ bound; rank-`d` eigengap | `sum_cross_inner_sq_le_opNorm`, `sum_cross_inner_sq_le_of_rank_floor_opNorm`; source-facing crude siblings | `DavisKahan.lean`, `RankGap.lean` |
 | The aligning orthogonal map `W*` | `alignedSpectralConfig`, `AlignExists`; Gram rigidity / polar factor | `AlignedPipeline.lean`, `GramRigidity.lean`, `PolarFactor.lean`, `Overlap.lean` |
 | PSD rank-`≤d` ⇒ Gram of a `d`-config (produces the population `ψ`) | `exists_config_gram_eq_of_posSemidef_rank_le` | `GramRealization.lean` |
-| Matrix-world capstone (entrywise `η` ⇒ aligned `ConfigError`) | `exists_isometry_configError_le_of_entrywise_close` | `MatrixPerturbation.lean` |
+| Matrix-world capstone (entrywise `η` ⇒ aligned Frobenius error) | `exists_isometry_configFrobError_le_of_entrywise_close`; legacy `ConfigError` corollary | `MatrixPerturbation.lean` |
 
 ---
 
@@ -108,6 +111,22 @@ to the overlap operator in terms of principal-angle energy.  That lemma is not
 yet part of the reusable TauCeti surface, so this layer does not introduce a
 cross-paper YWS dependency merely to duplicate the existing local polar step.
 
+### ArXiv v1 norm inconsistency
+
+The retained transcription is arXiv v1, which is also the version consumed by
+the January-2026 Quench argument.  That source is internally inconsistent about
+the norm in Theorem 2: the displayed theorem carries a `2,∞` subscript, while
+the discussion describes the proved concentration bounds as Frobenius and
+lists a two-to-infinity result as future work.  The formalization therefore
+exposes the Frobenius norm controlled directly by the appendix-style spectral
+argument as `ConfigFrobError`.  The valid rowwise consequence
+`‖error_i‖ ≤ ConfigFrobError` is proved separately; it is not labeled as a
+literal transcription of the disputed v1 display.
+
+The June-2026 arXiv v2 substantially revises the theorem and its rate.  Updating
+the repository's paper target from v1 to v2 should be treated as a separate
+source-version migration rather than folded into this Quench-facing v1 chain.
+
 ## What to scrutinize: assumptions beyond the paper
 
 - **Measurability of the raw spectral embedding** (`hmeas_spec` in the aligned
@@ -122,13 +141,15 @@ cross-paper YWS dependency merely to duplicate the existing local polar step.
   and explicit eigenvalue floor `α` / cap `Λ` hypotheses; the numeric
   **smallness conditions** (`hsmall`, `hpolar`) make the paper's "`r = ω(n³)`,
   `supᵢⱼ γᵢⱼ = O(1)`" regime concrete and are flagged where used.
-- **Rates are loose, not sharp.** `cmdsEntrywiseRate` / `configBound` /
+- **Rates are loose, not sharp.** `cmdsEntrywiseRate` / `configFrobBound` /
+  `configBound` /
   `endToEndRate` are *valid but non-optimal* propagation rates (the module
   docstrings compare them with the paper's `Poly₃((n³/r)^{1/2−δ})` bookkeeping).
   The deterministic spectral layer does use the reusable selected-block
   Davis--Kahan bound (`n → d`) and residual/Parseval summation for the CMDS
-  square-root commutator (`d² → d`), but the constants/exponents are still not
-  claimed to be the paper's sharp ones.
+  square-root commutator (`d² → d`).  The paper-facing Frobenius route also
+  removes the legacy `ConfigError ≤ √n · ConfigFrobError` loss, but the
+  constants/exponents are still not claimed to be the paper's sharp ones.
 - **Response boundedness in growing bridges.** The preferred Quench-facing
   response theorem no longer assumes separate uniform bounds for every sample
   and population dissimilarity. A population response-norm envelope, together

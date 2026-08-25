@@ -347,7 +347,7 @@ lemma chosenPerspectiveNet_covers
     (ψ : Model Q X → Vec d) (htb : PerspectiveTotallyBounded ψ)
     (ρ : ℝ) (hρ : 0 < ρ) :
     PerspectiveFiniteCover ψ (ρ / 2) (chosenPerspectiveNet ψ htb ρ) := by
-  rw [chosenPerspectiveNet, dif_pos hρ]
+  rw [chosenPerspectiveNet, dite_eq_left hρ]
   exact Classical.choose_spec (htb (ρ / 2) (by positivity))
 
 /-- Total boundedness, a measurable perspective map, full support, and iid
