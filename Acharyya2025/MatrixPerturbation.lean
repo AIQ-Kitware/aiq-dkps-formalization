@@ -2,7 +2,7 @@
 WP6-core — matrix-world assembly (transport layer) of `planning/acharyya-plan.md`.
 
 The operator-world configuration-perturbation theorem
-`Acharyya2025.ConfigPerturbation.exists_isometry_configError_spectralConfig_le`
+`Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le`
 is stated for symmetric operators `T, S` on `EuclideanSpace ℝ (Fin n)` with the
 sorted-eigenvalue hypotheses (spectral floor `α`, rank-`d` tail, top eigenvalue
 `≤ Λ`).  This file is the *transport layer* that lets the matrix world
@@ -22,10 +22,11 @@ The sorted-eigenvalue hypotheses are stated against Mathlib's
 * `gram_spectralConfig_eq` — the Gram matrix of the spectral configuration
   `spectralConfig T` equals `B` (operator spectral expansion evaluated at the
   standard basis vectors);
-* `exists_isometry_configError_le_of_entrywise_close` — the **matrix-world
-  assembly**: for any external configuration `ψ` realizing `B` as its Gram
-  matrix, the sample spectral embedding `spectralConfig S`, transported by a
-  single linear isometry `W`, is `configBound`-close to `ψ`.
+* `exists_isometry_configFrobError_le_of_entrywise_close` — the paper-facing
+  **matrix-world assembly** in Frobenius configuration error;
+* `exists_isometry_configError_le_of_entrywise_close` — the legacy
+  `ConfigError` compatibility corollary, obtained with the extra `√n` norm
+  conversion.
 
 The assembly combines the operator bound (via `OperatorBridge`), the rank/PSD
 eigenvalue transport, the Gram identity, and Gram rigidity
@@ -295,28 +296,18 @@ transport, the operator-world configuration bound
 (`ConfigPerturbation.exists_isometry_configError_spectralConfig_le`), the Gram
 identity, and Gram rigidity (`GramRigidity.exists_linearIsometryEquiv_of_gram_eq`). -/
 
-/-- **Matrix-world assembly.**
+/-- **Matrix-world Frobenius assembly.**
 
-Let `B` be a positive semidefinite Gram matrix with `B.rank ≤ d` (population),
-and `Bhat` a Hermitian sample matrix entrywise `η`-close to `B`.  Set
-`ε := n·η`.  Under the operator-side hypotheses (spectral floor `α`, top
-eigenvalue `≤ Λ`, smallness `n·η ≤ α/2`, polar-factor smallness), for *any*
-external configuration `ψ` realizing `B` as its Gram matrix, the sample spectral
-embedding `spectralConfig (toEuclideanLin Bhat)`, transported by a single linear
-isometry `W`, is `configBound n d α Λ (n·η)`-close to `ψ`.
+This is the matrix transport of
+`ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le`.  Entrywise
+matrix closeness is converted to the operator perturbation `ε = n·η`, and exact
+Gram rigidity transports the population spectral configuration to any external
+Gram realization `ψ` without changing Frobenius error.
 
-This is the matrix-world deterministic core *behind* the paper's **Theorem 2**
-(`‖ψ̂W* − ψ‖ ≤ κ` with high probability): once the sample matrix B̂ is entrywise
-close to the population B, the spectral embedding of B̂ — after an aligning
-isometry `W` (playing the role of the paper's `W*`; optimality/uniqueness is not
-established here) — is uniformly close to the true embedding `ψ`.  Theorem 2 is
-itself probabilistic; this lemma is the deterministic perturbation bound that
-*corresponds to / feeds* it.  The probabilistic step (concentration of
-`‖B̂ − B‖`) is *not* part of this lemma; this provides the deterministic
-perturbation bound that Weyl and Davis–Kahan feed.
-
-Formalized by Claude Fable 5 (claude-fable-5[1m]). -/
-theorem exists_isometry_configError_le_of_entrywise_close
+The conclusion stops before the repository's legacy `ConfigError` conversion,
+so its deterministic envelope is `configFrobBound`, with no extra `√n` factor.
+-/
+theorem exists_isometry_configFrobError_le_of_entrywise_close
     {n d : ℕ} (hd : d ≤ n)
     (B Bhat : Matrix (Fin n) (Fin n) ℝ)
     (hB : B.PosSemidef)             -- population `B` positive semidefinite (PSD)
@@ -333,14 +324,12 @@ theorem exists_isometry_configError_le_of_entrywise_close
     (hpolar : (d : ℝ) * (4 * (d : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2) -- polar-factor smallness (Davis–Kahan term ≤ 1/2)
     (ψ : Acharyya2024.Config n d)               -- any external configuration realizing B
     (hψ : ∀ i j, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :  -- ψ has Gram matrix B
-    -- Conclusion: ∃ a linear isometry W (an aligning isometry playing the role of the paper's `W*`;
-    -- optimality/uniqueness is not established here) such that the W-transported sample spectral
-    -- embedding is configBound-close to ψ (the deterministic core feeding Theorem 2).
+    -- Conclusion: the aligned sample configuration is Frobenius-close to `ψ`.
     ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
       (∀ x y, ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ) ∧
-      Acharyya2024.ConfigError
+      ConfigFrobError
         (fun i => W (spectralConfig (Matrix.toEuclideanLin Bhat) (opSym hBhat) hd i)) ψ
-        ≤ configBound n d α Λ ((n : ℝ) * η) := by
+        ≤ configFrobBound d α Λ ((n : ℝ) * η) := by
   set T := Matrix.toEuclideanLin B with hTdef
   set S := Matrix.toEuclideanLin Bhat with hSdef
   set hT := opSym hB.isHermitian with hTsym
@@ -372,7 +361,7 @@ theorem exists_isometry_configError_le_of_entrywise_close
     exact hΛ _
   -- operator-world configuration bound: alignment `W₀`.
   obtain ⟨W₀, hW₀_isom, hW₀_bound⟩ :=
-    exists_isometry_configError_spectralConfig_le hd T S hT hSsym hα_pos hε_nonneg
+    exists_isometry_configFrobError_spectralConfig_le hd T S hT hSsym hα_pos hε_nonneg
       hα htail hΛ' hclose hsmall hpolar
   -- Gram rigidity: Gram(spectralConfig T) = B = Gram(ψ), so an isometry `V` aligns them.
   have hgramT : ∀ i j : Fin n,
@@ -386,21 +375,68 @@ theorem exists_isometry_configError_le_of_entrywise_close
     intro x y
     show ⟪V (W₀ x), V (W₀ y)⟫_ℝ = ⟪x, y⟫_ℝ
     rw [V.inner_map_map, hW₀_isom x y]
-  · -- ConfigError comparison: `V` linear isometry preserves norms.
-    have hConfigEq : Acharyya2024.ConfigError
+  · -- Frobenius configuration error is invariant under the exact Gram-rigidity isometry.
+    have hFrobEq : ConfigFrobError
         (fun i => (V.toLinearMap ∘ₗ W₀) (spectralConfig S hSsym hd i)) ψ
-        = Acharyya2024.ConfigError
+        = ConfigFrobError
             (fun i => W₀ (spectralConfig S hSsym hd i)) (spectralConfig T hT hd) := by
-      unfold Acharyya2024.ConfigError
+      unfold ConfigFrobError
+      congr 1
       refine Finset.sum_congr rfl (fun i _ => ?_)
-      -- `‖V(W₀ ψ̂ᵢ) − ψᵢ‖ = ‖V(W₀ ψ̂ᵢ) − V(spectralConfig T ᵢ)‖ = ‖W₀ ψ̂ᵢ − spectralConfig T ᵢ‖`.
       have hψi : ψ i = V (spectralConfig T hT hd i) := (hV i).symm
-      show ‖V (W₀ (spectralConfig S hSsym hd i)) - ψ i‖
-          = ‖W₀ (spectralConfig S hSsym hd i) - spectralConfig T hT hd i‖
-      rw [hψi, ← map_sub, V.norm_map]
-    rw [hConfigEq]
+      have hnorm :
+          ‖V (W₀ (spectralConfig S hSsym hd i)) - ψ i‖ =
+            ‖W₀ (spectralConfig S hSsym hd i) - spectralConfig T hT hd i‖ := by
+        rw [hψi, ← map_sub, V.norm_map]
+      change ‖V (W₀ (spectralConfig S hSsym hd i)) - ψ i‖ ^ 2 =
+        ‖W₀ (spectralConfig S hSsym hd i) - spectralConfig T hT hd i‖ ^ 2
+      rw [hnorm]
+    rw [hFrobEq]
     exact hW₀_bound
 
+/-- **Matrix-world assembly in the legacy `ConfigError` metric.**
+
+Compatibility corollary of `exists_isometry_configFrobError_le_of_entrywise_close`.
+The only additional loss is `ConfigError ≤ √n · ConfigFrobError`.
+-/
+theorem exists_isometry_configError_le_of_entrywise_close
+    {n d : ℕ} (hd : d ≤ n)
+    (B Bhat : Matrix (Fin n) (Fin n) ℝ)
+    (hB : B.PosSemidef)             -- population `B` positive semidefinite (PSD)
+    (hBhat : Bhat.IsHermitian)      -- sample `Bhat` Hermitian (real symmetric)
+    (hrank : B.rank ≤ d)            -- rank bound: rank(B) ≤ d (Assumption 1)
+    {α Λ η : ℝ} (hα_pos : 0 < α) (hη_nonneg : 0 ≤ η)
+    -- eigenvalue floor α (Assumption 2, lower)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    -- eigenvalue ceiling Λ (Assumption 2, upper)
+    (hΛ : ∀ l : Fin (Fintype.card (Fin n)), hB.isHermitian.eigenvalues₀ l ≤ Λ)
+    (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)   -- entrywise closeness: |B̂ᵢⱼ − Bᵢⱼ| ≤ η
+    (hsmall : (n : ℝ) * η ≤ α / 2)              -- smallness: perturbation ≤ half the floor (Weyl/gap)
+    (hpolar : (d : ℝ) * (4 * (d : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2) -- polar-factor smallness (Davis–Kahan term ≤ 1/2)
+    (ψ : Acharyya2024.Config n d)               -- any external configuration realizing B
+    (hψ : ∀ i j, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :  -- ψ has Gram matrix B
+    -- Conclusion: ∃ a linear isometry W (an aligning isometry playing the role of the paper's `W*`;
+    -- optimality/uniqueness is not established here) such that the W-transported sample spectral
+    -- embedding is configBound-close to ψ (the deterministic core feeding Theorem 2).
+    ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
+      (∀ x y, ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ) ∧
+      Acharyya2024.ConfigError
+        (fun i => W (spectralConfig (Matrix.toEuclideanLin Bhat) (opSym hBhat) hd i)) ψ
+        ≤ configBound n d α Λ ((n : ℝ) * η)  := by
+  obtain ⟨W, hWiso, hWfrob⟩ :=
+    exists_isometry_configFrobError_le_of_entrywise_close hd B Bhat hB hBhat hrank
+      hα_pos hη_nonneg hfloor hΛ hentry hsmall hpolar ψ hψ
+  refine ⟨W, hWiso, ?_⟩
+  calc
+    Acharyya2024.ConfigError
+        (fun i => W (spectralConfig (Matrix.toEuclideanLin Bhat) (opSym hBhat) hd i)) ψ
+        ≤ Real.sqrt n * ConfigFrobError
+            (fun i => W (spectralConfig (Matrix.toEuclideanLin Bhat) (opSym hBhat) hd i)) ψ :=
+          configError_le_sqrt_mul_ConfigFrobError _ _
+    _ ≤ Real.sqrt n * configFrobBound d α Λ ((n : ℝ) * η) :=
+      mul_le_mul_of_nonneg_left hWfrob (Real.sqrt_nonneg _)
+    _ = configBound n d α Λ ((n : ℝ) * η) := rfl
 
 /-- Matrix-world assembly with the spectral ceiling chosen canonically as the
 largest population eigenvalue.
@@ -427,6 +463,31 @@ theorem exists_isometry_configError_le_of_entrywise_close_topEigenvalue
         (fun i => W (spectralConfig (Matrix.toEuclideanLin Bhat) (opSym hBhat) hd i)) ψ
         ≤ configBound n d α (topEigenvalue hn hB) ((n : ℝ) * η) := by
   exact exists_isometry_configError_le_of_entrywise_close hd B Bhat hB hBhat hrank
+    hα_pos hη_nonneg hfloor (eigenvalues₀_le_topEigenvalue hn hB)
+    hentry hsmall hpolar ψ hψ
+
+/-- Frobenius-error form with the spectral ceiling chosen canonically as the
+largest population eigenvalue. -/
+theorem exists_isometry_configFrobError_le_of_entrywise_close_topEigenvalue
+    {n d : ℕ} (hn : 0 < n) (hd : d ≤ n)
+    (B Bhat : Matrix (Fin n) (Fin n) ℝ)
+    (hB : B.PosSemidef)
+    (hBhat : Bhat.IsHermitian)
+    (hrank : B.rank ≤ d)
+    {α η : ℝ} (hα_pos : 0 < α) (hη_nonneg : 0 ≤ η)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)
+    (hsmall : (n : ℝ) * η ≤ α / 2)
+    (hpolar : (d : ℝ) * (4 * (d : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2)
+    (ψ : Acharyya2024.Config n d)
+    (hψ : ∀ i j, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :
+    ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
+      (∀ x y, ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ) ∧
+      ConfigFrobError
+        (fun i => W (spectralConfig (Matrix.toEuclideanLin Bhat) (opSym hBhat) hd i)) ψ
+        ≤ configFrobBound d α (topEigenvalue hn hB) ((n : ℝ) * η) := by
+  exact exists_isometry_configFrobError_le_of_entrywise_close hd B Bhat hB hBhat hrank
     hα_pos hη_nonneg hfloor (eigenvalues₀_le_topEigenvalue hn hB)
     hentry hsmall hpolar ψ hψ
 

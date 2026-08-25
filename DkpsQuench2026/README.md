@@ -91,6 +91,20 @@ DkpsQuench2026.QueryEfficiency.InfiniteSubsetData
 DkpsQuench2026.QueryEfficiency.InfiniteSubsetAssumptions
 ```
 
+## Acharyya concentration bridge
+
+`Geometry/AlignedCMDS.lean` retains the established `ConfigError` bridge and
+also exposes a Frobenius route through
+`quench_uniform_embedding_error_of_aligned_spectral_frob`.  The latter consumes
+Acharyya's `configFrobBound` directly and uses the elementary row bound
+`‖error_i‖ ≤ ConfigFrobError`, so Quench's uniform embedding-error premise no
+longer needs the extra `√n` introduced by the older row-sum `ConfigError` API.
+
+This does not alter Quench's nearest-neighbor theorem.  It strengthens the
+upstream concentration certificate that can be supplied to that theorem and
+keeps the Quench-facing v1 Acharyya rate path separate from the revised
+June-2026 Acharyya source version.
+
 ## Build and audit
 
 ```bash

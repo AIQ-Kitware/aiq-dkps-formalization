@@ -10,8 +10,9 @@ operator norm (`ε ≤ α/2`), the *spectral embeddings*
 `ψ̂ := spectralConfig S`, `ψ := spectralConfig T`
 (the classical MDS coordinates `√λ̂_k · v_k(i)` and `√λ_l · u_l(i)`) are close
 *up to a linear isometry* `W`:
-`ConfigError (W ∘ ψ̂) ψ ≤ CBOUND` with an explicit closed-form `CBOUND` in
-`n, d, α, Λ, ε`.
+a Frobenius configuration error bound with an explicit closed form in
+`d, α, Λ, ε`.  The legacy `ConfigError` theorem is retained as a compatibility
+corollary and pays the expected Cauchy--Schwarz factor `√n`.
 
 The proof is entirely elementary and coordinatewise — no SVD, no von Neumann
 trace inequality.  It reuses the spectral toolkit built in this session:
@@ -33,8 +34,9 @@ The three-term decomposition `ψ̂W − ψ = Term1 + Term2 + Term3` is:
   controlled by the Davis–Kahan cross energy.
 
 Frobenius triangle inequality (`norm_add_le` on `EuclideanSpace ℝ (Fin n × Fin d)`)
-combines the three, and `ConfigError ≤ √n · ‖·‖_F` (Cauchy–Schwarz) converts the
-Frobenius bound to the `ℓ¹`-over-points `ConfigError`.
+combines the three.  The paper-facing deterministic theorem stops at this
+Frobenius bound; `ConfigError ≤ √n · ‖·‖_F` is used only by the compatibility
+corollary consumed by older downstream code.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
@@ -517,26 +519,26 @@ private theorem defect_repr (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hd : d �
   rw [hsum1]
   by_cases hj : d ≤ (j : ℕ)
   · -- trailing block: the leading sum vanishes
-    rw [if_pos hj]
+    rw [ite_eq_left hj]
     have hzero : ∑ k, Q k l * (if j = Fin.castLE hd k then (1:ℝ) else 0) = 0 := by
       refine Finset.sum_eq_zero (fun k _ => ?_)
       have hne : j ≠ Fin.castLE hd k := by
         intro h; rw [h] at hj; simp only [Fin.val_castLE] at hj; omega
-      rw [if_neg hne, mul_zero]
+      rw [ite_eq_right hne, mul_zero]
     rw [hzero, zero_sub]
   · -- leading block: cancellation `Q_{⟨j⟩,l} = ⟪v_j, u_l⟫`
-    rw [if_neg hj]
+    rw [ite_eq_right hj]
     push Not at hj
     have hcollapse : ∑ k, Q k l * (if j = Fin.castLE hd k then (1:ℝ) else 0) = Q ⟨(j:ℕ), hj⟩ l := by
       rw [Finset.sum_eq_single ⟨(j:ℕ), hj⟩]
       · have hje : j = Fin.castLE hd ⟨(j:ℕ), hj⟩ := by apply Fin.ext; simp [Fin.castLE]
-        rw [if_pos hje, mul_one]
+        rw [ite_eq_left hje, mul_one]
       · intro k _ hk
         have hne : j ≠ Fin.castLE hd k := by
           intro h; apply hk; apply Fin.ext
           have heq : (j : ℕ) = ((Fin.castLE hd k : Fin n) : ℕ) := by rw [h]
           simp only [Fin.val_castLE] at heq; exact heq.symm
-        rw [if_neg hne, mul_zero]
+        rw [ite_eq_right hne, mul_zero]
       · intro hc; exact absurd (Finset.mem_univ _) hc
     rw [hcollapse]
     -- `Q_{⟨j⟩,l} = ⟪v_{castLE ⟨j⟩}, u_l⟫ = ⟪v_j, u_l⟫`, so the difference is 0
@@ -566,11 +568,11 @@ private theorem defect_norm_sq (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hd : d
       ((hS.eigenvectorBasis hn_eq).repr w j)^2 = 0 := by
     refine Finset.sum_eq_zero (fun j hj => ?_)
     have hjlt : ¬ (d ≤ (j : ℕ)) := (Finset.mem_filter.mp hj).2
-    rw [hw, defect_repr hT hS hd l j, if_neg hjlt]; ring
+    rw [hw, defect_repr hT hS hd l j, ite_eq_right hjlt]; ring
   rw [hlead, add_zero]
   refine Finset.sum_congr rfl (fun j hj => ?_)
   have hjge : d ≤ (j : ℕ) := (Finset.mem_filter.mp hj).2
-  rw [hw, defect_repr hT hS hd l j, if_pos hjge]
+  rw [hw, defect_repr hT hS hd l j, ite_eq_left hjge]
   ring
 
 /-! ### Frobenius packaging
@@ -859,7 +861,7 @@ private theorem term2_norm_sq_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsS
                 ‖⟪hS.eigenvectorBasis hn_eq (Fin.castLE hd k),
                     (S - T) (hT.eigenvectorBasis hn_eq (Fin.castLE hd l))⟫_ℝ‖^2 := by
               refine Finset.sum_congr rfl (fun k _ => ?_)
-              simpa [r, Real.norm_eq_abs, sq_abs]
+              simp [r, Real.norm_eq_abs, sq_abs]
         _ ≤ ‖(S - T) (hT.eigenvectorBasis hn_eq (Fin.castLE hd l))‖^2 := hparseval
         _ ≤ ε^2 := pow_le_pow_left₀ (norm_nonneg _) hclose 2
     calc
@@ -942,57 +944,96 @@ private theorem sum_norm_sq_spectralConfig_le (hd : d ≤ n) (hT : T.IsSymmetric
 
 /-! ### The configuration-perturbation theorem (WP7(c4)) -/
 
-/-- The explicit closed-form configuration-error bound `CBOUND` produced by the
-three-term decomposition, as a function of the sample size `n`, embedding
-dimension `d`, eigenvalue floor `α` (paper's `λ_d`/`C1`), eigenvalue cap `Λ`
-(paper's `λ_1`/`C2`), and operator-norm perturbation `ε`.
+/-- Frobenius error between two finite configurations, viewing the `n` points in
+`ℝ^d` as an `n × d` matrix.  This is the matrix Frobenius norm used by the
+perturbation proof before the legacy `ConfigError` conversion. -/
+noncomputable def ConfigFrobError {n d : ℕ}
+    (ψhat ψ : Acharyya2024.Config n d) : ℝ :=
+  Real.sqrt (∑ i : Fin n, ‖ψhat i - ψ i‖^2)
 
-The three `Real.sqrt` summands are the Frobenius bounds of Term 1 (polar factor),
-Term 2 (commutator), and Term 3 (Davis–Kahan defect) respectively; the leading
-`√n` converts the Frobenius norm to the per-point `ConfigError`. Here
-`δ := d · (4 d ε² / α²)` is the polar-factor parameter. This is the explicit
-`κ`-style bound on `‖ψ̂W* − ψ‖` in the deterministic core feeding Theorem 2; a
-plain definition (the bound is asserted in the theorem below). -/
+/-- Every row error is bounded by the Frobenius configuration error. -/
+theorem norm_config_le_ConfigFrobError {n d : ℕ}
+    (ψhat ψ : Acharyya2024.Config n d) (i : Fin n) :
+    ‖ψhat i - ψ i‖ ≤ ConfigFrobError ψhat ψ := by
+  rw [ConfigFrobError, ← Real.sqrt_sq (norm_nonneg (ψhat i - ψ i))]
+  apply Real.sqrt_le_sqrt
+  exact Finset.single_le_sum
+    (fun j _ => sq_nonneg ‖ψhat j - ψ j‖) (Finset.mem_univ i)
+
+/-- The legacy `ℓ¹`-over-points `ConfigError` is at most `√n` times the
+Frobenius configuration error. -/
+theorem configError_le_sqrt_mul_ConfigFrobError {n d : ℕ}
+    (ψhat ψ : Acharyya2024.Config n d) :
+    Acharyya2024.ConfigError ψhat ψ ≤ Real.sqrt n * ConfigFrobError ψhat ψ := by
+  unfold Acharyya2024.ConfigError ConfigFrobError
+  have hcard :
+      (∑ i : Fin n, ‖ψhat i - ψ i‖)^2 ≤
+        (n : ℝ) * ∑ i : Fin n, ‖ψhat i - ψ i‖^2 := by
+    have h := sq_sum_le_card_mul_sum_sq
+      (s := (Finset.univ : Finset (Fin n)))
+      (f := fun i => ‖ψhat i - ψ i‖)
+    simpa [Finset.card_univ] using h
+  have hsum_nonneg : 0 ≤ ∑ i : Fin n, ‖ψhat i - ψ i‖ :=
+    Finset.sum_nonneg (fun i _ => norm_nonneg _)
+  calc
+    ∑ i : Fin n, ‖ψhat i - ψ i‖
+        = Real.sqrt ((∑ i : Fin n, ‖ψhat i - ψ i‖)^2) := by
+            rw [Real.sqrt_sq hsum_nonneg]
+    _ ≤ Real.sqrt ((n : ℝ) * ∑ i : Fin n, ‖ψhat i - ψ i‖^2) :=
+      Real.sqrt_le_sqrt hcard
+    _ = Real.sqrt n * Real.sqrt (∑ i : Fin n, ‖ψhat i - ψ i‖^2) := by
+      rw [Real.sqrt_mul (show (0 : ℝ) ≤ (n : ℝ) by positivity)]
+
+/-- The Frobenius part of the explicit spectral configuration bound.  After the
+selected-block Davis--Kahan and residual/Parseval sharpenings, this expression
+has no direct ambient-`n` factor; ambient size enters only through whatever
+operator perturbation `ε` is supplied by the statistical/matrix layer. -/
+noncomputable def configFrobBound (d : ℕ) (α Λ ε : ℝ) : ℝ :=
+  Real.sqrt ((2 * ((d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2)))^2 * ((d : ℝ) * (Λ + ε)))
+    + Real.sqrt ((d : ℝ) * (ε / Real.sqrt (α / 2))^2)
+    + Real.sqrt (Λ * (4 * (d : ℝ) * ε^2 / α^2))
+
+/-- Compatibility bound for the older `ConfigError` API.  It is definitionally
+`√n` times `configFrobBound`; the expression is kept expanded so existing
+downstream proofs that unfold `configBound` keep their previous normal form. -/
 noncomputable def configBound (n d : ℕ) (α Λ ε : ℝ) : ℝ :=
   Real.sqrt n *
     ( Real.sqrt ((2 * ((d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2)))^2 * ((d : ℝ) * (Λ + ε)))
     + Real.sqrt ((d : ℝ) * (ε / Real.sqrt (α / 2))^2)
     + Real.sqrt (Λ * (4 * (d : ℝ) * ε^2 / α^2)) )
 
+/-- The legacy `configBound` is exactly the Frobenius bound followed by the
+`ConfigError ≤ √n · ConfigFrobError` conversion. -/
+theorem configBound_eq_sqrt_mul_configFrobBound (n d : ℕ) (α Λ ε : ℝ) :
+    configBound n d α Λ ε = Real.sqrt n * configFrobBound d α Λ ε := by
+  rfl
+
 /--
-**Configuration perturbation for the classical-MDS spectral embedding.**
+**Frobenius configuration perturbation for the classical-MDS spectral embedding.**
 
-Let `T` (population) be a symmetric operator on `EuclideanSpace ℝ (Fin n)` whose
-leading `d` sorted eigenvalues are `≥ α > 0`, with all trailing eigenvalues `0`
-(rank `d`, spectral floor `α`) and top eigenvalue `≤ Λ`; let `S` (sample) be
-symmetric and `ε`-close in operator norm (`ε ≤ α/2`).  Then the spectral
-embeddings `spectralConfig S` and `spectralConfig T` agree up to a linear isometry
-`W` of `EuclideanSpace ℝ (Fin d)`, with
-`ConfigError (W ∘ spectralConfig S) (spectralConfig T) ≤ configBound n d α Λ ε`.
+Under the same rank-`d`, spectral-floor/cap, and operator-perturbation hypotheses
+as the legacy `ConfigError` theorem, there is an aligning isometry `W` such that
 
-The constant is the explicit (loose) `configBound`; the alignment `W` is the
-polar factor of the eigenvector overlap matrix.  The proof is the elementary
-three-term decomposition `ψ̂W − ψ = Term1 + Term2 + Term3` (polar / commutator /
-Davis–Kahan), combined by the Minkowski inequality on
-`EuclideanSpace ℝ (Fin n × Fin d)` and `ConfigError ≤ √n · ‖·‖_F`.
+`ConfigFrobError (W ∘ spectralConfig S) (spectralConfig T) ≤ configFrobBound d α Λ ε`.
 
-PAPER CORRESPONDENCE: this is the **deterministic core feeding Theorem 2** (the
-Weyl + Davis–Kahan part); Theorem 2 itself is probabilistic. The existential `W`
-is an aligning isometry playing the role of the paper's orthogonal matrix
-`W* ∈ O(d)` (optimality/uniqueness is not established here); the conclusion is the
-deterministic counterpart of `‖ψ̂W* − ψ‖ ≤ κ`, here with the explicit
-`κ = configBound n d α Λ ε`. The probabilistic "with high probability" content of
-Theorem 2 (turning `ε` and the asymptotic regime `r = ω(n³)` into a tail bound)
-lives elsewhere; this theorem supplies the deterministic bound that holds once
-`S` is `ε`-close to `T`.
+This is the natural endpoint of the three-term product-space proof: the norm on
+`EuclideanSpace ℝ (Fin n × Fin d)` is exactly the Frobenius norm of the
+configuration matrix.  No Cauchy--Schwarz conversion across the `n` rows is
+needed, so the explicit deterministic bound has no extra `√n` factor.
 
-Formalized by Claude Fable 5 (claude-fable-5[1m]).
+PAPER CORRESPONDENCE: the retained arXiv v1 source is internally inconsistent:
+its displayed Theorem 2 carries a `2,∞` subscript, while its discussion says the
+proved error is Frobenius and lists a two-to-infinity result as future work.  The
+appendix proof works with ordinary matrix norms.  This declaration records the
+Frobenius quantity actually controlled by the formal three-term argument.  The
+rowwise bound follows separately from `norm_config_le_ConfigFrobError`; it is not
+presented here as the literal v1 theorem statement.
 -/
-theorem exists_isometry_configError_spectralConfig_le
+theorem exists_isometry_configFrobError_spectralConfig_le
     {n d : ℕ} (hd : d ≤ n)               -- embedding dimension/rank `d ≤ n` (Assumption 1: rank = d)
     (T S : EuclideanSpace ℝ (Fin n) →ₗ[ℝ] EuclideanSpace ℝ (Fin n))  -- `T` population, `S` sample Gram operators
     (hT : T.IsSymmetric) (hS : S.IsSymmetric)  -- extra (encoding) assumption: operators are symmetric/self-adjoint
-    {α Λ ε : ℝ} (hα_pos : 0 < α) (hε_nonneg : 0 ≤ ε)  -- floor `α > 0`, perturbation `ε ≥ 0`
+    {α Λ ε : ℝ} (hα_pos : 0 < α) (_hε_nonneg : 0 ≤ ε)  -- floor `α > 0`, perturbation `ε ≥ 0`
     -- Assumption 2 (lower): leading `d` population eigenvalues `≥ α` (paper's `λ_d`/`C1`):
     (hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues finrank_euclideanSpace_fin i)
     -- Assumption 1 (rank = d, encoded): all trailing population eigenvalues vanish:
@@ -1003,12 +1044,12 @@ theorem exists_isometry_configError_spectralConfig_le
     (hsmall : ε ≤ α / 2)                 -- smallness side-condition (extra explicit numeric condition)
     -- polar-factor applicability: `δ = d·4dε²/α² ≤ 1/2` (extra explicit smallness condition):
     (hpolar : (d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2) ≤ 1/2) :
-    -- Conclusion: there is an isometry `W` of `ℝ^d` aligning the sample embedding to the
-    -- population embedding with configuration error `≤ configBound n d α Λ ε`.
+    -- Conclusion: there is an isometry `W` aligning the sample and population
+    -- spectral configurations in Frobenius norm.
     ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
       (∀ x y, ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ) ∧
-      Acharyya2024.ConfigError (fun i => W (spectralConfig S hS hd i)) (spectralConfig T hT hd)
-        ≤ configBound n d α Λ ε := by
+      ConfigFrobError (fun i => W (spectralConfig S hS hd i)) (spectralConfig T hT hd)
+        ≤ configFrobBound d α Λ ε  := by
   set δ : ℝ := (d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2) with hδ
   have hδ0 : 0 ≤ δ := by rw [hδ]; positivity
   -- The near-isometry `M` and its Gram-deviation bound feed the polar factor.
@@ -1142,59 +1183,75 @@ theorem exists_isometry_configError_spectralConfig_le
     calc ‖term3vec hT hS hd‖ = Real.sqrt (‖term3vec hT hS hd‖^2) := by rw [Real.sqrt_sq (norm_nonneg _)]
       _ ≤ Real.sqrt (Λ * (4 * (d : ℝ) * ε^2 / α^2)) :=
           Real.sqrt_le_sqrt (term3_norm_sq_le hd hT hS hα_pos hα htail hΛ hε hsmall)
-  -- `ConfigError ≤ √n · ‖etot‖`.
-  have hconfig : Acharyya2024.ConfigError (fun i => W (spectralConfig S hS hd i)) (spectralConfig T hT hd)
-      ≤ Real.sqrt n * ‖etot‖ := by
-    -- `ConfigError = ∑_i ‖W(ψ̂ i) − ψ i‖`; each is `√(∑_l etot(i,l)²)`.
-    have hai : ∀ i : Fin n, ‖W (spectralConfig S hS hd i) - spectralConfig T hT hd i‖
+  -- The product-space norm is exactly the Frobenius configuration error.
+  have hai : ∀ i : Fin n,
+      ‖W (spectralConfig S hS hd i) - spectralConfig T hT hd i‖
         = Real.sqrt (∑ l : Fin d, (etot (i, l))^2) := by
-      intro i
-      rw [EuclideanSpace.norm_eq]
-      congr 1
-      refine Finset.sum_congr rfl (fun l _ => ?_)
-      show ‖(W (spectralConfig S hS hd i) - spectralConfig T hT hd i) l‖^2 = (etot (i, l))^2
-      rw [hetot]
-      show ‖(W (spectralConfig S hS hd i)) l - (spectralConfig T hT hd i) l‖^2 = _
-      rw [Real.norm_eq_abs, sq_abs]
-    -- `∑_i √(rowSq i) ≤ √n · √(∑_i rowSq i) = √n · ‖etot‖`.
-    have hetotsq : ‖etot‖^2 = ∑ i : Fin n, ∑ l : Fin d, (etot (i, l))^2 := frob_sq etot
-    have hrow_nn : ∀ i : Fin n, 0 ≤ Real.sqrt (∑ l : Fin d, (etot (i, l))^2) :=
-      fun i => Real.sqrt_nonneg _
-    unfold Acharyya2024.ConfigError
-    calc ∑ i : Fin n, ‖W (spectralConfig S hS hd i) - spectralConfig T hT hd i‖
-        = ∑ i : Fin n, Real.sqrt (∑ l : Fin d, (etot (i, l))^2) := by
-          refine Finset.sum_congr rfl (fun i _ => hai i)
-      _ ≤ Real.sqrt n * Real.sqrt (∑ i : Fin n, (Real.sqrt (∑ l : Fin d, (etot (i, l))^2))^2) := by
-          have hcard : (∑ i : Fin n, Real.sqrt (∑ l : Fin d, (etot (i, l))^2))^2
-              ≤ (n : ℝ) * ∑ i : Fin n, (Real.sqrt (∑ l : Fin d, (etot (i, l))^2))^2 := by
-            have h := sq_sum_le_card_mul_sum_sq
-              (s := (Finset.univ : Finset (Fin n)))
-              (f := fun i => Real.sqrt (∑ l : Fin d, (etot (i, l))^2))
-            simpa [Finset.card_univ] using h
-          have hsum_nn : 0 ≤ ∑ i : Fin n, Real.sqrt (∑ l : Fin d, (etot (i, l))^2) :=
-            Finset.sum_nonneg (fun i _ => hrow_nn i)
-          rw [← Real.sqrt_mul (by positivity)]
-          rw [show ∑ i : Fin n, Real.sqrt (∑ l : Fin d, (etot (i, l))^2)
-              = Real.sqrt ((∑ i : Fin n, Real.sqrt (∑ l : Fin d, (etot (i, l))^2))^2) by
-                rw [Real.sqrt_sq hsum_nn]]
-          exact Real.sqrt_le_sqrt hcard
-      _ = Real.sqrt n * ‖etot‖ := by
-          congr 1
-          rw [show (∑ i : Fin n, (Real.sqrt (∑ l : Fin d, (etot (i, l))^2))^2)
-              = ∑ i : Fin n, ∑ l : Fin d, (etot (i, l))^2 by
-                refine Finset.sum_congr rfl (fun i _ => Real.sq_sqrt (by positivity))]
-          rw [← hetotsq, Real.sqrt_sq (norm_nonneg _)]
-  -- Assemble into `configBound`.
-  calc Acharyya2024.ConfigError (fun i => W (spectralConfig S hS hd i)) (spectralConfig T hT hd)
-      ≤ Real.sqrt n * ‖etot‖ := hconfig
-    _ ≤ Real.sqrt n * (‖t1‖ + ‖term2vec hT hS hd‖ + ‖term3vec hT hS hd‖) :=
-        mul_le_mul_of_nonneg_left hmink (Real.sqrt_nonneg _)
-    _ ≤ configBound n d α Λ ε := by
-        rw [configBound]
-        apply mul_le_mul_of_nonneg_left _ (Real.sqrt_nonneg _)
-        have h12 := add_le_add ht1bound ht2bound
-        have h123 := add_le_add h12 ht3bound
-        -- `δ` is definitionally `↑d * (4 * ↑d * ε² / α²)`, matching `configBound`.
-        exact h123
+    intro i
+    rw [EuclideanSpace.norm_eq]
+    congr 1
+    refine Finset.sum_congr rfl (fun l _ => ?_)
+    show ‖(W (spectralConfig S hS hd i) - spectralConfig T hT hd i) l‖^2 =
+      (etot (i, l))^2
+    rw [hetot]
+    show ‖(W (spectralConfig S hS hd i)) l - (spectralConfig T hT hd i) l‖^2 = _
+    rw [Real.norm_eq_abs, sq_abs]
+  have hfrob : ConfigFrobError
+      (fun i => W (spectralConfig S hS hd i)) (spectralConfig T hT hd) = ‖etot‖ := by
+    unfold ConfigFrobError
+    have hsumsq :
+        (∑ i : Fin n,
+          ‖W (spectralConfig S hS hd i) - spectralConfig T hT hd i‖^2) =
+          ∑ i : Fin n, ∑ l : Fin d, (etot (i, l))^2 := by
+      refine Finset.sum_congr rfl (fun i _ => ?_)
+      rw [hai i, Real.sq_sqrt (by positivity)]
+    rw [hsumsq, ← frob_sq etot, Real.sqrt_sq (norm_nonneg _)]
+  rw [hfrob]
+  calc
+    ‖etot‖ ≤ ‖t1‖ + ‖term2vec hT hS hd‖ + ‖term3vec hT hS hd‖ := hmink
+    _ ≤ configFrobBound d α Λ ε := by
+      rw [configFrobBound]
+      exact add_le_add (add_le_add ht1bound ht2bound) ht3bound
+
+
+/--
+Compatibility form of the configuration perturbation theorem in the repository's
+legacy `ConfigError` metric.  It is now a direct corollary of the Frobenius
+paper-facing theorem plus `ConfigError ≤ √n · ConfigFrobError`.
+-/
+theorem exists_isometry_configError_spectralConfig_le
+    {n d : ℕ} (hd : d ≤ n)               -- embedding dimension/rank `d ≤ n` (Assumption 1: rank = d)
+    (T S : EuclideanSpace ℝ (Fin n) →ₗ[ℝ] EuclideanSpace ℝ (Fin n))  -- `T` population, `S` sample Gram operators
+    (hT : T.IsSymmetric) (hS : S.IsSymmetric)  -- extra (encoding) assumption: operators are symmetric/self-adjoint
+    {α Λ ε : ℝ} (hα_pos : 0 < α) (hε_nonneg : 0 ≤ ε)  -- floor `α > 0`, perturbation `ε ≥ 0`
+    -- Assumption 2 (lower): leading `d` population eigenvalues `≥ α` (paper's `λ_d`/`C1`):
+    (hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues finrank_euclideanSpace_fin i)
+    -- Assumption 1 (rank = d, encoded): all trailing population eigenvalues vanish:
+    (htail : ∀ j : Fin n, d ≤ (j : ℕ) → hT.eigenvalues finrank_euclideanSpace_fin j = 0)
+    -- Assumption 2 (upper): all population eigenvalues `≤ Λ` (paper's `λ_1`/`C2`):
+    (hΛ : ∀ l : Fin n, hT.eigenvalues finrank_euclideanSpace_fin l ≤ Λ)
+    (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖)   -- sample/population operator-norm closeness `‖S − T‖ ≤ ε`
+    (hsmall : ε ≤ α / 2)                 -- smallness side-condition (extra explicit numeric condition)
+    -- polar-factor applicability: `δ = d·4dε²/α² ≤ 1/2` (extra explicit smallness condition):
+    (hpolar : (d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2) ≤ 1/2) :
+    -- Conclusion: there is an isometry `W` of `ℝ^d` aligning the sample embedding to the
+    -- population embedding with configuration error `≤ configBound n d α Λ ε`.
+    ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
+      (∀ x y, ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ) ∧
+      Acharyya2024.ConfigError (fun i => W (spectralConfig S hS hd i)) (spectralConfig T hT hd)
+        ≤ configBound n d α Λ ε  := by
+  obtain ⟨W, hWiso, hWfrob⟩ :=
+    exists_isometry_configFrobError_spectralConfig_le hd T S hT hS hα_pos hε_nonneg
+      hα htail hΛ hε hsmall hpolar
+  refine ⟨W, hWiso, ?_⟩
+  calc
+    Acharyya2024.ConfigError (fun i => W (spectralConfig S hS hd i)) (spectralConfig T hT hd)
+        ≤ Real.sqrt n * ConfigFrobError
+            (fun i => W (spectralConfig S hS hd i)) (spectralConfig T hT hd) :=
+          configError_le_sqrt_mul_ConfigFrobError _ _
+    _ ≤ Real.sqrt n * configFrobBound d α Λ ε :=
+      mul_le_mul_of_nonneg_left hWfrob (Real.sqrt_nonneg _)
+    _ = configBound n d α Λ ε :=
+      (configBound_eq_sqrt_mul_configFrobBound n d α Λ ε).symm
 
 end Acharyya2025.ConfigPerturbation

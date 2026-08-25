@@ -174,6 +174,30 @@ theorem highProb_uniformResponseMeanClose_of_secondMoment
 
 /-! ### (2) Vanishing of the spectral bound -/
 
+/-- The paper-facing Frobenius spectral bound is continuous in the operator
+perturbation argument. -/
+theorem continuous_configFrobBound (d : Nat) (α Λ : Real) :
+    Continuous (fun ε : Real => configFrobBound d α Λ ε) := by
+  unfold configFrobBound
+  fun_prop
+
+/-- The Frobenius spectral bound vanishes at zero perturbation. -/
+theorem configFrobBound_zero (d : Nat) (α Λ : Real) :
+    configFrobBound d α Λ 0 = 0 := by
+  simp [configFrobBound]
+
+/-- `configFrobBound d α Λ ε → 0` as `ε → 0`. -/
+theorem tendsto_configFrobBound_zero (d : Nat) (α Λ : Real) :
+    Tendsto (fun ε => configFrobBound d α Λ ε) (𝓝 0) (𝓝 0) := by
+  simpa [configFrobBound_zero d α Λ] using
+    (continuous_configFrobBound d α Λ).tendsto 0
+
+/-- Sequence form of `tendsto_configFrobBound_zero`. -/
+theorem tendsto_configFrobBound_comp_zero (d : Nat) (α Λ : Real)
+    {e : Nat → Real} (he : Tendsto e atTop (𝓝 0)) :
+    Tendsto (fun u => configFrobBound d α Λ (e u)) atTop (𝓝 0) :=
+  (tendsto_configFrobBound_zero d α Λ).comp he
+
 /--
 The capstone spectral bound `configBound n d α Λ ε` is continuous in `ε`
 (for any fixed `n, d, α, Λ`): it is built from `√`, `+`, `*`, `^2` and division

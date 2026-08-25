@@ -157,7 +157,9 @@ private theorem inner_eigenvectorBasis_castLE
   rw [orthonormal_iff_ite.mp hortho (Fin.castLE hd k) (Fin.castLE hd l)]
   by_cases h : k = l
   · simp [h]
-  · rw [if_neg h, if_neg (fun he => h (Fin.castLE_injective hd he))]
+  · have hcast : Fin.castLE hd k ≠ Fin.castLE hd l :=
+      fun he => h (Fin.castLE_injective hd he)
+    rw [ite_eq_right hcast, ite_eq_right h]
 
 /-- **`QᵀQ − I` deviation bound (entrywise).**  Each off-orthogonality entry of
 `QᵀQ` is the trailing cross-energy

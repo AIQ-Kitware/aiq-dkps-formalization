@@ -151,7 +151,7 @@ theorem map_referenceCoordinate_eq
       fun h j => by by_cases hji : j = i <;> simp [hji, h]⟩
   rw [hset] at hj
   rw [hj]
-  simp only [apply_ite Pf, measure_univ, Finset.prod_ite_eq', Finset.mem_univ, if_true]
+  simp only [apply_ite Pf, measure_univ, Finset.prod_ite_eq', Finset.mem_univ, ite_true]
 
 /-- Scalar weak law for one perspective coordinate mean.
 -/
@@ -221,10 +221,10 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
       (fun k => if k = i then A' else if k = j then B' else Set.univ)
       (fun k => by
         rcases eq_or_ne k i with h1 | h1
-        · simp only [if_pos h1]; exact hsm
+        · simp only [ite_eq_left h1]; exact hsm
         · rcases eq_or_ne k j with h2 | h2
-          · simp only [if_neg h1, if_pos h2]; exact htm
-          · simp only [if_neg h1, if_neg h2]; exact MeasurableSet.univ)
+          · simp only [ite_eq_right h1, ite_eq_left h2]; exact htm
+          · simp only [ite_eq_right h1, ite_eq_right h2]; exact MeasurableSet.univ)
     have hset : {ωref | ∀ k, f_ref n ωref k ∈
           (if k = i then A' else if k = j then B' else Set.univ)}
         = ((fun ωref => ψ (f_ref n ωref i) a) ⁻¹' s)
@@ -234,13 +234,13 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
       constructor
       · intro h
         exact ⟨by have := h i; simpa using this,
-          by have := h j; rwa [if_neg (Ne.symm hij), if_pos rfl] at this⟩
+          by have := h j; rwa [ite_eq_right (Ne.symm hij), ite_eq_left rfl] at this⟩
       · rintro ⟨hi', hj'⟩ k
         rcases eq_or_ne k i with h1 | h1
         · subst h1; simp only [reduceIte]; exact hi'
         · rcases eq_or_ne k j with h2 | h2
-          · subst h2; simp only [if_neg h1]; exact hj'
-          · simp only [if_neg h1, if_neg h2]; exact Set.mem_univ _
+          · subst h2; simp only [ite_eq_right h1]; exact hj'
+          · simp only [ite_eq_right h1, ite_eq_right h2]; exact Set.mem_univ _
     rw [hset] at hj
     rw [hj]
     have hmi : (μref n) ((fun ωref => ψ (f_ref n ωref i) a) ⁻¹' s) = Pf A' := by
@@ -255,15 +255,15 @@ theorem highProb_referenceCoordinateMean_of_compact_iid
     rw [Finset.prod_congr rfl (g := fun k =>
         if k = i then Pf A' else if k = j then Pf B' else 1) (fun k _ => by
       rcases eq_or_ne k i with h1 | h1
-      · simp only [if_pos h1]
+      · simp only [ite_eq_left h1]
       · rcases eq_or_ne k j with h2 | h2
-        · simp only [if_neg h1, if_pos h2]
-        · simp only [if_neg h1, if_neg h2, measure_univ])]
+        · simp only [ite_eq_right h1, ite_eq_left h2]
+        · simp only [ite_eq_right h1, ite_eq_right h2, measure_univ])]
     rw [← Finset.prod_subset (Finset.subset_univ ({i, j} : Finset (Fin n)))
       (fun k _ hk => by
         simp only [Finset.mem_insert, Finset.mem_singleton, not_or] at hk
-        simp only [if_neg hk.1, if_neg hk.2])]
-    rw [Finset.prod_pair hij, if_pos rfl, if_neg (Ne.symm hij), if_pos rfl]
+        simp only [ite_eq_right hk.1, ite_eq_right hk.2])]
+    rw [Finset.prod_pair hij, ite_eq_left rfl, ite_eq_right (Ne.symm hij), ite_eq_left rfl]
   have hmse : ∀ n : Nat, 0 < n →
       ∫ ωref, (referenceCoordinateMean ψ f_ref n ωref a - c) ^ 2 ∂(μref n)
         ≤ 4 * B ^ 2 / n := by
@@ -434,10 +434,10 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
       (fun k => if k = i then A' else if k = j then B' else Set.univ)
       (fun k => by
         rcases eq_or_ne k i with h1 | h1
-        · simp only [if_pos h1]; exact hsm
+        · simp only [ite_eq_left h1]; exact hsm
         · rcases eq_or_ne k j with h2 | h2
-          · simp only [if_neg h1, if_pos h2]; exact htm
-          · simp only [if_neg h1, if_neg h2]; exact MeasurableSet.univ)
+          · simp only [ite_eq_right h1, ite_eq_left h2]; exact htm
+          · simp only [ite_eq_right h1, ite_eq_right h2]; exact MeasurableSet.univ)
     have hset : {ωref | ∀ k, f_ref n ωref k ∈
           (if k = i then A' else if k = j then B' else Set.univ)}
         = ((fun ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) ⁻¹' s)
@@ -447,13 +447,13 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
       constructor
       · intro h
         exact ⟨by have := h i; simpa using this,
-          by have := h j; rwa [if_neg (Ne.symm hij), if_pos rfl] at this⟩
+          by have := h j; rwa [ite_eq_right (Ne.symm hij), ite_eq_left rfl] at this⟩
       · rintro ⟨hi', hj'⟩ k
         rcases eq_or_ne k i with h1 | h1
         · subst h1; simp only [reduceIte]; exact hi'
         · rcases eq_or_ne k j with h2 | h2
-          · subst h2; simp only [if_neg h1]; exact hj'
-          · simp only [if_neg h1, if_neg h2]; exact Set.mem_univ _
+          · subst h2; simp only [ite_eq_right h1]; exact hj'
+          · simp only [ite_eq_right h1, ite_eq_right h2]; exact Set.mem_univ _
     rw [hset] at hj
     rw [hj]
     have hmi : (μref n) ((fun ωref => ψ (f_ref n ωref i) a * ψ (f_ref n ωref i) b) ⁻¹' s)
@@ -470,15 +470,15 @@ theorem highProb_referenceCoordinateProductMean_of_compact_iid
     rw [Finset.prod_congr rfl (g := fun k =>
         if k = i then Pf A' else if k = j then Pf B' else 1) (fun k _ => by
       rcases eq_or_ne k i with h1 | h1
-      · simp only [if_pos h1]
+      · simp only [ite_eq_left h1]
       · rcases eq_or_ne k j with h2 | h2
-        · simp only [if_neg h1, if_pos h2]
-        · simp only [if_neg h1, if_neg h2, measure_univ])]
+        · simp only [ite_eq_right h1, ite_eq_left h2]
+        · simp only [ite_eq_right h1, ite_eq_right h2, measure_univ])]
     rw [← Finset.prod_subset (Finset.subset_univ ({i, j} : Finset (Fin n)))
       (fun k _ hk => by
         simp only [Finset.mem_insert, Finset.mem_singleton, not_or] at hk
-        simp only [if_neg hk.1, if_neg hk.2])]
-    rw [Finset.prod_pair hij, if_pos rfl, if_neg (Ne.symm hij), if_pos rfl]
+        simp only [ite_eq_right hk.1, ite_eq_right hk.2])]
+    rw [Finset.prod_pair hij, ite_eq_left rfl, ite_eq_right (Ne.symm hij), ite_eq_left rfl]
   have hmse : ∀ n : Nat, 0 < n →
       ∫ ωref, (referenceCoordinateProductMean ψ f_ref n ωref a b - c) ^ 2 ∂(μref n)
         ≤ 4 * Bg ^ 2 / n := by
