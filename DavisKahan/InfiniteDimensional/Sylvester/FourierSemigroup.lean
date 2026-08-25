@@ -447,7 +447,7 @@ theorem FiniteSpectralStep.norm_operator_sub_le
         Finset.sum_nonneg fun i _ => abs_nonneg _, fun x hx => ?_⟩
       obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp (S.covers_spectrum hx)
       have hex : ∃ j, x ∈ S.cell j := ⟨i, hxi⟩
-      rw [chosenFiniteStepSymbol, dif_pos hex]
+      rw [chosenFiniteStepSymbol, dite_eq_left hex]
       exact Finset.single_le_sum (fun j _ => abs_nonneg (S.representative j))
         (Finset.mem_univ _)
     have hclose : ∀ x ∈ realSpectrum A,
@@ -455,7 +455,7 @@ theorem FiniteSpectralStep.norm_operator_sub_le
       intro x hx
       obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp (S.covers_spectrum hx)
       have hex : ∃ j, x ∈ S.cell j := ⟨i, hxi⟩
-      rw [chosenFiniteStepSymbol, dif_pos hex]
+      rw [chosenFiniteStepSymbol, dite_eq_left hex]
       have hxj : x ∈ S.cell (Classical.choose hex) := Classical.choose_spec hex
       have hsame : Classical.choose hex = i := by
         by_contra hne

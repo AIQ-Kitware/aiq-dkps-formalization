@@ -560,11 +560,11 @@ variable [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
 /-- On members the extended gauge is the record's gauge. -/
 theorem ofRectangularGauge_of_mem {A : E →L[𝕜] F} (hA : N.Mem A) :
-    ofRectangularGauge N A = ENNReal.ofReal (N.gauge A) := if_pos hA
+    ofRectangularGauge N A = ENNReal.ofReal (N.gauge A) := ite_eq_left hA
 
 /-- Off the ideal the extended gauge is `∞`. -/
 theorem ofRectangularGauge_of_not_mem {A : E →L[𝕜] F} (hA : ¬ N.Mem A) :
-    ofRectangularGauge N A = ∞ := if_neg hA
+    ofRectangularGauge N A = ∞ := ite_eq_right hA
 
 /-- Finiteness of the extended gauge is exactly membership. -/
 theorem ofRectangularGauge_ne_top_iff {A : E →L[𝕜] F} :

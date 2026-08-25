@@ -19,28 +19,22 @@ this file makes the rate explicit and proves it vanishes:
   `t u → 0` (`tendsto_endToEndRate_zero`).
 
 **Comparison with the paper's rate.**  The paper states the embedding error as
-`Poly₃((n³/r)^{1/2−δ})` for a degree-3 polynomial `Poly₃` in the problem
-constants, where `r = r(u)` is the per-model response count.  In the formal
-chain, taking `σ2 u = γ / r(u)` (the iid trace bound proved in
-`Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound`)
-and a closeness level `t u ~ √(n · σ2 u) / δ' = √(n γ / r(u)) / δ'`, the
-Chebyshev hypothesis `n · σ2 u / (t u)² = δ'² → 0` holds along any `δ' → 0`
-slow enough, and the resulting bound is
-`configBound n d α Λ (n · cmdsEntrywiseRate n m R (t u))` with
-`cmdsEntrywiseRate n m R η = 16 R n² m⁻¹ · η` linear in `η = t u`.  Since
-`configBound n d α Λ ε` has linear terms of order
-`√(n d) · ε / √(α/2)` (commutator) and
-`√(n d Λ) · ε / α` (Davis--Kahan reconstruction), while the polar term is
-`O(ε²)`.  Thus the formal rate is
-`poly(n, d, m⁻¹, R, Λ, 1/α) · √(γ / r(u))` — matching the paper's `r^{−1/2+δ}`
-dependence (the `δ`-loss is exactly the Chebyshev slack `1/δ'` above) and a
-polynomial constant in the structural parameters.  What differs is bookkeeping:
-the formal constant is the deliberately loose product of the proved chain
-constants (`2n²/m` from the ℓ²→ℓ¹ Frobenius step, `8R` from the
-squaring/centering step, `√n` from `ConfigError ≤ √n‖·‖_F`), not the paper's
-optimized `Poly₃(n³)` aggregation, and the formal statement quantifies the
-spectral hypotheses (floor `α`, cap `Λ`, rank ≤ `d`, smallness, polar) as
-explicit per-`u` side conditions rather than absorbing them asymptotically.
+`Poly₃((n³/r)^{1/2−δ})`.  The sharpened formal spectral stage can now be
+separated from the upstream statistical bookkeeping: for every nonnegative
+operator perturbation `ε ≤ 1`,
+`configFrobBound d α Λ ε ≤ C₁ ε + C₂ ε²`
+(`configFrobBound_le_configFrobQuadraticMajorant`).  Hence no cubic loss is
+introduced by the selected-block Davis--Kahan / polar / square-root spectral
+step itself.  `endToEndFrobQuadraticRate` applies this polynomial envelope to
+the operator perturbation produced by the current response→CMDS chain.
+
+The remaining difference from the literal printed `Poly₃((n³/r)^{1/2−δ})`
+statement is upstream: this file's primary probability theorem fixes the model
+count `n` while the response budget varies, whereas the paper couples growing
+`n` and `r`; moreover the proved response→CMDS constants are deliberately
+loose.  The development therefore records the genuine polynomial spectral
+majorant without identifying the current end-to-end rate with the paper's
+specific joint-asymptotic polynomial before that upstream comparison is proved.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
@@ -287,6 +281,72 @@ before the legacy `ConfigError ≤ √n · ConfigFrobError` conversion. -/
 noncomputable def endToEndFrobRate
     (n m d : Nat) (α Λ R : Real) (t : Nat → Real) : Nat → Real :=
   fun u => configFrobBound d α Λ ((n : Real) * cmdsEntrywiseRate n m R (t u))
+
+
+/-- The operator-perturbation rate fed into the spectral theorem by the current
+response-to-CMDS chain.  Naming this intermediate quantity separates the
+statistical/matrix bookkeeping from the DK spectral majorant. -/
+noncomputable def endToEndOperatorRate
+    (n m : Nat) (R : Real) (t : Nat → Real) : Nat → Real :=
+  fun u => (n : Real) * cmdsEntrywiseRate n m R (t u)
+
+/-- The explicit degree-at-most-two polynomial envelope obtained by applying
+`configFrobQuadraticMajorant` to the operator perturbation delivered by the
+current end-to-end chain. -/
+noncomputable def endToEndFrobQuadraticRate
+    (n m d : Nat) (α Λ R : Real) (t : Nat → Real) : Nat → Real :=
+  fun u => configFrobQuadraticMajorant d α Λ (endToEndOperatorRate n m R t u)
+
+/-- The exact Frobenius rate is the sharpened spectral bound evaluated at the
+named operator-perturbation rate. -/
+theorem endToEndFrobRate_eq_configFrobBound_operatorRate
+    (n m d : Nat) (α Λ R : Real) (t : Nat → Real) (u : Nat) :
+    endToEndFrobRate n m d α Λ R t u =
+      configFrobBound d α Λ (endToEndOperatorRate n m R t u) := by
+  rfl
+
+/-- Pointwise polynomial majorization of the end-to-end Frobenius rate whenever
+the current operator perturbation lies in the local regime `[0,1]`. -/
+theorem endToEndFrobRate_le_endToEndFrobQuadraticRate
+    (n m d : Nat) (α Λ R : Real) (t : Nat → Real) (u : Nat)
+    (h0 : 0 ≤ endToEndOperatorRate n m R t u)
+    (h1 : endToEndOperatorRate n m R t u ≤ 1) :
+    endToEndFrobRate n m d α Λ R t u ≤
+      endToEndFrobQuadraticRate n m d α Λ R t u := by
+  unfold endToEndFrobRate endToEndFrobQuadraticRate
+  exact configFrobBound_le_configFrobQuadraticMajorant d α Λ
+    (endToEndOperatorRate n m R t u) h0 h1
+
+/-- A vanishing nonnegative operator-perturbation sequence eventually enters the
+`[0,1]` regime, so the quadratic paper-facing envelope eventually dominates the
+exact DK-sharpened Frobenius rate. -/
+theorem eventually_endToEndFrobRate_le_endToEndFrobQuadraticRate
+    (n m d : Nat) (α Λ R : Real) (t : Nat → Real)
+    (h0 : ∀ u, 0 ≤ endToEndOperatorRate n m R t u)
+    (hzero : Tendsto (endToEndOperatorRate n m R t) atTop (𝓝 0)) :
+    ∀ᶠ u in atTop,
+      endToEndFrobRate n m d α Λ R t u ≤
+        endToEndFrobQuadraticRate n m d α Λ R t u := by
+  have hle1 : ∀ᶠ u in atTop, endToEndOperatorRate n m R t u ≤ 1 :=
+    (hzero.eventually (Iio_mem_nhds (show (0 : Real) < 1 by norm_num))).mono
+      (fun _ hu => hu.le)
+  filter_upwards [hle1] with u hu
+  exact endToEndFrobRate_le_endToEndFrobQuadraticRate
+    n m d α Λ R t u (h0 u) hu
+
+/-- The quadratic envelope vanishes with the operator perturbation. -/
+theorem tendsto_endToEndFrobQuadraticRate_zero
+    (n m d : Nat) (α Λ R : Real) (t : Nat → Real)
+    (hzero : Tendsto (endToEndOperatorRate n m R t) atTop (𝓝 0)) :
+    Tendsto (endToEndFrobQuadraticRate n m d α Λ R t) atTop (𝓝 0) := by
+  have hlin := hzero.const_mul (configFrobLinearCoeff d α Λ)
+  have hquad := (hzero.pow 2).const_mul (configFrobQuadraticCoeff d α Λ)
+  change Tendsto
+    (fun u =>
+      configFrobLinearCoeff d α Λ * endToEndOperatorRate n m R t u +
+        configFrobQuadraticCoeff d α Λ * endToEndOperatorRate n m R t u ^ 2)
+    atTop (𝓝 0)
+  simpa using hlin.add hquad
 
 /--
 **End-to-end rate theorem.**  Under per-model second-moment bounds `σ2 u`

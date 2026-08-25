@@ -322,7 +322,7 @@ theorem orthonormal_scaled_of_inner_eq {n : ℕ} {f : Fin n → H}
   intro i j
   rw [inner_smul_left, inner_smul_right, h i j]
   rcases eq_or_ne i j with rfl | hne
-  · rw [if_pos rfl, mul_one, ← Complex.ofReal_inv, Complex.conj_ofReal,
+  · rw [ite_eq_left rfl, mul_one, ← Complex.ofReal_inv, Complex.conj_ofReal,
       ← Complex.ofReal_mul, ← Complex.ofReal_mul, Complex.ofReal_eq_one]
     have hci := (hc i).ne'
     field_simp
@@ -1150,9 +1150,9 @@ theorem sq_norm_sum_smul_diagonalPart_offDiagonalPart_le_of_compressed
       β i * (((q i) ^ 2 : ℝ) : ℂ) := by
     intro i
     rw [hSSg, inner_sum, Finset.sum_eq_single i]
-    · rw [inner_smul_right, hgram i i, if_pos rfl, mul_one]
+    · rw [inner_smul_right, hgram i i, ite_eq_left rfl, mul_one]
     · intro j _ hj
-      rw [inner_smul_right, hgram j i, if_neg (Ne.symm hj), mul_zero, mul_zero]
+      rw [inner_smul_right, hgram j i, ite_eq_right (Ne.symm hj), mul_zero, mul_zero]
     · intro hi
       exact absurd (Finset.mem_univ i) hi
   have hterm : ∀ i : Fin n, ⟪(β i * (((q i) ^ 2 : ℝ) : ℂ)) • x i,
@@ -1291,7 +1291,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
   have hself : ∀ i, ⟪((x i : A.domain) : H), U.offDiagonalPart Z
       (U.offDiagonalPart Z ((x i : A.domain) : H))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) := fun i => by
-    rw [hgram i i, if_pos rfl, mul_one]
+    rw [hgram i i, ite_eq_left rfl, mul_one]
   have hq1 : ∀ i, q i < 1 := fun i =>
     compressedDoubleAngleEigenvalue_lt_one hred hB hZsa hZ2 hZdom hZcomm hUa hUb
       hab (hxU i) (hx1 i) (hq i) (hself i) (hres i)
@@ -1637,7 +1637,7 @@ theorem exists_compressedDoubleAngleEigenfamily_of_invariantSubspace
   have hμnn : ∀ i, 0 ≤ μ i := by
     intro i
     have h := hgram0 i i
-    rw [if_pos rfl, mul_one] at h
+    rw [ite_eq_left rfl, mul_one] at h
     rw [← hSsym ((e i : W) : H) (U.offDiagonalPart Z ((e i : W) : H))] at h
     have h2 : ((‖U.offDiagonalPart Z ((e i : W) : H)‖ ^ 2 : ℝ) : ℂ) =
         ((μ i : ℝ) : ℂ) := by
@@ -1721,7 +1721,7 @@ theorem gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
   have hx1 : ∀ i, ‖((y i : A.domain) : H)‖ = 1 := fun i => hyon.norm_eq_one i
   have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagonalPart Z
       (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
-      (((q i) ^ 2 : ℝ) : ℂ) := fun i => by rw [hgram i i, if_pos rfl, mul_one]
+      (((q i) ^ 2 : ℝ) : ℂ) := fun i => by rw [hgram i i, ite_eq_left rfl, mul_one]
   have hnorm : ∀ i, ‖U.offDiagonalPart Z ((y i : A.domain) : H)‖ ^ 2 =
       (q i) ^ 2 := fun i =>
     norm_sq_offDiagonalPart_of_compressedDiagonal (U := U) hZsa (hself i)
@@ -1755,8 +1755,8 @@ theorem gap_mul_sum_tangent_le_kyFan_of_invariantSubspace
     rw [hgram (σ i) (σ j)]
     congr 1
     by_cases hji : j = i
-    · rw [if_pos hji, if_pos (congrArg σ hji)]
-    · rw [if_neg hji, if_neg (fun h => hji (hσinj h))]
+    · rw [ite_eq_left hji, ite_eq_left (congrArg σ hji)]
+    · rw [ite_eq_right hji, ite_eq_right (fun h => hji (hσinj h))]
   have hmain := gap_mul_sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
     hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab (fun j => y (σ j))
     (fun j => hyU (σ j)) (hyon.comp σ hσinj) hσmem hgram'
@@ -2198,7 +2198,7 @@ theorem sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
       ((√(1 - (q i) ^ 2) : ℝ) : ℂ)⁻¹ • U.offDiagonalPart Z (x i) := by
     rw [map_smul, hT (x i) (hxU i)]
   rw [hTv, inner_smul_left, inner_smul_right, (hG i i).1]
-  rw [if_pos rfl, mul_one]
+  rw [ite_eq_left rfl, mul_one]
   have hqi := (hq i).ne'
   have hci := (hcpos i).ne'
   rw [← Complex.ofReal_inv, ← Complex.ofReal_inv, Complex.conj_ofReal]
@@ -2255,7 +2255,7 @@ theorem sum_tangent_le_kyFan_of_invariantSubspace
   have hx1 : ∀ i, ‖((y i : A.domain) : H)‖ = 1 := fun i => hyon.norm_eq_one i
   have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagonalPart Z
       (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
-      (((q i) ^ 2 : ℝ) : ℂ) := fun i => by rw [hgram i i, if_pos rfl, mul_one]
+      (((q i) ^ 2 : ℝ) : ℂ) := fun i => by rw [hgram i i, ite_eq_left rfl, mul_one]
   have hnorm : ∀ i, ‖U.offDiagonalPart Z ((y i : A.domain) : H)‖ ^ 2 =
       (q i) ^ 2 := fun i =>
     norm_sq_offDiagonalPart_of_compressedDiagonal (U := U) hZsa (hself i)
@@ -2289,8 +2289,8 @@ theorem sum_tangent_le_kyFan_of_invariantSubspace
     rw [hgram (σ i) (σ j)]
     congr 1
     by_cases hji : j = i
-    · rw [if_pos hji, if_pos (congrArg σ hji)]
-    · rw [if_neg hji, if_neg (fun h => hji (hσinj h))]
+    · rw [ite_eq_left hji, ite_eq_left (congrArg σ hji)]
+    · rw [ite_eq_right hji, ite_eq_right (fun h => hji (hσinj h))]
   have hmain := sum_tangent_le_kyFan_of_compressedDoubleAngleEigenfamily
     hZsa hZ2 hTtan (fun j => ((y (σ j) : A.domain) : H))
     (fun j => hyU (σ j)) (hyon.comp σ hσinj) hσmem (fun j => hq1 (σ j)) hgram'
@@ -2350,7 +2350,7 @@ theorem kyFan_eq_sum_tangent_of_isCompressedDoubleAngleEigenbasis
   have hself : ∀ i, ⟪((y i : A.domain) : H), U.offDiagonalPart Z
       (U.offDiagonalPart Z ((y i : A.domain) : H))⟫_ℂ =
       (((q i) ^ 2 : ℝ) : ℂ) := fun i => by
-    rw [hygram i i, if_pos rfl, mul_one]
+    rw [hygram i i, ite_eq_left rfl, mul_one]
   have hq1 : ∀ i, q i < 1 := fun i =>
     compressedDoubleAngleEigenvalue_lt_one hred hB hZsa hZ2 hZdom hZcomm hUa hUb
       hab (hyU i) (hx1 i) (hqpos i) (hself i) (hyres i)

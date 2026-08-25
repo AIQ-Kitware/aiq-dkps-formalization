@@ -415,8 +415,9 @@ theorem quench_part2_from_aligned_configFrobError_hp
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
     (hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
     (c : Nat → Real)
-    (hc_eq : c = fun u => Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
-      ((n : Real) * rate u))
+    (hc_majorant : ∀ᶠ u in Filter.atTop,
+      Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+        ((n : Real) * rate u) ≤ c u)
     -- The honest measurability primitive replacing `hmeas_spec`: the sample
     -- dissimilarity matrix is measurable in the sample (trivially dischargeable).
     (hDmeas : ∀ k, Measurable (fun ω => Dhat k ω))
@@ -464,7 +465,9 @@ theorem quench_part2_from_aligned_configFrobError_hp
   -- local spectral side conditions hold.  This loses only finitely many budgets.
   let side : Nat → Prop := fun k =>
     (n : Real) * rate k ≤ α / 2 ∧
-      (d : Real) * (4 * (d : Real) * ((n : Real) * rate k)^2 / α^2) ≤ 1 / 2
+      (d : Real) * (4 * (d : Real) * ((n : Real) * rate k)^2 / α^2) ≤ 1 / 2 ∧
+      Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+        ((n : Real) * rate k) ≤ c k
   set E : Nat → Set Ω := fun k => {ω |
     Acharyya2025.Bridge.EntrywiseClose
       (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat k ω))
@@ -486,12 +489,12 @@ theorem quench_part2_from_aligned_configFrobError_hp
     exact (hcenter_meas k).inter (hside_meas k)
   have hE_sub : ∀ k, E k ⊆ {ω | ∀ f, ‖ψHat k ω f - ψ f‖ ≤ c k} := by
     intro k ω hω f
-    obtain ⟨hclose, hsmall, hpolar⟩ := hω
-    have hA : Acharyya2025.AlignedPipeline.AlignFrobExists hd Dhat hsym ψFinite c k ω := by
-      rw [hc_eq]
-      exact Acharyya2025.AlignedPipeline.alignFrobExists_of_entrywiseClose
-        hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψFinite hψFinite_gram
-        rate k (hrate_nonneg k) hsmall hpolar ω hclose
+    obtain ⟨hclose, hsmall, hpolar, hbound⟩ := hω
+    have hAexact := Acharyya2025.AlignedPipeline.alignFrobExists_of_entrywiseClose
+      hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψFinite hψFinite_gram
+      rate k (hrate_nonneg k) hsmall hpolar ω hclose
+    have hA : Acharyya2025.AlignedPipeline.AlignFrobExists hd Dhat hsym ψFinite c k ω :=
+      Acharyya2025.AlignedPipeline.AlignFrobExists.mono hAexact hbound
     have hcfg := Acharyya2025.AlignedPipeline.configFrobError_alignedSpectralConfigFrob_le
       hd Dhat hsym ψFinite c k ω hA
     calc ‖ψHat k ω f - ψ f‖
@@ -501,10 +504,15 @@ theorem quench_part2_from_aligned_configFrobError_hp
             (Acharyya2025.AlignedPipeline.alignedSpectralConfigFrob hd Dhat hsym ψFinite c k ω)
             ψFinite := Acharyya2025.ConfigPerturbation.norm_config_le_ConfigFrobError _ _ _
       _ ≤ _ := hcfg
-  have hside_eventually : ∀ᶠ k in Filter.atTop, side k := by
-    simpa [side] using
+  have hspectral : ∀ᶠ k in Filter.atTop,
+      (n : Real) * rate k ≤ α / 2 ∧
+        (d : Real) * (4 * (d : Real) * ((n : Real) * rate k)^2 / α^2) ≤ 1 / 2 := by
+    simpa using
       (Acharyya2025.AlignedPipeline.eventually_spectral_side_conditions
         (d := d) hα_pos hrate_zero)
+  have hside_eventually : ∀ᶠ k in Filter.atTop, side k := by
+    filter_upwards [hspectral, hc_majorant] with k hk hbound
+    exact ⟨hk.1, hk.2, hbound⟩
   have hE_acharyya : Acharyya2024.HighProbAtTop μ E := by
     refine Acharyya2024.HighProbAtTop.mono_eventually hcenter ?_
     filter_upwards [hside_eventually] with k hk
@@ -517,6 +525,115 @@ theorem quench_part2_from_aligned_configFrobError_hp
     (fun _ f => ψ f) (fun u ω (_ : Finset Q) f => ψHat u ω f) f_ref score Qstar Qsub
     γ h_lipQ h_gamma_pos _ h_c_tendsto h_c_nonneg
     E hE_meas hE_sub hE h_cover h_cover_meas hMSE_Q_pos
+
+
+/--
+**Quench Part 2 with the explicit quadratic DK envelope.**
+
+This specializes `quench_part2_from_aligned_configFrobError_hp` to
+`configFrobQuadraticMajorant`.  Since `(n : ℝ) * rate u → 0`, the operator
+perturbation is eventually in `[0,1]`, where the exact sharpened Acharyya bound
+is dominated by `C₁ ε + C₂ ε²`.  Quench therefore consumes a genuine
+polynomial spectral concentration rate rather than the nested-square-root
+internal bound.
+-/
+theorem quench_part2_from_aligned_configFrobQuadratic_hp
+    [DecidableEq Q]
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : Nat → Measure Ω) (hμ : ∀ k, IsProbabilityMeasure (μ k))
+    {n d : Nat} (hd : d ≤ n)
+    (Dhat : Nat → Ω → Acharyya2024.DisMat n)
+    (hsym : ∀ u ω, (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat u ω))).IsHermitian)
+    (D : Acharyya2024.DisMat n)
+    (ψFinite : Config n d)
+    (hB : (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix D)).PosSemidef)
+    (hrank : (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix D)).rank ≤ d)
+    {α Λ : Real} (hα_pos : 0 < α)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
+    (hψFinite_gram : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
+      = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
+    (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
+    (hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
+    (hDmeas : ∀ k, Measurable (fun ω => Dhat k ω))
+    (hcenter : Acharyya2024.HighProbAtTop μ (fun k => {ω |
+      Acharyya2025.Bridge.EntrywiseClose
+        (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat k ω))
+        (Acharyya2025.Deterministic.classicalMDSMatrix D) (rate k)}))
+    (f_ref : ∀ k, Ω → Fin k → Model Q X)
+    (score : Model Q X → Finset Q → ℝ)
+    (Qstar Qsub : Finset Q)
+    (γ : ℝ)
+    (indexOf : Model Q X → Fin n)
+    (ψ : Model Q X → Vec d)
+    (ψHat : Nat → Ω → Model Q X → Vec d)
+    (h_lipQ : ∀ (f f' : Model Q X),
+      |score f Qstar - score f' Qstar| ≤ γ * ‖ψ f - ψ f'‖)
+    (h_gamma_pos : 0 < γ)
+    (hψ : ∀ f, ψ f = ψFinite (indexOf f))
+    (hψHat : ∀ u ω f, ψHat u ω f =
+      Acharyya2025.AlignedPipeline.alignedSpectralConfigFrob hd Dhat hsym ψFinite
+        (fun u => Acharyya2025.ConfigPerturbation.configFrobQuadraticMajorant d α Λ
+          ((n : Real) * rate u)) u ω (indexOf f))
+    (h_cover : ∀ ρ > 0,
+      _root_.HighProbAtTop μ hμ
+        (fun k => {ω | ∀ f, ∃ i, ‖ψ (f_ref k ω i) - ψ f‖ ≤ ρ}))
+    (h_cover_meas : ∀ ρ > 0, ∀ k,
+      MeasurableSet {ω | ∀ f, ∃ i, ‖ψ (f_ref k ω i) - ψ f‖ ≤ ρ})
+    (hMSE_Q_pos :
+      0 < MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+        (yQ (Q := Q) (X := X) score Qsub)) :
+    ∀ δ : ENNReal, 0 < δ →
+      ∃ k : ℕ,
+        (μ k) {ω |
+          MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+            (fun f => yNN_paper (d := d)
+              (fun u ω (_ : Finset Q) f => ψHat u ω f) f_ref score Qstar Qsub k ω f)
+          ≤ MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+              (yQ (Q := Q) (X := X) score Qsub)} ≥ 1 - δ := by
+  let c : Nat → Real := fun u =>
+    Acharyya2025.ConfigPerturbation.configFrobQuadraticMajorant d α Λ
+      ((n : Real) * rate u)
+  have hop_nonneg : ∀ u, 0 ≤ (n : Real) * rate u := fun u =>
+    mul_nonneg (Nat.cast_nonneg n) (hrate_nonneg u)
+  have hop_le_one : ∀ᶠ u in Filter.atTop, (n : Real) * rate u ≤ 1 :=
+    (hrate_zero.eventually (Iio_mem_nhds (show (0 : Real) < 1 by norm_num))).mono
+      (fun _ hu => hu.le)
+  have hc_majorant : ∀ᶠ u in Filter.atTop,
+      Acharyya2025.ConfigPerturbation.configFrobBound d α Λ ((n : Real) * rate u) ≤ c u := by
+    filter_upwards [hop_le_one] with u hu
+    exact Acharyya2025.ConfigPerturbation.configFrobBound_le_configFrobQuadraticMajorant
+      d α Λ ((n : Real) * rate u) (hop_nonneg u) hu
+  have hc_zero : Filter.Tendsto c Filter.atTop (nhds 0) := by
+    have hlin := hrate_zero.const_mul
+      (Acharyya2025.ConfigPerturbation.configFrobLinearCoeff d α Λ)
+    have hquad := (hrate_zero.pow 2).const_mul
+      (Acharyya2025.ConfigPerturbation.configFrobQuadraticCoeff d α Λ)
+    simpa [c, Acharyya2025.ConfigPerturbation.configFrobQuadraticMajorant] using hlin.add hquad
+  have hc_nonneg : ∀ u, 0 ≤ c u := by
+    intro u
+    have he : 0 ≤ (n : Real) * rate u := hop_nonneg u
+    have hlin : 0 ≤ Acharyya2025.ConfigPerturbation.configFrobLinearCoeff d α Λ := by
+      unfold Acharyya2025.ConfigPerturbation.configFrobLinearCoeff
+      positivity
+    have hquad : 0 ≤ Acharyya2025.ConfigPerturbation.configFrobQuadraticCoeff d α Λ := by
+      unfold Acharyya2025.ConfigPerturbation.configFrobQuadraticCoeff
+      positivity
+    dsimp [c]
+    unfold Acharyya2025.ConfigPerturbation.configFrobQuadraticMajorant
+    exact add_nonneg (mul_nonneg hlin he) (mul_nonneg hquad (sq_nonneg _))
+  apply quench_part2_from_aligned_configFrobError_hp Pf μ hμ hd Dhat hsym D ψFinite
+    hB hrank hα_pos hfloor hΛ hψFinite_gram rate hrate_nonneg hrate_zero c
+    hc_majorant hDmeas hcenter hc_zero hc_nonneg f_ref score Qstar Qsub γ
+    indexOf ψ ψHat h_lipQ h_gamma_pos hψ
+  · simpa [c] using hψHat
+  · exact h_cover
+  · exact h_cover_meas
+  · exact hMSE_Q_pos
 
 /--
 **Query efficiency from the spectral concentration chain (Theorem 2 Part 2,
@@ -848,7 +965,8 @@ theorem queryEfficient_nn_of_response_mean_frob
     (fun u => Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
     hrate_nonneg hrate_zero
     (fun u => Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
-      ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))) rfl
+      ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u)))
+    (Filter.Eventually.of_forall (fun _ => le_rfl))
     hXmeas hcenter h_c_tendsto h_c_nonneg f_ref score Qstar Qsub γ
     indexOf ψ ψHat h_lipQ h_gamma_pos hψ hψHat h_cover h_cover_meas hMSE_Q_pos
 

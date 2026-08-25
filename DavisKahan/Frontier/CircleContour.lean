@@ -234,7 +234,7 @@ noncomputable def circleSeparatingContour
       have h := (hsep.inside_iff_mem lam hlam).mpr hmem
       rwa [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs] at h
     rw [circleContour_normalizedWinding c lam r hsep.radius_pos
-      (abs_sub_ne_radius_of_mem_realSpectrum hsep hlam), if_pos hin]
+      (abs_sub_ne_radius_of_mem_realSpectrum hsep hlam), ite_eq_left hin]
   winding_complement := by
     intro lam hlam hmem
     have hnotin : ¬ |lam - c| < r := by
@@ -242,7 +242,7 @@ noncomputable def circleSeparatingContour
       refine hmem ((hsep.inside_iff_mem lam hlam).mp ?_)
       rwa [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
     rw [circleContour_normalizedWinding c lam r hsep.radius_pos
-      (abs_sub_ne_radius_of_mem_realSpectrum hsep hlam), if_neg hnotin]
+      (abs_sub_ne_radius_of_mem_realSpectrum hsep hlam), ite_eq_right hnotin]
 
 /-! ## Contour length and the uniform Neumann margin -/
 

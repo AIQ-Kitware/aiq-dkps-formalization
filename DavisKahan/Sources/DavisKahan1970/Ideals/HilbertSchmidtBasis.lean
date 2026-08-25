@@ -133,7 +133,7 @@ theorem paperBasisProjection_apply {ι : Type*}
           intro i _
           rw [inner_smul_left, hb i j]
           by_cases hij : i = j <;> simp [hij]
-        rw [Finset.sum_congr rfl hkey, Finset.sum_ite_eq' s j, if_pos hjs,
+        rw [Finset.sum_congr rfl hkey, Finset.sum_ite_eq' s j, ite_eq_left hjs,
           inner_conj_symm, sub_self]
     | zero => simp
     | add u v _ _ hu hv => rw [inner_add_right, hu, hv, add_zero]

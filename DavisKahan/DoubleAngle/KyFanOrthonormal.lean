@@ -175,7 +175,7 @@ theorem sum_abs_le_kyFanApproximationGauge_of_orthonormal
       RCLike.re ⟪u' i, K (v i)⟫_𝕜 := by
     intro i
     by_cases h : 0 ≤ RCLike.re ⟪u i, K (v i)⟫_𝕜
-    · simp only [hu', hσ, decide_eq_true_eq, if_pos h]
+    · simp only [hu', hσ, decide_eq_true_eq, ite_eq_left h]
       exact abs_of_nonneg h
     · have hneg : σ i = false := by simp [hσ, h]
       rw [abs_of_neg (not_le.mp h)]

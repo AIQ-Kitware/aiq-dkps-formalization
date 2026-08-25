@@ -223,7 +223,7 @@ theorem orthonormal_tanThetaResidualWitness
   intro i j
   by_cases hij : i = j
   · subst j
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     let σ := S.singularValues i
     let v := rightSingularBasis S i
     have hvv : ⟪v, v⟫_𝕜 = 1 := by
@@ -294,7 +294,7 @@ theorem orthonormal_tanThetaResidualWitness
       simp only [inner_smul_left, inner_smul_right, map_inv₀,
         RCLike.conj_ofReal, hraw]
       exact_mod_cast hnormalize
-  · rw [if_neg hij]
+  · rw [ite_eq_right hij]
     let σi := S.singularValues i
     let σj := S.singularValues j
     let vi := rightSingularBasis S i
@@ -542,7 +542,7 @@ theorem tanThetaResidualWitness_scalar
           ((((c : ℝ) : 𝕜)⁻¹) •
             (y - ((σ : ℝ) : 𝕜) • X.toLinearMap v))),
         R v⟫_𝕜
-    rw [if_neg hσzero, hscale]
+    rw [ite_eq_right hσzero, hscale]
     simpa [div_eq_mul_inv, mul_assoc] using
       (div_le_div_iff_of_pos_right hcpos').2 hpair_lower
 

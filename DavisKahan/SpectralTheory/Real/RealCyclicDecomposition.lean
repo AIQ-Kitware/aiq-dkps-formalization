@@ -445,11 +445,11 @@ theorem exists_countable_isHilbertSum_lp_diagMeasure_conjugation_fixed
   set e : ℕ → Eℂ := fun n => if h : ∃ x, x ∈ S ∧ f x = n then h.choose else 0 with hedef
   have hspec : ∀ n, ∀ h : ∃ x, x ∈ S ∧ f x = n, e n ∈ S ∧ f (e n) = n := by
     intro n h
-    simp only [hedef, dif_pos h]
+    simp only [hedef, dite_eq_left h]
     exact h.choose_spec
   have hzero : ∀ n, ¬(∃ x, x ∈ S ∧ f x = n) → e n = 0 := by
     intro n h
-    simp only [hedef, dif_neg h]
+    simp only [hedef, dite_eq_right h]
   have hemem : ∀ n, e n = 0 ∨ (e n ∈ S ∧ f (e n) = n) := by
     intro n
     by_cases h : ∃ x, x ∈ S ∧ f x = n

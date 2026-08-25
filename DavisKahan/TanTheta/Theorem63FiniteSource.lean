@@ -326,7 +326,7 @@ theorem orthonormal_theorem63ResidualWitness
   intro i j
   by_cases hij : i = j
   · subst j
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     let sigma := finiteSourceSingularValue S i
     let v := finiteSourceRightSingularBasis S i
     have hvv : ⟪(v : H), (v : H)⟫_ℂ = 1 := by
@@ -392,7 +392,7 @@ theorem orthonormal_theorem63ResidualWitness
       simp only [inner_smul_left, inner_smul_right, map_inv₀,
         Complex.conj_ofReal, hraw]
       exact_mod_cast hnormalize
-  · rw [if_neg hij]
+  · rw [ite_eq_right hij]
     let sigma_i := finiteSourceSingularValue S i
     let sigma_j := finiteSourceSingularValue S j
     let v_i := finiteSourceRightSingularBasis S i
@@ -656,7 +656,7 @@ theorem theorem63ResidualWitness_scalar_of_data
         (if sigma = 0 then (v : H) else
           ((((c : ℝ) : ℂ)⁻¹) •
             (y - ((sigma : ℝ) : ℂ) • (v : H)))), R v⟫_ℂ
-    rw [if_neg hsigma_zero, hscale]
+    rw [ite_eq_right hsigma_zero, hscale]
     simpa [div_eq_mul_inv, mul_assoc] using
       (div_le_div_iff_of_pos_right hcpos').2 hpair_lower
 

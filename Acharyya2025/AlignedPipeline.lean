@@ -246,6 +246,19 @@ def AlignFrobExists {n d : Nat} (hd : d ≤ n) {Ω : Type}
           (Matrix.toEuclideanLin (disMatToMatrix (classicalMDSMatrix (Dhat u ω))))
           (opSym (hsym u ω)) hd i)) ψ ≤ c u
 
+
+/-- A Frobenius alignment certificate remains valid when its deterministic
+error envelope is enlarged. -/
+theorem AlignFrobExists.mono {n d : Nat} {hd : d ≤ n} {Ω : Type}
+    {Dhat : Nat → Ω → DisMat n}
+    {hsym : ∀ u ω, (disMatToMatrix (classicalMDSMatrix (Dhat u ω))).IsHermitian}
+    {ψ : Config n d} {c c' : Nat → Real} {u : Nat} {ω : Ω}
+    (h : AlignFrobExists hd Dhat hsym ψ c u ω)
+    (hle : c u ≤ c' u) :
+    AlignFrobExists hd Dhat hsym ψ c' u ω := by
+  obtain ⟨W, hW, herr⟩ := h
+  exact ⟨W, hW, herr.trans hle⟩
+
 open Classical in
 /-- Choice-based aligned spectral estimator using the Frobenius-error
 existential.  It is separate from `alignedSpectralConfig` so the legacy
@@ -620,6 +633,48 @@ theorem highProb_aligned_configFrobError_of_entrywise_close
     (fun u => configFrobBound d α Λ ((n : Real) * rate u)) u ω
     (alignFrobExists_of_entrywiseClose hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψ hψ
       rate u (hrate_nonneg u) hu.1 hu.2 ω hω)
+
+
+/-- High-probability Frobenius perturbation with an arbitrary deterministic
+majorant.  The exact `configFrobBound` need only be eventually bounded by `c`;
+the aligned estimator is then chosen directly at the larger envelope `c`.
+
+This is the interface used to pass the explicit quadratic DK majorant to
+paper-facing downstream theorems without requiring definitional equality with
+the internal spectral bound. -/
+theorem highProb_aligned_configFrobError_of_entrywise_close_of_majorant
+    {Ω : Type} [MeasurableSpace Ω]
+    (P : Nat → MeasureTheory.Measure Ω)
+    {n d : Nat} (hd : d ≤ n)
+    (Dhat : Nat → Ω → DisMat n) (D : DisMat n)
+    (hsym : ∀ u ω, (disMatToMatrix (classicalMDSMatrix (Dhat u ω))).IsHermitian)
+    (hB : (disMatToMatrix (classicalMDSMatrix D)).PosSemidef)
+    (hrank : (disMatToMatrix (classicalMDSMatrix D)).rank ≤ d)
+    {α Λ : Real} (hα_pos : 0 < α)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
+    (ψ : Config n d)
+    (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
+    (rate c : Nat → Real)
+    (hrate_nonneg : ∀ u, 0 ≤ rate u)
+    (hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
+    (hc : ∀ᶠ u in atTop,
+      configFrobBound d α Λ ((n : Real) * rate u) ≤ c u)
+    (hcenter : HighProbAtTop P (fun u => {ω |
+      Acharyya2025.Bridge.EntrywiseClose
+        (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)})) :
+    HighProbAtTop P (fun u => {ω |
+      ConfigFrobError (alignedSpectralConfigFrob hd Dhat hsym ψ c u ω) ψ ≤ c u}) := by
+  have hside := eventually_spectral_side_conditions (d := d)
+    hα_pos hrate_zero
+  refine HighProbAtTop.mono_eventually hcenter ?_
+  filter_upwards [hside, hc] with u hu hcu
+  intro ω hω
+  have hexact := alignFrobExists_of_entrywiseClose hd Dhat D hsym hB hrank
+    hα_pos hfloor hΛ ψ hψ rate u (hrate_nonneg u) hu.1 hu.2 ω hω
+  exact configFrobError_alignedSpectralConfigFrob_le hd Dhat hsym ψ c u ω
+    (AlignFrobExists.mono hexact hcu)
 
 /-- Canonical-population-configuration form of
 `highProb_aligned_configError_of_entrywise_close`.

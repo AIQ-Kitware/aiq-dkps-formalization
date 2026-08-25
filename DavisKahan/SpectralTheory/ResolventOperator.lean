@@ -108,7 +108,7 @@ theorem resolventOperator_inverse (A : E →L[𝕜] E) {z : 𝕜}
       (A - z • ContinuousLinearMap.id 𝕜 E) ∘L resolventOperator A z =
         ContinuousLinearMap.id 𝕜 E := by
   simp only [resolventOperator]
-  rw [dif_pos hz]
+  rw [dite_eq_left hz]
   exact hz.choose_spec
 
 omit [CompleteSpace E] in

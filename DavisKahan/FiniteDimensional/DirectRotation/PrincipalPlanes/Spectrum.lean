@@ -300,7 +300,7 @@ theorem sum_repeated_pair_prefix {m : ℕ}
   -- type on the right changes size with `k`, which no rewrite can follow, and
   -- the embedded bound proofs block congruence.
   set D : ℕ → ℝ := fun j => if h : j < m then d ⟨j, h⟩ else 0 with hD
-  have hDval : ∀ (j : ℕ) (h : j < m), D j = d ⟨j, h⟩ := fun _ h => dif_pos h
+  have hDval : ∀ (j : ℕ) (h : j < m), D j = d ⟨j, h⟩ := fun _ h => dite_eq_left h
   have hleft : (∑ n : Fin k, if hn : (n : ℕ) < 2 * m then
         d ⟨(n : ℕ) / 2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩
       else 0) = ∑ j ∈ Finset.range k, (if j < 2 * m then D (j / 2) else 0) := by
@@ -308,8 +308,8 @@ theorem sum_repeated_pair_prefix {m : ℕ}
       (fun j : ℕ => if j < 2 * m then D (j / 2) else 0) k]
     refine Finset.sum_congr rfl fun n _ => ?_
     by_cases hn : (n : ℕ) < 2 * m
-    · rw [dif_pos hn, if_pos hn, hDval _ (by omega)]
-    · rw [dif_neg hn, if_neg hn]
+    · rw [dite_eq_left hn, ite_eq_left hn, hDval _ (by omega)]
+    · rw [dite_eq_right hn, ite_eq_right hn]
   have hright : ∀ (p : ℕ) (hp : p ≤ m),
       (∑ i : Fin p, 2 * d (Fin.castLE hp i)) = ∑ j ∈ Finset.range p, 2 * D j := by
     intro p hp
@@ -322,8 +322,8 @@ theorem sum_repeated_pair_prefix {m : ℕ}
         (if n % 2 = 1 ∧ n / 2 < m then D (n / 2) else 0) := by
     intro n
     by_cases h : n % 2 = 1 ∧ n / 2 < m
-    · rw [dif_pos h, if_pos h, hDval _ h.2]
-    · rw [dif_neg h, if_neg h]
+    · rw [dite_eq_left h, ite_eq_left h, hDval _ h.2]
+    · rw [dite_eq_right h, ite_eq_right h]
   rw [hleft, hright _ (min_le_right _ _), hextra]
   clear hleft
   induction k with
@@ -331,23 +331,23 @@ theorem sum_repeated_pair_prefix {m : ℕ}
   | succ k ih =>
       rw [Finset.sum_range_succ, ih]
       by_cases hkm : k < 2 * m
-      · rw [if_pos hkm]
+      · rw [ite_eq_left hkm]
         rcases Nat.even_or_odd k with heven | hodd
         · obtain ⟨q, rfl⟩ := heven
-          rw [if_neg (by omega), if_pos (by omega),
+          rw [ite_eq_right (by omega), ite_eq_left (by omega),
             show min ((q + q) / 2) m = min ((q + q + 1) / 2) m from by omega,
             show (q + q) / 2 = (q + q + 1) / 2 from by omega]
           ring
         · obtain ⟨q, rfl⟩ := hodd
-          rw [if_pos (show (2 * q + 1) % 2 = 1 ∧ (2 * q + 1) / 2 < m from
+          rw [ite_eq_left (show (2 * q + 1) % 2 = 1 ∧ (2 * q + 1) / 2 < m from
               by omega),
-            if_neg (by omega),
+            ite_eq_right (by omega),
             show min ((2 * q + 1 + 1) / 2) m = min ((2 * q + 1) / 2) m + 1 from
               by omega,
             Finset.sum_range_succ,
             show min ((2 * q + 1) / 2) m = (2 * q + 1) / 2 from by omega]
           ring
-      · rw [if_neg hkm, if_neg (by omega), if_neg (by omega),
+      · rw [ite_eq_right hkm, ite_eq_right (by omega), ite_eq_right (by omega),
           show min ((k + 1) / 2) m = min (k / 2) m from by omega]
         ring
 
@@ -391,7 +391,7 @@ theorem singularValues_directRotation_displacement
         else principalOrthogonalVector U V hacute p.1)
         (⟨⟨(a : ℕ) / 2, by omega⟩, ⟨(a : ℕ) % 2, by omega⟩⟩) := by
       rw [hv]
-      simp only [dif_pos ha']
+      simp only [dite_eq_left ha']
       by_cases hpar : (a : ℕ) % 2 = 0
       · simp [hpar]
       · have : (a : ℕ) % 2 = 1 := by omega
@@ -402,7 +402,7 @@ theorem singularValues_directRotation_displacement
         else principalOrthogonalVector U V hacute p.1)
         (⟨⟨(b : ℕ) / 2, by omega⟩, ⟨(b : ℕ) % 2, by omega⟩⟩) := by
       rw [hv]
-      simp only [dif_pos hb']
+      simp only [dite_eq_left hb']
       by_cases hpar : (b : ℕ) % 2 = 0
       · simp [hpar]
       · have : (b : ℕ) % 2 = 1 := by omega
@@ -461,21 +461,21 @@ theorem singularValues_directRotation_displacement
     by_cases hk : (k : ℕ) < 2 * m
     · have hbk : b k = v k := hb k hk
       rw [hgram, hbk, hv]
-      simp only [dif_pos hk]
+      simp only [dite_eq_left hk]
       by_cases hpar : (k : ℕ) % 2 = 0
-      · rw [if_pos hpar]
+      · rw [ite_eq_left hpar]
         rw [LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply,
           habs_u ⟨(k : ℕ) / 2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩]
         rw [hμ]
-        simp only [dif_pos hk]
+        simp only [dite_eq_left hk]
         rw [principalPlaneChord_sq]
         match_scalars
         ring
-      · rw [if_neg hpar]
+      · rw [ite_eq_right hpar]
         rw [LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply,
           habs_j ⟨(k : ℕ) / 2, (Nat.div_lt_iff_lt_mul (by omega)).2 (by omega)⟩]
         rw [hμ]
-        simp only [dif_pos hk]
+        simp only [dite_eq_left hk]
         rw [principalPlaneChord_sq]
         match_scalars
         ring
@@ -486,8 +486,8 @@ theorem singularValues_directRotation_displacement
         have hval : ((⟨2 * (i : ℕ), by omega⟩ : Fin (finrank 𝕜 E)) : ℕ) < 2 * m := hpos
         have hbu : b ⟨2 * (i : ℕ), by omega⟩ = principalSourceVector U V i := by
           rw [hb _ hval, hv]
-          simp only [dif_pos hval]
-          rw [if_pos (by omega)]
+          simp only [dite_eq_left hval]
+          rw [ite_eq_left (by omega)]
           congr 1
           ext
           simp
@@ -504,8 +504,8 @@ theorem singularValues_directRotation_displacement
         have hbj : b ⟨2 * (i : ℕ) + 1, by omega⟩ =
             principalOrthogonalVector U V hacute i := by
           rw [hb _ hval, hv]
-          simp only [dif_pos hval]
-          rw [if_neg (by omega)]
+          simp only [dite_eq_left hval]
+          rw [ite_eq_right (by omega)]
           congr 1
           ext
           simp
@@ -522,7 +522,7 @@ theorem singularValues_directRotation_displacement
       rw [hgram]
       simp only [LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply, habs,
         sub_self, smul_zero, hμ]
-      simp [dif_neg hk]
+      simp [dite_eq_right hk]
   -- Identify the sorted eigenvalues.
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis A.isSymmetric_adjoint_comp_self rfl b
     hμanti hdiag
@@ -534,7 +534,7 @@ theorem singularValues_directRotation_displacement
     · exact Real.sqrt_sq (principalPlaneChord_nonneg U V _)
     · exact Real.sqrt_zero
   · rw [A.singularValues_of_finrank_le hnE]
-    rw [dif_neg (by omega)]
+    rw [dite_eq_right (by omega)]
 
 /-- Closed Ky Fan formula for the direct displacement. -/
 theorem kyFanSum_directRotation_displacement_eq_principalChords

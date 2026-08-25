@@ -652,7 +652,7 @@ private theorem singularValues_tanAngle_model
           inner_smul_right, RCLike.conj_ofReal])
       hinner safeTan,
     TauCeti.selfAdjointFunctionalCalculus_real_smul_id]
-  simp only [safeTan, if_neg hcos]
+  simp only [safeTan, ite_eq_right hcos]
   rw [show Real.sin θ / Real.cos θ = Real.tan θ from (Real.tan_eq_sin_div_cos θ).symm]
   -- restate the scalar operator as a constant diagonal so the planar
   -- singular-value lemma applies
@@ -709,7 +709,7 @@ private theorem singularValues_tanTwoAngle_model
     TauCeti.selfAdjointFunctionalCalculus_congr_op _ hsymTheta
       hinner safeTanTwo,
     TauCeti.selfAdjointFunctionalCalculus_real_smul_id]
-  simp only [safeTanTwo, if_neg hcos]
+  simp only [safeTanTwo, ite_eq_right hcos]
   rw [show Real.sin (2 * θ) / Real.cos (2 * θ) = Real.tan (2 * θ) from
     (Real.tan_eq_sin_div_cos (2 * θ)).symm,
     ← diagOp_const_pair (EuclideanSpace.basisFun (Fin 2) 𝕜) (Real.tan (2 * θ))]
