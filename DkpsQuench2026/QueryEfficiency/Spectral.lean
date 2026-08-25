@@ -99,7 +99,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSub
     (d : Real) *
       (4 * (d : Real) *
         ((((n + 1 : Nat) : Real) * entryRate n)^2) / α^2) ≤ 1 / 2 ∧
-    configBound (n + 1) d α (ceiling n)
+    configFrobBound d α (ceiling n)
       (((n + 1 : Nat) : Real) * entryRate n) ≤ Hrate.bound n
   let Es : Nat → Set Ω := fun n => E n ∩ Hspectral.event n
   let Eg : Nat → Set Ω := fun n => Es n ∩ {ω | good n}
@@ -139,7 +139,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSub
     have hfloor := Hspectral.floor n ω hspectralEvent f
     have hceiling := Hspectral.ceiling_bound n ω hspectralEvent f
     have hpair :=
-      abs_pairwiseDistance_spectralConfig_sub_le_two_configBound
+      abs_pairwiseDistance_spectralConfig_sub_le_two_configFrobBound
         hdim
         (disMatToMatrix (classicalMDSMatrix (D n ω f)))
         (disMatToMatrix (classicalMDSMatrix (Dhat n ω f)))
