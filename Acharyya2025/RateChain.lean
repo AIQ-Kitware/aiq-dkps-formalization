@@ -281,6 +281,13 @@ noncomputable def endToEndRate (n m d : Nat) (α Λ R : Real) (t : Nat → Real)
     Nat → Real :=
   fun u => configBound n d α Λ ((n : Real) * cmdsEntrywiseRate n m R (t u))
 
+/-- Paper-facing Frobenius end-to-end rate.  This is the same statistical and
+matrix perturbation scale as `endToEndRate`, evaluated in `configFrobBound`
+before the legacy `ConfigError ≤ √n · ConfigFrobError` conversion. -/
+noncomputable def endToEndFrobRate
+    (n m d : Nat) (α Λ R : Real) (t : Nat → Real) : Nat → Real :=
+  fun u => configFrobBound d α Λ ((n : Real) * cmdsEntrywiseRate n m R (t u))
+
 /--
 **End-to-end rate theorem.**  Under per-model second-moment bounds `σ2 u`
 (uniform over models) with vanishing Chebyshev ratio `n · σ2 u / (t u)² → 0`,
@@ -352,6 +359,57 @@ theorem highProb_aligned_configError_endToEndRate
   -- Aligned pipeline with the constant dissimilarity bound `fun _ => R`;
   -- `endToEndRate` is definitionally the bound it produces.
   exact Acharyya2025.AlignedPipeline.highProb_aligned_configError_of_response_mean
+    P hn hd Xbar μ hB hrank hα_pos hfloor hΛ ψ hψ t (fun _ => R)
+    hrate_nonneg hrate_zero hmean hsample_bound
+    (fun _u i j => hpopulation_bound i j)
+
+/--
+**Paper-facing Frobenius end-to-end rate theorem.**  This is the Frobenius
+counterpart of `highProb_aligned_configError_endToEndRate`.  The Chebyshev and
+CMDS perturbation chain is identical, but the final estimator and bound use
+`alignedSpectralConfigFrob` / `endToEndFrobRate`, so no terminal `√n` loss is
+introduced by the legacy row-sum `ConfigError` API.
+
+The local spectral smallness and polar conditions do not appear in the public
+signature: `highProb_aligned_configFrobError_of_response_mean` derives them
+eventually from `hrate_zero`.
+-/
+theorem highProb_aligned_configFrobError_endToEndFrobRate
+    {Ω : Type} [MeasurableSpace Ω]
+    (P : Nat → Measure Ω) [∀ u, IsProbabilityMeasure (P u)]
+    {n m p d : Nat} (hn : 0 < n) (hd : d ≤ n)
+    (Xbar : Nat → Ω → Fin n → Mat m p) (μ : Fin n → Mat m p)
+    (hB : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).PosSemidef)
+    (hrank : (disMatToMatrix (classicalMDSMatrix (responseDist μ))).rank ≤ d)
+    {α Λ : Real} (hα_pos : 0 < α)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
+    (ψ : Config n d)
+    (hψ : ∀ i j, (∑ k, ψ i k * ψ j k)
+      = classicalMDSMatrix (responseDist μ) i j)
+    (t : Nat → Real) (R : Real) (σ2 : Nat → Real)
+    (hint : ∀ u (i : Fin n), Integrable (fun ω => ‖Xbar u ω i - μ i‖ ^ 2) (P u))
+    (hσ2 : ∀ u (i : Fin n), ∫ ω, ‖Xbar u ω i - μ i‖ ^ 2 ∂(P u) ≤ σ2 u)
+    (ht_pos : ∀ u, 0 < t u)
+    (hratio : Tendsto (fun u => (n : Real) * σ2 u / (t u) ^ 2) atTop (𝓝 0))
+    (hrate_nonneg : ∀ u, 0 ≤ cmdsEntrywiseRate n m R (t u))
+    (hrate_zero : Tendsto
+      (fun u => (n : Real) * cmdsEntrywiseRate n m R (t u)) atTop (𝓝 0))
+    (hsample_bound : ∀ u ω i j, |responseDist (Xbar u ω) i j| ≤ R)
+    (hpopulation_bound : ∀ i j, |responseDist μ i j| ≤ R) :
+    HighProbAtTop P (fun u => {ω |
+      ConfigFrobError
+        (alignedSpectralConfigFrob hd (fun u ω => responseDist (Xbar u ω))
+          (fun u ω => isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
+            (Xbar u ω))
+          ψ (endToEndFrobRate n m d α Λ R t) u ω) ψ
+        ≤ endToEndFrobRate n m d α Λ R t u}) := by
+  have hmean : HighProbAtTop P
+      (fun u => {ω | UniformResponseMeanClose (Xbar u ω) μ (t u)}) :=
+    highProb_uniformResponseMeanClose_of_secondMoment P Xbar μ σ2 t
+      hint hσ2 ht_pos hratio
+  exact Acharyya2025.AlignedPipeline.highProb_aligned_configFrobError_of_response_mean
     P hn hd Xbar μ hB hrank hα_pos hfloor hΛ ψ hψ t (fun _ => R)
     hrate_nonneg hrate_zero hmean hsample_bound
     (fun _u i j => hpopulation_bound i j)
@@ -436,6 +494,27 @@ theorem tendsto_endToEndRate_zero (n m d : Nat) (α Λ R : Real)
       ((n : Real) * (4 * ((2 * R) * (((n : Real) * (n : Real))
         * ((m : Real)⁻¹ * 2)))))
   exact tendsto_configBound_comp_zero n d α Λ hlin
+
+
+/-- The paper-facing Frobenius end-to-end rate vanishes with the response-mean
+closeness level.  This is the direct Corollary-2-style rate statement before the
+legacy `√n` conversion. -/
+theorem tendsto_endToEndFrobRate_zero (n m d : Nat) (α Λ R : Real)
+    {t : Nat → Real} (ht : Tendsto t atTop (𝓝 0)) :
+    Tendsto (endToEndFrobRate n m d α Λ R t) atTop (𝓝 0) := by
+  have hkey : ∀ u, (n : Real) * cmdsEntrywiseRate n m R (t u)
+      = ((n : Real) * (4 * ((2 * R) * (((n : Real) * (n : Real))
+          * ((m : Real)⁻¹ * 2))))) * t u := by
+    intro u
+    simp only [cmdsEntrywiseRate, responseFrobRate]
+    ring
+  have hlin : Tendsto (fun u => (n : Real) * cmdsEntrywiseRate n m R (t u))
+      atTop (𝓝 0) := by
+    simp_rw [hkey]
+    simpa using ht.const_mul
+      ((n : Real) * (4 * ((2 * R) * (((n : Real) * (n : Real))
+        * ((m : Real)⁻¹ * 2)))))
+  exact tendsto_configFrobBound_comp_zero d α Λ hlin
 
 
 /-! ### End-to-end rate with a canonical spectral ceiling -/

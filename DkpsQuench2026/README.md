@@ -100,9 +100,14 @@ Acharyya's `configFrobBound` directly and uses the elementary row bound
 `‖error_i‖ ≤ ConfigFrobError`, so Quench's uniform embedding-error premise no
 longer needs the extra `√n` introduced by the older row-sum `ConfigError` API.
 
-This does not alter Quench's nearest-neighbor theorem.  It strengthens the
-upstream concentration certificate that can be supplied to that theorem and
-keeps the Quench-facing v1 Acharyya rate path separate from the revised
+The Frobenius route now reaches the raw-response query-efficiency capstone as
+well: `quench_part2_from_aligned_configFrobError_hp`,
+`queryEfficient_nn_of_response_mean_frob`, and
+`queryEfficient_nn_of_second_moment_frob` use the DK-sharpened Acharyya bound
+all the way to Quench's uniform embedding-error premise.  The older
+`ConfigError` declarations remain as compatibility APIs.
+
+This keeps the Quench-facing v1 Acharyya rate path separate from the revised
 June-2026 Acharyya source version.
 
 ## Build and audit

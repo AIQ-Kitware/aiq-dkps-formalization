@@ -354,7 +354,7 @@ theorem alignmentConsistency_of_aligned_spectral
           (((n + 1 : ℕ) : ℝ) * rate u)) u ω) := by
   -- Derive the alignment-existence HP event from `hgood` via the deterministic capstone.
   have hside := Acharyya2025.AlignedPipeline.eventually_spectral_side_conditions
-    (n := n + 1) (d := d) hα_pos hrate_zero
+    (d := d) hα_pos hrate_zero
   have halign :
       HighProbAtTop (fun _u : Nat => Measure.pi (fun _ : Fin (n + 1) => P))
         (fun u =>
