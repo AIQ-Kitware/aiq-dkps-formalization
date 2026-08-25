@@ -280,12 +280,12 @@ theorem exists_gramSpectralBandModel
           have hinner := (orthonormal_iff_ite.mp (hblockOrtho leftLabel))
             ((finiteValueFiber a leftLabel).equivFin i)
             ((finiteValueFiber a leftLabel).equivFin j)
-          rw [if_neg hidx] at hinner
+          rw [ite_eq_right hidx] at hinner
           have hsigma : (Sigma.mk leftLabel i : Index) ≠ Sigma.mk leftLabel j := by
             intro h
             cases h
             exact hij rfl
-          simpa only [allVec, if_neg hsigma] using hinner
+          simpa only [allVec, ite_eq_right hsigma] using hinner
       · have hdisj := gramBands_disjoint a hη0.le hηa hηsep hlabels
         have hinner := inner_eq_zero_of_mem_disjoint_pvmRanges P
           measurableSet_Icc measurableSet_Icc hdisj
@@ -294,7 +294,7 @@ theorem exists_gramSpectralBandModel
         have hsigma : (Sigma.mk leftLabel i : Index) ≠ Sigma.mk rightLabel j := by
           intro h
           exact hlabels (Sigma.mk.inj_iff.mp h).1
-        simpa only [allVec, band, if_neg hsigma] using hinner
+        simpa only [allVec, band, ite_eq_right hsigma] using hinner
     let right : Fin count → E0 := allVec ∘ indexEquiv.symm
     have hrightOrtho : Orthonormal ℂ right :=
       hallOrtho.comp indexEquiv.symm indexEquiv.symm.injective

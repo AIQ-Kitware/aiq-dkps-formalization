@@ -164,7 +164,7 @@ theorem klmn
       ⟨alpha, beta, halpha, hbeta0, hbeta, hrel⟩⟩
   have hsum := ClosedForm.klmnSum_properties
     a v ha_sesq hv_sesq ha_closed ha_lower hrel halpha hbeta0 hbeta
-  rw [formSum, dif_pos hadm]
+  rw [formSum, dite_eq_left hadm]
   exact ⟨hsum.closed, hsum.lowerSemibounded,
     ClosedForm.associatedOperator_isSelfAdjoint _
       hsum.sesquilinear hsum.closed hsum.lowerSemibounded⟩

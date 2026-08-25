@@ -167,8 +167,8 @@ theorem orthonormal_finiteSourceLeftSingularVector_subtype (A : E →L[ℂ] F) :
       apply heq
       apply Subtype.ext
       exact congrArg Subtype.val h'
-    rw [if_neg hne] at hij
-    rw [if_neg heq]
+    rw [ite_eq_right hne] at hij
+    rw [ite_eq_right heq]
     simpa [finiteSourceLeftSingularVector, i', j'] using hij
 
 /-- The ambient adjoint singular relation. -/

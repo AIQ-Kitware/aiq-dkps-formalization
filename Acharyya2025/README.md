@@ -71,10 +71,13 @@ The result is assembled in layers; read them in this order:
    **high-probability Theorem 2** route (feed the Theorem-1 event through the
    Frobenius deterministic bound), alongside the legacy `ConfigError` route.
 4. **[`RateChain.lean`](RateChain.lean)** — `endToEndFrobRate` /
-   `highProb_aligned_configFrobError_endToEndFrobRate` /
-   `tendsto_endToEndFrobRate_zero`: the paper-facing **Corollary 2** rate chain
-   before the legacy `√n` conversion.  `endToEndRate` is retained for the older
-   `ConfigError` API.
+   `endToEndFrobQuadraticRate` /
+   `eventually_endToEndFrobRate_le_endToEndFrobQuadraticRate` /
+   `highProb_aligned_configFrobError_endToEndFrobRate`: the paper-facing
+   **Corollary 2** rate chain before the legacy `√n` conversion.  The sharpened
+   spectral stage is now explicitly majorized by a degree-at-most-two
+   polynomial in its operator perturbation. `endToEndRate` remains for the
+   older `ConfigError` API.
 
 ---
 
@@ -87,8 +90,8 @@ The result is assembled in layers; read them in this order:
 | **Assumption 1** (`rank B = d`) | rank-`≤ d` hypotheses; `CMDSpectralAssumptions` | `ConfigPerturbation.lean`, `SpectralPipeline.lean` |
 | **Assumption 2** (eigenvalue stability `λ_d > C₁`, `λ₁ < C₂`) | eigenvalue floor `α` / cap `Λ` hypotheses | `ConfigPerturbation.lean`, `MatrixPerturbation.lean` |
 | **Theorem 2**, deterministic Frobenius core — `∃ W*∈O(d)` | `exists_isometry_configFrobError_spectralConfig_le`, `configFrobBound`; legacy `ConfigError` corollary | `ConfigPerturbation.lean` |
-| **Theorem 2**, high-probability Frobenius form | `highProb_aligned_configFrobError_of_entrywise_close`, `…_of_response_mean`; legacy `ConfigError` siblings | `AlignedPipeline.lean` |
-| **Corollary 2** — vanishing rate as budgets grow | `endToEndFrobRate`, `highProb_aligned_configFrobError_endToEndFrobRate`, `tendsto_endToEndFrobRate_zero`; legacy `endToEndRate` siblings | `RateChain.lean` |
+| **Theorem 2**, high-probability Frobenius form | `highProb_aligned_configFrobError_of_entrywise_close`, `…_of_majorant`, `…_of_response_mean`; legacy `ConfigError` siblings | `AlignedPipeline.lean` |
+| **Corollary 2** — vanishing rate as budgets grow | `endToEndFrobRate`, `endToEndFrobQuadraticRate`, `eventually_endToEndFrobRate_le_endToEndFrobQuadraticRate`, `tendsto_endToEndFrobQuadraticRate_zero`; legacy `endToEndRate` siblings | `RateChain.lean` |
 | Weyl's eigenvalue inequality | `abs_eigenvalues_sub_le` | `Weyl.lean` |
 | Davis–Kahan sin-Θ bound; rank-`d` eigengap | `sum_cross_inner_sq_le_opNorm`, `sum_cross_inner_sq_le_of_rank_floor_opNorm`; source-facing crude siblings | `DavisKahan.lean`, `RankGap.lean` |
 | The aligning orthogonal map `W*` | `alignedSpectralConfig`, `AlignExists`; Gram rigidity / polar factor | `AlignedPipeline.lean`, `GramRigidity.lean`, `PolarFactor.lean`, `Overlap.lean` |
@@ -145,15 +148,16 @@ source-version migration rather than folded into this Quench-facing v1 chain.
   concrete.  They are now discharged *eventually* from the vanishing perturbation
   rate by `eventually_spectral_side_conditions`, so they do not remain assumptions
   of the high-probability paper-facing Frobenius theorem.
-- **Rates are loose, not sharp.** `cmdsEntrywiseRate` / `configFrobBound` /
-  `configBound` / `endToEndFrobRate` / legacy `endToEndRate` are *valid but
-  non-optimal* propagation rates (the module
-  docstrings compare them with the paper's `Poly₃((n³/r)^{1/2−δ})` bookkeeping).
-  The deterministic spectral layer does use the reusable selected-block
-  Davis--Kahan bound (`n → d`) and residual/Parseval summation for the CMDS
-  square-root commutator (`d² → d`).  The paper-facing Frobenius route also
-  removes the legacy `ConfigError ≤ √n · ConfigFrobError` loss, but the
-  constants/exponents are still not claimed to be the paper's sharp ones.
+- **Rates are loose upstream, while the spectral stage is now explicitly
+  polynomial.** `configFrobBound_le_configFrobQuadraticMajorant` proves that for
+  `0 ≤ ε ≤ 1`, the DK-sharpened spectral error is bounded by `C₁ ε + C₂ ε²`.
+  `RateChain.lean` propagates this to `endToEndFrobQuadraticRate`.  Thus the
+  spectral stage itself is already degree `≤ 2`, stronger than needing a cubic
+  envelope.  The remaining gap to the paper's literal
+  `Poly₃((n³/r)^{1/2−δ})` statement is in the upstream response→CMDS transport
+  and its joint growing-`n`, growing-`r` bookkeeping.  The formalization does
+  not rename that upstream rate as the paper's `Poly₃` until those quantifiers
+  and powers are proved.
 - **Response boundedness in growing bridges.** The preferred Quench-facing
   response theorem no longer assumes separate uniform bounds for every sample
   and population dissimilarity. A population response-norm envelope, together

@@ -90,7 +90,7 @@ keeps the sign.  Proved twice below by slightly different routes, inside two
 anyone would look for it.  See `{lane:DK-LONGPROOF-6}`. -/
 theorem principalHalfPhase_re_nonneg {z : ℂ} (hz : ‖z‖ = 1) (hzneg : z ≠ -1) :
     0 ≤ (principalHalfPhase z).re := by
-  rw [principalHalfPhase, if_neg hzneg, Complex.div_ofReal_re]
+  rw [principalHalfPhase, ite_eq_right hzneg, Complex.div_ofReal_re]
   have hnum : 0 ≤ (1 + z).re := by
     have habs : |z.re| ≤ ‖z‖ := Complex.abs_re_le_norm z
     rw [hz] at habs
@@ -132,7 +132,7 @@ theorem abs_principalHalfPhase_of_abs_eq_one
     ‖principalHalfPhase z‖ = 1 := by
   have h1z : (1 : ℂ) + z ≠ 0 := fun h => hz (by linear_combination h)
   have hne : ‖1 + z‖ ≠ 0 := norm_ne_zero_iff.mpr h1z
-  simp only [principalHalfPhase, if_neg hz, norm_div, Complex.norm_real,
+  simp only [principalHalfPhase, ite_eq_right hz, norm_div, Complex.norm_real,
     Real.norm_eq_abs, abs_of_nonneg (norm_nonneg _), div_self hne]
 
 /-- Scalar principal-square-root identity. -/
@@ -156,7 +156,7 @@ theorem principalHalfPhase_sq_of_abs_eq_one
     rw [h, Complex.normSq_eq_norm_sq]
     push_cast
     ring
-  rw [principalHalfPhase, if_neg hz, div_mul_div_comm, hden,
+  rw [principalHalfPhase, ite_eq_right hz, div_mul_div_comm, hden,
     div_eq_iff (mul_ne_zero h1z h1cz)]
   linear_combination (-1 - z) * hzz
 
@@ -173,7 +173,7 @@ theorem continuousOn_principalHalfPhase {s : Set ℂ} (hs : (-1 : ℂ) ∉ s) :
       exact Complex.ofReal_ne_zero.mpr
         (norm_ne_zero_iff.mpr fun h => hzne (by linear_combination h))
   exact hcont.congr fun z hz =>
-    if_neg fun h : z = -1 => hs (h ▸ hz)
+    ite_eq_right fun h : z = -1 => hs (h ▸ hz)
 
 /-- Conjugating the half-phase is the half-phase of the conjugate point. -/
 theorem star_principalHalfPhase (z : ℂ) :
@@ -188,7 +188,7 @@ theorem star_principalHalfPhase (z : ℂ) :
       simpa using this
     have hnorm : ‖(1 : ℂ) + star z‖ = ‖1 + z‖ := by
       rw [show (1 : ℂ) + star z = star (1 + z) by simp, norm_star]
-    rw [principalHalfPhase, principalHalfPhase, if_neg hz, if_neg hstarz, hnorm]
+    rw [principalHalfPhase, principalHalfPhase, ite_eq_right hz, ite_eq_right hstarz, hnorm]
     simp [star_div₀, Complex.conj_ofReal]
 
 /-- The midpoint is invertible exactly when the reflection product avoids the
@@ -325,7 +325,7 @@ theorem principalHalfPhase_mul_cosineGauge {z : ℂ} (hz : z ≠ -1) :
   have h1z : (1 : ℂ) + z ≠ 0 := fun h => hz (by linear_combination h)
   have hne : (‖(1 : ℂ) + z‖ : ℂ) ≠ 0 :=
     Complex.ofReal_ne_zero.mpr (norm_ne_zero_iff.mpr h1z)
-  rw [principalHalfPhase, if_neg hz, cosineGauge, smul_eq_mul]
+  rw [principalHalfPhase, ite_eq_right hz, cosineGauge, smul_eq_mul]
   push_cast
   field_simp
 
@@ -524,7 +524,7 @@ theorem spectraDirectRotation_real_inner_nonneg
     have hzne : z ≠ -1 := fun h => hneg (h ▸ hz)
     have hz1 : ‖z‖ = 1 := spectrum_spectraReflectionProduct_abs_eq_one U V hz
     have hre : (principalHalfPhase z).re = (1 + z).re / ‖1 + z‖ := by
-      rw [principalHalfPhase, if_neg hzne, div_eq_inv_mul,
+      rw [principalHalfPhase, ite_eq_right hzne, div_eq_inv_mul,
         ← Complex.ofReal_inv, Complex.re_ofReal_mul, inv_mul_eq_div]
     have hre0 : 0 ≤ (principalHalfPhase z).re :=
       principalHalfPhase_re_nonneg hz1 hzne

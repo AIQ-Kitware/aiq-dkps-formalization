@@ -104,8 +104,14 @@ The Frobenius route now reaches the raw-response query-efficiency capstone as
 well: `quench_part2_from_aligned_configFrobError_hp`,
 `queryEfficient_nn_of_response_mean_frob`, and
 `queryEfficient_nn_of_second_moment_frob` use the DK-sharpened Acharyya bound
-all the way to Quench's uniform embedding-error premise.  The older
-`ConfigError` declarations remain as compatibility APIs.
+all the way to Quench's uniform embedding-error premise.  The core Frobenius
+bridge accepts any deterministic envelope that eventually dominates
+`configFrobBound`; `quench_part2_from_aligned_configFrobQuadratic_hp` specializes
+this to the explicit `C₁ ε + C₂ ε²` spectral majorant.  This gives Quench a
+polynomial spectral concentration input without pretending that the current
+upstream response→CMDS rate has already reproduced the paper's exact
+`(n³/r)^(1/2-δ)` bookkeeping.  The older `ConfigError` declarations remain as
+compatibility APIs.
 
 This keeps the Quench-facing v1 Acharyya rate path separate from the revised
 June-2026 Acharyya source version.

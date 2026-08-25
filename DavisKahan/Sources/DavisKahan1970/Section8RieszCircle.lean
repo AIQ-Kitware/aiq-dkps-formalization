@@ -328,8 +328,8 @@ theorem circleRieszProjection_eq_boundedSelfAdjointSpectralProjection
       _ = spectralSelector B lam := by
           unfold spectralSelector
           by_cases hmem : lam ∈ B
-          · rw [if_pos (hiff.mpr hmem), Set.indicator_of_mem hmem]
-          · rw [if_neg (fun h => hmem (hiff.mp h)),
+          · rw [ite_eq_left (hiff.mpr hmem), Set.indicator_of_mem hmem]
+          · rw [ite_eq_right (fun h => hmem (hiff.mp h)),
               Set.indicator_of_notMem hmem]
   rw [hproj,
     boundedSelfAdjointSpectralProjection_eq_cfcL_of_selector A hA B hB g hagree]

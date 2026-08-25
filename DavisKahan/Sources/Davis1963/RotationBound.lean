@@ -207,7 +207,7 @@ theorem intertwiningUnitary_apply_ofOrthonormalBasis {b b' : OrthonormalBasis (F
     rw [polarFactor_apply_operatorAbs_apply, map_smul, hMb, smul_smul]
   · rw [OrthonormalBasis.spanIndicesProjection_apply_basis]
     simp only [Finset.mem_singleton]
-    rw [if_neg (Ne.symm hji), map_zero]
+    rw [ite_eq_right (Ne.symm hji), map_zero]
 
 /-- **BL4 — the angle interpretation for eigen-families:** the squared sine of the `i`-th
 rotation angle of the canonical unitary is the complementary squared overlap,
@@ -298,7 +298,7 @@ theorem sum_sq_eigenvalues_sub_diag_eq (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     have hoff : ∀ j, j ≠ i → ⟪hT.eigenvectorBasis hn j, S (hT.eigenvectorBasis hn i)⟫_𝕜
         = ⟪hT.eigenvectorBasis hn j, (S - T) (hT.eigenvectorBasis hn i)⟫_𝕜 := fun j hj => by
       rw [LinearMap.sub_apply, inner_sub_right, hT.apply_eigenvectorBasis, inner_smul_right,
-        orthonormal_iff_ite.mp (hT.eigenvectorBasis hn).orthonormal j i, if_neg hj]
+        orthonormal_iff_ite.mp (hT.eigenvectorBasis hn).orthonormal j i, ite_eq_right hj]
       simp
     have h1 := Finset.add_sum_erase Finset.univ
       (fun j => ‖⟪hT.eigenvectorBasis hn j, S (hT.eigenvectorBasis hn i)⟫_𝕜‖ ^ 2)

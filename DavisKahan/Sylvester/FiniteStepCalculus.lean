@@ -325,7 +325,7 @@ theorem chosenFiniteStepSymbol_eq {n : ℕ}
     by_contra hne
     exact Set.disjoint_left.mp
       (hdisj (Set.mem_univ (Classical.choose hex)) (Set.mem_univ i) hne) hxj hxi
-  rw [chosenFiniteStepSymbol, dif_pos hex, hji, finiteStepSymbol, Finset.sum_eq_single i]
+  rw [chosenFiniteStepSymbol, dite_eq_left hex, hji, finiteStepSymbol, Finset.sum_eq_single i]
   · rw [Set.indicator_of_mem hxi]
   · intro k _ hki
     have hxk : x ∉ cell k := by
@@ -359,7 +359,7 @@ theorem measurable_chosenFiniteStepSymbol {n : ℕ}
         by_contra hne
         exact Set.disjoint_left.mp
           (hdisj (Set.mem_univ (Classical.choose hex)) (Set.mem_univ i) hne) hxj hxi
-      rw [chosenFiniteStepSymbol, dif_pos hex, hji, Finset.sum_eq_single i]
+      rw [chosenFiniteStepSymbol, dite_eq_left hex, hji, Finset.sum_eq_single i]
       · rw [Set.indicator_of_mem hxi]
       · intro k _ hki
         have hxk : x ∉ cell k := fun hxk =>
@@ -371,7 +371,7 @@ theorem measurable_chosenFiniteStepSymbol {n : ℕ}
     · rw [Set.piecewise_eq_of_notMem _ _ _ hx]
       have hnex : ¬ ∃ i, x ∈ cell i := fun ⟨i, hxi⟩ =>
         hx (Set.mem_iUnion.mpr ⟨i, hxi⟩)
-      rw [chosenFiniteStepSymbol, dif_neg hnex]
+      rw [chosenFiniteStepSymbol, dite_eq_right hnex]
   rw [heq]
   exact Measurable.piecewise (MeasurableSet.iUnion hcell) hstep measurable_id
 
@@ -391,7 +391,7 @@ theorem boundedSelfAdjointBorelCalculus_eq_finset_sum_indicator [Nontrivial H]
         have hcov := hcover hx
         obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp hcov
         have hex : ∃ j, x ∈ cell j := ⟨i, hxi⟩
-        rw [chosenFiniteStepSymbol, dif_pos hex]
+        rw [chosenFiniteStepSymbol, dite_eq_left hex]
         exact Finset.single_le_sum (fun j _ => abs_nonneg (rep j)) (Finset.mem_univ _)) =
       ∑ i, (rep i : ℂ) •
         boundedSelfAdjointSpectralProjection A hA (cell i) (hcell i) := by
@@ -401,7 +401,7 @@ theorem boundedSelfAdjointBorelCalculus_eq_finset_sum_indicator [Nontrivial H]
     have hcov := hcover hx
     obtain ⟨i, hxi⟩ := Set.mem_iUnion.mp hcov
     have hex : ∃ j, x ∈ cell j := ⟨i, hxi⟩
-    rw [chosenFiniteStepSymbol, dif_pos hex]
+    rw [chosenFiniteStepSymbol, dite_eq_left hex]
     exact Finset.single_le_sum (fun j _ => abs_nonneg (rep j)) (Finset.mem_univ _)
   change boundedSelfAdjointBorelCalculusC A hA
       (spectrumRestrictedSymbol A (chosenFiniteStepSymbol cell rep))

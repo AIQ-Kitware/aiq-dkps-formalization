@@ -51,13 +51,13 @@ def breakPointNat (Γ : PiecewiseC1ClosedContour) (k : ℕ) : ℝ :=
 /-- The natural-indexed partition starts at zero. -/
 @[simp] theorem breakPointNat_zero (Γ : PiecewiseC1ClosedContour) :
     Γ.breakPointNat 0 = 0 := by
-  rw [breakPointNat, dif_pos (Nat.zero_le Γ.pieceCount)]
+  rw [breakPointNat, dite_eq_left (Nat.zero_le Γ.pieceCount)]
   simpa using Γ.breakPoint_zero
 
 /-- The natural-indexed partition ends at one. -/
 @[simp] theorem breakPointNat_pieceCount (Γ : PiecewiseC1ClosedContour) :
     Γ.breakPointNat Γ.pieceCount = 1 := by
-  rw [breakPointNat, dif_pos le_rfl]
+  rw [breakPointNat, dite_eq_left le_rfl]
   have hindex :
       (⟨Γ.pieceCount, Nat.lt_succ_iff.mpr le_rfl⟩ :
         Fin (Γ.pieceCount + 1)) = Fin.last Γ.pieceCount := by
@@ -169,12 +169,12 @@ theorem curveIntegrable_of_continuousOn
     have hk0 : k ≤ Γ.pieceCount := Nat.le_of_lt hk
     have hk1 : k + 1 ≤ Γ.pieceCount := Nat.succ_le_iff.mpr hk
     have hleft : Γ.breakPointNat k = Γ.breakPoint i.castSucc := by
-      rw [breakPointNat, dif_pos hk0]
+      rw [breakPointNat, dite_eq_left hk0]
       apply congrArg Γ.breakPoint
       apply Fin.ext
       rfl
     have hright : Γ.breakPointNat (k + 1) = Γ.breakPoint i.succ := by
-      rw [breakPointNat, dif_pos hk1]
+      rw [breakPointNat, dite_eq_left hk1]
       apply congrArg Γ.breakPoint
       apply Fin.ext
       rfl

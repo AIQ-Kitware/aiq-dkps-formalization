@@ -67,7 +67,7 @@ theorem approximationSingularValue_rankOne
     approximationSingularValue n V = if n = 0 then 1 else 0 := by
   rcases n with _ | n
   · simp [hVnorm]
-  · rw [if_neg (Nat.succ_ne_zero n)]
+  · rw [ite_eq_right (Nat.succ_ne_zero n)]
     exact approximationSingularValue_eq_zero_of_rank_le_nat hVrank
       (Nat.succ_le_succ (Nat.zero_le n))
 

@@ -993,6 +993,112 @@ noncomputable def configFrobBound (d : ℕ) (α Λ ε : ℝ) : ℝ :=
     + Real.sqrt ((d : ℝ) * (ε / Real.sqrt (α / 2))^2)
     + Real.sqrt (Λ * (4 * (d : ℝ) * ε^2 / α^2))
 
+
+/-- Linear coefficient in the local polynomial majorant for `configFrobBound`.
+The two linear pieces are the square-root commutator term and the
+Davis--Kahan reconstruction term. -/
+noncomputable def configFrobLinearCoeff (d : ℕ) (α Λ : ℝ) : ℝ :=
+  Real.sqrt ((d : ℝ) * (1 / Real.sqrt (α / 2))^2)
+    + Real.sqrt (Λ * (4 * (d : ℝ) / α^2))
+
+/-- Quadratic coefficient in the local polynomial majorant for
+`configFrobBound`.  The bound `ε ≤ 1` replaces the sample-energy factor
+`Λ + ε` by the fixed ceiling `Λ + 1`. -/
+noncomputable def configFrobQuadraticCoeff (d : ℕ) (α Λ : ℝ) : ℝ :=
+  Real.sqrt
+    ((2 * ((d : ℝ) * (4 * (d : ℝ) / α^2)))^2 * ((d : ℝ) * (Λ + 1)))
+
+/-- A degree-at-most-two polynomial envelope for the sharpened Frobenius
+spectral perturbation bound.  It is written as a degree-three-compatible
+polynomial (zero constant and cubic coefficients) because this is the local
+spectral object that is compared with the paper's `Poly₃` rate. -/
+noncomputable def configFrobQuadraticMajorant (d : ℕ) (α Λ ε : ℝ) : ℝ :=
+  configFrobLinearCoeff d α Λ * ε + configFrobQuadraticCoeff d α Λ * ε^2
+
+/-- On the perturbative regime `0 ≤ ε ≤ 1`, the DK-sharpened Frobenius
+configuration bound is explicitly polynomial in the operator perturbation:
+
+`configFrobBound d α Λ ε ≤ C₁ ε + C₂ ε²`.
+
+Thus the spectral stage itself needs no cubic loss.  Any remaining difference
+between the formal end-to-end rate and the paper's
+`Poly₃((n³/r)^(1/2-δ))` bookkeeping comes from the upstream statistical/CMDS
+transport into `ε`, not from the selected-block Davis--Kahan step. -/
+theorem configFrobBound_le_configFrobQuadraticMajorant
+    (d : ℕ) (α Λ ε : ℝ) (hε0 : 0 ≤ ε) (hε1 : ε ≤ 1) :
+    configFrobBound d α Λ ε ≤ configFrobQuadraticMajorant d α Λ ε := by
+  have hfirst_factor :
+      (2 * ((d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2)))^2 * ((d : ℝ) * (Λ + ε))
+        = ε^4 *
+            ((2 * ((d : ℝ) * (4 * (d : ℝ) / α^2)))^2 *
+              ((d : ℝ) * (Λ + ε))) := by
+    ring
+  have hfirst_inside :
+      ε^4 *
+          ((2 * ((d : ℝ) * (4 * (d : ℝ) / α^2)))^2 *
+            ((d : ℝ) * (Λ + ε)))
+        ≤ ε^4 *
+          ((2 * ((d : ℝ) * (4 * (d : ℝ) / α^2)))^2 *
+            ((d : ℝ) * (Λ + 1))) := by
+    have hΛadd : Λ + ε ≤ Λ + 1 := by
+      linarith
+    have hΛ : (d : ℝ) * (Λ + ε) ≤ (d : ℝ) * (Λ + 1) :=
+      mul_le_mul_of_nonneg_left hΛadd (by positivity)
+    have hc : 0 ≤ (2 * ((d : ℝ) * (4 * (d : ℝ) / α^2)))^2 := sq_nonneg _
+    have hx : 0 ≤ ε^4 := by positivity
+    exact mul_le_mul_of_nonneg_left (mul_le_mul_of_nonneg_left hΛ hc) hx
+  have hfirst :
+      Real.sqrt
+          ((2 * ((d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2)))^2 *
+            ((d : ℝ) * (Λ + ε)))
+        ≤ ε^2 * configFrobQuadraticCoeff d α Λ := by
+    rw [hfirst_factor]
+    calc
+      Real.sqrt
+          (ε^4 *
+            ((2 * ((d : ℝ) * (4 * (d : ℝ) / α^2)))^2 *
+              ((d : ℝ) * (Λ + ε))))
+          ≤ Real.sqrt
+            (ε^4 *
+              ((2 * ((d : ℝ) * (4 * (d : ℝ) / α^2)))^2 *
+                ((d : ℝ) * (Λ + 1)))) := Real.sqrt_le_sqrt hfirst_inside
+      _ = Real.sqrt (ε^4) * configFrobQuadraticCoeff d α Λ := by
+          rw [configFrobQuadraticCoeff, Real.sqrt_mul (by positivity : 0 ≤ ε^4)]
+      _ = ε^2 * configFrobQuadraticCoeff d α Λ := by
+          rw [show ε^4 = (ε^2)^2 by ring, Real.sqrt_sq (sq_nonneg ε)]
+  have hsecond_factor :
+      (d : ℝ) * (ε / Real.sqrt (α / 2))^2
+        = ε^2 * ((d : ℝ) * (1 / Real.sqrt (α / 2))^2) := by
+    ring
+  have hsecond :
+      Real.sqrt ((d : ℝ) * (ε / Real.sqrt (α / 2))^2)
+        = ε * Real.sqrt ((d : ℝ) * (1 / Real.sqrt (α / 2))^2) := by
+    rw [hsecond_factor, Real.sqrt_mul (sq_nonneg ε), Real.sqrt_sq hε0]
+  have hthird_factor :
+      Λ * (4 * (d : ℝ) * ε^2 / α^2)
+        = ε^2 * (Λ * (4 * (d : ℝ) / α^2)) := by
+    ring
+  have hthird :
+      Real.sqrt (Λ * (4 * (d : ℝ) * ε^2 / α^2))
+        = ε * Real.sqrt (Λ * (4 * (d : ℝ) / α^2)) := by
+    rw [hthird_factor, Real.sqrt_mul (sq_nonneg ε), Real.sqrt_sq hε0]
+  unfold configFrobBound configFrobQuadraticMajorant configFrobLinearCoeff
+  rw [hsecond, hthird]
+  calc
+    Real.sqrt
+          ((2 * ((d : ℝ) * (4 * (d : ℝ) * ε ^ 2 / α ^ 2))) ^ 2 *
+            ((d : ℝ) * (Λ + ε))) +
+        ε * Real.sqrt ((d : ℝ) * (1 / Real.sqrt (α / 2)) ^ 2) +
+        ε * Real.sqrt (Λ * (4 * (d : ℝ) / α ^ 2))
+      ≤ ε^2 * configFrobQuadraticCoeff d α Λ +
+          ε * Real.sqrt ((d : ℝ) * (1 / Real.sqrt (α / 2)) ^ 2) +
+          ε * Real.sqrt (Λ * (4 * (d : ℝ) / α ^ 2)) := by
+            exact add_le_add (add_le_add hfirst le_rfl) le_rfl
+    _ = (Real.sqrt ((d : ℝ) * (1 / Real.sqrt (α / 2)) ^ 2) +
+          Real.sqrt (Λ * (4 * (d : ℝ) / α ^ 2))) * ε +
+          configFrobQuadraticCoeff d α Λ * ε^2 := by
+            ring
+
 /-- Compatibility bound for the older `ConfigError` API.  It is definitionally
 `√n` times `configFrobBound`; the expression is kept expanded so existing
 downstream proofs that unfold `configBound` keep their previous normal form. -/

@@ -57,11 +57,11 @@ private theorem norm_sq_sum_smul_orthonormal
     refine Finset.sum_congr rfl fun a _ => ?_
     rw [inner_smul_left, inner_sum]
     rw [Finset.sum_eq_single a]
-    · rw [inner_smul_right, orthonormal_iff_ite.mp hw a a, if_pos rfl, mul_one,
+    · rw [inner_smul_right, orthonormal_iff_ite.mp hw a a, ite_eq_left rfl, mul_one,
         RCLike.conj_mul]
     · intro c _ hca
       rw [inner_smul_right, orthonormal_iff_ite.mp hw a c,
-        if_neg (fun h => hca h.symm), mul_zero]
+        ite_eq_right (fun h => hca h.symm), mul_zero]
     · intro ha
       exact absurd (Finset.mem_univ a) ha
   have := congrArg RCLike.re hinner
@@ -220,7 +220,7 @@ theorem singularValues_restrictedDisplacement_directRotation
     rintro ⟨a, ha⟩ ⟨b, hb⟩
     have ha' : (a : ℕ) < m := ha
     have hb' : (b : ℕ) < m := hb
-    simp only [Set.domRestrict_apply, hv, dif_pos ha', dif_pos hb']
+    simp only [Set.domRestrict_apply, hv, dite_eq_left ha', dite_eq_left hb']
     rw [orthonormal_iff_ite.mp (orthonormal_principalSourceVector U V)
       ⟨(a : ℕ), ha'⟩ ⟨(b : ℕ), hb'⟩]
     congr 1
@@ -261,7 +261,7 @@ theorem singularValues_restrictedDisplacement_directRotation
     by_cases hk : (k : ℕ) < m
     · have hbk : b k = v k := hb k hk
       have hsrc : b k = principalSourceVector U V ⟨(k : ℕ), hk⟩ := by
-        rw [hbk, hv]; simp [dif_pos hk]
+        rw [hbk, hv]; simp [dite_eq_left hk]
       rw [hgram, hsrc]
       have hu := principalSourceVector_mem U V hacute ⟨(k : ℕ), hk⟩
       simp only [LinearMap.comp_apply, LinearMap.comp_apply,
@@ -273,7 +273,7 @@ theorem singularValues_restrictedDisplacement_directRotation
       -- push the projector through every scalar before using its fixed point
       simp only [map_smul, projection_apply_of_mem hu]
       rw [hμ]
-      simp only [dif_pos hk]
+      simp only [dite_eq_left hk]
       rw [principalPlaneChord_sq]
       match_scalars
       ring
@@ -285,7 +285,7 @@ theorem singularValues_restrictedDisplacement_directRotation
         have hbu : b ⟨(i : ℕ), lt_of_lt_of_le i.isLt hmE⟩ =
             principalSourceVector U V i := by
           rw [hb _ hval, hv]
-          simp only [dif_pos hval]
+          simp only [dite_eq_left hval]
         have hne : (⟨(i : ℕ), lt_of_lt_of_le i.isLt hmE⟩ :
             Fin (finrank 𝕜 E)) ≠ k := by
           intro h
@@ -304,7 +304,7 @@ theorem singularValues_restrictedDisplacement_directRotation
       simp only [hgram, LinearMap.comp_apply, LinearMap.comp_apply,
         LinearMap.smul_apply, LinearMap.sub_apply, LinearMap.id_apply, habs,
         sub_self, smul_zero, map_zero, hμ]
-      simp [dif_neg hk]
+      simp [dite_eq_right hk]
   have heig := LinearMap.IsSymmetric.eigenvalues_eq_of_eigenbasis AR.isSymmetric_adjoint_comp_self rfl b
     hμanti hdiag
   rcases lt_or_ge n (finrank 𝕜 E) with hnE | hnE
@@ -314,7 +314,7 @@ theorem singularValues_restrictedDisplacement_directRotation
     split_ifs with hn
     · exact Real.sqrt_sq (principalPlaneChord_nonneg U V _)
     · exact Real.sqrt_zero
-  · rw [AR.singularValues_of_finrank_le hnE, dif_neg (by omega)]
+  · rw [AR.singularValues_of_finrank_le hnE, dite_eq_right (by omega)]
 
 /-- **Pointwise singular-value minimality of the restricted displacement**
 (Davis--Kahan Proposition 4.1): every singular value of `(I - R) P_U` is

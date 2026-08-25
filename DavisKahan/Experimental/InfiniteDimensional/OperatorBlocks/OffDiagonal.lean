@@ -57,9 +57,9 @@ noncomputable instance continuedSpectralSubspace_hasOrthogonalProjection
   by_cases h : Nonempty (ContinuedSpectralDatum A H s)
   · let D := Classical.choice h
     have hp := continuedProjection_isOrthogonalProjection D
-    rw [continuedSpectralSubspace, dif_pos h]
+    rw [continuedSpectralSubspace, dite_eq_left h]
     exact hp.range_hasOrthogonalProjection
-  · rw [continuedSpectralSubspace, dif_neg h]
+  · rw [continuedSpectralSubspace, dite_eq_right h]
     infer_instance
 
 /-- Off-diagonal perturbations preserve the separating gap below the sharp
