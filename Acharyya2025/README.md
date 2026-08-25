@@ -70,9 +70,11 @@ The result is assembled in layers; read them in this order:
    `highProb_aligned_configFrobError_of_entrywise_close`: the paper-facing
    **high-probability Theorem 2** route (feed the Theorem-1 event through the
    Frobenius deterministic bound), alongside the legacy `ConfigError` route.
-4. **[`RateChain.lean`](RateChain.lean)** — `endToEndRate` /
-   `tendsto_endToEndRate_zero`: the **Corollary 2** vanishing rate as the
-   replicate budget grows.
+4. **[`RateChain.lean`](RateChain.lean)** — `endToEndFrobRate` /
+   `highProb_aligned_configFrobError_endToEndFrobRate` /
+   `tendsto_endToEndFrobRate_zero`: the paper-facing **Corollary 2** rate chain
+   before the legacy `√n` conversion.  `endToEndRate` is retained for the older
+   `ConfigError` API.
 
 ---
 
@@ -86,7 +88,7 @@ The result is assembled in layers; read them in this order:
 | **Assumption 2** (eigenvalue stability `λ_d > C₁`, `λ₁ < C₂`) | eigenvalue floor `α` / cap `Λ` hypotheses | `ConfigPerturbation.lean`, `MatrixPerturbation.lean` |
 | **Theorem 2**, deterministic Frobenius core — `∃ W*∈O(d)` | `exists_isometry_configFrobError_spectralConfig_le`, `configFrobBound`; legacy `ConfigError` corollary | `ConfigPerturbation.lean` |
 | **Theorem 2**, high-probability Frobenius form | `highProb_aligned_configFrobError_of_entrywise_close`, `…_of_response_mean`; legacy `ConfigError` siblings | `AlignedPipeline.lean` |
-| **Corollary 2** — vanishing rate as budgets grow | `endToEndRate`, `tendsto_endToEndRate_zero`, `tendsto_configBound_zero` | `RateChain.lean` |
+| **Corollary 2** — vanishing rate as budgets grow | `endToEndFrobRate`, `highProb_aligned_configFrobError_endToEndFrobRate`, `tendsto_endToEndFrobRate_zero`; legacy `endToEndRate` siblings | `RateChain.lean` |
 | Weyl's eigenvalue inequality | `abs_eigenvalues_sub_le` | `Weyl.lean` |
 | Davis–Kahan sin-Θ bound; rank-`d` eigengap | `sum_cross_inner_sq_le_opNorm`, `sum_cross_inner_sq_le_of_rank_floor_opNorm`; source-facing crude siblings | `DavisKahan.lean`, `RankGap.lean` |
 | The aligning orthogonal map `W*` | `alignedSpectralConfig`, `AlignExists`; Gram rigidity / polar factor | `AlignedPipeline.lean`, `GramRigidity.lean`, `PolarFactor.lean`, `Overlap.lean` |
@@ -139,11 +141,13 @@ source-version migration rather than folded into this Quench-facing v1 chain.
   is machinery the paper does not need (it argues classically).
 - **Assumptions 1–2 are encoded** as `IsHermitian` / `PosSemidef` / `rank ≤ d`
   and explicit eigenvalue floor `α` / cap `Λ` hypotheses; the numeric
-  **smallness conditions** (`hsmall`, `hpolar`) make the paper's "`r = ω(n³)`,
-  `supᵢⱼ γᵢⱼ = O(1)`" regime concrete and are flagged where used.
+  deterministic `hsmall` / `hpolar` conditions make the local spectral argument
+  concrete.  They are now discharged *eventually* from the vanishing perturbation
+  rate by `eventually_spectral_side_conditions`, so they do not remain assumptions
+  of the high-probability paper-facing Frobenius theorem.
 - **Rates are loose, not sharp.** `cmdsEntrywiseRate` / `configFrobBound` /
-  `configBound` /
-  `endToEndRate` are *valid but non-optimal* propagation rates (the module
+  `configBound` / `endToEndFrobRate` / legacy `endToEndRate` are *valid but
+  non-optimal* propagation rates (the module
   docstrings compare them with the paper's `Poly₃((n³/r)^{1/2−δ})` bookkeeping).
   The deterministic spectral layer does use the reusable selected-block
   Davis--Kahan bound (`n → d`) and residual/Parseval summation for the CMDS
@@ -192,7 +196,7 @@ user-observed model labels.
 | [`ConfigPerturbation.lean`](ConfigPerturbation.lean) | **The bridge theorem** `exists_isometry_configError_spectralConfig_le` + explicit `configBound` — deterministic core of Theorem 2. |
 | [`AlignedPipeline.lean`](AlignedPipeline.lean) | `alignedSpectralConfig` (choice-based aligned estimator) + the high-probability aligned-`ConfigError` theorems (entrywise and response-mean versions). |
 | [`GrowingPipeline.lean`](GrowingPipeline.lean) | Choice-free pairwise-distance perturbation, target-augmented growing-dimension foundations, and `GrowingConfigControl` for joint model/response schedules. |
-| [`RateChain.lean`](RateChain.lean) | The explicit end-to-end rate: HP lemma, `configBound` continuity at 0, `endToEndRate` and its vanishing (Corollary 2). |
+| [`RateChain.lean`](RateChain.lean) | Explicit end-to-end rates: the preferred Frobenius `endToEndFrobRate` and HP/vanishing theorems, plus the legacy `ConfigError` rate. |
 | [`MatrixPerturbation.lean`](MatrixPerturbation.lean) | Matrix-world capstone: entrywise `η` ⇒ aligned `ConfigError ≤ configBound`, with rank transport for trailing eigenvalues. |
 | [`Weyl.lean`](Weyl.lean) | Discrete Courant–Fischer + Weyl's eigenvalue perturbation inequality. |
 | [`DavisKahan.lean`](DavisKahan.lean) | Cross-term identity + Davis–Kahan cross-block sin-Θ bound. |

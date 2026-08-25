@@ -368,7 +368,143 @@ theorem quench_part2_from_aligned_configError_hp
   have hside_eventually : ∀ᶠ k in Filter.atTop, side k := by
     simpa [side] using
       (Acharyya2025.AlignedPipeline.eventually_spectral_side_conditions
-        (n := n) (d := d) hα_pos hrate_zero)
+        (d := d) hα_pos hrate_zero)
+  have hE_acharyya : Acharyya2024.HighProbAtTop μ E := by
+    refine Acharyya2024.HighProbAtTop.mono_eventually hcenter ?_
+    filter_upwards [hside_eventually] with k hk
+    intro ω hω
+    exact ⟨hω, hk⟩
+  have hE : _root_.HighProbAtTop μ hμ E := by
+    intro δ hδ
+    exact hE_acharyya δ hδ
+  exact highProb_queryEfficient_nn_of_subevent (Q := Q) (X := X) (d := d) Pf μ hμ
+    (fun _ f => ψ f) (fun u ω (_ : Finset Q) f => ψHat u ω f) f_ref score Qstar Qsub
+    γ h_lipQ h_gamma_pos _ h_c_tendsto h_c_nonneg
+    E hE_meas hE_sub hE h_cover h_cover_meas hMSE_Q_pos
+
+/--
+**Frobenius core: query efficiency from the CMDS-entrywise high-probability event.**
+
+This is the paper-facing counterpart of `quench_part2_from_aligned_configError_hp`.
+It uses the DK-sharpened `configFrobBound` and `alignedSpectralConfigFrob`, then
+converts Frobenius control to the uniform per-model error needed by Quench via
+`norm_config_le_ConfigFrobError`.  The measurable subevent remains the CMDS
+entrywise event, so no eigenbasis measurability assumption is introduced.
+-/
+theorem quench_part2_from_aligned_configFrobError_hp
+    [DecidableEq Q]
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : Nat → Measure Ω) (hμ : ∀ k, IsProbabilityMeasure (μ k))
+    {n d : Nat} (hd : d ≤ n)
+    (Dhat : Nat → Ω → Acharyya2024.DisMat n)
+    (hsym : ∀ u ω, (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat u ω))).IsHermitian)
+    (D : Acharyya2024.DisMat n)
+    (ψFinite : Config n d)
+    -- Population spectral structure (Assumptions 1/2):
+    (hB : (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix D)).PosSemidef)
+    (hrank : (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix D)).rank ≤ d)
+    {α Λ : Real} (hα_pos : 0 < α)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
+    (hψFinite_gram : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
+      = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
+    (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
+    (hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
+    (c : Nat → Real)
+    (hc_eq : c = fun u => Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+      ((n : Real) * rate u))
+    -- The honest measurability primitive replacing `hmeas_spec`: the sample
+    -- dissimilarity matrix is measurable in the sample (trivially dischargeable).
+    (hDmeas : ∀ k, Measurable (fun ω => Dhat k ω))
+    -- Theorem 1 input: high-probability entrywise CMDS-closeness event.
+    (hcenter : Acharyya2024.HighProbAtTop μ (fun k => {ω |
+      Acharyya2025.Bridge.EntrywiseClose
+        (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat k ω))
+        (Acharyya2025.Deterministic.classicalMDSMatrix D) (rate k)}))
+    (h_c_tendsto : Filter.Tendsto c Filter.atTop (nhds 0))
+    (h_c_nonneg : ∀ k, 0 ≤ c k)
+    (f_ref : ∀ k, Ω → Fin k → Model Q X)
+    (score : Model Q X → Finset Q → ℝ)
+    (Qstar Qsub : Finset Q)
+    (γ : ℝ)
+    (indexOf : Model Q X → Fin n)
+    (ψ : Model Q X → Vec d)
+    (ψHat : Nat → Ω → Model Q X → Vec d)
+    (h_lipQ : ∀ (f f' : Model Q X),
+      |score f Qstar - score f' Qstar| ≤ γ * ‖ψ f - ψ f'‖)
+    (h_gamma_pos : 0 < γ)
+    (hψ : ∀ f, ψ f = ψFinite (indexOf f))
+    (hψHat : ∀ u ω f, ψHat u ω f =
+      Acharyya2025.AlignedPipeline.alignedSpectralConfigFrob hd Dhat hsym ψFinite c u ω
+        (indexOf f))
+    (h_cover : ∀ ρ > 0,
+      _root_.HighProbAtTop μ hμ
+        (fun k => {ω | ∀ f, ∃ i, ‖ψ (f_ref k ω i) - ψ f‖ ≤ ρ}))
+    (h_cover_meas : ∀ ρ > 0, ∀ k,
+      MeasurableSet {ω | ∀ f, ∃ i, ‖ψ (f_ref k ω i) - ψ f‖ ≤ ρ})
+    (hMSE_Q_pos :
+      0 < MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+        (yQ (Q := Q) (X := X) score Qsub)) :
+    -- Conclusion: with high probability, MSE(ŷ_NN) ≤ MSE(ŷ_Q) — the NN estimator is
+    -- query-efficient relative to the subset baseline ŷ_Q.  (Here the embedding-error
+    -- event is *derived* from the spectral / statistical inputs, not assumed.)
+    ∀ δ : ENNReal, 0 < δ →
+      ∃ k : ℕ,
+        (μ k) {ω |
+          MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+            (fun f => yNN_paper (d := d)
+              (fun u ω (_ : Finset Q) f => ψHat u ω f) f_ref score Qstar Qsub k ω f)
+          ≤ MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+              (yQ (Q := Q) (X := X) score Qsub)} ≥ 1 - δ := by
+  -- Restrict the directly measurable CMDS-entrywise event to the tail where the
+  -- local spectral side conditions hold.  This loses only finitely many budgets.
+  let side : Nat → Prop := fun k =>
+    (n : Real) * rate k ≤ α / 2 ∧
+      (d : Real) * (4 * (d : Real) * ((n : Real) * rate k)^2 / α^2) ≤ 1 / 2
+  set E : Nat → Set Ω := fun k => {ω |
+    Acharyya2025.Bridge.EntrywiseClose
+      (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat k ω))
+      (Acharyya2025.Deterministic.classicalMDSMatrix D) (rate k) ∧ side k} with hE_def
+  have hcenter_meas : ∀ k, MeasurableSet {ω |
+      Acharyya2025.Bridge.EntrywiseClose
+        (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat k ω))
+        (Acharyya2025.Deterministic.classicalMDSMatrix D) (rate k)} := fun k =>
+    Acharyya2025.SpectralMeasurability.measurableSet_entrywiseClose_event Dhat D rate k
+      (hDmeas k)
+  have hside_meas : ∀ k, MeasurableSet {ω : Ω | side k} := by
+    intro k
+    by_cases hk : side k
+    · simp [hk]
+    · simp [hk]
+  have hE_meas : ∀ k, MeasurableSet (E k) := by
+    intro k
+    rw [hE_def]
+    exact (hcenter_meas k).inter (hside_meas k)
+  have hE_sub : ∀ k, E k ⊆ {ω | ∀ f, ‖ψHat k ω f - ψ f‖ ≤ c k} := by
+    intro k ω hω f
+    obtain ⟨hclose, hsmall, hpolar⟩ := hω
+    have hA : Acharyya2025.AlignedPipeline.AlignFrobExists hd Dhat hsym ψFinite c k ω := by
+      rw [hc_eq]
+      exact Acharyya2025.AlignedPipeline.alignFrobExists_of_entrywiseClose
+        hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψFinite hψFinite_gram
+        rate k (hrate_nonneg k) hsmall hpolar ω hclose
+    have hcfg := Acharyya2025.AlignedPipeline.configFrobError_alignedSpectralConfigFrob_le
+      hd Dhat hsym ψFinite c k ω hA
+    calc ‖ψHat k ω f - ψ f‖
+        = ‖Acharyya2025.AlignedPipeline.alignedSpectralConfigFrob hd Dhat hsym ψFinite c k ω
+            (indexOf f) - ψFinite (indexOf f)‖ := by rw [hψHat, hψ]
+      _ ≤ Acharyya2025.ConfigPerturbation.ConfigFrobError
+            (Acharyya2025.AlignedPipeline.alignedSpectralConfigFrob hd Dhat hsym ψFinite c k ω)
+            ψFinite := Acharyya2025.ConfigPerturbation.norm_config_le_ConfigFrobError _ _ _
+      _ ≤ _ := hcfg
+  have hside_eventually : ∀ᶠ k in Filter.atTop, side k := by
+    simpa [side] using
+      (Acharyya2025.AlignedPipeline.eventually_spectral_side_conditions
+        (d := d) hα_pos hrate_zero)
   have hE_acharyya : Acharyya2024.HighProbAtTop μ E := by
     refine Acharyya2024.HighProbAtTop.mono_eventually hcenter ?_
     filter_upwards [hside_eventually] with k hk
@@ -611,6 +747,112 @@ theorem queryEfficient_nn_of_response_mean
     indexOf ψ ψHat h_lipQ h_gamma_pos hψ hψHat h_cover h_cover_meas hMSE_Q_pos
 
 /--
+**Query efficiency from response-mean concentration using the Frobenius Acharyya rate.**
+
+This is the DK-sharpened paper-facing variant of `queryEfficient_nn_of_response_mean`.
+It follows the same response-mean → CMDS-entrywise concentration chain, but its
+aligned estimator and rate use `configFrobBound`, eliminating the terminal `√n`
+conversion before Quench takes the required uniform rowwise consequence.
+-/
+theorem queryEfficient_nn_of_response_mean_frob
+    [DecidableEq Q]
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : Nat → Measure Ω) (hμ : ∀ k, IsProbabilityMeasure (μ k))
+    {n m p d : Nat} (hn : 0 < n) (hd : d ≤ n)
+    (Xbar : Nat → Ω → Fin n → Acharyya2024.Mat m p) (μvec : Fin n → Acharyya2024.Mat m p)
+    (hB : (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix
+          (Acharyya2024.responseDist μvec))).PosSemidef)
+    (hrank : (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix
+          (Acharyya2024.responseDist μvec))).rank ≤ d)
+    {α Λ : Real} (hα_pos : 0 < α)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
+    (ψFinite : Config n d)
+    (hψFinite : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
+      = Acharyya2025.Deterministic.classicalMDSMatrix (Acharyya2024.responseDist μvec) i j)
+    (η R : Nat → Real)
+    (hrate_nonneg : ∀ u, 0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
+    (hrate_zero : Filter.Tendsto
+      (fun u => (n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
+      Filter.atTop (nhds 0))
+    (hmean : Acharyya2024.HighProbAtTop μ
+      (fun u => {ω | Acharyya2025.Bridge.UniformResponseMeanClose (Xbar u ω) μvec (η u)}))
+    (hsample_bound : ∀ u ω i j, |Acharyya2024.responseDist (Xbar u ω) i j| ≤ R u)
+    (hpopulation_bound : ∀ u i j, |Acharyya2024.responseDist μvec i j| ≤ R u)
+    (indexOf : Model Q X → Fin n)
+    (ψ : Model Q X → Vec d)
+    (ψHat : Nat → Ω → Model Q X → Vec d)
+    (hψ : ∀ f, ψ f = ψFinite (indexOf f))
+    (hψHat : ∀ u ω f, ψHat u ω f =
+      Acharyya2025.AlignedPipeline.alignedSpectralConfigFrob hd
+        (fun u ω => Acharyya2024.responseDist (Xbar u ω))
+        (fun u ω => Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
+          (Xbar u ω))
+        ψFinite
+        (fun u => Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+          ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))) u ω
+        (indexOf f))
+    (f_ref : ∀ k, Ω → Fin k → Model Q X)
+    (score : Model Q X → Finset Q → ℝ)
+    (Qstar Qsub : Finset Q)
+    (γ : ℝ)
+    (h_lipQ : ∀ (f f' : Model Q X),
+      |score f Qstar - score f' Qstar| ≤ γ * ‖ψ f - ψ f'‖)
+    (h_gamma_pos : 0 < γ)
+    -- Honest measurability primitive: the sample response-distance matrix is
+    -- measurable in the sample.
+    (hXmeas : ∀ k, Measurable (fun ω => Acharyya2024.responseDist (Xbar k ω)))
+    (h_cover : ∀ ρ > 0,
+      _root_.HighProbAtTop μ hμ
+        (fun k => {ω | ∀ f, ∃ i, ‖ψ (f_ref k ω i) - ψ f‖ ≤ ρ}))
+    (h_cover_meas : ∀ ρ > 0, ∀ k,
+      MeasurableSet {ω | ∀ f, ∃ i, ‖ψ (f_ref k ω i) - ψ f‖ ≤ ρ})
+    (hMSE_Q_pos :
+      0 < MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+        (yQ (Q := Q) (X := X) score Qsub)) :
+    -- Conclusion: with high probability, MSE(ŷ_NN) ≤ MSE(ŷ_Q) — the NN estimator is
+    -- query-efficient relative to the subset baseline ŷ_Q.  (Here the embedding-error
+    -- event is *derived* from the spectral / statistical inputs, not assumed.)
+    ∀ δ : ENNReal, 0 < δ →
+      ∃ k : ℕ,
+        (μ k) {ω |
+          MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+            (fun f => yNN_paper (d := d)
+              (fun u ω (_ : Finset Q) f => ψHat u ω f) f_ref score Qstar Qsub k ω f)
+          ≤ MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+              (yQ (Q := Q) (X := X) score Qsub)} ≥ 1 - δ := by
+  -- The CMDS-entrywise HP event derived from response-mean concentration (Bridge chain).
+  have hcenter :=
+    Acharyya2025.AlignedPipeline.highProb_cmdsEntrywise_of_response_mean
+      μ hn Xbar μvec η R hmean hsample_bound hpopulation_bound
+  have h_c_tendsto :
+      Filter.Tendsto
+        (fun k => Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+          ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R k) (η k)))
+        Filter.atTop (nhds 0) :=
+    Acharyya2025.RateChain.tendsto_configFrobBound_comp_zero d α Λ hrate_zero
+  have h_c_nonneg : ∀ k, 0 ≤ Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+      ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R k) (η k)) := by
+    intro k
+    unfold Acharyya2025.ConfigPerturbation.configFrobBound
+    positivity
+  exact quench_part2_from_aligned_configFrobError_hp Pf μ hμ hd
+    (fun u ω => Acharyya2024.responseDist (Xbar u ω))
+    (fun u ω => Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
+      (Xbar u ω))
+    (Acharyya2024.responseDist μvec)
+    ψFinite hB hrank hα_pos hfloor hΛ hψFinite
+    (fun u => Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
+    hrate_nonneg hrate_zero
+    (fun u => Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+      ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))) rfl
+    hXmeas hcenter h_c_tendsto h_c_nonneg f_ref score Qstar Qsub γ
+    indexOf ψ ψHat h_lipQ h_gamma_pos hψ hψHat h_cover h_cover_meas hMSE_Q_pos
+
+/--
 **Query efficiency from iid second moments (Theorem 2 Part 2, raw-response).**
 
 The literal bottom of the paper's concentration chain.  This is
@@ -708,6 +950,98 @@ theorem queryEfficient_nn_of_second_moment
     Acharyya2025.RateChain.highProb_uniformResponseMeanClose_of_secondMoment
       μ Xbar μvec σ2 η hint hσ2 hη_pos hratio
   exact queryEfficient_nn_of_response_mean Pf μ hμ hn hd Xbar μvec hB hrank hα_pos hfloor hΛ
+    ψFinite hψFinite η R hrate_nonneg hrate_zero hmean hsample_bound
+    hpopulation_bound indexOf ψ ψHat hψ hψHat f_ref score Qstar Qsub γ h_lipQ
+    h_gamma_pos hXmeas h_cover h_cover_meas hMSE_Q_pos
+
+/--
+**Query efficiency from iid second moments using the Frobenius Acharyya rate.**
+
+This is the raw-response Quench capstone for the DK-sharpened path.  It derives
+response-mean concentration by Chebyshev exactly as the legacy theorem does,
+then uses `queryEfficient_nn_of_response_mean_frob`, so the final concentration
+rate no longer carries the compatibility-only `√n` factor.
+-/
+theorem queryEfficient_nn_of_second_moment_frob
+    [DecidableEq Q]
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : Nat → Measure Ω) (hμ : ∀ k, IsProbabilityMeasure (μ k))
+    {n m p d : Nat} (hn : 0 < n) (hd : d ≤ n)
+    (Xbar : Nat → Ω → Fin n → Acharyya2024.Mat m p) (μvec : Fin n → Acharyya2024.Mat m p)
+    (hB : (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix
+          (Acharyya2024.responseDist μvec))).PosSemidef)
+    (hrank : (Acharyya2025.MathlibBridge.disMatToMatrix
+        (Acharyya2025.Deterministic.classicalMDSMatrix
+          (Acharyya2024.responseDist μvec))).rank ≤ d)
+    {α Λ : Real} (hα_pos : 0 < α)
+    (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
+      α ≤ hB.isHermitian.eigenvalues₀ i)
+    (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
+    (ψFinite : Config n d)
+    (hψFinite : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
+      = Acharyya2025.Deterministic.classicalMDSMatrix (Acharyya2024.responseDist μvec) i j)
+    (η R : Nat → Real)
+    (hrate_nonneg : ∀ u, 0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
+    (hrate_zero : Filter.Tendsto
+      (fun u => (n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
+      Filter.atTop (nhds 0))
+    -- iid second-moment hypotheses (replacing the assumed response-mean event):
+    (σ2 : Nat → Real)
+    (hint : ∀ u (i : Fin n), Integrable (fun ω => ‖Xbar u ω i - μvec i‖ ^ 2) (μ u))
+    (hσ2 : ∀ u (i : Fin n), ∫ ω, ‖Xbar u ω i - μvec i‖ ^ 2 ∂(μ u) ≤ σ2 u)
+    (hη_pos : ∀ u, 0 < η u)
+    (hratio : Filter.Tendsto (fun u => (n : Real) * σ2 u / (η u) ^ 2) Filter.atTop (nhds 0))
+    (hsample_bound : ∀ u ω i j, |Acharyya2024.responseDist (Xbar u ω) i j| ≤ R u)
+    (hpopulation_bound : ∀ u i j, |Acharyya2024.responseDist μvec i j| ≤ R u)
+    (indexOf : Model Q X → Fin n)
+    (ψ : Model Q X → Vec d)
+    (ψHat : Nat → Ω → Model Q X → Vec d)
+    (hψ : ∀ f, ψ f = ψFinite (indexOf f))
+    (hψHat : ∀ u ω f, ψHat u ω f =
+      Acharyya2025.AlignedPipeline.alignedSpectralConfigFrob hd
+        (fun u ω => Acharyya2024.responseDist (Xbar u ω))
+        (fun u ω => Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
+          (Xbar u ω))
+        ψFinite
+        (fun u => Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+          ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))) u ω
+        (indexOf f))
+    (f_ref : ∀ k, Ω → Fin k → Model Q X)
+    (score : Model Q X → Finset Q → ℝ)
+    (Qstar Qsub : Finset Q)
+    (γ : ℝ)
+    (h_lipQ : ∀ (f f' : Model Q X),
+      |score f Qstar - score f' Qstar| ≤ γ * ‖ψ f - ψ f'‖)
+    (h_gamma_pos : 0 < γ)
+    -- Honest measurability primitive: the sample response-distance matrix is
+    -- measurable in the sample.
+    (hXmeas : ∀ k, Measurable (fun ω => Acharyya2024.responseDist (Xbar k ω)))
+    (h_cover : ∀ ρ > 0,
+      _root_.HighProbAtTop μ hμ
+        (fun k => {ω | ∀ f, ∃ i, ‖ψ (f_ref k ω i) - ψ f‖ ≤ ρ}))
+    (h_cover_meas : ∀ ρ > 0, ∀ k,
+      MeasurableSet {ω | ∀ f, ∃ i, ‖ψ (f_ref k ω i) - ψ f‖ ≤ ρ})
+    (hMSE_Q_pos :
+      0 < MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+        (yQ (Q := Q) (X := X) score Qsub)) :
+    -- Conclusion: with high probability, MSE(ŷ_NN) ≤ MSE(ŷ_Q) — the NN estimator is
+    -- query-efficient relative to the subset baseline ŷ_Q.  (Here the embedding-error
+    -- event is *derived* from the spectral / statistical inputs, not assumed.)
+    ∀ δ : ENNReal, 0 < δ →
+      ∃ k : ℕ,
+        (μ k) {ω |
+          MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+            (fun f => yNN_paper (d := d)
+              (fun u ω (_ : Finset Q) f => ψHat u ω f) f_ref score Qstar Qsub k ω f)
+          ≤ MSE (Q := Q) (X := X) Pf (yFull score Qstar)
+              (yQ (Q := Q) (X := X) score Qsub)} ≥ 1 - δ := by
+  -- Derive the response-mean closeness event from second moments (Chebyshev).
+  have : ∀ u, IsProbabilityMeasure (μ u) := hμ
+  have hmean :=
+    Acharyya2025.RateChain.highProb_uniformResponseMeanClose_of_secondMoment
+      μ Xbar μvec σ2 η hint hσ2 hη_pos hratio
+  exact queryEfficient_nn_of_response_mean_frob Pf μ hμ hn hd Xbar μvec hB hrank hα_pos hfloor hΛ
     ψFinite hψFinite η R hrate_nonneg hrate_zero hmean hsample_bound
     hpopulation_bound indexOf ψ ψHat hψ hψHat f_ref score Qstar Qsub γ h_lipQ
     h_gamma_pos hXmeas h_cover h_cover_meas hMSE_Q_pos
