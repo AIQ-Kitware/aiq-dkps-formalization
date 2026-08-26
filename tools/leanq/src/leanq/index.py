@@ -30,6 +30,8 @@ class Decl:
     line: int | None
     axioms: tuple[str, ...] | None
     deps: tuple[str, ...]
+    library: str | None = None
+    internal: bool = False
 
     @classmethod
     def from_json(cls, obj: dict) -> "Decl":
@@ -45,6 +47,8 @@ class Decl:
                 None if obj.get("axioms") is None else tuple(obj.get("axioms", ()))
             ),
             deps=tuple(obj.get("deps", ())),
+            library=obj.get("library"),
+            internal=bool(obj.get("internal", False)),
         )
 
     def to_json(self) -> dict:
@@ -58,6 +62,8 @@ class Decl:
             "line": self.line,
             "axioms": None if self.axioms is None else list(self.axioms),
             "deps": list(self.deps),
+            "library": self.library,
+            "internal": self.internal,
         }
 
     @property
@@ -83,6 +89,16 @@ def index_path(project: LeanProject, library: str) -> Path:
     return project.root / ".leanq" / f"{library}.jsonl"
 
 
+def detail_index_path(project: LeanProject, library: str, detail: str) -> Path:
+    """Cache path for an ordinary whole-library index at a chosen detail level."""
+    if detail == "full":
+        return index_path(project, library)
+    if detail not in {"deps", "graph"}:
+        raise ProjectError(f"unknown index detail {detail!r}; expected full, deps, or graph")
+    base = index_path(project, library)
+    return base.with_name(f"{library}.{detail}.jsonl")
+
+
 @profile
 def build_index(
     project: LeanProject,
@@ -101,8 +117,10 @@ def build_index(
     is a worse answer than an obvious error.  ``modules`` intentionally overrides that behavior
     for root-scoped questions such as the production promotion boundary.
     """
-    if detail not in {"full", "deps"}:
-        raise ProjectError(f"unknown index detail {detail!r}; expected full or deps")
+    if detail not in {"full", "deps", "graph"}:
+        raise ProjectError(
+            f"unknown index detail {detail!r}; expected full, deps, or graph"
+        )
     scoped = modules is not None
     modules = list(modules) if scoped else project.modules(library)
     if project.stale_modules and verbose and not scoped:
@@ -111,7 +129,7 @@ def build_index(
             f"e.g. {project.stale_modules[0]}",
             file=sys.stderr,
         )
-    out = out or index_path(project, library)
+    out = out or detail_index_path(project, library, detail)
     out.parent.mkdir(parents=True, exist_ok=True)
 
     with tempfile.NamedTemporaryFile("w", suffix=".txt", delete=False) as handle:
@@ -226,6 +244,24 @@ def ensure_scoped_index(
     if refresh or not path.exists():
         build_index(
             project, library, out=path, modules=roots, verbose=verbose, detail=detail
+        )
+    return load_index(path)
+
+
+@profile
+def ensure_graph_index(
+    project: LeanProject, library: str, *, refresh: bool = False, verbose: bool = True
+) -> list[Decl]:
+    """Load the dependency-complete graph index for one local library.
+
+    Graph indexes include internal/private implementation constants so a public
+    theorem's path through private support is not cut before it reaches another
+    public theorem. Expensive axiom/source metadata stays disabled.
+    """
+    path = detail_index_path(project, library, "graph")
+    if refresh or not path.exists():
+        build_index(
+            project, library, out=path, verbose=verbose, detail="graph"
         )
     return load_index(path)
 

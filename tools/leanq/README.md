@@ -44,6 +44,7 @@ leanq deps myDef --local         # helpers from *this* library that myDef needs
 leanq deps myDef --transitive    # everything it reaches, Mathlib included
 leanq rdeps myDef                # who references myDef
 leanq query --uses myDef         # same, composable with the other filters
+leanq graph FinalTheorem --transitive-reduction --json
 ```
 
 `deps --local` answers "what would I have to bring along to restate this somewhere else": it
@@ -54,6 +55,45 @@ in scaffolding", was first answered with a regex over source text, and was wrong
 `--lib` picks the library when a project builds more than one; `--project` points at a project
 other than the working directory. Every subcommand takes `--json`, and `query`/`stubs` take
 `--names` for a bare list, so output drops straight into a pipeline.
+
+## Proof dependency graphs
+
+`leanq graph` is the semantic backend for dependency visualizations. It merges graph indexes
+from multiple local Lean libraries, follows the elaborated constant dependencies of one or more
+target declarations, and emits a stable JSON graph. An edge is oriented **dependency → consumer**,
+so the graph reads from mathematical foundations toward the requested conclusion.
+
+```bash
+# All project libraries discovered in the current build are included by default.
+leanq graph DkpsQuench2026.QueryEfficiency.infiniteFixedSubset \
+  --transitive-reduction --json > /tmp/quench-proof-graph.json
+
+# A narrower, explicit cross-package scope is useful while iterating.
+leanq graph Some.Quench.Theorem \
+  --include-lib ForTauCeti \
+  --include-lib DavisKahan \
+  --include-lib YuWangSamworth2015 \
+  --include-lib Acharyya2025 \
+  --include-lib DkpsQuench2026 \
+  --transitive-reduction --out build/proof-graph.json
+```
+
+The graph command uses a separate cached `<Library>.graph.jsonl` index. Graph mode is deliberately
+more complete than ordinary inventory mode: it retains Lean internal/private constants and their
+dependencies. That prevents a public dependency path from being severed merely because it passes
+through private proof support. Internal nodes are marked with `"internal": true` so a later viewer
+can collapse or hide them *after* reachability has been established.
+
+The JSON payload contains the exact project-local direct edges plus, when requested,
+`reducedEdges`. The latter is a reachability-preserving transitive reduction. Ordinary declaration
+DAGs get the unique DAG reduction; rare generated-constant cycles are condensed into strongly
+connected components first. Dependencies outside the indexed local libraries (normally Mathlib or
+Lean) are summarized by prefix, and `--include-unresolved` includes their full boundary names.
+
+`leanq.graph.projected_reduction` is the presentation primitive for the next layer: given a set of
+headline declarations, it computes their reachability relation, transitively reduces it, and
+attaches a shortest exact witness path through omitted support nodes to every displayed edge. This
+keeps editorial omission separate from semantic dependency extraction.
 
 ## Promotion-boundary queries
 
@@ -170,6 +210,7 @@ install it alongside if you want the positional half.
 ```
 src/leanq/cli.py             argparse CLI
 src/leanq/index.py           build/load/filter the index
+src/leanq/graph.py           cross-library target graphs and graph reductions
 src/leanq/project.py         locate the project, enumerate built modules
 src/leanq/lean/decl_index.lean   the metaprogram, run via `lake env lean --run`
 ```

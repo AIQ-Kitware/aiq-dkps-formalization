@@ -13,15 +13,19 @@ from the elaborated environment instead of by regexes over source text.
 
 Run it against whichever project owns the modules:
 
-    lake env lean --run decl_index.lean <LibraryRoot> [<modulesFile>] [full|deps]
+    lake env lean --run decl_index.lean <LibraryRoot> [<modulesFile>] [full|deps|graph]
 
 `full` is the ordinary leanq index. It records proposition classification, source ranges and the
 transitive axiom closure used for honest `sorryAx` reporting.
 
 `deps` is a structural fast path for dependency-boundary queries such as `leanq promotions`. It
-records only declaration identity, kind and direct constant dependencies. Expensive metadata is
-emitted as JSON `null` rather than fabricated. This matters on large libraries because promotion
-queries do not use axiom closure, WHNF-based proposition classification or source-range lookup.
+records only public declaration identity, kind and direct constant dependencies. Expensive metadata
+is emitted as JSON `null` rather than fabricated.
+
+`graph` is the dependency-complete structural mode used by `leanq graph`. Unlike inventory and
+promotion queries, it retains internal/private constants and references so a public theorem's path
+through private proof support is not cut out of the declaration graph. These support nodes are
+marked with `internal: true` and can be hidden by presentation tooling after reachability is known.
 
 `<modulesFile>` holds one module name per line, and all of them are imported. Pass it for complete
 whole-library inventory: a root module is not required to import every module Lake built.
@@ -59,25 +63,30 @@ def propValued (type : Expr) : MetaM Bool :=
     let body ← whnfR body
     return body.isProp || (body.isSort && body.sortLevel!.isZero)
 
-def dependencyJson (ci : ConstantInfo) (self : Name) : String :=
+def dependencyJson (ci : ConstantInfo) (self : Name) (includeInternal : Bool) : String :=
   let used := ci.type.getUsedConstants ++ (ci.value?.map Expr.getUsedConstants).getD #[]
-  let deps := used.toList.filter (fun d => !d.isInternal && d != self) |>.eraseDups
+  let deps := used.toList.filter (fun d => (includeInternal || !d.isInternal) && d != self) |>.eraseDups
   String.intercalate "," (deps.map fun d => "\"" ++ esc d.toString ++ "\"")
 
-def emit (root : Name) (depsOnly : Bool) : MetaM Unit := do
+def emit (root : Name) (detail : String) : MetaM Unit := do
   let env ← getEnv
+  let graphMode := detail == "graph"
+  let depsOnly := detail != "full"
   for h : i in [0 : env.header.moduleNames.size] do
     let modName := env.header.moduleNames[i]
     unless root.isPrefixOf modName do continue
     for n in env.header.moduleData[i]!.constNames do
-      if n.isInternal then continue
+      if n.isInternal && !graphMode then continue
       let some ci := env.find? n | continue
-      let depStr := dependencyJson ci n
+      let depStr := dependencyJson ci n graphMode
+      let internalStr := if n.isInternal then "true" else "false"
       if depsOnly then
         IO.println <| "{"
           ++ "\"name\":\"" ++ esc n.toString ++ "\","
           ++ "\"module\":\"" ++ esc modName.toString ++ "\","
           ++ "\"kind\":\"" ++ kindOf ci ++ "\","
+          ++ "\"library\":\"" ++ esc root.toString ++ "\","
+          ++ "\"internal\":" ++ internalStr ++ ","
           ++ "\"isProp\":null,"
           ++ "\"propValued\":null,"
           ++ "\"sorried\":null,"
@@ -100,6 +109,8 @@ def emit (root : Name) (depsOnly : Bool) : MetaM Unit := do
           ++ "\"name\":\"" ++ esc n.toString ++ "\","
           ++ "\"module\":\"" ++ esc modName.toString ++ "\","
           ++ "\"kind\":\"" ++ kindOf ci ++ "\","
+          ++ "\"library\":\"" ++ esc root.toString ++ "\","
+          ++ "\"internal\":" ++ internalStr ++ ","
           ++ "\"isProp\":" ++ (if isP then "true" else "false") ++ ","
           ++ "\"propValued\":" ++ (if pv then "true" else "false") ++ ","
           ++ "\"sorried\":" ++ (if ax.contains ``sorryAx then "true" else "false") ++ ","
@@ -113,8 +124,8 @@ end DeclIndex
 unsafe def main (args : List String) : IO Unit := do
   let root := (args.head?.getD "Mathlib").toName
   let detail := args.drop 2 |>.head?.getD "full"
-  unless detail == "full" || detail == "deps" do
-    throw <| IO.userError s!"unknown leanq index detail {detail}; expected full or deps"
+  unless detail == "full" || detail == "deps" || detail == "graph" do
+    throw <| IO.userError s!"unknown leanq index detail {detail}; expected full, deps, or graph"
   let timings := (← IO.getEnv "LEANQ_TIMINGS") == some "1"
   initSearchPath (← findSysroot)
   let mods ← match args.drop 1 |>.head? with
@@ -135,7 +146,7 @@ unsafe def main (args : List String) : IO Unit := do
     { fileName := "<decl-index>", fileMap := default, maxHeartbeats := 0 }
   let st : Core.State := { env := env }
   let emitStart ← IO.monoNanosNow
-  discard <| ((DeclIndex.emit root (detail == "deps")).run' {} {} |>.toIO ctx st)
+  discard <| ((DeclIndex.emit root detail).run' {} {} |>.toIO ctx st)
   let emitStop ← IO.monoNanosNow
   if timings then
     IO.eprintln s!"leanq timing: emit_ns={emitStop - emitStart} detail={detail}"
