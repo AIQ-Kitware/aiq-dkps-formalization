@@ -232,7 +232,7 @@ theorem secondMoment_ratio_paperResponseTolerance
       (n : Real) ^ 3 * σ2 / x ^ 2 := by
   have hn' : (n : Real) ≠ 0 := Nat.cast_ne_zero.mpr hn.ne'
   simp only [paperResponseTolerance]
-  field_simp [hn', hx] <;> ring
+  field_simp [hn', hx]
 
 /-- The Chebyshev/union-bound ratio at the paper-scaled response tolerance has
 the exact `n^3 / r` structure.  Here `r` is the replicate count and `γ` bounds
