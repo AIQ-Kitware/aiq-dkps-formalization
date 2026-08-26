@@ -16,10 +16,7 @@ root's closure, and `Experimental/All.lean` is curated by hand
 
 The failure mode is worth naming because it is not "a module is broken".  It is
 **a gate reporting CLEAN over a third of the tree it names**, which is worse than
-having no gate, because the green is believed.  The same shape turned up the same
-day in `FinishTanTwoTheta`, which has no `globs` in `lakefile.toml`: a module
-there had stopped compiling and a promotion four hours earlier had silently
-broken another.
+having no gate, because the green is believed.
 
     python3 scripts/check_experimental_coverage.py           # report
     python3 scripts/check_experimental_coverage.py --check   # exit 1 on a finding

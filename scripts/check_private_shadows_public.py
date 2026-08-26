@@ -47,7 +47,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 #: Libraries to scan.  `vendor/` is excluded: it is not ours to restructure.
-LIBS = ["ForTauCeti", "DavisKahan", "FinishTanTwoTheta", "Challenge"]
+LIBS = ["ForTauCeti", "DavisKahan", "Challenge"]
 
 DECL_RE = re.compile(
     r"^(?:@\[[^\]]*\]\s*)?"

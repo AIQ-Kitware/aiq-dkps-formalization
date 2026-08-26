@@ -34,12 +34,6 @@ into a strict lower bound on `KJ + (KJ)^*`.  Finally
 `KJ + JK = 2 - 4(P_U-P_V)^2`
 
 gives `||P_U-P_V||^2 < 1/2`, i.e. the quarter-acute branch.
-
-*Moved, not restated.*  This module was written in the non-default
-`FinishTanTwoTheta` completion lane and is promoted here verbatim except for
-the namespace (`TauCeti.DavisKahan.FinishTanTwoTheta` to `TauCeti.DavisKahan`)
-and for three helpers that stop being `private`: they are the reusable
-dimension-free seams that Section 8's spectral-repulsion theorem needs.
 -/
 
 namespace TauCeti

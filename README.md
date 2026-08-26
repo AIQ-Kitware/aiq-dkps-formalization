@@ -29,7 +29,6 @@ report "proved in the default build" rather than "proved".
 | Library | Why it is not guarded |
 | --- | --- |
 | `DavisKahan.Experimental` | The working frontier. Carries `sorry`s by design, and the material graduates into `DavisKahan` or `ForTauCeti` when finished. |
-| `FinishTanTwoTheta` | Compatibility/regression surface for the completed bounded tan-2-theta result. The production theorem now lives under `DavisKahan`; the separate unbounded research target remains outside the aggregate. |
 | `Challenge` | Comparator challenges, which are posed problems rather than results. |
 
 The libraries formalize more than paper-facing wrappers. They include supporting
@@ -70,7 +69,6 @@ automatically is what previously produced status that looked healthy and was not
 ├── DavisKahan/              # Sources/ (source-faithful 1970), FiniteDimensional/, SinTheta/,
 │                            #   Sylvester/, SpectralTheory/, Experimental/ (the frontier)
 ├── YuWangSamworth2015/      # Yu--Wang--Samworth 2015 paper-facing package (sorry-free)
-├── FinishTanTwoTheta/       # compatibility/regression surface; bounded result promoted to DavisKahan
 ├── Acharyya2024{.lean,/}    # raw-stress MDS, probability, second moments, consistency
 ├── Acharyya2025{.lean,/}    # CMDS, Weyl/Davis--Kahan, Gram rigidity, finite-sample rates
 ├── DkpsQuench2026{.lean,/}  # geometry, response, spectral, rate, query-efficiency modules
@@ -133,13 +131,10 @@ lake exe cache get
 lake build
 ```
 
-`lake build` builds every default target. `FinishTanTwoTheta` and `Challenge` are
+`lake build` builds every default target. `Challenge` is
 explicit opt-in libraries, and the experimental Davis--Kahan frontier is also
 checked explicitly when it is touched:
 
-```bash
-lake build FinishTanTwoTheta Challenge DavisKahan.Experimental
-```
 
 The gates are Python and run separately. Do not run `lake` at the same time —
 five gates shell out to it and a concurrent build makes them report failures that

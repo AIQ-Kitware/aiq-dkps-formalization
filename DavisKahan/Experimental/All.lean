@@ -39,7 +39,7 @@ infinite-dimensional Section 4 propositions, and the Section 9 analytic model â€
 together with the `sorry`s that mark what is still open.  Until 2026-08-04
 **nothing in the repository imported any of it.**  `lake build` did not reach it,
 `lake build DavisKahan.Experimental` did not reach it, and neither did
-`Challenge` or `FinishTanTwoTheta`; it compiled only when a module was named
+`Challenge`; it compiled only when a module was named
 explicitly on the command line, which nothing and nobody did routinely.
 
 That is the same defect the `RoadmapBridge` block in `lakefile.toml` records for
