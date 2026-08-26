@@ -169,8 +169,16 @@ def build_index(
         elif line:
             junk.append(line)
     if proc.returncode != 0 and not records:
-        detail = (proc.stderr or "").strip() or "\n".join(junk[:20]) or "(no output)"
-        raise ProjectError(f"lean exited {proc.returncode}:\n{detail}")
+        error_detail = (proc.stderr or "").strip() or "\n".join(junk[:20]) or "(no output)"
+        if scoped and "incompatible header" in error_detail:
+            roots = " ".join(modules)
+            error_detail += (
+                "\nleanq imported only the requested graph root module(s). "
+                "At least one artifact in that real import closure was built by an "
+                "incompatible Lean toolchain. Rebuild the roots with:\n"
+                f"  lake build {roots}"
+            )
+        raise ProjectError(f"lean exited {proc.returncode}:\n{error_detail}")
     if junk and verbose:
         print(f"leanq: {len(junk)} non-record line(s) from lean, first:", file=sys.stderr)
         print(f"  {junk[0][:200]}", file=sys.stderr)

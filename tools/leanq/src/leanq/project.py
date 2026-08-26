@@ -1,8 +1,10 @@
-"""Locating a Lean project and enumerating what it actually built.
+"""Locate a Lean project and resolve live source/build modules.
 
-Nothing here parses Lean source.  A project is found by walking up to a ``lakefile``, and its
-modules are read off the ``.lake`` build tree, so the index describes what exists rather than
-what someone hoped exists.
+Inventory commands still enumerate compiled artifacts because they answer questions about
+what a library actually built. Target-focused proof graphs are different: importing every
+artifact is both wasteful and vulnerable to abandoned ``.olean`` files from an older Lean
+toolchain. For those queries this module resolves the target declaration to its live source
+module, follows only the local source import closure, and lets Lean elaborate that closure.
 """
 
 from __future__ import annotations
@@ -10,14 +12,31 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Sequence
 
 from ._profile import profile
 
 LAKEFILES = ("lakefile.toml", "lakefile.lean")
+_IMPORT_RE = re.compile(r"^\s*import\s+(.+?)\s*$")
+_DECL_RE_TEMPLATE = (
+    r"(?m)^\s*"
+    r"(?:(?:@\[[^\n]*\]\s*)?)*"
+    r"(?:(?:private|protected|noncomputable|unsafe|partial|scoped|local|opaque)\s+)*"
+    r"(?:theorem|lemma|def|abbrev|structure|class|inductive|axiom)\s+"
+    r"`?{name}`?(?=\s|\(|\{|:|$)"
+)
 
 
 class ProjectError(RuntimeError):
     """Raised when a project cannot be located or is not built."""
+
+
+@dataclass(frozen=True)
+class LeanLibrarySpec:
+    """Minimal Lake library layout needed for source/module resolution."""
+
+    name: str
+    src_dir: str = "."
 
 
 @dataclass
@@ -39,19 +58,55 @@ class LeanProject:
         # `.lake` is frequently a symlink to a cache outside the repo; resolve() follows it.
         return (self.root / ".lake" / "build" / "lib" / "lean").resolve()
 
-    def libraries(self) -> list[str]:
-        """Library root names declared by the lakefile, best effort.
-
-        Falls back to the top-level names present in the build tree, which is what actually
-        matters for indexing.
-        """
+    def library_specs(self) -> list[LeanLibrarySpec]:
+        """Local ``lean_lib`` declarations with their source roots."""
         text = self.lakefile.read_text(encoding="utf-8")
-        names = re.findall(r"^\s*name\s*=\s*[\"']?([A-Za-z_][A-Za-z0-9_']*)", text, re.M)
-        names += re.findall(r"lean_lib\s+[«]?([A-Za-z_][A-Za-z0-9_']*)", text)
-        seen = {n for n in names if n not in {"mathlib", "batteries"}}
+        if self.lakefile.suffix == ".toml":
+            blocks = re.split(r"(?m)^\s*\[\[lean_lib\]\]\s*$", text)[1:]
+            specs: list[LeanLibrarySpec] = []
+            for block in blocks:
+                block = re.split(r"(?m)^\s*\[\[.*?\]\]\s*$", block, maxsplit=1)[0]
+                name_match = re.search(
+                    r"(?m)^\s*name\s*=\s*[\"']([^\"']+)[\"']", block
+                )
+                if not name_match:
+                    continue
+                src_match = re.search(
+                    r"(?m)^\s*srcDir\s*=\s*[\"']([^\"']+)[\"']", block
+                )
+                specs.append(
+                    LeanLibrarySpec(
+                        name_match.group(1),
+                        src_match.group(1) if src_match else ".",
+                    )
+                )
+            return specs
+        names = re.findall(
+            r"(?m)^\s*lean_lib\s+[«]?([A-Za-z_][A-Za-z0-9_']*)", text
+        )
+        return [LeanLibrarySpec(name) for name in dict.fromkeys(names)]
+
+    def declared_libraries(self) -> list[str]:
+        """Lean library names declared by the project lakefile."""
+        return [spec.name for spec in self.library_specs()]
+
+    def library_spec(self, library: str) -> LeanLibrarySpec:
+        for spec in self.library_specs():
+            if spec.name == library:
+                return spec
+        return LeanLibrarySpec(library)
+
+    def libraries(self) -> list[str]:
+        """Declared library roots that currently have compiled artifacts.
+
+        Falls back to built top-level names for nonstandard projects. This is the historical
+        inventory behavior used by ``leanq query``/``stats``. Target-focused graph commands use
+        :meth:`libraries_for_import_closure` instead.
+        """
+        declared = self.declared_libraries()
         built = set(self.built_roots())
-        ordered = [n for n in seen if n in built] or sorted(built)
-        return sorted(set(ordered))
+        selected = [name for name in declared if name in built]
+        return sorted(selected or built)
 
     @profile
     def built_roots(self) -> list[str]:
@@ -71,9 +126,9 @@ class LeanProject:
     def modules(self, library: str) -> list[str]:
         """Every built module under ``library``, as dotted module names.
 
-        Read from ``.olean`` paths rather than from imports: a library's root module is not
-        required to import the library.  ``TauCetiRoadmap.lean`` omits an entire roadmap that
-        the lakefile globs in, so an import-following walk would silently miss it.
+        This remains artifact-driven for whole-library inventory queries. Proof-graph queries
+        intentionally do *not* call this method: optional/stale artifacts can exist without
+        belonging to a target theorem's import closure.
         """
         lib = self.build_lib
         if not lib.is_dir():
@@ -99,17 +154,155 @@ class LeanProject:
         return live
 
     def source_of(self, module: str) -> Path:
-        """Where a module's source would live, by the standard layout."""
-        return self.root.joinpath(*module.split(".")).with_suffix(".lean")
+        """Resolve a local module to source, honoring each ``lean_lib.srcDir``."""
+        candidates: list[Path] = []
+        matching = [
+            spec for spec in self.library_specs()
+            if module == spec.name or module.startswith(spec.name + ".")
+        ]
+        for spec in sorted(matching, key=lambda item: len(item.name), reverse=True):
+            base = (self.root / spec.src_dir).resolve()
+            candidates.append(base.joinpath(*module.split(".")).with_suffix(".lean"))
+        candidates.append(self.root.joinpath(*module.split(".")).with_suffix(".lean"))
+        for candidate in candidates:
+            if candidate.exists():
+                return candidate
+        return candidates[0] if candidates else self.root.joinpath(*module.split(".")).with_suffix(".lean")
+
+    def module_of_source(self, path: Path) -> str:
+        """Convert a project source path to its dotted module name, honoring ``srcDir``."""
+        resolved = path.resolve()
+        choices: list[tuple[int, Path]] = []
+        for spec in self.library_specs():
+            base = (self.root / spec.src_dir).resolve()
+            try:
+                rel = resolved.relative_to(base)
+            except ValueError:
+                continue
+            choices.append((len(base.parts), rel))
+        if not choices:
+            rel = resolved.relative_to(self.root.resolve())
+        else:
+            _, rel = max(choices, key=lambda item: item[0])
+        return ".".join(rel.with_suffix("").parts)
+
+    def source_modules(self, library: str) -> list[str]:
+        """Live source modules belonging to ``library``."""
+        spec = self.library_spec(library)
+        source_root = (self.root / spec.src_dir).resolve()
+        result: list[str] = []
+        root_file = source_root.joinpath(*library.split(".")).with_suffix(".lean")
+        if root_file.exists():
+            result.append(library)
+        root_dir = source_root.joinpath(*library.split("."))
+        if root_dir.is_dir():
+            result.extend(self.module_of_source(path) for path in sorted(root_dir.rglob("*.lean")))
+        return list(dict.fromkeys(result))
+
+    def imports_of(self, module: str) -> list[str]:
+        """Direct source imports of a local module.
+
+        Imports are used only to choose which project libraries/modules to ask the elaborator
+        about. Declaration dependency edges still come exclusively from Lean's environment.
+        """
+        path = self.source_of(module)
+        if not path.exists():
+            return []
+        imports: list[str] = []
+        for raw in path.read_text(encoding="utf-8", errors="replace").splitlines():
+            line = raw.split("--", 1)[0].strip()
+            match = _IMPORT_RE.match(line)
+            if not match:
+                continue
+            imports.extend(token for token in match.group(1).split() if token)
+        return imports
+
+    def local_import_closure(self, roots: Sequence[str]) -> list[str]:
+        """Project-local source import closure of ``roots``, including the roots."""
+        root_set = set(roots)
+        queue = list(dict.fromkeys(roots))
+        seen: set[str] = set()
+        ordered: list[str] = []
+        while queue:
+            module = queue.pop(0)
+            if module in seen:
+                continue
+            source = self.source_of(module)
+            if not source.exists():
+                if module in root_set:
+                    raise ProjectError(
+                        f"cannot find source for graph root module {module!r} at {source}"
+                    )
+                continue
+            seen.add(module)
+            ordered.append(module)
+            for imported in self.imports_of(module):
+                if imported not in seen and self.source_of(imported).exists():
+                    queue.append(imported)
+        return ordered
+
+    def libraries_for_import_closure(self, roots: Sequence[str]) -> list[str]:
+        """Local ``lean_lib`` roots actually present in the source import closure."""
+        modules = self.local_import_closure(roots)
+        declared = self.declared_libraries()
+        used: set[str] = set()
+        for module in modules:
+            matches = [
+                lib for lib in declared
+                if module == lib or module.startswith(lib + ".")
+            ]
+            if matches:
+                used.add(max(matches, key=len))
+        if not used:
+            raise ProjectError(
+                "could not associate graph import roots with any local lean_lib; "
+                "pass --include-lib explicitly"
+            )
+        return [lib for lib in declared if lib in used]
+
+    def declaration_modules(self, targets: Sequence[str]) -> list[str]:
+        """Locate source modules defining requested graph target declarations.
+
+        This source scan is only a bootstrap from declaration name to module. The resulting
+        dependency graph remains semantic: Lean imports these modules and reports proof-term
+        dependencies from the elaborated environment.
+        """
+        result: list[str] = []
+        declared = self.declared_libraries()
+        for target in targets:
+            short = target.rsplit(".", 1)[-1]
+            first = target.split(".", 1)[0]
+            candidate_libs = [first] if first in declared else declared
+            pattern = re.compile(_DECL_RE_TEMPLATE.replace("{name}", re.escape(short)))
+            matches: list[str] = []
+            for library in candidate_libs:
+                for module in self.source_modules(library):
+                    path = self.source_of(module)
+                    text = path.read_text(encoding="utf-8", errors="replace")
+                    if pattern.search(text):
+                        matches.append(module)
+            matches = list(dict.fromkeys(matches))
+            if not matches:
+                raise ProjectError(
+                    f"cannot locate source declaration {target!r}; "
+                    "pass --root-module with the module that defines it"
+                )
+            if len(matches) > 1:
+                shown = ", ".join(matches[:6])
+                extra = " ..." if len(matches) > 6 else ""
+                raise ProjectError(
+                    f"declaration name {target!r} is ambiguous across source modules: "
+                    f"{shown}{extra}; pass --root-module explicitly"
+                )
+            result.append(matches[0])
+        return list(dict.fromkeys(result))
 
     def _split_stale(self, mods: list[str]) -> tuple[list[str], list[str]]:
-        """Drop modules whose source is gone.
+        """Drop built modules whose source is gone.
 
-        `lake` does not delete the `.olean` of a module you renamed or removed, so the build
-        tree accumulates artifacts that no longer correspond to anything.  Importing one
-        alongside its replacement fails outright -- two modules claiming the same constant --
-        which is how the `UnitarilyInvariantNorm` -> `...Seminorm` rename surfaced.  If no
-        module resolves to a source file the layout is non-standard, so filter nothing.
+        This protects whole-library inventory indexing from ordinary renamed/deleted modules.
+        It cannot identify old-toolchain artifacts whose source still exists; target-scoped graph
+        indexing avoids importing those unrelated artifacts in the first place.
         """
         live = [m for m in mods if self.source_of(m).exists()]
         if not live:

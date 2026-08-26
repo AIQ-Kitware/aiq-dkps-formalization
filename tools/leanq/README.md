@@ -59,10 +59,16 @@ other than the working directory. Every subcommand takes `--json`, and `query`/`
 ## Proof dependency graphs
 
 `leanq graph` is the semantic backend and interactive viewer for declaration-level proof
-architecture. It merges graph indexes from multiple local Lean libraries, follows the elaborated
-constant dependencies of one or more target declarations, and keeps the graph direction
-**dependency → consumer** so the picture reads from mathematical foundations toward the requested
-conclusion.
+architecture. It resolves each target declaration to its live source module, imports only those
+module roots, merges the elaborated declarations from the local libraries in that real import
+closure, and keeps the graph direction **dependency → consumer** so the picture reads from
+mathematical foundations toward the requested conclusion.
+
+Target-scoped imports are intentional. A Lake build tree can retain optional or historical
+`.olean` files from an older Lean toolchain even after the ordinary project build is green. Those
+artifacts are irrelevant to a target proof and must not make graph extraction fail. The target
+module's real import closure remains authoritative: if an incompatible artifact is actually on that
+closure, `leanq` reports it and suggests rebuilding the target module.
 
 ```bash
 # Exact JSON for the full project-local ancestor closure.
@@ -74,7 +80,9 @@ leanq graph DkpsQuench2026.QueryEfficiency.infiniteFixedSubset \
 leanq graph DkpsQuench2026.QueryEfficiency.infiniteFixedSubset \
   --html build/quench-proof-graph.html
 
-# A narrower explicit library scope remains useful while iterating.
+# A narrower explicit library scope remains useful while iterating. The same
+# target module is imported for each selected library; unrelated library artifacts
+# are never bulk-imported.
 leanq graph Some.Quench.Theorem \
   --include-lib ForTauCeti \
   --include-lib DavisKahan \
@@ -82,13 +90,25 @@ leanq graph Some.Quench.Theorem \
   --include-lib Acharyya2025 \
   --include-lib DkpsQuench2026 \
   --html build/proof-graph.html
+
+# Source lookup is normally automatic. For generated/ambiguous declaration names,
+# give the defining module explicitly.
+leanq graph Some.Generated.Declaration \
+  --root-module DkpsQuench2026.Geometry.AlignedCMDS \
+  --html build/proof-graph.html
 ```
 
-The graph command uses a separate cached `<Library>.graph.jsonl` index. Graph mode is deliberately
-more complete than ordinary inventory mode: it retains Lean internal/private constants and their
-dependencies. That prevents a public dependency path from being severed merely because it passes
-through private proof support. Internal nodes are marked with `"internal": true` so the viewer can
-collapse them *after* reachability has been established.
+The graph command uses separate target-scoped caches named like
+`<Library>.roots-<TargetModule>.graph.jsonl`. This also prevents an older whole-library graph cache
+from being mistaken for the current target environment. Graph mode is deliberately more complete
+than ordinary inventory mode: it retains Lean internal/private constants and their dependencies.
+That prevents a public dependency path from being severed merely because it passes through private
+proof support. Internal nodes are marked with `"internal": true` so the viewer can collapse them
+*after* reachability has been established.
+
+Lake `srcDir` settings are honored when resolving source modules, including the nested
+`YuWangSamworth2015` package layout. The source import walk is used only to choose graph scope;
+all declaration edges are still extracted from Lean's elaborated environment.
 
 The JSON payload contains the exact project-local direct edges plus `reducedEdges` when requested
 (or automatically when HTML is rendered). The latter is a reachability-preserving transitive
@@ -255,9 +275,10 @@ aggregating it. Indexing by importing only the root reported *zero* declarations
 roadmap — a confident, wrong answer. `leanq` therefore imports every built module explicitly.
 
 **Stale build artifacts.** `lake` does not delete the `.olean` of a module you renamed, so a
-`Norm` → `Seminorm` rename left six orphans behind. Importing one next to its replacement fails
-outright: two modules claiming `TauCeti.diagOp`. `leanq` skips artifacts whose source file is
-gone and says how many it skipped.
+`Norm` → `Seminorm` rename left six orphans behind. Inventory indexing skips artifacts whose source
+file is gone. Proof-graph indexing goes further: it imports only the requested target module(s), so
+an optional module whose source still exists but whose `.olean` belongs to an older Lean toolchain
+cannot poison an unrelated proof graph.
 
 ## Relationship to `leanclient`
 
