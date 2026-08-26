@@ -29,12 +29,14 @@ step itself.  `endToEndFrobQuadraticRate` applies this polynomial envelope to
 the operator perturbation produced by the current response→CMDS chain.
 
 The remaining difference from the literal printed `Poly₃((n³/r)^{1/2−δ})`
-statement is upstream: this file's primary probability theorem fixes the model
-count `n` while the response budget varies, whereas the paper couples growing
-`n` and `r`; moreover the proved response→CMDS constants are deliberately
-loose.  The development therefore records the genuine polynomial spectral
-majorant without identifying the current end-to-end rate with the paper's
-specific joint-asymptotic polynomial before that upstream comparison is proved.
+statement in this fixed-population module is that its primary probability
+theorem fixes the model count `n` while the response budget varies.  The direct
+entrywise response bridge now removes the previous ambient `n²` detour; the
+growing module records that choosing response tolerance `x/n` makes the
+Chebyshev ratio exactly proportional to `n³/(r x²)` and the operator
+perturbation a fixed multiple of `x`.  A separate growing paper-rate capstone
+can therefore be stated without pretending this fixed-`n` theorem is itself
+the joint asymptotic result.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
@@ -260,7 +262,7 @@ estimator: the deterministic spectral bound `configBound` evaluated at the
 operator-norm proxy
 `n · cmdsEntrywiseRate n m R (t u)`, where `t u` is the uniform response-mean
 closeness level, `R` the uniform dissimilarity bound, and
-`cmdsEntrywiseRate n m R η = 4 · (2R) · n² · m⁻¹ · 2η` the proved entrywise
+`cmdsEntrywiseRate n m R η = 4 · (2R) · m⁻¹ · 2η` the direct entrywise
 CMDS-matrix rate.  This is literally the bound produced by
 `Acharyya2025.AlignedPipeline.highProb_aligned_configError_of_response_mean`
 specialized to a constant dissimilarity bound `R`.
@@ -524,7 +526,7 @@ vanishes (`t u → 0`), then the explicit end-to-end rate vanishes:
 `endToEndRate n m d α Λ R t u → 0`.
 
 The inner rate `n · cmdsEntrywiseRate n m R (t u)` is linear in `t u` (constant
-`16 R n³ / m`), so it vanishes with `t`; composing with
+`16 R n / m`), so it vanishes with `t`; composing with
 `tendsto_configBound_comp_zero` finishes.  No sign conditions on `R, Λ, α` are
 needed (the bound is continuous and zero-at-zero unconditionally).
 
@@ -542,17 +544,15 @@ theorem tendsto_endToEndRate_zero (n m d : Nat) (α Λ R : Real)
     Tendsto (endToEndRate n m d α Λ R t) atTop (𝓝 0) := by
   -- The inner rate is a constant multiple of `t u`.
   have hkey : ∀ u, (n : Real) * cmdsEntrywiseRate n m R (t u)
-      = ((n : Real) * (4 * ((2 * R) * (((n : Real) * (n : Real))
-          * ((m : Real)⁻¹ * 2))))) * t u := by
+      = ((n : Real) * (4 * ((2 * R) * ((m : Real)⁻¹ * 2)))) * t u := by
     intro u
-    simp only [cmdsEntrywiseRate, responseFrobRate]
+    simp only [cmdsEntrywiseRate, responseEntrywiseRate]
     ring
   have hlin : Tendsto (fun u => (n : Real) * cmdsEntrywiseRate n m R (t u))
       atTop (𝓝 0) := by
     simp_rw [hkey]
     simpa using ht.const_mul
-      ((n : Real) * (4 * ((2 * R) * (((n : Real) * (n : Real))
-        * ((m : Real)⁻¹ * 2)))))
+      ((n : Real) * (4 * ((2 * R) * ((m : Real)⁻¹ * 2))))
   exact tendsto_configBound_comp_zero n d α Λ hlin
 
 
@@ -563,17 +563,15 @@ theorem tendsto_endToEndFrobRate_zero (n m d : Nat) (α Λ R : Real)
     {t : Nat → Real} (ht : Tendsto t atTop (𝓝 0)) :
     Tendsto (endToEndFrobRate n m d α Λ R t) atTop (𝓝 0) := by
   have hkey : ∀ u, (n : Real) * cmdsEntrywiseRate n m R (t u)
-      = ((n : Real) * (4 * ((2 * R) * (((n : Real) * (n : Real))
-          * ((m : Real)⁻¹ * 2))))) * t u := by
+      = ((n : Real) * (4 * ((2 * R) * ((m : Real)⁻¹ * 2)))) * t u := by
     intro u
-    simp only [cmdsEntrywiseRate, responseFrobRate]
+    simp only [cmdsEntrywiseRate, responseEntrywiseRate]
     ring
   have hlin : Tendsto (fun u => (n : Real) * cmdsEntrywiseRate n m R (t u))
       atTop (𝓝 0) := by
     simp_rw [hkey]
     simpa using ht.const_mul
-      ((n : Real) * (4 * ((2 * R) * (((n : Real) * (n : Real))
-        * ((m : Real)⁻¹ * 2)))))
+      ((n : Real) * (4 * ((2 * R) * ((m : Real)⁻¹ * 2))))
   exact tendsto_configFrobBound_comp_zero d α Λ hlin
 
 

@@ -199,6 +199,146 @@ theorem highProb_uniformResponseMeanClose_of_growing_iid_replicates
   · exact hη_pos
   · simpa using hratio
 
+/-! ### Paper-scale response tolerance bookkeeping -/
+
+/-- Response-mean tolerance associated with a desired operator-scale error `x`.
+The direct entrywise response bridge contributes one later factor of the
+population size when entrywise matrix error is converted to operator norm, so
+choosing `η = x / n` cancels that factor. -/
+noncomputable def paperResponseTolerance (n : Nat) (x : Real) : Real :=
+  x / (n : Real)
+
+/-- With positive population size, the batch-scaled direct CMDS rate at
+`paperResponseTolerance n x` is a fixed constant times `x`, independent of `n`. -/
+theorem scaled_cmdsEntrywiseRate_paperResponseTolerance
+    (n m : Nat) (hn : 0 < n) (R x : Real) :
+    (n : Real) * cmdsEntrywiseRate n m R (paperResponseTolerance n x) =
+      16 * R * (m : Real)⁻¹ * x := by
+  have hn' : (n : Real) ≠ 0 := Nat.cast_ne_zero.mpr hn.ne'
+  simp only [cmdsEntrywiseRate, responseEntrywiseRate, paperResponseTolerance,
+    div_eq_mul_inv]
+  calc
+    (n : Real) * (4 * ((2 * R) * ((m : Real)⁻¹ * (2 * (x * (n : Real)⁻¹)))))
+        = (16 * R * (m : Real)⁻¹ * x) * ((n : Real) * (n : Real)⁻¹) := by ring
+    _ = 16 * R * (m : Real)⁻¹ * x := by
+      rw [mul_inv_cancel₀ hn']
+      ring
+
+/-- For an already-averaged response with second-moment bound `σ²`, the
+Chebyshev/union-bound ratio at `η = x/n` is exactly `n³ σ² / x²`. -/
+theorem secondMoment_ratio_paperResponseTolerance
+    (n : Nat) (hn : 0 < n) (x σ2 : Real) (hx : x ≠ 0) :
+    (n : Real) * σ2 / (paperResponseTolerance n x) ^ 2 =
+      (n : Real) ^ 3 * σ2 / x ^ 2 := by
+  have hn' : (n : Real) ≠ 0 := Nat.cast_ne_zero.mpr hn.ne'
+  simp only [paperResponseTolerance]
+  field_simp [hn', hx] <;> ring
+
+/-- The Chebyshev/union-bound ratio at the paper-scaled response tolerance has
+the exact `n^3 / r` structure.  Here `r` is the replicate count and `γ` bounds
+the per-replicate second moment. -/
+theorem concentration_ratio_paperResponseTolerance
+    (n r : Nat) (hn : 0 < n) (x γ : Real) (hx : x ≠ 0) :
+    (n : Real) * (γ / r) / (paperResponseTolerance n x) ^ 2 =
+      ((n : Real) ^ 3 * γ) / r / x ^ 2 := by
+  calc
+    (n : Real) * (γ / r) / (paperResponseTolerance n x) ^ 2
+        = (n : Real) ^ 3 * (γ / r) / x ^ 2 :=
+          secondMoment_ratio_paperResponseTolerance n hn x (γ / r) hx
+    _ = ((n : Real) ^ 3 * γ) / r / x ^ 2 := by ring
+
+/-- Growing version of the preceding identity.  It isolates the exact base
+quantity behind Acharyya's `n^3/r` concentration statement without committing
+to a particular real-power parametrization of `x`. -/
+theorem concentration_ratio_paperResponseTolerance_growing
+    (count replicates : Nat → Nat)
+    (hcount : ∀ u, 0 < count u)
+    (x γ : Nat → Real) (hx : ∀ u, x u ≠ 0) :
+    (fun u => (count u : Real) * (γ u / replicates u) /
+        (paperResponseTolerance (count u) (x u)) ^ 2) =
+      (fun u => ((count u : Real) ^ 3 * γ u) / replicates u / (x u) ^ 2) := by
+  funext u
+  exact concentration_ratio_paperResponseTolerance
+    (count u) (replicates u) (hcount u) (x u) (γ u) (hx u)
+
+/-- Growing Chebyshev concentration at a paper-scale operator target `x`.
+After the direct pairwise response bridge, the natural response tolerance is
+`x/count`; the only probabilistic ratio left is `count³ σ² / x²`. -/
+theorem highProb_uniformResponseMeanClose_of_growing_secondMoment_paperScale
+    (P : Nat → Measure Ω) [∀ u, IsProbabilityMeasure (P u)]
+    {m p : Nat} (count : Nat → Nat) (hcount : ∀ u, 0 < count u)
+    (Xbar μ : ∀ u, Ω → Fin (count u) → Mat m p)
+    (σ2 x : Nat → Real)
+    (hint : ∀ u (i : Fin (count u)),
+      Integrable (fun ω => ‖Xbar u ω i - μ u ω i‖ ^ 2) (P u))
+    (hσ2 : ∀ u (i : Fin (count u)),
+      ∫ ω, ‖Xbar u ω i - μ u ω i‖ ^ 2 ∂(P u) ≤ σ2 u)
+    (hx_pos : ∀ u, 0 < x u)
+    (hratio : Tendsto
+      (fun u => (count u : Real) ^ 3 * σ2 u / (x u) ^ 2)
+      atTop (𝓝 0)) :
+    HighProbAtTop P
+      (GrowingUniformResponseMeanClose count Xbar μ
+        (fun u => paperResponseTolerance (count u) (x u))) := by
+  apply highProb_uniformResponseMeanClose_of_growing_secondMoment
+    P count Xbar μ σ2 (fun u => paperResponseTolerance (count u) (x u))
+  · exact hint
+  · exact hσ2
+  · intro u
+    have hcount' : (0 : Real) < count u := by exact_mod_cast hcount u
+    exact div_pos (hx_pos u) hcount'
+  · have heq :
+        (fun u => (count u : Real) * σ2 u /
+          (paperResponseTolerance (count u) (x u)) ^ 2) =
+        (fun u => (count u : Real) ^ 3 * σ2 u / (x u) ^ 2) := by
+      funext u
+      exact secondMoment_ratio_paperResponseTolerance
+        (count u) (hcount u) (x u) (σ2 u) (ne_of_gt (hx_pos u))
+    rw [heq]
+    exact hratio
+
+/-- Concrete iid-replicate form of the paper-scale concentration theorem.
+The hypothesis is the exact joint ratio produced by Chebyshev plus the model
+union bound after choosing response tolerance `x/count`:
+`count^3 * gamma / replicates / x^2 -> 0`. -/
+theorem highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale
+    {Ω0 : Type} [MeasurableSpace Ω0]
+    (P : Nat → Measure Ω0) [∀ u, IsProbabilityMeasure (P u)]
+    {m p : Nat} (count replicates : Nat → Nat)
+    (hcount : ∀ u, 0 < count u)
+    (hrep : ∀ u, 0 < replicates u)
+    (Y : ∀ u, Fin (count u) → Fin (replicates u) → Ω0 → Mat m p)
+    (μ : ∀ u, Fin (count u) → Mat m p)
+    (hL2 : ∀ u i k, MemLp (Y u i k) 2 (P u))
+    (hmean : ∀ u i k c, ∫ ω, Y u i k ω c ∂(P u) = μ u i c)
+    (hindep : ∀ u i,
+      Set.Pairwise (Set.univ : Set (Fin (replicates u)))
+        fun k l => IndepFun (Y u i k) (Y u i l) (P u))
+    (γ x : Nat → Real)
+    (hbound : ∀ u i k,
+      ∫ ω, ‖Y u i k ω - μ u i‖ ^ 2 ∂(P u) ≤ γ u)
+    (hsample_int : ∀ u i, Integrable
+      (fun ω => ‖growingReplicateMean count replicates Y u ω i - μ u i‖ ^ 2)
+      (P u))
+    (hx_pos : ∀ u, 0 < x u)
+    (hratio : Tendsto
+      (fun u => ((count u : Real) ^ 3 * γ u) / replicates u / (x u) ^ 2)
+      atTop (𝓝 0)) :
+    HighProbAtTop P
+      (fun u => {ω | UniformResponseMeanClose
+        (growingReplicateMean count replicates Y u ω) (μ u)
+        (paperResponseTolerance (count u) (x u))}) := by
+  apply highProb_uniformResponseMeanClose_of_growing_iid_replicates
+    P count replicates hrep Y μ hL2 hmean hindep γ
+    (fun u => paperResponseTolerance (count u) (x u)) hbound hsample_int
+  · intro u
+    have hcount' : (0 : Real) < count u := by exact_mod_cast hcount u
+    exact div_pos (hx_pos u) hcount'
+  · have heq := concentration_ratio_paperResponseTolerance_growing
+      count replicates hcount x γ (fun u => ne_of_gt (hx_pos u))
+    rw [heq]
+    exact hratio
+
 /-- A uniform response-matrix norm bound yields a uniform dissimilarity
 bound.  This packages the elementary triangle inequality used to discharge the
 bounded-dissimilarity side condition of the CMDS bridge. -/
@@ -235,8 +375,7 @@ theorem cmdsEntrywise_of_responseMeanClose
       (classicalMDSMatrix (responseDist Xbar))
       (classicalMDSMatrix (responseDist μ))
       (cmdsEntrywiseRate n m R η) := by
-  have hfrob := response_mean_close_event_to_frob_event Xbar μ hmean
-  have hentry := frob_close_to_entrywise_close hfrob
+  have hentry := response_mean_close_event_to_entrywise_event Xbar μ hmean
   simpa [cmdsEntrywiseRate] using
     entrywise_close_to_cmds_entrywise_close_of_bounded
       hn hentry hsample hpopulation

@@ -148,20 +148,19 @@ source-version migration rather than folded into this Quench-facing v1 chain.
   concrete.  They are now discharged *eventually* from the vanishing perturbation
   rate by `eventually_spectral_side_conditions`, so they do not remain assumptions
   of the high-probability paper-facing Frobenius theorem.
-- **Rates are loose upstream, while the spectral stage is now explicitly
-  polynomial.** `configFrobBound_le_configFrobQuadraticMajorant` proves that for
-  `0 ≤ ε ≤ 1`, the DK-sharpened spectral error is bounded by `C₁ ε + C₂ ε²`.
-  `RateChain.lean` propagates this to `endToEndFrobQuadraticRate`.  Thus the
-  spectral stage itself is already degree `≤ 2`, stronger than needing a cubic
-  envelope.  The remaining gap to the paper's literal
-  `Poly₃((n³/r)^{1/2−δ})` statement is in the upstream response→CMDS transport
-  and its joint growing-`n`, growing-`r` bookkeeping.  The Frobenius migration
-  does improve the explicit Quench safe schedule: the current CMDS transport
-  supports response tolerance `(n+1)^-4` with finite replicate budget
-  `(n+1)^10`, rather than the older `(n+1)^-5` / `(n+1)^13` schedule forced by
-  the legacy row-sum norm.  This is still a conservative growing certificate;
-  the formalization does not rename it as the paper's `Poly₃` until the paper's
-  joint quantifiers and powers are proved.
+- **The response→CMDS transport now has the paper's `n³/r` scaling algebra.**
+  The primary bridge bounds each response dissimilarity entry directly by
+  `2η/m` instead of first taking a Frobenius norm over all `n²` entries.  With
+  `η = x/n`, the subsequent entrywise-to-operator factor of `n` cancels exactly,
+  leaving a fixed multiple of `x`, while the Chebyshev/union-bound ratio becomes
+  exactly `n³ σ²/x²` (or `n³ γ/(r x²)` for `r` iid replicates).
+  `PaperRate.lean` records this cancellation and combines it with
+  `configFrobBound_le_configFrobQuadraticMajorant`, so the DK spectral stage is
+  bounded by a degree-`≤ 2` polynomial in the same `x`.  The remaining literal
+  source step is the real-power specialization `x=(n³/r)^(1/2-δ)` together with
+  the final growing high-probability capstone.  The constructive Quench safe
+  schedule correspondingly improves to response tolerance `(n+1)^-2`, finite
+  replicate budget `(n+1)^6`, and compact-cover exponent `2d`.
 - **Response boundedness in growing bridges.** The preferred Quench-facing
   response theorem no longer assumes separate uniform bounds for every sample
   and population dissimilarity. A population response-norm envelope, together
@@ -203,10 +202,12 @@ user-observed model labels.
 
 | File | Contents |
 |---|---|
-| [`Bridge.lean`](Bridge.lean) | Theorem-1 event chain: response-mean → Frobenius → entrywise → CMDS-entrywise closeness predicates and propagation. |
+| [`Bridge.lean`](Bridge.lean) | Theorem-1 event chain: response-mean → direct pairwise entrywise → CMDS-entrywise closeness; legacy Frobenius transport retained for compatibility. |
 | [`ConfigPerturbation.lean`](ConfigPerturbation.lean) | **The bridge theorem** `exists_isometry_configError_spectralConfig_le` + explicit `configBound` — deterministic core of Theorem 2. |
 | [`AlignedPipeline.lean`](AlignedPipeline.lean) | `alignedSpectralConfig` (choice-based aligned estimator) + the high-probability aligned-`ConfigError` theorems (entrywise and response-mean versions). |
 | [`GrowingPipeline.lean`](GrowingPipeline.lean) | Choice-free pairwise-distance perturbation, target-augmented growing-dimension foundations, and `GrowingConfigControl` for joint model/response schedules. |
+| [`GrowingResponse.lean`](GrowingResponse.lean) | Growing Chebyshev/union-bound concentration, direct response→CMDS transport, and exact `η=x/n` / `n³σ²/x²` paper-scale identities. |
+| [`PaperRate.lean`](PaperRate.lean) | Paper-scale operator rate and degree-`≤2` DK Frobenius polynomial envelope in a generic target scale `x`. |
 | [`RateChain.lean`](RateChain.lean) | Explicit end-to-end rates: the preferred Frobenius `endToEndFrobRate` and HP/vanishing theorems, plus the legacy `ConfigError` rate. |
 | [`MatrixPerturbation.lean`](MatrixPerturbation.lean) | Matrix-world capstone: entrywise `η` ⇒ aligned `ConfigError ≤ configBound`, with rank transport for trailing eigenvalues. |
 | [`Weyl.lean`](Weyl.lean) | Discrete Courant–Fischer + Weyl's eigenvalue perturbation inequality. |
@@ -244,7 +245,8 @@ stage-dependent finite populations.  It provides:
 - the matrix-valued iid second-moment bound for those averages;
 - Chebyshev and union bounds with a varying population size;
 - a finite-target double union bound;
-- response-mean to CMDS-entrywise propagation when the matrix dimension varies.
+- direct response-mean to CMDS-entrywise propagation when the matrix dimension varies;
+- the paper-scale choice `η=x/n`, with exact Chebyshev ratio `n³σ²/x²`.
 
 This is the response-level input used by the growing target-augmented Quench
 bridge.  For infinite target classes, uniform target concentration remains an
