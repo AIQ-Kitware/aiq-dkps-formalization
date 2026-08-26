@@ -317,8 +317,8 @@ theorem alignmentConsistency_of_aligned_spectral
     -- Gram realization (also encodes centring of the latents):
     (hgram : ∀ ω i j, (∑ k, (ω i).1 k * (ω j).1 k)
         = Acharyya2025.Deterministic.classicalMDSMatrix (Dpop ω) i j)
-    -- Vanishing perturbation rate.  The local spectral smallness conditions are
-    -- derived automatically on a sufficiently large tail.
+    -- Vanishing perturbation rate, used below to make the explicit configuration
+    -- bound tend to zero.
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
     (hrate_zero : Tendsto (fun u => ((n + 1 : ℕ) : ℝ) * rate u) atTop (𝓝 0))
     -- measurability of the alignment-error events (implicit, beyond the paper):
@@ -352,9 +352,8 @@ theorem alignmentConsistency_of_aligned_spectral
         (fun i : Fin (n + 1) => (ω i).1)
         (fun u => Acharyya2025.ConfigPerturbation.configBound (n + 1) d α Λ
           (((n + 1 : ℕ) : ℝ) * rate u)) u ω) := by
-  -- Derive the alignment-existence HP event from `hgood` via the deterministic capstone.
-  have hside := Acharyya2025.AlignedPipeline.eventually_spectral_side_conditions
-    (d := d) hα_pos hrate_zero
+  -- Derive the alignment-existence HP event directly from `hgood` via the
+  -- strengthened deterministic capstone.
   have halign :
       HighProbAtTop (fun _u : Nat => Measure.pi (fun _ : Fin (n + 1) => P))
         (fun u =>
@@ -364,13 +363,12 @@ theorem alignmentConsistency_of_aligned_spectral
               (fun u => Acharyya2025.ConfigPerturbation.configBound (n + 1) d α Λ
                 (((n + 1 : ℕ) : ℝ) * rate u)) u ω}) := by
     refine HighProbAtTop.mono_eventually hgood ?_
-    filter_upwards [hside] with u hu
-    intro ω hω
-    obtain ⟨hclose, hfloor⟩ := hω
-    exact Acharyya2025.AlignedPipeline.alignExists_of_entrywiseClose
-      hd Dhat (Dpop ω) hsym (hpsd ω) (hrank ω) hα_pos hfloor (fun l => hcap ω l)
-      (fun i : Fin (n + 1) => (ω i).1) (hgram ω) rate u (hrate_nonneg u)
-      hu.1 hu.2 ω hclose
+    exact Filter.Eventually.of_forall fun u ω hω => by
+      obtain ⟨hclose, hfloor⟩ := hω
+      exact Acharyya2025.AlignedPipeline.alignExists_of_entrywiseClose
+        hd Dhat (Dpop ω) hsym (hpsd ω) (hrank ω) hα_pos hfloor (fun l => hcap ω l)
+        (fun i : Fin (n + 1) => (ω i).1) (hgram ω) rate u (hrate_nonneg u)
+        ω hclose
   -- Transport to the ConfigError HP event, then apply the identity-alignment bridge.
   have hconfig :
       HighProbAtTop (fun _u : Nat => Measure.pi (fun _ : Fin (n + 1) => P))

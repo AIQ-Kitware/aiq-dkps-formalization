@@ -320,8 +320,6 @@ theorem exists_isometry_configFrobError_le_of_entrywise_close
     -- eigenvalue ceiling Λ (Assumption 2, upper)
     (hΛ : ∀ l : Fin (Fintype.card (Fin n)), hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)   -- entrywise closeness: |B̂ᵢⱼ − Bᵢⱼ| ≤ η
-    (_hsmall : (n : ℝ) * η ≤ α / 2)             -- retained for downstream compatibility
-    (_hpolar : (d : ℝ) * (4 * (d : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2) -- retained for downstream compatibility
     (ψ : Acharyya2024.Config n d)               -- any external configuration realizing B
     (hψ : ∀ i j, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :  -- ψ has Gram matrix B
     -- Conclusion: the aligned sample configuration is Frobenius-close to `ψ`.
@@ -412,8 +410,6 @@ theorem exists_isometry_configError_le_of_entrywise_close
     -- eigenvalue ceiling Λ (Assumption 2, upper)
     (hΛ : ∀ l : Fin (Fintype.card (Fin n)), hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)   -- entrywise closeness: |B̂ᵢⱼ − Bᵢⱼ| ≤ η
-    (hsmall : (n : ℝ) * η ≤ α / 2)              -- smallness: perturbation ≤ half the floor (Weyl/gap)
-    (hpolar : (d : ℝ) * (4 * (d : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2) -- polar-factor smallness (Davis–Kahan term ≤ 1/2)
     (ψ : Acharyya2024.Config n d)               -- any external configuration realizing B
     (hψ : ∀ i j, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :  -- ψ has Gram matrix B
     -- Conclusion: ∃ a linear isometry W (an aligning isometry playing the role of the paper's `W*`;
@@ -426,7 +422,7 @@ theorem exists_isometry_configError_le_of_entrywise_close
         ≤ configBound n d α Λ ((n : ℝ) * η)  := by
   obtain ⟨W, hWiso, hWfrob⟩ :=
     exists_isometry_configFrobError_le_of_entrywise_close hd B Bhat hB hBhat hrank
-      hα_pos hη_nonneg hfloor hΛ hentry hsmall hpolar ψ hψ
+      hα_pos hη_nonneg hfloor hΛ hentry ψ hψ
   refine ⟨W, hWiso, ?_⟩
   calc
     Acharyya2024.ConfigError
@@ -453,8 +449,6 @@ theorem exists_isometry_configError_le_of_entrywise_close_topEigenvalue
     (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
       α ≤ hB.isHermitian.eigenvalues₀ i)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)
-    (hsmall : (n : ℝ) * η ≤ α / 2)
-    (hpolar : (d : ℝ) * (4 * (d : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2)
     (ψ : Acharyya2024.Config n d)
     (hψ : ∀ i j, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :
     ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
@@ -464,7 +458,7 @@ theorem exists_isometry_configError_le_of_entrywise_close_topEigenvalue
         ≤ configBound n d α (topEigenvalue hn hB) ((n : ℝ) * η) := by
   exact exists_isometry_configError_le_of_entrywise_close hd B Bhat hB hBhat hrank
     hα_pos hη_nonneg hfloor (eigenvalues₀_le_topEigenvalue hn hB)
-    hentry hsmall hpolar ψ hψ
+    hentry ψ hψ
 
 /-- Frobenius-error form with the spectral ceiling chosen canonically as the
 largest population eigenvalue. -/
@@ -478,8 +472,6 @@ theorem exists_isometry_configFrobError_le_of_entrywise_close_topEigenvalue
     (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
       α ≤ hB.isHermitian.eigenvalues₀ i)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)
-    (hsmall : (n : ℝ) * η ≤ α / 2)
-    (hpolar : (d : ℝ) * (4 * (d : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2)
     (ψ : Acharyya2024.Config n d)
     (hψ : ∀ i j, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :
     ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
@@ -489,6 +481,6 @@ theorem exists_isometry_configFrobError_le_of_entrywise_close_topEigenvalue
         ≤ configFrobBound d α (topEigenvalue hn hB) ((n : ℝ) * η) := by
   exact exists_isometry_configFrobError_le_of_entrywise_close hd B Bhat hB hBhat hrank
     hα_pos hη_nonneg hfloor (eigenvalues₀_le_topEigenvalue hn hB)
-    hentry hsmall hpolar ψ hψ
+    hentry ψ hψ
 
 end Acharyya2025.MatrixPerturbation

@@ -117,8 +117,8 @@ What is composed end-to-end: the entrywise CMDS-closeness HP event `hcenter` is
 fed through the proved capstone to produce the aligned-`ConfigError` HP event,
 which is then transported by the index-map factorization.  What is hypothesized:
 the factorization data (`indexOf`, `hψ`, `hψHat`), the spectral hypotheses of the
-capstone (PSD/rank/floor/cap/smallness/polar), the Gram realization of `ψ`, and
-the entrywise-closeness HP event `hcenter`.
+capstone (PSD/rank/floor/cap), the Gram realization of `ψ`, and the
+entrywise-closeness HP event `hcenter`.
 
 Formalized by Claude Fable 5 (claude-fable-5[1m]).
 -/
@@ -238,7 +238,7 @@ theorem quench_uniform_embedding_error_of_aligned_spectral_frob
 **Reusable core: query efficiency from the CMDS-entrywise high-probability event.**
 
 Given the population spectral structure (PSD / rank / floor `α` / cap `Λ`), the
-Gram realization of `ψFinite`, the vanishing-rate side conditions, the honest
+Gram realization of `ψFinite`, the entrywise-rate assumptions, the honest
 *sample-matrix* measurability primitive `hDmeas` (`Measurable (fun ω => Dhat k ω)`,
 trivially true), the high-probability CMDS-entrywise-closeness event `hcenter`
 (the paper's Theorem 1 content), and the genuine Quench assumptions
@@ -277,7 +277,7 @@ theorem quench_part2_from_aligned_configError_hp
     (hψFinite_gram : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
       = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
+    (_hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
     (c : Nat → Real)
     (hc_eq : c = fun u => Acharyya2025.ConfigPerturbation.configBound n d α Λ
       ((n : Real) * rate u))
@@ -324,38 +324,30 @@ theorem quench_part2_from_aligned_configError_hp
               (fun u ω (_ : Finset Q) f => ψHat u ω f) f_ref score Qstar Qsub k ω f)
           ≤ MSE (Q := Q) (X := X) Pf (yFull score Qstar)
               (yQ (Q := Q) (X := X) score Qsub)} ≥ 1 - δ := by
-  -- Restrict the directly measurable CMDS-entrywise event to the tail where the
-  -- local spectral side conditions hold.  This loses only finitely many budgets.
-  let side : Nat → Prop := fun k =>
-    (n : Real) * rate k ≤ α / 2 ∧
-      (d : Real) * (4 * (d : Real) * ((n : Real) * rate k)^2 / α^2) ≤ 1 / 2
+  -- The strengthened finite spectral theorem applies directly on the measurable
+  -- CMDS-entrywise event; no local smallness tail restriction is required.
   set E : Nat → Set Ω := fun k => {ω |
     Acharyya2025.Bridge.EntrywiseClose
       (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat k ω))
-      (Acharyya2025.Deterministic.classicalMDSMatrix D) (rate k) ∧ side k} with hE_def
+      (Acharyya2025.Deterministic.classicalMDSMatrix D) (rate k)} with hE_def
   have hcenter_meas : ∀ k, MeasurableSet {ω |
       Acharyya2025.Bridge.EntrywiseClose
         (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat k ω))
         (Acharyya2025.Deterministic.classicalMDSMatrix D) (rate k)} := fun k =>
     Acharyya2025.SpectralMeasurability.measurableSet_entrywiseClose_event Dhat D rate k
       (hDmeas k)
-  have hside_meas : ∀ k, MeasurableSet {ω : Ω | side k} := by
-    intro k
-    by_cases hk : side k
-    · simp [hk]
-    · simp [hk]
   have hE_meas : ∀ k, MeasurableSet (E k) := by
     intro k
     rw [hE_def]
-    exact (hcenter_meas k).inter (hside_meas k)
+    exact hcenter_meas k
   have hE_sub : ∀ k, E k ⊆ {ω | ∀ f, ‖ψHat k ω f - ψ f‖ ≤ c k} := by
     intro k ω hω f
-    obtain ⟨hclose, hsmall, hpolar⟩ := hω
+    have hclose := hω
     have hA : Acharyya2025.AlignedPipeline.AlignExists hd Dhat hsym ψFinite c k ω := by
       rw [hc_eq]
       exact Acharyya2025.AlignedPipeline.alignExists_of_entrywiseClose
         hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψFinite hψFinite_gram
-        rate k (hrate_nonneg k) hsmall hpolar ω hclose
+        rate k (hrate_nonneg k) ω hclose
     have hcfg := Acharyya2025.AlignedPipeline.configError_alignedSpectralConfig_le
       hd Dhat hsym ψFinite c k ω hA
     calc ‖ψHat k ω f - ψ f‖
@@ -365,15 +357,9 @@ theorem quench_part2_from_aligned_configError_hp
             (Acharyya2025.AlignedPipeline.alignedSpectralConfig hd Dhat hsym ψFinite c k ω)
             ψFinite := norm_config_le_ConfigError _ _ _
       _ ≤ _ := hcfg
-  have hside_eventually : ∀ᶠ k in Filter.atTop, side k := by
-    simpa [side] using
-      (Acharyya2025.AlignedPipeline.eventually_spectral_side_conditions
-        (d := d) hα_pos hrate_zero)
   have hE_acharyya : Acharyya2024.HighProbAtTop μ E := by
-    refine Acharyya2024.HighProbAtTop.mono_eventually hcenter ?_
-    filter_upwards [hside_eventually] with k hk
-    intro ω hω
-    exact ⟨hω, hk⟩
+    rw [hE_def]
+    exact hcenter
   have hE : _root_.HighProbAtTop μ hμ E := by
     intro δ hδ
     exact hE_acharyya δ hδ
@@ -413,7 +399,7 @@ theorem quench_part2_from_aligned_configFrobError_hp
     (hψFinite_gram : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
       = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
+    (_hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
     (c : Nat → Real)
     (hc_majorant : ∀ᶠ u in Filter.atTop,
       Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
@@ -461,13 +447,10 @@ theorem quench_part2_from_aligned_configFrobError_hp
               (fun u ω (_ : Finset Q) f => ψHat u ω f) f_ref score Qstar Qsub k ω f)
           ≤ MSE (Q := Q) (X := X) Pf (yFull score Qstar)
               (yQ (Q := Q) (X := X) score Qsub)} ≥ 1 - δ := by
-  -- Restrict the directly measurable CMDS-entrywise event to the tail where the
-  -- local spectral side conditions hold.  This loses only finitely many budgets.
+  -- Only domination by the requested majorant remains as a tail condition.
   let side : Nat → Prop := fun k =>
-    (n : Real) * rate k ≤ α / 2 ∧
-      (d : Real) * (4 * (d : Real) * ((n : Real) * rate k)^2 / α^2) ≤ 1 / 2 ∧
-      Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
-        ((n : Real) * rate k) ≤ c k
+    Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
+      ((n : Real) * rate k) ≤ c k
   set E : Nat → Set Ω := fun k => {ω |
     Acharyya2025.Bridge.EntrywiseClose
       (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat k ω))
@@ -489,10 +472,10 @@ theorem quench_part2_from_aligned_configFrobError_hp
     exact (hcenter_meas k).inter (hside_meas k)
   have hE_sub : ∀ k, E k ⊆ {ω | ∀ f, ‖ψHat k ω f - ψ f‖ ≤ c k} := by
     intro k ω hω f
-    obtain ⟨hclose, hsmall, hpolar, hbound⟩ := hω
+    obtain ⟨hclose, hbound⟩ := hω
     have hAexact := Acharyya2025.AlignedPipeline.alignFrobExists_of_entrywiseClose
       hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψFinite hψFinite_gram
-      rate k (hrate_nonneg k) hsmall hpolar ω hclose
+      rate k (hrate_nonneg k) ω hclose
     have hA : Acharyya2025.AlignedPipeline.AlignFrobExists hd Dhat hsym ψFinite c k ω :=
       Acharyya2025.AlignedPipeline.AlignFrobExists.mono hAexact hbound
     have hcfg := Acharyya2025.AlignedPipeline.configFrobError_alignedSpectralConfigFrob_le
@@ -504,15 +487,8 @@ theorem quench_part2_from_aligned_configFrobError_hp
             (Acharyya2025.AlignedPipeline.alignedSpectralConfigFrob hd Dhat hsym ψFinite c k ω)
             ψFinite := Acharyya2025.ConfigPerturbation.norm_config_le_ConfigFrobError _ _ _
       _ ≤ _ := hcfg
-  have hspectral : ∀ᶠ k in Filter.atTop,
-      (n : Real) * rate k ≤ α / 2 ∧
-        (d : Real) * (4 * (d : Real) * ((n : Real) * rate k)^2 / α^2) ≤ 1 / 2 := by
-    simpa using
-      (Acharyya2025.AlignedPipeline.eventually_spectral_side_conditions
-        (d := d) hα_pos hrate_zero)
   have hside_eventually : ∀ᶠ k in Filter.atTop, side k := by
-    filter_upwards [hspectral, hc_majorant] with k hk hbound
-    exact ⟨hk.1, hk.2, hbound⟩
+    simpa [side] using hc_majorant
   have hE_acharyya : Acharyya2024.HighProbAtTop μ E := by
     refine Acharyya2024.HighProbAtTop.mono_eventually hcenter ?_
     filter_upwards [hside_eventually] with k hk

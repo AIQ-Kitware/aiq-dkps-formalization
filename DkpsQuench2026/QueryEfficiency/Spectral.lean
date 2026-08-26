@@ -95,18 +95,14 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSub
       (fun _ _ f => yQ score Qsub f) := by
   let good : Nat → Prop := fun n =>
     d ≤ n + 1 ∧
-    ((n + 1 : Nat) : Real) * entryRate n ≤ α / 2 ∧
-    (d : Real) *
-      (4 * (d : Real) *
-        ((((n + 1 : Nat) : Real) * entryRate n)^2) / α^2) ≤ 1 / 2 ∧
     configFrobBound d α (ceiling n)
       (((n + 1 : Nat) : Real) * entryRate n) ≤ Hrate.bound n
   let Es : Nat → Set Ω := fun n => E n ∩ Hspectral.event n
   let Eg : Nat → Set Ω := fun n => Es n ∩ {ω | good n}
   have hgood : ∀ᶠ n in atTop, good n := by
     filter_upwards [eventually_dimension_le_succ d, Hrate.eventually_all]
-      with n hdim hsides
-    exact ⟨hdim, hsides.1, hsides.2.1, hsides.2.2⟩
+      with n hdim hbound
+    exact ⟨hdim, hbound⟩
   have hEsMeas : ∀ n, MeasurableSet (Es n) := by
     intro n
     exact (hEmeas n).inter (Hspectral.measurable n)
@@ -134,7 +130,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSub
       |augmentedSpectralRadialDistance (d := d) Dhat hsym n ω f i -
           ‖ψ (f_ref n ω i) - ψ f‖| ≤ radialRate n} := by
     intro n ω hω f i
-    rcases hω with ⟨⟨hentryEvent, hspectralEvent⟩, hdim, hsmall, hpolar, hbound⟩
+    rcases hω with ⟨⟨hentryEvent, hspectralEvent⟩, hdim, hbound⟩
     have hentry := hEsub n hentryEvent f
     have hfloor := Hspectral.floor n ω hspectralEvent f
     have hceiling := Hspectral.ceiling_bound n ω hspectralEvent f
@@ -147,7 +143,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSub
         (hsym n ω f)
         (populationRankLeOfGram D z hzGram n ω f)
         hα (Hrate.entry_nonneg n) hfloor hceiling
-        hentry hsmall hpolar (z n ω f) (hzGram n ω f)
+        hentry (z n ω f) (hzGram n ω f)
         i.castSucc (Fin.last n)
     have hraw : rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f =
         spectralConfig
