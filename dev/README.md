@@ -16,6 +16,7 @@ Read `../AGENTS.md` first, then route by task instead of reading `dev/` linearly
 | [`SEARCH.md`](SEARCH.md) | How to search engineering memory by symptom or subsystem. |
 | [`tauceti/README.md`](tauceti/README.md) | Current Tau Ceti engineering authorities and the boundary between maintained status and migration history. |
 | [`davis-kahan-1970-full-source-census.md`](davis-kahan-1970-full-source-census.md) and [`davis-kahan-1970-frontier-status.md`](davis-kahan-1970-frontier-status.md) | Current Davis--Kahan source coverage and the remaining proof frontier. |
+| [`acharyya-2024-full-source-census.md`](acharyya-2024-full-source-census.md), [`acharyya-2025-full-source-census.md`](acharyya-2025-full-source-census.md), [`helm-2025-full-source-census.md`](helm-2025-full-source-census.md), [`quench-2026-full-source-census.md`](quench-2026-full-source-census.md) | Source-to-Lean semantic alignment for the DKPS application-paper chain. |
 
 The governing policy is in [`../AGENTS.md`](../AGENTS.md), not here. It defines
 the dual-track split (Tau Ceti extraction primary, Davis--Kahan source fidelity
@@ -335,6 +336,27 @@ worth knowing before quoting this paper:
   declaration names retain the 2014 preprint's flat sequence: Theorem 1,
   Theorem 2, Corollary 3, Theorem 4, and Lemma 5. The census records the
   translation explicitly rather than silently renaming pinned declarations.
+
+## DKPS application-paper source censuses
+
+The same source-keyed audit discipline is applied to the downstream paper chain:
+
+- `acharyya-2024-full-source-census.json` / `.md` — raw-stress consistency, including the finite-vs-continuous MDS scope boundary;
+- `acharyya-2025-full-source-census.json` / `.md` — response-embedding concentration and the current YWS-backed perturbation route;
+- `helm-2025-full-source-census.json` / `.md` — inference transfer and the assumptions used by the risk proof;
+- `quench-2026-full-source-census.json` / `.md` — query efficiency, source repairs, and the stronger raw-response capstones.
+
+The JSON files are authoritative and the Markdown views are generated. Each row is keyed to a source passage and carries both a proof/build status and a separate semantic-alignment classification (`exact`, `generalized`, `stronger_hypotheses`, `source_repair`, `missing`, and so on). This separation is intentional: a theorem can be fully proved in Lean while still differing from the printed source in hypotheses, scope, or conclusion.
+
+Validate and regenerate with:
+
+```bash
+python3 scripts/check_dkps_application_source_censuses.py
+python3 scripts/check_dkps_application_source_censuses.py --render
+python3 scripts/check_dkps_application_source_censuses.py --probe
+```
+
+The fast gate validates schema, source ranges, gap references, and cited declaration names against the working tree. `--probe` additionally invokes Lean and `#check`s every cited fully-qualified declaration, with a deliberately unresolved canary to guard the diagnostic parser. The application censuses do not infer paper coverage from the Lean tree: missing source results remain rows, including the Acharyya 2024 continuum `L^p` theorem and Acharyya 2025 Proposition 1.
 
 ## The `@[expose]` ratchet
 
