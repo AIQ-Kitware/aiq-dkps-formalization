@@ -93,7 +93,7 @@ The result is assembled in layers; read them in this order:
 | **Theorem 2**, high-probability Frobenius form | `highProb_aligned_configFrobError_of_entrywise_close`, `…_of_majorant`, `…_of_response_mean`; legacy `ConfigError` siblings | `AlignedPipeline.lean` |
 | **Corollary 2** — vanishing rate as budgets grow | `endToEndFrobRate`, `endToEndFrobQuadraticRate`, `eventually_endToEndFrobRate_le_endToEndFrobQuadraticRate`, `tendsto_endToEndFrobQuadraticRate_zero`; legacy `endToEndRate` siblings | `RateChain.lean` |
 | Weyl's eigenvalue inequality | `abs_eigenvalues_sub_le` | `Weyl.lean` |
-| Davis–Kahan sin-Θ bound; rank-`d` eigengap | `sum_cross_inner_sq_le_opNorm`, `sum_cross_inner_sq_le_of_rank_floor_opNorm`; source-facing crude siblings | `DavisKahan.lean`, `RankGap.lean` |
+| Davis–Kahan sin-Θ bound; rank-`d` sample-gap route (standalone/legacy for the finite configuration proof) | `sum_cross_inner_sq_le_opNorm`, `sum_cross_inner_sq_le_of_rank_floor_opNorm`; source-facing crude siblings | `DavisKahan.lean`, `RankGap.lean` |
 | The aligning orthogonal map `W*` | `alignedSpectralConfig`, `AlignExists`; Gram rigidity / polar factor | `AlignedPipeline.lean`, `GramRigidity.lean`, `PolarFactor.lean`, `Overlap.lean` |
 | PSD rank-`≤d` ⇒ Gram of a `d`-config (produces the population `ψ`) | `exists_config_gram_eq_of_posSemidef_rank_le` | `GramRealization.lean` |
 | Matrix-world capstone (entrywise `η` ⇒ aligned Frobenius error) | `exists_isometry_configFrobError_le_of_entrywise_close`; legacy `ConfigError` corollary | `MatrixPerturbation.lean` |
@@ -103,17 +103,22 @@ The result is assembled in layers; read them in this order:
 
 ### Reuse with DavisKahan / YWS / TauCeti
 
-`ConfigPerturbation.lean` now consumes the selected-block operator-norm
-Davis--Kahan endpoint from the reusable `TauCeti`/`DavisKahan` layer and keeps
-the exact eigenvalue-commutator residual through a Bessel/Parseval sum.  The
-older ambient-`n` wrapper theorems remain available for source fidelity.
+`ConfigPerturbation.lean` now uses the Yu--Wang--Samworth population-gap and
+alignment results for the active cross-energy/alignment route, while keeping the
+exact eigenvalue-commutator residual through a Bessel/Parseval sum.  The separate
+`DavisKahan.lean` and `RankGap.lean` results remain available as reusable/source-
+fidelity theorems, but the paper-facing configuration proof no longer invokes
+their local sample-gap bounds.  `Overlap.lean` still reuses the algebraic
+cross-term identity from `DavisKahan.lean` for its commutator lemma.
 
-The current proof also consumes the Yu--Wang--Samworth population-gap and
-alignment results.  The population-only residual sin-Theta bound controls both
+The population-only residual sin-Theta bound controls both
 cross-energy orientations without a sample-gap condition, removing the former
 `hsmall : ε ≤ α / 2` hypothesis.  The YWS aligned-frame/overlap-map bridge is
 combined with the sharp TauCeti near-isometry theorem to remove the former
-`hpolar` hypothesis.  Thus the paper-facing finite Frobenius theorem now needs
+`hpolar` hypothesis.  `ConfigPerturbation.lean` imports the YWS residual,
+Procrustes, and TauCeti near-isometry modules directly; the older rank-gap and
+Acharyya polar-factor routes are retained as standalone results rather than used
+for the finite theorem.  Thus the paper-facing finite Frobenius theorem now needs
 only the population spectral floor/cap/rank assumptions and operator closeness,
 not separate local spectral-applicability conditions.
 
@@ -211,7 +216,7 @@ user-observed model labels.
 | File | Contents |
 |---|---|
 | [`Bridge.lean`](Bridge.lean) | Theorem-1 event chain: response-mean → direct pairwise entrywise → CMDS-entrywise closeness; legacy Frobenius transport retained for compatibility. |
-| [`ConfigPerturbation.lean`](ConfigPerturbation.lean) | **The bridge theorem** `exists_isometry_configError_spectralConfig_le` + explicit `configBound` — deterministic core of Theorem 2. |
+| [`ConfigPerturbation.lean`](ConfigPerturbation.lean) | **The bridge theorem** `exists_isometry_configFrobError_spectralConfig_le` + explicit `configFrobBound` — deterministic core of Theorem 2; legacy `ConfigError` corollary retained separately. |
 | [`AlignedPipeline.lean`](AlignedPipeline.lean) | `alignedSpectralConfig` (choice-based aligned estimator) + the high-probability aligned-`ConfigError` theorems (entrywise and response-mean versions). |
 | [`GrowingPipeline.lean`](GrowingPipeline.lean) | Choice-free pairwise-distance perturbation, target-augmented growing-dimension foundations, and `GrowingConfigControl` for joint model/response schedules. |
 | [`GrowingResponse.lean`](GrowingResponse.lean) | Growing Chebyshev/union-bound concentration, direct response→CMDS transport, and exact `η=x/n` / `n³σ²/x²` paper-scale identities. |
@@ -219,8 +224,8 @@ user-observed model labels.
 | [`RateChain.lean`](RateChain.lean) | Explicit end-to-end rates: the preferred Frobenius `endToEndFrobRate` and HP/vanishing theorems, plus the legacy `ConfigError` rate. |
 | [`MatrixPerturbation.lean`](MatrixPerturbation.lean) | Matrix-world capstone: entrywise `η` ⇒ aligned `ConfigError ≤ configBound`, with rank transport for trailing eigenvalues. |
 | [`Weyl.lean`](Weyl.lean) | Discrete Courant–Fischer + Weyl's eigenvalue perturbation inequality. |
-| [`DavisKahan.lean`](DavisKahan.lean) | Cross-term identity + Davis–Kahan cross-block sin-Θ bound. |
-| [`RankGap.lean`](RankGap.lean) | Eigengap derivation from rank-`d` / floor structure via Weyl. |
+| [`DavisKahan.lean`](DavisKahan.lean) | Algebraic cross-term identity (reused by `Overlap`) + standalone Davis–Kahan cross-block sin-Θ bound. |
+| [`RankGap.lean`](RankGap.lean) | Standalone local sample-gap derivation from rank-`d` / floor structure via Weyl; no longer used by `ConfigPerturbation`. |
 | [`Overlap.lean`](Overlap.lean) | Eigenvector overlap matrix, `QᵀQ − I` deviation, Sylvester commutator identity. |
 | [`PolarFactor.lean`](PolarFactor.lean) | Quantitative polar factor: near-isometry ⇒ exact isometry within `2δ`. |
 | [`GramRigidity.lean`](GramRigidity.lean) | Exact Gram rigidity: equal Grams ⇒ isometry-related (the `κ = 0` limit of `W*`). |

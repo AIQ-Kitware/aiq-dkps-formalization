@@ -6,7 +6,7 @@ Given a population symmetric operator `T` on `EuclideanSpace ℝ (Fin n)` whose
 leading `d` (sorted) eigenvalues are `≥ α > 0` with all trailing eigenvalues `0`
 (the doubly-centered CMDS Gram operator, rank `d`, spectral floor `α`, top
 eigenvalue `≤ Λ`), and a sample symmetric operator `S` that is `ε`-close in
-operator norm (`ε ≤ α/2`), the *spectral embeddings*
+operator norm, the *spectral embeddings*
 `ψ̂ := spectralConfig S`, `ψ := spectralConfig T`
 (the classical MDS coordinates `√λ̂_k · v_k(i)` and `√λ_l · u_l(i)`) are close
 *up to a linear isometry* `W`:
@@ -14,24 +14,26 @@ a Frobenius configuration error bound with an explicit closed form in
 `d, α, Λ, ε`.  The legacy `ConfigError` theorem is retained as a compatibility
 corollary and pays the expected Cauchy--Schwarz factor `√n`.
 
-The proof is entirely elementary and coordinatewise — no SVD, no von Neumann
-trace inequality.  It reuses the spectral toolkit built in this session:
+The proof is coordinatewise and reuses the spectral toolkit built in this
+session:
 
-* `Acharyya2025.Weyl` (Weyl perturbation, eigenbasis Parseval),
-* `Acharyya2025.DavisKahan` (cross-energy / sin-Θ bound),
-* `Acharyya2025.RankGap` (cross-energy under the rank-`d` floor),
+* `Acharyya2025.Weyl` (Weyl perturbation and eigenbasis Parseval),
+* `YuWangSamworth2015.Core.Residual` and `.Procrustes` (population-gap
+  cross-energy and global Procrustes alignment),
 * `Acharyya2025.Overlap` (overlap matrix `Q`, commutator identity,
   `QᵀQ − I` deviation bound),
-* `Acharyya2025.PolarFactor` (quantitative polar factor of a near-isometry).
+* `ForTauCeti.Analysis.InnerProductSpace.NearIsometry` for the local alignment
+  branch.
 
 The three-term decomposition `ψ̂W − ψ = Term1 + Term2 + Term3` is:
 
 * `Term1 = (W − M) ψ̂` where `M := toEuclideanLin Qᵀ` is the near-isometry whose
-  Gram deviation `QᵀQ − I` is small (polar-factor estimate);
+  Gram deviation `QᵀQ − I` is small; local alignment uses the sharp TauCeti
+  near-isometry theorem and the complementary regime uses YWS Procrustes;
 * `Term2 = M ψ̂ − (the QΛ^{1/2}-rescaled vector)` — the commutator term, each
   entry `Q_{kl}(√λ̂_k − √λ_l)` controlled by the Sylvester identity;
 * `Term3` — the population reconstruction defect `√λ_l(Σ_k Q_{kl} v_k − u_l)`,
-  controlled by the Davis–Kahan cross energy.
+  controlled by the YWS population-gap cross energy.
 
 Frobenius triangle inequality (`norm_add_le` on `EuclideanSpace ℝ (Fin n × Fin d)`)
 combines the three.  The paper-facing deterministic theorem stops at this
@@ -44,10 +46,9 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 import Mathlib
 import Acharyya2024.Common
 import Acharyya2025.Weyl
-import Acharyya2025.DavisKahan
-import Acharyya2025.RankGap
 import Acharyya2025.Overlap
-import Acharyya2025.PolarFactor
+import ForTauCeti.Analysis.InnerProductSpace.NearIsometry
+import YuWangSamworth2015.Core.Residual
 import YuWangSamworth2015.Core.Procrustes
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
@@ -60,9 +61,9 @@ namespace Acharyya2025.ConfigPerturbation
 /-- The **spectral embedding / CMDS configuration** of a symmetric operator `S`:
 the `i`-th point has `k`-th coordinate `√λ̂_k · v_k(i)`, where `v_k` is the
 `k`-th sample eigenvector and `λ̂_k` the `k`-th (decreasingly sorted) eigenvalue.
-`Real.sqrt` clamps possibly-negative trailing eigenvalues to `0` (the CMDS
-convention); under the main theorem's hypotheses the top-`d` block eigenvalues
-are `≥ α/2 > 0`, so no clamping occurs there.
+`Real.sqrt` clamps negative eigenvalues to `0` (the CMDS convention).  The
+main theorem does not require the sample top-`d` eigenvalues to stay positive;
+the square-root and sample-energy arguments explicitly accommodate clamping.
 
 Paper correspondence: this is the classical-MDS embedding `ψ̂` (when `S` is the
 sample Gram operator) or `ψ` (when `S` is the population Gram operator) appearing
@@ -99,42 +100,17 @@ private theorem sum_castLE_eq_filter (hd : d ≤ n) (f : Fin n → ℝ) :
   · intro j _; apply Fin.ext; simp [Fin.castLE]
   · intro m _; rfl
 
-/-! ### Step 1: Weyl in the top block
+/-! ### Step 1: Weyl upper control in the top block
 
-The sample top-`d` eigenvalues are squeezed between `α/2` and `Λ + α/2`; the
-trailing population eigenvalues vanish.  These per-eigenvalue facts feed the gap
-and the `√λ̂` denominators below. -/
-
-/-- Internal helper (Weyl, lower bound). The sample top-block eigenvalues satisfy
-`λ̂_k ≥ α/2 > 0`. This is the eigenvalue-stability half of Theorem 2's argument
-(Weyl's inequality), specialized to the leading block.
-
-Hypotheses:
-* `hd : d ≤ n` — dimension/rank `d` (encodes Assumption 1: the population operator
-  has rank `d`).
-* `hα` — eigenvalue floor: leading population eigenvalues are `≥ α` (the paper's
-  spectral lower bound `λ_d`, the `C1` side of Assumption 2).
-* `hε` — the sample `S` is `ε`-close to the population `T` in operator norm.
-* `hsmall : ε ≤ α/2` — smallness/perturbation side-condition (extra explicit numeric
-  condition beyond the paper's asymptotic statement). -/
-private theorem sample_eig_lb (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsSymmetric)
-    {α ε : ℝ}
-    (hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues hn_eq i)
-    (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖) (hsmall : ε ≤ α / 2) (k : Fin d) :
-    -- Conclusion: the `k`-th leading sample eigenvalue is at least `α/2`.
-    α / 2 ≤ hS.eigenvalues hn_eq (Fin.castLE hd k) := by
-  have hε' : ∀ x, ‖(T - S) x‖ ≤ ε * ‖x‖ := by
-    intro x
-    have : (T - S) x = -((S - T) x) := by rw [LinearMap.sub_apply, LinearMap.sub_apply]; abel
-    rw [this, norm_neg]; exact hε x
-  have hweyl := Acharyya2025.Weyl.abs_eigenvalues_sub_le hT hS hn_eq hε' (Fin.castLE hd k)
-  rw [abs_le] at hweyl
-  have hlt : ((Fin.castLE hd k : Fin n) : ℕ) < d := by simp [Fin.castLE]
-  have hαk : α ≤ hT.eigenvalues hn_eq (Fin.castLE hd k) := hα (Fin.castLE hd k) hlt
-  linarith [hweyl.2, hαk]
+Only the upper sample-eigenvalue bound is needed by the active proof.  No lower
+sample-eigenvalue bound is required: negative sample eigenvalues are handled by
+`Real.sqrt` clamping, and the cross-energy estimates use the population-only YWS
+gap instead of manufacturing a sample gap.
+-/
 
 /-- Internal helper (Weyl, upper bound). The sample top-block eigenvalues satisfy
-`λ̂_k ≤ Λ + ε`. Eigenvalue-stability (Weyl) companion to `sample_eig_lb`.
+`λ̂_k ≤ Λ + ε`. This is the only per-sample-eigenvalue Weyl bound needed by
+the active configuration proof.
 
 Hypotheses:
 * `hΛ` — eigenvalue cap `Λ` on all population eigenvalues (the paper's `λ_1` upper
@@ -154,80 +130,13 @@ private theorem sample_eig_ub (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsSymm
   rw [abs_le] at hweyl
   linarith [hweyl.1, hΛ (Fin.castLE hd k)]
 
-/-! ### Step 2a: the two cross-energy bounds
+/-! ### Step 2a: population-gap YWS cross-energy bounds
 
-`crossPop`: population leading vs sample trailing, `∑_{i<d}∑_{j≥d}⟪u_i,v_j⟫²`,
-bounded directly by `Acharyya2025.RankGap` (population structure on `T`).
-
-`crossSamp`: sample leading vs population trailing, `∑_{i<d}∑_{j≥d}⟪v_i,u_j⟫²`,
-bounded by `Acharyya2025.DavisKahan` with a manually supplied gap (`λ̂_i ≥ α/2`
-for `i < d`, `λ_j = 0` for `j ≥ d`).  Both use the selected-block
-operator-norm branch and are `4 d ε² / α²`. -/
-
-/-- Internal helper (Davis–Kahan / rank-gap cross energy). `crossPop ≤ 4 d ε² / α²`:
-total squared overlap of leading population eigenvectors against trailing sample
-eigenvectors. This is the eigenvector-perturbation half of Theorem 2's argument.
-
-Hypotheses:
-* `hα_pos`, `hα` — eigenvalue floor `α > 0` on the leading block (Assumption 2 lower
-  bound `λ_d` / `C1`).
-* `htail` — all trailing population eigenvalues vanish (rank `= d`, encoding
-  Assumption 1).
-* `hε`, `hsmall : ε ≤ α/2` — operator-norm closeness and smallness side-condition. -/
-private theorem crossPop_le (hT : T.IsSymmetric) (hS : S.IsSymmetric)
-    {α ε : ℝ} (hα_pos : 0 < α)
-    (hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues hn_eq i)
-    (htail : ∀ j : Fin n, d ≤ (j : ℕ) → hT.eigenvalues hn_eq j = 0)
-    (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖) (hsmall : ε ≤ α / 2) :
-    -- Conclusion: the leading-population / trailing-sample cross energy is `≤ 4dε²/α²`.
-    ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < d),
-      ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : ℕ)),
-        (⟪hT.eigenvectorBasis hn_eq i, hS.eigenvectorBasis hn_eq j⟫_ℝ)^2
-      ≤ 4 * (d : ℝ) * ε^2 / α^2 :=
-  Acharyya2025.RankGap.sum_cross_inner_sq_le_of_rank_floor_opNorm
-    hT hS hn_eq d hα_pos hα htail hε hsmall
-
-/-- Internal helper (Davis–Kahan cross energy, swapped roles). `crossSamp ≤ 4 d ε² / α²`:
-total squared overlap of leading sample eigenvectors against trailing population
-eigenvectors. The spectral gap is `α/2` because each leading sample eigenvalue
-exceeds `α/2` (Weyl) while every trailing population eigenvalue is `0`. Same
-hypothesis roles as `crossPop_le` (floor `α`, rank-`d` tail, closeness `ε`). -/
-private theorem crossSamp_le (hT : T.IsSymmetric) (hS : S.IsSymmetric)
-    {α ε : ℝ} (hα_pos : 0 < α)
-    (hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues hn_eq i)
-    (htail : ∀ j : Fin n, d ≤ (j : ℕ) → hT.eigenvalues hn_eq j = 0)
-    (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖) (hsmall : ε ≤ α / 2) :
-    -- Conclusion: the leading-sample / trailing-population cross energy is `≤ 4dε²/α²`.
-    ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < d),
-      ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : ℕ)),
-        (⟪hS.eigenvectorBasis hn_eq i, hT.eigenvectorBasis hn_eq j⟫_ℝ)^2
-      ≤ 4 * (d : ℝ) * ε^2 / α^2 := by
-  -- `‖(T − S) x‖ ≤ ε ‖x‖` for the Weyl step (symmetric direction).
-  have hε' : ∀ x, ‖(T - S) x‖ ≤ ε * ‖x‖ := by
-    intro x
-    have : (T - S) x = -((S - T) x) := by rw [LinearMap.sub_apply, LinearMap.sub_apply]; abel
-    rw [this, norm_neg]; exact hε x
-  -- Gap: for `i < d`, `λ̂_i ≥ α/2`; for `j ≥ d`, `λ_j = 0`.
-  have hgap : ∀ i j : Fin n, (i : ℕ) < d → d ≤ (j : ℕ) →
-      α / 2 ≤ |hS.eigenvalues hn_eq i - hT.eigenvalues hn_eq j| := by
-    intro i j hi hj
-    -- Weyl on index `i`: `λ̂_i ≥ λ_i − ε ≥ α − ε ≥ α/2`.
-    have hweyl := Acharyya2025.Weyl.abs_eigenvalues_sub_le hT hS hn_eq hε' i
-    rw [abs_le] at hweyl
-    have hSi : α / 2 ≤ hS.eigenvalues hn_eq i := by
-      have := hα i hi; linarith [hweyl.2]
-    have hTj : hT.eigenvalues hn_eq j = 0 := htail j hj
-    rw [hTj, sub_zero]
-    calc α / 2 ≤ hS.eigenvalues hn_eq i := hSi
-      _ ≤ |hS.eigenvalues hn_eq i| := le_abs_self _
-  have hbound := Acharyya2025.DavisKahan.sum_cross_inner_sq_le_opNorm hS hT hn_eq d
-    (by positivity : (0 : ℝ) < α / 2) hgap hε'
-  calc
-    ∑ i ∈ Finset.univ.filter (fun i : Fin n => (i : ℕ) < d),
-      ∑ j ∈ Finset.univ.filter (fun j : Fin n => d ≤ (j : ℕ)),
-        (⟪hS.eigenvectorBasis hn_eq i, hT.eigenvectorBasis hn_eq j⟫_ℝ)^2
-        ≤ (d : ℝ) * ε^2 / (α / 2)^2 := hbound
-    _ = 4 * (d : ℝ) * ε^2 / α^2 := by field_simp; ring
+Yu--Wang--Samworth controls the leading-sample / trailing-population cross energy
+directly from the population eigengap.  Principal-angle symmetry transfers the
+same bound to the opposite orientation.  This route uses no lower bound on the
+sample eigenvalues and no `ε ≤ α/2` side condition.
+-/
 
 /-- The leading index filter has exactly `d` elements when `d ≤ n`. -/
 private theorem leading_filter_card (hd : d ≤ n) :
@@ -260,8 +169,8 @@ private theorem leading_filter_compl :
   omega
 
 /-- YWS population-gap bound for the leading-sample / trailing-population
-cross energy.  Unlike `crossSamp_le`, this uses no sample-eigenvalue lower bound
-and hence no `ε ≤ α/2` hypothesis. -/
+cross energy.  It uses only the population spectral floor/tail separation, so no
+sample-eigenvalue lower bound or perturbative smallness side condition enters. -/
 private theorem crossSamp_yws_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     {α ε : ℝ} (hα_pos : 0 < α)
     (hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues hn_eq i)
@@ -388,9 +297,9 @@ private theorem crossPop_yws_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsSy
   exact crossSamp_yws_le hd hT hS hα_pos hα htail hε
 
 /-- Internal helper / algebraic step. A single trailing-energy column of the
-`(overlap hS hT)ᵀ * (overlap hS hT)` deviation is bounded by `crossSamp`:
-`∑_{j≥d}⟪hT.basis j, hS.basis (castLE k)⟫² ≤ 4 d ε² / α²`. Same hypothesis roles
-as `crossSamp_le`. -/
+`(overlap hS hT)ᵀ * (overlap hS hT)` deviation is bounded by the YWS
+leading-sample / trailing-population cross energy:
+`∑_{j≥d}⟪hT.basis j, hS.basis (castLE k)⟫² ≤ 4 d ε² / α²`. -/
 private theorem tailS_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     {α ε : ℝ} (hα_pos : 0 < α)
     (hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues hn_eq i)
@@ -470,8 +379,8 @@ private theorem dev_eq (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hd : d ≤ n) 
 
 /-- Internal helper / algebraic step (**entrywise Gram-deviation bound**). Each
 entry of `QQᵀ − I` is at most `τ := 4 d ε² / α²` in absolute value. This
-quantifies how close the overlap matrix `Q` is to orthogonal (a Davis–Kahan
-consequence). Same hypothesis roles as `crossPop_le` (floor `α`, rank-`d` tail,
+quantifies how close the overlap matrix `Q` is to orthogonal.  Its spectral
+input is the YWS population-gap cross-energy bound (floor `α`, rank-`d` tail,
 closeness `ε`). -/
 private theorem abs_dev_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     {α ε : ℝ} (hα_pos : 0 < α)
@@ -568,9 +477,9 @@ private theorem inner_self_eq_sum (x : EuclideanSpace ℝ (Fin d)) :
 
 /-- Internal helper / algebraic step (**Gram-deviation quadratic-form bound**).
 `M` is a near-isometry: `|⟪M x, M x⟫ − ⟪x, x⟫| ≤ δ ⟪x, x⟫` with `δ := d · τ`,
-`τ := 4 d ε² / α²`. This is the input to the polar-factor step that produces the
-alignment `W`. Same hypothesis roles as `crossPop_le` (floor `α`, rank-`d` tail,
-closeness `ε`, smallness `ε ≤ α/2`). -/
+`τ := 4 d ε² / α²`. This is the input to the local near-isometry alignment
+branch.  The spectral input is the YWS population-gap cross-energy bound; no
+sample-gap smallness condition is used. -/
 private theorem gram_dev_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     {α ε : ℝ} (hα_pos : 0 < α)
     (hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues hn_eq i)
@@ -708,7 +617,7 @@ private theorem defect_repr (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hd : d �
 
 /-- Internal helper / algebraic step (**Term-3 defect squared norm**):
 `‖w_l‖² = ∑_{j ≥ d} ⟪v_j, u_l⟫²` — the defect's energy equals the trailing
-cross-energy (which `crossPop_le` bounds). -/
+cross-energy later controlled by `crossPop_yws_le`. -/
 private theorem defect_norm_sq (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hd : d ≤ n)
     (l : Fin d) :
     -- Conclusion: the `l`-th defect's squared norm equals its trailing cross energy.
@@ -767,7 +676,7 @@ private noncomputable def term2vec (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hd
         * (Real.sqrt (lamHat hS hd k) - Real.sqrt (lamPop hT hd p.2))
         * hS.eigenvectorBasis hn_eq (Fin.castLE hd k) p.1)
 
-/-- The **Term-3 (Davis–Kahan reconstruction-defect) vector**, packaged as a
+/-- The **Term-3 (subspace reconstruction-defect) vector**, packaged as a
 Frobenius vector: `(i,l) ↦ √λ_l (∑_k Q_{kl} v_k(i) − u_l(i))`. Third of the three
 decomposition terms; a plain definition. -/
 private noncomputable def term3vec (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hd : d ≤ n) :
@@ -789,12 +698,12 @@ private theorem term3vec_apply (hT : T.IsSymmetric) (hS : S.IsSymmetric) (hd : d
             - hT.eigenvectorBasis hn_eq (Fin.castLE hd l)) i) := rfl
 
 /-- Internal helper / algebraic step (**Term-3 squared Frobenius bound**):
-`‖term3vec‖² ≤ Λ · (4 d ε² / α²)`. Bounds the Davis–Kahan reconstruction-defect
-term using the eigenvalue cap `Λ` and the cross energy.
+`‖term3vec‖² ≤ Λ · (4 d ε² / α²)`. Bounds the reconstruction-defect term
+using the eigenvalue cap `Λ` and the YWS population-gap cross energy.
 
 Hypotheses combine the eigenvalue floor `α` (`hα_pos`, `hα`), the rank-`d` tail
 (`htail`, Assumption 1), the cap `Λ` (`hΛ`, Assumption 2 upper bound), and
-operator-norm closeness `ε` with smallness `ε ≤ α/2`. -/
+operator-norm closeness `ε`; no sample-gap smallness condition is required. -/
 private theorem term3_norm_sq_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsSymmetric)
     {α Λ ε : ℝ} (hα_pos : 0 < α)
     (hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues hn_eq i)
