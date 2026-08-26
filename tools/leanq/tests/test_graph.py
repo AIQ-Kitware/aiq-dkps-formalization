@@ -129,6 +129,20 @@ class DependencyGraphTests(unittest.TestCase):
             frozenset({("Pkg.Feature.support", "Pkg.Feature.capstone")}),
         )
 
+    def test_external_name_does_not_collide_by_short_name(self):
+        rows = [
+            decl("TauCeti.StandardCompletion.ofNat"),
+            decl("TauCeti.Function.id"),
+            decl("Pkg.capstone", deps=("OfNat.ofNat", "id")),
+        ]
+        graph = target_dependency_graph(rows, ["Pkg.capstone"])
+        self.assertEqual(set(graph.nodes), {"Pkg.capstone"})
+        self.assertEqual(graph.edges, frozenset())
+        self.assertEqual(
+            graph.unresolved,
+            (("Pkg.capstone", "OfNat.ofNat"), ("Pkg.capstone", "id")),
+        )
+
     def test_transitive_reduction_removes_shortcut(self):
         nodes = {"A", "B", "C", "D"}
         edges = {

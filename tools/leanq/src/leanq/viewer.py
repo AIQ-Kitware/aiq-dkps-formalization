@@ -10,6 +10,7 @@ from pathlib import Path
 
 _GRAPH_TEMPLATE = "assets/viewer.html"
 _HEADLINE_TEMPLATE = "assets/headline_viewer.html"
+_PROJECT_EXPLORER_TEMPLATE = "assets/project_explorer.html"
 
 
 def _safe_json_for_script(payload: dict) -> str:
@@ -29,6 +30,10 @@ def _display_title(payload: dict, title: str | None = None) -> str:
         return str(presentation["title"])
     if payload.get("payloadKind") == "headline-consumption":
         return "Headline theorem consumption into Quench"
+    if payload.get("payloadKind") == "headline-dependencies":
+        return "Headline theorem dependency foundations"
+    if payload.get("payloadKind") == "project-explorer":
+        return "Whole formalization dependency explorer"
     targets = payload.get("targets") or payload.get("bootstrapTargets") or []
     result = "Lean proof dependencies"
     if targets:
@@ -42,11 +47,12 @@ def render_graph_html(payload: dict, *, title: str | None = None) -> str:
     Rendering is pure Python/resource loading.  It never invokes Lean, so an HTML
     template can be iterated against a stable JSON artifact.
     """
-    template_name = (
-        _HEADLINE_TEMPLATE
-        if payload.get("payloadKind") == "headline-consumption"
-        else _GRAPH_TEMPLATE
-    )
+    if payload.get("payloadKind") in {"project-explorer", "headline-dependencies"}:
+        template_name = _PROJECT_EXPLORER_TEMPLATE
+    elif payload.get("payloadKind") == "headline-consumption":
+        template_name = _HEADLINE_TEMPLATE
+    else:
+        template_name = _GRAPH_TEMPLATE
     template = files("leanq").joinpath(template_name).read_text(encoding="utf-8")
     return template.replace(
         "__LEANQ_TITLE__", html.escape(_display_title(payload, title))

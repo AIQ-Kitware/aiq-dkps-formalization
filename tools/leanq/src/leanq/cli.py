@@ -35,7 +35,7 @@ from .graph import (
     transitive_reduction,
 )
 from .presentation import build_presentation, load_presentation
-from .headlines import analyze_headlines
+from .headlines import analyze_headlines, prepare_project_explorer
 from .viewer import write_graph_html
 from .project import ProjectError, find_project
 from .promotion import DEFAULT_TAGS, promotion_report
@@ -478,18 +478,19 @@ def cmd_graph_slice(args) -> int:
 
 @profile
 def cmd_graph_headlines(args) -> int:
-    """Stage 2: census-aware headline consumption analysis, without Lean."""
+    """Stage 2: census-aware headline analysis, without Lean."""
     semantic_path = Path(args.semantic_index)
     payload = _read_json_object(semantic_path)
     if payload.get("payloadKind") != "semantic-index":
         raise ProjectError(
             f"{semantic_path} is not a reusable semantic index; run `leanq graph-index ...` first"
         )
-    targets = list(args.target or payload.get("bootstrapTargets") or ())
-    if not targets:
-        raise ProjectError("graph-headlines needs --target or a graph-index bootstrap target")
-    if len(targets) != 1:
-        raise ProjectError("graph-headlines currently accepts exactly one target declaration")
+    view = getattr(args, "view", "dependencies")
+    targets = list(args.target or ())
+    if view == "consumption" and not targets:
+        targets = list(payload.get("bootstrapTargets") or ())
+    if view == "consumption" and not targets:
+        raise ProjectError("graph-headlines --view consumption needs --target")
     census_paths = [Path(path) for path in args.census]
     importances = args.importance or ["headline"]
     result = analyze_headlines(
@@ -497,6 +498,9 @@ def cmd_graph_headlines(args) -> int:
         targets=targets,
         census_paths=census_paths,
         importances=importances,
+        view=view,
+        include_supporting=getattr(args, "include_supporting", False),
+        default_claims=list(getattr(args, "default_claim", None) or ()),
     )
     result["sourceSemanticIndex"]["path"] = str(semantic_path)
     text = json.dumps(result, indent=2) + "\n"
@@ -508,11 +512,27 @@ def cmd_graph_headlines(args) -> int:
     else:
         counts = result["headlineAnalysis"]["familyCounts"]
         print(out)
-        for family, row in counts.items():
+        if view == "dependencies":
             print(
-                f"{family}: {row['consumed']}/{row['claims']} headline claim(s) consumed",
+                f"headline dependency union: {result['nodeCount']} declarations, "
+                f"{result['edgeCount']} direct edges, "
+                f"{result['headlineAnalysis']['headlineDeclarationCount']} headline landmarks, "
+                f"{result['headlineAnalysis']['sharedDependencyCount']} shared dependencies; no Lean invoked",
                 file=sys.stderr,
             )
+        else:
+            for family, row in counts.items():
+                print(
+                    f"{family}: {row['consumed']}/{row['claims']} headline claim(s) consumed",
+                    file=sys.stderr,
+                )
+            library_counts = result["headlineAnalysis"].get("targetClosureLibraryCounts", {})
+            if library_counts:
+                print(
+                    "target closure library machinery: "
+                    + ", ".join(f"{name}={count}" for name, count in library_counts.items()),
+                    file=sys.stderr,
+                )
     return 0
 
 
@@ -521,6 +541,15 @@ def cmd_graph_html(args) -> int:
     """Stage 3: render saved graph/headline JSON to self-contained HTML, without Lean."""
     payload_path = Path(args.input)
     payload = _read_json_object(payload_path)
+    census_paths = [Path(path) for path in (getattr(args, "census", None) or ())]
+    if payload.get("payloadKind") == "semantic-index" and census_paths:
+        payload = prepare_project_explorer(
+            payload,
+            census_paths=census_paths,
+            importances=getattr(args, "importance", None) or ["headline"],
+            targets=getattr(args, "target", None) or (),
+            default_claims=list(getattr(args, "default_claim", None) or ()),
+        )
     out = Path(args.out)
     write_graph_html(out, payload, title=args.title)
     print(out)
@@ -886,13 +915,21 @@ def build_parser() -> argparse.ArgumentParser:
 
     p = sub.add_parser(
         "graph-headlines",
-        help="stage 2: analyze census headline consumption from a saved semantic index",
+        help="stage 2: derive headline dependency or consumption analysis from a saved semantic index",
     )
     add_common(p)
     p.add_argument("semantic_index", help="JSON written by `leanq graph-index`")
     p.add_argument(
         "--target", action="append",
-        help="Quench target declaration (default: graph-index bootstrap target)",
+        help="optional downstream target annotation (required only for --view consumption)",
+    )
+    p.add_argument(
+        "--view", choices=("dependencies", "consumption"), default="dependencies",
+        help="real dependency-union view (default) or legacy compact target-consumption view",
+    )
+    p.add_argument(
+        "--include-supporting", action="store_true",
+        help="also seed the dependency union from reviewed supporting declarations",
     )
     p.add_argument(
         "--census", action="append", required=True,
@@ -901,6 +938,13 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--importance", action="append",
         help="census importance to include (repeatable; default: headline)",
+    )
+    p.add_argument(
+        "--default-claim", action="append",
+        help=(
+            "census claim id selected when the viewer loads (repeatable); "
+            "default: every headline theorem row"
+        ),
     )
     p.add_argument("--out", required=True, help="write the headline-analysis JSON here")
     p.set_defaults(func=cmd_graph_headlines)
@@ -911,6 +955,25 @@ def build_parser() -> argparse.ArgumentParser:
     )
     add_common(p)
     p.add_argument("input", help="saved leanq graph or headline-analysis JSON")
+    p.add_argument(
+        "--census", action="append",
+        help="annotate a semantic index with census landmarks (repeatable)",
+    )
+    p.add_argument(
+        "--importance", action="append",
+        help="census importance to include (repeatable; default: headline)",
+    )
+    p.add_argument(
+        "--target", action="append",
+        help="optional downstream target annotation for census landmarks",
+    )
+    p.add_argument(
+        "--default-claim", action="append",
+        help=(
+            "census claim id selected when the viewer loads (repeatable); "
+            "default: every headline theorem row"
+        ),
+    )
     p.add_argument("--out", required=True, help="write the self-contained HTML here")
     p.add_argument("--title", help="override the HTML title")
     p.set_defaults(func=cmd_graph_html)

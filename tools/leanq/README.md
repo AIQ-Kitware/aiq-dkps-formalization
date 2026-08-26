@@ -115,61 +115,109 @@ leanq graph-slice \
 
 That same master graph can be sliced repeatedly for any declaration it contains.
 
-### Stage 2: census headline consumption, no Lean
+### Whole-formalization explorer with headline landmarks, no Lean
 
-`graph-headlines` takes the saved semantic index plus any full-source censuses.  Census rows are
-claim groups: every `lean_declarations` entry is considered a realization of that paper claim.
-This lets the analysis distinguish "the canonical headline theorem is called" from "Quench uses
-supporting machinery registered to this headline claim".
+One file-only rendering command embeds the complete semantic graph and annotates actual census
+declarations as landmarks:
 
 For the current DK / YWS / Quench review:
 
 ```bash
-leanq graph-headlines \
+leanq graph-html \
   build/leanq/project-semantic-graph.json \
-  --target DkpsQuench2026.QueryEfficiency.infiniteFixedSubset \
   --census dev/davis-kahan-1970-full-source-census.json \
   --census dev/yu-wang-samworth-2015-full-source-census.json \
   --census dev/quench-2026-full-source-census.json \
-  --out build/leanq/quench-headlines.json
+  --out build/leanq/project-semantic-graph.html
+
+xdg-open build/leanq/project-semantic-graph.html
 ```
 
-The default importance is `headline`; repeat `--importance major` to include a broader census
-surface.  For every selected claim the output records:
+The HTML retains every indexed declaration and direct edge, then derives changing projections
+locally in the browser without rerunning Python or Lean.
 
-- whether any registered declaration is in the exact target dependency closure;
-- all consumed declarations from that claim group and which one is used as the representative;
-- when the census `semantic_review` supplies them, whether a canonical headline declaration or a supporting realization is consumed, distinct from merely reaching some other registered/context declaration;
-- the first consumer, nearest `YuWangSamworth2015`, `Acharyya2025`, and `DkpsQuench2026` public consumers;
-- the nearest downstream Quench headline claim; and
-- an exact shortest witness path to the selected target.
+**Headline subset.** The sidebar checkbox list selects any subset of census headline claims, and
+several may be checked at once. The paper default is every headline *theorem* row — the four
+Davis--Kahan Section 2 theorems, both Yu--Wang--Samworth Theorem 2 conclusions shown in
+`formalization_draft2`, and both Quench Theorem 2 conclusions — while Quench's estimator definition
+and standing assumption stay available but unselected. `--default-claim Q26-NN` (repeatable)
+overrides that on the command line. Per-family `all` / `none` buttons and the `Paper default` /
+`All` / `None` buttons move whole groups at once.
 
-Unused census headlines stay in the analysis rather than disappearing from an ancestor graph.
+**Only reachable nodes.** With `Ancestors of selection only` checked (the default), the visible
+universe is exactly the dependency closure of the selected headline theorems: a declaration no
+selected headline reaches is never drawn, expanding a cluster cannot introduce one, and selecting
+no headline at all renders an empty graph. Unchecking it restores the whole project.
+`Shared foundations only` narrows further to declarations at least two selected headlines reach.
+
+**Progressive hierarchical expansion.** A declaration is collapsed at the shallowest unopened prefix
+of `Library / module segment / module segment / ...`, so double-clicking `DavisKahan` opens its
+immediate submodules rather than its thirteen thousand declarations. `Group` sets the same limit
+globally, from `Library` down to individual `Declarations`. Selected headline declarations always
+render as real nodes. Double-clicking a declaration pulls in one dependency level; the selection
+panel hides a node, collapses it back into its module, focuses its cone, or reveals a shortest
+route up to any selected headline it feeds.
+
+Every box carries its edge degrees: a declaration shows true `in` / `out` direct-edge counts plus
+the counts actually drawn, and a cluster shows its declaration and immediate-child counts together
+with projected in/out and internal edge counts.
+
+**Export.** `DOT` and `JSON` write the visible projection, the selected headline closure, one
+declaration's dependency cone, or the complete graph. DOT nodes carry `leanq_library`,
+`leanq_module`, `leanq_kind`, `leanq_headline`, `leanq_headline_claims`, `leanq_headline_family`,
+`leanq_coverage`, `leanq_depth`, and `leanq_declaration_count` attributes, so a Graphviz layout can
+style headline nodes and package membership; collapsed edges carry their multiplicity as `label`
+and `weight`.
+
+Canonical declarations from `semantic_review` become strongly marked headline nodes. Supporting
+declarations get a weaker marker. For an older census without reviewed canonical metadata, the
+exact `lean_declarations` list remains the fallback realization list. Headline metrics include
+transitive dependency size, maximum depth, module/library span, exclusive/shared dependency counts,
+and the nearest shared dependency with its exact shortest path.
+
+### Optional focused headline analysis, no Lean
+
+`graph-headlines` remains useful when a smaller JSON artifact is wanted. Its default
+`--view dependencies` computes the union of all real canonical headline dependency closures and
+retains every direct declaration edge in that union; no target is required:
+
+```bash
+leanq graph-headlines \
+  build/leanq/project-semantic-graph.json \
+  --census dev/davis-kahan-1970-full-source-census.json \
+  --census dev/yu-wang-samworth-2015-full-source-census.json \
+  --census dev/quench-2026-full-source-census.json \
+  --view dependencies \
+  --out build/leanq/headline-dependencies.json
+```
+
+Its payload includes:
+
+- every canonical headline declaration, including multiple realizations of one claim;
+- complete real dependency nodes and compiler-derived direct edges;
+- per-node headline coverage and shared-frontier annotations;
+- per-headline nearest shared dependency distances and witness paths;
+- pairwise nearest common dependencies; and
+- a structural projection whose collapsed linear edges retain exact witnesses and omitted counts.
+
+An optional `--target` only annotates reachability and distance. The legacy target-oriented summary
+is still available explicitly as `--view consumption --target DECLARATION`.
 
 ### Stage 3: HTML, no Lean
 
 Rendering is a separate command and reads only saved JSON:
 
 ```bash
-leanq graph-html \
-  build/leanq/quench-headlines.json \
-  --out build/leanq/quench-headlines.html
-
-xdg-open build/leanq/quench-headlines.html
+leanq graph-html build/leanq/headline-dependencies.json \
+  --out build/leanq/headline-dependencies.html
 ```
-
-The headline viewer lays out Davis--Kahan headlines, YWS headlines/nearest YWS consumers, nearest
-Acharyya integration points, nearest Quench integration points, downstream Quench headline claims,
-and the selected target.  Unconsumed headlines remain visible in gray.  Clicking a collapsed edge shows the exact elaborated witness
-path through omitted declarations; clicking a headline shows which registered declaration was
-actually consumed and its nearest integration points.
 
 This separation means:
 
 ```text
 Lean/source changes         -> graph-index, then whichever file transforms you need
-target selection             -> graph-slice or graph-headlines; no Lean
-census selection             -> graph-headlines; no Lean
+target selection             -> graph-slice or optional graph-headlines annotation; no Lean
+census selection             -> graph-headlines or graph-html annotation; no Lean
 HTML / CSS / JS iteration    -> graph-html only; no Lean
 ```
 
