@@ -46,6 +46,24 @@ class ViewerTests(unittest.TestCase):
             self.assertEqual(result, path)
             self.assertTrue(path.read_text(encoding="utf-8").endswith("</html>\n"))
 
+    def test_missing_presentation_headlines_are_embedded_for_visible_warning(self):
+        payload = {
+            "schemaVersion": 1,
+            "targets": ["Quench.end"],
+            "nodes": [],
+            "edges": [],
+            "presentation": {
+                "title": "Proof",
+                "nodes": [],
+                "edges": [],
+                "missingHeadlineCount": 1,
+                "missingHeadlines": ["YWS.missing"],
+            },
+        }
+        rendered = render_graph_html(payload)
+        self.assertIn("YWS.missing", rendered)
+        self.assertIn("presentation-warning", rendered)
+
 
 if __name__ == "__main__":
     unittest.main()

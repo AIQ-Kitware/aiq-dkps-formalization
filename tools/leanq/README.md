@@ -44,7 +44,7 @@ leanq deps myDef --local         # helpers from *this* library that myDef needs
 leanq deps myDef --transitive    # everything it reaches, Mathlib included
 leanq rdeps myDef                # who references myDef
 leanq query --uses myDef         # same, composable with the other filters
-leanq graph FinalTheorem --transitive-reduction --json
+leanq graph-index --out build/leanq/project-semantic-graph.json
 ```
 
 `deps --local` answers "what would I have to bring along to restate this somewhere else": it
@@ -58,64 +58,124 @@ other than the working directory. Every subcommand takes `--json`, and `query`/`
 
 ## Proof dependency graphs
 
-`leanq graph` is the semantic backend and interactive viewer for declaration-level proof
-architecture. It resolves each target declaration to its live source module, imports only those
-module roots, merges the elaborated declarations from the local libraries in that real import
-closure, and keeps the graph direction **dependency → consumer** so the picture reads from
-mathematical foundations toward the requested conclusion.
+The recommended graph workflow is staged so presentation iteration never re-runs Lean.
 
-Target-scoped imports are intentional. A Lake build tree can retain optional or historical
-`.olean` files from an older Lean toolchain even after the ordinary project build is green. Those
-artifacts are irrelevant to a target proof and must not make graph extraction fail. The target
-module's real import closure remains authoritative: if an incompatible artifact is actually on that
-closure, `leanq` reports it and suggests rebuilding the target module.
+### Stage 1: reusable project semantic index
+
+`graph-index` is the only graph stage that invokes Lean. With no positional target it discovers the
+project's ordinary Lake/default-target build surface and writes one reusable declaration graph for
+that whole first-party surface. The graph contains **direct dependency edges only**; target closures,
+transitive reductions, headline projections, and HTML are downstream file transformations.
 
 ```bash
-# Exact JSON for the full project-local ancestor closure.
-leanq graph DkpsQuench2026.QueryEfficiency.infiniteFixedSubset \
-  --transitive-reduction \
-  --out build/quench-proof-graph.json
-
-# The same exact graph as one self-contained offline HTML file.
-leanq graph DkpsQuench2026.QueryEfficiency.infiniteFixedSubset \
-  --html build/quench-proof-graph.html
-
-# A narrower explicit library scope remains useful while iterating. The same
-# target module is imported for each selected library; unrelated library artifacts
-# are never bulk-imported.
-leanq graph Some.Quench.Theorem \
-  --include-lib ForTauCeti \
-  --include-lib DavisKahan \
-  --include-lib YuWangSamworth2015 \
-  --include-lib Acharyya2025 \
-  --include-lib DkpsQuench2026 \
-  --html build/proof-graph.html
-
-# Source lookup is normally automatic. For generated/ambiguous declaration names,
-# give the defining module explicitly.
-leanq graph Some.Generated.Declaration \
-  --root-module DkpsQuench2026.Geometry.AlignedCMDS \
-  --html build/proof-graph.html
+leanq graph-index \
+  --out build/leanq/project-semantic-graph.json
 ```
 
-The graph command uses separate target-scoped caches named like
-`<Library>.roots-<TargetModule>.graph.jsonl`. This also prevents an older whole-library graph cache
-from being mistaken for the current target environment. Graph mode is deliberately more complete
-than ordinary inventory mode: it retains Lean internal/private constants and their dependencies.
-That prevents a public dependency path from being severed merely because it passes through private
-proof support. Internal nodes are marked with `"internal": true` so the viewer can collapse them
-*after* reachability has been established.
+The discovery is Lake-driven rather than repository-specific. It honors `defaultTargets`, local
+`lean_lib` ownership, `srcDir`, module targets such as `DavisKahan.All`, and glob-built libraries
+such as `ForTauCeti` whose root module does not import their full build surface. Optional/non-default
+libraries are excluded from the ordinary project graph; opt into every declared local library with
+`--all-libraries`, or add an individual optional library with `--include-lib`.
 
-Lake `srcDir` settings are honored when resolving source modules, including the nested
-`YuWangSamworth2015` package layout. The source import walk is used only to choose graph scope;
-all declaration edges are still extracted from Lean's elaborated environment.
+The expensive pieces are cached independently per library/module-root set as graph-vN JSONL files.
+Graph caches now carry a source/tool fingerprint covering the local import closure, Lake file,
+toolchain declaration, and Lean exporter. An unchanged cache is reused automatically; a source or
+exporter change invalidates the affected cache without needing `--refresh`. Explicit controls remain
+available:
 
-The JSON payload contains the exact project-local direct edges plus `reducedEdges` when requested
-(or automatically when HTML is rendered). The latter is a reachability-preserving transitive
-reduction. Ordinary declaration DAGs get the unique DAG reduction; rare generated-constant cycles
-are condensed into strongly connected components first. Dependencies outside the indexed local
-libraries, normally Mathlib or Lean, are summarized by prefix; `--include-unresolved` includes
-their full boundary names.
+```bash
+# Force only the layers you know changed.
+leanq graph-index \
+  --refresh-lib Acharyya2025 \
+  --refresh-lib DkpsQuench2026 \
+  --out build/leanq/project-semantic-graph.json
+
+# Force every project-graph cache.
+leanq graph-index \
+  --refresh \
+  --out build/leanq/project-semantic-graph.json
+```
+
+A positional target or `--root-module` still requests a deliberately narrower imported-environment
+index when desired, but presentation tooling should normally start from the project graph. The
+aggregate JSON records each library's import roots, cache path/fingerprint/reuse status, all direct
+declaration edges, and unresolved private-support diagnostics. The graph direction is
+**dependency → consumer**.
+
+Target-specific exploration is a second-stage operation and never invokes Lean:
+
+```bash
+leanq graph-slice \
+  build/leanq/project-semantic-graph.json \
+  DkpsQuench2026.QueryEfficiency.infiniteFixedSubset \
+  --transitive-reduction \
+  --out build/leanq/quench-proof-graph.json
+```
+
+That same master graph can be sliced repeatedly for any declaration it contains.
+
+### Stage 2: census headline consumption, no Lean
+
+`graph-headlines` takes the saved semantic index plus any full-source censuses.  Census rows are
+claim groups: every `lean_declarations` entry is considered a realization of that paper claim.
+This lets the analysis distinguish "the canonical headline theorem is called" from "Quench uses
+supporting machinery registered to this headline claim".
+
+For the current DK / YWS / Quench review:
+
+```bash
+leanq graph-headlines \
+  build/leanq/project-semantic-graph.json \
+  --target DkpsQuench2026.QueryEfficiency.infiniteFixedSubset \
+  --census dev/davis-kahan-1970-full-source-census.json \
+  --census dev/yu-wang-samworth-2015-full-source-census.json \
+  --census dev/quench-2026-full-source-census.json \
+  --out build/leanq/quench-headlines.json
+```
+
+The default importance is `headline`; repeat `--importance major` to include a broader census
+surface.  For every selected claim the output records:
+
+- whether any registered declaration is in the exact target dependency closure;
+- all consumed declarations from that claim group and which one is used as the representative;
+- when the census `semantic_review` supplies them, whether a canonical headline declaration or a supporting realization is consumed, distinct from merely reaching some other registered/context declaration;
+- the first consumer, nearest `YuWangSamworth2015`, `Acharyya2025`, and `DkpsQuench2026` public consumers;
+- the nearest downstream Quench headline claim; and
+- an exact shortest witness path to the selected target.
+
+Unused census headlines stay in the analysis rather than disappearing from an ancestor graph.
+
+### Stage 3: HTML, no Lean
+
+Rendering is a separate command and reads only saved JSON:
+
+```bash
+leanq graph-html \
+  build/leanq/quench-headlines.json \
+  --out build/leanq/quench-headlines.html
+
+xdg-open build/leanq/quench-headlines.html
+```
+
+The headline viewer lays out Davis--Kahan headlines, YWS headlines/nearest YWS consumers, nearest
+Acharyya integration points, nearest Quench integration points, downstream Quench headline claims,
+and the selected target.  Unconsumed headlines remain visible in gray.  Clicking a collapsed edge shows the exact elaborated witness
+path through omitted declarations; clicking a headline shows which registered declaration was
+actually consumed and its nearest integration points.
+
+This separation means:
+
+```text
+Lean/source changes         -> graph-index, then whichever file transforms you need
+target selection             -> graph-slice or graph-headlines; no Lean
+census selection             -> graph-headlines; no Lean
+HTML / CSS / JS iteration    -> graph-html only; no Lean
+```
+
+`leanq graph` remains as a backwards-compatible one-shot target-ancestor command, including its
+older `--html`/`--presentation` options.  New presentation work should prefer the staged commands
+above so rendering does not accidentally trigger Lean.
 
 ### Interactive HTML viewer
 
@@ -140,7 +200,11 @@ back to that graph.
 A presentation JSON is the human-owned layer over compiler facts. It can provide graph targets,
 labels, groups, descriptions, and the declaration names that should survive in the headline graph.
 Names are resolved exactly or as unambiguous Lean short names. If a named headline is no longer in
-the target dependency closure, generation fails instead of dropping it from the slide.
+the target dependency closure, the default behavior is to omit that headline, write the exact JSON
+and HTML anyway, and report the missing name both on stderr and in a visible viewer warning. This
+keeps stale editorial metadata from blocking access to the semantic graph. Use
+`--strict-presentation` when a curated presentation file is itself an audited artifact and any
+missing headline should fail the command.
 
 ```json
 {
@@ -180,7 +244,9 @@ JSON, while `--title` and `--subtitle` override display copy.
 declarations, it computes their reachability relation, transitively reduces it, and attaches a
 shortest exact witness path through omitted support nodes to every displayed edge. The HTML viewer
 implements the same operation for interactive headline changes, while a loaded presentation spec is
-prevalidated and reduced on the Python side before it is embedded.
+validated and reduced on the Python side before it is embedded. Missing curated names are carried
+in `presentation.missingHeadlines`, so downstream tooling can distinguish a complete curated view
+from a degraded-but-still-truthful one.
 
 ## Promotion-boundary queries
 

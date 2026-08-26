@@ -110,6 +110,25 @@ class DependencyGraphTests(unittest.TestCase):
             ),
         )
 
+    def test_namespace_relative_dependency_is_reconciled(self):
+        rows = [
+            decl(
+                "Pkg.Feature.support",
+                module="Pkg.Feature",
+            ),
+            decl(
+                "Pkg.Feature.capstone",
+                deps=("support",),
+                module="Pkg.Feature",
+            ),
+        ]
+        graph = target_dependency_graph(rows, ["Pkg.Feature.capstone"])
+        self.assertEqual(set(graph.nodes), {"Pkg.Feature.support", "Pkg.Feature.capstone"})
+        self.assertEqual(
+            graph.edges,
+            frozenset({("Pkg.Feature.support", "Pkg.Feature.capstone")}),
+        )
+
     def test_transitive_reduction_removes_shortcut(self):
         nodes = {"A", "B", "C", "D"}
         edges = {

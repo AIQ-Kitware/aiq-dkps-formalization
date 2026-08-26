@@ -37,6 +37,7 @@ class LeanLibrarySpec:
 
     name: str
     src_dir: str = "."
+    globs: tuple[str, ...] = ()
 
 
 @dataclass
@@ -74,10 +75,17 @@ class LeanProject:
                 src_match = re.search(
                     r"(?m)^\s*srcDir\s*=\s*[\"']([^\"']+)[\"']", block
                 )
+                globs_match = re.search(
+                    r"(?ms)^\s*globs\s*=\s*\[(.*?)\]", block
+                )
+                globs = tuple(
+                    re.findall(r"[\"']([^\"']+)[\"']", globs_match.group(1))
+                ) if globs_match else ()
                 specs.append(
                     LeanLibrarySpec(
                         name_match.group(1),
                         src_match.group(1) if src_match else ".",
+                        globs,
                     )
                 )
             return specs
@@ -89,6 +97,131 @@ class LeanProject:
     def declared_libraries(self) -> list[str]:
         """Lean library names declared by the project lakefile."""
         return [spec.name for spec in self.library_specs()]
+
+    def default_targets(self) -> list[str]:
+        """Lake default targets, when they can be read from the project file.
+
+        ``lakefile.toml`` is common for data/research repositories and gives us a
+        stable definition of the ordinary claimed build surface.  For a Lean
+        lakefile, where robust source parsing would be inappropriate here, the
+        caller falls back to declared library roots.
+        """
+        if self.lakefile.suffix != ".toml":
+            return []
+        text = self.lakefile.read_text(encoding="utf-8")
+        match = re.search(r"(?ms)^\s*defaultTargets\s*=\s*\[(.*?)\]", text)
+        if not match:
+            return []
+        return re.findall(r"[\"']([^\"']+)[\"']", match.group(1))
+
+    def library_for_module(self, module: str) -> str | None:
+        """Return the most specific local ``lean_lib`` owning ``module``."""
+        matches = [
+            spec.name for spec in self.library_specs()
+            if module == spec.name or module.startswith(spec.name + ".")
+        ]
+        return max(matches, key=len) if matches else None
+
+    def _library_build_roots(self, library: str) -> list[str]:
+        """Source roots representing a normal Lake build of one library.
+
+        A glob-built library has no requirement that its root module imports all
+        files (``ForTauCeti`` deliberately has an empty root), so every live
+        source module is an import root in that case.  Otherwise the library root
+        is the normal Lake surface when it exists.
+        """
+        spec = self.library_spec(library)
+        if spec.globs:
+            roots = self.source_modules(library)
+            if roots:
+                return roots
+        if self.source_of(library).exists():
+            return [library]
+        return self.source_modules(library)
+
+    def unavailable_import_roots(self, roots: Sequence[str]) -> list[str]:
+        """Roots that have source but no current importable build artifact.
+
+        Lake may retain a ``lean_lib`` declaration for an archival aggregate
+        whose source is intentionally not part of the current build.  Its
+        source layout alone is not enough for ``importModules``: Lean needs an
+        ``.olean`` at the module path.  This check deliberately says nothing
+        about an existing artifact that later fails elaboration; that remains a
+        genuine indexing failure.
+        """
+        return [
+            root for root in roots
+            if not (self.build_lib.joinpath(*root.split(".")).with_suffix(".olean")).exists()
+        ]
+
+    def project_graph_roots(
+        self,
+        *,
+        include_libraries: Sequence[str] = (),
+        exclude_libraries: Sequence[str] = (),
+        all_libraries: bool = False,
+        only_library: str | None = None,
+    ) -> dict[str, list[str]]:
+        """Map local libraries to module roots for a reusable project graph.
+
+        The default is the project's ordinary Lake build surface.  This avoids
+        optional/challenge libraries that are intentionally outside
+        ``defaultTargets`` while still honoring glob-built libraries.
+        ``all_libraries`` opts into every declared first-party library.
+        """
+        declared = self.declared_libraries()
+        declared_set = set(declared)
+        unknown = sorted(set(include_libraries) - declared_set)
+        if unknown:
+            raise ProjectError(
+                "unknown local lean_lib(s): " + ", ".join(unknown)
+            )
+
+        roots_by_library: dict[str, list[str]] = {}
+        if all_libraries:
+            for library in declared:
+                roots_by_library[library] = self._library_build_roots(library)
+        else:
+            targets = self.default_targets() or declared
+            for target in targets:
+                library = self.library_for_module(target)
+                if library is None:
+                    continue
+                if target == library:
+                    roots = self._library_build_roots(library)
+                elif self.source_of(target).exists():
+                    roots = [target]
+                else:
+                    # A Lake target can name the library even when source layout
+                    # is nonstandard. Fall back to its ordinary build roots.
+                    roots = self._library_build_roots(library)
+                roots_by_library.setdefault(library, []).extend(roots)
+
+        for library in include_libraries:
+            roots_by_library.setdefault(library, []).extend(
+                self._library_build_roots(library)
+            )
+
+        excluded = set(exclude_libraries)
+        roots_by_library = {
+            library: list(dict.fromkeys(roots))
+            for library, roots in roots_by_library.items()
+            if library not in excluded and roots
+        }
+        if only_library is not None:
+            if only_library not in declared_set:
+                raise ProjectError(f"unknown local lean_lib {only_library!r}")
+            roots = roots_by_library.get(only_library)
+            if roots is None:
+                roots = self._library_build_roots(only_library)
+            roots_by_library = {only_library: roots}
+        if not roots_by_library:
+            raise ProjectError("project graph scope contains no source-backed lean_libs")
+        return {
+            library: roots_by_library[library]
+            for library in declared
+            if library in roots_by_library
+        }
 
     def library_spec(self, library: str) -> LeanLibrarySpec:
         for spec in self.library_specs():

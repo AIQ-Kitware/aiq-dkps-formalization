@@ -206,6 +206,49 @@ def merge_declarations(groups: Iterable[Iterable[Decl]]) -> dict[str, Decl]:
     return table
 
 
+def environment_dependency_graph(decls: Iterable[Decl]) -> DependencyGraph:
+    """Return every indexed declaration and project-local direct edge.
+
+    This is the reusable stage-1 graph artifact.  Unlike
+    :func:`target_dependency_graph`, it deliberately does not take an ancestor
+    closure: any target present in the imported Lean environment can be sliced
+    out later without invoking Lean again.
+    """
+    rows = list(decls)
+    table = {decl.name: decl for decl in rows}
+    short_names = _unique_short_names(table)
+    edges: set[Edge] = set()
+    unresolved: set[tuple[str, str]] = set()
+    for consumer, decl in table.items():
+        for dependency in decl.deps:
+            if dependency == consumer:
+                continue
+            resolved = _resolve_dependency_name(table, short_names, decl, dependency)
+            if resolved is not None:
+                edges.add((resolved, consumer))
+            else:
+                unresolved.add((consumer, dependency))
+    return DependencyGraph(
+        nodes=table,
+        edges=frozenset(edges),
+        targets=(),
+        unresolved=tuple(sorted(unresolved)),
+    )
+
+
+def declarations_from_graph_payload(payload: Mapping) -> list[Decl]:
+    """Rehydrate declaration rows from a saved leanq graph/index payload."""
+    rows = payload.get("nodes")
+    if not isinstance(rows, list):
+        raise ProjectError("graph payload has no nodes list")
+    decls: list[Decl] = []
+    for row in rows:
+        if not isinstance(row, dict) or "name" not in row:
+            raise ProjectError("graph payload contains a malformed declaration node")
+        decls.append(Decl.from_json(row))
+    return decls
+
+
 def target_dependency_graph(
     decls: Iterable[Decl], targets: Sequence[str]
 ) -> DependencyGraph:
@@ -217,25 +260,29 @@ def target_dependency_graph(
     """
     rows = list(decls)
     table = {decl.name: decl for decl in rows}
-    resolved = tuple(resolve_decl_name(rows, target) for target in targets)
+    short_names = _unique_short_names(table)
+    resolved_targets = tuple(resolve_decl_name(rows, target) for target in targets)
 
-    keep: set[str] = set(resolved)
+    keep: set[str] = set(resolved_targets)
     edges: set[Edge] = set()
     unresolved: set[tuple[str, str]] = set()
-    queue = deque(resolved)
+    queue = deque(resolved_targets)
     while queue:
         consumer = queue.popleft()
         decl = table[consumer]
         for dependency in decl.deps:
             if dependency == consumer:
                 continue
-            if dependency not in table:
+            dependency_name = _resolve_dependency_name(
+                table, short_names, decl, dependency
+            )
+            if dependency_name is None:
                 unresolved.add((consumer, dependency))
                 continue
-            edges.add((dependency, consumer))
-            if dependency not in keep:
-                keep.add(dependency)
-                queue.append(dependency)
+            edges.add((dependency_name, consumer))
+            if dependency_name not in keep:
+                keep.add(dependency_name)
+                queue.append(dependency_name)
 
     # A dependency can be discovered before its own closure is scanned, so the
     # edge set above already contains every direct edge whose consumer is kept.
@@ -243,9 +290,50 @@ def target_dependency_graph(
     return DependencyGraph(
         nodes=nodes,
         edges=frozenset(edges),
-        targets=resolved,
+        targets=resolved_targets,
         unresolved=tuple(sorted(unresolved)),
     )
+
+
+def _unique_short_names(table: Mapping[str, Decl]) -> dict[str, str | None]:
+    """Map a declaration short name to its identity when it is unambiguous."""
+    result: dict[str, str | None] = {}
+    for name, decl in table.items():
+        short = decl.short_name
+        if short not in result:
+            result[short] = name
+        elif result[short] != name:
+            result[short] = None
+    return result
+
+
+def _resolve_dependency_name(
+    table: Mapping[str, Decl], short_names: Mapping[str, str | None],
+    consumer: Decl, dependency: str
+) -> str | None:
+    """Resolve an environment dependency to an indexed declaration identity.
+
+    Lean's used-constant traversal normally yields fully-qualified names.  Some
+    elaborated declarations nevertheless retain a namespace-relative name in
+    their value (notably a theorem referring to a sibling declaration).  A
+    project graph indexes declaration identities by their full environment
+    names, so treating that spelling as unresolved silently cuts a real edge.
+
+    Resolve exact names first, then interpret the spelling relative to the
+    consumer's enclosing namespaces from nearest to farthest.  A final unique
+    short-name fallback handles genuine root aliases without inventing an edge
+    in the ambiguous case.
+    """
+    if dependency in table:
+        return dependency
+
+    namespace = consumer.name.split(".")[:-1]
+    for size in range(len(namespace), 0, -1):
+        candidate = ".".join((*namespace[:size], dependency))
+        if candidate in table:
+            return candidate
+
+    return short_names.get(dependency.rsplit(".", 1)[-1])
 
 
 def _adjacency(nodes: Iterable[str], edges: Iterable[Edge]) -> dict[str, set[str]]:
@@ -272,18 +360,17 @@ def strongly_connected_components(
     for root in node_list:
         if root in seen:
             continue
+        seen.add(root)
         stack: list[tuple[str, bool]] = [(root, False)]
         while stack:
             node, expanded = stack.pop()
             if expanded:
                 finish.append(node)
                 continue
-            if node in seen:
-                continue
-            seen.add(node)
             stack.append((node, True))
             for nxt in sorted(adj[node], reverse=True):
                 if nxt not in seen:
+                    seen.add(nxt)
                     stack.append((nxt, False))
 
     assigned: set[str] = set()

@@ -64,60 +64,89 @@ def propValued (type : Expr) : MetaM Bool :=
     return body.isProp || (body.isSort && body.sortLevel!.isZero)
 
 def dependencyJson (ci : ConstantInfo) (self : Name) (includeInternal : Bool) : String :=
-  let used := ci.type.getUsedConstants ++ (ci.value?.map Expr.getUsedConstants).getD #[]
+  -- The proof of a theorem is opaque to reduction, but it is still present in
+  -- the environment and is essential to a semantic *dependency* graph.  The
+  -- default `value?` deliberately hides theorem values; opt in explicitly so
+  -- this records the declarations actually used to establish a theorem.
+  let used := ci.type.getUsedConstants ++
+    (ci.value? (allowOpaque := true) |>.map Expr.getUsedConstants).getD #[]
   let deps := used.toList.filter (fun d => (includeInternal || !d.isInternal) && d != self) |>.eraseDups
   String.intercalate "," (deps.map fun d => "\"" ++ esc d.toString ++ "\"")
 
+def emitConst (root modName n : Name) (ci : ConstantInfo)
+    (depsOnly graphMode : Bool) : MetaM Unit := do
+  let depStr := dependencyJson ci n graphMode
+  let internalStr := if n.isInternal then "true" else "false"
+  if depsOnly then
+    IO.println <| "{"
+      ++ "\"name\":\"" ++ esc n.toString ++ "\","
+      ++ "\"module\":\"" ++ esc modName.toString ++ "\","
+      ++ "\"kind\":\"" ++ kindOf ci ++ "\","
+      ++ "\"library\":\"" ++ esc root.toString ++ "\","
+      ++ "\"internal\":" ++ internalStr ++ ","
+      ++ "\"isProp\":null,"
+      ++ "\"propValued\":null,"
+      ++ "\"sorried\":null,"
+      ++ "\"line\":null,"
+      ++ "\"axioms\":null,"
+      ++ "\"deps\":[" ++ depStr ++ "]"
+      ++ "}"
+  else
+    -- One pathological declaration must not abort the whole index.
+    let ax ← try collectAxioms n catch _ => pure #[]
+    let isP ← try isProp ci.type catch _ => pure false
+    let pv ← try propValued ci.type catch _ => pure false
+    let line ← try
+        match ← findDeclarationRanges? n with
+        | some r => pure r.range.pos.line
+        | none => pure 0
+      catch _ => pure 0
+    let axStr := String.intercalate "," (ax.toList.map fun a => "\"" ++ esc a.toString ++ "\"")
+    IO.println <| "{"
+      ++ "\"name\":\"" ++ esc n.toString ++ "\","
+      ++ "\"module\":\"" ++ esc modName.toString ++ "\","
+      ++ "\"kind\":\"" ++ kindOf ci ++ "\","
+      ++ "\"library\":\"" ++ esc root.toString ++ "\","
+      ++ "\"internal\":" ++ internalStr ++ ","
+      ++ "\"isProp\":" ++ (if isP then "true" else "false") ++ ","
+      ++ "\"propValued\":" ++ (if pv then "true" else "false") ++ ","
+      ++ "\"sorried\":" ++ (if ax.contains ``sorryAx then "true" else "false") ++ ","
+      ++ "\"line\":" ++ toString line ++ ","
+      ++ "\"axioms\":[" ++ axStr ++ "],"
+      ++ "\"deps\":[" ++ depStr ++ "]"
+      ++ "}"
+
+/-- Emit declarations owned by `root` modules.
+
+In graph mode, also recover private implementation constants directly from the
+imported environment.  Lean private names are `_private.<module>...`; depending
+on how a module was compiled they are not guaranteed to appear in the public
+module header's `constNames`.  Missing one cuts an otherwise real dependency
+path at the private helper, so the graph would falsely report that downstream
+public theorems do not reach their upstream dependencies.
+-/
 def emit (root : Name) (detail : String) : MetaM Unit := do
   let env ← getEnv
   let graphMode := detail == "graph"
   let depsOnly := detail != "full"
+  let mut seen : Array Name := #[]
   for h : i in [0 : env.header.moduleNames.size] do
     let modName := env.header.moduleNames[i]
     unless root.isPrefixOf modName do continue
     for n in env.header.moduleData[i]!.constNames do
       if n.isInternal && !graphMode then continue
       let some ci := env.find? n | continue
-      let depStr := dependencyJson ci n graphMode
-      let internalStr := if n.isInternal then "true" else "false"
-      if depsOnly then
-        IO.println <| "{"
-          ++ "\"name\":\"" ++ esc n.toString ++ "\","
-          ++ "\"module\":\"" ++ esc modName.toString ++ "\","
-          ++ "\"kind\":\"" ++ kindOf ci ++ "\","
-          ++ "\"library\":\"" ++ esc root.toString ++ "\","
-          ++ "\"internal\":" ++ internalStr ++ ","
-          ++ "\"isProp\":null,"
-          ++ "\"propValued\":null,"
-          ++ "\"sorried\":null,"
-          ++ "\"line\":null,"
-          ++ "\"axioms\":null,"
-          ++ "\"deps\":[" ++ depStr ++ "]"
-          ++ "}"
-      else
-        -- One pathological declaration must not abort the whole index.
-        let ax ← try collectAxioms n catch _ => pure #[]
-        let isP ← try isProp ci.type catch _ => pure false
-        let pv ← try propValued ci.type catch _ => pure false
-        let line ← try
-            match ← findDeclarationRanges? n with
-            | some r => pure r.range.pos.line
-            | none => pure 0
-          catch _ => pure 0
-        let axStr := String.intercalate "," (ax.toList.map fun a => "\"" ++ esc a.toString ++ "\"")
-        IO.println <| "{"
-          ++ "\"name\":\"" ++ esc n.toString ++ "\","
-          ++ "\"module\":\"" ++ esc modName.toString ++ "\","
-          ++ "\"kind\":\"" ++ kindOf ci ++ "\","
-          ++ "\"library\":\"" ++ esc root.toString ++ "\","
-          ++ "\"internal\":" ++ internalStr ++ ","
-          ++ "\"isProp\":" ++ (if isP then "true" else "false") ++ ","
-          ++ "\"propValued\":" ++ (if pv then "true" else "false") ++ ","
-          ++ "\"sorried\":" ++ (if ax.contains ``sorryAx then "true" else "false") ++ ","
-          ++ "\"line\":" ++ toString line ++ ","
-          ++ "\"axioms\":[" ++ axStr ++ "],"
-          ++ "\"deps\":[" ++ depStr ++ "]"
-          ++ "}"
+      emitConst root modName n ci depsOnly graphMode
+      seen := seen.push n
+
+  if graphMode then
+    let privatePrefix := "_private." ++ root.toString ++ "."
+    for (n, ci) in env.constants.toList do
+      if n.isInternal && n.toString.startsWith privatePrefix && !(seen.contains n) then
+        -- These rows have no reliable public module-header provenance.  The
+        -- library root is sufficient for display; declaration identity and
+        -- dependencies come from the environment constant itself.
+        emitConst root root n ci depsOnly graphMode
 
 end DeclIndex
 

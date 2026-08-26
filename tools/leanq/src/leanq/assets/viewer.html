@@ -53,6 +53,8 @@ header h1 { margin: 0; font-size: clamp(1.25rem, 2vw, 1.7rem); line-height: 1.2;
 header p { margin: 5px 0 0; color: var(--muted); max-width: 900px; }
 .badges { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; }
 .badge { border: 1px solid var(--border); background: var(--panel); border-radius: 999px; padding: 4px 8px; font-size: 0.78rem; white-space: nowrap; }
+.warning { margin: 0 0 10px; border: 1px solid #b7791f; background: color-mix(in srgb, #f6ad55 16%, var(--panel)); border-radius: 8px; padding: 8px 10px; font-size: .82rem; line-height: 1.4; }
+.warning code { font-size: .9em; }
 .toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 10px; }
 .toolbar .spacer { flex: 1 1 auto; }
 .check { display: inline-flex; align-items: center; gap: 5px; font-size: 0.86rem; color: var(--muted); }
@@ -129,6 +131,8 @@ svg .node text.sub { fill: #4b5968; font-size: 9px; }
     </div>
     <div class="badges" id="badges" aria-label="Graph summary"></div>
   </header>
+
+  <div id="presentation-warning" class="warning" hidden role="status"></div>
 
   <div class="toolbar" aria-label="Graph controls">
     <label>View
@@ -209,6 +213,14 @@ svg .node text.sub { fill: #4b5968; font-size: 9px; }
   const directAdj = adjacency(DATA.nodes.map(n => n.id), directEdges);
   const directRev = reverseAdjacency(DATA.nodes.map(n => n.id), directEdges);
   const seedPresentation = DATA.presentation || {nodes: [], edges: []};
+  const missingHeadlines = seedPresentation.missingHeadlines || [];
+  const presentationWarning = document.getElementById("presentation-warning");
+  if (missingHeadlines.length) {
+    presentationWarning.hidden = false;
+    const shown = missingHeadlines.slice(0, 4).join(", ");
+    const suffix = missingHeadlines.length > 4 ? `, … (+${missingHeadlines.length - 4})` : "";
+    presentationWarning.textContent = `Presentation warning: ${missingHeadlines.length} curated headline(s) are not in the exact target dependency closure and were omitted: ${shown}${suffix}`;
+  }
   const presentationMeta = new Map((seedPresentation.nodes || []).map(node => [node.id, node]));
   const seedHeadlines = new Set((seedPresentation.nodes || []).map(node => node.id));
   if (!seedHeadlines.size) DATA.targets.forEach(id => seedHeadlines.add(id));

@@ -22,14 +22,20 @@ from .index import (
     ensure_scoped_index,
     filter_decls,
     index_path,
+    scoped_index_path,
+    scoped_index_cache_state,
+    GRAPH_CACHE_VERSION,
 )
 from .graph import (
+    declarations_from_graph_payload,
+    environment_dependency_graph,
     merge_declarations,
     strongly_connected_components,
     target_dependency_graph,
     transitive_reduction,
 )
 from .presentation import build_presentation, load_presentation
+from .headlines import analyze_headlines
 from .viewer import write_graph_html
 from .project import ProjectError, find_project
 from .promotion import DEFAULT_TAGS, promotion_report
@@ -260,6 +266,267 @@ def cmd_promotions(args) -> int:
         )
     return 0
 
+def _graph_scope(project, targets, root_modules, include_lib, exclude_lib, lib):
+    roots = list(dict.fromkeys(root_modules or ()))
+    if not roots:
+        if not targets:
+            raise ProjectError("graph indexing needs a target declaration or --root-module")
+        roots = project.declaration_modules(targets)
+    if include_lib:
+        libraries = list(dict.fromkeys(include_lib))
+    elif lib:
+        libraries = [lib]
+    else:
+        libraries = project.libraries_for_import_closure(roots)
+    excluded = set(exclude_lib or ())
+    libraries = [library for library in libraries if library not in excluded]
+    if not libraries:
+        raise ProjectError("graph scope contains no libraries")
+    return roots, libraries
+
+
+def _read_json_object(path: Path) -> dict:
+    try:
+        obj = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as ex:
+        raise ProjectError(f"cannot read JSON payload {path}: {ex}") from ex
+    if not isinstance(obj, dict):
+        raise ProjectError(f"JSON payload {path} must contain an object")
+    return obj
+
+
+@profile
+def cmd_graph_index(args) -> int:
+    """Stage 1: build a reusable semantic dependency index.
+
+    With no target/root arguments this indexes the project's ordinary Lake
+    build surface.  Target/root arguments retain the narrower imported-
+    environment mode for repositories where a smaller cache is useful.
+    """
+    project = find_project(Path(args.project) if args.project else None)
+    targets = list(args.target or ())
+    explicit_roots = list(args.root_module or ())
+    project_mode = bool(args.whole_project or (not targets and not explicit_roots))
+    if args.whole_project and (targets or explicit_roots):
+        raise ProjectError("--whole-project cannot be combined with targets or --root-module")
+
+    if project_mode:
+        roots_by_library = project.project_graph_roots(
+            include_libraries=args.include_lib or (),
+            exclude_libraries=args.exclude_lib or (),
+            all_libraries=bool(args.all_libraries),
+            only_library=args.lib,
+        )
+        scope = "project-all-libraries" if args.all_libraries else "project-default-build"
+        bootstrap_targets: list[str] = []
+    else:
+        roots, libraries = _graph_scope(
+            project,
+            targets,
+            explicit_roots,
+            args.include_lib,
+            args.exclude_lib,
+            args.lib,
+        )
+        roots_by_library = {library: list(roots) for library in libraries}
+        scope = "imported-environment"
+        bootstrap_targets = targets
+
+    libraries = list(roots_by_library)
+    refresh_libs = set(args.refresh_lib or ())
+    unknown_refresh = sorted(refresh_libs - set(libraries))
+    if unknown_refresh:
+        raise ProjectError(
+            "--refresh-lib names libraries outside this graph scope: "
+            + ", ".join(unknown_refresh)
+        )
+
+    groups = []
+    cache_rows = []
+    unavailable_libraries: list[dict[str, object]] = []
+    for library, roots in roots_by_library.items():
+        unavailable_roots = project.unavailable_import_roots(roots) if args.all_libraries else []
+        if unavailable_roots:
+            reason = (
+                "declared library has no importable build root "
+                "(missing .olean artifact)"
+            )
+            if args.all_libraries and not getattr(args, "strict_all_libraries", False):
+                unavailable_libraries.append(
+                    {"library": library, "roots": list(roots), "unavailableRoots": unavailable_roots,
+                     "reason": reason}
+                )
+                if not args.json:
+                    print(
+                        f"leanq: skipping {library}: {reason}: {', '.join(unavailable_roots)}",
+                        file=sys.stderr,
+                    )
+                continue
+            raise ProjectError(
+                f"cannot index {library}: {reason}: {', '.join(unavailable_roots)}"
+            )
+        forced = bool(args.refresh or library in refresh_libs)
+        before = scoped_index_cache_state(project, library, roots, detail="graph")
+        path = before["path"]
+        if before["current"] and not forced and not args.json:
+            print(f"leanq: using current graph cache {path}", file=sys.stderr)
+        groups.append(
+            ensure_scoped_index(
+                project,
+                library,
+                roots,
+                refresh=forced,
+                verbose=not args.json,
+                detail="graph",
+            )
+        )
+        cache_rows.append(
+            {
+                "library": library,
+                "path": str(path),
+                "roots": list(roots),
+                "fingerprint": before.get("fingerprint"),
+                "reused": bool(before["current"] and not forced),
+                "rebuilt": bool(forced or not before["current"]),
+            }
+        )
+
+    if not groups:
+        raise ProjectError("graph scope contains no importable libraries")
+    table = merge_declarations(groups)
+    graph = environment_dependency_graph(table.values())
+    payload = graph.to_json()
+    payload["payloadKind"] = "semantic-index"
+    payload["graphCacheVersion"] = GRAPH_CACHE_VERSION
+    payload["project"] = str(project.root)
+    payload["libraries"] = [row["library"] for row in cache_rows]
+    payload["importRootsByLibrary"] = roots_by_library
+    payload["importRoots"] = list(dict.fromkeys(
+        root for roots in roots_by_library.values() for root in roots
+    ))
+    payload["bootstrapTargets"] = bootstrap_targets
+    payload["scope"] = scope
+    if project_mode:
+        payload["projectDefaultTargets"] = project.default_targets()
+    payload["cache"] = cache_rows
+    payload["unavailableLibraries"] = unavailable_libraries
+    components = strongly_connected_components(graph.nodes, graph.edges)
+    cyclic = [list(component) for component in components if len(component) > 1]
+    payload["cyclicComponentCount"] = len(cyclic)
+    payload["cyclicComponents"] = cyclic
+    unresolved_internal = sorted(
+        {dependency for _, dependency in graph.unresolved if dependency.startswith("_private.")}
+    )
+    payload["unresolvedInternalDependencyCount"] = len(unresolved_internal)
+    if unresolved_internal:
+        payload["unresolvedInternalDependencies"] = unresolved_internal
+
+    text = json.dumps(payload, indent=2) + "\n"
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(text, encoding="utf-8")
+    if args.json:
+        sys.stdout.write(text)
+    else:
+        print(out)
+        print(
+            f"semantic index: {len(graph.nodes)} declarations, {len(graph.edges)} direct edges, "
+            f"{len(cache_rows)} libraries [{scope}]; downstream queries are Lean-free",
+            file=sys.stderr,
+        )
+    return 0
+
+
+@profile
+def cmd_graph_slice(args) -> int:
+    """Stage 2 generic target slice from a saved semantic index, without Lean."""
+    semantic_path = Path(args.semantic_index)
+    payload = _read_json_object(semantic_path)
+    if payload.get("payloadKind") != "semantic-index":
+        raise ProjectError(
+            f"{semantic_path} is not a reusable semantic index; run `leanq graph-index` first"
+        )
+    targets = list(args.target or ())
+    if not targets:
+        raise ProjectError("graph-slice needs at least one target declaration")
+    decls = declarations_from_graph_payload(payload)
+    graph = target_dependency_graph(decls, targets)
+    reduced = transitive_reduction(graph.nodes, graph.edges) if args.transitive_reduction else None
+    result = graph.to_json(reduced_edges=reduced)
+    result["payloadKind"] = "graph-slice"
+    result["sourceSemanticIndex"] = {
+        "path": str(semantic_path),
+        "scope": payload.get("scope"),
+        "graphCacheVersion": payload.get("graphCacheVersion"),
+    }
+    result["project"] = payload.get("project")
+    result["libraries"] = payload.get("libraries", [])
+    text = json.dumps(result, indent=2) + "\n"
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(text, encoding="utf-8")
+    if args.json:
+        sys.stdout.write(text)
+    else:
+        print(out)
+        print(
+            f"graph slice: {len(graph.nodes)} declarations, {len(graph.edges)} direct edges; no Lean invoked",
+            file=sys.stderr,
+        )
+    return 0
+
+
+@profile
+def cmd_graph_headlines(args) -> int:
+    """Stage 2: census-aware headline consumption analysis, without Lean."""
+    semantic_path = Path(args.semantic_index)
+    payload = _read_json_object(semantic_path)
+    if payload.get("payloadKind") != "semantic-index":
+        raise ProjectError(
+            f"{semantic_path} is not a reusable semantic index; run `leanq graph-index ...` first"
+        )
+    targets = list(args.target or payload.get("bootstrapTargets") or ())
+    if not targets:
+        raise ProjectError("graph-headlines needs --target or a graph-index bootstrap target")
+    if len(targets) != 1:
+        raise ProjectError("graph-headlines currently accepts exactly one target declaration")
+    census_paths = [Path(path) for path in args.census]
+    importances = args.importance or ["headline"]
+    result = analyze_headlines(
+        payload,
+        targets=targets,
+        census_paths=census_paths,
+        importances=importances,
+    )
+    result["sourceSemanticIndex"]["path"] = str(semantic_path)
+    text = json.dumps(result, indent=2) + "\n"
+    out = Path(args.out)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(text, encoding="utf-8")
+    if args.json:
+        sys.stdout.write(text)
+    else:
+        counts = result["headlineAnalysis"]["familyCounts"]
+        print(out)
+        for family, row in counts.items():
+            print(
+                f"{family}: {row['consumed']}/{row['claims']} headline claim(s) consumed",
+                file=sys.stderr,
+            )
+    return 0
+
+
+@profile
+def cmd_graph_html(args) -> int:
+    """Stage 3: render saved graph/headline JSON to self-contained HTML, without Lean."""
+    payload_path = Path(args.input)
+    payload = _read_json_object(payload_path)
+    out = Path(args.out)
+    write_graph_html(out, payload, title=args.title)
+    print(out)
+    return 0
+
+
 @profile
 def cmd_graph(args) -> int:
     """Exact project-local declaration graph and optional interactive viewer."""
@@ -317,6 +584,20 @@ def cmd_graph(args) -> int:
     cyclic = [list(component) for component in components if len(component) > 1]
     payload["cyclicComponentCount"] = len(cyclic)
     payload["cyclicComponents"] = cyclic
+    unresolved_internal = sorted(
+        {dependency for _, dependency in graph.unresolved if dependency.startswith("_private.")}
+    )
+    payload["unresolvedInternalDependencyCount"] = len(unresolved_internal)
+    if unresolved_internal:
+        payload["unresolvedInternalDependencies"] = unresolved_internal
+        shown = ", ".join(unresolved_internal[:3])
+        extra = len(unresolved_internal) - 3
+        suffix = f", ... (+{extra})" if extra else ""
+        print(
+            "leanq: warning: exact graph has unresolved private support dependencies: "
+            f"{shown}{suffix}",
+            file=sys.stderr,
+        )
     if args.include_unresolved:
         payload["unresolvedDependencies"] = [
             {"consumer": consumer, "dependency": dependency}
@@ -330,6 +611,7 @@ def cmd_graph(args) -> int:
             extra_headlines=args.headline or (),
             title=args.title,
             subtitle=args.subtitle,
+            strict=args.strict_presentation,
         )
     elif args.title or args.subtitle:
         payload["presentation"] = build_presentation(
@@ -337,6 +619,20 @@ def cmd_graph(args) -> int:
             None,
             title=args.title,
             subtitle=args.subtitle,
+            strict=args.strict_presentation,
+        )
+
+    presentation = payload.get("presentation") or {}
+    missing_headlines = presentation.get("missingHeadlines") or []
+    if missing_headlines:
+        shown = ", ".join(repr(name) for name in missing_headlines[:5])
+        extra = len(missing_headlines) - 5
+        suffix = f", ... (+{extra})" if extra else ""
+        print(
+            "leanq: warning: presentation skipped "
+            f"{len(missing_headlines)} headline(s) not in the target dependency closure: "
+            f"{shown}{suffix}",
+            file=sys.stderr,
         )
 
     text = json.dumps(payload, indent=2) + "\n"
@@ -531,6 +827,95 @@ def build_parser() -> argparse.ArgumentParser:
     p.set_defaults(func=cmd_promotions)
 
     p = sub.add_parser(
+        "graph-index",
+        help="stage 1: build a reusable imported-environment semantic graph index",
+    )
+    add_common(p)
+    p.add_argument(
+        "target", nargs="*",
+        help="optional declaration(s) for a narrow imported-environment index; omit for the reusable project graph",
+    )
+    p.add_argument(
+        "--whole-project", action="store_true",
+        help="explicitly index the project's ordinary Lake/default-target build surface (also the default when no target/root is given)",
+    )
+    p.add_argument(
+        "--all-libraries", action="store_true",
+        help="with project indexing, include every declared local lean_lib, including optional/non-default libraries",
+    )
+    p.add_argument(
+        "--strict-all-libraries", action="store_true",
+        help="with --all-libraries, fail instead of recording a declared library with no importable build root as unavailable",
+    )
+    p.add_argument(
+        "--root-module", action="append",
+        help="module root to import instead of inferring it from target declarations",
+    )
+    p.add_argument(
+        "--include-lib", action="append",
+        help="library whose declarations should be present in the semantic index (repeatable)",
+    )
+    p.add_argument(
+        "--exclude-lib", action="append",
+        help="remove a library from the inferred graph scope (repeatable)",
+    )
+    p.add_argument(
+        "--refresh", action="store_true",
+        help="rebuild every per-library graph cache before aggregating",
+    )
+    p.add_argument(
+        "--refresh-lib", action="append",
+        help="rebuild only this library's graph cache (repeatable)",
+    )
+    p.add_argument("--out", required=True, help="write the reusable semantic-index JSON here")
+    p.set_defaults(func=cmd_graph_index)
+
+    p = sub.add_parser(
+        "graph-slice",
+        help="stage 2: derive a target dependency subgraph from a saved semantic index",
+    )
+    add_common(p)
+    p.add_argument("semantic_index", help="JSON written by `leanq graph-index`")
+    p.add_argument("target", nargs="+", help="target declaration(s) to slice from the reusable graph")
+    p.add_argument(
+        "--transitive-reduction", action="store_true",
+        help="also emit a reachability-preserving reduced edge set",
+    )
+    p.add_argument("--out", required=True, help="write the target graph JSON here")
+    p.set_defaults(func=cmd_graph_slice)
+
+    p = sub.add_parser(
+        "graph-headlines",
+        help="stage 2: analyze census headline consumption from a saved semantic index",
+    )
+    add_common(p)
+    p.add_argument("semantic_index", help="JSON written by `leanq graph-index`")
+    p.add_argument(
+        "--target", action="append",
+        help="Quench target declaration (default: graph-index bootstrap target)",
+    )
+    p.add_argument(
+        "--census", action="append", required=True,
+        help="full-source census JSON to include (repeatable)",
+    )
+    p.add_argument(
+        "--importance", action="append",
+        help="census importance to include (repeatable; default: headline)",
+    )
+    p.add_argument("--out", required=True, help="write the headline-analysis JSON here")
+    p.set_defaults(func=cmd_graph_headlines)
+
+    p = sub.add_parser(
+        "graph-html",
+        help="stage 3: render a saved graph/headline JSON payload to HTML without Lean",
+    )
+    add_common(p)
+    p.add_argument("input", help="saved leanq graph or headline-analysis JSON")
+    p.add_argument("--out", required=True, help="write the self-contained HTML here")
+    p.add_argument("--title", help="override the HTML title")
+    p.set_defaults(func=cmd_graph_html)
+
+    p = sub.add_parser(
         "graph",
         help="project-local elaborated dependency graph for one or more target declarations",
     )
@@ -572,6 +957,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--headline", action="append",
         help="add a declaration to the initial headline presentation (repeatable)",
+    )
+    p.add_argument(
+        "--strict-presentation", action="store_true",
+        help="fail if any curated headline is absent from the exact target dependency closure",
     )
     p.add_argument("--title", help="override the viewer/presentation title")
     p.add_argument("--subtitle", help="override the viewer/presentation subtitle")
