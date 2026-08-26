@@ -18,10 +18,17 @@ from .index import (
     build_index,
     by_name,
     closure,
+    ensure_graph_index,
     ensure_index,
     ensure_scoped_index,
     filter_decls,
     index_path,
+)
+from .graph import (
+    merge_declarations,
+    strongly_connected_components,
+    target_dependency_graph,
+    transitive_reduction,
 )
 from .project import ProjectError, find_project
 from .promotion import DEFAULT_TAGS, promotion_report
@@ -252,6 +259,69 @@ def cmd_promotions(args) -> int:
         )
     return 0
 
+@profile
+def cmd_graph(args) -> int:
+    """Exact project-local declaration graph feeding later visualization tools."""
+    project = find_project(Path(args.project) if args.project else None)
+    if args.include_lib:
+        libraries = list(dict.fromkeys(args.include_lib))
+    elif args.lib:
+        libraries = [args.lib]
+    else:
+        libraries = project.libraries()
+    excluded = set(args.exclude_lib or ())
+    libraries = [library for library in libraries if library not in excluded]
+    if not libraries:
+        raise ProjectError("graph scope contains no libraries")
+
+    groups = []
+    for library in libraries:
+        groups.append(
+            ensure_graph_index(
+                project, library, refresh=args.refresh, verbose=not args.json
+            )
+        )
+    table = merge_declarations(groups)
+    graph = target_dependency_graph(table.values(), args.target)
+    reduced = (
+        transitive_reduction(graph.nodes, graph.edges)
+        if args.transitive_reduction
+        else None
+    )
+    payload = graph.to_json(reduced_edges=reduced)
+    payload["project"] = str(project.root)
+    payload["libraries"] = libraries
+    payload["scope"] = "project-local"
+    components = strongly_connected_components(graph.nodes, graph.edges)
+    cyclic = [list(component) for component in components if len(component) > 1]
+    payload["cyclicComponentCount"] = len(cyclic)
+    payload["cyclicComponents"] = cyclic
+    if args.include_unresolved:
+        payload["unresolvedDependencies"] = [
+            {"consumer": consumer, "dependency": dependency}
+            for consumer, dependency in graph.unresolved
+        ]
+
+    text = json.dumps(payload, indent=2) + "\n"
+    if args.out:
+        out = Path(args.out)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        out.write_text(text, encoding="utf-8")
+        if not args.json:
+            print(out)
+    if args.json:
+        sys.stdout.write(text)
+    elif not args.out:
+        print(f"targets: {', '.join(graph.targets)}")
+        print(f"libraries: {', '.join(libraries)}")
+        print(f"nodes: {len(graph.nodes)}")
+        print(f"direct edges: {len(graph.edges)}")
+        if reduced is not None:
+            print(f"transitive-reduction edges: {len(reduced)}")
+        print(f"cyclic components: {len(cyclic)}")
+        print(f"unresolved boundary dependencies: {len(graph.unresolved)}")
+    return 0
+
 
 def cmd_axioms(args) -> int:
     project, library = _resolve(args)
@@ -412,6 +482,32 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--refresh", action="store_true", help="rebuild the root-scoped index")
     p.add_argument("--names", action="store_true", help="print bare declaration names")
     p.set_defaults(func=cmd_promotions)
+
+    p = sub.add_parser(
+        "graph",
+        help="project-local elaborated dependency graph for one or more target declarations",
+    )
+    add_common(p)
+    p.add_argument("target", nargs="+", help="full or unambiguous short declaration name")
+    p.add_argument(
+        "--include-lib", action="append",
+        help="library to index for graph nodes (repeatable; default: all project libraries in the current build)",
+    )
+    p.add_argument(
+        "--exclude-lib", action="append",
+        help="remove a library from the default graph scope (repeatable)",
+    )
+    p.add_argument("--refresh", action="store_true", help="rebuild graph indexes first")
+    p.add_argument(
+        "--transitive-reduction", action="store_true",
+        help="also emit a reachability-preserving reduced edge set",
+    )
+    p.add_argument(
+        "--include-unresolved", action="store_true",
+        help="include names outside the indexed project-local graph, e.g. Mathlib dependencies",
+    )
+    p.add_argument("--out", help="write the graph JSON payload to this path")
+    p.set_defaults(func=cmd_graph)
 
     p = sub.add_parser("axioms", help="axiom closure of one declaration")
     add_common(p)

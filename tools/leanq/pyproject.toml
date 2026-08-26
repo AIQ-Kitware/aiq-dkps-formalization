@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "leanq"
-version = "0.1.0"
+version = "0.2.0"
 description = "Query a built Lean 4 library's declarations from the elaborator, not from regexes"
 readme = "README.md"
 requires-python = ">=3.10"
