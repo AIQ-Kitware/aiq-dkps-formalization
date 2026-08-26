@@ -309,7 +309,7 @@ theorem safe_scaled_cmdsEntrywiseRate_zero
   refine hfinal.congr (fun n => ?_)
   have hN : ((n + 1 : ℕ) : ℝ) ≠ 0 := by positivity
   simp only [cmdsEntrywiseRate, responseEntrywiseRate, responseDistBound, safeResponseTolerance]
-  field_simp <;> ring
+  (field_simp; ring)
 
 /-- The polar-factor side expression vanishes under the safe tolerance.
 
