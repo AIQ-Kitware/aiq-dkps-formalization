@@ -91,26 +91,118 @@ def resolve_decl_name(decls: Iterable[Decl], query: str) -> str:
     return short[0]
 
 
+def _merge_optional_field(name: str, left, right, *, decl_name: str):
+    """Merge optional semantic metadata, rejecting real disagreements."""
+    if left is None:
+        return right
+    if right is None:
+        return left
+    if left != right:
+        raise ProjectError(
+            f"conflicting graph records for {decl_name}: semantic field "
+            f"{name} differs ({left!r} vs {right!r})"
+        )
+    return left
+
+
+def _merge_decl_records(left: Decl, right: Decl) -> Decl:
+    """Reconcile two records for the same Lean environment constant.
+
+    Lean module headers can list the same generated declaration under more than
+    one importing module.  The declaration name is the environment identity, so
+    differing module provenance alone is not a semantic conflict.  We accept
+    such duplicates when their elaborated kind/dependencies/metadata agree and
+    retain deterministic provenance for display.  Actual semantic disagreement
+    remains an error.
+    """
+    if left.name != right.name:
+        raise AssertionError("cannot merge declarations with different names")
+    if left.kind != right.kind:
+        raise ProjectError(
+            f"conflicting graph records for {left.name}: semantic field kind "
+            f"differs ({left.kind!r} vs {right.kind!r})"
+        )
+    if set(left.deps) != set(right.deps):
+        left_only = sorted(set(left.deps) - set(right.deps))
+        right_only = sorted(set(right.deps) - set(left.deps))
+        raise ProjectError(
+            f"conflicting graph records for {left.name}: direct dependencies differ "
+            f"(left-only={left_only[:5]!r}, right-only={right_only[:5]!r})"
+        )
+    if left.internal != right.internal:
+        raise ProjectError(
+            f"conflicting graph records for {left.name}: semantic field internal "
+            f"differs ({left.internal!r} vs {right.internal!r})"
+        )
+
+    is_prop = _merge_optional_field(
+        "isProp", left.is_prop, right.is_prop, decl_name=left.name
+    )
+    prop_valued = _merge_optional_field(
+        "propValued", left.prop_valued, right.prop_valued, decl_name=left.name
+    )
+    sorried = _merge_optional_field(
+        "sorried", left.sorried, right.sorried, decl_name=left.name
+    )
+
+    if left.axioms is None:
+        axioms = right.axioms
+    elif right.axioms is None:
+        axioms = left.axioms
+    elif set(left.axioms) != set(right.axioms):
+        raise ProjectError(
+            f"conflicting graph records for {left.name}: semantic field axioms differs"
+        )
+    else:
+        axioms = tuple(sorted(set(left.axioms)))
+
+    # `module` and `line` are provenance/display metadata, not declaration
+    # identity.  Pick a stable module independent of index/group order and keep
+    # the line associated with that provenance when one is available.
+    left_key = (
+        left.module.count("."), len(left.module), left.module, left.line or -1
+    )
+    right_key = (
+        right.module.count("."), len(right.module), right.module, right.line or -1
+    )
+    if left_key <= right_key:
+        module = left.module
+        line = left.line if left.line is not None else right.line
+    else:
+        module = right.module
+        line = right.line if right.line is not None else left.line
+
+    libraries = sorted({lib for lib in (left.library, right.library) if lib})
+    library = libraries[0] if libraries else None
+    return Decl(
+        name=left.name,
+        module=module,
+        kind=left.kind,
+        is_prop=is_prop,
+        prop_valued=prop_valued,
+        sorried=sorried,
+        line=line,
+        axioms=axioms,
+        deps=tuple(sorted(set(left.deps))),
+        library=library,
+        internal=left.internal,
+    )
+
+
 def merge_declarations(groups: Iterable[Iterable[Decl]]) -> dict[str, Decl]:
-    """Merge indexes and reject conflicting duplicate declaration records."""
+    """Merge graph indexes by Lean declaration identity.
+
+    Duplicate module-header provenance is reconciled; semantic conflicts still
+    fail loudly so the graph cannot hide incompatible declaration records.
+    """
     table: dict[str, Decl] = {}
     for group in groups:
         for decl in group:
             previous = table.get(decl.name)
             if previous is None:
                 table[decl.name] = decl
-                continue
-            if previous.module != decl.module or previous.kind != decl.kind:
-                raise ProjectError(
-                    f"conflicting graph records for {decl.name}: "
-                    f"{previous.module}/{previous.kind} vs {decl.module}/{decl.kind}"
-                )
-            # Prefer the richer/newer record. Graph indexes normally agree, but
-            # this makes merging an old cache with a refreshed cache predictable.
-            if len(decl.deps) > len(previous.deps) or (
-                decl.internal and not previous.internal
-            ):
-                table[decl.name] = decl
+            else:
+                table[decl.name] = _merge_decl_records(previous, decl)
     return table
 
 

@@ -57,6 +57,41 @@ class DependencyGraphTests(unittest.TestCase):
         )
         self.assertEqual(graph.unresolved, (("Ach.config", "Mathlib.sqrt"),))
 
+    def test_duplicate_module_provenance_is_not_a_conflict(self):
+        name = (
+            "TauCeti.RectangularUnitarilyInvariantSeminorm."
+            "rectangularKyFanSum.congr_simp"
+        )
+        deps = ("TauCeti.alpha", "TauCeti.beta")
+        first = decl(
+            name,
+            deps=deps,
+            module="ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
+            library="ForTauCeti",
+        )
+        second = decl(
+            name,
+            deps=tuple(reversed(deps)),
+            module=(
+                "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Internal."
+                "ReciprocalMultiplier.DoubledPhase"
+            ),
+            library="ForTauCeti",
+        )
+        rows = merge_declarations([[second], [first]])
+        merged = rows[name]
+        self.assertEqual(
+            merged.module,
+            "ForTauCeti.Analysis.InnerProductSpace.Sylvester.Interval",
+        )
+        self.assertEqual(merged.deps, tuple(sorted(deps)))
+
+    def test_duplicate_semantic_disagreement_still_fails(self):
+        left = decl("Pkg.same", deps=("Pkg.a",), module="Pkg.One")
+        right = decl("Pkg.same", deps=("Pkg.b",), module="Pkg.Two")
+        with self.assertRaisesRegex(Exception, "direct dependencies differ"):
+            merge_declarations([[left], [right]])
+
     def test_internal_support_is_kept_in_exact_graph(self):
         rows = [
             decl("YWS.public"),
