@@ -309,7 +309,7 @@ noncomputable def paperDeltaGrowingConfigControl
     (count replicates : Nat → Nat)
     (hcount : ∀ u, 0 < count u) (hrep : ∀ u, 0 < replicates u)
     (m d : Nat) (α Λ R δ : Real)
-    (hα : 0 < α) (hR : 0 ≤ R)
+    (_hα : 0 < α) (hR : 0 ≤ R)
     (hω : ReplicatesDominateCubic count replicates)
     (hδ0 : 0 < δ) (hδhalf : δ < 1 / 2) :
     GrowingConfigControl count d α (fun _ => Λ)
@@ -338,25 +338,10 @@ noncomputable def paperDeltaGrowingConfigControl
         (count u) m (hcount u) R (x u)
     rw [heq]
     exact tendsto_paperOperatorScale_zero m R hx
-  have hpolar : Tendsto
-      (fun u => (d : Real) *
-        (4 * (d : Real) * (((count u : Real) * entryRate u) ^ 2) / α ^ 2))
-      atTop (𝓝 0) := by
-    let C : Real := (d : Real) * (4 * (d : Real)) * (α ^ 2)⁻¹
-    have heq :
-        (fun u => (d : Real) *
-          (4 * (d : Real) * (((count u : Real) * entryRate u) ^ 2) / α ^ 2)) =
-        (fun u => C * (((count u : Real) * entryRate u) ^ 2)) := by
-      funext u
-      unfold C
-      rw [div_eq_mul_inv]
-      ring
-    rw [heq]
-    simpa using (hscaled.pow 2).const_mul C
   have hbound : Tendsto
       (fun u => configFrobBound d α Λ
         ((count u : Real) * entryRate u)) atTop (𝓝 0) :=
     Acharyya2025.RateChain.tendsto_configFrobBound_comp_zero d α Λ hscaled
-  exact GrowingConfigControl.of_tendsto hα hentry hscaled hpolar hbound
+  exact GrowingConfigControl.of_tendsto hentry hbound
 
 end Acharyya2025.PaperRate

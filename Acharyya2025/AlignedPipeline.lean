@@ -425,36 +425,6 @@ theorem measurableSet_setOf_alignExists {n d : Nat} (hd : d ≤ n)
 /-! ### (3) High-probability aligned perturbation (repaired legacy seam) -/
 
 /--
-A perturbation scale tending to zero eventually satisfies both numerical side
-conditions consumed by the finite CMDS perturbation theorem: the eigenvalue-floor
-smallness bound and the polar-factor local-stability bound.  Initial budget
-values are irrelevant to asymptotic high-probability conclusions.
--/
-theorem eventually_spectral_side_conditions
-    {d : Nat} {α : Real} (hα_pos : 0 < α)
-    {e : Nat → Real} (he : Tendsto e atTop (𝓝 0)) :
-    ∀ᶠ u in atTop,
-      e u ≤ α / 2 ∧
-      (d : Real) * (4 * (d : Real) * (e u)^2 / α^2) ≤ 1 / 2 := by
-  have hhalf_pos : 0 < α / 2 := by positivity
-  have hsmall : ∀ᶠ u in atTop, e u < α / 2 :=
-    he.eventually (Iio_mem_nhds hhalf_pos)
-  let polar : Real → Real := fun x =>
-    (d : Real) * (4 * (d : Real) * x^2 / α^2)
-  have hpolar_tend : Tendsto (fun u => polar (e u)) atTop (𝓝 0) := by
-    have hcont : Continuous polar := by
-      dsimp [polar]
-      fun_prop
-    change Tendsto (polar ∘ e) atTop (𝓝 0)
-    have h := (hcont.tendsto 0).comp he
-    rw [show polar 0 = 0 by simp [polar]] at h
-    exact h
-  have hpolar : ∀ᶠ u in atTop, polar (e u) < 1 / 2 :=
-    hpolar_tend.eventually (Iio_mem_nhds (by norm_num : (0 : Real) < 1 / 2))
-  filter_upwards [hsmall, hpolar] with u hu_small hu_polar
-  exact ⟨hu_small.le, by simpa [polar] using hu_polar.le⟩
-
-/--
 **Deterministic: entrywise CMDS-closeness implies the alignment existential.**
 
 On any sample where the CMDS matrices are entrywise `rate u`-close, the
@@ -481,8 +451,6 @@ theorem alignExists_of_entrywiseClose {Ω : Type}
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
     (rate : Nat → Real) (u : Nat)
     (hrate_nonneg : 0 ≤ rate u)
-    (hsmall : (n : Real) * rate u ≤ α / 2)
-    (hpolar : (d : Real) * (4 * (d : Real) * ((n : Real) * rate u)^2 / α^2) ≤ 1/2)
     (ω : Ω)
     (hω : Acharyya2025.Bridge.EntrywiseClose
       (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)) :
@@ -493,7 +461,7 @@ theorem alignExists_of_entrywiseClose {Ω : Type}
   exact MatrixPerturbation.exists_isometry_configError_le_of_entrywise_close
     hd (disMatToMatrix (classicalMDSMatrix D))
     (disMatToMatrix (classicalMDSMatrix (Dhat u ω)))
-    hB (hsym u ω) hrank hα_pos hrate_nonneg hfloor hΛ hentry hsmall hpolar ψ hψ
+    hB (hsym u ω) hrank hα_pos hrate_nonneg hfloor hΛ hentry ψ hψ
 
 /-- Frobenius counterpart of `alignExists_of_entrywiseClose`.  The same
 entrywise CMDS perturbation event produces an orthogonal alignment with the
@@ -512,8 +480,6 @@ theorem alignFrobExists_of_entrywiseClose {Ω : Type}
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
     (rate : Nat → Real) (u : Nat)
     (hrate_nonneg : 0 ≤ rate u)
-    (hsmall : (n : Real) * rate u ≤ α / 2)
-    (hpolar : (d : Real) * (4 * (d : Real) * ((n : Real) * rate u)^2 / α^2) ≤ 1/2)
     (ω : Ω)
     (hω : Acharyya2025.Bridge.EntrywiseClose
       (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)) :
@@ -525,7 +491,7 @@ theorem alignFrobExists_of_entrywiseClose {Ω : Type}
   exact MatrixPerturbation.exists_isometry_configFrobError_le_of_entrywise_close
     hd (disMatToMatrix (classicalMDSMatrix D))
     (disMatToMatrix (classicalMDSMatrix (Dhat u ω)))
-    hB (hsym u ω) hrank hα_pos hrate_nonneg hfloor hΛ hentry hsmall hpolar ψ hψ
+    hB (hsym u ω) hrank hα_pos hrate_nonneg hfloor hΛ hentry ψ hψ
 
 
 /--
@@ -568,10 +534,10 @@ theorem highProb_aligned_configError_of_entrywise_close
     (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)  -- eigenvalue cap Λ
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)  -- ψ is a Gram factor of the population CMDS matrix
-    -- Rate side-conditions.  The local spectral inequalities are derived
-    -- eventually from the vanishing perturbation scale.
+    -- The finite theorem only needs nonnegativity of the entrywise rate.
+    -- The vanishing-rate argument is retained positionally here for downstream compatibility.
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
+    (_hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
     -- Theorem 1 input: high-probability entrywise closeness of sample to population CMDS matrices.
     (hcenter : HighProbAtTop P (fun u => {ω |
       Acharyya2025.Bridge.EntrywiseClose
@@ -583,21 +549,18 @@ theorem highProb_aligned_configError_of_entrywise_close
         (alignedSpectralConfig hd Dhat hsym ψ
           (fun u => configBound n d α Λ ((n : Real) * rate u)) u ω) ψ
         ≤ configBound n d α Λ ((n : Real) * rate u)}) := by
-  have hside := eventually_spectral_side_conditions (d := d)
-    hα_pos hrate_zero
   refine HighProbAtTop.mono_eventually hcenter ?_
-  filter_upwards [hside] with u hu
-  intro ω hω
-  exact configError_alignedSpectralConfig_le hd Dhat hsym ψ
-    (fun u => configBound n d α Λ ((n : Real) * rate u)) u ω
-    (alignExists_of_entrywiseClose hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψ hψ
-      rate u (hrate_nonneg u) hu.1 hu.2 ω hω)
+  exact Filter.Eventually.of_forall fun u ω hω =>
+    configError_alignedSpectralConfig_le hd Dhat hsym ψ
+      (fun u => configBound n d α Λ ((n : Real) * rate u)) u ω
+      (alignExists_of_entrywiseClose hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψ hψ
+        rate u (hrate_nonneg u) ω hω)
 
 /-- High-probability aligned CMDS perturbation in matrix Frobenius norm.
 
 This is the paper-facing spectral endpoint before the repository's legacy
 `ConfigError ≤ √n · ConfigFrobError` conversion.  The probability input and
-spectral side conditions are identical to
+spectral inputs are identical to
 `highProb_aligned_configError_of_entrywise_close`; only the error metric and
 explicit bound change. -/
 theorem highProb_aligned_configFrobError_of_entrywise_close
@@ -615,7 +578,7 @@ theorem highProb_aligned_configFrobError_of_entrywise_close
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
+    (_hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
     (hcenter : HighProbAtTop P (fun u => {ω |
       Acharyya2025.Bridge.EntrywiseClose
         (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)})) :
@@ -624,15 +587,12 @@ theorem highProb_aligned_configFrobError_of_entrywise_close
         (alignedSpectralConfigFrob hd Dhat hsym ψ
           (fun u => configFrobBound d α Λ ((n : Real) * rate u)) u ω) ψ
         ≤ configFrobBound d α Λ ((n : Real) * rate u)}) := by
-  have hside := eventually_spectral_side_conditions (d := d)
-    hα_pos hrate_zero
   refine HighProbAtTop.mono_eventually hcenter ?_
-  filter_upwards [hside] with u hu
-  intro ω hω
-  exact configFrobError_alignedSpectralConfigFrob_le hd Dhat hsym ψ
-    (fun u => configFrobBound d α Λ ((n : Real) * rate u)) u ω
-    (alignFrobExists_of_entrywiseClose hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψ hψ
-      rate u (hrate_nonneg u) hu.1 hu.2 ω hω)
+  exact Filter.Eventually.of_forall fun u ω hω =>
+    configFrobError_alignedSpectralConfigFrob_le hd Dhat hsym ψ
+      (fun u => configFrobBound d α Λ ((n : Real) * rate u)) u ω
+      (alignFrobExists_of_entrywiseClose hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψ hψ
+        rate u (hrate_nonneg u) ω hω)
 
 
 /-- High-probability Frobenius perturbation with an arbitrary deterministic
@@ -658,7 +618,7 @@ theorem highProb_aligned_configFrobError_of_entrywise_close_of_majorant
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
     (rate c : Nat → Real)
     (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
+    (_hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
     (hc : ∀ᶠ u in atTop,
       configFrobBound d α Λ ((n : Real) * rate u) ≤ c u)
     (hcenter : HighProbAtTop P (fun u => {ω |
@@ -666,13 +626,11 @@ theorem highProb_aligned_configFrobError_of_entrywise_close_of_majorant
         (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)})) :
     HighProbAtTop P (fun u => {ω |
       ConfigFrobError (alignedSpectralConfigFrob hd Dhat hsym ψ c u ω) ψ ≤ c u}) := by
-  have hside := eventually_spectral_side_conditions (d := d)
-    hα_pos hrate_zero
   refine HighProbAtTop.mono_eventually hcenter ?_
-  filter_upwards [hside, hc] with u hu hcu
+  filter_upwards [hc] with u hcu
   intro ω hω
   have hexact := alignFrobExists_of_entrywiseClose hd Dhat D hsym hB hrank
-    hα_pos hfloor hΛ ψ hψ rate u (hrate_nonneg u) hu.1 hu.2 ω hω
+    hα_pos hfloor hΛ ψ hψ rate u (hrate_nonneg u) ω hω
   exact configFrobError_alignedSpectralConfigFrob_le hd Dhat hsym ψ c u ω
     (AlignFrobExists.mono hexact hcu)
 
@@ -790,8 +748,8 @@ the aligned CMDS spectral `ConfigError` against the population configuration `ψ
 The population CMDS Gram matrix is `classicalMDSMatrix (responseDist μ)`; the
 sample estimator is built from `Dhat u ω := responseDist (Xbar u ω)`.  Hermitian-
 ness of every sample CMDS matrix is supplied automatically (symmetry plumbing);
-the remaining spectral hypotheses (PSD, rank, floor, cap, smallness, polar) are
-exactly those of the matrix-world assembly.
+the remaining spectral hypotheses (PSD, rank, floor, and cap) are
+exactly those of the strengthened matrix-world assembly.
 
 This is the response-mean-driven high-probability bound *corresponding to*
 **Theorem 2** (which is itself probabilistic): it takes a high-probability uniform
@@ -819,7 +777,7 @@ theorem highProb_aligned_configError_of_response_mean
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k)
       = classicalMDSMatrix (responseDist μ) i j)  -- ψ is a Gram factor of the population CMDS matrix
-    -- Rate / smallness side-conditions (per budget `u`):
+    -- Entrywise perturbation rate (per budget `u`):
     (η R : Nat → Real)
     (hrate_nonneg : ∀ u, 0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
     (hrate_zero : Tendsto
@@ -975,8 +933,6 @@ theorem alignExists_of_entrywiseClose_topEigenvalue {Ω : Type}
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
     (rate : Nat → Real) (u : Nat)
     (hrate_nonneg : 0 ≤ rate u)
-    (hsmall : (n : Real) * rate u ≤ α / 2)
-    (hpolar : (d : Real) * (4 * (d : Real) * ((n : Real) * rate u)^2 / α^2) ≤ 1/2)
     (ω : Ω)
     (hω : Acharyya2025.Bridge.EntrywiseClose
       (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)) :
@@ -985,7 +941,7 @@ theorem alignExists_of_entrywiseClose_topEigenvalue {Ω : Type}
         ((n : Real) * rate u)) u ω := by
   exact alignExists_of_entrywiseClose hd Dhat D hsym hB hrank hα_pos hfloor
     (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
-    ψ hψ rate u hrate_nonneg hsmall hpolar ω hω
+    ψ hψ rate u hrate_nonneg ω hω
 
 /-- High-probability aligned configuration control with the upper spectral
 ceiling synthesized from the population matrix. -/

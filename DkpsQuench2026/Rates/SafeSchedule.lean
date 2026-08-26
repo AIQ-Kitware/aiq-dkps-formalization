@@ -284,8 +284,8 @@ theorem tendsto_natCast_succ_pow_atTop {k : ℕ} (hk : 1 ≤ k) :
 /-- The batch-size-scaled CMDS entry rate vanishes under the safe
 tolerance.
 
-This is the exact limit used by the local spectral-smallness field of
-`GrowingConfigControl`.
+This records the batch-scaled perturbation decay used elsewhere in the explicit
+rate analysis.  `GrowingConfigControl` no longer needs it as a side-condition field.
 -/
 theorem safe_scaled_cmdsEntrywiseRate_zero
     (m : Nat) (hm : 0 < m) (populationResponseBound : Real) :
@@ -311,11 +311,10 @@ theorem safe_scaled_cmdsEntrywiseRate_zero
   simp only [cmdsEntrywiseRate, responseEntrywiseRate, responseDistBound, safeResponseTolerance]
   (field_simp; ring)
 
-/-- The polar-factor side expression vanishes under the safe tolerance.
+/-- The former polar-factor side expression also vanishes under the safe tolerance.
 
-The selected-block Davis--Kahan estimate removes the growing ambient factor
-`n + 1` from this expression, so this is now an immediate quadratic consequence
-of the scaled CMDS entry rate tending to zero. -/
+The strengthened spectral theorem no longer requires this fact, but the limit is
+retained as a useful quantitative consequence of the explicit schedule. -/
 theorem safe_polar_expression_zero
     (m d : Nat) (hm : 0 < m)
     (populationResponseBound κ : Real) (hκ : 0 < κ) :
@@ -506,12 +505,10 @@ noncomputable def safe_growingConfigControl
         (responseDistBound m
           (populationResponseBound + safeResponseTolerance n))
         (safeResponseTolerance n)) :=
-  GrowingConfigControl.of_tendsto (by positivity)
+  GrowingConfigControl.of_tendsto
     (fun n => by
       simp only [cmdsEntrywiseRate, responseEntrywiseRate, responseDistBound, safeResponseTolerance]
       positivity)
-    (safe_scaled_cmdsEntrywiseRate_zero m hm populationResponseBound)
-    (safe_polar_expression_zero m d hm populationResponseBound κ hκ)
     (safe_configFrobBound_zero m d hm populationResponseBound perspectiveBound κ hκ)
 
 end DkpsQuench2026

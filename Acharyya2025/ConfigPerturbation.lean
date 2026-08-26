@@ -1634,10 +1634,7 @@ theorem exists_isometry_configError_spectralConfig_le
     (htail : ∀ j : Fin n, d ≤ (j : ℕ) → hT.eigenvalues finrank_euclideanSpace_fin j = 0)
     -- Assumption 2 (upper): all population eigenvalues `≤ Λ` (paper's `λ_1`/`C2`):
     (hΛ : ∀ l : Fin n, hT.eigenvalues finrank_euclideanSpace_fin l ≤ Λ)
-    (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖)   -- sample/population operator-norm closeness `‖S − T‖ ≤ ε`
-    (_hsmall : ε ≤ α / 2)                -- retained temporarily for downstream compatibility
-    -- polar-factor applicability: `δ = d·4dε²/α² ≤ 1/2` (extra explicit smallness condition):
-    (_hpolar : (d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2) ≤ 1/2) :
+    (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖) :  -- sample/population operator-norm closeness `‖S − T‖ ≤ ε`
     -- Conclusion: there is an isometry `W` of `ℝ^d` aligning the sample embedding to the
     -- population embedding with configuration error `≤ configBound n d α Λ ε`.
     ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
