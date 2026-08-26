@@ -1,0 +1,474 @@
+{
+  "schema_version": "2026-08-26-result-semantic-review-v1",
+  "review_kind": "paper-result-source-to-lean-semantic-comparison",
+  "paper": {
+    "citation": "Hayden Helm, Ben Johnson, Carey E. Priebe, Query-efficient model evaluation using cached responses, arXiv:2605.07096.",
+    "source_version": "Retained ICML/non-anonymous transcription and source TeX.",
+    "source_files": [
+      "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+      "DkpsQuench2026/prose/quench-tex-src/main_icml.tex"
+    ]
+  },
+  "purpose": "Compare the printed Quench definitions, assumptions, and Theorem 2 with the Lean theorem surface, including explicit repairs of the retained source.",
+  "companion_census": "dev/quench-2026-full-source-census.json",
+  "audit_date": "2026-08-26",
+  "relation_definitions": {
+    "exact": "The source clause and Lean clause have the same mathematical content, modulo notation/encoding.",
+    "equivalent_encoding": "The mathematical content is equivalent, but Lean packages it in a structurally different form.",
+    "lean_weaker_hypothesis": "Lean assumes less than the source at this clause, so the Lean theorem is stronger here.",
+    "lean_stronger_hypothesis": "Lean assumes more than the source at this clause; this is a source-fidelity gap unless separately justified.",
+    "lean_stronger_conclusion": "Lean proves at least the source conclusion and additionally proves a stronger conclusion.",
+    "lean_weaker_conclusion": "Lean proves less than the source conclusion; this is a source-fidelity gap.",
+    "different_quantifier_encoding": "Lean makes an informal/asymptotic quantifier pattern explicit using an equivalent or stronger schedule/event formulation.",
+    "derived_by_composition": "No single source-shaped declaration exists, but the source clause follows from a checked composition of cited Lean declarations.",
+    "source_repair": "The retained source wording is inconsistent, false, or mismatched with its proof; Lean formalizes the repaired mathematical statement.",
+    "proof_role_replaced": "The printed proof-side lemma is not exposed literally; a different formal proof route removes or subsumes its role.",
+    "missing": "No Lean theorem surface was found for this source clause.",
+    "supplementary": "This Lean result goes beyond the printed source and is recorded for context, not source coverage."
+  },
+  "rows": [
+    {
+      "id": "Q26-T1",
+      "source_anchor": "Theorem 1 (inherited Acharyya et al. 2025 Theorem 2)",
+      "source_kind": "theorem",
+      "title": "Inherited DKPS embedding concentration",
+      "importance": "major",
+      "verdict": "REPAIR source mismatch",
+      "literal_source_covered": false,
+      "source_claim": "For r=omega(n^3) and bounded response covariance, the maximum aligned perspective error is bounded by a cubic polynomial in (n^3/r)^(1/2-delta) with high probability.",
+      "source_locator": {
+        "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "lines": [
+          87,
+          96
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+        "Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate",
+        "Acharyya2025.ConfigPerturbation.norm_config_le_ConfigFrobError"
+      ],
+      "clauses": [
+        {
+          "source_clause": "Inherited Theorem 1 states max_i ||psiHat_i-psi_i|| <= Poly3((n^3/r)^(1/2-delta)) with high probability.",
+          "lean_clause": "Quench consumes Acharyya2025 Frobenius configuration concentration and then uses norm_config_le_ConfigFrobError to obtain every row bound.",
+          "relation": "source_repair",
+          "note": "This avoids treating the inconsistent Acharyya v1 2,infinity display as literally proved while still supplying the rowwise control Quench uses."
+        },
+        {
+          "source_clause": "Technical spectral assumptions are inherited from Acharyya.",
+          "lean_clause": "The current inherited chain has fixed rank/floor/cap assumptions but no hsmall, hpolar, or redundant finite-stage rate-zero premise.",
+          "relation": "lean_weaker_hypothesis",
+          "note": "The DK/YWS improvements made the inherited theorem closer to the paper assumption surface."
+        }
+      ],
+      "review": "Quench uses the current Acharyya Frobenius concentration theorem plus the rowwise norm bound, which supplies exactly the max-row control needed by the Quench proof without claiming the disputed Acharyya v1 display literally.",
+      "notes": "The current bridge no longer carries hsmall, hpolar, or a redundant finite-stage vanishing-rate premise.",
+      "gap_refs": [
+        "inherited-acharyya-v1-norm"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "Q26-QDEF",
+      "source_anchor": "Equation (2) and query-efficiency definitions",
+      "source_kind": "definition",
+      "title": "Q-, m-, and all-budget query efficiency",
+      "importance": "major",
+      "verdict": "PASS exact",
+      "literal_source_covered": true,
+      "source_claim": "Eventually the DKPS predictor risk is no larger than the subset-score baseline; m-query efficiency quantifies over all subsets of size m and full query efficiency quantifies over all m<M.",
+      "source_locator": {
+        "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "lines": [
+          118,
+          133
+        ]
+      },
+      "lean_declarations": [
+        "QQueryEfficient",
+        "mQueryEfficient",
+        "HighProbQQueryEfficient",
+        "HighProbMQueryEfficient",
+        "HighProbQueryEfficientBelow",
+        "HighProbQueryEfficient"
+      ],
+      "clauses": [
+        {
+          "source_clause": "Q-query efficiency: exists N such that for all n>N the DKPS predictor risk is <= the baseline risk.",
+          "lean_clause": "QQueryEfficient has exactly exists N, forall n>N, Risk(h n)<=Risk(h' n).",
+          "relation": "exact",
+          "note": ""
+        },
+        {
+          "source_clause": "m-query efficiency quantifies this over every subset Q of cardinality m.",
+          "lean_clause": "mQueryEfficient quantifies over all Finset Q with card=m and gives a subset-specific threshold.",
+          "relation": "exact",
+          "note": ""
+        },
+        {
+          "source_clause": "Full query efficiency quantifies over every m<M.",
+          "lean_clause": "The higher-level predicates preserve this quantifier order; high-probability analogues add confidence events without changing the source deterministic definition.",
+          "relation": "equivalent_encoding",
+          "note": ""
+        }
+      ],
+      "review": "The deterministic source predicates and their high-probability analogues are explicit. The all-subset lift preserves the source quantifier order.",
+      "notes": "No additional note.",
+      "gap_refs": [],
+      "next_action": "None."
+    },
+    {
+      "id": "Q26-NN",
+      "source_anchor": "Displayed nearest-neighbor estimator",
+      "source_kind": "definition",
+      "title": "Tie-averaged nearest-neighbor score estimator",
+      "importance": "headline",
+      "verdict": "REPAIR source mismatch",
+      "literal_source_covered": false,
+      "source_claim": "Average the full-benchmark scores of every reference model tied at the minimum estimated perspective distance.",
+      "source_locator": {
+        "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "lines": [
+          135,
+          144
+        ]
+      },
+      "lean_declarations": [
+        "yNN_paper",
+        "tieAverageNN",
+        "yNNTieAverage_paper",
+        "hNNTieAverage"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The displayed estimator averages scores over every reference model tied at the minimum estimated perspective distance.",
+          "lean_clause": "tieAverageNN / yNNTieAverage_paper implement the literal tie average.",
+          "relation": "exact",
+          "note": ""
+        },
+        {
+          "source_clause": "The proof text subsequently chooses one f* in argmin and treats its full score as yHat_NN.",
+          "lean_clause": "yNN_paper separately implements the single-selected-neighbor proof object.",
+          "relation": "source_repair",
+          "note": "Keeping both definitions makes the source display/proof mismatch explicit; the preferred source-facing estimator is the tie average."
+        }
+      ],
+      "review": "The preferred formal estimator is the literal displayed tie average. A separate yNN_paper follows the proof text and chooses one minimizer, making the source mismatch explicit rather than conflating them.",
+      "notes": "No additional note.",
+      "gap_refs": [
+        "tie-display-proof-mismatch"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "Q26-A1",
+      "source_anchor": "Assumption 1 (Lipschitz Score Function)",
+      "source_kind": "assumption",
+      "title": "Benchmark score is Lipschitz in population perspective distance",
+      "importance": "major",
+      "verdict": "PASS equivalent encoding",
+      "literal_source_covered": true,
+      "source_claim": "There exists gamma>0 such that score differences are at most gamma times perspective distance.",
+      "source_locator": {
+        "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "lines": [
+          145,
+          152
+        ]
+      },
+      "lean_declarations": [
+        "LipschitzScore",
+        "DkpsQuench2026.QueryEfficiency.lipschitz_le_max_one"
+      ],
+      "clauses": [
+        {
+          "source_clause": "There exists gamma>0 such that full-score differences are bounded by gamma times perspective distance for the chosen query subset.",
+          "lean_clause": "Theorem2 takes exactly the fixed-Qsub inequality; LipschitzScore packages the all-subset variant.",
+          "relation": "equivalent_encoding",
+          "note": ""
+        },
+        {
+          "source_clause": "gamma is positive.",
+          "lean_clause": "Some public certificates normalize a witness using max(gamma,1), eliminating a separate positivity burden without weakening the inequality.",
+          "relation": "lean_weaker_hypothesis",
+          "note": ""
+        }
+      ],
+      "review": "Lean stores the displayed Lipschitz inequality and can replace any valid constant by max(gamma,1), so public certificates do not require a redundant positivity proof for the supplied witness.",
+      "notes": "No additional note.",
+      "gap_refs": [],
+      "next_action": "None."
+    },
+    {
+      "id": "Q26-A2",
+      "source_anchor": "Assumption 2 (Model Distribution Support)",
+      "source_kind": "assumption",
+      "title": "Positive probability of every target-centered neighborhood",
+      "importance": "headline",
+      "verdict": "REPAIR source mismatch",
+      "literal_source_covered": false,
+      "source_claim": "The prose claims positive mass for every compact subset and calls this equivalent to positive mass for each target-centered ball.",
+      "source_locator": {
+        "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "lines": [
+          153,
+          162
+        ]
+      },
+      "lean_declarations": [
+        "PerspectiveFullSupport",
+        "IIDReferenceSampler",
+        "coverageSubevents_of_compact_iid_fullSupport",
+        "highProb_uniformCoverage_of_compact_iid_fullSupport"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The prose first says Pf has nonzero measure on all compact subsets of model space.",
+          "lean_clause": "Lean does not formalize this literal clause.",
+          "relation": "source_repair",
+          "note": "The literal statement is false because the empty compact set has measure zero, and positive mass for arbitrary compact sets is much stronger than needed."
+        },
+        {
+          "source_clause": "The paper then calls this equivalent to: every target-centered ball has positive probability.",
+          "lean_clause": "PerspectiveFullSupport formalizes the positive-mass-in-every-perspective-ball property used by the proof.",
+          "relation": "source_repair",
+          "note": "This is the mathematically relevant support condition."
+        },
+        {
+          "source_clause": "Denseness should yield a nearby reference model with high probability as n grows.",
+          "lean_clause": "Compact perspective range + iid reference sampling + PerspectiveFullSupport prove uniform high-probability coverage.",
+          "relation": "derived_by_composition",
+          "note": ""
+        }
+      ],
+      "review": "Lean formalizes the ball-support property actually consumed by the proof. Compactness plus iid reference sampling then proves uniform high-probability nearest-reference coverage.",
+      "notes": "The false all-compact-subsets wording is not propagated into the theorem API.",
+      "gap_refs": [
+        "support-wording-repair"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "Q26-T2A",
+      "source_anchor": "Theorem 2, small-MSE conclusion",
+      "source_kind": "theorem",
+      "title": "Nearest-neighbor MSE can be made arbitrarily small with high probability",
+      "importance": "headline",
+      "verdict": "GAP stronger analytic hypotheses",
+      "literal_source_covered": false,
+      "source_claim": "For every epsilon>0 there are sufficiently large sampling/model budgets for which MSE(yhat_NN)<=epsilon with high probability.",
+      "source_locator": {
+        "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "lines": [
+          163,
+          171
+        ]
+      },
+      "lean_declarations": [
+        "highProb_mse_nn_le",
+        "highProb_mse_nn_le_of_subevent",
+        "highProb_mse_tieAverage_of_subevents",
+        "highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport"
+      ],
+      "clauses": [
+        {
+          "source_clause": "For every epsilon>0 there exists a budget triple (n,m,r) with MSE(yHat_NN)<=epsilon with high probability.",
+          "lean_clause": "highProb_mse_nn_le fixes Qsub and abstracts m,r into the stage-indexed estimator/rate; for every epsilon and confidence delta it produces an n with probability >=1-delta.",
+          "relation": "different_quantifier_encoding",
+          "note": ""
+        },
+        {
+          "source_clause": "Assumption 1 supplies score smoothness.",
+          "lean_clause": "The theorem takes the fixed-Qsub Lipschitz inequality and gamma>0.",
+          "relation": "exact",
+          "note": ""
+        },
+        {
+          "source_clause": "Assumption 2 supplies nearby reference models.",
+          "lean_clause": "The theorem takes high-probability uniform coverage; compact-iid-fullSupport wrappers derive it from the repaired support assumption.",
+          "relation": "derived_by_composition",
+          "note": ""
+        },
+        {
+          "source_clause": "Theorem 1 supplies representation error c(n,m,r,d)->0.",
+          "lean_clause": "The abstract theorem takes a nonnegative c n ->0 and a high-probability uniform concentration event; spectral/raw-response capstones discharge it.",
+          "relation": "derived_by_composition",
+          "note": ""
+        },
+        {
+          "source_clause": "The paper proof moves from a pointwise target error bound to MSE.",
+          "lean_clause": "Lean explicitly requires measurable concentration/coverage events and proves a uniform-in-target bound before integrating.",
+          "relation": "lean_stronger_hypothesis",
+          "note": "These are formal analytic obligations omitted from the prose proof, not extra statistical content."
+        }
+      ],
+      "review": "The abstract paper-facing theorem and the literal tie-average theorem are compiled. The stronger interfaces expose measurable high-probability subevents and eventual stage schedules instead of an informal existential budget triple.",
+      "notes": "No additional note.",
+      "gap_refs": [
+        "tie-display-proof-mismatch"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "Q26-T2B",
+      "source_anchor": "Theorem 2, query-efficiency conclusion",
+      "source_kind": "theorem",
+      "title": "Eventual high-probability improvement over subset-score baseline",
+      "importance": "headline",
+      "verdict": "GAP stronger analytic hypotheses",
+      "literal_source_covered": false,
+      "source_claim": "When m<M and the subset-score baseline has positive MSE, nearest-neighbor DKPS prediction is query-efficient with high probability.",
+      "source_locator": {
+        "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "lines": [
+          165,
+          236
+        ]
+      },
+      "lean_declarations": [
+        "highProb_queryEfficient_nn",
+        "highProb_queryEfficient_nn_of_subevent",
+        "highProbQQueryEfficient_tieAverage_of_subevents",
+        "highProbMQueryEfficient_tieAverage_of_certificates",
+        "highProbQueryEfficient_tieAverage_of_certificates"
+      ],
+      "clauses": [
+        {
+          "source_clause": "If m<M and MSE(yHat_Q)>0, yHat_NN is query-efficient relative to yHat_Q with high probability.",
+          "lean_clause": "Lean requires the positive baseline MSE and proves the eventual high-probability risk comparison.",
+          "relation": "exact",
+          "note": ""
+        },
+        {
+          "source_clause": "The prose proof leaves measurability and the uniform-target step implicit when passing from pointwise NN error to MSE/risk.",
+          "lean_clause": "The source-facing Lean theorem requires measurable high-probability concentration/coverage events (or a measurable subevent certificate) before integration.",
+          "relation": "lean_stronger_hypothesis",
+          "note": "These are explicit analytic premises not stated in the paper theorem."
+        },
+        {
+          "source_clause": "The source also assumes m<M.",
+          "lean_clause": "The strongest fixed-subset Lean theorem drops m<M because the proof never uses it; all-subset wrappers reintroduce the source budget quantification where appropriate.",
+          "relation": "lean_weaker_hypothesis",
+          "note": ""
+        },
+        {
+          "source_clause": "The source theorem is initially existential in one budget triple.",
+          "lean_clause": "Lean also proves eventual fixed-subset, m-query, and all-budget high-probability predicates with the source quantifier order.",
+          "relation": "lean_stronger_conclusion",
+          "note": ""
+        }
+      ],
+      "review": "Lean retains the mathematically necessary positive baseline-MSE premise, proves the fixed-subset result, and lifts it to every proper subset/budget with the source quantifier order.",
+      "notes": "The formal proof supplies the missing uniform-target/measurability step before integrating pointwise squared error to MSE.",
+      "gap_refs": [],
+      "next_action": "None."
+    },
+    {
+      "id": "Q26-RAW-FIN",
+      "source_anchor": "Finite-model raw-response capstone",
+      "source_kind": "extension",
+      "title": "End-to-end finite raw-response query efficiency",
+      "importance": "major",
+      "verdict": "SUPPLEMENTARY Lean extension",
+      "literal_source_covered": false,
+      "source_claim": "A constructive finite-model strengthening that starts from raw cached-response sampling assumptions and proves the paper query-efficiency conclusion.",
+      "source_locator": {
+        "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "lines": [
+          163,
+          236
+        ]
+      },
+      "lean_declarations": [
+        "DkpsQuench2026.QueryEfficiency.FiniteSubsetData",
+        "DkpsQuench2026.QueryEfficiency.FiniteSubsetAssumptions",
+        "DkpsQuench2026.QueryEfficiency.finiteFixedSubset",
+        "DkpsQuench2026.QueryEfficiency.finiteAllQueries"
+      ],
+      "clauses": [
+        {
+          "source_clause": "No printed theorem starts from the complete finite raw cached-response sampling model.",
+          "lean_clause": "FiniteSubsetData/Assumptions and finiteFixedSubset/finiteAllQueries discharge concentration, realization, and query-efficiency end to end.",
+          "relation": "supplementary",
+          "note": ""
+        }
+      ],
+      "review": "This goes beyond the printed theorem by discharging representation concentration from raw finite response data with explicit schedules and a separated reference/response probability model.",
+      "notes": "No additional note.",
+      "gap_refs": [
+        "raw-response-explicit-assumptions"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "Q26-RAW-INF",
+      "source_anchor": "Compact-infinite raw-response capstone",
+      "source_kind": "extension",
+      "title": "End-to-end compact-infinite query efficiency",
+      "importance": "major",
+      "verdict": "SUPPLEMENTARY Lean extension",
+      "literal_source_covered": false,
+      "source_claim": "A constructive compact-infinite strengthening using pathwise regularity and finite covers.",
+      "source_locator": {
+        "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "lines": [
+          163,
+          236
+        ]
+      },
+      "lean_declarations": [
+        "DkpsQuench2026.QueryEfficiency.InfiniteSubsetData",
+        "DkpsQuench2026.QueryEfficiency.InfiniteSubsetAssumptions",
+        "DkpsQuench2026.QueryEfficiency.infiniteFixedSubset",
+        "DkpsQuench2026.QueryEfficiency.infiniteAllQueries"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The printed theorem does not specify a uniform infinite-population concentration mechanism.",
+          "lean_clause": "InfiniteSubsetData/Assumptions and infiniteFixedSubset/infiniteAllQueries add compact/cover regularity and prove the corresponding end-to-end theorem.",
+          "relation": "supplementary",
+          "note": ""
+        }
+      ],
+      "review": "The paper does not specify how uniform control over an infinite model population is obtained. Lean supplies an explicit compact/entropy-net theorem rather than hiding this scope issue.",
+      "notes": "No additional note.",
+      "gap_refs": [
+        "raw-response-explicit-assumptions"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "Q26-OLS",
+      "source_anchor": "OLS/ensemble empirical prediction methods",
+      "source_kind": "extension",
+      "title": "Theory-practice OLS bridge",
+      "importance": "supporting",
+      "verdict": "SUPPLEMENTARY Lean extension",
+      "literal_source_covered": false,
+      "source_claim": "The experiments use OLS/ensemble regressors although Theorem 2 proves nearest-neighbor query efficiency.",
+      "source_locator": {
+        "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+        "lines": [
+          239,
+          353
+        ]
+      },
+      "lean_declarations": [],
+      "clauses": [
+        {
+          "source_clause": "The paper experiments use OLS but the printed theorem is nearest-neighbor based.",
+          "lean_clause": "The OLS theorem family is an additional theory/practice bridge under explicit affine-risk assumptions.",
+          "relation": "supplementary",
+          "note": ""
+        }
+      ],
+      "review": "The OLS formalization is an additional theorem family with explicit affine-risk assumptions; it is not evidence for the printed nearest-neighbor Theorem 2 and is not required for source coverage.",
+      "notes": "Tracked because it explains the paper theory/practice boundary.",
+      "gap_refs": [
+        "ols-theory-practice"
+      ],
+      "next_action": "None for Theorem 2 source fidelity."
+    }
+  ]
+}

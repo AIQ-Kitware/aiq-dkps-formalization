@@ -1,0 +1,393 @@
+{
+  "schema_version": "2026-08-26-result-semantic-review-v1",
+  "review_kind": "paper-result-source-to-lean-semantic-comparison",
+  "paper": {
+    "citation": "Hayden S. Helm, Aranyak Acharyya, Brandon Duderstadt, Youngser Park, Carey E. Priebe, Statistical inference on black-box generative models in the Data Kernel Perspective Space, arXiv:2410.01106.",
+    "source_version": "Retained paper prose/TeX corresponding to the Helm2025 formalization.",
+    "source_files": [
+      "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+      "Helm2025/prose/statistical-black-box-dkps-tex-src"
+    ]
+  },
+  "purpose": "Compare the inference-transfer theorems and Appendix assumptions with their Lean encodings and expose every additional analytic premise.",
+  "companion_census": "dev/helm-2025-full-source-census.json",
+  "audit_date": "2026-08-26",
+  "relation_definitions": {
+    "exact": "The source clause and Lean clause have the same mathematical content, modulo notation/encoding.",
+    "equivalent_encoding": "The mathematical content is equivalent, but Lean packages it in a structurally different form.",
+    "lean_weaker_hypothesis": "Lean assumes less than the source at this clause, so the Lean theorem is stronger here.",
+    "lean_stronger_hypothesis": "Lean assumes more than the source at this clause; this is a source-fidelity gap unless separately justified.",
+    "lean_stronger_conclusion": "Lean proves at least the source conclusion and additionally proves a stronger conclusion.",
+    "lean_weaker_conclusion": "Lean proves less than the source conclusion; this is a source-fidelity gap.",
+    "different_quantifier_encoding": "Lean makes an informal/asymptotic quantifier pattern explicit using an equivalent or stronger schedule/event formulation.",
+    "derived_by_composition": "No single source-shaped declaration exists, but the source clause follows from a checked composition of cited Lean declarations.",
+    "source_repair": "The retained source wording is inconsistent, false, or mismatched with its proof; Lean formalizes the repaired mathematical statement.",
+    "proof_role_replaced": "The printed proof-side lemma is not exposed literally; a different formal proof route removes or subsumes its role.",
+    "missing": "No Lean theorem surface was found for this source clause.",
+    "supplementary": "This Lean result goes beyond the printed source and is recorded for context, not source coverage."
+  },
+  "rows": [
+    {
+      "id": "H25-T1",
+      "source_anchor": "Theorem 1",
+      "source_kind": "theorem",
+      "title": "Fixed-n inference risk transfer",
+      "importance": "headline",
+      "verdict": "GAP stronger Lean hypotheses",
+      "literal_source_covered": false,
+      "source_claim": "For fixed n, as DKPS estimation budgets grow, the risk of the decision function trained/evaluated on estimated perspectives converges to the risk based on true perspectives.",
+      "source_locator": {
+        "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "lines": [
+          103,
+          112
+        ]
+      },
+      "lean_declarations": [
+        "Helm2025.DKPS.Theorem1",
+        "Helm2025.DKPS.risk_converges_fixed_n"
+      ],
+      "clauses": [
+        {
+          "source_clause": "n is fixed; m,r grow and risk on estimated DKPS training data converges to risk on true DKPS training data.",
+          "lean_clause": "Theorem1/risk_converges_fixed_n prove the fixed-n risk convergence along an abstract estimation-budget index.",
+          "relation": "different_quantifier_encoding",
+          "note": "The budget index packages the joint m,r growth."
+        },
+        {
+          "source_clause": "Technical assumptions are Appendix Assumptions 1--4 plus aligned embedding consistency Eq. (3).",
+          "lean_clause": "Lean explicitly takes AlignmentConsistency, affine-isometry invariance, continuity of the learning rule, compact-range control, and continuous loss.",
+          "relation": "equivalent_encoding",
+          "note": ""
+        },
+        {
+          "source_clause": "The source does not explicitly require measurability of the embedding estimator.",
+          "lean_clause": "Lean requires h_meas_psi.",
+          "relation": "lean_stronger_hypothesis",
+          "note": "This is a standard integration/probability side condition but still an additional theorem premise."
+        },
+        {
+          "source_clause": "Assumption 3 says the image of every h is closed, bounded, complete.",
+          "lean_clause": "The main theorem uses Assumption3' / compact-range encoding.",
+          "relation": "lean_stronger_hypothesis",
+          "note": "In the finite-dimensional Euclidean codomain this is a sufficient compactness form."
+        },
+        {
+          "source_clause": "Assumption 4 is continuity in prediction for each fixed label.",
+          "lean_clause": "The main theorem uses joint ContinuousLoss.",
+          "relation": "lean_stronger_hypothesis",
+          "note": ""
+        },
+        {
+          "source_clause": "No bounded/compact label-support assumption is visible in the retained source theorem or Appendix assumptions.",
+          "lean_clause": "Theorem1 additionally requires LabelCompactSupport.",
+          "relation": "lean_stronger_hypothesis",
+          "note": "This is the most significant unresolved source-vs-Lean hypothesis discrepancy in Helm2025."
+        },
+        {
+          "source_clause": "Conclusion is convergence of the two risks.",
+          "lean_clause": "Lean concludes exactly the corresponding Tendsto/risk convergence.",
+          "relation": "exact",
+          "note": ""
+        }
+      ],
+      "review": "The conclusion is source-shaped. Lean additionally requires measurable embedding estimators, uses the compact-range form of A3, and joint loss continuity; these are sufficient conditions for the paper proof. The paper-facing wrapper also requires bounded/compact label support; no matching assumption was located in the retained source.",
+      "notes": "The theorem is a genuine paper-facing wrapper, so the remaining mismatch is in hypotheses rather than conclusion. The retained source should be rechecked against the original PDF specifically for label-support/bounded-loss language before treating this hypothesis as source-faithful.",
+      "gap_refs": [
+        "stronger-analysis-hypotheses",
+        "label-compact-support"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "H25-T2",
+      "source_anchor": "Theorem 2",
+      "source_kind": "theorem",
+      "title": "Consistency transfer from true to estimated DKPS embeddings",
+      "importance": "headline",
+      "verdict": "GAP stronger Lean hypotheses",
+      "literal_source_covered": false,
+      "source_claim": "If learning on true perspectives is consistent, learning on estimated perspectives is also consistent as n,m,r grow.",
+      "source_locator": {
+        "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "lines": [
+          113,
+          118
+        ]
+      },
+      "lean_declarations": [
+        "Helm2025.DKPS.Theorem2_bayes",
+        "Helm2025.DKPS.consistency_transfer_dkps_bayes",
+        "Helm2025.DKPS.diagonal_convergence"
+      ],
+      "clauses": [
+        {
+          "source_clause": "If the true-perspective learning sequence is consistent, the estimated-perspective sequence is consistent as n,m,r->infinity.",
+          "lean_clause": "Theorem2_bayes proves Bayes-risk consistency transfer.",
+          "relation": "exact",
+          "note": ""
+        },
+        {
+          "source_clause": "The source uses a three-parameter informal joint limit.",
+          "lean_clause": "Lean uses a diverging diagonal budget schedule phi(n) to choose sufficiently accurate embedding stages as n grows.",
+          "relation": "different_quantifier_encoding",
+          "note": "This makes the quantifier order executable and is at least the diagonal form needed for the proof."
+        },
+        {
+          "source_clause": "Appendix Assumptions 1--4 and Eq. (3) provide the analytic transfer conditions.",
+          "lean_clause": "Lean uses the same strengthened analytic forms as Theorem1 and a sequence of alignment-consistency hypotheses.",
+          "relation": "lean_stronger_hypothesis",
+          "note": ""
+        },
+        {
+          "source_clause": "No bounded/compact label-support premise is visible in the retained source.",
+          "lean_clause": "Theorem2_bayes carries the label-support/boundedness condition used by the risk limit.",
+          "relation": "lean_stronger_hypothesis",
+          "note": ""
+        }
+      ],
+      "review": "Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The analytic hypotheses are stronger than the literal paper assumptions, and the joint (m,r) limit is represented by diagonalization. The paper-facing wrapper also requires bounded/compact label support; no matching assumption was located in the retained source.",
+      "notes": "The schedule makes the quantifier structure executable rather than leaving the phrase n,m,r -> infinity informal. The retained source should be rechecked against the original PDF specifically for label-support/bounded-loss language before treating this hypothesis as source-faithful.",
+      "gap_refs": [
+        "stronger-analysis-hypotheses",
+        "diagonal-budget-schedule",
+        "label-compact-support"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "H25-A1",
+      "source_anchor": "Assumption 1",
+      "source_kind": "assumption",
+      "title": "Rigid/affine-isometry invariance of the learning rule",
+      "importance": "major",
+      "verdict": "PASS exact",
+      "literal_source_covered": true,
+      "source_claim": "The decision function is unchanged under an orthogonal transformation and translation of the DKPS coordinates.",
+      "source_locator": {
+        "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "lines": [
+          348,
+          354
+        ]
+      },
+      "lean_declarations": [
+        "Helm2025.DKPS.Assumption1",
+        "Helm2025.DKPS.InvariantToAffineIsometries"
+      ],
+      "clauses": [
+        {
+          "source_clause": "h is invariant under a common orthogonal transformation plus translation of train/test DKPS coordinates.",
+          "lean_clause": "InvariantToAffineIsometries/Assumption1 encodes exactly this affine-isometry invariance.",
+          "relation": "exact",
+          "note": ""
+        }
+      ],
+      "review": "The Lean predicate directly represents invariance under affine isometries of Euclidean embedding space.",
+      "notes": "No additional note.",
+      "gap_refs": [],
+      "next_action": "None."
+    },
+    {
+      "id": "H25-A2",
+      "source_anchor": "Assumption 2",
+      "source_kind": "assumption",
+      "title": "Continuity of the learning rule",
+      "importance": "major",
+      "verdict": "GAP stronger Lean hypotheses",
+      "literal_source_covered": false,
+      "source_claim": "Sequentially close training sets and query points produce close predictions.",
+      "source_locator": {
+        "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "lines": [
+          355,
+          369
+        ]
+      },
+      "lean_declarations": [
+        "Helm2025.DKPS.PaperA2_SequentialContinuity",
+        "Helm2025.DKPS.Assumption2",
+        "Helm2025.DKPS.ContinuousLearningRule.paperA2"
+      ],
+      "clauses": [
+        {
+          "source_clause": "Sequentially uniform embedding convergence implies the learned prediction converges.",
+          "lean_clause": "PaperA2_SequentialContinuity records the literal source predicate.",
+          "relation": "exact",
+          "note": ""
+        },
+        {
+          "source_clause": "The main theorem uses a joint continuity predicate on the learning rule.",
+          "lean_clause": "Assumption2 is a stronger sufficient condition and proves the paper-shaped sequential condition.",
+          "relation": "lean_stronger_hypothesis",
+          "note": ""
+        }
+      ],
+      "review": "The literal sequential predicate exists. The main theorem assumes a stronger joint continuity predicate and proves it implies the paper-shaped condition.",
+      "notes": "No additional note.",
+      "gap_refs": [
+        "stronger-analysis-hypotheses"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "H25-A3",
+      "source_anchor": "Assumption 3",
+      "source_kind": "assumption",
+      "title": "Closed, bounded, complete decision-function image",
+      "importance": "major",
+      "verdict": "PASS equivalent encoding",
+      "literal_source_covered": true,
+      "source_claim": "Each decision function in the hypothesis class has closed, bounded, complete image.",
+      "source_locator": {
+        "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "lines": [
+          370,
+          371
+        ]
+      },
+      "lean_declarations": [
+        "Helm2025.DKPS.PaperA3_ImageClosedBoundedComplete",
+        "Helm2025.DKPS.Assumption3",
+        "Helm2025.DKPS.Assumption3'",
+        "Helm2025.DKPS.BoundedLearningRule"
+      ],
+      "clauses": [
+        {
+          "source_clause": "Every decision function image is closed, bounded, and complete.",
+          "lean_clause": "PaperA3_ImageClosedBoundedComplete records this source property; the proof-facing Assumption3' uses compact-range control in Euclidean codomain.",
+          "relation": "equivalent_encoding",
+          "note": ""
+        }
+      ],
+      "review": "The literal source predicate is retained. The proof uses bounded/compact-range control, equivalent for the finite-dimensional Euclidean codomain used here.",
+      "notes": "No additional note.",
+      "gap_refs": [],
+      "next_action": "None."
+    },
+    {
+      "id": "H25-A4",
+      "source_anchor": "Assumption 4",
+      "source_kind": "assumption",
+      "title": "Continuity of loss in the prediction",
+      "importance": "major",
+      "verdict": "GAP stronger Lean hypotheses",
+      "literal_source_covered": false,
+      "source_claim": "For each fixed label y, the loss varies continuously with the prediction.",
+      "source_locator": {
+        "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "lines": [
+          372,
+          373
+        ]
+      },
+      "lean_declarations": [
+        "Helm2025.DKPS.ContinuousLossInPred",
+        "Helm2025.DKPS.Assumption4",
+        "Helm2025.DKPS.Assumption4'",
+        "Helm2025.DKPS.ContinuousLoss.continuousLossInPred"
+      ],
+      "clauses": [
+        {
+          "source_clause": "For every fixed label y, the loss is continuous in the prediction.",
+          "lean_clause": "ContinuousLossInPred/Assumption4 records this literal property.",
+          "relation": "exact",
+          "note": ""
+        },
+        {
+          "source_clause": "The main theorem uses joint continuity of loss.",
+          "lean_clause": "ContinuousLoss is stronger than the printed pointwise-in-label condition.",
+          "relation": "lean_stronger_hypothesis",
+          "note": ""
+        }
+      ],
+      "review": "The literal pointwise-in-label predicate exists, while the main theorem assumes joint continuity of the loss as a convenient sufficient condition.",
+      "notes": "No additional note.",
+      "gap_refs": [
+        "stronger-analysis-hypotheses"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "H25-EQ3",
+      "source_anchor": "Equation (3), alignment consistency",
+      "source_kind": "equation",
+      "title": "Aligned estimated perspectives converge uniformly in probability",
+      "importance": "headline",
+      "verdict": "PASS equivalent encoding",
+      "literal_source_covered": true,
+      "source_claim": "After suitable orthogonal/translation alignment, the maximum coordinate error over the n training models and test model tends to zero in probability.",
+      "source_locator": {
+        "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "lines": [
+          374,
+          405
+        ]
+      },
+      "lean_declarations": [
+        "Helm2025.DKPS.DKPSAlignmentConsistency",
+        "Helm2025.DKPS.AlignmentConsistency"
+      ],
+      "clauses": [
+        {
+          "source_clause": "There exist stagewise orthogonal W^(u) and translations a^(u) such that max_i ||psiHat_i-(W psi_i+a)|| ->P 0.",
+          "lean_clause": "DKPSAlignmentConsistency existentially quantifies a sequence of affine isometries and uses finite iSup over all train/test indices.",
+          "relation": "equivalent_encoding",
+          "note": ""
+        },
+        {
+          "source_clause": "The source takes a subsequence r_u.",
+          "lean_clause": "Lean packages the selected estimation stages into one abstract budget sequence.",
+          "relation": "different_quantifier_encoding",
+          "note": ""
+        }
+      ],
+      "review": "Lean uses a finite iSup in place of max and a single abstract estimation-budget index. For a finite index set this is the same uniform error statement.",
+      "notes": "No additional note.",
+      "gap_refs": [],
+      "next_action": "None."
+    },
+    {
+      "id": "H25-BRIDGE",
+      "source_anchor": "Appendix A.1 use of Acharyya et al. (2024) alignment consistency",
+      "source_kind": "dependency",
+      "title": "Discharge Equation (3) from an MDS consistency theorem",
+      "importance": "major",
+      "verdict": "GAP stronger Lean hypotheses",
+      "literal_source_covered": false,
+      "source_claim": "The proof cites the eigengap-free asymptotic raw-stress consistency theorem to obtain aligned DKPS consistency.",
+      "source_locator": {
+        "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "lines": [
+          374,
+          395
+        ]
+      },
+      "lean_declarations": [
+        "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral",
+        "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram",
+        "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The Appendix cites Acharyya 2024 raw-stress consistency to justify Eq. (3), without an eigengap premise.",
+          "lean_clause": "The available end-to-end bridge realizes estimates by spectral/classical MDS and requires a positive population eigenvalue floor plus cap.",
+          "relation": "lean_stronger_hypothesis",
+          "note": "This discrepancy belongs to the concrete estimator bridge, not the abstract inference-transfer theorem once Eq. (3) is assumed."
+        },
+        {
+          "source_clause": "The paper route is raw-stress/affine alignment.",
+          "lean_clause": "The Lean bridge is spectral/orthogonal alignment; Gram identities discharge PSD/rank, but spectral stability remains.",
+          "relation": "source_repair",
+          "note": "A raw-stress bridge using Acharyya2024 would be closer to the paper route."
+        }
+      ],
+      "review": "The available end-to-end bridge realizes the estimator as spectral/classical MDS and therefore assumes a positive population eigenvalue floor. That is stronger than the Helm paper route through raw-stress consistency.",
+      "notes": "This discrepancy belongs to the bridge, not the abstract Theorem1/Theorem2 transfer once Equation (3) is assumed.",
+      "gap_refs": [
+        "spectral-vs-rawstress-bridge"
+      ],
+      "next_action": "For exact end-to-end faithfulness, bridge Helm to the Acharyya2024 raw-stress consistency theorem instead of the spectral estimator, or state the extra spectral assumption in the paper-facing theorem."
+    }
+  ]
+}
