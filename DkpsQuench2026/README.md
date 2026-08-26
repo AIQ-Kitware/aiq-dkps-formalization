@@ -111,9 +111,13 @@ to tolerance `(n+1)^-2` / finite replicate budget `(n+1)^6`.  The
 compact-infinite cover exponent correspondingly drops from `5d` to `2d`, so its
 declared replicate budget is `(n+1)^(6+2d)`.  The underlying Acharyya response
 bookkeeping now exposes the exact structural ratio `n³γ/(r x²)` at tolerance
-`η=x/n`; the remaining source-fidelity step is the explicit real-power choice
-`x=(n³/r)^(1/2-δ)` and its growing capstone.  For the
-fixed-population route,
+`η=x/n`.  `Acharyya2025.PaperRate` now closes the literal source specialization:
+`r = ω(n³)` is represented by a little-o hypothesis, `x=(n³/r)^(1/2-δ)` tends
+to zero for `δ ∈ (0,1/2)`, the concentration ratio becomes a bounded factor
+times `(n³/r)^(2δ)`, and a growing DK `GrowingConfigControl` is produced at
+that same scale.  The next integration step is to let the growing Quench
+capstone consume that paper-scale certificate directly instead of choosing the
+explicit safe schedule.  For the fixed-population route,
 `quench_part2_from_aligned_configFrobError_hp`,
 `queryEfficient_nn_of_response_mean_frob`, and
 `queryEfficient_nn_of_second_moment_frob` use the DK-sharpened Acharyya bound
@@ -121,11 +125,11 @@ all the way to Quench's uniform embedding-error premise.  The core Frobenius
 bridge accepts any deterministic envelope that eventually dominates
 `configFrobBound`; `quench_part2_from_aligned_configFrobQuadratic_hp` specializes
 this to the explicit `C₁ ε + C₂ ε²` spectral majorant.  This gives Quench a
-polynomial spectral concentration input.  `Acharyya2025.PaperRate` now shows
-that the direct response bridge feeds the spectral theorem a fixed multiple of
-the same target scale `x` whose concentration ratio has `n³/r` structure; the
-remaining literal paper syntax is the specialization `x=(n³/r)^(1/2-δ)`.
-The older `ConfigError` declarations remain as compatibility APIs.
+polynomial spectral concentration input.  `Acharyya2025.PaperRate` now carries
+that bridge through the paper's real-power scale and proves the corresponding
+response and growing spectral rates vanish under `r = ω(n³)` and bounded
+second moments.  The older `ConfigError` declarations remain as compatibility
+APIs.
 
 This keeps the Quench-facing v1 Acharyya rate path separate from the revised
 June-2026 Acharyya source version.
