@@ -320,8 +320,8 @@ theorem exists_isometry_configFrobError_le_of_entrywise_close
     -- eigenvalue ceiling Λ (Assumption 2, upper)
     (hΛ : ∀ l : Fin (Fintype.card (Fin n)), hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (hentry : ∀ i j, |Bhat i j - B i j| ≤ η)   -- entrywise closeness: |B̂ᵢⱼ − Bᵢⱼ| ≤ η
-    (hsmall : (n : ℝ) * η ≤ α / 2)              -- smallness: perturbation ≤ half the floor (Weyl/gap)
-    (hpolar : (d : ℝ) * (4 * (d : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2) -- polar-factor smallness (Davis–Kahan term ≤ 1/2)
+    (_hsmall : (n : ℝ) * η ≤ α / 2)             -- retained for downstream compatibility
+    (_hpolar : (d : ℝ) * (4 * (d : ℝ) * ((n : ℝ) * η)^2 / α^2) ≤ 1/2) -- retained for downstream compatibility
     (ψ : Acharyya2024.Config n d)               -- any external configuration realizing B
     (hψ : ∀ i j, (∑ k : Fin d, ψ i k * ψ j k) = B i j) :  -- ψ has Gram matrix B
     -- Conclusion: the aligned sample configuration is Frobenius-close to `ψ`.
@@ -362,7 +362,7 @@ theorem exists_isometry_configFrobError_le_of_entrywise_close
   -- operator-world configuration bound: alignment `W₀`.
   obtain ⟨W₀, hW₀_isom, hW₀_bound⟩ :=
     exists_isometry_configFrobError_spectralConfig_le hd T S hT hSsym hα_pos hε_nonneg
-      hα htail hΛ' hclose hsmall hpolar
+      hα htail hΛ' hclose
   -- Gram rigidity: Gram(spectralConfig T) = B = Gram(ψ), so an isometry `V` aligns them.
   have hgramT : ∀ i j : Fin n,
       (∑ k : Fin d, spectralConfig T hT hd i k * spectralConfig T hT hd j k) = B i j :=
