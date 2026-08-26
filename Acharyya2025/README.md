@@ -155,9 +155,13 @@ source-version migration rather than folded into this Quench-facing v1 chain.
   spectral stage itself is already degree `≤ 2`, stronger than needing a cubic
   envelope.  The remaining gap to the paper's literal
   `Poly₃((n³/r)^{1/2−δ})` statement is in the upstream response→CMDS transport
-  and its joint growing-`n`, growing-`r` bookkeeping.  The formalization does
-  not rename that upstream rate as the paper's `Poly₃` until those quantifiers
-  and powers are proved.
+  and its joint growing-`n`, growing-`r` bookkeeping.  The Frobenius migration
+  does improve the explicit Quench safe schedule: the current CMDS transport
+  supports response tolerance `(n+1)^-4` with finite replicate budget
+  `(n+1)^10`, rather than the older `(n+1)^-5` / `(n+1)^13` schedule forced by
+  the legacy row-sum norm.  This is still a conservative growing certificate;
+  the formalization does not rename it as the paper's `Poly₃` until the paper's
+  joint quantifiers and powers are proved.
 - **Response boundedness in growing bridges.** The preferred Quench-facing
   response theorem no longer assumes separate uniform bounds for every sample
   and population dissimilarity. A population response-norm envelope, together

@@ -104,7 +104,14 @@ The Frobenius route now reaches both fixed-population and growing target-augment
 query-efficiency capstones.  `GrowingConfigControl` tracks `configFrobBound`,
 and the pairwise-distance engine bounds each target/reference radial error
 straight from `ConfigFrobError`; the growing path therefore no longer
-reintroduces the legacy `sqrt(n+1)` factor.  For the fixed-population route,
+reintroduces the legacy `sqrt(n+1)` factor.  `Rates/SafeSchedule.lean` uses that
+improvement to retune the explicit raw-response schedule from tolerance
+`(n+1)^-5` / finite replicate budget `(n+1)^13` to `(n+1)^-4` /
+`(n+1)^10`.  The compact-infinite cover exponent correspondingly drops from
+`5d` to `4d`, so its declared replicate budget is `(n+1)^(10+4d)`.  These are
+still conservative sufficient schedules, not a claim that the formal upstream
+response→CMDS rate has reached the paper's sharp asymptotics.  For the
+fixed-population route,
 `quench_part2_from_aligned_configFrobError_hp`,
 `queryEfficient_nn_of_response_mean_frob`, and
 `queryEfficient_nn_of_second_moment_frob` use the DK-sharpened Acharyya bound
