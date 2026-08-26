@@ -48,6 +48,7 @@ import Acharyya2025.DavisKahan
 import Acharyya2025.RankGap
 import Acharyya2025.Overlap
 import Acharyya2025.PolarFactor
+import YuWangSamworth2015.Core.Procrustes
 
 open scoped BigOperators RealInnerProductSpace InnerProductSpace Matrix
 open Module (finrank)
@@ -1147,9 +1148,7 @@ theorem exists_isometry_configFrobError_spectralConfig_le
     -- Assumption 2 (upper): all population eigenvalues `≤ Λ` (paper's `λ_1`/`C2`):
     (hΛ : ∀ l : Fin n, hT.eigenvalues finrank_euclideanSpace_fin l ≤ Λ)
     (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖)   -- sample/population operator-norm closeness `‖S − T‖ ≤ ε`
-    (hsmall : ε ≤ α / 2)                 -- smallness side-condition (extra explicit numeric condition)
-    -- polar-factor applicability: `δ = d·4dε²/α² ≤ 1/2` (extra explicit smallness condition):
-    (hpolar : (d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2) ≤ 1/2) :
+    (hsmall : ε ≤ α / 2) :               -- smallness side-condition (extra explicit numeric condition)
     -- Conclusion: there is an isometry `W` aligning the sample and population
     -- spectral configurations in Frobenius norm.
     ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
@@ -1158,16 +1157,83 @@ theorem exists_isometry_configFrobError_spectralConfig_le
         ≤ configFrobBound d α Λ ε  := by
   set δ : ℝ := (d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2) with hδ
   have hδ0 : 0 ≤ δ := by rw [hδ]; positivity
-  -- The near-isometry `M` and its Gram-deviation bound feed the polar factor.
+  -- The near-isometry `M` and its Gram-deviation bound feed the local branch.
+  -- For `δ < 1`, the sharp TauCeti polar estimate gives an isometry within `δ`.
+  -- For `δ ≥ 1`, YWS supplies a global Procrustes alignment; since both the
+  -- overlap map and the alignment are contractions/isometries, their distance
+  -- is at most `2 ≤ 2δ`.  This removes the former `δ ≤ 1/2` hypothesis while
+  -- preserving the existing `2δ` Term-1 envelope.
   set M := nearIsometry hT hS hd with hM
   have hclose : ∀ x : EuclideanSpace ℝ (Fin d),
       |⟪M x, M x⟫_ℝ - ⟪x, x⟫_ℝ| ≤ δ * ⟪x, x⟫_ℝ := by
     intro x
     rw [hM, hδ]
     exact gram_dev_le hd hT hS hα_pos hα htail hε hsmall x
-  obtain ⟨W, hWiso, hWclose⟩ :=
-    Acharyya2025.PolarFactor.exists_isometry_close_of_self_adjoint_comp_close
-      (finrank_euclideanSpace_fin (n := d)) M hpolar hclose
+  obtain ⟨W, hWiso, hWclose⟩ :
+      ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
+        (∀ x y, ⟪W x, W y⟫_ℝ = ⟪x, y⟫_ℝ) ∧
+        (∀ x, ‖(M - W) x‖ ≤ 2 * δ * ‖x‖) := by
+    by_cases hδlt : δ < 1
+    · obtain ⟨W, hWsharp⟩ :=
+        TauCeti.LinearMap.exists_linearIsometryEquiv_norm_sub_apply_le M hδlt hclose
+      refine ⟨W.toLinearEquiv.toLinearMap,
+        fun x y => W.inner_map_map x y, fun x => ?_⟩
+      rw [LinearMap.sub_apply]
+      have hprod : 0 ≤ δ * ‖x‖ := mul_nonneg hδ0 (norm_nonneg x)
+      exact (hWsharp x).trans (by nlinarith)
+    · have hδge : 1 ≤ δ := le_of_not_gt hδlt
+      let e : Fin d ↪ Fin n := Fin.castLEEmb hd
+      have hu := TauCeti.isOrderedEigenframe_eigenvectorBasis hT hn_eq e
+      have hv := TauCeti.isOrderedEigenframe_eigenvectorBasis hS hn_eq e
+      have hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
+          α ≤ |hT.eigenvalues hn_eq (e i) - hT.eigenvalues hn_eq k| := by
+        intro i k hk
+        have hkge : d ≤ (k : ℕ) := by
+          by_contra hkd
+          apply hk
+          refine ⟨⟨(k : ℕ), Nat.lt_of_not_ge hkd⟩, ?_⟩
+          apply Fin.ext
+          rfl
+        have hlead : α ≤ hT.eigenvalues hn_eq (e i) := by
+          apply hα
+          simp [e]
+        have hlead0 : 0 ≤ hT.eigenvalues hn_eq (e i) :=
+          le_trans (le_of_lt hα_pos) hlead
+        rw [htail k hkge, sub_zero, abs_of_nonneg hlead0]
+        exact hlead
+      obtain ⟨W, hWiso, _hWalign⟩ :=
+        YuWangSamworth2015.yuWangSamworth_alignmentMap_sub_overlapOp_apply_le
+          hu hv hα_pos hgap
+      have hM_overlap :
+          M = TauCeti.overlapOp hu.orthonormal hv.orthonormal := by
+        apply LinearMap.ext
+        intro x
+        ext l
+        rw [hM, nearIsometry_apply, TauCeti.overlapOp_coord,
+          TauCeti.familyIsometry_apply, inner_sum]
+        refine Finset.sum_congr rfl (fun k _ => ?_)
+        rw [real_inner_smul_right]
+        simp only [Acharyya2025.Overlap.overlap]
+        rw [real_inner_comm]
+        simp [e, mul_comm]
+      refine ⟨W, hWiso, fun x => ?_⟩
+      have hMnorm : ‖M x‖ ≤ ‖x‖ := by
+        rw [hM_overlap]
+        exact TauCeti.overlapOp_contraction hu.orthonormal hv.orthonormal x
+      have hWnorm : ‖W x‖ = ‖x‖ := by
+        have hsq : ‖W x‖ ^ 2 = ‖x‖ ^ 2 := by
+          rw [← real_inner_self_eq_norm_sq, ← real_inner_self_eq_norm_sq,
+            hWiso x x]
+        nlinarith [norm_nonneg (W x), norm_nonneg x]
+      rw [LinearMap.sub_apply]
+      calc
+        ‖M x - W x‖ ≤ ‖M x‖ + ‖W x‖ := norm_sub_le _ _
+        _ ≤ ‖x‖ + ‖x‖ := add_le_add hMnorm (le_of_eq hWnorm)
+        _ = 2 * ‖x‖ := by ring
+        _ ≤ 2 * δ * ‖x‖ := by
+          have hprod : 0 ≤ (δ - 1) * ‖x‖ :=
+            mul_nonneg (sub_nonneg.mpr hδge) (norm_nonneg x)
+          nlinarith
   refine ⟨W, hWiso, ?_⟩
   -- The total error and the three terms as product-space vectors.
   set etot : EuclideanSpace ℝ (Fin n × Fin d) :=
@@ -1339,7 +1405,7 @@ theorem exists_isometry_configError_spectralConfig_le
     (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖)   -- sample/population operator-norm closeness `‖S − T‖ ≤ ε`
     (hsmall : ε ≤ α / 2)                 -- smallness side-condition (extra explicit numeric condition)
     -- polar-factor applicability: `δ = d·4dε²/α² ≤ 1/2` (extra explicit smallness condition):
-    (hpolar : (d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2) ≤ 1/2) :
+    (_hpolar : (d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2) ≤ 1/2) :
     -- Conclusion: there is an isometry `W` of `ℝ^d` aligning the sample embedding to the
     -- population embedding with configuration error `≤ configBound n d α Λ ε`.
     ∃ W : EuclideanSpace ℝ (Fin d) →ₗ[ℝ] EuclideanSpace ℝ (Fin d),
@@ -1348,7 +1414,7 @@ theorem exists_isometry_configError_spectralConfig_le
         ≤ configBound n d α Λ ε  := by
   obtain ⟨W, hWiso, hWfrob⟩ :=
     exists_isometry_configFrobError_spectralConfig_le hd T S hT hS hα_pos hε_nonneg
-      hα htail hΛ hε hsmall hpolar
+      hα htail hΛ hε hsmall
   refine ⟨W, hWiso, ?_⟩
   calc
     Acharyya2024.ConfigError (fun i => W (spectralConfig S hS hd i)) (spectralConfig T hT hd)
