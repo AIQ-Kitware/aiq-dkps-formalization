@@ -921,7 +921,7 @@ private theorem abs_sqrt_sub_sqrt_le_abs_sub_div_sqrt_right
 the corresponding perturbation residual, before the operator norm is applied:
 
 `|Q_kl (sqrt(lamHat_k) - sqrt(lam_l))|
-  <= |<v_k, (S - T) u_l>| / sqrt(alpha / 2)`.
+  <= |<v_k, (S - T) u_l>| / sqrt(alpha)`.
 
 Keeping the residual on the right is the key strengthening over the entrywise
 bound below: Parseval can sum these residual coordinates for a fixed `l` before
@@ -983,7 +983,7 @@ private theorem abs_term2_coeff_le_residual
       exact mul_le_mul_of_nonneg_left hroot (abs_nonneg _)
 
 /-- Internal helper / algebraic step (**Term-2 squared Frobenius bound**):
-`‖term2vec‖² ≤ d · (ε / √(α/2))²`.
+`‖term2vec‖² ≤ d · (ε / √α)²`.
 
 For each population column `l`, the commutator identity leaves the residual
 coordinates `⟪v_k, (S - T) u_l⟫`.  Parseval/Bessel sums those coordinates first,
@@ -993,15 +993,15 @@ private theorem term2_norm_sq_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsS
     {α ε : ℝ} (hα_pos : 0 < α)
     (hα : ∀ i : Fin n, (i : ℕ) < d → α ≤ hT.eigenvalues hn_eq i)
     (hε : ∀ x, ‖(S - T) x‖ ≤ ε * ‖x‖) :
-    -- Conclusion: the Term-2 Frobenius energy is `≤ d·(ε/√(α/2))²`.
-    ‖term2vec hT hS hd‖^2 ≤ (d : ℝ) * (ε / Real.sqrt (α / 2))^2 := by
+    -- Conclusion: the Term-2 Frobenius energy is `≤ d·(ε/√α)²`.
+    ‖term2vec hT hS hd‖^2 ≤ (d : ℝ) * (ε / Real.sqrt α)^2 := by
   set c := fun (k l : Fin d) => (Acharyya2025.Overlap.overlap hT hS hn_eq hd) k l
       * (Real.sqrt (lamHat hS hd k) - Real.sqrt (lamPop hT hd l)) with hc
   set r := fun (k l : Fin d) =>
       ⟪hS.eigenvectorBasis hn_eq (Fin.castLE hd k),
         (S - T) (hT.eigenvectorBasis hn_eq (Fin.castLE hd l))⟫_ℝ with hr
-  set ρ : ℝ := Real.sqrt (α / 2) with hρ
-  have hρ_pos : 0 < ρ := by rw [hρ]; exact Real.sqrt_pos.mpr (by positivity)
+  set ρ : ℝ := Real.sqrt α with hρ
+  have hρ_pos : 0 < ρ := by rw [hρ]; exact Real.sqrt_pos.mpr hα_pos
   -- `‖t2‖² = ∑_l ∑_k c_{kl}²` via Parseval per `l`.
   have hstep : ‖term2vec hT hS hd‖^2 = ∑ l : Fin d, ∑ k : Fin d, (c k l)^2 := by
     rw [frob_sq, Finset.sum_comm]
@@ -1027,17 +1027,9 @@ private theorem term2_norm_sq_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsS
   have hcoeff : ∀ k l : Fin d, (c k l)^2 ≤ (r k l / ρ)^2 := by
     intro k l
     have habs_strong := abs_term2_coeff_le_residual hd hT hS hα_pos hα k l
-    have hρ_le : ρ ≤ Real.sqrt α := by
-      rw [hρ]
-      exact Real.sqrt_le_sqrt (by linarith [hα_pos] : α / 2 ≤ α)
-    have hαroot_pos : 0 < Real.sqrt α := Real.sqrt_pos.mpr hα_pos
     have habs : |c k l| ≤ |r k l| / ρ := by
-      calc
-        |c k l| ≤ |r k l| / Real.sqrt α := by
-          simpa [c, r] using habs_strong
-        _ ≤ |r k l| / ρ := by
-          rw [div_le_div_iff₀ hαroot_pos hρ_pos]
-          exact mul_le_mul_of_nonneg_left hρ_le (abs_nonneg _)
+      rw [hρ]
+      simpa only [c, r] using habs_strong
     have hsquare := pow_le_pow_left₀ (abs_nonneg (c k l)) habs 2
     calc
       (c k l)^2 = |c k l|^2 := by rw [sq_abs]
@@ -1083,7 +1075,7 @@ private theorem term2_norm_sq_le (hd : d ≤ n) (hT : T.IsSymmetric) (hS : S.IsS
         ≤ ∑ _l : Fin d, (ε / ρ)^2 := Finset.sum_le_sum (fun l _ => hcol l)
     _ = (d : ℝ) * (ε / ρ)^2 := by
         rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
-    _ = (d : ℝ) * (ε / Real.sqrt (α / 2))^2 := by rw [hρ]
+    _ = (d : ℝ) * (ε / Real.sqrt α)^2 := by rw [hρ]
 
 /-! ### Step 4 (Term 1): total energy of the spectral embedding `ψ̂`
 
@@ -1224,7 +1216,7 @@ has no direct ambient-`n` factor; ambient size enters only through whatever
 operator perturbation `ε` is supplied by the statistical/matrix layer. -/
 noncomputable def configFrobBound (d : ℕ) (α Λ ε : ℝ) : ℝ :=
   Real.sqrt ((2 * ((d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2)))^2 * ((d : ℝ) * (Λ + ε)))
-    + Real.sqrt ((d : ℝ) * (ε / Real.sqrt (α / 2))^2)
+    + Real.sqrt ((d : ℝ) * (ε / Real.sqrt α)^2)
     + Real.sqrt (Λ * (4 * (d : ℝ) * ε^2 / α^2))
 
 
@@ -1232,7 +1224,7 @@ noncomputable def configFrobBound (d : ℕ) (α Λ ε : ℝ) : ℝ :=
 The two linear pieces are the square-root commutator term and the
 Davis--Kahan reconstruction term. -/
 noncomputable def configFrobLinearCoeff (d : ℕ) (α Λ : ℝ) : ℝ :=
-  Real.sqrt ((d : ℝ) * (1 / Real.sqrt (α / 2))^2)
+  Real.sqrt ((d : ℝ) * (1 / Real.sqrt α)^2)
     + Real.sqrt (Λ * (4 * (d : ℝ) / α^2))
 
 /-- Quadratic coefficient in the local polynomial majorant for
@@ -1301,12 +1293,12 @@ theorem configFrobBound_le_configFrobQuadraticMajorant
       _ = ε^2 * configFrobQuadraticCoeff d α Λ := by
           rw [show ε^4 = (ε^2)^2 by ring, Real.sqrt_sq (sq_nonneg ε)]
   have hsecond_factor :
-      (d : ℝ) * (ε / Real.sqrt (α / 2))^2
-        = ε^2 * ((d : ℝ) * (1 / Real.sqrt (α / 2))^2) := by
+      (d : ℝ) * (ε / Real.sqrt α)^2
+        = ε^2 * ((d : ℝ) * (1 / Real.sqrt α)^2) := by
     ring
   have hsecond :
-      Real.sqrt ((d : ℝ) * (ε / Real.sqrt (α / 2))^2)
-        = ε * Real.sqrt ((d : ℝ) * (1 / Real.sqrt (α / 2))^2) := by
+      Real.sqrt ((d : ℝ) * (ε / Real.sqrt α)^2)
+        = ε * Real.sqrt ((d : ℝ) * (1 / Real.sqrt α)^2) := by
     rw [hsecond_factor, Real.sqrt_mul (sq_nonneg ε), Real.sqrt_sq hε0]
   have hthird_factor :
       Λ * (4 * (d : ℝ) * ε^2 / α^2)
@@ -1322,13 +1314,13 @@ theorem configFrobBound_le_configFrobQuadraticMajorant
     Real.sqrt
           ((2 * ((d : ℝ) * (4 * (d : ℝ) * ε ^ 2 / α ^ 2))) ^ 2 *
             ((d : ℝ) * (Λ + ε))) +
-        ε * Real.sqrt ((d : ℝ) * (1 / Real.sqrt (α / 2)) ^ 2) +
+        ε * Real.sqrt ((d : ℝ) * (1 / Real.sqrt α) ^ 2) +
         ε * Real.sqrt (Λ * (4 * (d : ℝ) / α ^ 2))
       ≤ ε^2 * configFrobQuadraticCoeff d α Λ +
-          ε * Real.sqrt ((d : ℝ) * (1 / Real.sqrt (α / 2)) ^ 2) +
+          ε * Real.sqrt ((d : ℝ) * (1 / Real.sqrt α) ^ 2) +
           ε * Real.sqrt (Λ * (4 * (d : ℝ) / α ^ 2)) := by
             exact add_le_add (add_le_add hfirst le_rfl) le_rfl
-    _ = (Real.sqrt ((d : ℝ) * (1 / Real.sqrt (α / 2)) ^ 2) +
+    _ = (Real.sqrt ((d : ℝ) * (1 / Real.sqrt α) ^ 2) +
           Real.sqrt (Λ * (4 * (d : ℝ) / α ^ 2))) * ε +
           configFrobQuadraticCoeff d α Λ * ε^2 := by
             ring
@@ -1339,7 +1331,7 @@ downstream proofs that unfold `configBound` keep their previous normal form. -/
 noncomputable def configBound (n d : ℕ) (α Λ ε : ℝ) : ℝ :=
   Real.sqrt n *
     ( Real.sqrt ((2 * ((d : ℝ) * (4 * (d : ℝ) * ε^2 / α^2)))^2 * ((d : ℝ) * (Λ + ε)))
-    + Real.sqrt ((d : ℝ) * (ε / Real.sqrt (α / 2))^2)
+    + Real.sqrt ((d : ℝ) * (ε / Real.sqrt α)^2)
     + Real.sqrt (Λ * (4 * (d : ℝ) * ε^2 / α^2)) )
 
 /-- The legacy `configBound` is exactly the Frobenius bound followed by the
@@ -1578,9 +1570,9 @@ theorem exists_isometry_configFrobError_spectralConfig_le
     calc ‖t1‖ = Real.sqrt (‖t1‖^2) := by rw [Real.sqrt_sq (norm_nonneg _)]
       _ ≤ Real.sqrt ((2 * δ)^2 * ((d : ℝ) * (Λ + ε))) := Real.sqrt_le_sqrt ht1sq
   -- Term-2 norm bound.
-  have ht2bound : ‖term2vec hT hS hd‖ ≤ Real.sqrt ((d : ℝ) * (ε / Real.sqrt (α / 2))^2) := by
+  have ht2bound : ‖term2vec hT hS hd‖ ≤ Real.sqrt ((d : ℝ) * (ε / Real.sqrt α)^2) := by
     calc ‖term2vec hT hS hd‖ = Real.sqrt (‖term2vec hT hS hd‖^2) := by rw [Real.sqrt_sq (norm_nonneg _)]
-      _ ≤ Real.sqrt ((d : ℝ) * (ε / Real.sqrt (α / 2))^2) :=
+      _ ≤ Real.sqrt ((d : ℝ) * (ε / Real.sqrt α)^2) :=
           Real.sqrt_le_sqrt (term2_norm_sq_le hd hT hS hα_pos hα hε)
   -- Term-3 norm bound.
   have ht3bound : ‖term3vec hT hS hd‖ ≤ Real.sqrt (Λ * (4 * (d : ℝ) * ε^2 / α^2)) := by

@@ -108,13 +108,18 @@ Davis--Kahan endpoint from the reusable `TauCeti`/`DavisKahan` layer and keeps
 the exact eigenvalue-commutator residual through a Bessel/Parseval sum.  The
 older ambient-`n` wrapper theorems remain available for source fidelity.
 
-The current proof still uses the local near-isometry/polar theorem and therefore
-retains `hpolar`.  The YWS aligned-frame API already supplies the canonical
-`choosePolarUnitary (overlapOp ...)` construction, but replacing `hpolar`
-cleanly also needs a reusable Frobenius estimate comparing that polar unitary
-to the overlap operator in terms of principal-angle energy.  That lemma is not
-yet part of the reusable TauCeti surface, so this layer does not introduce a
-cross-paper YWS dependency merely to duplicate the existing local polar step.
+The current proof also consumes the Yu--Wang--Samworth population-gap and
+alignment results.  The population-only residual sin-Theta bound controls both
+cross-energy orientations without a sample-gap condition, removing the former
+`hsmall : ε ≤ α / 2` hypothesis.  The YWS aligned-frame/overlap-map bridge is
+combined with the sharp TauCeti near-isometry theorem to remove the former
+`hpolar` hypothesis.  Thus the paper-facing finite Frobenius theorem now needs
+only the population spectral floor/cap/rank assumptions and operator closeness,
+not separate local spectral-applicability conditions.
+
+The square-root commutator term also keeps the stronger residual estimate all
+the way to the public bound: its denominator is `√α`, rather than the earlier
+compatibility envelope `√(α/2)`.
 
 ### ArXiv v1 norm inconsistency
 
@@ -143,11 +148,12 @@ source-version migration rather than folded into this Quench-facing v1 chain.
   measurability we route through the existential predicate `AlignExists`. This
   is machinery the paper does not need (it argues classically).
 - **Assumptions 1–2 are encoded** as `IsHermitian` / `PosSemidef` / `rank ≤ d`
-  and explicit eigenvalue floor `α` / cap `Λ` hypotheses; the numeric
-  deterministic `hsmall` / `hpolar` conditions make the local spectral argument
-  concrete.  They are now discharged *eventually* from the vanishing perturbation
-  rate by `eventually_spectral_side_conditions`, so they do not remain assumptions
-  of the high-probability paper-facing Frobenius theorem.
+  and explicit eigenvalue floor `α` / cap `Λ` hypotheses.  The former numeric
+  `hsmall` / `hpolar` side conditions are no longer part of the finite spectral
+  theorem.  Consequently the high-probability finite-bound wrappers also no
+  longer assume that the perturbation-rate sequence tends to zero; vanishing
+  rates are required only by the separate consistency/rate conclusions that
+  actually prove convergence to zero.
 - **The response→CMDS transport now has the paper's `n³/r` scaling algebra.**
   The primary bridge bounds each response dissimilarity entry directly by
   `2η/m` instead of first taking a Frobenius norm over all `n²` entries.  With

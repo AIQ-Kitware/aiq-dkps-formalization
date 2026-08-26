@@ -197,7 +197,7 @@ theorem tendsto_configFrobBound_comp_zero (d : Nat) (α Λ : Real)
 /--
 The capstone spectral bound `configBound n d α Λ ε` is continuous in `ε`
 (for any fixed `n, d, α, Λ`): it is built from `√`, `+`, `*`, `^2` and division
-by the constants `α²` and `√(α/2)`, all continuous.
+by the constants `α²` and `√α`, all continuous.
 
 Internal helper (analytic ingredient for the vanishing-rate lemma).
 
@@ -397,11 +397,8 @@ theorem highProb_aligned_configError_endToEndRate
     (hσ2 : ∀ u (i : Fin n), ∫ ω, ‖Xbar u ω i - μ i‖ ^ 2 ∂(P u) ≤ σ2 u)  -- second-moment bound
     (ht_pos : ∀ u, 0 < t u)
     (hratio : Tendsto (fun u => (n : Real) * σ2 u / (t u) ^ 2) atTop (𝓝 0))  -- vanishing Chebyshev ratio (cf. r = ω(n³))
-    -- Rate side-conditions.  The local spectral smallness inequalities are
-    -- automatic eventually from the vanishing scaled perturbation rate.
+    -- The finite spectral bound only needs nonnegativity of the entrywise rate.
     (hrate_nonneg : ∀ u, 0 ≤ cmdsEntrywiseRate n m R (t u))
-    (hrate_zero : Tendsto
-      (fun u => (n : Real) * cmdsEntrywiseRate n m R (t u)) atTop (𝓝 0))
     (hsample_bound : ∀ u ω i j, |responseDist (Xbar u ω) i j| ≤ R)  -- uniform dissimilarity bound (sample)
     (hpopulation_bound : ∀ i j, |responseDist μ i j| ≤ R) :         -- uniform dissimilarity bound (population)
     -- Conclusion (explicit-rate Theorem 2): with high probability the aligned
@@ -422,7 +419,7 @@ theorem highProb_aligned_configError_endToEndRate
   -- `endToEndRate` is definitionally the bound it produces.
   exact Acharyya2025.AlignedPipeline.highProb_aligned_configError_of_response_mean
     P hn hd Xbar μ hB hrank hα_pos hfloor hΛ ψ hψ t (fun _ => R)
-    hrate_nonneg hrate_zero hmean hsample_bound
+    hrate_nonneg hmean hsample_bound
     (fun _u i j => hpopulation_bound i j)
 
 /--
@@ -432,9 +429,9 @@ CMDS perturbation chain is identical, but the final estimator and bound use
 `alignedSpectralConfigFrob` / `endToEndFrobRate`, so no terminal `√n` loss is
 introduced by the legacy row-sum `ConfigError` API.
 
-The local spectral smallness and polar conditions do not appear in the public
-signature: `highProb_aligned_configFrobError_of_response_mean` derives them
-eventually from `hrate_zero`.
+The finite spectral theorem requires neither local spectral smallness/polar
+conditions nor a vanishing-rate hypothesis; convergence is stated separately
+below.
 -/
 theorem highProb_aligned_configFrobError_endToEndFrobRate
     {Ω : Type} [MeasurableSpace Ω]
@@ -456,8 +453,6 @@ theorem highProb_aligned_configFrobError_endToEndFrobRate
     (ht_pos : ∀ u, 0 < t u)
     (hratio : Tendsto (fun u => (n : Real) * σ2 u / (t u) ^ 2) atTop (𝓝 0))
     (hrate_nonneg : ∀ u, 0 ≤ cmdsEntrywiseRate n m R (t u))
-    (hrate_zero : Tendsto
-      (fun u => (n : Real) * cmdsEntrywiseRate n m R (t u)) atTop (𝓝 0))
     (hsample_bound : ∀ u ω i j, |responseDist (Xbar u ω) i j| ≤ R)
     (hpopulation_bound : ∀ i j, |responseDist μ i j| ≤ R) :
     HighProbAtTop P (fun u => {ω |
@@ -473,7 +468,7 @@ theorem highProb_aligned_configFrobError_endToEndFrobRate
       hint hσ2 ht_pos hratio
   exact Acharyya2025.AlignedPipeline.highProb_aligned_configFrobError_of_response_mean
     P hn hd Xbar μ hB hrank hα_pos hfloor hΛ ψ hψ t (fun _ => R)
-    hrate_nonneg hrate_zero hmean hsample_bound
+    hrate_nonneg hmean hsample_bound
     (fun _u i j => hpopulation_bound i j)
 
 /-- Canonical population-realization form of the explicit end-to-end rate
@@ -499,8 +494,6 @@ theorem highProb_aligned_configError_endToEndRate_canonical
     (ht_pos : ∀ u, 0 < t u)
     (hratio : Tendsto (fun u => (n : Real) * σ2 u / (t u) ^ 2) atTop (𝓝 0))
     (hrate_nonneg : ∀ u, 0 ≤ cmdsEntrywiseRate n m R (t u))
-    (hrate_zero : Tendsto
-      (fun u => (n : Real) * cmdsEntrywiseRate n m R (t u)) atTop (𝓝 0))
     (hsample_bound : ∀ u ω i j, |responseDist (Xbar u ω) i j| ≤ R)
     (hpopulation_bound : ∀ i j, |responseDist μ i j| ≤ R) :
     HighProbAtTop P (fun u => {ω |
@@ -515,7 +508,7 @@ theorem highProb_aligned_configError_endToEndRate_canonical
   exact highProb_aligned_configError_endToEndRate P hn hd Xbar μ hB hrank
     hα_pos hfloor hΛ (canonicalCMDSConfig (responseDist μ) hB hrank)
     (canonicalCMDSConfig_gram_eq (responseDist μ) hB hrank)
-    t R σ2 hint hσ2 ht_pos hratio hrate_nonneg hrate_zero
+    t R σ2 hint hσ2 ht_pos hratio hrate_nonneg
     hsample_bound hpopulation_bound
 
 /-! ### (4) Consistency corollary -/
@@ -606,8 +599,6 @@ theorem highProb_aligned_configError_endToEndRate_topEigenvalue
     (ht_pos : ∀ u, 0 < t u)
     (hratio : Tendsto (fun u => (n : Real) * σ2 u / (t u) ^ 2) atTop (𝓝 0))
     (hrate_nonneg : ∀ u, 0 ≤ cmdsEntrywiseRate n m R (t u))
-    (hrate_zero : Tendsto
-      (fun u => (n : Real) * cmdsEntrywiseRate n m R (t u)) atTop (𝓝 0))
     (hsample_bound : ∀ u ω i j, |responseDist (Xbar u ω) i j| ≤ R)
     (hpopulation_bound : ∀ i j, |responseDist μ i j| ≤ R) :
     HighProbAtTop P (fun u => {ω |
@@ -619,7 +610,7 @@ theorem highProb_aligned_configError_endToEndRate_topEigenvalue
         ≤ endToEndRateTopEigenvalue hn m d hB α R t u}) := by
   exact highProb_aligned_configError_endToEndRate P hn hd Xbar μ hB hrank
     hα_pos hfloor (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
-    ψ hψ t R σ2 hint hσ2 ht_pos hratio hrate_nonneg hrate_zero
+    ψ hψ t R σ2 hint hσ2 ht_pos hratio hrate_nonneg
     hsample_bound hpopulation_bound
 
 /-- Canonical population realization and canonical upper spectral ceiling for
@@ -640,8 +631,6 @@ theorem highProb_aligned_configError_endToEndRate_canonical_topEigenvalue
     (ht_pos : ∀ u, 0 < t u)
     (hratio : Tendsto (fun u => (n : Real) * σ2 u / (t u) ^ 2) atTop (𝓝 0))
     (hrate_nonneg : ∀ u, 0 ≤ cmdsEntrywiseRate n m R (t u))
-    (hrate_zero : Tendsto
-      (fun u => (n : Real) * cmdsEntrywiseRate n m R (t u)) atTop (𝓝 0))
     (hsample_bound : ∀ u ω i j, |responseDist (Xbar u ω) i j| ≤ R)
     (hpopulation_bound : ∀ i j, |responseDist μ i j| ≤ R) :
     HighProbAtTop P (fun u => {ω |
@@ -656,7 +645,7 @@ theorem highProb_aligned_configError_endToEndRate_canonical_topEigenvalue
         ≤ endToEndRateTopEigenvalue hn m d hB α R t u}) := by
   exact highProb_aligned_configError_endToEndRate_canonical P hn hd Xbar μ hB hrank
     hα_pos hfloor (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
-    t R σ2 hint hσ2 ht_pos hratio hrate_nonneg hrate_zero
+    t R σ2 hint hσ2 ht_pos hratio hrate_nonneg
     hsample_bound hpopulation_bound
 
 /-- The canonically capped end-to-end rate still vanishes whenever the

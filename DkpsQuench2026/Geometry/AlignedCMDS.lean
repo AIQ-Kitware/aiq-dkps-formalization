@@ -142,7 +142,6 @@ theorem quench_uniform_embedding_error_of_aligned_spectral
     (hψFinite : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
       = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
     (hcenter : Acharyya2024.HighProbAtTop μ (fun u => {ω |
       Acharyya2025.Bridge.EntrywiseClose
         (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat u ω))
@@ -165,7 +164,7 @@ theorem quench_uniform_embedding_error_of_aligned_spectral
   have haligned :=
     Acharyya2025.AlignedPipeline.highProb_aligned_configError_of_entrywise_close
       μ hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψFinite hψFinite
-      rate hrate_nonneg hrate_zero hcenter
+      rate hrate_nonneg hcenter
   -- Lift through the index-map factorization with the existing generic theorem.
   exact quench_uniform_embedding_error_of_finite_configError
     μ hμ indexOf ψFinite
@@ -203,7 +202,6 @@ theorem quench_uniform_embedding_error_of_aligned_spectral_frob
     (hψFinite : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
       = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
     (hcenter : Acharyya2024.HighProbAtTop μ (fun u => {ω |
       Acharyya2025.Bridge.EntrywiseClose
         (Acharyya2025.Deterministic.classicalMDSMatrix (Dhat u ω))
@@ -223,7 +221,7 @@ theorem quench_uniform_embedding_error_of_aligned_spectral_frob
   have haligned :=
     Acharyya2025.AlignedPipeline.highProb_aligned_configFrobError_of_entrywise_close
       μ hd Dhat D hsym hB hrank hα_pos hfloor hΛ ψFinite hψFinite
-      rate hrate_nonneg hrate_zero hcenter
+      rate hrate_nonneg hcenter
   exact quench_uniform_embedding_error_of_finite_configFrobError
     μ hμ indexOf ψFinite
     (Acharyya2025.AlignedPipeline.alignedSpectralConfigFrob hd Dhat hsym ψFinite
@@ -277,7 +275,6 @@ theorem quench_part2_from_aligned_configError_hp
     (hψFinite_gram : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
       = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (_hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
     (c : Nat → Real)
     (hc_eq : c = fun u => Acharyya2025.ConfigPerturbation.configBound n d α Λ
       ((n : Real) * rate u))
@@ -399,7 +396,6 @@ theorem quench_part2_from_aligned_configFrobError_hp
     (hψFinite_gram : ∀ i j, (∑ k, ψFinite i k * ψFinite j k)
       = Acharyya2025.Deterministic.classicalMDSMatrix D i j)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (_hrate_zero : Filter.Tendsto (fun u => (n : Real) * rate u) Filter.atTop (nhds 0))
     (c : Nat → Real)
     (hc_majorant : ∀ᶠ u in Filter.atTop,
       Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
@@ -603,7 +599,7 @@ theorem quench_part2_from_aligned_configFrobQuadratic_hp
     unfold Acharyya2025.ConfigPerturbation.configFrobQuadraticMajorant
     exact add_nonneg (mul_nonneg hlin he) (mul_nonneg hquad (sq_nonneg _))
   apply quench_part2_from_aligned_configFrobError_hp Pf μ hμ hd Dhat hsym D ψFinite
-    hB hrank hα_pos hfloor hΛ hψFinite_gram rate hrate_nonneg hrate_zero c
+    hB hrank hα_pos hfloor hΛ hψFinite_gram rate hrate_nonneg c
     hc_majorant hDmeas hcenter hc_zero hc_nonneg f_ref score Qstar Qsub γ
     indexOf ψ ψHat h_lipQ h_gamma_pos hψ
   · simpa [c] using hψHat
@@ -716,7 +712,7 @@ theorem queryEfficient_nn_of_aligned_spectral
     unfold Acharyya2025.ConfigPerturbation.configBound
     positivity
   exact quench_part2_from_aligned_configError_hp Pf μ hμ hd Dhat hsym D ψFinite
-    hB hrank hα_pos hfloor hΛ hψFinite rate hrate_nonneg hrate_zero
+    hB hrank hα_pos hfloor hΛ hψFinite rate hrate_nonneg
     (fun u => Acharyya2025.ConfigPerturbation.configBound n d α Λ ((n : Real) * rate u)) rfl
     hDhat_meas hcenter h_c_tendsto h_c_nonneg f_ref score Qstar Qsub γ
     indexOf ψ ψHat h_lipQ h_gamma_pos hψ hψHat h_cover h_cover_meas hMSE_Q_pos
@@ -833,7 +829,7 @@ theorem queryEfficient_nn_of_response_mean
     (Acharyya2024.responseDist μvec)
     ψFinite hB hrank hα_pos hfloor hΛ hψFinite
     (fun u => Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-    hrate_nonneg hrate_zero
+    hrate_nonneg
     (fun u => Acharyya2025.ConfigPerturbation.configBound n d α Λ
       ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))) rfl
     hXmeas hcenter h_c_tendsto h_c_nonneg f_ref score Qstar Qsub γ
@@ -939,7 +935,7 @@ theorem queryEfficient_nn_of_response_mean_frob
     (Acharyya2024.responseDist μvec)
     ψFinite hB hrank hα_pos hfloor hΛ hψFinite
     (fun u => Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-    hrate_nonneg hrate_zero
+    hrate_nonneg
     (fun u => Acharyya2025.ConfigPerturbation.configFrobBound d α Λ
       ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u)))
     (Filter.Eventually.of_forall (fun _ => le_rfl))

@@ -99,6 +99,11 @@ also exposes a Frobenius route through
 Acharyya's `configFrobBound` directly and uses the elementary row bound
 `‖error_i‖ ≤ ConfigFrobError`, so Quench's uniform embedding-error premise no
 longer needs the extra `√n` introduced by the older row-sum `ConfigError` API.
+The finite/high-probability bridge also no longer assumes that the scaled
+perturbation rate tends to zero: that hypothesis is reserved for downstream
+consistency/query-efficiency results that actually need a vanishing error
+envelope.  The Term-2 contribution in `configFrobBound` now uses the sharper
+`√α` denominator instead of `√(α/2)`.
 
 The Frobenius route now reaches both fixed-population and growing target-augmented
 query-efficiency capstones.  `GrowingConfigControl` tracks `configFrobBound`,

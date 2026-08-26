@@ -446,15 +446,15 @@ theorem safe_configFrobBound_zero
     exact h
   -- Second square-root term: a fixed multiple of `e_n^2`.
   have hsq2 : Tendsto (fun n : ℕ =>
-      Real.sqrt ((d : ℝ) * (en n / Real.sqrt ((κ / 2) / 2)) ^ 2))
+      Real.sqrt ((d : ℝ) * (en n / Real.sqrt (κ / 2)) ^ 2))
       atTop (𝓝 0) := by
     have hlim : Tendsto (fun n : ℕ =>
-        (d : ℝ) * (en n / Real.sqrt ((κ / 2) / 2)) ^ 2) atTop (𝓝 0) := by
+        (d : ℝ) * (en n / Real.sqrt (κ / 2)) ^ 2) atTop (𝓝 0) := by
       have hbase : Tendsto (fun n : ℕ =>
-          ((d : ℝ) / ((κ / 2) / 2)) * (en n) ^ 2) atTop (𝓝 0) := by
-        simpa using he2.const_mul ((d : ℝ) / ((κ / 2) / 2))
+          ((d : ℝ) / (κ / 2)) * (en n) ^ 2) atTop (𝓝 0) := by
+        simpa using he2.const_mul ((d : ℝ) / (κ / 2))
       refine hbase.congr (fun n => ?_)
-      have hc : Real.sqrt ((κ / 2) / 2) ^ 2 = (κ / 2) / 2 :=
+      have hc : Real.sqrt (κ / 2) ^ 2 = κ / 2 :=
         Real.sq_sqrt (by positivity)
       rw [div_pow, hc]
       field_simp
