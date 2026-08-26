@@ -20,36 +20,48 @@
 \setlength{\emergencystretch}{3em}
 
 % ArXiv-friendly Lean code: no shell escape, minted, or external highlighter.
-\definecolor{leankeyword}{rgb}{0.0,0.0,0.55}
-\definecolor{leancomment}{rgb}{0.0,0.48,0.15}
-\definecolor{leannumber}{rgb}{0.45,0.45,0.45}
-\definecolor{leanbackground}{rgb}{0.965,0.965,0.945}
+\definecolor{leankeyword}{HTML}{243B6B}
+\definecolor{leantactic}{HTML}{70477A}
+\definecolor{leantype}{HTML}{1F6473}
+\definecolor{leancomment}{HTML}{39734D}
+\definecolor{leanstring}{HTML}{8A4B2A}
+\definecolor{leannumber}{HTML}{777777}
+\definecolor{leanbackground}{HTML}{F7F7F3}
 \lstdefinelanguage{lean}{%
   sensitive=true,
   morecomment=[l]{--},
   morecomment=[s]{/-}{-/},
+  morestring=[b]",
   morekeywords=[1]{import,open,namespace,section,end,noncomputable,variable,variables,
-    theorem,lemma,def,abbrev,example,instance,structure,class,inductive,notation,local,
+    universe,universes,set_option,attribute,axiom,opaque,theorem,lemma,def,abbrev,
+    example,instance,structure,class,inductive,notation,local,deriving,extends,
     by,where,let,have,show,fun,match,with,if,then,else,do,return,in,forall},
   morekeywords=[2]{simp,simpa,rw,erw,dsimp,unfold,ring,ring_nf,nlinarith,linarith,
     positivity,norm_num,field_simp,omega,exact,refine,apply,assumption,intro,intros,
     ext,funext,cases,rcases,obtain,constructor,left,right,classical,by_contra,
     contrapose,convert,using,suffices,calc},
+  morekeywords=[3]{Prop,Type,Nat,Int,Real,Fin,Set,Submodule,Matrix,EuclideanSpace,
+    LinearMap,ContinuousLinearMap,ClosedOperator,UnitaryInvariantNorm,LinearPMap,
+    IsTrialResidual,IsExactSpectralDecomposition,IsEigenvectorBlock,
+    SourcePopulationGap},
 }
 \lstdefinestyle{leanpaper}{%
   language=lean,
   columns=fullflexible,
   backgroundcolor=\color{leanbackground},
-  commentstyle=\color{leancomment},
-  keywordstyle=\color{leankeyword},
-  numberstyle=\tiny\color{leannumber},
   basicstyle=\ttfamily\scriptsize,
+  commentstyle=\color{leancomment}\itshape,
+  keywordstyle=[1]\color{leankeyword}\bfseries,
+  keywordstyle=[2]\color{leantactic},
+  keywordstyle=[3]\color{leantype},
+  stringstyle=\color{leanstring},
+  numberstyle=\tiny\color{leannumber},
   breakatwhitespace=false,
   breaklines=true,
   captionpos=b,
   keepspaces=true,
   numbers=left,
-  numbersep=5pt,
+  numbersep=6pt,
   showspaces=false,
   showstringspaces=false,
   showtabs=false,
@@ -123,13 +135,13 @@
 \maketitle
 
 \begin{abstract}
-We formalize in \Lean{} 4 all \FormalizationDKResultCount{} mathematical results
+We formalize in Lean~4 all \FormalizationDKResultCount{} mathematical results
 established by Davis and Kahan in their 1970 paper: the four unnumbered
 Section~2 theorems and every named theorem, proposition, lemma, and corollary.
 Twenty-eight are proved at the scope stated in the source; Proposition~4.4 is
 false as printed and is formally refuted and repaired.  We also formalize the
-theorem-level claims of Theorems~1--3 of Yu, Wang, and Samworth, including both
-conclusions of Theorem~2 and the right-, left-, and aligned-frame forms of
+theorem-level claims of Theorems~1--3 of Yu, Wang, and Samworth (YWS), including
+both conclusions of Theorem~2 and the right-, left-, and aligned-frame forms of
 Theorem~3.  Formal comparison with the published arguments exposes two printed
 YWS defects.
 
@@ -140,12 +152,11 @@ including principal angles, singular-subspace geometry, unitarily invariant
 norms, Borel spectral calculus, unbounded self-adjoint operators, direct
 rotations, operator angles, and Sylvester equations.
 
-We also report lower bounds on LLM resource use as baselines for comparing
-  formalization efficiency, and extrapolate to obtain an order of magnitude
-  estimate of resource usage.
-Although records do not capture the full formalization cost, commit-level
-  provenance enables fine-grained comparison of resources used for individual
-  proof developments.
+We also report lower bounds on large language model (LLM) resource use as
+  baselines for comparing formalization efficiency and extrapolate them to
+  obtain an order-of-magnitude estimate of project-wide resource usage.
+These records do not capture the full formalization cost, but commit-level
+  provenance enables comparisons on individual proof developments.
 
 \end{abstract}
 
@@ -161,9 +172,10 @@ Although records do not capture the full formalization cost, commit-level
 The Davis--Kahan sine-theta theorem is a standard tool for converting
 perturbations of a self-adjoint operator into perturbation bounds for its
 spectral subspaces \citep{davis1970rotation,chen2021spectral}.  In statistics,
-the variant of \citet{yu2015davis} is widely used because its separation
-condition depends only on the population spectrum and its conclusions include
-aligned-frame and singular-subspace bounds suited to estimation problems.  On 17 August 2026, OpenAlex recorded
+the Yu--Wang--Samworth (YWS) variant \citep{yu2015davis} is widely used
+because its separation condition depends only on the population spectrum and
+its conclusions include aligned-frame and singular-subspace bounds suited to
+estimation problems.  On 17 August 2026, OpenAlex recorded
 \OpenAlexDavisKahanCitations{} and \OpenAlexYuWangSamworthCitations{} citing works
 for Davis--Kahan and YWS, respectively, while Google Scholar recorded
 \GoogleScholarDavisKahanCitations{} and \GoogleScholarYuWangSamworthCitations{}
@@ -185,16 +197,17 @@ This yields the common pattern
 \]
 
 \paragraph{Lean and formalization.}
-Lean 4 is an interactive theorem prover based on dependent type theory
+Lean~4 is an interactive theorem prover based on dependent type theory
 \citep{demoura2021lean4}.  Mathematical definitions, theorem statements, and
 proofs are represented as typed expressions that are checked by Lean's kernel;
 Mathlib supplies a large shared library of formalized mathematics
 \citep{mathlib2020}.  In this work, formalizing a source theorem means encoding
 its mathematical objects and hypotheses in Lean and constructing a proof of the
 corresponding proposition at the scope asserted by the source.  The formalization
-was developed with LLM assistance through the ChatGPT chat interface, Claude
-Code, and Codex, with repeated comparison of the Lean statements against the
-papers.  Appendix~\ref{app:formalization-process} describes the process.
+was developed with large language model (LLM) assistance through the ChatGPT
+chat interface, Claude Code, and Codex, with repeated comparison of the Lean
+statements against the papers.  Appendix~\ref{app:formalization-process}
+describes the process.
 
 Davis--Kahan and YWS provide useful targets for this kind of formalization for
 two related reasons.  First, translating the papers into checked statements and
@@ -206,8 +219,9 @@ norms, spectral calculus, real/complex transfer, direct rotations, operator
 angles, and Sylvester equations.  Formalizing the papers therefore required
 building reusable mathematical infrastructure beyond the final perturbation
 inequalities.  We also retained lower-bound LLM resource measurements so that
-the computational scale of the formalization, and possible improvements in AI
-formalization workflows, can be studied quantitatively.
+the computational scale of the formalization, and possible improvements in
+artificial intelligence (AI) formalization workflows, can be studied
+quantitatively.
 
 \paragraph{Contributions.}
 \begin{enumerate}
@@ -341,7 +355,7 @@ eigenvectors at the ordered indices $r,\ldots,s$.  Define
 Only the population spectrum enters $\Delta$, so the sample eigenframe may be
 chosen arbitrarily inside a repeated sample eigenspace.
 
-\subsection{Yu--Wang--Samworth sine-angle bound}
+\subsection{Yu--Wang--Samworth Sine-Angle Bound}
 \label{sec:yws-sintheta}
 
 The first conclusion of YWS Theorem~2 states that, when $\Delta>0$,
@@ -360,7 +374,7 @@ auxiliary scalar \texttt{sinThetaNorm} with the left side of
 \cref{eq:yws-sintheta}.
 
 \begin{lstlisting}[style=leanpaper,
-  caption={Lean signature for the sine-angle conclusion (2) of YWS Theorem 2.},
+  caption={Lean signature for the sine-angle conclusion (2) of YWS Theorem~2.},
   label={lst:yws-theorem2-sintheta}]
 theorem theorem2_sinTheta
     {p d r s : Nat}
@@ -384,7 +398,7 @@ theorem theorem2_sinTheta
         ‖SigmaHat - Sigma‖_F / Delta := by
 \end{lstlisting}
 
-\subsection{Yu--Wang--Samworth aligned-frame bound}
+\subsection{Yu--Wang--Samworth Aligned-Frame Bound}
 \label{sec:yws-aligned}
 
 The second conclusion of YWS Theorem~2 states that there exists an orthogonal
@@ -402,7 +416,7 @@ matrix $\widehat O\in O(d)$ such that
 \cref{eq:yws-aligned} and proves the stated Frobenius bound.
 
 \begin{lstlisting}[style=leanpaper,
-  caption={Lean signature for the aligned-frame conclusion (3) of YWS Theorem 2.},
+  caption={Lean signature for the aligned-frame conclusion (3) of YWS Theorem~2.},
   label={lst:yws-theorem2-aligned}]
 theorem theorem2_alignedFrame
     {p d r s : Nat}
@@ -424,7 +438,7 @@ theorem theorem2_alignedFrame
               ‖SigmaHat - Sigma‖_F / Delta := by
 \end{lstlisting}
 
-\subsection{Yu--Wang--Samworth rectangular extension}
+\subsection{Yu--Wang--Samworth Rectangular Extension}
 \label{sec:yws-rectangular}
 
 YWS Theorem~3 extends the same population-gap principle to singular subspaces of
@@ -451,12 +465,12 @@ algebraic identity, a boundary convention, and an extremal claim.  All
 counterexamples and corrected statements discussed in this section are verified
 in Lean; Appendix~\ref{app:source-coverage} gives the corresponding declarations.
 
-\subsection{Two defects in YWS}
+\subsection{Two Defects in YWS}
 
-Printed equation (4) is a false polynomial identity: it is missing a square.  We
+Printed equation~(4) is a false polynomial identity: it is missing a square.  We
 prove both a concrete counterexample to the printed formula and the corrected
 identity.  The printed convention
-$\sigma^2_{\operatorname{rank}(A)+1}:=-\infty$ in Theorem 3 is incorrect at the
+$\sigma^2_{\operatorname{rank}(A)+1}:=-\infty$ in Theorem~3 is incorrect at the
 rank boundary.  When $s=\operatorname{rank}(A)$ it makes a denominator infinite
 and can force a zero upper bound even when the sample and population singular
 subspaces are orthogonal.  The intended theorem is repaired by the ambient-index
@@ -541,10 +555,10 @@ For the example above, the lower boundary is therefore the Gram eigenvalue gap
 \[
 \sigma_1^2-\sigma_2^2=1-0=1,
 \]
-in place of $+\infty$.  The formalization uses this ambient boundary in the corrected right- and
-left-singular-subspace statements.
+in place of $+\infty$.  The formalization uses this ambient boundary in the
+corrected right- and left-singular-subspace statements.
 
-\subsection{Davis--Kahan Proposition 4.4 is false as printed}
+\subsection{Davis--Kahan Proposition 4.4 Is False as Printed}
 
 For Davis--Kahan Proposition~4.4, we prove an explicit four-dimensional
 counterexample for the trace norm.  With two principal angles
@@ -572,9 +586,9 @@ For the counterexample, however,
 \]
 so the asserted inequality would require $2\sqrt2\geq4$.
 The two domain planes are orthogonal, while their images under $K$ overlap;
-the corresponding singular-value sums therefore fail to add.  On this witness, the later blockwise calculation where the $\pi/3$ bound
-is consumed behaves as claimed; the invalid step is the earlier summation
-across blocks.
+the corresponding singular-value sums therefore fail to add.  On this witness,
+the later blockwise calculation where the $\pi/3$ bound is consumed behaves as
+claimed; the invalid step is the earlier summation across blocks.
 
 The strict trace-norm comparison directly falsifies Proposition~4.4,
 independently of the diagnosis of its printed proof.  Proposition~4.3 concerns
@@ -602,7 +616,7 @@ identifies failure of Proposition~4.4 within its stated real short-angle regime.
 There was a considerable gap between the statements required by YWS and
 Davis--Kahan and the operator-theoretic infrastructure available in the Lean
 libraries we used.  Closing that gap required substantial formal development in
-spectral geometry and operator theory in addition to the source theorems.
+spectral geometry and operator theory.
 
 \begin{table}[H]
 \centering
@@ -662,8 +676,9 @@ Converting the observed token usage to operational energy requires assumptions
 about serving throughput, hardware power, cache work, per-turn overhead, and
 datacenter power usage effectiveness.  Under the central versioned model, the
 observed lower-bound usage corresponds to \ModeledOperationalEnergy{}; a separate
-per-token calculation gives \PerTokenCrossCheckEnergy{}.  Provider energy meter readings are unavailable, so these values are
-order-of-magnitude operational estimates \citep{crall2026llmresource}.
+per-token calculation gives \PerTokenCrossCheckEnergy{}.  Provider energy
+meter readings are unavailable, so these values are order-of-magnitude
+operational estimates \citep{crall2026llmresource}.
 
 To indicate plausible project scale, we use a simple linear extrapolation model.
 For an observed quantity $q$ measured over coverage fraction $c$, the model
@@ -675,7 +690,6 @@ formalization-text coverage under the same serving model.
 \begin{table}[H]
 \centering
 \small
-\input{snapshots/resource_coverage_extrapolation_table.tex}
 \caption{Observed lower bounds and two rough linear project-scale
 extrapolations.  The observed column uses retained telemetry.  The extrapolated
 columns apply $q/c$ to the exact primary-repository subset using commit coverage
@@ -683,12 +697,14 @@ or the adjusted Lean-line-change coverage defined in
 Appendix~\ref{app:accounting}.  All energy values use the same central serving
 assumptions.}
 \label{tab:resource-extrapolation}
+\input{snapshots/resource_coverage_extrapolation_table.tex}
 \end{table}
 
 The extrapolations assume comparable token intensity between observed and
-unobserved work under the selected denominator.  Their difference shows the
-sensitivity to that choice.  API-price valuation and the detailed accounting
-inputs are reported in Appendix~\ref{app:accounting}.
+unobserved work.  Their difference shows the
+sensitivity to that choice.  Valuation using application programming interface
+(API) prices and the accounting inputs are reported in
+Appendix~\ref{app:accounting}.
 
 \section{Related Work}
 \label{sec:related}
@@ -706,8 +722,8 @@ formalizes statistical learning theory and related spectral results in Lean
 Several current systems suggest different ways to organize AI-assisted Lean
 work.  MathCode maintains a persistent Lean environment and reusable theorem
 library, while AutoLean uses compile-repair loops with semantic evaluation and
-replanning \citep{mathcode2026,autolean2026}.  Human use of AI during
-formalization and the resource demands of long-running mathematical agents have
+replanning \citep{mathcode2026,autolean2026}.  Use of AI during
+formalization and the resource demands of long-running math agents have
 also been studied directly \citep{collins2026humanai,anthropic2026zeta}.  The
 resource record in \cref{sec:process-study} provides a historical baseline for
 comparing such workflow choices on parts of this formalization.
@@ -744,14 +760,19 @@ The observed portion of the project also required substantial computational
 resources.  Because a subset of the measurements is linked to individual Git
 commits, selected pre-commit states can serve as a historical baseline for
 experiments with alternative workflows such as MathCode and AutoLean
-\citep{mathcode2026,autolean2026}.  Comparing those workflows while controlling the model, available context,
-stopping criteria, and proof-acceptance criteria would help quantify how far the
-computational cost of large formalization projects can be reduced while
-retaining comparable theorem coverage and proof checking.
+\citep{mathcode2026,autolean2026}.  Comparing those workflows while controlling
+the model, available context, stopping criteria, and acceptance criteria
+would help quantify how far the computational cost of large formalization
+projects can be reduced while retaining comparable theorem coverage and proof
+checking.
 
 \section*{Acknowledgments}
 
-This material is based upon work supported by the Defense Advanced Research Project Agency (DARPA) under Contract No. HR001125CE017. Any opinions, findings and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the Defense Advanced Research Project Agency (DARPA).
+This material is based upon work supported by the Defense Advanced Research
+Project Agency (DARPA) under Contract No. HR001125CE017. Any opinions, findings
+and conclusions or recommendations expressed in this material are those of the
+author(s) and do not necessarily reflect the views of the Defense Advanced
+Research Project Agency (DARPA).
 
 \bibliographystyle{unsrtnat}
 \bibliography{references}
@@ -760,7 +781,7 @@ This material is based upon work supported by the Defense Advanced Research Proj
 \appendix
 \input{snapshots/census_macros.tex}
 
-\section{Reading the Lean signatures}
+\section{Reading the Lean Signatures}
 \label{app:reading-lean}
 
 A Lean theorem declaration has the form
@@ -779,7 +800,7 @@ proof \citep{demoura2021lean4}.
 
 \paragraph{Notation used in the displayed formalizations.}
 The scalar type $\Bbbk$ in \Cref{lst:dk-sintheta-headline} is constrained by
-\texttt{RCLike}, the Mathlib abstraction covering $\mathbb R$ and $\mathbb C$.
+\texttt{RCLike}, the Mathlib abstraction covering $\mathbb{R}$ and $\mathbb{C}$.
 The notation \texttt{Fin n} is an $n$-element index type, and \texttt{Nat} and
 \texttt{Real} are the natural and real numbers.  In Lean, a type of the form
 \lstinline[style=leanpaper]!F →L[\KField] E! is a continuous linear map and
@@ -788,7 +809,7 @@ The notation \texttt{Fin n} is an $n$-element index type, and \texttt{Nat} and
 \texttt{.IsSelfAdjoint} asserts self-adjointness; \texttt{.adjoint} is the
 adjoint; and \lstinline[style=leanpaper]!F₀ ∘L F₀.adjoint! denotes composition
 with an adjoint continuous linear map.  In the YWS formalizations,
-\texttt{EuclideanSpace Real (Fin p)} is $\mathbb R^p$,
+\texttt{EuclideanSpace Real (Fin p)} is $\mathbb{R}^p$,
 \texttt{Matrix (Fin d) (Fin d) Real} is a real $d\times d$ matrix,
 \texttt{Matrix.orthogonalGroup} is $O(d)$, \texttt{\ensuremath{\bullet}} is
 scalar multiplication, and \texttt{\ensuremath{\sum}} is finite summation.
