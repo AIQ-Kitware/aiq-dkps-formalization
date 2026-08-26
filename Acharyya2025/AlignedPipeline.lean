@@ -535,9 +535,7 @@ theorem highProb_aligned_configError_of_entrywise_close
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)  -- ψ is a Gram factor of the population CMDS matrix
     -- The finite theorem only needs nonnegativity of the entrywise rate.
-    -- The vanishing-rate argument is retained positionally here for downstream compatibility.
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (_hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
     -- Theorem 1 input: high-probability entrywise closeness of sample to population CMDS matrices.
     (hcenter : HighProbAtTop P (fun u => {ω |
       Acharyya2025.Bridge.EntrywiseClose
@@ -578,7 +576,6 @@ theorem highProb_aligned_configFrobError_of_entrywise_close
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (_hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
     (hcenter : HighProbAtTop P (fun u => {ω |
       Acharyya2025.Bridge.EntrywiseClose
         (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)})) :
@@ -618,7 +615,6 @@ theorem highProb_aligned_configFrobError_of_entrywise_close_of_majorant
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
     (rate c : Nat → Real)
     (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (_hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
     (hc : ∀ᶠ u in atTop,
       configFrobBound d α Λ ((n : Real) * rate u) ≤ c u)
     (hcenter : HighProbAtTop P (fun u => {ω |
@@ -653,7 +649,6 @@ theorem highProb_aligned_configError_of_entrywise_close_canonical
       α ≤ hB.isHermitian.eigenvalues₀ i)
     (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
     (hcenter : HighProbAtTop P (fun u => {ω |
       Acharyya2025.Bridge.EntrywiseClose
         (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)})) :
@@ -665,7 +660,7 @@ theorem highProb_aligned_configError_of_entrywise_close_canonical
         ≤ configBound n d α Λ ((n : Real) * rate u)}) := by
   exact highProb_aligned_configError_of_entrywise_close P hd Dhat D hsym
     hB hrank hα_pos hfloor hΛ (canonicalCMDSConfig D hB hrank)
-    (canonicalCMDSConfig_gram_eq D hB hrank) rate hrate_nonneg hrate_zero hcenter
+    (canonicalCMDSConfig_gram_eq D hB hrank) rate hrate_nonneg hcenter
 
 /-! ### (4) End-to-end response-mean → aligned ConfigError -/
 
@@ -780,9 +775,6 @@ theorem highProb_aligned_configError_of_response_mean
     -- Entrywise perturbation rate (per budget `u`):
     (η R : Nat → Real)
     (hrate_nonneg : ∀ u, 0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-    (hrate_zero : Tendsto
-      (fun u => (n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-      atTop (𝓝 0))
     -- Theorem 1 input: high-probability uniform response-mean closeness at level `η u`.
     (hmean : HighProbAtTop P
       (fun u => {ω | Acharyya2025.Bridge.UniformResponseMeanClose (Xbar u ω) μ (η u)}))
@@ -814,7 +806,7 @@ theorem highProb_aligned_configError_of_response_mean
   -- Apply (3) with this CMDS-entrywise event.
   exact highProb_aligned_configError_of_entrywise_close P hd Dhat D
     (fun u ω => isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist (Xbar u ω))
-    hB hrank hα_pos hfloor hΛ ψ hψ rate hrate_nonneg hrate_zero hcenter
+    hB hrank hα_pos hfloor hΛ ψ hψ rate hrate_nonneg hcenter
 
 /-- End-to-end response-mean concentration to aligned CMDS Frobenius error.
 
@@ -838,9 +830,6 @@ theorem highProb_aligned_configFrobError_of_response_mean
       = classicalMDSMatrix (responseDist μ) i j)
     (η R : Nat → Real)
     (hrate_nonneg : ∀ u, 0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-    (hrate_zero : Tendsto
-      (fun u => (n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-      atTop (𝓝 0))
     (hmean : HighProbAtTop P
       (fun u => {ω | Acharyya2025.Bridge.UniformResponseMeanClose (Xbar u ω) μ (η u)}))
     (hsample_bound : ∀ u ω i j, |responseDist (Xbar u ω) i j| ≤ R u)
@@ -866,7 +855,7 @@ theorem highProb_aligned_configFrobError_of_response_mean
       hsample_bound hpopulation_bound
   exact highProb_aligned_configFrobError_of_entrywise_close P hd Dhat D
     (fun u ω => isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist (Xbar u ω))
-    hB hrank hα_pos hfloor hΛ ψ hψ rate hrate_nonneg hrate_zero hcenter
+    hB hrank hα_pos hfloor hΛ ψ hψ rate hrate_nonneg hcenter
 
 /-- End-to-end response-mean concentration against the canonical population
 CMDS realization.
@@ -887,9 +876,6 @@ theorem highProb_aligned_configError_of_response_mean_canonical
     (hΛ : ∀ l, hB.isHermitian.eigenvalues₀ l ≤ Λ)
     (η R : Nat → Real)
     (hrate_nonneg : ∀ u, 0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-    (hrate_zero : Tendsto
-      (fun u => (n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-      atTop (𝓝 0))
     (hmean : HighProbAtTop P
       (fun u => {ω | Acharyya2025.Bridge.UniformResponseMeanClose (Xbar u ω) μ (η u)}))
     (hsample_bound : ∀ u ω i j, |responseDist (Xbar u ω) i j| ≤ R u)
@@ -908,7 +894,7 @@ theorem highProb_aligned_configError_of_response_mean_canonical
   exact highProb_aligned_configError_of_response_mean P hn hd Xbar μ hB hrank
     hα_pos hfloor hΛ (canonicalCMDSConfig (responseDist μ) hB hrank)
     (canonicalCMDSConfig_gram_eq (responseDist μ) hB hrank)
-    η R hrate_nonneg hrate_zero hmean hsample_bound hpopulation_bound
+    η R hrate_nonneg hmean hsample_bound hpopulation_bound
 
 
 /-! ### Canonical population spectral ceiling
@@ -959,7 +945,6 @@ theorem highProb_aligned_configError_of_entrywise_close_topEigenvalue
     (ψ : Config n d)
     (hψ : ∀ i j, (∑ k, ψ i k * ψ j k) = classicalMDSMatrix D i j)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
     (hcenter : HighProbAtTop P (fun u => {ω |
       Acharyya2025.Bridge.EntrywiseClose
         (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)})) :
@@ -972,7 +957,7 @@ theorem highProb_aligned_configError_of_entrywise_close_topEigenvalue
             ((n : Real) * rate u)}) := by
   exact highProb_aligned_configError_of_entrywise_close P hd Dhat D hsym hB hrank
     hα_pos hfloor (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
-    ψ hψ rate hrate_nonneg hrate_zero hcenter
+    ψ hψ rate hrate_nonneg hcenter
 
 /-- Canonical-population-configuration version with the upper spectral ceiling
 also synthesized internally. -/
@@ -988,7 +973,6 @@ theorem highProb_aligned_configError_of_entrywise_close_canonical_topEigenvalue
     (hfloor : ∀ i : Fin (Fintype.card (Fin n)), (i : ℕ) < d →
       α ≤ hB.isHermitian.eigenvalues₀ i)
     (rate : Nat → Real) (hrate_nonneg : ∀ u, 0 ≤ rate u)
-    (hrate_zero : Tendsto (fun u => (n : Real) * rate u) atTop (𝓝 0))
     (hcenter : HighProbAtTop P (fun u => {ω |
       Acharyya2025.Bridge.EntrywiseClose
         (classicalMDSMatrix (Dhat u ω)) (classicalMDSMatrix D) (rate u)})) :
@@ -1003,7 +987,7 @@ theorem highProb_aligned_configError_of_entrywise_close_canonical_topEigenvalue
   exact highProb_aligned_configError_of_entrywise_close_canonical P hd Dhat D hsym
     hB hrank hα_pos hfloor
     (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
-    rate hrate_nonneg hrate_zero hcenter
+    rate hrate_nonneg hcenter
 
 /-- Response-mean concentration with the upper spectral ceiling selected as the
 leading population eigenvalue. -/
@@ -1022,9 +1006,6 @@ theorem highProb_aligned_configError_of_response_mean_topEigenvalue
       = classicalMDSMatrix (responseDist μ) i j)
     (η R : Nat → Real)
     (hrate_nonneg : ∀ u, 0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-    (hrate_zero : Tendsto
-      (fun u => (n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-      atTop (𝓝 0))
     (hmean : HighProbAtTop P
       (fun u => {ω | Acharyya2025.Bridge.UniformResponseMeanClose (Xbar u ω) μ (η u)}))
     (hsample_bound : ∀ u ω i j, |responseDist (Xbar u ω) i j| ≤ R u)
@@ -1040,7 +1021,7 @@ theorem highProb_aligned_configError_of_response_mean_topEigenvalue
             ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))}) := by
   exact highProb_aligned_configError_of_response_mean P hn hd Xbar μ hB hrank
     hα_pos hfloor (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
-    ψ hψ η R hrate_nonneg hrate_zero hmean hsample_bound hpopulation_bound
+    ψ hψ η R hrate_nonneg hmean hsample_bound hpopulation_bound
 
 /-- Canonical response-mean pipeline with both the population configuration and
 upper spectral ceiling synthesized from PSD/rank data. -/
@@ -1056,9 +1037,6 @@ theorem highProb_aligned_configError_of_response_mean_canonical_topEigenvalue
       α ≤ hB.isHermitian.eigenvalues₀ i)
     (η R : Nat → Real)
     (hrate_nonneg : ∀ u, 0 ≤ Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-    (hrate_zero : Tendsto
-      (fun u => (n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))
-      atTop (𝓝 0))
     (hmean : HighProbAtTop P
       (fun u => {ω | Acharyya2025.Bridge.UniformResponseMeanClose (Xbar u ω) μ (η u)}))
     (hsample_bound : ∀ u ω i j, |responseDist (Xbar u ω) i j| ≤ R u)
@@ -1076,6 +1054,6 @@ theorem highProb_aligned_configError_of_response_mean_canonical_topEigenvalue
             ((n : Real) * Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))}) := by
   exact highProb_aligned_configError_of_response_mean_canonical P hn hd Xbar μ hB hrank
     hα_pos hfloor (MatrixPerturbation.eigenvalues₀_le_topEigenvalue hn hB)
-    η R hrate_nonneg hrate_zero hmean hsample_bound hpopulation_bound
+    η R hrate_nonneg hmean hsample_bound hpopulation_bound
 
 end Acharyya2025.AlignedPipeline
