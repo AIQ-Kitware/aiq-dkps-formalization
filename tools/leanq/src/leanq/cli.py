@@ -18,7 +18,6 @@ from .index import (
     build_index,
     by_name,
     closure,
-    ensure_graph_index,
     ensure_index,
     ensure_scoped_index,
     filter_decls,
@@ -276,12 +275,16 @@ def cmd_graph(args) -> int:
             "graph needs at least one target declaration, either positionally or in --presentation"
         )
 
+    root_modules = list(dict.fromkeys(args.root_module or ()))
+    if not root_modules:
+        root_modules = project.declaration_modules(targets)
+
     if args.include_lib:
         libraries = list(dict.fromkeys(args.include_lib))
     elif args.lib:
         libraries = [args.lib]
     else:
-        libraries = project.libraries()
+        libraries = project.libraries_for_import_closure(root_modules)
     excluded = set(args.exclude_lib or ())
     libraries = [library for library in libraries if library not in excluded]
     if not libraries:
@@ -290,11 +293,13 @@ def cmd_graph(args) -> int:
     groups = []
     for library in libraries:
         groups.append(
-            ensure_graph_index(
+            ensure_scoped_index(
                 project,
                 library,
+                root_modules,
                 refresh=args.refresh,
                 verbose=not args.json,
+                detail="graph",
             )
         )
     table = merge_declarations(groups)
@@ -306,7 +311,8 @@ def cmd_graph(args) -> int:
     payload = graph.to_json(reduced_edges=reduced)
     payload["project"] = str(project.root)
     payload["libraries"] = libraries
-    payload["scope"] = "project-local"
+    payload["importRoots"] = root_modules
+    payload["scope"] = "target-import-closure"
     components = strongly_connected_components(graph.nodes, graph.edges)
     cyclic = [list(component) for component in components if len(component) > 1]
     payload["cyclicComponentCount"] = len(cyclic)
@@ -535,7 +541,11 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p.add_argument(
         "--include-lib", action="append",
-        help="library to index for graph nodes (repeatable; default: all project libraries in the current build)",
+        help="library to include as graph nodes (repeatable; default: local libraries in the target module import closure)",
+    )
+    p.add_argument(
+        "--root-module", action="append",
+        help="module to import for the graph environment (repeatable; normally inferred from target declarations)",
     )
     p.add_argument(
         "--exclude-lib", action="append",
