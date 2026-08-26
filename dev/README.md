@@ -531,3 +531,24 @@ Note the precise question each tool answers: the drift check asks only whether a
 declaration with the recorded name exists somewhere in the tree. It does not
 prove that the declaration is reachable from the intended aggregate or default
 build. Use the Lean-backed signature/probe tools for reachability.
+
+## DKPS paper result-semantic reviews
+
+The full-source censuses above answer coverage. The result-semantic reviews below are the
+source-to-Lean statement audits: for each paper result they compare the paper hypotheses and
+conclusion to the selected Lean theorem surface clause by clause, and classify stronger/weaker
+hypotheses, stronger conclusions, source repairs, and missing clauses.
+
+- `dev/dkps-application-result-semantic-review.md` — cross-paper headline index
+- `dev/acharyya-2024-result-semantic-review.md`
+- `dev/acharyya-2025-result-semantic-review.md`
+- `dev/helm-2025-result-semantic-review.md`
+- `dev/quench-2026-result-semantic-review.md`
+
+Validate/render them with:
+
+```bash
+python3 scripts/check_dkps_result_semantic_reviews.py
+python3 scripts/check_dkps_result_semantic_reviews.py --render
+python3 scripts/check_dkps_result_semantic_reviews.py --probe
+```

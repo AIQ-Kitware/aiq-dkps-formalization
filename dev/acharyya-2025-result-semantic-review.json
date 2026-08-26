@@ -1,0 +1,719 @@
+{
+  "schema_version": "2026-08-26-result-semantic-review-v1",
+  "review_kind": "paper-result-source-to-lean-semantic-comparison",
+  "paper": {
+    "citation": "Aranyak Acharyya, Joshua Agterberg, Youngser Park, Carey E. Priebe, Concentration bounds on response-based vector embeddings of black-box generative models, arXiv:2511.08307.",
+    "source_version": "Retained arXiv v1 transcription used by the January-2026 Quench argument. The June-2026 v2 revision is a separate migration target.",
+    "source_files": [
+      "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md"
+    ]
+  },
+  "purpose": "Compare each retained source result in the 2025 concentration paper with the Lean theorem surface, including source repairs and proof-route replacements.",
+  "companion_census": "dev/acharyya-2025-full-source-census.json",
+  "audit_date": "2026-08-26",
+  "relation_definitions": {
+    "exact": "The source clause and Lean clause have the same mathematical content, modulo notation/encoding.",
+    "equivalent_encoding": "The mathematical content is equivalent, but Lean packages it in a structurally different form.",
+    "lean_weaker_hypothesis": "Lean assumes less than the source at this clause, so the Lean theorem is stronger here.",
+    "lean_stronger_hypothesis": "Lean assumes more than the source at this clause; this is a source-fidelity gap unless separately justified.",
+    "lean_stronger_conclusion": "Lean proves at least the source conclusion and additionally proves a stronger conclusion.",
+    "lean_weaker_conclusion": "Lean proves less than the source conclusion; this is a source-fidelity gap.",
+    "different_quantifier_encoding": "Lean makes an informal/asymptotic quantifier pattern explicit using an equivalent or stronger schedule/event formulation.",
+    "derived_by_composition": "No single source-shaped declaration exists, but the source clause follows from a checked composition of cited Lean declarations.",
+    "source_repair": "The retained source wording is inconsistent, false, or mismatched with its proof; Lean formalizes the repaired mathematical statement.",
+    "proof_role_replaced": "The printed proof-side lemma is not exposed literally; a different formal proof route removes or subsumes its role.",
+    "missing": "No Lean theorem surface was found for this source clause.",
+    "supplementary": "This Lean result goes beyond the printed source and is recorded for context, not source coverage."
+  },
+  "rows": [
+    {
+      "id": "A25-T1",
+      "source_anchor": "Theorem 1",
+      "source_kind": "theorem",
+      "title": "Entrywise concentration of the centered CMDS matrix",
+      "importance": "headline",
+      "verdict": "GAP exact finite probability constant not exposed",
+      "literal_source_covered": false,
+      "source_claim": "For any epsilon>0, every entry of Bhat is within epsilon of B with the displayed finite high-probability bound determined by response covariances.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          272,
+          288
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.Bridge.EntrywiseClose",
+        "Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded",
+        "Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale"
+      ],
+      "clauses": [
+        {
+          "source_clause": "For any epsilon>0, all entries |Bhat_ii'-B_ii'|<epsilon simultaneously with probability at least 1 - 16 sum gamma_ij/(r m epsilon^2).",
+          "lean_clause": "EntrywiseClose plus the response-to-CMDS bridge and growing-response concentration prove the same event shape.",
+          "relation": "derived_by_composition",
+          "note": ""
+        },
+        {
+          "source_clause": "The finite displayed failure-probability constant is exactly the paper expression.",
+          "lean_clause": "No single source-facing Lean theorem exposes that exact finite constant; the active bridge uses conservative constants.",
+          "relation": "lean_weaker_conclusion",
+          "note": "The asymptotic paper scale is preserved, but constant-level literal fidelity is not packaged."
+        }
+      ],
+      "review": "The event shape and response-to-CMDS concentration mechanism are compiled, including the paper-scale n^3/r bookkeeping. The exact finite displayed constant is not exposed by one source-facing theorem.",
+      "notes": "The active response-to-CMDS bridge works entrywise directly and avoids the former n^2 Frobenius detour. Its constants are intentionally conservative.",
+      "gap_refs": [
+        "t1-literal-finite-wrapper"
+      ],
+      "next_action": "Add a literal finite Theorem-1 wrapper only if exact constant-level source coverage is required."
+    },
+    {
+      "id": "A25-C1",
+      "source_anchor": "Corollary 1",
+      "source_kind": "corollary",
+      "title": "Spectral-norm rate under r = omega(n^3)",
+      "importance": "major",
+      "verdict": "PASS by checked composition",
+      "literal_source_covered": true,
+      "source_claim": "Under uniformly bounded response variance and r growing faster than n^3, ||Bhat-B|| is below (n^3/r)^(1/2-delta) with high probability for delta in (0,1/2).",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          289,
+          310
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.MathlibBridge.MatrixOperatorNormClose",
+        "Acharyya2025.SpectralPipeline.operatorNormClose_of_entrywiseClose",
+        "Acharyya2025.PaperRate.paperBaseRatio",
+        "Acharyya2025.PaperRate.paperDeltaScale",
+        "Acharyya2025.PaperRate.tendsto_concentration_ratio_paperDeltaScale_zero"
+      ],
+      "clauses": [
+        {
+          "source_clause": "sup gamma_ij=O(1), r=omega(n^3), delta in (0,1/2).",
+          "lean_clause": "PaperRate defines ReplicatesDominateCubic and paperDeltaScale=(n^3/r)^(1/2-delta), with the corresponding vanishing concentration ratio.",
+          "relation": "equivalent_encoding",
+          "note": ""
+        },
+        {
+          "source_clause": "With high probability ||Bhat-B||_op < (n^3/r)^(1/2-delta).",
+          "lean_clause": "Entrywise-to-operator transport plus the paper-scale concentration theorem yields this rate by composition.",
+          "relation": "derived_by_composition",
+          "note": ""
+        }
+      ],
+      "review": "The literal n^3/r real-power scale, its vanishing under r=omega(n^3), and entrywise-to-operator transport are compiled. The source corollary is assembled rather than wrapped verbatim.",
+      "notes": "The paper-scale module was added specifically to close the source exponent rather than leave only a generic rate parameter.",
+      "gap_refs": [],
+      "next_action": "None."
+    },
+    {
+      "id": "A25-A1",
+      "source_anchor": "Assumption 1",
+      "source_kind": "assumption",
+      "title": "Eventually fixed embedding rank d",
+      "importance": "major",
+      "verdict": "PASS equivalent encoding",
+      "literal_source_covered": true,
+      "source_claim": "For sufficiently large n, rank(B)=d with d fixed.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          311,
+          333
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.SpectralPipeline.CMDSpectralAssumptions",
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le"
+      ],
+      "clauses": [
+        {
+          "source_clause": "Eventually rank(B)=d for fixed d.",
+          "lean_clause": "The operator theorem uses d<=n, positive leading-d eigenvalue floor, and zero trailing eigenvalues; matrix-side structure uses rank<=d plus the positive floor.",
+          "relation": "equivalent_encoding",
+          "note": "Together these force exactly d positive population eigenvalues."
+        }
+      ],
+      "review": "Lean typically states rank <= d together with a positive floor on the first d eigenvalues (and zero tail in the operator theorem); jointly these force the intended rank-d population geometry.",
+      "notes": "The rank packaging is more convenient for Gram realization and matrix transport than a bare equality.",
+      "gap_refs": [],
+      "next_action": "None."
+    },
+    {
+      "id": "A25-A2",
+      "source_anchor": "Assumption 2",
+      "source_kind": "assumption",
+      "title": "Uniform lower/upper population eigenvalue control",
+      "importance": "major",
+      "verdict": "PASS equivalent encoding",
+      "literal_source_covered": true,
+      "source_claim": "There are constants C1,C2>0 with liminf lambda_d>C1 and limsup lambda_1<C2.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          337,
+          351
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+        "Acharyya2025.PaperRate.paperDeltaGrowingConfigControl"
+      ],
+      "clauses": [
+        {
+          "source_clause": "There are fixed C1,C2>0 with liminf lambda_d>C1 and limsup lambda_1<C2.",
+          "lean_clause": "Finite theorems take a uniform alpha>0 floor and Lambda cap; GrowingConfigControl carries stage-uniform versions.",
+          "relation": "equivalent_encoding",
+          "note": ""
+        },
+        {
+          "source_clause": "No sample/population smallness side condition is part of the paper assumption.",
+          "lean_clause": "The active theorem chain no longer requires epsilon<=alpha/2 or the former polar-factor smallness condition.",
+          "relation": "exact",
+          "note": "This was the recent DK/YWS-driven source-fidelity improvement."
+        }
+      ],
+      "review": "The finite theorem takes an explicit positive eigenvalue floor alpha and cap Lambda; the growing certificate packages these as stage-uniform bounds. This is the operational form of the source liminf/limsup stability assumption.",
+      "notes": "The former extra hsmall and hpolar applicability hypotheses have been removed from the active theorem chain.",
+      "gap_refs": [],
+      "next_action": "None."
+    },
+    {
+      "id": "A25-P1",
+      "source_anchor": "Proposition 1",
+      "source_kind": "proposition",
+      "title": "Compact Riemannian-manifold sufficient condition",
+      "importance": "major",
+      "verdict": "GAP missing source result",
+      "literal_source_covered": false,
+      "source_claim": "If model latent points lie on a d-dimensional compact Riemannian manifold and population dissimilarities equal geodesic distances, Assumptions 1 and 2 hold.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          352,
+          357
+        ]
+      },
+      "lean_declarations": [],
+      "clauses": [
+        {
+          "source_clause": "Compact d-dimensional Riemannian latent manifold with geodesic distances equal population dissimilarities implies Assumptions 1 and 2.",
+          "lean_clause": "No manifold/geodesic sufficient-condition theorem was found.",
+          "relation": "missing",
+          "note": ""
+        }
+      ],
+      "review": "No manifold/geodesic sufficient-condition theorem was found in the Acharyya2025 package or its cited foundation modules.",
+      "notes": "This is the clearest remaining numbered-result coverage gap in the main text.",
+      "gap_refs": [
+        "riemannian-proposition"
+      ],
+      "next_action": "Formalize only if full-paper numbered-result coverage is a goal; it is not needed by Quench."
+    },
+    {
+      "id": "A25-T2",
+      "source_anchor": "Theorem 2",
+      "source_kind": "theorem",
+      "title": "Aligned CMDS configuration concentration",
+      "importance": "headline",
+      "verdict": "REPAIR source mismatch",
+      "literal_source_covered": false,
+      "source_claim": "Under r=omega(n^3), bounded response variability, and Assumptions 1--2, there exists an orthogonal alignment W* and the embedding error is bounded by a cubic polynomial in (n^3/r)^(1/2-delta) with high probability.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          358,
+          387
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.ConfigFrobError",
+        "Acharyya2025.ConfigPerturbation.configFrobBound",
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+        "Acharyya2025.AlignedPipeline.highProb_aligned_configFrobError_of_entrywise_close",
+        "Acharyya2025.RateChain.endToEndFrobQuadraticRate"
+      ],
+      "clauses": [
+        {
+          "source_clause": "r=omega(n^3), uniformly bounded response covariance, Assumptions 1 and 2.",
+          "lean_clause": "The statistical RateChain supplies operator perturbation epsilon at the paper scale; ConfigPerturbation assumes only rank/floor/cap and operator closeness.",
+          "relation": "derived_by_composition",
+          "note": ""
+        },
+        {
+          "source_clause": "There exists W* in O(d) aligning estimated and population embeddings.",
+          "lean_clause": "exists_isometry_configFrobError_spectralConfig_le produces an inner-product-preserving linear map W on R^d; finite-dimensional real isometry is the orthogonal alignment.",
+          "relation": "equivalent_encoding",
+          "note": ""
+        },
+        {
+          "source_clause": "The displayed v1 theorem bounds ||psiHat W*-psi||_{2,infinity}.",
+          "lean_clause": "Lean makes the proved quantity ConfigFrobError (Frobenius) primary and derives each row norm by norm_config_le_ConfigFrobError.",
+          "relation": "source_repair",
+          "note": "The retained v1 text later says the proved result is Frobenius and lists two-to-infinity control as future work; the appendix also uses ordinary matrix/Frobenius norms."
+        },
+        {
+          "source_clause": "The error is bounded by a cubic polynomial in x=(n^3/r)^(1/2-delta).",
+          "lean_clause": "configFrobBound has an explicit local linear+quadratic majorant and PaperRate composes it with paperDeltaScale; the result vanishes at the printed scale.",
+          "relation": "derived_by_composition",
+          "note": ""
+        },
+        {
+          "source_clause": "No epsilon<=alpha/2 premise appears.",
+          "lean_clause": "The active YWS population-gap residual proof controls both directed cross-energies without hsmall.",
+          "relation": "lean_weaker_hypothesis",
+          "note": "This strengthens the theorem and improves paper fidelity."
+        },
+        {
+          "source_clause": "No local polar-factor smallness premise appears.",
+          "lean_clause": "The local TauCeti near-isometry branch plus YWS Procrustes alignment handles all regimes, so hpolar is absent.",
+          "relation": "lean_weaker_hypothesis",
+          "note": "This strengthens the theorem and improves paper fidelity."
+        },
+        {
+          "source_clause": "The paper appendix has the older square-root perturbation constants.",
+          "lean_clause": "Term 2 is proved with denominator sqrt(alpha), sharper than the previous sqrt(alpha/2) envelope.",
+          "relation": "lean_stronger_conclusion",
+          "note": ""
+        }
+      ],
+      "review": "The current theorem proves the Frobenius configuration bound supported by the paper discussion/appendix and obtains rowwise control as a consequence. It does not label the internally inconsistent v1 2,infinity display as literally proved.",
+      "notes": "The active proof now uses the YWS population-only gap residual bound and YWS Procrustes alignment. It needs neither epsilon<=alpha/2 nor the former polar-factor smallness condition. Term 2 uses sqrt(alpha), improving the previous sqrt(alpha/2) envelope.",
+      "gap_refs": [
+        "v1-norm-inconsistency"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "A25-C2",
+      "source_anchor": "Corollary 2",
+      "source_kind": "corollary",
+      "title": "Vanishing aligned embedding rate",
+      "importance": "headline",
+      "verdict": "REPAIR source mismatch",
+      "literal_source_covered": false,
+      "source_claim": "There exists a sequence of orthogonal alignments with embedding error O_P((n^3/r)^(1/2-delta)).",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          388,
+          405
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.RateChain.endToEndFrobRate",
+        "Acharyya2025.RateChain.endToEndFrobQuadraticRate",
+        "Acharyya2025.RateChain.eventually_endToEndFrobRate_le_endToEndFrobQuadraticRate",
+        "Acharyya2025.RateChain.tendsto_endToEndFrobQuadraticRate_zero",
+        "Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate",
+        "Acharyya2025.PaperRate.paperDeltaScale"
+      ],
+      "clauses": [
+        {
+          "source_clause": "There is a sequence W_n* with aligned error O_P((n^3/r)^(1/2-delta)).",
+          "lean_clause": "The high-probability Frobenius rate chain and PaperRate prove a vanishing aligned configuration error at exactly this real-power scale.",
+          "relation": "source_repair",
+          "note": "Frobenius is primary because of the v1 norm inconsistency; rowwise error follows by domination."
+        },
+        {
+          "source_clause": "The paper assumes the same rank/eigenvalue stability conditions.",
+          "lean_clause": "The active growing certificate needs the uniform floor/cap but no longer stores eventual hsmall/hpolar side conditions.",
+          "relation": "lean_weaker_hypothesis",
+          "note": ""
+        }
+      ],
+      "review": "The source real-power rate and high-probability vanishing conclusion are compiled in Frobenius form, with rowwise control available by norm domination; the v1 norm inconsistency is handled exactly as for Theorem 2.",
+      "notes": "The rate chain now retains the sharper Frobenius bound instead of paying a final sqrt(n) conversion.",
+      "gap_refs": [
+        "v1-norm-inconsistency"
+      ],
+      "next_action": "None."
+    },
+    {
+      "id": "A25-PA1",
+      "source_anchor": "Proposition A.1",
+      "source_kind": "proposition",
+      "title": "R1 inverse-eigenvalue perturbation bound",
+      "importance": "technical",
+      "verdict": "PROOF ROLE REPLACED",
+      "literal_source_covered": false,
+      "source_claim": "Printed auxiliary result in the six-term appendix perturbation proof.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          793,
+          819
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The paper prints this as a distinct auxiliary proposition/lemma in the six-term perturbation proof.",
+          "lean_clause": "The exact auxiliary statement is not exposed as a source-facing declaration; the current final proof uses YWS population-gap residual/alignment and direct residual identities instead.",
+          "relation": "proof_role_replaced",
+          "note": "The final theorem is proved, but this row must not be counted as literal formalization of the printed proof lemma."
+        }
+      ],
+      "review": "The exact printed auxiliary statement is not exposed as a source-facing declaration. Its role in the final configuration bound is eliminated or subsumed by the current YWS/direct-residual proof.",
+      "notes": "This row deliberately does not count the main theorem as exact coverage of the appendix lemma. It records semantic proof-role replacement.",
+      "gap_refs": [
+        "appendix-proof-route-replaced"
+      ],
+      "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
+    },
+    {
+      "id": "A25-PA2",
+      "source_anchor": "Proposition A.2",
+      "source_kind": "proposition",
+      "title": "R2 square-root commutator bound",
+      "importance": "technical",
+      "verdict": "PROOF ROLE REPLACED",
+      "literal_source_covered": false,
+      "source_claim": "Printed auxiliary result in the six-term appendix perturbation proof.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          820,
+          844
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+        "Acharyya2025.ConfigPerturbation.configFrobBound"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The paper prints this as a distinct auxiliary proposition/lemma in the six-term perturbation proof.",
+          "lean_clause": "The exact auxiliary statement is not exposed as a source-facing declaration; the current final proof uses YWS population-gap residual/alignment and direct residual identities instead.",
+          "relation": "proof_role_replaced",
+          "note": "The final theorem is proved, but this row must not be counted as literal formalization of the printed proof lemma."
+        }
+      ],
+      "review": "The exact printed auxiliary statement is not exposed as a source-facing declaration. Its role in the final configuration bound is eliminated or subsumed by the current YWS/direct-residual proof.",
+      "notes": "This row deliberately does not count the main theorem as exact coverage of the appendix lemma. It records semantic proof-role replacement.",
+      "gap_refs": [
+        "appendix-proof-route-replaced"
+      ],
+      "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
+    },
+    {
+      "id": "A25-PA3",
+      "source_anchor": "Proposition A.3",
+      "source_kind": "proposition",
+      "title": "R3 subspace/alignment bound",
+      "importance": "technical",
+      "verdict": "PROOF ROLE REPLACED",
+      "literal_source_covered": false,
+      "source_claim": "Printed auxiliary result in the six-term appendix perturbation proof.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          845,
+          879
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+        "YuWangSamworth2015.yuWangSamworth_alignmentMap_sub_overlapOp_apply_le"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The paper prints this as a distinct auxiliary proposition/lemma in the six-term perturbation proof.",
+          "lean_clause": "The exact auxiliary statement is not exposed as a source-facing declaration; the current final proof uses YWS population-gap residual/alignment and direct residual identities instead.",
+          "relation": "proof_role_replaced",
+          "note": "The final theorem is proved, but this row must not be counted as literal formalization of the printed proof lemma."
+        }
+      ],
+      "review": "The exact printed auxiliary statement is not exposed as a source-facing declaration. Its role in the final configuration bound is eliminated or subsumed by the current YWS/direct-residual proof.",
+      "notes": "This row deliberately does not count the main theorem as exact coverage of the appendix lemma. It records semantic proof-role replacement.",
+      "gap_refs": [
+        "appendix-proof-route-replaced"
+      ],
+      "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
+    },
+    {
+      "id": "A25-PA4",
+      "source_anchor": "Proposition A.4",
+      "source_kind": "proposition",
+      "title": "R4 perturbation-times-sin-Theta bound",
+      "importance": "technical",
+      "verdict": "PROOF ROLE REPLACED",
+      "literal_source_covered": false,
+      "source_claim": "Printed auxiliary result in the six-term appendix perturbation proof.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          880,
+          911
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+        "YuWangSamworth2015.yuWangSamworth_alignmentMap_sub_overlapOp_apply_le"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The paper prints this as a distinct auxiliary proposition/lemma in the six-term perturbation proof.",
+          "lean_clause": "The exact auxiliary statement is not exposed as a source-facing declaration; the current final proof uses YWS population-gap residual/alignment and direct residual identities instead.",
+          "relation": "proof_role_replaced",
+          "note": "The final theorem is proved, but this row must not be counted as literal formalization of the printed proof lemma."
+        }
+      ],
+      "review": "The exact printed auxiliary statement is not exposed as a source-facing declaration. Its role in the final configuration bound is eliminated or subsumed by the current YWS/direct-residual proof.",
+      "notes": "This row deliberately does not count the main theorem as exact coverage of the appendix lemma. It records semantic proof-role replacement.",
+      "gap_refs": [
+        "appendix-proof-route-replaced"
+      ],
+      "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
+    },
+    {
+      "id": "A25-PA5",
+      "source_anchor": "Proposition A.5",
+      "source_kind": "proposition",
+      "title": "R5 inverse-square-root commutator bound",
+      "importance": "technical",
+      "verdict": "PROOF ROLE REPLACED",
+      "literal_source_covered": false,
+      "source_claim": "Printed auxiliary result in the six-term appendix perturbation proof.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          912,
+          941
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+        "Acharyya2025.ConfigPerturbation.configFrobBound"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The paper prints this as a distinct auxiliary proposition/lemma in the six-term perturbation proof.",
+          "lean_clause": "The exact auxiliary statement is not exposed as a source-facing declaration; the current final proof uses YWS population-gap residual/alignment and direct residual identities instead.",
+          "relation": "proof_role_replaced",
+          "note": "The final theorem is proved, but this row must not be counted as literal formalization of the printed proof lemma."
+        }
+      ],
+      "review": "The exact printed auxiliary statement is not exposed as a source-facing declaration. Its role in the final configuration bound is eliminated or subsumed by the current YWS/direct-residual proof.",
+      "notes": "This row deliberately does not count the main theorem as exact coverage of the appendix lemma. It records semantic proof-role replacement.",
+      "gap_refs": [
+        "appendix-proof-route-replaced"
+      ],
+      "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
+    },
+    {
+      "id": "A25-PA6",
+      "source_anchor": "Proposition A.6",
+      "source_kind": "proposition",
+      "title": "R6 perturbation/alignment remainder bound",
+      "importance": "technical",
+      "verdict": "PROOF ROLE REPLACED",
+      "literal_source_covered": false,
+      "source_claim": "Printed auxiliary result in the six-term appendix perturbation proof.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          942,
+          980
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+        "YuWangSamworth2015.yuWangSamworth_alignmentMap_sub_overlapOp_apply_le"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The paper prints this as a distinct auxiliary proposition/lemma in the six-term perturbation proof.",
+          "lean_clause": "The exact auxiliary statement is not exposed as a source-facing declaration; the current final proof uses YWS population-gap residual/alignment and direct residual identities instead.",
+          "relation": "proof_role_replaced",
+          "note": "The final theorem is proved, but this row must not be counted as literal formalization of the printed proof lemma."
+        }
+      ],
+      "review": "The exact printed auxiliary statement is not exposed as a source-facing declaration. Its role in the final configuration bound is eliminated or subsumed by the current YWS/direct-residual proof.",
+      "notes": "This row deliberately does not count the main theorem as exact coverage of the appendix lemma. It records semantic proof-role replacement.",
+      "gap_refs": [
+        "appendix-proof-route-replaced"
+      ],
+      "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
+    },
+    {
+      "id": "A25-L1",
+      "source_anchor": "Lemma 1",
+      "source_kind": "lemma",
+      "title": "Block eigenvalue/eigenvector commutator bound",
+      "importance": "technical",
+      "verdict": "PROOF ROLE REPLACED",
+      "literal_source_covered": false,
+      "source_claim": "Printed auxiliary result in the six-term appendix perturbation proof.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          981,
+          1077
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+        "Acharyya2025.Overlap.eigenvalue_commutator_eq"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The paper prints this as a distinct auxiliary proposition/lemma in the six-term perturbation proof.",
+          "lean_clause": "The exact auxiliary statement is not exposed as a source-facing declaration; the current final proof uses YWS population-gap residual/alignment and direct residual identities instead.",
+          "relation": "proof_role_replaced",
+          "note": "The final theorem is proved, but this row must not be counted as literal formalization of the printed proof lemma."
+        }
+      ],
+      "review": "The exact printed auxiliary statement is not exposed as a source-facing declaration. Its role in the final configuration bound is eliminated or subsumed by the current YWS/direct-residual proof.",
+      "notes": "This row deliberately does not count the main theorem as exact coverage of the appendix lemma. It records semantic proof-role replacement.",
+      "gap_refs": [
+        "appendix-proof-route-replaced"
+      ],
+      "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
+    },
+    {
+      "id": "A25-L2",
+      "source_anchor": "Lemma 2",
+      "source_kind": "lemma",
+      "title": "H matrix bound using a sample-eigenvalue lower bound",
+      "importance": "technical",
+      "verdict": "PROOF ROLE REPLACED",
+      "literal_source_covered": false,
+      "source_claim": "Printed auxiliary result in the six-term appendix perturbation proof.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          1078,
+          1116
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The paper prints this as a distinct auxiliary proposition/lemma in the six-term perturbation proof.",
+          "lean_clause": "The exact auxiliary statement is not exposed as a source-facing declaration; the current final proof uses YWS population-gap residual/alignment and direct residual identities instead.",
+          "relation": "proof_role_replaced",
+          "note": "The final theorem is proved, but this row must not be counted as literal formalization of the printed proof lemma."
+        }
+      ],
+      "review": "The exact printed auxiliary statement is not exposed as a source-facing declaration. Its role in the final configuration bound is eliminated or subsumed by the current YWS/direct-residual proof.",
+      "notes": "This row deliberately does not count the main theorem as exact coverage of the appendix lemma. It records semantic proof-role replacement.",
+      "gap_refs": [
+        "appendix-proof-route-replaced"
+      ],
+      "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
+    },
+    {
+      "id": "A25-L3",
+      "source_anchor": "Lemma 3",
+      "source_kind": "lemma",
+      "title": "Inverse sample eigenvalue bound",
+      "importance": "technical",
+      "verdict": "PROOF ROLE REPLACED",
+      "literal_source_covered": false,
+      "source_claim": "Printed auxiliary result in the six-term appendix perturbation proof.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          1117,
+          1144
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The paper prints this as a distinct auxiliary proposition/lemma in the six-term perturbation proof.",
+          "lean_clause": "The exact auxiliary statement is not exposed as a source-facing declaration; the current final proof uses YWS population-gap residual/alignment and direct residual identities instead.",
+          "relation": "proof_role_replaced",
+          "note": "The final theorem is proved, but this row must not be counted as literal formalization of the printed proof lemma."
+        }
+      ],
+      "review": "The exact printed auxiliary statement is not exposed as a source-facing declaration. Its role in the final configuration bound is eliminated or subsumed by the current YWS/direct-residual proof.",
+      "notes": "This row deliberately does not count the main theorem as exact coverage of the appendix lemma. It records semantic proof-role replacement.",
+      "gap_refs": [
+        "appendix-proof-route-replaced"
+      ],
+      "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
+    },
+    {
+      "id": "A25-L4",
+      "source_anchor": "Lemma 4",
+      "source_kind": "lemma",
+      "title": "Square-root spectral commutator bound",
+      "importance": "technical",
+      "verdict": "PROOF ROLE REPLACED",
+      "literal_source_covered": false,
+      "source_claim": "Printed auxiliary result in the six-term appendix perturbation proof.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          1145,
+          1191
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+        "Acharyya2025.ConfigPerturbation.configFrobBound"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The paper prints this as a distinct auxiliary proposition/lemma in the six-term perturbation proof.",
+          "lean_clause": "The exact auxiliary statement is not exposed as a source-facing declaration; the current final proof uses YWS population-gap residual/alignment and direct residual identities instead.",
+          "relation": "proof_role_replaced",
+          "note": "The final theorem is proved, but this row must not be counted as literal formalization of the printed proof lemma."
+        }
+      ],
+      "review": "The exact printed auxiliary statement is not exposed as a source-facing declaration. Its role in the final configuration bound is eliminated or subsumed by the current YWS/direct-residual proof.",
+      "notes": "This row deliberately does not count the main theorem as exact coverage of the appendix lemma. It records semantic proof-role replacement.",
+      "gap_refs": [
+        "appendix-proof-route-replaced"
+      ],
+      "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
+    },
+    {
+      "id": "A25-L5",
+      "source_anchor": "Lemma 5",
+      "source_kind": "lemma",
+      "title": "Inverse-square-root spectral commutator bound",
+      "importance": "technical",
+      "verdict": "PROOF ROLE REPLACED",
+      "literal_source_covered": false,
+      "source_claim": "Printed auxiliary result in the six-term appendix perturbation proof.",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          1192,
+          1215
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+        "Acharyya2025.ConfigPerturbation.configFrobBound"
+      ],
+      "clauses": [
+        {
+          "source_clause": "The paper prints this as a distinct auxiliary proposition/lemma in the six-term perturbation proof.",
+          "lean_clause": "The exact auxiliary statement is not exposed as a source-facing declaration; the current final proof uses YWS population-gap residual/alignment and direct residual identities instead.",
+          "relation": "proof_role_replaced",
+          "note": "The final theorem is proved, but this row must not be counted as literal formalization of the printed proof lemma."
+        }
+      ],
+      "review": "The exact printed auxiliary statement is not exposed as a source-facing declaration. Its role in the final configuration bound is eliminated or subsumed by the current YWS/direct-residual proof.",
+      "notes": "This row deliberately does not count the main theorem as exact coverage of the appendix lemma. It records semantic proof-role replacement.",
+      "gap_refs": [
+        "appendix-proof-route-replaced"
+      ],
+      "next_action": "Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition."
+    }
+  ]
+}
