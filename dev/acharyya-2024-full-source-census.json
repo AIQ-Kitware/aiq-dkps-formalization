@@ -1,0 +1,518 @@
+{
+  "schema_version": 1,
+  "census_kind": "dkps_application_source_semantic_alignment",
+  "status_definitions": {
+    "compiled_exact": "The source claim is represented by a compiled source-facing theorem with the same mathematical content.",
+    "compiled_equivalent": "The source claim is compiled under a semantically equivalent encoding; representation changes are documented.",
+    "compiled_by_composition": "All essential clauses are compiled, but the source result is assembled from multiple declarations rather than one literal wrapper.",
+    "compiled_generalized": "A compiled theorem is strictly more general or gives a stronger conclusion than the printed source claim.",
+    "compiled_specialization": "A useful compiled specialization exists, but it does not cover the full printed source scope.",
+    "compiled_stronger_hypotheses": "The source conclusion is compiled, but the current theorem uses additional or stronger hypotheses.",
+    "compiled_source_repair": "The source is internally inconsistent or contains a false/overbroad clause; the formalization records the mathematically usable repaired statement.",
+    "compiled_role_replaced": "The exact source proof lemma is not exposed as a theorem; its role in the main proof is discharged by a different compiled argument. This is not exact source-item coverage.",
+    "not_represented": "No matching formal theorem or construction was found.",
+    "not_proof_debt": "The item is exposition, empirical methodology, or an extension beyond the paper theorem surface; it is documented but not counted as missing source theorem coverage."
+  },
+  "verification_definitions": {
+    "proved_in_build": "Every cited Lean declaration exists in the repository and is part of the package tree that the user has reported building successfully.",
+    "absent": "No matching Lean declaration is cited because the source claim is not represented.",
+    "not_applicable": "No proof is required for this row."
+  },
+  "semantic_alignment_definitions": {
+    "exact": "Source and Lean claim have the same mathematical hypotheses and conclusion, modulo notation.",
+    "equivalent_encoding": "The mathematical claim is equivalent; Lean changes representation or packages assumptions differently.",
+    "by_composition": "The source claim is recovered from a chain of compiled declarations rather than one wrapper.",
+    "generalized": "Lean proves a stronger or more general result.",
+    "specialized": "Lean proves only a restricted source case.",
+    "stronger_hypotheses": "Lean proves the source conclusion but assumes more.",
+    "source_repair": "Lean intentionally formalizes a repaired reading of inconsistent/false source prose.",
+    "proof_replaced": "The printed auxiliary lemma is not mirrored; a different compiled proof removes its role.",
+    "missing": "No corresponding Lean result was found.",
+    "out_of_scope": "The row is tracked for context but is not a source theorem obligation."
+  },
+  "paper": {
+    "citation": "Aranyak Acharyya, Michael W. Trosset, Carey E. Priebe, Hayden Helm, Consistent estimation of generative model representations in the Data Kernel Perspective Space, arXiv:2409.17308.",
+    "source_version": "Retained arXiv transcription in Acharyya2024/prose; audit is keyed to the theorem/assumption numbering in that source.",
+    "source_files": [
+      "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md"
+    ]
+  },
+  "scope": "Finite raw-stress/MDS setup and the numbered consistency surface used downstream: Remark 1--3 where they carry mathematical content, Theorems 1--5, Assumptions 1--2, Lemmas 1--2, and Corollary 1. Empirical sections are excluded.",
+  "audit_revision": "2026-08-26 working tree based on repository snapshot 8895692fef63 plus the accepted local overlays.",
+  "notes": "The package is proof-complete for its stated Lean theorems, but source coverage is not complete. The fixed-representative raw-stress theorem requires an explicit UniquePairProfile premise absent from the paper, while an unconditional minimizer-set stability theorem is proved without it. The continuum model-distribution/L^p part of the growing-model regime is not formalized; the current result is finite per stage.",
+  "gaps": {
+    "fixed-profile-uniqueness": {
+      "kind": "source_audit",
+      "title": "The paper fixes one limiting MDS profile without a uniqueness premise",
+      "detail": "Theorem 1, Lemma 1, and Theorem 3 name a fixed limiting minimizer/profile. Lean proves unconditional convergence to the minimizer set, and recovers a fixed profile only under RawStress.UniquePairProfile. Under that premise Lean gets full-sequence convergence, stronger than the source subsequence conclusion."
+    },
+    "growing-query-rate-wiring": {
+      "kind": "scope_gap",
+      "title": "The explicit growing-query gamma/r condition is not wired end to end",
+      "detail": "The second-moment and probability modules prove the finite-dimensional concentration mechanism and the gamma/r sample-mean estimate. The paper lets the number of queries m grow with r and uses (1/m) sum_j gamma_ij = o(r). Lean currently feeds the growing-query consistency theorem an abstract sampling-convergence hypothesis rather than constructing the varying-m response matrices and discharging that source rate condition in one theorem."
+    },
+    "rigid-alignment-corollary": {
+      "kind": "source_gap",
+      "title": "Corollary 1 coordinate alignment is not represented in Acharyya2024",
+      "detail": "The source upgrades pairwise-distance convergence to existence of orthogonal W^(u) and translations a^(u) with point-coordinate convergence. Acharyya2024 proves translation invariance and pairwise-distance convergence but has no theorem constructing the source Corollary 1 alignment."
+    },
+    "continuous-mds-lp": {
+      "kind": "scope_gap",
+      "title": "Continuous-MDS and L^p(P x P) growing-model conclusions are not formalized",
+      "detail": "The source introduces a compact model space, a model distribution P, continuous raw stress, and an mds(phi) map, then states Lemma 2 and Theorem 5 as L^p(P x P) convergence. The package explicitly documents that its growing-model result is only a countable family of finite per-stage statements and does not model the continuum distribution/integral."
+    },
+    "affine-invariance-partial": {
+      "kind": "source_audit",
+      "title": "Remark 1 affine/rigid invariance is only partially exposed",
+      "detail": "rawStress_translate proves the translation component. No Acharyya2024 theorem explicitly packages the orthogonal part of the rigid transformation or the full source wording. The paper calls this affine, while its later Corollary 1 uses orthogonal W plus translation."
+    },
+    "growing-n-concentration": {
+      "kind": "scope_gap",
+      "title": "Theorem 4 growing-n concentration is represented only through finite specializations/assumptions",
+      "detail": "The finite second-moment concentration theorem handles any fixed finite model set. The triangular-array consistency theorem assumes per-stage dissimilarity convergence hD; it does not derive the paper Theorem 4 pointwise growing-n conclusion from the gamma condition."
+    }
+  },
+  "items": [
+    {
+      "id": "A24-EQ1",
+      "importance": "major",
+      "section": "2",
+      "source_anchor": "Equation (1), finite raw stress",
+      "source_kind": "definition",
+      "title": "Finite raw-stress MDS objective and minimizer set",
+      "source_claim": "For a finite dissimilarity matrix, define the raw-stress objective and MDS(Delta) as its minimizers in R^d.",
+      "status": "compiled_exact",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          100,
+          113
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.rawStress",
+        "Acharyya2024.MDS"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [],
+      "semantic_alignment": {
+        "classification": "exact",
+        "detail": "The Lean definitions directly encode the finite raw-stress objective and minimizer set."
+      },
+      "notes": "The package treats configurations as Fin n -> EuclideanSpace rather than matrices with rows.",
+      "next_action": "None."
+    },
+    {
+      "id": "A24-R1",
+      "importance": "supporting",
+      "section": "2",
+      "source_anchor": "Remark 1",
+      "source_kind": "remark",
+      "title": "Nonuniqueness and rigid/affine invariance of raw-stress minimizers",
+      "source_claim": "Applying a rigid/affine transformation to a minimizer gives another minimizer; additional non-congruent minimizers may also exist.",
+      "status": "compiled_specialization",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          114,
+          117
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.RawStress.rawStress_translate",
+        "Acharyya2024.RawStress.center_mem_mds"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [
+        "affine-invariance-partial"
+      ],
+      "semantic_alignment": {
+        "classification": "specialized",
+        "detail": "Lean explicitly proves translation invariance and preservation of minimizer status under centering, but does not expose the full orthogonal-plus-translation source claim as one theorem."
+      },
+      "notes": "The source uses the word affine, but its later alignment statement restricts the linear part to O(d).",
+      "next_action": "None."
+    },
+    {
+      "id": "A24-R2",
+      "importance": "supporting",
+      "section": "2",
+      "source_anchor": "Remark 2",
+      "source_kind": "remark",
+      "title": "Existence of a finite raw-stress minimizer",
+      "source_claim": "The finite raw-stress problem attains a minimizer.",
+      "status": "compiled_generalized",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          118,
+          132
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.RawStress.mds_nonempty",
+        "Acharyya2024.RawStress.mdsConfig_mem"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [],
+      "semantic_alignment": {
+        "classification": "generalized",
+        "detail": "Lean proves nonemptiness directly for the finite raw-stress minimizer set, without requiring the source proof route through a bounded set of Euclidean distance matrices."
+      },
+      "notes": "The conclusion is the source conclusion; the proof architecture is different and the Lean statement is usable for arbitrary finite dissimilarity data.",
+      "next_action": "None."
+    },
+    {
+      "id": "A24-R3",
+      "importance": "major",
+      "section": "2",
+      "source_anchor": "Continuous raw-stress setup and Remark 3",
+      "source_kind": "construction",
+      "title": "Continuous MDS over a compact model space",
+      "source_claim": "Define continuous raw stress by a P x P integral over a compact model space and let mds minimize it over Borel-measurable embeddings.",
+      "status": "not_represented",
+      "verification": "absent",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          134,
+          159
+        ]
+      },
+      "lean_declarations": [],
+      "planned_declarations": [],
+      "gap_refs": [
+        "continuous-mds-lp"
+      ],
+      "semantic_alignment": {
+        "classification": "missing",
+        "detail": "No corresponding continuous-model-space raw-stress functional, model distribution, or minimizing mds(phi) map is present in Acharyya2024."
+      },
+      "notes": "This missing source layer is exactly the layer needed by Lemma 2 and Theorem 5.",
+      "next_action": "Formalize only if full source coverage of the continuum growing-model regime is desired."
+    },
+    {
+      "id": "A24-T1",
+      "importance": "headline",
+      "section": "4.1",
+      "source_anchor": "Theorem 1",
+      "source_kind": "theorem",
+      "title": "Fixed models and fixed queries: raw-stress consistency",
+      "source_claim": "With n and m fixed, a subsequence of estimated raw-stress minimizers has pairwise distances converging in probability to those of a fixed population minimizer.",
+      "status": "compiled_stronger_hypotheses",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          205,
+          224
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.Consistency.fixed_models_fixed_queries_consistency_of_uniqueProfile",
+        "Acharyya2024.Consistency.rawStress_mds_stability",
+        "Acharyya2024.Consistency.rawStress_mds_stability_set"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [
+        "fixed-profile-uniqueness"
+      ],
+      "semantic_alignment": {
+        "classification": "stronger_hypotheses",
+        "detail": "The source-shaped fixed-minimizer conclusion is proved with an explicit UniquePairProfile premise. Without it Lean proves convergence to the population minimizer set instead."
+      },
+      "notes": "The repaired theorem actually proves the fixed-profile convergence along the full sequence and then supplies id as the source subsequence.",
+      "next_action": "None."
+    },
+    {
+      "id": "A24-A1",
+      "importance": "major",
+      "section": "4.2",
+      "source_anchor": "Assumption 1",
+      "source_kind": "assumption",
+      "title": "Finite-model population dissimilarities have a fixed Euclidean limit",
+      "source_claim": "For fixed models there are vectors phi_i in a finite-dimensional Euclidean space whose pairwise distances are the limits of the population model-mean discrepancies as m,r grow.",
+      "status": "compiled_generalized",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          236,
+          247
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.Consistency.growing_queries_dissimilarity_converges",
+        "Acharyya2024.Consistency.growing_queries_dissimilarity_converges_of_entrywise",
+        "Acharyya2024.tendsto_frobSub_zero_of_entrywise"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [],
+      "semantic_alignment": {
+        "classification": "generalized",
+        "detail": "The active theorem only needs deterministic convergence of the population dissimilarity matrices to a fixed DeltaInf; for fixed n entrywise convergence suffices. It does not require that DeltaInf be represented by named phi_i vectors."
+      },
+      "notes": "This weakens the structural content of the paper assumption to the part actually used by the proof.",
+      "next_action": "None."
+    },
+    {
+      "id": "A24-L1",
+      "importance": "major",
+      "section": "4.2",
+      "source_anchor": "Lemma 1",
+      "source_kind": "lemma",
+      "title": "Raw-stress stability under convergence of dissimilarity matrices",
+      "source_claim": "If D converges to Delta^(infinity) with n fixed, a subsequence of MDS(D) has pairwise distances converging to those of a fixed minimizer of MDS(Delta^(infinity)).",
+      "status": "compiled_stronger_hypotheses",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          248,
+          263
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.Consistency.rawStress_mds_stability",
+        "Acharyya2024.RawStress.mds_stability_inProbability_set",
+        "Acharyya2024.RawStress.mds_stability_inProbability_of_uniqueProfile"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [
+        "fixed-profile-uniqueness"
+      ],
+      "semantic_alignment": {
+        "classification": "stronger_hypotheses",
+        "detail": "Lean proves unconditional convergence to the minimizer set. The fixed-minimizer form requires UniquePairProfile, which is not printed in the paper."
+      },
+      "notes": "The set-valued theorem isolates the strongest unconditional statement.",
+      "next_action": "None."
+    },
+    {
+      "id": "A24-T2",
+      "importance": "headline",
+      "section": "4.2",
+      "source_anchor": "Theorem 2",
+      "source_kind": "theorem",
+      "title": "Dissimilarity concentration under the covariance-trace rate",
+      "source_claim": "If (1/m) sum_j gamma_ij / r tends to zero for every fixed model, then the empirical dissimilarity matrix converges in Frobenius norm in probability to Delta^(infinity).",
+      "status": "compiled_specialization",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          264,
+          278
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment",
+        "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean",
+        "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound",
+        "Acharyya2024.Consistency.growing_queries_dissimilarity_converges"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [
+        "growing-query-rate-wiring"
+      ],
+      "semantic_alignment": {
+        "classification": "specialized",
+        "detail": "The finite-dimensional Chebyshev/second-moment mechanism and gamma/r sample-mean bound are compiled. The theorem with query dimension m itself growing with r is not assembled; the growing-query consistency layer accepts the resulting sampling convergence as a hypothesis."
+      },
+      "notes": "The probability theorem is mathematically faithful to the concentration mechanism but has fixed type-level response dimension.",
+      "next_action": "None."
+    },
+    {
+      "id": "A24-T3",
+      "importance": "headline",
+      "section": "4.2",
+      "source_anchor": "Theorem 3",
+      "source_kind": "theorem",
+      "title": "Fixed models, growing queries: DKPS consistency",
+      "source_claim": "Under the Theorem 2 rate condition, estimated raw-stress pairwise distances converge along a subsequence to a population MDS configuration.",
+      "status": "compiled_stronger_hypotheses",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          279,
+          303
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.Consistency.fixed_models_growing_queries_consistency_of_uniqueProfile",
+        "Acharyya2024.Consistency.growing_queries_dissimilarity_converges"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [
+        "fixed-profile-uniqueness",
+        "growing-query-rate-wiring"
+      ],
+      "semantic_alignment": {
+        "classification": "stronger_hypotheses",
+        "detail": "The geometric conclusion is compiled, with UniquePairProfile added for a fixed limiting profile and the source gamma condition abstracted into sampling and deterministic-limit convergence hypotheses."
+      },
+      "notes": "Under the added uniqueness premise the Lean proof obtains full-sequence convergence.",
+      "next_action": "None."
+    },
+    {
+      "id": "A24-C1",
+      "importance": "headline",
+      "section": "4.2",
+      "source_anchor": "Corollary 1",
+      "source_kind": "corollary",
+      "title": "Coordinate convergence after orthogonal alignment and translation",
+      "source_claim": "There exist orthogonal W^(u) and translations a^(u) such that every estimated point converges in probability to W^(u) psi_i + a^(u).",
+      "status": "not_represented",
+      "verification": "absent",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          305,
+          326
+        ]
+      },
+      "lean_declarations": [],
+      "planned_declarations": [],
+      "gap_refs": [
+        "rigid-alignment-corollary"
+      ],
+      "semantic_alignment": {
+        "classification": "missing",
+        "detail": "Acharyya2024 stops at convergence of pairwise distances and does not construct the orthogonal/translation witnesses required by this corollary."
+      },
+      "notes": "Later packages contain substantial Procrustes/Gram-rigidity infrastructure, but this source-facing Acharyya2024 corollary is not exposed.",
+      "next_action": "Add a source-facing quantitative finite-configuration congruence/Procrustes bridge if exact 2024 coverage is required."
+    },
+    {
+      "id": "A24-A2",
+      "importance": "major",
+      "section": "4.3",
+      "source_anchor": "Assumption 2",
+      "source_kind": "assumption",
+      "title": "Growing models lie on a compact Riemannian model manifold",
+      "source_claim": "There is a compact Riemannian manifold M containing latent vectors phi_i whose pairwise distances are the limiting model dissimilarities.",
+      "status": "compiled_specialization",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          333,
+          341
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [
+        "continuous-mds-lp"
+      ],
+      "semantic_alignment": {
+        "classification": "specialized",
+        "detail": "The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity matrices and therefore does not need a manifold. The compact-manifold/model-distribution structure needed for the source continuum conclusion is not represented."
+      },
+      "notes": "This is useful finite content but does not encode the literal source assumption.",
+      "next_action": "None."
+    },
+    {
+      "id": "A24-L2",
+      "importance": "headline",
+      "section": "4.3",
+      "source_anchor": "Lemma 2",
+      "source_kind": "lemma",
+      "title": "Continuous-MDS L^p stability over iid model draws",
+      "source_claim": "For iid phi_i from P, pointwise convergence of empirical dissimilarities implies, along a subsequence, L^p(P x P) convergence of estimated pairwise distances to continuous-MDS distances.",
+      "status": "not_represented",
+      "verification": "absent",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          342,
+          355
+        ]
+      },
+      "lean_declarations": [],
+      "planned_declarations": [],
+      "gap_refs": [
+        "continuous-mds-lp"
+      ],
+      "semantic_alignment": {
+        "classification": "missing",
+        "detail": "The package has no model-distribution P over a compact model space, no continuous-MDS map, and no double-integral L^p conclusion."
+      },
+      "notes": "The finite per-stage triangular-array theorem is not an encoding of this integral statement.",
+      "next_action": "Formalize the continuous-MDS source layer before claiming full Theorem 5 coverage."
+    },
+    {
+      "id": "A24-T4",
+      "importance": "headline",
+      "section": "4.3",
+      "source_anchor": "Theorem 4",
+      "source_kind": "theorem",
+      "title": "Growing-model pointwise dissimilarity concentration",
+      "source_claim": "When n,m grow with r, the same covariance-trace rate implies pointwise convergence D_ii' -> Delta^(infinity)(phi_i,phi_i') in probability for every fixed pair.",
+      "status": "compiled_specialization",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          356,
+          370
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment",
+        "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [
+        "growing-query-rate-wiring",
+        "growing-n-concentration"
+      ],
+      "semantic_alignment": {
+        "classification": "specialized",
+        "detail": "Lean has the finite-model concentration mechanism and a growing-stage consistency theorem that assumes per-stage sampling convergence. It does not derive the literal growing-n pointwise theorem from the source gamma condition."
+      },
+      "notes": "The source proof is pointwise in each pair, suggesting a future theorem can avoid uniform-in-n concentration.",
+      "next_action": "None."
+    },
+    {
+      "id": "A24-T5",
+      "importance": "headline",
+      "section": "4.3",
+      "source_anchor": "Theorem 5",
+      "source_kind": "theorem",
+      "title": "Growing models and queries: L^p consistency",
+      "source_claim": "Under the Theorem 4 rate, along a subsequence the pairwise-distance error converges to zero in L^p(P x P) in probability for every p >= 1.",
+      "status": "compiled_specialization",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          413,
+          424
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile",
+        "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [
+        "continuous-mds-lp",
+        "growing-query-rate-wiring",
+        "growing-n-concentration"
+      ],
+      "semantic_alignment": {
+        "classification": "specialized",
+        "detail": "Lean proves a shared full-sequence/per-stage finite consistency family, which is useful but does not imply the paper double-integral L^p(P x P) conclusion over a continuum of iid model draws."
+      },
+      "notes": "The source-level continuum theorem remains open even though every finite-stage theorem cited here is proved.",
+      "next_action": "Formalize the continuous model-distribution layer if this source theorem is a completion target."
+    }
+  ]
+}
