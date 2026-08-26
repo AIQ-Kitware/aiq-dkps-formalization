@@ -30,3 +30,4 @@ packages = ["src/leanq"]
 "src/leanq/lean/decl_index.lean" = "leanq/lean/decl_index.lean"
 "src/leanq/assets/viewer.html" = "leanq/assets/viewer.html"
 "src/leanq/assets/headline_viewer.html" = "leanq/assets/headline_viewer.html"
+"src/leanq/assets/project_explorer.html" = "leanq/assets/project_explorer.html"

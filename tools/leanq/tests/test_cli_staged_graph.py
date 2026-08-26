@@ -130,7 +130,7 @@ class StagedGraphCliTests(unittest.TestCase):
             html_path = root / "headlines.html"
             semantic_path.write_text(json.dumps(semantic), encoding="utf-8")
             census.write_text(json.dumps({"items": [{"id":"Y","title":"YWS","importance":"headline","lean_declarations":["YWS.core"]}]}), encoding="utf-8")
-            args = Namespace(semantic_index=str(semantic_path), target=None, census=[str(census)], importance=None, out=str(analysis_path), json=False)
+            args = Namespace(semantic_index=str(semantic_path), target=None, census=[str(census)], importance=None, view="dependencies", include_supporting=False, out=str(analysis_path), json=False)
             with patch("sys.stdout", new_callable=io.StringIO), patch("sys.stderr", new_callable=io.StringIO):
                 self.assertEqual(cmd_graph_headlines(args), 0)
             self.assertTrue(analysis_path.exists())
@@ -139,8 +139,38 @@ class StagedGraphCliTests(unittest.TestCase):
                 self.assertEqual(cmd_graph_html(args_html), 0)
             self.assertTrue(html_path.exists())
             text = html_path.read_text()
-            self.assertIn("Headline theorem consumption into Quench", text)
+            self.assertIn("Whole formalization dependency explorer", text)
             self.assertIn("YWS.core", text)
+
+    def test_whole_project_html_embeds_complete_graph_with_census_landmarks(self):
+        rows = [
+            decl("Foundation.base", library="Foundation"),
+            decl("YWS.helper", deps=("Foundation.base",), library="YuWangSamworth2015"),
+            decl("YWS.head", deps=("YWS.helper",), library="YuWangSamworth2015"),
+            decl("Unrelated.kept", library="Unrelated"),
+        ]
+        semantic = environment_dependency_graph(rows).to_json()
+        semantic.update({"payloadKind": "semantic-index", "libraries": ["Foundation", "YuWangSamworth2015", "Unrelated"]})
+        with tempfile.TemporaryDirectory() as dpath:
+            root = Path(dpath)
+            semantic_path, census, html_path = root / "semantic.json", root / "census.json", root / "project.html"
+            semantic_path.write_text(json.dumps(semantic), encoding="utf-8")
+            census.write_text(json.dumps({"items": [{"id": "Y", "title": "YWS headline", "importance": "headline", "lean_declarations": ["YWS.head"], "semantic_review": {"canonical_declarations": ["YWS.head"], "supporting_declarations": ["YWS.helper"]}}]}), encoding="utf-8")
+            args = Namespace(input=str(semantic_path), census=[str(census)], importance=None, target=None, out=str(html_path), title=None)
+            with patch("sys.stdout", new_callable=io.StringIO):
+                self.assertEqual(cmd_graph_html(args), 0)
+            text = html_path.read_text(encoding="utf-8")
+        self.assertIn('"completeGraphEmbedded":true', text)
+        self.assertIn("Unrelated.kept", text)
+        self.assertIn('"headline":true', text)
+        self.assertIn("Dependencies +1", text)
+        self.assertIn("Ancestors of selection only", text)
+        self.assertIn('"defaultClaimSelection"', text)
+        self.assertIn("Nearest shared dependency", text)
+        self.assertIn("Modules / source files", text)
+        self.assertIn("Headline subset", text)
+        self.assertIn("Paper default", text)
+        self.assertIn("Direct dependencies (in)", text)
 
 
 if __name__ == "__main__":

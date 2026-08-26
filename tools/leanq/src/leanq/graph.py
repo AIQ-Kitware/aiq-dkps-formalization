@@ -216,14 +216,13 @@ def environment_dependency_graph(decls: Iterable[Decl]) -> DependencyGraph:
     """
     rows = list(decls)
     table = {decl.name: decl for decl in rows}
-    short_names = _unique_short_names(table)
     edges: set[Edge] = set()
     unresolved: set[tuple[str, str]] = set()
     for consumer, decl in table.items():
         for dependency in decl.deps:
             if dependency == consumer:
                 continue
-            resolved = _resolve_dependency_name(table, short_names, decl, dependency)
+            resolved = _resolve_dependency_name(table, decl, dependency)
             if resolved is not None:
                 edges.add((resolved, consumer))
             else:
@@ -260,7 +259,6 @@ def target_dependency_graph(
     """
     rows = list(decls)
     table = {decl.name: decl for decl in rows}
-    short_names = _unique_short_names(table)
     resolved_targets = tuple(resolve_decl_name(rows, target) for target in targets)
 
     keep: set[str] = set(resolved_targets)
@@ -273,9 +271,7 @@ def target_dependency_graph(
         for dependency in decl.deps:
             if dependency == consumer:
                 continue
-            dependency_name = _resolve_dependency_name(
-                table, short_names, decl, dependency
-            )
+            dependency_name = _resolve_dependency_name(table, decl, dependency)
             if dependency_name is None:
                 unresolved.add((consumer, dependency))
                 continue
@@ -295,21 +291,8 @@ def target_dependency_graph(
     )
 
 
-def _unique_short_names(table: Mapping[str, Decl]) -> dict[str, str | None]:
-    """Map a declaration short name to its identity when it is unambiguous."""
-    result: dict[str, str | None] = {}
-    for name, decl in table.items():
-        short = decl.short_name
-        if short not in result:
-            result[short] = name
-        elif result[short] != name:
-            result[short] = None
-    return result
-
-
 def _resolve_dependency_name(
-    table: Mapping[str, Decl], short_names: Mapping[str, str | None],
-    consumer: Decl, dependency: str
+    table: Mapping[str, Decl], consumer: Decl, dependency: str
 ) -> str | None:
     """Resolve an environment dependency to an indexed declaration identity.
 
@@ -320,9 +303,9 @@ def _resolve_dependency_name(
     names, so treating that spelling as unresolved silently cuts a real edge.
 
     Resolve exact names first, then interpret the spelling relative to the
-    consumer's enclosing namespaces from nearest to farthest.  A final unique
-    short-name fallback handles genuine root aliases without inventing an edge
-    in the ambiguous case.
+    consumer's enclosing namespaces from nearest to farthest.  Anything else
+    remains an unresolved environment boundary; dependency edges are never
+    inferred merely from a matching final name component.
     """
     if dependency in table:
         return dependency
@@ -333,7 +316,11 @@ def _resolve_dependency_name(
         if candidate in table:
             return candidate
 
-    return short_names.get(dependency.rsplit(".", 1)[-1])
+    # A missing name is an external/boundary constant, not a license to bind its
+    # final component to an unrelated local declaration.  In particular,
+    # resolving ``OfNat.ofNat`` (or bare ``id``) to a project declaration with
+    # the same short name manufactures large false dependency cones.
+    return None
 
 
 def _adjacency(nodes: Iterable[str], edges: Iterable[Edge]) -> dict[str, set[str]]:
