@@ -156,11 +156,13 @@ source-version migration rather than folded into this Quench-facing v1 chain.
   exactly `n³ σ²/x²` (or `n³ γ/(r x²)` for `r` iid replicates).
   `PaperRate.lean` records this cancellation and combines it with
   `configFrobBound_le_configFrobQuadraticMajorant`, so the DK spectral stage is
-  bounded by a degree-`≤ 2` polynomial in the same `x`.  The remaining literal
-  source step is the real-power specialization `x=(n³/r)^(1/2-δ)` together with
-  the final growing high-probability capstone.  The constructive Quench safe
-  schedule correspondingly improves to response tolerance `(n+1)^-2`, finite
-  replicate budget `(n+1)^6`, and compact-cover exponent `2d`.
+  bounded by a degree-`≤ 2` polynomial in the same `x`.  It now also formalizes
+  the literal source specialization `x=(n³/r)^(1/2-δ)`: `r = ω(n³)` is encoded
+  as a Mathlib little-o relation, the Chebyshev ratio reduces to a bounded
+  second-moment factor times `(n³/r)^(2δ)`, and both the iid response event and
+  the growing DK spectral certificate vanish for `δ ∈ (0,1/2)`.  The
+  constructive Quench safe schedule remains available as the explicit
+  `(n+1)^-2` / `(n+1)^6` sufficient schedule with compact-cover exponent `2d`.
 - **Response boundedness in growing bridges.** The preferred Quench-facing
   response theorem no longer assumes separate uniform bounds for every sample
   and population dissimilarity. A population response-norm envelope, together
@@ -207,7 +209,7 @@ user-observed model labels.
 | [`AlignedPipeline.lean`](AlignedPipeline.lean) | `alignedSpectralConfig` (choice-based aligned estimator) + the high-probability aligned-`ConfigError` theorems (entrywise and response-mean versions). |
 | [`GrowingPipeline.lean`](GrowingPipeline.lean) | Choice-free pairwise-distance perturbation, target-augmented growing-dimension foundations, and `GrowingConfigControl` for joint model/response schedules. |
 | [`GrowingResponse.lean`](GrowingResponse.lean) | Growing Chebyshev/union-bound concentration, direct response→CMDS transport, and exact `η=x/n` / `n³σ²/x²` paper-scale identities. |
-| [`PaperRate.lean`](PaperRate.lean) | Paper-scale operator rate and degree-`≤2` DK Frobenius polynomial envelope in a generic target scale `x`. |
+| [`PaperRate.lean`](PaperRate.lean) | Literal `r = ω(n³)` / `(n³/r)^(1/2-δ)` specialization, paper-scale iid response concentration, and the degree-`≤2` DK Frobenius growing certificate. |
 | [`RateChain.lean`](RateChain.lean) | Explicit end-to-end rates: the preferred Frobenius `endToEndFrobRate` and HP/vanishing theorems, plus the legacy `ConfigError` rate. |
 | [`MatrixPerturbation.lean`](MatrixPerturbation.lean) | Matrix-world capstone: entrywise `η` ⇒ aligned `ConfigError ≤ configBound`, with rank transport for trailing eigenvalues. |
 | [`Weyl.lean`](Weyl.lean) | Discrete Courant–Fischer + Weyl's eigenvalue perturbation inequality. |
