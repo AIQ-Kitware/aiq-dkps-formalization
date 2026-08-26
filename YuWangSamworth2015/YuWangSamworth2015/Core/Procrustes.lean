@@ -106,6 +106,74 @@ theorem span_range_frameComp {v : Fin d → E} (hv : Orthonormal 𝕜 v)
                    Submodule.subset_span (Set.mem_range_self j))
     (by rw [finrank_span_eq_card hv.linearIndependent, Fintype.card_fin])
 
+/-- **Coordinate-map form of frame alignment.**
+
+If `O` rotates the frame `v` toward `u`, then the inverse coordinate rotation
+`O⁻¹` is close, pointwise, to the overlap operator `U⋆V`.  More precisely,
+
+`‖(O⁻¹ - overlapOp hu hv) x‖ ≤ ‖V O - U‖_F ‖x‖`.
+
+This is the bridge from an aligned eigenframe theorem to weighted spectral
+coordinates.  It does not require the overlap operator to be invertible or
+locally close to an isometry. -/
+theorem norm_symm_sub_overlapOp_apply_le_frameError
+    {u v : Fin d → E} (hu : Orthonormal 𝕜 u) (hv : Orthonormal 𝕜 v)
+    (O : EuclideanSpace 𝕜 (Fin d) ≃ₗᵢ[𝕜] EuclideanSpace 𝕜 (Fin d))
+    (x : EuclideanSpace 𝕜 (Fin d)) :
+    ‖(O.symm.toLinearEquiv.toLinearMap - overlapOp hu hv) x‖ ≤
+      Real.sqrt (∑ i, ‖frameComp hv O i - u i‖ ^ 2) * ‖x‖ := by
+  set y : E := familyIsometry hv x with hy
+  have hynorm : ‖y‖ = ‖x‖ := by
+    rw [hy, (familyIsometry hv).norm_map]
+  have hcoord : ∀ i : Fin d,
+      ((O.symm.toLinearEquiv.toLinearMap - overlapOp hu hv) x) i =
+        ⟪frameComp hv O i - u i, y⟫_𝕜 := by
+    intro i
+    have hOcoord : (O.symm.toLinearEquiv.toLinearMap x) i =
+        ⟪frameComp hv O i, y⟫_𝕜 := by
+      calc
+        (O.symm.toLinearEquiv.toLinearMap x) i = (O.symm x) i := rfl
+        _ = ⟪EuclideanSpace.single i (1 : 𝕜), O.symm x⟫_𝕜 := by
+          rw [EuclideanSpace.inner_single_left, map_one, one_mul]
+        _ = ⟪O (EuclideanSpace.single i (1 : 𝕜)), O (O.symm x)⟫_𝕜 :=
+          (O.inner_map_map _ _).symm
+        _ = ⟪O (EuclideanSpace.single i (1 : 𝕜)), x⟫_𝕜 := by
+          rw [O.apply_symm_apply]
+        _ = ⟪familyIsometry hv (O (EuclideanSpace.single i (1 : 𝕜))),
+              familyIsometry hv x⟫_𝕜 :=
+          ((familyIsometry hv).inner_map_map _ _).symm
+        _ = ⟪frameComp hv O i, y⟫_𝕜 := by
+          rw [frameComp, hy]
+    have hMcoord : overlapOp hu hv x i = ⟪u i, y⟫_𝕜 := by
+      rw [hy]
+      exact overlapOp_coord hu hv x i
+    rw [LinearMap.sub_apply]
+    change (O.symm.toLinearEquiv.toLinearMap x) i - overlapOp hu hv x i = _
+    rw [hOcoord, hMcoord, inner_sub_left]
+  have hsum :
+      ∑ i, ‖((O.symm.toLinearEquiv.toLinearMap - overlapOp hu hv) x) i‖ ^ 2 ≤
+        (∑ i, ‖frameComp hv O i - u i‖ ^ 2) * ‖y‖ ^ 2 := by
+    calc
+      ∑ i, ‖((O.symm.toLinearEquiv.toLinearMap - overlapOp hu hv) x) i‖ ^ 2
+          ≤ ∑ i, ‖frameComp hv O i - u i‖ ^ 2 * ‖y‖ ^ 2 := by
+            refine Finset.sum_le_sum fun i _ => ?_
+            rw [hcoord i]
+            have hinner := norm_inner_le_norm (𝕜 := 𝕜) (frameComp hv O i - u i) y
+            have hpow := pow_le_pow_left₀ (norm_nonneg _) hinner 2
+            simpa [mul_pow] using hpow
+      _ = (∑ i, ‖frameComp hv O i - u i‖ ^ 2) * ‖y‖ ^ 2 := by
+        rw [Finset.sum_mul]
+  rw [EuclideanSpace.norm_eq]
+  calc
+    Real.sqrt (∑ i, ‖((O.symm.toLinearEquiv.toLinearMap - overlapOp hu hv) x) i‖ ^ 2)
+        ≤ Real.sqrt ((∑ i, ‖frameComp hv O i - u i‖ ^ 2) * ‖y‖ ^ 2) :=
+      Real.sqrt_le_sqrt hsum
+    _ = Real.sqrt (∑ i, ‖frameComp hv O i - u i‖ ^ 2) * ‖y‖ := by
+      rw [Real.sqrt_mul (Finset.sum_nonneg fun i _ => sq_nonneg _),
+        Real.sqrt_sq (norm_nonneg y)]
+    _ = Real.sqrt (∑ i, ‖frameComp hv O i - u i‖ ^ 2) * ‖x‖ := by
+      rw [hynorm]
+
 /-- **The Procrustes step, with the alignment exhibited.**
 
 `‖V̂ Ô − V‖²_F ≤ 2 ‖sin Θ(V̂, V)‖²_F` for an orthogonal `Ô` acting on the
@@ -164,6 +232,35 @@ theorem yuWangSamworth_alignedFrame_le
         mul_le_mul_of_nonneg_left hsine (Real.sqrt_nonneg 2)
     _ = 2 * Real.sqrt 2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
           (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ := by ring
+
+/-- **Yu--Wang--Samworth alignment as a coordinate-map bound.**
+
+Under the population-only gap hypotheses of Theorem 2, there is an isometric
+coordinate map `W` whose distance from the overlap operator is controlled by
+the same aligned-frame envelope.  This is the form needed by weighted spectral
+embeddings such as classical MDS: `W` can act directly on coordinate vectors,
+while `overlapOp` supplies the algebraic commutator/reconstruction decomposition.
+
+No local near-isometry or small-polar-factor hypothesis is required. -/
+theorem yuWangSamworth_alignmentMap_sub_overlapOp_apply_le
+    {A B : E →ₗ[𝕜] E} {hA : A.IsSymmetric} {hB : B.IsSymmetric}
+    {n : ℕ} {hn : finrank 𝕜 E = n} {e : Fin d ↪ Fin n} {u v : Fin d → E}
+    (hu : IsOrderedEigenframe hA hn e u) (hv : IsOrderedEigenframe hB hn e v)
+    {Δ : ℝ} (hΔ : 0 < Δ)
+    (hgap : ∀ (i : Fin d) (k : Fin n), k ∉ Set.range (⇑e) →
+      Δ ≤ |hA.eigenvalues hn (e i) - hA.eigenvalues hn k|) :
+    ∃ W : EuclideanSpace 𝕜 (Fin d) →ₗ[𝕜] EuclideanSpace 𝕜 (Fin d),
+      (∀ x y, ⟪W x, W y⟫_𝕜 = ⟪x, y⟫_𝕜) ∧
+      ∀ x, ‖(W - overlapOp hu.orthonormal hv.orthonormal) x‖ ≤
+        (2 * Real.sqrt 2 *
+          min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
+            (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ) * ‖x‖ := by
+  obtain ⟨O, _hO, hframe⟩ := yuWangSamworth_alignedFrame_le hu hv hΔ hgap
+  refine ⟨O.symm.toLinearEquiv.toLinearMap,
+    fun x y => O.symm.inner_map_map x y, fun x => ?_⟩
+  exact (norm_symm_sub_overlapOp_apply_le_frameError
+    hu.orthonormal hv.orthonormal O x).trans
+      (mul_le_mul_of_nonneg_right hframe (norm_nonneg x))
 
 /-- **The residual form of the aligned conclusion, with an explicit `Ô`.**
 `‖V̂ Ô − V‖_F ≤ 2^{1/2} ‖V̂ Λ − Σ V̂‖_F / Δ`, the inequality Yu, Wang and Samworth
