@@ -64,10 +64,17 @@ class PresentationTests(unittest.TestCase):
         )
         self.assertEqual(yws_edge["collapsedNodeCount"], 1)
 
-    def test_stale_headline_fails_instead_of_disappearing(self):
+    def test_stale_headline_is_reported_without_blocking_output(self):
+        spec = PresentationSpec.from_json({"headlines": ["Not.A.Dependency"]})
+        payload = build_presentation(self.graph(), spec)
+        self.assertEqual(payload["missingHeadlineCount"], 1)
+        self.assertEqual(payload["missingHeadlines"], ["Not.A.Dependency"])
+        self.assertEqual([node["id"] for node in payload["nodes"]], ["Quench.end"])
+
+    def test_strict_stale_headline_still_fails(self):
         spec = PresentationSpec.from_json({"headlines": ["Not.A.Dependency"]})
         with self.assertRaisesRegex(ProjectError, "not in the target dependency closure"):
-            build_presentation(self.graph(), spec)
+            build_presentation(self.graph(), spec, strict=True)
 
     def test_load_json(self):
         with tempfile.TemporaryDirectory() as d:

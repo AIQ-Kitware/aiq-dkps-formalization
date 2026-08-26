@@ -117,12 +117,14 @@ def build_presentation(
     extra_headlines: Iterable[str] = (),
     title: str | None = None,
     subtitle: str | None = None,
+    strict: bool = False,
 ) -> dict:
     """Resolve a presentation spec against one exact target dependency graph.
 
-    Every selected declaration must be in the target closure.  This catches stale
-    presentation specs instead of producing a plausible-looking graph whose
-    editorial nodes are no longer proof dependencies.
+    Missing curated headlines are recorded and omitted by default so stale editorial
+    metadata cannot prevent the exact graph or viewer from being written.  Pass
+    ``strict=True`` when a presentation spec is itself an audited artifact and any
+    missing headline should fail the command.
     """
     rows = list(graph.nodes.values())
     ordered: list[HeadlineSpec] = list(spec.headlines if spec else ())
@@ -131,14 +133,19 @@ def build_presentation(
         ordered.extend(HeadlineSpec(name=name) for name in graph.targets)
 
     resolved_rows: list[tuple[str, HeadlineSpec]] = []
+    missing_headlines: list[str] = []
     seen: set[str] = set()
     for headline in ordered:
         try:
             resolved = resolve_decl_name(rows, headline.name)
         except ProjectError as exc:
-            raise ProjectError(
-                f"presentation headline {headline.name!r} is not in the target dependency closure"
-            ) from exc
+            if strict:
+                raise ProjectError(
+                    f"presentation headline {headline.name!r} is not in the target dependency closure"
+                ) from exc
+            if headline.name not in missing_headlines:
+                missing_headlines.append(headline.name)
+            continue
         if resolved in seen:
             continue
         seen.add(resolved)
@@ -181,4 +188,6 @@ def build_presentation(
         "subtitle": resolved_subtitle,
         "nodes": nodes,
         "edges": edges,
+        "missingHeadlineCount": len(missing_headlines),
+        "missingHeadlines": missing_headlines,
     }

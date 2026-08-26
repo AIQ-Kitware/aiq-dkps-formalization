@@ -1,4 +1,4 @@
-"""Self-contained interactive HTML renderer for leanq proof graphs."""
+"""Self-contained interactive HTML renderers for leanq graph payloads."""
 
 from __future__ import annotations
 
@@ -8,7 +8,8 @@ from importlib.resources import files
 from pathlib import Path
 
 
-_TEMPLATE = "assets/viewer.html"
+_GRAPH_TEMPLATE = "assets/viewer.html"
+_HEADLINE_TEMPLATE = "assets/headline_viewer.html"
 
 
 def _safe_json_for_script(payload: dict) -> str:
@@ -20,19 +21,36 @@ def _safe_json_for_script(payload: dict) -> str:
     return text.replace("<", r"\u003c").replace(">", r"\u003e").replace("&", r"\u0026")
 
 
-def render_graph_html(payload: dict, *, title: str | None = None) -> str:
-    """Render one graph payload as a standalone, offline HTML document."""
+def _display_title(payload: dict, title: str | None = None) -> str:
+    if title:
+        return title
     presentation = payload.get("presentation") or {}
-    display_title = title or presentation.get("title")
-    if not display_title:
-        targets = payload.get("targets") or []
-        display_title = "Lean proof dependencies"
-        if targets:
-            display_title += f": {str(targets[0]).rsplit('.', 1)[-1]}"
-    template = files("leanq").joinpath(_TEMPLATE).read_text(encoding="utf-8")
-    return template.replace("__LEANQ_TITLE__", html.escape(display_title)).replace(
-        "__LEANQ_DATA__", _safe_json_for_script(payload)
+    if presentation.get("title"):
+        return str(presentation["title"])
+    if payload.get("payloadKind") == "headline-consumption":
+        return "Headline theorem consumption into Quench"
+    targets = payload.get("targets") or payload.get("bootstrapTargets") or []
+    result = "Lean proof dependencies"
+    if targets:
+        result += f": {str(targets[0]).rsplit('.', 1)[-1]}"
+    return result
+
+
+def render_graph_html(payload: dict, *, title: str | None = None) -> str:
+    """Render one saved payload as a standalone, offline HTML document.
+
+    Rendering is pure Python/resource loading.  It never invokes Lean, so an HTML
+    template can be iterated against a stable JSON artifact.
+    """
+    template_name = (
+        _HEADLINE_TEMPLATE
+        if payload.get("payloadKind") == "headline-consumption"
+        else _GRAPH_TEMPLATE
     )
+    template = files("leanq").joinpath(template_name).read_text(encoding="utf-8")
+    return template.replace(
+        "__LEANQ_TITLE__", html.escape(_display_title(payload, title))
+    ).replace("__LEANQ_DATA__", _safe_json_for_script(payload))
 
 
 def write_graph_html(path: Path, payload: dict, *, title: str | None = None) -> Path:

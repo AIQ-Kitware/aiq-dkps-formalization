@@ -61,6 +61,7 @@ class GraphCliScopeTests(unittest.TestCase):
             headline=None,
             title=None,
             subtitle=None,
+            strict_presentation=False,
             out=None,
         )
 
@@ -131,6 +132,7 @@ class GraphCliScopeTests(unittest.TestCase):
                 headline=None,
                 title=None,
                 subtitle=None,
+                strict_presentation=False,
                 out=str(out),
             )
             with patch("leanq.cli.find_project", return_value=project), patch(
@@ -145,6 +147,62 @@ class GraphCliScopeTests(unittest.TestCase):
             self.assertEqual(payload["edgeCount"], 1)
             self.assertTrue(html.exists())
             self.assertIn("App.final", html.read_text())
+
+    def test_stale_presentation_headline_warns_but_writes_outputs(self):
+        from leanq.presentation import PresentationSpec
+
+        project = Mock()
+        project.root = Path("/tmp/demo")
+        project.declaration_modules.return_value = ["App.Target"]
+        project.libraries_for_import_closure.return_value = ["App"]
+        rows = {
+            "App": [decl("App.final", module="App.Target", library="App")]
+        }
+
+        def scoped(_project, library, roots, **kwargs):
+            return rows[library]
+
+        spec = PresentationSpec.from_json(
+            {"targets": ["App.final"], "headlines": ["YWS.missing"]}
+        )
+        with tempfile.TemporaryDirectory() as dpath:
+            out = Path(dpath) / "proof.json"
+            html = Path(dpath) / "proof.html"
+            args = Namespace(
+                project=None,
+                presentation="unused.json",
+                target=[],
+                root_module=None,
+                include_lib=None,
+                lib=None,
+                exclude_lib=None,
+                refresh=False,
+                json=False,
+                transitive_reduction=True,
+                html=str(html),
+                include_unresolved=False,
+                headline=None,
+                title=None,
+                subtitle=None,
+                strict_presentation=False,
+                out=str(out),
+            )
+            with patch("leanq.cli.find_project", return_value=project), patch(
+                "leanq.cli.load_presentation", return_value=spec
+            ), patch(
+                "leanq.cli.ensure_scoped_index", side_effect=scoped
+            ), patch("sys.stdout", new_callable=io.StringIO), patch(
+                "sys.stderr", new_callable=io.StringIO
+            ) as stderr:
+                status = cmd_graph(args)
+
+            self.assertEqual(status, 0)
+            self.assertTrue(out.exists())
+            self.assertTrue(html.exists())
+            payload = json.loads(out.read_text())
+            self.assertEqual(payload["presentation"]["missingHeadlines"], ["YWS.missing"])
+            self.assertIn("presentation skipped 1 headline", stderr.getvalue())
+            self.assertIn("Presentation warning", html.read_text())
 
 
 if __name__ == "__main__":

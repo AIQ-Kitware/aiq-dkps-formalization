@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import subprocess
@@ -15,6 +16,7 @@ from ._profile import profile
 from .project import LeanProject, ProjectError
 
 LEAN_SCRIPT = Path(__file__).with_name("lean") / "decl_index.lean"
+GRAPH_CACHE_VERSION = 3
 
 
 @dataclass(frozen=True)
@@ -96,7 +98,10 @@ def detail_index_path(project: LeanProject, library: str, detail: str) -> Path:
     if detail not in {"deps", "graph"}:
         raise ProjectError(f"unknown index detail {detail!r}; expected full, deps, or graph")
     base = index_path(project, library)
-    return base.with_name(f"{library}.{detail}.jsonl")
+    detail_label = (
+        f"graph-v{GRAPH_CACHE_VERSION}" if detail == "graph" else detail
+    )
+    return base.with_name(f"{library}.{detail_label}.jsonl")
 
 
 @profile
@@ -212,6 +217,70 @@ def ensure_index(
     return load_index(path)
 
 
+def _cache_meta_path(path: Path) -> Path:
+    return path.with_name(path.name + ".meta.json")
+
+
+def graph_scope_fingerprint(
+    project: LeanProject, library: str, roots: Sequence[str]
+) -> str:
+    """Fingerprint source/tool inputs that can change a scoped graph index.
+
+    This intentionally hashes source content rather than timestamps.  The cost is
+    tiny compared with Lean import/elaboration and it makes cache reuse safe across
+    rebases, archive extraction, and timestamp-preserving copies.  The local import
+    closure is included because an unchanged consumer source can elaborate to a
+    different constant after an imported local API changes.
+    """
+    digest = hashlib.sha256()
+    digest.update(f"leanq-graph-v{GRAPH_CACHE_VERSION}\0{library}\0".encode())
+    for config in (project.lakefile, project.root / "lean-toolchain", LEAN_SCRIPT):
+        if config.exists():
+            digest.update(str(config.relative_to(project.root) if config.is_relative_to(project.root) else config).encode())
+            digest.update(b"\0")
+            digest.update(config.read_bytes())
+            digest.update(b"\0")
+    try:
+        modules = project.local_import_closure(tuple(dict.fromkeys(roots)))
+    except ProjectError:
+        modules = list(dict.fromkeys(roots))
+    for module in sorted(set(modules)):
+        source = project.source_of(module)
+        if not source.exists():
+            continue
+        digest.update(module.encode())
+        digest.update(b"\0")
+        digest.update(source.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def scoped_index_cache_state(
+    project: LeanProject, library: str, roots: Sequence[str], *, detail: str = "deps"
+) -> dict:
+    """Describe whether a scoped cache can be reused without invoking Lean."""
+    path = scoped_index_path(project, library, roots, detail=detail)
+    state = {"path": path, "exists": path.exists(), "current": path.exists()}
+    if detail != "graph":
+        return state
+    fingerprint = graph_scope_fingerprint(project, library, roots)
+    meta_path = _cache_meta_path(path)
+    state.update({"fingerprint": fingerprint, "metaPath": meta_path, "current": False})
+    if not path.exists() or not meta_path.exists():
+        return state
+    try:
+        meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return state
+    state["current"] = (
+        meta.get("graphCacheVersion") == GRAPH_CACHE_VERSION
+        and meta.get("fingerprint") == fingerprint
+        and meta.get("library") == library
+        and meta.get("roots") == list(dict.fromkeys(roots))
+    )
+    return state
+
+
 def scoped_index_path(
     project: LeanProject, library: str, roots: Sequence[str], *, detail: str = "deps"
 ) -> Path:
@@ -228,7 +297,10 @@ def scoped_index_path(
         import hashlib
         label = hashlib.sha256("\0".join(roots).encode()).hexdigest()[:16]
     base = index_path(project, library)
-    return base.with_name(f"{library}.roots-{label}.{detail}.jsonl")
+    detail_label = (
+        f"graph-v{GRAPH_CACHE_VERSION}" if detail == "graph" else detail
+    )
+    return base.with_name(f"{library}.roots-{label}.{detail_label}.jsonl")
 
 
 @profile
@@ -249,10 +321,22 @@ def ensure_scoped_index(
     """
     roots = tuple(dict.fromkeys(roots))
     path = scoped_index_path(project, library, roots, detail=detail)
-    if refresh or not path.exists():
+    state = scoped_index_cache_state(project, library, roots, detail=detail)
+    if refresh or not state["current"]:
+        if verbose and path.exists() and detail == "graph" and not refresh:
+            print(f"leanq: graph cache stale, rebuilding {path}", file=sys.stderr)
         build_index(
             project, library, out=path, modules=roots, verbose=verbose, detail=detail
         )
+        if detail == "graph":
+            meta_path = _cache_meta_path(path)
+            meta = {
+                "graphCacheVersion": GRAPH_CACHE_VERSION,
+                "fingerprint": graph_scope_fingerprint(project, library, roots),
+                "library": library,
+                "roots": list(roots),
+            }
+            meta_path.write_text(json.dumps(meta, indent=2) + "\n", encoding="utf-8")
     return load_index(path)
 
 
