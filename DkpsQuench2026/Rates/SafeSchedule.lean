@@ -33,20 +33,20 @@ open Acharyya2025.GrowingPipeline
 open Acharyya2025.GrowingResponse
 open Acharyya2025.ConfigPerturbation
 
-/-- Conservative response-mean tolerance.  The fifth power is chosen to beat
-the intentionally loose growing CMDS bound, including its final
-configuration-error factor. -/
+/-- Conservative response-mean tolerance.  The fourth power is the smallest
+integer power that makes the batch-scaled CMDS perturbation vanish after
+the Frobenius migration. -/
 noncomputable def safeResponseTolerance (n : Nat) : Real :=
-  ((((n + 1 : Nat) : Real) ^ 5))⁻¹
+  ((((n + 1 : Nat) : Real) ^ 4))⁻¹
 
 /-- Conservative finite-model replicate budget. -/
 def safeFiniteReplicates (n : Nat) : Nat :=
-  (n + 1) ^ 13
+  (n + 1) ^ 10
 
 /-- Replicate budget allowing a stage net with polynomial cardinality
 `O((n+1)^entropyPower)`. -/
 def safeEntropyReplicates (entropyPower n : Nat) : Nat :=
-  (n + 1) ^ (13 + entropyPower)
+  (n + 1) ^ (10 + entropyPower)
 
 /-- Canonical shrinking perspective-net radius for a common raw-response
 Lipschitz constant `L`.  The denominator reserves half of the response error
@@ -62,17 +62,17 @@ noncomputable def safeNetTolerance (n : Nat) : Real :=
 theorem safeResponseTolerance_pos (n : Nat) :
     0 < safeResponseTolerance n := by
   rw [safeResponseTolerance]
-  exact inv_pos.mpr (pow_pos (by positivity : (0 : Real) < ((n + 1 : Nat) : Real)) 5)
+  exact inv_pos.mpr (pow_pos (by positivity : (0 : Real) < ((n + 1 : Nat) : Real)) 4)
 
 theorem safeFiniteReplicates_pos (n : Nat) :
     0 < safeFiniteReplicates n := by
   rw [safeFiniteReplicates]
-  exact pow_pos (Nat.succ_pos n) 13
+  exact pow_pos (Nat.succ_pos n) 10
 
 theorem safeEntropyReplicates_pos (entropyPower n : Nat) :
     0 < safeEntropyReplicates entropyPower n := by
   rw [safeEntropyReplicates]
-  exact pow_pos (Nat.succ_pos n) (13 + entropyPower)
+  exact pow_pos (Nat.succ_pos n) (10 + entropyPower)
 
 theorem safePerspectiveRadius_pos
     (L : Real) (hL : 0 ≤ L) (n : Nat) :
@@ -88,14 +88,14 @@ theorem safePerspectiveRadius_zero
     (L : Real) (hL : 0 ≤ L) :
     Tendsto (safePerspectiveRadius L) atTop (𝓝 0) := by
   have h0 : Tendsto safeResponseTolerance atTop (𝓝 0) := by
-    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ 5) atTop atTop :=
+    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ 4) atTop atTop :=
       tendsto_atTop_mono
         (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by norm_num)))
         tendsto_id
-    have h5 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ 5) atTop atTop := by
+    have h4 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ 4) atTop atTop := by
       simp_rw [← Nat.cast_pow]
       exact tendsto_natCast_atTop_atTop.comp hnat
-    exact h5.inv_tendsto_atTop
+    exact h4.inv_tendsto_atTop
   unfold safePerspectiveRadius
   simpa using h0.div_const (4 * (L + 1))
 
@@ -115,42 +115,42 @@ theorem exists_safeGrowingPerspectiveNet
     ∃ net : GrowingPerspectiveNet ψ, ∃ C : Real,
       0 ≤ C ∧
       (∀ n, ((net.centers n).card : Real) ≤
-        C * (((n + 1 : Nat) : Real) ^ (5 * d))) ∧
+        C * (((n + 1 : Nat) : Real) ^ (4 * d))) ∧
       (∀ n, net.radius n = safePerspectiveRadius L n) := by
   obtain ⟨net, C0, hC0, hcard0, hradius⟩ :=
     exists_growingPerspectiveNet_with_polynomial_card ψ hcompact
       (safePerspectiveRadius L) (safePerspectiveRadius_pos L hL) (safePerspectiveRadius_zero L hL)
   refine ⟨net, C0 * (1 + 4 * (L + 1)) ^ d, by positivity, fun n => ?_, hradius⟩
-  have h1 : (1 : ℝ) ≤ ((n + 1 : ℕ) : ℝ) ^ 5 :=
+  have h1 : (1 : ℝ) ≤ ((n + 1 : ℕ) : ℝ) ^ 4 :=
     one_le_pow₀ (by exact_mod_cast Nat.one_le_iff_ne_zero.mpr (by omega))
-  have hpos5 : (0 : ℝ) ≤ ((n + 1 : ℕ) : ℝ) ^ 5 := by positivity
-  have hinv : (safePerspectiveRadius L n)⁻¹ = 4 * (L + 1) * ((n + 1 : ℕ) : ℝ) ^ 5 := by
+  have hpos4 : (0 : ℝ) ≤ ((n + 1 : ℕ) : ℝ) ^ 4 := by positivity
+  have hinv : (safePerspectiveRadius L n)⁻¹ = 4 * (L + 1) * ((n + 1 : ℕ) : ℝ) ^ 4 := by
     rw [safePerspectiveRadius, safeResponseTolerance, inv_div, div_eq_mul_inv, inv_inv]
-  have hmax : max 1 (safePerspectiveRadius L n)⁻¹ ≤ (1 + 4 * (L + 1)) * ((n + 1 : ℕ) : ℝ) ^ 5 := by
+  have hmax : max 1 (safePerspectiveRadius L n)⁻¹ ≤ (1 + 4 * (L + 1)) * ((n + 1 : ℕ) : ℝ) ^ 4 := by
     rw [hinv]
     refine max_le ?_ ?_
-    · nlinarith [h1, hL, mul_nonneg (by linarith : (0 : ℝ) ≤ 4 * (L + 1)) hpos5]
-    · nlinarith [hpos5, hL]
+    · nlinarith [h1, hL, mul_nonneg (by linarith : (0 : ℝ) ≤ 4 * (L + 1)) hpos4]
+    · nlinarith [hpos4, hL]
   calc ((net.centers n).card : ℝ)
       ≤ C0 * (max 1 (safePerspectiveRadius L n)⁻¹) ^ d := hcard0 n
-    _ ≤ C0 * ((1 + 4 * (L + 1)) * ((n + 1 : ℕ) : ℝ) ^ 5) ^ d :=
+    _ ≤ C0 * ((1 + 4 * (L + 1)) * ((n + 1 : ℕ) : ℝ) ^ 4) ^ d :=
         mul_le_mul_of_nonneg_left
           (pow_le_pow_left₀ (le_trans zero_le_one (le_max_left _ _)) hmax d) hC0
-    _ = C0 * (1 + 4 * (L + 1)) ^ d * (((n + 1 : ℕ) : ℝ)) ^ (5 * d) := by
+    _ = C0 * (1 + 4 * (L + 1)) ^ d * (((n + 1 : ℕ) : ℝ)) ^ (4 * d) := by
         rw [mul_pow, ← pow_mul]; ring
 
 /-- The conservative response tolerance vanishes.
 -/
 theorem safeResponseTolerance_zero :
     Tendsto safeResponseTolerance atTop (𝓝 0) := by
-  have hnat : Tendsto (fun n : ℕ => (n + 1) ^ 5) atTop atTop :=
+  have hnat : Tendsto (fun n : ℕ => (n + 1) ^ 4) atTop atTop :=
     tendsto_atTop_mono
       (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by norm_num)))
       tendsto_id
-  have h5 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ 5) atTop atTop := by
+  have h4 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ 4) atTop atTop := by
     simp_rw [← Nat.cast_pow]
     exact tendsto_natCast_atTop_atTop.comp hnat
-  exact h5.inv_tendsto_atTop
+  exact h4.inv_tendsto_atTop
 
 /-- The finite-model Chebyshev/union-bound ratio vanishes under the safe
 replicate schedule.
@@ -163,11 +163,9 @@ theorem safeFinite_concentration_ratio_zero
         (safeResponseTolerance n) ^ 2) atTop (𝓝 0) := by
   have h1 : Tendsto (fun n : ℕ => ((n : ℝ) + 1)⁻¹) atTop (𝓝 0) :=
     (tendsto_atTop_add_const_right atTop 1 tendsto_natCast_atTop_atTop).inv_tendsto_atTop
-  have hlim : Tendsto (fun n : ℕ => (((n : ℝ) + 1)⁻¹) ^ 2) atTop (𝓝 0) := by
-    simpa using h1.pow 2
   have hmain : Tendsto (fun n : ℕ =>
-      (targetCount * varianceBound : ℝ) * (((n : ℝ) + 1)⁻¹) ^ 2) atTop (𝓝 0) := by
-    simpa using hlim.const_mul (targetCount * varianceBound : ℝ)
+      (targetCount * varianceBound : ℝ) * ((n : ℝ) + 1)⁻¹) atTop (𝓝 0) := by
+    simpa using h1.const_mul (targetCount * varianceBound : ℝ)
   refine hmain.congr (fun n => ?_)
   have hpos : ((n : ℝ) + 1) ≠ 0 := by positivity
   simp only [safeFiniteReplicates, safeResponseTolerance]
@@ -193,23 +191,23 @@ theorem safeEntropy_concentration_ratio_zero
   have hcov : 0 ≤ coverConstant := by
     have h := hcard 0
     simpa using le_trans (Nat.cast_nonneg (centersCard 0)) h
-  have hpow3 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹) atTop (𝓝 0) := by
-    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ 3) atTop atTop :=
+  have hpow2 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹) atTop (𝓝 0) := by
+    have hnat : Tendsto (fun n : ℕ => (n + 1) ^ 2) atTop atTop :=
       tendsto_atTop_mono
         (fun n => le_trans (Nat.le_succ n) (le_self_pow (by omega) (by omega))) tendsto_id
-    have h3 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ 3) atTop atTop := by
+    have h2 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ 2) atTop atTop := by
       simp_rw [← Nat.cast_pow]; exact tendsto_natCast_atTop_atTop.comp hnat
-    exact h3.inv_tendsto_atTop
+    exact h2.inv_tendsto_atTop
   have hg : Tendsto (fun n : ℕ =>
-      4 * coverConstant * |varianceBound| * (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹) atTop (𝓝 0) := by
-    simpa only [mul_zero] using hpow3.const_mul (4 * coverConstant * |varianceBound|)
+      4 * coverConstant * |varianceBound| * (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹) atTop (𝓝 0) := by
+    simpa only [mul_zero] using hpow2.const_mul (4 * coverConstant * |varianceBound|)
   refine squeeze_zero_norm (fun n => ?_) hg
   have hNpos : (0 : ℝ) < ((n + 1 : ℕ) : ℝ) := by positivity
   have hNne : ((n + 1 : ℕ) : ℝ) ≠ 0 := ne_of_gt hNpos
   have hfeq : (centersCard n : ℝ) * (varianceBound / safeEntropyReplicates entropyPower n) /
       (safeNetTolerance n) ^ 2
       = 4 * varianceBound * ((centersCard n : ℝ) * (((n + 1 : ℕ) : ℝ) ^ entropyPower)⁻¹) *
-          (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹ := by
+          (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹ := by
     simp only [safeEntropyReplicates, safeNetTolerance, safeResponseTolerance]
     push_cast
     rw [pow_add]
@@ -219,7 +217,7 @@ theorem safeEntropy_concentration_ratio_zero
     rw [mul_inv_le_iff₀ (by positivity)]
     simpa [mul_comm] using hcard n
   rw [hfeq, Real.norm_eq_abs, abs_mul, abs_mul,
-    abs_of_pos (by positivity : (0 : ℝ) < (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹)]
+    abs_of_pos (by positivity : (0 : ℝ) < (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹)]
   have h4 : |4 * varianceBound| = 4 * |varianceBound| := by rw [abs_mul]; norm_num
   have hc2 : |(centersCard n : ℝ) * (((n + 1 : ℕ) : ℝ) ^ entropyPower)⁻¹|
       = (centersCard n : ℝ) * (((n + 1 : ℕ) : ℝ) ^ entropyPower)⁻¹ :=
@@ -227,9 +225,9 @@ theorem safeEntropy_concentration_ratio_zero
   rw [h4, hc2]
   calc 4 * |varianceBound| *
         ((centersCard n : ℝ) * (((n + 1 : ℕ) : ℝ) ^ entropyPower)⁻¹) *
-          (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹
-      ≤ 4 * |varianceBound| * coverConstant * (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹ := by gcongr
-    _ = 4 * coverConstant * |varianceBound| * (((n + 1 : ℕ) : ℝ) ^ 3)⁻¹ := by ring
+          (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹
+      ≤ 4 * |varianceBound| * coverConstant * (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹ := by gcongr
+    _ = 4 * coverConstant * |varianceBound| * (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹ := by ring
 
 /-- A small enough shrinking-net radius fits inside the half-tolerance budget
 when sample and population response maps have a common Lipschitz envelope.
@@ -302,14 +300,15 @@ theorem safe_scaled_cmdsEntrywiseRate_zero
   have hpow : ∀ k : ℕ, 1 ≤ k →
       Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ)) ^ k) atTop atTop :=
     fun _ hk => tendsto_natCast_succ_pow_atTop hk
-  have h2 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹) atTop (𝓝 0) :=
-    (hpow 2 (by norm_num)).inv_tendsto_atTop
-  have h7 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 7)⁻¹) atTop (𝓝 0) :=
-    (hpow 7 (by norm_num)).inv_tendsto_atTop
+  have h1 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ))⁻¹) atTop (𝓝 0) := by
+    simpa only [one_div, Nat.cast_add, Nat.cast_one] using
+      (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
+  have h5 : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ) ^ 5)⁻¹) atTop (𝓝 0) :=
+    (hpow 5 (by norm_num)).inv_tendsto_atTop
   have hfinal : Tendsto (fun n : ℕ => 32 * ((m : ℝ)⁻¹) ^ 2 *
-      (populationResponseBound * (((n + 1 : ℕ) : ℝ) ^ 2)⁻¹
-        + (((n + 1 : ℕ) : ℝ) ^ 7)⁻¹)) atTop (𝓝 0) := by
-    have := ((h2.const_mul populationResponseBound).add h7).const_mul (32 * ((m : ℝ)⁻¹) ^ 2)
+      (populationResponseBound * (((n + 1 : ℕ) : ℝ))⁻¹
+        + (((n + 1 : ℕ) : ℝ) ^ 5)⁻¹)) atTop (𝓝 0) := by
+    have := ((h1.const_mul populationResponseBound).add h5).const_mul (32 * ((m : ℝ)⁻¹) ^ 2)
     simpa using this
   refine hfinal.congr (fun n => ?_)
   have hN : ((n + 1 : ℕ) : ℝ) ≠ 0 := by positivity
@@ -351,20 +350,21 @@ theorem safe_polar_expression_zero
   simp only [e]
   ring
 
-/-- The complete deterministic configuration envelope vanishes under the safe
+/-- The complete Frobenius configuration envelope vanishes under the retuned
 schedule and linear population spectral ceiling.
 
-Treat the summands in `configBound` separately.  Use the preceding scaled-rate
-limit, the ceiling `4(n+1)B²`, and positivity of `κ/2`.  Loose domination is
-preferred; this theorem exists so the final constructor does not contain a
-single monolithic asymptotic calculation.
--/
-theorem safe_configBound_zero
+With `safeResponseTolerance n = (n+1)⁻⁴`, the batch-scaled CMDS perturbation is
+`O((n+1)⁻¹)`.  The DK-sharpened Frobenius terms then scale as `O((n+1)⁻¹/²)`
+or faster even when the population spectral ceiling grows linearly.  The older
+`configBound` endpoint would reintroduce `sqrt(n+1)` and does not support this
+weaker schedule; the growing Quench path no longer uses that compatibility
+norm. -/
+theorem safe_configFrobBound_zero
     (m d : Nat) (hm : 0 < m)
     (populationResponseBound perspectiveBound κ : Real)
     (hκ : 0 < κ) :
     Tendsto (fun n =>
-      configBound (n + 1) d (κ / 2)
+      configFrobBound d (κ / 2)
         (4 * ((n + 1 : Nat) : Real) * perspectiveBound ^ 2)
         (((n + 1 : Nat) : Real) *
           cmdsEntrywiseRate (n + 1) m
@@ -382,180 +382,112 @@ theorem safe_configBound_zero
         (responseDistBound m (populationResponseBound + safeResponseTolerance n))
         (safeResponseTolerance n) := fun n => by rw [hen]
   simp only [← hpt]
-  -- `1/(n+1) → 0` and a generic zero-at-zero continuous composition tool.
   have hu : Tendsto (fun n : ℕ => (((n + 1 : ℕ) : ℝ))⁻¹) atTop (𝓝 0) := by
     simpa only [one_div, Nat.cast_add, Nat.cast_one] using
       (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
-  have key : ∀ f : ℝ → ℝ, Continuous f → f 0 = 0 →
-      Tendsto (fun n : ℕ => f ((((n + 1 : ℕ) : ℝ))⁻¹)) atTop (𝓝 0) := by
-    intro f hf hf0
-    have h := (hf.tendsto (0 : ℝ)).comp hu
-    rw [hf0] at h
-    exact h
   have he : Tendsto en atTop (𝓝 0) := by
     simpa only [hen] using
       safe_scaled_cmdsEntrywiseRate_zero m hm populationResponseBound
-  -- One extra factor of `n+1` still vanishes for the chosen safe schedule.
-  have hNen : Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ) * en n) atTop (𝓝 0) := by
-    refine (key (fun x => (32 / (m : ℝ) ^ 2) *
-        (populationResponseBound * x + x ^ 6)) (by fun_prop) (by simp)).congr ?_
-    intro n
+  -- One factor of `n+1` times the scaled perturbation has a finite limit.
+  have hNen : Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ) * en n) atTop
+      (𝓝 (32 * ((m : ℝ)⁻¹) ^ 2 * populationResponseBound)) := by
+    have h4 : Tendsto (fun n : ℕ => ((((n + 1 : ℕ) : ℝ))⁻¹) ^ 4) atTop (𝓝 0) := by
+      simpa using hu.pow 4
+    have hconst : Tendsto (fun _ : ℕ => populationResponseBound) atTop
+        (𝓝 populationResponseBound) := tendsto_const_nhds
+    have hbase : Tendsto (fun n : ℕ =>
+        32 * ((m : ℝ)⁻¹) ^ 2 *
+          (populationResponseBound + ((((n + 1 : ℕ) : ℝ))⁻¹) ^ 4)) atTop
+        (𝓝 (32 * ((m : ℝ)⁻¹) ^ 2 * populationResponseBound)) := by
+      simpa only [add_zero] using
+        (hconst.add h4).const_mul (32 * ((m : ℝ)⁻¹) ^ 2)
+    refine hbase.congr (fun n => ?_)
     simp only [hen, cmdsEntrywiseRate, responseFrobRate, responseDistBound,
       safeResponseTolerance]
     have hN : ((n + 1 : ℕ) : ℝ) ≠ 0 := by positivity
     field_simp
     ring
-  -- The improved Davis--Kahan factor is `P_n = 4 d e_n^2 / (κ/2)^2`.
-  have hP : Tendsto (fun n : ℕ =>
-      4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2) atTop (𝓝 0) := by
-    have hbase : Tendsto (fun n =>
-        (4 * (d : ℝ) / (κ / 2) ^ 2) * (en n * en n)) atTop (𝓝 0) := by
-      simpa using (he.mul he).const_mul (4 * (d : ℝ) / (κ / 2) ^ 2)
-    refine hbase.congr (fun n => ?_)
-    ring
-  have hPN : Tendsto (fun n : ℕ =>
-      (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2) * ((n + 1 : ℕ) : ℝ))
+  have hNe2 : Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ) * (en n) ^ 2)
       atTop (𝓝 0) := by
-    have hbase : Tendsto (fun n =>
-        (4 * (d : ℝ) / (κ / 2) ^ 2) *
-          (en n * (((n + 1 : ℕ) : ℝ) * en n))) atTop (𝓝 0) := by
-      simpa using (he.mul hNen).const_mul (4 * (d : ℝ) / (κ / 2) ^ 2)
+    have hbase : Tendsto (fun n : ℕ =>
+        en n * (((n + 1 : ℕ) : ℝ) * en n)) atTop (𝓝 0) := by
+      simpa using he.mul hNen
     refine hbase.congr (fun n => ?_)
     ring
-  have hN2P : Tendsto (fun n : ℕ =>
-      ((n + 1 : ℕ) : ℝ) ^ 2 * (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))
+  have hNe4 : Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ) * (en n) ^ 4)
       atTop (𝓝 0) := by
-    have hbase : Tendsto (fun n =>
-        (4 * (d : ℝ) / (κ / 2) ^ 2) *
-          ((((n + 1 : ℕ) : ℝ) * en n) * (((n + 1 : ℕ) : ℝ) * en n)))
-        atTop (𝓝 0) := by
-      simpa using (hNen.mul hNen).const_mul (4 * (d : ℝ) / (κ / 2) ^ 2)
+    have hbase : Tendsto (fun n : ℕ =>
+        (en n) ^ 3 * (((n + 1 : ℕ) : ℝ) * en n)) atTop (𝓝 0) := by
+      simpa using (he.pow 3).mul hNen
     refine hbase.congr (fun n => ?_)
     ring
-  -- The three square-root summands of `configBound`, each scaled by `√(n+1)`.
-  have hsq1 : Tendsto (fun n : ℕ => Real.sqrt (((n + 1 : ℕ) : ℝ) *
+  have he2 : Tendsto (fun n : ℕ => (en n) ^ 2) atTop (𝓝 0) := by
+    simpa using he.pow 2
+  have he5 : Tendsto (fun n : ℕ => (en n) ^ 5) atTop (𝓝 0) := by
+    simpa using he.pow 5
+  -- First square-root term: `e_n^4 (Λ_n + e_n)`.
+  have hsq1 : Tendsto (fun n : ℕ => Real.sqrt
       ((2 * ((d : ℝ) * (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) ^ 2 *
-        ((d : ℝ) * (4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2 + en n)))))
+        ((d : ℝ) * (4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2 + en n))))
       atTop (𝓝 0) := by
-    have hlim : Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ) *
-        ((2 * ((d : ℝ) * (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) ^ 2 *
-          ((d : ℝ) * (4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2 + en n))))
+    have hbase : Tendsto (fun n : ℕ =>
+        ((2 * ((d : ℝ) * (4 * (d : ℝ) / (κ / 2) ^ 2))) ^ 2 *
+            ((d : ℝ) * 4 * perspectiveBound ^ 2)) *
+          (((n + 1 : ℕ) : ℝ) * (en n) ^ 4)
+        + ((2 * ((d : ℝ) * (4 * (d : ℝ) / (κ / 2) ^ 2))) ^ 2 * (d : ℝ)) *
+          (en n) ^ 5) atTop (𝓝 0) := by
+      simpa using
+        (hNe4.const_mul
+          ((2 * ((d : ℝ) * (4 * (d : ℝ) / (κ / 2) ^ 2))) ^ 2 *
+            ((d : ℝ) * 4 * perspectiveBound ^ 2))).add
+        (he5.const_mul
+          ((2 * ((d : ℝ) * (4 * (d : ℝ) / (κ / 2) ^ 2))) ^ 2 * (d : ℝ)))
+    have hlim : Tendsto (fun n : ℕ =>
+        (2 * ((d : ℝ) * (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) ^ 2 *
+          ((d : ℝ) * (4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2 + en n)))
         atTop (𝓝 0) := by
-      have hbase : Tendsto (fun n : ℕ =>
-          16 * (d : ℝ) ^ 3 * perspectiveBound ^ 2 *
-            ((4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2 * ((n + 1 : ℕ) : ℝ)) *
-              (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2 * ((n + 1 : ℕ) : ℝ)))
-          + 4 * (d : ℝ) ^ 3 *
-            ((4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2) *
-              (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2 * ((n + 1 : ℕ) : ℝ)) *
-              en n)) atTop (𝓝 0) := by
-        simpa using
-          (((hPN.mul hPN).const_mul (16 * (d : ℝ) ^ 3 * perspectiveBound ^ 2)).add
-            (((hP.mul hPN).mul he).const_mul (4 * (d : ℝ) ^ 3)))
       refine hbase.congr (fun n => ?_)
       field_simp
-      ring
     have h := (Real.continuous_sqrt.tendsto (0 : ℝ)).comp hlim
     rw [Real.sqrt_zero] at h
     exact h
-  have hsq2 : Tendsto (fun n : ℕ => Real.sqrt (((n + 1 : ℕ) : ℝ) *
-      ((d : ℝ) * (en n / Real.sqrt ((κ / 2) / 2)) ^ 2))) atTop (𝓝 0) := by
-    have hlim : Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ) *
-        ((d : ℝ) * (en n / Real.sqrt ((κ / 2) / 2)) ^ 2)) atTop (𝓝 0) := by
+  -- Second square-root term: a fixed multiple of `e_n^2`.
+  have hsq2 : Tendsto (fun n : ℕ =>
+      Real.sqrt ((d : ℝ) * (en n / Real.sqrt ((κ / 2) / 2)) ^ 2))
+      atTop (𝓝 0) := by
+    have hlim : Tendsto (fun n : ℕ =>
+        (d : ℝ) * (en n / Real.sqrt ((κ / 2) / 2)) ^ 2) atTop (𝓝 0) := by
       have hbase : Tendsto (fun n : ℕ =>
-          (d : ℝ) / ((κ / 2) / 2) * (en n * (((n + 1 : ℕ) : ℝ) * en n)))
-          atTop (𝓝 0) := by
-        simpa using (he.mul hNen).const_mul ((d : ℝ) / ((κ / 2) / 2))
+          ((d : ℝ) / ((κ / 2) / 2)) * (en n) ^ 2) atTop (𝓝 0) := by
+        simpa using he2.const_mul ((d : ℝ) / ((κ / 2) / 2))
       refine hbase.congr (fun n => ?_)
-      have hc : Real.sqrt ((κ / 2) / 2) ^ 2 = (κ / 2) / 2 := Real.sq_sqrt (by positivity)
+      have hc : Real.sqrt ((κ / 2) / 2) ^ 2 = (κ / 2) / 2 :=
+        Real.sq_sqrt (by positivity)
       rw [div_pow, hc]
       field_simp
     have h := (Real.continuous_sqrt.tendsto (0 : ℝ)).comp hlim
     rw [Real.sqrt_zero] at h
     exact h
-  have hsq3 : Tendsto (fun n : ℕ => Real.sqrt (((n + 1 : ℕ) : ℝ) *
+  -- Third square-root term: a fixed multiple of `(n+1) e_n^2`.
+  have hsq3 : Tendsto (fun n : ℕ => Real.sqrt
       ((4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2) *
-        (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2)))) atTop (𝓝 0) := by
-    have hlim : Tendsto (fun n : ℕ => ((n + 1 : ℕ) : ℝ) *
-        ((4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2) *
-          (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) atTop (𝓝 0) := by
+        (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) atTop (𝓝 0) := by
+    have hlim : Tendsto (fun n : ℕ =>
+        (4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2) *
+          (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2)) atTop (𝓝 0) := by
       have hbase : Tendsto (fun n : ℕ =>
-          4 * perspectiveBound ^ 2 *
-            (((n + 1 : ℕ) : ℝ) ^ 2 * (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2)))
-          atTop (𝓝 0) := by
-        simpa using hN2P.const_mul (4 * perspectiveBound ^ 2)
+          (16 * (d : ℝ) * perspectiveBound ^ 2 / (κ / 2) ^ 2) *
+            (((n + 1 : ℕ) : ℝ) * (en n) ^ 2)) atTop (𝓝 0) := by
+        simpa using hNe2.const_mul
+          (16 * (d : ℝ) * perspectiveBound ^ 2 / (κ / 2) ^ 2)
       refine hbase.congr (fun n => ?_)
+      field_simp
       ring
     have h := (Real.continuous_sqrt.tendsto (0 : ℝ)).comp hlim
     rw [Real.sqrt_zero] at h
     exact h
-  -- Rewrite `configBound` as those three summands via `√a·√b = √(a·b)`.
-  have hfun : (fun n : ℕ => configBound (n + 1) d (κ / 2)
-      (4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2) (en n))
-      = fun n : ℕ =>
-        Real.sqrt (((n + 1 : ℕ) : ℝ) *
-          ((2 * ((d : ℝ) * (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) ^ 2 *
-            ((d : ℝ) * (4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2 + en n))))
-        + Real.sqrt (((n + 1 : ℕ) : ℝ) *
-            ((d : ℝ) * (en n / Real.sqrt ((κ / 2) / 2)) ^ 2))
-        + Real.sqrt (((n + 1 : ℕ) : ℝ) *
-            ((4 * ((n + 1 : ℕ) : ℝ) * perspectiveBound ^ 2) *
-              (4 * (d : ℝ) * (en n) ^ 2 / (κ / 2) ^ 2))) := by
-    funext n
-    simp only [configBound]
-    rw [mul_add, mul_add,
-      ← Real.sqrt_mul (by positivity : (0 : ℝ) ≤ ((n + 1 : ℕ) : ℝ)),
-      ← Real.sqrt_mul (by positivity : (0 : ℝ) ≤ ((n + 1 : ℕ) : ℝ)),
-      ← Real.sqrt_mul (by positivity : (0 : ℝ) ≤ ((n + 1 : ℕ) : ℝ))]
-  rw [hfun]
+  unfold configFrobBound
   simpa using (hsq1.add hsq2).add hsq3
-
-/-- The sharpened Frobenius configuration envelope also vanishes under the
-existing conservative schedule.  This follows from the legacy result because
-`configBound = sqrt(n+1) * configFrobBound` and `sqrt(n+1) >= 1`.
-
-This theorem is the compatibility bridge used while the schedule itself is
-retuned to the weaker Frobenius requirement. -/
-theorem safe_configFrobBound_zero
-    (m d : Nat) (hm : 0 < m)
-    (populationResponseBound perspectiveBound κ : Real)
-    (hκ : 0 < κ) :
-    Tendsto (fun n =>
-      configFrobBound d (κ / 2)
-        (4 * ((n + 1 : Nat) : Real) * perspectiveBound ^ 2)
-        (((n + 1 : Nat) : Real) *
-          cmdsEntrywiseRate (n + 1) m
-            (responseDistBound m
-              (populationResponseBound + safeResponseTolerance n))
-            (safeResponseTolerance n))) atTop (𝓝 0) := by
-  have hlegacy := safe_configBound_zero m d hm
-    populationResponseBound perspectiveBound κ hκ
-  refine tendsto_of_tendsto_of_tendsto_of_le_of_le
-    tendsto_const_nhds hlegacy (fun n => ?_) (fun n => ?_)
-  · unfold configFrobBound
-    positivity
-  · let ε : Real := ((n + 1 : Nat) : Real) *
-        cmdsEntrywiseRate (n + 1) m
-          (responseDistBound m
-            (populationResponseBound + safeResponseTolerance n))
-          (safeResponseTolerance n)
-    let Λ : Real := 4 * ((n + 1 : Nat) : Real) * perspectiveBound ^ 2
-    have hfrob_nonneg : 0 ≤ configFrobBound d (κ / 2) Λ ε := by
-      unfold configFrobBound
-      positivity
-    have hN : (1 : Real) ≤ ((n + 1 : Nat) : Real) := by
-      exact_mod_cast Nat.succ_le_succ (Nat.zero_le n)
-    have hsqrt : 1 ≤ Real.sqrt ((n + 1 : Nat) : Real) := by
-      rw [← Real.sqrt_one]
-      exact Real.sqrt_le_sqrt hN
-    calc
-      configFrobBound d (κ / 2) Λ ε
-          = 1 * configFrobBound d (κ / 2) Λ ε := by ring
-      _ ≤ Real.sqrt ((n + 1 : Nat) : Real) *
-          configFrobBound d (κ / 2) Λ ε :=
-        mul_le_mul_of_nonneg_right hsqrt hfrob_nonneg
-      _ = configBound (n + 1) d (κ / 2) Λ ε := by
-        rw [configBound_eq_sqrt_mul_configFrobBound]
 
 /-- The conservative tolerance and linear spectral ceiling satisfy every field
 of `GrowingConfigControl` for the current proved CMDS perturbation bound.
@@ -564,9 +496,10 @@ The certificate now controls the Frobenius configuration bound directly, so
 the growing Quench path avoids the legacy `sqrt(n+1)` conversion.  Completing
 this theorem removes `Hrate`, entrywise nonnegativity, the local smallness
 inequality, the polar inequality, and the vanishing configuration bound from
-the final public theorem.  This is intentionally a safe-rate result;
-a later sharp Davis--Kahan theorem may improve the exponent without changing
-the raw-response Quench interface.
+the final public theorem.  The fourth-power response tolerance is the smallest
+integer-power choice that makes the proved batch-scaled CMDS perturbation
+vanish; no legacy
+`ConfigError` factor is included in this schedule.
 -/
 noncomputable def safe_growingConfigControl
     (m d : Nat) (hm : 0 < m)
