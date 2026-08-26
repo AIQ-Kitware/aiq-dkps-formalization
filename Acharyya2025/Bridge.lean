@@ -10,8 +10,11 @@ response-mean event
   → downstream DKPS concentration/alignment hypotheses.
 
 Every arrow proved in this file is deterministic event propagation or its
-high-probability lift, with explicit rates (`responseFrobRate`,
-`cmdsEntrywiseRate`).  The spectral/MDS arrow is fully proved downstream:
+high-probability lift, with explicit rates.  The primary response-to-CMDS path
+now works entrywise from the start: one response-mean error controls one
+dissimilarity entry with no ambient `n^2` Frobenius detour.  The older
+`responseFrobRate` remains as a compatibility bound.  The spectral/MDS arrow is
+fully proved downstream:
 `Acharyya2025.AlignedPipeline.highProb_aligned_configError_of_entrywise_close`
 consumes the entrywise CMDS-closeness events produced here.  No unproved
 statements remain in this file.
@@ -51,15 +54,21 @@ Frobenius distance between the sample and population dissimilarity matrices
 noncomputable def responseFrobRate (n m : Nat) (η : Real) : Real :=
   ((n : Real) * (n : Real)) * (((m : Real)⁻¹) * (2 * η))
 
-/-- Loose entrywise CMDS-matrix rate obtained from bounded dissimilarities and
-response error. Composing the squaring step (factor `2R`, with `R` a bound on the
-dissimilarity entries) and the double-centering step (factor `4`) on top of
-`responseFrobRate`, this is the entrywise `ε` reached for the centered CMDS
-matrices `B̂` vs. `B` — i.e. the rate at which entrywise CMDS closeness (Theorem 1)
-is established here. The constants are intentionally loose, not the paper's sharp
-`16 Σγ/(rmε²)` constant. -/
-noncomputable def cmdsEntrywiseRate (n m : Nat) (R η : Real) : Real :=
-  4 * ((2 * R) * responseFrobRate n m η)
+/-- Direct entrywise dissimilarity rate obtained from uniform response-mean
+error.  For one pair `(i,j)`, the reverse triangle inequality gives
+
+`|Dhat i j - D i j| ≤ m⁻¹ (‖Xbar i - μ i‖ + ‖Xbar j - μ j‖) ≤ 2η/m`.
+
+Unlike `responseFrobRate`, this quantity carries no ambient population factor. -/
+noncomputable def responseEntrywiseRate (m : Nat) (η : Real) : Real :=
+  (m : Real)⁻¹ * (2 * η)
+
+/-- Entrywise CMDS-matrix rate obtained from the direct pairwise response bound.
+The argument `_n` is retained for API compatibility with the older Frobenius
+route, but the improved rate is independent of the population size before the
+subsequent entrywise-to-operator conversion. -/
+noncomputable def cmdsEntrywiseRate (_n m : Nat) (R η : Real) : Real :=
+  4 * ((2 * R) * responseEntrywiseRate m η)
 
 /--
 Frobenius closeness implies entrywise closeness.
@@ -114,9 +123,48 @@ theorem response_mean_close_event_to_frob_event
       ≤ responseFrobRate n m η := by
   exact frobSub_responseDist_le_of_uniform_errors Xbar μ hclose
 
+/-- Uniform response-mean closeness directly implies entrywise closeness of
+the response dissimilarity matrix.  This is the source-faithful deterministic
+bridge used by the primary CMDS concentration path; it avoids first summing the
+errors over all `n^2` pairs. -/
+theorem response_mean_close_event_to_entrywise_event
+    {n m p : Nat} {η : Real}
+    (Xbar μ : Fin n → Mat m p)
+    (hclose : UniformResponseMeanClose Xbar μ η) :
+    EntrywiseClose (responseDist Xbar) (responseDist μ)
+      (responseEntrywiseRate m η) := by
+  intro i j
+  have hm : 0 ≤ (m : Real)⁻¹ := inv_nonneg.mpr (by positivity)
+  calc
+    |responseDist Xbar i j - responseDist μ i j|
+        ≤ (m : Real)⁻¹ * (‖Xbar i - μ i‖ + ‖Xbar j - μ j‖) :=
+          abs_responseDistEntry_sub_responseDistEntry_le Xbar μ i j
+    _ ≤ (m : Real)⁻¹ * (η + η) :=
+          mul_le_mul_of_nonneg_left (add_le_add (hclose i) (hclose j)) hm
+    _ = responseEntrywiseRate m η := by
+          simp [responseEntrywiseRate, two_mul]
+
+/-- High-probability lift of the direct response-mean-to-entrywise bridge. -/
+theorem response_mean_close_hp_to_entrywise_hp
+    (P : Nat → Measure Ω)
+    {n m p : Nat}
+    (Xbar : Nat → Ω → Fin n → Mat m p)
+    (μ : Fin n → Mat m p)
+    (η : Nat → Real)
+    (hclose : HighProbAtTop P
+      (fun u => {ω | UniformResponseMeanClose (Xbar u ω) μ (η u)})) :
+    HighProbAtTop P
+      (fun u => {ω | EntrywiseClose (responseDist (Xbar u ω)) (responseDist μ)
+        (responseEntrywiseRate m (η u))}) := by
+  exact HighProbAtTop.mono hclose
+    (fun u ω hω => response_mean_close_event_to_entrywise_event (Xbar u ω) μ hω)
+
 /--
 High-probability response-mean closeness propagates to a high-probability
 Frobenius dissimilarity-matrix bound.
+
+This compatibility theorem retains the older all-pairs Frobenius route; the
+primary CMDS concentration path uses `response_mean_close_hp_to_entrywise_hp`.
 
 Formalized by Codex 5.5 High, per user-observed model label.
 -/

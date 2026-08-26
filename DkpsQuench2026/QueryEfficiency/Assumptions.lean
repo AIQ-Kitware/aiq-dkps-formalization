@@ -105,7 +105,7 @@ The retuned Frobenius safe schedule uses a fourth-power shrinking radius, so a
 structure InfiniteSubsetData (d m p : Nat) where
   perspective : Model Q X → Vec d
   rawResponse : ∀ n, Model Q X →
-    Fin (safeEntropyReplicates (4 * d) n) →
+    Fin (safeEntropyReplicates (2 * d) n) →
     Ωresp → Acharyya2024.Mat m p
   populationMean : Model Q X → Acharyya2024.Mat m p
   varianceBound : Real
@@ -134,10 +134,10 @@ structure InfiniteSubsetAssumptions
   compact_range : IsCompact (Set.range D.perspective)
   full_support : PerspectiveFullSupport Pf D.perspective
   raw : RawIIDResponseModel μresp
-    (safeEntropyReplicates (4 * d)) D.rawResponse
+    (safeEntropyReplicates (2 * d)) D.rawResponse
     D.populationMean (fun _ => D.varianceBound)
   raw_lipschitz : RawResponseLipschitz D.perspective
-    (safeEntropyReplicates (4 * d)) D.rawResponse
+    (safeEntropyReplicates (2 * d)) D.rawResponse
     D.rawResponseLipschitzConstant
   response_realization : ModelResponseRealization D.perspective D.populationMean
   nondegenerate : PerspectiveNondegeneracy Pf D.perspective D.covarianceFloor
@@ -158,11 +158,11 @@ noncomputable def infiniteEstimator
   yNNTieAverage_augmentedCMDS (d := d)
     (augmentedSampleResponseDist
       (augmentedRawSampleMean f_ref
-        (safeEntropyReplicates (4 * d)) D.rawResponse))
+        (safeEntropyReplicates (2 * d)) D.rawResponse))
     (fun n ω f =>
       Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
         (augmentedRawSampleMean f_ref
-          (safeEntropyReplicates (4 * d)) D.rawResponse n ω f))
+          (safeEntropyReplicates (2 * d)) D.rawResponse n ω f))
     (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
     score Qstar n ω f
 

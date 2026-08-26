@@ -712,8 +712,8 @@ theorem highProb_aligned_configError_of_entrywise_close_canonical
 /-! ### (4) End-to-end response-mean → aligned ConfigError -/
 
 /-- **Response-mean concentration to CMDS-entrywise closeness (high-probability).**
-The `Bridge.lean` deterministic chain (response-mean → Frobenius → entrywise →
-CMDS-entrywise), packaged to expose the CMDS-entrywise high-probability event
+The `Bridge.lean` deterministic chain (response-mean → direct pairwise
+entrywise control → CMDS-entrywise), packaged to expose the CMDS-entrywise high-probability event
 directly — the measurable sub-event the response-mean Quench capstones consume.
 
 Formalized by Claude Opus 4.8 (claude-opus-4-8[1m]).
@@ -733,22 +733,17 @@ theorem highProb_cmdsEntrywise_of_response_mean
       (Acharyya2025.Bridge.cmdsEntrywiseRate n m (R u) (η u))}) := by
   set Dhat : Nat → Ω → DisMat n := fun u ω => responseDist (Xbar u ω) with hDhat
   set D : DisMat n := responseDist μ with hD
-  have hfrob :
-      HighProbAtTop P
-        (fun u => {ω | frobSub (Dhat u ω) D
-          ≤ Acharyya2025.Bridge.responseFrobRate n m (η u)}) := by
-    simpa [Dhat, D] using
-      Acharyya2025.Bridge.response_mean_close_hp_to_frob_hp P Xbar μ η hmean
   have hentry :
       HighProbAtTop P
         (fun u => {ω | Acharyya2025.Bridge.EntrywiseClose (Dhat u ω) D
-          (Acharyya2025.Bridge.responseFrobRate n m (η u))}) :=
-    Acharyya2025.Bridge.frob_close_hp_to_entrywise_close_hp P Dhat D
-      (fun u => Acharyya2025.Bridge.responseFrobRate n m (η u)) hfrob
+          (Acharyya2025.Bridge.responseEntrywiseRate m (η u))}) := by
+    simpa [Dhat, D] using
+      Acharyya2025.Bridge.response_mean_close_hp_to_entrywise_hp P Xbar μ η hmean
   refine HighProbAtTop.mono hentry (fun u ω hω => ?_)
-  exact Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded hn hω
-    (fun i j => by simpa [Dhat] using hsample_bound u ω i j)
-    (fun i j => by simpa [D] using hpopulation_bound u i j)
+  simpa [Acharyya2025.Bridge.cmdsEntrywiseRate] using
+    Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded hn hω
+      (fun i j => by simpa [Dhat] using hsample_bound u ω i j)
+      (fun i j => by simpa [D] using hpopulation_bound u i j)
 
 
 /--
@@ -787,7 +782,7 @@ theorem isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
 **End-to-end response-mean concentration to aligned CMDS `ConfigError`.**
 
 Composing `Bridge.lean`'s proved high-probability chain
-(response-mean → Frobenius → entrywise → CMDS-entrywise) with the matrix-world
+(response-mean → direct pairwise entrywise → CMDS-entrywise) with the matrix-world
 spectral assembly (via `highProb_aligned_configError_of_entrywise_close`), a
 high-probability uniform response-mean event yields a high-probability bound on
 the aligned CMDS spectral `ConfigError` against the population configuration `ψ`.
@@ -801,8 +796,9 @@ exactly those of the matrix-world assembly.
 This is the response-mean-driven high-probability bound *corresponding to*
 **Theorem 2** (which is itself probabilistic): it takes a high-probability uniform
 response-mean event and emits the high-probability aligned `ConfigError` bound,
-composing `Bridge.lean`'s concentration chain (response-mean → Frobenius →
-entrywise → CMDS-entrywise, i.e. the input corresponding to Theorem 1) with the
+composing `Bridge.lean`'s concentration chain (response-mean → direct
+entrywise dissimilarity control → CMDS-entrywise, i.e. the input corresponding
+to Theorem 1) with the
 deterministic configuration bound.  The error measured is the *direct*
 `ConfigError` (stronger than the paper's affine-quotient error).
 

@@ -105,12 +105,14 @@ query-efficiency capstones.  `GrowingConfigControl` tracks `configFrobBound`,
 and the pairwise-distance engine bounds each target/reference radial error
 straight from `ConfigFrobError`; the growing path therefore no longer
 reintroduces the legacy `sqrt(n+1)` factor.  `Rates/SafeSchedule.lean` uses that
-improvement to retune the explicit raw-response schedule from tolerance
-`(n+1)^-5` / finite replicate budget `(n+1)^13` to `(n+1)^-4` /
-`(n+1)^10`.  The compact-infinite cover exponent correspondingly drops from
-`5d` to `4d`, so its declared replicate budget is `(n+1)^(10+4d)`.  These are
-still conservative sufficient schedules, not a claim that the formal upstream
-response→CMDS rate has reached the paper's sharp asymptotics.  For the
+improvement together with the direct pairwise response→CMDS bridge to retune
+the explicit raw-response schedule from the original `(n+1)^-5` / `(n+1)^13`
+to tolerance `(n+1)^-2` / finite replicate budget `(n+1)^6`.  The
+compact-infinite cover exponent correspondingly drops from `5d` to `2d`, so its
+declared replicate budget is `(n+1)^(6+2d)`.  The underlying Acharyya response
+bookkeeping now exposes the exact structural ratio `n³γ/(r x²)` at tolerance
+`η=x/n`; the remaining source-fidelity step is the explicit real-power choice
+`x=(n³/r)^(1/2-δ)` and its growing capstone.  For the
 fixed-population route,
 `quench_part2_from_aligned_configFrobError_hp`,
 `queryEfficient_nn_of_response_mean_frob`, and
@@ -119,10 +121,11 @@ all the way to Quench's uniform embedding-error premise.  The core Frobenius
 bridge accepts any deterministic envelope that eventually dominates
 `configFrobBound`; `quench_part2_from_aligned_configFrobQuadratic_hp` specializes
 this to the explicit `C₁ ε + C₂ ε²` spectral majorant.  This gives Quench a
-polynomial spectral concentration input without pretending that the current
-upstream response→CMDS rate has already reproduced the paper's exact
-`(n³/r)^(1/2-δ)` bookkeeping.  The older `ConfigError` declarations remain as
-compatibility APIs.
+polynomial spectral concentration input.  `Acharyya2025.PaperRate` now shows
+that the direct response bridge feeds the spectral theorem a fixed multiple of
+the same target scale `x` whose concentration ratio has `n³/r` structure; the
+remaining literal paper syntax is the specialization `x=(n³/r)^(1/2-δ)`.
+The older `ConfigError` declarations remain as compatibility APIs.
 
 This keeps the Quench-facing v1 Acharyya rate path separate from the revised
 June-2026 Acharyya source version.

@@ -755,7 +755,7 @@ response-mean closeness** high-probability event
 `{ω | UniformResponseMeanClose (Xbar u ω) μ (η u)}` — and *derives* the entrywise
 CMDS event internally via
 `Acharyya2025.AlignedPipeline.highProb_aligned_configError_of_response_mean`
-(which composes the Bridge chain response-mean → Frobenius → entrywise → CMDS).
+(which composes the Bridge chain response-mean → direct pairwise entrywise → CMDS).
 Everything else (the choice-free measurable sub-event, the genuine Quench
 assumptions) is the shared `quench_part2_from_aligned_configError_hp` core.
 
