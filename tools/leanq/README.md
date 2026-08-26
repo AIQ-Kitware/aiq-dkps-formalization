@@ -58,42 +58,109 @@ other than the working directory. Every subcommand takes `--json`, and `query`/`
 
 ## Proof dependency graphs
 
-`leanq graph` is the semantic backend for dependency visualizations. It merges graph indexes
-from multiple local Lean libraries, follows the elaborated constant dependencies of one or more
-target declarations, and emits a stable JSON graph. An edge is oriented **dependency → consumer**,
-so the graph reads from mathematical foundations toward the requested conclusion.
+`leanq graph` is the semantic backend and interactive viewer for declaration-level proof
+architecture. It merges graph indexes from multiple local Lean libraries, follows the elaborated
+constant dependencies of one or more target declarations, and keeps the graph direction
+**dependency → consumer** so the picture reads from mathematical foundations toward the requested
+conclusion.
 
 ```bash
-# All project libraries discovered in the current build are included by default.
+# Exact JSON for the full project-local ancestor closure.
 leanq graph DkpsQuench2026.QueryEfficiency.infiniteFixedSubset \
-  --transitive-reduction --json > /tmp/quench-proof-graph.json
+  --transitive-reduction \
+  --out build/quench-proof-graph.json
 
-# A narrower, explicit cross-package scope is useful while iterating.
+# The same exact graph as one self-contained offline HTML file.
+leanq graph DkpsQuench2026.QueryEfficiency.infiniteFixedSubset \
+  --html build/quench-proof-graph.html
+
+# A narrower explicit library scope remains useful while iterating.
 leanq graph Some.Quench.Theorem \
   --include-lib ForTauCeti \
   --include-lib DavisKahan \
   --include-lib YuWangSamworth2015 \
   --include-lib Acharyya2025 \
   --include-lib DkpsQuench2026 \
-  --transitive-reduction --out build/proof-graph.json
+  --html build/proof-graph.html
 ```
 
 The graph command uses a separate cached `<Library>.graph.jsonl` index. Graph mode is deliberately
 more complete than ordinary inventory mode: it retains Lean internal/private constants and their
 dependencies. That prevents a public dependency path from being severed merely because it passes
-through private proof support. Internal nodes are marked with `"internal": true` so a later viewer
-can collapse or hide them *after* reachability has been established.
+through private proof support. Internal nodes are marked with `"internal": true` so the viewer can
+collapse them *after* reachability has been established.
 
-The JSON payload contains the exact project-local direct edges plus, when requested,
-`reducedEdges`. The latter is a reachability-preserving transitive reduction. Ordinary declaration
-DAGs get the unique DAG reduction; rare generated-constant cycles are condensed into strongly
-connected components first. Dependencies outside the indexed local libraries (normally Mathlib or
-Lean) are summarized by prefix, and `--include-unresolved` includes their full boundary names.
+The JSON payload contains the exact project-local direct edges plus `reducedEdges` when requested
+(or automatically when HTML is rendered). The latter is a reachability-preserving transitive
+reduction. Ordinary declaration DAGs get the unique DAG reduction; rare generated-constant cycles
+are condensed into strongly connected components first. Dependencies outside the indexed local
+libraries, normally Mathlib or Lean, are summarized by prefix; `--include-unresolved` includes
+their full boundary names.
 
-`leanq.graph.projected_reduction` is the presentation primitive for the next layer: given a set of
-headline declarations, it computes their reachability relation, transitively reduces it, and
-attaches a shortest exact witness path through omitted support nodes to every displayed edge. This
-keeps editorial omission separate from semantic dependency extraction.
+### Interactive HTML viewer
+
+The generated HTML has no server or JavaScript-package requirement. Graph data, CSS, and vanilla
+JavaScript are embedded into one file that can be opened directly in a browser. The viewer provides:
+
+- **Presentation**, **reduced**, and **direct** graph modes;
+- reachability-preserving collapse of private/internal support declarations;
+- search by full declaration name, short name, or module;
+- pan, wheel zoom, fit-to-view, and library emphasis;
+- node details with module/library/kind/source-line and direct degree counts;
+- edge details showing the exact witness path behind every collapsed presentation edge;
+- interactive promotion/removal of headline nodes; and
+- export of the current headline selection as a reusable exact-name presentation JSON file.
+
+The browser never guesses mathematical roles. It can change which exact declarations are displayed,
+but every edge is derived from the elaborated graph and every collapsed edge retains a witness path
+back to that graph.
+
+### Curated presentation views
+
+A presentation JSON is the human-owned layer over compiler facts. It can provide graph targets,
+labels, groups, descriptions, and the declaration names that should survive in the headline graph.
+Names are resolved exactly or as unambiguous Lean short names. If a named headline is no longer in
+the target dependency closure, generation fails instead of dropping it from the slide.
+
+```json
+{
+  "schemaVersion": 1,
+  "title": "YWS → Acharyya → Quench",
+  "targets": ["DkpsQuench2026.quench_part2_from_aligned_configFrobError_hp"],
+  "headlines": [
+    {
+      "name": "YuWangSamworth2015.sq_gap_mul_sum_cross_le_of_population_gap_opNorm",
+      "label": "YWS population-gap sin-Θ",
+      "group": "Yu–Wang–Samworth"
+    },
+    {
+      "name": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+      "label": "Frobenius configuration perturbation",
+      "group": "Acharyya"
+    }
+  ]
+}
+```
+
+A checked-in starting view for the current Frobenius bridge lives at
+`tools/leanq/presentations/quench-frobenius-core.json`:
+
+```bash
+leanq graph \
+  --presentation tools/leanq/presentations/quench-frobenius-core.json \
+  --html build/quench-frobenius-core.html \
+  --out build/quench-frobenius-core.json
+```
+
+The target can be supplied positionally instead; positional targets override the targets in the
+presentation file. `--headline Some.Declaration` adds a one-off initial headline without editing the
+JSON, while `--title` and `--subtitle` override display copy.
+
+`leanq.graph.projected_reduction` remains the Python presentation primitive: given selected headline
+declarations, it computes their reachability relation, transitively reduces it, and attaches a
+shortest exact witness path through omitted support nodes to every displayed edge. The HTML viewer
+implements the same operation for interactive headline changes, while a loaded presentation spec is
+prevalidated and reduced on the Python side before it is embedded.
 
 ## Promotion-boundary queries
 
@@ -211,6 +278,9 @@ install it alongside if you want the positional half.
 src/leanq/cli.py             argparse CLI
 src/leanq/index.py           build/load/filter the index
 src/leanq/graph.py           cross-library target graphs and graph reductions
+src/leanq/presentation.py    exact-name curated headline views
+src/leanq/viewer.py          standalone HTML renderer
+src/leanq/assets/viewer.html interactive offline viewer
 src/leanq/project.py         locate the project, enumerate built modules
 src/leanq/lean/decl_index.lean   the metaprogram, run via `lake env lean --run`
 ```

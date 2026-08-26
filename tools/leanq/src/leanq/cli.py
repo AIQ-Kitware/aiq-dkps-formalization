@@ -30,6 +30,8 @@ from .graph import (
     target_dependency_graph,
     transitive_reduction,
 )
+from .presentation import build_presentation, load_presentation
+from .viewer import write_graph_html
 from .project import ProjectError, find_project
 from .promotion import DEFAULT_TAGS, promotion_report
 
@@ -261,8 +263,19 @@ def cmd_promotions(args) -> int:
 
 @profile
 def cmd_graph(args) -> int:
-    """Exact project-local declaration graph feeding later visualization tools."""
+    """Exact project-local declaration graph and optional interactive viewer."""
     project = find_project(Path(args.project) if args.project else None)
+    presentation_spec = (
+        load_presentation(Path(args.presentation)) if args.presentation else None
+    )
+    targets = list(args.target or ())
+    if not targets and presentation_spec is not None:
+        targets = list(presentation_spec.targets)
+    if not targets:
+        raise ProjectError(
+            "graph needs at least one target declaration, either positionally or in --presentation"
+        )
+
     if args.include_lib:
         libraries = list(dict.fromkeys(args.include_lib))
     elif args.lib:
@@ -278,15 +291,17 @@ def cmd_graph(args) -> int:
     for library in libraries:
         groups.append(
             ensure_graph_index(
-                project, library, refresh=args.refresh, verbose=not args.json
+                project,
+                library,
+                refresh=args.refresh,
+                verbose=not args.json,
             )
         )
     table = merge_declarations(groups)
-    graph = target_dependency_graph(table.values(), args.target)
+    graph = target_dependency_graph(table.values(), targets)
+    need_reduction = args.transitive_reduction or bool(args.html)
     reduced = (
-        transitive_reduction(graph.nodes, graph.edges)
-        if args.transitive_reduction
-        else None
+        transitive_reduction(graph.nodes, graph.edges) if need_reduction else None
     )
     payload = graph.to_json(reduced_edges=reduced)
     payload["project"] = str(project.root)
@@ -302,16 +317,42 @@ def cmd_graph(args) -> int:
             for consumer, dependency in graph.unresolved
         ]
 
+    if presentation_spec is not None or args.headline:
+        payload["presentation"] = build_presentation(
+            graph,
+            presentation_spec,
+            extra_headlines=args.headline or (),
+            title=args.title,
+            subtitle=args.subtitle,
+        )
+    elif args.title or args.subtitle:
+        payload["presentation"] = build_presentation(
+            graph,
+            None,
+            title=args.title,
+            subtitle=args.subtitle,
+        )
+
     text = json.dumps(payload, indent=2) + "\n"
+    written = []
     if args.out:
         out = Path(args.out)
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(text, encoding="utf-8")
-        if not args.json:
-            print(out)
+        written.append(out)
+    if args.html:
+        html_path = Path(args.html)
+        if args.out and html_path.resolve() == Path(args.out).resolve():
+            raise ProjectError("--html and --out must name different files")
+        write_graph_html(html_path, payload, title=args.title)
+        written.append(html_path)
+
     if args.json:
         sys.stdout.write(text)
-    elif not args.out:
+    elif written:
+        for path in written:
+            print(path)
+    else:
         print(f"targets: {', '.join(graph.targets)}")
         print(f"libraries: {', '.join(libraries)}")
         print(f"nodes: {len(graph.nodes)}")
@@ -488,7 +529,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="project-local elaborated dependency graph for one or more target declarations",
     )
     add_common(p)
-    p.add_argument("target", nargs="+", help="full or unambiguous short declaration name")
+    p.add_argument(
+        "target", nargs="*",
+        help="full or unambiguous short declaration name; may come from --presentation instead",
+    )
     p.add_argument(
         "--include-lib", action="append",
         help="library to index for graph nodes (repeatable; default: all project libraries in the current build)",
@@ -507,6 +551,20 @@ def build_parser() -> argparse.ArgumentParser:
         help="include names outside the indexed project-local graph, e.g. Mathlib dependencies",
     )
     p.add_argument("--out", help="write the graph JSON payload to this path")
+    p.add_argument(
+        "--html", metavar="PATH",
+        help="write a self-contained interactive HTML dependency viewer",
+    )
+    p.add_argument(
+        "--presentation", metavar="JSON",
+        help="curated exact-name presentation spec; may also provide graph targets",
+    )
+    p.add_argument(
+        "--headline", action="append",
+        help="add a declaration to the initial headline presentation (repeatable)",
+    )
+    p.add_argument("--title", help="override the viewer/presentation title")
+    p.add_argument("--subtitle", help="override the viewer/presentation subtitle")
     p.set_defaults(func=cmd_graph)
 
     p = sub.add_parser("axioms", help="axiom closure of one declaration")

@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "title": "YWS → Acharyya → Quench Frobenius proof chain",
+  "subtitle": "Headline nodes are editorial; every displayed edge preserves an elaborated dependency path and exposes its exact witness.",
+  "targets": [
+    "DkpsQuench2026.quench_part2_from_aligned_configFrobError_hp"
+  ],
+  "headlines": [
+    {
+      "name": "YuWangSamworth2015.sq_gap_mul_sum_cross_le_of_population_gap_opNorm",
+      "label": "YWS population-gap sin-Θ",
+      "group": "Yu–Wang–Samworth",
+      "description": "Population-only eigengap controls selected cross-energy without the former sample-gap smallness hypothesis."
+    },
+    {
+      "name": "YuWangSamworth2015.yuWangSamworth_alignmentMap_sub_overlapOp_apply_le",
+      "label": "YWS Procrustes alignment",
+      "group": "Yu–Wang–Samworth",
+      "description": "Global orthogonal alignment bridge used to eliminate the former local polar-smallness condition."
+    },
+    {
+      "name": "TauCeti.LinearMap.exists_linearIsometryEquiv_norm_sub_apply_le",
+      "label": "Sharp near-isometry alignment",
+      "group": "Tau Ceti",
+      "description": "Local branch of the alignment argument for small Gram deviation."
+    },
+    {
+      "name": "Acharyya2025.Weyl.abs_eigenvalues_sub_le",
+      "label": "Weyl eigenvalue control",
+      "group": "Acharyya"
+    },
+    {
+      "name": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+      "label": "Frobenius spectral configuration bound",
+      "group": "Acharyya"
+    },
+    {
+      "name": "Acharyya2025.MatrixPerturbation.exists_isometry_configFrobError_le_of_entrywise_close",
+      "label": "Entrywise matrix → configuration",
+      "group": "Acharyya"
+    },
+    {
+      "name": "Acharyya2025.AlignedPipeline.alignFrobExists_of_entrywiseClose",
+      "label": "Aligned CMDS seam",
+      "group": "Acharyya"
+    }
+  ]
+}
