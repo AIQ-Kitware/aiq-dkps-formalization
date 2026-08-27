@@ -421,6 +421,8 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `Acharyya2024.ContinuousMDS.lpPairDistErr`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
+- `TauCeti.integral_doubleSum_pi`
+- `TauCeti.map_evalPair_pi`
 
 **Clause-by-clause comparison:**
 
@@ -439,7 +441,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Replace the empirical model measure by the population law, which needs the convergence of empirical continuous-MDS embeddings to the population one.
+**Next action:** Finish link 1 -- the variance bound for a V-statistic of order two, on top of TauCeti.integral_doubleSum_pi -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -489,6 +491,8 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
+- `TauCeti.integral_doubleSum_pi`
+- `TauCeti.map_evalPair_pi`
 
 **Clause-by-clause comparison:**
 
@@ -505,7 +509,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Replace the empirical model measure by the population law; that is the continuous-MDS step the source attributes to the cited literature.
+**Next action:** Finish link 1 -- the variance bound for a V-statistic of order two, on top of TauCeti.integral_doubleSum_pi -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 
