@@ -397,16 +397,22 @@ function wrap(t, width = 34, maxLines = 3) {
   }
   return lines;
 }
-/* Rank libraries by the direction of the dependency edges between them, so a
-   band layout reads ForTauCeti -> DavisKahan -> the paper libraries.  Ties and
-   any cycle fall back to a stable alphabetical order.                        */
-const libraryRank = (() => {
+/* Package column order.
+
+   The library-level dependency graph is a DAG, so any topological order is
+   defensible; an alphabetical tiebreak is not, because it interleaves lineages
+   that never touch.  DavisKahan and Acharyya2024, for instance, have no edge in
+   either direction, and sorting them by name put Acharyya2024 between ForTauCeti
+   and DavisKahan.
+
+   This is a depth-first Kahn traversal: a package becomes available once every
+   prerequisite is placed, and among available packages the traversal continues
+   down the heaviest outgoing chain first.  That keeps a lineage contiguous --
+   ForTauCeti, DavisKahan, Yu--Wang--Samworth, then the DKPS application chain --
+   instead of scheduling by rank alone.  Only the dominant direction of a package
+   pair becomes an edge, as a defensive fallback against a cycle. */
+const libraryGraph = (() => {
   const libs = [...new Set(allNodes.map(n => n.library || "Other"))].sort();
-  const index = new Map(libs.map((l, i) => [l, i]));
-  /* Only the dominant direction of each library pair becomes an edge.  A
-     handful of generated equation lemmas are indexed under the module that
-     first unfolded them, which would otherwise put a cycle between two
-     cleanly layered packages. */
   const weight = new Map();
   for (const e of allEdges) {
     const a = byId.get(e.source)?.library || "Other", b = byId.get(e.target)?.library || "Other";
@@ -414,37 +420,39 @@ const libraryRank = (() => {
     const k = a + "\u0000" + b;
     weight.set(k, (weight.get(k) || 0) + 1);
   }
-  const out = new Map(libs.map(l => [l, new Set()]));
+  const out = new Map(libs.map(l => [l, []]));
   const indeg = new Map(libs.map(l => [l, 0]));
   for (const [k, count] of weight) {
     const [a, b] = k.split("\u0000");
-    if (!out.has(a) || !out.has(b) || out.get(a).has(b)) continue;
+    if (!out.has(a) || !out.has(b)) continue;
     if (count < (weight.get(b + "\u0000" + a) || 0)) continue;
-    out.get(a).add(b);
+    if (out.get(a).some(row => row.lib === b)) continue;
+    out.get(a).push({lib: b, count});
     indeg.set(b, indeg.get(b) + 1);
   }
+  /* ascending weight, so the heaviest successor ends up on top of the stack */
+  for (const rows of out.values())
+    rows.sort((x, y) => x.count - y.count || y.lib.localeCompare(x.lib));
   const rank = new Map(libs.map(l => [l, 0]));
-  const queue = libs.filter(l => indeg.get(l) === 0);
-  let seen = 0;
-  for (let i = 0; i < queue.length; i++) {
-    const a = queue[i];
-    seen++;
-    for (const b of out.get(a)) {
+  const pending = new Map(indeg);
+  const stack = libs.filter(l => pending.get(l) === 0).sort((a, b) => b.localeCompare(a));
+  const order = [], placed = new Set();
+  while (stack.length) {
+    const a = stack.pop();
+    if (placed.has(a)) continue;
+    placed.add(a);
+    order.push(a);
+    for (const {lib: b} of out.get(a)) {
       rank.set(b, Math.max(rank.get(b), rank.get(a) + 1));
-      indeg.set(b, indeg.get(b) - 1);
-      if (indeg.get(b) === 0) queue.push(b);
+      pending.set(b, pending.get(b) - 1);
+      if (pending.get(b) === 0) stack.push(b);
     }
   }
-  if (seen < libs.length) for (const l of libs) rank.set(l, index.get(l));
-  return rank;
+  for (const l of libs) if (!placed.has(l)) order.push(l);
+  return {rank, order};
 })();
-/* Library column order.  `libraryRank` is a longest-path rank over the
-   dependency DAG between packages, so ordering by it is a topological order;
-   the name comparison only separates packages the DAG leaves incomparable.
-   Each library gets its own column rather than sharing one with everything at
-   the same rank. */
-const libraryOrder = [...libraryRank.keys()].sort(
-  (a, b) => libraryRank.get(a) - libraryRank.get(b) || a.localeCompare(b));
+const libraryRank = libraryGraph.rank;
+const libraryOrder = libraryGraph.order;
 
 function topology(P) {
   const ins = new Map(P.nodes.map(n => [n.id, 0])), outs = new Map(P.nodes.map(n => [n.id, []]));
