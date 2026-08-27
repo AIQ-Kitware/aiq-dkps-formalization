@@ -21,7 +21,7 @@ namespace ExactSinTheta
 
 universe v
 
-/-- Direct lower-left/upper-right ordered branch over vendored Spectra. -/
+/-- Direct lower-left/upper-right ordered branch. -/
 theorem directOrderedSylvesterEngine_lowerUpper
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
@@ -48,7 +48,7 @@ theorem directOrderedSylvesterEngine_lowerUpper
     (spectraBoundedTruncationInterface B hB)
     hδ hAc hBc hEq hR
 
-/-- Direct upper-left/lower-right ordered branch over vendored Spectra. -/
+/-- Direct upper-left/lower-right ordered branch. -/
 theorem directOrderedSylvesterEngine_upperLower
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]

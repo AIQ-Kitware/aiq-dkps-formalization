@@ -8,10 +8,14 @@ import DavisKahan.Geometry.Polar.DirectRotationSquare
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
-# Complex direct rotation backed by Spectra
+# Complex direct rotation, the attribution-preserving bridge
 
 This module connects the proof-complete complex polar-factor construction to
 Davis--Kahan's established direct-rotation namespace and theorem interfaces.
+`SpectraBridge` is the attribution-preserving name for that boundary: the
+construction it wraps came from the vendored Spectra package, which was retired
+on 2026-07-29, and the polar factor it names is now native
+(`Geometry/Polar/DirectRotationSquare.lean`).
 The scalar-generic declarations remain independent; these declarations provide
 the completed complex specialization without weakening or replacing the real
 and general `RCLike` program.
@@ -29,8 +33,8 @@ open DavisKahan
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
-/-- The completed complex direct rotation obtained from the Spectra polar
-factor of the canonical intertwiner. -/
+/-- The completed complex direct rotation, the polar factor of the canonical
+intertwiner. -/
 noncomputable abbrev complexDirectRotation
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

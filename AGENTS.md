@@ -204,9 +204,9 @@ difference to hide behind a forwarding facade.
 
 Temporary adapters may keep intermediate commits buildable, but completion of
 the migration includes removing them. Namespace aliases and forwarding
-re-exports are not the final architecture. `Experimental/**`, `MathAhead/**`,
-and diagnostic `Audits/**` modules remain outside `DavisKahan.All`; production
-code never imports them.
+re-exports are not the final architecture. `Experimental/**` and diagnostic
+`Audits/**` modules remain outside `DavisKahan.All`; production code never
+imports them.
 
 Planning inventories under `dev/tauceti/` record earlier campaigns and may be
 useful evidence, but the current source tree and pinned Mathlib/Tau Ceti APIs are
@@ -521,12 +521,14 @@ The task is to **promote** the sketch:
 2. Take the proof **out** of the scratch file and put it in its correct home
    module — the source-facing location the statement actually belongs to — then
    fix it *there* until it compiles. Do not repair it inside `Scratch/`.
-3. The source-facing home is the `Frontier/**` statement (often a documented
-   open obligation). "Mathematics ahead" of the frontier lives in `MathAhead/**`;
-   *promotion* means lifting that proof up so the `Frontier` statement is proved
-   directly. Because `MathAhead` imports `Frontier`, the proof and its helper
-   lemmas must be moved **up** into the frontier module (import graph permitting;
-   the underlying `Sources/**` lemmas are upstream of both and cycle-safe).
+3. The source-facing home is the statement under `DavisKahan/Sources/DavisKahan1970/**`
+   that the sketch is about; reusable mathematics beneath it belongs to its
+   natural stable owner — `Geometry/`, `SpectralTheory/`, `BoundedOperator/`,
+   `Sylvester/`, `InfiniteDimensional/` or `ForTauCeti/`. *Promotion* means
+   moving the proof to that owner and proving the source statement directly
+   against it, not repairing the sketch where it sits. The staging trees this
+   step used to name — `Frontier/**` and `MathAhead/**` — were deleted on
+   2026-08-27; do not recreate them.
 4. Prefer the **source-faithful** signature over whatever the scratch happened to
    state. A sketch may carry an accidentally overstrong hypothesis that
    trivializes the conclusion; correct the statement to match the paper before
@@ -535,11 +537,11 @@ The task is to **promote** the sketch:
 5. After promotion, leave the staging module as scratch-only source or delete it
    when it no longer carries useful history. A declaration used by a
    source-facing theorem or counted by the source census has its canonical owner
-   outside `Experimental`, `MathAhead`, and `HiddenFoundations` staging paths.
-   Production consumers import only that canonical owner.
+   outside `Experimental` and `HiddenFoundations` staging paths. Production
+   consumers import only that canonical owner.
 
 `DavisKahan.All` contains production mathematics only. Directories named
-`Experimental`, `MathAhead`, and `Audits` are excluded from generated production
+`Experimental` and `Audits` are excluded from generated production
 aggregates. Run `lake build DavisKahan.Audits.All` explicitly for diagnostics.
 A production import of a staging or audit module is an architecture error.
 Production declarations also do not live under a `Scratch` namespace; once a proof
@@ -597,10 +599,10 @@ Prefer one strong leaf over a long inventory of supporting declarations.
 ## Canonical sine-theta handoff
 
 Before changing the single-angle API, read
-`docs/planning/davis-kahan-general-sin-theta-roadmap.md`,
-`dev/davis-kahan-1970-one-shot-proof-manuscript.md`, and
-`DavisKahan/Experimental/InfiniteDimensional/SinTheta/README.md`. The canonical
-target is the domain-aware unbounded theorem; bounded and finite results are
-specializations or alternative proofs.
+`docs/planning/davis-kahan-general-sin-theta-roadmap.md` and
+`dev/davis-kahan-1970-one-shot-proof-manuscript.md`. The canonical target is the
+domain-aware unbounded theorem; bounded and finite results are specializations
+or alternative proofs. (`DavisKahan/Experimental/InfiniteDimensional/SinTheta/README.md`
+was a third entry here until that tree was deleted on 2026-08-27.)
 
-Production theorem names use stable namespaces. Promoted declarations leave `Experimental`, `MathAhead`, and `HiddenFoundations` namespaces when they enter the production API.
+Production theorem names use stable namespaces. Promoted declarations leave `Experimental` and `HiddenFoundations` namespaces when they enter the production API.
