@@ -14,12 +14,12 @@ Companion coverage census: `dev/helm-2025-full-source-census.json`.
 
 | verdict | rows |
 | --- | ---: |
-| `GAP expected rather than in-probability` | 1 |
 | `GAP no literal wrapper` | 1 |
 | `GAP stronger Lean hypotheses` | 3 |
 | `PASS` | 2 |
 | `PASS equivalent encoding` | 2 |
 | `PASS exact` | 1 |
+| `PASS via composition` | 1 |
 | `REPAIR uniform integrability is necessary` | 1 |
 | `REPAIR uniform integrability; GAP consistency notion` | 1 |
 
@@ -40,7 +40,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | `H25-EQ1` | Equation (1), dissimilarity definition | PASS |
 | `H25-EQ2` | Equation (2), dissimilarity convergence | GAP no literal wrapper |
 | `H25-LEARN` | Statistical learning problem and Bayes risk | PASS |
-| `H25-CONSIST` | Definition of consistency | GAP expected rather than in-probability |
+| `H25-CONSIST` | Definition of consistency | PASS via composition |
 
 ## Relation legend
 
@@ -109,10 +109,12 @@ The conclusion is source-shaped. Lean additionally requires measurable embedding
 - `Helm2025.DKPS.LossDominated`
 - `Helm2025.DKPS.Theorem2_bayes`
 - `Helm2025.DKPS.consistency_transfer_dkps_bayes`
+- `Helm2025.DKPS.consistentExpected_of_consistentInProbability`
 - `Helm2025.DKPS.diagonal_convergence`
 - `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`
 - `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`
 - `Helm2025.DKPS.riskGivenTraining`
+- `Helm2025.DKPS.risk_eq_integral_riskGivenTraining`
 - `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`
 
 **Clause-by-clause comparison:**
@@ -134,7 +136,7 @@ Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The
 
 **Companion census gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
 
-**Next action:** State the transfer over the paper's in-probability consistency predicate rather than ConsistentExpected.
+**Next action:** None; the transfer is reachable from the paper's own consistency via consistentExpected_of_consistentInProbability.
 
 ### 3. `H25-A1` — Assumption 1: Rigid/affine-isometry invariance of the learning rule
 
@@ -366,7 +368,7 @@ risk_df is the expected loss of a decision function and bayesRisk is the infimum
 
 ### 12. `H25-CONSIST` — Definition of consistency: A decision-function sequence is consistent when its risk approaches the Bayes risk
 
-**Verdict:** GAP expected rather than in-probability
+**Verdict:** PASS via composition
 
 **Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:91-97`
 
@@ -376,7 +378,9 @@ risk_df is the expected loss of a decision function and bayesRisk is the infimum
 - `Helm2025.DKPS.ConsistentExpected`
 - `Helm2025.DKPS.ConsistentInProbability`
 - `Helm2025.DKPS.ConvergesInProbabilityToZero`
+- `Helm2025.DKPS.consistentExpected_of_consistentInProbability`
 - `Helm2025.DKPS.riskGivenTraining`
+- `Helm2025.DKPS.risk_eq_integral_riskGivenTraining`
 - `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`
 
 **Clause-by-clause comparison:**
@@ -393,5 +397,3 @@ Lean carries ConvergesInProbabilityToZero, the literal in-probability predicate,
 **Additional note:** This is the definition Theorem 2 quantifies over, so the substitution propagates to it.
 
 **Companion census gap refs:** `consistency-in-probability-vs-expectation`
-
-**Next action:** Restate the transfer over ConsistentInProbability; the missing step is risk n = the integral of riskGivenTraining over training sets.

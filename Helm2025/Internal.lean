@@ -625,6 +625,40 @@ theorem expectation_converges_of_prob_converges_uac {Ω : ℕ → Type*}
   linarith
 
 /--
+Fubini for the risk: the expected risk is the average of the conditional risk over training sets.
+
+`risk` integrates the loss over the training sample and the test point together, while
+`riskGivenTraining` holds the training set fixed.  Splitting the last coordinate of the product
+measure relates the two, which is what lets a theorem stated over `ConsistentExpected` be
+restated over the paper's in-probability consistency.
+-/
+theorem risk_eq_integral_riskGivenTraining (n d d' : ℕ)
+    (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
+    (learn : LearningRule n d d') (loss : LossFunction d')
+    (h_int : Integrable (fun p : (E d × Y d') × (Fin n → E d × Y d') =>
+        loss (learn p.2 p.1.1) p.1.2)
+      (P.prod (Measure.pi (fun _ : Fin n => P)))) :
+    risk n d d' P learn loss
+      = ∫ T, riskGivenTraining n d d' P learn loss T ∂(Measure.pi (fun _ : Fin n => P)) := by
+  classical
+  have hmp := MeasureTheory.measurePreserving_piFinSuccAbove
+    (fun _ : Fin (n + 1) => P) (Fin.last n)
+  have hsucc : ∀ j : Fin n, (Fin.last n).succAbove j = j.castSucc := fun j =>
+    Fin.succAbove_last_apply j
+  -- transport the integral along the splitting equivalence
+  have hcomp : risk n d d' P learn loss
+      = ∫ p, loss (learn p.2 p.1.1) p.1.2 ∂(P.prod (Measure.pi (fun _ : Fin n => P))) := by
+    rw [risk]
+    rw [← hmp.integral_comp (MeasurableEquiv.piFinSuccAbove _ _).measurableEmbedding]
+    refine integral_congr_ae (Filter.Eventually.of_forall fun ω => ?_)
+    have hinit : Fin.init ω = fun i : Fin n => ω i.castSucc := rfl
+    simp [MeasurableEquiv.piFinSuccAbove, hinit]
+  rw [hcomp, integral_prod _ h_int]
+  -- and swap the order, which is the content of the identity
+  rw [integral_integral_swap h_int]
+  rfl
+
+/--
 The paper's in-probability consistency gives convergence of the **expected** risks, provided the
 conditional risks are uniformly absolutely continuous.
 

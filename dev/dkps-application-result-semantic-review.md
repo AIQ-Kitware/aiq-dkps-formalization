@@ -38,7 +38,7 @@ This is the entry point for **paper theorem vs. Lean theorem** comparison. The c
 | `helm-2025` | `H25-EQ1` | Equation (1), dissimilarity definition | PASS | No substantive delta recorded. |
 | `helm-2025` | `H25-EQ2` | Equation (2), dissimilarity convergence | GAP no literal wrapper | The paper imports this rather than proving it, and so does the formalization. |
 | `helm-2025` | `H25-LEARN` | Statistical learning problem and Bayes risk | PASS | The infimum form does not presume the argmin is attained. |
-| `helm-2025` | `H25-CONSIST` | Definition of consistency | GAP expected rather than in-probability | Convergence in probability and convergence of expectations are not equivalent; the literal in-probability predicate exists as ConvergesInProbabilityToZero but is not the one the transfer theorems quantify over. |
+| `helm-2025` | `H25-CONSIST` | Definition of consistency | PASS via composition | Convergence in probability and convergence of expectations are not equivalent; the literal in-probability predicate exists as ConvergesInProbabilityToZero but is not the one the transfer theorems quantify over. |
 | `quench-2026` | `Q26-T1` | Theorem 1 (inherited Acharyya et al. 2025 Theorem 2) | REPAIR source mismatch | This avoids treating the inconsistent Acharyya v1 2,infinity display as literally proved while still supplying the rowwise control Quench uses. |
 | `quench-2026` | `Q26-EQ1` | Equation (1), DKPS definition | PROOF ROLE REPLACED | The Eq. (1) estimator is formalized; it is simply not the one Quench uses. |
 | `quench-2026` | `Q26-QDEF` | Equation (2) and query-efficiency definitions | PASS exact | No substantive delta recorded. |

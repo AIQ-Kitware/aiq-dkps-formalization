@@ -168,6 +168,37 @@ def ConsistentExpected (d d' : ℕ) (P : Measure (E d × Y d'))
     (H : Set (DecisionFunction d d')) : Prop :=
   Tendsto (fun n => risk n d d' P (learn n) loss) atTop (𝓝 (bayesRisk d d' P loss H))
 
+/--
+The paper's consistency implies the consistency the transfer theorem consumes.
+
+`ConsistentExpected` is convergence of the expected risk; the paper defines consistency in
+probability over the training set.  Under the uniform-integrability condition that
+`prob_convergence_not_enough_for_expectations` shows is unavoidable, and the Fubini identity
+`risk_eq_integral_riskGivenTraining`, the paper's hypothesis gives the one Lean's transfer
+theorems quantify over.  A theorem stated over `ConsistentExpected` is therefore applicable
+directly from the paper's own definition.
+-/
+theorem consistentExpected_of_consistentInProbability
+    (d d' : ℕ) (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
+    (loss : LossFunction d') (learn : (n : ℕ) → LearningRule n d d')
+    (H : Set (DecisionFunction d d'))
+    (h_meas : ∀ n, Measurable (fun T : Fin n → E d × Y d' =>
+      riskGivenTraining n d d' P (learn n) loss T))
+    (h_int : ∀ n, Integrable (fun T : Fin n → E d × Y d' =>
+      riskGivenTraining n d d' P (learn n) loss T - bayesRisk d d' P loss H)
+      (Measure.pi (fun _ : Fin n => P)))
+    (h_prod : ∀ n, Integrable (fun p : (E d × Y d') × (Fin n → E d × Y d') =>
+        loss (learn n p.2 p.1.1) p.1.2)
+      (P.prod (Measure.pi (fun _ : Fin n => P))))
+    (h_uac : UniformlyAbsolutelyContinuous (fun n => Measure.pi (fun _ : Fin n => P))
+      (fun n T => riskGivenTraining n d d' P (learn n) loss T - bayesRisk d d' P loss H))
+    (h_cons : ConsistentInProbability d d' P loss learn (bayesRisk d d' P loss H)) :
+    ConsistentExpected d d' P loss learn H := by
+  have h := tendsto_integral_riskGivenTraining_of_consistentInProbability d d' P loss learn
+    (bayesRisk d d' P loss H) h_meas h_int h_uac h_cons
+  refine h.congr (fun n => ?_)
+  exact (risk_eq_integral_riskGivenTraining n d d' P (learn n) loss (h_prod n)).symm
+
 /-- Theorem 2, specialized to Bayes risk over a hypothesis class. -/
 theorem consistency_transfer_dkps_bayes (d d' : ℕ)
     (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
