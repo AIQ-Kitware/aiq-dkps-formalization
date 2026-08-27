@@ -85,11 +85,15 @@ The paper imports a representation concentration theorem and leaves reference/re
 
 The paper proves nearest-neighbor query efficiency but evaluates OLS/ensembles empirically. The formal OLS namespace records additional assumptions sufficient for theory-practice bridges; these are extensions, not missing pieces of Theorem 2.
 
-### `replicate-schedule-exceeds-source-rate` — Formal replicate schedule still exceeds the source rate, by d + 1 powers
+### `replicate-schedule-exceeds-source-rate` — Replicate schedule: the finite route now runs at the source rate; the infinite route pays for its net
 
 **Kind:** `source_audit`
 
 Theorem 1 needs only r = omega(n^3); the capstones fix safeEntropyReplicates d n = (n+1)^(4+d), reduced from (n+1)^(6+2d) once the spectral certificate began reporting the population Gram floor at its true scale n(kappa/2) rather than as the constant kappa/2. The remaining excess is structural, not slack: the paper applies Theorem 1 to a fixed set of n reference models, while Theorem 2's proof also needs the bound for the target model, and making it uniform over an infinite model class costs a union bound over a perspective net of size (n+1)^d against a tolerance whose square is (n+1)^2. No schedule below (n+1)^(2+d) can work for that quantifier, so omega(n^3) is reachable only at the fixed finite scope Theorem 1 actually addresses. See theorem1-rate-not-instantiated.
+
+RESOLVED for the finite route. The schedule is no longer hardcoded: FiniteSubsetData is parameterized by the replicate budget and finiteFixedSubsetMSE takes SourceReplicateRate, which is exactly the source's r = omega(n^3). That is what the concentration ratio needs -- the ratio is a constant divided by r n / (n+1)^3 -- so nothing above the source rate is required. The old (n+1)^4 schedule is recovered as one instance via sourceReplicateRate_safeFiniteReplicates.
+
+For the compact-infinite route the excess is now named and bounded rather than hidden in a constant. NetReplicateRate asks for r n / (n+1)^(2 + entropyPower) -> infinity, where entropyPower is the polynomial exponent of the shrinking perspective net. The gap to the source rate is therefore exactly the price of the net, and closing it means removing the net -- the continuum treatment recorded under Acharyya 2024's continuous-MDS gap -- not tuning constants. The previous hardcoded schedule had two further powers of slack, which are gone.
 
 ### `dkps-definition-raw-stress-vs-cmds` — Eq. (1) defines DKPS by raw stress; the cited concentration theorem is classical MDS
 
@@ -126,6 +130,12 @@ The DKPS chain does not use one dissimilarity convention. Acharyya 2024 (line 17
 Consequence. Rescaling every dissimilarity by c > 0 rescales the CMDS configuration by c, the doubly centred matrix by c^2 and its eigenvalues by c^2, so a vanishing-error conclusion survives the substitution. What does not survive is the literal constants: Acharyya 2025 Theorem 2's C1, C2, C3 are stated in terms of eigenvalues of B under the 1/sqrt m scaling. And in every regime where m grows the factor is not a constant, so the substitution is not a harmless choice of units there.
 
 Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extraction in which the fraction renders as "1m" with a separate 1 and m around a radical. It is consistent across both the population and sample definitions, but it should be confirmed against the published PDF before any statement is changed on the strength of it.
+
+### `technical-assumptions-are-acharyya-1-and-2` — Quench's Theorem 1 says 'under technical assumptions'; those are Acharyya 2025's Assumptions 1 and 2
+
+**Kind:** `source_audit`
+
+Quench states its Theorem 1 as '[Acharyya et al. (2025) Theorem 2] In our setting, suppose r = omega(n^3) and sup_ij trace(Cov(F_ij)) = O(1). Then, UNDER TECHNICAL ASSUMPTIONS, ...'. The technical assumptions of the theorem being imported are Acharyya 2025's Assumptions 1 and 2, and Assumption 2 is the population eigenvalue floor and ceiling. The eigenvalue floor that the Lean capstones carry is therefore the printed technical assumption named, not a hypothesis added beyond the paper. What the formalization contributes here is that the phrase is discharged into a specific condition a reader can check.
 
 ## Detail
 
@@ -250,12 +260,12 @@ Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extractio
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:163-171`
 * **importance:** `headline`
 * **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — infiniteFixedSubsetMSE and finiteFixedSubsetMSE prove the printed conclusion end to end for the literal tie-averaged estimator built from raw cached responses: the representation concentration is derived through the CMDS/Davis--Kahan chain rather than assumed. They are stronger than the source only in hypotheses -- an explicit population nondegeneracy floor and a replicate schedule above the source rate. The remaining rows are the conditional intermediates that take the concentration event as a premise.
+* **semantic alignment:** `stronger_hypotheses` — infiniteFixedSubsetMSE and finiteFixedSubsetMSE prove the printed conclusion end to end for the literal tie-averaged estimator built from raw cached responses: the representation concentration is derived through the CMDS/Davis--Kahan chain rather than assumed. They are stronger than the source only in hypotheses -- an explicit population nondegeneracy floor and a replicate schedule above the source rate. The remaining rows are the conditional intermediates that take the concentration event as a premise. Update: the eigenvalue floor is the paper's own 'technical assumptions' named -- Quench imports Acharyya 2025 Theorem 2 with that phrase, and Assumption 2 is that floor -- so it is not an excess. The replicate schedule is no longer an excess either for the finite route, which now runs on any budget meeting the source's r = omega(n^3).
 * **source claim:** For every epsilon>0 there are sufficiently large sampling/model budgets for which MSE(yhat_NN)<=epsilon with high probability.
-* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`, `highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport`, `highProb_mse_nn_le`, `highProb_mse_nn_le_of_subevent`, `highProb_mse_tieAverage_of_subevents`, `integrable_sqLoss_of_bounded`, `mse_le_one_of_unit_range`, `radialTieAverage_mem_Icc`
-* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`, `tie-display-proof-mismatch`
+* **Lean declarations:** `DkpsQuench2026.NetReplicateRate`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`, `DkpsQuench2026.SourceReplicateRate`, `highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport`, `highProb_mse_nn_le`, `highProb_mse_nn_le_of_subevent`, `highProb_mse_tieAverage_of_subevents`, `integrable_sqLoss_of_bounded`, `mse_le_one_of_unit_range`, `radialTieAverage_mem_Icc`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `technical-assumptions-are-acharyya-1-and-2`, `theorem1-rate-not-instantiated`, `tie-display-proof-mismatch`
 * **notes:** The end-to-end declarations are the canonical realization; the conditional forms remain listed because they are the reusable interfaces the capstones factor through.
-* **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
+* **next action:** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.
 
 ### `Q26-T2B` — Eventual high-probability improvement over subset-score baseline
 
@@ -263,12 +273,12 @@ Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extractio
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:165-236`
 * **importance:** `headline`
 * **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — infiniteAllQueries and finiteAllQueries conclude HighProbQueryEfficient, the paper's full predicate quantified over every budget below the benchmark cardinality, for the raw-response estimator with concentration derived rather than assumed. The fixed-subset capstones are the Q-level statement they quantify. The excess over the source is in hypotheses only, as recorded in the referenced gaps.
+* **semantic alignment:** `stronger_hypotheses` — infiniteAllQueries and finiteAllQueries conclude HighProbQueryEfficient, the paper's full predicate quantified over every budget below the benchmark cardinality, for the raw-response estimator with concentration derived rather than assumed. The fixed-subset capstones are the Q-level statement they quantify. The excess over the source is in hypotheses only, as recorded in the referenced gaps. Update: the eigenvalue floor is the paper's own 'technical assumptions' named. The replicate schedule is now an explicit rate condition rather than a hardcoded polynomial, and the remaining excess over the source rate is exactly the exponent of the perspective net.
 * **source claim:** When m<M and the subset-score baseline has positive MSE, nearest-neighbor DKPS prediction is query-efficient with high probability.
-* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.infiniteAllQueries`, `DkpsQuench2026.QueryEfficiency.finiteAllQueries`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubset`, `highProb_queryEfficient_nn`, `highProb_queryEfficient_nn_of_subevent`, `highProbQQueryEfficient_tieAverage_of_subevents`, `highProbMQueryEfficient_tieAverage_of_certificates`, `highProbQueryEfficient_tieAverage_of_certificates`
-* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`
+* **Lean declarations:** `DkpsQuench2026.NetReplicateRate`, `DkpsQuench2026.QueryEfficiency.finiteAllQueries`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubset`, `DkpsQuench2026.QueryEfficiency.infiniteAllQueries`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`, `DkpsQuench2026.SourceReplicateRate`, `highProbMQueryEfficient_tieAverage_of_certificates`, `highProbQQueryEfficient_tieAverage_of_subevents`, `highProbQueryEfficient_tieAverage_of_certificates`, `highProb_queryEfficient_nn`, `highProb_queryEfficient_nn_of_subevent`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `technical-assumptions-are-acharyya-1-and-2`, `theorem1-rate-not-instantiated`
 * **notes:** The end-to-end declarations are the canonical realization; the certificate and subevent forms remain listed as the reusable interfaces they factor through.
-* **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
+* **next action:** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.
 
 ### `Q26-RAW-FIN` — End-to-end finite raw-response query efficiency
 
@@ -276,12 +286,12 @@ Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extractio
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:163-236`
 * **importance:** `major`
 * **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — The finite realization of Theorem 2. Previously classified as an extension beyond the paper theorem surface, which inverted the layering: the conditional forms assume what the paper proves, and these discharge it. The excess over the source is the explicit sampling/regularity interface and the replicate schedule.
+* **semantic alignment:** `stronger_hypotheses` — The finite realization of Theorem 2. Previously classified as an extension beyond the paper theorem surface, which inverted the layering: the conditional forms assume what the paper proves, and these discharge it. The excess over the source is the explicit sampling/regularity interface and the replicate schedule. Update: the eigenvalue floor is the paper's own 'technical assumptions' named -- Quench imports Acharyya 2025 Theorem 2 with that phrase, and Assumption 2 is that floor -- so it is not an excess. The replicate schedule is no longer an excess either for the finite route, which now runs on any budget meeting the source's r = omega(n^3).
 * **source claim:** Theorem 2 at the finite model-class scope: the paper's proof derives the representation error from Theorem 1, so discharging it is inside the printed argument rather than beyond it.
-* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.FiniteSubsetData`, `DkpsQuench2026.QueryEfficiency.FiniteSubsetAssumptions`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubset`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.finiteAllQueries`
-* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`
+* **Lean declarations:** `DkpsQuench2026.NetReplicateRate`, `DkpsQuench2026.QueryEfficiency.FiniteSubsetAssumptions`, `DkpsQuench2026.QueryEfficiency.FiniteSubsetData`, `DkpsQuench2026.QueryEfficiency.finiteAllQueries`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubset`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`, `DkpsQuench2026.SourceReplicateRate`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `technical-assumptions-are-acharyya-1-and-2`, `theorem1-rate-not-instantiated`
 * **notes:** No additional note.
-* **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
+* **next action:** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.
 
 ### `Q26-RAW-INF` — End-to-end compact-infinite query efficiency
 
@@ -289,12 +299,12 @@ Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extractio
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:163-236`
 * **importance:** `major`
 * **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — The compact-infinite realization of Theorem 2. Previously classified as an extension beyond the paper theorem surface, which inverted the layering: the conditional forms assume what the paper proves, and these discharge it. The excess over the source is the explicit sampling/regularity interface and the replicate schedule.
+* **semantic alignment:** `stronger_hypotheses` — The compact-infinite realization of Theorem 2. Previously classified as an extension beyond the paper theorem surface, which inverted the layering: the conditional forms assume what the paper proves, and these discharge it. The excess over the source is the explicit sampling/regularity interface and the replicate schedule. Update: the eigenvalue floor is the paper's own 'technical assumptions' named. The replicate schedule is now an explicit rate condition rather than a hardcoded polynomial, and the remaining excess over the source rate is exactly the exponent of the perspective net.
 * **source claim:** Theorem 2 at the compact-infinite model-class scope: the paper's proof derives the representation error from Theorem 1, so discharging it is inside the printed argument rather than beyond it.
-* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.InfiniteSubsetData`, `DkpsQuench2026.QueryEfficiency.InfiniteSubsetAssumptions`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.infiniteAllQueries`
-* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`
+* **Lean declarations:** `DkpsQuench2026.NetReplicateRate`, `DkpsQuench2026.QueryEfficiency.InfiniteSubsetAssumptions`, `DkpsQuench2026.QueryEfficiency.InfiniteSubsetData`, `DkpsQuench2026.QueryEfficiency.infiniteAllQueries`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`, `DkpsQuench2026.SourceReplicateRate`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `technical-assumptions-are-acharyya-1-and-2`, `theorem1-rate-not-instantiated`
 * **notes:** No additional note.
-* **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
+* **next action:** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.
 
 ### `Q26-OLS` — Theory-practice OLS bridge
 
