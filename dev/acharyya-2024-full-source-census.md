@@ -21,8 +21,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `compiled_exact` | 2 |
 | `compiled_generalized` | 2 |
 | `compiled_specialization` | 6 |
-| `compiled_stronger_hypotheses` | 3 |
-| `compiled_source_repair` | 1 |
+| `compiled_source_repair` | 4 |
 | `not_proof_debt` | 1 |
 
 ## Semantic-alignment summary
@@ -32,8 +31,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `exact` | 2 |
 | `generalized` | 2 |
 | `specialized` | 6 |
-| `stronger_hypotheses` | 3 |
-| `source_repair` | 1 |
+| `source_repair` | 4 |
 | `out_of_scope` | 1 |
 
 ## Items
@@ -45,11 +43,11 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `A24-R2` | `supporting` | Remark 2 | `compiled_generalized` | `generalized` | `proved_in_build` |
 | `A24-R3` | `major` | Continuous raw-stress setup and Remark 3 | `compiled_exact` | `exact` | `absent` |
 | `A24-R4` | `supporting` | Remark 4 | `not_proof_debt` | `out_of_scope` | `not_applicable` |
-| `A24-T1` | `headline` | Theorem 1 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `A24-T1` | `headline` | Theorem 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-A1` | `major` | Assumption 1 | `compiled_generalized` | `generalized` | `proved_in_build` |
-| `A24-L1` | `major` | Lemma 1 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `A24-L1` | `major` | Lemma 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-T2` | `headline` | Theorem 2 | `compiled_specialization` | `specialized` | `proved_in_build` |
-| `A24-T3` | `headline` | Theorem 3 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `A24-T3` | `headline` | Theorem 3 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-C1` | `headline` | Corollary 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-A2` | `major` | Assumption 2 | `compiled_specialization` | `specialized` | `proved_in_build` |
 | `A24-L2` | `headline` | Lemma 2 | `compiled_specialization` | `specialized` | `absent` |
@@ -58,11 +56,17 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 
 ## Gaps and source repairs
 
-### `fixed-profile-uniqueness` — The paper fixes one limiting MDS profile without a uniqueness premise
+### `fixed-profile-uniqueness` — The paper fixes one limiting MDS profile without a uniqueness premise -- REFUTED
 
 **Kind:** `source_audit`
 
 Theorem 1, Lemma 1, and Theorem 3 name a fixed limiting minimizer/profile. Lean proves unconditional convergence to the minimizer set, and recovers a fixed profile only under RawStress.UniquePairProfile. Under that premise Lean gets full-sequence convergence, stronger than the source subsequence conclusion.
+
+REFUTED, with a machine-checked counterexample. Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile exhibits a sequence of dissimilarity matrices converging in probability to the equilateral matrix on three objects -- constantly equal to it -- and a selection of raw-stress minimizers for which no subsequence and no minimizer of the limit make the pairwise distances converge in probability. Every hypothesis of the printed theorem holds in its strongest form.
+
+The obstruction is structural, not exotic. Raw stress sees the dissimilarity matrix only through its entries, so a matrix invariant under relabeling the models has a minimizer set closed under relabeling. Three points on a line cannot be mutually equidistant unless they coincide, and coinciding is not optimal against the equilateral matrix, so relabeling yields a genuinely different pairwise-distance profile. A selection returning one labeling on half the sample points and the other on the rest defeats every fixed profile.
+
+RawStress.UniquePairProfile is exactly what rules this out. The package's extra hypothesis is therefore a repair of the source, not an assumption added to it, and the rows carrying it are dispositioned accordingly.
 
 ### `growing-query-rate-wiring` — The explicit growing-query gamma/r condition is not wired end to end
 
@@ -197,13 +201,13 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **source anchor:** Theorem 1 (theorem, section 4.1)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:205-224`
 * **importance:** `headline`
-* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — The source-shaped fixed-minimizer conclusion is proved with an explicit UniquePairProfile premise. Without it Lean proves convergence to the population minimizer set instead.
+* **status / verification:** `compiled_source_repair` / `proved_in_build`
+* **semantic alignment:** `source_repair` — The printed statement names a fixed limiting minimizer with no uniqueness premise, and that is false: no_fixed_limiting_profile is a counterexample satisfying every printed hypothesis in its strongest form. RawStress.UniquePairProfile is the repair, and in exchange the Lean conclusion holds along the full sequence rather than along a subsequence, which is stronger than printed. The unconditional content -- convergence to the minimizer SET -- is separately proved without any uniqueness premise by rawStress_mds_stability_set.
 * **source claim:** With n and m fixed, a subsequence of estimated raw-stress minimizers has pairwise distances converging in probability to those of a fixed population minimizer.
-* **Lean declarations:** `Acharyya2024.Consistency.fixed_models_fixed_queries_consistency_of_uniqueProfile`, `Acharyya2024.Consistency.rawStress_mds_stability`, `Acharyya2024.Consistency.rawStress_mds_stability_set`
+* **Lean declarations:** `Acharyya2024.Consistency.fixed_models_fixed_queries_consistency_of_uniqueProfile`, `Acharyya2024.Consistency.rawStress_mds_stability`, `Acharyya2024.Consistency.rawStress_mds_stability_set`, `Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist`, `Acharyya2024.ProfileNonuniqueness.mds_comp_perm`, `Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile`
 * **gap refs:** `fixed-profile-uniqueness`
 * **notes:** The repaired theorem actually proves the fixed-profile convergence along the full sequence and then supplies id as the source subsequence.
-* **next action:** None.
+* **next action:** None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it.
 
 ### `A24-A1` — Finite-model population dissimilarities have a fixed Euclidean limit
 
@@ -222,13 +226,13 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **source anchor:** Lemma 1 (lemma, section 4.2)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:248-263`
 * **importance:** `major`
-* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — Lean proves unconditional convergence to the minimizer set. The fixed-minimizer form requires UniquePairProfile, which is not printed in the paper.
+* **status / verification:** `compiled_source_repair` / `proved_in_build`
+* **semantic alignment:** `source_repair` — The printed statement names a fixed limiting minimizer with no uniqueness premise, and that is false: no_fixed_limiting_profile is a counterexample satisfying every printed hypothesis in its strongest form. RawStress.UniquePairProfile is the repair, and in exchange the Lean conclusion holds along the full sequence rather than along a subsequence, which is stronger than printed. The unconditional content -- convergence to the minimizer SET -- is separately proved without any uniqueness premise by rawStress_mds_stability_set.
 * **source claim:** If D converges to Delta^(infinity) with n fixed, a subsequence of MDS(D) has pairwise distances converging to those of a fixed minimizer of MDS(Delta^(infinity)).
-* **Lean declarations:** `Acharyya2024.Consistency.rawStress_mds_stability`, `Acharyya2024.RawStress.mds_stability_inProbability_set`, `Acharyya2024.RawStress.mds_stability_inProbability_of_uniqueProfile`
+* **Lean declarations:** `Acharyya2024.Consistency.rawStress_mds_stability`, `Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist`, `Acharyya2024.ProfileNonuniqueness.mds_comp_perm`, `Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile`, `Acharyya2024.RawStress.mds_stability_inProbability_of_uniqueProfile`, `Acharyya2024.RawStress.mds_stability_inProbability_set`
 * **gap refs:** `fixed-profile-uniqueness`
 * **notes:** The set-valued theorem isolates the strongest unconditional statement.
-* **next action:** None.
+* **next action:** None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it.
 
 ### `A24-T2` — Dissimilarity concentration under the covariance-trace rate
 
@@ -248,13 +252,13 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **source anchor:** Theorem 3 (theorem, section 4.2)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:279-303`
 * **importance:** `headline`
-* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — The geometric conclusion is compiled, with UniquePairProfile added for a fixed limiting profile and the source gamma condition abstracted into sampling and deterministic-limit convergence hypotheses.
+* **status / verification:** `compiled_source_repair` / `proved_in_build`
+* **semantic alignment:** `source_repair` — The printed statement names a fixed limiting minimizer with no uniqueness premise, and that is false: no_fixed_limiting_profile is a counterexample satisfying every printed hypothesis in its strongest form. RawStress.UniquePairProfile is the repair, and in exchange the Lean conclusion holds along the full sequence rather than along a subsequence, which is stronger than printed. The unconditional content -- convergence to the minimizer SET -- is separately proved without any uniqueness premise by rawStress_mds_stability_set.
 * **source claim:** Under the Theorem 2 rate condition, estimated raw-stress pairwise distances converge along a subsequence to a population MDS configuration.
-* **Lean declarations:** `Acharyya2024.Consistency.fixed_models_growing_queries_consistency_of_uniqueProfile`, `Acharyya2024.Consistency.growing_queries_dissimilarity_converges`
+* **Lean declarations:** `Acharyya2024.Consistency.fixed_models_growing_queries_consistency_of_uniqueProfile`, `Acharyya2024.Consistency.growing_queries_dissimilarity_converges`, `Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist`, `Acharyya2024.ProfileNonuniqueness.mds_comp_perm`, `Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile`
 * **gap refs:** `fixed-profile-uniqueness`, `growing-query-rate-wiring`
 * **notes:** Under the added uniqueness premise the Lean proof obtains full-sequence convergence.
-* **next action:** None.
+* **next action:** None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it.
 
 ### `A24-C1` — Coordinate convergence after orthogonal alignment and translation
 

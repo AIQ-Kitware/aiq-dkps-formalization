@@ -179,6 +179,9 @@ No corresponding continuous-model-space raw-stress functional, model distributio
 - `Acharyya2024.Consistency.fixed_models_fixed_queries_consistency_of_uniqueProfile`
 - `Acharyya2024.Consistency.rawStress_mds_stability`
 - `Acharyya2024.Consistency.rawStress_mds_stability_set`
+- `Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist`
+- `Acharyya2024.ProfileNonuniqueness.mds_comp_perm`
+- `Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile`
 
 **Clause-by-clause comparison:**
 
@@ -188,6 +191,7 @@ No corresponding continuous-model-space raw-stress functional, model distributio
 | psi-hat(r) is a raw-stress minimizer of D(r), and psi is a fixed minimizer of the limiting Delta. | Lean assumes sample minimizer membership and a fixed population minimizer. | `exact` |  |
 | There exists a subsequence along which every estimated pairwise distance converges in probability to the corresponding distance of that fixed psi. | Lean proves full-sequence pair-distance convergence, then the identity subsequence suffices. | `lean_stronger_conclusion` |  |
 | The paper does not require all population minimizers to share one pair-distance profile. | The fixed-psi Lean theorem requires UniquePairProfile Delta. | `lean_stronger_hypothesis` | Without it Lean proves convergence to the population minimizer set, showing why the printed fixed-representative conclusion needs repair. |
+| there is a minimizer psi of the limiting dissimilarity matrix whose pairwise distances the estimates approach | no_fixed_limiting_profile refutes this without a uniqueness premise; RawStress.UniquePairProfile is the repair. | `source_repair` | The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly. |
 
 **Semantic review:**
 
@@ -196,6 +200,8 @@ The source-shaped fixed-minimizer conclusion is proved with an explicit UniquePa
 **Additional note:** The repaired theorem actually proves the fixed-profile convergence along the full sequence and then supplies id as the source subsequence.
 
 **Companion census gap refs:** `fixed-profile-uniqueness`
+
+**Next action:** None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it.
 
 ### 6. `A24-A1` — Assumption 1: Finite-model population dissimilarities have a fixed Euclidean limit
 
@@ -232,8 +238,11 @@ The active theorem only needs deterministic convergence of the population dissim
 
 **Selected Lean declarations:**
 - `Acharyya2024.Consistency.rawStress_mds_stability`
-- `Acharyya2024.RawStress.mds_stability_inProbability_set`
+- `Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist`
+- `Acharyya2024.ProfileNonuniqueness.mds_comp_perm`
+- `Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile`
 - `Acharyya2024.RawStress.mds_stability_inProbability_of_uniqueProfile`
+- `Acharyya2024.RawStress.mds_stability_inProbability_set`
 
 **Clause-by-clause comparison:**
 
@@ -241,6 +250,7 @@ The active theorem only needs deterministic convergence of the population dissim
 | --- | --- | --- | --- |
 | D -> DeltaInf in Frobenius norm in probability for fixed n. | rawStress_mds_stability_set assumes the corresponding finite dissimilarity convergence. | `exact` |  |
 | A subsequence of arbitrary MDS(D) minimizers approaches the pair distances of one fixed psi in MDS(DeltaInf). | Unconditionally Lean proves distance to the minimizer set tends to zero; the fixed-psi form adds UniquePairProfile. | `lean_stronger_hypothesis` | This is the same identifiability issue as Theorem 1. |
+| there is a minimizer psi of the limiting dissimilarity matrix whose pairwise distances the estimates approach | no_fixed_limiting_profile refutes this without a uniqueness premise; RawStress.UniquePairProfile is the repair. | `source_repair` | The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly. |
 
 **Semantic review:**
 
@@ -249,6 +259,8 @@ Lean proves unconditional convergence to the minimizer set. The fixed-minimizer 
 **Additional note:** The set-valued theorem isolates the strongest unconditional statement.
 
 **Companion census gap refs:** `fixed-profile-uniqueness`
+
+**Next action:** None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it.
 
 ### 8. `A24-T2` — Theorem 2: Dissimilarity concentration under the covariance-trace rate
 
@@ -290,6 +302,9 @@ The finite-dimensional Chebyshev/second-moment mechanism and gamma/r sample-mean
 **Selected Lean declarations:**
 - `Acharyya2024.Consistency.fixed_models_growing_queries_consistency_of_uniqueProfile`
 - `Acharyya2024.Consistency.growing_queries_dissimilarity_converges`
+- `Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist`
+- `Acharyya2024.ProfileNonuniqueness.mds_comp_perm`
+- `Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile`
 
 **Clause-by-clause comparison:**
 
@@ -298,6 +313,7 @@ The finite-dimensional Chebyshev/second-moment mechanism and gamma/r sample-mean
 | Use Theorem 2 covariance-trace rate plus Assumption 1. | Lean replaces the concrete rate premise by sampling convergence and deterministic population-limit convergence hypotheses. | `lean_weaker_hypothesis` | As a theorem interface this is more abstract/stronger; the literal rate-to-convergence assembly is incomplete. |
 | A subsequence of raw-stress minimizers has pair distances converging to those of a fixed limiting psi. | fixed_models_growing_queries_consistency_of_uniqueProfile proves the full-sequence version. | `lean_stronger_conclusion` |  |
 | No profile-uniqueness assumption is printed. | Lean requires UniquePairProfile for a fixed limiting pair-distance profile. | `lean_stronger_hypothesis` |  |
+| there is a minimizer psi of the limiting dissimilarity matrix whose pairwise distances the estimates approach | no_fixed_limiting_profile refutes this without a uniqueness premise; RawStress.UniquePairProfile is the repair. | `source_repair` | The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly. |
 
 **Semantic review:**
 
@@ -306,6 +322,8 @@ The geometric conclusion is compiled, with UniquePairProfile added for a fixed l
 **Additional note:** Under the added uniqueness premise the Lean proof obtains full-sequence convergence.
 
 **Companion census gap refs:** `fixed-profile-uniqueness`, `growing-query-rate-wiring`
+
+**Next action:** None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it.
 
 ### 10. `A24-C1` — Corollary 1: Coordinate convergence after orthogonal alignment and translation
 
