@@ -167,7 +167,6 @@ open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation
 open TauCeti.ApproximationNumber
-open TauCeti.DavisKahan.Frontier
 
 universe u
 

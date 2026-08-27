@@ -283,7 +283,7 @@ theorem tanTheta_unbounded_ambient_paperUINorm_of_data
       (alpha + delta) * ‖Vᗮ.starProjection ((z : U) : E)‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection ((z : U) : E),
           Vᗮ.starProjection (data.action z)⟫_ℂ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual :
       data.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
@@ -299,7 +299,7 @@ theorem tanTheta_unbounded_ambient_paperUINorm_of_data
     exact lt_of_le_of_lt h hdirected
   have htr : ‖sinAngleOperatorC U V‖ < 1 := by
     rw [norm_sinAngleOperatorC U V,
-      DavisKahan.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
+      DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
         U V h35]
     exact hambient
   exact tanTheta_unbounded_ambient_paperUINorm_of_data_of_transversality N data H hH
@@ -394,7 +394,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_of_data
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : U) : E)),
           Vᗮ.starProjection (D.action z)⟫_ℂ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual :
       D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
@@ -409,7 +409,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_of_data
     exact lt_of_le_of_lt h hdirected
   have htr : ‖sinAngleOperatorC U V‖ < 1 := by
     rw [norm_sinAngleOperatorC U V,
-      DavisKahan.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
+      DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
         U V h35]
     exact hambient
   exact tanTheta_unboundedCompression_ambient_paperUINorm_of_data_of_transversality
@@ -443,7 +443,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_exact
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤
         RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
     N.Mem (paperTanAngleOperatorC U V) ∧
@@ -473,7 +473,7 @@ theorem tanTheta_unbounded_ambient_paperUINorm_exact
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤
         RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
     N.Mem (paperTanAngleOperatorC U V) ∧

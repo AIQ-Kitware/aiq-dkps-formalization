@@ -49,7 +49,7 @@ with no separability at all.
 ## Note on the relation carrier
 
 The Halmos classification layer still states its generic component with
-`TauCeti.DavisKahan.Frontier.BoundedOperatorsUnitaryEquivalent`, while the promoted
+`TauCeti.DavisKahan.BoundedOperatorsUnitaryEquivalent`, while the promoted
 multiplicity theorems are stated with the canonical `TauCeti.OperatorUnitaryEquiv`.  The two are
 literally the same existential; `operatorUnitaryEquiv_iff_boundedOperatorsUnitaryEquivalent`
 below is the one-line bridge, and it is private because the intended long-term outcome is that
@@ -62,7 +62,6 @@ namespace TauCeti
 namespace DavisKahan1970
 
 open DavisKahan
-open DavisKahan.Frontier
 open DavisKahan.RealSpectralRestriction
 
 universe u v
@@ -75,7 +74,7 @@ variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
 
 private theorem operatorUnitaryEquiv_iff_boundedOperatorsUnitaryEquivalent
     (A : H₁ →L[𝕜] H₁) (B : H₂ →L[𝕜] H₂) :
-    OperatorUnitaryEquiv A B ↔ Frontier.BoundedOperatorsUnitaryEquivalent A B :=
+    OperatorUnitaryEquiv A B ↔ BoundedOperatorsUnitaryEquivalent A B :=
   Iff.rfl
 
 end Bridge

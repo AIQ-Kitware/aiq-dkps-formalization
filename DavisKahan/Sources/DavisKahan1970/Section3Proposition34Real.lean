@@ -29,7 +29,6 @@ namespace TauCeti
 namespace DavisKahan1970
 
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Frontier
 open TauCeti.DavisKahanExt
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification

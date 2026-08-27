@@ -46,7 +46,6 @@ namespace TauCeti
 namespace DavisKahan1970
 
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Frontier
 
 universe u v
 

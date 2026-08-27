@@ -5,11 +5,11 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 -- supplies `IsPrincipalUnitarySquareRoot` together with both halves of Proposition 3.3 at
--- the arbitrary-pair scope.  It is a `Geometry` module and never imports `Frontier`.
+-- the arbitrary-pair scope.  It is a `Geometry` module.
 import DavisKahan.Geometry.Polar.DirectRotationBlocks
 -- supplies the two reflection/projection identities this file needs,
 -- `projection_mul_reflectionOperator_self` and `reflectionOperator_mul_projection_self`.
--- It is a `Geometry` module and never imports `Frontier`.
+-- It is a `Geometry` module.
 import DavisKahan.Geometry.Polar.DirectRotationReal
 
 /-!
@@ -53,7 +53,7 @@ signs to operator positivity. -/
 private theorem principalSquareRoot_positiveDiagonalBlocks
     (T : H →L[ℂ] H)
     (hroot : IsPrincipalUnitarySquareRoot (spectraReflectionProduct U V) T)
-    (hT : DavisKahan.Frontier.IsPaperDirectRotation U V T) :
+    (hT : DavisKahan.IsPaperDirectRotation U V T) :
     (U.starProjection * T * U.starProjection).IsPositive ∧
       (Uᗮ.starProjection * T * Uᗮ.starProjection).IsPositive := by
   have hintR : T * U.reflectionOperator = V.reflectionOperator * T := by
@@ -148,7 +148,7 @@ theorem proposition3_3_complex_converse_source
       (Uᗮ.starProjection * T * Uᗮ.starProjection).IsPositive ∧
       Uᗮ.starProjection * T * U.starProjection =
         -star (U.starProjection * T * Uᗮ.starProjection) := by
-  have hT : DavisKahan.Frontier.IsPaperDirectRotation U V T :=
+  have hT : DavisKahan.IsPaperDirectRotation U V T :=
     proposition3_3_principalSquareRoot_converse U V T hroot hcross
   have hpos := principalSquareRoot_positiveDiagonalBlocks U V T hroot hT
   exact ⟨hT.unitary_mem, hT.intertwines, hpos.1, hpos.2, hT.crossed_blocks⟩
@@ -320,7 +320,7 @@ theorem proposition3_3_real_converse_source
   have hcrossC : TC '' (halmosSourceDefect CU CV : Set (RealComplexification E)) =
       (halmosTargetDefect CU CV : Set (RealComplexification E)) := by
     simpa [CU, CV, TC] using complexify_crossedDefect_image_eq U V T hcross
-  have hTcomplex : DavisKahan.Frontier.IsPaperDirectRotation CU CV TC :=
+  have hTcomplex : DavisKahan.IsPaperDirectRotation CU CV TC :=
     proposition3_3_principalSquareRoot_converse CU CV TC hrootC hcrossC
   have hposC := principalSquareRoot_positiveDiagonalBlocks CU CV TC hrootC hTcomplex
   have hunitary : T ∈ unitary (E →L[ℝ] E) :=

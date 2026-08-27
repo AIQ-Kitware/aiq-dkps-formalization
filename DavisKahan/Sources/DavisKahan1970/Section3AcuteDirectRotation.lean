@@ -285,7 +285,7 @@ theorem proposition3_1_positivity_characterization
     (hcomplement_sa : IsSelfAdjoint
       (DavisKahan.complementaryProjection U * T *
         DavisKahan.complementaryProjection U)) :
-    DavisKahan.Frontier.IsPaperDirectRotation U V T ↔
+    DavisKahan.IsPaperDirectRotation U V T ↔
       T = DavisKahan.spectraDirectRotation U V hacute := by
   constructor
   · intro hT

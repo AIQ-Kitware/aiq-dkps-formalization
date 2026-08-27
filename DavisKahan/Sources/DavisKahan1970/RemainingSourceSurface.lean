@@ -31,11 +31,11 @@ open scoped InnerProductSpace
 open Set
 
 namespace TauCeti
-namespace DavisKahan
-namespace Frontier
+namespace DavisKahan1970
 namespace RemainingSourceSurface
 
-open ExactSinTheta
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.ExactSinTheta
 open DavisKahanExt
 open TauCeti.DavisKahan
 
@@ -560,6 +560,5 @@ theorem section7_tanTwoTheta_source_ideal
 end DoubleAngleSourceWrappers
 
 end RemainingSourceSurface
-end Frontier
-end DavisKahan
+end DavisKahan1970
 end TauCeti

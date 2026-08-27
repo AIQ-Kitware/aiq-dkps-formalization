@@ -50,7 +50,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Frontier
 
 universe u
 
@@ -130,6 +129,5 @@ theorem halmosSourceDefect_ne_bot_of_not_isAcute
   exact hnonacute (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mpr
     ⟨hbot, (halmosSourceDefect_eq_bot_iff_halmosTargetDefect_eq_bot U V hdefect).mp hbot⟩)
 
-end Frontier
 end DavisKahan
 end TauCeti

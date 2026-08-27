@@ -20,7 +20,7 @@ sine squares to the reducing generic summand (together with their Pythagorean
 identity).
 
 These declarations were promoted out of the experimental frontier module once
-they became grounded.  The namespace stack `TauCeti.DavisKahan.Frontier`
+they became grounded.  The namespace stack `TauCeti.DavisKahan`
 is retained verbatim so that the fully-qualified names are unchanged; only the
 module path has moved.  De-experimentalizing the namespace is a deliberately
 deferred later pass.
@@ -30,7 +30,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Frontier
 
 
 universe u v
@@ -105,6 +104,5 @@ theorem genericHalmosCosineSq_add_sineSq
 
 end UnitaryGeometry
 
-end Frontier
 end DavisKahan
 end TauCeti

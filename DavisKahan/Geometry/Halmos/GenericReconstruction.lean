@@ -62,7 +62,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open Frontier
 
 universe u v
 
@@ -397,7 +396,7 @@ theorem pairOfSubspacesUnitaryEquivalent_of_cosineBlockEquiv
     (es : halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
     (et : halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
     (ee : halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂) :
-    Frontier.PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ :=
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ :=
   pairOfSubspacesUnitaryEquivalent_of_summandEquivs U₁ V₁ U₂ V₂ ec es et ee
     (genericTransport U₁ V₁ U₂ V₂ W)
     (mem_left_genericTransport_iff U₁ V₁ U₂ V₂ W)
@@ -422,7 +421,7 @@ variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
 the `U`-half of the generic part onto the `U`-half, and there it intertwines the
 cosine blocks. -/
 theorem exists_cosineBlockEquiv_of_pairEquiv
-    (h : Frontier.PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
+    (h : PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
     ∃ W : genericLeftHalf U₁ V₁ ≃ₗᵢ[𝕜] genericLeftHalf U₂ V₂,
       ∀ m, W (genericCosineBlock U₁ V₁ m) = genericCosineBlock U₂ V₂ (W m) := by
   obtain ⟨e, hU, hV⟩ := h
@@ -543,7 +542,7 @@ it — no spectral-multiplicity theory: the reconstruction in
 `pairOfSubspacesUnitaryEquivalent_of_cosineBlockEquiv` is elementary, driven by
 the polar decomposition of the Halmos cross block. -/
 theorem pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant :
-    Frontier.PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameHalmosCosineBlockInvariant U₁ V₁ U₂ V₂ := by
   constructor
   · intro h

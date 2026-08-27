@@ -8,12 +8,12 @@ import DavisKahan.Geometry.Halmos.TwoProjections
 -- projection calculus they are described by, and `complementaryProjection_mul_projection`.
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 -- supplies `IsPaperDirectRotation`, the five-field predicate whose characterisation this
--- module proves.  It lives in `TauCeti.DavisKahan.Frontier` and is opened by name below.
+-- module proves.  It lives in `TauCeti.DavisKahan`.
 import DavisKahan.Geometry.Polar.DirectRotation
 -- supplies `spectraReflectionProduct`, `spectraCanonicalIntertwiner`, the operator absolute
 -- value `spectraOperatorAbsoluteValue` and the polar identities relating them.  That module
 -- and everything beneath it are `Geometry`/`BoundedOperator` leaves and never import
--- `Frontier`, so this module is acyclic.
+-- the source layer, so this module is acyclic.
 
 /-!
 # Principal unitary square roots of the reflection product
@@ -27,7 +27,7 @@ crossed intersection `U ⊓ Vᗮ` onto the target crossed intersection `Uᗮ ⊓
 This module owns that characterisation and the block calculus it runs on.  It was extracted
 from the Section 3 frontier module; the mathematics is unchanged.  The extraction is what
 lets `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean` -- the source-facing
-home of Proposition 3.3 -- stop importing the former `DavisKahan.Frontier.Section3`.
+home of Proposition 3.3 -- stop importing the former `DavisKahan.Section3`.
 
 ## Scope
 
@@ -56,7 +56,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Frontier (IsPaperDirectRotation)
 
 universe u
 

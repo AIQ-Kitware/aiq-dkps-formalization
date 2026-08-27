@@ -58,11 +58,11 @@ open scoped InnerProductSpace BigOperators ENNReal
 open Finset
 
 namespace TauCeti
-namespace DavisKahan
-namespace Frontier
+namespace DavisKahan1970
 namespace Section6Appendix
 
-open ExactSinTheta
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.ExactSinTheta
 
 universe u v w
 
@@ -392,6 +392,5 @@ theorem lemma6_3_singularValue_leakage
 end ComplexScalars
 
 end Section6Appendix
-end Frontier
-end DavisKahan
+end DavisKahan1970
 end TauCeti

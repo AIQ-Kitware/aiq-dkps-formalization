@@ -48,7 +48,7 @@ canonical gap circle -- together with the estimates that pin it down:
 
 Nothing here mentions Davis--Kahan, a perturbation, or a homotopy: it is the
 generic band-selection layer.  It was extracted verbatim from
-`DavisKahan/Frontier/Section8Perturbation.lean`, where Theorem 8.2 uses it to
+`Sources/DavisKahan1970/Section8/Theorem82Branch.lean`, where Theorem 8.2 uses it to
 follow a moving spectral band along an operator path.
 
 ## Scope
@@ -598,7 +598,7 @@ end
 configuration `realSpectrum B ⊆ Icc l r ∪ gapExterior l r d`, the band spectral
 subspace `centralBandSubspace`, its form bounds, and the shifted-operator
 estimates.  What stays here are the statements that need the Section 8
-spectral-order bridges of `Frontier/Section8.lean` and the `SpectrumIn`
+spectral-order bridges of `SpectralTheory/SpectralGapFormBounds.lean` and the `SpectrumIn`
 constructors of `Sources/DavisKahan1970/Section8`: the remaining
 reducing-subspace bound, and the two-sided identification of the band. 
 -/

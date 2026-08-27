@@ -72,7 +72,6 @@ open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation
 open TauCeti.DavisKahan.RieszCircle
-open TauCeti.DavisKahan.Frontier
 
 universe u
 
@@ -189,7 +188,7 @@ theorem theorem8_2_perturbationHalfGap_source
   set R : ℝ → Submodule ℂ H := fun t =>
     centralBandSubspace (A0 + t • E) (hBself t) (l := l) (r := rr) (d := d) with hRdef
   have hproj : ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
-      (R t).starProjection = Frontier.circleRieszProjection (A0 + t • E) cen rad := by
+      (R t).starProjection = circleRieszProjection (A0 + t • E) cen rad := by
     intro t ht
     show (centralBandSubspace (A0 + t • E) (hBself t)
       (l := l) (r := rr) (d := d)).starProjection = _
@@ -205,13 +204,13 @@ theorem theorem8_2_perturbationHalfGap_source
     have h := spectrum.notMem_iff.mp hnot
     rwa [Algebra.algebraMap_eq_smul_one] at h
   have hcontRiesz : ContinuousOn
-      (fun t : ℝ => Frontier.circleRieszProjection (A0 + t • E) cen rad)
+      (fun t : ℝ => circleRieszProjection (A0 + t • E) cen rad)
       (Set.Icc 0 1) :=
     continuous_circleRieszProjection_path A0 E cen rad hradpos.le hunit
   set f : ℝ → ℝ := fun t => directedGap (R t) Q with hfdef
   have hfeq : ∀ t : ℝ, t ∈ Set.Icc (0 : ℝ) 1 →
       f t = ‖Qᗮ.starProjection ∘L
-        Frontier.circleRieszProjection (A0 + t • E) cen rad‖ := by
+        circleRieszProjection (A0 + t • E) cen rad‖ := by
     intro t ht
     show ‖Qᗮ.starProjection ∘L (R t).starProjection‖ = _
     rw [hproj t ht]

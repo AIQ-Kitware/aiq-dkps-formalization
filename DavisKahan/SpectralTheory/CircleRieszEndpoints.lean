@@ -48,7 +48,6 @@ open scoped Topology Real
 
 namespace TauCeti
 namespace DavisKahan
-namespace Frontier
 
 universe u
 
@@ -327,6 +326,5 @@ theorem circleRieszProjection_eq_one (A : H →L[ℂ] H) {center radius : ℝ}
 
 end OneEndpoint
 
-end Frontier
 end DavisKahan
 end TauCeti

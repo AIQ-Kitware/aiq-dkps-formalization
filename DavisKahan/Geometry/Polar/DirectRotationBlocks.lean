@@ -8,14 +8,14 @@ import DavisKahan.Geometry.Halmos.TwoProjections
 -- two-projection calculus these block estimates run on.
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
 -- supplies `IsPaperDirectRotation`, the five-field predicate the norm bounds are read against.
--- It lives in `TauCeti.DavisKahan.Frontier` and is opened by name below.
+-- It lives in `TauCeti.DavisKahan`.
 import DavisKahan.Geometry.Polar.DirectRotationSquare
 import DavisKahan.Geometry.Polar.Section3Elementary
 import DavisKahan.Geometry.Polar.Section3Nonacute
 import DavisKahan.InfiniteDimensional.DoubleAngle
 -- supplies `reflectedSubspace` and `starProjection_reflectedSubspace`, the mirror image of
 -- one subspace in another.  That module imports only `SinTheta`/`SpectralTheory` material
--- and never touches `Frontier`, so the dependency is acyclic.
+-- so the dependency is acyclic.
 -- supplies `paperDirectRotation_conjugates_projection` and its complement form, the
 -- intertwining identities a `IsPaperDirectRotation` gives on the two projections.
 -- supplies `spectraDirectRotation_crossed_blocks`, the crossed-block identity of the
@@ -27,7 +27,7 @@ import DavisKahan.Geometry.Halmos.FixedCosineSubspace
 -- supplies `inner_starProjection_self_eq`.
 -- supplies `spectraDirectRotation`, `IsUniformlyAcute` and the reflection/projection algebra
 -- (`reflectionOperator_eq_projection_add_projection_sub_one`).  That module and everything
--- beneath it are `Geometry`/`BoundedOperator` leaves and never import `Frontier`, so this
+-- beneath it are `Geometry`/`BoundedOperator` leaves, so this
 -- module is acyclic.
 
 /-!
@@ -77,7 +77,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open TauCeti.DavisKahan.Frontier (IsPaperDirectRotation)
 open TauCeti.DavisKahanExt (reflectedSubspace starProjection_reflectedSubspace)
 
 universe u

@@ -49,7 +49,6 @@ namespace DavisKahanExt
 open DavisKahan
 open TauCeti.DavisKahan.Foundation
 open TauCeti.DavisKahan.RieszCircle
-open TauCeti.DavisKahan.Frontier
 
 universe u v
 

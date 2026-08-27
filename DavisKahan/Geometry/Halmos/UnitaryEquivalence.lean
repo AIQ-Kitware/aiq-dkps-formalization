@@ -19,7 +19,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Frontier
 
 
 universe u v
@@ -84,6 +83,5 @@ theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff
 
 end CrossSpaceClassification
 
-end Frontier
 end DavisKahan
 end TauCeti

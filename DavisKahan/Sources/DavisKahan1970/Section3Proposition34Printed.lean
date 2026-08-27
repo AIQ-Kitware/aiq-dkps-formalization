@@ -18,7 +18,7 @@ reflected pair, under the printed half-angle hypothesis `C₀² ≥ ½` on the s
 
 This module owns the three source-facing statements: the full nonacute form, the acute
 specialisation that is the printed sentence, and the identification of the acute form with the
-canonical direct rotation.  They were promoted out of `DavisKahan/Frontier/Section3.lean` (now deleted); the
+canonical direct rotation.  They were promoted out of the deleted `DavisKahan/Frontier/Section3.lean`; the
 mathematics is unchanged.  The reusable block estimates beneath them live in
 `DavisKahan/Geometry/Polar/DirectRotationBlocks.lean`.
 
@@ -43,7 +43,6 @@ namespace TauCeti
 namespace DavisKahan1970
 
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Frontier (IsPaperDirectRotation)
 open TauCeti.DavisKahanExt (reflectedSubspace starProjection_reflectedSubspace)
 
 universe u

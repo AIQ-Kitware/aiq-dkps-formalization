@@ -29,7 +29,6 @@ namespace CircleContour
 
 open DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Frontier
 open DavisKahan.Foundation
 
 universe u

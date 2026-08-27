@@ -41,11 +41,11 @@ open scoped InnerProductSpace BigOperators ENNReal
 open Finset
 
 namespace TauCeti
-namespace DavisKahan
-namespace Frontier
+namespace DavisKahan1970
 namespace Section6Appendix
 
-open ExactSinTheta
+open TauCeti.DavisKahan
+open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
 
@@ -151,6 +151,5 @@ theorem lemma6_3_singularValue_leakage_real
   simpa only [approximationEnergy_eq_singularValues] using hnear
 
 end Section6Appendix
-end Frontier
-end DavisKahan
+end DavisKahan1970
 end TauCeti
