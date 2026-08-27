@@ -87,7 +87,7 @@ Quench uses the current Acharyya Frobenius concentration theorem plus the rowwis
 
 **Additional note:** The rate endpoint is proved but not consumed downstream: Quench needs the growing-sample, target-augmented regime. See gap theorem1-rate-not-instantiated.
 
-**Companion census gap refs:** `inherited-acharyya-v1-norm`, `theorem1-rate-not-instantiated`
+**Companion census gap refs:** `dissimilarity-normalisation-divergence`, `inherited-acharyya-v1-norm`, `theorem1-rate-not-instantiated`
 
 **Next action:** Either generalize the rate theorem to a growing sample with an augmented target, or keep the divergence recorded; the capstones do not depend on the choice.
 
@@ -442,7 +442,7 @@ The replicate average is the raw-response mean the capstones consume. The dissim
 
 **Additional note:** This row exists because the displayed D had no census coverage at all, which is how the normalisation mismatch went unrecorded.
 
-**Companion census gap refs:** `dissimilarity-normalisation-mismatch`
+**Companion census gap refs:** `dissimilarity-normalisation-divergence`, `dissimilarity-normalisation-mismatch`
 
 **Next action:** Decide whether Quench should state D with the 1/m factor or carry the rescaling explicitly in Assumption 1.
 

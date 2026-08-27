@@ -71,6 +71,7 @@
    "review": "Quench uses the current Acharyya Frobenius concentration theorem plus the rowwise norm bound, which supplies exactly the max-row control needed by the Quench proof without claiming the disputed Acharyya v1 display literally.",
    "notes": "The rate endpoint is proved but not consumed downstream: Quench needs the growing-sample, target-augmented regime. See gap theorem1-rate-not-instantiated.",
    "gap_refs": [
+    "dissimilarity-normalisation-divergence",
     "inherited-acharyya-v1-norm",
     "theorem1-rate-not-instantiated"
    ],
@@ -626,6 +627,7 @@
    "review": "The replicate average is the raw-response mean the capstones consume. The dissimilarity Lean uses is Acharyya2024.responseDistEntry, which carries a (m)^{-1} factor the Quench display does not; see dissimilarity-normalisation-mismatch for why the estimator is unaffected and Assumption 1 is not.",
    "notes": "This row exists because the displayed D had no census coverage at all, which is how the normalisation mismatch went unrecorded.",
    "gap_refs": [
+    "dissimilarity-normalisation-divergence",
     "dissimilarity-normalisation-mismatch"
    ],
    "next_action": "Decide whether Quench should state D with the 1/m factor or carry the rescaling explicitly in Assumption 1."

@@ -284,6 +284,7 @@
    "review": "The current theorem proves the Frobenius configuration bound supported by the paper discussion/appendix and obtains rowwise control as a consequence. It does not label the internally inconsistent v1 2,infinity display as literally proved.",
    "notes": "The active proof now uses the YWS population-only gap residual bound and YWS Procrustes alignment. It needs neither epsilon<=alpha/2 nor the former polar-factor smallness condition. Term 2 uses sqrt(alpha), improving the previous sqrt(alpha/2) envelope.",
    "gap_refs": [
+    "dissimilarity-normalisation-divergence",
     "v1-norm-inconsistency"
    ],
    "next_action": "None."
@@ -329,6 +330,7 @@
    "review": "The source real-power rate and high-probability vanishing conclusion are compiled in Frobenius form, with rowwise control available by norm domination; the v1 norm inconsistency is handled exactly as for Theorem 2.",
    "notes": "The rate chain now retains the sharper Frobenius bound instead of paying a final sqrt(n) conversion.",
    "gap_refs": [
+    "dissimilarity-normalisation-divergence",
     "v1-norm-inconsistency"
    ],
    "next_action": "None."
