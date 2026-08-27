@@ -13,13 +13,31 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFounda
 The operator-level Halmos classification does not require direct integrals.
 The remaining step in the printed Theorem 3.1 is the general theorem that a
 bounded self-adjoint operator is classified up to unitary equivalence by its
-spectral multiplicity function.  That theorem is not currently present in the
-repository or in the pinned dependencies.
+spectral multiplicity function.
 
-This file gives the missing theorem an explicit, reusable interface.  It also
-separates the easier compact specialization, where the invariant can be an
-ordered eigenvalue list with multiplicity.  No pair-of-projections theorem
-needs to invent direct-integral machinery once these interfaces are available.
+**That theorem is proved, and this interface is no longer the route to it.**
+`TauCeti.sameSpectralMultiplicity_iff_operatorUnitaryEquiv`
+(`ForTauCeti/Analysis/InnerProductSpace/BorelCalculus/SpectralMultiplicityEquiv.lean`)
+classifies bounded self-adjoint operators on a separable complex Hilbert space by their
+multiplicity data, and
+`TauCeti.BorelCalculus.operatorUnitaryEquiv_iff_measureEquiv_and_level` supplies the
+uniqueness half.  The source-facing consequence is
+`TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification`, with a real
+analogue.  Nothing in Section 3 waits on the interfaces below.
+
+What the structures here still record is a *stronger* packaging than what is proved:
+`multiplicity` is a **function** into a canonical `Datum`, so inhabiting
+`SpectralMultiplicityFoundation` needs a canonical quotient-valued multiplicity invariant,
+whereas `TauCeti.SameSpectralMultiplicity` is an existential over presentations.  That
+repackaging is bookkeeping, not a missing theorem.  The file is retained for the compact
+specialization below, where the invariant is an ordered eigenvalue list with multiplicity,
+and because it is registered in `dev/davis-kahan-hidden-foundations.json`.
+
+The `BoundedOperatorsUnitaryEquivalent` defined here is a third spelling of a relation
+whose canonical owner is `TauCeti.OperatorUnitaryEquiv`
+(`ForTauCeti/Analysis/InnerProductSpace/OperatorUnitaryEquiv.lean`); it is stated with a
+composition of continuous linear maps rather than pointwise, so it is not literally the
+same existential.  Converging the three spellings is a separate task.
 -/
 
 open scoped InnerProductSpace

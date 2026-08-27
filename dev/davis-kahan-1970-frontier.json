@@ -210,8 +210,8 @@
       "id": "s3-spectral-multiplicity-definition",
       "title": "Spectral multiplicity equivalence definition",
       "kind": "foundation",
-      "module": "DavisKahan.Frontier.Core",
-      "declaration": "TauCeti.DavisKahan.Frontier.SameSpectralMultiplicity",
+      "module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv",
+      "declaration": "TauCeti.SameSpectralMultiplicity",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "hard",
@@ -222,8 +222,8 @@
       "id": "s3-spectral-multiplicity-complete",
       "title": "Spectral multiplicity completeness theorem",
       "kind": "foundation",
-      "module": "DavisKahan.Frontier.Core",
-      "declaration": "TauCeti.DavisKahan.Frontier.sameSpectralMultiplicity_iff_unitarilyEquivalent",
+      "module": "ForTauCeti.Analysis.InnerProductSpace.BorelCalculus.SpectralMultiplicityEquiv",
+      "declaration": "TauCeti.sameSpectralMultiplicity_iff_operatorUnitaryEquiv",
       "dependencies": [
         "s3-spectral-multiplicity-definition"
       ],
@@ -393,8 +393,8 @@
       "id": "s3-theorem3-1",
       "title": "Theorem 3.1 spectral multiplicity classification",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section3Classification",
+      "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification",
       "dependencies": [
         "s3-operator-classification",
         "s3-spectral-multiplicity-complete"
