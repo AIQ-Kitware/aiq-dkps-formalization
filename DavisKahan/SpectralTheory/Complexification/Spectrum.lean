@@ -117,6 +117,29 @@ theorem realSpectrum_complexify (T : E →L[ℝ] E) :
   ext r
   simpa [realSpectrum] using mem_spectrum_complexify_iff T r
 
+/-- **Full-space spectral separation survives complexification.**
+
+`SpectraSeparated _ ⊤ _ ⊤` is a statement about the two real spectra
+(`spectraSeparated_top_iff`), and `realSpectrum_complexify` says complexification does not
+move either of them, so the separation transports verbatim with the same gap.
+
+This is the bridge the real `π/2` Sylvester estimate needs: the Fourier representation
+behind that estimate is intrinsically complex, so a real separation hypothesis has to be
+carried across `complexify` before the complex theorem applies.  Only the `⊤` case is
+stated, because that is the only one for which `realSpectrum` is the whole story; a
+restricted subspace would first need its own complexification and an invariance transport. -/
+theorem spectraSeparated_top_complexify
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
+    {A : E →L[ℝ] E} {B : F →L[ℝ] F} {d : ℝ}
+    (hsep : SpectraSeparated A (⊤ : Submodule ℝ E) B (⊤ : Submodule ℝ F) d) :
+    SpectraSeparated (complexify A) (⊤ : Submodule ℂ (RealComplexification E))
+      (complexify B) (⊤ : Submodule ℂ (RealComplexification F)) d := by
+  rw [spectraSeparated_top_iff] at hsep ⊢
+  intro a ha b hb
+  rw [realSpectrum_complexify] at ha
+  rw [realSpectrum_complexify] at hb
+  exact hsep a ha b hb
+
 end RealComplexification
 
 end Foundation

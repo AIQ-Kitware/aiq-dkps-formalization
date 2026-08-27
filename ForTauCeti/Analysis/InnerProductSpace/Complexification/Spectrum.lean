@@ -40,9 +40,10 @@ scope open.  See `algebraMap_complexOperator`.
 The mathematics is moved, not restated, from `TauCeti.DavisKahan.Experimental.Foundation.`
 `RealComplexification` in `DavisKahan/SpectralTheory/Complexification/Spectrum.lean`, which
 depended on nothing in the paper library and is where this argument was first proved.  That
-module, and a third copy of `isUnit_complexify_iff` in `DavisKahan/Experimental/MathAhead/`
-`HiddenFoundations/RealSylvesterDescent.lean`, still carry their own copies in their own
-namespaces; re-grounding them on these is separate, mechanical work.
+module still carries its own copies in its own namespace; re-grounding it on these is
+separate, mechanical work.  A third copy, in `DavisKahan/Experimental/MathAhead/`
+`HiddenFoundations/RealSylvesterDescent.lean`, was deleted with that staging file on
+2026-08-27.
 -/
 
 public section

@@ -30,7 +30,7 @@ which only says that the image of the selected source block lies in the
 selected target block.  This module states and proves the corrected result in
 both the approximation-number form and the finite-dimensional singular-value
 specialization.  The proof was developed ahead of the frontier and is promoted
-here (see `dev/overlays/lemma63-promotion-scratch-7f9f562-gpt56.md`).
+here.
 
 The proof exposes three ingredients:
 

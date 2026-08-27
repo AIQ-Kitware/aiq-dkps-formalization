@@ -69,12 +69,11 @@ SKIP_SUFFIX = {
     ".bib": "bibliography", ".gitignore": "ignore rules",
 }
 SKIP_GLOB = (
-    ("OVERLAY-METADATA/", "overlay delivery receipts, superseded by dev/overlays/"),
+    ("OVERLAY-METADATA/", "overlay delivery receipts, kept only in Git history"),
     ("_overlay/", "overlay staging drop"),
     ("papers/", "our own paper drafts, reviewed as prose not as code"),
 )
-# Root-level *_MANIFEST.txt are overlay delivery receipts. dev/overlays/*.manifest*
-# is NOT dropped: scripts/check_davis_kahan_rebased_mathahead.py checks it.
+# Root-level *_MANIFEST.txt are overlay delivery receipts, dropped from the checklist.
 SKIP_ROOT_MANIFEST = "_MANIFEST.txt"
 
 

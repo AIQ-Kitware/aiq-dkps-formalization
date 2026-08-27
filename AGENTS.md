@@ -514,9 +514,10 @@ task.
 
 The task is to **promote** the sketch:
 
-1. Read the sketch and its manifest in `dev/overlays/*.md` (and the paired
-   `*-candidates-*.json`). The manifest states what each declaration proves,
-   where it should land, and the likely elaboration seams.
+1. Read the sketch. Work out what each declaration proves, where it should
+   land, and the likely elaboration seams — the sketch's own docstrings are the
+   only guide, and they are frequently wrong about names and APIs, so check
+   every one against the current tree before believing it.
 2. Take the proof **out** of the scratch file and put it in its correct home
    module — the source-facing location the statement actually belongs to — then
    fix it *there* until it compiles. Do not repair it inside `Scratch/`.
