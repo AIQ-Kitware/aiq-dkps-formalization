@@ -13,7 +13,9 @@ public import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 /-!
 # Ky Fan gauges against Bochner integrals and unitary conjugation
 
-Two facts about the finite Ky Fan gauges that an operator-valued integral needs.
+Two facts about the finite Ky Fan gauges that an operator-valued integral needs.  They are
+proved at different scalar scopes, deliberately: the unitary-invariance half below is generic
+over `RCLike`, while the Bochner half is stated for complex operator spaces.
 
 ## Minkowski's integral inequality
 
@@ -22,14 +24,19 @@ Two facts about the finite Ky Fan gauges that an operator-valued integral needs.
 ```
 
 The gauge is a genuine seminorm — subadditivity is the Ky Fan triangle inequality, the one
-nontrivial input, taken here through `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` so
-that both `ℝ` and `ℂ` are covered — and it is continuous because
-`T.kyFanGauge k ≤ k * ‖T‖`.  Neither fact alone gives the integral inequality: Mathlib has
+nontrivial input — and it is continuous because `T.kyFanGauge k ≤ k * ‖T‖`.  Both statements
+of this half, the continuity and the integral estimate, are over `ℂ`: the underlying seminorm
+inequality `seminorm_integral_le` holds over any `RCLike` scalar field, but it needs the real
+normed-space structure `[NormedSpace ℝ X]` and `[IsScalarTower ℝ 𝕜 X]` on the space being
+integrated over, and those do not simply synthesize for an operator space over a generic
+`RCLike` field.
+
+Neither fact alone gives the integral inequality: Mathlib has
 `norm_integral_le_integral_norm` for the *norm* of a Banach space and nothing for a seminorm
-on it, so `Seminorm.integral_le` below supplies the general statement by Hahn--Banach.  Pick
-a functional that is dominated by the seminorm and attains it at the value of the integral;
-that functional commutes with the Bochner integral, and the ordinary norm inequality for
-scalars finishes the estimate.
+on it, so the private `seminorm_integral_le` below supplies the general statement by
+Hahn--Banach.  Pick a functional that is dominated by the seminorm and attains it at the
+value of the integral; that functional commutes with the Bochner integral, and the ordinary
+norm inequality for scalars finishes the estimate.
 
 ## Unitary invariance
 
@@ -39,7 +46,8 @@ scalars finishes the estimate.
 
 The `≤` half is the two-sided ideal inequality `kyFanGauge_comp_le` with both norms at most
 one; the `≥` half is the same inequality applied to `T = L⋆ (L T R) R⋆`, whose factors are
-unitary as well.  This is what makes a Ky Fan gauge blind to the unitary orbit of an
+unitary as well.  Nothing in this half is field-specific, so it is stated over an arbitrary
+`RCLike` scalar field.  This is what makes a Ky Fan gauge blind to the unitary orbit of an
 operator, which is how an oscillatory integral of unitary conjugates is estimated by the
 gauge of the operator being conjugated.
 
@@ -56,8 +64,9 @@ gauge of the operator being conjugated.
 * Extraction class: **restated and reproved**.  The source was an uncompiled proof sketch:
   it named a `Seminorm.integral_le` that does not exist in Mathlib, dropped its unitary
   invariance onto an unstated `norm_eq_one_of_isometry_and_surjective`, and was fixed to
-  `ℂ`.  The statements move to `ContinuousLinearMap.kyFanGauge`, the scalars to any field
-  with the min--max lower bound, and the two missing inputs are proved here.
+  `ℂ`.  The statements move to `ContinuousLinearMap.kyFanGauge`, the unitary-invariance
+  scalars to an arbitrary `RCLike` field, and the two missing inputs are proved here.  The
+  Bochner statements remain over `ℂ`, for the instance reason recorded above.
 * Extraction motive: the arbitrary-Hilbert-space `π/2` Sylvester estimate in every finite
   Ky Fan gauge (`DavisKahan/InfiniteDimensional/Sylvester/GeneralSeparationKyFan.lean`)
   is an integral of unitary conjugates, so it needs exactly these two facts and nothing
