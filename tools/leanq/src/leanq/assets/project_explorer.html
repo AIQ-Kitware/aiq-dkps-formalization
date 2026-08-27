@@ -152,6 +152,20 @@ svg text.band.empty{font-weight:400;fill:#9aa8b6;font-style:italic}
     <option value="cone">Selected node dependency cone</option>
     <option value="complete">Complete graph</option>
   </select></label>
+  <label title="Output format of the Graphviz command shown after a DOT export">as <select id="export-format">
+    <option value="svg">SVG</option>
+    <option value="png">PNG</option>
+    <option value="pdf">PDF</option>
+  </select></label>
+  <label title="Graphviz layout engine. Auto picks one from the size of the export."><select id="export-engine">
+    <option value="auto">auto engine</option>
+    <option value="dot">dot</option>
+    <option value="neato">neato</option>
+    <option value="fdp">fdp</option>
+    <option value="sfdp">sfdp</option>
+    <option value="circo">circo</option>
+    <option value="twopi">twopi</option>
+  </select></label>
   <button id="export-dot">DOT</button><button id="export-json">JSON</button>
   <span class="badge" id="visible"></span>
 </div>
@@ -1124,6 +1138,7 @@ function exportData(scope) {
     edges: P.edges};
 }
 function dotValue(v){return JSON.stringify(String(v ?? ""))}
+let lastExport = null;
 function exportDot(data, stem = "leanq-graph") {
   const palette = ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462",
                    "#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"];
@@ -1131,7 +1146,7 @@ function exportDot(data, stem = "leanq-graph") {
      to render it without going back to the viewer. */
   const lines = [];
   lines.push(`// leanq export: ${data.nodes.length} nodes, ${data.edges.length} edges, scope ${data.exportScope}`);
-  for (const [cmd, why] of graphvizCommands(stem, data.nodes.length))
+  for (const [cmd, why] of graphvizCommands(stem, data.nodes.length, exportFormat(), exportEngine()))
     lines.push(`//   ${cmd}`, `//     ${why}`);
   lines.push("");
   lines.push("digraph LeanQ {",
@@ -1182,22 +1197,51 @@ function exportDot(data, stem = "leanq-graph") {
    finishes at all.  The command is chosen from the size of what was exported so
    the file can just be run. */
 const DOWNLOAD_DIR = "~/Downloads/";
-function graphvizCommands(stem, nodeCount) {
+/* Per-engine flags, and the size at which that engine stops being a good idea.
+   The thresholds are measured, not guessed: on this project's 2007-node export
+   neato did not finish inside two minutes, while dot took 134s and sfdp is the
+   only engine that stays comfortable past ten thousand nodes. */
+const ENGINES = {
+  dot:   {flags: n => n > 2500 ? ["-Gnslimit=2", "-Gmclimit=2"] : [],
+          note: "hierarchical, left to right -- the layering this graph is drawn for",
+          slowAbove: 12000},
+  neato: {flags: () => ["-Goverlap=prism"],
+          note: "spring model, no layering", slowAbove: 800},
+  fdp:   {flags: () => ["-Goverlap=prism"],
+          note: "force-directed, clusters kept together", slowAbove: 2000},
+  sfdp:  {flags: () => ["-Goverlap=prism", "-Gbeautify=true"],
+          note: "multilevel force-directed, the one that scales", slowAbove: Infinity},
+  circo: {flags: () => ["-Goverlap=prism"], note: "circular", slowAbove: 1500},
+  twopi: {flags: () => ["-Goverlap=prism"], note: "radial, from one root", slowAbove: 1500},
+};
+function autoEngine(nodeCount){return nodeCount <= 12000 ? "dot" : "sfdp"}
+/* A bitmap has a hard ceiling: past roughly 32767 pixels on a side Graphviz
+   warns "graph is too large for cairo-renderer bitmaps" and silently scales the
+   whole drawing down, which turns every label into mush.  Bounding the surface
+   up front is what keeps a PNG readable. */
+function formatFlags(format){return format === "png" ? ["-Gsize='30,30!'", "-Gdpi=150"] : []}
+function graphvizCommands(stem, nodeCount, format = "svg", engine = "auto") {
   /* Paths are written against the browser's download directory, so the command
      runs from wherever the shell happens to be rather than only from beside the
      file. */
-  const f = DOWNLOAD_DIR + stem + ".dot", out = DOWNLOAD_DIR + stem + ".svg";
-  if (nodeCount <= 2500)
-    return [[`dot -Tsvg ${f} -o ${out}`, "hierarchical, left to right"]];
-  if (nodeCount <= 12000)
-    return [[`dot -Tsvg -Gnslimit=2 -Gmclimit=2 ${f} -o ${out}`,
-             `hierarchical; the limits bound dot's iterative passes, which matter at ${nodeCount.toLocaleString()} nodes`],
-            [`sfdp -Tsvg -Goverlap=prism -Gbeautify=true ${f} -o ${out}`,
-             "force-directed, if dot is still too slow -- faster, but the dependency layering is lost"]];
-  return [[`sfdp -Tsvg -Goverlap=prism -Gbeautify=true ${f} -o ${out}`,
-           `force-directed; dot does not realistically finish on ${nodeCount.toLocaleString()} nodes`],
-          [`dot -Tsvg -Gnslimit=1 -Gmclimit=1 ${f} -o ${out}`,
-           "hierarchical, if you are willing to wait for it"]];
+  const f = DOWNLOAD_DIR + stem + ".dot", out = DOWNLOAD_DIR + stem + "." + format;
+  const chosen = engine === "auto" ? autoEngine(nodeCount) : engine;
+  const build = (name, primary) => {
+    const spec = ENGINES[name] || ENGINES.dot;
+    const parts = [name, "-T" + format, ...spec.flags(nodeCount), ...formatFlags(format), f, "-o", out];
+    let why = spec.note;
+    if (primary && engine === "auto") why += ` (chosen for ${nodeCount.toLocaleString()} nodes)`;
+    if (!primary) why = "alternative: " + why;
+    if (nodeCount > spec.slowAbove)
+      why += ` -- WARNING: ${name} is superlinear; at ${nodeCount.toLocaleString()} nodes expect minutes or worse`;
+    if (format === "png")
+      why += ". The size cap keeps the bitmap under Graphviz's 32767px limit";
+    return [parts.join(" "), why];
+  };
+  const rows = [build(chosen, true)];
+  const alt = chosen === "sfdp" ? "dot" : "sfdp";
+  if (nodeCount > 2500 && alt !== chosen) rows.push(build(alt, false));
+  return rows;
 }
 function download(name, text, type) {
   const a = document.createElement("a"), url = URL.createObjectURL(new Blob([text], {type}));
@@ -1218,11 +1262,14 @@ function runExport(format) {
   }
   download(stem + ".dot", exportDot(data, stem), "text/vnd.graphviz");
   showExportCommands(stem, data);
+  lastExport = {stem, data};
 }
 /* The same commands the .dot header carries, in a form that can be copied
    straight into a shell next to the downloaded file. */
+function exportFormat(){return $("export-format").value}
+function exportEngine(){return $("export-engine").value}
 function showExportCommands(stem, data) {
-  const rows = graphvizCommands(stem, data.nodes.length);
+  const rows = graphvizCommands(stem, data.nodes.length, exportFormat(), exportEngine());
   details.className = "";
   details.replaceChildren();
   const head = document.createElement("div");
@@ -1232,7 +1279,8 @@ function showExportCommands(stem, data) {
   sub.className = "sub";
   sub.textContent = `${data.nodes.length.toLocaleString()} nodes · ` +
     `${data.edges.length.toLocaleString()} edges · paths assume ${DOWNLOAD_DIR}, so this runs ` +
-    `from any directory. The .dot file repeats it in its header.`;
+    `from any directory. Change the format or engine above to rewrite the command; ` +
+    `the .dot on disk is unaffected and its header records the command as exported.`;
   details.append(head, sub);
   const wrap = document.createElement("div");
   wrap.className = "cmd";
@@ -1369,6 +1417,13 @@ $("unhide").onclick = () => { hiddenNodes = new Set(); collapsed = new Set(); re
 $("fit").onclick = () => { transform = {x: 0, y: 0, s: 1}; applyTransform(); };
 $("zin").onclick = () => zoom(1.2);
 $("zout").onclick = () => zoom(.83);
+/* Changing either select after an export just re-reads the command; the .dot on
+   disk is unchanged, and its header still records the command as exported. */
+const refreshExportCommands = () => {
+  if (lastExport) showExportCommands(lastExport.stem, lastExport.data);
+};
+$("export-format").onchange = refreshExportCommands;
+$("export-engine").onchange = refreshExportCommands;
 $("export-dot").onclick = () => runExport("dot");
 $("export-json").onclick = () => runExport("json");
 svg.onwheel = e => { e.preventDefault(); zoom(e.deltaY < 0 ? 1.1 : .9); };

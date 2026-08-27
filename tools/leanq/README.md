@@ -194,11 +194,24 @@ can be pasted into any shell without changing directory first:
 //     hierarchical, left to right
 ```
 
-The engine is chosen from the size of the export. `dot` reads the `rankdir=LR` the file already
+Two selects beside the export buttons choose the output format (`SVG`, `PNG`, `PDF`) and the layout
+engine (`auto`, `dot`, `neato`, `fdp`, `sfdp`, `circo`, `twopi`). Changing either rewrites the shown
+command in place; the `.dot` already on disk is untouched, and its header records the command as it
+was exported.
+
+`auto` picks the engine from the size of the export. `dot` reads the `rankdir=LR` the file already
 sets and its layering is the point of the drawing, but its iterative passes are superlinear: past
 2500 nodes the command bounds them with `-Gnslimit=2 -Gmclimit=2` and offers `sfdp` as the
 fallback, and past 12000 it leads with `sfdp -Goverlap=prism`, which is the only engine that
-realistically finishes at that size.
+realistically finishes at that size. Picking an engine explicitly overrides that, and the panel says
+so when the choice is likely to be slow: measured on this project's 2007-node export, `neato` did
+not finish inside two minutes while `dot` took 134s.
+
+`PNG` always carries `-Gsize='30,30!' -Gdpi=150`. Without it Graphviz hits its bitmap ceiling and
+says `graph is too large for cairo-renderer bitmaps. Scaling by 0.317408 to fit` -- it does not
+fail, it silently shrinks the whole drawing, which on that same export produced an unreadable
+11375x32766 pixel, 46 MB file. With the cap it is 1562x4500 and 2.2 MB. `SVG` and `PDF` are vector
+formats and get no cap.
 
 **Progressive hierarchical expansion.** A declaration is collapsed at the shallowest prefix of
 `Library / module segment / module segment / ...` that neither the global `Group` depth nor an
