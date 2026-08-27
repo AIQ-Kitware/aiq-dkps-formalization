@@ -66,7 +66,9 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 **Normalized paper statement:** For fixed n, as DKPS estimation budgets grow, the risk of the decision function trained/evaluated on estimated perspectives converges to the risk based on true perspectives.
 
 **Selected Lean declarations:**
+- `Helm2025.DKPS.LossDominated`
 - `Helm2025.DKPS.Theorem1`
+- `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`
 - `Helm2025.DKPS.risk_converges_fixed_n`
 
 **Clause-by-clause comparison:**
@@ -80,14 +82,15 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | Assumption 4 is continuity in prediction for each fixed label. | The main theorem uses joint ContinuousLoss. | `lean_stronger_hypothesis` |  |
 | No bounded/compact label-support assumption is visible in the retained source theorem or Appendix assumptions. | Theorem1 additionally requires LabelCompactSupport. | `lean_stronger_hypothesis` | This is the most significant unresolved source-vs-Lean hypothesis discrepancy in Helm2025. |
 | Conclusion is convergence of the two risks. | Lean concludes exactly the corresponding Tendsto/risk convergence. | `exact` |  |
+| The paper states no boundedness or compactness condition on the labels. | The theorems require LossDominated -- an integrable envelope for the loss as a function of the label -- rather than compact label support. | `lean_weaker_hypothesis` | Strictly weaker than the previous hypothesis, and implied by the finiteness of the risk the paper writes down. |
 
 **Semantic review:**
 
 The conclusion is source-shaped. Lean additionally requires measurable embedding estimators, uses the compact-range form of A3, and joint loss continuity; these are sufficient conditions for the paper proof. The paper-facing wrapper also requires bounded/compact label support; no matching assumption was located in the retained source.
 
-**Additional note:** The theorem is a genuine paper-facing wrapper, so the remaining mismatch is in hypotheses rather than conclusion. The retained source should be rechecked against the original PDF specifically for label-support/bounded-loss language before treating this hypothesis as source-faithful.
+**Additional note:** The compact-label hypothesis, which no source passage states, has been replaced by the integrable-envelope hypothesis LossDominated; see gap label-compact-support.
 
-**Companion census gap refs:** `stronger-analysis-hypotheses`, `label-compact-support`
+**Companion census gap refs:** `label-compact-support`, `stronger-analysis-hypotheses`
 
 ### 2. `H25-T2` — Theorem 2: Consistency transfer from true to estimated DKPS embeddings
 
@@ -98,9 +101,11 @@ The conclusion is source-shaped. Lean additionally requires measurable embedding
 **Normalized paper statement:** If learning on true perspectives is consistent, learning on estimated perspectives is also consistent as n,m,r grow.
 
 **Selected Lean declarations:**
+- `Helm2025.DKPS.LossDominated`
 - `Helm2025.DKPS.Theorem2_bayes`
 - `Helm2025.DKPS.consistency_transfer_dkps_bayes`
 - `Helm2025.DKPS.diagonal_convergence`
+- `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`
 
 **Clause-by-clause comparison:**
 
@@ -110,12 +115,13 @@ The conclusion is source-shaped. Lean additionally requires measurable embedding
 | The source uses a three-parameter informal joint limit. | Lean uses a diverging diagonal budget schedule phi(n) to choose sufficiently accurate embedding stages as n grows. | `different_quantifier_encoding` | This makes the quantifier order executable and is at least the diagonal form needed for the proof. |
 | Appendix Assumptions 1--4 and Eq. (3) provide the analytic transfer conditions. | Lean uses the same strengthened analytic forms as Theorem1 and a sequence of alignment-consistency hypotheses. | `lean_stronger_hypothesis` |  |
 | No bounded/compact label-support premise is visible in the retained source. | Theorem2_bayes carries the label-support/boundedness condition used by the risk limit. | `lean_stronger_hypothesis` |  |
+| The paper states no boundedness or compactness condition on the labels. | The theorems require LossDominated -- an integrable envelope for the loss as a function of the label -- rather than compact label support. | `lean_weaker_hypothesis` | Strictly weaker than the previous hypothesis, and implied by the finiteness of the risk the paper writes down. |
 
 **Semantic review:**
 
 Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The analytic hypotheses are stronger than the literal paper assumptions, and the joint (m,r) limit is represented by diagonalization. The paper-facing wrapper also requires bounded/compact label support; no matching assumption was located in the retained source.
 
-**Additional note:** The schedule makes the quantifier structure executable rather than leaving the phrase n,m,r -> infinity informal. The retained source should be rechecked against the original PDF specifically for label-support/bounded-loss language before treating this hypothesis as source-faithful.
+**Additional note:** The compact-label hypothesis, which no source passage states, has been replaced by the integrable-envelope hypothesis LossDominated; see gap label-compact-support.
 
 **Companion census gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
 

@@ -65,11 +65,13 @@ Helm cites the eigengap-free raw-stress consistency theorem from Acharyya 2024. 
 
 The paper writes n,m,r -> infinity. Lean proves existence of a diverging embedding-budget schedule phi(n), a precise diagonalization of the fixed-n convergence used in the proof.
 
-### `label-compact-support` — Compact/bounded label support is explicit in Lean but not located in the retained paper source
+### `label-compact-support` — The compact-label hypothesis has been removed from the theorem statements
 
 **Kind:** `source_audit`
 
-Helm2025.DKPS.Theorem1 and Theorem2_bayes require BoundedLabelSupport/LabelCompactSupport so the loss can be uniformly dominated on a compact label range. Searches of the retained prose and TeX did not locate a corresponding paper assumption. This should therefore be treated as an additional formal hypothesis unless a source passage is identified.
+Helm2025.DKPS.Theorem1 and Theorem2_bayes previously required BoundedLabelSupport / LabelCompactSupport -- labels almost surely in a compact set -- so the loss could be uniformly dominated. Searches of the retained prose and TeX did not locate any corresponding paper assumption, and the paper's own Assumptions 3 and 4 do not supply one: they bound the predictions and give continuity of the loss in the prediction for each fixed label, which bounds the loss on the prediction set separately for each label, with a label-dependent bound.
+
+Resolved. The statements now carry LossDominated: the loss at any prediction of the learning rule is dominated almost everywhere by an integrable function of the label. That is what the dominated-convergence step actually uses, it is strictly weaker (compact labels plus a continuous loss give a constant envelope, and a constant is integrable against a probability measure, which is lossDominated_of_boundedLabelSupport), and it is no more than the paper already needs for the risk it writes down to be finite. expectation_converges_of_prob_converges_dominated generalises the bounded convergence helper to an integrable envelope via Integrable.tendsto_setIntegral_nhds_zero.
 
 ### `dangling-theorem-3-reference` — The Appendix A.2 proof cites a Theorem 3 that the paper does not contain
 
@@ -93,9 +95,9 @@ The paper writes Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0, so R_l(P_
 * **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
 * **semantic alignment:** `stronger_hypotheses` — The conclusion is source-shaped. Lean additionally requires measurable embedding estimators, uses the compact-range form of A3, and joint loss continuity; these are sufficient conditions for the paper proof. The paper-facing wrapper also requires bounded/compact label support; no matching assumption was located in the retained source.
 * **source claim:** For fixed n, as DKPS estimation budgets grow, the risk of the decision function trained/evaluated on estimated perspectives converges to the risk based on true perspectives.
-* **Lean declarations:** `Helm2025.DKPS.Theorem1`, `Helm2025.DKPS.risk_converges_fixed_n`
-* **gap refs:** `stronger-analysis-hypotheses`, `label-compact-support`
-* **notes:** The theorem is a genuine paper-facing wrapper, so the remaining mismatch is in hypotheses rather than conclusion. The retained source should be rechecked against the original PDF specifically for label-support/bounded-loss language before treating this hypothesis as source-faithful.
+* **Lean declarations:** `Helm2025.DKPS.LossDominated`, `Helm2025.DKPS.Theorem1`, `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`, `Helm2025.DKPS.risk_converges_fixed_n`
+* **gap refs:** `label-compact-support`, `stronger-analysis-hypotheses`
+* **notes:** The compact-label hypothesis, which no source passage states, has been replaced by the integrable-envelope hypothesis LossDominated; see gap label-compact-support.
 * **next action:** None.
 
 ### `H25-T2` — Consistency transfer from true to estimated DKPS embeddings
@@ -106,9 +108,9 @@ The paper writes Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0, so R_l(P_
 * **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
 * **semantic alignment:** `stronger_hypotheses` — Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The analytic hypotheses are stronger than the literal paper assumptions, and the joint (m,r) limit is represented by diagonalization. The paper-facing wrapper also requires bounded/compact label support; no matching assumption was located in the retained source.
 * **source claim:** If learning on true perspectives is consistent, learning on estimated perspectives is also consistent as n,m,r grow.
-* **Lean declarations:** `Helm2025.DKPS.Theorem2_bayes`, `Helm2025.DKPS.consistency_transfer_dkps_bayes`, `Helm2025.DKPS.diagonal_convergence`
+* **Lean declarations:** `Helm2025.DKPS.LossDominated`, `Helm2025.DKPS.Theorem2_bayes`, `Helm2025.DKPS.consistency_transfer_dkps_bayes`, `Helm2025.DKPS.diagonal_convergence`, `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`
 * **gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
-* **notes:** The schedule makes the quantifier structure executable rather than leaving the phrase n,m,r -> infinity informal. The retained source should be rechecked against the original PDF specifically for label-support/bounded-loss language before treating this hypothesis as source-faithful.
+* **notes:** The compact-label hypothesis, which no source passage states, has been replaced by the integrable-envelope hypothesis LossDominated; see gap label-compact-support.
 * **next action:** None.
 
 ### `H25-A1` — Rigid/affine-isometry invariance of the learning rule
