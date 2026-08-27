@@ -18,9 +18,9 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 
 | status | items |
 | --- | ---: |
-| `compiled_exact` | 4 |
+| `compiled_exact` | 5 |
 | `compiled_generalized` | 2 |
-| `compiled_specialization` | 3 |
+| `compiled_specialization` | 2 |
 | `compiled_source_repair` | 5 |
 | `not_proof_debt` | 1 |
 
@@ -28,9 +28,9 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 
 | classification | items |
 | --- | ---: |
-| `exact` | 4 |
+| `exact` | 5 |
 | `generalized` | 2 |
-| `specialized` | 3 |
+| `specialized` | 2 |
 | `source_repair` | 5 |
 | `out_of_scope` | 1 |
 
@@ -49,7 +49,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `A24-T2` | `headline` | Theorem 2 | `compiled_exact` | `exact` | `proved_in_build` |
 | `A24-T3` | `headline` | Theorem 3 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-C1` | `headline` | Corollary 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
-| `A24-A2` | `major` | Assumption 2 | `compiled_specialization` | `specialized` | `proved_in_build` |
+| `A24-A2` | `major` | Assumption 2 | `compiled_exact` | `exact` | `proved_in_build` |
 | `A24-L2` | `headline` | Lemma 2 | `compiled_specialization` | `specialized` | `absent` |
 | `A24-T4` | `headline` | Theorem 4 | `compiled_exact` | `exact` | `proved_in_build` |
 | `A24-T5` | `headline` | Theorem 5 | `compiled_specialization` | `specialized` | `proved_in_build` |
@@ -143,6 +143,16 @@ The in-probability mode needs one more thing, and it is a genuine obstacle rathe
 REFUTED, with a machine-checked counterexample. not_exists_deterministic_rigidMotion_of_pairDist_exact exhibits a selection of raw-stress minimizers whose pairwise distances equal the target's EXACTLY at every stage -- so the corollary's hypothesis holds in its strongest possible form -- for which no sequence of orthogonal maps and translations gives convergence in probability of the coordinates. The witness is the one-dimensional two-point configuration and its reflection, each selected with probability one half; both are genuine minimizers because raw stress depends only on pairwise distances, and one motion within half the separation of both would place the two branches within the separation of each other. The printed quantifier is therefore not a matter of emphasis: as written the corollary is false.
 
 The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside the probability, sample point by sample point. That is what a distance-based estimator can actually do and what the corollary's downstream uses need, and it is proved in both the alignment-error and the coordinate form.
+
+### `riemannian-structure-decorative` — Assumption 2's Riemannian structure is not used by what Assumption 2 says
+
+**Kind:** `source_audit`
+
+Assumption 2 introduces a compact Riemannian manifold M in an ambient R^q, but the distance on both sides of its limit is the AMBIENT norm: '(1/m)||mu_i - mu_i'|| -> ||phi_i - phi_i'||', and the dissimilarity function it induces is defined as 'Delta^(infinity)(phi_i, phi_i') = ||phi_i - phi_i'||', again the ambient norm rather than a geodesic distance. Nothing in the assumption's own statement refers to the Riemannian metric.
+
+Compactness is likewise not used by what the assumption delivers. tendsto_frobSub_responseDist_of_ambientLimit derives the Frobenius convergence of the population dissimilarity matrices -- the hypothesis the growing-model chain consumes -- from the entrywise limits alone.
+
+Both are recorded in the AmbientModelLimit structure so the assumption is represented at its printed scope; the manifold structure and the compactness are carried for the cited continuous-MDS theory downstream, where the model space genuinely matters, not for this step. This is a note about where the hypotheses do work, not a defect.
 
 ## Detail
 
@@ -290,13 +300,13 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **source anchor:** Assumption 2 (assumption, section 4.3)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:333-341`
 * **importance:** `major`
-* **status / verification:** `compiled_specialization` / `proved_in_build`
-* **semantic alignment:** `specialized` — The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity matrices and therefore does not need a manifold. The compact-manifold/model-distribution structure needed for the source continuum conclusion is not represented.
+* **status / verification:** `compiled_exact` / `proved_in_build`
+* **semantic alignment:** `exact` — AmbientModelLimit is the assumption at its printed scope: a compact model space in an ambient Euclidean space, a latent vector in it for each model, and convergence of the normalized population dissimilarities to the ambient pairwise distances. limitDissimilarity is the induced Delta^(infinity), which the source defines as the ambient norm. The Riemannian structure is not referred to by the assumption's own statement and compactness is not consumed by what it delivers; both are recorded and the note explains where they do work.
 * **source claim:** There is a compact Riemannian manifold M containing latent vectors phi_i whose pairwise distances are the limiting model dissimilarities.
-* **Lean declarations:** `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
-* **gap refs:** `continuous-mds-lp`
-* **notes:** This is useful finite content but does not encode the literal source assumption.
-* **next action:** None.
+* **Lean declarations:** `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`, `Acharyya2024.Consistency.lp_consistency_of_gamma_ambientLimit`, `Acharyya2024.GrowingModels.AmbientModelLimit`, `Acharyya2024.GrowingModels.limitDissimilarity`, `Acharyya2024.GrowingModels.tendsto_frobSub_responseDist_of_ambientLimit`
+* **gap refs:** `continuous-mds-lp`, `riemannian-structure-decorative`
+* **notes:** lp_consistency_of_gamma_ambientLimit feeds the assumption directly into the growing-model L^p chain, so it is represented in use and not only as a definition.
+* **next action:** None. The remaining growing-model gap is the population law in Lemma 2 and Theorem 5, not this assumption.
 
 ### `A24-L2` — Continuous-MDS L^p stability over iid model draws
 

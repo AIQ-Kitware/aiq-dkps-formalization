@@ -80,6 +80,11 @@
       "kind": "source_audit",
       "title": "Corollary 1 quantifies the aligning rotation outside the probability -- REFUTED",
       "detail": "The source writes \"there exist sequences W^(u) and a^(u), satisfying W^(u) in O(d) and a^(u) in R^d for all u, such that for all i, ||psihat_i^(r_u) - (W^(u) psi_i + a^(u))|| ->P 0\". The alignment sequence is quantified outside the probability statement, so a single deterministic pair (W^(u), a^(u)) is asserted to work.\n\nThe estimate psihat is a function of the sample, and multidimensional scaling fixes a configuration only up to a rigid motion, so the motion that aligns it is a function of the sample too. What the argument supports is an alignment depending on the sample point. A deterministic sequence would additionally require the required alignment to become asymptotically sample-independent, which the source neither states nor proves.\n\nexists_rigidMotion_of_pairDist_tendsto proves the alignment step in the form the mathematics gives: whenever every pairwise distance converges, the configurations are eventually alignable to within any tolerance. The step needs no spectral hypothesis, so the eigengap-free raw-stress route reaches coordinates without a population eigenvalue floor.\n\nProgress. ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto lifts the alignment step to the almost-sure mode: if almost surely every pairwise distance converges, then almost surely the estimates are eventually alignable within any tolerance. That mode goes through by intersecting the finitely many almost-sure hypotheses and applying the deterministic step at each sample point.\n\nThe in-probability mode needs one more thing, and it is a genuine obstacle rather than bookkeeping: the set of sample points admitting an eps-alignment is an existential over the isometry group, not a countable condition, so its measurability is not automatic. Making it measurable means introducing the alignment error as an infimum over rigid motions and proving that infimum continuous, which needs compactness of the group. That is the remaining work for this row, and it is also why the source's deterministic W^(u) deserves scrutiny: the object the argument produces is sample-dependent.\n\nREFUTED, with a machine-checked counterexample. not_exists_deterministic_rigidMotion_of_pairDist_exact exhibits a selection of raw-stress minimizers whose pairwise distances equal the target's EXACTLY at every stage -- so the corollary's hypothesis holds in its strongest possible form -- for which no sequence of orthogonal maps and translations gives convergence in probability of the coordinates. The witness is the one-dimensional two-point configuration and its reflection, each selected with probability one half; both are genuine minimizers because raw stress depends only on pairwise distances, and one motion within half the separation of both would place the two branches within the separation of each other. The printed quantifier is therefore not a matter of emphasis: as written the corollary is false.\n\nThe repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside the probability, sample point by sample point. That is what a distance-based estimator can actually do and what the corollary's downstream uses need, and it is proved in both the alignment-error and the coordinate form."
+    },
+    "riemannian-structure-decorative": {
+      "kind": "source_audit",
+      "title": "Assumption 2's Riemannian structure is not used by what Assumption 2 says",
+      "detail": "Assumption 2 introduces a compact Riemannian manifold M in an ambient R^q, but the distance on both sides of its limit is the AMBIENT norm: '(1/m)||mu_i - mu_i'|| -> ||phi_i - phi_i'||', and the dissimilarity function it induces is defined as 'Delta^(infinity)(phi_i, phi_i') = ||phi_i - phi_i'||', again the ambient norm rather than a geodesic distance. Nothing in the assumption's own statement refers to the Riemannian metric.\n\nCompactness is likewise not used by what the assumption delivers. tendsto_frobSub_responseDist_of_ambientLimit derives the Frobenius convergence of the population dissimilarity matrices -- the hypothesis the growing-model chain consumes -- from the entrywise limits alone.\n\nBoth are recorded in the AmbientModelLimit structure so the assumption is represented at its printed scope; the manifold structure and the compactness are carried for the cited continuous-MDS theory downstream, where the model space genuinely matters, not for this step. This is a note about where the hypotheses do work, not a defect."
     }
   },
   "items": [
@@ -465,7 +470,7 @@
       "source_kind": "assumption",
       "title": "Growing models lie on a compact Riemannian model manifold",
       "source_claim": "There is a compact Riemannian manifold M containing latent vectors phi_i whose pairwise distances are the limiting model dissimilarities.",
-      "status": "compiled_specialization",
+      "status": "compiled_exact",
       "verification": "proved_in_build",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -475,18 +480,23 @@
         ]
       },
       "lean_declarations": [
-        "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile"
+        "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
+        "Acharyya2024.Consistency.lp_consistency_of_gamma_ambientLimit",
+        "Acharyya2024.GrowingModels.AmbientModelLimit",
+        "Acharyya2024.GrowingModels.limitDissimilarity",
+        "Acharyya2024.GrowingModels.tendsto_frobSub_responseDist_of_ambientLimit"
       ],
       "planned_declarations": [],
       "gap_refs": [
-        "continuous-mds-lp"
+        "continuous-mds-lp",
+        "riemannian-structure-decorative"
       ],
       "semantic_alignment": {
-        "classification": "specialized",
-        "detail": "The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity matrices and therefore does not need a manifold. The compact-manifold/model-distribution structure needed for the source continuum conclusion is not represented."
+        "classification": "exact",
+        "detail": "AmbientModelLimit is the assumption at its printed scope: a compact model space in an ambient Euclidean space, a latent vector in it for each model, and convergence of the normalized population dissimilarities to the ambient pairwise distances. limitDissimilarity is the induced Delta^(infinity), which the source defines as the ambient norm. The Riemannian structure is not referred to by the assumption's own statement and compactness is not consumed by what it delivers; both are recorded and the note explains where they do work."
       },
-      "notes": "This is useful finite content but does not encode the literal source assumption.",
-      "next_action": "None."
+      "notes": "lp_consistency_of_gamma_ambientLimit feeds the assumption directly into the growing-model L^p chain, so it is represented in use and not only as a definition.",
+      "next_action": "None. The remaining growing-model gap is the population law in Lemma 2 and Theorem 5, not this assumption."
     },
     {
       "id": "A24-L2",
