@@ -16,10 +16,11 @@ Companion coverage census: `dev/helm-2025-full-source-census.json`.
 | --- | ---: |
 | `GAP expected rather than in-probability` | 1 |
 | `GAP no literal wrapper` | 1 |
-| `GAP stronger Lean hypotheses` | 5 |
+| `GAP stronger Lean hypotheses` | 4 |
 | `PASS` | 2 |
 | `PASS equivalent encoding` | 2 |
 | `PASS exact` | 1 |
+| `REPAIR uniform integrability is necessary` | 1 |
 
 A `PASS` verdict means the source result follows from the selected Lean surface at the stated scope. `GAP` means the Lean surface is narrower or assumes more. `REPAIR` means literal source fidelity is intentionally rejected because the retained source statement is inconsistent or incorrect. `PROOF ROLE REPLACED` means the final theorem is proved by another route, but the printed proof lemma itself is not represented literally.
 
@@ -27,7 +28,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 
 | id | source anchor | verdict |
 | --- | --- | --- |
-| `H25-T1` | Theorem 1 | GAP stronger Lean hypotheses |
+| `H25-T1` | Theorem 1 | REPAIR uniform integrability is necessary |
 | `H25-T2` | Theorem 2 | GAP stronger Lean hypotheses |
 | `H25-A1` | Assumption 1 | PASS exact |
 | `H25-A2` | Assumption 2 | GAP stronger Lean hypotheses |
@@ -59,7 +60,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 
 ### 1. `H25-T1` — Theorem 1: Fixed-n inference risk transfer
 
-**Verdict:** GAP stronger Lean hypotheses
+**Verdict:** REPAIR uniform integrability is necessary
 
 **Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:103-112`
 
@@ -69,6 +70,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 - `Helm2025.DKPS.LossDominated`
 - `Helm2025.DKPS.Theorem1`
 - `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`
+- `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`
 - `Helm2025.DKPS.risk_converges_fixed_n`
 
 **Clause-by-clause comparison:**
@@ -83,6 +85,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | No bounded/compact label-support assumption is visible in the retained source theorem or Appendix assumptions. | Theorem1 additionally requires LabelCompactSupport. | `lean_stronger_hypothesis` | This is the most significant unresolved source-vs-Lean hypothesis discrepancy in Helm2025. |
 | Conclusion is convergence of the two risks. | Lean concludes exactly the corresponding Tendsto/risk convergence. | `exact` |  |
 | The paper states no boundedness or compactness condition on the labels. | The theorems require LossDominated -- an integrable envelope for the loss as a function of the label -- rather than compact label support. | `lean_weaker_hypothesis` | Strictly weaker than the previous hypothesis, and implied by the finiteness of the risk the paper writes down. |
+| Theorem 1 asserts risk convergence under Assumptions 1-4 alone. | Not provable as stated; prob_convergence_not_enough_for_expectations gives the escaping-mass witness. The theorem carries an integrable envelope. | `source_repair` | The envelope is implied by finiteness of the risk the paper writes down. |
 
 **Semantic review:**
 
@@ -106,6 +109,7 @@ The conclusion is source-shaped. Lean additionally requires measurable embedding
 - `Helm2025.DKPS.consistency_transfer_dkps_bayes`
 - `Helm2025.DKPS.diagonal_convergence`
 - `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`
+- `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`
 
 **Clause-by-clause comparison:**
 

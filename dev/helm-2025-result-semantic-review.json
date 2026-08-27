@@ -33,7 +33,7 @@
    "source_kind": "theorem",
    "title": "Fixed-n inference risk transfer",
    "importance": "headline",
-   "verdict": "GAP stronger Lean hypotheses",
+   "verdict": "REPAIR uniform integrability is necessary",
    "literal_source_covered": false,
    "source_claim": "For fixed n, as DKPS estimation budgets grow, the risk of the decision function trained/evaluated on estimated perspectives converges to the risk based on true perspectives.",
    "source_locator": {
@@ -47,6 +47,7 @@
     "Helm2025.DKPS.LossDominated",
     "Helm2025.DKPS.Theorem1",
     "Helm2025.DKPS.lossDominated_of_boundedLabelSupport",
+    "Helm2025.DKPS.prob_convergence_not_enough_for_expectations",
     "Helm2025.DKPS.risk_converges_fixed_n"
    ],
    "clauses": [
@@ -97,6 +98,12 @@
      "lean_clause": "The theorems require LossDominated -- an integrable envelope for the loss as a function of the label -- rather than compact label support.",
      "relation": "lean_weaker_hypothesis",
      "note": "Strictly weaker than the previous hypothesis, and implied by the finiteness of the risk the paper writes down."
+    },
+    {
+     "source_clause": "Theorem 1 asserts risk convergence under Assumptions 1-4 alone.",
+     "lean_clause": "Not provable as stated; prob_convergence_not_enough_for_expectations gives the escaping-mass witness. The theorem carries an integrable envelope.",
+     "relation": "source_repair",
+     "note": "The envelope is implied by finiteness of the risk the paper writes down."
     }
    ],
    "review": "The conclusion is source-shaped. Lean additionally requires measurable embedding estimators, uses the compact-range form of A3, and joint loss continuity; these are sufficient conditions for the paper proof. The paper-facing wrapper also requires bounded/compact label support; no matching assumption was located in the retained source.",
@@ -128,7 +135,8 @@
     "Helm2025.DKPS.Theorem2_bayes",
     "Helm2025.DKPS.consistency_transfer_dkps_bayes",
     "Helm2025.DKPS.diagonal_convergence",
-    "Helm2025.DKPS.lossDominated_of_boundedLabelSupport"
+    "Helm2025.DKPS.lossDominated_of_boundedLabelSupport",
+    "Helm2025.DKPS.prob_convergence_not_enough_for_expectations"
    ],
    "clauses": [
     {
