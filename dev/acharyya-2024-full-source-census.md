@@ -25,8 +25,8 @@ Theorems 2 and 4 are by_composition rather than exact: they consume a bound on t
 | `compiled_exact` | 3 |
 | `compiled_by_composition` | 2 |
 | `compiled_generalized` | 2 |
-| `compiled_specialization` | 1 |
-| `compiled_source_repair` | 6 |
+| `compiled_specialization` | 2 |
+| `compiled_source_repair` | 5 |
 | `not_proof_debt` | 1 |
 
 ## Semantic-alignment summary
@@ -36,8 +36,8 @@ Theorems 2 and 4 are by_composition rather than exact: they consume a bound on t
 | `exact` | 3 |
 | `by_composition` | 2 |
 | `generalized` | 2 |
-| `specialized` | 1 |
-| `source_repair` | 6 |
+| `specialized` | 2 |
+| `source_repair` | 5 |
 | `out_of_scope` | 1 |
 
 ## Items
@@ -56,7 +56,7 @@ Theorems 2 and 4 are by_composition rather than exact: they consume a bound on t
 | `A24-T3` | `headline` | Theorem 3 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-C1` | `headline` | Corollary 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-A2` | `major` | Assumption 2 | `compiled_exact` | `exact` | `proved_in_build` |
-| `A24-L2` | `headline` | Lemma 2 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
+| `A24-L2` | `headline` | Lemma 2 | `compiled_specialization` | `specialized` | `proved_in_build` |
 | `A24-T4` | `headline` | Theorem 4 | `compiled_by_composition` | `by_composition` | `proved_in_build` |
 | `A24-T5` | `headline` | Theorem 5 | `compiled_specialization` | `specialized` | `proved_in_build` |
 
@@ -88,7 +88,7 @@ The source upgrades pairwise-distance convergence to existence of orthogonal W^(
 
 Done. Both modes are now proved: almost surely via ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto, and in probability via tendsto_measure_alignmentError_of_pairDist_convergesInProbability and tendsto_measure_alignedConfig_dist_gt. The in-probability mode needed a modulus uniform over configurations, since the sample point is not fixed when the tolerance is chosen; that is TauCeti.exists_delta_forall_exists_rigidMotion.
 
-### `continuous-mds-lp` — The continuum layer is formalized and Lemma 2 is proved end to end
+### `continuous-mds-lp` — The continuum layer is formalized; the population limit is proved, the sample-dissimilarity perturbation is not
 
 **Kind:** `scope_gap`
 
@@ -119,6 +119,12 @@ A first attempt did not compile: deriving measurability of the per-pair expectat
 END TO END. tendsto_measure_lpPairDistErr_outOfSample instantiates the population conclusion at the out-of-sample embedding: the L^p(P x P) discrepancy between the estimated pairwise distances and the population ones tends to zero in probability, which is the printed conclusion. Its almost-sure input is ae_eventually_forall_isMinOn_of_iid and its uniform bound comes from the coercivity bounds on the sample and population minimizers (norm_min_pointStress_le_of_bounded and norm_min_continuousPointStress_le).
 
 Its hypotheses are the source's setting -- a bounded measurable reference embedding and bounded measurable dissimilarities, which a compact model space with a continuous embedding supplies -- plus the identifiability premise whose necessity Consistency.not_unique_min_continuousPointStress establishes, and joint measurability of the estimator, which the printed statement needs for its own integral to denote anything. Two clauses come out stronger than printed: the full sequence rather than a subsequence, and one statement in p rather than one per p.
+
+CORRECTION, made on rereading the printed lemma against what was proved. tendsto_measure_lpPairDistErr_outOfSample builds its estimator from the POPULATION dissimilarities: its hypothesis hPsimin says the estimate minimizes pointStress (chi o phi) (Delta x o phi). Lemma 2's psihat is built from the SAMPLE dissimilarities D, under the hypothesis that D_ii' converges in probability to Delta^(infinity)(phi_i, phi_i'). So what is proved is the population-limit half -- the finite reference sample's population embedding converging to the population minimizer in L^p(P x P), which is exactly the continuous-MDS identification the source attributes to its reference [23] -- and not the printed lemma, which additionally perturbs the target dissimilarities.
+
+The missing half is a perturbation, and the machinery for it exists: the objectives built from D differ from those built from Delta by at most the dissimilarity error times a bound, so the pointwise convergence and the equi-Lipschitz estimate both survive, and tendsto_argmin_of_tendsto_of_equiLipschitz already handles objectives that vary at every stage. What has to be handled with care is that the source's hypothesis is convergence in probability, so the error is random.
+
+I had recorded this row as closed. That was wrong, and the claim is withdrawn rather than softened.
 
 ### `affine-invariance-partial` — Remark 1's invariance is rigid, not affine -- now proved and the wording corrected
 
@@ -331,15 +337,15 @@ Both are recorded in the AmbientModelLimit structure so the assumption is repres
 * **source anchor:** Lemma 2 (lemma, section 4.3)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:342-355`
 * **importance:** `headline`
-* **status / verification:** `compiled_source_repair` / `proved_in_build`
-* **semantic alignment:** `source_repair` — The printed conclusion is proved end to end by tendsto_measure_lpPairDistErr_outOfSample: the L^p(P x P) discrepancy between the estimated pairwise distances and the population embedding's tends to zero in probability, over the population measure and not an empirical stand-in. Two clauses come out stronger than printed -- the full sequence rather than a subsequence, and one statement in p rather than one per p.
+* **status / verification:** `compiled_specialization` / `proved_in_build`
+* **semantic alignment:** `specialized` — The printed conclusion -- the L^p(P x P) discrepancy tending to zero in probability, against the population measure and the population embedding -- is proved by tendsto_measure_lpPairDistErr_outOfSample, along the full sequence and uniformly in p, both stronger than printed. The specialization is in the estimator: it is built from the population dissimilarities, whereas the printed psihat is built from the sample dissimilarities D under the hypothesis that D converges in probability to them. So the population-limit half is proved -- that is the continuous-MDS identification the source attributes to its reference [23] -- and the sample-dissimilarity perturbation is not.
 
-The row is a source repair rather than exact because the lemma is stated without an identifiability premise and is false without one: Consistency.not_unique_min_continuousPointStress exhibits population data whose one-point stress has three minimizers, so constant sequences at two of them converge to different limits and no statement of the printed form can hold. That premise is on the same footing as RawStress.UniquePairProfile, whose necessity is established for the configuration analogue. The remaining hypotheses are the source's own setting, plus estimator measurability, which the printed statement needs for its integral to denote anything.
+The identifiability premise the proof uses is separately shown necessary by Consistency.not_unique_min_continuousPointStress, so it is a repair rather than an addition; estimator measurability is what the printed integral needs to denote anything.
 * **source claim:** For iid phi_i from P, pointwise convergence of empirical dissimilarities implies, along a subsequence, L^p(P x P) convergence of estimated pairwise distances to continuous-MDS distances.
 * **Lean declarations:** `Acharyya2024.Consistency.continuousPointStress_twoPoint_eq_one`, `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`, `Acharyya2024.Consistency.not_unique_min_continuousPointStress`, `Acharyya2024.Consistency.one_le_continuousPointStress_twoPoint`, `Acharyya2024.ContinuousMDS.ContinuousMDS`, `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`, `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`, `Acharyya2024.ContinuousMDS.ae_eventually_forall_isMinOn_of_iid`, `Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress`, `Acharyya2024.ContinuousMDS.ae_tendsto_outOfSampleExtension_of_iid`, `Acharyya2024.ContinuousMDS.continuousPointStress`, `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`, `Acharyya2024.ContinuousMDS.estimatedEmbedding`, `Acharyya2024.ContinuousMDS.estimatedEmbedding_mem_mds`, `Acharyya2024.ContinuousMDS.eventually_forall_isMinOn_dist_lt`, `Acharyya2024.ContinuousMDS.exists_min_continuousPointStress`, `Acharyya2024.ContinuousMDS.exists_min_pointStress`, `Acharyya2024.ContinuousMDS.frameEmbedding`, `Acharyya2024.ContinuousMDS.frameEmbedding_min`, `Acharyya2024.ContinuousMDS.lpPairDistErr`, `Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation`, `Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_pairDiscrepancy`, `Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_prod`, `Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left`, `Acharyya2024.ContinuousMDS.lt_pointStress_of_norm_gt`, `Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress`, `Acharyya2024.ContinuousMDS.norm_min_continuousPointStress_le`, `Acharyya2024.ContinuousMDS.norm_min_pointStress_le_of_bounded`, `Acharyya2024.ContinuousMDS.pairDiscrepancy`, `Acharyya2024.ContinuousMDS.pointStress`, `Acharyya2024.ContinuousMDS.pointStress_rigidMotion`, `Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz`, `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding`, `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_outOfSample`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_population`, `Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz`, `Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension`, `Acharyya2024.ContinuousMDS.tendsto_pointStress`, `TauCeti.ae_ae_of_forall_ae`, `TauCeti.integral_doubleSum_pi`, `TauCeti.map_evalPair_pi`, `TauCeti.measurableSet_exists_isMinOn_le`, `TauCeti.measurableSet_tendsto_isMinOn`
 * **gap refs:** `continuous-mds-lp`
 * **notes:** The source attributes this lemma to its reference [23]; the continuous-MDS identification it stands for is proved here as ae_eventually_forall_isMinOn_of_iid.
-* **next action:** None. The printed conclusion is proved, the identifiability premise is shown necessary, and the remaining hypotheses are the source's setting plus estimator measurability.
+* **next action:** Let the target dissimilarities vary with the stage and converge to the population ones, so the estimator is built from D rather than Delta. The objectives differ by at most the dissimilarity error times a bound, so pointwise convergence and the equi-Lipschitz estimate both survive; the care is that the source's hypothesis is convergence in probability.
 
 ### `A24-T4` — Growing-model pointwise dissimilarity concentration
 
@@ -365,4 +371,4 @@ The row is a source repair rather than exact because the lemma is stated without
 * **Lean declarations:** `Acharyya2024.Consistency.continuousPointStress_twoPoint_eq_one`, `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`, `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`, `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`, `Acharyya2024.Consistency.not_unique_min_continuousPointStress`, `Acharyya2024.Consistency.one_le_continuousPointStress_twoPoint`, `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`, `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`, `Acharyya2024.ContinuousMDS.ae_eventually_forall_isMinOn_of_iid`, `Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress`, `Acharyya2024.ContinuousMDS.ae_tendsto_outOfSampleExtension_of_iid`, `Acharyya2024.ContinuousMDS.continuousPointStress`, `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`, `Acharyya2024.ContinuousMDS.estimatedEmbedding`, `Acharyya2024.ContinuousMDS.estimatedEmbedding_mem_mds`, `Acharyya2024.ContinuousMDS.eventually_forall_isMinOn_dist_lt`, `Acharyya2024.ContinuousMDS.exists_min_continuousPointStress`, `Acharyya2024.ContinuousMDS.exists_min_pointStress`, `Acharyya2024.ContinuousMDS.frameEmbedding`, `Acharyya2024.ContinuousMDS.frameEmbedding_min`, `Acharyya2024.ContinuousMDS.lpPairDistErr`, `Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_pairDiscrepancy`, `Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_prod`, `Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left`, `Acharyya2024.ContinuousMDS.lt_pointStress_of_norm_gt`, `Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress`, `Acharyya2024.ContinuousMDS.norm_min_continuousPointStress_le`, `Acharyya2024.ContinuousMDS.norm_min_pointStress_le_of_bounded`, `Acharyya2024.ContinuousMDS.pairDiscrepancy`, `Acharyya2024.ContinuousMDS.pointStress`, `Acharyya2024.ContinuousMDS.pointStress_rigidMotion`, `Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz`, `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding`, `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_outOfSample`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_population`, `Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz`, `Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension`, `Acharyya2024.ContinuousMDS.tendsto_pointStress`, `TauCeti.ae_ae_of_forall_ae`, `TauCeti.integral_doubleSum_pi`, `TauCeti.map_evalPair_pi`, `TauCeti.measurableSet_exists_isMinOn_le`, `TauCeti.measurableSet_tendsto_isMinOn`
 * **gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 * **notes:** Previously the growing-stage consistency theorem took per-stage sampling convergence as a hypothesis; that hypothesis is now discharged from the source's own condition.
-* **next action:** Compose the Theorem 4 rate with tendsto_measure_lpPairDistErr_outOfSample, which now proves the Lemma 2 conclusion Theorem 5 quotes.
+* **next action:** Compose the Theorem 4 rate with the Lemma 2 conclusion; that conclusion is proved for a population-dissimilarity estimator and needs the sample-dissimilarity perturbation first, tracked on A24-L2.

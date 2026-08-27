@@ -479,7 +479,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 | ... -> P 0 as u -> infinity | tendsto_lpPairDistErr_frameEmbedding proves the L^p discrepancy tends to zero, against the population embedding of a fixed reference sample. | `lean_stronger_hypothesis` | Identifying that target with the continuous-MDS map, as the reference collection grows, is the whole residual. |
 | Lemma 2. ([23]) ... \|\|mds(phi_1) - mds(phi_2)\|\| | ae_tendsto_outOfSampleExtension_of_iid proves the identification of the estimated out-of-sample position with the population minimizer, which is what the citation stands for. | `derived_by_composition` | Combining it with the L^p conclusion needs a Fubini exchange of quantifiers and hence joint measurability of the out-of-sample map. |
 | (the lemma states no identifiability premise) | not_unique_min_continuousPointStress shows the uniqueness premise the argmin steps use cannot be dropped. | `source_repair` | Same footing as UniquePairProfile, whose necessity is separately established for the configuration analogue. |
-| int int \|...\|^p P(dphi_1) P(dphi_2) ->P 0 as u -> infinity | tendsto_measure_lpPairDistErr_population: the L^p(P x P) discrepancy against the population measure tends to zero in probability. | `exact` | Reached by the expectation route -- Tonelli, per-pair dominated convergence, Markov -- so no quantifier exchange and no measurable selection is involved. Instantiating it at the out-of-sample embedding is what remains. |
+| int int \|...\|^p P(dphi_1) P(dphi_2) ->P 0 as u -> infinity | tendsto_measure_lpPairDistErr_population: the L^p(P x P) discrepancy against the population measure tends to zero in probability. | `lean_stronger_hypothesis` | Proved for an estimator built from the population dissimilarities; the printed psihat is built from the sample dissimilarities D. |
 | (the lemma states no identifiability premise) | not_unique_min_continuousPointStress shows the printed form cannot hold without one. | `source_repair` | Same footing as UniquePairProfile. |
 
 **Semantic review:**
@@ -490,7 +490,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** None. The printed conclusion is proved, the identifiability premise is shown necessary, and the remaining hypotheses are the source's setting plus estimator measurability.
+**Next action:** Let the target dissimilarities vary with the stage and converge to the population ones, so the estimator is built from D rather than Delta. The objectives differ by at most the dissimilarity error times a bound, so pointwise convergence and the equi-Lipschitz estimate both survive; the care is that the source's hypothesis is convergence in probability.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -599,7 +599,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Compose the Theorem 4 rate with tendsto_measure_lpPairDistErr_outOfSample, which now proves the Lemma 2 conclusion Theorem 5 quotes.
+**Next action:** Compose the Theorem 4 rate with the Lemma 2 conclusion; that conclusion is proved for a population-dissimilarity estimator and needs the sample-dissimilarity perturbation first, tracked on A24-L2.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 

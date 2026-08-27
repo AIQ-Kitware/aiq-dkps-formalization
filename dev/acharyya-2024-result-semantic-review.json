@@ -687,8 +687,8 @@
     {
      "source_clause": "int int |...|^p P(dphi_1) P(dphi_2) ->P 0 as u -> infinity",
      "lean_clause": "tendsto_measure_lpPairDistErr_population: the L^p(P x P) discrepancy against the population measure tends to zero in probability.",
-     "relation": "exact",
-     "note": "Reached by the expectation route -- Tonelli, per-pair dominated convergence, Markov -- so no quantifier exchange and no measurable selection is involved. Instantiating it at the out-of-sample embedding is what remains."
+     "relation": "lean_stronger_hypothesis",
+     "note": "Proved for an estimator built from the population dissimilarities; the printed psihat is built from the sample dissimilarities D."
     },
     {
      "source_clause": "(the lemma states no identifiability premise)",
@@ -702,7 +702,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "None. The printed conclusion is proved, the identifiability premise is shown necessary, and the remaining hypotheses are the source's setting plus estimator measurability."
+   "next_action": "Let the target dissimilarities vary with the stage and converge to the population ones, so the estimator is built from D rather than Delta. The objectives differ by at most the dissimilarity error times a bound, so pointwise convergence and the equi-Lipschitz estimate both survive; the care is that the source's hypothesis is convergence in probability."
   },
   {
    "id": "A24-T4",
@@ -848,7 +848,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Compose the Theorem 4 rate with tendsto_measure_lpPairDistErr_outOfSample, which now proves the Lemma 2 conclusion Theorem 5 quotes."
+   "next_action": "Compose the Theorem 4 rate with the Lemma 2 conclusion; that conclusion is proved for a population-dissimilarity estimator and needs the sample-dissimilarity perturbation first, tracked on A24-L2."
   },
   {
    "id": "A24-R4",
