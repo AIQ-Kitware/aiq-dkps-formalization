@@ -55,7 +55,7 @@ Two source defects stand: Theorem 1 is not provable as printed without an envelo
 
 ## Gaps and source repairs
 
-### `stronger-analysis-hypotheses` — Joint continuity replaced by the printed readings of Assumptions 2 and 4
+### `stronger-analysis-hypotheses` — Joint continuity replaced by the printed readings of Assumptions 2 and 4 -- Assumption 3's compact-range encoding and estimator measurability remain
 
 **Kind:** `source_audit`
 
@@ -259,7 +259,7 @@ alignmentConsistency_of_pairwiseDist takes convergence in probability of the est
 * **Lean declarations:** `Helm2025.DKPS.ConsistentExpected`, `Helm2025.DKPS.ConsistentInProbability`, `Helm2025.DKPS.ConvergesInProbabilityToZero`, `Helm2025.DKPS.consistentExpected_of_consistentInProbability`, `Helm2025.DKPS.riskGivenTraining`, `Helm2025.DKPS.risk_eq_integral_riskGivenTraining`, `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`
 * **gap refs:** `consistency-in-probability-vs-expectation`
 * **notes:** This is the definition Theorem 2 quantifies over, so the substitution propagates to it.
-* **next action:** None.
+* **next action:** None required: the displayed definition is formalized verbatim as ConsistentInProbability, and the bridge to the form the transfer theorems consume is proved. The row is by_composition only because the paper states a definition rather than a theorem, so there is no single result to reproduce.
 
 ### `H25-EQ3` — Aligned estimated perspectives converge uniformly in probability
 

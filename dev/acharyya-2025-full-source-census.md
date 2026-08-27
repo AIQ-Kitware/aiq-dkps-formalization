@@ -161,7 +161,7 @@ This does not change what is formalized -- every library still uses Acharyya2024
 * **source claim:** Under uniformly bounded response variance and r growing faster than n^3, ||Bhat-B|| is below (n^3/r)^(1/2-delta) with high probability for delta in (0,1/2).
 * **Lean declarations:** `Acharyya2025.MathlibBridge.MatrixOperatorNormClose`, `Acharyya2025.SpectralPipeline.operatorNormClose_of_entrywiseClose`, `Acharyya2025.PaperRate.paperBaseRatio`, `Acharyya2025.PaperRate.paperDeltaScale`, `Acharyya2025.PaperRate.tendsto_concentration_ratio_paperDeltaScale_zero`
 * **notes:** The paper-scale module was added specifically to close the source exponent rather than leave only a generic rate parameter.
-* **next action:** None.
+* **next action:** Optional: expose one source-facing declaration stating the corollary verbatim. The pieces are compiled and the assembly is one step, so this is presentational rather than mathematical -- recorded so the by_composition status is a choice on the record rather than a silent one.
 
 ### `A25-A1` — Eventually fixed embedding rank d
 

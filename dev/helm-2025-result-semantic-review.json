@@ -592,7 +592,7 @@
    "gap_refs": [
     "consistency-in-probability-vs-expectation"
    ],
-   "next_action": "None."
+   "next_action": "None required: the displayed definition is formalized verbatim as ConsistentInProbability, and the bridge to the form the transfer theorems consume is proved. The row is by_composition only because the paper states a definition rather than a theorem, so there is no single result to reproduce."
   }
  ]
 }
