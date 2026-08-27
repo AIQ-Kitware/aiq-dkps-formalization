@@ -218,6 +218,54 @@ theorem exists_linearIsometryEquiv_map_eq_of_inner_eq [FiniteDimensional 𝕜 E]
   exact ⟨L.extend.toLinearIsometryEquiv rfl, fun i => by
     simpa [L] using L.extend_apply ⟨φ i, Submodule.subset_span ⟨i, rfl⟩⟩⟩
 
+/-- **Rigid-motion rigidity.** Two families in a finite-dimensional real inner product space
+with equal pairwise *distances* differ by a rigid motion: there is a linear isometry
+equivalence `W` and a translation `b` with `ψ i = W (φ i) + b` for every `i`.
+
+This is the affine companion of `exists_linearIsometryEquiv_map_eq_of_inner_eq`, which needs
+equal inner products.  Recentring at a base index turns equal distances into equal inner
+products by polarisation, and the linear statement then supplies `W`.
+
+It is the classical fact underlying multidimensional scaling: a configuration is determined by
+its pairwise distances only up to a rigid motion, so a distance-based embedding can be compared
+with a target configuration only after alignment. -/
+theorem exists_rigidMotion_of_dist_eq
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [FiniteDimensional ℝ F]
+    {ι : Type*} [Nonempty ι] {φ ψ : ι → F}
+    (h : ∀ i j, ‖φ i - φ j‖ = ‖ψ i - ψ j‖) :
+    ∃ (W : F ≃ₗᵢ[ℝ] F) (b : F), ∀ i, ψ i = W (φ i) + b := by
+  classical
+  obtain ⟨i₀⟩ := ‹Nonempty ι›
+  set φ' : ι → F := fun i => φ i - φ i₀ with hφ'
+  set ψ' : ι → F := fun i => ψ i - ψ i₀ with hψ'
+  have hnorm : ∀ i, ‖φ' i‖ = ‖ψ' i‖ := fun i => h i i₀
+  have hdiff : ∀ i j, ‖φ' i - φ' j‖ = ‖ψ' i - ψ' j‖ := by
+    intro i j
+    have hφsub : φ' i - φ' j = φ i - φ j := by simp only [hφ']; abel
+    have hψsub : ψ' i - ψ' j = ψ i - ψ j := by simp only [hψ']; abel
+    rw [hφsub, hψsub]
+    exact h i j
+  -- polarisation turns equal distances into equal inner products
+  have hinner : ∀ i j, ⟪φ' i, φ' j⟫_ℝ = ⟪ψ' i, ψ' j⟫_ℝ := by
+    intro i j
+    have hφ := norm_sub_sq_real (φ' i) (φ' j)
+    have hψ := norm_sub_sq_real (ψ' i) (ψ' j)
+    have h1 := hnorm i
+    have h2 := hnorm j
+    have h3 := hdiff i j
+    rw [h1, h2, h3] at hφ
+    linarith [hφ, hψ]
+  obtain ⟨W, hW⟩ := exists_linearIsometryEquiv_map_eq_of_inner_eq (𝕜 := ℝ) hinner
+  refine ⟨W, ψ i₀ - W (φ i₀), fun i => ?_⟩
+  have hWi := hW i
+  simp only [hφ', hψ'] at hWi
+  rw [map_sub] at hWi
+  have hfinal : ψ i = W (φ i) - W (φ i₀) + ψ i₀ := by
+    have := congrArg (fun v => v + ψ i₀) hWi
+    simpa using this.symm
+  rw [hfinal]
+  abel
+
 namespace Matrix
 
 open _root_.Matrix
