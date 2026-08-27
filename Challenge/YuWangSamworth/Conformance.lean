@@ -10,11 +10,12 @@ import Mathlib
 
 The open proof below is a deliberate challenge placeholder. Do not fill it in
 this repository and do not count it as formalization debt. The proof belongs to the
-ordinary `ForMathlib` implementation imported by the paired leaderboard.
+ordinary `YuWangSamworth2015.Core.Residual` implementation imported by the paired
+leaderboard.
 -/
 
 
-namespace TauCeti
+namespace YuWangSamworth2015
 open scoped InnerProductSpace BigOperators
 open Module (finrank)
 
@@ -36,4 +37,4 @@ theorem sqrt_sum_cross_le_of_population_gap
           (∑ k, ‖(S - T) (hT.eigenvectorBasis hn k)‖ ^ 2) / Δ := by
   sorry
 
-end TauCeti
+end YuWangSamworth2015

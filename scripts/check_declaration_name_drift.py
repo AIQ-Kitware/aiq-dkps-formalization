@@ -99,6 +99,7 @@ SOURCE_ROOTS = [
     "ForMathlib",
     "ForTauCeti",
     "Helm2025",
+    "YuWangSamworth2015",
 ]
 
 # `theorem foo`, `lemma foo`, `def foo`, `abbrev foo`, `instance foo`, ... The
