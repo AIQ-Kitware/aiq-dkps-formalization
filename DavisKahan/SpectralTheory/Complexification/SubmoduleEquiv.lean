@@ -81,6 +81,7 @@ noncomputable def complexifySubmoduleLinearEquiv (Z : Submodule ℝ E) :
     apply Subtype.ext
     apply TauCeti.RealComplexification.ext <;> simp
 
+/-- The underlying function of the complexified-submodule linear equivalence. -/
 @[simp] theorem coe_complexifySubmoduleLinearEquiv (Z : Submodule ℝ E)
     (w : RealComplexification Z) :
     ((complexifySubmoduleLinearEquiv Z w : RealComplexification E)) =
@@ -103,6 +104,8 @@ noncomputable def complexifySubmoduleEquiv (Z : Submodule ℝ E) :
       simp
     exact (sq_eq_sq₀ (norm_nonneg _) (norm_nonneg _)).mp (htgt.trans hsrc.symm)
 
+/-- The underlying function of the complexified-submodule isometric
+equivalence. -/
 @[simp] theorem coe_complexifySubmoduleEquiv (Z : Submodule ℝ E)
     (w : RealComplexification Z) :
     ((complexifySubmoduleEquiv Z w : RealComplexification E)) =
@@ -172,13 +175,16 @@ noncomputable def conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) : G →
   e.toContinuousLinearEquiv.toContinuousLinearMap ∘L T ∘L
     e.symm.toContinuousLinearEquiv.toContinuousLinearMap
 
+/-- The conjugation equivalence acts by conjugating coordinates. -/
 @[simp] theorem conjEquiv_apply (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) (y : G) :
     conjEquiv e T y = e (T (e.symm y)) := rfl
 
+/-- Conjugation is an involution, in one order. -/
 @[simp] theorem conjEquiv_symm_conjEquiv (e : F ≃ₗᵢ[ℂ] G) (T : F →L[ℂ] F) :
     conjEquiv e.symm (conjEquiv e T) = T := by
   ext x; simp
 
+/-- Conjugation is an involution, in the other order. -/
 @[simp] theorem conjEquiv_conjEquiv_symm (e : F ≃ₗᵢ[ℂ] G) (S : G →L[ℂ] G) :
     conjEquiv e (conjEquiv e.symm S) = S := by
   ext y; simp

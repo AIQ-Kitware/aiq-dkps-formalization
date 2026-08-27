@@ -120,6 +120,7 @@ def gapExterior (l r d : ℝ) : Set ℝ := {x : ℝ | x ≤ l - d ∨ r + d ≤ 
 /-- The central band strictly inside the canonical gap circle. -/
 def centralBand (l r d : ℝ) : Set ℝ := Set.Ioo (l - d / 2) (r + d / 2)
 
+/-- The central band is an open interval, hence measurable. -/
 theorem measurableSet_centralBand (l r d : ℝ) :
     MeasurableSet (centralBand l r d) := measurableSet_Ioo
 
@@ -128,23 +129,30 @@ cutoff, written as a minimum since both take values in `[0,1]`. -/
 def bandCutoff (l r d t : ℝ) : ℝ :=
   min (spectralGapCutoff r d t) (1 - spectralGapCutoff (l - d) d t)
 
+/-- The one-sided cutoff is nonnegative. -/
 theorem spectralGapCutoff_nonneg (a d t : ℝ) : 0 ≤ spectralGapCutoff a d t :=
   le_max_left _ _
 
+/-- The one-sided cutoff is bounded by one. -/
 theorem spectralGapCutoff_le_one (a d t : ℝ) : spectralGapCutoff a d t ≤ 1 :=
   max_le zero_le_one (min_le_left _ _)
 
+/-- The two-sided cutoff is continuous, being a minimum of continuous
+functions. -/
 theorem continuous_bandCutoff (l r d : ℝ) : Continuous (bandCutoff l r d) :=
   (continuous_spectralGapCutoff r d).min
     (continuous_const.sub (continuous_spectralGapCutoff (l - d) d))
 
+/-- The two-sided cutoff is nonnegative. -/
 theorem bandCutoff_nonneg (l r d t : ℝ) : 0 ≤ bandCutoff l r d t :=
   le_min (spectralGapCutoff_nonneg _ _ _)
     (by linarith [spectralGapCutoff_le_one (l - d) d t])
 
+/-- The two-sided cutoff is bounded by one. -/
 theorem bandCutoff_le_one (l r d t : ℝ) : bandCutoff l r d t ≤ 1 :=
   (min_le_left _ _).trans (spectralGapCutoff_le_one _ _ _)
 
+/-- The two-sided cutoff is `1` on the selected interval `[l, r]`. -/
 theorem bandCutoff_eq_one {l r d t : ℝ} (hd : 0 < d) (ht : t ∈ Set.Icc l r) :
     bandCutoff l r d t = 1 := by
   have h1 : spectralGapCutoff r d t = 1 := spectralGapCutoff_eq_one hd ht.2
@@ -153,6 +161,7 @@ theorem bandCutoff_eq_one {l r d t : ℝ} (hd : 0 < d) (ht : t ∈ Set.Icc l r) 
   rw [bandCutoff, h1, h2]
   norm_num
 
+/-- The two-sided cutoff vanishes on the gap exterior. -/
 theorem bandCutoff_eq_zero {l r d t : ℝ} (hd : 0 < d) (ht : t ∈ gapExterior l r d) :
     bandCutoff l r d t = 0 := by
   rcases ht with hlow | hhigh
@@ -172,6 +181,7 @@ def bandSymbol (B : H →L[ℂ] H) (l r d : ℝ) : C(spectrum ℂ B, ℝ) :=
       (Complex.continuous_re.comp continuous_subtype_val)⟩
 
 omit [CompleteSpace H] in
+/-- Evaluating the band symbol is evaluating the cutoff at the real part. -/
 @[simp] theorem bandSymbol_apply (B : H →L[ℂ] H) (l r d : ℝ) (w : spectrum ℂ B) :
     bandSymbol B l r d w = bandCutoff l r d (TauCeti.BorelCalculus.reCoord w) := rfl
 
@@ -215,14 +225,19 @@ def centralBandSubspace {l r d : ℝ} : Submodule ℂ H :=
   boundedSelfAdjointSpectralSubspace B hB (centralBand l r d)
     (measurableSet_centralBand l r d)
 
+/-- The band subspace is a spectral subspace, so it is orthogonally
+complemented. -/
 instance centralBandSubspace_hasOrthogonalProjection {l r d : ℝ} :
     (centralBandSubspace B hB (l := l) (r := r) (d := d)).HasOrthogonalProjection :=
   boundedSelfAdjointSpectralSubspace_hasOrthogonalProjection B hB _ _
 
+/-- The band subspace reduces the operator it is cut from. -/
 theorem centralBandSubspace_reduces {l r d : ℝ} :
     Reduces B (centralBandSubspace B hB (l := l) (r := r) (d := d)) :=
   boundedSelfAdjointSpectralSubspace_reduces B hB _ _
 
+/-- The orthogonal projection onto the band subspace is the band spectral
+projection. -/
 theorem starProjection_centralBandSubspace {l r d : ℝ} :
     (centralBandSubspace B hB (l := l) (r := r) (d := d)).starProjection =
       boundedSelfAdjointSpectralProjection B hB (centralBand l r d)
@@ -371,11 +386,13 @@ def shiftedOperator (l r : ℝ) : H →L[ℂ] H :=
   B - ((gapCenter l r : ℝ) : ℂ) • (1 : H →L[ℂ] H)
 
 omit [CompleteSpace H] in
+/-- Evaluating the shifted operator subtracts the gap centre. -/
 theorem shiftedOperator_apply (l r : ℝ) (x : H) :
     shiftedOperator B l r x = B x - ((gapCenter l r : ℝ) : ℂ) • x := by
   simp [shiftedOperator]
 
 omit [CompleteSpace H] hB in
+/-- Shifting by a real scalar preserves symmetry of the quadratic form. -/
 theorem inner_shiftedOperator_symm (hB' : IsSelfAdjointOperator B) (l r : ℝ) (u v : H) :
     ⟪u, shiftedOperator B l r v⟫_ℂ = ⟪shiftedOperator B l r u, v⟫_ℂ := by
   have h : ⟪B u, v⟫_ℂ = ⟪u, B v⟫_ℂ := hB' u v
@@ -563,6 +580,7 @@ theorem norm_shiftedOperator_ge_of_spectrumIn_gapExterior
   linarith
 
 omit [CompleteSpace H] hB in
+/-- The shifted operator depends on the interval only through its centre. -/
 theorem shiftedOperator_congr {l r l' r' : ℝ} (h : gapCenter l' r' = gapCenter l r) :
     shiftedOperator B l' r' = shiftedOperator B l r := by
   rw [shiftedOperator, shiftedOperator, h]

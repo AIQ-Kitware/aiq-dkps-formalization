@@ -75,6 +75,8 @@ noncomputable def lowerCosineBlock (P Q : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] : H →L[𝕜] H :=
   Q.starProjection ∘L P.starProjection
 
+/-- Evaluating the upper block shift: project to `Pᗮ`, shift by `α`, project
+back. -/
 theorem upperBlockShift_apply (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] (alpha : ℝ) (x : H) :
     RCLike.re ⟪x, upperBlockShift A P alpha x⟫_𝕜 =
@@ -166,6 +168,8 @@ theorem starProjection_cosineBlock (P Q : Submodule 𝕜 H)
   Submodule.starProjection_eq_self_iff.mpr
     (Submodule.starProjection_apply_mem _ _)
 
+/-- Evaluating the lower block shift: project to `P`, subtract from `α + δ`,
+project back. -/
 theorem lowerBlockShift_apply (A : H →L[𝕜] H) (P : Submodule 𝕜 H)
     [P.HasOrthogonalProjection] (alpha delta : ℝ) (x : H) :
     RCLike.re ⟪x, lowerBlockShift A P alpha delta x⟫_𝕜 =
