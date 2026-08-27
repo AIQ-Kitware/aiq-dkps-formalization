@@ -110,6 +110,25 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #: `specProjection -> spectralPVM -> toProjValMeasure -> specProj` chain, now a four-lemma `rw`.
 #: The other seven sites had already been rewired by the `specProjection` slice, which introduced
 #: that very lemma. A per-declaration removal cost is only valid against the tree it was taken on.
+#:
+#: **Measured 2026-08-27 (Claude Opus 5), so the next reader does not repeat it.**
+#: Every one of the 191 `@[expose]` attributes in `ForTauCeti` was deleted and the
+#: library rebuilt: 65 errors, in 17 modules.  Restoring, file by file, only the
+#: files an error named or whose exposed declarations an erroring file mentions,
+#: and rebuilding after each round, converged after seven rounds with **189 of the
+#: 191 still needed** -- the two removable ones were `firstPrimitive` in
+#: `MeasureTheory/IntervalSecondPrimitiveDeriv.lean` and one in
+#: `MeasureTheory/MulLpCfc.lean`, and both are removed.
+#:
+#: That measurement is at whole-file granularity, so it is an upper bound on
+#: necessity rather than a proof that each individual attribute is load-bearing: a
+#: file restored for one expose keeps all of them.  What it does establish is that
+#: **lowering this count is not a cleanup task.**  The failures are `simp` lemmas
+#: whose statement is a definitional unfolding, `rfl` proofs, and `rw` at a
+#: definition name; each one needs the missing application or elimination lemma
+#: written and its consumers migrated, which is the api-design work the rubric
+#: above asks for and not an attribute deletion.  Do not raise this baseline to
+#: make the gate green; the gate is correctly reporting real debt.
 PER_DECL_BASELINE = 10
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
