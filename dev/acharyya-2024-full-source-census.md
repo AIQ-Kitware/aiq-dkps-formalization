@@ -20,10 +20,9 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | --- | ---: |
 | `compiled_exact` | 2 |
 | `compiled_generalized` | 2 |
-| `compiled_specialization` | 5 |
+| `compiled_specialization` | 6 |
 | `compiled_stronger_hypotheses` | 3 |
 | `compiled_source_repair` | 1 |
-| `not_represented` | 1 |
 | `not_proof_debt` | 1 |
 
 ## Semantic-alignment summary
@@ -32,10 +31,9 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | --- | ---: |
 | `exact` | 2 |
 | `generalized` | 2 |
-| `specialized` | 5 |
+| `specialized` | 6 |
 | `stronger_hypotheses` | 3 |
 | `source_repair` | 1 |
-| `missing` | 1 |
 | `out_of_scope` | 1 |
 
 ## Items
@@ -54,7 +52,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `A24-T3` | `headline` | Theorem 3 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `A24-C1` | `headline` | Corollary 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-A2` | `major` | Assumption 2 | `compiled_specialization` | `specialized` | `proved_in_build` |
-| `A24-L2` | `headline` | Lemma 2 | `not_represented` | `missing` | `absent` |
+| `A24-L2` | `headline` | Lemma 2 | `compiled_specialization` | `specialized` | `absent` |
 | `A24-T4` | `headline` | Theorem 4 | `compiled_specialization` | `specialized` | `proved_in_build` |
 | `A24-T5` | `headline` | Theorem 5 | `compiled_specialization` | `specialized` | `proved_in_build` |
 
@@ -89,6 +87,8 @@ The source introduces a compact model space, a model distribution P, continuous 
 Partly closed. Acharyya2024.ContinuousMDS.continuousRawStress is the source's double integral and ContinuousMDS is the minimizer set over Borel-measurable embeddings, so the Lemma 2 and Theorem 5 conclusions can now at least be written. continuousRawStress_empiricalPopulation is the compatibility theorem: against the empirical measure of a finite population the continuous raw stress is the finite raw stress over the square of the population size, so the continuum definition extends the finite one the rest of the package uses. What remains unformalized is the L^p(P x P) convergence itself, which needs a limit theorem relating the empirical minimizers to the population minimizer.
 
 Existence of a minimizer is attributed by the source to the cited continuous-MDS literature through Remark 3 and is not reproved here; under this project's standard an externally attributed result is source-fidelity material, not an added proof obligation.
+
+Further progress. lpPairDistErr is the source's L^p(P x P) discrepancy, and tendsto_measure_lpPairDistErr_gt proves Lemma 2's conclusion for the EMPIRICAL model distribution: pairwise convergence in probability of the estimates gives convergence in probability of the L^p discrepancy, along the full sequence rather than a subsequence and uniformly in p >= 1. What is still missing is the population law in place of the empirical measure, which is where the continuous-MDS embedding of the source enters and which the source itself attributes to the cited literature.
 
 ### `affine-invariance-partial` — Remark 1 affine/rigid invariance is only partially exposed
 
@@ -287,13 +287,13 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **source anchor:** Lemma 2 (lemma, section 4.3)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:342-355`
 * **importance:** `headline`
-* **status / verification:** `not_represented` / `absent`
-* **semantic alignment:** `missing` — The package has no model-distribution P over a compact model space, no continuous-MDS map, and no double-integral L^p conclusion.
+* **status / verification:** `compiled_specialization` / `absent`
+* **semantic alignment:** `specialized` — The conclusion is now formalized and proved against the empirical measure of the sampled models: pairwise convergence in probability of the estimated distances gives convergence in probability of the L^p(P x P) discrepancy. Two clauses come out stronger than printed -- the full sequence rather than a subsequence, and one statement uniform in p rather than one per p. The specialization is that P is the empirical model measure rather than the population law the models are drawn from; the population case is the part the source attributes to the cited continuous-MDS literature.
 * **source claim:** For iid phi_i from P, pointwise convergence of empirical dissimilarities implies, along a subsequence, L^p(P x P) convergence of estimated pairwise distances to continuous-MDS distances.
-* **Lean declarations:** _none_
+* **Lean declarations:** `Acharyya2024.ContinuousMDS.lpPairDistErr`, `Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`, `Acharyya2024.ContinuousMDS.ContinuousMDS`
 * **gap refs:** `continuous-mds-lp`
-* **notes:** The finite per-stage triangular-array theorem is not an encoding of this integral statement.
-* **next action:** The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it.
+* **notes:** The definitions the conclusion is stated over -- continuousRawStress, ContinuousMDS, lpPairDistErr -- did not previously exist in the package.
+* **next action:** Replace the empirical model measure by the population law, which needs the convergence of empirical continuous-MDS embeddings to the population one.
 
 ### `A24-T4` — Growing-model pointwise dissimilarity concentration
 
@@ -316,7 +316,7 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **status / verification:** `compiled_specialization` / `proved_in_build`
 * **semantic alignment:** `specialized` — Lean proves a shared full-sequence/per-stage finite consistency family, which is useful but does not imply the paper double-integral L^p(P x P) conclusion over a continuum of iid model draws.
 * **source claim:** Under the Theorem 4 rate, along a subsequence the pairwise-distance error converges to zero in L^p(P x P) in probability for every p >= 1.
-* **Lean declarations:** `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`, `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
+* **Lean declarations:** `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`, `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`, `Acharyya2024.ContinuousMDS.lpPairDistErr`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
 * **gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 * **notes:** The source-level continuum theorem remains open even though every finite-stage theorem cited here is proved.
-* **next action:** The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it.
+* **next action:** Compose the Theorem 4 rate with the empirical-measure L^p result, then replace the empirical model measure by the population law.
