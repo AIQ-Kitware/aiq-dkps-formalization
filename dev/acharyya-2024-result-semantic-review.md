@@ -452,6 +452,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz`
 - `Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension`
 - `Acharyya2024.ContinuousMDS.tendsto_pointStress`
+- `TauCeti.ae_ae_of_forall_ae`
 - `TauCeti.integral_doubleSum_pi`
 - `TauCeti.map_evalPair_pi`
 
@@ -476,7 +477,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Establish joint measurability of the out-of-sample map in the sample and the model, then exchange the quantifiers by Fubini to combine ae_tendsto_outOfSampleExtension_of_iid with tendsto_lpPairDistErr_of_ae_tendsto. The mathematics of the identification is proved.
+**Next action:** Discharge the measurability hypothesis of TauCeti.ae_ae_of_forall_ae for the out-of-sample map -- by a measurable selection of minimizers, or by taking estimator measurability as the disclosed implicit assumption the repository already uses elsewhere -- and the chain closes.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -554,6 +555,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz`
 - `Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension`
 - `Acharyya2024.ContinuousMDS.tendsto_pointStress`
+- `TauCeti.ae_ae_of_forall_ae`
 - `TauCeti.integral_doubleSum_pi`
 - `TauCeti.map_evalPair_pi`
 
@@ -572,7 +574,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Establish joint measurability of the out-of-sample map in the sample and the model, then exchange the quantifiers by Fubini to combine ae_tendsto_outOfSampleExtension_of_iid with tendsto_lpPairDistErr_of_ae_tendsto. The mathematics of the identification is proved.
+**Next action:** Discharge the measurability hypothesis of TauCeti.ae_ae_of_forall_ae for the out-of-sample map -- by a measurable selection of minimizers, or by taking estimator measurability as the disclosed implicit assumption the repository already uses elsewhere -- and the chain closes.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 

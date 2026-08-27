@@ -14,6 +14,7 @@ module
 public import Mathlib.Probability.Independence.Basic
 public import Mathlib.MeasureTheory.Constructions.Pi
 public import Mathlib.MeasureTheory.Integral.Prod
+public import Mathlib.MeasureTheory.Measure.Prod
 
 /-! # Two-coordinate marginals of a product measure, and the mean of a V-statistic
 
@@ -154,5 +155,49 @@ theorem integral_doubleSum_pi {n : ℕ} (P : Measure α) [IsProbabilityMeasure P
   simp_rw [hstep]
   rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
   ring
+
+/-! ### Exchanging an almost-everywhere quantifier with a parameter
+
+A limit theorem proved "for each parameter, almost surely" gives a null set that depends on the
+parameter.  A conclusion phrased "almost surely, for almost every parameter" needs the opposite
+order, and the exchange is Fubini: the failure set has null sections in one direction, hence null
+product measure, hence null sections in the other.
+
+The exchange needs the failure set to be measurable in the product, which is a genuine
+obligation, not bookkeeping -- for a non-measurable set the two orders can disagree. -/
+
+/--
+**Exchanging an almost-everywhere quantifier with a parameter.**
+
+If for every parameter the property holds almost surely, and the set where it holds is
+measurable in the product, then almost surely it holds for almost every parameter.
+-/
+theorem ae_ae_of_forall_ae {Ω X : Type*} [MeasurableSpace Ω] [MeasurableSpace X]
+    (μ : Measure Ω) [SFinite μ] (P : Measure X) [SFinite P]
+    {s : Set (Ω × X)} (hs : MeasurableSet s)
+    (h : ∀ x : X, ∀ᵐ ω ∂μ, (ω, x) ∈ s) :
+    ∀ᵐ ω ∂μ, ∀ᵐ x ∂P, (ω, x) ∈ s := by
+  classical
+  -- the failure set has null sections in the parameter direction
+  have hswap : MeasurableSet (Prod.swap ⁻¹' sᶜ : Set (X × Ω)) :=
+    (hs.compl).preimage measurable_swap
+  have hsect : ∀ x : X, μ (Prod.mk x ⁻¹' (Prod.swap ⁻¹' sᶜ : Set (X × Ω))) = 0 := by
+    intro x
+    have := h x
+    rw [Filter.Eventually, mem_ae_iff] at this
+    refine measure_mono_null (fun ω hω => ?_) this
+    simpa using hω
+  have hnull : (P.prod μ) (Prod.swap ⁻¹' sᶜ : Set (X × Ω)) = 0 :=
+    Measure.measure_prod_null_of_ae_null hswap
+      (Filter.Eventually.of_forall fun x => hsect x)
+  -- transport across the swap and read the sections in the other direction
+  have hmapnull : (μ.prod P) (sᶜ) = 0 := by
+    have hmap : (P.prod μ).map Prod.swap = μ.prod P := Measure.prod_swap
+    rw [← hmap, Measure.map_apply measurable_swap hs.compl]
+    exact hnull
+  have hae : ∀ᵐ z ∂(μ.prod P), z ∈ s := by
+    rw [Filter.Eventually, mem_ae_iff]
+    simpa using hmapnull
+  exact Measure.ae_ae_of_ae_prod hae
 
 end TauCeti

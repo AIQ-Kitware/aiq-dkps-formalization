@@ -615,6 +615,7 @@
     "Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz",
     "Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension",
     "Acharyya2024.ContinuousMDS.tendsto_pointStress",
+    "TauCeti.ae_ae_of_forall_ae",
     "TauCeti.integral_doubleSum_pi",
     "TauCeti.map_evalPair_pi"
    ],
@@ -673,7 +674,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Establish joint measurability of the out-of-sample map in the sample and the model, then exchange the quantifiers by Fubini to combine ae_tendsto_outOfSampleExtension_of_iid with tendsto_lpPairDistErr_of_ae_tendsto. The mathematics of the identification is proved."
+   "next_action": "Discharge the measurability hypothesis of TauCeti.ae_ae_of_forall_ae for the out-of-sample map -- by a measurable selection of minimizers, or by taking estimator measurability as the disclosed implicit assumption the repository already uses elsewhere -- and the chain closes."
   },
   {
    "id": "A24-T4",
@@ -777,6 +778,7 @@
     "Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz",
     "Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension",
     "Acharyya2024.ContinuousMDS.tendsto_pointStress",
+    "TauCeti.ae_ae_of_forall_ae",
     "TauCeti.integral_doubleSum_pi",
     "TauCeti.map_evalPair_pi"
    ],
@@ -801,7 +803,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Establish joint measurability of the out-of-sample map in the sample and the model, then exchange the quantifiers by Fubini to combine ae_tendsto_outOfSampleExtension_of_iid with tendsto_lpPairDistErr_of_ae_tendsto. The mathematics of the identification is proved."
+   "next_action": "Discharge the measurability hypothesis of TauCeti.ae_ae_of_forall_ae for the out-of-sample map -- by a measurable selection of minimizers, or by taking estimator measurability as the disclosed implicit assumption the repository already uses elsewhere -- and the chain closes."
   },
   {
    "id": "A24-R4",
