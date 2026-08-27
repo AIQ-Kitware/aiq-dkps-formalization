@@ -8,7 +8,6 @@ import DavisKahan.Frontier.Core
 import DavisKahan.Frontier.Section3
 import DavisKahan.Frontier.Section3BilateralShift
 import DavisKahan.Frontier.Section3Real
-import DavisKahan.Frontier.Section4
 import DavisKahan.Frontier.Section8
 import DavisKahan.Frontier.Section8Krein
 import DavisKahan.Frontier.Section8PartII
