@@ -14,8 +14,8 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 
 | status | items |
 | --- | ---: |
-| `compiled_exact` | 2 |
-| `compiled_equivalent` | 2 |
+| `compiled_exact` | 3 |
+| `compiled_equivalent` | 3 |
 | `compiled_by_composition` | 1 |
 | `compiled_stronger_hypotheses` | 5 |
 
@@ -23,8 +23,8 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 
 | classification | items |
 | --- | ---: |
-| `exact` | 2 |
-| `equivalent_encoding` | 2 |
+| `exact` | 3 |
+| `equivalent_encoding` | 3 |
 | `by_composition` | 1 |
 | `stronger_hypotheses` | 5 |
 
@@ -40,6 +40,8 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 | `H25-A4` | `major` | Assumption 4 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `H25-EQ1` | `major` | Equation (1), dissimilarity definition | `compiled_exact` | `exact` | `proved_in_build` |
 | `H25-EQ2` | `major` | Equation (2), dissimilarity convergence | `compiled_by_composition` | `by_composition` | `proved_in_build` |
+| `H25-LEARN` | `major` | Statistical learning problem and Bayes risk | `compiled_exact` | `exact` | `proved_in_build` |
+| `H25-CONSIST` | `major` | Definition of consistency | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
 | `H25-EQ3` | `headline` | Equation (3), alignment consistency | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
 | `H25-BRIDGE` | `major` | Appendix A.1 use of Acharyya et al. (2024) alignment consistency | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 
@@ -75,6 +77,12 @@ Helm2025.DKPS.Theorem1 and Theorem2_bayes require BoundedLabelSupport/LabelCompa
 
 The proof of Theorem 2 concludes "given the results in (Sekhon, 2021), for some subsequence of u as defined in Theorem 3". The retained paper states exactly two theorems -- the TeX source declares thm:rule-convergence and thm:consistency and no third -- so the citation resolves to nothing. The subsequence it appeals to is the one produced inside the Theorem 2 argument itself, which is how the Lean development treats it: Helm2025 proves existence of a diverging embedding-budget schedule rather than importing a numbered result. Recorded so a reviewer asking why the census has no Theorem 3 row gets an answer.
 
+### `consistency-in-probability-vs-expectation` — The paper defines consistency in probability; Lean uses convergence of the expected risk
+
+**Kind:** `source_audit`
+
+The paper writes Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0, so R_l(P_fY, h(.;T_n)) is a random variable depending on the training set and the convergence is in probability. Helm2025.risk integrates over the whole product measure, training sample included, so it is a deterministic expected risk, and ConsistentExpected is Tendsto risk -> bayesRisk. Its own docstring says "Appendix-style (expected) consistency". Convergence in probability and convergence of expectations are not equivalent in general; with a bounded loss and uniform integrability the former gives the latter, but the formal statement as it stands is a different notion from the printed definition. Both the hypothesis and the conclusion of the transfer theorem use the expected form, so the transfer itself is shape-faithful.
+
 ## Detail
 
 ### `H25-T1` — Fixed-n inference risk transfer
@@ -99,7 +107,7 @@ The proof of Theorem 2 concludes "given the results in (Sekhon, 2021), for some 
 * **semantic alignment:** `stronger_hypotheses` — Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The analytic hypotheses are stronger than the literal paper assumptions, and the joint (m,r) limit is represented by diagonalization. The paper-facing wrapper also requires bounded/compact label support; no matching assumption was located in the retained source.
 * **source claim:** If learning on true perspectives is consistent, learning on estimated perspectives is also consistent as n,m,r grow.
 * **Lean declarations:** `Helm2025.DKPS.Theorem2_bayes`, `Helm2025.DKPS.consistency_transfer_dkps_bayes`, `Helm2025.DKPS.diagonal_convergence`
-* **gap refs:** `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
+* **gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
 * **notes:** The schedule makes the quantifier structure executable rather than leaving the phrase n,m,r -> infinity informal. The retained source should be rechecked against the original PDF specifically for label-support/bounded-loss language before treating this hypothesis as source-faithful.
 * **next action:** None.
 
@@ -156,7 +164,7 @@ The proof of Theorem 2 concludes "given the results in (Sekhon, 2021), for some 
 ### `H25-EQ1` — Pairwise dissimilarity is the query-averaged Frobenius distance
 
 * **source anchor:** Equation (1), dissimilarity definition (definition, section 2)
-* **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:57-61`
+* **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:49-61`
 * **importance:** `major`
 * **status / verification:** `compiled_exact` / `proved_in_build`
 * **semantic alignment:** `exact` — responseDistEntry Xbar i j = (m)^{-1} * ||Xbar i - Xbar j||, which is the displayed definition including the 1/m rescaling. Helm consumes it through the Acharyya bridge rather than redefining it.
@@ -178,10 +186,35 @@ The proof of Theorem 2 concludes "given the results in (Sekhon, 2021), for some 
 * **notes:** This equation is the hypothesis the Helm risk-transfer theorems consume.
 * **next action:** Expose one Helm-facing statement of the displayed limit if a literal wrapper is wanted.
 
+### `H25-LEARN` — Risk, the Bayes decision function, and the Bayes risk
+
+* **source anchor:** Statistical learning problem and Bayes risk (definition, section 2.2)
+* **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:83-90`
+* **importance:** `major`
+* **status / verification:** `compiled_exact` / `proved_in_build`
+* **semantic alignment:** `exact` — risk_df is the expected loss of a decision function and bayesRisk is the infimum of that over the hypothesis class, which is the displayed R*_l stated as an infimum rather than as the value at a minimiser. Lean does not assume the minimiser exists, which is weaker than the paper's argmin and therefore safe.
+* **source claim:** h* in argmin_{h in H} R_l(P_fY, h), and R*_l(P_fY, H) = R_l(P_fY, h*) is the risk of h*.
+* **Lean declarations:** `Helm2025.DKPS.risk_df`, `Helm2025.DKPS.bayesRisk`
+* **notes:** The paper's argmin presumes attainment; the sInf form does not.
+* **next action:** None.
+
+### `H25-CONSIST` — A decision-function sequence is consistent when its risk approaches the Bayes risk
+
+* **source anchor:** Definition of consistency (definition, section 2.2)
+* **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:91-97`
+* **importance:** `major`
+* **status / verification:** `compiled_equivalent` / `proved_in_build`
+* **semantic alignment:** `equivalent_encoding` — Lean carries ConvergesInProbabilityToZero, the literal in-probability predicate, but the consistency used by the transfer theorems is ConsistentExpected: convergence of the expected risk, since Helm2025.risk integrates over the training sample. See gap consistency-in-probability-vs-expectation.
+* **source claim:** Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0 as n -> infinity.
+* **Lean declarations:** `Helm2025.DKPS.ConsistentExpected`, `Helm2025.DKPS.ConvergesInProbabilityToZero`
+* **gap refs:** `consistency-in-probability-vs-expectation`
+* **notes:** This is the definition Theorem 2 quantifies over, so the substitution propagates to it.
+* **next action:** State the transfer theorem over the in-probability predicate, or record why the expected form is the intended reading.
+
 ### `H25-EQ3` — Aligned estimated perspectives converge uniformly in probability
 
 * **source anchor:** Equation (3), alignment consistency (equation, section appendix)
-* **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:374-405`
+* **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:326-441`
 * **importance:** `headline`
 * **status / verification:** `compiled_equivalent` / `proved_in_build`
 * **semantic alignment:** `equivalent_encoding` — Lean uses a finite iSup in place of max and a single abstract estimation-budget index. For a finite index set this is the same uniform error statement.

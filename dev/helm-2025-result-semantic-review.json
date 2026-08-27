@@ -149,6 +149,7 @@
    "review": "Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The analytic hypotheses are stronger than the literal paper assumptions, and the joint (m,r) limit is represented by diagonalization. The paper-facing wrapper also requires bounded/compact label support; no matching assumption was located in the retained source.",
    "notes": "The schedule makes the quantifier structure executable rather than leaving the phrase n,m,r -> infinity informal. The retained source should be rechecked against the original PDF specifically for label-support/bounded-loss language before treating this hypothesis as source-faithful.",
    "gap_refs": [
+    "consistency-in-probability-vs-expectation",
     "dangling-theorem-3-reference",
     "diagonal-budget-schedule",
     "label-compact-support",
@@ -321,8 +322,8 @@
    "source_locator": {
     "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
     "lines": [
-     374,
-     405
+     326,
+     441
     ]
    },
    "lean_declarations": [
@@ -402,7 +403,7 @@
    "source_locator": {
     "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
     "lines": [
-     57,
+     49,
      61
     ]
    },
@@ -457,6 +458,74 @@
     "spectral-vs-rawstress-bridge"
    ],
    "next_action": "Expose one Helm-facing statement of the displayed limit if a literal wrapper is wanted."
+  },
+  {
+   "id": "H25-LEARN",
+   "source_anchor": "Statistical learning problem and Bayes risk",
+   "source_kind": "definition",
+   "title": "Risk, the Bayes decision function, and the Bayes risk",
+   "importance": "major",
+   "verdict": "PASS",
+   "literal_source_covered": true,
+   "source_claim": "h* in argmin_{h in H} R_l(P_fY, h), and R*_l(P_fY, H) = R_l(P_fY, h*) is the risk of h*.",
+   "source_locator": {
+    "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+    "lines": [
+     83,
+     90
+    ]
+   },
+   "lean_declarations": [
+    "Helm2025.DKPS.risk_df",
+    "Helm2025.DKPS.bayesRisk"
+   ],
+   "clauses": [
+    {
+     "source_clause": "h* in argmin_{h in H} R_l(P_fY, h); R*_l(P_fY, H) = R_l(P_fY, h*).",
+     "lean_clause": "bayesRisk is sInf of risk_df over the hypothesis class.",
+     "relation": "lean_weaker_hypothesis",
+     "note": "The infimum form does not presume the argmin is attained."
+    }
+   ],
+   "review": "risk_df is the expected loss of a decision function and bayesRisk is the infimum of that over the hypothesis class, which is the displayed R*_l stated as an infimum rather than as the value at a minimiser. Lean does not assume the minimiser exists, which is weaker than the paper's argmin and therefore safe.",
+   "notes": "The paper's argmin presumes attainment; the sInf form does not.",
+   "gap_refs": [],
+   "next_action": "None."
+  },
+  {
+   "id": "H25-CONSIST",
+   "source_anchor": "Definition of consistency",
+   "source_kind": "definition",
+   "title": "A decision-function sequence is consistent when its risk approaches the Bayes risk",
+   "importance": "major",
+   "verdict": "GAP expected rather than in-probability",
+   "literal_source_covered": false,
+   "source_claim": "Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0 as n -> infinity.",
+   "source_locator": {
+    "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+    "lines": [
+     91,
+     97
+    ]
+   },
+   "lean_declarations": [
+    "Helm2025.DKPS.ConsistentExpected",
+    "Helm2025.DKPS.ConvergesInProbabilityToZero"
+   ],
+   "clauses": [
+    {
+     "source_clause": "Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0.",
+     "lean_clause": "ConsistentExpected: Tendsto (risk n) atTop (nhds (bayesRisk ...)), where risk integrates over the training sample and is therefore deterministic.",
+     "relation": "different_quantifier_encoding",
+     "note": "Convergence in probability and convergence of expectations are not equivalent; the literal in-probability predicate exists as ConvergesInProbabilityToZero but is not the one the transfer theorems quantify over."
+    }
+   ],
+   "review": "Lean carries ConvergesInProbabilityToZero, the literal in-probability predicate, but the consistency used by the transfer theorems is ConsistentExpected: convergence of the expected risk, since Helm2025.risk integrates over the training sample. See gap consistency-in-probability-vs-expectation.",
+   "notes": "This is the definition Theorem 2 quantifies over, so the substitution propagates to it.",
+   "gap_refs": [
+    "consistency-in-probability-vs-expectation"
+   ],
+   "next_action": "State the transfer theorem over the in-probability predicate, or record why the expected form is the intended reading."
   }
  ]
 }
