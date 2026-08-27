@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.BeamWeinberger
-import DavisKahan.SpectralTheory.FormMethod.BeamInPlaneAngle
+import DavisKahan.Specialized.FreeBeam.BeamWeinberger
+import DavisKahan.Specialized.FreeBeam.BeamInPlaneAngle
 import DavisKahan.Sources.DavisKahan1970.Section9.BeamDoubleTangentKyFan
 
 /-!

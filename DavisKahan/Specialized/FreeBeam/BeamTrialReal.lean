@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.BeamSpectrumReal
+import DavisKahan.Specialized.FreeBeam.BeamSpectrumReal
 import DavisKahan.Sources.DavisKahan1970.Section9.ExactData
 import DavisKahan.Sources.DavisKahan1970.Section9.TrialSubspace
 import DavisKahan.SinTheta.BoundedPerturbation

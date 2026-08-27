@@ -206,8 +206,8 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.proposition3_4_source_full_complex
 #check @TauCeti.DavisKahan1970.proposition3_4_source_full_real
-#check @TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full
-#check @TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation
+#check @TauCeti.DavisKahan1970.proposition3_4_source_full
+#check @TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation
 
 /-! ## DK-3.1-thm: Classification of pairs of subspaces
 

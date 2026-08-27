@@ -684,8 +684,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.4-prop",
       "review_declarations": [
-        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
-        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation",
+        "TauCeti.DavisKahan1970.proposition3_4_source_full",
+        "TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation",
         "TauCeti.DavisKahan1970.proposition3_4_source_full_real"
       ],
       "audit_clauses": [
@@ -693,8 +693,8 @@
           "id": "DK-3.4-prop.result",
           "description": "Exact result-only audit of Proposition 3.4 over complex and real Hilbert spaces at the printed nonacute half-angle scope.",
           "review_declarations": [
-            "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
-            "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation",
+            "TauCeti.DavisKahan1970.proposition3_4_source_full",
+            "TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation",
             "TauCeti.DavisKahan1970.proposition3_4_source_full_real"
           ]
         }

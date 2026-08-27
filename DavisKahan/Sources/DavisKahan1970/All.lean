@@ -31,6 +31,7 @@ import DavisKahan.Sources.DavisKahan1970.Section3AcuteDirectRotation
 import DavisKahan.Sources.DavisKahan1970.Section3Classification
 import DavisKahan.Sources.DavisKahan1970.Section3PrincipalSquareRoot
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34
+import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Printed
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Real
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition35
 import DavisKahan.Sources.DavisKahan1970.Section4

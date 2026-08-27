@@ -6,10 +6,10 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 -- supplies `IsPrincipalUnitarySquareRoot` together with both halves of Proposition 3.3 at
 -- the arbitrary-pair scope.  It is a `Geometry` module and never imports `Frontier`.
-import DavisKahan.Frontier.Section3
--- still load-bearing, but only for two reflection/projection identities of the
--- Proposition 3.4 block: `projection_mul_reflectionOperator_self` and
--- `reflectionOperator_mul_projection_self`.
+import DavisKahan.Geometry.Polar.DirectRotationBlocks
+-- supplies the two reflection/projection identities this file needs,
+-- `projection_mul_reflectionOperator_self` and `reflectionOperator_mul_projection_self`.
+-- It is a `Geometry` module and never imports `Frontier`.
 import DavisKahan.Geometry.Polar.DirectRotationReal
 
 /-!
@@ -35,7 +35,6 @@ namespace TauCeti
 namespace DavisKahan1970
 
 open DavisKahan
-open DavisKahan.Frontier.Section3
 open TauCeti.RealComplexification
 open DavisKahan.Foundation.RealComplexification
 

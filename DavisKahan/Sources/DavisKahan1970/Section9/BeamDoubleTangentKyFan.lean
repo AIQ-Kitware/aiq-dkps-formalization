@@ -3,13 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.FormMethod.BeamDoubleTangent
+import DavisKahan.Specialized.FreeBeam.BeamDoubleTangent
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
 
 /-!
 # Section 9, the 2-norm sentence of equation (9.7)
 
-`DavisKahan/SpectralTheory/FormMethod/BeamDoubleTangent.lean` proves the
+`DavisKahan/Specialized/FreeBeam/BeamDoubleTangent.lean` proves the
 bound-norm half of equation (9.7) for the genuine free beam:
 `tan 2θ₁ ≤ 2‖R̂‖/(500 - α̂₂)`.  The sentence the paper prints straight after it is
 

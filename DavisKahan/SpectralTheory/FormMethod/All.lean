@@ -3,22 +3,6 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.FormMethod.BeamClassicalReal
-import DavisKahan.SpectralTheory.FormMethod.BeamDoubleTangent
-import DavisKahan.SpectralTheory.FormMethod.BeamEigenbasis
-import DavisKahan.SpectralTheory.FormMethod.BeamEigenvalueSequence
-import DavisKahan.SpectralTheory.FormMethod.BeamEigenvalueSequenceReal
-import DavisKahan.SpectralTheory.FormMethod.BeamFormSpace
-import DavisKahan.SpectralTheory.FormMethod.BeamFormSpaceReal
-import DavisKahan.SpectralTheory.FormMethod.BeamFormSpaceScalar
-import DavisKahan.SpectralTheory.FormMethod.BeamInPlaneAngle
-import DavisKahan.SpectralTheory.FormMethod.BeamSection9
-import DavisKahan.SpectralTheory.FormMethod.BeamSection9Real
-import DavisKahan.SpectralTheory.FormMethod.BeamSpectrum
-import DavisKahan.SpectralTheory.FormMethod.BeamSpectrumReal
-import DavisKahan.SpectralTheory.FormMethod.BeamTangent
-import DavisKahan.SpectralTheory.FormMethod.BeamTrialReal
-import DavisKahan.SpectralTheory.FormMethod.BeamWeinberger
 import DavisKahan.SpectralTheory.FormMethod.BoundedGraphCompactness
 import DavisKahan.SpectralTheory.FormMethod.BoundedInverseRealization
 import DavisKahan.SpectralTheory.FormMethod.CoerciveFormResolvent

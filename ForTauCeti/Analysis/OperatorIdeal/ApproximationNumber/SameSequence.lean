@@ -71,6 +71,14 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 def HasSameApproximationNumbers (A : E₁ →L[𝕜] F₁) (B : E₂ →L[𝕜] F₂) : Prop :=
   ∀ n : ℕ, A.approximationNumber n = B.approximationNumber n
 
+/-- Unfolding lemma for `ContinuousLinearMap.HasSameApproximationNumbers`.  The definition is
+not exposed, so this is how a downstream module both introduces the relation and reads an
+individual index out of it. -/
+theorem hasSameApproximationNumbers_iff (A : E₁ →L[𝕜] F₁) (B : E₂ →L[𝕜] F₂) :
+    A.HasSameApproximationNumbers B ↔
+      ∀ n : ℕ, A.approximationNumber n = B.approximationNumber n :=
+  Iff.rfl
+
 namespace HasSameApproximationNumbers
 
 /-- Having the same approximation numbers is reflexive. -/

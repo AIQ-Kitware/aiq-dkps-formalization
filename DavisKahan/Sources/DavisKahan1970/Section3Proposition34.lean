@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Frontier.Section3
+import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Printed
 
 /-!
 # Davis--Kahan 1970, Proposition 3.4 over complex Hilbert spaces
@@ -18,7 +18,7 @@ proof of Proposition 3.4 discharges the positivity clause in that genuine
 operator sense: "we must still prove (i) and (ii), which for this case take the
 form `Q₋U²Q₋ ≥ 0` ...".
 
-`TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full` concludes the
+`TauCeti.DavisKahan.proposition3_4_source_full` concludes the
 weaker `IsPaperDirectRotation` predicate, whose diagonal clauses record only a
 nonnegative real numerical range, `0 ≤ re ⟪x, (P T P) x⟫`.  Over a complex
 Hilbert space that does not even force the compression to be self-adjoint, so it
@@ -46,7 +46,6 @@ namespace DavisKahan1970
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Frontier
-open TauCeti.DavisKahan.Frontier.Section3
 open TauCeti.DavisKahanExt
 
 variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
@@ -157,7 +156,7 @@ theorem proposition3_4_source_full_complex
         -star ((reflectedSubspace U V).starProjection * (W * W) *
           (reflectedSubspace U V)ᗮ.starProjection) := by
   have hpaper : IsPaperDirectRotation (reflectedSubspace U V) V (W * W) :=
-    Frontier.Section3.proposition3_4_source_full U V W hunitary hintertwines
+    proposition3_4_source_full U V W hunitary hintertwines
       hcrossed
       ((ContinuousLinearMap.nonneg_iff_isPositive _).mpr hsource_pos)
       ((ContinuousLinearMap.nonneg_iff_isPositive _).mpr hcomplement_pos) hcos

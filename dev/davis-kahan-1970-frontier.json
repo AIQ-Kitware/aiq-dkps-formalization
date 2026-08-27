@@ -1170,7 +1170,7 @@
       "id": "s9-semantic-model",
       "title": "Free-beam coercive form data (concrete analytic model)",
       "kind": "foundation",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamFormSpace",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamFormSpace",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.beamCoerciveFormData",
       "dependencies": [],
       "source_census_ids": [],
@@ -1182,7 +1182,7 @@
       "id": "s9-represents-free-beam",
       "title": "Free-beam realization: positive eigenvalues solve the printed characteristic equation",
       "kind": "foundation",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamSpectrum",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamSpectrum",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.exists_characteristic_of_eigen",
       "dependencies": [
         "s9-semantic-model"
@@ -1196,7 +1196,7 @@
       "id": "s9-third-eigenvalue-correct",
       "title": "Free-beam spectrum identification",
       "kind": "foundation",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamSection9",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamSection9",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.realSpectrum_beamOperator_subset_sharp",
       "dependencies": [
         "s9-semantic-model"
@@ -1210,7 +1210,7 @@
       "id": "s9-free-beam-operator",
       "title": "Closed fourth-derivative free-beam operator",
       "kind": "foundation",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamFormSpace",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamFormSpace",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.beamOperator",
       "dependencies": [],
       "source_census_ids": [],
@@ -1222,7 +1222,7 @@
       "id": "s9-free-beam-selfadjoint",
       "title": "Free-beam self-adjointness",
       "kind": "foundation",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamFormSpace",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamFormSpace",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.beamOperator_isSelfAdjoint",
       "dependencies": [
         "s9-free-beam-operator"
@@ -1236,7 +1236,7 @@
       "id": "s9-canonical-model",
       "title": "Canonical perturbed free-beam model",
       "kind": "bridge",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamSection9",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamSection9",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.beamPerturbed",
       "dependencies": [
         "s9-free-beam-operator",
@@ -1252,7 +1252,7 @@
       "id": "s9-third-eigenvalue-bound",
       "title": "Free-beam positive eigenvalues exceed 500",
       "kind": "source",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamSpectrum",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamSpectrum",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.eigenvalue_gt_five_hundred",
       "dependencies": [
         "s9-represents-free-beam",
@@ -1267,7 +1267,7 @@
       "id": "s9-exact-finite-data",
       "title": "Exact residual Gram matrix of the genuine operator",
       "kind": "bridge",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamSection9",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamSection9",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.beamResidualGram_matrix",
       "dependencies": [
         "s9-represents-free-beam"
@@ -1281,7 +1281,7 @@
       "id": "s9-finite-certificate",
       "title": "Finite-data certificate from the genuine operator",
       "kind": "bridge",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamSection9",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamSection9",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.beamFiniteDataCertificate",
       "dependencies": [
         "s9-third-eigenvalue-bound",
@@ -1298,7 +1298,7 @@
       "id": "s9-initial-angle-bounds",
       "title": "Equations 9.1--9.4: initial sine and double-angle bounds",
       "kind": "source",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamSection9",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamSection9",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.beamSinTheta_le",
       "dependencies": [
         "s7-sin2",
@@ -1315,7 +1315,7 @@
       "id": "s9-tangent-angle-bounds",
       "title": "Equations 9.5--9.7: tangent bounds (largest angle only)",
       "kind": "source",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamTangent",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamTangent",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.beamTanTheta_le",
       "dependencies": [
         "s6-theorem6-3",
@@ -1333,7 +1333,7 @@
       "id": "s9-weinberger-comparison",
       "title": "Equation 9.8: Weinberger comparison bounds for the genuine beam",
       "kind": "source",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamWeinberger",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamWeinberger",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.beam_equation_9_8",
       "dependencies": [
         "s9-represents-free-beam"
@@ -1348,7 +1348,7 @@
       "id": "s9-individual-eigenvector-bounds",
       "title": "Equations 9.9--9.11: individual eigenvector bounds for the genuine beam",
       "kind": "source",
-      "module": "DavisKahan.SpectralTheory.FormMethod.BeamInPlaneAngle",
+      "module": "DavisKahan.Specialized.FreeBeam.BeamInPlaneAngle",
       "declaration": "TauCeti.DavisKahan.FreeBeam.Model.beamLowEigenvector_ritz_pairing",
       "dependencies": [
         "s9-represents-free-beam"
