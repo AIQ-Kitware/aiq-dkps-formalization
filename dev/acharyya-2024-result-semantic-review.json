@@ -602,6 +602,7 @@
     "Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress",
     "Acharyya2024.ContinuousMDS.pointStress",
     "Acharyya2024.ContinuousMDS.pointStress_rigidMotion",
+    "Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto",
     "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
@@ -653,7 +654,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Apply the strong law to the averaged one-point stress at each position of a countable dense set, lift to locally uniform convergence with abs_sub_pointStress_le, and move the minimizers by the argmin argument. Every ingredient is now present."
+   "next_action": "Supply pointwise convergence of the averaged one-point stress by the strong law, then apply tendsto_argmin_of_tendsto_of_equiLipschitz. The deterministic half of the identification is proved and the coercivity bound supplies the boundedness it asks for."
   },
   {
    "id": "A24-T4",
@@ -744,6 +745,7 @@
     "Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress",
     "Acharyya2024.ContinuousMDS.pointStress",
     "Acharyya2024.ContinuousMDS.pointStress_rigidMotion",
+    "Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto",
     "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
@@ -773,7 +775,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Apply the strong law to the averaged one-point stress at each position of a countable dense set, lift to locally uniform convergence with abs_sub_pointStress_le, and move the minimizers by the argmin argument. Every ingredient is now present."
+   "next_action": "Supply pointwise convergence of the averaged one-point stress by the strong law, then apply tendsto_argmin_of_tendsto_of_equiLipschitz. The deterministic half of the identification is proved and the coercivity bound supplies the boundedness it asks for."
   },
   {
    "id": "A24-R4",
