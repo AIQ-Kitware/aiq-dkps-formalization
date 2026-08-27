@@ -82,17 +82,18 @@ alias theorem8_1_source_characterization :=
 alias theorem8_1_source_uniqueness :=
   theorem8_1_eq_canonicalBranch_of_maximalAngle_le
 
-/-- Continuation-witness core of Section 8.1.  This is *not* the source
-theorem: it takes the branch selection, the contour smallness and the spectral
-orientation as caller-supplied data.  Kept because Section 9's continuation
-layer consumes it. -/
-alias theorem8_1_selectedBranch_and_spectralRepulsion :=
-  theorem81CoreConclusion
-
-/-- Source-facing Section 8.2 strict-branch wrapper under an explicit
-perturbation half-gap continuation bridge. -/
-alias theorem8_2_perturbationHalfGap_selectedBranch :=
-  theorem82_branch_of_perturbationHalfGapBridge
+/-! `theorem8_1_selectedBranch_and_spectralRepulsion` and
+`theorem8_2_perturbationHalfGap_selectedBranch` used to be aliases here, for
+`theorem81CoreConclusion` and `theorem82_branch_of_perturbationHalfGapBridge`
+respectively.  Both aliases named a statement that takes the branch selection,
+the contour smallness and the spectral orientation as *caller-supplied data*,
+and both docstrings said so.  The theorems that actually carry those source
+names -- proving the same conclusions from a circle datum, and adding the two
+compression clauses -- are in `Section8/BranchRepulsion.lean`, in this same
+namespace, so the aliases were competing with them for one source-numbered name
+and are gone.  `theorem81CoreConclusion` and
+`theorem82_branch_of_perturbationHalfGapBridge` keep their own names and their
+consumers. -/
 
 
 /-- Source-facing algebraic core of Theorem 8.1(i), before instantiating the

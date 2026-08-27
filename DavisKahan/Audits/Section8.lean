@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Frontier.Section8SourceSurface
-import DavisKahan.Frontier.Section8PartIIIReal
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81MajorizationReal
 
 /-!
 # Dependency audit for Davis--Kahan 1970 Section 8

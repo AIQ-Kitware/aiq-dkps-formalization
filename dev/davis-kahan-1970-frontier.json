@@ -1059,8 +1059,8 @@
       "id": "s8-direct-rotation-upper-data",
       "title": "Direct-rotation upper compression data",
       "kind": "bridge",
-      "module": "DavisKahan.Frontier.Section8",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section8.upperCompressionRepulsionData_of_targetSplitting",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8.BranchRepulsion",
+      "declaration": "TauCeti.DavisKahan1970.Section8.upperCompressionRepulsionData_of_targetSplitting",
       "dependencies": [
         "s3-prop3-1"
       ],
@@ -1073,8 +1073,8 @@
       "id": "s8-direct-rotation-lower-data",
       "title": "Direct-rotation lower compression data",
       "kind": "bridge",
-      "module": "DavisKahan.Frontier.Section8",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section8.lowerCompressionRepulsionData_of_targetSplitting",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8.BranchRepulsion",
+      "declaration": "TauCeti.DavisKahan1970.Section8.lowerCompressionRepulsionData_of_targetSplitting",
       "dependencies": [
         "s3-prop3-1"
       ],
@@ -1087,8 +1087,8 @@
       "id": "s8-theorem8-1",
       "title": "Theorem 8.1 full source conclusion",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section8",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section8.theorem8_1_selectedBranch_and_spectralRepulsion",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8.BranchRepulsion",
+      "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_selectedBranch_and_spectralRepulsion",
       "dependencies": [
         "s8-continuation-witness",
         "s8-continuation-endpoints",
@@ -1108,8 +1108,8 @@
       "id": "s8-perturbation-half-gap",
       "title": "Construct perturbation half-gap bridge",
       "kind": "bridge",
-      "module": "DavisKahan.Frontier.Section8",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section8.perturbationHalfGapBridge_of_sourceHypotheses",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8.BranchRepulsion",
+      "declaration": "TauCeti.DavisKahan1970.Section8.perturbationHalfGapBridge_of_sourceHypotheses",
       "dependencies": [
         "s8-continuation-witness",
         "s8-projection-lipschitz"
@@ -1123,8 +1123,8 @@
       "id": "s8-residual-half-gap",
       "title": "Construct residual half-gap bridge",
       "kind": "bridge",
-      "module": "DavisKahan.Frontier.Section8",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section8.residualHalfGapBridge_of_sourceHypotheses",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8.BranchRepulsion",
+      "declaration": "TauCeti.DavisKahan1970.Section8.residualHalfGapBridge_of_sourceHypotheses",
       "dependencies": [
         "s8-continuation-witness",
         "s8-projection-lipschitz"
@@ -1138,8 +1138,8 @@
       "id": "s8-theorem8-2-perturbation",
       "title": "Theorem 8.2 perturbation alternative",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section8",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section8.theorem8_2_perturbationHalfGap_selectedBranch",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8.BranchRepulsion",
+      "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_perturbationHalfGap_selectedBranch",
       "dependencies": [
         "s8-perturbation-half-gap"
       ],
@@ -1154,8 +1154,8 @@
       "id": "s8-theorem8-2-residual",
       "title": "Theorem 8.2 residual alternative",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section8",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section8.theorem8_2_residualHalfGap_selectedBranch",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section8.BranchRepulsion",
+      "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_residualHalfGap_selectedBranch",
       "dependencies": [
         "s8-residual-half-gap"
       ],

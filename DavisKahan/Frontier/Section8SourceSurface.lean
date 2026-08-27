@@ -91,16 +91,6 @@ namespace Section8
 
 /-! ### Theorem 8.1(i), both blocks -/
 
-/-- **Theorem 8.1(i), upper block**, source-literal: `A₁ - α ≤ C₁(Λ₁ - α)C₁` as
-quadratic forms on the `Pᗮ` block, at the canonical branch. -/
-alias theorem8_1_upperCompressionRepulsion_source :=
-  DavisKahan.Frontier.Section8.theorem8_1_upperCompressionRepulsion_source
-
-/-- **Theorem 8.1(i), lower block**, the printed "with a similar relation for
-`A₀`": `(α + δ) - A₀ ≤ C₀((α + δ) - Λ₀)C₀` on the `P` block. -/
-alias theorem8_1_lowerCompressionRepulsion_source :=
-  DavisKahan.Frontier.Section8.theorem8_1_lowerCompressionRepulsion_source
-
 /-! ### Theorem 8.2
 
 `theorem8_2_branch_source_directed` is the strongest statement obtainable from

@@ -5,35 +5,45 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness
-import DavisKahan.Sources.DavisKahan1970.Section8.All
+import DavisKahan.Sources.DavisKahan1970.Section8.SourceTheorem81
+import DavisKahan.Sources.DavisKahan1970.Section8.SelectedBranch
+import DavisKahan.Sources.DavisKahan1970.Section8.Smallness
+import DavisKahan.Sources.DavisKahan1970.Section8.CompressionRepulsion
+import DavisKahan.Sources.DavisKahan1970.Section8.CompressionApproximation
+import DavisKahan.Sources.DavisKahan1970.Section8.SourceSurface
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
 import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
 
 /-!
-# Section 8 frontier: branch selection and spectral repulsion
+# Davis--Kahan 1970, Section 8: the selected branch and its spectral repulsion
 
-This module states the source-level conclusions of Theorems 8.1 and 8.2.  The
-generic circle-to-witness bridge it used to open with was promoted to
-`DavisKahan/InfiniteDimensional/SinTheta/Continuation/CircleWitness.lean`;
-nothing about Davis--Kahan's paper was in it.
+The source-level conclusions of Theorems 8.1 and 8.2 that need the analytic
+continuation layer: existence of the selected branch with full spectral
+repulsion, the two half-gap bridges that discharge Theorem 8.2's smallness
+alternatives, and the printed compression inequalities of Theorem 8.1(i), both
+from a target splitting and at the canonical branch.
+
+The machinery is owned upstream.  The circle continuation witness is
+`InfiniteDimensional/SinTheta/Continuation/CircleWitness.lean`, the form/spectrum
+bridges are `SpectralTheory/SpectralGapFormBounds.lean`, and the branch itself
+is `Section8/SourceTheorem81.lean`; this module states the paper's sentences
+against them.
 -/
 
 open scoped InnerProductSpace
 open Set Filter
 
 namespace TauCeti
-
-open TauCeti
-namespace DavisKahan
-namespace Frontier
+namespace DavisKahan1970
 namespace Section8
 
 open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation
-open RieszCircle
+open TauCeti.DavisKahan.RieszCircle
+open TauCeti.DavisKahan.Frontier
 
 universe u v
 
@@ -573,6 +583,5 @@ theorem theorem8_1_lowerCompressionRepulsion_source
 end CanonicalBranchCompression
 
 end Section8
-end Frontier
-end DavisKahan
+end DavisKahan1970
 end TauCeti

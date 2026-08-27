@@ -3166,79 +3166,79 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source`
 
-Source location candidates: `DavisKahan/Frontier/Section8.lean:494`, `DavisKahan/Frontier/Section8SourceSurface.lean:96`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:504`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source`
 
-Source location candidates: `DavisKahan/Frontier/Section8.lean:542`, `DavisKahan/Frontier/Section8SourceSurface.lean:101`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:552`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real`
 
-Source location candidates: `DavisKahan/Frontier/Section8PartIIReal.lean:341`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:294`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real`
 
-Source location candidates: `DavisKahan/Frontier/Section8PartIIReal.lean:404`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:357`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source`
 
-Source location candidates: `DavisKahan/Frontier/Section8PartII.lean:419`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:217`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source`
 
-Source location candidates: `DavisKahan/Frontier/Section8PartII.lean:548`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:346`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real`
 
-Source location candidates: `DavisKahan/Frontier/Section8PartIIReal.lean:536`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:489`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real`
 
-Source location candidates: `DavisKahan/Frontier/Section8PartIIReal.lean:622`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:575`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:147`
+Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:146`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:437`
+Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:436`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:490`
+Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:489`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:715`
+Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:714`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:770`
+Source location candidates: `DavisKahan/Frontier/Section8SourceDictionary.lean:769`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3337,49 +3337,49 @@ The source closes Section~8 by stating that the $\sin2\theta$ theorem extends to
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:118`
+Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:108`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:202`, `DavisKahan/Frontier/Section8SourceTheorem82.lean:432`
+Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:192`, `DavisKahan/Frontier/Section8SourceTheorem82.lean:432`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:211`, `DavisKahan/Frontier/Section8SourceTheorem82.lean:508`
+Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:201`, `DavisKahan/Frontier/Section8SourceTheorem82.lean:508`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:246`, `DavisKahan/Frontier/Section8SourceTheorem82Real.lean:320`
+Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:236`, `DavisKahan/Frontier/Section8SourceTheorem82Real.lean:320`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:279`, `DavisKahan/Frontier/Section8SourceTheorem82Real.lean:554`
+Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:269`, `DavisKahan/Frontier/Section8SourceTheorem82Real.lean:554`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.Frontier.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm`
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:285`, `DavisKahan/Frontier/Section8SourceTheorem82Real.lean:609`
+Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:275`, `DavisKahan/Frontier/Section8SourceTheorem82Real.lean:609`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:222`, `DavisKahan/Frontier/Section8SourceTheorem82.lean:596`
+Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:212`, `DavisKahan/Frontier/Section8SourceTheorem82.lean:596`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`
 
-Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:256`, `DavisKahan/Frontier/Section8SourceTheorem82Real.lean:381`
+Source location candidates: `DavisKahan/Frontier/Section8SourceSurface.lean:246`, `DavisKahan/Frontier/Section8SourceTheorem82Real.lean:381`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
