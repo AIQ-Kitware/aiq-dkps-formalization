@@ -136,13 +136,19 @@ xdg-open build/leanq/project-semantic-graph.html
 The HTML retains every indexed declaration and direct edge, then derives changing projections
 locally in the browser without rerunning Python or Lean.
 
-**Headline subset.** The sidebar checkbox list selects any subset of census headline claims, and
-several may be checked at once. The paper default is every headline *theorem* row — the four
-Davis--Kahan Section 2 theorems, both Yu--Wang--Samworth Theorem 2 conclusions shown in
-`formalization_draft2`, and both Quench Theorem 2 conclusions — while Quench's estimator definition
-and standing assumption stay available but unselected. `--default-claim Q26-NN` (repeatable)
-overrides that on the command line. Per-family `all` / `none` buttons and the `Paper default` /
-`All` / `None` buttons move whole groups at once.
+**Headline subset.** Selection is per *declaration*, so one leaf theorem of a claim that registers
+several realizations can be the whole selection. Each claim is a group control over its
+realizations, listed beneath it with the leafmost ones marked; the paper default selects the leaves
+of every headline *theorem* row — the four Davis--Kahan Section 2 theorems, both Yu--Wang--Samworth
+Theorem 2 conclusions shown in `formalization_draft2`, and both Quench Theorem 2 conclusions — while
+Quench's estimator definition and standing assumption stay available but unselected.
+`--default-claim Q26-NN` (repeatable) overrides that on the command line. Per-family
+`leaves` / `all` / `none` buttons and the `Paper default` / `All` / `None` buttons move whole groups.
+
+Every claim and realization reports which packages its dependency closure actually reaches. A claim
+whose closure never leaves its own library is visible immediately, which is how a census row that
+registers the abstract form of a theorem rather than the instantiation consuming the shared
+mathematics shows up.
 
 **Only reachable nodes.** With `Ancestors of selection only` checked (the default), the visible
 universe is exactly the dependency closure of the selected headline theorems: a declaration no
@@ -150,17 +156,23 @@ selected headline reaches is never drawn, expanding a cluster cannot introduce o
 no headline at all renders an empty graph. Unchecking it restores the whole project.
 `Shared foundations only` narrows further to declarations at least two selected headlines reach.
 
-**Progressive hierarchical expansion.** A declaration is collapsed at the shallowest unopened prefix
-of `Library / module segment / module segment / ...`, so double-clicking `DavisKahan` opens its
-immediate submodules rather than its thirteen thousand declarations. `Group` sets the same limit
-globally, from `Library` down to individual `Declarations`. Selected headline declarations always
-render as real nodes. Double-clicking a declaration pulls in one dependency level; the selection
-panel hides a node, collapses it back into its module, focuses its cone, or reveals a shortest
-route up to any selected headline it feeds.
+**Progressive hierarchical expansion.** A declaration is collapsed at the shallowest prefix of
+`Library / module segment / module segment / ...` that neither the global `Group` depth nor an
+explicit double-click has opened, so double-clicking `DavisKahan` opens its immediate submodules
+rather than its thirteen thousand declarations and leaves every other branch exactly as it was.
+Double-click is always an expansion; collapsing is an explicit button in the selection panel.
+Selected headline declarations always render as real nodes.
 
-Every box carries its edge degrees: a declaration shows true `in` / `out` direct-edge counts plus
-the counts actually drawn, and a cluster shows its declaration and immediate-child counts together
-with projected in/out and internal edge counts.
+Boxes say whether they can be opened: `▸` marks an expandable node, `•` a fully opened one, `★` a
+selected headline theorem. Each box is labelled with its qualified Lean name, wrapped on its dots,
+and carries its edge degrees — a declaration shows true `in` / `out` direct-edge counts, the counts
+actually drawn, and how many dependencies are still folded inside a cluster; a cluster shows its
+declaration, child, internal-edge and projected-edge counts.
+
+**Layout.** `Library bands` puts each package in its own column, ordered by the dominant direction
+of the dependency edges between packages, and pins every selected headline theorem to one extremal
+column so the edges into them are the picture. `Dependency depth` keeps the older topological
+columns. Columns are labelled.
 
 **Export.** `DOT` and `JSON` write the visible projection, the selected headline closure, one
 declaration's dependency cone, or the complete graph. DOT nodes carry `leanq_library`,

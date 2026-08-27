@@ -920,6 +920,29 @@ def analyze_dependency_headlines(
         for name in distances:
             coverage[name].add(headline)
 
+    # A claim often registers several canonical realizations of one printed
+    # theorem: a general form, a specialization, a packaged corollary.  The
+    # leafmost ones are those no *other* realization of the same claim consumes,
+    # so selecting them alone still covers the claim's whole dependency closure.
+    for row in claim_rows:
+        realizations = [name for name in row["canonicalDeclarations"] if name in graph.nodes]
+        leaves = []
+        for name in realizations:
+            downstream = _dependency_walk(name, outgoing)[0]
+            if not any(other != name and other in downstream for other in realizations):
+                leaves.append(name)
+        row["leafDeclarations"] = leaves or realizations
+        # Which packages each realization actually reaches.  A claim whose
+        # realizations never leave their own library is a visible signal that the
+        # census registered the abstract form of the theorem rather than the
+        # instantiation that consumes the shared mathematics.
+        reach: dict[str, dict[str, int]] = {}
+        for name in realizations:
+            distances, _ = _dependency_walk(name, incoming)
+            counts = Counter(graph.nodes[dep].library or "Other" for dep in distances)
+            reach[name] = dict(sorted(counts.items(), key=lambda kv: (-kv[1], kv[0])))
+        row["realizationClosureLibraries"] = reach
+
     shared = {name for name, ids in coverage.items() if len(ids) >= 2}
     frontier = {
         name
