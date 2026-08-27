@@ -261,6 +261,7 @@ Lean formalizes the ball-support property actually consumed by the proof. Compac
 | The paper proof moves from a pointwise target error bound to MSE. | Lean explicitly requires measurable concentration/coverage events and proves a uniform-in-target bound before integrating. | `lean_stronger_hypothesis` | These are formal analytic obligations omitted from the prose proof, not extra statistical content. |
 | The theorem is stated for the DKPS perspectives of Eq. (1). | The estimator uses the classical-MDS perspectives, matching the Theorem 1 bound the proof consumes rather than the raw-stress definition. | `proof_role_replaced` | Recorded as gap dkps-definition-raw-stress-vs-cmds; see Q26-EQ1. |
 | suppose r = omega(n^3) ... under technical assumptions | SourceReplicateRate is that rate condition, and the finite capstone consumes it; the technical assumptions are Acharyya 2025's Assumptions 1 and 2, of which Assumption 2 is the eigenvalue floor. | `exact` | Neither the floor nor the schedule is an excess for the finite route. |
+| Given Assumptions 1 & 2 ... For any epsilon > 0 there exists (n,m,r) such that MSE(yhat_NN) <= epsilon with high probability. | The Lean hypotheses beyond the printed ones are exactly two: measurability of the perspective map, and finiteness of the model class. | `lean_stronger_hypothesis` | Every other field of FiniteSubsetAssumptions is printed -- Assumption 1, Assumption 2, the iid response setting with Theorem 1's variance bound, the DKPS definition, Theorem 1's technical assumptions, Theorem 2's own MSE(yhat_Q) > 0, and r = omega(n^3). Itemized under raw-response-explicit-assumptions. |
 
 **Semantic review:**
 
@@ -300,6 +301,7 @@ The printed conclusion is proved end to end by infiniteFixedSubsetMSE and finite
 | The source also assumes m<M. | The strongest fixed-subset Lean theorem drops m<M because the proof never uses it; all-subset wrappers reintroduce the source budget quantification where appropriate. | `lean_weaker_hypothesis` |  |
 | The source theorem is initially existential in one budget triple. | Lean also proves eventual fixed-subset, m-query, and all-budget high-probability predicates with the source quantifier order. | `lean_stronger_conclusion` |  |
 | Query efficiency is claimed for all m < M, not only for one fixed subset. | infiniteAllQueries and finiteAllQueries conclude HighProbQueryEfficient, which quantifies over every budget below the benchmark cardinality and every subset of that size. | `exact` |  |
+| Given Assumptions 1 & 2 ... For any epsilon > 0 there exists (n,m,r) such that MSE(yhat_NN) <= epsilon with high probability. | The Lean hypotheses beyond the printed ones are measurability, compactness of the perspective range, pathwise Lipschitz regularity of the raw response embedding, and the net's share of the replicate budget. | `lean_stronger_hypothesis` | This route answers the printed scope -- the model class is not assumed finite -- at the cost of the regularity that buys uniformity over it. |
 
 **Semantic review:**
 
@@ -334,6 +336,7 @@ The printed conclusion is proved at the paper's full quantifier level by infinit
 | --- | --- | --- | --- |
 | No printed theorem starts from the complete finite raw cached-response sampling model. | FiniteSubsetData/Assumptions and finiteFixedSubset/finiteAllQueries discharge concentration, realization, and query-efficiency end to end. | `supplementary` |  |
 | suppose r = omega(n^3) ... under technical assumptions | SourceReplicateRate is that rate condition, and the finite capstone consumes it; the technical assumptions are Acharyya 2025's Assumptions 1 and 2, of which Assumption 2 is the eigenvalue floor. | `exact` | Neither the floor nor the schedule is an excess for the finite route. |
+| Given Assumptions 1 & 2 ... For any epsilon > 0 there exists (n,m,r) such that MSE(yhat_NN) <= epsilon with high probability. | The Lean hypotheses beyond the printed ones are exactly two: measurability of the perspective map, and finiteness of the model class. | `lean_stronger_hypothesis` | Every other field of FiniteSubsetAssumptions is printed -- Assumption 1, Assumption 2, the iid response setting with Theorem 1's variance bound, the DKPS definition, Theorem 1's technical assumptions, Theorem 2's own MSE(yhat_Q) > 0, and r = omega(n^3). Itemized under raw-response-explicit-assumptions. |
 
 **Semantic review:**
 
@@ -365,6 +368,7 @@ The finite realization of Theorem 2. This row previously read as an extension be
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
 | The printed theorem does not specify a uniform infinite-population concentration mechanism. | InfiniteSubsetData/Assumptions and infiniteFixedSubset/infiniteAllQueries add compact/cover regularity and prove the corresponding end-to-end theorem. | `supplementary` |  |
+| Given Assumptions 1 & 2 ... For any epsilon > 0 there exists (n,m,r) such that MSE(yhat_NN) <= epsilon with high probability. | The Lean hypotheses beyond the printed ones are measurability, compactness of the perspective range, pathwise Lipschitz regularity of the raw response embedding, and the net's share of the replicate budget. | `lean_stronger_hypothesis` | This route answers the printed scope -- the model class is not assumed finite -- at the cost of the regularity that buys uniformity over it. |
 
 **Semantic review:**
 
