@@ -13,6 +13,7 @@ import Acharyya2025.AlignedPipeline
 import Acharyya2025.GramRealization
 import Acharyya2025.RateChain
 import Helm2025.Basic
+import ForTauCeti.Probability.RigidAlignment
 
 open scoped BigOperators Topology
 open Filter MeasureTheory
@@ -517,5 +518,80 @@ theorem alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound
     simpa [Acharyya2025.MathlibBridge.disMatToMatrix] using hentry ω i j
   exact alignmentConsistency_of_aligned_spectral_of_gram hd P Dhat hsym Dpop
     hα_pos hgram hcap rate hrate_nonneg hrate_zero hgood_meas hgood
+
+/-! ### The eigengap-free route
+
+Everything above realizes the DKPS estimator as the *classical / spectral* MDS embedding, whose
+finite-sample stability genuinely needs an eigengap; that is why those theorems carry the
+latent eigenvalue floor `α`, which is Acharyya 2025's Assumption 2 and is **not** among Helm's
+assumptions.  Helm's own argument cites Acharyya 2024's *raw-stress* consistency, which has no
+spectral hypothesis at all.
+
+The theorem below is that route.  Its only probabilistic input is convergence in probability of
+the estimated pairwise distances to the true ones — exactly what raw-stress consistency
+delivers — and it produces Helm's Eq. (3) with no spectral hypothesis anywhere: no eigenvalue
+floor, no eigenvalue cap, no positive semidefiniteness, no rank condition, and no Gram
+realization.
+
+Two things make this possible.  `TauCeti.exists_delta_forall_exists_rigidMotion` gives a
+modulus that does not depend on the configurations, so it survives a random target; and
+`TauCeti.alignedConfig` performs the alignment sample by sample, so no alignment sequence has to
+be quantified outside the probability.  The alignment is therefore inside the estimator, and the
+constant affine isometry witnesses Eq. (3).
+
+The price is that the conclusion is purely qualitative.  That is the right price here: Helm's
+Theorems 1 and 2 conclude convergence with no rate, so nothing downstream wants one.  Quench
+2026, whose capstones do carry rates, still needs a spectral gap — a quantitative
+Gram-to-configuration bound is unstable without one — so its floor is not an artifact of this
+substitution.
+-/
+theorem alignmentConsistency_of_pairwiseDist
+    {n d d' : Nat}
+    (P : Measure (Z d d')) [IsProbabilityMeasure P]
+    -- the raw estimated configurations, before alignment
+    (φ : Nat → (Sample n d d') → Fin (n + 1) → E d)
+    -- the alignment slack: any positive sequence tending to zero
+    (t : Nat → Real) (ht : ∀ u, 0 < t u) (ht0 : Tendsto t atTop (𝓝 0))
+    -- ★ the only probabilistic input: the estimated pairwise distances converge in probability
+    -- to the true ones.  This is what eigengap-free raw-stress consistency delivers.
+    (hdist : ∀ δ > (0 : Real), Tendsto
+      (fun u => (Measure.pi (fun _ : Fin (n + 1) => P))
+        {ω : Sample n d d' |
+          ¬ ∀ i j, |‖φ u ω i - φ u ω j‖ - ‖(ω i).1 - (ω j).1‖| ≤ δ}) atTop (𝓝 0)) :
+    DKPSAlignmentConsistency n d d' P
+      (fun u ω => TauCeti.alignedConfig (fun i : Fin (n + 1) => (ω i).1) (φ u ω) (t u)) := by
+  classical
+  refine ⟨fun _u => AffineIsometryEquiv.refl Real (E d), ?_⟩
+  have key : ConvergesInProbabilityToZero (Measure.pi (fun _ : Fin (n + 1) => P))
+      (fun u ω => ⨆ i : Fin (n + 1),
+        dist (TauCeti.alignedConfig (fun i : Fin (n + 1) => (ω i).1) (φ u ω) (t u) i)
+          ((ω i).1)) := by
+    intro ε hε
+    have hmeas : ∀ i j : Fin (n + 1),
+        Measurable fun ω : Sample n d d' => ‖(ω i).1 - (ω j).1‖ :=
+      fun i j => ((measurable_pi_apply i).fst.sub (measurable_pi_apply j).fst).norm
+    have hAE := TauCeti.tendsto_measure_alignmentError_gt
+      (Measure.pi (fun _ : Fin (n + 1) => P)) φ (fun ω i => (ω i).1) hmeas hdist
+      (ε := ε / 2) (by linarith)
+    refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hAE
+      (Filter.Eventually.of_forall fun _ => bot_le) ?_
+    filter_upwards [Filter.Tendsto.eventually_lt_const
+      (show (0 : Real) < ε / 2 by linarith) ht0] with u hu
+    refine measure_mono fun ω hω => ?_
+    have hbdd : BddAbove (Set.range fun i : Fin (n + 1) =>
+        dist (TauCeti.alignedConfig (fun i : Fin (n + 1) => (ω i).1) (φ u ω) (t u) i)
+          ((ω i).1)) := Finite.bddAbove_range _
+    have hle : (⨆ i : Fin (n + 1),
+        dist (TauCeti.alignedConfig (fun i : Fin (n + 1) => (ω i).1) (φ u ω) (t u) i)
+          ((ω i).1))
+        ≤ TauCeti.alignmentError (fun i : Fin (n + 1) => (ω i).1) (φ u ω) + t u :=
+      ciSup_le fun i => TauCeti.dist_alignedConfig_le _ _ (ht u) i
+    have hnn : (0 : Real) ≤ ⨆ i : Fin (n + 1),
+        dist (TauCeti.alignedConfig (fun i : Fin (n + 1) => (ω i).1) (φ u ω) (t u) i)
+          ((ω i).1) := le_trans dist_nonneg (le_ciSup hbdd 0)
+    rw [Set.mem_ofPred_eq, gt_iff_lt, abs_of_nonneg hnn] at hω
+    show ε / 2 < TauCeti.alignmentError (fun i : Fin (n + 1) => (ω i).1) (φ u ω)
+    linarith
+  simpa using key
 
 end Helm2025.DKPS.AcharyyaBridge
