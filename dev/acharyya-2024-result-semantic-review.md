@@ -483,7 +483,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Thread eventually_forall_isMinOn_dist_lt through TauCeti.ae_ae_of_forall_ae and tendsto_lpPairDistErr_of_ae_tendsto. Every ingredient is proved and no step names a chosen minimizer, so no measurable selection is involved.
+**Next action:** Compose along the expectation route -- Tonelli, per-pair dominated convergence, Markov -- which reaches the printed convergence-in-probability mode without a quantifier exchange or a measurable selection. A first attempt was reverted for an elaboration loop in the measurability step; lift the integrand to a top-level definition so nothing unfolds through a local binding.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -587,7 +587,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Thread eventually_forall_isMinOn_dist_lt through TauCeti.ae_ae_of_forall_ae and tendsto_lpPairDistErr_of_ae_tendsto. Every ingredient is proved and no step names a chosen minimizer, so no measurable selection is involved.
+**Next action:** Compose along the expectation route -- Tonelli, per-pair dominated convergence, Markov -- which reaches the printed convergence-in-probability mode without a quantifier exchange or a measurable selection. A first attempt was reverted for an elaboration loop in the measurability step; lift the integrand to a top-level definition so nothing unfolds through a local binding.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 
