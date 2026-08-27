@@ -409,6 +409,7 @@
     ]
    },
    "lean_declarations": [
+    "Acharyya2024.Consistency.ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto",
     "Acharyya2024.Consistency.exists_rigidMotion_of_pairDist_tendsto",
     "TauCeti.eventually_exists_rigidMotion_dist_lt",
     "TauCeti.exists_rigidMotion_of_dist_eq"
@@ -425,6 +426,12 @@
      "lean_clause": "exists_rigidMotion_of_pairDist_tendsto gives the alignment whenever the pairwise distances converge, with the rigid motion depending on the configuration, hence on the sample.",
      "relation": "different_quantifier_encoding",
      "note": "The source places the aligning rotation outside the probability; the estimate and so its aligning motion depend on the sample."
+    },
+    {
+     "source_clause": "The convergence after alignment is asserted in probability.",
+     "lean_clause": "Proved in the almost-sure mode; the in-probability mode needs measurability of the set of sample points admitting an eps-alignment, which is an existential over the isometry group.",
+     "relation": "different_quantifier_encoding",
+     "note": "A genuine obstacle: measurability requires the alignment error as a continuous infimum over a compact group."
     }
    ],
    "review": "Acharyya2024 stops at convergence of pairwise distances and does not construct the orthogonal/translation witnesses required by this corollary.",
@@ -434,7 +441,7 @@
     "rigid-alignment-corollary",
     "rigid-motion-engine-now-available"
    ],
-   "next_action": "Lift the deterministic alignment step to convergence in probability along a subsequence, and record whether a sample-independent W^(u) is achievable at all."
+   "next_action": "Introduce the alignment error as an infimum over rigid motions, prove it continuous using compactness of the isometry group, and lift the almost-sure statement to convergence in probability."
   },
   {
    "id": "A24-A2",

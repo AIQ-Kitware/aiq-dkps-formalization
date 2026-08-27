@@ -79,7 +79,7 @@
     "corollary1-deterministic-alignment": {
       "kind": "source_audit",
       "title": "Corollary 1 quantifies the aligning rotation outside the probability",
-      "detail": "The source writes \"there exist sequences W^(u) and a^(u), satisfying W^(u) in O(d) and a^(u) in R^d for all u, such that for all i, ||psihat_i^(r_u) - (W^(u) psi_i + a^(u))|| ->P 0\". The alignment sequence is quantified outside the probability statement, so a single deterministic pair (W^(u), a^(u)) is asserted to work.\n\nThe estimate psihat is a function of the sample, and multidimensional scaling fixes a configuration only up to a rigid motion, so the motion that aligns it is a function of the sample too. What the argument supports is an alignment depending on the sample point. A deterministic sequence would additionally require the required alignment to become asymptotically sample-independent, which the source neither states nor proves.\n\nexists_rigidMotion_of_pairDist_tendsto proves the alignment step in the form the mathematics gives: whenever every pairwise distance converges, the configurations are eventually alignable to within any tolerance. The step needs no spectral hypothesis, so the eigengap-free raw-stress route reaches coordinates without a population eigenvalue floor."
+      "detail": "The source writes \"there exist sequences W^(u) and a^(u), satisfying W^(u) in O(d) and a^(u) in R^d for all u, such that for all i, ||psihat_i^(r_u) - (W^(u) psi_i + a^(u))|| ->P 0\". The alignment sequence is quantified outside the probability statement, so a single deterministic pair (W^(u), a^(u)) is asserted to work.\n\nThe estimate psihat is a function of the sample, and multidimensional scaling fixes a configuration only up to a rigid motion, so the motion that aligns it is a function of the sample too. What the argument supports is an alignment depending on the sample point. A deterministic sequence would additionally require the required alignment to become asymptotically sample-independent, which the source neither states nor proves.\n\nexists_rigidMotion_of_pairDist_tendsto proves the alignment step in the form the mathematics gives: whenever every pairwise distance converges, the configurations are eventually alignable to within any tolerance. The step needs no spectral hypothesis, so the eigengap-free raw-stress route reaches coordinates without a population eigenvalue floor.\n\nProgress. ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto lifts the alignment step to the almost-sure mode: if almost surely every pairwise distance converges, then almost surely the estimates are eventually alignable within any tolerance. That mode goes through by intersecting the finitely many almost-sure hypotheses and applying the deterministic step at each sample point.\n\nThe in-probability mode needs one more thing, and it is a genuine obstacle rather than bookkeeping: the set of sample points admitting an eps-alignment is an existential over the isometry group, not a countable condition, so its measurability is not automatic. Making it measurable means introducing the alignment error as an infimum over rigid motions and proving that infimum continuous, which needs compactness of the group. That is the remaining work for this row, and it is also why the source's deterministic W^(u) deserves scrutiny: the object the argument produces is sample-dependent."
     }
   },
   "items": [
@@ -413,6 +413,7 @@
         ]
       },
       "lean_declarations": [
+        "Acharyya2024.Consistency.ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto",
         "Acharyya2024.Consistency.exists_rigidMotion_of_pairDist_tendsto",
         "TauCeti.eventually_exists_rigidMotion_dist_lt",
         "TauCeti.exists_rigidMotion_of_dist_eq"
@@ -428,7 +429,7 @@
         "detail": "The alignment step is now proved: convergence of every pairwise distance makes the configurations eventually alignable by a rigid motion, with no spectral hypothesis. What remains between this and the printed corollary is the probabilistic packaging -- lifting from a deterministic sequence to convergence in probability along a subsequence -- and the quantifier question recorded in corollary1-deterministic-alignment, since the source places the aligning rotation outside the probability."
       },
       "notes": "Previously unrepresented. The engine is now present in ForTauCeti as exact and approximate rigid-motion rigidity, neither of which Mathlib carries.",
-      "next_action": "Lift the deterministic alignment step to convergence in probability along a subsequence, and record whether a sample-independent W^(u) is achievable at all."
+      "next_action": "Introduce the alignment error as an infimum over rigid motions, prove it continuous using compactness of the isometry group, and lift the almost-sure statement to convergence in probability."
     },
     {
       "id": "A24-A2",

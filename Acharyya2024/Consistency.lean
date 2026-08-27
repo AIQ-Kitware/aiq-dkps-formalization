@@ -131,6 +131,37 @@ theorem exists_rigidMotion_of_pairDist_tendsto
   rfl
 
 /--
+**Corollary 1, almost-sure alignment.**
+
+If almost surely every pairwise distance of the estimates converges to the target's, then
+almost surely the estimates are eventually alignable to within any tolerance.  The finitely
+many almost-sure hypotheses are intersected and the deterministic alignment step is applied
+sample point by sample point.
+
+The almost-sure mode is the one that goes through without extra machinery.  Stating the same
+conclusion in probability would additionally require the set of sample points admitting an
+`ε`-alignment to be measurable, and that is an existential over the isometry group rather than
+a countable condition; making it measurable means introducing the alignment error as an
+infimum over rigid motions and proving it continuous, which needs compactness of the group.
+See the census gap `corollary1-deterministic-alignment`.
+-/
+theorem ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto
+    {Ω : Type} [MeasurableSpace Ω] (P : Measure Ω)
+    {n d : Nat} (hn : 0 < n)
+    (ψhat : Nat → Ω → Config n d) (ψ : Config n d)
+    (h : ∀ i j, ∀ᵐ ω ∂P, Tendsto (fun t => pairDistErr (ψhat t ω) ψ i j) atTop (𝓝 0)) :
+    ∀ᵐ ω ∂P, ∀ ε > 0, ∀ᶠ t in atTop,
+      ∃ (W : Rvec d ≃ₗᵢ[Real] Rvec d) (a : Rvec d), ∀ i, ‖W (ψhat t ω i) + a - ψ i‖ < ε := by
+  have hall : ∀ᵐ ω ∂P, ∀ i j, Tendsto (fun t => pairDistErr (ψhat t ω) ψ i j) atTop (𝓝 0) := by
+    rw [MeasureTheory.ae_all_iff]
+    intro i
+    rw [MeasureTheory.ae_all_iff]
+    intro j
+    exact h i j
+  filter_upwards [hall] with ω hω
+  exact exists_rigidMotion_of_pairDist_tendsto hn (fun t => ψhat t ω) ψ hω
+
+/--
 Trosset-style raw-stress MDS stability — REPAIRED + PROVED (2026-06-11).
 
 The original scaffold statement asserted a single subsequence and a fixed

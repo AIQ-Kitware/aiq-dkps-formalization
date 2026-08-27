@@ -310,6 +310,7 @@ The geometric conclusion is compiled, with UniquePairProfile added for a fixed l
 **Normalized paper statement:** There exist orthogonal W^(u) and translations a^(u) such that every estimated point converges in probability to W^(u) psi_i + a^(u).
 
 **Selected Lean declarations:**
+- `Acharyya2024.Consistency.ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto`
 - `Acharyya2024.Consistency.exists_rigidMotion_of_pairDist_tendsto`
 - `TauCeti.eventually_exists_rigidMotion_dist_lt`
 - `TauCeti.exists_rigidMotion_of_dist_eq`
@@ -320,6 +321,7 @@ The geometric conclusion is compiled, with UniquePairProfile added for a fixed l
 | --- | --- | --- | --- |
 | There exist W^(u) in O(d) and translations a^(u) aligning every estimated point to the population configuration. | Acharyya2024 contains no source-facing construction of the orthogonal/translation witnesses. | `missing` | Later packages have Procrustes/Gram-rigidity machinery but this corollary itself is absent. |
 | There exist sequences W^(u) in O(d) and a^(u) in R^d such that for all i, \|\|psihat_i - (W^(u) psi_i + a^(u))\|\| ->P 0. | exists_rigidMotion_of_pairDist_tendsto gives the alignment whenever the pairwise distances converge, with the rigid motion depending on the configuration, hence on the sample. | `different_quantifier_encoding` | The source places the aligning rotation outside the probability; the estimate and so its aligning motion depend on the sample. |
+| The convergence after alignment is asserted in probability. | Proved in the almost-sure mode; the in-probability mode needs measurability of the set of sample points admitting an eps-alignment, which is an existential over the isometry group. | `different_quantifier_encoding` | A genuine obstacle: measurability requires the alignment error as a continuous infimum over a compact group. |
 
 **Semantic review:**
 
@@ -329,7 +331,7 @@ Acharyya2024 stops at convergence of pairwise distances and does not construct t
 
 **Companion census gap refs:** `corollary1-deterministic-alignment`, `rigid-alignment-corollary`, `rigid-motion-engine-now-available`
 
-**Next action:** Lift the deterministic alignment step to convergence in probability along a subsequence, and record whether a sample-independent W^(u) is achievable at all.
+**Next action:** Introduce the alignment error as an infimum over rigid motions, prove it continuous using compactness of the isometry group, and lift the almost-sure statement to convergence in probability.
 
 ### 11. `A24-A2` — Assumption 2: Growing models lie on a compact Riemannian model manifold
 
