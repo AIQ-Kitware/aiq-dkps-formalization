@@ -65,6 +65,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 - `Acharyya2025.Bridge.EntrywiseClose`
 - `Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded`
 - `Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale`
+- `Acharyya2025.GrowingResponse.prob_uniformResponseMeanClose_ge_of_secondMoment`
 
 **Clause-by-clause comparison:**
 
@@ -72,6 +73,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | --- | --- | --- | --- |
 | For any epsilon>0, all entries \|Bhat_ii'-B_ii'\|<epsilon simultaneously with probability at least 1 - 16 sum gamma_ij/(r m epsilon^2). | EntrywiseClose plus the response-to-CMDS bridge and growing-response concentration prove the same event shape. | `derived_by_composition` |  |
 | The finite displayed failure-probability constant is exactly the paper expression. | No single source-facing Lean theorem exposes that exact finite constant; the active bridge uses conservative constants. | `lean_weaker_conclusion` | The asymptotic paper scale is preserved, but constant-level literal fidelity is not packaged. |
+| For any epsilon > 0, P[\|Bhat_ii' - B_ii'\| < epsilon for all i,i'] >= 1 - 16 sum gamma_ij / (r m epsilon^2). | The probability step is now finite and explicit: prob_uniformResponseMeanClose_ge_of_secondMoment gives 1 - N sigma^2 / eta^2 for the response means. | `derived_by_composition` | The remaining distance is the response-mean to doubly-centred-entry passage, which carries the factor 16 and the 1/(rm) scaling. |
 
 **Semantic review:**
 
@@ -81,7 +83,7 @@ The event shape and response-to-CMDS concentration mechanism are compiled, inclu
 
 **Companion census gap refs:** `t1-literal-finite-wrapper`
 
-**Next action:** Add a literal finite Theorem-1 wrapper only if exact constant-level source coverage is required.
+**Next action:** Compose the finite probability step with the response-mean to doubly-centred-entry bound to reach the displayed constant.
 
 ### 2. `A25-C1` — Corollary 1: Spectral-norm rate under r = omega(n^3)
 
