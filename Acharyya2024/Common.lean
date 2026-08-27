@@ -37,6 +37,11 @@ abbrev Config (n d : Nat) := Fin n → Rvec d
 Corresponds to the paper's subsequences `{r_u}` of `{r}`. -/
 def Subseq (u : Nat → Nat) : Prop := StrictMono u
 
+/-- In one dimension the norm is the absolute difference of the single coordinate. -/
+theorem norm_sub_one_dim (x y : Rvec 1) : ‖x - y‖ = |x 0 - y 0| := by
+  rw [EuclideanSpace.norm_eq]
+  simp [Real.sqrt_sq_eq_abs]
+
 /-- Squared Frobenius norm of a dissimilarity matrix: `∑ᵢⱼ (Aᵢⱼ)²`. -/
 noncomputable def frobSq {n : Nat} (A : DisMat n) : Real :=
   ∑ i : Fin n, ∑ j : Fin n, (A i j)^2

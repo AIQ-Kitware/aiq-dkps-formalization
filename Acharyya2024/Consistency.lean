@@ -883,6 +883,21 @@ instance : IsProbabilityMeasure coinMeasure := by
 theorem coinMeasure_singleton (b : Bool) : coinMeasure {b} = 1 / 2 := by
   cases b <;> simp [coinMeasure, Measure.coe_add, Measure.coe_smul]
 
+/-- Integration against the fair two-point measure. -/
+theorem integral_coinMeasure (f : Bool → Real) :
+    ∫ ω, f ω ∂coinMeasure = (1 / 2) * f true + (1 / 2) * f false := by
+  haveI hf1 : IsFiniteMeasure ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) true) :=
+    ⟨by simp⟩
+  haveI hf2 : IsFiniteMeasure ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) false) :=
+    ⟨by simp⟩
+  have h1 : Integrable f ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) true) :=
+    Integrable.of_finite
+  have h2 : Integrable f ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) false) :=
+    Integrable.of_finite
+  rw [coinMeasure, integral_add_measure h1 h2, integral_smul_measure, integral_smul_measure,
+    integral_dirac, integral_dirac]
+  norm_num
+
 theorem coinMeasure_ge_half {S : Set Bool} (hS : true ∈ S ∨ false ∈ S) :
     (1 / 2 : ENNReal) ≤ coinMeasure S := by
   rcases hS with h | h
@@ -1097,5 +1112,92 @@ theorem lp_consistency_of_gamma_ambientLimit
   lp_consistency_of_gamma_empirical P m Xbar μpop
     (GrowingModels.limitDissimilarity H2.latent) γ hγnonneg hint hmoment hγ
     H2.tendsto_frobSub ψhat hψhat huniq
+
+/-! ### The identifiability premise is necessary
+
+`tendsto_outOfSampleExtension` and `tendsto_argmin_of_tendsto_of_equiLipschitz` both assume the
+limiting one-point stress has a *unique* minimizer.  That premise cannot be dropped, for the same
+reason `RawStress.UniquePairProfile` cannot: the minimizer set may carry more than one point, and
+then different admissible selections converge to different limits, so no statement of the form
+"the minimizers converge to `v'`" can hold.
+
+The witness is two reference points at distance two with target dissimilarity two from each.  A
+position matching both exactly does not exist, and the stress is minimized at three separate
+places. -/
+
+/-- The two-point reference embedding of the witness: `+1` and `-1` on a fair coin. -/
+noncomputable def twoPointEmbedding : Bool → Rvec 1 :=
+  fun b => EuclideanSpace.single 0 (if b then (1 : Real) else -1)
+
+/-- Its population one-point stress at target dissimilarity `2`, in closed form. -/
+theorem continuousPointStress_twoPoint (v : Rvec 1) :
+    ContinuousMDS.continuousPointStress 1 coinMeasure twoPointEmbedding
+      (fun _ => (2 : Real)) v
+      = (1 / 2) * (|v 0 - 1| - 2) ^ 2 + (1 / 2) * (|v 0 + 1| - 2) ^ 2 := by
+  rw [ContinuousMDS.continuousPointStress, integral_coinMeasure]
+  simp only [twoPointEmbedding, norm_sub_one_dim, EuclideanSpace.single_apply]
+  norm_num
+
+/-- The population one-point stress of the witness is at least `1` everywhere. -/
+theorem one_le_continuousPointStress_twoPoint (v : Rvec 1) :
+    (1 : Real) ≤ ContinuousMDS.continuousPointStress 1 coinMeasure twoPointEmbedding
+      (fun _ => (2 : Real)) v := by
+  rw [continuousPointStress_twoPoint]
+  set t : Real := v 0 with ht
+  rcases le_or_gt 1 t with h1 | h1
+  · rw [abs_of_nonneg (by linarith : (0:Real) ≤ t - 1),
+      abs_of_nonneg (by linarith : (0:Real) ≤ t + 1)]
+    nlinarith [sq_nonneg (t - 2)]
+  · rcases le_or_gt t (-1) with h2 | h2
+    · rw [abs_of_nonpos (by linarith : t - 1 ≤ (0:Real)),
+        abs_of_nonpos (by linarith : t + 1 ≤ (0:Real))]
+      nlinarith [sq_nonneg (t + 2)]
+    · rw [abs_of_nonpos (by linarith : t - 1 ≤ (0:Real)),
+        abs_of_nonneg (by linarith : (0:Real) ≤ t + 1)]
+      nlinarith [sq_nonneg t]
+
+/-- Both `0` and the point at distance two from it attain that value, so the minimizer is not
+unique. -/
+theorem continuousPointStress_twoPoint_eq_one :
+    ContinuousMDS.continuousPointStress 1 coinMeasure twoPointEmbedding
+        (fun _ => (2 : Real)) 0 = 1 ∧
+    ContinuousMDS.continuousPointStress 1 coinMeasure twoPointEmbedding
+        (fun _ => (2 : Real)) (EuclideanSpace.single 0 (2 : Real)) = 1 := by
+  constructor <;>
+    · rw [continuousPointStress_twoPoint]
+      simp [EuclideanSpace.single_apply]
+      norm_num
+
+/--
+**The identifiability premise cannot be dropped.**
+
+There are population data whose one-point stress has two distinct minimizers.  Constant
+sequences at each of them minimize the stress at every stage and converge, to different limits,
+so no theorem concluding that minimizers converge to a single point can hold without a
+uniqueness premise.
+-/
+theorem not_unique_min_continuousPointStress :
+    ∃ (V W : Nat → Rvec 1) (v' w' : Rvec 1),
+      v' ≠ w' ∧
+      (∀ n, ∀ u : Rvec 1,
+        ContinuousMDS.continuousPointStress 1 coinMeasure twoPointEmbedding
+            (fun _ => (2 : Real)) (V n)
+          ≤ ContinuousMDS.continuousPointStress 1 coinMeasure twoPointEmbedding
+            (fun _ => (2 : Real)) u) ∧
+      (∀ n, ∀ u : Rvec 1,
+        ContinuousMDS.continuousPointStress 1 coinMeasure twoPointEmbedding
+            (fun _ => (2 : Real)) (W n)
+          ≤ ContinuousMDS.continuousPointStress 1 coinMeasure twoPointEmbedding
+            (fun _ => (2 : Real)) u) ∧
+      Tendsto V atTop (𝓝 v') ∧ Tendsto W atTop (𝓝 w') := by
+  obtain ⟨h0, h2⟩ := continuousPointStress_twoPoint_eq_one
+  refine ⟨fun _ => 0, fun _ => EuclideanSpace.single 0 (2 : Real), 0,
+    EuclideanSpace.single 0 (2 : Real), ?_, fun n u => ?_, fun n u => ?_,
+    tendsto_const_nhds, tendsto_const_nhds⟩
+  · intro hcon
+    have := congrArg (fun x : Rvec 1 => x 0) hcon
+    simp [EuclideanSpace.single_apply] at this
+  · rw [h0]; exact one_le_continuousPointStress_twoPoint u
+  · rw [h2]; exact one_le_continuousPointStress_twoPoint u
 
 end Acharyya2024.Consistency

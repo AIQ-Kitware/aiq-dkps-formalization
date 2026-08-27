@@ -17,7 +17,7 @@ This is the entry point for **paper theorem vs. Lean theorem** comparison. The c
 | `acharyya-2024` | `A24-T3` | Theorem 3 | GAP stronger Lean hypotheses | The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly. |
 | `acharyya-2024` | `A24-C1` | Corollary 1 | GAP probabilistic packaging and quantifier | Later packages have Procrustes/Gram-rigidity machinery but this corollary itself is absent. |
 | `acharyya-2024` | `A24-A2` | Assumption 2 | GAP only a specialization is formalized | Compactness is not consumed by this step. |
-| `acharyya-2024` | `A24-L2` | Lemma 2 | GAP missing source result | The population law is replaced by the empirical model measure; that substitution is the remaining distance to the printed lemma. |
+| `acharyya-2024` | `A24-L2` | Lemma 2 | GAP missing source result | Same footing as UniquePairProfile, whose necessity is separately established for the configuration analogue. |
 | `acharyya-2024` | `A24-T4` | Theorem 4 | GAP only a specialization is formalized | No substantive delta recorded. |
 | `acharyya-2024` | `A24-T5` | Theorem 5 | GAP only a specialization is formalized | Every intermediate link is proved rather than assumed; the population law in place of the empirical measure is what remains. |
 | `acharyya-2025` | `A25-T1` | Theorem 1 | GAP exact finite probability constant not exposed | At m = 1 the three competing dissimilarity normalisations coincide, so the refutation is independent of that question. |

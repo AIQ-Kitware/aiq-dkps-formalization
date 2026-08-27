@@ -34,11 +34,6 @@ open Acharyya2024.Consistency (coinMeasure coinMeasure_ge_half)
 It is invariant under relabeling, which is the whole source of the obstruction. -/
 noncomputable def equilateral : DisMat 3 := fun i j => if i = j then 0 else 1
 
-/-- In one dimension the norm is the absolute difference of the single coordinate. -/
-theorem norm_sub_one_dim (x y : Rvec 1) : ‖x - y‖ = |x 0 - y 0| := by
-  rw [EuclideanSpace.norm_eq]
-  simp [Real.sqrt_sq_eq_abs]
-
 /-- A one-dimensional competitor: two objects at the same place, the third at distance one. -/
 noncomputable def witness : Config 3 1 :=
   fun i => EuclideanSpace.single 0 (if i = 1 then (1 : Real) else 0)
