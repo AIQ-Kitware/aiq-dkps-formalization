@@ -1002,4 +1002,66 @@ theorem ae_tendsto_averaged_pointStress {d : Nat} (P : Measure M) [IsProbability
   unfold pointStress
   exact (Fin.sum_univ_eq_sum_range (fun i => (‖v - χ (φ i)‖ - c (φ i)) ^ 2) n).symm
 
+/-- **Pointwise convergence spreads from a dense set under an equi-Lipschitz bound.**
+
+The strong law gives convergence at each fixed position, but with a null set that depends on the
+position, so only countably many positions can be handled at once.  Equi-Lipschitz bounds turn
+convergence on a countable dense set into convergence everywhere, off a single null set. -/
+theorem tendsto_of_dense_of_equiLipschitz {d : Nat}
+    {G : Nat → Rvec d → Real} {g : Rvec d → Real} (hg : Continuous g)
+    (hlip : ∀ R : Real, ∃ L : Real, 0 ≤ L ∧ ∀ u : Nat, ∀ v w : Rvec d,
+      ‖v‖ ≤ R → ‖w‖ ≤ R → |G u v - G u w| ≤ L * ‖v - w‖)
+    {D : Set (Rvec d)} (hD : Dense D)
+    (hptw : ∀ v ∈ D, Tendsto (fun u => G u v) atTop (𝓝 (g v))) :
+    ∀ v : Rvec d, Tendsto (fun u => G u v) atTop (𝓝 (g v)) := by
+  intro v
+  rw [Metric.tendsto_atTop]
+  intro ε hε
+  obtain ⟨L, hL0, hLle⟩ := hlip (‖v‖ + 1)
+  -- a radius small enough for all three error terms
+  obtain ⟨δ₂, hδ₂pos, hδ₂⟩ :=
+    Metric.continuousAt_iff.mp hg.continuousAt (ε / 3) (by linarith)
+  set δ : Real := min (min 1 δ₂) (ε / (3 * (L + 1))) with hδ
+  have hδpos : 0 < δ := by
+    refine lt_min (lt_min one_pos hδ₂pos) ?_
+    have : (0 : Real) < 3 * (L + 1) := by linarith
+    positivity
+  obtain ⟨w, hwD, hw⟩ := Metric.mem_closure_iff.mp (hD v) δ hδpos
+  have hvw : ‖v - w‖ < δ := by rwa [← dist_eq_norm]
+  have hwnorm : ‖w‖ ≤ ‖v‖ + 1 := by
+    have h1 : ‖w‖ ≤ ‖v‖ + ‖v - w‖ := by
+      calc ‖w‖ = ‖v - (v - w)‖ := by abel_nf
+        _ ≤ ‖v‖ + ‖v - w‖ := norm_sub_le _ _
+    have h2 : ‖v - w‖ < 1 := lt_of_lt_of_le hvw (le_trans (min_le_left _ _) (min_le_left _ _))
+    linarith
+  have hgw : |g w - g v| < ε / 3 := by
+    have h2 : dist v w < δ₂ := lt_of_lt_of_le hw (le_trans (min_le_left _ _) (min_le_right _ _))
+    have := hδ₂ (by rwa [dist_comm] at h2)
+    rwa [Real.dist_eq] at this
+  have hlipw : ∀ u : Nat, |G u v - G u w| < ε / 3 := by
+    intro u
+    have h1 := hLle u v w (by linarith) hwnorm
+    have h2 : ‖v - w‖ ≤ ε / (3 * (L + 1)) := le_of_lt (lt_of_lt_of_le hvw (min_le_right _ _))
+    have h3 : L * ‖v - w‖ ≤ L * (ε / (3 * (L + 1))) :=
+      mul_le_mul_of_nonneg_left h2 hL0
+    have h4 : L * (ε / (3 * (L + 1))) < ε / 3 := by
+      have hden : (0 : Real) < 3 * (L + 1) := by linarith
+      have hkey : L * ε * 3 < ε * (3 * (L + 1)) := by nlinarith [hε, hL0]
+      calc L * (ε / (3 * (L + 1))) = (L * ε) / (3 * (L + 1)) := by ring
+        _ < ε / 3 := by
+            rw [div_lt_div_iff₀ hden (by norm_num : (0 : Real) < 3)]
+            linarith [hkey]
+    linarith
+  obtain ⟨N, hN⟩ := Metric.tendsto_atTop.mp (hptw w hwD) (ε / 3) (by linarith)
+  refine ⟨N, fun u hu => ?_⟩
+  have h1 := hlipw u
+  have h2 := hN u hu
+  rw [Real.dist_eq] at h2 ⊢
+  calc |G u v - g v| = |(G u v - G u w) + (G u w - g w) + (g w - g v)| := by ring_nf
+    _ ≤ |(G u v - G u w) + (G u w - g w)| + |g w - g v| := abs_add_le _ _
+    _ ≤ |G u v - G u w| + |G u w - g w| + |g w - g v| := by
+        have := abs_add_le (G u v - G u w) (G u w - g w)
+        linarith
+    _ < ε := by linarith
+
 end Acharyya2024.ContinuousMDS

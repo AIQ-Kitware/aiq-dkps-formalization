@@ -607,6 +607,7 @@
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto",
     "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
+    "Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz",
     "Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension",
     "Acharyya2024.ContinuousMDS.tendsto_pointStress",
     "TauCeti.integral_doubleSum_pi",
@@ -655,7 +656,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Thread the proved ingredients into one statement: strong law for the objectives, equi-Lipschitz to locally uniform, argmin for a growing collection, coercivity for boundedness, then dominated convergence. Each is proved individually; what remains is fixing how the reference configuration is tied to the population embedding at the sampled models."
+   "next_action": "Assemble: intersect the countably many strong-law null sets over a countable dense set, spread by tendsto_of_dense_of_equiLipschitz, bound the minimizers by coercivity, and apply tendsto_argmin_of_tendsto_of_equiLipschitz; then tendsto_lpPairDistErr_of_ae_tendsto finishes."
   },
   {
    "id": "A24-T4",
@@ -751,6 +752,7 @@
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto",
     "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
+    "Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz",
     "Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension",
     "Acharyya2024.ContinuousMDS.tendsto_pointStress",
     "TauCeti.integral_doubleSum_pi",
@@ -777,7 +779,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Thread the proved ingredients into one statement: strong law for the objectives, equi-Lipschitz to locally uniform, argmin for a growing collection, coercivity for boundedness, then dominated convergence. Each is proved individually; what remains is fixing how the reference configuration is tied to the population embedding at the sampled models."
+   "next_action": "Assemble: intersect the countably many strong-law null sets over a countable dense set, spread by tendsto_of_dense_of_equiLipschitz, bound the minimizers by coercivity, and apply tendsto_argmin_of_tendsto_of_equiLipschitz; then tendsto_lpPairDistErr_of_ae_tendsto finishes."
   },
   {
    "id": "A24-R4",
