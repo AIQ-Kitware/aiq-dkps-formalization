@@ -88,6 +88,24 @@ def check_schema(path: Path, data: dict) -> list[dict]:
             fail(f'{path}: {rid} verification proved_in_build but cites no declaration')
         if row['status'].startswith('compiled') and row['verification'] == 'absent':
             fail(f'{path}: {rid} status {row["status"]} but verification absent')
+        # Line-number citations into the prose rot silently when those files are edited.
+        # Only the exact checks are gated here -- the file exists and the range lies inside
+        # it.  Matching the anchor text against the range was tried and produced false
+        # positives on LaTeX displays, and a check people learn to ignore is worse than none.
+        loc = row.get('source_locator') or {}
+        src, lines = loc.get('file'), loc.get('lines')
+        if not src or not isinstance(lines, list) or len(lines) != 2:
+            fail(f'{path}: {rid} missing or malformed source_locator')
+        else:
+            srcp = Path(src)
+            if not srcp.exists():
+                fail(f'{path}: {rid} source_locator file does not exist: {src}')
+            else:
+                total = len(srcp.read_text(errors='ignore').split('\n'))
+                lo, hi = lines
+                if not (1 <= lo <= hi <= total):
+                    fail(f'{path}: {rid} source_locator lines {lo}-{hi} outside {src} '
+                         f'(which has {total} lines)')
         sem = row.get('semantic_alignment', {})
         if sem.get('classification') not in alignments or not sem.get('detail'):
             fail(f'{path}: {rid} bad semantic_alignment')

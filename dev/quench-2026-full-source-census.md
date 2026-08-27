@@ -57,8 +57,8 @@ The argument that measurability is a well-definedness condition of the printed s
 | `Q26-A2` | `headline` | Assumption 2 (Model Distribution Support) | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `Q26-T2A` | `headline` | Theorem 2, small-MSE conclusion | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `Q26-T2B` | `headline` | Theorem 2, query-efficiency conclusion | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
-| `Q26-RAW-FIN` | `major` | Finite-model raw-response capstone | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
-| `Q26-RAW-INF` | `major` | Compact-infinite raw-response capstone | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `Q26-RAW-FIN` | `major` | Theorem 2 and its proof, at the finite model-class scope | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `Q26-RAW-INF` | `major` | Theorem 2 and its proof, at the compact-infinite model-class scope | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `Q26-OLS` | `supporting` | OLS/ensemble empirical prediction methods | `not_proof_debt` | `out_of_scope` | `not_applicable` |
 
 ## Gaps and source repairs
@@ -324,7 +324,7 @@ Quench states its Theorem 1 as '[Acharyya et al. (2025) Theorem 2] In our settin
 
 ### `Q26-RAW-FIN` — End-to-end finite raw-response query efficiency
 
-* **source anchor:** Finite-model raw-response capstone (theorem, section 3)
+* **source anchor:** Theorem 2 and its proof, at the finite model-class scope (theorem, section 3)
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:163-236`
 * **importance:** `major`
 * **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
@@ -337,7 +337,7 @@ Quench states its Theorem 1 as '[Acharyya et al. (2025) Theorem 2] In our settin
 
 ### `Q26-RAW-INF` — End-to-end compact-infinite query efficiency
 
-* **source anchor:** Compact-infinite raw-response capstone (theorem, section 3)
+* **source anchor:** Theorem 2 and its proof, at the compact-infinite model-class scope (theorem, section 3)
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:163-236`
 * **importance:** `major`
 * **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`

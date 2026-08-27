@@ -471,7 +471,7 @@
   },
   {
    "id": "Q26-RAW-FIN",
-   "source_anchor": "Finite-model raw-response capstone",
+   "source_anchor": "Theorem 2 and its proof, at the finite model-class scope",
    "source_kind": "theorem",
    "title": "End-to-end finite raw-response query efficiency",
    "importance": "major",
@@ -526,7 +526,7 @@
   },
   {
    "id": "Q26-RAW-INF",
-   "source_anchor": "Compact-infinite raw-response capstone",
+   "source_anchor": "Theorem 2 and its proof, at the compact-infinite model-class scope",
    "source_kind": "theorem",
    "title": "End-to-end compact-infinite query efficiency",
    "importance": "major",
