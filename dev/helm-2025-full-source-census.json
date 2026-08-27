@@ -60,6 +60,11 @@
       "kind": "source_audit",
       "title": "Compact/bounded label support is explicit in Lean but not located in the retained paper source",
       "detail": "Helm2025.DKPS.Theorem1 and Theorem2_bayes require BoundedLabelSupport/LabelCompactSupport so the loss can be uniformly dominated on a compact label range. Searches of the retained prose and TeX did not locate a corresponding paper assumption. This should therefore be treated as an additional formal hypothesis unless a source passage is identified."
+    },
+    "dangling-theorem-3-reference": {
+      "kind": "source_audit",
+      "title": "The Appendix A.2 proof cites a Theorem 3 that the paper does not contain",
+      "detail": "The proof of Theorem 2 concludes \"given the results in (Sekhon, 2021), for some subsequence of u as defined in Theorem 3\". The retained paper states exactly two theorems -- the TeX source declares thm:rule-convergence and thm:consistency and no third -- so the citation resolves to nothing. The subsequence it appeals to is the one produced inside the Theorem 2 argument itself, which is how the Lean development treats it: Helm2025 proves existence of a diverging embedding-budget schedule rather than importing a numbered result. Recorded so a reviewer asking why the census has no Theorem 3 row gets an answer."
     }
   },
   "items": [
@@ -120,9 +125,10 @@
       ],
       "planned_declarations": [],
       "gap_refs": [
-        "stronger-analysis-hypotheses",
+        "dangling-theorem-3-reference",
         "diagonal-budget-schedule",
-        "label-compact-support"
+        "label-compact-support",
+        "stronger-analysis-hypotheses"
       ],
       "semantic_alignment": {
         "classification": "stronger_hypotheses",

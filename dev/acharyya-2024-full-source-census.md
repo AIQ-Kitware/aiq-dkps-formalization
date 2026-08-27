@@ -23,6 +23,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `compiled_specialization` | 5 |
 | `compiled_stronger_hypotheses` | 3 |
 | `not_represented` | 3 |
+| `not_proof_debt` | 1 |
 
 ## Semantic-alignment summary
 
@@ -33,6 +34,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `specialized` | 5 |
 | `stronger_hypotheses` | 3 |
 | `missing` | 3 |
+| `out_of_scope` | 1 |
 
 ## Items
 
@@ -42,6 +44,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `A24-R1` | `supporting` | Remark 1 | `compiled_specialization` | `specialized` | `proved_in_build` |
 | `A24-R2` | `supporting` | Remark 2 | `compiled_generalized` | `generalized` | `proved_in_build` |
 | `A24-R3` | `major` | Continuous raw-stress setup and Remark 3 | `not_represented` | `missing` | `absent` |
+| `A24-R4` | `supporting` | Remark 4 | `not_proof_debt` | `out_of_scope` | `not_applicable` |
 | `A24-T1` | `headline` | Theorem 1 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `A24-A1` | `major` | Assumption 1 | `compiled_generalized` | `generalized` | `proved_in_build` |
 | `A24-L1` | `major` | Lemma 1 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
@@ -142,6 +145,18 @@ The finite second-moment concentration theorem handles any fixed finite model se
 * **gap refs:** `continuous-mds-lp`
 * **notes:** This missing source layer is exactly the layer needed by Lemma 2 and Theorem 5.
 * **next action:** Formalize only if full source coverage of the continuum growing-model regime is desired.
+
+### `A24-R4` — Notation for the replicate dependence of the estimated perspectives
+
+* **source anchor:** Remark 4 (remark, section 3)
+* **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:189-191`
+* **importance:** `supporting`
+* **status / verification:** `not_proof_debt` / `not_applicable`
+* **semantic alignment:** `out_of_scope` — A notational convention introducing the superscript r, with no mathematical content to formalize. The r-dependence it names is carried explicitly by the stage index in every Lean statement, so the convention is honoured without a declaration.
+* **source claim:** In every setting r -> infinity; for quantities whose definition depends on r, such as psi-hat, the dependence is sometimes written psi-hat^(r).
+* **Lean declarations:** _none_
+* **notes:** Included so the census covers every numbered source item; an adversarial reviewer should be able to see that this remark was read and classified, not skipped.
+* **next action:** None.
 
 ### `A24-T1` — Fixed models and fixed queries: raw-stress consistency
 

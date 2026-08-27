@@ -23,6 +23,7 @@ The strongest paper-facing change since the earlier audit is hypothesis reductio
 | `compiled_source_repair` | 2 |
 | `compiled_role_replaced` | 11 |
 | `not_represented` | 1 |
+| `not_proof_debt` | 1 |
 
 ## Semantic-alignment summary
 
@@ -33,12 +34,14 @@ The strongest paper-facing change since the earlier audit is hypothesis reductio
 | `source_repair` | 2 |
 | `proof_replaced` | 11 |
 | `missing` | 1 |
+| `out_of_scope` | 1 |
 
 ## Items
 
 | id | importance | source anchor | status | alignment | verification |
 | --- | --- | --- | --- | --- | --- |
 | `A25-T1` | `headline` | Theorem 1 | `compiled_by_composition` | `by_composition` | `proved_in_build` |
+| `A25-R1` | `supporting` | Remark 1 | `not_proof_debt` | `out_of_scope` | `not_applicable` |
 | `A25-C1` | `major` | Corollary 1 | `compiled_by_composition` | `by_composition` | `proved_in_build` |
 | `A25-A1` | `major` | Assumption 1 | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
 | `A25-A2` | `major` | Assumption 2 | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
@@ -97,6 +100,18 @@ The current deterministic configuration theorem no longer follows the six-term A
 * **gap refs:** `t1-literal-finite-wrapper`
 * **notes:** The active response-to-CMDS bridge works entrywise directly and avoids the former n^2 Frobenius detour. Its constants are intentionally conservative.
 * **next action:** Add a literal finite Theorem-1 wrapper only if exact constant-level source coverage is required.
+
+### `A25-R1` — Naming and notation for true and estimated perspectives and the B matrices
+
+* **source anchor:** Remark 1 (remark, section 2)
+* **source locator:** `Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md:232-241`
+* **importance:** `supporting`
+* **status / verification:** `not_proof_debt` / `not_applicable`
+* **semantic alignment:** `out_of_scope` — Naming and notation only. The double-centred matrices it names are the classical MDS matrices already carried by classicalMDSMatrix, and the decreasing-magnitude eigenvalue indexing is the eigenvalues0 ordering; neither needs its own declaration.
+* **source claim:** psi_i is called the true perspective of f_i and psi-hat_i the estimated perspective; B = -(1/2) H_n Delta^{o2} H_n^T and B-hat = -(1/2) H_n^T D^{o2} H_n^T, with eigenvalues indexed in decreasing order of magnitude.
+* **Lean declarations:** _none_
+* **notes:** Included so the census covers every numbered source item.
+* **next action:** None.
 
 ### `A25-C1` — Spectral-norm rate under r = omega(n^3)
 

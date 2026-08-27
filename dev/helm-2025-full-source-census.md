@@ -65,6 +65,12 @@ The paper writes n,m,r -> infinity. Lean proves existence of a diverging embeddi
 
 Helm2025.DKPS.Theorem1 and Theorem2_bayes require BoundedLabelSupport/LabelCompactSupport so the loss can be uniformly dominated on a compact label range. Searches of the retained prose and TeX did not locate a corresponding paper assumption. This should therefore be treated as an additional formal hypothesis unless a source passage is identified.
 
+### `dangling-theorem-3-reference` — The Appendix A.2 proof cites a Theorem 3 that the paper does not contain
+
+**Kind:** `source_audit`
+
+The proof of Theorem 2 concludes "given the results in (Sekhon, 2021), for some subsequence of u as defined in Theorem 3". The retained paper states exactly two theorems -- the TeX source declares thm:rule-convergence and thm:consistency and no third -- so the citation resolves to nothing. The subsequence it appeals to is the one produced inside the Theorem 2 argument itself, which is how the Lean development treats it: Helm2025 proves existence of a diverging embedding-budget schedule rather than importing a numbered result. Recorded so a reviewer asking why the census has no Theorem 3 row gets an answer.
+
 ## Detail
 
 ### `H25-T1` — Fixed-n inference risk transfer
@@ -89,7 +95,7 @@ Helm2025.DKPS.Theorem1 and Theorem2_bayes require BoundedLabelSupport/LabelCompa
 * **semantic alignment:** `stronger_hypotheses` — Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The analytic hypotheses are stronger than the literal paper assumptions, and the joint (m,r) limit is represented by diagonalization. The paper-facing wrapper also requires bounded/compact label support; no matching assumption was located in the retained source.
 * **source claim:** If learning on true perspectives is consistent, learning on estimated perspectives is also consistent as n,m,r grow.
 * **Lean declarations:** `Helm2025.DKPS.Theorem2_bayes`, `Helm2025.DKPS.consistency_transfer_dkps_bayes`, `Helm2025.DKPS.diagonal_convergence`
-* **gap refs:** `stronger-analysis-hypotheses`, `diagonal-budget-schedule`, `label-compact-support`
+* **gap refs:** `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
 * **notes:** The schedule makes the quantifier structure executable rather than leaving the phrase n,m,r -> infinity informal. The retained source should be rechecked against the original PDF specifically for label-support/bounded-loss language before treating this hypothesis as source-faithful.
 * **next action:** None.
 
