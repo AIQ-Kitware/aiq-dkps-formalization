@@ -34,27 +34,12 @@ namespace Acharyya2025.Theorem1Scale
 
 open Acharyya2024
 open Acharyya2025.Deterministic
-open Acharyya2024.Consistency (coinMeasure)
+open Acharyya2024.Consistency (coinMeasure integral_coinMeasure)
 
 /-- The norm on a `1 x 1` response matrix is the absolute value of its single entry. -/
 theorem norm_mat_one_one (x : Mat 1 1) : ‖x‖ = |x (0, 0)| := by
   rw [EuclideanSpace.norm_eq]
   simp [Fintype.sum_prod_type, Real.sqrt_sq_eq_abs]
-
-/-- Integration against the fair two-point measure. -/
-theorem integral_coinMeasure (f : Bool → Real) :
-    ∫ ω, f ω ∂coinMeasure = (1 / 2) * f true + (1 / 2) * f false := by
-  haveI hf1 : IsFiniteMeasure ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) true) :=
-    ⟨by simp⟩
-  haveI hf2 : IsFiniteMeasure ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) false) :=
-    ⟨by simp⟩
-  have h1 : Integrable f ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) true) :=
-    Integrable.of_finite
-  have h2 : Integrable f ((1 / 2 : ENNReal) • Measure.dirac (α := Bool) false) :=
-    Integrable.of_finite
-  rw [coinMeasure, integral_add_measure h1 h2, integral_smul_measure, integral_smul_measure,
-    integral_dirac, integral_dirac]
-  norm_num
 
 /-- The sample response means of the counterexample: model `0` answers `0`, model `1` answers
 `20` plus or minus `1` on a fair coin. -/

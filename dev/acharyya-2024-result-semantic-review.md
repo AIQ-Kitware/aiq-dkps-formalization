@@ -419,7 +419,10 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 **Normalized paper statement:** For iid phi_i from P, pointwise convergence of empirical dissimilarities implies, along a subsequence, L^p(P x P) convergence of estimated pairwise distances to continuous-MDS distances.
 
 **Selected Lean declarations:**
+- `Acharyya2024.Consistency.continuousPointStress_twoPoint_eq_one`
 - `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
+- `Acharyya2024.Consistency.not_unique_min_continuousPointStress`
+- `Acharyya2024.Consistency.one_le_continuousPointStress_twoPoint`
 - `Acharyya2024.ContinuousMDS.ContinuousMDS`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`
@@ -463,6 +466,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 | int int \|‖psihat_1 - psihat_2‖ - ‖mds(phi_1) - mds(phi_2)‖\|^p P(dphi_1) P(dphi_2) | lpPairDistErr over ContinuousMDS.frameEmbedding and a continuous-MDS map; every model is placed against one fixed reference configuration, so the pairwise distances are comparisons within a single frame. | `different_quantifier_encoding` | The source leaves the out-of-sample map implicit in its notation; Quench states it as Psihat_Q. Augmenting one model at a time gives each model its own frame and so cannot serve the integral. |
 | ... -> P 0 as u -> infinity | tendsto_lpPairDistErr_frameEmbedding proves the L^p discrepancy tends to zero, against the population embedding of a fixed reference sample. | `lean_stronger_hypothesis` | Identifying that target with the continuous-MDS map, as the reference collection grows, is the whole residual. |
 | Lemma 2. ([23]) ... \|\|mds(phi_1) - mds(phi_2)\|\| | ae_tendsto_outOfSampleExtension_of_iid proves the identification of the estimated out-of-sample position with the population minimizer, which is what the citation stands for. | `derived_by_composition` | Combining it with the L^p conclusion needs a Fubini exchange of quantifiers and hence joint measurability of the out-of-sample map. |
+| (the lemma states no identifiability premise) | not_unique_min_continuousPointStress shows the uniqueness premise the argmin steps use cannot be dropped. | `source_repair` | Same footing as UniquePairProfile, whose necessity is separately established for the configuration analogue. |
 
 **Semantic review:**
 
@@ -517,9 +521,12 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 **Normalized paper statement:** Under the Theorem 4 rate, along a subsequence the pairwise-distance error converges to zero in L^p(P x P) in probability for every p >= 1.
 
 **Selected Lean declarations:**
+- `Acharyya2024.Consistency.continuousPointStress_twoPoint_eq_one`
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`
 - `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
+- `Acharyya2024.Consistency.not_unique_min_continuousPointStress`
+- `Acharyya2024.Consistency.one_le_continuousPointStress_twoPoint`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`
 - `Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress`

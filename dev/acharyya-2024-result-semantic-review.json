@@ -582,7 +582,10 @@
     ]
    },
    "lean_declarations": [
+    "Acharyya2024.Consistency.continuousPointStress_twoPoint_eq_one",
     "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
+    "Acharyya2024.Consistency.not_unique_min_continuousPointStress",
+    "Acharyya2024.Consistency.one_le_continuousPointStress_twoPoint",
     "Acharyya2024.ContinuousMDS.ContinuousMDS",
     "Acharyya2024.ContinuousMDS.abs_sub_pointStress_le",
     "Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le",
@@ -657,6 +660,12 @@
      "lean_clause": "ae_tendsto_outOfSampleExtension_of_iid proves the identification of the estimated out-of-sample position with the population minimizer, which is what the citation stands for.",
      "relation": "derived_by_composition",
      "note": "Combining it with the L^p conclusion needs a Fubini exchange of quantifiers and hence joint measurability of the out-of-sample map."
+    },
+    {
+     "source_clause": "(the lemma states no identifiability premise)",
+     "lean_clause": "not_unique_min_continuousPointStress shows the uniqueness premise the argmin steps use cannot be dropped.",
+     "relation": "source_repair",
+     "note": "Same footing as UniquePairProfile, whose necessity is separately established for the configuration analogue."
     }
    ],
    "review": "The package has no model-distribution P over a compact model space, no continuous-MDS map, and no double-integral L^p conclusion.",
@@ -735,9 +744,12 @@
     ]
    },
    "lean_declarations": [
+    "Acharyya2024.Consistency.continuousPointStress_twoPoint_eq_one",
     "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
     "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile",
     "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
+    "Acharyya2024.Consistency.not_unique_min_continuousPointStress",
+    "Acharyya2024.Consistency.one_le_continuousPointStress_twoPoint",
     "Acharyya2024.ContinuousMDS.abs_sub_pointStress_le",
     "Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le",
     "Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress",
