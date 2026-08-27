@@ -76,6 +76,8 @@ The witness has n = 2 models, m = 1 query, p = 1, r = 1 replicate; population me
 
 The repair was already in the package and is now justified: Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded carries an entrywise bound R on the dissimilarities, documented there as an assumption beyond the paper. The counterexample shows it cannot be dropped, and the probability step prob_uniformResponseMeanClose_ge_of_secondMoment supplies the finite Chebyshev-union input that the corrected chain consumes.
 
+Strengthened after adversarial review. The witness asserted the second moment about mu but never that mu is the population mean, so gamma was not certified to be the trace-covariance the source defines -- a reviewer could say the refutation attacked a different quantity. mean_eq now proves mu is the mean, so gamma is the source's gamma.
+
 ### `v1-norm-inconsistency` — arXiv v1 Theorem 2 and Corollary 2 disagree about the norm
 
 **Kind:** `source_audit`
@@ -134,7 +136,7 @@ This does not change what is formalized -- every library still uses Acharyya2024
 * **status / verification:** `compiled_source_repair` / `proved_in_build`
 * **semantic alignment:** `source_repair` — The printed bound has no hypothesis on the scale of the population responses, and it needs one: B is the doubly centred SQUARE of the dissimilarity matrix, so a deviation of the sample response means enters Bhat - B multiplied by the population scale, while gamma measures only response variability. prob_entrywiseClose_lt_paper_bound refutes the statement at n = 2, m = 1, p = 1, r = 1, where the competing dissimilarity normalisations coincide. The repair is the entrywise dissimilarity bound R already carried by Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded and disclosed there as an assumption beyond the paper; the counterexample shows it is necessary rather than convenient.
 * **source claim:** For any epsilon>0, every entry of Bhat is within epsilon of B with the displayed finite high-probability bound determined by response covariances.
-* **Lean declarations:** `Acharyya2025.Bridge.EntrywiseClose`, `Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded`, `Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale`, `Acharyya2025.GrowingResponse.prob_uniformResponseMeanClose_ge_of_secondMoment`, `Acharyya2025.Theorem1Scale.prob_entrywiseClose_lt_paper_bound`, `Acharyya2025.Theorem1Scale.secondMoment_eq`
+* **Lean declarations:** `Acharyya2025.Bridge.EntrywiseClose`, `Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded`, `Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale`, `Acharyya2025.GrowingResponse.prob_uniformResponseMeanClose_ge_of_secondMoment`, `Acharyya2025.Theorem1Scale.mean_eq`, `Acharyya2025.Theorem1Scale.prob_entrywiseClose_lt_paper_bound`, `Acharyya2025.Theorem1Scale.secondMoment_eq`
 * **gap refs:** `normalisation-pinned-by-theorem1-constant`, `t1-literal-finite-wrapper`
 * **notes:** The finite probability step is prob_uniformResponseMeanClose_ge_of_secondMoment; the corrected chain is that step composed with the bounded entrywise bridge.
 * **next action:** Optionally state the corrected finite bound -- the printed one with the entrywise dissimilarity bound R inserted -- as one source-facing theorem.

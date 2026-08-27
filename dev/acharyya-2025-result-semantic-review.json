@@ -47,6 +47,7 @@
     "Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded",
     "Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale",
     "Acharyya2025.GrowingResponse.prob_uniformResponseMeanClose_ge_of_secondMoment",
+    "Acharyya2025.Theorem1Scale.mean_eq",
     "Acharyya2025.Theorem1Scale.prob_entrywiseClose_lt_paper_bound",
     "Acharyya2025.Theorem1Scale.secondMoment_eq"
    ],

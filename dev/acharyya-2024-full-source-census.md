@@ -225,6 +225,8 @@ REFUTED, with a machine-checked counterexample. not_exists_deterministic_rigidMo
 
 The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside the probability, sample point by sample point. That is what a distance-based estimator can actually do and what the corollary's downstream uses need, and it is proved in both the alignment-error and the coordinate form.
 
+Strengthened after adversarial review. The counterexample originally exhibited arbitrary configurations, which a reviewer could reject: Corollary 1's estimates come from the raw-stress theorem, so they are MDS outputs and not arbitrary. It now carries a dissimilarity matrix and proves that both branches and the target are genuine raw-stress minimizers of it -- both realize it exactly, so both have zero stress, which is the global minimum. The refutation therefore lands inside the corollary's own setting.
+
 ### `riemannian-structure-decorative` — Assumption 2's Riemannian structure is not used by what Assumption 2 says
 
 **Kind:** `source_audit`
