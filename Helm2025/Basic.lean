@@ -152,6 +152,40 @@ def risk_est (n : ℕ) (d d' : ℕ)
   let P_prod := Measure.pi (fun _ : Fin (n + 1) => P)
   ∫ ω, loss (learn (fun i : Fin n => (psi_hat ω (Fin.castSucc i), (ω (Fin.castSucc i)).2)) (psi_hat ω (Fin.last n))) (ω (Fin.last n)).2 ∂P_prod
 
+/--
+The **conditional risk of a trained decision function**, as a function of the training set.
+
+The paper writes `R_ℓ(P_{fY}, h(·; T_n))`: the training set `T_n` is held fixed and the
+expectation is over a fresh test point only, so this is a random variable in `T_n`.  `risk`
+above integrates over the training sample as well and is therefore the *expected* risk, a
+number.  The distinction is what separates the paper's consistency definition from
+`ConsistentExpected`; see `ConsistentInProbability`.
+-/
+def riskGivenTraining (n : ℕ) (d d' : ℕ)
+    (P : Measure (E d × Y d'))
+    (learn : LearningRule n d d')
+    (loss : LossFunction d')
+    (T : Fin n → E d × Y d') : ℝ :=
+  ∫ z, loss (learn T z.1) z.2 ∂P
+
+/--
+The paper's **consistency in probability**: `Pr(|R_ℓ(P_{fY}, h(·;T_n)) - b| > ε) → 0` for every
+`ε > 0`, the probability being over the training set.
+
+This is the literal reading of the displayed definition.  `ConsistentExpected` instead asserts
+convergence of the expected risk, which is a different statement -- convergence in probability
+and convergence of expectations do not imply one another, as
+`Helm2025.DKPS.prob_convergence_not_enough_for_expectations` witnesses in one direction.
+-/
+def ConsistentInProbability (d d' : ℕ)
+    (P : Measure (E d × Y d'))
+    (loss : LossFunction d')
+    (learn : (n : ℕ) → LearningRule n d d')
+    (b : ℝ) : Prop :=
+  ∀ ε > 0, Tendsto
+    (fun n => (Measure.pi (fun _ : Fin n => P))
+      {T | ε < |riskGivenTraining n d d' P (learn n) loss T - b|}) atTop (𝓝 0)
+
 
 /-! ## Paper-oriented helper types and notation -/
 
