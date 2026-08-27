@@ -19,7 +19,7 @@ The forward direction is proved here in full: a pair-equivalence
 summands and, on the generic remainder, intertwines the cosine-square operator.
 
 The results now live in the stable geometry API; the frontier statement
-`twoProjection_operator_classification` in `Frontier/Section3` is grounded by
+`DavisKahan1970.twoProjection_operator_classification` is grounded by
 `:=` on top of these lemmas so there is a single source of truth.
 -/
 

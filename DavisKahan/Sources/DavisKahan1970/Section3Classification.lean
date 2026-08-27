@@ -3,7 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking, Claude Opus 5
 -/
-import DavisKahan.Frontier.Section3
+import DavisKahan.Geometry.Halmos.GenericReconstruction
+import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
 
 /-!
@@ -16,8 +17,9 @@ statements below record exactly that, over `ℂ` and over `ℝ`.
 
 Each is a wrapper over two independently proved theorems and adds no mathematics of its own:
 
-* the operator-level Halmos classification `twoProjection_operator_classification`, which carries
-  the classification *content* with no compactness, no finite dimension and no separability; and
+* the operator-level Halmos classification `twoProjection_operator_classification` below, which
+  carries the classification *content* with no compactness, no finite dimension and no
+  separability; and
 * the spectral-multiplicity translation of its generic invariant --
   `TauCeti.sameSpectralMultiplicity_iff_operatorUnitaryEquiv` over `ℂ`, and
   `TauCeti.DavisKahan.RealSpectralRestriction.sameSpectralMultiplicity_iff_operatorUnitaryEquiv_real`
@@ -30,7 +32,8 @@ The statement compares the `U`-side cosine block on the generic part, not the sy
 multiplicity -- and recovering `A` from `A ⊕ A` is multiplicity-halving, which this development
 does not have and does not need.  Davis and Kahan state Theorem 3.1 for the angle operator on the
 `U`-side, so the block used here is the paper-faithful reading; the docstring at
-`SameHalmosOperatorInvariant` records the 2026-08-04 decision.
+`SameHalmosCosineBlockInvariant` in `Geometry/Halmos/GenericReconstruction.lean` records the
+2026-08-04 decision.
 
 ## On separability
 
@@ -60,7 +63,6 @@ namespace DavisKahan1970
 
 open DavisKahan
 open DavisKahan.Frontier
-open DavisKahan.Frontier.Section3
 open DavisKahan.RealSpectralRestriction
 
 universe u v
@@ -77,6 +79,92 @@ private theorem operatorUnitaryEquiv_iff_boundedOperatorsUnitaryEquivalent
   Iff.rfl
 
 end Bridge
+
+section OperatorClassification
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace 𝕜 H₁]
+  [CompleteSpace H₁]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace 𝕜 H₂]
+  [CompleteSpace H₂]
+variable (U₁ V₁ : Submodule 𝕜 H₁) [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule 𝕜 H₂) [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection]
+
+/-! The converse direction reconstructs the pair from the cosine block through the
+polar decomposition of the Halmos cross block, so it carries the functional-calculus
+hypotheses of `Geometry/Halmos/GenericReconstruction.lean`.  They are found by typeclass
+inference at `𝕜 = ℂ` and at `𝕜 = ℝ` alike. -/
+
+variable [Algebra ℝ (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁)]
+  [ContinuousFunctionalCalculus ℝ
+    (genericLeftHalf U₁ V₁ →L[𝕜] genericLeftHalf U₁ V₁) IsSelfAdjoint]
+variable [Algebra ℝ (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
+  [IsScalarTower ℝ 𝕜 (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂)]
+  [ContinuousFunctionalCalculus ℝ
+    (genericLeftHalf U₂ V₂ →L[𝕜] genericLeftHalf U₂ V₂) IsSelfAdjoint]
+
+/-- **Davis--Kahan 1970, Theorem 3.1: the operator-level classification, both
+directions.**
+
+Two ordered pairs of subspaces are unitarily equivalent *as pairs* exactly when
+their four elementary Halmos summands are isometric and their angle operators
+`cos²Θ` -- read on the `U`-side, as the paper reads them -- are unitarily
+equivalent.  This is the constructive spine of the theorem and needs no
+direct-integral presentation, no compactness, no finite dimension and no
+separability.
+
+Grounded by `:=` on
+`pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, so there
+is a single source of truth; the two forms differ only in splitting the stable
+five-field invariant into the paper's two printed halves.  The forward direction
+restricts a pair-equivalence to the `U`-half of the generic part; the converse is
+bricks (1) and (2) -- brick (1) reconstructs the generic-part unitary from the
+cosine block alone (`Geometry/Halmos/GenericReconstruction`), brick (2) glues it
+to the four elementary summand isometries (`Geometry/Halmos/Assembly`). -/
+theorem twoProjection_operator_classification :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
+        BoundedOperatorsUnitaryEquivalent
+          (genericCosineBlock U₁ V₁) (genericCosineBlock U₂ V₂) := by
+  rw [pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant
+    U₁ V₁ U₂ V₂]
+  constructor
+  · rintro ⟨hc, hs, ht, he, hg⟩
+    exact ⟨⟨hc, hs, ht, he⟩, hg⟩
+  · rintro ⟨⟨hc, hs, ht, he⟩, hg⟩
+    exact ⟨hc, hs, ht, he, hg⟩
+
+end OperatorClassification
+
+section RealOperatorClassification
+
+variable {H₁ : Type u} [NormedAddCommGroup H₁] [InnerProductSpace ℝ H₁]
+  [CompleteSpace H₁]
+variable {H₂ : Type v} [NormedAddCommGroup H₂] [InnerProductSpace ℝ H₂]
+  [CompleteSpace H₂]
+variable (U₁ V₁ : Submodule ℝ H₁) [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection]
+variable (U₂ V₂ : Submodule ℝ H₂) [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection]
+
+set_option maxSynthPendingDepth 3
+
+/-- **Davis--Kahan 1970, Theorem 3.1, the operator-level classification, over a
+real Hilbert space.**
+
+The `𝕜 = ℝ` instance of `twoProjection_operator_classification`.  No
+compactness, no finite dimension, no separability. -/
+theorem twoProjection_operator_classification_real :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
+        BoundedOperatorsUnitaryEquivalent
+          (genericCosineBlock U₁ V₁) (genericCosineBlock U₂ V₂) :=
+  twoProjection_operator_classification U₁ V₁ U₂ V₂
+
+end RealOperatorClassification
 
 section ComplexClassification
 

@@ -425,7 +425,7 @@ theorem genericCrossBlockMirror_eq_zero_iff (n : genericRightHalf U V) :
 
 /-! ## Relation to the frontier's chosen invariant
 
-`SameHalmosOperatorInvariant` (Frontier/Section3) records the generic part by
+`SameHalmosCosineBlockInvariant` records the generic part by
 the unitary-equivalence class of `genericHalmosCosineSq U V`, the compression of
 `P_U P_V P_U + P_Uᗮ P_Vᗮ P_Uᗮ` to `G`.  On the `U`-half that operator *is* the
 cosine block, which the lemma below proves.
@@ -438,7 +438,7 @@ multiplicity-halving statement — Hahn--Hellinger, which Mathlib does not have 
 whereas the pair `(U, V)` is determined by `A` alone by elementary means, and
 Davis and Kahan state Theorem 3.1 for the angle operator on the `U`-side anyway.
 
-On 2026-08-04 `SameHalmosOperatorInvariant.generic` (Frontier/Section3) was
+On 2026-08-04 the generic field of that invariant was
 re-pointed at `genericCosineBlock`, which is what let
 `twoProjection_operator_classification` be proved in both directions.  The lemma
 below is the bridge that justified the change: it is the proof that the two

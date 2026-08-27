@@ -35,7 +35,7 @@ That candidate works because each of the other three blocks is pinned by `A`:
 
 Brick (1), and with `Assembly.lean`'s brick (2) the whole converse of
 Davis--Kahan Theorem 3.1.  The frontier statement
-`Frontier.Section3.twoProjection_operator_classification` is grounded by `:=` on
+`DavisKahan1970.twoProjection_operator_classification` is grounded by `:=` on
 the classification proved at the end of this file.
 
 The frontier used to record the generic part by `genericHalmosCosineSq`, the
@@ -442,6 +442,59 @@ theorem exists_cosineBlockEquiv_of_pairEquiv
         congrArg (genericLeftHalf U₂ V₂).starProjection
           (isometryEquiv_intertwines_projection e hV (m : H₁))
 
+/-- **The elementary half of Davis--Kahan 1970 Theorem 3.1's invariant.**
+
+Equality of the four elementary Halmos summands, expressed as isometric
+equivalences rather than as equal cardinals, so that no finite-rank substitute
+is needed.  These are the first four fields of `SameHalmosCosineBlockInvariant`,
+named separately because the paper states Theorem 3.1 and Corollary 3.1 as
+"these multiplicities agree, *and* the angle data agree", with two different
+readings of the second half. -/
+structure SameHalmosTrivialDimensions : Prop where
+  common : Nonempty
+    (halmosCommonPart U₁ V₁ ≃ₗᵢ[𝕜] halmosCommonPart U₂ V₂)
+  sourceDefect : Nonempty
+    (halmosSourceDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosSourceDefect U₂ V₂)
+  targetDefect : Nonempty
+    (halmosTargetDefect U₁ V₁ ≃ₗᵢ[𝕜] halmosTargetDefect U₂ V₂)
+  exterior : Nonempty
+    (halmosExteriorPart U₁ V₁ ≃ₗᵢ[𝕜] halmosExteriorPart U₂ V₂)
+
+omit [CompleteSpace H₁] [CompleteSpace H₂] [U₁.HasOrthogonalProjection]
+  [V₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection]
+  [V₂.HasOrthogonalProjection] in
+/-- Transport a nonempty isometric equivalence of submodules along equalities
+of those submodules.  Needed because the two summand families below are equal
+as submodules but the `≃ₗᵢ` type former does not rewrite. -/
+private theorem nonempty_linearIsometryEquiv_congr
+    {X X' : Submodule 𝕜 H₁} {Y Y' : Submodule 𝕜 H₂}
+    (hX : X = X') (hY : Y = Y') (h : Nonempty (X ≃ₗᵢ[𝕜] Y)) :
+    Nonempty (X' ≃ₗᵢ[𝕜] Y') :=
+  h.map fun f =>
+    ((LinearIsometryEquiv.ofEq X' X hX.symm).trans f).trans
+      (LinearIsometryEquiv.ofEq Y Y' hY)
+
+omit [U₁.HasOrthogonalProjection] [U₂.HasOrthogonalProjection] [CompleteSpace H₁]
+  [CompleteSpace H₂] in
+/-- Complementing the second subspace permutes the four elementary Halmos
+summands: `U ⊓ V` swaps with `U ⊓ Vᗮ`, and `Uᗮ ⊓ V` with `Uᗮ ⊓ Vᗮ`. -/
+theorem sameHalmosTrivialDimensions_orthogonal_right_iff :
+    SameHalmosTrivialDimensions U₁ V₁ᗮ U₂ V₂ᗮ ↔
+      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ := by
+  have hVV1 : V₁ᗮᗮ = V₁ := Submodule.orthogonal_orthogonal V₁
+  have hVV2 : V₂ᗮᗮ = V₂ := Submodule.orthogonal_orthogonal V₂
+  have e1 : U₁ ⊓ V₁ᗮᗮ = U₁ ⊓ V₁ := by rw [hVV1]
+  have e2 : U₂ ⊓ V₂ᗮᗮ = U₂ ⊓ V₂ := by rw [hVV2]
+  have e3 : U₁ᗮ ⊓ V₁ᗮᗮ = U₁ᗮ ⊓ V₁ := by rw [hVV1]
+  have e4 : U₂ᗮ ⊓ V₂ᗮᗮ = U₂ᗮ ⊓ V₂ := by rw [hVV2]
+  constructor
+  · rintro ⟨hc, hs, ht, he⟩
+    exact ⟨nonempty_linearIsometryEquiv_congr e1 e2 hs, hc,
+      nonempty_linearIsometryEquiv_congr e3 e4 he, ht⟩
+  · rintro ⟨hc, hs, ht, he⟩
+    exact ⟨hs, nonempty_linearIsometryEquiv_congr e1.symm e2.symm hc,
+      he, nonempty_linearIsometryEquiv_congr e3.symm e4.symm ht⟩
+
 /-- **Davis--Kahan 1970 Theorem 3.1's complete invariant, in the paper's own
 terms.**
 
@@ -450,9 +503,11 @@ unitary-equivalence class of the angle operator `cos²Θ` *on the `U`-side* — 
 compression of `P_V` to `U ⊓ generic`.  That is the operator whose spectral
 multiplicity function the paper's Theorem 3.1 uses.
 
-`SameHalmosOperatorInvariant` in `Frontier/Section3` records exactly this, and
-`twoProjection_operator_classification` is grounded by `:=` on the theorem
-below.  It used to record the symmetrized `P_U P_V P_U + P_Uᗮ P_Vᗮ P_Uᗮ`, which
+The source-facing Theorem 3.1,
+`DavisKahan1970.twoProjection_operator_classification`, is grounded by `:=` on
+the theorem below and splits this invariant into its two printed halves,
+`SameHalmosTrivialDimensions` and the angle-operator equivalence.  This
+structure used to record the symmetrized `P_U P_V P_U + P_Uᗮ P_Vᗮ P_Uᗮ`, which
 on the generic part is the cosine block on the `U`-half and `1 - D` on the
 `Uᗮ`-half — the same angle data with multiplicity doubled, which is what put
 Hahn--Hellinger on the critical path. -/

@@ -215,7 +215,7 @@ Status: **TERMINAL EXACT**.
 -/
 
 #check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification
-#check @TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization
+#check @TauCeti.DavisKahan1970.theorem3_1_realization
 #check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real
 
 /-! ## DK-3.1-cor: Compact classification by angle eigenvalues
@@ -223,9 +223,9 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification
-#check @TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_classification_real
-#check @TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization
+#check @TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification
+#check @TauCeti.DavisKahan1970.corollary3_1_compact_classification_real
+#check @TauCeti.DavisKahan1970.corollary3_1_realization
 
 /-! ## DK-3.5-prop: Angle commutation and eigenspace geometry
 
@@ -255,7 +255,7 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution
 #check @TauCeti.DavisKahan1970.complex_directRotation_reversal
 #check @TauCeti.DavisKahan1970.real_directRotation_reversal
-#check @TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form
+#check @TauCeti.DavisKahan1970.corollary3_2_reversal_source_form
 
 /-! ## DK-4.1-prop: Pointwise and singular-value extremality of the direct rotation
 

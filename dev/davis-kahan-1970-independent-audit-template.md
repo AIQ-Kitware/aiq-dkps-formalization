@@ -1007,7 +1007,7 @@ In the acute case, a direct rotation exists and is unique.  Moreover positivity 
 
 #### `TauCeti.DavisKahan1970.proposition3_1_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:169`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:170`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1367,19 +1367,19 @@ their domain dimensions sum to $\dim\Hsp$, and their spectral multiplicity funct
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:105`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:193`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization`
+#### `TauCeti.DavisKahan1970.theorem3_1_realization`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:816`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:79`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:147`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:235`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1443,21 +1443,21 @@ together with a possible eigenvalue $0$; $\Theta_1$ has the same nonzero eigenva
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification`
+#### `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:588`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_classification_real`
-
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1304`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:160`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization`
+#### `TauCeti.DavisKahan1970.corollary3_1_compact_classification_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:989`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:483`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.corollary3_1_realization`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:288`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1654,9 +1654,9 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form`
+#### `TauCeti.DavisKahan1970.corollary3_2_reversal_source_form`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:210`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary32.lean:40`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

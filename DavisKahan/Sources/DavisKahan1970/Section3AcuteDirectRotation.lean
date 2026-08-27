@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Geometry.Polar.DirectRotationAcute
 import DavisKahan.Geometry.Polar.DirectRotationReal
 import DavisKahan.Geometry.Polar.DirectRotationSquare
+import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 
@@ -254,6 +255,51 @@ theorem eq_spectraDirectRotation_iff_diagonalBlocks_pos_of_isAcute
         (∀ x ∈ Uᗮ, 0 ≤ ⟪W x, x⟫_ℂ) :=
   complex_acute_directRotation_iff_positiveDiagonalBlocks U V
     (TauCeti.isAcute_of_projectionGap_lt_one hacute) W
+
+/-- **Davis--Kahan 1970, Proposition 3.1, the positivity characterization of the
+canonical direct rotation.**
+
+In the acute case the direct rotation is the unique unitary intertwiner whose
+diagonal `U`-compressions are positive.
+
+The predicate `IsPaperDirectRotation` records the diagonal compressions only
+through their numerical range (`0 ≤ re ⟪x, (P T P) x⟫`), which is strictly
+weaker than operator positivity and does not pin the phase on the common part:
+on `U = V` every scalar `exp (I * θ)` with `|θ| < π / 2` satisfies all five
+fields yet differs from the identity direct rotation.  Uniqueness therefore
+needs the diagonal compressions to be self-adjoint (equivalently genuinely
+positive operators, which the canonical direct rotation satisfies because its
+diagonal blocks are the positive Halmos cosine).  These two self-adjointness
+hypotheses are the minimal strengthening; with them the operator squares to the
+reflection product and the square-root branch is fixed by accretivity.
+
+The printed proposition at its own hypothesis, `TauCeti.IsAcute` rather than the
+strictly stronger uniform gap, is `proposition3_1_source` above; this is the
+`IsUniformlyAcute` form stated against `spectraDirectRotation`. -/
+theorem proposition3_1_positivity_characterization
+    (hacute : DavisKahan.IsUniformlyAcute U V) (T : H →L[ℂ] H)
+    (hunitary : T ∈ unitary (H →L[ℂ] H))
+    (hintertwines : T * DavisKahan.projection U = DavisKahan.projection V * T)
+    (hsource_sa : IsSelfAdjoint
+      (DavisKahan.projection U * T * DavisKahan.projection U))
+    (hcomplement_sa : IsSelfAdjoint
+      (DavisKahan.complementaryProjection U * T *
+        DavisKahan.complementaryProjection U)) :
+    DavisKahan.Frontier.IsPaperDirectRotation U V T ↔
+      T = DavisKahan.spectraDirectRotation U V hacute := by
+  constructor
+  · intro hT
+    have hsq : T * T = DavisKahan.spectraReflectionProduct U V :=
+      DavisKahan.sq_eq_spectraReflectionProduct U V T hunitary hintertwines hsource_sa
+        hcomplement_sa hT.crossed_blocks
+    -- Accretivity fixes the square-root branch.
+    have hre : ∀ x, 0 ≤ Complex.re ⟪T x, x⟫_ℂ := by
+      intro x
+      have h := DavisKahan.re_inner_paperDirectRotation_nonneg U V T hT x
+      rwa [← inner_re_symm (𝕜 := ℂ) (T x) x, RCLike.re_eq_complex_re] at h
+    exact DavisKahan.spectraDirectRotation_unique_of_sq U V hacute T hunitary hsq hre
+  · rintro rfl
+    exact DavisKahan.spectraDirectRotation_isPaperDirectRotation U V hacute
 
 end Complex
 

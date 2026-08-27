@@ -719,7 +719,7 @@
       "tex_marker": "DK-3.1-thm",
       "review_declarations": [
         "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification",
-        "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization",
+        "TauCeti.DavisKahan1970.theorem3_1_realization",
         "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real"
       ],
       "audit_clauses": [
@@ -728,7 +728,7 @@
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification",
-            "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization",
+            "TauCeti.DavisKahan1970.theorem3_1_realization",
             "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real"
           ]
         }
@@ -754,18 +754,18 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.1-cor",
       "review_declarations": [
-        "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification",
-        "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_classification_real",
-        "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization"
+        "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification",
+        "TauCeti.DavisKahan1970.corollary3_1_compact_classification_real",
+        "TauCeti.DavisKahan1970.corollary3_1_realization"
       ],
       "audit_clauses": [
         {
           "id": "DK-3.1-cor.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification",
-            "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_classification_real",
-            "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization"
+            "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification",
+            "TauCeti.DavisKahan1970.corollary3_1_compact_classification_real",
+            "TauCeti.DavisKahan1970.corollary3_1_realization"
           ]
         }
       ],
@@ -866,7 +866,7 @@
         "TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution",
         "TauCeti.DavisKahan1970.complex_directRotation_reversal",
         "TauCeti.DavisKahan1970.real_directRotation_reversal",
-        "TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form"
+        "TauCeti.DavisKahan1970.corollary3_2_reversal_source_form"
       ],
       "audit_clauses": [
         {
@@ -878,7 +878,7 @@
             "TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution",
             "TauCeti.DavisKahan1970.complex_directRotation_reversal",
             "TauCeti.DavisKahan1970.real_directRotation_reversal",
-            "TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form"
+            "TauCeti.DavisKahan1970.corollary3_2_reversal_source_form"
           ]
         }
       ],

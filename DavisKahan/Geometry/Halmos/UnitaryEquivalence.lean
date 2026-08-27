@@ -53,6 +53,35 @@ def BoundedOperatorsUnitaryEquivalent
     (A : H₁ →L[𝕜] H₁) (B : H₂ →L[𝕜] H₂) : Prop :=
   ∃ e : H₁ ≃ₗᵢ[𝕜] H₂, ∀ x : H₁, e (A x) = B (e x)
 
+omit [CompleteSpace H₁] [CompleteSpace H₂] in
+/-- Complementing the second subspace of each pair preserves unitary
+equivalence of ordered pairs. -/
+theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right
+    {U₁ V₁ : Submodule 𝕜 H₁} {U₂ V₂ : Submodule 𝕜 H₂}
+    [V₁.HasOrthogonalProjection] [V₂.HasOrthogonalProjection]
+    (h : PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂) :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ᗮ U₂ V₂ᗮ := by
+  obtain ⟨e, hU, hV⟩ := h
+  refine ⟨e, hU, ?_⟩
+  have hmap : V₁ᗮ.map (e.toLinearEquiv : H₁ →ₗ[𝕜] H₂) =
+      (V₁.map (e.toLinearEquiv : H₁ →ₗ[𝕜] H₂))ᗮ :=
+    Submodule.map_orthogonal_equiv V₁ e
+  have hcoe : (e.toLinearEquiv : H₁ →ₗ[𝕜] H₂) = e.toLinearMap := rfl
+  rw [hcoe] at hmap
+  rw [hmap, hV]
+
+omit [CompleteSpace H₁] [CompleteSpace H₂] in
+/-- Complementing the second subspace of each pair is an equivalence on the
+pair-equivalence relation, because complementation is involutive. -/
+theorem pairOfSubspacesUnitaryEquivalent_orthogonal_right_iff
+    (U₁ V₁ : Submodule 𝕜 H₁) (U₂ V₂ : Submodule 𝕜 H₂)
+    [V₁.HasOrthogonalProjection] [V₂.HasOrthogonalProjection] :
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ᗮ U₂ V₂ᗮ ↔
+      PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ := by
+  refine ⟨fun h => ?_, pairOfSubspacesUnitaryEquivalent_orthogonal_right⟩
+  have h' := pairOfSubspacesUnitaryEquivalent_orthogonal_right h
+  rwa [Submodule.orthogonal_orthogonal, Submodule.orthogonal_orthogonal] at h'
+
 end CrossSpaceClassification
 
 end Frontier
