@@ -15,7 +15,8 @@ The inherited concentration theorem, the DKPS definition, query-efficiency defin
 | status | items |
 | --- | ---: |
 | `compiled_exact` | 1 |
-| `compiled_generalized` | 1 |
+| `compiled_equivalent` | 2 |
+| `compiled_generalized` | 2 |
 | `compiled_stronger_hypotheses` | 4 |
 | `compiled_source_repair` | 3 |
 | `compiled_role_replaced` | 1 |
@@ -26,7 +27,8 @@ The inherited concentration theorem, the DKPS definition, query-efficiency defin
 | classification | items |
 | --- | ---: |
 | `exact` | 1 |
-| `generalized` | 1 |
+| `equivalent_encoding` | 2 |
+| `generalized` | 2 |
 | `stronger_hypotheses` | 4 |
 | `source_repair` | 3 |
 | `proof_replaced` | 1 |
@@ -36,8 +38,11 @@ The inherited concentration theorem, the DKPS definition, query-efficiency defin
 
 | id | importance | source anchor | status | alignment | verification |
 | --- | --- | --- | --- | --- | --- |
+| `Q26-D` | `major` | Response means and the dissimilarity matrix | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
+| `Q26-Y` | `major` | Benchmark scoring function | `compiled_generalized` | `generalized` | `proved_in_build` |
 | `Q26-T1` | `major` | Theorem 1 (inherited Acharyya et al. 2025 Theorem 2) | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `Q26-EQ1` | `major` | Equation (1), DKPS definition | `compiled_role_replaced` | `proof_replaced` | `proved_in_build` |
+| `Q26-INFER` | `supporting` | Inference in the DKPS | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
 | `Q26-QDEF` | `major` | Equation (2) and query-efficiency definitions | `compiled_exact` | `exact` | `proved_in_build` |
 | `Q26-NN` | `headline` | Displayed nearest-neighbor estimator | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `Q26-A1` | `major` | Assumption 1 (Lipschitz Score Function) | `compiled_generalized` | `generalized` | `proved_in_build` |
@@ -104,12 +109,44 @@ Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stat
 
 Quench's methods section defines D_{ii'} = ||Xbar_i - Xbar_{i'}||_F. Acharyya 2024 and Helm 2025 both define the same matrix as (1/m)||Xbar_i - Xbar_{i'}||_F, and the Lean dissimilarity the Quench chain uses is Acharyya2024.responseDistEntry, which carries the (m)^{-1} factor. Quench therefore imports a Theorem 1 stated for the rescaled convention while printing the unrescaled one. The tie-averaged nearest-neighbour estimator is unaffected, because scaling every dissimilarity by a positive constant does not change which reference attains the minimum. Assumption 1 is affected: it bounds the score difference by gamma times ||psi(Q) - psi'(Q)||, and rescaling the dissimilarities rescales psi, so the same gamma means different things under the two conventions -- and m is the query budget, so the factor is not a fixed constant.
 
+### `unbounded-score-codomain` — The paper's score takes values in [0,1]; the Lean score is an unrestricted real
+
+**Kind:** `source_audit`
+
+Quench declares y : F x 2^{Q*} -> [0,1]. The Lean development uses score : Model Q X -> Finset Q -> R with no range constraint. That is a weakening in the usual direction -- any [0,1]-valued score is a real-valued one -- but it is not free: MSE is a Bochner integral, and for an unbounded score neither it nor the baseline MSE is guaranteed finite, in which case Lean's integral silently returns 0 rather than diverging. The theorems remain true as stated, but their content at an unbounded score is weaker than it looks. The paper's boundedness makes both integrals automatically finite, so restoring it would be a strengthening of the formal statements, not a restriction.
+
 ## Detail
+
+### `Q26-D` — Query-averaged response matrices and their pairwise Frobenius dissimilarities
+
+* **source anchor:** Response means and the dissimilarity matrix (definition, section 2)
+* **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:50-62`
+* **importance:** `major`
+* **status / verification:** `compiled_equivalent` / `proved_in_build`
+* **semantic alignment:** `equivalent_encoding` — The replicate average is the raw-response mean the capstones consume. The dissimilarity Lean uses is Acharyya2024.responseDistEntry, which carries a (m)^{-1} factor the Quench display does not; see dissimilarity-normalisation-mismatch for why the estimator is unaffected and Assumption 1 is not.
+* **source claim:** Xbar_{ij.} = (1/r) sum_k g(f_i(q_j))_k, and D is the pairwise distance matrix with entries D_{ii'} = ||Xbar_i - Xbar_{i'}||_F.
+* **Lean declarations:** `Acharyya2024.responseDistEntry`, `Acharyya2024.responseDist`, `DkpsQuench2026.augmentedSampleResponseDist`
+* **gap refs:** `dissimilarity-normalisation-mismatch`
+* **notes:** This row exists because the displayed D had no census coverage at all, which is how the normalisation mismatch went unrecorded.
+* **next action:** Decide whether Quench should state D with the 1/m factor or carry the rescaling explicitly in Assumption 1.
+
+### `Q26-Y` — The benchmark score is a [0,1]-valued function of a model and a query subset
+
+* **source anchor:** Benchmark scoring function (definition, section 2)
+* **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:36-44`
+* **importance:** `major`
+* **status / verification:** `compiled_generalized` / `proved_in_build`
+* **semantic alignment:** `generalized` — yFull and yQ are the two displayed evaluations. Lean drops the [0,1] codomain and uses a real-valued score, which is more general but removes the automatic integrability the bounded range supplies. Recorded as gap unbounded-score-codomain.
+* **source claim:** y : F x 2^{Q*} -> [0,1] is the benchmark scoring function; y(f, Q*) is the score of f on all queries, and yhat_Q := y(f, Q) its score on a subset.
+* **Lean declarations:** `yFull`, `yQ`
+* **gap refs:** `unbounded-score-codomain`
+* **notes:** Restoring the bound would strengthen the MSE statements rather than restrict them.
+* **next action:** Consider a bounded-score variant so the MSE integrals are unconditionally finite.
 
 ### `Q26-T1` — Inherited DKPS embedding concentration
 
 * **source anchor:** Theorem 1 (inherited Acharyya et al. 2025 Theorem 2) (theorem, section 2.1)
-* **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:87-96`
+* **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:78-96`
 * **importance:** `major`
 * **status / verification:** `compiled_source_repair` / `proved_in_build`
 * **semantic alignment:** `source_repair` — Quench uses the current Acharyya Frobenius concentration theorem plus the rowwise norm bound, which supplies exactly the max-row control needed by the Quench proof without claiming the disputed Acharyya v1 display literally.
@@ -131,6 +168,18 @@ Quench's methods section defines D_{ii'} = ||Xbar_i - Xbar_{i'}||_F. Acharyya 20
 * **gap refs:** `dissimilarity-normalisation-mismatch`, `dkps-definition-raw-stress-vs-cmds`
 * **notes:** No Quench module references rawStress; the connection is a source-level open question, not a Lean gap.
 * **next action:** None; recorded as a source-fidelity divergence.
+
+### `Q26-INFER` — Model-level inference is carried out on perspective-score pairs
+
+* **source anchor:** Inference in the DKPS (definition, section 2.2)
+* **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:99-116`
+* **importance:** `supporting`
+* **status / verification:** `compiled_equivalent` / `proved_in_build`
+* **semantic alignment:** `equivalent_encoding` — Risk is the expected loss over Pf and MSE its squared-loss instance. Lean composes the decision function with the perspective map directly at each use site rather than naming h_n^Q, which is the same object with the composition inlined.
+* **source claim:** h_n^Q(f) = hhat_n^Q(Psihat_Q(f)) with hhat_n^Q trained on the perspective-score pairs, and the goal is to minimise E_{P_f}[l(h_n^Q(f), y)].
+* **Lean declarations:** `Risk`, `MSE`
+* **notes:** No additional note.
+* **next action:** None.
 
 ### `Q26-QDEF` — Q-, m-, and all-budget query efficiency
 
