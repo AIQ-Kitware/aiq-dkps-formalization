@@ -19,8 +19,8 @@ For work on the current tree, start from these sources instead:
 - `../tauceti/extraction-manifest.json` and the checked Tau Ceti status tools —
   reusable-library ownership/provenance;
 - `../davis-kahan-1970-full-source-census.json` plus
-  `../davis-kahan-1970-frontier.json` — Davis--Kahan source coverage and open
-  proof frontier;
+  `../davis-kahan-1970-formalization-result-inventory.json` — Davis--Kahan source
+  coverage and the 29-result completion denominator;
 - `../../scripts/run_gates.py` — current automated repository checks.
 
 The audit checklists remain useful for reconstructing what was reviewed.  Their

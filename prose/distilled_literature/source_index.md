@@ -67,7 +67,7 @@ The index deliberately separates a paper's **formalization role** from the state
 | `Davis1963` | 1963 | The Rotation of Eigenvectors by a Perturbation | primary theorem source | Sections I--V reconstructed in source order; core endpoints formalized, canonical direct rotation remains unfinished | `complete` | P0 |
 | `Halmos1969` | 1969 | Two Subspaces | primary theorem source | canonical two-subspace/direct-rotation background | `missing` | P2 |
 | `DavisKahan1970` | 1970 | The Rotation of Eigenvectors by a Perturbation. III | primary theorem source | the maintained source-to-Lean audit records all 45 mathematical completion obligations as terminal: 44 compiled exact source-facing rows plus the formally refuted false printed Proposition 4.4; the four Section 10 questions remain source-accounting entries rather than proof obligations | `source_faithful_audit_specification` | P0 |
-| `Wedin1972` | 1972 | Perturbation Bounds in Connection with Singular Value Decomposition | primary theorem source | singular-subspace/Wedin-style corollaries scaffolded | `missing` | P1 |
+| `Wedin1972` | 1972 | Perturbation Bounds in Connection with Singular Value Decomposition | primary theorem source | singular-subspace/Wedin-style corollaries scaffolded; the experimental Hermitian-dilation scaffold was deleted 2026-08-27 and the compact singular-subspace material is in ForTauCeti | `missing` | P1 |
 | `BhatiaDavisMcIntosh1983` | 1983 | Perturbation of Spectral Subspaces and Solution of Linear Operator Equations | primary theorem source | hard arbitrary-spectrum Sylvester estimate scaffolded | `missing` | P1 |
 | `Higham1986` | 1986 | Computing the Polar Decomposition--with Applications | modern comparison | quantitative polar-factor comparison source | `missing` | P2 |
 | `BhatiaRosenthal1997` | 1997 | How and Why to Solve the Operator Equation AX - XB = Y | supporting source | modern reference for Sylvester equations | `missing` | P2 |
@@ -87,7 +87,7 @@ The index deliberately separates a paper's **formalization role** from the state
 
 | Key | Year | Work | Role | Formalization status | Literature asset | Priority |
 |---|---:|---|---|---|---|---|
-| `Kato1966` | 1966 | Perturbation Theory for Linear Operators | reference work | reference horizon for the retained unbounded and spectral-projection scaffolds | `missing` | P3 |
+| `Kato1966` | 1966 | Perturbation Theory for Linear Operators | reference work | reference horizon for the unbounded and spectral-projection development, which is `SpectralTheory/ClosedOperator/**` and `ForTauCeti/.../LinearPMap/**` since the experimental scaffolds were deleted 2026-08-27 | `missing` | P3 |
 | `StewartSun1990` | 1990 | Matrix Perturbation Theory | reference work | cross-check source for matrix/subspace perturbation statements | `missing` | P2 |
 | `Bhatia1997` | 1997 | Matrix Analysis | reference work | modern reference for UI norms, Sylvester bounds, and Davis--Kahan | `missing` | P1 |
 | `CoxCox2001` | 2001 | Multidimensional Scaling, Second Edition | reference work | modern classical-MDS reference | `missing` | P2 |

@@ -42,14 +42,12 @@ a gate.  So the runner reads each script's own `argparse` setup and asks it.
 ## Where deriving it stops working
 
 Reading `argparse` tells you a gate *accepts* `--check`.  It does not tell you
-what `--check` **means** there, and one gate means something else by it:
-`check_davis_kahan_frontier` is strict on real problems either way, and its
-`--check` additionally requires every paper result to be recursively grounded --
-a completion target, 59 of 80 today.  **That was found by running the suite, not
-by reading the code**, and it is why `CHECK_IS_STRONGER` is a short hand-written
-list with a reason per entry rather than another derivation.  Two entries of
-judgement beside twenty-seven derivations is the right ratio; twenty-seven
-entries of judgement would be the table this script exists to avoid.
+what `--check` **means** there.  `CHECK_IS_STRONGER` below is the hand-written
+list of gates where it means something stronger than the soft/strict toggle, with
+a reason per entry.  It is empty today: its one entry named
+`check_davis_kahan_frontier`, deleted on 2026-08-27 with the frontier concept it
+audited.  Keeping the mechanism costs one empty dict and documents the limit of
+the derivation.
 
 ## Consequence
 
@@ -91,7 +89,6 @@ SCRIPTS = ROOT / "scripts"
 #: fast run is never mistaken for a green full run.
 SLOW = {
     "check_comparator_signatures",
-    "check_davis_kahan_frontier",
     "check_davis_kahan_hidden_foundations",
     "check_experimental_root_status",
 }
@@ -116,16 +113,12 @@ ADVISORY: dict[str, str] = {}
 #: **This is the limit of deriving the classification from `argparse`, and it was
 #: found by running the suite rather than by reading the code.**  Accepting
 #: `--check` does not tell you what `--check` means.
-#: `check_davis_kahan_frontier` is strict on real problems either way; its
-#: `--check` *additionally* demands that every paper result be recursively
-#: grounded, which is a project-completion target (59 of 80 today).  Passing the
-#: flag would make the suite permanently red on an unmet ambition -- the same
-#: "trains everyone to ignore it" failure that `ADVISORY` exists to prevent.
-CHECK_IS_STRONGER = {
-    "check_davis_kahan_frontier":
-        "--check demands full recursive grounding of every paper result, a "
-        "completion target and not a regression; the default mode is the gate",
-}
+#:
+#: Empty since 2026-08-27.  Its one entry was `check_davis_kahan_frontier`, whose
+#: `--check` demanded full recursive grounding of every paper result -- a
+#: completion target rather than a regression.  That gate is deleted; the entry
+#: goes with it, and the mechanism stays for the next gate that needs it.
+CHECK_IS_STRONGER: dict[str, str] = {}
 
 #: Recognised by reading the script rather than by running `--help`, which for
 #: the slow gates would mean starting a Lean build just to ask a question.

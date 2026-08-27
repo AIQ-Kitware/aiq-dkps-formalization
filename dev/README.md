@@ -15,7 +15,7 @@ Read `../AGENTS.md` first, then route by task instead of reading `dev/` linearly
 |---|---|
 | [`SEARCH.md`](SEARCH.md) | How to search engineering memory by symptom or subsystem. |
 | [`tauceti/README.md`](tauceti/README.md) | Current Tau Ceti engineering authorities and the boundary between maintained status and migration history. |
-| [`davis-kahan-1970-full-source-census.md`](davis-kahan-1970-full-source-census.md) and [`davis-kahan-1970-frontier-status.md`](davis-kahan-1970-frontier-status.md) | Current Davis--Kahan source coverage and the remaining proof frontier. |
+| [`davis-kahan-1970-full-source-census.md`](davis-kahan-1970-full-source-census.md) and [`davis-kahan-1970-formalization-result-inventory.md`](davis-kahan-1970-formalization-result-inventory.md) | Current Davis--Kahan source coverage and the 29-result completion denominator. |
 | [`acharyya-2024-full-source-census.md`](acharyya-2024-full-source-census.md), [`acharyya-2025-full-source-census.md`](acharyya-2025-full-source-census.md), [`helm-2025-full-source-census.md`](helm-2025-full-source-census.md), [`quench-2026-full-source-census.md`](quench-2026-full-source-census.md) | Source-to-Lean semantic alignment for the DKPS application-paper chain. |
 
 The governing policy is in [`../AGENTS.md`](../AGENTS.md), not here. It defines
@@ -42,7 +42,7 @@ dev/
 ```
 
 Alongside those, `dev/` holds the Davis--Kahan source-fidelity ledgers:
-the maintained census/frontier data and generated views, plus a small number of
+the maintained census and result-inventory data and their generated views, plus a small number of
 stable historical notes that are still cited by source files or checkers. Dated
 campaign handoffs and status snapshots belong in Git history rather than the
 working tree. Several `.json` files are read or written by `scripts/check_*.py` —
@@ -233,14 +233,15 @@ The full-paper theorem-by-theorem source ledger:
 
 - `davis-kahan-1970-full-source-census.json` — authoritative structured source ledger;
 - `davis-kahan-1970-full-source-census.md` — generated human-readable view;
-- `davis-kahan-1970-frontier.json` / `davis-kahan-1970-frontier-status.md` —
-  maintained proof-frontier graph and generated status;
+- `davis-kahan-1970-formalization-result-inventory.json` /
+  `davis-kahan-1970-formalization-result-inventory.md` — the 29-result completion
+  denominator and its generated view;
 - `davis-kahan-1970-private-source-workflow.md` — rules for using the local
   transcription without redistributing it.
 
 Do not revive dated `*-completion-plan*`, `*-handoff*`, or
 `missing-statements-*` files as current work queues.  Their useful history is in
-Git; the census and frontier own present-tense status.
+Git; the census and the result inventory own present-tense status.
 
 Validate with:
 

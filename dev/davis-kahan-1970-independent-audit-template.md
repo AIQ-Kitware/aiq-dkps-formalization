@@ -1753,7 +1753,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1256`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1258`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1765,7 +1765,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1178`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1180`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1835,7 +1835,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1283`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1285`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1914,7 +1914,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:785`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:787`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2049,7 +2049,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1298`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1300`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3142,13 +3142,13 @@ These exclude $\theta=\pi/4$ and then $\theta>\pi/4$ under the chosen spectral p
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:140`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:142`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:385`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:387`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

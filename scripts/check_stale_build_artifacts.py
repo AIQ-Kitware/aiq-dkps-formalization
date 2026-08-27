@@ -9,12 +9,12 @@ removed.  It simply stays on disk, importable, indefinitely.
 
 That is harmless right up until something imports by name outside
 `defaultTargets` -- and this repository does exactly that, in
-`check_davis_kahan_frontier.py`, which writes a probe file importing
-`DavisKahan.Experimental.Frontier.All` and compiles it with `lake env lean`.
+audit and comparator probe files that import a module by name and compile it
+with `lake env lean`.
 
 **Measured on 2026-07-31: 126 modules had build products and no source.**  The
 oldest were the 23 `SinTheta/Continuation*.lean` files that lane `EXP-CONT`
-moved into `Continuation/` a day earlier.  The frontier gate failed with
+moved into `Continuation/` a day earlier.  A probe gate failed with
 
     error: import ...SinTheta.Continuation.Core failed, environment already
     contains 'TauCeti.DavisKahanExt.SameProjectionComponent' from
@@ -119,7 +119,7 @@ def main() -> int:
     print(
         "\n  These are importable.  A module moved or deleted without clearing its\n"
         "  build products keeps resolving under its old name, and an importer that\n"
-        "  names it directly -- `check_davis_kahan_frontier.py` writes such a probe --\n"
+        "  names it directly -- a `#check` probe or an audit module --\n"
         "  gets the ghost instead of an error.  Re-run with `--fix`."
     )
     return 1 if args.check else 0

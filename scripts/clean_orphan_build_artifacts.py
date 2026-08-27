@@ -5,7 +5,7 @@
 `.lean` that produced them is deleted or renamed.  The stale artifacts are
 invisible to `lake build`, which works from the source tree, but they are *not*
 invisible to anything that imports **by module name** through `LEAN_PATH` --
-and that is how the frontier probe (`scripts/check_davis_kahan_frontier.py`)
+and that is how an audit probe that names a module directly
 and the comparator pre-flight build their scratch files.
 
 The failure mode is confusing rather than obvious.  A module deleted during a

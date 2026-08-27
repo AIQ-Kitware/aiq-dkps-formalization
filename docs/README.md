@@ -15,7 +15,7 @@ smallest authority that answers the question:
 | [`../ForTauCeti/README.md`](../ForTauCeti/README.md) | Reusable-library architecture and Tau Ceti staging rules |
 | [`../DavisKahan/Sources/DavisKahan1970/README.md`](../DavisKahan/Sources/DavisKahan1970/README.md) | Publication-facing Davis--Kahan overview |
 | [`../dev/davis-kahan-1970-full-source-census.md`](../dev/davis-kahan-1970-full-source-census.md) | Generated theorem-by-theorem source census |
-| [`../dev/davis-kahan-1970-frontier-status.md`](../dev/davis-kahan-1970-frontier-status.md) | Current Davis--Kahan dependency frontier |
+| [`../dev/davis-kahan-1970-formalization-result-inventory.md`](../dev/davis-kahan-1970-formalization-result-inventory.md) | The 29-result completion denominator and its status |
 | [`planning/davis-kahan-general-sin-theta-roadmap.md`](planning/davis-kahan-general-sin-theta-roadmap.md) | Completed Section 6 single-angle target and its stable source map |
 
 The retired lane workflow is not a source of current status.

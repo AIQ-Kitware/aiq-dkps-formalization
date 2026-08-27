@@ -327,8 +327,8 @@
     }
   ],
   "frontier_alignment": {
-    "source_manifest": "dev/davis-kahan-1970-frontier.json",
-    "policy": "A frontier node may be redirected to a hidden-foundation node only after the declaration elaborates and its own proof closure is verified. Interface nodes expose work but do not discharge frontier obligations."
+    "source_manifest": null,
+    "policy": "Retired 2026-08-27 with `dev/davis-kahan-1970-frontier.json` and `scripts/check_davis_kahan_frontier.py`.  The frontier graph was the campaign-era map of remaining Davis--Kahan proof obligations; with `DavisKahan/Frontier/` gone and the 29-result inventory and source census carrying certification, it no longer represented anything.  The `frontier_nodes` field on each node below is kept as a historical record of which obligation a node was opened against; it no longer resolves against a live manifest and nothing checks it."
   },
   "rebased_on_commit": "53297a486170",
   "rebased_overlay": "pending-mathahead-rebased-53297a4-gpt56",
