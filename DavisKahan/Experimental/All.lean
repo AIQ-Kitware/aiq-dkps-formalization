@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.All
-import DavisKahan.Experimental.Frontier.All
 
 /-! # Experimental Davis--Kahan theory
 
@@ -18,34 +17,31 @@ its own aggregate docstring asked for — and the two `Experimental` aggregates
 that existed only to reach it were deleted rather than left as empty shells.
 `DavisKahan.All`, imported above, reaches Section 8 now.
 
-**The canonical infinite-dimensional route is the production tree, not this one.**
-`Experimental/InfiniteDimensional/` still holds the older ambient facades, kept for
-historical reference; they are deliberately not aggregated here, and the live
-development is `DavisKahan.All` together with `Geometry.Angle.*`, `TanTwoTheta.All`
-and `DoubleAngle.{Unbounded,UnboundedIdeal}`, all of which `DavisKahan.All` reaches.
+**`Experimental/InfiniteDimensional/` is deleted (2026-08-27).**  Seventeen files
+and about 4700 lines of an older ambient route, audited declaration by
+declaration before removal: every module was either an explicitly labelled
+"open obligations" interface whose proved part had already moved to
+`SpectralTheory/ClosedOperator/**`, `Sylvester/**` or `ForTauCeti/.../LinearPMap/**`,
+an unimplemented "construction plan", or a "legacy" engine the canonical one
+never imported.  None of the seventeen elaborated any more -- each failed on
+namespaces and identifiers (`DavisKahan.Experimental.Foundation`,
+`IsUnitaryOperator`, `IntervalExteriorSeparated`) that no longer exist -- so
+none of it was available for promotion without a rewrite, and nothing was
+checking that, because the whole subtree was excluded from the coverage gate.
+The census had already recorded the sharpest case: `ideal_sinTheta` and
+`ideal_sinTwoTheta` there read exactly like the missing real-scalar `sin 2Theta`
+endpoint and are **not** coverage, because they reach `sorryAx`; the endpoint
+was closed elsewhere.
 
-That statement used to live in `Experimental/InfiniteDimensional/All.lean`, an
-aggregate whose every import was already reachable from the `DavisKahan.All` it
-opened with — so it contributed nothing but the note, while its own 94-module
-directory went unaggregated and it stood as a permanent rule-3 violation.  The note
-is the part worth keeping; the sub-aggregates (`InfiniteDimensional/Core/All.lean`
-and its siblings) cover the subtree.
+The live development is `DavisKahan.All` together with `Geometry.Angle.*`,
+`TanTwoTheta.All` and `DoubleAngle.{Unbounded,UnboundedIdeal}`, all of which
+`DavisKahan.All` reaches.
 
-## Why `Frontier.All` is imported here
+## Why there is no `Experimental.Frontier.All`
 
-`DavisKahan/Experimental/Frontier/**` holds the remaining Davis--Kahan 1970
-frontier statements — the Section 3 classification spine, the
-infinite-dimensional Section 4 propositions, and the Section 9 analytic model —
-together with the `sorry`s that mark what is still open.  Until 2026-08-04
-**nothing in the repository imported any of it.**  `lake build` did not reach it,
-`lake build DavisKahan.Experimental` did not reach it, and neither did
-`Challenge`; it compiled only when a module was named
-explicitly on the command line, which nothing and nobody did routinely.
-
-That is the same defect the `RoadmapBridge` block in `lakefile.toml` records for
-the suggested-signature files: a tree that nothing builds is a tree that rots
-silently, and the fix is an import rather than a checker.  It is imported *here*
-rather than into a default target because the frontier's whole purpose is to
-carry `sorry`s, so it cannot live under `warningAsError`.  `lake build
-DavisKahan.Experimental` now covers it.
+That aggregate existed to build `DavisKahan/Experimental/Frontier/**`, which was
+promoted long ago; by the end it imported six production modules and nothing
+else, every one of them already reachable from the `DavisKahan.All` above.  It
+is deleted rather than kept as an empty shell, for the same reason its
+`Experimental.Sources` siblings were.
 -/

@@ -50,24 +50,6 @@ IMPORT_RE = re.compile(r"^\s*(?:public\s+)?import\s+(\S+)\s*$", re.M)
 #: red for everyone without telling anybody anything new.
 EXCLUDED: dict[str, str] = {
     # The six that do not compile.
-    "DavisKahan.Experimental.InfiniteDimensional.Core.Unbounded":
-        "projects adjointDomain, adjointVector, adjointVector_inner, "
-        "adjointDomain_dense, adjoint_graph_closed, resolvent, subScalar and "
-        "symmetric off ClosedOperator; none of them is declared anywhere in the "
-        "repository.  The module's own docstring says it 'retains only the "
-        "declarations that are still unresolved' -- the interface it was written "
-        "against left ClosedOperator/Basic.lean and took the fields with it.",
-    "DavisKahan.Experimental.InfiniteDimensional.OperatorBlocks.OffDiagonal":
-        "**CLASS: written against an interface that was never built.**  19 errors, and the "
-        "reason recorded here until 2026-07-31 -- 'a drifted block API' -- was wrong in the "
-        "way that matters, because 'drifted' invites a repair.  The file references "
-        "`riccatiEquation_of_graph_reduces`, `diagonalBlock`, `offDiagonalBlock`, "
-        "`ContinuedSpectralDatum`, `twoAngleTransform` and "
-        "`exists_continuedSpectralDatum_of_offDiagonal`; **six of those seven names are "
-        "absent from the entire repository** (only `tanTwoAngleOperator` exists), and "
-        "`git log --all -S` over each shows the only file that has ever contained them is "
-        "this one.  Nothing moved out from under it.  Delete-or-rewrite is a decision for "
-        "an owner, not a repair -- same disposition as `Core/Unbounded` below.",
     "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.OperatorAbsoluteValueComplex":
         "KyFanDominantIdealFamily.gaugeReal no longer exists.",
     "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.ReflectionTransport":
@@ -76,22 +58,14 @@ EXCLUDED: dict[str, str] = {
 
 #: Subtrees the root deliberately does not aggregate, each with the reason.
 #:
-#: `Experimental/All.lean`'s own docstring states the `InfiniteDimensional` one:
-#: those modules are *"older ambient facades, kept for historical reference"* and
-#: are *"deliberately not aggregated here"*.  **The other three subtrees are
-#: excluded too and nothing says so** — which is the finding this gate exists to
-#: stop repeating.  A prefix here is a decision about a subtree; a name in
-#: `EXCLUDED` is a broken module.  The two must not be confused, because the first
-#: is permanent and the second is a bug.
+#: A prefix here is a decision about a subtree; a name in `EXCLUDED` is a broken
+#: module.  The two must not be confused, because the first is permanent and the
+#: second is a bug.  On 2026-08-27 the `InfiniteDimensional` prefix was removed
+#: with its subtree: every one of its seventeen modules had stopped elaborating,
+#: and being excluded here is exactly why nothing said so.  That is the failure
+#: this gate exists to name, so a subtree exclusion should be read as a standing
+#: bet that nobody is checking the modules inside it.
 EXCLUDED_PREFIXES: dict[str, str] = {
-    "DavisKahan.Experimental.InfiniteDimensional.":
-        "deliberately not aggregated -- `Experimental/All.lean` says these are older "
-        "ambient facades kept for historical reference, and that the live development "
-        "is `DavisKahan.All`.  Documented, and the only one of the four that is.",
-    "DavisKahan.Experimental.Frontier.":
-        "not aggregated, and no module says why.  Recorded here so the absence is at "
-        "least visible; deciding whether it should be aggregated is lane "
-        "`{lane:DK-EXPCOVER-REPAIR}`.",
     "DavisKahan.Experimental.Scratch.":
         "not aggregated; the directory name is the reason, but it was nowhere written "
         "down that nothing compiles it.",
