@@ -166,6 +166,140 @@ theorem safeFinite_concentration_ratio_zero
   push_cast
   field_simp
 
+/-- **The source's replicate condition**, `r = omega(n^3)`.
+
+Acharyya et al. (2025) Theorem 2, which Quench imports as its Theorem 1, requires the replicate
+budget to grow faster than the cube of the model count.  This is that condition, and it is
+exactly what the finite-model concentration ratio needs: the ratio is a constant divided by
+`r n / (n+1)^3`. -/
+def SourceReplicateRate (r : Nat → Nat) : Prop :=
+  Tendsto (fun n : Nat => (r n : Real) / (((n : Real) + 1)) ^ 3) atTop atTop
+
+/-- The finite-model Chebyshev/union-bound ratio vanishes under *any* replicate schedule
+meeting the source rate, not merely the hardcoded one. -/
+theorem finite_concentration_ratio_zero_of_sourceRate
+    {r : Nat → Nat} (hr : SourceReplicateRate r)
+    (targetCount : Nat) (varianceBound : Real) :
+    Tendsto (fun n =>
+      (targetCount : Real) * ((n + 1 : Nat) : Real) *
+        (varianceBound / r n) /
+        (safeResponseTolerance n) ^ 2) atTop (𝓝 0) := by
+  have hmain : Tendsto (fun n : Nat =>
+      (targetCount * varianceBound : Real) / ((r n : Real) / (((n : Real) + 1)) ^ 3))
+      atTop (𝓝 0) := hr.const_div_atTop _
+  refine hmain.congr (fun n => ?_)
+  have hpos : ((n : Real) + 1) ≠ 0 := by positivity
+  simp only [safeResponseTolerance]
+  push_cast
+  field_simp
+
+/-- The hardcoded schedule meets the source rate. -/
+theorem sourceReplicateRate_safeFiniteReplicates :
+    SourceReplicateRate safeFiniteReplicates := by
+  have h : Tendsto (fun n : Nat => ((n : Real) + 1)) atTop atTop :=
+    tendsto_atTop_add_const_right atTop 1 tendsto_natCast_atTop_atTop
+  refine h.congr' (Filter.Eventually.of_forall fun n => ?_)
+  have hpos : ((n : Real) + 1) ≠ 0 := by positivity
+  simp only [safeFiniteReplicates]
+  push_cast
+  field_simp
+
+/-- **The net-adjusted replicate condition.**
+
+The compact-infinite route buys uniformity over an infinite model class with a union bound over
+a shrinking perspective net of polynomial cardinality `O((n+1)^entropyPower)`.  That costs
+`entropyPower` powers on top of what the finite route needs, and this is the resulting
+condition on the replicate budget.  It reduces to the finite requirement when the net is
+trivial, and the gap to the source's `r = omega(n^3)` is exactly the price of the net. -/
+def NetReplicateRate (entropyPower : Nat) (r : Nat → Nat) : Prop :=
+  Tendsto (fun n : Nat => (r n : Real) / (((n : Real) + 1)) ^ (2 + entropyPower)) atTop atTop
+
+/-- The entropy-aware concentration ratio vanishes under *any* replicate schedule meeting the
+net-adjusted rate. -/
+theorem entropy_concentration_ratio_zero_of_netRate
+    (entropyPower : Nat) {r : Nat → Nat} (hr : NetReplicateRate entropyPower r)
+    (varianceBound coverConstant : Real)
+    (centersCard : Nat → Nat)
+    (hcard : ∀ n,
+      (centersCard n : Real) ≤
+        coverConstant * (((n + 1 : Nat) : Real) ^ entropyPower)) :
+    Tendsto (fun n =>
+      (centersCard n : Real) * (varianceBound / r n) /
+        (safeNetTolerance n) ^ 2) atTop (𝓝 0) := by
+  have hcov : 0 ≤ coverConstant := by
+    have h := hcard 0
+    simpa using le_trans (Nat.cast_nonneg (centersCard 0)) h
+  have hinv : Tendsto (fun n : Nat =>
+      (((n : Real) + 1) ^ (2 + entropyPower)) / (r n : Real)) atTop (𝓝 0) := by
+    have := hr.inv_tendsto_atTop
+    refine this.congr (fun n => ?_)
+    simp only [Pi.inv_apply]
+    rw [inv_div]
+  have hg : Tendsto (fun n : Nat =>
+      4 * coverConstant * |varianceBound| *
+        ((((n : Real) + 1) ^ (2 + entropyPower)) / (r n : Real))) atTop (𝓝 0) := by
+    simpa only [mul_zero] using hinv.const_mul (4 * coverConstant * |varianceBound|)
+  refine squeeze_zero_norm (fun n => ?_) hg
+  have hNpos : (0 : Real) < ((n : Real) + 1) := by positivity
+  rcases eq_or_ne (r n : Real) 0 with hr0 | hr0
+  · have hnn : (0 : Real) ≤ 4 * coverConstant * |varianceBound| *
+        ((((n : Real) + 1) ^ (2 + entropyPower)) / (r n : Real)) := by
+      rw [hr0]
+      simp
+    simpa [hr0] using hnn
+  · have hfeq : (centersCard n : Real) * (varianceBound / r n) / (safeNetTolerance n) ^ 2
+        = 4 * varianceBound * ((centersCard n : Real) * (((n : Real) + 1) ^ entropyPower)⁻¹) *
+            ((((n : Real) + 1) ^ (2 + entropyPower)) / (r n : Real)) := by
+      simp only [safeNetTolerance, safeResponseTolerance]
+      push_cast
+      rw [pow_add]
+      field_simp
+      ring
+    have hcard' : (centersCard n : Real) * (((n : Real) + 1) ^ entropyPower)⁻¹
+        ≤ coverConstant := by
+      rw [mul_inv_le_iff₀ (by positivity)]
+      have := hcard n
+      push_cast at this
+      simpa [mul_comm] using this
+    have hcard0 : (0 : Real) ≤ (centersCard n : Real) * (((n : Real) + 1) ^ entropyPower)⁻¹ := by
+      positivity
+    have hquot : (0 : Real) ≤ (((n : Real) + 1) ^ (2 + entropyPower)) / (r n : Real) := by
+      have : (0 : Real) ≤ (r n : Real) := Nat.cast_nonneg _
+      positivity
+    rw [hfeq, Real.norm_eq_abs, abs_mul, abs_mul, abs_of_nonneg hcard0,
+      abs_of_nonneg hquot, abs_mul]
+    have h4 : |(4 : Real)| = 4 := by norm_num
+    rw [h4]
+    have hstep : 4 * |varianceBound| *
+        ((centersCard n : Real) * (((n : Real) + 1) ^ entropyPower)⁻¹)
+        ≤ 4 * |varianceBound| * coverConstant := by
+      have : (0 : Real) ≤ 4 * |varianceBound| := by positivity
+      exact mul_le_mul_of_nonneg_left hcard' this
+    calc 4 * |varianceBound| *
+          ((centersCard n : Real) * (((n : Real) + 1) ^ entropyPower)⁻¹) *
+          ((((n : Real) + 1) ^ (2 + entropyPower)) / (r n : Real))
+        ≤ 4 * |varianceBound| * coverConstant *
+          ((((n : Real) + 1) ^ (2 + entropyPower)) / (r n : Real)) :=
+          mul_le_mul_of_nonneg_right hstep hquot
+      _ = 4 * coverConstant * |varianceBound| *
+          ((((n : Real) + 1) ^ (2 + entropyPower)) / (r n : Real)) := by ring
+
+/-- The hardcoded entropy schedule meets the net-adjusted rate, with two powers to spare. -/
+theorem netReplicateRate_safeEntropyReplicates (entropyPower : Nat) :
+    NetReplicateRate entropyPower (safeEntropyReplicates entropyPower) := by
+  have h : Tendsto (fun n : Nat => (((n : Real) + 1)) ^ 2) atTop atTop := by
+    have h1 : Tendsto (fun n : Nat => ((n : Real) + 1)) atTop atTop :=
+      tendsto_atTop_add_const_right atTop 1 tendsto_natCast_atTop_atTop
+    have h2 : Tendsto (fun x : Real => x ^ 2) atTop atTop :=
+      tendsto_pow_atTop (by norm_num)
+    exact h2.comp h1
+  refine h.congr' (Filter.Eventually.of_forall fun n => ?_)
+  have hpos : (0 : Real) < ((n : Real) + 1) := by positivity
+  simp only [safeEntropyReplicates]
+  push_cast
+  rw [show (4 + entropyPower) = (2 + entropyPower) + 2 by omega, pow_add]
+  field_simp
+
 /-- Entropy-aware concentration ratio for polynomial-size shrinking nets.
 
 The theorem is stated with an upper bound on net cardinality so applications do

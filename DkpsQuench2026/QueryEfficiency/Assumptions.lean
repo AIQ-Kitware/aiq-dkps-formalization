@@ -38,9 +38,9 @@ variable {Ωref : Type wr} [MeasurableSpace Ωref]
 variable {Ωresp : Type wy} [MeasurableSpace Ωresp]
 /-- Raw data needed to run the conservative finite-model raw-response Quench
 pipeline for one query subset. -/
-structure FiniteSubsetData (d m p : Nat) where
+structure FiniteSubsetData (replicates : Nat → Nat) (d m p : Nat) where
   perspective : Model Q X → Vec d
-  rawResponse : ∀ n, Model Q X → Fin (safeFiniteReplicates n) →
+  rawResponse : ∀ n, Model Q X → Fin (replicates n) →
     Ωresp → Acharyya2024.Mat m p
   populationMean : Model Q X → Acharyya2024.Mat m p
   varianceBound : Real
@@ -67,11 +67,12 @@ structure FiniteSubsetAssumptions
     (μresp : Nat → Measure Ωresp)
     (score : Model Q X → Finset Q → Real)
     (Qstar Qsub : Finset Q)
+    {replicates : Nat → Nat}
     (D : FiniteSubsetData (Q := Q) (X := X)
-      (Ωresp := Ωresp) d m p) : Prop where
+      (Ωresp := Ωresp) replicates d m p) : Prop where
   perspective_measurable : Measurable D.perspective
   full_support : PerspectiveFullSupport Pf D.perspective
-  raw : RawIIDResponseModel μresp safeFiniteReplicates D.rawResponse
+  raw : RawIIDResponseModel μresp replicates D.rawResponse
     D.populationMean (fun _ => D.varianceBound)
   response_realization : ModelResponseRealization D.perspective D.populationMean
   nondegenerate : PerspectiveNondegeneracy Pf D.perspective D.covarianceFloor
@@ -86,15 +87,16 @@ noncomputable def finiteEstimator
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)
     (score : Model Q X → Finset Q → Real)
     (Qstar : Finset Q)
+    {replicates : Nat → Nat}
     (D : FiniteSubsetData (Q := Q) (X := X)
-      (Ωresp := Ωresp) d m p)
+      (Ωresp := Ωresp) replicates d m p)
     (n : Nat) (ω : Ωref × Ωresp) (f : Model Q X) : Real :=
   yNNTieAverage_augmentedCMDS (d := d)
     (augmentedSampleResponseDist
-      (augmentedRawSampleMean f_ref safeFiniteReplicates D.rawResponse))
+      (augmentedRawSampleMean f_ref replicates D.rawResponse))
     (fun n ω f =>
       Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
-        (augmentedRawSampleMean f_ref safeFiniteReplicates D.rawResponse n ω f))
+        (augmentedRawSampleMean f_ref replicates D.rawResponse n ω f))
     (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
     score Qstar n ω f
 /-- Raw data needed for one compact infinite-model raw-response Quench theorem.
@@ -102,10 +104,10 @@ noncomputable def finiteEstimator
 The retuned Frobenius safe schedule uses a fourth-power shrinking radius, so a
 `d`-dimensional compact perspective range has polynomial net exponent `4*d`.
 -/
-structure InfiniteSubsetData (d m p : Nat) where
+structure InfiniteSubsetData (replicates : Nat → Nat) (d m p : Nat) where
   perspective : Model Q X → Vec d
   rawResponse : ∀ n, Model Q X →
-    Fin (safeEntropyReplicates d n) →
+    Fin (replicates n) →
     Ωresp → Acharyya2024.Mat m p
   populationMean : Model Q X → Acharyya2024.Mat m p
   varianceBound : Real
@@ -128,16 +130,17 @@ structure InfiniteSubsetAssumptions
     (μresp : Nat → Measure Ωresp)
     (score : Model Q X → Finset Q → Real)
     (Qstar Qsub : Finset Q)
+    {replicates : Nat → Nat}
     (D : InfiniteSubsetData (Q := Q) (X := X)
-      (Ωresp := Ωresp) d m p) : Prop where
+      (Ωresp := Ωresp) replicates d m p) : Prop where
   perspective_measurable : Measurable D.perspective
   compact_range : IsCompact (Set.range D.perspective)
   full_support : PerspectiveFullSupport Pf D.perspective
   raw : RawIIDResponseModel μresp
-    (safeEntropyReplicates d) D.rawResponse
+    replicates D.rawResponse
     D.populationMean (fun _ => D.varianceBound)
   raw_lipschitz : RawResponseLipschitz D.perspective
-    (safeEntropyReplicates d) D.rawResponse
+    replicates D.rawResponse
     D.rawResponseLipschitzConstant
   response_realization : ModelResponseRealization D.perspective D.populationMean
   nondegenerate : PerspectiveNondegeneracy Pf D.perspective D.covarianceFloor
@@ -152,17 +155,18 @@ noncomputable def infiniteEstimator
     (f_ref : ∀ n, Ωref → Fin n → Model Q X)
     (score : Model Q X → Finset Q → Real)
     (Qstar : Finset Q)
+    {replicates : Nat → Nat}
     (D : InfiniteSubsetData (Q := Q) (X := X)
-      (Ωresp := Ωresp) d m p)
+      (Ωresp := Ωresp) replicates d m p)
     (n : Nat) (ω : Ωref × Ωresp) (f : Model Q X) : Real :=
   yNNTieAverage_augmentedCMDS (d := d)
     (augmentedSampleResponseDist
       (augmentedRawSampleMean f_ref
-        (safeEntropyReplicates d) D.rawResponse))
+        replicates D.rawResponse))
     (fun n ω f =>
       Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
         (augmentedRawSampleMean f_ref
-          (safeEntropyReplicates d) D.rawResponse n ω f))
+          replicates D.rawResponse n ω f))
     (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
     score Qstar n ω f
 

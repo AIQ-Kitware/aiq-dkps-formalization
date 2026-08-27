@@ -49,8 +49,10 @@ theorem finiteAllQueries
     (hiid : IIDReferenceSampler Pf μref f_ref)
     (score : Model Q X → Finset Q → Real)
     (Qstar : Finset Q)
+    (replicates : Finset Q → Nat → Nat)
+    (hrate : ∀ Qsub, SourceReplicateRate (replicates Qsub))
     (D : ∀ Qsub, FiniteSubsetData (Q := Q) (X := X)
-      (Ωresp := Ωresp) (d Qsub) (m Qsub) (p Qsub))
+      (Ωresp := Ωresp) (replicates Qsub) (d Qsub) (m Qsub) (p Qsub))
     (hm : ∀ Qsub, Qsub ⊆ Qstar → Qsub.card < Qstar.card →
       0 < m Qsub)
     (H : ∀ Qsub, Qsub ⊆ Qstar → Qsub.card < Qstar.card →
@@ -71,7 +73,7 @@ theorem finiteAllQueries
       (hm := hm Qsub hsub hlt)
       (Pf := Pf) (μref := μref) (hμref := hμref) (μresp := μresp)
       (f_ref := f_ref) (hiid := hiid) (score := score)
-      (Qstar := Qstar) (Qsub := Qsub) (D := D Qsub)
+      (Qstar := Qstar) (Qsub := Qsub) (hrate := hrate Qsub) (D := D Qsub)
       (H := H Qsub hsub hlt))
 
 /-- All-proper-subsets compact infinite-model raw-response Quench.
@@ -91,8 +93,10 @@ theorem infiniteAllQueries
     (hiid : IIDReferenceSampler Pf μref f_ref)
     (score : Model Q X → Finset Q → Real)
     (Qstar : Finset Q)
+    (replicates : Finset Q → Nat → Nat)
+    (hrate : ∀ Qsub, NetReplicateRate (d Qsub) (replicates Qsub))
     (D : ∀ Qsub, InfiniteSubsetData (Q := Q) (X := X)
-      (Ωresp := Ωresp) (d Qsub) (m Qsub) (p Qsub))
+      (Ωresp := Ωresp) (replicates Qsub) (d Qsub) (m Qsub) (p Qsub))
     (hm : ∀ Qsub, Qsub ⊆ Qstar → Qsub.card < Qstar.card →
       0 < m Qsub)
     (H : ∀ Qsub, Qsub ⊆ Qstar → Qsub.card < Qstar.card →
@@ -113,7 +117,7 @@ theorem infiniteAllQueries
       (hm := hm Qsub hsub hlt)
       (Pf := Pf) (μref := μref) (hμref := hμref) (μresp := μresp)
       (f_ref := f_ref) (hiid := hiid) (score := score)
-      (Qstar := Qstar) (Qsub := Qsub) (D := D Qsub)
+      (Qstar := Qstar) (Qsub := Qsub) (hrate := hrate Qsub) (D := D Qsub)
       (H := H Qsub hsub hlt))
 
 

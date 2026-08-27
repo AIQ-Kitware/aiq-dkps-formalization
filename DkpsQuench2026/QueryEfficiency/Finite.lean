@@ -48,8 +48,9 @@ theorem finiteFixedSubsetMSE
     (hiid : IIDReferenceSampler Pf μref f_ref)
     (score : Model Q X → Finset Q → Real)
     (Qstar Qsub : Finset Q)
+    {replicates : Nat → Nat} (hrate : SourceReplicateRate replicates)
     (D : FiniteSubsetData (Q := Q) (X := X)
-      (Ωresp := Ωresp) d m p)
+      (Ωresp := Ωresp) replicates d m p)
     (H : FiniteSubsetAssumptions Pf μresp score Qstar Qsub D) :
     ∀ ε : Real, 0 < ε →
       HighProbAtTop (jointStageMeasure μref μresp)
@@ -64,10 +65,10 @@ theorem finiteFixedSubsetMSE
     exists_populationMean_norm_bound_finite D.populationMean
   let Hmean := augmentedRawResponseMeanSubevents_finite
     μref hμref μresp f_ref hiid.measurable
-    safeFiniteReplicates D.rawResponse D.populationMean
+    replicates D.rawResponse D.populationMean
     (fun _ => D.varianceBound) safeResponseTolerance H.raw
     safeResponseTolerance_pos
-    (safeFinite_concentration_ratio_zero
+    (finite_concentration_ratio_zero_of_sourceRate hrate
       (Fintype.card (Model Q X)) D.varianceBound)
   let hrealize :
       PerspectiveResponseRealization D.perspective
@@ -99,10 +100,10 @@ theorem finiteFixedSubsetMSE
       MSE Pf (yFull score Qstar)
         (fun f => yNNTieAverage_augmentedCMDS (d := d)
       (augmentedSampleResponseDist
-        (augmentedRawSampleMean f_ref safeFiniteReplicates D.rawResponse))
+        (augmentedRawSampleMean f_ref replicates D.rawResponse))
       (fun n ω f =>
         Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
-          (augmentedRawSampleMean f_ref safeFiniteReplicates D.rawResponse n ω f))
+          (augmentedRawSampleMean f_ref replicates D.rawResponse n ω f))
       (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
       score Qstar n ω f) ≤ ε})
   exact
@@ -113,7 +114,7 @@ theorem finiteFixedSubsetMSE
       (hcompact := hcompact) (hfull := H.full_support)
       (f_ref := liftedReferenceSampler (Ωresp := Ωresp) f_ref)
       (hiid := hiidJoint)
-      (Xbar := augmentedRawSampleMean f_ref safeFiniteReplicates D.rawResponse)
+      (Xbar := augmentedRawSampleMean f_ref replicates D.rawResponse)
       (μbar := augmentedRawPopulationMean f_ref D.populationMean)
       (η := safeResponseTolerance) (B := fun _ => B)
       (hηNonneg := fun n => (safeResponseTolerance_pos n).le)
@@ -145,8 +146,9 @@ theorem finiteFixedSubset
     (hiid : IIDReferenceSampler Pf μref f_ref)
     (score : Model Q X → Finset Q → Real)
     (Qstar Qsub : Finset Q)
+    {replicates : Nat → Nat} (hrate : SourceReplicateRate replicates)
     (D : FiniteSubsetData (Q := Q) (X := X)
-      (Ωresp := Ωresp) d m p)
+      (Ωresp := Ωresp) replicates d m p)
     (H : FiniteSubsetAssumptions Pf μresp score Qstar Qsub D) :
     HighProbQQueryEfficient (Q := Q) (X := X)
       (jointStageMeasure μref μresp)
@@ -160,7 +162,7 @@ theorem finiteFixedSubset
     (yFull score Qstar) (yQ score Qsub)
     (finiteEstimator f_ref score Qstar D)
   · exact finiteFixedSubsetMSE (Q := Q) (X := X) (Ωref := Ωref) (Ωresp := Ωresp)
-      (d := d) (m := m) (p := p) hm Pf μref hμref μresp f_ref hiid score Qstar Qsub D H
+      (d := d) (m := m) (p := p) hm Pf μref hμref μresp f_ref hiid score Qstar Qsub hrate D H
   · exact H.baseline_pos
 
 

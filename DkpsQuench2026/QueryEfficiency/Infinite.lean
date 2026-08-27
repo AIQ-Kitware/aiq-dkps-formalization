@@ -49,8 +49,9 @@ theorem infiniteFixedSubsetMSE
     (hiid : IIDReferenceSampler Pf μref f_ref)
     (score : Model Q X → Finset Q → Real)
     (Qstar Qsub : Finset Q)
+    {replicates : Nat → Nat} (hrate : NetReplicateRate d replicates)
     (D : InfiniteSubsetData (Q := Q) (X := X)
-      (Ωresp := Ωresp) d m p)
+      (Ωresp := Ωresp) replicates d m p)
     (H : InfiniteSubsetAssumptions Pf μresp score Qstar Qsub D)  :
     ∀ ε : Real, 0 < ε →
       HighProbAtTop (jointStageMeasure μref μresp)
@@ -62,7 +63,7 @@ theorem infiniteFixedSubsetMSE
   let hiidJoint := iidReferenceSampler_lifted_prod Pf μref hμref μresp
     H.raw.probability f_ref hiid
   let Hreg := uniformModelResponseRegularity_of_raw_lipschitz
-    μresp D.perspective (safeEntropyReplicates d) D.rawResponse
+    μresp D.perspective replicates D.rawResponse
     D.populationMean (fun _ => D.varianceBound) H.raw
     D.rawResponseLipschitzConstant H.raw_lipschitz
   obtain ⟨net, C, hC, hcard, hradius⟩ :=
@@ -74,7 +75,7 @@ theorem infiniteFixedSubsetMSE
       H.raw_lipschitz.constant_nonneg (fun f g => Hreg.population_lipschitz 0 f g)
   let Hmean := augmentedRawResponseMeanSubevents_infinite
     μref hμref μresp f_ref D.perspective
-    (safeEntropyReplicates d) D.rawResponse D.populationMean
+    replicates D.rawResponse D.populationMean
     (fun _ => D.varianceBound) H.raw net
     (fun _ => D.rawResponseLipschitzConstant)
     (fun _ => D.rawResponseLipschitzConstant)
@@ -82,7 +83,7 @@ theorem infiniteFixedSubsetMSE
     (fun n => by
       rw [safeNetTolerance]
       exact div_pos (safeResponseTolerance_pos n) (by norm_num))
-    (safeEntropy_concentration_ratio_zero d D.varianceBound C
+    (entropy_concentration_ratio_zero_of_netRate d hrate D.varianceBound C
       (fun n => (net.centers n).card) hcard)
     (safe_net_extension_budget
       (fun _ => D.rawResponseLipschitzConstant)
@@ -123,11 +124,11 @@ theorem infiniteFixedSubsetMSE
         (fun f => yNNTieAverage_augmentedCMDS (d := d)
       (augmentedSampleResponseDist
         (augmentedRawSampleMean f_ref
-          (safeEntropyReplicates d) D.rawResponse))
+          replicates D.rawResponse))
       (fun n ω f =>
         Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
           (augmentedRawSampleMean f_ref
-            (safeEntropyReplicates d) D.rawResponse n ω f))
+            replicates D.rawResponse n ω f))
       (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
       score Qstar n ω f) ≤ ε})
   exact
@@ -139,7 +140,7 @@ theorem infiniteFixedSubsetMSE
       (f_ref := liftedReferenceSampler (Ωresp := Ωresp) f_ref)
       (hiid := hiidJoint)
       (Xbar := augmentedRawSampleMean f_ref
-        (safeEntropyReplicates d) D.rawResponse)
+        replicates D.rawResponse)
       (μbar := augmentedRawPopulationMean f_ref D.populationMean)
       (η := safeResponseTolerance) (B := fun _ => B)
       (hηNonneg := fun n => (safeResponseTolerance_pos n).le)
@@ -170,8 +171,9 @@ theorem infiniteFixedSubset
     (hiid : IIDReferenceSampler Pf μref f_ref)
     (score : Model Q X → Finset Q → Real)
     (Qstar Qsub : Finset Q)
+    {replicates : Nat → Nat} (hrate : NetReplicateRate d replicates)
     (D : InfiniteSubsetData (Q := Q) (X := X)
-      (Ωresp := Ωresp) d m p)
+      (Ωresp := Ωresp) replicates d m p)
     (H : InfiniteSubsetAssumptions Pf μresp score Qstar Qsub D) :
     HighProbQQueryEfficient (Q := Q) (X := X)
       (jointStageMeasure μref μresp)
@@ -185,7 +187,7 @@ theorem infiniteFixedSubset
     (yFull score Qstar) (yQ score Qsub)
     (infiniteEstimator f_ref score Qstar D)
   · exact infiniteFixedSubsetMSE (Q := Q) (X := X) (Ωref := Ωref) (Ωresp := Ωresp)
-      (d := d) (m := m) (p := p) hm Pf μref hμref μresp f_ref hiid score Qstar Qsub D H
+      (d := d) (m := m) (p := p) hm Pf μref hμref μresp f_ref hiid score Qstar Qsub hrate D H
   · exact H.baseline_pos
 
 
