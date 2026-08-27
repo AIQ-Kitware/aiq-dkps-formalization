@@ -35,6 +35,8 @@ open TauCeti.DavisKahan.ExactSinTheta
 by the two complementary coordinates. -/
 abbrev Example61Ambient := EuclideanSpace ℝ (Fin 3)
 
+/-- The constant `1 / √2` of Example 6.1, named so the example's arithmetic
+reads as the paper's. -/
 def example61InvSqrtTwo : ℝ := 1 / Real.sqrt 2
 
 private theorem example61InvSqrtTwo_sq :

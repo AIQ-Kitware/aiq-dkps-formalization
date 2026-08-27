@@ -128,6 +128,7 @@ noncomputable def specProjectionDomain (B : Set ℝ) (hB : MeasurableSet B) (x :
     A.domain :=
   ⟨specProjection hA B hB (x : H), specProjection_mem_domain hA B hB x⟩
 
+/-- The underlying set of the spectral-projection domain. -/
 @[simp]
 theorem specProjectionDomain_coe (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
     ((specProjectionDomain hA B hB x : A.domain) : H) = specProjection hA B hB (x : H) := rfl

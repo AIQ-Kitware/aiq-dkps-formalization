@@ -29,7 +29,9 @@ open Module (finrank)
 
 noncomputable section
 
+/-- The two-dimensional real model space of the Section 4 examples. -/
 abbrev RealPlane := EuclideanSpace ℝ (Fin 2)
+/-- The two-dimensional complex model space of the Section 4 examples. -/
 abbrev ComplexPlane := EuclideanSpace ℂ (Fin 2)
 
 /-! ## Shared two-dimensional coordinate calculations -/
@@ -129,6 +131,7 @@ private theorem example41ReflectionDisplacement_eq_matrix (theta : ℝ) :
     example41ReflectionDisplacement theta =
       Matrix.toEuclideanLin (example41ReflectionDisplacementMatrix theta) := rfl
 
+/-- The displacement of Example 4.1's direct rotation, as an explicit matrix. -/
 @[simp] theorem one_sub_example41DirectRotation (theta : ℝ) :
     LinearMap.id - example41DirectRotation theta = example41DirectDisplacement theta := by
   ext x i
@@ -137,6 +140,7 @@ private theorem example41ReflectionDisplacement_eq_matrix (theta : ℝ) :
       Matrix.toLpLin_apply, Matrix.vecHead, Matrix.vecTail] <;>
     ring
 
+/-- The displacement of Example 4.1's reflection, as an explicit matrix. -/
 @[simp] theorem one_sub_example41Reflection (theta : ℝ) :
     LinearMap.id - example41Reflection theta = example41ReflectionDisplacement theta := by
   ext x i
@@ -271,6 +275,7 @@ theorem example4_1_reflection_beats_direct_iff
 def example42Phase (t : ℝ) : ℂ :=
   (Real.cos t : ℂ) + (Real.sin t : ℂ) * Complex.I
 
+/-- Example 4.2's phase at parameter zero. -/
 @[simp] theorem example42Phase_zero : example42Phase 0 = 1 := by
   simp [example42Phase]
 
@@ -338,6 +343,7 @@ theorem example42Competitor_eq_phase_smul (theta delta : ℝ) :
       Matrix.toLpLin_apply, Matrix.vecHead, Matrix.vecTail,
       LinearMap.smul_apply, hplus, hminus, mul_assoc]
 
+/-- The displacement of Example 4.2's competitor, as an explicit matrix. -/
 @[simp] theorem one_sub_example42Competitor (theta delta : ℝ) :
     LinearMap.id - example42Competitor theta delta = example42Displacement theta delta := by
   ext x i

@@ -34,6 +34,8 @@ open TauCeti.DavisKahan.ExactSinTheta
 
 noncomputable section
 
+/-- The two-dimensional model space in which the Section 7 swap asymmetry is
+exhibited. -/
 abbrev Plane := PaperPlane ℂ
 
 /-- The source unperturbed operator `diag(0, delta)`. -/

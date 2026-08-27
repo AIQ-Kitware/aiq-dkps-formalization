@@ -208,11 +208,13 @@ def branchFreeTangentErrorCoefficient (A H T : E →L[𝕜] E) (d : ℝ) : ℝ :
   max (8 / 3) (8 * ‖H‖ / d) * approximatePairErrorCoefficient A H T
 
 omit [CompleteSpace E] in
+/-- The approximate-pair error coefficient is nonnegative. -/
 theorem approximatePairErrorCoefficient_nonneg (A H T : E →L[𝕜] E) :
     0 ≤ approximatePairErrorCoefficient A H T := by
   unfold approximatePairErrorCoefficient; positivity
 
 omit [CompleteSpace E] in
+/-- The branch-free tangent error coefficient is nonnegative. -/
 theorem branchFreeTangentErrorCoefficient_nonneg (A H T : E →L[𝕜] E) (d : ℝ) :
     0 ≤ branchFreeTangentErrorCoefficient A H T d := by
   unfold branchFreeTangentErrorCoefficient

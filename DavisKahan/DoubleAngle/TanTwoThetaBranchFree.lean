@@ -82,6 +82,7 @@ the modulus of `tan 2θ`, which is what a unitarily invariant norm of `tan 2Θ`
 reads off.  In terms of `s = sin θ` it is `2 s √(1 - s²) / |1 - 2 s²|`. -/
 noncomputable def absDoubleAngleTangent (t : ℝ) : ℝ := 2 * t / |1 - t ^ 2|
 
+/-- The branch-free double-angle tangent vanishes at zero. -/
 @[simp] theorem absDoubleAngleTangent_zero : absDoubleAngleTangent 0 = 0 := by
   simp [absDoubleAngleTangent]
 

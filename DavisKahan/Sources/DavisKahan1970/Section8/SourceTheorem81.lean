@@ -64,6 +64,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-! ### Scalar bookkeeping: the quarter turn -/
 
+/-- The quarter-turn angle: `arcsin (√2 / 2) = π / 4`. -/
 theorem arcsin_sqrt_two_div_two : Real.arcsin (Real.sqrt 2 / 2) = Real.pi / 4 :=
   Real.arcsin_eq_of_sin_eq Real.sin_pi_div_four
     ⟨by linarith [Real.pi_pos], by linarith [Real.pi_pos]⟩
@@ -102,6 +103,7 @@ def canonicalLowBranch (B : E →L[ℂ] E) (hB : IsSelfAdjointOperator B)
     (alpha : ℝ) : Submodule ℂ E :=
   boundedSelfAdjointSpectralSubspace B hB (Set.Iic alpha) measurableSet_Iic
 
+/-- The canonical low branch is a spectral subspace, hence complemented. -/
 instance canonicalLowBranch_hasOrthogonalProjection (B : E →L[ℂ] E)
     (hB : IsSelfAdjointOperator B) (alpha : ℝ) :
     (canonicalLowBranch B hB alpha).HasOrthogonalProjection :=
