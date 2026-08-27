@@ -23,13 +23,16 @@ JSONS = [ROOT / 'dev' / f'{s}-full-source-census.json' for s in SLUGS]
 DECL_RE = re.compile(
     r"^\s*(?:@\[[^\]]*\]\s*)*(?:private |protected |noncomputable |scoped )*"
     r"(?:alias|theorem|lemma|def|abbrev|structure|instance|class)\s+"
-    r"([A-Za-z_][A-Za-z0-9_'.]*)", re.M)
+    # Lean identifiers admit subscript and superscript digits (eigenvalues₀_...); without
+    # them the scan silently truncates such a name and the citation cannot be resolved.
+    r"([A-Za-z_][A-Za-z0-9_'.₀-₉⁰-⁹]*)", re.M)
 IMPORTS = [
     'Acharyya2024',
     'Acharyya2025.Bridge', 'Acharyya2025.ConfigPerturbation',
     'Acharyya2025.MathlibBridge', 'Acharyya2025.SpectralPipeline',
     'Acharyya2025.AlignedPipeline', 'Acharyya2025.GrowingResponse',
     'Acharyya2025.PaperRate', 'Acharyya2025.RateChain', 'Acharyya2025.Overlap',
+    'Acharyya2025.ManifoldCondition',
     'Helm2025', 'DkpsQuench2026',
 ]
 CANARY = 'DkpsApplicationCensusProbeCanaryMustNotResolve'

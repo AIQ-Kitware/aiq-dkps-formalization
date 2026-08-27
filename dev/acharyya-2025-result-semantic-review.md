@@ -171,13 +171,16 @@ The finite theorem takes an explicit positive eigenvalue floor alpha and cap Lam
 **Normalized paper statement:** If model latent points lie on a d-dimensional compact Riemannian manifold and population dissimilarities equal geodesic distances, Assumptions 1 and 2 hold.
 
 **Selected Lean declarations:**
-- *(none)*
+- `Acharyya2025.ManifoldCondition.classicalMDSMatrix_const_eq_zero`
+- `Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_const_eq_zero`
+- `Acharyya2025.ManifoldCondition.no_eigenvalue_floor_for_const_selection`
+- `Acharyya2025.ManifoldCondition.rank_classicalMDSMatrix_const_eq_zero`
 
 **Clause-by-clause comparison:**
 
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
-| Compact d-dimensional Riemannian latent manifold with geodesic distances equal population dissimilarities implies Assumptions 1 and 2. | No manifold/geodesic sufficient-condition theorem was found. | `missing` |  |
+| Assumption 1 and Assumption 2 hold when every model is associated with a vector on a d-dimensional compact Riemannian manifold whose pairwise geodesic distances equal the population dissimilarities. | no_eigenvalue_floor_for_const_selection and rank_classicalMDSMatrix_const_eq_zero refute both conclusions for a constant selection meeting the hypothesis. | `source_repair` | The hypothesis constrains the ambient manifold; the conclusion constrains the placement of the models within it. |
 
 **Semantic review:**
 
@@ -185,9 +188,9 @@ No manifold/geodesic sufficient-condition theorem was found in the Acharyya2025 
 
 **Additional note:** This is the clearest remaining numbered-result coverage gap in the main text.
 
-**Companion census gap refs:** `riemannian-proposition`
+**Companion census gap refs:** `proposition1-omits-spread-condition`
 
-**Next action:** Formalize only if full-paper numbered-result coverage is a goal; it is not needed by Quench.
+**Next action:** If a repair is wanted, formulate a spread condition on the model selection strong enough to keep the doubly centred matrix nondegenerate as n grows, and prove Assumptions 1 and 2 from it.
 
 ### 6. `A25-T2` — Theorem 2: Aligned CMDS configuration concentration
 
