@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Frontier.Section8SourceTheorem82
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Source
 import DavisKahan.DoubleAngle.RealAngleIdentification
 import DavisKahan.Sources.DavisKahan1970.WholeSpaceReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
@@ -98,8 +98,7 @@ sequence back without loss.
 open scoped InnerProductSpace
 
 namespace TauCeti
-namespace DavisKahan
-namespace Frontier
+namespace DavisKahan1970
 namespace Section8
 
 open DavisKahanExt
@@ -107,7 +106,7 @@ open TauCeti.DavisKahan
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation
 open TauCeti.DavisKahan.Foundation.RealComplexification
-open TauCeti.DavisKahan1970.Section8
+open TauCeti.DavisKahan.Frontier
 
 noncomputable section
 
@@ -698,6 +697,5 @@ theorem theorem8_2_source_real [FiniteDimensional ℝ E]
 end
 
 end Section8
-end Frontier
-end DavisKahan
+end DavisKahan1970
 end TauCeti

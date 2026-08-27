@@ -13,17 +13,15 @@ import DavisKahan.InfiniteDimensional.TanTheta.ContinuationWitnessAPriori
 # Davis--Kahan 1970 Section 8 source surface
 
 This leaf is the **low-level** Section 8 facade: it gives stable source-facing
-names to the results that live upstream of the analytic Frontier layer.
-`DavisKahan/Frontier/Section8.lean` imports it, so it cannot itself import
-Frontier.
+names to the results that live upstream of the analytic layer.
+`Section8/BranchRepulsion.lean` imports it, so it cannot itself import the
+downstream Theorem 8.2 modules.
 
-**The final production facade is
-`DavisKahan/Frontier/Section8SourceSurface.lean`,** downstream of
-`Section8PartII` / `Section8PartIII` / `Section8Perturbation` /
-`Section8Residual` and of the source dictionary.  Its declarations land in this
-same namespace, `TauCeti.DavisKahan1970.Section8`, and it is reachable from
-`DavisKahan.All` through `DavisKahan.Frontier.All`.  Read it, not this file, for
-the claim-by-claim map of the printed section.
+**The final facade is `Section8/PaperSurface.lean`,** downstream of
+`Theorem81Approximation`, `Theorem81Majorization`, `Theorem81AngleForms`,
+`Theorem82Branch` and the two `Theorem82Source` modules.  Its declarations land
+in this same namespace, `TauCeti.DavisKahan1970.Section8`.  Read it, not this
+file, for the claim-by-claim map of the printed section.
 
 **Theorem 8.1 is promoted** (2026-08-07).  `SourceTheorem81.lean` proves it from
 the printed hypotheses alone -- self-adjoint `A` reduced by `P`, the ordered
