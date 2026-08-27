@@ -276,6 +276,41 @@ theorem highProbQQueryEfficient_radialTieAverage_of_subevents
   · exact hbase
 
 /-- Compact perspective image, full support, and iid sampling discharge coverage
+for the radial MSE theorem.
+
+This is the radial form of the paper's first Theorem 2 conclusion: for every
+target accuracy the tie-averaged nearest-neighbor mean squared error is
+eventually below it with high probability.  No baseline positivity is needed;
+that hypothesis belongs to the query-efficiency conclusion only. -/
+theorem highProb_mse_radialTieAverage_of_compact_iid_fullSupport
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : Nat → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
+    (ψ : Model Q X → Vec d) (hψ : Measurable ψ)
+    (hcompact : IsCompact (Set.range ψ))
+    (hfull : PerspectiveFullSupport Pf ψ)
+    (rhat : ∀ n, Ω → Model Q X → Fin n → Real)
+    (f_ref : ∀ n, Ω → Fin n → Model Q X)
+    (hiid : IIDReferenceSampler Pf μ f_ref)
+    (y : Model Q X → Real)
+    (γ : Real)
+    (hlip : ∀ f f', |y f - y f'| ≤ γ * ‖ψ f - ψ f'‖)
+    (hγ : 0 < γ)
+    (c : Nat → Real) (hcZero : Tendsto c atTop (nhds 0))
+    (hcNonneg : ∀ n, 0 ≤ c n)
+    (E : Nat → Set Ω)
+    (hEmeas : ∀ n, MeasurableSet (E n))
+    (hEsub : ∀ n, E n ⊆ {ω | ∀ f i,
+      |rhat n ω f i - ‖ψ (f_ref n ω i) - ψ f‖| ≤ c n})
+    (hE : HighProbAtTop μ hμ E) :
+    ∀ ε : Real, 0 < ε →
+      HighProbAtTop μ hμ (fun n => {ω |
+        MSE Pf y (fun f => radialTieAverageNN rhat f_ref y n ω f) ≤ ε}) :=
+  highProb_mse_radialTieAverage_of_subevents Pf μ hμ ψ rhat f_ref y γ hlip hγ
+    c hcZero hcNonneg E hEmeas hEsub hE
+    (coverageSubevents_of_compact_iid_fullSupport
+      Pf μ hμ ψ hψ hcompact hfull f_ref hiid)
+
+/-- Compact perspective image, full support, and iid sampling discharge coverage
 for the radial theorem. -/
 theorem highProbQQueryEfficient_radialTieAverage_of_compact_iid_fullSupport
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
@@ -305,10 +340,12 @@ theorem highProbQQueryEfficient_radialTieAverage_of_compact_iid_fullSupport
       (fun n ω f => radialTieAverageNN rhat f_ref
         (yFull score Qstar) n ω f)
       (fun _ _ f => yQ score Qsub f) := by
-  let C := coverageSubevents_of_compact_iid_fullSupport
-    Pf μ hμ ψ hψ hcompact hfull f_ref hiid
-  exact highProbQQueryEfficient_radialTieAverage_of_subevents
-    Pf μ hμ ψ rhat f_ref score Qstar Qsub γ hlip hγ
-    c hcZero hcNonneg E hEmeas hEsub hE C hbase
+  apply highProbQQueryEfficient_of_mse_atTop Pf μ hμ
+    (yFull score Qstar) (yQ score Qsub)
+    (fun n ω f => radialTieAverageNN rhat f_ref (yFull score Qstar) n ω f)
+  · exact highProb_mse_radialTieAverage_of_compact_iid_fullSupport
+      Pf μ hμ ψ hψ hcompact hfull rhat f_ref hiid (yFull score Qstar)
+      γ hlip hγ c hcZero hcNonneg E hEmeas hEsub hE
+  · exact hbase
 
 end
