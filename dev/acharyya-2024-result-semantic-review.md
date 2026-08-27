@@ -283,6 +283,7 @@ Lean proves unconditional convergence to the minimizer set. The fixed-minimizer 
 - `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma`
 - `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`
 - `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment_growing`
+- `Acharyya2024.SecondMoment.integral_norm_sq_eq_sum_query`
 - `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean`
 - `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound`
 
@@ -292,6 +293,7 @@ Lean proves unconditional convergence to the minimizer set. The fixed-minimizer 
 | --- | --- | --- | --- |
 | If for all i, lim_r ((1/m) sum_j gamma_ij)/r = 0 | hgamma, aggregated over the fixed model collection | `equivalent_encoding` | For finitely many nonnegative sequences the per-model and aggregated forms agree. |
 | then \|\|D - Delta^(infinity)\|\|_F ->P 0 as r -> infinity | ConvergesInProbabilityZero P (fun r omega => frobSub (responseDist (Xbar r omega)) (responseDist (mu r))) | `exact` | The number of queries is a function of r, so the response matrices live in a different space at each stage. |
+| Let Sigma_ij be the covariance of the response distribution and gamma_ij = trace(Sigma_ij). | integral_norm_sq_eq_sum_query: the Frobenius second moment of a response matrix is the sum over queries of the per-query trace-covariance, so the gamma consumed is the paper's. | `derived_by_composition` | The passage from that definition to the sample-mean bound is the source's Appendix A.2 and is compiled separately, not threaded into one endpoint. |
 
 **Semantic review:**
 
@@ -301,7 +303,7 @@ The finite-dimensional Chebyshev/second-moment mechanism and gamma/r sample-mean
 
 **Companion census gap refs:** `growing-query-rate-wiring`
 
-**Next action:** None. Theorem 4, which also grows the model count, remains a specialization.
+**Next action:** Thread integral_norm_sq_sampleMean_sub_mean_le_of_bound into the growing-scope theorems so one declaration runs from the paper's iid replicate setup to its conclusion.
 
 ### 9. `A24-T3` — Theorem 3: Fixed models, growing queries: DKPS consistency
 
@@ -494,6 +496,8 @@ The package has no model-distribution P over a compact model space, no continuou
 - `Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma`
 - `Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing`
 - `Acharyya2024.Probability.sourceGammaRate_imp_secondMomentRate`
+- `Acharyya2024.SecondMoment.integral_norm_sq_eq_sum_query`
+- `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound`
 
 **Clause-by-clause comparison:**
 
@@ -502,6 +506,7 @@ The package has no model-distribution P over a compact model space, no continuou
 | In our setting where m, n -> infinity as r -> infinity | m : ℕ → ℕ and models indexed by all of ℕ | `exact` |  |
 | \|D_ii' - Delta^(infinity)(phi_i, phi_i')\| ->P 0 for every fixed pair | ConvergesInProbabilityZero for the fixed pair (i, i') | `exact` | Pointwise, so the union bound is over the two models in the pair, not over n. |
 | if (1/m) sum_j gamma_ij = o(r) | hgamma, via sourceGammaRate_imp_secondMomentRate | `exact` |  |
+| Let Sigma_ij be the covariance of the response distribution and gamma_ij = trace(Sigma_ij). | integral_norm_sq_eq_sum_query: the Frobenius second moment of a response matrix is the sum over queries of the per-query trace-covariance, so the gamma consumed is the paper's. | `derived_by_composition` | The passage from that definition to the sample-mean bound is the source's Appendix A.2 and is compiled separately, not threaded into one endpoint. |
 
 **Semantic review:**
 
@@ -511,7 +516,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 
 **Companion census gap refs:** `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** None. Theorem 5's L^p conclusion over the population law remains the open item on this side.
+**Next action:** Thread integral_norm_sq_sampleMean_sub_mean_le_of_bound into the growing-scope theorems so one declaration runs from the paper's iid replicate setup to its conclusion.
 
 ### 14. `A24-T5` — Theorem 5: Growing models and queries: L^p consistency
 

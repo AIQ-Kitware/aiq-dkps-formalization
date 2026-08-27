@@ -364,6 +364,7 @@
     "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma",
     "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment",
     "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment_growing",
+    "Acharyya2024.SecondMoment.integral_norm_sq_eq_sum_query",
     "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean",
     "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound"
    ],
@@ -379,6 +380,12 @@
      "lean_clause": "ConvergesInProbabilityZero P (fun r omega => frobSub (responseDist (Xbar r omega)) (responseDist (mu r)))",
      "relation": "exact",
      "note": "The number of queries is a function of r, so the response matrices live in a different space at each stage."
+    },
+    {
+     "source_clause": "Let Sigma_ij be the covariance of the response distribution and gamma_ij = trace(Sigma_ij).",
+     "lean_clause": "integral_norm_sq_eq_sum_query: the Frobenius second moment of a response matrix is the sum over queries of the per-query trace-covariance, so the gamma consumed is the paper's.",
+     "relation": "derived_by_composition",
+     "note": "The passage from that definition to the sample-mean bound is the source's Appendix A.2 and is compiled separately, not threaded into one endpoint."
     }
    ],
    "review": "The finite-dimensional Chebyshev/second-moment mechanism and gamma/r sample-mean bound are compiled. The theorem with query dimension m itself growing with r is not assembled; the growing-query consistency layer accepts the resulting sampling convergence as a hypothesis.",
@@ -386,7 +393,7 @@
    "gap_refs": [
     "growing-query-rate-wiring"
    ],
-   "next_action": "None. Theorem 4, which also grows the model count, remains a specialization."
+   "next_action": "Thread integral_norm_sq_sampleMean_sub_mean_le_of_bound into the growing-scope theorems so one declaration runs from the paper's iid replicate setup to its conclusion."
   },
   {
    "id": "A24-T3",
@@ -698,7 +705,9 @@
     "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment",
     "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma",
     "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing",
-    "Acharyya2024.Probability.sourceGammaRate_imp_secondMomentRate"
+    "Acharyya2024.Probability.sourceGammaRate_imp_secondMomentRate",
+    "Acharyya2024.SecondMoment.integral_norm_sq_eq_sum_query",
+    "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound"
    ],
    "clauses": [
     {
@@ -718,6 +727,12 @@
      "lean_clause": "hgamma, via sourceGammaRate_imp_secondMomentRate",
      "relation": "exact",
      "note": ""
+    },
+    {
+     "source_clause": "Let Sigma_ij be the covariance of the response distribution and gamma_ij = trace(Sigma_ij).",
+     "lean_clause": "integral_norm_sq_eq_sum_query: the Frobenius second moment of a response matrix is the sum over queries of the per-query trace-covariance, so the gamma consumed is the paper's.",
+     "relation": "derived_by_composition",
+     "note": "The passage from that definition to the sample-mean bound is the source's Appendix A.2 and is compiled separately, not threaded into one endpoint."
     }
    ],
    "review": "Lean has the finite-model concentration mechanism and a growing-stage consistency theorem that assumes per-stage sampling convergence. It does not derive the literal growing-n pointwise theorem from the source gamma condition.",
@@ -726,7 +741,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "None. Theorem 5's L^p conclusion over the population law remains the open item on this side."
+   "next_action": "Thread integral_norm_sq_sampleMean_sub_mean_le_of_bound into the growing-scope theorems so one declaration runs from the paper's iid replicate setup to its conclusion."
   },
   {
    "id": "A24-T5",

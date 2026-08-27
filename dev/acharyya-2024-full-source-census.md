@@ -18,7 +18,8 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 
 | status | items |
 | --- | ---: |
-| `compiled_exact` | 5 |
+| `compiled_exact` | 3 |
+| `compiled_by_composition` | 2 |
 | `compiled_generalized` | 2 |
 | `compiled_specialization` | 2 |
 | `compiled_source_repair` | 5 |
@@ -28,7 +29,8 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 
 | classification | items |
 | --- | ---: |
-| `exact` | 5 |
+| `exact` | 3 |
+| `by_composition` | 2 |
 | `generalized` | 2 |
 | `specialized` | 2 |
 | `source_repair` | 5 |
@@ -46,12 +48,12 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `A24-T1` | `headline` | Theorem 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-A1` | `major` | Assumption 1 | `compiled_generalized` | `generalized` | `proved_in_build` |
 | `A24-L1` | `major` | Lemma 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
-| `A24-T2` | `headline` | Theorem 2 | `compiled_exact` | `exact` | `proved_in_build` |
+| `A24-T2` | `headline` | Theorem 2 | `compiled_by_composition` | `by_composition` | `proved_in_build` |
 | `A24-T3` | `headline` | Theorem 3 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-C1` | `headline` | Corollary 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-A2` | `major` | Assumption 2 | `compiled_exact` | `exact` | `proved_in_build` |
 | `A24-L2` | `headline` | Lemma 2 | `compiled_specialization` | `specialized` | `absent` |
-| `A24-T4` | `headline` | Theorem 4 | `compiled_exact` | `exact` | `proved_in_build` |
+| `A24-T4` | `headline` | Theorem 4 | `compiled_by_composition` | `by_composition` | `proved_in_build` |
 | `A24-T5` | `headline` | Theorem 5 | `compiled_specialization` | `specialized` | `proved_in_build` |
 
 ## Gaps and source repairs
@@ -192,6 +194,10 @@ Two details the fixed-m form hid. The threshold eta r = eps * m r / (2 n^2) now 
 Theorem 4 is still not derived from the gamma condition: it needs the model count to grow as well, and the per-stage consistency theorem continues to take sampling convergence as a hypothesis.
 
 CLOSED for Theorem 4 as well. pointwise_dissimilarity_convergesInProbability_of_gamma grows the model count too: the models are indexed by all of ℕ, which is what a growing family is, and the pair (i, i') is a fixed pair of natural numbers as in the source. The growing model count is harmless because Theorem 4 asks only for pointwise convergence -- the union bound is over the two models in the pair, not over n -- so the replicate condition is the same one Theorem 2 needs. sourceGammaRate_imp_secondMomentRate is the shared step from the source's ((1/m) sum gamma)/r to the second-moment rate the Chebyshev step consumes.
+
+Adversarial-review correction. Marking A24-T2 and A24-T4 exact overstated. The theorems take a bound on the sample-mean second moment as a HYPOTHESIS, so on their own they assume part of what the printed theorem asserts: the paper defines gamma_ij as the trace-covariance of the response of model i to query j, and the passage from that definition to the second-moment bound is the content of its Appendix A.2, not a premise.
+
+Two things follow. The rows are reclassified as by_composition: the pieces are all compiled -- integral_norm_sq_sampleMean_sub_mean_le_of_bound supplies the gamma/r rate from iid replicates, and the growing-scope theorems consume it -- but no single declaration runs from the paper's sampling setup to its conclusion at the growing scope. And SecondMoment.integral_norm_sq_eq_sum_query now grounds gamma: the Frobenius second moment of a response matrix is the sum over queries of the trace-covariance of the response to that query, so the gamma these theorems consume is the paper's sum_j gamma_ij and not an abstract bound.
 
 ### `rigid-motion-engine-now-available` — The distance-to-coordinates step now has an engine; the eigenvalue floor is needed only for rates
 
@@ -336,13 +342,13 @@ Both are recorded in the AmbientModelLimit structure so the assumption is repres
 * **source anchor:** Theorem 2 (theorem, section 4.2)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:264-278`
 * **importance:** `headline`
-* **status / verification:** `compiled_exact` / `proved_in_build`
-* **semantic alignment:** `exact` — dissimilarity_convergesInProbability_of_gamma is the printed theorem: the number of queries is a function of the replicate count, gamma_ij is the trace-covariance, the hypothesis is the source's ((1/m) sum_j gamma_ij)/r -> 0 aggregated over the fixed model collection -- equivalent to the per-model form for finitely many nonnegative sequences -- and the conclusion is convergence of the Frobenius distance in probability. The second-moment identity relating the sample-mean error to sum_j gamma_ij / r is the separately compiled iid layer.
+* **status / verification:** `compiled_by_composition` / `proved_in_build`
+* **semantic alignment:** `by_composition` — dissimilarity_convergesInProbability_of_gamma is the printed theorem: the number of queries is a function of the replicate count, gamma_ij is the trace-covariance, the hypothesis is the source's ((1/m) sum_j gamma_ij)/r -> 0 aggregated over the fixed model collection -- equivalent to the per-model form for finitely many nonnegative sequences -- and the conclusion is convergence of the Frobenius distance in probability. The second-moment identity relating the sample-mean error to sum_j gamma_ij / r is the separately compiled iid layer. Reclassified after adversarial review: the theorem takes the sample-mean second-moment bound as a hypothesis, so on its own it assumes the passage from the paper's definition of gamma to that bound, which is the content of the source's Appendix A.2. Both halves are compiled -- integral_norm_sq_sampleMean_sub_mean_le_of_bound for the gamma/r rate from iid replicates, and integral_norm_sq_eq_sum_query showing the gamma consumed is the paper's per-query trace-covariance summed over queries -- but no single declaration runs from the sampling setup to the conclusion at the growing scope.
 * **source claim:** If (1/m) sum_j gamma_ij / r tends to zero for every fixed model, then the empirical dissimilarity matrix converges in Frobenius norm in probability to Delta^(infinity).
-* **Lean declarations:** `Acharyya2024.Consistency.growing_queries_dissimilarity_converges`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment_growing`, `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean`, `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound`
+* **Lean declarations:** `Acharyya2024.Consistency.growing_queries_dissimilarity_converges`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment_growing`, `Acharyya2024.SecondMoment.integral_norm_sq_eq_sum_query`, `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean`, `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound`
 * **gap refs:** `growing-query-rate-wiring`
 * **notes:** The fixed-m form remains available and is what the downstream finite theorems consume.
-* **next action:** None. Theorem 4, which also grows the model count, remains a specialization.
+* **next action:** Thread integral_norm_sq_sampleMean_sub_mean_le_of_bound into the growing-scope theorems so one declaration runs from the paper's iid replicate setup to its conclusion.
 
 ### `A24-T3` — Fixed models, growing queries: DKPS consistency
 
@@ -401,13 +407,13 @@ Both are recorded in the AmbientModelLimit structure so the assumption is repres
 * **source anchor:** Theorem 4 (theorem, section 4.3)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:356-370`
 * **importance:** `headline`
-* **status / verification:** `compiled_exact` / `proved_in_build`
-* **semantic alignment:** `exact` — The printed theorem: models indexed by all of ℕ so their number grows, the number of queries a function of the replicate count, the same trace-covariance condition, and pointwise convergence in probability for a fixed pair. The growing model count costs nothing because the conclusion is pointwise: the union bound is over the two models in the pair, not over n.
+* **status / verification:** `compiled_by_composition` / `proved_in_build`
+* **semantic alignment:** `by_composition` — The printed theorem: models indexed by all of ℕ so their number grows, the number of queries a function of the replicate count, the same trace-covariance condition, and pointwise convergence in probability for a fixed pair. The growing model count costs nothing because the conclusion is pointwise: the union bound is over the two models in the pair, not over n. Reclassified after adversarial review: the theorem takes the sample-mean second-moment bound as a hypothesis, so on its own it assumes the passage from the paper's definition of gamma to that bound, which is the content of the source's Appendix A.2. Both halves are compiled -- integral_norm_sq_sampleMean_sub_mean_le_of_bound for the gamma/r rate from iid replicates, and integral_norm_sq_eq_sum_query showing the gamma consumed is the paper's per-query trace-covariance summed over queries -- but no single declaration runs from the sampling setup to the conclusion at the growing scope.
 * **source claim:** When n,m grow with r, the same covariance-trace rate implies pointwise convergence D_ii' -> Delta^(infinity)(phi_i,phi_i') in probability for every fixed pair.
-* **Lean declarations:** `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`, `Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma`, `Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing`, `Acharyya2024.Probability.sourceGammaRate_imp_secondMomentRate`
+* **Lean declarations:** `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`, `Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma`, `Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing`, `Acharyya2024.Probability.sourceGammaRate_imp_secondMomentRate`, `Acharyya2024.SecondMoment.integral_norm_sq_eq_sum_query`, `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound`
 * **gap refs:** `growing-query-rate-wiring`, `growing-n-concentration`
 * **notes:** The per-stage consistency theorem that consumes this still takes sampling convergence as a hypothesis; what was missing was the derivation of that hypothesis from the source's gamma condition, and it is now present.
-* **next action:** None. Theorem 5's L^p conclusion over the population law remains the open item on this side.
+* **next action:** Thread integral_norm_sq_sampleMean_sub_mean_le_of_bound into the growing-scope theorems so one declaration runs from the paper's iid replicate setup to its conclusion.
 
 ### `A24-T5` — Growing models and queries: L^p consistency
 

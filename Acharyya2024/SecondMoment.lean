@@ -187,4 +187,39 @@ theorem integral_norm_sq_sampleMean_sub_mean_le_of_bound
     _ = γ / r := by
           rw [sq, mul_assoc, inv_mul_cancel_left₀ hr0.ne', div_eq_inv_mul]
 
+/-! ## (e) Grounding `γ` as the paper's per-query trace-covariance
+
+The concentration theorems take a bound on `∫ ‖X̄ᵢ − μᵢ‖²`.  The paper's hypothesis is stated in
+terms of `γ_ij = trace(Σ_ij)`, the trace-covariance of the response of model `i` to query `j`,
+summed over queries.  These two are the same quantity, and this is why: the Frobenius second
+moment of a response matrix splits over its rows, and the row `j` contribution is exactly the
+trace-covariance of the response to query `j`. -/
+
+/-- The second moment of a Euclidean-space-valued variable splits over coordinates. -/
+theorem integral_norm_sq_eq_sum_coord {ι : Type} [Fintype ι] (P : Measure Ω)
+    (X : Ω → EuclideanSpace Real ι) (μ : EuclideanSpace Real ι)
+    (hint : ∀ i, Integrable (fun ω => (X ω i - μ i) ^ 2) P) :
+    ∫ ω, ‖X ω - μ‖ ^ 2 ∂P = ∑ i, ∫ ω, (X ω i - μ i) ^ 2 ∂P := by
+  have hpt : ∀ ω, ‖X ω - μ‖ ^ 2 = ∑ i, (X ω i - μ i) ^ 2 := by
+    intro ω
+    rw [EuclideanSpace.norm_eq, Real.sq_sqrt (by positivity)]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    simp [Real.norm_eq_abs, sq_abs]
+  simp_rw [hpt]
+  exact integral_finsetSum _ (fun i _ => hint i)
+
+/--
+**`γ` is the paper's trace-covariance, summed over queries.**
+
+The Frobenius second moment of a response matrix is the sum over queries of the trace-covariance
+of the response to that query.  So the `γ` that the concentration theorems consume is the
+paper's `∑_j γ_ij` and not an abstract bound.
+-/
+theorem integral_norm_sq_eq_sum_query {m p : Nat} (P : Measure Ω)
+    (X : Ω → EuclideanSpace Real (Fin m × Fin p)) (μ : EuclideanSpace Real (Fin m × Fin p))
+    (hint : ∀ q : Fin m × Fin p, Integrable (fun ω => (X ω q - μ q) ^ 2) P) :
+    ∫ ω, ‖X ω - μ‖ ^ 2 ∂P
+      = ∑ j : Fin m, ∑ k : Fin p, ∫ ω, (X ω (j, k) - μ (j, k)) ^ 2 ∂P := by
+  rw [integral_norm_sq_eq_sum_coord P X μ hint, Fintype.sum_prod_type]
+
 end Acharyya2024.SecondMoment
