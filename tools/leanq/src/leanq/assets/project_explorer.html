@@ -52,6 +52,7 @@ svg .node text{font-size:10px;fill:#15202b;pointer-events:none}
 svg .node text.small{font-size:8px;fill:#4b5a6b}
 svg .node.cluster rect{stroke-dasharray:4 3}
 svg .node.headline rect{stroke:var(--headline);stroke-width:3}
+svg .edge.via{stroke-dasharray:4 3}
 svg .node.supporting rect{stroke:var(--support);stroke-width:2}
 svg .node.shared rect{stroke:var(--shared);stroke-width:2}
 svg .node.selected rect{stroke:var(--accent);stroke-width:3.4}
@@ -85,6 +86,12 @@ svg text.band.empty{font-weight:400;fill:#9aa8b6;font-style:italic}
 .path li{word-break:break-word;margin-bottom:1px}
 .family-title{font-size:.72rem;font-weight:650;margin:9px 0 3px;display:flex;align-items:center;gap:6px}
 .family-title button{font-size:.66rem;min-height:20px;padding:1px 5px}
+.family-head{cursor:pointer;user-select:none;border-radius:6px;padding:2px 4px}
+.family-head:hover{background:color-mix(in srgb,var(--accent) 8%,transparent)}
+.family-head .caret{display:inline-block;width:9px;font-size:.6rem;color:var(--muted)}
+.family-head .name{flex:1}
+.family-head .tally{font-weight:400;color:var(--muted);font-size:.66rem;white-space:nowrap}
+.family-head.on .tally{color:var(--headline)}
 .headline-selection label{display:flex;gap:7px;align-items:start;font-size:.76rem;padding:3px 4px;border-radius:6px;cursor:pointer}
 .headline-selection label:hover{background:color-mix(in srgb,var(--accent) 8%,transparent)}
 .headline-selection input{min-height:0;margin-top:3px}
@@ -121,6 +128,8 @@ svg text.band.empty{font-weight:400;fill:#9aa8b6;font-style:italic}
     <input type="checkbox" id="restrict" checked> Ancestors of selection only</label>
   <label title="Keep only declarations reached by at least two selected headline theorems">
     <input type="checkbox" id="sharedonly"> Shared foundations only</label>
+  <label title="Fold private helpers, proof terms and generated equation lemmas out of the drawing. Each chain through them is reconnected, so no dependency path is lost; the edge records how many were folded away.">
+    <input type="checkbox" id="hideinternal" checked> Collapse internal helpers</label>
   <div class="search-wrap"><button id="packages-toggle">Packages</button>
     <div id="packages" class="results packages"></div></div>
   <span class="sep"></span>
@@ -171,6 +180,70 @@ for (const e of allEdges) {
   const out = outgoing.get(e.source), inc = incoming.get(e.target);
   if (out && inc) { out.push(e.target); inc.push(e.source); }
 }
+
+/* ---------------------------------------------- internal-helper contraction */
+/* Private constants, proof terms and generated equation lemmas carry no
+   conceptual content, but a public theorem's route to its foundations usually
+   runs straight through them.  Hiding them would cut those routes, so they are
+   *contracted* instead: every public consumer is reconnected to the public
+   dependencies it reaches through a chain of them, and the resulting edge
+   records how many were folded away.  Reachability itself is always computed on
+   the full graph, so ancestor closures, coverage counts and shortest paths do
+   not depend on this setting -- only what is drawn does. */
+const GENERATED_SUFFIX = /\.(?:eq_\d+|eq_def|_eq_\d+)$/;
+function isInternalNode(n){return n.internal === true || GENERATED_SUFFIX.test(n.id)}
+const internalIds = new Set(allNodes.filter(isInternalNode).map(n => n.id));
+function collapsingInternal(){return internalBox.checked && internalIds.size > 0}
+
+let contractedCache = null;
+function contractedGraph() {
+  if (contractedCache) return contractedCache;
+  /* Nearest public consumers of an internal node, with how many internal nodes
+     the shortest route crosses.  A cycle among internal nodes contributes
+     nothing on the back edge, which is the only place this under-reports. */
+  const memo = new Map(), active = new Set();
+  function nearest(id) {
+    const hit = memo.get(id);
+    if (hit) return hit;
+    if (active.has(id)) return new Map();
+    active.add(id);
+    const out = new Map();
+    for (const v of outgoing.get(id) || []) {
+      if (!internalIds.has(v)) { const c = out.get(v); if (c === undefined || c > 1) out.set(v, 1); }
+      else for (const [w, c] of nearest(v)) {
+        const seen = out.get(w);
+        if (seen === undefined || seen > c + 1) out.set(w, c + 1);
+      }
+    }
+    active.delete(id);
+    memo.set(id, out);
+    return out;
+  }
+  const emap = new Map(), inc = new Map(), out = new Map();
+  const add = (a, b, via) => {
+    if (a === b) return;
+    const k = a + " " + b, row = emap.get(k);
+    if (row) { if (via < row.collapsedNodeCount) row.collapsedNodeCount = via; return; }
+    emap.set(k, {source: a, target: b, collapsedNodeCount: via});
+    if (!inc.has(b)) inc.set(b, []);
+    if (!out.has(a)) out.set(a, []);
+    inc.get(b).push(a);
+    out.get(a).push(b);
+  };
+  for (const n of allNodes) {
+    if (internalIds.has(n.id)) continue;
+    for (const v of outgoing.get(n.id) || []) {
+      if (!internalIds.has(v)) add(n.id, v, 0);
+      else for (const [w, c] of nearest(v)) add(n.id, w, c);
+    }
+  }
+  contractedCache = {edges: [...emap.values()], incoming: inc, outgoing: out};
+  return contractedCache;
+}
+/* Adjacency for the things the user *sees*: opening one dependency level must
+   land on drawn nodes, not on helpers the projection is about to fold away. */
+function depAdj(){return collapsingInternal() ? contractedGraph().incoming : incoming}
+function consAdj(){return collapsingInternal() ? contractedGraph().outgoing : outgoing}
 
 /* ------------------------------------------------- hierarchical cluster keys */
 /* Every declaration sits at Library / module segment / module segment / ... .
@@ -223,6 +296,9 @@ function paperDefaultSeeds() {
 
 /* -------------------------------------------------------------------- state */
 let selectedSeeds = paperDefaultSeeds();
+/* Which paper sections of the subset panel are open.  The panel is rebuilt on
+   every selection change, so the open set has to outlive the render. */
+let openFamilies = new Set();
 let expanded = new Set();      // cluster keys the user opened
 let revealed = new Set();      // declarations forced to render as real nodes
 let collapsed = new Set();     // declarations forced back into their module
@@ -239,6 +315,7 @@ let enabledLibraries = new Set();
 const $ = id => document.getElementById(id);
 const svg = $("graph"), viewport = $("viewport"), details = $("details");
 const depthSelect = $("depth"), restrictBox = $("restrict"), sharedBox = $("sharedonly");
+const internalBox = $("hideinternal");
 const layoutSelect = $("layout");
 
 /* --------------------------------------------------------------- utilities */
@@ -321,9 +398,12 @@ function project() {
   const foundationMode = layoutSelect.value === "foundation";
   const limit = Number(depthSelect.value) + (foundationMode ? 1 : 0);
   const sharedOnly = sharedBox.checked && activeHeadlineDeclarations().size > 0;
+  const foldInternal = collapsingInternal();
   const group = new Map(), members = new Map();
+  let foldedCount = 0;
   for (const n of allNodes) {
     if (hiddenNodes.has(n.id)) continue;
+    if (foldInternal && internalIds.has(n.id) && !isSelectedHeadline(n)) { foldedCount++; continue; }
     if (!enabledLibraries.has(n.library || "Other")) continue;
     if (allowed && !allowed.has(n.id)) continue;
     if (sharedOnly && coverageCount(n.id) < 2 && !isSelectedHeadline(n)) continue;
@@ -362,14 +442,18 @@ function project() {
     });
   }
   const byProjectedId = new Map(pnodes.map(n => [n.id, n])), emap = new Map();
-  for (const e of allEdges) {
+  for (const e of (foldInternal ? contractedGraph().edges : allEdges)) {
     const a = group.get(e.source), b = group.get(e.target);
     if (!a || !b) continue;
     if (a === b) { const n = byProjectedId.get(a); if (n) n.hiddenEdgeCount++; continue; }
     const k = a + " " + b;
     let row = emap.get(k);
-    if (!row) { row = {source: a, target: b, edgeCount: 0, witness: [e.source, e.target]}; emap.set(k, row); }
+    if (!row) {
+      row = {source: a, target: b, edgeCount: 0, witness: [e.source, e.target], collapsedNodeCount: 0};
+      emap.set(k, row);
+    }
     row.edgeCount++;
+    if (e.collapsedNodeCount > row.collapsedNodeCount) row.collapsedNodeCount = e.collapsedNodeCount;
   }
   for (const e of emap.values()) {
     byProjectedId.get(e.source).projectedOutCount++;
@@ -380,14 +464,14 @@ function project() {
   for (const n of pnodes) {
     if (n.cluster) { n.expandable = true; n.foldedDependencyCount = n.hiddenDeclarationCount; continue; }
     let folded = 0;
-    for (const d of incoming.get(n.id) || []) {
+    for (const d of depAdj().get(n.id) || []) {
       const g = group.get(d);
       if (g && g !== d) folded++;
     }
     n.foldedDependencyCount = folded;
     n.expandable = folded > 0;
   }
-  currentProjection = {nodes: pnodes, edges: [...emap.values()]};
+  currentProjection = {nodes: pnodes, edges: [...emap.values()], foldedInternalCount: foldedCount};
   return currentProjection;
 }
 
@@ -601,10 +685,20 @@ function render() {
     const a = layoutPos.get(e.source), b = layoutPos.get(e.target);
     if (!a || !b) continue;
     const x1 = a.x + a.w, y1 = a.y + a.h / 2, x2 = b.x, y2 = b.y + b.h / 2, m = (x1 + x2) / 2;
-    viewport.append(el("path", {
+    /* A dashed edge is one that was routed through folded internal helpers, so
+       the reader can tell an indirect link from a declared dependency. */
+    const via = e.collapsedNodeCount || 0;
+    const path = el("path", {
       d: `M${x1},${y1}C${m},${y1} ${m},${y2} ${x2},${y2}`,
-      class: "edge" + (highlighted.has(e.source) && highlighted.has(e.target) ? " hot" : ""),
-      "marker-end": "url(#arrow)"}));
+      class: "edge" + (highlighted.has(e.source) && highlighted.has(e.target) ? " hot" : "")
+        + (via ? " via" : ""),
+      "marker-end": "url(#arrow)"});
+    if (via) {
+      const t = el("title");
+      t.textContent = `through ${via} internal helper${via === 1 ? "" : "s"}`;
+      path.append(t);
+    }
+    viewport.append(path);
   }
   for (const n of P.nodes) {
     const p = layoutPos.get(n.id);
@@ -638,7 +732,7 @@ function render() {
     g.addEventListener("click", ev => { ev.stopPropagation(); choose(n, ev.shiftKey); });
     g.addEventListener("dblclick", ev => {
       ev.stopPropagation();
-      if (n.cluster) expandCluster(n); else reveal(n.id, incoming, 1);
+      if (n.cluster) expandCluster(n); else reveal(n.id, depAdj(), 1);
     });
     viewport.append(g);
   }
@@ -769,9 +863,9 @@ function showNode(n) {
         ["Shared dependencies", h.sharedDependencyCount]]) +
       pathHtml(h.pathToNearestSharedDependency || []) : "");
   const act = (a, f) => { const b = details.querySelector(`[data-a="${a}"]`); if (b) b.onclick = f; };
-  act("d1", () => reveal(n.id, incoming, 1));
-  act("d3", () => reveal(n.id, incoming, 3));
-  act("cons", () => reveal(n.id, outgoing, 1));
+  act("d1", () => reveal(n.id, depAdj(), 1));
+  act("d3", () => reveal(n.id, depAdj(), 3));
+  act("cons", () => reveal(n.id, consAdj(), 1));
   act("cone", () => { highlighted = walk([n.id], incoming); render(); });
   act("focus", () => { focusRegion = walk([n.id], incoming); render(); });
   act("module", () => { collapsed.add(n.id); revealed.delete(n.id); selected = []; render(); });
@@ -840,6 +934,9 @@ function renderBadges() {
     `<span class="badge">${selectedClaimIds().size} / ${claims.length} claims · ${active.size} selected theorems</span>` +
     `<span class="badge">${ancestorUniverse().size.toLocaleString()} in selected closure</span>` +
     `<span class="badge">${shared.toLocaleString()} shared by two or more</span>` +
+    (collapsingInternal()
+      ? `<span class="badge" title="Private helpers, proof terms and generated equation lemmas, folded out of the drawing with their dependency chains reconnected">${internalIds.size.toLocaleString()} internal helpers contracted</span>`
+      : "") +
     (unreachedLibraries.length
       ? `<span class="badge" title="These packages have no declaration in the selected closure, so they get no column">not reached: ${esc(unreachedLibraries.join(", "))}</span>`
       : "");
@@ -853,13 +950,23 @@ function renderSelection() {
     families.get(c.family).push(c);
   }
   for (const [family, rows] of families) {
+    const open = openFamilies.has(family);
+    const chosenClaims = rows.filter(c => claimRealizations(c).some(d => selectedSeeds.has(d))).length;
     const head = document.createElement("div");
-    head.className = "family-title";
-    head.append(document.createTextNode(family));
+    head.className = "family-title family-head" + (chosenClaims ? " on" : "");
+    head.title = open ? "Collapse this paper" : "Expand this paper";
+    const caret = document.createElement("span");
+    caret.className = "caret";
+    caret.textContent = open ? "\u25be" : "\u25b8";
+    const name = document.createElement("span");
+    name.className = "name";
+    name.textContent = family;
+    head.append(caret, name);
     for (const [label, pick] of [["leaves", c => claimLeaves(c)], ["all", c => claimRealizations(c)], ["none", () => []]]) {
       const b = document.createElement("button");
       b.textContent = label;
-      b.onclick = () => {
+      b.onclick = ev => {
+        ev.stopPropagation();
         for (const c of rows) {
           for (const d of claimRealizations(c)) selectedSeeds.delete(d);
           for (const d of pick(c)) selectedSeeds.add(d);
@@ -868,7 +975,18 @@ function renderSelection() {
       };
       head.append(b);
     }
+    const tally = document.createElement("span");
+    tally.className = "tally";
+    tally.textContent = `${chosenClaims}/${rows.length}`;
+    head.append(tally);
+    /* Selecting a paper's claims from its header must not force the reader to
+       scroll past its claim list, so the section's open state is independent. */
+    head.onclick = () => {
+      if (openFamilies.has(family)) openFamilies.delete(family); else openFamilies.add(family);
+      renderSelection();
+    };
     box.append(head);
+    if (!open) continue;
     for (const c of rows) {
       const realizations = claimRealizations(c), leaves = new Set(claimLeaves(c));
       const chosen = realizations.filter(d => selectedSeeds.has(d));
@@ -1133,6 +1251,7 @@ function reset() {
   layoutSelect.value = "library";
   restrictBox.checked = true;
   sharedBox.checked = false;
+  internalBox.checked = true;
   enabledLibraries = new Set(libraryOrder.filter(lib => lib !== BOUNDARY));
   renderPackages();
   transform = {x: 0, y: 0, s: 1};
@@ -1151,6 +1270,7 @@ depthSelect.onchange = render;
 layoutSelect.onchange = render;
 restrictBox.onchange = render;
 sharedBox.onchange = render;
+internalBox.onchange = render;
 $("subset-default").onclick = () => setHeadlineSubset(paperDefaultSeeds());
 $("subset-all").onclick = () =>
   setHeadlineSubset(new Set(claims.flatMap(claimRealizations)));

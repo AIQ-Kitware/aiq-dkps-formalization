@@ -156,6 +156,11 @@ Quench's estimator definition and standing assumption stay available but unselec
 `--default-claim Q26-NN` (repeatable) overrides that on the command line. Per-family
 `leaves` / `all` / `none` buttons and the `Paper default` / `All` / `None` buttons move whole groups.
 
+The panel is grouped by paper, one collapsible section each, and every section starts closed with a
+`selected / total` claim tally beside its name, so reaching one paper's headline theorems does not
+mean scrolling past every other paper's. Opening a section is independent of selecting from it: the
+`leaves` / `all` / `none` buttons act on the whole paper without opening it.
+
 Every claim and realization reports which packages its dependency closure actually reaches. A claim
 whose closure never leaves its own library is visible immediately, which is how a census row that
 registers the abstract form of a theorem rather than the instantiation consuming the shared
@@ -166,6 +171,17 @@ universe is exactly the dependency closure of the selected headline theorems: a 
 selected headline reaches is never drawn, expanding a cluster cannot introduce one, and selecting
 no headline at all renders an empty graph. Unchecking it restores the whole project.
 `Shared foundations only` narrows further to declarations at least two selected headlines reach.
+
+**Collapse internal helpers.** Checked by default. Private constants, proof terms and generated
+equation lemmas -- about a third of the declarations in a project index -- carry no conceptual
+content, but a public theorem's route to its foundations usually runs straight *through* them, so
+hiding them outright would cut the very chains the picture is for. They are contracted instead:
+each public consumer is reconnected to the public dependencies it reaches through a chain of them,
+and the resulting edge is drawn dashed and reports how many were folded away. On the current index
+that is 7258 of 22393 declarations folded, with 3233 edges routed through at least one of them --
+the links a naive hide would have severed. Reachability is always computed on the full graph, so
+ancestor closures, coverage counts and shortest paths do not depend on the setting; only what is
+drawn does.
 
 **Progressive hierarchical expansion.** A declaration is collapsed at the shallowest prefix of
 `Library / module segment / module segment / ...` that neither the global `Group` depth nor an
