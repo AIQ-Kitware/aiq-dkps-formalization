@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Frontier.Section8PartII
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Approximation
 import ForTauCeti.Analysis.InnerProductSpace.SandwichMajorization
 
 /-!
@@ -89,7 +89,6 @@ namespace Section8
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Frontier.Section8
 
 universe u
 

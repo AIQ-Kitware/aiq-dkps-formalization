@@ -3,8 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Frontier.Section8PartIII
-import DavisKahan.Frontier.Section8PartIIIReal
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Majorization
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81MajorizationReal
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Examples
 
@@ -99,7 +99,6 @@ namespace Section8
 
 open scoped InnerProductSpace
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Frontier.Section8
 open Module (finrank)
 
 universe u

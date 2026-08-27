@@ -3,7 +3,8 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Frontier.Section8PartII
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81Approximation
+import DavisKahan.BoundedOperator.BlockShift
 import DavisKahan.OperatorIdeal.ComplexificationApproximation
 import DavisKahan.Sources.DavisKahan1970.Section8.SourceTheorem81Real
 
@@ -71,54 +72,6 @@ universe v
 
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
-
-/-! ### The four block bridges
-
-Each of the four ambient blocks of part (ii) commutes with `complexify`. -/
-
-omit [CompleteSpace E] in
-/-- The unperturbed upper block commutes with complexification. -/
-theorem complexify_upperBlockShift (A : E →L[ℝ] E) (P : Submodule ℝ E)
-    [P.HasOrthogonalProjection] (alpha : ℝ) :
-    complexify (upperBlockShift A P alpha) =
-      upperBlockShift (complexify A) (complexifySubmodule P) alpha := by
-  simp only [upperBlockShift, complexify_comp, complexify_sub, complexify_real_smul,
-    complexify_id, starProjection_complexifySubmodule_orthogonal,
-    RCLike.ofReal_real_eq_id, id_eq]
-  rfl
-
-omit [CompleteSpace E] in
-/-- The cosine block commutes with complexification. -/
-theorem complexify_cosineBlock (P Q : Submodule ℝ E)
-    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
-    complexify (cosineBlock P Q) =
-      cosineBlock (complexifySubmodule P) (complexifySubmodule Q) := by
-  simp only [cosineBlock, complexify_comp, starProjection_complexifySubmodule_orthogonal]
-
-omit [CompleteSpace E] in
-/-- The unperturbed lower block commutes with complexification. -/
-theorem complexify_lowerBlockShift (A : E →L[ℝ] E) (P : Submodule ℝ E)
-    [P.HasOrthogonalProjection] (alpha delta : ℝ) :
-    complexify (lowerBlockShift A P alpha delta) =
-      lowerBlockShift (complexify A) (complexifySubmodule P) alpha delta := by
-  simp only [lowerBlockShift, complexify_comp, complexify_sub, complexify_real_smul,
-    complexify_id, starProjection_complexifySubmodule,
-    RCLike.ofReal_real_eq_id, id_eq]
-  rfl
-
-omit [CompleteSpace E] in
-/-- The lower cosine block commutes with complexification. -/
-theorem complexify_lowerCosineBlock (P Q : Submodule ℝ E)
-    [P.HasOrthogonalProjection] [Q.HasOrthogonalProjection] :
-    complexify (lowerCosineBlock P Q) =
-      lowerCosineBlock (complexifySubmodule P) (complexifySubmodule Q) := by
-  simp only [lowerCosineBlock, complexify_comp, starProjection_complexifySubmodule]
-
-/-- The adjoint sandwich commutes with complexification. -/
-theorem complexify_adjoint_sandwich (M D : E →L[ℝ] E) :
-    complexify (ContinuousLinearMap.adjoint D ∘L M ∘L D) =
-      ContinuousLinearMap.adjoint (complexify D) ∘L complexify M ∘L complexify D := by
-  rw [complexify_comp, complexify_comp, complexify_adjoint]
 
 /-! ### The real branch -/
 
@@ -378,7 +331,7 @@ theorem theorem8_1_upperCompressionRepulsion_real
             (complexify A + complexify K) (Qcᗮ.starProjection (ofReal x))⟫_ℂ -
           alpha * ‖Qcᗮ.starProjection (ofReal x)‖ ^ 2 := by
     rintro Qc _ rfl
-    exact DavisKahan.Frontier.Section8.theorem8_1_upperCompressionRepulsion_source
+    exact DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source
       (complexify A) (complexify K) (complexifySubmodule P) hdelta hAc hKc
       (fun z hz => mapsTo_complexifySubmodule hAP hz)
       (fun z hz => re_inner_le_of_mem_complexifySubmodule hPlow hz)
@@ -441,7 +394,7 @@ theorem theorem8_1_lowerCompressionRepulsion_real
           RCLike.re ⟪Qc.starProjection (ofReal x),
             (complexify A + complexify K) (Qc.starProjection (ofReal x))⟫_ℂ := by
     rintro Qc _ rfl
-    exact DavisKahan.Frontier.Section8.theorem8_1_lowerCompressionRepulsion_source
+    exact DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source
       (complexify A) (complexify K) (complexifySubmodule P) hdelta hAc hKc
       (fun z hz => mapsTo_complexifySubmodule hAP hz)
       (fun z hz => re_inner_le_of_mem_complexifySubmodule hPlow hz)

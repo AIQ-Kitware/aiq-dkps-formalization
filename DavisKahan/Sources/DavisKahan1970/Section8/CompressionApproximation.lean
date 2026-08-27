@@ -59,7 +59,7 @@ through the bounded projection-valued measure of a self-adjoint operator.  Since
 `RCLike` carries no `ℝ`/`ℂ` discriminator, that cannot be worked around inside a
 `𝕜`-generic proof.  The real-scalar consumers therefore descend from the complex
 statement by complexification rather than re-elaborating this proof over `ℝ`;
-see `DavisKahan/Frontier/Section8PartIIReal.lean`.
+see `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean`.
 -/
 
 namespace TauCeti

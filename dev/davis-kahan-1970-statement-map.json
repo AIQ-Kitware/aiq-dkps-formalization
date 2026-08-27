@@ -612,16 +612,16 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "S3-standing-scope",
       "review_declarations": [
-        "TauCeti.DavisKahan.Frontier.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
-        "TauCeti.DavisKahan.Frontier.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects"
+        "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
+        "TauCeti.DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects"
       ],
       "audit_clauses": [
         {
           "id": "S3-standing-scope.whole",
           "description": "Audit the standing convention as one scope assertion: (3.5) holds together with (1.5) for the rest of the paper unless a later statement says otherwise.",
           "review_declarations": [
-            "TauCeti.DavisKahan.Frontier.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
-            "TauCeti.DavisKahan.Frontier.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects"
+            "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
+            "TauCeti.DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects"
           ]
         }
       ],
