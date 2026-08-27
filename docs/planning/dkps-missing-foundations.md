@@ -116,6 +116,38 @@ hypotheses appears to have no source at all.
 - `inherited-acharyya-v1-norm`, `v1-norm-inconsistency`, `tie-display-proof-mismatch`,
   `support-wording-repair`: source defects, already dispositioned.
 
+## What TauCeti already provides (checked 2026-08-27)
+
+`external/TauCeti` is a build input, so anything here is directly importable. Searched all
+12,360 modules for each foundation.
+
+**Materially changes F1.** TauCeti has the measure-theoretic layer the continuum MDS
+treatment needs:
+
+- `TauCeti/Probability/Process/EmpiricalMeasure.lean` — `empiricalPopulation`,
+  `empiricalMeasure`, and crucially `integral_empiricalPopulation`:
+  `∫ f d(empiricalPopulation x) = (card κ)⁻¹ • ∑ i, f (x i)`.
+- `TauCeti/Probability/StrongLaw.lean` — `strong_law_ae_infinitePi`: averages along the
+  coordinates of `Q^{⊗ℕ}` converge a.e. to `∫ f dQ`.
+- `TauCeti/Probability/Exchangeability/ConditionallyIID/StrongLaw.lean` —
+  `tendsto_integral_empiricalMeasure_ae` and friends.
+- `TauCeti/MeasureTheory/OptimalTransport/` — Wasserstein cost and gluing.
+
+`integral_empiricalPopulation` is the exact bridge: the paper's finite raw stress is a
+double sum, which is `n²` times an integral against the empirical measure on each factor,
+and the continuous raw stress is the same integral against `P`. So F1 is not "build the
+continuum theory" — it is "define raw stress as an integral functional and connect the
+finite case through TauCeti's empirical measure", with the strong law supplying the limit.
+Substantially smaller than the gap text implies.
+
+**Provides nothing for F2, F3, F4.** No Davis--Kahan, `sinTheta`, Procrustes, eigenvalue
+perturbation, triangular arrays, covering numbers, or concentration inequalities. The
+`Weyl` hits are representation-theoretic Weyl modules, unrelated. The spectral perturbation
+layer is genuinely ours to build.
+
+**Partial for F5.** Uniform integrability appears via `Probability/Martingale/Convergence`
+(Mathlib's `UnifIntegrable`); nothing purpose-built for risk functionals.
+
 ## Suggested order
 
 F2 first — it removes a stated-nowhere hypothesis from two papers and closes `Q26-EQ1`.
