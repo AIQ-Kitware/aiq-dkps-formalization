@@ -424,6 +424,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`
 - `Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress`
+- `Acharyya2024.ContinuousMDS.ae_tendsto_outOfSampleExtension_of_iid`
 - `Acharyya2024.ContinuousMDS.continuousPointStress`
 - `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding`
@@ -438,6 +439,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left`
 - `Acharyya2024.ContinuousMDS.lt_pointStress_of_norm_gt`
 - `Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress`
+- `Acharyya2024.ContinuousMDS.norm_min_pointStress_le_of_bounded`
 - `Acharyya2024.ContinuousMDS.pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress_rigidMotion`
 - `Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz`
@@ -460,6 +462,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 | Lemma 2. ([23]) | The source attributes the lemma to the cited continuous-MDS literature and does not prove it. | `supplementary` |  |
 | int int \|‖psihat_1 - psihat_2‖ - ‖mds(phi_1) - mds(phi_2)‖\|^p P(dphi_1) P(dphi_2) | lpPairDistErr over ContinuousMDS.frameEmbedding and a continuous-MDS map; every model is placed against one fixed reference configuration, so the pairwise distances are comparisons within a single frame. | `different_quantifier_encoding` | The source leaves the out-of-sample map implicit in its notation; Quench states it as Psihat_Q. Augmenting one model at a time gives each model its own frame and so cannot serve the integral. |
 | ... -> P 0 as u -> infinity | tendsto_lpPairDistErr_frameEmbedding proves the L^p discrepancy tends to zero, against the population embedding of a fixed reference sample. | `lean_stronger_hypothesis` | Identifying that target with the continuous-MDS map, as the reference collection grows, is the whole residual. |
+| Lemma 2. ([23]) ... \|\|mds(phi_1) - mds(phi_2)\|\| | ae_tendsto_outOfSampleExtension_of_iid proves the identification of the estimated out-of-sample position with the population minimizer, which is what the citation stands for. | `derived_by_composition` | Combining it with the L^p conclusion needs a Fubini exchange of quantifiers and hence joint measurability of the out-of-sample map. |
 
 **Semantic review:**
 
@@ -469,7 +472,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Assemble: intersect the countably many strong-law null sets over a countable dense set, spread by tendsto_of_dense_of_equiLipschitz, bound the minimizers by coercivity, and apply tendsto_argmin_of_tendsto_of_equiLipschitz; then tendsto_lpPairDistErr_of_ae_tendsto finishes.
+**Next action:** Establish joint measurability of the out-of-sample map in the sample and the model, then exchange the quantifiers by Fubini to combine ae_tendsto_outOfSampleExtension_of_iid with tendsto_lpPairDistErr_of_ae_tendsto. The mathematics of the identification is proved.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -520,6 +523,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`
 - `Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress`
+- `Acharyya2024.ContinuousMDS.ae_tendsto_outOfSampleExtension_of_iid`
 - `Acharyya2024.ContinuousMDS.continuousPointStress`
 - `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding`
@@ -533,6 +537,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left`
 - `Acharyya2024.ContinuousMDS.lt_pointStress_of_norm_gt`
 - `Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress`
+- `Acharyya2024.ContinuousMDS.norm_min_pointStress_le_of_bounded`
 - `Acharyya2024.ContinuousMDS.pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress_rigidMotion`
 - `Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz`
@@ -560,7 +565,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Assemble: intersect the countably many strong-law null sets over a countable dense set, spread by tendsto_of_dense_of_equiLipschitz, bound the minimizers by coercivity, and apply tendsto_argmin_of_tendsto_of_equiLipschitz; then tendsto_lpPairDistErr_of_ae_tendsto finishes.
+**Next action:** Establish joint measurability of the out-of-sample map in the sample and the model, then exchange the quantifiers by Fubini to combine ae_tendsto_outOfSampleExtension_of_iid with tendsto_lpPairDistErr_of_ae_tendsto. The mathematics of the identification is proved.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 
