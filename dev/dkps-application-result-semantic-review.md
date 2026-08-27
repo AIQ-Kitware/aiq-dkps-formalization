@@ -9,7 +9,7 @@ This is the entry point for **paper theorem vs. Lean theorem** comparison. The c
 | paper | id | source anchor | verdict | first substantive delta |
 | --- | --- | --- | --- | --- |
 | `acharyya-2024` | `A24-EQ1` | Equation (1), finite raw stress | PASS exact | No substantive delta recorded. |
-| `acharyya-2024` | `A24-R3` | Continuous raw-stress setup and Remark 3 | GAP missing source result | Define continuous raw stress on a compact model space using a P x P integral and minimize over measurable embeddings. -> No continuous-model-space raw-stress functional or continuous MDS minimizer exists in Acharyya2024. |
+| `acharyya-2024` | `A24-R3` | Continuous raw-stress setup and Remark 3 | GAP missing source result | A minimizer set rather than a chosen minimizer, since MDS determines an embedding only up to a rigid motion. Existence is attributed by the source to the cited literature. |
 | `acharyya-2024` | `A24-T1` | Theorem 1 | GAP stronger Lean hypotheses | Without it Lean proves convergence to the population minimizer set, showing why the printed fixed-representative conclusion needs repair. |
 | `acharyya-2024` | `A24-A1` | Assumption 1 | PASS generalized/stronger theorem | This formalizes exactly the consequence used by raw-stress stability and does not require named latent vectors. |
 | `acharyya-2024` | `A24-L1` | Lemma 1 | GAP stronger Lean hypotheses | This is the same identifiability issue as Theorem 1. |

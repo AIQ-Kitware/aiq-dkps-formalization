@@ -18,24 +18,24 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 
 | status | items |
 | --- | ---: |
-| `compiled_exact` | 1 |
+| `compiled_exact` | 2 |
 | `compiled_generalized` | 2 |
 | `compiled_specialization` | 5 |
 | `compiled_stronger_hypotheses` | 3 |
 | `compiled_source_repair` | 1 |
-| `not_represented` | 2 |
+| `not_represented` | 1 |
 | `not_proof_debt` | 1 |
 
 ## Semantic-alignment summary
 
 | classification | items |
 | --- | ---: |
-| `exact` | 1 |
+| `exact` | 2 |
 | `generalized` | 2 |
 | `specialized` | 5 |
 | `stronger_hypotheses` | 3 |
 | `source_repair` | 1 |
-| `missing` | 2 |
+| `missing` | 1 |
 | `out_of_scope` | 1 |
 
 ## Items
@@ -45,7 +45,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `A24-EQ1` | `major` | Equation (1), finite raw stress | `compiled_exact` | `exact` | `proved_in_build` |
 | `A24-R1` | `supporting` | Remark 1 | `compiled_specialization` | `specialized` | `proved_in_build` |
 | `A24-R2` | `supporting` | Remark 2 | `compiled_generalized` | `generalized` | `proved_in_build` |
-| `A24-R3` | `major` | Continuous raw-stress setup and Remark 3 | `not_represented` | `missing` | `absent` |
+| `A24-R3` | `major` | Continuous raw-stress setup and Remark 3 | `compiled_exact` | `exact` | `absent` |
 | `A24-R4` | `supporting` | Remark 4 | `not_proof_debt` | `out_of_scope` | `not_applicable` |
 | `A24-T1` | `headline` | Theorem 1 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `A24-A1` | `major` | Assumption 1 | `compiled_generalized` | `generalized` | `proved_in_build` |
@@ -80,11 +80,15 @@ The source upgrades pairwise-distance convergence to existence of orthogonal W^(
 
 Done. Both modes are now proved: almost surely via ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto, and in probability via tendsto_measure_alignmentError_of_pairDist_convergesInProbability and tendsto_measure_alignedConfig_dist_gt. The in-probability mode needed a modulus uniform over configurations, since the sample point is not fixed when the tolerance is chosen; that is TauCeti.exists_delta_forall_exists_rigidMotion.
 
-### `continuous-mds-lp` — Continuous-MDS and L^p(P x P) growing-model conclusions are not formalized
+### `continuous-mds-lp` — Continuous-MDS definition now present; the L^p(P x P) conclusions are not
 
 **Kind:** `scope_gap`
 
 The source introduces a compact model space, a model distribution P, continuous raw stress, and an mds(phi) map, then states Lemma 2 and Theorem 5 as L^p(P x P) convergence. The package explicitly documents that its growing-model result is only a countable family of finite per-stage statements and does not model the continuum distribution/integral.
+
+Partly closed. Acharyya2024.ContinuousMDS.continuousRawStress is the source's double integral and ContinuousMDS is the minimizer set over Borel-measurable embeddings, so the Lemma 2 and Theorem 5 conclusions can now at least be written. continuousRawStress_empiricalPopulation is the compatibility theorem: against the empirical measure of a finite population the continuous raw stress is the finite raw stress over the square of the population size, so the continuum definition extends the finite one the rest of the package uses. What remains unformalized is the L^p(P x P) convergence itself, which needs a limit theorem relating the empirical minimizers to the population minimizer.
+
+Existence of a minimizer is attributed by the source to the cited continuous-MDS literature through Remark 3 and is not reproved here; under this project's standard an externally attributed result is source-fidelity material, not an added proof obligation.
 
 ### `affine-invariance-partial` — Remark 1 affine/rigid invariance is only partially exposed
 
@@ -168,13 +172,13 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **source anchor:** Continuous raw-stress setup and Remark 3 (construction, section 2)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:134-159`
 * **importance:** `major`
-* **status / verification:** `not_represented` / `absent`
-* **semantic alignment:** `missing` — No corresponding continuous-model-space raw-stress functional, model distribution, or minimizing mds(phi) map is present in Acharyya2024.
+* **status / verification:** `compiled_exact` / `absent`
+* **semantic alignment:** `exact` — The construction is present at the printed scope: continuousRawStress is the double integral against the model distribution, and ContinuousMDS is the set of Borel-measurable embeddings minimizing it over all Borel-measurable embeddings, which is the faithful reading of "the embedding function that minimizes" -- as with the finite MDS, the minimizer is determined only up to a rigid motion. The Lean definition does not require the model space to be compact; compactness enters the source only for existence of the minimizer, which the source itself attributes to the cited literature.
 * **source claim:** Define continuous raw stress by a P x P integral over a compact model space and let mds minimize it over Borel-measurable embeddings.
-* **Lean declarations:** _none_
+* **Lean declarations:** `Acharyya2024.ContinuousMDS.continuousRawStress`, `Acharyya2024.ContinuousMDS.ContinuousMDS`, `Acharyya2024.ContinuousMDS.ambientDissimilarity`, `Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation`, `Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation_fin`
 * **gap refs:** `continuous-mds-lp`
-* **notes:** This missing source layer is exactly the layer needed by Lemma 2 and Theorem 5.
-* **next action:** Formalize only if full source coverage of the continuum growing-model regime is desired.
+* **notes:** continuousRawStress_empiricalPopulation ties the definition to the package's finite rawStress through the empirical measure, so it is not a parallel notion.
+* **next action:** Prove the L^p(P x P) limit theorem that Lemma 2 and Theorem 5 state over this definition.
 
 ### `A24-R4` — Notation for the replicate dependence of the estimated perspectives
 
@@ -289,7 +293,7 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **Lean declarations:** _none_
 * **gap refs:** `continuous-mds-lp`
 * **notes:** The finite per-stage triangular-array theorem is not an encoding of this integral statement.
-* **next action:** Formalize the continuous-MDS source layer before claiming full Theorem 5 coverage.
+* **next action:** The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it.
 
 ### `A24-T4` — Growing-model pointwise dissimilarity concentration
 
@@ -315,4 +319,4 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **Lean declarations:** `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`, `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
 * **gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 * **notes:** The source-level continuum theorem remains open even though every finite-stage theorem cited here is proved.
-* **next action:** Formalize the continuous model-distribution layer if this source theorem is a completion target.
+* **next action:** The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it.
