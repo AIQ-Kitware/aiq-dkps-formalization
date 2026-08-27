@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Frontier.Section8Residual
+import DavisKahan.BoundedOperator.TrialResidual
 
 /-!
 # Davis--Kahan 1970, Section 1: the residual and its block column
@@ -28,8 +28,8 @@ here, in the quadratic form the paper uses it in: for `u ∈ Pℋ`, `P(Hu)` is `
 `‖Ru‖² = ‖H₀u‖² + ‖Bu‖²` is exactly the printed operator identity read at `u`.  The norm-square formulation is scalar-generic over `RCLike`, and the coordinate
 isometries `E₀, E₁` are unnecessary for the source identity.
 
-The residual identities live upstream in `DavisKahan/Frontier/Section8Residual.lean`, where
-Theorem 8.2's residual branch consumes them; they are cited by `:=` here rather than
+The residual identities live upstream in `DavisKahan/BoundedOperator/TrialResidual.lean`,
+beside the rest of the trial-residual algebra; they are cited by `:=` here rather than
 restated, so there is a single source of truth.
 -/
 
@@ -64,7 +64,7 @@ or that `R = HE₀`".  The hypothesis is the printed one: `Pℋ` reduces the unp
 operator, so on it the compression `A₀` is the honest restriction and the two `A` terms
 cancel. -/
 alias equation1_8_eq_perturbation_comp :=
-  DavisKahan.Frontier.Section8.residual_eq_comp_subtypeL
+  DavisKahan.BoundedOperator.residual_eq_comp_subtypeL
 
 /-- **Davis--Kahan 1970, Section 1: `R⋆R = H₀² + B⋆B`.**
 
@@ -82,7 +82,7 @@ theorem equation1_8_norm_sq_eq_diagonal_add_offDiagonal
         (DavisKahanExt.compressOperator P A) u‖ ^ 2 =
       ‖P.starProjection (K (u : H))‖ ^ 2 + ‖Pᗮ.starProjection (K (u : H))‖ ^ 2 := by
   have hR := congrArg (fun T : P →L[𝕜] H => T u)
-    (DavisKahan.Frontier.Section8.residual_eq_comp_subtypeL A K P hPinv)
+    (DavisKahan.BoundedOperator.residual_eq_comp_subtypeL A K P hPinv)
   have hRu : DavisKahan.residual (A + K) P.subtypeL
       (DavisKahanExt.compressOperator P A) u = K (u : H) := hR
   rw [hRu]

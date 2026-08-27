@@ -3,14 +3,20 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
+import DavisKahan.Geometry.Polar.PrincipalSquareRoot
+-- supplies `IsPrincipalUnitarySquareRoot` together with both halves of Proposition 3.3 at
+-- the arbitrary-pair scope.  It is a `Geometry` module and never imports `Frontier`.
 import DavisKahan.Frontier.Section3
+-- still load-bearing, but only for two reflection/projection identities of the
+-- Proposition 3.4 block: `projection_mul_reflectionOperator_self` and
+-- `reflectionOperator_mul_projection_self`.
 import DavisKahan.Geometry.Polar.DirectRotationReal
 
 /-!
 # Davis--Kahan 1970, Proposition 3.3, at the printed nonacute scope
 
-The arbitrary-pair complex mathematics was already present in
-`DavisKahan.Frontier.Section3`: every paper direct rotation with genuinely
+The arbitrary-pair complex mathematics is owned by
+`DavisKahan.Geometry.Polar.PrincipalSquareRoot`: every paper direct rotation with genuinely
 positive diagonal blocks is a principal unitary square root of the reflection
 product, and every principal square root carrying the source crossed defect onto
 the target crossed defect is a direct rotation. Neither theorem assumes
