@@ -616,7 +616,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Replace the empirical model measure by the population law, which needs the convergence of empirical continuous-MDS embeddings to the population one."
+   "next_action": "Build the order-two V-statistic law of large numbers -- absent from Mathlib and TauCeti -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp for the decomposition."
   },
   {
    "id": "A24-T4",
@@ -714,7 +714,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Replace the empirical model measure by the population law; that is the continuous-MDS step the source attributes to the cited literature."
+   "next_action": "Build the order-two V-statistic law of large numbers -- absent from Mathlib and TauCeti -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp for the decomposition."
   },
   {
    "id": "A24-R4",
