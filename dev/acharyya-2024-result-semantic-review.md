@@ -426,9 +426,13 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `Acharyya2024.ContinuousMDS.lpPairDistErr`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left`
+- `Acharyya2024.ContinuousMDS.lt_pointStress_of_norm_gt`
+- `Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress_rigidMotion`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
+- `Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension`
+- `Acharyya2024.ContinuousMDS.tendsto_pointStress`
 - `TauCeti.integral_doubleSum_pi`
 - `TauCeti.map_evalPair_pi`
 
@@ -450,7 +454,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Prove that ContinuousMDS.frameEmbedding converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. The map itself now exists, in a common frame, with its minimum attained.
+**Next action:** Feed tendsto_outOfSampleExtension: prove the reference configurations converge to a population configuration as the model collection grows, and add the identifiability premise that the limiting one-point stress has a unique minimizer. Fubini and dominated convergence then give the L^p(P x P) conclusion.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -505,9 +509,13 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.ContinuousMDS.frameEmbedding_min`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left`
+- `Acharyya2024.ContinuousMDS.lt_pointStress_of_norm_gt`
+- `Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress_rigidMotion`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
+- `Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension`
+- `Acharyya2024.ContinuousMDS.tendsto_pointStress`
 - `TauCeti.integral_doubleSum_pi`
 - `TauCeti.map_evalPair_pi`
 
@@ -526,7 +534,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Prove that ContinuousMDS.frameEmbedding converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. The map itself now exists, in a common frame, with its minimum attained.
+**Next action:** Feed tendsto_outOfSampleExtension: prove the reference configurations converge to a population configuration as the model collection grows, and add the identifiability premise that the limiting one-point stress has a unique minimizer. Fubini and dominated convergence then give the L^p(P x P) conclusion.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 
