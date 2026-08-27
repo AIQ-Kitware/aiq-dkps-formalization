@@ -15,7 +15,7 @@ This is the entry point for **paper theorem vs. Lean theorem** comparison. The c
 | `acharyya-2024` | `A24-L1` | Lemma 1 | GAP stronger Lean hypotheses | This is the same identifiability issue as Theorem 1. |
 | `acharyya-2024` | `A24-T2` | Theorem 2 | GAP only a specialization is formalized | The literal varying-m theorem is not assembled because m is type-level in the finite probability theorem. |
 | `acharyya-2024` | `A24-T3` | Theorem 3 | GAP stronger Lean hypotheses | No profile-uniqueness assumption is printed. -> Lean requires UniquePairProfile for a fixed limiting pair-distance profile. |
-| `acharyya-2024` | `A24-C1` | Corollary 1 | GAP missing source result | Later packages have Procrustes/Gram-rigidity machinery but this corollary itself is absent. |
+| `acharyya-2024` | `A24-C1` | Corollary 1 | GAP probabilistic packaging and quantifier | Later packages have Procrustes/Gram-rigidity machinery but this corollary itself is absent. |
 | `acharyya-2024` | `A24-A2` | Assumption 2 | GAP only a specialization is formalized | This is enough for finite-stage consistency but not the continuum source theorem. |
 | `acharyya-2024` | `A24-L2` | Lemma 2 | GAP missing source result | For iid phi_i~P, pointwise dissimilarity convergence implies subsequential L^p(P x P) convergence of pairwise embedding distances to continuous-MDS distances. -> No model distribution, continuous MDS map, or P x P integral conclusion is present. |
 | `acharyya-2024` | `A24-T4` | Theorem 4 | GAP only a specialization is formalized | For each fixed pair (i,i'), D_ii' ->P DeltaInf(phi_i,phi_i'). -> The growing-model per-stage consistency theorem assumes the required sample/population limit instead of proving this source statement. |

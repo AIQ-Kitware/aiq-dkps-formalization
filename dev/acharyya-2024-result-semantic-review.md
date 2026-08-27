@@ -14,8 +14,9 @@ Companion coverage census: `dev/acharyya-2024-full-source-census.json`.
 
 | verdict | rows |
 | --- | ---: |
-| `GAP missing source result` | 3 |
+| `GAP missing source result` | 2 |
 | `GAP only a specialization is formalized` | 5 |
+| `GAP probabilistic packaging and quantifier` | 1 |
 | `GAP stronger Lean hypotheses` | 3 |
 | `PASS` | 1 |
 | `PASS exact` | 1 |
@@ -34,7 +35,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | `A24-L1` | Lemma 1 | GAP stronger Lean hypotheses |
 | `A24-T2` | Theorem 2 | GAP only a specialization is formalized |
 | `A24-T3` | Theorem 3 | GAP stronger Lean hypotheses |
-| `A24-C1` | Corollary 1 | GAP missing source result |
+| `A24-C1` | Corollary 1 | GAP probabilistic packaging and quantifier |
 | `A24-A2` | Assumption 2 | GAP only a specialization is formalized |
 | `A24-L2` | Lemma 2 | GAP missing source result |
 | `A24-T4` | Theorem 4 | GAP only a specialization is formalized |
@@ -302,13 +303,15 @@ The geometric conclusion is compiled, with UniquePairProfile added for a fixed l
 
 ### 10. `A24-C1` — Corollary 1: Coordinate convergence after orthogonal alignment and translation
 
-**Verdict:** GAP missing source result
+**Verdict:** GAP probabilistic packaging and quantifier
 
 **Source:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:305-326`
 
 **Normalized paper statement:** There exist orthogonal W^(u) and translations a^(u) such that every estimated point converges in probability to W^(u) psi_i + a^(u).
 
 **Selected Lean declarations:**
+- `Acharyya2024.Consistency.exists_rigidMotion_of_pairDist_tendsto`
+- `TauCeti.eventually_exists_rigidMotion_dist_lt`
 - `TauCeti.exists_rigidMotion_of_dist_eq`
 
 **Clause-by-clause comparison:**
@@ -316,6 +319,7 @@ The geometric conclusion is compiled, with UniquePairProfile added for a fixed l
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
 | There exist W^(u) in O(d) and translations a^(u) aligning every estimated point to the population configuration. | Acharyya2024 contains no source-facing construction of the orthogonal/translation witnesses. | `missing` | Later packages have Procrustes/Gram-rigidity machinery but this corollary itself is absent. |
+| There exist sequences W^(u) in O(d) and a^(u) in R^d such that for all i, \|\|psihat_i - (W^(u) psi_i + a^(u))\|\| ->P 0. | exists_rigidMotion_of_pairDist_tendsto gives the alignment whenever the pairwise distances converge, with the rigid motion depending on the configuration, hence on the sample. | `different_quantifier_encoding` | The source places the aligning rotation outside the probability; the estimate and so its aligning motion depend on the sample. |
 
 **Semantic review:**
 
@@ -323,9 +327,9 @@ Acharyya2024 stops at convergence of pairwise distances and does not construct t
 
 **Additional note:** Later packages contain substantial Procrustes/Gram-rigidity infrastructure, but this source-facing Acharyya2024 corollary is not exposed.
 
-**Companion census gap refs:** `rigid-alignment-corollary`, `rigid-motion-engine-now-available`
+**Companion census gap refs:** `corollary1-deterministic-alignment`, `rigid-alignment-corollary`, `rigid-motion-engine-now-available`
 
-**Next action:** Add a source-facing quantitative finite-configuration congruence/Procrustes bridge if exact 2024 coverage is required.
+**Next action:** Lift the deterministic alignment step to convergence in probability along a subsequence, and record whether a sample-independent W^(u) is achievable at all.
 
 ### 11. `A24-A2` — Assumption 2: Growing models lie on a compact Riemannian model manifold
 
