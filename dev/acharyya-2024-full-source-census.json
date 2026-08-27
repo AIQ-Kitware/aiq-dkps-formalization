@@ -68,8 +68,8 @@
     },
     "growing-n-concentration": {
       "kind": "scope_gap",
-      "title": "Growing-query concentration is now assembled; growing-n Theorem 4 still is not",
-      "detail": "The finite second-moment concentration theorem handles any fixed finite model set. The triangular-array consistency theorem assumes per-stage dissimilarity convergence hD; it does not derive the paper Theorem 4 pointwise growing-n conclusion from the gamma condition.\n\nCLOSED for Theorem 2. dissimilarity_convergesInProbability_of_secondMoment_growing takes the number of queries as a function of the replicate count, so the response matrices live in a different space at each stage -- which is the whole point of the theorem, a sufficient condition for how fast m may grow. dissimilarity_convergesInProbability_of_gamma states it in the source's own terms, with gamma_ij the trace-covariance and the hypothesis ((1/m) sum_j gamma_ij)/r -> 0.\n\nTwo details the fixed-m form hid. The threshold eta r = eps * m r / (2 n^2) now moves with the stage, and the Chebyshev bound needs v r / (m r)^2 -> 0, which the source's condition implies with a spare factor of 1/m. And the stages where m r = 0 need no separate treatment: the dissimilarities vanish there so the bad event is empty, while v r / (eta r)^2 is v r / 0 = 0 under Lean's division convention, so the same inequality holds.\n\nTheorem 4 is still not derived from the gamma condition: it needs the model count to grow as well, and the per-stage consistency theorem continues to take sampling convergence as a hypothesis."
+      "title": "Growing-query and growing-model concentration are both assembled",
+      "detail": "The finite second-moment concentration theorem handles any fixed finite model set. The triangular-array consistency theorem assumes per-stage dissimilarity convergence hD; it does not derive the paper Theorem 4 pointwise growing-n conclusion from the gamma condition.\n\nCLOSED for Theorem 2. dissimilarity_convergesInProbability_of_secondMoment_growing takes the number of queries as a function of the replicate count, so the response matrices live in a different space at each stage -- which is the whole point of the theorem, a sufficient condition for how fast m may grow. dissimilarity_convergesInProbability_of_gamma states it in the source's own terms, with gamma_ij the trace-covariance and the hypothesis ((1/m) sum_j gamma_ij)/r -> 0.\n\nTwo details the fixed-m form hid. The threshold eta r = eps * m r / (2 n^2) now moves with the stage, and the Chebyshev bound needs v r / (m r)^2 -> 0, which the source's condition implies with a spare factor of 1/m. And the stages where m r = 0 need no separate treatment: the dissimilarities vanish there so the bad event is empty, while v r / (eta r)^2 is v r / 0 = 0 under Lean's division convention, so the same inequality holds.\n\nTheorem 4 is still not derived from the gamma condition: it needs the model count to grow as well, and the per-stage consistency theorem continues to take sampling convergence as a hypothesis.\n\nCLOSED for Theorem 4 as well. pointwise_dissimilarity_convergesInProbability_of_gamma grows the model count too: the models are indexed by all of ℕ, which is what a growing family is, and the pair (i, i') is a fixed pair of natural numbers as in the source. The growing model count is harmless because Theorem 4 asks only for pointwise convergence -- the union bound is over the two models in the pair, not over n -- so the replicate condition is the same one Theorem 2 needs. sourceGammaRate_imp_secondMomentRate is the shared step from the source's ((1/m) sum gamma)/r to the second-moment rate the Chebyshev step consumes."
     },
     "rigid-motion-engine-now-available": {
       "kind": "source_audit",
@@ -530,7 +530,7 @@
       "source_kind": "theorem",
       "title": "Growing-model pointwise dissimilarity concentration",
       "source_claim": "When n,m grow with r, the same covariance-trace rate implies pointwise convergence D_ii' -> Delta^(infinity)(phi_i,phi_i') in probability for every fixed pair.",
-      "status": "compiled_specialization",
+      "status": "compiled_exact",
       "verification": "proved_in_build",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -542,7 +542,10 @@
       "lean_declarations": [
         "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
         "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma",
-        "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment"
+        "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment",
+        "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma",
+        "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing",
+        "Acharyya2024.Probability.sourceGammaRate_imp_secondMomentRate"
       ],
       "planned_declarations": [],
       "gap_refs": [
@@ -550,11 +553,11 @@
         "growing-n-concentration"
       ],
       "semantic_alignment": {
-        "classification": "specialized",
-        "detail": "Lean has the finite-model concentration mechanism and a growing-stage consistency theorem that assumes per-stage sampling convergence. It does not derive the literal growing-n pointwise theorem from the source gamma condition."
+        "classification": "exact",
+        "detail": "The printed theorem: models indexed by all of ℕ so their number grows, the number of queries a function of the replicate count, the same trace-covariance condition, and pointwise convergence in probability for a fixed pair. The growing model count costs nothing because the conclusion is pointwise: the union bound is over the two models in the pair, not over n."
       },
-      "notes": "The source proof is pointwise in each pair, suggesting a future theorem can avoid uniform-in-n concentration.",
-      "next_action": "Grow the model count as well; the growing-query half is now assembled in dissimilarity_convergesInProbability_of_gamma."
+      "notes": "The per-stage consistency theorem that consumes this still takes sampling convergence as a hypothesis; what was missing was the derivation of that hypothesis from the source's gamma condition, and it is now present.",
+      "next_action": "None. Theorem 5's L^p conclusion over the population law remains the open item on this side."
     },
     {
       "id": "A24-T5",

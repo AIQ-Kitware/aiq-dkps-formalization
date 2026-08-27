@@ -344,6 +344,38 @@ theorem dissimilarity_convergesInProbability_of_secondMoment_growing
       (fun r => bot_le) hbad
   simpa only [hset_eq] using hsqueeze
 
+/-- The source's replicate condition `((1/m) * S)/r -> 0` implies the second-moment rate
+`(S/r)/m^2 -> 0` that the Chebyshev step needs; the difference is a spare factor of `1/m`. -/
+theorem sourceGammaRate_imp_secondMomentRate {m : Nat → Nat} {S : Nat → Real}
+    (hS : ∀ r, 0 ≤ S r)
+    (h : Tendsto (fun r => ((m r : Real))⁻¹ * S r / (r : Real)) atTop (𝓝 0)) :
+    Tendsto (fun r => (S r / (r : Real)) / ((m r : Real)) ^ 2) atTop (𝓝 0) := by
+  have hnn : ∀ r, 0 ≤ S r / (r : Real) := by
+    intro r
+    have := hS r
+    positivity
+  refine squeeze_zero (fun r => div_nonneg (hnn r) (by positivity)) (fun r => ?_) h
+  rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
+  · simp [hm0]
+  · have hm_one : (1 : Real) ≤ ((m r : Real)) := by exact_mod_cast hmpos
+    have hm_pos : (0 : Real) < ((m r : Real)) := by linarith
+    rcases Nat.eq_zero_or_pos r with hr0 | hrpos
+    · simp [hr0]
+    · have hr_pos : (0 : Real) < (r : Real) := by exact_mod_cast hrpos
+      have h1 : S r / (r : Real) / ((m r : Real)) ^ 2
+          = S r / ((r : Real) * ((m r : Real)) ^ 2) := by rw [div_div]
+      have h2 : ((m r : Real))⁻¹ * S r / (r : Real)
+          = S r / ((r : Real) * ((m r : Real))) := by field_simp
+      rw [h1, h2, div_le_div_iff₀ (by positivity) (by positivity)]
+      have hsq : ((m r : Real)) ≤ ((m r : Real)) ^ 2 := by nlinarith [hm_one]
+      have hkey : (S r * (r : Real)) * ((m r : Real))
+          ≤ (S r * (r : Real)) * ((m r : Real)) ^ 2 :=
+        mul_le_mul_of_nonneg_left hsq (mul_nonneg (hS r) hr_pos.le)
+      calc S r * ((r : Real) * ((m r : Real)))
+          = (S r * (r : Real)) * ((m r : Real)) := by ring
+        _ ≤ (S r * (r : Real)) * ((m r : Real)) ^ 2 := hkey
+        _ = S r * ((r : Real) * ((m r : Real)) ^ 2) := by ring
+
 /--
 **Theorem 2, in the source's own terms.**
 
@@ -369,35 +401,137 @@ theorem dissimilarity_convergesInProbability_of_gamma
       (fun r ω => frobSub (responseDist (Xbar r ω)) (responseDist (μ r))) := by
   refine dissimilarity_convergesInProbability_of_secondMoment_growing P m Xbar μ
     (fun r => (∑ i, ∑ j, γ r i j) / (r : Real)) hint hmoment ?_
-  have hnn : ∀ r, 0 ≤ (∑ i, ∑ j, γ r i j) / (r : Real) := by
+  exact sourceGammaRate_imp_secondMomentRate
+    (fun r => Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => hγnonneg r i j) hγ
+
+/--
+**Theorem 4: pointwise dissimilarity concentration with the model count growing too.**
+
+Theorem 4 lets `n` grow along with `m`, and in exchange asks only for *pointwise* convergence:
+for each fixed pair of models, the sample dissimilarity approaches the population one.  That is
+what makes the growing model count harmless -- no union bound over `n` is taken, only over the
+two models in the pair -- so the condition on the replicate budget is the same one Theorem 2
+needs.
+
+The models are indexed by `ℕ` here rather than by `Fin (n r)`: a growing family is exactly a
+family indexed by all of `ℕ`, and a fixed pair `(i, i')` is then literally a pair of natural
+numbers, as in the source.
+-/
+theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {p : Nat} (m : Nat → Nat)
+    (Xbar : ∀ r, Ω → Nat → Mat (m r) p)
+    (μ : ∀ r, Nat → Mat (m r) p)
+    (v : Nat → Real) (i i' : Nat)
+    (hint : ∀ r k, Integrable (fun ω => ‖Xbar r ω k - μ r k‖ ^ 2) P)
+    (hmoment : ∀ r k, ∫ ω, ‖Xbar r ω k - μ r k‖ ^ 2 ∂P ≤ v r)
+    (hv : Tendsto (fun r => v r / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
+    ConvergesInProbabilityZero P (fun r ω =>
+      ((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+        - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) := by
+  intro ε hε
+  set η : Nat → Real := fun r => ε * ((m r : Real)) / 2 with hη_def
+  -- the deterministic reduction: two uniform errors control the dissimilarity entry
+  have hdet : ∀ r ω, ‖Xbar r ω i - μ r i‖ ≤ η r → ‖Xbar r ω i' - μ r i'‖ ≤ η r →
+      |((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+        - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖| ≤ ε := by
+    intro r ω h1 h2
+    have hrev : |‖Xbar r ω i - Xbar r ω i'‖ - ‖μ r i - μ r i'‖|
+        ≤ ‖Xbar r ω i - μ r i‖ + ‖Xbar r ω i' - μ r i'‖ := by
+      have hsub : (Xbar r ω i - Xbar r ω i') - (μ r i - μ r i')
+          = (Xbar r ω i - μ r i) - (Xbar r ω i' - μ r i') := by abel
+      calc |‖Xbar r ω i - Xbar r ω i'‖ - ‖μ r i - μ r i'‖|
+          ≤ ‖(Xbar r ω i - Xbar r ω i') - (μ r i - μ r i')‖ := abs_norm_sub_norm_le _ _
+        _ = ‖(Xbar r ω i - μ r i) - (Xbar r ω i' - μ r i')‖ := by rw [hsub]
+        _ ≤ ‖Xbar r ω i - μ r i‖ + ‖Xbar r ω i' - μ r i'‖ := norm_sub_le _ _
+    have hmul : |((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+        - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖|
+        = ((m r : Real))⁻¹ * |‖Xbar r ω i - Xbar r ω i'‖ - ‖μ r i - μ r i'‖| := by
+      rw [← mul_sub, abs_mul, abs_of_nonneg (by positivity : (0:Real) ≤ ((m r : Real))⁻¹)]
+    rw [hmul]
+    rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
+    · simp [hm0, hε.le]
+    · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
+      have hbound : |‖Xbar r ω i - Xbar r ω i'‖ - ‖μ r i - μ r i'‖| ≤ 2 * η r := by
+        linarith [hrev, h1, h2]
+      calc ((m r : Real))⁻¹ * |‖Xbar r ω i - Xbar r ω i'‖ - ‖μ r i - μ r i'‖|
+          ≤ ((m r : Real))⁻¹ * (2 * η r) := by
+            exact mul_le_mul_of_nonneg_left hbound (by positivity)
+        _ = ε := by rw [hη_def]; field_simp
+  -- the per-stage bound
+  have hbad : ∀ r : Nat,
+      P {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+          - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) (0 : Real) > ε}
+        ≤ 2 * ENNReal.ofReal (v r / (η r) ^ 2) := by
     intro r
-    have : 0 ≤ ∑ i, ∑ j, γ r i j :=
-      Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => hγnonneg r i j
-    positivity
-  refine squeeze_zero (fun r => div_nonneg (hnn r) (by positivity)) (fun r => ?_) hγ
-  rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
-  · simp [hm0]
-  · have hm_one : (1 : Real) ≤ ((m r : Real)) := by exact_mod_cast hmpos
-    have hm_pos : (0 : Real) < ((m r : Real)) := by linarith
-    have hS : 0 ≤ ∑ i, ∑ j, γ r i j :=
-      Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => hγnonneg r i j
-    rcases Nat.eq_zero_or_pos r with hr0 | hrpos
-    · simp [hr0]
-    · have hr_pos : (0 : Real) < (r : Real) := by exact_mod_cast hrpos
-      have h1 : (∑ i, ∑ j, γ r i j) / (r : Real) / ((m r : Real)) ^ 2
-          = (∑ i, ∑ j, γ r i j) / ((r : Real) * ((m r : Real)) ^ 2) := by
-        rw [div_div]
-      have h2 : ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real)
-          = (∑ i, ∑ j, γ r i j) / ((r : Real) * ((m r : Real))) := by
-        field_simp
-      rw [h1, h2, div_le_div_iff₀ (by positivity) (by positivity)]
-      have hsq : ((m r : Real)) ≤ ((m r : Real)) ^ 2 := by nlinarith [hm_one]
-      have hkey : ((∑ i, ∑ j, γ r i j) * (r : Real)) * ((m r : Real))
-          ≤ ((∑ i, ∑ j, γ r i j) * (r : Real)) * ((m r : Real)) ^ 2 :=
-        mul_le_mul_of_nonneg_left hsq (mul_nonneg hS hr_pos.le)
-      calc (∑ i, ∑ j, γ r i j) * ((r : Real) * ((m r : Real)))
-          = ((∑ i, ∑ j, γ r i j) * (r : Real)) * ((m r : Real)) := by ring
-        _ ≤ ((∑ i, ∑ j, γ r i j) * (r : Real)) * ((m r : Real)) ^ 2 := hkey
-        _ = (∑ i, ∑ j, γ r i j) * ((r : Real) * ((m r : Real)) ^ 2) := by ring
+    rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
+    · have hempty : {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+          - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) (0 : Real) > ε} = (∅ : Set Ω) := by
+        ext ω
+        simp [hm0, Real.dist_eq, not_lt.mpr hε.le]
+      rw [hempty, measure_empty]
+      exact bot_le
+    · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
+      have hη_pos : 0 < η r := by rw [hη_def]; positivity
+      have hincl : {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+            - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) (0 : Real) > ε}
+          ⊆ {ω | η r < ‖Xbar r ω i - μ r i‖} ∪ {ω | η r < ‖Xbar r ω i' - μ r i'‖} := by
+        intro ω hω
+        by_contra hnot
+        simp only [Set.mem_union, Set.mem_ofPred_eq, not_or, not_lt] at hnot
+        simp only [Set.mem_ofPred_eq, gt_iff_lt, Real.dist_eq, sub_zero] at hω
+        exact absurd (hdet r ω hnot.1 hnot.2) (not_le.mpr hω)
+      calc P {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+              - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) (0 : Real) > ε}
+          ≤ P ({ω | η r < ‖Xbar r ω i - μ r i‖} ∪ {ω | η r < ‖Xbar r ω i' - μ r i'‖}) :=
+            measure_mono hincl
+        _ ≤ P {ω | η r < ‖Xbar r ω i - μ r i‖} + P {ω | η r < ‖Xbar r ω i' - μ r i'‖} :=
+            measure_union_le _ _
+        _ ≤ ENNReal.ofReal (v r / (η r) ^ 2) + ENNReal.ofReal (v r / (η r) ^ 2) :=
+            add_le_add
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i) hη_pos (hmoment r i))
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i') hη_pos (hmoment r i'))
+        _ = 2 * ENNReal.ofReal (v r / (η r) ^ 2) := by rw [two_mul]
+  -- the bound vanishes
+  have hratio : ∀ r, v r / (η r) ^ 2 = (4 / ε ^ 2) * (v r / ((m r : Real)) ^ 2) := by
+    intro r
+    rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
+    · rw [hη_def]; simp [hm0]
+    · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
+      rw [hη_def]; field_simp; ring
+  have hub : Tendsto (fun r => 2 * ENNReal.ofReal (v r / (η r) ^ 2)) atTop (𝓝 0) := by
+    have h1 : Tendsto (fun r => v r / (η r) ^ 2) atTop (𝓝 0) := by
+      have := hv.const_mul (4 / ε ^ 2)
+      simpa only [mul_zero, hratio] using this
+    have h2 : Tendsto (fun r => ENNReal.ofReal (v r / (η r) ^ 2)) atTop (𝓝 0) := by
+      simpa using ENNReal.tendsto_ofReal h1
+    have h3 := ENNReal.Tendsto.const_mul h2 (Or.inr (by simp : (2 : ENNReal) ≠ ⊤))
+    simpa using h3
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hub
+    (fun r => bot_le) hbad
+
+/--
+**Theorem 4, in the source's own terms.**
+
+The same trace-covariance condition as Theorem 2, with the model collection now growing as well:
+models are indexed by `ℕ`, the pair `(i, i')` is fixed, and the conclusion is pointwise
+convergence of that entry of the dissimilarity matrix.
+-/
+theorem pointwise_dissimilarity_convergesInProbability_of_gamma
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {p : Nat} (m : Nat → Nat)
+    (Xbar : ∀ r, Ω → Nat → Mat (m r) p)
+    (μ : ∀ r, Nat → Mat (m r) p)
+    (S : Nat → Real) (i i' : Nat)
+    (hSnonneg : ∀ r, 0 ≤ S r)
+    (hint : ∀ r k, Integrable (fun ω => ‖Xbar r ω k - μ r k‖ ^ 2) P)
+    (hmoment : ∀ r k, ∫ ω, ‖Xbar r ω k - μ r k‖ ^ 2 ∂P ≤ S r / (r : Real))
+    (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * S r / (r : Real)) atTop (𝓝 0)) :
+    ConvergesInProbabilityZero P (fun r ω =>
+      ((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+        - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) :=
+  pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing P m Xbar μ
+    (fun r => S r / (r : Real)) i i' hint hmoment
+    (sourceGammaRate_imp_secondMomentRate hSnonneg hγ)
 
 end Acharyya2024.Probability

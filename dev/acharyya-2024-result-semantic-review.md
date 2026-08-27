@@ -443,13 +443,17 @@ The package has no model-distribution P over a compact model space, no continuou
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
 - `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma`
 - `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`
+- `Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma`
+- `Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing`
+- `Acharyya2024.Probability.sourceGammaRate_imp_secondMomentRate`
 
 **Clause-by-clause comparison:**
 
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
-| n and m both grow with r; the same covariance-trace rate is assumed pointwise for every model. | Lean has the finite concentration mechanism but no theorem deriving the growing-n pointwise statement from this rate. | `lean_weaker_conclusion` |  |
-| For each fixed pair (i,i'), D_ii' ->P DeltaInf(phi_i,phi_i'). | The growing-model per-stage consistency theorem assumes the required sample/population limit instead of proving this source statement. | `missing` |  |
+| In our setting where m, n -> infinity as r -> infinity | m : ℕ → ℕ and models indexed by all of ℕ | `exact` |  |
+| \|D_ii' - Delta^(infinity)(phi_i, phi_i')\| ->P 0 for every fixed pair | ConvergesInProbabilityZero for the fixed pair (i, i') | `exact` | Pointwise, so the union bound is over the two models in the pair, not over n. |
+| if (1/m) sum_j gamma_ij = o(r) | hgamma, via sourceGammaRate_imp_secondMomentRate | `exact` |  |
 
 **Semantic review:**
 
@@ -459,7 +463,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 
 **Companion census gap refs:** `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Grow the model count as well; the growing-query half is now assembled in dissimilarity_convergesInProbability_of_gamma.
+**Next action:** None. Theorem 5's L^p conclusion over the population law remains the open item on this side.
 
 ### 14. `A24-T5` — Theorem 5: Growing models and queries: L^p consistency
 
