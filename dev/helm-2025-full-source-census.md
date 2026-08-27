@@ -6,9 +6,17 @@ Hayden S. Helm, Aranyak Acharyya, Brandon Duderstadt, Youngser Park, Carey E. Pr
 
 **Source version:** Retained paper prose/TeX corresponding to the Helm2025 formalization.
 
-**Audit revision:** 2026-08-26 working tree after YWS population-gap/alignment propagation, hypothesis reduction, and Term-2 constant sharpening; based on repository snapshot 8895692fef63 plus the accepted local overlays.
+**Audit revision:** 2026-08-27 working tree at commit 6f11665f; statuses, cited declarations and gap texts revised throughout this pass, including an adversarial self-review that corrected two overstated statuses and strengthened two counterexamples.
 
 Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency dependency used to discharge Equation (3). Experimental claims are excluded.
+
+## Current audit note
+
+Both headline theorems now run on the paper's own readings of Assumptions 2 and 4. Assumption 2's display holds the labels fixed and moves only the embeddings, so it was never joint continuity; Assumption 4's gloss holds the label fixed. Theorem1_printed and Theorem2_bayes_printed consume those readings and use Assumption 3 nowhere.
+
+Equation (3) is derived with no spectral hypothesis of any kind. The population eigenvalue floor the earlier bridges carried is Acharyya 2025's Assumption 2, which Helm never states, and it was an artifact of realizing the estimator as spectral MDS rather than of the mathematics.
+
+Two source defects stand: Theorem 1 is not provable as printed without an envelope for the loss, witnessed by an escaping-mass counterexample, and the paper's Theorem 3 reference has no referent. Both are dispositioned as repairs.
 
 ## Status summary
 
