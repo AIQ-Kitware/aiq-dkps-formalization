@@ -14,9 +14,10 @@ Companion coverage census: `dev/helm-2025-full-source-census.json`.
 
 | verdict | rows |
 | --- | ---: |
+| `GAP expected rather than in-probability` | 1 |
 | `GAP no literal wrapper` | 1 |
 | `GAP stronger Lean hypotheses` | 5 |
-| `PASS` | 1 |
+| `PASS` | 2 |
 | `PASS equivalent encoding` | 2 |
 | `PASS exact` | 1 |
 
@@ -36,6 +37,8 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | `H25-BRIDGE` | Appendix A.1 use of Acharyya et al. (2024) alignment consistency | GAP stronger Lean hypotheses |
 | `H25-EQ1` | Equation (1), dissimilarity definition | PASS |
 | `H25-EQ2` | Equation (2), dissimilarity convergence | GAP no literal wrapper |
+| `H25-LEARN` | Statistical learning problem and Bayes risk | PASS |
+| `H25-CONSIST` | Definition of consistency | GAP expected rather than in-probability |
 
 ## Relation legend
 
@@ -114,7 +117,7 @@ Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The
 
 **Additional note:** The schedule makes the quantifier structure executable rather than leaving the phrase n,m,r -> infinity informal. The retained source should be rechecked against the original PDF specifically for label-support/bounded-loss language before treating this hypothesis as source-faithful.
 
-**Companion census gap refs:** `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
+**Companion census gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
 
 ### 3. `H25-A1` — Assumption 1: Rigid/affine-isometry invariance of the learning rule
 
@@ -219,7 +222,7 @@ The literal pointwise-in-label predicate exists, while the main theorem assumes 
 
 **Verdict:** PASS equivalent encoding
 
-**Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:374-405`
+**Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:326-441`
 
 **Normalized paper statement:** After suitable orthogonal/translation alignment, the maximum coordinate error over the n training models and test model tends to zero in probability.
 
@@ -272,7 +275,7 @@ The available end-to-end bridge realizes the estimator as spectral/classical MDS
 
 **Verdict:** PASS
 
-**Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:57-61`
+**Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:49-61`
 
 **Normalized paper statement:** D_{ii'} = (1/m) || Xbar_i - Xbar_{i'} ||_F, so D is a rescaled Euclidean distance matrix.
 
@@ -319,3 +322,55 @@ The paper imports this convergence rather than proving it. Lean likewise obtains
 **Companion census gap refs:** `spectral-vs-rawstress-bridge`
 
 **Next action:** Expose one Helm-facing statement of the displayed limit if a literal wrapper is wanted.
+
+### 11. `H25-LEARN` — Statistical learning problem and Bayes risk: Risk, the Bayes decision function, and the Bayes risk
+
+**Verdict:** PASS
+
+**Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:83-90`
+
+**Normalized paper statement:** h* in argmin_{h in H} R_l(P_fY, h), and R*_l(P_fY, H) = R_l(P_fY, h*) is the risk of h*.
+
+**Selected Lean declarations:**
+- `Helm2025.DKPS.risk_df`
+- `Helm2025.DKPS.bayesRisk`
+
+**Clause-by-clause comparison:**
+
+| paper clause | Lean clause | relation | assessment |
+| --- | --- | --- | --- |
+| h* in argmin_{h in H} R_l(P_fY, h); R*_l(P_fY, H) = R_l(P_fY, h*). | bayesRisk is sInf of risk_df over the hypothesis class. | `lean_weaker_hypothesis` | The infimum form does not presume the argmin is attained. |
+
+**Semantic review:**
+
+risk_df is the expected loss of a decision function and bayesRisk is the infimum of that over the hypothesis class, which is the displayed R*_l stated as an infimum rather than as the value at a minimiser. Lean does not assume the minimiser exists, which is weaker than the paper's argmin and therefore safe.
+
+**Additional note:** The paper's argmin presumes attainment; the sInf form does not.
+
+### 12. `H25-CONSIST` — Definition of consistency: A decision-function sequence is consistent when its risk approaches the Bayes risk
+
+**Verdict:** GAP expected rather than in-probability
+
+**Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:91-97`
+
+**Normalized paper statement:** Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0 as n -> infinity.
+
+**Selected Lean declarations:**
+- `Helm2025.DKPS.ConsistentExpected`
+- `Helm2025.DKPS.ConvergesInProbabilityToZero`
+
+**Clause-by-clause comparison:**
+
+| paper clause | Lean clause | relation | assessment |
+| --- | --- | --- | --- |
+| Pr(\|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)\| > eps) -> 0. | ConsistentExpected: Tendsto (risk n) atTop (nhds (bayesRisk ...)), where risk integrates over the training sample and is therefore deterministic. | `different_quantifier_encoding` | Convergence in probability and convergence of expectations are not equivalent; the literal in-probability predicate exists as ConvergesInProbabilityToZero but is not the one the transfer theorems quantify over. |
+
+**Semantic review:**
+
+Lean carries ConvergesInProbabilityToZero, the literal in-probability predicate, but the consistency used by the transfer theorems is ConsistentExpected: convergence of the expected risk, since Helm2025.risk integrates over the training sample. See gap consistency-in-probability-vs-expectation.
+
+**Additional note:** This is the definition Theorem 2 quantifies over, so the substitution propagates to it.
+
+**Companion census gap refs:** `consistency-in-probability-vs-expectation`
+
+**Next action:** State the transfer theorem over the in-probability predicate, or record why the expected form is the intended reading.
