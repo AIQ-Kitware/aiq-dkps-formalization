@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.BoundedOperator.Compat
 import DavisKahan.Geometry.Halmos.GenericRotationPredicates
+import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
 /-!
 # Davis--Kahan 1970, standing assumption (3.5): the symmetric gap is directed
@@ -35,12 +36,14 @@ generic two-subspace geometry and lives in `ForTauCeti`:
 
 ## Why (3.5) is not implied by (1.5)
 
-`Frontier/Section3BilateralShift.lean` formalizes the paper's own Remark: on
+`Geometry/Halmos/BilateralShiftExample.lean` builds the separating pair: on
 `ℓ²(ℤ)` the shift-related half-spaces satisfy (1.5) while their source crossed
 defect is a line and their target crossed defect is zero.  The two directed gaps
 of that pair are `1` and `0`, so `directedGap_comm_of_crossedDefectsEquivalent`
 fails on it outright; that is recorded there, next to the pair, as
-`directedGap_asymmetric_coordinateHalfSpace`.
+`directedGap_asymmetric_coordinateHalfSpace`.  The paper's own Remark, which
+reads that pair as the separation of (1.5) from (3.5), is
+`DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses`.
 -/
 
 open scoped InnerProductSpace
@@ -112,6 +115,20 @@ theorem subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
     subspaceGap U V = directedGap U V :=
   U.projectionGap_eq_directedProjectionGap_of_inf_orthogonal_eq_bot_iff V
     (halmosSourceDefect_eq_bot_iff_halmosTargetDefect_eq_bot U V h)
+
+omit [CompleteSpace H] in
+/-- **In the nonacute case the crossed defect spaces are nonzero.**
+
+Acuteness of a pair is the vanishing of both crossed intersections `U ⊓ Vᗮ` and
+`Uᗮ ⊓ V`, so failing to be acute makes at least one of them nonzero; the
+identification supplied by (3.5) then transports that to the source defect. -/
+theorem halmosSourceDefect_ne_bot_of_not_isAcute
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hdefect : CrossedDefectsEquivalent U V) (hnonacute : ¬ TauCeti.IsAcute U V) :
+    halmosSourceDefect U V ≠ ⊥ := by
+  intro hbot
+  exact hnonacute (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mpr
+    ⟨hbot, (halmosSourceDefect_eq_bot_iff_halmosTargetDefect_eq_bot U V hdefect).mp hbot⟩)
 
 end Frontier
 end DavisKahan

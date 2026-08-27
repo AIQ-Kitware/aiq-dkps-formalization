@@ -134,8 +134,8 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact
 #check @TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact
 #check @TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact
-#check @TauCeti.DavisKahan.Frontier.Section3.directedGap_asymmetric_coordinateHalfSpace
-#check @TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses
+#check @TauCeti.DavisKahan.directedGap_asymmetric_coordinateHalfSpace
+#check @TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses
 #check @TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral
 #check @TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral
 #check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
@@ -184,10 +184,10 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent
-#check @TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique
-#check @TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real
-#check @TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique_real
+#check @TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent
+#check @TauCeti.DavisKahan1970.proposition3_2_not_unique
+#check @TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real
+#check @TauCeti.DavisKahan1970.proposition3_2_not_unique_real
 
 /-! ## DK-3.3-prop: Principal square-root characterization
 

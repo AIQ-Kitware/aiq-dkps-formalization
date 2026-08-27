@@ -253,8 +253,8 @@
       "id": "s3-crossed-identification",
       "title": "Paper crossed intersections equal Halmos defects",
       "kind": "bridge",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.crossed_intersections_are_halmos_defects",
+      "module": "DavisKahan.Geometry.Polar.Section3Elementary",
+      "declaration": "TauCeti.DavisKahan.crossed_intersections_are_halmos_defects_completed",
       "dependencies": [
         "base-halmos-decomposition"
       ],
@@ -267,8 +267,8 @@
       "id": "s3-prop3-2-existence",
       "title": "Proposition 3.2 existence criterion",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section3Proposition32",
+      "declaration": "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent",
       "dependencies": [
         "s3-paper-direct-rotation-predicate",
         "s3-crossed-defect-equivalence",
@@ -285,8 +285,8 @@
       "id": "s3-prop3-2-parameter",
       "title": "Proposition 3.2 nonuniqueness parameterization",
       "kind": "bridge",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_parameterized_nonuniqueness",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section3Proposition32",
+      "declaration": "TauCeti.DavisKahan1970.proposition3_2_parameterized_nonuniqueness",
       "dependencies": [
         "s3-prop3-2-existence"
       ],

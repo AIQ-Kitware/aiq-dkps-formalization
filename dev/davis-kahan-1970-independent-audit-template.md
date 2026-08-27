@@ -531,7 +531,7 @@ The theorem is printed in Section 2, before (3.5) exists in the exposition, and 
   - Real specialization with an unbounded ambient self-adjoint operator but bounded Ritz compression. Uniform transversality is derived from the form bounds and (3.5); the stronger Appendix case is certified separately by the real unboundedCompression endpoint.
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`
   - Alternative bounded route assuming uniform transversality `‖sin Theta‖ < 1` instead of (3.5). This is a strictly stronger hypothesis than the source's standing condition and is registered as a specialization, not as the source-shaped form.
-- `TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses`
+- `TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses`
   - Machine-checked witness that (1.5) does not imply (3.5) in infinite dimension, so the omitted qualification is substantive. It is a vacuity/nonvacuity witness, not a counterexample to the counted result.
 
 #### 6. The repository's accepted reading
@@ -1080,27 +1080,27 @@ The source appends a remark comparing (3.5) with the earlier matching-dimension 
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent`
+#### `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:291`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique`
-
-Source location candidates: `DavisKahan/Frontier/Section3.lean:345`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:69`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real`
+#### `TauCeti.DavisKahan1970.proposition3_2_not_unique`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1553`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:103`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique_real`
+#### `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1577`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:254`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_2_not_unique_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:278`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1373,7 +1373,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:945`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:816`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1445,19 +1445,19 @@ together with a possible eigenvalue $0$; $\Theta_1$ has the same nonzero eigenva
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:717`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:588`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_classification_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1433`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1304`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1118`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:989`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1656,7 +1656,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:219`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:210`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

@@ -28,7 +28,7 @@ import DavisKahan.Geometry.Angle.PaperOperatorAngle
 import DavisKahan.Geometry.Angle.PaperDoubleAngle
 import DavisKahan.Geometry.Angle.PaperTanAngle
 import DavisKahan.Geometry.Halmos.CrossedDefectGap
-import DavisKahan.Frontier.Section3BilateralShift
+import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
 import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
@@ -365,8 +365,8 @@ theorem tanTheta_literalSection2_admits_ambientRightAngle
     {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     [CompleteSpace H]
     (b : HilbertBasis ℤ ℂ H) :
-    let P := DavisKahan.Frontier.Section3.coordinateHalfSpace b 1
-    let Q := DavisKahan.Frontier.Section3.coordinateHalfSpace b 0
+    let P := DavisKahan.coordinateHalfSpace b 1
+    let Q := DavisKahan.coordinateHalfSpace b 0
     let A : H →L[ℂ] H := Qᗮ.starProjection
     let K : H →L[ℂ] H := 0
     (Nonempty (P ≃ₗᵢ[ℂ] Q) ∧ Nonempty (Pᗮ ≃ₗᵢ[ℂ] Qᗮ)) ∧

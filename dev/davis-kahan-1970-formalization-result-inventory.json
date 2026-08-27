@@ -198,7 +198,7 @@
             "mechanism": "Alternative bounded route assuming uniform transversality `‖sin Theta‖ < 1` instead of (3.5). This is a strictly stronger hypothesis than the source's standing condition and is registered as a specialization, not as the source-shaped form."
           },
           {
-            "declaration": "TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses",
+            "declaration": "TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses",
             "mechanism": "Machine-checked witness that (1.5) does not imply (3.5) in infinite dimension, so the omitted qualification is substantive. It is a vacuity/nonvacuity witness, not a counterexample to the counted result."
           }
         ],
@@ -375,10 +375,10 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent",
-        "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique",
-        "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real",
-        "TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique_real"
+        "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent",
+        "TauCeti.DavisKahan1970.proposition3_2_not_unique",
+        "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real",
+        "TauCeti.DavisKahan1970.proposition3_2_not_unique_real"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The generic Section 3 source surface states existence of a paper direct rotation iff the two crossed defect spaces are equivalent and separately proves nonuniqueness whenever the pair is nonacute. The explicit real aliases expose the same two printed clauses over `ℝ`; the generic theorem covers `ℂ` and arbitrary Hilbert dimension. The crossing-subspace square identity and bilateral-shift example are adjacent source material and are not part of the counted Proposition 3.2 boundary.",
       "parent_claim_id": "DK-3.2-prop",
