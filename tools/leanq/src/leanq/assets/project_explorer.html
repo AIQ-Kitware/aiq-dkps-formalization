@@ -215,6 +215,7 @@ let hiddenNodes = new Set();
 let selected = [], highlighted = new Set(), focusRegion = null;
 let transform = {x: 0, y: 0, s: 1}, dragging = null;
 let layoutPos = new Map(), currentProjection = {nodes: [], edges: []};
+let unreachedLibraries = [];
 
 const $ = id => document.getElementById(id);
 const svg = $("graph"), viewport = $("viewport"), details = $("details");
@@ -437,13 +438,13 @@ const libraryRank = (() => {
   if (seen < libs.length) for (const l of libs) rank.set(l, index.get(l));
   return rank;
 })();
-/* Every library in the repository gets its own column, ordered by that rank and
-   then by name, so the band layout is stable across selections and a package a
-   selection does not reach is visibly empty rather than silently absent. */
+/* Library column order.  `libraryRank` is a longest-path rank over the
+   dependency DAG between packages, so ordering by it is a topological order;
+   the name comparison only separates packages the DAG leaves incomparable.
+   Each library gets its own column rather than sharing one with everything at
+   the same rank. */
 const libraryOrder = [...libraryRank.keys()].sort(
   (a, b) => libraryRank.get(a) - libraryRank.get(b) || a.localeCompare(b));
-const libraryColumn = new Map(libraryOrder.map((lib, i) => [lib, i]));
-const headlineBand = libraryOrder.length;
 
 function topology(P) {
   const ins = new Map(P.nodes.map(n => [n.id, 0])), outs = new Map(P.nodes.map(n => [n.id, []]));
@@ -471,7 +472,15 @@ function render() {
   /* Library bands keep each package in one column and pin every selected
      headline theorem to one extremal column, so the edges into them are the
      picture.  The depth layout keeps the older topological columns.         */
+  /* Only libraries this selection actually reaches get a column; an unreached
+     package would otherwise hold an empty band open across the whole canvas. */
   const bandLayout = layoutSelect.value === "library";
+  const reached = new Set();
+  for (const n of P.nodes) if (!n.selectedHeadline) reached.add(n.library || "Other");
+  const activeLibraries = libraryOrder.filter(lib => reached.has(lib));
+  unreachedLibraries = libraryOrder.filter(lib => !reached.has(lib));
+  const libraryColumn = new Map(activeLibraries.map((lib, i) => [lib, i]));
+  const headlineBand = activeLibraries.length;
   const bandOf = n => bandLayout
     ? (n.selectedHeadline ? headlineBand : (libraryColumn.get(n.library || "Other") ?? 0))
     : (depth.get(n.id) || 0);
@@ -496,15 +505,12 @@ function render() {
   }
   viewport.replaceChildren();
   for (const [d, rows] of [...columns].sort((a, b) => a[0] - b[0])) {
-    if (!bandLayout && !rows.length) continue;
+    if (!rows.length) continue;
     const label = bandLayout
-      ? (d === headlineBand ? "Selected headline theorems" : libraryOrder[d])
+      ? (d === headlineBand ? "Selected headline theorems" : activeLibraries[d])
       : `depth ${d}`;
-    const head = el("text", {x: columnX(d), y: Y - 12,
-      class: rows.length ? "band" : "band empty"});
-    head.textContent = rows.length
-      ? `${label} · ${rows.length}`
-      : `${label} · not reached`;
+    const head = el("text", {x: columnX(d), y: Y - 12, class: "band"});
+    head.textContent = `${label} · ${rows.length}`;
     viewport.append(head);
   }
   for (const e of P.edges) {
@@ -749,7 +755,10 @@ function renderBadges() {
     `<span class="badge">${allEdges.length.toLocaleString()} direct edges</span>` +
     `<span class="badge">${selectedClaimIds().size} / ${claims.length} claims · ${active.size} selected theorems</span>` +
     `<span class="badge">${ancestorUniverse().size.toLocaleString()} in selected closure</span>` +
-    `<span class="badge">${shared.toLocaleString()} shared by two or more</span>`;
+    `<span class="badge">${shared.toLocaleString()} shared by two or more</span>` +
+    (unreachedLibraries.length
+      ? `<span class="badge" title="These packages have no declaration in the selected closure, so they get no column">not reached: ${esc(unreachedLibraries.join(", "))}</span>`
+      : "");
 }
 function renderSelection() {
   const box = $("headline-selection");
