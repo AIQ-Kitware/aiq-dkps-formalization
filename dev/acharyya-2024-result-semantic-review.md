@@ -380,13 +380,19 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 **Normalized paper statement:** For iid phi_i from P, pointwise convergence of empirical dissimilarities implies, along a subsequence, L^p(P x P) convergence of estimated pairwise distances to continuous-MDS distances.
 
 **Selected Lean declarations:**
-- *(none)*
+- `Acharyya2024.ContinuousMDS.lpPairDistErr`
+- `Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation`
+- `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
+- `Acharyya2024.ContinuousMDS.ContinuousMDS`
 
 **Clause-by-clause comparison:**
 
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
-| For iid phi_i~P, pointwise dissimilarity convergence implies subsequential L^p(P x P) convergence of pairwise embedding distances to continuous-MDS distances. | No model distribution, continuous MDS map, or P x P integral conclusion is present. | `missing` |  |
+| for some subsequence {r_u} of {r} | the conclusion holds along the full sequence | `lean_stronger_conclusion` |  |
+| for all p >= 1 | one statement with p as a parameter, hypothesis 1 <= p | `exact` |  |
+| int int \| ‖psihat_1 - psihat_2‖ - ‖mds(phi_1) - mds(phi_2)‖ \|^p P(dphi_1) P(dphi_2) ->P 0 | tendsto_measure_lpPairDistErr_gt, with P the empirical measure of the sampled models | `lean_stronger_hypothesis` | The population law is replaced by the empirical model measure; that substitution is the remaining distance to the printed lemma. |
+| Lemma 2. ([23]) | The source attributes the lemma to the cited continuous-MDS literature and does not prove it. | `supplementary` |  |
 
 **Semantic review:**
 
@@ -396,7 +402,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it.
+**Next action:** Replace the empirical model measure by the population law, which needs the convergence of empirical continuous-MDS embeddings to the population one.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -434,8 +440,10 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 **Normalized paper statement:** Under the Theorem 4 rate, along a subsequence the pairwise-distance error converges to zero in L^p(P x P) in probability for every p >= 1.
 
 **Selected Lean declarations:**
-- `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
+- `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`
+- `Acharyya2024.ContinuousMDS.lpPairDistErr`
+- `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
 
 **Clause-by-clause comparison:**
 
@@ -451,7 +459,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it.
+**Next action:** Compose the Theorem 4 rate with the empirical-measure L^p result, then replace the empirical model measure by the population law.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 

@@ -59,7 +59,7 @@
     "continuous-mds-lp": {
       "kind": "scope_gap",
       "title": "Continuous-MDS definition now present; the L^p(P x P) conclusions are not",
-      "detail": "The source introduces a compact model space, a model distribution P, continuous raw stress, and an mds(phi) map, then states Lemma 2 and Theorem 5 as L^p(P x P) convergence. The package explicitly documents that its growing-model result is only a countable family of finite per-stage statements and does not model the continuum distribution/integral.\n\nPartly closed. Acharyya2024.ContinuousMDS.continuousRawStress is the source's double integral and ContinuousMDS is the minimizer set over Borel-measurable embeddings, so the Lemma 2 and Theorem 5 conclusions can now at least be written. continuousRawStress_empiricalPopulation is the compatibility theorem: against the empirical measure of a finite population the continuous raw stress is the finite raw stress over the square of the population size, so the continuum definition extends the finite one the rest of the package uses. What remains unformalized is the L^p(P x P) convergence itself, which needs a limit theorem relating the empirical minimizers to the population minimizer.\n\nExistence of a minimizer is attributed by the source to the cited continuous-MDS literature through Remark 3 and is not reproved here; under this project's standard an externally attributed result is source-fidelity material, not an added proof obligation."
+      "detail": "The source introduces a compact model space, a model distribution P, continuous raw stress, and an mds(phi) map, then states Lemma 2 and Theorem 5 as L^p(P x P) convergence. The package explicitly documents that its growing-model result is only a countable family of finite per-stage statements and does not model the continuum distribution/integral.\n\nPartly closed. Acharyya2024.ContinuousMDS.continuousRawStress is the source's double integral and ContinuousMDS is the minimizer set over Borel-measurable embeddings, so the Lemma 2 and Theorem 5 conclusions can now at least be written. continuousRawStress_empiricalPopulation is the compatibility theorem: against the empirical measure of a finite population the continuous raw stress is the finite raw stress over the square of the population size, so the continuum definition extends the finite one the rest of the package uses. What remains unformalized is the L^p(P x P) convergence itself, which needs a limit theorem relating the empirical minimizers to the population minimizer.\n\nExistence of a minimizer is attributed by the source to the cited continuous-MDS literature through Remark 3 and is not reproved here; under this project's standard an externally attributed result is source-fidelity material, not an added proof obligation.\n\nFurther progress. lpPairDistErr is the source's L^p(P x P) discrepancy, and tendsto_measure_lpPairDistErr_gt proves Lemma 2's conclusion for the EMPIRICAL model distribution: pairwise convergence in probability of the estimates gives convergence in probability of the L^p discrepancy, along the full sequence rather than a subsequence and uniformly in p >= 1. What is still missing is the population law in place of the empirical measure, which is where the continuous-MDS embedding of the source enters and which the source itself attributes to the cited literature."
     },
     "affine-invariance-partial": {
       "kind": "source_audit",
@@ -482,7 +482,7 @@
       "source_kind": "lemma",
       "title": "Continuous-MDS L^p stability over iid model draws",
       "source_claim": "For iid phi_i from P, pointwise convergence of empirical dissimilarities implies, along a subsequence, L^p(P x P) convergence of estimated pairwise distances to continuous-MDS distances.",
-      "status": "not_represented",
+      "status": "compiled_specialization",
       "verification": "absent",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -491,17 +491,22 @@
           355
         ]
       },
-      "lean_declarations": [],
+      "lean_declarations": [
+        "Acharyya2024.ContinuousMDS.lpPairDistErr",
+        "Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation",
+        "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
+        "Acharyya2024.ContinuousMDS.ContinuousMDS"
+      ],
       "planned_declarations": [],
       "gap_refs": [
         "continuous-mds-lp"
       ],
       "semantic_alignment": {
-        "classification": "missing",
-        "detail": "The package has no model-distribution P over a compact model space, no continuous-MDS map, and no double-integral L^p conclusion."
+        "classification": "specialized",
+        "detail": "The conclusion is now formalized and proved against the empirical measure of the sampled models: pairwise convergence in probability of the estimated distances gives convergence in probability of the L^p(P x P) discrepancy. Two clauses come out stronger than printed -- the full sequence rather than a subsequence, and one statement uniform in p rather than one per p. The specialization is that P is the empirical model measure rather than the population law the models are drawn from; the population case is the part the source attributes to the cited continuous-MDS literature."
       },
-      "notes": "The finite per-stage triangular-array theorem is not an encoding of this integral statement.",
-      "next_action": "The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it."
+      "notes": "The definitions the conclusion is stated over -- continuousRawStress, ContinuousMDS, lpPairDistErr -- did not previously exist in the package.",
+      "next_action": "Replace the empirical model measure by the population law, which needs the convergence of empirical continuous-MDS embeddings to the population one."
     },
     {
       "id": "A24-T4",
@@ -554,8 +559,10 @@
         ]
       },
       "lean_declarations": [
+        "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
         "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile",
-        "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile"
+        "Acharyya2024.ContinuousMDS.lpPairDistErr",
+        "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt"
       ],
       "planned_declarations": [],
       "gap_refs": [
@@ -568,7 +575,7 @@
         "detail": "Lean proves a shared full-sequence/per-stage finite consistency family, which is useful but does not imply the paper double-integral L^p(P x P) conclusion over a continuum of iid model draws."
       },
       "notes": "The source-level continuum theorem remains open even though every finite-stage theorem cited here is proved.",
-      "next_action": "The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it."
+      "next_action": "Compose the Theorem 4 rate with the empirical-measure L^p result, then replace the empirical model measure by the population law."
     }
   ]
 }

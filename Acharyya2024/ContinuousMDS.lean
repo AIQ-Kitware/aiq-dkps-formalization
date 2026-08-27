@@ -115,4 +115,149 @@ theorem continuousRawStress_empiricalPopulation_fin
   have := continuousRawStress_empiricalPopulation (κ := Fin n) d φ Δ h hh hΔ hΔ'
   simpa [rawStress] using this
 
+/-! ### The `L^p(P x P)` discrepancy of Lemma 2 and Theorem 5 -/
+
+/--
+The `L^p(P x P)` pairwise-distance discrepancy the source's Lemma 2 and Theorem 5 drive to
+zero: the double integral of `| ‖psi m' - psi m''‖ - ‖chi m' - chi m''‖ |^p` against the model
+distribution, where `chi` is the continuous-MDS embedding.
+-/
+noncomputable def lpPairDistErr (d : Nat) (P : Measure M) (p : Real)
+    (ψ χ : M → Rvec d) : Real :=
+  ∫ m', ∫ m'', |‖ψ m' - ψ m''‖ - ‖χ m' - χ m''‖| ^ p ∂P ∂P
+
+/-- Against the empirical measure of a finite population, the `L^p` discrepancy is the average
+of the pairwise errors. -/
+theorem lpPairDistErr_empiricalPopulation
+    {κ : Type*} [Fintype κ] [Nonempty κ] (d : Nat) {p : Real} (hp : 0 ≤ p)
+    (φ : κ → M) (ψ χ : M → Rvec d) (hψ : Measurable ψ) (hχ : Measurable χ) :
+    lpPairDistErr d (TauCeti.Probability.empiricalPopulation φ : Measure M) p ψ χ
+      = ((Fintype.card κ : Real))⁻¹ * ((Fintype.card κ : Real))⁻¹ *
+          ∑ i, ∑ j, |‖ψ (φ i) - ψ (φ j)‖ - ‖χ (φ i) - χ (φ j)‖| ^ p := by
+  classical
+  have hinner : ∀ m' : M,
+      ∫ m'', |‖ψ m' - ψ m''‖ - ‖χ m' - χ m''‖| ^ p
+          ∂(TauCeti.Probability.empiricalPopulation φ : Measure M)
+        = ((Fintype.card κ : Real))⁻¹ *
+            ∑ j, |‖ψ m' - ψ (φ j)‖ - ‖χ m' - χ (φ j)‖| ^ p := by
+    intro m'
+    have hmeas : StronglyMeasurable
+        fun m'' : M => |‖ψ m' - ψ m''‖ - ‖χ m' - χ m''‖| ^ p :=
+      ((Real.continuous_rpow_const hp).measurable.comp
+        (((measurable_const.sub hψ).norm.sub
+          (measurable_const.sub hχ).norm).abs)).stronglyMeasurable
+    rw [TauCeti.Probability.integral_empiricalPopulation hmeas, smul_eq_mul]
+  rw [lpPairDistErr]
+  simp_rw [hinner]
+  have houter : StronglyMeasurable fun m' : M =>
+      ((Fintype.card κ : Real))⁻¹ *
+        ∑ j, |‖ψ m' - ψ (φ j)‖ - ‖χ m' - χ (φ j)‖| ^ p := by
+    refine (measurable_const.mul (Finset.measurable_sum _ fun j _ => ?_)).stronglyMeasurable
+    exact (Real.continuous_rpow_const hp).measurable.comp
+      (((hψ.sub measurable_const).norm.sub
+        (hχ.sub measurable_const).norm).abs)
+  rw [TauCeti.Probability.integral_empiricalPopulation houter, smul_eq_mul, ← Finset.mul_sum,
+    ← mul_assoc]
+
+/--
+**Lemma 2 for the empirical model distribution.**
+
+If every pairwise distance of the estimates converges in probability to the corresponding
+distance of the continuous-MDS embedding, then the `L^p(P x P)` discrepancy converges in
+probability to zero, for every `p >= 1` and against the empirical measure of the models.
+
+Two differences from the printed lemma, both in the direction of strength: the conclusion holds
+along the full sequence rather than along a subsequence, and it is uniform in `p`.  The
+restriction is that `P` is the empirical measure of the sampled models rather than the
+population law they are drawn from; lifting that is the remaining content of Lemma 2, which the
+source attributes to the cited continuous-MDS literature.
+-/
+theorem tendsto_measure_lpPairDistErr_gt
+    {Ω : Type*} [MeasurableSpace Ω] (Q : Measure Ω)
+    {κ : Type*} [Fintype κ] [Nonempty κ] {d : Nat} (p : Real) (hp : 1 ≤ p)
+    (φ : κ → M) (ψ : Nat → Ω → M → Rvec d) (χ : M → Rvec d)
+    (hψ : ∀ u ω, Measurable (ψ u ω)) (hχ : Measurable χ)
+    (hconv : ∀ i j, ∀ δ > (0 : Real), Filter.Tendsto
+      (fun u => Q {ω | δ < |‖ψ u ω (φ i) - ψ u ω (φ j)‖ - ‖χ (φ i) - χ (φ j)‖|})
+      Filter.atTop (𝓝 0))
+    {ε : Real} (hε : 0 < ε) :
+    Filter.Tendsto
+      (fun u => Q {ω | ε < lpPairDistErr d
+        (TauCeti.Probability.empiricalPopulation φ : Measure M) p (ψ u ω) χ})
+      Filter.atTop (𝓝 0) := by
+  classical
+  set δ : Real := min 1 ε with hδdef
+  have hδpos : 0 < δ := lt_min one_pos hε
+  have hδ1 : δ ≤ 1 := min_le_left _ _
+  have hδε : δ ≤ ε := min_le_right _ _
+  have hcard : (0 : Real) < (Fintype.card κ : Real) := by
+    exact_mod_cast Fintype.card_pos
+  -- a uniform pairwise bound `δ` forces the averaged `p`-th power below `ε`
+  have hsub : ∀ u, {ω | ε < lpPairDistErr d
+        (TauCeti.Probability.empiricalPopulation φ : Measure M) p (ψ u ω) χ}
+      ⊆ ⋃ q : κ × κ,
+          {ω | δ < |‖ψ u ω (φ q.1) - ψ u ω (φ q.2)‖ - ‖χ (φ q.1) - χ (φ q.2)‖|} := by
+    intro u ω hω
+    by_contra hno
+    simp only [Set.mem_iUnion, not_exists, Set.mem_ofPred_eq, not_lt] at hno
+    have hterm : ∀ i j : κ,
+        |‖ψ u ω (φ i) - ψ u ω (φ j)‖ - ‖χ (φ i) - χ (φ j)‖| ^ p ≤ ε := by
+      intro i j
+      have h1 : |‖ψ u ω (φ i) - ψ u ω (φ j)‖ - ‖χ (φ i) - χ (φ j)‖| ^ p ≤ δ ^ p :=
+        Real.rpow_le_rpow (abs_nonneg _) (hno (i, j)) (by linarith)
+      have h2 : δ ^ p ≤ δ ^ (1 : Real) :=
+        Real.rpow_le_rpow_of_exponent_ge hδpos hδ1 hp
+      rw [Real.rpow_one] at h2
+      linarith
+    have hsum : ∑ i : κ, ∑ j : κ,
+        |‖ψ u ω (φ i) - ψ u ω (φ j)‖ - ‖χ (φ i) - χ (φ j)‖| ^ p
+        ≤ (Fintype.card κ : Real) * ((Fintype.card κ : Real) * ε) := by
+      calc ∑ i : κ, ∑ j : κ,
+              |‖ψ u ω (φ i) - ψ u ω (φ j)‖ - ‖χ (φ i) - χ (φ j)‖| ^ p
+          ≤ ∑ _i : κ, ((Fintype.card κ : Real) * ε) := by
+            refine Finset.sum_le_sum fun i _ => ?_
+            calc ∑ j : κ, |‖ψ u ω (φ i) - ψ u ω (φ j)‖ - ‖χ (φ i) - χ (φ j)‖| ^ p
+                ≤ ∑ _j : κ, ε := Finset.sum_le_sum fun j _ => hterm i j
+              _ = (Fintype.card κ : Real) * ε := by
+                  simp [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+        _ = (Fintype.card κ : Real) * ((Fintype.card κ : Real) * ε) := by
+            simp [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+    rw [Set.mem_ofPred_eq,
+      lpPairDistErr_empiricalPopulation d (by linarith : (0:Real) ≤ p) φ (ψ u ω) χ
+        (hψ u ω) hχ] at hω
+    have hfin : ((Fintype.card κ : Real))⁻¹ * ((Fintype.card κ : Real))⁻¹ *
+        ∑ i : κ, ∑ j : κ,
+          |‖ψ u ω (φ i) - ψ u ω (φ j)‖ - ‖χ (φ i) - χ (φ j)‖| ^ p ≤ ε := by
+      have hpos : (0 : Real) < ((Fintype.card κ : Real))⁻¹ * ((Fintype.card κ : Real))⁻¹ := by
+        positivity
+      calc ((Fintype.card κ : Real))⁻¹ * ((Fintype.card κ : Real))⁻¹ *
+            ∑ i : κ, ∑ j : κ,
+              |‖ψ u ω (φ i) - ψ u ω (φ j)‖ - ‖χ (φ i) - χ (φ j)‖| ^ p
+          ≤ ((Fintype.card κ : Real))⁻¹ * ((Fintype.card κ : Real))⁻¹ *
+              ((Fintype.card κ : Real) * ((Fintype.card κ : Real) * ε)) := by
+            exact mul_le_mul_of_nonneg_left hsum hpos.le
+        _ = ε := by field_simp
+    linarith
+  refine Filter.Tendsto.congr' (Filter.Eventually.of_forall fun _ => rfl) ?_
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds
+    (g := fun _ : Nat => (0 : ENNReal))
+    (h := fun u => ∑ q : κ × κ,
+      Q {ω | δ < |‖ψ u ω (φ q.1) - ψ u ω (φ q.2)‖ - ‖χ (φ q.1) - χ (φ q.2)‖|}) ?_
+    (Filter.Eventually.of_forall fun _ => bot_le)
+    (Filter.Eventually.of_forall fun u => ?_)
+  · have := tendsto_finset_sum (Finset.univ : Finset (κ × κ))
+      (fun q _ => hconv q.1 q.2 δ hδpos)
+    simpa using this
+  · calc Q {ω | ε < lpPairDistErr d
+            (TauCeti.Probability.empiricalPopulation φ : Measure M) p (ψ u ω) χ}
+        ≤ Q (⋃ q : κ × κ,
+            {ω | δ < |‖ψ u ω (φ q.1) - ψ u ω (φ q.2)‖ - ‖χ (φ q.1) - χ (φ q.2)‖|}) :=
+          measure_mono (hsub u)
+      _ ≤ ∑' q : κ × κ,
+            Q {ω | δ < |‖ψ u ω (φ q.1) - ψ u ω (φ q.2)‖ - ‖χ (φ q.1) - χ (φ q.2)‖|} :=
+          measure_iUnion_le _
+      _ = ∑ q : κ × κ,
+            Q {ω | δ < |‖ψ u ω (φ q.1) - ψ u ω (φ q.2)‖ - ‖χ (φ q.1) - χ (φ q.2)‖|} :=
+          tsum_fintype _
+
 end Acharyya2024.ContinuousMDS
