@@ -10,8 +10,10 @@ import DavisKahan.Sylvester.ClosedSylvesterEquation
 
 These two records say what a spectral cutoff and a bounded truncation must
 provide, without saying how to build one.  Keeping the interface apart from any
-particular construction lets the vendored Spectra calculus supply an
-implementation while the legacy construction remains an open obligation.
+particular construction is what let a second implementation be supplied while the
+legacy construction remained an open obligation; the implementation that did so
+came from the vendored Spectra package, retired on 2026-07-29, and the native
+spectral calculus supplies it now.
 -/
 
 namespace TauCeti

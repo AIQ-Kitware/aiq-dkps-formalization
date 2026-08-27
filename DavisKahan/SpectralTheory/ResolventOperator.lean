@@ -603,7 +603,7 @@ The self-adjoint resolvent-norm bound, the contour-separation predicate, the
 Riesz projection, and its identification with the spectral projection used to
 live here.  They were written against a `Contour.integral` / `Contour.IsClosed`
 / `Contour.Rectifiable` / `Contour.index` API that exists nowhere in this
-repository, in Mathlib, or in vendored Spectra, so the whole tail never
+repository, in Mathlib, or in the then-vendored Spectra, so the whole tail never
 compiled and kept every downstream module dark.
 
 The circle-only replacement is

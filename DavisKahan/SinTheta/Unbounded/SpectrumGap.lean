@@ -34,11 +34,11 @@ variable {E F G : Type v}
 
 /-- **The unbounded Davis--Kahan `sin Θ` theorem with genuine spectra.**  For
 the paper-shaped unbounded data, if the quadratic form of the trial block
-`A₀` lies in `[β, α]` and the Spectra resolvent-set spectrum of the
-complementary block `Λ₁` avoids the open interval `(β - δ, α + δ)`, then
+`A₀` lies in `[β, α]` and the resolvent-set spectrum of the complementary
+block `Λ₁` avoids the open interval `(β - δ, α + δ)`, then
 `δ ‖X⋆ ∘ F₁‖ ≤ ‖R⋆ ∘ F₁‖`.  The resolvent hypothesis of
-`sinTheta_unbounded_opNorm` is discharged by the unbounded spectral theorem
-from the Spectra library. -/
+`sinTheta_unbounded_opNorm` is discharged by the unbounded spectral theorem.
+That theorem came from the vendored Spectra package, retired on 2026-07-29. -/
 theorem sinTheta_unbounded_opNorm_of_spectrum_gap
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : D.A.IsSelfAdjoint) (hA₀ : D.A₀.IsSelfAdjoint)

@@ -9,8 +9,9 @@ Analysis 7 (1970), 1--46.
 Do not infer completion from this README or from the presence of one facade file.
 The maintained theorem-by-theorem authority is
 `dev/davis-kahan-1970-full-source-census.json`, with the generated readable view in
-`dev/davis-kahan-1970-full-source-census.md` and the dependency frontier in
-`dev/davis-kahan-1970-frontier-status.md`.
+`dev/davis-kahan-1970-full-source-census.md`, and the completion denominator is
+`dev/davis-kahan-1970-formalization-result-inventory.json` with its generated
+view `dev/davis-kahan-1970-formalization-result-inventory.md`.
 
 Run the checker for the current source-obligation summary:
 
@@ -30,7 +31,7 @@ rotation, and Part III source surfaces.
 
 The census is deliberately more precise than a blanket "paper complete" claim. It
 records proved, conditional, refuted, scope-qualified, and non-proof-debt source
-items separately. Consult it for the exact frontier and declaration names instead
+items separately. Consult it for the exact status and declaration names instead
 of maintaining a second hand-written status table here.
 
 ## Completion standard

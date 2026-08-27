@@ -13,8 +13,9 @@ import DavisKahan.SinTheta.Bounded.Core
 The problem data and angle identification now live in
 `DavisKahan.SinTheta.Bounded.Core`.  The endpoints below are stated through the
 legacy interval/exterior estimate of the bounded spectral bridge, which is still
-an open obligation.  The production route to the same endpoints goes through the
-vendored Spectra calculus instead.
+an open obligation.  The production route to the same endpoints is the native
+bounded self-adjoint spectral calculus under `DavisKahan/SpectralTheory/`; the
+vendored Spectra package this note used to name was retired on 2026-07-29.
 -/
 
 namespace TauCeti

@@ -10,10 +10,11 @@ import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 /-!
 # Unitary conjugation for DK closed operators
 
-This module exposes the vendored Spectra unitary-conjugation construction in
-terms of the DK closed-operator wrapper.  The source and target Hilbert spaces
-may differ, which is important when conjugating operators restricted to
-spectral subspaces.
+This module states unitary conjugation in terms of the DK closed-operator
+wrapper.  The source and target Hilbert spaces may differ, which is important
+when conjugating operators restricted to spectral subspaces.  The construction
+came from the vendored Spectra package, retired on 2026-07-29; it is now built
+on Mathlib's `LinearPMap`.
 -/
 
 open scoped InnerProductSpace

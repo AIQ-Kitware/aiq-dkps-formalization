@@ -1,47 +1,45 @@
 # Experimental Davis--Kahan development
 
-This tree contains unfinished work toward both the canonical full-paper theory
-and optional extensions. In particular, the Hilbert-space modules are not a
-secondary generalization of an already completed finite theory: they contain
-major portions of the default Davis--Kahan 1970 objective.
+This tree is what is left of a staging area that has now been drained. Stable
+modules must not import it; it may import them.
 
-The tree mirrors the mathematical organization of the stable `DavisKahan`
-library. A completed cluster can therefore be promoted by moving it to the
-corresponding stable path rather than redesigning its module boundary.
+Everything it once held has been promoted or deleted. The Davis--Kahan 1970
+source-facing statements live under `DavisKahan/Sources/DavisKahan1970/`, the
+reusable mathematics under `DavisKahan/Geometry/`, `DavisKahan/SpectralTheory/`,
+`DavisKahan/BoundedOperator/`, `DavisKahan/Sylvester/`,
+`DavisKahan/InfiniteDimensional/` and `ForTauCeti/`, and the concrete
+applications under `DavisKahan/Specialized/`.
 
-That promotion happened at scale on 2026-08-05: every module here whose import
-closure had become admission-free moved to the corresponding production path,
-namespaces untouched. What follows is what is left, and every entry is left for
-one of exactly two reasons — it still carries a `sorry`, or it does not compile.
+What was removed, and why:
 
-- `Frontier/` holds the remaining Davis--Kahan 1970 frontier statements — the
-  Section 3 classification spine, the infinite-dimensional Section 4
-  propositions and the Section 9 analytic model — together with the `sorry`s
-  that mark what is still open. Its Section 8 and circle-contour leaves were
-  promoted to `DavisKahan/Frontier/`.
-- `InfiniteDimensional/Core/` contains provisional spectral, form, and
-  operator-angle infrastructure required by the paper's Hilbert-space scope.
-- `InfiniteDimensional/Sylvester/` retains the cutoff interface, the legacy
-  ordered engine and the unbounded development; the bounded, Fourier-semigroup
-  and ordered-semigroup layers are now `DavisKahan/InfiniteDimensional/`.
-- `InfiniteDimensional/SinTheta/` retains the canonical, unbounded and
-  ideal-interval-exterior obligations; the bounded, continuation and spectral
-  bridges moved out.
-- `InfiniteDimensional/Ideals/CompactAndSingular.lean` is the remaining
-  approximation-number obligation.
-- `InfiniteDimensional/{OperatorBlocks/OffDiagonal,Sharpness,DirectRotation}`,
-  `MathAhead/HiddenFoundations/` and `Scratch/SharedFoundations/Ideal/` are the
-  modules that **do not compile**. They are admission-free only because nothing
-  ever elaborated them, which is precisely why they may not be promoted; each is
-  named with its reason in `scripts/check_experimental_coverage.py`.
+- `Frontier/` (2026-08-27) — the Section 3 classification spine, the Section 4
+  propositions and the Section 9 analytic model were promoted long ago; the
+  aggregate that remained imported six production modules and nothing else, all
+  of them already reachable from `DavisKahan.All`. Its documentation described a
+  repair order for a directory that no longer existed.
+- `InfiniteDimensional/` (2026-08-27) — seventeen files of an older ambient
+  route, audited declaration by declaration first. Every module was an
+  explicitly labelled "open obligations" interface whose proved part had already
+  moved to production, an unimplemented "construction plan", or a "legacy"
+  engine the canonical one never imported; and none of the seventeen elaborated
+  any more. See the `DavisKahan/Experimental/All.lean` docstring for the audit.
+- `MathAhead/` (2026-08-27) — one abandoned route to the circle continuation
+  contour, superseded by `SpectralTheory/CircleContour.lean` and
+  `InfiniteDimensional/SinTheta/Continuation/CircleWitness.lean`.
 
-Experimental modules may import stable modules. Stable modules must not import
-this tree. Status as experimental means the declarations are not yet accepted
-as stable APIs; it does not mean they are outside the main source-fidelity
-roadmap.
+What remains:
 
-Build the complete experimental development with:
+- `Scratch/SharedFoundations/Ideal/` — two modules that do not compile against
+  the current ideal-family signature. They are named, with their reasons, in
+  `scripts/check_experimental_coverage.py`, which refuses an unexplained
+  absence from the experimental root's closure.
+
+A subtree excluded from that gate is a standing bet that nobody is checking the
+modules inside it, and the `InfiniteDimensional` deletion is what that bet cost.
+Prefer promoting or deleting to adding an exclusion.
+
+Build the experimental development with:
 
 ```bash
-lake build DavisKahan.Experimental.All
+lake build DavisKahan.Experimental
 ```
