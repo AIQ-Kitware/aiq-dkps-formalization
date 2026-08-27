@@ -6,6 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.SpectralTheory.CircleRieszIntegral
 import DavisKahan.SpectralTheory.CircleContour
+import DavisKahan.SpectralTheory.CentralBand
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpSchurComplement
 import DavisKahan.InfiniteDimensional.Riccati.ContinuationWitnessOrientedBlocks
@@ -166,58 +167,6 @@ theorem selectedBranchProjectionLipschitzConstant_of_circle
   have hm : (D.margin : ℝ) ≠ 0 := D.margin_pos.ne'
   field_simp
 
-
-omit [CompleteSpace H] in
-/-- Local two-sided resolvent membership excludes a point from the Banach
-algebra spectrum. -/
-theorem not_mem_spectrum_of_inResolventSet
-    (T : H →L[ℂ] H) {z : ℂ} (hz : InResolventSet T z) :
-    z ∉ spectrum ℂ T := by
-  obtain ⟨R, hRL, hLR⟩ := hz
-  let P : H →L[ℂ] H := z • (1 : H →L[ℂ] H) - T
-  have hP : P = -(T - z • (1 : H →L[ℂ] H)) := by
-    dsimp only [P]
-    abel
-  have hPR : P * (-R) = 1 := by
-    rw [hP, neg_mul_neg]
-    simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def]
-      using hLR
-  have hRP : (-R) * P = 1 := by
-    rw [hP, neg_mul_neg]
-    simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def]
-      using hRL
-  have hunit : IsUnit P := isUnit_iff_exists.mpr ⟨-R, hPR, hRP⟩
-  apply spectrum.notMem_iff.mpr
-  simpa only [P, Algebra.algebraMap_eq_smul_one] using hunit
-
-omit [CompleteSpace H] in
-/-- The total inverse of `zI - T` has the same norm as the local resolvent
-operator defined using the opposite pencil `T - zI`. -/
-theorem norm_ringInverse_pencil_eq_norm_resolventOperator
-    (T : H →L[ℂ] H) {z : ℂ} (hz : InResolventSet T z) :
-    ‖Ring.inverse (z • (1 : H →L[ℂ] H) - T)‖ =
-      ‖resolventOperator T z‖ := by
-  let P : H →L[ℂ] H := z • (1 : H →L[ℂ] H) - T
-  let R : H →L[ℂ] H := resolventOperator T z
-  have hP : P = -(T - z • (1 : H →L[ℂ] H)) := by
-    dsimp only [P]
-    abel
-  have hRL := resolventOperator_mul_cancel T hz
-  have hLR := mul_resolventOperator_cancel T hz
-  have hPR : P * (-R) = 1 := by
-    rw [hP, neg_mul_neg]
-    simpa only [R] using hLR
-  have hRP : (-R) * P = 1 := by
-    rw [hP, neg_mul_neg]
-    simpa only [R] using hRL
-  have hunit : IsUnit P := isUnit_iff_exists.mpr ⟨-R, hPR, hRP⟩
-  have hinv : Ring.inverse P = -R := by
-    calc
-      Ring.inverse P = Ring.inverse P * 1 := (mul_one _).symm
-      _ = Ring.inverse P * (P * (-R)) := by rw [hPR]
-      _ = (Ring.inverse P * P) * (-R) := by rw [mul_assoc]
-      _ = -R := by rw [Ring.inverse_mul_cancel P hunit, one_mul]
-  rw [show z • (1 : H →L[ℂ] H) - T = P from rfl, hinv, norm_neg]
 
 /-- Every point on the canonical finite-gap circle is at distance at least
 `d / 2` from the selected interval. -/
@@ -535,6 +484,162 @@ theorem exists_spectralContinuationWitness_of_offDiagonal_halfGap
   exact ⟨left, right, hlr, ⟨spectralContinuationWitness_of_circle D⟩⟩
 
 end ContinuationBridge
+
+/-! ## The affine path, its spectral gap, and the canonical separating circle
+
+The construction above takes a `CircleContinuationData` as given.  This last
+section builds one from a spectral gap: if the real spectrum of `T` lies in
+`[l, r] ∪ gapExterior l r d`, then the canonical gap circle -- centered at
+`gapCenter l r` with radius `(r - l + d) / 2` -- separates the real spectrum and
+selects exactly the central band, with every circle point at distance at least
+`d / 2` from the spectrum.  A self-adjoint perturbation of norm below `d / 2`
+shrinks both gaps by its norm and leaves them nonempty, which is what makes the
+same circle work along the whole path.
+-/
+
+section Path
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+/-- The real spectrum of a self-adjoint operator splits over a reducing
+decomposition. -/
+theorem realSpectrum_subset_union_of_reduces
+    {T : H →L[ℂ] H} (hT : IsSelfAdjointOperator T) {U : Submodule ℂ H}
+    [U.HasOrthogonalProjection] (hU : Reduces T U) {p q : Set ℝ}
+    (h0 : SpectrumIn T U p) (h1 : SpectrumIn T Uᗮ q) :
+    realSpectrum T ⊆ p ∪ q := by
+  let : CompleteSpace U :=
+    (U.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
+  let : CompleteSpace (Uᗮ : Submodule ℂ H) :=
+    (Uᗮ.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
+  rw [realSpectrum_eq_union_compressions_of_reduces T U hT hU]
+  rintro x (hx | hx)
+  · exact Or.inl (h0.subset (by
+      rwa [realSpectrum_compressOperator_eq_restrictedSpectrum T U h0.invariant] at hx))
+  · exact Or.inr (h1.subset (by
+      rwa [realSpectrum_compressOperator_eq_restrictedSpectrum T Uᗮ h1.invariant] at hx))
+
+omit [CompleteSpace H] in
+theorem real_smul_eq_complex_smul (t : ℝ) (E : H →L[ℂ] H) :
+    (t • E : H →L[ℂ] H) = ((t : ℂ)) • E := by
+  ext x
+  simp [Complex.coe_smul]
+
+omit [CompleteSpace H] in
+theorem isSelfAdjointOperator_path {A E : H →L[ℂ] H}
+    (hA : IsSelfAdjointOperator A) (hE : IsSelfAdjointOperator E) (t : ℝ) :
+    IsSelfAdjointOperator (A + t • E) := by
+  rw [real_smul_eq_complex_smul]
+  exact operatorPath_isSelfAdjointOperator hA hE t
+
+/-- **The two gaps survive a small self-adjoint perturbation.**  Both open gaps
+shrink by `gam` on each side, and they stay nonempty precisely because
+`gam < delta / 2`.  This is the printed step
+"`A(σ)`, being a perturbation of bound norm at most `γ`, has spectrum disjoint
+from `(β - δ + γ, β - γ)`", proved by the Neumann series. -/
+theorem realSpectrum_add_subset_of_gap
+    {T K : H →L[ℂ] H} (hT : IsSelfAdjointOperator T)
+    {alpha beta delta gam : ℝ} (hab : beta ≤ alpha) (_hdelta : 0 < delta)
+    (hgam : 0 ≤ gam) (_hgamlt : gam < delta / 2) (hK : ‖K‖ ≤ gam)
+    (hgap : realSpectrum T ⊆ Set.Icc beta alpha ∪ gapExterior beta alpha delta) :
+    realSpectrum (T + K) ⊆
+      Set.Icc (beta - gam) (alpha + gam) ∪
+        gapExterior (beta - gam) (alpha + gam) (delta - 2 * gam) := by
+  intro lam hlam
+  by_contra hnot
+  rw [Set.mem_union] at hnot
+  have h1 : lam ∉ Set.Icc (beta - gam) (alpha + gam) := fun h => hnot (Or.inl h)
+  have h2 : lam ∉ gapExterior (beta - gam) (alpha + gam) (delta - 2 * gam) :=
+    fun h => hnot (Or.inr h)
+  have h2' : beta - delta + gam < lam ∧ lam < alpha + delta - gam := by
+    constructor
+    · by_contra hcon
+      exact h2 (Or.inl (by simp only [not_lt] at hcon; linarith))
+    · by_contra hcon
+      exact h2 (Or.inr (by simp only [not_lt] at hcon; linarith))
+  have h1' : lam < beta - gam ∨ alpha + gam < lam := by
+    rcases lt_or_ge lam (beta - gam) with h | h
+    · exact Or.inl h
+    · exact Or.inr (by
+        by_contra hcon
+        exact h1 ⟨h, le_of_not_gt hcon⟩)
+  -- the ambient spectrum lies below `beta - delta` or above `beta`, and dually
+  have hnorm : ∀ mu : ℝ, ‖((lam : ℝ) : ℂ) - ((mu : ℝ) : ℂ)‖ = |lam - mu| := by
+    intro mu
+    rw [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
+  have hcontra : ∀ m : ℝ, 0 < m → gam < m →
+      (∀ mu ∈ realSpectrum T, m ≤ |lam - mu|) → False := by
+    intro m hm hgm hsep
+    have hsep' : ∀ mu ∈ realSpectrum T, m ≤ ‖((lam : ℝ) : ℂ) - ((mu : ℝ) : ℂ)‖ := by
+      intro mu hmu; rw [hnorm]; exact hsep mu hmu
+    exact notMem_spectrum_add_of_realSpectrum_dist hT hm hsep'
+      (lt_of_le_of_lt hK hgm) hlam
+  rcases h1' with hlow | hhigh
+  · refine hcontra (min (beta - lam) (lam - (beta - delta))) ?_ ?_ ?_
+    · exact lt_min (by linarith) (by linarith)
+    · exact lt_min (by linarith) (by linarith)
+    · intro mu hmu
+      rcases hgap hmu with hin | hout
+      · have : beta ≤ mu := hin.1
+        rw [abs_of_nonpos (by linarith)]
+        exact le_trans (min_le_left _ _) (by linarith)
+      · rcases hout with hle | hge
+        · rw [abs_of_nonneg (by linarith)]
+          exact le_trans (min_le_right _ _) (by linarith)
+        · rw [abs_of_nonpos (by linarith)]
+          exact le_trans (min_le_left _ _) (by linarith)
+  · refine hcontra (min (lam - alpha) (alpha + delta - lam)) ?_ ?_ ?_
+    · exact lt_min (by linarith) (by linarith)
+    · exact lt_min (by linarith) (by linarith)
+    · intro mu hmu
+      rcases hgap hmu with hin | hout
+      · have : mu ≤ alpha := hin.2
+        rw [abs_of_nonneg (by linarith)]
+        exact le_trans (min_le_left _ _) (by linarith)
+      · rcases hout with hle | hge
+        · rw [abs_of_nonneg (by linarith)]
+          exact le_trans (min_le_left _ _) (by linarith)
+        · rw [abs_of_nonpos (by linarith)]
+          exact le_trans (min_le_right _ _) (by linarith)
+
+omit [CompleteSpace H] in
+/-- Every point of the canonical gap circle is at distance at least `d / 2`
+from the real spectrum. -/
+theorem margin_le_dist_of_gap
+    {T : H →L[ℂ] H} {l r d : ℝ} (hlr : l ≤ r) (hd : 0 < d)
+    (hgap : realSpectrum T ⊆ Set.Icc l r ∪ gapExterior l r d)
+    {z : ℂ} (hz : ‖z - ((gapCenter l r : ℝ) : ℂ)‖ = (r - l + d) / 2)
+    {lam : ℝ} (hlam : lam ∈ realSpectrum T) :
+    d / 2 ≤ ‖z - (lam : ℂ)‖ := by
+  rw [gapCenter] at hz
+  rcases hgap hlam with hin | hout
+  · exact canonicalGapCircle_distance_interval hlr hz hin
+  · exact canonicalGapCircle_distance_exterior hlr hd.le hz hout
+
+/-- The canonical gap circle separates the real spectrum, selecting exactly the
+central band. -/
+theorem circleSeparates_of_gap
+    {T : H →L[ℂ] H} (hT : IsSelfAdjointOperator T) {l r d : ℝ}
+    (hlr : l ≤ r) (hd : 0 < d)
+    (hgap : realSpectrum T ⊆ Set.Icc l r ∪ gapExterior l r d) :
+    CircleSeparatesRealSpectrum T hT (centralBand l r d) (gapCenter l r)
+      ((r - l + d) / 2) where
+  radius_pos := by linarith
+  contour_resolvent := by
+    intro z hz
+    exact not_mem_spectrum_of_inResolventSet T
+      (complex_inResolventSet_of_distance T hT z (d / 2) (by linarith)
+        fun lam hlam => margin_le_dist_of_gap hlr hd hgap hz hlam)
+  inside_iff_mem := by
+    intro x _
+    rw [gapCenter]
+    exact canonicalGapCircle_inside_iff (left := l) (right := r) (d := d) (x := x)
+
+end Path
 
 end DavisKahanExt
 end TauCeti

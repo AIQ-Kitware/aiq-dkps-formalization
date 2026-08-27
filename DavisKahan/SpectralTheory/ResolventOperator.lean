@@ -497,6 +497,105 @@ theorem complex_continuousOn_resolventOperator_of_distance
     A hA S delta hdelta hsep).continuousOn
 
 
+omit [CompleteSpace H] in
+/-- Local two-sided resolvent membership excludes a point from the Banach
+algebra spectrum. -/
+theorem not_mem_spectrum_of_inResolventSet
+    (T : H →L[ℂ] H) {z : ℂ} (hz : InResolventSet T z) :
+    z ∉ spectrum ℂ T := by
+  obtain ⟨R, hRL, hLR⟩ := hz
+  let P : H →L[ℂ] H := z • (1 : H →L[ℂ] H) - T
+  have hP : P = -(T - z • (1 : H →L[ℂ] H)) := by
+    dsimp only [P]
+    abel
+  have hPR : P * (-R) = 1 := by
+    rw [hP, neg_mul_neg]
+    simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def]
+      using hLR
+  have hRP : (-R) * P = 1 := by
+    rw [hP, neg_mul_neg]
+    simpa only [ContinuousLinearMap.mul_def, ContinuousLinearMap.one_def]
+      using hRL
+  have hunit : IsUnit P := isUnit_iff_exists.mpr ⟨-R, hPR, hRP⟩
+  apply spectrum.notMem_iff.mpr
+  simpa only [P, Algebra.algebraMap_eq_smul_one] using hunit
+
+omit [CompleteSpace H] in
+/-- The total inverse of `zI - T` has the same norm as the local resolvent
+operator defined using the opposite pencil `T - zI`. -/
+theorem norm_ringInverse_pencil_eq_norm_resolventOperator
+    (T : H →L[ℂ] H) {z : ℂ} (hz : InResolventSet T z) :
+    ‖Ring.inverse (z • (1 : H →L[ℂ] H) - T)‖ =
+      ‖resolventOperator T z‖ := by
+  let P : H →L[ℂ] H := z • (1 : H →L[ℂ] H) - T
+  let R : H →L[ℂ] H := resolventOperator T z
+  have hP : P = -(T - z • (1 : H →L[ℂ] H)) := by
+    dsimp only [P]
+    abel
+  have hRL := resolventOperator_mul_cancel T hz
+  have hLR := mul_resolventOperator_cancel T hz
+  have hPR : P * (-R) = 1 := by
+    rw [hP, neg_mul_neg]
+    simpa only [R] using hLR
+  have hRP : (-R) * P = 1 := by
+    rw [hP, neg_mul_neg]
+    simpa only [R] using hRL
+  have hunit : IsUnit P := isUnit_iff_exists.mpr ⟨-R, hPR, hRP⟩
+  have hinv : Ring.inverse P = -R := by
+    calc
+      Ring.inverse P = Ring.inverse P * 1 := (mul_one _).symm
+      _ = Ring.inverse P * (P * (-R)) := by rw [hPR]
+      _ = (Ring.inverse P * P) * (-R) := by rw [mul_assoc]
+      _ = -R := by rw [Ring.inverse_mul_cancel P hunit, one_mul]
+  rw [show z • (1 : H →L[ℂ] H) - T = P from rfl, hinv, norm_neg]
+
+/-- **Neumann perturbation of the resolvent set.**  If every point of the real
+spectrum of a self-adjoint `T` is at distance at least `m` from `z`, then `z`
+survives in the resolvent set of `T + K` for every perturbation of norm below
+`m`.  No self-adjointness of `K` is needed. -/
+theorem notMem_spectrum_add_of_realSpectrum_dist
+    {T K : H →L[ℂ] H} (hT : IsSelfAdjointOperator T) {z : ℂ} {m : ℝ} (hm : 0 < m)
+    (hsep : ∀ lam ∈ realSpectrum T, m ≤ ‖z - (lam : ℂ)‖) (hK : ‖K‖ < m) :
+    z ∉ spectrum ℂ (T + K) := by
+  obtain ⟨hres, hbound⟩ :=
+    complex_inResolventSet_and_norm_resolvent_le_inv_distance T hT z m hm hsep
+  have hznot : z ∉ spectrum ℂ T := not_mem_spectrum_of_inResolventSet T hres
+  have hunit : IsUnit (z • (1 : H →L[ℂ] H) - T) := by
+    have h := spectrum.notMem_iff.mp hznot
+    rwa [Algebra.algebraMap_eq_smul_one] at h
+  have hinvnorm : ‖Ring.inverse (z • (1 : H →L[ℂ] H) - T)‖ ≤ m⁻¹ := by
+    rw [norm_ringInverse_pencil_eq_norm_resolventOperator T hres]
+    exact hbound
+  have hval : ((hunit.unit⁻¹ : (H →L[ℂ] H)ˣ) : H →L[ℂ] H) =
+      Ring.inverse (z • (1 : H →L[ℂ] H) - T) :=
+    (Ring.inverse_unit hunit.unit).symm.trans
+      (congrArg Ring.inverse hunit.unit_spec)
+  intro hmem
+  have hnotunit : ¬ IsUnit (z • (1 : H →L[ℂ] H) - (T + K)) := by
+    intro hu
+    exact (spectrum.notMem_iff.mpr
+      (by rwa [Algebra.algebraMap_eq_smul_one])) hmem
+  have hnontriv : Nontrivial (H →L[ℂ] H) := by
+    rcases subsingleton_or_nontrivial (H →L[ℂ] H) with hsub | hn
+    · exact absurd (by
+        rw [Subsingleton.elim (z • (1 : H →L[ℂ] H) - (T + K)) (1 : H →L[ℂ] H)]
+        exact isUnit_one) hnotunit
+    · exact hn
+  have hpos : (0 : ℝ) < ‖((hunit.unit⁻¹ : (H →L[ℂ] H)ˣ) : H →L[ℂ] H)‖ :=
+    Units.norm_pos _
+  have hm_le : m ≤ ‖((hunit.unit⁻¹ : (H →L[ℂ] H)ˣ) : H →L[ℂ] H)‖⁻¹ := by
+    rw [← inv_inv m]
+    gcongr
+    rw [hval]; exact hinvnorm
+  have hlt : ‖(-K : H →L[ℂ] H)‖ < ‖((hunit.unit⁻¹ : (H →L[ℂ] H)ˣ) : H →L[ℂ] H)‖⁻¹ := by
+    rw [norm_neg]; exact lt_of_lt_of_le hK hm_le
+  have hu := (hunit.unit.add (-K) hlt).isUnit
+  rw [Units.val_add, hunit.unit_spec] at hu
+  refine hnotunit ?_
+  have hrw : z • (1 : H →L[ℂ] H) - T + -K = z • (1 : H →L[ℂ] H) - (T + K) := by
+    abel
+  rwa [hrw] at hu
+
 end ComplexResolventDistance
 
 /-

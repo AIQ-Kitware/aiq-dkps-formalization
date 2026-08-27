@@ -107,6 +107,7 @@ open TauCeti.DavisKahan
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation
 open TauCeti.DavisKahan.Foundation.RealComplexification
+open TauCeti.DavisKahan1970.Section8
 
 noncomputable section
 

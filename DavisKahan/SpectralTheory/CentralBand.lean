@@ -593,6 +593,227 @@ theorem commute_starProjection_centralBandSubspace
 
 end
 
+/-! ## Identifying the band from source spectral hypotheses
+`DavisKahan/SpectralTheory/CentralBand.lean` owns the band itself: the
+configuration `realSpectrum B ⊆ Icc l r ∪ gapExterior l r d`, the band spectral
+subspace `centralBandSubspace`, its form bounds, and the shifted-operator
+estimates.  What stays here are the statements that need the Section 8
+spectral-order bridges of `Frontier/Section8.lean` and the `SpectrumIn`
+constructors of `Sources/DavisKahan1970/Section8`: the remaining
+reducing-subspace bound, and the two-sided identification of the band. 
+-/
+
+noncomputable section
+
+variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+
+variable (B : H →L[ℂ] H) (hB : IsSelfAdjointOperator B)
+
+/-! ### The upper bound for an arbitrary reducing subspace
+
+The spectral hypotheses of the source theorem are `SpectrumIn` statements about
+`Q`, `Qᗮ` and `P`, not statements about band spectral subspaces.  This lemma and
+`norm_shiftedOperator_ge_of_spectrumIn_gapExterior` convert them into the same
+shifted-operator bounds. -/
+
+include hB in
+/-- **A reducing subspace with spectrum in `[l, r]` is a contraction after the
+shift.**  The two-sided form bound of the restricted spectrum becomes a norm
+bound by the Rayleigh description of the norm of a symmetric operator; the
+ambient carrier is `(B - c) P_U`, so no restriction appears. -/
+theorem norm_shiftedOperator_le_of_spectrumIn_Icc
+    {U : Submodule ℂ H} [U.HasOrthogonalProjection] {l r : ℝ} (hlr : l ≤ r)
+    (hU : Reduces B U) (hspec : SpectrumIn B U (Set.Icc l r))
+    {x : H} (hx : x ∈ U) :
+    ‖shiftedOperator B l r x‖ ≤ ((r - l) / 2) * ‖x‖ := by
+  set S : H →L[ℂ] H := shiftedOperator B l r with hSdef
+  set Pu : H →L[ℂ] H := U.starProjection with hPu
+  have hrl : (0 : ℝ) ≤ (r - l) / 2 := by linarith
+  have hcomm : Pu ∘L B = B ∘L Pu :=
+    ContinuousLinearMap.starProjection_comp_comm_of_reduces B U hU
+  have hScomm : ∀ y : H, Pu (S y) = S (Pu y) := by
+    intro y
+    have h := congrArg (fun T : H →L[ℂ] H => T y) hcomm
+    simp only [ContinuousLinearMap.comp_apply] at h
+    rw [hSdef, shiftedOperator_apply, shiftedOperator_apply, map_sub, h,
+      ContinuousLinearMap.map_smul]
+  have hUform : ∀ y ∈ U, |RCLike.re ⟪S y, y⟫_ℂ| ≤ ((r - l) / 2) * ‖y‖ ^ 2 := by
+    intro y hy
+    have hup : RCLike.re ⟪y, B y⟫_ℂ ≤ r * ‖y‖ ^ 2 :=
+      re_inner_le_of_spectrumIn_Iic hB (hspec.mono Set.Icc_subset_Iic_self) hy
+    have hlo : l * ‖y‖ ^ 2 ≤ RCLike.re ⟪y, B y⟫_ℂ :=
+      le_re_inner_of_spectrumIn_Ici hB (hspec.mono Set.Icc_subset_Ici_self) hy
+    have hswap : RCLike.re ⟪B y, y⟫_ℂ = RCLike.re ⟪y, B y⟫_ℂ :=
+      (inner_re_symm y (B y)).symm
+    rw [hSdef, re_inner_shiftedOperator B l r y, hswap, abs_le, gapCenter]
+    constructor <;> linarith
+  have hmemS : ∀ y : H, S (Pu y) ∈ U := by
+    intro y
+    rw [← hScomm]
+    exact U.starProjection_apply_mem _
+  have hsym : IsSelfAdjointOperator (S ∘L Pu) := by
+    intro u v
+    show ⟪S (Pu u), v⟫_ℂ = ⟪u, S (Pu v)⟫_ℂ
+    have h1 : ⟪S (Pu u), v⟫_ℂ = ⟪Pu u, S v⟫_ℂ :=
+      (inner_shiftedOperator_symm B hB l r (Pu u) v).symm
+    have h2 : ⟪Pu u, S v⟫_ℂ = ⟪u, Pu (S v)⟫_ℂ := by
+      rw [hPu]
+      exact Submodule.inner_starProjection_left_eq_right U u (S v)
+    rw [h1, h2, hScomm v]
+  have hbound : ‖S ∘L Pu‖ ≤ (r - l) / 2 := by
+    refine opNorm_le_of_abs_re_inner_le hsym hrl fun y => ?_
+    have hzero : ⟪S (Pu y), Uᗮ.starProjection y⟫_ℂ = 0 :=
+      (Submodule.mem_orthogonal U (Uᗮ.starProjection y)).mp
+        (Uᗮ.starProjection_apply_mem y) (S (Pu y)) (hmemS y)
+    have hsplit : Pu y + Uᗮ.starProjection y = y := by
+      rw [hPu, Submodule.starProjection_orthogonal_apply]; abel
+    have hval : ⟪(S ∘L Pu) y, y⟫_ℂ = ⟪S (Pu y), Pu y⟫_ℂ := by
+      show ⟪S (Pu y), y⟫_ℂ = _
+      calc ⟪S (Pu y), y⟫_ℂ
+          = ⟪S (Pu y), Pu y + Uᗮ.starProjection y⟫_ℂ := by rw [hsplit]
+        _ = ⟪S (Pu y), Pu y⟫_ℂ + ⟪S (Pu y), Uᗮ.starProjection y⟫_ℂ :=
+            inner_add_right _ _ _
+        _ = ⟪S (Pu y), Pu y⟫_ℂ := by rw [hzero, add_zero]
+    rw [hval]
+    calc |RCLike.re ⟪S (Pu y), Pu y⟫_ℂ| ≤ ((r - l) / 2) * ‖Pu y‖ ^ 2 :=
+        hUform _ (U.starProjection_apply_mem y)
+      _ ≤ ((r - l) / 2) * ‖y‖ ^ 2 := by
+          have h1 : ‖Pu y‖ ≤ ‖y‖ := by
+            rw [hPu]; exact U.norm_starProjection_apply_le y
+          have hsq : ‖Pu y‖ ^ 2 ≤ ‖y‖ ^ 2 := by
+            nlinarith [norm_nonneg (Pu y), norm_nonneg y]
+          exact mul_le_mul_of_nonneg_left hsq hrl
+  have hPx : Pu x = x := by
+    rw [hPu]; exact Submodule.starProjection_eq_self_iff.mpr hx
+  calc ‖S x‖ = ‖(S ∘L Pu) x‖ := by
+        rw [ContinuousLinearMap.comp_apply, hPx]
+    _ ≤ ‖S ∘L Pu‖ * ‖x‖ := (S ∘L Pu).le_opNorm x
+    _ ≤ ((r - l) / 2) * ‖x‖ := mul_le_mul_of_nonneg_right hbound (norm_nonneg x)
+
+/-! ### Identifying the band subspace
+
+`Π` is a continuous functional calculus of `B`, so it commutes with every
+orthogonal projection onto a reducing subspace
+(`commute_starProjection_centralBandSubspace`).  Together with the two
+shifted-operator bounds that pins `Π` down. -/
+
+include hB in
+/-- The band spectral subspace carries spectrum inside `[l, r]`. -/
+theorem spectrumIn_centralBandSubspace
+    {l r d : ℝ} (hd : 0 < d)
+    (hgap : realSpectrum B ⊆ Set.Icc l r ∪ gapExterior l r d) :
+    SpectrumIn B (centralBandSubspace B hB (l := l) (r := r) (d := d))
+      (Set.Icc l r) := by
+  have hinv : ∀ x ∈ centralBandSubspace B hB (l := l) (r := r) (d := d),
+      B x ∈ centralBandSubspace B hB (l := l) (r := r) (d := d) :=
+    (centralBandSubspace_reduces B hB).1
+  have hup := spectrumIn_Iic_of_re_inner_le
+    (T := B) hinv (c := r)
+    (fun x hx => re_inner_le_of_mem_centralBandSubspace B hB hd hgap hx)
+  have hlo := spectrumIn_Ici_of_le_re_inner
+    (T := B) hinv (c := l)
+    (fun x hx => le_re_inner_of_mem_centralBandSubspace B hB hd hgap hx)
+  exact ⟨hinv, fun t ht => ⟨hlo.subset ht, hup.subset ht⟩⟩
+
+include hB in
+/-- **One half of the identification.**  A reducing subspace whose complement
+is spectrally outside the two gaps contains the band spectral subspace. -/
+theorem centralBandSubspace_le_of_spectrumIn_gapExterior
+    {l r d : ℝ} (hd : 0 < d) (hlr : l ≤ r)
+    (hgap : realSpectrum B ⊆ Set.Icc l r ∪ gapExterior l r d)
+    {U : Submodule ℂ H} [U.HasOrthogonalProjection] (hU : Reduces B U)
+    (hperp : SpectrumIn B Uᗮ (gapExterior l r d)) :
+    centralBandSubspace B hB (l := l) (r := r) (d := d) ≤ U := by
+  set R := centralBandSubspace B hB (l := l) (r := r) (d := d) with hR
+  have hcomm := commute_starProjection_centralBandSubspace B hB hd hgap hU
+  intro x hx
+  set y : H := Uᗮ.starProjection x with hy
+  have hyU : y ∈ Uᗮ := Uᗮ.starProjection_apply_mem x
+  have hRx : R.starProjection x = x := Submodule.starProjection_eq_self_iff.mpr hx
+  have hyR : y ∈ R := by
+    have hperpcomm : R.starProjection ∘L Uᗮ.starProjection =
+        Uᗮ.starProjection ∘L R.starProjection := by
+      have hsplit : Uᗮ.starProjection =
+          (1 : H →L[ℂ] H) - U.starProjection := by
+        ext z
+        rw [Submodule.starProjection_orthogonal_apply]
+        simp
+      rw [hsplit]
+      show R.starProjection * ((1 : H →L[ℂ] H) - U.starProjection) =
+        ((1 : H →L[ℂ] H) - U.starProjection) * R.starProjection
+      rw [mul_sub, sub_mul, mul_one, one_mul, hcomm.eq]
+    have h := congrArg (fun T : H →L[ℂ] H => T x) hperpcomm
+    simp only [ContinuousLinearMap.comp_apply] at h
+    rw [hy, ← Submodule.starProjection_eq_self_iff, h, hRx]
+  have hupper : ‖shiftedOperator B l r y‖ ≤ ((r - l) / 2) * ‖y‖ :=
+    norm_shiftedOperator_le_of_spectrumIn_Icc B hB hlr
+      (centralBandSubspace_reduces B hB) (spectrumIn_centralBandSubspace B hB hd hgap)
+      hyR
+  have hlower : ((r - l) / 2 + d) * ‖y‖ ≤ ‖shiftedOperator B l r y‖ :=
+    norm_shiftedOperator_ge_of_spectrumIn_gapExterior B hB hd hlr hperp hyU
+  have hy0 : y = 0 := by
+    by_contra hne
+    have hpos : 0 < ‖y‖ := norm_pos_iff.mpr hne
+    nlinarith
+  have hfix : U.starProjection x = x := by
+    have hsum := U.starProjection_add_starProjection_orthogonal x
+    rw [hy] at hy0
+    rw [hy0, add_zero] at hsum
+    exact hsum
+  rw [← hfix]
+  exact U.starProjection_apply_mem x
+
+include hB in
+/-- **The other half.**  A reducing subspace whose spectrum sits in a shorter
+interval with the same centre is contained in the band spectral subspace. -/
+theorem le_centralBandSubspace_of_spectrumIn_Icc
+    {l r d l' r' : ℝ} (hd : 0 < d) (hlr : l ≤ r) (hlr' : l' ≤ r')
+    (hgap : realSpectrum B ⊆ Set.Icc l r ∪ gapExterior l r d)
+    {U : Submodule ℂ H} [U.HasOrthogonalProjection] (hU : Reduces B U)
+    (hspec : SpectrumIn B U (Set.Icc l' r'))
+    (hcen : gapCenter l' r' = gapCenter l r)
+    (hsmall : (r' - l') / 2 < (r - l) / 2 + d) :
+    U ≤ centralBandSubspace B hB (l := l) (r := r) (d := d) := by
+  set R := centralBandSubspace B hB (l := l) (r := r) (d := d) with hR
+  have hcomm := commute_starProjection_centralBandSubspace B hB hd hgap hU
+  intro x hx
+  set y : H := Rᗮ.starProjection x with hy
+  have hyR : y ∈ Rᗮ := Rᗮ.starProjection_apply_mem x
+  have hUx : U.starProjection x = x := Submodule.starProjection_eq_self_iff.mpr hx
+  have hyU : y ∈ U := by
+    have hperpcomm : U.starProjection ∘L Rᗮ.starProjection =
+        Rᗮ.starProjection ∘L U.starProjection := by
+      have hsplit : Rᗮ.starProjection = (1 : H →L[ℂ] H) - R.starProjection := by
+        ext z
+        rw [Submodule.starProjection_orthogonal_apply]
+        simp
+      rw [hsplit]
+      show U.starProjection * ((1 : H →L[ℂ] H) - R.starProjection) =
+        ((1 : H →L[ℂ] H) - R.starProjection) * U.starProjection
+      rw [mul_sub, sub_mul, mul_one, one_mul, hcomm.eq]
+    have h := congrArg (fun T : H →L[ℂ] H => T x) hperpcomm
+    simp only [ContinuousLinearMap.comp_apply] at h
+    rw [hy, ← Submodule.starProjection_eq_self_iff, h, hUx]
+  have hupper : ‖shiftedOperator B l r y‖ ≤ ((r' - l') / 2) * ‖y‖ := by
+    have h := norm_shiftedOperator_le_of_spectrumIn_Icc B hB hlr' hU hspec hyU
+    rwa [shiftedOperator_congr B hcen] at h
+  have hlower : ((r - l) / 2 + d) * ‖y‖ ≤ ‖shiftedOperator B l r y‖ :=
+    norm_shiftedOperator_ge_of_mem_centralBandSubspace_orthogonal B hB hd hlr hgap hyR
+  have hy0 : y = 0 := by
+    by_contra hne
+    have hpos : 0 < ‖y‖ := norm_pos_iff.mpr hne
+    nlinarith
+  have hfix : R.starProjection x = x := by
+    have hsum := R.starProjection_add_starProjection_orthogonal x
+    rw [hy] at hy0
+    rw [hy0, add_zero] at hsum
+    exact hsum
+  rw [← hfix]
+  exact R.starProjection_apply_mem x
+
+end
+
 end Band
 
 end DavisKahan
