@@ -30,7 +30,7 @@ import Acharyya2024.RawStress
 import TauCeti.Probability.Process.EmpiricalMeasure
 
 open scoped BigOperators Topology
-open MeasureTheory
+open MeasureTheory Filter
 
 namespace Acharyya2024.ContinuousMDS
 
@@ -359,12 +359,36 @@ theorem continuous_pointStress {n d : Nat} (z : Config n d) (c : Fin n → Real)
   exact continuous_finset_sum _ fun i _ =>
     (((continuous_id.sub continuous_const).norm.sub continuous_const).pow 2)
 
+/-- **Coercivity of the one-point raw stress.**  Far enough from a reference point, the term of
+that single reference point already exceeds the whole stress at the point itself. -/
+theorem lt_pointStress_of_norm_gt {n d : Nat} (z : Config n d) (c : Fin n → Real) (i₀ : Fin n)
+    {w : Rvec d}
+    (hw : ‖z i₀‖ + |c i₀| + Real.sqrt (pointStress z c (z i₀)) + 1 < ‖w‖) :
+    pointStress z c (z i₀) < pointStress z c w := by
+  classical
+  set B : Real := pointStress z c (z i₀) with hB
+  have hB0 : 0 ≤ B := Finset.sum_nonneg fun i _ => sq_nonneg _
+  have hsqrt : 0 ≤ Real.sqrt B := Real.sqrt_nonneg B
+  have hstep : Real.sqrt B + 1 ≤ ‖w - z i₀‖ - c i₀ := by
+    have h1 : ‖w‖ - ‖z i₀‖ ≤ ‖w - z i₀‖ := norm_sub_norm_le _ _
+    have h2 : c i₀ ≤ |c i₀| := le_abs_self _
+    linarith
+  have hsq : B < (‖w - z i₀‖ - c i₀) ^ 2 := by
+    have hpos : (0 : Real) ≤ Real.sqrt B + 1 := by linarith
+    have hmono : (Real.sqrt B + 1) ^ 2 ≤ (‖w - z i₀‖ - c i₀) ^ 2 :=
+      pow_le_pow_left₀ hpos hstep 2
+    have hBsq : Real.sqrt B ^ 2 = B := Real.sq_sqrt hB0
+    nlinarith [hmono, hBsq, hsqrt]
+  have hsingle : (‖w - z i₀‖ - c i₀) ^ 2 ≤ pointStress z c w :=
+    Finset.single_le_sum (f := fun i => (‖w - z i‖ - c i) ^ 2)
+      (fun i _ => sq_nonneg _) (Finset.mem_univ i₀)
+  linarith
+
 /--
 **The one-point raw stress attains its minimum.**
 
-It is continuous and coercive: far from the reference configuration the term of any single
-reference point already exceeds the value at that point, so a minimizer over a large closed
-ball -- which exists by compactness -- is a global minimizer.
+It is continuous and coercive, so a minimizer over a large closed ball -- which exists by
+compactness -- is a global minimizer.
 -/
 theorem exists_min_pointStress {n d : Nat} (hn : 0 < n) (z : Config n d) (c : Fin n → Real) :
     ∃ v : Rvec d, ∀ w : Rvec d, pointStress z c v ≤ pointStress z c w := by
@@ -387,21 +411,18 @@ theorem exists_min_pointStress {n d : Nat} (hn : 0 < n) (z : Config n d) (c : Fi
   by_cases hw : ‖w‖ ≤ R
   · exact hv_min (by simpa [Metric.mem_closedBall] using hw)
   · push Not at hw
-    have hstep : Real.sqrt B + 1 ≤ ‖w - z i₀‖ - c i₀ := by
-      have h1 : ‖w‖ - ‖z i₀‖ ≤ ‖w - z i₀‖ := norm_sub_norm_le _ _
-      have h2 : c i₀ ≤ |c i₀| := le_abs_self _
-      rw [hR] at hw
-      linarith
-    have hsq : B < (‖w - z i₀‖ - c i₀) ^ 2 := by
-      have hpos : (0 : Real) ≤ Real.sqrt B + 1 := by linarith
-      have hmono : (Real.sqrt B + 1) ^ 2 ≤ (‖w - z i₀‖ - c i₀) ^ 2 :=
-        pow_le_pow_left₀ hpos hstep 2
-      have hBsq : Real.sqrt B ^ 2 = B := Real.sq_sqrt hB0
-      nlinarith [hmono, hBsq, hsqrt]
-    have hsingle : (‖w - z i₀‖ - c i₀) ^ 2 ≤ pointStress z c w :=
-      Finset.single_le_sum (f := fun i => (‖w - z i‖ - c i) ^ 2)
-        (fun i _ => sq_nonneg _) (Finset.mem_univ i₀)
+    have := lt_pointStress_of_norm_gt z c i₀ (by rw [← hR]; exact hw)
     linarith
+
+/-- A global minimizer of the one-point raw stress is bounded by the coercivity radius. -/
+theorem norm_le_of_min_pointStress {n d : Nat} (z : Config n d) (c : Fin n → Real)
+    (i₀ : Fin n) {v : Rvec d} (hv : ∀ w : Rvec d, pointStress z c v ≤ pointStress z c w) :
+    ‖v‖ ≤ ‖z i₀‖ + |c i₀| + Real.sqrt (pointStress z c (z i₀)) + 1 := by
+  by_contra hcon
+  push Not at hcon
+  have h1 := lt_pointStress_of_norm_gt z c i₀ hcon
+  have h2 := hv (z i₀)
+  linarith
 
 open Classical in
 /-- **The out-of-sample extension**: the position minimizing the one-point raw stress of the
@@ -443,5 +464,90 @@ theorem pointStress_rigidMotion {n d : Nat} (z : Config n d) (c : Fin n → Real
   refine Finset.sum_congr rfl fun i _ => ?_
   have h : (W v + b) - (W (z i) + b) = W (v - z i) := by rw [map_sub]; abel
   rw [h, LinearIsometryEquiv.norm_map]
+
+/-! ### Stability of the out-of-sample extension
+
+This is the argmin step for the out-of-sample map, the analogue for a single new point of the
+raw-stress stability the package proves for whole configurations.  If the reference
+configuration and the target dissimilarities converge, and the limiting one-point stress has a
+unique minimizer, then the out-of-sample positions converge to it.
+
+The proof is compactness: the minimizers are bounded by the coercivity radius, which converges;
+every subsequential limit minimizes the limiting stress, hence is *the* minimizer; and a bounded
+sequence all of whose subsequential limits agree converges. -/
+
+/-- The one-point raw stress is jointly continuous in the reference configuration, the target
+dissimilarities and the point, along sequences. -/
+theorem tendsto_pointStress {n d : Nat} {z : Nat → Config n d} {ψ : Config n d}
+    {c : Nat → Fin n → Real} {c' : Fin n → Real} {v : Nat → Rvec d} {v' : Rvec d}
+    (hz : ∀ i, Tendsto (fun u => z u i) atTop (𝓝 (ψ i)))
+    (hc : ∀ i, Tendsto (fun u => c u i) atTop (𝓝 (c' i)))
+    (hv : Tendsto v atTop (𝓝 v')) :
+    Tendsto (fun u => pointStress (z u) (c u) (v u)) atTop (𝓝 (pointStress ψ c' v')) := by
+  unfold pointStress
+  refine tendsto_finset_sum _ fun i _ => ?_
+  exact ((hv.sub (hz i)).norm.sub (hc i)).pow 2
+
+/--
+**Stability of the out-of-sample extension.**
+
+If the reference configuration and the target dissimilarities converge, and the limiting
+one-point stress has a unique minimizer `v'`, then the out-of-sample positions converge to `v'`.
+-/
+theorem tendsto_outOfSampleExtension {n d : Nat} (hn : 0 < n)
+    {z : Nat → Config n d} {ψ : Config n d}
+    {c : Nat → Fin n → Real} {c' : Fin n → Real} {v' : Rvec d}
+    (hz : ∀ i, Tendsto (fun u => z u i) atTop (𝓝 (ψ i)))
+    (hc : ∀ i, Tendsto (fun u => c u i) atTop (𝓝 (c' i)))
+    (hmin : ∀ w : Rvec d, pointStress ψ c' v' ≤ pointStress ψ c' w)
+    (huniq : ∀ w : Rvec d, (∀ w' : Rvec d, pointStress ψ c' w ≤ pointStress ψ c' w') → w = v') :
+    Tendsto (fun u => outOfSampleExtension hn (z u) (c u)) atTop (𝓝 v') := by
+  classical
+  have hne : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
+  obtain ⟨i₀⟩ := hne
+  set V : Nat → Rvec d := fun u => outOfSampleExtension hn (z u) (c u) with hV
+  have hVmin : ∀ u, ∀ w : Rvec d, pointStress (z u) (c u) (V u) ≤ pointStress (z u) (c u) w :=
+    fun u w => outOfSampleExtension_min hn (z u) (c u) w
+  -- the coercivity radius converges, so the minimizers are bounded
+  set Rseq : Nat → Real :=
+    fun u => ‖z u i₀‖ + |c u i₀| + Real.sqrt (pointStress (z u) (c u) (z u i₀)) + 1 with hRseq
+  have hRlim : Tendsto Rseq atTop
+      (𝓝 (‖ψ i₀‖ + |c' i₀| + Real.sqrt (pointStress ψ c' (ψ i₀)) + 1)) := by
+    have hstress : Tendsto (fun u => pointStress (z u) (c u) (z u i₀)) atTop
+        (𝓝 (pointStress ψ c' (ψ i₀))) := tendsto_pointStress hz hc (hz i₀)
+    exact (((hz i₀).norm.add (hc i₀).abs).add
+      (Real.continuous_sqrt.continuousAt.tendsto.comp hstress)).add tendsto_const_nhds
+  obtain ⟨Rb, hRb⟩ := (Metric.isBounded_range_of_tendsto _ hRlim).subset_closedBall 0
+  have hVbound : ∀ u, ‖V u‖ ≤ Rb := by
+    intro u
+    refine le_trans (norm_le_of_min_pointStress (z u) (c u) i₀ (hVmin u)) ?_
+    have := hRb (Set.mem_range_self u)
+    rw [mem_closedBall_zero_iff, Real.norm_eq_abs] at this
+    exact le_trans (le_abs_self _) this
+  -- every subsequential limit minimizes the limiting stress, hence equals `v'`
+  refine tendsto_of_subseq_tendsto (fun ns hns => ?_)
+  have hmem : ∀ k, V (ns k) ∈ Metric.closedBall (0 : Rvec d) Rb := by
+    intro k
+    rw [mem_closedBall_zero_iff]
+    exact hVbound (ns k)
+  obtain ⟨L, -, ms, hmsmono, hms⟩ :=
+    tendsto_subseq_of_bounded (Metric.isBounded_closedBall) hmem
+  refine ⟨ms, ?_⟩
+  have hsub : Tendsto (fun k => ns (ms k)) atTop atTop :=
+    hns.comp hmsmono.tendsto_atTop
+  have hLmin : ∀ w : Rvec d, pointStress ψ c' L ≤ pointStress ψ c' w := by
+    intro w
+    have hlhs : Tendsto (fun k => pointStress (z (ns (ms k))) (c (ns (ms k))) (V (ns (ms k))))
+        atTop (𝓝 (pointStress ψ c' L)) :=
+      tendsto_pointStress (fun i => (hz i).comp hsub) (fun i => (hc i).comp hsub) hms
+    have hrhs : Tendsto (fun k => pointStress (z (ns (ms k))) (c (ns (ms k))) w)
+        atTop (𝓝 (pointStress ψ c' w)) :=
+      tendsto_pointStress (fun i => (hz i).comp hsub) (fun i => (hc i).comp hsub)
+        tendsto_const_nhds
+    exact le_of_tendsto_of_tendsto hlhs hrhs
+      (Filter.Eventually.of_forall fun k => hVmin (ns (ms k)) w)
+  have hLeq : L = v' := huniq L hLmin
+  rw [← hLeq]
+  exact hms
 
 end Acharyya2024.ContinuousMDS
