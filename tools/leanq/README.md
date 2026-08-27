@@ -180,6 +180,15 @@ and carries its edge degrees — a declaration shows true `in` / `out` direct-ed
 actually drawn, and how many dependencies are still folded inside a cluster; a cluster shows its
 declaration, child, internal-edge and projected-edge counts.
 
+**Paper foundations.** `--foundations` takes a CSV with `module` and `theory_id` columns -- the
+draft's `generated/formalization_declaration_formal_provenance.csv` is one -- and tags each
+declaration with the paper's named mathematical foundation, reading labels from
+`formalization_basic_theories.csv` beside it. The taxonomy spans packages: the same foundation has
+modules in `DavisKahan`, `ForTauCeti`, and `YuWangSamworth2015`, because material was promoted
+between them. `Paper foundation bands` therefore groups the graph by the mathematics rather than by
+which package currently hosts it, which package columns alone cannot show. In that mode a cluster
+is rooted at its foundation, so no cluster spans two.
+
 **Layout.** `Library bands` gives every package its own column and pins the selected headline
 theorems to one extremal column, so the edges into them are the picture. Column order is a
 depth-first Kahn traversal of the package dependency DAG: a package is placed once its prerequisites

@@ -1152,6 +1152,56 @@ def analyze_headlines(
     raise ProjectError(f"unknown headline view {view!r}")
 
 
+def load_foundation_map(path: Path) -> tuple[dict[str, str], dict[str, str]]:
+    """Read a module -> paper-foundation map from the draft's generated CSV.
+
+    The paper groups the supporting development into named mathematical
+    foundations.  That taxonomy spans packages: the same foundation has modules
+    in `DavisKahan`, `ForTauCeti`, and `YuWangSamworth2015`, because material was
+    promoted between them.  Grouping the graph by foundation therefore shows the
+    mathematics independently of which package currently hosts it, which package
+    columns alone cannot.
+
+    Labels come from `formalization_basic_theories.csv` beside the map when it is
+    there; the two `*_result_layer` ids are paper-facing result layers rather
+    than foundations and keep their identifier.
+    """
+    import csv
+
+    try:
+        rows = list(csv.DictReader(path.open(encoding="utf-8")))
+    except OSError as ex:
+        raise ProjectError(f"cannot read foundation map {path}: {ex}") from ex
+    if not rows or "module" not in rows[0] or "theory_id" not in rows[0]:
+        raise ProjectError(
+            f"{path} needs `module` and `theory_id` columns to be a foundation map"
+        )
+    modules: dict[str, str] = {}
+    for row in rows:
+        module, theory = (row.get("module") or "").strip(), (row.get("theory_id") or "").strip()
+        if module and theory:
+            modules.setdefault(module, theory)
+    labels: dict[str, str] = {}
+    sibling = path.parent / "formalization_basic_theories.csv"
+    if sibling.is_file():
+        for row in csv.DictReader(sibling.open(encoding="utf-8")):
+            if row.get("theory_id") and row.get("theory"):
+                labels[row["theory_id"].strip()] = row["theory"].strip()
+    return modules, labels
+
+
+def _foundation_for(module: str, modules: Mapping[str, str]) -> str | None:
+    """Longest module prefix carrying a foundation, so submodules inherit it."""
+    if module in modules:
+        return modules[module]
+    parts = module.split(".")
+    for cut in range(len(parts) - 1, 0, -1):
+        prefix = ".".join(parts[:cut])
+        if prefix in modules:
+            return modules[prefix]
+    return None
+
+
 #: Library name given to declarations outside every first-party library.  The
 #: index records them only by name, so Lean core and Batteries constants are
 #: lumped in with Mathlib; the overwhelming majority are Mathlib.
@@ -1246,6 +1296,7 @@ def prepare_project_explorer(
     targets: Sequence[str] = (),
     default_claims: Sequence[str] = (),
     boundary: str = "none",
+    foundations: Path | None = None,
 ) -> dict:
     """Annotate a complete semantic index for the whole-project HTML explorer.
 
@@ -1373,6 +1424,24 @@ def prepare_project_explorer(
     boundary_summary = _attach_boundary_declarations(
         nodes, edges, decls, graph, dependency_result, boundary
     )
+    foundation_summary: dict = {"source": None, "declarationCount": 0, "labels": {}}
+    if foundations is not None:
+        modules, labels = load_foundation_map(foundations)
+        tagged = 0
+        used: set[str] = set()
+        for row in nodes:
+            theory = _foundation_for(str(row.get("module") or ""), modules)
+            if theory is None:
+                continue
+            row["foundation"] = theory
+            row["foundationLabel"] = labels.get(theory, theory)
+            used.add(theory)
+            tagged += 1
+        foundation_summary = {
+            "source": str(foundations),
+            "declarationCount": tagged,
+            "labels": {theory: labels.get(theory, theory) for theory in sorted(used)},
+        }
 
     result = dict(semantic_payload)
     result.update(
@@ -1385,6 +1454,7 @@ def prepare_project_explorer(
             "nodes": nodes,
             "edges": edges,
             "boundary": boundary_summary,
+            "foundations": foundation_summary,
             "headlineAnalysis": analysis,
             "clusterStats": cluster_stats,
             "explorer": {
