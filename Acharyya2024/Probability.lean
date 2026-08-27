@@ -511,6 +511,110 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing
     (fun r => bot_le) hbad
 
 /--
+**Theorem 4 when the models are random too.**
+
+`pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing` treats the model
+population means as fixed, which is how Theorem 4 is stated: the models are given and the
+replicates are random.  Lemma 2 then *draws* the models, so composing the two needs the means to
+be random as well.  Nothing in the argument used their determinism -- the reduction to two
+uniform errors is pointwise in the sample, and Chebyshev is applied to `‖Xbar - μ‖` whichever of
+the two is random -- so this is the same theorem with `μ` allowed to depend on the sample point.
+-/
+theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_random
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {p : Nat} (m : Nat → Nat)
+    (Xbar : ∀ r, Ω → Nat → Mat (m r) p)
+    (μ : ∀ r, Ω → Nat → Mat (m r) p)
+    (v : Nat → Real) (i i' : Nat)
+    (hint : ∀ r k, Integrable (fun ω => ‖Xbar r ω k - μ r ω k‖ ^ 2) P)
+    (hmoment : ∀ r k, ∫ ω, ‖Xbar r ω k - μ r ω k‖ ^ 2 ∂P ≤ v r)
+    (hv : Tendsto (fun r => v r / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
+    ConvergesInProbabilityZero P (fun r ω =>
+      ((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+        - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) := by
+  intro ε hε
+  set η : Nat → Real := fun r => ε * ((m r : Real)) / 2 with hη_def
+  -- the deterministic reduction: two uniform errors control the dissimilarity entry
+  have hdet : ∀ r ω, ‖Xbar r ω i - μ r ω i‖ ≤ η r → ‖Xbar r ω i' - μ r ω i'‖ ≤ η r →
+      |((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+        - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖| ≤ ε := by
+    intro r ω h1 h2
+    have hrev : |‖Xbar r ω i - Xbar r ω i'‖ - ‖μ r ω i - μ r ω i'‖|
+        ≤ ‖Xbar r ω i - μ r ω i‖ + ‖Xbar r ω i' - μ r ω i'‖ := by
+      have hsub : (Xbar r ω i - Xbar r ω i') - (μ r ω i - μ r ω i')
+          = (Xbar r ω i - μ r ω i) - (Xbar r ω i' - μ r ω i') := by abel
+      calc |‖Xbar r ω i - Xbar r ω i'‖ - ‖μ r ω i - μ r ω i'‖|
+          ≤ ‖(Xbar r ω i - Xbar r ω i') - (μ r ω i - μ r ω i')‖ := abs_norm_sub_norm_le _ _
+        _ = ‖(Xbar r ω i - μ r ω i) - (Xbar r ω i' - μ r ω i')‖ := by rw [hsub]
+        _ ≤ ‖Xbar r ω i - μ r ω i‖ + ‖Xbar r ω i' - μ r ω i'‖ := norm_sub_le _ _
+    have hmul : |((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+        - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖|
+        = ((m r : Real))⁻¹ * |‖Xbar r ω i - Xbar r ω i'‖ - ‖μ r ω i - μ r ω i'‖| := by
+      rw [← mul_sub, abs_mul, abs_of_nonneg (by positivity : (0:Real) ≤ ((m r : Real))⁻¹)]
+    rw [hmul]
+    rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
+    · simp [hm0, hε.le]
+    · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
+      have hbound : |‖Xbar r ω i - Xbar r ω i'‖ - ‖μ r ω i - μ r ω i'‖| ≤ 2 * η r := by
+        linarith [hrev, h1, h2]
+      calc ((m r : Real))⁻¹ * |‖Xbar r ω i - Xbar r ω i'‖ - ‖μ r ω i - μ r ω i'‖|
+          ≤ ((m r : Real))⁻¹ * (2 * η r) := by
+            exact mul_le_mul_of_nonneg_left hbound (by positivity)
+        _ = ε := by rw [hη_def]; field_simp
+  -- the per-stage bound
+  have hbad : ∀ r : Nat,
+      P {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+          - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) (0 : Real) > ε}
+        ≤ 2 * ENNReal.ofReal (v r / (η r) ^ 2) := by
+    intro r
+    rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
+    · have hempty : {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+          - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) (0 : Real) > ε} = (∅ : Set Ω) := by
+        ext ω
+        simp [hm0, Real.dist_eq, not_lt.mpr hε.le]
+      rw [hempty, measure_empty]
+      exact bot_le
+    · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
+      have hη_pos : 0 < η r := by rw [hη_def]; positivity
+      have hincl : {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+            - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) (0 : Real) > ε}
+          ⊆ {ω | η r < ‖Xbar r ω i - μ r ω i‖} ∪ {ω | η r < ‖Xbar r ω i' - μ r ω i'‖} := by
+        intro ω hω
+        by_contra hnot
+        simp only [Set.mem_union, Set.mem_ofPred_eq, not_or, not_lt] at hnot
+        simp only [Set.mem_ofPred_eq, gt_iff_lt, Real.dist_eq, sub_zero] at hω
+        exact absurd (hdet r ω hnot.1 hnot.2) (not_le.mpr hω)
+      calc P {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+              - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) (0 : Real) > ε}
+          ≤ P ({ω | η r < ‖Xbar r ω i - μ r ω i‖} ∪ {ω | η r < ‖Xbar r ω i' - μ r ω i'‖}) :=
+            measure_mono hincl
+        _ ≤ P {ω | η r < ‖Xbar r ω i - μ r ω i‖} + P {ω | η r < ‖Xbar r ω i' - μ r ω i'‖} :=
+            measure_union_le _ _
+        _ ≤ ENNReal.ofReal (v r / (η r) ^ 2) + ENNReal.ofReal (v r / (η r) ^ 2) :=
+            add_le_add
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i) hη_pos (hmoment r i))
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i') hη_pos (hmoment r i'))
+        _ = 2 * ENNReal.ofReal (v r / (η r) ^ 2) := by rw [two_mul]
+  -- the bound vanishes
+  have hratio : ∀ r, v r / (η r) ^ 2 = (4 / ε ^ 2) * (v r / ((m r : Real)) ^ 2) := by
+    intro r
+    rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
+    · rw [hη_def]; simp [hm0]
+    · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
+      rw [hη_def]; field_simp; ring
+  have hub : Tendsto (fun r => 2 * ENNReal.ofReal (v r / (η r) ^ 2)) atTop (𝓝 0) := by
+    have h1 : Tendsto (fun r => v r / (η r) ^ 2) atTop (𝓝 0) := by
+      have := hv.const_mul (4 / ε ^ 2)
+      simpa only [mul_zero, hratio] using this
+    have h2 : Tendsto (fun r => ENNReal.ofReal (v r / (η r) ^ 2)) atTop (𝓝 0) := by
+      simpa using ENNReal.tendsto_ofReal h1
+    have h3 := ENNReal.Tendsto.const_mul h2 (Or.inr (by simp : (2 : ENNReal) ≠ ⊤))
+    simpa using h3
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hub
+    (fun r => bot_le) hbad
+
+
+/--
 **Theorem 4, in the source's own terms.**
 
 The same trace-covariance condition as Theorem 2, with the model collection now growing as well:
