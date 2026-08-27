@@ -444,6 +444,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding`
 - `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
+- `Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz`
 - `Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension`
 - `Acharyya2024.ContinuousMDS.tendsto_pointStress`
 - `TauCeti.integral_doubleSum_pi`
@@ -468,7 +469,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Thread the proved ingredients into one statement: strong law for the objectives, equi-Lipschitz to locally uniform, argmin for a growing collection, coercivity for boundedness, then dominated convergence. Each is proved individually; what remains is fixing how the reference configuration is tied to the population embedding at the sampled models.
+**Next action:** Assemble: intersect the countably many strong-law null sets over a countable dense set, spread by tendsto_of_dense_of_equiLipschitz, bound the minimizers by coercivity, and apply tendsto_argmin_of_tendsto_of_equiLipschitz; then tendsto_lpPairDistErr_of_ae_tendsto finishes.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -538,6 +539,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding`
 - `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
+- `Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz`
 - `Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension`
 - `Acharyya2024.ContinuousMDS.tendsto_pointStress`
 - `TauCeti.integral_doubleSum_pi`
@@ -558,7 +560,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Thread the proved ingredients into one statement: strong law for the objectives, equi-Lipschitz to locally uniform, argmin for a growing collection, coercivity for boundedness, then dominated convergence. Each is proved individually; what remains is fixing how the reference configuration is tied to the population embedding at the sampled models.
+**Next action:** Assemble: intersect the countably many strong-law null sets over a countable dense set, spread by tendsto_of_dense_of_equiLipschitz, bound the minimizers by coercivity, and apply tendsto_argmin_of_tendsto_of_equiLipschitz; then tendsto_lpPairDistErr_of_ae_tendsto finishes.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 
