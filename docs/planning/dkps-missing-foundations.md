@@ -189,3 +189,66 @@ independent and can be done whenever.
 
 Per `AGENTS.md` and standing direction: do not add `DkpsQuench2026` theorems that neither
 dispatch an assumption nor weaken a hypothesis. Foundation work belongs in `ForTauCeti`.
+
+---
+
+## Status after the 2026-08-27 pass
+
+The table at the top of this document is stale. Current statuses across the four application
+censuses:
+
+| paper | rows | not represented | stronger hypotheses | specialization | source repair |
+|---|---:|---:|---:|---:|---:|
+| Acharyya 2024 | 15 | 0 | 0 | 5 | 5 |
+| Acharyya 2025 | 19 | 0 | 0 | 0 | 3 |
+| Helm 2025 | 12 | 0 | 0 | 0 | 2 |
+| Quench 2026 | 14 | 0 | 4 | 0 | 3 |
+
+**No row is unrepresented, and only Quench still carries hypotheses beyond its source.**
+
+### What closed
+
+- **F2/F4, eigengap-free distance-to-coordinates.** `TauCeti.exists_delta_forall_exists_rigidMotion`
+  is uniform approximate rigidity — one modulus for *every* pair of configurations, which is what
+  a random target needs. `TauCeti.alignmentError` / `TauCeti.alignedConfig` package it and
+  `TauCeti.tendsto_measure_alignmentError_gt` moves it to convergence in probability.
+  Helm's Equation (3) is now derived with no spectral hypothesis at all
+  (`alignmentConsistency_of_pairwiseDist`). Acharyya 2024's Corollary 1 has both modes.
+- **F1, continuum MDS.** `Acharyya2024.ContinuousMDS` defines the source's double-integral raw
+  stress and the minimizer set, with `continuousRawStress_empiricalPopulation` tying it to the
+  finite raw stress through TauCeti's empirical measure. Lemma 2's `L^p` conclusion is proved
+  for the empirical model distribution, along the full sequence and uniformly in `p`.
+- **F5, regularity for risk functionals.** Not needed as posed. Assumption 2 as printed holds the
+  labels fixed and moves only the embeddings; Assumption 4's gloss holds the label fixed. Both
+  suffice: the continuous-mapping step compares configurations carrying identical labels
+  (`tendstoInMeasure_comp_of_continuous_fst`), and the measurability joint continuity was
+  supplying comes from Carathéodory (`stronglyMeasurable_combined_loss_of_printed`).
+  `Theorem1_printed` runs on the printed readings and does not use Assumption 3.
+
+### What is left
+
+- **The perspective net (was F1's real cost).** Quench's compact-infinite route needs
+  `NetReplicateRate`: `r n / (n+1)^(2 + entropyPower) → ∞`. The finite route now runs at the
+  source's `r = ω(n³)` exactly. The gap between them is the net, so closing it means a continuum
+  treatment, not constant-tuning.
+- **F3, triangular arrays.** Unchanged: Acharyya 2024's Theorems 2 and 4 are still specializations
+  because the growing-`m` assembly is not built. `growing-n-concentration`.
+- **Population law in Lemma 2 / Theorem 5.** The `L^p` result holds against the empirical model
+  measure; the population case is what the source attributes to the cited literature.
+- **Quench's remaining excess** is the explicit sampling and measurability interface, not the
+  eigenvalue floor and not the replicate schedule. The floor is the paper's own "under technical
+  assumptions" named — Quench imports Acharyya 2025 Theorem 2 with that phrase, and its
+  Assumption 2 is the floor.
+
+### Source defects found, all machine-checked
+
+- Acharyya 2024 Corollary 1 is **false as printed**: the aligning rotation cannot sit outside the
+  probability (`not_exists_deterministic_rigidMotion_of_pairDist_exact`).
+- Acharyya 2024 Theorem 1's fixed limiting profile is **not available** without a uniqueness
+  premise (`no_fixed_limiting_profile`); `UniquePairProfile` is a repair, not an added assumption.
+- Acharyya 2024 Remark 1's invariance is **rigid, not affine** (`rawStress_not_affine_invariant`).
+- Acharyya 2025 Proposition 1 is **false as printed**: its hypothesis constrains the ambient
+  manifold, its conclusion the placement of the models within it
+  (`no_eigenvalue_floor_for_const_selection`).
+- Helm 2025 Theorem 1 is **not provable as stated** without an envelope for the loss
+  (`prob_convergence_not_enough_for_expectations`), and its Theorem 3 reference has no referent.
