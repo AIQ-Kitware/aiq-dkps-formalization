@@ -373,6 +373,12 @@
      "lean_clause": "SourceReplicateRate is that rate condition, and the finite capstone consumes it; the technical assumptions are Acharyya 2025's Assumptions 1 and 2, of which Assumption 2 is the eigenvalue floor.",
      "relation": "exact",
      "note": "Neither the floor nor the schedule is an excess for the finite route."
+    },
+    {
+     "source_clause": "Given Assumptions 1 & 2 ... For any epsilon > 0 there exists (n,m,r) such that MSE(yhat_NN) <= epsilon with high probability.",
+     "lean_clause": "The Lean hypotheses beyond the printed ones are exactly two: measurability of the perspective map, and finiteness of the model class.",
+     "relation": "lean_stronger_hypothesis",
+     "note": "Every other field of FiniteSubsetAssumptions is printed -- Assumption 1, Assumption 2, the iid response setting with Theorem 1's variance bound, the DKPS definition, Theorem 1's technical assumptions, Theorem 2's own MSE(yhat_Q) > 0, and r = omega(n^3). Itemized under raw-response-explicit-assumptions."
     }
    ],
    "review": "The printed conclusion is proved end to end by infiniteFixedSubsetMSE and finiteFixedSubsetMSE for the literal tie-averaged estimator built from raw cached responses, with the representation concentration derived rather than assumed. The verdict remains GAP because the derivation needs a population nondegeneracy floor and a replicate schedule above the source rate, and because the perspectives are classical MDS rather than the Eq. (1) raw-stress minimizer.",
@@ -445,6 +451,12 @@
      "lean_clause": "infiniteAllQueries and finiteAllQueries conclude HighProbQueryEfficient, which quantifies over every budget below the benchmark cardinality and every subset of that size.",
      "relation": "exact",
      "note": ""
+    },
+    {
+     "source_clause": "Given Assumptions 1 & 2 ... For any epsilon > 0 there exists (n,m,r) such that MSE(yhat_NN) <= epsilon with high probability.",
+     "lean_clause": "The Lean hypotheses beyond the printed ones are measurability, compactness of the perspective range, pathwise Lipschitz regularity of the raw response embedding, and the net's share of the replicate budget.",
+     "relation": "lean_stronger_hypothesis",
+     "note": "This route answers the printed scope -- the model class is not assumed finite -- at the cost of the regularity that buys uniformity over it."
     }
    ],
    "review": "The printed conclusion is proved at the paper's full quantifier level by infiniteAllQueries and finiteAllQueries for the raw-response estimator, with the representation concentration derived rather than assumed. The verdict remains GAP for the same hypothesis excess recorded on Q26-T2A.",
@@ -494,6 +506,12 @@
      "lean_clause": "SourceReplicateRate is that rate condition, and the finite capstone consumes it; the technical assumptions are Acharyya 2025's Assumptions 1 and 2, of which Assumption 2 is the eigenvalue floor.",
      "relation": "exact",
      "note": "Neither the floor nor the schedule is an excess for the finite route."
+    },
+    {
+     "source_clause": "Given Assumptions 1 & 2 ... For any epsilon > 0 there exists (n,m,r) such that MSE(yhat_NN) <= epsilon with high probability.",
+     "lean_clause": "The Lean hypotheses beyond the printed ones are exactly two: measurability of the perspective map, and finiteness of the model class.",
+     "relation": "lean_stronger_hypothesis",
+     "note": "Every other field of FiniteSubsetAssumptions is printed -- Assumption 1, Assumption 2, the iid response setting with Theorem 1's variance bound, the DKPS definition, Theorem 1's technical assumptions, Theorem 2's own MSE(yhat_Q) > 0, and r = omega(n^3). Itemized under raw-response-explicit-assumptions."
     }
    ],
    "review": "The finite realization of Theorem 2. This row previously read as an extension beyond the paper theorem surface, which inverted the layering: the paper's proof of Theorem 2 derives its representation error from Theorem 1, so discharging that premise is inside the printed argument. What genuinely exceeds the source is the explicit sampling and regularity interface and the replicate schedule.",
@@ -537,6 +555,12 @@
      "lean_clause": "InfiniteSubsetData/Assumptions and infiniteFixedSubset/infiniteAllQueries add compact/cover regularity and prove the corresponding end-to-end theorem.",
      "relation": "supplementary",
      "note": ""
+    },
+    {
+     "source_clause": "Given Assumptions 1 & 2 ... For any epsilon > 0 there exists (n,m,r) such that MSE(yhat_NN) <= epsilon with high probability.",
+     "lean_clause": "The Lean hypotheses beyond the printed ones are measurability, compactness of the perspective range, pathwise Lipschitz regularity of the raw response embedding, and the net's share of the replicate budget.",
+     "relation": "lean_stronger_hypothesis",
+     "note": "This route answers the printed scope -- the model class is not assumed finite -- at the cost of the regularity that buys uniformity over it."
     }
    ],
    "review": "The compact-infinite realization of Theorem 2. This row previously read as an extension beyond the paper theorem surface, which inverted the layering: the paper's proof of Theorem 2 derives its representation error from Theorem 1, so discharging that premise is inside the printed argument. What genuinely exceeds the source is the explicit sampling and regularity interface and the replicate schedule.",

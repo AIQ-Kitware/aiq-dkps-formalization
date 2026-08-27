@@ -73,11 +73,31 @@ The display averages all nearest references, while the proof chooses one nearest
 
 “Non-zero measure on all compact subsets” is false literally (the empty compact set already contradicts it) and is not equivalent to the target-ball property used in the proof. Lean formalizes the target-centered positive-ball-mass condition as PerspectiveFullSupport.
 
-### `raw-response-explicit-assumptions` — Raw-response capstones make hidden sampling/regularity assumptions explicit
+### `raw-response-explicit-assumptions` — Raw-response capstones make the sampling and regularity interface explicit -- itemized against the printed text
 
 **Kind:** `source_audit`
 
 The paper imports a representation concentration theorem and leaves reference/response randomness mostly prose-level. The end-to-end formal capstones separate iid reference sampling, raw-response concentration, measurability, compactness or finite population, and a population nondegeneracy floor.
+
+Itemized. Every field of the two assumption structures, with its printed provenance:
+
+FiniteSubsetAssumptions:
+  - full_support -- Assumption 2 (Model Distribution Support). PRINTED.
+  - score_lipschitz -- Assumption 1 (Lipschitz Score Function). PRINTED.
+  - raw (RawIIDResponseModel with a variance bound) -- the setting's iid embedded responses g(f_i(q_j)_k) ~ F_ij, and Theorem 1's sup_ij trace(Cov(F_ij)) = O(1). PRINTED.
+  - response_realization -- the population means realize the perspectives, which is the definition of the DKPS. PRINTED (definitional).
+  - nondegenerate -- Acharyya 2025's Assumption 2, which is what Quench's Theorem 1 imports as 'technical assumptions'. PRINTED by reference; see technical-assumptions-are-acharyya-1-and-2.
+  - baseline_pos -- Theorem 2's own statement, 'for m < M such that MSE(yhat_Q) > 0'. PRINTED. It is not used by the MSE conclusion at all.
+  - perspective_measurable -- IMPLICIT, beyond the paper. The standard measurability the paper leaves unstated.
+  - [Fintype (Model Q X)] -- BEYOND the paper, a scope restriction: the source's model space F is not assumed finite. The compact-infinite route is the one that answers the printed scope.
+  - SourceReplicateRate -- Theorem 1's r = omega(n^3). PRINTED.
+
+InfiniteSubsetAssumptions adds, over the finite one:
+  - compact_range -- BEYOND the paper. Assumption 2 speaks of compact subsets of F but does not make the perspective range compact.
+  - raw_lipschitz -- BEYOND the paper. Pathwise Lipschitz regularity of the raw response embedding over the perspective range, which is what buys uniformity over an infinite model class.
+  - NetReplicateRate rather than SourceReplicateRate -- BEYOND the paper by the exponent of the perspective net; see replicate-schedule-exceeds-source-rate.
+
+So the finite route's excess over the printed text is exactly measurability plus finiteness of the model class, and the infinite route's is measurability plus compactness, raw-response Lipschitz regularity, and the net's share of the replicate budget. Nothing else on the list is an addition.
 
 ### `ols-theory-practice` — OLS experiment theory is an extension beyond Theorem 2
 
