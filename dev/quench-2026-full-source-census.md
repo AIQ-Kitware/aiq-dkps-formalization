@@ -99,6 +99,10 @@ InfiniteSubsetAssumptions adds, over the finite one:
 
 So the finite route's excess over the printed text is exactly measurability plus finiteness of the model class, and the infinite route's is measurability plus compactness, raw-response Lipschitz regularity, and the net's share of the replicate budget. Nothing else on the list is an addition.
 
+On measurability specifically. Assumption 2 writes P_f(B_delta(f)) >= epsilon, a probability of an event defined through the model space, and Theorem 2's conclusion is an MSE, an integral against P_f of a function of the perspective. Both require the perspective map to be measurable for the printed statements to denote anything at all. So perspective_measurable is arguably a well-definedness condition of the source rather than a hypothesis added to it. The rows keep it on the excess list because that is the conservative reading and because the source never states it; the argument for the other reading is recorded here so the choice is visible rather than silent.
+
+That leaves finiteness of the model class as the finite route's only substantive addition -- and it is a scope restriction the compact-infinite route exists to lift -- and compactness plus raw-response Lipschitz regularity plus the net's share of the replicate budget as the infinite route's. Those three are what buy uniformity over an infinite model class, and removing them means the continuum treatment recorded on the Acharyya 2024 side, not a tightening of constants.
+
 ### `ols-theory-practice` — OLS experiment theory is an extension beyond Theorem 2
 
 **Kind:** `not_proof_debt`
