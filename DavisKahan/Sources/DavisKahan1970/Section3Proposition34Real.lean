@@ -30,7 +30,6 @@ namespace DavisKahan1970
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Frontier
-open TauCeti.DavisKahan.Frontier.Section3
 open TauCeti.DavisKahanExt
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
@@ -192,7 +191,7 @@ theorem proposition3_4_source_full_real
 
   have hC : IsPaperDirectRotation CR CV (WC * WC) := by
     dsimp only [CR]
-    exact Frontier.Section3.proposition3_4_source_full
+    exact proposition3_4_source_full
       CU CV WC hunitaryC hintertwinesC hcrossedC
         hsource_nonnegC hcomplement_nonnegC hcosC
 

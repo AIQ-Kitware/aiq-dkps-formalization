@@ -8,7 +8,10 @@ import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SelectedReduction
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
 import DavisKahan.Geometry.Polar.DirectRotationSquare
 import DavisKahan.Geometry.Polar.Section3Nonacute
-import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SubspaceSingularTransport
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
+-- supplies `hasSameApproximationNumbers_extendDomainByZero`, promoted out of
+-- `Sources/DavisKahan1970/SineTheta/Norms/SubspaceSingularTransport.lean`: it is a statement
+-- about `Submodule.subtypeL` and approximation numbers, with nothing paper-specific in it.
 import DavisKahan.Sylvester.Spectrum
 
 /-!
@@ -967,11 +970,11 @@ theorem sourceRestrictedDisplacement_extendDomainByZero
 approximation-singular-value sequence as the ambient restricted displacement. -/
 theorem sourceRestrictedDisplacement_sameApproximationSingularSequence
     (T : H →L[ℂ] H) :
-    SameApproximationSingularSequence
+    ContinuousLinearMap.HasSameApproximationNumbers
       ((1 - T) ∘L projection U) (sourceRestrictedDisplacement U T) := by
   intro n
   rw [← sourceRestrictedDisplacement_extendDomainByZero U T]
-  exact sameApproximationSingularValues_extendDomainByZero U
+  exact ContinuousLinearMap.hasSameApproximationNumbers_extendDomainByZero U
     (sourceRestrictedDisplacement U T) n
 
 /-- Infinite-dimensional Davis--Kahan Proposition 4.1 in the ambient form used

@@ -13,6 +13,7 @@ import DavisKahan.SpectralTheory.BoundedFromSpectrum
 import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
 import DavisKahan.SpectralTheory.BoundedTruncation
 import DavisKahan.SpectralTheory.CayleySelectorBridge
+import DavisKahan.SpectralTheory.CentralBand
 import DavisKahan.SpectralTheory.CircleRieszEndpoints
 import DavisKahan.SpectralTheory.CircleRieszProjection
 import DavisKahan.SpectralTheory.ContinuationContour

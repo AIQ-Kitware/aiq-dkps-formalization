@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.BeamTangent
+import DavisKahan.Specialized.FreeBeam.BeamTangent
 
 /-!
 # Section 9, equation (9.8): unconditional beam statement

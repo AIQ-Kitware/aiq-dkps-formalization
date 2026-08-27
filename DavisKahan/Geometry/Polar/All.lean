@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Geometry.Polar.DirectRotation
 import DavisKahan.Geometry.Polar.DirectRotationAcute
+import DavisKahan.Geometry.Polar.DirectRotationBlocks
 import DavisKahan.Geometry.Polar.DirectRotationReal
 import DavisKahan.Geometry.Polar.DirectRotationSquare
 import DavisKahan.Geometry.Polar.DisplacementSquareExtremal

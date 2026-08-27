@@ -1082,25 +1082,25 @@ The source appends a remark comparing (3.5) with the earlier matching-dimension 
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:876`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:291`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:930`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:345`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2138`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1553`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2162`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1577`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1190,25 +1190,25 @@ Every direct rotation is therefore the principal unitary square root of $(Q-Q^\p
 
 #### `TauCeti.DavisKahan1970.proposition3_3_complex_forward_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:118`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:117`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_3_complex_converse_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:141`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:140`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_3_real_forward_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:263`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:262`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_3_real_converse_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:305`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:304`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1273,25 +1273,25 @@ Under the same direct-rotation setup, if
 
 #### `TauCeti.DavisKahan1970.proposition3_4_source_full_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:138`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:137`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_4_source_full_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:119`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:118`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`
+#### `TauCeti.DavisKahan1970.proposition3_4_source_full`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:668`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:67`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`
+#### `TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:819`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:218`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1373,7 +1373,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1530`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:945`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1445,19 +1445,19 @@ together with a possible eigenvalue $0$; $\Theta_1$ has the same nonzero eigenva
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1302`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:717`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_classification_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2018`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1433`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1703`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1118`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1656,7 +1656,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:286`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:219`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1753,7 +1753,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1255`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1256`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1765,7 +1765,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1177`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1178`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1835,7 +1835,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1282`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1283`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1914,7 +1914,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:784`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:785`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2049,7 +2049,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1297`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1298`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

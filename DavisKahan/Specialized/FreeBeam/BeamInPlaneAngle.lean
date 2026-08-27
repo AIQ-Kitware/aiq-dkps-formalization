@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.BeamEigenbasis
+import DavisKahan.Specialized.FreeBeam.BeamEigenbasis
 import DavisKahan.Sources.DavisKahan1970.Section9.IndividualAngles
 
 /-!

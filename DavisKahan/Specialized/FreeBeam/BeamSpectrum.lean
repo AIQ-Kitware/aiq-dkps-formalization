@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.SpectralTheory.FormMethod.BeamFormSpace
+import DavisKahan.Specialized.FreeBeam.BeamFormSpace
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamModeUniqueness
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamRootLocalization
 import Mathlib.Tactic

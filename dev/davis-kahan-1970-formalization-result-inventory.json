@@ -459,8 +459,8 @@
       "lean_declarations": [
         "TauCeti.DavisKahan1970.proposition3_4_source_full_complex",
         "TauCeti.DavisKahan1970.proposition3_4_source_full_real",
-        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full",
-        "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation"
+        "TauCeti.DavisKahan1970.proposition3_4_source_full",
+        "TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation"
       ],
       "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: `proposition3_4_source_full` concludes only `IsPaperDirectRotation`, whose diagonal clauses are `0 <= re inner x (P T P) x`, which over C does not even force self-adjointness of the compression, whereas Definition 3.1 asks for genuine operator positivity.  The repair is `proposition3_4_source_full_complex`: printed hypothesis C_0^2 >= 1/2 together with the Definition 3.1 data for U, concluding the genuine Definition 3.1 statement for U^2 from Q_- to Q -- unitarity, intertwining Q_- to Q, `IsPositive` for both diagonal compressions, and the crossed-block adjoint/sign relation.  No acuteness, compactness, finite-dimensional or separability hypothesis is added, and the positivity upgrade reuses the real development's `positiveDiagonalBlocks_of_sq` (promoted to a public declaration) rather than reproving it.  Evidence for the row is now the new complex theorem together with `proposition3_4_source_full_real`; the `IsPaperDirectRotation` statements are retained as supporting material, not as primary evidence.  The row also now carries the standing Section 3 scope atom (3.5).",
       "boundary_review": {

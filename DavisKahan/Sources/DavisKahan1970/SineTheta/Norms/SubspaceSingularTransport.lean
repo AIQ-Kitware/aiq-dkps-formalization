@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
-import DavisKahan.BoundedOperator.Compat
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.SubspaceTransport
 
 /-!
 # Singular-value transport across canonical subspace coordinates
@@ -19,6 +19,14 @@ Because the ambient and subtype coordinates are genuinely different Hilbert
 spaces, the statements use the heterogeneous relation
 `SameApproximationSingularSequence` rather than its same-type specialisation
 `SameApproximationSingularValues`.
+
+**The mathematics is not here.**  Nothing in these three statements mentions
+Davis--Kahan, so all of it lives in
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/SubspaceTransport.lean`
+under `ContinuousLinearMap`; this module only keeps the paper's names for the
+source layer, in the source layer's spelling of the relation.  The move was
+forced by `DavisKahan/Geometry/Polar/RestrictedDisplacementExtremal.lean`, a
+generic geometry module that used to reach backwards into this file.
 -/
 
 namespace TauCeti
@@ -44,90 +52,22 @@ local instance instCompleteSpaceCoeOfHasOrthogonalProjection
     (U : Submodule 𝕜 G) [U.HasOrthogonalProjection] : CompleteSpace U :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
-omit [CompleteSpace E] in
-/-- The canonical inclusion of a subspace has `‖·‖ ≤ 1`. -/
-private theorem norm_subtypeL_le_one (U : Submodule 𝕜 E) :
-    ‖U.subtypeL‖ ≤ 1 := by
-  exact_mod_cast U.norm_subtypeL_le
-
-/-- The adjoint of the canonical inclusion is the orthogonal projection, so it
-too has `‖·‖ ≤ 1`. -/
-private theorem norm_adjoint_subtypeL_le_one
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
-    ‖U.subtypeL.adjoint‖ ≤ 1 := by
-  rw [Submodule.adjoint_subtypeL]
-  exact_mod_cast U.orthogonalProjectionOnto_norm_le
-
 /-- Extending a map from a closed subspace by zero on its orthogonal complement
 preserves every approximation singular value. -/
 theorem sameApproximationSingularValues_extendDomainByZero
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (T : U →L[𝕜] F) :
     SameApproximationSingularSequence
-      (T ∘L U.subtypeL.adjoint) T := by
-  intro n
-  have hfactor : (T ∘L U.subtypeL.adjoint) ∘L U.subtypeL = T := by
-    ext x
-    simp [Submodule.adjoint_subtypeL]
-  have key : (T ∘L U.subtypeL.adjoint).approximationNumber n
-      = T.approximationNumber n := by
-    refine le_antisymm ?_ ?_
-    · calc (T ∘L U.subtypeL.adjoint).approximationNumber n
-          ≤ T.approximationNumber n * ‖U.subtypeL.adjoint‖ :=
-            T.approximationNumber_comp_le_mul_norm _ n
-        _ ≤ T.approximationNumber n * 1 := by
-            gcongr <;>
-              first
-                | exact norm_adjoint_subtypeL_le_one U
-                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
-        _ = T.approximationNumber n := mul_one _
-    · calc T.approximationNumber n
-          = ((T ∘L U.subtypeL.adjoint) ∘L U.subtypeL).approximationNumber n := by
-            rw [hfactor]
-        _ ≤ (T ∘L U.subtypeL.adjoint).approximationNumber n * ‖U.subtypeL‖ :=
-            (T ∘L U.subtypeL.adjoint).approximationNumber_comp_le_mul_norm _ n
-        _ ≤ (T ∘L U.subtypeL.adjoint).approximationNumber n * 1 := by
-            gcongr <;>
-              first
-                | exact norm_subtypeL_le_one U
-                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
-        _ = (T ∘L U.subtypeL.adjoint).approximationNumber n := mul_one _
-  exact key
+      (T ∘L U.subtypeL.adjoint) T :=
+  ContinuousLinearMap.hasSameApproximationNumbers_extendDomainByZero U T
 
 /-- Including the range of a map into the ambient Hilbert space preserves every
 approximation singular value. -/
 theorem sameApproximationSingularValues_includeCodomain
     (V : Submodule 𝕜 F) [V.HasOrthogonalProjection]
     (T : E →L[𝕜] V) :
-    SameApproximationSingularSequence (V.subtypeL ∘L T) T := by
-  intro n
-  have hfactor : V.subtypeL.adjoint ∘L (V.subtypeL ∘L T) = T := by
-    ext x
-    simp [Submodule.adjoint_subtypeL]
-  have key : (V.subtypeL ∘L T).approximationNumber n
-      = T.approximationNumber n := by
-    refine le_antisymm ?_ ?_
-    · calc (V.subtypeL ∘L T).approximationNumber n
-          ≤ ‖V.subtypeL‖ * T.approximationNumber n :=
-            ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ T n
-        _ ≤ 1 * T.approximationNumber n := by
-            gcongr <;>
-              first
-                | exact norm_subtypeL_le_one V
-                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
-        _ = T.approximationNumber n := one_mul _
-    · calc T.approximationNumber n
-          = (V.subtypeL.adjoint ∘L (V.subtypeL ∘L T)).approximationNumber n := by
-            rw [hfactor]
-        _ ≤ ‖V.subtypeL.adjoint‖ * (V.subtypeL ∘L T).approximationNumber n :=
-            ContinuousLinearMap.approximationNumber_comp_le_norm_mul _ _ n
-        _ ≤ 1 * (V.subtypeL ∘L T).approximationNumber n := by
-            gcongr <;>
-              first
-                | exact norm_adjoint_subtypeL_le_one V
-                | simpa using ContinuousLinearMap.approximationNumber_nonneg _ _
-        _ = (V.subtypeL ∘L T).approximationNumber n := one_mul _
-  exact key
+    SameApproximationSingularSequence (V.subtypeL ∘L T) T :=
+  ContinuousLinearMap.hasSameApproximationNumbers_includeCodomain V T
 
 /-- Ambient extension of a rectangular subspace block preserves the complete
 singular-value sequence. -/
@@ -137,9 +77,7 @@ theorem sameApproximationSingularValues_ambientSubspaceBlock
     (T : U →L[𝕜] V) :
     SameApproximationSingularSequence
       (V.subtypeL ∘L T ∘L U.subtypeL.adjoint) T :=
-  (sameApproximationSingularValues_includeCodomain V
-    (T ∘L U.subtypeL.adjoint)).trans
-      (sameApproximationSingularValues_extendDomainByZero U T)
+  ContinuousLinearMap.hasSameApproximationNumbers_ambientSubspaceBlock U V T
 
 end
 
