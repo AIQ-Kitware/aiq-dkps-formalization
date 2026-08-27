@@ -86,6 +86,16 @@ The retained v1 display uses a 2,infinity norm, while the surrounding prose desc
 
 The current deterministic configuration theorem no longer follows the six-term Agterberg decomposition. YWS population-gap residual bounds, YWS Procrustes alignment, and a direct square-root residual estimate remove the sample-gap and polar-smallness detours. Exact appendix wrappers would improve source coverage but are not needed for the main theorem.
 
+### `dissimilarity-normalisation-divergence` — The four papers print three different dissimilarity normalisations; Lean uses one
+
+**Kind:** `source_audit`
+
+The DKPS chain does not use one dissimilarity convention. Acharyya 2024 (line 174) and Helm 2025 Equation (1) write (1/m)||Xbar_i - Xbar_i'||_F; Acharyya 2025 (lines 184 and 195-199) writes (1/sqrt m)||.||_F for both the population and sample matrices; Quench 2026 writes ||.||_F with no factor at all. Every Lean library uses Acharyya2024.responseDistEntry, which is (m)^{-1} * ||Xbar i - Xbar j||, so Acharyya 2025 and Quench are both formalized under a convention other than the one they print.
+
+Consequence. Rescaling every dissimilarity by c > 0 rescales the CMDS configuration by c, the doubly centred matrix by c^2 and its eigenvalues by c^2, so a vanishing-error conclusion survives the substitution. What does not survive is the literal constants: Acharyya 2025 Theorem 2's C1, C2, C3 are stated in terms of eigenvalues of B under the 1/sqrt m scaling. And in every regime where m grows the factor is not a constant, so the substitution is not a harmless choice of units there.
+
+Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extraction in which the fraction renders as "1m" with a separate 1 and m around a radical. It is consistent across both the population and sample definitions, but it should be confirmed against the published PDF before any statement is changed on the strength of it.
+
 ## Detail
 
 ### `A25-T1` — Entrywise concentration of the centered CMDS matrix
@@ -172,7 +182,7 @@ The current deterministic configuration theorem no longer follows the six-term A
 * **semantic alignment:** `source_repair` — The current theorem proves the Frobenius configuration bound supported by the paper discussion/appendix and obtains rowwise control as a consequence. It does not label the internally inconsistent v1 2,infinity display as literally proved.
 * **source claim:** Under r=omega(n^3), bounded response variability, and Assumptions 1--2, there exists an orthogonal alignment W* and the embedding error is bounded by a cubic polynomial in (n^3/r)^(1/2-delta) with high probability. The displayed polynomial upper bound is the source's Equation (2), whose coefficients Assumptions 1 and 2 keep bounded.
 * **Lean declarations:** `Acharyya2025.ConfigPerturbation.ConfigFrobError`, `Acharyya2025.ConfigPerturbation.configFrobBound`, `Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le`, `Acharyya2025.AlignedPipeline.highProb_aligned_configFrobError_of_entrywise_close`, `Acharyya2025.RateChain.endToEndFrobQuadraticRate`
-* **gap refs:** `v1-norm-inconsistency`
+* **gap refs:** `dissimilarity-normalisation-divergence`, `v1-norm-inconsistency`
 * **notes:** The active proof now uses the YWS population-only gap residual bound and YWS Procrustes alignment. It needs neither epsilon<=alpha/2 nor the former polar-factor smallness condition. Term 2 uses sqrt(alpha), improving the previous sqrt(alpha/2) envelope.
 * **next action:** None.
 
@@ -185,7 +195,7 @@ The current deterministic configuration theorem no longer follows the six-term A
 * **semantic alignment:** `source_repair` — The source real-power rate and high-probability vanishing conclusion are compiled in Frobenius form, with rowwise control available by norm domination; the v1 norm inconsistency is handled exactly as for Theorem 2.
 * **source claim:** There exists a sequence of orthogonal alignments with embedding error O_P((n^3/r)^(1/2-delta)).
 * **Lean declarations:** `Acharyya2025.RateChain.endToEndFrobRate`, `Acharyya2025.RateChain.endToEndFrobQuadraticRate`, `Acharyya2025.RateChain.eventually_endToEndFrobRate_le_endToEndFrobQuadraticRate`, `Acharyya2025.RateChain.tendsto_endToEndFrobQuadraticRate_zero`, `Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate`, `Acharyya2025.PaperRate.paperDeltaScale`
-* **gap refs:** `v1-norm-inconsistency`
+* **gap refs:** `dissimilarity-normalisation-divergence`, `v1-norm-inconsistency`
 * **notes:** The rate chain now retains the sharper Frobenius bound instead of paying a final sqrt(n) conversion.
 * **next action:** None.
 

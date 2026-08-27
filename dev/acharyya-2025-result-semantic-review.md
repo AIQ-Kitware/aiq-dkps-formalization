@@ -220,7 +220,7 @@ The current theorem proves the Frobenius configuration bound supported by the pa
 
 **Additional note:** The active proof now uses the YWS population-only gap residual bound and YWS Procrustes alignment. It needs neither epsilon<=alpha/2 nor the former polar-factor smallness condition. Term 2 uses sqrt(alpha), improving the previous sqrt(alpha/2) envelope.
 
-**Companion census gap refs:** `v1-norm-inconsistency`
+**Companion census gap refs:** `dissimilarity-normalisation-divergence`, `v1-norm-inconsistency`
 
 ### 7. `A25-C2` — Corollary 2: Vanishing aligned embedding rate
 
@@ -251,7 +251,7 @@ The source real-power rate and high-probability vanishing conclusion are compile
 
 **Additional note:** The rate chain now retains the sharper Frobenius bound instead of paying a final sqrt(n) conversion.
 
-**Companion census gap refs:** `v1-norm-inconsistency`
+**Companion census gap refs:** `dissimilarity-normalisation-divergence`, `v1-norm-inconsistency`
 
 ### 8. `A25-PA1` — Proposition A.1: R1 inverse-eigenvalue perturbation bound
 

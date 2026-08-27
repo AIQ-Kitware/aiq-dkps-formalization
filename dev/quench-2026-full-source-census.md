@@ -107,13 +107,23 @@ Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stat
 
 **Kind:** `source_audit`
 
-Quench's methods section defines D_{ii'} = ||Xbar_i - Xbar_{i'}||_F. Acharyya 2024 and Helm 2025 both define the same matrix as (1/m)||Xbar_i - Xbar_{i'}||_F, and the Lean dissimilarity the Quench chain uses is Acharyya2024.responseDistEntry, which carries the (m)^{-1} factor. Quench therefore imports a Theorem 1 stated for the rescaled convention while printing the unrescaled one. The tie-averaged nearest-neighbour estimator is unaffected, because scaling every dissimilarity by a positive constant does not change which reference attains the minimum. Assumption 1 is affected: it bounds the score difference by gamma times ||psi(Q) - psi'(Q)||, and rescaling the dissimilarities rescales psi, so the same gamma means different things under the two conventions -- and m is the query budget, so the factor is not a fixed constant.
+Quench's methods section defines D_{ii'} = ||Xbar_i - Xbar_{i'}||_F. Acharyya 2024 and Helm 2025 both define the same matrix as (1/m)||Xbar_i - Xbar_{i'}||_F, and the Lean dissimilarity the Quench chain uses is Acharyya2024.responseDistEntry, which carries the (m)^{-1} factor. Quench therefore imports a Theorem 1 stated for the rescaled convention while printing the unrescaled one. The tie-averaged nearest-neighbour estimator is unaffected, because scaling every dissimilarity by a positive constant does not change which reference attains the minimum. Assumption 1 is affected: it bounds the score difference by gamma times ||psi(Q) - psi'(Q)||, and rescaling the dissimilarities rescales psi, so the same gamma means different things under the two conventions -- and m is the query budget, so the factor is not a fixed constant. This is one instance of a chain-wide divergence; see dissimilarity-normalisation-divergence.
 
 ### `unbounded-score-codomain` — The paper's score takes values in [0,1]; the Lean score is an unrestricted real
 
 **Kind:** `source_audit`
 
 Quench declares y : F x 2^{Q*} -> [0,1]. The Lean development uses score : Model Q X -> Finset Q -> R with no range constraint. That is a weakening in the usual direction -- any [0,1]-valued score is a real-valued one -- but it is not free: MSE is a Bochner integral, and for an unbounded score neither it nor the baseline MSE is guaranteed finite, in which case Lean's integral silently returns 0 rather than diverging. The theorems remain true as stated, but their content at an unbounded score is weaker than it looks. The paper's boundedness makes both integrals automatically finite, so restoring it would be a strengthening of the formal statements, not a restriction.
+
+### `dissimilarity-normalisation-divergence` — The four papers print three different dissimilarity normalisations; Lean uses one
+
+**Kind:** `source_audit`
+
+The DKPS chain does not use one dissimilarity convention. Acharyya 2024 (line 174) and Helm 2025 Equation (1) write (1/m)||Xbar_i - Xbar_i'||_F; Acharyya 2025 (lines 184 and 195-199) writes (1/sqrt m)||.||_F for both the population and sample matrices; Quench 2026 writes ||.||_F with no factor at all. Every Lean library uses Acharyya2024.responseDistEntry, which is (m)^{-1} * ||Xbar i - Xbar j||, so Acharyya 2025 and Quench are both formalized under a convention other than the one they print.
+
+Consequence. Rescaling every dissimilarity by c > 0 rescales the CMDS configuration by c, the doubly centred matrix by c^2 and its eigenvalues by c^2, so a vanishing-error conclusion survives the substitution. What does not survive is the literal constants: Acharyya 2025 Theorem 2's C1, C2, C3 are stated in terms of eigenvalues of B under the 1/sqrt m scaling. And in every regime where m grows the factor is not a constant, so the substitution is not a harmless choice of units there.
+
+Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extraction in which the fraction renders as "1m" with a separate 1 and m around a radical. It is consistent across both the population and sample definitions, but it should be confirmed against the published PDF before any statement is changed on the strength of it.
 
 ## Detail
 
@@ -126,7 +136,7 @@ Quench declares y : F x 2^{Q*} -> [0,1]. The Lean development uses score : Model
 * **semantic alignment:** `equivalent_encoding` — The replicate average is the raw-response mean the capstones consume. The dissimilarity Lean uses is Acharyya2024.responseDistEntry, which carries a (m)^{-1} factor the Quench display does not; see dissimilarity-normalisation-mismatch for why the estimator is unaffected and Assumption 1 is not.
 * **source claim:** Xbar_{ij.} = (1/r) sum_k g(f_i(q_j))_k, and D is the pairwise distance matrix with entries D_{ii'} = ||Xbar_i - Xbar_{i'}||_F.
 * **Lean declarations:** `Acharyya2024.responseDistEntry`, `Acharyya2024.responseDist`, `DkpsQuench2026.augmentedSampleResponseDist`
-* **gap refs:** `dissimilarity-normalisation-mismatch`
+* **gap refs:** `dissimilarity-normalisation-divergence`, `dissimilarity-normalisation-mismatch`
 * **notes:** This row exists because the displayed D had no census coverage at all, which is how the normalisation mismatch went unrecorded.
 * **next action:** Decide whether Quench should state D with the 1/m factor or carry the rescaling explicitly in Assumption 1.
 
@@ -152,7 +162,7 @@ Quench declares y : F x 2^{Q*} -> [0,1]. The Lean development uses score : Model
 * **semantic alignment:** `source_repair` — Quench uses the current Acharyya Frobenius concentration theorem plus the rowwise norm bound, which supplies exactly the max-row control needed by the Quench proof without claiming the disputed Acharyya v1 display literally.
 * **source claim:** For r=omega(n^3) and bounded response covariance, the maximum aligned perspective error is bounded by a cubic polynomial in (n^3/r)^(1/2-delta) with high probability.
 * **Lean declarations:** `Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le`, `Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate`, `Acharyya2025.ConfigPerturbation.norm_config_le_ConfigFrobError`
-* **gap refs:** `inherited-acharyya-v1-norm`, `theorem1-rate-not-instantiated`
+* **gap refs:** `dissimilarity-normalisation-divergence`, `inherited-acharyya-v1-norm`, `theorem1-rate-not-instantiated`
 * **notes:** The rate endpoint is proved but not consumed downstream: Quench needs the growing-sample, target-augmented regime. See gap theorem1-rate-not-instantiated.
 * **next action:** Either generalize the rate theorem to a growing sample with an augmented target, or keep the divergence recorded; the capstones do not depend on the choice.
 

@@ -59,6 +59,11 @@
       "kind": "not_proof_debt",
       "title": "The R1--R6 appendix proof architecture is superseded",
       "detail": "The current deterministic configuration theorem no longer follows the six-term Agterberg decomposition. YWS population-gap residual bounds, YWS Procrustes alignment, and a direct square-root residual estimate remove the sample-gap and polar-smallness detours. Exact appendix wrappers would improve source coverage but are not needed for the main theorem."
+    },
+    "dissimilarity-normalisation-divergence": {
+      "kind": "source_audit",
+      "title": "The four papers print three different dissimilarity normalisations; Lean uses one",
+      "detail": "The DKPS chain does not use one dissimilarity convention. Acharyya 2024 (line 174) and Helm 2025 Equation (1) write (1/m)||Xbar_i - Xbar_i'||_F; Acharyya 2025 (lines 184 and 195-199) writes (1/sqrt m)||.||_F for both the population and sample matrices; Quench 2026 writes ||.||_F with no factor at all. Every Lean library uses Acharyya2024.responseDistEntry, which is (m)^{-1} * ||Xbar i - Xbar j||, so Acharyya 2025 and Quench are both formalized under a convention other than the one they print.\n\nConsequence. Rescaling every dissimilarity by c > 0 rescales the CMDS configuration by c, the doubly centred matrix by c^2 and its eigenvalues by c^2, so a vanishing-error conclusion survives the substitution. What does not survive is the literal constants: Acharyya 2025 Theorem 2's C1, C2, C3 are stated in terms of eigenvalues of B under the 1/sqrt m scaling. And in every regime where m grows the factor is not a constant, so the substitution is not a harmless choice of units there.\n\nEvidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extraction in which the fraction renders as \"1m\" with a separate 1 and m around a radical. It is consistent across both the population and sample definitions, but it should be confirmed against the published PDF before any statement is changed on the strength of it."
     }
   },
   "items": [
@@ -272,6 +277,7 @@
       ],
       "planned_declarations": [],
       "gap_refs": [
+        "dissimilarity-normalisation-divergence",
         "v1-norm-inconsistency"
       ],
       "semantic_alignment": {
@@ -308,6 +314,7 @@
       ],
       "planned_declarations": [],
       "gap_refs": [
+        "dissimilarity-normalisation-divergence",
         "v1-norm-inconsistency"
       ],
       "semantic_alignment": {
