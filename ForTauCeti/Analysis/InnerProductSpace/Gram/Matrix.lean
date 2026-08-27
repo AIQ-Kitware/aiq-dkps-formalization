@@ -25,6 +25,8 @@ public import Mathlib.Analysis.InnerProductSpace.PiL2
 public import Mathlib.LinearAlgebra.Isomorphisms
 public import ForTauCeti.Analysis.InnerProductSpace.Basic
 public import ForTauCeti.Analysis.Normed.Operator.LinearIsometry
+public import Mathlib.Analysis.Normed.Module.FiniteDimension
+public import Mathlib.Topology.MetricSpace.Sequences
 
 
 /-! # Gram matrix rigidity
@@ -76,6 +78,7 @@ public section
 
 namespace TauCeti
 
+open scoped Topology
 open scoped InnerProductSpace
 
 variable {𝕜 E F ι : Type*} [RCLike 𝕜] [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
@@ -265,6 +268,103 @@ theorem exists_rigidMotion_of_dist_eq
     simpa using this.symm
   rw [hfinal]
   abel
+
+/-- **Approximate rigid-motion rigidity.** If the pairwise distances of a sequence of finite
+configurations converge to those of a target, then eventually each configuration is carried
+arbitrarily close to the target by some rigid motion.
+
+This is the asymptotic form of `exists_rigidMotion_of_dist_eq`, and it is what a distance-based
+consistency statement needs: multidimensional scaling determines a configuration only up to a
+rigid motion, so convergence of the estimates can be asserted only after alignment.
+
+The proof is a compactness argument and uses **no spectral hypothesis**.  Recentring at a base
+index leaves all distances unchanged and bounds the configurations; a bounded sequence in a
+finite-dimensional space has a convergent subsequence; the limit has exactly the target's
+pairwise distances; and the exact statement then supplies a rigid motion, which by continuity
+serves the whole tail. -/
+theorem eventually_exists_rigidMotion_dist_lt
+    {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F] [FiniteDimensional ℝ F]
+    {ι : Type*} [Finite ι] [Nonempty ι] {φ : ℕ → ι → F} {ψ : ι → F}
+    (h : ∀ i j, Filter.Tendsto (fun u => ‖φ u i - φ u j‖) Filter.atTop (𝓝 ‖ψ i - ψ j‖)) :
+    ∀ ε > 0, ∀ᶠ u in Filter.atTop,
+      ∃ (W : F ≃ₗᵢ[ℝ] F) (b : F), ∀ i, ‖W (φ u i) + b - ψ i‖ < ε := by
+  classical
+  let _ : Fintype ι := Fintype.ofFinite ι
+  obtain ⟨i₀⟩ := ‹Nonempty ι›
+  set φ' : ℕ → ι → F := fun u i => φ u i - φ u i₀ with hφ'
+  have hsub : ∀ u i j, φ' u i - φ' u j = φ u i - φ u j := by
+    intro u i j; simp only [hφ']; abel
+  have hdist' : ∀ i j, Filter.Tendsto (fun u => ‖φ' u i - φ' u j‖) Filter.atTop
+      (𝓝 ‖ψ i - ψ j‖) := fun i j => (h i j).congr fun u => by rw [hsub]
+  intro ε hε
+  by_contra hcon
+  rw [Filter.not_eventually] at hcon
+  obtain ⟨σ, hσmono, hσ⟩ := Filter.extraction_of_frequently_atTop hcon
+  -- each recentred coordinate is a bounded sequence
+  have hbdd : ∀ i, ∃ R : ℝ, ∀ k, ‖φ' (σ k) i‖ ≤ R := by
+    intro i
+    have hlim : Filter.Tendsto (fun u => ‖φ' u i‖) Filter.atTop (𝓝 ‖ψ i - ψ i₀‖) := by
+      refine (hdist' i i₀).congr fun u => ?_
+      congr 1
+      simp only [hφ']
+      abel
+    have hb := Metric.isBounded_range_of_tendsto _ (hlim.comp hσmono.tendsto_atTop)
+    obtain ⟨R, hR⟩ := hb.subset_closedBall 0
+    refine ⟨R, fun k => ?_⟩
+    have := hR (Set.mem_range_self k)
+    simpa [Real.norm_eq_abs, abs_of_nonneg (norm_nonneg _)] using
+      (mem_closedBall_zero_iff.mp this)
+  choose R hR using hbdd
+  set Rmax : ℝ := (Finset.univ.sup' Finset.univ_nonempty R) with hRmax
+  have hRle : ∀ k i, ‖φ' (σ k) i‖ ≤ Rmax :=
+    fun k i => le_trans (hR i k) (Finset.le_sup' R (Finset.mem_univ i))
+  -- so the configurations lie in a bounded set of the finite-dimensional space `ι → F`
+  have hmem : ∀ k, φ' (σ k) ∈ Metric.closedBall (0 : ι → F) Rmax := by
+    intro k
+    rw [mem_closedBall_zero_iff, pi_norm_le_iff_of_nonneg]
+    · exact fun i => hRle k i
+    · exact le_trans (norm_nonneg _) (hRle 0 i₀)
+  obtain ⟨χ, -, τ, hτmono, hτ⟩ :=
+    tendsto_subseq_of_bounded (Metric.isBounded_closedBall) hmem
+  -- the limit configuration has exactly the target's pairwise distances
+  have hχ : ∀ i j, ‖χ i - χ j‖ = ‖ψ i - ψ j‖ := by
+    intro i j
+    have hconv : Filter.Tendsto (fun k => ‖φ' (σ (τ k)) i - φ' (σ (τ k)) j‖) Filter.atTop
+        (𝓝 ‖χ i - χ j‖) := by
+      have hi : Filter.Tendsto (fun k => φ' (σ (τ k)) i) Filter.atTop (𝓝 (χ i)) :=
+        (continuous_apply i).continuousAt.tendsto.comp hτ
+      have hj : Filter.Tendsto (fun k => φ' (σ (τ k)) j) Filter.atTop (𝓝 (χ j)) :=
+        (continuous_apply j).continuousAt.tendsto.comp hτ
+      exact (hi.sub hj).norm
+    have hconv' : Filter.Tendsto (fun k => ‖φ' (σ (τ k)) i - φ' (σ (τ k)) j‖) Filter.atTop
+        (𝓝 ‖ψ i - ψ j‖) :=
+      ((hdist' i j).comp hσmono.tendsto_atTop).comp hτmono.tendsto_atTop
+    exact tendsto_nhds_unique hconv hconv'
+  obtain ⟨W, b, hWb⟩ := exists_rigidMotion_of_dist_eq (φ := χ) (ψ := ψ) hχ
+  -- for large `k` the same rigid motion works, contradicting the choice of `σ`
+  have hgo : Filter.Tendsto (fun k => ‖φ' (σ (τ k)) - χ‖) Filter.atTop (𝓝 0) := by
+    have hd : Filter.Tendsto (fun k => φ' (σ (τ k)) - χ) Filter.atTop (𝓝 (0 : ι → F)) := by
+      simpa using hτ.sub (tendsto_const_nhds (x := χ))
+    simpa using hd.norm
+  rw [Metric.tendsto_atTop] at hgo
+  obtain ⟨K, hK⟩ := hgo ε hε
+  have hbad := hσ (τ K)
+  refine hbad ⟨W, b - W (φ (σ (τ K)) i₀), fun i => ?_⟩
+  have hrw : W (φ (σ (τ K)) i) + (b - W (φ (σ (τ K)) i₀)) - ψ i
+      = W (φ' (σ (τ K)) i) + b - ψ i := by
+    simp only [hφ', map_sub]
+    abel
+  rw [hrw, hWb i]
+  have hstep : W (φ' (σ (τ K)) i) + b - (W (χ i) + b) = W (φ' (σ (τ K)) i - χ i) := by
+    have hms : W (φ' (σ (τ K)) i - χ i) = W (φ' (σ (τ K)) i) - W (χ i) := map_sub W _ _
+    rw [hms]
+    abel
+  rw [hstep, LinearIsometryEquiv.norm_map]
+  have hle : ‖φ' (σ (τ K)) i - χ i‖ ≤ ‖φ' (σ (τ K)) - χ‖ := by
+    simpa using norm_le_pi_norm (φ' (σ (τ K)) - χ) i
+  have := hK K le_rfl
+  rw [Real.dist_eq, sub_zero, abs_of_nonneg (norm_nonneg _)] at this
+  exact lt_of_le_of_lt hle this
 
 namespace Matrix
 
