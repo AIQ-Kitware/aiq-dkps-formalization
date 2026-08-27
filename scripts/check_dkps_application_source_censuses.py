@@ -77,6 +77,17 @@ def check_schema(path: Path, data: dict) -> list[dict]:
             fail(f'{path}: {rid} bad status {row["status"]}')
         if row['verification'] not in verifications:
             fail(f'{path}: {rid} bad verification {row["verification"]}')
+        # The verification axis has to agree with what the row actually cites.  A row that
+        # says 'absent' while citing declarations, or 'proved_in_build' while citing none,
+        # reads as an internal contradiction to a hostile reviewer -- and is how a status
+        # upgrade silently leaves the verification field behind.
+        decls = row.get('lean_declarations') or []
+        if row['verification'] == 'absent' and decls:
+            fail(f'{path}: {rid} verification absent but cites {len(decls)} declaration(s)')
+        if row['verification'] == 'proved_in_build' and not decls:
+            fail(f'{path}: {rid} verification proved_in_build but cites no declaration')
+        if row['status'].startswith('compiled') and row['verification'] == 'absent':
+            fail(f'{path}: {rid} status {row["status"]} but verification absent')
         sem = row.get('semantic_alignment', {})
         if sem.get('classification') not in alignments or not sem.get('detail'):
             fail(f'{path}: {rid} bad semantic_alignment')
