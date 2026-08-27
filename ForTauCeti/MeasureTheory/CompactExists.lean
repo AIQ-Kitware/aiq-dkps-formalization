@@ -198,4 +198,64 @@ theorem measurable_iInf_of_isCompact (hS : IsCompact S) (hSne : S.Nonempty)
 
 end Infimum
 
+/-! ### Minimizers far from a reference point
+
+The event "some minimizer of `F` lies at distance at least `c` from a reference point" is what a
+convergence statement about minimizers has to be measurable in, and it is the place a
+measurable-selection theorem would ordinarily be invoked: the minimizer is not canonical, so
+there is no obvious function of the sample to be measurable about.
+
+No selection is needed.  Being a minimizer is the sublevel condition `F y ω ≤ ⨅ z, F z ω`, and
+the infimum is measurable by `measurable_iInf_of_isCompact`; combining it with the distance
+condition inside a single `max` puts the event back into the compactly-quantified existential
+form that `measurableSet_exists_mem_le` already handles. -/
+
+section Minimizers
+
+variable {Y : Type*} [PseudoMetricSpace Y] {Ω : Type*} [MeasurableSpace Ω]
+variable {S : Set Y} {F G : Y → Ω → ℝ}
+
+/--
+**The event that some minimizer satisfies a further closed constraint is measurable.**
+
+`F` is the objective and `G` the constraint, both Carathéodory on the compact parameter set `S`.
+The event is that some minimizer of `F` over `S` has `c ≤ G`.  Taking `G y ω = ‖y - r ω‖` gives
+"some minimizer is at distance at least `c` from `r ω`", which is what a statement about
+convergence of minimizers must be measurable in.
+-/
+theorem measurableSet_exists_isMinOn_le (hS : IsCompact S) (hSne : S.Nonempty)
+    (hFc : ∀ ω, ContinuousOn (fun y => F y ω) S) (hFm : ∀ y ∈ S, Measurable (F y))
+    (hGc : ∀ ω, ContinuousOn (fun y => G y ω) S) (hGm : ∀ y ∈ S, Measurable (G y)) (c : ℝ) :
+    MeasurableSet {ω | ∃ y ∈ S, F y ω ≤ (⨅ z : S, F z ω) ∧ c ≤ G y ω} := by
+  classical
+  set H : Y → Ω → ℝ := fun y ω => max (F y ω - ⨅ z : S, F z ω) (c - G y ω) with hH
+  have hiInf : Measurable fun ω => ⨅ z : S, F z ω :=
+    measurable_iInf_of_isCompact hS hSne hFc hFm
+  have hHc : ∀ ω, ContinuousOn (fun y => H y ω) S := by
+    intro ω
+    have h1 : ContinuousOn (fun y => F y ω - ⨅ z : S, F z ω) S :=
+      (hFc ω).sub continuousOn_const
+    have h2 : ContinuousOn (fun y => c - G y ω) S :=
+      continuousOn_const.sub (hGc ω)
+    have h3 : ContinuousOn (fun y => (F y ω - ⨅ z : S, F z ω) ⊔ (c - G y ω)) S := h1.sup h2
+    rw [hH]
+    exact h3
+  have hHm : ∀ y ∈ S, Measurable (H y) := by
+    intro y hy
+    exact Measurable.max ((hFm y hy).sub hiInf) (measurable_const.sub (hGm y hy))
+  have hset : {ω | ∃ y ∈ S, F y ω ≤ (⨅ z : S, F z ω) ∧ c ≤ G y ω}
+      = {ω | ∃ y ∈ S, H y ω ≤ 0} := by
+    ext ω
+    constructor
+    · rintro ⟨y, hyS, h1, h2⟩
+      exact ⟨y, hyS, max_le (by linarith) (by linarith)⟩
+    · rintro ⟨y, hyS, h⟩
+      have h1 := le_trans (le_max_left _ _) h
+      have h2 := le_trans (le_max_right _ _) h
+      exact ⟨y, hyS, by linarith, by linarith⟩
+  rw [hset]
+  exact measurableSet_exists_mem_le hS hHc hHm 0
+
+end Minimizers
+
 end TauCeti
