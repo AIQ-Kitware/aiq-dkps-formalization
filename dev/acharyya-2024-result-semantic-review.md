@@ -92,15 +92,18 @@ The Lean definitions directly encode the finite raw-stress objective and minimiz
 **Normalized paper statement:** Applying a rigid/affine transformation to a minimizer gives another minimizer; additional non-congruent minimizers may also exist.
 
 **Selected Lean declarations:**
-- `Acharyya2024.RawStress.rawStress_translate`
+- `Acharyya2024.ProfileNonuniqueness.rawStress_not_affine_invariant`
 - `Acharyya2024.RawStress.center_mem_mds`
+- `Acharyya2024.RawStress.mds_rigidMotion`
+- `Acharyya2024.RawStress.rawStress_rigidMotion`
+- `Acharyya2024.RawStress.rawStress_translate`
 
 **Clause-by-clause comparison:**
 
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
-| Rigid/affine transformations preserve the raw-stress objective/minimizer status. | rawStress_translate and center_mem_mds explicitly cover translation/centering invariance. | `lean_weaker_conclusion` | The full orthogonal-plus-translation invariance is not exposed here as one Acharyya2024 source-facing result. |
-| Additional non-congruent minimizers may exist. | UniquePairProfile is introduced precisely because distinct minimizers can have different pair-distance profiles. | `equivalent_encoding` | Lean turns the ambiguity into an explicit identifiability predicate rather than a theorem asserting examples. |
+| Applying a rigid/affine transformation to a minimizer gives another minimizer. | mds_rigidMotion for the rigid class; rawStress_not_affine_invariant refutes the affine reading. | `source_repair` | Corollary 1 uses an orthogonal map plus a translation, so the remark's 'affine' is a wording slip. |
+| additional non-congruent minimizers may also exist | no_fixed_limiting_profile constructs minimizers with distinct pairwise-distance profiles. | `exact` |  |
 
 **Semantic review:**
 
@@ -109,6 +112,8 @@ Lean explicitly proves translation invariance and preservation of minimizer stat
 **Additional note:** The source uses the word affine, but its later alignment statement restricts the linear part to O(d).
 
 **Companion census gap refs:** `affine-invariance-partial`
+
+**Next action:** None. The invariance is proved at the correct class and the wording slip is recorded with a counterexample.
 
 ### 3. `A24-R2` — Remark 2: Existence of a finite raw-stress minimizer
 
