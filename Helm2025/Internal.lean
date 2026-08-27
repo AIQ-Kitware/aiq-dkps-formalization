@@ -561,6 +561,123 @@ lemma ae_mem_of_ae_mem_pi {ι : Type*} [Fintype ι] {α : ι → Type*}
         (expose_names; exact Measure.pi_eval_preimage_null μ hS_1)
 
 /--
+Uniform absolute continuity of a triangular array: the integrals of `|X n|` over small sets are
+small, uniformly in `n`.
+
+A single integrable envelope is not available here because the sample space changes with `n` --
+the training set lives in `Fin n → Z`.  This is the standard replacement, and it is what
+`ConsistentInProbability` needs in order to give convergence of the expected risks.
+-/
+def UniformlyAbsolutelyContinuous {Ω : ℕ → Type*} [∀ n, MeasurableSpace (Ω n)]
+    (μ : ∀ n, Measure (Ω n)) (X : ∀ n, Ω n → ℝ) : Prop :=
+  ∀ ε > 0, ∃ δ > 0, ∀ (n : ℕ) (S : Set (Ω n)), MeasurableSet S →
+    μ n S < ENNReal.ofReal δ → ∫ ω in S, |X n ω| ∂(μ n) < ε
+
+/--
+Convergence in probability plus uniform absolute continuity gives convergence of the
+expectations, for a triangular array whose sample space varies with `n`.
+
+Same two-region split as `expectation_converges_of_prob_converges_dominated`: the region where
+`|X n|` is small contributes at most `ε` because each `μ n` is a probability measure, and the
+region where it is large has small measure, so uniform absolute continuity controls it.
+-/
+theorem expectation_converges_of_prob_converges_uac {Ω : ℕ → Type*}
+    [∀ n, MeasurableSpace (Ω n)]
+    (μ : ∀ n, Measure (Ω n)) [∀ n, IsProbabilityMeasure (μ n)]
+    (X : ∀ n, Ω n → ℝ)
+    (h_meas : ∀ n, Measurable (X n))
+    (h_int : ∀ n, Integrable (X n) (μ n))
+    (h_uac : UniformlyAbsolutelyContinuous μ X)
+    (h_conv : ∀ ε > 0, Tendsto (fun n => (μ n) {ω | ε < |X n ω|}) atTop (𝓝 0)) :
+    Tendsto (fun n => ∫ ω, |X n ω| ∂(μ n)) atTop (𝓝 0) := by
+  rw [Metric.tendsto_atTop]
+  intro D hD
+  obtain ⟨δ, hδpos, hδ⟩ := h_uac (D / 3) (by positivity)
+  have hεpos : (0 : ℝ) < D / 3 := by positivity
+  have hgo := h_conv (D / 3) hεpos
+  rw [ENNReal.tendsto_atTop_zero] at hgo
+  obtain ⟨N, hN⟩ := hgo (ENNReal.ofReal (δ / 2)) (ENNReal.ofReal_pos.mpr (by positivity))
+  refine ⟨N, fun n hn => ?_⟩
+  set S : Set (Ω n) := {ω | D / 3 < |X n ω|} with hS
+  have hSmeas : MeasurableSet S := measurableSet_lt measurable_const (h_meas n).abs
+  have hSsmall : (μ n) S < ENNReal.ofReal δ := by
+    refine lt_of_le_of_lt (hN n hn) ?_
+    exact (ENNReal.ofReal_lt_ofReal_iff hδpos).mpr (by linarith)
+  have hnonneg : 0 ≤ ∫ ω, |X n ω| ∂(μ n) := integral_nonneg fun _ => abs_nonneg _
+  have habs : Integrable (fun ω => |X n ω|) (μ n) := (h_int n).abs
+  have hbad : ∫ ω in S, |X n ω| ∂(μ n) < D / 3 := hδ n S hSmeas hSsmall
+  have hgood : ∫ ω in Sᶜ, |X n ω| ∂(μ n) ≤ D / 3 := by
+    have h1 : ∫ ω in Sᶜ, |X n ω| ∂(μ n) ≤ ∫ _ω in Sᶜ, D / 3 ∂(μ n) := by
+      refine setIntegral_mono_on habs.integrableOn integrableOn_const hSmeas.compl ?_
+      intro ω hω
+      simpa [hS, not_lt] using hω
+    refine h1.trans ?_
+    rw [setIntegral_const, smul_eq_mul]
+    have hle1 : (μ n).real (Sᶜ) ≤ 1 := by
+      simpa [Measure.real] using
+        ENNReal.toReal_mono ENNReal.one_ne_top (prob_le_one (μ := μ n) (s := Sᶜ))
+    have hnn : 0 ≤ (μ n).real (Sᶜ) := by positivity
+    nlinarith [hεpos.le, hle1, hnn]
+  have hsplit : ∫ ω, |X n ω| ∂(μ n) ≤ D / 3 + D / 3 := by
+    rw [← integral_add_compl hSmeas habs]
+    exact add_le_add hbad.le hgood
+  rw [Real.dist_eq, sub_zero, abs_of_nonneg hnonneg]
+  linarith
+
+/--
+The paper's in-probability consistency gives convergence of the **expected** risks, provided the
+conditional risks are uniformly absolutely continuous.
+
+`ConsistentExpected`, which the transfer theorems quantify over, is convergence of the expected
+risk.  The paper instead defines consistency in probability over the training set.  The two are
+different notions, and `prob_convergence_not_enough_for_expectations` shows neither direction is
+free.  This is the implication that holds, with the uniform-integrability condition that the
+counterexample shows is unavoidable, so a theorem stated over the expected form is applicable
+whenever the paper's own hypothesis holds and the risks are uniformly integrable.
+-/
+theorem tendsto_integral_riskGivenTraining_of_consistentInProbability
+    (d d' : ℕ) (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
+    (loss : LossFunction d') (learn : (n : ℕ) → LearningRule n d d') (b : ℝ)
+    (h_meas : ∀ n, Measurable (fun T : Fin n → E d × Y d' =>
+      riskGivenTraining n d d' P (learn n) loss T))
+    (h_int : ∀ n, Integrable (fun T : Fin n → E d × Y d' =>
+      riskGivenTraining n d d' P (learn n) loss T - b) (Measure.pi (fun _ : Fin n => P)))
+    (h_uac : UniformlyAbsolutelyContinuous (fun n => Measure.pi (fun _ : Fin n => P))
+      (fun n T => riskGivenTraining n d d' P (learn n) loss T - b))
+    (h_cons : ConsistentInProbability d d' P loss learn b) :
+    Tendsto (fun n => ∫ T, riskGivenTraining n d d' P (learn n) loss T
+      ∂(Measure.pi (fun _ : Fin n => P))) atTop (𝓝 b) := by
+  have key : Tendsto (fun n => ∫ T, |riskGivenTraining n d d' P (learn n) loss T - b|
+      ∂(Measure.pi (fun _ : Fin n => P))) atTop (𝓝 0) := by
+    refine expectation_converges_of_prob_converges_uac
+      (fun n => Measure.pi (fun _ : Fin n => P))
+      (fun n T => riskGivenTraining n d d' P (learn n) loss T - b)
+      (fun n => (h_meas n).sub measurable_const) h_int h_uac ?_
+    intro ε hε
+    exact h_cons ε hε
+  have hdiff : Tendsto (fun n => ∫ T, riskGivenTraining n d d' P (learn n) loss T
+      ∂(Measure.pi (fun _ : Fin n => P)) - b) atTop (𝓝 0) := by
+    refine squeeze_zero_norm ?_ key
+    intro n
+    have : ∫ T, riskGivenTraining n d d' P (learn n) loss T
+        ∂(Measure.pi (fun _ : Fin n => P)) - b
+        = ∫ T, (riskGivenTraining n d d' P (learn n) loss T - b)
+          ∂(Measure.pi (fun _ : Fin n => P)) := by
+      have hR : Integrable (fun T : Fin n → E d × Y d' =>
+          riskGivenTraining n d d' P (learn n) loss T) (Measure.pi (fun _ : Fin n => P)) := by
+        have h2 := (h_int n).add (integrable_const b)
+        refine h2.congr ?_
+        filter_upwards with T
+        simp
+      rw [integral_sub hR (integrable_const b), integral_const]
+      simp
+    rw [this]
+    simpa using norm_integral_le_integral_norm
+      (μ := Measure.pi (fun _ : Fin n => P))
+      (f := fun T => riskGivenTraining n d d' P (learn n) loss T - b)
+  simpa using hdiff.add_const b
+
+/--
 **The domination hypothesis is not removable.**
 
 Convergence in probability does not imply convergence of the expectations, so no strengthening

@@ -16,11 +16,12 @@ Companion coverage census: `dev/helm-2025-full-source-census.json`.
 | --- | ---: |
 | `GAP expected rather than in-probability` | 1 |
 | `GAP no literal wrapper` | 1 |
-| `GAP stronger Lean hypotheses` | 4 |
+| `GAP stronger Lean hypotheses` | 3 |
 | `PASS` | 2 |
 | `PASS equivalent encoding` | 2 |
 | `PASS exact` | 1 |
 | `REPAIR uniform integrability is necessary` | 1 |
+| `REPAIR uniform integrability; GAP consistency notion` | 1 |
 
 A `PASS` verdict means the source result follows from the selected Lean surface at the stated scope. `GAP` means the Lean surface is narrower or assumes more. `REPAIR` means literal source fidelity is intentionally rejected because the retained source statement is inconsistent or incorrect. `PROOF ROLE REPLACED` means the final theorem is proved by another route, but the printed proof lemma itself is not represented literally.
 
@@ -29,7 +30,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | id | source anchor | verdict |
 | --- | --- | --- |
 | `H25-T1` | Theorem 1 | REPAIR uniform integrability is necessary |
-| `H25-T2` | Theorem 2 | GAP stronger Lean hypotheses |
+| `H25-T2` | Theorem 2 | REPAIR uniform integrability; GAP consistency notion |
 | `H25-A1` | Assumption 1 | PASS exact |
 | `H25-A2` | Assumption 2 | GAP stronger Lean hypotheses |
 | `H25-A3` | Assumption 3 | PASS equivalent encoding |
@@ -97,19 +98,22 @@ The conclusion is source-shaped. Lean additionally requires measurable embedding
 
 ### 2. `H25-T2` — Theorem 2: Consistency transfer from true to estimated DKPS embeddings
 
-**Verdict:** GAP stronger Lean hypotheses
+**Verdict:** REPAIR uniform integrability; GAP consistency notion
 
 **Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:113-118`
 
 **Normalized paper statement:** If learning on true perspectives is consistent, learning on estimated perspectives is also consistent as n,m,r grow.
 
 **Selected Lean declarations:**
+- `Helm2025.DKPS.ConsistentInProbability`
 - `Helm2025.DKPS.LossDominated`
 - `Helm2025.DKPS.Theorem2_bayes`
 - `Helm2025.DKPS.consistency_transfer_dkps_bayes`
 - `Helm2025.DKPS.diagonal_convergence`
 - `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`
 - `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`
+- `Helm2025.DKPS.riskGivenTraining`
+- `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`
 
 **Clause-by-clause comparison:**
 
@@ -120,6 +124,7 @@ The conclusion is source-shaped. Lean additionally requires measurable embedding
 | Appendix Assumptions 1--4 and Eq. (3) provide the analytic transfer conditions. | Lean uses the same strengthened analytic forms as Theorem1 and a sequence of alignment-consistency hypotheses. | `lean_stronger_hypothesis` |  |
 | No bounded/compact label-support premise is visible in the retained source. | Theorem2_bayes carries the label-support/boundedness condition used by the risk limit. | `lean_stronger_hypothesis` |  |
 | The paper states no boundedness or compactness condition on the labels. | The theorems require LossDominated -- an integrable envelope for the loss as a function of the label -- rather than compact label support. | `lean_weaker_hypothesis` | Strictly weaker than the previous hypothesis, and implied by the finiteness of the risk the paper writes down. |
+| Theorem 2 asserts the transfer under Assumptions 1-4 alone. | Inherits Theorem 1's repair: an integrable envelope at each sample size, with no compact-label hypothesis. | `source_repair` | Necessity witnessed by prob_convergence_not_enough_for_expectations. |
 
 **Semantic review:**
 
@@ -128,6 +133,8 @@ Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The
 **Additional note:** The compact-label hypothesis, which no source passage states, has been replaced by the integrable-envelope hypothesis LossDominated; see gap label-compact-support.
 
 **Companion census gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
+
+**Next action:** State the transfer over the paper's in-probability consistency predicate rather than ConsistentExpected.
 
 ### 3. `H25-A1` — Assumption 1: Rigid/affine-isometry invariance of the learning rule
 
@@ -367,13 +374,17 @@ risk_df is the expected loss of a decision function and bayesRisk is the infimum
 
 **Selected Lean declarations:**
 - `Helm2025.DKPS.ConsistentExpected`
+- `Helm2025.DKPS.ConsistentInProbability`
 - `Helm2025.DKPS.ConvergesInProbabilityToZero`
+- `Helm2025.DKPS.riskGivenTraining`
+- `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`
 
 **Clause-by-clause comparison:**
 
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
 | Pr(\|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)\| > eps) -> 0. | ConsistentExpected: Tendsto (risk n) atTop (nhds (bayesRisk ...)), where risk integrates over the training sample and is therefore deterministic. | `different_quantifier_encoding` | Convergence in probability and convergence of expectations are not equivalent; the literal in-probability predicate exists as ConvergesInProbabilityToZero but is not the one the transfer theorems quantify over. |
+| Consistency is convergence in probability of the risk of the trained rule. | ConsistentInProbability over riskGivenTraining is that definition verbatim; it implies convergence of the averaged conditional risk under uniform absolute continuity. | `exact` | The predicate is now present; the transfer theorems do not yet quantify over it. |
 
 **Semantic review:**
 
@@ -383,4 +394,4 @@ Lean carries ConvergesInProbabilityToZero, the literal in-probability predicate,
 
 **Companion census gap refs:** `consistency-in-probability-vs-expectation`
 
-**Next action:** State the transfer theorem over the in-probability predicate, or record why the expected form is the intended reading.
+**Next action:** Restate the transfer over ConsistentInProbability; the missing step is risk n = the integral of riskGivenTraining over training sets.

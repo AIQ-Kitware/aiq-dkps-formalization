@@ -17,8 +17,8 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 | `compiled_exact` | 3 |
 | `compiled_equivalent` | 3 |
 | `compiled_by_composition` | 1 |
-| `compiled_stronger_hypotheses` | 4 |
-| `compiled_source_repair` | 1 |
+| `compiled_stronger_hypotheses` | 3 |
+| `compiled_source_repair` | 2 |
 
 ## Semantic-alignment summary
 
@@ -27,15 +27,15 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 | `exact` | 3 |
 | `equivalent_encoding` | 3 |
 | `by_composition` | 1 |
-| `stronger_hypotheses` | 4 |
-| `source_repair` | 1 |
+| `stronger_hypotheses` | 3 |
+| `source_repair` | 2 |
 
 ## Items
 
 | id | importance | source anchor | status | alignment | verification |
 | --- | --- | --- | --- | --- | --- |
 | `H25-T1` | `headline` | Theorem 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
-| `H25-T2` | `headline` | Theorem 2 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `H25-T2` | `headline` | Theorem 2 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `H25-A1` | `major` | Assumption 1 | `compiled_exact` | `exact` | `proved_in_build` |
 | `H25-A2` | `major` | Assumption 2 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `H25-A3` | `major` | Assumption 3 | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
@@ -89,6 +89,10 @@ The proof of Theorem 2 concludes "given the results in (Sekhon, 2021), for some 
 
 The paper writes Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0, so R_l(P_fY, h(.;T_n)) is a random variable depending on the training set and the convergence is in probability. Helm2025.risk integrates over the whole product measure, training sample included, so it is a deterministic expected risk, and ConsistentExpected is Tendsto risk -> bayesRisk. Its own docstring says "Appendix-style (expected) consistency". Convergence in probability and convergence of expectations are not equivalent in general; with a bounded loss and uniform integrability the former gives the latter, but the formal statement as it stands is a different notion from the printed definition. Both the hypothesis and the conclusion of the transfer theorem use the expected form, so the transfer itself is shape-faithful.
 
+Progress. The paper's notion is now formalized directly: riskGivenTraining holds the training set fixed and integrates over a fresh test point, which is the paper's random R_l(P_fY, h(.;T_n)), and ConsistentInProbability is the displayed definition over it. tendsto_integral_riskGivenTraining_of_consistentInProbability proves that the paper's hypothesis yields convergence of the averaged conditional risk, under uniform absolute continuity of the conditional risks -- the triangular-array replacement for a single envelope, since the training space Fin n -> Z changes with n, via expectation_converges_of_prob_converges_uac. The uniform-integrability side condition is again not optional: prob_convergence_not_enough_for_expectations rules out dropping it.
+
+Remaining. The transfer theorems still quantify over ConsistentExpected. Closing the gap means restating Theorem 2 over ConsistentInProbability, for which the missing step is the Fubini identity risk n = integral of riskGivenTraining over training sets.
+
 ## Detail
 
 ### `H25-T1` — Fixed-n inference risk transfer
@@ -109,13 +113,13 @@ The paper writes Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0, so R_l(P_
 * **source anchor:** Theorem 2 (theorem, section 2.2)
 * **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:113-118`
 * **importance:** `headline`
-* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The analytic hypotheses are stronger than the literal paper assumptions, and the joint (m,r) limit is represented by diagonalization. The paper-facing wrapper also requires bounded/compact label support; no matching assumption was located in the retained source.
+* **status / verification:** `compiled_source_repair` / `proved_in_build`
+* **semantic alignment:** `source_repair` — Theorem 2 is proved by applying Theorem 1 at each sample size, so it inherits Theorem 1's defect: with no condition on the labels, convergence in probability of the losses does not give convergence of the risks, as prob_convergence_not_enough_for_expectations witnesses. The formalization carries the same weakest repair, an integrable envelope at each n, and no compact-label hypothesis. Separately, the consistency notion the transfer quantifies over is convergence of the expected risk rather than the paper's in-probability form; that is recorded as consistency-in-probability-vs-expectation and is not yet resolved.
 * **source claim:** If learning on true perspectives is consistent, learning on estimated perspectives is also consistent as n,m,r grow.
-* **Lean declarations:** `Helm2025.DKPS.LossDominated`, `Helm2025.DKPS.Theorem2_bayes`, `Helm2025.DKPS.consistency_transfer_dkps_bayes`, `Helm2025.DKPS.diagonal_convergence`, `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`, `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`
+* **Lean declarations:** `Helm2025.DKPS.ConsistentInProbability`, `Helm2025.DKPS.LossDominated`, `Helm2025.DKPS.Theorem2_bayes`, `Helm2025.DKPS.consistency_transfer_dkps_bayes`, `Helm2025.DKPS.diagonal_convergence`, `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`, `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`, `Helm2025.DKPS.riskGivenTraining`, `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`
 * **gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
 * **notes:** The compact-label hypothesis, which no source passage states, has been replaced by the integrable-envelope hypothesis LossDominated; see gap label-compact-support.
-* **next action:** None.
+* **next action:** State the transfer over the paper's in-probability consistency predicate rather than ConsistentExpected.
 
 ### `H25-A1` — Rigid/affine-isometry invariance of the learning rule
 
@@ -212,10 +216,10 @@ The paper writes Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0, so R_l(P_
 * **status / verification:** `compiled_equivalent` / `proved_in_build`
 * **semantic alignment:** `equivalent_encoding` — Lean carries ConvergesInProbabilityToZero, the literal in-probability predicate, but the consistency used by the transfer theorems is ConsistentExpected: convergence of the expected risk, since Helm2025.risk integrates over the training sample. See gap consistency-in-probability-vs-expectation.
 * **source claim:** Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0 as n -> infinity.
-* **Lean declarations:** `Helm2025.DKPS.ConsistentExpected`, `Helm2025.DKPS.ConvergesInProbabilityToZero`
+* **Lean declarations:** `Helm2025.DKPS.ConsistentExpected`, `Helm2025.DKPS.ConsistentInProbability`, `Helm2025.DKPS.ConvergesInProbabilityToZero`, `Helm2025.DKPS.riskGivenTraining`, `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`
 * **gap refs:** `consistency-in-probability-vs-expectation`
 * **notes:** This is the definition Theorem 2 quantifies over, so the substitution propagates to it.
-* **next action:** State the transfer theorem over the in-probability predicate, or record why the expected form is the intended reading.
+* **next action:** Restate the transfer over ConsistentInProbability; the missing step is risk n = the integral of riskGivenTraining over training sets.
 
 ### `H25-EQ3` — Aligned estimated perspectives converge uniformly in probability
 
