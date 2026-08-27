@@ -5,7 +5,12 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Geometry.Polar.DirectRotationAcute
 import DavisKahan.Geometry.Halmos.TwoProjections
-import DavisKahan.Frontier.Section3
+import DavisKahan.Geometry.Halmos.FixedCosineSubspace
+-- supplies the fixed-cosine eigenspace this file identifies with `Ω({θ})H`, together
+-- with the `halmosCosineSq` commutation lemmas underneath it.
+import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
+-- supplies `TauCeti.IsAcute` and `TauCeti.isAcute_iff_inf_orthogonal_eq_bot`, which this
+-- file used to receive indirectly through `DavisKahan.Frontier.Section3`.
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
 import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner
@@ -35,8 +40,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 namespace Proposition35
-
-open Frontier.Section3
 
 noncomputable section
 
@@ -379,7 +382,7 @@ theorem section3SinAngleOperator_comm_projection :
 theorem section3SinAngleOperator_comm_projection_right :
     Commute (section3SinAngleOperator U V) (projection V) := by
   have hsinQ : Commute (halmosSineSq U V) (projection V) := by
-    have hcosQ := Frontier.Section3.halmosCosineSq_commute_projection_right U V
+    have hcosQ := halmosCosineSq_commute_projection_right U V
     have hs : halmosSineSq U V = 1 - halmosCosineSq U V :=
       eq_sub_of_add_eq' (halmosCosineSq_add_sineSq U V)
     rw [hs]
@@ -809,7 +812,7 @@ theorem proposition3_5_angleEigenspace_maximal
     exact hx0 (by simpa using hk)
   have heq := section3AngleEigenspace_eq_fixedCosineSubspace U V hacute hθ
   rw [heq]
-  exact Frontier.Section3.proposition3_5_fixedAngle_maximal U V (Real.cos θ) hc0
+  exact proposition3_5_fixedAngle_maximal U V (Real.cos θ) hc0
 
 end
 
