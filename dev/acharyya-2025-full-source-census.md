@@ -6,13 +6,17 @@ Aranyak Acharyya, Joshua Agterberg, Youngser Park, Carey E. Priebe, Concentratio
 
 **Source version:** Retained arXiv v1 transcription used by the January-2026 Quench argument. The June-2026 v2 revision is a separate migration target.
 
-**Audit revision:** 2026-08-26 working tree after YWS population-gap/alignment propagation, hypothesis reduction, and Term-2 constant sharpening; based on repository snapshot 8895692fef63 plus the accepted local overlays.
+**Audit revision:** 2026-08-27 working tree at commit 6f11665f; statuses, cited declarations and gap texts revised throughout this pass, including an adversarial self-review that corrected two overstated statuses and strengthened two counterexamples.
 
 Numbered main-text results and the numbered appendix perturbation propositions/lemmas. Empirical claims are excluded. Exact appendix wrappers are distinguished from a replacement proof so theorem coverage is not inflated.
 
 ## Current audit note
 
-The strongest paper-facing change since the earlier audit is hypothesis reduction: YWS population-gap and alignment theorems remove the former sample-smallness and polar-smallness premises while preserving the Frobenius bound; the square-root term is also sharpened from sqrt(alpha/2) to sqrt(alpha).
+Two printed results are refuted with compiled counterexamples. Theorem 1's entrywise bound has no hypothesis on the scale of the population responses and needs one, since B is the doubly centred SQUARE of the dissimilarity matrix; this is why no literal finite wrapper exists, and the repair is the entrywise dissimilarity bound the compiled bridge already carries. Proposition 1's hypothesis constrains the ambient manifold while its conclusion constrains the placement of the models within it; no repair is proved, because the source supplies no spread condition from which a minimal one could be derived.
+
+Theorem 1's printed constant also settles the dissimilarity normalisation from inside the paper: only the 1/sqrt(m) reading matches its denominator. That removes the earlier dependence on a lossy PDF extraction.
+
+Retained from the earlier audit: the YWS population-gap and alignment theorems remove the former sample-smallness and polar-smallness premises while preserving the Frobenius bound, and the square-root term is sharpened from sqrt(alpha/2) to sqrt(alpha).
 
 ## Status summary
 

@@ -6,9 +6,17 @@ Hayden Helm, Ben Johnson, Carey E. Priebe, Query-efficient model evaluation usin
 
 **Source version:** Retained ICML/non-anonymous transcription and source TeX.
 
-**Audit revision:** 2026-08-26 working tree; Theorem 2 rows repointed at the end-to-end raw-response capstones after adding the MSE capstones infiniteFixedSubsetMSE / finiteFixedSubsetMSE, and Eq. (1) given its own row.
+**Audit revision:** 2026-08-27 working tree at commit 6f11665f; statuses, cited declarations and gap texts revised throughout this pass, including an adversarial self-review that corrected two overstated statuses and strengthened two counterexamples.
 
 The inherited concentration theorem, the DKPS definition, query-efficiency definitions, the nearest-neighbor estimator, Assumptions 1--2, and Theorem 2 including the raw-response realizations that discharge its representation-error premise. Empirical result claims are not theorem obligations; the OLS bridge is tracked as an extension.
+
+## Current audit note
+
+The four Theorem 2 rows carry hypotheses beyond the printed text, and the list is itemized against the paper rather than summarized. Most of what an earlier audit listed turns out to be printed: Assumption 1 is the score-Lipschitz field, Assumption 2 the full-support field, the iid embedded responses and Theorem 1's variance bound the raw field, the DKPS definition the realization field, Theorem 1's 'technical assumptions' the nondegeneracy field -- those are Acharyya 2025's Assumptions 1 and 2, so the eigenvalue floor is the paper's own phrase named -- and Theorem 2's own 'for m < M such that MSE(yhat_Q) > 0' the baseline field, which the MSE conclusion does not use.
+
+What is actually beyond the paper: on the finite route, measurability of the perspective map and finiteness of the model class; on the compact-infinite route, measurability, compactness of the perspective range, pathwise Lipschitz regularity of the raw response embedding, and the perspective net's share of the replicate budget. The finite route now runs at the source's own r = omega(n^3).
+
+The argument that measurability is a well-definedness condition of the printed statements rather than an added hypothesis is recorded under raw-response-explicit-assumptions; the rows keep the conservative reading.
 
 ## Status summary
 
