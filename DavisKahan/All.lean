@@ -9,7 +9,6 @@ import DavisKahan.Analysis.All
 import DavisKahan.BoundedOperator.All
 import DavisKahan.DoubleAngle.All
 import DavisKahan.FiniteDimensional.All
-import DavisKahan.Frontier.All
 import DavisKahan.Geometry.All
 import DavisKahan.InfiniteDimensional.All
 import DavisKahan.Interop.All

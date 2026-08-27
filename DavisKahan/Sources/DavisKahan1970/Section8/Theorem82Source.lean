@@ -160,15 +160,14 @@ open scoped InnerProductSpace
 open Module (finrank)
 
 namespace TauCeti
-namespace DavisKahan
-namespace Frontier
+namespace DavisKahan1970
 namespace Section8
 
 open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation
 open TauCeti.ApproximationNumber
-open TauCeti.DavisKahan1970.Section8
+open TauCeti.DavisKahan.Frontier
 
 universe u
 
@@ -646,6 +645,5 @@ theorem theorem8_2_source [FiniteDimensional ℂ H]
       hrank hsmall⟩
 
 end Section8
-end Frontier
-end DavisKahan
+end DavisKahan1970
 end TauCeti
