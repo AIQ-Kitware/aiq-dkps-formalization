@@ -595,6 +595,90 @@ lemma lossEnvelope_of_boundedLabelSupport (d d' : ℕ)
   simpa using hM (p, z.2) ⟨hp, hz⟩
 
 /--
+The loss of a learning rule's predictions is dominated by an integrable function of the label.
+
+This is the hypothesis the risk-convergence theorems carry in place of `BoundedLabelSupport`.
+It says exactly what the dominated-convergence step uses and nothing more: whatever the
+training set and query embedding, the loss incurred is at most `g` of the label, and `g` is
+integrable.  `lossDominated_of_boundedLabelSupport` shows the old hypothesis implies it, so
+no previously provable statement is lost.
+-/
+def LossDominated (n d d' : ℕ) (P : Measure (E d × Y d'))
+    (learn : LearningRule n d d') (loss : LossFunction d') : Prop :=
+  ∃ g : Y d' → ℝ, Integrable (fun z : E d × Y d' => g z.2) P ∧
+    ∀ᵐ z ∂P, ∀ (t : Fin n → E d × Y d') (ψ : E d), |loss (learn t ψ) z.2| ≤ g z.2
+
+/-- Assumptions 3 and 4 together with compact labels give a dominating envelope. -/
+lemma lossDominated_of_boundedLabelSupport (n d d' : ℕ)
+    (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
+    (learn : LearningRule n d d') (loss : LossFunction d')
+    (h_bound_learn : BoundedLearningRule n d d' learn)
+    (h_cont_loss : ContinuousLoss d' loss)
+    (h_bound_label : BoundedLabelSupport d d' P) :
+    LossDominated n d d' P learn loss := by
+  obtain ⟨K_pred, hK_pred, hK_pred'⟩ := h_bound_learn
+  obtain ⟨g, hg_int, hg_dom⟩ :=
+    lossEnvelope_of_boundedLabelSupport d d' P loss K_pred hK_pred h_cont_loss h_bound_label
+  refine ⟨g, hg_int, ?_⟩
+  filter_upwards [hg_dom] with z hz t ψ
+  exact hz _ (hK_pred' t ψ)
+
+/-- The product-space dominating function supplied by `LossDominated`. -/
+lemma loss_dominated_pi (n d d' : ℕ)
+    (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
+    (learn : LearningRule n d d') (loss : LossFunction d')
+    (psi_hat : ℕ → (Fin (n + 1) → E d × Y d') → Fin (n + 1) → E d)
+    (h_dom : LossDominated n d d' P learn loss) :
+    ∃ G : (Fin (n + 1) → E d × Y d') → ℝ,
+      Integrable G (Measure.pi (fun _ : Fin (n + 1) => P)) ∧
+      ∀ u, ∀ᵐ ω ∂(Measure.pi (fun _ : Fin (n + 1) => P)),
+        |loss (learn (fun i => (psi_hat u ω (Fin.castSucc i), (ω (Fin.castSucc i)).2))
+          (psi_hat u ω (Fin.last n))) (ω (Fin.last n)).2| ≤ G ω := by
+  obtain ⟨g, hg_int, hg_dom⟩ := h_dom
+  have hmp : MeasurePreserving (fun ω : Fin (n + 1) → E d × Y d' => ω (Fin.last n))
+      (Measure.pi (fun _ : Fin (n + 1) => P)) P :=
+    MeasureTheory.measurePreserving_eval (fun _ : Fin (n + 1) => P) (Fin.last n)
+  refine ⟨fun ω => g ((ω (Fin.last n)).2), (hmp.integrable_comp hg_int.1).2 hg_int, ?_⟩
+  intro u
+  filter_upwards [hmp.quasiMeasurePreserving.ae hg_dom] with ω hω
+  exact hω _ _
+
+/--
+The per-sample loss is dominated, uniformly in the stage `u`, by an **integrable function**.
+
+This is the envelope-based replacement for `loss_uniformly_bounded`.  Where that lemma needed
+labels in a compact set to produce a constant, this one needs only `LossEnvelope`: the
+predictions lie in the compact set Assumption 3 supplies, and the envelope dominates the loss
+at every such prediction, so composing the envelope with the label coordinate gives a
+dominating function on the product space.  Integrability transfers because evaluation at a
+coordinate is measure preserving.
+-/
+lemma loss_dominated_of_envelope (n d d' : ℕ)
+    (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
+    (learn : LearningRule n d d')
+    (loss : LossFunction d')
+    (psi_hat : ℕ → (Fin (n + 1) → E d × Y d') → Fin (n + 1) → E d)
+    (h_bound_learn : BoundedLearningRule n d d' learn)
+    (h_env : ∀ K : Set (Y d'), (∀ (t : Fin n → E d × Y d') (ψ : E d), learn t ψ ∈ K) →
+      LossEnvelope d d' P loss K) :
+    ∃ G : (Fin (n + 1) → E d × Y d') → ℝ,
+      Integrable G (Measure.pi (fun _ : Fin (n + 1) => P)) ∧
+      ∀ u, ∀ᵐ ω ∂(Measure.pi (fun _ : Fin (n + 1) => P)),
+        |loss (learn (fun i => (psi_hat u ω (Fin.castSucc i), (ω (Fin.castSucc i)).2))
+          (psi_hat u ω (Fin.last n))) (ω (Fin.last n)).2| ≤ G ω := by
+  obtain ⟨K_pred, hK_pred, hK_pred'⟩ := h_bound_learn
+  obtain ⟨g, hg_int, hg_dom⟩ := h_env K_pred hK_pred'
+  have hmp : MeasurePreserving (fun ω : Fin (n + 1) → E d × Y d' => ω (Fin.last n))
+      (Measure.pi (fun _ : Fin (n + 1) => P)) P :=
+    MeasureTheory.measurePreserving_eval (fun _ : Fin (n + 1) => P) (Fin.last n)
+  refine ⟨fun ω => g ((ω (Fin.last n)).2), ?_, ?_⟩
+  · exact (hmp.integrable_comp hg_int.1).2 hg_int
+  · intro u
+    have := hmp.quasiMeasurePreserving.ae hg_dom
+    filter_upwards [this] with ω hω
+    exact hω _ (hK_pred' _ _)
+
+/--
 Internal helper: the per-sample loss is almost surely bounded by a constant `M` that is
 *uniform in the stage `u`*. Combines A3 (`BoundedLearningRule`, predictions in a compact set),
 A4 (`ContinuousLoss`), and `BoundedLabelSupport` (labels in a compact set). Provides the
@@ -764,7 +848,8 @@ lemma risk_convergence_of_aligned_embeddings (n d d' : ℕ)
     (h_cont_learn : ContinuousLearningRule n d d' learn)  -- A2
     (h_bound_learn : BoundedLearningRule n d d' learn)    -- A3
     (h_cont_loss : ContinuousLoss d' loss)                -- A4
-    (h_bound_label : BoundedLabelSupport d d' P) :         -- labels in a compact set
+    (h_dom : LossDominated n d d' P learn loss) :          -- integrable envelope, in place of
+                                                          -- the paper-less compact-label hypothesis
     -- Conclusion: the estimated risk converges to the true risk as the budget `u → ∞`.
     Tendsto (fun u => risk_est n d d' P learn loss (psi_hat u)) atTop (𝓝 (risk n d d' P learn loss)) := by
       -- Apply the lemma that states if the loss difference converges in probability to zero, then the risk converges.
@@ -774,13 +859,16 @@ lemma risk_convergence_of_aligned_embeddings (n d d' : ℕ)
             have h_risk_conv : ConvergesInProbabilityToZero (Measure.pi (fun _ : Fin (n + 1) => P)) (fun u ω => dist (loss_est_fn n d d' learn loss psi_hat u ω) (loss_true_fn n d d' learn loss ω)) := by
               exact loss_converges_in_prob n d d' P learn loss psi_hat h_meas_psi h_conv h_cont_learn h_cont_loss
             exact fun ε hε => by simpa [ Real.dist_eq, abs_abs ] using h_risk_conv ε hε;
-          have h_risk_conv : ∃ M : ℝ, ∀ u, ∀ᵐ ω ∂(Measure.pi (fun _ : Fin (n + 1) => P)), |loss_est_fn n d d' learn loss psi_hat u ω - loss_true_fn n d d' learn loss ω| ≤ M := by
-            obtain ⟨ M₁, hM₁ ⟩ := loss_uniformly_bounded n d d' P learn loss psi_hat h_bound_learn h_cont_loss h_bound_label;
-            obtain ⟨ M₂, hM₂ ⟩ := loss_uniformly_bounded n d d' P learn loss ( fun _ => fun ω i => ( ω i ).1 ) h_bound_learn h_cont_loss h_bound_label;
-            exact ⟨ M₁ + M₂, fun u => by filter_upwards [ hM₁ u, hM₂ u ] with ω hω₁ hω₂ using abs_le.mpr ⟨ by linarith! [ abs_le.mp hω₁, abs_le.mp hω₂ ], by linarith! [ abs_le.mp hω₁, abs_le.mp hω₂ ] ⟩ ⟩;
+          have h_risk_env : ∃ G : (Fin (n + 1) → E d × Y d') → ℝ,
+              Integrable G (Measure.pi (fun _ : Fin (n + 1) => P)) ∧
+              ∀ u, ∀ᵐ ω ∂(Measure.pi (fun _ : Fin (n + 1) => P)),
+                |loss_est_fn n d d' learn loss psi_hat u ω - loss_true_fn n d d' learn loss ω| ≤ G ω := by
+            obtain ⟨ G₁, hG₁int, hG₁ ⟩ := loss_dominated_pi n d d' P learn loss psi_hat h_dom;
+            obtain ⟨ G₂, hG₂int, hG₂ ⟩ := loss_dominated_pi n d d' P learn loss ( fun _ => fun ω i => ( ω i ).1 ) h_dom;
+            exact ⟨ fun ω => G₁ ω + G₂ ω, hG₁int.add hG₂int, fun u => by filter_upwards [ hG₁ u, hG₂ u ] with ω hω₁ hω₂ using abs_le.mpr ⟨ by linarith! [ abs_le.mp hω₁, abs_le.mp hω₂ ], by linarith! [ abs_le.mp hω₁, abs_le.mp hω₂ ] ⟩ ⟩;
           have h_risk_conv : Tendsto (fun u => ∫ ω, |loss_est_fn n d d' learn loss psi_hat u ω - loss_true_fn n d d' learn loss ω| ∂(Measure.pi (fun _ : Fin (n + 1) => P))) atTop (𝓝 0) := by
-            obtain ⟨ M, hM ⟩ := h_risk_conv;
-            apply_rules [ expectation_converges_of_prob_converges_bounded ];
+            obtain ⟨ G, hGint, hG ⟩ := h_risk_env;
+            refine expectation_converges_of_prob_converges_dominated _ _ G ?_ hGint hG h_risk_conv;
             intro u;
             apply_rules [ Measurable.sub, Measurable.comp, measurable_const ];
             · apply_rules [ Continuous.measurable, combined_loss_continuous ];
@@ -792,30 +880,23 @@ lemma risk_convergence_of_aligned_embeddings (n d d' : ℕ)
         rw [ MeasureTheory.integral_add ];
         · rw [ MeasureTheory.integral_neg, add_assoc, neg_add_cancel, add_zero ];
         · -- Since the loss function is bounded, the integral of the loss function over the product measure is finite.
-          have h_bounded : ∃ M, ∀ u, ∀ᵐ ω ∂(Measure.pi (fun _ : Fin (n + 1) => P)), |loss_est_fn n d d' learn loss psi_hat u ω| ≤ M := by
-            exact
-              loss_uniformly_bounded n d d' P learn loss
-                (fun u ω ↦ (psi_hat u ω, fun i ↦ (ω i).2).1) h_bound_learn h_cont_loss h_bound_label;
-          refine' MeasureTheory.Integrable.mono' _ _ _;
-          use fun ω => h_bounded.choose;
-          · norm_num [ MeasureTheory.integrable_const_iff ];
+          obtain ⟨ G, hGint, hG ⟩ := loss_dominated_pi n d d' P learn loss
+                (fun u ω ↦ (psi_hat u ω, fun i ↦ (ω i).2).1) h_dom;
+          refine' MeasureTheory.Integrable.mono' hGint _ _;
           · refine' Measurable.aestronglyMeasurable _;
             refine' Measurable.comp ( show Measurable ( combined_loss_fn n d d' learn loss ) from _ ) _;
             · exact Continuous.measurable ( combined_loss_continuous n d d' learn loss h_cont_learn h_cont_loss );
             · exact Measurable.prodMk ( h_meas_psi _ ) ( measurable_pi_lambda _ fun _ => measurable_pi_apply _ |> Measurable.snd );
-          · exact h_bounded.choose_spec _;
+          · simpa [loss_est_fn, combined_loss_fn] using hG _;
         · -- The loss function is continuous, hence integrable.
           have h_integrable : Integrable (fun ω => loss_true_fn n d d' learn loss ω) (Measure.pi fun x => P) := by
-            obtain ⟨ K, hK_compact, hK_bound ⟩ := h_bound_label;
-            obtain ⟨ M, hM ⟩ := loss_uniformly_bounded n d d' P learn loss ( fun _ => fun ω i => ( ω i |>.1 ) ) h_bound_learn h_cont_loss ⟨ K, hK_compact, hK_bound ⟩;
-            refine' MeasureTheory.Integrable.mono' _ _ _;
-            use fun ω => M;
-            · norm_num;
+            obtain ⟨ G, hGint, hG ⟩ := loss_dominated_pi n d d' P learn loss ( fun _ => fun ω i => ( ω i |>.1 ) ) h_dom;
+            refine' MeasureTheory.Integrable.mono' hGint _ _;
             · refine' Continuous.aestronglyMeasurable _;
               apply_rules [ Continuous.comp, continuous_const ];
               · exact combined_loss_continuous n d d' learn loss h_cont_learn h_cont_loss;
               · fun_prop;
-            · exact hM 0;
+            · simpa [loss_true_fn, combined_loss_fn] using hG 0;
           exact h_integrable.neg;
       exact h_risk_conv
 
@@ -843,16 +924,16 @@ theorem risk_converges_fixed_n (n d d' : ℕ)
     (h_cont_learn : ContinuousLearningRule n d d' learn)  -- A2
     (h_bound_learn : BoundedLearningRule n d d' learn)    -- A3
     (h_cont_loss : ContinuousLoss d' loss)                -- A4
-    (h_bound_label : BoundedLabelSupport d d' P) :         -- labels in a compact set
+    (h_dom : LossDominated n d d' P learn loss) :          -- integrable envelope
     -- Conclusion: estimated risk → true risk as the estimation budget `u → ∞`.
     Tendsto (fun u => risk_est n d d' P learn loss (psi_hat u)) atTop (𝓝 (risk n d d' P learn loss)) := by
       obtain ⟨ e, he ⟩ := h_align;
       convert risk_convergence_of_aligned_embeddings n d d' P learn loss ( fun u ω i => ( e u ).symm ( psi_hat u ω i ) ) _ _ using 1;
       · constructor <;> intro h;
-        · intro h_cont_learn h_bound_learn h_cont_loss h_bound_label;
+        · intro h_cont_learn h_bound_learn h_cont_loss h_dom;
           convert h using 1;
           exact funext fun u => risk_est_invariant n d d' P learn loss _ _ ( h_inv );
-        · convert h h_cont_learn h_bound_learn h_cont_loss h_bound_label using 1;
+        · convert h h_cont_learn h_bound_learn h_cont_loss h_dom using 1;
           ext u;
           convert risk_est_invariant n d d' P learn loss ( fun ω i => ( e u ).symm ( psi_hat u ω i ) ) ( e u ) h_inv using 1;
           simp +decide [ risk_est ];
@@ -938,7 +1019,7 @@ theorem consistency_transfer_dkps (d d' : ℕ)
     (h_cont_learn : ∀ n, ContinuousLearningRule n d d' (learn n))   -- A2
     (h_bound_learn : ∀ n, BoundedLearningRule n d d' (learn n))     -- A3
     (h_cont_loss : ContinuousLoss d' loss)                         -- A4
-    (h_bound_label : BoundedLabelSupport d d' P)                    -- labels in a compact set
+    (h_dom : ∀ n, LossDominated n d d' P (learn n) loss)            -- integrable envelope
     -- The hypothesis being transferred: consistency under the *true* embeddings.
     (h_consistent : Tendsto (fun n => risk n d d' P (learn n) loss) atTop (𝓝 L)) :
     -- Conclusion: a diverging budget schedule `phi` along which the *estimated*-embedding risk → `L`.
@@ -949,7 +1030,7 @@ theorem consistency_transfer_dkps (d d' : ℕ)
           have h_lim_u : ∀ n, Tendsto (fun u => risk_est n d d' P (learn n) loss (psi_hat n u)) atTop (𝓝 (risk n d d' P (learn n) loss)) := by
             exact fun n ↦
               risk_converges_fixed_n n d d' P (learn n) loss (psi_hat n) (h_meas_psi n) (h_align n)
-                (h_inv n) (h_cont_learn n) (h_bound_learn n) h_cont_loss h_bound_label
+                (h_inv n) (h_cont_learn n) (h_bound_learn n) h_cont_loss (h_dom n)
           have h_lim_n : Tendsto (fun n => risk n d d' P (learn n) loss) atTop (𝓝 L) := by
             exact h_consistent
           convert diagonal_convergence _ _ _ h_lim_u h_lim_n using 1;

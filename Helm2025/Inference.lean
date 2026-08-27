@@ -183,7 +183,10 @@ theorem consistency_transfer_dkps_bayes (d d' : ℕ)
     (h_cont_learn : ∀ n, ContinuousLearningRule n d d' (learn n))      -- A2
     (h_bound_learn : ∀ n, BoundedLearningRule n d d' (learn n))        -- A3 (compact-range encoding)
     (h_cont_loss : ContinuousLoss d' loss)                            -- A4 (strengthened)
-    (h_bound_label : BoundedLabelSupport d d' P)
+    -- In place of a compact-label hypothesis the paper never states: the loss is dominated by
+    -- an integrable function of the label.  `lossDominated_of_boundedLabelSupport` recovers this
+    -- from compact labels, so the old form remains available to callers that have it.
+    (h_dom : ∀ n, LossDominated n d d' P (learn n) loss)
     -- the input being transferred: the rule is consistent under TRUE embeddings (risk → Bayes risk)
     (h_consistent : ConsistentExpected d d' P loss learn H) :
     -- Conclusion: there is a budget schedule φ(n) → ∞ along which the ESTIMATED-embedding risk
@@ -195,7 +198,7 @@ theorem consistency_transfer_dkps_bayes (d d' : ℕ)
   simpa [ConsistentExpected] using
     consistency_transfer_dkps (d:=d) (d':=d') (P:=P) (learn:=learn) (loss:=loss) (psi_hat:=psi_hat)
       (L := bayesRisk d d' P loss H)
-      h_meas_psi h_align h_inv h_cont_learn h_bound_learn h_cont_loss h_bound_label h_consistent
+      h_meas_psi h_align h_inv h_cont_learn h_bound_learn h_cont_loss h_dom h_consistent
 
 end PaperFacing
 
@@ -302,14 +305,15 @@ theorem Theorem1 (n d d' : ℕ)
     (h_cont_learn : Assumption2 (n:=n) (d:=d) (d':=d') learn)   -- A2: learning rule continuous
     (h_bound_learn : Assumption3' (n:=n) (d:=d) (d':=d') learn) -- A3 (compact-range encoding)
     (h_cont_loss : ContinuousLoss d' loss)                     -- A4 (strengthened: joint continuity)
-    -- paper Theorem 1 condition: labels have compact (bounded) support
-    (h_bound_label : LabelCompactSupport (d:=d) (d':=d') P) :
+    -- In place of the compact-label condition, which no passage of the paper states: the loss is
+    -- dominated by an integrable function of the label.  Compact labels imply this.
+    (h_dom : LossDominated n d d' P learn loss) :
     -- Conclusion: as the estimation budget u → ∞, the estimated-embedding risk Rhatℓ converges
     -- to the true-embedding risk Rℓ (for fixed sample size n).  Proof (`:= by`) follows.
     Tendsto (fun u => Rhatℓ n d d' P learn loss (psi_hat u)) atTop (𝓝 (Rℓ n d d' P learn loss)) := by
-  simpa [Rhatℓ, Rℓ, AlignmentConsistency, Assumption1, Assumption2, Assumption3', LabelCompactSupport] using
+  simpa [Rhatℓ, Rℓ, AlignmentConsistency, Assumption1, Assumption2, Assumption3'] using
     (risk_converges_fixed_n (n:=n) (d:=d) (d':=d') (P:=P) (learn:=learn) (loss:=loss)
-      (psi_hat:=psi_hat) h_meas_psi h_align h_inv h_cont_learn h_bound_learn h_cont_loss h_bound_label)
+      (psi_hat:=psi_hat) h_meas_psi h_align h_inv h_cont_learn h_bound_learn h_cont_loss h_dom)
 
 
 /-- **Theorem 2 (paper)**: consistency transfers from true to estimated embeddings along a schedule. -/
@@ -327,7 +331,10 @@ theorem Theorem2_bayes (d d' : ℕ)
     (h_cont_learn : ∀ n, ContinuousLearningRule n d d' (learn n))      -- A2
     (h_bound_learn : ∀ n, BoundedLearningRule n d d' (learn n))        -- A3 (compact-range encoding)
     (h_cont_loss : ContinuousLoss d' loss)                            -- A4 (strengthened)
-    (h_bound_label : BoundedLabelSupport d d' P)
+    -- In place of a compact-label hypothesis the paper never states: the loss is dominated by
+    -- an integrable function of the label.  `lossDominated_of_boundedLabelSupport` recovers this
+    -- from compact labels, so the old form remains available to callers that have it.
+    (h_dom : ∀ n, LossDominated n d d' P (learn n) loss)
     -- consistency under TRUE embeddings (the hypothesis the theorem transfers)
     (h_consistent : ConsistentExpected d d' P loss learn H) :
     -- Conclusion: along some budget schedule φ(n) → ∞, the estimated-embedding risk Rhatℓ
@@ -338,7 +345,7 @@ theorem Theorem2_bayes (d d' : ℕ)
   simpa [Rhatℓ] using
     (consistency_transfer_dkps_bayes (d:=d) (d':=d') (P:=P) (learn:=learn) (loss:=loss)
       (psi_hat:=psi_hat) (H:=H) h_meas_psi h_align h_inv h_cont_learn h_bound_learn
-      h_cont_loss h_bound_label h_consistent)
+      h_cont_loss h_dom h_consistent)
 
 
 end PaperAPI
