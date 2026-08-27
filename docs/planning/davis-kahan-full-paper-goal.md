@@ -27,7 +27,8 @@ Do not maintain a second prose status ledger here. The current authorities are:
 - `dev/davis-kahan-1970-full-source-census.json` -- source-by-source status and
   verification;
 - `dev/davis-kahan-1970-full-source-census.md` -- generated readable census;
-- `dev/davis-kahan-1970-frontier-status.md` -- current dependency frontier;
+- `dev/davis-kahan-1970-formalization-result-inventory.md` -- the 29-result
+  completion denominator and its status;
 - `AGENTS.md` -- current project policy and ownership rules;
 - `DavisKahan/Sources/DavisKahan1970/README.md` -- publication-facing overview.
 
@@ -38,8 +39,8 @@ python3 scripts/check_davis_kahan_1970_source_census.py
 python3 scripts/render_davis_kahan_1970_source_census.py --check
 ```
 
-When Lean is available, use the repository's compile-backed census/frontier probes
-rather than copying their output into this document.
+When Lean is available, use the repository's compile-backed census probes rather
+than copying their output into this document.
 
 ## Historical detail
 

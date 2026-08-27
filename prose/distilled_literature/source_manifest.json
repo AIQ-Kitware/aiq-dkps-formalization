@@ -858,13 +858,13 @@
       "group": "Spectral perturbation, principal angles, and matrix inequalities",
       "tier": "primary",
       "priority": "P1",
-      "formalization_status": "singular-subspace/Wedin-style corollaries scaffolded",
+      "formalization_status": "singular-subspace/Wedin-style corollaries scaffolded; the experimental Hermitian-dilation scaffold was deleted 2026-08-27 and the compact singular-subspace material is in ForTauCeti",
       "distilled_status": "missing",
       "primary_url": "",
       "target_note": "Wedin1972_svd_perturbation.tex",
       "repo_evidence": [
         "YuWangSamworth2015/YuWangSamworth2015/Core/SingularSubspace.lean",
-        "DavisKahan/Experimental/InfiniteDimensional/Ideals/CompactAndSingular.lean"
+        "ForTauCeti/Analysis/InnerProductSpace/CompactSingularSubspaces.lean"
       ],
       "existing_assets": [],
       "scope": "Residual-based perturbation bounds for left and right singular subspaces.",
@@ -1194,13 +1194,13 @@
       "group": "Reference works and modern syntheses",
       "tier": "reference",
       "priority": "P3",
-      "formalization_status": "reference horizon for the retained unbounded and spectral-projection scaffolds",
+      "formalization_status": "reference horizon for the unbounded and spectral-projection development, which is `SpectralTheory/ClosedOperator/**` and `ForTauCeti/.../LinearPMap/**` since the experimental scaffolds were deleted 2026-08-27",
       "distilled_status": "missing",
       "primary_url": "https://doi.org/10.1007/978-3-642-66282-9",
       "target_note": "Kato1966_selected_perturbation_theory.tex",
       "repo_evidence": [
         "DavisKahan/Experimental/README.md",
-        "DavisKahan/Experimental/InfiniteDimensional/Core/Unbounded.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean",
         "docs/planning/historical/davis-kahan-pre-reorganization/infinite-proof-plan.md"
       ],
       "existing_assets": [],
@@ -1463,7 +1463,7 @@
       "repo_evidence": [
         "DavisKahan/OperatorIdeal/ApproximationNumbers/Core.lean",
         "DavisKahan/OperatorIdeal/ApproximationNumbers/ScalarGeneric.lean",
-        "DavisKahan/Experimental/InfiniteDimensional/Sylvester/Unbounded.lean"
+        "DavisKahan/Sylvester/Unbounded/Neumann.lean"
       ],
       "existing_assets": [
         "prose/distilled_literature/Deepesh2024_approximation_truncations.tex"

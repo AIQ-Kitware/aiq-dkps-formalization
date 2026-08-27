@@ -155,7 +155,7 @@ def render_report(data: dict, present: dict[str, bool], probes: dict[str, bool |
     for n in nodes:
         probe = probes.get(n["id"])
         lean = "yes" if probe is True else "no" if probe is False else "-"
-        frontier = ", ".join(f"`{x}`" for x in n.get("frontier_nodes", [])) or "-"
+        frontier = ", ".join(f"`{x}`" for x in n.get("frontier_nodes", [])) or "-"  # historical: the frontier manifest was retired 2026-08-27
         lines.append(
             f"| `{n['id']}` | {n['kind']} | {n['confidence']} | "
             f"{'yes' if present[n['id']] else 'no'} | {lean} | {frontier} |"
