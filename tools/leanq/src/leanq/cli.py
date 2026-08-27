@@ -549,6 +549,7 @@ def cmd_graph_html(args) -> int:
             importances=getattr(args, "importance", None) or ["headline"],
             targets=getattr(args, "target", None) or (),
             default_claims=list(getattr(args, "default_claim", None) or ()),
+            boundary=getattr(args, "boundary", None) or "none",
         )
     out = Path(args.out)
     write_graph_html(out, payload, title=args.title)
@@ -972,6 +973,14 @@ def build_parser() -> argparse.ArgumentParser:
         help=(
             "census claim id selected when the viewer loads (repeatable); "
             "default: every headline theorem row"
+        ),
+    )
+    p.add_argument(
+        "--boundary", choices=("none", "headline", "project"), default="none",
+        help=(
+            "include the Mathlib/Lean declarations the project depends on: not at all "
+            "(default), for consumers in the headline dependency union, or for the whole "
+            "project (very large)"
         ),
     )
     p.add_argument("--out", required=True, help="write the self-contained HTML here")

@@ -128,10 +128,21 @@ leanq graph-html \
   --census dev/davis-kahan-1970-full-source-census.json \
   --census dev/yu-wang-samworth-2015-full-source-census.json \
   --census dev/quench-2026-full-source-census.json \
+  --boundary headline \
   --out build/leanq/project-semantic-graph.html
 
 xdg-open build/leanq/project-semantic-graph.html
 ```
+
+**Packages.** The `Packages` button toggles which libraries the projection may draw, with a
+declaration count beside each. `--boundary` decides whether the payload carries the Mathlib and
+Lean-core declarations the project depends on but does not declare: `none` (default), `headline` for
+consumers inside the headline dependency union, or `project` for every consumer. The scopes differ
+by more than an order of magnitude -- `headline` adds about 2,900 declarations and 107,000 edges,
+`project` about 8,000 and 1,476,000, because nearly every declaration in the repository reaches
+`Eq`, `Nat`, and `Real`. The boundary library starts **disabled** in the viewer: it is the reason
+the option exists and almost never what you want on screen. The index resolves boundary names only
+by name, so Lean core and Batteries constants are grouped under `Mathlib` with them.
 
 The HTML retains every indexed declaration and direct edge, then derives changing projections
 locally in the browser without rerunning Python or Lean.

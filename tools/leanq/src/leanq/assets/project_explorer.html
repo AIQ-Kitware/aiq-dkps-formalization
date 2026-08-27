@@ -67,6 +67,12 @@ svg text.band.empty{font-weight:400;fill:#9aa8b6;font-style:italic}
 .realizations label{font-size:.7rem;padding:1px 3px;word-break:break-all}
 .realizations small{display:block;color:var(--muted);font-size:.64rem;word-break:normal}
 .realizations b{color:var(--accent);font-weight:650}
+.packages{width:280px;padding:7px 9px}
+.packages label{display:flex;gap:7px;align-items:center;font-size:.76rem;padding:3px 2px;cursor:pointer}
+.packages input{min-height:0}
+.packages small{color:var(--muted);margin-left:auto}
+.packages .row{display:flex;gap:5px;margin-bottom:5px}
+.packages .row button{font-size:.7rem;min-height:22px;padding:1px 6px}
 .note{position:absolute;left:10px;bottom:8px;font-size:.7rem;color:var(--muted);background:color-mix(in srgb,var(--panel) 84%,transparent);padding:3px 7px;border-radius:6px}
 .meta{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:.76rem;margin:6px 0}
 .meta dt{color:var(--muted)}
@@ -115,6 +121,8 @@ svg text.band.empty{font-weight:400;fill:#9aa8b6;font-style:italic}
     <input type="checkbox" id="restrict" checked> Ancestors of selection only</label>
   <label title="Keep only declarations reached by at least two selected headline theorems">
     <input type="checkbox" id="sharedonly"> Shared foundations only</label>
+  <div class="search-wrap"><button id="packages-toggle">Packages</button>
+    <div id="packages" class="results packages"></div></div>
   <span class="sep"></span>
   <div class="search-wrap"><input id="search" type="search" placeholder="Search declaration, module, library, census title..."><div id="results" class="results"></div></div>
   <span class="sep"></span>
@@ -216,6 +224,10 @@ let selected = [], highlighted = new Set(), focusRegion = null;
 let transform = {x: 0, y: 0, s: 1}, dragging = null;
 let layoutPos = new Map(), currentProjection = {nodes: [], edges: []};
 let unreachedLibraries = [];
+/* Packages the viewer is allowed to draw.  The Mathlib boundary, when the
+   payload carries one, starts hidden: it is the reason the option exists but
+   almost never what you want on screen. */
+let enabledLibraries = new Set();
 
 const $ = id => document.getElementById(id);
 const svg = $("graph"), viewport = $("viewport"), details = $("details");
@@ -304,6 +316,7 @@ function project() {
   const group = new Map(), members = new Map();
   for (const n of allNodes) {
     if (hiddenNodes.has(n.id)) continue;
+    if (!enabledLibraries.has(n.library || "Other")) continue;
     if (allowed && !allowed.has(n.id)) continue;
     if (sharedOnly && coverageCount(n.id) < 2 && !isSelectedHeadline(n)) continue;
     const key = clusterKeyFor(n, limit);
@@ -453,6 +466,7 @@ const libraryGraph = (() => {
 })();
 const libraryRank = libraryGraph.rank;
 const libraryOrder = libraryGraph.order;
+const BOUNDARY = (DATA.boundary || {}).library || "Mathlib";
 
 function topology(P) {
   const ins = new Map(P.nodes.map(n => [n.id, 0])), outs = new Map(P.nodes.map(n => [n.id, []]));
@@ -486,7 +500,8 @@ function render() {
   const reached = new Set();
   for (const n of P.nodes) if (!n.selectedHeadline) reached.add(n.library || "Other");
   const activeLibraries = libraryOrder.filter(lib => reached.has(lib));
-  unreachedLibraries = libraryOrder.filter(lib => !reached.has(lib));
+  unreachedLibraries = libraryOrder.filter(
+    lib => enabledLibraries.has(lib) && !reached.has(lib));
   const libraryColumn = new Map(activeLibraries.map((lib, i) => [lib, i]));
   const headlineBand = activeLibraries.length;
   const bandOf = n => bandLayout
@@ -985,6 +1000,52 @@ function runExport(format) {
   else download(stem + ".json", JSON.stringify(data, null, 2) + "\n", "application/json");
 }
 
+/* ---------------------------------------------------------------- packages */
+function libraryDeclarationCounts() {
+  const counts = new Map();
+  for (const n of allNodes) {
+    const lib = n.library || "Other";
+    counts.set(lib, (counts.get(lib) || 0) + 1);
+  }
+  return counts;
+}
+function renderPackages() {
+  const box = $("packages"), counts = libraryDeclarationCounts();
+  box.replaceChildren();
+  const row = document.createElement("div");
+  row.className = "row";
+  for (const [text, pick] of [["all", () => new Set(libraryOrder)],
+                              ["none", () => new Set()],
+                              ["first-party", () => new Set(libraryOrder.filter(l => l !== BOUNDARY))]]) {
+    const b = document.createElement("button");
+    b.textContent = text;
+    b.onclick = () => { enabledLibraries = pick(); renderPackages(); render(); };
+    row.append(b);
+  }
+  box.append(row);
+  for (const lib of libraryOrder) {
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = enabledLibraries.has(lib);
+    input.onchange = () => {
+      if (input.checked) enabledLibraries.add(lib); else enabledLibraries.delete(lib);
+      renderPackages();
+      render();
+    };
+    const name = document.createElement("span");
+    name.textContent = lib;
+    const count = document.createElement("small");
+    count.textContent = (counts.get(lib) || 0).toLocaleString();
+    label.append(input, name, count);
+    box.append(label);
+  }
+}
+$("packages-toggle").onclick = () => {
+  const box = $("packages");
+  box.style.display = box.style.display === "block" ? "none" : "block";
+};
+
 /* ------------------------------------------------------------------ search */
 const search = $("search"), results = $("results");
 search.oninput = () => {
@@ -1011,6 +1072,8 @@ function reset() {
   layoutSelect.value = "library";
   restrictBox.checked = true;
   sharedBox.checked = false;
+  enabledLibraries = new Set(libraryOrder.filter(lib => lib !== BOUNDARY));
+  renderPackages();
   transform = {x: 0, y: 0, s: 1};
   render();
   details.textContent = "View reset. Select a cluster or search for any declaration.";
@@ -1053,6 +1116,8 @@ svg.onpointermove = e => {
 };
 svg.onpointerup = () => dragging = null;
 
+enabledLibraries = new Set(libraryOrder.filter(lib => lib !== BOUNDARY));
+renderPackages();
 renderSelection();
 renderHeadlineList();
 details.textContent = "Select a cluster or declaration. Double-click a cluster to open its immediate children; shift-click a second declaration to compare them.";
