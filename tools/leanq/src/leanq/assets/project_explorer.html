@@ -57,6 +57,15 @@ svg .node.shared rect{stroke:var(--shared);stroke-width:2}
 svg .node.selected rect{stroke:var(--accent);stroke-width:3.4}
 svg .node.faded{opacity:.22}
 svg .node text.star{font-size:13px;fill:#b8241a}
+svg .node text.chevron{font-size:11px;fill:#5b6b7d}
+svg .node.cluster text.chevron{fill:#174ea6;font-weight:700}
+svg text.band{font-size:11px;font-weight:650;fill:#5b6b7d}
+@media(prefers-color-scheme:dark){svg text.band{fill:#a8b4c0}svg .node text.chevron{fill:#33414f}}
+.claim{margin-bottom:4px}
+.realizations{margin:1px 0 4px 22px;border-left:2px solid var(--border);padding-left:7px}
+.realizations label{font-size:.7rem;padding:1px 3px;word-break:break-all}
+.realizations small{display:block;color:var(--muted);font-size:.64rem;word-break:normal}
+.realizations b{color:var(--accent);font-weight:650}
 .note{position:absolute;left:10px;bottom:8px;font-size:.7rem;color:var(--muted);background:color-mix(in srgb,var(--panel) 84%,transparent);padding:3px 7px;border-radius:6px}
 .meta{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;font-size:.76rem;margin:6px 0}
 .meta dt{color:var(--muted)}
@@ -89,6 +98,10 @@ svg .node text.star{font-size:13px;fill:#b8241a}
   <div class="badges" id="badges"></div>
 </div>
 <div class="toolbar">
+  <label>Layout <select id="layout">
+    <option value="library">Library bands</option>
+    <option value="depth">Dependency depth</option>
+  </select></label>
   <label>Group <select id="depth">
     <option value="1">Library</option>
     <option value="2">Library / top module</option>
@@ -169,15 +182,31 @@ const claims = analysis.claims || [];
 const headlines = analysis.headlines || [];
 const headlineByDecl = new Map(headlines.map(h => [h.declaration, h]));
 
-function paperDefaultClaims() {
+function defaultClaimIds() {
   const declared = analysis.defaultClaimSelection;
   if (Array.isArray(declared) && declared.length) return new Set(declared);
   const theorems = claims.filter(c => /theorem/.test(c.sourceKind || "")).map(c => c.nodeId);
   return new Set(theorems.length ? theorems : claims.map(c => c.nodeId));
 }
+/* Realizations of a claim that no other realization of the same claim consumes.
+   Selecting these alone still covers the claim's whole dependency closure.   */
+function claimLeaves(c) {
+  const rows = (c.leafDeclarations || c.canonicalDeclarations || []).filter(x => byId.has(x));
+  return rows.length ? rows : (c.canonicalDeclarations || []).filter(x => byId.has(x));
+}
+function claimRealizations(c) {
+  return (c.canonicalDeclarations || []).filter(x => byId.has(x));
+}
+/* Selection is per *declaration*, so one leaf of a multi-realization claim can
+   be chosen on its own; the claim checkbox is a group control over them.     */
+function paperDefaultSeeds() {
+  const wanted = defaultClaimIds(), seeds = new Set();
+  for (const c of claims) if (wanted.has(c.nodeId)) for (const d of claimLeaves(c)) seeds.add(d);
+  return seeds;
+}
 
 /* -------------------------------------------------------------------- state */
-let selectedClaims = paperDefaultClaims();
+let selectedSeeds = paperDefaultSeeds();
 let expanded = new Set();      // cluster keys the user opened
 let revealed = new Set();      // declarations forced to render as real nodes
 let collapsed = new Set();     // declarations forced back into their module
@@ -189,6 +218,7 @@ let layoutPos = new Map(), currentProjection = {nodes: [], edges: []};
 const $ = id => document.getElementById(id);
 const svg = $("graph"), viewport = $("viewport"), details = $("details");
 const depthSelect = $("depth"), restrictBox = $("restrict"), sharedBox = $("sharedonly");
+const layoutSelect = $("layout");
 
 /* --------------------------------------------------------------- utilities */
 const stateColors = new Map();
@@ -214,15 +244,11 @@ function distances(start, adj) {
 
 /* ---------------------------------------- selected-headline derived closures */
 let cache = {key: null, decls: new Set(), coverage: new Map(), ancestors: new Set()};
-function selectionKey(){return [...selectedClaims].sort().join("|")}
+function selectionKey(){return [...selectedSeeds].sort().join("|")}
 function refreshSelectionCache() {
   const key = selectionKey();
   if (cache.key === key) return;
-  const decls = new Set();
-  for (const c of claims) {
-    if (!selectedClaims.has(c.nodeId)) continue;
-    for (const name of c.canonicalDeclarations || []) if (byId.has(name)) decls.add(name);
-  }
+  const decls = new Set([...selectedSeeds].filter(name => byId.has(name)));
   const coverage = new Map(), ancestors = new Set();
   for (const seed of decls) {
     for (const id of walk([seed], incoming)) {
@@ -236,9 +262,15 @@ function activeHeadlineDeclarations(){refreshSelectionCache();return cache.decls
 function ancestorUniverse(){refreshSelectionCache();return cache.ancestors}
 function coverageCount(id){refreshSelectionCache();return cache.coverage.get(id) || 0}
 function isSelectedHeadline(n){return activeHeadlineDeclarations().has(n.id)}
+function selectedClaimIds() {
+  const ids = new Set();
+  for (const c of claims) if (claimRealizations(c).some(d => selectedSeeds.has(d))) ids.add(c.nodeId);
+  return ids;
+}
 function isSelectedSupporting(n) {
   if (isSelectedHeadline(n)) return false;
-  return (n.supportingClaims || []).some(c => selectedClaims.has(c.nodeId));
+  const active = selectedClaimIds();
+  return (n.supportingClaims || []).some(c => active.has(c.nodeId));
 }
 
 /* --------------------------------------------------------------- projection */
@@ -250,13 +282,16 @@ function universe() {
   if (focusRegion) base = base ? new Set([...focusRegion].filter(x => base.has(x))) : focusRegion;
   return base;
 }
+/* A prefix is open when the global grouping depth already covers it or the user
+   opened it explicitly.  Opening one cluster therefore never re-groups another
+   branch, which is what made expansion look like it collapsed the view.      */
 function clusterKeyFor(n, limit) {
   if (collapsed.has(n.id)) return n._keys[n._keys.length - 1];
   if (revealed.has(n.id) || isSelectedHeadline(n)) return null;
   const keys = n._keys;
   for (let i = 0; i < keys.length; i++) {
-    if (i + 1 > limit) return keys[i];
-    if (!expanded.has(keys[i])) return keys[i];
+    const autoOpen = limit === 0 || i + 1 < limit;
+    if (!autoOpen && !expanded.has(keys[i])) return keys[i];
   }
   return null;
 }
@@ -315,23 +350,94 @@ function project() {
     byProjectedId.get(e.source).projectedOutCount++;
     byProjectedId.get(e.target).projectedInCount++;
   }
+  /* A declaration is expandable while any of its in-scope direct dependencies
+     is still folded inside a cluster; a cluster is always expandable. */
+  for (const n of pnodes) {
+    if (n.cluster) { n.expandable = true; n.foldedDependencyCount = n.hiddenDeclarationCount; continue; }
+    let folded = 0;
+    for (const d of incoming.get(n.id) || []) {
+      const g = group.get(d);
+      if (g && g !== d) folded++;
+    }
+    n.foldedDependencyCount = folded;
+    n.expandable = folded > 0;
+  }
   currentProjection = {nodes: pnodes, edges: [...emap.values()]};
   return currentProjection;
 }
 
 /* ------------------------------------------------------------------- layout */
-function significantLabel(n) {
-  if (n.cluster) return n.name;
-  const claim = n.headlineClaims?.[0];
-  return claim?.claimTitle || short(n.id);
+/* Cluster keys are Library/segment/segment; the qualified Lean module name is
+   the same path with dots, because the duplicated library segment was stripped. */
+function qualifiedKey(key){return String(key).split("/").join(".")}
+function significantLabel(n){return n.cluster ? qualifiedKey(n.fullKey) : n.id}
+/* Wrap a qualified name on its dots, then hard-break any oversized segment. */
+function wrap(t, width = 34, maxLines = 3) {
+  const parts = String(t).split(".");
+  const lines = [];
+  let current = "";
+  for (let i = 0; i < parts.length; i++) {
+    const piece = parts[i] + (i < parts.length - 1 ? "." : "");
+    if (!current) {
+      current = piece;
+    } else if ((current + piece).length <= width) {
+      current += piece;
+    } else {
+      lines.push(current);
+      current = piece;
+    }
+    while (current.length > width) { lines.push(current.slice(0, width)); current = current.slice(width); }
+  }
+  if (current) lines.push(current);
+  if (lines.length > maxLines) {
+    lines.length = maxLines;
+    lines[maxLines - 1] = lines[maxLines - 1].slice(0, width - 1) + "…";
+  }
+  return lines;
 }
-function wrap(t, m = 29) {
-  if (t.length <= m) return [t];
-  const a = t.split(/(?=[A-Z])|[_\s]+/).filter(Boolean), r = [""];
-  for (const w of a) { if ((r.at(-1) + w).length > m && r.length < 2) r.push(""); r[r.length - 1] += w; }
-  if (r[1]?.length > m) r[1] = r[1].slice(0, m - 1) + "…";
-  return r;
-}
+/* Rank libraries by the direction of the dependency edges between them, so a
+   band layout reads ForTauCeti -> DavisKahan -> the paper libraries.  Ties and
+   any cycle fall back to a stable alphabetical order.                        */
+const libraryRank = (() => {
+  const libs = [...new Set(allNodes.map(n => n.library || "Other"))].sort();
+  const index = new Map(libs.map((l, i) => [l, i]));
+  /* Only the dominant direction of each library pair becomes an edge.  A
+     handful of generated equation lemmas are indexed under the module that
+     first unfolded them, which would otherwise put a cycle between two
+     cleanly layered packages. */
+  const weight = new Map();
+  for (const e of allEdges) {
+    const a = byId.get(e.source)?.library || "Other", b = byId.get(e.target)?.library || "Other";
+    if (a === b) continue;
+    const k = a + "\u0000" + b;
+    weight.set(k, (weight.get(k) || 0) + 1);
+  }
+  const out = new Map(libs.map(l => [l, new Set()]));
+  const indeg = new Map(libs.map(l => [l, 0]));
+  for (const [k, count] of weight) {
+    const [a, b] = k.split("\u0000");
+    if (!out.has(a) || !out.has(b) || out.get(a).has(b)) continue;
+    if (count < (weight.get(b + "\u0000" + a) || 0)) continue;
+    out.get(a).add(b);
+    indeg.set(b, indeg.get(b) + 1);
+  }
+  const rank = new Map(libs.map(l => [l, 0]));
+  const queue = libs.filter(l => indeg.get(l) === 0);
+  let seen = 0;
+  for (let i = 0; i < queue.length; i++) {
+    const a = queue[i];
+    seen++;
+    for (const b of out.get(a)) {
+      rank.set(b, Math.max(rank.get(b), rank.get(a) + 1));
+      indeg.set(b, indeg.get(b) - 1);
+      if (indeg.get(b) === 0) queue.push(b);
+    }
+  }
+  if (seen < libs.length) for (const l of libs) rank.set(l, index.get(l));
+  return rank;
+})();
+const maxLibraryRank = Math.max(0, ...libraryRank.values());
+
 function topology(P) {
   const ins = new Map(P.nodes.map(n => [n.id, 0])), outs = new Map(P.nodes.map(n => [n.id, []]));
   for (const e of P.edges) { ins.set(e.target, (ins.get(e.target) || 0) + 1); outs.get(e.source)?.push(e.target); }
@@ -355,15 +461,24 @@ function el(tag, attrs = {}) {
 
 function render() {
   const P = project(), depth = topology(P), columns = new Map();
+  /* Library bands keep each package in one column and pin every selected
+     headline theorem to one extremal column, so the edges into them are the
+     picture.  The depth layout keeps the older topological columns.         */
+  const bandLayout = layoutSelect.value === "library";
+  const headlineBand = maxLibraryRank + 1;
+  const bandOf = n => bandLayout
+    ? (n.selectedHeadline ? headlineBand : (libraryRank.get(n.library || "Other") ?? 0))
+    : (depth.get(n.id) || 0);
   for (const n of P.nodes) {
-    const d = depth.get(n.id) || 0;
+    const d = bandOf(n);
     if (!columns.has(d)) columns.set(d, []);
     columns.get(d).push(n);
   }
   for (const rows of columns.values())
     rows.sort((a, b) => (a.library || "").localeCompare(b.library || "")
+      || (depth.get(a.id) || 0) - (depth.get(b.id) || 0)
       || significantLabel(a).localeCompare(significantLabel(b)));
-  const W = 230, H = 58, X = 74, Y = 35, xgap = 92, ygap = 18;
+  const W = 272, H = 78, X = 74, Y = 35, xgap = 96, ygap = 18;
   layoutPos = new Map();
   let maxRows = 1, maxCol = 0;
   for (const [d, rows] of columns) {
@@ -372,6 +487,14 @@ function render() {
     rows.forEach((n, i) => layoutPos.set(n.id, {x: X + d * (W + xgap), y: Y + i * (H + ygap), w: W, h: H}));
   }
   viewport.replaceChildren();
+  for (const [d, rows] of columns) {
+    const p = layoutPos.get(rows[0].id);
+    const head = el("text", {x: p.x, y: Y - 12, class: "band"});
+    head.textContent = bandLayout
+      ? (d === headlineBand ? "Selected headline theorems" : (rows[0].library || "Other"))
+      : `depth ${d}`;
+    viewport.append(head);
+  }
   for (const e of P.edges) {
     const a = layoutPos.get(e.source), b = layoutPos.get(e.target);
     if (!a || !b) continue;
@@ -390,25 +513,25 @@ function render() {
       highlighted.size && !highlighted.has(n.id) ? "faded" : ""].filter(Boolean).join(" ");
     const g = el("g", {class: classes, transform: `translate(${p.x},${p.y})`});
     g.append(el("rect", {width: W, height: H, fill: color(n.library || "Other")}));
-    if (n.selectedHeadline) {
-      const st = el("text", {x: 6, y: 18, class: "star"});
-      st.textContent = "★";
-      g.append(st);
-    }
+    const marker = el("text", {x: 7, y: 17, class: n.selectedHeadline ? "star" : "chevron"});
+    marker.textContent = n.selectedHeadline ? "★" : n.expandable ? "▸" : "•";
+    g.append(marker);
+    const claimTitle = n.cluster ? null : n.headlineClaims?.[0]?.claimTitle;
     wrap(significantLabel(n)).forEach((s, i) => {
-      const t = el("text", {x: n.selectedHeadline ? 27 : 9, y: 18 + i * 14});
+      const t = el("text", {x: 22, y: 17 + i * 12});
       t.textContent = s;
       g.append(t);
     });
-    const sub = el("text", {x: 9, y: 43, class: "small"});
+    const sub = el("text", {x: 9, y: 61, class: "small"});
     sub.textContent = n.cluster
-      ? `${n.hiddenDeclarationCount} declarations · ${n.childCount} children`
-      : `${n.kind || "decl"} · depth ${n.dependencyDepth}`;
+      ? `${n.hiddenDeclarationCount} declarations · ${n.childCount} children · ${n.hiddenEdgeCount} internal edges`
+      : (claimTitle ? claimTitle.slice(0, 46) : `${n.kind || "declaration"} · depth ${n.dependencyDepth}`);
     g.append(sub);
-    const sub2 = el("text", {x: 9, y: 52, class: "small"});
+    const sub2 = el("text", {x: 9, y: 71, class: "small"});
     sub2.textContent = n.cluster
-      ? `in ${n.projectedInCount} · out ${n.projectedOutCount} · ${n.hiddenEdgeCount} internal`
-      : `in ${n.directDependencyCount} · out ${n.directConsumerCount} · shown in ${n.projectedInCount} / out ${n.projectedOutCount}`;
+      ? `shown in ${n.projectedInCount} · out ${n.projectedOutCount} · double-click to open`
+      : `in ${n.directDependencyCount} · out ${n.directConsumerCount} · shown ${n.projectedInCount}/${n.projectedOutCount}` +
+        (n.expandable ? ` · ${n.foldedDependencyCount} folded` : "");
     g.append(sub2);
     g.addEventListener("click", ev => { ev.stopPropagation(); choose(n, ev.shiftKey); });
     g.addEventListener("dblclick", ev => {
@@ -417,7 +540,7 @@ function render() {
     });
     viewport.append(g);
   }
-  const width = X * 2 + (maxCol + 1) * (W + xgap), height = Y + maxRows * (H + ygap) + 25;
+  const width = X * 2 + (maxCol + 1) * (W + xgap), height = Y + maxRows * (H + ygap) + 40;
   svg.setAttribute("viewBox", `0 0 ${Math.max(width, 600)} ${Math.max(height, 400)}`);
   const scope = universe();
   $("visible").textContent =
@@ -430,13 +553,18 @@ function render() {
 
 /* ------------------------------------------------------------- interactions */
 function expandCluster(n) {
-  /* Open exactly one hierarchy level: this cluster's immediate children. */
+  /* Open exactly one hierarchy level: this cluster's immediate children.  The
+     global grouping depth is deliberately left alone. */
   expanded.add(n.fullKey);
-  const childDepth = n.fullKey.split("/").length + 1;
-  if (Number(depthSelect.value) !== 0 && Number(depthSelect.value) < childDepth)
-    depthSelect.value = String(Math.min(99, childDepth));
   render();
-  showCluster(currentProjection.nodes.find(x => x.id === n.id) || n);
+  const children = currentProjection.nodes.filter(
+    x => x.cluster && x.fullKey.startsWith(n.fullKey + "/"));
+  if (children.length === 1) showCluster(children[0]); else showDetailsPlaceholder(n, children.length);
+}
+function showDetailsPlaceholder(n, count) {
+  details.className = "";
+  details.innerHTML = `<div class="title">${esc(qualifiedKey(n.fullKey))}</div>` +
+    `<div class="sub">Opened into ${count} immediate ${count === 1 ? "child" : "children"}.</div>`;
 }
 function collapseCluster(key) {
   for (const k of [...expanded]) if (k === key || k.startsWith(key + "/")) expanded.delete(k);
@@ -607,7 +735,7 @@ function renderBadges() {
   $("badges").innerHTML =
     `<span class="badge">${allNodes.length.toLocaleString()} declarations</span>` +
     `<span class="badge">${allEdges.length.toLocaleString()} direct edges</span>` +
-    `<span class="badge">${selectedClaims.size} / ${claims.length} claims · ${active.size} landmark declarations</span>` +
+    `<span class="badge">${selectedClaimIds().size} / ${claims.length} claims · ${active.size} selected theorems</span>` +
     `<span class="badge">${ancestorUniverse().size.toLocaleString()} in selected closure</span>` +
     `<span class="badge">${shared.toLocaleString()} shared by two or more</span>`;
 }
@@ -623,31 +751,73 @@ function renderSelection() {
     const head = document.createElement("div");
     head.className = "family-title";
     head.append(document.createTextNode(family));
-    for (const [label, value] of [["all", true], ["none", false]]) {
+    for (const [label, pick] of [["leaves", c => claimLeaves(c)], ["all", c => claimRealizations(c)], ["none", () => []]]) {
       const b = document.createElement("button");
       b.textContent = label;
       b.onclick = () => {
-        for (const c of rows) { if (value) selectedClaims.add(c.nodeId); else selectedClaims.delete(c.nodeId); }
+        for (const c of rows) {
+          for (const d of claimRealizations(c)) selectedSeeds.delete(d);
+          for (const d of pick(c)) selectedSeeds.add(d);
+        }
         afterSelectionChange();
       };
       head.append(b);
     }
     box.append(head);
     for (const c of rows) {
+      const realizations = claimRealizations(c), leaves = new Set(claimLeaves(c));
+      const chosen = realizations.filter(d => selectedSeeds.has(d));
+      const group = document.createElement("div");
+      group.className = "claim";
       const label = document.createElement("label");
       const input = document.createElement("input");
       const span = document.createElement("span");
       input.type = "checkbox";
-      input.checked = selectedClaims.has(c.nodeId);
+      input.checked = chosen.length > 0;
+      input.indeterminate = chosen.length > 0 && chosen.length < realizations.length;
       input.onchange = () => {
-        if (input.checked) selectedClaims.add(c.nodeId); else selectedClaims.delete(c.nodeId);
+        for (const d of realizations) selectedSeeds.delete(d);
+        if (input.checked) for (const d of claimLeaves(c)) selectedSeeds.add(d);
         afterSelectionChange();
       };
+      /* Union of the packages this claim's realizations reach, so a claim whose
+         closure never leaves its own library is visible without expanding it. */
+      const reachAll = {};
+      for (const d of realizations)
+        for (const [lib, count] of Object.entries((c.realizationClosureLibraries || {})[d] || {}))
+          reachAll[lib] = Math.max(reachAll[lib] || 0, count);
+      const reachLibs = Object.keys(reachAll).sort((a, b) => reachAll[b] - reachAll[a]);
       span.innerHTML = `<strong>${esc(c.title)}</strong><small>${esc(c.id)} · ` +
         `${esc(c.sourceAnchor || c.sourceKind || "census claim")} · ` +
-        `${(c.canonicalDeclarations || []).length} landmark declaration(s)</small>`;
+        `${chosen.length} of ${realizations.length} realization(s) selected</small>` +
+        (reachLibs.length ? `<small>reaches ${esc(reachLibs.join(", "))}</small>` : "");
       label.append(input, span);
-      box.append(label);
+      group.append(label);
+      /* Each realization is selectable on its own, so a single leaf theorem of a
+         multi-declaration claim can be the whole selection. */
+      const list = document.createElement("div");
+      list.className = "realizations";
+      for (const d of realizations) {
+        const row = document.createElement("label");
+        const box2 = document.createElement("input");
+        const text = document.createElement("span");
+        box2.type = "checkbox";
+        box2.checked = selectedSeeds.has(d);
+        box2.onchange = () => {
+          if (box2.checked) selectedSeeds.add(d); else selectedSeeds.delete(d);
+          afterSelectionChange();
+        };
+        const reach = (c.realizationClosureLibraries || {})[d];
+        const reachText = reach
+          ? Object.entries(reach).map(([lib, count]) => `${lib} ${count}`).join(" · ")
+          : "";
+        text.innerHTML = `${leaves.has(d) ? "<b>leaf</b> " : ""}${esc(d)}` +
+          (reachText ? `<small>reaches ${esc(reachText)}</small>` : "");
+        row.append(box2, text);
+        list.append(row);
+      }
+      if (realizations.length > 1) group.append(list);
+      box.append(group);
     }
   }
 }
@@ -665,7 +835,7 @@ function renderHeadlineList() {
     const n = byId.get(h.declaration), info = n?.headlineClaims?.[0] || {};
     const nextFamily = info.headlineFamily || "Other";
     const title = info.claimTitle || short(h.declaration);
-    const active = (h.claims || []).some(c => selectedClaims.has(c.nodeId));
+    const active = selectedSeeds.has(h.declaration);
     if (nextFamily !== family) {
       family = nextFamily;
       const label = document.createElement("div");
@@ -682,11 +852,11 @@ function renderHeadlineList() {
     list.append(b);
   }
 }
-function setHeadlineSubset(ids) { selectedClaims = ids; selected = []; afterSelectionChange(); }
+function setHeadlineSubset(seeds) { selectedSeeds = seeds; selected = []; afterSelectionChange(); }
 function revealAndSelect(id) {
   const n = byId.get(id);
   if (!n) return;
-  for (const c of n.headlineClaims || []) selectedClaims.add(c.nodeId);
+  if ((n.headlineClaims || []).length) selectedSeeds.add(id);
   revealed.add(id);
   hiddenNodes.delete(id);
   selected = [id];
@@ -700,7 +870,7 @@ function revealAndSelect(id) {
 /* ----------------------------------------------------------------- exports */
 function exportData(scope) {
   const stamp = {schemaVersion: 2, edgeDirection: "dependency-to-consumer", exportScope: scope,
-    selectedHeadlineClaimIds: [...selectedClaims],
+    selectedHeadlineClaimIds: [...selectedClaimIds()],
     selectedHeadlineDeclarations: [...activeHeadlineDeclarations()]};
   const decorate = ids => {
     const set = ids instanceof Set ? ids : new Set(ids);
@@ -741,8 +911,8 @@ function exportDot(data) {
                              : (n.selectedCoverageCount ?? coverageCount(n.id));
     const attrs = {
       label: cluster
-        ? `${n.fullKey || n.name}\\n${n.hiddenDeclarationCount} declarations`
-        : `${short(n.id)}\\nin ${n.directDependencyCount} / out ${n.directConsumerCount}`,
+        ? `${qualifiedKey(n.fullKey || n.name)}\n${n.hiddenDeclarationCount} declarations`
+        : `${n.id}\nin ${n.directDependencyCount} / out ${n.directConsumerCount}`,
       shape: cluster ? "folder" : headline ? "doubleoctagon" : support ? "component" : "box",
       fillcolor: palette[hash(library) % palette.length],
       color: headline ? "#d23b2d" : support ? "#b97800" : coverage >= 2 ? "#8b3fb0" : "#596979",
@@ -809,6 +979,7 @@ function reset() {
   expanded = new Set(); revealed = new Set(); collapsed = new Set(); hiddenNodes = new Set();
   selected = []; highlighted = new Set(); focusRegion = null;
   depthSelect.value = "1";
+  layoutSelect.value = "library";
   restrictBox.checked = true;
   sharedBox.checked = false;
   transform = {x: 0, y: 0, s: 1};
@@ -824,10 +995,12 @@ function center(id) {
   applyTransform();
 }
 depthSelect.onchange = render;
+layoutSelect.onchange = render;
 restrictBox.onchange = render;
 sharedBox.onchange = render;
-$("subset-default").onclick = () => setHeadlineSubset(paperDefaultClaims());
-$("subset-all").onclick = () => setHeadlineSubset(new Set(claims.map(c => c.nodeId)));
+$("subset-default").onclick = () => setHeadlineSubset(paperDefaultSeeds());
+$("subset-all").onclick = () =>
+  setHeadlineSubset(new Set(claims.flatMap(claimRealizations)));
 $("subset-none").onclick = () => setHeadlineSubset(new Set());
 $("reset").onclick = reset;
 $("clearfocus").onclick = () => { focusRegion = null; highlighted = new Set(); render(); };
