@@ -170,7 +170,7 @@ The current deterministic configuration theorem no longer follows the six-term A
 * **importance:** `headline`
 * **status / verification:** `compiled_source_repair` / `proved_in_build`
 * **semantic alignment:** `source_repair` — The current theorem proves the Frobenius configuration bound supported by the paper discussion/appendix and obtains rowwise control as a consequence. It does not label the internally inconsistent v1 2,infinity display as literally proved.
-* **source claim:** Under r=omega(n^3), bounded response variability, and Assumptions 1--2, there exists an orthogonal alignment W* and the embedding error is bounded by a cubic polynomial in (n^3/r)^(1/2-delta) with high probability.
+* **source claim:** Under r=omega(n^3), bounded response variability, and Assumptions 1--2, there exists an orthogonal alignment W* and the embedding error is bounded by a cubic polynomial in (n^3/r)^(1/2-delta) with high probability. The displayed polynomial upper bound is the source's Equation (2), whose coefficients Assumptions 1 and 2 keep bounded.
 * **Lean declarations:** `Acharyya2025.ConfigPerturbation.ConfigFrobError`, `Acharyya2025.ConfigPerturbation.configFrobBound`, `Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le`, `Acharyya2025.AlignedPipeline.highProb_aligned_configFrobError_of_entrywise_close`, `Acharyya2025.RateChain.endToEndFrobQuadraticRate`
 * **gap refs:** `v1-norm-inconsistency`
 * **notes:** The active proof now uses the YWS population-only gap residual bound and YWS Procrustes alignment. It needs neither epsilon<=alpha/2 nor the former polar-factor smallness condition. Term 2 uses sqrt(alpha), improving the previous sqrt(alpha/2) envelope.

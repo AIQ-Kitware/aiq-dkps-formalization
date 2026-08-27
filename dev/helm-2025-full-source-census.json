@@ -267,6 +267,68 @@
       "next_action": "None."
     },
     {
+      "id": "H25-EQ1",
+      "importance": "major",
+      "section": "2",
+      "source_anchor": "Equation (1), dissimilarity definition",
+      "source_kind": "definition",
+      "title": "Pairwise dissimilarity is the query-averaged Frobenius distance",
+      "source_claim": "D_{ii'} = (1/m) || Xbar_i - Xbar_{i'} ||_F, so D is a rescaled Euclidean distance matrix.",
+      "status": "compiled_exact",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "lines": [
+          57,
+          61
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.responseDistEntry",
+        "Acharyya2024.responseDist"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [],
+      "semantic_alignment": {
+        "classification": "exact",
+        "detail": "responseDistEntry Xbar i j = (m)^{-1} * ||Xbar i - Xbar j||, which is the displayed definition including the 1/m rescaling. Helm consumes it through the Acharyya bridge rather than redefining it."
+      },
+      "notes": "The 1/m rescaling is explicit here and in Acharyya 2024; Quench 2026 defines the same matrix without it. See the Quench gap dissimilarity-normalisation-mismatch.",
+      "next_action": "None."
+    },
+    {
+      "id": "H25-EQ2",
+      "importance": "major",
+      "section": "2.1",
+      "source_anchor": "Equation (2), dissimilarity convergence",
+      "source_kind": "equation",
+      "title": "Sample dissimilarities converge to their population limits",
+      "source_claim": "Under the assumptions of Acharyya et al. (2024), D_{ii'} = (1/m)||Xbar_i - Xbar_{i'}||_F -> Delta*_{ii'} as m, r -> infinity.",
+      "status": "compiled_by_composition",
+      "verification": "proved_in_build",
+      "source_locator": {
+        "file": "Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md",
+        "lines": [
+          70,
+          76
+        ]
+      },
+      "lean_declarations": [
+        "Acharyya2024.responseDist",
+        "Acharyya2025.Bridge.EntrywiseClose"
+      ],
+      "planned_declarations": [],
+      "gap_refs": [
+        "spectral-vs-rawstress-bridge"
+      ],
+      "semantic_alignment": {
+        "classification": "by_composition",
+        "detail": "The paper imports this convergence rather than proving it. Lean likewise obtains it from the Acharyya response-mean and entrywise-closeness layer; there is no single Helm declaration reproducing the displayed limit, which is why the row is by_composition rather than exact."
+      },
+      "notes": "This equation is the hypothesis the Helm risk-transfer theorems consume.",
+      "next_action": "Expose one Helm-facing statement of the displayed limit if a literal wrapper is wanted."
+    },
+    {
       "id": "H25-EQ3",
       "importance": "headline",
       "section": "appendix",

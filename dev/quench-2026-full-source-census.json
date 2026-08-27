@@ -80,6 +80,11 @@
       "kind": "source_audit",
       "title": "Theorem 1's rate theorem is not the input the Quench chain uses",
       "detail": "Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stated for a fixed collection of n models with the asymptotics in the replicate index. Quench needs the perspective error at every stage of a growing reference sample with the target augmented into the matrix, so the capstones re-derive the concentration in that regime from the same Acharyya2025.ConfigPerturbation machinery rather than instantiating the rate theorem. Two of Q26-T1's three registered declarations are consumed; the rate endpoint is not. The paper's own proof has the same shape -- it applies Theorem 1 to the n reference models and then silently uses the same bound for the target model, whose perspective is not among them."
+    },
+    "dissimilarity-normalisation-mismatch": {
+      "kind": "source_audit",
+      "title": "Quench defines D without the 1/m rescaling used by the theorem it imports",
+      "detail": "Quench's methods section defines D_{ii'} = ||Xbar_i - Xbar_{i'}||_F. Acharyya 2024 and Helm 2025 both define the same matrix as (1/m)||Xbar_i - Xbar_{i'}||_F, and the Lean dissimilarity the Quench chain uses is Acharyya2024.responseDistEntry, which carries the (m)^{-1} factor. Quench therefore imports a Theorem 1 stated for the rescaled convention while printing the unrescaled one. The tie-averaged nearest-neighbour estimator is unaffected, because scaling every dissimilarity by a positive constant does not change which reference attains the minimum. Assumption 1 is affected: it bounds the score difference by gamma times ||psi(Q) - psi'(Q)||, and rescaling the dissimilarities rescales psi, so the same gamma means different things under the two conventions -- and m is the query budget, so the factor is not a fixed constant."
     }
   },
   "items": [
@@ -141,6 +146,7 @@
       ],
       "planned_declarations": [],
       "gap_refs": [
+        "dissimilarity-normalisation-mismatch",
         "dkps-definition-raw-stress-vs-cmds"
       ],
       "semantic_alignment": {
@@ -240,7 +246,9 @@
         "DkpsQuench2026.QueryEfficiency.lipschitz_le_max_one"
       ],
       "planned_declarations": [],
-      "gap_refs": [],
+      "gap_refs": [
+        "dissimilarity-normalisation-mismatch"
+      ],
       "semantic_alignment": {
         "classification": "generalized",
         "detail": "Lean stores the displayed Lipschitz inequality and can replace any valid constant by max(gamma,1), so public certificates do not require a redundant positivity proof for the supplied witness."

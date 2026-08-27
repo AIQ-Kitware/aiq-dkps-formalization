@@ -114,6 +114,7 @@
    "review": "Equation (1) defines DKPS by raw stress while every result the paper proves about psi-hat comes from a classical-MDS concentration theorem. The formalization follows the classical-MDS reading because that is what Theorem 2's proof consumes, and the divergence is recorded rather than assumed away.",
    "notes": "No additional note.",
    "gap_refs": [
+    "dissimilarity-normalisation-mismatch",
     "dkps-definition-raw-stress-vs-cmds"
    ],
    "next_action": "None; recorded as a source-fidelity divergence."
@@ -246,7 +247,9 @@
    ],
    "review": "Lean stores the displayed Lipschitz inequality and can replace any valid constant by max(gamma,1), so public certificates do not require a redundant positivity proof for the supplied witness.",
    "notes": "No additional note.",
-   "gap_refs": [],
+   "gap_refs": [
+    "dissimilarity-normalisation-mismatch"
+   ],
    "next_action": "None."
   },
   {

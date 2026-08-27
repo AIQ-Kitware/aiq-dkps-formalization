@@ -110,7 +110,7 @@ Quench uses the current Acharyya Frobenius concentration theorem plus the rowwis
 
 Equation (1) defines DKPS by raw stress while every result the paper proves about psi-hat comes from a classical-MDS concentration theorem. The formalization follows the classical-MDS reading because that is what Theorem 2's proof consumes, and the divergence is recorded rather than assumed away.
 
-**Companion census gap refs:** `dkps-definition-raw-stress-vs-cmds`
+**Companion census gap refs:** `dissimilarity-normalisation-mismatch`, `dkps-definition-raw-stress-vs-cmds`
 
 **Next action:** None; recorded as a source-fidelity divergence.
 
@@ -191,6 +191,8 @@ The preferred formal estimator is the literal displayed tie average. A separate 
 **Semantic review:**
 
 Lean stores the displayed Lipschitz inequality and can replace any valid constant by max(gamma,1), so public certificates do not require a redundant positivity proof for the supplied witness.
+
+**Companion census gap refs:** `dissimilarity-normalisation-mismatch`
 
 ### 6. `Q26-A2` — Assumption 2 (Model Distribution Support): Positive probability of every target-centered neighborhood
 

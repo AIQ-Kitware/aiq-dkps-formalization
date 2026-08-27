@@ -14,16 +14,18 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 
 | status | items |
 | --- | ---: |
-| `compiled_exact` | 1 |
+| `compiled_exact` | 2 |
 | `compiled_equivalent` | 2 |
+| `compiled_by_composition` | 1 |
 | `compiled_stronger_hypotheses` | 5 |
 
 ## Semantic-alignment summary
 
 | classification | items |
 | --- | ---: |
-| `exact` | 1 |
+| `exact` | 2 |
 | `equivalent_encoding` | 2 |
+| `by_composition` | 1 |
 | `stronger_hypotheses` | 5 |
 
 ## Items
@@ -36,6 +38,8 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 | `H25-A2` | `major` | Assumption 2 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `H25-A3` | `major` | Assumption 3 | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
 | `H25-A4` | `major` | Assumption 4 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `H25-EQ1` | `major` | Equation (1), dissimilarity definition | `compiled_exact` | `exact` | `proved_in_build` |
+| `H25-EQ2` | `major` | Equation (2), dissimilarity convergence | `compiled_by_composition` | `by_composition` | `proved_in_build` |
 | `H25-EQ3` | `headline` | Equation (3), alignment consistency | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
 | `H25-BRIDGE` | `major` | Appendix A.1 use of Acharyya et al. (2024) alignment consistency | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 
@@ -148,6 +152,31 @@ The proof of Theorem 2 concludes "given the results in (Sekhon, 2021), for some 
 * **gap refs:** `stronger-analysis-hypotheses`
 * **notes:** No additional note.
 * **next action:** None.
+
+### `H25-EQ1` — Pairwise dissimilarity is the query-averaged Frobenius distance
+
+* **source anchor:** Equation (1), dissimilarity definition (definition, section 2)
+* **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:57-61`
+* **importance:** `major`
+* **status / verification:** `compiled_exact` / `proved_in_build`
+* **semantic alignment:** `exact` — responseDistEntry Xbar i j = (m)^{-1} * ||Xbar i - Xbar j||, which is the displayed definition including the 1/m rescaling. Helm consumes it through the Acharyya bridge rather than redefining it.
+* **source claim:** D_{ii'} = (1/m) || Xbar_i - Xbar_{i'} ||_F, so D is a rescaled Euclidean distance matrix.
+* **Lean declarations:** `Acharyya2024.responseDistEntry`, `Acharyya2024.responseDist`
+* **notes:** The 1/m rescaling is explicit here and in Acharyya 2024; Quench 2026 defines the same matrix without it. See the Quench gap dissimilarity-normalisation-mismatch.
+* **next action:** None.
+
+### `H25-EQ2` — Sample dissimilarities converge to their population limits
+
+* **source anchor:** Equation (2), dissimilarity convergence (equation, section 2.1)
+* **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:70-76`
+* **importance:** `major`
+* **status / verification:** `compiled_by_composition` / `proved_in_build`
+* **semantic alignment:** `by_composition` — The paper imports this convergence rather than proving it. Lean likewise obtains it from the Acharyya response-mean and entrywise-closeness layer; there is no single Helm declaration reproducing the displayed limit, which is why the row is by_composition rather than exact.
+* **source claim:** Under the assumptions of Acharyya et al. (2024), D_{ii'} = (1/m)||Xbar_i - Xbar_{i'}||_F -> Delta*_{ii'} as m, r -> infinity.
+* **Lean declarations:** `Acharyya2024.responseDist`, `Acharyya2025.Bridge.EntrywiseClose`
+* **gap refs:** `spectral-vs-rawstress-bridge`
+* **notes:** This equation is the hypothesis the Helm risk-transfer theorems consume.
+* **next action:** Expose one Helm-facing statement of the displayed limit if a literal wrapper is wanted.
 
 ### `H25-EQ3` — Aligned estimated perspectives converge uniformly in probability
 
