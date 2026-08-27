@@ -35,6 +35,8 @@ This is the entry point for **paper theorem vs. Lean theorem** comparison. The c
 | `helm-2025` | `H25-A4` | Assumption 4 | GAP stronger Lean hypotheses | The main theorem uses joint continuity of loss. -> ContinuousLoss is stronger than the printed pointwise-in-label condition. |
 | `helm-2025` | `H25-EQ3` | Equation (3), alignment consistency | PASS equivalent encoding | The source takes a subsequence r_u. -> Lean packages the selected estimation stages into one abstract budget sequence. |
 | `helm-2025` | `H25-BRIDGE` | Appendix A.1 use of Acharyya et al. (2024) alignment consistency | GAP stronger Lean hypotheses | A raw-stress bridge using Acharyya2024 would be closer to the paper route. |
+| `helm-2025` | `H25-EQ1` | Equation (1), dissimilarity definition | PASS | No substantive delta recorded. |
+| `helm-2025` | `H25-EQ2` | Equation (2), dissimilarity convergence | GAP no literal wrapper | The paper imports this rather than proving it, and so does the formalization. |
 | `quench-2026` | `Q26-T1` | Theorem 1 (inherited Acharyya et al. 2025 Theorem 2) | REPAIR source mismatch | This avoids treating the inconsistent Acharyya v1 2,infinity display as literally proved while still supplying the rowwise control Quench uses. |
 | `quench-2026` | `Q26-EQ1` | Equation (1), DKPS definition | PROOF ROLE REPLACED | The Eq. (1) estimator is formalized; it is simply not the one Quench uses. |
 | `quench-2026` | `Q26-QDEF` | Equation (2) and query-efficiency definitions | PASS exact | No substantive delta recorded. |

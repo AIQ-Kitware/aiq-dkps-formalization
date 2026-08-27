@@ -98,6 +98,12 @@ Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, wh
 
 Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stated for a fixed collection of n models with the asymptotics in the replicate index. Quench needs the perspective error at every stage of a growing reference sample with the target augmented into the matrix, so the capstones re-derive the concentration in that regime from the same Acharyya2025.ConfigPerturbation machinery rather than instantiating the rate theorem. Two of Q26-T1's three registered declarations are consumed; the rate endpoint is not. The paper's own proof has the same shape -- it applies Theorem 1 to the n reference models and then silently uses the same bound for the target model, whose perspective is not among them.
 
+### `dissimilarity-normalisation-mismatch` — Quench defines D without the 1/m rescaling used by the theorem it imports
+
+**Kind:** `source_audit`
+
+Quench's methods section defines D_{ii'} = ||Xbar_i - Xbar_{i'}||_F. Acharyya 2024 and Helm 2025 both define the same matrix as (1/m)||Xbar_i - Xbar_{i'}||_F, and the Lean dissimilarity the Quench chain uses is Acharyya2024.responseDistEntry, which carries the (m)^{-1} factor. Quench therefore imports a Theorem 1 stated for the rescaled convention while printing the unrescaled one. The tie-averaged nearest-neighbour estimator is unaffected, because scaling every dissimilarity by a positive constant does not change which reference attains the minimum. Assumption 1 is affected: it bounds the score difference by gamma times ||psi(Q) - psi'(Q)||, and rescaling the dissimilarities rescales psi, so the same gamma means different things under the two conventions -- and m is the query budget, so the factor is not a fixed constant.
+
 ## Detail
 
 ### `Q26-T1` — Inherited DKPS embedding concentration
@@ -122,7 +128,7 @@ Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stat
 * **semantic alignment:** `proof_replaced` — The printed definition is a raw-stress minimizer, formalized as Acharyya2024.rawStress with its minimizer set Acharyya2024.MDS. Every Quench theorem instead uses the classical-MDS perspectives, because the Theorem 1 bound that the Theorem 2 proof consumes is a classical-MDS result. The source does not establish that the two agree, so the divergence is recorded rather than assumed away.
 * **source claim:** The d-dimensional DKPS representations are a solution to argmin over z of the sum of (||z_i - z_j|| - D_{ii'})^2.
 * **Lean declarations:** `Acharyya2024.rawStress`, `Acharyya2024.MDS`, `Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist`
-* **gap refs:** `dkps-definition-raw-stress-vs-cmds`
+* **gap refs:** `dissimilarity-normalisation-mismatch`, `dkps-definition-raw-stress-vs-cmds`
 * **notes:** No Quench module references rawStress; the connection is a source-level open question, not a Lean gap.
 * **next action:** None; recorded as a source-fidelity divergence.
 
@@ -160,6 +166,7 @@ Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stat
 * **semantic alignment:** `generalized` — Lean stores the displayed Lipschitz inequality and can replace any valid constant by max(gamma,1), so public certificates do not require a redundant positivity proof for the supplied witness.
 * **source claim:** There exists gamma>0 such that score differences are at most gamma times perspective distance.
 * **Lean declarations:** `LipschitzScore`, `DkpsQuench2026.QueryEfficiency.lipschitz_le_max_one`
+* **gap refs:** `dissimilarity-normalisation-mismatch`
 * **notes:** No additional note.
 * **next action:** None.
 

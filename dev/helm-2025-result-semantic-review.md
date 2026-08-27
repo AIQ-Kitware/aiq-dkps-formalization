@@ -14,7 +14,9 @@ Companion coverage census: `dev/helm-2025-full-source-census.json`.
 
 | verdict | rows |
 | --- | ---: |
+| `GAP no literal wrapper` | 1 |
 | `GAP stronger Lean hypotheses` | 5 |
+| `PASS` | 1 |
 | `PASS equivalent encoding` | 2 |
 | `PASS exact` | 1 |
 
@@ -32,6 +34,8 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | `H25-A4` | Assumption 4 | GAP stronger Lean hypotheses |
 | `H25-EQ3` | Equation (3), alignment consistency | PASS equivalent encoding |
 | `H25-BRIDGE` | Appendix A.1 use of Acharyya et al. (2024) alignment consistency | GAP stronger Lean hypotheses |
+| `H25-EQ1` | Equation (1), dissimilarity definition | PASS |
+| `H25-EQ2` | Equation (2), dissimilarity convergence | GAP no literal wrapper |
 
 ## Relation legend
 
@@ -110,7 +114,7 @@ Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The
 
 **Additional note:** The schedule makes the quantifier structure executable rather than leaving the phrase n,m,r -> infinity informal. The retained source should be rechecked against the original PDF specifically for label-support/bounded-loss language before treating this hypothesis as source-faithful.
 
-**Companion census gap refs:** `stronger-analysis-hypotheses`, `diagonal-budget-schedule`, `label-compact-support`
+**Companion census gap refs:** `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
 
 ### 3. `H25-A1` — Assumption 1: Rigid/affine-isometry invariance of the learning rule
 
@@ -263,3 +267,55 @@ The available end-to-end bridge realizes the estimator as spectral/classical MDS
 **Companion census gap refs:** `spectral-vs-rawstress-bridge`
 
 **Next action:** For exact end-to-end faithfulness, bridge Helm to the Acharyya2024 raw-stress consistency theorem instead of the spectral estimator, or state the extra spectral assumption in the paper-facing theorem.
+
+### 9. `H25-EQ1` — Equation (1), dissimilarity definition: Pairwise dissimilarity is the query-averaged Frobenius distance
+
+**Verdict:** PASS
+
+**Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:57-61`
+
+**Normalized paper statement:** D_{ii'} = (1/m) || Xbar_i - Xbar_{i'} ||_F, so D is a rescaled Euclidean distance matrix.
+
+**Selected Lean declarations:**
+- `Acharyya2024.responseDistEntry`
+- `Acharyya2024.responseDist`
+
+**Clause-by-clause comparison:**
+
+| paper clause | Lean clause | relation | assessment |
+| --- | --- | --- | --- |
+| D_{ii'} = (1/m)\|\|Xbar_i - Xbar_{i'}\|\|_F. | Acharyya2024.responseDistEntry Xbar i j = (m)^{-1} * \|\|Xbar i - Xbar j\|\|. | `exact` | Including the 1/m rescaling, which Quench's own text omits. |
+
+**Semantic review:**
+
+responseDistEntry Xbar i j = (m)^{-1} * ||Xbar i - Xbar j||, which is the displayed definition including the 1/m rescaling. Helm consumes it through the Acharyya bridge rather than redefining it.
+
+**Additional note:** The 1/m rescaling is explicit here and in Acharyya 2024; Quench 2026 defines the same matrix without it. See the Quench gap dissimilarity-normalisation-mismatch.
+
+### 10. `H25-EQ2` — Equation (2), dissimilarity convergence: Sample dissimilarities converge to their population limits
+
+**Verdict:** GAP no literal wrapper
+
+**Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:70-76`
+
+**Normalized paper statement:** Under the assumptions of Acharyya et al. (2024), D_{ii'} = (1/m)||Xbar_i - Xbar_{i'}||_F -> Delta*_{ii'} as m, r -> infinity.
+
+**Selected Lean declarations:**
+- `Acharyya2024.responseDist`
+- `Acharyya2025.Bridge.EntrywiseClose`
+
+**Clause-by-clause comparison:**
+
+| paper clause | Lean clause | relation | assessment |
+| --- | --- | --- | --- |
+| D_{ii'} -> Delta*_{ii'} as m, r -> infinity, citing Acharyya et al. (2024). | Obtained from the Acharyya response-mean and entrywise-closeness layer rather than from a single Helm declaration. | `derived_by_composition` | The paper imports this rather than proving it, and so does the formalization. |
+
+**Semantic review:**
+
+The paper imports this convergence rather than proving it. Lean likewise obtains it from the Acharyya response-mean and entrywise-closeness layer; there is no single Helm declaration reproducing the displayed limit, which is why the row is by_composition rather than exact.
+
+**Additional note:** This equation is the hypothesis the Helm risk-transfer theorems consume.
+
+**Companion census gap refs:** `spectral-vs-rawstress-bridge`
+
+**Next action:** Expose one Helm-facing statement of the displayed limit if a literal wrapper is wanted.

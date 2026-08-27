@@ -193,7 +193,7 @@ No manifold/geodesic sufficient-condition theorem was found in the Acharyya2025 
 
 **Source:** `Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md:358-387`
 
-**Normalized paper statement:** Under r=omega(n^3), bounded response variability, and Assumptions 1--2, there exists an orthogonal alignment W* and the embedding error is bounded by a cubic polynomial in (n^3/r)^(1/2-delta) with high probability.
+**Normalized paper statement:** Under r=omega(n^3), bounded response variability, and Assumptions 1--2, there exists an orthogonal alignment W* and the embedding error is bounded by a cubic polynomial in (n^3/r)^(1/2-delta) with high probability. The displayed polynomial upper bound is the source's Equation (2), whose coefficients Assumptions 1 and 2 keep bounded.
 
 **Selected Lean declarations:**
 - `Acharyya2025.ConfigPerturbation.ConfigFrobError`
