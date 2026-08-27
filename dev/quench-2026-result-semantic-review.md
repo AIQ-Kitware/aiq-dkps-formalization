@@ -38,8 +38,8 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | `Q26-A2` | Assumption 2 (Model Distribution Support) | REPAIR source mismatch |
 | `Q26-T2A` | Theorem 2, small-MSE conclusion | GAP stronger analytic hypotheses |
 | `Q26-T2B` | Theorem 2, query-efficiency conclusion | GAP stronger analytic hypotheses |
-| `Q26-RAW-FIN` | Finite-model raw-response capstone | SUPPLEMENTARY Lean extension |
-| `Q26-RAW-INF` | Compact-infinite raw-response capstone | SUPPLEMENTARY Lean extension |
+| `Q26-RAW-FIN` | Theorem 2 and its proof, at the finite model-class scope | SUPPLEMENTARY Lean extension |
+| `Q26-RAW-INF` | Theorem 2 and its proof, at the compact-infinite model-class scope | SUPPLEMENTARY Lean extension |
 | `Q26-Y` | Benchmark scoring function | PASS generalized |
 | `Q26-D` | Response means and the dissimilarity matrix | GAP normalisation mismatch |
 
@@ -313,7 +313,7 @@ The printed conclusion is proved at the paper's full quantifier level by infinit
 
 **Next action:** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.
 
-### 9. `Q26-RAW-FIN` — Finite-model raw-response capstone: End-to-end finite raw-response query efficiency
+### 9. `Q26-RAW-FIN` — Theorem 2 and its proof, at the finite model-class scope: End-to-end finite raw-response query efficiency
 
 **Verdict:** SUPPLEMENTARY Lean extension
 
@@ -346,7 +346,7 @@ The finite realization of Theorem 2. This row previously read as an extension be
 
 **Next action:** Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.
 
-### 10. `Q26-RAW-INF` — Compact-infinite raw-response capstone: End-to-end compact-infinite query efficiency
+### 10. `Q26-RAW-INF` — Theorem 2 and its proof, at the compact-infinite model-class scope: End-to-end compact-infinite query efficiency
 
 **Verdict:** SUPPLEMENTARY Lean extension
 

@@ -265,7 +265,7 @@ The literal pointwise-in-label predicate exists, while the main theorem assumes 
 
 **Verdict:** PASS equivalent encoding
 
-**Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:326-441`
+**Source:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:374-380`
 
 **Normalized paper statement:** After suitable orthogonal/translation alignment, the maximum coordinate error over the n training models and test model tends to zero in probability.
 

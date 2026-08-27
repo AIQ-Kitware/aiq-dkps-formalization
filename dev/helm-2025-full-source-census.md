@@ -264,7 +264,7 @@ alignmentConsistency_of_pairwiseDist takes convergence in probability of the est
 ### `H25-EQ3` — Aligned estimated perspectives converge uniformly in probability
 
 * **source anchor:** Equation (3), alignment consistency (equation, section appendix)
-* **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:326-441`
+* **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:374-380`
 * **importance:** `headline`
 * **status / verification:** `compiled_equivalent` / `proved_in_build`
 * **semantic alignment:** `equivalent_encoding` — Lean uses a finite iSup in place of max and a single abstract estimation-budget index. For a finite index set this is the same uniform error statement.
