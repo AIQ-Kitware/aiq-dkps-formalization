@@ -139,6 +139,7 @@
     "Helm2025.DKPS.ContinuousLossInPrediction",
     "Helm2025.DKPS.LossDominated",
     "Helm2025.DKPS.Theorem2_bayes",
+    "Helm2025.DKPS.Theorem2_bayes_printed",
     "Helm2025.DKPS.consistency_transfer_dkps_bayes",
     "Helm2025.DKPS.consistentExpected_of_consistentInProbability",
     "Helm2025.DKPS.diagonal_convergence",
@@ -198,7 +199,7 @@
     "rigid-motion-engine-now-available",
     "stronger-analysis-hypotheses"
    ],
-   "next_action": "None; the transfer is reachable from the paper's own consistency via consistentExpected_of_consistentInProbability."
+   "next_action": "None for the assumptions; Theorem2_bayes_printed runs on the printed readings of Assumptions 2 and 4 and does not use Assumption 3."
   },
   {
    "id": "H25-A1",
@@ -255,6 +256,8 @@
     "Helm2025.DKPS.ContinuousLearningRuleInEmbeddings",
     "Helm2025.DKPS.PaperA2_SequentialContinuity",
     "Helm2025.DKPS.Theorem1_printed",
+    "Helm2025.DKPS.Theorem2_bayes_printed",
+    "Helm2025.DKPS.consistency_transfer_dkps_printed",
     "Helm2025.DKPS.continuousLearningRuleInEmbeddings_of_continuousLearningRule"
    ],
    "clauses": [
@@ -330,6 +333,8 @@
     "Helm2025.DKPS.ContinuousLossInPred",
     "Helm2025.DKPS.ContinuousLossInPrediction",
     "Helm2025.DKPS.Theorem1_printed",
+    "Helm2025.DKPS.Theorem2_bayes_printed",
+    "Helm2025.DKPS.consistency_transfer_dkps_printed",
     "Helm2025.DKPS.loss_converges_in_prob_printed",
     "Helm2025.DKPS.stronglyMeasurable_combined_loss_of_printed",
     "Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4"

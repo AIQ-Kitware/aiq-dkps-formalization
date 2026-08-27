@@ -115,6 +115,7 @@ The conclusion is source-shaped. Lean additionally requires measurable embedding
 - `Helm2025.DKPS.ContinuousLossInPrediction`
 - `Helm2025.DKPS.LossDominated`
 - `Helm2025.DKPS.Theorem2_bayes`
+- `Helm2025.DKPS.Theorem2_bayes_printed`
 - `Helm2025.DKPS.consistency_transfer_dkps_bayes`
 - `Helm2025.DKPS.consistentExpected_of_consistentInProbability`
 - `Helm2025.DKPS.diagonal_convergence`
@@ -145,7 +146,7 @@ Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The
 
 **Companion census gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `rigid-motion-engine-now-available`, `stronger-analysis-hypotheses`
 
-**Next action:** None; the transfer is reachable from the paper's own consistency via consistentExpected_of_consistentInProbability.
+**Next action:** None for the assumptions; Theorem2_bayes_printed runs on the printed readings of Assumptions 2 and 4 and does not use Assumption 3.
 
 ### 3. `H25-A1` — Assumption 1: Rigid/affine-isometry invariance of the learning rule
 
@@ -183,6 +184,8 @@ The Lean predicate directly represents invariance under affine isometries of Euc
 - `Helm2025.DKPS.ContinuousLearningRuleInEmbeddings`
 - `Helm2025.DKPS.PaperA2_SequentialContinuity`
 - `Helm2025.DKPS.Theorem1_printed`
+- `Helm2025.DKPS.Theorem2_bayes_printed`
+- `Helm2025.DKPS.consistency_transfer_dkps_printed`
 - `Helm2025.DKPS.continuousLearningRuleInEmbeddings_of_continuousLearningRule`
 
 **Clause-by-clause comparison:**
@@ -238,6 +241,8 @@ The literal source predicate is retained. The proof uses bounded/compact-range c
 - `Helm2025.DKPS.ContinuousLossInPred`
 - `Helm2025.DKPS.ContinuousLossInPrediction`
 - `Helm2025.DKPS.Theorem1_printed`
+- `Helm2025.DKPS.Theorem2_bayes_printed`
+- `Helm2025.DKPS.consistency_transfer_dkps_printed`
 - `Helm2025.DKPS.loss_converges_in_prob_printed`
 - `Helm2025.DKPS.stronglyMeasurable_combined_loss_of_printed`
 - `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`

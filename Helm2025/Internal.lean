@@ -1603,5 +1603,34 @@ theorem consistency_transfer_dkps (d d' : ℕ)
           convert diagonal_convergence _ _ _ h_lim_u h_lim_n using 1;
         exact h_diag
 
+/--
+**Consistency transfer under the printed readings of Assumptions 2 and 4.**
+
+The same diagonal argument as `consistency_transfer_dkps`, running on
+`risk_converges_fixed_n_printed` at each sample size.  Assumption 3 is not needed.
+-/
+theorem consistency_transfer_dkps_printed (d d' : ℕ)
+    (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
+    (learn : (n : ℕ) → LearningRule n d d')
+    (loss : LossFunction d')
+    (psi_hat : (n : ℕ) → ℕ → (Fin (n + 1) → E d × Y d') → Fin (n + 1) → E d)
+    (L : ℝ)
+    (h_meas_psi : ∀ n u, Measurable (psi_hat n u))
+    (h_align : ∀ n, DKPSAlignmentConsistency n d d' P (psi_hat n))
+    (h_inv : ∀ n, InvariantToAffineIsometries n d d' (learn n))            -- A1
+    (hA2 : ∀ n, ContinuousLearningRuleInEmbeddings n d d' (learn n))       -- A2 as printed
+    (hA4 : ContinuousLossInPrediction d' loss)                             -- A4 as printed
+    (hML : MeasurableLossInLabel d' loss)
+    (hMlearn : ∀ n, MeasurableLearningRuleInLabels n d d' (learn n))
+    (h_dom : ∀ n, LossDominated n d d' P (learn n) loss)
+    (h_consistent : Tendsto (fun n => risk n d d' P (learn n) loss) atTop (𝓝 L)) :
+    ∃ phi : ℕ → ℕ, Tendsto phi atTop atTop ∧
+      Tendsto (fun n => risk_est n d d' P (learn n) loss (psi_hat n (phi n))) atTop (𝓝 L) := by
+  have h_lim_u : ∀ n, Tendsto (fun u => risk_est n d d' P (learn n) loss (psi_hat n u)) atTop
+      (𝓝 (risk n d d' P (learn n) loss)) := fun n =>
+    risk_converges_fixed_n_printed n d d' P (learn n) loss (psi_hat n) (h_meas_psi n)
+      (h_align n) (h_inv n) (hA2 n) hA4 hML (hMlearn n) (h_dom n)
+  convert diagonal_convergence _ _ _ h_lim_u h_consistent using 1
+
 end DKPS
 end Helm2025
