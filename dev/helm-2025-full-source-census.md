@@ -16,8 +16,8 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 | --- | ---: |
 | `compiled_exact` | 3 |
 | `compiled_equivalent` | 2 |
-| `compiled_by_composition` | 2 |
-| `compiled_stronger_hypotheses` | 3 |
+| `compiled_by_composition` | 3 |
+| `compiled_stronger_hypotheses` | 2 |
 | `compiled_source_repair` | 2 |
 
 ## Semantic-alignment summary
@@ -26,8 +26,8 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 | --- | ---: |
 | `exact` | 3 |
 | `equivalent_encoding` | 2 |
-| `by_composition` | 2 |
-| `stronger_hypotheses` | 3 |
+| `by_composition` | 3 |
+| `stronger_hypotheses` | 2 |
 | `source_repair` | 2 |
 
 ## Items
@@ -45,7 +45,7 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 | `H25-LEARN` | `major` | Statistical learning problem and Bayes risk | `compiled_exact` | `exact` | `proved_in_build` |
 | `H25-CONSIST` | `major` | Definition of consistency | `compiled_by_composition` | `by_composition` | `proved_in_build` |
 | `H25-EQ3` | `headline` | Equation (3), alignment consistency | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
-| `H25-BRIDGE` | `major` | Appendix A.1 use of Acharyya et al. (2024) alignment consistency | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `H25-BRIDGE` | `major` | Appendix A.1 use of Acharyya et al. (2024) alignment consistency | `compiled_by_composition` | `by_composition` | `proved_in_build` |
 
 ## Gaps and source repairs
 
@@ -61,11 +61,13 @@ How much the difference costs is now pinned down. stronglyMeasurable_loss_of_pri
 
 The other hypotheses this gap covered -- joint continuity of the learning rule in Assumption 2, compact range in Assumption 3, and estimator measurability -- are unchanged.
 
-### `spectral-vs-rawstress-bridge` — End-to-end spectral bridge needs an eigenvalue floor absent from Helm
+### `spectral-vs-rawstress-bridge` — Eigenvalue floor absent from Helm -- RESOLVED for the bridge, retained for the spectral chain
 
 **Kind:** `source_audit`
 
 Helm cites the eigengap-free raw-stress consistency theorem from Acharyya 2024. The current end-to-end implementation bridge uses classical spectral MDS and therefore explicitly assumes a population eigenvalue floor (Acharyya 2025 Assumption 2).
+
+RESOLVED for the bridge. alignmentConsistency_of_pairwiseDist derives Equation (3) with no spectral hypothesis of any kind: no eigenvalue floor, no eigenvalue cap, no positive semidefiniteness, no rank condition, no Gram realization. Its only probabilistic input is convergence in probability of the estimated pairwise distances, which is what the eigengap-free raw-stress consistency Helm cites delivers. The three alignmentConsistency_of_aligned_spectral theorems remain as the quantitative alternative and still carry the floor; this gap is retained only for rows that consume that chain.
 
 ### `diagonal-budget-schedule` — Theorem 2 is realized along an explicit diagonal budget schedule
 
@@ -108,6 +110,14 @@ The uniform-integrability side condition remains, and is again forced rather tha
 Acharyya2024.rawStress_mds_stability is eigengap-free -- its hypotheses are minimality, a unique pair profile, and dissimilarity convergence, with no spectral condition -- but it concludes convergence of pairwise distances rather than of coordinates. The missing step is Acharyya 2024 Corollary 1, and its exact form is now proved as TauCeti.exists_rigidMotion_of_dist_eq: equal pairwise distances imply the configurations differ by a rigid motion. Mathlib does not carry this; it has Congruent and the triangle criteria only.
 
 What each paper needs from the bridge differs. Helm's conclusions are Tendsto statements with no rate, so the qualitative eigengap-free route suffices and its population eigenvalue floor is avoidable, modulo the approximate form of the rigidity lemma. Quench's capstones carry entryRate and GrowingConfigControl and conclude stagewise high-probability bounds; a quantitative Gram-to-configuration bound needs a spectral gap, because eigenvector perturbation is unstable without one, so Quench's floor is likely intrinsic rather than an artifact.
+
+Done. The approximate form is TauCeti.exists_delta_forall_exists_rigidMotion -- uniform in both configurations, which is what a random target needs -- with TauCeti.alignmentError and TauCeti.alignedConfig packaging it and TauCeti.tendsto_measure_alignmentError_gt moving it to convergence in probability. Helm's floor is now actually removed, not merely diagnosed as removable.
+
+### `bridge-distance-input-not-fibered` — The eigengap-free bridge's distance-convergence input is assumed, not derived from Acharyya 2024
+
+**Kind:** `implementation`
+
+alignmentConsistency_of_pairwiseDist takes convergence in probability of the estimated pairwise distances as a hypothesis. Acharyya2024.rawStress_mds_stability_set proves a statement of that shape, but for a FIXED model collection with a deterministic limiting dissimilarity matrix, whereas Helm's target is the random latent sample: the population dissimilarities are themselves functions of omega. Discharging the hypothesis therefore needs a fibered version of the Acharyya theorem, conditional on the latent sample, plus the identifiability premise that pins a single pair profile. The paper cites the theorem and does not address the fibering either.
 
 ## Detail
 
@@ -210,7 +220,7 @@ What each paper needs from the bridge differs. Helm's conclusions are Tendsto st
 * **Lean declarations:** `Acharyya2024.responseDist`, `Acharyya2025.Bridge.EntrywiseClose`
 * **gap refs:** `spectral-vs-rawstress-bridge`
 * **notes:** This equation is the hypothesis the Helm risk-transfer theorems consume.
-* **next action:** Expose one Helm-facing statement of the displayed limit if a literal wrapper is wanted.
+* **next action:** Expose one Helm-facing statement of the displayed limit; it is also the input the eigengap-free bridge now consumes.
 
 ### `H25-LEARN` — Risk, the Bayes decision function, and the Bayes risk
 
@@ -254,10 +264,10 @@ What each paper needs from the bridge differs. Helm's conclusions are Tendsto st
 * **source anchor:** Appendix A.1 use of Acharyya et al. (2024) alignment consistency (dependency, section appendix)
 * **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:374-395`
 * **importance:** `major`
-* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — The available end-to-end bridge realizes the estimator as spectral/classical MDS and therefore assumes a positive population eigenvalue floor. That is stronger than the Helm paper route through raw-stress consistency.
+* **status / verification:** `compiled_by_composition` / `proved_in_build`
+* **semantic alignment:** `by_composition` — Equation (3) is now derived along the route Helm's proof actually cites, with no spectral hypothesis: alignmentConsistency_of_pairwiseDist consumes convergence in probability of the pairwise distances and nothing else. The eigenvalue floor that the spectral bridges carry -- Acharyya 2025's Assumption 2, which Helm never states -- is gone. The row is by_composition rather than exact because the distance-convergence input is assumed rather than instantiated from the Acharyya theorem, which is stated for a fixed model collection while Helm's target is the random latent sample.
 * **source claim:** The proof cites the eigengap-free asymptotic raw-stress consistency theorem to obtain aligned DKPS consistency.
-* **Lean declarations:** `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral`, `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram`, `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound`, `TauCeti.exists_rigidMotion_of_dist_eq`
-* **gap refs:** `rigid-motion-engine-now-available`, `spectral-vs-rawstress-bridge`
-* **notes:** This discrepancy belongs to the bridge, not the abstract Theorem1/Theorem2 transfer once Equation (3) is assumed.
-* **next action:** For exact end-to-end faithfulness, bridge Helm to the Acharyya2024 raw-stress consistency theorem instead of the spectral estimator, or state the extra spectral assumption in the paper-facing theorem.
+* **Lean declarations:** `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral`, `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram`, `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound`, `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_pairwiseDist`, `TauCeti.alignedConfig`, `TauCeti.exists_delta_forall_exists_rigidMotion`, `TauCeti.exists_rigidMotion_of_dist_eq`, `TauCeti.tendsto_measure_alignmentError_gt`
+* **gap refs:** `bridge-distance-input-not-fibered`, `rigid-motion-engine-now-available`
+* **notes:** The alignment is performed inside the estimator, sample by sample, so no alignment sequence is quantified outside the probability and the constant affine isometry witnesses Equation (3).
+* **next action:** Fiber Acharyya2024.rawStress_mds_stability_set over the latent sample to discharge the distance-convergence hypothesis.

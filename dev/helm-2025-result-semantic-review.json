@@ -418,7 +418,11 @@
     "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral",
     "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram",
     "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound",
-    "TauCeti.exists_rigidMotion_of_dist_eq"
+    "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_pairwiseDist",
+    "TauCeti.alignedConfig",
+    "TauCeti.exists_delta_forall_exists_rigidMotion",
+    "TauCeti.exists_rigidMotion_of_dist_eq",
+    "TauCeti.tendsto_measure_alignmentError_gt"
    ],
    "clauses": [
     {
@@ -432,15 +436,21 @@
      "lean_clause": "The Lean bridge is spectral/orthogonal alignment; Gram identities discharge PSD/rank, but spectral stability remains.",
      "relation": "source_repair",
      "note": "A raw-stress bridge using Acharyya2024 would be closer to the paper route."
+    },
+    {
+     "source_clause": "The cited MDS consistency theorem is eigengap-free.",
+     "lean_clause": "alignmentConsistency_of_pairwiseDist has no spectral hypothesis: it derives Equation (3) from convergence in probability of the pairwise distances alone.",
+     "relation": "lean_weaker_hypothesis",
+     "note": "The population eigenvalue floor the spectral bridges carry is Acharyya 2025's Assumption 2 and appears nowhere in Helm; it is now removed rather than merely disclosed."
     }
    ],
    "review": "The available end-to-end bridge realizes the estimator as spectral/classical MDS and therefore assumes a positive population eigenvalue floor. That is stronger than the Helm paper route through raw-stress consistency.",
    "notes": "This discrepancy belongs to the bridge, not the abstract Theorem1/Theorem2 transfer once Equation (3) is assumed.",
    "gap_refs": [
-    "rigid-motion-engine-now-available",
-    "spectral-vs-rawstress-bridge"
+    "bridge-distance-input-not-fibered",
+    "rigid-motion-engine-now-available"
    ],
-   "next_action": "For exact end-to-end faithfulness, bridge Helm to the Acharyya2024 raw-stress consistency theorem instead of the spectral estimator, or state the extra spectral assumption in the paper-facing theorem."
+   "next_action": "Fiber Acharyya2024.rawStress_mds_stability_set over the latent sample to discharge the distance-convergence hypothesis."
   },
   {
    "id": "H25-EQ1",
@@ -508,7 +518,7 @@
    "gap_refs": [
     "spectral-vs-rawstress-bridge"
    ],
-   "next_action": "Expose one Helm-facing statement of the displayed limit if a literal wrapper is wanted."
+   "next_action": "Expose one Helm-facing statement of the displayed limit; it is also the input the eigengap-free bridge now consumes."
   },
   {
    "id": "H25-LEARN",

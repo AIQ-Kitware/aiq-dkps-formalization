@@ -282,7 +282,11 @@ Lean uses a finite iSup in place of max and a single abstract estimation-budget 
 - `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral`
 - `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram`
 - `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound`
+- `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_pairwiseDist`
+- `TauCeti.alignedConfig`
+- `TauCeti.exists_delta_forall_exists_rigidMotion`
 - `TauCeti.exists_rigidMotion_of_dist_eq`
+- `TauCeti.tendsto_measure_alignmentError_gt`
 
 **Clause-by-clause comparison:**
 
@@ -290,6 +294,7 @@ Lean uses a finite iSup in place of max and a single abstract estimation-budget 
 | --- | --- | --- | --- |
 | The Appendix cites Acharyya 2024 raw-stress consistency to justify Eq. (3), without an eigengap premise. | The available end-to-end bridge realizes estimates by spectral/classical MDS and requires a positive population eigenvalue floor plus cap. | `lean_stronger_hypothesis` | This discrepancy belongs to the concrete estimator bridge, not the abstract inference-transfer theorem once Eq. (3) is assumed. |
 | The paper route is raw-stress/affine alignment. | The Lean bridge is spectral/orthogonal alignment; Gram identities discharge PSD/rank, but spectral stability remains. | `source_repair` | A raw-stress bridge using Acharyya2024 would be closer to the paper route. |
+| The cited MDS consistency theorem is eigengap-free. | alignmentConsistency_of_pairwiseDist has no spectral hypothesis: it derives Equation (3) from convergence in probability of the pairwise distances alone. | `lean_weaker_hypothesis` | The population eigenvalue floor the spectral bridges carry is Acharyya 2025's Assumption 2 and appears nowhere in Helm; it is now removed rather than merely disclosed. |
 
 **Semantic review:**
 
@@ -297,9 +302,9 @@ The available end-to-end bridge realizes the estimator as spectral/classical MDS
 
 **Additional note:** This discrepancy belongs to the bridge, not the abstract Theorem1/Theorem2 transfer once Equation (3) is assumed.
 
-**Companion census gap refs:** `rigid-motion-engine-now-available`, `spectral-vs-rawstress-bridge`
+**Companion census gap refs:** `bridge-distance-input-not-fibered`, `rigid-motion-engine-now-available`
 
-**Next action:** For exact end-to-end faithfulness, bridge Helm to the Acharyya2024 raw-stress consistency theorem instead of the spectral estimator, or state the extra spectral assumption in the paper-facing theorem.
+**Next action:** Fiber Acharyya2024.rawStress_mds_stability_set over the latent sample to discharge the distance-convergence hypothesis.
 
 ### 9. `H25-EQ1` — Equation (1), dissimilarity definition: Pairwise dissimilarity is the query-averaged Frobenius distance
 
@@ -351,7 +356,7 @@ The paper imports this convergence rather than proving it. Lean likewise obtains
 
 **Companion census gap refs:** `spectral-vs-rawstress-bridge`
 
-**Next action:** Expose one Helm-facing statement of the displayed limit if a literal wrapper is wanted.
+**Next action:** Expose one Helm-facing statement of the displayed limit; it is also the input the eigengap-free bridge now consumes.
 
 ### 11. `H25-LEARN` — Statistical learning problem and Bayes risk: Risk, the Bayes decision function, and the Bayes risk
 
