@@ -1152,6 +1152,92 @@ def analyze_headlines(
     raise ProjectError(f"unknown headline view {view!r}")
 
 
+#: Library name given to declarations outside every first-party library.  The
+#: index records them only by name, so Lean core and Batteries constants are
+#: lumped in with Mathlib; the overwhelming majority are Mathlib.
+BOUNDARY_LIBRARY = "Mathlib"
+
+
+def _attach_boundary_declarations(
+    nodes: list[dict],
+    edges: list[dict],
+    decls: Sequence[Decl],
+    graph: DependencyGraph,
+    dependency_result: Mapping | None,
+    boundary: str,
+) -> dict:
+    """Add the declarations the project depends on but does not declare.
+
+    The project index resolves first-party declarations only; everything else is
+    a boundary name.  Adding all of them costs about 1.5 million edges, because
+    nearly every declaration in the repository reaches `Eq`, `Nat`, and `Real`.
+    Restricting the consumers to the headline dependency union keeps the useful
+    question -- which Mathlib results does this theorem actually rest on -- at
+    roughly a fifteenth of that.
+    """
+    if boundary not in {"none", "headline", "project"}:
+        raise ProjectError(f"unknown boundary scope {boundary!r}")
+    summary = {"scope": boundary, "library": BOUNDARY_LIBRARY,
+               "declarationCount": 0, "edgeCount": 0}
+    if boundary == "none":
+        return summary
+    table = {decl.name: decl for decl in decls}
+    if boundary == "headline":
+        if dependency_result is None:
+            raise ProjectError(
+                "boundary scope 'headline' needs a census; pass --census or use 'project'"
+            )
+        consumers = [row["id"] for row in dependency_result["nodes"]]
+    else:
+        consumers = sorted(graph.nodes)
+    external: dict[str, int] = {}
+    added: list[dict] = []
+    for name in consumers:
+        decl = table.get(name)
+        if decl is None:
+            continue
+        for dep in decl.deps:
+            if dep in table:
+                continue
+            external[dep] = external.get(dep, 0) + 1
+            added.append({"source": dep, "target": name, "direct": True})
+    for dep, consumer_count in sorted(external.items()):
+        nodes.append(
+            {
+                "id": dep,
+                "module": dep.rsplit(".", 1)[0] if "." in dep else dep,
+                "kind": "external",
+                "isProp": None,
+                "propValued": None,
+                "sorried": None,
+                "line": None,
+                "axioms": None,
+                "library": BOUNDARY_LIBRARY,
+                "internal": False,
+                "target": False,
+                "dependencyDepth": 0,
+                "directDependencyCount": 0,
+                "directConsumerCount": consumer_count,
+                "headline": False,
+                "headlineRole": None,
+                "headlineClaims": [],
+                "supportingClaims": [],
+                "headlineCoverageCount": 0,
+                "headlineCoverageIds": [],
+                "exclusiveToHeadline": None,
+                "sharedDependency": False,
+                "sharedFrontier": False,
+                "consumedByTarget": False,
+                "distanceToTarget": None,
+                "boundary": True,
+            }
+        )
+    edges.extend(added)
+    summary["declarationCount"] = len(external)
+    summary["edgeCount"] = len(added)
+    return summary
+
+
 def prepare_project_explorer(
     semantic_payload: Mapping,
     *,
@@ -1159,6 +1245,7 @@ def prepare_project_explorer(
     importances: Iterable[str] = ("headline",),
     targets: Sequence[str] = (),
     default_claims: Sequence[str] = (),
+    boundary: str = "none",
 ) -> dict:
     """Annotate a complete semantic index for the whole-project HTML explorer.
 
@@ -1279,6 +1366,14 @@ def prepare_project_explorer(
             bucket["libraryCount"] = len(bucket.pop("libraries"))
             bucket["moduleCount"] = len(bucket.pop("modules"))
 
+    edges = [
+        {"source": source, "target": target, "direct": True}
+        for source, target in sorted(graph.edges)
+    ]
+    boundary_summary = _attach_boundary_declarations(
+        nodes, edges, decls, graph, dependency_result, boundary
+    )
+
     result = dict(semantic_payload)
     result.update(
         {
@@ -1286,12 +1381,10 @@ def prepare_project_explorer(
             "payloadKind": "project-explorer",
             "targets": sorted(resolved_target_set),
             "nodeCount": len(nodes),
-            "edgeCount": len(graph.edges),
+            "edgeCount": len(edges),
             "nodes": nodes,
-            "edges": [
-                {"source": source, "target": target, "direct": True}
-                for source, target in sorted(graph.edges)
-            ],
+            "edges": edges,
+            "boundary": boundary_summary,
             "headlineAnalysis": analysis,
             "clusterStats": cluster_stats,
             "explorer": {
