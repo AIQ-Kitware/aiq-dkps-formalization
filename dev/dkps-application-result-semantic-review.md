@@ -19,7 +19,7 @@ This is the entry point for **paper theorem vs. Lean theorem** comparison. The c
 | `acharyya-2024` | `A24-A2` | Assumption 2 | GAP only a specialization is formalized | This is enough for finite-stage consistency but not the continuum source theorem. |
 | `acharyya-2024` | `A24-L2` | Lemma 2 | GAP missing source result | The population law is replaced by the empirical model measure; that substitution is the remaining distance to the printed lemma. |
 | `acharyya-2024` | `A24-T4` | Theorem 4 | GAP only a specialization is formalized | No substantive delta recorded. |
-| `acharyya-2024` | `A24-T5` | Theorem 5 | GAP only a specialization is formalized | Finite-stage consistency does not imply the source double-integral continuum conclusion. |
+| `acharyya-2024` | `A24-T5` | Theorem 5 | GAP only a specialization is formalized | Every intermediate link is proved rather than assumed; the population law in place of the empirical measure is what remains. |
 | `acharyya-2025` | `A25-T1` | Theorem 1 | GAP exact finite probability constant not exposed | At m = 1 the three competing dissimilarity normalisations coincide, so the refutation is independent of that question. |
 | `acharyya-2025` | `A25-C1` | Corollary 1 | PASS by checked composition | With high probability \|\|Bhat-B\|\|_op < (n^3/r)^(1/2-delta). -> Entrywise-to-operator transport plus the paper-scale concentration theorem yields this rate by composition. |
 | `acharyya-2025` | `A25-A1` | Assumption 1 | PASS equivalent encoding | No substantive delta recorded. |

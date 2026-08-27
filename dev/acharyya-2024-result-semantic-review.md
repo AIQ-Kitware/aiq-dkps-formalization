@@ -407,10 +407,11 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 **Normalized paper statement:** For iid phi_i from P, pointwise convergence of empirical dissimilarities implies, along a subsequence, L^p(P x P) convergence of estimated pairwise distances to continuous-MDS distances.
 
 **Selected Lean declarations:**
+- `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
+- `Acharyya2024.ContinuousMDS.ContinuousMDS`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
-- `Acharyya2024.ContinuousMDS.ContinuousMDS`
 
 **Clause-by-clause comparison:**
 
@@ -476,6 +477,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 **Selected Lean declarations:**
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`
+- `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
 
@@ -484,6 +486,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
 | Under Lemma 2 and the Theorem 4 rate, for every p>=1 a subsequence gives L^p(P x P) convergence in probability. | Lean proves finite per-stage pair-distance consistency for growing cardinalities. | `lean_weaker_conclusion` | Finite-stage consistency does not imply the source double-integral continuum conclusion. |
+| In the setting of Lemma 2, suppose (1/m) sum_j gamma_ij = o(r). Then for all p >= 1, along a subsequence, the L^p(P x P) discrepancy tends to zero in probability. | lp_consistency_of_gamma_empirical, with P the empirical measure of the sampled models, along the full sequence and uniform in p. | `lean_stronger_hypothesis` | Every intermediate link is proved rather than assumed; the population law in place of the empirical measure is what remains. |
 
 **Semantic review:**
 
@@ -493,7 +496,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Compose the Theorem 4 rate with the empirical-measure L^p result, then replace the empirical model measure by the population law.
+**Next action:** Replace the empirical model measure by the population law; that is the continuous-MDS step the source attributes to the cited literature.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 

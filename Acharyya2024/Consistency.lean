@@ -24,6 +24,8 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 
 import Acharyya2024.Common
 import Acharyya2024.RawStress
+import Acharyya2024.Probability
+import Acharyya2024.ContinuousMDS
 import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 import ForTauCeti.Probability.RigidAlignment
 
@@ -969,5 +971,98 @@ theorem not_exists_deterministic_rigidMotion_of_pairDist_exact :
     have hle : (1 / 2 : ENNReal) ≤ 0 :=
       ge_of_tendsto h (Filter.Eventually.of_forall hhalf)
     simp at hle
+
+/--
+**Theorem 5 for the empirical model distribution.**
+
+The source's Theorem 5 composes its Theorem 4 rate with Lemma 2: under the trace-covariance
+condition, the `L^p(P × P)` discrepancy between the estimated pairwise distances and the
+continuous-MDS ones vanishes in probability.  This is that composition, with `P` the empirical
+measure of the sampled models.
+
+Every link is now a proved theorem rather than an assumed hypothesis:
+
+* `Probability.dissimilarity_convergesInProbability_of_gamma` turns the source's
+  `((1/m) ∑_j γ_ij)/r → 0` into convergence of the sample dissimilarities, with the number of
+  queries growing with the replicate count;
+* `hpop` is the source's Assumption 1, that the population dissimilarities approach the limiting
+  ones, and the triangle inequality composes the two;
+* `RawStress.mds_stability_inProbability_of_uniqueProfile` turns that into convergence of the
+  estimates' pairwise distances -- with the profile-uniqueness premise whose necessity
+  `ProfileNonuniqueness.no_fixed_limiting_profile` establishes;
+* `ContinuousMDS.tendsto_measure_lpPairDistErr_gt` assembles the pairs into the `L^p`
+  discrepancy, along the full sequence and uniformly in `p`.
+
+What separates this from the printed theorem is that `P` is the empirical measure of the sampled
+models rather than the population law they are drawn from -- the step the source attributes to
+the cited continuous-MDS literature.
+-/
+theorem lp_consistency_of_gamma_empirical
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {n d q : Nat} [NeZero n] (m : Nat → Nat)
+    (Xbar : ∀ r, Ω → Fin n → Mat (m r) q)
+    (μpop : ∀ r, Fin n → Mat (m r) q)
+    (DeltaInf : DisMat n)
+    (γ : ∀ r, Fin n → Fin (m r) → Real)
+    (hγnonneg : ∀ r i j, 0 ≤ γ r i j)
+    (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μpop r i‖ ^ 2) P)
+    (hmoment : ∀ r i, ∫ ω, ‖Xbar r ω i - μpop r i‖ ^ 2 ∂P
+      ≤ (∑ i', ∑ j, γ r i' j) / (r : Real))
+    (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real))
+      atTop (𝓝 0))
+    -- Assumption 1: the population dissimilarities approach the limiting ones
+    (hpop : Tendsto (fun r => frobSub (responseDist (μpop r)) DeltaInf) atTop (𝓝 0))
+    (ψhat : Nat → Ω → Config n d)
+    (hψhat : ∀ r ω, ψhat r ω ∈ MDS n d (responseDist (Xbar r ω)))
+    (huniq : RawStress.UniquePairProfile n d DeltaInf) :
+    ∃ ψ ∈ MDS n d DeltaInf, ∀ p : Real, 1 ≤ p → ∀ ε : Real, 0 < ε →
+      Tendsto (fun r => P {ω | ε < ((n : Real))⁻¹ * ((n : Real))⁻¹ *
+        ∑ i, ∑ j, |‖ψhat r ω i - ψhat r ω j‖ - ‖ψ i - ψ j‖| ^ p}) atTop (𝓝 0) := by
+  classical
+  -- (1) the sample dissimilarities reach the limiting matrix
+  have hsample := Probability.dissimilarity_convergesInProbability_of_gamma P m Xbar μpop γ
+    hγnonneg hint hmoment hγ
+  have hD : ConvergesInProbabilityZero P
+      (fun r ω => frobSub (responseDist (Xbar r ω)) DeltaInf) := by
+    intro ε hε
+    have hhalf : (0 : Real) < ε / 2 := by linarith
+    have hpop' : ∀ᶠ r in atTop, frobSub (responseDist (μpop r)) DeltaInf ≤ ε / 2 := by
+      have := hpop.eventually_lt_const hhalf
+      exact this.mono fun r hr => hr.le
+    refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds (hsample (ε / 2) hhalf)
+      (Filter.Eventually.of_forall fun _ => bot_le) ?_
+    filter_upwards [hpop'] with r hr
+    refine measure_mono fun ω hω => ?_
+    simp only [Set.mem_ofPred_eq, gt_iff_lt, Real.dist_eq, sub_zero,
+      abs_of_nonneg (frobSub_nonneg _ _)] at hω ⊢
+    by_contra hcon
+    push Not at hcon
+    have := frobSub_triangle (responseDist (Xbar r ω)) (responseDist (μpop r)) DeltaInf
+    linarith
+  -- (2) the estimates' pairwise distances reach a fixed minimizer's
+  obtain ⟨ψ, hψmem, hψconv⟩ :=
+    RawStress.mds_stability_inProbability_of_uniqueProfile P
+      (fun r ω => responseDist (Xbar r ω)) DeltaInf ψhat hψhat huniq hD
+  refine ⟨ψ, hψmem, fun p hp ε hε => ?_⟩
+  -- (3) assemble the pairs into the `L^p` discrepancy
+  have hconv : ∀ i j : Fin n, ∀ δ > (0 : Real), Tendsto
+      (fun r => P {ω | δ < |‖ψhat r ω ((id : Fin n → Fin n) i)
+        - ψhat r ω ((id : Fin n → Fin n) j)‖
+        - ‖ψ ((id : Fin n → Fin n) i) - ψ ((id : Fin n → Fin n) j)‖|}) atTop (𝓝 0) := by
+    intro i j δ hδ
+    refine (hψconv i j δ hδ).congr fun r => ?_
+    congr 1
+    ext ω
+    simp [pairDistErr, pairDist, Real.dist_eq, abs_abs]
+  have hlp := ContinuousMDS.tendsto_measure_lpPairDistErr_gt (M := Fin n) P (κ := Fin n)
+    (d := d) p hp (id : Fin n → Fin n) ψhat ψ
+    (fun u ω => measurable_of_countable _) (measurable_of_countable _) hconv (ε := ε) hε
+  refine hlp.congr fun r => ?_
+  congr 1
+  ext ω
+  simp only [Set.mem_ofPred_eq]
+  rw [ContinuousMDS.lpPairDistErr_empiricalPopulation (M := Fin n) d (by linarith : (0:Real) ≤ p)
+    (id : Fin n → Fin n) (ψhat r ω) ψ (measurable_of_countable _) (measurable_of_countable _)]
+  simp
 
 end Acharyya2024.Consistency
