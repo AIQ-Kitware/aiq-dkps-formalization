@@ -523,12 +523,15 @@ theorem realSpectrum_subset_union_of_reduces
       rwa [realSpectrum_compressOperator_eq_restrictedSpectrum T Uᗮ h1.invariant] at hx))
 
 omit [CompleteSpace H] in
+/-- A real scalar multiple of a complex-linear operator is the multiple by the
+corresponding complex scalar. -/
 theorem real_smul_eq_complex_smul (t : ℝ) (E : H →L[ℂ] H) :
     (t • E : H →L[ℂ] H) = ((t : ℂ)) • E := by
   ext x
   simp [Complex.coe_smul]
 
 omit [CompleteSpace H] in
+/-- Every point of the affine path `A + t E` with real `t` is self-adjoint. -/
 theorem isSelfAdjointOperator_path {A E : H →L[ℂ] H}
     (hA : IsSelfAdjointOperator A) (hE : IsSelfAdjointOperator E) (t : ℝ) :
     IsSelfAdjointOperator (A + t • E) := by

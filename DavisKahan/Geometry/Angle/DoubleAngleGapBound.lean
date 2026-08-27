@@ -39,10 +39,12 @@ universe u
 
 /-! ## 1. Two scalar facts about `√2 / 2` -/
 
+/-- The quarter-turn threshold squares to one half. -/
 theorem sqrt_two_div_two_sq : (Real.sqrt 2 / 2) ^ 2 = 1 / 2 := by
   rw [div_pow, Real.sq_sqrt (by norm_num : (0 : ℝ) ≤ 2)]
   norm_num
 
+/-- The quarter-turn threshold is positive. -/
 theorem sqrt_two_div_two_pos : (0 : ℝ) < Real.sqrt 2 / 2 := by
   have : (0 : ℝ) < Real.sqrt 2 := Real.sqrt_pos.mpr (by norm_num)
   linarith

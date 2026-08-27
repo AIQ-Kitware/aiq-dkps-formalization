@@ -54,11 +54,13 @@ and interpolates linearly in between. -/
 def spectralGapCutoff (alpha delta t : ℝ) : ℝ :=
   max 0 (min 1 ((alpha + delta - t) / delta))
 
+/-- The one-sided gap cutoff is continuous. -/
 theorem continuous_spectralGapCutoff (alpha delta : ℝ) :
     Continuous (spectralGapCutoff alpha delta) := by
   unfold spectralGapCutoff
   fun_prop
 
+/-- The one-sided gap cutoff is `1` below the gap. -/
 theorem spectralGapCutoff_eq_one {alpha delta t : ℝ} (hdelta : 0 < delta)
     (ht : t ≤ alpha) : spectralGapCutoff alpha delta t = 1 := by
   have h1 : (1 : ℝ) ≤ (alpha + delta - t) / delta := by
@@ -67,6 +69,7 @@ theorem spectralGapCutoff_eq_one {alpha delta t : ℝ} (hdelta : 0 < delta)
   unfold spectralGapCutoff
   rw [min_eq_left h1, max_eq_right zero_le_one]
 
+/-- The one-sided gap cutoff vanishes above the gap. -/
 theorem spectralGapCutoff_eq_zero {alpha delta t : ℝ} (hdelta : 0 < delta)
     (ht : alpha + delta ≤ t) : spectralGapCutoff alpha delta t = 0 := by
   have h1 : (alpha + delta - t) / delta ≤ 0 :=
@@ -85,6 +88,7 @@ def spectralGapSymbol (alpha delta : ℝ) : C(spectrum ℂ B, ℝ) :=
       (Complex.continuous_re.comp continuous_subtype_val)⟩
 
 omit [CompleteSpace H] in
+/-- Evaluating the gap symbol is evaluating the cutoff at the real part. -/
 @[simp] theorem spectralGapSymbol_apply (alpha delta : ℝ) (w : spectrum ℂ B) :
     spectralGapSymbol B alpha delta w =
       spectralGapCutoff alpha delta (TauCeti.BorelCalculus.reCoord w) := rfl
