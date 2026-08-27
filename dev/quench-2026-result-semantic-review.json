@@ -319,12 +319,15 @@
     ]
    },
    "lean_declarations": [
-    "DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE",
     "DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE",
+    "DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE",
+    "highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport",
     "highProb_mse_nn_le",
     "highProb_mse_nn_le_of_subevent",
     "highProb_mse_tieAverage_of_subevents",
-    "highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport"
+    "integrable_sqLoss_of_bounded",
+    "mse_le_one_of_unit_range",
+    "radialTieAverage_mem_Icc"
    ],
    "clauses": [
     {
@@ -560,8 +563,8 @@
    "source_kind": "definition",
    "title": "The benchmark score is a [0,1]-valued function of a model and a query subset",
    "importance": "major",
-   "verdict": "GAP unbounded codomain",
-   "literal_source_covered": false,
+   "verdict": "PASS generalized",
+   "literal_source_covered": true,
    "source_claim": "y : F x 2^{Q*} -> [0,1] is the benchmark scoring function; y(f, Q*) is the score of f on all queries, and yhat_Q := y(f, Q) its score on a subset.",
    "source_locator": {
     "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
@@ -571,6 +574,9 @@
     ]
    },
    "lean_declarations": [
+    "integrable_sqLoss_of_bounded",
+    "mse_le_one_of_unit_range",
+    "radialTieAverage_mem_Icc",
     "yFull",
     "yQ"
    ],
@@ -580,6 +586,12 @@
      "lean_clause": "score : Model Q X -> Finset Q -> R, with yFull and yQ the two displayed evaluations.",
      "relation": "lean_weaker_hypothesis",
      "note": "Lean drops the [0,1] codomain, which also drops the automatic finiteness of the MSE integral."
+    },
+    {
+     "source_clause": "The score takes values in [0,1].",
+     "lean_clause": "Not required; but at that range the estimator stays in [0,1] and the MSE integrand is integrable with MSE <= 1, so the theorems are not vacuous there.",
+     "relation": "lean_weaker_hypothesis",
+     "note": ""
     }
    ],
    "review": "yFull and yQ are the two displayed evaluations. Lean drops the [0,1] codomain and uses a real-valued score, which is more general but removes the automatic integrability the bounded range supplies. Recorded as gap unbounded-score-codomain.",
@@ -587,7 +599,7 @@
    "gap_refs": [
     "unbounded-score-codomain"
    ],
-   "next_action": "Consider a bounded-score variant so the MSE integrals are unconditionally finite."
+   "next_action": "None."
   },
   {
    "id": "Q26-D",

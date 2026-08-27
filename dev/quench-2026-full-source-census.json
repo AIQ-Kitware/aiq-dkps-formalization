@@ -88,8 +88,8 @@
     },
     "unbounded-score-codomain": {
       "kind": "source_audit",
-      "title": "The paper's score takes values in [0,1]; the Lean score is an unrestricted real",
-      "detail": "Quench declares y : F x 2^{Q*} -> [0,1]. The Lean development uses score : Model Q X -> Finset Q -> R with no range constraint. That is a weakening in the usual direction -- any [0,1]-valued score is a real-valued one -- but it is not free: MSE is a Bochner integral, and for an unbounded score neither it nor the baseline MSE is guaranteed finite, in which case Lean's integral silently returns 0 rather than diverging. The theorems remain true as stated, but their content at an unbounded score is weaker than it looks. The paper's boundedness makes both integrals automatically finite, so restoring it would be a strengthening of the formal statements, not a restriction."
+      "title": "The paper's [0,1] score is not required in Lean; its consequences are now proved separately",
+      "detail": "Quench declares y : F x 2^{Q*} -> [0,1]. The Lean development uses score : Model Q X -> Finset Q -> R with no range constraint. That is a weakening in the usual direction -- any [0,1]-valued score is a real-valued one -- but it is not free: MSE is a Bochner integral, and for an unbounded score neither it nor the baseline MSE is guaranteed finite, in which case Lean's integral silently returns 0 rather than diverging. The theorems remain true as stated, but their content at an unbounded score is weaker than it looks. The paper's boundedness makes both integrals automatically finite, so restoring it would be a strengthening of the formal statements, not a restriction.\n\nAddressed. radialTieAverage_mem_Icc shows the tie-averaged estimator is a convex combination of the reference scores and so inherits their range: at a [0,1]-valued score the prediction is again in [0,1]. integrable_sqLoss_of_bounded shows a bounded target and estimator make the squared-loss integrand integrable, and mse_le_one_of_unit_range gives MSE <= 1 at the paper's range. So at the paper's own typing the mean squared error in every Quench theorem is a genuine bounded average rather than the value the Bochner integral assigns to a non-integrable function, and the statements say what they appear to say. The theorems keep the unrestricted real score, which is the more general form; the bounded case is now covered explicitly instead of being left to the reader."
     },
     "dissimilarity-normalisation-divergence": {
       "kind": "source_audit",
@@ -150,6 +150,9 @@
         ]
       },
       "lean_declarations": [
+        "integrable_sqLoss_of_bounded",
+        "mse_le_one_of_unit_range",
+        "radialTieAverage_mem_Icc",
         "yFull",
         "yQ"
       ],
@@ -159,10 +162,10 @@
       ],
       "semantic_alignment": {
         "classification": "generalized",
-        "detail": "yFull and yQ are the two displayed evaluations. Lean drops the [0,1] codomain and uses a real-valued score, which is more general but removes the automatic integrability the bounded range supplies. Recorded as gap unbounded-score-codomain."
+        "detail": "yFull and yQ are the two displayed evaluations. Lean drops the [0,1] codomain and uses a real-valued score, which is strictly more general. The consequence the bounded range would have supplied -- finiteness of the MSE integral -- is now proved directly for that case by integrable_sqLoss_of_bounded and mse_le_one_of_unit_range, with radialTieAverage_mem_Icc showing the estimator stays in range."
       },
       "notes": "Restoring the bound would strengthen the MSE statements rather than restrict them.",
-      "next_action": "Consider a bounded-score variant so the MSE integrals are unconditionally finite."
+      "next_action": "None."
     },
     {
       "id": "Q26-T1",
@@ -415,12 +418,15 @@
         ]
       },
       "lean_declarations": [
-        "DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE",
         "DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE",
+        "DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE",
+        "highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport",
         "highProb_mse_nn_le",
         "highProb_mse_nn_le_of_subevent",
         "highProb_mse_tieAverage_of_subevents",
-        "highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport"
+        "integrable_sqLoss_of_bounded",
+        "mse_le_one_of_unit_range",
+        "radialTieAverage_mem_Icc"
       ],
       "planned_declarations": [],
       "gap_refs": [

@@ -91,6 +91,36 @@ lemma radialMinimizers_nonempty {n : Nat} (hn : n > 0)
   rw [mem_radialMinimizers_iff]
   exact radialIndex_isArgmin hn rhat
 
+/--
+A tie average of reference scores lies between their bounds.
+
+The estimator is a convex combination of the scores of the tied nearest references, so it
+inherits their range.  With the paper's `[0,1]`-valued benchmark score this says the predicted
+score is again in `[0,1]`, which is what makes the mean squared error a genuine bounded average
+rather than the value the Bochner integral assigns to a non-integrable function.
+-/
+theorem radialTieAverage_mem_Icc {n : Nat} (hn : n > 0)
+    (rhat : Fin n → Real) (yref : Fin n → Real) {a b : Real}
+    (hlo : ∀ i, a ≤ yref i) (hhi : ∀ i, yref i ≤ b) :
+    radialTieAverage hn rhat yref ∈ Set.Icc a b := by
+  classical
+  have hne := radialMinimizers_nonempty hn rhat
+  have hcard : (0 : Real) < ((radialMinimizers hn rhat).card : Real) := by
+    exact_mod_cast Finset.card_pos.mpr hne
+  constructor
+  · rw [radialTieAverage, le_div_iff₀ hcard]
+    calc a * ((radialMinimizers hn rhat).card : Real)
+        = ∑ _i ∈ radialMinimizers hn rhat, a := by
+          rw [Finset.sum_const, nsmul_eq_mul]; ring
+      _ ≤ ∑ i ∈ radialMinimizers hn rhat, yref i :=
+          Finset.sum_le_sum fun i _ => hlo i
+  · rw [radialTieAverage, div_le_iff₀ hcard]
+    calc ∑ i ∈ radialMinimizers hn rhat, yref i
+        ≤ ∑ _i ∈ radialMinimizers hn rhat, b := Finset.sum_le_sum fun i _ => hhi i
+      _ = b * ((radialMinimizers hn rhat).card : Real) := by
+          rw [Finset.sum_const, nsmul_eq_mul]; ring
+
+
 /-- An average over all radial minimizers inherits a common absolute error
 bound satisfied by every minimizer. -/
 lemma abs_radialTieAverage_sub_le {n : Nat} (hn : n > 0)
