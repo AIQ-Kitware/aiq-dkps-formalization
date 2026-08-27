@@ -159,6 +159,38 @@ theorem rawStress_translate (Δ : DisMat n) (z : Config n d)
   have : (z i - c) - (z j - c) = z i - z j := by abel
   rw [this]
 
+/-! ## Remark 1: rigid invariance of raw stress, and its limits
+
+Raw stress is a function of the pairwise distances alone, so it is unchanged by any rigid
+motion and the minimizer set is closed under them.  `rawStress_translate` is the translation
+half; these are the whole statement.
+
+The source calls the invariance *affine*.  Raw stress is not affine-invariant, and
+`rawStress_not_affine_invariant` says so: a dilation changes every distance and therefore
+changes the stress.  The paper's own Corollary 1 uses an orthogonal map plus a translation,
+which is the correct class. -/
+
+/-- **Raw stress is invariant under rigid motions.** -/
+theorem rawStress_rigidMotion (Δ : DisMat n) (z : Config n d)
+    (W : EuclideanSpace ℝ (Fin d) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin d))
+    (a : EuclideanSpace ℝ (Fin d)) :
+    rawStress n d Δ (fun i => W (z i) + a) = rawStress n d Δ z := by
+  unfold rawStress
+  refine Finset.sum_congr rfl (fun i _ => Finset.sum_congr rfl (fun j _ => ?_))
+  have hsub : (W (z i) + a) - (W (z j) + a) = W (z i - z j) := by
+    rw [map_sub]
+    abel
+  rw [hsub, LinearIsometryEquiv.norm_map]
+
+/-- **Remark 1.** A rigid motion carries a raw-stress minimizer to a raw-stress minimizer. -/
+theorem mds_rigidMotion (Δ : DisMat n) (z : Config n d) (hz : z ∈ MDS n d Δ)
+    (W : EuclideanSpace ℝ (Fin d) ≃ₗᵢ[ℝ] EuclideanSpace ℝ (Fin d))
+    (a : EuclideanSpace ℝ (Fin d)) :
+    (fun i => W (z i) + a) ∈ MDS n d Δ := by
+  intro w
+  rw [rawStress_rigidMotion]
+  exact hz w
+
 /-! ## (c) Existence of minimizers -/
 
 /-- Each squared residual term is bounded by the whole raw-stress sum.

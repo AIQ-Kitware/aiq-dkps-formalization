@@ -82,21 +82,24 @@
     ]
    },
    "lean_declarations": [
-    "Acharyya2024.RawStress.rawStress_translate",
-    "Acharyya2024.RawStress.center_mem_mds"
+    "Acharyya2024.ProfileNonuniqueness.rawStress_not_affine_invariant",
+    "Acharyya2024.RawStress.center_mem_mds",
+    "Acharyya2024.RawStress.mds_rigidMotion",
+    "Acharyya2024.RawStress.rawStress_rigidMotion",
+    "Acharyya2024.RawStress.rawStress_translate"
    ],
    "clauses": [
     {
-     "source_clause": "Rigid/affine transformations preserve the raw-stress objective/minimizer status.",
-     "lean_clause": "rawStress_translate and center_mem_mds explicitly cover translation/centering invariance.",
-     "relation": "lean_weaker_conclusion",
-     "note": "The full orthogonal-plus-translation invariance is not exposed here as one Acharyya2024 source-facing result."
+     "source_clause": "Applying a rigid/affine transformation to a minimizer gives another minimizer.",
+     "lean_clause": "mds_rigidMotion for the rigid class; rawStress_not_affine_invariant refutes the affine reading.",
+     "relation": "source_repair",
+     "note": "Corollary 1 uses an orthogonal map plus a translation, so the remark's 'affine' is a wording slip."
     },
     {
-     "source_clause": "Additional non-congruent minimizers may exist.",
-     "lean_clause": "UniquePairProfile is introduced precisely because distinct minimizers can have different pair-distance profiles.",
-     "relation": "equivalent_encoding",
-     "note": "Lean turns the ambiguity into an explicit identifiability predicate rather than a theorem asserting examples."
+     "source_clause": "additional non-congruent minimizers may also exist",
+     "lean_clause": "no_fixed_limiting_profile constructs minimizers with distinct pairwise-distance profiles.",
+     "relation": "exact",
+     "note": ""
     }
    ],
    "review": "Lean explicitly proves translation invariance and preservation of minimizer status under centering, but does not expose the full orthogonal-plus-translation source claim as one theorem.",
@@ -104,7 +107,7 @@
    "gap_refs": [
     "affine-invariance-partial"
    ],
-   "next_action": "None."
+   "next_action": "None. The invariance is proved at the correct class and the wording slip is recorded with a counterexample."
   },
   {
    "id": "A24-R2",

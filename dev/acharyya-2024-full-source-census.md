@@ -20,8 +20,8 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | --- | ---: |
 | `compiled_exact` | 2 |
 | `compiled_generalized` | 2 |
-| `compiled_specialization` | 6 |
-| `compiled_source_repair` | 4 |
+| `compiled_specialization` | 5 |
+| `compiled_source_repair` | 5 |
 | `not_proof_debt` | 1 |
 
 ## Semantic-alignment summary
@@ -30,8 +30,8 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | --- | ---: |
 | `exact` | 2 |
 | `generalized` | 2 |
-| `specialized` | 6 |
-| `source_repair` | 4 |
+| `specialized` | 5 |
+| `source_repair` | 5 |
 | `out_of_scope` | 1 |
 
 ## Items
@@ -39,7 +39,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | id | importance | source anchor | status | alignment | verification |
 | --- | --- | --- | --- | --- | --- |
 | `A24-EQ1` | `major` | Equation (1), finite raw stress | `compiled_exact` | `exact` | `proved_in_build` |
-| `A24-R1` | `supporting` | Remark 1 | `compiled_specialization` | `specialized` | `proved_in_build` |
+| `A24-R1` | `supporting` | Remark 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-R2` | `supporting` | Remark 2 | `compiled_generalized` | `generalized` | `proved_in_build` |
 | `A24-R3` | `major` | Continuous raw-stress setup and Remark 3 | `compiled_exact` | `exact` | `absent` |
 | `A24-R4` | `supporting` | Remark 4 | `not_proof_debt` | `out_of_scope` | `not_applicable` |
@@ -94,11 +94,13 @@ Existence of a minimizer is attributed by the source to the cited continuous-MDS
 
 Further progress. lpPairDistErr is the source's L^p(P x P) discrepancy, and tendsto_measure_lpPairDistErr_gt proves Lemma 2's conclusion for the EMPIRICAL model distribution: pairwise convergence in probability of the estimates gives convergence in probability of the L^p discrepancy, along the full sequence rather than a subsequence and uniformly in p >= 1. What is still missing is the population law in place of the empirical measure, which is where the continuous-MDS embedding of the source enters and which the source itself attributes to the cited literature.
 
-### `affine-invariance-partial` — Remark 1 affine/rigid invariance is only partially exposed
+### `affine-invariance-partial` — Remark 1's invariance is rigid, not affine -- now proved and the wording corrected
 
 **Kind:** `source_audit`
 
 rawStress_translate proves the translation component. No Acharyya2024 theorem explicitly packages the orthogonal part of the rigid transformation or the full source wording. The paper calls this affine, while its later Corollary 1 uses orthogonal W plus translation.
+
+Done, with a correction. RawStress.rawStress_rigidMotion and RawStress.mds_rigidMotion package the full orthogonal-plus-translation statement: raw stress is unchanged by a rigid motion and the minimizer set is closed under them. The source's word 'affine' is too wide, and rawStress_not_affine_invariant shows it: a dilation changes every distance and therefore the stress. The paper's own Corollary 1 uses an orthogonal map plus a translation, which is the correct class, so this is a wording slip rather than a mathematical error.
 
 ### `growing-n-concentration` — Theorem 4 growing-n concentration is represented only through finite specializations/assumptions
 
@@ -151,13 +153,13 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **source anchor:** Remark 1 (remark, section 2)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:114-117`
 * **importance:** `supporting`
-* **status / verification:** `compiled_specialization` / `proved_in_build`
-* **semantic alignment:** `specialized` — Lean explicitly proves translation invariance and preservation of minimizer status under centering, but does not expose the full orthogonal-plus-translation source claim as one theorem.
+* **status / verification:** `compiled_source_repair` / `proved_in_build`
+* **semantic alignment:** `source_repair` — The invariance is now proved in full -- a rigid motion carries a minimizer to a minimizer -- rather than only its translation half. The source's description of the class as affine is corrected: raw stress sees only the pairwise distances, so a dilation changes it, and rawStress_not_affine_invariant exhibits that. The paper's Corollary 1 uses an orthogonal map plus a translation, so the intended class is the rigid one and the slip is in the wording of the remark.
 * **source claim:** Applying a rigid/affine transformation to a minimizer gives another minimizer; additional non-congruent minimizers may also exist.
-* **Lean declarations:** `Acharyya2024.RawStress.rawStress_translate`, `Acharyya2024.RawStress.center_mem_mds`
+* **Lean declarations:** `Acharyya2024.ProfileNonuniqueness.rawStress_not_affine_invariant`, `Acharyya2024.RawStress.center_mem_mds`, `Acharyya2024.RawStress.mds_rigidMotion`, `Acharyya2024.RawStress.rawStress_rigidMotion`, `Acharyya2024.RawStress.rawStress_translate`
 * **gap refs:** `affine-invariance-partial`
-* **notes:** The source uses the word affine, but its later alignment statement restricts the linear part to O(d).
-* **next action:** None.
+* **notes:** The remark's second clause, that non-congruent minimizers may also exist, is witnessed by ProfileNonuniqueness.no_fixed_limiting_profile, whose construction produces minimizers with distinct pairwise-distance profiles.
+* **next action:** None. The invariance is proved at the correct class and the wording slip is recorded with a counterexample.
 
 ### `A24-R2` — Existence of a finite raw-stress minimizer
 

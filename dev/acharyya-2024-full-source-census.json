@@ -63,8 +63,8 @@
     },
     "affine-invariance-partial": {
       "kind": "source_audit",
-      "title": "Remark 1 affine/rigid invariance is only partially exposed",
-      "detail": "rawStress_translate proves the translation component. No Acharyya2024 theorem explicitly packages the orthogonal part of the rigid transformation or the full source wording. The paper calls this affine, while its later Corollary 1 uses orthogonal W plus translation."
+      "title": "Remark 1's invariance is rigid, not affine -- now proved and the wording corrected",
+      "detail": "rawStress_translate proves the translation component. No Acharyya2024 theorem explicitly packages the orthogonal part of the rigid transformation or the full source wording. The paper calls this affine, while its later Corollary 1 uses orthogonal W plus translation.\n\nDone, with a correction. RawStress.rawStress_rigidMotion and RawStress.mds_rigidMotion package the full orthogonal-plus-translation statement: raw stress is unchanged by a rigid motion and the minimizer set is closed under them. The source's word 'affine' is too wide, and rawStress_not_affine_invariant shows it: a dilation changes every distance and therefore the stress. The paper's own Corollary 1 uses an orthogonal map plus a translation, which is the correct class, so this is a wording slip rather than a mathematical error."
     },
     "growing-n-concentration": {
       "kind": "scope_gap",
@@ -121,7 +121,7 @@
       "source_kind": "remark",
       "title": "Nonuniqueness and rigid/affine invariance of raw-stress minimizers",
       "source_claim": "Applying a rigid/affine transformation to a minimizer gives another minimizer; additional non-congruent minimizers may also exist.",
-      "status": "compiled_specialization",
+      "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -131,19 +131,22 @@
         ]
       },
       "lean_declarations": [
-        "Acharyya2024.RawStress.rawStress_translate",
-        "Acharyya2024.RawStress.center_mem_mds"
+        "Acharyya2024.ProfileNonuniqueness.rawStress_not_affine_invariant",
+        "Acharyya2024.RawStress.center_mem_mds",
+        "Acharyya2024.RawStress.mds_rigidMotion",
+        "Acharyya2024.RawStress.rawStress_rigidMotion",
+        "Acharyya2024.RawStress.rawStress_translate"
       ],
       "planned_declarations": [],
       "gap_refs": [
         "affine-invariance-partial"
       ],
       "semantic_alignment": {
-        "classification": "specialized",
-        "detail": "Lean explicitly proves translation invariance and preservation of minimizer status under centering, but does not expose the full orthogonal-plus-translation source claim as one theorem."
+        "classification": "source_repair",
+        "detail": "The invariance is now proved in full -- a rigid motion carries a minimizer to a minimizer -- rather than only its translation half. The source's description of the class as affine is corrected: raw stress sees only the pairwise distances, so a dilation changes it, and rawStress_not_affine_invariant exhibits that. The paper's Corollary 1 uses an orthogonal map plus a translation, so the intended class is the rigid one and the slip is in the wording of the remark."
       },
-      "notes": "The source uses the word affine, but its later alignment statement restricts the linear part to O(d).",
-      "next_action": "None."
+      "notes": "The remark's second clause, that non-congruent minimizers may also exist, is witnessed by ProfileNonuniqueness.no_fixed_limiting_profile, whose construction produces minimizers with distinct pairwise-distance profiles.",
+      "next_action": "None. The invariance is proved at the correct class and the wording slip is recorded with a counterexample."
     },
     {
       "id": "A24-R2",

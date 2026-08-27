@@ -195,4 +195,22 @@ theorem no_fixed_limiting_profile :
       ge_of_tendsto hlim (Filter.Eventually.of_forall fun t => hhalf (u t))
     simp at hle
 
+/--
+**Raw stress is not affine-invariant.**
+
+Remark 1 describes the non-uniqueness of raw-stress minimizers as invariance under an *affine*
+transformation.  Raw stress depends on the configuration only through its pairwise distances, so
+it is invariant under rigid motions -- `RawStress.rawStress_rigidMotion` -- but a general affine
+map changes distances and therefore changes the stress.  A dilation suffices to show it, and the
+paper's own Corollary 1 uses an orthogonal map plus a translation, which is the correct class.
+-/
+theorem rawStress_not_affine_invariant :
+    ∃ (Δ : DisMat 2) (z : Config 2 1),
+      rawStress 2 1 Δ z ≠ rawStress 2 1 Δ (fun i => (2 : Real) • z i) := by
+  classical
+  refine ⟨fun i j => if i = j then 0 else 1,
+    fun i => EuclideanSpace.single 0 (if i = 1 then (1 : Real) else 0), ?_⟩
+  simp only [rawStress, Fin.sum_univ_two, norm_sub_one_dim]
+  norm_num [EuclideanSpace.single_apply, Fin.ext_iff]
+
 end Acharyya2024.ProfileNonuniqueness
