@@ -330,7 +330,7 @@ theorem tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent
       RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hMem : N.Mem (T - A)) :
     N.Mem (paperTanAngleOperatorC U V) ∧
       delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge (T - A) := by

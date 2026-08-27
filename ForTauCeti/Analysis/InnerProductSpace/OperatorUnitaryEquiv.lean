@@ -17,7 +17,7 @@ The relation is already spelled out at several places in the Davis--Kahan develo
 introduced here so that the *chain* of equivalences produced by the multiplicity construction --
 operator, cyclic model, slice model, normal form -- can be composed by `trans` instead of by
 hand.  The definition is literally the same existential as
-`TauCeti.DavisKahan.Frontier.BoundedOperatorsUnitaryEquivalent`, so the two unfold
+`TauCeti.DavisKahan.BoundedOperatorsUnitaryEquivalent`, so the two unfold
 to each other.
 
 The intertwining is stated **pointwise**.  Writing it as a composition of continuous linear maps

@@ -28,7 +28,6 @@ namespace RieszCircle
 
 open DavisKahanExt
 open TauCeti.DavisKahan
-open TauCeti.DavisKahan.Frontier
 
 universe u
 
@@ -54,7 +53,7 @@ omit [CompleteSpace H] in
 circle integral. -/
 theorem circleRieszProjection_eq_integral
     (A : H →L[ℂ] H) (center radius : ℝ) :
-    Frontier.circleRieszProjection A center radius =
+    circleRieszProjection A center radius =
       circleRieszProjectionIntegral A center radius :=
   rfl
 
@@ -250,7 +249,7 @@ theorem circleRieszProjection_eq_boundedSelfAdjointSpectralProjection
     (A : H →L[ℂ] H) (hA : IsSelfAdjointOperator A)
     (B : Set ℝ) (hB : MeasurableSet B) (center radius : ℝ)
     (hsep : CircleSeparatesRealSpectrum A hA B center radius) :
-    Frontier.circleRieszProjection A center radius =
+    circleRieszProjection A center radius =
       boundedSelfAdjointSpectralProjection A hA B hB := by
   classical
   have hnormal : IsStarNormal A :=
@@ -260,9 +259,9 @@ theorem circleRieszProjection_eq_boundedSelfAdjointSpectralProjection
       ∫ θ in (0 : ℝ)..2 * Real.pi, circleSpectrumSymbol A center radius θ
     with hg
   have hint := intervalIntegrable_circleSpectrumSymbol A hA hsep
-  have hproj : Frontier.circleRieszProjection A center radius =
+  have hproj : circleRieszProjection A center radius =
       cfcL (a := A) hnormal g := by
-    have h1 : Frontier.circleRieszProjection A center radius =
+    have h1 : circleRieszProjection A center radius =
         (2 * Real.pi * Complex.I)⁻¹ •
           ∫ θ in (0 : ℝ)..2 * Real.pi,
             cfcL (a := A) hnormal (circleSpectrumSymbol A center radius θ) := by
@@ -428,8 +427,8 @@ theorem norm_circleRieszProjection_sub_le
       ‖Ring.inverse (z • (1 : H →L[ℂ] H) - A)‖ ≤ margin⁻¹)
     (hAEres : ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius →
       ‖Ring.inverse (z • (1 : H →L[ℂ] H) - (A + E))‖ ≤ margin⁻¹) :
-    ‖Frontier.circleRieszProjection (A + E) center radius -
-        Frontier.circleRieszProjection A center radius‖ ≤
+    ‖circleRieszProjection (A + E) center radius -
+        circleRieszProjection A center radius‖ ≤
       radius * ‖E‖ / margin ^ 2 := by
   have hint : CircleIntegrable
       (fun z : ℂ => Ring.inverse (z • (1 : H →L[ℂ] H) - A)) center radius :=
@@ -481,8 +480,8 @@ theorem norm_circleRieszProjection_sub_le
     · rw [Ring.inverse_non_unit T hTu, Ring.inverse_non_unit T' hT'u, sub_zero,
         norm_zero]
       positivity
-  have hsplit : Frontier.circleRieszProjection (A + E) center radius -
-      Frontier.circleRieszProjection A center radius =
+  have hsplit : circleRieszProjection (A + E) center radius -
+      circleRieszProjection A center radius =
       (2 * Real.pi * Complex.I)⁻¹ •
         ∮ z in C((center : ℂ), radius),
           (Ring.inverse (z • (1 : H →L[ℂ] H) - (A + E)) -
@@ -504,7 +503,7 @@ theorem continuous_circleRieszProjection_path
       ∀ z : ℂ, ‖z - (center : ℂ)‖ = radius →
         IsUnit (z • (1 : H →L[ℂ] H) - (A + t • E))) :
     ContinuousOn
-      (fun t : ℝ => Frontier.circleRieszProjection (A + t • E) center radius)
+      (fun t : ℝ => circleRieszProjection (A + t • E) center radius)
       (Set.Icc 0 1) := by
   rw [continuousOn_iff_continuous_domRestrict]
   set F : Set.Icc (0 : ℝ) 1 → ℝ → (H →L[ℂ] H) := fun t θ =>

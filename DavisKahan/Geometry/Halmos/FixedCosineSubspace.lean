@@ -24,7 +24,7 @@ This module owns that eigenspace and everything the maximality argument needs.  
 extracted from the Section 3 frontier module; the mathematics is unchanged.  The extraction
 is what lets `DavisKahan/Geometry/Angle/Proposition35Infinite.lean` -- which identifies this
 eigenspace with the operator-angle eigenspace `Ω({θ})H` -- stop importing
-the former `DavisKahan.Frontier.Section3`, so no stable geometry module depends on the frontier.
+the former `DavisKahan.Section3`, so no stable geometry module depends on the frontier.
 
 ## Scope
 

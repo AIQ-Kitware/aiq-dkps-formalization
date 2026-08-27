@@ -1223,7 +1223,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent
       RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V) :
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
     ‖sinAngleOperatorC U V‖ < 1 := by
   have hdirected : approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
     approximationSingularValue_sineBlock_lt_one_infiniteTrial T V U hT hV hdelta
@@ -1233,7 +1233,7 @@ theorem norm_sinAngleOperatorC_lt_one_of_crossedDefectsEquivalent
     rw [(paperDirectedSineAmbient U V).approximationNumber_index_zero] at h
     exact lt_of_le_of_lt h hdirected
   rw [norm_sinAngleOperatorC U V,
-    DavisKahan.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
+    DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent
       U V h35]
   exact hambient
 
@@ -1249,7 +1249,7 @@ theorem tanTheta_wholeSpace_all_kyFan_of_crossedDefectsEquivalent
       RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V) :
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
     ∀ k : ℕ,
       delta * kyFanApproximationGauge k (paperTanAngleOperatorC U V) ≤
         kyFanApproximationGauge k (T - A) :=
@@ -1271,7 +1271,7 @@ theorem tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent
       RCLike.re ⟪theorem63Compression T U z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ,
       (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hMem : N.Mem (T - A)) :
     N.Mem (paperTanAngleOperatorC U V) ∧
       delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge (T - A) :=

@@ -124,7 +124,7 @@
       "title": "Paper direct-rotation predicate",
       "kind": "foundation",
       "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
-      "declaration": "TauCeti.DavisKahan.Frontier.IsPaperDirectRotation",
+      "declaration": "TauCeti.DavisKahan.IsPaperDirectRotation",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -138,7 +138,7 @@
       "title": "Crossed-defect Hilbert equivalence",
       "kind": "foundation",
       "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
-      "declaration": "TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent",
+      "declaration": "TauCeti.DavisKahan.CrossedDefectsEquivalent",
       "dependencies": [
         "base-halmos-decomposition"
       ],
@@ -152,7 +152,7 @@
       "title": "Generic Halmos cosine restriction",
       "kind": "foundation",
       "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
-      "declaration": "TauCeti.DavisKahan.Frontier.genericHalmosCosineSq",
+      "declaration": "TauCeti.DavisKahan.genericHalmosCosineSq",
       "dependencies": [
         "base-halmos-decomposition",
         "base-halmos-pythagoras"
@@ -181,7 +181,7 @@
       "title": "Generic Halmos sine restriction",
       "kind": "foundation",
       "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
-      "declaration": "TauCeti.DavisKahan.Frontier.genericHalmosSineSq",
+      "declaration": "TauCeti.DavisKahan.genericHalmosSineSq",
       "dependencies": [
         "base-halmos-decomposition",
         "base-halmos-pythagoras"
@@ -196,7 +196,7 @@
       "title": "Generic restriction Pythagoras",
       "kind": "bridge",
       "module": "DavisKahan.Geometry.Halmos.GenericRotationPredicates",
-      "declaration": "TauCeti.DavisKahan.Frontier.genericHalmosCosineSq_add_sineSq",
+      "declaration": "TauCeti.DavisKahan.genericHalmosCosineSq_add_sineSq",
       "dependencies": [
         "s3-generic-cosine-restriction",
         "s3-generic-sine-restriction"
@@ -450,7 +450,7 @@
         "DK-4.1-prop"
       ],
       "priority": "medium",
-      "notes": "RETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Frontier.Section4.proposition4_1_restrictedDisplacement_approximationNumbers`, a wrapper in the retired Section 4 staging module `DavisKahan/Frontier/Section4.lean`.  That module is deleted; the stable implementation is `TauCeti.DavisKahan.Section4.proposition4_1_restrictedDisplacement_approximationNumbers` in `DavisKahan/Geometry/Polar/RestrictedDisplacementExtremal.lean`, and the source-facing endpoint is the alias named here.  Scope is unchanged: arbitrary complex Hilbert space, acute pair, every approximation number of the restricted displacement minimized by the canonical direct rotation.  `Proposition4_1_infiniteDimensional_nonacute` carries the matched-crossed-defect scope.",
+      "notes": "RETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Section4.proposition4_1_restrictedDisplacement_approximationNumbers`, a wrapper in the retired Section 4 staging module `DavisKahan/Frontier/Section4.lean`.  That module is deleted; the stable implementation is `TauCeti.DavisKahan.Section4.proposition4_1_restrictedDisplacement_approximationNumbers` in `DavisKahan/Geometry/Polar/RestrictedDisplacementExtremal.lean`, and the source-facing endpoint is the alias named here.  Scope is unchanged: arbitrary complex Hilbert space, acute pair, every approximation number of the restricted displacement minimized by the canonical direct rotation.  `Proposition4_1_infiniteDimensional_nonacute` carries the matched-crossed-defect scope.",
       "external": false
     },
     {
@@ -466,7 +466,7 @@
         "DK-4.1-cor"
       ],
       "priority": "medium",
-      "notes": "RETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Frontier.Section4.corollary4_1_restrictedDisplacement_idealGauge` in the retired staging module `DavisKahan/Frontier/Section4.lean`.  The source-facing endpoint named here is the matched-crossed-defect scope the paper inherits from Corollary 3.1; the acute scope of the retired declaration is `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional`, added to `DavisKahan/Sources/DavisKahan1970/Section4.lean` in the same change.  Both promote approximation-number minimality to every Ky-Fan-dominant unitarily invariant ideal gauge, and both conclude ideal membership rather than assuming it.",
+      "notes": "RETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Section4.corollary4_1_restrictedDisplacement_idealGauge` in the retired staging module `DavisKahan/Frontier/Section4.lean`.  The source-facing endpoint named here is the matched-crossed-defect scope the paper inherits from Corollary 3.1; the acute scope of the retired declaration is `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional`, added to `DavisKahan/Sources/DavisKahan1970/Section4.lean` in the same change.  Both promote approximation-number minimality to every Ky-Fan-dominant unitarily invariant ideal gauge, and both conclude ideal membership rather than assuming it.",
       "external": false
     },
     {
@@ -482,7 +482,7 @@
         "DK-4.2-prop"
       ],
       "priority": "medium",
-      "notes": "RETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Frontier.Section4.proposition4_2_basisAngleSquareSum`, a finite-index wrapper in the retired staging module `DavisKahan/Frontier/Section4.lean`.  The stable implementations are `TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge` and its arbitrary-index `ℝ≥0∞` companions in `DavisKahan/Geometry/Angle/BasisAngleEnergy.lean`; the source-facing endpoint named here is the printed principal-angle form `∑ₖ sin² θₖ ≤ ∑ᵢ sin²(bᵢ, W bᵢ)`, which is the arbitrary-dimensional statement rather than the finite-index one the retired wrapper carried.  The retired staging module's discussion of the two refuted transcriptions is preserved in the `BasisAngleEnergy` module docstring.",
+      "notes": "RETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Section4.proposition4_2_basisAngleSquareSum`, a finite-index wrapper in the retired staging module `DavisKahan/Frontier/Section4.lean`.  The stable implementations are `TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge` and its arbitrary-index `ℝ≥0∞` companions in `DavisKahan/Geometry/Angle/BasisAngleEnergy.lean`; the source-facing endpoint named here is the printed principal-angle form `∑ₖ sin² θₖ ≤ ∑ᵢ sin²(bᵢ, W bᵢ)`, which is the arbitrary-dimensional statement rather than the finite-index one the retired wrapper carried.  The retired staging module's discussion of the two refuted transcriptions is preserved in the `BasisAngleEnergy` module docstring.",
       "external": false
     },
     {
@@ -498,7 +498,7 @@
         "DK-4.3-prop"
       ],
       "priority": "medium",
-      "notes": "RESTATED 2026-08-05.  The node used to point at `proposition4_3_squaredDisplacement_approximationNumbers`, pointwise domination of the individual approximation numbers.  That statement is FALSE: pointwise domination implies Ky Fan majorisation and hence Proposition 4.4, which this repository refutes (`shortRotation_fullDisplacement_refuted`, census row DK-4.4-prop).  Refuting configuration, computed: R^4, `U = span(e1,e2)`, `V` at principal angles pi/4 and pi/4 (acute), competitor carrying `U` onto `V` by a quarter turn in the V-frame and `U-perp` onto `V-perp` by the identity; then `a_2(1-D) = 0.765367 > 0.261052 = a_2(1-W)`.  Proposition 4.3 itself survives, because its Ky Fan sums are sums of SQUARES and those are dominated at every k.  The node now points at the Ky Fan form, which is what a unitarily invariant norm sees; it is still open.\n\nRETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Frontier.Section4.proposition4_3_squaredDisplacement_kyFan` in the retired staging module `DavisKahan/Frontier/Section4.lean`; that wrapper was `:=` the stable theorem `TauCeti.DavisKahan.Section4.proposition4_3_squaredDisplacement_kyFan` in `DavisKahan/Geometry/Polar/DisplacementSquareExtremal.lean`, aliased source-facing as the declaration named here, so the statement is unchanged.  The Ky Fan form is PROVED; the closing sentence of the 2026-08-05 note above, written when the statement was still open, is superseded.  The refuting configuration for the pointwise reading is preserved in the `DisplacementSquareExtremal` module docstring.",
+      "notes": "RESTATED 2026-08-05.  The node used to point at `proposition4_3_squaredDisplacement_approximationNumbers`, pointwise domination of the individual approximation numbers.  That statement is FALSE: pointwise domination implies Ky Fan majorisation and hence Proposition 4.4, which this repository refutes (`shortRotation_fullDisplacement_refuted`, census row DK-4.4-prop).  Refuting configuration, computed: R^4, `U = span(e1,e2)`, `V` at principal angles pi/4 and pi/4 (acute), competitor carrying `U` onto `V` by a quarter turn in the V-frame and `U-perp` onto `V-perp` by the identity; then `a_2(1-D) = 0.765367 > 0.261052 = a_2(1-W)`.  Proposition 4.3 itself survives, because its Ky Fan sums are sums of SQUARES and those are dominated at every k.  The node now points at the Ky Fan form, which is what a unitarily invariant norm sees; it is still open.\n\nRETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Section4.proposition4_3_squaredDisplacement_kyFan` in the retired staging module `DavisKahan/Frontier/Section4.lean`; that wrapper was `:=` the stable theorem `TauCeti.DavisKahan.Section4.proposition4_3_squaredDisplacement_kyFan` in `DavisKahan/Geometry/Polar/DisplacementSquareExtremal.lean`, aliased source-facing as the declaration named here, so the statement is unchanged.  The Ky Fan form is PROVED; the closing sentence of the 2026-08-05 note above, written when the statement was still open, is superseded.  The refuting configuration for the pointwise reading is preserved in the `DisplacementSquareExtremal` module docstring.",
       "external": false
     },
     {
@@ -506,7 +506,7 @@
       "title": "Approximation-number energy",
       "kind": "foundation",
       "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section6Appendix.approximationEnergy",
+      "declaration": "TauCeti.DavisKahan1970.Section6Appendix.approximationEnergy",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -518,7 +518,7 @@
       "title": "Lemma 6.3 approximation-number form",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
+      "declaration": "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage",
       "dependencies": [
         "s6-approximation-energy"
       ],
@@ -534,7 +534,7 @@
       "title": "Lemma 6.3 singular-value specialization",
       "kind": "bridge",
       "module": "DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
+      "declaration": "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage",
       "dependencies": [
         "s6-lemma6-3-approx"
       ],
@@ -668,7 +668,7 @@
       "title": "Compatible cross-operator norm interface",
       "kind": "foundation",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "TauCeti.DavisKahan.Frontier.RemainingSourceSurface.CompatibleCrossOperatorNorm",
+      "declaration": "TauCeti.DavisKahan1970.RemainingSourceSurface.CompatibleCrossOperatorNorm",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "medium",
@@ -680,7 +680,7 @@
       "title": "Theorem 5.1 exact compatible-norm form",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "TauCeti.DavisKahan.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester",
+      "declaration": "TauCeti.DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester",
       "dependencies": [
         "s5-compatible-cross-norm"
       ],
@@ -710,7 +710,7 @@
       "title": "Theorem 5.1 with the roles of A and B interchanged",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "TauCeti.DavisKahan.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_interchanged",
+      "declaration": "TauCeti.DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester_interchanged",
       "dependencies": [
         "s5-compatible-cross-norm"
       ],
@@ -726,7 +726,7 @@
       "title": "Theorem 5.1 for a closed densely defined left block",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "TauCeti.DavisKahan.Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester_unboundedA",
+      "declaration": "TauCeti.DavisKahan1970.RemainingSourceSurface.theorem5_1_banach_sylvester_unboundedA",
       "dependencies": [
         "s5-compatible-cross-norm"
       ],
@@ -742,7 +742,7 @@
       "title": "Trial residual operator",
       "kind": "foundation",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "TauCeti.DavisKahan.Frontier.RemainingSourceSurface.trialResidual",
+      "declaration": "TauCeti.DavisKahan1970.RemainingSourceSurface.trialResidual",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -809,7 +809,7 @@
       "title": "Theorem 6.3 finite strict-lower-rank specialization",
       "kind": "bridge",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "TauCeti.DavisKahan.Frontier.RemainingSourceSurface.theorem6_3_finite_generalizedTanTheta_ideal",
+      "declaration": "TauCeti.DavisKahan1970.RemainingSourceSurface.theorem6_3_finite_generalizedTanTheta_ideal",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -838,7 +838,7 @@
       "title": "Section 2 single-angle tangent theorem",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "TauCeti.DavisKahan.Frontier.RemainingSourceSurface.theorem6_3_equalDimension_tanTheta_ideal_spectral",
+      "declaration": "TauCeti.DavisKahan1970.RemainingSourceSurface.theorem6_3_equalDimension_tanTheta_ideal_spectral",
       "dependencies": [
         "s6-theorem6-3-kyfan-promotion"
       ],
@@ -854,7 +854,7 @@
       "title": "Theorem 6.3 unbounded graph-angle operator-norm partial",
       "kind": "bridge",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "TauCeti.DavisKahan.Frontier.RemainingSourceSurface.theorem6_3_unbounded_graphAngle_opNorm_partial",
+      "declaration": "TauCeti.DavisKahan1970.RemainingSourceSurface.theorem6_3_unbounded_graphAngle_opNorm_partial",
       "dependencies": [],
       "source_census_ids": [],
       "priority": "high",
@@ -866,7 +866,7 @@
       "title": "Section 2 unbounded self-adjoint scope",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "TauCeti.DavisKahan.Frontier.RemainingSourceSurface.unbounded_angle_theorems_source_scope_partial_marker",
+      "declaration": "TauCeti.DavisKahan1970.RemainingSourceSurface.unbounded_angle_theorems_source_scope_partial_marker",
       "dependencies": [
         "base-theorem5-2",
         "s6-theorem6-3",
@@ -884,7 +884,7 @@
       "title": "Section 7 sine double-angle source ideal theorem",
       "kind": "source",
       "module": "DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface",
-      "declaration": "TauCeti.DavisKahan.Frontier.RemainingSourceSurface.section7_sinTwoTheta_source_ideal",
+      "declaration": "TauCeti.DavisKahan1970.RemainingSourceSurface.section7_sinTwoTheta_source_ideal",
       "dependencies": [
         "base-spectral-projection"
       ],

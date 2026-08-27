@@ -49,7 +49,6 @@ open scoped Topology
 
 namespace TauCeti
 namespace DavisKahan
-namespace Frontier
 
 universe u
 
@@ -461,6 +460,5 @@ theorem exists_norm_le_mul_norm_sylvesterOperator (hr : 0 < radius)
 
 end BoundedInverse
 
-end Frontier
 end DavisKahan
 end TauCeti

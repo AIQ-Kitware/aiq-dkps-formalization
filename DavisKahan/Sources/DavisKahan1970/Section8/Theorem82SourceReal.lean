@@ -106,7 +106,6 @@ open TauCeti.DavisKahan
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation
 open TauCeti.DavisKahan.Foundation.RealComplexification
-open TauCeti.DavisKahan.Frontier
 
 noncomputable section
 

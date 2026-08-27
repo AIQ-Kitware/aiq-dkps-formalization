@@ -25,8 +25,8 @@ of it, so it cannot import those modules without creating an import cycle.  This
 module is that downstream leaf.
 
 Most of what this file used to hold was a list of aliases forwarding
-`TauCeti.DavisKahan.Frontier.Section8.X` to `X` in this namespace.  With the
-Section 8 modules out of `DavisKahan/Frontier/` those forwards became
+`TauCeti.DavisKahan.Section8.X` to `X` in this namespace.  With the
+Section 8 modules out of the retired `DavisKahan/Frontier/` those forwards became
 self-aliases and are gone; the two entries below are genuine renames, and what
 remains is the claim-by-claim map itself.
 

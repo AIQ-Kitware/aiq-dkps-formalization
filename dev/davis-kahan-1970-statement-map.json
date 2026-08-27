@@ -1561,18 +1561,18 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6.3-lem",
       "review_declarations": [
-        "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
-        "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
-        "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage_real"
+        "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage",
+        "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage",
+        "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real"
       ],
       "audit_clauses": [
         {
           "id": "DK-6.3-lem.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
-            "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
-            "TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage_real"
+            "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage",
+            "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage",
+            "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real"
           ]
         }
       ],

@@ -383,9 +383,9 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage
-#check @TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_singularValue_leakage
-#check @TauCeti.DavisKahan.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage_real
+#check @TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage
+#check @TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage
+#check @TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real
 
 /-! ## DK-8.1-thm: Branch selection and spectral repulsion
 

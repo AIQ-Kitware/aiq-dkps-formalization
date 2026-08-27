@@ -3,14 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Frontier.Section8SourceSurface
+import DavisKahan.Section8SourceSurface
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem81MajorizationReal
 
 /-!
 # Dependency audit for Davis--Kahan 1970 Section 8
 
 This is the audit leaf for the **actual final capstones** of Section 8.  It
-lives downstream of the Frontier layer because that is where Section 8's
+lives downstream of the analytic layer because that is where Section 8's
 analytic content lives; the upstream leaf
 `DavisKahan/Sources/DavisKahan1970/Audits/Section8.lean` continues to audit the
 internal infrastructure, which is no longer evidence about the printed

@@ -39,7 +39,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open Frontier
 open Module (finrank)
 open Module.End (eigenspace)
 
@@ -343,7 +342,7 @@ one for which the eigenvalue list *is* a complete invariant. -/
 theorem pairOfSubspacesUnitaryEquivalent_iff_sameCompactAngleData
     (hc₁ : IsCompactOperator (projection U₁ ∘L projection V₁ ∘L projection U₁))
     (hc₂ : IsCompactOperator (projection U₂ ∘L projection V₂ ∘L projection U₂)) :
-    Frontier.PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
+    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
       SameCompactAngleData U₁ V₁ U₂ V₂ := by
   constructor
   · intro h

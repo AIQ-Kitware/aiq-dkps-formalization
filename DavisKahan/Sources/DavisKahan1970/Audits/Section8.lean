@@ -18,8 +18,8 @@ and their trusted-dependency reports are clean, and that is all this
 leaf certifies.
 
 The audit of the actual Section 8 capstones is
-`DavisKahan/Frontier/Section8Audit.lean`, which must live downstream of the
-Frontier layer because that is where Section 8's analytic content is.  It checks
+`DavisKahan/Audits/Section8.lean`, which must live downstream of the analytic
+layer because that is where Section 8's analytic content is.  It checks
 Theorem 8.1's branch, characterization and uniqueness; parts (i), (ii) and (iii)
 for both blocks including the every-symmetric-gauge forms; the eigenvalue/angle
 source dictionary; and both Theorem 8.2 alternatives together with the printed

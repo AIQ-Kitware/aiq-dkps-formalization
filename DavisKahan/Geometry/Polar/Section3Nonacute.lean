@@ -28,7 +28,6 @@ open scoped InnerProductSpace
 namespace TauCeti
 namespace DavisKahan
 
-open Frontier
 
 noncomputable section
 

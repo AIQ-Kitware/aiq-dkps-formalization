@@ -21,7 +21,6 @@ open scoped InnerProductSpace
 
 namespace TauCeti
 namespace DavisKahan
-namespace Frontier
 
 
 universe u
@@ -76,6 +75,5 @@ end Projection
 
 end CircleRieszInterface
 
-end Frontier
 end DavisKahan
 end TauCeti

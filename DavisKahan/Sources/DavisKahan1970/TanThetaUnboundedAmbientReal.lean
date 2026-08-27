@@ -99,7 +99,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent
     (hCompression : ∀ z : U, ⟪data.compression z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hcross : ∀ z : U, (alpha + delta) * ‖Vᗮ.starProjection ((z : U) : E)‖ ^ 2 ≤
       ⟪Vᗮ.starProjection ((z : U) : E), Vᗮ.starProjection (data.action z)⟫_ℝ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V) :
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
     ‖paperSinAngleOperatorR U V‖ < 1 := by
   have hdirected := approximationSingularValue_sineBlockReal_lt_one_infiniteData
     data hdelta hCompression hcross 0
@@ -116,7 +116,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefectsEquivalent
             (ContinuousLinearMap.opNorm_nonneg (theorem63DirectedSineBlockReal U V))
       _ < 1 := by rwa [mul_one]
   rw [norm_paperSinAngleOperatorR,
-    DavisKahan.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent U V h35]
+    DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent U V h35]
   exact hnorm
 
 /-! ## Transporting the Rayleigh--Ritz residual block -/
@@ -167,7 +167,7 @@ theorem tanTheta_unbounded_ambient_paperUINorm_real_of_data
     (hCompression : ∀ z : U, ⟪data.compression z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hcross : ∀ z : U, (alpha + delta) * ‖Vᗮ.starProjection ((z : U) : E)‖ ^ 2 ≤
       ⟪Vᗮ.starProjection ((z : U) : E), Vᗮ.starProjection (data.action z)⟫_ℝ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : data.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
     N.Mem (paperTanAngleOperatorR U V) ∧
@@ -222,7 +222,7 @@ theorem tanTheta_unbounded_ambient_paperUINorm_real_exact
     (hCompression : ∀ z : U, ⟪D.operator z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℝ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
     N.Mem (paperTanAngleOperatorR U V) ∧
@@ -251,7 +251,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefect
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : U) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V) :
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
     ‖paperSinAngleOperatorR U V‖ < 1 := by
   have hdirected := approximationSingularValue_sineBlockReal_lt_one_unboundedCompression
     D V hdelta hupper hcross 0
@@ -269,7 +269,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefect
           (ContinuousLinearMap.opNorm_nonneg (theorem63DirectedSineBlockReal U V))
       _ < 1 := by rwa [mul_one]
   rw [norm_paperSinAngleOperatorR,
-    DavisKahan.Frontier.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent U V h35]
+    DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent U V h35]
   exact hnorm
 
 /-- The Rayleigh--Ritz residual-block identity for real unbounded-compression data
@@ -313,7 +313,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_real_of_data
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : U) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
     N.Mem (paperTanAngleOperatorR U V) ∧
@@ -359,7 +359,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_real_exact
     (hupper : SemiboundedAbove D.compression alpha)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℝ)
-    (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
     N.Mem (paperTanAngleOperatorR U V) ∧
