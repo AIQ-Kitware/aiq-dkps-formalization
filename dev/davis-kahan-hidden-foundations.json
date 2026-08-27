@@ -69,71 +69,6 @@
       "notes": ""
     },
     {
-      "id": "spectral-multiplicity-foundation",
-      "title": "Abstract spectral-multiplicity classifier interface",
-      "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
-      "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.SpectralMultiplicityFoundation",
-      "kind": "interface",
-      "dependencies": [],
-      "frontier_nodes": [
-        "s3-spectral-multiplicity-definition",
-        "s3-spectral-multiplicity-complete",
-        "s3-theorem3-1"
-      ],
-      "confidence": "high",
-      "notes": "Honest boundary for the missing direct-integral multiplicity theorem."
-    },
-    {
-      "id": "spectral-multiplicity-completeness",
-      "title": "Multiplicity equality iff unitary equivalence",
-      "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
-      "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.SpectralMultiplicityFoundation.multiplicity_eq_iff",
-      "kind": "bridge",
-      "dependencies": [
-        "spectral-multiplicity-foundation"
-      ],
-      "frontier_nodes": [
-        "s3-spectral-multiplicity-complete",
-        "s3-theorem3-1"
-      ],
-      "confidence": "high",
-      "notes": ""
-    },
-    {
-      "id": "compact-positive-list-foundation",
-      "title": "Compact positive operator eigenvalue-list classifier interface",
-      "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
-      "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.CompactPositiveListFoundation",
-      "kind": "interface",
-      "dependencies": [],
-      "frontier_nodes": [
-        "s3-compact-angle-list",
-        "s3-cor3-1"
-      ],
-      "confidence": "high",
-      "notes": ""
-    },
-    {
-      "id": "compact-list-classification",
-      "title": "Eigenvalue list iff unitary equivalence",
-      "module": "DavisKahan.SpectralTheory.SpectralMultiplicityFoundation",
-      "file": "DavisKahan/SpectralTheory/SpectralMultiplicityFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.CompactPositiveListFoundation.list_eq_iff_unitarilyEquivalent",
-      "kind": "bridge",
-      "dependencies": [
-        "compact-positive-list-foundation"
-      ],
-      "frontier_nodes": [
-        "s3-compact-angle-list",
-        "s3-cor3-1"
-      ],
-      "confidence": "high",
-      "notes": ""
-    },
-    {
       "id": "circle-param",
       "title": "Positive circle parameterization",
       "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry",
@@ -531,11 +466,7 @@
         "orthogonal-sum-equivalence",
         "two-projection-equivalence-data",
         "two-projection-ambient-unitary",
-        "two-projection-classification",
-        "spectral-multiplicity-foundation",
-        "spectral-multiplicity-completeness",
-        "compact-positive-list-foundation",
-        "compact-list-classification"
+        "two-projection-classification"
       ]
     },
     {
@@ -591,6 +522,7 @@
   "rebased_overlay": "pending-mathahead-rebased-53297a4-gpt56",
   "notes": [
     "Promoted polar decomposition and nonacute Section 3 declarations are intentionally absent from this hidden-foundation manifest; their canonical owners are DavisKahan/Geometry/Polar modules.",
-    "PROMOTED AND REMOVED 2026-08-27: the nine Ky Fan / real-descent Sylvester nodes (kyfan-seminorm, kyfan-bochner, kyfan-unitary-invariance, complex-separated-sylvester-kyfan, complexify-sylvester, complexify-spectrum, complexify-separation, real-separated-sylvester-kyfan, real-separated-sylvester) are no longer hidden foundations. The reusable Ky Fan machinery is ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFanBochner.lean (ContinuousLinearMap.kyFanGauge_integral_le, continuous_kyFanGauge, kyFanGauge_unitary_comp_comp); the arbitrary-Hilbert complex and real pi/2 finite-Ky-Fan Sylvester theorems and the ideal-gauge corollary are DavisKahan/InfiniteDimensional/Sylvester/GeneralSeparationKyFan.lean (TauCeti.DavisKahanExt.kyFan_sylvester_le_of_generalSeparation{,_real} and idealGauge_sylvester_le_of_generalSeparation_real); the complexification of full-space spectral separation is TauCeti.DavisKahan.Foundation.RealComplexification.spectraSeparated_top_complexify in DavisKahan/SpectralTheory/Complexification/Spectrum.lean. The invertibility and real-spectrum transports were duplicates of the stable isUnit_complexify_iff / realSpectrum_complexify in that same module and were deleted rather than promoted. The two source files are gone and were not replaced by forwarding modules."
+    "PROMOTED AND REMOVED 2026-08-27: the nine Ky Fan / real-descent Sylvester nodes (kyfan-seminorm, kyfan-bochner, kyfan-unitary-invariance, complex-separated-sylvester-kyfan, complexify-sylvester, complexify-spectrum, complexify-separation, real-separated-sylvester-kyfan, real-separated-sylvester) are no longer hidden foundations. The reusable Ky Fan machinery is ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFanBochner.lean (ContinuousLinearMap.kyFanGauge_integral_le, continuous_kyFanGauge, kyFanGauge_unitary_comp_comp); the arbitrary-Hilbert complex and real pi/2 finite-Ky-Fan Sylvester theorems and the ideal-gauge corollary are DavisKahan/InfiniteDimensional/Sylvester/GeneralSeparationKyFan.lean (TauCeti.DavisKahanExt.kyFan_sylvester_le_of_generalSeparation{,_real} and idealGauge_sylvester_le_of_generalSeparation_real); the complexification of full-space spectral separation is TauCeti.DavisKahan.Foundation.RealComplexification.spectraSeparated_top_complexify in DavisKahan/SpectralTheory/Complexification/Spectrum.lean. The invertibility and real-spectrum transports were duplicates of the stable isUnit_complexify_iff / realSpectrum_complexify in that same module and were deleted rather than promoted. The two source files are gone and were not replaced by forwarding modules.",
+    "2026-08-27: the four `SpectralMultiplicityFoundation` / `CompactPositiveListFoundation` interface and bridge nodes were removed with their module.  Both interfaces were superseded by actual theorems -- `TauCeti.sameSpectralMultiplicity_iff_operatorUnitaryEquiv` and `TauCeti.exists_linearIsometryEquiv_intertwining_of_approximationNumber_eq` -- and neither structure had a consumer outside its own file."
   ]
 }
