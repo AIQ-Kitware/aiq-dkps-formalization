@@ -59,9 +59,37 @@ which is what Proposition 4.2 actually asserts.
 The competitor is not exotic: the maximiser of `∑ᵢ (re ⟪bᵢ, W bᵢ⟫)²` over the
 admissible class is computed by a rank-one pencil, and it beats the direct
 rotation on every basis that is not principal.  This is the *second* defect
-found in the transcription of this proposition — the first was a missing
-completeness hypothesis on the family — so the statement below is written
-against the paper's basis-free right-hand side.
+found in the transcription of this proposition — the first is recorded next —
+so the statement below is written against the paper's basis-free right-hand
+side.
+
+## The first trap: no proper subfamily inherits the inequality
+
+The earlier transcription quantified over an arbitrary `Finset` of an arbitrary
+orthonormal family in `U`, with no completeness requirement, and **in that form
+it is false**.  The singleton instance is the natural thing to attack first, so
+the refutation is recorded here rather than left to be rediscovered.
+
+Take one unit `x ∈ U`; the claim becomes `(re ⟪x, D x⟫)² ≥ (re ⟪x, W x⟫)²`.  Now
+`re ⟪x, D x⟫ = ⟪C x, x⟫` with `C = |S|` the positive Halmos cosine, and
+`‖C x‖ = ‖P_V x‖` on `U` (`norm_absoluteValue_apply_eq_norm_projection`).  Any
+admissible `W` sends `x` into `V` with `‖W x‖ = 1`, so
+`re ⟪x, W x⟫ = re ⟪P_V x, W x⟫ ≤ ‖P_V x‖`, **with equality** for the `W`
+determined by `W x = P_V x / ‖P_V x‖`, which exists whenever `U` and `V` have
+equal finite dimension — any unit vector of `U` maps to any unit vector of `V`
+under some isometry, and `Uᗮ → Vᗮ` may be chosen freely.  Cauchy--Schwarz gives
+`⟪C x, x⟫ ≤ ‖C x‖` **strictly** unless `x` is an eigenvector of `C`.  So *every*
+unit `x ∈ U` that is not a principal vector refutes the singleton case.
+
+Concretely, in `ℂ⁴` with principal angles `0` and `π/3` (acute, since
+`sin(π/3) < 1`) and `x = (e₁ + e₂)/√2`: `⟪C x, x⟫ = 3/4` while
+`‖P_V x‖ = √(5/8) ≈ 0.7906`, so the competitor's cost `1 - 5/8 = 3/8` is
+*smaller* than the direct rotation's `1 - 9/16 = 7/16`.
+
+The defect is a missing hypothesis, not a wrong theorem: the source quantifies
+over an orthonormal **basis** of `U`, and the inequality is a statement about
+total energy, which no proper subfamily inherits.  Summing the same `ℂ⁴` example
+over the full basis `{(e₁ ± e₂)/√2}` restores it: `1.025 < 1.125`.
 -/
 
 open scoped InnerProductSpace BigOperators

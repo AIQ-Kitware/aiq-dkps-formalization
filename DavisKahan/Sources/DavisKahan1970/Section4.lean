@@ -64,9 +64,9 @@ alias Corollary4_1_minimizer :=
 values of the squared displacement `(1 − W)⋆(1 − W)` are minimized by the direct rotation.
 
 Ky Fan level is the honest scope: the *individual* singular values are **not** dominated.
-Pointwise domination would imply Proposition 4.4, which this repository refutes.  See the
-docstring of `DavisKahan/Experimental/Frontier/Section4.lean`'s Proposition 4.3 for the
-refuting configuration. -/
+Pointwise domination would imply Proposition 4.4, which this repository refutes.  The
+refuting configuration is recorded with the stable theorem, in the module docstring of
+`DavisKahan/Geometry/Polar/DisplacementSquareExtremal.lean`. -/
 alias Proposition4_3_kyFan := DavisKahanTheory.directRotation_displacementSquare_kyFan
 
 /-- **Davis--Kahan 1970, Proposition 4.3.**  Every unitarily invariant norm of the squared
@@ -386,6 +386,28 @@ theorem Corollary4_1_infiniteDimensional_nonacute
   DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
     (DavisKahan.Section4.nonacute_restrictedDisplacementDominance
       U V J W hWunitary hWmap) hWmem
+
+/-- **Davis--Kahan 1970, Corollary 4.1 at the acute arbitrary-dimensional scope.**
+For a uniformly acute pair the canonical direct rotation is the minimizer, and its
+approximation-number minimality promotes to every Ky-Fan-dominant unitarily invariant
+ideal gauge.  Membership in the ideal is concluded rather than assumed, matching
+`Corollary4_1_real`; `Corollary4_1_infiniteDimensional_nonacute` carries the same
+statement at the matched-crossed-defect scope the paper inherits from Corollary 3.1. -/
+theorem Corollary4_1_infiniteDimensional
+    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hacute : DavisKahan.IsUniformlyAcute U V)
+    (W : H →L[ℂ] H) (hWunitary : W ∈ unitary (H →L[ℂ] H))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W)
+    (hWmem : N.Mem ((1 - W) ∘L DavisKahan.projection U)) :
+    N.Mem ((1 - DavisKahan.spectraDirectRotation
+          U V hacute) ∘L DavisKahan.projection U) ∧
+      N.gauge ((1 - DavisKahan.spectraDirectRotation
+          U V hacute) ∘L DavisKahan.projection U) ≤
+        N.gauge ((1 - W) ∘L DavisKahan.projection U) :=
+  DavisKahan.Section4.restrictedDisplacement_idealGauge_le N
+    (DavisKahan.Section4.infinite_restrictedDisplacementDominance
+      U V hacute W hWunitary hWmap) hWmem
 
 end Corollary4_1Infinite
 

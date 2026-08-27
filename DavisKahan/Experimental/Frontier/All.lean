@@ -6,7 +6,6 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Frontier.Core
 import DavisKahan.Frontier.Section3
-import DavisKahan.Frontier.Section4
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
 import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle

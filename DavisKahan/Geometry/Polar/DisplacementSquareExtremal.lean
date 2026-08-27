@@ -55,6 +55,32 @@ exist before this development.  It is also exactly why Proposition 4.3 survives 
 Proposition 4.4 does not: sums of *squares* of the approximation numbers are dominated at
 every `k`, while the sums themselves are not -- the repository carries a compiled
 counterexample to the latter.
+
+## The pointwise reading of Proposition 4.3 is false
+
+The obvious reading of the printed proposition -- that every *individual* approximation
+number `aₙ((1−W)†(1−W))` is minimized by the direct rotation -- does not hold, and the
+configuration that kills it is the same equal-angle multiplicity mixing that refutes
+Proposition 4.4 (`shortRotation_fullDisplacement_refuted`, census row `DK-4.4-prop`).  For a
+Ky Fan norm the pointwise domination would imply the Ky Fan one and hence 4.4, so it cannot
+hold.
+
+Explicitly, in `ℝ⁴` take `U = span(e₁, e₂)` and `V` at principal angles `π/4, π/4` -- acute,
+since `‖P_U − P_V‖ = sin(π/4) < 1`.  Let `W` carry `U` onto `V` by a quarter turn in the
+`V`-frame and `Uᗮ` onto `Vᗮ` by the identity; it is orthogonal and satisfies
+`W P_U = P_V W`.  Then
+
+* `aₙ(1 − D) = (0.765367, 0.765367, 0.765367, 0.765367)` -- four equal values `2 sin(π/8)`,
+  one per principal direction;
+* `aₙ(1 − W) = (1.586707, 1.586707, 0.261052, 0.261052)`;
+
+so at `n = 2` the competitor is strictly smaller, and squaring preserves that:
+`aₙ((1−D)†(1−D))` is `0.585786` at `n = 2` against the competitor's `0.068148`.
+
+Proposition 4.3 itself is untouched.  Its Ky Fan sums of *squares* are
+`(0.586, 1.172, 1.757, 2.343)` for the direct rotation against
+`(2.518, 5.035, 5.103, 5.172)` for the competitor, dominated at every `k`.  The statement
+proved here is therefore at Ky Fan level, which is what a unitarily invariant norm sees.
 -/
 
 open scoped InnerProductSpace

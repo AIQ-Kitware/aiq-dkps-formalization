@@ -47,8 +47,8 @@ direct rotation with the Halmos cosine directly, and the extremality argument
 then compares two extrema, not two fibers.  See the route on
 `directRotation_minimal`.  A fiberwise comparison is not merely unnecessary, it
 is false; the pointwise inequality it would need is the one refuted in
-`Frontier/Section4.lean`.  Do not generalize the result to arbitrary symmetric
-ideals without a separate majorization theorem.
+`Geometry/Angle/BasisAngleEnergy.lean`.  Do not generalize the result to
+arbitrary symmetric ideals without a separate majorization theorem.
 -/
 
 namespace TauCeti
@@ -1182,8 +1182,8 @@ and `Δ = P_U − P_V`.
 The two `sup`/`inf` manipulations are the only real work left; everything
 algebraic is proved above.  **Do not reach for a fiberwise comparison**: the
 pointwise claim `re ⟪W x, x⟫ ≤ ⟪C x, x⟫` is *false* — see the refutation of
-Proposition 4.2's transcription in `Frontier/Section4.lean`, which is exactly
-that claim.  Only the two extrema compare.
+Proposition 4.2's transcription in `Geometry/Angle/BasisAngleEnergy.lean`, which
+is exactly that claim.  Only the two extrema compare.
 
 Ext-agent signature audit (GPT 5.6 High): Correct as an operator-norm extremal statement
 for acute pairs. It must not be generalized automatically to every symmetric ideal

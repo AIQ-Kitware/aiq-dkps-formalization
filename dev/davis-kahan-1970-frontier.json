@@ -439,10 +439,10 @@
     },
     {
       "id": "s4-prop4-1",
-      "title": "Proposition 4.1 infinite approximation-number form",
+      "title": "Proposition 4.1 arbitrary-dimensional approximation-number form",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section4",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section4.proposition4_1_restrictedDisplacement_approximationNumbers",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section4",
+      "declaration": "TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -450,15 +450,15 @@
         "DK-4.1-prop"
       ],
       "priority": "medium",
-      "notes": "",
+      "notes": "RETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Frontier.Section4.proposition4_1_restrictedDisplacement_approximationNumbers`, a wrapper in the retired Section 4 staging module `DavisKahan/Frontier/Section4.lean`.  That module is deleted; the stable implementation is `TauCeti.DavisKahan.Section4.proposition4_1_restrictedDisplacement_approximationNumbers` in `DavisKahan/Geometry/Polar/RestrictedDisplacementExtremal.lean`, and the source-facing endpoint is the alias named here.  Scope is unchanged: arbitrary complex Hilbert space, acute pair, every approximation number of the restricted displacement minimized by the canonical direct rotation.  `Proposition4_1_infiniteDimensional_nonacute` carries the matched-crossed-defect scope.",
       "external": false
     },
     {
       "id": "s4-cor4-1",
-      "title": "Corollary 4.1 ideal-gauge form",
+      "title": "Corollary 4.1 arbitrary-dimensional ideal-gauge form",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section4",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section4.corollary4_1_restrictedDisplacement_idealGauge",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section4",
+      "declaration": "TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute",
       "dependencies": [
         "s4-prop4-1"
       ],
@@ -466,15 +466,15 @@
         "DK-4.1-cor"
       ],
       "priority": "medium",
-      "notes": "",
+      "notes": "RETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Frontier.Section4.corollary4_1_restrictedDisplacement_idealGauge` in the retired staging module `DavisKahan/Frontier/Section4.lean`.  The source-facing endpoint named here is the matched-crossed-defect scope the paper inherits from Corollary 3.1; the acute scope of the retired declaration is `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional`, added to `DavisKahan/Sources/DavisKahan1970/Section4.lean` in the same change.  Both promote approximation-number minimality to every Ky-Fan-dominant unitarily invariant ideal gauge, and both conclude ideal membership rather than assuming it.",
       "external": false
     },
     {
       "id": "s4-prop4-2",
-      "title": "Proposition 4.2 orthonormal partial sums",
+      "title": "Proposition 4.2 arbitrary-dimensional displacement-sine energy",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section4",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section4.proposition4_2_basisAngleSquareSum",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section4",
+      "declaration": "TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -482,15 +482,15 @@
         "DK-4.2-prop"
       ],
       "priority": "medium",
-      "notes": "",
+      "notes": "RETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Frontier.Section4.proposition4_2_basisAngleSquareSum`, a finite-index wrapper in the retired staging module `DavisKahan/Frontier/Section4.lean`.  The stable implementations are `TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge` and its arbitrary-index `ℝ≥0∞` companions in `DavisKahan/Geometry/Angle/BasisAngleEnergy.lean`; the source-facing endpoint named here is the printed principal-angle form `∑ₖ sin² θₖ ≤ ∑ᵢ sin²(bᵢ, W bᵢ)`, which is the arbitrary-dimensional statement rather than the finite-index one the retired wrapper carried.  The retired staging module's discussion of the two refuted transcriptions is preserved in the `BasisAngleEnergy` module docstring.",
       "external": false
     },
     {
       "id": "s4-prop4-3",
       "title": "Proposition 4.3 squared displacement (Ky Fan level)",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section4",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section4.proposition4_3_squaredDisplacement_kyFan",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section4",
+      "declaration": "TauCeti.DavisKahan1970.Proposition4_3_infiniteDimensional",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -498,7 +498,7 @@
         "DK-4.3-prop"
       ],
       "priority": "medium",
-      "notes": "RESTATED 2026-08-05.  The node used to point at `proposition4_3_squaredDisplacement_approximationNumbers`, pointwise domination of the individual approximation numbers.  That statement is FALSE: pointwise domination implies Ky Fan majorisation and hence Proposition 4.4, which this repository refutes (`shortRotation_fullDisplacement_refuted`, census row DK-4.4-prop).  Refuting configuration, computed: R^4, `U = span(e1,e2)`, `V` at principal angles pi/4 and pi/4 (acute), competitor carrying `U` onto `V` by a quarter turn in the V-frame and `U-perp` onto `V-perp` by the identity; then `a_2(1-D) = 0.765367 > 0.261052 = a_2(1-W)`.  Proposition 4.3 itself survives, because its Ky Fan sums are sums of SQUARES and those are dominated at every k.  The node now points at the Ky Fan form, which is what a unitarily invariant norm sees; it is still open.",
+      "notes": "RESTATED 2026-08-05.  The node used to point at `proposition4_3_squaredDisplacement_approximationNumbers`, pointwise domination of the individual approximation numbers.  That statement is FALSE: pointwise domination implies Ky Fan majorisation and hence Proposition 4.4, which this repository refutes (`shortRotation_fullDisplacement_refuted`, census row DK-4.4-prop).  Refuting configuration, computed: R^4, `U = span(e1,e2)`, `V` at principal angles pi/4 and pi/4 (acute), competitor carrying `U` onto `V` by a quarter turn in the V-frame and `U-perp` onto `V-perp` by the identity; then `a_2(1-D) = 0.765367 > 0.261052 = a_2(1-W)`.  Proposition 4.3 itself survives, because its Ky Fan sums are sums of SQUARES and those are dominated at every k.  The node now points at the Ky Fan form, which is what a unitarily invariant norm sees; it is still open.\n\nRETARGETED 2026-08-27.  The node pointed at `TauCeti.DavisKahan.Frontier.Section4.proposition4_3_squaredDisplacement_kyFan` in the retired staging module `DavisKahan/Frontier/Section4.lean`; that wrapper was `:=` the stable theorem `TauCeti.DavisKahan.Section4.proposition4_3_squaredDisplacement_kyFan` in `DavisKahan/Geometry/Polar/DisplacementSquareExtremal.lean`, aliased source-facing as the declaration named here, so the statement is unchanged.  The Ky Fan form is PROVED; the closing sentence of the 2026-08-05 note above, written when the statement was still open, is superseded.  The refuting configuration for the pointwise reading is preserved in the `DisplacementSquareExtremal` module docstring.",
       "external": false
     },
     {
