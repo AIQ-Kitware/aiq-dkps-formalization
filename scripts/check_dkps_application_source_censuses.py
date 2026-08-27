@@ -32,7 +32,7 @@ IMPORTS = [
     'Acharyya2025.MathlibBridge', 'Acharyya2025.SpectralPipeline',
     'Acharyya2025.AlignedPipeline', 'Acharyya2025.GrowingResponse',
     'Acharyya2025.PaperRate', 'Acharyya2025.RateChain', 'Acharyya2025.Overlap',
-    'Acharyya2025.ManifoldCondition',
+    'Acharyya2025.ManifoldCondition', 'Acharyya2025.Theorem1Scale',
     'Helm2025', 'DkpsQuench2026',
 ]
 CANARY = 'DkpsApplicationCensusProbeCanaryMustNotResolve'

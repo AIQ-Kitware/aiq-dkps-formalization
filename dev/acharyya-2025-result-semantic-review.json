@@ -46,7 +46,9 @@
     "Acharyya2025.Bridge.EntrywiseClose",
     "Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded",
     "Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale",
-    "Acharyya2025.GrowingResponse.prob_uniformResponseMeanClose_ge_of_secondMoment"
+    "Acharyya2025.GrowingResponse.prob_uniformResponseMeanClose_ge_of_secondMoment",
+    "Acharyya2025.Theorem1Scale.prob_entrywiseClose_lt_paper_bound",
+    "Acharyya2025.Theorem1Scale.secondMoment_eq"
    ],
    "clauses": [
     {
@@ -66,6 +68,12 @@
      "lean_clause": "The probability step is now finite and explicit: prob_uniformResponseMeanClose_ge_of_secondMoment gives 1 - N sigma^2 / eta^2 for the response means.",
      "relation": "derived_by_composition",
      "note": "The remaining distance is the response-mean to doubly-centred-entry passage, which carries the factor 16 and the 1/(rm) scaling."
+    },
+    {
+     "source_clause": "For any eps > 0, P[|Bhat_ii' - B_ii'| < eps for all i,i'] >= 1 - 16 sum gamma_ij / (r m eps^2), with no hypothesis on the scale of the population responses.",
+     "lean_clause": "prob_entrywiseClose_lt_paper_bound refutes this; the repair is the entrywise dissimilarity bound already carried by the compiled bridge.",
+     "relation": "source_repair",
+     "note": "At m = 1 the three competing dissimilarity normalisations coincide, so the refutation is independent of that question."
     }
    ],
    "review": "The event shape and response-to-CMDS concentration mechanism are compiled, including the paper-scale n^3/r bookkeeping. The exact finite displayed constant is not exposed by one source-facing theorem.",
@@ -74,7 +82,7 @@
     "normalisation-pinned-by-theorem1-constant",
     "t1-literal-finite-wrapper"
    ],
-   "next_action": "Compose the finite probability step with the response-mean to doubly-centred-entry bound to reach the displayed constant."
+   "next_action": "Optionally state the corrected finite bound -- the printed one with the entrywise dissimilarity bound R inserted -- as one source-facing theorem."
   },
   {
    "id": "A25-C1",
