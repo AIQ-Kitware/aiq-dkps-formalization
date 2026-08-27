@@ -16,10 +16,10 @@ Companion coverage census: `dev/quench-2026-full-source-census.json`.
 | --- | ---: |
 | `GAP normalisation mismatch` | 1 |
 | `GAP stronger analytic hypotheses` | 2 |
-| `GAP unbounded codomain` | 1 |
 | `PASS` | 1 |
 | `PASS equivalent encoding` | 1 |
 | `PASS exact` | 1 |
+| `PASS generalized` | 1 |
 | `PROOF ROLE REPLACED` | 1 |
 | `REPAIR source mismatch` | 3 |
 | `SUPPLEMENTARY Lean extension` | 3 |
@@ -40,7 +40,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | `Q26-T2B` | Theorem 2, query-efficiency conclusion | GAP stronger analytic hypotheses |
 | `Q26-RAW-FIN` | Finite-model raw-response capstone | SUPPLEMENTARY Lean extension |
 | `Q26-RAW-INF` | Compact-infinite raw-response capstone | SUPPLEMENTARY Lean extension |
-| `Q26-Y` | Benchmark scoring function | GAP unbounded codomain |
+| `Q26-Y` | Benchmark scoring function | PASS generalized |
 | `Q26-D` | Response means and the dissimilarity matrix | GAP normalisation mismatch |
 
 ## Relation legend
@@ -238,12 +238,15 @@ Lean formalizes the ball-support property actually consumed by the proof. Compac
 **Normalized paper statement:** For every epsilon>0 there are sufficiently large sampling/model budgets for which MSE(yhat_NN)<=epsilon with high probability.
 
 **Selected Lean declarations:**
-- `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`
 - `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`
+- `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`
+- `highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport`
 - `highProb_mse_nn_le`
 - `highProb_mse_nn_le_of_subevent`
 - `highProb_mse_tieAverage_of_subevents`
-- `highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport`
+- `integrable_sqLoss_of_bounded`
+- `mse_le_one_of_unit_range`
+- `radialTieAverage_mem_Icc`
 
 **Clause-by-clause comparison:**
 
@@ -390,13 +393,16 @@ The OLS formalization is an additional theorem family with explicit affine-risk 
 
 ### 12. `Q26-Y` — Benchmark scoring function: The benchmark score is a [0,1]-valued function of a model and a query subset
 
-**Verdict:** GAP unbounded codomain
+**Verdict:** PASS generalized
 
 **Source:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:36-44`
 
 **Normalized paper statement:** y : F x 2^{Q*} -> [0,1] is the benchmark scoring function; y(f, Q*) is the score of f on all queries, and yhat_Q := y(f, Q) its score on a subset.
 
 **Selected Lean declarations:**
+- `integrable_sqLoss_of_bounded`
+- `mse_le_one_of_unit_range`
+- `radialTieAverage_mem_Icc`
 - `yFull`
 - `yQ`
 
@@ -405,6 +411,7 @@ The OLS formalization is an additional theorem family with explicit affine-risk 
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
 | y : F x 2^{Q*} -> [0,1] is the benchmark scoring function. | score : Model Q X -> Finset Q -> R, with yFull and yQ the two displayed evaluations. | `lean_weaker_hypothesis` | Lean drops the [0,1] codomain, which also drops the automatic finiteness of the MSE integral. |
+| The score takes values in [0,1]. | Not required; but at that range the estimator stays in [0,1] and the MSE integrand is integrable with MSE <= 1, so the theorems are not vacuous there. | `lean_weaker_hypothesis` |  |
 
 **Semantic review:**
 
@@ -413,8 +420,6 @@ yFull and yQ are the two displayed evaluations. Lean drops the [0,1] codomain an
 **Additional note:** Restoring the bound would strengthen the MSE statements rather than restrict them.
 
 **Companion census gap refs:** `unbounded-score-codomain`
-
-**Next action:** Consider a bounded-score variant so the MSE integrals are unconditionally finite.
 
 ### 13. `Q26-D` — Response means and the dissimilarity matrix: Query-averaged response matrices and their pairwise Frobenius dissimilarities
 

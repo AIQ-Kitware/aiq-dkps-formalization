@@ -109,11 +109,13 @@ Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stat
 
 Quench's methods section defines D_{ii'} = ||Xbar_i - Xbar_{i'}||_F. Acharyya 2024 and Helm 2025 both define the same matrix as (1/m)||Xbar_i - Xbar_{i'}||_F, and the Lean dissimilarity the Quench chain uses is Acharyya2024.responseDistEntry, which carries the (m)^{-1} factor. Quench therefore imports a Theorem 1 stated for the rescaled convention while printing the unrescaled one. The tie-averaged nearest-neighbour estimator is unaffected, because scaling every dissimilarity by a positive constant does not change which reference attains the minimum. Assumption 1 is affected: it bounds the score difference by gamma times ||psi(Q) - psi'(Q)||, and rescaling the dissimilarities rescales psi, so the same gamma means different things under the two conventions -- and m is the query budget, so the factor is not a fixed constant. This is one instance of a chain-wide divergence; see dissimilarity-normalisation-divergence.
 
-### `unbounded-score-codomain` — The paper's score takes values in [0,1]; the Lean score is an unrestricted real
+### `unbounded-score-codomain` — The paper's [0,1] score is not required in Lean; its consequences are now proved separately
 
 **Kind:** `source_audit`
 
 Quench declares y : F x 2^{Q*} -> [0,1]. The Lean development uses score : Model Q X -> Finset Q -> R with no range constraint. That is a weakening in the usual direction -- any [0,1]-valued score is a real-valued one -- but it is not free: MSE is a Bochner integral, and for an unbounded score neither it nor the baseline MSE is guaranteed finite, in which case Lean's integral silently returns 0 rather than diverging. The theorems remain true as stated, but their content at an unbounded score is weaker than it looks. The paper's boundedness makes both integrals automatically finite, so restoring it would be a strengthening of the formal statements, not a restriction.
+
+Addressed. radialTieAverage_mem_Icc shows the tie-averaged estimator is a convex combination of the reference scores and so inherits their range: at a [0,1]-valued score the prediction is again in [0,1]. integrable_sqLoss_of_bounded shows a bounded target and estimator make the squared-loss integrand integrable, and mse_le_one_of_unit_range gives MSE <= 1 at the paper's range. So at the paper's own typing the mean squared error in every Quench theorem is a genuine bounded average rather than the value the Bochner integral assigns to a non-integrable function, and the statements say what they appear to say. The theorems keep the unrestricted real score, which is the more general form; the bounded case is now covered explicitly instead of being left to the reader.
 
 ### `dissimilarity-normalisation-divergence` — The four papers print three different dissimilarity normalisations; Lean uses one
 
@@ -146,12 +148,12 @@ Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extractio
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:36-44`
 * **importance:** `major`
 * **status / verification:** `compiled_generalized` / `proved_in_build`
-* **semantic alignment:** `generalized` — yFull and yQ are the two displayed evaluations. Lean drops the [0,1] codomain and uses a real-valued score, which is more general but removes the automatic integrability the bounded range supplies. Recorded as gap unbounded-score-codomain.
+* **semantic alignment:** `generalized` — yFull and yQ are the two displayed evaluations. Lean drops the [0,1] codomain and uses a real-valued score, which is strictly more general. The consequence the bounded range would have supplied -- finiteness of the MSE integral -- is now proved directly for that case by integrable_sqLoss_of_bounded and mse_le_one_of_unit_range, with radialTieAverage_mem_Icc showing the estimator stays in range.
 * **source claim:** y : F x 2^{Q*} -> [0,1] is the benchmark scoring function; y(f, Q*) is the score of f on all queries, and yhat_Q := y(f, Q) its score on a subset.
-* **Lean declarations:** `yFull`, `yQ`
+* **Lean declarations:** `integrable_sqLoss_of_bounded`, `mse_le_one_of_unit_range`, `radialTieAverage_mem_Icc`, `yFull`, `yQ`
 * **gap refs:** `unbounded-score-codomain`
 * **notes:** Restoring the bound would strengthen the MSE statements rather than restrict them.
-* **next action:** Consider a bounded-score variant so the MSE integrals are unconditionally finite.
+* **next action:** None.
 
 ### `Q26-T1` — Inherited DKPS embedding concentration
 
@@ -250,7 +252,7 @@ Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extractio
 * **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
 * **semantic alignment:** `stronger_hypotheses` — infiniteFixedSubsetMSE and finiteFixedSubsetMSE prove the printed conclusion end to end for the literal tie-averaged estimator built from raw cached responses: the representation concentration is derived through the CMDS/Davis--Kahan chain rather than assumed. They are stronger than the source only in hypotheses -- an explicit population nondegeneracy floor and a replicate schedule above the source rate. The remaining rows are the conditional intermediates that take the concentration event as a premise.
 * **source claim:** For every epsilon>0 there are sufficiently large sampling/model budgets for which MSE(yhat_NN)<=epsilon with high probability.
-* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`, `highProb_mse_nn_le`, `highProb_mse_nn_le_of_subevent`, `highProb_mse_tieAverage_of_subevents`, `highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport`
+* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`, `highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport`, `highProb_mse_nn_le`, `highProb_mse_nn_le_of_subevent`, `highProb_mse_tieAverage_of_subevents`, `integrable_sqLoss_of_bounded`, `mse_le_one_of_unit_range`, `radialTieAverage_mem_Icc`
 * **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`, `tie-display-proof-mismatch`
 * **notes:** The end-to-end declarations are the canonical realization; the conditional forms remain listed because they are the reusable interfaces the capstones factor through.
 * **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.

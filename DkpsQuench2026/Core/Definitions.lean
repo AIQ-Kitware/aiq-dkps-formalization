@@ -254,6 +254,58 @@ noncomputable def MSE {Q : Type u} {X : Type v} [MeasurableSpace X]
     (y yHat : Model Q X → ℝ) : ℝ :=
   ∫ f, sqLoss (yHat f) (y f) ∂ Pf
 
+/--
+A bounded target and estimator make the mean squared error a genuine finite average.
+
+The paper types the benchmark score `y : F × 2^{Q*} → [0,1]`; the development uses an
+unrestricted real score, which is more general but does not by itself guarantee that `MSE` is
+the integral of an integrable function -- for a non-integrable integrand the Bochner integral
+returns `0`, so an unbounded score would let a theorem about `MSE` say less than it appears to.
+This records that at the paper's own bounded score there is no such issue: the integrand is
+bounded, hence integrable against a probability measure, and the mean squared error is at most
+`(2C)^2`.
+-/
+theorem integrable_sqLoss_of_bounded {Q : Type u} {X : Type v} [MeasurableSpace X]
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (y yHat : Model Q X → ℝ) (C : ℝ)
+    (hy : ∀ f, |y f| ≤ C) (hyHat : ∀ f, |yHat f| ≤ C)
+    (hmeas : AEStronglyMeasurable (fun f => sqLoss (yHat f) (y f)) Pf) :
+    Integrable (fun f => sqLoss (yHat f) (y f)) Pf := by
+  refine Integrable.mono' (integrable_const ((2 * C) ^ (2 : ℕ))) hmeas ?_
+  filter_upwards with f
+  have hdiff : |yHat f - y f| ≤ 2 * C := by
+    calc |yHat f - y f| ≤ |yHat f| + |y f| := abs_sub _ _
+      _ ≤ C + C := add_le_add (hyHat f) (hy f)
+      _ = 2 * C := by ring
+  have hnn : (0 : ℝ) ≤ 2 * C := le_trans (abs_nonneg _) hdiff
+  rw [Real.norm_eq_abs, sqLoss, abs_of_nonneg (by positivity)]
+  calc (yHat f - y f) ^ (2 : ℕ) = |yHat f - y f| ^ (2 : ℕ) := by rw [sq_abs]
+    _ ≤ (2 * C) ^ (2 : ℕ) := by
+        exact pow_le_pow_left₀ (abs_nonneg _) hdiff 2
+
+/--
+At the paper's `[0,1]`-valued score the mean squared error is bounded by one.
+-/
+theorem mse_le_one_of_unit_range {Q : Type u} {X : Type v} [MeasurableSpace X]
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (y yHat : Model Q X → ℝ)
+    (hy : ∀ f, y f ∈ Set.Icc (0 : ℝ) 1) (hyHat : ∀ f, yHat f ∈ Set.Icc (0 : ℝ) 1)
+    (hmeas : AEStronglyMeasurable (fun f => sqLoss (yHat f) (y f)) Pf) :
+    MSE Pf y yHat ≤ 1 := by
+  have hbound : ∀ f, sqLoss (yHat f) (y f) ≤ 1 := by
+    intro f
+    obtain ⟨hy0, hy1⟩ := hy f
+    obtain ⟨hh0, hh1⟩ := hyHat f
+    rw [sqLoss]
+    nlinarith
+  have hint : Integrable (fun f => sqLoss (yHat f) (y f)) Pf := by
+    refine integrable_sqLoss_of_bounded Pf y yHat 1 (fun f => ?_) (fun f => ?_) hmeas
+    · exact abs_le.mpr ⟨by linarith [(hy f).1], (hy f).2⟩
+    · exact abs_le.mpr ⟨by linarith [(hyHat f).1], (hyHat f).2⟩
+  calc MSE Pf y yHat = ∫ f, sqLoss (yHat f) (y f) ∂Pf := rfl
+    _ ≤ ∫ _f, (1 : ℝ) ∂Pf := integral_mono hint (integrable_const 1) hbound
+    _ = 1 := by simp
+
 section NN_Definitions
 
 variable {d : ℕ}
