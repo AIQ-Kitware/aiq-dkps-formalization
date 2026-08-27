@@ -4,7 +4,15 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Frontier.Core
+import DavisKahan.Geometry.Halmos.TwoProjections
+import DavisKahan.Geometry.Halmos.GenericRotationPredicates
+import DavisKahan.Geometry.Halmos.UnitaryEquivalence
+import DavisKahan.SpectralTheory.SpectralRestriction
+-- supplies `compressOperator`
+import DavisKahan.SpectralTheory.CircleRieszProjection
+import DavisKahan.Sylvester.Spectrum
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
+import Mathlib.MeasureTheory.Integral.CircleIntegral
 import DavisKahan.Geometry.Polar.DirectRotation
 -- supplies `spectraReflectionProduct` and `IsUniformlyAcute.symm`
 import DavisKahan.Geometry.Polar.DirectRotationSquare
@@ -18,7 +26,7 @@ import DavisKahan.InfiniteDimensional.DoubleAngle
 -- itself never imports this module, so the dependency is acyclic.
 import DavisKahan.Geometry.Polar.Section3Nonacute
 -- supplies the forward direction of the operator-level Halmos classification
--- (`sameHalmosInvariant_of_pairEquiv`).  This module imports only Frontier/Core,
+-- (`sameHalmosInvariant_of_pairEquiv`).  That module never imports `Frontier`,
 -- so the dependency is acyclic.
 import DavisKahan.Geometry.Halmos.Classification
 import DavisKahan.Geometry.Halmos.GenericReconstruction
@@ -2610,43 +2618,13 @@ bounded operators, but reaching it from a subspace coercion needs one more level
 pending synthesis than the default allows; the instance is found at depth `3`. -/
 set_option maxSynthPendingDepth 3
 
-/-- **Davis--Kahan 1970, Theorem 3.1**, in the paper's own phrasing: the spectral multiplicity
-data of the two angle operators, together with the elementary multiplicities, form a complete
-invariant for ordered pairs of subspaces.
-
-**The angle operator is `genericCosineBlock`, not `genericHalmosCosineSq`.**  The statement used
-to compare the symmetrized block, which on the generic part is `A ⊕ A` -- doubled multiplicity --
-and recovering `A` from `A ⊕ A` is multiplicity-halving, which this development does not have and
-does not need.  The docstring at `SameHalmosOperatorInvariant` records the 2026-08-04 decision
-that put the `U`-side cosine block into the operator invariant for exactly this reason; the same
-correction was applied to Corollary 3.1 on 2026-08-06.  Davis and Kahan state Theorem 3.1 for the
-angle operator on the `U`-side, so this is the paper-faithful reading.
-
-**On separability.**  It is carried on `H₁` only, it is inherited by the generic left half, and
-it is one of the paper's **standing assumptions**, taken from the Introduction and Sections 1--2
-and so governing Section 3; see `prose/distilled_literature/DavisKahan1970_part_III.tex`,
-*Standing assumptions from the transcription*.  It is needed for `→` alone -- producing a
-multiplicity model requires the existence half of Hahn--Hellinger -- and the `←` direction is
-separability-free.  Crucially, nothing already proved is weakened: the operator-level form
-`twoProjection_operator_classification`, grounded on
-`pairOfSubspacesUnitaryEquivalent_iff_sameHalmosCosineBlockInvariant`, remains stated with no
-separability, no compactness and no finite dimension, and it is that theorem which carries the
-classification content of Theorem 3.1.  What this statement adds is the *translation* of its
-invariant into multiplicity data. -/
-theorem theorem3_1_spectralMultiplicity_classification
-    [TopologicalSpace.SeparableSpace H₁] :
-    PairOfSubspacesUnitaryEquivalent U₁ V₁ U₂ V₂ ↔
-      SameHalmosTrivialDimensions U₁ V₁ U₂ V₂ ∧
-      SameSpectralMultiplicity
-        (genericCosineBlock U₁ V₁)
-        (genericCosineBlock U₂ V₂) := by
-  rw [twoProjection_operator_classification]
-  constructor
-  · rintro ⟨htriv, hgen⟩
-    refine ⟨htriv, sameSpectralMultiplicity_of_unitarilyEquivalent _ _ ?_ hgen⟩
-    exact isSelfAdjoint_genericCosineBlock U₁ V₁
-  · rintro ⟨htriv, hmult⟩
-    exact ⟨htriv, unitarilyEquivalent_of_sameSpectralMultiplicity _ _ hmult⟩
+/-! **Davis--Kahan 1970, Theorem 3.1 in the paper's multiplicity phrasing** is
+`TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification`, in
+`DavisKahan/Sources/DavisKahan1970/Section3Classification.lean`, together with its real
+analogue.  It is a wrapper over `twoProjection_operator_classification` below and the
+promoted spectral-multiplicity classification
+`TauCeti.sameSpectralMultiplicity_iff_operatorUnitaryEquiv`; it lives with the other
+source-facing Section 3 statements rather than here. -/
 
 /-- **Davis--Kahan 1970, Corollary 3.1 with the printed hypothesis, over a complex Hilbert
 space.**
@@ -2689,9 +2667,9 @@ variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [Complet
 /-- **Davis--Kahan 1970, Theorem 3.1, the realization half — the paper's sentence
 (ii).**
 
-The classification half (`twoProjection_operator_classification`,
-`theorem3_1_spectralMultiplicity_classification`) says that the angle datum
-determines the pair.  This says the converse of the *existence* kind: every
+The classification half (`twoProjection_operator_classification`, and
+`TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification` in the paper's
+multiplicity phrasing) says that the angle datum determines the pair.  This says the converse of the *existence* kind: every
 admissible angle datum is *attained*.  Given `cos Θ₀, sin Θ₀` on `E`,
 `cos Θ₁, sin Θ₁` on `F` and the intertwiner `J₀` that matches their spectral
 multiplicities away from the angle `0`, the two subspaces

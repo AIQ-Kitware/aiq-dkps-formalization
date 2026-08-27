@@ -204,9 +204,9 @@ REPAIRED 2026-08-12 by `proposition3_4_source_full_complex`. Its hypotheses are 
 **Counted source atoms:** `DK-3.1-thm.complete-invariant`, `DK-3.1-thm.converse-angle-data`.
 
 **Selected source-facing Lean declarations:**
-- `TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification`
+- `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification`
 - `TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization`
-- `TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification_real`
+- `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real`
 
 **Semantic review:**
 

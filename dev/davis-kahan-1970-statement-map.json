@@ -718,18 +718,18 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-3.1-thm",
       "review_declarations": [
-        "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification",
+        "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification",
         "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization",
-        "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification_real"
+        "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real"
       ],
       "audit_clauses": [
         {
           "id": "DK-3.1-thm.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification",
+            "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification",
             "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization",
-            "TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification_real"
+            "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real"
           ]
         }
       ],

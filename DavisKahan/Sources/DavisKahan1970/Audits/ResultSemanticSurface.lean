@@ -214,9 +214,9 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification
+#check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification
 #check @TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization
-#check @TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification_real
+#check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real
 
 /-! ## DK-3.1-cor: Compact classification by angle eigenvalues
 

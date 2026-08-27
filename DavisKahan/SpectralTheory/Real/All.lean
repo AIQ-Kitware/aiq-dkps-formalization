@@ -9,6 +9,7 @@ import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Real
 import DavisKahan.SpectralTheory.Real.RealCyclicDecomposition
 import DavisKahan.SpectralTheory.Real.RealMultiplicityModel
 import DavisKahan.SpectralTheory.Real.SpectralCutoff
+import DavisKahan.SpectralTheory.Real.SpectralMultiplicityClassification
 import DavisKahan.SpectralTheory.Real.SpectralRestriction
 
 /-! # `DavisKahan/SpectralTheory/Real` -/

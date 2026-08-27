@@ -88,6 +88,18 @@ or the same condition with $A_0$ and $\Lambda_1$ interchanged.  Then, for every 
 
 ### Source-facing Lean declarations
 
+#### `DavisKahan1970.sinTheta_headline`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:138`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTheta_headline_generic`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean:103`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 #### `TauCeti.DavisKahan1970.sinTheta`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:53`
@@ -601,6 +613,12 @@ The first is directed and residual-based; the second uses the ambient angle and 
 
 ### Source-facing Lean declarations
 
+#### `TauCeti.DavisKahan1970.tanTheta_headline_generic_directed`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:73`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 #### `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIII.lean:119`
@@ -734,6 +752,12 @@ Again the source distinguishes the directed residual statement from the ambient 
 ~~~~
 
 ### Source-facing Lean declarations
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:111`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`
 
@@ -870,6 +894,12 @@ Section~7 derives the nonvanishing of the relevant $\cos(2\theta_j)$ factors fro
 ~~~~
 
 ### Source-facing Lean declarations
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_headline_generic`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:180`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`
 
@@ -1052,25 +1082,25 @@ The source appends a remark comparing (3.5) with the earlier matching-dimension 
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2038`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:2046`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2092`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:2100`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:3330`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:3308`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:3354`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:3332`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1255,13 +1285,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1830`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1838`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1981`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1989`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1335,21 +1365,21 @@ their domain dimensions sum to $\dim\Hsp$, and their spectral multiplicity funct
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification`
+#### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2636`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:105`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2722`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:2700`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.Frontier.Section3.theorem3_1_spectralMultiplicity_classification_real`
+#### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3Real.lean:132`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:147`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1415,19 +1445,19 @@ together with a possible eigenvalue $0$; $\Theta_1$ has the same nonzero eigenva
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2464`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:2472`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_classification_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:3210`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:3188`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2895`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:2873`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1626,7 +1656,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1448`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1456`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1878,7 +1908,7 @@ with the inequality also valid when the right-hand side is infinite.  The proof 
 
 #### `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:396`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:418`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2013,7 +2043,7 @@ for every unitary-invariant norm.  They also imply minimality of the operator no
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:487`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:509`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2095,19 +2125,19 @@ then $\norm{1-V}$ is asserted to be minimized by $V=U$ for every unitary-invaria
 
 #### `TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite`
 
-Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:639`
+Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:838`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite`
 
-Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:663`
+Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:862`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted`
 
-Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:610`
+Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:809`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
