@@ -357,23 +357,25 @@
     ]
    },
    "lean_declarations": [
+    "Acharyya2024.Consistency.growing_queries_dissimilarity_converges",
+    "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma",
     "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment",
+    "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment_growing",
     "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean",
-    "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound",
-    "Acharyya2024.Consistency.growing_queries_dissimilarity_converges"
+    "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound"
    ],
    "clauses": [
     {
-     "source_clause": "For each model i, (1/m sum_j gamma_ij)/r -> 0 while m may grow with r.",
-     "lean_clause": "SecondMoment/Probability compile the gamma/r sample-mean mechanism at fixed type-level response dimension; GrowingQueries accepts the resulting sampling convergence.",
-     "relation": "lean_weaker_conclusion",
-     "note": "The literal varying-m theorem is not assembled because m is type-level in the finite probability theorem."
+     "source_clause": "If for all i, lim_r ((1/m) sum_j gamma_ij)/r = 0",
+     "lean_clause": "hgamma, aggregated over the fixed model collection",
+     "relation": "equivalent_encoding",
+     "note": "For finitely many nonnegative sequences the per-model and aggregated forms agree."
     },
     {
-     "source_clause": "Then ||D-DeltaInf||_F ->P 0.",
-     "lean_clause": "The finite concentration theorem plus deterministic-limit bridge proves this shape when the required convergence inputs are supplied.",
-     "relation": "derived_by_composition",
-     "note": ""
+     "source_clause": "then ||D - Delta^(infinity)||_F ->P 0 as r -> infinity",
+     "lean_clause": "ConvergesInProbabilityZero P (fun r omega => frobSub (responseDist (Xbar r omega)) (responseDist (mu r)))",
+     "relation": "exact",
+     "note": "The number of queries is a function of r, so the response matrices live in a different space at each stage."
     }
    ],
    "review": "The finite-dimensional Chebyshev/second-moment mechanism and gamma/r sample-mean bound are compiled. The theorem with query dimension m itself growing with r is not assembled; the growing-query consistency layer accepts the resulting sampling convergence as a hypothesis.",
@@ -381,7 +383,7 @@
    "gap_refs": [
     "growing-query-rate-wiring"
    ],
-   "next_action": "None."
+   "next_action": "None. Theorem 4, which also grows the model count, remains a specialization."
   },
   {
    "id": "A24-T3",
@@ -609,8 +611,9 @@
     ]
    },
    "lean_declarations": [
-    "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment",
-    "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile"
+    "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
+    "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma",
+    "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment"
    ],
    "clauses": [
     {
@@ -632,7 +635,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "None."
+   "next_action": "Grow the model count as well; the growing-query half is now assembled in dissimilarity_convergesInProbability_of_gamma."
   },
   {
    "id": "A24-T5",

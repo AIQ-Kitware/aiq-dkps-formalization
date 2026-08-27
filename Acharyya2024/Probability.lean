@@ -208,4 +208,196 @@ theorem dissimilarity_convergesInProbability_of_secondMoment
       (fun r => zero_le) hbad
   simpa only [hset_eq] using hsqueeze
 
+/--
+**Theorem 2 with the number of queries growing with the number of replicates.**
+
+The fixed-`m` form above takes the number of queries as a constant.  The source lets `m` grow
+with `r` -- that is the whole point of the theorem, which is a sufficient condition for *how
+fast* `m` may grow -- so the response matrices live in a different space at every stage.  This
+is that statement, with `m : ℕ → ℕ`.
+
+The threshold `η r = ε · m r / (2 n²)` now moves with the stage, and the Chebyshev bound needs
+`v r / (m r)² → 0`.  The degenerate stages where `m r = 0` need no separate treatment: the
+dissimilarities are then identically zero and the bad event is empty, while `v r / (η r)^2` is
+`v r / 0 = 0`, so the same inequality holds at those stages too.
+-/
+theorem dissimilarity_convergesInProbability_of_secondMoment_growing
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {n p : Nat} (m : Nat → Nat)
+    (Xbar : ∀ r, Ω → Fin n → Mat (m r) p)
+    (μ : ∀ r, Fin n → Mat (m r) p)
+    (v : Nat → Real)
+    (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μ r i‖ ^ 2) P)
+    (hmoment : ∀ r i, ∫ ω, ‖Xbar r ω i - μ r i‖ ^ 2 ∂P ≤ v r)
+    (hv : Tendsto (fun r => v r / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
+    ConvergesInProbabilityZero P
+      (fun r ω => frobSub (responseDist (Xbar r ω)) (responseDist (μ r))) := by
+  intro ε hε
+  have hfrob_nonneg : ∀ r ω,
+      0 ≤ frobSub (responseDist (Xbar r ω)) (responseDist (μ r)) := by
+    intro r ω; exact Real.sqrt_nonneg _
+  have hset_eq : ∀ r,
+      {ω | dist (frobSub (responseDist (Xbar r ω)) (responseDist (μ r))) (0 : Real) > ε}
+        = {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist (μ r))} := by
+    intro r
+    ext ω
+    simp only [Set.mem_ofPred_eq, dist_zero_right, Real.norm_eq_abs, gt_iff_lt,
+      abs_of_nonneg (hfrob_nonneg r ω)]
+  rcases Nat.eq_zero_or_pos n with hn0 | hnpos
+  · subst hn0
+    have hzero : ∀ r ω, frobSub (responseDist (Xbar r ω)) (responseDist (μ r)) = 0 := by
+      intro r ω
+      simp [frobSub, frob, frobSq]
+    have hempty : ∀ r,
+        {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist (μ r))} = (∅ : Set Ω) := by
+      intro r; ext ω
+      simp only [hzero r ω, Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false, not_lt]
+      exact hε.le
+    simp only [hset_eq, hempty, measure_empty]
+    exact tendsto_const_nhds
+  have hn_pos : (0 : Real) < (n : Real) := by exact_mod_cast hnpos
+  set η : Nat → Real := fun r => ε * ((m r : Real)) / (2 * (n : Real) * (n : Real)) with hη_def
+  have hη_nonneg : ∀ r, 0 ≤ η r := by
+    intro r
+    rw [hη_def]
+    positivity
+  -- the deterministic reduction, valid at every stage including `m r = 0`
+  have hdet : ∀ r ω, (∀ i : Fin n, ‖Xbar r ω i - μ r i‖ ≤ η r) →
+      frobSub (responseDist (Xbar r ω)) (responseDist (μ r)) ≤ ε := by
+    intro r ω hbound
+    refine (frobSub_responseDist_le_of_uniform_errors (Xbar r ω) (μ r) hbound).trans ?_
+    rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
+    · rw [hm0]
+      simp only [Nat.cast_zero, inv_zero, zero_mul, mul_zero]
+      exact hε.le
+    · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
+      have hval : ((n : Real) * (n : Real)) * ((((m r : Real))⁻¹) * (2 * η r)) = ε := by
+        rw [hη_def]
+        field_simp
+      exact hval.le
+  -- the per-stage bound, uniform in the degenerate case
+  have hbad : ∀ r : Nat,
+      P {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist (μ r))}
+        ≤ (n : ENNReal) * ENNReal.ofReal (v r / (η r) ^ 2) := by
+    intro r
+    rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
+    · have hzero : ∀ ω, frobSub (responseDist (Xbar r ω)) (responseDist (μ r)) = 0 := by
+        intro ω
+        simp [frobSub, frob, frobSq, responseDist, responseDistEntry, hm0]
+      have hempty :
+          {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist (μ r))} = (∅ : Set Ω) := by
+        ext ω
+        simp only [hzero ω, Set.mem_ofPred_eq, Set.mem_empty_iff_false, iff_false, not_lt]
+        exact hε.le
+      rw [hempty, measure_empty]
+      exact bot_le
+    · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
+      have hη_pos : 0 < η r := by
+        rw [hη_def]
+        positivity
+      have hcheb : ∀ i : Fin n,
+          P {ω | η r < ‖Xbar r ω i - μ r i‖} ≤ ENNReal.ofReal (v r / (η r) ^ 2) :=
+        fun i => meas_gt_le_ofReal_secondMoment_div_sq P (hint r i) hη_pos (hmoment r i)
+      have hincl :
+          {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist (μ r))}
+            ⊆ ⋃ i : Fin n, {ω | η r < ‖Xbar r ω i - μ r i‖} := by
+        intro ω hω
+        by_contra hnot
+        simp only [Set.mem_iUnion, Set.mem_ofPred_eq, not_exists, not_lt] at hnot
+        exact absurd (hdet r ω hnot) (not_le.mpr hω)
+      calc
+        P {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist (μ r))}
+            ≤ P (⋃ i : Fin n, {ω | η r < ‖Xbar r ω i - μ r i‖}) :=
+              measure_mono hincl
+        _ ≤ ∑ i : Fin n, P {ω | η r < ‖Xbar r ω i - μ r i‖} :=
+              measure_iUnion_fintype_le (μ := P)
+                (fun i => {ω | η r < ‖Xbar r ω i - μ r i‖})
+        _ ≤ ∑ _i : Fin n, ENNReal.ofReal (v r / (η r) ^ 2) :=
+              Finset.sum_le_sum fun i _ => hcheb i
+        _ = (n : ENNReal) * ENNReal.ofReal (v r / (η r) ^ 2) := by
+              simp [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+  -- the upper bound vanishes
+  have hratio : ∀ r, v r / (η r) ^ 2
+      = (4 * (n : Real) ^ 4 / ε ^ 2) * (v r / ((m r : Real)) ^ 2) := by
+    intro r
+    rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
+    · rw [hη_def]
+      simp [hm0]
+    · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
+      rw [hη_def]
+      field_simp
+      ring
+  have hub : Tendsto (fun r => (n : ENNReal) * ENNReal.ofReal (v r / (η r) ^ 2))
+      atTop (𝓝 0) := by
+    have h1 : Tendsto (fun r => v r / (η r) ^ 2) atTop (𝓝 0) := by
+      have := hv.const_mul (4 * (n : Real) ^ 4 / ε ^ 2)
+      simpa only [mul_zero, hratio] using this
+    have h2 : Tendsto (fun r => ENNReal.ofReal (v r / (η r) ^ 2)) atTop (𝓝 0) := by
+      simpa using ENNReal.tendsto_ofReal h1
+    have h3 := ENNReal.Tendsto.const_mul h2 (Or.inr (ENNReal.natCast_ne_top n))
+    simpa using h3
+  have hsqueeze :
+      Tendsto (fun r =>
+        P {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist (μ r))})
+        atTop (𝓝 0) :=
+    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hub
+      (fun r => bot_le) hbad
+  simpa only [hset_eq] using hsqueeze
+
+/--
+**Theorem 2, in the source's own terms.**
+
+`γ r i j` is the trace of the covariance of the response distribution of model `i` to query `j`
+at stage `r`, so the sample-mean second moment is `∑_j γ_ij / r`.  The hypothesis
+`hγ` is the source's condition, `((1/m) ∑_j γ_ij)/r → 0`, aggregated over the fixed model
+collection -- for finitely many nonnegative sequences that is equivalent to the per-model form
+the paper writes.
+-/
+theorem dissimilarity_convergesInProbability_of_gamma
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {n p : Nat} (m : Nat → Nat)
+    (Xbar : ∀ r, Ω → Fin n → Mat (m r) p)
+    (μ : ∀ r, Fin n → Mat (m r) p)
+    (γ : ∀ r, Fin n → Fin (m r) → Real)
+    (hγnonneg : ∀ r i j, 0 ≤ γ r i j)
+    (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μ r i‖ ^ 2) P)
+    (hmoment : ∀ r i, ∫ ω, ‖Xbar r ω i - μ r i‖ ^ 2 ∂P
+      ≤ (∑ i', ∑ j, γ r i' j) / (r : Real))
+    (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real))
+      atTop (𝓝 0)) :
+    ConvergesInProbabilityZero P
+      (fun r ω => frobSub (responseDist (Xbar r ω)) (responseDist (μ r))) := by
+  refine dissimilarity_convergesInProbability_of_secondMoment_growing P m Xbar μ
+    (fun r => (∑ i, ∑ j, γ r i j) / (r : Real)) hint hmoment ?_
+  have hnn : ∀ r, 0 ≤ (∑ i, ∑ j, γ r i j) / (r : Real) := by
+    intro r
+    have : 0 ≤ ∑ i, ∑ j, γ r i j :=
+      Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => hγnonneg r i j
+    positivity
+  refine squeeze_zero (fun r => div_nonneg (hnn r) (by positivity)) (fun r => ?_) hγ
+  rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
+  · simp [hm0]
+  · have hm_one : (1 : Real) ≤ ((m r : Real)) := by exact_mod_cast hmpos
+    have hm_pos : (0 : Real) < ((m r : Real)) := by linarith
+    have hS : 0 ≤ ∑ i, ∑ j, γ r i j :=
+      Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => hγnonneg r i j
+    rcases Nat.eq_zero_or_pos r with hr0 | hrpos
+    · simp [hr0]
+    · have hr_pos : (0 : Real) < (r : Real) := by exact_mod_cast hrpos
+      have h1 : (∑ i, ∑ j, γ r i j) / (r : Real) / ((m r : Real)) ^ 2
+          = (∑ i, ∑ j, γ r i j) / ((r : Real) * ((m r : Real)) ^ 2) := by
+        rw [div_div]
+      have h2 : ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real)
+          = (∑ i, ∑ j, γ r i j) / ((r : Real) * ((m r : Real))) := by
+        field_simp
+      rw [h1, h2, div_le_div_iff₀ (by positivity) (by positivity)]
+      have hsq : ((m r : Real)) ≤ ((m r : Real)) ^ 2 := by nlinarith [hm_one]
+      have hkey : ((∑ i, ∑ j, γ r i j) * (r : Real)) * ((m r : Real))
+          ≤ ((∑ i, ∑ j, γ r i j) * (r : Real)) * ((m r : Real)) ^ 2 :=
+        mul_le_mul_of_nonneg_left hsq (mul_nonneg hS hr_pos.le)
+      calc (∑ i, ∑ j, γ r i j) * ((r : Real) * ((m r : Real)))
+          = ((∑ i, ∑ j, γ r i j) * (r : Real)) * ((m r : Real)) := by ring
+        _ ≤ ((∑ i, ∑ j, γ r i j) * (r : Real)) * ((m r : Real)) ^ 2 := hkey
+        _ = (∑ i, ∑ j, γ r i j) * ((r : Real) * ((m r : Real)) ^ 2) := by ring
+
 end Acharyya2024.Probability

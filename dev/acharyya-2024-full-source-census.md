@@ -18,9 +18,9 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 
 | status | items |
 | --- | ---: |
-| `compiled_exact` | 2 |
+| `compiled_exact` | 3 |
 | `compiled_generalized` | 2 |
-| `compiled_specialization` | 5 |
+| `compiled_specialization` | 4 |
 | `compiled_source_repair` | 5 |
 | `not_proof_debt` | 1 |
 
@@ -28,9 +28,9 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 
 | classification | items |
 | --- | ---: |
-| `exact` | 2 |
+| `exact` | 3 |
 | `generalized` | 2 |
-| `specialized` | 5 |
+| `specialized` | 4 |
 | `source_repair` | 5 |
 | `out_of_scope` | 1 |
 
@@ -46,7 +46,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `A24-T1` | `headline` | Theorem 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-A1` | `major` | Assumption 1 | `compiled_generalized` | `generalized` | `proved_in_build` |
 | `A24-L1` | `major` | Lemma 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
-| `A24-T2` | `headline` | Theorem 2 | `compiled_specialization` | `specialized` | `proved_in_build` |
+| `A24-T2` | `headline` | Theorem 2 | `compiled_exact` | `exact` | `proved_in_build` |
 | `A24-T3` | `headline` | Theorem 3 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-C1` | `headline` | Corollary 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-A2` | `major` | Assumption 2 | `compiled_specialization` | `specialized` | `proved_in_build` |
@@ -102,11 +102,17 @@ rawStress_translate proves the translation component. No Acharyya2024 theorem ex
 
 Done, with a correction. RawStress.rawStress_rigidMotion and RawStress.mds_rigidMotion package the full orthogonal-plus-translation statement: raw stress is unchanged by a rigid motion and the minimizer set is closed under them. The source's word 'affine' is too wide, and rawStress_not_affine_invariant shows it: a dilation changes every distance and therefore the stress. The paper's own Corollary 1 uses an orthogonal map plus a translation, which is the correct class, so this is a wording slip rather than a mathematical error.
 
-### `growing-n-concentration` — Theorem 4 growing-n concentration is represented only through finite specializations/assumptions
+### `growing-n-concentration` — Growing-query concentration is now assembled; growing-n Theorem 4 still is not
 
 **Kind:** `scope_gap`
 
 The finite second-moment concentration theorem handles any fixed finite model set. The triangular-array consistency theorem assumes per-stage dissimilarity convergence hD; it does not derive the paper Theorem 4 pointwise growing-n conclusion from the gamma condition.
+
+CLOSED for Theorem 2. dissimilarity_convergesInProbability_of_secondMoment_growing takes the number of queries as a function of the replicate count, so the response matrices live in a different space at each stage -- which is the whole point of the theorem, a sufficient condition for how fast m may grow. dissimilarity_convergesInProbability_of_gamma states it in the source's own terms, with gamma_ij the trace-covariance and the hypothesis ((1/m) sum_j gamma_ij)/r -> 0.
+
+Two details the fixed-m form hid. The threshold eta r = eps * m r / (2 n^2) now moves with the stage, and the Chebyshev bound needs v r / (m r)^2 -> 0, which the source's condition implies with a spare factor of 1/m. And the stages where m r = 0 need no separate treatment: the dissimilarities vanish there so the bad event is empty, while v r / (eta r)^2 is v r / 0 = 0 under Lean's division convention, so the same inequality holds.
+
+Theorem 4 is still not derived from the gamma condition: it needs the model count to grow as well, and the per-stage consistency theorem continues to take sampling convergence as a hypothesis.
 
 ### `rigid-motion-engine-now-available` — The distance-to-coordinates step now has an engine; the eigenvalue floor is needed only for rates
 
@@ -241,13 +247,13 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **source anchor:** Theorem 2 (theorem, section 4.2)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:264-278`
 * **importance:** `headline`
-* **status / verification:** `compiled_specialization` / `proved_in_build`
-* **semantic alignment:** `specialized` — The finite-dimensional Chebyshev/second-moment mechanism and gamma/r sample-mean bound are compiled. The theorem with query dimension m itself growing with r is not assembled; the growing-query consistency layer accepts the resulting sampling convergence as a hypothesis.
+* **status / verification:** `compiled_exact` / `proved_in_build`
+* **semantic alignment:** `exact` — dissimilarity_convergesInProbability_of_gamma is the printed theorem: the number of queries is a function of the replicate count, gamma_ij is the trace-covariance, the hypothesis is the source's ((1/m) sum_j gamma_ij)/r -> 0 aggregated over the fixed model collection -- equivalent to the per-model form for finitely many nonnegative sequences -- and the conclusion is convergence of the Frobenius distance in probability. The second-moment identity relating the sample-mean error to sum_j gamma_ij / r is the separately compiled iid layer.
 * **source claim:** If (1/m) sum_j gamma_ij / r tends to zero for every fixed model, then the empirical dissimilarity matrix converges in Frobenius norm in probability to Delta^(infinity).
-* **Lean declarations:** `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`, `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean`, `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound`, `Acharyya2024.Consistency.growing_queries_dissimilarity_converges`
+* **Lean declarations:** `Acharyya2024.Consistency.growing_queries_dissimilarity_converges`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment_growing`, `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean`, `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound`
 * **gap refs:** `growing-query-rate-wiring`
-* **notes:** The probability theorem is mathematically faithful to the concentration mechanism but has fixed type-level response dimension.
-* **next action:** None.
+* **notes:** The fixed-m form remains available and is what the downstream finite theorems consume.
+* **next action:** None. Theorem 4, which also grows the model count, remains a specialization.
 
 ### `A24-T3` — Fixed models, growing queries: DKPS consistency
 
@@ -309,10 +315,10 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **status / verification:** `compiled_specialization` / `proved_in_build`
 * **semantic alignment:** `specialized` — Lean has the finite-model concentration mechanism and a growing-stage consistency theorem that assumes per-stage sampling convergence. It does not derive the literal growing-n pointwise theorem from the source gamma condition.
 * **source claim:** When n,m grow with r, the same covariance-trace rate implies pointwise convergence D_ii' -> Delta^(infinity)(phi_i,phi_i') in probability for every fixed pair.
-* **Lean declarations:** `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`, `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
+* **Lean declarations:** `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma`, `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`
 * **gap refs:** `growing-query-rate-wiring`, `growing-n-concentration`
 * **notes:** The source proof is pointwise in each pair, suggesting a future theorem can avoid uniform-in-n concentration.
-* **next action:** None.
+* **next action:** Grow the model count as well; the growing-query half is now assembled in dissimilarity_convergesInProbability_of_gamma.
 
 ### `A24-T5` — Growing models and queries: L^p consistency
 

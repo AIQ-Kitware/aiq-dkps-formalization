@@ -276,17 +276,19 @@ Lean proves unconditional convergence to the minimizer set. The fixed-minimizer 
 **Normalized paper statement:** If (1/m) sum_j gamma_ij / r tends to zero for every fixed model, then the empirical dissimilarity matrix converges in Frobenius norm in probability to Delta^(infinity).
 
 **Selected Lean declarations:**
+- `Acharyya2024.Consistency.growing_queries_dissimilarity_converges`
+- `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma`
 - `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`
+- `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment_growing`
 - `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean`
 - `Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound`
-- `Acharyya2024.Consistency.growing_queries_dissimilarity_converges`
 
 **Clause-by-clause comparison:**
 
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
-| For each model i, (1/m sum_j gamma_ij)/r -> 0 while m may grow with r. | SecondMoment/Probability compile the gamma/r sample-mean mechanism at fixed type-level response dimension; GrowingQueries accepts the resulting sampling convergence. | `lean_weaker_conclusion` | The literal varying-m theorem is not assembled because m is type-level in the finite probability theorem. |
-| Then \|\|D-DeltaInf\|\|_F ->P 0. | The finite concentration theorem plus deterministic-limit bridge proves this shape when the required convergence inputs are supplied. | `derived_by_composition` |  |
+| If for all i, lim_r ((1/m) sum_j gamma_ij)/r = 0 | hgamma, aggregated over the fixed model collection | `equivalent_encoding` | For finitely many nonnegative sequences the per-model and aggregated forms agree. |
+| then \|\|D - Delta^(infinity)\|\|_F ->P 0 as r -> infinity | ConvergesInProbabilityZero P (fun r omega => frobSub (responseDist (Xbar r omega)) (responseDist (mu r))) | `exact` | The number of queries is a function of r, so the response matrices live in a different space at each stage. |
 
 **Semantic review:**
 
@@ -295,6 +297,8 @@ The finite-dimensional Chebyshev/second-moment mechanism and gamma/r sample-mean
 **Additional note:** The probability theorem is mathematically faithful to the concentration mechanism but has fixed type-level response dimension.
 
 **Companion census gap refs:** `growing-query-rate-wiring`
+
+**Next action:** None. Theorem 4, which also grows the model count, remains a specialization.
 
 ### 9. `A24-T3` — Theorem 3: Fixed models, growing queries: DKPS consistency
 
@@ -436,8 +440,9 @@ The package has no model-distribution P over a compact model space, no continuou
 **Normalized paper statement:** When n,m grow with r, the same covariance-trace rate implies pointwise convergence D_ii' -> Delta^(infinity)(phi_i,phi_i') in probability for every fixed pair.
 
 **Selected Lean declarations:**
-- `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
+- `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma`
+- `Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment`
 
 **Clause-by-clause comparison:**
 
@@ -453,6 +458,8 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 **Additional note:** The source proof is pointwise in each pair, suggesting a future theorem can avoid uniform-in-n concentration.
 
 **Companion census gap refs:** `growing-query-rate-wiring`, `growing-n-concentration`
+
+**Next action:** Grow the model count as well; the growing-query half is now assembled in dissimilarity_convergesInProbability_of_gamma.
 
 ### 14. `A24-T5` — Theorem 5: Growing models and queries: L^p consistency
 
