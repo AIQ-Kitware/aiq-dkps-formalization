@@ -149,8 +149,8 @@ theorem norm_residual_complexify
   rw [BoundedOperator.residual_eq_comp_subtypeL (complexify A) (complexify K)
       (complexifySubmodule P) hPinvC,
     BoundedOperator.residual_eq_comp_subtypeL A K P hPinv,
-    Krein.norm_comp_subtypeL_eq_norm_comp_starProjection,
-    Krein.norm_comp_subtypeL_eq_norm_comp_starProjection,
+    TauCeti.norm_comp_subtypeL_eq_norm_comp_starProjection,
+    TauCeti.norm_comp_subtypeL_eq_norm_comp_starProjection,
     starProjection_complexifySubmodule, ← complexify_comp, norm_complexify]
 
 omit [CompleteSpace E] in

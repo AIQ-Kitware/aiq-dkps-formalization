@@ -2138,7 +2138,7 @@
         "TauCeti.DavisKahan.Frontier.Section8.theorem8_2_perturbationHalfGap_source_angle_lt",
         "TauCeti.DavisKahan.Frontier.Section8.theorem8_2_residualHalfGap_source_angle_lt",
         "TauCeti.DavisKahan.BoundedOperator.residual_eq_comp_subtypeL",
-        "TauCeti.DavisKahan.Frontier.Krein.exists_selfAdjoint_completion_eq_norm_restriction",
+        "TauCeti.exists_selfAdjoint_completion_eq_norm_restriction",
         "TauCeti.DavisKahan1970.Section8.PerturbationHalfGapBridge",
         "TauCeti.DavisKahan1970.Section8.ResidualHalfGapBridge",
         "TauCeti.DavisKahan1970.Section8.theorem82_branch_of_residualHalfGapBridge",
