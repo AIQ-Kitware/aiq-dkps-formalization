@@ -13,12 +13,12 @@ This is the entry point for **paper theorem vs. Lean theorem** comparison. The c
 | `acharyya-2024` | `A24-T1` | Theorem 1 | GAP stronger Lean hypotheses | The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly. |
 | `acharyya-2024` | `A24-A1` | Assumption 1 | PASS generalized/stronger theorem | This formalizes exactly the consequence used by raw-stress stability and does not require named latent vectors. |
 | `acharyya-2024` | `A24-L1` | Lemma 1 | GAP stronger Lean hypotheses | The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly. |
-| `acharyya-2024` | `A24-T2` | Theorem 2 | GAP only a specialization is formalized | No substantive delta recorded. |
+| `acharyya-2024` | `A24-T2` | Theorem 2 | GAP only a specialization is formalized | The passage from that definition to the sample-mean bound is the source's Appendix A.2 and is compiled separately, not threaded into one endpoint. |
 | `acharyya-2024` | `A24-T3` | Theorem 3 | GAP stronger Lean hypotheses | The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly. |
 | `acharyya-2024` | `A24-C1` | Corollary 1 | GAP probabilistic packaging and quantifier | Later packages have Procrustes/Gram-rigidity machinery but this corollary itself is absent. |
 | `acharyya-2024` | `A24-A2` | Assumption 2 | GAP only a specialization is formalized | Compactness is not consumed by this step. |
 | `acharyya-2024` | `A24-L2` | Lemma 2 | GAP missing source result | Same footing as UniquePairProfile, whose necessity is separately established for the configuration analogue. |
-| `acharyya-2024` | `A24-T4` | Theorem 4 | GAP only a specialization is formalized | No substantive delta recorded. |
+| `acharyya-2024` | `A24-T4` | Theorem 4 | GAP only a specialization is formalized | The passage from that definition to the sample-mean bound is the source's Appendix A.2 and is compiled separately, not threaded into one endpoint. |
 | `acharyya-2024` | `A24-T5` | Theorem 5 | GAP only a specialization is formalized | Every intermediate link is proved rather than assumed; the population law in place of the empirical measure is what remains. |
 | `acharyya-2025` | `A25-T1` | Theorem 1 | GAP exact finite probability constant not exposed | At m = 1 the three competing dissimilarity normalisations coincide, so the refutation is independent of that question. |
 | `acharyya-2025` | `A25-C1` | Corollary 1 | PASS by checked composition | With high probability \|\|Bhat-B\|\|_op < (n^3/r)^(1/2-delta). -> Entrywise-to-operator transport plus the paper-scale concentration theorem yields this rate by composition. |
