@@ -418,8 +418,11 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 **Selected Lean declarations:**
 - `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
 - `Acharyya2024.ContinuousMDS.ContinuousMDS`
+- `Acharyya2024.ContinuousMDS.estimatedEmbedding`
+- `Acharyya2024.ContinuousMDS.estimatedEmbedding_mem_mds`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation`
+- `Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
 - `TauCeti.integral_doubleSum_pi`
 - `TauCeti.map_evalPair_pi`
@@ -432,6 +435,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 | for all p >= 1 | one statement with p as a parameter, hypothesis 1 <= p | `exact` |  |
 | int int \| ‖psihat_1 - psihat_2‖ - ‖mds(phi_1) - mds(phi_2)‖ \|^p P(dphi_1) P(dphi_2) ->P 0 | tendsto_measure_lpPairDistErr_gt, with P the empirical measure of the sampled models | `lean_stronger_hypothesis` | The population law is replaced by the empirical model measure; that substitution is the remaining distance to the printed lemma. |
 | Lemma 2. ([23]) | The source attributes the lemma to the cited continuous-MDS literature and does not prove it. | `supplementary` |  |
+| int int \|‖psihat_1 - psihat_2‖ - ‖mds(phi_1) - mds(phi_2)‖\|^p P(dphi_1) P(dphi_2) | lpPairDistErr over ContinuousMDS.estimatedEmbedding and a continuous-MDS map; the estimate is now a map on the whole model space, as the integral requires. | `different_quantifier_encoding` | The source leaves the out-of-sample map implicit in its notation; Quench states it as Psihat_Q. Fixing it is what makes the population conclusion expressible. |
 
 **Semantic review:**
 
@@ -441,7 +445,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Define the out-of-sample estimated embedding on the model space and prove it converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. See continuous-mds-lp, including its correction.
+**Next action:** Prove that ContinuousMDS.estimatedEmbedding converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. The embedding map itself is now defined; see continuous-mds-lp.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -489,7 +493,10 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`
 - `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
+- `Acharyya2024.ContinuousMDS.estimatedEmbedding`
+- `Acharyya2024.ContinuousMDS.estimatedEmbedding_mem_mds`
 - `Acharyya2024.ContinuousMDS.lpPairDistErr`
+- `Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
 - `TauCeti.integral_doubleSum_pi`
 - `TauCeti.map_evalPair_pi`
@@ -509,7 +516,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Define the out-of-sample estimated embedding on the model space and prove it converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. See continuous-mds-lp, including its correction.
+**Next action:** Prove that ContinuousMDS.estimatedEmbedding converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. The embedding map itself is now defined; see continuous-mds-lp.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 

@@ -26,6 +26,7 @@ finite one the rest of the package uses, not a parallel notion.
 Formalized by Claude Opus 5 (claude-opus-5[1m]).
 -/
 import Acharyya2024.Common
+import Acharyya2024.RawStress
 import TauCeti.Probability.Process.EmpiricalMeasure
 
 open scoped BigOperators Topology
@@ -259,5 +260,74 @@ theorem tendsto_measure_lpPairDistErr_gt
       _ = ∑ q : κ × κ,
             Q {ω | δ < |‖ψ u ω (φ q.1) - ψ u ω (φ q.2)‖ - ‖χ (φ q.1) - χ (φ q.2)‖|} :=
           tsum_fintype _
+
+/-! ### The out-of-sample estimated embedding
+
+Lemma 2 and Theorem 5 integrate `‖psihat_1 - psihat_2‖` against `P × P`, so the estimate has to
+be defined at arbitrary models and not only at the sampled ones.  Acharyya 2024 leaves this
+implicit in writing `psihat_1, psihat_2` under an integral over the model distribution; Quench
+2026 states the map explicitly as `Psihat_Q`.  Without it the population conclusion cannot even
+be written down, which is why it is fixed here.
+
+The construction both papers have in mind, and the one the downstream augmented pipelines
+implement, is to put the model into the reference collection and read off its coordinate in a
+raw-stress minimizer of the enlarged dissimilarity matrix. -/
+
+/--
+**The estimated embedding as a map on the whole model space**: augment `x` into the reference
+sample `φ` and read its coordinate off the canonical raw-stress minimizer of the enlarged
+dissimilarity matrix.
+-/
+noncomputable def estimatedEmbedding {M : Type*} (d n : Nat) (Δ : M → M → Real)
+    (φ : Fin n → M) (x : M) : Rvec d :=
+  RawStress.mdsConfig (n := n + 1) (d := d)
+    (fun i j => Δ (Fin.snoc (α := fun _ => M) φ x i) (Fin.snoc (α := fun _ => M) φ x j)) (Fin.last n)
+
+/-- The augmented configuration behind `estimatedEmbedding` is a raw-stress minimizer of the
+augmented dissimilarity matrix, so the definition is not vacuous. -/
+theorem estimatedEmbedding_mem_mds {M : Type*} (d n : Nat) (Δ : M → M → Real)
+    (φ : Fin n → M) (x : M) :
+    RawStress.mdsConfig (n := n + 1) (d := d)
+      (fun i j => Δ (Fin.snoc (α := fun _ => M) φ x i) (Fin.snoc (α := fun _ => M) φ x j))
+      ∈ MDS (n + 1) d (fun i j => Δ (Fin.snoc (α := fun _ => M) φ x i) (Fin.snoc (α := fun _ => M) φ x j)) :=
+  RawStress.mdsConfig_mem _
+
+/-- `estimatedEmbedding` is the last coordinate of that minimizer. -/
+theorem estimatedEmbedding_eq {M : Type*} (d n : Nat) (Δ : M → M → Real)
+    (φ : Fin n → M) (x : M) :
+    estimatedEmbedding d n Δ φ x
+      = RawStress.mdsConfig (n := n + 1) (d := d)
+          (fun i j => Δ (Fin.snoc (α := fun _ => M) φ x i) (Fin.snoc (α := fun _ => M) φ x j)) (Fin.last n) :=
+  rfl
+
+/--
+**The `L^p` discrepancy is invariant under a rigid motion of the estimate.**
+
+Multidimensional scaling determines an embedding only up to a rigid motion, so a coordinatewise
+error between two embeddings is not a well-posed quantity while this pairwise-distance
+discrepancy is.  That is why the source states Lemma 2 and Theorem 5 in this form.
+-/
+theorem lpPairDistErr_rigidMotion_left {M : Type*} [MeasurableSpace M] (d : Nat)
+    (P : Measure M) (p : Real) (ψ χ : M → Rvec d)
+    (W : Rvec d ≃ₗᵢ[Real] Rvec d) (b : Rvec d) :
+    lpPairDistErr d P p (fun x => W (ψ x) + b) χ = lpPairDistErr d P p ψ χ := by
+  have key : ∀ x y : M, ‖(W (ψ x) + b) - (W (ψ y) + b)‖ = ‖ψ x - ψ y‖ := by
+    intro x y
+    have h : (W (ψ x) + b) - (W (ψ y) + b) = W (ψ x - ψ y) := by rw [map_sub]; abel
+    rw [h, LinearIsometryEquiv.norm_map]
+  unfold lpPairDistErr
+  simp_rw [key]
+
+/-- The same for a rigid motion of the target. -/
+theorem lpPairDistErr_rigidMotion_right {M : Type*} [MeasurableSpace M] (d : Nat)
+    (P : Measure M) (p : Real) (ψ χ : M → Rvec d)
+    (W : Rvec d ≃ₗᵢ[Real] Rvec d) (b : Rvec d) :
+    lpPairDistErr d P p ψ (fun x => W (χ x) + b) = lpPairDistErr d P p ψ χ := by
+  have key : ∀ x y : M, ‖(W (χ x) + b) - (W (χ y) + b)‖ = ‖χ x - χ y‖ := by
+    intro x y
+    have h : (W (χ x) + b) - (W (χ y) + b) = W (χ x - χ y) := by rw [map_sub]; abel
+    rw [h, LinearIsometryEquiv.norm_map]
+  unfold lpPairDistErr
+  simp_rw [key]
 
 end Acharyya2024.ContinuousMDS
