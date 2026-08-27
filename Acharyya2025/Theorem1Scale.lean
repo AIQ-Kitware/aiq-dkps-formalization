@@ -53,6 +53,15 @@ noncomputable def μ : Fin 2 → Mat 1 1 :=
 /-- The response variabilities: model `1` has trace-covariance `1`, model `0` none. -/
 noncomputable def γ : Fin 2 → Fin 1 → Real := fun i _ => if i = 1 then 1 else 0
 
+/-- `μ` really is the population mean of the responses.  Without this, `γ` below would be a
+second moment about an arbitrary point rather than the trace-covariance the source defines, and
+the refutation would be attacking a different quantity. -/
+theorem mean_eq (i : Fin 2) (q : Fin 1 × Fin 1) :
+    ∫ ω, Xbar ω i q ∂coinMeasure = μ i q := by
+  obtain ⟨j, k⟩ := q
+  fin_cases i <;> fin_cases j <;> fin_cases k <;>
+    simp [integral_coinMeasure, Xbar, μ, EuclideanSpace.single_apply] <;> norm_num
+
 theorem secondMoment_eq (i : Fin 2) :
     ∫ ω, ‖Xbar ω i - μ i‖ ^ 2 ∂coinMeasure = ∑ j, γ i j := by
   fin_cases i <;>
@@ -77,6 +86,10 @@ and the response variability is `1`, so pushing the two models apart makes every
 
 Since `m = 1`, the `1/m`, `1/sqrt m` and unnormalized dissimilarity conventions agree here, so
 the refutation is independent of which one the source intends.
+
+`mean_eq` and `secondMoment_eq` together certify that the `γ` used here is the source's own
+quantity: `μ` is the population mean, so `γ` is the trace-covariance of the response and not a
+second moment about some other point.
 -/
 theorem prob_entrywiseClose_lt_paper_bound :
     coinMeasure {ω : Bool | ∀ i i' : Fin 2,

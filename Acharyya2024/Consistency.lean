@@ -923,7 +923,10 @@ and `-x` within `‖x‖` of each other.
 inside the probability.
 -/
 theorem not_exists_deterministic_rigidMotion_of_pairDist_exact :
-    ∃ (ψhat : Nat → Bool → Config 2 1) (ψ : Config 2 1),
+    ∃ (ψhat : Nat → Bool → Config 2 1) (ψ : Config 2 1) (D : DisMat 2),
+      -- the estimates and the target are genuine raw-stress minimizers, as in the corollary's
+      -- own setting: they are MDS outputs, not arbitrary configurations
+      (∀ t ω, ψhat t ω ∈ MDS 2 1 D) ∧ ψ ∈ MDS 2 1 D ∧
       (∀ i j, ConvergesInProbability coinMeasure
         (fun t ω => pairDistErr (ψhat t ω) ψ i j) 0) ∧
       ∀ (W : Nat → (Rvec 1 ≃ₗᵢ[Real] Rvec 1)) (a : Nat → Rvec 1),
@@ -933,7 +936,21 @@ theorem not_exists_deterministic_rigidMotion_of_pairDist_exact :
   classical
   set x : Rvec 1 := EuclideanSpace.single 0 (1 : Real) with hxdef
   have hxnorm : ‖x‖ = 1 := by simp [hxdef]
-  refine ⟨fun _ ω => if ω then ![0, x] else ![0, -x], ![0, x], ?_, ?_⟩
+  set D : DisMat 2 := fun i j => if i = j then 0 else 1 with hD
+  -- both branches realize `D` exactly, so both have zero raw stress and are minimizers
+  have hmin : ∀ z : Config 2 1, rawStress 2 1 D z = 0 → z ∈ MDS 2 1 D := by
+    intro z hz w
+    rw [hz]
+    exact Finset.sum_nonneg fun i _ => Finset.sum_nonneg fun j _ => sq_nonneg _
+  have hstress : ∀ y : Rvec 1, ‖y‖ = 1 → rawStress 2 1 D ![0, y] = 0 := by
+    intro y hy
+    simp only [rawStress, Fin.sum_univ_two, hD, Matrix.cons_val_zero, Matrix.cons_val_one,
+      Matrix.head_cons]
+    norm_num [hy, Fin.ext_iff, norm_sub_rev (0 : Rvec 1) y]
+  have hmem0 : (![0, x] : Config 2 1) ∈ MDS 2 1 D := hmin _ (hstress x hxnorm)
+  have hmemn : (![0, -x] : Config 2 1) ∈ MDS 2 1 D := hmin _ (hstress (-x) (by simp [hxnorm]))
+  refine ⟨fun _ ω => if ω then ![0, x] else ![0, -x], ![0, x], D,
+    fun t ω => by cases ω <;> simpa using ‹_›, hmem0, ?_, ?_⟩
   · -- the pairwise distances are exactly right, so the hypothesis holds at every stage
     intro i j ε hε
     have hzero : ∀ ω : Bool,
