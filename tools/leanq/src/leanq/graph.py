@@ -11,8 +11,9 @@ implementations here keep ``leanq`` installable without a resolve step.
 
 from __future__ import annotations
 
+import re
 from collections import Counter, deque
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Iterable, Mapping, Sequence
 
 from .index import Decl
@@ -235,6 +236,30 @@ def environment_dependency_graph(decls: Iterable[Decl]) -> DependencyGraph:
     )
 
 
+_GENERATED_SUFFIX = re.compile(r"\.(?:eq_\d+|eq_def|_eq_\d+)$")
+
+
+def _reattribute_generated_equations(decls: list[Decl]) -> list[Decl]:
+    """Give a generated equation lemma the library/module of the definition it unfolds.
+
+    Lean attributes ``X.eq_1`` to whichever module first forced it, which need not
+    be the module that declares ``X``.  Across a multi-library index that shows up
+    as a package apparently depending on a downstream package: `TauCeti.sinThetaMap`
+    is declared in ForTauCeti, but `TauCeti.sinThetaMap.eq_1` was generated inside a
+    DavisKahan module.  The edges are real; only the attribution is an artifact, and
+    left alone it puts phantom nodes in the wrong package.
+    """
+    table = {decl.name: decl for decl in decls}
+    result: list[Decl] = []
+    for decl in decls:
+        match = _GENERATED_SUFFIX.search(decl.name)
+        parent = table.get(decl.name[: match.start()]) if match else None
+        if parent is not None and parent.library != decl.library:
+            decl = replace(decl, library=parent.library, module=parent.module)
+        result.append(decl)
+    return result
+
+
 def declarations_from_graph_payload(payload: Mapping) -> list[Decl]:
     """Rehydrate declaration rows from a saved leanq graph/index payload."""
     rows = payload.get("nodes")
@@ -245,7 +270,7 @@ def declarations_from_graph_payload(payload: Mapping) -> list[Decl]:
         if not isinstance(row, dict) or "name" not in row:
             raise ProjectError("graph payload contains a malformed declaration node")
         decls.append(Decl.from_json(row))
-    return decls
+    return _reattribute_generated_equations(decls)
 
 
 def target_dependency_graph(
