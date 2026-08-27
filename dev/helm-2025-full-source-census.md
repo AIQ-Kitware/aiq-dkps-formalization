@@ -65,6 +65,8 @@ Both are now enough. The continuous-mapping step compares two configurations car
 
 What this gap still covers is the compact-range encoding of Assumption 3 and the estimator measurability, both unchanged.
 
+Adversarial-review fix. The entry above said the printed readings are 'what the paper-facing theorem now consumes', but only Theorem 1 had a printed-assumption version; Theorem 2 and the transfer beneath it still required the joint readings, so the joint reading was still load-bearing for a headline result. consistency_transfer_dkps_printed and Theorem2_bayes_printed close that: both headline theorems now run on the printed readings, and neither uses Assumption 3.
+
 ### `spectral-vs-rawstress-bridge` — Eigenvalue floor absent from Helm -- RESOLVED for the bridge, retained for the spectral chain
 
 **Kind:** `source_audit`
@@ -146,10 +148,10 @@ alignmentConsistency_of_pairwiseDist takes convergence in probability of the est
 * **status / verification:** `compiled_source_repair` / `proved_in_build`
 * **semantic alignment:** `source_repair` — Theorem 2 is proved by applying Theorem 1 at each sample size, so it inherits Theorem 1's defect: with no condition on the labels, convergence in probability of the losses does not give convergence of the risks, as prob_convergence_not_enough_for_expectations witnesses. The formalization carries the same weakest repair, an integrable envelope at each n, and no compact-label hypothesis. Separately, the consistency notion the transfer quantifies over is convergence of the expected risk rather than the paper's in-probability form; that is recorded as consistency-in-probability-vs-expectation and is not yet resolved.
 * **source claim:** If learning on true perspectives is consistent, learning on estimated perspectives is also consistent as n,m,r grow.
-* **Lean declarations:** `Helm2025.DKPS.ConsistentInProbability`, `Helm2025.DKPS.ContinuousLossInPrediction`, `Helm2025.DKPS.LossDominated`, `Helm2025.DKPS.Theorem2_bayes`, `Helm2025.DKPS.consistency_transfer_dkps_bayes`, `Helm2025.DKPS.consistentExpected_of_consistentInProbability`, `Helm2025.DKPS.diagonal_convergence`, `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`, `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`, `Helm2025.DKPS.riskGivenTraining`, `Helm2025.DKPS.risk_eq_integral_riskGivenTraining`, `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`, `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`, `TauCeti.exists_rigidMotion_of_dist_eq`
+* **Lean declarations:** `Helm2025.DKPS.ConsistentInProbability`, `Helm2025.DKPS.ContinuousLossInPrediction`, `Helm2025.DKPS.LossDominated`, `Helm2025.DKPS.Theorem2_bayes`, `Helm2025.DKPS.Theorem2_bayes_printed`, `Helm2025.DKPS.consistency_transfer_dkps_bayes`, `Helm2025.DKPS.consistentExpected_of_consistentInProbability`, `Helm2025.DKPS.diagonal_convergence`, `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`, `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`, `Helm2025.DKPS.riskGivenTraining`, `Helm2025.DKPS.risk_eq_integral_riskGivenTraining`, `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`, `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`, `TauCeti.exists_rigidMotion_of_dist_eq`
 * **gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `rigid-motion-engine-now-available`, `stronger-analysis-hypotheses`
 * **notes:** The compact-label hypothesis, which no source passage states, has been replaced by the integrable-envelope hypothesis LossDominated; see gap label-compact-support.
-* **next action:** None; the transfer is reachable from the paper's own consistency via consistentExpected_of_consistentInProbability.
+* **next action:** None for the assumptions; Theorem2_bayes_printed runs on the printed readings of Assumptions 2 and 4 and does not use Assumption 3.
 
 ### `H25-A1` — Rigid/affine-isometry invariance of the learning rule
 
@@ -169,9 +171,9 @@ alignmentConsistency_of_pairwiseDist takes convergence in probability of the est
 * **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:355-369`
 * **importance:** `major`
 * **status / verification:** `compiled_exact` / `proved_in_build`
-* **semantic alignment:** `exact` — The printed assumption holds the labels fixed and moves only the embeddings, and ContinuousLearningRuleInEmbeddings is exactly that. Theorem1_printed consumes it in place of joint continuity, so the stronger reading is no longer needed. The sequential form of the printed assumption is equivalent to it, the domain being metric.
+* **semantic alignment:** `exact` — The printed assumption holds the labels fixed and moves only the embeddings, and ContinuousLearningRuleInEmbeddings is exactly that. Theorem1_printed consumes it in place of joint continuity, so the stronger reading is no longer needed. The sequential form of the printed assumption is equivalent to it, the domain being metric. Both headline theorems consume the printed reading: Theorem1_printed and Theorem2_bayes_printed. The joint readings remain available and imply the printed ones.
 * **source claim:** Sequentially close training sets and query points produce close predictions.
-* **Lean declarations:** `Helm2025.DKPS.Assumption2`, `Helm2025.DKPS.ContinuousLearningRule.paperA2`, `Helm2025.DKPS.ContinuousLearningRuleInEmbeddings`, `Helm2025.DKPS.PaperA2_SequentialContinuity`, `Helm2025.DKPS.Theorem1_printed`, `Helm2025.DKPS.continuousLearningRuleInEmbeddings_of_continuousLearningRule`
+* **Lean declarations:** `Helm2025.DKPS.Assumption2`, `Helm2025.DKPS.ContinuousLearningRule.paperA2`, `Helm2025.DKPS.ContinuousLearningRuleInEmbeddings`, `Helm2025.DKPS.PaperA2_SequentialContinuity`, `Helm2025.DKPS.Theorem1_printed`, `Helm2025.DKPS.Theorem2_bayes_printed`, `Helm2025.DKPS.consistency_transfer_dkps_printed`, `Helm2025.DKPS.continuousLearningRuleInEmbeddings_of_continuousLearningRule`
 * **gap refs:** `stronger-analysis-hypotheses`
 * **notes:** No additional note.
 * **next action:** None. The printed reading is formalized and is what the paper-facing theorem now consumes.
@@ -194,9 +196,9 @@ alignmentConsistency_of_pairwiseDist takes convergence in probability of the est
 * **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:372-373`
 * **importance:** `major`
 * **status / verification:** `compiled_exact` / `proved_in_build`
-* **semantic alignment:** `exact` — ContinuousLossInPrediction is the displayed gloss, and it is now what the paper-facing theorem consumes. The continuous-mapping step is reproved from it by the subsequence principle, and the joint measurability the risk integrals need comes from the Caratheodory argument rather than from joint continuity. The headline sentence's stronger reading remains available and implies this one.
+* **semantic alignment:** `exact` — ContinuousLossInPrediction is the displayed gloss, and it is now what the paper-facing theorem consumes. The continuous-mapping step is reproved from it by the subsequence principle, and the joint measurability the risk integrals need comes from the Caratheodory argument rather than from joint continuity. The headline sentence's stronger reading remains available and implies this one. Both headline theorems consume the printed reading: Theorem1_printed and Theorem2_bayes_printed. The joint readings remain available and imply the printed ones.
 * **source claim:** For each fixed label y, the loss varies continuously with the prediction.
-* **Lean declarations:** `Helm2025.DKPS.Assumption4`, `Helm2025.DKPS.Assumption4'`, `Helm2025.DKPS.ContinuousLoss.continuousLossInPred`, `Helm2025.DKPS.ContinuousLossInPred`, `Helm2025.DKPS.ContinuousLossInPrediction`, `Helm2025.DKPS.Theorem1_printed`, `Helm2025.DKPS.loss_converges_in_prob_printed`, `Helm2025.DKPS.stronglyMeasurable_combined_loss_of_printed`, `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`
+* **Lean declarations:** `Helm2025.DKPS.Assumption4`, `Helm2025.DKPS.Assumption4'`, `Helm2025.DKPS.ContinuousLoss.continuousLossInPred`, `Helm2025.DKPS.ContinuousLossInPred`, `Helm2025.DKPS.ContinuousLossInPrediction`, `Helm2025.DKPS.Theorem1_printed`, `Helm2025.DKPS.Theorem2_bayes_printed`, `Helm2025.DKPS.consistency_transfer_dkps_printed`, `Helm2025.DKPS.loss_converges_in_prob_printed`, `Helm2025.DKPS.stronglyMeasurable_combined_loss_of_printed`, `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`
 * **gap refs:** `stronger-analysis-hypotheses`
 * **notes:** No additional note.
 * **next action:** None. The displayed gloss is what the paper-facing theorem consumes.

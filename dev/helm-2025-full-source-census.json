@@ -44,7 +44,7 @@
     "stronger-analysis-hypotheses": {
       "kind": "source_audit",
       "title": "Joint continuity replaced by the printed readings of Assumptions 2 and 4",
-      "detail": "The paper writes: \"The loss function l is continuous. That is, for every y in R^{d'}, ||l(h',y) - l(h'',y)|| -> 0 if ||h' - h''|| -> 0.\" The headline clause asserts continuity of a two-argument function, which is joint continuity. The displayed gloss that follows is separate continuity in the first argument only, which is strictly weaker -- separate continuity does not imply joint continuity. The two readings are not equivalent and the paper does not say which it intends.\n\nBoth are now formalized. ContinuousLoss is the headline reading and is what the theorems use. ContinuousLossInPrediction is the displayed gloss, with continuousLossInPrediction_of_continuousLoss and measurableLossInLabel_of_continuousLoss showing the headline reading implies the gloss and label measurability, so the difference is quantified rather than assumed away.\n\nHow much the difference costs is now pinned down. stronglyMeasurable_loss_of_printed_assumption4 shows the displayed gloss together with measurability of the loss in the label already gives joint strong measurability of the loss, by the Caratheodory argument. So the measurability the development draws from joint continuity does not need it. What joint continuity is still used for is the continuous-mapping step, where predictions and labels vary together; reproving that step under the gloss is the remaining work, and it is a subsequence argument rather than a missing foundation.\n\nThe other hypotheses this gap covered -- joint continuity of the learning rule in Assumption 2, compact range in Assumption 3, and estimator measurability -- are unchanged.\n\nRESOLVED for Assumptions 2 and 4. Reading Assumption 2 again settles what it actually says: 'if max_i ||psihat_i - psi_i|| -> 0 then ||h(psihat_{n+1}; {(psihat_i, y_i)}) - h(psi_{n+1}; {(psi_i, y_i)})|| -> 0'. The labels y_i are the SAME on both sides. The printed assumption is therefore continuity in the embeddings with the labels held fixed, which is what ContinuousLearningRuleInEmbeddings records, and Assumption 4's displayed gloss is continuity in the prediction with the label held fixed.\n\nBoth are now enough. The continuous-mapping step compares two configurations carrying identical labels, so only separate continuity is ever used; what the weaker readings cost is a modulus depending on the sample point, and the replacement is the subsequence principle (tendstoInMeasure_comp_of_continuous_fst). The measurability that joint continuity was silently supplying to the risk integrals comes instead from the Caratheodory argument (stronglyMeasurable_combined_loss_of_printed), at the cost of two label-measurability conditions that the joint readings imply. Theorem1_printed is the resulting paper-facing statement; it subsumes Theorem1 and does not use Assumption 3 at all.\n\nWhat this gap still covers is the compact-range encoding of Assumption 3 and the estimator measurability, both unchanged."
+      "detail": "The paper writes: \"The loss function l is continuous. That is, for every y in R^{d'}, ||l(h',y) - l(h'',y)|| -> 0 if ||h' - h''|| -> 0.\" The headline clause asserts continuity of a two-argument function, which is joint continuity. The displayed gloss that follows is separate continuity in the first argument only, which is strictly weaker -- separate continuity does not imply joint continuity. The two readings are not equivalent and the paper does not say which it intends.\n\nBoth are now formalized. ContinuousLoss is the headline reading and is what the theorems use. ContinuousLossInPrediction is the displayed gloss, with continuousLossInPrediction_of_continuousLoss and measurableLossInLabel_of_continuousLoss showing the headline reading implies the gloss and label measurability, so the difference is quantified rather than assumed away.\n\nHow much the difference costs is now pinned down. stronglyMeasurable_loss_of_printed_assumption4 shows the displayed gloss together with measurability of the loss in the label already gives joint strong measurability of the loss, by the Caratheodory argument. So the measurability the development draws from joint continuity does not need it. What joint continuity is still used for is the continuous-mapping step, where predictions and labels vary together; reproving that step under the gloss is the remaining work, and it is a subsequence argument rather than a missing foundation.\n\nThe other hypotheses this gap covered -- joint continuity of the learning rule in Assumption 2, compact range in Assumption 3, and estimator measurability -- are unchanged.\n\nRESOLVED for Assumptions 2 and 4. Reading Assumption 2 again settles what it actually says: 'if max_i ||psihat_i - psi_i|| -> 0 then ||h(psihat_{n+1}; {(psihat_i, y_i)}) - h(psi_{n+1}; {(psi_i, y_i)})|| -> 0'. The labels y_i are the SAME on both sides. The printed assumption is therefore continuity in the embeddings with the labels held fixed, which is what ContinuousLearningRuleInEmbeddings records, and Assumption 4's displayed gloss is continuity in the prediction with the label held fixed.\n\nBoth are now enough. The continuous-mapping step compares two configurations carrying identical labels, so only separate continuity is ever used; what the weaker readings cost is a modulus depending on the sample point, and the replacement is the subsequence principle (tendstoInMeasure_comp_of_continuous_fst). The measurability that joint continuity was silently supplying to the risk integrals comes instead from the Caratheodory argument (stronglyMeasurable_combined_loss_of_printed), at the cost of two label-measurability conditions that the joint readings imply. Theorem1_printed is the resulting paper-facing statement; it subsumes Theorem1 and does not use Assumption 3 at all.\n\nWhat this gap still covers is the compact-range encoding of Assumption 3 and the estimator measurability, both unchanged.\n\nAdversarial-review fix. The entry above said the printed readings are 'what the paper-facing theorem now consumes', but only Theorem 1 had a printed-assumption version; Theorem 2 and the transfer beneath it still required the joint readings, so the joint reading was still load-bearing for a headline result. consistency_transfer_dkps_printed and Theorem2_bayes_printed close that: both headline theorems now run on the printed readings, and neither uses Assumption 3."
     },
     "spectral-vs-rawstress-bridge": {
       "kind": "source_audit",
@@ -145,6 +145,7 @@
         "Helm2025.DKPS.ContinuousLossInPrediction",
         "Helm2025.DKPS.LossDominated",
         "Helm2025.DKPS.Theorem2_bayes",
+        "Helm2025.DKPS.Theorem2_bayes_printed",
         "Helm2025.DKPS.consistency_transfer_dkps_bayes",
         "Helm2025.DKPS.consistentExpected_of_consistentInProbability",
         "Helm2025.DKPS.diagonal_convergence",
@@ -170,7 +171,7 @@
         "detail": "Theorem 2 is proved by applying Theorem 1 at each sample size, so it inherits Theorem 1's defect: with no condition on the labels, convergence in probability of the losses does not give convergence of the risks, as prob_convergence_not_enough_for_expectations witnesses. The formalization carries the same weakest repair, an integrable envelope at each n, and no compact-label hypothesis. Separately, the consistency notion the transfer quantifies over is convergence of the expected risk rather than the paper's in-probability form; that is recorded as consistency-in-probability-vs-expectation and is not yet resolved."
       },
       "notes": "The compact-label hypothesis, which no source passage states, has been replaced by the integrable-envelope hypothesis LossDominated; see gap label-compact-support.",
-      "next_action": "None; the transfer is reachable from the paper's own consistency via consistentExpected_of_consistentInProbability."
+      "next_action": "None for the assumptions; Theorem2_bayes_printed runs on the printed readings of Assumptions 2 and 4 and does not use Assumption 3."
     },
     {
       "id": "H25-A1",
@@ -225,6 +226,8 @@
         "Helm2025.DKPS.ContinuousLearningRuleInEmbeddings",
         "Helm2025.DKPS.PaperA2_SequentialContinuity",
         "Helm2025.DKPS.Theorem1_printed",
+        "Helm2025.DKPS.Theorem2_bayes_printed",
+        "Helm2025.DKPS.consistency_transfer_dkps_printed",
         "Helm2025.DKPS.continuousLearningRuleInEmbeddings_of_continuousLearningRule"
       ],
       "planned_declarations": [],
@@ -233,7 +236,7 @@
       ],
       "semantic_alignment": {
         "classification": "exact",
-        "detail": "The printed assumption holds the labels fixed and moves only the embeddings, and ContinuousLearningRuleInEmbeddings is exactly that. Theorem1_printed consumes it in place of joint continuity, so the stronger reading is no longer needed. The sequential form of the printed assumption is equivalent to it, the domain being metric."
+        "detail": "The printed assumption holds the labels fixed and moves only the embeddings, and ContinuousLearningRuleInEmbeddings is exactly that. Theorem1_printed consumes it in place of joint continuity, so the stronger reading is no longer needed. The sequential form of the printed assumption is equivalent to it, the domain being metric. Both headline theorems consume the printed reading: Theorem1_printed and Theorem2_bayes_printed. The joint readings remain available and imply the printed ones."
       },
       "notes": "No additional note.",
       "next_action": "None. The printed reading is formalized and is what the paper-facing theorem now consumes."
@@ -294,6 +297,8 @@
         "Helm2025.DKPS.ContinuousLossInPred",
         "Helm2025.DKPS.ContinuousLossInPrediction",
         "Helm2025.DKPS.Theorem1_printed",
+        "Helm2025.DKPS.Theorem2_bayes_printed",
+        "Helm2025.DKPS.consistency_transfer_dkps_printed",
         "Helm2025.DKPS.loss_converges_in_prob_printed",
         "Helm2025.DKPS.stronglyMeasurable_combined_loss_of_printed",
         "Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4"
@@ -304,7 +309,7 @@
       ],
       "semantic_alignment": {
         "classification": "exact",
-        "detail": "ContinuousLossInPrediction is the displayed gloss, and it is now what the paper-facing theorem consumes. The continuous-mapping step is reproved from it by the subsequence principle, and the joint measurability the risk integrals need comes from the Caratheodory argument rather than from joint continuity. The headline sentence's stronger reading remains available and implies this one."
+        "detail": "ContinuousLossInPrediction is the displayed gloss, and it is now what the paper-facing theorem consumes. The continuous-mapping step is reproved from it by the subsequence principle, and the joint measurability the risk integrals need comes from the Caratheodory argument rather than from joint continuity. The headline sentence's stronger reading remains available and implies this one. Both headline theorems consume the printed reading: Theorem1_printed and Theorem2_bayes_printed. The joint readings remain available and imply the printed ones."
       },
       "notes": "No additional note.",
       "next_action": "None. The displayed gloss is what the paper-facing theorem consumes."

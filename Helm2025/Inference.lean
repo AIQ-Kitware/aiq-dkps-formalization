@@ -382,6 +382,37 @@ theorem Theorem1_printed (n d d' : ℕ)
     (risk_converges_fixed_n_printed (n := n) (d := d) (d' := d') (P := P) (learn := learn)
       (loss := loss) (psi_hat := psi_hat) h_meas_psi h_align h_inv hA2 hA4 hML hMlearn h_dom)
 
+/--
+**Theorem 2 (paper), under the printed readings of Assumptions 2 and 4.**
+
+The companion of `Theorem1_printed`: consistency transfers to estimated embeddings along a
+budget schedule, with Assumption 2 moving only the embeddings and Assumption 4 only the
+prediction, as the paper writes them.  Assumption 3 is not used.
+-/
+theorem Theorem2_bayes_printed (d d' : ℕ)
+    (P : Measure (Z d d')) [IsProbabilityMeasure P]
+    (learn : (n : ℕ) → LearningRule n d d')
+    (loss : LossFunction d')
+    (psi_hat : (n : ℕ) → ℕ → (Sample n d d') → Fin (n + 1) → E d)
+    (H : Set (E d → Y d'))
+    -- extra (implicit) assumption beyond the paper: every embedding estimator is measurable
+    (h_meas_psi : ∀ n u, Measurable (psi_hat n u))
+    (h_align : ∀ n, DKPSAlignmentConsistency n d d' P (psi_hat n))          -- Eq. (3)
+    (h_inv : ∀ n, InvariantToAffineIsometries n d d' (learn n))             -- A1
+    (hA2 : ∀ n, ContinuousLearningRuleInEmbeddings n d d' (learn n))        -- A2 as printed
+    (hA4 : ContinuousLossInPrediction d' loss)                              -- A4 as printed
+    (hML : MeasurableLossInLabel d' loss)
+    (hMlearn : ∀ n, MeasurableLearningRuleInLabels n d d' (learn n))
+    (h_dom : ∀ n, LossDominated n d d' P (learn n) loss)
+    (h_consistent : ConsistentExpected d d' P loss learn H) :
+    ∃ phi : ℕ → ℕ, Tendsto phi atTop atTop ∧
+      Tendsto (fun n => Rhatℓ n d d' P (learn n) loss (psi_hat n (phi n))) atTop
+        (𝓝 (bayesRisk d d' P loss H)) := by
+  simpa [Rhatℓ, ConsistentExpected] using
+    consistency_transfer_dkps_printed (d := d) (d' := d') (P := P) (learn := learn)
+      (loss := loss) (psi_hat := psi_hat) (L := bayesRisk d d' P loss H)
+      h_meas_psi h_align h_inv hA2 hA4 hML hMlearn h_dom h_consistent
+
 /-- **Theorem 2 (paper)**: consistency transfers from true to estimated embeddings along a schedule. -/
 theorem Theorem2_bayes (d d' : ℕ)
     (P : Measure (Z d d')) [IsProbabilityMeasure P]
