@@ -21,8 +21,8 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `compiled_exact` | 1 |
 | `compiled_generalized` | 2 |
 | `compiled_specialization` | 5 |
-| `compiled_stronger_hypotheses` | 3 |
-| `not_represented` | 3 |
+| `compiled_stronger_hypotheses` | 4 |
+| `not_represented` | 2 |
 | `not_proof_debt` | 1 |
 
 ## Semantic-alignment summary
@@ -32,8 +32,8 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `exact` | 1 |
 | `generalized` | 2 |
 | `specialized` | 5 |
-| `stronger_hypotheses` | 3 |
-| `missing` | 3 |
+| `stronger_hypotheses` | 4 |
+| `missing` | 2 |
 | `out_of_scope` | 1 |
 
 ## Items
@@ -50,7 +50,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `A24-L1` | `major` | Lemma 1 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `A24-T2` | `headline` | Theorem 2 | `compiled_specialization` | `specialized` | `proved_in_build` |
 | `A24-T3` | `headline` | Theorem 3 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
-| `A24-C1` | `headline` | Corollary 1 | `not_represented` | `missing` | `absent` |
+| `A24-C1` | `headline` | Corollary 1 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `A24-A2` | `major` | Assumption 2 | `compiled_specialization` | `specialized` | `proved_in_build` |
 | `A24-L2` | `headline` | Lemma 2 | `not_represented` | `missing` | `absent` |
 | `A24-T4` | `headline` | Theorem 4 | `compiled_specialization` | `specialized` | `proved_in_build` |
@@ -101,6 +101,16 @@ The finite second-moment concentration theorem handles any fixed finite model se
 Acharyya2024.rawStress_mds_stability is eigengap-free -- its hypotheses are minimality, a unique pair profile, and dissimilarity convergence, with no spectral condition -- but it concludes convergence of pairwise distances rather than of coordinates. The missing step is Acharyya 2024 Corollary 1, and its exact form is now proved as TauCeti.exists_rigidMotion_of_dist_eq: equal pairwise distances imply the configurations differ by a rigid motion. Mathlib does not carry this; it has Congruent and the triangle criteria only.
 
 What each paper needs from the bridge differs. Helm's conclusions are Tendsto statements with no rate, so the qualitative eigengap-free route suffices and its population eigenvalue floor is avoidable, modulo the approximate form of the rigidity lemma. Quench's capstones carry entryRate and GrowingConfigControl and conclude stagewise high-probability bounds; a quantitative Gram-to-configuration bound needs a spectral gap, because eigenvector perturbation is unstable without one, so Quench's floor is likely intrinsic rather than an artifact.
+
+### `corollary1-deterministic-alignment` — Corollary 1 quantifies the aligning rotation outside the probability
+
+**Kind:** `source_audit`
+
+The source writes "there exist sequences W^(u) and a^(u), satisfying W^(u) in O(d) and a^(u) in R^d for all u, such that for all i, ||psihat_i^(r_u) - (W^(u) psi_i + a^(u))|| ->P 0". The alignment sequence is quantified outside the probability statement, so a single deterministic pair (W^(u), a^(u)) is asserted to work.
+
+The estimate psihat is a function of the sample, and multidimensional scaling fixes a configuration only up to a rigid motion, so the motion that aligns it is a function of the sample too. What the argument supports is an alignment depending on the sample point. A deterministic sequence would additionally require the required alignment to become asymptotically sample-independent, which the source neither states nor proves.
+
+exists_rigidMotion_of_pairDist_tendsto proves the alignment step in the form the mathematics gives: whenever every pairwise distance converges, the configurations are eventually alignable to within any tolerance. The step needs no spectral hypothesis, so the eigengap-free raw-stress route reaches coordinates without a population eigenvalue floor.
 
 ## Detail
 
@@ -235,13 +245,13 @@ What each paper needs from the bridge differs. Helm's conclusions are Tendsto st
 * **source anchor:** Corollary 1 (corollary, section 4.2)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:305-326`
 * **importance:** `headline`
-* **status / verification:** `not_represented` / `absent`
-* **semantic alignment:** `missing` — Acharyya2024 stops at convergence of pairwise distances and does not construct the orthogonal/translation witnesses required by this corollary.
+* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
+* **semantic alignment:** `stronger_hypotheses` — The alignment step is now proved: convergence of every pairwise distance makes the configurations eventually alignable by a rigid motion, with no spectral hypothesis. What remains between this and the printed corollary is the probabilistic packaging -- lifting from a deterministic sequence to convergence in probability along a subsequence -- and the quantifier question recorded in corollary1-deterministic-alignment, since the source places the aligning rotation outside the probability.
 * **source claim:** There exist orthogonal W^(u) and translations a^(u) such that every estimated point converges in probability to W^(u) psi_i + a^(u).
-* **Lean declarations:** `TauCeti.exists_rigidMotion_of_dist_eq`
-* **gap refs:** `rigid-alignment-corollary`, `rigid-motion-engine-now-available`
-* **notes:** Later packages contain substantial Procrustes/Gram-rigidity infrastructure, but this source-facing Acharyya2024 corollary is not exposed.
-* **next action:** Add a source-facing quantitative finite-configuration congruence/Procrustes bridge if exact 2024 coverage is required.
+* **Lean declarations:** `Acharyya2024.Consistency.exists_rigidMotion_of_pairDist_tendsto`, `TauCeti.eventually_exists_rigidMotion_dist_lt`, `TauCeti.exists_rigidMotion_of_dist_eq`
+* **gap refs:** `corollary1-deterministic-alignment`, `rigid-alignment-corollary`, `rigid-motion-engine-now-available`
+* **notes:** Previously unrepresented. The engine is now present in ForTauCeti as exact and approximate rigid-motion rigidity, neither of which Mathlib carries.
+* **next action:** Lift the deterministic alignment step to convergence in probability along a subsequence, and record whether a sample-independent W^(u) is achievable at all.
 
 ### `A24-A2` — Growing models lie on a compact Riemannian model manifold
 

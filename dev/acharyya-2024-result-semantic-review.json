@@ -398,7 +398,7 @@
    "source_kind": "corollary",
    "title": "Coordinate convergence after orthogonal alignment and translation",
    "importance": "headline",
-   "verdict": "GAP missing source result",
+   "verdict": "GAP probabilistic packaging and quantifier",
    "literal_source_covered": false,
    "source_claim": "There exist orthogonal W^(u) and translations a^(u) such that every estimated point converges in probability to W^(u) psi_i + a^(u).",
    "source_locator": {
@@ -409,6 +409,8 @@
     ]
    },
    "lean_declarations": [
+    "Acharyya2024.Consistency.exists_rigidMotion_of_pairDist_tendsto",
+    "TauCeti.eventually_exists_rigidMotion_dist_lt",
     "TauCeti.exists_rigidMotion_of_dist_eq"
    ],
    "clauses": [
@@ -417,15 +419,22 @@
      "lean_clause": "Acharyya2024 contains no source-facing construction of the orthogonal/translation witnesses.",
      "relation": "missing",
      "note": "Later packages have Procrustes/Gram-rigidity machinery but this corollary itself is absent."
+    },
+    {
+     "source_clause": "There exist sequences W^(u) in O(d) and a^(u) in R^d such that for all i, ||psihat_i - (W^(u) psi_i + a^(u))|| ->P 0.",
+     "lean_clause": "exists_rigidMotion_of_pairDist_tendsto gives the alignment whenever the pairwise distances converge, with the rigid motion depending on the configuration, hence on the sample.",
+     "relation": "different_quantifier_encoding",
+     "note": "The source places the aligning rotation outside the probability; the estimate and so its aligning motion depend on the sample."
     }
    ],
    "review": "Acharyya2024 stops at convergence of pairwise distances and does not construct the orthogonal/translation witnesses required by this corollary.",
    "notes": "Later packages contain substantial Procrustes/Gram-rigidity infrastructure, but this source-facing Acharyya2024 corollary is not exposed.",
    "gap_refs": [
+    "corollary1-deterministic-alignment",
     "rigid-alignment-corollary",
     "rigid-motion-engine-now-available"
    ],
-   "next_action": "Add a source-facing quantitative finite-configuration congruence/Procrustes bridge if exact 2024 coverage is required."
+   "next_action": "Lift the deterministic alignment step to convergence in probability along a subsequence, and record whether a sample-independent W^(u) is achievable at all."
   },
   {
    "id": "A24-A2",

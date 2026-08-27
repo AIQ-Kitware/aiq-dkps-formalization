@@ -24,6 +24,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 
 import Acharyya2024.Common
 import Acharyya2024.RawStress
+import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 
 open scoped BigOperators Topology
 open Filter MeasureTheory
@@ -95,6 +96,39 @@ theorem rawStress_mds_stability_set_canonical
   exact rawStress_mds_stability_set P Dseq DeltaInf
     (fun r ω => RawStress.mdsConfig (d := d) (Dseq r ω))
     (fun r ω => RawStress.mdsConfig_mem (d := d) (Dseq r ω)) hD hε
+
+/--
+**Corollary 1, alignment step.**
+
+Convergence of every pairwise distance to the target's forces the configurations to be
+eventually alignable: for each tolerance there is a rigid motion carrying the estimate that
+close to the target.  This is the content of the source's Corollary 1, which upgrades the
+pairwise-distance conclusion of Theorem 3 to coordinate convergence after an orthogonal map
+and a translation.
+
+The step needs no spectral hypothesis; it is
+`TauCeti.eventually_exists_rigidMotion_dist_lt`, a compactness argument.  That matters because
+the raw-stress route into it is itself eigengap-free, so this whole path avoids the population
+eigenvalue floor that a classical-MDS bridge requires.
+
+Note the quantifier.  The source writes "there exist sequences `W^(u)` and `a^(u)`" outside the
+probability, i.e. a single deterministic alignment sequence.  What the argument supports is an
+alignment depending on the sample point, since the estimate does; see the census gap
+`corollary1-deterministic-alignment`.
+-/
+theorem exists_rigidMotion_of_pairDist_tendsto
+    {n d : Nat} (hn : 0 < n)
+    (ψhat : Nat → Config n d) (ψ : Config n d)
+    (h : ∀ i j, Tendsto (fun t => pairDistErr (ψhat t) ψ i j) atTop (𝓝 0)) :
+    ∀ ε > 0, ∀ᶠ t in atTop,
+      ∃ (W : Rvec d ≃ₗᵢ[Real] Rvec d) (a : Rvec d), ∀ i, ‖W (ψhat t i) + a - ψ i‖ < ε := by
+  have : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
+  refine TauCeti.eventually_exists_rigidMotion_dist_lt (φ := ψhat) (ψ := ψ) ?_
+  intro i j
+  rw [tendsto_iff_dist_tendsto_zero]
+  refine (h i j).congr fun t => ?_
+  rw [Real.dist_eq]
+  rfl
 
 /--
 Trosset-style raw-stress MDS stability — REPAIRED + PROVED (2026-06-11).
