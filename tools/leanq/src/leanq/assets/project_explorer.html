@@ -1181,8 +1181,12 @@ function exportDot(data, stem = "leanq-graph") {
    need bounding, and past roughly twelve thousand only a force-directed engine
    finishes at all.  The command is chosen from the size of what was exported so
    the file can just be run. */
+const DOWNLOAD_DIR = "~/Downloads/";
 function graphvizCommands(stem, nodeCount) {
-  const f = stem + ".dot", out = stem + ".svg";
+  /* Paths are written against the browser's download directory, so the command
+     runs from wherever the shell happens to be rather than only from beside the
+     file. */
+  const f = DOWNLOAD_DIR + stem + ".dot", out = DOWNLOAD_DIR + stem + ".svg";
   if (nodeCount <= 2500)
     return [[`dot -Tsvg ${f} -o ${out}`, "hierarchical, left to right"]];
   if (nodeCount <= 12000)
@@ -1227,8 +1231,8 @@ function showExportCommands(stem, data) {
   const sub = document.createElement("div");
   sub.className = "sub";
   sub.textContent = `${data.nodes.length.toLocaleString()} nodes · ` +
-    `${data.edges.length.toLocaleString()} edges · run this from the download directory ` +
-    `(the .dot file repeats it in its header).`;
+    `${data.edges.length.toLocaleString()} edges · paths assume ${DOWNLOAD_DIR}, so this runs ` +
+    `from any directory. The .dot file repeats it in its header.`;
   details.append(head, sub);
   const wrap = document.createElement("div");
   wrap.className = "cmd";

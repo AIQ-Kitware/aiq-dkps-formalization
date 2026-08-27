@@ -183,13 +183,14 @@ the links a naive hide would have severed. Reachability is always computed on th
 ancestor closures, coverage counts and shortest paths do not depend on the setting; only what is
 drawn does.
 
-**Export.** `DOT` and `JSON` write the chosen scope to a file. The `.dot` carries its own Graphviz
-invocation in a header comment, and the side panel repeats it with a copy button, so rendering the
-download is `head` plus a paste rather than a guess at the right engine:
+**Export.** `DOT` and `JSON` write the chosen scope to a file. After a `DOT` export the side panel
+shows the Graphviz invocation that renders it, with a copy button; the `.dot` repeats it in a header
+comment. Paths are written against `~/Downloads`, the browser's download directory, so the command
+can be pasted into any shell without changing directory first:
 
 ```dot
 // leanq export: 69 nodes, 99 edges, scope visible
-//   dot -Tsvg leanq-visible-69-nodes.dot -o leanq-visible-69-nodes.svg
+//   dot -Tsvg ~/Downloads/leanq-visible-69-nodes.dot -o ~/Downloads/leanq-visible-69-nodes.svg
 //     hierarchical, left to right
 ```
 
