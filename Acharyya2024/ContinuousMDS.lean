@@ -1378,4 +1378,149 @@ theorem ae_eventually_forall_isMinOn_of_iid {d : Nat} (P : Measure M) [IsProbabi
   rw [hG]
   exact mul_le_mul_of_nonneg_left (hv w) (le_of_lt (inv_pos.mpr hpos))
 
+/-! ### Lemma 2's population conclusion, in the mode the source states
+
+The source concludes convergence in probability of the `L^p(P x P)` discrepancy.  That mode is
+reached without exchanging any quantifiers and without selecting a minimizer: the expectation of
+the discrepancy over the sample is, by Tonelli, the double integral of the per-pair
+expectations, each of which vanishes by dominated convergence, and Markov converts the vanishing
+expectation into the printed convergence in probability. -/
+
+/-- The `p`-th power of the pairwise-distance discrepancy at a pair of models.  A top-level
+definition rather than a local abbreviation, so that the product-measure lemmas below do not
+have to unfold through a binding. -/
+noncomputable def pairDiscrepancy {M : Type*} (d : Nat) (p : Real) (ψ χ : M → Rvec d)
+    (q : M × M) : Real :=
+  |‖ψ q.1 - ψ q.2‖ - ‖χ q.1 - χ q.2‖| ^ p
+
+theorem pairDiscrepancy_nonneg {M : Type*} (d : Nat) {p : Real} (hp : 0 ≤ p)
+    (ψ χ : M → Rvec d) (q : M × M) : 0 ≤ pairDiscrepancy d p ψ χ q :=
+  Real.rpow_nonneg (abs_nonneg _) p
+
+theorem lpPairDistErr_eq_integral_pairDiscrepancy {M : Type*} [MeasurableSpace M] (d : Nat)
+    (P : Measure M) [SFinite P] (p : Real) (ψ χ : M → Rvec d)
+    (hint : Integrable (pairDiscrepancy d p ψ χ) (P.prod P)) :
+    lpPairDistErr d P p ψ χ = ∫ q, pairDiscrepancy d p ψ χ q ∂(P.prod P) :=
+  lpPairDistErr_eq_integral_prod d P p ψ χ hint
+
+/--
+**Lemma 2's `L^p` conclusion, against the population embedding, in probability.**
+
+`Psi n phi` is the estimated embedding at stage `n` on sample path `phi`, and `chi` the
+population embedding.  The hypotheses are that the discrepancy vanishes almost surely at each
+pair of models, that it is uniformly bounded, and that it is jointly measurable -- the last
+being the well-definedness condition the printed statement needs for its integral to denote
+anything, and the same condition this repository discloses for every estimator.
+-/
+theorem tendsto_measure_lpPairDistErr_population {Ω : Type*} [MeasurableSpace Ω]
+    (μ : Measure Ω) [IsProbabilityMeasure μ]
+    {M : Type*} [MeasurableSpace M] (P : Measure M) [IsProbabilityMeasure P]
+    {d : Nat} {p : Real} (hp : 0 ≤ p)
+    (Ψ : Nat → Ω → M → Rvec d) (χ : M → Rvec d) {C : Real}
+    (hbdd : ∀ n φ q, pairDiscrepancy d p (Ψ n φ) χ q ≤ C)
+    (hmeas : ∀ n, Measurable fun z : Ω × (M × M) => pairDiscrepancy d p (Ψ n z.1) χ z.2)
+    (hae : ∀ q : M × M, ∀ᵐ φ ∂μ,
+      Tendsto (fun n => pairDiscrepancy d p (Ψ n φ) χ q) atTop (𝓝 0))
+    {ε : Real} (hε : 0 < ε) :
+    Tendsto (fun n => μ {φ | ε < lpPairDistErr d P p (Ψ n φ) χ}) atTop (𝓝 0) := by
+  classical
+  have hnn : ∀ n φ q, 0 ≤ pairDiscrepancy d p (Ψ n φ) χ q :=
+    fun n φ q => pairDiscrepancy_nonneg d hp _ _ q
+  have hint : ∀ n φ, Integrable (pairDiscrepancy d p (Ψ n φ) χ) (P.prod P) := by
+    intro n φ
+    refine Integrable.mono' (integrable_const C)
+      (((hmeas n).comp (measurable_const.prodMk measurable_id)).aestronglyMeasurable)
+      (Filter.Eventually.of_forall fun q => ?_)
+    simpa [Real.norm_eq_abs, abs_of_nonneg (hnn n φ q)] using hbdd n φ q
+  have hintprod : ∀ n, Integrable
+      (fun z : Ω × (M × M) => pairDiscrepancy d p (Ψ n z.1) χ z.2) (μ.prod (P.prod P)) := by
+    intro n
+    refine Integrable.mono' (integrable_const C) (hmeas n).aestronglyMeasurable
+      (Filter.Eventually.of_forall fun z => ?_)
+    simpa [Real.norm_eq_abs, abs_of_nonneg (hnn n z.1 z.2)] using hbdd n z.1 z.2
+  -- measurability of the per-pair expectation, with the sample coordinate integrated out
+  have hqmeas : ∀ n, Measurable
+      fun q : M × M => ∫ φ, pairDiscrepancy d p (Ψ n φ) χ q ∂μ := fun n =>
+    (StronglyMeasurable.integral_prod_left
+      (f := fun φ (q : M × M) => pairDiscrepancy d p (Ψ n φ) χ q)
+      (hmeas n).stronglyMeasurable).measurable
+  -- each per-pair expectation vanishes
+  have hpair : ∀ q : M × M,
+      Tendsto (fun n => ∫ φ, pairDiscrepancy d p (Ψ n φ) χ q ∂μ) atTop (𝓝 0) := by
+    intro q
+    have hlim := tendsto_integral_of_dominated_convergence (fun _ : Ω => C)
+      (fun n => ((hmeas n).comp (measurable_id.prodMk measurable_const)).aestronglyMeasurable)
+      (integrable_const C)
+      (fun n => Filter.Eventually.of_forall fun φ => by
+        simpa [Real.norm_eq_abs, abs_of_nonneg (hnn n φ q)] using hbdd n φ q)
+      (hae q)
+    simpa using hlim
+  -- so their double integral vanishes
+  have hdouble : Tendsto
+      (fun n => ∫ q, (∫ φ, pairDiscrepancy d p (Ψ n φ) χ q ∂μ) ∂(P.prod P)) atTop (𝓝 0) := by
+    have hb : ∀ n, ∀ q : M × M,
+        ‖∫ φ, pairDiscrepancy d p (Ψ n φ) χ q ∂μ‖ ≤ C := by
+      intro n q
+      rw [Real.norm_eq_abs, abs_of_nonneg (integral_nonneg fun φ => hnn n φ q)]
+      calc ∫ φ, pairDiscrepancy d p (Ψ n φ) χ q ∂μ ≤ ∫ _φ : Ω, C ∂μ := by
+            refine integral_mono ?_ (integrable_const C) (fun φ => hbdd n φ q)
+            refine Integrable.mono' (integrable_const C)
+              (((hmeas n).comp (measurable_id.prodMk measurable_const)).aestronglyMeasurable)
+              (Filter.Eventually.of_forall fun φ => by
+                simpa [Real.norm_eq_abs, abs_of_nonneg (hnn n φ q)] using hbdd n φ q)
+        _ = C := by simp
+    have hlim := tendsto_integral_of_dominated_convergence (fun _ : M × M => C)
+      (fun n => (hqmeas n).aestronglyMeasurable (μ := P.prod P)) (integrable_const C)
+      (fun n => Filter.Eventually.of_forall (hb n)) (Filter.Eventually.of_forall hpair)
+    simpa using hlim
+  -- the expectation of the discrepancy is that double integral
+  have hexp : Tendsto (fun n => ∫ φ, lpPairDistErr d P p (Ψ n φ) χ ∂μ) atTop (𝓝 0) := by
+    refine hdouble.congr fun n => ?_
+    rw [← integral_integral_swap (hintprod n)]
+    refine integral_congr_ae (Filter.Eventually.of_forall fun φ => ?_)
+    exact (lpPairDistErr_eq_integral_pairDiscrepancy d P p (Ψ n φ) χ (hint n φ)).symm
+  -- Markov
+  have hXnn : ∀ n φ, 0 ≤ lpPairDistErr d P p (Ψ n φ) χ := by
+    intro n φ
+    rw [lpPairDistErr_eq_integral_pairDiscrepancy d P p (Ψ n φ) χ (hint n φ)]
+    exact integral_nonneg fun q => hnn n φ q
+  have hXmeas : ∀ n, Measurable fun φ => lpPairDistErr d P p (Ψ n φ) χ := by
+    intro n
+    have heq : (fun φ => lpPairDistErr d P p (Ψ n φ) χ)
+        = fun φ => ∫ q, pairDiscrepancy d p (Ψ n φ) χ q ∂(P.prod P) :=
+      funext fun φ => lpPairDistErr_eq_integral_pairDiscrepancy d P p (Ψ n φ) χ (hint n φ)
+    rw [heq]
+    exact (StronglyMeasurable.integral_prod_right'
+      (ν := P.prod P) (hmeas n).stronglyMeasurable).measurable
+  have hXint : ∀ n, Integrable (fun φ => lpPairDistErr d P p (Ψ n φ) χ) μ := by
+    intro n
+    refine Integrable.mono' (integrable_const C) (hXmeas n).aestronglyMeasurable
+      (Filter.Eventually.of_forall fun φ => ?_)
+    rw [Real.norm_eq_abs, abs_of_nonneg (hXnn n φ),
+      lpPairDistErr_eq_integral_pairDiscrepancy d P p (Ψ n φ) χ (hint n φ)]
+    calc ∫ q, pairDiscrepancy d p (Ψ n φ) χ q ∂(P.prod P)
+        ≤ ∫ _q : M × M, C ∂(P.prod P) :=
+          integral_mono (hint n φ) (integrable_const C) (fun q => hbdd n φ q)
+      _ = C := by simp
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds
+    (h := fun n => ENNReal.ofReal ((∫ φ, lpPairDistErr d P p (Ψ n φ) χ ∂μ) / ε)) ?_
+    (Filter.Eventually.of_forall fun _ => bot_le)
+    (Filter.Eventually.of_forall fun n => ?_)
+  · have hdiv : Tendsto (fun n => (∫ φ, lpPairDistErr d P p (Ψ n φ) χ ∂μ) / ε) atTop (𝓝 0) := by
+      simpa using hexp.div_const ε
+    simpa using ENNReal.tendsto_ofReal hdiv
+  · have hmk := mul_meas_ge_le_integral_of_nonneg
+      (Filter.Eventually.of_forall fun φ => hXnn n φ) (hXint n) ε
+    have hle : μ.real {φ | ε ≤ lpPairDistErr d P p (Ψ n φ) χ}
+        ≤ (∫ φ, lpPairDistErr d P p (Ψ n φ) χ ∂μ) / ε := by
+      rw [le_div_iff₀ hε]
+      linarith [hmk]
+    calc μ {φ | ε < lpPairDistErr d P p (Ψ n φ) χ}
+        ≤ μ {φ | ε ≤ lpPairDistErr d P p (Ψ n φ) χ} :=
+          measure_mono (Set.setOf_subset_setOf.mpr fun φ h => h.le)
+      _ = ENNReal.ofReal (μ.real {φ | ε ≤ lpPairDistErr d P p (Ψ n φ) χ}) := by
+          rw [measureReal_def, ENNReal.ofReal_toReal (measure_ne_top μ _)]
+      _ ≤ ENNReal.ofReal ((∫ φ, lpPairDistErr d P p (Ψ n φ) χ ∂μ) / ε) :=
+          ENNReal.ofReal_le_ofReal hle
+
 end Acharyya2024.ContinuousMDS
