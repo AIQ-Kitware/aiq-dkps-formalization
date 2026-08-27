@@ -17,20 +17,20 @@ public import Mathlib.MeasureTheory.Integral.Prod
 
 /-! # Two-coordinate marginals of a product measure, and the mean of a V-statistic
 
-A *V-statistic of order two* is a double average `(1/n²) ∑ᵢ ∑ⱼ f (X i) (X j)` over an
-independent sample.  Averages of a function of one coordinate are covered by the law of large
-numbers; a double average is not, because the summands share coordinates, and the classical
-routes — Hoeffding's decomposition, or Varadarajan's theorem on almost-sure weak convergence of
-empirical measures — are both absent from Mathlib.
-
-This file supplies the first piece: under a product measure the pair of two *distinct*
-coordinates has the product law, so the expectation of a V-statistic splits into its
-off-diagonal and diagonal parts,
+Under a product measure the pair of two *distinct* coordinates has the product law.  That is
+`map_evalPair_pi`, and it is the reason the expectation of a double average splits into its
+off-diagonal and diagonal parts:
 
   `∫ ∑ᵢ ∑ⱼ f (ω i) (ω j) = n (n - 1) ∫∫ f + n ∫ f x x`.
 
-That identity is what an elementary second-moment proof of the weak law for V-statistics starts
-from.
+A double average of this shape — a *V-statistic of order two* — is not covered by the law of
+large numbers, since the summands share coordinates, and the classical routes (Hoeffding's
+decomposition, or Varadarajan's theorem on almost-sure weak convergence of empirical measures)
+are both absent from Mathlib.  The identity above is where an elementary second-moment proof of
+the weak law would start.
+
+Both statements are ordinary facts about product measures and are stated for their own sake;
+neither is currently consumed by a paper-facing theorem in this repository.
 -/
 
 public section
