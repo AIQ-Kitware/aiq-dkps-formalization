@@ -28,6 +28,7 @@ Formalized by Claude Opus 5 (claude-opus-5[1m]).
 import Acharyya2024.Common
 import Acharyya2024.RawStress
 import TauCeti.Probability.Process.EmpiricalMeasure
+import TauCeti.Probability.StrongLaw
 
 open scoped BigOperators Topology
 open MeasureTheory Filter
@@ -961,5 +962,44 @@ theorem tendsto_argmin_of_tendsto_of_equiLipschitz {d : Nat}
       (Filter.Eventually.of_forall fun k => hV (ns (ms k)) w)
   rw [← huniq L hLmin]
   exact hms
+
+/-! ### The probabilistic input: the strong law for the averaged one-point stress
+
+The averaged one-point stress against an iid reference sample is an average of a bounded
+measurable function of one coordinate, so the strong law applies directly.  This is the last
+ingredient the argmin step needs. -/
+
+/--
+**The averaged one-point stress converges to its population counterpart.**
+
+For an iid reference sample, and at each fixed position, the averaged one-point stress against
+the sample converges almost surely to the population one-point stress.  This is the strong law
+applied to the summand, which is bounded and measurable, hence integrable.
+-/
+theorem ae_tendsto_averaged_pointStress {d : Nat} (P : Measure M) [IsProbabilityMeasure P]
+    {χ : M → Rvec d} {c : M → Real} {K : Real}
+    (hχ : Measurable χ) (hc : Measurable c)
+    (hχb : ∀ m, ‖χ m‖ ≤ K) (hcb : ∀ m, |c m| ≤ K) (v : Rvec d) :
+    ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P),
+      Tendsto (fun n : Nat => (n : Real)⁻¹ *
+        pointStress (fun i : Fin n => χ (φ i)) (fun i : Fin n => c (φ i)) v) atTop
+        (𝓝 (continuousPointStress d P χ c v)) := by
+  classical
+  set f : M → Real := fun m => (‖v - χ m‖ - c m) ^ 2 with hf
+  have hfmeas : Measurable f := by
+    rw [hf]
+    exact ((measurable_const.sub hχ).norm.sub hc).pow_const 2
+  have hfint : Integrable f P :=
+    integrable_continuousPointStress_integrand P hχ.aestronglyMeasurable
+      hc.aestronglyMeasurable hχb hcb v
+  have hslln := TauCeti.Probability.strong_law_ae_infinitePi P hfmeas hfint
+  filter_upwards [hslln] with φ hφ
+  have hval : ∫ y, f y ∂P = continuousPointStress d P χ c v := rfl
+  rw [hval] at hφ
+  refine hφ.congr fun n => ?_
+  rw [smul_eq_mul]
+  congr 1
+  unfold pointStress
+  exact (Fin.sum_univ_eq_sum_range (fun i => (‖v - χ (φ i)‖ - c (φ i)) ^ 2) n).symm
 
 end Acharyya2024.ContinuousMDS

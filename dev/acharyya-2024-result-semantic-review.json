@@ -586,6 +586,7 @@
     "Acharyya2024.ContinuousMDS.ContinuousMDS",
     "Acharyya2024.ContinuousMDS.abs_sub_pointStress_le",
     "Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le",
+    "Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress",
     "Acharyya2024.ContinuousMDS.continuousPointStress",
     "Acharyya2024.ContinuousMDS.continuous_continuousPointStress",
     "Acharyya2024.ContinuousMDS.estimatedEmbedding",
@@ -654,7 +655,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Supply pointwise convergence of the averaged one-point stress by the strong law, then apply tendsto_argmin_of_tendsto_of_equiLipschitz. The deterministic half of the identification is proved and the coercivity bound supplies the boundedness it asks for."
+   "next_action": "Thread the proved ingredients into one statement: strong law for the objectives, equi-Lipschitz to locally uniform, argmin for a growing collection, coercivity for boundedness, then dominated convergence. Each is proved individually; what remains is fixing how the reference configuration is tied to the population embedding at the sampled models."
   },
   {
    "id": "A24-T4",
@@ -730,6 +731,7 @@
     "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
     "Acharyya2024.ContinuousMDS.abs_sub_pointStress_le",
     "Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le",
+    "Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress",
     "Acharyya2024.ContinuousMDS.continuousPointStress",
     "Acharyya2024.ContinuousMDS.continuous_continuousPointStress",
     "Acharyya2024.ContinuousMDS.estimatedEmbedding",
@@ -775,7 +777,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Supply pointwise convergence of the averaged one-point stress by the strong law, then apply tendsto_argmin_of_tendsto_of_equiLipschitz. The deterministic half of the identification is proved and the coercivity bound supplies the boundedness it asks for."
+   "next_action": "Thread the proved ingredients into one statement: strong law for the objectives, equi-Lipschitz to locally uniform, argmin for a growing collection, coercivity for boundedness, then dominated convergence. Each is proved individually; what remains is fixing how the reference configuration is tied to the population embedding at the sampled models."
   },
   {
    "id": "A24-R4",

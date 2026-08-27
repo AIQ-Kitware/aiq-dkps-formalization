@@ -423,6 +423,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `Acharyya2024.ContinuousMDS.ContinuousMDS`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`
+- `Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress`
 - `Acharyya2024.ContinuousMDS.continuousPointStress`
 - `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding`
@@ -467,7 +468,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Supply pointwise convergence of the averaged one-point stress by the strong law, then apply tendsto_argmin_of_tendsto_of_equiLipschitz. The deterministic half of the identification is proved and the coercivity bound supplies the boundedness it asks for.
+**Next action:** Thread the proved ingredients into one statement: strong law for the objectives, equi-Lipschitz to locally uniform, argmin for a growing collection, coercivity for boundedness, then dominated convergence. Each is proved individually; what remains is fixing how the reference configuration is tied to the population embedding at the sampled models.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -517,6 +518,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`
+- `Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress`
 - `Acharyya2024.ContinuousMDS.continuousPointStress`
 - `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding`
@@ -556,7 +558,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Supply pointwise convergence of the averaged one-point stress by the strong law, then apply tendsto_argmin_of_tendsto_of_equiLipschitz. The deterministic half of the identification is proved and the coercivity bound supplies the boundedness it asks for.
+**Next action:** Thread the proved ingredients into one statement: strong law for the objectives, equi-Lipschitz to locally uniform, argmin for a growing collection, coercivity for boundedness, then dominated convergence. Each is proved individually; what remains is fixing how the reference configuration is tied to the population embedding at the sampled models.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 
