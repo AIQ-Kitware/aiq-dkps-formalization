@@ -837,6 +837,62 @@ theorem exists_min_continuousPointStress {d : Nat} (P : Measure M) [IsProbabilit
     have := hcoer w hw
     linarith
 
+/-- A minimizer of the population one-point stress is bounded, by the same coercivity that gives
+its existence. -/
+theorem norm_min_continuousPointStress_le {d : Nat} (P : Measure M) [IsProbabilityMeasure P]
+    {χ : M → Rvec d} {c : M → Real} {K : Real}
+    (hχmeas : AEStronglyMeasurable χ P) (hcmeas : AEStronglyMeasurable c P)
+    (hχ : ∀ m, ‖χ m‖ ≤ K) (hc : ∀ m, |c m| ≤ K)
+    {v : Rvec d}
+    (hv : ∀ w : Rvec d,
+      continuousPointStress d P χ c v ≤ continuousPointStress d P χ c w) :
+    ‖v‖ ≤ 4 * K + 1 := by
+  classical
+  have hne : Nonempty M := by
+    by_contra hcon
+    rw [not_nonempty_iff] at hcon
+    have h1 : P Set.univ = 0 := by
+      have : (Set.univ : Set M) = ∅ := Set.univ_eq_empty_iff.mpr hcon
+      rw [this, measure_empty]
+    rw [measure_univ] at h1
+    exact one_ne_zero h1
+  have hK : 0 ≤ K := le_trans (abs_nonneg _) (hc (Classical.arbitrary M))
+  by_contra hcon
+  push Not at hcon
+  -- the value at the origin is at most `(2K)^2`
+  have hzero : continuousPointStress d P χ c 0 ≤ (2 * K) ^ 2 := by
+    rw [continuousPointStress]
+    have hle : ∀ m, (‖(0 : Rvec d) - χ m‖ - c m) ^ 2 ≤ (2 * K) ^ 2 := by
+      intro m
+      have h1 : ‖(0 : Rvec d) - χ m‖ ≤ K := by simpa using hχ m
+      have h2 := abs_le.mp (hc m)
+      have hnn : 0 ≤ ‖(0 : Rvec d) - χ m‖ := norm_nonneg _
+      have habs : |‖(0 : Rvec d) - χ m‖ - c m| ≤ 2 * K := by
+        rw [abs_le]; constructor <;> linarith
+      calc (‖(0 : Rvec d) - χ m‖ - c m) ^ 2
+          = |‖(0 : Rvec d) - χ m‖ - c m| ^ 2 := (sq_abs _).symm
+        _ ≤ (2 * K) ^ 2 := pow_le_pow_left₀ (abs_nonneg _) habs 2
+    calc ∫ m, (‖(0 : Rvec d) - χ m‖ - c m) ^ 2 ∂P
+        ≤ ∫ _m, (2 * K) ^ 2 ∂P :=
+          integral_mono (integrable_continuousPointStress_integrand P hχmeas hcmeas hχ hc 0)
+            (integrable_const _) hle
+      _ = (2 * K) ^ 2 := by simp
+  -- but far away it exceeds that
+  have hge : ∀ m, (2 * K + 1) ^ 2 ≤ (‖v - χ m‖ - c m) ^ 2 := by
+    intro m
+    have h1 : ‖v‖ - ‖χ m‖ ≤ ‖v - χ m‖ := norm_sub_norm_le _ _
+    have h2 := abs_le.mp (hc m)
+    have h3 : 2 * K + 1 ≤ ‖v - χ m‖ - c m := by linarith [hχ m]
+    exact pow_le_pow_left₀ (by linarith) h3 2
+  have hint : ∫ _m : M, (2 * K + 1) ^ 2 ∂P ≤ continuousPointStress d P χ c v := by
+    rw [continuousPointStress]
+    exact integral_mono (integrable_const _)
+      (integrable_continuousPointStress_integrand P hχmeas hcmeas hχ hc v) hge
+  have hval : ∫ _m : M, (2 * K + 1) ^ 2 ∂P = (2 * K + 1) ^ 2 := by simp
+  rw [hval] at hint
+  have := hv 0
+  nlinarith [hint, hzero, hK]
+
 /-! ### Equi-Lipschitz bounds for the one-point stresses
 
 Pointwise convergence of objectives is not enough to move minimizers; locally uniform
@@ -1522,5 +1578,106 @@ theorem tendsto_measure_lpPairDistErr_population {Ω : Type*} [MeasurableSpace �
           rw [measureReal_def, ENNReal.ofReal_toReal (measure_ne_top μ _)]
       _ ≤ ENNReal.ofReal ((∫ φ, lpPairDistErr d P p (Ψ n φ) χ ∂μ) / ε) :=
           ENNReal.ofReal_le_ofReal hle
+
+/--
+**Lemma 2, end to end.**
+
+The out-of-sample estimated embedding, placed against the reference sample at each stage,
+satisfies the source's conclusion: the `L^p(P x P)` discrepancy between its pairwise distances
+and those of the population embedding tends to zero in probability.
+
+The hypotheses are the source's setting -- a bounded measurable reference embedding and bounded
+measurable dissimilarities, which a compact model space with a continuous embedding supplies --
+together with the identifiability premise whose necessity
+`Consistency.not_unique_min_continuousPointStress` establishes, and joint measurability of the
+estimator, which the printed statement needs for its own integral to denote anything.
+
+Two clauses come out stronger than printed: the conclusion holds along the full sequence rather
+than along a subsequence, and it is one statement in `p` rather than one per `p`.
+-/
+theorem tendsto_measure_lpPairDistErr_outOfSample {d : Nat} (P : Measure M)
+    [IsProbabilityMeasure P] {p : Real} (hp : 0 < p)
+    (Δ : M → M → Real) (χ : M → Rvec d) {K : Real}
+    (hχ : Measurable χ) (hΔ : ∀ x, Measurable (Δ x))
+    (hχb : ∀ m, ‖χ m‖ ≤ K) (hΔb : ∀ x m, |Δ x m| ≤ K)
+    (χlim : M → Rvec d)
+    (hχlimmin : ∀ x : M, ∀ w : Rvec d,
+      continuousPointStress d P χ (Δ x) (χlim x) ≤ continuousPointStress d P χ (Δ x) w)
+    (huniq : ∀ x : M, ∀ w : Rvec d,
+      (∀ w' : Rvec d,
+        continuousPointStress d P χ (Δ x) w ≤ continuousPointStress d P χ (Δ x) w') →
+      w = χlim x)
+    (Ψ : Nat → (Nat → M) → M → Rvec d)
+    (hΨmin : ∀ n φ x, ∀ w : Rvec d,
+      pointStress (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => Δ x (φ i)) (Ψ n φ x)
+        ≤ pointStress (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => Δ x (φ i)) w)
+    (hmeas : ∀ n, Measurable fun z : (Nat → M) × (M × M) =>
+      pairDiscrepancy d p (Ψ n z.1) χlim z.2)
+    {ε : Real} (hε : 0 < ε) :
+    Tendsto (fun n => (Measure.infinitePi fun _ : Nat => P)
+      {φ | ε < lpPairDistErr d P p (Ψ n φ) χlim}) atTop (𝓝 0) := by
+  classical
+  have hne : Nonempty M := by
+    by_contra hcon
+    rw [not_nonempty_iff] at hcon
+    have h1 : P Set.univ = 0 := by
+      have : (Set.univ : Set M) = ∅ := Set.univ_eq_empty_iff.mpr hcon
+      rw [this, measure_empty]
+    rw [measure_univ] at h1
+    exact one_ne_zero h1
+  have hK : 0 ≤ K := le_trans (norm_nonneg _) (hχb (Classical.arbitrary M))
+  -- both families of embeddings are bounded
+  have hΨb : ∀ n φ x, ‖Ψ n φ x‖ ≤ 4 * K := fun n φ x =>
+    norm_min_pointStress_le_of_bounded (n := n + 1) n.succ_pos _ _
+      (fun i => hχb _) (fun i => hΔb x _) (hΨmin n φ x)
+  have hχlimb : ∀ x, ‖χlim x‖ ≤ 4 * K + 1 := fun x =>
+    norm_min_continuousPointStress_le P hχ.aestronglyMeasurable (hΔ x).aestronglyMeasurable
+      hχb (hΔb x) (hχlimmin x)
+  -- so the discrepancy is uniformly bounded
+  have hbdd : ∀ n φ q, pairDiscrepancy d p (Ψ n φ) χlim q ≤ (16 * K + 2) ^ p := by
+    intro n φ q
+    have h1 : ‖Ψ n φ q.1 - Ψ n φ q.2‖ ≤ 8 * K := by
+      refine le_trans (norm_sub_le _ _) ?_
+      linarith [hΨb n φ q.1, hΨb n φ q.2]
+    have h2 : ‖χlim q.1 - χlim q.2‖ ≤ 8 * K + 2 := by
+      refine le_trans (norm_sub_le _ _) ?_
+      linarith [hχlimb q.1, hχlimb q.2]
+    have habs : |‖Ψ n φ q.1 - Ψ n φ q.2‖ - ‖χlim q.1 - χlim q.2‖| ≤ 16 * K + 2 := by
+      rw [abs_le]
+      constructor <;> [linarith [norm_nonneg (Ψ n φ q.1 - Ψ n φ q.2)];
+        linarith [norm_nonneg (χlim q.1 - χlim q.2)]]
+    exact Real.rpow_le_rpow (abs_nonneg _) habs hp.le
+  -- and it vanishes almost surely at each pair
+  have hae : ∀ q : M × M, ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P),
+      Tendsto (fun n => pairDiscrepancy d p (Ψ n φ) χlim q) atTop (𝓝 0) := by
+    intro q
+    have h1 := ae_eventually_forall_isMinOn_of_iid P hχ (hΔ q.1) hχb (hΔb q.1) (huniq q.1)
+    have h2 := ae_eventually_forall_isMinOn_of_iid P hχ (hΔ q.2) hχb (hΔb q.2) (huniq q.2)
+    filter_upwards [h1, h2] with φ hφ1 hφ2
+    have hc1 : Tendsto (fun n => Ψ n φ q.1) atTop (𝓝 (χlim q.1)) := by
+      rw [Metric.tendsto_atTop]
+      intro δ hδ
+      obtain ⟨N, hN⟩ := (hφ1 δ hδ).exists_forall_of_atTop
+      exact ⟨N, fun n hn => by
+        rw [dist_eq_norm]; exact hN n hn (Ψ n φ q.1) (hΨmin n φ q.1)⟩
+    have hc2 : Tendsto (fun n => Ψ n φ q.2) atTop (𝓝 (χlim q.2)) := by
+      rw [Metric.tendsto_atTop]
+      intro δ hδ
+      obtain ⟨N, hN⟩ := (hφ2 δ hδ).exists_forall_of_atTop
+      exact ⟨N, fun n hn => by
+        rw [dist_eq_norm]; exact hN n hn (Ψ n φ q.2) (hΨmin n φ q.2)⟩
+    have hnorm : Tendsto (fun n => ‖Ψ n φ q.1 - Ψ n φ q.2‖) atTop
+        (𝓝 ‖χlim q.1 - χlim q.2‖) := (hc1.sub hc2).norm
+    have hsub : Tendsto
+        (fun n => |‖Ψ n φ q.1 - Ψ n φ q.2‖ - ‖χlim q.1 - χlim q.2‖|) atTop (𝓝 0) := by
+      simpa using (hnorm.sub (tendsto_const_nhds (x := ‖χlim q.1 - χlim q.2‖))).abs
+    have hrpow : Tendsto (fun t : Real => t ^ p) (𝓝[≥] (0 : Real)) (𝓝 0) := by
+      have h : ContinuousWithinAt (fun t : Real => t ^ p) (Set.Ici (0 : Real)) 0 :=
+        (Real.continuousAt_rpow_const (0 : Real) p (Or.inr hp.le)).continuousWithinAt
+      have h2 : Tendsto (fun t : Real => t ^ p) (𝓝[≥] (0 : Real)) (𝓝 ((0 : Real) ^ p)) := h
+      rwa [Real.zero_rpow hp.ne'] at h2
+    exact hrpow.comp (tendsto_nhdsWithin_iff.mpr ⟨hsub,
+      Filter.Eventually.of_forall fun n => Set.mem_Ici.mpr (abs_nonneg _)⟩)
+  exact tendsto_measure_lpPairDistErr_population _ P hp.le Ψ χlim hbdd hmeas hae hε
 
 end Acharyya2024.ContinuousMDS
