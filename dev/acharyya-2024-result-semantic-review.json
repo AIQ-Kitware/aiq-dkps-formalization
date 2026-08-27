@@ -610,17 +610,20 @@
     "Acharyya2024.ContinuousMDS.frameEmbedding_min",
     "Acharyya2024.ContinuousMDS.lpPairDistErr",
     "Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation",
+    "Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_pairDiscrepancy",
     "Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_prod",
     "Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left",
     "Acharyya2024.ContinuousMDS.lt_pointStress_of_norm_gt",
     "Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress",
     "Acharyya2024.ContinuousMDS.norm_min_pointStress_le_of_bounded",
+    "Acharyya2024.ContinuousMDS.pairDiscrepancy",
     "Acharyya2024.ContinuousMDS.pointStress",
     "Acharyya2024.ContinuousMDS.pointStress_rigidMotion",
     "Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto",
     "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
+    "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_population",
     "Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz",
     "Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension",
     "Acharyya2024.ContinuousMDS.tendsto_pointStress",
@@ -678,6 +681,12 @@
      "lean_clause": "not_unique_min_continuousPointStress shows the uniqueness premise the argmin steps use cannot be dropped.",
      "relation": "source_repair",
      "note": "Same footing as UniquePairProfile, whose necessity is separately established for the configuration analogue."
+    },
+    {
+     "source_clause": "int int |...|^p P(dphi_1) P(dphi_2) ->P 0 as u -> infinity",
+     "lean_clause": "tendsto_measure_lpPairDistErr_population: the L^p(P x P) discrepancy against the population measure tends to zero in probability.",
+     "relation": "exact",
+     "note": "Reached by the expectation route -- Tonelli, per-pair dominated convergence, Markov -- so no quantifier exchange and no measurable selection is involved. Instantiating it at the out-of-sample embedding is what remains."
     }
    ],
    "review": "The package has no model-distribution P over a compact model space, no continuous-MDS map, and no double-integral L^p conclusion.",
@@ -685,7 +694,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Compose along the expectation route -- Tonelli, per-pair dominated convergence, Markov -- which reaches the printed convergence-in-probability mode without a quantifier exchange or a measurable selection. A first attempt was reverted for an elaboration loop in the measurability step; lift the integrand to a top-level definition so nothing unfolds through a local binding."
+   "next_action": "Instantiate tendsto_measure_lpPairDistErr_population at the out-of-sample embedding, discharging its almost-sure hypothesis from ae_eventually_forall_isMinOn_of_iid and its uniform bound from the coercivity bound on minimizers."
   },
   {
    "id": "A24-T4",
@@ -785,17 +794,20 @@
     "Acharyya2024.ContinuousMDS.frameEmbedding",
     "Acharyya2024.ContinuousMDS.frameEmbedding_min",
     "Acharyya2024.ContinuousMDS.lpPairDistErr",
+    "Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_pairDiscrepancy",
     "Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_prod",
     "Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left",
     "Acharyya2024.ContinuousMDS.lt_pointStress_of_norm_gt",
     "Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress",
     "Acharyya2024.ContinuousMDS.norm_min_pointStress_le_of_bounded",
+    "Acharyya2024.ContinuousMDS.pairDiscrepancy",
     "Acharyya2024.ContinuousMDS.pointStress",
     "Acharyya2024.ContinuousMDS.pointStress_rigidMotion",
     "Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto",
     "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
+    "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_population",
     "Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz",
     "Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension",
     "Acharyya2024.ContinuousMDS.tendsto_pointStress",
@@ -826,7 +838,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Compose along the expectation route -- Tonelli, per-pair dominated convergence, Markov -- which reaches the printed convergence-in-probability mode without a quantifier exchange or a measurable selection. A first attempt was reverted for an elaboration loop in the measurability step; lift the integrand to a top-level definition so nothing unfolds through a local binding."
+   "next_action": "Instantiate tendsto_measure_lpPairDistErr_population at the out-of-sample embedding, discharging its almost-sure hypothesis from ae_eventually_forall_isMinOn_of_iid and its uniform bound from the coercivity bound on minimizers."
   },
   {
    "id": "A24-R4",
