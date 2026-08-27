@@ -84,6 +84,7 @@ theorem integral_unitIocMeasure_pow (n : ℕ) :
 /-- The two-dimensional affine trial subspace of the paper's numerical example. -/
 def beamTrial : Submodule ℂ BeamL2 := Submodule.span ℂ {beamOneLp, beamIdLp}
 
+/-- Membership in the beam trial subspace. -/
 theorem mem_beamTrial_iff {x : BeamL2} :
     x ∈ beamTrial ↔ ∃ a b : ℂ, x = affineLp a b := by
   rw [beamTrial, Submodule.mem_span_pair]
@@ -93,13 +94,17 @@ theorem mem_beamTrial_iff {x : BeamL2} :
   · rintro ⟨a, b, rfl⟩
     exact ⟨a, b, rfl⟩
 
+/-- Every affine function lies in the beam trial subspace. -/
 theorem affineLp_mem_beamTrial (a b : ℂ) : affineLp a b ∈ beamTrial :=
   mem_beamTrial_iff.2 ⟨a, b, rfl⟩
 
+/-- The trial subspace is spanned by two functions, so it is finite
+dimensional. -/
 instance : FiniteDimensional ℂ beamTrial := by
   rw [beamTrial]
   exact FiniteDimensional.span_of_finite ℂ (Set.toFinite _)
 
+/-- A finite-dimensional subspace is complete. -/
 instance : CompleteSpace beamTrial := FiniteDimensional.complete ℂ _
 
 /-- The trial subspace lies in the operator's domain: it is the affine kernel
@@ -119,6 +124,7 @@ theorem beamOperator_apply_trial {x : BeamL2} (hx : x ∈ beamTrial)
 /-- The isometric inclusion of the trial subspace. -/
 def beamTrialIncl : beamTrial →L[ℂ] BeamL2 := beamTrial.subtypeL
 
+/-- Evaluating the trial subspace's inclusion. -/
 @[simp] theorem beamTrialIncl_apply (x : beamTrial) :
     beamTrialIncl x = (x : BeamL2) := rfl
 
@@ -127,23 +133,29 @@ def beamTrialIncl : beamTrial →L[ℂ] BeamL2 := beamTrial.subtypeL
 /-- The unit-interval coordinate, clamped so that the symbol is globally bounded. -/
 def beamClamp (t : ℝ) : ℝ := max 0 (min t 1)
 
+/-- The clamping symbol is measurable. -/
 theorem measurable_beamClamp : Measurable beamClamp :=
   measurable_const.max (measurable_id.min measurable_const)
 
+/-- The clamping symbol is nonnegative. -/
 theorem beamClamp_nonneg (t : ℝ) : 0 ≤ beamClamp t := le_max_left _ _
 
+/-- The clamping symbol is bounded by one. -/
 theorem beamClamp_le_one (t : ℝ) : beamClamp t ≤ 1 :=
   max_le zero_le_one (min_le_right _ _)
 
+/-- The clamping symbol is the identity below the threshold. -/
 theorem beamClamp_eq_self {t : ℝ} (ht : t ∈ Set.Ioc (0 : ℝ) 1) : beamClamp t = t := by
   rw [beamClamp, min_eq_left ht.2, max_eq_right ht.1.le]
 
 /-- The symbol of the paper's perturbation: `ε` times the clamped coordinate. -/
 def beamSymbol (ε : ℝ) (t : ℝ) : ℂ := ((ε * beamClamp t : ℝ) : ℂ)
 
+/-- The beam symbol is measurable. -/
 theorem measurable_beamSymbol (ε : ℝ) : Measurable (beamSymbol ε) :=
   Complex.measurable_ofReal.comp (measurable_const.mul measurable_beamClamp)
 
+/-- The beam symbol is bounded by the clamping threshold. -/
 theorem norm_beamSymbol_le (ε : ℝ) (t : ℝ) : ‖beamSymbol ε t‖ ≤ |ε| := by
   rw [beamSymbol, Complex.norm_real, Real.norm_eq_abs, abs_mul,
     abs_of_nonneg (beamClamp_nonneg t)]
@@ -155,6 +167,7 @@ theorem norm_beamSymbol_le (ε : ℝ) (t : ℝ) : ‖beamSymbol ε t‖ ≤ |ε|
 def beamPerturbation (ε : ℝ) : BeamL2 →L[ℂ] BeamL2 :=
   mulLp unitIocMeasure (measurable_beamSymbol ε) (norm_beamSymbol_le ε)
 
+/-- The beam perturbation, as a function. -/
 theorem coeFn_beamPerturbation (ε : ℝ) (x : BeamL2) :
     (beamPerturbation ε x : ℝ → ℂ) =ᵐ[unitIocMeasure]
       fun t => ((ε * t : ℝ) : ℂ) * (x : ℝ → ℂ) t := by
@@ -164,6 +177,7 @@ theorem coeFn_beamPerturbation (ε : ℝ) (x : BeamL2) :
     = (mulLp unitIocMeasure (measurable_beamSymbol ε) (norm_beamSymbol_le ε) x :
         ℝ → ℂ) t from rfl, ht, beamSymbol, beamClamp_eq_self hmem]
 
+/-- The beam perturbation is bounded in norm by the clamping threshold. -/
 theorem norm_beamPerturbation_le (ε : ℝ) : ‖beamPerturbation ε‖ ≤ |ε| := by
   have := norm_mulLp_le unitIocMeasure (measurable_beamSymbol ε) (norm_beamSymbol_le ε)
   simpa [beamPerturbation, abs_abs] using this
@@ -234,18 +248,21 @@ theorem integral_unitIocMeasure_coe : ∫ t : ℝ, (t : ℂ) ∂unitIocMeasure =
   rw [h]
   norm_num
 
+/-- `∫₀¹ t² = 1/3`. -/
 theorem integral_unitIocMeasure_coe_sq :
     ∫ t : ℝ, (t : ℂ) ^ 2 ∂unitIocMeasure = 1 / 3 := by
   have h := integral_unitIocMeasure_pow 2
   rw [h]
   norm_num
 
+/-- `∫₀¹ t³ = 1/4`. -/
 theorem integral_unitIocMeasure_coe_cube :
     ∫ t : ℝ, (t : ℂ) ^ 3 ∂unitIocMeasure = 1 / 4 := by
   have h := integral_unitIocMeasure_pow 3
   rw [h]
   norm_num
 
+/-- `∫₀¹ t⁴ = 1/5`. -/
 theorem integral_unitIocMeasure_coe_four :
     ∫ t : ℝ, (t : ℂ) ^ 4 ∂unitIocMeasure = 1 / 5 := by
   have h := integral_unitIocMeasure_pow 4
@@ -613,6 +630,7 @@ multiplication by `ε t`. -/
 def beamPerturbed (ε : ℝ) : DKClosedOperator (H := BeamL2) :=
   beamOperator.addBounded (beamPerturbation ε)
 
+/-- The perturbed beam operator is self-adjoint. -/
 theorem beamPerturbed_isSelfAdjoint (ε : ℝ) : (beamPerturbed ε).IsSelfAdjoint :=
   addBounded_isSelfAdjoint beamOperator beamOperator_isSelfAdjoint _
     (beamPerturbation_isSelfAdjoint ε)
@@ -620,6 +638,7 @@ theorem beamPerturbed_isSelfAdjoint (ε : ℝ) : (beamPerturbed ε).IsSelfAdjoin
 /-- The spectral set that isolates everything above the free-beam gap. -/
 def beamHighSet : Set ℝ := Set.Ici 500
 
+/-- The high spectral set of the beam model is measurable. -/
 theorem measurableSet_beamHighSet : MeasurableSet beamHighSet := measurableSet_Ici
 
 /-- The zero operator on the trial subspace: the compression of the free beam to its
@@ -627,6 +646,8 @@ own kernel, which is the trial subspace itself. -/
 def beamTrialZero : DKClosedOperator (H := beamTrial) :=
   DavisKahanExt.ClosedOperator.ofBounded 0
 
+/-- The trial-block compression of the unperturbed beam operator is
+self-adjoint. -/
 theorem beamTrialZero_isSelfAdjoint : beamTrialZero.IsSelfAdjoint :=
   DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint 0 (fun _ _ => by simp)
 
@@ -638,6 +659,7 @@ def beamSinTheta (ε : ℝ) : ℝ :=
       selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
         (beamPerturbed_isSelfAdjoint ε) beamHighSet measurableSet_beamHighSet‖
 
+/-- The beam model's `sin Θ` is nonnegative. -/
 theorem beamSinTheta_nonneg (ε : ℝ) : 0 ≤ beamSinTheta ε :=
   norm_nonneg (ContinuousLinearMap.adjoint beamTrialIncl ∘L
     selfAdjointSpectralSubspaceInclusion (beamPerturbed ε)
@@ -733,6 +755,7 @@ below `4.73⁴ = 500.546…` and above the paper's rounded `500`, so it separate
 modes from the whole positive spectrum with room to spare. -/
 def beamLowSet : Set ℝ := Set.Iic (1001 / 2)
 
+/-- The low spectral set of the beam model is measurable. -/
 theorem measurableSet_beamLowSet : MeasurableSet beamLowSet := measurableSet_Iic
 
 /-- **The free-beam gap, sharpened past the paper's rounding.**  The positive spectrum
@@ -822,6 +845,7 @@ theorem beamLow_semiboundedBelow :
     beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
     (β := 0) (α := 0) (by simp) (mem_specRange_singleton_of_mem_lowSet x.1.2) x.2).1
 
+/-- The beam operator is bounded above on the low spectral set. -/
 theorem beamLow_semiboundedAbove :
     SemiboundedAbove (selfAdjointSpectralRestriction beamOperator
       beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet) 0 := by
@@ -841,6 +865,7 @@ def beamSinTwoTheta (ε : ℝ) : ℝ :=
       (selfAdjointSpectralSubspace (beamPerturbed ε) (beamPerturbed_isSelfAdjoint ε)
         beamLowSet measurableSet_beamLowSet)‖
 
+/-- The beam model's `sin 2Θ` is nonnegative. -/
 theorem beamSinTwoTheta_nonneg (ε : ℝ) : 0 ≤ beamSinTwoTheta ε :=
   norm_nonneg (DavisKahanExt.sinTwoAngleOperatorC
       (selfAdjointSpectralSubspace beamOperator beamOperator_isSelfAdjoint beamLowSet
@@ -955,6 +980,7 @@ theorem inner_beamPerturbation_affineLp (ε : ℝ) (a b c d : ℂ) :
 def centeredAffineLp (p : DavisKahan1970.Section9.CenteredAffine) : BeamL2 :=
   affineLp ((p.constant - p.centered : ℝ) : ℂ) ((2 * p.centered : ℝ) : ℂ)
 
+/-- The centred affine function lies in the beam trial subspace. -/
 theorem centeredAffineLp_mem_beamTrial (p : DavisKahan1970.Section9.CenteredAffine) :
     centeredAffineLp p ∈ beamTrial :=
   affineLp_mem_beamTrial _ _
@@ -1091,6 +1117,7 @@ def beamFiniteDataCertificate (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
 def beamKyFanTwo : TauCeti.SymmetricOperatorIdealFamily.{0, 0} ℂ :=
   kyFanSymmetricIdealFamily (𝕜 := ℂ) 2 (by norm_num)
 
+/-- The two-term Ky Fan family is a complete operator ideal family. -/
 instance : beamKyFanTwo.toOperatorIdealFamily.IsComplete :=
   isComplete_kyFanSymmetricIdealFamily (𝕜 := ℂ) 2 (by norm_num)
 
@@ -1186,11 +1213,13 @@ def beamTrialVecTwo : beamTrial :=
   ⟨centeredAffineLp trialTwo, centeredAffineLp_mem_beamTrial _⟩
 
 open DavisKahan1970.Section9 in
+/-- The beam residual on the first trial basis vector. -/
 theorem beamResidual_apply_vecOne (ε : ℝ) :
     beamResidual ε beamTrialVecOne = beamPerturbation ε (centeredAffineLp trialOne) :=
   rfl
 
 open DavisKahan1970.Section9 in
+/-- The beam residual on the second trial basis vector. -/
 theorem beamResidual_apply_vecTwo (ε : ℝ) :
     beamResidual ε beamTrialVecTwo = beamPerturbation ε (centeredAffineLp trialTwo) :=
   rfl
@@ -1324,6 +1353,8 @@ theorem beamResidual_orthogonal_inner (ε : ℝ) :
   ring
 
 open DavisKahan1970.Section9 in
+/-- The squared norm of the residual's component orthogonal to the trial
+subspace. -/
 theorem beamResidual_orthogonal_norm_sq (ε : ℝ) :
     ‖beamResidual ε (((beamGramTopCoefficient : ℝ) : ℂ) • beamTrialVecOne -
         beamTrialVecTwo)‖ ^ 2
@@ -1357,11 +1388,13 @@ def beamResidualRankOne (ε : ℝ) : beamTrial →L[ℂ] BeamL2 :=
     ((((1 + beamGramTopCoefficient ^ 2 : ℝ) : ℂ)⁻¹) •
       beamResidual ε beamGramTopVector)
 
+/-- Evaluating the rank-one model of the beam residual. -/
 theorem beamResidualRankOne_apply (ε : ℝ) (x : beamTrial) :
     beamResidualRankOne ε x = ⟪beamGramTopVector, x⟫_ℂ •
       ((((1 + beamGramTopCoefficient ^ 2 : ℝ) : ℂ)⁻¹) •
         beamResidual ε beamGramTopVector) := rfl
 
+/-- The rank-one model of the beam residual has rank at most one. -/
 theorem beamResidualRankOne_rank_le (ε : ℝ) :
     (beamResidualRankOne ε).rank ≤ (1 : Cardinal) := by
   classical

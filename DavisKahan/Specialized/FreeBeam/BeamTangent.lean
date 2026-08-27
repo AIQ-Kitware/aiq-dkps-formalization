@@ -55,6 +55,8 @@ noncomputable section
 def beamRitzCompression (ε : ℝ) : beamTrial →L[ℂ] beamTrial :=
   beamTrial.orthogonalProjectionOnto ∘L beamResidual ε
 
+/-- The Rayleigh--Ritz compression of the beam operator, in ambient
+coordinates. -/
 theorem beamRitzCompression_coe (ε : ℝ) (x : beamTrial) :
     ((beamRitzCompression ε x : beamTrial) : BeamL2)
       = beamTrial.starProjection (beamResidual ε x) := rfl
@@ -109,6 +111,7 @@ def beamTrialBlock (ε : ℝ) : UnboundedTrialBlock (beamPerturbed ε) beamTrial
           + beamPerturbation ε (x : BeamL2) from rfl, hker, zero_add]
     rfl
 
+/-- Evaluating the trial block's residual. -/
 theorem beamTrialBlock_residual_apply (ε : ℝ) (x : beamTrial) :
     (beamTrialBlock ε).residual x
       = beamResidual ε x - beamTrial.starProjection (beamResidual ε x) := rfl
