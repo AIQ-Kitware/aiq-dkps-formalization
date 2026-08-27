@@ -525,6 +525,7 @@ noncomputable def alignmentError {F : Type*} [NormedAddCommGroup F] [InnerProduc
     {ι : Type*} (ψ φ : ι → F) : ℝ :=
   sInf (rigidTolerances ψ φ)
 
+/-- The set of rigidity tolerances is nonempty. -/
 theorem rigidTolerances_nonempty {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     {ι : Type*} [Finite ι] [Nonempty ι] (ψ φ : ι → F) :
     (rigidTolerances ψ φ).Nonempty := by
@@ -536,6 +537,7 @@ theorem rigidTolerances_nonempty {F : Type*} [NormedAddCommGroup F] [InnerProduc
   rw [hrfl]
   exact Finset.le_sup' (fun i => ‖φ i - ψ i‖) (Finset.mem_univ i)
 
+/-- The set of rigidity tolerances is bounded below, so its infimum exists. -/
 theorem bddBelow_rigidTolerances {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     {ι : Type*} [Nonempty ι] (ψ φ : ι → F) : BddBelow (rigidTolerances ψ φ) := by
   obtain ⟨i⟩ := ‹Nonempty ι›
@@ -543,6 +545,7 @@ theorem bddBelow_rigidTolerances {F : Type*} [NormedAddCommGroup F] [InnerProduc
   obtain ⟨W, b, hW⟩ := hr
   exact le_trans (norm_nonneg _) (hW i)
 
+/-- The alignment error is nonnegative. -/
 theorem alignmentError_nonneg {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
     {ι : Type*} [Nonempty ι] (ψ φ : ι → F) : 0 ≤ alignmentError ψ φ := by
   obtain ⟨i⟩ := ‹Nonempty ι›

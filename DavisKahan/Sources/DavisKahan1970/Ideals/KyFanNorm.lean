@@ -44,11 +44,13 @@ noncomputable def paperZeroPadPerm {n : ℕ} (pi : Equiv.Perm (Fin n)) :
   finSumFinEquiv.symm.trans
     ((Equiv.sumCongr pi (Equiv.refl (Fin 1))).trans finSumFinEquiv)
 
+/-- The zero-padding permutation fixes the original block. -/
 @[simp]
 theorem paperZeroPadPerm_castAdd {n : ℕ} (pi : Equiv.Perm (Fin n)) (i : Fin n) :
     paperZeroPadPerm pi (Fin.castAdd 1 i) = Fin.castAdd 1 (pi i) := by
   simp [paperZeroPadPerm]
 
+/-- The zero-padding permutation sends the padded block past the original. -/
 @[simp]
 theorem paperZeroPadPerm_natAdd {n : ℕ} (pi : Equiv.Perm (Fin n)) (i : Fin 1) :
     paperZeroPadPerm pi (Fin.natAdd n i) = Fin.natAdd n i := by

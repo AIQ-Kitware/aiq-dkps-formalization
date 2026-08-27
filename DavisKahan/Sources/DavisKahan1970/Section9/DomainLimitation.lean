@@ -167,6 +167,8 @@ writes them. -/
 noncomputable def diagonalDomain (d : ℕ → ℝ) : Submodule ℝ DomainLimitationSpace :=
   TauCeti.LinearPMap.lpDiagonalDomain d
 
+/-- Membership in the diagonal operator's domain is square-summability of the
+weighted coordinates. -/
 theorem mem_diagonalDomain_iff (d : ℕ → ℝ) (x : DomainLimitationSpace) :
     x ∈ diagonalDomain d ↔ Memℓp (fun n => d n * (x : ℕ → ℝ) n) 2 :=
   TauCeti.LinearPMap.mem_lpDiagonalDomain_iff d x
@@ -183,6 +185,7 @@ noncomputable def diagonalOperator (d : ℕ → ℝ) :
 theorem diagonalOperator_domain (d : ℕ → ℝ) :
     (diagonalOperator d).domain = diagonalDomain d := rfl
 
+/-- The diagonal operator multiplies each coordinate by its weight. -/
 @[simp]
 theorem diagonalOperator_apply (d : ℕ → ℝ) (x : (diagonalOperator d).domain) (n : ℕ) :
     ((diagonalOperator d x : DomainLimitationSpace) : ℕ → ℝ) n
@@ -245,6 +248,7 @@ noncomputable def geometricTrial {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1) :
     rw [h]
     exact summable_geometric_of_lt_one (by positivity) (by nlinarith)⟩
 
+/-- Coordinates of the geometric trial vector. -/
 @[simp]
 theorem geometricTrial_apply {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1) (n : ℕ) :
     ((geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n = μ ^ n := rfl
@@ -295,6 +299,7 @@ noncomputable def truncatedTrial (μ : ℝ) (N : ℕ) : DomainLimitationSpace :=
     intro n hn
     rw [truncatedTrialSequence_eq_zero (by simpa using hn), sq, mul_zero]⟩
 
+/-- Coordinates of the truncated trial vector. -/
 @[simp]
 theorem truncatedTrial_apply (μ : ℝ) (N n : ℕ) :
     ((truncatedTrial μ N : DomainLimitationSpace) : ℕ → ℝ) n

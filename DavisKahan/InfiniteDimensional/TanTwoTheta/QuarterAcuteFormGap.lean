@@ -247,6 +247,7 @@ theorem reflection_anticommutes_of_maps_orthogonal
         module
       rw [hJx]
 
+/-- A coercive quadratic form bounds the real spectrum below. -/
 theorem spectrum_re_lower_of_coercive
     (T : E →L[ℂ] E) {α : ℝ} (_hα : 0 < α)
     (hcoer : ∀ x, α * ‖x‖ ^ 2 ≤ RCLike.re ⟪T x, x⟫_ℂ) :

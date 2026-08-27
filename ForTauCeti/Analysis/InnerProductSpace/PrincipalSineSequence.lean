@@ -43,6 +43,7 @@ noncomputable def principalSineOperator (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : U →L[𝕜] H :=
   Vᗮ.starProjection ∘L U.subtypeL
 
+/-- Evaluating the principal sine operator. -/
 @[simp]
 theorem principalSineOperator_apply (U V : Submodule 𝕜 H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] (x : U) :

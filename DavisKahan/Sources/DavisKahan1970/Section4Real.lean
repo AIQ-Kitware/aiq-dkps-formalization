@@ -271,6 +271,7 @@ noncomputable def sourceCosineR : U →L[ℝ] U := by
 noncomputable def sourceRestrictedDisplacementR (T : E →L[ℝ] E) : U →L[ℝ] E :=
   (1 - T) ∘L U.subtypeL
 
+/-- Evaluating the real source cosine block, in ambient coordinates. -/
 @[simp]
 theorem sourceCosineR_apply_coe (x : U) :
     ((sourceCosineR U V x : U) : E) =
@@ -285,6 +286,7 @@ theorem sourceCosineR_selfAdjoint : IsSelfAdjointOperator (sourceCosineR U V) :=
   exact (TauCeti.DavisKahan.isPositive_canonicalAbsoluteValueR U V).inner_left_eq_inner_right
     (x : E) (y : E)
 
+/-- The real source cosine block is a nonnegative operator. -/
 theorem sourceCosineR_nonnegative (x : U) :
     0 ≤ inner ℝ (sourceCosineR U V x) x := by
   change 0 ≤ ⟪TauCeti.DavisKahan.canonicalAbsoluteValueR U V (x : E), (x : E)⟫_ℝ
