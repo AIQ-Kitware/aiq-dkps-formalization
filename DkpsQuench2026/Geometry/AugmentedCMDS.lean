@@ -171,10 +171,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds
       (disMatToMatrix (classicalMDSMatrix (D n ω f))).PosSemidef)
     (hrank : ∀ n ω f,
       (disMatToMatrix (classicalMDSMatrix (D n ω f))).rank ≤ d)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling entryRate : Nat → Real)
     (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
-      α ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
+      α n ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
     (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
       (hB n ω f).isHermitian.eigenvalues₀ i ≤ ceiling n)
     (z : ∀ n, Ω → Model Q X → Config (n + 1) d)
@@ -206,7 +206,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds
       (fun _ _ f => yQ score Qsub f) := by
   let good : Nat → Prop := fun n =>
     d ≤ n + 1 ∧
-    configFrobBound d α (ceiling n)
+    configFrobBound d (α n) (ceiling n)
       (((n + 1 : Nat) : Real) * entryRate n) ≤ Hrate.bound n
   let Eg : Nat → Set Ω := fun n => E n ∩ {ω | good n}
   have hgood : ∀ᶠ n in atTop, good n := by
@@ -243,7 +243,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds
         (disMatToMatrix (classicalMDSMatrix (D n ω f)))
         (disMatToMatrix (classicalMDSMatrix (Dhat n ω f)))
         (hB n ω f) (hsym n ω f) (hrank n ω f)
-        hα (Hrate.entry_nonneg n) (hfloor n ω f) (hceiling n ω f)
+        (hα n) (Hrate.entry_nonneg n) (hfloor n ω f) (hceiling n ω f)
         hentry (z n ω f) (hzGram n ω f)
         i.castSucc (Fin.last n)
     have hraw : rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f =
@@ -290,10 +290,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_of_gram
     (hzRadial : ∀ n ω f (i : Fin n),
       ‖z n ω f i.castSucc - z n ω f (Fin.last n)‖ =
         ‖ψ (f_ref n ω i) - ψ f‖)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling entryRate : Nat → Real)
     (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
-      α ≤ (populationPosSemidefOfGram D z hzGram n ω f).isHermitian.eigenvalues₀ i)
+      α n ≤ (populationPosSemidefOfGram D z hzGram n ω f).isHermitian.eigenvalues₀ i)
     (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
       (populationPosSemidefOfGram D z hzGram n ω f).isHermitian.eigenvalues₀ i ≤ ceiling n)
     (Hrate : GrowingConfigControl (fun n => n + 1) d α ceiling entryRate)

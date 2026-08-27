@@ -197,29 +197,29 @@ finite spectral theorem no longer needs local `ε ≤ α/2` or polar-applicabili
 side conditions, so the growing certificate tracks only entrywise nonnegativity
 and a vanishing Frobenius configuration envelope. -/
 structure GrowingConfigControl
-    (count : Nat → Nat) (d : Nat) (α : Real)
+    (count : Nat → Nat) (d : Nat) (α : Nat → Real)
     (ceiling entryRate : Nat → Real) where
   entry_nonneg : ∀ u, 0 ≤ entryRate u
   bound : Nat → Real
   bound_nonneg : ∀ u, 0 ≤ bound u
   bound_zero : Tendsto bound atTop (𝓝 0)
   configFrobBound_le : ∀ᶠ u in atTop,
-    configFrobBound d α (ceiling u)
+    configFrobBound d (α u) (ceiling u)
       ((count u : Real) * entryRate u) ≤ bound u
 
 
 /-- Build a growing control certificate from entrywise nonnegativity and a
 vanishing exact Frobenius configuration bound. -/
 noncomputable def GrowingConfigControl.of_tendsto
-    {count : Nat → Nat} {d : Nat} {α : Real}
+    {count : Nat → Nat} {d : Nat} {α : Nat → Real}
     {ceiling entryRate : Nat → Real}
     (hentry : ∀ u, 0 ≤ entryRate u)
     (hbound : Tendsto
-      (fun u => configFrobBound d α (ceiling u)
+      (fun u => configFrobBound d (α u) (ceiling u)
         ((count u : Real) * entryRate u)) atTop (𝓝 0)) :
     GrowingConfigControl count d α ceiling entryRate where
   entry_nonneg := hentry
-  bound := fun u => configFrobBound d α (ceiling u)
+  bound := fun u => configFrobBound d (α u) (ceiling u)
     ((count u : Real) * entryRate u)
   bound_nonneg := by
     intro u
@@ -230,11 +230,11 @@ noncomputable def GrowingConfigControl.of_tendsto
 
 /-- The final error domination holds eventually. -/
 theorem GrowingConfigControl.eventually_all
-    {count : Nat → Nat} {d : Nat} {α : Real}
+    {count : Nat → Nat} {d : Nat} {α : Nat → Real}
     {ceiling entryRate : Nat → Real}
     (H : GrowingConfigControl count d α ceiling entryRate) :
     ∀ᶠ u in atTop,
-      configFrobBound d α (ceiling u)
+      configFrobBound d (α u) (ceiling u)
         ((count u : Real) * entryRate u) ≤ H.bound u :=
   H.configFrobBound_le
 

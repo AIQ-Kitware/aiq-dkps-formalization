@@ -120,8 +120,10 @@ theorem finiteFixedSubsetMSE
       (Hmean := Hmean)
       (hpopulationNorm := augmentedRawPopulationMean_norm_le f_ref D.populationMean hB)
       (hrealize := hrealize)
-      (α := D.covarianceFloor / 2)
-      (hα := by linarith [H.nondegenerate.kappa_pos])
+      (α := fun n => max ((n : Real)) 1 * (D.covarianceFloor / 2))
+      (hα := fun n =>
+        mul_pos (lt_of_lt_of_le zero_lt_one (le_max_right _ _))
+          (by linarith [H.nondegenerate.kappa_pos]))
       (ceiling := fun n => 4 * ((n + 1 : Nat) : Real) * Bψ ^ 2)
       (Hspectral := Hspectral) (Hrate := Hrate)
       (score := score) (Qstar := Qstar) (Qsub := Qsub)

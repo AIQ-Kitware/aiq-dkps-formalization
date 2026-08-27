@@ -312,7 +312,7 @@ noncomputable def paperDeltaGrowingConfigControl
     (_hα : 0 < α) (hR : 0 ≤ R)
     (hω : ReplicatesDominateCubic count replicates)
     (hδ0 : 0 < δ) (hδhalf : δ < 1 / 2) :
-    GrowingConfigControl count d α (fun _ => Λ)
+    GrowingConfigControl count d (fun _ => α) (fun _ => Λ)
       (fun u => cmdsEntrywiseRate (count u) m R
         (paperResponseTolerance (count u)
           (paperDeltaScale count replicates δ u))) := by

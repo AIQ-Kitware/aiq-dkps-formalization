@@ -96,10 +96,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_response_mean
     (hrank : ∀ n ω f,
       (disMatToMatrix
         (classicalMDSMatrix (responseDist (μbar n ω f)))).rank ≤ d)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling : Nat → Real)
     (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
-      α ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
+      α n ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
     (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
       (hB n ω f).isHermitian.eigenvalues₀ i ≤ ceiling n)
     (z : ∀ n, Ω → Model Q X → Config (n + 1) d)
@@ -184,10 +184,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_response_mean_of
     (hrank : ∀ n ω f,
       (disMatToMatrix
         (classicalMDSMatrix (responseDist (μbar n ω f)))).rank ≤ d)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling : Nat → Real)
     (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
-      α ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
+      α n ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
     (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
       (hB n ω f).isHermitian.eigenvalues₀ i ≤ ceiling n)
     (z : ∀ n, Ω → Model Q X → Config (n + 1) d)
@@ -283,10 +283,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_secondMoment
     (hrank : ∀ n ω f,
       (disMatToMatrix
         (classicalMDSMatrix (responseDist (μbar n ω f)))).rank ≤ d)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling : Nat → Real)
     (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
-      α ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
+      α n ≤ (hB n ω f).isHermitian.eigenvalues₀ i)
     (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
       (hB n ω f).isHermitian.eigenvalues₀ i ≤ ceiling n)
     (z : ∀ n, Ω → Model Q X → Config (n + 1) d)
@@ -400,10 +400,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_response_mean_of
     (hzRadial : ∀ n ω f (i : Fin n),
       ‖z n ω f i.castSucc - z n ω f (Fin.last n)‖ =
         ‖ψ (f_ref n ω i) - ψ f‖)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling : Nat → Real)
     (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
-      α ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
+      α n ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
     (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
       (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i ≤
           ceiling n)
@@ -463,10 +463,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_response_mean_of
     (hzRadial : ∀ n ω f (i : Fin n),
       ‖z n ω f i.castSucc - z n ω f (Fin.last n)‖ =
         ‖ψ (f_ref n ω i) - ψ f‖)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling : Nat → Real)
     (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
-      α ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
+      α n ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
     (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
       (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i ≤
           ceiling n)
@@ -540,10 +540,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_secondMoment_of_
     (hzRadial : ∀ n ω f (i : Fin n),
       ‖z n ω f i.castSucc - z n ω f (Fin.last n)‖ =
         ‖ψ (f_ref n ω i) - ψ f‖)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling : Nat → Real)
     (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
-      α ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
+      α n ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
     (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
       (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i ≤
           ceiling n)
@@ -628,10 +628,10 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_secondMoment_of_
     (hzRadial : ∀ n ω f (i : Fin n),
       ‖z n ω f i.castSucc - z n ω f (Fin.last n)‖ =
         ‖ψ (f_ref n ω i) - ψ f‖)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling : Nat → Real)
     (hfloor : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))), (i : Nat) < d →
-      α ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
+      α n ≤ (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i)
     (hceiling : ∀ n ω f (i : Fin (Fintype.card (Fin (n + 1)))),
       (augmentedPopulationPosSemidefOfGram μbar z hzGram n ω f).isHermitian.eigenvalues₀ i ≤
           ceiling n)
