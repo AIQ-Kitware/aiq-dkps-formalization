@@ -3166,13 +3166,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source`
 
-Source location candidates: `DavisKahan/Frontier/Section8.lean:1015`, `DavisKahan/Frontier/Section8SourceSurface.lean:96`
+Source location candidates: `DavisKahan/Frontier/Section8.lean:530`, `DavisKahan/Frontier/Section8SourceSurface.lean:96`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source`
 
-Source location candidates: `DavisKahan/Frontier/Section8.lean:1063`, `DavisKahan/Frontier/Section8SourceSurface.lean:101`
+Source location candidates: `DavisKahan/Frontier/Section8.lean:578`, `DavisKahan/Frontier/Section8SourceSurface.lean:101`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
