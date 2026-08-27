@@ -195,13 +195,13 @@ structure GrowingSpectralSubevents
     (hzGram : ∀ n ωref f i j,
       (∑ k, z n ωref f i k * z n ωref f j k) =
         classicalMDSMatrix (D n ωref f) i j)
-    (α : Real) (ceiling : Nat → Real) where
+    (α ceiling : Nat → Real) where
   event : Nat → Set Ωref
   measurable : ∀ n, MeasurableSet (event n)
   highProb : HighProbAtTop μref hμref event
   floor : ∀ n ωref, ωref ∈ event n → ∀ f (i : Fin (Fintype.card (Fin (n + 1)))),
     (i : Nat) < d →
-      α ≤ (populationPosSemidefOfGram D z hzGram n ωref f).isHermitian.eigenvalues₀ i
+      α n ≤ (populationPosSemidefOfGram D z hzGram n ωref f).isHermitian.eigenvalues₀ i
   ceiling_bound : ∀ n ωref, ωref ∈ event n → ∀ f (i : Fin (Fintype.card (Fin (n + 1)))),
     (populationPosSemidefOfGram D z hzGram n ωref f).isHermitian.eigenvalues₀ i ≤
       ceiling n

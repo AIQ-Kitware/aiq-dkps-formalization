@@ -48,8 +48,20 @@ reusable seams the capstones factor through, not the paper-facing results; the
 `ASSUMPTION DISCLOSURE` note in `Paper/Theorem2.lean` says which is which.
 
 Two hypotheses still exceed the source and are tracked as census gaps: the
-replicate schedule `safeEntropyReplicates (2 * d) n = (n + 1) ^ (6 + 2 * d)`
-against the paper's `r = omega(n ^ 3)`, and the population nondegeneracy floor.
+replicate schedule `safeEntropyReplicates d n = (n + 1) ^ (4 + d)` against the
+paper's `r = omega(n ^ 3)`, and the population nondegeneracy floor.
+
+The schedule was `(n + 1) ^ (6 + 2 * d)` until the spectral certificate began
+reporting the population Gram floor at its true scale.  The Gram matrix of `n`
+centered points is `n` times an empirical covariance, so its leading eigenvalues
+grow linearly, exactly as the compactness ceiling `4(n+1)B^2` does; reporting a
+constant floor against a growing ceiling inflated the conditioning ratio in the
+Davis--Kahan configuration bound by a factor `n`.  With the floor at scale, every
+term of that bound vanishes for a merely bounded batch-scaled perturbation, so
+the response tolerance loosened from `(n+1)^-2` to `(n+1)^-1`, the perspective
+net shrank from `O((n+1)^(2d))` to `O((n+1)^d)`, and the replicate budget fell by
+`d + 2` powers.  At `d = 2` and `n = 100` that is 1.1e12 cached responses per
+model rather than 1.1e20.
 
 ## Theory--practice OLS bridge
 

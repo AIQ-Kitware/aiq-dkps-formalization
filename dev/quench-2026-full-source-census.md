@@ -80,11 +80,11 @@ The paper imports a representation concentration theorem and leaves reference/re
 
 The paper proves nearest-neighbor query efficiency but evaluates OLS/ensembles empirically. The formal OLS namespace records additional assumptions sufficient for theory-practice bridges; these are extensions, not missing pieces of Theorem 2.
 
-### `replicate-schedule-exceeds-source-rate` — Formal replicate schedule is far stronger than the source rate
+### `replicate-schedule-exceeds-source-rate` — Formal replicate schedule still exceeds the source rate, by d + 1 powers
 
 **Kind:** `source_audit`
 
-Theorem 1 needs only r = omega(n^3). The end-to-end capstones fix safeEntropyReplicates (2d) n = (n+1)^(6+2d), which is a strictly stronger sampling requirement. The exponent is an artifact of the union bound over the perspective net used to make the response concentration uniform in the target, not of the source argument.
+Theorem 1 needs only r = omega(n^3); the capstones fix safeEntropyReplicates d n = (n+1)^(4+d), reduced from (n+1)^(6+2d) once the spectral certificate began reporting the population Gram floor at its true scale n(kappa/2) rather than as the constant kappa/2. The remaining excess is structural, not slack: the paper applies Theorem 1 to a fixed set of n reference models, while Theorem 2's proof also needs the bound for the target model, and making it uniform over an infinite model class costs a union bound over a perspective net of size (n+1)^d against a tolerance whose square is (n+1)^2. No schedule below (n+1)^(2+d) can work for that quantifier, so omega(n^3) is reachable only at the fixed finite scope Theorem 1 actually addresses. See theorem1-rate-not-instantiated.
 
 ### `dkps-definition-raw-stress-vs-cmds` — Eq. (1) defines DKPS by raw stress; the cited concentration theorem is classical MDS
 

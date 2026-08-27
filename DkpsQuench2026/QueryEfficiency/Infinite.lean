@@ -62,7 +62,7 @@ theorem infiniteFixedSubsetMSE
   let hiidJoint := iidReferenceSampler_lifted_prod Pf μref hμref μresp
     H.raw.probability f_ref hiid
   let Hreg := uniformModelResponseRegularity_of_raw_lipschitz
-    μresp D.perspective (safeEntropyReplicates (2 * d)) D.rawResponse
+    μresp D.perspective (safeEntropyReplicates d) D.rawResponse
     D.populationMean (fun _ => D.varianceBound) H.raw
     D.rawResponseLipschitzConstant H.raw_lipschitz
   obtain ⟨net, C, hC, hcard, hradius⟩ :=
@@ -74,7 +74,7 @@ theorem infiniteFixedSubsetMSE
       H.raw_lipschitz.constant_nonneg (fun f g => Hreg.population_lipschitz 0 f g)
   let Hmean := augmentedRawResponseMeanSubevents_infinite
     μref hμref μresp f_ref D.perspective
-    (safeEntropyReplicates (2 * d)) D.rawResponse D.populationMean
+    (safeEntropyReplicates d) D.rawResponse D.populationMean
     (fun _ => D.varianceBound) H.raw net
     (fun _ => D.rawResponseLipschitzConstant)
     (fun _ => D.rawResponseLipschitzConstant)
@@ -82,7 +82,7 @@ theorem infiniteFixedSubsetMSE
     (fun n => by
       rw [safeNetTolerance]
       exact div_pos (safeResponseTolerance_pos n) (by norm_num))
-    (safeEntropy_concentration_ratio_zero (2 * d) D.varianceBound C
+    (safeEntropy_concentration_ratio_zero d D.varianceBound C
       (fun n => (net.centers n).card) hcard)
     (safe_net_extension_budget
       (fun _ => D.rawResponseLipschitzConstant)
@@ -123,11 +123,11 @@ theorem infiniteFixedSubsetMSE
         (fun f => yNNTieAverage_augmentedCMDS (d := d)
       (augmentedSampleResponseDist
         (augmentedRawSampleMean f_ref
-          (safeEntropyReplicates (2 * d)) D.rawResponse))
+          (safeEntropyReplicates d) D.rawResponse))
       (fun n ω f =>
         Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
           (augmentedRawSampleMean f_ref
-            (safeEntropyReplicates (2 * d)) D.rawResponse n ω f))
+            (safeEntropyReplicates d) D.rawResponse n ω f))
       (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
       score Qstar n ω f) ≤ ε})
   exact
@@ -139,15 +139,17 @@ theorem infiniteFixedSubsetMSE
       (f_ref := liftedReferenceSampler (Ωresp := Ωresp) f_ref)
       (hiid := hiidJoint)
       (Xbar := augmentedRawSampleMean f_ref
-        (safeEntropyReplicates (2 * d)) D.rawResponse)
+        (safeEntropyReplicates d) D.rawResponse)
       (μbar := augmentedRawPopulationMean f_ref D.populationMean)
       (η := safeResponseTolerance) (B := fun _ => B)
       (hηNonneg := fun n => (safeResponseTolerance_pos n).le)
       (Hmean := Hmean)
       (hpopulationNorm := augmentedRawPopulationMean_norm_le f_ref D.populationMean hB)
       (hrealize := hrealize)
-      (α := D.covarianceFloor / 2)
-      (hα := by linarith [H.nondegenerate.kappa_pos])
+      (α := fun n => max ((n : Real)) 1 * (D.covarianceFloor / 2))
+      (hα := fun n =>
+        mul_pos (lt_of_lt_of_le zero_lt_one (le_max_right _ _))
+          (by linarith [H.nondegenerate.kappa_pos]))
       (ceiling := fun n => 4 * ((n + 1 : Nat) : Real) * Bψ ^ 2)
       (Hspectral := Hspectral) (Hrate := Hrate)
       (score := score) (Qstar := Qstar) (Qsub := Qsub)

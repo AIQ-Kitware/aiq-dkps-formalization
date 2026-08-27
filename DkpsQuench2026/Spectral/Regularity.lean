@@ -916,8 +916,15 @@ The normalized quadratic floor is scaled by `n` into an unnormalized floor
 `eigenvalues₀_configGram_lower_of_quadratic_floor`: the configuration Gram
 matrix is the codomain Gram operator `TT†` of the analysis map `T` of `zref`,
 whose first `d` sorted eigenvalues dominate any quadratic floor of `T†T`.
-For `κ ≤ 0` the claim is positive semidefiniteness; for `κ > 0` the floor
-`κ/2 ≤ n·κ/2` uses `1 ≤ n`. -/
+For `κ ≤ 0` the claim is positive semidefiniteness.
+
+The floor is stated at its natural scale `n·(κ/2)` rather than the constant
+`κ/2`.  The Gram matrix of `n` centered points is `n` times an empirical
+covariance, so its leading eigenvalues grow linearly in `n`, exactly as the
+compactness ceiling `4(n+1)B²` does.  Reporting a constant floor against a
+growing ceiling inflates the conditioning ratio in `configFrobBound` by a
+factor `n`, which is what previously forced the response tolerance down to
+`n⁻²` and the replicate budget up by two powers of `n`. -/
 theorem eigenvalues₀_reference_centeredGram_lower
     {d n : Nat} (hn : 0 < n)
     (zref : Config n d) {κ : Real}
@@ -925,12 +932,13 @@ theorem eigenvalues₀_reference_centeredGram_lower
       (κ / 2) * ‖x‖ ^ 2 ≤
         (n : Real)⁻¹ * ∑ i, ((∑ a : Fin d, x a * zref i a)) ^ 2)
     (i : Fin (Fintype.card (Fin n))) (hi : (i : Nat) < d) :
-    κ / 2 ≤ (configGramPosSemidef zref).isHermitian.eigenvalues₀ i := by
+    (n : Real) * (κ / 2) ≤ (configGramPosSemidef zref).isHermitian.eigenvalues₀ i := by
+  have hnpos : (0 : Real) < (n : Real) := by exact_mod_cast hn
   rcases le_or_gt κ 0 with hκ | hκ
-  · exact le_trans (by linarith) (TauCeti.Matrix.PosSemidef.eigenvalues₀_nonneg (configGramPosSemidef zref) i)
-  · have hnpos : (0 : Real) < (n : Real) := by exact_mod_cast hn
-    have hn1 : (1 : Real) ≤ (n : Real) := by exact_mod_cast hn
-    have hquad' : ∀ x : Vec d,
+  · have : (n : Real) * (κ / 2) ≤ 0 := mul_nonpos_of_nonneg_of_nonpos hnpos.le (by linarith)
+    exact this.trans
+      (TauCeti.Matrix.PosSemidef.eigenvalues₀_nonneg (configGramPosSemidef zref) i)
+  · have hquad' : ∀ x : Vec d,
         ((n : Real) * (κ / 2)) * ‖x‖ ^ 2 ≤
           ∑ j : Fin n, (∑ a : Fin d, x a * zref j a) ^ 2 := by
       intro x
@@ -941,9 +949,7 @@ theorem eigenvalues₀_reference_centeredGram_lower
             mul_le_mul_of_nonneg_left (hquad x) hnpos.le
         _ = ∑ j : Fin n, (∑ a : Fin d, x a * zref j a) ^ 2 := by
             rw [← mul_assoc, mul_inv_cancel₀ hnpos.ne', one_mul]
-    have hfloor := eigenvalues₀_configGram_lower_of_quadratic_floor hquad' i hi
-    have hgrow : κ / 2 ≤ (n : Real) * (κ / 2) := by nlinarith
-    linarith
+    exact eigenvalues₀_configGram_lower_of_quadratic_floor hquad' i hi
 
 /-- Adding the target and recentering the enlarged cloud cannot decrease the
 reference scatter in any perspective direction.
@@ -1059,7 +1065,7 @@ theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
         (centeredAugmentedPerspectiveConfig ψ f_ref)
         (centeredAugmentedPerspectiveConfig_gram_eq
           ψ f_ref μbar hrealize)
-        (κ / 2)
+        (fun n => max ((n : Real)) 1 * (κ / 2))
         (fun n => 4 * ((n + 1 : Nat) : Real) * B ^ 2)) := by
   obtain ⟨B, hB0, hBbound⟩ := exists_perspective_norm_bound_of_isCompact_range ψ hcompact
   refine ⟨B, hB0, hBbound, ?_⟩
@@ -1108,10 +1114,13 @@ theorem exists_growingSpectralSubevents_of_compact_iid_nondegenerate
     rintro n ωref ⟨hcov, hdn, hn0⟩ f i hi
     have hquadref := reference_centered_quadratic_floor_of_event Pf ψ f_ref Hnondeg ωref hcov
     have href : ∀ j : Fin (Fintype.card (Fin n)), (j : Nat) < d →
-        κ / 2 ≤ (configGramPosSemidef
+        (n : Real) * (κ / 2) ≤ (configGramPosSemidef
           (centerConfig (referencePerspectiveConfig ψ f_ref n ωref))).isHermitian.eigenvalues₀ j :=
       fun j hj => eigenvalues₀_reference_centeredGram_lower hn0
         (centerConfig (referencePerspectiveConfig ψ f_ref n ωref)) hquadref j hj
+    have hmax : max ((n : Real)) 1 = (n : Real) :=
+      max_eq_left (by exact_mod_cast Nat.one_le_iff_ne_zero.mpr hn0.ne')
+    rw [hmax]
     have haug := augmented_centeredGram_floor_of_reference_floor hn0 hdn
       (referencePerspectiveConfig ψ f_ref n ωref) (ψ f) href i hi
     have haugcfg : augmentedPerspectiveConfig ψ f_ref n ωref f =

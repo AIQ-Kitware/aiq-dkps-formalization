@@ -72,7 +72,7 @@ theorem highProb_mse_tieAverage_of_growing_augmented_cmds_spectralSubevents
     (hzRadial : ∀ n ω f (i : Fin n),
       ‖z n ω f i.castSucc - z n ω f (Fin.last n)‖ =
         ‖ψ (f_ref n ω i) - ψ f‖)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling entryRate : Nat → Real)
     (Hspectral : GrowingSpectralSubevents μ hμ D z hzGram α ceiling)
     (Hrate : GrowingConfigControl (fun n => n + 1) d α ceiling entryRate)
@@ -96,7 +96,7 @@ theorem highProb_mse_tieAverage_of_growing_augmented_cmds_spectralSubevents
               Dhat hsym f_ref score Qstar n ω f) ≤ ε}) := by
   let good : Nat → Prop := fun n =>
     d ≤ n + 1 ∧
-    configFrobBound d α (ceiling n)
+    configFrobBound d (α n) (ceiling n)
       (((n + 1 : Nat) : Real) * entryRate n) ≤ Hrate.bound n
   let Es : Nat → Set Ω := fun n => E n ∩ Hspectral.event n
   let Eg : Nat → Set Ω := fun n => Es n ∩ {ω | good n}
@@ -143,7 +143,7 @@ theorem highProb_mse_tieAverage_of_growing_augmented_cmds_spectralSubevents
         (populationPosSemidefOfGram D z hzGram n ω f)
         (hsym n ω f)
         (populationRankLeOfGram D z hzGram n ω f)
-        hα (Hrate.entry_nonneg n) hfloor hceiling
+        (hα n) (Hrate.entry_nonneg n) hfloor hceiling
         hentry (z n ω f) (hzGram n ω f)
         i.castSucc (Fin.last n)
     have hraw : rawAugmentedSpectralConfig (d := d) Dhat hsym n ω f =
@@ -190,7 +190,7 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSub
     (hzRadial : ∀ n ω f (i : Fin n),
       ‖z n ω f i.castSucc - z n ω f (Fin.last n)‖ =
         ‖ψ (f_ref n ω i) - ψ f‖)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling entryRate : Nat → Real)
     (Hspectral : GrowingSpectralSubevents μ hμ D z hzGram α ceiling)
     (Hrate : GrowingConfigControl (fun n => n + 1) d α ceiling entryRate)
@@ -254,7 +254,7 @@ theorem highProbQQueryEfficient_tieAverage_of_response_mean_realization_spectral
       (augmentedUniformResponseMeanEvent Xbar μbar η))
     (hpopulationNorm : ∀ n ω f i, ‖μbar n ω f i‖ ≤ B n)
     (hrealize : PerspectiveResponseRealization ψ f_ref μbar)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling : Nat → Real)
     (Hspectral : GrowingSpectralSubevents μ hμ
       (fun n ω f => responseDist (μbar n ω f))
@@ -337,7 +337,7 @@ theorem highProb_mse_tieAverage_of_responseSubevents_realization_spectralSubeven
     (Hmean : AugmentedResponseMeanSubevents μ hμ Xbar μbar η)
     (hpopulationNorm : ∀ n ω f i, ‖μbar n ω f i‖ ≤ B n)
     (hrealize : PerspectiveResponseRealization ψ f_ref μbar)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling : Nat → Real)
     (Hspectral : GrowingSpectralSubevents μ hμ
       (fun n ω f => responseDist (μbar n ω f))
@@ -420,7 +420,7 @@ theorem highProbQQueryEfficient_tieAverage_of_responseSubevents_realization_spec
     (Hmean : AugmentedResponseMeanSubevents μ hμ Xbar μbar η)
     (hpopulationNorm : ∀ n ω f i, ‖μbar n ω f i‖ ≤ B n)
     (hrealize : PerspectiveResponseRealization ψ f_ref μbar)
-    {α : Real} (hα : 0 < α)
+    {α : Nat → Real} (hα : ∀ n, 0 < α n)
     (ceiling : Nat → Real)
     (Hspectral : GrowingSpectralSubevents μ hμ
       (fun n ω f => responseDist (μbar n ω f))
