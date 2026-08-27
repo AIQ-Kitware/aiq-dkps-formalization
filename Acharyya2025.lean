@@ -1,4 +1,6 @@
 import Acharyya2025.Basic
+import Acharyya2025.ManifoldCondition
+import Acharyya2025.Theorem1Scale
 
 import Acharyya2025.GrowingResponse
 import Acharyya2025.PaperRate
