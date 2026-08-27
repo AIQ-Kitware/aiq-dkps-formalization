@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
+import DavisKahan.SpectralTheory.CircleRieszIntegral
 import DavisKahan.SpectralTheory.ContinuationContour
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Transport
 
@@ -25,11 +25,11 @@ open Set
 
 namespace TauCeti
 namespace DavisKahan
-namespace Frontier
 namespace CircleContour
 
 open DavisKahanExt
 open TauCeti.DavisKahan
+open TauCeti.DavisKahan.Frontier
 open DavisKahan.Foundation
 
 universe u
@@ -310,6 +310,5 @@ theorem margin_le_norm_sub_of_inverse_bound
       circleContour (c : ℂ) r := rfl
 
 end CircleContour
-end Frontier
 end DavisKahan
 end TauCeti

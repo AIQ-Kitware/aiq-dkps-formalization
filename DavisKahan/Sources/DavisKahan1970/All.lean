@@ -49,7 +49,6 @@ import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 import DavisKahan.Sources.DavisKahan1970.Section6Example61
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
 import DavisKahan.Sources.DavisKahan1970.Section7SwapAsymmetry
-import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
 import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 import DavisKahan.Sources.DavisKahan1970.SinTwoTheta

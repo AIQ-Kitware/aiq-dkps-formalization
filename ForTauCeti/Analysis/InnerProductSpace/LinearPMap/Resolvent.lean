@@ -74,7 +74,7 @@ can be read side by side.
      which silently assumes self-adjointness — for a general operator that set is
      not the spectrum at all, only its real slice.  Mathlib's convention is
      `spectrum 𝕜 a : Set 𝕜`, and this repository already uses `spectrum ℂ T` for
-     bounded operators in `DavisKahan/Sources/DavisKahan1970/Section8RieszCircle.lean`,
+     bounded operators in `DavisKahan/SpectralTheory/CircleRieszIntegral.lean`,
      so the two were not comparable.  Recorded as a decision in
      the Spectra-removal plan.
   2. **Scalars are a general `NontriviallyNormedField`, not `ℂ`**, and the space

@@ -14,7 +14,7 @@ import Mathlib.Analysis.CStarAlgebra.ContinuousFunctionalCalculus.Isometric
 The contour-free half of the spectral-identification machinery, split out of
 `ContinuationSpectralIdentification` so that consumers that produce their own
 continuous spectral symbol (for example the circle Riesz projection in
-`Frontier/RieszCircle.lean`) can identify a bounded spectral projection with a
+`SpectralTheory/CircleRieszIntegral.lean`) can identify a bounded spectral projection with a
 Mathlib continuous-functional-calculus value without importing the
 contour-continuation chain (which is currently blocked on `SinTheta/General`).
 

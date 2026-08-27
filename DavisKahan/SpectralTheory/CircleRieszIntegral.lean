@@ -24,11 +24,11 @@ open Set Filter
 
 namespace TauCeti
 namespace DavisKahan
-namespace Frontier
 namespace RieszCircle
 
 open DavisKahanExt
 open TauCeti.DavisKahan
+open TauCeti.DavisKahan.Frontier
 
 universe u
 
@@ -548,6 +548,5 @@ theorem continuous_circleRieszProjection_path
   exact hcont.const_smul ((2 * Real.pi * Complex.I)⁻¹ : ℂ)
 
 end RieszCircle
-end Frontier
 end DavisKahan
 end TauCeti

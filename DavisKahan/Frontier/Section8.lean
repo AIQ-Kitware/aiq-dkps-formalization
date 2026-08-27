@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
-import DavisKahan.Frontier.CircleContour
+import DavisKahan.SpectralTheory.CircleRieszIntegral
+import DavisKahan.SpectralTheory.CircleContour
 import DavisKahan.Sources.DavisKahan1970.Section8.All
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.SharpDiagonalResolvents

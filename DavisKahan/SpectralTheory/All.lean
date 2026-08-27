@@ -15,6 +15,8 @@ import DavisKahan.SpectralTheory.BoundedTruncation
 import DavisKahan.SpectralTheory.CayleySelectorBridge
 import DavisKahan.SpectralTheory.CentralBand
 import DavisKahan.SpectralTheory.CircleRieszEndpoints
+import DavisKahan.SpectralTheory.CircleContour
+import DavisKahan.SpectralTheory.CircleRieszIntegral
 import DavisKahan.SpectralTheory.CircleRieszProjection
 import DavisKahan.SpectralTheory.ContinuationContour
 import DavisKahan.SpectralTheory.ContinuationRieszIntegral
