@@ -159,11 +159,14 @@
     ]
    },
    "lean_declarations": [
-    "Acharyya2024.ContinuousMDS.continuousRawStress",
     "Acharyya2024.ContinuousMDS.ContinuousMDS",
     "Acharyya2024.ContinuousMDS.ambientDissimilarity",
+    "Acharyya2024.ContinuousMDS.continuousPointStress",
+    "Acharyya2024.ContinuousMDS.continuousRawStress",
     "Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation",
-    "Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation_fin"
+    "Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation_fin",
+    "Acharyya2024.ContinuousMDS.continuous_continuousPointStress",
+    "Acharyya2024.ContinuousMDS.exists_min_continuousPointStress"
    ],
    "clauses": [
     {
@@ -581,8 +584,11 @@
    "lean_declarations": [
     "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
     "Acharyya2024.ContinuousMDS.ContinuousMDS",
+    "Acharyya2024.ContinuousMDS.continuousPointStress",
+    "Acharyya2024.ContinuousMDS.continuous_continuousPointStress",
     "Acharyya2024.ContinuousMDS.estimatedEmbedding",
     "Acharyya2024.ContinuousMDS.estimatedEmbedding_mem_mds",
+    "Acharyya2024.ContinuousMDS.exists_min_continuousPointStress",
     "Acharyya2024.ContinuousMDS.exists_min_pointStress",
     "Acharyya2024.ContinuousMDS.frameEmbedding",
     "Acharyya2024.ContinuousMDS.frameEmbedding_min",
@@ -645,7 +651,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Identify the population embedding of a fixed reference sample with the continuous-MDS map in the limit of a growing reference collection. Everything else in the chain is proved, ending at tendsto_lpPairDistErr_frameEmbedding."
+   "next_action": "Prove that the fixed-sample population embedding converges to the minimizer of continuousPointStress as the reference collection grows; that needs the empirical reference configuration to converge to the continuous-MDS map at the sampled models. Both sides of the identification are now defined with their defining properties proved."
   },
   {
    "id": "A24-T4",
@@ -719,8 +725,11 @@
     "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
     "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile",
     "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
+    "Acharyya2024.ContinuousMDS.continuousPointStress",
+    "Acharyya2024.ContinuousMDS.continuous_continuousPointStress",
     "Acharyya2024.ContinuousMDS.estimatedEmbedding",
     "Acharyya2024.ContinuousMDS.estimatedEmbedding_mem_mds",
+    "Acharyya2024.ContinuousMDS.exists_min_continuousPointStress",
     "Acharyya2024.ContinuousMDS.exists_min_pointStress",
     "Acharyya2024.ContinuousMDS.frameEmbedding",
     "Acharyya2024.ContinuousMDS.frameEmbedding_min",
@@ -760,7 +769,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Identify the population embedding of a fixed reference sample with the continuous-MDS map in the limit of a growing reference collection. Everything else in the chain is proved, ending at tendsto_lpPairDistErr_frameEmbedding."
+   "next_action": "Prove that the fixed-sample population embedding converges to the minimizer of continuousPointStress as the reference collection grows; that needs the empirical reference configuration to converge to the continuous-MDS map at the sampled models. Both sides of the identification are now defined with their defining properties proved."
   },
   {
    "id": "A24-R4",

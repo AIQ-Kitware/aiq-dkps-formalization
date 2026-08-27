@@ -682,4 +682,158 @@ theorem tendsto_lpPairDistErr_frameEmbedding {M : Type*} [MeasurableSpace M]
   rw [Real.norm_eq_abs, abs_of_nonneg (Real.rpow_nonneg (abs_nonneg _) p)]
   exact Real.rpow_le_rpow (abs_nonneg _) (hbdd u q.1 q.2) hp.le
 
+/-! ### The population one-point stress
+
+`pointStress` places a model against a finite reference sample.  Its population counterpart
+places a model against the whole model distribution, and is what the source's `mds` minimizes
+pointwise.  Defining it, and proving its minimizer exists, gives the target of Lemma 2's
+conclusion a definition at the population level.
+
+Boundedness of the reference embedding and of the target dissimilarities is what a compact model
+space with a continuous embedding supplies, and it is what makes the integral finite and the
+functional continuous and coercive. -/
+
+/-- **The population one-point stress**: the continuous analogue of `pointStress`, placing `v`
+against the whole model distribution rather than a finite sample. -/
+noncomputable def continuousPointStress {M : Type*} [MeasurableSpace M] (d : Nat)
+    (P : Measure M) (χ : M → Rvec d) (c : M → Real) (v : Rvec d) : Real :=
+  ∫ m, (‖v - χ m‖ - c m) ^ 2 ∂P
+
+variable {M : Type*} [MeasurableSpace M]
+
+/-- Under a bounded reference embedding and bounded target dissimilarities, the integrand is
+uniformly bounded on any ball of positions. -/
+theorem continuousPointStress_integrand_le {d : Nat} {χ : M → Rvec d} {c : M → Real} {K : Real}
+    (hχ : ∀ m, ‖χ m‖ ≤ K) (hc : ∀ m, |c m| ≤ K) (v : Rvec d) (m : M) :
+    |(‖v - χ m‖ - c m) ^ 2| ≤ (‖v‖ + 2 * K) ^ 2 := by
+  have hK : 0 ≤ K := le_trans (abs_nonneg _) (hc m)
+  have h1 : ‖v - χ m‖ ≤ ‖v‖ + K :=
+    le_trans (norm_sub_le _ _) (by linarith [hχ m])
+  have h2 : |‖v - χ m‖ - c m| ≤ ‖v‖ + 2 * K := by
+    have := abs_le.mp (hc m)
+    have hnn : 0 ≤ ‖v - χ m‖ := norm_nonneg _
+    rw [abs_le]
+    constructor <;> linarith
+  have hnn : 0 ≤ ‖v‖ + 2 * K := by positivity
+  rw [abs_of_nonneg (sq_nonneg _), ← abs_of_nonneg hnn]
+  calc (‖v - χ m‖ - c m) ^ 2 = |‖v - χ m‖ - c m| ^ 2 := (sq_abs _).symm
+    _ ≤ (‖v‖ + 2 * K) ^ 2 := by
+        refine pow_le_pow_left₀ (abs_nonneg _) h2 2
+    _ = |‖v‖ + 2 * K| ^ 2 := by rw [abs_of_nonneg hnn]
+
+/-- The population one-point stress is continuous in the position. -/
+theorem continuous_continuousPointStress {d : Nat} (P : Measure M) [IsFiniteMeasure P]
+    {χ : M → Rvec d} {c : M → Real} {K : Real}
+    (hχmeas : AEStronglyMeasurable χ P) (hcmeas : AEStronglyMeasurable c P)
+    (hχ : ∀ m, ‖χ m‖ ≤ K) (hc : ∀ m, |c m| ≤ K) :
+    Continuous (continuousPointStress d P χ c) := by
+  rw [continuous_iff_continuousAt]
+  intro v₀
+  refine continuousAt_of_dominated (bound := fun _ => (‖v₀‖ + 1 + 2 * K) ^ 2) ?_ ?_
+    (integrable_const _) ?_
+  · exact Filter.Eventually.of_forall fun v =>
+      (((aestronglyMeasurable_const.sub hχmeas).norm.sub hcmeas).pow 2)
+  · filter_upwards [Metric.ball_mem_nhds v₀ one_pos] with v hv
+    refine Filter.Eventually.of_forall fun m => ?_
+    have hvle : ‖v‖ ≤ ‖v₀‖ + 1 := by
+      have := (mem_ball_iff_norm.mp hv).le
+      calc ‖v‖ = ‖v - v₀ + v₀‖ := by abel_nf
+        _ ≤ ‖v - v₀‖ + ‖v₀‖ := norm_add_le _ _
+        _ ≤ 1 + ‖v₀‖ := by linarith
+        _ = ‖v₀‖ + 1 := by ring
+    have hK : 0 ≤ K := le_trans (abs_nonneg _) (hc m)
+    refine le_trans ?_ (pow_le_pow_left₀ (by linarith [norm_nonneg v])
+      (by linarith : ‖v‖ + 2 * K ≤ ‖v₀‖ + 1 + 2 * K) 2)
+    simpa [Real.norm_eq_abs] using continuousPointStress_integrand_le hχ hc v m
+  · refine Filter.Eventually.of_forall fun m => ?_
+    exact (((continuous_id.sub continuous_const).norm.sub continuous_const).pow 2).continuousAt
+
+/-- The integrand of the population one-point stress is integrable under the boundedness
+hypotheses. -/
+theorem integrable_continuousPointStress_integrand {d : Nat} (P : Measure M) [IsFiniteMeasure P]
+    {χ : M → Rvec d} {c : M → Real} {K : Real}
+    (hχmeas : AEStronglyMeasurable χ P) (hcmeas : AEStronglyMeasurable c P)
+    (hχ : ∀ m, ‖χ m‖ ≤ K) (hc : ∀ m, |c m| ≤ K) (v : Rvec d) :
+    Integrable (fun m => (‖v - χ m‖ - c m) ^ 2) P := by
+  refine Integrable.mono' (integrable_const ((‖v‖ + 2 * K) ^ 2))
+    (((aestronglyMeasurable_const.sub hχmeas).norm.sub hcmeas).pow 2)
+    (Filter.Eventually.of_forall fun m => ?_)
+  simpa [Real.norm_eq_abs] using continuousPointStress_integrand_le hχ hc v m
+
+/--
+**The population one-point stress attains its minimum.**
+
+Continuous by `continuous_continuousPointStress` and coercive: far from the reference the
+integrand is bounded below by `(‖v‖ - 2K)²`, which eventually exceeds the value at the origin.
+So the target of Lemma 2's conclusion is a genuine minimizer, not a posited object.
+-/
+theorem exists_min_continuousPointStress {d : Nat} (P : Measure M) [IsProbabilityMeasure P]
+    {χ : M → Rvec d} {c : M → Real} {K : Real}
+    (hχmeas : AEStronglyMeasurable χ P) (hcmeas : AEStronglyMeasurable c P)
+    (hχ : ∀ m, ‖χ m‖ ≤ K) (hc : ∀ m, |c m| ≤ K) :
+    ∃ v : Rvec d, ∀ w : Rvec d,
+      continuousPointStress d P χ c v ≤ continuousPointStress d P χ c w := by
+  classical
+  have hne : Nonempty M := by
+    by_contra hcon
+    rw [not_nonempty_iff] at hcon
+    have h1 : P Set.univ = 0 := by
+      have : (Set.univ : Set M) = ∅ := Set.univ_eq_empty_iff.mpr hcon
+      rw [this, measure_empty]
+    rw [measure_univ] at h1
+    exact one_ne_zero h1
+  obtain ⟨m₀⟩ := hne
+  have hK : 0 ≤ K := le_trans (abs_nonneg _) (hc m₀)
+  set R : Real := 4 * K + 1 with hR
+  have hRpos : 0 < R := by rw [hR]; linarith
+  -- the value at the origin
+  have hzero : continuousPointStress d P χ c 0 ≤ (2 * K) ^ 2 := by
+    rw [continuousPointStress]
+    have hle : ∀ m, (‖(0 : Rvec d) - χ m‖ - c m) ^ 2 ≤ (2 * K) ^ 2 := by
+      intro m
+      have h1 : ‖(0 : Rvec d) - χ m‖ ≤ K := by simpa using hχ m
+      have h2 := abs_le.mp (hc m)
+      have hnn : 0 ≤ ‖(0 : Rvec d) - χ m‖ := norm_nonneg _
+      have habs : |‖(0 : Rvec d) - χ m‖ - c m| ≤ 2 * K := by
+        rw [abs_le]; constructor <;> linarith
+      calc (‖(0 : Rvec d) - χ m‖ - c m) ^ 2
+          = |‖(0 : Rvec d) - χ m‖ - c m| ^ 2 := (sq_abs _).symm
+        _ ≤ (2 * K) ^ 2 := pow_le_pow_left₀ (abs_nonneg _) habs 2
+    calc ∫ m, (‖(0 : Rvec d) - χ m‖ - c m) ^ 2 ∂P
+        ≤ ∫ _m, (2 * K) ^ 2 ∂P :=
+          integral_mono (integrable_continuousPointStress_integrand P hχmeas hcmeas hχ hc 0)
+            (integrable_const _) hle
+      _ = (2 * K) ^ 2 := by simp
+  -- coercivity
+  have hcoer : ∀ w : Rvec d, R < ‖w‖ → (2 * K) ^ 2 < continuousPointStress d P χ c w := by
+    intro w hw
+    have hge : ∀ m, (2 * K + 1) ^ 2 ≤ (‖w - χ m‖ - c m) ^ 2 := by
+      intro m
+      have h1 : ‖w‖ - ‖χ m‖ ≤ ‖w - χ m‖ := norm_sub_norm_le _ _
+      have h2 := abs_le.mp (hc m)
+      have h3 : 2 * K + 1 ≤ ‖w - χ m‖ - c m := by
+        rw [hR] at hw
+        linarith [hχ m]
+      exact pow_le_pow_left₀ (by linarith) h3 2
+    have hint : ∫ _m, (2 * K + 1) ^ 2 ∂P ≤ continuousPointStress d P χ c w := by
+      rw [continuousPointStress]
+      exact integral_mono (integrable_const _)
+        (integrable_continuousPointStress_integrand P hχmeas hcmeas hχ hc w) hge
+    have hval : ∫ _m : M, (2 * K + 1) ^ 2 ∂P = (2 * K + 1) ^ 2 := by simp
+    rw [hval] at hint
+    nlinarith [hint, hK]
+  -- compactness on the ball, then globality
+  obtain ⟨v, hv_mem, hv_min⟩ :=
+    (isCompact_closedBall (0 : Rvec d) R).exists_isMinOn
+      ⟨0, by simp [Metric.mem_closedBall, hRpos.le]⟩
+      (continuous_continuousPointStress P hχmeas hcmeas hχ hc).continuousOn
+  refine ⟨v, fun w => ?_⟩
+  have hv0 : continuousPointStress d P χ c v ≤ continuousPointStress d P χ c 0 :=
+    hv_min (by simp [Metric.mem_closedBall, hRpos.le])
+  by_cases hw : ‖w‖ ≤ R
+  · exact hv_min (by simpa [Metric.mem_closedBall] using hw)
+  · push Not at hw
+    have := hcoer w hw
+    linarith
+
 end Acharyya2024.ContinuousMDS
