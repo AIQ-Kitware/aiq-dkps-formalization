@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Assembly
+import DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Core
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.Endpoints
 import DavisKahan.InfiniteDimensional.SinTheta.Continuation.QuarterAcute

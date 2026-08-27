@@ -1000,8 +1000,8 @@
       "id": "s8-circle-continuation-data",
       "title": "Common-circle continuation data",
       "kind": "foundation",
-      "module": "DavisKahan.Frontier.Section8",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section8.CircleContinuationData",
+      "module": "DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness",
+      "declaration": "TauCeti.DavisKahanExt.CircleContinuationData",
       "dependencies": [
         "s8-riesz-eq-spectral",
         "s8-riesz-path-continuity"
@@ -1015,8 +1015,8 @@
       "id": "s8-continuation-witness",
       "title": "Construct continuation witness from circle",
       "kind": "bridge",
-      "module": "DavisKahan.Frontier.Section8",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section8.spectralContinuationWitness_of_circle",
+      "module": "DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness",
+      "declaration": "TauCeti.DavisKahanExt.spectralContinuationWitness_of_circle",
       "dependencies": [
         "s8-circle-continuation-data"
       ],
@@ -1029,8 +1029,8 @@
       "id": "s8-continuation-endpoints",
       "title": "Identify continuation endpoints",
       "kind": "bridge",
-      "module": "DavisKahan.Frontier.Section8",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section8.spectralContinuationWitness_of_circle_endpoints",
+      "module": "DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness",
+      "declaration": "TauCeti.DavisKahanExt.spectralContinuationWitness_of_circle_endpoints",
       "dependencies": [
         "s8-continuation-witness",
         "base-spectral-projection"
@@ -1044,8 +1044,8 @@
       "id": "s8-projection-lipschitz",
       "title": "Continuation projection Lipschitz estimate",
       "kind": "bridge",
-      "module": "DavisKahan.Frontier.Section8",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section8.selectedBranchProjectionLipschitzConstant_of_circle",
+      "module": "DavisKahan.InfiniteDimensional.SinTheta.Continuation.CircleWitness",
+      "declaration": "TauCeti.DavisKahanExt.selectedBranchProjectionLipschitzConstant_of_circle",
       "dependencies": [
         "s8-continuation-witness",
         "s8-riesz-norm-bound"
