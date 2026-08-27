@@ -522,22 +522,45 @@
     ]
    },
    "lean_declarations": [
-    "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile"
+    "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
+    "Acharyya2024.Consistency.lp_consistency_of_gamma_ambientLimit",
+    "Acharyya2024.GrowingModels.AmbientModelLimit",
+    "Acharyya2024.GrowingModels.limitDissimilarity",
+    "Acharyya2024.GrowingModels.tendsto_frobSub_responseDist_of_ambientLimit"
    ],
    "clauses": [
     {
-     "source_clause": "Latent model points lie on a compact Riemannian manifold and their geodesic distances equal limiting dissimilarities.",
-     "lean_clause": "The finite per-stage Lean theorem accepts arbitrary stagewise limiting dissimilarity matrices and does not encode the manifold/distribution structure.",
-     "relation": "lean_weaker_hypothesis",
-     "note": "This is enough for finite-stage consistency but not the continuum source theorem."
+     "source_clause": "Let M be a compact Riemannian manifold ... phi_i in M subset R^q",
+     "lean_clause": "AmbientModelLimit.space, isCompact, latent, latent_mem",
+     "relation": "equivalent_encoding",
+     "note": "The Riemannian metric is never referred to by the assumption's own statement; the distances it uses are the ambient ones."
+    },
+    {
+     "source_clause": "for all pairs (i,i'), (1/m)||mu_i - mu_i'|| -> ||phi_i - phi_i'|| as r -> infinity",
+     "lean_clause": "AmbientModelLimit.tendsto",
+     "relation": "exact",
+     "note": ""
+    },
+    {
+     "source_clause": "Delta^(infinity)(phi_i, phi_i') = ||phi_i - phi_i'||",
+     "lean_clause": "limitDissimilarity",
+     "relation": "exact",
+     "note": ""
+    },
+    {
+     "source_clause": "Results from [23] tell us that psihat is consistent if D_ii' approaches Delta^(infinity)(phi_i, phi_i')",
+     "lean_clause": "tendsto_frobSub_responseDist_of_ambientLimit, feeding lp_consistency_of_gamma_ambientLimit",
+     "relation": "derived_by_composition",
+     "note": "Compactness is not consumed by this step."
     }
    ],
    "review": "The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity matrices and therefore does not need a manifold. The compact-manifold/model-distribution structure needed for the source continuum conclusion is not represented.",
    "notes": "This is useful finite content but does not encode the literal source assumption.",
    "gap_refs": [
-    "continuous-mds-lp"
+    "continuous-mds-lp",
+    "riemannian-structure-decorative"
    ],
-   "next_action": "None."
+   "next_action": "None. The remaining growing-model gap is the population law in Lemma 2 and Theorem 5, not this assumption."
   },
   {
    "id": "A24-L2",

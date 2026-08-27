@@ -383,12 +383,19 @@ Acharyya2024 stops at convergence of pairwise distances and does not construct t
 
 **Selected Lean declarations:**
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
+- `Acharyya2024.Consistency.lp_consistency_of_gamma_ambientLimit`
+- `Acharyya2024.GrowingModels.AmbientModelLimit`
+- `Acharyya2024.GrowingModels.limitDissimilarity`
+- `Acharyya2024.GrowingModels.tendsto_frobSub_responseDist_of_ambientLimit`
 
 **Clause-by-clause comparison:**
 
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
-| Latent model points lie on a compact Riemannian manifold and their geodesic distances equal limiting dissimilarities. | The finite per-stage Lean theorem accepts arbitrary stagewise limiting dissimilarity matrices and does not encode the manifold/distribution structure. | `lean_weaker_hypothesis` | This is enough for finite-stage consistency but not the continuum source theorem. |
+| Let M be a compact Riemannian manifold ... phi_i in M subset R^q | AmbientModelLimit.space, isCompact, latent, latent_mem | `equivalent_encoding` | The Riemannian metric is never referred to by the assumption's own statement; the distances it uses are the ambient ones. |
+| for all pairs (i,i'), (1/m)\|\|mu_i - mu_i'\|\| -> \|\|phi_i - phi_i'\|\| as r -> infinity | AmbientModelLimit.tendsto | `exact` |  |
+| Delta^(infinity)(phi_i, phi_i') = \|\|phi_i - phi_i'\|\| | limitDissimilarity | `exact` |  |
+| Results from [23] tell us that psihat is consistent if D_ii' approaches Delta^(infinity)(phi_i, phi_i') | tendsto_frobSub_responseDist_of_ambientLimit, feeding lp_consistency_of_gamma_ambientLimit | `derived_by_composition` | Compactness is not consumed by this step. |
 
 **Semantic review:**
 
@@ -396,7 +403,9 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 
 **Additional note:** This is useful finite content but does not encode the literal source assumption.
 
-**Companion census gap refs:** `continuous-mds-lp`
+**Companion census gap refs:** `continuous-mds-lp`, `riemannian-structure-decorative`
+
+**Next action:** None. The remaining growing-model gap is the population law in Lemma 2 and Theorem 5, not this assumption.
 
 ### 12. `A24-L2` — Lemma 2: Continuous-MDS L^p stability over iid model draws
 

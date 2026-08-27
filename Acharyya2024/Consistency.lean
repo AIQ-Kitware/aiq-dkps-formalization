@@ -26,6 +26,7 @@ import Acharyya2024.Common
 import Acharyya2024.RawStress
 import Acharyya2024.Probability
 import Acharyya2024.ContinuousMDS
+import Acharyya2024.GrowingModels
 import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 import ForTauCeti.Probability.RigidAlignment
 
@@ -1064,5 +1065,37 @@ theorem lp_consistency_of_gamma_empirical
   rw [ContinuousMDS.lpPairDistErr_empiricalPopulation (M := Fin n) d (by linarith : (0:Real) ≤ p)
     (id : Fin n → Fin n) (ψhat r ω) ψ (measurable_of_countable _) (measurable_of_countable _)]
   simp
+
+/--
+**Theorem 5 from Assumption 2**, for the empirical model distribution.
+
+The same composition as `lp_consistency_of_gamma_empirical`, with the source's Assumption 2
+supplied as a structure rather than its consequence as a hypothesis.  The limiting dissimilarity
+matrix is the one the assumption induces, `Delta^(infinity)(phi_i, phi_i') = ||phi_i - phi_i'||`.
+-/
+theorem lp_consistency_of_gamma_ambientLimit
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {n d qamb pdim : Nat} [NeZero n] (m : Nat → Nat)
+    (Xbar : ∀ r, Ω → Fin n → Mat (m r) pdim)
+    (μpop : ∀ r, Fin n → Mat (m r) pdim)
+    (H2 : GrowingModels.AmbientModelLimit n qamb m μpop)
+    (γ : ∀ r, Fin n → Fin (m r) → Real)
+    (hγnonneg : ∀ r i j, 0 ≤ γ r i j)
+    (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μpop r i‖ ^ 2) P)
+    (hmoment : ∀ r i, ∫ ω, ‖Xbar r ω i - μpop r i‖ ^ 2 ∂P
+      ≤ (∑ i', ∑ j, γ r i' j) / (r : Real))
+    (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real))
+      atTop (𝓝 0))
+    (ψhat : Nat → Ω → Config n d)
+    (hψhat : ∀ r ω, ψhat r ω ∈ MDS n d (responseDist (Xbar r ω)))
+    (huniq : RawStress.UniquePairProfile n d
+      (GrowingModels.limitDissimilarity H2.latent)) :
+    ∃ ψ ∈ MDS n d (GrowingModels.limitDissimilarity H2.latent),
+      ∀ p : Real, 1 ≤ p → ∀ ε : Real, 0 < ε →
+        Tendsto (fun r => P {ω | ε < ((n : Real))⁻¹ * ((n : Real))⁻¹ *
+          ∑ i, ∑ j, |‖ψhat r ω i - ψhat r ω j‖ - ‖ψ i - ψ j‖| ^ p}) atTop (𝓝 0) :=
+  lp_consistency_of_gamma_empirical P m Xbar μpop
+    (GrowingModels.limitDissimilarity H2.latent) γ hγnonneg hint hmoment hγ
+    H2.tendsto_frobSub ψhat hψhat huniq
 
 end Acharyya2024.Consistency
