@@ -94,6 +94,8 @@ Existence of a minimizer is attributed by the source to the cited continuous-MDS
 
 Further progress. lpPairDistErr is the source's L^p(P x P) discrepancy, and tendsto_measure_lpPairDistErr_gt proves Lemma 2's conclusion for the EMPIRICAL model distribution: pairwise convergence in probability of the estimates gives convergence in probability of the L^p discrepancy, along the full sequence rather than a subsequence and uniformly in p >= 1. What is still missing is the population law in place of the empirical measure, which is where the continuous-MDS embedding of the source enters and which the source itself attributes to the cited literature.
 
+End to end for the empirical model distribution. Consistency.lp_consistency_of_gamma_empirical composes the whole chain: the source's trace-covariance condition gives convergence of the sample dissimilarities with the query count growing; Assumption 1 -- the population dissimilarities approaching the limiting ones -- composes with it by the triangle inequality; raw-stress stability turns that into convergence of the estimates' pairwise distances; and the L^p assembly finishes, along the full sequence and uniformly in p. Every link is a proved theorem rather than an assumed hypothesis. What separates it from the printed Theorem 5 is only that P is the empirical measure of the sampled models rather than the population law -- the step the source attributes to the cited continuous-MDS literature.
+
 ### `affine-invariance-partial` — Remark 1's invariance is rigid, not affine -- now proved and the wording corrected
 
 **Kind:** `source_audit`
@@ -304,7 +306,7 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **status / verification:** `compiled_specialization` / `absent`
 * **semantic alignment:** `specialized` — The conclusion is now formalized and proved against the empirical measure of the sampled models: pairwise convergence in probability of the estimated distances gives convergence in probability of the L^p(P x P) discrepancy. Two clauses come out stronger than printed -- the full sequence rather than a subsequence, and one statement uniform in p rather than one per p. The specialization is that P is the empirical model measure rather than the population law the models are drawn from; the population case is the part the source attributes to the cited continuous-MDS literature.
 * **source claim:** For iid phi_i from P, pointwise convergence of empirical dissimilarities implies, along a subsequence, L^p(P x P) convergence of estimated pairwise distances to continuous-MDS distances.
-* **Lean declarations:** `Acharyya2024.ContinuousMDS.lpPairDistErr`, `Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`, `Acharyya2024.ContinuousMDS.ContinuousMDS`
+* **Lean declarations:** `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`, `Acharyya2024.ContinuousMDS.ContinuousMDS`, `Acharyya2024.ContinuousMDS.lpPairDistErr`, `Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
 * **gap refs:** `continuous-mds-lp`
 * **notes:** The definitions the conclusion is stated over -- continuousRawStress, ContinuousMDS, lpPairDistErr -- did not previously exist in the package.
 * **next action:** Replace the empirical model measure by the population law, which needs the convergence of empirical continuous-MDS embeddings to the population one.
@@ -328,9 +330,9 @@ The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside th
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:413-424`
 * **importance:** `headline`
 * **status / verification:** `compiled_specialization` / `proved_in_build`
-* **semantic alignment:** `specialized` — Lean proves a shared full-sequence/per-stage finite consistency family, which is useful but does not imply the paper double-integral L^p(P x P) conclusion over a continuum of iid model draws.
+* **semantic alignment:** `specialized` — The theorem is now assembled end to end for the empirical model distribution: the source's gamma condition in, the L^p discrepancy vanishing in probability out, with every intermediate link proved -- growing-query dissimilarity concentration, Assumption 1 composed by the triangle inequality, raw-stress stability under the profile-uniqueness premise whose necessity is separately established, and the L^p assembly. Two clauses come out stronger than printed: the full sequence rather than a subsequence, and one statement in p rather than one per p. The specialization is that P is the empirical model measure rather than the population law.
 * **source claim:** Under the Theorem 4 rate, along a subsequence the pairwise-distance error converges to zero in L^p(P x P) in probability for every p >= 1.
-* **Lean declarations:** `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`, `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`, `Acharyya2024.ContinuousMDS.lpPairDistErr`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
+* **Lean declarations:** `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`, `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`, `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`, `Acharyya2024.ContinuousMDS.lpPairDistErr`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
 * **gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
-* **notes:** The source-level continuum theorem remains open even though every finite-stage theorem cited here is proved.
-* **next action:** Compose the Theorem 4 rate with the empirical-measure L^p result, then replace the empirical model measure by the population law.
+* **notes:** Previously the growing-stage consistency theorem took per-stage sampling convergence as a hypothesis; that hypothesis is now discharged from the source's own condition.
+* **next action:** Replace the empirical model measure by the population law; that is the continuous-MDS step the source attributes to the cited literature.

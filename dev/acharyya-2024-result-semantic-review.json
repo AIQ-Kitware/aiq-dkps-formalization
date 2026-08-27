@@ -556,10 +556,11 @@
     ]
    },
    "lean_declarations": [
+    "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
+    "Acharyya2024.ContinuousMDS.ContinuousMDS",
     "Acharyya2024.ContinuousMDS.lpPairDistErr",
     "Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation",
-    "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
-    "Acharyya2024.ContinuousMDS.ContinuousMDS"
+    "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt"
    ],
    "clauses": [
     {
@@ -665,6 +666,7 @@
    "lean_declarations": [
     "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
     "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile",
+    "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
     "Acharyya2024.ContinuousMDS.lpPairDistErr",
     "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt"
    ],
@@ -674,6 +676,12 @@
      "lean_clause": "Lean proves finite per-stage pair-distance consistency for growing cardinalities.",
      "relation": "lean_weaker_conclusion",
      "note": "Finite-stage consistency does not imply the source double-integral continuum conclusion."
+    },
+    {
+     "source_clause": "In the setting of Lemma 2, suppose (1/m) sum_j gamma_ij = o(r). Then for all p >= 1, along a subsequence, the L^p(P x P) discrepancy tends to zero in probability.",
+     "lean_clause": "lp_consistency_of_gamma_empirical, with P the empirical measure of the sampled models, along the full sequence and uniform in p.",
+     "relation": "lean_stronger_hypothesis",
+     "note": "Every intermediate link is proved rather than assumed; the population law in place of the empirical measure is what remains."
     }
    ],
    "review": "Lean proves a shared full-sequence/per-stage finite consistency family, which is useful but does not imply the paper double-integral L^p(P x P) conclusion over a continuum of iid model draws.",
@@ -683,7 +691,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Compose the Theorem 4 rate with the empirical-measure L^p result, then replace the empirical model measure by the population law."
+   "next_action": "Replace the empirical model measure by the population law; that is the continuous-MDS step the source attributes to the cited literature."
   },
   {
    "id": "A24-R4",
