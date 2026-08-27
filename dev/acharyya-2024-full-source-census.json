@@ -58,8 +58,8 @@
     },
     "continuous-mds-lp": {
       "kind": "scope_gap",
-      "title": "Continuous-MDS and L^p(P x P) growing-model conclusions are not formalized",
-      "detail": "The source introduces a compact model space, a model distribution P, continuous raw stress, and an mds(phi) map, then states Lemma 2 and Theorem 5 as L^p(P x P) convergence. The package explicitly documents that its growing-model result is only a countable family of finite per-stage statements and does not model the continuum distribution/integral."
+      "title": "Continuous-MDS definition now present; the L^p(P x P) conclusions are not",
+      "detail": "The source introduces a compact model space, a model distribution P, continuous raw stress, and an mds(phi) map, then states Lemma 2 and Theorem 5 as L^p(P x P) convergence. The package explicitly documents that its growing-model result is only a countable family of finite per-stage statements and does not model the continuum distribution/integral.\n\nPartly closed. Acharyya2024.ContinuousMDS.continuousRawStress is the source's double integral and ContinuousMDS is the minimizer set over Borel-measurable embeddings, so the Lemma 2 and Theorem 5 conclusions can now at least be written. continuousRawStress_empiricalPopulation is the compatibility theorem: against the empirical measure of a finite population the continuous raw stress is the finite raw stress over the square of the population size, so the continuum definition extends the finite one the rest of the package uses. What remains unformalized is the L^p(P x P) convergence itself, which needs a limit theorem relating the empirical minimizers to the population minimizer.\n\nExistence of a minimizer is attributed by the source to the cited continuous-MDS literature through Remark 3 and is not reproved here; under this project's standard an externally attributed result is source-fidelity material, not an added proof obligation."
     },
     "affine-invariance-partial": {
       "kind": "source_audit",
@@ -183,7 +183,7 @@
       "source_kind": "construction",
       "title": "Continuous MDS over a compact model space",
       "source_claim": "Define continuous raw stress by a P x P integral over a compact model space and let mds minimize it over Borel-measurable embeddings.",
-      "status": "not_represented",
+      "status": "compiled_exact",
       "verification": "absent",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -192,17 +192,23 @@
           159
         ]
       },
-      "lean_declarations": [],
+      "lean_declarations": [
+        "Acharyya2024.ContinuousMDS.continuousRawStress",
+        "Acharyya2024.ContinuousMDS.ContinuousMDS",
+        "Acharyya2024.ContinuousMDS.ambientDissimilarity",
+        "Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation",
+        "Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation_fin"
+      ],
       "planned_declarations": [],
       "gap_refs": [
         "continuous-mds-lp"
       ],
       "semantic_alignment": {
-        "classification": "missing",
-        "detail": "No corresponding continuous-model-space raw-stress functional, model distribution, or minimizing mds(phi) map is present in Acharyya2024."
+        "classification": "exact",
+        "detail": "The construction is present at the printed scope: continuousRawStress is the double integral against the model distribution, and ContinuousMDS is the set of Borel-measurable embeddings minimizing it over all Borel-measurable embeddings, which is the faithful reading of \"the embedding function that minimizes\" -- as with the finite MDS, the minimizer is determined only up to a rigid motion. The Lean definition does not require the model space to be compact; compactness enters the source only for existence of the minimizer, which the source itself attributes to the cited literature."
       },
-      "notes": "This missing source layer is exactly the layer needed by Lemma 2 and Theorem 5.",
-      "next_action": "Formalize only if full source coverage of the continuum growing-model regime is desired."
+      "notes": "continuousRawStress_empiricalPopulation ties the definition to the package's finite rawStress through the empirical measure, so it is not a parallel notion.",
+      "next_action": "Prove the L^p(P x P) limit theorem that Lemma 2 and Theorem 5 state over this definition."
     },
     {
       "id": "A24-R4",
@@ -495,7 +501,7 @@
         "detail": "The package has no model-distribution P over a compact model space, no continuous-MDS map, and no double-integral L^p conclusion."
       },
       "notes": "The finite per-stage triangular-array theorem is not an encoding of this integral statement.",
-      "next_action": "Formalize the continuous-MDS source layer before claiming full Theorem 5 coverage."
+      "next_action": "The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it."
     },
     {
       "id": "A24-T4",
@@ -562,7 +568,7 @@
         "detail": "Lean proves a shared full-sequence/per-stage finite consistency family, which is useful but does not imply the paper double-integral L^p(P x P) conclusion over a continuum of iid model draws."
       },
       "notes": "The source-level continuum theorem remains open even though every finite-stage theorem cited here is proved.",
-      "next_action": "Formalize the continuous model-distribution layer if this source theorem is a completion target."
+      "next_action": "The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it."
     }
   ]
 }

@@ -9,6 +9,7 @@ status clearer.
 
 import Acharyya2024.WellKnown
 import Acharyya2024.Common
+import Acharyya2024.ContinuousMDS
 import Acharyya2024.Consistency
 
 import Acharyya2024.Probability

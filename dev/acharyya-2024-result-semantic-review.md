@@ -143,13 +143,19 @@ Lean proves nonemptiness directly for the finite raw-stress minimizer set, witho
 **Normalized paper statement:** Define continuous raw stress by a P x P integral over a compact model space and let mds minimize it over Borel-measurable embeddings.
 
 **Selected Lean declarations:**
-- *(none)*
+- `Acharyya2024.ContinuousMDS.continuousRawStress`
+- `Acharyya2024.ContinuousMDS.ContinuousMDS`
+- `Acharyya2024.ContinuousMDS.ambientDissimilarity`
+- `Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation`
+- `Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation_fin`
 
 **Clause-by-clause comparison:**
 
 | paper clause | Lean clause | relation | assessment |
 | --- | --- | --- | --- |
-| Define continuous raw stress on a compact model space using a P x P integral and minimize over measurable embeddings. | No continuous-model-space raw-stress functional or continuous MDS minimizer exists in Acharyya2024. | `missing` |  |
+| sigma((Delta, P), h) = int int (‖h m' - h m''‖ - Delta m' m'')^2 P(dm') P(dm''). | continuousRawStress d Delta P h is that double integral. | `exact` |  |
+| mds is the embedding minimizing sigma over all Borel-measurable embeddings from M to R^d. | ContinuousMDS d Delta P is the set of measurable h minimizing continuousRawStress among measurable embeddings. | `different_quantifier_encoding` | A minimizer set rather than a chosen minimizer, since MDS determines an embedding only up to a rigid motion. Existence is attributed by the source to the cited literature. |
+| The finite raw stress sums over the model collection; the continuum version integrates against P. | continuousRawStress_empiricalPopulation: against the empirical measure of a finite population the two agree up to the factor card^{-2}. | `supplementary` | Shows the continuum definition extends the finite one. |
 
 **Semantic review:**
 
@@ -159,7 +165,7 @@ No corresponding continuous-model-space raw-stress functional, model distributio
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Formalize only if full source coverage of the continuum growing-model regime is desired.
+**Next action:** Prove the L^p(P x P) limit theorem that Lemma 2 and Theorem 5 state over this definition.
 
 ### 5. `A24-T1` — Theorem 1: Fixed models and fixed queries: raw-stress consistency
 
@@ -390,7 +396,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Formalize the continuous-MDS source layer before claiming full Theorem 5 coverage.
+**Next action:** The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -445,7 +451,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Formalize the continuous model-distribution layer if this source theorem is a completion target.
+**Next action:** The continuous-MDS definition now exists; what remains is the L^p(P x P) limit theorem over it.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 
