@@ -136,11 +136,14 @@ theorem beamEigenvalues_eq_characteristicFourthPowers :
   · rintro ⟨beta, hbeta, hroot, rfl⟩
     exact pow_four_mem_beamEigenvalues_of_characteristic hbeta hroot
 
+/-- Every listed beam eigenvalue exceeds five hundred. -/
 theorem five_hundred_lt_of_mem_beamEigenvalues {lam : ℝ} (hlam : lam ∈ beamEigenvalues) :
     500 < lam := by
   obtain ⟨hpos, x, hx0, heig⟩ := hlam
   exact eigenvalue_gt_five_hundred hpos hx0 heig
 
+/-- Every listed beam eigenvalue is in the real spectrum of the beam
+operator. -/
 theorem mem_realSpectrum_of_mem_beamEigenvalues {lam : ℝ} (hlam : lam ∈ beamEigenvalues) :
     lam ∈ beamOperator.realSpectrum := by
   obtain ⟨-, x, hx0, heig⟩ := hlam

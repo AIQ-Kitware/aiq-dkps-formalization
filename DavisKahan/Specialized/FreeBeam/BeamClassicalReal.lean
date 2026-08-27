@@ -169,6 +169,7 @@ def affineV (a b : ℝ) : BeamV :=
   ⟨(WithLp.prodContinuousLinearEquiv 2 ℝ BeamL2 BeamL2).symm (affineLp a b, 0),
     affinePair_mem a b⟩
 
+/-- The inclusion of an affine form-domain element is the affine function. -/
 @[simp] theorem beamEmbed_affineV (a b : ℝ) : beamEmbed (affineV a b) = affineLp a b := by
   rw [show beamEmbed (affineV a b) = pairFst ((affineV a b : BeamV) : BeamPairSpace) from rfl]
   rw [show ((affineV a b : BeamV) : BeamPairSpace) =
@@ -176,6 +177,7 @@ def affineV (a b : ℝ) : BeamV :=
   rw [Scalar.pairFst_apply]
   simp
 
+/-- An affine form-domain element has vanishing second derivative. -/
 @[simp] theorem beamSnd_affineV (a b : ℝ) : beamSnd (affineV a b) = 0 := by
   rw [show beamSnd (affineV a b) = pairSnd ((affineV a b : BeamV) : BeamPairSpace) from rfl]
   rw [show ((affineV a b : BeamV) : BeamPairSpace) =
@@ -692,6 +694,7 @@ def beamGraphParam : BeamL2 →L[ℝ] (BeamL2 × BeamL2) :=
   beamCoerciveFormData.resolvent.prod
     ((ContinuousLinearMap.id ℝ BeamL2) - beamCoerciveFormData.resolvent)
 
+/-- Evaluating the graph parametrization of the beam trial subspace. -/
 @[simp] theorem beamGraphParam_apply (g : BeamL2) :
     beamGraphParam g =
       (beamCoerciveFormData.resolvent g, g - beamCoerciveFormData.resolvent g) := rfl

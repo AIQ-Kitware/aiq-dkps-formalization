@@ -180,6 +180,7 @@ def affineV (a b : ℂ) : BeamV :=
   ⟨(WithLp.prodContinuousLinearEquiv 2 ℂ BeamL2 BeamL2).symm (affineLp a b, 0),
     affinePair_mem a b⟩
 
+/-- The inclusion of an affine form-domain element is the affine function. -/
 @[simp] theorem beamEmbed_affineV (a b : ℂ) : beamEmbed (affineV a b) = affineLp a b := by
   rw [show beamEmbed (affineV a b) = pairFst ((affineV a b : BeamV) : BeamPairSpace)
     from rfl]
@@ -189,6 +190,7 @@ def affineV (a b : ℂ) : BeamV :=
   rw [pairFst_apply]
   simp
 
+/-- An affine form-domain element has vanishing second derivative. -/
 @[simp] theorem beamSnd_affineV (a b : ℂ) : beamSnd (affineV a b) = 0 := by
   rw [show beamSnd (affineV a b) = pairSnd ((affineV a b : BeamV) : BeamPairSpace)
     from rfl]
@@ -368,18 +370,22 @@ def cubicD1 (_c0 c1 c2 c3 t : ℝ) : ℝ := c1 + 2 * c2 * t + 3 * c3 * t ^ 2
 /-- Second derivative of the cubic. -/
 def cubicD2 (_c0 _c1 c2 c3 t : ℝ) : ℝ := 2 * c2 + 6 * c3 * t
 
+/-- The model cubic is continuous. -/
 theorem continuous_cubic (c0 c1 c2 c3 : ℝ) : Continuous (cubic c0 c1 c2 c3) := by
   unfold cubic
   fun_prop
 
+/-- The model cubic's first derivative is continuous. -/
 theorem continuous_cubicD1 (c0 c1 c2 c3 : ℝ) : Continuous (cubicD1 c0 c1 c2 c3) := by
   unfold cubicD1
   fun_prop
 
+/-- The model cubic's second derivative is continuous. -/
 theorem continuous_cubicD2 (c0 c1 c2 c3 : ℝ) : Continuous (cubicD2 c0 c1 c2 c3) := by
   unfold cubicD2
   fun_prop
 
+/-- The model cubic differentiates to `cubicD1`. -/
 theorem hasDerivAt_cubic (c0 c1 c2 c3 t : ℝ) :
     HasDerivAt (cubic c0 c1 c2 c3) (cubicD1 c0 c1 c2 c3 t) t := by
   have h := (((hasDerivAt_const t c0).add ((hasDerivAt_id t).const_mul c1)).add
@@ -389,6 +395,7 @@ theorem hasDerivAt_cubic (c0 c1 c2 c3 t : ℝ) :
   push_cast
   ring
 
+/-- `cubicD1` differentiates to `cubicD2`. -/
 theorem hasDerivAt_cubicD1 (c0 c1 c2 c3 t : ℝ) :
     HasDerivAt (cubicD1 c0 c1 c2 c3) (cubicD2 c0 c1 c2 c3 t) t := by
   have h := ((hasDerivAt_const t c1).add

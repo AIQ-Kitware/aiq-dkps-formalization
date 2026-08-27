@@ -60,9 +60,11 @@ def pairSnd : BeamPairSpace →L[ℂ] BeamL2 :=
   (ContinuousLinearMap.snd ℂ BeamL2 BeamL2).comp
     (WithLp.prodContinuousLinearEquiv 2 ℂ BeamL2 BeamL2 : BeamPairSpace →L[ℂ] BeamL2 × BeamL2)
 
+/-- Evaluating the first pair coordinate. -/
 @[simp] theorem pairFst_apply (p : BeamPairSpace) :
     pairFst p = (WithLp.prodContinuousLinearEquiv 2 ℂ BeamL2 BeamL2 p).1 := rfl
 
+/-- Evaluating the second pair coordinate. -/
 @[simp] theorem pairSnd_apply (p : BeamPairSpace) :
     pairSnd p = (WithLp.prodContinuousLinearEquiv 2 ℂ BeamL2 BeamL2 p).2 := rfl
 
@@ -73,11 +75,13 @@ def pairingBound (g : ℝ → ℂ) (hg : Continuous g) : ℝ :=
   ((isCompact_Icc : IsCompact (Set.Icc (0 : ℝ) 1)).exists_bound_of_continuousOn
     hg.continuousOn).choose
 
+/-- The defining bound of the bump pairing functional. -/
 theorem pairingBound_spec (g : ℝ → ℂ) (hg : Continuous g) :
     ∀ x ∈ Set.Icc (0 : ℝ) 1, ‖g x‖ ≤ pairingBound g hg :=
   ((isCompact_Icc : IsCompact (Set.Icc (0 : ℝ) 1)).exists_bound_of_continuousOn
     hg.continuousOn).choose_spec
 
+/-- The bump pairing bound is nonnegative. -/
 theorem pairingBound_nonneg (g : ℝ → ℂ) (hg : Continuous g) : 0 ≤ pairingBound g hg :=
   le_trans (norm_nonneg (g 0)) (pairingBound_spec g hg 0 (by norm_num))
 
@@ -124,6 +128,7 @@ def pairingCLM (g : ℝ → ℂ) (hg : Continuous g) : BeamL2 →L[ℂ] ℂ :=
                 (pairingBound_nonneg g hg)
       exact key)
 
+/-- Evaluating the bump pairing functional. -/
 @[simp] theorem pairingCLM_apply (g : ℝ → ℂ) (hg : Continuous g) (W : BeamL2) :
     pairingCLM g hg W = ∫ t, (W : ℝ → ℂ) t * g t ∂unitIocMeasure := rfl
 
@@ -133,9 +138,11 @@ def bumpD2C (k : ℕ) (t : ℝ) : ℂ := (intervalBumpD2 k t : ℂ)
 /-- The complexified bump. -/
 def bumpC (k : ℕ) (t : ℝ) : ℂ := (intervalBump k t : ℂ)
 
+/-- The second derivative of the interval bump is continuous. -/
 theorem continuous_bumpD2C (k : ℕ) : Continuous (bumpD2C k) :=
   Complex.continuous_ofReal.comp (continuous_intervalBumpD2 k)
 
+/-- The interval bump is continuous. -/
 theorem continuous_bumpC (k : ℕ) : Continuous (bumpC k) :=
   Complex.continuous_ofReal.comp (continuous_intervalBump k)
 
@@ -175,6 +182,7 @@ theorem isClosed_beamFormSubmodule :
 /-- The free-beam form space. -/
 abbrev BeamV : Type := ↥beamFormSubmodule
 
+/-- The form domain is closed in the pair space, hence complete. -/
 instance : CompleteSpace BeamV := isClosed_beamFormSubmodule.completeSpace_coe
 
 /-- The form-space embedding into the ambient `L²`. -/
@@ -183,8 +191,10 @@ def beamEmbed : BeamV →L[ℂ] BeamL2 := pairFst.comp beamFormSubmodule.subtype
 /-- The bending-slot projection of the form space. -/
 def beamSnd : BeamV →L[ℂ] BeamL2 := pairSnd.comp beamFormSubmodule.subtypeL
 
+/-- Evaluating the form-domain inclusion. -/
 @[simp] theorem beamEmbed_apply (p : BeamV) : beamEmbed p = pairFst (p : BeamPairSpace) := rfl
 
+/-- Evaluating the form-domain second-derivative map. -/
 @[simp] theorem beamSnd_apply (p : BeamV) : beamSnd p = pairSnd (p : BeamPairSpace) := rfl
 
 /-- The weak-derivative identities, in the form the representation theorem consumes. -/
@@ -320,6 +330,7 @@ def contToLp (g : ℝ → ℂ) (hg : Continuous g) : BeamL2 :=
     filter_upwards [ae_mem_unitIocMeasure] with t ht
     exact pairingBound_spec g hg t ⟨ht.1.le, ht.2⟩)).toLp g
 
+/-- A continuous function represents itself almost everywhere. -/
 theorem coeFn_contToLp (g : ℝ → ℂ) (hg : Continuous g) :
     (contToLp g hg : ℝ → ℂ) =ᵐ[unitIocMeasure] g :=
   MemLp.coeFn_toLp _
@@ -566,9 +577,11 @@ derivative with free boundary conditions on `L²(0,1]`. -/
 def beamOperator : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := BeamL2) :=
   beamShiftedFormData.beamOperator
 
+/-- The beam operator is self-adjoint. -/
 theorem beamOperator_isSelfAdjoint : beamOperator.IsSelfAdjoint :=
   beamShiftedFormData.beamOperator_isSelfAdjoint
 
+/-- The beam operator is nonnegative. -/
 theorem beamOperator_nonneg (x : beamOperator.domain) :
     0 ≤ RCLike.re ⟪beamOperator.toLinearMap x, (x : BeamL2)⟫_ℂ :=
   beamShiftedFormData.beam_nonnegative x
@@ -581,9 +594,11 @@ def beamOneLp : BeamL2 := contToLp (fun _ => (1 : ℂ)) continuous_const
 /-- The coordinate element of the beam `L²` space. -/
 def beamIdLp : BeamL2 := contToLp (fun t => (t : ℂ)) (by fun_prop)
 
+/-- `beamOneLp` is the constant `1` almost everywhere. -/
 theorem coeFn_beamOneLp : (beamOneLp : ℝ → ℂ) =ᵐ[unitIocMeasure] fun _ => (1 : ℂ) :=
   coeFn_contToLp _ _
 
+/-- `beamIdLp` is `t ↦ t` almost everywhere. -/
 theorem coeFn_beamIdLp : (beamIdLp : ℝ → ℂ) =ᵐ[unitIocMeasure] fun t => (t : ℂ) :=
   coeFn_contToLp _ _
 

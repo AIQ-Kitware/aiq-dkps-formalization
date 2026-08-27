@@ -45,6 +45,7 @@ theorem integral_unitIocMeasure_pow (n : ℕ) :
 /-- The paper's two-dimensional affine trial subspace. -/
 def beamTrial : Submodule ℝ BeamL2 := Submodule.span ℝ {beamOneLp, beamIdLp}
 
+/-- Membership in the beam trial subspace. -/
 theorem mem_beamTrial_iff {x : BeamL2} :
     x ∈ beamTrial ↔ ∃ a b : ℝ, x = affineLp a b := by
   rw [beamTrial, Submodule.mem_span_pair]
@@ -54,13 +55,17 @@ theorem mem_beamTrial_iff {x : BeamL2} :
   · rintro ⟨a, b, rfl⟩
     exact ⟨a, b, rfl⟩
 
+/-- Every affine function lies in the beam trial subspace. -/
 theorem affineLp_mem_beamTrial (a b : ℝ) : affineLp a b ∈ beamTrial :=
   mem_beamTrial_iff.2 ⟨a, b, rfl⟩
 
+/-- The trial subspace is spanned by two functions, so it is finite
+dimensional. -/
 instance : FiniteDimensional ℝ beamTrial := by
   rw [beamTrial]
   exact FiniteDimensional.span_of_finite ℝ (Set.toFinite _)
 
+/-- A finite-dimensional subspace is complete. -/
 instance : CompleteSpace beamTrial := FiniteDimensional.complete ℝ _
 
 /-- The affine trial plane is contained in the beam-operator domain. -/
@@ -79,6 +84,7 @@ theorem beamOperator_apply_trial {x : BeamL2} (hx : x ∈ beamTrial)
 /-- Isometric inclusion of the trial plane. -/
 def beamTrialIncl : beamTrial →L[ℝ] BeamL2 := beamTrial.subtypeL
 
+/-- Evaluating the trial subspace's inclusion. -/
 @[simp] theorem beamTrialIncl_apply (x : beamTrial) : beamTrialIncl x = (x : BeamL2) := rfl
 
 /-! ## Multiplication by `epsilon t` -/
@@ -86,23 +92,29 @@ def beamTrialIncl : beamTrial →L[ℝ] BeamL2 := beamTrial.subtypeL
 /-- Globally bounded extension of the unit-interval coordinate. -/
 def beamClamp (t : ℝ) : ℝ := max 0 (min t 1)
 
+/-- The clamping symbol is measurable. -/
 theorem measurable_beamClamp : Measurable beamClamp :=
   measurable_const.max (measurable_id.min measurable_const)
 
+/-- The clamping symbol is nonnegative. -/
 theorem beamClamp_nonneg (t : ℝ) : 0 ≤ beamClamp t := le_max_left _ _
 
+/-- The clamping symbol is bounded by one. -/
 theorem beamClamp_le_one (t : ℝ) : beamClamp t ≤ 1 :=
   max_le zero_le_one (min_le_right _ _)
 
+/-- The clamping symbol is the identity below the threshold. -/
 theorem beamClamp_eq_self {t : ℝ} (ht : t ∈ Set.Ioc (0 : ℝ) 1) : beamClamp t = t := by
   rw [beamClamp, min_eq_left ht.2, max_eq_right ht.1.le]
 
 /-- Symbol of the real Section 9 perturbation. -/
 def beamSymbol (ε : ℝ) (t : ℝ) : ℝ := ε * beamClamp t
 
+/-- The beam symbol is measurable. -/
 theorem measurable_beamSymbol (ε : ℝ) : Measurable (beamSymbol ε) :=
   measurable_const.mul measurable_beamClamp
 
+/-- The beam symbol is bounded by the clamping threshold. -/
 theorem norm_beamSymbol_le (ε : ℝ) (t : ℝ) : ‖beamSymbol ε t‖ ≤ |ε| := by
   rw [beamSymbol, Real.norm_eq_abs, abs_mul, abs_of_nonneg (beamClamp_nonneg t)]
   calc
@@ -180,6 +192,7 @@ theorem beamPerturbation_apply (ε : ℝ) (x : BeamL2) :
       MemLp.toLp (fun t => beamSymbol ε t * x t)
         (memLp_two_mul_real (measurable_beamSymbol ε) (norm_beamSymbol_le ε) x) := rfl
 
+/-- The beam perturbation, as a function. -/
 theorem coeFn_beamPerturbation (ε : ℝ) (x : BeamL2) :
     (beamPerturbation ε x : ℝ → ℝ) =ᵐ[unitIocMeasure]
       fun t => (ε * t) * (x : ℝ → ℝ) t := by
@@ -190,6 +203,7 @@ theorem coeFn_beamPerturbation (ε : ℝ) (x : BeamL2) :
   filter_upwards [hmul, ae_mem_unitIocMeasure] with t ht hmem
   rw [ht, beamSymbol, beamClamp_eq_self hmem]
 
+/-- The beam perturbation is bounded in norm by the clamping threshold. -/
 theorem norm_beamPerturbation_le (ε : ℝ) : ‖beamPerturbation ε‖ ≤ |ε| := by
   refine ContinuousLinearMap.opNorm_le_bound _ (abs_nonneg ε) ?_
   intro F
@@ -381,9 +395,11 @@ theorem beamOneLp_ne_zero : beamOneLp ≠ 0 := by
 def centeredAffineLp (p : DavisKahan1970.Section9.CenteredAffine) : BeamL2 :=
   affineLp (p.constant - p.centered) (2 * p.centered)
 
+/-- The centred affine function lies in the beam trial subspace. -/
 theorem centeredAffineLp_mem_beamTrial (p : DavisKahan1970.Section9.CenteredAffine) :
     centeredAffineLp p ∈ beamTrial := affineLp_mem_beamTrial _ _
 
+/-- Inner product against the centred affine function. -/
 theorem inner_centeredAffineLp (p q : DavisKahan1970.Section9.CenteredAffine) :
     ⟪centeredAffineLp p, centeredAffineLp q⟫_ℝ =
       DavisKahan1970.Section9.CenteredAffine.inner p q := by
@@ -391,6 +407,7 @@ theorem inner_centeredAffineLp (p q : DavisKahan1970.Section9.CenteredAffine) :
     DavisKahan1970.Section9.CenteredAffine.inner]
   ring
 
+/-- Inner product against a multiple of the centred affine function. -/
 theorem inner_centeredAffineLp_mul (ε : ℝ)
     (p q : DavisKahan1970.Section9.CenteredAffine) :
     ⟪centeredAffineLp p, beamPerturbation ε (centeredAffineLp q)⟫_ℝ =
@@ -399,6 +416,7 @@ theorem inner_centeredAffineLp_mul (ε : ℝ)
     DavisKahan1970.Section9.CenteredAffine.tInner]
   ring
 
+/-- Inner product of two multiples of the centred affine function. -/
 theorem inner_mul_centeredAffineLp_mul (ε : ℝ)
     (p q : DavisKahan1970.Section9.CenteredAffine) :
     ⟪beamPerturbation ε (centeredAffineLp p),

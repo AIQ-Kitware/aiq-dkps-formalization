@@ -25,24 +25,41 @@ namespace Real
 
 noncomputable section
 
+/-- The real `L²(0,1]` of the free-beam model. -/
 abbrev BeamL2 : Type := Scalar.BeamL2 (𝕜 := ℝ)
+/-- The real pair space `L² ⊕₂ L²` carrying a function and its second
+derivative. -/
 abbrev BeamPairSpace : Type := Scalar.BeamPairSpace (𝕜 := ℝ)
+/-- The real form domain: the pairs that are genuinely a function and its
+second derivative. -/
 abbrev BeamV : Type := Scalar.BeamV (𝕜 := ℝ)
 
+/-- First coordinate of a pair: the function. -/
 abbrev pairFst : BeamPairSpace →L[ℝ] BeamL2 := Scalar.pairFst (𝕜 := ℝ)
+/-- Second coordinate of a pair: its second derivative. -/
 abbrev pairSnd : BeamPairSpace →L[ℝ] BeamL2 := Scalar.pairSnd (𝕜 := ℝ)
+/-- The form domain as a submodule of the pair space, cut out by the weak
+second-derivative identity against every bump. -/
 abbrev beamFormSubmodule : Submodule ℝ BeamPairSpace := Scalar.beamFormSubmodule (𝕜 := ℝ)
 
+/-- The form domain's inclusion into `L²`, reading off the function. -/
 abbrev beamEmbed : BeamV →L[ℝ] BeamL2 := Scalar.beamEmbed (𝕜 := ℝ)
+/-- The form domain's second-derivative map into `L²`. -/
 abbrev beamSnd : BeamV →L[ℝ] BeamL2 := Scalar.beamSnd (𝕜 := ℝ)
 
+/-- A continuous function as an element of `L²(0,1]`. -/
 abbrev contToLp := Scalar.contToLp (𝕜 := ℝ)
+/-- The constant function `1` in `L²(0,1]`. -/
 abbrev beamOneLp : BeamL2 := Scalar.beamOneLp (𝕜 := ℝ)
+/-- The identity function `t ↦ t` in `L²(0,1]`. -/
 abbrev beamIdLp : BeamL2 := Scalar.beamIdLp (𝕜 := ℝ)
 
+/-- The coercive bending form of the real model, as form data. -/
 abbrev beamCoerciveFormData := Scalar.beamCoerciveFormData (𝕜 := ℝ)
+/-- The shifted bending form of the real model, as form data. -/
 abbrev beamShiftedFormData := Scalar.beamShiftedFormData (𝕜 := ℝ)
 
+/-- Membership in the form domain, tested against every interval bump. -/
 theorem mem_beamFormSubmodule_iff (p : BeamPairSpace) :
     p ∈ beamFormSubmodule ↔
       ∀ k : ℕ,
@@ -50,11 +67,15 @@ theorem mem_beamFormSubmodule_iff (p : BeamPairSpace) :
           ∫ t, (pairSnd p : ℝ → ℝ) t * intervalBump k t ∂unitIocMeasure :=
   Scalar.mem_beamFormSubmodule_iff (𝕜 := ℝ) p
 
+/-- Every form-domain element is affine plus the second primitive of its
+second derivative. -/
 theorem beamV_repr (p : BeamV) :
     ∃ a b : ℝ, (beamEmbed p : ℝ → ℝ) =ᵐ[unitIocMeasure]
       fun t => a + b * t + secondPrimitive ((beamSnd p : ℝ → ℝ)) t :=
   Scalar.beamV_repr (𝕜 := ℝ) p
 
+/-- A twice continuously differentiable function pairs with its second
+derivative inside the form domain. -/
 theorem contPair_mem {f f1 f2 : ℝ → ℝ}
     (hf : Continuous f) (hf1 : Continuous f1) (hf2 : Continuous f2)
     (hd : ∀ x, HasDerivAt f (f1 x) x)
@@ -63,14 +84,17 @@ theorem contPair_mem {f f1 f2 : ℝ → ℝ}
       (contToLp f hf, contToLp f2 hf2) ∈ beamFormSubmodule :=
   Scalar.contPair_mem (𝕜 := ℝ) hf hf1 hf2 hd hd1
 
+/-- A continuous function represents itself almost everywhere. -/
 theorem coeFn_contToLp (g : ℝ → ℝ) (hg : Continuous g) :
     (contToLp g hg : ℝ → ℝ) =ᵐ[unitIocMeasure] g :=
   Scalar.coeFn_contToLp (𝕜 := ℝ) g hg
 
+/-- `beamOneLp` is the constant `1` almost everywhere. -/
 theorem coeFn_beamOneLp :
     (beamOneLp : ℝ → ℝ) =ᵐ[unitIocMeasure] fun _ => 1 :=
   Scalar.coeFn_beamOneLp (𝕜 := ℝ)
 
+/-- `beamIdLp` is `t ↦ t` almost everywhere. -/
 theorem coeFn_beamIdLp :
     (beamIdLp : ℝ → ℝ) =ᵐ[unitIocMeasure] fun t => t :=
   Scalar.coeFn_beamIdLp (𝕜 := ℝ)
