@@ -69,182 +69,6 @@
       "notes": ""
     },
     {
-      "id": "circle-param",
-      "title": "Positive circle parameterization",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/CircleContourGeometry.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.positiveCircleParam",
-      "kind": "construction",
-      "dependencies": [],
-      "frontier_nodes": [
-        "s8-circle-integrand"
-      ],
-      "confidence": "high",
-      "notes": ""
-    },
-    {
-      "id": "circle-contour",
-      "title": "Piecewise-C1 positive circle contour",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/CircleContourGeometry.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.positiveCircleContour",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "circle-param"
-      ],
-      "frontier_nodes": [
-        "s8-circle-integral"
-      ],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "circle-winding-one",
-      "title": "Normalized circle winding equals one inside",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/CircleContourGeometry.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.normalizedWinding_positiveCircle_eq_one",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "circle-contour"
-      ],
-      "frontier_nodes": [
-        "s8-scalar-cauchy"
-      ],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "circle-winding-zero",
-      "title": "Normalized circle winding vanishes outside",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/CircleContourGeometry.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.normalizedWinding_positiveCircle_eq_zero",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "circle-contour"
-      ],
-      "frontier_nodes": [
-        "s8-scalar-cauchy"
-      ],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "uniform-circle-separation",
-      "title": "Uniform spectral separation by one circle",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/CircleContourGeometry.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.UniformCircleSeparation",
-      "kind": "interface",
-      "dependencies": [],
-      "frontier_nodes": [
-        "s8-circle-continuation-data"
-      ],
-      "confidence": "high",
-      "notes": ""
-    },
-    {
-      "id": "circle-separating-contour",
-      "title": "Convert circle geometry into the production contour record",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/CircleContourGeometry.lean",
-      "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.UniformCircleSeparation.separatingContour",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "uniform-circle-separation",
-        "circle-winding-one",
-        "circle-winding-zero"
-      ],
-      "frontier_nodes": [
-        "s8-riesz-eq-spectral",
-        "s8-circle-continuation-data"
-      ],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "realized-circle-data",
-      "title": "Bridge circle separation into the production continuation layer",
-      "module": "DavisKahan.MathAhead.HiddenFoundations.ContourReuseBridge",
-      "file": "DavisKahan/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.RealizedCircleContinuationData",
-      "kind": "interface",
-      "dependencies": [],
-      "frontier_nodes": [
-        "s8-circle-continuation-data"
-      ],
-      "confidence": "high",
-      "notes": ""
-    },
-    {
-      "id": "circle-continuation-witness",
-      "title": "Reuse the existing contour theory to obtain a continuation witness",
-      "module": "DavisKahan.MathAhead.HiddenFoundations.ContourReuseBridge",
-      "file": "DavisKahan/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.RealizedCircleContinuationData.toSpectralContinuationWitness",
-      "kind": "bridge",
-      "dependencies": [
-        "realized-circle-data"
-      ],
-      "frontier_nodes": [
-        "s8-continuation-witness"
-      ],
-      "confidence": "high",
-      "notes": ""
-    },
-    {
-      "id": "circle-projection-continuity",
-      "title": "Continuity of the selected projection path",
-      "module": "DavisKahan.MathAhead.HiddenFoundations.ContourReuseBridge",
-      "file": "DavisKahan/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.RealizedCircleContinuationData.continuous_selectedProjectionPath",
-      "kind": "bridge",
-      "dependencies": [
-        "circle-continuation-witness"
-      ],
-      "frontier_nodes": [
-        "s8-riesz-path-continuity",
-        "s8-continuation-endpoints"
-      ],
-      "confidence": "high",
-      "notes": ""
-    },
-    {
-      "id": "circle-projection-lipschitz",
-      "title": "Norm bound for the selected projection path",
-      "module": "DavisKahan.MathAhead.HiddenFoundations.ContourReuseBridge",
-      "file": "DavisKahan/MathAhead/HiddenFoundations/ContourReuseBridge.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.RealizedCircleContinuationData.norm_selectedProjectionPath_sub_le",
-      "kind": "bridge",
-      "dependencies": [
-        "circle-continuation-witness"
-      ],
-      "frontier_nodes": [
-        "s8-riesz-norm-bound",
-        "s8-projection-lipschitz"
-      ],
-      "confidence": "high",
-      "notes": ""
-    },
-    {
-      "id": "circle-to-realized-data",
-      "title": "Construct realized continuation data from explicit circle geometry",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/CircleContourGeometry.lean",
-      "declaration": "ForMathlib.DavisKahan.Experimental.MathAhead.HiddenFoundations.UniformCircleSeparation.toRealizedCircleContinuationData",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "circle-separating-contour",
-        "realized-circle-data"
-      ],
-      "frontier_nodes": [
-        "s8-circle-continuation-data"
-      ],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
       "id": "hs-completeness",
       "title": "Completeness of the paper Hilbert--Schmidt gauge",
       "module": "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
@@ -472,19 +296,7 @@
     {
       "id": "section8-circle",
       "title": "Circle geometry feeding the existing contour continuation engine",
-      "nodes": [
-        "circle-param",
-        "circle-contour",
-        "circle-winding-one",
-        "circle-winding-zero",
-        "uniform-circle-separation",
-        "circle-separating-contour",
-        "realized-circle-data",
-        "circle-continuation-witness",
-        "circle-projection-continuity",
-        "circle-projection-lipschitz",
-        "circle-to-realized-data"
-      ]
+      "nodes": []
     },
     {
       "id": "sylvester-real-ideals",
@@ -523,6 +335,7 @@
   "notes": [
     "Promoted polar decomposition and nonacute Section 3 declarations are intentionally absent from this hidden-foundation manifest; their canonical owners are DavisKahan/Geometry/Polar modules.",
     "PROMOTED AND REMOVED 2026-08-27: the nine Ky Fan / real-descent Sylvester nodes (kyfan-seminorm, kyfan-bochner, kyfan-unitary-invariance, complex-separated-sylvester-kyfan, complexify-sylvester, complexify-spectrum, complexify-separation, real-separated-sylvester-kyfan, real-separated-sylvester) are no longer hidden foundations. The reusable Ky Fan machinery is ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFanBochner.lean (ContinuousLinearMap.kyFanGauge_integral_le, continuous_kyFanGauge, kyFanGauge_unitary_comp_comp); the arbitrary-Hilbert complex and real pi/2 finite-Ky-Fan Sylvester theorems and the ideal-gauge corollary are DavisKahan/InfiniteDimensional/Sylvester/GeneralSeparationKyFan.lean (TauCeti.DavisKahanExt.kyFan_sylvester_le_of_generalSeparation{,_real} and idealGauge_sylvester_le_of_generalSeparation_real); the complexification of full-space spectral separation is TauCeti.DavisKahan.Foundation.RealComplexification.spectraSeparated_top_complexify in DavisKahan/SpectralTheory/Complexification/Spectrum.lean. The invertibility and real-spectrum transports were duplicates of the stable isUnit_complexify_iff / realSpectrum_complexify in that same module and were deleted rather than promoted. The two source files are gone and were not replaced by forwarding modules.",
-    "2026-08-27: the four `SpectralMultiplicityFoundation` / `CompactPositiveListFoundation` interface and bridge nodes were removed with their module.  Both interfaces were superseded by actual theorems -- `TauCeti.sameSpectralMultiplicity_iff_operatorUnitaryEquiv` and `TauCeti.exists_linearIsometryEquiv_intertwining_of_approximationNumber_eq` -- and neither structure had a consumer outside its own file."
+    "2026-08-27: the four `SpectralMultiplicityFoundation` / `CompactPositiveListFoundation` interface and bridge nodes were removed with their module.  Both interfaces were superseded by actual theorems -- `TauCeti.sameSpectralMultiplicity_iff_operatorUnitaryEquiv` and `TauCeti.exists_linearIsometryEquiv_intertwining_of_approximationNumber_eq` -- and neither structure had a consumer outside its own file.",
+    "2026-08-27: the eleven MathAhead circle-contour nodes were removed with `DavisKahan/MathAhead/` and `DavisKahan/Experimental/MathAhead/`.  That route is superseded by `DavisKahan/SpectralTheory/CircleContour.lean` (circle path, contour, winding law, separating contour, spectral margin) together with the continuation witness `Frontier.Section8.spectralContinuationWitness_of_circleData`, which builds the witness the MathAhead `RealizedCircleContinuationData` bridge was designed to produce."
   ]
 }

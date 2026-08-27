@@ -68,29 +68,6 @@ EXCLUDED: dict[str, str] = {
         "`git log --all -S` over each shows the only file that has ever contained them is "
         "this one.  Nothing moved out from under it.  Delete-or-rewrite is a decision for "
         "an owner, not a repair -- same disposition as `Core/Unbounded` below.",
-    "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry":
-        "**CLASS: a Mathlib-era migration, not a rename sweep.**  21 errors.  This entry "
-        "said on 2026-07-31 that 'every unknown name has a live successor'; that was "
-        "measured by grepping Mathlib for similar names and **it does not survive trying "
-        "them** -- each substitution clears its own error and exposes the next, which is the "
-        "same cascade at lemma level that `ContourReuseBridge` showed at module level.  "
-        "**The blocker is `Complex.abs`**: the bundled `AbsoluteValue` is gone from pinned "
-        "Mathlib and only the `Complex.abs_*` lemmas remain, the idiom now being the norm.  "
-        "Two other files in this repository (`Geometry/Polar/DirectRotationSquare.lean`, "
-        "`ForTauCeti/.../LinearPMap/SpectralMeasure.lean`) use the *lemmas* and build; this "
-        "module uses the *bundle* (`map_sub Complex.abs`) and cannot.  Measured "
-        "substitutions: `circleIntegral_def` -> `circleIntegral_def_Icc` clears that error "
-        "and exposes `intervalIntegral.integral_comp_mul_deriv_Icc`, also absent; "
-        "`HasDerivAt.ofReal`/`Continuous.ofReal` need restructuring rather than renaming, "
-        "because `HasDerivAt.ofReal_comp` has a different shape.  Other names that do have "
-        "successors: "
-        "`Complex.circleIntegral_eq_zero_of_differentiable_on_ball` -> "
-        "`circleIntegral_eq_zero_of_differentiable_on_off_countable` (generalised, so the "
-        "argument list changes); `Complex.abs.map_sub` -> renamed with the `Complex.abs` "
-        "restructuring.  Also `Continuous.ofReal` and `HasFDerivAtFilter.ofReal`.  "
-        "**Newly visible on 2026-07-31**: it inherited its exclusion from "
-        "`ContourReuseBridge` until that was repaired, and repairing one module is what "
-        "exposed the next.",
     "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.OperatorAbsoluteValueComplex":
         "KyFanDominantIdealFamily.gaugeReal no longer exists.",
     "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.ReflectionTransport":
@@ -115,8 +92,6 @@ EXCLUDED_PREFIXES: dict[str, str] = {
         "not aggregated, and no module says why.  Recorded here so the absence is at "
         "least visible; deciding whether it should be aggregated is lane "
         "`{lane:DK-EXPCOVER-REPAIR}`.",
-    "DavisKahan.Experimental.MathAhead.":
-        "not aggregated, and no module says why -- same as `Frontier`.",
     "DavisKahan.Experimental.Scratch.":
         "not aggregated; the directory name is the reason, but it was nowhere written "
         "down that nothing compiles it.",
