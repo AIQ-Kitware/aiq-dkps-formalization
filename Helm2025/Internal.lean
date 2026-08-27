@@ -41,6 +41,81 @@ variable {d d' : ℕ}
 Lemma: If a sequence of random variables converges in probability to zero and is uniformly bounded, then their expectations converge to zero.
 -/
 /--
+Convergence in probability together with an **integrable envelope** gives convergence of the
+expectations.
+
+This generalises `expectation_converges_of_prob_converges_bounded` from a constant dominating
+bound `M` to an integrable dominating function `g`.  The distinction is what lets the
+development drop its compact-label hypothesis: the paper's Assumptions 3 and 4 give
+boundedness of the predictions and continuity of the loss in the prediction *for each fixed
+label*, which bounds the loss on the prediction set separately for each label, with a bound
+depending on that label.  They do not give a bound uniform in the label.  Domination by an
+integrable envelope is the weakest condition this argument uses, and it is exactly what the
+paper already needs in order for the risk to be finite.
+
+Same two-region split as the bounded version: on `{|X u| ≤ ε}` the integrand is at most `ε`,
+and on `{|X u| > ε}` it is at most `g` over a set whose measure tends to zero, so that
+contribution vanishes by absolute continuity of the integral of an integrable function.
+-/
+lemma expectation_converges_of_prob_converges_dominated {Ω : Type*} [MeasurableSpace Ω]
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    (X : ℕ → Ω → ℝ) (g : Ω → ℝ)
+    (h_meas : ∀ u, Measurable (X u))
+    (hg : Integrable g P)
+    (h_dom : ∀ u, ∀ᵐ ω ∂P, |X u ω| ≤ g ω)
+    (h_conv : ConvergesInProbabilityToZero P X) :
+    Tendsto (fun u => ∫ ω, |X u ω| ∂P) atTop (𝓝 0) := by
+  have hXint : ∀ u, Integrable (fun ω => |X u ω|) P := by
+    intro u
+    refine Integrable.mono' hg ((h_meas u).abs.aestronglyMeasurable) ?_
+    filter_upwards [h_dom u] with ω hω
+    simpa using hω
+  rw [Metric.tendsto_atTop]
+  intro δ hδ
+  set ε : ℝ := δ / 3 with hεdef
+  have hεpos : 0 < ε := by positivity
+  set S : ℕ → Set Ω := fun u => {ω | ε < |X u ω|} with hSdef
+  have hSmeas : ∀ u, MeasurableSet (S u) :=
+    fun u => measurableSet_lt measurable_const (h_meas u).abs
+  have hPS : Tendsto (fun u => P (S u)) atTop (𝓝 0) := by
+    simpa [hSdef, gt_iff_lt] using h_conv ε hεpos
+  have htail := hg.tendsto_setIntegral_nhds_zero hPS
+  rw [Metric.tendsto_atTop] at htail
+  obtain ⟨N, hN⟩ := htail ε hεpos
+  refine ⟨N, fun u hu => ?_⟩
+  have hnonneg : 0 ≤ ∫ ω, |X u ω| ∂P := integral_nonneg fun _ => abs_nonneg _
+  -- the tail region is dominated by `g`
+  have hS_le : ∫ ω in S u, |X u ω| ∂P ≤ ∫ ω in S u, g ω ∂P := by
+    refine setIntegral_mono_ae_restrict ((hXint u).integrableOn) hg.integrableOn ?_
+    exact ae_restrict_of_ae (h_dom u)
+  -- the small-value region contributes at most `ε`
+  have hC_le : ∫ ω in (S u)ᶜ, |X u ω| ∂P ≤ ε := by
+    have hconst : IntegrableOn (fun _ : Ω => ε) ((S u)ᶜ) P := integrableOn_const
+    have h1 : ∫ ω in (S u)ᶜ, |X u ω| ∂P ≤ ∫ _ω in (S u)ᶜ, ε ∂P := by
+      refine setIntegral_mono_on ((hXint u).integrableOn) hconst ((hSmeas u).compl) ?_
+      intro ω hω
+      simpa [hSdef, not_lt] using hω
+    refine h1.trans ?_
+    rw [setIntegral_const, smul_eq_mul]
+    have hle1 : P.real ((S u)ᶜ) ≤ 1 := by
+      simpa [Measure.real] using
+        ENNReal.toReal_mono ENNReal.one_ne_top (prob_le_one (μ := P) (s := (S u)ᶜ))
+    have hnn : 0 ≤ P.real ((S u)ᶜ) := by positivity
+    nlinarith [hεpos.le, hle1, hnn]
+  have hsplit : ∫ ω, |X u ω| ∂P ≤ ∫ ω in S u, g ω ∂P + ε := by
+    have := integral_add_compl (hSmeas u) (hXint u)
+    calc ∫ ω, |X u ω| ∂P
+        = ∫ ω in S u, |X u ω| ∂P + ∫ ω in (S u)ᶜ, |X u ω| ∂P := this.symm
+      _ ≤ ∫ ω in S u, g ω ∂P + ε := add_le_add hS_le hC_le
+  have htail_small : ∫ ω in S u, g ω ∂P < ε := by
+    have := hN u hu
+    rw [Real.dist_eq, sub_zero] at this
+    exact (le_abs_self _).trans_lt this
+  rw [Real.dist_eq, sub_zero, abs_of_nonneg hnonneg]
+  have : ∫ ω, |X u ω| ∂P < ε + ε := by linarith
+  linarith [hεdef ▸ this]
+
+/--
 Internal helper (a bounded-convergence / dominated-convergence step used in the proof
 of Theorem 1): convergence in probability to zero plus uniform boundedness implies
 convergence of the expectations `E|X_u|` to zero. Not stated separately in the paper.
@@ -484,6 +559,40 @@ lemma ae_mem_of_ae_mem_pi {ι : Type*} [Fintype ι] {α : ι → Type*}
           rfl;
         rw [ h_preimage ];
         (expose_names; exact Measure.pi_eval_preimage_null μ hS_1)
+
+/--
+An **integrable envelope** for the loss over a set of predictions.
+
+`LossEnvelope P loss K` says the loss at any prediction in `K` is dominated by a single
+integrable function of the label alone.  This is the hypothesis that replaces
+`BoundedLabelSupport`, which the retained paper never states.  It is strictly weaker:
+compact labels plus a continuous loss give a *constant* envelope, and a constant is
+integrable against a probability measure.  It is also no more than the paper already needs,
+since without an integrable envelope the risk it writes down need not be finite.
+-/
+def LossEnvelope (d d' : ℕ) (P : Measure (E d × Y d'))
+    (loss : LossFunction d') (K : Set (Y d')) : Prop :=
+  ∃ g : Y d' → ℝ, Integrable (fun z : E d × Y d' => g z.2) P ∧
+    ∀ᵐ z ∂P, ∀ p ∈ K, |loss p z.2| ≤ g z.2
+
+/--
+Compact label support gives an integrable envelope, so nothing that held under the old
+hypothesis is lost.  The envelope is the constant supplied by continuity of the loss on the
+product of the compact prediction set with the compact label set.
+-/
+lemma lossEnvelope_of_boundedLabelSupport (d d' : ℕ)
+    (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
+    (loss : LossFunction d') (K : Set (Y d'))
+    (hK : IsCompact K)
+    (h_cont_loss : ContinuousLoss d' loss)
+    (h_bound_label : BoundedLabelSupport d d' P) :
+    LossEnvelope d d' P loss K := by
+  obtain ⟨K_label, hK_label, hK_label'⟩ := h_bound_label
+  obtain ⟨M, hM⟩ := IsCompact.exists_bound_of_continuousOn (hK.prod hK_label)
+    h_cont_loss.continuousOn
+  refine ⟨fun _ => M, integrable_const M, ?_⟩
+  filter_upwards [hK_label'] with z hz p hp
+  simpa using hM (p, z.2) ⟨hp, hz⟩
 
 /--
 Internal helper: the per-sample loss is almost surely bounded by a constant `M` that is
