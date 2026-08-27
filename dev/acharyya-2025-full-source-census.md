@@ -20,9 +20,8 @@ The strongest paper-facing change since the earlier audit is hypothesis reductio
 | --- | ---: |
 | `compiled_equivalent` | 2 |
 | `compiled_by_composition` | 2 |
-| `compiled_source_repair` | 2 |
+| `compiled_source_repair` | 3 |
 | `compiled_role_replaced` | 11 |
-| `not_represented` | 1 |
 | `not_proof_debt` | 1 |
 
 ## Semantic-alignment summary
@@ -31,9 +30,8 @@ The strongest paper-facing change since the earlier audit is hypothesis reductio
 | --- | ---: |
 | `equivalent_encoding` | 2 |
 | `by_composition` | 2 |
-| `source_repair` | 2 |
+| `source_repair` | 3 |
 | `proof_replaced` | 11 |
-| `missing` | 1 |
 | `out_of_scope` | 1 |
 
 ## Items
@@ -45,7 +43,7 @@ The strongest paper-facing change since the earlier audit is hypothesis reductio
 | `A25-C1` | `major` | Corollary 1 | `compiled_by_composition` | `by_composition` | `proved_in_build` |
 | `A25-A1` | `major` | Assumption 1 | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
 | `A25-A2` | `major` | Assumption 2 | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
-| `A25-P1` | `major` | Proposition 1 | `not_represented` | `missing` | `absent` |
+| `A25-P1` | `major` | Proposition 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A25-T2` | `headline` | Theorem 2 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A25-C2` | `headline` | Corollary 2 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A25-PA1` | `technical` | Proposition A.1 | `compiled_role_replaced` | `proof_replaced` | `proved_in_build` |
@@ -70,12 +68,6 @@ The response-mean, entrywise CMDS, union-bound, and n^3/r algebra are compiled, 
 
 Progress. prob_uniformResponseMeanClose_ge_of_secondMoment supplies the probability step in the displayed finite shape: for a fixed model count, the probability that every sample response mean is within eta of its population counterpart is at least 1 - N sigma^2 / eta^2. Until now the Chebyshev and union-bound machinery existed only in its asymptotic consequence (HighProbAtTop), which cannot express the paper's explicit bound. What remains between this and the printed Theorem 1 is the passage from response means to entries of the doubly centred matrix, where the source's factor 16 and its 1/(rm) scaling arise.
 
-### `riemannian-proposition` — Proposition 1 manifold sufficient condition is unformalized
-
-**Kind:** `hard_math`
-
-The compact Riemannian-manifold/geodesic-distance sufficient condition for Assumptions 1 and 2 has no corresponding Acharyya2025 declaration.
-
 ### `v1-norm-inconsistency` — arXiv v1 Theorem 2 and Corollary 2 disagree about the norm
 
 **Kind:** `source_audit`
@@ -97,6 +89,18 @@ The DKPS chain does not use one dissimilarity convention. Acharyya 2024 (line 17
 Consequence. Rescaling every dissimilarity by c > 0 rescales the CMDS configuration by c, the doubly centred matrix by c^2 and its eigenvalues by c^2, so a vanishing-error conclusion survives the substitution. What does not survive is the literal constants: Acharyya 2025 Theorem 2's C1, C2, C3 are stated in terms of eigenvalues of B under the 1/sqrt m scaling. And in every regime where m grows the factor is not a constant, so the substitution is not a harmless choice of units there.
 
 Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extraction in which the fraction renders as "1m" with a separate 1 and m around a radical. It is consistent across both the population and sample definitions, but it should be confirmed against the published PDF before any statement is changed on the strength of it.
+
+### `proposition1-omits-spread-condition` — Proposition 1's hypothesis constrains the ambient manifold, not the model selection
+
+**Kind:** `source_defect`
+
+Superseding the earlier riemannian-proposition entry, which read: The compact Riemannian-manifold/geodesic-distance sufficient condition for Assumptions 1 and 2 has no corresponding Acharyya2025 declaration.
+
+Proposition 1 asserts that Assumptions 1 and 2 hold as soon as every generative model is associated with a vector on a d-dimensional compact Riemannian manifold in an ambient R^q whose pairwise geodesic distances are the population dissimilarities. The hypothesis is about the ambient space; the conclusion is about the placement of the models within it. Assumption 1 asks the doubly centred population matrix to have rank d and Assumption 2 asks its d-th eigenvalue to stay above a positive constant, and neither survives a degenerate placement.
+
+Machine-checked: associate every model with one and the same point. The population dissimilarities are then all zero -- and they are literally the pairwise geodesic distances of any compact geodesically convex set containing that point, a closed ball of the ambient space for instance -- so the hypothesis is met. eigenvalues_classicalMDSMatrix_const_eq_zero shows the doubly centred matrix vanishes identically, no_eigenvalue_floor_for_const_selection that no positive constant bounds its eigenvalues below at any stage, and rank_classicalMDSMatrix_const_eq_zero that its rank is zero rather than d. Both conclusions fail.
+
+The proposition is stated in the source without proof. The missing clause is a spread condition on the selection: the models must fill the manifold well enough that the doubly centred matrix stays nondegenerate as n grows. The source gives no such condition, and no natural minimal one is derivable from what it does state, so this is recorded as a refutation with the obstruction named rather than as a repaired theorem.
 
 ## Detail
 
@@ -166,14 +170,14 @@ Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extractio
 * **source anchor:** Proposition 1 (proposition, section 4)
 * **source locator:** `Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md:352-357`
 * **importance:** `major`
-* **status / verification:** `not_represented` / `absent`
-* **semantic alignment:** `missing` — No manifold/geodesic sufficient-condition theorem was found in the Acharyya2025 package or its cited foundation modules.
+* **status / verification:** `compiled_source_repair` / `proved_in_build`
+* **semantic alignment:** `source_repair` — The proposition as printed is false, and the refutation is machine-checked: a constant model selection satisfies its hypothesis -- the pairwise geodesic distances of a compact geodesically convex set containing the point are the population dissimilarities -- while the doubly centred population matrix vanishes, so Assumption 1's rank d and Assumption 2's eigenvalue floor both fail. The hypothesis constrains the ambient manifold and the conclusion constrains the placement of the models within it. No repair is proved because the source supplies no spread condition on the selection and none is derivable from what it states; the obstruction is recorded explicitly instead.
 * **source claim:** If model latent points lie on a d-dimensional compact Riemannian manifold and population dissimilarities equal geodesic distances, Assumptions 1 and 2 hold.
-* **Lean declarations:** _none_
+* **Lean declarations:** `Acharyya2025.ManifoldCondition.classicalMDSMatrix_const_eq_zero`, `Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_const_eq_zero`, `Acharyya2025.ManifoldCondition.no_eigenvalue_floor_for_const_selection`, `Acharyya2025.ManifoldCondition.rank_classicalMDSMatrix_const_eq_zero`
 * **planned declarations:** `Acharyya2025.Riemannian.proposition1`
-* **gap refs:** `riemannian-proposition`
-* **notes:** This is the clearest remaining numbered-result coverage gap in the main text.
-* **next action:** Formalize only if full-paper numbered-result coverage is a goal; it is not needed by Quench.
+* **gap refs:** `proposition1-omits-spread-condition`
+* **notes:** The source states Proposition 1 without proof. Nothing downstream in Acharyya 2025 or Quench depends on it; the eigenvalue floor is assumed directly where it is used.
+* **next action:** If a repair is wanted, formulate a spread condition on the model selection strong enough to keep the doubly centred matrix nondegenerate as n grows, and prove Assumptions 1 and 2 from it.
 
 ### `A25-T2` — Aligned CMDS configuration concentration
 
