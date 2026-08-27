@@ -25,6 +25,7 @@ Formalized by Claude Fable 5 (claude-fable-5[1m]).
 import Acharyya2024.Common
 import Acharyya2024.RawStress
 import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
+import ForTauCeti.Probability.RigidAlignment
 
 open scoped BigOperators Topology
 open Filter MeasureTheory
@@ -751,5 +752,222 @@ theorem growing_models_growing_queries_perStage_consistency_canonical_of_sample_
     (fun r ω k => RawStress.mdsConfig_mem (d := d) (Dseq r ω k))
     (fun k => RawStress.uniquePairProfile_of_exists_realizes (hexact k))
     hsample hlimit
+
+/--
+**Corollary 1, in probability.**
+
+The almost-sure form above is the one that goes through with a deterministic modulus.  The
+in-probability form needs more: a modulus valid for *every* configuration at once, since the
+sample point is not fixed while the tolerance is chosen.  That is
+`TauCeti.exists_delta_forall_exists_rigidMotion`, and the alignment error it bounds --
+`TauCeti.alignmentError`, the least uniform distance to the target achievable by a rigid motion
+-- is the quantity that converges.
+
+The hypothesis is exactly the conclusion of `rawStress_mds_stability`: each of the finitely many
+pairwise distance errors converges to zero in probability.  A union bound assembles them.
+
+No measurability is required of the estimates.  The events here are existential over the
+isometry group, so they need not be measurable, but a measure is monotone and countably
+subadditive on arbitrary sets and that is all the argument uses.
+-/
+theorem tendsto_measure_alignmentError_of_pairDist_convergesInProbability
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {n d : Nat} (hn : 0 < n)
+    (ψhat : Nat → Ω → Config n d) (ψ : Config n d)
+    (h : ∀ i j, ConvergesInProbability P (fun t ω => pairDistErr (ψhat t ω) ψ i j) 0)
+    {ε : Real} (hε : 0 < ε) :
+    Tendsto (fun t => P {ω | ε < TauCeti.alignmentError ψ (ψhat t ω)}) atTop (𝓝 0) := by
+  classical
+  have : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
+  have hunion : ∀ δ > (0 : Real), Tendsto
+      (fun t => P {ω | ¬ ∀ i j, |‖ψhat t ω i - ψhat t ω j‖ - ‖ψ i - ψ j‖| ≤ δ})
+      atTop (𝓝 0) := by
+    intro δ hδ
+    have hsub : ∀ t, {ω | ¬ ∀ i j, |‖ψhat t ω i - ψhat t ω j‖ - ‖ψ i - ψ j‖| ≤ δ}
+        ⊆ ⋃ p : Fin n × Fin n,
+            {ω | dist (pairDistErr (ψhat t ω) ψ p.1 p.2) 0 > δ} := by
+      intro t ω hω
+      simp only [Set.mem_ofPred_eq, not_forall, not_le] at hω
+      obtain ⟨i, j, hij⟩ := hω
+      refine Set.mem_iUnion.mpr ⟨(i, j), ?_⟩
+      simp only [Set.mem_ofPred_eq, gt_iff_lt, Real.dist_eq, sub_zero, pairDistErr, pairDist,
+        abs_abs]
+      exact hij
+    refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds
+      (f := fun t => P {ω | ¬ ∀ i j, |‖ψhat t ω i - ψhat t ω j‖ - ‖ψ i - ψ j‖| ≤ δ})
+      (h := fun t => ∑ p : Fin n × Fin n,
+        P {ω | dist (pairDistErr (ψhat t ω) ψ p.1 p.2) 0 > δ}) ?_
+      (Filter.Eventually.of_forall fun _ => bot_le)
+      (Filter.Eventually.of_forall fun t => ?_)
+    · have hsum : Tendsto (fun t => ∑ p : Fin n × Fin n,
+          P {ω | dist (pairDistErr (ψhat t ω) ψ p.1 p.2) 0 > δ}) atTop (𝓝 0) := by
+        have := tendsto_finset_sum (Finset.univ : Finset (Fin n × Fin n))
+          (fun p _ => h p.1 p.2 δ hδ)
+        simpa using this
+      exact hsum
+    · calc P {ω | ¬ ∀ i j, |‖ψhat t ω i - ψhat t ω j‖ - ‖ψ i - ψ j‖| ≤ δ}
+          ≤ P (⋃ p : Fin n × Fin n,
+              {ω | dist (pairDistErr (ψhat t ω) ψ p.1 p.2) 0 > δ}) := measure_mono (hsub t)
+        _ ≤ ∑' p : Fin n × Fin n,
+              P {ω | dist (pairDistErr (ψhat t ω) ψ p.1 p.2) 0 > δ} := measure_iUnion_le _
+        _ = ∑ p : Fin n × Fin n,
+              P {ω | dist (pairDistErr (ψhat t ω) ψ p.1 p.2) 0 > δ} := tsum_fintype _
+  exact TauCeti.tendsto_measure_alignmentError_gt P ψhat (fun _ => ψ)
+    (fun _ _ => measurable_const) hunion hε
+
+/--
+**Corollary 1, coordinate convergence in probability.**
+
+The printed corollary asserts convergence of the aligned coordinates, not of the alignment
+error.  `TauCeti.alignedConfig` performs the alignment inside the estimator -- sample point by
+sample point, up to a slack `s t` that may be taken to vanish -- so its coordinates converge in
+probability to the target's.
+
+The alignment is therefore chosen *inside* the probability.  The source writes "there exist
+sequences `W^(u)` and `a^(u)`" outside it, which the argument does not support, since the
+aligning motion depends on the estimate and hence on the sample point; see the census gap
+`corollary1-deterministic-alignment`.
+-/
+theorem tendsto_measure_alignedConfig_dist_gt
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {n d : Nat} (hn : 0 < n)
+    (ψhat : Nat → Ω → Config n d) (ψ : Config n d)
+    (s : Nat → Real) (hs : ∀ t, 0 < s t) (hs0 : Tendsto s atTop (𝓝 0))
+    (h : ∀ i j, ConvergesInProbability P (fun t ω => pairDistErr (ψhat t ω) ψ i j) 0)
+    {ε : Real} (hε : 0 < ε) :
+    Tendsto
+      (fun t => P {ω | ∃ i, ε < ‖TauCeti.alignedConfig ψ (ψhat t ω) (s t) i - ψ i‖})
+      atTop (𝓝 0) := by
+  classical
+  have : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
+  have hAE := tendsto_measure_alignmentError_of_pairDist_convergesInProbability P hn ψhat ψ h
+    (ε := ε / 2) (by linarith)
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hAE
+    (Filter.Eventually.of_forall fun _ => bot_le) ?_
+  filter_upwards [Filter.Tendsto.eventually_lt_const
+    (show (0 : Real) < ε / 2 by linarith) hs0] with t hts
+  refine measure_mono fun ω hω => ?_
+  obtain ⟨i, hi⟩ := hω
+  have hle := TauCeti.norm_alignedConfig_sub_le ψ (ψhat t ω) (hs t) i
+  show ε / 2 < TauCeti.alignmentError ψ (ψhat t ω)
+  linarith
+
+/-! ### Corollary 1 as printed is false
+
+The source writes "there exist sequences `W^(u)` and `a^(u)`" *outside* the probability: one
+orthogonal map and one translation per stage, serving every sample point.  The argument does not
+support that, and neither does the mathematics.  A raw-stress minimizer is determined only up to
+a rigid motion, so a legitimate selection may return a reflected copy on some sample points and
+the original on others.  Every pairwise distance is then exactly correct at every stage, so the
+hypothesis holds in its strongest form, while no single motion can align both branches.
+
+The repair is `tendsto_measure_alignedConfig_dist_gt`: choose the motion inside the probability,
+sample point by sample point.  That is what the estimator can actually do, and it is what the
+corollary's downstream uses need.
+-/
+
+/-- The fair two-point measure on `Bool`, the sample space of the refutation. -/
+noncomputable def coinMeasure : Measure Bool :=
+  (1 / 2 : ENNReal) • Measure.dirac true + (1 / 2 : ENNReal) • Measure.dirac false
+
+instance : IsProbabilityMeasure coinMeasure := by
+  constructor
+  simp only [coinMeasure, Measure.coe_add, Measure.coe_smul, Pi.add_apply, Pi.smul_apply,
+    measure_univ, smul_eq_mul, mul_one]
+  rw [one_div]
+  exact ENNReal.inv_two_add_inv_two
+
+theorem coinMeasure_singleton (b : Bool) : coinMeasure {b} = 1 / 2 := by
+  cases b <;> simp [coinMeasure, Measure.coe_add, Measure.coe_smul]
+
+theorem coinMeasure_ge_half {S : Set Bool} (hS : true ∈ S ∨ false ∈ S) :
+    (1 / 2 : ENNReal) ≤ coinMeasure S := by
+  rcases hS with h | h
+  · rw [← coinMeasure_singleton true]
+    exact measure_mono (Set.singleton_subset_iff.mpr h)
+  · rw [← coinMeasure_singleton false]
+    exact measure_mono (Set.singleton_subset_iff.mpr h)
+
+/--
+**Corollary 1, as printed, is false.**
+
+There is a selection of raw-stress minimizers whose pairwise distances are *exactly* those of
+the target at every stage -- so the corollary's hypothesis holds in its strongest possible form
+-- and yet for no sequence of orthogonal maps `W^(u)` and translations `a^(u)` do the estimated
+coordinates converge in probability to `W^(u) ψ_i + a^(u)`.
+
+The witness is the one-dimensional two-point configuration `(0, x)` together with its reflection
+`(0, -x)`, each selected with probability one half.  Both are genuine minimizers, since raw
+stress depends only on pairwise distances; a single motion within `‖x‖/2` of both would put `x`
+and `-x` within `‖x‖` of each other.
+
+`tendsto_measure_alignedConfig_dist_gt` is the corresponding repair, with the motion chosen
+inside the probability.
+-/
+theorem not_exists_deterministic_rigidMotion_of_pairDist_exact :
+    ∃ (ψhat : Nat → Bool → Config 2 1) (ψ : Config 2 1),
+      (∀ i j, ConvergesInProbability coinMeasure
+        (fun t ω => pairDistErr (ψhat t ω) ψ i j) 0) ∧
+      ∀ (W : Nat → (Rvec 1 ≃ₗᵢ[Real] Rvec 1)) (a : Nat → Rvec 1),
+        ¬ ∀ ε > (0 : Real), Tendsto
+            (fun t => coinMeasure
+              {ω | ∃ i, ε < ‖ψhat t ω i - (W t (ψ i) + a t)‖}) atTop (𝓝 0) := by
+  classical
+  set x : Rvec 1 := EuclideanSpace.single 0 (1 : Real) with hxdef
+  have hxnorm : ‖x‖ = 1 := by simp [hxdef]
+  refine ⟨fun _ ω => if ω then ![0, x] else ![0, -x], ![0, x], ?_, ?_⟩
+  · -- the pairwise distances are exactly right, so the hypothesis holds at every stage
+    intro i j ε hε
+    have hzero : ∀ ω : Bool,
+        pairDistErr (if ω then ![0, x] else ![0, -x]) ![0, x] i j = 0 := by
+      intro ω
+      cases ω <;> fin_cases i <;> fin_cases j <;>
+        simp [pairDistErr, pairDist]
+    have hempty : ∀ _t : Nat,
+        {ω : Bool | dist (pairDistErr (if ω then ![0, x] else ![0, -x])
+          (![0, x] : Config 2 1) i j) 0 > ε} = (∅ : Set Bool) := by
+      intro _t
+      ext ω
+      simp [hzero ω, not_lt.mpr hε.le]
+    refine Filter.Tendsto.congr (fun t => ?_)
+      (tendsto_const_nhds : Filter.Tendsto (fun _ : Nat => (0 : ENNReal)) Filter.atTop (𝓝 0))
+    rw [hempty t, measure_empty]
+  · -- yet no deterministic alignment sequence works
+    intro W a hcon
+    have h := hcon (1 / 2) (by norm_num)
+    have hmem : ∀ t : Nat,
+        true ∈ {ω : Bool | ∃ i, (1 / 2 : Real) <
+            ‖(if ω then ![0, x] else ![0, -x] : Config 2 1) i
+              - (W t ((![0, x] : Config 2 1) i) + a t)‖} ∨
+        false ∈ {ω : Bool | ∃ i, (1 / 2 : Real) <
+            ‖(if ω then ![0, x] else ![0, -x] : Config 2 1) i
+              - (W t ((![0, x] : Config 2 1) i) + a t)‖} := by
+      intro t
+      by_contra hno
+      push Not at hno
+      obtain ⟨h1, h2⟩ := hno
+      simp only [Set.mem_ofPred_eq, not_exists, not_lt] at h1 h2
+      have e1' : ‖x - (W t x + a t)‖ ≤ 1 / 2 := by simpa using h1 1
+      have e2' : ‖(-x) - (W t x + a t)‖ ≤ 1 / 2 := by simpa using h2 1
+      have htri : ‖x - (-x)‖
+          ≤ ‖x - (W t x + a t)‖ + ‖(W t x + a t) - (-x)‖ := by
+        have hsum : (x - (W t x + a t)) + ((W t x + a t) - (-x)) = x - (-x) := by abel
+        calc ‖x - (-x)‖ = ‖(x - (W t x + a t)) + ((W t x + a t) - (-x))‖ := by rw [hsum]
+          _ ≤ _ := norm_add_le _ _
+      have hrev : ‖(W t x + a t) - (-x)‖ = ‖(-x) - (W t x + a t)‖ := norm_sub_rev _ _
+      have hxx : ‖x - (-x)‖ = 2 := by
+        have hstep : x - (-x) = (2 : Real) • x := by rw [sub_neg_eq_add, two_smul]
+        rw [hstep, norm_smul, hxnorm]
+        simp
+      rw [hxx, hrev] at htri
+      linarith
+    have hhalf : ∀ t : Nat, (1 / 2 : ENNReal) ≤ coinMeasure
+        {ω : Bool | ∃ i, (1 / 2 : Real) <
+          ‖(if ω then ![0, x] else ![0, -x] : Config 2 1) i
+            - (W t ((![0, x] : Config 2 1) i) + a t)‖} :=
+      fun t => coinMeasure_ge_half (hmem t)
+    have hle : (1 / 2 : ENNReal) ≤ 0 :=
+      ge_of_tendsto h (Filter.Eventually.of_forall hhalf)
+    simp at hle
 
 end Acharyya2024.Consistency

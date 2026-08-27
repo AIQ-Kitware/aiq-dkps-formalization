@@ -53,8 +53,8 @@
     },
     "rigid-alignment-corollary": {
       "kind": "source_gap",
-      "title": "Corollary 1 coordinate alignment is not represented in Acharyya2024",
-      "detail": "The source upgrades pairwise-distance convergence to existence of orthogonal W^(u) and translations a^(u) with point-coordinate convergence. Acharyya2024 proves translation invariance and pairwise-distance convergence but has no theorem constructing the source Corollary 1 alignment."
+      "title": "Corollary 1 coordinate alignment -- now represented in Acharyya2024",
+      "detail": "The source upgrades pairwise-distance convergence to existence of orthogonal W^(u) and translations a^(u) with point-coordinate convergence. Acharyya2024 proves translation invariance and pairwise-distance convergence but has no theorem constructing the source Corollary 1 alignment.\n\nDone. Both modes are now proved: almost surely via ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto, and in probability via tendsto_measure_alignmentError_of_pairDist_convergesInProbability and tendsto_measure_alignedConfig_dist_gt. The in-probability mode needed a modulus uniform over configurations, since the sample point is not fixed when the tolerance is chosen; that is TauCeti.exists_delta_forall_exists_rigidMotion."
     },
     "continuous-mds-lp": {
       "kind": "scope_gap",
@@ -78,8 +78,8 @@
     },
     "corollary1-deterministic-alignment": {
       "kind": "source_audit",
-      "title": "Corollary 1 quantifies the aligning rotation outside the probability",
-      "detail": "The source writes \"there exist sequences W^(u) and a^(u), satisfying W^(u) in O(d) and a^(u) in R^d for all u, such that for all i, ||psihat_i^(r_u) - (W^(u) psi_i + a^(u))|| ->P 0\". The alignment sequence is quantified outside the probability statement, so a single deterministic pair (W^(u), a^(u)) is asserted to work.\n\nThe estimate psihat is a function of the sample, and multidimensional scaling fixes a configuration only up to a rigid motion, so the motion that aligns it is a function of the sample too. What the argument supports is an alignment depending on the sample point. A deterministic sequence would additionally require the required alignment to become asymptotically sample-independent, which the source neither states nor proves.\n\nexists_rigidMotion_of_pairDist_tendsto proves the alignment step in the form the mathematics gives: whenever every pairwise distance converges, the configurations are eventually alignable to within any tolerance. The step needs no spectral hypothesis, so the eigengap-free raw-stress route reaches coordinates without a population eigenvalue floor.\n\nProgress. ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto lifts the alignment step to the almost-sure mode: if almost surely every pairwise distance converges, then almost surely the estimates are eventually alignable within any tolerance. That mode goes through by intersecting the finitely many almost-sure hypotheses and applying the deterministic step at each sample point.\n\nThe in-probability mode needs one more thing, and it is a genuine obstacle rather than bookkeeping: the set of sample points admitting an eps-alignment is an existential over the isometry group, not a countable condition, so its measurability is not automatic. Making it measurable means introducing the alignment error as an infimum over rigid motions and proving that infimum continuous, which needs compactness of the group. That is the remaining work for this row, and it is also why the source's deterministic W^(u) deserves scrutiny: the object the argument produces is sample-dependent."
+      "title": "Corollary 1 quantifies the aligning rotation outside the probability -- REFUTED",
+      "detail": "The source writes \"there exist sequences W^(u) and a^(u), satisfying W^(u) in O(d) and a^(u) in R^d for all u, such that for all i, ||psihat_i^(r_u) - (W^(u) psi_i + a^(u))|| ->P 0\". The alignment sequence is quantified outside the probability statement, so a single deterministic pair (W^(u), a^(u)) is asserted to work.\n\nThe estimate psihat is a function of the sample, and multidimensional scaling fixes a configuration only up to a rigid motion, so the motion that aligns it is a function of the sample too. What the argument supports is an alignment depending on the sample point. A deterministic sequence would additionally require the required alignment to become asymptotically sample-independent, which the source neither states nor proves.\n\nexists_rigidMotion_of_pairDist_tendsto proves the alignment step in the form the mathematics gives: whenever every pairwise distance converges, the configurations are eventually alignable to within any tolerance. The step needs no spectral hypothesis, so the eigengap-free raw-stress route reaches coordinates without a population eigenvalue floor.\n\nProgress. ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto lifts the alignment step to the almost-sure mode: if almost surely every pairwise distance converges, then almost surely the estimates are eventually alignable within any tolerance. That mode goes through by intersecting the finitely many almost-sure hypotheses and applying the deterministic step at each sample point.\n\nThe in-probability mode needs one more thing, and it is a genuine obstacle rather than bookkeeping: the set of sample points admitting an eps-alignment is an existential over the isometry group, not a countable condition, so its measurability is not automatic. Making it measurable means introducing the alignment error as an infimum over rigid motions and proving that infimum continuous, which needs compactness of the group. That is the remaining work for this row, and it is also why the source's deterministic W^(u) deserves scrutiny: the object the argument produces is sample-dependent.\n\nREFUTED, with a machine-checked counterexample. not_exists_deterministic_rigidMotion_of_pairDist_exact exhibits a selection of raw-stress minimizers whose pairwise distances equal the target's EXACTLY at every stage -- so the corollary's hypothesis holds in its strongest possible form -- for which no sequence of orthogonal maps and translations gives convergence in probability of the coordinates. The witness is the one-dimensional two-point configuration and its reflection, each selected with probability one half; both are genuine minimizers because raw stress depends only on pairwise distances, and one motion within half the separation of both would place the two branches within the separation of each other. The printed quantifier is therefore not a matter of emphasis: as written the corollary is false.\n\nThe repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside the probability, sample point by sample point. That is what a distance-based estimator can actually do and what the corollary's downstream uses need, and it is proved in both the alignment-error and the coordinate form."
     }
   },
   "items": [
@@ -403,7 +403,7 @@
       "source_kind": "corollary",
       "title": "Coordinate convergence after orthogonal alignment and translation",
       "source_claim": "There exist orthogonal W^(u) and translations a^(u) such that every estimated point converges in probability to W^(u) psi_i + a^(u).",
-      "status": "compiled_stronger_hypotheses",
+      "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -415,7 +415,13 @@
       "lean_declarations": [
         "Acharyya2024.Consistency.ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto",
         "Acharyya2024.Consistency.exists_rigidMotion_of_pairDist_tendsto",
+        "Acharyya2024.Consistency.not_exists_deterministic_rigidMotion_of_pairDist_exact",
+        "Acharyya2024.Consistency.tendsto_measure_alignedConfig_dist_gt",
+        "Acharyya2024.Consistency.tendsto_measure_alignmentError_of_pairDist_convergesInProbability",
+        "TauCeti.alignedConfig",
+        "TauCeti.alignmentError",
         "TauCeti.eventually_exists_rigidMotion_dist_lt",
+        "TauCeti.exists_delta_forall_exists_rigidMotion",
         "TauCeti.exists_rigidMotion_of_dist_eq"
       ],
       "planned_declarations": [],
@@ -425,11 +431,11 @@
         "rigid-motion-engine-now-available"
       ],
       "semantic_alignment": {
-        "classification": "stronger_hypotheses",
-        "detail": "The alignment step is now proved: convergence of every pairwise distance makes the configurations eventually alignable by a rigid motion, with no spectral hypothesis. What remains between this and the printed corollary is the probabilistic packaging -- lifting from a deterministic sequence to convergence in probability along a subsequence -- and the quantifier question recorded in corollary1-deterministic-alignment, since the source places the aligning rotation outside the probability."
+        "classification": "source_repair",
+        "detail": "The corollary as printed places the orthogonal map and the translation outside the probability, one per stage, serving every sample point. That is false, and the refutation is machine-checked: a legitimate selection of raw-stress minimizers can return a reflected copy on some sample points and the original on others, matching every pairwise distance exactly while admitting no common alignment. The repair chooses the motion inside the probability and is proved in both the alignment-error and the coordinate form, in probability as well as almost surely. Every other clause of the corollary is met at the printed scope."
       },
-      "notes": "Previously unrepresented. The engine is now present in ForTauCeti as exact and approximate rigid-motion rigidity, neither of which Mathlib carries.",
-      "next_action": "Introduce the alignment error as an infimum over rigid motions, prove it continuous using compactness of the isometry group, and lift the almost-sure statement to convergence in probability."
+      "notes": "The alignment error -- the least uniform distance to the target achievable by a rigid motion -- is the quantity that converges. Its existence needs no measurability of the estimates, since a measure is monotone and subadditive on arbitrary sets.",
+      "next_action": "None. The printed statement is refuted and the repair is proved; retain the counterexample as the record of why the alignment must sit inside the probability."
     },
     {
       "id": "A24-A2",
