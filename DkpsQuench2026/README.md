@@ -24,12 +24,32 @@ DkpsQuench2026/
 
 ## Public theorem family
 
+Theorem 2 has two printed conclusions.  Both are proved end to end for the
+literal tie-averaged nearest-neighbor estimator built from raw cached responses,
+with the representation concentration derived through the CMDS/Davis--Kahan
+chain rather than taken as a hypothesis.
+
 ```lean
+-- "for any e > 0 there exists (n,m,r) such that MSE(y_NN) <= e with high probability"
+DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE
+DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE
+
+-- "y_NN is query-efficient relative to y_Q with high probability", for a fixed
+-- query subset and then at the paper's full quantifier level over every m < M
 DkpsQuench2026.QueryEfficiency.finiteFixedSubset
 DkpsQuench2026.QueryEfficiency.infiniteFixedSubset
 DkpsQuench2026.QueryEfficiency.finiteAllQueries
 DkpsQuench2026.QueryEfficiency.infiniteAllQueries
 ```
+
+The conditional interfaces in `Paper/` and `Geometry/` state the same
+conclusions with the concentration event as an explicit premise.  They are the
+reusable seams the capstones factor through, not the paper-facing results; the
+`ASSUMPTION DISCLOSURE` note in `Paper/Theorem2.lean` says which is which.
+
+Two hypotheses still exceed the source and are tracked as census gaps: the
+replicate schedule `safeEntropyReplicates (2 * d) n = (n + 1) ^ (6 + 2 * d)`
+against the paper's `r = omega(n ^ 3)`, and the population nondegeneracy floor.
 
 ## Theory--practice OLS bridge
 

@@ -45,13 +45,15 @@ variable {Q : Type u} [DecidableEq Q]
 variable {X : Type v} [MeasurableSpace X]
 variable {Ω : Type w} [MeasurableSpace Ω]
 
-/-- Growing target-augmented Quench with a high-probability spectral
-certificate.
+/-- **Paper Theorem 2, first conclusion, from a growing spectral certificate.**
 
-Completing this theorem removes global `hfloor` and `hceiling` premises from all
-later capstones.  Do not add them back as hidden fields.
+For every target accuracy the tie-averaged nearest-neighbor mean squared error is
+eventually below it with high probability.  This is the paper's
+"for any `ε > 0` there exists `(n,m,r)` such that `MSE(ŷ_NN) ≤ ε` with high
+probability"; baseline positivity is not needed for it and enters only in the
+query-efficiency conclusion below.
 -/
-theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSubevents
+theorem highProb_mse_tieAverage_of_growing_augmented_cmds_spectralSubevents
     {d : Nat}
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
     (μ : Nat → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
@@ -86,13 +88,12 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSub
     (γ : Real)
     (hlip : ∀ f f',
       |score f Qstar - score f' Qstar| ≤ γ * ‖ψ f - ψ f'‖)
-    (hγ : 0 < γ)
-    (hbase : 0 < MSE Pf (yFull score Qstar) (yQ score Qsub)) :
-    HighProbQQueryEfficient (Q := Q) (X := X) μ hμ Pf sqLoss
-      (yFull score Qstar)
-      (fun n ω f => yNNTieAverage_augmentedCMDS (d := d)
-        Dhat hsym f_ref score Qstar n ω f)
-      (fun _ _ f => yQ score Qsub f) := by
+    (hγ : 0 < γ) :
+    ∀ ε : Real, 0 < ε →
+      HighProbAtTop μ hμ (fun n => {ω |
+        MSE Pf (yFull score Qstar)
+            (fun f => yNNTieAverage_augmentedCMDS (d := d)
+              Dhat hsym f_ref score Qstar n ω f) ≤ ε}) := by
   let good : Nat → Prop := fun n =>
     d ≤ n + 1 ∧
     configFrobBound d α (ceiling n)
@@ -157,12 +158,75 @@ theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSub
           ‖ψ (f_ref n ω i) - ψ f‖| ≤ 2 * Hrate.bound n
     rw [hraw, ← hzRadial n ω f i]
     exact hpair.trans (mul_le_mul_of_nonneg_left hbound (by norm_num))
-  exact highProbQQueryEfficient_radialTieAverage_of_compact_iid_fullSupport
+  exact highProb_mse_radialTieAverage_of_compact_iid_fullSupport
     Pf μ hμ ψ hψmeas hcompact hfull
     (augmentedSpectralRadialDistance (d := d) Dhat hsym)
-    f_ref hiid score Qstar Qsub γ hlip hγ
+    f_ref hiid (yFull score Qstar) γ hlip hγ
     radialRate hradialRateZero hradialRateNonneg
-    Eg hEgMeas hEgSub hEg hbase
+    Eg hEgMeas hEgSub hEg
+
+/-- Growing target-augmented Quench with a high-probability spectral
+certificate.
+
+Completing this theorem removes global `hfloor` and `hceiling` premises from all
+later capstones.  Do not add them back as hidden fields.
+-/
+theorem highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSubevents
+    {d : Nat}
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : Nat → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
+    (ψ : Model Q X → Vec d) (hψmeas : Measurable ψ)
+    (hcompact : IsCompact (Set.range ψ))
+    (hfull : PerspectiveFullSupport Pf ψ)
+    (f_ref : ∀ n, Ω → Fin n → Model Q X)
+    (hiid : IIDReferenceSampler Pf μ f_ref)
+    (Dhat D : ∀ n, Ω → Model Q X → DisMat (n + 1))
+    (hsym : ∀ n ω f,
+      (disMatToMatrix (classicalMDSMatrix (Dhat n ω f))).IsHermitian)
+    (z : ∀ n, Ω → Model Q X → Config (n + 1) d)
+    (hzGram : ∀ n ω f i j,
+      (∑ k, z n ω f i k * z n ω f j k) =
+        classicalMDSMatrix (D n ω f) i j)
+    (hzRadial : ∀ n ω f (i : Fin n),
+      ‖z n ω f i.castSucc - z n ω f (Fin.last n)‖ =
+        ‖ψ (f_ref n ω i) - ψ f‖)
+    {α : Real} (hα : 0 < α)
+    (ceiling entryRate : Nat → Real)
+    (Hspectral : GrowingSpectralSubevents μ hμ D z hzGram α ceiling)
+    (Hrate : GrowingConfigControl (fun n => n + 1) d α ceiling entryRate)
+    (E : Nat → Set Ω)
+    (hEmeas : ∀ n, MeasurableSet (E n))
+    (hEsub : ∀ n, E n ⊆ {ω | ∀ f,
+      EntrywiseClose
+        (classicalMDSMatrix (Dhat n ω f))
+        (classicalMDSMatrix (D n ω f)) (entryRate n)})
+    (hE : HighProbAtTop μ hμ E)
+    (score : Model Q X → Finset Q → Real)
+    (Qstar Qsub : Finset Q)
+    (γ : Real)
+    (hlip : ∀ f f',
+      |score f Qstar - score f' Qstar| ≤ γ * ‖ψ f - ψ f'‖)
+    (hγ : 0 < γ)
+    (hbase : 0 < MSE Pf (yFull score Qstar) (yQ score Qsub)) :
+    HighProbQQueryEfficient (Q := Q) (X := X) μ hμ Pf sqLoss
+      (yFull score Qstar)
+      (fun n ω f => yNNTieAverage_augmentedCMDS (d := d)
+        Dhat hsym f_ref score Qstar n ω f)
+      (fun _ _ f => yQ score Qsub f) := by
+  apply highProbQQueryEfficient_of_mse_atTop Pf μ hμ
+    (yFull score Qstar) (yQ score Qsub)
+    (fun n ω f => yNNTieAverage_augmentedCMDS (d := d)
+      Dhat hsym f_ref score Qstar n ω f)
+  · exact highProb_mse_tieAverage_of_growing_augmented_cmds_spectralSubevents
+      (Pf := Pf) (μ := μ) (hμ := hμ) (ψ := ψ) (hψmeas := hψmeas)
+      (hcompact := hcompact) (hfull := hfull) (f_ref := f_ref) (hiid := hiid)
+      (Dhat := Dhat) (D := D) (hsym := hsym) (z := z) (hzGram := hzGram)
+      (hzRadial := hzRadial) (hα := hα) (ceiling := ceiling)
+      (entryRate := entryRate) (Hspectral := Hspectral) (Hrate := Hrate)
+      (E := E) (hEmeas := hEmeas) (hEsub := hEsub) (hE := hE)
+      (score := score) (Qstar := Qstar) (Qsub := Qsub)
+      (γ := γ) (hlip := hlip) (hγ := hγ)
+  · exact hbase
 
 /-- Response-mean capstone with population geometry reduced to one distance
 realization and spectral assumptions reduced to a high-probability certificate.
@@ -252,6 +316,89 @@ theorem highProbQQueryEfficient_tieAverage_of_response_mean_realization_spectral
     (score := score) (Qstar := Qstar) (Qsub := Qsub)
     (γ := γ) (hlip := hlip) (hγ := hγ) (hbase := hbase)
 
+/-- **Paper Theorem 2, first conclusion, from measurable response subevents.**
+
+The mean-squared-error half of the raw-response capstones: for every `ε > 0` the
+tie-averaged nearest-neighbor estimator eventually has `MSE ≤ ε` with high
+probability.  Baseline positivity is not among its hypotheses.
+-/
+theorem highProb_mse_tieAverage_of_responseSubevents_realization_spectralSubevents
+    {d m p : Nat}
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μ : Nat → Measure Ω) (hμ : ∀ n, IsProbabilityMeasure (μ n))
+    (ψ : Model Q X → Vec d) (hψmeas : Measurable ψ)
+    (hcompact : IsCompact (Set.range ψ))
+    (hfull : PerspectiveFullSupport Pf ψ)
+    (f_ref : ∀ n, Ω → Fin n → Model Q X)
+    (hiid : IIDReferenceSampler Pf μ f_ref)
+    (Xbar μbar : ∀ n, Ω → Model Q X → Fin (n + 1) → Acharyya2024.Mat m p)
+    (η B : Nat → Real)
+    (hηNonneg : ∀ n, 0 ≤ η n)
+    (Hmean : AugmentedResponseMeanSubevents μ hμ Xbar μbar η)
+    (hpopulationNorm : ∀ n ω f i, ‖μbar n ω f i‖ ≤ B n)
+    (hrealize : PerspectiveResponseRealization ψ f_ref μbar)
+    {α : Real} (hα : 0 < α)
+    (ceiling : Nat → Real)
+    (Hspectral : GrowingSpectralSubevents μ hμ
+      (fun n ω f => responseDist (μbar n ω f))
+      (centeredAugmentedPerspectiveConfig ψ f_ref)
+      (centeredAugmentedPerspectiveConfig_gram_eq
+        ψ f_ref μbar hrealize)
+      α ceiling)
+    (Hrate : GrowingConfigControl (fun n => n + 1) d α ceiling
+      (fun n => cmdsEntrywiseRate (n + 1) m
+        (responseDistBound m (B n + η n)) (η n)))
+    (score : Model Q X → Finset Q → Real)
+    (Qstar Qsub : Finset Q)
+    (γ : Real)
+    (hlip : ∀ f f',
+      |score f Qstar - score f' Qstar| ≤ γ * ‖ψ f - ψ f'‖)
+    (hγ : 0 < γ) :
+    ∀ ε : Real, 0 < ε →
+      HighProbAtTop μ hμ (fun n => {ω |
+        MSE Pf (yFull score Qstar)
+            (fun f => yNNTieAverage_augmentedCMDS (d := d)
+              (augmentedSampleResponseDist Xbar)
+              (fun n ω f =>
+                Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
+                  (Xbar n ω f))
+              f_ref score Qstar n ω f) ≤ ε}) := by
+  let Dhat : ∀ n, Ω → Model Q X → DisMat (n + 1) :=
+    augmentedSampleResponseDist Xbar
+  let D : ∀ n, Ω → Model Q X → DisMat (n + 1) :=
+    fun n ω f => responseDist (μbar n ω f)
+  have hEsub : ∀ n, Hmean.event n ⊆ {ω | ∀ f,
+      EntrywiseClose
+        (classicalMDSMatrix (Dhat n ω f))
+        (classicalMDSMatrix (D n ω f))
+        (cmdsEntrywiseRate (n + 1) m
+          (responseDistBound m (B n + η n)) (η n))} := by
+    intro n ω hω f
+    have hmean := Hmean.subset n hω f
+    simpa [Dhat, D, augmentedSampleResponseDist] using
+      cmdsEntrywise_of_responseMeanClose_of_population_norm (by omega)
+        (Xbar n ω f) (μbar n ω f) (hηNonneg n) hmean
+        (hpopulationNorm n ω f)
+  exact highProb_mse_tieAverage_of_growing_augmented_cmds_spectralSubevents
+    (Pf := Pf) (μ := μ) (hμ := hμ)
+    (ψ := ψ) (hψmeas := hψmeas) (hcompact := hcompact) (hfull := hfull)
+    (f_ref := f_ref) (hiid := hiid)
+    (Dhat := Dhat) (D := D)
+    (hsym := fun n ω f =>
+      Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
+        (Xbar n ω f))
+    (z := centeredAugmentedPerspectiveConfig ψ f_ref)
+    (hzGram := centeredAugmentedPerspectiveConfig_gram_eq ψ f_ref μbar hrealize)
+    (hzRadial := centeredAugmentedPerspectiveConfig_radial ψ f_ref)
+    (hα := hα) (ceiling := ceiling)
+    (entryRate := fun n => cmdsEntrywiseRate (n + 1) m
+      (responseDistBound m (B n + η n)) (η n))
+    (Hspectral := Hspectral) (Hrate := Hrate)
+    (E := Hmean.event) (hEmeas := Hmean.measurable)
+    (hEsub := hEsub) (hE := Hmean.highProb)
+    (score := score) (Qstar := Qstar) (Qsub := Qsub)
+    (γ := γ) (hlip := hlip) (hγ := hγ)
+
 /-- Infinite-class-compatible response capstone using measurable response
 subevents rather than measurability of the universal response event.
 
@@ -300,40 +447,22 @@ theorem highProbQQueryEfficient_tieAverage_of_responseSubevents_realization_spec
             (Xbar n ω f))
         f_ref score Qstar n ω f)
       (fun _ _ f => yQ score Qsub f) := by
-  let Dhat : ∀ n, Ω → Model Q X → DisMat (n + 1) :=
-    augmentedSampleResponseDist Xbar
-  let D : ∀ n, Ω → Model Q X → DisMat (n + 1) :=
-    fun n ω f => responseDist (μbar n ω f)
-  have hEsub : ∀ n, Hmean.event n ⊆ {ω | ∀ f,
-      EntrywiseClose
-        (classicalMDSMatrix (Dhat n ω f))
-        (classicalMDSMatrix (D n ω f))
-        (cmdsEntrywiseRate (n + 1) m
-          (responseDistBound m (B n + η n)) (η n))} := by
-    intro n ω hω f
-    have hmean := Hmean.subset n hω f
-    simpa [Dhat, D, augmentedSampleResponseDist] using
-      cmdsEntrywise_of_responseMeanClose_of_population_norm (by omega)
-        (Xbar n ω f) (μbar n ω f) (hηNonneg n) hmean
-        (hpopulationNorm n ω f)
-  exact highProbQQueryEfficient_tieAverage_of_growing_augmented_cmds_spectralSubevents
-    (Pf := Pf) (μ := μ) (hμ := hμ)
-    (ψ := ψ) (hψmeas := hψmeas) (hcompact := hcompact) (hfull := hfull)
-    (f_ref := f_ref) (hiid := hiid)
-    (Dhat := Dhat) (D := D)
-    (hsym := fun n ω f =>
-      Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
-        (Xbar n ω f))
-    (z := centeredAugmentedPerspectiveConfig ψ f_ref)
-    (hzGram := centeredAugmentedPerspectiveConfig_gram_eq ψ f_ref μbar hrealize)
-    (hzRadial := centeredAugmentedPerspectiveConfig_radial ψ f_ref)
-    (hα := hα) (ceiling := ceiling)
-    (entryRate := fun n => cmdsEntrywiseRate (n + 1) m
-      (responseDistBound m (B n + η n)) (η n))
-    (Hspectral := Hspectral) (Hrate := Hrate)
-    (E := Hmean.event) (hEmeas := Hmean.measurable)
-    (hEsub := hEsub) (hE := Hmean.highProb)
-    (score := score) (Qstar := Qstar) (Qsub := Qsub)
-    (γ := γ) (hlip := hlip) (hγ := hγ) (hbase := hbase)
+  apply highProbQQueryEfficient_of_mse_atTop Pf μ hμ
+    (yFull score Qstar) (yQ score Qsub)
+    (fun n ω f => yNNTieAverage_augmentedCMDS (d := d)
+      (augmentedSampleResponseDist Xbar)
+      (fun n ω f =>
+        Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
+          (Xbar n ω f))
+      f_ref score Qstar n ω f)
+  · exact highProb_mse_tieAverage_of_responseSubevents_realization_spectralSubevents
+      (Pf := Pf) (μ := μ) (hμ := hμ) (ψ := ψ) (hψmeas := hψmeas)
+      (hcompact := hcompact) (hfull := hfull) (f_ref := f_ref) (hiid := hiid)
+      (Xbar := Xbar) (μbar := μbar) (η := η) (B := B) (hηNonneg := hηNonneg)
+      (Hmean := Hmean) (hpopulationNorm := hpopulationNorm) (hrealize := hrealize)
+      (hα := hα) (ceiling := ceiling) (Hspectral := Hspectral) (Hrate := Hrate)
+      (score := score) (Qstar := Qstar) (Qsub := Qsub)
+      (γ := γ) (hlip := hlip) (hγ := hγ)
+  · exact hbase
 
 end DkpsQuench2026.QueryEfficiency

@@ -31,12 +31,16 @@ variable {Q : Type u} [DecidableEq Q]
 variable {X : Type v} [MeasurableSpace X]
 variable {Ωref : Type wr} [MeasurableSpace Ωref]
 variable {Ωresp : Type wy} [MeasurableSpace Ωresp]
-/-- Fixed-subset compact infinite-model raw-response Quench theorem.
+/-- **Paper Theorem 2, first conclusion, end to end.**
 
-This removes the abstract uniform response-concentration premise and every
-explicit net/envelope certificate from the arbitrary-model growing Quench path.
+"For any `ε > 0` there exists `(n,m,r)` such that `MSE(ŷ_NN) ≤ ε` with high
+probability."  The estimator is the literal tie-averaged nearest-neighbor
+predictor built from raw cached responses through augmented CMDS; the embedding
+concentration is derived, not assumed.  `InfiniteSubsetAssumptions.baseline_pos`
+is not used by this conclusion — it is the hypothesis of the query-efficiency
+sentence, proved as `infiniteFixedSubset` below.
 -/
-theorem infiniteFixedSubset
+theorem infiniteFixedSubsetMSE
     {d m p : Nat} (hm : 0 < m)
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
     (μref : Nat → Measure Ωref) (hμref : ∀ n, IsProbabilityMeasure (μref n))
@@ -47,13 +51,13 @@ theorem infiniteFixedSubset
     (Qstar Qsub : Finset Q)
     (D : InfiniteSubsetData (Q := Q) (X := X)
       (Ωresp := Ωresp) d m p)
-    (H : InfiniteSubsetAssumptions Pf μresp score Qstar Qsub D) :
-    HighProbQQueryEfficient (Q := Q) (X := X)
-      (jointStageMeasure μref μresp)
-      (jointStageMeasure_probability μref hμref μresp H.raw.probability)
-      Pf sqLoss (yFull score Qstar)
-      (infiniteEstimator f_ref score Qstar D)
-      (fun _ _ f => yQ score Qsub f) := by
+    (H : InfiniteSubsetAssumptions Pf μresp score Qstar Qsub D)  :
+    ∀ ε : Real, 0 < ε →
+      HighProbAtTop (jointStageMeasure μref μresp)
+        (jointStageMeasure_probability μref hμref μresp H.raw.probability)
+        (fun n => {ω |
+          MSE Pf (yFull score Qstar)
+            (fun f => infiniteEstimator f_ref score Qstar D n ω f) ≤ ε}) := by
   let hμjoint := jointStageMeasure_probability μref hμref μresp H.raw.probability
   let hiidJoint := iidReferenceSampler_lifted_prod Pf μref hμref μresp
     H.raw.probability f_ref hiid
@@ -113,10 +117,10 @@ theorem infiniteFixedSubset
       |score f Qstar - score g Qstar| ≤
         gamma * ‖D.perspective f - D.perspective g‖ :=
     lipschitz_le_max_one H.score_lipschitz
-  change HighProbQQueryEfficient (Q := Q) (X := X)
-    (jointStageMeasure μref μresp) hμjoint Pf sqLoss
-    (yFull score Qstar)
-    (fun n ω f => yNNTieAverage_augmentedCMDS (d := d)
+  change ∀ ε : Real, 0 < ε →
+    HighProbAtTop (jointStageMeasure μref μresp) hμjoint (fun n => {ω |
+      MSE Pf (yFull score Qstar)
+        (fun f => yNNTieAverage_augmentedCMDS (d := d)
       (augmentedSampleResponseDist
         (augmentedRawSampleMean f_ref
           (safeEntropyReplicates (2 * d)) D.rawResponse))
@@ -125,10 +129,9 @@ theorem infiniteFixedSubset
           (augmentedRawSampleMean f_ref
             (safeEntropyReplicates (2 * d)) D.rawResponse n ω f))
       (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
-      score Qstar n ω f)
-    (fun _ _ f => yQ score Qsub f)
+      score Qstar n ω f) ≤ ε})
   exact
-    highProbQQueryEfficient_tieAverage_of_responseSubevents_realization_spectralSubevents
+    highProb_mse_tieAverage_of_responseSubevents_realization_spectralSubevents
       (d := d) (m := m) (p := p)
       (Pf := Pf) (μ := jointStageMeasure μref μresp) (hμ := hμjoint)
       (ψ := D.perspective) (hψmeas := H.perspective_measurable)
@@ -149,7 +152,39 @@ theorem infiniteFixedSubset
       (Hspectral := Hspectral) (Hrate := Hrate)
       (score := score) (Qstar := Qstar) (Qsub := Qsub)
       (γ := gamma) (hlip := hlipschitz)
-      (hγ := hgamma) (hbase := H.baseline_pos)
+      (hγ := hgamma)
+
+/-- Fixed-subset compact infinite-model raw-response Quench theorem.
+
+This removes the abstract uniform response-concentration premise and every
+explicit net/envelope certificate from the arbitrary-model growing Quench path.
+-/
+theorem infiniteFixedSubset
+    {d m p : Nat} (hm : 0 < m)
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μref : Nat → Measure Ωref) (hμref : ∀ n, IsProbabilityMeasure (μref n))
+    (μresp : Nat → Measure Ωresp)
+    (f_ref : ∀ n, Ωref → Fin n → Model Q X)
+    (hiid : IIDReferenceSampler Pf μref f_ref)
+    (score : Model Q X → Finset Q → Real)
+    (Qstar Qsub : Finset Q)
+    (D : InfiniteSubsetData (Q := Q) (X := X)
+      (Ωresp := Ωresp) d m p)
+    (H : InfiniteSubsetAssumptions Pf μresp score Qstar Qsub D) :
+    HighProbQQueryEfficient (Q := Q) (X := X)
+      (jointStageMeasure μref μresp)
+      (jointStageMeasure_probability μref hμref μresp H.raw.probability)
+      Pf sqLoss (yFull score Qstar)
+      (infiniteEstimator f_ref score Qstar D)
+      (fun _ _ f => yQ score Qsub f) := by
+  apply highProbQQueryEfficient_of_mse_atTop Pf
+    (jointStageMeasure μref μresp)
+    (jointStageMeasure_probability μref hμref μresp H.raw.probability)
+    (yFull score Qstar) (yQ score Qsub)
+    (infiniteEstimator f_ref score Qstar D)
+  · exact infiniteFixedSubsetMSE (Q := Q) (X := X) (Ωref := Ωref) (Ωresp := Ωresp)
+      (d := d) (m := m) (p := p) hm Pf μref hμref μresp f_ref hiid score Qstar Qsub D H
+  · exact H.baseline_pos
 
 
 end DkpsQuench2026.QueryEfficiency

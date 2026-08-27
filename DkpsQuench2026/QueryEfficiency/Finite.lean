@@ -31,12 +31,14 @@ variable {Q : Type u} [DecidableEq Q]
 variable {X : Type v} [MeasurableSpace X]
 variable {Ωref : Type wr} [MeasurableSpace Ωref]
 variable {Ωresp : Type wy} [MeasurableSpace Ωresp]
-/-- Fixed-subset finite-model raw-response Quench theorem.
+/-- **Paper Theorem 2, first conclusion, end to end, finite model class.**
 
-The theorem's visible assumptions
-are the intended finite-model raw-response Quench interface.
+The finite-model counterpart of `infiniteFixedSubsetMSE`: for every `ε > 0` the
+literal tie-averaged nearest-neighbor predictor built from raw cached responses
+eventually has `MSE ≤ ε` with high probability, with the embedding concentration
+derived rather than assumed.  `FiniteSubsetAssumptions.baseline_pos` is not used.
 -/
-theorem finiteFixedSubset
+theorem finiteFixedSubsetMSE
     [Fintype (Model Q X)]
     {d m p : Nat} (hm : 0 < m)
     (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
@@ -49,12 +51,12 @@ theorem finiteFixedSubset
     (D : FiniteSubsetData (Q := Q) (X := X)
       (Ωresp := Ωresp) d m p)
     (H : FiniteSubsetAssumptions Pf μresp score Qstar Qsub D) :
-    HighProbQQueryEfficient (Q := Q) (X := X)
-      (jointStageMeasure μref μresp)
-      (jointStageMeasure_probability μref hμref μresp H.raw.probability)
-      Pf sqLoss (yFull score Qstar)
-      (finiteEstimator f_ref score Qstar D)
-      (fun _ _ f => yQ score Qsub f) := by
+    ∀ ε : Real, 0 < ε →
+      HighProbAtTop (jointStageMeasure μref μresp)
+        (jointStageMeasure_probability μref hμref μresp H.raw.probability)
+        (fun n => {ω |
+          MSE Pf (yFull score Qstar)
+            (fun f => finiteEstimator f_ref score Qstar D n ω f) ≤ ε}) := by
   let hμjoint := jointStageMeasure_probability μref hμref μresp H.raw.probability
   let hiidJoint := iidReferenceSampler_lifted_prod Pf μref hμref μresp
     H.raw.probability f_ref hiid
@@ -92,20 +94,19 @@ theorem finiteFixedSubset
       |score f Qstar - score g Qstar| ≤
         gamma * ‖D.perspective f - D.perspective g‖ :=
     lipschitz_le_max_one H.score_lipschitz
-  change HighProbQQueryEfficient (Q := Q) (X := X)
-    (jointStageMeasure μref μresp) hμjoint Pf sqLoss
-    (yFull score Qstar)
-    (fun n ω f => yNNTieAverage_augmentedCMDS (d := d)
+  change ∀ ε : Real, 0 < ε →
+    HighProbAtTop (jointStageMeasure μref μresp) hμjoint (fun n => {ω |
+      MSE Pf (yFull score Qstar)
+        (fun f => yNNTieAverage_augmentedCMDS (d := d)
       (augmentedSampleResponseDist
         (augmentedRawSampleMean f_ref safeFiniteReplicates D.rawResponse))
       (fun n ω f =>
         Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist
           (augmentedRawSampleMean f_ref safeFiniteReplicates D.rawResponse n ω f))
       (liftedReferenceSampler (Ωresp := Ωresp) f_ref)
-      score Qstar n ω f)
-    (fun _ _ f => yQ score Qsub f)
+      score Qstar n ω f) ≤ ε})
   exact
-    highProbQQueryEfficient_tieAverage_of_responseSubevents_realization_spectralSubevents
+    highProb_mse_tieAverage_of_responseSubevents_realization_spectralSubevents
       (d := d) (m := m) (p := p)
       (Pf := Pf) (μ := jointStageMeasure μref μresp) (hμ := hμjoint)
       (ψ := D.perspective) (hψmeas := H.perspective_measurable)
@@ -125,7 +126,40 @@ theorem finiteFixedSubset
       (Hspectral := Hspectral) (Hrate := Hrate)
       (score := score) (Qstar := Qstar) (Qsub := Qsub)
       (γ := gamma) (hlip := hlipschitz)
-      (hγ := hgamma) (hbase := H.baseline_pos)
+      (hγ := hgamma)
+
+/-- Fixed-subset finite-model raw-response Quench theorem.
+
+The theorem's visible assumptions
+are the intended finite-model raw-response Quench interface.
+-/
+theorem finiteFixedSubset
+    [Fintype (Model Q X)]
+    {d m p : Nat} (hm : 0 < m)
+    (Pf : Measure (Model Q X)) [IsProbabilityMeasure Pf]
+    (μref : Nat → Measure Ωref) (hμref : ∀ n, IsProbabilityMeasure (μref n))
+    (μresp : Nat → Measure Ωresp)
+    (f_ref : ∀ n, Ωref → Fin n → Model Q X)
+    (hiid : IIDReferenceSampler Pf μref f_ref)
+    (score : Model Q X → Finset Q → Real)
+    (Qstar Qsub : Finset Q)
+    (D : FiniteSubsetData (Q := Q) (X := X)
+      (Ωresp := Ωresp) d m p)
+    (H : FiniteSubsetAssumptions Pf μresp score Qstar Qsub D) :
+    HighProbQQueryEfficient (Q := Q) (X := X)
+      (jointStageMeasure μref μresp)
+      (jointStageMeasure_probability μref hμref μresp H.raw.probability)
+      Pf sqLoss (yFull score Qstar)
+      (finiteEstimator f_ref score Qstar D)
+      (fun _ _ f => yQ score Qsub f) := by
+  apply highProbQQueryEfficient_of_mse_atTop Pf
+    (jointStageMeasure μref μresp)
+    (jointStageMeasure_probability μref hμref μresp H.raw.probability)
+    (yFull score Qstar) (yQ score Qsub)
+    (finiteEstimator f_ref score Qstar D)
+  · exact finiteFixedSubsetMSE (Q := Q) (X := X) (Ωref := Ωref) (Ωresp := Ωresp)
+      (d := d) (m := m) (p := p) hm Pf μref hμref μresp f_ref hiid score Qstar Qsub D H
+  · exact H.baseline_pos
 
 
 end DkpsQuench2026.QueryEfficiency
