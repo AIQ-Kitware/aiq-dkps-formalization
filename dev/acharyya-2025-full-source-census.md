@@ -19,8 +19,8 @@ The strongest paper-facing change since the earlier audit is hypothesis reductio
 | status | items |
 | --- | ---: |
 | `compiled_equivalent` | 2 |
-| `compiled_by_composition` | 2 |
-| `compiled_source_repair` | 3 |
+| `compiled_by_composition` | 1 |
+| `compiled_source_repair` | 4 |
 | `compiled_role_replaced` | 11 |
 | `not_proof_debt` | 1 |
 
@@ -29,8 +29,8 @@ The strongest paper-facing change since the earlier audit is hypothesis reductio
 | classification | items |
 | --- | ---: |
 | `equivalent_encoding` | 2 |
-| `by_composition` | 2 |
-| `source_repair` | 3 |
+| `by_composition` | 1 |
+| `source_repair` | 4 |
 | `proof_replaced` | 11 |
 | `out_of_scope` | 1 |
 
@@ -38,7 +38,7 @@ The strongest paper-facing change since the earlier audit is hypothesis reductio
 
 | id | importance | source anchor | status | alignment | verification |
 | --- | --- | --- | --- | --- | --- |
-| `A25-T1` | `headline` | Theorem 1 | `compiled_by_composition` | `by_composition` | `proved_in_build` |
+| `A25-T1` | `headline` | Theorem 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A25-R1` | `supporting` | Remark 1 | `not_proof_debt` | `out_of_scope` | `not_applicable` |
 | `A25-C1` | `major` | Corollary 1 | `compiled_by_composition` | `by_composition` | `proved_in_build` |
 | `A25-A1` | `major` | Assumption 1 | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
@@ -60,13 +60,21 @@ The strongest paper-facing change since the earlier audit is hypothesis reductio
 
 ## Gaps and source repairs
 
-### `t1-literal-finite-wrapper` — Theorem 1 lacks one literal finite-probability wrapper
+### `t1-literal-finite-wrapper` — No literal finite wrapper for Theorem 1 -- because the printed statement is false
 
 **Kind:** `mechanical`
 
 The response-mean, entrywise CMDS, union-bound, and n^3/r algebra are compiled, but there is no single public theorem reproducing the exact displayed finite probability lower bound with the source constant 16 and sum_{ij} gamma_ij/(rm eps^2).
 
 Progress. prob_uniformResponseMeanClose_ge_of_secondMoment supplies the probability step in the displayed finite shape: for a fixed model count, the probability that every sample response mean is within eta of its population counterpart is at least 1 - N sigma^2 / eta^2. Until now the Chebyshev and union-bound machinery existed only in its asymptotic consequence (HighProbAtTop), which cannot express the paper's explicit bound. What remains between this and the printed Theorem 1 is the passage from response means to entries of the doubly centred matrix, where the source's factor 16 and its 1/(rm) scaling arise.
+
+SETTLED, and not the way the gap anticipated. There is no literal wrapper because the printed statement is false. prob_entrywiseClose_lt_paper_bound is the counterexample.
+
+The two sides of the printed inequality do not respond to the population scale in the same way. B is built from the SQUARES of the dissimilarities, so a deviation of the sample response means enters the entries of Bhat - B multiplied by the population scale, while gamma_ij measures only the variability of the responses and is unchanged by translating the population means apart. Pushing two models apart therefore drives the left side to zero while the right side stays fixed.
+
+The witness has n = 2 models, m = 1 query, p = 1, r = 1 replicate; population means 0 and 20; and a response variability of 1, so gamma sums to 1. At eps = 5 the printed bound claims probability at least 9/25, and the event is empty: every sample value of Bhat_00 is at least 9.75 away from B_00 = 100. Because m = 1, the 1/m, 1/sqrt(m) and unnormalized dissimilarity conventions coincide, so the refutation does not depend on which the source intends.
+
+The repair was already in the package and is now justified: Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded carries an entrywise bound R on the dissimilarities, documented there as an assumption beyond the paper. The counterexample shows it cannot be dropped, and the probability step prob_uniformResponseMeanClose_ge_of_secondMoment supplies the finite Chebyshev-union input that the corrected chain consumes.
 
 ### `v1-norm-inconsistency` — arXiv v1 Theorem 2 and Corollary 2 disagree about the norm
 
@@ -123,13 +131,13 @@ This does not change what is formalized -- every library still uses Acharyya2024
 * **source anchor:** Theorem 1 (theorem, section 4)
 * **source locator:** `Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md:272-288`
 * **importance:** `headline`
-* **status / verification:** `compiled_by_composition` / `proved_in_build`
-* **semantic alignment:** `by_composition` — The event shape and response-to-CMDS concentration mechanism are compiled, including the paper-scale n^3/r bookkeeping. The exact finite displayed constant is not exposed by one source-facing theorem.
+* **status / verification:** `compiled_source_repair` / `proved_in_build`
+* **semantic alignment:** `source_repair` — The printed bound has no hypothesis on the scale of the population responses, and it needs one: B is the doubly centred SQUARE of the dissimilarity matrix, so a deviation of the sample response means enters Bhat - B multiplied by the population scale, while gamma measures only response variability. prob_entrywiseClose_lt_paper_bound refutes the statement at n = 2, m = 1, p = 1, r = 1, where the competing dissimilarity normalisations coincide. The repair is the entrywise dissimilarity bound R already carried by Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded and disclosed there as an assumption beyond the paper; the counterexample shows it is necessary rather than convenient.
 * **source claim:** For any epsilon>0, every entry of Bhat is within epsilon of B with the displayed finite high-probability bound determined by response covariances.
-* **Lean declarations:** `Acharyya2025.Bridge.EntrywiseClose`, `Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded`, `Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale`, `Acharyya2025.GrowingResponse.prob_uniformResponseMeanClose_ge_of_secondMoment`
+* **Lean declarations:** `Acharyya2025.Bridge.EntrywiseClose`, `Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded`, `Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale`, `Acharyya2025.GrowingResponse.prob_uniformResponseMeanClose_ge_of_secondMoment`, `Acharyya2025.Theorem1Scale.prob_entrywiseClose_lt_paper_bound`, `Acharyya2025.Theorem1Scale.secondMoment_eq`
 * **gap refs:** `normalisation-pinned-by-theorem1-constant`, `t1-literal-finite-wrapper`
-* **notes:** The active response-to-CMDS bridge works entrywise directly and avoids the former n^2 Frobenius detour. Its constants are intentionally conservative.
-* **next action:** Compose the finite probability step with the response-mean to doubly-centred-entry bound to reach the displayed constant.
+* **notes:** The finite probability step is prob_uniformResponseMeanClose_ge_of_secondMoment; the corrected chain is that step composed with the bounded entrywise bridge.
+* **next action:** Optionally state the corrected finite bound -- the printed one with the entrywise dissimilarity bound R inserted -- as one source-facing theorem.
 
 ### `A25-R1` — Naming and notation for true and estimated perspectives and the B matrices
 
