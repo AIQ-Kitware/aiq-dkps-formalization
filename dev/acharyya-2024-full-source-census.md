@@ -21,7 +21,8 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `compiled_exact` | 1 |
 | `compiled_generalized` | 2 |
 | `compiled_specialization` | 5 |
-| `compiled_stronger_hypotheses` | 4 |
+| `compiled_stronger_hypotheses` | 3 |
+| `compiled_source_repair` | 1 |
 | `not_represented` | 2 |
 | `not_proof_debt` | 1 |
 
@@ -32,7 +33,8 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `exact` | 1 |
 | `generalized` | 2 |
 | `specialized` | 5 |
-| `stronger_hypotheses` | 4 |
+| `stronger_hypotheses` | 3 |
+| `source_repair` | 1 |
 | `missing` | 2 |
 | `out_of_scope` | 1 |
 
@@ -50,7 +52,7 @@ The package is proof-complete for its stated Lean theorems, but source coverage 
 | `A24-L1` | `major` | Lemma 1 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `A24-T2` | `headline` | Theorem 2 | `compiled_specialization` | `specialized` | `proved_in_build` |
 | `A24-T3` | `headline` | Theorem 3 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
-| `A24-C1` | `headline` | Corollary 1 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `A24-C1` | `headline` | Corollary 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `A24-A2` | `major` | Assumption 2 | `compiled_specialization` | `specialized` | `proved_in_build` |
 | `A24-L2` | `headline` | Lemma 2 | `not_represented` | `missing` | `absent` |
 | `A24-T4` | `headline` | Theorem 4 | `compiled_specialization` | `specialized` | `proved_in_build` |
@@ -70,11 +72,13 @@ Theorem 1, Lemma 1, and Theorem 3 name a fixed limiting minimizer/profile. Lean 
 
 The second-moment and probability modules prove the finite-dimensional concentration mechanism and the gamma/r sample-mean estimate. The paper lets the number of queries m grow with r and uses (1/m) sum_j gamma_ij = o(r). Lean currently feeds the growing-query consistency theorem an abstract sampling-convergence hypothesis rather than constructing the varying-m response matrices and discharging that source rate condition in one theorem.
 
-### `rigid-alignment-corollary` — Corollary 1 coordinate alignment is not represented in Acharyya2024
+### `rigid-alignment-corollary` — Corollary 1 coordinate alignment -- now represented in Acharyya2024
 
 **Kind:** `source_gap`
 
 The source upgrades pairwise-distance convergence to existence of orthogonal W^(u) and translations a^(u) with point-coordinate convergence. Acharyya2024 proves translation invariance and pairwise-distance convergence but has no theorem constructing the source Corollary 1 alignment.
+
+Done. Both modes are now proved: almost surely via ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto, and in probability via tendsto_measure_alignmentError_of_pairDist_convergesInProbability and tendsto_measure_alignedConfig_dist_gt. The in-probability mode needed a modulus uniform over configurations, since the sample point is not fixed when the tolerance is chosen; that is TauCeti.exists_delta_forall_exists_rigidMotion.
 
 ### `continuous-mds-lp` — Continuous-MDS and L^p(P x P) growing-model conclusions are not formalized
 
@@ -102,7 +106,7 @@ Acharyya2024.rawStress_mds_stability is eigengap-free -- its hypotheses are mini
 
 What each paper needs from the bridge differs. Helm's conclusions are Tendsto statements with no rate, so the qualitative eigengap-free route suffices and its population eigenvalue floor is avoidable, modulo the approximate form of the rigidity lemma. Quench's capstones carry entryRate and GrowingConfigControl and conclude stagewise high-probability bounds; a quantitative Gram-to-configuration bound needs a spectral gap, because eigenvector perturbation is unstable without one, so Quench's floor is likely intrinsic rather than an artifact.
 
-### `corollary1-deterministic-alignment` — Corollary 1 quantifies the aligning rotation outside the probability
+### `corollary1-deterministic-alignment` — Corollary 1 quantifies the aligning rotation outside the probability -- REFUTED
 
 **Kind:** `source_audit`
 
@@ -115,6 +119,10 @@ exists_rigidMotion_of_pairDist_tendsto proves the alignment step in the form the
 Progress. ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto lifts the alignment step to the almost-sure mode: if almost surely every pairwise distance converges, then almost surely the estimates are eventually alignable within any tolerance. That mode goes through by intersecting the finitely many almost-sure hypotheses and applying the deterministic step at each sample point.
 
 The in-probability mode needs one more thing, and it is a genuine obstacle rather than bookkeeping: the set of sample points admitting an eps-alignment is an existential over the isometry group, not a countable condition, so its measurability is not automatic. Making it measurable means introducing the alignment error as an infimum over rigid motions and proving that infimum continuous, which needs compactness of the group. That is the remaining work for this row, and it is also why the source's deterministic W^(u) deserves scrutiny: the object the argument produces is sample-dependent.
+
+REFUTED, with a machine-checked counterexample. not_exists_deterministic_rigidMotion_of_pairDist_exact exhibits a selection of raw-stress minimizers whose pairwise distances equal the target's EXACTLY at every stage -- so the corollary's hypothesis holds in its strongest possible form -- for which no sequence of orthogonal maps and translations gives convergence in probability of the coordinates. The witness is the one-dimensional two-point configuration and its reflection, each selected with probability one half; both are genuine minimizers because raw stress depends only on pairwise distances, and one motion within half the separation of both would place the two branches within the separation of each other. The printed quantifier is therefore not a matter of emphasis: as written the corollary is false.
+
+The repair is tendsto_measure_alignedConfig_dist_gt: choose the motion inside the probability, sample point by sample point. That is what a distance-based estimator can actually do and what the corollary's downstream uses need, and it is proved in both the alignment-error and the coordinate form.
 
 ## Detail
 
@@ -249,13 +257,13 @@ The in-probability mode needs one more thing, and it is a genuine obstacle rathe
 * **source anchor:** Corollary 1 (corollary, section 4.2)
 * **source locator:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:305-326`
 * **importance:** `headline`
-* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — The alignment step is now proved: convergence of every pairwise distance makes the configurations eventually alignable by a rigid motion, with no spectral hypothesis. What remains between this and the printed corollary is the probabilistic packaging -- lifting from a deterministic sequence to convergence in probability along a subsequence -- and the quantifier question recorded in corollary1-deterministic-alignment, since the source places the aligning rotation outside the probability.
+* **status / verification:** `compiled_source_repair` / `proved_in_build`
+* **semantic alignment:** `source_repair` — The corollary as printed places the orthogonal map and the translation outside the probability, one per stage, serving every sample point. That is false, and the refutation is machine-checked: a legitimate selection of raw-stress minimizers can return a reflected copy on some sample points and the original on others, matching every pairwise distance exactly while admitting no common alignment. The repair chooses the motion inside the probability and is proved in both the alignment-error and the coordinate form, in probability as well as almost surely. Every other clause of the corollary is met at the printed scope.
 * **source claim:** There exist orthogonal W^(u) and translations a^(u) such that every estimated point converges in probability to W^(u) psi_i + a^(u).
-* **Lean declarations:** `Acharyya2024.Consistency.ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto`, `Acharyya2024.Consistency.exists_rigidMotion_of_pairDist_tendsto`, `TauCeti.eventually_exists_rigidMotion_dist_lt`, `TauCeti.exists_rigidMotion_of_dist_eq`
+* **Lean declarations:** `Acharyya2024.Consistency.ae_eventually_exists_rigidMotion_of_ae_pairDist_tendsto`, `Acharyya2024.Consistency.exists_rigidMotion_of_pairDist_tendsto`, `Acharyya2024.Consistency.not_exists_deterministic_rigidMotion_of_pairDist_exact`, `Acharyya2024.Consistency.tendsto_measure_alignedConfig_dist_gt`, `Acharyya2024.Consistency.tendsto_measure_alignmentError_of_pairDist_convergesInProbability`, `TauCeti.alignedConfig`, `TauCeti.alignmentError`, `TauCeti.eventually_exists_rigidMotion_dist_lt`, `TauCeti.exists_delta_forall_exists_rigidMotion`, `TauCeti.exists_rigidMotion_of_dist_eq`
 * **gap refs:** `corollary1-deterministic-alignment`, `rigid-alignment-corollary`, `rigid-motion-engine-now-available`
-* **notes:** Previously unrepresented. The engine is now present in ForTauCeti as exact and approximate rigid-motion rigidity, neither of which Mathlib carries.
-* **next action:** Introduce the alignment error as an infimum over rigid motions, prove it continuous using compactness of the isometry group, and lift the almost-sure statement to convergence in probability.
+* **notes:** The alignment error -- the least uniform distance to the target achievable by a rigid motion -- is the quantity that converges. Its existence needs no measurability of the estimates, since a measure is monotone and subadditive on arbitrary sets.
+* **next action:** None. The printed statement is refuted and the repair is proved; retain the counterexample as the record of why the alignment must sit inside the probability.
 
 ### `A24-A2` — Growing models lie on a compact Riemannian model manifold
 
