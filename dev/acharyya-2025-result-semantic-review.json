@@ -205,21 +205,26 @@
      357
     ]
    },
-   "lean_declarations": [],
+   "lean_declarations": [
+    "Acharyya2025.ManifoldCondition.classicalMDSMatrix_const_eq_zero",
+    "Acharyya2025.ManifoldCondition.eigenvalues₀_classicalMDSMatrix_const_eq_zero",
+    "Acharyya2025.ManifoldCondition.no_eigenvalue_floor_for_const_selection",
+    "Acharyya2025.ManifoldCondition.rank_classicalMDSMatrix_const_eq_zero"
+   ],
    "clauses": [
     {
-     "source_clause": "Compact d-dimensional Riemannian latent manifold with geodesic distances equal population dissimilarities implies Assumptions 1 and 2.",
-     "lean_clause": "No manifold/geodesic sufficient-condition theorem was found.",
-     "relation": "missing",
-     "note": ""
+     "source_clause": "Assumption 1 and Assumption 2 hold when every model is associated with a vector on a d-dimensional compact Riemannian manifold whose pairwise geodesic distances equal the population dissimilarities.",
+     "lean_clause": "no_eigenvalue_floor_for_const_selection and rank_classicalMDSMatrix_const_eq_zero refute both conclusions for a constant selection meeting the hypothesis.",
+     "relation": "source_repair",
+     "note": "The hypothesis constrains the ambient manifold; the conclusion constrains the placement of the models within it."
     }
    ],
    "review": "No manifold/geodesic sufficient-condition theorem was found in the Acharyya2025 package or its cited foundation modules.",
    "notes": "This is the clearest remaining numbered-result coverage gap in the main text.",
    "gap_refs": [
-    "riemannian-proposition"
+    "proposition1-omits-spread-condition"
    ],
-   "next_action": "Formalize only if full-paper numbered-result coverage is a goal; it is not needed by Quench."
+   "next_action": "If a repair is wanted, formulate a spread condition on the model selection strong enough to keep the doubly centred matrix nondegenerate as n grows, and prove Assumptions 1 and 2 from it."
   },
   {
    "id": "A25-T2",
