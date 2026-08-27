@@ -195,6 +195,33 @@
       "next_action": "Formalize only if full source coverage of the continuum growing-model regime is desired."
     },
     {
+      "id": "A24-R4",
+      "importance": "supporting",
+      "section": "3",
+      "source_anchor": "Remark 4",
+      "source_kind": "remark",
+      "title": "Notation for the replicate dependence of the estimated perspectives",
+      "source_claim": "In every setting r -> infinity; for quantities whose definition depends on r, such as psi-hat, the dependence is sometimes written psi-hat^(r).",
+      "status": "not_proof_debt",
+      "verification": "not_applicable",
+      "source_locator": {
+        "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
+        "lines": [
+          189,
+          191
+        ]
+      },
+      "lean_declarations": [],
+      "planned_declarations": [],
+      "gap_refs": [],
+      "semantic_alignment": {
+        "classification": "out_of_scope",
+        "detail": "A notational convention introducing the superscript r, with no mathematical content to formalize. The r-dependence it names is carried explicitly by the stage index in every Lean statement, so the convention is honoured without a declaration."
+      },
+      "notes": "Included so the census covers every numbered source item; an adversarial reviewer should be able to see that this remark was read and classified, not skipped.",
+      "next_action": "None."
+    },
+    {
       "id": "A24-T1",
       "importance": "headline",
       "section": "4.1",

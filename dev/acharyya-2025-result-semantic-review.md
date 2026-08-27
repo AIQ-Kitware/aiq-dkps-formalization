@@ -16,6 +16,7 @@ Companion coverage census: `dev/acharyya-2025-full-source-census.json`.
 | --- | ---: |
 | `GAP exact finite probability constant not exposed` | 1 |
 | `GAP missing source result` | 1 |
+| `PASS` | 1 |
 | `PASS by checked composition` | 1 |
 | `PASS equivalent encoding` | 2 |
 | `PROOF ROLE REPLACED` | 11 |
@@ -556,3 +557,24 @@ The exact printed auxiliary statement is not exposed as a source-facing declarat
 **Companion census gap refs:** `appendix-proof-route-replaced`
 
 **Next action:** Optional source-fidelity wrapper only; no downstream theorem depends on this proof decomposition.
+
+### 19. `A25-R1` — Remark 1: Naming and notation for true and estimated perspectives and the B matrices
+
+**Verdict:** PASS
+
+**Source:** `Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md:232-241`
+
+**Normalized paper statement:** psi_i is called the true perspective of f_i and psi-hat_i the estimated perspective; B = -(1/2) H_n Delta^{o2} H_n^T and B-hat = -(1/2) H_n^T D^{o2} H_n^T, with eigenvalues indexed in decreasing order of magnitude.
+
+**Selected Lean declarations:**
+- *(none)*
+
+**Clause-by-clause comparison:**
+
+| paper clause | Lean clause | relation | assessment |
+| --- | --- | --- | --- |
+| psi_i and psi-hat_i are named the true and estimated perspectives; B and B-hat are the double-centred matrices, eigenvalues indexed by decreasing magnitude. | The double-centred matrices are classicalMDSMatrix applied to the population and sample dissimilarities; the decreasing-magnitude indexing is the eigenvalues0 ordering. | `equivalent_encoding` | Naming and notation; the objects it names already exist under their own names. |
+
+**Semantic review:**
+
+A notational convention rather than a mathematical claim. It is recorded so the census covers every numbered source item and a reviewer can see it was classified, not skipped.

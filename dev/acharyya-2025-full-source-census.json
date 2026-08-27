@@ -96,6 +96,33 @@
       "next_action": "Add a literal finite Theorem-1 wrapper only if exact constant-level source coverage is required."
     },
     {
+      "id": "A25-R1",
+      "importance": "supporting",
+      "section": "2",
+      "source_anchor": "Remark 1",
+      "source_kind": "remark",
+      "title": "Naming and notation for true and estimated perspectives and the B matrices",
+      "source_claim": "psi_i is called the true perspective of f_i and psi-hat_i the estimated perspective; B = -(1/2) H_n Delta^{o2} H_n^T and B-hat = -(1/2) H_n^T D^{o2} H_n^T, with eigenvalues indexed in decreasing order of magnitude.",
+      "status": "not_proof_debt",
+      "verification": "not_applicable",
+      "source_locator": {
+        "file": "Acharyya2025/prose/concentration-bounds-response-embeddings-2511.08307_transcription.md",
+        "lines": [
+          232,
+          241
+        ]
+      },
+      "lean_declarations": [],
+      "planned_declarations": [],
+      "gap_refs": [],
+      "semantic_alignment": {
+        "classification": "out_of_scope",
+        "detail": "Naming and notation only. The double-centred matrices it names are the classical MDS matrices already carried by classicalMDSMatrix, and the decreasing-magnitude eigenvalue indexing is the eigenvalues0 ordering; neither needs its own declaration."
+      },
+      "notes": "Included so the census covers every numbered source item.",
+      "next_action": "None."
+    },
+    {
       "id": "A25-C1",
       "importance": "major",
       "section": "4",

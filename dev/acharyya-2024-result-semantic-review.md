@@ -17,6 +17,7 @@ Companion coverage census: `dev/acharyya-2024-full-source-census.json`.
 | `GAP missing source result` | 3 |
 | `GAP only a specialization is formalized` | 5 |
 | `GAP stronger Lean hypotheses` | 3 |
+| `PASS` | 1 |
 | `PASS exact` | 1 |
 | `PASS generalized/stronger theorem` | 2 |
 
@@ -432,3 +433,24 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
 **Next action:** Formalize the continuous model-distribution layer if this source theorem is a completion target.
+
+### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
+
+**Verdict:** PASS
+
+**Source:** `Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md:189-191`
+
+**Normalized paper statement:** In every setting r -> infinity; for quantities whose definition depends on r, such as psi-hat, the dependence is sometimes written psi-hat^(r).
+
+**Selected Lean declarations:**
+- *(none)*
+
+**Clause-by-clause comparison:**
+
+| paper clause | Lean clause | relation | assessment |
+| --- | --- | --- | --- |
+| For quantities depending on r, such as psi-hat, the dependence is sometimes written psi-hat^(r). | Every Lean statement carries the replicate index explicitly as a stage parameter, so the convention is realised structurally rather than by a declaration. | `supplementary` | Notation only; there is no claim to prove. |
+
+**Semantic review:**
+
+A notational convention rather than a mathematical claim. It is recorded so the census covers every numbered source item and a reviewer can see it was classified, not skipped.
