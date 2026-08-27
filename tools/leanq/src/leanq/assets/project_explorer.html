@@ -80,6 +80,12 @@ svg text.band.empty{font-weight:400;fill:#9aa8b6;font-style:italic}
 .meta dd{margin:0;word-break:break-word}
 .title{font-weight:650;font-size:.92rem;word-break:break-word}
 .sub{font-size:.72rem;color:var(--muted);word-break:break-word;margin-top:2px}
+.cmd{margin-top:7px}
+.cmd .why{color:var(--muted);font-size:.67rem;margin:5px 0 2px}
+.cmd code{display:block;white-space:pre-wrap;word-break:break-all;padding:5px 7px;border-radius:6px;
+  border:1px solid var(--border);background:color-mix(in srgb,var(--accent) 6%,var(--panel));
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.7rem;line-height:1.35}
+.cmd button{margin-top:5px;font-size:.7rem;min-height:24px;padding:2px 8px}
 .actions{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}
 .actions button{font-size:.74rem;min-height:26px}
 .path{font-size:.72rem;padding-left:18px;margin:5px 0;max-height:220px;overflow:auto}
@@ -1118,13 +1124,20 @@ function exportData(scope) {
     edges: P.edges};
 }
 function dotValue(v){return JSON.stringify(String(v ?? ""))}
-function exportDot(data) {
+function exportDot(data, stem = "leanq-graph") {
   const palette = ["#8dd3c7","#ffffb3","#bebada","#fb8072","#80b1d3","#fdb462",
                    "#b3de69","#fccde5","#d9d9d9","#bc80bd","#ccebc5","#ffed6f"];
-  const lines = ["digraph LeanQ {",
+  /* The invocation travels with the file, so `head` on the .dot tells you how
+     to render it without going back to the viewer. */
+  const lines = [];
+  lines.push(`// leanq export: ${data.nodes.length} nodes, ${data.edges.length} edges, scope ${data.exportScope}`);
+  for (const [cmd, why] of graphvizCommands(stem, data.nodes.length))
+    lines.push(`//   ${cmd}`, `//     ${why}`);
+  lines.push("");
+  lines.push("digraph LeanQ {",
     "  graph [rankdir=LR, overlap=false, splines=true];",
     '  node [style=filled, fontname="Helvetica", fontsize=9];',
-    '  edge [color="#7d8da0", arrowsize=0.65];'];
+    '  edge [color="#7d8da0", arrowsize=0.65];');
   for (const n of data.nodes) {
     const cluster = !!n.cluster;
     const headline = !cluster && (n.selectedHeadline ?? isSelectedHeadline(n));
@@ -1162,6 +1175,26 @@ function exportDot(data) {
   lines.push("}");
   return lines.join("\n") + "\n";
 }
+/* Graphviz on a dependency DAG.  `dot` is the engine that reads the rankdir=LR
+   this file already sets, and its layering is the whole point of the drawing --
+   but its iterative passes are superlinear, so past a few thousand nodes they
+   need bounding, and past roughly twelve thousand only a force-directed engine
+   finishes at all.  The command is chosen from the size of what was exported so
+   the file can just be run. */
+function graphvizCommands(stem, nodeCount) {
+  const f = stem + ".dot", out = stem + ".svg";
+  if (nodeCount <= 2500)
+    return [[`dot -Tsvg ${f} -o ${out}`, "hierarchical, left to right"]];
+  if (nodeCount <= 12000)
+    return [[`dot -Tsvg -Gnslimit=2 -Gmclimit=2 ${f} -o ${out}`,
+             `hierarchical; the limits bound dot's iterative passes, which matter at ${nodeCount.toLocaleString()} nodes`],
+            [`sfdp -Tsvg -Goverlap=prism -Gbeautify=true ${f} -o ${out}`,
+             "force-directed, if dot is still too slow -- faster, but the dependency layering is lost"]];
+  return [[`sfdp -Tsvg -Goverlap=prism -Gbeautify=true ${f} -o ${out}`,
+           `force-directed; dot does not realistically finish on ${nodeCount.toLocaleString()} nodes`],
+          [`dot -Tsvg -Gnslimit=1 -Gmclimit=1 ${f} -o ${out}`,
+           "hierarchical, if you are willing to wait for it"]];
+}
 function download(name, text, type) {
   const a = document.createElement("a"), url = URL.createObjectURL(new Blob([text], {type}));
   a.href = url;
@@ -1175,8 +1208,59 @@ function runExport(format) {
   const scope = $("export-scope").value, data = exportData(scope);
   if (!data) return;
   const stem = `leanq-${scope}-${data.nodes.length}-nodes`;
-  if (format === "dot") download(stem + ".dot", exportDot(data), "text/vnd.graphviz");
-  else download(stem + ".json", JSON.stringify(data, null, 2) + "\n", "application/json");
+  if (format === "json") {
+    download(stem + ".json", JSON.stringify(data, null, 2) + "\n", "application/json");
+    return;
+  }
+  download(stem + ".dot", exportDot(data, stem), "text/vnd.graphviz");
+  showExportCommands(stem, data);
+}
+/* The same commands the .dot header carries, in a form that can be copied
+   straight into a shell next to the downloaded file. */
+function showExportCommands(stem, data) {
+  const rows = graphvizCommands(stem, data.nodes.length);
+  details.className = "";
+  details.replaceChildren();
+  const head = document.createElement("div");
+  head.className = "title";
+  head.textContent = `${stem}.dot`;
+  const sub = document.createElement("div");
+  sub.className = "sub";
+  sub.textContent = `${data.nodes.length.toLocaleString()} nodes · ` +
+    `${data.edges.length.toLocaleString()} edges · run this from the download directory ` +
+    `(the .dot file repeats it in its header).`;
+  details.append(head, sub);
+  const wrap = document.createElement("div");
+  wrap.className = "cmd";
+  for (const [cmd, why] of rows) {
+    const why_ = document.createElement("div");
+    why_.className = "why";
+    why_.textContent = why;
+    const code = document.createElement("code");
+    code.textContent = cmd;
+    wrap.append(why_, code);
+  }
+  const copy = document.createElement("button");
+  copy.textContent = "Copy command";
+  copy.onclick = () => {
+    const text = rows[0][0];
+    const done = () => { copy.textContent = "Copied"; setTimeout(() => copy.textContent = "Copy command", 1200); };
+    if (navigator.clipboard?.writeText) navigator.clipboard.writeText(text).then(done, () => fallback(text, done));
+    else fallback(text, done);
+  };
+  /* Clipboard access needs a secure context, and a file:// page is not one. */
+  const fallback = (text, done) => {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.append(ta);
+    ta.select();
+    try { document.execCommand("copy"); done(); } catch { ta.select(); }
+    ta.remove();
+  };
+  wrap.append(copy);
+  details.append(wrap);
 }
 
 /* ---------------------------------------------------------------- packages */
