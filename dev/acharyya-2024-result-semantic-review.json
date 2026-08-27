@@ -624,7 +624,9 @@
     "Acharyya2024.ContinuousMDS.tendsto_pointStress",
     "TauCeti.ae_ae_of_forall_ae",
     "TauCeti.integral_doubleSum_pi",
-    "TauCeti.map_evalPair_pi"
+    "TauCeti.map_evalPair_pi",
+    "TauCeti.measurableSet_exists_isMinOn_le",
+    "TauCeti.measurableSet_tendsto_isMinOn"
    ],
    "clauses": [
     {
@@ -681,7 +683,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Discharge the measurability hypothesis of TauCeti.ae_ae_of_forall_ae for the out-of-sample map -- by a measurable selection of minimizers, or by taking estimator measurability as the disclosed implicit assumption the repository already uses elsewhere -- and the chain closes."
+   "next_action": "State the L^p conclusion over the largest deviation across the minimizer set, which dominates every selection and whose convergence event is measurable by TauCeti.measurableSet_tendsto_isMinOn, then thread TauCeti.ae_ae_of_forall_ae and tendsto_lpPairDistErr_of_ae_tendsto. No measurable selection is needed."
   },
   {
    "id": "A24-T4",
@@ -795,7 +797,9 @@
     "Acharyya2024.ContinuousMDS.tendsto_pointStress",
     "TauCeti.ae_ae_of_forall_ae",
     "TauCeti.integral_doubleSum_pi",
-    "TauCeti.map_evalPair_pi"
+    "TauCeti.map_evalPair_pi",
+    "TauCeti.measurableSet_exists_isMinOn_le",
+    "TauCeti.measurableSet_tendsto_isMinOn"
    ],
    "clauses": [
     {
@@ -818,7 +822,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Discharge the measurability hypothesis of TauCeti.ae_ae_of_forall_ae for the out-of-sample map -- by a measurable selection of minimizers, or by taking estimator measurability as the disclosed implicit assumption the repository already uses elsewhere -- and the chain closes."
+   "next_action": "State the L^p conclusion over the largest deviation across the minimizer set, which dominates every selection and whose convergence event is measurable by TauCeti.measurableSet_tendsto_isMinOn, then thread TauCeti.ae_ae_of_forall_ae and tendsto_lpPairDistErr_of_ae_tendsto. No measurable selection is needed."
   },
   {
    "id": "A24-R4",

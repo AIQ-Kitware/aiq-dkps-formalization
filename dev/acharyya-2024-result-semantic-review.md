@@ -457,6 +457,8 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `TauCeti.ae_ae_of_forall_ae`
 - `TauCeti.integral_doubleSum_pi`
 - `TauCeti.map_evalPair_pi`
+- `TauCeti.measurableSet_exists_isMinOn_le`
+- `TauCeti.measurableSet_tendsto_isMinOn`
 
 **Clause-by-clause comparison:**
 
@@ -479,7 +481,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Discharge the measurability hypothesis of TauCeti.ae_ae_of_forall_ae for the out-of-sample map -- by a measurable selection of minimizers, or by taking estimator measurability as the disclosed implicit assumption the repository already uses elsewhere -- and the chain closes.
+**Next action:** State the L^p conclusion over the largest deviation across the minimizer set, which dominates every selection and whose convergence event is measurable by TauCeti.measurableSet_tendsto_isMinOn, then thread TauCeti.ae_ae_of_forall_ae and tendsto_lpPairDistErr_of_ae_tendsto. No measurable selection is needed.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -563,6 +565,8 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `TauCeti.ae_ae_of_forall_ae`
 - `TauCeti.integral_doubleSum_pi`
 - `TauCeti.map_evalPair_pi`
+- `TauCeti.measurableSet_exists_isMinOn_le`
+- `TauCeti.measurableSet_tendsto_isMinOn`
 
 **Clause-by-clause comparison:**
 
@@ -579,7 +583,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Discharge the measurability hypothesis of TauCeti.ae_ae_of_forall_ae for the out-of-sample map -- by a measurable selection of minimizers, or by taking estimator measurability as the disclosed implicit assumption the repository already uses elsewhere -- and the chain closes.
+**Next action:** State the L^p conclusion over the largest deviation across the minimizer set, which dominates every selection and whose convergence event is measurable by TauCeti.measurableSet_tendsto_isMinOn, then thread TauCeti.ae_ae_of_forall_ae and tendsto_lpPairDistErr_of_ae_tendsto. No measurable selection is needed.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 

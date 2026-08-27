@@ -256,6 +256,57 @@ theorem measurableSet_exists_isMinOn_le (hS : IsCompact S) (hSne : S.Nonempty)
   rw [hset]
   exact measurableSet_exists_mem_le hS hHc hHm 0
 
+/-! ### The event that all minimizers approach a reference point
+
+A statement "the minimizers converge" is about a set, not a chosen element, and the event that
+it holds is measurable without selecting anything.  `measurableSet_exists_isMinOn_le` gives the
+one-stage event; the convergence event is a countable combination of those, so it is measurable
+too.
+
+This settles the question a measurable-selection theorem would otherwise be invoked for: a
+convergence conclusion about minimizers can be integrated against without a selection, because
+the quantity being integrated need never name a particular minimizer. -/
+
+variable {F' : ℕ → Y → Ω → ℝ} {G' : ℕ → Y → Ω → ℝ}
+
+/-- The one-stage event that *every* minimizer of `F` is strictly within `c` of the reference,
+as the complement of the existential event. -/
+theorem measurableSet_forall_isMinOn_lt (hS : IsCompact S) (hSne : S.Nonempty)
+    {F G : Y → Ω → ℝ}
+    (hFc : ∀ ω, ContinuousOn (fun y => F y ω) S) (hFm : ∀ y ∈ S, Measurable (F y))
+    (hGc : ∀ ω, ContinuousOn (fun y => G y ω) S) (hGm : ∀ y ∈ S, Measurable (G y)) (c : ℝ) :
+    MeasurableSet {ω | ∀ y ∈ S, F y ω ≤ (⨅ z : S, F z ω) → G y ω < c} := by
+  have hcompl : {ω | ∀ y ∈ S, F y ω ≤ (⨅ z : S, F z ω) → G y ω < c}
+      = {ω | ∃ y ∈ S, F y ω ≤ (⨅ z : S, F z ω) ∧ c ≤ G y ω}ᶜ := by
+    ext ω
+    simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_exists, not_and, not_le]
+  rw [hcompl]
+  exact (measurableSet_exists_isMinOn_le hS hSne hFc hFm hGc hGm c).compl
+
+/--
+**The event that all minimizers approach the reference point is measurable.**
+
+`F n` are the stagewise objectives and `G n` measures the distance of a candidate from the
+reference.  The event is that for every tolerance, eventually every minimizer of `F n` is within
+it.  No minimizer is ever selected, so no measurable-selection theorem is needed.
+-/
+theorem measurableSet_tendsto_isMinOn (hS : IsCompact S) (hSne : S.Nonempty)
+    (hFc : ∀ n ω, ContinuousOn (fun y => F' n y ω) S)
+    (hFm : ∀ n, ∀ y ∈ S, Measurable (F' n y))
+    (hGc : ∀ n ω, ContinuousOn (fun y => G' n y ω) S)
+    (hGm : ∀ n, ∀ y ∈ S, Measurable (G' n y)) :
+    MeasurableSet {ω | ∀ k : ℕ, ∃ N : ℕ, ∀ n ≥ N,
+      ∀ y ∈ S, F' n y ω ≤ (⨅ z : S, F' n z ω) → G' n y ω < 1 / (k + 1 : ℝ)} := by
+  have hrw : {ω | ∀ k : ℕ, ∃ N : ℕ, ∀ n ≥ N,
+        ∀ y ∈ S, F' n y ω ≤ (⨅ z : S, F' n z ω) → G' n y ω < 1 / (k + 1 : ℝ)}
+      = ⋂ k : ℕ, ⋃ N : ℕ, ⋂ n : ℕ, ⋂ _ : N ≤ n,
+          {ω | ∀ y ∈ S, F' n y ω ≤ (⨅ z : S, F' n z ω) → G' n y ω < 1 / (k + 1 : ℝ)} := by
+    ext ω; simp [Set.mem_iInter, Set.mem_iUnion]
+  rw [hrw]
+  refine MeasurableSet.iInter fun k => MeasurableSet.iUnion fun N =>
+    MeasurableSet.iInter fun n => MeasurableSet.iInter fun _ => ?_
+  exact measurableSet_forall_isMinOn_lt hS hSne (hFc n) (hFm n) (hGc n) (hGm n) _
+
 end Minimizers
 
 end TauCeti
