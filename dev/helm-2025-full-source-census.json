@@ -43,8 +43,8 @@
   "gaps": {
     "stronger-analysis-hypotheses": {
       "kind": "source_audit",
-      "title": "The proved risk-transfer wrappers use stronger analytic regularity",
-      "detail": "The paper states sequential/pointwise continuity. Lean retains literal predicates but the main theorems use joint continuity/compact-range sufficient conditions and explicit estimator measurability."
+      "title": "Assumption 4's headline sentence and its displayed gloss differ; both are now formalized",
+      "detail": "The paper writes: \"The loss function l is continuous. That is, for every y in R^{d'}, ||l(h',y) - l(h'',y)|| -> 0 if ||h' - h''|| -> 0.\" The headline clause asserts continuity of a two-argument function, which is joint continuity. The displayed gloss that follows is separate continuity in the first argument only, which is strictly weaker -- separate continuity does not imply joint continuity. The two readings are not equivalent and the paper does not say which it intends.\n\nBoth are now formalized. ContinuousLoss is the headline reading and is what the theorems use. ContinuousLossInPrediction is the displayed gloss, with continuousLossInPrediction_of_continuousLoss and measurableLossInLabel_of_continuousLoss showing the headline reading implies the gloss and label measurability, so the difference is quantified rather than assumed away.\n\nHow much the difference costs is now pinned down. stronglyMeasurable_loss_of_printed_assumption4 shows the displayed gloss together with measurability of the loss in the label already gives joint strong measurability of the loss, by the Caratheodory argument. So the measurability the development draws from joint continuity does not need it. What joint continuity is still used for is the continuous-mapping step, where predictions and labels vary together; reproving that step under the gloss is the remaining work, and it is a subsequence argument rather than a missing foundation.\n\nThe other hypotheses this gap covered -- joint continuity of the learning rule in Assumption 2, compact range in Assumption 3, and estimator measurability -- are unchanged."
     },
     "spectral-vs-rawstress-bridge": {
       "kind": "source_audit",
@@ -91,11 +91,13 @@
         ]
       },
       "lean_declarations": [
+        "Helm2025.DKPS.ContinuousLossInPrediction",
         "Helm2025.DKPS.LossDominated",
         "Helm2025.DKPS.Theorem1",
         "Helm2025.DKPS.lossDominated_of_boundedLabelSupport",
         "Helm2025.DKPS.prob_convergence_not_enough_for_expectations",
-        "Helm2025.DKPS.risk_converges_fixed_n"
+        "Helm2025.DKPS.risk_converges_fixed_n",
+        "Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4"
       ],
       "planned_declarations": [],
       "gap_refs": [
@@ -128,6 +130,7 @@
       },
       "lean_declarations": [
         "Helm2025.DKPS.ConsistentInProbability",
+        "Helm2025.DKPS.ContinuousLossInPrediction",
         "Helm2025.DKPS.LossDominated",
         "Helm2025.DKPS.Theorem2_bayes",
         "Helm2025.DKPS.consistency_transfer_dkps_bayes",
@@ -137,6 +140,7 @@
         "Helm2025.DKPS.prob_convergence_not_enough_for_expectations",
         "Helm2025.DKPS.riskGivenTraining",
         "Helm2025.DKPS.risk_eq_integral_riskGivenTraining",
+        "Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4",
         "Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability"
       ],
       "planned_declarations": [],
@@ -267,10 +271,12 @@
         ]
       },
       "lean_declarations": [
-        "Helm2025.DKPS.ContinuousLossInPred",
         "Helm2025.DKPS.Assumption4",
         "Helm2025.DKPS.Assumption4'",
-        "Helm2025.DKPS.ContinuousLoss.continuousLossInPred"
+        "Helm2025.DKPS.ContinuousLoss.continuousLossInPred",
+        "Helm2025.DKPS.ContinuousLossInPred",
+        "Helm2025.DKPS.ContinuousLossInPrediction",
+        "Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4"
       ],
       "planned_declarations": [],
       "gap_refs": [
@@ -278,10 +284,10 @@
       ],
       "semantic_alignment": {
         "classification": "stronger_hypotheses",
-        "detail": "The literal pointwise-in-label predicate exists, while the main theorem assumes joint continuity of the loss as a convenient sufficient condition."
+        "detail": "ContinuousLoss is the headline sentence's reading, joint continuity. The displayed gloss is separate continuity in the prediction, formalized as ContinuousLossInPrediction; the headline implies it. The gloss plus label measurability already gives joint strong measurability, so only the continuous-mapping step still needs the stronger reading."
       },
       "notes": "No additional note.",
-      "next_action": "None."
+      "next_action": "Reprove the continuous-mapping step under ContinuousLossInPrediction via a.e.-convergent subsequences."
     },
     {
       "id": "H25-EQ1",
