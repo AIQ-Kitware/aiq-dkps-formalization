@@ -14,20 +14,18 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 
 | status | items |
 | --- | ---: |
-| `compiled_exact` | 3 |
+| `compiled_exact` | 5 |
 | `compiled_equivalent` | 2 |
 | `compiled_by_composition` | 3 |
-| `compiled_stronger_hypotheses` | 2 |
 | `compiled_source_repair` | 2 |
 
 ## Semantic-alignment summary
 
 | classification | items |
 | --- | ---: |
-| `exact` | 3 |
+| `exact` | 5 |
 | `equivalent_encoding` | 2 |
 | `by_composition` | 3 |
-| `stronger_hypotheses` | 2 |
 | `source_repair` | 2 |
 
 ## Items
@@ -37,9 +35,9 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 | `H25-T1` | `headline` | Theorem 1 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `H25-T2` | `headline` | Theorem 2 | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `H25-A1` | `major` | Assumption 1 | `compiled_exact` | `exact` | `proved_in_build` |
-| `H25-A2` | `major` | Assumption 2 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `H25-A2` | `major` | Assumption 2 | `compiled_exact` | `exact` | `proved_in_build` |
 | `H25-A3` | `major` | Assumption 3 | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
-| `H25-A4` | `major` | Assumption 4 | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `H25-A4` | `major` | Assumption 4 | `compiled_exact` | `exact` | `proved_in_build` |
 | `H25-EQ1` | `major` | Equation (1), dissimilarity definition | `compiled_exact` | `exact` | `proved_in_build` |
 | `H25-EQ2` | `major` | Equation (2), dissimilarity convergence | `compiled_by_composition` | `by_composition` | `proved_in_build` |
 | `H25-LEARN` | `major` | Statistical learning problem and Bayes risk | `compiled_exact` | `exact` | `proved_in_build` |
@@ -49,7 +47,7 @@ Theorems 1--2, Appendix Assumptions 1--4, Equation (3), and the MDS-consistency 
 
 ## Gaps and source repairs
 
-### `stronger-analysis-hypotheses` — Assumption 4's headline sentence and its displayed gloss differ; both are now formalized
+### `stronger-analysis-hypotheses` — Joint continuity replaced by the printed readings of Assumptions 2 and 4
 
 **Kind:** `source_audit`
 
@@ -60,6 +58,12 @@ Both are now formalized. ContinuousLoss is the headline reading and is what the 
 How much the difference costs is now pinned down. stronglyMeasurable_loss_of_printed_assumption4 shows the displayed gloss together with measurability of the loss in the label already gives joint strong measurability of the loss, by the Caratheodory argument. So the measurability the development draws from joint continuity does not need it. What joint continuity is still used for is the continuous-mapping step, where predictions and labels vary together; reproving that step under the gloss is the remaining work, and it is a subsequence argument rather than a missing foundation.
 
 The other hypotheses this gap covered -- joint continuity of the learning rule in Assumption 2, compact range in Assumption 3, and estimator measurability -- are unchanged.
+
+RESOLVED for Assumptions 2 and 4. Reading Assumption 2 again settles what it actually says: 'if max_i ||psihat_i - psi_i|| -> 0 then ||h(psihat_{n+1}; {(psihat_i, y_i)}) - h(psi_{n+1}; {(psi_i, y_i)})|| -> 0'. The labels y_i are the SAME on both sides. The printed assumption is therefore continuity in the embeddings with the labels held fixed, which is what ContinuousLearningRuleInEmbeddings records, and Assumption 4's displayed gloss is continuity in the prediction with the label held fixed.
+
+Both are now enough. The continuous-mapping step compares two configurations carrying identical labels, so only separate continuity is ever used; what the weaker readings cost is a modulus depending on the sample point, and the replacement is the subsequence principle (tendstoInMeasure_comp_of_continuous_fst). The measurability that joint continuity was silently supplying to the risk integrals comes instead from the Caratheodory argument (stronglyMeasurable_combined_loss_of_printed), at the cost of two label-measurability conditions that the joint readings imply. Theorem1_printed is the resulting paper-facing statement; it subsumes Theorem1 and does not use Assumption 3 at all.
+
+What this gap still covers is the compact-range encoding of Assumption 3 and the estimator measurability, both unchanged.
 
 ### `spectral-vs-rawstress-bridge` — Eigenvalue floor absent from Helm -- RESOLVED for the bridge, retained for the spectral chain
 
@@ -129,10 +133,10 @@ alignmentConsistency_of_pairwiseDist takes convergence in probability of the est
 * **status / verification:** `compiled_source_repair` / `proved_in_build`
 * **semantic alignment:** `source_repair` — The printed theorem is not provable as stated: its assumptions place no condition on the labels, and convergence in probability of the loss does not give convergence of the risks, as prob_convergence_not_enough_for_expectations witnesses. The formalization carries the weakest repair, an integrable envelope for the loss, and drops the compact-label hypothesis it previously used.
 * **source claim:** For fixed n, as DKPS estimation budgets grow, the risk of the decision function trained/evaluated on estimated perspectives converges to the risk based on true perspectives.
-* **Lean declarations:** `Helm2025.DKPS.ContinuousLossInPrediction`, `Helm2025.DKPS.LossDominated`, `Helm2025.DKPS.Theorem1`, `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`, `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`, `Helm2025.DKPS.risk_converges_fixed_n`, `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`
+* **Lean declarations:** `Helm2025.DKPS.ContinuousLossInPrediction`, `Helm2025.DKPS.LossDominated`, `Helm2025.DKPS.Theorem1`, `Helm2025.DKPS.Theorem1_printed`, `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`, `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`, `Helm2025.DKPS.risk_converges_fixed_n`, `Helm2025.DKPS.risk_converges_fixed_n_printed`, `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`
 * **gap refs:** `label-compact-support`, `stronger-analysis-hypotheses`
 * **notes:** The compact-label hypothesis, which no source passage states, has been replaced by the integrable-envelope hypothesis LossDominated; see gap label-compact-support.
-* **next action:** None.
+* **next action:** None for the assumptions; Theorem1_printed now runs on the printed readings of Assumptions 2 and 4 and does not use Assumption 3.
 
 ### `H25-T2` — Consistency transfer from true to estimated DKPS embeddings
 
@@ -164,13 +168,13 @@ alignmentConsistency_of_pairwiseDist takes convergence in probability of the est
 * **source anchor:** Assumption 2 (assumption, section appendix)
 * **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:355-369`
 * **importance:** `major`
-* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — The literal sequential predicate exists. The main theorem assumes a stronger joint continuity predicate and proves it implies the paper-shaped condition.
+* **status / verification:** `compiled_exact` / `proved_in_build`
+* **semantic alignment:** `exact` — The printed assumption holds the labels fixed and moves only the embeddings, and ContinuousLearningRuleInEmbeddings is exactly that. Theorem1_printed consumes it in place of joint continuity, so the stronger reading is no longer needed. The sequential form of the printed assumption is equivalent to it, the domain being metric.
 * **source claim:** Sequentially close training sets and query points produce close predictions.
-* **Lean declarations:** `Helm2025.DKPS.PaperA2_SequentialContinuity`, `Helm2025.DKPS.Assumption2`, `Helm2025.DKPS.ContinuousLearningRule.paperA2`
+* **Lean declarations:** `Helm2025.DKPS.Assumption2`, `Helm2025.DKPS.ContinuousLearningRule.paperA2`, `Helm2025.DKPS.ContinuousLearningRuleInEmbeddings`, `Helm2025.DKPS.PaperA2_SequentialContinuity`, `Helm2025.DKPS.Theorem1_printed`, `Helm2025.DKPS.continuousLearningRuleInEmbeddings_of_continuousLearningRule`
 * **gap refs:** `stronger-analysis-hypotheses`
 * **notes:** No additional note.
-* **next action:** None.
+* **next action:** None. The printed reading is formalized and is what the paper-facing theorem now consumes.
 
 ### `H25-A3` — Closed, bounded, complete decision-function image
 
@@ -189,13 +193,13 @@ alignmentConsistency_of_pairwiseDist takes convergence in probability of the est
 * **source anchor:** Assumption 4 (assumption, section appendix)
 * **source locator:** `Helm2025/prose/statistical_inference_black_box_generative_models_dkps.md:372-373`
 * **importance:** `major`
-* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
-* **semantic alignment:** `stronger_hypotheses` — ContinuousLoss is the headline sentence's reading, joint continuity. The displayed gloss is separate continuity in the prediction, formalized as ContinuousLossInPrediction; the headline implies it. The gloss plus label measurability already gives joint strong measurability, so only the continuous-mapping step still needs the stronger reading.
+* **status / verification:** `compiled_exact` / `proved_in_build`
+* **semantic alignment:** `exact` — ContinuousLossInPrediction is the displayed gloss, and it is now what the paper-facing theorem consumes. The continuous-mapping step is reproved from it by the subsequence principle, and the joint measurability the risk integrals need comes from the Caratheodory argument rather than from joint continuity. The headline sentence's stronger reading remains available and implies this one.
 * **source claim:** For each fixed label y, the loss varies continuously with the prediction.
-* **Lean declarations:** `Helm2025.DKPS.Assumption4`, `Helm2025.DKPS.Assumption4'`, `Helm2025.DKPS.ContinuousLoss.continuousLossInPred`, `Helm2025.DKPS.ContinuousLossInPred`, `Helm2025.DKPS.ContinuousLossInPrediction`, `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`
+* **Lean declarations:** `Helm2025.DKPS.Assumption4`, `Helm2025.DKPS.Assumption4'`, `Helm2025.DKPS.ContinuousLoss.continuousLossInPred`, `Helm2025.DKPS.ContinuousLossInPred`, `Helm2025.DKPS.ContinuousLossInPrediction`, `Helm2025.DKPS.Theorem1_printed`, `Helm2025.DKPS.loss_converges_in_prob_printed`, `Helm2025.DKPS.stronglyMeasurable_combined_loss_of_printed`, `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`
 * **gap refs:** `stronger-analysis-hypotheses`
 * **notes:** No additional note.
-* **next action:** Reprove the continuous-mapping step under ContinuousLossInPrediction via a.e.-convergent subsequences.
+* **next action:** None. The displayed gloss is what the paper-facing theorem consumes.
 
 ### `H25-EQ1` — Pairwise dissimilarity is the query-averaged Frobenius distance
 

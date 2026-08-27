@@ -256,6 +256,53 @@ def ContinuousLearningRule (n : ℕ) (d d' : ℕ) (learn : LearningRule n d d') 
   Continuous (fun (p : (Fin n → E d × Y d') × E d) => learn p.1 p.2)
 
 /--
+Assumption A2 **as printed**.
+
+The paper's Assumption 2 reads: if `max_i ‖psihat_i - psi_i‖ -> 0` then
+`‖h(psihat_{n+1}; {(psihat_i, y_i)}) - h(psi_{n+1}; {(psi_i, y_i)})‖ -> 0`.  The labels `y_i`
+are the *same* on both sides: only the embeddings move.  So the printed assumption is
+continuity in the embedding coordinates with the labels held fixed, which is strictly weaker
+than the joint continuity `ContinuousLearningRule` asks for.
+
+This predicate is that reading, and it is all the convergence argument needs, because the step
+it feeds compares two configurations carrying identical labels.
+-/
+def ContinuousLearningRuleInEmbeddings (n : ℕ) (d d' : ℕ) (learn : LearningRule n d d') : Prop :=
+  ∀ ys : Fin n → Y d',
+    Continuous (fun p : (Fin n → E d) × E d => learn (fun i => (p.1 i, ys i)) p.2)
+
+/-- The joint reading implies the printed one. -/
+theorem continuousLearningRuleInEmbeddings_of_continuousLearningRule (n d d' : ℕ)
+    (learn : LearningRule n d d') (h : ContinuousLearningRule n d d' learn) :
+    ContinuousLearningRuleInEmbeddings n d d' learn := by
+  intro ys
+  have h' : Continuous (fun p : (Fin n → E d × Y d') × E d => learn p.1 p.2) := h
+  have hmap : Continuous
+      (fun p : (Fin n → E d) × E d => ((fun i => (p.1 i, ys i)), p.2)) := by
+    refine Continuous.prodMk (continuous_pi fun i => ?_) continuous_snd
+    exact ((continuous_apply i).comp continuous_fst).prodMk continuous_const
+  exact h'.comp hmap
+
+/-- Measurability of the learning rule in the labels, for each fixed pair of embeddings.  With
+the printed Assumption 2 this gives joint measurability by the Carathéodory argument, which is
+what the risk integrals need and all that joint continuity was supplying. -/
+def MeasurableLearningRuleInLabels (n : ℕ) (d d' : ℕ) (learn : LearningRule n d d') : Prop :=
+  ∀ p : (Fin n → E d) × E d,
+    Measurable (fun ys : Fin n → Y d' => learn (fun i => (p.1 i, ys i)) p.2)
+
+/-- The joint reading implies label measurability of the learning rule. -/
+theorem measurableLearningRuleInLabels_of_continuousLearningRule (n d d' : ℕ)
+    (learn : LearningRule n d d') (h : ContinuousLearningRule n d d' learn) :
+    MeasurableLearningRuleInLabels n d d' learn := by
+  intro p
+  have h' : Continuous (fun q : (Fin n → E d × Y d') × E d => learn q.1 q.2) := h
+  have hmap : Continuous
+      (fun ys : Fin n → Y d' => ((fun i => (p.1 i, ys i)), p.2)) := by
+    refine Continuous.prodMk (continuous_pi fun i => ?_) continuous_const
+    exact continuous_const.prodMk (continuous_apply i)
+  exact (h'.comp hmap).measurable
+
+/--
 Assumption A3 (paper): The learning rule has bounded range.
 Specifically, the image of the learning rule is contained in a single compact set `K`
 (uniformly over all training sets and test embeddings).

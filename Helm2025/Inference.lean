@@ -347,6 +347,41 @@ theorem Theorem1 (n d d' : ℕ)
       (psi_hat:=psi_hat) h_meas_psi h_align h_inv h_cont_learn h_bound_learn h_cont_loss h_dom)
 
 
+/--
+**Theorem 1 (paper), under the printed readings of Assumptions 2 and 4.**
+
+Same conclusion as `Theorem1`, with the two continuity hypotheses replaced by exactly what the
+paper writes.  Assumption 2 as printed moves only the embeddings and holds the labels fixed;
+Assumption 4 as printed moves only the prediction and holds the label fixed.  Neither is joint
+continuity, and neither needs to be: the step they feed compares two configurations carrying
+identical labels, and the measurability the risk integrals need comes from the Carathéodory
+argument instead.
+
+The two label-measurability conditions are implied by the joint readings, so this theorem
+subsumes `Theorem1`.  Assumption 3 is not needed at all once the loss carries an integrable
+envelope.
+-/
+theorem Theorem1_printed (n d d' : ℕ)
+    (P : Measure (Z d d')) [IsProbabilityMeasure P]
+    (learn : LearningRule n d d')
+    (loss : LossFunction d')
+    (psi_hat : ℕ → (Sample n d d') → Fin (n + 1) → E d)
+    -- extra (implicit) assumption beyond the paper: the embedding estimators are measurable
+    (h_meas_psi : ∀ u, Measurable (psi_hat u))
+    -- paper Eq. (3): the estimated embeddings are alignment-consistent
+    (h_align : AlignmentConsistency (n := n) (d := d) (d' := d') (P := P) psi_hat)
+    (h_inv : Assumption1 (n := n) (d := d) (d' := d') learn)              -- A1
+    (hA2 : ContinuousLearningRuleInEmbeddings n d d' learn)               -- A2 as printed
+    (hA4 : ContinuousLossInPrediction d' loss)                            -- A4 as printed
+    (hML : MeasurableLossInLabel d' loss)
+    (hMlearn : MeasurableLearningRuleInLabels n d d' learn)
+    (h_dom : LossDominated n d d' P learn loss) :
+    Tendsto (fun u => Rhatℓ n d d' P learn loss (psi_hat u)) atTop
+      (𝓝 (Rℓ n d d' P learn loss)) := by
+  simpa [Rhatℓ, Rℓ, AlignmentConsistency, Assumption1] using
+    (risk_converges_fixed_n_printed (n := n) (d := d) (d' := d') (P := P) (learn := learn)
+      (loss := loss) (psi_hat := psi_hat) h_meas_psi h_align h_inv hA2 hA4 hML hMlearn h_dom)
+
 /-- **Theorem 2 (paper)**: consistency transfers from true to estimated embeddings along a schedule. -/
 theorem Theorem2_bayes (d d' : ℕ)
     (P : Measure (Z d d')) [IsProbabilityMeasure P]

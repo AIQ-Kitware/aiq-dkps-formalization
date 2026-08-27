@@ -30,9 +30,9 @@ This is the entry point for **paper theorem vs. Lean theorem** comparison. The c
 | `helm-2025` | `H25-T1` | Theorem 1 | REPAIR uniform integrability is necessary | The envelope is implied by finiteness of the risk the paper writes down. |
 | `helm-2025` | `H25-T2` | Theorem 2 | REPAIR uniform integrability; GAP consistency notion | Necessity witnessed by prob_convergence_not_enough_for_expectations. |
 | `helm-2025` | `H25-A1` | Assumption 1 | PASS exact | No substantive delta recorded. |
-| `helm-2025` | `H25-A2` | Assumption 2 | GAP stronger Lean hypotheses | The main theorem uses a joint continuity predicate on the learning rule. -> Assumption2 is a stronger sufficient condition and proves the paper-shaped sequential condition. |
+| `helm-2025` | `H25-A2` | Assumption 2 | GAP stronger Lean hypotheses | No substantive delta recorded. |
 | `helm-2025` | `H25-A3` | Assumption 3 | PASS equivalent encoding | No substantive delta recorded. |
-| `helm-2025` | `H25-A4` | Assumption 4 | GAP stronger Lean hypotheses | The main theorem uses joint continuity of loss. -> ContinuousLoss is stronger than the printed pointwise-in-label condition. |
+| `helm-2025` | `H25-A4` | Assumption 4 | GAP stronger Lean hypotheses | No substantive delta recorded. |
 | `helm-2025` | `H25-EQ3` | Equation (3), alignment consistency | PASS equivalent encoding | The source takes a subsequence r_u. -> Lean packages the selected estimation stages into one abstract budget sequence. |
 | `helm-2025` | `H25-BRIDGE` | Appendix A.1 use of Acharyya et al. (2024) alignment consistency | GAP stronger Lean hypotheses | A raw-stress bridge using Acharyya2024 would be closer to the paper route. |
 | `helm-2025` | `H25-EQ1` | Equation (1), dissimilarity definition | PASS | No substantive delta recorded. |
