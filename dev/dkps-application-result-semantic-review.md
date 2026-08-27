@@ -47,6 +47,8 @@ This is the entry point for **paper theorem vs. Lean theorem** comparison. The c
 | `quench-2026` | `Q26-T2B` | Theorem 2, query-efficiency conclusion | GAP stronger analytic hypotheses | These are explicit analytic premises not stated in the paper theorem. |
 | `quench-2026` | `Q26-RAW-FIN` | Finite-model raw-response capstone | SUPPLEMENTARY Lean extension | No printed theorem starts from the complete finite raw cached-response sampling model. -> FiniteSubsetData/Assumptions and finiteFixedSubset/finiteAllQueries discharge concentration, realization, and query-efficiency end to end. |
 | `quench-2026` | `Q26-RAW-INF` | Compact-infinite raw-response capstone | SUPPLEMENTARY Lean extension | The printed theorem does not specify a uniform infinite-population concentration mechanism. -> InfiniteSubsetData/Assumptions and infiniteFixedSubset/infiniteAllQueries add compact/cover regularity and prove the corresponding end-to-end theorem. |
+| `quench-2026` | `Q26-Y` | Benchmark scoring function | GAP unbounded codomain | Lean drops the [0,1] codomain, which also drops the automatic finiteness of the MSE integral. |
+| `quench-2026` | `Q26-D` | Response means and the dissimilarity matrix | GAP normalisation mismatch | Differs from the display by the 1/m factor the imported Theorem 1 assumes. |
 
 ## Detailed reviews
 

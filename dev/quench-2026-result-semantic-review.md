@@ -14,7 +14,10 @@ Companion coverage census: `dev/quench-2026-full-source-census.json`.
 
 | verdict | rows |
 | --- | ---: |
+| `GAP normalisation mismatch` | 1 |
 | `GAP stronger analytic hypotheses` | 2 |
+| `GAP unbounded codomain` | 1 |
+| `PASS` | 1 |
 | `PASS equivalent encoding` | 1 |
 | `PASS exact` | 1 |
 | `PROOF ROLE REPLACED` | 1 |
@@ -37,6 +40,8 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | `Q26-T2B` | Theorem 2, query-efficiency conclusion | GAP stronger analytic hypotheses |
 | `Q26-RAW-FIN` | Finite-model raw-response capstone | SUPPLEMENTARY Lean extension |
 | `Q26-RAW-INF` | Compact-infinite raw-response capstone | SUPPLEMENTARY Lean extension |
+| `Q26-Y` | Benchmark scoring function | GAP unbounded codomain |
+| `Q26-D` | Response means and the dissimilarity matrix | GAP normalisation mismatch |
 
 ## Relation legend
 
@@ -59,7 +64,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 
 **Verdict:** REPAIR source mismatch
 
-**Source:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:87-96`
+**Source:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:78-96`
 
 **Normalized paper statement:** For r=omega(n^3) and bounded response covariance, the maximum aligned perspective error is bounded by a cubic polynomial in (n^3/r)^(1/2-delta) with high probability.
 
@@ -382,3 +387,83 @@ The OLS formalization is an additional theorem family with explicit affine-risk 
 **Companion census gap refs:** `ols-theory-practice`
 
 **Next action:** None for Theorem 2 source fidelity.
+
+### 12. `Q26-Y` — Benchmark scoring function: The benchmark score is a [0,1]-valued function of a model and a query subset
+
+**Verdict:** GAP unbounded codomain
+
+**Source:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:36-44`
+
+**Normalized paper statement:** y : F x 2^{Q*} -> [0,1] is the benchmark scoring function; y(f, Q*) is the score of f on all queries, and yhat_Q := y(f, Q) its score on a subset.
+
+**Selected Lean declarations:**
+- `yFull`
+- `yQ`
+
+**Clause-by-clause comparison:**
+
+| paper clause | Lean clause | relation | assessment |
+| --- | --- | --- | --- |
+| y : F x 2^{Q*} -> [0,1] is the benchmark scoring function. | score : Model Q X -> Finset Q -> R, with yFull and yQ the two displayed evaluations. | `lean_weaker_hypothesis` | Lean drops the [0,1] codomain, which also drops the automatic finiteness of the MSE integral. |
+
+**Semantic review:**
+
+yFull and yQ are the two displayed evaluations. Lean drops the [0,1] codomain and uses a real-valued score, which is more general but removes the automatic integrability the bounded range supplies. Recorded as gap unbounded-score-codomain.
+
+**Additional note:** Restoring the bound would strengthen the MSE statements rather than restrict them.
+
+**Companion census gap refs:** `unbounded-score-codomain`
+
+**Next action:** Consider a bounded-score variant so the MSE integrals are unconditionally finite.
+
+### 13. `Q26-D` — Response means and the dissimilarity matrix: Query-averaged response matrices and their pairwise Frobenius dissimilarities
+
+**Verdict:** GAP normalisation mismatch
+
+**Source:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:50-62`
+
+**Normalized paper statement:** Xbar_{ij.} = (1/r) sum_k g(f_i(q_j))_k, and D is the pairwise distance matrix with entries D_{ii'} = ||Xbar_i - Xbar_{i'}||_F.
+
+**Selected Lean declarations:**
+- `Acharyya2024.responseDistEntry`
+- `Acharyya2024.responseDist`
+- `DkpsQuench2026.augmentedSampleResponseDist`
+
+**Clause-by-clause comparison:**
+
+| paper clause | Lean clause | relation | assessment |
+| --- | --- | --- | --- |
+| Xbar_{ij.} = (1/r) sum_k g(f_i(q_j))_k. | The raw-response replicate mean the capstones consume. | `exact` |  |
+| D_{ii'} = \|\|Xbar_i - Xbar_{i'}\|\|_F. | Acharyya2024.responseDistEntry, which is (m)^{-1} * \|\|Xbar i - Xbar j\|\|. | `different_quantifier_encoding` | Differs from the display by the 1/m factor the imported Theorem 1 assumes. |
+
+**Semantic review:**
+
+The replicate average is the raw-response mean the capstones consume. The dissimilarity Lean uses is Acharyya2024.responseDistEntry, which carries a (m)^{-1} factor the Quench display does not; see dissimilarity-normalisation-mismatch for why the estimator is unaffected and Assumption 1 is not.
+
+**Additional note:** This row exists because the displayed D had no census coverage at all, which is how the normalisation mismatch went unrecorded.
+
+**Companion census gap refs:** `dissimilarity-normalisation-mismatch`
+
+**Next action:** Decide whether Quench should state D with the 1/m factor or carry the rescaling explicitly in Assumption 1.
+
+### 14. `Q26-INFER` — Inference in the DKPS: Model-level inference is carried out on perspective-score pairs
+
+**Verdict:** PASS
+
+**Source:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:99-116`
+
+**Normalized paper statement:** h_n^Q(f) = hhat_n^Q(Psihat_Q(f)) with hhat_n^Q trained on the perspective-score pairs, and the goal is to minimise E_{P_f}[l(h_n^Q(f), y)].
+
+**Selected Lean declarations:**
+- `Risk`
+- `MSE`
+
+**Clause-by-clause comparison:**
+
+| paper clause | Lean clause | relation | assessment |
+| --- | --- | --- | --- |
+| h_n^Q(f) = hhat_n^Q(Psihat_Q(f)); minimise E_{P_f}[l(h_n^Q(f), y)]. | Risk Pf l y h with MSE its squared-loss instance; the composition with the perspective map is inlined at each use site. | `equivalent_encoding` |  |
+
+**Semantic review:**
+
+Risk is the expected loss over Pf and MSE its squared-loss instance. Lean composes the decision function with the perspective map directly at each use site rather than naming h_n^Q, which is the same object with the composition inlined.

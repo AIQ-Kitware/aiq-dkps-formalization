@@ -39,7 +39,7 @@
    "source_locator": {
     "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
     "lines": [
-     87,
+     78,
      96
     ]
    },
@@ -552,6 +552,116 @@
     "ols-theory-practice"
    ],
    "next_action": "None for Theorem 2 source fidelity."
+  },
+  {
+   "id": "Q26-Y",
+   "source_anchor": "Benchmark scoring function",
+   "source_kind": "definition",
+   "title": "The benchmark score is a [0,1]-valued function of a model and a query subset",
+   "importance": "major",
+   "verdict": "GAP unbounded codomain",
+   "literal_source_covered": false,
+   "source_claim": "y : F x 2^{Q*} -> [0,1] is the benchmark scoring function; y(f, Q*) is the score of f on all queries, and yhat_Q := y(f, Q) its score on a subset.",
+   "source_locator": {
+    "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+    "lines": [
+     36,
+     44
+    ]
+   },
+   "lean_declarations": [
+    "yFull",
+    "yQ"
+   ],
+   "clauses": [
+    {
+     "source_clause": "y : F x 2^{Q*} -> [0,1] is the benchmark scoring function.",
+     "lean_clause": "score : Model Q X -> Finset Q -> R, with yFull and yQ the two displayed evaluations.",
+     "relation": "lean_weaker_hypothesis",
+     "note": "Lean drops the [0,1] codomain, which also drops the automatic finiteness of the MSE integral."
+    }
+   ],
+   "review": "yFull and yQ are the two displayed evaluations. Lean drops the [0,1] codomain and uses a real-valued score, which is more general but removes the automatic integrability the bounded range supplies. Recorded as gap unbounded-score-codomain.",
+   "notes": "Restoring the bound would strengthen the MSE statements rather than restrict them.",
+   "gap_refs": [
+    "unbounded-score-codomain"
+   ],
+   "next_action": "Consider a bounded-score variant so the MSE integrals are unconditionally finite."
+  },
+  {
+   "id": "Q26-D",
+   "source_anchor": "Response means and the dissimilarity matrix",
+   "source_kind": "definition",
+   "title": "Query-averaged response matrices and their pairwise Frobenius dissimilarities",
+   "importance": "major",
+   "verdict": "GAP normalisation mismatch",
+   "literal_source_covered": false,
+   "source_claim": "Xbar_{ij.} = (1/r) sum_k g(f_i(q_j))_k, and D is the pairwise distance matrix with entries D_{ii'} = ||Xbar_i - Xbar_{i'}||_F.",
+   "source_locator": {
+    "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+    "lines": [
+     50,
+     62
+    ]
+   },
+   "lean_declarations": [
+    "Acharyya2024.responseDistEntry",
+    "Acharyya2024.responseDist",
+    "DkpsQuench2026.augmentedSampleResponseDist"
+   ],
+   "clauses": [
+    {
+     "source_clause": "Xbar_{ij.} = (1/r) sum_k g(f_i(q_j))_k.",
+     "lean_clause": "The raw-response replicate mean the capstones consume.",
+     "relation": "exact",
+     "note": ""
+    },
+    {
+     "source_clause": "D_{ii'} = ||Xbar_i - Xbar_{i'}||_F.",
+     "lean_clause": "Acharyya2024.responseDistEntry, which is (m)^{-1} * ||Xbar i - Xbar j||.",
+     "relation": "different_quantifier_encoding",
+     "note": "Differs from the display by the 1/m factor the imported Theorem 1 assumes."
+    }
+   ],
+   "review": "The replicate average is the raw-response mean the capstones consume. The dissimilarity Lean uses is Acharyya2024.responseDistEntry, which carries a (m)^{-1} factor the Quench display does not; see dissimilarity-normalisation-mismatch for why the estimator is unaffected and Assumption 1 is not.",
+   "notes": "This row exists because the displayed D had no census coverage at all, which is how the normalisation mismatch went unrecorded.",
+   "gap_refs": [
+    "dissimilarity-normalisation-mismatch"
+   ],
+   "next_action": "Decide whether Quench should state D with the 1/m factor or carry the rescaling explicitly in Assumption 1."
+  },
+  {
+   "id": "Q26-INFER",
+   "source_anchor": "Inference in the DKPS",
+   "source_kind": "definition",
+   "title": "Model-level inference is carried out on perspective-score pairs",
+   "importance": "supporting",
+   "verdict": "PASS",
+   "literal_source_covered": true,
+   "source_claim": "h_n^Q(f) = hhat_n^Q(Psihat_Q(f)) with hhat_n^Q trained on the perspective-score pairs, and the goal is to minimise E_{P_f}[l(h_n^Q(f), y)].",
+   "source_locator": {
+    "file": "DkpsQuench2026/prose/quench-icml-nonanon_transcription.md",
+    "lines": [
+     99,
+     116
+    ]
+   },
+   "lean_declarations": [
+    "Risk",
+    "MSE"
+   ],
+   "clauses": [
+    {
+     "source_clause": "h_n^Q(f) = hhat_n^Q(Psihat_Q(f)); minimise E_{P_f}[l(h_n^Q(f), y)].",
+     "lean_clause": "Risk Pf l y h with MSE its squared-loss instance; the composition with the perspective map is inlined at each use site.",
+     "relation": "equivalent_encoding",
+     "note": ""
+    }
+   ],
+   "review": "Risk is the expected loss over Pf and MSE its squared-loss instance. Lean composes the decision function with the perspective map directly at each use site rather than naming h_n^Q, which is the same object with the composition inlined.",
+   "notes": "No additional note.",
+   "gap_refs": [],
+   "next_action": "None."
   }
  ]
 }
