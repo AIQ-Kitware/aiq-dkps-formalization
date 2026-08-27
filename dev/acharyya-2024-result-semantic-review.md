@@ -434,6 +434,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding_mem_mds`
+- `Acharyya2024.ContinuousMDS.eventually_forall_isMinOn_dist_lt`
 - `Acharyya2024.ContinuousMDS.exists_min_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.exists_min_pointStress`
 - `Acharyya2024.ContinuousMDS.frameEmbedding`
@@ -481,7 +482,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** State the L^p conclusion over the largest deviation across the minimizer set, which dominates every selection and whose convergence event is measurable by TauCeti.measurableSet_tendsto_isMinOn, then thread TauCeti.ae_ae_of_forall_ae and tendsto_lpPairDistErr_of_ae_tendsto. No measurable selection is needed.
+**Next action:** Thread eventually_forall_isMinOn_dist_lt through TauCeti.ae_ae_of_forall_ae and tendsto_lpPairDistErr_of_ae_tendsto. Every ingredient is proved and no step names a chosen minimizer, so no measurable selection is involved.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -543,6 +544,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding_mem_mds`
+- `Acharyya2024.ContinuousMDS.eventually_forall_isMinOn_dist_lt`
 - `Acharyya2024.ContinuousMDS.exists_min_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.exists_min_pointStress`
 - `Acharyya2024.ContinuousMDS.frameEmbedding`
@@ -583,7 +585,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** State the L^p conclusion over the largest deviation across the minimizer set, which dominates every selection and whose convergence event is measurable by TauCeti.measurableSet_tendsto_isMinOn, then thread TauCeti.ae_ae_of_forall_ae and tendsto_lpPairDistErr_of_ae_tendsto. No measurable selection is needed.
+**Next action:** Thread eventually_forall_isMinOn_dist_lt through TauCeti.ae_ae_of_forall_ae and tendsto_lpPairDistErr_of_ae_tendsto. Every ingredient is proved and no step names a chosen minimizer, so no measurable selection is involved.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 

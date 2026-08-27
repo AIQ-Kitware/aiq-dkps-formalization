@@ -1211,4 +1211,70 @@ theorem ae_tendsto_outOfSampleExtension_of_iid {d : Nat} (P : Measure M) [IsProb
     hlip hDdense hptwD
   exact tendsto_argmin_of_tendsto_of_equiLipschitz hlip hptw hVmin hVbdd huniq
 
+/--
+**Every minimizer, not just a chosen one, eventually lies near the limit.**
+
+`tendsto_argmin_of_tendsto_of_equiLipschitz` moves a given sequence of minimizers.  This is the
+statement about the minimizer *set*: for every tolerance, eventually every minimizer of `G n` is
+within it of `v'`.  Nothing is selected, which is what lets the conclusion be integrated against
+-- the event it describes is measurable by `TauCeti.measurableSet_tendsto_isMinOn`.
+-/
+theorem eventually_forall_isMinOn_dist_lt {d : Nat}
+    {G : Nat → Rvec d → Real} {g : Rvec d → Real} {v' : Rvec d}
+    (hlip : ∀ R : Real, ∃ L : Real, 0 ≤ L ∧ ∀ u : Nat, ∀ v w : Rvec d,
+      ‖v‖ ≤ R → ‖w‖ ≤ R → |G u v - G u w| ≤ L * ‖v - w‖)
+    (hptw : ∀ v : Rvec d, Tendsto (fun u => G u v) atTop (𝓝 (g v)))
+    {Rb : Real} (hbdd : ∀ u : Nat, ∀ v : Rvec d, (∀ w : Rvec d, G u v ≤ G u w) → ‖v‖ ≤ Rb)
+    (huniq : ∀ w : Rvec d, (∀ w' : Rvec d, g w ≤ g w') → w = v') :
+    ∀ ε > (0 : Real), ∀ᶠ u in atTop,
+      ∀ v : Rvec d, (∀ w : Rvec d, G u v ≤ G u w) → ‖v - v'‖ < ε := by
+  classical
+  intro ε hε
+  by_contra hcon
+  rw [Filter.not_eventually] at hcon
+  have hbad : ∃ᶠ u in atTop, ∃ v : Rvec d,
+      (∀ w : Rvec d, G u v ≤ G u w) ∧ ε ≤ ‖v - v'‖ := by
+    refine hcon.mono fun u hu => ?_
+    push Not at hu
+    obtain ⟨v, hv, hd⟩ := hu
+    exact ⟨v, hv, hd⟩
+  obtain ⟨σ, hσmono, hσ⟩ := Filter.extraction_of_frequently_atTop hbad
+  choose V hVmin hVfar using hσ
+  -- the bad minimizers are bounded, so they subconverge
+  have hmem : ∀ k, V k ∈ Metric.closedBall (0 : Rvec d) Rb := by
+    intro k
+    rw [mem_closedBall_zero_iff]
+    exact hbdd (σ k) (V k) (hVmin k)
+  obtain ⟨L, -, ms, hmsmono, hms⟩ :=
+    tendsto_subseq_of_bounded (Metric.isBounded_closedBall) hmem
+  have hsub : Tendsto (fun k => σ (ms k)) atTop atTop :=
+    (hσmono.comp hmsmono).tendsto_atTop
+  have hLb : ‖L‖ ≤ Rb :=
+    le_of_tendsto hms.norm (Filter.Eventually.of_forall fun k => hbdd _ _ (hVmin (ms k)))
+  obtain ⟨C, hC0, hCle⟩ := hlip Rb
+  -- the limit of the bad minimizers still minimizes `g`, so it is `v'`
+  have hvals : Tendsto (fun k => G (σ (ms k)) (V (ms k))) atTop (𝓝 (g L)) := by
+    have hbound : ∀ k, ‖G (σ (ms k)) (V (ms k)) - G (σ (ms k)) L‖ ≤ C * ‖V (ms k) - L‖ := by
+      intro k
+      rw [Real.norm_eq_abs]
+      exact hCle (σ (ms k)) (V (ms k)) L (hbdd _ _ (hVmin (ms k))) hLb
+    have hd : Tendsto (fun k => C * ‖V (ms k) - L‖) atTop (𝓝 0) := by
+      have h0 : Tendsto (fun k => ‖V (ms k) - L‖) atTop (𝓝 0) := by
+        simpa using (hms.sub (tendsto_const_nhds (x := L))).norm
+      simpa using h0.const_mul C
+    have hgap : Tendsto (fun k => G (σ (ms k)) (V (ms k)) - G (σ (ms k)) L) atTop (𝓝 0) :=
+      squeeze_zero_norm hbound hd
+    have hbase : Tendsto (fun k => G (σ (ms k)) L) atTop (𝓝 (g L)) := (hptw L).comp hsub
+    simpa using hgap.add hbase
+  have hLmin : ∀ w : Rvec d, g L ≤ g w := fun w =>
+    le_of_tendsto_of_tendsto hvals ((hptw w).comp hsub)
+      (Filter.Eventually.of_forall fun k => hVmin (ms k) w)
+  have hLeq : L = v' := huniq L hLmin
+  -- but they stay `ε` away from it
+  have hfar : ε ≤ ‖L - v'‖ :=
+    ge_of_tendsto ((hms.sub (tendsto_const_nhds (x := v'))).norm)
+      (Filter.Eventually.of_forall fun k => hVfar (ms k))
+  rw [hLeq, sub_self, norm_zero] at hfar
+  linarith
+
 end Acharyya2024.ContinuousMDS
