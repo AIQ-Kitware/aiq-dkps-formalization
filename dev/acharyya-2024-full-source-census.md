@@ -80,7 +80,7 @@ RawStress.UniquePairProfile is exactly what rules this out. The package's extra 
 
 The second-moment and probability modules prove the finite-dimensional concentration mechanism and the gamma/r sample-mean estimate. The paper lets the number of queries m grow with r and uses (1/m) sum_j gamma_ij = o(r). Lean currently feeds the growing-query consistency theorem an abstract sampling-convergence hypothesis rather than constructing the varying-m response matrices and discharging that source rate condition in one theorem.
 
-### `rigid-alignment-corollary` — Corollary 1 coordinate alignment -- now represented in Acharyya2024
+### `rigid-alignment-corollary` — RESOLVED -- Corollary 1's coordinate alignment is represented in both modes
 
 **Kind:** `source_gap`
 
@@ -214,7 +214,7 @@ Both are recorded in the AmbientModelLimit structure so the assumption is repres
 * **Lean declarations:** `Acharyya2024.ContinuousMDS.ContinuousMDS`, `Acharyya2024.ContinuousMDS.ambientDissimilarity`, `Acharyya2024.ContinuousMDS.continuousPointStress`, `Acharyya2024.ContinuousMDS.continuousRawStress`, `Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation`, `Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation_fin`, `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`, `Acharyya2024.ContinuousMDS.exists_min_continuousPointStress`
 * **gap refs:** `continuous-mds-lp`
 * **notes:** continuousRawStress_empiricalPopulation ties the definition to the package's finite rawStress through the empirical measure, so it is not a parallel notion.
-* **next action:** Prove the L^p(P x P) limit theorem that Lemma 2 and Theorem 5 state over this definition.
+* **next action:** None. This row is the construction, and it is complete; the L^p limit theorem stated over it is A24-L2's and A24-T5's business, and is tracked there.
 
 ### `A24-R4` — Notation for the replicate dependence of the estimated perspectives
 

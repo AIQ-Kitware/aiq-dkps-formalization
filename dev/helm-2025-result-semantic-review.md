@@ -427,3 +427,5 @@ Lean carries ConvergesInProbabilityToZero, the literal in-probability predicate,
 **Additional note:** This is the definition Theorem 2 quantifies over, so the substitution propagates to it.
 
 **Companion census gap refs:** `consistency-in-probability-vs-expectation`
+
+**Next action:** None required: the displayed definition is formalized verbatim as ConsistentInProbability, and the bridge to the form the transfer theorems consume is proved. The row is by_composition only because the paper states a definition rather than a theorem, so there is no single result to reproduce.

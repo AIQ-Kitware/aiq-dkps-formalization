@@ -173,7 +173,7 @@ No corresponding continuous-model-space raw-stress functional, model distributio
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Prove the L^p(P x P) limit theorem that Lemma 2 and Theorem 5 state over this definition.
+**Next action:** None. This row is the construction, and it is complete; the L^p limit theorem stated over it is A24-L2's and A24-T5's business, and is tracked there.
 
 ### 5. `A24-T1` — Theorem 1: Fixed models and fixed queries: raw-stress consistency
 

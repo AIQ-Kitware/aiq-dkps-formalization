@@ -125,7 +125,7 @@
    "review": "The literal n^3/r real-power scale, its vanishing under r=omega(n^3), and entrywise-to-operator transport are compiled. The source corollary is assembled rather than wrapped verbatim.",
    "notes": "The paper-scale module was added specifically to close the source exponent rather than leave only a generic rate parameter.",
    "gap_refs": [],
-   "next_action": "None."
+   "next_action": "Optional: expose one source-facing declaration stating the corollary verbatim. The pieces are compiled and the assembly is one step, so this is presentational rather than mathematical -- recorded so the by_composition status is a choice on the record rather than a silent one."
   },
   {
    "id": "A25-A1",

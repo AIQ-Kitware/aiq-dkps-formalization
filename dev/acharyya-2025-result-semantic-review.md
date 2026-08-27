@@ -117,6 +117,8 @@ The literal n^3/r real-power scale, its vanishing under r=omega(n^3), and entryw
 
 **Additional note:** The paper-scale module was added specifically to close the source exponent rather than leave only a generic rate parameter.
 
+**Next action:** Optional: expose one source-facing declaration stating the corollary verbatim. The pieces are compiled and the assembly is one step, so this is presentational rather than mathematical -- recorded so the by_composition status is a choice on the record rather than a silent one.
+
 ### 3. `A25-A1` — Assumption 1: Eventually fixed embedding rank d
 
 **Verdict:** PASS equivalent encoding
