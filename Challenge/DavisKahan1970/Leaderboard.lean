@@ -34,7 +34,7 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
 import DavisKahan.BoundedOperator.Spectral.Complex
 import DavisKahan.FiniteDimensional.DirectRotation.ShortRotationCounterexample
 import DavisKahan.FiniteDimensional.Sharpness
-import DavisKahan.Frontier.Section3BilateralShift
+import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
 import DavisKahan.Sources.DavisKahan1970.Section8.All
 import DavisKahan.Sources.DavisKahan1970.Section9.All
 
@@ -206,7 +206,7 @@ numbered Section 9 numerical consequence.
 #print axioms TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact
 #print axioms TauCeti.DavisKahanTheory.directSum_model_all_four_equalities
 #print axioms TauCeti.DavisKahanTheory.single_double_sine_tangent_ratios_tendsto_one
-#print axioms TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses
+#print axioms TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses
 #print axioms TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite
 #print axioms TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch
 #print axioms TauCeti.DavisKahan1970.Section9.equation_9_7

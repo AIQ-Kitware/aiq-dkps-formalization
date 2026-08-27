@@ -93,7 +93,7 @@ Each result below explicitly partitions its primary source block into atoms insi
   - Same (3.5) hypothesis at unbounded self-adjoint scope over complex scalars, with the norm-ideal membership again concluded.
 - `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`
   - Alternative bounded route assuming uniform transversality `‖sin Theta‖ < 1` instead of (3.5). This is a strictly stronger hypothesis than the source's standing condition and is registered as a specialization, not as the source-shaped form.
-- `TauCeti.DavisKahan.Frontier.Section3.remark3_2_bilateralShift_separates_dimensionHypotheses`
+- `TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses`
   - Machine-checked witness that (1.5) does not imply (3.5) in infinite dimension, so the omitted qualification is substantive. It is a vacuity/nonvacuity witness, not a counterexample to the counted result.
 
 **Accepted reading.** The printed theorem is read under the paper's own global semantics: the Section 1 vacuity convention governs the existence of the displayed norms, and the standing (3.5) is in force where the theorem is actually proved. On that reading a Lean statement that carries a crossed-defect hypothesis corresponding to (3.5), and that concludes rather than assumes membership of the tangent operator in the norm's ideal, is a source-faithful formalization of semantics the paper already imposes. It is not a claim that the Section 2 display literally contains (3.5).

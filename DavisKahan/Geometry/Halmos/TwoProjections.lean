@@ -81,6 +81,27 @@ theorem hasOrthogonalProjection_sup_of_le_orthogonal
   rcases Submodule.mem_sup.mp hy with ⟨a, ha, b, hb, rfl⟩
   rw [inner_add_left, hrK a ha, hrl b hb, zero_add]
 
+omit [CompleteSpace H] in
+/-- Membership in the orthogonal complement of a span is tested on the spanning
+set alone.
+
+A general inner-product fact, kept here because the Halmos development
+repeatedly cuts subspaces out of an orthonormal family by a condition on the
+index set and then has to recognize the complement. -/
+theorem mem_orthogonal_span {S : Set H} {x : H} :
+    x ∈ (Submodule.span 𝕜 S)ᗮ ↔ ∀ y ∈ S, ⟪y, x⟫_𝕜 = 0 := by
+  rw [Submodule.mem_orthogonal]
+  constructor
+  · intro h y hy
+    exact h y (Submodule.subset_span hy)
+  · intro h u hu
+    induction hu using Submodule.span_induction with
+    | mem y hy => exact h y hy
+    | zero => exact inner_zero_left x
+    | add a c _ _ ha hc => rw [inner_add_left, ha, hc, add_zero]
+    | smul c a _ ha => rw [inner_smul_left, ha, mul_zero]
+
+
 /-! ## Elementary and generic Halmos summands -/
 
 /-- `U ∩ V`. -/

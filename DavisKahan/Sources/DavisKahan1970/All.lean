@@ -30,6 +30,7 @@ import DavisKahan.Sources.DavisKahan1970.Section3AcuteCounterexample
 import DavisKahan.Sources.DavisKahan1970.Section3AcuteDirectRotation
 import DavisKahan.Sources.DavisKahan1970.Section3Classification
 import DavisKahan.Sources.DavisKahan1970.Section3PrincipalSquareRoot
+import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Printed
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Real
@@ -44,6 +45,7 @@ import DavisKahan.Sources.DavisKahan1970.Section5
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakage
 import DavisKahan.Sources.DavisKahan1970.Section6Example61
 import DavisKahan.Sources.DavisKahan1970.Section6AppendixLeakageReal
+import DavisKahan.Sources.DavisKahan1970.Section7SwapAsymmetry
 import DavisKahan.Sources.DavisKahan1970.Section8RieszCircle
 import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Sources.DavisKahan1970.SharpKyFan

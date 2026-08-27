@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 
-import DavisKahan.Frontier.Section3BilateralShift
+import DavisKahan.Geometry.Halmos.TwoProjections
+import Mathlib.Analysis.InnerProductSpace.l2Space
+import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 
 /-!
 # Printed acuteness is weaker than a uniform projection gap
@@ -29,7 +31,6 @@ namespace DavisKahan1970
 namespace Section3AcuteCounterexample
 
 open DavisKahan
-open DavisKahan.Frontier.Section3
 
 noncomputable section
 
