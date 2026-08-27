@@ -618,7 +618,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Finish link 1 -- the variance bound for a V-statistic of order two, on top of TauCeti.integral_doubleSum_pi -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp."
+   "next_action": "Define the out-of-sample estimated embedding on the model space and prove it converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. See continuous-mds-lp, including its correction."
   },
   {
    "id": "A24-T4",
@@ -718,7 +718,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Finish link 1 -- the variance bound for a V-statistic of order two, on top of TauCeti.integral_doubleSum_pi -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp."
+   "next_action": "Define the out-of-sample estimated embedding on the model space and prove it converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. See continuous-mds-lp, including its correction."
   },
   {
    "id": "A24-R4",

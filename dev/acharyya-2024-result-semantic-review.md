@@ -441,7 +441,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Finish link 1 -- the variance bound for a V-statistic of order two, on top of TauCeti.integral_doubleSum_pi -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp.
+**Next action:** Define the out-of-sample estimated embedding on the model space and prove it converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. See continuous-mds-lp, including its correction.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -509,7 +509,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Finish link 1 -- the variance bound for a V-statistic of order two, on top of TauCeti.integral_doubleSum_pi -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp.
+**Next action:** Define the out-of-sample estimated embedding on the model space and prove it converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. See continuous-mds-lp, including its correction.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 

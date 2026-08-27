@@ -106,6 +106,15 @@ Everything downstream of these is proved: lp_consistency_of_gamma_empirical is t
 
 Link 1 started. TauCeti.map_evalPair_pi proves that under a product of probability measures two DISTINCT coordinates are jointly distributed as the product measure, and TauCeti.integral_doubleSum_pi is the resulting mean of a V-statistic of order two: the double sum splits into n(n-1) off-diagonal terms, each with the product law, and n diagonal terms, each with the base law. That identity is where the elementary second-moment proof of the weak law begins; the variance bound is the remaining half of link 1.
 
+CORRECTION to the decomposition above. The V-statistic law of large numbers is NOT the blocker for Lemma 2's population form, and saying so was wrong. That form integrates against P x P, not against the empirical measure, so Fubini turns the expectation of the L^p discrepancy into int int E|discrepancy(phi_1, phi_2)|^p dP dP -- a pointwise question at two independent test models, with no double average over the sample anywhere. Markov then gives the convergence-in-probability mode the lemma states. The V-statistic only entered because the EMPIRICAL-measure variant was proved first, and that variant is already complete.
+
+What actually blocks the population form is the out-of-sample embedding:
+  1. The estimated embedding must be a map on the whole model space, not just at the sampled models -- the source's Psihat_Q, which Quench states explicitly and Acharyya 2024 leaves implicit in the notation psihat_1, psihat_2 under an integral over P.
+  2. That map must converge to the continuous-MDS map at P x P-almost every pair, in the pairwise-distance sense. This is the continuous-MDS consistency the source attributes to the cited literature; it is where compactness of the model space and the Riemannian structure of Assumption 2 finally do work.
+  3. Domination, to pass from almost-everywhere convergence to the L^p(P x P) integral.
+
+TauCeti.map_evalPair_pi and TauCeti.integral_doubleSum_pi remain correct and reusable -- they are what the empirical-measure variant's second-moment analysis would need -- but they are not on the critical path here.
+
 ### `affine-invariance-partial` — Remark 1's invariance is rigid, not affine -- now proved and the wording corrected
 
 **Kind:** `source_audit`
@@ -329,7 +338,7 @@ Both are recorded in the AmbientModelLimit structure so the assumption is repres
 * **Lean declarations:** `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`, `Acharyya2024.ContinuousMDS.ContinuousMDS`, `Acharyya2024.ContinuousMDS.lpPairDistErr`, `Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`, `TauCeti.integral_doubleSum_pi`, `TauCeti.map_evalPair_pi`
 * **gap refs:** `continuous-mds-lp`
 * **notes:** The definitions the conclusion is stated over -- continuousRawStress, ContinuousMDS, lpPairDistErr -- did not previously exist in the package.
-* **next action:** Finish link 1 -- the variance bound for a V-statistic of order two, on top of TauCeti.integral_doubleSum_pi -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp.
+* **next action:** Define the out-of-sample estimated embedding on the model space and prove it converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. See continuous-mds-lp, including its correction.
 
 ### `A24-T4` — Growing-model pointwise dissimilarity concentration
 
@@ -355,4 +364,4 @@ Both are recorded in the AmbientModelLimit structure so the assumption is repres
 * **Lean declarations:** `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`, `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`, `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`, `Acharyya2024.ContinuousMDS.lpPairDistErr`, `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`, `TauCeti.integral_doubleSum_pi`, `TauCeti.map_evalPair_pi`
 * **gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 * **notes:** Previously the growing-stage consistency theorem took per-stage sampling convergence as a hypothesis; that hypothesis is now discharged from the source's own condition.
-* **next action:** Finish link 1 -- the variance bound for a V-statistic of order two, on top of TauCeti.integral_doubleSum_pi -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp.
+* **next action:** Define the out-of-sample estimated embedding on the model space and prove it converges to the continuous-MDS map at P x P-almost every pair; Fubini and dominated convergence then give the L^p(P x P) conclusion. See continuous-mds-lp, including its correction.
