@@ -148,11 +148,14 @@ Lean proves nonemptiness directly for the finite raw-stress minimizer set, witho
 **Normalized paper statement:** Define continuous raw stress by a P x P integral over a compact model space and let mds minimize it over Borel-measurable embeddings.
 
 **Selected Lean declarations:**
-- `Acharyya2024.ContinuousMDS.continuousRawStress`
 - `Acharyya2024.ContinuousMDS.ContinuousMDS`
 - `Acharyya2024.ContinuousMDS.ambientDissimilarity`
+- `Acharyya2024.ContinuousMDS.continuousPointStress`
+- `Acharyya2024.ContinuousMDS.continuousRawStress`
 - `Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation`
 - `Acharyya2024.ContinuousMDS.continuousRawStress_empiricalPopulation_fin`
+- `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`
+- `Acharyya2024.ContinuousMDS.exists_min_continuousPointStress`
 
 **Clause-by-clause comparison:**
 
@@ -418,8 +421,11 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 **Selected Lean declarations:**
 - `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
 - `Acharyya2024.ContinuousMDS.ContinuousMDS`
+- `Acharyya2024.ContinuousMDS.continuousPointStress`
+- `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding_mem_mds`
+- `Acharyya2024.ContinuousMDS.exists_min_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.exists_min_pointStress`
 - `Acharyya2024.ContinuousMDS.frameEmbedding`
 - `Acharyya2024.ContinuousMDS.frameEmbedding_min`
@@ -458,7 +464,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Identify the population embedding of a fixed reference sample with the continuous-MDS map in the limit of a growing reference collection. Everything else in the chain is proved, ending at tendsto_lpPairDistErr_frameEmbedding.
+**Next action:** Prove that the fixed-sample population embedding converges to the minimizer of continuousPointStress as the reference collection grows; that needs the empirical reference configuration to converge to the continuous-MDS map at the sampled models. Both sides of the identification are now defined with their defining properties proved.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -506,8 +512,11 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`
 - `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
+- `Acharyya2024.ContinuousMDS.continuousPointStress`
+- `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding_mem_mds`
+- `Acharyya2024.ContinuousMDS.exists_min_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.exists_min_pointStress`
 - `Acharyya2024.ContinuousMDS.frameEmbedding`
 - `Acharyya2024.ContinuousMDS.frameEmbedding_min`
@@ -541,7 +550,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Identify the population embedding of a fixed reference sample with the continuous-MDS map in the limit of a growing reference collection. Everything else in the chain is proved, ending at tendsto_lpPairDistErr_frameEmbedding.
+**Next action:** Prove that the fixed-sample population embedding converges to the minimizer of continuousPointStress as the reference collection grows; that needs the empirical reference configuration to converge to the continuous-MDS map at the sampled models. Both sides of the identification are now defined with their defining properties proved.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 
