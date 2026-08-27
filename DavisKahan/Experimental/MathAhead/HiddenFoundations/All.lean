@@ -12,7 +12,6 @@ import DavisKahan.Geometry.Polar.PolarIntertwining
 import DavisKahan.Geometry.Polar.PolarIsometryFinal
 import DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation
 import DavisKahan.Geometry.Polar.Section3Nonacute
-import DavisKahan.SpectralTheory.SpectralMultiplicityFoundation
 import DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification
 /-!
 # Aggregate hidden-foundation mathematics-ahead layer
