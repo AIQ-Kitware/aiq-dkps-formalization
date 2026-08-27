@@ -27,7 +27,7 @@ This is the entry point for **paper theorem vs. Lean theorem** comparison. The c
 | `acharyya-2025` | `A25-P1` | Proposition 1 | GAP missing source result | Compact d-dimensional Riemannian latent manifold with geodesic distances equal population dissimilarities implies Assumptions 1 and 2. -> No manifold/geodesic sufficient-condition theorem was found. |
 | `acharyya-2025` | `A25-T2` | Theorem 2 | REPAIR source mismatch | The retained v1 text later says the proved result is Frobenius and lists two-to-infinity control as future work; the appendix also uses ordinary matrix/Frobenius norms. |
 | `acharyya-2025` | `A25-C2` | Corollary 2 | REPAIR source mismatch | Frobenius is primary because of the v1 norm inconsistency; rowwise error follows by domination. |
-| `helm-2025` | `H25-T1` | Theorem 1 | GAP stronger Lean hypotheses | This is a standard integration/probability side condition but still an additional theorem premise. |
+| `helm-2025` | `H25-T1` | Theorem 1 | REPAIR uniform integrability is necessary | The envelope is implied by finiteness of the risk the paper writes down. |
 | `helm-2025` | `H25-T2` | Theorem 2 | GAP stronger Lean hypotheses | Appendix Assumptions 1--4 and Eq. (3) provide the analytic transfer conditions. -> Lean uses the same strengthened analytic forms as Theorem1 and a sequence of alignment-consistency hypotheses. |
 | `helm-2025` | `H25-A1` | Assumption 1 | PASS exact | No substantive delta recorded. |
 | `helm-2025` | `H25-A2` | Assumption 2 | GAP stronger Lean hypotheses | The main theorem uses a joint continuity predicate on the learning rule. -> Assumption2 is a stronger sufficient condition and proves the paper-shaped sequential condition. |

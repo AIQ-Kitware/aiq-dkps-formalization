@@ -561,6 +561,92 @@ lemma ae_mem_of_ae_mem_pi {ι : Type*} [Fintype ι] {α : ι → Type*}
         (expose_names; exact Measure.pi_eval_preimage_null μ hS_1)
 
 /--
+**The domination hypothesis is not removable.**
+
+Convergence in probability does not imply convergence of the expectations, so no strengthening
+of `expectation_converges_of_prob_converges_dominated` can drop its envelope.  The witness is
+the standard escaping-mass example on the unit interval: `X u` has height `u + 1` on a set of
+measure `1 / (u + 1)` and is zero elsewhere, so `X u → 0` in probability while every
+`∫ |X u| = 1`.
+
+This is what makes `LossDominated` a repair rather than an added assumption.  Helm's Theorem 1
+concludes that the risk computed from estimated embeddings converges to the risk computed from
+true ones, and Assumptions 1--4 constrain the learning rule and the loss but say nothing about
+the labels.  For a jointly continuous loss such as `ℓ(p, y) = ‖y‖ · φ(p)`, with predictions
+confined to the compact set Assumption 3 supplies, the loss differences take exactly this
+escaping-mass shape.  The printed theorem therefore needs some uniform-integrability side
+condition, and an integrable envelope is the weakest natural one.
+-/
+theorem prob_convergence_not_enough_for_expectations :
+    ∃ (P : Measure ℝ) (_ : IsProbabilityMeasure P) (X : ℕ → ℝ → ℝ),
+      (∀ u, Measurable (X u)) ∧
+      ConvergesInProbabilityToZero P X ∧
+      ¬ Tendsto (fun u => ∫ ω, |X u ω| ∂P) atTop (𝓝 0) := by
+  classical
+  have hprob : IsProbabilityMeasure (volume.restrict (Set.Icc (0 : ℝ) 1)) := by
+    constructor
+    simp [Real.volume_Icc]
+  refine ⟨volume.restrict (Set.Icc (0 : ℝ) 1), hprob,
+    fun u => (Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ))).indicator (fun _ => (u + 1 : ℝ)),
+    fun u => measurable_const.indicator measurableSet_Icc, ?_, ?_⟩
+  · -- convergence in probability: the support shrinks
+    intro ε hε
+    have hmeas : ∀ u : ℕ,
+        (volume.restrict (Set.Icc (0 : ℝ) 1))
+          {ω | ε < |(Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ))).indicator (fun _ => (u + 1 : ℝ)) ω|}
+          ≤ ENNReal.ofReal (1 / (u + 1 : ℝ)) := by
+      intro u
+      have hsub : {ω | ε < |(Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ))).indicator
+            (fun _ => (u + 1 : ℝ)) ω|} ⊆ Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ)) := by
+        intro ω hω
+        by_contra hmem
+        rw [Set.mem_setOf_eq, Set.indicator_of_notMem hmem] at hω
+        simp at hω
+        linarith
+      calc (volume.restrict (Set.Icc (0 : ℝ) 1))
+              {ω | ε < |(Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ))).indicator (fun _ => (u + 1 : ℝ)) ω|}
+            ≤ (volume.restrict (Set.Icc (0 : ℝ) 1)) (Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ))) :=
+            measure_mono hsub
+        _ ≤ volume (Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ))) := Measure.restrict_apply_le _ _
+        _ = ENNReal.ofReal (1 / (u + 1 : ℝ)) := by rw [Real.volume_Icc, sub_zero]
+    have htend : Tendsto (fun u : ℕ => ENNReal.ofReal (1 / (u + 1 : ℝ))) atTop (𝓝 0) := by
+      simpa using ENNReal.tendsto_ofReal
+        (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
+    exact tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds htend
+      (Filter.Eventually.of_forall fun _ => bot_le)
+      (Filter.Eventually.of_forall hmeas)
+  · -- but every integral is one, so the expectations do not vanish
+    have hone : ∀ u : ℕ,
+        ∫ ω, |(Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ))).indicator (fun _ => (u + 1 : ℝ)) ω|
+          ∂(volume.restrict (Set.Icc (0 : ℝ) 1)) = 1 := by
+      intro u
+      have hupos : (0 : ℝ) < (u + 1 : ℝ) := by positivity
+      have hle : 1 / (u + 1 : ℝ) ≤ 1 := by
+        rw [div_le_one hupos]; linarith [Nat.cast_nonneg (α := ℝ) u]
+      have hnn : ∀ ω, 0 ≤ (Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ))).indicator
+          (fun _ => (u + 1 : ℝ)) ω := fun ω => Set.indicator_nonneg (fun _ _ => hupos.le) ω
+      have habs : (fun ω => |(Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ))).indicator
+            (fun _ => (u + 1 : ℝ)) ω|)
+          = (Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ))).indicator (fun _ => (u + 1 : ℝ)) :=
+        funext fun ω => abs_of_nonneg (hnn ω)
+      have hinter : Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ)) ∩ Set.Icc (0 : ℝ) 1
+          = Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ)) :=
+        Set.inter_eq_self_of_subset_left (Set.Icc_subset_Icc le_rfl hle)
+      rw [habs, integral_indicator measurableSet_Icc, setIntegral_const]
+      have hmeasure : (volume.restrict (Set.Icc (0 : ℝ) 1)).real
+          (Set.Icc (0 : ℝ) (1 / (u + 1 : ℝ))) = 1 / (u + 1 : ℝ) := by
+        rw [Measure.real, Measure.restrict_apply measurableSet_Icc, hinter, Real.volume_Icc,
+          sub_zero, ENNReal.toReal_ofReal (by positivity)]
+      rw [hmeasure, smul_eq_mul]
+      field_simp
+    intro hcontra
+    have h1 : Tendsto (fun _ : ℕ => (1 : ℝ)) atTop (𝓝 0) := by
+      refine hcontra.congr (fun u => ?_)
+      exact hone u
+    have h2 := tendsto_nhds_unique h1 tendsto_const_nhds
+    norm_num at h2
+
+/--
 An **integrable envelope** for the loss over a set of predictions.
 
 `LossEnvelope P loss K` says the loss at any prediction in `K` is dominated by a single
