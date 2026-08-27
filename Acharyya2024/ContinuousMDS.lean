@@ -550,4 +550,50 @@ theorem tendsto_outOfSampleExtension {n d : Nat} (hn : 0 < n)
   rw [← hLeq]
   exact hms
 
+/-! ### From pointwise convergence to the `L^p` conclusion
+
+With the estimated embedding in hand, the passage from convergence at almost every pair of
+models to the source's `L^p(P × P)` conclusion is dominated convergence, and nothing else.  The
+double integral is an integral against the product measure, so no double average over a sample
+appears and no law of large numbers is involved. -/
+
+/-- The `L^p` pairwise-distance discrepancy is an integral against the product measure. -/
+theorem lpPairDistErr_eq_integral_prod {M : Type*} [MeasurableSpace M] (d : Nat)
+    (P : Measure M) [SFinite P] (p : Real) (ψ χ : M → Rvec d)
+    (hint : Integrable
+      (fun q : M × M => |‖ψ q.1 - ψ q.2‖ - ‖χ q.1 - χ q.2‖| ^ p) (P.prod P)) :
+    lpPairDistErr d P p ψ χ
+      = ∫ q, |‖ψ q.1 - ψ q.2‖ - ‖χ q.1 - χ q.2‖| ^ p ∂(P.prod P) := by
+  rw [lpPairDistErr, integral_prod _ hint]
+
+/--
+**Lemma 2's conclusion from convergence at almost every pair.**
+
+If the pairwise-distance discrepancy of the estimated embeddings tends to zero at `P × P`-almost
+every pair of models, and is dominated by a fixed integrable envelope, then the source's
+`L^p(P × P)` discrepancy tends to zero.
+
+This is the whole distance from a pointwise statement to the printed conclusion: dominated
+convergence on the product measure.  In particular no law of large numbers enters, because the
+integral is against `P × P` and not against an empirical measure.
+-/
+theorem tendsto_lpPairDistErr_of_ae_tendsto {M : Type*} [MeasurableSpace M] (d : Nat)
+    (P : Measure M) [IsProbabilityMeasure P] (p : Real)
+    (Ψ : Nat → M → Rvec d) (χ : M → Rvec d)
+    (G : M × M → Real) (hG : Integrable G (P.prod P))
+    (hmeas : ∀ u, AEStronglyMeasurable
+      (fun q : M × M => |‖Ψ u q.1 - Ψ u q.2‖ - ‖χ q.1 - χ q.2‖| ^ p) (P.prod P))
+    (hdom : ∀ u, ∀ᵐ q ∂(P.prod P),
+      ‖|‖Ψ u q.1 - Ψ u q.2‖ - ‖χ q.1 - χ q.2‖| ^ p‖ ≤ G q)
+    (hae : ∀ᵐ q ∂(P.prod P), Tendsto
+      (fun u => |‖Ψ u q.1 - Ψ u q.2‖ - ‖χ q.1 - χ q.2‖| ^ p) atTop (𝓝 0)) :
+    Tendsto (fun u => lpPairDistErr d P p (Ψ u) χ) atTop (𝓝 0) := by
+  have hint : ∀ u, Integrable
+      (fun q : M × M => |‖Ψ u q.1 - Ψ u q.2‖ - ‖χ q.1 - χ q.2‖| ^ p) (P.prod P) :=
+    fun u => Integrable.mono' hG (hmeas u) (hdom u)
+  have hlim := tendsto_integral_of_dominated_convergence G hmeas hG hdom hae
+  rw [integral_zero] at hlim
+  refine hlim.congr fun u => ?_
+  exact (lpPairDistErr_eq_integral_prod d P p (Ψ u) χ (hint u)).symm
+
 end Acharyya2024.ContinuousMDS
