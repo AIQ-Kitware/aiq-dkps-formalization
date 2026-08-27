@@ -583,7 +583,9 @@
     "Acharyya2024.ContinuousMDS.ContinuousMDS",
     "Acharyya2024.ContinuousMDS.lpPairDistErr",
     "Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation",
-    "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt"
+    "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
+    "TauCeti.integral_doubleSum_pi",
+    "TauCeti.map_evalPair_pi"
    ],
    "clauses": [
     {
@@ -616,7 +618,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Build the order-two V-statistic law of large numbers -- absent from Mathlib and TauCeti -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp for the decomposition."
+   "next_action": "Finish link 1 -- the variance bound for a V-statistic of order two, on top of TauCeti.integral_doubleSum_pi -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp."
   },
   {
    "id": "A24-T4",
@@ -691,7 +693,9 @@
     "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile",
     "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
     "Acharyya2024.ContinuousMDS.lpPairDistErr",
-    "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt"
+    "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
+    "TauCeti.integral_doubleSum_pi",
+    "TauCeti.map_evalPair_pi"
    ],
    "clauses": [
     {
@@ -714,7 +718,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Build the order-two V-statistic law of large numbers -- absent from Mathlib and TauCeti -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp for the decomposition."
+   "next_action": "Finish link 1 -- the variance bound for a V-statistic of order two, on top of TauCeti.integral_doubleSum_pi -- then lift it uniformly over the embedding class by a net argument and apply the argmin step; see continuous-mds-lp."
   },
   {
    "id": "A24-R4",

@@ -34,6 +34,7 @@ IMPORTS = [
     'Acharyya2025.PaperRate', 'Acharyya2025.RateChain', 'Acharyya2025.Overlap',
     'Acharyya2025.ManifoldCondition', 'Acharyya2025.Theorem1Scale',
     'Helm2025', 'DkpsQuench2026',
+    'ForTauCeti.Probability.VStatistic',
 ]
 CANARY = 'DkpsApplicationCensusProbeCanaryMustNotResolve'
 
