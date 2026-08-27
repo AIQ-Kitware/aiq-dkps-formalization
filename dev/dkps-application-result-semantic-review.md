@@ -10,11 +10,11 @@ This is the entry point for **paper theorem vs. Lean theorem** comparison. The c
 | --- | --- | --- | --- | --- |
 | `acharyya-2024` | `A24-EQ1` | Equation (1), finite raw stress | PASS exact | No substantive delta recorded. |
 | `acharyya-2024` | `A24-R3` | Continuous raw-stress setup and Remark 3 | GAP missing source result | A minimizer set rather than a chosen minimizer, since MDS determines an embedding only up to a rigid motion. Existence is attributed by the source to the cited literature. |
-| `acharyya-2024` | `A24-T1` | Theorem 1 | GAP stronger Lean hypotheses | Without it Lean proves convergence to the population minimizer set, showing why the printed fixed-representative conclusion needs repair. |
+| `acharyya-2024` | `A24-T1` | Theorem 1 | GAP stronger Lean hypotheses | The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly. |
 | `acharyya-2024` | `A24-A1` | Assumption 1 | PASS generalized/stronger theorem | This formalizes exactly the consequence used by raw-stress stability and does not require named latent vectors. |
-| `acharyya-2024` | `A24-L1` | Lemma 1 | GAP stronger Lean hypotheses | This is the same identifiability issue as Theorem 1. |
+| `acharyya-2024` | `A24-L1` | Lemma 1 | GAP stronger Lean hypotheses | The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly. |
 | `acharyya-2024` | `A24-T2` | Theorem 2 | GAP only a specialization is formalized | The literal varying-m theorem is not assembled because m is type-level in the finite probability theorem. |
-| `acharyya-2024` | `A24-T3` | Theorem 3 | GAP stronger Lean hypotheses | No profile-uniqueness assumption is printed. -> Lean requires UniquePairProfile for a fixed limiting pair-distance profile. |
+| `acharyya-2024` | `A24-T3` | Theorem 3 | GAP stronger Lean hypotheses | The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly. |
 | `acharyya-2024` | `A24-C1` | Corollary 1 | GAP probabilistic packaging and quantifier | Later packages have Procrustes/Gram-rigidity machinery but this corollary itself is absent. |
 | `acharyya-2024` | `A24-A2` | Assumption 2 | GAP only a specialization is formalized | This is enough for finite-stage consistency but not the continuum source theorem. |
 | `acharyya-2024` | `A24-L2` | Lemma 2 | GAP missing source result | The population law is replaced by the empirical model measure; that substitution is the remaining distance to the printed lemma. |

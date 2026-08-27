@@ -43,8 +43,8 @@
   "gaps": {
     "fixed-profile-uniqueness": {
       "kind": "source_audit",
-      "title": "The paper fixes one limiting MDS profile without a uniqueness premise",
-      "detail": "Theorem 1, Lemma 1, and Theorem 3 name a fixed limiting minimizer/profile. Lean proves unconditional convergence to the minimizer set, and recovers a fixed profile only under RawStress.UniquePairProfile. Under that premise Lean gets full-sequence convergence, stronger than the source subsequence conclusion."
+      "title": "The paper fixes one limiting MDS profile without a uniqueness premise -- REFUTED",
+      "detail": "Theorem 1, Lemma 1, and Theorem 3 name a fixed limiting minimizer/profile. Lean proves unconditional convergence to the minimizer set, and recovers a fixed profile only under RawStress.UniquePairProfile. Under that premise Lean gets full-sequence convergence, stronger than the source subsequence conclusion.\n\nREFUTED, with a machine-checked counterexample. Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile exhibits a sequence of dissimilarity matrices converging in probability to the equilateral matrix on three objects -- constantly equal to it -- and a selection of raw-stress minimizers for which no subsequence and no minimizer of the limit make the pairwise distances converge in probability. Every hypothesis of the printed theorem holds in its strongest form.\n\nThe obstruction is structural, not exotic. Raw stress sees the dissimilarity matrix only through its entries, so a matrix invariant under relabeling the models has a minimizer set closed under relabeling. Three points on a line cannot be mutually equidistant unless they coincide, and coinciding is not optimal against the equilateral matrix, so relabeling yields a genuinely different pairwise-distance profile. A selection returning one labeling on half the sample points and the other on the rest defeats every fixed profile.\n\nRawStress.UniquePairProfile is exactly what rules this out. The package's extra hypothesis is therefore a repair of the source, not an assumption added to it, and the rows carrying it are dispositioned accordingly."
     },
     "growing-query-rate-wiring": {
       "kind": "scope_gap",
@@ -245,7 +245,7 @@
       "source_kind": "theorem",
       "title": "Fixed models and fixed queries: raw-stress consistency",
       "source_claim": "With n and m fixed, a subsequence of estimated raw-stress minimizers has pairwise distances converging in probability to those of a fixed population minimizer.",
-      "status": "compiled_stronger_hypotheses",
+      "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -257,18 +257,21 @@
       "lean_declarations": [
         "Acharyya2024.Consistency.fixed_models_fixed_queries_consistency_of_uniqueProfile",
         "Acharyya2024.Consistency.rawStress_mds_stability",
-        "Acharyya2024.Consistency.rawStress_mds_stability_set"
+        "Acharyya2024.Consistency.rawStress_mds_stability_set",
+        "Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist",
+        "Acharyya2024.ProfileNonuniqueness.mds_comp_perm",
+        "Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile"
       ],
       "planned_declarations": [],
       "gap_refs": [
         "fixed-profile-uniqueness"
       ],
       "semantic_alignment": {
-        "classification": "stronger_hypotheses",
-        "detail": "The source-shaped fixed-minimizer conclusion is proved with an explicit UniquePairProfile premise. Without it Lean proves convergence to the population minimizer set instead."
+        "classification": "source_repair",
+        "detail": "The printed statement names a fixed limiting minimizer with no uniqueness premise, and that is false: no_fixed_limiting_profile is a counterexample satisfying every printed hypothesis in its strongest form. RawStress.UniquePairProfile is the repair, and in exchange the Lean conclusion holds along the full sequence rather than along a subsequence, which is stronger than printed. The unconditional content -- convergence to the minimizer SET -- is separately proved without any uniqueness premise by rawStress_mds_stability_set."
       },
       "notes": "The repaired theorem actually proves the fixed-profile convergence along the full sequence and then supplies id as the source subsequence.",
-      "next_action": "None."
+      "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it."
     },
     {
       "id": "A24-A1",
@@ -309,7 +312,7 @@
       "source_kind": "lemma",
       "title": "Raw-stress stability under convergence of dissimilarity matrices",
       "source_claim": "If D converges to Delta^(infinity) with n fixed, a subsequence of MDS(D) has pairwise distances converging to those of a fixed minimizer of MDS(Delta^(infinity)).",
-      "status": "compiled_stronger_hypotheses",
+      "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -320,19 +323,22 @@
       },
       "lean_declarations": [
         "Acharyya2024.Consistency.rawStress_mds_stability",
-        "Acharyya2024.RawStress.mds_stability_inProbability_set",
-        "Acharyya2024.RawStress.mds_stability_inProbability_of_uniqueProfile"
+        "Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist",
+        "Acharyya2024.ProfileNonuniqueness.mds_comp_perm",
+        "Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile",
+        "Acharyya2024.RawStress.mds_stability_inProbability_of_uniqueProfile",
+        "Acharyya2024.RawStress.mds_stability_inProbability_set"
       ],
       "planned_declarations": [],
       "gap_refs": [
         "fixed-profile-uniqueness"
       ],
       "semantic_alignment": {
-        "classification": "stronger_hypotheses",
-        "detail": "Lean proves unconditional convergence to the minimizer set. The fixed-minimizer form requires UniquePairProfile, which is not printed in the paper."
+        "classification": "source_repair",
+        "detail": "The printed statement names a fixed limiting minimizer with no uniqueness premise, and that is false: no_fixed_limiting_profile is a counterexample satisfying every printed hypothesis in its strongest form. RawStress.UniquePairProfile is the repair, and in exchange the Lean conclusion holds along the full sequence rather than along a subsequence, which is stronger than printed. The unconditional content -- convergence to the minimizer SET -- is separately proved without any uniqueness premise by rawStress_mds_stability_set."
       },
       "notes": "The set-valued theorem isolates the strongest unconditional statement.",
-      "next_action": "None."
+      "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it."
     },
     {
       "id": "A24-T2",
@@ -376,7 +382,7 @@
       "source_kind": "theorem",
       "title": "Fixed models, growing queries: DKPS consistency",
       "source_claim": "Under the Theorem 2 rate condition, estimated raw-stress pairwise distances converge along a subsequence to a population MDS configuration.",
-      "status": "compiled_stronger_hypotheses",
+      "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -387,7 +393,10 @@
       },
       "lean_declarations": [
         "Acharyya2024.Consistency.fixed_models_growing_queries_consistency_of_uniqueProfile",
-        "Acharyya2024.Consistency.growing_queries_dissimilarity_converges"
+        "Acharyya2024.Consistency.growing_queries_dissimilarity_converges",
+        "Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist",
+        "Acharyya2024.ProfileNonuniqueness.mds_comp_perm",
+        "Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile"
       ],
       "planned_declarations": [],
       "gap_refs": [
@@ -395,11 +404,11 @@
         "growing-query-rate-wiring"
       ],
       "semantic_alignment": {
-        "classification": "stronger_hypotheses",
-        "detail": "The geometric conclusion is compiled, with UniquePairProfile added for a fixed limiting profile and the source gamma condition abstracted into sampling and deterministic-limit convergence hypotheses."
+        "classification": "source_repair",
+        "detail": "The printed statement names a fixed limiting minimizer with no uniqueness premise, and that is false: no_fixed_limiting_profile is a counterexample satisfying every printed hypothesis in its strongest form. RawStress.UniquePairProfile is the repair, and in exchange the Lean conclusion holds along the full sequence rather than along a subsequence, which is stronger than printed. The unconditional content -- convergence to the minimizer SET -- is separately proved without any uniqueness premise by rawStress_mds_stability_set."
       },
       "notes": "Under the added uniqueness premise the Lean proof obtains full-sequence convergence.",
-      "next_action": "None."
+      "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it."
     },
     {
       "id": "A24-C1",

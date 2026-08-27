@@ -208,7 +208,10 @@
    "lean_declarations": [
     "Acharyya2024.Consistency.fixed_models_fixed_queries_consistency_of_uniqueProfile",
     "Acharyya2024.Consistency.rawStress_mds_stability",
-    "Acharyya2024.Consistency.rawStress_mds_stability_set"
+    "Acharyya2024.Consistency.rawStress_mds_stability_set",
+    "Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist",
+    "Acharyya2024.ProfileNonuniqueness.mds_comp_perm",
+    "Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile"
    ],
    "clauses": [
     {
@@ -234,6 +237,12 @@
      "lean_clause": "The fixed-psi Lean theorem requires UniquePairProfile Delta.",
      "relation": "lean_stronger_hypothesis",
      "note": "Without it Lean proves convergence to the population minimizer set, showing why the printed fixed-representative conclusion needs repair."
+    },
+    {
+     "source_clause": "there is a minimizer psi of the limiting dissimilarity matrix whose pairwise distances the estimates approach",
+     "lean_clause": "no_fixed_limiting_profile refutes this without a uniqueness premise; RawStress.UniquePairProfile is the repair.",
+     "relation": "source_repair",
+     "note": "The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly."
     }
    ],
    "review": "The source-shaped fixed-minimizer conclusion is proved with an explicit UniquePairProfile premise. Without it Lean proves convergence to the population minimizer set instead.",
@@ -241,7 +250,7 @@
    "gap_refs": [
     "fixed-profile-uniqueness"
    ],
-   "next_action": "None."
+   "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it."
   },
   {
    "id": "A24-A1",
@@ -295,8 +304,11 @@
    },
    "lean_declarations": [
     "Acharyya2024.Consistency.rawStress_mds_stability",
-    "Acharyya2024.RawStress.mds_stability_inProbability_set",
-    "Acharyya2024.RawStress.mds_stability_inProbability_of_uniqueProfile"
+    "Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist",
+    "Acharyya2024.ProfileNonuniqueness.mds_comp_perm",
+    "Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile",
+    "Acharyya2024.RawStress.mds_stability_inProbability_of_uniqueProfile",
+    "Acharyya2024.RawStress.mds_stability_inProbability_set"
    ],
    "clauses": [
     {
@@ -310,6 +322,12 @@
      "lean_clause": "Unconditionally Lean proves distance to the minimizer set tends to zero; the fixed-psi form adds UniquePairProfile.",
      "relation": "lean_stronger_hypothesis",
      "note": "This is the same identifiability issue as Theorem 1."
+    },
+    {
+     "source_clause": "there is a minimizer psi of the limiting dissimilarity matrix whose pairwise distances the estimates approach",
+     "lean_clause": "no_fixed_limiting_profile refutes this without a uniqueness premise; RawStress.UniquePairProfile is the repair.",
+     "relation": "source_repair",
+     "note": "The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly."
     }
    ],
    "review": "Lean proves unconditional convergence to the minimizer set. The fixed-minimizer form requires UniquePairProfile, which is not printed in the paper.",
@@ -317,7 +335,7 @@
    "gap_refs": [
     "fixed-profile-uniqueness"
    ],
-   "next_action": "None."
+   "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it."
   },
   {
    "id": "A24-T2",
@@ -380,7 +398,10 @@
    },
    "lean_declarations": [
     "Acharyya2024.Consistency.fixed_models_growing_queries_consistency_of_uniqueProfile",
-    "Acharyya2024.Consistency.growing_queries_dissimilarity_converges"
+    "Acharyya2024.Consistency.growing_queries_dissimilarity_converges",
+    "Acharyya2024.ProfileNonuniqueness.exists_distinct_pairDist",
+    "Acharyya2024.ProfileNonuniqueness.mds_comp_perm",
+    "Acharyya2024.ProfileNonuniqueness.no_fixed_limiting_profile"
    ],
    "clauses": [
     {
@@ -400,6 +421,12 @@
      "lean_clause": "Lean requires UniquePairProfile for a fixed limiting pair-distance profile.",
      "relation": "lean_stronger_hypothesis",
      "note": ""
+    },
+    {
+     "source_clause": "there is a minimizer psi of the limiting dissimilarity matrix whose pairwise distances the estimates approach",
+     "lean_clause": "no_fixed_limiting_profile refutes this without a uniqueness premise; RawStress.UniquePairProfile is the repair.",
+     "relation": "source_repair",
+     "note": "The counterexample satisfies every printed hypothesis in its strongest form: the observed dissimilarities equal the limit exactly."
     }
    ],
    "review": "The geometric conclusion is compiled, with UniquePairProfile added for a fixed limiting profile and the source gamma condition abstracted into sampling and deterministic-limit convergence hypotheses.",
@@ -408,7 +435,7 @@
     "fixed-profile-uniqueness",
     "growing-query-rate-wiring"
    ],
-   "next_action": "None."
+   "next_action": "None. The printed statement is refuted, the repair is proved, and the premise-free set form is available alongside it."
   },
   {
    "id": "A24-C1",
