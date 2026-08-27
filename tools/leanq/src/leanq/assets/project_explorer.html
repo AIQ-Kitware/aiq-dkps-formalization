@@ -60,6 +60,7 @@ svg .node text.star{font-size:13px;fill:#b8241a}
 svg .node text.chevron{font-size:11px;fill:#5b6b7d}
 svg .node.cluster text.chevron{fill:#174ea6;font-weight:700}
 svg text.band{font-size:11px;font-weight:650;fill:#5b6b7d}
+svg text.band.empty{font-weight:400;fill:#9aa8b6;font-style:italic}
 @media(prefers-color-scheme:dark){svg text.band{fill:#a8b4c0}svg .node text.chevron{fill:#33414f}}
 .claim{margin-bottom:4px}
 .realizations{margin:1px 0 4px 22px;border-left:2px solid var(--border);padding-left:7px}
@@ -436,7 +437,13 @@ const libraryRank = (() => {
   if (seen < libs.length) for (const l of libs) rank.set(l, index.get(l));
   return rank;
 })();
-const maxLibraryRank = Math.max(0, ...libraryRank.values());
+/* Every library in the repository gets its own column, ordered by that rank and
+   then by name, so the band layout is stable across selections and a package a
+   selection does not reach is visibly empty rather than silently absent. */
+const libraryOrder = [...libraryRank.keys()].sort(
+  (a, b) => libraryRank.get(a) - libraryRank.get(b) || a.localeCompare(b));
+const libraryColumn = new Map(libraryOrder.map((lib, i) => [lib, i]));
+const headlineBand = libraryOrder.length;
 
 function topology(P) {
   const ins = new Map(P.nodes.map(n => [n.id, 0])), outs = new Map(P.nodes.map(n => [n.id, []]));
@@ -465,10 +472,10 @@ function render() {
      headline theorem to one extremal column, so the edges into them are the
      picture.  The depth layout keeps the older topological columns.         */
   const bandLayout = layoutSelect.value === "library";
-  const headlineBand = maxLibraryRank + 1;
   const bandOf = n => bandLayout
-    ? (n.selectedHeadline ? headlineBand : (libraryRank.get(n.library || "Other") ?? 0))
+    ? (n.selectedHeadline ? headlineBand : (libraryColumn.get(n.library || "Other") ?? 0))
     : (depth.get(n.id) || 0);
+  if (bandLayout) for (let d = 0; d <= headlineBand; d++) columns.set(d, []);
   for (const n of P.nodes) {
     const d = bandOf(n);
     if (!columns.has(d)) columns.set(d, []);
@@ -479,20 +486,25 @@ function render() {
       || (depth.get(a.id) || 0) - (depth.get(b.id) || 0)
       || significantLabel(a).localeCompare(significantLabel(b)));
   const W = 272, H = 78, X = 74, Y = 35, xgap = 96, ygap = 18;
+  const columnX = d => X + d * (W + xgap);
   layoutPos = new Map();
   let maxRows = 1, maxCol = 0;
   for (const [d, rows] of columns) {
     maxCol = Math.max(maxCol, d);
     maxRows = Math.max(maxRows, rows.length);
-    rows.forEach((n, i) => layoutPos.set(n.id, {x: X + d * (W + xgap), y: Y + i * (H + ygap), w: W, h: H}));
+    rows.forEach((n, i) => layoutPos.set(n.id, {x: columnX(d), y: Y + i * (H + ygap), w: W, h: H}));
   }
   viewport.replaceChildren();
-  for (const [d, rows] of columns) {
-    const p = layoutPos.get(rows[0].id);
-    const head = el("text", {x: p.x, y: Y - 12, class: "band"});
-    head.textContent = bandLayout
-      ? (d === headlineBand ? "Selected headline theorems" : (rows[0].library || "Other"))
+  for (const [d, rows] of [...columns].sort((a, b) => a[0] - b[0])) {
+    if (!bandLayout && !rows.length) continue;
+    const label = bandLayout
+      ? (d === headlineBand ? "Selected headline theorems" : libraryOrder[d])
       : `depth ${d}`;
+    const head = el("text", {x: columnX(d), y: Y - 12,
+      class: rows.length ? "band" : "band empty"});
+    head.textContent = rows.length
+      ? `${label} · ${rows.length}`
+      : `${label} · not reached`;
     viewport.append(head);
   }
   for (const e of P.edges) {
