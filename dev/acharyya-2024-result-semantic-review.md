@@ -431,6 +431,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress_rigidMotion`
+- `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding`
 - `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
 - `Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension`
@@ -447,6 +448,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 | int int \| ‖psihat_1 - psihat_2‖ - ‖mds(phi_1) - mds(phi_2)‖ \|^p P(dphi_1) P(dphi_2) ->P 0 | tendsto_measure_lpPairDistErr_gt, with P the empirical measure of the sampled models | `lean_stronger_hypothesis` | The population law is replaced by the empirical model measure; that substitution is the remaining distance to the printed lemma. |
 | Lemma 2. ([23]) | The source attributes the lemma to the cited continuous-MDS literature and does not prove it. | `supplementary` |  |
 | int int \|‖psihat_1 - psihat_2‖ - ‖mds(phi_1) - mds(phi_2)‖\|^p P(dphi_1) P(dphi_2) | lpPairDistErr over ContinuousMDS.frameEmbedding and a continuous-MDS map; every model is placed against one fixed reference configuration, so the pairwise distances are comparisons within a single frame. | `different_quantifier_encoding` | The source leaves the out-of-sample map implicit in its notation; Quench states it as Psihat_Q. Augmenting one model at a time gives each model its own frame and so cannot serve the integral. |
+| ... -> P 0 as u -> infinity | tendsto_lpPairDistErr_frameEmbedding proves the L^p discrepancy tends to zero, against the population embedding of a fixed reference sample. | `lean_stronger_hypothesis` | Identifying that target with the continuous-MDS map, as the reference collection grows, is the whole residual. |
 
 **Semantic review:**
 
@@ -456,7 +458,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Supply the one remaining input: convergence of the estimated embedding's pairwise distances at P x P-almost every pair with a dominating envelope. tendsto_lpPairDistErr_of_ae_tendsto then finishes, and by tendsto_outOfSampleExtension that input reduces to convergence of the reference configurations plus an identifiability premise on the limiting one-point stress.
+**Next action:** Identify the population embedding of a fixed reference sample with the continuous-MDS map in the limit of a growing reference collection. Everything else in the chain is proved, ending at tendsto_lpPairDistErr_frameEmbedding.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -516,6 +518,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress_rigidMotion`
+- `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding`
 - `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
 - `Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension`
@@ -538,7 +541,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Supply the one remaining input: convergence of the estimated embedding's pairwise distances at P x P-almost every pair with a dominating envelope. tendsto_lpPairDistErr_of_ae_tendsto then finishes, and by tendsto_outOfSampleExtension that input reduces to convergence of the reference configurations plus an identifiability premise on the limiting one-point stress.
+**Next action:** Identify the population embedding of a fixed reference sample with the continuous-MDS map in the limit of a growing reference collection. Everything else in the chain is proved, ending at tendsto_lpPairDistErr_frameEmbedding.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 

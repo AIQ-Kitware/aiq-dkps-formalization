@@ -596,4 +596,90 @@ theorem tendsto_lpPairDistErr_of_ae_tendsto {M : Type*} [MeasurableSpace M] (d :
   refine hlim.congr fun u => ?_
   exact (lpPairDistErr_eq_integral_prod d P p (Ψ u) χ (hint u)).symm
 
+/-! ### Lemma 2's conclusion for a fixed reference sample
+
+Assembling the pieces: the out-of-sample positions converge at every model
+(`tendsto_outOfSampleExtension`), so the pairwise-distance discrepancy converges at every pair,
+and dominated convergence (`tendsto_lpPairDistErr_of_ae_tendsto`) turns that into the source's
+`L^p(P × P)` conclusion.
+
+What this proves is the conclusion's shape, with the population embedding taken relative to a
+*fixed* reference sample.  The source's `mds` is the continuous-MDS map, which is the limit of
+these as the reference collection grows; identifying the two is the residual. -/
+
+/--
+**Lemma 2's `L^p` conclusion, against the population embedding of a fixed reference sample.**
+
+`z u` are the estimated reference configurations and `ψ` their limit; `Δhat u` the estimated
+dissimilarities and `Δ` their limit.  The uniqueness hypothesis is the identifiability premise
+the argmin step needs, of the same kind as `RawStress.UniquePairProfile`; the uniform bound is
+what a bounded dissimilarity function on a compact model space supplies.
+-/
+theorem tendsto_lpPairDistErr_frameEmbedding {M : Type*} [MeasurableSpace M]
+    {d n : Nat} (hn : 0 < n) (P : Measure M) [IsProbabilityMeasure P]
+    {p : Real} (hp : 0 < p)
+    (Δhat : Nat → M → M → Real) (Δ : M → M → Real) (φ : Fin n → M)
+    (z : Nat → Config n d) (ψ : Config n d)
+    (hz : ∀ i, Tendsto (fun u => z u i) atTop (𝓝 (ψ i)))
+    (hΔ : ∀ x i, Tendsto (fun u => Δhat u x (φ i)) atTop (𝓝 (Δ x (φ i))))
+    (huniq : ∀ x : M, ∀ w : Rvec d,
+      (∀ w' : Rvec d, pointStress ψ (fun i => Δ x (φ i)) w
+        ≤ pointStress ψ (fun i => Δ x (φ i)) w') →
+      w = frameEmbedding d n hn Δ φ ψ x)
+    {C : Real} (hC : 0 ≤ C)
+    (hbdd : ∀ u, ∀ x y : M,
+      |‖frameEmbedding d n hn (Δhat u) φ (z u) x - frameEmbedding d n hn (Δhat u) φ (z u) y‖
+        - ‖frameEmbedding d n hn Δ φ ψ x - frameEmbedding d n hn Δ φ ψ y‖| ≤ C)
+    (hmeas : ∀ u, AEStronglyMeasurable
+      (fun q : M × M =>
+        |‖frameEmbedding d n hn (Δhat u) φ (z u) q.1
+            - frameEmbedding d n hn (Δhat u) φ (z u) q.2‖
+          - ‖frameEmbedding d n hn Δ φ ψ q.1 - frameEmbedding d n hn Δ φ ψ q.2‖| ^ p)
+      (P.prod P)) :
+    Tendsto (fun u => lpPairDistErr d P p
+      (frameEmbedding d n hn (Δhat u) φ (z u)) (frameEmbedding d n hn Δ φ ψ))
+      atTop (𝓝 0) := by
+  classical
+  -- the out-of-sample position converges at every model
+  have hpt : ∀ x : M, Tendsto (fun u => frameEmbedding d n hn (Δhat u) φ (z u) x) atTop
+      (𝓝 (frameEmbedding d n hn Δ φ ψ x)) := by
+    intro x
+    have hmin : ∀ w : Rvec d,
+        pointStress ψ (fun i => Δ x (φ i)) (frameEmbedding d n hn Δ φ ψ x)
+          ≤ pointStress ψ (fun i => Δ x (φ i)) w :=
+      fun w => frameEmbedding_min d n hn Δ φ ψ x w
+    exact tendsto_outOfSampleExtension hn hz (fun i => hΔ x i) hmin (huniq x)
+  -- hence the pairwise-distance discrepancy converges at every pair
+  have hae : ∀ᵐ q ∂(P.prod P), Tendsto
+      (fun u => |‖frameEmbedding d n hn (Δhat u) φ (z u) q.1
+          - frameEmbedding d n hn (Δhat u) φ (z u) q.2‖
+        - ‖frameEmbedding d n hn Δ φ ψ q.1 - frameEmbedding d n hn Δ φ ψ q.2‖| ^ p)
+      atTop (𝓝 0) := by
+    refine Filter.Eventually.of_forall fun q => ?_
+    have hnorm : Tendsto
+        (fun u => ‖frameEmbedding d n hn (Δhat u) φ (z u) q.1
+            - frameEmbedding d n hn (Δhat u) φ (z u) q.2‖) atTop
+        (𝓝 ‖frameEmbedding d n hn Δ φ ψ q.1 - frameEmbedding d n hn Δ φ ψ q.2‖) :=
+      ((hpt q.1).sub (hpt q.2)).norm
+    have hsub : Tendsto
+        (fun u => |‖frameEmbedding d n hn (Δhat u) φ (z u) q.1
+            - frameEmbedding d n hn (Δhat u) φ (z u) q.2‖
+          - ‖frameEmbedding d n hn Δ φ ψ q.1 - frameEmbedding d n hn Δ φ ψ q.2‖|)
+        atTop (𝓝 0) := by
+      have h0 := (hnorm.sub (tendsto_const_nhds
+        (x := ‖frameEmbedding d n hn Δ φ ψ q.1 - frameEmbedding d n hn Δ φ ψ q.2‖))).abs
+      simpa using h0
+    have hrpow : Tendsto (fun t : Real => t ^ p) (𝓝[≥] (0 : Real)) (𝓝 0) := by
+      have h : ContinuousWithinAt (fun t : Real => t ^ p) (Set.Ici (0 : Real)) 0 :=
+        (Real.continuousAt_rpow_const (0 : Real) p (Or.inr hp.le)).continuousWithinAt
+      have h2 : Tendsto (fun t : Real => t ^ p) (𝓝[≥] (0 : Real)) (𝓝 ((0 : Real) ^ p)) := h
+      rwa [Real.zero_rpow hp.ne'] at h2
+    refine hrpow.comp (tendsto_nhdsWithin_iff.mpr ⟨hsub, ?_⟩)
+    exact Filter.Eventually.of_forall fun u => Set.mem_Ici.mpr (abs_nonneg _)
+  -- dominated convergence finishes
+  refine tendsto_lpPairDistErr_of_ae_tendsto d P p _ _ (fun _ => C ^ p)
+    (integrable_const _) hmeas (fun u => Filter.Eventually.of_forall fun q => ?_) hae
+  rw [Real.norm_eq_abs, abs_of_nonneg (Real.rpow_nonneg (abs_nonneg _) p)]
+  exact Real.rpow_le_rpow (abs_nonneg _) (hbdd u q.1 q.2) hp.le
+
 end Acharyya2024.ContinuousMDS

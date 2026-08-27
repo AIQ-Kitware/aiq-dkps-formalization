@@ -594,6 +594,7 @@
     "Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress",
     "Acharyya2024.ContinuousMDS.pointStress",
     "Acharyya2024.ContinuousMDS.pointStress_rigidMotion",
+    "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto",
     "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
     "Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension",
@@ -631,6 +632,12 @@
      "lean_clause": "lpPairDistErr over ContinuousMDS.frameEmbedding and a continuous-MDS map; every model is placed against one fixed reference configuration, so the pairwise distances are comparisons within a single frame.",
      "relation": "different_quantifier_encoding",
      "note": "The source leaves the out-of-sample map implicit in its notation; Quench states it as Psihat_Q. Augmenting one model at a time gives each model its own frame and so cannot serve the integral."
+    },
+    {
+     "source_clause": "... -> P 0 as u -> infinity",
+     "lean_clause": "tendsto_lpPairDistErr_frameEmbedding proves the L^p discrepancy tends to zero, against the population embedding of a fixed reference sample.",
+     "relation": "lean_stronger_hypothesis",
+     "note": "Identifying that target with the continuous-MDS map, as the reference collection grows, is the whole residual."
     }
    ],
    "review": "The package has no model-distribution P over a compact model space, no continuous-MDS map, and no double-integral L^p conclusion.",
@@ -638,7 +645,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Supply the one remaining input: convergence of the estimated embedding's pairwise distances at P x P-almost every pair with a dominating envelope. tendsto_lpPairDistErr_of_ae_tendsto then finishes, and by tendsto_outOfSampleExtension that input reduces to convergence of the reference configurations plus an identifiability premise on the limiting one-point stress."
+   "next_action": "Identify the population embedding of a fixed reference sample with the continuous-MDS map in the limit of a growing reference collection. Everything else in the chain is proved, ending at tendsto_lpPairDistErr_frameEmbedding."
   },
   {
    "id": "A24-T4",
@@ -724,6 +731,7 @@
     "Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress",
     "Acharyya2024.ContinuousMDS.pointStress",
     "Acharyya2024.ContinuousMDS.pointStress_rigidMotion",
+    "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding",
     "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto",
     "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
     "Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension",
@@ -752,7 +760,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Supply the one remaining input: convergence of the estimated embedding's pairwise distances at P x P-almost every pair with a dominating envelope. tendsto_lpPairDistErr_of_ae_tendsto then finishes, and by tendsto_outOfSampleExtension that input reduces to convergence of the reference configurations plus an identifiability premise on the limiting one-point stress."
+   "next_action": "Identify the population embedding of a fixed reference sample with the continuous-MDS map in the limit of a growing reference collection. Everything else in the chain is proved, ending at tendsto_lpPairDistErr_frameEmbedding."
   },
   {
    "id": "A24-R4",
