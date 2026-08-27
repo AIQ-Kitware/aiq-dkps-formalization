@@ -36,7 +36,6 @@ dev/
   tauceti/                    # Tau Ceti engineering records and generated status
   journals/                   # Postmortems of bugs that took real effort to diagnose
   benchmark-candidates/       # Hard questions distilled from real formalization mistakes
-  overlays/                   # Promotion manifests for the surviving Scratch/** sketches
   alternates/                 # Non-building Lean files kept for proof-strategy comparison
   upstream-extraction/        # Provenance JSON for extracted material
   retired-full-part-iii-ambient-route-2026-07-21/   # Compressed archive of a retired route
@@ -134,23 +133,6 @@ for.
   vocabulary.
 - **Write** here after a fix that took effort. Skip the narrative; the canonical
   shape is **Symptom / What it was NOT / Root cause / Fix / Takeaway**.
-
-## `dev/overlays/`
-
-Promotion manifests for the proof sketches under
-`DavisKahan/Experimental/Scratch/**`. Per `AGENTS.md`, a scratch file is **not
-required to build** — the task is to promote the sketch into its source-facing
-home module and fix it *there*. The manifest states what each declaration
-proves, where it should land, and the likely elaboration seams.
-
-This directory is curated rather than a delivery archive. A manifest remains only
-when it still guards live scratch work, records a promotion needed by a current
-checker, or is cited from live source/data. In particular,
-`pending-mathahead-rebased-53297a4-gpt56.manifest.txt` is checked by
-`scripts/check_davis_kahan_rebased_mathahead.py`; entries may record successful
-promotion with `<scratch> -> <target>`. `lemma63-promotion-scratch-7f9f562-gpt56.md`
-is retained because two Lean sources still cite it. Applied-overlay receipts with
-no live consumer belong in Git history instead.
 
 ## Quality bar
 

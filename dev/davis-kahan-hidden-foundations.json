@@ -310,129 +310,6 @@
       "notes": ""
     },
     {
-      "id": "kyfan-seminorm",
-      "title": "Continuous finite Ky Fan approximation seminorm",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/KyFanBochner.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.kyFanApproximationSeminorm",
-      "kind": "construction",
-      "dependencies": [],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "kyfan-bochner",
-      "title": "Ky Fan gauge of a Bochner integral",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/KyFanBochner.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.kyFanApproximationGauge_integral_le",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "kyfan-seminorm"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "kyfan-unitary-invariance",
-      "title": "Unitary invariance of finite approximation gauges",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/KyFanBochner.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.kyFanApproximationGauge_unitary_left_right",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "kyfan-seminorm"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "complex-separated-sylvester-kyfan",
-      "title": "Complex separated Sylvester estimate for every finite Ky Fan gauge",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/KyFanBochner.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.complex_separated_sylvester_kyFan",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "kyfan-bochner",
-        "kyfan-unitary-invariance"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "complexify-sylvester",
-      "title": "Complexification preserves the Sylvester equation",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/RealSylvesterDescent.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.complexify_sylvesterEquation",
-      "kind": "bridge",
-      "dependencies": [],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "complexify-spectrum",
-      "title": "Real spectrum is preserved by complexification",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/RealSylvesterDescent.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.realSpectrum_complexify_bounded",
-      "kind": "bridge",
-      "dependencies": [],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "complexify-separation",
-      "title": "Separated spectra are preserved by complexification",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/RealSylvesterDescent.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.spectraSeparated_top_complexify",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "complexify-spectrum"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "real-separated-sylvester-kyfan",
-      "title": "Real finite-Ky-Fan separated Sylvester estimate",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/RealSylvesterDescent.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.real_bounded_separated_sylvester_kyFan",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "complexify-sylvester",
-        "complexify-separation",
-        "complex-separated-sylvester-kyfan"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
-      "id": "real-separated-sylvester",
-      "title": "Real UI-norm separated Sylvester estimate",
-      "module": "DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent",
-      "file": "DavisKahan/Experimental/MathAhead/HiddenFoundations/RealSylvesterDescent.lean",
-      "declaration": "TauCeti.DavisKahan.Experimental.MathAhead.HiddenFoundations.real_bounded_separated_sylvester",
-      "kind": "proof_candidate",
-      "dependencies": [
-        "real-separated-sylvester-kyfan"
-      ],
-      "frontier_nodes": [],
-      "confidence": "medium",
-      "notes": ""
-    },
-    {
       "id": "hs-completeness",
       "title": "Completeness of the paper Hilbert--Schmidt gauge",
       "module": "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
@@ -680,17 +557,8 @@
     },
     {
       "id": "sylvester-real-ideals",
-      "title": "Ky Fan transport, real descent, and rectangular ideals",
+      "title": "Hilbert--Schmidt and Schatten ideal families",
       "nodes": [
-        "kyfan-seminorm",
-        "kyfan-bochner",
-        "kyfan-unitary-invariance",
-        "complex-separated-sylvester-kyfan",
-        "complexify-sylvester",
-        "complexify-spectrum",
-        "complexify-separation",
-        "real-separated-sylvester-kyfan",
-        "real-separated-sylvester",
         "hs-completeness",
         "hs-complex-family",
         "schatten-foundation",
@@ -722,6 +590,7 @@
   "rebased_on_commit": "53297a486170",
   "rebased_overlay": "pending-mathahead-rebased-53297a4-gpt56",
   "notes": [
-    "Promoted polar decomposition and nonacute Section 3 declarations are intentionally absent from this hidden-foundation manifest; their canonical owners are DavisKahan/Geometry/Polar modules."
+    "Promoted polar decomposition and nonacute Section 3 declarations are intentionally absent from this hidden-foundation manifest; their canonical owners are DavisKahan/Geometry/Polar modules.",
+    "PROMOTED AND REMOVED 2026-08-27: the nine Ky Fan / real-descent Sylvester nodes (kyfan-seminorm, kyfan-bochner, kyfan-unitary-invariance, complex-separated-sylvester-kyfan, complexify-sylvester, complexify-spectrum, complexify-separation, real-separated-sylvester-kyfan, real-separated-sylvester) are no longer hidden foundations. The reusable Ky Fan machinery is ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFanBochner.lean (ContinuousLinearMap.kyFanGauge_integral_le, continuous_kyFanGauge, kyFanGauge_unitary_comp_comp); the arbitrary-Hilbert complex and real pi/2 finite-Ky-Fan Sylvester theorems and the ideal-gauge corollary are DavisKahan/InfiniteDimensional/Sylvester/GeneralSeparationKyFan.lean (TauCeti.DavisKahanExt.kyFan_sylvester_le_of_generalSeparation{,_real} and idealGauge_sylvester_le_of_generalSeparation_real); the complexification of full-space spectral separation is TauCeti.DavisKahan.Foundation.RealComplexification.spectraSeparated_top_complexify in DavisKahan/SpectralTheory/Complexification/Spectrum.lean. The invertibility and real-spectrum transports were duplicates of the stable isUnit_complexify_iff / realSpectrum_complexify in that same module and were deleted rather than promoted. The two source files are gone and were not replaced by forwarding modules."
   ]
 }

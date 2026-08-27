@@ -68,25 +68,6 @@ EXCLUDED: dict[str, str] = {
         "`git log --all -S` over each shows the only file that has ever contained them is "
         "this one.  Nothing moved out from under it.  Delete-or-rewrite is a decision for "
         "an owner, not a repair -- same disposition as `Core/Unbounded` below.",
-    "DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner":
-        "**blocked on absent Mathlib, not on this repository.**  Narrowed from 8 errors to "
-        "4 on 2026-07-31: the universe mismatch and the `Seminorm` fields are fixed, and "
-        "what is left is two things pinned Mathlib does not have -- `Seminorm.integral_le`, "
-        "which is the Bochner--Minkowski inequality the module exists to apply, and the "
-        "`†` adjoint notation.  **Corrected 2026-07-31 by lane DK-EXPCOVER's own follow-up, "
-        "EXP-BUILD-ADJ: the notation is Mathlib's, localized in `LinearPMap`, so that half "
-        "needs `open scoped LinearPMap` and not a definition.**  What is genuinely absent "
-        "is `Seminorm.integral_le` alone -- same category as `compactOperatorNorm` and "
-        "Schauder's theorem: the chain leaves the repository.  "
-        "**CLASS: one external blocker plus two local errors, re-measured 2026-07-31.**  Of "
-        "the 7 errors, exactly one is external (`Seminorm.integral_le` at :71).  The other "
-        "two roots are local and neither needs Mathlib: a type mismatch at :62, and at :77 "
-        "the `\u2020` adjoint notation applied to a `ContinuousLinearMap` -- `\u2020` is "
-        "Mathlib\'s and is scoped to `LinearPMap`, so it is not merely out of scope here, "
-        "it is the wrong notation for a bounded operator.  The two errors at :122/:123 are "
-        "cascade: :77 fails, so the theorem it heads never registers, and its own use "
-        "below reports an unknown identifier.  **So this module is nearer to building than "
-        "an error count suggests** -- but it cannot reach green while :71 stands.",
     "DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry":
         "**CLASS: a Mathlib-era migration, not a rename sweep.**  21 errors.  This entry "
         "said on 2026-07-31 that 'every unknown name has a live successor'; that was "

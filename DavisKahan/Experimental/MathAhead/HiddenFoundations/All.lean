@@ -7,11 +7,9 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 import DavisKahan.Experimental.MathAhead.HiddenFoundations.CircleContourGeometry
 import DavisKahan.MathAhead.HiddenFoundations.ContourReuseBridge
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.KyFanBochner
 import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
 import DavisKahan.Geometry.Polar.PolarIntertwining
 import DavisKahan.Geometry.Polar.PolarIsometryFinal
-import DavisKahan.Experimental.MathAhead.HiddenFoundations.RealSylvesterDescent
 import DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation
 import DavisKahan.Geometry.Polar.Section3Nonacute
 import DavisKahan.SpectralTheory.SpectralMultiplicityFoundation
