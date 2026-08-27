@@ -47,9 +47,11 @@
     "Helm2025.DKPS.ContinuousLossInPrediction",
     "Helm2025.DKPS.LossDominated",
     "Helm2025.DKPS.Theorem1",
+    "Helm2025.DKPS.Theorem1_printed",
     "Helm2025.DKPS.lossDominated_of_boundedLabelSupport",
     "Helm2025.DKPS.prob_convergence_not_enough_for_expectations",
     "Helm2025.DKPS.risk_converges_fixed_n",
+    "Helm2025.DKPS.risk_converges_fixed_n_printed",
     "Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4"
    ],
    "clauses": [
@@ -114,7 +116,7 @@
     "label-compact-support",
     "stronger-analysis-hypotheses"
    ],
-   "next_action": "None."
+   "next_action": "None for the assumptions; Theorem1_printed now runs on the printed readings of Assumptions 2 and 4 and does not use Assumption 3."
   },
   {
    "id": "H25-T2",
@@ -248,22 +250,19 @@
     ]
    },
    "lean_declarations": [
-    "Helm2025.DKPS.PaperA2_SequentialContinuity",
     "Helm2025.DKPS.Assumption2",
-    "Helm2025.DKPS.ContinuousLearningRule.paperA2"
+    "Helm2025.DKPS.ContinuousLearningRule.paperA2",
+    "Helm2025.DKPS.ContinuousLearningRuleInEmbeddings",
+    "Helm2025.DKPS.PaperA2_SequentialContinuity",
+    "Helm2025.DKPS.Theorem1_printed",
+    "Helm2025.DKPS.continuousLearningRuleInEmbeddings_of_continuousLearningRule"
    ],
    "clauses": [
     {
-     "source_clause": "Sequentially uniform embedding convergence implies the learned prediction converges.",
-     "lean_clause": "PaperA2_SequentialContinuity records the literal source predicate.",
+     "source_clause": "if max_i ||psihat_i - psi_i|| -> 0 then ||h(psihat_{n+1}; {(psihat_i, y_i)}) - h(psi_{n+1}; {(psi_i, y_i)})|| -> 0",
+     "lean_clause": "ContinuousLearningRuleInEmbeddings: for each fixed label vector, the learning rule is continuous in the embeddings.",
      "relation": "exact",
-     "note": ""
-    },
-    {
-     "source_clause": "The main theorem uses a joint continuity predicate on the learning rule.",
-     "lean_clause": "Assumption2 is a stronger sufficient condition and proves the paper-shaped sequential condition.",
-     "relation": "lean_stronger_hypothesis",
-     "note": ""
+     "note": "The labels are the same on both sides of the printed display, so the assumption is separate continuity in the embeddings, not joint continuity."
     }
    ],
    "review": "The literal sequential predicate exists. The main theorem assumes a stronger joint continuity predicate and proves it implies the paper-shaped condition.",
@@ -271,7 +270,7 @@
    "gap_refs": [
     "stronger-analysis-hypotheses"
    ],
-   "next_action": "None."
+   "next_action": "None. The printed reading is formalized and is what the paper-facing theorem now consumes."
   },
   {
    "id": "H25-A3",
@@ -330,26 +329,17 @@
     "Helm2025.DKPS.ContinuousLoss.continuousLossInPred",
     "Helm2025.DKPS.ContinuousLossInPred",
     "Helm2025.DKPS.ContinuousLossInPrediction",
+    "Helm2025.DKPS.Theorem1_printed",
+    "Helm2025.DKPS.loss_converges_in_prob_printed",
+    "Helm2025.DKPS.stronglyMeasurable_combined_loss_of_printed",
     "Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4"
    ],
    "clauses": [
     {
-     "source_clause": "For every fixed label y, the loss is continuous in the prediction.",
-     "lean_clause": "ContinuousLossInPred/Assumption4 records this literal property.",
+     "source_clause": "for every y, ||l(h',y) - l(h'',y)|| -> 0 if ||h' - h''|| -> 0",
+     "lean_clause": "ContinuousLossInPrediction, consumed by Theorem1_printed.",
      "relation": "exact",
-     "note": ""
-    },
-    {
-     "source_clause": "The main theorem uses joint continuity of loss.",
-     "lean_clause": "ContinuousLoss is stronger than the printed pointwise-in-label condition.",
-     "relation": "lean_stronger_hypothesis",
-     "note": ""
-    },
-    {
-     "source_clause": "\"The loss function is continuous. That is, for every y, ...\"",
-     "lean_clause": "Both readings are formalized: ContinuousLoss (joint, used by the theorems) and ContinuousLossInPrediction (the displayed gloss). The gloss plus label measurability suffices for joint strong measurability.",
-     "relation": "lean_stronger_hypothesis",
-     "note": "The headline clause supports the joint reading; the gloss is strictly weaker."
+     "note": "The headline sentence admits the stronger joint reading; the displayed gloss is this one and it now suffices."
     }
    ],
    "review": "The literal pointwise-in-label predicate exists, while the main theorem assumes joint continuity of the loss as a convenient sufficient condition.",
@@ -357,7 +347,7 @@
    "gap_refs": [
     "stronger-analysis-hypotheses"
    ],
-   "next_action": "Reprove the continuous-mapping step under ContinuousLossInPrediction via a.e.-convergent subsequences."
+   "next_action": "None. The displayed gloss is what the paper-facing theorem consumes."
   },
   {
    "id": "H25-EQ3",

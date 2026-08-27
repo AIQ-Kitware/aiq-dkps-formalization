@@ -1037,6 +1037,196 @@ lemma loss_converges_in_prob (n d d' : ℕ)
               contrapose! hw;
               exact pi_norm_le_iff_of_nonneg ( by linarith [ show 0 ≤ w by exact le_trans ( norm_nonneg _ ) ( hw 0 ) ] ) |>.2 hw
 
+/-! ### The continuous-mapping step under the printed assumptions
+
+Assumption 2 as printed moves only the embeddings, holding the labels fixed, and Assumption 4 as
+printed moves only the prediction, holding the label fixed.  Both are strictly weaker than the
+joint continuity the development has been using, and both are enough here, because the step
+being proved compares two configurations that carry *identical* labels.
+
+What the weaker readings cost is a modulus that depends on the sample point, so the ordinary
+continuous-mapping theorem no longer applies.  The replacement is the subsequence principle:
+convergence in measure passes to an almost-everywhere convergent subsequence, where the sample
+point is fixed and separate continuity is exactly what is needed, and a sequence converges when
+every subsequence has a convergent subsequence.
+-/
+
+/-- The supremum of the coordinatewise distances is the distance in the product. -/
+theorem ciSup_dist_eq_dist_pi {ι : Type*} [Fintype ι] [Nonempty ι] {V : Type*}
+    [NormedAddCommGroup V] (x y : ι → V) : (⨆ i, dist (x i) (y i)) = dist x y := by
+  simp only [dist_eq_norm]
+  refine ciSup_eq_of_forall_le_of_forall_lt_exists_gt (fun i => ?_) (fun w hw => ?_)
+  · simpa using norm_le_pi_norm (x - y) i
+  · contrapose! hw
+    have h0 : (0 : ℝ) ≤ w :=
+      le_trans (norm_nonneg _) (hw (Classical.arbitrary ι))
+    exact (pi_norm_le_iff_of_nonneg h0).2 (fun i => by simpa using hw i)
+
+/-- Convergence in measure gives the package's convergence in probability of the distances. -/
+theorem convergesInProbabilityToZero_of_tendstoInMeasure {Ω : Type*} [MeasurableSpace Ω]
+    {P : Measure Ω} {F : ℕ → Ω → ℝ} {G : Ω → ℝ}
+    (h : TendstoInMeasure P F atTop G) :
+    ConvergesInProbabilityToZero P (fun u ω => dist (F u ω) (G ω)) := by
+  intro ε hε
+  have h' := h (ENNReal.ofReal ε) (by simpa using hε)
+  refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds h'
+    (Filter.Eventually.of_forall fun _ => bot_le)
+    (Filter.Eventually.of_forall fun u => measure_mono fun ω hω => ?_)
+  simp only [Set.mem_ofPred_eq, gt_iff_lt, abs_of_nonneg dist_nonneg] at hω
+  simp only [Set.mem_ofPred_eq, edist_dist]
+  exact ENNReal.ofReal_le_ofReal hω.le
+
+/-- The package's convergence in probability of the distances gives convergence in measure. -/
+theorem tendstoInMeasure_of_convergesInProbabilityToZero {Ω : Type*} [MeasurableSpace Ω]
+    {P : Measure Ω} {A : Type*} [MetricSpace A] {X : ℕ → Ω → A} {Xt : Ω → A}
+    (h : ConvergesInProbabilityToZero P (fun u ω => dist (X u ω) (Xt ω))) :
+    TendstoInMeasure P X atTop Xt := by
+  intro ε hε
+  rcases eq_or_ne ε ⊤ with rfl | hεtop
+  · have hempty : ∀ u, {ω | (⊤ : ENNReal) ≤ edist (X u ω) (Xt ω)} = (∅ : Set Ω) := by
+      intro u
+      ext ω
+      simp [edist_dist, ENNReal.ofReal_ne_top, top_le_iff]
+    refine Filter.Tendsto.congr (fun u => ?_)
+      (tendsto_const_nhds : Filter.Tendsto (fun _ : ℕ => (0 : ENNReal)) atTop (𝓝 0))
+    rw [hempty u, measure_empty]
+  · set r : ℝ := ε.toReal with hr
+    have hrpos : 0 < r := ENNReal.toReal_pos hε.ne' hεtop
+    have h' := h (r / 2) (by linarith)
+    refine tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds h'
+      (Filter.Eventually.of_forall fun _ => bot_le)
+      (Filter.Eventually.of_forall fun u => measure_mono fun ω hω => ?_)
+    simp only [Set.mem_ofPred_eq, edist_dist] at hω
+    have hle : r ≤ dist (X u ω) (Xt ω) := by
+      have hεeq : ENNReal.ofReal r ≤ ENNReal.ofReal (dist (X u ω) (Xt ω)) := by
+        rw [hr, ENNReal.ofReal_toReal hεtop]
+        exact hω
+      exact (ENNReal.ofReal_le_ofReal_iff dist_nonneg).mp hεeq
+    simp only [Set.mem_ofPred_eq, gt_iff_lt, abs_of_nonneg dist_nonneg]
+    linarith
+
+/--
+**Continuous mapping in measure under separate continuity.**
+
+If `X u` converges in measure to `X_true`, and `f` is continuous in its first argument for each
+fixed value of its second, then `f (X u ω) (Y ω)` converges in measure to `f (X_true ω) (Y ω)`.
+
+The second argument is a fixed function of the sample point, so on each sample point the
+continuity used is exactly the separate one.  Only measurability of the composites is required,
+and no continuity in the second argument at all.
+-/
+theorem tendstoInMeasure_comp_of_continuous_fst {Ω : Type*} [MeasurableSpace Ω]
+    {P : Measure Ω} [IsFiniteMeasure P] {A B : Type*} [MetricSpace A]
+    {X : ℕ → Ω → A} {X_true : Ω → A} {Yv : Ω → B} {f : A → B → ℝ}
+    (hf : ∀ b, Continuous fun a => f a b)
+    (hmeas : ∀ u, AEStronglyMeasurable (fun ω => f (X u ω) (Yv ω)) P)
+    (hconv : TendstoInMeasure P X atTop X_true) :
+    TendstoInMeasure P (fun u ω => f (X u ω) (Yv ω)) atTop (fun ω => f (X_true ω) (Yv ω)) := by
+  intro ε hε
+  refine tendsto_of_subseq_tendsto (fun ns hns => ?_)
+  have hsub : TendstoInMeasure P (fun k ω => X (ns k) ω) atTop X_true :=
+    fun δ hδ => (hconv δ hδ).comp hns
+  obtain ⟨ms, -, hae⟩ := hsub.exists_seq_tendsto_ae
+  refine ⟨ms, ?_⟩
+  have hae' : ∀ᵐ ω ∂P, Filter.Tendsto (fun k => f (X (ns (ms k)) ω) (Yv ω)) atTop
+      (𝓝 (f (X_true ω) (Yv ω))) := by
+    filter_upwards [hae] with ω hω
+    exact ((hf (Yv ω)).tendsto (X_true ω)).comp hω
+  exact tendstoInMeasure_of_tendsto_ae (fun k => hmeas (ns (ms k))) hae' ε hε
+
+/-- With the labels fixed, the end-to-end loss is continuous in the embeddings, under the
+printed readings of Assumptions 2 and 4 alone. -/
+theorem combined_loss_continuous_in_embeddings (n d d' : ℕ)
+    (learn : LearningRule n d d') (loss : LossFunction d')
+    (hA2 : ContinuousLearningRuleInEmbeddings n d d' learn)
+    (hA4 : ContinuousLossInPrediction d' loss)
+    (ys : Fin (n + 1) → Y d') :
+    Continuous (fun ps : Fin (n + 1) → E d =>
+      combined_loss_fn n d d' learn loss (ps, ys)) := by
+  have hmap : Continuous (fun ps : Fin (n + 1) → E d =>
+      ((fun i : Fin n => ps (Fin.castSucc i)), ps (Fin.last n))) :=
+    (continuous_pi fun i => continuous_apply _).prodMk (continuous_apply _)
+  exact (hA4 (ys (Fin.last n))).comp ((hA2 (fun i => ys (Fin.castSucc i))).comp hmap)
+
+/--
+**The end-to-end loss is jointly strongly measurable under the printed assumptions.**
+
+Joint continuity was supplying two different things: the continuous-mapping step, and the
+measurability the risk integrals need.  The first is handled by the subsequence argument above.
+This handles the second, by the Carathéodory argument -- the composite is continuous in the
+embeddings for each fixed label vector, and measurable in the labels for each fixed embedding
+vector -- so no joint continuity appears in the hypotheses.
+-/
+theorem stronglyMeasurable_combined_loss_of_printed (n d d' : ℕ)
+    (learn : LearningRule n d d') (loss : LossFunction d')
+    (hA2 : ContinuousLearningRuleInEmbeddings n d d' learn)
+    (hA4 : ContinuousLossInPrediction d' loss)
+    (hML : MeasurableLossInLabel d' loss)
+    (hMlearn : MeasurableLearningRuleInLabels n d d' learn) :
+    StronglyMeasurable (fun q : (Fin (n + 1) → E d) × (Fin (n + 1) → Y d') =>
+      combined_loss_fn n d d' learn loss q) := by
+  have hlossSM : StronglyMeasurable (fun r : Y d' × Y d' => loss r.1 r.2) :=
+    stronglyMeasurable_loss_of_printed_assumption4 d' loss hA4 hML
+  have hlab : ∀ ps : Fin (n + 1) → E d,
+      StronglyMeasurable fun ys : Fin (n + 1) → Y d' =>
+        combined_loss_fn n d d' learn loss (ps, ys) := by
+    intro ps
+    have hpred : Measurable fun ys : Fin (n + 1) → Y d' =>
+        learn (fun i : Fin n => (ps (Fin.castSucc i), ys (Fin.castSucc i)))
+          (ps (Fin.last n)) :=
+      (hMlearn ((fun i : Fin n => ps (Fin.castSucc i)), ps (Fin.last n))).comp
+        (measurable_pi_lambda _ fun i => measurable_pi_apply _)
+    exact (hlossSM.measurable.comp
+      (hpred.prodMk (measurable_pi_apply (Fin.last n)))).stronglyMeasurable
+  have huncurry := MeasureTheory.stronglyMeasurable_uncurry_of_continuous_of_stronglyMeasurable
+    (u := fun (ps : Fin (n + 1) → E d) (ys : Fin (n + 1) → Y d') =>
+      combined_loss_fn n d d' learn loss (ps, ys))
+    (fun ys => combined_loss_continuous_in_embeddings n d d' learn loss hA2 hA4 ys)
+    hlab
+  convert huncurry using 1
+  funext q
+  rfl
+
+/--
+**The continuous-mapping step of Theorem 1, under the printed assumptions.**
+
+Identical in statement to `loss_converges_in_prob`, but consuming the printed readings of
+Assumptions 2 and 4 -- continuity in the embeddings with the labels fixed, and continuity in the
+prediction with the label fixed -- instead of joint continuity in all arguments.
+
+Measurability of the composites is assumed rather than derived; joint continuity used to supply
+it for free, and the printed assumptions do not.  That is an implicit assumption beyond the
+paper of the same kind as the estimator measurability the development already carries.
+-/
+theorem loss_converges_in_prob_printed (n d d' : ℕ)
+    (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
+    (learn : LearningRule n d d')
+    (loss : LossFunction d')
+    (psi_hat : ℕ → (Fin (n + 1) → E d × Y d') → Fin (n + 1) → E d)
+    (h_conv : ConvergesInProbabilityToZero (Measure.pi (fun _ : Fin (n + 1) => P))
+      (fun u ω => ⨆ i : Fin (n + 1), dist (psi_hat u ω i) ((ω i).1)))
+    (hA2 : ContinuousLearningRuleInEmbeddings n d d' learn)
+    (hA4 : ContinuousLossInPrediction d' loss)
+    (h_meas : ∀ u, AEStronglyMeasurable
+      (fun ω : Fin (n + 1) → E d × Y d' =>
+        combined_loss_fn n d d' learn loss (psi_hat u ω, fun i => (ω i).2))
+      (Measure.pi (fun _ : Fin (n + 1) => P))) :
+    ConvergesInProbabilityToZero (Measure.pi (fun _ : Fin (n + 1) => P))
+      (fun u ω => dist
+        (combined_loss_fn n d d' learn loss (psi_hat u ω, fun i => (ω i).2))
+        (combined_loss_fn n d d' learn loss (fun i => (ω i).1, fun i => (ω i).2))) := by
+  have hconv' : ConvergesInProbabilityToZero (Measure.pi (fun _ : Fin (n + 1) => P))
+      (fun u ω => dist (psi_hat u ω) (fun i => (ω i).1)) := by
+    refine fun ε hε => (h_conv ε hε).congr fun u => ?_
+    congr 1
+    ext ω
+    simp only [Set.mem_ofPred_eq, ciSup_dist_eq_dist_pi]
+  exact convergesInProbabilityToZero_of_tendstoInMeasure
+    (tendstoInMeasure_comp_of_continuous_fst
+      (f := fun ps ys => combined_loss_fn n d d' learn loss (ps, ys))
+      (fun ys => combined_loss_continuous_in_embeddings n d d' learn loss hA2 hA4 ys)
+      h_meas (tendstoInMeasure_of_convergesInProbabilityToZero hconv'))
+
 /-- Internal helper: when the "estimated" embeddings are taken to be the true embeddings, the
 estimated risk reduces to the true risk (definitional sanity check / base case). -/
 lemma risk_eq_risk_est_true (n d d' : ℕ)
@@ -1066,12 +1256,87 @@ def loss_true_fn (n d d' : ℕ)
   fun ω => combined_loss_fn n d d' learn loss (fun i => (ω i).1, fun i => (ω i).2)
 
 /--
+**Theorem 1's risk convergence, under the printed readings of Assumptions 2 and 4.**
+
+Identical in statement to `risk_convergence_of_aligned_embeddings`, but with joint continuity of
+the learning rule and of the loss replaced by the paper's own readings: continuity in the
+embeddings with the labels held fixed, and continuity in the prediction with the label held
+fixed.
+
+Measurability of the two composite loss functions is assumed rather than derived, because joint
+continuity was what supplied it before.  It is an implicit assumption of the same kind as the
+estimator measurability the development already carries, and it is strictly weaker than joint
+continuity: `combined_loss_continuous` discharges it whenever the stronger reading holds.
+-/
+theorem risk_convergence_of_aligned_embeddings_printed (n d d' : ℕ)
+    (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
+    (learn : LearningRule n d d')
+    (loss : LossFunction d')
+    (psi_hat : ℕ → (Fin (n + 1) → E d × Y d') → Fin (n + 1) → E d)
+    (h_conv : ConvergesInProbabilityToZero (Measure.pi (fun _ : Fin (n + 1) => P))
+      (fun u ω => ⨆ i : Fin (n + 1), dist (psi_hat u ω i) ((ω i).1)))
+    (hA2 : ContinuousLearningRuleInEmbeddings n d d' learn)   -- A2 as printed
+    (hA4 : ContinuousLossInPrediction d' loss)                -- A4 as printed
+    (h_meas_est : ∀ u, Measurable (loss_est_fn n d d' learn loss psi_hat u))
+    (h_meas_true : Measurable (loss_true_fn n d d' learn loss))
+    (h_dom : LossDominated n d d' P learn loss) :
+    Tendsto (fun u => risk_est n d d' P learn loss (psi_hat u)) atTop
+      (𝓝 (risk n d d' P learn loss)) := by
+  set μ := Measure.pi (fun _ : Fin (n + 1) => P) with hμ
+  have hprob : ConvergesInProbabilityToZero μ
+      (fun u ω => loss_est_fn n d d' learn loss psi_hat u ω
+        - loss_true_fn n d d' learn loss ω) := by
+    have h := loss_converges_in_prob_printed n d d' P learn loss psi_hat h_conv hA2 hA4
+      (fun u => (h_meas_est u).aestronglyMeasurable)
+    exact fun ε hε => by
+      simpa [Real.dist_eq, abs_abs, loss_est_fn, loss_true_fn, hμ] using h ε hε
+  obtain ⟨G₁, hG₁int, hG₁⟩ := loss_dominated_pi n d d' P learn loss psi_hat h_dom
+  obtain ⟨G₂, hG₂int, hG₂⟩ := loss_dominated_pi n d d' P learn loss
+    (fun _ => fun ω i => (ω i).1) h_dom
+  have hG₁' : ∀ u, ∀ᵐ ω ∂μ, ‖loss_est_fn n d d' learn loss psi_hat u ω‖ ≤ G₁ ω := by
+    intro u
+    filter_upwards [hG₁ u] with ω hω
+    simpa [loss_est_fn, combined_loss_fn, Real.norm_eq_abs] using hω
+  have hG₂' : ∀ᵐ ω ∂μ, ‖loss_true_fn n d d' learn loss ω‖ ≤ G₂ ω := by
+    filter_upwards [hG₂ 0] with ω hω
+    simpa [loss_true_fn, combined_loss_fn, Real.norm_eq_abs] using hω
+  have hint_est : ∀ u, Integrable (loss_est_fn n d d' learn loss psi_hat u) μ := fun u =>
+    Integrable.mono' hG₁int (h_meas_est u).aestronglyMeasurable (hG₁' u)
+  have hint_true : Integrable (loss_true_fn n d d' learn loss) μ :=
+    Integrable.mono' hG₂int h_meas_true.aestronglyMeasurable hG₂'
+  have henv : ∀ u, ∀ᵐ ω ∂μ,
+      |loss_est_fn n d d' learn loss psi_hat u ω - loss_true_fn n d d' learn loss ω|
+        ≤ G₁ ω + G₂ ω := by
+    intro u
+    filter_upwards [hG₁' u, hG₂'] with ω hω₁ hω₂
+    rw [Real.norm_eq_abs] at hω₁ hω₂
+    calc |loss_est_fn n d d' learn loss psi_hat u ω - loss_true_fn n d d' learn loss ω|
+        ≤ |loss_est_fn n d d' learn loss psi_hat u ω|
+          + |loss_true_fn n d d' learn loss ω| := abs_sub _ _
+      _ ≤ G₁ ω + G₂ ω := add_le_add hω₁ hω₂
+  have habs : Tendsto (fun u => ∫ ω,
+      |loss_est_fn n d d' learn loss psi_hat u ω - loss_true_fn n d d' learn loss ω| ∂μ)
+      atTop (𝓝 0) :=
+    expectation_converges_of_prob_converges_dominated μ _ (fun ω => G₁ ω + G₂ ω)
+      (fun u => (h_meas_est u).sub h_meas_true) (hG₁int.add hG₂int) henv hprob
+  have hsub : Tendsto (fun u => (∫ ω, loss_est_fn n d d' learn loss psi_hat u ω ∂μ)
+      - ∫ ω, loss_true_fn n d d' learn loss ω ∂μ) atTop (𝓝 0) := by
+    refine squeeze_zero_norm (fun u => ?_) habs
+    rw [← integral_sub (hint_est u) hint_true]
+    simpa using norm_integral_le_integral_norm
+      (fun ω => loss_est_fn n d d' learn loss psi_hat u ω - loss_true_fn n d d' learn loss ω)
+  show Filter.Tendsto (fun u => ∫ ω, loss_est_fn n d d' learn loss psi_hat u ω ∂μ) atTop
+    (𝓝 (∫ ω, loss_true_fn n d d' learn loss ω ∂μ))
+  simpa using hsub.add_const (∫ ω, loss_true_fn n d d' learn loss ω ∂μ)
+
+/--
 Internal workhorse for Theorem 1: if the estimated embeddings converge *directly* to the true
 embeddings in probability (no alignment isometry left to remove), then the estimated risk
 converges to the true risk. This packages the whole "continuous mapping (loss converges in
 probability) + uniform boundedness (dominating constant) + convergence of expectations"
 argument. `risk_converges_fixed_n` reduces to this lemma after using A1 to absorb the alignment.
 -/
+
 lemma risk_convergence_of_aligned_embeddings (n d d' : ℕ)
     (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
     (learn : LearningRule n d d')
@@ -1136,6 +1401,71 @@ lemma risk_convergence_of_aligned_embeddings (n d d' : ℕ)
             · simpa [loss_true_fn, combined_loss_fn] using hG 0;
           exact h_integrable.neg;
       exact h_risk_conv
+
+/--
+**Theorem 1 under the printed readings of Assumptions 2 and 4.**
+
+Same statement as `risk_converges_fixed_n`, with joint continuity of the learning rule and of
+the loss replaced by what the paper actually writes: Assumption 2 moves only the embeddings and
+holds the labels fixed, Assumption 4 moves only the prediction and holds the label fixed.  The
+two label-measurability conditions replace what joint continuity was silently contributing to
+the risk integrals, and are implied by it.
+-/
+theorem risk_converges_fixed_n_printed (n d d' : ℕ)
+    (P : Measure (E d × Y d')) [IsProbabilityMeasure P]
+    (learn : LearningRule n d d')
+    (loss : LossFunction d')
+    (psi_hat : ℕ → (Fin (n + 1) → E d × Y d') → Fin (n + 1) → E d)
+    (h_meas_psi : ∀ u, Measurable (psi_hat u))            -- extra implicit measurability assumption
+    (h_align : DKPSAlignmentConsistency n d d' P psi_hat)  -- paper Eq. (3)
+    (h_inv : InvariantToAffineIsometries n d d' learn)     -- A1
+    (hA2 : ContinuousLearningRuleInEmbeddings n d d' learn)  -- A2 as printed
+    (hA4 : ContinuousLossInPrediction d' loss)               -- A4 as printed
+    (hML : MeasurableLossInLabel d' loss)
+    (hMlearn : MeasurableLearningRuleInLabels n d d' learn)
+    (h_dom : LossDominated n d d' P learn loss) :
+    Tendsto (fun u => risk_est n d d' P learn loss (psi_hat u)) atTop
+      (𝓝 (risk n d d' P learn loss)) := by
+  obtain ⟨e, he⟩ := h_align
+  set psi' : ℕ → (Fin (n + 1) → E d × Y d') → Fin (n + 1) → E d :=
+    fun u ω i => (e u).symm (psi_hat u ω i) with hpsi'
+  have hmeas' : ∀ u, Measurable (psi' u) := by
+    intro u
+    refine measurable_pi_lambda _ fun i => ?_
+    exact ((e u).symm.continuous.measurable).comp ((h_meas_psi u).eval)
+  -- the alignment is absorbed into the estimator
+  have hconv' : ConvergesInProbabilityToZero (Measure.pi (fun _ : Fin (n + 1) => P))
+      (fun u ω => ⨆ i : Fin (n + 1), dist (psi' u ω i) ((ω i).1)) := by
+    refine fun ε hε => (he ε hε).congr fun u => ?_
+    congr 1
+    ext ω
+    have hd : ∀ i : Fin (n + 1),
+        dist (psi' u ω i) ((ω i).1) = dist (psi_hat u ω i) (e u ((ω i).1)) := by
+      intro i
+      rw [hpsi']
+      have := (e u).symm.isometry.dist_eq (psi_hat u ω i) (e u ((ω i).1))
+      simpa using this
+    simp only [Set.mem_ofPred_eq, hd]
+  have hSM := stronglyMeasurable_combined_loss_of_printed n d d' learn loss hA2 hA4 hML hMlearn
+  have hmeas_est : ∀ u, Measurable (loss_est_fn n d d' learn loss psi' u) := by
+    intro u
+    exact hSM.measurable.comp ((hmeas' u).prodMk
+      (measurable_pi_lambda _ fun i => (measurable_pi_apply i).snd))
+  have hmeas_true : Measurable (loss_true_fn n d d' learn loss) :=
+    hSM.measurable.comp ((measurable_pi_lambda _ fun i => (measurable_pi_apply i).fst).prodMk
+      (measurable_pi_lambda _ fun i => (measurable_pi_apply i).snd))
+  have hmain := risk_convergence_of_aligned_embeddings_printed n d d' P learn loss psi'
+    hconv' hA2 hA4 hmeas_est hmeas_true h_dom
+  have hrisk : ∀ u, risk_est n d d' P learn loss (psi' u)
+      = risk_est n d d' P learn loss (psi_hat u) := by
+    intro u
+    have h := risk_est_invariant n d d' P learn loss (psi' u) (e u) h_inv
+    rw [← h]
+    congr 1
+    funext ω i
+    rw [hpsi']
+    simp
+  simpa [hrisk] using hmain
 
 /--
 **Theorem 1 (paper, fixed-`n` risk convergence).**
