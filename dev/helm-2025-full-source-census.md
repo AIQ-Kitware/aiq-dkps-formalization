@@ -101,6 +101,14 @@ Resolved. risk_eq_integral_riskGivenTraining is the Fubini identity -- the expec
 
 The uniform-integrability side condition remains, and is again forced rather than chosen: prob_convergence_not_enough_for_expectations rules out dropping it. Because the training space Fin n -> Z varies with n, the condition takes the triangular-array form UniformlyAbsolutelyContinuous rather than a single envelope.
 
+### `rigid-motion-engine-now-available` — The distance-to-coordinates step now has an engine; the eigenvalue floor is needed only for rates
+
+**Kind:** `source_audit`
+
+Acharyya2024.rawStress_mds_stability is eigengap-free -- its hypotheses are minimality, a unique pair profile, and dissimilarity convergence, with no spectral condition -- but it concludes convergence of pairwise distances rather than of coordinates. The missing step is Acharyya 2024 Corollary 1, and its exact form is now proved as TauCeti.exists_rigidMotion_of_dist_eq: equal pairwise distances imply the configurations differ by a rigid motion. Mathlib does not carry this; it has Congruent and the triangle criteria only.
+
+What each paper needs from the bridge differs. Helm's conclusions are Tendsto statements with no rate, so the qualitative eigengap-free route suffices and its population eigenvalue floor is avoidable, modulo the approximate form of the rigidity lemma. Quench's capstones carry entryRate and GrowingConfigControl and conclude stagewise high-probability bounds; a quantitative Gram-to-configuration bound needs a spectral gap, because eigenvector perturbation is unstable without one, so Quench's floor is likely intrinsic rather than an artifact.
+
 ## Detail
 
 ### `H25-T1` — Fixed-n inference risk transfer
@@ -124,8 +132,8 @@ The uniform-integrability side condition remains, and is again forced rather tha
 * **status / verification:** `compiled_source_repair` / `proved_in_build`
 * **semantic alignment:** `source_repair` — Theorem 2 is proved by applying Theorem 1 at each sample size, so it inherits Theorem 1's defect: with no condition on the labels, convergence in probability of the losses does not give convergence of the risks, as prob_convergence_not_enough_for_expectations witnesses. The formalization carries the same weakest repair, an integrable envelope at each n, and no compact-label hypothesis. Separately, the consistency notion the transfer quantifies over is convergence of the expected risk rather than the paper's in-probability form; that is recorded as consistency-in-probability-vs-expectation and is not yet resolved.
 * **source claim:** If learning on true perspectives is consistent, learning on estimated perspectives is also consistent as n,m,r grow.
-* **Lean declarations:** `Helm2025.DKPS.ConsistentInProbability`, `Helm2025.DKPS.ContinuousLossInPrediction`, `Helm2025.DKPS.LossDominated`, `Helm2025.DKPS.Theorem2_bayes`, `Helm2025.DKPS.consistency_transfer_dkps_bayes`, `Helm2025.DKPS.consistentExpected_of_consistentInProbability`, `Helm2025.DKPS.diagonal_convergence`, `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`, `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`, `Helm2025.DKPS.riskGivenTraining`, `Helm2025.DKPS.risk_eq_integral_riskGivenTraining`, `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`, `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`
-* **gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
+* **Lean declarations:** `Helm2025.DKPS.ConsistentInProbability`, `Helm2025.DKPS.ContinuousLossInPrediction`, `Helm2025.DKPS.LossDominated`, `Helm2025.DKPS.Theorem2_bayes`, `Helm2025.DKPS.consistency_transfer_dkps_bayes`, `Helm2025.DKPS.consistentExpected_of_consistentInProbability`, `Helm2025.DKPS.diagonal_convergence`, `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`, `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`, `Helm2025.DKPS.riskGivenTraining`, `Helm2025.DKPS.risk_eq_integral_riskGivenTraining`, `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`, `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`, `TauCeti.exists_rigidMotion_of_dist_eq`
+* **gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `rigid-motion-engine-now-available`, `stronger-analysis-hypotheses`
 * **notes:** The compact-label hypothesis, which no source passage states, has been replaced by the integrable-envelope hypothesis LossDominated; see gap label-compact-support.
 * **next action:** None; the transfer is reachable from the paper's own consistency via consistentExpected_of_consistentInProbability.
 
@@ -249,7 +257,7 @@ The uniform-integrability side condition remains, and is again forced rather tha
 * **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
 * **semantic alignment:** `stronger_hypotheses` — The available end-to-end bridge realizes the estimator as spectral/classical MDS and therefore assumes a positive population eigenvalue floor. That is stronger than the Helm paper route through raw-stress consistency.
 * **source claim:** The proof cites the eigengap-free asymptotic raw-stress consistency theorem to obtain aligned DKPS consistency.
-* **Lean declarations:** `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral`, `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram`, `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound`
-* **gap refs:** `spectral-vs-rawstress-bridge`
+* **Lean declarations:** `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral`, `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram`, `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound`, `TauCeti.exists_rigidMotion_of_dist_eq`
+* **gap refs:** `rigid-motion-engine-now-available`, `spectral-vs-rawstress-bridge`
 * **notes:** This discrepancy belongs to the bridge, not the abstract Theorem1/Theorem2 transfer once Equation (3) is assumed.
 * **next action:** For exact end-to-end faithfulness, bridge Helm to the Acharyya2024 raw-stress consistency theorem instead of the spectral estimator, or state the extra spectral assumption in the paper-facing theorem.

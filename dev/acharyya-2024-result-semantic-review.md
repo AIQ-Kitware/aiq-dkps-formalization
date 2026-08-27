@@ -309,7 +309,7 @@ The geometric conclusion is compiled, with UniquePairProfile added for a fixed l
 **Normalized paper statement:** There exist orthogonal W^(u) and translations a^(u) such that every estimated point converges in probability to W^(u) psi_i + a^(u).
 
 **Selected Lean declarations:**
-- *(none)*
+- `TauCeti.exists_rigidMotion_of_dist_eq`
 
 **Clause-by-clause comparison:**
 
@@ -323,7 +323,7 @@ Acharyya2024 stops at convergence of pairwise distances and does not construct t
 
 **Additional note:** Later packages contain substantial Procrustes/Gram-rigidity infrastructure, but this source-facing Acharyya2024 corollary is not exposed.
 
-**Companion census gap refs:** `rigid-alignment-corollary`
+**Companion census gap refs:** `rigid-alignment-corollary`, `rigid-motion-engine-now-available`
 
 **Next action:** Add a source-facing quantitative finite-configuration congruence/Procrustes bridge if exact 2024 coverage is required.
 

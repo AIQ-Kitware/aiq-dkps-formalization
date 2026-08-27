@@ -120,6 +120,7 @@ The conclusion is source-shaped. Lean additionally requires measurable embedding
 - `Helm2025.DKPS.risk_eq_integral_riskGivenTraining`
 - `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`
 - `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`
+- `TauCeti.exists_rigidMotion_of_dist_eq`
 
 **Clause-by-clause comparison:**
 
@@ -138,7 +139,7 @@ Lean proves Bayes-risk consistency along a diverging budget schedule phi(n). The
 
 **Additional note:** The compact-label hypothesis, which no source passage states, has been replaced by the integrable-envelope hypothesis LossDominated; see gap label-compact-support.
 
-**Companion census gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `stronger-analysis-hypotheses`
+**Companion census gap refs:** `consistency-in-probability-vs-expectation`, `dangling-theorem-3-reference`, `diagonal-budget-schedule`, `label-compact-support`, `rigid-motion-engine-now-available`, `stronger-analysis-hypotheses`
 
 **Next action:** None; the transfer is reachable from the paper's own consistency via consistentExpected_of_consistentInProbability.
 
@@ -281,6 +282,7 @@ Lean uses a finite iSup in place of max and a single abstract estimation-budget 
 - `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral`
 - `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram`
 - `Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound`
+- `TauCeti.exists_rigidMotion_of_dist_eq`
 
 **Clause-by-clause comparison:**
 
@@ -295,7 +297,7 @@ The available end-to-end bridge realizes the estimator as spectral/classical MDS
 
 **Additional note:** This discrepancy belongs to the bridge, not the abstract Theorem1/Theorem2 transfer once Equation (3) is assumed.
 
-**Companion census gap refs:** `spectral-vs-rawstress-bridge`
+**Companion census gap refs:** `rigid-motion-engine-now-available`, `spectral-vs-rawstress-bridge`
 
 **Next action:** For exact end-to-end faithfulness, bridge Helm to the Acharyya2024 raw-stress consistency theorem instead of the spectral estimator, or state the extra spectral assumption in the paper-facing theorem.
 

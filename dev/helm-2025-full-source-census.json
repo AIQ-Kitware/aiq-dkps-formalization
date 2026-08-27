@@ -70,6 +70,11 @@
       "kind": "source_audit",
       "title": "The paper's in-probability consistency is formalized and connected to the expected form",
       "detail": "The paper writes Pr(|R_l(P_fY, h(.;T_n)) - R*_l(P_fY, H)| > eps) -> 0, so R_l(P_fY, h(.;T_n)) is a random variable depending on the training set and the convergence is in probability. Helm2025.risk integrates over the whole product measure, training sample included, so it is a deterministic expected risk, and ConsistentExpected is Tendsto risk -> bayesRisk. Its own docstring says \"Appendix-style (expected) consistency\". Convergence in probability and convergence of expectations are not equivalent in general; with a bounded loss and uniform integrability the former gives the latter, but the formal statement as it stands is a different notion from the printed definition. Both the hypothesis and the conclusion of the transfer theorem use the expected form, so the transfer itself is shape-faithful.\n\nProgress. The paper's notion is now formalized directly: riskGivenTraining holds the training set fixed and integrates over a fresh test point, which is the paper's random R_l(P_fY, h(.;T_n)), and ConsistentInProbability is the displayed definition over it. tendsto_integral_riskGivenTraining_of_consistentInProbability proves that the paper's hypothesis yields convergence of the averaged conditional risk, under uniform absolute continuity of the conditional risks -- the triangular-array replacement for a single envelope, since the training space Fin n -> Z changes with n, via expectation_converges_of_prob_converges_uac. The uniform-integrability side condition is again not optional: prob_convergence_not_enough_for_expectations rules out dropping it.\n\nResolved. risk_eq_integral_riskGivenTraining is the Fubini identity -- the expected risk is the average of the conditional risk over training sets -- obtained by splitting the last coordinate of the product measure and swapping the order of integration. With it, consistentExpected_of_consistentInProbability shows the paper's own definition implies ConsistentExpected, the hypothesis the transfer theorems quantify over. Theorem 2 is therefore applicable directly from the paper's consistency, and the substitution no longer hides a gap.\n\nThe uniform-integrability side condition remains, and is again forced rather than chosen: prob_convergence_not_enough_for_expectations rules out dropping it. Because the training space Fin n -> Z varies with n, the condition takes the triangular-array form UniformlyAbsolutelyContinuous rather than a single envelope."
+    },
+    "rigid-motion-engine-now-available": {
+      "kind": "source_audit",
+      "title": "The distance-to-coordinates step now has an engine; the eigenvalue floor is needed only for rates",
+      "detail": "Acharyya2024.rawStress_mds_stability is eigengap-free -- its hypotheses are minimality, a unique pair profile, and dissimilarity convergence, with no spectral condition -- but it concludes convergence of pairwise distances rather than of coordinates. The missing step is Acharyya 2024 Corollary 1, and its exact form is now proved as TauCeti.exists_rigidMotion_of_dist_eq: equal pairwise distances imply the configurations differ by a rigid motion. Mathlib does not carry this; it has Congruent and the triangle criteria only.\n\nWhat each paper needs from the bridge differs. Helm's conclusions are Tendsto statements with no rate, so the qualitative eigengap-free route suffices and its population eigenvalue floor is avoidable, modulo the approximate form of the rigidity lemma. Quench's capstones carry entryRate and GrowingConfigControl and conclude stagewise high-probability bounds; a quantitative Gram-to-configuration bound needs a spectral gap, because eigenvector perturbation is unstable without one, so Quench's floor is likely intrinsic rather than an artifact."
     }
   },
   "items": [
@@ -141,7 +146,8 @@
         "Helm2025.DKPS.riskGivenTraining",
         "Helm2025.DKPS.risk_eq_integral_riskGivenTraining",
         "Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4",
-        "Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability"
+        "Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability",
+        "TauCeti.exists_rigidMotion_of_dist_eq"
       ],
       "planned_declarations": [],
       "gap_refs": [
@@ -149,6 +155,7 @@
         "dangling-theorem-3-reference",
         "diagonal-budget-schedule",
         "label-compact-support",
+        "rigid-motion-engine-now-available",
         "stronger-analysis-hypotheses"
       ],
       "semantic_alignment": {
@@ -468,10 +475,12 @@
       "lean_declarations": [
         "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral",
         "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram",
-        "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound"
+        "Helm2025.DKPS.AcharyyaBridge.alignmentConsistency_of_aligned_spectral_of_gram_entrywiseBound",
+        "TauCeti.exists_rigidMotion_of_dist_eq"
       ],
       "planned_declarations": [],
       "gap_refs": [
+        "rigid-motion-engine-now-available",
         "spectral-vs-rawstress-bridge"
       ],
       "semantic_alignment": {

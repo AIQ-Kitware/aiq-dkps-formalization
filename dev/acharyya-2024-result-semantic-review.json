@@ -408,7 +408,9 @@
      326
     ]
    },
-   "lean_declarations": [],
+   "lean_declarations": [
+    "TauCeti.exists_rigidMotion_of_dist_eq"
+   ],
    "clauses": [
     {
      "source_clause": "There exist W^(u) in O(d) and translations a^(u) aligning every estimated point to the population configuration.",
@@ -420,7 +422,8 @@
    "review": "Acharyya2024 stops at convergence of pairwise distances and does not construct the orthogonal/translation witnesses required by this corollary.",
    "notes": "Later packages contain substantial Procrustes/Gram-rigidity infrastructure, but this source-facing Acharyya2024 corollary is not exposed.",
    "gap_refs": [
-    "rigid-alignment-corollary"
+    "rigid-alignment-corollary",
+    "rigid-motion-engine-now-available"
    ],
    "next_action": "Add a source-facing quantitative finite-configuration congruence/Procrustes bridge if exact 2024 coverage is required."
   },

@@ -94,6 +94,14 @@ rawStress_translate proves the translation component. No Acharyya2024 theorem ex
 
 The finite second-moment concentration theorem handles any fixed finite model set. The triangular-array consistency theorem assumes per-stage dissimilarity convergence hD; it does not derive the paper Theorem 4 pointwise growing-n conclusion from the gamma condition.
 
+### `rigid-motion-engine-now-available` — The distance-to-coordinates step now has an engine; the eigenvalue floor is needed only for rates
+
+**Kind:** `source_audit`
+
+Acharyya2024.rawStress_mds_stability is eigengap-free -- its hypotheses are minimality, a unique pair profile, and dissimilarity convergence, with no spectral condition -- but it concludes convergence of pairwise distances rather than of coordinates. The missing step is Acharyya 2024 Corollary 1, and its exact form is now proved as TauCeti.exists_rigidMotion_of_dist_eq: equal pairwise distances imply the configurations differ by a rigid motion. Mathlib does not carry this; it has Congruent and the triangle criteria only.
+
+What each paper needs from the bridge differs. Helm's conclusions are Tendsto statements with no rate, so the qualitative eigengap-free route suffices and its population eigenvalue floor is avoidable, modulo the approximate form of the rigidity lemma. Quench's capstones carry entryRate and GrowingConfigControl and conclude stagewise high-probability bounds; a quantitative Gram-to-configuration bound needs a spectral gap, because eigenvector perturbation is unstable without one, so Quench's floor is likely intrinsic rather than an artifact.
+
 ## Detail
 
 ### `A24-EQ1` — Finite raw-stress MDS objective and minimizer set
@@ -230,8 +238,8 @@ The finite second-moment concentration theorem handles any fixed finite model se
 * **status / verification:** `not_represented` / `absent`
 * **semantic alignment:** `missing` — Acharyya2024 stops at convergence of pairwise distances and does not construct the orthogonal/translation witnesses required by this corollary.
 * **source claim:** There exist orthogonal W^(u) and translations a^(u) such that every estimated point converges in probability to W^(u) psi_i + a^(u).
-* **Lean declarations:** _none_
-* **gap refs:** `rigid-alignment-corollary`
+* **Lean declarations:** `TauCeti.exists_rigidMotion_of_dist_eq`
+* **gap refs:** `rigid-alignment-corollary`, `rigid-motion-engine-now-available`
 * **notes:** Later packages contain substantial Procrustes/Gram-rigidity infrastructure, but this source-facing Acharyya2024 corollary is not exposed.
 * **next action:** Add a source-facing quantitative finite-configuration congruence/Procrustes bridge if exact 2024 coverage is required.
 

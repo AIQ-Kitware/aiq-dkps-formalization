@@ -58,6 +58,37 @@ Quench states, and it is present in both only because of this substitution. Eith
 direction closes it: connect raw-stress minimizers to CMDS configurations, or develop
 subspace perturbation that does not need an absolute spectral gap.
 
+### F2 splits: the floor is needed for rates, not for convergence (found 2026-08-27)
+
+Reading `Acharyya2024.rawStress_mds_stability` settles part of this. Its hypotheses are
+minimality of the estimates, a unique pair profile, and dissimilarity convergence — **no
+spectral condition anywhere**. So the population eigenvalue floor is not intrinsic to DKPS
+consistency; it enters only because a bridge routes through classical MDS.
+
+But that theorem concludes convergence of *pairwise distances*, not of coordinates. The step
+from one to the other is Acharyya 2024's Corollary 1, which the census records as the
+unrepresented headline `A24-C1`. So F2 and F4 are the same blockage, and the exact form of the
+missing lemma is now proved: `TauCeti.exists_rigidMotion_of_dist_eq` in
+`ForTauCeti/Analysis/InnerProductSpace/Gram/Matrix.lean` — equal pairwise distances imply the
+configurations differ by a rigid motion. Mathlib does not have this; it has `Congruent` and the
+triangle criteria only.
+
+**The split.** What each paper needs from the bridge is different:
+
+- **Helm 2025 needs only convergence.** Its Theorem 1 and Theorem 2 conclusions are `Tendsto`
+  statements with no rate. The eigengap-free raw-stress route is qualitative and therefore
+  suffices, so Helm's floor is **avoidable**, modulo the approximate form of the rigidity lemma
+  (distances converge ⇒ coordinates converge after alignment), which is a compactness argument
+  over the isometry group and needs no spectral gap.
+- **Quench 2026 needs rates.** Its capstones carry `entryRate` and `GrowingConfigControl` and
+  conclude high-probability bounds at each stage. A *quantitative* Gram-to-configuration bound
+  genuinely requires a spectral gap — eigenvector perturbation is unstable without one — so
+  Quench's floor is likely **intrinsic**, not an artifact of the bridge.
+
+That is a materially better picture than "remove the floor". The honest targets are: remove it
+from Helm, and for Quench either justify it as necessary or replace it by a residual-gap
+condition that the setting implies.
+
 ## F3 — Growing-sample (triangular-array) perturbation framework
 
 **Blocks:** `A24-T4` specialization, `A24-T3` stronger hypotheses. Gaps
