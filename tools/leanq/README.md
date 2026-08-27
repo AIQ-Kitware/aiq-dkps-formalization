@@ -183,6 +183,22 @@ the links a naive hide would have severed. Reachability is always computed on th
 ancestor closures, coverage counts and shortest paths do not depend on the setting; only what is
 drawn does.
 
+**Export.** `DOT` and `JSON` write the chosen scope to a file. The `.dot` carries its own Graphviz
+invocation in a header comment, and the side panel repeats it with a copy button, so rendering the
+download is `head` plus a paste rather than a guess at the right engine:
+
+```dot
+// leanq export: 69 nodes, 99 edges, scope visible
+//   dot -Tsvg leanq-visible-69-nodes.dot -o leanq-visible-69-nodes.svg
+//     hierarchical, left to right
+```
+
+The engine is chosen from the size of the export. `dot` reads the `rankdir=LR` the file already
+sets and its layering is the point of the drawing, but its iterative passes are superlinear: past
+2500 nodes the command bounds them with `-Gnslimit=2 -Gmclimit=2` and offers `sfdp` as the
+fallback, and past 12000 it leads with `sfdp -Goverlap=prism`, which is the only engine that
+realistically finishes at that size.
+
 **Progressive hierarchical expansion.** A declaration is collapsed at the shallowest prefix of
 `Library / module segment / module segment / ...` that neither the global `Group` depth nor an
 explicit double-click has opened, so double-clicking `DavisKahan` opens its immediate submodules
