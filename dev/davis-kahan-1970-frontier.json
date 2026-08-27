@@ -299,8 +299,8 @@
       "id": "s3-prop3-3",
       "title": "Proposition 3.3 converse square-root characterization",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.proposition3_3_principalSquareRoot_converse",
+      "module": "DavisKahan.Geometry.Polar.PrincipalSquareRoot",
+      "declaration": "TauCeti.DavisKahan.proposition3_3_principalSquareRoot_converse",
       "dependencies": [
         "s3-paper-direct-rotation-predicate",
         "s3-crossed-identification"

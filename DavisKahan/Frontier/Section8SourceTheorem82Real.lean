@@ -146,9 +146,9 @@ theorem norm_residual_complexify
     ((complexifySubmodule P).isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   have hPinvC : ∀ z ∈ complexifySubmodule P, complexify A z ∈ complexifySubmodule P :=
     fun _ hz => mapsTo_complexifySubmodule hPinv hz
-  rw [residual_eq_comp_subtypeL (complexify A) (complexify K)
+  rw [BoundedOperator.residual_eq_comp_subtypeL (complexify A) (complexify K)
       (complexifySubmodule P) hPinvC,
-    residual_eq_comp_subtypeL A K P hPinv,
+    BoundedOperator.residual_eq_comp_subtypeL A K P hPinv,
     Krein.norm_comp_subtypeL_eq_norm_comp_starProjection,
     Krein.norm_comp_subtypeL_eq_norm_comp_starProjection,
     starProjection_complexifySubmodule, ← complexify_comp, norm_complexify]
@@ -171,9 +171,9 @@ theorem residual_complexify_equiv
   have hPinvC : ∀ z ∈ complexifySubmodule P,
       complexify A z ∈ complexifySubmodule P :=
     fun _ hz => mapsTo_complexifySubmodule hPinv hz
-  rw [residual_eq_comp_subtypeL (complexify A) (complexify K)
+  rw [BoundedOperator.residual_eq_comp_subtypeL (complexify A) (complexify K)
       (complexifySubmodule P) hPinvC,
-    residual_eq_comp_subtypeL A K P hPinv]
+    BoundedOperator.residual_eq_comp_subtypeL A K P hPinv]
   apply ContinuousLinearMap.ext
   intro w
   change (complexify K)

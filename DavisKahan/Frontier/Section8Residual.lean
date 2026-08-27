@@ -5,6 +5,10 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Frontier.Section8Perturbation
 import DavisKahan.Frontier.Section8Krein
+import DavisKahan.BoundedOperator.TrialResidual
+-- supplies `residual_eq_comp_subtypeL`, the invariance-only identity `R = K E₀`,
+-- promoted out of this file: it is generic trial-residual algebra with no Section 8
+-- content, and `Sources/DavisKahan1970/Section1.lean` reads it from there now.
 
 /-!
 # Davis--Kahan 1970, Theorem 8.2: the printed residual branch
@@ -43,9 +47,9 @@ its off-diagonal corner `B`.  That is what makes the reduction exact rather
 than lossy: Krein's theorem completes a column to a self-adjoint operator of
 the *same* norm, so `‖H'‖ = ‖R‖` on the nose.
 
-`residual_eq_comp_subtypeL` below proves `R = K ∘L P.subtypeL` from invariance
-alone, so the capstone can be stated with the source-literal (1.8) residual and
-still reach the Krein theorem.
+`BoundedOperator.residual_eq_comp_subtypeL` proves `R = K ∘L P.subtypeL` from
+invariance alone, so the capstone can be stated with the source-literal (1.8)
+residual and still reach the Krein theorem.
 
 ## The four preservation identities
 
@@ -80,34 +84,7 @@ section Residual
 variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 
-/-! ### 1. The printed residual is the first column of the perturbation -/
-
-/-- **The paper's `R = (A + H) E₀ - E₀ A₀` equals `H E₀`.**
-
-This is the Section 1 remark "`R`, left-multiplied by the isometry `(E₀⋆; E₁⋆)`,
-gives the first column of `H`; or that `R = H E₀`", and it needs nothing beyond
-invariance of `P` under the unperturbed operator: on `P` the compression `A₀` is
-the honest restriction, so the two `A`-terms cancel.
-
-Stated over an arbitrary `RCLike` field, with its own binders, because the real
-Section 8 descent needs exactly this identity over `ℝ`; nothing in the argument
-sees the scalars. -/
-theorem residual_eq_comp_subtypeL {𝕜 : Type*} [RCLike 𝕜] {G : Type*}
-    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
-    (A K : G →L[𝕜] G) (P : Submodule 𝕜 G)
-    [P.HasOrthogonalProjection] (hPinv : ∀ x ∈ P, A x ∈ P) :
-    residual (A + K) P.subtypeL (compressOperator P A) = K ∘L P.subtypeL := by
-  ext u
-  have hAu : A (u : G) ∈ P := hPinv (u : G) u.2
-  have hco : ((compressOperator P A u : P) : G) = A (u : G) := by
-    change P.starProjection (A (u : G)) = A (u : G)
-    exact Submodule.starProjection_eq_self_iff.mpr hAu
-  show (A + K) (u : G) - ((compressOperator P A u : P) : G) = K (u : G)
-  rw [hco]
-  show A (u : G) + K (u : G) - A (u : G) = K (u : G)
-  abel
-
-/-! ### 2. Spectral data on `P` only sees the operator on `P` -/
+/-! ### 1. Spectral data on `P` only sees the operator on `P` -/
 
 omit [CompleteSpace H] in
 /-- **`SpectrumIn` transfers along agreement on the subspace.**
@@ -134,7 +111,7 @@ theorem spectrumIn_of_eqOn {A B : H →L[ℂ] H} {P : Submodule ℂ H} {s : Set 
     ← restrictedSpectrum_eq_restrictionSpectrum A P h.1]
   exact h.2
 
-/-! ### 3. Theorem 8.2, the residual alternative -/
+/-! ### 2. Theorem 8.2, the residual alternative -/
 
 section Capstone
 
@@ -171,7 +148,7 @@ theorem theorem8_2_residualHalfGap_source
     (P.isComplete_coe_of_hasOrthogonalProjection).completeSpace_coe
   -- the printed residual is the first block column of the perturbation
   have hRcol : residual (A + K) P.subtypeL (compressOperator P A) = K ∘L P.subtypeL :=
-    residual_eq_comp_subtypeL A K P hPred.1
+    BoundedOperator.residual_eq_comp_subtypeL A K P hPred.1
   rw [hRcol, Krein.norm_comp_subtypeL_eq_norm_comp_starProjection] at hRsmall
   -- Krein's replacement: same first column, norm exactly the residual norm
   obtain ⟨K', hK'sa, hK'col, hK'norm⟩ :=

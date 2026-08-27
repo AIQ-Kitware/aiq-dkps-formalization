@@ -16,6 +16,13 @@ reflection-defect residual estimates, and Ritz-pair perturbation theory.
 For an isometric trial map `X`, the orthogonal projection onto its range is
 `X X*`; consequently the ambient off-diagonal block factors through the trial
 residual and `X*`.
+
+`residual_eq_comp_subtypeL` is the companion identity for the other standard
+trial map, the inclusion `P.subtypeL` of a closed subspace: when `P` is
+invariant under `A`, the residual of `A + K` against the compression
+`compressOperator P A` collapses to `K ∘L P.subtypeL`.  It is stated over an
+arbitrary `RCLike` field and uses invariance alone, so it belongs here rather
+than beside any one of its consumers.
 -/
 
 namespace TauCeti
@@ -64,6 +71,33 @@ theorem trialResidualCore_apply_mem_orthogonal
     [Z.HasOrthogonalProjection] (z : Z) :
     trialResidualCore T Z z ∈ Zᗮ := by
   exact Zᗮ.starProjection_apply_mem _
+
+/-! ### The residual of a subspace inclusion against an invariant compression -/
+
+/-- **The paper's `R = (A + H) E₀ - E₀ A₀` equals `H E₀`.**
+
+This is the Section 1 remark "`R`, left-multiplied by the isometry `(E₀⋆; E₁⋆)`,
+gives the first column of `H`; or that `R = H E₀`", and it needs nothing beyond
+invariance of `P` under the unperturbed operator: on `P` the compression `A₀` is
+the honest restriction, so the two `A`-terms cancel.
+
+Stated over an arbitrary `RCLike` field, with its own binders, because the real
+Section 8 descent needs exactly this identity over `ℝ`; nothing in the argument
+sees the scalars. -/
+theorem residual_eq_comp_subtypeL {𝕜 : Type*} [RCLike 𝕜] {G : Type*}
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
+    (A K : G →L[𝕜] G) (P : Submodule 𝕜 G)
+    [P.HasOrthogonalProjection] (hPinv : ∀ x ∈ P, A x ∈ P) :
+    residual (A + K) P.subtypeL (compressOperator P A) = K ∘L P.subtypeL := by
+  ext u
+  have hAu : A (u : G) ∈ P := hPinv (u : G) u.2
+  have hco : ((compressOperator P A u : P) : G) = A (u : G) := by
+    change P.starProjection (A (u : G)) = A (u : G)
+    exact Submodule.starProjection_eq_self_iff.mpr hAu
+  show (A + K) (u : G) - ((compressOperator P A u : P) : G) = K (u : G)
+  rw [hco]
+  show A (u : G) + K (u : G) - A (u : G) = K (u : G)
+  abel
 
 /-- Ambient projection onto the range of an isometric trial map. -/
 noncomputable def isometricRangeProjection

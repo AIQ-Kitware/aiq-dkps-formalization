@@ -12,6 +12,7 @@ import DavisKahan.Geometry.Polar.OperatorAbsoluteValue
 import DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates
 import DavisKahan.Geometry.Polar.PolarIntertwining
 import DavisKahan.Geometry.Polar.PolarIsometryFinal
+import DavisKahan.Geometry.Polar.PrincipalSquareRoot
 import DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal
 import DavisKahan.Geometry.Polar.Section3Elementary
 import DavisKahan.Geometry.Polar.Section3Nonacute
