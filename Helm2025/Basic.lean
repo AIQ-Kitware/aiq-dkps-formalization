@@ -280,6 +280,53 @@ def ContinuousLoss (d' : ℕ) (loss : LossFunction d') : Prop :=
   Continuous (fun (p : Y d' × Y d') => loss p.1 p.2)
 
 /--
+Assumption A4 **as printed**: for each fixed label, the loss is continuous in the prediction.
+
+The paper's sentence is "The loss function `ℓ` is continuous.  That is, for every `y ∈ ℝ^{d'}`,
+`‖ℓ(h', y) - ℓ(h'', y)‖ → 0` if `‖h' - h''‖ → 0`."  The headline clause asserts continuity of a
+two-argument function, which is joint continuity; the displayed gloss that follows is the
+strictly weaker separate continuity in the first argument.  `ContinuousLoss` above takes the
+headline reading, which is what the convergence argument uses.  This predicate records the
+displayed reading so the difference is visible and can be quantified rather than assumed away.
+-/
+def ContinuousLossInPrediction (d' : ℕ) (loss : LossFunction d') : Prop :=
+  ∀ y : Y d', Continuous (fun p : Y d' => loss p y)
+
+/-- Measurability of the loss in the label, for each fixed prediction. -/
+def MeasurableLossInLabel (d' : ℕ) (loss : LossFunction d') : Prop :=
+  ∀ p : Y d', Measurable (fun y : Y d' => loss p y)
+
+/-- The headline reading implies the displayed one. -/
+theorem continuousLossInPrediction_of_continuousLoss (d' : ℕ) (loss : LossFunction d')
+    (h : ContinuousLoss d' loss) : ContinuousLossInPrediction d' loss :=
+  fun y => h.comp (continuous_id.prodMk continuous_const)
+
+/-- The headline reading implies label measurability. -/
+theorem measurableLossInLabel_of_continuousLoss (d' : ℕ) (loss : LossFunction d')
+    (h : ContinuousLoss d' loss) : MeasurableLossInLabel d' loss :=
+  fun p => (h.comp (continuous_const.prodMk continuous_id)).measurable
+
+/--
+The **printed** Assumption 4, together with measurability of the loss in the label, already
+gives joint strong measurability of the loss.
+
+So the measurability the development draws from joint continuity does not need it: it follows
+from the paper's displayed gloss by the Carathéodory argument.  What joint continuity is still
+used for is the continuous-mapping step, where predictions and labels vary together.
+-/
+theorem stronglyMeasurable_loss_of_printed_assumption4 (d' : ℕ) (loss : LossFunction d')
+    (h_cont : ContinuousLossInPrediction d' loss)
+    (h_meas : MeasurableLossInLabel d' loss) :
+    MeasureTheory.StronglyMeasurable (fun q : Y d' × Y d' => loss q.1 q.2) := by
+  have := MeasureTheory.stronglyMeasurable_uncurry_of_continuous_of_stronglyMeasurable
+    (u := fun (p : Y d') (y : Y d') => loss p y)
+    (fun y => h_cont y)
+    (fun p => (h_meas p).stronglyMeasurable)
+  convert this using 1
+  funext q
+  rfl
+
+/--
 Convergence in probability to zero for a sequence of real random variables `X_u`
 (standard probabilistic notion, used to phrase the paper's "`ψ̂ → ψ`" statements):
 `∀ ε > 0, P(|X_u| > ε) → 0` as `u → ∞`.

@@ -68,11 +68,13 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 **Normalized paper statement:** For fixed n, as DKPS estimation budgets grow, the risk of the decision function trained/evaluated on estimated perspectives converges to the risk based on true perspectives.
 
 **Selected Lean declarations:**
+- `Helm2025.DKPS.ContinuousLossInPrediction`
 - `Helm2025.DKPS.LossDominated`
 - `Helm2025.DKPS.Theorem1`
 - `Helm2025.DKPS.lossDominated_of_boundedLabelSupport`
 - `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`
 - `Helm2025.DKPS.risk_converges_fixed_n`
+- `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`
 
 **Clause-by-clause comparison:**
 
@@ -106,6 +108,7 @@ The conclusion is source-shaped. Lean additionally requires measurable embedding
 
 **Selected Lean declarations:**
 - `Helm2025.DKPS.ConsistentInProbability`
+- `Helm2025.DKPS.ContinuousLossInPrediction`
 - `Helm2025.DKPS.LossDominated`
 - `Helm2025.DKPS.Theorem2_bayes`
 - `Helm2025.DKPS.consistency_transfer_dkps_bayes`
@@ -115,6 +118,7 @@ The conclusion is source-shaped. Lean additionally requires measurable embedding
 - `Helm2025.DKPS.prob_convergence_not_enough_for_expectations`
 - `Helm2025.DKPS.riskGivenTraining`
 - `Helm2025.DKPS.risk_eq_integral_riskGivenTraining`
+- `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`
 - `Helm2025.DKPS.tendsto_integral_riskGivenTraining_of_consistentInProbability`
 
 **Clause-by-clause comparison:**
@@ -219,10 +223,12 @@ The literal source predicate is retained. The proof uses bounded/compact-range c
 **Normalized paper statement:** For each fixed label y, the loss varies continuously with the prediction.
 
 **Selected Lean declarations:**
-- `Helm2025.DKPS.ContinuousLossInPred`
 - `Helm2025.DKPS.Assumption4`
 - `Helm2025.DKPS.Assumption4'`
 - `Helm2025.DKPS.ContinuousLoss.continuousLossInPred`
+- `Helm2025.DKPS.ContinuousLossInPred`
+- `Helm2025.DKPS.ContinuousLossInPrediction`
+- `Helm2025.DKPS.stronglyMeasurable_loss_of_printed_assumption4`
 
 **Clause-by-clause comparison:**
 
@@ -230,12 +236,15 @@ The literal source predicate is retained. The proof uses bounded/compact-range c
 | --- | --- | --- | --- |
 | For every fixed label y, the loss is continuous in the prediction. | ContinuousLossInPred/Assumption4 records this literal property. | `exact` |  |
 | The main theorem uses joint continuity of loss. | ContinuousLoss is stronger than the printed pointwise-in-label condition. | `lean_stronger_hypothesis` |  |
+| "The loss function is continuous. That is, for every y, ..." | Both readings are formalized: ContinuousLoss (joint, used by the theorems) and ContinuousLossInPrediction (the displayed gloss). The gloss plus label measurability suffices for joint strong measurability. | `lean_stronger_hypothesis` | The headline clause supports the joint reading; the gloss is strictly weaker. |
 
 **Semantic review:**
 
 The literal pointwise-in-label predicate exists, while the main theorem assumes joint continuity of the loss as a convenient sufficient condition.
 
 **Companion census gap refs:** `stronger-analysis-hypotheses`
+
+**Next action:** Reprove the continuous-mapping step under ContinuousLossInPrediction via a.e.-convergent subsequences.
 
 ### 7. `H25-EQ3` — Equation (3), alignment consistency: Aligned estimated perspectives converge uniformly in probability
 
