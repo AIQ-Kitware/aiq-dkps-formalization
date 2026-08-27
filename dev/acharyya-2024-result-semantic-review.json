@@ -613,19 +613,28 @@
    "lean_declarations": [
     "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
     "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma",
-    "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment"
+    "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment",
+    "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma",
+    "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing",
+    "Acharyya2024.Probability.sourceGammaRate_imp_secondMomentRate"
    ],
    "clauses": [
     {
-     "source_clause": "n and m both grow with r; the same covariance-trace rate is assumed pointwise for every model.",
-     "lean_clause": "Lean has the finite concentration mechanism but no theorem deriving the growing-n pointwise statement from this rate.",
-     "relation": "lean_weaker_conclusion",
+     "source_clause": "In our setting where m, n -> infinity as r -> infinity",
+     "lean_clause": "m : ℕ → ℕ and models indexed by all of ℕ",
+     "relation": "exact",
      "note": ""
     },
     {
-     "source_clause": "For each fixed pair (i,i'), D_ii' ->P DeltaInf(phi_i,phi_i').",
-     "lean_clause": "The growing-model per-stage consistency theorem assumes the required sample/population limit instead of proving this source statement.",
-     "relation": "missing",
+     "source_clause": "|D_ii' - Delta^(infinity)(phi_i, phi_i')| ->P 0 for every fixed pair",
+     "lean_clause": "ConvergesInProbabilityZero for the fixed pair (i, i')",
+     "relation": "exact",
+     "note": "Pointwise, so the union bound is over the two models in the pair, not over n."
+    },
+    {
+     "source_clause": "if (1/m) sum_j gamma_ij = o(r)",
+     "lean_clause": "hgamma, via sourceGammaRate_imp_secondMomentRate",
+     "relation": "exact",
      "note": ""
     }
    ],
@@ -635,7 +644,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Grow the model count as well; the growing-query half is now assembled in dissimilarity_convergesInProbability_of_gamma."
+   "next_action": "None. Theorem 5's L^p conclusion over the population law remains the open item on this side."
   },
   {
    "id": "A24-T5",
