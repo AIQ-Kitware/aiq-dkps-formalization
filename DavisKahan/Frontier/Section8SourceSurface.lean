@@ -193,7 +193,7 @@ alias theorem8_2_source :=
 /-- **Krein's self-adjoint completion with the exact restriction norm**, the one
 external theorem the printed proof of the residual alternative cites. -/
 alias theorem8_2_krein_completion_source :=
-  DavisKahan.Frontier.Krein.exists_selfAdjoint_completion_eq_norm_restriction
+  TauCeti.exists_selfAdjoint_completion_eq_norm_restriction
 
 /-! ### Theorem 8.2 at the printed norm scope
 

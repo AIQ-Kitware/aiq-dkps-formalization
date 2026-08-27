@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Frontier.Section8Perturbation
-import DavisKahan.Frontier.Section8Krein
+import ForTauCeti.Analysis.InnerProductSpace.Polar.SelfAdjointCompletion
 import DavisKahan.BoundedOperator.TrialResidual
 -- supplies `residual_eq_comp_subtypeL`, the invariance-only identity `R = K E₀`,
 -- promoted out of this file: it is generic trial-residual algebra with no Section 8
@@ -128,7 +128,7 @@ No caller-supplied certificate appears: no `ResidualHalfGapBridge`, no
 `A'`, no branch-selection datum.  All of those are proof internals.
 
 The proof is the printed reduction.  Krein's theorem
-(`Krein.exists_selfAdjoint_completion_eq_norm_restriction`) replaces `K` by a
+(`TauCeti.exists_selfAdjoint_completion_eq_norm_restriction`) replaces `K` by a
 self-adjoint `K'` with the same first column and with `‖K'‖ = ‖R‖`; setting
 `A' := A + K - K'` leaves `A' + K' = A + K` and `A'|P = A|P`, so every printed
 hypothesis transfers verbatim and
@@ -149,10 +149,10 @@ theorem theorem8_2_residualHalfGap_source
   -- the printed residual is the first block column of the perturbation
   have hRcol : residual (A + K) P.subtypeL (compressOperator P A) = K ∘L P.subtypeL :=
     BoundedOperator.residual_eq_comp_subtypeL A K P hPred.1
-  rw [hRcol, Krein.norm_comp_subtypeL_eq_norm_comp_starProjection] at hRsmall
+  rw [hRcol, TauCeti.norm_comp_subtypeL_eq_norm_comp_starProjection] at hRsmall
   -- Krein's replacement: same first column, norm exactly the residual norm
   obtain ⟨K', hK'sa, hK'col, hK'norm⟩ :=
-    Krein.exists_selfAdjoint_completion_eq_norm_restriction K
+    TauCeti.exists_selfAdjoint_completion_eq_norm_restriction K
       (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hK) P
   have hK'sym : IsSelfAdjointOperator K' :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp hK'sa
