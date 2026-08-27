@@ -29,6 +29,7 @@ import Acharyya2024.Common
 import Acharyya2024.RawStress
 import TauCeti.Probability.Process.EmpiricalMeasure
 import TauCeti.Probability.StrongLaw
+import ForTauCeti.Probability.AverageError
 
 open scoped BigOperators Topology
 open MeasureTheory Filter
@@ -954,6 +955,49 @@ theorem abs_sub_pointStress_le {n d : Nat} (z : Config n d) (c : Fin n → Real)
         rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
         ring
 
+/-! ### Perturbing the target dissimilarities
+
+The printed lemma builds its estimate from the *sample* dissimilarities, which converge to the
+population ones.  Replacing the target by a stage-dependent one changes the objective at every
+stage, and the change is controlled by the average dissimilarity error: each summand moves by at
+most the error at that model times a bound, so the normalized stress moves by at most the
+average error times the same bound. -/
+
+/-- Changing the target dissimilarities moves the one-point stress by at most the total error,
+scaled by a bound depending only on the position and the bounds. -/
+theorem abs_sub_pointStress_target {n d : Nat} (z : Config n d) (c c' : Fin n → Real)
+    (v : Rvec d) {K : Real} (hz : ∀ i, ‖z i‖ ≤ K) (hc : ∀ i, |c i| ≤ K)
+    (hc' : ∀ i, |c' i| ≤ K) :
+    |pointStress z c v - pointStress z c' v|
+      ≤ (2 * ‖v‖ + 4 * K) * ∑ i, |c i - c' i| := by
+  classical
+  have hterm : ∀ i, |(‖v - z i‖ - c i) ^ 2 - (‖v - z i‖ - c' i) ^ 2|
+      ≤ (2 * ‖v‖ + 4 * K) * |c i - c' i| := by
+    intro i
+    set a : Real := ‖v - z i‖ with ha
+    have hab : a ≤ ‖v‖ + K := le_trans (norm_sub_le _ _) (by linarith [hz i])
+    have hfac : (a - c i) ^ 2 - (a - c' i) ^ 2 = (c' i - c i) * (2 * a - c i - c' i) := by ring
+    have h1 := abs_le.mp (hc i)
+    have h2 := abs_le.mp (hc' i)
+    have hnn : 0 ≤ a := norm_nonneg _
+    have hK : 0 ≤ K := le_trans (abs_nonneg _) (hc i)
+    have hv : (0:Real) ≤ ‖v‖ := norm_nonneg _
+    have hbound : |2 * a - c i - c' i| ≤ 2 * ‖v‖ + 4 * K := by
+      rw [abs_le]; constructor <;> linarith
+    rw [hfac, abs_mul]
+    calc |c' i - c i| * |2 * a - c i - c' i|
+        ≤ |c' i - c i| * (2 * ‖v‖ + 4 * K) :=
+          mul_le_mul_of_nonneg_left hbound (abs_nonneg _)
+      _ = (2 * ‖v‖ + 4 * K) * |c i - c' i| := by rw [abs_sub_comm]; ring
+  unfold pointStress
+  rw [← Finset.sum_sub_distrib]
+  calc |∑ i, ((‖v - z i‖ - c i) ^ 2 - (‖v - z i‖ - c' i) ^ 2)|
+      ≤ ∑ i, |(‖v - z i‖ - c i) ^ 2 - (‖v - z i‖ - c' i) ^ 2| :=
+        Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ i, (2 * ‖v‖ + 4 * K) * |c i - c' i| :=
+        Finset.sum_le_sum fun i _ => hterm i
+    _ = (2 * ‖v‖ + 4 * K) * ∑ i, |c i - c' i| := by rw [Finset.mul_sum]
+
 /-! ### The argmin step for a growing reference collection
 
 `tendsto_outOfSampleExtension` moves minimizers when the objectives converge because the
@@ -1434,6 +1478,168 @@ theorem ae_eventually_forall_isMinOn_of_iid {d : Nat} (P : Measure M) [IsProbabi
   rw [hG]
   exact mul_le_mul_of_nonneg_left (hv w) (le_of_lt (inv_pos.mpr hpos))
 
+
+/--
+**Every minimizer against a *converging* target converges, almost surely.**
+
+`ae_eventually_forall_isMinOn_of_iid` minimizes against the population dissimilarities `c`.  The
+printed lemma minimizes against the *sample* dissimilarities, which are only assumed to approach
+`c`.  This is that version: the target may change with the stage, and the only thing asked of it
+is that the average error over the reference collection vanish -- along a subsequence `ns`, which
+is where the printed lemma's own subsequence goes.  The conclusion is otherwise unchanged, because
+the two objectives differ by at most that average error times a bound depending only on the
+position (`abs_sub_pointStress_target`), so pointwise convergence survives, while the
+equi-Lipschitz estimate and the minimizer bound only ever used the uniform bound `K`, which the
+stage-dependent target still satisfies.
+-/
+theorem ae_eventually_forall_isMinOn_of_iid_target {d : Nat} (P : Measure M)
+    [IsProbabilityMeasure P] {χ : M → Rvec d} {c : M → Real} {K : Real}
+    (hχ : Measurable χ) (hc : Measurable c)
+    (hχb : ∀ m, ‖χ m‖ ≤ K) (hcb : ∀ m, |c m| ≤ K)
+    (T : (Nat → M) → Nat → Nat → Real) (hTb : ∀ φ u i, |T φ u i| ≤ K)
+    (ns : Nat → Nat) (hns : Tendsto ns atTop atTop)
+    {v' : Rvec d}
+    (huniq : ∀ w : Rvec d,
+      (∀ w' : Rvec d, continuousPointStress d P χ c w ≤ continuousPointStress d P χ c w') →
+      w = v')
+    (herr : ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P),
+      Tendsto (fun u : Nat => (((ns u : Real) + 1))⁻¹ *
+        ∑ i : Fin (ns u + 1), |T φ u i - c (φ i)|) atTop (𝓝 0)) :
+    ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P), ∀ ε > (0 : Real), ∀ᶠ u in atTop,
+      ∀ v : Rvec d,
+        (∀ w : Rvec d,
+          pointStress (fun i : Fin (ns u + 1) => χ (φ i))
+              (fun i : Fin (ns u + 1) => T φ u i) v
+            ≤ pointStress (fun i : Fin (ns u + 1) => χ (φ i))
+                (fun i : Fin (ns u + 1) => T φ u i) w) →
+        ‖v - v'‖ < ε := by
+  classical
+  haveI hMne : Nonempty M := by
+    by_contra hcon
+    rw [not_nonempty_iff] at hcon
+    have h1 : P Set.univ = 0 := by
+      have : (Set.univ : Set M) = ∅ := Set.univ_eq_empty_iff.mpr hcon
+      rw [this, measure_empty]
+    rw [measure_univ] at h1
+    exact one_ne_zero h1
+  have hK : 0 ≤ K := le_trans (norm_nonneg _) (hχb (Classical.arbitrary M))
+  obtain ⟨D, hDcount, hDdense⟩ := TopologicalSpace.exists_countable_dense (Rvec d)
+  have hall : ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P), ∀ v ∈ D,
+      Tendsto (fun n : Nat => ((n : Real))⁻¹ *
+        pointStress (fun i : Fin n => χ (φ i)) (fun i : Fin n => c (φ i)) v) atTop
+        (𝓝 (continuousPointStress d P χ c v)) := by
+    rw [ae_ball_iff hDcount]
+    intro v _
+    exact ae_tendsto_averaged_pointStress P hχ hc hχb hcb v
+  filter_upwards [hall, herr] with φ hφ hφerr
+  -- the equi-Lipschitz estimate, for any bounded target: it only ever used the bound `K`
+  have hlipgen : ∀ R : Real, ∃ L : Real, 0 ≤ L ∧
+      ∀ (n : Nat) (t : Nat → Real), (∀ i, |t i| ≤ K) → ∀ v w : Rvec d,
+      ‖v‖ ≤ R → ‖w‖ ≤ R →
+        |(((n : Real) + 1))⁻¹ *
+            pointStress (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => t i) v
+          - (((n : Real) + 1))⁻¹ *
+            pointStress (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => t i) w|
+          ≤ L * ‖v - w‖ := by
+    intro R
+    refine ⟨2 * (max R 0 + 2 * K), by positivity, fun n t htb v w hv hw => ?_⟩
+    have hR : ‖v‖ ≤ max R 0 := le_trans hv (le_max_left _ _)
+    have hR' : ‖w‖ ≤ max R 0 := le_trans hw (le_max_left _ _)
+    have hbase := abs_sub_pointStress_le (fun i : Fin (n + 1) => χ (φ i))
+      (fun i : Fin (n + 1) => t i) v w hR hR' (fun i => hχb _) (fun i => htb _)
+    have hpos : (0 : Real) < ((n : Real) + 1) := by positivity
+    simp only [← mul_sub, abs_mul, abs_of_nonneg (le_of_lt (inv_pos.mpr hpos))]
+    calc ((n : Real) + 1)⁻¹ * |pointStress (fun i : Fin (n + 1) => χ (φ i))
+            (fun i : Fin (n + 1) => t i) v
+          - pointStress (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => t i) w|
+        ≤ ((n : Real) + 1)⁻¹ *
+            (((n + 1 : Nat) : Real) * (2 * (max R 0 + 2 * K)) * ‖v - w‖) := by
+          refine mul_le_mul_of_nonneg_left ?_ (le_of_lt (inv_pos.mpr hpos))
+          simpa using hbase
+      _ = 2 * (max R 0 + 2 * K) * ‖v - w‖ := by
+          push_cast
+          field_simp
+  -- the population objective and the stage-dependent one actually being minimized, along `ns`
+  set G : Nat → Rvec d → Real := fun u v => (((ns u : Real) + 1))⁻¹ *
+    pointStress (fun i : Fin (ns u + 1) => χ (φ i)) (fun i : Fin (ns u + 1) => c (φ i)) v with hG
+  set G' : Nat → Rvec d → Real := fun u v => (((ns u : Real) + 1))⁻¹ *
+    pointStress (fun i : Fin (ns u + 1) => χ (φ i))
+      (fun i : Fin (ns u + 1) => T φ u i) v with hG'
+  have hlip : ∀ R : Real, ∃ L : Real, 0 ≤ L ∧ ∀ u : Nat, ∀ v w : Rvec d,
+      ‖v‖ ≤ R → ‖w‖ ≤ R → |G u v - G u w| ≤ L * ‖v - w‖ := by
+    intro R
+    obtain ⟨L, hL0, hL⟩ := hlipgen R
+    exact ⟨L, hL0, fun u v w hv hw =>
+      hL (ns u) (fun i => c (φ i)) (fun i => hcb _) v w hv hw⟩
+  have hlip' : ∀ R : Real, ∃ L : Real, 0 ≤ L ∧ ∀ u : Nat, ∀ v w : Rvec d,
+      ‖v‖ ≤ R → ‖w‖ ≤ R → |G' u v - G' u w| ≤ L * ‖v - w‖ := by
+    intro R
+    obtain ⟨L, hL0, hL⟩ := hlipgen R
+    exact ⟨L, hL0, fun u v w hv hw =>
+      hL (ns u) (T φ u) (hTb φ u) v w hv hw⟩
+  have hshift : Tendsto (fun u : Nat => ns u + 1) atTop atTop :=
+    (Filter.tendsto_add_atTop_nat 1).comp hns
+  have hptwD : ∀ v ∈ D, Tendsto (fun u : Nat => G u v) atTop
+      (𝓝 (continuousPointStress d P χ c v)) := by
+    intro v hv
+    have := (hφ v hv).comp hshift
+    refine this.congr fun u => ?_
+    rw [hG]
+    norm_num
+  -- the population objective converges everywhere
+  have hptw := tendsto_of_dense_of_equiLipschitz
+    (continuous_continuousPointStress P hχ.aestronglyMeasurable hc.aestronglyMeasurable hχb hcb)
+    hlip hDdense hptwD
+  -- and so does the stage-dependent one, because the gap is the average target error
+  have hptw' : ∀ v : Rvec d, Tendsto (fun u => G' u v) atTop
+      (𝓝 (continuousPointStress d P χ c v)) := by
+    intro v
+    have hgap : Tendsto (fun u : Nat => G' u v - G u v) atTop (𝓝 0) := by
+      have hbound : ∀ u : Nat, ‖G' u v - G u v‖
+          ≤ (2 * ‖v‖ + 4 * K) * ((((ns u : Real) + 1))⁻¹ *
+              ∑ i : Fin (ns u + 1), |T φ u i - c (φ i)|) := by
+        intro u
+        have hpos : (0 : Real) < ((ns u : Real) + 1) := by positivity
+        have hb := abs_sub_pointStress_target (fun i : Fin (ns u + 1) => χ (φ i))
+          (fun i : Fin (ns u + 1) => T φ u i) (fun i : Fin (ns u + 1) => c (φ i)) v
+          (fun i => hχb _) (fun i => hTb _ _ _) (fun i => hcb _)
+        rw [Real.norm_eq_abs, hG, hG']
+        simp only [← mul_sub, abs_mul, abs_of_nonneg (le_of_lt (inv_pos.mpr hpos))]
+        calc ((ns u : Real) + 1)⁻¹ * |pointStress (fun i : Fin (ns u + 1) => χ (φ i))
+                (fun i : Fin (ns u + 1) => T φ u i) v
+              - pointStress (fun i : Fin (ns u + 1) => χ (φ i))
+                  (fun i : Fin (ns u + 1) => c (φ i)) v|
+            ≤ ((ns u : Real) + 1)⁻¹ *
+                ((2 * ‖v‖ + 4 * K) * ∑ i : Fin (ns u + 1), |T φ u i - c (φ i)|) :=
+              mul_le_mul_of_nonneg_left hb (le_of_lt (inv_pos.mpr hpos))
+          _ = (2 * ‖v‖ + 4 * K) * ((((ns u : Real) + 1))⁻¹ *
+                ∑ i : Fin (ns u + 1), |T φ u i - c (φ i)|) := by ring
+      have hz : Tendsto (fun u : Nat => (2 * ‖v‖ + 4 * K) * ((((ns u : Real) + 1))⁻¹ *
+          ∑ i : Fin (ns u + 1), |T φ u i - c (φ i)|)) atTop (𝓝 0) := by
+        simpa using hφerr.const_mul (2 * ‖v‖ + 4 * K)
+      exact squeeze_zero_norm hbound hz
+    have hsum : Tendsto (fun u => G' u v) atTop (𝓝 (0 + continuousPointStress d P χ c v)) :=
+      (hgap.add (hptw v)).congr fun u => by ring
+    rw [zero_add] at hsum
+    exact hsum
+  -- minimizers of the stage-dependent objective are bounded, uniformly in the stage
+  have hVbdd : ∀ u : Nat, ∀ v : Rvec d, (∀ w : Rvec d, G' u v ≤ G' u w) → ‖v‖ ≤ 4 * K := by
+    intro u v hv
+    refine norm_min_pointStress_le_of_bounded (n := ns u + 1) (ns u).succ_pos
+      (fun i : Fin (ns u + 1) => χ (φ i)) (fun i : Fin (ns u + 1) => T φ u i)
+      (fun i => hχb _) (fun i => hTb _ _ _) (fun w => ?_)
+    have hpos : (0 : Real) < ((ns u : Real) + 1) := by positivity
+    have h := hv w
+    rw [hG'] at h
+    exact le_of_mul_le_mul_left h (inv_pos.mpr hpos)
+  have huniform := eventually_forall_isMinOn_dist_lt hlip' hptw' hVbdd huniq
+  intro ε hε
+  filter_upwards [huniform ε hε] with u hu
+  intro v hv
+  refine hu v fun w => ?_
+  have hpos : (0 : Real) < ((ns u : Real) + 1) := by positivity
+  exact mul_le_mul_of_nonneg_left (hv w) (le_of_lt (inv_pos.mpr hpos))
+
 /-! ### Lemma 2's population conclusion, in the mode the source states
 
 The source concludes convergence in probability of the `L^p(P x P)` discrepancy.  That mode is
@@ -1475,7 +1681,7 @@ theorem tendsto_measure_lpPairDistErr_population {Ω : Type*} [MeasurableSpace �
     (Ψ : Nat → Ω → M → Rvec d) (χ : M → Rvec d) {C : Real}
     (hbdd : ∀ n φ q, pairDiscrepancy d p (Ψ n φ) χ q ≤ C)
     (hmeas : ∀ n, Measurable fun z : Ω × (M × M) => pairDiscrepancy d p (Ψ n z.1) χ z.2)
-    (hae : ∀ q : M × M, ∀ᵐ φ ∂μ,
+    (hae : ∀ᵐ q ∂(P.prod P), ∀ᵐ φ ∂μ,
       Tendsto (fun n => pairDiscrepancy d p (Ψ n φ) χ q) atTop (𝓝 0))
     {ε : Real} (hε : 0 < ε) :
     Tendsto (fun n => μ {φ | ε < lpPairDistErr d P p (Ψ n φ) χ}) atTop (𝓝 0) := by
@@ -1501,15 +1707,15 @@ theorem tendsto_measure_lpPairDistErr_population {Ω : Type*} [MeasurableSpace �
       (f := fun φ (q : M × M) => pairDiscrepancy d p (Ψ n φ) χ q)
       (hmeas n).stronglyMeasurable).measurable
   -- each per-pair expectation vanishes
-  have hpair : ∀ q : M × M,
+  have hpair : ∀ᵐ q ∂(P.prod P),
       Tendsto (fun n => ∫ φ, pairDiscrepancy d p (Ψ n φ) χ q ∂μ) atTop (𝓝 0) := by
-    intro q
+    filter_upwards [hae] with q hq
     have hlim := tendsto_integral_of_dominated_convergence (fun _ : Ω => C)
       (fun n => ((hmeas n).comp (measurable_id.prodMk measurable_const)).aestronglyMeasurable)
       (integrable_const C)
       (fun n => Filter.Eventually.of_forall fun φ => by
         simpa [Real.norm_eq_abs, abs_of_nonneg (hnn n φ q)] using hbdd n φ q)
-      (hae q)
+      hq
     simpa using hlim
   -- so their double integral vanishes
   have hdouble : Tendsto
@@ -1527,7 +1733,7 @@ theorem tendsto_measure_lpPairDistErr_population {Ω : Type*} [MeasurableSpace �
         _ = C := by simp
     have hlim := tendsto_integral_of_dominated_convergence (fun _ : M × M => C)
       (fun n => (hqmeas n).aestronglyMeasurable (μ := P.prod P)) (integrable_const C)
-      (fun n => Filter.Eventually.of_forall (hb n)) (Filter.Eventually.of_forall hpair)
+      (fun n => Filter.Eventually.of_forall (hb n)) hpair
     simpa using hlim
   -- the expectation of the discrepancy is that double integral
   have hexp : Tendsto (fun n => ∫ φ, lpPairDistErr d P p (Ψ n φ) χ ∂μ) atTop (𝓝 0) := by
@@ -1678,6 +1884,212 @@ theorem tendsto_measure_lpPairDistErr_outOfSample {d : Nat} (P : Measure M)
       rwa [Real.zero_rpow hp.ne'] at h2
     exact hrpow.comp (tendsto_nhdsWithin_iff.mpr ⟨hsub,
       Filter.Eventually.of_forall fun n => Set.mem_Ici.mpr (abs_nonneg _)⟩)
+  exact tendsto_measure_lpPairDistErr_population _ P hp.le Ψ χlim hbdd hmeas
+    (Filter.Eventually.of_forall hae) hε
+
+/-! ### Lemma 2 with the estimator built from the sample dissimilarities
+
+`tendsto_measure_lpPairDistErr_outOfSample` fits the estimate against the population
+dissimilarities `Δ`.  The printed lemma fits it against the *sample* dissimilarities `D`, and
+assumes only that those approach `Δ`.  This is that statement.  The passage costs nothing beyond
+`ae_eventually_forall_isMinOn_of_iid_target`: the estimator is still a minimizer of a one-point
+stress, just against a target that moves with the stage.
+-/
+
+/--
+**The printed Lemma 2**: the estimate fitted to the sample dissimilarities is `L^p`-consistent.
+
+`D u φ x i` is the dissimilarity, at stage `u`, between the query `x` and the `i`-th reference
+model, and `Ψ u φ x` is any minimizer of the one-point stress against it -- the printed `psihat`.
+The hypothesis is that the average of `|D - Δ|` over the reference collection vanishes along the
+subsequence, which is what an identically distributed array of pairwise errors supplies
+(`TauCeti.exists_subseq_ae_tendsto_average`); the conclusion is the printed one, and holds for
+every exponent at once rather than for `p ≥ 1`.
+-/
+theorem tendsto_measure_lpPairDistErr_sampleTarget {d : Nat} (P : Measure M)
+    [IsProbabilityMeasure P] {p : Real} (hp : 0 < p)
+    (Δ : M → M → Real) (χ : M → Rvec d) {K : Real}
+    (hχ : Measurable χ) (hΔ : ∀ x, Measurable (Δ x))
+    (hχb : ∀ m, ‖χ m‖ ≤ K) (hΔb : ∀ x m, |Δ x m| ≤ K)
+    (χlim : M → Rvec d)
+    (hχlimmin : ∀ x : M, ∀ w : Rvec d,
+      continuousPointStress d P χ (Δ x) (χlim x) ≤ continuousPointStress d P χ (Δ x) w)
+    (huniq : ∀ x : M, ∀ w : Rvec d,
+      (∀ w' : Rvec d,
+        continuousPointStress d P χ (Δ x) w ≤ continuousPointStress d P χ (Δ x) w') →
+      w = χlim x)
+    (D : Nat → (Nat → M) → M → Nat → Real) (hDb : ∀ u φ x i, |D u φ x i| ≤ K)
+    (ns : Nat → Nat) (hns : Tendsto ns atTop atTop)
+    (Ψ : Nat → (Nat → M) → M → Rvec d)
+    (hΨmin : ∀ u φ x, ∀ w : Rvec d,
+      pointStress (fun i : Fin (ns u + 1) => χ (φ i))
+          (fun i : Fin (ns u + 1) => D u φ x i) (Ψ u φ x)
+        ≤ pointStress (fun i : Fin (ns u + 1) => χ (φ i))
+            (fun i : Fin (ns u + 1) => D u φ x i) w)
+    (hmeas : ∀ u, Measurable fun z : (Nat → M) × (M × M) =>
+      pairDiscrepancy d p (Ψ u z.1) χlim z.2)
+    (herr : ∀ᵐ x ∂P, ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P),
+      Tendsto (fun u : Nat => (((ns u : Real) + 1))⁻¹ *
+        ∑ i : Fin (ns u + 1), |D u φ x i - Δ x (φ i)|) atTop (𝓝 0))
+    {ε : Real} (hε : 0 < ε) :
+    Tendsto (fun u => (Measure.infinitePi fun _ : Nat => P)
+      {φ | ε < lpPairDistErr d P p (Ψ u φ) χlim}) atTop (𝓝 0) := by
+  classical
+  have hne : Nonempty M := by
+    by_contra hcon
+    rw [not_nonempty_iff] at hcon
+    have h1 : P Set.univ = 0 := by
+      have : (Set.univ : Set M) = ∅ := Set.univ_eq_empty_iff.mpr hcon
+      rw [this, measure_empty]
+    rw [measure_univ] at h1
+    exact one_ne_zero h1
+  have hK : 0 ≤ K := le_trans (norm_nonneg _) (hχb (Classical.arbitrary M))
+  -- the estimator is bounded by the same `4K`, since the moving target obeys the same bound
+  have hΨb : ∀ u φ x, ‖Ψ u φ x‖ ≤ 4 * K := fun u φ x =>
+    norm_min_pointStress_le_of_bounded (n := ns u + 1) (ns u).succ_pos _ _
+      (fun i => hχb _) (fun i => hDb u φ x _) (hΨmin u φ x)
+  have hχlimb : ∀ x, ‖χlim x‖ ≤ 4 * K + 1 := fun x =>
+    norm_min_continuousPointStress_le P hχ.aestronglyMeasurable (hΔ x).aestronglyMeasurable
+      hχb (hΔb x) (hχlimmin x)
+  have hbdd : ∀ u φ q, pairDiscrepancy d p (Ψ u φ) χlim q ≤ (16 * K + 2) ^ p := by
+    intro u φ q
+    have h1 : ‖Ψ u φ q.1 - Ψ u φ q.2‖ ≤ 8 * K := by
+      refine le_trans (norm_sub_le _ _) ?_
+      linarith [hΨb u φ q.1, hΨb u φ q.2]
+    have h2 : ‖χlim q.1 - χlim q.2‖ ≤ 8 * K + 2 := by
+      refine le_trans (norm_sub_le _ _) ?_
+      linarith [hχlimb q.1, hχlimb q.2]
+    have habs : |‖Ψ u φ q.1 - Ψ u φ q.2‖ - ‖χlim q.1 - χlim q.2‖| ≤ 16 * K + 2 := by
+      rw [abs_le]
+      constructor <;> [linarith [norm_nonneg (Ψ u φ q.1 - Ψ u φ q.2)];
+        linarith [norm_nonneg (χlim q.1 - χlim q.2)]]
+    exact Real.rpow_le_rpow (abs_nonneg _) habs hp.le
+  -- the discrepancy vanishes almost surely at each pair, now against the moving target
+  have hae : ∀ᵐ q ∂(P.prod P), ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P),
+      Tendsto (fun u => pairDiscrepancy d p (Ψ u φ) χlim q) atTop (𝓝 0) := by
+    have hq1 := (Measure.quasiMeasurePreserving_fst (μ := P) (ν := P)).ae herr
+    have hq2 := (Measure.quasiMeasurePreserving_snd (μ := P) (ν := P)).ae herr
+    filter_upwards [hq1, hq2] with q hqe1 hqe2
+    have h1 := ae_eventually_forall_isMinOn_of_iid_target P hχ (hΔ q.1) hχb (hΔb q.1)
+      (fun φ u i => D u φ q.1 i) (fun φ u i => hDb u φ q.1 i) ns hns (huniq q.1) hqe1
+    have h2 := ae_eventually_forall_isMinOn_of_iid_target P hχ (hΔ q.2) hχb (hΔb q.2)
+      (fun φ u i => D u φ q.2 i) (fun φ u i => hDb u φ q.2 i) ns hns (huniq q.2) hqe2
+    filter_upwards [h1, h2] with φ hφ1 hφ2
+    have hc1 : Tendsto (fun u => Ψ u φ q.1) atTop (𝓝 (χlim q.1)) := by
+      rw [Metric.tendsto_atTop]
+      intro δ hδ
+      obtain ⟨N, hN⟩ := (hφ1 δ hδ).exists_forall_of_atTop
+      exact ⟨N, fun u hu => by
+        rw [dist_eq_norm]; exact hN u hu (Ψ u φ q.1) (hΨmin u φ q.1)⟩
+    have hc2 : Tendsto (fun u => Ψ u φ q.2) atTop (𝓝 (χlim q.2)) := by
+      rw [Metric.tendsto_atTop]
+      intro δ hδ
+      obtain ⟨N, hN⟩ := (hφ2 δ hδ).exists_forall_of_atTop
+      exact ⟨N, fun u hu => by
+        rw [dist_eq_norm]; exact hN u hu (Ψ u φ q.2) (hΨmin u φ q.2)⟩
+    have hnorm : Tendsto (fun u => ‖Ψ u φ q.1 - Ψ u φ q.2‖) atTop
+        (𝓝 ‖χlim q.1 - χlim q.2‖) := (hc1.sub hc2).norm
+    have hsub : Tendsto
+        (fun u => |‖Ψ u φ q.1 - Ψ u φ q.2‖ - ‖χlim q.1 - χlim q.2‖|) atTop (𝓝 0) := by
+      simpa using (hnorm.sub (tendsto_const_nhds (x := ‖χlim q.1 - χlim q.2‖))).abs
+    have hrpow : Tendsto (fun t : Real => t ^ p) (𝓝[≥] (0 : Real)) (𝓝 0) := by
+      have h : ContinuousWithinAt (fun t : Real => t ^ p) (Set.Ici (0 : Real)) 0 :=
+        (Real.continuousAt_rpow_const (0 : Real) p (Or.inr hp.le)).continuousWithinAt
+      have h2 : Tendsto (fun t : Real => t ^ p) (𝓝[≥] (0 : Real)) (𝓝 ((0 : Real) ^ p)) := h
+      rwa [Real.zero_rpow hp.ne'] at h2
+    exact hrpow.comp (tendsto_nhdsWithin_iff.mpr ⟨hsub,
+      Filter.Eventually.of_forall fun u => Set.mem_Ici.mpr (abs_nonneg _)⟩)
   exact tendsto_measure_lpPairDistErr_population _ P hp.le Ψ χlim hbdd hmeas hae hε
+
+
+/--
+**Lemma 2 under the source's own hypothesis on the dissimilarities.**
+
+The printed hypothesis is that `D` approaches `Δ` for every pair of reference models, in
+probability.  Read literally, over a *growing* collection, that is not enough: a triangular array
+can converge at each fixed index while its average does not.  What repairs it is already implicit
+in the sampling model -- the errors at a given stage are the same statistic applied to
+interchangeable models, hence identically distributed (`hid`), and then a single one of them
+governs the whole average.  The subsequence in the conclusion is the printed one, and this is
+where it comes from: `L¹` convergence gives almost-everywhere convergence only along a
+subsequence.
+
+The reference "models" are drawn from `M`; a model that carries its own replicate data is just a
+point of a larger `M`, so `D` being a function of the drawn sequence costs no generality.
+-/
+theorem exists_subseq_tendsto_measure_lpPairDistErr_of_identical {d : Nat} (P : Measure M)
+    [IsProbabilityMeasure P] {p : Real} (hp : 0 < p)
+    (Δ : M → M → Real) (χ : M → Rvec d) {K : Real}
+    (hχ : Measurable χ) (hΔ : ∀ x, Measurable (Δ x))
+    (hΔ2 : Measurable fun q : M × M => Δ q.1 q.2)
+    (hχb : ∀ m, ‖χ m‖ ≤ K) (hΔb : ∀ x m, |Δ x m| ≤ K)
+    (χlim : M → Rvec d)
+    (hχlimmin : ∀ x : M, ∀ w : Rvec d,
+      continuousPointStress d P χ (Δ x) (χlim x) ≤ continuousPointStress d P χ (Δ x) w)
+    (huniq : ∀ x : M, ∀ w : Rvec d,
+      (∀ w' : Rvec d,
+        continuousPointStress d P χ (Δ x) w ≤ continuousPointStress d P χ (Δ x) w') →
+      w = χlim x)
+    (D : Nat → (Nat → M) → M → Nat → Real) (hDb : ∀ r φ x i, |D r φ x i| ≤ K)
+    (hDm : ∀ r i, Measurable fun z : M × (Nat → M) => D r z.2 z.1 i)
+    (hid : ∀ (r : Nat) (i j : Fin (r + 1)),
+      ∫ z : M × (Nat → M), |D r z.2 z.1 i - Δ z.1 (z.2 i)|
+          ∂(P.prod (Measure.infinitePi fun _ : Nat => P))
+        = ∫ z : M × (Nat → M), |D r z.2 z.1 j - Δ z.1 (z.2 j)|
+          ∂(P.prod (Measure.infinitePi fun _ : Nat => P)))
+    (hzero : ∀ ε : Real, 0 < ε → Tendsto (fun r : Nat =>
+      ((P.prod (Measure.infinitePi fun _ : Nat => P))
+        {z : M × (Nat → M) | ε ≤ |D r z.2 z.1 0 - Δ z.1 (z.2 0)|}).toReal) atTop (𝓝 0))
+    (Ψ : Nat → (Nat → M) → M → Rvec d)
+    (hΨmin : ∀ r φ x, ∀ w : Rvec d,
+      pointStress (fun i : Fin (r + 1) => χ (φ i))
+          (fun i : Fin (r + 1) => D r φ x i) (Ψ r φ x)
+        ≤ pointStress (fun i : Fin (r + 1) => χ (φ i))
+            (fun i : Fin (r + 1) => D r φ x i) w)
+    (hmeas : ∀ r, Measurable fun z : (Nat → M) × (M × M) =>
+      pairDiscrepancy d p (Ψ r z.1) χlim z.2)
+    {ε : Real} (hε : 0 < ε) :
+    ∃ ns : Nat → Nat, StrictMono ns ∧
+      Tendsto (fun u => (Measure.infinitePi fun _ : Nat => P)
+        {φ | ε < lpPairDistErr d P p (Ψ (ns u) φ) χlim}) atTop (𝓝 0) := by
+  classical
+  set Q : Measure (M × (Nat → M)) := P.prod (Measure.infinitePi fun _ : Nat => P) with hQ
+  -- the per-index errors, on the space carrying both the query point and the models
+  set E : ∀ r : Nat, Fin (r + 1) → M × (Nat → M) → Real :=
+    fun r i z => |D r z.2 z.1 i - Δ z.1 (z.2 i)| with hE
+  have hEm : ∀ r i, Measurable (E r i) := by
+    intro r i
+    refine ((hDm r i).sub ?_).abs
+    exact hΔ2.comp (measurable_fst.prodMk ((measurable_pi_apply (i : Nat)).comp measurable_snd))
+  have hE0 : ∀ r i z, 0 ≤ E r i z := fun r i z => abs_nonneg _
+  have hEC : ∀ r i z, E r i z ≤ 2 * K := by
+    intro r i z
+    calc |D r z.2 z.1 i - Δ z.1 (z.2 i)| ≤ |D r z.2 z.1 i| + |Δ z.1 (z.2 i)| := abs_sub _ _
+      _ ≤ K + K := add_le_add (hDb _ _ _ _) (hΔb _ _)
+      _ = 2 * K := by ring
+  -- identically distributed errors give the average, along a subsequence
+  obtain ⟨ns, hnsmono, hnsae⟩ :=
+    TauCeti.exists_subseq_ae_tendsto_average_of_tendsto_measure_ge (μ := Q)
+      (fun r => r + 1) (fun r => r.succ_pos) E hEm hE0 hEC hid
+      (by
+        intro δ hδ
+        have := hzero δ hδ
+        refine this.congr fun r => ?_
+        rw [hQ])
+  refine ⟨ns, hnsmono, ?_⟩
+  -- Fubini turns the joint statement into one about a.e. query point
+  have hprod : ∀ᵐ x ∂P, ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P),
+      Tendsto (fun u : Nat => (((ns u : Real) + 1))⁻¹ *
+        ∑ i : Fin (ns u + 1), |D (ns u) φ x i - Δ x (φ i)|) atTop (𝓝 0) := by
+    have := Measure.ae_ae_of_ae_prod hnsae
+    filter_upwards [this] with x hx
+    filter_upwards [hx] with φ hφ
+    refine hφ.congr fun u => ?_
+    push_cast
+    rfl
+  exact tendsto_measure_lpPairDistErr_sampleTarget P hp Δ χ hχ hΔ hχb hΔb χlim hχlimmin huniq
+    (fun u φ x i => D (ns u) φ x i) (fun u φ x i => hDb _ _ _ _) ns hnsmono.tendsto_atTop
+    (fun u => Ψ (ns u)) (fun u φ x => hΨmin (ns u) φ x)
+    (fun u => hmeas (ns u)) hprod hε
 
 end Acharyya2024.ContinuousMDS
