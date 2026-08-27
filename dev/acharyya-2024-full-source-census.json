@@ -192,7 +192,7 @@
       "title": "Continuous MDS over a compact model space",
       "source_claim": "Define continuous raw stress by a P x P integral over a compact model space and let mds minimize it over Borel-measurable embeddings.",
       "status": "compiled_exact",
-      "verification": "absent",
+      "verification": "proved_in_build",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
@@ -511,7 +511,7 @@
       "title": "Continuous-MDS L^p stability over iid model draws",
       "source_claim": "For iid phi_i from P, pointwise convergence of empirical dissimilarities implies, along a subsequence, L^p(P x P) convergence of estimated pairwise distances to continuous-MDS distances.",
       "status": "compiled_specialization",
-      "verification": "absent",
+      "verification": "proved_in_build",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
         "lines": [
