@@ -68,6 +68,8 @@ The strongest paper-facing change since the earlier audit is hypothesis reductio
 
 The response-mean, entrywise CMDS, union-bound, and n^3/r algebra are compiled, but there is no single public theorem reproducing the exact displayed finite probability lower bound with the source constant 16 and sum_{ij} gamma_ij/(rm eps^2).
 
+Progress. prob_uniformResponseMeanClose_ge_of_secondMoment supplies the probability step in the displayed finite shape: for a fixed model count, the probability that every sample response mean is within eta of its population counterpart is at least 1 - N sigma^2 / eta^2. Until now the Chebyshev and union-bound machinery existed only in its asymptotic consequence (HighProbAtTop), which cannot express the paper's explicit bound. What remains between this and the printed Theorem 1 is the passage from response means to entries of the doubly centred matrix, where the source's factor 16 and its 1/(rm) scaling arise.
+
 ### `riemannian-proposition` — Proposition 1 manifold sufficient condition is unformalized
 
 **Kind:** `hard_math`
@@ -106,10 +108,10 @@ Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extractio
 * **status / verification:** `compiled_by_composition` / `proved_in_build`
 * **semantic alignment:** `by_composition` — The event shape and response-to-CMDS concentration mechanism are compiled, including the paper-scale n^3/r bookkeeping. The exact finite displayed constant is not exposed by one source-facing theorem.
 * **source claim:** For any epsilon>0, every entry of Bhat is within epsilon of B with the displayed finite high-probability bound determined by response covariances.
-* **Lean declarations:** `Acharyya2025.Bridge.EntrywiseClose`, `Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded`, `Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale`
+* **Lean declarations:** `Acharyya2025.Bridge.EntrywiseClose`, `Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded`, `Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale`, `Acharyya2025.GrowingResponse.prob_uniformResponseMeanClose_ge_of_secondMoment`
 * **gap refs:** `t1-literal-finite-wrapper`
 * **notes:** The active response-to-CMDS bridge works entrywise directly and avoids the former n^2 Frobenius detour. Its constants are intentionally conservative.
-* **next action:** Add a literal finite Theorem-1 wrapper only if exact constant-level source coverage is required.
+* **next action:** Compose the finite probability step with the response-mean to doubly-centred-entry bound to reach the displayed constant.
 
 ### `A25-R1` — Naming and notation for true and estimated perspectives and the B matrices
 

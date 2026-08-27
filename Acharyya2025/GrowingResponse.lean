@@ -87,6 +87,60 @@ def GrowingUniformResponseMeanClose
     (η : Nat → Real) (u : Nat) : Set Ω :=
   {ω | UniformResponseMeanClose (Xbar u ω) (μ u ω) (η u)}
 
+/--
+**Finite Chebyshev-plus-union bound for the response means.**
+
+For a fixed model count, the probability that every model's sample response mean is within `η`
+of its population counterpart is at least `1 - N σ² / η²`.
+
+The paper's Theorem 1 is a statement of exactly this shape -- an explicit finite lower bound on
+a probability, in terms of the response variances -- whereas
+`highProb_uniformResponseMeanClose_of_growing_secondMoment` below states the asymptotic
+consequence.  The census records that no single declaration reproduced the displayed finite
+bound; this supplies the probability step of it.  What remains between this and the printed
+Theorem 1 is the passage from response means to entries of the doubly centred matrix, which is
+where the source's factor `16` and its `1/(rm)` scaling arise.
+-/
+theorem prob_uniformResponseMeanClose_ge_of_secondMoment
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {N m p : Nat}
+    (Xbar μ : Ω → Fin N → Mat m p)
+    (σ2 η : Real) (hη : 0 < η)
+    (hint : ∀ i, Integrable (fun ω => ‖Xbar ω i - μ ω i‖ ^ 2) P)
+    (hσ2 : ∀ i, ∫ ω, ‖Xbar ω i - μ ω i‖ ^ 2 ∂P ≤ σ2) :
+    1 - ENNReal.ofReal ((N : Real) * σ2 / η ^ 2)
+      ≤ P {ω | UniformResponseMeanClose (Xbar ω) (μ ω) η} := by
+  have hcheb : ∀ i : Fin N,
+      P {ω | η < ‖Xbar ω i - μ ω i‖} ≤ ENNReal.ofReal (σ2 / η ^ 2) := fun i =>
+    TauCeti.meas_gt_le_ofReal_integral_sq_div_sq P (hint i) hη (hσ2 i)
+  have hincl : {ω | UniformResponseMeanClose (Xbar ω) (μ ω) η}ᶜ
+      ⊆ ⋃ i : Fin N, {ω | η < ‖Xbar ω i - μ ω i‖} := by
+    intro ω hω
+    by_contra hnot
+    simp only [Set.mem_iUnion, Set.mem_ofPred_eq, not_exists, not_lt] at hnot
+    exact hω (fun i => hnot i)
+  have hcompl : P ({ω | UniformResponseMeanClose (Xbar ω) (μ ω) η}ᶜ)
+      ≤ ENNReal.ofReal ((N : Real) * σ2 / η ^ 2) := by
+    calc P ({ω | UniformResponseMeanClose (Xbar ω) (μ ω) η}ᶜ)
+        ≤ P (⋃ i : Fin N, {ω | η < ‖Xbar ω i - μ ω i‖}) := measure_mono hincl
+      _ ≤ ∑ i : Fin N, P {ω | η < ‖Xbar ω i - μ ω i‖} :=
+          measure_iUnion_fintype_le (μ := P) (fun i => {ω | η < ‖Xbar ω i - μ ω i‖})
+      _ ≤ ∑ _i : Fin N, ENNReal.ofReal (σ2 / η ^ 2) := Finset.sum_le_sum fun i _ => hcheb i
+      _ = (N : ENNReal) * ENNReal.ofReal (σ2 / η ^ 2) := by
+          simp [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+      _ = ENNReal.ofReal ((N : Real) * (σ2 / η ^ 2)) := by
+          rw [ENNReal.ofReal_mul (Nat.cast_nonneg N), ENNReal.ofReal_natCast]
+      _ = ENNReal.ofReal ((N : Real) * σ2 / η ^ 2) := by rw [mul_div_assoc]
+  rw [tsub_le_iff_right]
+  calc (1 : ENNReal) = P Set.univ := by simp
+    _ ≤ P {ω | UniformResponseMeanClose (Xbar ω) (μ ω) η}
+        + P ({ω | UniformResponseMeanClose (Xbar ω) (μ ω) η}ᶜ) := by
+        simpa using measure_union_le (μ := P)
+          {ω | UniformResponseMeanClose (Xbar ω) (μ ω) η}
+          ({ω | UniformResponseMeanClose (Xbar ω) (μ ω) η}ᶜ)
+    _ ≤ P {ω | UniformResponseMeanClose (Xbar ω) (μ ω) η}
+        + ENNReal.ofReal ((N : Real) * σ2 / η ^ 2) := by gcongr
+
 /-- Stage-dependent Chebyshev plus union bound.  The number of models may vary
 with the asymptotic stage, and the population means may depend on the same
 outcome as the sample means.  Only the integrated squared errors enter the

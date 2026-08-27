@@ -45,7 +45,8 @@
    "lean_declarations": [
     "Acharyya2025.Bridge.EntrywiseClose",
     "Acharyya2025.Bridge.entrywise_close_to_cmds_entrywise_close_of_bounded",
-    "Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale"
+    "Acharyya2025.GrowingResponse.highProb_uniformResponseMeanClose_of_growing_iid_replicates_paperScale",
+    "Acharyya2025.GrowingResponse.prob_uniformResponseMeanClose_ge_of_secondMoment"
    ],
    "clauses": [
     {
@@ -59,6 +60,12 @@
      "lean_clause": "No single source-facing Lean theorem exposes that exact finite constant; the active bridge uses conservative constants.",
      "relation": "lean_weaker_conclusion",
      "note": "The asymptotic paper scale is preserved, but constant-level literal fidelity is not packaged."
+    },
+    {
+     "source_clause": "For any epsilon > 0, P[|Bhat_ii' - B_ii'| < epsilon for all i,i'] >= 1 - 16 sum gamma_ij / (r m epsilon^2).",
+     "lean_clause": "The probability step is now finite and explicit: prob_uniformResponseMeanClose_ge_of_secondMoment gives 1 - N sigma^2 / eta^2 for the response means.",
+     "relation": "derived_by_composition",
+     "note": "The remaining distance is the response-mean to doubly-centred-entry passage, which carries the factor 16 and the 1/(rm) scaling."
     }
    ],
    "review": "The event shape and response-to-CMDS concentration mechanism are compiled, including the paper-scale n^3/r bookkeeping. The exact finite displayed constant is not exposed by one source-facing theorem.",
@@ -66,7 +73,7 @@
    "gap_refs": [
     "t1-literal-finite-wrapper"
    ],
-   "next_action": "Add a literal finite Theorem-1 wrapper only if exact constant-level source coverage is required."
+   "next_action": "Compose the finite probability step with the response-mean to doubly-centred-entry bound to reach the displayed constant."
   },
   {
    "id": "A25-C1",
