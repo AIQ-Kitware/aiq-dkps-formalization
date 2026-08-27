@@ -269,9 +269,13 @@ implicit in writing `psihat_1, psihat_2` under an integral over the model distri
 2026 states the map explicitly as `Psihat_Q`.  Without it the population conclusion cannot even
 be written down, which is why it is fixed here.
 
-The construction both papers have in mind, and the one the downstream augmented pipelines
-implement, is to put the model into the reference collection and read off its coordinate in a
-raw-stress minimizer of the enlarged dissimilarity matrix. -/
+`estimatedEmbedding` below is the augment-one-at-a-time construction: put the model into the
+reference collection and read off its coordinate in a raw-stress minimizer of the enlarged
+matrix.  That is the right object when there is a *single* target model, which is the situation
+the downstream augmented pipelines are in.  It is **not** the map Lemma 2 and Theorem 5 need,
+because each model gets its own minimizer and hence its own frame, so `‖Psihat x - Psihat y‖`
+would compare coordinates in two unrelated frames.  `frameEmbedding`, further down, is the map
+those results need. -/
 
 /--
 **The estimated embedding as a map on the whole model space**: augment `x` into the reference
@@ -329,5 +333,115 @@ theorem lpPairDistErr_rigidMotion_right {M : Type*} [MeasurableSpace M] (d : Nat
     rw [h, LinearIsometryEquiv.norm_map]
   unfold lpPairDistErr
   simp_rw [key]
+
+/-! ### A common frame: the out-of-sample extension
+
+`estimatedEmbedding` above augments one model at a time, and that is not good enough for the
+source's integral.  The minimizer of the matrix augmented by `x` and the minimizer of the matrix
+augmented by `y` are each determined only up to their *own* rigid motion, so `‖Psihat x - Psihat
+y‖` compares coordinates in two unrelated frames and is not a well-defined quantity.  The
+integrand of Lemma 2 and Theorem 5 needs both models embedded in one frame.
+
+The classical remedy, and the one the phrase "out-of-sample embedding" refers to, is to fix a
+configuration for the reference sample and place each new model against it: `Psihat x` minimizes
+the one-point raw stress of `x` against the fixed reference configuration.  Every model is then
+placed in the same frame, and the pairwise distances the source integrates are well defined. -/
+
+/-- **One-point raw stress**: how badly `v` matches the target dissimilarities `c` against a
+fixed reference configuration `z`. -/
+noncomputable def pointStress {n d : Nat} (z : Config n d) (c : Fin n → Real) (v : Rvec d) :
+    Real :=
+  ∑ i, (‖v - z i‖ - c i) ^ 2
+
+theorem continuous_pointStress {n d : Nat} (z : Config n d) (c : Fin n → Real) :
+    Continuous (pointStress z c) := by
+  unfold pointStress
+  exact continuous_finset_sum _ fun i _ =>
+    (((continuous_id.sub continuous_const).norm.sub continuous_const).pow 2)
+
+/--
+**The one-point raw stress attains its minimum.**
+
+It is continuous and coercive: far from the reference configuration the term of any single
+reference point already exceeds the value at that point, so a minimizer over a large closed
+ball -- which exists by compactness -- is a global minimizer.
+-/
+theorem exists_min_pointStress {n d : Nat} (hn : 0 < n) (z : Config n d) (c : Fin n → Real) :
+    ∃ v : Rvec d, ∀ w : Rvec d, pointStress z c v ≤ pointStress z c w := by
+  classical
+  have hne : Nonempty (Fin n) := Fin.pos_iff_nonempty.mp hn
+  obtain ⟨i₀⟩ := hne
+  set B : Real := pointStress z c (z i₀) with hB
+  have hB0 : 0 ≤ B := Finset.sum_nonneg fun i _ => sq_nonneg _
+  set R : Real := ‖z i₀‖ + |c i₀| + Real.sqrt B + 1 with hR
+  have hsqrt : 0 ≤ Real.sqrt B := Real.sqrt_nonneg B
+  have hzR : ‖z i₀‖ ≤ R := by
+    rw [hR]; linarith [abs_nonneg (c i₀)]
+  obtain ⟨v, hv_mem, hv_min⟩ :=
+    (isCompact_closedBall (0 : Rvec d) R).exists_isMinOn
+      ⟨z i₀, by simpa [Metric.mem_closedBall] using hzR⟩
+      (continuous_pointStress z c).continuousOn
+  refine ⟨v, fun w => ?_⟩
+  have hvB : pointStress z c v ≤ B :=
+    hv_min (by simpa [Metric.mem_closedBall] using hzR)
+  by_cases hw : ‖w‖ ≤ R
+  · exact hv_min (by simpa [Metric.mem_closedBall] using hw)
+  · push Not at hw
+    have hstep : Real.sqrt B + 1 ≤ ‖w - z i₀‖ - c i₀ := by
+      have h1 : ‖w‖ - ‖z i₀‖ ≤ ‖w - z i₀‖ := norm_sub_norm_le _ _
+      have h2 : c i₀ ≤ |c i₀| := le_abs_self _
+      rw [hR] at hw
+      linarith
+    have hsq : B < (‖w - z i₀‖ - c i₀) ^ 2 := by
+      have hpos : (0 : Real) ≤ Real.sqrt B + 1 := by linarith
+      have hmono : (Real.sqrt B + 1) ^ 2 ≤ (‖w - z i₀‖ - c i₀) ^ 2 :=
+        pow_le_pow_left₀ hpos hstep 2
+      have hBsq : Real.sqrt B ^ 2 = B := Real.sq_sqrt hB0
+      nlinarith [hmono, hBsq, hsqrt]
+    have hsingle : (‖w - z i₀‖ - c i₀) ^ 2 ≤ pointStress z c w :=
+      Finset.single_le_sum (f := fun i => (‖w - z i‖ - c i) ^ 2)
+        (fun i _ => sq_nonneg _) (Finset.mem_univ i₀)
+    linarith
+
+open Classical in
+/-- **The out-of-sample extension**: the position minimizing the one-point raw stress of the
+target dissimilarities `c` against the fixed reference configuration `z`. -/
+noncomputable def outOfSampleExtension {n d : Nat} (hn : 0 < n) (z : Config n d)
+    (c : Fin n → Real) : Rvec d :=
+  (exists_min_pointStress hn z c).choose
+
+theorem outOfSampleExtension_min {n d : Nat} (hn : 0 < n) (z : Config n d) (c : Fin n → Real)
+    (w : Rvec d) :
+    pointStress z c (outOfSampleExtension hn z c) ≤ pointStress z c w :=
+  (exists_min_pointStress hn z c).choose_spec w
+
+/--
+**The estimated embedding in a common frame.**
+
+Each model of the space is placed against one fixed configuration of the reference sample, so
+the pairwise distances that Lemma 2 and Theorem 5 integrate are comparisons within a single
+frame.  This is the map those results need; `estimatedEmbedding` is not, because it re-solves
+the whole problem for each model and so produces a fresh frame each time.
+-/
+noncomputable def frameEmbedding {M : Type*} (d n : Nat) (hn : 0 < n) (Δ : M → M → Real)
+    (φ : Fin n → M) (z : Config n d) (x : M) : Rvec d :=
+  outOfSampleExtension hn z (fun i => Δ x (φ i))
+
+/-- The frame embedding minimizes the one-point stress at every model. -/
+theorem frameEmbedding_min {M : Type*} (d n : Nat) (hn : 0 < n) (Δ : M → M → Real)
+    (φ : Fin n → M) (z : Config n d) (x : M) (w : Rvec d) :
+    pointStress z (fun i => Δ x (φ i)) (frameEmbedding d n hn Δ φ z x)
+      ≤ pointStress z (fun i => Δ x (φ i)) w :=
+  outOfSampleExtension_min hn z _ w
+
+/-- Moving the reference frame by a rigid motion moves the whole embedding by the same rigid
+motion, so the pairwise distances it produces do not depend on the frame chosen. -/
+theorem pointStress_rigidMotion {n d : Nat} (z : Config n d) (c : Fin n → Real)
+    (W : Rvec d ≃ₗᵢ[Real] Rvec d) (b : Rvec d) (v : Rvec d) :
+    pointStress (fun i => W (z i) + b) c (W v + b) = pointStress z c v := by
+  unfold pointStress
+  refine Finset.sum_congr rfl fun i _ => ?_
+  have h : (W v + b) - (W (z i) + b) = W (v - z i) := by rw [map_sub]; abel
+  rw [h, LinearIsometryEquiv.norm_map]
 
 end Acharyya2024.ContinuousMDS
