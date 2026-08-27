@@ -332,8 +332,8 @@
       "id": "s3-fixed-angle-subspace",
       "title": "Fixed-angle spectral subspace construction",
       "kind": "foundation",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.fixedCosineSubspace",
+      "module": "DavisKahan.Geometry.Halmos.FixedCosineSubspace",
+      "declaration": "TauCeti.DavisKahan.fixedCosineSubspace",
       "dependencies": [
         "s3-generic-cosine-restriction"
       ],
@@ -346,8 +346,8 @@
       "id": "s3-prop3-5",
       "title": "Proposition 3.5 maximal fixed-angle subspace",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.proposition3_5_fixedAngle_maximal",
+      "module": "DavisKahan.Geometry.Halmos.FixedCosineSubspace",
+      "declaration": "TauCeti.DavisKahan.proposition3_5_fixedAngle_maximal",
       "dependencies": [
         "s3-fixed-angle-subspace"
       ],

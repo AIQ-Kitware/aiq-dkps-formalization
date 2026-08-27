@@ -55,7 +55,6 @@ namespace TauCeti
 namespace DavisKahan1970
 
 open DavisKahan
-open DavisKahan.Frontier.Section3
 open DavisKahan.Proposition35
 
 noncomputable section

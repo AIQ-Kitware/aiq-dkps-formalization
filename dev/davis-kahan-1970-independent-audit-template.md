@@ -1082,25 +1082,25 @@ The source appends a remark comparing (3.5) with the earlier matching-dimension 
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2046`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1581`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2100`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1635`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_exists_iff_crossedDefectsEquivalent_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:3308`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:2843`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_2_not_unique_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:3332`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:2867`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1285,13 +1285,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_full`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1838`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1373`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_source_eq_directRotation`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1989`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:1524`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1373,7 +1373,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.theorem3_1_realization`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2700`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:2235`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1445,19 +1445,19 @@ together with a possible eigenvalue $0$; $\Theta_1$ has the same nonzero eigenva
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_defectBlock_angleList_classification`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2472`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:2007`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_classification_real`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:3188`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:2723`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_1_realization`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:2873`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:2408`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1530,37 +1530,37 @@ In the acute case the $\theta$-eigenspace of $\Theta$ is the unique maximal subs
 
 #### `TauCeti.DavisKahan1970.proposition3_5_commutations`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:271`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:270`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:306`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:305`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:324`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:323`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:335`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:334`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_commutations_acute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:285`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:284`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:316`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:315`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1626,19 +1626,19 @@ Interchanging the roles of $P$ and $Q$ leaves the angle operator $\Theta$ unchan
 
 #### `TauCeti.DavisKahan1970.corollary3_2_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:214`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:213`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:183`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:182`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:164`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:163`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1656,7 +1656,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form`
 
-Source location candidates: `DavisKahan/Frontier/Section3.lean:1456`
+Source location candidates: `DavisKahan/Frontier/Section3.lean:991`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
