@@ -1277,4 +1277,105 @@ theorem eventually_forall_isMinOn_dist_lt {d : Nat}
   rw [hLeq, sub_self, norm_zero] at hfar
   linarith
 
+/--
+**Every minimizer converges, almost surely.**
+
+The choice-free form of `ae_tendsto_outOfSampleExtension_of_iid`: almost surely, for every
+tolerance, eventually EVERY minimizer of the sample one-point stress lies within it of the
+population minimizer.  Because the statement names no particular minimizer, the event it
+describes is measurable by `TauCeti.measurableSet_tendsto_isMinOn`, which is what lets it be
+integrated against.
+-/
+theorem ae_eventually_forall_isMinOn_of_iid {d : Nat} (P : Measure M) [IsProbabilityMeasure P]
+    {χ : M → Rvec d} {c : M → Real} {K : Real}
+    (hχ : Measurable χ) (hc : Measurable c)
+    (hχb : ∀ m, ‖χ m‖ ≤ K) (hcb : ∀ m, |c m| ≤ K)
+    {v' : Rvec d}
+    (huniq : ∀ w : Rvec d,
+      (∀ w' : Rvec d, continuousPointStress d P χ c w ≤ continuousPointStress d P χ c w') →
+      w = v') :
+    ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P), ∀ ε > (0 : Real), ∀ᶠ n in atTop,
+      ∀ v : Rvec d,
+        (∀ w : Rvec d,
+          pointStress (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => c (φ i)) v
+            ≤ pointStress (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => c (φ i)) w) →
+        ‖v - v'‖ < ε := by
+  classical
+  haveI hMne : Nonempty M := by
+    by_contra hcon
+    rw [not_nonempty_iff] at hcon
+    have h1 : P Set.univ = 0 := by
+      have : (Set.univ : Set M) = ∅ := Set.univ_eq_empty_iff.mpr hcon
+      rw [this, measure_empty]
+    rw [measure_univ] at h1
+    exact one_ne_zero h1
+  have hK : 0 ≤ K := le_trans (norm_nonneg _) (hχb (Classical.arbitrary M))
+  obtain ⟨D, hDcount, hDdense⟩ := TopologicalSpace.exists_countable_dense (Rvec d)
+  -- the strong law at every position of a countable dense set, off one null set
+  have hall : ∀ᵐ φ ∂(Measure.infinitePi fun _ : Nat => P), ∀ v ∈ D,
+      Tendsto (fun n : Nat => ((n : Real))⁻¹ *
+        pointStress (fun i : Fin n => χ (φ i)) (fun i : Fin n => c (φ i)) v) atTop
+        (𝓝 (continuousPointStress d P χ c v)) := by
+    rw [ae_ball_iff hDcount]
+    intro v _
+    exact ae_tendsto_averaged_pointStress P hχ hc hχb hcb v
+  filter_upwards [hall] with φ hφ
+  -- the shifted objectives, normalized so the Lipschitz constant does not grow
+  set G : Nat → Rvec d → Real := fun n v => (((n : Real) + 1))⁻¹ *
+    pointStress (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => c (φ i)) v with hG
+  have hshift : Tendsto (fun n : Nat => n + 1) atTop atTop :=
+    Filter.tendsto_add_atTop_nat 1
+  have hptwD : ∀ v ∈ D, Tendsto (fun n : Nat => G n v) atTop
+      (𝓝 (continuousPointStress d P χ c v)) := by
+    intro v hv
+    have := (hφ v hv).comp hshift
+    refine this.congr fun n => ?_
+    rw [hG]
+    norm_num
+  -- an equi-Lipschitz bound, uniform in the sample size
+  have hlip : ∀ R : Real, ∃ L : Real, 0 ≤ L ∧ ∀ n : Nat, ∀ v w : Rvec d,
+      ‖v‖ ≤ R → ‖w‖ ≤ R → |G n v - G n w| ≤ L * ‖v - w‖ := by
+    intro R
+    refine ⟨2 * (max R 0 + 2 * K), by positivity, fun n v w hv hw => ?_⟩
+    have hR : ‖v‖ ≤ max R 0 := le_trans hv (le_max_left _ _)
+    have hR' : ‖w‖ ≤ max R 0 := le_trans hw (le_max_left _ _)
+    have hbase := abs_sub_pointStress_le (fun i : Fin (n + 1) => χ (φ i))
+      (fun i : Fin (n + 1) => c (φ i)) v w hR hR' (fun i => hχb _) (fun i => hcb _)
+    have hpos : (0 : Real) < ((n : Real) + 1) := by positivity
+    rw [hG]
+    simp only [← mul_sub, abs_mul, abs_of_nonneg (le_of_lt (inv_pos.mpr hpos))]
+    calc ((n : Real) + 1)⁻¹ * |pointStress (fun i : Fin (n + 1) => χ (φ i))
+            (fun i : Fin (n + 1) => c (φ i)) v
+          - pointStress (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => c (φ i)) w|
+        ≤ ((n : Real) + 1)⁻¹ *
+            (((n + 1 : Nat) : Real) * (2 * (max R 0 + 2 * K)) * ‖v - w‖) := by
+          refine mul_le_mul_of_nonneg_left ?_ (le_of_lt (inv_pos.mpr hpos))
+          simpa using hbase
+      _ = 2 * (max R 0 + 2 * K) * ‖v - w‖ := by
+          push_cast
+          field_simp
+  -- every minimizer, at every stage, is bounded independently of the sample size
+  have hVbdd : ∀ n : Nat, ∀ v : Rvec d, (∀ w : Rvec d, G n v ≤ G n w) → ‖v‖ ≤ 4 * K := by
+    intro n v hv
+    refine norm_min_pointStress_le_of_bounded (n := n + 1) n.succ_pos
+      (fun i : Fin (n + 1) => χ (φ i)) (fun i : Fin (n + 1) => c (φ i))
+      (fun i => hχb _) (fun i => hcb _) (fun w => ?_)
+    have hpos : (0 : Real) < ((n : Real) + 1) := by positivity
+    have h := hv w
+    rw [hG] at h
+    exact le_of_mul_le_mul_left h (inv_pos.mpr hpos)
+  -- spread the convergence, then move every minimizer
+  have hptw := tendsto_of_dense_of_equiLipschitz
+    (continuous_continuousPointStress P hχ.aestronglyMeasurable hc.aestronglyMeasurable hχb hcb)
+    hlip hDdense hptwD
+  have huniform := eventually_forall_isMinOn_dist_lt hlip hptw hVbdd huniq
+  -- a minimizer of the raw stress is a minimizer of its normalized form
+  intro ε hε
+  filter_upwards [huniform ε hε] with n hn
+  intro v hv
+  refine hn v fun w => ?_
+  have hpos : (0 : Real) < ((n : Real) + 1) := by positivity
+  rw [hG]
+  exact mul_le_mul_of_nonneg_left (hv w) (le_of_lt (inv_pos.mpr hpos))
+
 end Acharyya2024.ContinuousMDS
