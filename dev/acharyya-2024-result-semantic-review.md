@@ -428,6 +428,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `Acharyya2024.ContinuousMDS.ContinuousMDS`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`
+- `Acharyya2024.ContinuousMDS.ae_eventually_forall_isMinOn_of_iid`
 - `Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress`
 - `Acharyya2024.ContinuousMDS.ae_tendsto_outOfSampleExtension_of_iid`
 - `Acharyya2024.ContinuousMDS.continuousPointStress`
@@ -538,6 +539,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.Consistency.one_le_continuousPointStress_twoPoint`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`
 - `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`
+- `Acharyya2024.ContinuousMDS.ae_eventually_forall_isMinOn_of_iid`
 - `Acharyya2024.ContinuousMDS.ae_tendsto_averaged_pointStress`
 - `Acharyya2024.ContinuousMDS.ae_tendsto_outOfSampleExtension_of_iid`
 - `Acharyya2024.ContinuousMDS.continuousPointStress`
