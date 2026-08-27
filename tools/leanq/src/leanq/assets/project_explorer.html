@@ -184,6 +184,13 @@ for (const n of allNodes) {
   for (let i = 0; i < path.length; i++) keys.push(path.slice(0, i + 1).join("/"));
   n._keys = keys;
 }
+/* A second cluster path rooted at the paper foundation, so a cluster in that
+   mode never spans two foundations and the band of a collapsed cluster is
+   well defined. */
+for (const n of allNodes) {
+  const root = n.foundation || "(no paper foundation)";
+  n._fkeys = [root, ...n._keys.map(k => root + "/" + k)];
+}
 
 /* -------------------------------------------------------------- census data */
 const analysis = DATA.headlineAnalysis || {};
@@ -299,10 +306,10 @@ function universe() {
 /* A prefix is open when the global grouping depth already covers it or the user
    opened it explicitly.  Opening one cluster therefore never re-groups another
    branch, which is what made expansion look like it collapsed the view.      */
-function clusterKeyFor(n, limit) {
-  if (collapsed.has(n.id)) return n._keys[n._keys.length - 1];
+function clusterKeyFor(n, limit, byFoundation) {
+  const keys = byFoundation ? n._fkeys : n._keys;
+  if (collapsed.has(n.id)) return keys[keys.length - 1];
   if (revealed.has(n.id) || isSelectedHeadline(n)) return null;
-  const keys = n._keys;
   for (let i = 0; i < keys.length; i++) {
     const autoOpen = limit === 0 || i + 1 < limit;
     if (!autoOpen && !expanded.has(keys[i])) return keys[i];
@@ -311,7 +318,8 @@ function clusterKeyFor(n, limit) {
 }
 function project() {
   const allowed = universe();
-  const limit = Number(depthSelect.value);
+  const foundationMode = layoutSelect.value === "foundation";
+  const limit = Number(depthSelect.value) + (foundationMode ? 1 : 0);
   const sharedOnly = sharedBox.checked && activeHeadlineDeclarations().size > 0;
   const group = new Map(), members = new Map();
   for (const n of allNodes) {
@@ -319,7 +327,7 @@ function project() {
     if (!enabledLibraries.has(n.library || "Other")) continue;
     if (allowed && !allowed.has(n.id)) continue;
     if (sharedOnly && coverageCount(n.id) < 2 && !isSelectedHeadline(n)) continue;
-    const key = clusterKeyFor(n, limit);
+    const key = clusterKeyFor(n, limit, foundationMode);
     const id = key === null ? n.id : "cluster:" + key;
     group.set(n.id, id);
     if (!members.has(id)) members.set(id, []);
@@ -346,9 +354,11 @@ function project() {
       maximumDependencyDepth: Math.max(0, ...rows.map(n => n.dependencyDepth || 0)),
       headlineCoverageCount: Math.max(0, ...rows.map(n => coverageCount(n.id))),
       headlineCount: rows.filter(isSelectedHeadline).length,
-      childCount: new Set(rows.map(n => n._keys[parts.length] || n.id)).size,
+      childCount: new Set(rows.map(
+        n => (foundationMode ? n._fkeys : n._keys)[parts.length] || n.id)).size,
       moduleCount: new Set(rows.map(n => n.module)).size,
-      library: parts[0],
+      library: foundationMode ? (rows[0].library || "Other") : parts[0],
+      foundation: foundationMode ? parts[0] : undefined,
     });
   }
   const byProjectedId = new Map(pnodes.map(n => [n.id, n])), emap = new Map();
@@ -466,6 +476,53 @@ const libraryGraph = (() => {
 })();
 const libraryRank = libraryGraph.rank;
 const libraryOrder = libraryGraph.order;
+
+/* The paper's named foundations cut across packages: the same foundation has
+   modules in DavisKahan, ForTauCeti and YuWangSamworth2015, because material was
+   promoted between them.  Banding by foundation therefore shows the mathematics
+   independently of which package currently hosts it, which package columns
+   alone cannot. */
+const FOUNDATION_LABELS = (DATA.foundations || {}).labels || {};
+const NO_FOUNDATION = "(no paper foundation)";
+function foundationOf(n){return n.foundation || NO_FOUNDATION}
+function foundationLabel(f){return f === NO_FOUNDATION ? f : (FOUNDATION_LABELS[f] || f)}
+const foundationOrder = (() => {
+  const keys = [...new Set(allNodes.map(foundationOf))].sort();
+  const weight = new Map();
+  for (const e of allEdges) {
+    const a = byId.get(e.source), b = byId.get(e.target);
+    if (!a || !b) continue;
+    const fa = foundationOf(a), fb = foundationOf(b);
+    if (fa === fb) continue;
+    const k = fa + "\u0000" + fb;
+    weight.set(k, (weight.get(k) || 0) + 1);
+  }
+  const out = new Map(keys.map(k => [k, []])), indeg = new Map(keys.map(k => [k, 0]));
+  for (const [k, count] of weight) {
+    const [a, b] = k.split("\u0000");
+    if (!out.has(a) || !out.has(b) || out.get(a).some(r => r.key === b)) continue;
+    if (count < (weight.get(b + "\u0000" + a) || 0)) continue;
+    out.get(a).push({key: b, count});
+    indeg.set(b, indeg.get(b) + 1);
+  }
+  for (const rows of out.values())
+    rows.sort((x, y) => x.count - y.count || y.key.localeCompare(x.key));
+  const pending = new Map(indeg);
+  const stack = keys.filter(k => pending.get(k) === 0).sort((a, b) => b.localeCompare(a));
+  const order = [], placed = new Set();
+  while (stack.length) {
+    const a = stack.pop();
+    if (placed.has(a)) continue;
+    placed.add(a);
+    order.push(a);
+    for (const {key: b} of out.get(a)) {
+      pending.set(b, pending.get(b) - 1);
+      if (pending.get(b) === 0) stack.push(b);
+    }
+  }
+  for (const k of keys) if (!placed.has(k)) order.push(k);
+  return order;
+})();
 const BOUNDARY = (DATA.boundary || {}).library || "Mathlib";
 
 function topology(P) {
@@ -496,16 +553,19 @@ function render() {
      picture.  The depth layout keeps the older topological columns.         */
   /* Only libraries this selection actually reaches get a column; an unreached
      package would otherwise hold an empty band open across the whole canvas. */
-  const bandLayout = layoutSelect.value === "library";
+  const mode = layoutSelect.value;
+  const bandLayout = mode === "library" || mode === "foundation";
+  const keyOf = mode === "foundation" ? foundationOf : (n => n.library || "Other");
+  const universeOrder = mode === "foundation" ? foundationOrder : libraryOrder;
   const reached = new Set();
-  for (const n of P.nodes) if (!n.selectedHeadline) reached.add(n.library || "Other");
-  const activeLibraries = libraryOrder.filter(lib => reached.has(lib));
-  unreachedLibraries = libraryOrder.filter(
+  for (const n of P.nodes) if (!n.selectedHeadline) reached.add(keyOf(n));
+  const activeBands = universeOrder.filter(k => reached.has(k));
+  unreachedLibraries = mode === "foundation" ? [] : libraryOrder.filter(
     lib => enabledLibraries.has(lib) && !reached.has(lib));
-  const libraryColumn = new Map(activeLibraries.map((lib, i) => [lib, i]));
-  const headlineBand = activeLibraries.length;
+  const bandColumn = new Map(activeBands.map((k, i) => [k, i]));
+  const headlineBand = activeBands.length;
   const bandOf = n => bandLayout
-    ? (n.selectedHeadline ? headlineBand : (libraryColumn.get(n.library || "Other") ?? 0))
+    ? (n.selectedHeadline ? headlineBand : (bandColumn.get(keyOf(n)) ?? 0))
     : (depth.get(n.id) || 0);
   if (bandLayout) for (let d = 0; d <= headlineBand; d++) columns.set(d, []);
   for (const n of P.nodes) {
@@ -530,7 +590,8 @@ function render() {
   for (const [d, rows] of [...columns].sort((a, b) => a[0] - b[0])) {
     if (!rows.length) continue;
     const label = bandLayout
-      ? (d === headlineBand ? "Selected headline theorems" : activeLibraries[d])
+      ? (d === headlineBand ? "Selected headline theorems"
+         : (mode === "foundation" ? foundationLabel(activeBands[d]) : activeBands[d]))
       : `depth ${d}`;
     const head = el("text", {x: columnX(d), y: Y - 12, class: "band"});
     head.textContent = `${label} · ${rows.length}`;

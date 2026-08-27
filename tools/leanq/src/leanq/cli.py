@@ -550,6 +550,9 @@ def cmd_graph_html(args) -> int:
             targets=getattr(args, "target", None) or (),
             default_claims=list(getattr(args, "default_claim", None) or ()),
             boundary=getattr(args, "boundary", None) or "none",
+            foundations=(
+                Path(args.foundations) if getattr(args, "foundations", None) else None
+            ),
         )
     out = Path(args.out)
     write_graph_html(out, payload, title=args.title)
@@ -981,6 +984,14 @@ def build_parser() -> argparse.ArgumentParser:
             "include the Mathlib/Lean declarations the project depends on: not at all "
             "(default), for consumers in the headline dependency union, or for the whole "
             "project (very large)"
+        ),
+    )
+    p.add_argument(
+        "--foundations",
+        help=(
+            "CSV with `module` and `theory_id` columns grouping modules into the paper's "
+            "named mathematical foundations; labels are read from "
+            "formalization_basic_theories.csv beside it when present"
         ),
     )
     p.add_argument("--out", required=True, help="write the self-contained HTML here")
