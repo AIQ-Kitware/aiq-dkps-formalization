@@ -131,6 +131,16 @@ Consequence. Rescaling every dissimilarity by c > 0 rescales the CMDS configurat
 
 Evidence caveat. The Acharyya 2025 reading comes from a lossy PDF text extraction in which the fraction renders as "1m" with a separate 1 and m around a radical. It is consistent across both the population and sample definitions, but it should be confirmed against the published PDF before any statement is changed on the strength of it.
 
+The evidence caveat is now resolved, from inside the paper. Theorem 1's printed constant pins the normalisation without needing the PDF: it asserts P[|Bhat_ii' - B_ii'| < eps for all i,i'] >= 1 - 16 sum_i sum_j gamma_ij / (r m eps^2).
+
+Write D for the dissimilarity matrix and B = -(1/2) J (D o D) J for its doubly centred square. Since E||(Xbar_i)_j - (mu_i)_j||^2 = gamma_ij / r, the second moment that drives a Markov bound on the entries of Bhat - B is a constant times sum_i of the normalised squared deviation of Xbar_i, and the normalisation enters squared:
+  - with D = (1/sqrt m)||.||_F, D o D carries 1/m and the bound is sum_ij gamma_ij / (r m);
+  - with D = (1/m)||.||_F, D o D carries 1/m^2 and the bound is sum_ij gamma_ij / (r m^2);
+  - with D = ||.||_F, there is no factor and the bound is sum_ij gamma_ij / r.
+Only the first matches the printed denominator r m. So Acharyya 2025 uses 1/sqrt m, independently of how the fraction renders in the extraction, and the divergence across the four papers is real rather than an artifact of the transcription.
+
+This does not change what is formalized -- every library still uses Acharyya2024.responseDistEntry -- but it removes the reason to wait for the published PDF before recording the divergence as fact.
+
 ### `technical-assumptions-are-acharyya-1-and-2` — Quench's Theorem 1 says 'under technical assumptions'; those are Acharyya 2025's Assumptions 1 and 2
 
 **Kind:** `source_audit`

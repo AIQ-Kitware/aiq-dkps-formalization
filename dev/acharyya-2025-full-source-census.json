@@ -64,6 +64,11 @@
       "kind": "source_defect",
       "title": "Proposition 1's hypothesis constrains the ambient manifold, not the model selection",
       "detail": "Superseding the earlier riemannian-proposition entry, which read: The compact Riemannian-manifold/geodesic-distance sufficient condition for Assumptions 1 and 2 has no corresponding Acharyya2025 declaration.\n\nProposition 1 asserts that Assumptions 1 and 2 hold as soon as every generative model is associated with a vector on a d-dimensional compact Riemannian manifold in an ambient R^q whose pairwise geodesic distances are the population dissimilarities. The hypothesis is about the ambient space; the conclusion is about the placement of the models within it. Assumption 1 asks the doubly centred population matrix to have rank d and Assumption 2 asks its d-th eigenvalue to stay above a positive constant, and neither survives a degenerate placement.\n\nMachine-checked: associate every model with one and the same point. The population dissimilarities are then all zero -- and they are literally the pairwise geodesic distances of any compact geodesically convex set containing that point, a closed ball of the ambient space for instance -- so the hypothesis is met. eigenvalues_classicalMDSMatrix_const_eq_zero shows the doubly centred matrix vanishes identically, no_eigenvalue_floor_for_const_selection that no positive constant bounds its eigenvalues below at any stage, and rank_classicalMDSMatrix_const_eq_zero that its rank is zero rather than d. Both conclusions fail.\n\nThe proposition is stated in the source without proof. The missing clause is a spread condition on the selection: the models must fill the manifold well enough that the doubly centred matrix stays nondegenerate as n grows. The source gives no such condition, and no natural minimal one is derivable from what it does state, so this is recorded as a refutation with the obstruction named rather than as a repaired theorem."
+    },
+    "normalisation-pinned-by-theorem1-constant": {
+      "kind": "source_audit",
+      "title": "Theorem 1's constant pins the dissimilarity normalisation to 1/sqrt(m)",
+      "detail": "The evidence caveat is now resolved, from inside the paper. Theorem 1's printed constant pins the normalisation without needing the PDF: it asserts P[|Bhat_ii' - B_ii'| < eps for all i,i'] >= 1 - 16 sum_i sum_j gamma_ij / (r m eps^2).\n\nWrite D for the dissimilarity matrix and B = -(1/2) J (D o D) J for its doubly centred square. Since E||(Xbar_i)_j - (mu_i)_j||^2 = gamma_ij / r, the second moment that drives a Markov bound on the entries of Bhat - B is a constant times sum_i of the normalised squared deviation of Xbar_i, and the normalisation enters squared:\n  - with D = (1/sqrt m)||.||_F, D o D carries 1/m and the bound is sum_ij gamma_ij / (r m);\n  - with D = (1/m)||.||_F, D o D carries 1/m^2 and the bound is sum_ij gamma_ij / (r m^2);\n  - with D = ||.||_F, there is no factor and the bound is sum_ij gamma_ij / r.\nOnly the first matches the printed denominator r m. So Acharyya 2025 uses 1/sqrt m, independently of how the fraction renders in the extraction, and the divergence across the four papers is real rather than an artifact of the transcription.\n\nThis does not change what is formalized -- every library still uses Acharyya2024.responseDistEntry -- but it removes the reason to wait for the published PDF before recording the divergence as fact."
     }
   },
   "items": [
@@ -92,6 +97,7 @@
       ],
       "planned_declarations": [],
       "gap_refs": [
+        "normalisation-pinned-by-theorem1-constant",
         "t1-literal-finite-wrapper"
       ],
       "semantic_alignment": {

@@ -81,7 +81,7 @@ The event shape and response-to-CMDS concentration mechanism are compiled, inclu
 
 **Additional note:** The active response-to-CMDS bridge works entrywise directly and avoids the former n^2 Frobenius detour. Its constants are intentionally conservative.
 
-**Companion census gap refs:** `t1-literal-finite-wrapper`
+**Companion census gap refs:** `normalisation-pinned-by-theorem1-constant`, `t1-literal-finite-wrapper`
 
 **Next action:** Compose the finite probability step with the response-mean to doubly-centred-entry bound to reach the displayed constant.
 
