@@ -584,6 +584,8 @@
    "lean_declarations": [
     "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
     "Acharyya2024.ContinuousMDS.ContinuousMDS",
+    "Acharyya2024.ContinuousMDS.abs_sub_pointStress_le",
+    "Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le",
     "Acharyya2024.ContinuousMDS.continuousPointStress",
     "Acharyya2024.ContinuousMDS.continuous_continuousPointStress",
     "Acharyya2024.ContinuousMDS.estimatedEmbedding",
@@ -651,7 +653,7 @@
    "gap_refs": [
     "continuous-mds-lp"
    ],
-   "next_action": "Prove that the fixed-sample population embedding converges to the minimizer of continuousPointStress as the reference collection grows; that needs the empirical reference configuration to converge to the continuous-MDS map at the sampled models. Both sides of the identification are now defined with their defining properties proved."
+   "next_action": "Apply the strong law to the averaged one-point stress at each position of a countable dense set, lift to locally uniform convergence with abs_sub_pointStress_le, and move the minimizers by the argmin argument. Every ingredient is now present."
   },
   {
    "id": "A24-T4",
@@ -725,6 +727,8 @@
     "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
     "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile",
     "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
+    "Acharyya2024.ContinuousMDS.abs_sub_pointStress_le",
+    "Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le",
     "Acharyya2024.ContinuousMDS.continuousPointStress",
     "Acharyya2024.ContinuousMDS.continuous_continuousPointStress",
     "Acharyya2024.ContinuousMDS.estimatedEmbedding",
@@ -769,7 +773,7 @@
     "growing-query-rate-wiring",
     "growing-n-concentration"
    ],
-   "next_action": "Prove that the fixed-sample population embedding converges to the minimizer of continuousPointStress as the reference collection grows; that needs the empirical reference configuration to converge to the continuous-MDS map at the sampled models. Both sides of the identification are now defined with their defining properties proved."
+   "next_action": "Apply the strong law to the averaged one-point stress at each position of a countable dense set, lift to locally uniform convergence with abs_sub_pointStress_le, and move the minimizers by the argmin argument. Every ingredient is now present."
   },
   {
    "id": "A24-R4",

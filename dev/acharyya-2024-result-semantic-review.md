@@ -421,6 +421,8 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 **Selected Lean declarations:**
 - `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
 - `Acharyya2024.ContinuousMDS.ContinuousMDS`
+- `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`
+- `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`
 - `Acharyya2024.ContinuousMDS.continuousPointStress`
 - `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding`
@@ -464,7 +466,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Prove that the fixed-sample population embedding converges to the minimizer of continuousPointStress as the reference collection grows; that needs the empirical reference configuration to converge to the continuous-MDS map at the sampled models. Both sides of the identification are now defined with their defining properties proved.
+**Next action:** Apply the strong law to the averaged one-point stress at each position of a countable dense set, lift to locally uniform convergence with abs_sub_pointStress_le, and move the minimizers by the argmin argument. Every ingredient is now present.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -512,6 +514,8 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile`
 - `Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile`
 - `Acharyya2024.Consistency.lp_consistency_of_gamma_empirical`
+- `Acharyya2024.ContinuousMDS.abs_sub_pointStress_le`
+- `Acharyya2024.ContinuousMDS.abs_sub_pointStress_term_le`
 - `Acharyya2024.ContinuousMDS.continuousPointStress`
 - `Acharyya2024.ContinuousMDS.continuous_continuousPointStress`
 - `Acharyya2024.ContinuousMDS.estimatedEmbedding`
@@ -550,7 +554,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Prove that the fixed-sample population embedding converges to the minimizer of continuousPointStress as the reference collection grows; that needs the empirical reference configuration to converge to the continuous-MDS map at the sampled models. Both sides of the identification are now defined with their defining properties proved.
+**Next action:** Apply the strong law to the averaged one-point stress at each position of a countable dense set, lift to locally uniform convergence with abs_sub_pointStress_le, and move the minimizers by the argmin argument. Every ingredient is now present.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 

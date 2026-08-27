@@ -836,4 +836,65 @@ theorem exists_min_continuousPointStress {d : Nat} (P : Measure M) [IsProbabilit
     have := hcoer w hw
     linarith
 
+/-! ### Equi-Lipschitz bounds for the one-point stresses
+
+Pointwise convergence of objectives is not enough to move minimizers; locally uniform
+convergence is.  For these stresses the gap is closed by an equi-Lipschitz estimate: on any ball
+of positions, each summand is Lipschitz with a constant depending only on the ball and on the
+bound for the reference embedding and the dissimilarities, not on the sample.  Pointwise
+convergence on a countable dense set then upgrades to locally uniform convergence. -/
+
+/-- One summand of the one-point stress is Lipschitz in the position, with a constant depending
+only on the ball and the bounds. -/
+theorem abs_sub_pointStress_term_le {d : Nat} (zi : Rvec d) (ci : Real) (v w : Rvec d)
+    {R K : Real} (hv : ‖v‖ ≤ R) (hw : ‖w‖ ≤ R) (hz : ‖zi‖ ≤ K) (hc : |ci| ≤ K) :
+    |(‖v - zi‖ - ci) ^ 2 - (‖w - zi‖ - ci) ^ 2| ≤ 2 * (R + 2 * K) * ‖v - w‖ := by
+  have hK : 0 ≤ K := le_trans (abs_nonneg _) hc
+  have hR : 0 ≤ R := le_trans (norm_nonneg _) hv
+  set a : Real := ‖v - zi‖ - ci with ha
+  set b : Real := ‖w - zi‖ - ci with hb
+  have hdiff : |a - b| ≤ ‖v - w‖ := by
+    have h1 : a - b = ‖v - zi‖ - ‖w - zi‖ := by rw [ha, hb]; ring
+    rw [h1]
+    have h2 : |‖v - zi‖ - ‖w - zi‖| ≤ ‖(v - zi) - (w - zi)‖ := abs_norm_sub_norm_le _ _
+    have h3 : (v - zi) - (w - zi) = v - w := by abel
+    rwa [h3] at h2
+  have habs : ∀ u : Rvec d, ‖u‖ ≤ R → |‖u - zi‖ - ci| ≤ R + 2 * K := by
+    intro u hu
+    have h1 : ‖u - zi‖ ≤ R + K := le_trans (norm_sub_le _ _) (by linarith)
+    have h2 := abs_le.mp hc
+    have hnn : 0 ≤ ‖u - zi‖ := norm_nonneg _
+    rw [abs_le]; constructor <;> linarith
+  have hsum : |a + b| ≤ 2 * (R + 2 * K) := by
+    have h1 := habs v hv
+    have h2 := habs w hw
+    calc |a + b| ≤ |a| + |b| := abs_add_le _ _
+      _ ≤ (R + 2 * K) + (R + 2 * K) := add_le_add h1 h2
+      _ = 2 * (R + 2 * K) := by ring
+  have hfac : a ^ 2 - b ^ 2 = (a - b) * (a + b) := by ring
+  rw [hfac, abs_mul]
+  have hnn : (0 : Real) ≤ ‖v - w‖ := norm_nonneg _
+  have hnn2 : (0 : Real) ≤ 2 * (R + 2 * K) := by linarith
+  calc |a - b| * |a + b| ≤ ‖v - w‖ * (2 * (R + 2 * K)) :=
+        mul_le_mul hdiff hsum (abs_nonneg _) hnn
+    _ = 2 * (R + 2 * K) * ‖v - w‖ := by ring
+
+/-- The averaged one-point stress is Lipschitz on any ball, with a constant independent of the
+sample size. -/
+theorem abs_sub_pointStress_le {n d : Nat} (z : Config n d) (c : Fin n → Real)
+    (v w : Rvec d) {R K : Real} (hv : ‖v‖ ≤ R) (hw : ‖w‖ ≤ R)
+    (hz : ∀ i, ‖z i‖ ≤ K) (hc : ∀ i, |c i| ≤ K) :
+    |pointStress z c v - pointStress z c w| ≤ (n : Real) * (2 * (R + 2 * K)) * ‖v - w‖ := by
+  unfold pointStress
+  rw [← Finset.sum_sub_distrib]
+  calc |∑ i, ((‖v - z i‖ - c i) ^ 2 - (‖w - z i‖ - c i) ^ 2)|
+      ≤ ∑ i, |(‖v - z i‖ - c i) ^ 2 - (‖w - z i‖ - c i) ^ 2| :=
+        Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ _i : Fin n, 2 * (R + 2 * K) * ‖v - w‖ :=
+        Finset.sum_le_sum fun i _ =>
+          abs_sub_pointStress_term_le (z i) (c i) v w hv hw (hz i) (hc i)
+    _ = (n : Real) * (2 * (R + 2 * K)) * ‖v - w‖ := by
+        rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
+        ring
+
 end Acharyya2024.ContinuousMDS
