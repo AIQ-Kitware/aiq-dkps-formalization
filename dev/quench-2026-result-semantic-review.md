@@ -17,6 +17,7 @@ Companion coverage census: `dev/quench-2026-full-source-census.json`.
 | `GAP stronger analytic hypotheses` | 2 |
 | `PASS equivalent encoding` | 1 |
 | `PASS exact` | 1 |
+| `PROOF ROLE REPLACED` | 1 |
 | `REPAIR source mismatch` | 3 |
 | `SUPPLEMENTARY Lean extension` | 3 |
 
@@ -27,6 +28,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | id | source anchor | verdict |
 | --- | --- | --- |
 | `Q26-T1` | Theorem 1 (inherited Acharyya et al. 2025 Theorem 2) | REPAIR source mismatch |
+| `Q26-EQ1` | Equation (1), DKPS definition | PROOF ROLE REPLACED |
 | `Q26-QDEF` | Equation (2) and query-efficiency definitions | PASS exact |
 | `Q26-NN` | Displayed nearest-neighbor estimator | REPAIR source mismatch |
 | `Q26-A1` | Assumption 1 (Lipschitz Score Function) | PASS equivalent encoding |
@@ -81,7 +83,35 @@ Quench uses the current Acharyya Frobenius concentration theorem plus the rowwis
 
 **Companion census gap refs:** `inherited-acharyya-v1-norm`
 
-### 2. `Q26-QDEF` — Equation (2) and query-efficiency definitions: Q-, m-, and all-budget query efficiency
+### 2. `Q26-EQ1` — Equation (1), DKPS definition: DKPS perspectives are a raw-stress minimizer
+
+**Verdict:** PROOF ROLE REPLACED
+
+**Source:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:64-70`
+
+**Normalized paper statement:** The d-dimensional DKPS representations are a solution to argmin over z of the sum of (||z_i - z_j|| - D_{ii'})^2.
+
+**Selected Lean declarations:**
+- `Acharyya2024.rawStress`
+- `Acharyya2024.MDS`
+- `Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist`
+
+**Clause-by-clause comparison:**
+
+| paper clause | Lean clause | relation | assessment |
+| --- | --- | --- | --- |
+| The perspectives are a minimizer of the raw stress sum over (\|\|z_i - z_j\|\| - D_{ii'})^2. | Acharyya2024.rawStress defines that objective and Acharyya2024.MDS its minimizer set, but no Quench module references either. | `proof_role_replaced` | The Eq. (1) estimator is formalized; it is simply not the one Quench uses. |
+| Theorem 1 bounds max_i \|\|psi-hat_i - psi_i\|\| for these perspectives. | The imported Acharyya 2025 bound and the whole Quench chain use the classical-MDS perspectives of the response distance matrix. | `different_quantifier_encoding` | The source does not establish that a raw-stress minimizer satisfies the classical-MDS bound, so the two readings are not interchangeable. |
+
+**Semantic review:**
+
+Equation (1) defines DKPS by raw stress while every result the paper proves about psi-hat comes from a classical-MDS concentration theorem. The formalization follows the classical-MDS reading because that is what Theorem 2's proof consumes, and the divergence is recorded rather than assumed away.
+
+**Companion census gap refs:** `dkps-definition-raw-stress-vs-cmds`
+
+**Next action:** None; recorded as a source-fidelity divergence.
+
+### 3. `Q26-QDEF` — Equation (2) and query-efficiency definitions: Q-, m-, and all-budget query efficiency
 
 **Verdict:** PASS exact
 
@@ -109,7 +139,7 @@ Quench uses the current Acharyya Frobenius concentration theorem plus the rowwis
 
 The deterministic source predicates and their high-probability analogues are explicit. The all-subset lift preserves the source quantifier order.
 
-### 3. `Q26-NN` — Displayed nearest-neighbor estimator: Tie-averaged nearest-neighbor score estimator
+### 4. `Q26-NN` — Displayed nearest-neighbor estimator: Tie-averaged nearest-neighbor score estimator
 
 **Verdict:** REPAIR source mismatch
 
@@ -136,7 +166,7 @@ The preferred formal estimator is the literal displayed tie average. A separate 
 
 **Companion census gap refs:** `tie-display-proof-mismatch`
 
-### 4. `Q26-A1` — Assumption 1 (Lipschitz Score Function): Benchmark score is Lipschitz in population perspective distance
+### 5. `Q26-A1` — Assumption 1 (Lipschitz Score Function): Benchmark score is Lipschitz in population perspective distance
 
 **Verdict:** PASS equivalent encoding
 
@@ -159,7 +189,7 @@ The preferred formal estimator is the literal displayed tie average. A separate 
 
 Lean stores the displayed Lipschitz inequality and can replace any valid constant by max(gamma,1), so public certificates do not require a redundant positivity proof for the supplied witness.
 
-### 5. `Q26-A2` — Assumption 2 (Model Distribution Support): Positive probability of every target-centered neighborhood
+### 6. `Q26-A2` — Assumption 2 (Model Distribution Support): Positive probability of every target-centered neighborhood
 
 **Verdict:** REPAIR source mismatch
 
@@ -189,7 +219,7 @@ Lean formalizes the ball-support property actually consumed by the proof. Compac
 
 **Companion census gap refs:** `support-wording-repair`
 
-### 6. `Q26-T2A` — Theorem 2, small-MSE conclusion: Nearest-neighbor MSE can be made arbitrarily small with high probability
+### 7. `Q26-T2A` — Theorem 2, small-MSE conclusion: Nearest-neighbor MSE can be made arbitrarily small with high probability
 
 **Verdict:** GAP stronger analytic hypotheses
 
@@ -198,6 +228,8 @@ Lean formalizes the ball-support property actually consumed by the proof. Compac
 **Normalized paper statement:** For every epsilon>0 there are sufficiently large sampling/model budgets for which MSE(yhat_NN)<=epsilon with high probability.
 
 **Selected Lean declarations:**
+- `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`
+- `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`
 - `highProb_mse_nn_le`
 - `highProb_mse_nn_le_of_subevent`
 - `highProb_mse_tieAverage_of_subevents`
@@ -210,16 +242,19 @@ Lean formalizes the ball-support property actually consumed by the proof. Compac
 | For every epsilon>0 there exists a budget triple (n,m,r) with MSE(yHat_NN)<=epsilon with high probability. | highProb_mse_nn_le fixes Qsub and abstracts m,r into the stage-indexed estimator/rate; for every epsilon and confidence delta it produces an n with probability >=1-delta. | `different_quantifier_encoding` |  |
 | Assumption 1 supplies score smoothness. | The theorem takes the fixed-Qsub Lipschitz inequality and gamma>0. | `exact` |  |
 | Assumption 2 supplies nearby reference models. | The theorem takes high-probability uniform coverage; compact-iid-fullSupport wrappers derive it from the repaired support assumption. | `derived_by_composition` |  |
-| Theorem 1 supplies representation error c(n,m,r,d)->0. | The abstract theorem takes a nonnegative c n ->0 and a high-probability uniform concentration event; spectral/raw-response capstones discharge it. | `derived_by_composition` |  |
+| Theorem 1 supplies representation error c(n,m,r,d)->0. | infiniteFixedSubsetMSE and finiteFixedSubsetMSE derive the concentration from iid raw responses through the CMDS/Davis--Kahan perturbation chain; only the conditional intermediates take it as a premise. | `derived_by_composition` | The derivation is at a replicate schedule stronger than the source r = omega(n^3). |
 | The paper proof moves from a pointwise target error bound to MSE. | Lean explicitly requires measurable concentration/coverage events and proves a uniform-in-target bound before integrating. | `lean_stronger_hypothesis` | These are formal analytic obligations omitted from the prose proof, not extra statistical content. |
+| The theorem is stated for the DKPS perspectives of Eq. (1). | The estimator uses the classical-MDS perspectives, matching the Theorem 1 bound the proof consumes rather than the raw-stress definition. | `proof_role_replaced` | Recorded as gap dkps-definition-raw-stress-vs-cmds; see Q26-EQ1. |
 
 **Semantic review:**
 
-The abstract paper-facing theorem and the literal tie-average theorem are compiled. The stronger interfaces expose measurable high-probability subevents and eventual stage schedules instead of an informal existential budget triple.
+The printed conclusion is proved end to end by infiniteFixedSubsetMSE and finiteFixedSubsetMSE for the literal tie-averaged estimator built from raw cached responses, with the representation concentration derived rather than assumed. The verdict remains GAP because the derivation needs a population nondegeneracy floor and a replicate schedule above the source rate, and because the perspectives are classical MDS rather than the Eq. (1) raw-stress minimizer.
 
-**Companion census gap refs:** `tie-display-proof-mismatch`
+**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `tie-display-proof-mismatch`
 
-### 7. `Q26-T2B` — Theorem 2, query-efficiency conclusion: Eventual high-probability improvement over subset-score baseline
+**Next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
+
+### 8. `Q26-T2B` — Theorem 2, query-efficiency conclusion: Eventual high-probability improvement over subset-score baseline
 
 **Verdict:** GAP stronger analytic hypotheses
 
@@ -228,6 +263,10 @@ The abstract paper-facing theorem and the literal tie-average theorem are compil
 **Normalized paper statement:** When m<M and the subset-score baseline has positive MSE, nearest-neighbor DKPS prediction is query-efficient with high probability.
 
 **Selected Lean declarations:**
+- `DkpsQuench2026.QueryEfficiency.infiniteAllQueries`
+- `DkpsQuench2026.QueryEfficiency.finiteAllQueries`
+- `DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`
+- `DkpsQuench2026.QueryEfficiency.finiteFixedSubset`
 - `highProb_queryEfficient_nn`
 - `highProb_queryEfficient_nn_of_subevent`
 - `highProbQQueryEfficient_tieAverage_of_subevents`
@@ -242,25 +281,31 @@ The abstract paper-facing theorem and the literal tie-average theorem are compil
 | The prose proof leaves measurability and the uniform-target step implicit when passing from pointwise NN error to MSE/risk. | The source-facing Lean theorem requires measurable high-probability concentration/coverage events (or a measurable subevent certificate) before integration. | `lean_stronger_hypothesis` | These are explicit analytic premises not stated in the paper theorem. |
 | The source also assumes m<M. | The strongest fixed-subset Lean theorem drops m<M because the proof never uses it; all-subset wrappers reintroduce the source budget quantification where appropriate. | `lean_weaker_hypothesis` |  |
 | The source theorem is initially existential in one budget triple. | Lean also proves eventual fixed-subset, m-query, and all-budget high-probability predicates with the source quantifier order. | `lean_stronger_conclusion` |  |
+| Query efficiency is claimed for all m < M, not only for one fixed subset. | infiniteAllQueries and finiteAllQueries conclude HighProbQueryEfficient, which quantifies over every budget below the benchmark cardinality and every subset of that size. | `exact` |  |
 
 **Semantic review:**
 
-Lean retains the mathematically necessary positive baseline-MSE premise, proves the fixed-subset result, and lifts it to every proper subset/budget with the source quantifier order.
+The printed conclusion is proved at the paper's full quantifier level by infiniteAllQueries and finiteAllQueries for the raw-response estimator, with the representation concentration derived rather than assumed. The verdict remains GAP for the same hypothesis excess recorded on Q26-T2A.
 
 **Additional note:** The formal proof supplies the missing uniform-target/measurability step before integrating pointwise squared error to MSE.
 
-### 8. `Q26-RAW-FIN` — Finite-model raw-response capstone: End-to-end finite raw-response query efficiency
+**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
+
+**Next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
+
+### 9. `Q26-RAW-FIN` — Finite-model raw-response capstone: End-to-end finite raw-response query efficiency
 
 **Verdict:** SUPPLEMENTARY Lean extension
 
 **Source:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:163-236`
 
-**Normalized paper statement:** A constructive finite-model strengthening that starts from raw cached-response sampling assumptions and proves the paper query-efficiency conclusion.
+**Normalized paper statement:** Theorem 2 at the finite model-class scope: the paper's proof derives the representation error from Theorem 1, so discharging it is inside the printed argument rather than beyond it.
 
 **Selected Lean declarations:**
 - `DkpsQuench2026.QueryEfficiency.FiniteSubsetData`
 - `DkpsQuench2026.QueryEfficiency.FiniteSubsetAssumptions`
 - `DkpsQuench2026.QueryEfficiency.finiteFixedSubset`
+- `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`
 - `DkpsQuench2026.QueryEfficiency.finiteAllQueries`
 
 **Clause-by-clause comparison:**
@@ -271,22 +316,25 @@ Lean retains the mathematically necessary positive baseline-MSE premise, proves 
 
 **Semantic review:**
 
-This goes beyond the printed theorem by discharging representation concentration from raw finite response data with explicit schedules and a separated reference/response probability model.
+The finite realization of Theorem 2. This row previously read as an extension beyond the paper theorem surface, which inverted the layering: the paper's proof of Theorem 2 derives its representation error from Theorem 1, so discharging that premise is inside the printed argument. What genuinely exceeds the source is the explicit sampling and regularity interface and the replicate schedule.
 
-**Companion census gap refs:** `raw-response-explicit-assumptions`
+**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
 
-### 9. `Q26-RAW-INF` — Compact-infinite raw-response capstone: End-to-end compact-infinite query efficiency
+**Next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
+
+### 10. `Q26-RAW-INF` — Compact-infinite raw-response capstone: End-to-end compact-infinite query efficiency
 
 **Verdict:** SUPPLEMENTARY Lean extension
 
 **Source:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:163-236`
 
-**Normalized paper statement:** A constructive compact-infinite strengthening using pathwise regularity and finite covers.
+**Normalized paper statement:** Theorem 2 at the compact-infinite model-class scope: the paper's proof derives the representation error from Theorem 1, so discharging it is inside the printed argument rather than beyond it.
 
 **Selected Lean declarations:**
 - `DkpsQuench2026.QueryEfficiency.InfiniteSubsetData`
 - `DkpsQuench2026.QueryEfficiency.InfiniteSubsetAssumptions`
 - `DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`
+- `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`
 - `DkpsQuench2026.QueryEfficiency.infiniteAllQueries`
 
 **Clause-by-clause comparison:**
@@ -297,11 +345,13 @@ This goes beyond the printed theorem by discharging representation concentration
 
 **Semantic review:**
 
-The paper does not specify how uniform control over an infinite model population is obtained. Lean supplies an explicit compact/entropy-net theorem rather than hiding this scope issue.
+The compact-infinite realization of Theorem 2. This row previously read as an extension beyond the paper theorem surface, which inverted the layering: the paper's proof of Theorem 2 derives its representation error from Theorem 1, so discharging that premise is inside the printed argument. What genuinely exceeds the source is the explicit sampling and regularity interface and the replicate schedule.
 
-**Companion census gap refs:** `raw-response-explicit-assumptions`
+**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
 
-### 10. `Q26-OLS` — OLS/ensemble empirical prediction methods: Theory-practice OLS bridge
+**Next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
+
+### 11. `Q26-OLS` — OLS/ensemble empirical prediction methods: Theory-practice OLS bridge
 
 **Verdict:** SUPPLEMENTARY Lean extension
 

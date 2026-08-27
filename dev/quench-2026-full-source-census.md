@@ -6,17 +6,19 @@ Hayden Helm, Ben Johnson, Carey E. Priebe, Query-efficient model evaluation usin
 
 **Source version:** Retained ICML/non-anonymous transcription and source TeX.
 
-**Audit revision:** 2026-08-26 working tree after YWS population-gap/alignment propagation, hypothesis reduction, and Term-2 constant sharpening; based on repository snapshot 8895692fef63 plus the accepted local overlays.
+**Audit revision:** 2026-08-26 working tree; Theorem 2 rows repointed at the end-to-end raw-response capstones after adding the MSE capstones infiniteFixedSubsetMSE / finiteFixedSubsetMSE, and Eq. (1) given its own row.
 
-The inherited concentration theorem, query-efficiency definitions, nearest-neighbor estimator, Assumptions 1--2, Theorem 2, and the formal strengthenings that clarify the paper theorem scope. Empirical result claims are not theorem obligations; the OLS bridge is tracked as an extension.
+The inherited concentration theorem, the DKPS definition, query-efficiency definitions, the nearest-neighbor estimator, Assumptions 1--2, and Theorem 2 including the raw-response realizations that discharge its representation-error premise. Empirical result claims are not theorem obligations; the OLS bridge is tracked as an extension.
 
 ## Status summary
 
 | status | items |
 | --- | ---: |
 | `compiled_exact` | 1 |
-| `compiled_generalized` | 5 |
+| `compiled_generalized` | 1 |
+| `compiled_stronger_hypotheses` | 4 |
 | `compiled_source_repair` | 3 |
+| `compiled_role_replaced` | 1 |
 | `not_proof_debt` | 1 |
 
 ## Semantic-alignment summary
@@ -24,8 +26,10 @@ The inherited concentration theorem, query-efficiency definitions, nearest-neigh
 | classification | items |
 | --- | ---: |
 | `exact` | 1 |
-| `generalized` | 5 |
+| `generalized` | 1 |
+| `stronger_hypotheses` | 4 |
 | `source_repair` | 3 |
+| `proof_replaced` | 1 |
 | `out_of_scope` | 1 |
 
 ## Items
@@ -33,14 +37,15 @@ The inherited concentration theorem, query-efficiency definitions, nearest-neigh
 | id | importance | source anchor | status | alignment | verification |
 | --- | --- | --- | --- | --- | --- |
 | `Q26-T1` | `major` | Theorem 1 (inherited Acharyya et al. 2025 Theorem 2) | `compiled_source_repair` | `source_repair` | `proved_in_build` |
+| `Q26-EQ1` | `major` | Equation (1), DKPS definition | `compiled_role_replaced` | `proof_replaced` | `proved_in_build` |
 | `Q26-QDEF` | `major` | Equation (2) and query-efficiency definitions | `compiled_exact` | `exact` | `proved_in_build` |
 | `Q26-NN` | `headline` | Displayed nearest-neighbor estimator | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `Q26-A1` | `major` | Assumption 1 (Lipschitz Score Function) | `compiled_generalized` | `generalized` | `proved_in_build` |
 | `Q26-A2` | `headline` | Assumption 2 (Model Distribution Support) | `compiled_source_repair` | `source_repair` | `proved_in_build` |
-| `Q26-T2A` | `headline` | Theorem 2, small-MSE conclusion | `compiled_generalized` | `generalized` | `proved_in_build` |
-| `Q26-T2B` | `headline` | Theorem 2, query-efficiency conclusion | `compiled_generalized` | `generalized` | `proved_in_build` |
-| `Q26-RAW-FIN` | `major` | Finite-model raw-response capstone | `compiled_generalized` | `generalized` | `proved_in_build` |
-| `Q26-RAW-INF` | `major` | Compact-infinite raw-response capstone | `compiled_generalized` | `generalized` | `proved_in_build` |
+| `Q26-T2A` | `headline` | Theorem 2, small-MSE conclusion | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `Q26-T2B` | `headline` | Theorem 2, query-efficiency conclusion | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `Q26-RAW-FIN` | `major` | Finite-model raw-response capstone | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
+| `Q26-RAW-INF` | `major` | Compact-infinite raw-response capstone | `compiled_stronger_hypotheses` | `stronger_hypotheses` | `proved_in_build` |
 | `Q26-OLS` | `supporting` | OLS/ensemble empirical prediction methods | `not_proof_debt` | `out_of_scope` | `not_applicable` |
 
 ## Gaps and source repairs
@@ -75,6 +80,18 @@ The paper imports a representation concentration theorem and leaves reference/re
 
 The paper proves nearest-neighbor query efficiency but evaluates OLS/ensembles empirically. The formal OLS namespace records additional assumptions sufficient for theory-practice bridges; these are extensions, not missing pieces of Theorem 2.
 
+### `replicate-schedule-exceeds-source-rate` — Formal replicate schedule is far stronger than the source rate
+
+**Kind:** `source_audit`
+
+Theorem 1 needs only r = omega(n^3). The end-to-end capstones fix safeEntropyReplicates (2d) n = (n+1)^(6+2d), which is a strictly stronger sampling requirement. The exponent is an artifact of the union bound over the perspective net used to make the response concentration uniform in the target, not of the source argument.
+
+### `dkps-definition-raw-stress-vs-cmds` — Eq. (1) defines DKPS by raw stress; the cited concentration theorem is classical MDS
+
+**Kind:** `source_audit`
+
+Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, while Theorem 1 imports an Acharyya 2025 classical-MDS concentration bound and the proof of Theorem 2 uses that bound for the same psi-hat. The two estimators are not known to agree. The formalization follows the classical-MDS reading, which is the one Theorem 2's proof actually needs; Acharyya2024.rawStress carries the Eq. (1) estimator and is not connected to the Quench chain.
+
 ## Detail
 
 ### `Q26-T1` — Inherited DKPS embedding concentration
@@ -89,6 +106,19 @@ The paper proves nearest-neighbor query efficiency but evaluates OLS/ensembles e
 * **gap refs:** `inherited-acharyya-v1-norm`
 * **notes:** The current bridge no longer carries hsmall, hpolar, or a redundant finite-stage vanishing-rate premise.
 * **next action:** None.
+
+### `Q26-EQ1` — DKPS perspectives are a raw-stress minimizer
+
+* **source anchor:** Equation (1), DKPS definition (definition, section 2)
+* **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:64-70`
+* **importance:** `major`
+* **status / verification:** `compiled_role_replaced` / `proved_in_build`
+* **semantic alignment:** `proof_replaced` — The printed definition is a raw-stress minimizer, formalized as Acharyya2024.rawStress with its minimizer set Acharyya2024.MDS. Every Quench theorem instead uses the classical-MDS perspectives, because the Theorem 1 bound that the Theorem 2 proof consumes is a classical-MDS result. The source does not establish that the two agree, so the divergence is recorded rather than assumed away.
+* **source claim:** The d-dimensional DKPS representations are a solution to argmin over z of the sum of (||z_i - z_j|| - D_{ii'})^2.
+* **Lean declarations:** `Acharyya2024.rawStress`, `Acharyya2024.MDS`, `Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist`
+* **gap refs:** `dkps-definition-raw-stress-vs-cmds`
+* **notes:** No Quench module references rawStress; the connection is a source-level open question, not a Lean gap.
+* **next action:** None; recorded as a source-fidelity divergence.
 
 ### `Q26-QDEF` — Q-, m-, and all-budget query efficiency
 
@@ -145,51 +175,52 @@ The paper proves nearest-neighbor query efficiency but evaluates OLS/ensembles e
 * **source anchor:** Theorem 2, small-MSE conclusion (theorem, section 3)
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:163-171`
 * **importance:** `headline`
-* **status / verification:** `compiled_generalized` / `proved_in_build`
-* **semantic alignment:** `generalized` — The abstract paper-facing theorem and the literal tie-average theorem are compiled. The stronger interfaces expose measurable high-probability subevents and eventual stage schedules instead of an informal existential budget triple.
+* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
+* **semantic alignment:** `stronger_hypotheses` — infiniteFixedSubsetMSE and finiteFixedSubsetMSE prove the printed conclusion end to end for the literal tie-averaged estimator built from raw cached responses: the representation concentration is derived through the CMDS/Davis--Kahan chain rather than assumed. They are stronger than the source only in hypotheses -- an explicit population nondegeneracy floor and a replicate schedule above the source rate. The remaining rows are the conditional intermediates that take the concentration event as a premise.
 * **source claim:** For every epsilon>0 there are sufficiently large sampling/model budgets for which MSE(yhat_NN)<=epsilon with high probability.
-* **Lean declarations:** `highProb_mse_nn_le`, `highProb_mse_nn_le_of_subevent`, `highProb_mse_tieAverage_of_subevents`, `highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport`
-* **gap refs:** `tie-display-proof-mismatch`
-* **notes:** No additional note.
-* **next action:** None.
+* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`, `highProb_mse_nn_le`, `highProb_mse_nn_le_of_subevent`, `highProb_mse_tieAverage_of_subevents`, `highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `tie-display-proof-mismatch`
+* **notes:** The end-to-end declarations are the canonical realization; the conditional forms remain listed because they are the reusable interfaces the capstones factor through.
+* **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 
 ### `Q26-T2B` — Eventual high-probability improvement over subset-score baseline
 
 * **source anchor:** Theorem 2, query-efficiency conclusion (theorem, section 3)
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:165-236`
 * **importance:** `headline`
-* **status / verification:** `compiled_generalized` / `proved_in_build`
-* **semantic alignment:** `generalized` — Lean retains the mathematically necessary positive baseline-MSE premise, proves the fixed-subset result, and lifts it to every proper subset/budget with the source quantifier order.
+* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
+* **semantic alignment:** `stronger_hypotheses` — infiniteAllQueries and finiteAllQueries conclude HighProbQueryEfficient, the paper's full predicate quantified over every budget below the benchmark cardinality, for the raw-response estimator with concentration derived rather than assumed. The fixed-subset capstones are the Q-level statement they quantify. The excess over the source is in hypotheses only, as recorded in the referenced gaps.
 * **source claim:** When m<M and the subset-score baseline has positive MSE, nearest-neighbor DKPS prediction is query-efficient with high probability.
-* **Lean declarations:** `highProb_queryEfficient_nn`, `highProb_queryEfficient_nn_of_subevent`, `highProbQQueryEfficient_tieAverage_of_subevents`, `highProbMQueryEfficient_tieAverage_of_certificates`, `highProbQueryEfficient_tieAverage_of_certificates`
-* **notes:** The formal proof supplies the missing uniform-target/measurability step before integrating pointwise squared error to MSE.
-* **next action:** None.
+* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.infiniteAllQueries`, `DkpsQuench2026.QueryEfficiency.finiteAllQueries`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubset`, `highProb_queryEfficient_nn`, `highProb_queryEfficient_nn_of_subevent`, `highProbQQueryEfficient_tieAverage_of_subevents`, `highProbMQueryEfficient_tieAverage_of_certificates`, `highProbQueryEfficient_tieAverage_of_certificates`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
+* **notes:** The end-to-end declarations are the canonical realization; the certificate and subevent forms remain listed as the reusable interfaces they factor through.
+* **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 
 ### `Q26-RAW-FIN` — End-to-end finite raw-response query efficiency
 
-* **source anchor:** Finite-model raw-response capstone (extension, section extension)
+* **source anchor:** Finite-model raw-response capstone (theorem, section 3)
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:163-236`
 * **importance:** `major`
-* **status / verification:** `compiled_generalized` / `proved_in_build`
-* **semantic alignment:** `generalized` — This goes beyond the printed theorem by discharging representation concentration from raw finite response data with explicit schedules and a separated reference/response probability model.
-* **source claim:** A constructive finite-model strengthening that starts from raw cached-response sampling assumptions and proves the paper query-efficiency conclusion.
-* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.FiniteSubsetData`, `DkpsQuench2026.QueryEfficiency.FiniteSubsetAssumptions`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubset`, `DkpsQuench2026.QueryEfficiency.finiteAllQueries`
-* **gap refs:** `raw-response-explicit-assumptions`
+* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
+* **semantic alignment:** `stronger_hypotheses` — The finite realization of Theorem 2. Previously classified as an extension beyond the paper theorem surface, which inverted the layering: the conditional forms assume what the paper proves, and these discharge it. The excess over the source is the explicit sampling/regularity interface and the replicate schedule.
+* **source claim:** Theorem 2 at the finite model-class scope: the paper's proof derives the representation error from Theorem 1, so discharging it is inside the printed argument rather than beyond it.
+* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.FiniteSubsetData`, `DkpsQuench2026.QueryEfficiency.FiniteSubsetAssumptions`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubset`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.finiteAllQueries`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
 * **notes:** No additional note.
-* **next action:** None.
+* **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 
 ### `Q26-RAW-INF` — End-to-end compact-infinite query efficiency
 
-* **source anchor:** Compact-infinite raw-response capstone (extension, section extension)
+* **source anchor:** Compact-infinite raw-response capstone (theorem, section 3)
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:163-236`
 * **importance:** `major`
-* **status / verification:** `compiled_generalized` / `proved_in_build`
-* **semantic alignment:** `generalized` — The paper does not specify how uniform control over an infinite model population is obtained. Lean supplies an explicit compact/entropy-net theorem rather than hiding this scope issue.
-* **source claim:** A constructive compact-infinite strengthening using pathwise regularity and finite covers.
-* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.InfiniteSubsetData`, `DkpsQuench2026.QueryEfficiency.InfiniteSubsetAssumptions`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`, `DkpsQuench2026.QueryEfficiency.infiniteAllQueries`
-* **gap refs:** `raw-response-explicit-assumptions`
+* **status / verification:** `compiled_stronger_hypotheses` / `proved_in_build`
+* **semantic alignment:** `stronger_hypotheses` — The compact-infinite realization of Theorem 2. Previously classified as an extension beyond the paper theorem surface, which inverted the layering: the conditional forms assume what the paper proves, and these discharge it. The excess over the source is the explicit sampling/regularity interface and the replicate schedule.
+* **source claim:** Theorem 2 at the compact-infinite model-class scope: the paper's proof derives the representation error from Theorem 1, so discharging it is inside the printed argument rather than beyond it.
+* **Lean declarations:** `DkpsQuench2026.QueryEfficiency.InfiniteSubsetData`, `DkpsQuench2026.QueryEfficiency.InfiniteSubsetAssumptions`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.infiniteAllQueries`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
 * **notes:** No additional note.
-* **next action:** None.
+* **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 
 ### `Q26-OLS` — Theory-practice OLS bridge
 
