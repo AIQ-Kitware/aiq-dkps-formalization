@@ -5,6 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Geometry.Halmos.GenericReconstruction
 import ForTauCeti.Analysis.InnerProductSpace.CompactSelfAdjointClassification
+import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
 
 /-!
 # Davis--Kahan 1970, Corollary 3.1: the compact case
@@ -45,6 +46,59 @@ open Module.End (eigenspace)
 universe u v
 
 variable {𝕜 : Type*} [RCLike 𝕜]
+
+/-! ## The angle eigenvalue list -/
+
+/-- Ordered eigenvalue data for a compact positive contraction: the
+approximation-number sequence of `A`.
+
+For a compact **positive** operator this is exactly the ordered eigenvalue list
+*with multiplicity* -- `aₙ(A)` is the `n`-th largest singular value, and singular
+values coincide with eigenvalues when the operator is positive, so a repeated
+eigenvalue is repeated in the sequence.
+
+The list is `ℝ`-valued over every scalar field, because the eigenvalues of a
+compact positive self-adjoint operator are real.
+
+Note the definition is total: it is stated for every `A`, and only *means* the
+angle eigenvalue list under the compactness and positivity hypotheses that the
+consumers carry.  This mirrors `approximationNumber` itself, which is total in
+the same way. -/
+noncomputable def compactAngleEigenvalueList
+    {K : Type*} [NormedAddCommGroup K] [InnerProductSpace 𝕜 K]
+    [CompleteSpace K] (A : K →L[𝕜] K) : ℕ → ℝ :=
+  fun n => A.approximationNumber n
+
+/-- **Approximation numbers are a unitary invariant.**  Conjugating by a linear isometric
+equivalence sandwiches the operator between two contractions in both directions, so no
+approximation number can move. -/
+theorem approximationNumber_eq_of_boundedOperatorsUnitaryEquivalent
+    {E F : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    {A : E →L[𝕜] E} {B : F →L[𝕜] F}
+    (h : BoundedOperatorsUnitaryEquivalent A B) (n : ℕ) :
+    A.approximationNumber n = B.approximationNumber n := by
+  obtain ⟨U, hU⟩ := h
+  have hUapp : ∀ x, B (U x) = U (A x) := fun x => (hU x).symm
+  have hUnorm : ‖(U : E →L[𝕜] F)‖ ≤ 1 :=
+    U.toLinearIsometry.norm_toContinuousLinearMap_le
+  have hUsnorm : ‖(U.symm : F →L[𝕜] E)‖ ≤ 1 :=
+    U.symm.toLinearIsometry.norm_toContinuousLinearMap_le
+  have hBfact : B = (U : E →L[𝕜] F) ∘L A ∘L (U.symm : F →L[𝕜] E) := by
+    ext y
+    change B y = U (A (U.symm y))
+    rw [← hUapp (U.symm y), U.apply_symm_apply]
+  have hAfact : A = (U.symm : F →L[𝕜] E) ∘L B ∘L (U : E →L[𝕜] F) := by
+    ext x
+    change A x = U.symm (B (U x))
+    rw [hUapp x, U.symm_apply_apply]
+  refine le_antisymm ?_ ?_
+  · conv_lhs => rw [hAfact]
+    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
+      (U.symm : F →L[𝕜] E) (U : E →L[𝕜] F) hUsnorm hUnorm n
+  · conv_lhs => rw [hBfact]
+    exact TauCeti.ApproximationNumber.approximationNumber_comp_contractions_le
+      (U : E →L[𝕜] F) (U.symm : F →L[𝕜] E) hUnorm hUsnorm n
 
 /-! ## The angle operator is compact with trivial kernel -/
 
@@ -106,6 +160,92 @@ theorem eigenspace_genericCosineBlock_zero :
   have hpos := re_inner_genericCosineBlock_pos U V hne
   rw [hzero] at hpos
   simp at hpos
+
+/-! ## From the generic cosine block to the ambient block
+
+Corollary 3.1's classifying invariant is the eigenvalue list of the *generic* cosine
+block `genericCosineBlock U V`, an operator on the `U`-half of the generic part, while a
+realization is naturally computed for the *ambient* block `P_U P_V P_U` on the whole
+space.  When the four elementary Halmos summands are trivial the two carry the same
+eigenvalue list, because the generic part is then everything and the ambient block is the
+extension of the generic block by zero off `U`. -/
+
+omit [CompleteSpace H] [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] in
+/-- With the four elementary Halmos summands trivial, the generic part is everything and
+the `U`-half of it is `U` itself. -/
+theorem genericLeftHalf_eq_of_halmosTrivialPart_eq_bot
+    (h : halmosTrivialPart U V = ⊥) : genericLeftHalf U V = U := by
+  have hgen : halmosGenericPart U V = ⊤ := by
+    show (halmosTrivialPart U V)ᗮ = ⊤
+    rw [h]
+    exact Submodule.bot_orthogonal_eq_top
+  show U ⊓ halmosGenericPart U V = U
+  rw [hgen, inf_top_eq]
+
+/-- The orthogonal projection onto the `U`-half of the generic part is the projection onto
+`U` when the four elementary Halmos summands are trivial. -/
+theorem starProjection_genericLeftHalf_eq_of_halmosTrivialPart_eq_bot
+    (h : halmosTrivialPart U V = ⊥) (x : H) :
+    (genericLeftHalf U V).starProjection x = U.starProjection x :=
+  Submodule.eq_starProjection_of_mem_of_inner_eq_zero
+    ((genericLeftHalf_eq_of_halmosTrivialPart_eq_bot U V h).ge (U.starProjection_apply_mem x))
+    fun w hw =>
+      Submodule.starProjection_inner_eq_zero x w
+        ((genericLeftHalf_eq_of_halmosTrivialPart_eq_bot U V h).le hw)
+
+/-- **The ambient block is the generic cosine block extended by zero.**
+
+`genericCosineBlock U V` is the compression of `P_V` to the `U`-half of the generic part;
+when the four elementary Halmos summands are trivial that half is `U`, and transporting the
+block back to the ambient space by the inclusion and the orthogonal projection reproduces
+`P_U P_V P_U` exactly. -/
+theorem subtypeL_comp_genericCosineBlock_comp_orthogonalProjectionOnto
+    (h : halmosTrivialPart U V = ⊥) :
+    (genericLeftHalf U V).subtypeL ∘L genericCosineBlock U V ∘L
+        (genericLeftHalf U V).orthogonalProjectionOnto =
+      U.starProjection ∘L V.starProjection ∘L U.starProjection := by
+  have hproj := starProjection_genericLeftHalf_eq_of_halmosTrivialPart_eq_bot U V h
+  refine ContinuousLinearMap.ext fun x => ?_
+  have hcoe : ∀ m : genericLeftHalf U V,
+      ((genericCosineBlock U V m : genericLeftHalf U V) : H) =
+        (genericLeftHalf U V).starProjection (V.starProjection (m : H)) := fun m => by
+    simp [genericCosineBlock, DavisKahanExt.compressOperator]
+  calc ((genericLeftHalf U V).subtypeL ∘L genericCosineBlock U V ∘L
+          (genericLeftHalf U V).orthogonalProjectionOnto) x
+      = (genericLeftHalf U V).starProjection
+          (V.starProjection ((genericLeftHalf U V).starProjection x)) :=
+        hcoe ((genericLeftHalf U V).orthogonalProjectionOnto x)
+    _ = U.starProjection (V.starProjection (U.starProjection x)) := by
+        rw [hproj, hproj]
+    _ = (U.starProjection ∘L V.starProjection ∘L U.starProjection) x := rfl
+
+/-- **The bridge between Corollary 3.1's two cosine blocks.**
+
+The generic cosine block and the ambient block `P_U P_V P_U` have the same
+approximation-number sequence -- hence the same `compactAngleEigenvalueList` -- whenever the
+four elementary Halmos summands are trivial.
+
+Mathematically this is "extension by zero preserves approximation numbers": off the generic
+part the ambient block vanishes, so the two operators carry the same nonzero singular data.
+The general fact is
+`TauCeti.ApproximationNumber.approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto`;
+nothing about angles is reproved here. -/
+theorem approximationNumber_genericCosineBlock_eq_ambient
+    (h : halmosTrivialPart U V = ⊥) (n : ℕ) :
+    (genericCosineBlock U V).approximationNumber n =
+      (U.starProjection ∘L V.starProjection ∘L U.starProjection).approximationNumber n := by
+  rw [← subtypeL_comp_genericCosineBlock_comp_orthogonalProjectionOnto U V h,
+    TauCeti.ApproximationNumber.approximationNumber_subtypeL_comp_comp_orthogonalProjectionOnto
+      (genericLeftHalf U V) (genericCosineBlock U V) n]
+
+/-- The `compactAngleEigenvalueList` form of
+`approximationNumber_genericCosineBlock_eq_ambient`. -/
+theorem compactAngleEigenvalueList_genericCosineBlock_eq_ambient
+    (h : halmosTrivialPart U V = ⊥) :
+    compactAngleEigenvalueList (genericCosineBlock U V) =
+      compactAngleEigenvalueList
+        (U.starProjection ∘L V.starProjection ∘L U.starProjection) :=
+  funext fun n => approximationNumber_genericCosineBlock_eq_ambient U V h n
 
 end OneSpace
 

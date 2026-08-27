@@ -236,8 +236,8 @@
       "id": "s3-prop3-1",
       "title": "Proposition 3.1 positivity characterization",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.proposition3_1_positivity_characterization",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section3AcuteDirectRotation",
+      "declaration": "TauCeti.DavisKahan1970.proposition3_1_positivity_characterization",
       "dependencies": [
         "s3-paper-direct-rotation-predicate",
         "base-acute-direct-rotation"
@@ -316,8 +316,8 @@
       "id": "s3-prop3-4",
       "title": "Proposition 3.4 reflected square",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.proposition3_4_square_is_reflected_directRotation",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section3Proposition34",
+      "declaration": "TauCeti.DavisKahan1970.proposition3_4_square_is_reflected_directRotation",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -362,8 +362,8 @@
       "id": "s3-cor3-2",
       "title": "Corollary 3.2 reversal source form",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.corollary3_2_reversal_source_form",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section3Corollary32",
+      "declaration": "TauCeti.DavisKahan1970.corollary3_2_reversal_source_form",
       "dependencies": [
         "base-acute-direct-rotation"
       ],
@@ -378,8 +378,8 @@
       "id": "s3-operator-classification",
       "title": "Operator-level two-projection classification",
       "kind": "bridge",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.twoProjection_operator_classification",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section3Classification",
+      "declaration": "TauCeti.DavisKahan1970.twoProjection_operator_classification",
       "dependencies": [
         "base-halmos-decomposition",
         "s3-generic-cosine-restriction"
@@ -410,8 +410,8 @@
       "id": "s3-compact-angle-list",
       "title": "Compact angle eigenvalue list",
       "kind": "foundation",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.compactAngleEigenvalueList",
+      "module": "DavisKahan.Geometry.Halmos.CompactClassification",
+      "declaration": "TauCeti.DavisKahan.compactAngleEigenvalueList",
       "dependencies": [
         "s3-generic-cosine-restriction"
       ],
@@ -424,8 +424,8 @@
       "id": "s3-cor3-1",
       "title": "Corollary 3.1 compact classification",
       "kind": "source",
-      "module": "DavisKahan.Frontier.Section3",
-      "declaration": "TauCeti.DavisKahan.Frontier.Section3.corollary3_1_compact_angleList_classification",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section3Corollary31",
+      "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_angleList_classification",
       "dependencies": [
         "s3-operator-classification",
         "s3-compact-angle-list"

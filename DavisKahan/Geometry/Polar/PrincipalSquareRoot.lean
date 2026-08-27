@@ -27,7 +27,7 @@ crossed intersection `U ⊓ Vᗮ` onto the target crossed intersection `Uᗮ ⊓
 This module owns that characterisation and the block calculus it runs on.  It was extracted
 from the Section 3 frontier module; the mathematics is unchanged.  The extraction is what
 lets `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean` -- the source-facing
-home of Proposition 3.3 -- stop importing `DavisKahan.Frontier.Section3`.
+home of Proposition 3.3 -- stop importing the former `DavisKahan.Frontier.Section3`.
 
 ## Scope
 

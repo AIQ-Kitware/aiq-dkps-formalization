@@ -3,6 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
+import DavisKahan.Geometry.Halmos.CompactClassification
 import DavisKahan.Geometry.Halmos.Realization
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
 import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
@@ -572,6 +573,94 @@ theorem ker_blockMap_angleSinOp (hθ0 : ∀ n, 0 ≤ θ n)
     rfl
 
 end ZeroKernel
+
+/-! ## The realized pair's generic invariant
+
+The realization computes the angle list of the *ambient* defect block `P (1 - Q) P`,
+while the classification's invariant is the eigenvalue list of the *generic* cosine block
+of the pair `(U, Vᗮ)`.  Once no prescribed angle is `0` or `π/2` the realized pair puts no
+mass on any of the four elementary Halmos summands, so
+`compactAngleEigenvalueList_genericCosineBlock_eq_ambient` identifies the two lists. -/
+
+section GenericInvariant
+
+/-- **The realized pair's generic invariant is the prescribed angle list.**
+
+The classifying invariant of Corollary 3.1's defect-block form, evaluated on the pair
+realized by `angleSequenceDatum`, is `n ↦ sin² θₙ`.  Grounded by `:=` on the realization
+sentence's approximation-number computation and on
+`approximationNumber_genericCosineBlock_eq_ambient`; no angle mathematics is redone.
+
+The strict bounds `0 < θₙ < π/2` are what make the four elementary Halmos summands vanish,
+which is the hypothesis of that bridge. -/
+theorem compactAngleEigenvalueList_genericCosineBlock_angleSequenceDatum
+    (𝕜 : Type*) [RCLike 𝕜] (θ : ℕ → ℝ)
+    (hθ0 : ∀ n, 0 < θ n) (hθ2 : ∀ n, θ n < Real.pi / 2) (hanti : Antitone θ) :
+    compactAngleEigenvalueList
+        (genericCosineBlock
+          (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+          ((angleSequenceDatum 𝕜 θ).targetSubspace)ᗮ) =
+      fun n => Real.sin (θ n) ^ 2 := by
+  have hθ0' : ∀ n, 0 ≤ θ n := fun n => (hθ0 n).le
+  have hθ2' : ∀ n, θ n ≤ Real.pi / 2 := fun n => (hθ2 n).le
+  have hne : ∀ n, θ n ≠ 0 := fun n => (hθ0 n).ne'
+  have hsin : LinearMap.ker
+      ((angleSinOp 𝕜 θ : AngleSequenceSpace 𝕜 →L[𝕜] AngleSequenceSpace 𝕜) :
+        AngleSequenceSpace 𝕜 →ₗ[𝕜] AngleSequenceSpace 𝕜) = ⊥ :=
+    ker_angleSinOp_eq_bot 𝕜 θ hθ0' hθ2' hne
+  have hcos : LinearMap.ker
+      ((angleCosOp 𝕜 θ : AngleSequenceSpace 𝕜 →L[𝕜] AngleSequenceSpace 𝕜) :
+        AngleSequenceSpace 𝕜 →ₗ[𝕜] AngleSequenceSpace 𝕜) = ⊥ :=
+    ker_angleCosOp_eq_bot 𝕜 θ hθ0' hθ2
+  -- The four elementary Halmos summands of the realized pair are trivial.
+  have hcommon : halmosCommonPart
+      (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+      (angleSequenceDatum 𝕜 θ).targetSubspace = ⊥ := by
+    rw [show halmosCommonPart
+        (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+        (angleSequenceDatum 𝕜 θ).targetSubspace = _ from
+      (angleSequenceDatum 𝕜 θ).halmosCommonPart_eq,
+      angleSequenceDatum_sin₀, hsin, Submodule.map_bot]
+  have hsource : halmosSourceDefect
+      (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+      (angleSequenceDatum 𝕜 θ).targetSubspace = ⊥ := by
+    rw [show halmosSourceDefect
+        (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+        (angleSequenceDatum 𝕜 θ).targetSubspace = _ from
+      (angleSequenceDatum 𝕜 θ).halmosSourceDefect_eq,
+      angleSequenceDatum_cos₀, hcos, Submodule.map_bot]
+  have htarget : halmosTargetDefect
+      (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+      (angleSequenceDatum 𝕜 θ).targetSubspace = ⊥ := by
+    rw [show halmosTargetDefect
+        (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+        (angleSequenceDatum 𝕜 θ).targetSubspace = _ from
+      (angleSequenceDatum 𝕜 θ).halmosTargetDefect_eq,
+      angleSequenceDatum_cos₁, hcos, Submodule.map_bot]
+  have hexterior : halmosExteriorPart
+      (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+      (angleSequenceDatum 𝕜 θ).targetSubspace = ⊥ := by
+    rw [show halmosExteriorPart
+        (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+        (angleSequenceDatum 𝕜 θ).targetSubspace = _ from
+      (angleSequenceDatum 𝕜 θ).halmosExteriorPart_eq,
+      angleSequenceDatum_sin₁, hsin, Submodule.map_bot]
+  have htriv : halmosTrivialPart
+      (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+      ((angleSequenceDatum 𝕜 θ).targetSubspace)ᗮ = ⊥ := by
+    rw [halmosTrivialPart_orthogonal_right, show halmosTrivialPart
+        (sourceSubspace 𝕜 (AngleSequenceSpace 𝕜) (AngleSequenceSpace 𝕜))
+        (angleSequenceDatum 𝕜 θ).targetSubspace =
+      (halmosCommonPart _ _ ⊔ halmosSourceDefect _ _) ⊔
+        (halmosTargetDefect _ _ ⊔ halmosExteriorPart _ _) from rfl,
+      hcommon, hsource, htarget, hexterior, bot_sup_eq, bot_sup_eq]
+  -- The bridge, then the realization's own computation of the ambient list.
+  rw [compactAngleEigenvalueList_genericCosineBlock_eq_ambient _ _ htriv,
+    Submodule.starProjection_orthogonal (angleSequenceDatum 𝕜 θ).targetSubspace]
+  exact funext fun n =>
+    approximationNumber_angleSequenceDefectBlock hθ0' hθ2' hanti n
+
+end GenericInvariant
 
 end DavisKahan
 end TauCeti

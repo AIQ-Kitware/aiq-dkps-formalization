@@ -10,7 +10,7 @@ import DavisKahan.Geometry.Halmos.FixedCosineSubspace
 -- with the `halmosCosineSq` commutation lemmas underneath it.
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
 -- supplies `TauCeti.IsAcute` and `TauCeti.isAcute_iff_inf_orthogonal_eq_bot`, which this
--- file used to receive indirectly through `DavisKahan.Frontier.Section3`.
+-- file used to receive indirectly through the former `DavisKahan.Frontier.Section3`.
 import ForTauCeti.Analysis.InnerProductSpace.RealContinuousFunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.VectorAngle
 import ForTauCeti.Analysis.InnerProductSpace.SeparatedIntertwiner

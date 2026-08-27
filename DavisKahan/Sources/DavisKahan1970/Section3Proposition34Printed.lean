@@ -18,7 +18,7 @@ reflected pair, under the printed half-angle hypothesis `C₀² ≥ ½` on the s
 
 This module owns the three source-facing statements: the full nonacute form, the acute
 specialisation that is the printed sentence, and the identification of the acute form with the
-canonical direct rotation.  They were promoted out of `DavisKahan/Frontier/Section3.lean`; the
+canonical direct rotation.  They were promoted out of `DavisKahan/Frontier/Section3.lean` (now deleted); the
 mathematics is unchanged.  The reusable block estimates beneath them live in
 `DavisKahan/Geometry/Polar/DirectRotationBlocks.lean`.
 
@@ -146,7 +146,7 @@ for the ordered pair `(Q₋ℋ, Qℋ)` -- the paper's own proof verifies exactly
 (ii) plus the intertwining `U²Q₋ = QU²`; and `hcos` is `C₀² ≥ ½` read through equation (3.7),
 `C₀² = E₀⋆ Q E₀`, so its quadratic form at `x ∈ Pℋ` is `‖Qx‖²`.
 
-Three narrowings of `TauCeti.DavisKahan.Frontier.Section3.proposition3_4_square_is_reflected_directRotation` are removed.  That
+Three narrowings of `TauCeti.DavisKahan1970.proposition3_4_square_is_reflected_directRotation` are removed.  That
 statement exhibits an existential pair rather than the printed `(Q₋ℋ, Qℋ)`; assumes the
 symmetrized whole-space form bound rather than the printed `Pℋ` one; and carries an extra
 `IsUniformlyAcute U (reflectedSubspace V U)`.  The extra acuteness is genuinely not available
