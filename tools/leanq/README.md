@@ -169,10 +169,14 @@ and carries its edge degrees — a declaration shows true `in` / `out` direct-ed
 actually drawn, and how many dependencies are still folded inside a cluster; a cluster shows its
 declaration, child, internal-edge and projected-edge counts.
 
-**Layout.** `Library bands` puts each package in its own column, ordered by the dominant direction
-of the dependency edges between packages, and pins every selected headline theorem to one extremal
-column so the edges into them are the picture. `Dependency depth` keeps the older topological
-columns. Columns are labelled.
+**Layout.** `Library bands` gives every package its own column and pins the selected headline
+theorems to one extremal column, so the edges into them are the picture. Column order is a
+depth-first Kahn traversal of the package dependency DAG: a package is placed once its prerequisites
+are, and the traversal follows the heaviest outgoing chain first, which keeps a lineage contiguous
+(`ForTauCeti → DavisKahan → YuWangSamworth2015`, then the DKPS application chain) instead of
+interleaving packages that never touch. Only packages the current selection reaches get a column;
+the rest are named in a `not reached` badge. `Dependency depth` keeps the older topological columns.
+Columns are labelled with their visible node count.
 
 **Export.** `DOT` and `JSON` write the visible projection, the selected headline closure, one
 declaration's dependency cone, or the complete graph. DOT nodes carry `leanq_library`,
