@@ -74,14 +74,17 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | --- | --- | --- | --- |
 | Inherited Theorem 1 states max_i \|\|psiHat_i-psi_i\|\| <= Poly3((n^3/r)^(1/2-delta)) with high probability. | Quench consumes Acharyya2025 Frobenius configuration concentration and then uses norm_config_le_ConfigFrobError to obtain every row bound. | `source_repair` | This avoids treating the inconsistent Acharyya v1 2,infinity display as literally proved while still supplying the rowwise control Quench uses. |
 | Technical spectral assumptions are inherited from Acharyya. | The current inherited chain has fixed rank/floor/cap assumptions but no hsmall, hpolar, or redundant finite-stage rate-zero premise. | `lean_weaker_hypothesis` | The DK/YWS improvements made the inherited theorem closer to the paper assumption surface. |
+| Theorem 1 bounds max_i \|\|psi-hat_i - psi_i\|\| over the n reference models. | The rate theorem is proved for a fixed model collection; the Quench capstones instead re-derive the bound stage by stage for a growing sample with the target augmented into the matrix, using the same ConfigPerturbation machinery. | `proof_role_replaced` | The paper's proof needs the bound for the target model too, which is not one of the n reference models it applied Theorem 1 to. |
 
 **Semantic review:**
 
 Quench uses the current Acharyya Frobenius concentration theorem plus the rowwise norm bound, which supplies exactly the max-row control needed by the Quench proof without claiming the disputed Acharyya v1 display literally.
 
-**Additional note:** The current bridge no longer carries hsmall, hpolar, or a redundant finite-stage vanishing-rate premise.
+**Additional note:** The rate endpoint is proved but not consumed downstream: Quench needs the growing-sample, target-augmented regime. See gap theorem1-rate-not-instantiated.
 
-**Companion census gap refs:** `inherited-acharyya-v1-norm`
+**Companion census gap refs:** `inherited-acharyya-v1-norm`, `theorem1-rate-not-instantiated`
+
+**Next action:** Either generalize the rate theorem to a growing sample with an augmented target, or keep the divergence recorded; the capstones do not depend on the choice.
 
 ### 2. `Q26-EQ1` — Equation (1), DKPS definition: DKPS perspectives are a raw-stress minimizer
 
@@ -250,7 +253,7 @@ Lean formalizes the ball-support property actually consumed by the proof. Compac
 
 The printed conclusion is proved end to end by infiniteFixedSubsetMSE and finiteFixedSubsetMSE for the literal tie-averaged estimator built from raw cached responses, with the representation concentration derived rather than assumed. The verdict remains GAP because the derivation needs a population nondegeneracy floor and a replicate schedule above the source rate, and because the perspectives are classical MDS rather than the Eq. (1) raw-stress minimizer.
 
-**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `tie-display-proof-mismatch`
+**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`, `tie-display-proof-mismatch`
 
 **Next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 
@@ -289,7 +292,7 @@ The printed conclusion is proved at the paper's full quantifier level by infinit
 
 **Additional note:** The formal proof supplies the missing uniform-target/measurability step before integrating pointwise squared error to MSE.
 
-**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
+**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`
 
 **Next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 
@@ -318,7 +321,7 @@ The printed conclusion is proved at the paper's full quantifier level by infinit
 
 The finite realization of Theorem 2. This row previously read as an extension beyond the paper theorem surface, which inverted the layering: the paper's proof of Theorem 2 derives its representation error from Theorem 1, so discharging that premise is inside the printed argument. What genuinely exceeds the source is the explicit sampling and regularity interface and the replicate schedule.
 
-**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
+**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`
 
 **Next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 
@@ -347,7 +350,7 @@ The finite realization of Theorem 2. This row previously read as an extension be
 
 The compact-infinite realization of Theorem 2. This row previously read as an extension beyond the paper theorem surface, which inverted the layering: the paper's proof of Theorem 2 derives its representation error from Theorem 1, so discharging that premise is inside the printed argument. What genuinely exceeds the source is the explicit sampling and regularity interface and the replicate schedule.
 
-**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
+**Companion census gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`
 
 **Next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 

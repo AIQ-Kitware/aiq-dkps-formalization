@@ -75,6 +75,11 @@
       "kind": "source_audit",
       "title": "Eq. (1) defines DKPS by raw stress; the cited concentration theorem is classical MDS",
       "detail": "Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, while Theorem 1 imports an Acharyya 2025 classical-MDS concentration bound and the proof of Theorem 2 uses that bound for the same psi-hat. The two estimators are not known to agree. The formalization follows the classical-MDS reading, which is the one Theorem 2's proof actually needs; Acharyya2024.rawStress carries the Eq. (1) estimator and is not connected to the Quench chain."
+    },
+    "theorem1-rate-not-instantiated": {
+      "kind": "source_audit",
+      "title": "Theorem 1's rate theorem is not the input the Quench chain uses",
+      "detail": "Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stated for a fixed collection of n models with the asymptotics in the replicate index. Quench needs the perspective error at every stage of a growing reference sample with the target augmented into the matrix, so the capstones re-derive the concentration in that regime from the same Acharyya2025.ConfigPerturbation machinery rather than instantiating the rate theorem. Two of Q26-T1's three registered declarations are consumed; the rate endpoint is not. The paper's own proof has the same shape -- it applies Theorem 1 to the n reference models and then silently uses the same bound for the target model, whose perspective is not among them."
     }
   },
   "items": [
@@ -102,14 +107,15 @@
       ],
       "planned_declarations": [],
       "gap_refs": [
-        "inherited-acharyya-v1-norm"
+        "inherited-acharyya-v1-norm",
+        "theorem1-rate-not-instantiated"
       ],
       "semantic_alignment": {
         "classification": "source_repair",
         "detail": "Quench uses the current Acharyya Frobenius concentration theorem plus the rowwise norm bound, which supplies exactly the max-row control needed by the Quench proof without claiming the disputed Acharyya v1 display literally."
       },
-      "notes": "The current bridge no longer carries hsmall, hpolar, or a redundant finite-stage vanishing-rate premise.",
-      "next_action": "None."
+      "notes": "The rate endpoint is proved but not consumed downstream: Quench needs the growing-sample, target-augmented regime. See gap theorem1-rate-not-instantiated.",
+      "next_action": "Either generalize the rate theorem to a growing sample with an augmented target, or keep the divergence recorded; the capstones do not depend on the choice."
     },
     {
       "id": "Q26-EQ1",
@@ -305,6 +311,7 @@
       "gap_refs": [
         "raw-response-explicit-assumptions",
         "replicate-schedule-exceeds-source-rate",
+        "theorem1-rate-not-instantiated",
         "tie-display-proof-mismatch"
       ],
       "semantic_alignment": {
@@ -345,7 +352,8 @@
       "planned_declarations": [],
       "gap_refs": [
         "raw-response-explicit-assumptions",
-        "replicate-schedule-exceeds-source-rate"
+        "replicate-schedule-exceeds-source-rate",
+        "theorem1-rate-not-instantiated"
       ],
       "semantic_alignment": {
         "classification": "stronger_hypotheses",
@@ -381,7 +389,8 @@
       "planned_declarations": [],
       "gap_refs": [
         "raw-response-explicit-assumptions",
-        "replicate-schedule-exceeds-source-rate"
+        "replicate-schedule-exceeds-source-rate",
+        "theorem1-rate-not-instantiated"
       ],
       "semantic_alignment": {
         "classification": "stronger_hypotheses",
@@ -417,7 +426,8 @@
       "planned_declarations": [],
       "gap_refs": [
         "raw-response-explicit-assumptions",
-        "replicate-schedule-exceeds-source-rate"
+        "replicate-schedule-exceeds-source-rate",
+        "theorem1-rate-not-instantiated"
       ],
       "semantic_alignment": {
         "classification": "stronger_hypotheses",

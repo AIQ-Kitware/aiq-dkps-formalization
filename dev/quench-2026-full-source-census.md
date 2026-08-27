@@ -92,6 +92,12 @@ Theorem 1 needs only r = omega(n^3). The end-to-end capstones fix safeEntropyRep
 
 Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, while Theorem 1 imports an Acharyya 2025 classical-MDS concentration bound and the proof of Theorem 2 uses that bound for the same psi-hat. The two estimators are not known to agree. The formalization follows the classical-MDS reading, which is the one Theorem 2's proof actually needs; Acharyya2024.rawStress carries the Eq. (1) estimator and is not connected to the Quench chain.
 
+### `theorem1-rate-not-instantiated` — Theorem 1's rate theorem is not the input the Quench chain uses
+
+**Kind:** `source_audit`
+
+Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stated for a fixed collection of n models with the asymptotics in the replicate index. Quench needs the perspective error at every stage of a growing reference sample with the target augmented into the matrix, so the capstones re-derive the concentration in that regime from the same Acharyya2025.ConfigPerturbation machinery rather than instantiating the rate theorem. Two of Q26-T1's three registered declarations are consumed; the rate endpoint is not. The paper's own proof has the same shape -- it applies Theorem 1 to the n reference models and then silently uses the same bound for the target model, whose perspective is not among them.
+
 ## Detail
 
 ### `Q26-T1` — Inherited DKPS embedding concentration
@@ -103,9 +109,9 @@ Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, wh
 * **semantic alignment:** `source_repair` — Quench uses the current Acharyya Frobenius concentration theorem plus the rowwise norm bound, which supplies exactly the max-row control needed by the Quench proof without claiming the disputed Acharyya v1 display literally.
 * **source claim:** For r=omega(n^3) and bounded response covariance, the maximum aligned perspective error is bounded by a cubic polynomial in (n^3/r)^(1/2-delta) with high probability.
 * **Lean declarations:** `Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le`, `Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate`, `Acharyya2025.ConfigPerturbation.norm_config_le_ConfigFrobError`
-* **gap refs:** `inherited-acharyya-v1-norm`
-* **notes:** The current bridge no longer carries hsmall, hpolar, or a redundant finite-stage vanishing-rate premise.
-* **next action:** None.
+* **gap refs:** `inherited-acharyya-v1-norm`, `theorem1-rate-not-instantiated`
+* **notes:** The rate endpoint is proved but not consumed downstream: Quench needs the growing-sample, target-augmented regime. See gap theorem1-rate-not-instantiated.
+* **next action:** Either generalize the rate theorem to a growing sample with an augmented target, or keep the divergence recorded; the capstones do not depend on the choice.
 
 ### `Q26-EQ1` — DKPS perspectives are a raw-stress minimizer
 
@@ -179,7 +185,7 @@ Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, wh
 * **semantic alignment:** `stronger_hypotheses` — infiniteFixedSubsetMSE and finiteFixedSubsetMSE prove the printed conclusion end to end for the literal tie-averaged estimator built from raw cached responses: the representation concentration is derived through the CMDS/Davis--Kahan chain rather than assumed. They are stronger than the source only in hypotheses -- an explicit population nondegeneracy floor and a replicate schedule above the source rate. The remaining rows are the conditional intermediates that take the concentration event as a premise.
 * **source claim:** For every epsilon>0 there are sufficiently large sampling/model budgets for which MSE(yhat_NN)<=epsilon with high probability.
 * **Lean declarations:** `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`, `highProb_mse_nn_le`, `highProb_mse_nn_le_of_subevent`, `highProb_mse_tieAverage_of_subevents`, `highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport`
-* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `tie-display-proof-mismatch`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`, `tie-display-proof-mismatch`
 * **notes:** The end-to-end declarations are the canonical realization; the conditional forms remain listed because they are the reusable interfaces the capstones factor through.
 * **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 
@@ -192,7 +198,7 @@ Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, wh
 * **semantic alignment:** `stronger_hypotheses` — infiniteAllQueries and finiteAllQueries conclude HighProbQueryEfficient, the paper's full predicate quantified over every budget below the benchmark cardinality, for the raw-response estimator with concentration derived rather than assumed. The fixed-subset capstones are the Q-level statement they quantify. The excess over the source is in hypotheses only, as recorded in the referenced gaps.
 * **source claim:** When m<M and the subset-score baseline has positive MSE, nearest-neighbor DKPS prediction is query-efficient with high probability.
 * **Lean declarations:** `DkpsQuench2026.QueryEfficiency.infiniteAllQueries`, `DkpsQuench2026.QueryEfficiency.finiteAllQueries`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubset`, `highProb_queryEfficient_nn`, `highProb_queryEfficient_nn_of_subevent`, `highProbQQueryEfficient_tieAverage_of_subevents`, `highProbMQueryEfficient_tieAverage_of_certificates`, `highProbQueryEfficient_tieAverage_of_certificates`
-* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`
 * **notes:** The end-to-end declarations are the canonical realization; the certificate and subevent forms remain listed as the reusable interfaces they factor through.
 * **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 
@@ -205,7 +211,7 @@ Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, wh
 * **semantic alignment:** `stronger_hypotheses` — The finite realization of Theorem 2. Previously classified as an extension beyond the paper theorem surface, which inverted the layering: the conditional forms assume what the paper proves, and these discharge it. The excess over the source is the explicit sampling/regularity interface and the replicate schedule.
 * **source claim:** Theorem 2 at the finite model-class scope: the paper's proof derives the representation error from Theorem 1, so discharging it is inside the printed argument rather than beyond it.
 * **Lean declarations:** `DkpsQuench2026.QueryEfficiency.FiniteSubsetData`, `DkpsQuench2026.QueryEfficiency.FiniteSubsetAssumptions`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubset`, `DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.finiteAllQueries`
-* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`
 * **notes:** No additional note.
 * **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 
@@ -218,7 +224,7 @@ Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, wh
 * **semantic alignment:** `stronger_hypotheses` — The compact-infinite realization of Theorem 2. Previously classified as an extension beyond the paper theorem surface, which inverted the layering: the conditional forms assume what the paper proves, and these discharge it. The excess over the source is the explicit sampling/regularity interface and the replicate schedule.
 * **source claim:** Theorem 2 at the compact-infinite model-class scope: the paper's proof derives the representation error from Theorem 1, so discharging it is inside the printed argument rather than beyond it.
 * **Lean declarations:** `DkpsQuench2026.QueryEfficiency.InfiniteSubsetData`, `DkpsQuench2026.QueryEfficiency.InfiniteSubsetAssumptions`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubset`, `DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE`, `DkpsQuench2026.QueryEfficiency.infiniteAllQueries`
-* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`
+* **gap refs:** `raw-response-explicit-assumptions`, `replicate-schedule-exceeds-source-rate`, `theorem1-rate-not-instantiated`
 * **notes:** No additional note.
 * **next action:** Weaken the replicate schedule toward the source r = omega(n^3) and replace the absolute eigenvalue floor by a residual-gap condition.
 
