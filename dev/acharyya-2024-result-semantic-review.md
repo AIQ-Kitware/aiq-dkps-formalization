@@ -439,6 +439,7 @@ The finite per-stage theorem can take arbitrary stagewise limiting dissimilarity
 - `Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress_rigidMotion`
+- `Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz`
 - `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding`
 - `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
@@ -466,7 +467,7 @@ The package has no model-distribution P over a compact model space, no continuou
 
 **Companion census gap refs:** `continuous-mds-lp`
 
-**Next action:** Apply the strong law to the averaged one-point stress at each position of a countable dense set, lift to locally uniform convergence with abs_sub_pointStress_le, and move the minimizers by the argmin argument. Every ingredient is now present.
+**Next action:** Supply pointwise convergence of the averaged one-point stress by the strong law, then apply tendsto_argmin_of_tendsto_of_equiLipschitz. The deterministic half of the identification is proved and the coercivity bound supplies the boundedness it asks for.
 
 ### 13. `A24-T4` — Theorem 4: Growing-model pointwise dissimilarity concentration
 
@@ -531,6 +532,7 @@ Lean has the finite-model concentration mechanism and a growing-stage consistenc
 - `Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress`
 - `Acharyya2024.ContinuousMDS.pointStress_rigidMotion`
+- `Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz`
 - `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding`
 - `Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto`
 - `Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt`
@@ -554,7 +556,7 @@ Lean proves a shared full-sequence/per-stage finite consistency family, which is
 
 **Companion census gap refs:** `continuous-mds-lp`, `growing-query-rate-wiring`, `growing-n-concentration`
 
-**Next action:** Apply the strong law to the averaged one-point stress at each position of a countable dense set, lift to locally uniform convergence with abs_sub_pointStress_le, and move the minimizers by the argmin argument. Every ingredient is now present.
+**Next action:** Supply pointwise convergence of the averaged one-point stress by the strong law, then apply tendsto_argmin_of_tendsto_of_equiLipschitz. The deterministic half of the identification is proved and the coercivity bound supplies the boundedness it asks for.
 
 ### 15. `A24-R4` — Remark 4: Notation for the replicate dependence of the estimated perspectives
 

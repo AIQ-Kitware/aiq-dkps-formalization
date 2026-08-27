@@ -897,4 +897,69 @@ theorem abs_sub_pointStress_le {n d : Nat} (z : Config n d) (c : Fin n → Real)
         rw [Finset.sum_const, Finset.card_univ, Fintype.card_fin, nsmul_eq_mul]
         ring
 
+/-! ### The argmin step for a growing reference collection
+
+`tendsto_outOfSampleExtension` moves minimizers when the objectives converge because the
+reference sample is *fixed* and only its configuration moves.  When the reference collection
+grows the objectives are different functions on every stage, and pointwise convergence alone
+does not move minimizers.  What does is pointwise convergence together with an equi-Lipschitz
+bound on balls -- exactly what `abs_sub_pointStress_le` provides for these stresses.
+
+This is the deterministic half of the remaining identification.  The probabilistic half is the
+strong law, which supplies the pointwise convergence. -/
+
+/--
+**Minimizers converge under pointwise convergence and an equi-Lipschitz bound.**
+
+`G u` are the objectives, `g` their pointwise limit, `V u` a minimizer of `G u`, and `v'` the
+unique minimizer of `g`.  The equi-Lipschitz hypothesis is what makes the value at a moving
+point converge, which pointwise convergence alone does not give.
+-/
+theorem tendsto_argmin_of_tendsto_of_equiLipschitz {d : Nat}
+    {G : Nat → Rvec d → Real} {g : Rvec d → Real} {V : Nat → Rvec d} {v' : Rvec d}
+    (hlip : ∀ R : Real, ∃ L : Real, 0 ≤ L ∧ ∀ u : Nat, ∀ v w : Rvec d,
+      ‖v‖ ≤ R → ‖w‖ ≤ R → |G u v - G u w| ≤ L * ‖v - w‖)
+    (hptw : ∀ v : Rvec d, Tendsto (fun u => G u v) atTop (𝓝 (g v)))
+    (hV : ∀ u : Nat, ∀ w : Rvec d, G u (V u) ≤ G u w)
+    {Rb : Real} (hbdd : ∀ u : Nat, ‖V u‖ ≤ Rb)
+    (huniq : ∀ w : Rvec d, (∀ w' : Rvec d, g w ≤ g w') → w = v') :
+    Tendsto V atTop (𝓝 v') := by
+  classical
+  refine tendsto_of_subseq_tendsto (fun ns hns => ?_)
+  have hmem : ∀ k, V (ns k) ∈ Metric.closedBall (0 : Rvec d) Rb := by
+    intro k
+    rw [mem_closedBall_zero_iff]
+    exact hbdd (ns k)
+  obtain ⟨L, -, ms, hmsmono, hms⟩ :=
+    tendsto_subseq_of_bounded (Metric.isBounded_closedBall) hmem
+  refine ⟨ms, ?_⟩
+  have hsub : Tendsto (fun k => ns (ms k)) atTop atTop := hns.comp hmsmono.tendsto_atTop
+  -- the limit point is in the ball, so a single Lipschitz constant covers the whole tail
+  have hLb : ‖L‖ ≤ Rb :=
+    le_of_tendsto hms.norm (Filter.Eventually.of_forall fun k => hbdd (ns (ms k)))
+  obtain ⟨C, hC0, hCle⟩ := hlip Rb
+  -- values at the moving minimizers converge to the value at the limit
+  have hvals : Tendsto (fun k => G (ns (ms k)) (V (ns (ms k)))) atTop (𝓝 (g L)) := by
+    have hgap : Tendsto (fun k => G (ns (ms k)) (V (ns (ms k))) - G (ns (ms k)) L)
+        atTop (𝓝 0) := by
+      have hbound : ∀ k, ‖G (ns (ms k)) (V (ns (ms k))) - G (ns (ms k)) L‖
+          ≤ C * ‖V (ns (ms k)) - L‖ := by
+        intro k
+        rw [Real.norm_eq_abs]
+        exact hCle (ns (ms k)) (V (ns (ms k))) L (hbdd (ns (ms k))) hLb
+      have hd : Tendsto (fun k => C * ‖V (ns (ms k)) - L‖) atTop (𝓝 0) := by
+        have h0 : Tendsto (fun k => ‖V (ns (ms k)) - L‖) atTop (𝓝 0) := by
+          simpa using (hms.sub (tendsto_const_nhds (x := L))).norm
+        simpa using h0.const_mul C
+      exact squeeze_zero_norm hbound hd
+    have hbase : Tendsto (fun k => G (ns (ms k)) L) atTop (𝓝 (g L)) := (hptw L).comp hsub
+    simpa using hgap.add hbase
+  -- so the limit point minimizes `g`
+  have hLmin : ∀ w : Rvec d, g L ≤ g w := by
+    intro w
+    exact le_of_tendsto_of_tendsto hvals ((hptw w).comp hsub)
+      (Filter.Eventually.of_forall fun k => hV (ns (ms k)) w)
+  rw [← huniq L hLmin]
+  exact hms
+
 end Acharyya2024.ContinuousMDS
