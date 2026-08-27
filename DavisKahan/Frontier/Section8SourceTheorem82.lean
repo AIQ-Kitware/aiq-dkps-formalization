@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Frontier.Section8Residual
+import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Branch
 import DavisKahan.Geometry.Halmos.CrossedDefectGap
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaWholeSpace
 import ForTauCeti.Analysis.InnerProductSpace.AngleGeometry
@@ -168,6 +168,7 @@ open DavisKahanExt
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.Foundation
 open TauCeti.ApproximationNumber
+open TauCeti.DavisKahan1970.Section8
 
 universe u
 
@@ -414,7 +415,7 @@ theorem spectrum_compressOperator_subset_of_spectrumIn
   intro r hr
   refine h.subset ⟨h.invariant, ?_⟩
   rw [compressOperator_eq_restrict_of_invariant T U h.invariant] at hr
-  exact (DavisKahan1970.Section8.realSpectrum_eq_spectrum_real
+  exact (realSpectrum_eq_spectrum_real
     (T.restrict h.invariant)).ge hr
 
 /-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, perturbation form, for

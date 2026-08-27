@@ -8,8 +8,6 @@ import DavisKahan.Frontier.Section8PartII
 import DavisKahan.Frontier.Section8PartIII
 import DavisKahan.Frontier.Section8PartIIIReal
 import DavisKahan.Frontier.Section8PartIIReal
-import DavisKahan.Frontier.Section8Perturbation
-import DavisKahan.Frontier.Section8Residual
 import DavisKahan.Frontier.Section8SourceDictionary
 import DavisKahan.Frontier.Section8SourceSurface
 import DavisKahan.Frontier.Section8SourceTheorem82

@@ -108,20 +108,15 @@ the explicit printed hypotheses; the `maximalAngle` forms add the Section 1
 standing convention (1.5) and deliver the printed `Θ < π/4`.  The distinction is
 deliberate and must not be collapsed. -/
 
-/-- **Theorem 8.2, perturbation alternative, dimension-free.** -/
-alias theorem8_2_perturbationHalfGap_source :=
-  DavisKahan.Frontier.Section8.theorem8_2_perturbationHalfGap_source
-
-/-- **Theorem 8.2, residual alternative, dimension-free.**  Krein's completion
-supplies a perturbation of the exact residual norm. -/
-alias theorem8_2_residualHalfGap_source :=
-  DavisKahan.Frontier.Section8.theorem8_2_residualHalfGap_source
+/-! `theorem8_2_perturbationHalfGap_source` and `theorem8_2_residualHalfGap_source`
+need no alias: they are declared in this namespace by
+`Sources/DavisKahan1970/Section8/Theorem82Branch.lean`. -/
 
 /-- **Theorem 8.2's printed disjunction, dimension-free.**  Either smallness
 alternative gives `directedGap P Q < √2/2`.  This is the strongest conclusion
 available from the explicit printed hypotheses alone. -/
 alias theorem8_2_branch_source_directed :=
-  DavisKahan.Frontier.Section8.theorem8_2_branch_source
+  DavisKahan1970.Section8.theorem8_2_branch_source
 
 /-- Equation (1.5) in its finite form: equal rank identifies the symmetric and
 directed projector gaps, so `‖sin Θ‖` may be computed from either. -/

@@ -52,42 +52,6 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
   [CompleteSpace H]
 variable {A E : H →L[ℂ] H} {s : Set ℝ}
 
-/-- A `SpectrumIn` upper half-line for a symmetric operator gives the
-quadratic-form upper bound on the branch, through the restriction-spectrum
-spectral-order bridge. -/
-theorem re_inner_le_of_spectrumIn_Iic
-    {T : H →L[ℂ] H} (hT : T.IsSymmetric) {W : Submodule ℂ H}
-    [W.HasOrthogonalProjection] {a : ℝ}
-    (h : SpectrumIn T W (Set.Iic a)) {y : H} (hy : y ∈ W) :
-    RCLike.re ⟪y, T y⟫_ℂ ≤ a * ‖y‖ ^ 2 := by
-  have hσ : spectrum ℝ (T.restrict h.invariant) ⊆ Set.Iic a := by
-    intro r hr
-    exact h.subset
-      ⟨h.invariant, by simpa using (spectrum.algebraMap_mem_iff (S := ℂ)).mpr hr⟩
-  have hb :=
-    SpectralOrder.Complex.upperFormBoundOn_of_restriction_spectrum_subset_Iic
-      hT h.invariant hσ y hy
-  calc RCLike.re ⟪y, T y⟫_ℂ = RCLike.re ⟪T y, y⟫_ℂ :=
-      (congrArg RCLike.re (hT y y)).symm
-    _ ≤ a * ‖y‖ ^ 2 := hb
-
-/-- A `SpectrumIn` lower half-line for a symmetric operator gives the
-quadratic-form lower bound on the branch. -/
-theorem le_re_inner_of_spectrumIn_Ici
-    {T : H →L[ℂ] H} (hT : T.IsSymmetric) {W : Submodule ℂ H}
-    [W.HasOrthogonalProjection] {b : ℝ}
-    (h : SpectrumIn T W (Set.Ici b)) {y : H} (hy : y ∈ W) :
-    b * ‖y‖ ^ 2 ≤ RCLike.re ⟪y, T y⟫_ℂ := by
-  have hσ : spectrum ℝ (T.restrict h.invariant) ⊆ Set.Ici b := by
-    intro r hr
-    exact h.subset
-      ⟨h.invariant, by simpa using (spectrum.algebraMap_mem_iff (S := ℂ)).mpr hr⟩
-  have hb :=
-    SpectralOrder.Complex.lowerFormBoundOn_of_restriction_spectrum_subset_Ici
-      hT h.invariant hσ y hy
-  calc b * ‖y‖ ^ 2 ≤ RCLike.re ⟪T y, y⟫_ℂ := hb
-    _ = RCLike.re ⟪y, T y⟫_ℂ := congrArg RCLike.re (hT y y)
-
 omit [CompleteSpace H] in
 /-- The quadratic form of an operator splits exactly through a reducing
 subspace: the cross terms vanish. -/
