@@ -71,6 +71,7 @@
    "review": "The event shape and response-to-CMDS concentration mechanism are compiled, including the paper-scale n^3/r bookkeeping. The exact finite displayed constant is not exposed by one source-facing theorem.",
    "notes": "The active response-to-CMDS bridge works entrywise directly and avoids the former n^2 Frobenius detour. Its constants are intentionally conservative.",
    "gap_refs": [
+    "normalisation-pinned-by-theorem1-constant",
     "t1-literal-finite-wrapper"
    ],
    "next_action": "Compose the finite probability step with the response-mean to doubly-centred-entry bound to reach the displayed constant."
