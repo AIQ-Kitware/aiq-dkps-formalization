@@ -84,7 +84,6 @@ variable (ρ : Measure α)
 Every obligation is the corresponding law from `MulLpAlgebra` with its almost-everywhere
 hypothesis discharged by `rfl`: composition with a fixed `ĝ` is applied pointwise, so it
 commutes with every pointwise operation on `C(s, ℂ)` on the nose. -/
-@[expose]
 noncomputable def mulLpStarHom (hĝ : Measurable ĝ) :
     C(↥s, ℂ) →⋆ₐ[ℂ] (Lp ℂ 2 ρ →L[ℂ] Lp ℂ 2 ρ) where
   toFun f := mulLp ρ (measurable_comp_contMap hĝ f) (norm_comp_contMap_le ĝ f)

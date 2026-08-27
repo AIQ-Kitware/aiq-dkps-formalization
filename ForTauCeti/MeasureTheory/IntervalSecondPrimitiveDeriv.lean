@@ -43,7 +43,7 @@ noncomputable section
 variable {𝕜 : Type*} [RCLike 𝕜]
 
 /-- Running integral of a density on the unit interval, cut off below the parameter. -/
-@[expose] def firstPrimitive (w : ℝ → 𝕜) (t : ℝ) : 𝕜 :=
+def firstPrimitive (w : ℝ → 𝕜) (t : ℝ) : 𝕜 :=
   ∫ s, (Set.Iio t).indicator w s ∂unitIocMeasure
 
 /-- The running integral depends only on the almost-everywhere class of the density. -/
