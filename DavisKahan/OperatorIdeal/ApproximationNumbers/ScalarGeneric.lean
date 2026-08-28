@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Core
-import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
@@ -351,28 +350,13 @@ of the historical record is a theorem about the canonical gauge, proved in
 
 variable (N : KyFanDominantIdealFamily.{u, v} 𝕜)
 
-/-- The historical real-valued view of the ideal.
-
-Kept only for the five `Experimental/` modules that still construct legacy records;
-nothing in production uses it, and it goes when they migrate.  See the note on
-`TauCeti.SymmetricOperatorIdealFamily.toRectangular`. -/
-noncomputable def toRectangularSymmetricIdealFamily :
-    RectangularSymmetricIdealFamily.{u, v} 𝕜 :=
-  N.toSymmetricOperatorIdealFamily.toRectangular
-
-/-! Both accessors below read the **canonical** family directly.  They used to route
-through a `toRectangularSymmetricIdealFamily` view onto the historical record, which
-made every one of the ~28 modules that consume a
-`KyFanDominantIdealFamily` depend on the legacy structure definitionally, even
-though none of them mentions it.  Since `toRectangular` defines exactly
-`Mem A := gauge A ≠ ∞` and `gauge A := (gauge A).toReal`, going direct is
-definitionally the same term — `mem_iff` and `gauge_eq_toReal` below are still
-`Iff.rfl` and `rfl` — so no statement or proof downstream changes meaning.
-
-What *does* change is what these unfold to: `simp only [KyFanDominantIdealFamily.gauge]`
-now exposes `(N.toSymmetricOperatorIdealFamily.gauge A).toReal` instead of a
-`RectangularSymmetricIdealFamily.gauge` application, which is the normal form the
-migration is heading for. -/
+/-! Both accessors below read the **canonical** family directly.  They used to
+route through a view onto the historical rectangular record, which made every one
+of the ~28 modules that consume a `KyFanDominantIdealFamily` depend on the legacy
+structure definitionally, even though none of them mentions it.  That view defined
+exactly `Mem A := gauge A ≠ ∞` and `gauge A := (gauge A).toReal`, so going direct
+is definitionally the same term — `mem_iff` and `gauge_eq_toReal` below are still
+`Iff.rfl` and `rfl` — and no statement or proof downstream changed meaning. -/
 
 /-- Membership in the ideal: the operator has finite ideal gauge. -/
 abbrev Mem (A : E →L[𝕜] F) : Prop :=
@@ -400,10 +384,8 @@ theorem gauge_eq_toReal (A : E →L[𝕜] F) :
     N.gauge A = (N.toSymmetricOperatorIdealFamily.gauge A).toReal := rfl
 
 /-! Both accessors are `abbrev`, so they are reducible and `exact` sees through
-them.  `rw` does **not**: it keys on the head symbol, and
-`KyFanDominantIdealFamily.gauge N A` and
-`RectangularSymmetricIdealFamily.gauge N.toRectangularSymmetricIdealFamily A`
-have different ones.  A proof whose goal is stated through these accessors but
+them.  `rw` does **not**: it keys on the head symbol, and the accessor form and
+the canonical-gauge form have different ones.  A proof whose goal is stated through these accessors but
 whose supporting lemmas are stated over the historical record — the block lemmas
 in `SinTheta/**` are the usual case — has to reconcile the two.
 

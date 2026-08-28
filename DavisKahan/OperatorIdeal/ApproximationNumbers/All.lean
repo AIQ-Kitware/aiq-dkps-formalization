@@ -11,6 +11,5 @@ import DavisKahan.OperatorIdeal.ApproximationNumbers.OperatorModulus
 import DavisKahan.OperatorIdeal.ApproximationNumbers.Real
 import DavisKahan.OperatorIdeal.ApproximationNumbers.RestrictedDisplacementDominance
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
-import DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation
 
 /-! # `DavisKahan/OperatorIdeal/ApproximationNumbers` -/
