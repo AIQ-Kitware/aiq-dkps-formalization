@@ -32,7 +32,7 @@ namespace ExactSinTheta
 open scoped InnerProductSpace
 open Filter Topology
 open TauCeti.RealComplexification
-open ClosedOperatorComplexification
+open PartialMapComplexification
 
 noncomputable section
 

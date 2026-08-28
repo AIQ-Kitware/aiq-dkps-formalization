@@ -50,7 +50,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- Ambient kernel of a closed operator, represented inside the Hilbert space
 rather than inside its bundled domain. -/
-noncomputable def closedOperatorKernel
+noncomputable def partialMapKernel
     (A : H →ₗ.[ℂ] H) : Submodule ℂ H :=
   (LinearMap.ker A.toFun).map A.domain.subtype
 
@@ -103,7 +103,7 @@ structure SobolevTraceFoundation where
   /-- Isometric identification of the zero eigenspace with the affine modes. -/
   affineKernelEquiv :
     EuclideanSpace ℂ (Fin 2) ≃ₗᵢ[ℂ]
-      closedOperatorKernel
+      partialMapKernel
         (LinearPMap.mk freeDomain freeFourth)
   /-- First positive free-beam frequency and its characteristic localization. -/
   rootLocalization : PositiveRootLocalization
@@ -156,7 +156,7 @@ theorem operator_isSelfAdjoint (D : SobolevTraceFoundation (H := H)) :
 /-- The zero eigenspace has Hilbert dimension two. -/
 theorem kernel_equiv_affine (D : SobolevTraceFoundation (H := H)) :
     Nonempty
-      (EuclideanSpace ℂ (Fin 2) ≃ₗᵢ[ℂ] closedOperatorKernel D.operator) := by
+      (EuclideanSpace ℂ (Fin 2) ≃ₗᵢ[ℂ] partialMapKernel D.operator) := by
   exact ⟨by simpa [operator] using D.affineKernelEquiv⟩
 
 /-- The first positive spectral value, hence the paper's third eigenvalue,

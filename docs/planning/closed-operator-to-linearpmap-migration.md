@@ -1,18 +1,18 @@
-# `DavisKahanExt.ClosedOperator` → `LinearPMap`: state and remaining steps
+# `DavisKahanExt.PartialMap` → `LinearPMap`: state and remaining steps
 
 **Status 2026-08-27: in progress, steps 1 and 2 landed.**
 
 `AGENTS.md` closes the representation question: the canonical carrier for an
 unbounded operator is Mathlib's `LinearPMap`, with closedness, dense domain,
 symmetry, and self-adjointness as *properties*; the bundled DKPS
-`ClosedOperator` is a temporary compatibility adapter. This file records how far
+`PartialMap` is a temporary compatibility adapter. This file records how far
 that migration has got and what the next commits are, so the next agent does not
 have to re-derive the order.
 
 ## What the bundle actually is
 
 ```lean
-structure ClosedOperator where
+structure PartialMap where
   domain : Submodule 𝕜 E
   toLinearMap : domain →ₗ[𝕜] E
   dense_domain : Dense (domain : Set E)
@@ -29,7 +29,7 @@ almost entirely mechanical:
 
 | before | after |
 | --- | --- |
-| `(A : ...ClosedOperator (𝕜 := 𝕜) (E := E))` | `(A : E →ₗ.[𝕜] E)` |
+| `(A : ...PartialMap (𝕜 := 𝕜) (E := E))` | `(A : E →ₗ.[𝕜] E)` |
 | `A.toLinearPMap` | `A` |
 | `A.toLinearMap x` | `A x` |
 | `A.dense_domain` | a `(hA : Dense (A.domain : Set E))` hypothesis |
@@ -83,7 +83,7 @@ having migrated consumers first.
      `closedOperatorOfSelfAdjointPMap (LinearPMap.specRestrict hA B hB) _`, so
      its body is already a partial map. **Retyping it was attempted and reverted
      on 2026-08-27**, because it is not separable from the two items below it:
-     the sine-theta data records hold its result in a `ClosedOperator` field, and
+     the sine-theta data records hold its result in a `PartialMap` field, and
      `semibounded_of_spectrum_subset_Icc` →
      `exists_boundedRealization_of_spectrum_subset_Icc` → `BoundedRealization`
      carry the bundle all the way into `SpectralTheory/FormMethod/**`. Do this
@@ -94,7 +94,7 @@ having migrated consumers first.
      `closedOperatorOfSelfAdjointPMap`, which is the adapter in the correct
      direction.
    * `realSelfAdjointSpectralRestriction` (41), `reducingRestriction` (45),
-     `ClosedOperator.addBounded` (174), `ClosedOperator.ofBounded` (121).
+     `PartialMap.addBounded` (174), `PartialMap.ofBounded` (121).
      `(ofBounded A).toLinearPMap = A.toLinearMap.toPMap ⊤` by `rfl` already.
 4. **The unbounded sine-theta core.** `SinTheta/Unbounded/Core.lean` carries both
    `UnboundedSinThetaData` (bundled) and `UnboundedSinThetaDataPMap` (raw) with
@@ -103,14 +103,14 @@ having migrated consumers first.
    `SinTheta/**` and `Sources/**` counts.
 5. **Tangent, double-angle and source-facing remnants**, then
    `Specialized/FreeBeam/**`.
-6. **Delete `DavisKahan/Interop/TauCeti/ClosedOperator.lean`** — its only export,
-   `ClosedOperator.ofLinearPMap`, has one consumer,
+6. **Delete `DavisKahan/Interop/TauCeti/PartialMap.lean`** — its only export,
+   `PartialMap.ofLinearPMap`, has one consumer,
    `UnboundedSinThetaDataPMap.toClosed`, which step 4 removes — and then
    `DavisKahan/SpectralTheory/PartialMap/**` itself.
 
 ## Size
 
-Occurrences of the bundle outside `ClosedOperatorComplexification`, by area, at
+Occurrences of the bundle outside `PartialMapComplexification`, by area, at
 the end of step 2:
 
 ```text
@@ -119,6 +119,6 @@ Specialized 23   TanTheta 26   DoubleAngle 18   TanTwoTheta 8
 Interop 8   InfiniteDimensional 4   OperatorIdeal 1
 ```
 
-`ClosedOperatorComplexification` (113 further mentions in
+`PartialMapComplexification` (113 further mentions in
 `SpectralTheory/Real/SpectralRestriction.lean`) is a namespace prefix, not the
 carrier; it migrates with step 3.

@@ -32,7 +32,7 @@ Concrete operating principles:
 
 * **General mathematics goes at the lowest reusable layer.** If a proof says nothing about Davis--Kahan, Section numbers, or paper-specific records, it probably belongs in `ForTauCeti/`.
 * **Paper facades should expose paper hypotheses.** Internal records are useful implementation devices, but a source endpoint is not complete if its caller is required to supply a branch selection, spectral orientation, smallness condition, or conclusion-like witness that the paper itself proves.
-* **`LinearPMap` is the canonical carrier for unbounded operators.** The local `ClosedOperator` compatibility layer is transitional. New foundational work should normally strengthen `LinearPMap`, not deepen the duplicate carrier.
+* **`LinearPMap` is the canonical carrier for unbounded operators.** The local `PartialMap` compatibility layer is transitional. New foundational work should normally strengthen `LinearPMap`, not deepen the duplicate carrier.
 * **Complexification is a proof technique, not the default architecture.** First determine whether the proof is already scalar-generic. If an essential ingredient is genuinely complex-only, transport the smallest necessary portion and descend the actual mathematical object, not an arbitrary existential witness.
 * **Mission boundaries are planning boundaries, not architectural walls.** It is correct to repair a missing reusable theorem immediately below the current source theorem. It is not necessary to implement an unrelated adjacent roadmap item.
 * **Do not modify `external/TauCeti/` or the roadmap checkout from this repository.** They are references. Reusable mathematics needed here lives in `ForTauCeti/`.
@@ -165,7 +165,7 @@ Do not rewrite `spectrum ℝ` through complexification. The repository has a rea
 
 ### 2.4 Unbounded operators
 
-The canonical unbounded carrier is Mathlib `LinearPMap`. Existing `DKClosedOperator` / `ClosedOperator` wrappers are compatibility layers. If a new theorem is fundamentally about domains, graph closure, spectral projections, or self-adjoint partial maps, prefer the `LinearPMap` layer and adapt outward.
+The canonical unbounded carrier is Mathlib `LinearPMap`. Existing `DKClosedOperator` / `PartialMap` wrappers are compatibility layers. If a new theorem is fundamentally about domains, graph closure, spectral projections, or self-adjoint partial maps, prefer the `LinearPMap` layer and adapt outward.
 
 In particular, recent spectral cutoff and spectral reduction work is already `LinearPMap`-native. Reuse it.
 
@@ -984,7 +984,7 @@ Search for the Weinberger/lower-bound theorem before reproving it. The point of 
 
 ### M21: finish the `LinearPMap` migration
 
-Recent work moved spectral reduction and its real companion onto `LinearPMap`; that is the correct foundation. Several source facades still consume the temporary real `ClosedOperator` adapter. Re-search current HEAD for all consumers before editing, then migrate them dependency-order and delete the duplicate abstraction when the last consumer is gone.
+Recent work moved spectral reduction and its real companion onto `LinearPMap`; that is the correct foundation. Several source facades still consume the temporary real `PartialMap` adapter. Re-search current HEAD for all consumers before editing, then migrate them dependency-order and delete the duplicate abstraction when the last consumer is gone.
 
 This is not merely cosmetic. Remaining unbounded work should not be forced to prove each theorem twice because two domain carriers survive indefinitely.
 

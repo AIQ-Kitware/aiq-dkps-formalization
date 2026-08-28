@@ -32,7 +32,7 @@ namespace DavisKahan
 namespace RealSpectralRestriction
 
 open ExactSinTheta
-open ExactSinTheta.ClosedOperatorComplexification
+open ExactSinTheta.PartialMapComplexification
 open TauCeti.RealComplexification
 -- the namespace is split across the two libraries: `Basic` is in `ForTauCeti`, `Subspace` here
 open TauCeti.DavisKahan.Foundation.RealComplexification
@@ -85,20 +85,20 @@ theorem conjugatePVM_diag (P : TauCeti.ProjValMeasure Eℂ) (z : Eℂ) :
 
 /-- Conjugation preserves the coordinatewise complexified operator domain. -/
 def conjugationDomain (A : E →ₗ.[ℝ] E)
-    (z : (ClosedOperatorComplexification.complexify A).domain) :
-    (ClosedOperatorComplexification.complexify A).domain :=
+    (z : (PartialMapComplexification.complexify A).domain) :
+    (PartialMapComplexification.complexify A).domain :=
   ⟨conjugation (z : Eℂ), by
-    rw [ClosedOperatorComplexification.mem_complexify_domain_iff]
+    rw [PartialMapComplexification.mem_complexify_domain_iff]
     simpa using
-      (ClosedOperatorComplexification.mem_complexify_domain_iff A z).mp z.property⟩
+      (PartialMapComplexification.mem_complexify_domain_iff A z).mp z.property⟩
 
 omit [CompleteSpace E] in
 /-- The conjugation domain, unfolded to the underlying vector. -/
 @[simp]
 theorem conjugationDomain_coe (A : E →ₗ.[ℝ] E)
-    (z : (ClosedOperatorComplexification.complexify A).domain) :
+    (z : (PartialMapComplexification.complexify A).domain) :
     ((conjugationDomain A z :
-      (ClosedOperatorComplexification.complexify A).domain) : Eℂ) =
+      (PartialMapComplexification.complexify A).domain) : Eℂ) =
       conjugation (z : Eℂ) :=
   rfl
 
@@ -106,20 +106,20 @@ omit [CompleteSpace E] in
 /-- The complexified closed operator commutes with canonical conjugation on its
 operator domain. -/
 theorem complexify_apply_conjugationDomain (A : E →ₗ.[ℝ] E)
-    (z : (ClosedOperatorComplexification.complexify A).domain) :
-    (ClosedOperatorComplexification.complexify A)
+    (z : (PartialMapComplexification.complexify A).domain) :
+    (PartialMapComplexification.complexify A)
         (conjugationDomain A z) =
       conjugation
-        ((ClosedOperatorComplexification.complexify A) z) := by
+        ((PartialMapComplexification.complexify A) z) := by
   refine RealComplexification.ext ?_ ?_
-  · rw [ClosedOperatorComplexification.complexify_apply_re,
+  · rw [PartialMapComplexification.complexify_apply_re,
       RealComplexification.re_conj,
-      ClosedOperatorComplexification.complexify_apply_re]
-    exact ClosedOperatorComplexification.toLinearMap_congr rfl
-  · rw [ClosedOperatorComplexification.complexify_apply_im,
+      PartialMapComplexification.complexify_apply_re]
+    exact PartialMapComplexification.toLinearMap_congr rfl
+  · rw [PartialMapComplexification.complexify_apply_im,
       RealComplexification.im_conj,
-      ClosedOperatorComplexification.complexify_apply_im]
-    refine (ClosedOperatorComplexification.toLinearMap_congr ?_).trans (map_neg _ _)
+      PartialMapComplexification.complexify_apply_im]
+    refine (PartialMapComplexification.toLinearMap_congr ?_).trans (map_neg _ _)
     simp [conjugationDomain]
 
 /-- Resolvents of a complexified real self-adjoint operator, in the native
@@ -129,16 +129,16 @@ theorem conjugateOperator_tauCetiResolvent
     (A : E →ₗ.[ℝ] E) (_hA : IsSelfAdjoint A)
     {z : ℂ} (_hz : z.im ≠ 0)
     (hzr : z ∈ TauCeti.LinearPMap.resolventSet
-      (ClosedOperatorComplexification.complexify A))
+      (PartialMapComplexification.complexify A))
     (hzbr : (starRingEnd ℂ) z ∈ TauCeti.LinearPMap.resolventSet
-      (ClosedOperatorComplexification.complexify A)) :
+      (PartialMapComplexification.complexify A)) :
     conjugateOperator (TauCeti.LinearPMap.resolvent
-        (ClosedOperatorComplexification.complexify A) z)
+        (PartialMapComplexification.complexify A) z)
       = TauCeti.LinearPMap.resolvent
-          (ClosedOperatorComplexification.complexify A) ((starRingEnd ℂ) z) := by
+          (PartialMapComplexification.complexify A) ((starRingEnd ℂ) z) := by
   apply ContinuousLinearMap.ext
   intro ξ
-  set Aℂ := (ClosedOperatorComplexification.complexify A) with hAc
+  set Aℂ := (PartialMapComplexification.complexify A) with hAc
   set r : Eℂ := TauCeti.LinearPMap.resolvent Aℂ z (conjugation ξ) with hr
   have hrdom : r ∈ Aℂ.domain :=
     TauCeti.LinearPMap.resolvent_mem_domain hzr (conjugation ξ)
@@ -162,20 +162,20 @@ theorem conjugateOperator_tauCetiResolvent
 its adjoint by canonical conjugation. -/
 theorem conjugateOperator_cayley (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) :
     conjugateOperator (TauCeti.LinearPMap.cayley
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA))
+        (PartialMapComplexification.isSelfAdjoint_complexify hA))
       = star (TauCeti.LinearPMap.cayley
-          (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)) := by
-  set hAℂ := ClosedOperatorComplexification.isSelfAdjoint_complexify hA with hhAc
+          (PartialMapComplexification.isSelfAdjoint_complexify hA)) := by
+  set hAℂ := PartialMapComplexification.isSelfAdjoint_complexify hA with hhAc
   have hni := TauCeti.LinearPMap.negI_mem_resolventSet hAℂ
   have hi := TauCeti.LinearPMap.I_mem_resolventSet hAℂ
   have hconjI : ((starRingEnd ℂ) (-Complex.I)) ∈ TauCeti.LinearPMap.resolventSet
-      (ClosedOperatorComplexification.complexify A) := by simpa using hi
+      (PartialMapComplexification.complexify A) := by simpa using hi
   have hkey : conjugateOperator
       (TauCeti.LinearPMap.resolvent
-        (ClosedOperatorComplexification.complexify A) (-Complex.I))
+        (PartialMapComplexification.complexify A) (-Complex.I))
       = ContinuousLinearMap.adjoint
         (TauCeti.LinearPMap.resolvent
-          (ClosedOperatorComplexification.complexify A) (-Complex.I)) := by
+          (PartialMapComplexification.complexify A) (-Complex.I)) := by
     rw [conjugateOperator_tauCetiResolvent A hA (by simp) hni hconjI,
       TauCeti.LinearPMap.adjoint_resolvent hAℂ hni hconjI]
   simp only [TauCeti.LinearPMap.cayley, conjugateOperator_add, conjugateOperator_one,
@@ -236,16 +236,16 @@ theorem conjugateOperator_cfcHom {U : Eℂ →L[ℂ] Eℂ} (hU : IsStarNormal U)
 invariant: real symbols have conjugation-invariant calculus images. -/
 theorem diagMeasure_conjugation (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (η : Eℂ) :
     TauCeti.BorelCalculus.diagMeasure (TauCeti.LinearPMap.isStarNormal_cayley
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)) (conjugation η)
+        (PartialMapComplexification.isSelfAdjoint_complexify hA)) (conjugation η)
       = TauCeti.BorelCalculus.diagMeasure (TauCeti.LinearPMap.isStarNormal_cayley
-          (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)) η := by
+          (PartialMapComplexification.isSelfAdjoint_complexify hA)) η := by
   have hUc := conjugateOperator_cayley A hA
   refine TauCeti.BorelCalculus.diagMeasure_congr _ (DFunLike.ext _ _ fun g => ?_)
   change (⟪conjugation η, cfcHom _ (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap)
       (conjugation η)⟫_ℂ).re
     = (⟪η, cfcHom _ (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap) η⟫_ℂ).re
   set T := cfcHom (TauCeti.LinearPMap.isStarNormal_cayley
-    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA))
+    (PartialMapComplexification.isSelfAdjoint_complexify hA))
     (TauCeti.BorelCalculus.ofRealLM g.toContinuousMap) with hT
   have hfix : conjugateOperator T = T := by
     rw [hT, conjugateOperator_cfcHom _ hUc, TauCeti.BorelCalculus.star_ofRealLM]
@@ -263,10 +263,10 @@ integrals are real and the polarisation sum is its own conjugate. -/
 theorem conjugateOperator_specProjection (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
     conjugateOperator (TauCeti.LinearPMap.specProjection
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS)
+        (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS)
       = TauCeti.LinearPMap.specProjection
-          (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS := by
-  set hAℂ := ClosedOperatorComplexification.isSelfAdjoint_complexify hA with hhAc
+          (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS := by
+  set hAℂ := PartialMapComplexification.isSelfAdjoint_complexify hA with hhAc
   set hU := TauCeti.LinearPMap.isStarNormal_cayley hAℂ with hhU
   set κ := TauCeti.LinearPMap.cayleyInv hAℂ with hκ
   have hSm : MeasurableSet (κ ⁻¹' S) := TauCeti.LinearPMap.measurable_cayleyInv hAℂ hS
@@ -320,12 +320,12 @@ theorem conjugatePVM_spectralPVM
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) :
     conjugatePVM
         (TauCeti.LinearPMap.spectralPVM
-          (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)) =
+          (PartialMapComplexification.isSelfAdjoint_complexify hA)) =
       TauCeti.LinearPMap.spectralPVM
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) :=
+        (PartialMapComplexification.isSelfAdjoint_complexify hA) :=
   TauCeti.ProjValMeasure.ext_of_diag fun ξ =>
     congrArg (MeasureTheory.Measure.map (TauCeti.LinearPMap.cayleyInv
-      (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)))
+      (PartialMapComplexification.isSelfAdjoint_complexify hA)))
       (diagMeasure_conjugation A hA ξ)
 
 /-- Every measurable spectral projection of a complexified real self-adjoint
@@ -335,11 +335,11 @@ theorem conjugateOperator_selfAdjointSpectralProjection
     (S : Set ℝ) (hS : MeasurableSet S) :
     conjugateOperator
         (selfAdjointSpectralProjection
-          (ClosedOperatorComplexification.complexify A)
-          (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS) =
+          (PartialMapComplexification.complexify A)
+          (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS) =
       selfAdjointSpectralProjection
-        (ClosedOperatorComplexification.complexify A)
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS := by
+        (PartialMapComplexification.complexify A)
+        (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS := by
   exact conjugateOperator_specProjection A hA S hS
 
 /-- The canonical real spectral projection, obtained by descending the complex
@@ -349,8 +349,8 @@ noncomputable def realSelfAdjointSpectralProjection
     (S : Set ℝ) (hS : MeasurableSet S) : E →L[ℝ] E :=
   realPartOperator
     (selfAdjointSpectralProjection
-      (ClosedOperatorComplexification.complexify A)
-      (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS)
+      (PartialMapComplexification.complexify A)
+      (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS)
 
 /-- Complexification of the descended real projection recovers the canonical
 complex spectral projection. -/
@@ -360,8 +360,8 @@ theorem complexify_realSelfAdjointSpectralProjection
     RealComplexification.complexify
         (realSelfAdjointSpectralProjection A hA S hS) =
       selfAdjointSpectralProjection
-        (ClosedOperatorComplexification.complexify A)
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS := by
+        (PartialMapComplexification.complexify A)
+        (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS := by
   exact complexify_realPartOperator
     (conjugateOperator_selfAdjointSpectralProjection A hA S hS)
 
@@ -371,8 +371,8 @@ theorem selfAdjointSpectralProjection_ofReal
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) (x : E) :
     selfAdjointSpectralProjection
-        (ClosedOperatorComplexification.complexify A)
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS
+        (PartialMapComplexification.complexify A)
+        (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS
         (ofReal x) =
       ofReal (realSelfAdjointSpectralProjection A hA S hS x) := by
   rw [← complexify_realSelfAdjointSpectralProjection A hA S hS]
@@ -392,13 +392,13 @@ theorem realSelfAdjointSpectralProjection_idem
   rw [RealComplexification.complexify_comp,
     complexify_realSelfAdjointSpectralProjection]
   change selfAdjointSpectralProjection
-      (ClosedOperatorComplexification.complexify A)
-      (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS *
+      (PartialMapComplexification.complexify A)
+      (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS *
     selfAdjointSpectralProjection
-      (ClosedOperatorComplexification.complexify A)
-      (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS = _
+      (PartialMapComplexification.complexify A)
+      (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS = _
   exact (TauCeti.LinearPMap.spectralPVM
-    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)).proj_idem S hS
+    (PartialMapComplexification.isSelfAdjoint_complexify hA)).proj_idem S hS
 
 /-- The descended real spectral projection is self-adjoint. -/
 theorem realSelfAdjointSpectralProjection_isSelfAdjoint
@@ -410,7 +410,7 @@ theorem realSelfAdjointSpectralProjection_isSelfAdjoint
   rw [TauCeti.RealComplexification.complexify_adjoint,
     complexify_realSelfAdjointSpectralProjection]
   exact (TauCeti.LinearPMap.spectralPVM
-    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)).isSelfAdjoint_proj S hS
+    (PartialMapComplexification.isSelfAdjoint_complexify hA)).isSelfAdjoint_proj S hS
     |>.adjoint_eq
 
 /-- The real spectral range. -/
@@ -502,8 +502,8 @@ theorem complexifySubmodule_realSelfAdjointSpectralSubspace
     (S : Set ℝ) (hS : MeasurableSet S) :
     complexifySubmodule (realSelfAdjointSpectralSubspace A hA S hS) =
       selfAdjointSpectralSubspace
-        (ClosedOperatorComplexification.complexify A)
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS := by
+        (PartialMapComplexification.complexify A)
+        (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS := by
   ext z
   rw [← Submodule.starProjection_eq_self_iff,
     ← Submodule.starProjection_eq_self_iff]
@@ -526,7 +526,7 @@ theorem realSelfAdjointSpectralProjection_compl
     RealComplexification.complexify_id,
     complexify_realSelfAdjointSpectralProjection]
   exact (TauCeti.LinearPMap.spectralPVM
-    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)).proj_compl S hS
+    (PartialMapComplexification.isSelfAdjoint_complexify hA)).proj_compl S hS
 
 /-- The range selected by the complement set is the orthogonal complement of
 the selected real spectral range. -/
@@ -547,8 +547,8 @@ theorem realSelfAdjointSpectralSubspace_compl
 omit [CompleteSpace E] in
 /-- The real copy of a domain vector has the expected underlying vector. -/
 private theorem coe_ofRealDomain (A : E →ₗ.[ℝ] E) (x : A.domain) :
-    ((ClosedOperatorComplexification.ofRealDomain A x :
-      (ClosedOperatorComplexification.complexify A).domain) : Eℂ) =
+    ((PartialMapComplexification.ofRealDomain A x :
+      (PartialMapComplexification.complexify A).domain) : Eℂ) =
       ofReal (x : E) :=
   rfl
 
@@ -568,10 +568,10 @@ theorem realSelfAdjointSpectralProjection_mem_domain
     {S : Set ℝ} (hS : MeasurableSet S) (x : A.domain) :
     realSelfAdjointSpectralProjection A hA S hS (x : E) ∈ A.domain := by
   have hproj := selfAdjointSpectralProjection_mem_domain
-    (ClosedOperatorComplexification.complexify A)
-    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) hS
-    (ClosedOperatorComplexification.ofRealDomain A x)
-  rw [ClosedOperatorComplexification.mem_complexify_domain_iff] at hproj
+    (PartialMapComplexification.complexify A)
+    (PartialMapComplexification.isSelfAdjoint_complexify hA) hS
+    (PartialMapComplexification.ofRealDomain A x)
+  rw [PartialMapComplexification.mem_complexify_domain_iff] at hproj
   have hre := hproj.1
   rw [coe_ofRealDomain A x, selfAdjointSpectralProjection_ofReal,
     re_ofReal] at hre
@@ -587,19 +587,19 @@ theorem realSelfAdjoint_apply_spectralProjection
           realSelfAdjointSpectralProjection_mem_domain A hA hS x⟩ =
       realSelfAdjointSpectralProjection A hA S hS (A x) := by
   have hcomm := selfAdjoint_apply_spectralProjection
-    (ClosedOperatorComplexification.complexify A)
-    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) hS
-    (ClosedOperatorComplexification.ofRealDomain A x)
+    (PartialMapComplexification.complexify A)
+    (PartialMapComplexification.isSelfAdjoint_complexify hA) hS
+    (PartialMapComplexification.ofRealDomain A x)
   have hre := congrArg re hcomm
-  rw [ClosedOperatorComplexification.complexify_apply_re,
-    ClosedOperatorComplexification.complexify_apply_ofReal,
+  rw [PartialMapComplexification.complexify_apply_re,
+    PartialMapComplexification.complexify_apply_ofReal,
     selfAdjointSpectralProjection_ofReal A hA S hS, re_ofReal] at hre
   refine Eq.trans ?_ hre
-  refine ClosedOperatorComplexification.toLinearMap_congr ?_
+  refine PartialMapComplexification.toLinearMap_congr ?_
   show realSelfAdjointSpectralProjection A hA S hS (x : E) =
     re (selfAdjointSpectralProjection
-      (ClosedOperatorComplexification.complexify A)
-      (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) S hS
+      (PartialMapComplexification.complexify A)
+      (PartialMapComplexification.isSelfAdjoint_complexify hA) S hS
       (ofReal (x : E)))
   rw [selfAdjointSpectralProjection_ofReal A hA S hS, re_ofReal]
 
@@ -646,7 +646,7 @@ noncomputable def realSelfAdjointSpectralSubspaceInclusion
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
     realSelfAdjointSpectralSubspace A hA S hS →L[ℝ] E :=
-  TauCeti.DavisKahanExt.ClosedOperator.reducingSubspaceInclusion
+  TauCeti.DavisKahanExt.PartialMap.reducingSubspaceInclusion
     (realSelfAdjointSpectralSubspace A hA S hS)
 
 /-- The real spectral-range inclusion is isometric. -/
@@ -655,7 +655,7 @@ theorem realSelfAdjointSpectralSubspaceInclusion_isometric
     (S : Set ℝ) (hS : MeasurableSet S) :
     IsometricEmbedding
       (realSelfAdjointSpectralSubspaceInclusion A hA S hS) :=
-  TauCeti.DavisKahanExt.ClosedOperator.reducingSubspaceInclusion_isometric _
+  TauCeti.DavisKahanExt.PartialMap.reducingSubspaceInclusion_isometric _
 
 /-- Canonical real closed restriction to a measurable spectral range. -/
 noncomputable def realSelfAdjointSpectralRestriction
@@ -672,7 +672,7 @@ theorem realSelfAdjointSpectralRestriction_isSelfAdjoint
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S) :
     _root_.IsSelfAdjoint (realSelfAdjointSpectralRestriction A hA S hS) := by
-  exact TauCeti.DavisKahanExt.ClosedOperator.reducingRestriction_isSelfAdjoint
+  exact TauCeti.DavisKahanExt.PartialMap.reducingRestriction_isSelfAdjoint
     A (realSelfAdjointSpectralSubspace A hA S hS)
     (realSelfAdjointSpectralSubspace_reducing A hA S hS) hA
 
@@ -684,7 +684,7 @@ theorem realSelfAdjointSpectralRestriction_inclusion_mem_domain
     (x : (realSelfAdjointSpectralRestriction A hA S hS).domain) :
     realSelfAdjointSpectralSubspaceInclusion A hA S hS
         (x : realSelfAdjointSpectralSubspace A hA S hS) ∈ A.domain := by
-  exact TauCeti.DavisKahanExt.ClosedOperator.reducingRestriction_inclusion_mem_domain
+  exact TauCeti.DavisKahanExt.PartialMap.reducingRestriction_inclusion_mem_domain
     A (realSelfAdjointSpectralSubspace A hA S hS)
     (realSelfAdjointSpectralSubspace_reducing A hA S hS) x
 
@@ -701,7 +701,7 @@ theorem realSelfAdjointSpectralRestriction_inclusion_intertwines
             A hA S hS x⟩ =
       realSelfAdjointSpectralSubspaceInclusion A hA S hS
         ((realSelfAdjointSpectralRestriction A hA S hS) x) := by
-  exact TauCeti.DavisKahanExt.ClosedOperator.reducingRestriction_inclusion_intertwines
+  exact TauCeti.DavisKahanExt.PartialMap.reducingRestriction_inclusion_intertwines
     A (realSelfAdjointSpectralSubspace A hA S hS)
     (realSelfAdjointSpectralSubspace_reducing A hA S hS) x
 

@@ -208,7 +208,7 @@ alias Theorem6_2_real_commonDomain_boundNorm_of_finiteRank :=
 
 /-! ## Graph-core appendix forms -/
 
-alias IsGraphCore := ClosedOperator.IsGraphCore
+alias IsGraphCore := PartialMap.IsGraphCore
 alias CommonCoreResidualData := PaperCommonCoreResidualData
 alias commonCoreResidual_extends_to_domain :=
   PaperCommonCoreResidualData.extends_to_domain

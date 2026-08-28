@@ -57,27 +57,27 @@ structure BeamFoundationCompletionData where
     ⟪traceModel.freeFourthAmbient x, (y : H)⟫_ℂ =
       ⟪(x : H), traceModel.freeFourthAmbient y⟫_ℂ
   selfAdjoint :
-    _root_.IsSelfAdjoint (traceModel.toClosedOperatorOfGraphNorm free_dense
+    _root_.IsSelfAdjoint (traceModel.toPartialMapOfGraphNorm free_dense
       graphConstant_pos graph_lower_bound)
   graph_compact :
     Abstract.SequentiallyCompactGraphEmbedding
-      (traceModel.toClosedOperatorOfGraphNorm free_dense
+      (traceModel.toPartialMapOfGraphNorm free_dense
         graphConstant_pos graph_lower_bound)
   affineKernelEquiv :
     EuclideanSpace ℂ (Fin 2) ≃ₗᵢ[ℂ]
-      closedOperatorKernel
-        (traceModel.toClosedOperatorOfGraphNorm free_dense
+      partialMapKernel
+        (traceModel.toPartialMapOfGraphNorm free_dense
           graphConstant_pos graph_lower_bound)
   rootLocalization : PositiveRootLocalization
   firstPositiveSpectralValue : ℝ
   firstPositiveSpectralValue_eq :
     firstPositiveSpectralValue = rootLocalization.firstPositiveRoot ^ 4
   spectrum_nonnegative :
-    TauCeti.LinearPMap.realSpectrum (traceModel.toClosedOperatorOfGraphNorm
+    TauCeti.LinearPMap.realSpectrum (traceModel.toPartialMapOfGraphNorm
       free_dense graphConstant_pos graph_lower_bound) ⊆ Set.Ici 0
   positive_spectrum_characterization : ∀ lambda : ℝ,
     lambda ∈ TauCeti.LinearPMap.realSpectrum
-      (traceModel.toClosedOperatorOfGraphNorm free_dense
+      (traceModel.toPartialMapOfGraphNorm free_dense
         graphConstant_pos graph_lower_bound) →
     0 < lambda →
     ∃ beta : ℝ, 0 < beta ∧ characteristic beta = 0 ∧ lambda = beta ^ 4
@@ -118,8 +118,8 @@ noncomputable def toSobolevTraceFoundation
   closed_freeGraph := D.closed_freeGraph
   green_identity := D.green_identity
   selfAdjoint := by
-    simpa [Abstract.FourthOrderTraceModel.toClosedOperatorOfGraphNorm,
-      Abstract.FourthOrderTraceModel.toClosedOperator] using D.selfAdjoint
+    simpa [Abstract.FourthOrderTraceModel.toPartialMapOfGraphNorm,
+      Abstract.FourthOrderTraceModel.toPartialMap] using D.selfAdjoint
   graph_compact := by
     intro x hx
     apply D.graph_compact x
@@ -130,19 +130,19 @@ noncomputable def toSobolevTraceFoundation
       ‖D.traceModel.freeFourthAmbient (x n)‖ ^ 2 ≤ C
     simpa only [Abstract.FourthOrderTraceModel.freeFourthAmbient_inverse] using hC n
   affineKernelEquiv := by
-    simpa [Abstract.FourthOrderTraceModel.toClosedOperatorOfGraphNorm,
-      Abstract.FourthOrderTraceModel.toClosedOperator] using D.affineKernelEquiv
+    simpa [Abstract.FourthOrderTraceModel.toPartialMapOfGraphNorm,
+      Abstract.FourthOrderTraceModel.toPartialMap] using D.affineKernelEquiv
   rootLocalization := D.rootLocalization
   firstPositiveSpectralValue := D.firstPositiveSpectralValue
   firstPositiveSpectralValue_eq := D.firstPositiveSpectralValue_eq
   spectrum_nonnegative := by
-    simpa [Abstract.FourthOrderTraceModel.toClosedOperatorOfGraphNorm,
-      Abstract.FourthOrderTraceModel.toClosedOperator] using D.spectrum_nonnegative
+    simpa [Abstract.FourthOrderTraceModel.toPartialMapOfGraphNorm,
+      Abstract.FourthOrderTraceModel.toPartialMap] using D.spectrum_nonnegative
   positive_spectrum_characterization := by
     intro lambda hlambda hpositive
     apply D.positive_spectrum_characterization lambda
-    · simpa [Abstract.FourthOrderTraceModel.toClosedOperatorOfGraphNorm,
-        Abstract.FourthOrderTraceModel.toClosedOperator] using hlambda
+    · simpa [Abstract.FourthOrderTraceModel.toPartialMapOfGraphNorm,
+        Abstract.FourthOrderTraceModel.toPartialMap] using hlambda
     · exact hpositive
 
 /-- The assembled first positive spectral value exceeds `500`. -/

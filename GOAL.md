@@ -229,7 +229,7 @@ The desired end state is;
 
 There are two LARGE migrations that are intentionally OUTSIDE this campaign;
 
-    DavisKahanExt.ClosedOperator -> LinearPMap
+    DavisKahanExt.PartialMap -> LinearPMap
 
 and the retirement of legacy rectangular / old ideal-family abstractions.
 
@@ -1092,11 +1092,11 @@ OUTSIDE THIS CAMPAIGN — DO NOT START YET
 
 The following remain important, but they are separate campaigns.
 
-1. ClosedOperator -> LinearPMap
+1. PartialMap -> LinearPMap
 
 There are still many production uses of;
 
-    DavisKahanExt.ClosedOperator
+    DavisKahanExt.PartialMap
 
 despite `LinearPMap` being the canonical unbounded carrier.
 

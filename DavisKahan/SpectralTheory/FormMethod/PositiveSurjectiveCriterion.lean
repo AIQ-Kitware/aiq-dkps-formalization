@@ -135,7 +135,7 @@ theorem isSelfAdjoint_of_isFormalAdjoint_nonnegative_one_add_surjective
   exact ⟨hw, x.property, hxeq⟩
 
 /-- Closed-operator wrapper for the positive-surjective criterion. -/
-theorem DavisKahanExt.ClosedOperator.isSelfAdjoint_of_nonnegative_one_add_surjective
+theorem DavisKahanExt.PartialMap.isSelfAdjoint_of_nonnegative_one_add_surjective
     (A : H →ₗ.[𝕜] H)
     (hsym : TauCeti.LinearPMap.IsSymmetric A)
     (hnonneg : ∀ x : A.domain,

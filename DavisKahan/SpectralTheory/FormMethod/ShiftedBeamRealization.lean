@@ -98,7 +98,7 @@ theorem embed_formRepresentative
     D.embed (D.formRepresentative x) = (x : H) := by
   change D.toCoerciveFormData.resolvent
       (D.shiftedOperator x) = (x : H)
-  exact Abstract.R_inverseClosedOperator_apply
+  exact Abstract.R_inversePartialMap_apply
     D.toCoerciveFormData.resolvent
     D.toCoerciveFormData.resolvent_isSelfAdjoint
     D.toCoerciveFormData.resolvent_injective x

@@ -16,7 +16,7 @@
       "local_declarations": [
         "dense_domain_of_nonnegative_one_add_surjective",
         "isSelfAdjoint_of_isFormalAdjoint_nonnegative_one_add_surjective",
-        "DavisKahanExt.ClosedOperator.isSelfAdjoint_of_nonnegative_one_add_surjective"
+        "DavisKahanExt.PartialMap.isSelfAdjoint_of_nonnegative_one_add_surjective"
       ],
       "adaptation_kind": "generalized and reorganized proof",
       "semantic_note": "The modular-operator-specific argument is abstracted to every symmetric nonnegative partial operator with surjective one-plus operator."

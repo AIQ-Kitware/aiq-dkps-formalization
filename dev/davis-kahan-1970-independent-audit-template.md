@@ -96,7 +96,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_headline_generic`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean:103`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean:102`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

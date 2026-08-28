@@ -36,7 +36,7 @@ universe v
 
 /-- Every point of the spectra of two partial maps is separated by at least
 `delta`.  This is the canonical pairwise-gap predicate; the bundled
-`ClosedOperator` form below remains only for existing source-facing data. -/
+`PartialMap` form below remains only for existing source-facing data. -/
 def LinearPMap.PairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]

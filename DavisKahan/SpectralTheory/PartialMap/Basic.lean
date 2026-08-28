@@ -11,7 +11,7 @@ import DavisKahan.SpectralTheory.AbstractSpectrum
 /-!
 # The bundled closed-operator record is gone
 
-`TauCeti.DavisKahanExt.ClosedOperator` was a `LinearPMap` together with dense
+`TauCeti.DavisKahanExt.PartialMap` was a `LinearPMap` together with dense
 domain and closed graph as *fields*.  The canonical carrier is Mathlib's
 `LinearPMap`, with those two as properties, and this module held the wrapper.
 

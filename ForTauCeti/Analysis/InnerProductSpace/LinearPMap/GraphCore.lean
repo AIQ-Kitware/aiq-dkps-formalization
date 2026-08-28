@@ -27,7 +27,7 @@ chosen to avoid installing a second topology on the domain subtype.
 ## Provenance
 
 * Original module: `DavisKahan/Sources/DavisKahan1970/SineTheta/CommonCore.lean`,
-  where it was stated for the bundled DKPS `ClosedOperator`.
+  where it was stated for the bundled DKPS `PartialMap`.
 * Extraction class: **representation migration** onto Mathlib's `LinearPMap`,
   per the U1 lane.  Generalised on
   the way: the original was stated for an endomorphism, this is stated for

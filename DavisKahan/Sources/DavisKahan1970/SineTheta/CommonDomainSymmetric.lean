@@ -220,23 +220,23 @@ noncomputable def forwardData
   residual := P.perturbation ∘L U.subtypeL
   X_maps_domain := fun x =>
     P.mem_domain_B
-      (ClosedOperator.reducingRestriction_inclusion_mem_domain P.A U P.reduces_A_U x)
+      (PartialMap.reducingRestriction_inclusion_mem_domain P.A U P.reduces_A_U x)
   F₁_maps_domain := fun y =>
-    ClosedOperator.reducingRestriction_inclusion_mem_domain P.B Vᗮ
+    PartialMap.reducingRestriction_inclusion_mem_domain P.B Vᗮ
       P.reduces_B_V.orthogonal y
   residual_eq := by
     intro x
     have hmemA : ((x : U) : E) ∈ P.A.domain :=
-      ClosedOperator.reducingRestriction_inclusion_mem_domain P.A U P.reduces_A_U x
+      PartialMap.reducingRestriction_inclusion_mem_domain P.A U P.reduces_A_U x
     have hint :
         (U.subtypeL
             ((TauCeti.LinearPMap.reducingRestriction P.A U P.reduces_A_U) x) : E) =
           P.A ⟨((x : U) : E), hmemA⟩ :=
-      (ClosedOperator.reducingRestriction_inclusion_intertwines P.A U P.reduces_A_U x).symm
+      (PartialMap.reducingRestriction_inclusion_intertwines P.A U P.reduces_A_U x).symm
     rw [hint]
     exact P.perturbation_eq _ hmemA (P.mem_domain_B hmemA)
   intertwines :=
-    ClosedOperator.reducingRestriction_inclusion_intertwines P.B Vᗮ
+    PartialMap.reducingRestriction_inclusion_intertwines P.B Vᗮ
       P.reduces_B_V.orthogonal
 
 /-- Internal data for the reversed application, with `A` and `B` interchanged. -/
@@ -251,20 +251,20 @@ noncomputable def reverseData
   residual := (-P.perturbation) ∘L V.subtypeL
   X_maps_domain := fun x =>
     P.mem_domain_A
-      (ClosedOperator.reducingRestriction_inclusion_mem_domain P.B V P.reduces_B_V x)
+      (PartialMap.reducingRestriction_inclusion_mem_domain P.B V P.reduces_B_V x)
   F₁_maps_domain := fun y =>
-    ClosedOperator.reducingRestriction_inclusion_mem_domain P.A Uᗮ
+    PartialMap.reducingRestriction_inclusion_mem_domain P.A Uᗮ
       P.reduces_A_U.orthogonal y
   residual_eq := by
     intro x
     have hmemB : ((x : V) : E) ∈ P.B.domain :=
-      ClosedOperator.reducingRestriction_inclusion_mem_domain P.B V P.reduces_B_V x
+      PartialMap.reducingRestriction_inclusion_mem_domain P.B V P.reduces_B_V x
     have hmemA : ((x : V) : E) ∈ P.A.domain := P.mem_domain_A hmemB
     have hint :
         (V.subtypeL
             ((TauCeti.LinearPMap.reducingRestriction P.B V P.reduces_B_V) x) : E) =
           P.B ⟨((x : V) : E), hmemB⟩ :=
-      (ClosedOperator.reducingRestriction_inclusion_intertwines P.B V P.reduces_B_V x).symm
+      (PartialMap.reducingRestriction_inclusion_intertwines P.B V P.reduces_B_V x).symm
     rw [hint]
     have hPE := P.perturbation_eq ((x : V) : E) hmemA hmemB
     have : P.A ⟨((x : V) : E), hmemA⟩ -
@@ -272,7 +272,7 @@ noncomputable def reverseData
       rw [← hPE]; abel
     exact this
   intertwines :=
-    ClosedOperator.reducingRestriction_inclusion_intertwines P.A Uᗮ
+    PartialMap.reducingRestriction_inclusion_intertwines P.A Uᗮ
       P.reduces_A_U.orthogonal
 
 /-- The first exact cross-projection block.  It is determined by the two subspaces alone;
@@ -307,9 +307,9 @@ theorem forward_all_kyFan [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
   intro k
   set D := P.forwardData with hD
   have hA0 : _root_.IsSelfAdjoint D.A₀ :=
-    ClosedOperator.reducingRestriction_isSelfAdjoint P.A U P.reduces_A_U P.selfAdjoint_A
+    PartialMap.reducingRestriction_isSelfAdjoint P.A U P.reduces_A_U P.selfAdjoint_A
   have hL : _root_.IsSelfAdjoint D.Λ₁ :=
-    ClosedOperator.reducingRestriction_isSelfAdjoint P.B Vᗮ
+    PartialMap.reducingRestriction_isSelfAdjoint P.B Vᗮ
       P.reduces_B_V.orthogonal P.selfAdjoint_B
   have hEq := unbounded_adjoint_residual_block_identity D P.selfAdjoint_B hA0 hL
   -- The only step that is not scalar-generic on its own; see the module docstring.
@@ -361,9 +361,9 @@ theorem reverse_all_kyFan [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
   intro k
   set D := P.reverseData with hD
   have hA0 : _root_.IsSelfAdjoint D.A₀ :=
-    ClosedOperator.reducingRestriction_isSelfAdjoint P.B V P.reduces_B_V P.selfAdjoint_B
+    PartialMap.reducingRestriction_isSelfAdjoint P.B V P.reduces_B_V P.selfAdjoint_B
   have hL : _root_.IsSelfAdjoint D.Λ₁ :=
-    ClosedOperator.reducingRestriction_isSelfAdjoint P.A Uᗮ
+    PartialMap.reducingRestriction_isSelfAdjoint P.A Uᗮ
       P.reduces_A_U.orthogonal P.selfAdjoint_A
   have hEq := unbounded_adjoint_residual_block_identity D P.selfAdjoint_A hA0 hL
   have hraw := unbounded_sylvester_kyFan hA0 hL P.gap_pos P.gap_V_to_Uperp hEq k
@@ -576,8 +576,8 @@ noncomputable def ofBounded (P : PaperSymmetricSinThetaProblem (E := E)) :
   B := (P.B.toLinearMap.toPMap ⊤)
   selfAdjoint_A := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A
   selfAdjoint_B := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B
-  reduces_A_U := TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
-  reduces_B_V := TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
+  reduces_A_U := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
+  reduces_B_V := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
   perturbation := P.perturbation
   domain_eq := rfl
   perturbation_eq := by intro x _ _; rfl
@@ -644,8 +644,8 @@ noncomputable def ofBoundedReal (P : PaperRealSymmetricSinThetaProblem (E := E))
   B := (P.B.toLinearMap.toPMap ⊤)
   selfAdjoint_A := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A
   selfAdjoint_B := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B
-  reduces_A_U := TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
-  reduces_B_V := TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
+  reduces_A_U := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
+  reduces_B_V := TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
   perturbation := P.perturbation
   domain_eq := rfl
   perturbation_eq := by intro x _ _; rfl

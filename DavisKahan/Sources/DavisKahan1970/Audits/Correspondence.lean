@@ -18,7 +18,7 @@ namespace TauCeti
 namespace DavisKahan
 namespace ExactSinTheta
 
-#check ClosedOperator.IsGraphCore
+#check PartialMap.IsGraphCore
 #check PaperCommonCoreResidualData.extends_to_domain
 #check unboundedSinThetaDataOfPaperCommonCore
 #check PaperCommonCoreTheorem61Data.result_every_unitarilyInvariantNorm_across

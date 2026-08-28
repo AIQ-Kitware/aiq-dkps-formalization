@@ -221,7 +221,7 @@ theorem beamOperator_affine_mem_and_zero (a b : ℝ) :
   refine ⟨hmem, ?_⟩
   have hshift : beamShiftedFormData.shiftedOperator ⟨affineLp a b, hmem⟩ =
       affineLp a b := by
-    have happ := Abstract.inverseClosedOperator_apply_R beamCoerciveFormData.resolvent
+    have happ := Abstract.inversePartialMap_apply_R beamCoerciveFormData.resolvent
       beamCoerciveFormData.resolvent_isSelfAdjoint
       beamCoerciveFormData.resolvent_injective (affineLp a b)
     have hsub : (⟨beamCoerciveFormData.resolvent (affineLp a b),
@@ -710,7 +710,7 @@ theorem classicalFreeBeamCoreGraph_subset_graph :
   rintro z ⟨g, hg, rfl⟩
   have hmem : beamCoerciveFormData.resolvent g ∈ beamOperator.domain :=
     LinearMap.mem_range_self _ g
-  have hshift := Abstract.inverseClosedOperator_apply_R beamCoerciveFormData.resolvent
+  have hshift := Abstract.inversePartialMap_apply_R beamCoerciveFormData.resolvent
     beamCoerciveFormData.resolvent_isSelfAdjoint beamCoerciveFormData.resolvent_injective g
   have hsub : (⟨beamCoerciveFormData.resolvent g, LinearMap.mem_range_self _ g⟩ :
       beamShiftedFormData.shiftedOperator.domain) =
@@ -751,7 +751,7 @@ theorem classicalFreeBeamCoreGraph_has_classical_representative
     exact h
   have hmem : beamCoerciveFormData.resolvent g ∈ beamOperator.domain :=
     LinearMap.mem_range_self _ g
-  have hshift := Abstract.inverseClosedOperator_apply_R beamCoerciveFormData.resolvent
+  have hshift := Abstract.inversePartialMap_apply_R beamCoerciveFormData.resolvent
     beamCoerciveFormData.resolvent_isSelfAdjoint beamCoerciveFormData.resolvent_injective g
   have hsub : (⟨beamCoerciveFormData.resolvent g, LinearMap.mem_range_self _ g⟩ :
       beamShiftedFormData.shiftedOperator.domain) =
@@ -847,7 +847,7 @@ theorem closure_classicalFreeBeamCoreGraph_eq_graph :
         have hRinv :
             beamCoerciveFormData.resolvent
                 (beamShiftedFormData.shiftedOperator xb) = (xb : BeamL2) := by
-          exact Abstract.R_inverseClosedOperator_apply beamCoerciveFormData.resolvent
+          exact Abstract.R_inversePartialMap_apply beamCoerciveFormData.resolvent
             beamCoerciveFormData.resolvent_isSelfAdjoint beamCoerciveFormData.resolvent_injective xb
         calc
           beamCoerciveFormData.resolvent g =

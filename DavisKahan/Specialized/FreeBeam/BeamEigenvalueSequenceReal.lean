@@ -155,7 +155,7 @@ theorem beamResolvent_apply_of_beamOperator_eigen {lam : ℝ} (hlam : 0 < lam)
     {x : beamOperator.domain} (heig : beamOperator x = lam • (x : BeamL2)) :
     beamCoerciveFormData.resolvent (x : BeamL2) = (1 + lam)⁻¹ • (x : BeamL2) := by
   have hne : 1 + lam ≠ 0 := by linarith
-  have hz := Abstract.R_inverseClosedOperator_apply beamCoerciveFormData.resolvent
+  have hz := Abstract.R_inversePartialMap_apply beamCoerciveFormData.resolvent
     beamCoerciveFormData.resolvent_isSelfAdjoint beamCoerciveFormData.resolvent_injective x
   have hsplit : beamShiftedFormData.shiftedOperator x =
       beamOperator x + (x : BeamL2) := shifted_apply_of_beam

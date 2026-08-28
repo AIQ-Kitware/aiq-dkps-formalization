@@ -339,7 +339,7 @@
     "Spectra.Cayley.real_add_I_ne_zero",
     "Spectra.Cayley.stoneGroup",
     "Spectra.CayleyTransform.BorelCalculus",
-    "Spectra.ClosedOperator",
+    "Spectra.PartialMap",
     "Spectra.DirectRotation",
     "Spectra.DirectRotationSquare",
     "Spectra.Essential",

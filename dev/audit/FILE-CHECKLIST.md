@@ -566,7 +566,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 *3 files, 82 lines — 3/3 reviewed*
 
-- [x] `DavisKahan/Interop/TauCeti/ClosedOperator.lean` — 64 lines · Lean source
+- [x] `DavisKahan/Interop/TauCeti/PartialMap.lean` — 64 lines · Lean source
 - [x] `DavisKahan/Interop/All.lean` — 9 lines · Lean source
 - [x] `DavisKahan/Interop/TauCeti/All.lean` — 9 lines · Lean source
 

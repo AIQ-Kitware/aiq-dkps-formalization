@@ -38,7 +38,7 @@ checked by `scripts/check_dependency_layers.py`.
 
 ## Current status
 
-`ClosedOperator.lean` is the active U1 boundary. It re-exports the historical
+`PartialMap.lean` is the active U1 boundary. It re-exports the historical
 bundle only for source-facing and Spectra-dependent consumers while the generic
 mathematics migrates to raw `LinearPMap` signatures. Its deletion condition is
 the final migration of those consumers; it must not collect new generic proofs.
