@@ -41,8 +41,8 @@ theorem generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
       A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
-    (hgap : SpectralSylvesterGap A0
-      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
+    (hgap : SpectralSylvesterGap A0.toLinearPMap
+      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ)
     (hR : N.Mem Rop) :
     N.Mem
       (directedSinThetaOperator X
@@ -69,7 +69,7 @@ theorem generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
     N D.toPMap (selfAdjointSpectralSubspaceInclusion A hA S hS)
       (D.toPMap_A_isSelfAdjoint hDA)
       (D.toPMap_A₀_isSelfAdjoint hDA₀)
-      (D.toPMap_Λ₁_isSelfAdjoint hLambda) hdecomp hδ hε hframe hgap.toPMap hR
+      (D.toPMap_Λ₁_isSelfAdjoint hLambda) hdecomp hδ hε hframe hgap hR
   simpa only [D, unboundedSinThetaDataOfSpectralSubspace,
     UnboundedSinThetaData.toPMap] using hmain
 

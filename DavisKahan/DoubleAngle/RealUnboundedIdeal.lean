@@ -100,7 +100,7 @@ theorem sinTheta_addBounded_gauge_real_isometric
       (A.addBounded V).toLinearMap ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁.toLinearMap y))
     (hXiso : IsometricEmbedding X) (hF₁iso : IsometricEmbedding F₁)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀.toLinearPMap Λ₁.toLinearPMap δ)
     (hVmem : N.Mem V) :
     N.Mem (X.adjoint ∘L F₁) ∧
       δ * N.gauge (X.adjoint ∘L F₁) ≤ N.gauge V := by
@@ -139,7 +139,7 @@ theorem sinTheta_addBounded_gauge_real_block
       (A.addBounded V).toLinearMap ⟨F₁ (y : G), hF₁dom y⟩ =
         F₁ (Λ₁.toLinearMap y))
     (hF₁iso : IsometricEmbedding F₁)
-    {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : FormBoundedSylvesterGap A₀.toLinearPMap Λ₁.toLinearPMap δ)
     (hVmem : N.Mem V) :
     N.Mem (X.adjoint ∘L F₁) ∧
       δ * N.gauge (X.adjoint ∘L F₁) ≤ N.gauge ((V ∘L X).adjoint ∘L F₁) := by
@@ -217,8 +217,8 @@ theorem sinTwoTheta_reflectionResidual_block_gauge_real
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA S hS)
-      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
+      (realSelfAdjointSpectralRestriction A hA S hS).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (A.addBounded R).toLinearMap
@@ -370,8 +370,8 @@ theorem sinTwoTheta_reflectionResidual_gauge_real
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA S hS)
-      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
+      (realSelfAdjointSpectralRestriction A hA S hS).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (A.addBounded R).toLinearMap
@@ -548,8 +548,8 @@ theorem sinTwoTheta_addBounded_gauge_real
     (S T : Set ℝ) (hS : MeasurableSet S) (hT : MeasurableSet T)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA S hS)
-      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
+      (realSelfAdjointSpectralRestriction A hA S hS).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ)
     (hEmem : N.Mem Eop) :
     N.Mem (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA S hS)

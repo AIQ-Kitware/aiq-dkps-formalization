@@ -58,7 +58,7 @@ theorem sinTheta_unbounded_exact_generic
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
     (hR : N.Mem D.residual) :
     N.Mem
         ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
@@ -156,7 +156,7 @@ theorem sinTheta_headline_generic
       isometry₁ := hF₁
       orthogonal := horth
       projection_sum := hdecomp }
-  have hgap : FormBoundedSylvesterGap A₀ Λ₁ δ :=
+  have hgap : FormBoundedSylvesterGap A₀.toLinearPMap Λ₁.toLinearPMap δ :=
     FormBoundedSylvesterGap.intervalExterior hβα hspectral
   apply N.mul_gauge_le_of_all_mul_kyFan_le hδ hR
   intro k
