@@ -61,7 +61,7 @@ audited explicitation of (3.5). Do not drop it to make the Section 2 display loo
 ```lean
 theorem tanTheta_unbounded_ambient_paperUINorm_real_exact
     (N : PaperUnitaryInvariantNorm)
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.PartialMap (𝕜 := ℝ) (E := E))
     {U V : Submodule ℝ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (D : UnboundedTrialBlock A U)
@@ -83,7 +83,7 @@ theorem tanTheta_unbounded_ambient_paperUINorm_real_exact
 
 Note `DKClosedOperator` is a **ℂ-only** abbreviation
 (`DavisKahan/SpectralTheory/PartialMap/MathlibBridge.lean:27`); spell the real carrier
-as `TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ)`. `UnboundedTrialBlock`
+as `TauCeti.DavisKahanExt.PartialMap (𝕜 := ℝ)`. `UnboundedTrialBlock`
 (`DavisKahan/TanTheta/UnboundedSpectrum.lean:44`) is already scalar-generic and its own
 docstring says so.
 

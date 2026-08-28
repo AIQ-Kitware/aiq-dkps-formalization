@@ -201,23 +201,23 @@ theorem dense_freeAmbientDomain
 
 Density and graph closedness are properties of this map, proved separately; the
 model itself only has to supply the domain and the action. -/
-noncomputable def toClosedOperator
+noncomputable def toPartialMap
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) : H →ₗ.[𝕜] H where
   domain := D.freeAmbientDomain
   toFun := D.freeFourthAmbient
 
 omit [CompleteSpace H] [CompleteSpace V] in
 /-- The domain of the derived partial map. -/
-@[simp] theorem toClosedOperator_domain
+@[simp] theorem toPartialMap_domain
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
-    D.toClosedOperator.domain = D.freeAmbientDomain := rfl
+    D.toPartialMap.domain = D.freeAmbientDomain := rfl
 
 omit [CompleteSpace H] [CompleteSpace V] in
 /-- Its action, which is the model's fourth-order operator. -/
-@[simp] theorem toClosedOperator_apply
+@[simp] theorem toPartialMap_apply
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.freeAmbientDomain) :
-    D.toClosedOperator x = D.freeFourthAmbient x := rfl
+    D.toPartialMap x = D.freeFourthAmbient x := rfl
 
 end FourthOrderTraceModel
 

@@ -101,31 +101,31 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     IsPaperHilbertSchmidt X ∧
       δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C := by
   have hgapC : PairwiseSpectrumGap
-      (ClosedOperatorComplexification.complexify A)
-      (ClosedOperatorComplexification.complexify B) δ := by
+      (PartialMapComplexification.complexify A)
+      (PartialMapComplexification.complexify B) δ := by
     intro lam hlam α hα
     -- The canonical spectrum lives in `ℂ`; `hgap` constrains only real points, so
     -- first use self-adjointness to see that there are no others.
     obtain ⟨lr, -, rfl⟩ :=
       spectrum_subset_real_of_isSelfAdjoint
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) hlam
+        (PartialMapComplexification.isSelfAdjoint_complexify hA) hlam
     obtain ⟨ar, -, rfl⟩ :=
       spectrum_subset_real_of_isSelfAdjoint
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hB) hα
+        (PartialMapComplexification.isSelfAdjoint_complexify hB) hα
     have h := hgap lr (by
-        rwa [ClosedOperatorComplexification.realSpectrum_complexify A,
+        rwa [PartialMapComplexification.realSpectrum_complexify A,
           Set.mem_preimage]) ar (by
-        rwa [ClosedOperatorComplexification.realSpectrum_complexify B,
+        rwa [PartialMapComplexification.realSpectrum_complexify B,
           Set.mem_preimage])
     rwa [← Complex.ofReal_sub, Complex.norm_real, Real.norm_eq_abs]
   have hCcomplex : IsPaperHilbertSchmidt
       (RealComplexification.complexify C) :=
     (isPaperHilbertSchmidt_complexify_iff C).2 hC
   have hmain := paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
-    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA)
-    (ClosedOperatorComplexification.isSelfAdjoint_complexify hB)
+    (PartialMapComplexification.isSelfAdjoint_complexify hA)
+    (PartialMapComplexification.isSelfAdjoint_complexify hB)
     hδ hgapC
-    (ClosedOperatorComplexification.closedSylvesterEquation_complexify hEq)
+    (PartialMapComplexification.closedSylvesterEquation_complexify hEq)
     hCcomplex
   constructor
   · exact (isPaperHilbertSchmidt_complexify_iff X).1 hmain.1

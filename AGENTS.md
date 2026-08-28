@@ -226,7 +226,7 @@ For unbounded operators the representation decision is **closed**:
 ```text
 canonical carrier: Mathlib LinearPMap
 canonical facts:   closedness, dense domain, symmetry, self-adjointness as properties
-temporary only:    DKPS ClosedOperator compatibility adapter
+temporary only:    DKPS PartialMap compatibility adapter
 ```
 
 Tau Ceti's semigroup generator already uses `LinearPMap`. Migrate local

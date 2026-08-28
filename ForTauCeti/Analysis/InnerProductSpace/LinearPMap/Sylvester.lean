@@ -20,7 +20,7 @@ separate hypotheses for the theorems that require them.
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Original module: `DavisKahan/Sylvester/ClosedSylvesterEquation.lean`.
 * Extraction class: **representation migration and generalization** from the
-  bundled DKPS `ClosedOperator` to raw Mathlib `LinearPMap`.
+  bundled DKPS `PartialMap` to raw Mathlib `LinearPMap`.
 * Spectra influence: none.  This module depends only on Mathlib and the
   dependency-clean `LinearPMap` domain API.
 -/

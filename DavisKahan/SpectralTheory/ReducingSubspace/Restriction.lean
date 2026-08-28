@@ -37,7 +37,7 @@ noncomputable local instance completeSpaceOfHasOrthogonalProjection
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : CompleteSpace U :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection U).completeSpace_coe
 
-namespace ClosedOperator
+namespace PartialMap
 
 /-- The canonical inclusion of a reducing subspace. -/
 def reducingSubspaceInclusion (U : Submodule 𝕜 E) : U →L[𝕜] E :=
@@ -105,6 +105,6 @@ theorem reducingRestriction_isSelfAdjoint
   TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A U hred
     hA.dense_domain hA
 
-end ClosedOperator
+end PartialMap
 end DavisKahanExt
 end TauCeti

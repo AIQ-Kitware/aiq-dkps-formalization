@@ -488,9 +488,9 @@ theorem le_re_inner_of_mem_orthogonal_realSelfAdjointSpectralSubspace_of_gap
     (hy : y ∈ A.domain) :
     (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ := by
   classical
-  set Ac := ClosedOperatorComplexification.complexify A with hAc_def
+  set Ac := PartialMapComplexification.complexify A with hAc_def
   have hAc : _root_.IsSelfAdjoint Ac :=
-    ClosedOperatorComplexification.isSelfAdjoint_complexify hA
+    PartialMapComplexification.isSelfAdjoint_complexify hA
   -- The complex gap hypothesis, obtained by complexifying the real one.
   have hgapC : TauCeti.LinearPMap.specProjection hAc
       (Set.Ioo alpha (alpha + delta)) measurableSet_Ioo = 0 := by
@@ -500,7 +500,7 @@ theorem le_re_inner_of_mem_orthogonal_realSelfAdjointSpectralSubspace_of_gap
     exact h.symm.trans RealComplexification.complexify_zero
   -- The real copy of `y` lies in the complexified domain.
   have hydC : ofReal y ∈ Ac.domain :=
-    (ClosedOperatorComplexification.ofRealDomain A ⟨y, hy⟩).2
+    (PartialMapComplexification.ofRealDomain A ⟨y, hy⟩).2
   -- The real copy of `y` is orthogonal to the complex spectral subspace of `Iic α`.
   have hyVC : ofReal y ∈
       (_root_.TauCeti.DavisKahan.selfAdjointSpectralSubspace Ac hAc
@@ -514,7 +514,7 @@ theorem le_re_inner_of_mem_orthogonal_realSelfAdjointSpectralSubspace_of_gap
       Ac hAc hgapC (ofReal y) hyVC hydC
   -- Read the complex bound back on the real copy.
   have hact : Ac ⟨ofReal y, hydC⟩ = ofReal (A ⟨y, hy⟩) :=
-    ClosedOperatorComplexification.complexify_apply_ofReal A ⟨y, hy⟩
+    PartialMapComplexification.complexify_apply_ofReal A ⟨y, hy⟩
   have hnorm : ‖ofReal (E := E) y‖ ^ 2 = ‖y‖ ^ 2 := by
     rw [RealComplexification.norm_sq]
     simp

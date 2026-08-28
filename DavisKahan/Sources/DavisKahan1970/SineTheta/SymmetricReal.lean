@@ -176,15 +176,15 @@ structure PaperRealSymmetricSinThetaProblem where
   gap_pos : 0 < gap
   gap_U_to_Vperp : FormBoundedSylvesterGap
     (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) U
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace A U reduces_A_U))
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace A U reduces_A_U))
     (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) Vᗮ
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V).orthogonal)
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace B V reduces_B_V).orthogonal)
     gap
   gap_V_to_Uperp : FormBoundedSylvesterGap
     (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) V
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V))
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace B V reduces_B_V))
     (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) Uᗮ
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace A U reduces_A_U).orthogonal)
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace A U reduces_A_U).orthogonal)
     gap
 
 attribute [instance] PaperRealSymmetricSinThetaProblem.proj_U
@@ -202,9 +202,9 @@ noncomputable def forwardData
     UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := P.U) (G := P.Vᗮ) where
   A := (P.B.toLinearMap.toPMap ⊤)
   A₀ := TauCeti.LinearPMap.reducingRestriction ((P.A.toLinearMap.toPMap ⊤)) P.U
-    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
+    (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
   Λ₁ := TauCeti.LinearPMap.reducingRestriction ((P.B.toLinearMap.toPMap ⊤)) P.Vᗮ
-    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
+    (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
   X := P.U.subtypeL
   F₁ := P.Vᗮ.subtypeL
   residual := P.perturbation ∘L P.U.subtypeL
@@ -214,9 +214,9 @@ noncomputable def forwardData
     intro x
     rfl
   intertwines :=
-    ClosedOperator.reducingRestriction_inclusion_intertwines
+    PartialMap.reducingRestriction_inclusion_intertwines
       ((P.B.toLinearMap.toPMap ⊤)) P.Vᗮ
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
 
 /-- Internal data for the reversed application. -/
 noncomputable def reverseData
@@ -224,9 +224,9 @@ noncomputable def reverseData
     UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := P.V) (G := P.Uᗮ) where
   A := (P.A.toLinearMap.toPMap ⊤)
   A₀ := TauCeti.LinearPMap.reducingRestriction ((P.B.toLinearMap.toPMap ⊤)) P.V
-    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
+    (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
   Λ₁ := TauCeti.LinearPMap.reducingRestriction ((P.A.toLinearMap.toPMap ⊤)) P.Uᗮ
-    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
+    (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
   X := P.V.subtypeL
   F₁ := P.Uᗮ.subtypeL
   residual := (-P.perturbation) ∘L P.V.subtypeL
@@ -237,9 +237,9 @@ noncomputable def reverseData
     simp [perturbation]
     rfl
   intertwines :=
-    ClosedOperator.reducingRestriction_inclusion_intertwines
+    PartialMap.reducingRestriction_inclusion_intertwines
       ((P.A.toLinearMap.toPMap ⊤)) P.Uᗮ
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
 
 /-- The first exact cross-projection block. -/
 def forwardSineBlock (P : PaperRealSymmetricSinThetaProblem (E := E)) :
@@ -270,14 +270,14 @@ theorem forward_all_kyFan
   intro k
   set D := P.forwardData with hD
   have hA0 : _root_.IsSelfAdjoint D.A₀ :=
-    ClosedOperator.reducingRestriction_isSelfAdjoint
+    PartialMap.reducingRestriction_isSelfAdjoint
       ((P.A.toLinearMap.toPMap ⊤)) P.U
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
       (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A)
   have hL : _root_.IsSelfAdjoint D.Λ₁ :=
-    ClosedOperator.reducingRestriction_isSelfAdjoint
+    PartialMap.reducingRestriction_isSelfAdjoint
       ((P.B.toLinearMap.toPMap ⊤)) P.Vᗮ
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
       (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B)
   have hEq := unbounded_adjoint_residual_block_identity D
     (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B) hA0 hL
@@ -331,14 +331,14 @@ theorem reverse_all_kyFan
   intro k
   set D := P.reverseData with hD
   have hA0 : _root_.IsSelfAdjoint D.A₀ :=
-    ClosedOperator.reducingRestriction_isSelfAdjoint
+    PartialMap.reducingRestriction_isSelfAdjoint
       ((P.B.toLinearMap.toPMap ⊤)) P.V
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
       (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B)
   have hL : _root_.IsSelfAdjoint D.Λ₁ :=
-    ClosedOperator.reducingRestriction_isSelfAdjoint
+    PartialMap.reducingRestriction_isSelfAdjoint
       ((P.A.toLinearMap.toPMap ⊤)) P.Uᗮ
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
+      (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
       (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A)
   have hEq := unbounded_adjoint_residual_block_identity D
     (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A) hA0 hL

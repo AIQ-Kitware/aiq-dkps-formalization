@@ -239,7 +239,7 @@ theorem beamOperator_affine_mem_and_zero (a b : ℂ) :
   -- the shifted operator fixes affine elements, so the beam operator kills them
   have hshift : beamShiftedFormData.shiftedOperator ⟨affineLp a b, hmem⟩
       = affineLp a b := by
-    have := Abstract.inverseClosedOperator_apply_R beamCoerciveFormData.resolvent
+    have := Abstract.inversePartialMap_apply_R beamCoerciveFormData.resolvent
       beamCoerciveFormData.resolvent_isSelfAdjoint
       beamCoerciveFormData.resolvent_injective (affineLp a b)
     have hsub : (⟨beamCoerciveFormData.resolvent (affineLp a b),
@@ -816,7 +816,7 @@ theorem exists_beamOperator_apply_of_beamResolvent_smul {mu : ℂ} (hmu : mu ≠
     rw [map_smul, huv, smul_smul, inv_mul_cancel₀ hmu, one_smul]
   have hshift : beamShiftedFormData.shiftedOperator ⟨u, humem⟩
       = mu⁻¹ • u := by
-    have happ := Abstract.inverseClosedOperator_apply_R R
+    have happ := Abstract.inversePartialMap_apply_R R
       beamCoerciveFormData.resolvent_isSelfAdjoint
       beamCoerciveFormData.resolvent_injective (mu⁻¹ • u)
     have hsub : (⟨R (mu⁻¹ • u), LinearMap.mem_range_self _ _⟩ :
@@ -982,7 +982,7 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
   · -- left inverse on the domain
     intro x
     have hxdom : (x : BeamL2) ∈ beamOperator.domain := x.2
-    have hz := Abstract.R_inverseClosedOperator_apply R
+    have hz := Abstract.R_inversePartialMap_apply R
       beamCoerciveFormData.resolvent_isSelfAdjoint
       beamCoerciveFormData.resolvent_injective x
     set z : BeamL2 := beamShiftedFormData.shiftedOperator x with hzdef
@@ -1013,7 +1013,7 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
     refine ⟨hmem, ?_⟩
     have hshifted : beamShiftedFormData.shiftedOperator ⟨(R * S) y, hmem⟩
         = S y := by
-      have happ := Abstract.inverseClosedOperator_apply_R R
+      have happ := Abstract.inversePartialMap_apply_R R
         beamCoerciveFormData.resolvent_isSelfAdjoint
         beamCoerciveFormData.resolvent_injective (S y)
       have hsub : (⟨R (S y), LinearMap.mem_range_self _ _⟩ :

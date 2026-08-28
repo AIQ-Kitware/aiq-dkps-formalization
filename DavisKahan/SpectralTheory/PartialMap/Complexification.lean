@@ -33,7 +33,7 @@ noncomputable section
 
 universe v
 
-namespace ClosedOperatorComplexification
+namespace PartialMapComplexification
 
 open TauCeti.RealComplexification
 -- `Basic` moved to `ForTauCeti`; `Subspace` (and `complexifySubmodule`) is still here, so the
@@ -367,7 +367,7 @@ omit [CompleteSpace E] in
 
 /-- Two partial maps coincide when their domains coincide and their actions
 agree on corresponding domain vectors. -/
-theorem closedOperator_ext
+theorem partialMap_ext
     {𝕜 : Type*} [RCLike 𝕜] {H : Type*}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H]
     {A B : H →ₗ.[𝕜] H}
@@ -392,7 +392,7 @@ theorem complexify_ofBounded
     (T : E →L[ℝ] E) :
     complexify ((T.toLinearMap.toPMap ⊤)) =
       ((RealComplexification.complexify T).toLinearMap.toPMap ⊤) := by
-  refine closedOperator_ext ?_ ?_
+  refine partialMap_ext ?_ ?_
   · ext z
     simp [complexify, domain, complexifySubmodule]
   · intro x y hxy
@@ -775,7 +775,7 @@ theorem unboundedSylvesterGap_complexify
       exact FormBoundedSylvesterGap.leftBelowRightAbove c
         (semiboundedAbove_complexify hA) (semiboundedBelow_complexify hB)
 
-end ClosedOperatorComplexification
+end PartialMapComplexification
 
 end
 

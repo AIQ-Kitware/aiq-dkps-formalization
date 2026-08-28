@@ -496,10 +496,10 @@ which opens two of the namespaces that had a copy.  That was true, and it was th
 conclusion: the ambiguity came from the *other three* copies, not from this one being visible.
 
 Getting there took a broken tree first, and the sequence is worth keeping.  `edward (aiq-gpu)`
-deleted the `ClosedOperatorComplexification` sibling in `4dacc008` and pointed that module here;
+deleted the `PartialMapComplexification` sibling in `4dacc008` and pointed that module here;
 separately this one was still `private`.  Each fix is right alone and they are fatal together —
 with the sibling gone and this one private, no public copy was reachable from
-`ClosedOperator/Complexification.lean` and the build stopped.  Lane `{lane:CPLX-DEDUP-1}` then
+`PartialMap/Complexification.lean` and the build stopped.  Lane `{lane:CPLX-DEDUP-1}` then
 deleted the remaining copies and made this one public, which is the state described above. -/
 theorem norm_re_le [NormedAddCommGroup E] (z : RealComplexification E) :
     ‖re z‖ ≤ ‖z‖ := by

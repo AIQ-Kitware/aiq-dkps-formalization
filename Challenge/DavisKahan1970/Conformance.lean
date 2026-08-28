@@ -256,15 +256,15 @@ theorem sinTheta_wholeSpace_paperUINorm
     {gap : ℝ} (hgap : 0 < gap)
     (hgapUV : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) U
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace A U hU))
+        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace A U hU))
       (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) Vᗮ
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace B V hV).orthogonal)
+        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace B V hV).orthogonal)
       gap)
     (hgapVU : FormBoundedSylvesterGap
       (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) V
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace B V hV))
+        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace B V hV))
       (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) Uᗮ
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace A U hU).orthogonal)
+        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace A U hU).orthogonal)
       gap)
     (hMem : N.Mem (B - A)) :
     N.Mem (paperSinAngleOperatorC U V) ∧

@@ -111,10 +111,10 @@ and, the same week, an explicit triage instruction naming the failure mode:
 
 Two live instances found 2026-07-30 by building a tree nothing builds:
 
-- `Core/Unbounded.lean` defines `ClosedOperator.adjoint` in terms of six fields
+- `Core/Unbounded.lean` defines `PartialMap.adjoint` in terms of six fields
   — `adjointDomain`, `adjointVector`, `adjointVector_inner`, `adjointDomain_dense`,
   `adjoint_graph_closed`, `closed_graph_add_relativelyBounded` — **none of which
-  exist**. `ClosedOperator` has exactly four fields. 28 errors. In that state for
+  exist**. `PartialMap` has exactly four fields. 28 errors. In that state for
   **11 days**, since a commit whose own title is *"Not Compiled - likely broken"*.
 - `ContourReuseBridge.lean` references
   `SpectralContinuationWitness.{sourceSelectedProjection, targetSelectedProjection}`;

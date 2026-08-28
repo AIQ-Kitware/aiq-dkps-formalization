@@ -75,7 +75,7 @@ def IsOffDiagonalRelativeToProjection (P H : E →L[𝕜] E) : Prop :=
     (ContinuousLinearMap.id 𝕜 E - P) ∘L H ∘L
       (ContinuousLinearMap.id 𝕜 E - P) = 0
 
--- `@[reducible]` for the same reason as `ClosedOperator.IsSelfAdjoint`: this is the shape
+-- `@[reducible]` for the same reason as `PartialMap.IsSelfAdjoint`: this is the shape
 -- `ContinuousLinearMap.restrict` already asks for, and unifiers matching at `instances`
 -- transparency have to be able to see that.
 /-- A subspace is invariant under a bounded operator. -/

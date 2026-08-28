@@ -13,5 +13,5 @@ import DavisKahan.SpectralTheory.PartialMap.UnitaryConjugation
 
 The Davis--Kahan additions to Mathlib's `LinearPMap`: the real resolvent set and
 spectrum, coordinatewise complexification, unitary conjugation, and bounded
-realization.  Named `ClosedOperator` until 2026-08-28, after the bundled record
+realization.  Named `PartialMap` until 2026-08-28, after the bundled record
 of that name. -/

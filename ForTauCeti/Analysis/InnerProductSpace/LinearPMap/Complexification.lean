@@ -9,7 +9,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 * Generalized from:
   `DavisKahan/SpectralTheory/PartialMap/Complexification.lean`.
 * Extraction class: **representation migration and generalization**.  The original
-  construction was tied to the historical bundled `ClosedOperator` and to square
+  construction was tied to the historical bundled `PartialMap` and to square
   operators.  This module defines the coordinatewise complexification directly on
   Mathlib `LinearPMap`, with independent source and target spaces.
 * The construction and structural transport use no Davis--Kahan theorem and import

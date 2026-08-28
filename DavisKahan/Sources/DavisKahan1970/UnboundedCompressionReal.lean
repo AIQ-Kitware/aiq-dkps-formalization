@@ -37,7 +37,7 @@ numbers of the directed sine block, and complexification preserves both on the n
 
 * `complexifyUnboundedCompressionTrialData`: the complexification of a real
   unbounded-compression bundle, with the compression transported by
-  `ClosedOperatorComplexification.complexify` and then read through the canonical
+  `PartialMapComplexification.complexify` and then read through the canonical
   subspace adapter `complexifySubmoduleEquiv`;
 * `all_kyFan_core_unboundedCompression_real`: the Appendix Ky Fan passage over real data;
 * `theorem6_3_unboundedCompression_ideal_exists_real` and
@@ -111,8 +111,8 @@ def complexifyUnboundedCompressionTrialData
     UnboundedCompressionTrialData (complexifySubmodule Z) where
   compression :=
     TauCeti.DavisKahan.unitaryConjugate (complexifySubmoduleEquiv Z)
-      (ExactSinTheta.ClosedOperatorComplexification.complexify D.compression)
-      (ExactSinTheta.ClosedOperatorComplexification.isSelfAdjoint_complexify
+      (ExactSinTheta.PartialMapComplexification.complexify D.compression)
+      (ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify
         D.compression_isSelfAdjoint)
   compression_isSelfAdjoint :=
     TauCeti.DavisKahan.unitaryConjugate_isSelfAdjoint _ _ _
@@ -148,7 +148,7 @@ def complexifyDomainRe (D : UnboundedCompressionTrialData Z)
     (w : (complexifyUnboundedCompressionTrialData D).compression.domain) :
     D.compression.domain :=
   ⟨re ((complexifySubmoduleEquiv Z).symm (w : complexifySubmodule Z)),
-    (((ExactSinTheta.ClosedOperatorComplexification.mem_complexify_domain_iff
+    (((ExactSinTheta.PartialMapComplexification.mem_complexify_domain_iff
       D.compression _).mp w.property).1)⟩
 
 /-- The imaginary coordinate of a complexified-data domain vector. -/
@@ -156,7 +156,7 @@ def complexifyDomainIm (D : UnboundedCompressionTrialData Z)
     (w : (complexifyUnboundedCompressionTrialData D).compression.domain) :
     D.compression.domain :=
   ⟨im ((complexifySubmoduleEquiv Z).symm (w : complexifySubmodule Z)),
-    (((ExactSinTheta.ClosedOperatorComplexification.mem_complexify_domain_iff
+    (((ExactSinTheta.PartialMapComplexification.mem_complexify_domain_iff
       D.compression _).mp w.property).2)⟩
 
 /-- **The complexified ambient action is the real one, coordinatewise.**  Real part. -/
@@ -213,10 +213,10 @@ theorem complexifyUnboundedCompressionTrialData_compression_upper
     (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha) :
     TauCeti.LinearPMap.SemiboundedAbove (complexifyUnboundedCompressionTrialData D).compression alpha :=
   semiboundedAbove_unitaryConjugate (complexifySubmoduleEquiv Z)
-    (ExactSinTheta.ClosedOperatorComplexification.complexify D.compression)
-    (ExactSinTheta.ClosedOperatorComplexification.isSelfAdjoint_complexify
+    (ExactSinTheta.PartialMapComplexification.complexify D.compression)
+    (ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify
       D.compression_isSelfAdjoint)
-    (ExactSinTheta.ClosedOperatorComplexification.semiboundedAbove_complexify hupper)
+    (ExactSinTheta.PartialMapComplexification.semiboundedAbove_complexify hupper)
 
 /-- The crossed form bound transports to the complexified data with the same constant. -/
 theorem complexifyUnboundedCompressionTrialData_crossed_lower

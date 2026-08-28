@@ -9,7 +9,7 @@ import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 /-!
 # Form-bounded gap hypotheses discharge the spectral ones
 
-`Sylvester/Gap.lean` states its gap over `ClosedOperator.realSpectrum` and
+`Sylvester/Gap.lean` states its gap over `PartialMap.realSpectrum` and
 packages ordered form bounds together with interval/exterior spectral
 separation.  `SpectralSylvesterGap` instead states all three configurations
 spectrally, using Spectra for the spectral branch and the direct cutoff engine

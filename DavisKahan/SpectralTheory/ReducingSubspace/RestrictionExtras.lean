@@ -22,7 +22,7 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
-namespace ClosedOperator
+namespace PartialMap
 namespace ReducesSubspace
 
 omit [CompleteSpace E] in
@@ -54,6 +54,6 @@ theorem ofBounded_reducesSubspace
     show A (x : E) ∈ Uᗮ
     exact hred.2 (x : E) hx
 
-end ClosedOperator
+end PartialMap
 end DavisKahanExt
 end TauCeti

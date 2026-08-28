@@ -39,7 +39,7 @@ variable {E F G : Type v}
 open TauCeti.DavisKahanExt
 open TauCeti.DavisKahan
 
-namespace ClosedOperator
+namespace PartialMap
 
 /-- A linear subspace of the operator domain that is sequentially dense in the
 graph norm.  The sequence formulation avoids installing a second topology on
@@ -58,7 +58,7 @@ namespace IsGraphCore
 omit [CompleteSpace E] in
 /-- The full operator domain is a graph core. -/
 theorem top (A : E →ₗ.[𝕜] E) :
-    ClosedOperator.IsGraphCore A ⊤ := by
+    PartialMap.IsGraphCore A ⊤ := by
   intro x
   refine ⟨fun _ => ⟨x, Submodule.mem_top⟩, ?_, ?_⟩
   · simp
@@ -69,7 +69,7 @@ omit [CompleteSpace E] in
 is an ambient-norm limit of vectors from the core. -/
 theorem ambient_approximation
     {A : E →ₗ.[𝕜] E}
-    {D : Submodule 𝕜 A.domain} (hD : ClosedOperator.IsGraphCore A D)
+    {D : Submodule 𝕜 A.domain} (hD : PartialMap.IsGraphCore A D)
     (x : A.domain) :
     ∃ u : ℕ → D,
       Tendsto (fun n => ((((u n : D) : A.domain) : E))) atTop (𝓝 (x : E)) := by
@@ -77,7 +77,7 @@ theorem ambient_approximation
   exact ⟨u, hu⟩
 
 end IsGraphCore
-end ClosedOperator
+end PartialMap
 
 /-- Residual data on a graph core of the trial operator. -/
 structure PaperCommonCoreResidualData
@@ -85,7 +85,7 @@ structure PaperCommonCoreResidualData
     (A₀ : F →ₗ.[𝕜] F)
     (X : F →L[𝕜] E) (R : F →L[𝕜] E) where
   core : Submodule 𝕜 A₀.domain
-  graph_core : ClosedOperator.IsGraphCore A₀ core
+  graph_core : PartialMap.IsGraphCore A₀ core
   maps_core : ∀ x : core, X (((x : core) : A₀.domain) : F) ∈ A.domain
   residual_on_core : ∀ x : core,
     A

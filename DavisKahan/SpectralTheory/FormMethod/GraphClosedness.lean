@@ -20,7 +20,7 @@ file proves that this closed range is exactly the ambient graph of the
 transported fourth derivative constructed in `TraceKernelModel`.
 
 The result turns a graph-norm estimate on the free trace kernel into the closed
-graph field required by `DavisKahanExt.ClosedOperator`.
+graph field required by `DavisKahanExt.PartialMap`.
 -/
 
 open Set
@@ -149,13 +149,13 @@ theorem isClosed_ambientGraph_of_normalized_graphNorm
 
 /-- Build the closed free-beam operator directly from dense range and a graph
 norm lower bound. -/
-noncomputable def toClosedOperatorOfGraphNorm
+noncomputable def toPartialMapOfGraphNorm
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
     (hdense : DenseRange D.freeEmbed)
     {c : ℝ} (hc : 0 < c)
     (hbound : ∀ x : D.freeSubspace, c * ‖x‖ ≤ ‖D.freeGraphMap x‖) :
     H →ₗ.[𝕜] H :=
-  D.toClosedOperator
+  D.toPartialMap
 
 end FourthOrderTraceModel
 

@@ -52,7 +52,7 @@ namespace DavisKahan
 namespace RealSpectralRestriction
 
 open ExactSinTheta
-open ExactSinTheta.ClosedOperatorComplexification
+open ExactSinTheta.PartialMapComplexification
 open TauCeti.RealComplexification
 open TauCeti.DavisKahan.Foundation.RealComplexification
 
@@ -73,8 +73,8 @@ noncomputable def realSpectralCutoff
 real cutoff. -/
 theorem spectraSpectralCutoff_ofReal
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (τ : ℝ) (x : E) :
-    spectraSpectralCutoff (ClosedOperatorComplexification.complexify A)
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) τ (ofReal x) =
+    spectraSpectralCutoff (PartialMapComplexification.complexify A)
+        (PartialMapComplexification.isSelfAdjoint_complexify hA) τ (ofReal x) =
       ofReal (realSpectralCutoff A hA τ x) :=
   selfAdjointSpectralProjection_ofReal A hA (Set.Icc (-τ) τ) measurableSet_Icc x
 
@@ -82,8 +82,8 @@ theorem spectraSpectralCutoff_ofReal
 theorem complexify_realSpectralCutoff
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (τ : ℝ) :
     RealComplexification.complexify (realSpectralCutoff A hA τ) =
-      spectraSpectralCutoff (ClosedOperatorComplexification.complexify A)
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) τ :=
+      spectraSpectralCutoff (PartialMapComplexification.complexify A)
+        (PartialMapComplexification.isSelfAdjoint_complexify hA) τ :=
   complexify_realSelfAdjointSpectralProjection A hA (Set.Icc (-τ) τ) measurableSet_Icc
 
 /-- Real spectral cutoffs are orthogonal projections. -/
@@ -106,15 +106,15 @@ theorem realSpectralCutoff_range_le_domain
     LinearMap.range (realSpectralCutoff A hA τ).toLinearMap ≤ A.domain := by
   rintro y ⟨x, rfl⟩
   have hC := spectraSpectralCutoff_range_le_domain
-    (ClosedOperatorComplexification.complexify A)
-    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) τ
-    (show spectraSpectralCutoff (ClosedOperatorComplexification.complexify A)
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) τ (ofReal x) ∈
-      LinearMap.range (spectraSpectralCutoff (ClosedOperatorComplexification.complexify A)
-        (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) τ).toLinearMap from
+    (PartialMapComplexification.complexify A)
+    (PartialMapComplexification.isSelfAdjoint_complexify hA) τ
+    (show spectraSpectralCutoff (PartialMapComplexification.complexify A)
+        (PartialMapComplexification.isSelfAdjoint_complexify hA) τ (ofReal x) ∈
+      LinearMap.range (spectraSpectralCutoff (PartialMapComplexification.complexify A)
+        (PartialMapComplexification.isSelfAdjoint_complexify hA) τ).toLinearMap from
       ⟨ofReal x, rfl⟩)
   rw [spectraSpectralCutoff_ofReal A hA τ x,
-    ClosedOperatorComplexification.mem_complexify_domain_iff] at hC
+    PartialMapComplexification.mem_complexify_domain_iff] at hC
   simpa using hC.1
 
 /-- Real spectral cutoffs preserve the operator domain and commute with the
@@ -136,8 +136,8 @@ theorem realSpectralCutoff_tendsto_identity
     (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (x : E) :
     Tendsto (fun τ : ℝ => realSpectralCutoff A hA τ x) atTop (𝓝 x) := by
   have hC := spectraSpectralCutoff_tendsto_identity
-    (ClosedOperatorComplexification.complexify A)
-    (ClosedOperatorComplexification.isSelfAdjoint_complexify hA) (ofReal x)
+    (PartialMapComplexification.complexify A)
+    (PartialMapComplexification.isSelfAdjoint_complexify hA) (ofReal x)
   rw [tendsto_iff_norm_sub_tendsto_zero] at hC ⊢
   refine hC.congr fun τ => ?_
   rw [spectraSpectralCutoff_ofReal A hA τ x, ← map_sub,

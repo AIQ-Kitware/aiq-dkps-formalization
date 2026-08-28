@@ -92,21 +92,21 @@ theorem inverse_graph_embedding_compact
     (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R)
     (hcompact : SequentiallyCompactOperator R) :
-    SequentiallyCompactGraphEmbedding (inverseClosedOperator R hR hinj) := by
+    SequentiallyCompactGraphEmbedding (inversePartialMap R hR hinj) := by
   intro x hx
   obtain ⟨C, hC⟩ := hx
   let y : ℕ → H := fun n =>
-    (inverseClosedOperator R hR hinj) (x n)
+    (inversePartialMap R hR hinj) (x n)
   have hybounded : ∃ D : ℝ, ∀ n, ‖y n‖ ≤ D := by
     refine ⟨Real.sqrt (max C 0), ?_⟩
     exact operator_values_bounded_of_graph_bound
-      (inverseClosedOperator R hR hinj) x hC
+      (inversePartialMap R hR hinj) x hC
   obtain ⟨phi, hphi, hcauchy⟩ := hcompact y hybounded
   refine ⟨phi, hphi, ?_⟩
   have heq : (fun n => R (y (phi n))) =
-      fun n => ((x (phi n) : (inverseClosedOperator R hR hinj).domain) : H) := by
+      fun n => ((x (phi n) : (inversePartialMap R hR hinj).domain) : H) := by
     funext n
-    exact R_inverseClosedOperator_apply R hR hinj (x (phi n))
+    exact R_inversePartialMap_apply R hR hinj (x (phi n))
   rwa [heq] at hcauchy
 
 /-- A uniform bound on `y` gives a graph bound for the inverse-domain sequence
@@ -117,8 +117,8 @@ theorem graph_bound_of_bounded_preimage
     (y : ℕ → H) {C : ℝ} (hC : ∀ n, ‖y n‖ ≤ C) :
     ∀ n,
       ‖((⟨R (y n), LinearMap.mem_range_self R.toLinearMap (y n)⟩ :
-          (inverseClosedOperator R hR hinj).domain) : H)‖ ^ 2 +
-        ‖(inverseClosedOperator R hR hinj)
+          (inversePartialMap R hR hinj).domain) : H)‖ ^ 2 +
+        ‖(inversePartialMap R hR hinj)
           ⟨R (y n), LinearMap.mem_range_self R.toLinearMap (y n)⟩‖ ^ 2
       ≤ (‖R‖ ^ 2 + 1) * max C 0 ^ 2 := by
   intro n
@@ -127,7 +127,7 @@ theorem graph_bound_of_bounded_preimage
   have hRyn : ‖R (y n)‖ ≤ ‖R‖ * max C 0 :=
     (R.le_opNorm (y n)).trans
       (mul_le_mul_of_nonneg_left hCn (norm_nonneg R))
-  rw [inverseClosedOperator_apply_R]
+  rw [inversePartialMap_apply_R]
   change ‖R (y n)‖ ^ 2 + ‖y n‖ ^ 2 ≤
     (‖R‖ ^ 2 + 1) * max C 0 ^ 2
   have hC0 : 0 ≤ max C 0 := le_max_right _ _
@@ -148,15 +148,15 @@ theorem compact_of_inverse_graph_embedding_compact
     (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R)
     (hgraph : SequentiallyCompactGraphEmbedding
-      (inverseClosedOperator R hR hinj)) :
+      (inversePartialMap R hR hinj)) :
     SequentiallyCompactOperator R := by
   intro y hy
   obtain ⟨C, hC⟩ := hy
-  let x : ℕ → (inverseClosedOperator R hR hinj).domain := fun n =>
+  let x : ℕ → (inversePartialMap R hR hinj).domain := fun n =>
     ⟨R (y n), LinearMap.mem_range_self R.toLinearMap (y n)⟩
   have hxbound : ∃ D : ℝ, ∀ n,
       ‖(x n : H)‖ ^ 2 +
-        ‖(inverseClosedOperator R hR hinj) (x n)‖ ^ 2 ≤ D := by
+        ‖(inversePartialMap R hR hinj) (x n)‖ ^ 2 ≤ D := by
     refine ⟨(‖R‖ ^ 2 + 1) * max C 0 ^ 2, ?_⟩
     exact graph_bound_of_bounded_preimage R hR hinj y hC
   obtain ⟨phi, hphi, hcauchy⟩ := hgraph x hxbound
@@ -168,7 +168,7 @@ theorem compact_of_inverse_graph_embedding_compact
 theorem inverse_graph_compact_iff
     (R : H →L[𝕜] H) (hR : IsSelfAdjoint R)
     (hinj : Function.Injective R) :
-    SequentiallyCompactGraphEmbedding (inverseClosedOperator R hR hinj) ↔
+    SequentiallyCompactGraphEmbedding (inversePartialMap R hR hinj) ↔
       SequentiallyCompactOperator R := by
   constructor
   · exact compact_of_inverse_graph_embedding_compact R hR hinj

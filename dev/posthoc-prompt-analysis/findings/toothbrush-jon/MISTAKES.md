@@ -49,7 +49,7 @@ compiler:
 
 ### A2. Statements whose hypotheses refer to undefined objects
 
-Worse than unproved — *meaningless*. `ClosedOperator.realSpectrum` was itself
+Worse than unproved — *meaningless*. `PartialMap.realSpectrum` was itself
 `:= by sorry`, so the source-facing sine-theta statement's spectral hypothesis
 referred to an undefined set. The agent's own words on finding it (2026-07-19):
 "That makes the statement meaningless, not merely unproved."

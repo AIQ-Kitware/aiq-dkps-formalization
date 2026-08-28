@@ -43,7 +43,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- A point-spectrum eigenpair for a closed operator, with the eigenvector
 stored in the operator domain. -/
-def ClosedOperatorEigenpair
+def PartialMapEigenpair
     (A : H →ₗ.[ℂ] H)
     (lambda : ℝ) (x : A.domain) : Prop :=
   (x : H) ≠ 0 ∧ A x = (lambda : ℂ) • (x : H)
@@ -87,7 +87,7 @@ end PositiveClassicalModeCertificate
 structure PositiveEigenmodeRegularity
     (A : H →ₗ.[ℂ] H) where
   classify : ∀ {lambda : ℝ} {x : A.domain},
-    0 < lambda → ClosedOperatorEigenpair A lambda x →
+    0 < lambda → PartialMapEigenpair A lambda x →
       PositiveClassicalModeCertificate lambda
 
 namespace PositiveEigenmodeRegularity
@@ -100,7 +100,7 @@ theorem eigenpair_characteristic
     (R : PositiveEigenmodeRegularity A)
     {lambda : ℝ} {x : A.domain}
     (hlambda : 0 < lambda)
-    (hx : ClosedOperatorEigenpair A lambda x) :
+    (hx : PartialMapEigenpair A lambda x) :
     ∃ beta : ℝ,
       0 < beta ∧
       FreeBeam.characteristic beta = 0 ∧
@@ -116,7 +116,7 @@ def PositiveSpectrumIsPointSpectrum
     (A : H →ₗ.[ℂ] H) : Prop :=
   ∀ lambda : ℝ,
     lambda ∈ TauCeti.LinearPMap.realSpectrum A → 0 < lambda →
-      ∃ x : A.domain, ClosedOperatorEigenpair A lambda x
+      ∃ x : A.domain, PartialMapEigenpair A lambda x
 
 omit [CompleteSpace H] in
 /-- Compact-resolvent discreteness plus ODE regularity gives the exact positive

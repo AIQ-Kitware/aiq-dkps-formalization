@@ -32,7 +32,7 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
-open ClosedOperatorComplexification
+open PartialMapComplexification
 open ComplexificationApproximation
 
 /-- Finite Ky Fan majorization for a real domain-aware Sylvester equation,

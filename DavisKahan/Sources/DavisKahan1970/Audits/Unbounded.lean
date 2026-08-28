@@ -44,7 +44,7 @@ namespace ExactSinTheta
 #check unboundedSinThetaDataOfSpectralSubspace
 #check spectralSubspace_orthogonalExactDecomposition
 #check sinTheta_unbounded_spectralSubspace_of_spectrumGap
-#check TauCeti.DavisKahanExt.ClosedOperator.reducingRestriction_isSelfAdjoint
+#check TauCeti.DavisKahanExt.PartialMap.reducingRestriction_isSelfAdjoint
 #check RealSpectralRestriction.conjugatePVM_spectralPVM
 #check RealSpectralRestriction.realSelfAdjointSpectralRestriction_isSelfAdjoint
 #check RealSpectralRestriction.complexifySubmodule_realSelfAdjointSpectralSubspace
@@ -56,8 +56,8 @@ namespace ExactSinTheta
 #check SpectralIsometricSinThetaProblem.result
 #check TauCeti.LinearPMap.realResolventSet
 #check realSpectrum_eq_spectraSpectrum
-#check ClosedOperatorComplexification.isSelfAdjoint_complexify
-#check ClosedOperatorComplexification.unboundedSylvesterGap_complexify
+#check PartialMapComplexification.isSelfAdjoint_complexify
+#check PartialMapComplexification.unboundedSylvesterGap_complexify
 #check ComplexificationApproximation.approximationNumber_complexify
 #check ComplexificationApproximation.kyFanApproximationGauge_complexify
 #check TauCeti.RealComplexification.conjugateOperator_cfc_eq
@@ -100,7 +100,7 @@ namespace ExactSinTheta
 #print axioms generalizedSinTheta_unbounded_exact_of_spectrumGap
 #print axioms sinTheta_unbounded_exact_of_spectrumGap
 #print axioms sinTheta_unbounded_spectralSubspace_of_spectrumGap
-#print axioms TauCeti.DavisKahanExt.ClosedOperator.reducingRestriction_isSelfAdjoint
+#print axioms TauCeti.DavisKahanExt.PartialMap.reducingRestriction_isSelfAdjoint
 #print axioms RealSpectralRestriction.conjugatePVM_spectralPVM
 #print axioms RealSpectralRestriction.realSelfAdjointSpectralRestriction_isSelfAdjoint
 #print axioms RealSpectralRestriction.complexifySubmodule_realSelfAdjointSpectralSubspace
@@ -112,8 +112,8 @@ namespace ExactSinTheta
 #print axioms SpectralIsometricSinThetaProblem.result
 #print axioms TauCeti.LinearPMap.realSpectrum
 #print axioms realSpectrum_eq_spectraSpectrum
-#print axioms ClosedOperatorComplexification.isSelfAdjoint_complexify
-#print axioms ClosedOperatorComplexification.unboundedSylvesterGap_complexify
+#print axioms PartialMapComplexification.isSelfAdjoint_complexify
+#print axioms PartialMapComplexification.unboundedSylvesterGap_complexify
 #print axioms ComplexificationApproximation.approximationNumber_complexify
 #print axioms ComplexificationApproximation.kyFanApproximationGauge_complexify
 #print axioms TauCeti.RealComplexification.conjugateOperator_cfc_eq
