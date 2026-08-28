@@ -24,7 +24,7 @@ These were decided by the maintainer and are not open for an agent to revisit.
 | D1 | **Hybrid submodule strategy.** Use the Palomar work to make `main` cleaner. Each Palomar submission gets its own branch; the branch delta must stay small and trivially forward/backward portable. |
 | D2 | **Submission repos are extracted.** Branches will most likely be lifted into their own standalone GitHub repositories for the actual submission. Everything is prepared here. |
 | D3 | **Add both Palomar tooling scripts, no CI.** `scripts/check_palomar_readiness.py` and `scripts/verify_palomar.sh`. This is an explicit maintainer exception to the AGENTS.md rule against new `scripts/check_*.py`. No GitHub Actions workflow. |
-| D4 | **Classical results only, this run.** Prepare Palomar entries for **Davis–Kahan 1970** and **Yu–Wang–Samworth 2015** only. Do **not** prepare entries for Acharyya 2024, Acharyya 2025, Helm 2025, or Quench 2026. Registration is permanent and public, and a DKPS entry would publicly record that printed statements in colleagues' in-discussion papers are false or under-specified; that is a conversation the maintainer has not had yet. |
+| D4 | **Two entries now; all DKPS results brought to Palomar-worthy state.** Prepare submission entries for **Davis–Kahan 1970** and **Yu–Wang–Samworth 2015** only — those go first, on their own. Do **not** prepare Palomar entries, Challenge modules, or entry metadata for Acharyya 2024, Acharyya 2025, Helm 2025 or Quench 2026 this run. But **do** bring all four DKPS packages to the state where such an entry could be made later, by us or by JHU (§6.3). Revised by the maintainer 2026-08-28 after the initial "classical only" answer. |
 | D5 | **Authorship.** `project.authors: [Jon Crall, Edward Wang]`. `project.responsible_maintainers: [Jon Crall]`. Basis: maintainer instruction. AI models are disclosed under `automation`, never as authors. |
 
 **The agent must not submit.** Do not call the submission API, do not open the
@@ -267,11 +267,75 @@ defer that entry and say so; a future accepted Tau Ceti upstream API would make 
 small. The README and metadata can explain that the repository contains the full
 unbounded development.
 
-### Not this run
+### 6.3 DKPS packages — Palomar-worthy state, no entries this run
 
-Acharyya 2024, Acharyya 2025, Helm 2025, Quench 2026 — per D4. Mathematical polish on
-those packages remains welcome at lower priority (§7, P2), but no Palomar entry, no
-Palomar Challenge, no entry metadata.
+Acharyya 2024, Acharyya 2025, Helm 2025 and Quench 2026 get **no Palomar entry, no
+Challenge module and no entry metadata** in this campaign. YWS and Davis–Kahan are
+submitted first and alone. The DKPS entries come later, made either here or by JHU —
+and since the paper authors themselves may be the submitters, the deliverable is that
+the mathematics and the statement surfaces are ready for someone else to pick up.
+
+"Palomar-worthy" is a checkable per-paper standard, not a vibe. For each of the four
+packages, the headline result must satisfy all of:
+
+1. **Mathematically finished.** No remaining seam between the paper's stated
+   hypotheses and the Lean theorem that is merely an artifact of one proof route. Every
+   assumption is either the paper's, or a documented repair with a stated reason.
+2. **Honestly dispositioned.** Exact source theorems say so; repairs say so and say
+   *what* was repaired and why the printed statement does not stand. Counterexamples to
+   false printed claims are preserved and reachable from the census row.
+3. **Statement-surface legible** — the load-bearing new criterion. The headline theorem
+   must be *expressible* in a Palomar Challenge: Mathlib-only vocabulary, or Mathlib
+   plus definitions that carry ordinary mathematical meaning and can be restated in a
+   short Challenge with precise docstrings. A statement that can only be posed by
+   importing this repository's implementation is not ready, however well proved.
+4. **Axiom-clean.** The headline theorem's axiom closure is exactly `propext`,
+   `Quot.sound`, `Classical.choice` — no `sorryAx`, no `Lean.ofReduceBool`, no custom
+   axiom. This is why the `native_decide` at
+   `DkpsQuench2026/Paper/TheoryPractice.lean:584` is now a blocker rather than a
+   landmine: **check whether it is in the Quench headline closure, and remove it either
+   way.**
+5. **Audit layer current.** Census status, semantic-review verdict, declaration lists
+   and generated alignment packets all match the actual theorem types, with no stale
+   freeform aggregate prose contradicting the structured rows.
+6. **Notability statable.** A one-paragraph research-interest case exists that argues
+   from the mathematics, never from formalization difficulty.
+
+Deliver, per package, a short **Challenge-feasibility finding**: which declaration is
+the headline, whether its statement is Mathlib-only expressible today, and if not,
+precisely which definitions would have to be restated or upstreamed. That finding is
+what determines whether JHU can pick this up, and it is more valuable than a
+half-built Challenge.
+
+Known remaining work by package, from the prior audits — verify each against current
+code before acting, several may already be closed:
+
+- **Acharyya 2024** — hostile re-audit of the final T2/T4/T5 surfaces, looking for
+  another defect of the kind just found: a proof needing only fixed `i, i'` while the
+  statement quantifies uniformly; `∀ᶠ` in the wrong binder order; a zero-stage
+  artifact; a product measure where a kernel is needed; fresh-query versus sampled-pair
+  law confusion; an ε-dependent subsequence; an integrated moment assumption stronger
+  than dominated convergence needs. If no defect is found, leave the mathematics alone.
+- **Acharyya 2025** — one clean source-facing theorem for the corrected finite
+  concentration bound with the entrywise dissimilarity bound `R` explicit (A25-T1); the
+  one-assembly-step spectral-norm corollary wrapper if it really is one step (A25-C1);
+  and, only after those, a meaningful spread/nondegeneracy condition from which
+  Assumptions 1 and 2 follow, labelled as a repair and never as the printed
+  Proposition 1 (A25-P1).
+- **Quench 2026** — adjudicate the normalization mismatch (Q26-D): the displayed
+  dissimilarity differs by `1/m` from the normalization the imported DKPS theory
+  assumes. Pick one coherent reading, justify it from the paper, and carry it
+  explicitly; do not leave an undocumented scale change. Then reconsider whether the
+  strengthened Acharyya 2024 continuum route removes the finite perspective net in the
+  compact-infinite route (T2A/T2B/RAW-INF) — likely the highest-value new theorem work
+  in this campaign. Preserve the tie-averaged nearest-neighbour repair and the
+  correction of the false all-compact-subsets assumption.
+- **Helm 2025** — the literal Equation (2) wrapper if the underlying theorem is
+  already there (H25-EQ2); and investigate discharging the bridge's distance-convergence
+  hypothesis by fibering `Acharyya2024.rawStress_mds_stability_set` over the latent
+  sample (H25-BRIDGE). Preserve the uniform-integrability / dominated-loss repair and
+  the evidence that convergence in probability alone does not give expected-risk
+  convergence.
 
 ---
 
@@ -303,31 +367,41 @@ Palomar Challenge, no entry metadata.
 10. Clean-clone verification: a fresh checkout at the candidate commit builds with no
     `git submodule update`, and the wrapper repo skeleton configures against it.
 
-**P1 — desired**
+**P1 — the two entries, and the DKPS Palomar-worthy standard (D4)**
 
 11. `Palomar/DavisKahan1970/{Challenge,Solution}.lean` + config + wrapper, verified.
-12. Davis–Kahan census residue that is mapping-stale rather than mathematically open:
-    `DK-3.2-prop`, `DK-4.1-prop`, `DK-9-model`, `DK-10.4` (split established
-    identities from the open functional-calculus question). Re-audit source and
-    current Lean *before* proving anything new.
-13. YWS single-pass current-state review: stale references, hidden hypotheses,
-    quantifier order, rank-boundary corners, local definitions leaking into public
-    statements. No broad YWS proof campaign — 24/24 rows are already disposed.
-14. Entry narratives (§9) and `palomar/README.md`.
+12. **DKPS packages to Palomar-worthy state** (§6.3), one package per lane, each
+    finishing with its Challenge-feasibility finding recorded in the census:
+    - Acharyya 2024 — hostile re-audit of the final T2/T4/T5 surfaces.
+    - Quench 2026 — adjudicate the `1/m` normalization mismatch; remove the
+      `native_decide` at `DkpsQuench2026/Paper/TheoryPractice.lean:584` and confirm the
+      headline closure is axiom-clean.
+    - Acharyya 2025 — corrected finite bound with `R` explicit (T1), then the
+      one-step spectral-norm wrapper (C1).
+    - Helm 2025 — literal Equation (2) wrapper (EQ2), then the bridge hypothesis.
+13. Entry narratives (§9) and `palomar/README.md`.
 
 **P2 — if healthy time remains**
 
-15. Genuinely open Davis–Kahan source items: `S1-block-residual`,
+14. Davis–Kahan census residue that is mapping-stale rather than mathematically open:
+    `DK-3.2-prop`, `DK-4.1-prop`, `DK-9-model`, `DK-10.4` (split established
+    identities from the open functional-calculus question). Re-audit source and
+    current Lean *before* proving anything new.
+15. YWS single-pass current-state review: stale references, hidden hypotheses,
+    quantifier order, rank-boundary corners, local definitions leaking into public
+    statements. No broad YWS proof campaign — 24/24 rows are already disposed.
+16. Quench compact-infinite route: whether the strengthened Acharyya 2024 continuum
+    theory removes the finite perspective net (T2A/T2B/RAW-INF). Highest-value new
+    theorem work if it lands; do not force it past a real compactness or measurability
+    obstruction — identify the missing theorem instead.
+17. Acharyya 2025 spread/nondegeneracy condition (A25-P1), labelled a repair.
+18. Genuinely open Davis–Kahan source items: `S1-block-residual`,
     `DK-5-hermitian-inequalities`, `DK-6.3-thm` Example 6.1,
     `DK-9-infinite-residual-counterexample`, `DK-9.8`.
-16. Mathematical polish on the DKPS packages (Acharyya 2024 hostile re-audit of the
-    final T2/T4/T5 surfaces; Acharyya 2025 T1/C1; Quench normalization adjudication;
-    Helm Equation (2) wrapper). **Polish only — no Palomar entries.**
-17. Remove the `native_decide` in `DkpsQuench2026/Paper/TheoryPractice.lean:584`.
 
 **P3 — stretch**
 
-18. Dependency-visualization and documentation presentation work.
+19. Dependency-visualization and documentation presentation work.
 
 ---
 
