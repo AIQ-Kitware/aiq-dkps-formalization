@@ -154,8 +154,8 @@ gauge is the operator norm — and renaming the block through
 `norm_sinTwoThetaIdealBlock_real` puts the Section 2 `sin 2Θ` theorem over the
 reals with a conclusion that names a real angle operator. -/
 
-variable (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
-  (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
+variable (A : E →ₗ.[ℝ] E)
+  (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
 
 /-- **Davis--Kahan 1970, `sin 2Θ` theorem over a REAL Hilbert space,
 reflection-residual form at the operator norm**: `δ ‖sin 2Θ‖ ≤ ‖R‖`.
@@ -170,13 +170,13 @@ theorem sinTwoTheta_reflectionResidual_opNorm_real
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA S hS).toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ)
+      (realSelfAdjointSpectralRestriction A hA S hS)
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (A.addBounded R).toLinearMap
+      (TauCeti.LinearPMap.addBounded A R)
           ⟨V.reflectionOperator (x : E), hJdom x⟩ =
-        V.reflectionOperator (A.toLinearMap x)) :
+        V.reflectionOperator (A x)) :
     δ * ‖paperSinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA S hS) V‖ ≤ ‖R‖ := by
   have h := sinTwoTheta_reflectionResidual_gauge_real A hA S hS
@@ -201,11 +201,11 @@ theorem sinTwoTheta_addBounded_opNorm_real
     (T : Set ℝ) (hT : MeasurableSet T)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA S hS).toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ) :
+      (realSelfAdjointSpectralRestriction A hA S hS)
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
     δ * ‖paperSinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA S hS)
-        (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) T hT)‖ ≤ 2 * ‖Eop‖ := by
   have h := sinTwoTheta_addBounded_gauge_real A hA Eop hEop
     (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) 1 Nat.one_pos) S T hS hT hδ hgap

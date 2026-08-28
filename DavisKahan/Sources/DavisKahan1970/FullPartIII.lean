@@ -57,9 +57,9 @@ alias bounded_sylvester_neumann_solution :=
 alias unbounded_sinTheta_opNorm :=
   DavisKahan.ExactSinTheta.sinTheta_unbounded_opNorm
 alias unbounded_sylvester_intervalExterior_opNorm :=
-  DavisKahan.ExactSinTheta.norm_closedSylvester_le_of_intervalExterior
+  DavisKahan.ExactSinTheta.linearPMap_norm_sylvester_le_of_intervalExterior
 alias unbounded_sylvester_exteriorInterval_opNorm :=
-  DavisKahan.ExactSinTheta.norm_closedSylvester_le_of_exteriorInterval
+  DavisKahan.ExactSinTheta.linearPMap_norm_sylvester_le_of_exteriorInterval
 alias unbounded_sinTheta_uiNorm :=
   DavisKahan.ExactSinTheta.sinTheta_unbounded_gauge
 alias unbounded_sinTheta_opNorm_genuineSpectrum :=
@@ -77,7 +77,7 @@ alias unbounded_spectralRestriction_spectrum_exterior :=
 alias unbounded_sinTheta_uiNorm_genuineSpectrum :=
   DavisKahan.sinTheta_unbounded_gauge_of_spectrum_gap
 alias unbounded_sylvester_exteriorInterval_uiNorm :=
-  DavisKahan.ExactSinTheta.mem_and_gauge_le_of_exteriorLeft_intervalRight
+  DavisKahan.ExactSinTheta.linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight
 alias unbounded_sylvester_intervalExterior_uiNorm :=
   DavisKahan.ExactSinTheta.mem_and_gauge_le_of_boundedLeft_exteriorRight
 alias unbounded_boundedRealization_of_spectrum_Icc :=

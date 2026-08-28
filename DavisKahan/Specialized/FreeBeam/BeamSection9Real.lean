@@ -52,12 +52,12 @@ It records the printed real scalar field, the self-adjoint closure of the classi
 fourth-derivative operator, the exact decomposition of the real spectrum into the two-dimensional
 zero mode and the increasing positive sequence, and the source gap above `500`. -/
 theorem beamRealModel_sourceFacts :
-    beamOperator.IsSelfAdjoint ∧
+    _root_.IsSelfAdjoint beamOperator ∧
       closure classicalFreeBeamGraph =
-        (beamOperator.toLinearPMap.graph : Set (BeamL2 × BeamL2)) ∧
-      beamOperator.realSpectrum = insert 0 beamEigenvalues ∧
+        (beamOperator.graph : Set (BeamL2 × BeamL2)) ∧
+      TauCeti.LinearPMap.realSpectrum beamOperator = insert 0 beamEigenvalues ∧
       (∃ f : ℕ → ℝ, StrictMono f ∧ Set.range f = beamEigenvalues ∧
-        ∀ n, 500 < f n ∧ f n ∈ beamOperator.realSpectrum) := by
+        ∀ n, 500 < f n ∧ f n ∈ TauCeti.LinearPMap.realSpectrum beamOperator) := by
   exact ⟨beamOperator_isSelfAdjoint,
     closure_classicalFreeBeamGraph_eq_graph,
     realSpectrum_beamOperator_eq_insert_zero,
@@ -74,7 +74,7 @@ theorem beamRealPositiveSpectrum_sourceFacts :
 theorem beamRealZeroMode_sourceFacts :
     Module.finrank ℝ beamTrial = 2 ∧
       ∀ (x : BeamL2) (h : x ∈ beamOperator.domain),
-        beamOperator.toLinearMap ⟨x, h⟩ = 0 ↔ x ∈ beamTrial :=
+        beamOperator ⟨x, h⟩ = 0 ↔ x ∈ beamTrial :=
   ⟨finrank_beamTrial, fun _ h => beamOperator_eq_zero_iff_mem_beamTrial h⟩
 
 /-- A source-facing summary of the real Section 9 perturbation and trial-space data. -/

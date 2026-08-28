@@ -46,18 +46,18 @@ graph norm.  The sequence formulation avoids installing a second topology on
 the domain subtype while recording exactly the two convergences needed by the
 closed-graph argument. -/
 def IsGraphCore
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : E →ₗ.[𝕜] E)
     (D : Submodule 𝕜 A.domain) : Prop :=
   ∀ x : A.domain, ∃ u : ℕ → D,
     Tendsto (fun n => ((((u n : D) : A.domain) : E))) atTop (𝓝 (x : E)) ∧
-    Tendsto (fun n => A.toLinearMap ((u n : D) : A.domain))
-      atTop (𝓝 (A.toLinearMap x))
+    Tendsto (fun n => A ((u n : D) : A.domain))
+      atTop (𝓝 (A x))
 
 namespace IsGraphCore
 
 omit [CompleteSpace E] in
 /-- The full operator domain is a graph core. -/
-theorem top (A : ClosedOperator (𝕜 := 𝕜) (E := E)) :
+theorem top (A : E →ₗ.[𝕜] E) :
     ClosedOperator.IsGraphCore A ⊤ := by
   intro x
   refine ⟨fun _ => ⟨x, Submodule.mem_top⟩, ?_, ?_⟩
@@ -68,7 +68,7 @@ omit [CompleteSpace E] in
 /-- A graph core is ambiently dense in the operator domain: every domain vector
 is an ambient-norm limit of vectors from the core. -/
 theorem ambient_approximation
-    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {A : E →ₗ.[𝕜] E}
     {D : Submodule 𝕜 A.domain} (hD : ClosedOperator.IsGraphCore A D)
     (x : A.domain) :
     ∃ u : ℕ → D,
@@ -81,16 +81,16 @@ end ClosedOperator
 
 /-- Residual data on a graph core of the trial operator. -/
 structure PaperCommonCoreResidualData
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (A₀ : ClosedOperator (𝕜 := 𝕜) (E := F))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
     (X : F →L[𝕜] E) (R : F →L[𝕜] E) where
   core : Submodule 𝕜 A₀.domain
   graph_core : ClosedOperator.IsGraphCore A₀ core
   maps_core : ∀ x : core, X (((x : core) : A₀.domain) : F) ∈ A.domain
   residual_on_core : ∀ x : core,
-    A.toLinearMap
+    A
         ⟨X (((x : core) : A₀.domain) : F), maps_core x⟩ -
-      X (A₀.toLinearMap ((x : core) : A₀.domain)) =
+      X (A₀ ((x : core) : A₀.domain)) =
         R (((x : core) : A₀.domain) : F)
 
 namespace PaperCommonCoreResidualData
@@ -100,13 +100,14 @@ omit [CompleteSpace E] [CompleteSpace F] in
 This is the load-bearing closed-graph argument behind the literal appendix
 formulation. -/
 theorem extends_to_domain
-    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {A₀ : ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : E →ₗ.[𝕜] E}
+    {A₀ : F →ₗ.[𝕜] F}
     {X : F →L[𝕜] E} {R : F →L[𝕜] E}
     (C : PaperCommonCoreResidualData A A₀ X R)
+    (hAclosed : A.IsClosed)
     (x : A₀.domain) :
     ∃ hx : X (x : F) ∈ A.domain,
-      A.toLinearMap ⟨X (x : F), hx⟩ - X (A₀.toLinearMap x) = R (x : F) := by
+      A ⟨X (x : F), hx⟩ - X (A₀ x) = R (x : F) := by
   obtain ⟨u, hu, hAu⟩ := C.graph_core x
   let xu : ℕ → A.domain := fun n =>
     ⟨X ((((u n : C.core) : A₀.domain) : F)), C.maps_core (u n)⟩
@@ -121,35 +122,36 @@ theorem extends_to_domain
       atTop (𝓝 (R (x : F))) :=
     (R.continuous.tendsto (x : F)).comp hu
   have hXA₀ : Tendsto
-      (fun n => X (A₀.toLinearMap ((u n : C.core) : A₀.domain)))
-      atTop (𝓝 (X (A₀.toLinearMap x))) :=
-    (X.continuous.tendsto (A₀.toLinearMap x)).comp hAu
-  have hAseq : Tendsto (fun n => A.toLinearMap (xu n))
-      atTop (𝓝 (R (x : F) + X (A₀.toLinearMap x))) := by
+      (fun n => X (A₀ ((u n : C.core) : A₀.domain)))
+      atTop (𝓝 (X (A₀ x))) :=
+    (X.continuous.tendsto (A₀ x)).comp hAu
+  have hAseq : Tendsto (fun n => A (xu n))
+      atTop (𝓝 (R (x : F) + X (A₀ x))) := by
     have hsum := hR.add hXA₀
     convert hsum using 1
     funext n
-    change A.toLinearMap
+    change A
         ⟨X ((((u n : C.core) : A₀.domain) : F)), C.maps_core (u n)⟩ =
       R ((((u n : C.core) : A₀.domain) : F)) +
-        X (A₀.toLinearMap ((u n : C.core) : A₀.domain))
+        X (A₀ ((u n : C.core) : A₀.domain))
     exact sub_eq_iff_eq_add.mp (C.residual_on_core (u n))
   have hgraph :
-      (X (x : F), R (x : F) + X (A₀.toLinearMap x)) ∈
-        Set.range (fun z : A.domain => ((z : E), A.toLinearMap z)) :=
-    A.closed_graph.mem_of_tendsto (hX.prodMk_nhds hAseq)
+      (X (x : F), R (x : F) + X (A₀ x)) ∈
+        Set.range (fun z : A.domain => ((z : E), A z)) :=
+    ((linearPMap_isClosed_iff_range_isClosed A).mp hAclosed).mem_of_tendsto
+      (hX.prodMk_nhds hAseq)
       (Eventually.of_forall fun n => ⟨xu n, rfl⟩)
   rcases hgraph with ⟨z, hz⟩
   have hzX : (z : E) = X (x : F) := congrArg Prod.fst hz
-  have hzA : A.toLinearMap z = R (x : F) + X (A₀.toLinearMap x) :=
+  have hzA : A z = R (x : F) + X (A₀ x) :=
     congrArg Prod.snd hz
   have hx : X (x : F) ∈ A.domain := by
     rw [← hzX]
     exact z.property
   refine ⟨hx, ?_⟩
   have hsubtype : z = (⟨X (x : F), hx⟩ : A.domain) := Subtype.ext hzX
-  have haction : A.toLinearMap ⟨X (x : F), hx⟩ =
-      R (x : F) + X (A₀.toLinearMap x) := by
+  have haction : A ⟨X (x : F), hx⟩ =
+      R (x : F) + X (A₀ x) := by
     rw [← hsubtype]
     exact hzA
   rw [haction]
@@ -158,28 +160,28 @@ theorem extends_to_domain
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Full-domain compatibility obtained from the graph-core hypothesis. -/
 theorem maps_domain
-    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {A₀ : ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : E →ₗ.[𝕜] E}
+    {A₀ : F →ₗ.[𝕜] F}
     {X : F →L[𝕜] E} {R : F →L[𝕜] E}
-    (C : PaperCommonCoreResidualData A A₀ X R) :
+    (C : PaperCommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed) :
     ∀ x : A₀.domain, X (x : F) ∈ A.domain := by
   intro x
-  exact (C.extends_to_domain x).choose
+  exact (C.extends_to_domain hAclosed x).choose
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Full-domain residual identity obtained from the graph-core hypothesis. -/
 theorem residual_eq
-    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {A₀ : ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : E →ₗ.[𝕜] E}
+    {A₀ : F →ₗ.[𝕜] F}
     {X : F →L[𝕜] E} {R : F →L[𝕜] E}
-    (C : PaperCommonCoreResidualData A A₀ X R)
+    (C : PaperCommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed)
     (x : A₀.domain) :
-    A.toLinearMap ⟨X (x : F), C.maps_domain x⟩ -
-      X (A₀.toLinearMap x) = R (x : F) := by
-  obtain ⟨hx, hEq⟩ := C.extends_to_domain x
+    A ⟨X (x : F), C.maps_domain hAclosed x⟩ -
+      X (A₀ x) = R (x : F) := by
+  obtain ⟨hx, hEq⟩ := C.extends_to_domain hAclosed x
   have hsub :
       (⟨X (x : F), hx⟩ : A.domain) =
-        ⟨X (x : F), C.maps_domain x⟩ := Subtype.ext rfl
+        ⟨X (x : F), C.maps_domain hAclosed x⟩ := Subtype.ext rfl
   simpa [hsub] using hEq
 
 end PaperCommonCoreResidualData
@@ -187,14 +189,14 @@ end PaperCommonCoreResidualData
 /-- Construct the accepted sine-theta bookkeeping package from a residual
 identity available only on a graph core. -/
 noncomputable def unboundedSinThetaDataOfPaperCommonCore
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (A₀ : ClosedOperator (𝕜 := 𝕜) (E := F))
-    (Λ₁ : ClosedOperator (𝕜 := 𝕜) (E := G))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
-    (C : PaperCommonCoreResidualData A A₀ X R)
+    (C : PaperCommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed)
     (hF₁ : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hintertwines : ∀ y : Λ₁.domain,
-      A.toLinearMap ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁.toLinearMap y)) :
+      A ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁ y)) :
     UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G) where
   A := A
   A₀ := A₀
@@ -202,9 +204,9 @@ noncomputable def unboundedSinThetaDataOfPaperCommonCore
   X := X
   F₁ := F₁
   residual := R
-  X_maps_domain := C.maps_domain
+  X_maps_domain := C.maps_domain hAclosed
   F₁_maps_domain := hF₁
-  residual_eq := C.residual_eq
+  residual_eq := C.residual_eq hAclosed
   intertwines := hintertwines
 
 omit [CompleteSpace G] [CompleteSpace E] [CompleteSpace F] in
@@ -215,15 +217,15 @@ returns the residual field of the constructed package; without this projection
 the two do not match syntactically. -/
 @[simp]
 theorem unboundedSinThetaDataOfPaperCommonCore_residual
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (A₀ : ClosedOperator (𝕜 := 𝕜) (E := F))
-    (Λ₁ : ClosedOperator (𝕜 := 𝕜) (E := G))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
-    (C : PaperCommonCoreResidualData A A₀ X R)
+    (C : PaperCommonCoreResidualData A A₀ X R) (hAclosed : A.IsClosed)
     (hF₁ : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hintertwines : ∀ y : Λ₁.domain,
-      A.toLinearMap ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁.toLinearMap y)) :
-    (unboundedSinThetaDataOfPaperCommonCore A A₀ Λ₁ X F₁ R C hF₁
+      A ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁ y)) :
+    (unboundedSinThetaDataOfPaperCommonCore A A₀ Λ₁ X F₁ R C hAclosed hF₁
       hintertwines).residual = R := rfl
 
 end ExactSinTheta

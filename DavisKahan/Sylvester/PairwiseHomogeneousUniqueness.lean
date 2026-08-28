@@ -30,7 +30,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahanExt
 
 noncomputable section
 
@@ -107,27 +106,27 @@ theorem linearPMapSylvester_solution_unique_of_pairwiseSpectrumGap
 /-- A bounded homogeneous closed Sylvester solution vanishes whenever the two
 self-adjoint spectra are disjoint. -/
 theorem closedSylvester_homogeneous_eq_zero_of_disjoint_spectrum
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X : F →L[ℂ] E}
     (hdisj : Disjoint
-      (TauCeti.LinearPMap.spectrum A.toLinearPMap)
-      (TauCeti.LinearPMap.spectrum B.toLinearPMap))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X 0) :
+      (TauCeti.LinearPMap.spectrum A)
+      (TauCeti.LinearPMap.spectrum B))
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
   exact linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
     hA hB hdisj hEq
 
 /-- Positive pairwise spectral distance implies homogeneous uniqueness. -/
 theorem closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X 0) :
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
   exact linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
     hA hB hδ hgap hEq
@@ -135,15 +134,15 @@ theorem closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
 /-- **Sylvester--Rosenblum uniqueness for closed operators.**  Two bounded solutions of the
 same closed Sylvester equation coincide as soon as the two spectra are *disjoint*. -/
 theorem closedSylvester_solution_unique_of_disjoint_spectrum
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X Y C : F →L[ℂ] E}
     (hdisj : Disjoint
-      (TauCeti.LinearPMap.spectrum A.toLinearPMap)
-      (TauCeti.LinearPMap.spectrum B.toLinearPMap))
-    (hX : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
-    (hY : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap Y C) :
+      (TauCeti.LinearPMap.spectrum A)
+      (TauCeti.LinearPMap.spectrum B))
+    (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
     X = Y :=
   linearPMapSylvester_solution_unique_of_disjoint_spectrum hA hB hdisj hX hY
 
@@ -151,14 +150,14 @@ theorem closedSylvester_solution_unique_of_disjoint_spectrum
 positive pairwise spectral separation.  A corollary of
 `closedSylvester_solution_unique_of_disjoint_spectrum`, which is the sharp form. -/
 theorem closedSylvester_solution_unique_of_pairwiseSpectrumGap
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X Y C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hX : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
-    (hY : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap Y C) :
+    (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
     X = Y :=
   closedSylvester_solution_unique_of_disjoint_spectrum hA hB (hgap.disjoint hδ) hX hY
 

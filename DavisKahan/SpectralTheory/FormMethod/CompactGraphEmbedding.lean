@@ -47,25 +47,25 @@ def SequentiallyCompactOperator (R : H →L[𝕜] H) : Prop :=
  domain.  This matches the shape used by `SobolevTraceFoundation.graph_compact`.
 -/
 def SequentiallyCompactGraphEmbedding
-    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)) : Prop :=
+    (A : H →ₗ.[𝕜] H) : Prop :=
   ∀ x : ℕ → A.domain,
     (∃ C : ℝ, ∀ n,
-      ‖(x n : H)‖ ^ 2 + ‖A.toLinearMap (x n)‖ ^ 2 ≤ C) →
+      ‖(x n : H)‖ ^ 2 + ‖A (x n)‖ ^ 2 ≤ C) →
     ∃ phi : ℕ → ℕ, StrictMono phi ∧
       CauchySeq (fun n => ((x (phi n) : A.domain) : H))
 
 omit [CompleteSpace H] in
 /-- A sum-of-squares graph bound gives a uniform bound on operator values. -/
 theorem operator_values_bounded_of_graph_bound
-    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : H →ₗ.[𝕜] H)
     (x : ℕ → A.domain) {C : ℝ}
     (hC : ∀ n,
-      ‖(x n : H)‖ ^ 2 + ‖A.toLinearMap (x n)‖ ^ 2 ≤ C) :
-    ∀ n, ‖A.toLinearMap (x n)‖ ≤ Real.sqrt (max C 0) := by
+      ‖(x n : H)‖ ^ 2 + ‖A (x n)‖ ^ 2 ≤ C) :
+    ∀ n, ‖A (x n)‖ ≤ Real.sqrt (max C 0) := by
   intro n
-  have hsquare : ‖A.toLinearMap (x n)‖ ^ 2 ≤ max C 0 := by
+  have hsquare : ‖A (x n)‖ ^ 2 ≤ max C 0 := by
     have hnonneg : 0 ≤ ‖(x n : H)‖ ^ 2 := sq_nonneg _
-    have hle : ‖A.toLinearMap (x n)‖ ^ 2 ≤ C := by
+    have hle : ‖A (x n)‖ ^ 2 ≤ C := by
       linarith [hC n]
     exact hle.trans (le_max_left _ _)
   exact Real.le_sqrt_of_sq_le hsquare
@@ -73,14 +73,14 @@ theorem operator_values_bounded_of_graph_bound
 omit [CompleteSpace H] in
 /-- A sum-of-squares graph bound gives a uniform bound on ambient values. -/
 theorem ambient_values_bounded_of_graph_bound
-    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : H →ₗ.[𝕜] H)
     (x : ℕ → A.domain) {C : ℝ}
     (hC : ∀ n,
-      ‖(x n : H)‖ ^ 2 + ‖A.toLinearMap (x n)‖ ^ 2 ≤ C) :
+      ‖(x n : H)‖ ^ 2 + ‖A (x n)‖ ^ 2 ≤ C) :
     ∀ n, ‖(x n : H)‖ ≤ Real.sqrt (max C 0) := by
   intro n
   have hsquare : ‖(x n : H)‖ ^ 2 ≤ max C 0 := by
-    have hnonneg : 0 ≤ ‖A.toLinearMap (x n)‖ ^ 2 := sq_nonneg _
+    have hnonneg : 0 ≤ ‖A (x n)‖ ^ 2 := sq_nonneg _
     have hle : ‖(x n : H)‖ ^ 2 ≤ C := by
       linarith [hC n]
     exact hle.trans (le_max_left _ _)
@@ -96,7 +96,7 @@ theorem inverse_graph_embedding_compact
   intro x hx
   obtain ⟨C, hC⟩ := hx
   let y : ℕ → H := fun n =>
-    (inverseClosedOperator R hR hinj).toLinearMap (x n)
+    (inverseClosedOperator R hR hinj) (x n)
   have hybounded : ∃ D : ℝ, ∀ n, ‖y n‖ ≤ D := by
     refine ⟨Real.sqrt (max C 0), ?_⟩
     exact operator_values_bounded_of_graph_bound
@@ -118,7 +118,7 @@ theorem graph_bound_of_bounded_preimage
     ∀ n,
       ‖((⟨R (y n), LinearMap.mem_range_self R.toLinearMap (y n)⟩ :
           (inverseClosedOperator R hR hinj).domain) : H)‖ ^ 2 +
-        ‖(inverseClosedOperator R hR hinj).toLinearMap
+        ‖(inverseClosedOperator R hR hinj)
           ⟨R (y n), LinearMap.mem_range_self R.toLinearMap (y n)⟩‖ ^ 2
       ≤ (‖R‖ ^ 2 + 1) * max C 0 ^ 2 := by
   intro n
@@ -156,7 +156,7 @@ theorem compact_of_inverse_graph_embedding_compact
     ⟨R (y n), LinearMap.mem_range_self R.toLinearMap (y n)⟩
   have hxbound : ∃ D : ℝ, ∀ n,
       ‖(x n : H)‖ ^ 2 +
-        ‖(inverseClosedOperator R hR hinj).toLinearMap (x n)‖ ^ 2 ≤ D := by
+        ‖(inverseClosedOperator R hR hinj) (x n)‖ ^ 2 ≤ D := by
     refine ⟨(‖R‖ ^ 2 + 1) * max C 0 ^ 2, ?_⟩
     exact graph_bound_of_bounded_preimage R hR hinj y hC
   obtain ⟨phi, hphi, hcauchy⟩ := hgraph x hxbound

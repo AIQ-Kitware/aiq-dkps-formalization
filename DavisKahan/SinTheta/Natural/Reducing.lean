@@ -74,25 +74,6 @@ theorem reducingSubspace_orthogonalExactDecomposition
     intro x
     exact U.starProjection_add_starProjection_orthogonal x
 
-/-- `LinearPMap.IsClosed` is stated on the graph, while the canonical
-reducing-restriction API states closedness as a range.  The two are the same set,
-so this is a reindexing lemma used in both directions. -/
-private theorem linearPMap_isClosed_iff_range_isClosed
-    {G : Type v} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
-    (f : G →ₗ.[𝕜] G) :
-    f.IsClosed ↔ IsClosed (Set.range fun x : f.domain => ((x : G), f x)) := by
-  have hgraph : (f.graph : Set (G × G)) =
-      Set.range (fun x : f.domain => ((x : G), f x)) := by
-    ext q
-    simp only [SetLike.mem_coe, LinearPMap.mem_graph_iff, Set.mem_range]
-    constructor
-    · rintro ⟨y, hy1, hy2⟩
-      exact ⟨y, Prod.ext hy1 hy2⟩
-    · rintro ⟨y, hy⟩
-      exact ⟨y, congrArg Prod.fst hy, congrArg Prod.snd hy⟩
-  change IsClosed (f.graph : Set (G × G)) ↔ _
-  rw [hgraph]
-
 /-- Internal unbounded sine-theta data constructed from a reducing exact
 subspace.  Density and graph closedness are carried as hypotheses rather than
 bundled into the operator, so the complementary restriction inherits both from
@@ -108,20 +89,10 @@ def unboundedSinThetaDataOfReducingSubspace
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
       A ⟨X (x : F), hXdom x⟩ - X (A0 x) = Rop (x : F)) :
-    UnboundedSinThetaDataPMap (𝕜 := 𝕜) (E := E) (F := F) (G := Uᗮ) where
+    UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := Uᗮ) where
   A := A
   A₀ := A0
   Λ₁ := TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal
-  A_dense := hAdense
-  A₀_dense := hA0dense
-  Λ₁_dense :=
-    TauCeti.LinearPMap.reducingRestriction_dense A Uᗮ hred.orthogonal hAdense
-  A_closed := hAclosed
-  A₀_closed := hA0closed
-  Λ₁_closed :=
-    (linearPMap_isClosed_iff_range_isClosed _).mpr
-      (TauCeti.LinearPMap.reducingRestriction_closedGraph A Uᗮ hred.orthogonal
-        ((linearPMap_isClosed_iff_range_isClosed A).mp hAclosed))
   X := X
   F₁ := Uᗮ.subtypeL
   residual := Rop
@@ -163,7 +134,7 @@ noncomputable def toData
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (P : NaturalReducingIsometricSinThetaProblem
       (𝕜 := 𝕜) (E := E) (F := F) N U) :
-    UnboundedSinThetaDataPMap (𝕜 := 𝕜) (E := E) (F := F) (G := Uᗮ) :=
+    UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := Uᗮ) :=
   unboundedSinThetaDataOfReducingSubspace
     P.A P.A_dense P.A_closed U P.reduces P.A₀ P.A₀_dense P.A₀_closed
     P.X P.residual P.X_maps_domain P.residual_eq
@@ -206,7 +177,7 @@ noncomputable def toData
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
     (P : NaturalReducingGeneralSinThetaProblem
       (𝕜 := 𝕜) (E := E) (F := F) N U) :
-    UnboundedSinThetaDataPMap (𝕜 := 𝕜) (E := E) (F := F) (G := Uᗮ) :=
+    UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := Uᗮ) :=
   unboundedSinThetaDataOfReducingSubspace
     P.A P.A_dense P.A_closed U P.reduces P.A₀ P.A₀_dense P.A₀_closed
     P.X P.residual P.X_maps_domain P.residual_eq
@@ -240,12 +211,12 @@ theorem result_complex
     simpa only [D, NaturalReducingIsometricSinThetaProblem.toData,
       unboundedSinThetaDataOfReducingSubspace] using
       reducingSubspace_orthogonalExactDecomposition (𝕜 := ℂ) U
-  have hmain := linearPMap_sinTheta_unbounded_exact_complex
+  have hmain := sinTheta_unbounded_exact_complex
     N D U.subtypeL P.ambient_selfAdjoint P.trial_selfAdjoint hcomp
       P.trial_isometry hdecomp P.gap_pos P.spectral_gap P.residual_mem
   simpa only [D, NaturalReducingIsometricSinThetaProblem.toData,
     unboundedSinThetaDataOfReducingSubspace,
-    UnboundedSinThetaDataPMap.toClosed] using hmain
+    ] using hmain
 
 end NaturalReducingIsometricSinThetaProblem
 
@@ -273,13 +244,13 @@ theorem result_complex
     simpa only [D, NaturalReducingGeneralSinThetaProblem.toData,
       unboundedSinThetaDataOfReducingSubspace] using
       reducingSubspace_orthogonalExactDecomposition (𝕜 := ℂ) U
-  have hmain := linearPMap_generalizedSinTheta_unbounded_exact_complex
+  have hmain := generalizedSinTheta_unbounded_exact_complex
     N D U.subtypeL P.ambient_selfAdjoint P.trial_selfAdjoint hcomp
       hdecomp P.gap_pos P.frameLowerBound_pos P.lowerFrame
       P.spectral_gap P.residual_mem
   simpa only [D, NaturalReducingGeneralSinThetaProblem.toData,
     unboundedSinThetaDataOfReducingSubspace,
-    UnboundedSinThetaDataPMap.toClosed] using hmain
+    ] using hmain
 
 end NaturalReducingGeneralSinThetaProblem
 
@@ -411,11 +382,11 @@ theorem result_real
   -- The real engines have no `linearPMap_` twin yet, so the conversion to the
   -- bundled representation is made explicit here rather than hidden in the record.
   have hmain := sinTheta_unbounded_exact_real
-    N D.toClosed U.subtypeL P.ambient_selfAdjoint P.trial_selfAdjoint hcomp
+    N D U.subtypeL P.ambient_selfAdjoint P.trial_selfAdjoint hcomp
       P.trial_isometry hdecomp P.gap_pos P.spectral_gap P.residual_mem
   simpa only [D, NaturalReducingIsometricSinThetaProblem.toData,
     unboundedSinThetaDataOfReducingSubspace,
-    UnboundedSinThetaDataPMap.toClosed] using hmain
+    ] using hmain
 
 end NaturalReducingIsometricSinThetaProblem
 
@@ -445,12 +416,12 @@ theorem result_real
       reducingSubspace_orthogonalExactDecomposition (𝕜 := ℝ) U
   -- As in the isometric real method: explicit conversion, no raw twin yet.
   have hmain := generalizedSinTheta_unbounded_exact_real
-    N D.toClosed U.subtypeL P.ambient_selfAdjoint P.trial_selfAdjoint hcomp
+    N D U.subtypeL P.ambient_selfAdjoint P.trial_selfAdjoint hcomp
       hdecomp P.gap_pos P.frameLowerBound_pos P.lowerFrame
       P.spectral_gap P.residual_mem
   simpa only [D, NaturalReducingGeneralSinThetaProblem.toData,
     unboundedSinThetaDataOfReducingSubspace,
-    UnboundedSinThetaDataPMap.toClosed] using hmain
+    ] using hmain
 
 end NaturalReducingGeneralSinThetaProblem
 

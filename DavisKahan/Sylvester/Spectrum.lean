@@ -6,7 +6,7 @@ Authors: Jon Crall, Claude Fable 5
 import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.SpectralTheory.ClosedOperator.Complex
+import DavisKahan.SpectralTheory.ClosedOperator.Basic
 import DavisKahan.SpectralTheory.ClosedOperator.BoundedRealization
 import DavisKahan.Sylvester.Gap
 import DavisKahan.Sylvester.Unbounded.Neumann

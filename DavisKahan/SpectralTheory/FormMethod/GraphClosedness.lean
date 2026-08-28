@@ -154,10 +154,8 @@ noncomputable def toClosedOperatorOfGraphNorm
     (hdense : DenseRange D.freeEmbed)
     {c : ℝ} (hc : 0 < c)
     (hbound : ∀ x : D.freeSubspace, c * ‖x‖ ≤ ‖D.freeGraphMap x‖) :
-    DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H) :=
+    H →ₗ.[𝕜] H :=
   D.toClosedOperator
-    (D.dense_freeAmbientDomain hdense)
-    (D.isClosed_ambientGraph_of_graphNorm_bound hc hbound)
 
 end FourthOrderTraceModel
 

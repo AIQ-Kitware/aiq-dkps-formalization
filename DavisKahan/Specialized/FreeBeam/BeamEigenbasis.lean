@@ -185,7 +185,7 @@ linear endomorphism of a two-dimensional space. -/
 def beamLowOperator (ε : ℝ) (hε : 0 ≤ ε) :
     (beamLowFiveHundred ε) →ₗ[ℂ] (beamLowFiveHundred ε) :=
   LinearMap.codRestrict (beamLowFiveHundred ε)
-    ((beamPerturbed ε).toLinearMap ∘ₗ
+    ((beamPerturbed ε).toFun ∘ₗ
       Submodule.inclusion (beamLowFiveHundred_le_domain' ε hε))
     (fun x => selfAdjoint_maps_spectralSubspace (beamPerturbed ε)
       (beamPerturbed_isSelfAdjoint ε) measurableSet_Iic
@@ -194,14 +194,15 @@ def beamLowOperator (ε : ℝ) (hε : 0 ≤ ε) :
 /-- The restriction acts by the ambient operator. -/
 @[simp] theorem beamLowOperator_coe (ε : ℝ) (hε : 0 ≤ ε) (x : beamLowFiveHundred ε) :
     ((beamLowOperator ε hε x : beamLowFiveHundred ε) : BeamL2)
-      = (beamPerturbed ε).toLinearMap ⟨(x : BeamL2), beamLowFiveHundred_le_domain ε hε x.2⟩ :=
+      = (beamPerturbed ε) ⟨(x : BeamL2), beamLowFiveHundred_le_domain ε hε x.2⟩ :=
   rfl
 
 /-- The restriction is symmetric. -/
 theorem beamLowOperator_isSymmetric (ε : ℝ) (hε : 0 ≤ ε) :
     (beamLowOperator ε hε).IsSymmetric := by
   intro x y
-  exact ((beamPerturbed_isSelfAdjoint ε).isSymmetric).toLinearMap_inner_eq
+  exact (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint
+      (beamPerturbed_isSelfAdjoint ε))
     ⟨(x : BeamL2), beamLowFiveHundred_le_domain ε hε x.2⟩
     ⟨(y : BeamL2), beamLowFiveHundred_le_domain ε hε y.2⟩
 
@@ -247,7 +248,7 @@ theorem norm_beamLowEigenvector (ε : ℝ) (hε : 0 ≤ ε) (hε100 : ε < 100) 
 /-- **The eigenvalue equation.** -/
 theorem beamPerturbed_apply_beamLowEigenvector (ε : ℝ) (hε : 0 ≤ ε) (hε100 : ε < 100)
     (k : Fin 2) :
-    (beamPerturbed ε).toLinearMap
+    (beamPerturbed ε)
         ⟨beamLowEigenvector ε hε hε100 k, beamLowEigenvector_mem_domain ε hε hε100 k⟩
       = ((beamLowEigenvalue ε hε hε100 k : ℝ) : ℂ) • beamLowEigenvector ε hε hε100 k := by
   have := finiteDimensional_beamLowFiveHundred ε hε
@@ -286,13 +287,13 @@ theorem beamLowEigenvalue_lt_five_hundred (ε : ℝ) (hε : 0 ≤ ε) (hε100 : 
   have hlt := TauCeti.LinearPMap.re_inner_lt_of_specProjection_Ici_apply_eq_zero
     (beamPerturbed_isSelfAdjoint ε)
     (⟨f, beamLowEigenvector_mem_domain ε hε hε100 k⟩ : (beamPerturbed ε).domain) hIci hfne
-  have heig : (beamPerturbed ε).toLinearMap
+  have heig : (beamPerturbed ε)
       ⟨f, beamLowEigenvector_mem_domain ε hε hε100 k⟩
       = ((beamLowEigenvalue ε hε hε100 k : ℝ) : ℂ) • f :=
     beamPerturbed_apply_beamLowEigenvector ε hε hε100 k
-  rw [show ((beamPerturbed ε).toLinearPMap
+  rw [show ((beamPerturbed ε)
       (⟨f, beamLowEigenvector_mem_domain ε hε hε100 k⟩ : (beamPerturbed ε).domain))
-      = (beamPerturbed ε).toLinearMap ⟨f, beamLowEigenvector_mem_domain ε hε hε100 k⟩ from rfl,
+      = (beamPerturbed ε) ⟨f, beamLowEigenvector_mem_domain ε hε hε100 k⟩ from rfl,
     heig, inner_smul_left, Complex.conj_ofReal, inner_self_eq_norm_sq_to_K] at hlt
   simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im] at hlt
   rw [hfn] at hlt
@@ -321,19 +322,19 @@ eigenvalue equation onto `beamTrialᗮ`, gives `B x + A₁ y = lam y` with
 `A + ε t` to the complement. -/
 theorem beam_lower_block_equation (ε : ℝ) {f : BeamL2} {lam : ℝ}
     (hfdom : f ∈ (beamPerturbed ε).domain)
-    (hf : (beamPerturbed ε).toLinearMap ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f) :
+    (hf : (beamPerturbed ε) ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f) :
     (beamPerturbation ε (beamTrial.starProjection f)
         - beamTrial.starProjection (beamPerturbation ε (beamTrial.starProjection f)))
-      + ((beamPerturbed ε).toLinearMap
+      + ((beamPerturbed ε)
             ⟨f - beamTrial.starProjection f, beamOrthogonal_part_mem_domain ε hfdom⟩
-          - beamTrial.starProjection ((beamPerturbed ε).toLinearMap
+          - beamTrial.starProjection ((beamPerturbed ε)
               ⟨f - beamTrial.starProjection f, beamOrthogonal_part_mem_domain ε hfdom⟩))
       = ((lam : ℝ) : ℂ) • (f - beamTrial.starProjection f) := by
   have hxmem : beamTrial.starProjection f ∈ beamTrial :=
     beamTrial.starProjection_apply_mem f
   have hxdom : beamTrial.starProjection f ∈ (beamPerturbed ε).domain :=
     beamTrial_starProjection_mem_domain ε f
-  have hTx : (beamPerturbed ε).toLinearMap ⟨beamTrial.starProjection f, hxdom⟩
+  have hTx : (beamPerturbed ε) ⟨beamTrial.starProjection f, hxdom⟩
       = beamPerturbation ε (beamTrial.starProjection f) :=
     beamPerturbed_apply_of_mem_beamTrial ε hxmem hxdom
   have hsum : (⟨beamTrial.starProjection f, hxdom⟩ : (beamPerturbed ε).domain)
@@ -343,23 +344,23 @@ theorem beam_lower_block_equation (ε : ℝ) {f : BeamL2} {lam : ℝ}
     show beamTrial.starProjection f + (f - beamTrial.starProjection f) = f
     abel
   have hTsplit : beamPerturbation ε (beamTrial.starProjection f)
-      + (beamPerturbed ε).toLinearMap
+      + (beamPerturbed ε)
           ⟨f - beamTrial.starProjection f, beamOrthogonal_part_mem_domain ε hfdom⟩
       = ((lam : ℝ) : ℂ) • f := by
-    rw [← hTx, ← map_add, hsum, hf]
+    rw [← hTx, ← LinearPMap.map_add, hsum, hf]
   have hproj : beamTrial.starProjection (((lam : ℝ) : ℂ) • f)
       = ((lam : ℝ) : ℂ) • beamTrial.starProjection f := map_smul _ _ _
   have hexpand : (beamPerturbation ε (beamTrial.starProjection f)
         - beamTrial.starProjection (beamPerturbation ε (beamTrial.starProjection f)))
-      + ((beamPerturbed ε).toLinearMap
+      + ((beamPerturbed ε)
             ⟨f - beamTrial.starProjection f, beamOrthogonal_part_mem_domain ε hfdom⟩
-          - beamTrial.starProjection ((beamPerturbed ε).toLinearMap
+          - beamTrial.starProjection ((beamPerturbed ε)
               ⟨f - beamTrial.starProjection f, beamOrthogonal_part_mem_domain ε hfdom⟩))
       = (beamPerturbation ε (beamTrial.starProjection f)
-            + (beamPerturbed ε).toLinearMap
+            + (beamPerturbed ε)
               ⟨f - beamTrial.starProjection f, beamOrthogonal_part_mem_domain ε hfdom⟩)
         - beamTrial.starProjection (beamPerturbation ε (beamTrial.starProjection f)
-            + (beamPerturbed ε).toLinearMap
+            + (beamPerturbed ε)
               ⟨f - beamTrial.starProjection f, beamOrthogonal_part_mem_domain ε hfdom⟩) := by
     rw [map_add]
     abel
@@ -369,14 +370,14 @@ theorem beam_lower_block_equation (ε : ℝ) {f : BeamL2} {lam : ℝ}
 theorem beam_lower_block_form_ge (ε : ℝ) (hε : 0 ≤ ε) (f : BeamL2)
     (hfdom : f ∈ (beamPerturbed ε).domain) :
     (1001 / 2 : ℝ) * ‖f - beamTrial.starProjection f‖ ^ 2
-      ≤ RCLike.re (inner ℂ ((beamPerturbed ε).toLinearMap
+      ≤ RCLike.re (inner ℂ ((beamPerturbed ε)
           ⟨f - beamTrial.starProjection f, beamOrthogonal_part_mem_domain ε hfdom⟩
-        - beamTrial.starProjection ((beamPerturbed ε).toLinearMap
+        - beamTrial.starProjection ((beamPerturbed ε)
             ⟨f - beamTrial.starProjection f, beamOrthogonal_part_mem_domain ε hfdom⟩))
           (f - beamTrial.starProjection f)) := by
   have hy : f - beamTrial.starProjection f ∈ beamTrialᗮ :=
     Submodule.sub_starProjection_mem_orthogonal f
-  have hzero : (inner ℂ (beamTrial.starProjection ((beamPerturbed ε).toLinearMap
+  have hzero : (inner ℂ (beamTrial.starProjection ((beamPerturbed ε)
       ⟨f - beamTrial.starProjection f, beamOrthogonal_part_mem_domain ε hfdom⟩))
       (f - beamTrial.starProjection f) : ℂ) = 0 :=
     hy _ (beamTrial.starProjection_apply_mem _)
@@ -397,7 +398,7 @@ theorem beam_norm_residual_column_le (ε : ℝ) (f : BeamL2) :
 eigenvector is controlled by its trial coordinate. -/
 theorem beam_norm_orthogonal_part_le (ε : ℝ) (hε : 0 ≤ ε) {f : BeamL2} {lam : ℝ}
     (hfdom : f ∈ (beamPerturbed ε).domain)
-    (hf : (beamPerturbed ε).toLinearMap ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
+    (hf : (beamPerturbed ε) ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
     (hlam : lam < 1001 / 2) :
     ((1001 : ℝ) / 2 - lam) * ‖f - beamTrial.starProjection f‖
       ≤ orthogonalResidualSingularValue ε * ‖beamTrial.starProjection f‖ := by
@@ -409,7 +410,7 @@ theorem beam_norm_orthogonal_part_le (ε : ℝ) (hε : 0 ≤ ε) {f : BeamL2} {l
 /-- The trial coordinate of a unit eigenvector below `500` never vanishes. -/
 theorem beam_starProjection_ne_zero (ε : ℝ) (hε : 0 ≤ ε) {f : BeamL2} {lam : ℝ}
     (hfdom : f ∈ (beamPerturbed ε).domain)
-    (hf : (beamPerturbed ε).toLinearMap ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
+    (hf : (beamPerturbed ε) ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
     (hlam : lam < 1001 / 2) (hfn : ‖f‖ = 1) :
     beamTrial.starProjection f ≠ 0 := by
   intro hzero
@@ -429,7 +430,7 @@ theorem beam_starProjection_ne_zero (ε : ℝ) (hε : 0 ≤ ε) {f : BeamL2} {la
 singular value `|ε| √15 / 15`. -/
 theorem beam_tan_eta_le (ε : ℝ) (hε : 0 ≤ ε) {f : BeamL2} {lam : ℝ}
     (hfdom : f ∈ (beamPerturbed ε).domain)
-    (hf : (beamPerturbed ε).toLinearMap ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
+    (hf : (beamPerturbed ε) ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
     (hlam : lam < 1001 / 2) (hfn : ‖f‖ = 1) :
     Real.tan (Real.arccos ‖beamTrial.starProjection f‖)
       ≤ orthogonalResidualSingularValue ε / ((1001 : ℝ) / 2 - lam) := by

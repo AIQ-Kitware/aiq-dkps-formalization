@@ -68,16 +68,16 @@ structure FormBoundedGeneralSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
+  trial_selfAdjoint : _root_.IsSelfAdjoint data.A₀
+  complement_selfAdjoint : _root_.IsSelfAdjoint data.Λ₁
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   frameLowerBound : ℝ
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
   residual_mem : N.Mem data.residual
 
 namespace FormBoundedGeneralSinThetaProblem
@@ -128,9 +128,9 @@ structure FiniteIntervalGeneralSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
+  trial_selfAdjoint : _root_.IsSelfAdjoint data.A₀
+  complement_selfAdjoint : _root_.IsSelfAdjoint data.Λ₁
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   intervalLower : ℝ
   intervalUpper : ℝ
@@ -140,7 +140,7 @@ structure FiniteIntervalGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : SpectralIntervalExteriorGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap
+  spectral_gap : SpectralIntervalExteriorGap data.A₀ data.Λ₁
     intervalLower intervalUpper gap
   residual_mem : N.Mem data.residual
 
@@ -161,14 +161,14 @@ theorem result
               P.lowerFrame P.frameLowerBound_pos)
         ≤ N.gauge P.data.residual :=
   by
-    simpa only [UnboundedSinThetaData.toPMap,
+    simpa only [UnboundedSinThetaData,
       KyFanDominantIdealFamily.toSymmetric_mem,
       KyFanDominantIdealFamily.toSymmetric_gaugeReal] using
       linearPMap_generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
-        N.toSymmetricOperatorIdealFamily P.data.toPMap P.exactMap
-        (P.data.toPMap_A_isSelfAdjoint P.ambient_selfAdjoint)
-        (P.data.toPMap_A₀_isSelfAdjoint P.trial_selfAdjoint)
-        (P.data.toPMap_Λ₁_isSelfAdjoint P.complement_selfAdjoint)
+        N.toSymmetricOperatorIdealFamily P.data P.exactMap
+        P.ambient_selfAdjoint
+        P.trial_selfAdjoint
+        P.complement_selfAdjoint
         P.exact_decomposition P.interval_order P.gap_pos
         P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
 
@@ -187,14 +187,14 @@ theorem complementaryBlock_result
               P.lowerFrame P.frameLowerBound_pos)
         ≤ N.gauge P.data.residual :=
   by
-    simpa only [UnboundedSinThetaData.toPMap,
+    simpa only [UnboundedSinThetaData,
       KyFanDominantIdealFamily.toSymmetric_mem,
       KyFanDominantIdealFamily.toSymmetric_gaugeReal] using
       linearPMap_generalizedSinTheta_unbounded_of_intervalExteriorGap
-        N.toSymmetricOperatorIdealFamily P.data.toPMap
-        (P.data.toPMap_A_isSelfAdjoint P.ambient_selfAdjoint)
-        (P.data.toPMap_A₀_isSelfAdjoint P.trial_selfAdjoint)
-        (P.data.toPMap_Λ₁_isSelfAdjoint P.complement_selfAdjoint)
+        N.toSymmetricOperatorIdealFamily P.data
+        P.ambient_selfAdjoint
+        P.trial_selfAdjoint
+        P.complement_selfAdjoint
         P.exact_decomposition.isometry₁ P.interval_order P.gap_pos
         P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
 
@@ -222,14 +222,14 @@ structure FormBoundedIsometricSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜)) where
   data : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G)
   exactMap : H →L[𝕜] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
+  trial_selfAdjoint : _root_.IsSelfAdjoint data.A₀
+  complement_selfAdjoint : _root_.IsSelfAdjoint data.Λ₁
   trial_isometry : IsometricEmbedding data.X
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   gap_pos : 0 < gap
-  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
   residual_mem : N.Mem data.residual
 
 end GenericIsometric
@@ -311,16 +311,16 @@ structure SpectralGeneralSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
+  trial_selfAdjoint : _root_.IsSelfAdjoint data.A₀
+  complement_selfAdjoint : _root_.IsSelfAdjoint data.Λ₁
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   frameLowerBound : ℝ
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : SpectralSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
+  spectral_gap : SpectralSylvesterGap data.A₀ data.Λ₁ gap
   residual_mem : N.Mem data.residual
 
 namespace SpectralGeneralSinThetaProblem
@@ -385,14 +385,14 @@ structure SpectralIsometricSinThetaProblem
     (N : KyFanDominantIdealFamily (𝕜 := ℂ)) where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
+  trial_selfAdjoint : _root_.IsSelfAdjoint data.A₀
+  complement_selfAdjoint : _root_.IsSelfAdjoint data.Λ₁
   trial_isometry : IsometricEmbedding data.X
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   gap_pos : 0 < gap
-  spectral_gap : SpectralSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
+  spectral_gap : SpectralSylvesterGap data.A₀ data.Λ₁ gap
   residual_mem : N.Mem data.residual
 
 namespace SpectralIsometricSinThetaProblem

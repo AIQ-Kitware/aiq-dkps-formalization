@@ -587,19 +587,19 @@ compactness hypothesis on `Z`.  The tangent representative is exhibited, and eve
 Fan-dominant unitarily invariant ideal gauge satisfies the printed residual bound. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H))
+    (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : UnboundedTrialBlock A Z)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
     (hCompression : ∀ z : Z,
       RCLike.re ⟪D.operator z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (hResidual : N.Mem D.residual) :
     ∃ tanTheta0 : Z →L[ℂ] H,
       HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
@@ -613,19 +613,19 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing
 approximation numbers is supplied explicitly. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_of_reducing
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H))
+    (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : UnboundedTrialBlock A Z)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
     (hCompression : ∀ z : Z,
       RCLike.re ⟪D.operator z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0)
     (hResidual : N.Mem D.residual) :
@@ -639,7 +639,7 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_of_reducing
 /-- Spectral-gap specialization of the arbitrary-trial unbounded theorem. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_exists
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : UnboundedTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)

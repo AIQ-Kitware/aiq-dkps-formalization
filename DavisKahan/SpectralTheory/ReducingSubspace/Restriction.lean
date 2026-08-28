@@ -39,90 +39,6 @@ noncomputable local instance completeSpaceOfHasOrthogonalProjection
 
 namespace ClosedOperator
 
-/-- Compatibility facade for invariance under the canonical partial map. -/
-abbrev InvariantSubspace
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (U : Submodule 𝕜 E) : Prop :=
-  TauCeti.LinearPMap.InvariantSubspace A.toLinearPMap U
-
-/-- Compatibility facade for reduction of the canonical partial map. -/
-abbrev ReducesSubspace
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] : Prop :=
-  TauCeti.LinearPMap.ReducesSubspace A.toLinearPMap U
-
-namespace ReducesSubspace
-
-omit [CompleteSpace E] in
-/-- The selected summand of a reducing subspace is invariant. -/
-theorem invariant
-    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (h : A.ReducesSubspace U) : A.InvariantSubspace U :=
-  h.2.2.1
-
-end ReducesSubspace
-
-/-- Compatibility facade for the raw restricted domain. -/
-abbrev reducingRestrictionDomain
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (U : Submodule 𝕜 E) : Submodule 𝕜 U :=
-  TauCeti.LinearPMap.reducingRestrictionDomain A.toLinearPMap U
-
-/-- Compatibility facade for the ambient-domain inclusion. -/
-abbrev reducingRestrictionDomainToAmbient
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (U : Submodule 𝕜 E)
-    (x : reducingRestrictionDomain A U) : A.domain :=
-  TauCeti.LinearPMap.reducingRestrictionDomainToAmbient A.toLinearPMap U x
-
-/-- Compatibility facade for the raw restricted action. -/
-abbrev reducingRestrictionLinearMap
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.ReducesSubspace U) :
-    reducingRestrictionDomain A U →ₗ[𝕜] U :=
-  TauCeti.LinearPMap.reducingRestrictionLinearMap A.toLinearPMap U hred
-
-/-- Compatibility facade for projection into the raw restricted domain. -/
-noncomputable abbrev projectDomainToReducingRestriction
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.ReducesSubspace U) (x : A.domain) :
-    reducingRestrictionDomain A U :=
-  TauCeti.LinearPMap.projectDomainToReducingRestriction A.toLinearPMap U hred x
-
-omit [CompleteSpace E] in
-private theorem reducingRestrictionDomain_dense
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.ReducesSubspace U) :
-    Dense ((reducingRestrictionDomain A U : Submodule 𝕜 U) : Set U) :=
-  TauCeti.LinearPMap.reducingRestriction_dense A.toLinearPMap U hred
-    A.toLinearPMap_dense
-
-omit [CompleteSpace E] in
-private theorem reducingRestrictionLinearMap_closedGraph
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.ReducesSubspace U) :
-    IsClosed (Set.range fun x : reducingRestrictionDomain A U =>
-      (((x : reducingRestrictionDomain A U) : U),
-        reducingRestrictionLinearMap A U hred x)) :=
-  TauCeti.LinearPMap.reducingRestriction_closedGraph A.toLinearPMap U hred
-    A.closed_graph
-
-/-- The closed operator induced on a reducing subspace. -/
-noncomputable def reducingRestriction
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.ReducesSubspace U) :
-    ClosedOperator (𝕜 := 𝕜) (E := U) where
-  domain := (TauCeti.LinearPMap.reducingRestriction A.toLinearPMap U hred).domain
-  toLinearMap := (TauCeti.LinearPMap.reducingRestriction A.toLinearPMap U hred).toFun
-  dense_domain := reducingRestrictionDomain_dense A U hred
-  closed_graph := reducingRestrictionLinearMap_closedGraph A U hred
-
 /-- The canonical inclusion of a reducing subspace. -/
 def reducingSubspaceInclusion (U : Submodule 𝕜 E) : U →L[𝕜] E :=
   U.subtypeL
@@ -136,58 +52,58 @@ theorem reducingSubspaceInclusion_isometric (U : Submodule 𝕜 E) :
 omit [CompleteSpace E] in
 /-- The inclusion maps the restricted domain into the ambient domain. -/
 theorem reducingRestriction_inclusion_mem_domain
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.ReducesSubspace U)
-    (x : (reducingRestriction A U hred).domain) :
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (x : (TauCeti.LinearPMap.reducingRestriction A U hred).domain) :
     reducingSubspaceInclusion U (x : U) ∈ A.domain :=
   x.property
 
 omit [CompleteSpace E] in
 /-- The inclusion intertwines the restricted and ambient operators. -/
 theorem reducingRestriction_inclusion_intertwines
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.ReducesSubspace U)
-    (x : (reducingRestriction A U hred).domain) :
-    A.toLinearMap
-        ⟨reducingSubspaceInclusion U (x : U),
-          reducingRestriction_inclusion_mem_domain A U hred x⟩ =
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (x : (TauCeti.LinearPMap.reducingRestriction A U hred).domain) :
+    A ⟨reducingSubspaceInclusion U (x : U),
+        reducingRestriction_inclusion_mem_domain A U hred x⟩ =
       reducingSubspaceInclusion U
-        ((reducingRestriction A U hred).toLinearMap x) :=
+        (TauCeti.LinearPMap.reducingRestriction A U hred x) :=
   rfl
 
 /-- Adjoint-domain membership of the restriction is exactly ambient
 adjoint-domain membership for the included vector. -/
 theorem mem_reducingRestriction_adjoint_domain_iff
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.ReducesSubspace U) (y : U) :
-    y ∈ (reducingRestriction A U hred).toLinearPMap.adjoint.domain ↔
-      (y : E) ∈ A.toLinearPMap.adjoint.domain :=
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U) (y : U) :
+    y ∈ (TauCeti.LinearPMap.reducingRestriction A U hred).adjoint.domain ↔
+      (y : E) ∈ A.adjoint.domain :=
   TauCeti.LinearPMap.mem_reducingRestriction_adjoint_domain_iff
-    A.toLinearPMap U hred y
+    A U hred y
 
 omit [CompleteSpace E] in
 /-- Symmetry passes to the reducing restriction. -/
 theorem reducingRestriction_isSymmetric
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.ReducesSubspace U)
-    (hA : A.IsSymmetric) :
-    (reducingRestriction A U hred).IsSymmetric :=
-  TauCeti.LinearPMap.reducingRestriction_isSymmetric A.toLinearPMap U hred hA
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hA : TauCeti.LinearPMap.IsSymmetric A) :
+    TauCeti.LinearPMap.IsSymmetric
+      (TauCeti.LinearPMap.reducingRestriction A U hred) :=
+  TauCeti.LinearPMap.reducingRestriction_isSymmetric A U hred hA
 
 /-- A self-adjoint operator restricts to a self-adjoint operator on every
 reducing subspace. -/
 theorem reducingRestriction_isSelfAdjoint
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.ReducesSubspace U)
-    (hA : A.IsSelfAdjoint) :
-    (reducingRestriction A U hred).IsSelfAdjoint :=
-  TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A.toLinearPMap U hred
-    A.toLinearPMap_dense hA
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hA : _root_.IsSelfAdjoint A) :
+    _root_.IsSelfAdjoint (TauCeti.LinearPMap.reducingRestriction A U hred) :=
+  TauCeti.LinearPMap.reducingRestriction_isSelfAdjoint A U hred
+    hA.dense_domain hA
 
 end ClosedOperator
 end DavisKahanExt

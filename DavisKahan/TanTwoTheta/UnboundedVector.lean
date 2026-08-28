@@ -34,34 +34,34 @@ variable {H : Type v}
 /-- Per-vector unbounded tangent-two-theta estimate for a bounded self-adjoint
 perturbation under an explicit spectral gap and quarter-acuteness hypothesis. -/
 theorem norm_tanTwoAngleOperatorC_apply_le_addBounded_of_spectrum_gap
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+      (selfAdjointSpectralRestriction A hA B hB) β)
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
+      (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
-        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hquarter : IsQuarterAcute
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (A.addBounded E)
+      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
         (addBounded_isSelfAdjoint A hA E hE) S hS))
     (x : H) :
     ‖tanTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (A.addBounded E)
+        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter x‖ ≤
       ((2 * ‖E‖ / δ) /
         (1 - 2 * directedGap
           (selfAdjointSpectralSubspace A hA B hB)
-          (selfAdjointSpectralSubspace (A.addBounded E)
+          (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
             (addBounded_isSelfAdjoint A hA E hE) S hS) ^ 2)) * ‖x‖ := by
   let U := selfAdjointSpectralSubspace A hA B hB
-  let V := selfAdjointSpectralSubspace (A.addBounded E)
+  let V := selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
     (addBounded_isSelfAdjoint A hA E hE) S hS
   have hop : ‖tanTwoAngleOperatorC U V hquarter‖ ≤
       (2 * ‖E‖ / δ) /
@@ -78,7 +78,7 @@ theorem norm_tanTwoAngleOperatorC_apply_le_addBounded_of_spectrum_gap
 
 /-- Set-localized per-vector form of the unbounded tangent-two-theta estimate. -/
 theorem norm_tanTwoAngleOperatorC_apply_le_addBounded_of_intervalExterior
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
@@ -86,21 +86,21 @@ theorem norm_tanTwoAngleOperatorC_apply_le_addBounded_of_intervalExterior
     (hBcomplDisj : Bᶜ ∩ Set.Ioo (β - δ) (α + δ) = ∅)
     (hquarter : IsQuarterAcute
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (A.addBounded E)
+      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
         (addBounded_isSelfAdjoint A hA E hE) S hS))
     (x : H) :
     ‖tanTwoAngleOperatorC
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (A.addBounded E)
+        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS)
         hquarter x‖ ≤
       ((2 * ‖E‖ / δ) /
         (1 - 2 * directedGap
           (selfAdjointSpectralSubspace A hA B hB)
-          (selfAdjointSpectralSubspace (A.addBounded E)
+          (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
             (addBounded_isSelfAdjoint A hA E hE) S hS) ^ 2)) * ‖x‖ := by
   let U := selfAdjointSpectralSubspace A hA B hB
-  let V := selfAdjointSpectralSubspace (A.addBounded E)
+  let V := selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
     (addBounded_isSelfAdjoint A hA E hE) S hS
   have hop : ‖tanTwoAngleOperatorC U V hquarter‖ ≤
       (2 * ‖E‖ / δ) /

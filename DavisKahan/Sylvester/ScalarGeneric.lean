@@ -62,12 +62,12 @@ class HasUnboundedSylvesterKyFan (𝕜 : Type u) [RCLike 𝕜] : Prop where
   out : ∀ {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)},
-    A.IsSelfAdjoint → B.IsSelfAdjoint →
+    {A : E →ₗ.[𝕜] E}
+    {B : F →ₗ.[𝕜] F},
+    IsSelfAdjoint A → IsSelfAdjoint B →
       ∀ {X C : F →L[𝕜] E} {δ : ℝ}, 0 < δ →
-        FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ →
-        TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C →
+        FormBoundedSylvesterGap A B δ →
+        TauCeti.LinearPMap.SylvesterEquation A B X C →
         ∀ k : ℕ,
           δ * kyFanApproximationGauge k X ≤ kyFanApproximationGauge k C
 
@@ -81,13 +81,13 @@ variable {E F : Type v}
 /-- Scalar-generic finite Ky Fan majorization for a domain-aware Sylvester
 equation.  This is the applied form; the class field is the quantified one. -/
 theorem unbounded_sylvester_kyFan
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[𝕜] E}
+    {B : F →ₗ.[𝕜] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X C : F →L[𝕜] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hgap : FormBoundedSylvesterGap A B δ)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (k : ℕ) :
     δ * kyFanApproximationGauge k X ≤ kyFanApproximationGauge k C :=
   HasUnboundedSylvesterKyFan.out hA hB hδ hgap hEq k

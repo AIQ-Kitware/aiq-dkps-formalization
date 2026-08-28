@@ -165,22 +165,22 @@ form.**  The chosen `sin 2Θ₀` may be any operator with the complete
 singular-value sequence of the canonical reflected overlap block. -/
 theorem unbounded_sinTwoTheta_uiNorm_representative
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : DavisKahan.IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+      (selfAdjointSpectralRestriction A hA B hB) β)
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
+      (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
-        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E)
     (sinTwoTheta₀ : PaperSinThetaRepresentative
       (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (A.addBounded E)
+        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS))) :
     N.Mem sinTwoTheta₀.operator ∧
       δ * N.gauge sinTwoTheta₀.operator ≤
@@ -219,26 +219,26 @@ unitarily-invariant-ideal scope, so the source sentence has a declaration whose
 signature contains the hypothesis it states. -/
 theorem unbounded_sinTwoTheta_uiNorm_representative_unequalDimension
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : DavisKahan.IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+      (selfAdjointSpectralRestriction A hA B hB) β)
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
+      (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
-        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E)
     (_hStrictDimension :
       Module.rank ℂ (selfAdjointSpectralSubspace A hA B hB) <
-        Module.rank ℂ (selfAdjointSpectralSubspace (A.addBounded E)
+        Module.rank ℂ (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS))
     (sinTwoTheta₀ : PaperSinThetaRepresentative
       (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
-        (selfAdjointSpectralSubspace (A.addBounded E)
+        (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS))) :
     N.Mem sinTwoTheta₀.operator ∧
       δ * N.gauge sinTwoTheta₀.operator ≤ 2 * N.gauge E := by
@@ -253,23 +253,23 @@ singular-value sequence of the canonical reflected overlap block, and it is
 controlled by the residual with constant one. -/
 theorem unbounded_sinTwoTheta_residual_uiNorm_representative
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (R : H →L[ℂ] H) (hR : DavisKahan.IsSelfAdjointOperator R)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+      (selfAdjointSpectralRestriction A hA B hB) β)
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
+      (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
-        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (A.addBounded R).toLinearMap
+      (TauCeti.LinearPMap.addBounded A R)
           ⟨V.reflectionOperator (x : H), hJdom x⟩ =
-        V.reflectionOperator (A.toLinearMap x))
+        V.reflectionOperator (A x))
     (hRmem : N.Mem R)
     (sinTwoTheta₀ : PaperSinThetaRepresentative
       (sinTwoThetaIdealBlock
@@ -292,23 +292,23 @@ is recorded exactly as printed; the proof is a
 direct specialization of the stronger dimension-free Section 7 theorem. -/
 theorem unbounded_sinTwoTheta_residual_uiNorm_representative_unequalDimension
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (R : H →L[ℂ] H) (hR : DavisKahan.IsSelfAdjointOperator R)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+      (selfAdjointSpectralRestriction A hA B hB) β)
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
+      (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
-        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : H) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (A.addBounded R).toLinearMap
+      (TauCeti.LinearPMap.addBounded A R)
           ⟨V.reflectionOperator (x : H), hJdom x⟩ =
-        V.reflectionOperator (A.toLinearMap x))
+        V.reflectionOperator (A x))
     (hRmem : N.Mem R)
     (_hStrictDimension :
       Module.rank ℂ (selfAdjointSpectralSubspace A hA B hB) < Module.rank ℂ V)
@@ -343,19 +343,19 @@ over a REAL Hilbert space.**  The chosen `sin 2Θ₀` may be any operator with t
 complete singular-value sequence of the canonical reflected overlap block. -/
 theorem unbounded_sinTwoTheta_uiNorm_representative_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
-    (hA : A.IsSelfAdjoint)
+    (A : Er →ₗ.[ℝ] Er)
+    (hA : IsSelfAdjoint A)
     (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop)
     (sinTwoTheta₀ : PaperSinThetaRepresentative
       (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB)
-        (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS))) :
     N.Mem sinTwoTheta₀.operator ∧
       δ * N.gauge sinTwoTheta₀.operator ≤ 2 * N.gauge Eop := by
@@ -372,23 +372,23 @@ directed `sin 2Θ₀` theorem, perturbation form.**  As over `ℂ`, the underlyi
 dimension-free; this declaration records the printed strict-dimension case. -/
 theorem unbounded_sinTwoTheta_uiNorm_representative_real_unequalDimension
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
-    (hA : A.IsSelfAdjoint)
+    (A : Er →ₗ.[ℝ] Er)
+    (hA : IsSelfAdjoint A)
     (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop)
     (_hStrictDimension :
       Module.rank ℝ (realSelfAdjointSpectralSubspace A hA B hB) <
-        Module.rank ℝ (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+        Module.rank ℝ (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS))
     (sinTwoTheta₀ : PaperSinThetaRepresentative
       (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB)
-        (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS))) :
     N.Mem sinTwoTheta₀.operator ∧
       δ * N.gauge sinTwoTheta₀.operator ≤ 2 * N.gauge Eop := by
@@ -403,20 +403,20 @@ complete singular-value sequence of the canonical reflected overlap block, and
 it is controlled by the residual with constant one. -/
 theorem unbounded_sinTwoTheta_residual_uiNorm_representative_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
-    (hA : A.IsSelfAdjoint)
+    (A : Er →ₗ.[ℝ] Er)
+    (hA : IsSelfAdjoint A)
     (R : Er →L[ℝ] Er) (hR : DavisKahan.IsSelfAdjointOperator R)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (A.addBounded R).toLinearMap
+      (TauCeti.LinearPMap.addBounded A R)
           ⟨V.reflectionOperator (x : Er), hJdom x⟩ =
-        V.reflectionOperator (A.toLinearMap x))
+        V.reflectionOperator (A x))
     (hRmem : N.Mem R)
     (sinTwoTheta₀ : PaperSinThetaRepresentative
       (sinTwoThetaIdealBlock
@@ -435,20 +435,20 @@ open DavisKahan DavisKahan.RealSpectralRestriction in
 directed `sin 2Θ₀` theorem, reflection-residual form.** -/
 theorem unbounded_sinTwoTheta_residual_uiNorm_representative_real_unequalDimension
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
-    (hA : A.IsSelfAdjoint)
+    (A : Er →ₗ.[ℝ] Er)
+    (hA : IsSelfAdjoint A)
     (R : Er →L[ℝ] Er) (hR : DavisKahan.IsSelfAdjointOperator R)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (A.addBounded R).toLinearMap
+      (TauCeti.LinearPMap.addBounded A R)
           ⟨V.reflectionOperator (x : Er), hJdom x⟩ =
-        V.reflectionOperator (A.toLinearMap x))
+        V.reflectionOperator (A x))
     (hRmem : N.Mem R)
     (_hStrictDimension :
       Module.rank ℝ (realSelfAdjointSpectralSubspace A hA B hB) < Module.rank ℝ V)
@@ -481,20 +481,20 @@ reflection-residual form, for every source unitarily invariant norm**:
 `δ ‖sin 2Θ₀‖ ≤ ‖R‖`. -/
 theorem sinTwoTheta_reflectionResidual_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
-    (hA : A.IsSelfAdjoint)
+    (A : Er →ₗ.[ℝ] Er)
+    (hA : IsSelfAdjoint A)
     (R : Er →L[ℝ] Er) (hR : DavisKahan.IsSelfAdjointOperator R)
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
-      (A.addBounded R).toLinearMap
+      (TauCeti.LinearPMap.addBounded A R)
           ⟨V.reflectionOperator (x : Er), hJdom x⟩ =
-        V.reflectionOperator (A.toLinearMap x))
+        V.reflectionOperator (A x))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB) V) ∧
@@ -517,29 +517,29 @@ bounded-perturbation form, for every source unitarily invariant norm**:
 `δ ‖sin 2Θ₀‖ ≤ 2‖E‖`, with the paper's sharp factor two. -/
 theorem sinTwoTheta_addBounded_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := Er))
-    (hA : A.IsSelfAdjoint)
+    (A : Er →ₗ.[ℝ] Er)
+    (hA : IsSelfAdjoint A)
     (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
     N.Mem (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB)
-        (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
       δ * N.gauge (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB)
-        (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
         2 * N.gauge Eop := by
   have hhalf : 0 < δ / 2 := by linarith
   have hmain := N.mul_gauge_le_of_all_mul_kyFan_le hhalf hEmem
     (A := sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB)
-        (realSelfAdjointSpectralSubspace (A.addBounded Eop)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) (fun k => ?_)
   · exact ⟨hmain.1, by linarith [hmain.2]⟩
   · rcases Nat.eq_zero_or_pos k with rfl | hk

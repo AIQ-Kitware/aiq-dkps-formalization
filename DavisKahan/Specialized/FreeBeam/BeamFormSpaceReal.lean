@@ -100,16 +100,16 @@ theorem coeFn_beamIdLp :
   Scalar.coeFn_beamIdLp (𝕜 := ℝ)
 
 /-- The real `L²(0,1]` free-beam operator represented by the shifted bending form. -/
-abbrev beamOperator : DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := BeamL2) :=
+abbrev beamOperator : BeamL2 →ₗ.[ℝ] BeamL2 :=
   Scalar.beamOperator (𝕜 := ℝ)
 
 /-- The real free-beam realization is self-adjoint. -/
-theorem beamOperator_isSelfAdjoint : beamOperator.IsSelfAdjoint :=
+theorem beamOperator_isSelfAdjoint : IsSelfAdjoint beamOperator :=
   Scalar.beamOperator_isSelfAdjoint (𝕜 := ℝ)
 
 /-- The real free-beam realization is nonnegative. -/
 theorem beamOperator_nonneg (x : beamOperator.domain) :
-    0 ≤ RCLike.re ⟪beamOperator.toLinearMap x, (x : BeamL2)⟫_ℝ :=
+    0 ≤ RCLike.re ⟪beamOperator x, (x : BeamL2)⟫_ℝ :=
   Scalar.beamOperator_nonneg (𝕜 := ℝ) x
 
 /-- The real form-domain embedding is compact. -/

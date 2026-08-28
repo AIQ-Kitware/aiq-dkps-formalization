@@ -764,6 +764,17 @@ theorem isSymmetric_iff (A : E →ₗ.[𝕜] E) :
       ∀ x y : A.domain, ⟪A x, (y : E)⟫_𝕜 = ⟪(x : E), A y⟫_𝕜 := by
   rfl
 
+/-- A self-adjoint partial map is symmetric on its operator domain.
+
+The converse fails: symmetry compares `A` with `A†` only on `dom A`, while
+self-adjointness also asserts that the two domains agree. -/
+theorem isSymmetric_of_isSelfAdjoint [CompleteSpace E] {A : E →ₗ.[𝕜] E}
+    (hA : _root_.IsSelfAdjoint A) : IsSymmetric A := by
+  have hformal := LinearPMap.adjoint_isFormalAdjoint hA.dense_domain
+  rw [LinearPMap.isSelfAdjoint_def.mp hA] at hformal
+  intro x y
+  exact hformal x y
+
 /-- A self-adjoint partial map restricts to a self-adjoint partial map on every
 reducing subspace. -/
 theorem reducingRestriction_isSelfAdjoint

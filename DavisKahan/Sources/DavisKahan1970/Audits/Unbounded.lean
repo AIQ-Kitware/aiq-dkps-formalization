@@ -54,7 +54,7 @@ namespace ExactSinTheta
 #check generalizedSinTheta_unbounded_real_spectralSubspace
 #check SpectralGeneralSinThetaProblem.result
 #check SpectralIsometricSinThetaProblem.result
-#check TauCeti.DavisKahanExt.ClosedOperator.realResolventSet
+#check TauCeti.LinearPMap.realResolventSet
 #check realSpectrum_eq_spectraSpectrum
 #check ClosedOperatorComplexification.isSelfAdjoint_complexify
 #check ClosedOperatorComplexification.unboundedSylvesterGap_complexify
@@ -110,7 +110,7 @@ namespace ExactSinTheta
 #print axioms generalizedSinTheta_unbounded_real_spectralSubspace
 #print axioms SpectralGeneralSinThetaProblem.result
 #print axioms SpectralIsometricSinThetaProblem.result
-#print axioms TauCeti.DavisKahanExt.ClosedOperator.realSpectrum
+#print axioms TauCeti.LinearPMap.realSpectrum
 #print axioms realSpectrum_eq_spectraSpectrum
 #print axioms ClosedOperatorComplexification.isSelfAdjoint_complexify
 #print axioms ClosedOperatorComplexification.unboundedSylvesterGap_complexify

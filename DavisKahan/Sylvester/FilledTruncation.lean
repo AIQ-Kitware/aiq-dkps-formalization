@@ -36,8 +36,8 @@ variable {E F : Type v}
 noncomputable def filledTruncation
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
-    (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[𝕜] H)
+    (hA : IsSelfAdjoint A)
     (Pcut : SpectralCutoffInterface A hA)
     (Tcut : BoundedTruncationInterface A hA Pcut)
     (a τ : ℝ) : H →L[𝕜] H :=
@@ -49,8 +49,8 @@ noncomputable def filledTruncation
 theorem filledTruncation_isSymmetric
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
-    (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[𝕜] H)
+    (hA : IsSelfAdjoint A)
     (Pcut : SpectralCutoffInterface A hA)
     (Tcut : BoundedTruncationInterface A hA Pcut)
     (a τ : ℝ) :
@@ -65,8 +65,8 @@ its squared norm completes the Pythagorean decomposition. -/
 theorem cutoff_complement_identities
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
-    (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[𝕜] H)
+    (hA : IsSelfAdjoint A)
     (Pcut : SpectralCutoffInterface A hA)
     (_Tcut : BoundedTruncationInterface A hA Pcut)
     (τ : ℝ) (x : H) :
@@ -96,8 +96,8 @@ recovers the bounded truncation. -/
 theorem filledTruncation_commutes_cutoff
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
-    (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[𝕜] H)
+    (hA : IsSelfAdjoint A)
     (Pcut : SpectralCutoffInterface A hA)
     (Tcut : BoundedTruncationInterface A hA Pcut)
     (a τ : ℝ) :
@@ -135,14 +135,14 @@ operator. -/
 theorem filledTruncation_eq_on_cutoff
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
-    (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[𝕜] H)
+    (hA : IsSelfAdjoint A)
     (Pcut : SpectralCutoffInterface A hA)
     (Tcut : BoundedTruncationInterface A hA Pcut)
     (a τ : ℝ) (x : H) :
     ∃ hx : Pcut.cutoff τ x ∈ A.domain,
       filledTruncation A hA Pcut Tcut a τ (Pcut.cutoff τ x) =
-        A.toLinearMap ⟨Pcut.cutoff τ x, hx⟩ := by
+        A ⟨Pcut.cutoff τ x, hx⟩ := by
   obtain ⟨hx, hTx⟩ := Tcut.eq_on_cutoff τ x
   refine ⟨hx, ?_⟩
   have hcomp := (filledTruncation_commutes_cutoff
@@ -152,21 +152,21 @@ theorem filledTruncation_eq_on_cutoff
     filledTruncation A hA Pcut Tcut a τ (Pcut.cutoff τ x) =
         Tcut.truncation τ x := by
       simpa only [ContinuousLinearMap.comp_apply] using happly
-    _ = A.toLinearMap ⟨Pcut.cutoff τ x, hx⟩ := hTx
+    _ = A ⟨Pcut.cutoff τ x, hx⟩ := hTx
 
 /-- For a fixed fill value, filled truncations converge strongly to the closed
 operator on its domain. -/
 theorem filledTruncation_tendsto_on_domain
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
-    (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[𝕜] H)
+    (hA : IsSelfAdjoint A)
     (Pcut : SpectralCutoffInterface A hA)
     (Tcut : BoundedTruncationInterface A hA Pcut)
     (a : ℝ) (x : A.domain) :
     Tendsto
       (fun τ : ℝ => filledTruncation A hA Pcut Tcut a τ (x : H))
-      atTop (𝓝 (A.toLinearMap x)) := by
+      atTop (𝓝 (A x)) := by
   have hT := Tcut.tendsto_on_domain x
   have hP := Pcut.tendsto_identity (x : H)
   have hQ : Tendsto (fun τ : ℝ => (x : H) - Pcut.cutoff τ (x : H))
@@ -178,7 +178,7 @@ theorem filledTruncation_tendsto_on_domain
   have hfill : Tendsto
       (fun τ : ℝ => Tcut.truncation τ (x : H) +
         ((a : ℝ) : 𝕜) • ((x : H) - Pcut.cutoff τ (x : H)))
-      atTop (𝓝 (A.toLinearMap x)) := by
+      atTop (𝓝 (A x)) := by
     have h := hT.add (ha.smul hQ)
     simpa only [smul_zero, add_zero] using h
   have hfun :
@@ -199,8 +199,8 @@ carried by the cutoff part; and the complement's form is its squared norm.
 Both filled-truncation bounds below derived all three inline. -/
 private theorem cutoff_orthogonality {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
-    (hA : A.IsSelfAdjoint) (Pcut : SpectralCutoffInterface A hA)
+    (A : H →ₗ.[𝕜] H)
+    (hA : IsSelfAdjoint A) (Pcut : SpectralCutoffInterface A hA)
     (Tcut : BoundedTruncationInterface A hA Pcut) (τ : ℝ) (x : H) :
     ⟪Tcut.truncation τ x, x - Pcut.cutoff τ x⟫_𝕜 = 0 ∧
       RCLike.re ⟪Tcut.truncation τ x, x⟫_𝕜 =
@@ -250,12 +250,12 @@ filling the orthogonal complement by the same scalar. -/
 theorem filledTruncation_lowerBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
-    (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[𝕜] H)
+    (hA : IsSelfAdjoint A)
     (Pcut : SpectralCutoffInterface A hA)
     (Tcut : BoundedTruncationInterface A hA Pcut)
     {a τ : ℝ} (hτ : 0 ≤ τ)
-    (ha : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap a) :
+    (ha : TauCeti.LinearPMap.SemiboundedBelow A a) :
     ∀ x, a * ‖x‖ ^ 2 ≤
       RCLike.re ⟪filledTruncation A hA Pcut Tcut a τ x, x⟫_𝕜 := by
   intro x
@@ -291,12 +291,12 @@ filling the orthogonal complement by the same scalar. -/
 theorem filledTruncation_upperBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
-    (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[𝕜] H)
+    (hA : IsSelfAdjoint A)
     (Pcut : SpectralCutoffInterface A hA)
     (Tcut : BoundedTruncationInterface A hA Pcut)
     {a τ : ℝ} (hτ : 0 ≤ τ)
-    (ha : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap a) :
+    (ha : TauCeti.LinearPMap.SemiboundedAbove A a) :
     ∀ x, RCLike.re ⟪filledTruncation A hA Pcut Tcut a τ x, x⟫_𝕜 ≤
       a * ‖x‖ ^ 2 := by
   intro x

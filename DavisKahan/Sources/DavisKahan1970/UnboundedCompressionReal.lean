@@ -81,14 +81,14 @@ carried across unchanged. -/
 theorem semiboundedAbove_unitaryConjugate {G K : Type v}
     [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
     [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
-    (W : G ≃ₗᵢ[ℂ] K) (A : TauCeti.DavisKahan.DKClosedOperator (H := G))
-    (hA : A.IsSelfAdjoint) {c : ℝ} (hc : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c) :
-    TauCeti.LinearPMap.SemiboundedAbove (TauCeti.DavisKahan.unitaryConjugate W A hA).toLinearPMap c := by
+    (W : G ≃ₗᵢ[ℂ] K) (A : G →ₗ.[ℂ] G)
+    (hA : IsSelfAdjoint A) {c : ℝ} (hc : TauCeti.LinearPMap.SemiboundedAbove A c) :
+    TauCeti.LinearPMap.SemiboundedAbove (TauCeti.DavisKahan.unitaryConjugate W A hA) c := by
   intro x
-  have hx : W.symm (x : K) ∈ A.toLinearPMap.domain := x.property
+  have hx : W.symm (x : K) ∈ A.domain := x.property
   have hbound := hc ⟨W.symm (x : K), hx⟩
-  have hinner : ⟪(TauCeti.DavisKahan.unitaryConjugate W A hA).toLinearPMap x, (x : K)⟫_ℂ =
-      ⟪A.toLinearPMap ⟨W.symm (x : K), hx⟩, W.symm (x : K)⟫_ℂ := by
+  have hinner : ⟪(TauCeti.DavisKahan.unitaryConjugate W A hA) x, (x : K)⟫_ℂ =
+      ⟪A ⟨W.symm (x : K), hx⟩, W.symm (x : K)⟫_ℂ := by
     have hxx : (x : K) = W (W.symm (x : K)) := (W.apply_symm_apply (x : K)).symm
     conv_lhs => rw [hxx]
     exact W.inner_map_map _ _
@@ -210,8 +210,8 @@ theorem kyFanApproximationGauge_complexifyUnboundedCompressionTrialData_residual
 the same constant. -/
 theorem complexifyUnboundedCompressionTrialData_compression_upper
     (D : UnboundedCompressionTrialData Z) {alpha : ℝ}
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha) :
-    TauCeti.LinearPMap.SemiboundedAbove (complexifyUnboundedCompressionTrialData D).compression.toLinearPMap alpha :=
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha) :
+    TauCeti.LinearPMap.SemiboundedAbove (complexifyUnboundedCompressionTrialData D).compression alpha :=
   semiboundedAbove_unitaryConjugate (complexifySubmoduleEquiv Z)
     (ExactSinTheta.ClosedOperatorComplexification.complexify D.compression)
     (ExactSinTheta.ClosedOperatorComplexification.isSelfAdjoint_complexify
@@ -266,7 +266,7 @@ descended. -/
 theorem all_kyFan_core_unboundedCompression_real
     (D : UnboundedCompressionTrialData Z) (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : Z) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : Z) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
@@ -287,7 +287,7 @@ strictly below one, so the real tangent sequence has no pole at any trial dimens
 theorem approximationSingularValue_sineBlockReal_lt_one_unboundedCompression
     (D : UnboundedCompressionTrialData Z) (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : Z) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : Z) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
@@ -311,7 +311,7 @@ theorem theorem6_3_unboundedCompression_ideal_exists_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedCompressionTrialData Z) (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : Z) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : Z) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
@@ -346,7 +346,7 @@ theorem theorem6_3_unboundedCompression_ideal_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedCompressionTrialData Z) (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : Z) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : Z) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
@@ -380,18 +380,18 @@ trial and reducing subspaces, the tangent representative, and the ideal gauge. -
 theorem theorem6_3_unboundedCompression_ideal_of_reducing_exists_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedCompressionTrialData Z) (V : Submodule ℝ E) [V.HasOrthogonalProjection]
-    (A : ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : E →ₗ.[ℝ] E)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hZA : ∀ z : D.compression.domain, ((z : Z) : E) ∈ A.domain)
     (haction : ∀ z : D.compression.domain,
-      D.action z = A.toLinearMap ⟨((z : Z) : E), hZA z⟩)
+      D.action z = A ⟨((z : Z) : E), hZA z⟩)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℝ)
+      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
     (hResidual : N.Mem D.residual) :
     ∃ tanTheta0 : Z →L[ℝ] E,
       HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0 ∧

@@ -39,8 +39,8 @@ variable {E F : Type v}
 /-- The canonical exact and complementary real spectral inclusions form a
 complete orthogonal coordinate decomposition of the ambient Hilbert space. -/
 theorem realSpectralSubspace_orthogonalExactDecomposition
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
-    (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S) :
+    (A : E →ₗ.[ℝ] E)
+    (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S) :
     OrthogonalExactDecomposition
       (realSelfAdjointSpectralSubspaceInclusion A hA S hS)
       (realSelfAdjointSpectralSubspaceInclusion A hA Sᶜ hS.compl) := by
@@ -83,13 +83,13 @@ theorem realSpectralSubspace_orthogonalExactDecomposition
 /-- Construct the internal real unbounded sine-theta bookkeeping from a
 measurable exact spectral set and a bounded residual extension. -/
 noncomputable def unboundedSinThetaDataOfRealSpectralSubspace
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
-    (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F))
+    (A : E →ₗ.[ℝ] E)
+    (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
+    (A0 : F →ₗ.[ℝ] F)
     (X Rop : F →L[ℝ] E)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
-      A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F)) :
+      A ⟨X (x : F), hXdom x⟩ - X (A0 x) = Rop (x : F)) :
     UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F)
       (G := realSelfAdjointSpectralSubspace A hA Sᶜ hS.compl) where
   A := A
@@ -112,18 +112,18 @@ inputs.  The real spectral projection, complementary self-adjoint restriction,
 and all exact-space bookkeeping are constructed internally. -/
 theorem sinTheta_unbounded_real_spectralSubspace
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
-    (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F))
-    (hA0 : A0.IsSelfAdjoint)
+    (A : E →ₗ.[ℝ] E)
+    (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
+    (A0 : F →ₗ.[ℝ] F)
+    (hA0 : _root_.IsSelfAdjoint A0)
     (X Rop : F →L[ℝ] E)
     (hX : IsometricEmbedding X)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
-      A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
+      A ⟨X (x : F), hXdom x⟩ - X (A0 x) = Rop (x : F))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A0.toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ)
+    (hgap : FormBoundedSylvesterGap A0
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
     (hR : N.Mem Rop) :
     N.Mem
       ((ContinuousLinearMap.id ℝ E -
@@ -136,7 +136,7 @@ theorem sinTheta_unbounded_real_spectralSubspace
         ≤ N.gauge Rop := by
   let D := unboundedSinThetaDataOfRealSpectralSubspace
     A hA S hS A0 X Rop hXdom hReq
-  have hLambda : D.Λ₁.IsSelfAdjoint := by
+  have hLambda : _root_.IsSelfAdjoint D.Λ₁ := by
     exact realSelfAdjointSpectralRestriction_isSelfAdjoint
       A hA Sᶜ hS.compl
   have hdecomp : OrthogonalExactDecomposition
@@ -154,18 +154,18 @@ operator while constructing the complementary spectral restriction
 internally. -/
 theorem generalizedSinTheta_unbounded_real_spectralSubspace
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
-    (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F))
-    (hA0 : A0.IsSelfAdjoint)
+    (A : E →ₗ.[ℝ] E)
+    (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
+    (A0 : F →ₗ.[ℝ] F)
+    (hA0 : _root_.IsSelfAdjoint A0)
     (X Rop : F →L[ℝ] E)
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
-      A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
-    (hgap : FormBoundedSylvesterGap A0.toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ)
+      A ⟨X (x : F), hXdom x⟩ - X (A0 x) = Rop (x : F))
+    (hgap : FormBoundedSylvesterGap A0
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
     (hR : N.Mem Rop) :
     N.Mem
       (directedSinThetaOperatorReal X
@@ -178,7 +178,7 @@ theorem generalizedSinTheta_unbounded_real_spectralSubspace
         ≤ N.gauge Rop := by
   let D := unboundedSinThetaDataOfRealSpectralSubspace
     A hA S hS A0 X Rop hXdom hReq
-  have hLambda : D.Λ₁.IsSelfAdjoint := by
+  have hLambda : _root_.IsSelfAdjoint D.Λ₁ := by
     exact realSelfAdjointSpectralRestriction_isSelfAdjoint
       A hA Sᶜ hS.compl
   have hdecomp : OrthogonalExactDecomposition

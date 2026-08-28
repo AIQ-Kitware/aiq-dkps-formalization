@@ -43,7 +43,6 @@ namespace DavisKahan
 namespace ExactSinTheta
 
 open scoped InnerProductSpace
-open TauCeti.DavisKahanExt
 open TauCeti.HilbertSchmidt
 open TauCeti.OneParameterUnitaryGroup (generator)
 
@@ -56,21 +55,21 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 private theorem hasClosedSylvesterEquation_of_generator
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)} {B : ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     (z : (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
       (TauCeti.LinearPMap.genToGroup hB) (paperHSBasis F))).domain) :
-    TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap
+    TauCeti.LinearPMap.SylvesterEquation A B
       (ofLp (paperHSBasis F) (z : lp (fun _ : PaperHSIndex F => E) 2))
       (ofLp (paperHSBasis F) (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
         (TauCeti.LinearPMap.genToGroup hB) (paperHSBasis F)) z)) := by
-  have hAU : generator (TauCeti.LinearPMap.genToGroup hA) = A.toLinearPMap :=
+  have hAU : generator (TauCeti.LinearPMap.genToGroup hA) = A :=
     TauCeti.LinearPMap.generator_genToGroup hA
-  have hBV : generator (TauCeti.LinearPMap.genToGroup hB) = B.toLinearPMap :=
+  have hBV : generator (TauCeti.LinearPMap.genToGroup hB) = B :=
     TauCeti.LinearPMap.generator_genToGroup hB
-  have hdomA : (generator (TauCeti.LinearPMap.genToGroup hA)).domain = A.toLinearPMap.domain :=
+  have hdomA : (generator (TauCeti.LinearPMap.genToGroup hA)).domain = A.domain :=
     congrArg LinearPMap.domain hAU
-  have hdomB : (generator (TauCeti.LinearPMap.genToGroup hB)).domain = B.toLinearPMap.domain :=
+  have hdomB : (generator (TauCeti.LinearPMap.genToGroup hB)).domain = B.domain :=
     congrArg LinearPMap.domain hBV
   refine ⟨?_, ?_⟩
   · intro x
@@ -96,14 +95,14 @@ private theorem hasClosedSylvesterEquation_of_generator
 /-- Defect-first square-norm estimate, reduced to the vector spectral gap of
 the Hilbert--Schmidt defect. -/
 theorem paperHilbertSchmidt_sylvester_defectFirst
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
     {X C : F →L[ℂ] E}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {δ : ℝ} (hδ : 0 < δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hunique : ∀ {Y : F →L[ℂ] E},
-      TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap Y 0 → Y = 0)
+      TauCeti.LinearPMap.SylvesterEquation A B Y 0 → Y = 0)
     (hC : IsPaperHilbertSchmidt C)
     (hCgap : TauCeti.LinearPMap.HasVectorSpectralGap
       (isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
@@ -119,11 +118,11 @@ theorem paperHilbertSchmidt_sylvester_defectFirst
   set X0 := ofLp (paperHSBasis F) z0 with hX0
   have hEq0raw := hasClosedSylvesterEquation_of_generator hA hB ⟨z0, hz0⟩
   have hcOp : ofLp (paperHSBasis F) c = C := toOperator_paperHilbertSchmidtTensor C hC
-  have hEq0 : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X0 C := by
+  have hEq0 : TauCeti.LinearPMap.SylvesterEquation A B X0 C := by
     have h := hEq0raw
     rw [hgen, hcOp] at h
     exact h
-  have hhom : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap (X - X0) 0 := by
+  have hhom : TauCeti.LinearPMap.SylvesterEquation A B (X - X0) 0 := by
     simpa using hEq.sub hEq0
   have hXX0 : X = X0 := sub_eq_zero.mp (hunique hhom)
   have hX0mem : IsPaperHilbertSchmidt X0 := isPaperHilbertSchmidt_toOperator z0

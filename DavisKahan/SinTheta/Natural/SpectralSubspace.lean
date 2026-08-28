@@ -30,8 +30,8 @@ variable {E F : Type v}
 /-- The canonical exact and complementary spectral inclusions form a complete
 orthogonal coordinate decomposition of the ambient Hilbert space. -/
 theorem spectralSubspace_orthogonalExactDecomposition
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S) :
+    (A : E →ₗ.[ℂ] E)
+    (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S) :
     OrthogonalExactDecomposition
       (selfAdjointSpectralSubspaceInclusion A hA S hS)
       (selfAdjointSpectralSubspaceInclusion A hA Sᶜ hS.compl) := by
@@ -76,13 +76,13 @@ theorem spectralSubspace_orthogonalExactDecomposition
 /-- Construct the internal unbounded sine-theta bookkeeping directly from a
 measurable exact spectral set and a bounded residual extension. -/
 noncomputable def unboundedSinThetaDataOfSpectralSubspace
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (A : E →ₗ.[ℂ] E)
+    (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
+    (A0 : F →ₗ.[ℂ] F) (hA0 : IsSelfAdjoint A0)
     (X Rop : F →L[ℂ] E)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
-      A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F)) :
+      A ⟨X (x : F), hXdom x⟩ - X (A0 x) = Rop (x : F)) :
     UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F)
       (G := selfAdjointSpectralSubspace A hA Sᶜ hS.compl) where
   A := A
@@ -103,18 +103,18 @@ The complementary restriction and all exact-space bookkeeping are constructed
 internally. -/
 theorem sinTheta_unbounded_spectralSubspace_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
-    (hA0 : A0.IsSelfAdjoint)
+    (A : E →ₗ.[ℂ] E)
+    (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
+    (A0 : F →ₗ.[ℂ] F)
+    (hA0 : IsSelfAdjoint A0)
     (X Rop : F →L[ℂ] E)
     (hX : IsometricEmbedding X)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
-      A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
+      A ⟨X (x : F), hXdom x⟩ - X (A0 x) = Rop (x : F))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectralSylvesterGap A0.toLinearPMap
-      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ)
+    (hgap : SpectralSylvesterGap A0
+      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
     (hR : N.Mem Rop) :
     N.Mem
       ((ContinuousLinearMap.id ℂ E -
@@ -126,24 +126,21 @@ theorem sinTheta_unbounded_spectralSubspace_of_spectrumGap
             (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X)
         ≤ N.gauge Rop := by
   let D := unboundedSinThetaDataOfSpectralSubspace
-    A hA S hS A0 X Rop hXdom hReq
-  have hLambda : D.Λ₁.IsSelfAdjoint := by
+    A hA S hS A0 hA0 X Rop hXdom hReq
+  have hLambda : _root_.IsSelfAdjoint D.Λ₁ := by
     exact selfAdjointSpectralRestriction_isSelfAdjoint A hA Sᶜ hS.compl
   have hdecomp : OrthogonalExactDecomposition
       (selfAdjointSpectralSubspaceInclusion A hA S hS) D.F₁ := by
     simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using
       spectralSubspace_orthogonalExactDecomposition A hA S hS
-  have hDA : D.A.IsSelfAdjoint := by
+  have hDA : _root_.IsSelfAdjoint D.A := by
     simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using hA
-  have hDA₀ : D.A₀.IsSelfAdjoint := by
+  have hDA₀ : _root_.IsSelfAdjoint D.A₀ := by
     simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using hA0
-  have hmain := linearPMap_sinTheta_unbounded_exact_of_spectrumGap
-    N D.toPMap (selfAdjointSpectralSubspaceInclusion A hA S hS)
-      (D.toPMap_A_isSelfAdjoint hDA)
-      (D.toPMap_A₀_isSelfAdjoint hDA₀)
-      (D.toPMap_Λ₁_isSelfAdjoint hLambda) hX hdecomp hδ hgap hR
-  simpa only [D, unboundedSinThetaDataOfSpectralSubspace,
-    UnboundedSinThetaData.toPMap] using hmain
+  have hmain := sinTheta_unbounded_exact_of_spectrumGap
+    N D (selfAdjointSpectralSubspaceInclusion A hA S hS)
+      hDA hDA₀ hLambda hX hdecomp hδ hgap hR
+  simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using hmain
 
 end ExactSinTheta
 end DavisKahan

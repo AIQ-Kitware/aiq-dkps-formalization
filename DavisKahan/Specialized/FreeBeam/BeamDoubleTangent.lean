@@ -231,27 +231,27 @@ theorem norm_beamRitzOffDiagonal_le (ε : ℝ) :
 
 /-- **The paper's comparison operator** `Â = Â₀ ⊕ Â₁`, obtained from `A + ε t` by
 deleting its off-diagonal blocks relative to the trial splitting. -/
-def beamComparison (ε : ℝ) : DKClosedOperator (H := BeamL2) :=
-  beamOperator.addBounded (beamRitzDiagonal ε)
+def beamComparison (ε : ℝ) : BeamL2 →ₗ.[ℂ] BeamL2 :=
+  TauCeti.LinearPMap.addBounded beamOperator (beamRitzDiagonal ε)
 
 /-- `Â` is self-adjoint: it is the self-adjoint free beam plus a bounded symmetric
 operator. -/
-theorem beamComparison_isSelfAdjoint (ε : ℝ) : (beamComparison ε).IsSelfAdjoint :=
+theorem beamComparison_isSelfAdjoint (ε : ℝ) : _root_.IsSelfAdjoint (beamComparison ε) :=
   addBounded_isSelfAdjoint beamOperator beamOperator_isSelfAdjoint _
     (beamRitzDiagonal_isSelfAdjoint ε)
 
 /-- `Â` acts as the free beam plus the diagonal block of the perturbation. -/
 theorem beamComparison_apply (ε : ℝ) {x : BeamL2} (hx : x ∈ beamOperator.domain) :
-    (beamComparison ε).toLinearMap ⟨x, hx⟩
-      = beamOperator.toLinearMap ⟨x, hx⟩ + beamRitzDiagonal ε x := rfl
+    (beamComparison ε) ⟨x, hx⟩
+      = beamOperator ⟨x, hx⟩ + beamRitzDiagonal ε x := rfl
 
 /-- `Â + B = A + ε t`: deleting the off-diagonal blocks and restoring them. -/
 theorem beamComparison_add_offDiagonal (ε : ℝ) {x : BeamL2}
     (hx : x ∈ beamOperator.domain) :
-    (beamComparison ε).toLinearMap ⟨x, hx⟩ + beamRitzOffDiagonal ε x
-      = (beamPerturbed ε).toLinearMap ⟨x, hx⟩ := by
-  have h2 : (beamPerturbed ε).toLinearMap ⟨x, hx⟩
-      = beamOperator.toLinearMap ⟨x, hx⟩ + beamPerturbation ε x := rfl
+    (beamComparison ε) ⟨x, hx⟩ + beamRitzOffDiagonal ε x
+      = (beamPerturbed ε) ⟨x, hx⟩ := by
+  have h2 : (beamPerturbed ε) ⟨x, hx⟩
+      = beamOperator ⟨x, hx⟩ + beamPerturbation ε x := rfl
   have h3 : beamRitzOffDiagonal ε x
       = beamPerturbation ε x - beamRitzDiagonal ε x := rfl
   rw [beamComparison_apply, h2, h3]
@@ -259,16 +259,17 @@ theorem beamComparison_add_offDiagonal (ε : ℝ) {x : BeamL2}
 
 /-- The free beam maps into the orthogonal complement of its kernel. -/
 theorem beamOperator_apply_mem_orthogonal (x : beamOperator.domain) :
-    beamOperator.toLinearMap x ∈ beamTrialᗮ := by
+    beamOperator x ∈ beamTrialᗮ := by
   rw [Submodule.mem_orthogonal]
   intro u hu
   have hudom : u ∈ beamOperator.domain := beamTrial_le_domain hu
-  have hsym : ⟪beamOperator.toLinearMap x, u⟫_ℂ
-      = ⟪(x : BeamL2), beamOperator.toLinearMap ⟨u, hudom⟩⟫_ℂ :=
-    beamOperator_isSelfAdjoint.isSymmetric x ⟨u, hudom⟩
-  have hzero : beamOperator.toLinearMap ⟨u, hudom⟩ = 0 :=
+  have hsym : ⟪beamOperator x, u⟫_ℂ
+      = ⟪(x : BeamL2), beamOperator ⟨u, hudom⟩⟫_ℂ :=
+    (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint beamOperator_isSelfAdjoint)
+      x ⟨u, hudom⟩
+  have hzero : beamOperator ⟨u, hudom⟩ = 0 :=
     beamOperator_apply_trial hu hudom
-  rw [← inner_conj_symm (𝕜 := ℂ) u (beamOperator.toLinearMap x), hsym, hzero,
+  rw [← inner_conj_symm (𝕜 := ℂ) u (beamOperator x), hsym, hzero,
     inner_zero_right, map_zero]
 
 /-- The trial projection of a vector of the trial subspace is itself, and its
@@ -289,7 +290,7 @@ theorem starProjection_eq_zero_of_mem_beamTrial_orthogonal {x : BeamL2}
 /-- On the trial subspace the comparison operator is the Ritz compression. -/
 theorem beamComparison_apply_of_mem_beamTrial (ε : ℝ) {x : BeamL2}
     (hx : x ∈ beamTrial) (hxd : x ∈ beamOperator.domain) :
-    (beamComparison ε).toLinearMap ⟨x, hxd⟩
+    (beamComparison ε) ⟨x, hxd⟩
       = beamTrial.starProjection (beamPerturbation ε x) := by
   have hd : beamRitzDiagonal ε x
       = beamTrial.starProjection (beamPerturbation ε (beamTrial.starProjection x))
@@ -304,8 +305,8 @@ theorem beamComparison_apply_of_mem_beamTrial (ε : ℝ) {x : BeamL2}
 compressed perturbation. -/
 theorem beamComparison_apply_of_mem_orthogonal (ε : ℝ) {x : BeamL2}
     (hx : x ∈ beamTrialᗮ) (hxd : x ∈ beamOperator.domain) :
-    (beamComparison ε).toLinearMap ⟨x, hxd⟩
-      = beamOperator.toLinearMap ⟨x, hxd⟩
+    (beamComparison ε) ⟨x, hxd⟩
+      = beamOperator ⟨x, hxd⟩
         + beamTrialᗮ.starProjection (beamPerturbation ε x) := by
   have hd : beamRitzDiagonal ε x
       = beamTrial.starProjection (beamPerturbation ε (beamTrial.starProjection x))
@@ -322,7 +323,7 @@ theorem beamComparison_apply_of_mem_orthogonal (ε : ℝ) {x : BeamL2}
 summands are invariant, because `Â` was built block-diagonal and the free beam maps the
 complement into itself. -/
 theorem beamComparison_reduces (ε : ℝ) :
-    TauCeti.LinearPMap.ReducesSubspace (beamComparison ε).toLinearPMap beamTrial := by
+    TauCeti.LinearPMap.ReducesSubspace (beamComparison ε) beamTrial := by
   refine TauCeti.LinearPMap.ReducesSubspace.of_components ?_ ?_ ?_ ?_
   · intro x
     exact beamTrial_le_domain (beamTrial.starProjection_apply_mem (x : BeamL2))
@@ -333,15 +334,15 @@ theorem beamComparison_reduces (ε : ℝ) :
       (beamTrial_le_domain (beamTrial.starProjection_apply_mem _))
   · intro x hx
     have hxd : (x : BeamL2) ∈ beamOperator.domain := x.2
-    have heq : (beamComparison ε).toLinearPMap x
+    have heq : (beamComparison ε) x
         = beamTrial.starProjection (beamPerturbation ε (x : BeamL2)) :=
       beamComparison_apply_of_mem_beamTrial ε hx hxd
     rw [heq]
     exact beamTrial.starProjection_apply_mem _
   · intro x hx
     have hxd : (x : BeamL2) ∈ beamOperator.domain := x.2
-    have heq : (beamComparison ε).toLinearPMap x
-        = beamOperator.toLinearMap ⟨(x : BeamL2), hxd⟩
+    have heq : (beamComparison ε) x
+        = beamOperator ⟨(x : BeamL2), hxd⟩
           + beamTrialᗮ.starProjection (beamPerturbation ε (x : BeamL2)) :=
       beamComparison_apply_of_mem_orthogonal ε hx hxd
     rw [heq]
@@ -366,11 +367,11 @@ theorem beamRitzOffDiagonal_isOddFor (ε : ℝ) :
 /-- **`Â₀ ≤ α̂₂`**: the comparison operator's form on the trial subspace is the Ritz
 compression, bounded by the upper Ritz value. -/
 theorem beamComparison_form_le_of_mem_beamTrial (ε : ℝ) (hε : 0 ≤ ε)
-    (x : (beamComparison ε).toLinearPMap.domain) (hx : (x : BeamL2) ∈ beamTrial) :
-    (⟪(beamComparison ε).toLinearPMap x, (x : BeamL2)⟫_ℂ).re
+    (x : (beamComparison ε).domain) (hx : (x : BeamL2) ∈ beamTrial) :
+    (⟪(beamComparison ε) x, (x : BeamL2)⟫_ℂ).re
       ≤ ritzHigh ε * ‖(x : BeamL2)‖ ^ 2 := by
   have hxd : (x : BeamL2) ∈ beamOperator.domain := x.2
-  have heq : (beamComparison ε).toLinearPMap x
+  have heq : (beamComparison ε) x
       = beamTrial.starProjection (beamPerturbation ε (x : BeamL2)) :=
     beamComparison_apply_of_mem_beamTrial ε hx hxd
   rw [heq, Submodule.inner_starProjection_left_eq_right,
@@ -380,12 +381,12 @@ theorem beamComparison_form_le_of_mem_beamTrial (ε : ℝ) (hε : 0 ≤ ε)
 /-- **`Â₁ > 500`**: the comparison operator's form off the trial subspace still carries
 the sharp free-beam gap `500.5`, because `Â₁ - A₁ = E₁* (ε t) E₁ ≥ 0`. -/
 theorem beamComparison_form_ge_of_mem_orthogonal (ε : ℝ) (hε : 0 ≤ ε)
-    (x : (beamComparison ε).toLinearPMap.domain) (hx : (x : BeamL2) ∈ beamTrialᗮ) :
+    (x : (beamComparison ε).domain) (hx : (x : BeamL2) ∈ beamTrialᗮ) :
     (1001 / 2 : ℝ) * ‖(x : BeamL2)‖ ^ 2
-      ≤ (⟪(beamComparison ε).toLinearPMap x, (x : BeamL2)⟫_ℂ).re := by
+      ≤ (⟪(beamComparison ε) x, (x : BeamL2)⟫_ℂ).re := by
   have hxd : (x : BeamL2) ∈ beamOperator.domain := x.2
-  have heq : (beamComparison ε).toLinearPMap x
-      = beamOperator.toLinearMap ⟨(x : BeamL2), hxd⟩
+  have heq : (beamComparison ε) x
+      = beamOperator ⟨(x : BeamL2), hxd⟩
         + beamTrialᗮ.starProjection (beamPerturbation ε (x : BeamL2)) :=
     beamComparison_apply_of_mem_orthogonal ε hx hxd
   rw [heq, inner_add_left, Complex.add_re]
@@ -402,7 +403,7 @@ theorem beamComparison_form_ge_of_mem_orthogonal (ε : ℝ) (hε : 0 ≤ ε)
 finite-dimensional and inside the domain, so the orthogonal projection onto it is
 already a cutoff: no limiting family is needed. -/
 def beamTrialCutoff (ε : ℝ) :
-    TauCeti.BoundedCutoff (beamComparison ε).toLinearPMap beamTrial
+    TauCeti.BoundedCutoff (beamComparison ε) beamTrial
       ‖beamPerturbation ε‖ where
   toProj := beamTrial.starProjection
   isSelfAdjoint := isSelfAdjoint_starProjection beamTrial
@@ -410,7 +411,7 @@ def beamTrialCutoff (ε : ℝ) :
   mem_subspace v := beamTrial.starProjection_apply_mem v
   mem_domain v := beamTrial_le_domain (beamTrial.starProjection_apply_mem v)
   norm_apply_le v := by
-    have heq : (beamComparison ε).toLinearPMap
+    have heq : (beamComparison ε)
         ⟨beamTrial.starProjection v,
           beamTrial_le_domain (beamTrial.starProjection_apply_mem v)⟩
         = beamTrial.starProjection
@@ -421,7 +422,7 @@ def beamTrialCutoff (ε : ℝ) :
     refine le_trans (beamTrial.norm_starProjection_apply_le _) ?_
     exact (beamPerturbation ε).le_opNorm _
   apply_mem_range v := by
-    have heq : (beamComparison ε).toLinearPMap
+    have heq : (beamComparison ε)
         ⟨beamTrial.starProjection v,
           beamTrial_le_domain (beamTrial.starProjection_apply_mem v)⟩
         = beamTrial.starProjection
@@ -473,34 +474,34 @@ theorem beamLowReflection_sq (ε : ℝ) :
 
 /-- The reflection preserves the domain: spectral projections do. -/
 theorem beamLowReflection_mem_domain (ε : ℝ) {x : BeamL2}
-    (hx : x ∈ (beamPerturbed ε).toLinearPMap.domain) :
-    beamLowReflection ε x ∈ (beamPerturbed ε).toLinearPMap.domain := by
-  have hQ : beamLowProjection ε x ∈ (beamPerturbed ε).toLinearPMap.domain :=
+    (hx : x ∈ (beamPerturbed ε).domain) :
+    beamLowReflection ε x ∈ (beamPerturbed ε).domain := by
+  have hQ : beamLowProjection ε x ∈ (beamPerturbed ε).domain :=
     TauCeti.LinearPMap.specProjection_mem_domain (beamPerturbed_isSelfAdjoint ε)
       _ _ ⟨x, hx⟩
   rw [beamLowReflection_apply]
-  exact (beamPerturbed ε).toLinearPMap.domain.sub_mem
-    ((beamPerturbed ε).toLinearPMap.domain.smul_mem _ hQ) hx
+  exact (beamPerturbed ε).domain.sub_mem
+    ((beamPerturbed ε).domain.smul_mem _ hQ) hx
 
 /-- The reflection preserves the domain of `Â`, which is the domain of the free beam. -/
 theorem beamLowReflection_mapsDomain (ε : ℝ) :
-    TauCeti.LinearPMap.MapsDomainTo (beamComparison ε).toLinearPMap
-      (beamComparison ε).toLinearPMap (beamLowReflection ε) := fun x =>
+    TauCeti.LinearPMap.MapsDomainTo (beamComparison ε)
+      (beamComparison ε) (beamLowReflection ε) := fun x =>
   beamLowReflection_mem_domain ε x.2
 
 /-- The reflection reduces the *perturbed* operator: that is what makes it the paper's
 `Z`. -/
 theorem beamPerturbed_comm_beamLowReflection (ε : ℝ)
-    (x : (beamPerturbed ε).toLinearPMap.domain)
-    (hzd : beamLowReflection ε (x : BeamL2) ∈ (beamPerturbed ε).toLinearPMap.domain) :
-    (beamPerturbed ε).toLinearPMap ⟨beamLowReflection ε (x : BeamL2), hzd⟩
-      = beamLowReflection ε ((beamPerturbed ε).toLinearPMap x) := by
-  have hQd : beamLowProjection ε (x : BeamL2) ∈ (beamPerturbed ε).toLinearPMap.domain :=
+    (x : (beamPerturbed ε).domain)
+    (hzd : beamLowReflection ε (x : BeamL2) ∈ (beamPerturbed ε).domain) :
+    (beamPerturbed ε) ⟨beamLowReflection ε (x : BeamL2), hzd⟩
+      = beamLowReflection ε ((beamPerturbed ε) x) := by
+  have hQd : beamLowProjection ε (x : BeamL2) ∈ (beamPerturbed ε).domain :=
     TauCeti.LinearPMap.specProjection_mem_domain (beamPerturbed_isSelfAdjoint ε) _ _ x
   have hsplit : (⟨beamLowReflection ε (x : BeamL2), hzd⟩ :
-        (beamPerturbed ε).toLinearPMap.domain)
+        (beamPerturbed ε).domain)
       = (2 : ℂ) • (⟨beamLowProjection ε (x : BeamL2), hQd⟩ :
-          (beamPerturbed ε).toLinearPMap.domain) - x := by
+          (beamPerturbed ε).domain) - x := by
     apply Subtype.ext
     exact beamLowReflection_apply ε (x : BeamL2)
   have hcomm := TauCeti.LinearPMap.specProjection_apply_domain
@@ -511,35 +512,35 @@ theorem beamPerturbed_comm_beamLowReflection (ε : ℝ)
 /-- The commutation hypothesis in the shape the block estimates take: `Z` commutes with
 `Â + B = A + ε t` on the domain. -/
 theorem beamLowReflection_comm (ε : ℝ)
-    (x : (beamComparison ε).toLinearPMap.domain) :
-    (beamComparison ε).toLinearPMap
+    (x : (beamComparison ε).domain) :
+    (beamComparison ε)
         ⟨beamLowReflection ε (x : BeamL2), beamLowReflection_mapsDomain ε x⟩
       + beamRitzOffDiagonal ε (beamLowReflection ε (x : BeamL2))
-      = beamLowReflection ε ((beamComparison ε).toLinearPMap x)
+      = beamLowReflection ε ((beamComparison ε) x)
         + beamLowReflection ε (beamRitzOffDiagonal ε (x : BeamL2)) := by
   have hxd : (x : BeamL2) ∈ beamOperator.domain := x.2
-  have hxp : (x : BeamL2) ∈ (beamPerturbed ε).toLinearPMap.domain := hxd
+  have hxp : (x : BeamL2) ∈ (beamPerturbed ε).domain := hxd
   have hzd : beamLowReflection ε (x : BeamL2) ∈ beamOperator.domain :=
     beamLowReflection_mem_domain ε hxp
-  have hL : (beamComparison ε).toLinearMap ⟨beamLowReflection ε (x : BeamL2), hzd⟩
+  have hL : (beamComparison ε) ⟨beamLowReflection ε (x : BeamL2), hzd⟩
       + beamRitzOffDiagonal ε (beamLowReflection ε (x : BeamL2))
-      = (beamPerturbed ε).toLinearMap ⟨beamLowReflection ε (x : BeamL2), hzd⟩ :=
+      = (beamPerturbed ε) ⟨beamLowReflection ε (x : BeamL2), hzd⟩ :=
     beamComparison_add_offDiagonal ε hzd
-  have hR : (beamComparison ε).toLinearMap ⟨(x : BeamL2), hxd⟩
+  have hR : (beamComparison ε) ⟨(x : BeamL2), hxd⟩
       + beamRitzOffDiagonal ε (x : BeamL2)
-      = (beamPerturbed ε).toLinearMap ⟨(x : BeamL2), hxd⟩ :=
+      = (beamPerturbed ε) ⟨(x : BeamL2), hxd⟩ :=
     beamComparison_add_offDiagonal ε hxd
-  have hZadd : beamLowReflection ε ((beamComparison ε).toLinearMap ⟨(x : BeamL2), hxd⟩)
+  have hZadd : beamLowReflection ε ((beamComparison ε) ⟨(x : BeamL2), hxd⟩)
       + beamLowReflection ε (beamRitzOffDiagonal ε (x : BeamL2))
-      = beamLowReflection ε ((beamPerturbed ε).toLinearMap ⟨(x : BeamL2), hxd⟩) := by
+      = beamLowReflection ε ((beamPerturbed ε) ⟨(x : BeamL2), hxd⟩) := by
     rw [← map_add, hR]
-  have hkey : (beamPerturbed ε).toLinearMap ⟨beamLowReflection ε (x : BeamL2), hzd⟩
-      = beamLowReflection ε ((beamPerturbed ε).toLinearMap ⟨(x : BeamL2), hxd⟩) :=
+  have hkey : (beamPerturbed ε) ⟨beamLowReflection ε (x : BeamL2), hzd⟩
+      = beamLowReflection ε ((beamPerturbed ε) ⟨(x : BeamL2), hxd⟩) :=
     beamPerturbed_comm_beamLowReflection ε ⟨(x : BeamL2), hxp⟩
       (beamLowReflection_mem_domain ε hxp)
-  show (beamComparison ε).toLinearMap ⟨beamLowReflection ε (x : BeamL2), hzd⟩
+  show (beamComparison ε) ⟨beamLowReflection ε (x : BeamL2), hzd⟩
       + beamRitzOffDiagonal ε (beamLowReflection ε (x : BeamL2))
-      = beamLowReflection ε ((beamComparison ε).toLinearMap ⟨(x : BeamL2), hxd⟩)
+      = beamLowReflection ε ((beamComparison ε) ⟨(x : BeamL2), hxd⟩)
         + beamLowReflection ε (beamRitzOffDiagonal ε (x : BeamL2))
   rw [hL, hZadd, hkey]
 

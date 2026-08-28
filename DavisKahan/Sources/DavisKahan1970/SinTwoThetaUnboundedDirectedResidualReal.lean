@@ -87,7 +87,7 @@ section MainEstimate
 
 variable {V : Submodule ℝ E} [V.HasOrthogonalProjection]
   {M : V →L[ℝ] V} {R : V →L[ℝ] E}
-  {A : ClosedOperator (𝕜 := ℝ) (E := E)}
+  {A : E →ₗ.[ℝ] E}
 
 /-- **Davis--Kahan 1970, the directed half of the `sin 2Θ` theorem for an
 unbounded self-adjoint operator over a REAL Hilbert space, Ky Fan form.**
@@ -100,14 +100,14 @@ is the printed residual `R = A E₀ - E₀ A₀`.  The conclusion is
 
 with the printed factor two. -/
 theorem sinTwoTheta_unbounded_directedResidual_all_kyFan_real
-    (hA : A.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
     (hVdom : ∀ v : V, (v : E) ∈ A.domain)
-    (hres : ∀ v : V, A.toLinearMap ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
+    (hres : ∀ v : V, A ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ) :
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ) :
     ∀ k : ℕ,
       δ * kyFanApproximationGauge k
           (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ≤
@@ -200,14 +200,14 @@ The reflected system is built internally from the trial data; no reflection
 residual appears in the statement. -/
 theorem sinTwoTheta_unbounded_directedResidual_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
-    (hA : A.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
     (hVdom : ∀ v : V, (v : E) ∈ A.domain)
-    (hres : ∀ v : V, A.toLinearMap ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
+    (hres : ∀ v : V, A ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ∧
       δ * N.gauge
@@ -244,14 +244,14 @@ hypothesis: the exact block has real spectrum inside `[β,α]` and the
 complementary block has real spectrum outside `]β-δ, α+δ[`. -/
 theorem sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExterior
     (N : PaperUnitaryInvariantNorm)
-    (hA : A.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
     (hVdom : ∀ v : V, (v : E) ∈ A.domain)
-    (hres : ∀ v : V, A.toLinearMap ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
+    (hres : ∀ v : V, A ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : RealSpectrumIntervalExteriorGap
-      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap β α δ)
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) β α δ)
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ∧
       δ * N.gauge

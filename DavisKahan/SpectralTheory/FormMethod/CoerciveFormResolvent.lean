@@ -199,14 +199,14 @@ theorem resolvent_nonnegative
 /-- Closed positive self-adjoint operator associated to the coercive form. -/
 noncomputable def associatedOperator
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H) :=
+    H →ₗ.[𝕜] H :=
   inverseClosedOperator D.resolvent D.resolvent_isSelfAdjoint
     D.resolvent_injective
 
 /-- The associated unbounded operator is self-adjoint. -/
 theorem associatedOperator_isSelfAdjoint
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    D.associatedOperator.IsSelfAdjoint :=
+    _root_.IsSelfAdjoint D.associatedOperator :=
   inverseClosedOperator_isSelfAdjoint
     D.resolvent D.resolvent_isSelfAdjoint D.resolvent_injective
     D.resolvent_nonnegative
@@ -214,7 +214,7 @@ theorem associatedOperator_isSelfAdjoint
 /-- The form resolvent is the inverse of the associated operator on its domain. -/
 @[simp] theorem associatedOperator_resolvent
     (D : CoerciveFormData (𝕜 := 𝕜) (H := H) (V := V)) (f : H) :
-    D.associatedOperator.toLinearMap
+    D.associatedOperator
       ⟨D.resolvent f,
         LinearMap.mem_range_self D.resolvent.toLinearMap f⟩ = f := by
   exact inverseClosedOperator_apply_R

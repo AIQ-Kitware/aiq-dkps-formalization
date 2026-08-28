@@ -58,46 +58,46 @@ omit [CompleteSpace H] in
 opposite block of a symmetric closed operator.  Only the particular vector in
 the orthogonal complement is required to lie in the operator domain. -/
 theorem norm_starProjection_closedOperator_le_of_mem_orthogonal
-    (A : DKClosedOperator (H := H)) (hA : A.IsSymmetric)
+    (A : H →ₗ.[ℂ] H) (hA : TauCeti.LinearPMap.IsSymmetric A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection]
     (hZdom : Z ≤ A.domain)
     {ρ : ℝ} (hρ0 : 0 ≤ ρ)
     (hρ : ∀ x : H, ∀ hx : x ∈ Z,
-      ‖A.toLinearMap ⟨x, hZdom hx⟩ -
-          Z.starProjection (A.toLinearMap ⟨x, hZdom hx⟩)‖ ≤ ρ * ‖x‖)
+      ‖A ⟨x, hZdom hx⟩ -
+          Z.starProjection (A ⟨x, hZdom hx⟩)‖ ≤ ρ * ‖x‖)
     {w : H} (hwdom : w ∈ A.domain) (hw : w ∈ Zᗮ) :
-    ‖Z.starProjection (A.toLinearMap ⟨w, hwdom⟩)‖ ≤ ρ * ‖w‖ := by
-  set z : H := Z.starProjection (A.toLinearMap ⟨w, hwdom⟩) with hz
+    ‖Z.starProjection (A ⟨w, hwdom⟩)‖ ≤ ρ * ‖w‖ := by
+  set z : H := Z.starProjection (A ⟨w, hwdom⟩) with hz
   have hzZ : z ∈ Z := Z.starProjection_apply_mem _
   have hzdom : z ∈ A.domain := hZdom hzZ
   have hsq : ‖z‖ ^ 2 ≤ ρ * ‖w‖ * ‖z‖ := by
-    have h0 : ⟪z, z⟫_ℂ = ⟪A.toLinearMap ⟨w, hwdom⟩, z⟫_ℂ := by
+    have h0 : ⟪z, z⟫_ℂ = ⟪A ⟨w, hwdom⟩, z⟫_ℂ := by
       conv_lhs => rw [hz]
       rw [Z.inner_starProjection_left_eq_right,
         Submodule.starProjection_eq_self_iff.mpr hzZ]
-    have h1 : ⟪A.toLinearMap ⟨w, hwdom⟩, z⟫_ℂ =
-        ⟪w, A.toLinearMap ⟨z, hzdom⟩ -
-          Z.starProjection (A.toLinearMap ⟨z, hzdom⟩)⟫_ℂ := by
+    have h1 : ⟪A ⟨w, hwdom⟩, z⟫_ℂ =
+        ⟪w, A ⟨z, hzdom⟩ -
+          Z.starProjection (A ⟨z, hzdom⟩)⟫_ℂ := by
       calc
-        ⟪A.toLinearMap ⟨w, hwdom⟩, z⟫_ℂ =
-            ⟪w, A.toLinearMap ⟨z, hzdom⟩⟫_ℂ :=
+        ⟪A ⟨w, hwdom⟩, z⟫_ℂ =
+            ⟪w, A ⟨z, hzdom⟩⟫_ℂ :=
           hA ⟨w, hwdom⟩ ⟨z, hzdom⟩
-        _ = ⟪w, A.toLinearMap ⟨z, hzdom⟩ -
-            Z.starProjection (A.toLinearMap ⟨z, hzdom⟩)⟫_ℂ := by
+        _ = ⟪w, A ⟨z, hzdom⟩ -
+            Z.starProjection (A ⟨z, hzdom⟩)⟫_ℂ := by
           rw [inner_sub_right,
             Submodule.inner_left_of_mem_orthogonal
-              (Z.starProjection_apply_mem (A.toLinearMap ⟨z, hzdom⟩)) hw,
+              (Z.starProjection_apply_mem (A ⟨z, hzdom⟩)) hw,
             sub_zero]
     calc
       ‖z‖ ^ 2 = RCLike.re ⟪z, z⟫_ℂ := (inner_self_eq_norm_sq z).symm
-      _ = RCLike.re ⟪w, A.toLinearMap ⟨z, hzdom⟩ -
-          Z.starProjection (A.toLinearMap ⟨z, hzdom⟩)⟫_ℂ := by
+      _ = RCLike.re ⟪w, A ⟨z, hzdom⟩ -
+          Z.starProjection (A ⟨z, hzdom⟩)⟫_ℂ := by
         rw [h0, h1]
-      _ ≤ ‖⟪w, A.toLinearMap ⟨z, hzdom⟩ -
-          Z.starProjection (A.toLinearMap ⟨z, hzdom⟩)⟫_ℂ‖ :=
+      _ ≤ ‖⟪w, A ⟨z, hzdom⟩ -
+          Z.starProjection (A ⟨z, hzdom⟩)⟫_ℂ‖ :=
         RCLike.re_le_norm _
-      _ ≤ ‖w‖ * ‖A.toLinearMap ⟨z, hzdom⟩ -
-          Z.starProjection (A.toLinearMap ⟨z, hzdom⟩)‖ :=
+      _ ≤ ‖w‖ * ‖A ⟨z, hzdom⟩ -
+          Z.starProjection (A ⟨z, hzdom⟩)‖ :=
         norm_inner_le_norm _ _
       _ ≤ ‖w‖ * (ρ * ‖z‖) := by
         have hzres := hρ z hzZ
@@ -121,25 +121,25 @@ of the bounded proof, so the conclusion is unchanged:
 `delta * ‖x - P_V x‖ <= rho * ‖P_V x‖` for every `x` in `Z`.
 -/
 theorem tanTheta_unbounded_vector_of_centered_bounds
-    (A : DKClosedOperator (H := H)) (hA : A.IsSymmetric)
+    (A : H →ₗ.[ℂ] H) (hA : TauCeti.LinearPMap.IsSymmetric A)
     {Z V : Submodule ℂ H} [Z.HasOrthogonalProjection]
     [V.HasOrthogonalProjection]
     (hZdom : Z ≤ A.domain)
     (hVperpdom : Vᗮ ≤ A.domain)
     (hVperpinv : ∀ u : H, ∀ hu : u ∈ Vᗮ,
-      A.toLinearMap ⟨u, hVperpdom hu⟩ ∈ Vᗮ)
+      A ⟨u, hVperpdom hu⟩ ∈ Vᗮ)
     {center halfWidth δ ρ : ℝ}
     (hhalf : 0 ≤ halfWidth) (hδ : 0 < δ) (hρ0 : 0 ≤ ρ)
     (hZcoercive : ∀ x : H, ∀ hx : x ∈ Z,
       (halfWidth + δ) * ‖x‖ ≤
-        ‖Z.starProjection (A.toLinearMap ⟨x, hZdom hx⟩) -
+        ‖Z.starProjection (A ⟨x, hZdom hx⟩) -
           (center : ℂ) • x‖)
     (hVperpcentered : ∀ u : H, ∀ hu : u ∈ Vᗮ,
-      ‖A.toLinearMap ⟨u, hVperpdom hu⟩ - (center : ℂ) • u‖ ≤
+      ‖A ⟨u, hVperpdom hu⟩ - (center : ℂ) • u‖ ≤
         halfWidth * ‖u‖)
     (hρ : ∀ x : H, ∀ hx : x ∈ Z,
-      ‖A.toLinearMap ⟨x, hZdom hx⟩ -
-          Z.starProjection (A.toLinearMap ⟨x, hZdom hx⟩)‖ ≤ ρ * ‖x‖) :
+      ‖A ⟨x, hZdom hx⟩ -
+          Z.starProjection (A ⟨x, hZdom hx⟩)‖ ≤ ρ * ‖x‖) :
     ∀ x : H, ∀ _hx : x ∈ Z,
       δ * ‖x - V.starProjection x‖ ≤ ρ * ‖V.starProjection x‖ := by
   set Wop : (↥Vᗮ) →L[ℂ] H := Z.starProjection ∘L Vᗮ.subtypeL with hWop
@@ -166,55 +166,55 @@ theorem tanTheta_unbounded_vector_of_centered_bounds
       A.domain.sub_mem huDom hpDom
     have h1 := hZcoercive (Z.starProjection u₀) hpZ
     have hAu :
-        A.toLinearMap ⟨u₀, huDom⟩ =
-          A.toLinearMap ⟨Z.starProjection u₀, hpDom⟩ +
-            A.toLinearMap ⟨u₀ - Z.starProjection u₀, hwDom⟩ := by
+        A ⟨u₀, huDom⟩ =
+          A ⟨Z.starProjection u₀, hpDom⟩ +
+            A ⟨u₀ - Z.starProjection u₀, hwDom⟩ := by
       have hsub : (⟨u₀, huDom⟩ : A.domain) =
           ⟨Z.starProjection u₀, hpDom⟩ +
             ⟨u₀ - Z.starProjection u₀, hwDom⟩ := by
         apply Subtype.ext
         simp
-      rw [hsub, map_add]
+      rw [hsub, LinearPMap.map_add]
     have hsplit :
         Z.starProjection
-            (A.toLinearMap ⟨Z.starProjection u₀, hpDom⟩) -
+            (A ⟨Z.starProjection u₀, hpDom⟩) -
             (center : ℂ) • Z.starProjection u₀ =
           Z.starProjection
-              (A.toLinearMap ⟨u₀, huDom⟩ - (center : ℂ) • u₀) -
+              (A ⟨u₀, huDom⟩ - (center : ℂ) • u₀) -
             Z.starProjection
-              (A.toLinearMap ⟨u₀ - Z.starProjection u₀, hwDom⟩) := by
+              (A ⟨u₀ - Z.starProjection u₀, hwDom⟩) := by
       calc
         Z.starProjection
-              (A.toLinearMap ⟨Z.starProjection u₀, hpDom⟩) -
+              (A ⟨Z.starProjection u₀, hpDom⟩) -
             (center : ℂ) • Z.starProjection u₀ =
             Z.starProjection
-                ((A.toLinearMap ⟨Z.starProjection u₀, hpDom⟩ +
-                    A.toLinearMap ⟨u₀ - Z.starProjection u₀, hwDom⟩) -
+                ((A ⟨Z.starProjection u₀, hpDom⟩ +
+                    A ⟨u₀ - Z.starProjection u₀, hwDom⟩) -
                   (center : ℂ) •
                     (Z.starProjection u₀ +
                       (u₀ - Z.starProjection u₀))) -
               Z.starProjection
-                (A.toLinearMap ⟨u₀ - Z.starProjection u₀, hwDom⟩) := by
+                (A ⟨u₀ - Z.starProjection u₀, hwDom⟩) := by
           simp only [map_sub, map_add, map_smul]
           rw [Submodule.starProjection_eq_self_iff.mpr hpZ]
           abel_nf
         _ = Z.starProjection
-              (A.toLinearMap ⟨u₀, huDom⟩ - (center : ℂ) • u₀) -
+              (A ⟨u₀, huDom⟩ - (center : ℂ) • u₀) -
             Z.starProjection
-              (A.toLinearMap ⟨u₀ - Z.starProjection u₀, hwDom⟩) := by
+              (A ⟨u₀ - Z.starProjection u₀, hwDom⟩) := by
           rw [← hAu, show Z.starProjection u₀ +
             (u₀ - Z.starProjection u₀) = u₀ by abel]
     have hcenterMem :
-        A.toLinearMap ⟨u₀, huDom⟩ - (center : ℂ) • u₀ ∈ Vᗮ :=
+        A ⟨u₀, huDom⟩ - (center : ℂ) • u₀ ∈ Vᗮ :=
       Submodule.sub_mem _ (hVperpinv u₀ hu₀V) (Vᗮ.smul_mem _ hu₀V)
     have h2 :
         ‖Z.starProjection
-            (A.toLinearMap ⟨u₀, huDom⟩ - (center : ℂ) • u₀)‖ ≤
+            (A ⟨u₀, huDom⟩ - (center : ℂ) • u₀)‖ ≤
           κ * halfWidth := by
       calc
         ‖Z.starProjection
-            (A.toLinearMap ⟨u₀, huDom⟩ - (center : ℂ) • u₀)‖ ≤
-            κ * ‖A.toLinearMap ⟨u₀, huDom⟩ - (center : ℂ) • u₀‖ :=
+            (A ⟨u₀, huDom⟩ - (center : ℂ) • u₀)‖ ≤
+            κ * ‖A ⟨u₀, huDom⟩ - (center : ℂ) • u₀‖ :=
           hmax _ hcenterMem
         _ ≤ κ * (halfWidth * ‖u₀‖) := by
           have hstrip := hVperpcentered u₀ hu₀V
@@ -223,7 +223,7 @@ theorem tanTheta_unbounded_vector_of_centered_bounds
         _ = κ * halfWidth := by ring
     have h3 :
         ‖Z.starProjection
-            (A.toLinearMap ⟨u₀ - Z.starProjection u₀, hwDom⟩)‖ ≤
+            (A ⟨u₀ - Z.starProjection u₀, hwDom⟩)‖ ≤
           ρ * ‖u₀ - Z.starProjection u₀‖ :=
       norm_starProjection_closedOperator_le_of_mem_orthogonal
         A hA hZdom hρ0 hρ hwDom
@@ -231,17 +231,17 @@ theorem tanTheta_unbounded_vector_of_centered_bounds
     calc
       (halfWidth + δ) * ‖Z.starProjection u₀‖ ≤
           ‖Z.starProjection
-              (A.toLinearMap ⟨Z.starProjection u₀, hpDom⟩) -
+              (A ⟨Z.starProjection u₀, hpDom⟩) -
             (center : ℂ) • Z.starProjection u₀‖ := h1
       _ = ‖Z.starProjection
-              (A.toLinearMap ⟨u₀, huDom⟩ - (center : ℂ) • u₀) -
+              (A ⟨u₀, huDom⟩ - (center : ℂ) • u₀) -
             Z.starProjection
-              (A.toLinearMap ⟨u₀ - Z.starProjection u₀, hwDom⟩)‖ := by
+              (A ⟨u₀ - Z.starProjection u₀, hwDom⟩)‖ := by
         rw [hsplit]
       _ ≤ ‖Z.starProjection
-              (A.toLinearMap ⟨u₀, huDom⟩ - (center : ℂ) • u₀)‖ +
+              (A ⟨u₀, huDom⟩ - (center : ℂ) • u₀)‖ +
             ‖Z.starProjection
-              (A.toLinearMap ⟨u₀ - Z.starProjection u₀, hwDom⟩)‖ :=
+              (A ⟨u₀ - Z.starProjection u₀, hwDom⟩)‖ :=
         norm_sub_le _ _
       _ ≤ κ * halfWidth + ρ * ‖u₀ - Z.starProjection u₀‖ :=
         add_le_add h2 h3
@@ -334,7 +334,7 @@ theorem tanTheta_unbounded_vector_of_centered_bounds
 /-- Every vector in the canonical interval spectral range lies in the domain of
 the unbounded self-adjoint operator. -/
 theorem selfAdjointSpectralIcc_mem_domain
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {α β : ℝ} (_hαβ : α ≤ β)
     {x : H}
     (hx : x ∈ selfAdjointSpectralSubspace A hA (Set.Icc α β)
@@ -346,12 +346,12 @@ theorem selfAdjointSpectralIcc_mem_domain
 /-- The canonical interval spectral range satisfies the sharp centered norm
 bound required by the unbounded tangent theorem. -/
 theorem selfAdjointSpectralIcc_centered_norm_le
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {α β : ℝ} (hαβ : α ≤ β)
     {x : H}
     (hx : x ∈ selfAdjointSpectralSubspace A hA (Set.Icc α β)
       measurableSet_Icc) :
-    ‖A.toLinearMap
+    ‖A
           ⟨x, selfAdjointSpectralIcc_mem_domain A hA hαβ hx⟩ -
         (((α + β) / 2 : ℝ) : ℂ) • x‖ ≤
       (β - α) / 2 * ‖x‖ :=
@@ -371,17 +371,17 @@ only remaining hypotheses concern the test subspace: domain inclusion,
 coercivity of its compressed action, and a columnwise residual bound.
 -/
 theorem tanTheta_unbounded_exactSpectralIcc
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection]
     {α β δ ρ : ℝ} (hαβ : α ≤ β) (hδ : 0 < δ) (hρ0 : 0 ≤ ρ)
     (hZdom : Z ≤ A.domain)
     (hZcoercive : ∀ x : H, ∀ hx : x ∈ Z,
       ((β - α) / 2 + δ) * ‖x‖ ≤
-        ‖Z.starProjection (A.toLinearMap ⟨x, hZdom hx⟩) -
+        ‖Z.starProjection (A ⟨x, hZdom hx⟩) -
           (((α + β) / 2 : ℝ) : ℂ) • x‖)
     (hρ : ∀ x : H, ∀ hx : x ∈ Z,
-      ‖A.toLinearMap ⟨x, hZdom hx⟩ -
-          Z.starProjection (A.toLinearMap ⟨x, hZdom hx⟩)‖ ≤ ρ * ‖x‖) :
+      ‖A ⟨x, hZdom hx⟩ -
+          Z.starProjection (A ⟨x, hZdom hx⟩)‖ ≤ ρ * ‖x‖) :
     let W := selfAdjointSpectralSubspace A hA (Set.Icc α β)
       measurableSet_Icc
     ∀ x : H, ∀ _hx : x ∈ Z,
@@ -395,15 +395,15 @@ theorem tanTheta_unbounded_exactSpectralIcc
     have huW : u ∈ W := (le_of_eq hdouble) hu
     exact selfAdjointSpectralIcc_mem_domain A hA hαβ huW
   have hVperpinv : ∀ u : H, ∀ hu : u ∈ (Wᗮ)ᗮ,
-      A.toLinearMap ⟨u, hVperpdom hu⟩ ∈ (Wᗮ)ᗮ := by
+      A ⟨u, hVperpdom hu⟩ ∈ (Wᗮ)ᗮ := by
     intro u hu
     have huW : u ∈ W := (le_of_eq hdouble) hu
-    have himage : A.toLinearMap ⟨u, hVperpdom hu⟩ ∈ W :=
+    have himage : A ⟨u, hVperpdom hu⟩ ∈ W :=
       selfAdjoint_maps_spectralSubspace A hA measurableSet_Icc
         ⟨u, hVperpdom hu⟩ huW
     exact (le_of_eq hdouble.symm) himage
   have hcenter : ∀ u : H, ∀ hu : u ∈ (Wᗮ)ᗮ,
-      ‖A.toLinearMap ⟨u, hVperpdom hu⟩ -
+      ‖A ⟨u, hVperpdom hu⟩ -
           (((α + β) / 2 : ℝ) : ℂ) • u‖ ≤
         (β - α) / 2 * ‖u‖ := by
     intro u hu
@@ -416,7 +416,7 @@ theorem tanTheta_unbounded_exactSpectralIcc
     rw [hdomEq]
     exact h
   exact tanTheta_unbounded_vector_of_centered_bounds
-    (V := Wᗮ) (Z := Z) A hA.isSymmetric hZdom hVperpdom hVperpinv
+    (V := Wᗮ) (Z := Z) A (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint hA) hZdom hVperpdom hVperpinv
       (halfWidth := (β - α) / 2)
       (center := (α + β) / 2)
       (δ := δ) (ρ := ρ)

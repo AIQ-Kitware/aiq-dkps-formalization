@@ -164,7 +164,7 @@ section TrialIntertwining
 
 variable {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
   {M : V →L[𝕜] V} {R : V →L[𝕜] H}
-  {A : ClosedOperator (𝕜 := 𝕜) (E := H)}
+  {A : H →ₗ.[𝕜] H}
 
 /-- The trial subspace lies in the domain, so the projection of any vector does.
 -/
@@ -178,9 +178,9 @@ theorem starProjection_mem_domain
 `R = A E₀ - E₀ A₀` transported to the ambient space. -/
 theorem apply_starProjection_eq_trialCompression
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
-    (hres : ∀ v : V, A.toLinearMap ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     (x : H) :
-    A.toLinearMap ⟨V.starProjection x, starProjection_mem_domain hVdom x⟩ =
+    A ⟨V.starProjection x, starProjection_mem_domain hVdom x⟩ =
       trialCompression V M R x := by
   have hcoe : (⟨V.starProjection x, starProjection_mem_domain hVdom x⟩ : A.domain)
       = ⟨((V.subtypeL.adjoint x : V) : H), hVdom (V.subtypeL.adjoint x)⟩ := by
@@ -193,21 +193,21 @@ theorem apply_starProjection_eq_trialCompression
 the trial subspace is the same as applying the adjoint of `A P_V`.  This is the
 only place the symmetry of the unbounded operator is used. -/
 theorem starProjection_apply_eq_trialCompression_adjoint
-    (hA : A.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
-    (hres : ∀ v : V, A.toLinearMap ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     (x : A.domain) :
-    V.starProjection (A.toLinearMap x) =
+    V.starProjection (A x) =
       (trialCompression V M R).adjoint (x : H) := by
   refine ext_inner_left 𝕜 fun y => ?_
-  have hsym := hA.isSymmetric.toLinearMap_inner_eq
+  have hsym := (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint hA)
     (⟨V.starProjection y, starProjection_mem_domain hVdom y⟩ : A.domain) x
-  calc ⟪y, V.starProjection (A.toLinearMap x)⟫_𝕜
-      = ⟪V.starProjection y, A.toLinearMap x⟫_𝕜 := by
+  calc ⟪y, V.starProjection (A x)⟫_𝕜
+      = ⟪V.starProjection y, A x⟫_𝕜 := by
         rw [← (isSelfAdjoint_starProjection V).adjoint_eq]
         rw [ContinuousLinearMap.adjoint_inner_left]
         rw [(isSelfAdjoint_starProjection V).adjoint_eq]
-    _ = ⟪A.toLinearMap (⟨V.starProjection y,
+    _ = ⟪A (⟨V.starProjection y,
           starProjection_mem_domain hVdom y⟩ : A.domain), (x : H)⟫_𝕜 := hsym.symm
     _ = ⟪trialCompression V M R y, (x : H)⟫_𝕜 := by
         rw [apply_starProjection_eq_trialCompression hVdom hres y]
@@ -217,9 +217,9 @@ theorem starProjection_apply_eq_trialCompression_adjoint
 /-- `P_V T = T* P_V` on the whole space: the two ways of reading the diagonal
 corner of `A` agree. -/
 theorem starProjection_trialCompression_apply
-    (hA : A.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
-    (hres : ∀ v : V, A.toLinearMap ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     (y : H) :
     V.starProjection (trialCompression V M R y) =
       (trialCompression V M R).adjoint (V.starProjection y) := by
@@ -229,9 +229,9 @@ theorem starProjection_trialCompression_apply
 
 /-- The off-diagonal part reproduces the antisymmetric part of `A P_V`. -/
 theorem trialOffDiagonalBlock_sub_adjoint_apply
-    (hA : A.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
-    (hres : ∀ v : V, A.toLinearMap ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     (y : H) :
     trialOffDiagonalBlock V M R y - (trialOffDiagonalBlock V M R).adjoint y =
       trialCompression V M R y - (trialCompression V M R).adjoint y := by
@@ -340,13 +340,13 @@ system on the whole domain: `(A + D) J_V = J_V A`.  This is what lets the
 printed trial residual drive the reflection proof of the `sin 2Θ` theorem when
 `A` is unbounded; the caller never sees `D`. -/
 theorem trialReflection_intertwines
-    (hA : A.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
-    (hres : ∀ v : V, A.toLinearMap ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     (x : A.domain) :
-    (A.addBounded ((-2 : 𝕜) • trialOffDiagonalPart V M R)).toLinearMap
+    (TauCeti.LinearPMap.addBounded A ((-2 : 𝕜) • trialOffDiagonalPart V M R))
         ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ =
-      V.reflectionOperator (A.toLinearMap x) := by
+      V.reflectionOperator (A x) := by
   -- the reflected vector, as a domain element
   have hsplit :
       (⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ :
@@ -355,19 +355,19 @@ theorem trialReflection_intertwines
           starProjection_mem_domain hVdom (x : H)⟩ : A.domain) - x := by
     apply Subtype.ext
     simp [Submodule.reflectionOperator_apply V (x : H)]
-  have hadd : (A.addBounded ((-2 : 𝕜) • trialOffDiagonalPart V M R)).toLinearMap
+  have hadd : (TauCeti.LinearPMap.addBounded A ((-2 : 𝕜) • trialOffDiagonalPart V M R))
         ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ =
-      A.toLinearMap
+      A
           ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ +
         ((-2 : 𝕜) • trialOffDiagonalPart V M R) (V.reflectionOperator (x : H)) :=
     rfl
-  have h1 : A.toLinearMap
+  have h1 : A
         ⟨V.reflectionOperator (x : H), reflectionOperator_mem_domain hVdom x⟩ =
-      (2 : 𝕜) • trialCompression V M R (x : H) - A.toLinearMap x := by
-    rw [hsplit, map_sub, map_smul,
+      (2 : 𝕜) • trialCompression V M R (x : H) - A x := by
+    rw [hsplit, LinearPMap.map_sub, LinearPMap.map_smul,
       apply_starProjection_eq_trialCompression hVdom hres (x : H)]
-  have h2 : V.reflectionOperator (A.toLinearMap x) =
-      (2 : 𝕜) • (trialCompression V M R).adjoint (x : H) - A.toLinearMap x := by
+  have h2 : V.reflectionOperator (A x) =
+      (2 : 𝕜) • (trialCompression V M R).adjoint (x : H) - A x := by
     rw [Submodule.reflectionOperator_apply,
       starProjection_apply_eq_trialCompression_adjoint hA hVdom hres x]
   have hPrefl : V.starProjection (V.reflectionOperator (x : H)) =

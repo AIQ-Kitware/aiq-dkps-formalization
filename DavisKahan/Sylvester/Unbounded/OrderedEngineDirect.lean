@@ -27,14 +27,14 @@ theorem directOrderedSylvesterEngine_lowerUpper
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X R : F →L[ℂ] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap (c + δ))
-    (hBc : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap c)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X R)
+    (hAc : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
+    (hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧
       δ * N.gauge X ≤
@@ -54,14 +54,14 @@ theorem directOrderedSylvesterEngine_upperLower
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X R : F →L[ℂ] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c)
-    (hBc : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap (c + δ))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X R)
+    (hAc : TauCeti.LinearPMap.SemiboundedAbove A c)
+    (hBc : TauCeti.LinearPMap.SemiboundedBelow B (c + δ))
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X R)
     (hR : N.Mem R) :
     N.Mem X ∧
       δ * N.gauge X ≤

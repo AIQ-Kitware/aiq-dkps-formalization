@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.Interop.TauCeti.ClosedOperator
+import DavisKahan.SpectralTheory.ClosedOperator.Basic
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
 /-!
@@ -33,8 +33,6 @@ namespace ExactSinTheta
 noncomputable section
 
 universe v
-
-open TauCeti.DavisKahanExt
 
 /-- Every point of the spectra of two partial maps is separated by at least
 `delta`.  This is the canonical pairwise-gap predicate; the bundled
@@ -93,10 +91,10 @@ def PairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    (A : ClosedOperator (𝕜 := ℂ) (E := E))
-    (B : ClosedOperator (𝕜 := ℂ) (E := F))
+    (A : E →ₗ.[ℂ] E)
+    (B : F →ₗ.[ℂ] F)
     (δ : ℝ) : Prop :=
-  LinearPMap.PairwiseSpectrumGap A.toLinearPMap B.toLinearPMap δ
+  LinearPMap.PairwiseSpectrumGap A B δ
 
 namespace PairwiseSpectrumGap
 
@@ -105,8 +103,8 @@ theorem symm
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)} {δ : ℝ}
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F} {δ : ℝ}
     (h : PairwiseSpectrumGap A B δ) :
     PairwiseSpectrumGap B A δ := by
   exact LinearPMap.PairwiseSpectrumGap.symm h
@@ -116,8 +114,8 @@ theorem mono
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)} {δ ε : ℝ}
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F} {δ ε : ℝ}
     (h : PairwiseSpectrumGap A B δ) (hεδ : ε ≤ δ) :
     PairwiseSpectrumGap A B ε := by
   exact LinearPMap.PairwiseSpectrumGap.mono h hεδ
@@ -127,11 +125,11 @@ theorem disjoint
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)} {δ : ℝ}
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F} {δ : ℝ}
     (h : PairwiseSpectrumGap A B δ) (hδ : 0 < δ) :
-    Disjoint (TauCeti.LinearPMap.spectrum A.toLinearPMap)
-      (TauCeti.LinearPMap.spectrum B.toLinearPMap) := by
+    Disjoint (TauCeti.LinearPMap.spectrum A)
+      (TauCeti.LinearPMap.spectrum B) := by
   exact LinearPMap.PairwiseSpectrumGap.disjoint h hδ
 
 end PairwiseSpectrumGap

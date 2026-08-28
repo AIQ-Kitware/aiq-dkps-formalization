@@ -39,13 +39,13 @@ open ComplexificationApproximation
 obtained by applying the complex theorem to the coordinatewise
 complexification. -/
 theorem real_unbounded_sylvester_kyFan
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℝ] E}
+    {B : F →ₗ.[ℝ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hgap : FormBoundedSylvesterGap A B δ)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (k : ℕ) :
     δ * kyFanApproximationGauge k X ≤
       kyFanApproximationGauge k C := by
@@ -75,13 +75,13 @@ orientations, with the same sharp constant and an arbitrary real unitarily
 invariant ideal family. -/
 theorem davisKahan1970_sylvester_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℝ] E}
+    {B : F →ₗ.[ℝ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hgap : FormBoundedSylvesterGap A B δ)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
       δ * N.gauge X ≤

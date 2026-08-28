@@ -60,14 +60,14 @@ namespace ShiftedBeamFormData
 /-- The positive self-adjoint operator associated to the shifted beam form. -/
 noncomputable def shiftedOperator
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H) :=
+    H →ₗ.[𝕜] H :=
   D.toCoerciveFormData.associatedOperator
 
 /-- The free-beam operator is the shifted realization minus the identity. -/
 noncomputable def beamOperator
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H) :=
-  D.shiftedOperator.addBounded (-(1 : H →L[𝕜] H))
+    H →ₗ.[𝕜] H :=
+  TauCeti.LinearPMap.addBounded D.shiftedOperator (-(1 : H →L[𝕜] H))
 
 /-- The domain of the shifted beam operator is the form domain. -/
 @[simp] theorem beamOperator_domain
@@ -78,10 +78,10 @@ noncomputable def beamOperator
 @[simp] theorem beamOperator_apply
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.beamOperator.domain) :
-    D.beamOperator.toLinearMap x =
-      D.shiftedOperator.toLinearMap x - (x : H) := by
-  change D.shiftedOperator.toLinearMap x + -(x : H) =
-    D.shiftedOperator.toLinearMap x - (x : H)
+    D.beamOperator x =
+      D.shiftedOperator x - (x : H) := by
+  change D.shiftedOperator x + -(x : H) =
+    D.shiftedOperator x - (x : H)
   rw [sub_eq_add_neg]
 
 /-- Form-space representative of a vector in the shifted operator domain. -/
@@ -89,7 +89,7 @@ noncomputable def formRepresentative
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.shiftedOperator.domain) : V :=
   D.toCoerciveFormData.solutionOperator
-    (D.shiftedOperator.toLinearMap x)
+    (D.shiftedOperator x)
 
 /-- The form representative embeds to the original ambient domain vector. -/
 theorem embed_formRepresentative
@@ -97,7 +97,7 @@ theorem embed_formRepresentative
     (x : D.shiftedOperator.domain) :
     D.embed (D.formRepresentative x) = (x : H) := by
   change D.toCoerciveFormData.resolvent
-      (D.shiftedOperator.toLinearMap x) = (x : H)
+      (D.shiftedOperator x) = (x : H)
   exact Abstract.R_inverseClosedOperator_apply
     D.toCoerciveFormData.resolvent
     D.toCoerciveFormData.resolvent_isSelfAdjoint
@@ -108,11 +108,11 @@ energy. -/
 theorem shifted_quadratic_eq_form_energy
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.shiftedOperator.domain) :
-    RCLike.re ⟪D.shiftedOperator.toLinearMap x, (x : H)⟫_𝕜 =
+    RCLike.re ⟪D.shiftedOperator x, (x : H)⟫_𝕜 =
       RCLike.re
         ⟪D.formOperator (D.formRepresentative x),
           D.formRepresentative x⟫_𝕜 := by
-  let f := D.shiftedOperator.toLinearMap x
+  let f := D.shiftedOperator x
   have henergy := D.toCoerciveFormData.resolvent_energy_identity f
   have hRx : D.toCoerciveFormData.resolvent f = (x : H) :=
     D.embed_formRepresentative x
@@ -132,13 +132,13 @@ theorem shifted_quadratic_eq_form_energy
 theorem beam_quadratic_eq_bendingEnergy
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.beamOperator.domain) :
-    RCLike.re ⟪D.beamOperator.toLinearMap x, (x : H)⟫_𝕜 =
+    RCLike.re ⟪D.beamOperator x, (x : H)⟫_𝕜 =
       D.bendingEnergy (D.formRepresentative x) := by
   rw [D.beamOperator_apply]
   rw [inner_sub_left, map_sub, inner_self_eq_norm_sq]
   -- Spelled as a closed equation: `x : D.beamOperator.domain` is only definitionally
   -- `D.shiftedOperator.domain`, so `rw` cannot instantiate the lemma's argument itself.
-  rw [show RCLike.re ⟪D.shiftedOperator.toLinearMap x, (x : H)⟫_𝕜 =
+  rw [show RCLike.re ⟪D.shiftedOperator x, (x : H)⟫_𝕜 =
       RCLike.re ⟪D.formOperator (D.formRepresentative x), D.formRepresentative x⟫_𝕜 from
     D.shifted_quadratic_eq_form_energy x]
   rw [D.form_energy_decomposition]
@@ -150,14 +150,14 @@ theorem beam_quadratic_eq_bendingEnergy
 theorem beam_nonnegative
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V))
     (x : D.beamOperator.domain) :
-    0 ≤ RCLike.re ⟪D.beamOperator.toLinearMap x, (x : H)⟫_𝕜 := by
+    0 ≤ RCLike.re ⟪D.beamOperator x, (x : H)⟫_𝕜 := by
   rw [D.beam_quadratic_eq_bendingEnergy]
   exact D.bending_nonnegative _
 
 /-- The shifted form realization is self-adjoint. -/
 theorem shiftedOperator_isSelfAdjoint
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    D.shiftedOperator.IsSelfAdjoint :=
+    _root_.IsSelfAdjoint D.shiftedOperator :=
   D.toCoerciveFormData.associatedOperator_isSelfAdjoint
 
 omit [CompleteSpace H] in
@@ -171,7 +171,7 @@ theorem negIdentity_isSelfAdjointOperator :
 beam is self-adjoint. -/
 theorem beamOperator_isSelfAdjoint
     (D : ShiftedBeamFormData (𝕜 := 𝕜) (H := H) (V := V)) :
-    D.beamOperator.IsSelfAdjoint := by
+    _root_.IsSelfAdjoint D.beamOperator := by
   exact addBounded_isSelfAdjoint
     D.shiftedOperator D.shiftedOperator_isSelfAdjoint
     (-(1 : H →L[𝕜] H)) negIdentity_isSelfAdjointOperator

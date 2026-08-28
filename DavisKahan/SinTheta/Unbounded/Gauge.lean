@@ -36,10 +36,10 @@ theorem sinTheta_unbounded_gauge
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
-    (hA : D.A.IsSelfAdjoint) (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A) (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow D.A₀.toLinearPMap β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove D.A₀.toLinearPMap α)
+    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow D.A₀ β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove D.A₀ α)
     (hΛres : TwoSidedShiftedInverseBound D.Λ₁ ((α + β) / 2)
       ((α - β) / 2 + δ))
     (hC : N.Mem (D.residual.adjoint ∘L D.F₁)) :
@@ -47,82 +47,32 @@ theorem sinTheta_unbounded_gauge
       δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
         N.gaugeReal (D.residual.adjoint ∘L D.F₁) := by
   obtain ⟨S, hSnorm, hSeq⟩ :=
-    linearPMap_exists_bounded_shift_extension hA₀.isSymmetric
-      D.A₀.toLinearPMap_dense hβα hA₀low hA₀high
+    linearPMap_exists_bounded_shift_extension
+      (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint hA₀)
+      hA₀.dense_domain hβα hA₀low hA₀high
   obtain ⟨J, hdom, _hleft, hright, hJnorm⟩ := hΛres
   have hEqu := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
   have hρ : (0 : ℝ) ≤ (α - β) / 2 := by linarith
   have hEq' : ∀ y : D.Λ₁.domain,
       S ((D.X.adjoint ∘L D.F₁) (y : G)) -
-        ((D.X.adjoint ∘L D.F₁) (D.Λ₁.toLinearMap y) -
+        ((D.X.adjoint ∘L D.F₁) (D.Λ₁ y) -
           (((α + β) / 2 : ℝ) : 𝕜) • (D.X.adjoint ∘L D.F₁) (y : G)) =
       (-(D.residual.adjoint ∘L D.F₁)) (y : G) := by
     intro y
     have h1 := hEqu.equation y
     have h2 := hSeq ⟨(D.X.adjoint ∘L D.F₁) (y : G), hEqu.mapsTo_domain y⟩
     rw [h2]
-    calc D.A₀.toLinearMap
+    calc D.A₀
           ⟨(D.X.adjoint ∘L D.F₁) (y : G), hEqu.mapsTo_domain y⟩ -
             (((α + β) / 2 : ℝ) : 𝕜) • (D.X.adjoint ∘L D.F₁) (y : G) -
-          ((D.X.adjoint ∘L D.F₁) (D.Λ₁.toLinearMap y) -
+          ((D.X.adjoint ∘L D.F₁) (D.Λ₁ y) -
             (((α + β) / 2 : ℝ) : 𝕜) • (D.X.adjoint ∘L D.F₁) (y : G))
-        = D.A₀.toLinearMap
+        = D.A₀
             ⟨(D.X.adjoint ∘L D.F₁) (y : G), hEqu.mapsTo_domain y⟩ -
-          (D.X.adjoint ∘L D.F₁) (D.Λ₁.toLinearMap y) := by abel
+          (D.X.adjoint ∘L D.F₁) (D.Λ₁ y) := by abel
       _ = (-(D.residual.adjoint ∘L D.F₁)) (y : G) := h1
   have hmain := mem_and_gauge_le_of_boundedLeft_exteriorRight N hρ hδ
     hSnorm hdom hright hJnorm hEq' (N.neg_mem hC)
-  refine ⟨hmain.1, ?_⟩
-  have hgC : N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) =
-      N.gaugeReal (D.residual.adjoint ∘L D.F₁) := N.gaugeReal_neg hC
-  calc δ * N.gaugeReal (D.X.adjoint ∘L D.F₁)
-      ≤ N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) := hmain.2
-    _ = N.gaugeReal (D.residual.adjoint ∘L D.F₁) := hgC
-
-/-- Canonical partial-map form of the unbounded ideal-gauge `sin Θ` bound.
-The Sylvester data, form bounds, and shifted-inverse hypothesis are all stated
-over raw `LinearPMap`s. -/
-theorem linearPMap_sinTheta_unbounded_gauge
-    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
-    [N.toOperatorIdealFamily.IsComplete]
-    (D : UnboundedSinThetaDataPMap (𝕜 := 𝕜) (E := E) (F := F) (G := G))
-    (hA : _root_.IsSelfAdjoint D.A) (hA₀ : _root_.IsSelfAdjoint D.A₀)
-    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
-    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow D.A₀ β)
-    (hA₀high : TauCeti.LinearPMap.SemiboundedAbove D.A₀ α)
-    (hΛres : TauCeti.LinearPMap.TwoSidedShiftedInverseBound D.Λ₁ ((α + β) / 2)
-      ((α - β) / 2 + δ))
-    (hC : N.Mem (D.residual.adjoint ∘L D.F₁)) :
-    N.Mem (D.X.adjoint ∘L D.F₁) ∧
-      δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
-        N.gaugeReal (D.residual.adjoint ∘L D.F₁) := by
-  have hA₀sym : TauCeti.LinearPMap.IsSymmetric D.A₀ :=
-    isSymmetric_A₀_of_isSelfAdjoint D hA₀
-  obtain ⟨S, hSnorm, hSeq⟩ :=
-    linearPMap_exists_bounded_shift_extension hA₀sym
-      D.A₀_dense hβα hA₀low hA₀high
-  obtain ⟨J, hdom, _hleft, hright, hJnorm⟩ := hΛres
-  have hEqu := linearPMap_unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have hρ : (0 : ℝ) ≤ (α - β) / 2 := by linarith
-  have hEq' : ∀ y : D.Λ₁.domain,
-      S ((D.X.adjoint ∘L D.F₁) (y : G)) -
-        ((D.X.adjoint ∘L D.F₁) (D.Λ₁ y) -
-          (((α + β) / 2 : ℝ) : 𝕜) • (D.X.adjoint ∘L D.F₁) (y : G)) =
-      (-(D.residual.adjoint ∘L D.F₁)) (y : G) := by
-    intro y
-    have h1 := hEqu.equation y
-    have h2 := hSeq ⟨(D.X.adjoint ∘L D.F₁) (y : G), hEqu.mapsTo_domain y⟩
-    rw [h2]
-    calc D.A₀ ⟨(D.X.adjoint ∘L D.F₁) (y : G), hEqu.mapsTo_domain y⟩ -
-          (((α + β) / 2 : ℝ) : 𝕜) • (D.X.adjoint ∘L D.F₁) (y : G) -
-        ((D.X.adjoint ∘L D.F₁) (D.Λ₁ y) -
-          (((α + β) / 2 : ℝ) : 𝕜) • (D.X.adjoint ∘L D.F₁) (y : G))
-        = D.A₀ ⟨(D.X.adjoint ∘L D.F₁) (y : G), hEqu.mapsTo_domain y⟩ -
-          (D.X.adjoint ∘L D.F₁) (D.Λ₁ y) := by abel
-      _ = (-(D.residual.adjoint ∘L D.F₁)) (y : G) := h1
-  have hmain := linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
-    N hρ hδ hSnorm hdom hright hJnorm hEq' (N.neg_mem hC)
   refine ⟨hmain.1, ?_⟩
   have hgC : N.gaugeReal (-(D.residual.adjoint ∘L D.F₁)) =
       N.gaugeReal (D.residual.adjoint ∘L D.F₁) := N.gaugeReal_neg hC

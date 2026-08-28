@@ -186,8 +186,8 @@ omit [CompleteSpace E] in
 realization is exactly the invertibility locus of `X - lam` in the bounded
 operator algebra. -/
 theorem mem_realResolventSet_ofBounded_iff (X : E →L[𝕜] E) (lam : ℝ) :
-    lam ∈ TauCeti.DavisKahanExt.ClosedOperator.realResolventSet
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded X) ↔
+    lam ∈ TauCeti.LinearPMap.realResolventSet
+        ((X.toLinearMap.toPMap ⊤)) ↔
       IsUnit (X - (lam : 𝕜) • (1 : E →L[𝕜] E)) := by
   constructor
   · rintro ⟨R, hleft, hright⟩
@@ -230,8 +230,8 @@ theorem boundedRealSpectrum_eq_realSpectrum (X : E →L[𝕜] E) :
     TauCeti.DavisKahan.ExactSinTheta.boundedRealSpectrum X =
       TauCeti.DavisKahan.Foundation.realSpectrum X := by
   ext lam
-  show lam ∈ (TauCeti.DavisKahanExt.ClosedOperator.realResolventSet
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded X))ᶜ ↔
+  show lam ∈ (TauCeti.LinearPMap.realResolventSet
+      ((X.toLinearMap.toPMap ⊤)))ᶜ ↔
     (lam : 𝕜) ∈ spectrum 𝕜 X
   rw [Set.mem_compl_iff, mem_realResolventSet_ofBounded_iff, spectrum.mem_iff,
     Algebra.algebraMap_eq_smul_one, ← IsUnit.neg_iff, neg_sub]

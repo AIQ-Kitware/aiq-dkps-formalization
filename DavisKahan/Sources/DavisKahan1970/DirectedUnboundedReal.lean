@@ -367,16 +367,16 @@ real.  Only the Appendix Ky Fan passage is proved by complexification, at the fi
 level where approximation numbers are preserved exactly. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (A : ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : E →ₗ.[ℝ] E)
     (D : UnboundedTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
     (hCompression : ∀ z : Z, ⟪D.operator z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℝ)
+      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
     (hResidual : N.Mem D.residual) :
     ∃ tanTheta0 : Z →L[ℝ] E,
       HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0 ∧
@@ -393,16 +393,16 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing_real
 approximation numbers is supplied by the caller. -/
 theorem theorem6_3_unbounded_infiniteTrial_ideal_of_reducing_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
-    (A : ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : E →ₗ.[ℝ] E)
     (D : UnboundedTrialBlock A Z)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
     (hCompression : ∀ z : Z, ⟪D.operator z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℝ)
+      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
     (tanTheta0 : Z →L[ℝ] E)
     (htan : HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0)
     (hResidual : N.Mem D.residual) :
@@ -425,7 +425,7 @@ section SpectralGap
 
 open TauCeti.DavisKahan.RealSpectralRestriction
 
-variable (A : ClosedOperator (𝕜 := ℝ) (E := E)) (hA : A.IsSelfAdjoint)
+variable (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
 
 omit [CompleteSpace E] [CompleteSpace Z] in
 private theorem starProjection_congr_real {U W : Submodule ℝ E}
@@ -456,8 +456,8 @@ theorem orthogonal_realSelfAdjointSpectralSubspace_starProjection_mem_domain
 /-- **A real spectral range reduces its operator, commutation half.** -/
 theorem realSelfAdjoint_apply_orthogonal_realSelfAdjointSpectralSubspace_starProjection
     (S : Set ℝ) (hS : MeasurableSet S) (x : A.domain) :
-    (realSelfAdjointSpectralSubspace A hA S hS)ᗮ.starProjection (A.toLinearMap x) =
-      A.toLinearMap
+    (realSelfAdjointSpectralSubspace A hA S hS)ᗮ.starProjection (A x) =
+      A
         ⟨(realSelfAdjointSpectralSubspace A hA S hS)ᗮ.starProjection ((x : E)),
           orthogonal_realSelfAdjointSpectralSubspace_starProjection_mem_domain
             A hA S hS x⟩ := by
@@ -486,10 +486,10 @@ theorem le_re_inner_of_mem_orthogonal_realSelfAdjointSpectralSubspace_of_gap
     (hyV : y ∈ (realSelfAdjointSpectralSubspace A hA (Set.Iic alpha)
       measurableSet_Iic)ᗮ)
     (hy : y ∈ A.domain) :
-    (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℝ := by
+    (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ := by
   classical
   set Ac := ClosedOperatorComplexification.complexify A with hAc_def
-  have hAc : Ac.IsSelfAdjoint :=
+  have hAc : _root_.IsSelfAdjoint Ac :=
     ClosedOperatorComplexification.isSelfAdjoint_complexify hA
   -- The complex gap hypothesis, obtained by complexifying the real one.
   have hgapC : TauCeti.LinearPMap.specProjection hAc
@@ -513,7 +513,7 @@ theorem le_re_inner_of_mem_orthogonal_realSelfAdjointSpectralSubspace_of_gap
     _root_.TauCeti.DavisKahan.ExactTanTheta.le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap
       Ac hAc hgapC (ofReal y) hyVC hydC
   -- Read the complex bound back on the real copy.
-  have hact : Ac.toLinearMap ⟨ofReal y, hydC⟩ = ofReal (A.toLinearMap ⟨y, hy⟩) :=
+  have hact : Ac ⟨ofReal y, hydC⟩ = ofReal (A ⟨y, hy⟩) :=
     ClosedOperatorComplexification.complexify_apply_ofReal A ⟨y, hy⟩
   have hnorm : ‖ofReal (E := E) y‖ ^ 2 = ‖y‖ ^ 2 := by
     rw [RealComplexification.norm_sq]

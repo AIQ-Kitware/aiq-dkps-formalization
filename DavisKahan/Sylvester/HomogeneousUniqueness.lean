@@ -39,13 +39,13 @@ variable {E F : Type v}
 /-- A bounded homogeneous complex Sylvester solution vanishes under any of the
 three source gap configurations. -/
 theorem closedSylvester_homogeneous_eq_zero_complex
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X 0) :
+    (hgap : FormBoundedSylvesterGap A B δ)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
   let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ)
   have hzero : N.Mem (0 : F →L[ℂ] E) := by
@@ -66,16 +66,16 @@ theorem closedSylvester_homogeneous_eq_zero_complex
 /-- Two bounded complex solutions of the same separated closed Sylvester
 equation coincide. -/
 theorem closedSylvester_solution_unique_complex
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X Y C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ)
-    (hX : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
-    (hY : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap Y C) :
+    (hgap : FormBoundedSylvesterGap A B δ)
+    (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
     X = Y := by
-  have hsub : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap (X - Y) 0 := by
+  have hsub : TauCeti.LinearPMap.SylvesterEquation A B (X - Y) 0 := by
     simpa using hX.sub hY
   have hz := closedSylvester_homogeneous_eq_zero_complex
     hA hB hδ hgap hsub
@@ -92,13 +92,13 @@ variable {E F : Type v}
 /-- A bounded homogeneous real Sylvester solution vanishes under any of the
 three source gap configurations. -/
 theorem closedSylvester_homogeneous_eq_zero_real
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℝ] E}
+    {B : F →ₗ.[ℝ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X 0) :
+    (hgap : FormBoundedSylvesterGap A B δ)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
   let N := KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)
   have hzero : N.Mem (0 : F →L[ℝ] E) := by
@@ -119,16 +119,16 @@ theorem closedSylvester_homogeneous_eq_zero_real
 /-- Two bounded real solutions of the same separated closed Sylvester equation
 coincide. -/
 theorem closedSylvester_solution_unique_real
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℝ] E}
+    {B : F →ₗ.[ℝ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X Y C : F →L[ℝ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ)
-    (hX : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
-    (hY : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap Y C) :
+    (hgap : FormBoundedSylvesterGap A B δ)
+    (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
+    (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
     X = Y := by
-  have hsub : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap (X - Y) 0 := by
+  have hsub : TauCeti.LinearPMap.SylvesterEquation A B (X - Y) 0 := by
     simpa using hX.sub hY
   have hz := closedSylvester_homogeneous_eq_zero_real
     hA hB hδ hgap hsub

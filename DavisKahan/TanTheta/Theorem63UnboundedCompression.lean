@@ -99,9 +99,9 @@ of the Appendix already reaches this generality. -/
 structure UnboundedCompressionTrialData (Z : Submodule 𝕜 H)
     [Z.HasOrthogonalProjection] [CompleteSpace Z] where
   /-- The Ritz compression `A₀`, densely defined and self-adjoint on the trial space. -/
-  compression : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := Z)
+  compression : Z →ₗ.[𝕜] Z
   /-- `A₀` is self-adjoint. -/
-  compression_isSelfAdjoint : compression.IsSelfAdjoint
+  compression_isSelfAdjoint : _root_.IsSelfAdjoint compression
   /-- The bounded Ritz residual. -/
   residual : Z →L[𝕜] H
   /-- The residual is orthogonal to the trial subspace. -/
@@ -115,7 +115,7 @@ variable {Z : Submodule 𝕜 H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
 `A₀ z + R z`. -/
 noncomputable def action (D : UnboundedCompressionTrialData Z)
     (z : D.compression.domain) : H :=
-  ((D.compression.toLinearMap z : Z) : H) + D.residual ((z : Z))
+  ((D.compression z : Z) : H) + D.residual ((z : Z))
 
 /-! ### The bounded data is an instance -/
 
@@ -123,9 +123,9 @@ noncomputable def action (D : UnboundedCompressionTrialData Z)
 added to anything already proved over `Theorem63TrialData`. -/
 noncomputable def ofBounded {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
     (data : Theorem63TrialData Z V) : UnboundedCompressionTrialData Z where
-  compression := DavisKahanExt.ClosedOperator.ofBounded data.compression
+  compression := (data.compression.toLinearMap.toPMap ⊤)
   compression_isSelfAdjoint :=
-    DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint _ data.compression_isSymmetric
+    TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint _ data.compression_isSymmetric
   residual := data.residual
   residual_orthogonal := data.residual_orthogonal
 
@@ -178,17 +178,17 @@ is bounded below by `α + δ` (`hlower`).  Nothing is assumed about `A` on `V` i
 theorem crossed_lower_of_reducing
     (D : UnboundedCompressionTrialData Z)
     (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : H →ₗ.[𝕜] H)
     {α δ : ℝ}
     (hZA : ∀ z : D.compression.domain, ((z : Z) : H) ∈ A.domain)
     (haction : ∀ z : D.compression.domain,
-      D.action z = A.toLinearMap ⟨((z : Z) : H), hZA z⟩)
+      D.action z = A ⟨((z : Z) : H), hZA z⟩)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
     (hlower : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_𝕜)
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_𝕜)
     (z : D.compression.domain) :
     (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
       RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
@@ -198,7 +198,7 @@ theorem crossed_lower_of_reducing
     conv_lhs => rw [← inner_conj_symm]
     rw [RCLike.conj_re]
   have hcomm : Vᗮ.starProjection (D.action z) =
-      A.toLinearMap ⟨Vᗮ.starProjection (((z : Z) : H)),
+      A ⟨Vᗮ.starProjection (((z : Z) : H)),
         hVdom ⟨((z : Z) : H), hZA z⟩⟩ := by
     rw [haction z]
     exact hVcomm ⟨((z : Z) : H), hZA z⟩
@@ -261,7 +261,7 @@ omit [CompleteSpace H] in
 /-- On the cutoff range the bounded truncation is the unbounded compression. -/
 theorem trunc_apply (τ : ℝ) (z : Z) :
     D.trunc τ z =
-      D.compression.toLinearMap ⟨D.cutoff τ z, D.cutoff_mem_domain τ z⟩ := by
+      D.compression ⟨D.cutoff τ z, D.cutoff_mem_domain τ z⟩ := by
   obtain ⟨_, hb⟩ := spectraBoundedTruncation_eq_on_cutoff D.compression
     D.compression_isSelfAdjoint τ z
   exact hb
@@ -482,7 +482,7 @@ omit [CompleteSpace H] in
 compression. -/
 theorem trunc_truncIncl (τ : ℝ) (f : D.truncSpace τ) :
     D.trunc τ (D.truncIncl τ f) =
-      D.compression.toLinearMap ⟨(D.truncIncl τ f : Z), D.truncIncl_mem_domain τ f⟩ := by
+      D.compression ⟨(D.truncIncl τ f : Z), D.truncIncl_mem_domain τ f⟩ := by
   rw [D.trunc_apply τ (D.truncIncl τ f)]
   congr 1
   exact Subtype.ext (D.cutoff_truncIncl τ f)
@@ -490,7 +490,7 @@ theorem trunc_truncIncl (τ : ℝ) (f : D.truncSpace τ) :
 /-- **`A₀ ≤ α` restricted.**  The printed upper form bound on the unbounded Ritz
 compression descends to the bounded compression of the truncated trial data. -/
 theorem truncData_compression_upper {α : ℝ}
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α) (τ : ℝ) :
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression α) (τ : ℝ) :
     ∀ f : D.truncSpace τ,
       RCLike.re ⟪(D.truncData V τ).compression f, f⟫_ℂ ≤ α * ‖f‖ ^ 2 := by
   intro f
@@ -528,7 +528,7 @@ theorem truncData_crossed_lower {α δ : ℝ}
       D.action ⟨(D.truncIncl τ f : Z), D.truncIncl_mem_domain τ f⟩ := by
     rw [D.truncData_action V τ f, D.truncAction_apply τ (D.truncIncl τ f)]
     change ((D.trunc τ (D.truncIncl τ f) : Z) : H) + _ =
-      ((D.compression.toLinearMap _ : Z) : H) + _
+      ((D.compression _ : Z) : H) + _
     rw [D.trunc_truncIncl τ f]
   rw [haction]
   exact h
@@ -545,7 +545,7 @@ The truncated trial data is bounded data, so the compiled arbitrary-trial-dimens
 Appendix chain applies to it verbatim; and the truncated residual is the ambient residual,
 so the bound is `τ`-free. -/
 theorem all_kyFan_core_trunc {α δ : ℝ} (hδ : 0 < δ)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression α)
     (hcross : ∀ z : D.compression.domain,
       (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
@@ -649,7 +649,7 @@ theorem approximationSingularValue_truncSineBlock_le (τ : ℝ) (n : ℕ) :
 /-- **No pole, with an unbounded Ritz compression.**  Every ambient directed sine
 approximation number is strictly below one. -/
 theorem approximationSingularValue_sineBlock_lt_one {α δ : ℝ} (hδ : 0 < δ)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression α)
     (hcross : ∀ z : D.compression.domain,
       (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
@@ -720,7 +720,7 @@ theorem approximationSingularValue_sineBlock_lt_one {α δ : ℝ} (hδ : 0 < δ)
 No finite-dimensionality of the trial space, and no boundedness of the Ritz compression:
 only the two printed form bounds on `A₀.domain`, and a bounded residual. -/
 theorem all_kyFan_core {α δ : ℝ} (hδ : 0 < δ)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression α)
     (hcross : ∀ z : D.compression.domain,
       (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
@@ -763,7 +763,7 @@ arbitrary dimension. -/
 theorem ideal_of_formBounds
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     {α δ : ℝ} (hδ : 0 < δ)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression α)
     (hcross : ∀ z : D.compression.domain,
       (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
@@ -792,7 +792,7 @@ is derived from the two form bounds rather than assumed. -/
 theorem ideal_of_formBounds_exists
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     {α δ : ℝ} (hδ : 0 < δ)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression α)
     (hcross : ∀ z : D.compression.domain,
       (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
@@ -830,18 +830,18 @@ There is no finite-dimensionality hypothesis on the trial space, no boundedness 
 on the Ritz compression, and the compression of `A` to `V` itself is unconstrained. -/
 theorem ideal_of_reducing_exists
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H))
+    (A : H →ₗ.[ℂ] H)
     {α δ : ℝ} (hδ : 0 < δ)
     (hZA : ∀ z : D.compression.domain, ((z : Z) : H) ∈ A.domain)
     (haction : ∀ z : D.compression.domain,
-      D.action z = A.toLinearMap ⟨((z : Z) : H), hZA z⟩)
+      D.action z = A ⟨((z : Z) : H), hZA z⟩)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression α)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (hResidual : N.Mem D.residual) :
     ∃ tanTheta0 : Z →L[ℂ] H,
       HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧

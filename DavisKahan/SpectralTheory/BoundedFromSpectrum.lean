@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5
 -/
-import DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge
+import DavisKahan.SpectralTheory.ClosedOperator.Basic
 import DavisKahan.SpectralTheory.ClosedOperator.BoundedRealization
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralSupport
 
@@ -28,7 +28,7 @@ The proof assembles three facts about the native spectral measure
 Until 2026-07-29 this went through Spectra: the operator was realized as the
 generator of its Yosida group and the four bricks were Spectra's.  The Stone
 group is not needed — the spectral measure is constructed directly from the
-Cayley transform, and `A.toLinearPMap` is its own generator.
+Cayley transform, and `A` is its own generator.
 
 This is the missing seam for the fully unbounded interval/exterior orientation
 of Davis--Kahan Theorem 5.2: the interval block of the configuration is
@@ -49,10 +49,10 @@ self-adjoint operator with spectrum contained in `[β, α]` admits a bounded
 realization on the whole space, centered within distance `(α - β)/2` of the
 midpoint multiple of the identity. -/
 theorem exists_boundedRealization_of_spectrum_subset_Icc
-    {A : DKClosedOperator (H := H)}
-    (hA : IsSelfAdjoint A.toLinearPMap)
+    {A : H →ₗ.[ℂ] H}
+    (hA : IsSelfAdjoint A)
     {β α : ℝ} (hβα : β ≤ α)
-    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
         Set.Icc β α) :
     ∃ R : BoundedRealization (𝕜 := ℂ) (E := H) A,
       ‖R.operator - (((β + α) / 2 : ℝ) : ℂ) •
@@ -61,7 +61,7 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
   have hBm : MeasurableSet (Set.Icc β α) := measurableSet_Icc
   -- every point outside `[β, α]` is a resolvent point
   have hres : ∀ lam ∈ (Set.Icc β α)ᶜ,
-      (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A.toLinearPMap := by
+      (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A := by
     intro lam hlam
     by_contra hnot
     exact hlam (hσ hnot)
@@ -100,27 +100,27 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
     rw [abs_le]
     exact ⟨by linarith [hs.1], by linarith [hs.2]⟩
   -- every vector lies in the domain, with the centered pointwise estimate
-  have hdomAll : ∀ φ : H, φ ∈ A.toLinearPMap.domain := fun φ =>
+  have hdomAll : ∀ φ : H, φ ∈ A.domain := fun φ =>
     TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded hA _ hBm hbnd
       (hrange φ)
   have hbound : ∀ φ : H,
-      ‖A.toLinearPMap ⟨φ, hdomAll φ⟩ - (((β + α) / 2 : ℝ) : ℂ) • φ‖
+      ‖A ⟨φ, hdomAll φ⟩ - (((β + α) / 2 : ℝ) : ℂ) • φ‖
         ≤ (α - β) / 2 * ‖φ‖ := fun φ =>
     TauCeti.LinearPMap.norm_sub_smul_le_of_mem_specRange hA _ hBm hbnd
       (by linarith) hcr (hrange φ) (hdomAll φ)
   -- the everywhere-defined linear realization
   let g : H →ₗ[ℂ] H :=
-    { toFun := fun φ => A.toLinearPMap ⟨φ, hdomAll φ⟩
+    { toFun := fun φ => A ⟨φ, hdomAll φ⟩
       map_add' := fun φ ψ => by
-        have h : (⟨φ + ψ, hdomAll (φ + ψ)⟩ : A.toLinearPMap.domain) =
+        have h : (⟨φ + ψ, hdomAll (φ + ψ)⟩ : A.domain) =
             ⟨φ, hdomAll φ⟩ + ⟨ψ, hdomAll ψ⟩ := rfl
-        rw [h, A.toLinearPMap.map_add]
+        rw [h, A.map_add]
       map_smul' := fun c φ => by
-        have h : (⟨c • φ, hdomAll (c • φ)⟩ : A.toLinearPMap.domain) =
+        have h : (⟨c • φ, hdomAll (c • φ)⟩ : A.domain) =
             c • ⟨φ, hdomAll φ⟩ := rfl
-        rw [h, A.toLinearPMap.map_smul]
+        rw [h, A.map_smul]
         rfl }
-  have hgφ : ∀ φ : H, g φ = A.toLinearPMap ⟨φ, hdomAll φ⟩ := fun _ => rfl
+  have hgφ : ∀ φ : H, g φ = A ⟨φ, hdomAll φ⟩ := fun _ => rfl
   have hsm : ∀ φ : H, (((β + α) / 2 : ℝ) : ℂ) • φ = ((β + α) / 2 : ℝ) • φ :=
     fun φ => (RCLike.real_smul_eq_coe_smul (K := ℂ) _ φ).symm
   -- continuity of the realization
@@ -140,14 +140,13 @@ theorem exists_boundedRealization_of_spectrum_subset_Icc
           rw [h2]; exact add_le_add h le_rfl
       _ = (|(β + α) / 2| + (α - β) / 2) * ‖φ‖ := by ring
   let T : H →L[ℂ] H := g.mkContinuous _ hgbound
-  have hTφ : ∀ φ : H, T φ = A.toLinearPMap ⟨φ, hdomAll φ⟩ := fun _ => rfl
+  have hTφ : ∀ φ : H, T φ = A ⟨φ, hdomAll φ⟩ := fun _ => rfl
   refine ⟨⟨T, ?_, ?_⟩, ?_⟩
   · -- the domain is everything
     exact Submodule.eq_top_iff'.mpr hdomAll
   · -- the realization agrees with `A` on the domain
     intro x
     rw [hTφ (x : H)]
-    exact congrArg _ (Subtype.ext rfl)
   · -- the centered norm bound
     refine ContinuousLinearMap.opNorm_le_bound _ (by linarith) fun φ => ?_
     have h := hbound φ

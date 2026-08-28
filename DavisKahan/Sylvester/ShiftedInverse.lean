@@ -32,21 +32,21 @@ variable {E F G : Type v}
 `s⁻¹`: the one-sided resolvent surrogate for "the spectrum of the
 self-adjoint `A` avoids `(c - s, c + s)`". -/
 abbrev LeftShiftedInverseBound
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : E →ₗ.[𝕜] E)
     (c s : ℝ) : Prop :=
-  TauCeti.LinearPMap.LeftShiftedInverseBound A.toLinearPMap c s
+  TauCeti.LinearPMap.LeftShiftedInverseBound A c s
 
 /-- Bounded two-sided inverse of the shifted operator `A - c` with norm at
 most `s⁻¹`, including the domain transport of the right-inverse leg. -/
 abbrev TwoSidedShiftedInverseBound
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : E →ₗ.[𝕜] E)
     (c s : ℝ) : Prop :=
-  TauCeti.LinearPMap.TwoSidedShiftedInverseBound A.toLinearPMap c s
+  TauCeti.LinearPMap.TwoSidedShiftedInverseBound A c s
 
 omit [CompleteSpace E] in
 /-- A two-sided shifted-inverse bound yields the left-hand bound. -/
 theorem TwoSidedShiftedInverseBound.leftShiftedInverseBound
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)} {c s : ℝ}
+    {A : E →ₗ.[𝕜] E} {c s : ℝ}
     (h : TwoSidedShiftedInverseBound A c s) :
     LeftShiftedInverseBound A c s := by
   exact TauCeti.LinearPMap.TwoSidedShiftedInverseBound.leftShiftedInverseBound h
@@ -218,20 +218,6 @@ theorem linearPMap_norm_shift_apply_le_of_form_bounds
     exact mul_nonneg hr0 (norm_nonneg _)
   · nlinarith
 
-omit [CompleteSpace F] in
-/-- Compatibility entry point for the raw shifted-form estimate. -/
-theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_bounds
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    (hsym : B.IsSymmetric)
-    {β α : ℝ} (hβα : β ≤ α)
-    (hlow : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap β) (hhigh : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap α)
-    (u : B.domain) :
-    ‖B.toLinearMap u - (((α + β) / 2 : ℝ) : 𝕜) • (u : F)‖ ≤
-      (α - β) / 2 * ‖(u : F)‖ := by
-  simpa only [TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] using
-    linearPMap_norm_shift_apply_le_of_form_bounds (B := B.toLinearPMap) hsym B.toLinearPMap_dense
-      hβα hlow hhigh u
-
 /-! ## Constant-one interval/exterior closed Sylvester estimates -/
 
 omit [CompleteSpace E] [CompleteSpace F] in
@@ -320,21 +306,6 @@ theorem linearPMap_norm_sylvester_le_of_intervalExterior
   nlinarith [norm_nonneg X]
 
 omit [CompleteSpace E] [CompleteSpace F] in
-/-- Compatibility entry point for the raw interval/exterior estimate. -/
-theorem norm_closedSylvester_le_of_intervalExterior
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    (hBsym : B.IsSymmetric)
-    {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap β) (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap α)
-    (hAres : LeftShiftedInverseBound A ((α + β) / 2) ((α - β) / 2 + δ))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C) :
-    δ * ‖X‖ ≤ ‖C‖ :=
-  linearPMap_norm_sylvester_le_of_intervalExterior
-    (A := A.toLinearPMap) (B := B.toLinearPMap) hBsym B.toLinearPMap_dense
-    hβα hδ hBlow hBhigh hAres hEq
-
-omit [CompleteSpace E] [CompleteSpace F] in
 /-- Raw partial-map form of the constant-one estimate in the swapped
 orientation: the interval block is `A` and the exterior block is `B`. -/
 theorem linearPMap_norm_sylvester_le_of_exteriorInterval
@@ -402,21 +373,6 @@ theorem linearPMap_norm_sylvester_le_of_exteriorInterval
   have hmul := mul_le_mul_of_nonneg_left hXnorm hrd.le
   rw [← mul_assoc, mul_inv_cancel₀ hrd.ne', one_mul] at hmul
   nlinarith [norm_nonneg X]
-
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Compatibility entry point for the raw exterior/interval estimate. -/
-theorem norm_closedSylvester_le_of_exteriorInterval
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    (hAsym : A.IsSymmetric)
-    {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hAlow : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap β) (hAhigh : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap α)
-    (hBres : TwoSidedShiftedInverseBound B ((α + β) / 2) ((α - β) / 2 + δ))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C) :
-    δ * ‖X‖ ≤ ‖C‖ :=
-  linearPMap_norm_sylvester_le_of_exteriorInterval
-    (A := A.toLinearPMap) (B := B.toLinearPMap) hAsym A.toLinearPMap_dense
-    hβα hδ hAlow hAhigh hBres hEq
 
 /-! ## The unbounded `sin Θ` theorem, operator norm -/
 

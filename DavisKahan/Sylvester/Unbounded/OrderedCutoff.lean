@@ -29,12 +29,6 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-/-- Local shorthand for a complex closed operator on `E`. -/
-abbrev DirectClosedOperatorOnE :=
-  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)
-/-- Local shorthand for a complex closed operator on `F`. -/
-abbrev DirectClosedOperatorOnF :=
-  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
 
 section ApproximationNumberEndpointAssumptions
 
@@ -47,8 +41,8 @@ original operators.  This is the topological limit step in the two-unbounded
 ordered Sylvester argument; the remaining analytic input is the corresponding
 inequality for each bounded truncation. -/
 theorem kyFanApproximationGauge_le_of_cutoff_le
-    {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
-    (hB : B.IsSelfAdjoint)
+    {B : F →ₗ.[𝕜] F}
+    (hB : IsSelfAdjoint B)
     (PCB : SpectralCutoffInterface B hB)
     {X C : F →L[𝕜] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
@@ -107,8 +101,8 @@ theorem kyFanApproximationGauge_left_comp_strongProjection_tendsto_direct
 omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] in
 /-- Left-cutoff finite Ky Fan inequalities pass to the original operators. -/
 theorem kyFanApproximationGauge_le_of_leftCutoff_le
-    {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
-    (hA : A.IsSelfAdjoint)
+    {A : E →ₗ.[𝕜] E}
+    (hA : IsSelfAdjoint A)
     (PCA : SpectralCutoffInterface A hA)
     {X C : F →L[𝕜] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
@@ -149,15 +143,15 @@ and truncation interfaces.
 `doubleSpectralCutoff_filled_sylvester_equation` is the concrete instantiation at
 `spectralCutoff` and `boundedSpectralTruncation`. -/
 theorem doubleCutoff_filled_sylvester_equation
-    {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
-    {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[𝕜] E}
+    {B : F →ₗ.[𝕜] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     (PCA : SpectralCutoffInterface A hA)
     (TCA : BoundedTruncationInterface A hA PCA)
     (PCB : SpectralCutoffInterface B hB)
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E}
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (a b τA τB : ℝ) :
     filledTruncation A hA PCA TCA a τA ∘L
         (PCA.cutoff τA ∘L X ∘L PCB.cutoff τB) -
@@ -202,10 +196,10 @@ theorem doubleCutoff_filled_sylvester_equation
       add_zero]
   have hAFilled :
       filledTruncation A hA PCA TCA a τA (PA (X (PB x))) =
-        PA (A.toLinearMap ⟨X (PB x), hXdom⟩) := by
+        PA (A ⟨X (PB x), hXdom⟩) := by
     change TA (PA (X (PB x))) +
         ((a : ℝ) : 𝕜) • (PA (X (PB x)) - PA (PA (X (PB x)))) =
-      PA (A.toLinearMap ⟨X (PB x), hXdom⟩)
+      PA (A ⟨X (PB x), hXdom⟩)
     rw [hTAPA, hPAPAx, sub_self, smul_zero, add_zero]
     rw [hTAcut]
     exact hAcomm
@@ -216,7 +210,7 @@ theorem doubleCutoff_filled_sylvester_equation
       PA (X (PB (filledTruncation B hB PCB TCB b τB x))) =
         PA (C (PB x))
   rw [hAFilled, hPBFilled]
-  rw [show TB x = B.toLinearMap ⟨PB x, hPBdom⟩ by
+  rw [show TB x = B ⟨PB x, hPBdom⟩ by
     simpa only [TB, PB] using hTBcut]
   simp only [map_sub] at heqPA
   exact heqPA
@@ -225,8 +219,8 @@ omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] in
 /-- Pointwise cutoff estimates for every finite Ky Fan gauge imply the full
 family of Ky Fan inequalities used by Fan dominance. -/
 theorem all_kyFanApproximationGauge_le_of_cutoff_le
-    {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
-    (hB : B.IsSelfAdjoint)
+    {B : F →ₗ.[𝕜] F}
+    (hB : IsSelfAdjoint B)
     (PCB : SpectralCutoffInterface B hB)
     {X C : F →L[𝕜] E} {δ : ℝ}
     (hcut : ∀ τ : ℝ, 0 ≤ τ → ∀ k : ℕ,
@@ -265,18 +259,18 @@ private theorem sylvester_shift_invariant
 
 /-- Ky Fan estimate obtained from bounded spectral truncations. -/
 theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
-    {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
-    {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[𝕜] E}
+    {B : F →ₗ.[𝕜] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     (PCA : SpectralCutoffInterface A hA)
     (TCA : BoundedTruncationInterface A hA PCA)
     (PCB : SpectralCutoffInterface B hB)
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap (c + δ))
-    (hBc : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap c)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C) :
+    (hAc : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
+    (hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C) :
     ∀ k, δ * kyFanApproximationGauge k X
       ≤ kyFanApproximationGauge k C := by
   intro k
@@ -365,18 +359,18 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
 /-- The opposite ordered orientation, obtained by adjointing and swapping the
 two closed blocks. -/
 theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
-    {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
-    {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[𝕜] E}
+    {B : F →ₗ.[𝕜] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     (PCA : SpectralCutoffInterface A hA)
     (TCA : BoundedTruncationInterface A hA PCA)
     (PCB : SpectralCutoffInterface B hB)
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c)
-    (hBc : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap (c + δ))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C) :
+    (hAc : TauCeti.LinearPMap.SemiboundedAbove A c)
+    (hBc : TauCeti.LinearPMap.SemiboundedBelow B (c + δ))
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C) :
     ∀ k, δ * kyFanApproximationGauge k X
       ≤ kyFanApproximationGauge k C := by
   intro k
@@ -465,18 +459,18 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
 /-- Ideal membership of the Sylvester solution from ordered cutoff estimates. -/
 theorem unbounded_sylvester_mem_of_semibounded_direct
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
-    {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
-    {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[𝕜] E}
+    {B : F →ₗ.[𝕜] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     (PCA : SpectralCutoffInterface A hA)
     (TCA : BoundedTruncationInterface A hA PCA)
     (PCB : SpectralCutoffInterface B hB)
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap (c + δ))
-    (hBc : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap c)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hAc : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
+    (hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X := by
   exact (mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
@@ -487,18 +481,18 @@ theorem unbounded_sylvester_mem_of_semibounded_direct
 /-- Davis--Kahan Theorem 5.2 in the lower-left/upper-right orientation. -/
 theorem unbounded_sylvester_mem_and_gauge_le_direct
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
-    {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
-    {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[𝕜] E}
+    {B : F →ₗ.[𝕜] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     (PCA : SpectralCutoffInterface A hA)
     (TCA : BoundedTruncationInterface A hA PCA)
     (PCB : SpectralCutoffInterface B hB)
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap (c + δ))
-    (hBc : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap c)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hAc : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
+    (hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
@@ -509,18 +503,18 @@ theorem unbounded_sylvester_mem_and_gauge_le_direct
 /-- Davis--Kahan Theorem 5.2 in the upper-left/lower-right orientation. -/
 theorem unbounded_sylvester_mem_and_gauge_le_direct_swapped
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
-    {A : DirectClosedOperatorOnE (𝕜 := 𝕜) (E := E)}
-    {B : DirectClosedOperatorOnF (𝕜 := 𝕜) (F := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[𝕜] E}
+    {B : F →ₗ.[𝕜] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     (PCA : SpectralCutoffInterface A hA)
     (TCA : BoundedTruncationInterface A hA PCA)
     (PCB : SpectralCutoffInterface B hB)
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c)
-    (hBc : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap (c + δ))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hAc : TauCeti.LinearPMap.SemiboundedAbove A c)
+    (hBc : TauCeti.LinearPMap.SemiboundedBelow B (c + δ))
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le

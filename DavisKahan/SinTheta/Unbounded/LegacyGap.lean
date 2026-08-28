@@ -37,13 +37,13 @@ manuscript-shaped Sylvester engine. -/
 theorem sinTheta_unbounded_complex
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
-    (hA : D.A.IsSelfAdjoint)
-    (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     (_hX : IsometricEmbedding D.X)
     (hF₁ : IsometricEmbedding D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gauge (D.X.adjoint ∘L D.F₁)
@@ -60,13 +60,13 @@ theorem sinTheta_unbounded_exact_complex
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
-    (hA : D.A.IsSelfAdjoint)
-    (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
       ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
@@ -87,14 +87,14 @@ gap configurations. -/
 theorem generalizedSinTheta_unbounded_complex
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
-    (hA : D.A.IsSelfAdjoint)
-    (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     (hF₁ : IsometricEmbedding D.F₁)
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         (sinThetaBlock D.X D.F₁ hframe hε) ∧
@@ -122,14 +122,14 @@ theorem generalizedSinTheta_unbounded_exact_complex
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
-    (hA : D.A.IsSelfAdjoint)
-    (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         (directedSinThetaOperator D.X F₀ hframe hε) ∧
@@ -144,55 +144,6 @@ theorem generalizedSinTheta_unbounded_exact_complex
   rw [KyFanDominantIdealFamily.toSymmetric_gaugeReal] at hAngle
   rw [hAngle.2]
   exact hBlock.2
-
-/-- Raw partial-map form of the exact complex isometric theorem.
-
-Every hypothesis of the bundled statement is definitionally the raw one at
-`D.toClosed`: `ClosedOperator.IsSelfAdjoint` unfolds to `IsSelfAdjoint` of the
-canonical partial map, `UnboundedSinThetaDataPMap.toClosed` round-trips by `rfl`,
-and `FormBoundedSylvesterGap` is a facade for `FormBoundedSylvesterGap`.
-So the transfer is a reindexing, not a proof. -/
-theorem linearPMap_sinTheta_unbounded_exact_complex
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
-    (F₀ : H →L[ℂ] E)
-    (hA : _root_.IsSelfAdjoint D.A)
-    (hA₀ : _root_.IsSelfAdjoint D.A₀)
-    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
-    (hX : IsometricEmbedding D.X)
-    (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
-    {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
-    (hR : N.Mem D.residual) :
-    N.Mem
-      ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
-      δ * N.gauge
-        ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X)
-        ≤ N.gauge D.residual :=
-  sinTheta_unbounded_exact_complex N D.toClosed F₀ hA hA₀ hΛ₁ hX hdecomp hδ hgap hR
-
-/-- Raw partial-map form of the exact complex generalized theorem.  Transfers
-along `UnboundedSinThetaDataPMap.toClosed` exactly as the isometric twin above. -/
-theorem linearPMap_generalizedSinTheta_unbounded_exact_complex
-    (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
-    (F₀ : H →L[ℂ] E)
-    (hA : _root_.IsSelfAdjoint D.A)
-    (hA₀ : _root_.IsSelfAdjoint D.A₀)
-    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
-    (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
-    {δ ε : ℝ}
-    (hδ : 0 < δ) (hε : 0 < ε)
-    (hframe : LowerFrameBound D.X ε)
-    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
-    (hR : N.Mem D.residual) :
-    N.Mem
-        (directedSinThetaOperator D.X F₀ hframe hε) ∧
-      δ * ε * N.gauge
-          (directedSinThetaOperator D.X F₀ hframe hε)
-        ≤ N.gauge D.residual :=
-  generalizedSinTheta_unbounded_exact_complex
-    N D.toClosed F₀ hA hA₀ hΛ₁ hdecomp hδ hε hframe hgap hR
 
 end Complex
 

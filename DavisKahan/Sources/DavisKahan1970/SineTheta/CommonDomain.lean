@@ -38,7 +38,7 @@ variable {E F G : Type v}
 /-- Domain of the composition of a closed operator with a bounded map on the
 right. -/
 def boundedPullbackDomain
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : E →ₗ.[𝕜] E)
     (X : F →L[𝕜] E) : Set F :=
   {x | X x ∈ A.domain}
 
@@ -46,15 +46,15 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- Membership in the bounded pullback domain, in terms of the underlying vector. -/
 @[simp]
 theorem mem_boundedPullbackDomain
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
+    (A : E →ₗ.[𝕜] E)
     (X : F →L[𝕜] E) (x : F) :
     x ∈ boundedPullbackDomain A X ↔ X x ∈ A.domain :=
   Iff.rfl
 
 /-- Exact source-paper domain condition for the trial map. -/
 def HasPaperCommonDomain
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
-    (A₀ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
     (X : F →L[𝕜] E) : Prop :=
   boundedPullbackDomain A X = A₀.domain
 
@@ -63,8 +63,8 @@ namespace HasPaperCommonDomain
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Pointwise form of the common-domain equality. -/
 theorem mem_iff
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {A₀ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : E →ₗ.[𝕜] E}
+    {A₀ : F →ₗ.[𝕜] F}
     {X : F →L[𝕜] E} (h : HasPaperCommonDomain A A₀ X) (x : F) :
     X x ∈ A.domain ↔ x ∈ A₀.domain := by
   change x ∈ boundedPullbackDomain A X ↔ x ∈ A₀.domain
@@ -75,8 +75,8 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- The exact source condition implies the forward domain compatibility used
 by the accepted theorem. -/
 theorem maps_domain
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {A₀ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
+    {A : E →ₗ.[𝕜] E}
+    {A₀ : F →ₗ.[𝕜] F}
     {X : F →L[𝕜] E} (h : HasPaperCommonDomain A A₀ X) :
     ∀ x : A₀.domain, X (x : F) ∈ A.domain := by
   intro x
@@ -86,12 +86,13 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- The common domain is dense because it is the domain of the densely defined
 trial operator. -/
 theorem dense
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {A₀ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    {X : F →L[𝕜] E} (h : HasPaperCommonDomain A A₀ X) :
+    {A : E →ₗ.[𝕜] E}
+    {A₀ : F →ₗ.[𝕜] F}
+    {X : F →L[𝕜] E} (h : HasPaperCommonDomain A A₀ X)
+    (hA₀ : Dense ((A₀.domain : Submodule 𝕜 F) : Set F)) :
     Dense (boundedPullbackDomain A X) := by
   rw [h]
-  exact A₀.dense_domain
+  exact hA₀
 
 end HasPaperCommonDomain
 
@@ -99,16 +100,16 @@ end HasPaperCommonDomain
 hypotheses.  The residual identity is stated on the common domain, identified
 with `dom A₀` by `hcommon`. -/
 noncomputable def unboundedSinThetaDataOfPaperCommonDomain
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
-    (A₀ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
-    (Λ₁ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
     (hcommon : HasPaperCommonDomain A A₀ X)
     (hF₁ : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hR : ∀ x : F, (hx : X x ∈ A.domain) → (hx₀ : x ∈ A₀.domain) →
-      A.toLinearMap ⟨X x, hx⟩ - X (A₀.toLinearMap ⟨x, hx₀⟩) = R x)
+      A ⟨X x, hx⟩ - X (A₀ ⟨x, hx₀⟩) = R x)
     (hintertwines : ∀ y : Λ₁.domain,
-      A.toLinearMap ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁.toLinearMap y)) :
+      A ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁ y)) :
     UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G) where
   A := A
   A₀ := A₀
@@ -131,32 +132,32 @@ returns the residual field of the constructed package; without this projection
 the two do not match syntactically. -/
 @[simp]
 theorem unboundedSinThetaDataOfPaperCommonDomain_residual
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
-    (A₀ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
-    (Λ₁ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
     (hcommon : HasPaperCommonDomain A A₀ X)
     (hF₁ : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hR : ∀ x : F, (hx : X x ∈ A.domain) → (hx₀ : x ∈ A₀.domain) →
-      A.toLinearMap ⟨X x, hx⟩ - X (A₀.toLinearMap ⟨x, hx₀⟩) = R x)
+      A ⟨X x, hx⟩ - X (A₀ ⟨x, hx₀⟩) = R x)
     (hintertwines : ∀ y : Λ₁.domain,
-      A.toLinearMap ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁.toLinearMap y)) :
+      A ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁ y)) :
     (unboundedSinThetaDataOfPaperCommonDomain A A₀ Λ₁ X F₁ R
       hcommon hF₁ hR hintertwines).residual = R := rfl
 
 omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
 /-- The constructed data remembers the exact paper common-domain equality. -/
 theorem unboundedSinThetaDataOfPaperCommonDomain_hasCommonDomain
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
-    (A₀ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F))
-    (Λ₁ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (X : F →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
     (hcommon : HasPaperCommonDomain A A₀ X)
     (hF₁ : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hR : ∀ x : F, (hx : X x ∈ A.domain) → (hx₀ : x ∈ A₀.domain) →
-      A.toLinearMap ⟨X x, hx⟩ - X (A₀.toLinearMap ⟨x, hx₀⟩) = R x)
+      A ⟨X x, hx⟩ - X (A₀ ⟨x, hx₀⟩) = R x)
     (hintertwines : ∀ y : Λ₁.domain,
-      A.toLinearMap ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁.toLinearMap y)) :
+      A ⟨F₁ (y : G), hF₁ y⟩ = F₁ (Λ₁ y)) :
     HasPaperCommonDomain
       (unboundedSinThetaDataOfPaperCommonDomain A A₀ Λ₁ X F₁ R
         hcommon hF₁ hR hintertwines).A

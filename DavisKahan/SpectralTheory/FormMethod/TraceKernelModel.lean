@@ -197,38 +197,27 @@ theorem dense_freeAmbientDomain
     Dense (D.freeAmbientDomain : Set H) := by
   simpa [freeAmbientDomain, DenseRange, LinearMap.coe_range] using hdense
 
-/-- Once graph closedness has been proved, the trace model produces the
- project's bundled closed operator directly. -/
+/-- The trace model as a partial map on the ambient space.
+
+Density and graph closedness are properties of this map, proved separately; the
+model itself only has to supply the domain and the action. -/
 noncomputable def toClosedOperator
-    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
-    (hdense : Dense (D.freeAmbientDomain : Set H))
-    (hclosed : IsClosed (Set.range fun x : D.freeAmbientDomain =>
-      ((x : H), D.freeFourthAmbient x))) :
-    DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H) where
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) : H →ₗ.[𝕜] H where
   domain := D.freeAmbientDomain
-  toLinearMap := D.freeFourthAmbient
-  dense_domain := hdense
-  closed_graph := hclosed
+  toFun := D.freeFourthAmbient
 
 omit [CompleteSpace H] [CompleteSpace V] in
-/-- The domain of the derived closed operator. -/
+/-- The domain of the derived partial map. -/
 @[simp] theorem toClosedOperator_domain
-    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
-    (hdense : Dense (D.freeAmbientDomain : Set H))
-    (hclosed : IsClosed (Set.range fun x : D.freeAmbientDomain =>
-      ((x : H), D.freeFourthAmbient x))) :
-    (D.toClosedOperator hdense hclosed).domain = D.freeAmbientDomain := rfl
+    (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V)) :
+    D.toClosedOperator.domain = D.freeAmbientDomain := rfl
 
 omit [CompleteSpace H] [CompleteSpace V] in
 /-- Its action, which is the model's fourth-order operator. -/
 @[simp] theorem toClosedOperator_apply
     (D : FourthOrderTraceModel (𝕜 := 𝕜) (H := H) (V := V))
-    (hdense : Dense (D.freeAmbientDomain : Set H))
-    (hclosed : IsClosed (Set.range fun x : D.freeAmbientDomain =>
-      ((x : H), D.freeFourthAmbient x)))
     (x : D.freeAmbientDomain) :
-    (D.toClosedOperator hdense hclosed).toLinearMap x =
-      D.freeFourthAmbient x := rfl
+    D.toClosedOperator x = D.freeFourthAmbient x := rfl
 
 end FourthOrderTraceModel
 

@@ -161,7 +161,7 @@ The exact target is the orthogonal complement of the interval spectral range.
 The trial block supplies the exterior Ritz spectrum and bounded residual.  The
 coordinate datum selects the transverse graph branch. -/
 theorem tanTheta_unbounded_graphAngle_trialBlock
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : UnboundedTrialBlock A Z)
     {α β δ : ℝ} (hαβ : α ≤ β) (hδ : 0 < δ)

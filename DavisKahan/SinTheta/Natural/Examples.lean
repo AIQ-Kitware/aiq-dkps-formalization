@@ -40,16 +40,16 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
 example
-    (A : ClosedOperator (𝕜 := ℂ) (E := E)) (hA : A.IsSelfAdjoint)
+    (A : E →ₗ.[ℂ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : ClosedOperator (𝕜 := ℂ) (E := F)) (hA0 : A0.IsSelfAdjoint)
+    (A0 : F →ₗ.[ℂ] F) (hA0 : _root_.IsSelfAdjoint A0)
     (X Rop : F →L[ℂ] E) (hX : IsometricEmbedding X)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
-      A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
+      A ⟨X (x : F), hXdom x⟩ - X (A0 x) = Rop (x : F))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectralSylvesterGap A0.toLinearPMap
-      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ) :
+    (hgap : SpectralSylvesterGap A0
+      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
     δ * ‖(ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
           (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X‖ ≤
@@ -64,16 +64,16 @@ example
 /-- The same natural theorem instantiated with the nontrivial two-term Ky Fan
 gauge rather than the operator norm. -/
 example
-    (A : ClosedOperator (𝕜 := ℂ) (E := E)) (hA : A.IsSelfAdjoint)
+    (A : E →ₗ.[ℂ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : ClosedOperator (𝕜 := ℂ) (E := F)) (hA0 : A0.IsSelfAdjoint)
+    (A0 : F →ₗ.[ℂ] F) (hA0 : _root_.IsSelfAdjoint A0)
     (X Rop : F →L[ℂ] E) (hX : IsometricEmbedding X)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
-      A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
+      A ⟨X (x : F), hXdom x⟩ - X (A0 x) = Rop (x : F))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectralSylvesterGap A0.toLinearPMap
-      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ) :
+    (hgap : SpectralSylvesterGap A0
+      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
     δ * kyFanApproximationGauge 2
         ((ContinuousLinearMap.id ℂ E -
           selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
@@ -97,16 +97,16 @@ variable {E F : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
 
 example
-    (A : ClosedOperator (𝕜 := ℝ) (E := E)) (hA : A.IsSelfAdjoint)
+    (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
     (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : ClosedOperator (𝕜 := ℝ) (E := F)) (hA0 : A0.IsSelfAdjoint)
+    (A0 : F →ₗ.[ℝ] F) (hA0 : _root_.IsSelfAdjoint A0)
     (X Rop : F →L[ℝ] E) (hX : IsometricEmbedding X)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
-      A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
+      A ⟨X (x : F), hXdom x⟩ - X (A0 x) = Rop (x : F))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A0.toLinearPMap
-      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ) :
+    (hgap : FormBoundedSylvesterGap A0
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
     δ * ‖(ContinuousLinearMap.id ℝ E -
         realSelfAdjointSpectralSubspaceInclusion A hA S hS ∘L
           (realSelfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X‖ ≤
@@ -135,14 +135,14 @@ example
     (X : F →L[ℂ] E) (hX : IsometricEmbedding X)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectralSylvesterGap
-      (ClosedOperator.ofBounded A0).toLinearPMap
-      (selfAdjointSpectralRestriction (ClosedOperator.ofBounded A)
-        (ClosedOperator.ofBounded_isSelfAdjoint A hA) Sᶜ hS.compl).toLinearPMap δ) :
+      ((A0.toLinearMap.toPMap ⊤))
+      (selfAdjointSpectralRestriction ((A.toLinearMap.toPMap ⊤))
+        (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA) Sᶜ hS.compl) δ) :
     δ * ‖(ContinuousLinearMap.id ℂ E -
-        selfAdjointSpectralSubspaceInclusion (ClosedOperator.ofBounded A)
-          (ClosedOperator.ofBounded_isSelfAdjoint A hA) S hS ∘L
-        (selfAdjointSpectralSubspaceInclusion (ClosedOperator.ofBounded A)
-          (ClosedOperator.ofBounded_isSelfAdjoint A hA) S hS).adjoint) ∘L X‖
+        selfAdjointSpectralSubspaceInclusion ((A.toLinearMap.toPMap ⊤))
+          (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA) S hS ∘L
+        (selfAdjointSpectralSubspaceInclusion ((A.toLinearMap.toPMap ⊤))
+          (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA) S hS).adjoint) ∘L X‖
       ≤ ‖generalResidual A X A0‖ := by
   have hmain := sinTheta_bounded_spectralSubspace_of_spectrumGap
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℂ))
@@ -162,10 +162,10 @@ abbrev RealPlane := EuclideanSpace ℝ (Fin 2)
 API. The whole plane is the exact subspace and the complementary block is the
 zero Hilbert space. -/
 theorem realPlane_zeroResidual_model :
-    let _A : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
-      ClosedOperator.ofBounded (0 : RealPlane →L[ℝ] RealPlane)
-    let _A0 : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
-      ClosedOperator.ofBounded (0 : RealPlane →L[ℝ] RealPlane)
+    let _A : RealPlane →ₗ.[ℝ] RealPlane :=
+      ((0 : RealPlane →L[ℝ] RealPlane).toLinearMap.toPMap ⊤)
+    let _A0 : RealPlane →ₗ.[ℝ] RealPlane :=
+      ((0 : RealPlane →L[ℝ] RealPlane).toLinearMap.toPMap ⊤)
     let U : Submodule ℝ RealPlane := ⊤
     let X : RealPlane →L[ℝ] RealPlane := ContinuousLinearMap.id ℝ RealPlane
     let Rop : RealPlane →L[ℝ] RealPlane := 0
@@ -175,27 +175,27 @@ theorem realPlane_zeroResidual_model :
         ((ContinuousLinearMap.id ℝ RealPlane - U.subtypeL ∘L U.subtypeL.adjoint) ∘L X)
       ≤ (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ)).gauge Rop := by
   dsimp
-  let A : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
-    ClosedOperator.ofBounded (0 : RealPlane →L[ℝ] RealPlane)
-  let A0 : ClosedOperator (𝕜 := ℝ) (E := RealPlane) :=
-    ClosedOperator.ofBounded (0 : RealPlane →L[ℝ] RealPlane)
+  let A : RealPlane →ₗ.[ℝ] RealPlane :=
+    ((0 : RealPlane →L[ℝ] RealPlane).toLinearMap.toPMap ⊤)
+  let A0 : RealPlane →ₗ.[ℝ] RealPlane :=
+    ((0 : RealPlane →L[ℝ] RealPlane).toLinearMap.toPMap ⊤)
   let U : Submodule ℝ RealPlane := ⊤
-  have hred : A.ReducesSubspace U := by
+  have hred : TauCeti.LinearPMap.ReducesSubspace A U := by
     simp [A, U, TauCeti.LinearPMap.ReducesSubspace,
       TauCeti.LinearPMap.InvariantSubspace]
-  have hA : A.IsSelfAdjoint := by
-    exact ClosedOperator.ofBounded_isSelfAdjoint
+  have hA : IsSelfAdjoint A := by
+    exact TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint
       (0 : RealPlane →L[ℝ] RealPlane) (by intro x y; simp)
-  have hA0 : A0.IsSelfAdjoint := by
-    exact ClosedOperator.ofBounded_isSelfAdjoint
+  have hA0 : _root_.IsSelfAdjoint A0 := by
+    exact TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint
       (0 : RealPlane →L[ℝ] RealPlane) (by intro x y; simp)
-  have hA0upper : TauCeti.LinearPMap.SemiboundedAbove A0.toLinearPMap 0 := by
+  have hA0upper : TauCeti.LinearPMap.SemiboundedAbove A0 0 := by
     intro x
     show RCLike.re
       ⟪(0 : RealPlane →L[ℝ] RealPlane) (x : RealPlane), (x : RealPlane)⟫_ℝ ≤ _
     simp
   have hcompLower : TauCeti.LinearPMap.SemiboundedBelow
-      (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal).toLinearPMap 1 := by
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) 1 := by
     intro x
     have hzero : ((x.1 : RealPlane)) = 0 :=
       inner_self_eq_zero.mp
@@ -203,14 +203,14 @@ theorem realPlane_zeroResidual_model :
     have hx : x = 0 := Subtype.ext (Subtype.ext hzero)
     rw [hx]
     simp
-  have hgap : FormBoundedSylvesterGap A0.toLinearPMap
-      (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal).toLinearPMap 1 := by
+  have hgap : FormBoundedSylvesterGap A0
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) 1 := by
     exact FormBoundedSylvesterGap.trialBelow_complementAbove hA0upper
       (by simpa using hcompLower)
   apply sinTheta_unbounded_real_reducingSubspace
     (KyFanDominantIdealFamily.operatorNorm (𝕜 := ℝ))
-      A.toLinearPMap A.toLinearPMap_dense A.toLinearPMap_isClosed hA U hred
-      A0.toLinearPMap A0.toLinearPMap_dense A0.toLinearPMap_isClosed hA0
+      A hA.dense_domain hA.isClosed hA U hred
+      A0 hA0.dense_domain hA0.isClosed hA0
       (ContinuousLinearMap.id ℝ RealPlane) 0 (fun _ => rfl)
   case hXdom => exact fun x => Submodule.mem_top
   case hReq =>

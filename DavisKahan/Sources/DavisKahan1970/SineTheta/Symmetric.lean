@@ -69,16 +69,16 @@ structure PaperSymmetricSinThetaProblem where
   gap : ℝ
   gap_pos : 0 < gap
   gap_U_to_Vperp : FormBoundedSylvesterGap
-    (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded A) U
-      (ClosedOperator.ofBounded_reducesSubspace A U reduces_A_U)).toLinearPMap
-    (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded B) Vᗮ
-      (ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V).orthogonal).toLinearPMap
+    (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) U
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace A U reduces_A_U))
+    (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) Vᗮ
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V).orthogonal)
     gap
   gap_V_to_Uperp : FormBoundedSylvesterGap
-    (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded B) V
-      (ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V)).toLinearPMap
-    (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded A) Uᗮ
-      (ClosedOperator.ofBounded_reducesSubspace A U reduces_A_U).orthogonal).toLinearPMap
+    (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) V
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V))
+    (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) Uᗮ
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace A U reduces_A_U).orthogonal)
     gap
 
 attribute [instance] PaperSymmetricSinThetaProblem.proj_U
@@ -94,11 +94,11 @@ def perturbation (P : PaperSymmetricSinThetaProblem (E := E)) : E →L[ℂ] E :=
 noncomputable def forwardData
     (P : PaperSymmetricSinThetaProblem (E := E)) :
     UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := P.U) (G := P.Vᗮ) where
-  A := ClosedOperator.ofBounded P.B
-  A₀ := ClosedOperator.reducingRestriction (ClosedOperator.ofBounded P.A) P.U
-    (ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
-  Λ₁ := ClosedOperator.reducingRestriction (ClosedOperator.ofBounded P.B) P.Vᗮ
-    (ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
+  A := (P.B.toLinearMap.toPMap ⊤)
+  A₀ := TauCeti.LinearPMap.reducingRestriction ((P.A.toLinearMap.toPMap ⊤)) P.U
+    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
+  Λ₁ := TauCeti.LinearPMap.reducingRestriction ((P.B.toLinearMap.toPMap ⊤)) P.Vᗮ
+    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
   X := P.U.subtypeL
   F₁ := P.Vᗮ.subtypeL
   residual := P.perturbation ∘L P.U.subtypeL
@@ -109,18 +109,18 @@ noncomputable def forwardData
     rfl
   intertwines :=
     ClosedOperator.reducingRestriction_inclusion_intertwines
-      (ClosedOperator.ofBounded P.B) P.Vᗮ
-      (ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
+      ((P.B.toLinearMap.toPMap ⊤)) P.Vᗮ
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
 
 /-- Internal data for the reversed application. -/
 noncomputable def reverseData
     (P : PaperSymmetricSinThetaProblem (E := E)) :
     UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := P.V) (G := P.Uᗮ) where
-  A := ClosedOperator.ofBounded P.A
-  A₀ := ClosedOperator.reducingRestriction (ClosedOperator.ofBounded P.B) P.V
-    (ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
-  Λ₁ := ClosedOperator.reducingRestriction (ClosedOperator.ofBounded P.A) P.Uᗮ
-    (ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
+  A := (P.A.toLinearMap.toPMap ⊤)
+  A₀ := TauCeti.LinearPMap.reducingRestriction ((P.B.toLinearMap.toPMap ⊤)) P.V
+    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
+  Λ₁ := TauCeti.LinearPMap.reducingRestriction ((P.A.toLinearMap.toPMap ⊤)) P.Uᗮ
+    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
   X := P.V.subtypeL
   F₁ := P.Uᗮ.subtypeL
   residual := (-P.perturbation) ∘L P.V.subtypeL
@@ -132,8 +132,8 @@ noncomputable def reverseData
     rfl
   intertwines :=
     ClosedOperator.reducingRestriction_inclusion_intertwines
-      (ClosedOperator.ofBounded P.A) P.Uᗮ
-      (ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
+      ((P.A.toLinearMap.toPMap ⊤)) P.Uᗮ
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
 
 /-- The first exact cross-projection block. -/
 def forwardSineBlock (P : PaperSymmetricSinThetaProblem (E := E)) :
@@ -168,18 +168,18 @@ theorem forward_all_kyFan
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
     let D := P.forwardData
-    have hA0 : D.A₀.IsSelfAdjoint :=
+    have hA0 : _root_.IsSelfAdjoint D.A₀ :=
       ClosedOperator.reducingRestriction_isSelfAdjoint
-        (ClosedOperator.ofBounded P.A) P.U
-        (ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
-        (ClosedOperator.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A)
-    have hL : D.Λ₁.IsSelfAdjoint :=
+        ((P.A.toLinearMap.toPMap ⊤)) P.U
+        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U)
+        (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A)
+    have hL : _root_.IsSelfAdjoint D.Λ₁ :=
       ClosedOperator.reducingRestriction_isSelfAdjoint
-        (ClosedOperator.ofBounded P.B) P.Vᗮ
-        (ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
-        (ClosedOperator.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B)
+        ((P.B.toLinearMap.toPMap ⊤)) P.Vᗮ
+        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V).orthogonal
+        (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B)
     have hEq := unbounded_adjoint_residual_block_identity D
-      (ClosedOperator.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B) hA0 hL
+      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B) hA0 hL
     have hraw := davisKahan1970_sylvester_complex N hA0 hL P.gap_pos
       P.gap_U_to_Vperp hEq
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk
@@ -235,18 +235,18 @@ theorem reverse_all_kyFan
   · have hk : 0 < k := Nat.pos_of_ne_zero hk0
     let N := KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk
     let D := P.reverseData
-    have hA0 : D.A₀.IsSelfAdjoint :=
+    have hA0 : _root_.IsSelfAdjoint D.A₀ :=
       ClosedOperator.reducingRestriction_isSelfAdjoint
-        (ClosedOperator.ofBounded P.B) P.V
-        (ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
-        (ClosedOperator.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B)
-    have hL : D.Λ₁.IsSelfAdjoint :=
+        ((P.B.toLinearMap.toPMap ⊤)) P.V
+        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V)
+        (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B)
+    have hL : _root_.IsSelfAdjoint D.Λ₁ :=
       ClosedOperator.reducingRestriction_isSelfAdjoint
-        (ClosedOperator.ofBounded P.A) P.Uᗮ
-        (ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
-        (ClosedOperator.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A)
+        ((P.A.toLinearMap.toPMap ⊤)) P.Uᗮ
+        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U).orthogonal
+        (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A)
     have hEq := unbounded_adjoint_residual_block_identity D
-      (ClosedOperator.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A) hA0 hL
+      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A) hA0 hL
     have hraw := davisKahan1970_sylvester_complex N hA0 hL P.gap_pos
       P.gap_V_to_Uperp hEq
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk

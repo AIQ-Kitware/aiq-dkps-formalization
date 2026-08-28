@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Fable 5, Claude Opus 5
 -/
-import DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge
+import DavisKahan.SpectralTheory.ClosedOperator.Basic
 import DavisKahan.Sylvester.ShiftedInverseGauge
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 
@@ -89,10 +89,10 @@ spectrum avoids `(c - s, c + s)`, the proof-carrying predicate
 `TwoSidedShiftedInverseBound A c s` holds.  This connects the honest unbounded
 Davis--Kahan hypotheses to the spectral theory. -/
 theorem twoSidedShiftedInverseBound_of_spectrum_gap
-    {A : DKClosedOperator (H := H)}
-    (hA : IsSelfAdjoint A.toLinearPMap) {c s : ℝ} (hs : 0 < s)
+    {A : H →ₗ.[ℂ] H}
+    (hA : IsSelfAdjoint A) {c s : ℝ} (hs : 0 < s)
     (hgap : ∀ lam ∈ Set.Ioo (c - s) (c + s),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap) :
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A) :
     TauCeti.DavisKahan.ExactSinTheta.TwoSidedShiftedInverseBound
       A c s := by
   obtain ⟨R, hnorm, hleft, hright⟩ :=

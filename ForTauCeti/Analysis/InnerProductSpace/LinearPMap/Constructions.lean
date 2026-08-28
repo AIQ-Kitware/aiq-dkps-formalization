@@ -97,6 +97,7 @@ omit [CompleteSpace H] in
 changes nothing about its values. -/
 @[simp] theorem boundedPerturbation_apply (A : H →ₗ.[𝕜] H) (T : H →L[𝕜] H)
     (x : A.domain) : boundedPerturbation A T x = T (x : H) := (rfl)
+
 /-- **Bounded Kato--Rellich.**  A bounded self-adjoint perturbation of a
 self-adjoint partial map is self-adjoint, on the same domain.
 
@@ -152,6 +153,7 @@ theorem isSelfAdjoint_perturb_bounded {A : H →ₗ.[𝕜] H} (hA : IsSelfAdjoin
     le_antisymm hle.1 (fun y hy => hsub y hy)
   rw [_root_.LinearPMap.isSelfAdjoint_def]
   exact (_root_.LinearPMap.eq_of_le_of_domain_eq hle hdomeq).symm
+
 
 end Bounded
 

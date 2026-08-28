@@ -211,17 +211,17 @@ Appendix Ky Fan passage is proved by complexification, at the finite Ky Fan leve
 approximation numbers are preserved exactly. -/
 theorem tanTheta_unbounded_ambient_paperUINorm_real_exact
     (N : PaperUnitaryInvariantNorm)
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : E →ₗ.[ℝ] E)
     (D : UnboundedTrialBlock A U)
     (H : E →L[ℝ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
     (hCompression : ∀ z : U, ⟪D.operator z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℝ)
+      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
@@ -247,7 +247,7 @@ condition (3.5) then converts the directed gap into the ambient gap. -/
 theorem norm_paperSinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent
     (D : UnboundedCompressionTrialData U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : U) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
@@ -309,7 +309,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_real_of_data
     (D : UnboundedCompressionTrialData U)
     (H : E →L[ℝ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : U) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
@@ -346,19 +346,19 @@ for the displayed unitary-invariant norm inequality. -/
 theorem tanTheta_unboundedCompression_ambient_paperUINorm_real_exact
     (N : PaperUnitaryInvariantNorm)
     (D : UnboundedCompressionTrialData U)
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
+    (A : E →ₗ.[ℝ] E)
     (H : E →L[ℝ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hZA : ∀ z : D.compression.domain, ((z : U) : E) ∈ A.domain)
     (haction : ∀ z : D.compression.domain,
-      D.action z = A.toLinearMap ⟨((z : U) : E), hZA z⟩)
+      D.action z = A ⟨((z : U) : E), hZA z⟩)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℝ)
+      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
