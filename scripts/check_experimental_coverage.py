@@ -44,17 +44,12 @@ IMPORT_RE = re.compile(r"^\s*(?:public\s+)?import\s+(\S+)\s*$", re.M)
 
 #: Modules deliberately outside the root's closure, each with the reason.
 #:
-#: All twenty-seven are one connected failure: six modules do not compile, and
-#: the rest reach one of the six.  Until they are repaired or retired, they are excluded here rather than
-#: imported, because importing them would make `lake build DavisKahan.Experimental`
-#: red for everyone without telling anybody anything new.
-EXCLUDED: dict[str, str] = {
-    # The six that do not compile.
-    "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.OperatorAbsoluteValueComplex":
-        "KyFanDominantIdealFamily.gaugeReal no longer exists.",
-    "DavisKahan.Experimental.Scratch.SharedFoundations.Ideal.ReflectionTransport":
-        "type mismatches against a changed ideal-family signature.",
-}
+#: Empty since 2026-08-27, and that is the intended steady state: an entry here
+#: is a module that does not compile, which is a bug with a name, not a policy.
+#: The last two were the ideal-family scratch pair; they were promoted to
+#: `DavisKahan/SharedFoundations/Ideal/{Modulus,Reflection}Transport.lean` and
+#: compile there.
+EXCLUDED: dict[str, str] = {}
 
 #: Subtrees the root deliberately does not aggregate, each with the reason.
 #:
@@ -65,11 +60,10 @@ EXCLUDED: dict[str, str] = {
 #: and being excluded here is exactly why nothing said so.  That is the failure
 #: this gate exists to name, so a subtree exclusion should be read as a standing
 #: bet that nobody is checking the modules inside it.
-EXCLUDED_PREFIXES: dict[str, str] = {
-    "DavisKahan.Experimental.Scratch.":
-        "not aggregated; the directory name is the reason, but it was nowhere written "
-        "down that nothing compiles it.",
-}
+#: Empty since 2026-08-27, when the last scratch subtree was drained.  A future
+#: scratch drop under `Experimental/Scratch/**` may want an entry again; read the
+#: paragraph above before adding one.
+EXCLUDED_PREFIXES: dict[str, str] = {}
 
 #: Filled in below: every module that reaches an excluded one inherits the
 #: exclusion, because it cannot build either.  Listing them explicitly would go
