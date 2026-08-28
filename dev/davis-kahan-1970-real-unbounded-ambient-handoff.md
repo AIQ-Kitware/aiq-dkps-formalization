@@ -61,7 +61,7 @@ audited explicitation of (3.5). Do not drop it to make the Section 2 display loo
 ```lean
 theorem tanTheta_unbounded_ambient_paperUINorm_real_exact
     (N : PaperUnitaryInvariantNorm)
-    (A : TauCeti.DavisKahanExt.PartialMap (𝕜 := ℝ) (E := E))
+    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     {U V : Submodule ℝ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (D : UnboundedTrialBlock A U)
@@ -82,7 +82,9 @@ theorem tanTheta_unbounded_ambient_paperUINorm_real_exact
 ```
 
 Note (superseded 2026-08-28): this paragraph named a `DKClosedOperator` abbreviation for
-the ℂ-only bundled record.  Both are deleted; the real carrier is `E →ₗ.[ℝ] E`. `UnboundedTrialBlock`
+the ℂ-only bundled record.  Both are deleted, as is the `ClosedOperator` carrier in the
+signature quoted above; the real carrier is now `E →ₗ.[ℝ] E`.  The signature is left as it
+was written so the record of the plan stays accurate to its date. `UnboundedTrialBlock`
 (`DavisKahan/TanTheta/UnboundedSpectrum.lean:44`) is already scalar-generic and its own
 docstring says so.
 

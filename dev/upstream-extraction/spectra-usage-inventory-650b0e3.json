@@ -114,11 +114,11 @@
       "spectra_module": "Spectra.Operator.KatoRellich"
     },
     {
-      "consumer": "DavisKahan/SpectralTheory/PartialMap/MathlibBridge.lean",
+      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/MathlibBridge.lean",
       "spectra_module": "Spectra.Operator.SelfAdjoint"
     },
     {
-      "consumer": "DavisKahan/SpectralTheory/PartialMap/UnitaryConjugation.lean",
+      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/UnitaryConjugation.lean",
       "spectra_module": "Spectra.Operator.Unitary.Conjugation"
     },
     {
@@ -166,15 +166,15 @@
       "spectra_module": "Spectra.Resolvent.Identities"
     },
     {
-      "consumer": "DavisKahan/SpectralTheory/PartialMap/RealSpectrum.lean",
+      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/RealSpectrum.lean",
       "spectra_module": "Spectra.Resolvent.Spectrum"
     },
     {
-      "consumer": "DavisKahan/SpectralTheory/PartialMap/UnitaryConjugation.lean",
+      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/UnitaryConjugation.lean",
       "spectra_module": "Spectra.Resolvent.Spectrum"
     },
     {
-      "consumer": "DavisKahan/SpectralTheory/PartialMap/Complexification.lean",
+      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/Complexification.lean",
       "spectra_module": "Spectra.Resolvent.Spectrum"
     },
     {
@@ -339,7 +339,7 @@
     "Spectra.Cayley.real_add_I_ne_zero",
     "Spectra.Cayley.stoneGroup",
     "Spectra.CayleyTransform.BorelCalculus",
-    "Spectra.PartialMap",
+    "Spectra.ClosedOperator",
     "Spectra.DirectRotation",
     "Spectra.DirectRotationSquare",
     "Spectra.Essential",
