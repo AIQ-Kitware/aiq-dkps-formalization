@@ -15,16 +15,19 @@ import ForTauCeti.Analysis.InnerProductSpace.Polar.PartialIsometry
 /-!
 # Absolute-value transport for square symmetric ideals
 
-The equality of ideal gauges between `T` and its positive modulus follows from
-two contraction factorizations.  No unitary extension of the polar partial
-isometry is needed.
+A unitarily invariant norm is absolute: `T` and `|T|` lie in the same ideal and
+have the same gauge.  The proof here is the elementary one -- the polar
+factorization `T = U|T|` and `|T| = U*T` are two contraction factorizations, so
+the two-way principle of `TwoWayFactorization` applies directly.  No unitary
+*extension* of the polar partial isometry is needed, which is what makes the
+argument work on an arbitrary Hilbert space rather than only where `U` extends
+to a unitary.
 -/
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace Scratch
 namespace SharedFoundations
+namespace Ideal
 
 open scoped InnerProductSpace
 open ExactSinTheta
@@ -92,32 +95,30 @@ theorem SymmetricNormIdeal.modulus_mem_and_gauge_eq
   have h := SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq I T
   exact ⟨h.1.mpr hT, h.2 hT⟩
 
-/-- Rectangular-family square specialization. -/
-theorem RectangularSymmetricIdealFamily.modulus_mem_and_gauge_eq
+/-- Square specialization to an operator ideal family. -/
+theorem SymmetricOperatorIdealFamily.modulus_mem_and_gauge_eq
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     {T : E →L[ℂ] E} (hT : N.Mem T) :
     N.Mem (ContinuousLinearMap.modulus T) ∧
       N.gaugeReal (ContinuousLinearMap.modulus T) = N.gaugeReal T := by
   let I : DavisKahanExt.SymmetricNormIdeal (𝕜 := ℂ) (E := E) :=
-    DavisKahanExt.SymmetricNormIdeal.ofRectangular N
+    DavisKahanExt.SymmetricNormIdeal.ofCanonical N
   have h := SymmetricNormIdeal.operatorAbs_mem_iff_and_gauge_eq I T
   exact ⟨h.1.mpr hT, h.2 hT⟩
 
-/-- The approximation-number proof and the polar-factor proof agree on the
-current family abstraction. -/
-theorem operatorAbs_family_transport_two_routes
+/-- The Ky Fan dominant family inherits the transport, since its gauge is that
+of its underlying symmetric family. -/
+theorem KyFanDominantIdealFamily.modulus_mem_and_gauge_eq
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
     {T : E →L[ℂ] E}
     (hT : N.Mem T) :
     N.Mem (ContinuousLinearMap.modulus T) ∧
-      N.gaugeReal (ContinuousLinearMap.modulus T) =
-        N.gaugeReal T := by
-  exact RectangularSymmetricIdealFamily.modulus_mem_and_gauge_eq
-    N.toRectangularSymmetricIdealFamily hT
+      N.gauge (ContinuousLinearMap.modulus T) = N.gauge T :=
+  SymmetricOperatorIdealFamily.modulus_mem_and_gauge_eq
+    N.toSymmetricOperatorIdealFamily hT
 
+end Ideal
 end SharedFoundations
-end Scratch
-end Experimental
 end DavisKahan
 end TauCeti

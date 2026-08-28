@@ -13,14 +13,19 @@ import DavisKahan.InfiniteDimensional.DoubleAngle
 The full absolute projector difference and a one-sided angle block have
 different singular-value multiplicities in general.  The stable ideal object
 for the directed theorem is the one-sided block.  Reflection converts the
-block for the mirror subspace exactly into the one-sided double-angle block.
+block for the mirror subspace exactly into the one-sided double-angle block
+(`directedSinBlock_reflected_eq_reflection_comp_sinTwo`), and a reflection is a
+self-inverse contraction, so it changes neither ideal membership nor the gauge.
+
+The companion file `TwoWayFactorization` proves the general two-way contraction
+principle these use; this one supplies the reflection instance of it and the
+double-angle consequence.
 -/
 
 namespace TauCeti
 namespace DavisKahan
-namespace Experimental
-namespace Scratch
 namespace SharedFoundations
+namespace Ideal
 
 open scoped InnerProductSpace
 open ExactSinTheta
@@ -29,7 +34,10 @@ open TauCeti.DavisKahan
 
 universe u
 
-variable {𝕜 : Type*} [RCLike 𝕜]
+-- `𝕜` must live in the same universe `u` as `E`; see the note in
+-- `TwoWayFactorization` on why a family closed under adjoints cannot keep the
+-- two space universes independent.
+variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [CompleteSpace E]
 
@@ -39,6 +47,7 @@ noncomputable def directedSinBlock
     [U.HasOrthogonalProjection] [W.HasOrthogonalProjection] : E →L[𝕜] E :=
   Wᗮ.starProjection ∘L U.starProjection
 
+omit [CompleteSpace E] in
 /-- Left reflection is an involutive contraction factorization. -/
 theorem reflection_left_twoWay
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
@@ -47,6 +56,7 @@ theorem reflection_left_twoWay
   rw [← ContinuousLinearMap.comp_assoc, reflectionOperator_involutive,
     ContinuousLinearMap.id_comp]
 
+omit [CompleteSpace E] in
 /-- Right reflection is an involutive contraction factorization. -/
 theorem reflection_right_twoWay
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
@@ -55,8 +65,8 @@ theorem reflection_right_twoWay
   rw [ContinuousLinearMap.comp_assoc, reflectionOperator_involutive,
     ContinuousLinearMap.comp_id]
 
-/-- Rectangular ideal membership is invariant under left reflection. -/
-theorem RectangularSymmetricIdealFamily.mem_reflection_comp_iff
+/-- Ideal membership is invariant under left reflection. -/
+theorem SymmetricOperatorIdealFamily.mem_reflection_comp_iff
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
@@ -69,8 +79,8 @@ theorem RectangularSymmetricIdealFamily.mem_reflection_comp_iff
   · intro h
     exact N.comp_left_mem (reflectionOperator V) h
 
-/-- Rectangular ideal gauge is invariant under left reflection. -/
-theorem RectangularSymmetricIdealFamily.gauge_reflection_comp
+/-- The ideal gauge is invariant under left reflection. -/
+theorem SymmetricOperatorIdealFamily.gauge_reflection_comp
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
@@ -90,8 +100,8 @@ theorem RectangularSymmetricIdealFamily.gauge_reflection_comp
         N.gaugeReal_comp_left_le (reflectionOperator V) hRT
           (norm_reflectionOperator_le_one V)
 
-/-- Rectangular ideal membership is invariant under right reflection. -/
-theorem RectangularSymmetricIdealFamily.mem_comp_reflection_iff
+/-- Ideal membership is invariant under right reflection. -/
+theorem SymmetricOperatorIdealFamily.mem_comp_reflection_iff
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
@@ -104,8 +114,8 @@ theorem RectangularSymmetricIdealFamily.mem_comp_reflection_iff
   · intro h
     exact N.comp_right_mem (reflectionOperator V) h
 
-/-- Rectangular ideal gauge is invariant under right reflection. -/
-theorem RectangularSymmetricIdealFamily.gauge_comp_reflection
+/-- The ideal gauge is invariant under right reflection. -/
+theorem SymmetricOperatorIdealFamily.gauge_comp_reflection
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection]
@@ -143,8 +153,8 @@ theorem directedSinBlock_reflected_eq_reflection_comp_sinTwo
   rw [hassoc, complementary_comp_reflection_comp_projection]
 
 /-- The directed mirror-angle block and the double-angle block have equivalent
-membership and equal rectangular ideal gauge. -/
-theorem RectangularSymmetricIdealFamily.directed_reflected_mem_iff_and_gauge_eq
+membership and equal ideal gauge. -/
+theorem SymmetricOperatorIdealFamily.directed_reflected_mem_iff_and_gauge_eq
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     (U V : Submodule 𝕜 E)
@@ -156,10 +166,10 @@ theorem RectangularSymmetricIdealFamily.directed_reflected_mem_iff_and_gauge_eq
         N.gaugeReal (sinTwoAngleOperator U V)) := by
   rw [directedSinBlock_reflected_eq_reflection_comp_sinTwo]
   constructor
-  · exact RectangularSymmetricIdealFamily.mem_reflection_comp_iff N V
+  · exact SymmetricOperatorIdealFamily.mem_reflection_comp_iff N V
       (sinTwoAngleOperator U V)
   · intro h
-    exact RectangularSymmetricIdealFamily.gauge_reflection_comp N V h
+    exact SymmetricOperatorIdealFamily.gauge_reflection_comp N V h
 
 /-- Square-ideal version of the directed mirror-angle transport. -/
 theorem DavisKahanExt.SymmetricNormIdeal.directed_reflected_mem_and_gauge_eq
@@ -187,8 +197,7 @@ theorem DavisKahanExt.SymmetricNormIdeal.directed_reflected_mem_and_gauge_eq
   exact SymmetricNormIdeal.mem_iff_and_gauge_eq_of_twoWayContractions I
     hback hforward hR hJ hR hJ hT
 
+end Ideal
 end SharedFoundations
-end Scratch
-end Experimental
 end DavisKahan
 end TauCeti
