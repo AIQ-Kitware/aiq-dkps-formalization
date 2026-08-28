@@ -28,7 +28,7 @@ report "proved in the default build" rather than "proved".
 
 | Library | Why it is not guarded |
 | --- | --- |
-| `DavisKahan.Experimental` | The working frontier. Carries `sorry`s by design, and the material graduates into `DavisKahan` or `ForTauCeti` when finished. |
+| `DavisKahan.Experimental` | A drained staging area. What it held has been promoted into `DavisKahan`/`ForTauCeti` or deleted; two ideal-family scratch modules remain, and they do not compile against the current ideal API. |
 | `Challenge` | Comparator challenges, which are posed problems rather than results. |
 
 The libraries formalize more than paper-facing wrappers. They include supporting
@@ -67,7 +67,7 @@ automatically is what previously produced status that looked healthy and was not
 ├── RoadmapBridge/           # each roadmap signature discharged by the delivered declaration
 ├── DavisKahan.lean          # root module for the paper-facing Davis--Kahan library
 ├── DavisKahan/              # Sources/ (source-faithful 1970), FiniteDimensional/, SinTheta/,
-│                            #   Sylvester/, SpectralTheory/, Experimental/ (the frontier)
+│                            #   Sylvester/, SpectralTheory/, Geometry/, InfiniteDimensional/
 ├── YuWangSamworth2015/      # Yu--Wang--Samworth 2015 paper-facing package (sorry-free)
 ├── Acharyya2024{.lean,/}    # raw-stress MDS, probability, second moments, consistency
 ├── Acharyya2025{.lean,/}    # CMDS, Weyl/Davis--Kahan, Gram rigidity, finite-sample rates
@@ -131,9 +131,15 @@ lake exe cache get
 lake build
 ```
 
-`lake build` builds every default target. `Challenge` is
-explicit opt-in libraries, and the experimental Davis--Kahan frontier is also
-checked explicitly when it is touched:
+`lake build` builds every default target. `Challenge`, the diagnostic audit
+modules, and the drained experimental tree are opt-in, and are built by naming
+them:
+
+```bash
+lake build Challenge
+lake build DavisKahan.Audits.All
+lake build DavisKahan.Experimental
+```
 
 
 The gates are Python and run separately. Do not run `lake` at the same time —
