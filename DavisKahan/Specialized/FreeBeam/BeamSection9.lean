@@ -117,7 +117,7 @@ theorem beamTrial_le_domain {x : BeamL2} (hx : x ∈ beamTrial) :
 /-- The beam operator annihilates the trial subspace. -/
 theorem beamOperator_apply_trial {x : BeamL2} (hx : x ∈ beamTrial)
     (h : x ∈ beamOperator.domain) :
-    beamOperator.toLinearMap ⟨x, h⟩ = 0 := by
+    beamOperator ⟨x, h⟩ = 0 := by
   obtain ⟨a, b, rfl⟩ := mem_beamTrial_iff.1 hx
   exact (beamOperator_affine_mem_and_zero a b).choose_spec
 
@@ -415,7 +415,7 @@ plane, the spectral theorem for compact self-adjoint operators forces a further 
 which inverts to a genuine positive eigenpair of the operator. -/
 theorem exists_pos_eigenpair_beamOperator :
     ∃ (lam : ℝ) (x : beamOperator.domain), 0 < lam ∧ (x : BeamL2) ≠ 0 ∧
-      beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2) := by
+      beamOperator x = (lam : ℂ) • (x : BeamL2) := by
   obtain ⟨mu, -, hnotle⟩ :=
     TauCeti.exists_hasEigenvalue_eigenspace_not_le isCompactOperator_beamResolvent
       beamCoerciveFormData.resolvent_isSelfAdjoint
@@ -449,16 +449,16 @@ theorem exists_pos_eigenpair_beamOperator :
 /-- **The positive real spectrum of the free beam is nonempty**, with every witness above
 the paper's `500`.  This is Davis--Kahan Section 9's `α₃`, exhibited rather than assumed. -/
 theorem exists_five_hundred_lt_mem_realSpectrum_beamOperator :
-    ∃ alpha : ℝ, 500 < alpha ∧ alpha ∈ beamOperator.realSpectrum := by
+    ∃ alpha : ℝ, 500 < alpha ∧ alpha ∈ TauCeti.LinearPMap.realSpectrum beamOperator := by
   obtain ⟨lam, x, hlam, hx0, heig⟩ := exists_pos_eigenpair_beamOperator
   exact ⟨lam, eigenvalue_gt_five_hundred hlam hx0 heig,
-    TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector (A := beamOperator.toLinearPMap)
+    TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector (A := beamOperator)
       (x := x) hx0 heig⟩
 
 /-- The real spectrum of the free beam contains a nonzero point.  This is the form in which
 the Section 9 finite-data certificate consumes the existence of `α₃`. -/
 theorem exists_mem_realSpectrum_beamOperator_ne_zero :
-    ∃ alpha : ℝ, alpha ∈ beamOperator.realSpectrum ∧ alpha ≠ 0 := by
+    ∃ alpha : ℝ, alpha ∈ TauCeti.LinearPMap.realSpectrum beamOperator ∧ alpha ≠ 0 := by
   obtain ⟨alpha, halpha, hmem⟩ := exists_five_hundred_lt_mem_realSpectrum_beamOperator
   exact ⟨alpha, hmem, by linarith⟩
 
@@ -627,11 +627,11 @@ theorem beamPerturbation_isSelfAdjoint (ε : ℝ) :
 
 /-- **The exact operator of the Section 9 example**: the free beam perturbed by
 multiplication by `ε t`. -/
-def beamPerturbed (ε : ℝ) : DKClosedOperator (H := BeamL2) :=
-  beamOperator.addBounded (beamPerturbation ε)
+def beamPerturbed (ε : ℝ) : BeamL2 →ₗ.[ℂ] BeamL2 :=
+  TauCeti.LinearPMap.addBounded beamOperator (beamPerturbation ε)
 
 /-- The perturbed beam operator is self-adjoint. -/
-theorem beamPerturbed_isSelfAdjoint (ε : ℝ) : (beamPerturbed ε).IsSelfAdjoint :=
+theorem beamPerturbed_isSelfAdjoint (ε : ℝ) : _root_.IsSelfAdjoint (beamPerturbed ε) :=
   addBounded_isSelfAdjoint beamOperator beamOperator_isSelfAdjoint _
     (beamPerturbation_isSelfAdjoint ε)
 
@@ -643,13 +643,13 @@ theorem measurableSet_beamHighSet : MeasurableSet beamHighSet := measurableSet_I
 
 /-- The zero operator on the trial subspace: the compression of the free beam to its
 own kernel, which is the trial subspace itself. -/
-def beamTrialZero : DKClosedOperator (H := beamTrial) :=
-  DavisKahanExt.ClosedOperator.ofBounded 0
+def beamTrialZero : beamTrial →ₗ.[ℂ] beamTrial :=
+  ((0 : beamTrial →L[ℂ] beamTrial).toLinearMap.toPMap ⊤)
 
 /-- The trial-block compression of the unperturbed beam operator is
 self-adjoint. -/
-theorem beamTrialZero_isSelfAdjoint : beamTrialZero.IsSelfAdjoint :=
-  DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint 0 (fun _ _ => by simp)
+theorem beamTrialZero_isSelfAdjoint : _root_.IsSelfAdjoint beamTrialZero :=
+  TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint 0 (fun _ _ => by simp)
 
 /-- **The largest sine of the angle** between the affine trial subspace and the exact
 low spectral subspace of the perturbed beam: the operator norm of the cross projection
@@ -678,20 +678,20 @@ theorem beamSinTheta_le (ε : ℝ) :
       beamTrialIncl (x : beamTrial) ∈ beamOperator.domain := fun x =>
     beamTrial_le_domain (x : beamTrial).2
   have hXint : ∀ x : beamTrialZero.domain,
-      beamOperator.toLinearMap ⟨beamTrialIncl (x : beamTrial), hXdom x⟩
-        = beamTrialIncl (beamTrialZero.toLinearMap x) := by
+      beamOperator ⟨beamTrialIncl (x : beamTrial), hXdom x⟩
+        = beamTrialIncl (beamTrialZero x) := by
     intro x
-    have hz : beamTrialZero.toLinearMap x = 0 := rfl
+    have hz : beamTrialZero x = 0 := rfl
     rw [hz, map_zero]
     exact beamOperator_apply_trial (x : beamTrial).2 _
-  have hlow : TauCeti.LinearPMap.SemiboundedBelow beamTrialZero.toLinearPMap 0 := by
+  have hlow : TauCeti.LinearPMap.SemiboundedBelow beamTrialZero 0 := by
     intro x
-    have hz : beamTrialZero.toLinearPMap x = 0 := rfl
+    have hz : beamTrialZero x = 0 := rfl
     rw [hz, inner_zero_left]
     simp
-  have hhigh : TauCeti.LinearPMap.SemiboundedAbove beamTrialZero.toLinearPMap 0 := by
+  have hhigh : TauCeti.LinearPMap.SemiboundedAbove beamTrialZero 0 := by
     intro x
-    have hz : beamTrialZero.toLinearPMap x = 0 := rfl
+    have hz : beamTrialZero x = 0 := rfl
     rw [hz, inner_zero_left]
     simp
   have hspec := selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
@@ -762,7 +762,7 @@ theorem measurableSet_beamLowSet : MeasurableSet beamLowSet := measurableSet_Iic
 clears `500.5`, not merely `500`: the characteristic roots exceed `4.73` and
 `4.73⁴ = 500.5466…`. -/
 theorem realSpectrum_beamOperator_subset_sharp :
-    beamOperator.realSpectrum ⊆ ({0} : Set ℝ) ∪ Set.Ioi (1001 / 2) := by
+    TauCeti.LinearPMap.realSpectrum beamOperator ⊆ ({0} : Set ℝ) ∪ Set.Ioi (1001 / 2) := by
   intro lam hlam
   rcases realSpectrum_beamOperator_subset hlam with h0 | ⟨beta, hbeta, hchar, hlameq⟩
   · exact Or.inl h0
@@ -777,13 +777,13 @@ theorem realSpectrum_beamOperator_subset_sharp :
 /-- Every nonzero point below the gap is a resolvent point of the free beam. -/
 theorem beamOperator_mem_resolventSet_of_mem_lowSet_diff {lam : ℝ}
     (hlam : lam ∈ beamLowSet \ ({0} : Set ℝ)) :
-    (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet beamOperator.toLinearPMap := by
+    (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet beamOperator := by
   by_contra hcon
   -- `realSpectrum` is the complement of `realResolventSet`, which inverts `A - lam`; the
   -- canonical `resolventSet` inverts `lam • I - A`.  The two agree, but only through the
   -- bridge -- this step used to be `fun hr => hcon hr` by definitional unfolding.
-  have hmem : lam ∈ beamOperator.realSpectrum := fun hr =>
-    hcon ((mem_realResolventSet_iff_mem_spectraResolvent beamOperator.toLinearPMap lam).mp hr)
+  have hmem : lam ∈ TauCeti.LinearPMap.realSpectrum beamOperator := fun hr =>
+    hcon ((mem_realResolventSet_iff_mem_spectraResolvent beamOperator lam).mp hr)
   rcases realSpectrum_beamOperator_subset_sharp hmem with h0 | hgt
   · exact hlam.2 h0
   · have hle : lam ≤ (1001 : ℝ) / 2 := hlam.1
@@ -839,7 +839,7 @@ theorem mem_specRange_singleton_of_mem_lowSet {y : BeamL2}
 both form bounds are `0`. -/
 theorem beamLow_semiboundedBelow :
     TauCeti.LinearPMap.SemiboundedBelow (selfAdjointSpectralRestriction beamOperator
-      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet).toLinearPMap 0 := by
+      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet) 0 := by
   intro x
   exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc
     beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
@@ -848,7 +848,7 @@ theorem beamLow_semiboundedBelow :
 /-- The beam operator is bounded above on the low spectral set. -/
 theorem beamLow_semiboundedAbove :
     TauCeti.LinearPMap.SemiboundedAbove (selfAdjointSpectralRestriction beamOperator
-      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet).toLinearPMap 0 := by
+      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet) 0 := by
   intro x
   exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc
     beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
@@ -879,7 +879,7 @@ theorem beamHigh_spectrum_avoids :
     ∀ lam ∈ Set.Ioo ((0 : ℝ) - 1001 / 2) ((0 : ℝ) + 1001 / 2),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction beamOperator beamOperator_isSelfAdjoint
-          beamLowSetᶜ measurableSet_beamLowSet.compl).toLinearPMap :=
+          beamLowSetᶜ measurableSet_beamLowSet.compl) :=
   selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
     beamOperator beamOperator_isSelfAdjoint beamLowSetᶜ measurableSet_beamLowSet.compl
     (by
@@ -1091,7 +1091,7 @@ open DavisKahan1970.Section9 in
 Every field is now discharged rather than postulated: the two Gram matrices and the two
 Ritz values are the compressions computed in `beamRitz_matrix` and
 `beamResidualGram_matrix`, and the third eigenvalue is a point of
-`beamOperator.realSpectrum` supplied by
+`TauCeti.LinearPMap.realSpectrum beamOperator` supplied by
 `exists_five_hundred_lt_mem_realSpectrum_beamOperator`, whose lower bound `500` comes with
 it.  The record no longer takes a spectral point as a hypothesis; the only inputs are the
 paper's two numerical constraints on `ε`. -/
@@ -1630,20 +1630,20 @@ theorem beamSinThetaSum_le (ε : ℝ) :
       beamTrialIncl (x : beamTrial) ∈ beamOperator.domain := fun x =>
     beamTrial_le_domain (x : beamTrial).2
   have hXint : ∀ x : beamTrialZero.domain,
-      beamOperator.toLinearMap ⟨beamTrialIncl (x : beamTrial), hXdom x⟩
-        = beamTrialIncl (beamTrialZero.toLinearMap x) := by
+      beamOperator ⟨beamTrialIncl (x : beamTrial), hXdom x⟩
+        = beamTrialIncl (beamTrialZero x) := by
     intro x
-    have hz : beamTrialZero.toLinearMap x = 0 := rfl
+    have hz : beamTrialZero x = 0 := rfl
     rw [hz, map_zero]
     exact beamOperator_apply_trial (x : beamTrial).2 _
-  have hlow : TauCeti.LinearPMap.SemiboundedBelow beamTrialZero.toLinearPMap 0 := by
+  have hlow : TauCeti.LinearPMap.SemiboundedBelow beamTrialZero 0 := by
     intro x
-    have hz : beamTrialZero.toLinearPMap x = 0 := rfl
+    have hz : beamTrialZero x = 0 := rfl
     rw [hz, inner_zero_left]
     simp
-  have hhigh : TauCeti.LinearPMap.SemiboundedAbove beamTrialZero.toLinearPMap 0 := by
+  have hhigh : TauCeti.LinearPMap.SemiboundedAbove beamTrialZero 0 := by
     intro x
-    have hz : beamTrialZero.toLinearPMap x = 0 := rfl
+    have hz : beamTrialZero x = 0 := rfl
     rw [hz, inner_zero_left]
     simp
   have hspec := selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
@@ -2017,7 +2017,7 @@ theorem mem_beamTrial_of_mem_specRange_singleton {y : BeamL2}
   have hdom : y ∈ beamOperator.domain :=
     TauCeti.LinearPMap.mem_domain_of_mem_specRange_of_bounded beamOperator_isSelfAdjoint
       _ _ hbnd hy
-  have hzero : beamOperator.toLinearMap ⟨y, hdom⟩ = 0 := by
+  have hzero : beamOperator ⟨y, hdom⟩ = 0 := by
     have hle := TauCeti.LinearPMap.norm_sub_smul_le_of_mem_specRange
       beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
       (M := 0) (c := 0) (r := 0) hbnd le_rfl
@@ -2052,7 +2052,7 @@ bound on the orthogonal complement of the trial subspace. -/
 theorem beamOperator_form_ge_of_mem_orthogonal (x : beamOperator.domain)
     (hx : (x : BeamL2) ∈ beamTrialᗮ) :
     (1001 / 2 : ℝ) * ‖(x : BeamL2)‖ ^ 2
-      ≤ (⟪beamOperator.toLinearMap x, (x : BeamL2)⟫_ℂ).re := by
+      ≤ (⟪beamOperator x, (x : BeamL2)⟫_ℂ).re := by
   refine TauCeti.LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero
     beamOperator_isSelfAdjoint (c := 1001 / 2) x ?_
   have hlow : TauCeti.LinearPMap.specProjection beamOperator_isSelfAdjoint beamLowSet
@@ -2064,12 +2064,12 @@ theorem beamOperator_form_ge_of_mem_orthogonal (x : beamOperator.domain)
 /-- **Coercivity of the perturbed beam off the trial subspace.**  The perturbation is
 positive, so it only helps. -/
 theorem beamPerturbed_form_ge_of_mem_orthogonal (ε : ℝ) (hε : 0 ≤ ε)
-    (x : (beamPerturbed ε).toLinearPMap.domain) (hx : (x : BeamL2) ∈ beamTrialᗮ) :
+    (x : (beamPerturbed ε).domain) (hx : (x : BeamL2) ∈ beamTrialᗮ) :
     (1001 / 2 : ℝ) * ‖(x : BeamL2)‖ ^ 2
-      ≤ (⟪(beamPerturbed ε).toLinearPMap x, (x : BeamL2)⟫_ℂ).re := by
+      ≤ (⟪(beamPerturbed ε) x, (x : BeamL2)⟫_ℂ).re := by
   have hxdom : (x : BeamL2) ∈ beamOperator.domain := x.2
-  have hsplit : (beamPerturbed ε).toLinearPMap x
-      = beamOperator.toLinearMap ⟨(x : BeamL2), hxdom⟩ + beamPerturbation ε (x : BeamL2) :=
+  have hsplit : (beamPerturbed ε) x
+      = beamOperator ⟨(x : BeamL2), hxdom⟩ + beamPerturbation ε (x : BeamL2) :=
     rfl
   rw [hsplit, inner_add_left, Complex.add_re]
   have h1 := beamOperator_form_ge_of_mem_orthogonal ⟨(x : BeamL2), hxdom⟩ hx
@@ -2079,14 +2079,14 @@ theorem beamPerturbed_form_ge_of_mem_orthogonal (ε : ℝ) (hε : 0 ≤ ε)
 /-- **The Ritz bound on the trial subspace.**  On the kernel the free beam contributes
 nothing, so the form is exactly the perturbation's, bounded by the upper Ritz value. -/
 theorem beamPerturbed_form_le_of_mem_beamTrial (ε : ℝ) (hε : 0 ≤ ε)
-    (x : (beamPerturbed ε).toLinearPMap.domain) (hx : (x : BeamL2) ∈ beamTrial) :
-    (⟪(beamPerturbed ε).toLinearPMap x, (x : BeamL2)⟫_ℂ).re
+    (x : (beamPerturbed ε).domain) (hx : (x : BeamL2) ∈ beamTrial) :
+    (⟪(beamPerturbed ε) x, (x : BeamL2)⟫_ℂ).re
       ≤ DavisKahan1970.Section9.ritzHigh ε * ‖(x : BeamL2)‖ ^ 2 := by
   have hxdom : (x : BeamL2) ∈ beamOperator.domain := x.2
-  have hsplit : (beamPerturbed ε).toLinearPMap x
-      = beamOperator.toLinearMap ⟨(x : BeamL2), hxdom⟩ + beamPerturbation ε (x : BeamL2) :=
+  have hsplit : (beamPerturbed ε) x
+      = beamOperator ⟨(x : BeamL2), hxdom⟩ + beamPerturbation ε (x : BeamL2) :=
     rfl
-  have hker : beamOperator.toLinearMap ⟨(x : BeamL2), hxdom⟩ = 0 :=
+  have hker : beamOperator ⟨(x : BeamL2), hxdom⟩ = 0 :=
     beamOperator_apply_trial hx hxdom
   have hres : beamPerturbation ε (x : BeamL2)
       = beamResidual ε (⟨(x : BeamL2), hx⟩ : beamTrial) := rfl

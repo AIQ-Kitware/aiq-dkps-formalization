@@ -26,7 +26,6 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace
 open TauCeti.RealComplexification
-open TauCeti.DavisKahanExt
 -- The complexification of a bounded operator sits under the foundation namespace.
 
 noncomputable section
@@ -44,9 +43,9 @@ vector.
 The pairwise gap is stated over `ℂ`; on real spectral points the complex norm is
 the real absolute value, which is the only conversion this needs. -/
 theorem paperHilbertSchmidtTensor_hasVectorSpectralGap
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {C : F →L[ℂ] E} {δ : ℝ}
     (hgap : PairwiseSpectrumGap A B δ)
     (hC : IsPaperHilbertSchmidt C) :
@@ -64,13 +63,13 @@ theorem paperHilbertSchmidtTensor_hasVectorSpectralGap
 spectral separation.**  This is the direct, non-circular completion of the
 analytic engine required by Theorem 6.2. -/
 theorem paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
     {X C : F →L[ℂ] E}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : IsPaperHilbertSchmidt C) :
     IsPaperHilbertSchmidt X ∧
       δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C := by
@@ -90,14 +89,14 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     {ER FR : Type v}
     [NormedAddCommGroup ER] [InnerProductSpace ℝ ER] [CompleteSpace ER]
     [NormedAddCommGroup FR] [InnerProductSpace ℝ FR] [CompleteSpace FR]
-    {A : ClosedOperator (𝕜 := ℝ) (E := ER)}
-    {B : ClosedOperator (𝕜 := ℝ) (E := FR)}
+    {A : ER →ₗ.[ℝ] ER}
+    {B : FR →ₗ.[ℝ] FR}
     {X C : FR →L[ℝ] ER}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : ∀ lam ∈ A.realSpectrum, ∀ α ∈ B.realSpectrum,
+    (hgap : ∀ lam ∈ TauCeti.LinearPMap.realSpectrum A, ∀ α ∈ TauCeti.LinearPMap.realSpectrum B,
       δ ≤ |lam - α|)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : IsPaperHilbertSchmidt C) :
     IsPaperHilbertSchmidt X ∧
       δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C := by

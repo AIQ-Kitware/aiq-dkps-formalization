@@ -42,14 +42,14 @@ noncomputable def directedSinThetaOperatorReal
 theorem generalizedSinTheta_unbounded_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
-    (hA : D.A.IsSelfAdjoint)
-    (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     (hF₁ : IsometricEmbedding D.F₁)
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
       (sinThetaBlockReal D.X D.F₁ hframe hε) ∧
@@ -81,14 +81,14 @@ theorem generalizedSinTheta_unbounded_exact_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℝ] E)
-    (hA : D.A.IsSelfAdjoint)
-    (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
       (directedSinThetaOperatorReal D.X F₀ hframe hε) ∧

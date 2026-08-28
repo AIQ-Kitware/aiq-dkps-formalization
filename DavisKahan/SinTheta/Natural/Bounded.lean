@@ -44,40 +44,40 @@ theorem sinTheta_bounded_spectralSubspace_of_spectrumGap
     (X : F →L[ℂ] E) (hX : IsometricEmbedding X)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectralSylvesterGap
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0).toLinearPMap
+      ((A0.toLinearMap.toPMap ⊤))
       (selfAdjointSpectralRestriction
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-        Sᶜ hS.compl).toLinearPMap δ)
+        ((A.toLinearMap.toPMap ⊤))
+        (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
+        Sᶜ hS.compl) δ)
     (hR : N.Mem
       (generalResidual A X A0)) :
     N.Mem
       ((ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralSubspaceInclusion
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+          ((A.toLinearMap.toPMap ⊤))
+          (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
           S hS ∘L
         (selfAdjointSpectralSubspaceInclusion
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+          ((A.toLinearMap.toPMap ⊤))
+          (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
           S hS).adjoint) ∘L X) ∧
       δ * N.gauge
         ((ContinuousLinearMap.id ℂ E -
           selfAdjointSpectralSubspaceInclusion
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+            ((A.toLinearMap.toPMap ⊤))
+            (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
             S hS ∘L
           (selfAdjointSpectralSubspaceInclusion
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+            ((A.toLinearMap.toPMap ⊤))
+            (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
             S hS).adjoint) ∘L X)
         ≤ N.gauge
           (generalResidual A X A0) := by
   apply sinTheta_unbounded_spectralSubspace_of_spectrumGap
-    N (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-      S hS (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A0 hA0)
+    N ((A.toLinearMap.toPMap ⊤))
+      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
+      S hS ((A0.toLinearMap.toPMap ⊤))
+      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A0 hA0)
       X (generalResidual A X A0) hX
   case hXdom => intro x; simp
   case hReq => intro x; rfl
@@ -95,32 +95,32 @@ theorem generalizedSinTheta_bounded_spectralSubspace_of_spectrumGap
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
     (hgap : SpectralSylvesterGap
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0).toLinearPMap
+      ((A0.toLinearMap.toPMap ⊤))
       (selfAdjointSpectralRestriction
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-        Sᶜ hS.compl).toLinearPMap δ)
+        ((A.toLinearMap.toPMap ⊤))
+        (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
+        Sᶜ hS.compl) δ)
     (hR : N.Mem
       (generalResidual A X A0)) :
     N.Mem
       (directedSinThetaOperator X
         (selfAdjointSpectralSubspaceInclusion
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+          ((A.toLinearMap.toPMap ⊤))
+          (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
           S hS) hframe hε) ∧
       δ * ε * N.gauge
         (directedSinThetaOperator X
           (selfAdjointSpectralSubspaceInclusion
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+            ((A.toLinearMap.toPMap ⊤))
+            (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
             S hS) hframe hε)
         ≤ N.gauge
           (generalResidual A X A0) := by
   apply generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
-    N (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-      S hS (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A0 hA0)
+    N ((A.toLinearMap.toPMap ⊤))
+      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
+      S hS ((A0.toLinearMap.toPMap ⊤))
+      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A0 hA0)
       X (generalResidual A X A0) hδ hε hframe
   case hXdom => intro x; simp
   case hReq => intro x; rfl
@@ -147,40 +147,40 @@ theorem sinTheta_bounded_real_spectralSubspace
     (X : F →L[ℝ] E) (hX : IsometricEmbedding X)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0).toLinearPMap
+      ((A0.toLinearMap.toPMap ⊤))
       (realSelfAdjointSpectralRestriction
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-        Sᶜ hS.compl).toLinearPMap δ)
+        ((A.toLinearMap.toPMap ⊤))
+        (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
+        Sᶜ hS.compl) δ)
     (hR : N.Mem
       (generalResidual A X A0)) :
     N.Mem
       ((ContinuousLinearMap.id ℝ E -
         realSelfAdjointSpectralSubspaceInclusion
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+          ((A.toLinearMap.toPMap ⊤))
+          (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
           S hS ∘L
         (realSelfAdjointSpectralSubspaceInclusion
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+          ((A.toLinearMap.toPMap ⊤))
+          (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
           S hS).adjoint) ∘L X) ∧
       δ * N.gauge
         ((ContinuousLinearMap.id ℝ E -
           realSelfAdjointSpectralSubspaceInclusion
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+            ((A.toLinearMap.toPMap ⊤))
+            (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
             S hS ∘L
           (realSelfAdjointSpectralSubspaceInclusion
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+            ((A.toLinearMap.toPMap ⊤))
+            (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
             S hS).adjoint) ∘L X)
         ≤ N.gauge
           (generalResidual A X A0) := by
   apply sinTheta_unbounded_real_spectralSubspace
-    N (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-      S hS (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A0 hA0)
+    N ((A.toLinearMap.toPMap ⊤))
+      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
+      S hS ((A0.toLinearMap.toPMap ⊤))
+      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A0 hA0)
       X (generalResidual A X A0) hX
   case hXdom => intro x; simp
   case hReq => intro x; rfl
@@ -199,32 +199,32 @@ theorem generalizedSinTheta_bounded_real_spectralSubspace
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
     (hgap : FormBoundedSylvesterGap
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0).toLinearPMap
+      ((A0.toLinearMap.toPMap ⊤))
       (realSelfAdjointSpectralRestriction
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-        Sᶜ hS.compl).toLinearPMap δ)
+        ((A.toLinearMap.toPMap ⊤))
+        (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
+        Sᶜ hS.compl) δ)
     (hR : N.Mem
       (generalResidual A X A0)) :
     N.Mem
       (directedSinThetaOperatorReal X
         (realSelfAdjointSpectralSubspaceInclusion
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-          (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+          ((A.toLinearMap.toPMap ⊤))
+          (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
           S hS) hframe hε) ∧
       δ * ε * N.gauge
         (directedSinThetaOperatorReal X
           (realSelfAdjointSpectralSubspaceInclusion
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-            (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
+            ((A.toLinearMap.toPMap ⊤))
+            (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
             S hS) hframe hε)
         ≤ N.gauge
           (generalResidual A X A0) := by
   apply generalizedSinTheta_unbounded_real_spectralSubspace
-    N (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-      S hS (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A0 hA0)
+    N ((A.toLinearMap.toPMap ⊤))
+      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A hA)
+      S hS ((A0.toLinearMap.toPMap ⊤))
+      (TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint A0 hA0)
       X (generalResidual A X A0) hδ hε hframe
   case hXdom => intro x; simp
   case hReq => intro x; rfl

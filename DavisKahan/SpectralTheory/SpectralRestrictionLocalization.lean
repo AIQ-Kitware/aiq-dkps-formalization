@@ -57,11 +57,11 @@ variable {H : Type*} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- The restriction to `E_A(B)H` inherits interval form bounds from the set
 containment `B ⊆ [β, α]`. -/
 theorem selfAdjointSpectralRestriction_semibounded_of_subset_Icc
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
     {β α : ℝ} (hBsub : B ⊆ Set.Icc β α) :
-    TauCeti.LinearPMap.SemiboundedBelow (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β ∧
-      TauCeti.LinearPMap.SemiboundedAbove (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α := by
+    TauCeti.LinearPMap.SemiboundedBelow (selfAdjointSpectralRestriction A hA B hB) β ∧
+      TauCeti.LinearPMap.SemiboundedAbove (selfAdjointSpectralRestriction A hA B hB) α := by
   constructor
   · intro x
     exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc hA B hB hBsub
@@ -73,12 +73,12 @@ theorem selfAdjointSpectralRestriction_semibounded_of_subset_Icc
 /-- If the selecting set is disjoint from an open interval, the spectrum of the
 restriction avoids that interval. -/
 theorem selfAdjointSpectralRestriction_spectrum_avoids_open_of_inter_eq_empty
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
     {a b : ℝ} (hdisj : B ∩ Set.Ioo a b = ∅) :
     ∀ lam ∈ Set.Ioo a b,
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
-        (selfAdjointSpectralRestriction A hA B hB).toLinearPMap := by
+        (selfAdjointSpectralRestriction A hA B hB) := by
   intro lam hlam
   have hleft : 0 < lam - a := by linarith [hlam.1]
   have hright : 0 < b - lam := by linarith [hlam.2]

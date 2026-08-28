@@ -81,7 +81,7 @@ section MainEstimate
 
 variable {V : Submodule ℂ H} [V.HasOrthogonalProjection]
   {M : V →L[ℂ] V} {R : V →L[ℂ] H}
-  {A : DKClosedOperator (H := H)}
+  {A : H →ₗ.[ℂ] H}
 
 /-- **Davis--Kahan 1970, the directed half of the `sin 2Θ` theorem for an
 unbounded self-adjoint operator, Ky Fan form.**
@@ -96,16 +96,16 @@ spectrum in `]β-δ, α+δ[`.  The conclusion is
 
 with the printed factor two. -/
 theorem sinTwoTheta_unbounded_directedResidual_all_kyFan
-    (hA : A.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
-    (hres : ∀ v : V, A.toLinearMap ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : TauCeti.LinearPMap.SemiboundedBelow (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
-    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow (selfAdjointSpectralRestriction A hA B hB) β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
-        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap) :
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl)) :
     ∀ k : ℕ,
       δ * kyFanApproximationGauge k
           (sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V) ≤
@@ -206,16 +206,16 @@ The reflected system is built internally from the trial data; no reflection
 residual appears in the statement. -/
 theorem sinTwoTheta_unbounded_directedResidual_paperUINorm
     (N : PaperUnitaryInvariantNorm)
-    (hA : A.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
-    (hres : ∀ v : V, A.toLinearMap ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : TauCeti.LinearPMap.SemiboundedBelow (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
-    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow (selfAdjointSpectralRestriction A hA B hB) β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove (selfAdjointSpectralRestriction A hA B hB) α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
-        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V) ∧
       δ * N.gauge

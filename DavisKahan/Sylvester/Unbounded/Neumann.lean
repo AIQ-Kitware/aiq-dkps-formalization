@@ -251,8 +251,8 @@ estimate. -/
 theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
-    (hAinv : TauCeti.LinearPMap.HasBoundedEverywhereInverse A.toLinearPMap)
+    {A : E →ₗ.[𝕜] E}
+    (hAinv : TauCeti.LinearPMap.HasBoundedEverywhereInverse A)
     (B : F →L[𝕜] F) {X C : F →L[𝕜] E}
     {ρ δ : ℝ} (hρ : 0 ≤ ρ) (hδ : 0 < δ)
     (hInvNorm : ‖hAinv.inv‖ ≤ (ρ + δ)⁻¹)
@@ -325,24 +325,9 @@ theorem linearPMapSylvesterEquation_boundedRealization
   rw [h]
   abel
 
-omit [CompleteSpace E] [CompleteSpace F] in
-/-- Compatibility entry point for the raw bounded-realization transfer. -/
-theorem closedSylvesterEquation_boundedRealization
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    {X C : F →L[𝕜] E} {T : F →L[𝕜] F}
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
-    (hT : ∀ y : B.domain, T (y : F) = B.toLinearMap y) :
-    HasUnboundedBoundedSylvesterEquation A T X C :=
-  linearPMapSylvesterEquation_boundedRealization A.toLinearPMap_isClosed
-    B.toLinearPMap_dense hEq hT
-
-/-- **Ideal-gauge constant-one Sylvester estimate with the unbounded block on
-    the right.**  This is the right-handed companion of
-    `sylvester_mem_and_gauge_le_of_unbounded_bound_inverse`.  A bounded left
-    block and a bounded shifted right inverse yield a Neumann contraction
-    `Y ↦ S Y J`, preserving membership and the sharp constant-one gauge bound. -/
-theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
+/-- Historical closed-operator presentation of the raw right-unbounded
+Neumann contraction. -/
+theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     {G : Type v}
@@ -489,31 +474,6 @@ theorem linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
   have hkey := mul_le_mul_of_nonneg_left hgauge hρδ.le
   rw [← mul_assoc, mul_inv_cancel₀ hρδ.ne', one_mul] at hkey
   linarith
-
-/-- Historical closed-operator presentation of the raw right-unbounded
-Neumann contraction. -/
-theorem mem_and_gauge_le_of_boundedLeft_exteriorRight
-    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
-    [N.toOperatorIdealFamily.IsComplete]
-    {G : Type v}
-    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-    {S : F →L[𝕜] F}
-    {Λ : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := G)}
-    {Y C : G →L[𝕜] F} {c ρ δ : ℝ}
-    (hρ : 0 ≤ ρ) (hδ : 0 < δ)
-    (hSnorm : ‖S‖ ≤ ρ)
-    {J : G →L[𝕜] G} (hdom : ∀ z : G, J z ∈ Λ.domain)
-    (hres : ∀ z : G,
-      Λ.toLinearMap ⟨J z, hdom z⟩ - ((c : ℝ) : 𝕜) • J z = z)
-    (hJnorm : ‖J‖ ≤ (ρ + δ)⁻¹)
-    (hEq : ∀ y : Λ.domain,
-      S (Y (y : G)) -
-        (Y (Λ.toLinearMap y) - ((c : ℝ) : 𝕜) • Y (y : G)) = C (y : G))
-    (hC : N.Mem C) :
-    N.Mem Y ∧ δ * N.gaugeReal Y ≤ N.gaugeReal C := by
-  exact linearPMap_mem_and_gauge_le_of_boundedLeft_exteriorRight
-    (Λ := Λ.toLinearPMap) N hρ hδ hSnorm hdom hres hJnorm hEq hC
-
 end ExactSinTheta
 end DavisKahan
 end TauCeti

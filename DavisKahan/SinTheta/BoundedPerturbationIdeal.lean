@@ -38,30 +38,30 @@ constant-one gap estimate. -/
 theorem sinTheta_addBounded_gauge_of_spectrum_gap_isometric
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
-    (A₀ : DKClosedOperator (H := F)) (hA₀ : A₀.IsSelfAdjoint)
-    (Λ₁ : DKClosedOperator (H := G)) (hΛ₁ : Λ₁.IsSelfAdjoint)
+    (A₀ : F →ₗ.[ℂ] F) (hA₀ : IsSelfAdjoint A₀)
+    (Λ₁ : G →ₗ.[ℂ] G) (hΛ₁ : IsSelfAdjoint Λ₁)
     (X : F →L[ℂ] H) (F₁ : G →L[ℂ] H)
     (hXdom : ∀ x : A₀.domain, X (x : F) ∈ A.domain)
     (hXintertwines : ∀ x : A₀.domain,
-      A.toLinearMap ⟨X (x : F), hXdom x⟩ = X (A₀.toLinearMap x))
+      A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hF₁intertwines : ∀ y : Λ₁.domain,
-      (A.addBounded V).toLinearMap ⟨F₁ (y : G), hF₁dom y⟩ =
-        F₁ (Λ₁.toLinearMap y))
+      (TauCeti.LinearPMap.addBounded A V) ⟨F₁ (y : G), hF₁dom y⟩ =
+        F₁ (Λ₁ y))
     (hXiso : IsometricEmbedding X) (hF₁iso : IsometricEmbedding F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow A₀.toLinearPMap β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove A₀.toLinearPMap α)
+    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow A₀ β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁.toLinearPMap)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁)
     (hVmem : N.Mem V) :
     N.Mem (X.adjoint ∘L F₁) ∧
       δ * N.gaugeReal (X.adjoint ∘L F₁) ≤ N.gaugeReal V := by
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
-  have hD : D.A.IsSelfAdjoint := by
-    change (A.addBounded V).IsSelfAdjoint
+  have hD : _root_.IsSelfAdjoint D.A := by
+    change _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
     exact addBounded_isSelfAdjoint A hA V hV
   have hVadj : N.Mem V.adjoint := N.adjoint_mem hVmem
   have hLeftMem : N.Mem (X.adjoint ∘L V.adjoint) :=
@@ -113,30 +113,30 @@ The isometry hypotheses are absent because only the contraction step used them.
 theorem sinTheta_addBounded_gauge_block_of_spectrum_gap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
-    (A₀ : DKClosedOperator (H := F)) (hA₀ : A₀.IsSelfAdjoint)
-    (Λ₁ : DKClosedOperator (H := G)) (hΛ₁ : Λ₁.IsSelfAdjoint)
+    (A₀ : F →ₗ.[ℂ] F) (hA₀ : IsSelfAdjoint A₀)
+    (Λ₁ : G →ₗ.[ℂ] G) (hΛ₁ : IsSelfAdjoint Λ₁)
     (X : F →L[ℂ] H) (F₁ : G →L[ℂ] H)
     (hXdom : ∀ x : A₀.domain, X (x : F) ∈ A.domain)
     (hXintertwines : ∀ x : A₀.domain,
-      A.toLinearMap ⟨X (x : F), hXdom x⟩ = X (A₀.toLinearMap x))
+      A ⟨X (x : F), hXdom x⟩ = X (A₀ x))
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hF₁intertwines : ∀ y : Λ₁.domain,
-      (A.addBounded V).toLinearMap ⟨F₁ (y : G), hF₁dom y⟩ =
-        F₁ (Λ₁.toLinearMap y))
+      (TauCeti.LinearPMap.addBounded A V) ⟨F₁ (y : G), hF₁dom y⟩ =
+        F₁ (Λ₁ y))
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow A₀.toLinearPMap β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove A₀.toLinearPMap α)
+    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow A₀ β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove A₀ α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁.toLinearPMap)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁)
     (hVmem : N.Mem V) :
     N.Mem (X.adjoint ∘L F₁) ∧
       δ * N.gaugeReal (X.adjoint ∘L F₁) ≤
         N.gaugeReal ((V ∘L X).adjoint ∘L F₁) := by
   let D := boundedPerturbationSinThetaData A V A₀ Λ₁ X F₁
     hXdom hXintertwines hF₁dom hF₁intertwines
-  have hD : D.A.IsSelfAdjoint := by
-    change (A.addBounded V).IsSelfAdjoint
+  have hD : _root_.IsSelfAdjoint D.A := by
+    change _root_.IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
     exact addBounded_isSelfAdjoint A hA V hV
   have hVadj : N.Mem V.adjoint := N.adjoint_mem hVmem
   have hLeftMem : N.Mem (X.adjoint ∘L V.adjoint) :=

@@ -177,24 +177,6 @@ theorem linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight
     rw [sub_eq_add_neg] at h
     exact h
 
-/-- Compatibility entry point for the raw ideal-gauge shifted-inverse
-assembly theorem. -/
-theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
-    (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
-    [N.toOperatorIdealFamily.IsComplete]
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
-    {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBsym : B.IsSymmetric)
-    (hBlow : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap β) (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap α)
-    (hAres : TwoSidedShiftedInverseBound A ((α + β) / 2)
-      ((α - β) / 2 + δ))
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
-    (hC : N.Mem C) :
-    N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C :=
-  linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight N
-    A.toLinearPMap_isClosed B.toLinearPMap_dense hβα hδ hBsym hBlow hBhigh hAres hEq hC
-
 end ExactSinTheta
 end DavisKahan
 end TauCeti

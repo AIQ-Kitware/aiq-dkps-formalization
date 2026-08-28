@@ -27,7 +27,7 @@ case `A.domain = B.domain = ⊤`, recorded as `ofBounded` below.
 Nothing in the paper's argument.  Both applications of the one-sided sine theorem already
 run through `UnboundedSinThetaData`, `unbounded_adjoint_residual_block_identity` and the
 Section 5 Sylvester estimate, all of which are stated for closed operators; the bounded
-file only reaches them through `ClosedOperator.ofBounded`.  The combination step
+file only reaches them through `(`..toLinearMap.toPMap ⊤)  The combination step
 (Lemma 6.1), the perturbation-block contraction (Lemma 6.2) and the identification of the
 cross-block sum with the literal functional-calculus `sin Θ` see only bounded projections
 and the bounded `H`, so they are reused verbatim.
@@ -122,37 +122,37 @@ operators. -/
 structure PaperCommonDomainSymmetricSinThetaProblem
     (U V : Submodule 𝕜 E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] where
   /-- The unperturbed closed self-adjoint operator. -/
-  A : ClosedOperator (𝕜 := 𝕜) (E := E)
+  A : E →ₗ.[𝕜] E
   /-- The perturbed closed self-adjoint operator. -/
-  B : ClosedOperator (𝕜 := 𝕜) (E := E)
+  B : E →ₗ.[𝕜] E
   /-- `A` is self-adjoint in the domain-aware sense. -/
-  selfAdjoint_A : A.IsSelfAdjoint
+  selfAdjoint_A : IsSelfAdjoint A
   /-- `B` is self-adjoint in the domain-aware sense. -/
-  selfAdjoint_B : B.IsSelfAdjoint
+  selfAdjoint_B : IsSelfAdjoint B
   /-- `U` reduces `A`. -/
-  reduces_A_U : A.ReducesSubspace U
+  reduces_A_U : TauCeti.LinearPMap.ReducesSubspace A U
   /-- `V` reduces `B`. -/
-  reduces_B_V : B.ReducesSubspace V
+  reduces_B_V : TauCeti.LinearPMap.ReducesSubspace B V
   /-- The paper's bounded perturbation `H`. -/
   perturbation : E →L[𝕜] E
   /-- The two operators share one domain. -/
   domain_eq : A.domain = B.domain
   /-- On the common domain the perturbation represents `B - A`. -/
   perturbation_eq : ∀ (x : E) (hA : x ∈ A.domain) (hB : x ∈ B.domain),
-    B.toLinearMap ⟨x, hB⟩ - A.toLinearMap ⟨x, hA⟩ = perturbation x
+    B ⟨x, hB⟩ - A ⟨x, hA⟩ = perturbation x
   /-- The paper's spectral separation `δ`. -/
   gap : ℝ
   /-- The separation is positive. -/
   gap_pos : 0 < gap
   /-- First application of the one-sided sine theorem. -/
   gap_U_to_Vperp : FormBoundedSylvesterGap
-    (ClosedOperator.reducingRestriction A U reduces_A_U).toLinearPMap
-    (ClosedOperator.reducingRestriction B Vᗮ reduces_B_V.orthogonal).toLinearPMap
+    (TauCeti.LinearPMap.reducingRestriction A U reduces_A_U)
+    (TauCeti.LinearPMap.reducingRestriction B Vᗮ reduces_B_V.orthogonal)
     gap
   /-- Second application, with `A` and `B` interchanged. -/
   gap_V_to_Uperp : FormBoundedSylvesterGap
-    (ClosedOperator.reducingRestriction B V reduces_B_V).toLinearPMap
-    (ClosedOperator.reducingRestriction A Uᗮ reduces_A_U.orthogonal).toLinearPMap
+    (TauCeti.LinearPMap.reducingRestriction B V reduces_B_V)
+    (TauCeti.LinearPMap.reducingRestriction A Uᗮ reduces_A_U.orthogonal)
     gap
 
 namespace PaperCommonDomainSymmetricSinThetaProblem
@@ -176,9 +176,10 @@ relations of `B` and of `A`.  Both sides are continuous in each argument separat
 the domain is dense, so the identity extends to the whole space in two steps. -/
 theorem perturbation_isSymmetric (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
     P.perturbation.IsSymmetric := by
-  have hAs := P.selfAdjoint_A.isSymmetric
-  have hBs := P.selfAdjoint_B.isSymmetric
-  have hdense : Dense ((P.A.domain : Submodule 𝕜 E) : Set E) := P.A.dense_domain
+  have hAs := TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint P.selfAdjoint_A
+  have hBs := TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint P.selfAdjoint_B
+  have hdense : Dense ((P.A.domain : Submodule 𝕜 E) : Set E) :=
+    P.selfAdjoint_A.dense_domain
   have hcore : ∀ x ∈ ((P.A.domain : Submodule 𝕜 E) : Set E),
       ∀ y ∈ ((P.A.domain : Submodule 𝕜 E) : Set E),
       ⟪P.perturbation x, y⟫_𝕜 = ⟪x, P.perturbation y⟫_𝕜 := by
@@ -187,8 +188,7 @@ theorem perturbation_isSymmetric (P : PaperCommonDomainSymmetricSinThetaProblem 
     have hyB : y ∈ P.B.domain := P.mem_domain_B hy
     rw [← P.perturbation_eq x hx hxB, ← P.perturbation_eq y hy hyB,
       inner_sub_left, inner_sub_right,
-      hBs.toLinearMap_inner_eq ⟨x, hxB⟩ ⟨y, hyB⟩,
-      hAs.toLinearMap_inner_eq ⟨x, hx⟩ ⟨y, hy⟩]
+      hBs ⟨x, hxB⟩ ⟨y, hyB⟩, hAs ⟨x, hx⟩ ⟨y, hy⟩]
   -- Freeze `x` in the domain and extend in `y`.
   have step : ∀ x ∈ ((P.A.domain : Submodule 𝕜 E) : Set E), ∀ y : E,
       ⟪P.perturbation x, y⟫_𝕜 = ⟪x, P.perturbation y⟫_𝕜 := by
@@ -213,8 +213,8 @@ noncomputable def forwardData
     (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
     UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := U) (G := Vᗮ) where
   A := P.B
-  A₀ := ClosedOperator.reducingRestriction P.A U P.reduces_A_U
-  Λ₁ := ClosedOperator.reducingRestriction P.B Vᗮ P.reduces_B_V.orthogonal
+  A₀ := TauCeti.LinearPMap.reducingRestriction P.A U P.reduces_A_U
+  Λ₁ := TauCeti.LinearPMap.reducingRestriction P.B Vᗮ P.reduces_B_V.orthogonal
   X := U.subtypeL
   F₁ := Vᗮ.subtypeL
   residual := P.perturbation ∘L U.subtypeL
@@ -230,8 +230,8 @@ noncomputable def forwardData
       ClosedOperator.reducingRestriction_inclusion_mem_domain P.A U P.reduces_A_U x
     have hint :
         (U.subtypeL
-            ((ClosedOperator.reducingRestriction P.A U P.reduces_A_U).toLinearMap x) : E) =
-          P.A.toLinearMap ⟨((x : U) : E), hmemA⟩ :=
+            ((TauCeti.LinearPMap.reducingRestriction P.A U P.reduces_A_U) x) : E) =
+          P.A ⟨((x : U) : E), hmemA⟩ :=
       (ClosedOperator.reducingRestriction_inclusion_intertwines P.A U P.reduces_A_U x).symm
     rw [hint]
     exact P.perturbation_eq _ hmemA (P.mem_domain_B hmemA)
@@ -244,8 +244,8 @@ noncomputable def reverseData
     (P : PaperCommonDomainSymmetricSinThetaProblem U V) :
     UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := V) (G := Uᗮ) where
   A := P.A
-  A₀ := ClosedOperator.reducingRestriction P.B V P.reduces_B_V
-  Λ₁ := ClosedOperator.reducingRestriction P.A Uᗮ P.reduces_A_U.orthogonal
+  A₀ := TauCeti.LinearPMap.reducingRestriction P.B V P.reduces_B_V
+  Λ₁ := TauCeti.LinearPMap.reducingRestriction P.A Uᗮ P.reduces_A_U.orthogonal
   X := V.subtypeL
   F₁ := Uᗮ.subtypeL
   residual := (-P.perturbation) ∘L V.subtypeL
@@ -262,13 +262,13 @@ noncomputable def reverseData
     have hmemA : ((x : V) : E) ∈ P.A.domain := P.mem_domain_A hmemB
     have hint :
         (V.subtypeL
-            ((ClosedOperator.reducingRestriction P.B V P.reduces_B_V).toLinearMap x) : E) =
-          P.B.toLinearMap ⟨((x : V) : E), hmemB⟩ :=
+            ((TauCeti.LinearPMap.reducingRestriction P.B V P.reduces_B_V) x) : E) =
+          P.B ⟨((x : V) : E), hmemB⟩ :=
       (ClosedOperator.reducingRestriction_inclusion_intertwines P.B V P.reduces_B_V x).symm
     rw [hint]
     have hPE := P.perturbation_eq ((x : V) : E) hmemA hmemB
-    have : P.A.toLinearMap ⟨((x : V) : E), hmemA⟩ -
-        P.B.toLinearMap ⟨((x : V) : E), hmemB⟩ = -P.perturbation ((x : V) : E) := by
+    have : P.A ⟨((x : V) : E), hmemA⟩ -
+        P.B ⟨((x : V) : E), hmemB⟩ = -P.perturbation ((x : V) : E) := by
       rw [← hPE]; abel
     exact this
   intertwines :=
@@ -306,9 +306,9 @@ theorem forward_all_kyFan [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
         kyFanApproximationGauge k P.forwardResidualBlock := by
   intro k
   set D := P.forwardData with hD
-  have hA0 : D.A₀.IsSelfAdjoint :=
+  have hA0 : _root_.IsSelfAdjoint D.A₀ :=
     ClosedOperator.reducingRestriction_isSelfAdjoint P.A U P.reduces_A_U P.selfAdjoint_A
-  have hL : D.Λ₁.IsSelfAdjoint :=
+  have hL : _root_.IsSelfAdjoint D.Λ₁ :=
     ClosedOperator.reducingRestriction_isSelfAdjoint P.B Vᗮ
       P.reduces_B_V.orthogonal P.selfAdjoint_B
   have hEq := unbounded_adjoint_residual_block_identity D P.selfAdjoint_B hA0 hL
@@ -360,9 +360,9 @@ theorem reverse_all_kyFan [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
         kyFanApproximationGauge k P.reverseResidualBlock := by
   intro k
   set D := P.reverseData with hD
-  have hA0 : D.A₀.IsSelfAdjoint :=
+  have hA0 : _root_.IsSelfAdjoint D.A₀ :=
     ClosedOperator.reducingRestriction_isSelfAdjoint P.B V P.reduces_B_V P.selfAdjoint_B
-  have hL : D.Λ₁.IsSelfAdjoint :=
+  have hL : _root_.IsSelfAdjoint D.Λ₁ :=
     ClosedOperator.reducingRestriction_isSelfAdjoint P.A Uᗮ
       P.reduces_A_U.orthogonal P.selfAdjoint_A
   have hEq := unbounded_adjoint_residual_block_identity D P.selfAdjoint_A hA0 hL
@@ -572,12 +572,12 @@ parallel statement: no hypothesis of `PaperSymmetricSinThetaProblem` is dropped,
 domain hypotheses are discharged by `⊤ = ⊤`. -/
 noncomputable def ofBounded (P : PaperSymmetricSinThetaProblem (E := E)) :
     PaperCommonDomainSymmetricSinThetaProblem P.U P.V where
-  A := ClosedOperator.ofBounded P.A
-  B := ClosedOperator.ofBounded P.B
-  selfAdjoint_A := ClosedOperator.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A
-  selfAdjoint_B := ClosedOperator.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B
-  reduces_A_U := ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
-  reduces_B_V := ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
+  A := (P.A.toLinearMap.toPMap ⊤)
+  B := (P.B.toLinearMap.toPMap ⊤)
+  selfAdjoint_A := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A
+  selfAdjoint_B := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B
+  reduces_A_U := TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
+  reduces_B_V := TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
   perturbation := P.perturbation
   domain_eq := rfl
   perturbation_eq := by intro x _ _; rfl
@@ -640,12 +640,12 @@ common-domain statement would only be parallel to the real bounded one rather th
 relaxation of it. -/
 noncomputable def ofBoundedReal (P : PaperRealSymmetricSinThetaProblem (E := E)) :
     PaperCommonDomainSymmetricSinThetaProblem P.U P.V where
-  A := ClosedOperator.ofBounded P.A
-  B := ClosedOperator.ofBounded P.B
-  selfAdjoint_A := ClosedOperator.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A
-  selfAdjoint_B := ClosedOperator.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B
-  reduces_A_U := ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
-  reduces_B_V := ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
+  A := (P.A.toLinearMap.toPMap ⊤)
+  B := (P.B.toLinearMap.toPMap ⊤)
+  selfAdjoint_A := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.A P.selfAdjoint_A
+  selfAdjoint_B := TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint P.B P.selfAdjoint_B
+  reduces_A_U := TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.A P.U P.reduces_A_U
+  reduces_B_V := TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace P.B P.V P.reduces_B_V
   perturbation := P.perturbation
   domain_eq := rfl
   perturbation_eq := by intro x _ _; rfl

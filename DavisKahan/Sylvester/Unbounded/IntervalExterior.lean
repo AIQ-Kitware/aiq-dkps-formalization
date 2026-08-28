@@ -75,41 +75,42 @@ end ExactSinTheta
 with Spectra spectrum in `[β, α]` has its quadratic form in `[β, α]`:
 transported through the bounded realization and the centered norm bound. -/
 theorem semibounded_of_spectrum_subset_Icc
-    {B : DKClosedOperator (H := F)}
-    (hB : B.IsSelfAdjoint)
+    {B : F →ₗ.[ℂ] F}
+    (hB : IsSelfAdjoint B)
     {β α : ℝ} (hβα : β ≤ α)
-    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
         Set.Icc β α) :
-    TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap β ∧ TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap α := by
+    TauCeti.LinearPMap.SemiboundedBelow B β ∧
+      TauCeti.LinearPMap.SemiboundedAbove B α := by
   obtain ⟨R, hnorm⟩ :=
     exists_boundedRealization_of_spectrum_subset_Icc hB hβα hσ
   have key : ∀ x : B.domain,
-      |RCLike.re ⟪B.toLinearMap x, (x : F)⟫_ℂ -
+      |RCLike.re ⟪B x, (x : F)⟫_ℂ -
         (β + α) / 2 * ‖(x : F)‖ ^ 2| ≤
       (α - β) / 2 * ‖(x : F)‖ ^ 2 := by
     intro x
-    have hag : R.operator (x : F) = B.toLinearMap x := R.agrees x
+    have hag : R.operator (x : F) = B x := R.agrees x
     have happ : (R.operator - (((β + α) / 2 : ℝ) : ℂ) •
         ContinuousLinearMap.id ℂ F) (x : F) =
-        B.toLinearMap x - (((β + α) / 2 : ℝ) : ℂ) • (x : F) := by
+        B x - (((β + α) / 2 : ℝ) : ℂ) • (x : F) := by
       rw [sub_apply, smul_apply, ContinuousLinearMap.id_apply, hag]
-    have hn : ‖B.toLinearMap x - (((β + α) / 2 : ℝ) : ℂ) • (x : F)‖ ≤
+    have hn : ‖B x - (((β + α) / 2 : ℝ) : ℂ) • (x : F)‖ ≤
         (α - β) / 2 * ‖(x : F)‖ := by
       rw [← happ]
       exact le_trans (ContinuousLinearMap.le_opNorm _ _)
         (mul_le_mul_of_nonneg_right hnorm (norm_nonneg _))
-    have h1 : RCLike.re ⟪B.toLinearMap x -
+    have h1 : RCLike.re ⟪B x -
         (((β + α) / 2 : ℝ) : ℂ) • (x : F), (x : F)⟫_ℂ =
-        RCLike.re ⟪B.toLinearMap x, (x : F)⟫_ℂ -
+        RCLike.re ⟪B x, (x : F)⟫_ℂ -
           (β + α) / 2 * ‖(x : F)‖ ^ 2 := by
       simp only [inner_sub_left, map_sub, inner_smul_left, Complex.conj_ofReal,
         ← Complex.real_smul, RCLike.smul_re, inner_self_eq_norm_sq]
-    have h2 : |RCLike.re ⟪B.toLinearMap x -
+    have h2 : |RCLike.re ⟪B x -
         (((β + α) / 2 : ℝ) : ℂ) • (x : F), (x : F)⟫_ℂ| ≤
         (α - β) / 2 * ‖(x : F)‖ ^ 2 := by
       refine le_trans (RCLike.abs_re_le_norm _) ?_
       refine le_trans (norm_inner_le_norm _ _) ?_
-      calc ‖B.toLinearMap x - (((β + α) / 2 : ℝ) : ℂ) • (x : F)‖ *
+      calc ‖B x - (((β + α) / 2 : ℝ) : ℂ) • (x : F)‖ *
             ‖(x : F)‖
           ≤ ((α - β) / 2 * ‖(x : F)‖) * ‖(x : F)‖ :=
             mul_le_mul_of_nonneg_right hn (norm_nonneg _)
@@ -122,20 +123,18 @@ theorem semibounded_of_spectrum_subset_Icc
     have hring : (β + α) / 2 * ‖(x : F)‖ ^ 2 -
         (α - β) / 2 * ‖(x : F)‖ ^ 2 = β * ‖(x : F)‖ ^ 2 := by ring
     have hlegacy : β * ‖(x : F)‖ ^ 2 ≤
-        RCLike.re ⟪B.toLinearMap x, (x : F)⟫_ℂ := by
+        RCLike.re ⟪B x, (x : F)⟫_ℂ := by
       linarith
-    simpa only [
-      TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply'] using hlegacy
+    exact hlegacy
   · intro x
     have h := (abs_le.mp (key x)).2
     have hring : (β + α) / 2 * ‖(x : F)‖ ^ 2 +
         (α - β) / 2 * ‖(x : F)‖ ^ 2 = α * ‖(x : F)‖ ^ 2 := by ring
     have hlegacy :
-        RCLike.re ⟪B.toLinearMap x, (x : F)⟫_ℂ ≤
+        RCLike.re ⟪B x, (x : F)⟫_ℂ ≤
           α * ‖(x : F)‖ ^ 2 := by
       linarith
-    simpa only [
-      TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply'] using hlegacy
+    exact hlegacy
 
 /-- **Davis--Kahan Theorem 5.2, interval/exterior, exterior block on the
 left, genuine spectra.**  For closed self-adjoint `A`, `B` with the
@@ -146,14 +145,14 @@ rectangular symmetric ideal family passes to `X` with
 theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRight
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
-    {A : DKClosedOperator (H := E)} {B : DKClosedOperator (H := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X C : F →L[ℂ] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hσA : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
-    (hσB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
+    (hσB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
         Set.Icc β α)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   obtain ⟨hBlow, hBhigh⟩ := semibounded_of_spectrum_subset_Icc hB hβα hσB
@@ -165,8 +164,8 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRig
     rw [Set.mem_Ioo] at hlam ⊢
     exact ⟨by linarith [hlam.1], by linarith [hlam.2]⟩
   exact linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight N
-    A.toLinearPMap_isClosed B.toLinearPMap_dense hβα hδ
-    hB.isSymmetric hBlow hBhigh hAres hEq hC
+    hA.isClosed hB.dense_domain hβα hδ
+    (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint hB) hBlow hBhigh hAres hEq hC
 
 /-- **Davis--Kahan Theorem 5.2, interval/exterior, interval block on the
 left, genuine spectra.**  The opposite orientation: the spectrum of `A`
@@ -176,14 +175,14 @@ Neumann engine finishes. -/
 theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRight
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
-    {A : DKClosedOperator (H := E)} {B : DKClosedOperator (H := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X C : F →L[ℂ] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hσA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+    (hσA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
         Set.Icc β α)
     (hσB : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   have hr0 : (0 : ℝ) ≤ (α - β) / 2 := by linarith
@@ -204,12 +203,12 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRig
   have hEq' : ∀ y : B.domain,
       (R.operator - (((α + β) / 2 : ℝ) : ℂ) •
         ContinuousLinearMap.id ℂ E) (X (y : F)) -
-        (X (B.toLinearMap y) -
+        (X (B y) -
           (((α + β) / 2 : ℝ) : ℂ) • X (y : F)) = C (y : F) := by
     intro y
     have h1 := hEq.equation y
     have h2 : R.operator (X (y : F)) =
-        A.toLinearMap ⟨X (y : F), hEq.mapsTo_domain y⟩ :=
+        A ⟨X (y : F), hEq.mapsTo_domain y⟩ :=
       R.agrees ⟨X (y : F), hEq.mapsTo_domain y⟩
     rw [sub_apply, smul_apply, ContinuousLinearMap.id_apply, h2, ← h1]
     abel

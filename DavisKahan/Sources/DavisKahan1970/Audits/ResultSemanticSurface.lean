@@ -75,9 +75,9 @@ theorem theorem5_2_real_ordered_sourceAudit
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
     (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℝ))
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℝ] E}
+    {B : F →ₗ.[ℝ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X C : F →L[ℝ] E} {c δ : ℝ}
     (hδ : 0 < δ)
     (hAc : TauCeti.DavisKahan.ExactSinTheta.SemiboundedBelow A (c + δ))

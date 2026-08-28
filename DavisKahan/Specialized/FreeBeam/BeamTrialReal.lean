@@ -77,7 +77,7 @@ theorem beamTrial_le_domain {x : BeamL2} (hx : x ∈ beamTrial) :
 /-- The free beam annihilates the affine trial plane. -/
 theorem beamOperator_apply_trial {x : BeamL2} (hx : x ∈ beamTrial)
     (h : x ∈ beamOperator.domain) :
-    beamOperator.toLinearMap ⟨x, h⟩ = 0 := by
+    beamOperator ⟨x, h⟩ = 0 := by
   obtain ⟨a, b, rfl⟩ := mem_beamTrial_iff.1 hx
   exact (beamOperator_affine_mem_and_zero a b).choose_spec
 
@@ -222,11 +222,11 @@ theorem beamPerturbation_isSelfAdjoint (ε : ℝ) :
   ring
 
 /-- The perturbed real free beam `A + H`. -/
-def beamPerturbed (ε : ℝ) : DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := BeamL2) :=
-  beamOperator.addBounded (beamPerturbation ε)
+def beamPerturbed (ε : ℝ) : BeamL2 →ₗ.[ℝ] BeamL2 :=
+  TauCeti.LinearPMap.addBounded beamOperator (beamPerturbation ε)
 
 /-- The perturbed real free beam is self-adjoint. -/
-theorem beamPerturbed_isSelfAdjoint (ε : ℝ) : (beamPerturbed ε).IsSelfAdjoint :=
+theorem beamPerturbed_isSelfAdjoint (ε : ℝ) : _root_.IsSelfAdjoint (beamPerturbed ε) :=
   addBounded_isSelfAdjoint beamOperator beamOperator_isSelfAdjoint
     (beamPerturbation ε) (beamPerturbation_isSelfAdjoint ε)
 
@@ -504,7 +504,7 @@ theorem finrank_beamTrial : Module.finrank ℝ beamTrial = 2 := by
 /-- The kernel of the real free-beam operator is exactly the affine trial plane. -/
 theorem beamOperator_eq_zero_iff_mem_beamTrial {x : BeamL2}
     (h : x ∈ beamOperator.domain) :
-    beamOperator.toLinearMap ⟨x, h⟩ = 0 ↔ x ∈ beamTrial := by
+    beamOperator ⟨x, h⟩ = 0 ↔ x ∈ beamTrial := by
   constructor
   · intro hzero
     obtain ⟨a, b, hab⟩ :=

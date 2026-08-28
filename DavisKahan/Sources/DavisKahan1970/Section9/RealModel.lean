@@ -29,7 +29,7 @@ abbrev RealBeamL2 : Type :=
 
 /-- The self-adjoint real free-beam operator used by the Section 9 numerical example. -/
 abbrev realBeamOperator :
-    DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := RealBeamL2) :=
+    RealBeamL2 →ₗ.[ℝ] RealBeamL2 :=
   DavisKahan.FreeBeam.Model.Real.beamOperator
 
 /-- The classical free-end fourth-derivative graph whose closure is `realBeamOperator`. -/
@@ -42,9 +42,9 @@ The real free-beam realization is self-adjoint and is exactly the graph closure 
 classical fourth derivative on functions satisfying
 `u''(0)=u'''(0)=u''(1)=u'''(1)=0`. -/
 theorem real_freeBeam_operator_source :
-    realBeamOperator.IsSelfAdjoint ∧
+    _root_.IsSelfAdjoint realBeamOperator ∧
       closure realClassicalFreeBeamGraph =
-        (realBeamOperator.toLinearPMap.graph : Set (RealBeamL2 × RealBeamL2)) :=
+        (realBeamOperator.graph : Set (RealBeamL2 × RealBeamL2)) :=
   DavisKahan.FreeBeam.Model.Real.beamOperator_is_closure_of_classical_freeBeam_fourthDerivative
 
 /-- **Paper-faithful spectral model for Section 9.**
@@ -52,12 +52,12 @@ theorem real_freeBeam_operator_source :
 Besides the two-dimensional zero eigenspace, the real spectrum is an increasing sequence of
 positive eigenvalues, every one of which is larger than `500`. -/
 theorem real_freeBeam_spectrum_source :
-    realBeamOperator.realSpectrum =
+    TauCeti.LinearPMap.realSpectrum realBeamOperator =
         insert 0 DavisKahan.FreeBeam.Model.Real.beamEigenvalues ∧
       (∃ f : ℕ → ℝ, StrictMono f ∧
         Set.range f =
           DavisKahan.FreeBeam.Model.Real.beamEigenvalues ∧
-        ∀ n, 500 < f n ∧ f n ∈ realBeamOperator.realSpectrum) := by
+        ∀ n, 500 < f n ∧ f n ∈ TauCeti.LinearPMap.realSpectrum realBeamOperator) := by
   exact ⟨
     DavisKahan.FreeBeam.Model.Real.realSpectrum_beamOperator_eq_insert_zero,
     DavisKahan.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues⟩
@@ -74,17 +74,17 @@ values would not justify the paper's strict multiplicity-sensitive indexing. -/
 theorem real_freeBeam_paper_eigenvalue_indexing_source :
     Module.finrank ℝ DavisKahan.FreeBeam.Model.Real.beamTrial = 2 ∧
       (∀ (x : RealBeamL2) (h : x ∈ realBeamOperator.domain),
-        realBeamOperator.toLinearMap ⟨x, h⟩ = 0 ↔
+        realBeamOperator ⟨x, h⟩ = 0 ↔
           x ∈ DavisKahan.FreeBeam.Model.Real.beamTrial) ∧
       (∃ f : ℕ → ℝ, StrictMono f ∧
         Set.range f = DavisKahan.FreeBeam.Model.Real.beamEigenvalues ∧
-        ∀ n, 500 < f n ∧ f n ∈ realBeamOperator.realSpectrum) ∧
+        ∀ n, 500 < f n ∧ f n ∈ TauCeti.LinearPMap.realSpectrum realBeamOperator) ∧
       (∀ (lam : ℝ), 0 < lam →
         ∀ (x y : realBeamOperator.domain),
           (x : RealBeamL2) ≠ 0 →
           (y : RealBeamL2) ≠ 0 →
-          realBeamOperator.toLinearMap x = lam • (x : RealBeamL2) →
-          realBeamOperator.toLinearMap y = lam • (y : RealBeamL2) →
+          realBeamOperator x = lam • (x : RealBeamL2) →
+          realBeamOperator y = lam • (y : RealBeamL2) →
           ∃ c : ℝ, (y : RealBeamL2) = c • (x : RealBeamL2)) := by
   refine ⟨DavisKahan.FreeBeam.Model.Real.finrank_beamTrial, ?_, ?_, ?_⟩
   · intro x h
@@ -113,7 +113,7 @@ theorem real_freeBeam_trial_le_domain {x : RealBeamL2}
 theorem real_freeBeam_operator_apply_trial {x : RealBeamL2}
     (hx : x ∈ DavisKahan.FreeBeam.Model.Real.beamTrial)
     (hdom : x ∈ realBeamOperator.domain) :
-    realBeamOperator.toLinearMap ⟨x, hdom⟩ = 0 :=
+    realBeamOperator ⟨x, hdom⟩ = 0 :=
   DavisKahan.FreeBeam.Model.Real.beamOperator_apply_trial hx hdom
 
 /-- The zero eigenspace is exactly the paper's two-dimensional affine trial plane. -/
@@ -121,7 +121,7 @@ theorem real_freeBeam_zero_mode_source :
     Module.finrank ℝ
         DavisKahan.FreeBeam.Model.Real.beamTrial = 2 ∧
       ∀ (x : RealBeamL2) (h : x ∈ realBeamOperator.domain),
-        realBeamOperator.toLinearMap ⟨x, h⟩ = 0 ↔
+        realBeamOperator ⟨x, h⟩ = 0 ↔
           x ∈ DavisKahan.FreeBeam.Model.Real.beamTrial :=
   DavisKahan.FreeBeam.Model.Real.beamRealZeroMode_sourceFacts
 

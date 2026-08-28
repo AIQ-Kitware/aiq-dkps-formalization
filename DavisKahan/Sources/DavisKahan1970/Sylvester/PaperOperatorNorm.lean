@@ -56,7 +56,6 @@ namespace ExactSinTheta
 
 open scoped InnerProductSpace BigOperators ENNReal
 
-open TauCeti.DavisKahanExt
 
 noncomputable section
 
@@ -74,13 +73,13 @@ theorem paperOperatorNorm_sylvester_le_of_pairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
     {X C : F →L[ℂ] E}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     {r : ℕ} (hRank : C.rank ≤ (r : Cardinal)) :
     δ * ‖X‖ ≤ ‖C‖ * Real.sqrt r := by
   have hC : IsPaperHilbertSchmidt C := isPaperHilbertSchmidt_of_rank_le hRank
@@ -98,13 +97,13 @@ theorem paperOperatorNorm_sylvester_real_le_of_pairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
-    {A : ClosedOperator (𝕜 := ℝ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℝ) (E := F)}
+    {A : E →ₗ.[ℝ] E}
+    {B : F →ₗ.[ℝ] F}
     {X C : F →L[ℝ] E}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : ∀ lam ∈ A.realSpectrum, ∀ α ∈ B.realSpectrum, δ ≤ |lam - α|)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hgap : ∀ lam ∈ TauCeti.LinearPMap.realSpectrum A, ∀ α ∈ TauCeti.LinearPMap.realSpectrum B, δ ≤ |lam - α|)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     {r : ℕ} (hRank : C.rank ≤ (r : Cardinal)) :
     δ * ‖X‖ ≤ ‖C‖ * Real.sqrt r := by
   have hC : IsPaperHilbertSchmidt C := isPaperHilbertSchmidt_of_rank_le hRank
@@ -128,13 +127,13 @@ theorem paperOperatorNorm_sylvester_le_finrank_range
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
     [FiniteDimensional ℂ F]
-    {A : ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
     {X C : F →L[ℂ] E}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C) :
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C) :
     δ * ‖X‖ ≤
       ‖C‖ * Real.sqrt (Module.finrank ℂ (LinearMap.range (C : F →ₗ[ℂ] E))) := by
   have hRank : C.rank ≤

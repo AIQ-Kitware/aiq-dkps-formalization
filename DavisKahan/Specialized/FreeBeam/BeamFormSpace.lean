@@ -574,16 +574,16 @@ def beamShiftedFormData :
 
 /-- **The free-beam operator**: the self-adjoint nonnegative realization of the fourth
 derivative with free boundary conditions on `L²(0,1]`. -/
-def beamOperator : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := BeamL2) :=
+def beamOperator : BeamL2 →ₗ.[ℂ] BeamL2 :=
   beamShiftedFormData.beamOperator
 
 /-- The beam operator is self-adjoint. -/
-theorem beamOperator_isSelfAdjoint : beamOperator.IsSelfAdjoint :=
+theorem beamOperator_isSelfAdjoint : IsSelfAdjoint beamOperator :=
   beamShiftedFormData.beamOperator_isSelfAdjoint
 
 /-- The beam operator is nonnegative. -/
 theorem beamOperator_nonneg (x : beamOperator.domain) :
-    0 ≤ RCLike.re ⟪beamOperator.toLinearMap x, (x : BeamL2)⟫_ℂ :=
+    0 ≤ RCLike.re ⟪beamOperator x, (x : BeamL2)⟫_ℂ :=
   beamShiftedFormData.beam_nonnegative x
 
 /-! ## Compactness of the embedding -/

@@ -489,25 +489,25 @@ theorem at arbitrary rectangular ideal-gauge scope. -/
 theorem section7_sinTwoTheta_source_ideal
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {beta alpha delta : ℝ} (hba : beta ≤ alpha) (hdelta : 0 < delta)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap beta)
+      (selfAdjointSpectralRestriction A hA B hB) beta)
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap alpha)
+      (selfAdjointSpectralRestriction A hA B hB) alpha)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (beta - delta) (alpha + delta),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
-        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E) :
     N.Mem (sinTwoThetaIdealBlock
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (A.addBounded E)
+      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
         (addBounded_isSelfAdjoint A hA E hE) S hS)) ∧
     delta * N.gaugeReal (sinTwoThetaIdealBlock
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (A.addBounded E)
+      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
         (addBounded_isSelfAdjoint A hA E hE) S hS)) ≤
       2 * N.gaugeReal E := by
   exact sinTwoTheta_addBounded_gauge_of_spectrum_gap
@@ -525,34 +525,34 @@ not an artifact. -/
 theorem section7_tanTwoTheta_source_ideal
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {beta alpha delta : ℝ} (hba : beta ≤ alpha) (hdelta : 0 < delta)
     (hBlow : TauCeti.LinearPMap.SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap beta)
+      (selfAdjointSpectralRestriction A hA B hB) beta)
     (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap alpha)
+      (selfAdjointSpectralRestriction A hA B hB) alpha)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (beta - delta) (alpha + delta),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
-        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
+        (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E)
     (hquarter : IsQuarterAcute
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (A.addBounded E)
+      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
         (addBounded_isSelfAdjoint A hA E hE) S hS)) :
     N.Mem (tanTwoThetaIdealBlock
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (A.addBounded E)
+      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
         (addBounded_isSelfAdjoint A hA E hE) S hS) hquarter) ∧
     delta * N.gaugeReal (tanTwoThetaIdealBlock
       (selfAdjointSpectralSubspace A hA B hB)
-      (selfAdjointSpectralSubspace (A.addBounded E)
+      (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
         (addBounded_isSelfAdjoint A hA E hE) S hS) hquarter) ≤
       (2 * N.gaugeReal E) /
         (1 - 2 * directedGap
           (selfAdjointSpectralSubspace A hA B hB)
-          (selfAdjointSpectralSubspace (A.addBounded E)
+          (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
             (addBounded_isSelfAdjoint A hA E hE) S hS) ^ 2) := by
   exact tanTwoTheta_addBounded_gauge_of_spectrum_gap
     N A hA E hE B S hB hS hba hdelta hBlow hBhigh hBcomplSpec hEmem hquarter

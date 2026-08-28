@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge
+import DavisKahan.SpectralTheory.ClosedOperator.Basic
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 
@@ -29,33 +29,34 @@ variable {H : Type u} {K : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
   [NormedAddCommGroup K] [InnerProductSpace ℂ K] [CompleteSpace K]
 
-/-- Conjugate a self-adjoint DK closed operator by a linear isometry
- equivalence.  The resulting DK operator is obtained by forgetting the
- self-adjoint partial operator built from the conjugated partial operator. -/
+/-- Conjugate a self-adjoint partial map by a linear isometry equivalence.
+
+The self-adjointness hypothesis is not used by the construction -- `unitaryConj`
+transports any partial map -- but it is retained so that this name and
+`unitaryConjugate_isSelfAdjoint` take the same arguments at every call site. -/
 noncomputable def unitaryConjugate
-    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
-    (hA : A.IsSelfAdjoint) : DKClosedOperator (H := K) :=
-  closedOperatorOfSelfAdjointPMap (TauCeti.LinearPMap.unitaryConj W A.toLinearPMap)
-    (TauCeti.LinearPMap.isSelfAdjoint_unitaryConj hA)
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
+    (_hA : IsSelfAdjoint A) : K →ₗ.[ℂ] K :=
+  TauCeti.LinearPMap.unitaryConj W A
 
 /-- The domain of a unitary conjugate is the image of the original domain. -/
 @[simp] theorem unitaryConjugate_domain
-    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
-    (hA : A.IsSelfAdjoint) :
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) :
     (unitaryConjugate W A hA).domain =
       A.domain.comap (W.symm.toLinearEquiv : K →ₗ[ℂ] H) := rfl
 
 /-- Membership in the transported domain is the expected inverse-image
 condition. -/
 theorem mem_unitaryConjugate_domain_iff
-    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
-    (hA : A.IsSelfAdjoint) {x : K} :
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) {x : K} :
     x ∈ (unitaryConjugate W A hA).domain ↔ W.symm x ∈ A.domain := Iff.rfl
 
 /-- The transported domain is also the direct image of the original domain. -/
 theorem unitaryConjugate_domain_eq_map
-    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
-    (hA : A.IsSelfAdjoint) :
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) :
     (unitaryConjugate W A hA).domain =
       A.domain.map (W.toLinearEquiv : H →ₗ[ℂ] K) := by
   ext x
@@ -69,30 +70,30 @@ theorem unitaryConjugate_domain_eq_map
 
 /-- The unitary conjugate acts by transporting, applying, and transporting back. -/
 @[simp] theorem unitaryConjugate_apply
-    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
-    (hA : A.IsSelfAdjoint) (x : (unitaryConjugate W A hA).domain) :
-    (unitaryConjugate W A hA).toLinearMap x =
-      W (A.toLinearMap ⟨W.symm (x : K), x.property⟩) := rfl
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) (x : (unitaryConjugate W A hA).domain) :
+    (unitaryConjugate W A hA) x =
+      W (A ⟨W.symm (x : K), x.property⟩) := rfl
 
 /-- The unitary sends every original-domain vector into the transported
  domain. -/
 theorem unitaryConjugate_map_mem_domain
-    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
-    (hA : A.IsSelfAdjoint) (x : A.domain) :
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) (x : A.domain) :
     W (x : H) ∈ (unitaryConjugate W A hA).domain := by
   rw [mem_unitaryConjugate_domain_iff, W.symm_apply_apply]
   exact x.property
 
 /-- Conjugation acts by the expected formula on transported domain vectors. -/
 theorem unitaryConjugate_apply_map
-    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
-    (hA : A.IsSelfAdjoint) (x : A.domain) :
-    (unitaryConjugate W A hA).toLinearMap
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) (x : A.domain) :
+    (unitaryConjugate W A hA)
         ⟨W (x : H), unitaryConjugate_map_mem_domain W A hA x⟩ =
-      W (A.toLinearMap x) := by
+      W (A x) := by
   rw [unitaryConjugate_apply]
   congr 1
-  exact congrArg A.toLinearMap
+  exact congrArg A
     (Subtype.ext (W.symm_apply_apply (x : H)))
 
 /-- Transport a bounded operator through a unitary equivalence. -/
@@ -164,33 +165,33 @@ theorem mem_resolventSet_unitaryConj_iff
 /-- A resolvent of the original DK operator transports to a resolvent of the
 unitarily conjugated DK operator. -/
 theorem mem_resolventSet_unitaryConjugate_iff
-    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
-    (hA : A.IsSelfAdjoint) {z : ℂ} :
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) {z : ℂ} :
     z ∈ TauCeti.LinearPMap.resolventSet
-        (unitaryConjugate W A hA).toLinearPMap ↔
-      z ∈ TauCeti.LinearPMap.resolventSet A.toLinearPMap := by
+        (unitaryConjugate W A hA) ↔
+      z ∈ TauCeti.LinearPMap.resolventSet A := by
   change z ∈ TauCeti.LinearPMap.resolventSet
-      (TauCeti.LinearPMap.unitaryConj W A.toLinearPMap) ↔
-    z ∈ TauCeti.LinearPMap.resolventSet A.toLinearPMap
-  exact mem_resolventSet_unitaryConj_iff W A.toLinearPMap
+      (TauCeti.LinearPMap.unitaryConj W A) ↔
+    z ∈ TauCeti.LinearPMap.resolventSet A
+  exact mem_resolventSet_unitaryConj_iff W A
 
 /-- The conjugated DK operator is self-adjoint. -/
 theorem unitaryConjugate_isSelfAdjoint
-    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
-    (hA : A.IsSelfAdjoint) : (unitaryConjugate W A hA).IsSelfAdjoint := by
-  change IsSelfAdjoint (TauCeti.LinearPMap.unitaryConj W A.toLinearPMap)
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) : _root_.IsSelfAdjoint (unitaryConjugate W A hA) := by
+  change IsSelfAdjoint (TauCeti.LinearPMap.unitaryConj W A)
   exact TauCeti.LinearPMap.isSelfAdjoint_unitaryConj hA
 
 /-- The real spectrum is invariant under unitary conjugation. -/
 theorem unitaryConjugate_spectrum_eq
-    (W : H ≃ₗᵢ[ℂ] K) (A : DKClosedOperator (H := H))
-    (hA : A.IsSelfAdjoint) :
-    TauCeti.LinearPMap.spectrum (unitaryConjugate W A hA).toLinearPMap =
-      TauCeti.LinearPMap.spectrum A.toLinearPMap := by
+    (W : H ≃ₗᵢ[ℂ] K) (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) :
+    TauCeti.LinearPMap.spectrum (unitaryConjugate W A hA) =
+      TauCeti.LinearPMap.spectrum A := by
   ext lam
   change ((lam : ℂ) ∉ TauCeti.LinearPMap.resolventSet
-      (unitaryConjugate W A hA).toLinearPMap) ↔
-    ((lam : ℂ) ∉ TauCeti.LinearPMap.resolventSet A.toLinearPMap)
+      (unitaryConjugate W A hA)) ↔
+    ((lam : ℂ) ∉ TauCeti.LinearPMap.resolventSet A)
   exact not_congr (mem_resolventSet_unitaryConjugate_iff W A hA)
 
 /-- Restriction of an ambient unitary to a submodule and its transported

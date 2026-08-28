@@ -33,36 +33,34 @@ variable {E : Type v}
 /-- The exact projection, domain, commutation, and strong-convergence laws
 needed from a spectral cutoff family. -/
 structure SpectralCutoffInterface
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
-    (hA : A.IsSelfAdjoint) where
+    (A : E →ₗ.[𝕜] E) (hA : IsSelfAdjoint A) where
   cutoff : ℝ → E →L[𝕜] E
   isOrthogonalProjection : ∀ τ,
     cutoff τ ∘L cutoff τ = cutoff τ ∧ (cutoff τ).IsSymmetric
   range_le_domain : ∀ τ, LinearMap.range (cutoff τ).toLinearMap ≤ A.domain
   commutes_on_domain : ∀ τ (x : A.domain),
     ∃ hx : cutoff τ (x : E) ∈ A.domain,
-      A.toLinearMap ⟨cutoff τ (x : E), hx⟩ = cutoff τ (A.toLinearMap x)
+      A ⟨cutoff τ (x : E), hx⟩ = cutoff τ (A x)
   tendsto_identity : ∀ x,
     Tendsto (fun τ : ℝ => cutoff τ x) atTop (𝓝 x)
 
 /-- The bounded truncation laws needed after a cutoff family has been chosen. -/
 structure BoundedTruncationInterface
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E))
-    (hA : A.IsSelfAdjoint)
+    (A : E →ₗ.[𝕜] E) (hA : IsSelfAdjoint A)
     (P : SpectralCutoffInterface A hA) where
   truncation : ℝ → E →L[𝕜] E
   isSymmetric : ∀ τ, (truncation τ).IsSymmetric
   eq_on_cutoff : ∀ τ x,
     ∃ hx : P.cutoff τ x ∈ A.domain,
-      truncation τ x = A.toLinearMap ⟨P.cutoff τ x, hx⟩
+      truncation τ x = A ⟨P.cutoff τ x, hx⟩
   tendsto_on_domain : ∀ x : A.domain,
     Tendsto (fun τ : ℝ => truncation τ (x : E)) atTop
-      (𝓝 (A.toLinearMap x))
-  lowerBound : ∀ {c : ℝ}, TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap c →
+      (𝓝 (A x))
+  lowerBound : ∀ {c : ℝ}, TauCeti.LinearPMap.SemiboundedBelow A c →
     ∀ {τ : ℝ}, 0 ≤ τ → ∀ x,
       c * ‖P.cutoff τ x‖ ^ 2 ≤
         RCLike.re ⟪truncation τ x, P.cutoff τ x⟫_𝕜
-  upperBound : ∀ {c : ℝ}, TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c →
+  upperBound : ∀ {c : ℝ}, TauCeti.LinearPMap.SemiboundedAbove A c →
     ∀ {τ : ℝ}, 0 ≤ τ → ∀ x,
       RCLike.re ⟪truncation τ x, P.cutoff τ x⟫_𝕜 ≤
         c * ‖P.cutoff τ x‖ ^ 2

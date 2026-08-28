@@ -325,7 +325,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_of_data_of_transversal
     (D : UnboundedCompressionTrialData U)
     (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : U) : E)),
@@ -389,7 +389,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_of_data
     (D : UnboundedCompressionTrialData U)
     (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : U) : E)),
@@ -429,20 +429,20 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_exact
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (D : UnboundedCompressionTrialData U)
-    (A : DKClosedOperator (H := E))
+    (A : E →ₗ.[ℂ] E)
     (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hZA : ∀ z : D.compression.domain, ((z : U) : E) ∈ A.domain)
     (haction : ∀ z : D.compression.domain,
-      D.action z = A.toLinearMap ⟨((z : U) : E), hZA z⟩)
+      D.action z = A ⟨((z : U) : E), hZA z⟩)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
-    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression alpha)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤
-        RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
+        RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
@@ -458,7 +458,7 @@ arbitrary chosen reducing subspace.  All domain-sensitive crossed-form work is
 reused from the already-proved unbounded Theorem 6.3 implementation. -/
 theorem tanTheta_unbounded_ambient_paperUINorm_exact
     (N : PaperUnitaryInvariantNorm)
-    (A : DKClosedOperator (H := E))
+    (A : E →ₗ.[ℂ] E)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (D : UnboundedTrialBlock A U)
@@ -466,13 +466,13 @@ theorem tanTheta_unbounded_ambient_paperUINorm_exact
     {alpha delta : ℝ} (hdelta : 0 < delta)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : E)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
     (hCompression : ∀ z : U,
       RCLike.re ⟪D.operator z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤
-        RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
+        RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :

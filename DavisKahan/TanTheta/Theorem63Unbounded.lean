@@ -70,7 +70,7 @@ ambient operator is not.
 Both the source bundle and the target bundle are bounded data, so this construction is
 scalar-generic. -/
 noncomputable def Theorem63TrialData.ofUnbounded
-    {A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)} {Z : Submodule 𝕜 H}
+    {A : H →ₗ.[𝕜] H} {Z : Submodule 𝕜 H}
     [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : UnboundedTrialBlock A Z) (V : Submodule 𝕜 H) [V.HasOrthogonalProjection] :
     Theorem63TrialData Z V where
@@ -88,12 +88,12 @@ noncomputable def Theorem63TrialData.ofUnbounded
 
 /-- The action of the unbounded trial data is the operator's own action. -/
 theorem Theorem63TrialData.ofUnbounded_action
-    {A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)} {Z : Submodule 𝕜 H}
+    {A : H →ₗ.[𝕜] H} {Z : Submodule 𝕜 H}
     [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : UnboundedTrialBlock A Z) (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
     (z : Z) :
     (Theorem63TrialData.ofUnbounded D V).action z =
-      A.toLinearMap ⟨(z : H), D.domain_le z.property⟩ := by
+      A ⟨(z : H), D.domain_le z.property⟩ := by
   have h := D.residual_apply z
   change ((D.operator z : Z) : H) + D.residual z = _
   rw [h]
@@ -117,17 +117,17 @@ a spectral gap.
 The argument is pure block algebra on the domain, so it is scalar-generic: the only
 property of the scalars used is that the real part of an inner product is symmetric. -/
 theorem crossed_lower_of_reducing
-    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H))
+    (A : H →ₗ.[𝕜] H)
     {Z : Submodule 𝕜 H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : UnboundedTrialBlock A Z)
     (V : Submodule 𝕜 H) [V.HasOrthogonalProjection]
     {α δ : ℝ}
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
     (hlower : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_𝕜)
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_𝕜)
     (z : Z) :
     (α + δ) * ‖Vᗮ.starProjection ((z : Z) : H)‖ ^ 2 ≤
       RCLike.re ⟪Vᗮ.starProjection ((z : Z) : H),
@@ -138,7 +138,7 @@ theorem crossed_lower_of_reducing
     conv_lhs => rw [← inner_conj_symm]
     rw [RCLike.conj_re]
   have haction : Vᗮ.starProjection ((Theorem63TrialData.ofUnbounded D V).action z) =
-      A.toLinearMap ⟨Vᗮ.starProjection ((z : Z) : H),
+      A ⟨Vᗮ.starProjection ((z : Z) : H),
         hVdom ⟨((z : Z) : H), hzdom⟩⟩ := by
     rw [Theorem63TrialData.ofUnbounded_action D V z]
     exact hVcomm ⟨((z : Z) : H), hzdom⟩
@@ -153,7 +153,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 section SpectralGap
 
-variable (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+variable (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
 
 /-- A spectral projection of a subset of a null set is null. -/
 theorem specProjection_eq_zero_of_subset {S T : Set ℝ}
@@ -232,8 +232,8 @@ theorem orthogonal_selfAdjointSpectralSubspace_starProjection_mem_domain
 /-- **A spectral subspace reduces its operator, commutation half.** -/
 theorem selfAdjoint_apply_orthogonal_selfAdjointSpectralSubspace_starProjection
     (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
-    (selfAdjointSpectralSubspace A hA B hB)ᗮ.starProjection (A.toLinearMap x) =
-      A.toLinearMap ⟨(selfAdjointSpectralSubspace A hA B hB)ᗮ.starProjection ((x : H)),
+    (selfAdjointSpectralSubspace A hA B hB)ᗮ.starProjection (A x) =
+      A ⟨(selfAdjointSpectralSubspace A hA B hB)ᗮ.starProjection ((x : H)),
         orthogonal_selfAdjointSpectralSubspace_starProjection_mem_domain A hA B hB x⟩ := by
   have hproj := starProjection_orthogonal_selfAdjointSpectralSubspace A hA B hB
   have hcoe : (⟨(selfAdjointSpectralSubspace A hA B hB)ᗮ.starProjection ((x : H)),
@@ -253,7 +253,7 @@ theorem le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_Iic
     {c : ℝ} (y : H)
     (hy : y ∈ (selfAdjointSpectralSubspace A hA (Set.Iic c) measurableSet_Iic)ᗮ)
     (hydom : y ∈ A.domain) :
-    c * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hydom⟩, y⟫_ℂ := by
+    c * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hydom⟩, y⟫_ℂ := by
   rw [RCLike.re_to_complex]
   refine TauCeti.LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero
     hA (c := c) ⟨y, hydom⟩ ?_
@@ -281,7 +281,7 @@ theorem le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap
     (y : H)
     (hyV : y ∈ (selfAdjointSpectralSubspace A hA (Set.Iic α) measurableSet_Iic)ᗮ)
     (hy : y ∈ A.domain) :
-    (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ := by
+    (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ := by
   classical
   have hprojV' : (selfAdjointSpectralSubspace A hA (Set.Iic α)
       measurableSet_Iic)ᗮ.starProjection =
@@ -294,14 +294,14 @@ theorem le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap
     exact Submodule.starProjection_eq_self_iff.mpr hyV
   -- The energy bound, at every threshold strictly below the gap.
   have hstep : ∀ c : ℝ, c < α + δ →
-      c * ‖y‖ ^ 2 ≤ (⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ).re := by
+      c * ‖y‖ ^ 2 ≤ (⟪A ⟨y, hy⟩, y⟫_ℂ).re := by
     intro c hc
     refine TauCeti.LinearPMap.le_re_inner_of_specProjection_Iic_apply_eq_zero
       hA (c := c) ⟨y, hy⟩ ?_
     have h0 := specProjection_Iic_apply_eq_zero_of_gap A hA hgap hc y
     rwa [hfix] at h0
   -- Take `c` up to `α + δ`.
-  have hfinal : (α + δ) * ‖y‖ ^ 2 ≤ (⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ).re := by
+  have hfinal : (α + δ) * ‖y‖ ^ 2 ≤ (⟪A ⟨y, hy⟩, y⟫_ℂ).re := by
     by_contra hcon
     push Not at hcon
     rcases eq_or_lt_of_le (sq_nonneg ‖y‖) with hzero | hpos
@@ -312,7 +312,7 @@ theorem le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_of_gap
       simp only [hy0, inner_zero_right, Complex.zero_re] at hcon
       exact absurd hcon (lt_irrefl 0)
     · obtain ⟨c, hc1, hc2⟩ := exists_between
-        (show (⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ).re / ‖y‖ ^ 2 < α + δ by
+        (show (⟪A ⟨y, hy⟩, y⟫_ℂ).re / ‖y‖ ^ 2 < α + δ by
           rw [div_lt_iff₀ hpos]
           exact hcon)
       have h := hstep c hc2
@@ -334,7 +334,7 @@ projection of `(Iic α)ᶜ` preserves the domain and commutes with the operator 
 gap supplies the form bound on `Vᗮ` at every vector of the domain, not merely at the
 projected trial vectors. -/
 theorem crossed_lower_of_spectralGap
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : UnboundedTrialBlock A Z)
     {α δ : ℝ}
@@ -374,7 +374,7 @@ operator is closed, unbounded and self-adjoint, and nothing in the statement or 
 requires it to be bounded. -/
 theorem theorem6_3_unbounded_ideal
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]
     (D : UnboundedTrialBlock A Z)
@@ -401,7 +401,7 @@ right singular basis of the directed sine block, with entries `tan (arcsin sᵢ)
 hypothesis the printed theorem does not. -/
 theorem theorem6_3_unbounded_ideal_directedTangent
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]
     (D : UnboundedTrialBlock A Z)
@@ -457,7 +457,7 @@ conclusion is the paper's `δ ‖tan Θ₀‖ ≤ ‖R‖` for every Fan-dominan
 ideal gauge. -/
 theorem theorem6_3_unbounded_ideal_of_reducing
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H))
+    (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]
     (D : UnboundedTrialBlock A Z)
@@ -465,11 +465,11 @@ theorem theorem6_3_unbounded_ideal_of_reducing
     {α δ : ℝ} (hδ : 0 < δ)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
     (hCompression : ∀ z : Z, RCLike.re ⟪D.operator z, z⟫_ℂ ≤ α * ‖z‖ ^ 2)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (tanTheta0 : Z →L[ℂ] H)
     (htan : HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0)
     (hResidual : N.Mem D.residual) :
@@ -486,7 +486,7 @@ the directed sine block, and the `sᵢ < 1` it needs is derived from the two for
 rather than assumed. -/
 theorem theorem6_3_unbounded_ideal_directedTangent_of_reducing
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : DKClosedOperator (H := H))
+    (A : H →ₗ.[ℂ] H)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     [FiniteDimensional ℂ Z]
     (D : UnboundedTrialBlock A Z)
@@ -494,11 +494,11 @@ theorem theorem6_3_unbounded_ideal_directedTangent_of_reducing
     {α δ : ℝ} (hδ : 0 < δ)
     (hVdom : ∀ x : A.domain, Vᗮ.starProjection ((x : H)) ∈ A.domain)
     (hVcomm : ∀ x : A.domain,
-      Vᗮ.starProjection (A.toLinearMap x) =
-        A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
+      Vᗮ.starProjection (A x) =
+        A ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
     (hCompression : ∀ z : Z, RCLike.re ⟪D.operator z, z⟫_ℂ ≤ α * ‖z‖ ^ 2)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (hResidual : N.Mem D.residual) :
     N.Mem (theorem63DirectedTangent Z V) ∧
       δ * N.gauge (theorem63DirectedTangent Z V) ≤ N.gauge D.residual := by

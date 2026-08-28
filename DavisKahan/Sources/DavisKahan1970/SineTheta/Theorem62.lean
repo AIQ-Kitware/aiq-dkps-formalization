@@ -42,9 +42,9 @@ variable {E F G H : Type v}
 structure PaperTheorem62Data where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
+  trial_selfAdjoint : _root_.IsSelfAdjoint data.A₀
+  complement_selfAdjoint : _root_.IsSelfAdjoint data.Λ₁
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   frameLowerBound : ℝ
@@ -276,9 +276,9 @@ variable {E F G H : Type v}
 structure PaperRealTheorem62Data where
   data : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℝ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
+  trial_selfAdjoint : _root_.IsSelfAdjoint data.A₀
+  complement_selfAdjoint : _root_.IsSelfAdjoint data.Λ₁
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   frameLowerBound : ℝ
@@ -286,7 +286,7 @@ structure PaperRealTheorem62Data where
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
   spectral_distance :
-    ∀ lam ∈ data.A₀.realSpectrum, ∀ α ∈ data.Λ₁.realSpectrum,
+    ∀ lam ∈ TauCeti.LinearPMap.realSpectrum data.A₀, ∀ α ∈ TauCeti.LinearPMap.realSpectrum data.Λ₁,
       gap ≤ |lam - α|
 
 namespace PaperRealTheorem62Data

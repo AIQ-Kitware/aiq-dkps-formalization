@@ -42,7 +42,7 @@ The bundle is *bounded data*: nothing in it mentions the ambient operator except
 through the two identities `operator_apply` and `residual_apply`.  It is
 therefore scalar-generic, over a real or a complex Hilbert space alike. -/
 structure UnboundedTrialBlock
-    (A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)) (Z : Submodule 𝕜 H)
+    (A : H →ₗ.[𝕜] H) (Z : Submodule 𝕜 H)
     [Z.HasOrthogonalProjection] [CompleteSpace Z] where
   domain_le : Z ≤ A.domain
   operator : Z →L[𝕜] Z
@@ -50,16 +50,16 @@ structure UnboundedTrialBlock
   operator_apply (x : Z) :
     (operator x : H) =
       Z.starProjection
-        (A.toLinearMap ⟨(x : H), domain_le x.property⟩)
+        (A ⟨(x : H), domain_le x.property⟩)
   residual : Z →L[𝕜] H
   residual_apply (x : Z) :
     residual x =
-      A.toLinearMap ⟨(x : H), domain_le x.property⟩ -
+      A ⟨(x : H), domain_le x.property⟩ -
         (operator x : H)
 
 namespace UnboundedTrialBlock
 
-variable {A : DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := H)}
+variable {A : H →ₗ.[𝕜] H}
   {Z : Submodule 𝕜 H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
 
 /-- The bundled residual is the part of the unbounded action orthogonal to the
@@ -67,9 +67,9 @@ trial subspace. -/
 theorem residual_eq_sub_starProjection
     (D : UnboundedTrialBlock A Z) (x : Z) :
     D.residual x =
-      A.toLinearMap ⟨(x : H), D.domain_le x.property⟩ -
+      A ⟨(x : H), D.domain_le x.property⟩ -
         Z.starProjection
-          (A.toLinearMap ⟨(x : H), D.domain_le x.property⟩) := by
+          (A ⟨(x : H), D.domain_le x.property⟩) := by
   rw [D.residual_apply, D.operator_apply]
 
 /-- The bundled trial residual is orthogonal to the trial subspace. -/
@@ -83,9 +83,9 @@ theorem residual_mem_orthogonal
 used by the vector tangent theorem. -/
 theorem norm_sub_starProjection_le
     (D : UnboundedTrialBlock A Z) (x : Z) :
-    ‖A.toLinearMap ⟨(x : H), D.domain_le x.property⟩ -
+    ‖A ⟨(x : H), D.domain_le x.property⟩ -
         Z.starProjection
-          (A.toLinearMap ⟨(x : H), D.domain_le x.property⟩)‖ ≤
+          (A ⟨(x : H), D.domain_le x.property⟩)‖ ≤
       ‖D.residual‖ * ‖(x : H)‖ := by
   rw [← D.residual_eq_sub_starProjection]
   exact D.residual.le_opNorm x
@@ -158,7 +158,7 @@ The exact complementary block is the canonical interval spectral range of
 self-adjoint Ritz block lies outside the enlarged interval.  The conclusion is
 controlled directly by the operator norm of the bundled residual. -/
 theorem tanTheta_unbounded_exactSpectralIcc_trialBlock
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
     (D : UnboundedTrialBlock A Z)
     {α β δ : ℝ} (hαβ : α ≤ β) (hδ : 0 < δ)
@@ -174,7 +174,7 @@ theorem tanTheta_unbounded_exactSpectralIcc_trialBlock
   have hZcoercive : ∀ x : H, ∀ hx : x ∈ Z,
       ((β - α) / 2 + δ) * ‖x‖ ≤
         ‖Z.starProjection
-              (A.toLinearMap ⟨x, D.domain_le hx⟩) -
+              (A ⟨x, D.domain_le hx⟩) -
             (((α + β) / 2 : ℝ) : ℂ) • x‖ := by
     intro x hx
     let z : Z := ⟨x, hx⟩
@@ -185,14 +185,14 @@ theorem tanTheta_unbounded_exactSpectralIcc_trialBlock
           ((β - α) / 2 + δ) * ‖z‖ := rfl
       _ ≤ ‖D.operator z - (((α + β) / 2 : ℝ) : ℂ) • z‖ := hz
       _ = ‖Z.starProjection
-              (A.toLinearMap ⟨x, D.domain_le hx⟩) -
+              (A ⟨x, D.domain_le hx⟩) -
             (((α + β) / 2 : ℝ) : ℂ) • x‖ := by
         change ‖(D.operator z : H) -
             (((α + β) / 2 : ℝ) : ℂ) • (z : H)‖ = _
         rw [D.operator_apply]
   have hρ : ∀ x : H, ∀ hx : x ∈ Z,
-      ‖A.toLinearMap ⟨x, D.domain_le hx⟩ -
-          Z.starProjection (A.toLinearMap ⟨x, D.domain_le hx⟩)‖ ≤
+      ‖A ⟨x, D.domain_le hx⟩ -
+          Z.starProjection (A ⟨x, D.domain_le hx⟩)‖ ≤
         ‖D.residual‖ * ‖x‖ := by
     intro x hx
     let z : Z := ⟨x, hx⟩

@@ -32,7 +32,6 @@ universe u v
 
 open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
-open TauCeti.DavisKahanExt
 
 section GenericEngine
 
@@ -52,13 +51,13 @@ theorem sinTheta_unbounded_exact_generic
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
     (D : UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G))
     (F₀ : H →L[𝕜] E)
-    (hA : D.A.IsSelfAdjoint)
-    (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
@@ -104,16 +103,16 @@ theorem sinTheta_headline_generic
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : PaperUnitaryInvariantNorm)
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (A₀ : ClosedOperator (𝕜 := 𝕜) (E := F))
-    (Λ₁ : ClosedOperator (𝕜 := 𝕜) (E := G))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (E₀ : F →L[𝕜] E)
     (F₀ : H →L[𝕜] E)
     (F₁ : G →L[𝕜] E)
     (R : F →L[𝕜] E)
-    (hA : A.IsSelfAdjoint)
-    (hA₀ : A₀.IsSelfAdjoint)
-    (hΛ₁ : Λ₁.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
+    (hA₀ : IsSelfAdjoint A₀)
+    (hΛ₁ : IsSelfAdjoint Λ₁)
     (hE₀ : IsometricEmbedding E₀)
     (hF₀ : IsometricEmbedding F₀)
     (hF₁ : IsometricEmbedding F₁)
@@ -123,18 +122,18 @@ theorem sinTheta_headline_generic
     (hE₀dom : ∀ x : A₀.domain, E₀ (x : F) ∈ A.domain)
     (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
     (hresidual : ∀ x : A₀.domain,
-      A.toLinearMap ⟨E₀ (x : F), hE₀dom x⟩ - E₀ (A₀.toLinearMap x) = R (x : F))
+      A ⟨E₀ (x : F), hE₀dom x⟩ - E₀ (A₀ x) = R (x : F))
     (hintertwines : ∀ y : Λ₁.domain,
-      A.toLinearMap ⟨F₁ (y : G), hF₁dom y⟩ = F₁ (Λ₁.toLinearMap y))
+      A ⟨F₁ (y : G), hF₁dom y⟩ = F₁ (Λ₁ y))
     {β α δ : ℝ}
     (hβα : β ≤ α)
     (hδ : 0 < δ)
     (hspectral :
-      (TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆
+      (TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
+          TauCeti.LinearPMap.realSpectrum Λ₁ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}) ∨
-        (TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆
+        (TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
+          TauCeti.LinearPMap.realSpectrum A₀ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}))
     (hR : N.Mem R) :
     N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
@@ -156,7 +155,7 @@ theorem sinTheta_headline_generic
       isometry₁ := hF₁
       orthogonal := horth
       projection_sum := hdecomp }
-  have hgap : FormBoundedSylvesterGap A₀.toLinearPMap Λ₁.toLinearPMap δ :=
+  have hgap : FormBoundedSylvesterGap A₀ Λ₁ δ :=
     FormBoundedSylvesterGap.intervalExterior hβα hspectral
   apply N.mul_gauge_le_of_all_mul_kyFan_le hδ hR
   intro k

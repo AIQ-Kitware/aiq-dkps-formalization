@@ -47,10 +47,10 @@ theorem beamOperator_domain_eq :
 
 /-- The shifted realization acts as the free-beam operator plus the identity. -/
 theorem shifted_apply_of_beam {x : beamOperator.domain} :
-    beamShiftedFormData.shiftedOperator.toLinearMap x =
-      beamOperator.toLinearMap x + (x : BeamL2) := by
-  have h : beamOperator.toLinearMap x =
-      beamShiftedFormData.shiftedOperator.toLinearMap x - (x : BeamL2) :=
+    beamShiftedFormData.shiftedOperator x =
+      beamOperator x + (x : BeamL2) := by
+  have h : beamOperator x =
+      beamShiftedFormData.shiftedOperator x - (x : BeamL2) :=
     beamShiftedFormData.beamOperator_apply x
   rw [h]
   abel
@@ -68,28 +68,28 @@ theorem exists_form_representative_of_beam_apply (x : beamOperator.domain) :
     ∃ p : BeamV, beamEmbed p = (x : BeamL2) ∧
       ∀ v : BeamV,
         ⟪beamSnd p, beamSnd v⟫_ℝ =
-          ⟪beamOperator.toLinearMap x, beamEmbed v⟫_ℝ := by
+          ⟪beamOperator x, beamEmbed v⟫_ℝ := by
   set p : BeamV := beamShiftedFormData.formRepresentative x with hpdef
   have hembed : beamEmbed p = (x : BeamL2) :=
     beamShiftedFormData.embed_formRepresentative x
   refine ⟨p, hembed, ?_⟩
   intro v
   have hvar := beamCoerciveFormData.variational_identity
-    (beamShiftedFormData.shiftedOperator.toLinearMap x) v
+    (beamShiftedFormData.shiftedOperator x) v
   have hform : beamCoerciveFormData.formOperator
       (beamCoerciveFormData.solutionOperator
-        (beamShiftedFormData.shiftedOperator.toLinearMap x)) = p := by
+        (beamShiftedFormData.shiftedOperator x)) = p := by
     rw [show beamCoerciveFormData.formOperator = ContinuousLinearMap.id ℝ BeamV from rfl]
     rfl
   rw [hform] at hvar
-  have hforce : beamShiftedFormData.shiftedOperator.toLinearMap x =
-      beamOperator.toLinearMap x + (x : BeamL2) := shifted_apply_of_beam
+  have hforce : beamShiftedFormData.shiftedOperator x =
+      beamOperator x + (x : BeamL2) := shifted_apply_of_beam
   have hlhs : ⟪p, v⟫_ℝ =
       ⟪(x : BeamL2), beamEmbed v⟫_ℝ + ⟪beamSnd p, beamSnd v⟫_ℝ := by
     rw [beamV_inner_decompose, hembed]
-  have hrhs : ⟪beamShiftedFormData.shiftedOperator.toLinearMap x,
+  have hrhs : ⟪beamShiftedFormData.shiftedOperator x,
       beamCoerciveFormData.embed v⟫_ℝ =
-      ⟪beamOperator.toLinearMap x, beamEmbed v⟫_ℝ +
+      ⟪beamOperator x, beamEmbed v⟫_ℝ +
         ⟪(x : BeamL2), beamEmbed v⟫_ℝ := by
     rw [hforce, inner_add_left]
     rfl
@@ -195,7 +195,7 @@ theorem adjoint_beamEmbed_affine (a b : ℝ) :
 /-- Real affine elements lie in the beam-operator domain and are annihilated. -/
 theorem beamOperator_affine_mem_and_zero (a b : ℝ) :
     ∃ h : affineLp a b ∈ beamOperator.domain,
-      beamOperator.toLinearMap ⟨affineLp a b, h⟩ = 0 := by
+      beamOperator ⟨affineLp a b, h⟩ = 0 := by
   have hres : beamCoerciveFormData.resolvent (affineLp a b) = affineLp a b := by
     rw [show beamCoerciveFormData.resolvent =
       beamCoerciveFormData.embed ∘L beamCoerciveFormData.solutionOperator from rfl]
@@ -219,7 +219,7 @@ theorem beamOperator_affine_mem_and_zero (a b : ℝ) :
       LinearMap.range (beamCoerciveFormData.resolvent : BeamL2 →ₗ[ℝ] BeamL2) from rfl]
     exact ⟨affineLp a b, hres⟩
   refine ⟨hmem, ?_⟩
-  have hshift : beamShiftedFormData.shiftedOperator.toLinearMap ⟨affineLp a b, hmem⟩ =
+  have hshift : beamShiftedFormData.shiftedOperator ⟨affineLp a b, hmem⟩ =
       affineLp a b := by
     have happ := Abstract.inverseClosedOperator_apply_R beamCoerciveFormData.resolvent
       beamCoerciveFormData.resolvent_isSelfAdjoint
@@ -230,16 +230,16 @@ theorem beamOperator_affine_mem_and_zero (a b : ℝ) :
       Subtype.ext hres
     rw [← hsub]
     exact happ
-  have happly : beamOperator.toLinearMap ⟨affineLp a b, hmem⟩ =
-      beamShiftedFormData.shiftedOperator.toLinearMap ⟨affineLp a b, hmem⟩ - affineLp a b :=
+  have happly : beamOperator ⟨affineLp a b, hmem⟩ =
+      beamShiftedFormData.shiftedOperator ⟨affineLp a b, hmem⟩ - affineLp a b :=
     beamShiftedFormData.beamOperator_apply _
   rw [happly, hshift, sub_self]
 
 /-- Conversely, every real zero mode is affine. -/
 theorem exists_affine_of_beamOperator_eq_zero {x : beamOperator.domain}
-    (hx : beamOperator.toLinearMap x = 0) :
+    (hx : beamOperator x = 0) :
     ∃ a b : ℝ, (x : BeamL2) = affineLp a b := by
-  have hquad : RCLike.re ⟪beamOperator.toLinearMap x, (x : BeamL2)⟫_ℝ =
+  have hquad : RCLike.re ⟪beamOperator x, (x : BeamL2)⟫_ℝ =
       beamShiftedFormData.bendingEnergy (beamShiftedFormData.formRepresentative x) :=
     beamShiftedFormData.beam_quadratic_eq_bendingEnergy x
   rw [hx, inner_zero_left] at hquad
@@ -284,12 +284,12 @@ theorem exists_affine_of_beamOperator_eq_zero {x : beamOperator.domain}
 /-- Test the variational beam identity against a real `C²` function. -/
 theorem beam_pairing_integral {x : beamOperator.domain} {p : BeamV}
     (hpair : ∀ v : BeamV,
-      ⟪beamSnd p, beamSnd v⟫_ℝ = ⟪beamOperator.toLinearMap x, beamEmbed v⟫_ℝ)
+      ⟪beamSnd p, beamSnd v⟫_ℝ = ⟪beamOperator x, beamEmbed v⟫_ℝ)
     {f f1 f2 : ℝ → ℝ}
     (hf : Continuous f) (hf1 : Continuous f1) (hf2 : Continuous f2)
     (hd : ∀ t, HasDerivAt f (f1 t) t) (hd1 : ∀ t, HasDerivAt f1 (f2 t) t) :
     ∫ t, (beamSnd p : ℝ → ℝ) t * f2 t ∂unitIocMeasure =
-      ∫ t, ((beamOperator.toLinearMap x : BeamL2) : ℝ → ℝ) t * f t ∂unitIocMeasure := by
+      ∫ t, ((beamOperator x : BeamL2) : ℝ → ℝ) t * f t ∂unitIocMeasure := by
   set v : BeamV := ⟨(WithLp.prodContinuousLinearEquiv 2 ℝ BeamL2 BeamL2).symm
       (contToLp f hf, contToLp f2 hf2),
     contPair_mem hf hf1 hf2 hd hd1⟩ with hvdef
@@ -311,8 +311,8 @@ theorem beam_pairing_integral {x : beamOperator.domain} {p : BeamV}
     rw [RCLike.inner_apply, ht]
     simp only [starRingEnd_apply, star_trivial]
     exact mul_comm _ _
-  have hR : ⟪(beamOperator.toLinearMap x : BeamL2), contToLp f hf⟫_ℝ =
-      ∫ t, ((beamOperator.toLinearMap x : BeamL2) : ℝ → ℝ) t * f t ∂unitIocMeasure := by
+  have hR : ⟪(beamOperator x : BeamL2), contToLp f hf⟫_ℝ =
+      ∫ t, ((beamOperator x : BeamL2) : ℝ → ℝ) t * f t ∂unitIocMeasure := by
     rw [MeasureTheory.L2.inner_def]
     refine integral_congr_ae ?_
     filter_upwards [coeFn_contToLp f hf] with t ht
@@ -492,10 +492,10 @@ private theorem hasDerivAt_cubicD1 (_c0 c1 c2 c3 t : ℝ) :
 representative. -/
 private theorem boundary_form_eq_zero {x : beamOperator.domain} {p : BeamV}
     (hpair : ∀ v : BeamV,
-      ⟪beamSnd p, beamSnd v⟫_ℝ = ⟪beamOperator.toLinearMap x, beamEmbed v⟫_ℝ)
+      ⟪beamSnd p, beamSnd v⟫_ℝ = ⟪beamOperator x, beamEmbed v⟫_ℝ)
     {u2 u3 u4 : ℝ → ℝ}
     (hu2ae : (beamSnd p : ℝ → ℝ) =ᵐ[unitIocMeasure] u2)
-    (hu4ae : ((beamOperator.toLinearMap x : BeamL2) : ℝ → ℝ) =ᵐ[unitIocMeasure] u4)
+    (hu4ae : ((beamOperator x : BeamL2) : ℝ → ℝ) =ᵐ[unitIocMeasure] u4)
     (hu4cont : Continuous u4)
     (hu2cont : Continuous u2)
     (hu2' : ∀ t, HasDerivAt u2 (u3 t) t)
@@ -519,7 +519,7 @@ private theorem boundary_form_eq_zero {x : beamOperator.domain} {p : BeamV}
         ∫ t, (beamSnd p : ℝ → ℝ) t * q2 t ∂unitIocMeasure from
       integral_congr_ae (by filter_upwards [hu2ae] with t ht; rw [ht])]
     rw [show ∫ t, u4 t * q t ∂unitIocMeasure =
-        ∫ t, ((beamOperator.toLinearMap x : BeamL2) : ℝ → ℝ) t * q t ∂unitIocMeasure from
+        ∫ t, ((beamOperator x : BeamL2) : ℝ → ℝ) t * q t ∂unitIocMeasure from
       integral_congr_ae (by filter_upwards [hu4ae] with t ht; rw [ht])]
     exact hInt
   have h01 : (0 : ℝ) ≤ 1 := by norm_num
@@ -549,9 +549,9 @@ representative on `[0,1]`, `u'''' = u4`, and all four free-end traces vanish. -/
 theorem exists_classicalFreeBeamRepresentative_of_continuous_apply
     (x : beamOperator.domain) {u4 : ℝ → ℝ}
     (hu4cont : Continuous u4)
-    (hu4ae : ((beamOperator.toLinearMap x : BeamL2) : ℝ → ℝ) =ᵐ[unitIocMeasure] u4) :
+    (hu4ae : ((beamOperator x : BeamL2) : ℝ → ℝ) =ᵐ[unitIocMeasure] u4) :
     Nonempty (ClassicalFreeBeamRepresentative (x : BeamL2)
-      (beamOperator.toLinearMap x : BeamL2)) := by
+      (beamOperator x : BeamL2)) := by
   classical
   obtain ⟨p, hembed, hpair⟩ := exists_form_representative_of_beam_apply x
   set xfn : ℝ → ℝ := ((x : BeamL2) : ℝ → ℝ) with hxfn
@@ -568,12 +568,12 @@ theorem exists_classicalFreeBeamRepresentative_of_continuous_apply
     have h := beam_pairing_integral hpair (continuous_intervalBump k)
       (continuous_intervalBumpD1 k) (continuous_intervalBumpD2 k)
       (hasDerivAt_intervalBump k) (hasDerivAt_intervalBumpD1 k)
-    rw [show ∫ t, ((beamOperator.toLinearMap x : BeamL2) : ℝ → ℝ) t *
+    rw [show ∫ t, ((beamOperator x : BeamL2) : ℝ → ℝ) t *
         intervalBump k t ∂unitIocMeasure =
       ∫ t, u4 t * intervalBump k t ∂unitIocMeasure from
         integral_congr_ae (by filter_upwards [hu4ae] with t ht; rw [ht])] at h
     exact h
-  set yfn : ℝ → ℝ := ((beamOperator.toLinearMap x : BeamL2) : ℝ → ℝ) with hyfn
+  set yfn : ℝ → ℝ := ((beamOperator x : BeamL2) : ℝ → ℝ) with hyfn
   have hw2y : ∀ k : ℕ,
       ∫ t, wfn t * intervalBumpD2 k t ∂unitIocMeasure =
         ∫ t, yfn t * intervalBump k t ∂unitIocMeasure := by
@@ -706,7 +706,7 @@ def classicalFreeBeamCoreGraph : Set (BeamL2 × BeamL2) :=
 
 /-- Every point of the continuous-forcing core is a graph point of `beamOperator`. -/
 theorem classicalFreeBeamCoreGraph_subset_graph :
-    classicalFreeBeamCoreGraph ⊆ (beamOperator.toLinearPMap.graph : Set (BeamL2 × BeamL2)) := by
+    classicalFreeBeamCoreGraph ⊆ (beamOperator.graph : Set (BeamL2 × BeamL2)) := by
   rintro z ⟨g, hg, rfl⟩
   have hmem : beamCoerciveFormData.resolvent g ∈ beamOperator.domain :=
     LinearMap.mem_range_self _ g
@@ -715,25 +715,25 @@ theorem classicalFreeBeamCoreGraph_subset_graph :
   have hsub : (⟨beamCoerciveFormData.resolvent g, LinearMap.mem_range_self _ g⟩ :
       beamShiftedFormData.shiftedOperator.domain) =
       ⟨beamCoerciveFormData.resolvent g, hmem⟩ := Subtype.ext rfl
-  have hshift' : beamShiftedFormData.shiftedOperator.toLinearMap
+  have hshift' : beamShiftedFormData.shiftedOperator
       ⟨beamCoerciveFormData.resolvent g, hmem⟩ = g := by
     rw [← hsub]
     exact hshift
   have hsum := shifted_apply_of_beam
     (x := ⟨beamCoerciveFormData.resolvent g, hmem⟩)
-  have hadd : beamOperator.toLinearMap ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
+  have hadd : beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
       beamCoerciveFormData.resolvent g = g := by
     calc
-      beamOperator.toLinearMap ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
+      beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
           beamCoerciveFormData.resolvent g =
-          beamShiftedFormData.shiftedOperator.toLinearMap
+          beamShiftedFormData.shiftedOperator
             ⟨beamCoerciveFormData.resolvent g, hmem⟩ := hsum.symm
       _ = g := hshift'
-  have hB : beamOperator.toLinearMap ⟨beamCoerciveFormData.resolvent g, hmem⟩ =
+  have hB : beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ =
       g - beamCoerciveFormData.resolvent g :=
     eq_sub_of_add_eq hadd
-  change beamGraphParam g ∈ beamOperator.toLinearPMap.graph
-  exact (LinearPMap.mem_graph_iff beamOperator.toLinearPMap).2
+  change beamGraphParam g ∈ beamOperator.graph
+  exact (LinearPMap.mem_graph_iff beamOperator).2
     ⟨⟨beamCoerciveFormData.resolvent g, hmem⟩, rfl, hB⟩
 
 /-- Each graph point in the continuous-forcing core has a genuine classical fourth-derivative
@@ -741,7 +741,7 @@ representative with the four printed free-end boundary conditions. -/
 theorem classicalFreeBeamCoreGraph_has_classical_representative
     {z : BeamL2 × BeamL2} (hz : z ∈ classicalFreeBeamCoreGraph) :
     ∃ h : z.1 ∈ beamOperator.domain,
-      beamOperator.toLinearMap ⟨z.1, h⟩ = z.2 ∧
+      beamOperator ⟨z.1, h⟩ = z.2 ∧
       Nonempty (ClassicalFreeBeamRepresentative z.1 z.2) := by
   rcases hz with ⟨g, hg, rfl⟩
   obtain ⟨gbar, hgbar⟩ := Lp.mem_boundedContinuousFunction_iff.mp hg
@@ -756,21 +756,21 @@ theorem classicalFreeBeamCoreGraph_has_classical_representative
   have hsub : (⟨beamCoerciveFormData.resolvent g, LinearMap.mem_range_self _ g⟩ :
       beamShiftedFormData.shiftedOperator.domain) =
       ⟨beamCoerciveFormData.resolvent g, hmem⟩ := Subtype.ext rfl
-  have hshift' : beamShiftedFormData.shiftedOperator.toLinearMap
+  have hshift' : beamShiftedFormData.shiftedOperator
       ⟨beamCoerciveFormData.resolvent g, hmem⟩ = g := by
     rw [← hsub]
     exact hshift
   have hsum := shifted_apply_of_beam
     (x := ⟨beamCoerciveFormData.resolvent g, hmem⟩)
-  have hadd : beamOperator.toLinearMap ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
+  have hadd : beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
       beamCoerciveFormData.resolvent g = g := by
     calc
-      beamOperator.toLinearMap ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
+      beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ +
           beamCoerciveFormData.resolvent g =
-          beamShiftedFormData.shiftedOperator.toLinearMap
+          beamShiftedFormData.shiftedOperator
             ⟨beamCoerciveFormData.resolvent g, hmem⟩ := hsum.symm
       _ = g := hshift'
-  have hB : beamOperator.toLinearMap ⟨beamCoerciveFormData.resolvent g, hmem⟩ =
+  have hB : beamOperator ⟨beamCoerciveFormData.resolvent g, hmem⟩ =
       g - beamCoerciveFormData.resolvent g :=
     eq_sub_of_add_eq hadd
   obtain ⟨p, hembed, -⟩ := exists_form_representative_of_beam_apply
@@ -822,15 +822,15 @@ theorem classicalFreeBeamCoreGraph_subset_classicalFreeBeamGraph :
 operator. -/
 theorem closure_classicalFreeBeamCoreGraph_eq_graph :
     closure classicalFreeBeamCoreGraph =
-      (beamOperator.toLinearPMap.graph : Set (BeamL2 × BeamL2)) := by
+      (beamOperator.graph : Set (BeamL2 × BeamL2)) := by
   apply Set.Subset.antisymm
-  · exact (beamOperator.toLinearPMap_isClosed.closure_subset_iff.mpr
+  · exact (beamOperator_isSelfAdjoint.isClosed.closure_subset_iff.mpr
       classicalFreeBeamCoreGraph_subset_graph)
   · intro z hz
-    obtain ⟨x, hx, hBx⟩ := (LinearPMap.mem_graph_iff beamOperator.toLinearPMap).1 hz
+    obtain ⟨x, hx, hBx⟩ := (LinearPMap.mem_graph_iff beamOperator).1 hz
     let xb : beamOperator.domain := x
-    have hBxb : beamOperator.toLinearMap xb = z.2 := by
-      change beamOperator.toLinearMap x = z.2
+    have hBxb : beamOperator xb = z.2 := by
+      change beamOperator x = z.2
       exact hBx
     have hxb : (xb : BeamL2) = z.1 := by
       change (x : BeamL2) = z.1
@@ -838,21 +838,21 @@ theorem closure_classicalFreeBeamCoreGraph_eq_graph :
     set g : BeamL2 := z.2 + z.1 with hgdef
     have hparam : beamGraphParam g = z := by
       have hR : beamCoerciveFormData.resolvent g = z.1 := by
-        have hshift : beamShiftedFormData.shiftedOperator.toLinearMap xb = g := by
+        have hshift : beamShiftedFormData.shiftedOperator xb = g := by
           calc
-            beamShiftedFormData.shiftedOperator.toLinearMap xb =
-                beamOperator.toLinearMap xb + (xb : BeamL2) := shifted_apply_of_beam
+            beamShiftedFormData.shiftedOperator xb =
+                beamOperator xb + (xb : BeamL2) := shifted_apply_of_beam
             _ = z.2 + z.1 := by rw [hBxb, hxb]
             _ = g := hgdef.symm
         have hRinv :
             beamCoerciveFormData.resolvent
-                (beamShiftedFormData.shiftedOperator.toLinearMap xb) = (xb : BeamL2) := by
+                (beamShiftedFormData.shiftedOperator xb) = (xb : BeamL2) := by
           exact Abstract.R_inverseClosedOperator_apply beamCoerciveFormData.resolvent
             beamCoerciveFormData.resolvent_isSelfAdjoint beamCoerciveFormData.resolvent_injective xb
         calc
           beamCoerciveFormData.resolvent g =
               beamCoerciveFormData.resolvent
-                (beamShiftedFormData.shiftedOperator.toLinearMap xb) :=
+                (beamShiftedFormData.shiftedOperator xb) :=
             congrArg beamCoerciveFormData.resolvent hshift.symm
           _ = (xb : BeamL2) := hRinv
           _ = z.1 := hxb
@@ -889,7 +889,7 @@ the classical pair defines an adjoint-domain vector, and self-adjointness identi
 beam operator itself. -/
 theorem classicalFreeBeamGraph_subset_graph :
     classicalFreeBeamGraph ⊆
-      (beamOperator.toLinearPMap.graph : Set (BeamL2 × BeamL2)) := by
+      (beamOperator.graph : Set (BeamL2 × BeamL2)) := by
   intro z hz
   rcases hz with ⟨hrep⟩
   let S : Set (BeamL2 × BeamL2) :=
@@ -904,30 +904,30 @@ theorem classicalFreeBeamGraph_subset_graph :
     exact inner_eq_of_classicalFreeBeamRepresentatives hrep hqrep
   have hclosure : closure classicalFreeBeamCoreGraph ⊆ S :=
     hSclosed.closure_subset_iff.mpr hcore
-  have hgraph : (beamOperator.toLinearPMap.graph : Set (BeamL2 × BeamL2)) ⊆ S := by
+  have hgraph : (beamOperator.graph : Set (BeamL2 × BeamL2)) ⊆ S := by
     rwa [closure_classicalFreeBeamCoreGraph_eq_graph] at hclosure
   have hEq : ∀ v : beamOperator.domain,
       ⟪z.2, (v : BeamL2)⟫_ℝ =
-        ⟪z.1, beamOperator.toLinearMap v⟫_ℝ := by
+        ⟪z.1, beamOperator v⟫_ℝ := by
     intro v
-    have hv := hgraph (beamOperator.toLinearPMap.mem_graph v)
+    have hv := hgraph (beamOperator.mem_graph v)
     simpa [S] using hv
-  have hmemAdj : z.1 ∈ beamOperator.toLinearPMap.adjoint.domain :=
+  have hmemAdj : z.1 ∈ beamOperator.adjoint.domain :=
     _root_.LinearPMap.mem_adjoint_domain_of_exists _ ⟨z.2, hEq⟩
-  have hsa := beamOperator_isSelfAdjoint.toLinearPMap_adjoint_eq
+  have hsa := (LinearPMap.isSelfAdjoint_def.mp beamOperator_isSelfAdjoint)
   have hmem : z.1 ∈ beamOperator.domain := by
     have hmem' := hmemAdj
     rw [hsa] at hmem'
     exact hmem'
-  have hadj : beamOperator.toLinearPMap.adjoint ⟨z.1, hmemAdj⟩ = z.2 :=
-    _root_.LinearPMap.adjoint_apply_eq beamOperator.toLinearPMap_dense
+  have hadj : beamOperator.adjoint ⟨z.1, hmemAdj⟩ = z.2 :=
+    _root_.LinearPMap.adjoint_apply_eq beamOperator_isSelfAdjoint.dense_domain
       ⟨z.1, hmemAdj⟩ hEq
-  have hB : beamOperator.toLinearMap ⟨z.1, hmem⟩ = z.2 := by
-    change beamOperator.toLinearPMap ⟨z.1, hmem⟩ = z.2
+  have hB : beamOperator ⟨z.1, hmem⟩ = z.2 := by
+    change beamOperator ⟨z.1, hmem⟩ = z.2
     have htrans := (_root_.LinearPMap.ext_iff.mp hsa).2
       (x := z.1) (hf := hmemAdj) (hg := hmem)
     rw [← htrans, hadj]
-  have hm := beamOperator.toLinearPMap.mem_graph ⟨z.1, hmem⟩
+  have hm := beamOperator.mem_graph ⟨z.1, hmem⟩
   simpa [hB] using hm
 
 /-- The full classical free-end fourth-derivative graph is a core for the real form
@@ -936,9 +936,9 @@ realization.  This is the source-level closure statement: the closure of the ope
 self-adjoint beam operator. -/
 theorem closure_classicalFreeBeamGraph_eq_graph :
     closure classicalFreeBeamGraph =
-      (beamOperator.toLinearPMap.graph : Set (BeamL2 × BeamL2)) := by
+      (beamOperator.graph : Set (BeamL2 × BeamL2)) := by
   apply Set.Subset.antisymm
-  · exact (beamOperator.toLinearPMap_isClosed.closure_subset_iff.mpr
+  · exact (beamOperator_isSelfAdjoint.isClosed.closure_subset_iff.mpr
       classicalFreeBeamGraph_subset_graph)
   · rw [← closure_classicalFreeBeamCoreGraph_eq_graph]
     exact closure_mono classicalFreeBeamCoreGraph_subset_classicalFreeBeamGraph
@@ -946,9 +946,9 @@ theorem closure_classicalFreeBeamGraph_eq_graph :
 /-- The real form realization is the self-adjoint closure of the classical free-end
 fourth-derivative operator appearing in Davis--Kahan Section 9. -/
 theorem beamOperator_is_closure_of_classical_freeBeam_fourthDerivative :
-    beamOperator.IsSelfAdjoint ∧
+    _root_.IsSelfAdjoint beamOperator ∧
       closure classicalFreeBeamGraph =
-        (beamOperator.toLinearPMap.graph : Set (BeamL2 × BeamL2)) :=
+        (beamOperator.graph : Set (BeamL2 × BeamL2)) :=
   ⟨beamOperator_isSelfAdjoint, closure_classicalFreeBeamGraph_eq_graph⟩
 
 /-! ## Characteristic roots produce operator eigenpairs -/
@@ -1110,7 +1110,7 @@ self-adjoint free-beam operator. -/
 theorem exists_eigenpair_of_characteristic {beta : ℝ} (hbeta : 0 < beta)
     (hroot : characteristic beta = 0) :
     ∃ x : beamOperator.domain, (x : BeamL2) ≠ 0 ∧
-      beamOperator.toLinearMap x = beta ^ 4 • (x : BeamL2) := by
+      beamOperator x = beta ^ 4 • (x : BeamL2) := by
   obtain ⟨a, b, hab, hfree⟩ :=
     TauCeti.DavisKahan.FreeBeam.Classical.exists_nontrivial_freeBoundary_of_characteristic
       hbeta.ne' hroot
@@ -1122,16 +1122,16 @@ theorem exists_eigenpair_of_characteristic {beta : ℝ} (hbeta : 0 < beta)
   have hclassical : (u, beta ^ 4 • u) ∈ classicalFreeBeamGraph :=
     (show Nonempty (ClassicalFreeBeamRepresentative u (beta ^ 4 • u)) from ⟨hrep⟩)
   have hgraph : (u, beta ^ 4 • u) ∈
-      (beamOperator.toLinearPMap.graph : Set (BeamL2 × BeamL2)) :=
+      (beamOperator.graph : Set (BeamL2 × BeamL2)) :=
     classicalFreeBeamGraph_subset_graph hclassical
   obtain ⟨x, hxu, hBx⟩ :=
-    (LinearPMap.mem_graph_iff beamOperator.toLinearPMap).1 hgraph
+    (LinearPMap.mem_graph_iff beamOperator).1 hgraph
   let xb : beamOperator.domain := x
   have hxb : (xb : BeamL2) = u := by
     change (x : BeamL2) = u
     exact hxu
-  have hBxb : beamOperator.toLinearMap xb = beta ^ 4 • u := by
-    change beamOperator.toLinearMap x = beta ^ 4 • u
+  have hBxb : beamOperator xb = beta ^ 4 • u := by
+    change beamOperator x = beta ^ 4 • u
     exact hBx
   refine ⟨xb, ?_, ?_⟩
   · intro hzero
@@ -1147,7 +1147,7 @@ This strengthens the characteristic-equation classification with the actual mode
 representation needed to certify geometric multiplicity. -/
 theorem exists_characteristic_mode_of_eigen {lam : ℝ} (hlam : 0 < lam)
     {x : beamOperator.domain} (hx0 : (x : BeamL2) ≠ 0)
-    (heig : beamOperator.toLinearMap x = lam • (x : BeamL2)) :
+    (heig : beamOperator x = lam • (x : BeamL2)) :
     ∃ beta a b : ℝ,
       beta = lam ^ ((1 : ℝ) / 4) ∧
       0 < beta ∧
@@ -1165,7 +1165,7 @@ theorem exists_characteristic_mode_of_eigen {lam : ℝ} (hlam : 0 < lam)
     obtain ⟨a, b, h⟩ := beamV_repr p
     rw [hembed] at h
     exact ⟨a, b, h⟩
-  have hxapply : (((beamOperator.toLinearMap x : BeamL2) : ℝ → ℝ)) =ᵐ[unitIocMeasure]
+  have hxapply : (((beamOperator x : BeamL2) : ℝ → ℝ)) =ᵐ[unitIocMeasure]
       fun t => lam * xfn t := by
     rw [heig]
     filter_upwards [Lp.coeFn_smul lam (x : BeamL2)] with t ht
@@ -1177,7 +1177,7 @@ theorem exists_characteristic_mode_of_eigen {lam : ℝ} (hlam : 0 < lam)
     have h := beam_pairing_integral hpair (continuous_intervalBump k)
       (continuous_intervalBumpD1 k) (continuous_intervalBumpD2 k)
       (hasDerivAt_intervalBump k) (hasDerivAt_intervalBumpD1 k)
-    rw [show ∫ t, ((beamOperator.toLinearMap x : BeamL2) : ℝ → ℝ) t *
+    rw [show ∫ t, ((beamOperator x : BeamL2) : ℝ → ℝ) t *
         intervalBump k t ∂unitIocMeasure =
       ∫ t, (lam * xfn t) * intervalBump k t ∂unitIocMeasure from
         integral_congr_ae (by filter_upwards [hxapply] with t ht; rw [ht])] at h
@@ -1249,7 +1249,7 @@ theorem exists_characteristic_mode_of_eigen {lam : ℝ} (hlam : 0 < lam)
     exact ((hasDerivWithinAt_firstPrimitive_of_continuous hu0cont ht).const_mul lam).const_add d
   have hu3cont : ContinuousOn u3 (Set.Icc 0 1) :=
     fun t ht => (hd3 t ht).continuousWithinAt
-  have hu4ae : ((beamOperator.toLinearMap x : BeamL2) : ℝ → ℝ) =ᵐ[unitIocMeasure]
+  have hu4ae : ((beamOperator x : BeamL2) : ℝ → ℝ) =ᵐ[unitIocMeasure]
       fun t => lam * u0 t := by
     filter_upwards [hxapply, hxuae] with t happly hx
     rw [happly, hx]
@@ -1345,7 +1345,7 @@ theorem exists_characteristic_mode_of_eigen {lam : ℝ} (hlam : 0 < lam)
 characteristic root. -/
 theorem exists_characteristic_of_eigen {lam : ℝ} (hlam : 0 < lam)
     {x : beamOperator.domain} (hx0 : (x : BeamL2) ≠ 0)
-    (heig : beamOperator.toLinearMap x = lam • (x : BeamL2)) :
+    (heig : beamOperator x = lam • (x : BeamL2)) :
     ∃ beta : ℝ, 0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4 := by
   obtain ⟨beta, _a, _b, _hbeta, hβpos, hchar, hβ4, _hab, _hfree, _hxmode⟩ :=
     exists_characteristic_mode_of_eigen hlam hx0 heig
@@ -1359,8 +1359,8 @@ distinct positive spectral values is not enough. -/
 theorem positive_eigenvectors_eq_smul {lam : ℝ} (hlam : 0 < lam)
     {x y : beamOperator.domain}
     (hx0 : (x : BeamL2) ≠ 0) (hy0 : (y : BeamL2) ≠ 0)
-    (hx : beamOperator.toLinearMap x = lam • (x : BeamL2))
-    (hy : beamOperator.toLinearMap y = lam • (y : BeamL2)) :
+    (hx : beamOperator x = lam • (x : BeamL2))
+    (hy : beamOperator y = lam • (y : BeamL2)) :
     ∃ c : ℝ, (y : BeamL2) = c • (x : BeamL2) := by
   obtain ⟨betax, ax, bx, hbetax, hbetaxPos, _hcharx, _hpowx, habx, hfreex, hmodex⟩ :=
     exists_characteristic_mode_of_eigen hlam hx0 hx
@@ -1389,7 +1389,7 @@ theorem positive_eigenvectors_eq_smul {lam : ℝ} (hlam : 0 < lam)
 /-- Every positive eigenvalue of the real free-beam realization exceeds `500`. -/
 theorem eigenvalue_gt_five_hundred {lam : ℝ} (hlam : 0 < lam)
     {x : beamOperator.domain} (hx0 : (x : BeamL2) ≠ 0)
-    (heig : beamOperator.toLinearMap x = lam • (x : BeamL2)) :
+    (heig : beamOperator x = lam • (x : BeamL2)) :
     500 < lam := by
   obtain ⟨beta, hβ, hchar, hlameq⟩ := exists_characteristic_of_eigen hlam hx0 heig
   rw [hlameq]
@@ -1398,7 +1398,7 @@ theorem eigenvalue_gt_five_hundred {lam : ℝ} (hlam : 0 < lam)
 /-- Eigenvalues of the real free beam are nonnegative. -/
 theorem nonneg_of_beamOperator_eigen {lam : ℝ} {x : beamOperator.domain}
     (hx0 : (x : BeamL2) ≠ 0)
-    (heig : beamOperator.toLinearMap x = lam • (x : BeamL2)) : 0 ≤ lam := by
+    (heig : beamOperator x = lam • (x : BeamL2)) : 0 ≤ lam := by
   have hpos : 0 ≤ lam * ‖(x : BeamL2)‖ ^ 2 := by
     have h := beamOperator_nonneg x
     simpa [heig, real_inner_smul_left, inner_self_eq_norm_sq] using h

@@ -95,19 +95,19 @@ def beamTrialBlock (ε : ℝ) : UnboundedTrialBlock (beamPerturbed ε) beamTrial
   operator_apply x := by
     rw [beamRitzCompression_coe]
     congr 1
-    have hker : beamOperator.toLinearMap ⟨(x : BeamL2), beamTrial_le_domain x.2⟩ = 0 :=
+    have hker : beamOperator ⟨(x : BeamL2), beamTrial_le_domain x.2⟩ = 0 :=
       beamOperator_apply_trial x.2 _
     show beamResidual ε x = _
-    rw [show (beamPerturbed ε).toLinearMap ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
-        = beamOperator.toLinearMap ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
+    rw [show (beamPerturbed ε) ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
+        = beamOperator ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
           + beamPerturbation ε (x : BeamL2) from rfl, hker, zero_add]
     rfl
   residual := beamResidual ε - beamTrialIncl ∘L beamRitzCompression ε
   residual_apply x := by
-    have hker : beamOperator.toLinearMap ⟨(x : BeamL2), beamTrial_le_domain x.2⟩ = 0 :=
+    have hker : beamOperator ⟨(x : BeamL2), beamTrial_le_domain x.2⟩ = 0 :=
       beamOperator_apply_trial x.2 _
-    rw [show (beamPerturbed ε).toLinearMap ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
-        = beamOperator.toLinearMap ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
+    rw [show (beamPerturbed ε) ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
+        = beamOperator ⟨(x : BeamL2), beamTrial_le_domain x.2⟩
           + beamPerturbation ε (x : BeamL2) from rfl, hker, zero_add]
     rfl
 
@@ -372,14 +372,14 @@ energy and the perturbation's symbol is `ε t ≥ 0`. -/
 
 /-- **The perturbed beam is positive.** -/
 theorem beamPerturbed_form_nonneg (ε : ℝ) (hε : 0 ≤ ε)
-    (x : (beamPerturbed ε).toLinearPMap.domain) :
-    0 ≤ (⟪(beamPerturbed ε).toLinearPMap x, (x : BeamL2)⟫_ℂ).re := by
+    (x : (beamPerturbed ε).domain) :
+    0 ≤ (⟪(beamPerturbed ε) x, (x : BeamL2)⟫_ℂ).re := by
   have hxdom : (x : BeamL2) ∈ beamOperator.domain := x.2
-  have hsplit : (beamPerturbed ε).toLinearPMap x
-      = beamOperator.toLinearMap ⟨(x : BeamL2), hxdom⟩ + beamPerturbation ε (x : BeamL2) :=
+  have hsplit : (beamPerturbed ε) x
+      = beamOperator ⟨(x : BeamL2), hxdom⟩ + beamPerturbation ε (x : BeamL2) :=
     rfl
   rw [hsplit, inner_add_left, Complex.add_re]
-  have h1 : 0 ≤ (⟪beamOperator.toLinearMap ⟨(x : BeamL2), hxdom⟩, (x : BeamL2)⟫_ℂ).re :=
+  have h1 : 0 ≤ (⟪beamOperator ⟨(x : BeamL2), hxdom⟩, (x : BeamL2)⟫_ℂ).re :=
     beamShiftedFormData.beam_nonnegative ⟨(x : BeamL2), hxdom⟩
   have h2 := re_inner_beamPerturbation_nonneg ε hε (x : BeamL2)
   linarith
@@ -387,7 +387,7 @@ theorem beamPerturbed_form_nonneg (ε : ℝ) (hε : 0 ≤ ε)
 /-- Every negative real is a resolvent point of the perturbed beam. -/
 theorem beamPerturbed_mem_resolventSet_of_neg (ε : ℝ) (hε : 0 ≤ ε)
     {lam : ℝ} (hlam : lam < 0) :
-    (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet (beamPerturbed ε).toLinearPMap := by
+    (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet (beamPerturbed ε) := by
   refine TauCeti.LinearPMap.mem_resolventSet_of_lower_bound
     (beamPerturbed_isSelfAdjoint ε) (by simp) (c := -lam) (by linarith) ?_
   intro x
@@ -395,14 +395,14 @@ theorem beamPerturbed_mem_resolventSet_of_neg (ε : ℝ) (hε : 0 ≤ ε)
   · rw [← hx0, mul_zero]
     exact norm_nonneg _
   · have hform := beamPerturbed_form_nonneg ε hε x
-    have hCS : (⟪(beamPerturbed ε).toLinearPMap x - (lam : ℂ) • (x : BeamL2),
+    have hCS : (⟪(beamPerturbed ε) x - (lam : ℂ) • (x : BeamL2),
         (x : BeamL2)⟫_ℂ).re
-        ≤ ‖(beamPerturbed ε).toLinearPMap x - (lam : ℂ) • (x : BeamL2)‖ * ‖(x : BeamL2)‖ := by
+        ≤ ‖(beamPerturbed ε) x - (lam : ℂ) • (x : BeamL2)‖ * ‖(x : BeamL2)‖ := by
       exact re_inner_le_norm (𝕜 := ℂ)
-        ((beamPerturbed ε).toLinearPMap x - (lam : ℂ) • (x : BeamL2)) ((x : BeamL2))
-    have hval : (⟪(beamPerturbed ε).toLinearPMap x - (lam : ℂ) • (x : BeamL2),
+        ((beamPerturbed ε) x - (lam : ℂ) • (x : BeamL2)) ((x : BeamL2))
+    have hval : (⟪(beamPerturbed ε) x - (lam : ℂ) • (x : BeamL2),
         (x : BeamL2)⟫_ℂ).re
-        = (⟪(beamPerturbed ε).toLinearPMap x, (x : BeamL2)⟫_ℂ).re
+        = (⟪(beamPerturbed ε) x, (x : BeamL2)⟫_ℂ).re
           - lam * ‖(x : BeamL2)‖ ^ 2 := by
       have hself : ⟪(x : BeamL2), (x : BeamL2)⟫_ℂ = ((‖(x : BeamL2)‖ ^ 2 : ℝ) : ℂ) := by
         rw [inner_self_eq_norm_sq_to_K]
@@ -412,7 +412,7 @@ theorem beamPerturbed_mem_resolventSet_of_neg (ε : ℝ) (hε : 0 ≤ ε)
         ← Complex.ofReal_mul, Complex.ofReal_re]
     rw [hval] at hCS
     have hsq : -lam * ‖(x : BeamL2)‖ ^ 2
-        ≤ ‖(beamPerturbed ε).toLinearPMap x - (lam : ℂ) • (x : BeamL2)‖ * ‖(x : BeamL2)‖ := by
+        ≤ ‖(beamPerturbed ε) x - (lam : ℂ) • (x : BeamL2)‖ * ‖(x : BeamL2)‖ := by
       nlinarith [hform, hCS]
     refine le_of_mul_le_mul_right ?_ hxpos
     nlinarith [hsq]
@@ -431,7 +431,7 @@ theorem beamPerturbed_specRange_le_domain (ε : ℝ) (hε : 0 ≤ ε)
     {y : BeamL2}
     (hy : y ∈ TauCeti.LinearPMap.specRange (beamPerturbed_isSelfAdjoint ε)
       (Set.Iic 500) measurableSet_Iic) :
-    y ∈ (beamPerturbed ε).toLinearPMap.domain := by
+    y ∈ (beamPerturbed ε).domain := by
   have hfix : TauCeti.LinearPMap.specProjection (beamPerturbed_isSelfAdjoint ε)
       (Set.Iic 500) measurableSet_Iic y = y :=
     (TauCeti.LinearPMap.mem_specRange_iff _ _ _ _).1 hy
@@ -578,9 +578,9 @@ theorem span_singleton_le_beamTrial {v : BeamL2} (hv : v ∈ beamTrial) :
 annihilates its kernel. -/
 theorem beamPerturbed_apply_of_mem_beamTrial (ε : ℝ) {x : BeamL2} (hx : x ∈ beamTrial)
     (h : x ∈ beamOperator.domain) :
-    (beamPerturbed ε).toLinearMap ⟨x, h⟩ = beamPerturbation ε x := by
-  rw [show (beamPerturbed ε).toLinearMap ⟨x, h⟩
-      = beamOperator.toLinearMap ⟨x, h⟩ + beamPerturbation ε x from rfl,
+    (beamPerturbed ε) ⟨x, h⟩ = beamPerturbation ε x := by
+  rw [show (beamPerturbed ε) ⟨x, h⟩
+      = beamOperator ⟨x, h⟩ + beamPerturbation ε x from rfl,
     beamOperator_apply_trial hx h, zero_add]
 
 /-- **The one-dimensional Rayleigh--Ritz trial block at a unit Ritz vector.**  The
@@ -663,7 +663,7 @@ theorem beamColumn_tangent_le (ε : ℝ) (v : BeamL2) (hv : v ∈ beamTrial)
   have hUnwanted : ∀ y ∈ (beamLowFiveHundred ε)ᗮ,
       ∀ hy : y ∈ (beamPerturbed ε).domain,
       (a + (500 - a)) * ‖y‖ ^ 2
-        ≤ RCLike.re ⟪(beamPerturbed ε).toLinearMap ⟨y, hy⟩, y⟫_ℂ := by
+        ≤ RCLike.re ⟪(beamPerturbed ε) ⟨y, hy⟩, y⟫_ℂ := by
     intro y hy hydom
     rw [show a + (500 - a) = (500 : ℝ) from by ring]
     exact le_re_inner_of_mem_orthogonal_selfAdjointSpectralSubspace_Iic

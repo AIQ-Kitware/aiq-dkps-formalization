@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
-import DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge
+import DavisKahan.SpectralTheory.ClosedOperator.Basic
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
 
@@ -42,11 +42,11 @@ variable {H : Type v}
 /-- Genuine spectral containment in `[c, ∞)` implies the matching lower
 quadratic-form bound. -/
 theorem semiboundedBelow_of_spectrum_subset_Ici
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {c : ℝ}
-    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
         Set.Ici c) :
-    TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap c := by
+    TauCeti.LinearPMap.SemiboundedBelow A c := by
   intro x
   have hzero :
       TauCeti.LinearPMap.specProjection hA (Set.Iio c) measurableSet_Iio = 0 := by
@@ -60,11 +60,11 @@ theorem semiboundedBelow_of_spectrum_subset_Ici
 /-- Genuine spectral containment in `(-∞, c]` implies the matching upper
 quadratic-form bound. -/
 theorem semiboundedAbove_of_spectrum_subset_Iic
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     {c : ℝ}
-    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+    (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
         Set.Iic c) :
-    TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c := by
+    TauCeti.LinearPMap.SemiboundedAbove A c := by
   intro x
   have hzero :
       TauCeti.LinearPMap.specProjection hA (Set.Ioi c) measurableSet_Ioi = 0 := by

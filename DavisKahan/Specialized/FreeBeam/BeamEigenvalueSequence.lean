@@ -33,7 +33,7 @@ spectral points above `500`; the set `beamEigenvalues` of positive *eigenvalues*
 unbounded above and finite below every bound; and — the printed statement — that set *is* a
 strictly increasing sequence: `beamEigenvalues` is order-isomorphic to `ℕ`, and the
 enumeration `f : ℕ → ℝ` is strictly monotone with `Set.range f = beamEigenvalues`, every term
-above `500` and in `beamOperator.realSpectrum`.  Nothing is omitted from the list and nothing
+above `500` and in `TauCeti.LinearPMap.realSpectrum beamOperator`.  Nothing is omitted from the list and nothing
 outside `beamEigenvalues` is in it.
 
 The order bookkeeping is `TauCeti.exists_strictMono_range_eq_of_unbounded_of_finite_inter_Iic`
@@ -43,7 +43,7 @@ The order bookkeeping is `TauCeti.exists_strictMono_range_eq_of_unbounded_of_fin
 Also proved, and this closes the last gap the previous pass recorded: the free beam has *no*
 continuous or residual real spectrum.  `exists_eigenvector_of_mem_realSpectrum_beamOperator`
 (BeamSpectrum) produces an eigenvector for every real spectral point, so
-`beamOperator.realSpectrum = insert 0 beamEigenvalues` exactly, and local finiteness holds for
+`TauCeti.LinearPMap.realSpectrum beamOperator = insert 0 beamEigenvalues` exactly, and local finiteness holds for
 the whole real spectrum and not only for the point spectrum.
 
 ## Main results
@@ -94,7 +94,7 @@ arbitrarily small modulus; the classification of its nonzero eigenvalues inverts
 an eigenvalue `β⁴` of `beamOperator`, and a small resolvent eigenvalue is a large `β⁴`. -/
 theorem exists_pos_eigenpair_beamOperator_gt (M : ℝ) :
     ∃ (lam : ℝ) (x : beamOperator.domain), M < lam ∧ 0 < lam ∧ (x : BeamL2) ≠ 0 ∧
-      beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2) := by
+      beamOperator x = (lam : ℂ) • (x : BeamL2) := by
   set N : ℝ := max M 0 with hNdef
   have hMN : M ≤ N := le_max_left _ _
   have hN0 : (0 : ℝ) ≤ N := le_max_right _ _
@@ -143,15 +143,15 @@ theorem exists_pos_eigenpair_beamOperator_gt (M : ℝ) :
 paper's `500`.  This is the unbounded half of Section 9's printed sequence
 `α₃ < α₄ < …`. -/
 theorem exists_lt_five_hundred_lt_mem_realSpectrum_beamOperator (M : ℝ) :
-    ∃ alpha : ℝ, M < alpha ∧ 500 < alpha ∧ alpha ∈ beamOperator.realSpectrum := by
+    ∃ alpha : ℝ, M < alpha ∧ 500 < alpha ∧ alpha ∈ TauCeti.LinearPMap.realSpectrum beamOperator := by
   obtain ⟨lam, x, hM, hlam, hx0, heig⟩ := exists_pos_eigenpair_beamOperator_gt M
   exact ⟨lam, hM, eigenvalue_gt_five_hundred hlam hx0 heig,
-    TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector (A := beamOperator.toLinearPMap)
+    TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector (A := beamOperator)
       (x := x) hx0 heig⟩
 
 /-- **The real spectrum of the free beam is unbounded above.** -/
 theorem not_bddAbove_realSpectrum_beamOperator :
-    ¬ BddAbove beamOperator.realSpectrum := by
+    ¬ BddAbove (TauCeti.LinearPMap.realSpectrum beamOperator) := by
   rintro ⟨b, hb⟩
   obtain ⟨alpha, hM, -, hmem⟩ := exists_lt_five_hundred_lt_mem_realSpectrum_beamOperator b
   exact absurd (hb hmem) (not_le.mpr hM)
@@ -159,10 +159,10 @@ theorem not_bddAbove_realSpectrum_beamOperator :
 /-! ## The eigenvalues are discrete -/
 
 /-- The set of positive eigenvalues of the free-beam operator.  Every element exceeds `500`
-(`eigenvalue_gt_five_hundred`) and lies in `beamOperator.realSpectrum`. -/
+(`eigenvalue_gt_five_hundred`) and lies in `TauCeti.LinearPMap.realSpectrum beamOperator`. -/
 def beamEigenvalues : Set ℝ :=
   {lam : ℝ | 0 < lam ∧ ∃ x : beamOperator.domain, (x : BeamL2) ≠ 0 ∧
-    beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2)}
+    beamOperator x = (lam : ℂ) • (x : BeamL2)}
 
 /-- Every positive eigenvalue of the free beam exceeds the paper's `500`. -/
 theorem five_hundred_lt_of_mem_beamEigenvalues {lam : ℝ} (hlam : lam ∈ beamEigenvalues) :
@@ -172,9 +172,9 @@ theorem five_hundred_lt_of_mem_beamEigenvalues {lam : ℝ} (hlam : lam ∈ beamE
 
 /-- Every positive eigenvalue of the free beam is a point of its real spectrum. -/
 theorem mem_realSpectrum_of_mem_beamEigenvalues {lam : ℝ} (hlam : lam ∈ beamEigenvalues) :
-    lam ∈ beamOperator.realSpectrum := by
+    lam ∈ TauCeti.LinearPMap.realSpectrum beamOperator := by
   obtain ⟨-, x, hx0, heig⟩ := hlam
-  exact TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector (A := beamOperator.toLinearPMap)
+  exact TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector (A := beamOperator)
     (x := x) hx0 heig
 
 /-- **The eigenvalue relation inverts.**  An eigenvector of `beamOperator` for `lam` is an
@@ -183,7 +183,7 @@ eigenvector of the variational resolvent for `(1 + lam)⁻¹`; this is the conve
 the resolvent's spectrum back to the operator. -/
 theorem beamResolvent_apply_of_beamOperator_eigen {lam : ℝ} (hlam : 0 < lam)
     {x : beamOperator.domain}
-    (heig : beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2)) :
+    (heig : beamOperator x = (lam : ℂ) • (x : BeamL2)) :
     beamCoerciveFormData.resolvent (x : BeamL2)
       = (((1 + lam : ℝ) : ℂ))⁻¹ • (x : BeamL2) := by
   have hne : ((1 + lam : ℝ) : ℂ) ≠ 0 := by
@@ -191,14 +191,14 @@ theorem beamResolvent_apply_of_beamOperator_eigen {lam : ℝ} (hlam : 0 < lam)
     exact_mod_cast this.ne'
   have hz := Abstract.R_inverseClosedOperator_apply beamCoerciveFormData.resolvent
     beamCoerciveFormData.resolvent_isSelfAdjoint beamCoerciveFormData.resolvent_injective x
-  have hsplit : beamShiftedFormData.shiftedOperator.toLinearMap x
-      = beamOperator.toLinearMap x + (x : BeamL2) := by
-    have h : beamOperator.toLinearMap x
-        = beamShiftedFormData.shiftedOperator.toLinearMap x - (x : BeamL2) :=
+  have hsplit : beamShiftedFormData.shiftedOperator x
+      = beamOperator x + (x : BeamL2) := by
+    have h : beamOperator x
+        = beamShiftedFormData.shiftedOperator x - (x : BeamL2) :=
       beamShiftedFormData.beamOperator_apply _
     rw [h]
     abel
-  have hshift : beamShiftedFormData.shiftedOperator.toLinearMap x
+  have hshift : beamShiftedFormData.shiftedOperator x
       = ((1 + lam : ℝ) : ℂ) • (x : BeamL2) := by
     rw [hsplit, heig]
     push_cast
@@ -285,7 +285,7 @@ sequence of real spectral points of the free-beam operator, every term above the
 sequence is increasing by construction; it is not claimed to enumerate the positive spectrum
 in order. -/
 theorem exists_strictMono_mem_realSpectrum_beamOperator :
-    ∃ f : ℕ → ℝ, StrictMono f ∧ ∀ n, 500 < f n ∧ f n ∈ beamOperator.realSpectrum := by
+    ∃ f : ℕ → ℝ, StrictMono f ∧ ∀ n, 500 < f n ∧ f n ∈ TauCeti.LinearPMap.realSpectrum beamOperator := by
   classical
   set g : ℝ → ℝ :=
     fun M => (exists_lt_five_hundred_lt_mem_realSpectrum_beamOperator M).choose with hgdef
@@ -293,7 +293,7 @@ theorem exists_strictMono_mem_realSpectrum_beamOperator :
     (exists_lt_five_hundred_lt_mem_realSpectrum_beamOperator M).choose_spec.1
   have hg2 : ∀ M : ℝ, 500 < g M := fun M =>
     (exists_lt_five_hundred_lt_mem_realSpectrum_beamOperator M).choose_spec.2.1
-  have hg3 : ∀ M : ℝ, g M ∈ beamOperator.realSpectrum := fun M =>
+  have hg3 : ∀ M : ℝ, g M ∈ TauCeti.LinearPMap.realSpectrum beamOperator := fun M =>
     (exists_lt_five_hundred_lt_mem_realSpectrum_beamOperator M).choose_spec.2.2
   refine ⟨fun n => Nat.rec (motive := fun _ => ℝ) (g 500) (fun _ prev => g prev) n, ?_, ?_⟩
   · exact strictMono_nat_of_lt_succ fun n => hg1 _
@@ -306,7 +306,7 @@ theorem exists_strictMono_mem_realSpectrum_beamOperator :
 
 /-- **`0` is in the real spectrum of the free beam.**  The constant function is a nonzero
 element of the affine kernel — `norm_affineLp_sq` makes `‖affineLp 1 0‖ ^ 2 = 1`. -/
-theorem zero_mem_realSpectrum_beamOperator : (0 : ℝ) ∈ beamOperator.realSpectrum := by
+theorem zero_mem_realSpectrum_beamOperator : (0 : ℝ) ∈ TauCeti.LinearPMap.realSpectrum beamOperator := by
   obtain ⟨hmem, hzero⟩ := beamOperator_affine_mem_and_zero 1 0
   set x : beamOperator.domain := ⟨affineLp 1 0, hmem⟩ with hxdef
   have hne : (x : BeamL2) ≠ 0 := by
@@ -315,9 +315,9 @@ theorem zero_mem_realSpectrum_beamOperator : (0 : ℝ) ∈ beamOperator.realSpec
     have hnorm := norm_affineLp_sq 1 0
     rw [show affineLp 1 0 = 0 from h0, norm_zero] at hnorm
     norm_num at hnorm
-  have heig : beamOperator.toLinearMap x = ((0 : ℝ) : ℂ) • (x : BeamL2) := by
+  have heig : beamOperator x = ((0 : ℝ) : ℂ) • (x : BeamL2) := by
     rw [hzero, Complex.ofReal_zero, zero_smul]
-  exact TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector (A := beamOperator.toLinearPMap)
+  exact TauCeti.LinearPMap.mem_realSpectrum_of_eigenvector (A := beamOperator)
     (x := x) hne heig
 
 /-- **The real spectrum of the free beam is exactly `{0}` together with the positive
@@ -325,7 +325,7 @@ eigenvalues.**  `exists_eigenvector_of_mem_realSpectrum_beamOperator` says every
 is an eigenvalue and `nonneg_of_beamOperator_eigen` says every eigenvalue is nonnegative, so
 there is no continuous or residual spectrum to account for. -/
 theorem realSpectrum_beamOperator_eq_insert_zero :
-    beamOperator.realSpectrum = insert 0 beamEigenvalues := by
+    TauCeti.LinearPMap.realSpectrum beamOperator = insert 0 beamEigenvalues := by
   apply Set.Subset.antisymm
   · intro lam hlam
     obtain ⟨x, hx0, heig⟩ := exists_eigenvector_of_mem_realSpectrum_beamOperator hlam
@@ -341,7 +341,7 @@ theorem realSpectrum_beamOperator_eq_insert_zero :
 `finite_beamEigenvalues_inter_Iic` upgraded from the point spectrum to the whole real
 spectrum, which the previous statement could not reach. -/
 theorem finite_realSpectrum_beamOperator_inter_Iic (M : ℝ) :
-    (beamOperator.realSpectrum ∩ Set.Iic M).Finite := by
+    (TauCeti.LinearPMap.realSpectrum beamOperator ∩ Set.Iic M).Finite := by
   refine Set.Finite.subset (Set.Finite.insert 0 (finite_beamEigenvalues_inter_Iic M)) ?_
   rw [realSpectrum_beamOperator_eq_insert_zero]
   rintro lam ⟨hlam, hle⟩
@@ -366,7 +366,7 @@ free-beam operator, with every term above the paper's `500` and in the real spec
 of spectral points, this omits no eigenvalue and lists nothing else. -/
 theorem exists_strictMono_range_eq_beamEigenvalues :
     ∃ f : ℕ → ℝ, StrictMono f ∧ Set.range f = beamEigenvalues ∧
-      ∀ n, 500 < f n ∧ f n ∈ beamOperator.realSpectrum := by
+      ∀ n, 500 < f n ∧ f n ∈ TauCeti.LinearPMap.realSpectrum beamOperator := by
   obtain ⟨f, hmono, hrange⟩ :=
     TauCeti.exists_strictMono_range_eq_of_unbounded_of_finite_inter_Iic
       exists_lt_mem_beamEigenvalues finite_beamEigenvalues_inter_Iic
@@ -379,7 +379,7 @@ theorem exists_strictMono_range_eq_beamEigenvalues :
 
 /-- **The free beam has infinitely many spectral points above `500`.** -/
 theorem infinite_five_hundred_lt_mem_realSpectrum_beamOperator :
-    {alpha : ℝ | 500 < alpha ∧ alpha ∈ beamOperator.realSpectrum}.Infinite := by
+    {alpha : ℝ | 500 < alpha ∧ alpha ∈ TauCeti.LinearPMap.realSpectrum beamOperator}.Infinite := by
   obtain ⟨f, hf, hmem⟩ := exists_strictMono_mem_realSpectrum_beamOperator
   exact Set.infinite_of_injective_forall_mem hf.injective hmem
 

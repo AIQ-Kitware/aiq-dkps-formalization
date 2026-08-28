@@ -28,9 +28,9 @@ namespace ReducesSubspace
 omit [CompleteSpace E] in
 /-- Orthogonal complementation preserves the reducing-subspace property. -/
 theorem orthogonal
-    {A : ClosedOperator (𝕜 := 𝕜) (E := E)}
+    {A : E →ₗ.[𝕜] E}
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (h : A.ReducesSubspace U) : A.ReducesSubspace Uᗮ :=
+    (h : TauCeti.LinearPMap.ReducesSubspace A U) : TauCeti.LinearPMap.ReducesSubspace A Uᗮ :=
   TauCeti.LinearPMap.ReducesSubspace.orthogonal h
 
 end ReducesSubspace
@@ -40,7 +40,8 @@ omit [CompleteSpace E] in
 full-domain closed operator. -/
 theorem ofBounded_reducesSubspace
     (A : E →L[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
-    (hred : A.Reduces U) : (ofBounded A).ReducesSubspace U := by
+    (hred : A.Reduces U) :
+    TauCeti.LinearPMap.ReducesSubspace (A.toLinearMap.toPMap ⊤) U := by
   refine ⟨?_, ?_, ?_, ?_⟩
   · intro x
     simp

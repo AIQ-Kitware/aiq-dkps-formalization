@@ -36,14 +36,14 @@ structure OrderedSylvesterEngine : Prop where
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
       (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-      {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-      {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-      (_hA : A.IsSelfAdjoint) (_hB : B.IsSelfAdjoint)
+      {A : E →ₗ.[ℂ] E}
+      {B : F →ₗ.[ℂ] F}
+      (_hA : IsSelfAdjoint A) (_hB : IsSelfAdjoint B)
       {X C : F →L[ℂ] E} {c δ : ℝ}
       (_hδ : 0 < δ)
-      (_hAc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap (c + δ))
-      (_hBc : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap c)
-      (_hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+      (_hAc : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
+      (_hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
+      (_hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
       (_hC : N.Mem C),
       N.Mem X ∧
         δ * N.gauge X ≤
@@ -53,14 +53,14 @@ structure OrderedSylvesterEngine : Prop where
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
       [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
       (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-      {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-      {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-      (_hA : A.IsSelfAdjoint) (_hB : B.IsSelfAdjoint)
+      {A : E →ₗ.[ℂ] E}
+      {B : F →ₗ.[ℂ] F}
+      (_hA : IsSelfAdjoint A) (_hB : IsSelfAdjoint B)
       {X C : F →L[ℂ] E} {c δ : ℝ}
       (_hδ : 0 < δ)
-      (_hAc : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c)
-      (_hBc : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap (c + δ))
-      (_hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+      (_hAc : TauCeti.LinearPMap.SemiboundedAbove A c)
+      (_hBc : TauCeti.LinearPMap.SemiboundedBelow B (c + δ))
+      (_hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
       (_hC : N.Mem C),
       N.Mem X ∧
         δ * N.gauge X ≤

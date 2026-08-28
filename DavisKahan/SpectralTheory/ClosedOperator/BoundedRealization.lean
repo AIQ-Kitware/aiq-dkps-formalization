@@ -32,10 +32,10 @@ variable {E F : Type v}
 
 /-- Bounded realization of a closed operator on its full domain. -/
 structure BoundedRealization
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)) where
+    (A : E →ₗ.[𝕜] E) where
   operator : E →L[𝕜] E
   domain_eq_top : A.domain = ⊤
-  agrees : ∀ x : A.domain, operator (x : E) = A.toLinearMap x
+  agrees : ∀ x : A.domain, operator (x : E) = A x
 
 end ExactSinTheta
 end DavisKahan

@@ -35,25 +35,25 @@ structure PaperCommonDomainSinThetaData
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H] where
-  A : ClosedOperator (𝕜 := 𝕜) (E := E)
-  A₀ : ClosedOperator (𝕜 := 𝕜) (E := F)
-  Λ₁ : ClosedOperator (𝕜 := 𝕜) (E := G)
+  A : E →ₗ.[𝕜] E
+  A₀ : F →ₗ.[𝕜] F
+  Λ₁ : G →ₗ.[𝕜] G
   E₀ : F →L[𝕜] E
   F₀ : H →L[𝕜] E
   F₁ : G →L[𝕜] E
   R : F →L[𝕜] E
-  A_selfAdjoint : A.IsSelfAdjoint
-  A₀_selfAdjoint : A₀.IsSelfAdjoint
-  Λ₁_selfAdjoint : Λ₁.IsSelfAdjoint
+  A_selfAdjoint : IsSelfAdjoint A
+  A₀_selfAdjoint : IsSelfAdjoint A₀
+  Λ₁_selfAdjoint : IsSelfAdjoint Λ₁
   exact_decomposition : OrthogonalExactDecomposition F₀ F₁
   common_domain : HasPaperCommonDomain A A₀ E₀
   F₁_maps_domain : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain
   residual_on_common_domain :
     ∀ x : F, (hx : E₀ x ∈ A.domain) → (hx₀ : x ∈ A₀.domain) →
-      A.toLinearMap ⟨E₀ x, hx⟩ - E₀ (A₀.toLinearMap ⟨x, hx₀⟩) = R x
+      A ⟨E₀ x, hx⟩ - E₀ (A₀ ⟨x, hx₀⟩) = R x
   F₁_intertwines : ∀ y : Λ₁.domain,
-    A.toLinearMap ⟨F₁ (y : G), F₁_maps_domain y⟩ =
-      F₁ (Λ₁.toLinearMap y)
+    A ⟨F₁ (y : G), F₁_maps_domain y⟩ =
+      F₁ (Λ₁ y)
 
 namespace PaperCommonDomainSinThetaData
 
@@ -102,7 +102,7 @@ structure PaperCommonDomainTheorem61Data where
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
   spectral_gap :
-    FormBoundedSylvesterGap source.A₀.toLinearPMap source.Λ₁.toLinearPMap gap
+    FormBoundedSylvesterGap source.A₀ source.Λ₁ gap
 
 namespace PaperCommonDomainTheorem61Data
 
@@ -249,7 +249,7 @@ structure PaperRealCommonDomainTheorem61Data where
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
   spectral_gap :
-    FormBoundedSylvesterGap source.A₀.toLinearPMap source.Λ₁.toLinearPMap gap
+    FormBoundedSylvesterGap source.A₀ source.Λ₁ gap
 
 namespace PaperRealCommonDomainTheorem61Data
 
@@ -311,7 +311,7 @@ structure PaperRealCommonDomainTheorem62Data where
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
   spectral_distance :
-    ∀ lam ∈ source.A₀.realSpectrum, ∀ α ∈ source.Λ₁.realSpectrum,
+    ∀ lam ∈ TauCeti.LinearPMap.realSpectrum source.A₀, ∀ α ∈ TauCeti.LinearPMap.realSpectrum source.Λ₁,
       gap ≤ |lam - α|
 
 namespace PaperRealCommonDomainTheorem62Data

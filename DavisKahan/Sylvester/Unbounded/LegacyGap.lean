@@ -93,13 +93,13 @@ spectrum theorem, while the two ordered constructors retain their form-bound
 hypotheses and call the direct engine verbatim. -/
 theorem davisKahan1970_sylvester_complex
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hgap : FormBoundedSylvesterGap A B δ)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
       δ * N.gauge X ≤
@@ -160,12 +160,12 @@ theorem stated over it -- `davisKahan1970_sylvester_complex` -- is the stronger
 theorem, with `davisKahan1970_sylvester_of_spectrumGap` a corollary of it.  Only
 the reverse direction on the ordered branches is missing. -/
 theorem formBoundedSylvesterGap_of_spectral
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {δ : ℝ}
-    (hgap : SpectralSylvesterGap A.toLinearPMap B.toLinearPMap δ) :
-    FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ := by
+    (hgap : SpectralSylvesterGap A B δ) :
+    FormBoundedSylvesterGap A B δ := by
   cases hgap with
   | intervalExterior hβα hgap =>
       exact .intervalExterior hβα (realSpectrumIntervalExteriorGap_of_spectral hgap)

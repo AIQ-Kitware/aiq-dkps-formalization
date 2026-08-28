@@ -37,14 +37,14 @@ theorem generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
-    (hA : D.A.IsSelfAdjoint)
-    (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     (hF₁ : IsometricEmbedding D.F₁)
     {β α δ ε : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : SpectralIntervalExteriorGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap β α δ)
+    (hgap : SpectralIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
@@ -76,7 +76,7 @@ Sylvester boundary. -/
 theorem linearPMap_generalizedSinTheta_unbounded_of_intervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
-    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
     (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
@@ -90,7 +90,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_of_intervalExteriorGap
       δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
         ≤ N.gaugeReal D.residual := by
   apply generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap
-    N D.toClosed hA hA₀ hΛ₁ hF₁ hβα hδ hε hframe
+    N D hA hA₀ hΛ₁ hF₁ hβα hδ hε hframe
   · exact hgap
   · exact hR
 
@@ -98,7 +98,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_of_intervalExteriorGap
 theorem linearPMap_generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
-    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)
@@ -125,7 +125,7 @@ endpoint, derived from the raw lower-frame theorem at frame bound one. -/
 theorem linearPMap_sinTheta_unbounded_exact_of_intervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
-    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
+    (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℂ] E)
     (hA : _root_.IsSelfAdjoint D.A)
     (hA₀ : _root_.IsSelfAdjoint D.A₀)

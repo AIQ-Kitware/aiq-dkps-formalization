@@ -49,15 +49,15 @@ private theorem abs_le_max_zero_of_mem_Icc (τ : ℝ) :
 
 /-- The bounded truncation `A · E_A([-τ,τ])`. -/
 noncomputable def spectraBoundedTruncation
-    (A : ComplexClosedOperatorH (H := H))
-    (hA : A.IsSelfAdjoint) (τ : ℝ) : H →L[ℂ] H :=
+    (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) (τ : ℝ) : H →L[ℂ] H :=
   TauCeti.LinearPMap.truncation hA (Set.Icc (-τ) τ) measurableSet_Icc
     (abs_le_max_zero_of_mem_Icc τ)
 
 /-- Bounded truncations are symmetric: the symbol is real. -/
 theorem spectraBoundedTruncation_isSymmetric
-    (A : ComplexClosedOperatorH (H := H))
-    (hA : A.IsSelfAdjoint) (τ : ℝ) :
+    (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) (τ : ℝ) :
     (spectraBoundedTruncation A hA τ).IsSymmetric :=
   (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric).mp
     (TauCeti.LinearPMap.isSelfAdjoint_truncation hA (Set.Icc (-τ) τ) measurableSet_Icc
@@ -65,58 +65,58 @@ theorem spectraBoundedTruncation_isSymmetric
 
 /-- The truncation agrees with `A` on the cutoff range. -/
 theorem spectraBoundedTruncation_eq_on_cutoff
-    (A : ComplexClosedOperatorH (H := H))
-    (hA : A.IsSelfAdjoint) (τ : ℝ) (x : H) :
+    (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) (τ : ℝ) (x : H) :
     ∃ hx : spectraSpectralCutoff A hA τ x ∈ A.domain,
-      spectraBoundedTruncation A hA τ x = A.toLinearMap ⟨spectraSpectralCutoff A hA τ x, hx⟩ := by
+      spectraBoundedTruncation A hA τ x = A ⟨spectraSpectralCutoff A hA τ x, hx⟩ := by
   obtain ⟨hx, hb⟩ := TauCeti.LinearPMap.truncation_eq_on_specProjection hA
     (Set.Icc (-τ) τ) measurableSet_Icc (abs_le_max_zero_of_mem_Icc τ) x
   exact ⟨hx, hb.symm⟩
 
 /-- Bounded truncations converge strongly to `A` on its domain. -/
 theorem spectraBoundedTruncation_tendsto_on_domain
-    (A : ComplexClosedOperatorH (H := H))
-    (hA : A.IsSelfAdjoint) (x : A.domain) :
+    (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) (x : A.domain) :
     Tendsto (fun τ : ℝ => spectraBoundedTruncation A hA τ (x : H)) atTop
-      (𝓝 (A.toLinearMap x)) := by
+      (𝓝 (A x)) := by
   have hval : ∀ τ : ℝ, spectraBoundedTruncation A hA τ (x : H)
       = TauCeti.LinearPMap.specProjection hA (Set.Icc (-τ) τ) measurableSet_Icc
-          (A.toLinearMap x) := by
+          (A x) := by
     intro τ
     obtain ⟨hx, hb⟩ := TauCeti.LinearPMap.truncation_eq_on_specProjection hA
       (Set.Icc (-τ) τ) measurableSet_Icc (abs_le_max_zero_of_mem_Icc τ) (x : H)
-    rw [show spectraBoundedTruncation A hA τ (x : H) = A.toLinearMap ⟨_, hx⟩ from hb.symm]
+    rw [show spectraBoundedTruncation A hA τ (x : H) = A ⟨_, hx⟩ from hb.symm]
     exact TauCeti.LinearPMap.specProjection_apply_domain hA (Set.Icc (-τ) τ)
       measurableSet_Icc x
   simp only [hval]
-  exact TauCeti.LinearPMap.tendsto_specProjection_Icc hA (A.toLinearMap x)
+  exact TauCeti.LinearPMap.tendsto_specProjection_Icc hA (A x)
 
 /-- A lower semibound for `A` descends to the truncations. -/
 theorem spectraBoundedTruncation_lowerBound
-    (A : ComplexClosedOperatorH (H := H))
-    (hA : A.IsSelfAdjoint) {c : ℝ} (hc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap c) {τ : ℝ} (x : H) :
+    (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) {c : ℝ} (hc : TauCeti.LinearPMap.SemiboundedBelow A c) {τ : ℝ} (x : H) :
     c * ‖spectraSpectralCutoff A hA τ x‖ ^ 2 ≤
       RCLike.re ⟪spectraBoundedTruncation A hA τ x, spectraSpectralCutoff A hA τ x⟫_ℂ := by
   obtain ⟨hx, hb⟩ := TauCeti.LinearPMap.truncation_eq_on_specProjection hA
     (Set.Icc (-τ) τ) measurableSet_Icc (abs_le_max_zero_of_mem_Icc τ) x
-  rw [show spectraBoundedTruncation A hA τ x = A.toLinearMap ⟨_, hx⟩ from hb.symm]
+  rw [show spectraBoundedTruncation A hA τ x = A ⟨_, hx⟩ from hb.symm]
   exact hc ⟨spectraSpectralCutoff A hA τ x, hx⟩
 
 /-- An upper semibound for `A` descends to the truncations. -/
 theorem spectraBoundedTruncation_upperBound
-    (A : ComplexClosedOperatorH (H := H))
-    (hA : A.IsSelfAdjoint) {c : ℝ} (hc : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c) {τ : ℝ} (x : H) :
+    (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) {c : ℝ} (hc : TauCeti.LinearPMap.SemiboundedAbove A c) {τ : ℝ} (x : H) :
     RCLike.re ⟪spectraBoundedTruncation A hA τ x, spectraSpectralCutoff A hA τ x⟫_ℂ ≤
       c * ‖spectraSpectralCutoff A hA τ x‖ ^ 2 := by
   obtain ⟨hx, hb⟩ := TauCeti.LinearPMap.truncation_eq_on_specProjection hA
     (Set.Icc (-τ) τ) measurableSet_Icc (abs_le_max_zero_of_mem_Icc τ) x
-  rw [show spectraBoundedTruncation A hA τ x = A.toLinearMap ⟨_, hx⟩ from hb.symm]
+  rw [show spectraBoundedTruncation A hA τ x = A ⟨_, hx⟩ from hb.symm]
   exact hc ⟨spectraSpectralCutoff A hA τ x, hx⟩
 
 /-- The truncation absorbs its cutoff on both sides. -/
 theorem spectraBoundedTruncation_commutes_cutoff
-    (A : ComplexClosedOperatorH (H := H))
-    (hA : A.IsSelfAdjoint) (τ : ℝ) :
+    (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) (τ : ℝ) :
     spectraBoundedTruncation A hA τ ∘L spectraSpectralCutoff A hA τ =
         spectraBoundedTruncation A hA τ ∧
       spectraSpectralCutoff A hA τ ∘L spectraBoundedTruncation A hA τ =
@@ -128,8 +128,8 @@ theorem spectraBoundedTruncation_commutes_cutoff
 
 /-- The implementation of the coherent bounded truncation interface. -/
 noncomputable def spectraBoundedTruncationInterface
-    (A : ComplexClosedOperatorH (H := H))
-    (hA : A.IsSelfAdjoint) :
+    (A : H →ₗ.[ℂ] H)
+    (hA : IsSelfAdjoint A) :
     BoundedTruncationInterface A hA
       (spectraSpectralCutoffInterface A hA) where
   truncation := spectraBoundedTruncation A hA

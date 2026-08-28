@@ -44,16 +44,16 @@ variable {E F G H : Type v}
 structure PaperTheorem61Data where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
+  trial_selfAdjoint : _root_.IsSelfAdjoint data.A₀
+  complement_selfAdjoint : _root_.IsSelfAdjoint data.Λ₁
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   frameLowerBound : ℝ
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
 
 namespace PaperTheorem61Data
 
@@ -149,14 +149,14 @@ end PaperTheorem61Data
 structure PaperIsometricTheoremData where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
+  trial_selfAdjoint : _root_.IsSelfAdjoint data.A₀
+  complement_selfAdjoint : _root_.IsSelfAdjoint data.Λ₁
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   gap_pos : 0 < gap
   trial_isometry : IsometricEmbedding data.X
-  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
 
 namespace PaperIsometricTheoremData
 
@@ -214,16 +214,16 @@ variable {E F G H : Type v}
 structure PaperRealTheorem61Data where
   data : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℝ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
+  trial_selfAdjoint : _root_.IsSelfAdjoint data.A₀
+  complement_selfAdjoint : _root_.IsSelfAdjoint data.Λ₁
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   frameLowerBound : ℝ
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
 
 namespace PaperRealTheorem61Data
 
@@ -314,14 +314,14 @@ end PaperRealTheorem61Data
 structure PaperRealIsometricTheoremData where
   data : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℝ] E
-  ambient_selfAdjoint : data.A.IsSelfAdjoint
-  trial_selfAdjoint : data.A₀.IsSelfAdjoint
-  complement_selfAdjoint : data.Λ₁.IsSelfAdjoint
+  ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
+  trial_selfAdjoint : _root_.IsSelfAdjoint data.A₀
+  complement_selfAdjoint : _root_.IsSelfAdjoint data.Λ₁
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   gap_pos : 0 < gap
   trial_isometry : IsometricEmbedding data.X
-  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
 
 namespace PaperRealIsometricTheoremData
 

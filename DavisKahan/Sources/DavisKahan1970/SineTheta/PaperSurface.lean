@@ -51,29 +51,29 @@ variable {E F G H : Type v}
 the residual `A E₀ - E₀ A₀` on the domain of the possibly unbounded trial
 operator `A₀`. -/
 structure IsTrialResidual
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (A₀ : ClosedOperator (𝕜 := 𝕜) (E := F))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
     (E₀ : F →L[𝕜] E)
     (R : F →L[𝕜] E) : Prop where
   isometry : IsometricEmbedding E₀
   mapsDomain : ∀ x : A₀.domain, E₀ (x : F) ∈ A.domain
   residualEquation : ∀ x : A₀.domain,
-    A.toLinearMap ⟨E₀ (x : F), mapsDomain x⟩ -
-      E₀ (A₀.toLinearMap x) = R (x : F)
+    A ⟨E₀ (x : F), mapsDomain x⟩ -
+      E₀ (A₀ x) = R (x : F)
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Fully expanded mathematical meaning of `IsTrialResidual`. -/
 theorem isTrialResidual_iff
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (A₀ : ClosedOperator (𝕜 := 𝕜) (E := F))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
     (E₀ : F →L[𝕜] E)
     (R : F →L[𝕜] E) :
     IsTrialResidual A A₀ E₀ R ↔
       IsometricEmbedding E₀ ∧
         ∃ hdom : ∀ x : A₀.domain, E₀ (x : F) ∈ A.domain,
           ∀ x : A₀.domain,
-            A.toLinearMap ⟨E₀ (x : F), hdom x⟩ -
-              E₀ (A₀.toLinearMap x) = R (x : F) := by
+            A ⟨E₀ (x : F), hdom x⟩ -
+              E₀ (A₀ x) = R (x : F) := by
   constructor
   · intro h
     exact ⟨h.isometry, h.mapsDomain, h.residualEquation⟩
@@ -86,8 +86,8 @@ theorem isTrialResidual_iff
 orthogonal complement.  The complementary coordinates intertwine the ambient
 operator `A` with the exact complementary block `Λ₁`. -/
 structure IsExactSpectralDecomposition
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (Λ₁ : ClosedOperator (𝕜 := 𝕜) (E := G))
+    (A : E →ₗ.[𝕜] E)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (F₀ : H →L[𝕜] E)
     (F₁ : G →L[𝕜] E) : Prop where
   desiredIsometry : IsometricEmbedding F₀
@@ -98,13 +98,13 @@ structure IsExactSpectralDecomposition
       ContinuousLinearMap.id 𝕜 E
   mapsDomain : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain
   intertwines : ∀ y : Λ₁.domain,
-    A.toLinearMap ⟨F₁ (y : G), mapsDomain y⟩ =
-      F₁ (Λ₁.toLinearMap y)
+    A ⟨F₁ (y : G), mapsDomain y⟩ =
+      F₁ (Λ₁ y)
 
 /-- Fully expanded mathematical meaning of `IsExactSpectralDecomposition`. -/
 theorem isExactSpectralDecomposition_iff
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (Λ₁ : ClosedOperator (𝕜 := 𝕜) (E := G))
+    (A : E →ₗ.[𝕜] E)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (F₀ : H →L[𝕜] E)
     (F₁ : G →L[𝕜] E) :
     IsExactSpectralDecomposition A Λ₁ F₀ F₁ ↔
@@ -115,8 +115,8 @@ theorem isExactSpectralDecomposition_iff
               ContinuousLinearMap.id 𝕜 E ∧
             ∃ hdom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain,
               ∀ y : Λ₁.domain,
-                A.toLinearMap ⟨F₁ (y : G), hdom y⟩ =
-                  F₁ (Λ₁.toLinearMap y) := by
+                A ⟨F₁ (y : G), hdom y⟩ =
+                  F₁ (Λ₁ y) := by
   constructor
   · intro h
     exact ⟨h.desiredIsometry, h.complementIsometry, h.orthogonal,
@@ -139,9 +139,9 @@ theorem sinTheta_headline
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : UnitaryInvariantNorm)
-    (A : ClosedOperator (𝕜 := 𝕜) (E := E))
-    (A₀ : ClosedOperator (𝕜 := 𝕜) (E := F))
-    (Λ₁ : ClosedOperator (𝕜 := 𝕜) (E := G))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (E₀ : F →L[𝕜] E)
     (F₀ : H →L[𝕜] E)
     (F₁ : G →L[𝕜] E)
@@ -150,20 +150,20 @@ theorem sinTheta_headline
     (hSinTheta₀ :
       sinTheta₀ =
         (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀)
-    (hA : A.IsSelfAdjoint)
-    (hA₀ : A₀.IsSelfAdjoint)
-    (hΛ₁ : Λ₁.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
+    (hA₀ : IsSelfAdjoint A₀)
+    (hΛ₁ : IsSelfAdjoint Λ₁)
     (htrial : IsTrialResidual A A₀ E₀ R)
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {β α δ : ℝ}
     (hβα : β ≤ α)
     (hδ : 0 < δ)
     (hspectral :
-      (LinearPMap.realSpectrum A₀.toLinearPMap ⊆ Set.Icc β α ∧
-          LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆
+      (LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum Λ₁ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}) ∨
-        (LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ Set.Icc β α ∧
-          LinearPMap.realSpectrum A₀.toLinearPMap ⊆
+        (LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum A₀ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}))
     (hR : N.Mem R) :
     δ * N.gauge sinTheta₀ ≤ N.gauge R := by

@@ -159,7 +159,7 @@ no approximation is made: this is symmetry of the operator plus the splitting of
 `f` along `beamTrial ⊕ beamTrialᗮ`. -/
 theorem beam_ritz_coordinate_identity (ε : ℝ) {f : BeamL2} {lam : ℝ}
     (hfdom : f ∈ (beamPerturbed ε).domain)
-    (hf : (beamPerturbed ε).toLinearMap ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
+    (hf : (beamPerturbed ε) ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
     (v : beamTrial) {α : ℝ}
     (hcomp : ∀ z : beamTrial, ⟪beamResidual ε v, (z : BeamL2)⟫_ℂ
       = ((α : ℝ) : ℂ) * ⟪(v : BeamL2), (z : BeamL2)⟫_ℂ) :
@@ -169,10 +169,10 @@ theorem beam_ritz_coordinate_identity (ε : ℝ) {f : BeamL2} {lam : ℝ}
   have hvdom : (v : BeamL2) ∈ (beamPerturbed ε).domain := beamTrial_le_domain hvmem
   have hy : f - beamTrial.starProjection f ∈ beamTrialᗮ :=
     Submodule.sub_starProjection_mem_orthogonal f
-  have hsym : ⟪(beamPerturbed ε).toLinearMap ⟨(v : BeamL2), hvdom⟩, f⟫_ℂ
-      = ⟪(v : BeamL2), (beamPerturbed ε).toLinearMap ⟨f, hfdom⟩⟫_ℂ :=
-    ((beamPerturbed_isSelfAdjoint ε).isSymmetric).toLinearMap_inner_eq
-      ⟨(v : BeamL2), hvdom⟩ ⟨f, hfdom⟩
+  have hsym : ⟪(beamPerturbed ε) ⟨(v : BeamL2), hvdom⟩, f⟫_ℂ
+      = ⟪(v : BeamL2), (beamPerturbed ε) ⟨f, hfdom⟩⟫_ℂ :=
+    (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint
+      (beamPerturbed_isSelfAdjoint ε)) ⟨(v : BeamL2), hvdom⟩ ⟨f, hfdom⟩
   rw [beamPerturbed_apply_of_mem_beamTrial ε hvmem hvdom, hf, inner_smul_right] at hsym
   have hR : beamPerturbation ε (v : BeamL2) = beamResidual ε v := rfl
   rw [hR] at hsym
@@ -322,7 +322,7 @@ theorem two_coordinate_schur_identity {d₁ d₂ : ℝ} {a b ρ : ℂ}
 /-- **The scalar data of the Ritz coordinates of an exact eigenvector.** -/
 theorem beam_ritz_scalar_data (ε : ℝ) (hε : 0 < ε) {f : BeamL2} {lam : ℝ}
     (hfdom : f ∈ (beamPerturbed ε).domain)
-    (hf : (beamPerturbed ε).toLinearMap ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
+    (hf : (beamPerturbed ε) ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
     (hlam : lam < 1001 / 2) (hfn : ‖f‖ = 1) :
     ∃ R S C : ℝ, 0 ≤ R ∧ 0 ≤ S ∧ 0 < C ∧
       |ritzLow ε - lam| * ‖⟪centeredAffineLp trialOne, f⟫_ℂ‖ = R ∧
@@ -505,7 +505,7 @@ eigenvalue relative to the *lower* Ritz value, and by nothing else: the sign of
 the Schur coefficient selects the branch. -/
 theorem beam_individual_angle_le (ε : ℝ) (hε : 0 < ε) {f : BeamL2} {lam : ℝ}
     (hfdom : f ∈ (beamPerturbed ε).domain)
-    (hf : (beamPerturbed ε).toLinearMap ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
+    (hf : (beamPerturbed ε) ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
     (hlam : lam < 1001 / 2) (hfn : ‖f‖ = 1) :
     (lam ≤ ritzLow ε ∧ Real.arccos ‖⟪centeredAffineLp trialOne, f⟫_ℂ‖
         ≤ Real.sqrt 7 / 10 * ε / ((1001 : ℝ) / 2 - lam))
@@ -628,7 +628,7 @@ so the bound proved above is strictly better; the printed statement follows. -/
 is within `(√7 / 10) ε / (500 - lam)` of every exact eigenvector below `500`. -/
 theorem beam_individual_angle_le_printed (ε : ℝ) (hε : 0 < ε) {f : BeamL2} {lam : ℝ}
     (hfdom : f ∈ (beamPerturbed ε).domain)
-    (hf : (beamPerturbed ε).toLinearMap ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
+    (hf : (beamPerturbed ε) ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
     (hlam : lam < 500) (hfn : ‖f‖ = 1) :
     (lam ≤ ritzLow ε ∧ Real.arccos ‖⟪centeredAffineLp trialOne, f⟫_ℂ‖
         ≤ Real.sqrt 7 / 10 * ε / (500 - lam))
@@ -667,7 +667,7 @@ value.**  This is a by-product of the sign analysis: the Schur coefficient is
 nonnegative, and an eigenvalue above both Ritz values would make it negative. -/
 theorem beam_eigenvalue_le_ritzHigh (ε : ℝ) (hε : 0 < ε) {f : BeamL2} {lam : ℝ}
     (hfdom : f ∈ (beamPerturbed ε).domain)
-    (hf : (beamPerturbed ε).toLinearMap ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
+    (hf : (beamPerturbed ε) ⟨f, hfdom⟩ = ((lam : ℝ) : ℂ) • f)
     (hlam : lam < 1001 / 2) (hfn : ‖f‖ = 1) :
     lam ≤ ritzHigh ε := by
   obtain ⟨R, S, C, hR, hS, hC, hG1, hG2, hprod, hSb⟩ :=

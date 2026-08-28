@@ -44,9 +44,9 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- A point-spectrum eigenpair for a closed operator, with the eigenvector
 stored in the operator domain. -/
 def ClosedOperatorEigenpair
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
+    (A : H →ₗ.[ℂ] H)
     (lambda : ℝ) (x : A.domain) : Prop :=
-  (x : H) ≠ 0 ∧ A.toLinearMap x = (lambda : ℂ) • (x : H)
+  (x : H) ≠ 0 ∧ A x = (lambda : ℂ) • (x : H)
 
 /-- Classical mode data obtained from regularity of a positive eigenvector. -/
 structure PositiveClassicalModeCertificate (lambda : ℝ) where
@@ -85,7 +85,7 @@ end PositiveClassicalModeCertificate
 
 /-- Regularity/classification package for one concrete free-beam operator. -/
 structure PositiveEigenmodeRegularity
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)) where
+    (A : H →ₗ.[ℂ] H) where
   classify : ∀ {lambda : ℝ} {x : A.domain},
     0 < lambda → ClosedOperatorEigenpair A lambda x →
       PositiveClassicalModeCertificate lambda
@@ -96,7 +96,7 @@ omit [CompleteSpace H] in
 /-- Every positive eigenpair of a regular free-beam realization gives a
 positive characteristic root. -/
 theorem eigenpair_characteristic
-    {A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
+    {A : H →ₗ.[ℂ] H}
     (R : PositiveEigenmodeRegularity A)
     {lambda : ℝ} {x : A.domain}
     (hlambda : 0 < lambda)
@@ -113,20 +113,20 @@ end PositiveEigenmodeRegularity
 /-- Spectral discreteness input: every positive spectral value is represented
 by a nonzero domain eigenvector. -/
 def PositiveSpectrumIsPointSpectrum
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)) : Prop :=
+    (A : H →ₗ.[ℂ] H) : Prop :=
   ∀ lambda : ℝ,
-    lambda ∈ A.realSpectrum → 0 < lambda →
+    lambda ∈ TauCeti.LinearPMap.realSpectrum A → 0 < lambda →
       ∃ x : A.domain, ClosedOperatorEigenpair A lambda x
 
 omit [CompleteSpace H] in
 /-- Compact-resolvent discreteness plus ODE regularity gives the exact positive
 spectrum characterization required by the paper-facing foundation. -/
 theorem positive_spectrum_characterization_of_pointSpectrum_and_regularity
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
+    (A : H →ₗ.[ℂ] H)
     (hpoint : PositiveSpectrumIsPointSpectrum A)
     (hregular : PositiveEigenmodeRegularity A) :
     ∀ lambda : ℝ,
-      lambda ∈ A.realSpectrum → 0 < lambda →
+      lambda ∈ TauCeti.LinearPMap.realSpectrum A → 0 < lambda →
       ∃ beta : ℝ,
         0 < beta ∧
         FreeBeam.characteristic beta = 0 ∧
@@ -139,11 +139,11 @@ omit [CompleteSpace H] in
 /-- Once root localization is known, every positive spectral point lies above
 `500`. -/
 theorem positive_spectrum_gt_five_hundred_of_pointSpectrum_and_regularity
-    (A : DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H))
+    (A : H →ₗ.[ℂ] H)
     (L : FreeBeam.PositiveRootLocalization)
     (hpoint : PositiveSpectrumIsPointSpectrum A)
     (hregular : PositiveEigenmodeRegularity A)
-    {lambda : ℝ} (hlambda : lambda ∈ A.realSpectrum)
+    {lambda : ℝ} (hlambda : lambda ∈ TauCeti.LinearPMap.realSpectrum A)
     (hpositive : 0 < lambda) :
     500 < lambda := by
   obtain ⟨beta, hbeta, hroot, hlambda_beta⟩ :=

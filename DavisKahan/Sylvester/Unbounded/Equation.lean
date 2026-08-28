@@ -32,9 +32,9 @@ variable {E F : Type v}
 This is not a second equation model: it is the closed Sylvester equation with
 the right block embedded as a full-domain closed operator. -/
 abbrev HasUnboundedBoundedSylvesterEquation
-    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
+    (A : E →ₗ.[𝕜] E)
     (B : F →L[𝕜] F) (X C : F →L[𝕜] E) : Prop :=
-  TauCeti.LinearPMap.UnboundedBoundedSylvesterEquation A.toLinearPMap B X C
+  TauCeti.LinearPMap.UnboundedBoundedSylvesterEquation A B X C
 
 end ExactSinTheta
 end DavisKahan

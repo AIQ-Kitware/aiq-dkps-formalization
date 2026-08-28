@@ -37,13 +37,13 @@ disjunction. -/
 theorem sinTheta_unbounded_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
-    (hA : D.A.IsSelfAdjoint)
-    (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     (_hX : IsometricEmbedding D.X)
     (hF₁ : IsometricEmbedding D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gauge (D.X.adjoint ∘L D.F₁)
@@ -61,12 +61,12 @@ contracted back to the whole residual.  The sharp directed residual
 theorem sinTheta_unbounded_real_block
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
-    (hA : D.A.IsSelfAdjoint)
-    (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     (hF₁ : IsometricEmbedding D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gauge (D.X.adjoint ∘L D.F₁)
@@ -86,13 +86,13 @@ theorem sinTheta_unbounded_exact_real
     (N : KyFanDominantIdealFamily (𝕜 := ℝ))
     (D : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G))
     (F₀ : H →L[ℝ] E)
-    (hA : D.A.IsSelfAdjoint)
-    (hA₀ : D.A₀.IsSelfAdjoint)
-    (hΛ₁ : D.Λ₁.IsSelfAdjoint)
+    (hA : _root_.IsSelfAdjoint D.A)
+    (hA₀ : _root_.IsSelfAdjoint D.A₀)
+    (hΛ₁ : _root_.IsSelfAdjoint D.Λ₁)
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
+    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
       ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧

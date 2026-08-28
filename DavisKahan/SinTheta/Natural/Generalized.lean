@@ -31,18 +31,18 @@ spectral inputs. The lower-frame polar factorization and every complementary
 spectral restriction are constructed internally. -/
 theorem generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S)
-    (A0 : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
-    (hA0 : A0.IsSelfAdjoint)
+    (A : E →ₗ.[ℂ] E)
+    (hA : IsSelfAdjoint A) (S : Set ℝ) (hS : MeasurableSet S)
+    (A0 : F →ₗ.[ℂ] F)
+    (hA0 : _root_.IsSelfAdjoint A0)
     (X Rop : F →L[ℂ] E)
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
     (hXdom : ∀ x : A0.domain, X (x : F) ∈ A.domain)
     (hReq : ∀ x : A0.domain,
-      A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
-    (hgap : SpectralSylvesterGap A0.toLinearPMap
-      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ)
+      A ⟨X (x : F), hXdom x⟩ - X (A0 x) = Rop (x : F))
+    (hgap : SpectralSylvesterGap A0
+      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
     (hR : N.Mem Rop) :
     N.Mem
       (directedSinThetaOperator X
@@ -54,24 +54,24 @@ theorem generalizedSinTheta_unbounded_spectralSubspace_of_spectrumGap
           hframe hε)
         ≤ N.gauge Rop := by
   let D := unboundedSinThetaDataOfSpectralSubspace
-    A hA S hS A0 X Rop hXdom hReq
-  have hLambda : D.Λ₁.IsSelfAdjoint := by
+    A hA S hS A0 hA0 X Rop hXdom hReq
+  have hLambda : _root_.IsSelfAdjoint D.Λ₁ := by
     exact selfAdjointSpectralRestriction_isSelfAdjoint A hA Sᶜ hS.compl
   have hdecomp : OrthogonalExactDecomposition
       (selfAdjointSpectralSubspaceInclusion A hA S hS) D.F₁ := by
     simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using
       spectralSubspace_orthogonalExactDecomposition A hA S hS
-  have hDA : D.A.IsSelfAdjoint := by
+  have hDA : _root_.IsSelfAdjoint D.A := by
     simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using hA
-  have hDA₀ : D.A₀.IsSelfAdjoint := by
+  have hDA₀ : _root_.IsSelfAdjoint D.A₀ := by
     simpa only [D, unboundedSinThetaDataOfSpectralSubspace] using hA0
-  have hmain := linearPMap_generalizedSinTheta_unbounded_exact_of_spectrumGap
-    N D.toPMap (selfAdjointSpectralSubspaceInclusion A hA S hS)
-      (D.toPMap_A_isSelfAdjoint hDA)
-      (D.toPMap_A₀_isSelfAdjoint hDA₀)
-      (D.toPMap_Λ₁_isSelfAdjoint hLambda) hdecomp hδ hε hframe hgap hR
+  have hmain := generalizedSinTheta_unbounded_exact_of_spectrumGap
+    N D (selfAdjointSpectralSubspaceInclusion A hA S hS)
+      hDA
+      hDA₀
+      hLambda hdecomp hδ hε hframe hgap hR
   simpa only [D, unboundedSinThetaDataOfSpectralSubspace,
-    UnboundedSinThetaData.toPMap] using hmain
+    UnboundedSinThetaData] using hmain
 
 end ExactSinTheta
 end DavisKahan

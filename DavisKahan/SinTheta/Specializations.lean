@@ -51,8 +51,8 @@ structure BoundedGeneralSinThetaProblem
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound X frameLowerBound
   spectral_gap : FormBoundedSylvesterGap
-    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A₀).toLinearPMap
-    (TauCeti.DavisKahanExt.ClosedOperator.ofBounded Λ₁).toLinearPMap gap
+    ((A₀.toLinearMap.toPMap ⊤))
+    ((Λ₁.toLinearMap.toPMap ⊤)) gap
   residual_mem : N.Mem
     (generalResidual A X A₀)
 
@@ -67,9 +67,9 @@ noncomputable def toGeneral
     FormBoundedGeneralSinThetaProblem (E := E) (F := F)
       (G := G) (H := H) N := by
   let D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G) := {
-    A := TauCeti.DavisKahanExt.ClosedOperator.ofBounded P.A
-    A₀ := TauCeti.DavisKahanExt.ClosedOperator.ofBounded P.A₀
-    Λ₁ := TauCeti.DavisKahanExt.ClosedOperator.ofBounded P.Λ₁
+    A := (P.A.toLinearMap.toPMap ⊤)
+    A₀ := (P.A₀.toLinearMap.toPMap ⊤)
+    Λ₁ := (P.Λ₁.toLinearMap.toPMap ⊤)
     X := P.X
     F₁ := P.F₁
     residual := generalResidual P.A P.X P.A₀
@@ -90,13 +90,13 @@ noncomputable def toGeneral
     data := D
     exactMap := P.F₀
     ambient_selfAdjoint :=
-      TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint
+      TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint
         P.A P.ambient_symmetric
     trial_selfAdjoint :=
-      TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint
+      TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint
         P.A₀ P.trial_symmetric
     complement_selfAdjoint :=
-      TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint
+      TauCeti.DavisKahanExt.ofBounded_isSelfAdjoint
         P.Λ₁ P.complement_symmetric
     exact_decomposition := P.exact_decomposition
     gap := P.gap
@@ -146,8 +146,8 @@ theorem intervalExteriorGap_to_unbounded
     {β α δ : ℝ}
     (hgap : IntervalExteriorGap A B β α δ) :
     RealSpectrumIntervalExteriorGap
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A).toLinearPMap
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded B).toLinearPMap
+      ((A.toLinearMap.toPMap ⊤))
+      ((B.toLinearMap.toPMap ⊤))
       β α δ := by
   exact hgap
 

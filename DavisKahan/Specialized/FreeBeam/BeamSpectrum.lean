@@ -40,10 +40,10 @@ theorem beamOperator_domain_eq :
 
 /-- The shifted operator acts as the beam operator plus the identity. -/
 theorem shifted_apply_of_beam {x : beamOperator.domain} :
-    beamShiftedFormData.shiftedOperator.toLinearMap x
-      = beamOperator.toLinearMap x + (x : BeamL2) := by
-  have h : beamOperator.toLinearMap x
-      = beamShiftedFormData.shiftedOperator.toLinearMap x - (x : BeamL2) :=
+    beamShiftedFormData.shiftedOperator x
+      = beamOperator x + (x : BeamL2) := by
+  have h : beamOperator x
+      = beamShiftedFormData.shiftedOperator x - (x : BeamL2) :=
     beamShiftedFormData.beamOperator_apply x
   rw [h]
   abel
@@ -59,7 +59,7 @@ theorem beamV_inner_decompose (p v : BeamV) :
 real eigenvalue `lam`, there is a form-space representative `p` with first slot `x` whose
 bending slot pairs against every test pair by `lam` times the ambient pairing. -/
 theorem exists_form_representative_of_eigen {lam : ℝ} {x : beamOperator.domain}
-    (heig : beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2)) :
+    (heig : beamOperator x = (lam : ℂ) • (x : BeamL2)) :
     ∃ p : BeamV, beamEmbed p = (x : BeamL2) ∧
       ∀ v : BeamV, ⟪beamSnd p, beamSnd v⟫_ℂ
         = (lam : ℂ) * ⟪(x : BeamL2), beamEmbed v⟫_ℂ := by
@@ -71,16 +71,16 @@ theorem exists_form_representative_of_eigen {lam : ℝ} {x : beamOperator.domain
   intro v
   -- the variational identity for the forcing `(shifted) x = (1 + lam) x`
   have hvar := beamCoerciveFormData.variational_identity
-    (beamShiftedFormData.shiftedOperator.toLinearMap x) v
+    (beamShiftedFormData.shiftedOperator x) v
   have hform : beamCoerciveFormData.formOperator
       (beamCoerciveFormData.solutionOperator
-        (beamShiftedFormData.shiftedOperator.toLinearMap x))
+        (beamShiftedFormData.shiftedOperator x))
       = p := by
     rw [show beamCoerciveFormData.formOperator = 1 from rfl]
     rfl
   rw [hform] at hvar
   -- identify the forcing
-  have hforce : beamShiftedFormData.shiftedOperator.toLinearMap x
+  have hforce : beamShiftedFormData.shiftedOperator x
       = ((1 + lam : ℝ) : ℂ) • (x : BeamL2) := by
     rw [shifted_apply_of_beam, heig]
     push_cast
@@ -210,7 +210,7 @@ theorem adjoint_beamEmbed_affine (a b : ℂ) :
 /-- Affine elements lie in the beam operator's domain and are annihilated by it. -/
 theorem beamOperator_affine_mem_and_zero (a b : ℂ) :
     ∃ h : affineLp a b ∈ beamOperator.domain,
-      beamOperator.toLinearMap ⟨affineLp a b, h⟩ = 0 := by
+      beamOperator ⟨affineLp a b, h⟩ = 0 := by
   -- the resolvent fixes affine elements
   have hres : beamCoerciveFormData.resolvent (affineLp a b) = affineLp a b := by
     rw [show beamCoerciveFormData.resolvent
@@ -237,7 +237,7 @@ theorem beamOperator_affine_mem_and_zero (a b : ℂ) :
     exact ⟨affineLp a b, hres⟩
   refine ⟨hmem, ?_⟩
   -- the shifted operator fixes affine elements, so the beam operator kills them
-  have hshift : beamShiftedFormData.shiftedOperator.toLinearMap ⟨affineLp a b, hmem⟩
+  have hshift : beamShiftedFormData.shiftedOperator ⟨affineLp a b, hmem⟩
       = affineLp a b := by
     have := Abstract.inverseClosedOperator_apply_R beamCoerciveFormData.resolvent
       beamCoerciveFormData.resolvent_isSelfAdjoint
@@ -248,18 +248,18 @@ theorem beamOperator_affine_mem_and_zero (a b : ℂ) :
         = ⟨affineLp a b, hmem⟩ := Subtype.ext hres
     rw [← hsub]
     exact this
-  have happly : beamOperator.toLinearMap ⟨affineLp a b, hmem⟩
-      = beamShiftedFormData.shiftedOperator.toLinearMap ⟨affineLp a b, hmem⟩
+  have happly : beamOperator ⟨affineLp a b, hmem⟩
+      = beamShiftedFormData.shiftedOperator ⟨affineLp a b, hmem⟩
         - affineLp a b :=
     beamShiftedFormData.beamOperator_apply _
   rw [happly, hshift, sub_self]
 
 /-- Conversely, an element of the kernel is affine. -/
 theorem exists_affine_of_beamOperator_eq_zero {x : beamOperator.domain}
-    (hx : beamOperator.toLinearMap x = 0) :
+    (hx : beamOperator x = 0) :
     ∃ a b : ℂ, (x : BeamL2) = affineLp a b := by
   -- the quadratic form vanishes, hence so does the bending slot
-  have hquad : RCLike.re ⟪beamOperator.toLinearMap x, (x : BeamL2)⟫_ℂ
+  have hquad : RCLike.re ⟪beamOperator x, (x : BeamL2)⟫_ℂ
       = beamShiftedFormData.bendingEnergy (beamShiftedFormData.formRepresentative x) :=
     beamShiftedFormData.beam_quadratic_eq_bendingEnergy x
   rw [hx, inner_zero_left] at hquad
@@ -496,7 +496,7 @@ form forces the free boundary conditions; and a nontrivial mode with free ends s
 `cos β cosh β = 1`. -/
 theorem exists_characteristic_of_eigen {lam : ℝ} (hlam : 0 < lam)
     {x : beamOperator.domain} (hx0 : (x : BeamL2) ≠ 0)
-    (heig : beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2)) :
+    (heig : beamOperator x = (lam : ℂ) • (x : BeamL2)) :
     ∃ beta : ℝ, 0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4 := by
   classical
   obtain ⟨p, hembed, hpair⟩ := exists_form_representative_of_eigen heig
@@ -743,7 +743,7 @@ free-beam realization exceeds `500`.  The margin is thin — the first positive 
 `4.7300407…`, whose fourth power is `500.56…`. -/
 theorem eigenvalue_gt_five_hundred {lam : ℝ} (hlam : 0 < lam)
     {x : beamOperator.domain} (hx0 : (x : BeamL2) ≠ 0)
-    (heig : beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2)) :
+    (heig : beamOperator x = (lam : ℂ) • (x : BeamL2)) :
     500 < lam := by
   obtain ⟨beta, hβ, hchar, hlameq⟩ := exists_characteristic_of_eigen hlam hx0 heig
   rw [hlameq]
@@ -753,9 +753,9 @@ theorem eigenvalue_gt_five_hundred {lam : ℝ} (hlam : 0 < lam)
 Rayleigh quotient of an eigenvector is the eigenvalue times the squared norm. -/
 theorem nonneg_of_beamOperator_eigen {lam : ℝ} {x : beamOperator.domain}
     (hx0 : (x : BeamL2) ≠ 0)
-    (heig : beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2)) : 0 ≤ lam := by
+    (heig : beamOperator x = (lam : ℂ) • (x : BeamL2)) : 0 ≤ lam := by
   have hpos := beamOperator_nonneg x
-  have hval : ⟪beamOperator.toLinearMap x, (x : BeamL2)⟫_ℂ
+  have hval : ⟪beamOperator x, (x : BeamL2)⟫_ℂ
       = ((lam * ‖(x : BeamL2)‖ ^ 2 : ℝ) : ℂ) := by
     rw [heig, inner_smul_left, Complex.conj_ofReal, inner_self_eq_norm_sq_to_K]
     push_cast
@@ -801,7 +801,7 @@ hold trivially. -/
 theorem exists_beamOperator_apply_of_beamResolvent_smul {mu : ℂ} (hmu : mu ≠ 0)
     {u : BeamL2} (huv : beamCoerciveFormData.resolvent u = mu • u) :
     ∃ h : u ∈ beamOperator.domain,
-      beamOperator.toLinearMap ⟨u, h⟩ = (mu⁻¹ - 1) • u := by
+      beamOperator ⟨u, h⟩ = (mu⁻¹ - 1) • u := by
   set R := beamCoerciveFormData.resolvent with hR
   -- the eigenvector is in the domain of the shifted operator
   have humem : u ∈ beamOperator.domain := by
@@ -814,16 +814,16 @@ theorem exists_beamOperator_apply_of_beamResolvent_smul {mu : ℂ} (hmu : mu ≠
   -- the shifted operator scales the eigenvector by `mu⁻¹`
   have hRmu : R (mu⁻¹ • u) = u := by
     rw [map_smul, huv, smul_smul, inv_mul_cancel₀ hmu, one_smul]
-  have hshift : beamShiftedFormData.shiftedOperator.toLinearMap ⟨u, humem⟩
+  have hshift : beamShiftedFormData.shiftedOperator ⟨u, humem⟩
       = mu⁻¹ • u := by
     have happ := Abstract.inverseClosedOperator_apply_R R
       beamCoerciveFormData.resolvent_isSelfAdjoint
       beamCoerciveFormData.resolvent_injective (mu⁻¹ • u)
     have hsub : (⟨R (mu⁻¹ • u), LinearMap.mem_range_self _ _⟩ :
         beamShiftedFormData.shiftedOperator.domain) = ⟨u, humem⟩ := Subtype.ext hRmu
-    exact (congrArg beamShiftedFormData.shiftedOperator.toLinearMap hsub).symm.trans happ
-  have h : beamOperator.toLinearMap ⟨u, humem⟩
-      = beamShiftedFormData.shiftedOperator.toLinearMap ⟨u, humem⟩ - u :=
+    exact (congrArg beamShiftedFormData.shiftedOperator hsub).symm.trans happ
+  have h : beamOperator ⟨u, humem⟩
+      = beamShiftedFormData.shiftedOperator ⟨u, humem⟩ - u :=
     beamShiftedFormData.beamOperator_apply _
   rw [h, hshift, sub_smul, one_smul]
 
@@ -850,19 +850,20 @@ theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
   -- the beam operator has eigenvalue `mu⁻¹ - 1`
   obtain ⟨humem, hbeam⟩ := exists_beamOperator_apply_of_beamResolvent_smul hmu huv
   -- the eigenvalue is real
-  have hL : ⟪beamOperator.toLinearMap ⟨u, humem⟩, u⟫_ℂ
+  have hL : ⟪beamOperator ⟨u, humem⟩, u⟫_ℂ
       = (starRingEnd ℂ) (mu⁻¹ - 1) * ((‖u‖ : ℂ)) ^ 2 := by
     rw [hbeam, inner_smul_left]
     congr 1
     exact inner_self_eq_norm_sq_to_K u
-  have hRt : ⟪u, beamOperator.toLinearMap ⟨u, humem⟩⟫_ℂ
+  have hRt : ⟪u, beamOperator ⟨u, humem⟩⟫_ℂ
       = (mu⁻¹ - 1) * ((‖u‖ : ℂ)) ^ 2 := by
     rw [hbeam, inner_smul_right]
     congr 1
     exact inner_self_eq_norm_sq_to_K u
-  have hsymm : ⟪beamOperator.toLinearMap ⟨u, humem⟩, u⟫_ℂ
-      = ⟪u, beamOperator.toLinearMap ⟨u, humem⟩⟫_ℂ :=
-    beamOperator_isSelfAdjoint.isSymmetric ⟨u, humem⟩ ⟨u, humem⟩
+  have hsymm : ⟪beamOperator ⟨u, humem⟩, u⟫_ℂ
+      = ⟪u, beamOperator ⟨u, humem⟩⟫_ℂ :=
+    (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint beamOperator_isSelfAdjoint)
+      ⟨u, humem⟩ ⟨u, humem⟩
   have hreal : (starRingEnd ℂ) (mu⁻¹ - 1) = mu⁻¹ - 1 := by
     have hchain : (starRingEnd ℂ) (mu⁻¹ - 1) * ((‖u‖ : ℂ)) ^ 2
         = (mu⁻¹ - 1) * ((‖u‖ : ℂ)) ^ 2 := hL.symm.trans (hsymm.trans hRt)
@@ -873,7 +874,7 @@ theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
     exact (Complex.conj_eq_iff_re.mp hreal).symm
   have hnu_nonneg : 0 ≤ nu := by
     have hpos := beamOperator_nonneg ⟨u, humem⟩
-    have hval : ⟪beamOperator.toLinearMap ⟨u, humem⟩, u⟫_ℂ
+    have hval : ⟪beamOperator ⟨u, humem⟩, u⟫_ℂ
         = ((nu * ‖u‖ ^ 2 : ℝ) : ℂ) := by
       rw [hL, hmunu, Complex.conj_ofReal]
       push_cast
@@ -897,7 +898,7 @@ theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
     exact inv_eq_one.mp h1
   · -- `nu > 0` is a genuine positive eigenvalue: classify it
     right
-    have heig : beamOperator.toLinearMap ⟨u, humem⟩ = ((nu : ℝ) : ℂ) • u := by
+    have heig : beamOperator ⟨u, humem⟩ = ((nu : ℝ) : ℂ) • u := by
       rw [hbeam, hmunu]
     obtain ⟨beta, hβ, hchar, hnueq⟩ :=
       exists_characteristic_of_eigen hposnu (x := ⟨u, humem⟩) hu0 heig
@@ -911,7 +912,7 @@ theorem beamResolvent_eigenvalue_classify {mu : ℂ} (hmu : mu ≠ 0)
       push_cast; ring, ← hmuinv, inv_inv]
 
 /-- **Every real spectral point of the free beam is an eigenvalue.**  The free beam has no
-continuous or residual real spectrum at all: if `lam` is in `beamOperator.realSpectrum` then
+continuous or residual real spectrum at all: if `lam` is in `TauCeti.LinearPMap.realSpectrum beamOperator` then
 `B x = lam x` for some nonzero `x` in the domain.
 
 This is the Fredholm alternative for the compact variational resolvent, run in the direction
@@ -922,9 +923,9 @@ contradicting `lam ∈ realSpectrum`; if it *is* an eigenvalue, then
 `exists_beamOperator_apply_of_beamResolvent_smul` inverts it to an eigenvector of `B` for
 `((1+lam)⁻¹)⁻¹ - 1 = lam`. -/
 theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
-    (hlam : lam ∈ beamOperator.realSpectrum) :
+    (hlam : lam ∈ TauCeti.LinearPMap.realSpectrum beamOperator) :
     ∃ x : beamOperator.domain, (x : BeamL2) ≠ 0 ∧
-      beamOperator.toLinearMap x = (lam : ℂ) • (x : BeamL2) := by
+      beamOperator x = (lam : ℂ) • (x : BeamL2) := by
   by_contra hcon
   push Not at hcon
   set R := beamCoerciveFormData.resolvent with hRdef
@@ -984,12 +985,12 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
     have hz := Abstract.R_inverseClosedOperator_apply R
       beamCoerciveFormData.resolvent_isSelfAdjoint
       beamCoerciveFormData.resolvent_injective x
-    set z : BeamL2 := beamShiftedFormData.shiftedOperator.toLinearMap x with hzdef
+    set z : BeamL2 := beamShiftedFormData.shiftedOperator x with hzdef
     have hRz : R z = (x : BeamL2) := hz
-    have hBx : beamOperator.toLinearPMap x - ((lam : ℝ) : ℂ) • (x : BeamL2)
+    have hBx : beamOperator x - ((lam : ℝ) : ℂ) • (x : BeamL2)
         = (↑U : BeamL2 →L[ℂ] BeamL2) z := by
-      have h1 : beamOperator.toLinearPMap x
-          = beamShiftedFormData.shiftedOperator.toLinearMap x - (x : BeamL2) :=
+      have h1 : beamOperator x
+          = beamShiftedFormData.shiftedOperator x - (x : BeamL2) :=
         beamShiftedFormData.beamOperator_apply x
       have hUz : ((1 : BeamL2 →L[ℂ] BeamL2) - c • R) z = z - c • (x : BeamL2) := by
         rw [sub_apply]
@@ -998,7 +999,7 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
       rw [h1, hU, hUz, hcdef]
       rw [add_smul, one_smul]
       abel
-    calc (R * S) (beamOperator.toLinearPMap x - ((lam : ℝ) : ℂ) • (x : BeamL2))
+    calc (R * S) (beamOperator x - ((lam : ℝ) : ℂ) • (x : BeamL2))
         = (R * S) ((↑U : BeamL2 →L[ℂ] BeamL2) z) := congrArg (R * S) hBx
       _ = R ((S * ↑U) z) := rfl
       _ = R z := by rw [hSU]; rfl
@@ -1010,7 +1011,7 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
       rw [this]
       exact LinearMap.mem_range_self _ _
     refine ⟨hmem, ?_⟩
-    have hshifted : beamShiftedFormData.shiftedOperator.toLinearMap ⟨(R * S) y, hmem⟩
+    have hshifted : beamShiftedFormData.shiftedOperator ⟨(R * S) y, hmem⟩
         = S y := by
       have happ := Abstract.inverseClosedOperator_apply_R R
         beamCoerciveFormData.resolvent_isSelfAdjoint
@@ -1018,9 +1019,9 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
       have hsub : (⟨R (S y), LinearMap.mem_range_self _ _⟩ :
           beamShiftedFormData.shiftedOperator.domain) = ⟨(R * S) y, hmem⟩ :=
         Subtype.ext rfl
-      exact (congrArg beamShiftedFormData.shiftedOperator.toLinearMap hsub).symm.trans happ
-    have h1 : beamOperator.toLinearPMap ⟨(R * S) y, hmem⟩
-        = beamShiftedFormData.shiftedOperator.toLinearMap ⟨(R * S) y, hmem⟩
+      exact (congrArg beamShiftedFormData.shiftedOperator hsub).symm.trans happ
+    have h1 : beamOperator ⟨(R * S) y, hmem⟩
+        = beamShiftedFormData.shiftedOperator ⟨(R * S) y, hmem⟩
           - (R * S) y :=
       beamShiftedFormData.beamOperator_apply _
     have hfinal : S y - (R * S) y - ((lam : ℝ) : ℂ) • (R * S) y
@@ -1033,9 +1034,9 @@ theorem exists_eigenvector_of_mem_realSpectrum_beamOperator {lam : ℝ}
       rw [show ((R * S) y : BeamL2) = R (S y) from rfl, hcdef]
       rw [add_smul, one_smul]
       abel
-    calc beamOperator.toLinearPMap ⟨(R * S) y, hmem⟩
+    calc beamOperator ⟨(R * S) y, hmem⟩
           - ((lam : ℝ) : ℂ) • ((R * S) y)
-        = beamShiftedFormData.shiftedOperator.toLinearMap ⟨(R * S) y, hmem⟩
+        = beamShiftedFormData.shiftedOperator ⟨(R * S) y, hmem⟩
             - (R * S) y - ((lam : ℝ) : ℂ) • ((R * S) y) := by rw [h1]
       _ = S y - (R * S) y - ((lam : ℝ) : ℂ) • (R * S) y := by rw [hshifted]
       _ = ((↑U : BeamL2 →L[ℂ] BeamL2) * S) y := hfinal
@@ -1046,7 +1047,7 @@ fourth powers of the characteristic roots.  Every spectral point is now an eigen
 (`exists_eigenvector_of_mem_realSpectrum_beamOperator`), it is nonnegative because the
 operator is, and a positive one carries a characteristic root. -/
 theorem realSpectrum_beamOperator_subset :
-    beamOperator.realSpectrum
+    TauCeti.LinearPMap.realSpectrum beamOperator
       ⊆ {0} ∪ {lam : ℝ | ∃ beta : ℝ,
           0 < beta ∧ characteristic beta = 0 ∧ lam = beta ^ 4} := by
   intro lam hlam
@@ -1060,7 +1061,7 @@ This is Davis--Kahan 1970 Section 9's `α₃ > 500` — including that the whole
 spectrum, not just the third eigenvalue, clears the bound — proved for the genuine
 self-adjoint fourth-derivative realization. -/
 theorem realSpectrum_beamOperator_subset_gap :
-    beamOperator.realSpectrum ⊆ ({0} : Set ℝ) ∪ Set.Ioi 500 := by
+    TauCeti.LinearPMap.realSpectrum beamOperator ⊆ ({0} : Set ℝ) ∪ Set.Ioi 500 := by
   intro lam hlam
   rcases realSpectrum_beamOperator_subset hlam with h0 | ⟨beta, hβ, hchar, hlameq⟩
   · exact Or.inl h0

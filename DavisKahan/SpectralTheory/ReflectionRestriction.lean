@@ -463,7 +463,7 @@ theorem subspaceGap_map_reflection_eq_norm_sinTwoAngle
 /-- The spectral range of a measurable complement is the orthogonal
 complement of the original spectral range. -/
 theorem selfAdjointSpectralSubspace_compl_eq_orthogonal
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) :
     selfAdjointSpectralSubspace A hA Bᶜ hB.compl =
       (selfAdjointSpectralSubspace A hA B hB)ᗮ := by
@@ -489,7 +489,7 @@ theorem selfAdjointSpectralSubspace_compl_eq_orthogonal
 /-- Reflection through a genuine spectral range preserves the full domain of
 the self-adjoint operator. -/
 theorem spectralReflection_mem_domain
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
     (selfAdjointSpectralSubspace A hA B hB).reflectionOperator (x : H) ∈
       A.domain := by
@@ -503,13 +503,13 @@ theorem spectralReflection_mem_domain
 /-- Reflection through a genuine spectral range commutes with the
 self-adjoint operator on its domain. -/
 theorem selfAdjoint_apply_spectralReflection
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B) (x : A.domain) :
-    A.toLinearMap
+    A
         ⟨(selfAdjointSpectralSubspace A hA B hB).reflectionOperator (x : H),
           spectralReflection_mem_domain A hA B hB x⟩ =
       (selfAdjointSpectralSubspace A hA B hB).reflectionOperator
-        (A.toLinearMap x) := by
+        (A x) := by
   let U := selfAdjointSpectralSubspace A hA B hB
   have hP : U.starProjection (x : H) ∈ A.domain := by
     rw [← selfAdjointSpectralProjection_eq_starProjection A hA B hB]
@@ -534,30 +534,30 @@ theorem selfAdjoint_apply_spectralReflection
       selfAdjointSpectralProjection A hA B hB (x : H)
     rw [hproj]
   have hPcomm :
-      A.toLinearMap px = U.starProjection (A.toLinearMap x) := by
+      A px = U.starProjection (A x) := by
     calc
-      A.toLinearMap px = A.toLinearMap qx :=
-        congrArg (fun y : A.domain => A.toLinearMap y) hpx
+      A px = A qx :=
+        congrArg (fun y : A.domain => A y) hpx
       _ = selfAdjointSpectralProjection A hA B hB
-          (A.toLinearMap x) := by
+          (A x) := by
         exact selfAdjoint_apply_spectralProjection A hA hB x
-      _ = U.starProjection (A.toLinearMap x) := by
+      _ = U.starProjection (A x) := by
         rw [hproj]
-  rw [hreflect, map_sub, map_smul, Submodule.reflectionOperator_apply,
-    hPcomm]
+  rw [hreflect, LinearPMap.map_sub, LinearPMap.map_smul,
+    Submodule.reflectionOperator_apply, hPcomm]
 
 /-- For a perturbed operator `C = A + E`, reflection through a spectral range
 of `C` preserves the original domain, because `C` and `A` have the same
 domain. -/
 theorem perturbedSpectralReflection_mem_domain
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (S : Set ℝ) (hS : MeasurableSet S) (x : A.domain) :
-    (selfAdjointSpectralSubspace (A.addBounded E)
+    (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
       (addBounded_isSelfAdjoint A hA E hE) S hS).reflectionOperator (x : H) ∈
       A.domain := by
-  let C := A.addBounded E
-  let hC : C.IsSelfAdjoint := addBounded_isSelfAdjoint A hA E hE
+  let C := TauCeti.LinearPMap.addBounded A E
+  let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA E hE
   let xc : C.domain := ⟨(x : H), by simp [C]⟩
   have h := spectralReflection_mem_domain C hC S hS xc
   simpa [C] using h
@@ -566,20 +566,20 @@ theorem perturbedSpectralReflection_mem_domain
 spectral range of `A + E` is the same as adding the bounded operator
 `E - J E J`. -/
 theorem add_reflectionPerturbation_intertwines
-    (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (S : Set ℝ) (hS : MeasurableSet S) (x : A.domain) :
-    let C := A.addBounded E
-    let hC : C.IsSelfAdjoint := addBounded_isSelfAdjoint A hA E hE
+    let C := TauCeti.LinearPMap.addBounded A E
+    let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA E hE
     let V := selfAdjointSpectralSubspace C hC S hS
     let J := V.reflectionOperator
     let D := reflectionPerturbation V E
-    (A.addBounded D).toLinearMap
+    (TauCeti.LinearPMap.addBounded A D)
         ⟨J (x : H), perturbedSpectralReflection_mem_domain
-          A hA E hE S hS x⟩ = J (A.toLinearMap x) := by
+          A hA E hE S hS x⟩ = J (A x) := by
   dsimp only
-  let C := A.addBounded E
-  let hC : C.IsSelfAdjoint := addBounded_isSelfAdjoint A hA E hE
+  let C := TauCeti.LinearPMap.addBounded A E
+  let hC : IsSelfAdjoint C := addBounded_isSelfAdjoint A hA E hE
   let V := selfAdjointSpectralSubspace C hC S hS
   let J := V.reflectionOperator
   let D := reflectionPerturbation V E
@@ -589,16 +589,16 @@ theorem add_reflectionPerturbation_intertwines
   let xc : C.domain := ⟨(x : H), by simp [C]⟩
   have hcommC := selfAdjoint_apply_spectralReflection C hC S hS xc
   have hcomm :
-      A.toLinearMap ⟨J (x : H), hJdomA⟩ + E (J (x : H)) =
-        J (A.toLinearMap x + E (x : H)) := by
+      A ⟨J (x : H), hJdomA⟩ + E (J (x : H)) =
+        J (A x + E (x : H)) := by
     calc
-      A.toLinearMap ⟨J (x : H), hJdomA⟩ + E (J (x : H)) =
-          C.toLinearMap
+      A ⟨J (x : H), hJdomA⟩ + E (J (x : H)) =
+          C
             ⟨J (x : H), spectralReflection_mem_domain C hC S hS xc⟩ := by
         rfl
-      _ = J (C.toLinearMap xc) := by
+      _ = J (C xc) := by
         simpa only [J, V] using hcommC
-      _ = J (A.toLinearMap x + E (x : H)) := by
+      _ = J (A x + E (x : H)) := by
         rfl
   have hJJ : J (J (x : H)) = (x : H) := by
     change V.reflection (V.reflection (x : H)) = (x : H)
@@ -618,22 +618,22 @@ theorem add_reflectionPerturbation_intertwines
       _ = E (J (x : H)) - J (E (x : H)) := by
         rw [hJJ]
   calc
-    (A.addBounded D).toLinearMap
+    (TauCeti.LinearPMap.addBounded A D)
         ⟨J (x : H), perturbedSpectralReflection_mem_domain
           A hA E hE S hS x⟩ =
-      A.toLinearMap ⟨J (x : H), hJdomA⟩ + D (J (x : H)) := by
+      A ⟨J (x : H), hJdomA⟩ + D (J (x : H)) := by
         rfl
-    _ = A.toLinearMap ⟨J (x : H), hJdomA⟩ +
+    _ = A ⟨J (x : H), hJdomA⟩ +
         (E (J (x : H)) - J (E (x : H))) := by
       rw [hDapply]
-    _ = (A.toLinearMap ⟨J (x : H), hJdomA⟩ + E (J (x : H))) -
+    _ = (A ⟨J (x : H), hJdomA⟩ + E (J (x : H))) -
         J (E (x : H)) := by
       abel
-    _ = J (A.toLinearMap x + E (x : H)) - J (E (x : H)) := by
+    _ = J (A x + E (x : H)) - J (E (x : H)) := by
       rw [hcomm]
-    _ = (J (A.toLinearMap x) + J (E (x : H))) - J (E (x : H)) := by
+    _ = (J (A x) + J (E (x : H))) - J (E (x : H)) := by
       rw [map_add]
-    _ = J (A.toLinearMap x) := add_sub_cancel_right _ _
+    _ = J (A x) := add_sub_cancel_right _ _
 
 end DavisKahan
 end TauCeti

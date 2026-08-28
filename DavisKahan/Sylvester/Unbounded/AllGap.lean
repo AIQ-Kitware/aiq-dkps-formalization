@@ -66,13 +66,13 @@ inductive SpectralSylvesterGap
 branch. -/
 theorem davisKahan1970_sylvester_of_spectrumGap
     (N : KyFanDominantIdealFamily (𝕜 := ℂ))
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-    (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : SpectralSylvesterGap A.toLinearPMap B.toLinearPMap δ)
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hgap : SpectralSylvesterGap A B δ)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
       δ * N.gauge X ≤

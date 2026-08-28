@@ -39,22 +39,22 @@ structure PaperCommonCoreSinThetaData
     [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
     [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
     [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H] where
-  A : ClosedOperator (𝕜 := 𝕜) (E := E)
-  A₀ : ClosedOperator (𝕜 := 𝕜) (E := F)
-  Λ₁ : ClosedOperator (𝕜 := 𝕜) (E := G)
+  A : E →ₗ.[𝕜] E
+  A₀ : F →ₗ.[𝕜] F
+  Λ₁ : G →ₗ.[𝕜] G
   E₀ : F →L[𝕜] E
   F₀ : H →L[𝕜] E
   F₁ : G →L[𝕜] E
   R : F →L[𝕜] E
-  A_selfAdjoint : A.IsSelfAdjoint
-  A₀_selfAdjoint : A₀.IsSelfAdjoint
-  Λ₁_selfAdjoint : Λ₁.IsSelfAdjoint
+  A_selfAdjoint : IsSelfAdjoint A
+  A₀_selfAdjoint : IsSelfAdjoint A₀
+  Λ₁_selfAdjoint : IsSelfAdjoint Λ₁
   exact_decomposition : OrthogonalExactDecomposition F₀ F₁
   core_residual : PaperCommonCoreResidualData A A₀ E₀ R
   F₁_maps_domain : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain
   F₁_intertwines : ∀ y : Λ₁.domain,
-    A.toLinearMap ⟨F₁ (y : G), F₁_maps_domain y⟩ =
-      F₁ (Λ₁.toLinearMap y)
+    A ⟨F₁ (y : G), F₁_maps_domain y⟩ =
+      F₁ (Λ₁ y)
 
 namespace PaperCommonCoreSinThetaData
 
@@ -70,7 +70,7 @@ noncomputable def toUnboundedSinThetaData
     (P : PaperCommonCoreSinThetaData 𝕜 E F G H) :
     UnboundedSinThetaData (𝕜 := 𝕜) (E := E) (F := F) (G := G) :=
   unboundedSinThetaDataOfPaperCommonCore
-    P.A P.A₀ P.Λ₁ P.E₀ P.F₁ P.R P.core_residual
+    P.A P.A₀ P.Λ₁ P.E₀ P.F₁ P.R P.core_residual P.A_selfAdjoint.isClosed
     P.F₁_maps_domain P.F₁_intertwines
 
 /-- The residual of the derived unbounded sine-theta data is the source's residual. -/
@@ -104,7 +104,7 @@ structure PaperCommonCoreTheorem61Data where
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
   spectral_gap :
-    FormBoundedSylvesterGap source.A₀.toLinearPMap source.Λ₁.toLinearPMap gap
+    FormBoundedSylvesterGap source.A₀ source.Λ₁ gap
 
 namespace PaperCommonCoreTheorem61Data
 
@@ -212,7 +212,7 @@ structure PaperRealCommonCoreTheorem61Data where
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
   spectral_gap :
-    FormBoundedSylvesterGap source.A₀.toLinearPMap source.Λ₁.toLinearPMap gap
+    FormBoundedSylvesterGap source.A₀ source.Λ₁ gap
 
 namespace PaperRealCommonCoreTheorem61Data
 
@@ -261,7 +261,7 @@ structure PaperRealCommonCoreTheorem62Data where
   epsilon_pos : 0 < epsilon
   lower_frame : LowerFrameBound source.E₀ epsilon
   spectral_distance :
-    ∀ lam ∈ source.A₀.realSpectrum, ∀ α ∈ source.Λ₁.realSpectrum,
+    ∀ lam ∈ TauCeti.LinearPMap.realSpectrum source.A₀, ∀ α ∈ TauCeti.LinearPMap.realSpectrum source.Λ₁,
       gap ≤ |lam - α|
 
 namespace PaperRealCommonCoreTheorem62Data

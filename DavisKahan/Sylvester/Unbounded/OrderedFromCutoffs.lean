@@ -29,19 +29,13 @@ variable {E F : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
 
-/-- Local shorthand for a complex closed operator on `E`. -/
-abbrev ComplexClosedOperatorOnE :=
-  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)
-/-- Local shorthand for a complex closed operator on `F`. -/
-abbrev ComplexClosedOperatorOnF :=
-  TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)
 
 /-- Fill the complement of an interface cutoff by a real scalar. -/
 noncomputable def interfaceFilledTruncation
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
-    {hA : A.IsSelfAdjoint}
+    {A : H →ₗ.[ℂ] H}
+    {hA : IsSelfAdjoint A}
     (P : SpectralCutoffInterface A hA)
     (T : BoundedTruncationInterface A hA P)
     (a τ : ℝ) : H →L[ℂ] H :=
@@ -52,8 +46,8 @@ noncomputable def interfaceFilledTruncation
 theorem interfaceFilledTruncation_isSymmetric
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
-    {hA : A.IsSelfAdjoint}
+    {A : H →ₗ.[ℂ] H}
+    {hA : IsSelfAdjoint A}
     (P : SpectralCutoffInterface A hA)
     (T : BoundedTruncationInterface A hA P)
     (a τ : ℝ) :
@@ -67,8 +61,8 @@ theorem interfaceFilledTruncation_isSymmetric
 theorem interfaceCutoff_complement_identities
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
-    {hA : A.IsSelfAdjoint}
+    {A : H →ₗ.[ℂ] H}
+    {hA : IsSelfAdjoint A}
     (P : SpectralCutoffInterface A hA)
     (τ : ℝ) (x : H) :
     ⟪P.cutoff τ x, x - P.cutoff τ x⟫_ℂ = 0 ∧
@@ -101,8 +95,8 @@ three inline, thirty lines each. -/
 private theorem interfaceCutoff_orthogonality
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
-    {hA : A.IsSelfAdjoint}
+    {A : H →ₗ.[ℂ] H}
+    {hA : IsSelfAdjoint A}
     (P : SpectralCutoffInterface A hA) (T : BoundedTruncationInterface A hA P)
     (τ : ℝ) (x : H) :
     ⟪T.truncation τ x, x - P.cutoff τ x⟫_ℂ = 0 ∧
@@ -160,11 +154,11 @@ filling the orthogonal complement by the same scalar. -/
 theorem interfaceFilledTruncation_lowerBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
-    {hA : A.IsSelfAdjoint}
+    {A : H →ₗ.[ℂ] H}
+    {hA : IsSelfAdjoint A}
     (P : SpectralCutoffInterface A hA)
     (T : BoundedTruncationInterface A hA P)
-    {a τ : ℝ} (hτ : 0 ≤ τ) (ha : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap a) :
+    {a τ : ℝ} (hτ : 0 ≤ τ) (ha : TauCeti.LinearPMap.SemiboundedBelow A a) :
     ∀ x, a * ‖x‖ ^ 2 ≤
       RCLike.re ⟪interfaceFilledTruncation P T a τ x, x⟫_ℂ := by
   intro x
@@ -201,11 +195,11 @@ filling the orthogonal complement by the same scalar. -/
 theorem interfaceFilledTruncation_upperBound
     {H : Type v}
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := H)}
-    {hA : A.IsSelfAdjoint}
+    {A : H →ₗ.[ℂ] H}
+    {hA : IsSelfAdjoint A}
     (P : SpectralCutoffInterface A hA)
     (T : BoundedTruncationInterface A hA P)
-    {a τ : ℝ} (hτ : 0 ≤ τ) (ha : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap a) :
+    {a τ : ℝ} (hτ : 0 ≤ τ) (ha : TauCeti.LinearPMap.SemiboundedAbove A a) :
     ∀ x, RCLike.re ⟪interfaceFilledTruncation P T a τ x, x⟫_ℂ ≤
       a * ‖x‖ ^ 2 := by
   intro x
@@ -244,8 +238,8 @@ variable [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} ℂ]
 omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere ℂ] in
 /-- Right interface-cutoff inequalities pass to the uncut operators. -/
 theorem kyFan_le_of_interfaceRightCutoff_le
-    {B : ComplexClosedOperatorOnF (F := F)}
-    {hB : B.IsSelfAdjoint}
+    {B : F →ₗ.[ℂ] F}
+    {hB : IsSelfAdjoint B}
     (P : SpectralCutoffInterface B hB)
     {X C : F →L[ℂ] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
@@ -295,8 +289,8 @@ theorem kyFan_left_comp_interfaceCutoff_tendsto
 omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere ℂ] in
 /-- Left interface-cutoff inequalities pass to the uncut operators. -/
 theorem kyFan_le_of_interfaceLeftCutoff_le
-    {A : ComplexClosedOperatorOnE (E := E)}
-    {hA : A.IsSelfAdjoint}
+    {A : E →ₗ.[ℂ] E}
+    {hA : IsSelfAdjoint A}
     (P : SpectralCutoffInterface A hA)
     {X C : F →L[ℂ] E} {δ : ℝ} (k : ℕ)
     (hcut : ∀ τ : ℝ, 0 ≤ τ →
@@ -323,15 +317,15 @@ omit [HasApproximationNumberStrongCutoff ℂ] [ContinuousLinearMap.HasMinMaxLowe
 /-- Double interface cutoff turns a domain-aware equation into a bounded
 Sylvester equation between the filled truncations. -/
 theorem interfaceDoubleCutoff_sylvester_equation
-    {A : ComplexClosedOperatorOnE (E := E)}
-    {B : ComplexClosedOperatorOnF (F := F)}
-    {hA : A.IsSelfAdjoint} {hB : B.IsSelfAdjoint}
+    {A : E →ₗ.[ℂ] E}
+    {B : F →ₗ.[ℂ] F}
+    {hA : IsSelfAdjoint A} {hB : IsSelfAdjoint B}
     (PAi : SpectralCutoffInterface A hA)
     (TAi : BoundedTruncationInterface A hA PAi)
     (PBi : SpectralCutoffInterface B hB)
     (TBi : BoundedTruncationInterface B hB PBi)
     {X C : F →L[ℂ] E}
-    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (a b τA τB : ℝ) :
     interfaceFilledTruncation PAi TAi a τA ∘L
         (PAi.cutoff τA ∘L X ∘L PBi.cutoff τB) -
@@ -375,10 +369,10 @@ theorem interfaceDoubleCutoff_sylvester_equation
       smul_zero, add_zero]
   have hAFilled :
       interfaceFilledTruncation PAi TAi a τA (PA (X (PB x))) =
-        PA (A.toLinearMap ⟨X (PB x), hXdom⟩) := by
+        PA (A ⟨X (PB x), hXdom⟩) := by
     change TA (PA (X (PB x))) +
         (a : ℂ) • (PA (X (PB x)) - PA (PA (X (PB x)))) =
-      PA (A.toLinearMap ⟨X (PB x), hXdom⟩)
+      PA (A ⟨X (PB x), hXdom⟩)
     rw [hTAPA, hPAPAx, sub_self, smul_zero, add_zero]
     rw [hTAcut]
     exact hAcomm
@@ -389,7 +383,7 @@ theorem interfaceDoubleCutoff_sylvester_equation
       PA (X (PB (interfaceFilledTruncation PBi TBi b τB x))) =
         PA (C (PB x))
   rw [hAFilled, hPBFilled]
-  rw [show TB x = B.toLinearMap ⟨PB x, hPBdom⟩ by
+  rw [show TB x = B ⟨PB x, hPBdom⟩ by
     simpa only [TB, PB] using hTBcut]
   simp only [map_sub] at heqPA
   exact heqPA

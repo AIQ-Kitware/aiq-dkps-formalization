@@ -255,16 +255,16 @@ theorem sinTheta_wholeSpace_paperUINorm
     (hU : A.Reduces U) (hV : B.Reduces V)
     {gap : ℝ} (hgap : 0 < gap)
     (hgapUV : FormBoundedSylvesterGap
-      (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded A) U
-        (ClosedOperator.ofBounded_reducesSubspace A U hU)).toLinearPMap
-      (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded B) Vᗮ
-        (ClosedOperator.ofBounded_reducesSubspace B V hV).orthogonal).toLinearPMap
+      (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) U
+        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace A U hU))
+      (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) Vᗮ
+        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace B V hV).orthogonal)
       gap)
     (hgapVU : FormBoundedSylvesterGap
-      (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded B) V
-        (ClosedOperator.ofBounded_reducesSubspace B V hV)).toLinearPMap
-      (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded A) Uᗮ
-        (ClosedOperator.ofBounded_reducesSubspace A U hU).orthogonal).toLinearPMap
+      (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) V
+        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace B V hV))
+      (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) Uᗮ
+        (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_reducesSubspace A U hU).orthogonal)
       gap)
     (hMem : N.Mem (B - A)) :
     N.Mem (paperSinAngleOperatorC U V) ∧
