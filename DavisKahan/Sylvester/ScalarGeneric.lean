@@ -67,7 +67,7 @@ class HasUnboundedSylvesterKyFan (𝕜 : Type u) [RCLike 𝕜] : Prop where
     A.IsSelfAdjoint → B.IsSelfAdjoint →
       ∀ {X C : F →L[𝕜] E} {δ : ℝ}, 0 < δ →
         FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ →
-        HasClosedSylvesterEquation A B X C →
+        TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C →
         ∀ k : ℕ,
           δ * kyFanApproximationGauge k X ≤ kyFanApproximationGauge k C
 
@@ -87,7 +87,7 @@ theorem unbounded_sylvester_kyFan
     {X C : F →L[𝕜] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ)
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (k : ℕ) :
     δ * kyFanApproximationGauge k X ≤ kyFanApproximationGauge k C :=
   HasUnboundedSylvesterKyFan.out hA hB hδ hgap hEq k

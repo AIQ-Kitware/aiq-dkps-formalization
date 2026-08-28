@@ -252,7 +252,7 @@ theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
-    (hAinv : HasBoundedEverywhereInverse A)
+    (hAinv : TauCeti.LinearPMap.HasBoundedEverywhereInverse A.toLinearPMap)
     (B : F →L[𝕜] F) {X C : F →L[𝕜] E}
     {ρ δ : ℝ} (hρ : 0 ≤ ρ) (hδ : 0 < δ)
     (hInvNorm : ‖hAinv.inv‖ ≤ (ρ + δ)⁻¹)
@@ -331,7 +331,7 @@ theorem closedSylvesterEquation_boundedRealization
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     {X C : F →L[𝕜] E} {T : F →L[𝕜] F}
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (hT : ∀ y : B.domain, T (y : F) = B.toLinearMap y) :
     HasUnboundedBoundedSylvesterEquation A T X C :=
   linearPMapSylvesterEquation_boundedRealization A.toLinearPMap_isClosed

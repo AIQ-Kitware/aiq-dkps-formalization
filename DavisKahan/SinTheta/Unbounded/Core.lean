@@ -170,7 +170,7 @@ theorem unbounded_adjoint_residual_block_identity
     (hA : D.A.IsSelfAdjoint)
     (hA₀ : D.A₀.IsSelfAdjoint)
     (_hΛ₁ : D.Λ₁.IsSelfAdjoint) :
-    HasClosedSylvesterEquation D.A₀ D.Λ₁
+    TauCeti.LinearPMap.SylvesterEquation D.A₀.toLinearPMap D.Λ₁.toLinearPMap
       (D.X.adjoint ∘L D.F₁)
       (-(D.residual.adjoint ∘L D.F₁)) := by
   have hA_symm := hA.isSymmetric

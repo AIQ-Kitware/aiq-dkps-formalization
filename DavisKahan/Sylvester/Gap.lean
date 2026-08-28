@@ -20,7 +20,7 @@ block.
 ## Two spellings of the same configurations
 
 This module states the ordered configurations as **operator-form bounds** —
-`SemiboundedBelow`/`SemiboundedAbove` — and the interval/exterior configuration
+`TauCeti.LinearPMap.SemiboundedBelow`/`TauCeti.LinearPMap.SemiboundedAbove` — and the interval/exterior configuration
 over `LinearPMap.realSpectrum`.  `SpectralIntervalExteriorGap` and
 `SpectralSylvesterGap` (`SinTheta/Unbounded/IntervalExterior.lean`,
 `Sylvester/Unbounded/AllGap.lean`) instead state all three configurations as
@@ -91,7 +91,7 @@ operator-form bounds.  The ordered constructors allow both diagonal blocks to be
 genuinely unbounded; only the interval/exterior constructor has a bounded
 spectral block.
 
-For self-adjoint blocks `SemiboundedBelow A c` and
+For self-adjoint blocks `TauCeti.LinearPMap.SemiboundedBelow A c` and
 `ofReal ⁻¹' spectrum A ⊆ Set.Ici c` describe the same configuration but are
 different propositions.  `SpectralSylvesterGap` is the spectral spelling and
 implies this one (`formBoundedSylvesterGap_of_spectral`); the converse is proved

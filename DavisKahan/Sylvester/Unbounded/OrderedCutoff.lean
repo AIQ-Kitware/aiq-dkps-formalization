@@ -157,7 +157,7 @@ theorem doubleCutoff_filled_sylvester_equation
     (PCB : SpectralCutoffInterface B hB)
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E}
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (a b τA τB : ℝ) :
     filledTruncation A hA PCA TCA a τA ∘L
         (PCA.cutoff τA ∘L X ∘L PCB.cutoff τB) -
@@ -209,7 +209,7 @@ theorem doubleCutoff_filled_sylvester_equation
     rw [hTAPA, hPAPAx, sub_self, smul_zero, add_zero]
     rw [hTAcut]
     exact hAcomm
-  have heq := ClosedSylvesterEquation.equation_toLinearMap hEq ⟨PB x, hPBdom⟩ hXdom
+  have heq := SylvesterEquation.equation_of_mem hEq ⟨PB x, hPBdom⟩ hXdom
   have heqPA := congrArg PA heq
   change
     filledTruncation A hA PCA TCA a τA (PA (X (PB x))) -
@@ -218,7 +218,8 @@ theorem doubleCutoff_filled_sylvester_equation
   rw [hAFilled, hPBFilled]
   rw [show TB x = B.toLinearMap ⟨PB x, hPBdom⟩ by
     simpa only [TB, PB] using hTBcut]
-  simpa only [map_sub] using heqPA
+  simp only [map_sub] at heqPA
+  exact heqPA
 
 omit [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] in
 /-- Pointwise cutoff estimates for every finite Ky Fan gauge imply the full
@@ -273,9 +274,9 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : SemiboundedBelow A (c + δ))
-    (hBc : SemiboundedAbove B c)
-    (hEq : HasClosedSylvesterEquation A B X C) :
+    (hAc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap (c + δ))
+    (hBc : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap c)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C) :
     ∀ k, δ * kyFanApproximationGauge k X
       ≤ kyFanApproximationGauge k C := by
   intro k
@@ -373,9 +374,9 @@ theorem kyFan_unbounded_sylvester_le_of_semibounded_direct_swapped
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : SemiboundedAbove A c)
-    (hBc : SemiboundedBelow B (c + δ))
-    (hEq : HasClosedSylvesterEquation A B X C) :
+    (hAc : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c)
+    (hBc : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap (c + δ))
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C) :
     ∀ k, δ * kyFanApproximationGauge k X
       ≤ kyFanApproximationGauge k C := by
   intro k
@@ -473,9 +474,9 @@ theorem unbounded_sylvester_mem_of_semibounded_direct
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : SemiboundedBelow A (c + δ))
-    (hBc : SemiboundedAbove B c)
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hAc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap (c + δ))
+    (hBc : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap c)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (hC : N.Mem C) :
     N.Mem X := by
   exact (mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
@@ -495,9 +496,9 @@ theorem unbounded_sylvester_mem_and_gauge_le_direct
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : SemiboundedBelow A (c + δ))
-    (hBc : SemiboundedAbove B c)
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hAc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap (c + δ))
+    (hBc : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap c)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le
@@ -517,9 +518,9 @@ theorem unbounded_sylvester_mem_and_gauge_le_direct_swapped
     (TCB : BoundedTruncationInterface B hB PCB)
     {X C : F →L[𝕜] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : SemiboundedAbove A c)
-    (hBc : SemiboundedBelow B (c + δ))
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hAc : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c)
+    (hBc : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap (c + δ))
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
   exact mem_and_scaled_gauge_le_of_all_scaled_kyFan_le

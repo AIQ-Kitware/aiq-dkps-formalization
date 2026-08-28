@@ -189,13 +189,13 @@ theorem realPlane_zeroResidual_model :
   have hA0 : A0.IsSelfAdjoint := by
     exact ClosedOperator.ofBounded_isSelfAdjoint
       (0 : RealPlane →L[ℝ] RealPlane) (by intro x y; simp)
-  have hA0upper : SemiboundedAbove A0 0 := by
+  have hA0upper : TauCeti.LinearPMap.SemiboundedAbove A0.toLinearPMap 0 := by
     intro x
     show RCLike.re
       ⟪(0 : RealPlane →L[ℝ] RealPlane) (x : RealPlane), (x : RealPlane)⟫_ℝ ≤ _
     simp
-  have hcompLower : SemiboundedBelow
-      (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal) 1 := by
+  have hcompLower : TauCeti.LinearPMap.SemiboundedBelow
+      (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal).toLinearPMap 1 := by
     intro x
     have hzero : ((x.1 : RealPlane)) = 0 :=
       inner_self_eq_zero.mp

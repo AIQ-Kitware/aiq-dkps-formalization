@@ -255,7 +255,7 @@ theorem filledTruncation_lowerBound
     (Pcut : SpectralCutoffInterface A hA)
     (Tcut : BoundedTruncationInterface A hA Pcut)
     {a τ : ℝ} (hτ : 0 ≤ τ)
-    (ha : SemiboundedBelow A a) :
+    (ha : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap a) :
     ∀ x, a * ‖x‖ ^ 2 ≤
       RCLike.re ⟪filledTruncation A hA Pcut Tcut a τ x, x⟫_𝕜 := by
   intro x
@@ -296,7 +296,7 @@ theorem filledTruncation_upperBound
     (Pcut : SpectralCutoffInterface A hA)
     (Tcut : BoundedTruncationInterface A hA Pcut)
     {a τ : ℝ} (hτ : 0 ≤ τ)
-    (ha : SemiboundedAbove A a) :
+    (ha : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap a) :
     ∀ x, RCLike.re ⟪filledTruncation A hA Pcut Tcut a τ x, x⟫_𝕜 ≤
       a * ‖x‖ ^ 2 := by
   intro x

@@ -60,8 +60,8 @@ theorem selfAdjointSpectralRestriction_semibounded_of_subset_Icc
     (A : DKClosedOperator (H := H)) (hA : A.IsSelfAdjoint)
     (B : Set ℝ) (hB : MeasurableSet B)
     {β α : ℝ} (hBsub : B ⊆ Set.Icc β α) :
-    SemiboundedBelow (selfAdjointSpectralRestriction A hA B hB) β ∧
-      SemiboundedAbove (selfAdjointSpectralRestriction A hA B hB) α := by
+    TauCeti.LinearPMap.SemiboundedBelow (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β ∧
+      TauCeti.LinearPMap.SemiboundedAbove (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α := by
   constructor
   · intro x
     exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc hA B hB hBsub

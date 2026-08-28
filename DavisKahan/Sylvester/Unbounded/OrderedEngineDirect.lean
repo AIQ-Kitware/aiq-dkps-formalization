@@ -32,9 +32,9 @@ theorem directOrderedSylvesterEngine_lowerUpper
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X R : F →L[ℂ] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : SemiboundedBelow A (c + δ))
-    (hBc : SemiboundedAbove B c)
-    (hEq : HasClosedSylvesterEquation A B X R)
+    (hAc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap (c + δ))
+    (hBc : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap c)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X R)
     (hR : N.Mem R) :
     N.Mem X ∧
       δ * N.gauge X ≤
@@ -59,9 +59,9 @@ theorem directOrderedSylvesterEngine_upperLower
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X R : F →L[ℂ] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : SemiboundedAbove A c)
-    (hBc : SemiboundedBelow B (c + δ))
-    (hEq : HasClosedSylvesterEquation A B X R)
+    (hAc : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c)
+    (hBc : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap (c + δ))
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X R)
     (hR : N.Mem R) :
     N.Mem X ∧
       δ * N.gauge X ≤

@@ -70,7 +70,7 @@ theorem paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (hC : IsPaperHilbertSchmidt C) :
     IsPaperHilbertSchmidt X ∧
       δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C := by
@@ -97,7 +97,7 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : ∀ lam ∈ A.realSpectrum, ∀ α ∈ B.realSpectrum,
       δ ≤ |lam - α|)
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (hC : IsPaperHilbertSchmidt C) :
     IsPaperHilbertSchmidt X ∧
       δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C := by

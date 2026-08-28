@@ -39,55 +39,18 @@ abbrev ClosedOperatorE :=
 abbrev ClosedOperatorF :=
   TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)
 
-/-- Compatibility facade for a lower semibound of the canonical partial map. -/
-abbrev SemiboundedBelow
-    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) (c : ℝ) : Prop :=
-  TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap c
-
-/-- Compatibility facade for an upper semibound of the canonical partial map. -/
-abbrev SemiboundedAbove
-    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) (c : ℝ) : Prop :=
-  TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c
-
-/-- Compatibility facade for the canonical `LinearPMap` Sylvester equation.
-
-Closedness, dense domain, and self-adjointness are properties of `A.toLinearPMap`
-and `B.toLinearPMap`; the algebraic equation itself is no longer tied to the
-historical bundled representation. -/
-abbrev ClosedSylvesterEquation
-    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
-    (B : ClosedOperatorF (𝕜 := 𝕜) (F := F))
-    (X C : F →L[𝕜] E) : Prop :=
-  TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C
-
-/-- Compatibility name retained for the existing experimental theorem graph.
-
-The arguments are written explicitly rather than leaving Lean to synthesize the
-ambient Hilbert spaces from the polymorphic structure constant.  This avoids a
-stuck `CompleteSpace` metavariable at the alias declaration. -/
-abbrev HasClosedSylvesterEquation
-    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E))
-    (B : ClosedOperatorF (𝕜 := 𝕜) (F := F))
-    (X C : F →L[𝕜] E) : Prop :=
-  ClosedSylvesterEquation A B X C
-
-namespace ClosedSylvesterEquation
+namespace SylvesterEquation
 
 omit [CompleteSpace E] [CompleteSpace F] in
-/-- Rewrite the canonical partial-map equation through the historical
-`toLinearMap` fields.  The explicit output-domain witness may be any proof of
-the required membership; proof irrelevance identifies it with the witness
-stored by the canonical equation. -/
-theorem equation_toLinearMap
-    {A : ClosedOperatorE (𝕜 := 𝕜) (E := E)}
-    {B : ClosedOperatorF (𝕜 := 𝕜) (F := F)}
+/-- Rewrite the Sylvester equation with an arbitrary output-domain witness.
+Proof irrelevance identifies it with the witness the equation stores. -/
+theorem equation_of_mem
+    {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     {X C : F →L[𝕜] E}
-    (h : HasClosedSylvesterEquation A B X C)
+    (h : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (x : B.domain) (hx : X (x : F) ∈ A.domain) :
-    A.toLinearMap ⟨X (x : F), hx⟩ - X (B.toLinearMap x) = C (x : F) := by
+    A ⟨X (x : F), hx⟩ - X (B x) = C (x : F) := by
   have heq := h.equation x
-  simp only [
-    TauCeti.DavisKahanExt.ClosedOperator.toLinearPMap_apply] at heq
   have harg :
       (⟨X (x : F), hx⟩ : A.domain) =
         ⟨X (x : F), h.mapsTo_domain x⟩ := by
@@ -96,13 +59,7 @@ theorem equation_toLinearMap
   rw [harg]
   exact heq
 
-end ClosedSylvesterEquation
-
-/-- Compatibility facade for a bounded everywhere inverse of the canonical
-partial map. -/
-abbrev HasBoundedEverywhereInverse
-    (A : ClosedOperatorE (𝕜 := 𝕜) (E := E)) :=
-  TauCeti.LinearPMap.HasBoundedEverywhereInverse A.toLinearPMap
+end SylvesterEquation
 
 end ExactSinTheta
 end DavisKahan

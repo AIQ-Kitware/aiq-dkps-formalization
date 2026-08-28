@@ -36,7 +36,7 @@ an instance, so no hypothesis is added to anything already proved.
 
 The two form hypotheses are the printed ones, stated on `A₀.domain`:
 
-* `A₀ ≤ α` in form (`SemiboundedAbove`);
+* `A₀ ≤ α` in form (`TauCeti.LinearPMap.SemiboundedAbove`);
 * the crossed form on `Vᗮ` bounded below by `α + δ`.
 
 For a level `τ` let `Ω(τ)` be the spectral cutoff `E_{A₀}([-τ, τ])` of the Ritz
@@ -490,7 +490,7 @@ theorem trunc_truncIncl (τ : ℝ) (f : D.truncSpace τ) :
 /-- **`A₀ ≤ α` restricted.**  The printed upper form bound on the unbounded Ritz
 compression descends to the bounded compression of the truncated trial data. -/
 theorem truncData_compression_upper {α : ℝ}
-    (hupper : SemiboundedAbove D.compression α) (τ : ℝ) :
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α) (τ : ℝ) :
     ∀ f : D.truncSpace τ,
       RCLike.re ⟪(D.truncData V τ).compression f, f⟫_ℂ ≤ α * ‖f‖ ^ 2 := by
   intro f
@@ -545,7 +545,7 @@ The truncated trial data is bounded data, so the compiled arbitrary-trial-dimens
 Appendix chain applies to it verbatim; and the truncated residual is the ambient residual,
 so the bound is `τ`-free. -/
 theorem all_kyFan_core_trunc {α δ : ℝ} (hδ : 0 < δ)
-    (hupper : SemiboundedAbove D.compression α)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
     (hcross : ∀ z : D.compression.domain,
       (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
@@ -649,7 +649,7 @@ theorem approximationSingularValue_truncSineBlock_le (τ : ℝ) (n : ℕ) :
 /-- **No pole, with an unbounded Ritz compression.**  Every ambient directed sine
 approximation number is strictly below one. -/
 theorem approximationSingularValue_sineBlock_lt_one {α δ : ℝ} (hδ : 0 < δ)
-    (hupper : SemiboundedAbove D.compression α)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
     (hcross : ∀ z : D.compression.domain,
       (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
@@ -720,7 +720,7 @@ theorem approximationSingularValue_sineBlock_lt_one {α δ : ℝ} (hδ : 0 < δ)
 No finite-dimensionality of the trial space, and no boundedness of the Ritz compression:
 only the two printed form bounds on `A₀.domain`, and a bounded residual. -/
 theorem all_kyFan_core {α δ : ℝ} (hδ : 0 < δ)
-    (hupper : SemiboundedAbove D.compression α)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
     (hcross : ∀ z : D.compression.domain,
       (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
@@ -763,7 +763,7 @@ arbitrary dimension. -/
 theorem ideal_of_formBounds
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     {α δ : ℝ} (hδ : 0 < δ)
-    (hupper : SemiboundedAbove D.compression α)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
     (hcross : ∀ z : D.compression.domain,
       (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
@@ -792,7 +792,7 @@ is derived from the two form bounds rather than assumed. -/
 theorem ideal_of_formBounds_exists
     (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
     {α δ : ℝ} (hδ : 0 < δ)
-    (hupper : SemiboundedAbove D.compression α)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
     (hcross : ∀ z : D.compression.domain,
       (α + δ) * ‖Vᗮ.starProjection (((z : Z) : H))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : Z) : H)),
@@ -839,7 +839,7 @@ theorem ideal_of_reducing_exists
     (hVcomm : ∀ x : A.domain,
       Vᗮ.starProjection (A.toLinearMap x) =
         A.toLinearMap ⟨Vᗮ.starProjection ((x : H)), hVdom x⟩)
-    (hupper : SemiboundedAbove D.compression α)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap α)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
     (hResidual : N.Mem D.residual) :

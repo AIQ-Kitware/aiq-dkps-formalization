@@ -493,10 +493,10 @@ theorem section7_sinTwoTheta_source_ideal
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {beta alpha delta : ℝ} (hba : beta ≤ alpha) (hdelta : 0 < delta)
-    (hBlow : SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB) beta)
-    (hBhigh : SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB) alpha)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap beta)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap alpha)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (beta - delta) (alpha + delta),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
@@ -529,10 +529,10 @@ theorem section7_tanTwoTheta_source_ideal
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {beta alpha delta : ℝ} (hba : beta ≤ alpha) (hdelta : 0 < delta)
-    (hBlow : SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB) beta)
-    (hBhigh : SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB) alpha)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap beta)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap alpha)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (beta - delta) (alpha + delta),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)

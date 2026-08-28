@@ -123,10 +123,10 @@ theorem sinTheta_addBounded_directedGap_of_spectrum_gap
     (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB) β)
-    (hBhigh : SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
     (hScomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction (A.addBounded V)
@@ -175,12 +175,12 @@ theorem sinTheta_addBounded_reverseDirectedGap_of_spectrum_gap
     (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hSlow : SemiboundedBelow
+    (hSlow : TauCeti.LinearPMap.SemiboundedBelow
       (selfAdjointSpectralRestriction (A.addBounded V)
-        (addBounded_isSelfAdjoint A hA V hV) S hS) β)
-    (hShigh : SemiboundedAbove
+        (addBounded_isSelfAdjoint A hA V hV) S hS).toLinearPMap β)
+    (hShigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction (A.addBounded V)
-        (addBounded_isSelfAdjoint A hA V hV) S hS) α)
+        (addBounded_isSelfAdjoint A hA V hV) S hS).toLinearPMap α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap) :
@@ -241,20 +241,20 @@ theorem sinTheta_addBounded_spectralProjection_sub_opNorm_of_formBounds
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α β' α' δ : ℝ}
     (hβα : β ≤ α) (hβ'α' : β' ≤ α') (hδ : 0 < δ)
-    (hBlow : SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB) β)
-    (hBhigh : SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
     (hScomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction (A.addBounded V)
           (addBounded_isSelfAdjoint A hA V hV) Sᶜ hS.compl).toLinearPMap)
-    (hSlow : SemiboundedBelow
+    (hSlow : TauCeti.LinearPMap.SemiboundedBelow
       (selfAdjointSpectralRestriction (A.addBounded V)
-        (addBounded_isSelfAdjoint A hA V hV) S hS) β')
-    (hShigh : SemiboundedAbove
+        (addBounded_isSelfAdjoint A hA V hV) S hS).toLinearPMap β')
+    (hShigh : TauCeti.LinearPMap.SemiboundedAbove
       (selfAdjointSpectralRestriction (A.addBounded V)
-        (addBounded_isSelfAdjoint A hA V hV) S hS) α')
+        (addBounded_isSelfAdjoint A hA V hV) S hS).toLinearPMap α')
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β' - δ) (α' + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap) :

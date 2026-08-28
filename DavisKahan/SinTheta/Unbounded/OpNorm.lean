@@ -35,7 +35,7 @@ theorem sinTheta_unbounded_opNorm
     (hA : D.A.IsSelfAdjoint) (hA₀ : D.A₀.IsSelfAdjoint)
     (hΛ₁ : D.Λ₁.IsSelfAdjoint)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hA₀low : SemiboundedBelow D.A₀ β) (hA₀high : SemiboundedAbove D.A₀ α)
+    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow D.A₀.toLinearPMap β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove D.A₀.toLinearPMap α)
     (hΛres : TwoSidedShiftedInverseBound D.Λ₁ ((α + β) / 2)
       ((α - β) / 2 + δ)) :
     δ * ‖D.X.adjoint ∘L D.F₁‖ ≤ ‖D.residual.adjoint ∘L D.F₁‖ := by

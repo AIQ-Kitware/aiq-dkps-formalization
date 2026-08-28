@@ -114,7 +114,7 @@ theorem closedSylvester_homogeneous_eq_zero_of_disjoint_spectrum
     (hdisj : Disjoint
       (TauCeti.LinearPMap.spectrum A.toLinearPMap)
       (TauCeti.LinearPMap.spectrum B.toLinearPMap))
-    (hEq : HasClosedSylvesterEquation A B X 0) :
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X 0) :
     X = 0 := by
   exact linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
     hA hB hdisj hEq
@@ -127,7 +127,7 @@ theorem closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
     {X : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hEq : HasClosedSylvesterEquation A B X 0) :
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X 0) :
     X = 0 := by
   exact linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
     hA hB hδ hgap hEq
@@ -142,8 +142,8 @@ theorem closedSylvester_solution_unique_of_disjoint_spectrum
     (hdisj : Disjoint
       (TauCeti.LinearPMap.spectrum A.toLinearPMap)
       (TauCeti.LinearPMap.spectrum B.toLinearPMap))
-    (hX : HasClosedSylvesterEquation A B X C)
-    (hY : HasClosedSylvesterEquation A B Y C) :
+    (hX : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hY : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap Y C) :
     X = Y :=
   linearPMapSylvester_solution_unique_of_disjoint_spectrum hA hB hdisj hX hY
 
@@ -157,8 +157,8 @@ theorem closedSylvester_solution_unique_of_pairwiseSpectrumGap
     {X Y C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hX : HasClosedSylvesterEquation A B X C)
-    (hY : HasClosedSylvesterEquation A B Y C) :
+    (hX : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
+    (hY : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap Y C) :
     X = Y :=
   closedSylvester_solution_unique_of_disjoint_spectrum hA hB (hgap.disjoint hδ) hX hY
 

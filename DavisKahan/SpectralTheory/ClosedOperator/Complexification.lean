@@ -432,8 +432,8 @@ theorem closedSylvesterEquation_complexify
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
     {X C : F →L[ℝ] E}
-    (hEq : HasClosedSylvesterEquation A B X C) :
-    HasClosedSylvesterEquation (complexify A) (complexify B)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C) :
+    TauCeti.LinearPMap.SylvesterEquation (complexify A).toLinearPMap (complexify B).toLinearPMap
       (RealComplexification.complexify X)
       (RealComplexification.complexify C) := by
   refine {
@@ -453,8 +453,8 @@ omit [CompleteSpace E] in
 /-- A lower quadratic-form bound is preserved exactly by complexification. -/
 theorem semiboundedBelow_complexify
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {c : ℝ} (hA : SemiboundedBelow A c) :
-    SemiboundedBelow (complexify A) c := by
+    {c : ℝ} (hA : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap c) :
+    TauCeti.LinearPMap.SemiboundedBelow (complexify A).toLinearPMap c := by
   intro z
   have hr : c * ‖re (z : Eℂ)‖ ^ 2 ≤
       ⟪A.toLinearMap (domainRe A z), re (z : Eℂ)⟫_ℝ := hA (domainRe A z)
@@ -470,8 +470,8 @@ omit [CompleteSpace E] in
 /-- An upper quadratic-form bound is preserved exactly by complexification. -/
 theorem semiboundedAbove_complexify
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
-    {c : ℝ} (hA : SemiboundedAbove A c) :
-    SemiboundedAbove (complexify A) c := by
+    {c : ℝ} (hA : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c) :
+    TauCeti.LinearPMap.SemiboundedAbove (complexify A).toLinearPMap c := by
   intro z
   have hr : ⟪A.toLinearMap (domainRe A z), re (z : Eℂ)⟫_ℝ ≤
       c * ‖re (z : Eℂ)‖ ^ 2 := hA (domainRe A z)
