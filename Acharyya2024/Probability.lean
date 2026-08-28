@@ -24,6 +24,7 @@ No added axioms, no open proof obligations.
 -/
 
 import Acharyya2024.Common
+import Acharyya2024.SecondMoment
 import ForTauCeti.Probability.Moments.Variance
 import ForTauCeti.Probability.ProductConvergence
 
@@ -229,7 +230,7 @@ theorem dissimilarity_convergesInProbability_of_secondMoment_growing
     (μ : ∀ r, Fin n → Mat (m r) p)
     (v : Nat → Real)
     (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μ r i‖ ^ 2) P)
-    (hmoment : ∀ r i, ∫ ω, ‖Xbar r ω i - μ r i‖ ^ 2 ∂P ≤ v r)
+    (hmoment : ∀ᶠ r in atTop, ∀ i, ∫ ω, ‖Xbar r ω i - μ r i‖ ^ 2 ∂P ≤ v r)
     (hv : Tendsto (fun r => v r / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
     ConvergesInProbabilityZero P
       (fun r ω => frobSub (responseDist (Xbar r ω)) (responseDist (μ r))) := by
@@ -277,10 +278,10 @@ theorem dissimilarity_convergesInProbability_of_secondMoment_growing
         field_simp
       exact hval.le
   -- the per-stage bound, uniform in the degenerate case
-  have hbad : ∀ r : Nat,
+  have hbad : ∀ᶠ r in atTop,
       P {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist (μ r))}
         ≤ (n : ENNReal) * ENNReal.ofReal (v r / (η r) ^ 2) := by
-    intro r
+    filter_upwards [hmoment] with r hmr
     rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
     · have hzero : ∀ ω, frobSub (responseDist (Xbar r ω)) (responseDist (μ r)) = 0 := by
         intro ω
@@ -298,7 +299,7 @@ theorem dissimilarity_convergesInProbability_of_secondMoment_growing
         positivity
       have hcheb : ∀ i : Fin n,
           P {ω | η r < ‖Xbar r ω i - μ r i‖} ≤ ENNReal.ofReal (v r / (η r) ^ 2) :=
-        fun i => meas_gt_le_ofReal_secondMoment_div_sq P (hint r i) hη_pos (hmoment r i)
+        fun i => meas_gt_le_ofReal_secondMoment_div_sq P (hint r i) hη_pos (hmr i)
       have hincl :
           {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist (μ r))}
             ⊆ ⋃ i : Fin n, {ω | η r < ‖Xbar r ω i - μ r i‖} := by
@@ -341,8 +342,8 @@ theorem dissimilarity_convergesInProbability_of_secondMoment_growing
       Tendsto (fun r =>
         P {ω | ε < frobSub (responseDist (Xbar r ω)) (responseDist (μ r))})
         atTop (𝓝 0) :=
-    tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hub
-      (fun r => bot_le) hbad
+    tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hub
+      (Filter.Eventually.of_forall fun r => bot_le) hbad
   simpa only [hset_eq] using hsqueeze
 
 /-- The source's replicate condition `((1/m) * S)/r -> 0` implies the second-moment rate
@@ -394,7 +395,7 @@ theorem dissimilarity_convergesInProbability_of_gamma
     (γ : ∀ r, Fin n → Fin (m r) → Real)
     (hγnonneg : ∀ r i j, 0 ≤ γ r i j)
     (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μ r i‖ ^ 2) P)
-    (hmoment : ∀ r i, ∫ ω, ‖Xbar r ω i - μ r i‖ ^ 2 ∂P
+    (hmoment : ∀ᶠ r in atTop, ∀ i, ∫ ω, ‖Xbar r ω i - μ r i‖ ^ 2 ∂P
       ≤ (∑ i', ∑ j, γ r i' j) / (r : Real))
     (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real))
       atTop (𝓝 0)) :
@@ -417,16 +418,22 @@ needs.
 The models are indexed by `ℕ` here rather than by `Fin (n r)`: a growing family is exactly a
 family indexed by all of `ℕ`, and a fixed pair `(i, i')` is then literally a pair of natural
 numbers, as in the source.
+
+The bound `v` is indexed by the model as well as by the stage, and each model's bound is only
+required to hold eventually, at a stage of its own choosing.  A single sequence bounding every
+model in the collection would be a uniformity the source does not state -- the paper attaches
+`(1/m) ∑_j γ_ij` to the model `i` -- and it would also be the wrong shape for the reason the
+theorem is pointwise: only the two models of the pair are ever used.
 -/
 theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing
     (P : Measure Ω) [IsProbabilityMeasure P]
     {p : Nat} (m : Nat → Nat)
     (Xbar : ∀ r, Ω → Nat → Mat (m r) p)
     (μ : ∀ r, Nat → Mat (m r) p)
-    (v : Nat → Real) (i i' : Nat)
+    (v : Nat → Nat → Real) (i i' : Nat)
     (hint : ∀ r k, Integrable (fun ω => ‖Xbar r ω k - μ r k‖ ^ 2) P)
-    (hmoment : ∀ r k, ∫ ω, ‖Xbar r ω k - μ r k‖ ^ 2 ∂P ≤ v r)
-    (hv : Tendsto (fun r => v r / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
+    (hmoment : ∀ k, ∀ᶠ r in atTop, ∫ ω, ‖Xbar r ω k - μ r k‖ ^ 2 ∂P ≤ v r k)
+    (hv : ∀ k, Tendsto (fun r => v r k / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
     ConvergesInProbabilityZero P (fun r ω =>
       ((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
         - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) := by
@@ -459,12 +466,12 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing
           ≤ ((m r : Real))⁻¹ * (2 * η r) := by
             exact mul_le_mul_of_nonneg_left hbound (by positivity)
         _ = ε := by rw [hη_def]; field_simp
-  -- the per-stage bound
-  have hbad : ∀ r : Nat,
+  -- the per-stage bound, valid once both models' second moments have reached their own bounds
+  have hbad : ∀ᶠ r in atTop,
       P {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
           - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) (0 : Real) > ε}
-        ≤ 2 * ENNReal.ofReal (v r / (η r) ^ 2) := by
-    intro r
+        ≤ ENNReal.ofReal (v r i / (η r) ^ 2) + ENNReal.ofReal (v r i' / (η r) ^ 2) := by
+    filter_upwards [hmoment i, hmoment i'] with r hri hri'
     rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
     · have hempty : {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
           - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) (0 : Real) > ε} = (∅ : Set Ω) := by
@@ -488,28 +495,30 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing
             measure_mono hincl
         _ ≤ P {ω | η r < ‖Xbar r ω i - μ r i‖} + P {ω | η r < ‖Xbar r ω i' - μ r i'‖} :=
             measure_union_le _ _
-        _ ≤ ENNReal.ofReal (v r / (η r) ^ 2) + ENNReal.ofReal (v r / (η r) ^ 2) :=
+        _ ≤ ENNReal.ofReal (v r i / (η r) ^ 2) + ENNReal.ofReal (v r i' / (η r) ^ 2) :=
             add_le_add
-              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i) hη_pos (hmoment r i))
-              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i') hη_pos (hmoment r i'))
-        _ = 2 * ENNReal.ofReal (v r / (η r) ^ 2) := by rw [two_mul]
-  -- the bound vanishes
-  have hratio : ∀ r, v r / (η r) ^ 2 = (4 / ε ^ 2) * (v r / ((m r : Real)) ^ 2) := by
-    intro r
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i) hη_pos hri)
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i') hη_pos hri')
+  -- each model's bound vanishes at its own rate; no rate common to the collection is used
+  have hratio : ∀ (k r : Nat),
+      v r k / (η r) ^ 2 = (4 / ε ^ 2) * (v r k / ((m r : Real)) ^ 2) := by
+    intro k r
     rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
     · rw [hη_def]; simp [hm0]
     · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
       rw [hη_def]; field_simp; ring
-  have hub : Tendsto (fun r => 2 * ENNReal.ofReal (v r / (η r) ^ 2)) atTop (𝓝 0) := by
-    have h1 : Tendsto (fun r => v r / (η r) ^ 2) atTop (𝓝 0) := by
-      have := hv.const_mul (4 / ε ^ 2)
-      simpa only [mul_zero, hratio] using this
-    have h2 : Tendsto (fun r => ENNReal.ofReal (v r / (η r) ^ 2)) atTop (𝓝 0) := by
-      simpa using ENNReal.tendsto_ofReal h1
-    have h3 := ENNReal.Tendsto.const_mul h2 (Or.inr (by simp : (2 : ENNReal) ≠ ⊤))
-    simpa using h3
-  exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hub
-    (fun r => bot_le) hbad
+  have hone : ∀ k : Nat,
+      Tendsto (fun r => ENNReal.ofReal (v r k / (η r) ^ 2)) atTop (𝓝 0) := by
+    intro k
+    have h1 : Tendsto (fun r => v r k / (η r) ^ 2) atTop (𝓝 0) := by
+      have := (hv k).const_mul (4 / ε ^ 2)
+      simpa only [mul_zero, hratio k] using this
+    simpa using ENNReal.tendsto_ofReal h1
+  have hub : Tendsto (fun r => ENNReal.ofReal (v r i / (η r) ^ 2)
+      + ENNReal.ofReal (v r i' / (η r) ^ 2)) atTop (𝓝 0) := by
+    simpa using (hone i).add (hone i')
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hub
+    (Filter.Eventually.of_forall fun r => bot_le) hbad
 
 /--
 **Theorem 4 when the models are random too.**
@@ -520,16 +529,19 @@ replicates are random.  Lemma 2 then *draws* the models, so composing the two ne
 be random as well.  Nothing in the argument used their determinism -- the reduction to two
 uniform errors is pointwise in the sample, and Chebyshev is applied to `‖Xbar - μ‖` whichever of
 the two is random -- so this is the same theorem with `μ` allowed to depend on the sample point.
+
+The second moment here is taken *after* integrating over the model draw, which is what makes
+this the wrong route to Theorem 5: see the section below.  It is not used there.
 -/
 theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_random
     (P : Measure Ω) [IsProbabilityMeasure P]
     {p : Nat} (m : Nat → Nat)
     (Xbar : ∀ r, Ω → Nat → Mat (m r) p)
     (μ : ∀ r, Ω → Nat → Mat (m r) p)
-    (v : Nat → Real) (i i' : Nat)
+    (v : Nat → Nat → Real) (i i' : Nat)
     (hint : ∀ r k, Integrable (fun ω => ‖Xbar r ω k - μ r ω k‖ ^ 2) P)
-    (hmoment : ∀ r k, ∫ ω, ‖Xbar r ω k - μ r ω k‖ ^ 2 ∂P ≤ v r)
-    (hv : Tendsto (fun r => v r / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
+    (hmoment : ∀ k, ∀ᶠ r in atTop, ∫ ω, ‖Xbar r ω k - μ r ω k‖ ^ 2 ∂P ≤ v r k)
+    (hv : ∀ k, Tendsto (fun r => v r k / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
     ConvergesInProbabilityZero P (fun r ω =>
       ((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
         - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) := by
@@ -562,12 +574,12 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_random
           ≤ ((m r : Real))⁻¹ * (2 * η r) := by
             exact mul_le_mul_of_nonneg_left hbound (by positivity)
         _ = ε := by rw [hη_def]; field_simp
-  -- the per-stage bound
-  have hbad : ∀ r : Nat,
+  -- the per-stage bound, valid once both models' second moments have reached their own bounds
+  have hbad : ∀ᶠ r in atTop,
       P {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
           - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) (0 : Real) > ε}
-        ≤ 2 * ENNReal.ofReal (v r / (η r) ^ 2) := by
-    intro r
+        ≤ ENNReal.ofReal (v r i / (η r) ^ 2) + ENNReal.ofReal (v r i' / (η r) ^ 2) := by
+    filter_upwards [hmoment i, hmoment i'] with r hri hri'
     rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
     · have hempty : {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
           - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) (0 : Real) > ε} = (∅ : Set Ω) := by
@@ -591,28 +603,30 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_random
             measure_mono hincl
         _ ≤ P {ω | η r < ‖Xbar r ω i - μ r ω i‖} + P {ω | η r < ‖Xbar r ω i' - μ r ω i'‖} :=
             measure_union_le _ _
-        _ ≤ ENNReal.ofReal (v r / (η r) ^ 2) + ENNReal.ofReal (v r / (η r) ^ 2) :=
+        _ ≤ ENNReal.ofReal (v r i / (η r) ^ 2) + ENNReal.ofReal (v r i' / (η r) ^ 2) :=
             add_le_add
-              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i) hη_pos (hmoment r i))
-              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i') hη_pos (hmoment r i'))
-        _ = 2 * ENNReal.ofReal (v r / (η r) ^ 2) := by rw [two_mul]
-  -- the bound vanishes
-  have hratio : ∀ r, v r / (η r) ^ 2 = (4 / ε ^ 2) * (v r / ((m r : Real)) ^ 2) := by
-    intro r
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i) hη_pos hri)
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i') hη_pos hri')
+  -- each model's bound vanishes at its own rate
+  have hratio : ∀ (k r : Nat),
+      v r k / (η r) ^ 2 = (4 / ε ^ 2) * (v r k / ((m r : Real)) ^ 2) := by
+    intro k r
     rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
     · rw [hη_def]; simp [hm0]
     · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
       rw [hη_def]; field_simp; ring
-  have hub : Tendsto (fun r => 2 * ENNReal.ofReal (v r / (η r) ^ 2)) atTop (𝓝 0) := by
-    have h1 : Tendsto (fun r => v r / (η r) ^ 2) atTop (𝓝 0) := by
-      have := hv.const_mul (4 / ε ^ 2)
-      simpa only [mul_zero, hratio] using this
-    have h2 : Tendsto (fun r => ENNReal.ofReal (v r / (η r) ^ 2)) atTop (𝓝 0) := by
-      simpa using ENNReal.tendsto_ofReal h1
-    have h3 := ENNReal.Tendsto.const_mul h2 (Or.inr (by simp : (2 : ENNReal) ≠ ⊤))
-    simpa using h3
-  exact tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hub
-    (fun r => bot_le) hbad
+  have hone : ∀ k : Nat,
+      Tendsto (fun r => ENNReal.ofReal (v r k / (η r) ^ 2)) atTop (𝓝 0) := by
+    intro k
+    have h1 : Tendsto (fun r => v r k / (η r) ^ 2) atTop (𝓝 0) := by
+      have := (hv k).const_mul (4 / ε ^ 2)
+      simpa only [mul_zero, hratio k] using this
+    simpa using ENNReal.tendsto_ofReal h1
+  have hub : Tendsto (fun r => ENNReal.ofReal (v r i / (η r) ^ 2)
+      + ENNReal.ofReal (v r i' / (η r) ^ 2)) atTop (𝓝 0) := by
+    simpa using (hone i).add (hone i')
+  exact tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hub
+    (Filter.Eventually.of_forall fun r => bot_le) hbad
 
 
 /--
@@ -621,23 +635,156 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_random
 The same trace-covariance condition as Theorem 2, with the model collection now growing as well:
 models are indexed by `ℕ`, the pair `(i, i')` is fixed, and the conclusion is pointwise
 convergence of that entry of the dissimilarity matrix.
+
+`S k` is model `k`'s own `∑_j γ_kj`, and `hγ` is the source's condition for that model alone:
+"for all `i`, `(1/m) ∑_j γ_ij = o(r)`" is a statement about each model, not a rate shared by the
+collection, and the proof uses it only at `i` and `i'`.
 -/
 theorem pointwise_dissimilarity_convergesInProbability_of_gamma
     (P : Measure Ω) [IsProbabilityMeasure P]
     {p : Nat} (m : Nat → Nat)
     (Xbar : ∀ r, Ω → Nat → Mat (m r) p)
     (μ : ∀ r, Nat → Mat (m r) p)
-    (S : Nat → Real) (i i' : Nat)
-    (hSnonneg : ∀ r, 0 ≤ S r)
+    (S : Nat → Nat → Real) (i i' : Nat)
+    (hSnonneg : ∀ k r, 0 ≤ S k r)
     (hint : ∀ r k, Integrable (fun ω => ‖Xbar r ω k - μ r k‖ ^ 2) P)
-    (hmoment : ∀ r k, ∫ ω, ‖Xbar r ω k - μ r k‖ ^ 2 ∂P ≤ S r / (r : Real))
-    (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * S r / (r : Real)) atTop (𝓝 0)) :
+    (hmoment : ∀ k, ∀ᶠ r in atTop,
+      ∫ ω, ‖Xbar r ω k - μ r k‖ ^ 2 ∂P ≤ S k r / (r : Real))
+    (hγ : ∀ k, Tendsto (fun r => ((m r : Real))⁻¹ * S k r / (r : Real)) atTop (𝓝 0)) :
     ConvergesInProbabilityZero P (fun r ω =>
       ((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
         - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) :=
   pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing P m Xbar μ
-    (fun r => S r / (r : Real)) i i' hint hmoment
-    (sourceGammaRate_imp_secondMomentRate hSnonneg hγ)
+    (fun r k => S k r / (r : Real)) i i' hint hmoment
+    (fun k => sourceGammaRate_imp_secondMomentRate (hSnonneg k) (hγ k))
+
+/-! ### Appendix A.2, as the hypothesis the concentration theorems consume
+
+Every theorem above takes a bound on `∫ ‖Xbar - μ‖²`.  The source does not assume that bound; it
+derives it, in Appendix A.2, from the sampling model: for each query the `r` replicates are iid
+with trace-covariance `γ_ij`, so the replicate average has mean-squared error `γ_ij / r`, and the
+Frobenius error of the response matrix is the sum of the row errors.
+
+`eventually_integral_norm_sq_le_sum_gamma` is that derivation, in the form the concentration
+theorems consume.  It assumes replicate independence for each fixed query and nothing across
+queries -- the row split is an identity, so the queries never need to be independent of one
+another.  The bound holds for every positive `r`, hence eventually, which is why the concentration
+theorems ask for their moment hypothesis eventually rather than at every stage: at `r = 0` the
+printed rate `γ/r` is not a bound on anything.
+-/
+
+/--
+**The source's `γ` condition delivers the second-moment hypothesis.**
+
+`Y r j t` is the `t`-th replicate of the response to query `j` at stage `r`, `mu r j` its mean and
+`γ r j` its trace-covariance; `Xbar r` is the response matrix of replicate averages and `μ r` the
+matrix of means.  The conclusion is the hypothesis `hmoment` of the concentration theorems, with
+the paper's own `∑_j γ_ij` in place of an assumed bound.
+-/
+theorem eventually_integral_norm_sq_le_sum_gamma
+    (P : Measure Ω) [IsProbabilityMeasure P] {p : Nat} (m : Nat → Nat)
+    (Y : ∀ r : Nat, Fin (m r) → Fin r → Ω → Rvec p)
+    (mu : ∀ r : Nat, Fin (m r) → Rvec p)
+    (γ : ∀ r : Nat, Fin (m r) → Real)
+    (Xbar : ∀ r, Ω → Mat (m r) p) (μ : ∀ r, Mat (m r) p)
+    (hXbar : ∀ r ω (j : Fin (m r)) (c : Fin p),
+      Xbar r ω (j, c) = ((r : Real)⁻¹ • ∑ t, Y r j t ω) c)
+    (hμ : ∀ r (j : Fin (m r)) (c : Fin p), μ r (j, c) = mu r j c)
+    (hL2 : ∀ r j t, MemLp (Y r j t) 2 P)
+    (hmean : ∀ r j t (c : Fin p), ∫ ω, Y r j t ω c ∂P = mu r j c)
+    (hindep : ∀ r (j : Fin (m r)), Set.Pairwise (Set.univ : Set (Fin r))
+      fun t t' => ProbabilityTheory.IndepFun (Y r j t) (Y r j t') P)
+    (hγ : ∀ r j t, ∫ ω, ‖Y r j t ω - mu r j‖ ^ 2 ∂P ≤ γ r j)
+    (hintcoord : ∀ r (q : Fin (m r) × Fin p),
+      Integrable (fun ω => (Xbar r ω q - μ r q) ^ 2) P) :
+    ∀ᶠ r in atTop, ∫ ω, ‖Xbar r ω - μ r‖ ^ 2 ∂P ≤ (∑ j, γ r j) / (r : Real) := by
+  filter_upwards [eventually_gt_atTop 0] with r hr
+  exact Acharyya2024.SecondMoment.integral_norm_sq_matrix_le_sum_row_bounds P hr (Y r) (mu r) (γ r)
+    (hL2 r) (hmean r) (hindep r) (hγ r) (Xbar r) (μ r) (hXbar r) (hμ r) (hintcoord r)
+
+/--
+**Theorem 2 from the source's sampling model.**
+
+The same statement as `dissimilarity_convergesInProbability_of_gamma`, with the second-moment
+hypothesis discharged rather than assumed: what is given is the sampling model -- `r` replicates
+per query, independent for each fixed query, with trace-covariance `γ_ij` -- and the paper's
+condition `((1/m) ∑_i ∑_j γ_ij)/r → 0`.
+-/
+theorem dissimilarity_convergesInProbability_of_replicates
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {n p : Nat} (m : Nat → Nat)
+    (Y : ∀ r : Nat, Fin n → Fin (m r) → Fin r → Ω → Rvec p)
+    (mu : ∀ r : Nat, Fin n → Fin (m r) → Rvec p)
+    (γ : ∀ r : Nat, Fin n → Fin (m r) → Real)
+    (Xbar : ∀ r, Ω → Fin n → Mat (m r) p) (μ : ∀ r, Fin n → Mat (m r) p)
+    (hXbar : ∀ r ω i (j : Fin (m r)) (c : Fin p),
+      Xbar r ω i (j, c) = ((r : Real)⁻¹ • ∑ t, Y r i j t ω) c)
+    (hμ : ∀ r i (j : Fin (m r)) (c : Fin p), μ r i (j, c) = mu r i j c)
+    (hL2 : ∀ r i j t, MemLp (Y r i j t) 2 P)
+    (hmean : ∀ r i j t (c : Fin p), ∫ ω, Y r i j t ω c ∂P = mu r i j c)
+    (hindep : ∀ r i (j : Fin (m r)), Set.Pairwise (Set.univ : Set (Fin r))
+      fun t t' => ProbabilityTheory.IndepFun (Y r i j t) (Y r i j t') P)
+    (hγbound : ∀ r i j t, ∫ ω, ‖Y r i j t ω - mu r i j‖ ^ 2 ∂P ≤ γ r i j)
+    (hγnonneg : ∀ r i j, 0 ≤ γ r i j)
+    (hintcoord : ∀ r i (q : Fin (m r) × Fin p),
+      Integrable (fun ω => (Xbar r ω i q - μ r i q) ^ 2) P)
+    (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real))
+      atTop (𝓝 0)) :
+    ConvergesInProbabilityZero P
+      (fun r ω => frobSub (responseDist (Xbar r ω)) (responseDist (μ r))) := by
+  refine dissimilarity_convergesInProbability_of_gamma P m Xbar μ γ hγnonneg
+    (fun r i => Acharyya2024.SecondMoment.integrable_norm_sq_of_coord P
+      (fun ω => Xbar r ω i) (μ r i) (hintcoord r i)) ?_ hγ
+  filter_upwards [eventually_gt_atTop 0] with r hr i
+  refine le_trans (Acharyya2024.SecondMoment.integral_norm_sq_matrix_le_sum_row_bounds P hr
+    (Y r i) (mu r i) (γ r i) (hL2 r i) (hmean r i) (hindep r i) (hγbound r i)
+    (fun ω => Xbar r ω i) (μ r i) (fun ω => hXbar r ω i) (hμ r i) (hintcoord r i)) ?_
+  have hle : (∑ j, γ r i j) ≤ ∑ i', ∑ j, γ r i' j :=
+    Finset.single_le_sum (f := fun i' => ∑ j, γ r i' j)
+      (fun i' _ => Finset.sum_nonneg fun j _ => hγnonneg r i' j) (Finset.mem_univ i)
+  gcongr
+
+/--
+**Theorem 4 from the source's sampling model.**
+
+The same statement as `pointwise_dissimilarity_convergesInProbability_of_gamma`, with the
+second-moment hypothesis discharged rather than assumed.  Models are indexed by `ℕ` and each
+carries its own `∑_j γ_kj` and its own rate; nothing here is shared across the collection.
+-/
+theorem pointwise_dissimilarity_convergesInProbability_of_replicates
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {p : Nat} (m : Nat → Nat)
+    (Y : ∀ r : Nat, Nat → Fin (m r) → Fin r → Ω → Rvec p)
+    (mu : ∀ r : Nat, Nat → Fin (m r) → Rvec p)
+    (γ : ∀ r : Nat, Nat → Fin (m r) → Real)
+    (Xbar : ∀ r, Ω → Nat → Mat (m r) p) (μ : ∀ r, Nat → Mat (m r) p)
+    (i i' : Nat)
+    (hXbar : ∀ r ω k (j : Fin (m r)) (c : Fin p),
+      Xbar r ω k (j, c) = ((r : Real)⁻¹ • ∑ t, Y r k j t ω) c)
+    (hμ : ∀ r k (j : Fin (m r)) (c : Fin p), μ r k (j, c) = mu r k j c)
+    (hL2 : ∀ r k j t, MemLp (Y r k j t) 2 P)
+    (hmean : ∀ r k j t (c : Fin p), ∫ ω, Y r k j t ω c ∂P = mu r k j c)
+    (hindep : ∀ r k (j : Fin (m r)), Set.Pairwise (Set.univ : Set (Fin r))
+      fun t t' => ProbabilityTheory.IndepFun (Y r k j t) (Y r k j t') P)
+    (hγbound : ∀ r k j t, ∫ ω, ‖Y r k j t ω - mu r k j‖ ^ 2 ∂P ≤ γ r k j)
+    (hγnonneg : ∀ r k j, 0 ≤ γ r k j)
+    (hintcoord : ∀ r k (q : Fin (m r) × Fin p),
+      Integrable (fun ω => (Xbar r ω k q - μ r k q) ^ 2) P)
+    (hγ : ∀ k, Tendsto (fun r => ((m r : Real))⁻¹ * (∑ j, γ r k j) / (r : Real))
+      atTop (𝓝 0)) :
+    ConvergesInProbabilityZero P (fun r ω =>
+      ((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
+        - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) :=
+  pointwise_dissimilarity_convergesInProbability_of_gamma P m Xbar μ
+    (fun k r => ∑ j, γ r k j) i i'
+    (fun k r => Finset.sum_nonneg fun j _ => hγnonneg r k j)
+    (fun r k => Acharyya2024.SecondMoment.integrable_norm_sq_of_coord P
+      (fun ω => Xbar r ω k) (μ r k) (hintcoord r k))
+    (fun k => eventually_integral_norm_sq_le_sum_gamma P m (fun r => Y r k) (fun r => mu r k)
+      (fun r => γ r k) (fun r ω => Xbar r ω k) (fun r => μ r k)
+      (fun r ω => hXbar r ω k) (fun r => hμ r k) (fun r => hL2 r k) (fun r => hmean r k)
+      (fun r => hindep r k) (fun r => hγbound r k) (fun r => hintcoord r k))
+    hγ
 
 /-! ### Theorem 4 when the models are drawn, without a uniform rate
 
@@ -647,11 +794,10 @@ correct way to get it, and they do not prove the same theorem.
 
 The tempting way is to bound the second moment `∫ ‖Xbar - μ‖²` after integrating over the model
 draw, which is what `pointwise_dissimilarity_convergesInProbability_of_secondMoment_random` does.
-That theorem is true and its hypothesis is a single bound `v r` valid for every model index; but
-deducing that hypothesis from the paper's condition needs the *expected* value of
-`(1/m) ∑_j γ_ij` to be `o(r)`, and the paper states only that `(1/m) ∑_j γ_ij` is `o(r)` for each
-model -- an almost-sure statement about the drawn models, which does not imply the statement
-about its mean without a uniform integrability assumption the source never makes.
+That theorem is true; but deducing its hypothesis from the paper's condition needs the *expected*
+value of `(1/m) ∑_j γ_ij` to be `o(r)`, and the paper states only that `(1/m) ∑_j γ_ij` is `o(r)`
+for each model -- an almost-sure statement about the drawn models, which does not imply the
+statement about its mean without a uniform integrability assumption the source never makes.
 
 The correct way needs no such assumption.  Theorem 4 already gives, for *each fixed* model
 configuration, that the bad-event probability tends to zero.  Bad-event probabilities lie in
@@ -685,16 +831,16 @@ theorem pointwise_dissimilarity_convergesInProbability_of_gamma_kernel
     {p : Nat} (m : Nat → Nat)
     (Xbar : ∀ r, Λ → Ω → Nat → Mat (m r) p)
     (μ : ∀ r, Λ → Nat → Mat (m r) p)
-    (S : Λ → Nat → Real) (i i' : Nat)
+    (S : Λ → Nat → Nat → Real) (i i' : Nat)
     (hmeasX : ∀ r, Measurable fun z : Λ × Ω =>
       ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
         - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖)
-    (hS : ∀ᵐ l ∂Pmod, ∀ r, 0 ≤ S l r)
+    (hS : ∀ᵐ l ∂Pmod, ∀ k r, 0 ≤ S l k r)
     (hint : ∀ᵐ l ∂Pmod, ∀ r k, Integrable (fun ω => ‖Xbar r l ω k - μ r l k‖ ^ 2) (κ l))
-    (hmoment : ∀ᵐ l ∂Pmod, ∀ r k,
-      ∫ ω, ‖Xbar r l ω k - μ r l k‖ ^ 2 ∂(κ l) ≤ S l r / (r : Real))
-    (hγ : ∀ᵐ l ∂Pmod,
-      Tendsto (fun r => ((m r : Real))⁻¹ * S l r / (r : Real)) atTop (𝓝 0)) :
+    (hmoment : ∀ᵐ l ∂Pmod, ∀ k, ∀ᶠ r in atTop,
+      ∫ ω, ‖Xbar r l ω k - μ r l k‖ ^ 2 ∂(κ l) ≤ S l k r / (r : Real))
+    (hγ : ∀ᵐ l ∂Pmod, ∀ k,
+      Tendsto (fun r => ((m r : Real))⁻¹ * S l k r / (r : Real)) atTop (𝓝 0)) :
     ConvergesInProbabilityZero (Pmod ⊗ₘ κ) (fun r z =>
       ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
         - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖) := by
@@ -711,10 +857,10 @@ theorem pointwise_dissimilarity_convergesInProbability_of_gamma_kernel
       (fun r => Xbar r l) (fun r => μ r l) (S l) i i' hSl hintl hmomentl hγl ε hε
     refine h.congr fun r => congrArg _ ?_
     ext ω
-    simp [Real.dist_eq]
+    simp
   refine key.congr fun r => congrArg _ ?_
   ext z
-  simp [Real.dist_eq]
+  simp
 
 /--
 **Theorem 4 with the models drawn**, in the special case where the replicate law does not depend
@@ -730,16 +876,16 @@ theorem pointwise_dissimilarity_convergesInProbability_of_gamma_random
     {p : Nat} (m : Nat → Nat)
     (Xbar : ∀ r, Λ → Ω → Nat → Mat (m r) p)
     (μ : ∀ r, Λ → Nat → Mat (m r) p)
-    (S : Λ → Nat → Real) (i i' : Nat)
+    (S : Λ → Nat → Nat → Real) (i i' : Nat)
     (hmeasX : ∀ r, Measurable fun z : Λ × Ω =>
       ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
         - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖)
-    (hS : ∀ᵐ l ∂Pmod, ∀ r, 0 ≤ S l r)
+    (hS : ∀ᵐ l ∂Pmod, ∀ k r, 0 ≤ S l k r)
     (hint : ∀ᵐ l ∂Pmod, ∀ r k, Integrable (fun ω => ‖Xbar r l ω k - μ r l k‖ ^ 2) P)
-    (hmoment : ∀ᵐ l ∂Pmod, ∀ r k,
-      ∫ ω, ‖Xbar r l ω k - μ r l k‖ ^ 2 ∂P ≤ S l r / (r : Real))
-    (hγ : ∀ᵐ l ∂Pmod,
-      Tendsto (fun r => ((m r : Real))⁻¹ * S l r / (r : Real)) atTop (𝓝 0)) :
+    (hmoment : ∀ᵐ l ∂Pmod, ∀ k, ∀ᶠ r in atTop,
+      ∫ ω, ‖Xbar r l ω k - μ r l k‖ ^ 2 ∂P ≤ S l k r / (r : Real))
+    (hγ : ∀ᵐ l ∂Pmod, ∀ k,
+      Tendsto (fun r => ((m r : Real))⁻¹ * S l k r / (r : Real)) atTop (𝓝 0)) :
     ConvergesInProbabilityZero (Pmod.prod P) (fun r z =>
       ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
         - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖) := by
@@ -783,7 +929,8 @@ of the population means.
 
 This is the form Lemma 2 consumes.  As in
 `pointwise_dissimilarity_convergesInProbability_of_gamma_kernel`, no bound uniform over the model
-population is used.
+population is used: the two drawn models carry their own bounds `S L.1` and `S L.2`, and they are
+combined only after the pair is fixed.
 -/
 theorem pairwise_dissimilarity_convergesInProbability_of_gamma
     {Λ : Type} [MeasurableSpace Λ]
@@ -795,7 +942,7 @@ theorem pairwise_dissimilarity_convergesInProbability_of_gamma
     (hmeasX : ∀ r, Measurable (Xbar r)) (hmeasMu : ∀ r, Measurable (mu r))
     (hS : ∀ᵐ l ∂Pmod, ∀ r, 0 ≤ S l r)
     (hint : ∀ᵐ l ∂Pmod, ∀ r, Integrable (fun ω => ‖Xbar r (l, ω) - mu r l‖ ^ 2) (κ l))
-    (hmoment : ∀ᵐ l ∂Pmod, ∀ r,
+    (hmoment : ∀ᵐ l ∂Pmod, ∀ᶠ r in atTop,
       ∫ ω, ‖Xbar r (l, ω) - mu r l‖ ^ 2 ∂(κ l) ≤ S l r / (r : Real))
     (hγ : ∀ᵐ l ∂Pmod,
       Tendsto (fun r => ((m r : Real))⁻¹ * S l r / (r : Real)) atTop (𝓝 0)) :
@@ -808,7 +955,8 @@ theorem pairwise_dissimilarity_convergesInProbability_of_gamma
     fun r L W k => if k = 0 then Xbar r (L.1, W.1) else Xbar r (L.2, W.2) with hX2
   set M2 : ∀ r, (Λ × Λ) → Nat → Mat (m r) p :=
     fun r L k => if k = 0 then mu r L.1 else mu r L.2 with hM2
-  set S2 : (Λ × Λ) → Nat → Real := fun L r => max (S L.1 r) (S L.2 r) with hS2
+  set S2 : (Λ × Λ) → Nat → Nat → Real :=
+    fun L k r => if k = 0 then S L.1 r else S L.2 r with hS2
   have hX0 : ∀ (r : Nat) (L : Λ × Λ) (W : Ω × Ω), X2 r L W 0 = Xbar r (L.1, W.1) := by
     intro r L W; simp [hX2]
   have hX1 : ∀ (r : Nat) (L : Λ × Λ) (W : Ω × Ω), X2 r L W 1 = Xbar r (L.2, W.2) := by
@@ -850,8 +998,11 @@ theorem pairwise_dissimilarity_convergesInProbability_of_gamma
     simp only [hX0, hX1, hM0, hM1]
     fun_prop
   · filter_upwards [hfst hS, hsnd hS] with L h1 h2
-    intro r
-    exact le_max_of_le_left (h1 r)
+    intro k r
+    simp only [hS2]
+    by_cases hk : k = 0 <;> simp only [hk, ↓reduceIte]
+    · exact h1 r
+    · exact h2 r
   · filter_upwards [hfst hint, hsnd hint] with L h1 h2
     intro r k
     rw [hpair]
@@ -861,31 +1012,23 @@ theorem pairwise_dissimilarity_convergesInProbability_of_gamma
     · simp only [hX2, hM2, hk, ↓reduceIte]
       exact (h2 r).comp_snd _
   · filter_upwards [hfst hint, hsnd hint, hfst hmoment, hsnd hmoment] with L h1 h2 g1 g2
-    intro r k
-    rw [hpair]
+    intro k
     by_cases hk : k = 0
-    · simp only [hX2, hM2, hk, ↓reduceIte]
+    · filter_upwards [g1] with r gr
+      rw [hpair]
+      simp only [hX2, hM2, hS2, hk, ↓reduceIte]
       rw [integral_comp_fst_prod (h1 r)]
-      refine le_trans (g1 r) ?_
-      simp only [hS2]
-      gcongr
-      exact le_max_left _ _
-    · simp only [hX2, hM2, hk, ↓reduceIte]
+      exact gr
+    · filter_upwards [g2] with r gr
+      rw [hpair]
+      simp only [hX2, hM2, hS2, hk, ↓reduceIte]
       rw [integral_comp_snd_prod (h2 r)]
-      refine le_trans (g2 r) ?_
-      simp only [hS2]
-      gcongr
-      exact le_max_right _ _
-  · filter_upwards [hfst hγ, hsnd hγ, hfst hS, hsnd hS] with L h1 h2 p1 p2
-    have hmax : ∀ r : Nat, ((m r : Real))⁻¹ * S2 L r / (r : Real)
-        = max (((m r : Real))⁻¹ * S L.1 r / (r : Real))
-            (((m r : Real))⁻¹ * S L.2 r / (r : Real)) := by
-      intro r
-      simp only [hS2]
-      rcases le_total (S L.1 r) (S L.2 r) with h | h
-      · rw [max_eq_right h, max_eq_right (by gcongr <;> positivity)]
-      · rw [max_eq_left h, max_eq_left (by gcongr <;> positivity)]
-    simp only [hmax]
-    simpa using h1.max h2
+      exact gr
+  · filter_upwards [hfst hγ, hsnd hγ] with L h1 h2
+    intro k
+    simp only [hS2]
+    by_cases hk : k = 0 <;> simp only [hk, ↓reduceIte]
+    · exact h1
+    · exact h2
 
 end Acharyya2024.Probability

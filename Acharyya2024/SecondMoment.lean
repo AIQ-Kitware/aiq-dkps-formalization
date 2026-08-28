@@ -222,4 +222,81 @@ theorem integral_norm_sq_eq_sum_query {m p : Nat} (P : Measure Ω)
       = ∑ j : Fin m, ∑ k : Fin p, ∫ ω, (X ω (j, k) - μ (j, k)) ^ 2 ∂P := by
   rw [integral_norm_sq_eq_sum_coord P X μ hint, Fintype.sum_prod_type]
 
+/-! ## (f) Appendix A.2 through to the response matrix
+
+`integral_norm_sq_sampleMean_sub_mean_le_of_bound` is Appendix A.2 for one query: the replicate
+average of the responses to a single query has mean-squared error at most `gamma_ij / r`.  The
+quantity the concentration step consumes is the Frobenius error of the whole response *matrix*,
+and passing from one to the other is a sum over rows.
+
+The sum costs nothing, and in particular it does **not** need the responses to different queries
+to be independent.  The Frobenius second moment splits over coordinates by
+`integral_norm_sq_eq_sum_query` -- an identity, not an inequality -- so each row may be bounded on
+its own.  Only the replicates of a *fixed* query need to be independent, which is exactly what the
+source assumes when it writes `g(f_i(q_j)_k) ~iid F_ij`. -/
+
+/--
+**Appendix A.2 for the response matrix.**
+
+`Y j k` is the `k`-th replicate of the response to query `j`, `mu j` its mean, and `gamma j` a
+bound on its second moment -- the paper's `gamma_ij = trace(Sigma_ij)`.  `Xbar` is the response
+matrix whose `j`-th row is the replicate average, and the conclusion is the bound the
+concentration theorems consume:
+
+  `E ‖Xbar_i − mu_i‖² ≤ (∑_j gamma_ij) / r`.
+
+Independence is assumed only across the replicates of each fixed query.
+-/
+theorem integral_norm_sq_matrix_le_sum_row_bounds
+    (P : Measure Ω) [IsProbabilityMeasure P] {m p : Nat} {r : Nat} (hr : 0 < r)
+    (Y : Fin m → Fin r → Ω → EuclideanSpace Real (Fin p))
+    (mu : Fin m → EuclideanSpace Real (Fin p))
+    (γ : Fin m → Real)
+    (hL2 : ∀ j k, MemLp (Y j k) 2 P)
+    (hmean : ∀ j k (c : Fin p), ∫ ω, Y j k ω c ∂P = mu j c)
+    (hindep : ∀ j, Set.Pairwise (Set.univ : Set (Fin r))
+      fun k k' => IndepFun (Y j k) (Y j k') P)
+    (hbound : ∀ j k, ∫ ω, ‖Y j k ω - mu j‖ ^ 2 ∂P ≤ γ j)
+    (Xbar : Ω → EuclideanSpace Real (Fin m × Fin p))
+    (μM : EuclideanSpace Real (Fin m × Fin p))
+    (hXbar : ∀ ω (j : Fin m) (c : Fin p),
+      Xbar ω (j, c) = ((r : Real)⁻¹ • ∑ k, Y j k ω) c)
+    (hμM : ∀ (j : Fin m) (c : Fin p), μM (j, c) = mu j c)
+    (hint : ∀ q : Fin m × Fin p, Integrable (fun ω => (Xbar ω q - μM q) ^ 2) P) :
+    ∫ ω, ‖Xbar ω - μM‖ ^ 2 ∂P ≤ (∑ j, γ j) / r := by
+  rw [integral_norm_sq_eq_sum_query P Xbar μM hint, Finset.sum_div]
+  refine Finset.sum_le_sum fun j _ => ?_
+  have hcongr : ∀ (c : Fin p) (ω : Ω),
+      (Xbar ω (j, c) - μM (j, c)) ^ 2
+        = (((r : Real)⁻¹ • ∑ k, Y j k ω) c - mu j c) ^ 2 := by
+    intro c ω
+    rw [hXbar, hμM]
+  have hint' : ∀ c : Fin p, Integrable
+      (fun ω => (((r : Real)⁻¹ • ∑ k, Y j k ω) c - mu j c) ^ 2) P := fun c =>
+    (hint (j, c)).congr (Filter.Eventually.of_forall fun ω => hcongr c ω)
+  have hrow : ∑ c : Fin p, ∫ ω, (Xbar ω (j, c) - μM (j, c)) ^ 2 ∂P
+      = ∫ ω, ‖((r : Real)⁻¹ • ∑ k, Y j k ω) - mu j‖ ^ 2 ∂P := by
+    rw [integral_norm_sq_eq_sum_coord P (fun ω => (r : Real)⁻¹ • ∑ k, Y j k ω) (mu j) hint']
+    exact Finset.sum_congr rfl fun c _ =>
+      integral_congr_ae (Filter.Eventually.of_forall fun ω => hcongr c ω)
+  rw [hrow]
+  exact integral_norm_sq_sampleMean_sub_mean_le_of_bound P hr (Y j) (mu j) (hL2 j)
+    (hmean j) (hindep j) (hbound j)
+
+
+/-- The Frobenius square is integrable as soon as each coordinate square is: the two agree
+pointwise, and a finite sum of integrable functions is integrable. -/
+theorem integrable_norm_sq_of_coord {ι : Type} [Fintype ι] (P : Measure Ω)
+    (X : Ω → EuclideanSpace Real ι) (μ : EuclideanSpace Real ι)
+    (hint : ∀ i, Integrable (fun ω => (X ω i - μ i) ^ 2) P) :
+    Integrable (fun ω => ‖X ω - μ‖ ^ 2) P := by
+  have hpt : ∀ ω, ‖X ω - μ‖ ^ 2 = ∑ i, (X ω i - μ i) ^ 2 := by
+    intro ω
+    rw [EuclideanSpace.norm_eq, Real.sq_sqrt (by positivity)]
+    refine Finset.sum_congr rfl fun i _ => ?_
+    simp [Real.norm_eq_abs, sq_abs]
+  exact (integrable_finsetSum _ fun i _ => hint i).congr
+    (Filter.Eventually.of_forall fun ω => (hpt ω).symm)
+
+
 end Acharyya2024.SecondMoment
