@@ -94,7 +94,7 @@ theorem spectraBoundedTruncation_tendsto_on_domain
 /-- A lower semibound for `A` descends to the truncations. -/
 theorem spectraBoundedTruncation_lowerBound
     (A : ComplexClosedOperatorH (H := H))
-    (hA : A.IsSelfAdjoint) {c : ℝ} (hc : SemiboundedBelow A c) {τ : ℝ} (x : H) :
+    (hA : A.IsSelfAdjoint) {c : ℝ} (hc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap c) {τ : ℝ} (x : H) :
     c * ‖spectraSpectralCutoff A hA τ x‖ ^ 2 ≤
       RCLike.re ⟪spectraBoundedTruncation A hA τ x, spectraSpectralCutoff A hA τ x⟫_ℂ := by
   obtain ⟨hx, hb⟩ := TauCeti.LinearPMap.truncation_eq_on_specProjection hA
@@ -105,7 +105,7 @@ theorem spectraBoundedTruncation_lowerBound
 /-- An upper semibound for `A` descends to the truncations. -/
 theorem spectraBoundedTruncation_upperBound
     (A : ComplexClosedOperatorH (H := H))
-    (hA : A.IsSelfAdjoint) {c : ℝ} (hc : SemiboundedAbove A c) {τ : ℝ} (x : H) :
+    (hA : A.IsSelfAdjoint) {c : ℝ} (hc : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c) {τ : ℝ} (x : H) :
     RCLike.re ⟪spectraBoundedTruncation A hA τ x, spectraSpectralCutoff A hA τ x⟫_ℂ ≤
       c * ‖spectraSpectralCutoff A hA τ x‖ ^ 2 := by
   obtain ⟨hx, hb⟩ := TauCeti.LinearPMap.truncation_eq_on_specProjection hA

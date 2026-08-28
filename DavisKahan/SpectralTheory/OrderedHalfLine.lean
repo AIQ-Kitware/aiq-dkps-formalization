@@ -46,7 +46,7 @@ theorem semiboundedBelow_of_spectrum_subset_Ici
     {c : ℝ}
     (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
         Set.Ici c) :
-    SemiboundedBelow A c := by
+    TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap c := by
   intro x
   have hzero :
       TauCeti.LinearPMap.specProjection hA (Set.Iio c) measurableSet_Iio = 0 := by
@@ -64,7 +64,7 @@ theorem semiboundedAbove_of_spectrum_subset_Iic
     {c : ℝ}
     (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
         Set.Iic c) :
-    SemiboundedAbove A c := by
+    TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c := by
   intro x
   have hzero :
       TauCeti.LinearPMap.specProjection hA (Set.Ioi c) measurableSet_Ioi = 0 := by

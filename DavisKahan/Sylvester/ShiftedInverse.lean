@@ -224,7 +224,7 @@ theorem _root_.TauCeti.DavisKahanExt.ClosedOperator.norm_shift_apply_le_of_form_
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     (hsym : B.IsSymmetric)
     {β α : ℝ} (hβα : β ≤ α)
-    (hlow : SemiboundedBelow B β) (hhigh : SemiboundedAbove B α)
+    (hlow : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap β) (hhigh : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap α)
     (u : B.domain) :
     ‖B.toLinearMap u - (((α + β) / 2 : ℝ) : 𝕜) • (u : F)‖ ≤
       (α - β) / 2 * ‖(u : F)‖ := by
@@ -326,9 +326,9 @@ theorem norm_closedSylvester_le_of_intervalExterior
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     (hBsym : B.IsSymmetric)
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : SemiboundedBelow B β) (hBhigh : SemiboundedAbove B α)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap β) (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap α)
     (hAres : LeftShiftedInverseBound A ((α + β) / 2) ((α - β) / 2 + δ))
-    (hEq : HasClosedSylvesterEquation A B X C) :
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C) :
     δ * ‖X‖ ≤ ‖C‖ :=
   linearPMap_norm_sylvester_le_of_intervalExterior
     (A := A.toLinearPMap) (B := B.toLinearPMap) hBsym B.toLinearPMap_dense
@@ -410,9 +410,9 @@ theorem norm_closedSylvester_le_of_exteriorInterval
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     (hAsym : A.IsSymmetric)
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hAlow : SemiboundedBelow A β) (hAhigh : SemiboundedAbove A α)
+    (hAlow : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap β) (hAhigh : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap α)
     (hBres : TwoSidedShiftedInverseBound B ((α + β) / 2) ((α - β) / 2 + δ))
-    (hEq : HasClosedSylvesterEquation A B X C) :
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C) :
     δ * ‖X‖ ≤ ‖C‖ :=
   linearPMap_norm_sylvester_le_of_exteriorInterval
     (A := A.toLinearPMap) (B := B.toLinearPMap) hAsym A.toLinearPMap_dense

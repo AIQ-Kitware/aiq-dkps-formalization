@@ -80,7 +80,7 @@ theorem paperOperatorNorm_sylvester_le_of_pairwiseSpectrumGap
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     {r : ℕ} (hRank : C.rank ≤ (r : Cardinal)) :
     δ * ‖X‖ ≤ ‖C‖ * Real.sqrt r := by
   have hC : IsPaperHilbertSchmidt C := isPaperHilbertSchmidt_of_rank_le hRank
@@ -104,7 +104,7 @@ theorem paperOperatorNorm_sylvester_real_le_of_pairwiseSpectrumGap
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : ∀ lam ∈ A.realSpectrum, ∀ α ∈ B.realSpectrum, δ ≤ |lam - α|)
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     {r : ℕ} (hRank : C.rank ≤ (r : Cardinal)) :
     δ * ‖X‖ ≤ ‖C‖ * Real.sqrt r := by
   have hC : IsPaperHilbertSchmidt C := isPaperHilbertSchmidt_of_rank_le hRank
@@ -134,7 +134,7 @@ theorem paperOperatorNorm_sylvester_le_finrank_range
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : PairwiseSpectrumGap A B δ)
-    (hEq : HasClosedSylvesterEquation A B X C) :
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C) :
     δ * ‖X‖ ≤
       ‖C‖ * Real.sqrt (Module.finrank ℂ (LinearMap.range (C : F →ₗ[ℂ] E))) := by
   have hRank : C.rank ≤

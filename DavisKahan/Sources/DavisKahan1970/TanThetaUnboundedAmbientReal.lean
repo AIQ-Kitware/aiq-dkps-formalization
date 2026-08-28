@@ -247,7 +247,7 @@ condition (3.5) then converts the directed gap into the ambient gap. -/
 theorem norm_paperSinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent
     (D : UnboundedCompressionTrialData U)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : SemiboundedAbove D.compression alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : U) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
@@ -309,7 +309,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_real_of_data
     (D : UnboundedCompressionTrialData U)
     (H : E →L[ℝ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : SemiboundedAbove D.compression alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         ⟪Vᗮ.starProjection (((z : U) : E)), Vᗮ.starProjection (D.action z)⟫_ℝ)
@@ -356,7 +356,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_real_exact
     (hVcomm : ∀ x : A.domain,
       Vᗮ.starProjection (A.toLinearMap x) =
         A.toLinearMap ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
-    (hupper : SemiboundedAbove D.compression alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℝ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)

@@ -58,11 +58,11 @@ structure BoundedTruncationInterface
   tendsto_on_domain : ∀ x : A.domain,
     Tendsto (fun τ : ℝ => truncation τ (x : E)) atTop
       (𝓝 (A.toLinearMap x))
-  lowerBound : ∀ {c : ℝ}, SemiboundedBelow A c →
+  lowerBound : ∀ {c : ℝ}, TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap c →
     ∀ {τ : ℝ}, 0 ≤ τ → ∀ x,
       c * ‖P.cutoff τ x‖ ^ 2 ≤
         RCLike.re ⟪truncation τ x, P.cutoff τ x⟫_𝕜
-  upperBound : ∀ {c : ℝ}, SemiboundedAbove A c →
+  upperBound : ∀ {c : ℝ}, TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c →
     ∀ {τ : ℝ}, 0 ≤ τ → ∀ x,
       RCLike.re ⟪truncation τ x, P.cutoff τ x⟫_𝕜 ≤
         c * ‖P.cutoff τ x‖ ^ 2

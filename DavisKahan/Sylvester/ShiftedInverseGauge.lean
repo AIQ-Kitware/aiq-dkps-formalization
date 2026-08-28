@@ -186,10 +186,10 @@ theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := 𝕜) (E := F)}
     {X C : F →L[𝕜] E} {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hBsym : B.IsSymmetric)
-    (hBlow : SemiboundedBelow B β) (hBhigh : SemiboundedAbove B α)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap β) (hBhigh : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap α)
     (hAres : TwoSidedShiftedInverseBound A ((α + β) / 2)
       ((α - β) / 2 + δ))
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C :=
   linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight N

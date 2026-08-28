@@ -684,12 +684,12 @@ theorem beamSinTheta_le (ε : ℝ) :
     have hz : beamTrialZero.toLinearMap x = 0 := rfl
     rw [hz, map_zero]
     exact beamOperator_apply_trial (x : beamTrial).2 _
-  have hlow : SemiboundedBelow beamTrialZero 0 := by
+  have hlow : TauCeti.LinearPMap.SemiboundedBelow beamTrialZero.toLinearPMap 0 := by
     intro x
     have hz : beamTrialZero.toLinearPMap x = 0 := rfl
     rw [hz, inner_zero_left]
     simp
-  have hhigh : SemiboundedAbove beamTrialZero 0 := by
+  have hhigh : TauCeti.LinearPMap.SemiboundedAbove beamTrialZero.toLinearPMap 0 := by
     intro x
     have hz : beamTrialZero.toLinearPMap x = 0 := rfl
     rw [hz, inner_zero_left]
@@ -838,8 +838,8 @@ theorem mem_specRange_singleton_of_mem_lowSet {y : BeamL2}
 /-- The compression of the free beam to the spectral subspace below the gap is zero:
 both form bounds are `0`. -/
 theorem beamLow_semiboundedBelow :
-    SemiboundedBelow (selfAdjointSpectralRestriction beamOperator
-      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet) 0 := by
+    TauCeti.LinearPMap.SemiboundedBelow (selfAdjointSpectralRestriction beamOperator
+      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet).toLinearPMap 0 := by
   intro x
   exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc
     beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
@@ -847,8 +847,8 @@ theorem beamLow_semiboundedBelow :
 
 /-- The beam operator is bounded above on the low spectral set. -/
 theorem beamLow_semiboundedAbove :
-    SemiboundedAbove (selfAdjointSpectralRestriction beamOperator
-      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet) 0 := by
+    TauCeti.LinearPMap.SemiboundedAbove (selfAdjointSpectralRestriction beamOperator
+      beamOperator_isSelfAdjoint beamLowSet measurableSet_beamLowSet).toLinearPMap 0 := by
   intro x
   exact (TauCeti.LinearPMap.re_inner_apply_bounds_of_subset_Icc
     beamOperator_isSelfAdjoint ({0} : Set ℝ) (measurableSet_singleton 0)
@@ -1636,12 +1636,12 @@ theorem beamSinThetaSum_le (ε : ℝ) :
     have hz : beamTrialZero.toLinearMap x = 0 := rfl
     rw [hz, map_zero]
     exact beamOperator_apply_trial (x : beamTrial).2 _
-  have hlow : SemiboundedBelow beamTrialZero 0 := by
+  have hlow : TauCeti.LinearPMap.SemiboundedBelow beamTrialZero.toLinearPMap 0 := by
     intro x
     have hz : beamTrialZero.toLinearPMap x = 0 := rfl
     rw [hz, inner_zero_left]
     simp
-  have hhigh : SemiboundedAbove beamTrialZero 0 := by
+  have hhigh : TauCeti.LinearPMap.SemiboundedAbove beamTrialZero.toLinearPMap 0 := by
     intro x
     have hz : beamTrialZero.toLinearPMap x = 0 := rfl
     rw [hz, inner_zero_left]

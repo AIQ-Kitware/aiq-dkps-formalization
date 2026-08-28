@@ -154,7 +154,7 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap
         F₁ (Λ₁.toLinearMap y))
     (hXnorm : ‖X‖ ≤ 1) (hF₁norm : ‖F₁‖ ≤ 1)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hA₀low : SemiboundedBelow A₀ β) (hA₀high : SemiboundedAbove A₀ α)
+    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow A₀.toLinearPMap β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove A₀.toLinearPMap α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁.toLinearPMap) :
     δ * ‖X.adjoint ∘L F₁‖ ≤ ‖V‖ := by
@@ -190,7 +190,7 @@ theorem sinTheta_addBounded_opNorm_of_spectrum_gap_isometric
         F₁ (Λ₁.toLinearMap y))
     (hXiso : IsometricEmbedding X) (hF₁iso : IsometricEmbedding F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hA₀low : SemiboundedBelow A₀ β) (hA₀high : SemiboundedAbove A₀ α)
+    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow A₀.toLinearPMap β) (hA₀high : TauCeti.LinearPMap.SemiboundedAbove A₀.toLinearPMap α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum Λ₁.toLinearPMap) :
     δ * ‖X.adjoint ∘L F₁‖ ≤ ‖V‖ := by
@@ -233,10 +233,10 @@ theorem sinTheta_addBounded_spectralSubspaces_opNorm_of_spectrum_gap
     (V : H →L[ℂ] H) (hV : IsSelfAdjointOperator V)
     (B T : Set ℝ) (hB : MeasurableSet B) (hT : MeasurableSet T)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hA₀low : SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB) β)
-    (hA₀high : SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hA₀low : TauCeti.LinearPMap.SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+    (hA₀high : TauCeti.LinearPMap.SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
     (hΛspec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction (A.addBounded V)

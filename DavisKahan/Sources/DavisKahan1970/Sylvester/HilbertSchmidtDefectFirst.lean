@@ -60,7 +60,7 @@ private theorem hasClosedSylvesterEquation_of_generator
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     (z : (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
       (TauCeti.LinearPMap.genToGroup hB) (paperHSBasis F))).domain) :
-    HasClosedSylvesterEquation A B
+    TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap
       (ofLp (paperHSBasis F) (z : lp (fun _ : PaperHSIndex F => E) 2))
       (ofLp (paperHSBasis F) (generator (sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
         (TauCeti.LinearPMap.genToGroup hB) (paperHSBasis F)) z)) := by
@@ -101,9 +101,9 @@ theorem paperHilbertSchmidt_sylvester_defectFirst
     {X C : F →L[ℂ] E}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {δ : ℝ} (hδ : 0 < δ)
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (hunique : ∀ {Y : F →L[ℂ] E},
-      HasClosedSylvesterEquation A B Y 0 → Y = 0)
+      TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap Y 0 → Y = 0)
     (hC : IsPaperHilbertSchmidt C)
     (hCgap : TauCeti.LinearPMap.HasVectorSpectralGap
       (isSelfAdjoint_generator_sylvesterGroup (TauCeti.LinearPMap.genToGroup hA)
@@ -119,11 +119,11 @@ theorem paperHilbertSchmidt_sylvester_defectFirst
   set X0 := ofLp (paperHSBasis F) z0 with hX0
   have hEq0raw := hasClosedSylvesterEquation_of_generator hA hB ⟨z0, hz0⟩
   have hcOp : ofLp (paperHSBasis F) c = C := toOperator_paperHilbertSchmidtTensor C hC
-  have hEq0 : HasClosedSylvesterEquation A B X0 C := by
+  have hEq0 : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X0 C := by
     have h := hEq0raw
     rw [hgen, hcOp] at h
     exact h
-  have hhom : HasClosedSylvesterEquation A B (X - X0) 0 := by
+  have hhom : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap (X - X0) 0 := by
     simpa using hEq.sub hEq0
   have hXX0 : X = X0 := sub_eq_zero.mp (hunique hhom)
   have hX0mem : IsPaperHilbertSchmidt X0 := isPaperHilbertSchmidt_toOperator z0

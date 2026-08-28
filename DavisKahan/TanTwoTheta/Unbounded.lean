@@ -62,10 +62,10 @@ theorem tanTwoTheta_addBounded_of_spectrum_gap
     (E : H →L[ℂ] H) (hE : IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB) β)
-    (hBhigh : SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)

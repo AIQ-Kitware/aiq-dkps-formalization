@@ -80,7 +80,7 @@ theorem semibounded_of_spectrum_subset_Icc
     {β α : ℝ} (hβα : β ≤ α)
     (hσ : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
         Set.Icc β α) :
-    SemiboundedBelow B β ∧ SemiboundedAbove B α := by
+    TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap β ∧ TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap α := by
   obtain ⟨R, hnorm⟩ :=
     exists_boundedRealization_of_spectrum_subset_Icc hB hβα hσ
   have key : ∀ x : B.domain,
@@ -153,7 +153,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRig
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
     (hσB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
         Set.Icc β α)
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   obtain ⟨hBlow, hBhigh⟩ := semibounded_of_spectrum_subset_Icc hB hβα hσB
@@ -183,7 +183,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_intervalLeft_exteriorRig
         Set.Icc β α)
     (hσB : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap)
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   have hr0 : (0 : ℝ) ≤ (α - β) / 2 := by linarith

@@ -41,9 +41,9 @@ structure OrderedSylvesterEngine : Prop where
       (_hA : A.IsSelfAdjoint) (_hB : B.IsSelfAdjoint)
       {X C : F →L[ℂ] E} {c δ : ℝ}
       (_hδ : 0 < δ)
-      (_hAc : SemiboundedBelow A (c + δ))
-      (_hBc : SemiboundedAbove B c)
-      (_hEq : HasClosedSylvesterEquation A B X C)
+      (_hAc : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap (c + δ))
+      (_hBc : TauCeti.LinearPMap.SemiboundedAbove B.toLinearPMap c)
+      (_hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
       (_hC : N.Mem C),
       N.Mem X ∧
         δ * N.gauge X ≤
@@ -58,9 +58,9 @@ structure OrderedSylvesterEngine : Prop where
       (_hA : A.IsSelfAdjoint) (_hB : B.IsSelfAdjoint)
       {X C : F →L[ℂ] E} {c δ : ℝ}
       (_hδ : 0 < δ)
-      (_hAc : SemiboundedAbove A c)
-      (_hBc : SemiboundedBelow B (c + δ))
-      (_hEq : HasClosedSylvesterEquation A B X C)
+      (_hAc : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap c)
+      (_hBc : TauCeti.LinearPMap.SemiboundedBelow B.toLinearPMap (c + δ))
+      (_hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
       (_hC : N.Mem C),
       N.Mem X ∧
         δ * N.gauge X ≤

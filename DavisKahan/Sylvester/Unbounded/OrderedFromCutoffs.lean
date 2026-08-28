@@ -164,7 +164,7 @@ theorem interfaceFilledTruncation_lowerBound
     {hA : A.IsSelfAdjoint}
     (P : SpectralCutoffInterface A hA)
     (T : BoundedTruncationInterface A hA P)
-    {a τ : ℝ} (hτ : 0 ≤ τ) (ha : SemiboundedBelow A a) :
+    {a τ : ℝ} (hτ : 0 ≤ τ) (ha : TauCeti.LinearPMap.SemiboundedBelow A.toLinearPMap a) :
     ∀ x, a * ‖x‖ ^ 2 ≤
       RCLike.re ⟪interfaceFilledTruncation P T a τ x, x⟫_ℂ := by
   intro x
@@ -205,7 +205,7 @@ theorem interfaceFilledTruncation_upperBound
     {hA : A.IsSelfAdjoint}
     (P : SpectralCutoffInterface A hA)
     (T : BoundedTruncationInterface A hA P)
-    {a τ : ℝ} (hτ : 0 ≤ τ) (ha : SemiboundedAbove A a) :
+    {a τ : ℝ} (hτ : 0 ≤ τ) (ha : TauCeti.LinearPMap.SemiboundedAbove A.toLinearPMap a) :
     ∀ x, RCLike.re ⟪interfaceFilledTruncation P T a τ x, x⟫_ℂ ≤
       a * ‖x‖ ^ 2 := by
   intro x
@@ -331,7 +331,7 @@ theorem interfaceDoubleCutoff_sylvester_equation
     (PBi : SpectralCutoffInterface B hB)
     (TBi : BoundedTruncationInterface B hB PBi)
     {X C : F →L[ℂ] E}
-    (hEq : HasClosedSylvesterEquation A B X C)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A.toLinearPMap B.toLinearPMap X C)
     (a b τA τB : ℝ) :
     interfaceFilledTruncation PAi TAi a τA ∘L
         (PAi.cutoff τA ∘L X ∘L PBi.cutoff τB) -
@@ -382,7 +382,7 @@ theorem interfaceDoubleCutoff_sylvester_equation
     rw [hTAPA, hPAPAx, sub_self, smul_zero, add_zero]
     rw [hTAcut]
     exact hAcomm
-  have heq := ClosedSylvesterEquation.equation_toLinearMap hEq ⟨PB x, hPBdom⟩ hXdom
+  have heq := SylvesterEquation.equation_of_mem hEq ⟨PB x, hPBdom⟩ hXdom
   have heqPA := congrArg PA heq
   change
     interfaceFilledTruncation PAi TAi a τA (PA (X (PB x))) -
@@ -391,7 +391,8 @@ theorem interfaceDoubleCutoff_sylvester_equation
   rw [hAFilled, hPBFilled]
   rw [show TB x = B.toLinearMap ⟨PB x, hPBdom⟩ by
     simpa only [TB, PB] using hTBcut]
-  simpa only [map_sub] using heqPA
+  simp only [map_sub] at heqPA
+  exact heqPA
 
 end ApproximationNumberEndpointAssumptions
 

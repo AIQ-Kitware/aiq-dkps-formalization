@@ -169,10 +169,10 @@ theorem unbounded_sinTwoTheta_uiNorm_representative
     (E : H →L[ℂ] H) (hE : DavisKahan.IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB) β)
-    (hBhigh : SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
@@ -223,10 +223,10 @@ theorem unbounded_sinTwoTheta_uiNorm_representative_unequalDimension
     (E : H →L[ℂ] H) (hE : DavisKahan.IsSelfAdjointOperator E)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB) β)
-    (hBhigh : SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
@@ -258,10 +258,10 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB) β)
-    (hBhigh : SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)
@@ -297,10 +297,10 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative_unequalDimension
     (B : Set ℝ) (hB : MeasurableSet B)
     (V : Submodule ℂ H) [V.HasOrthogonalProjection]
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : SemiboundedBelow
-      (selfAdjointSpectralRestriction A hA B hB) β)
-    (hBhigh : SemiboundedAbove
-      (selfAdjointSpectralRestriction A hA B hB) α)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
+      (selfAdjointSpectralRestriction A hA B hB).toLinearPMap α)
     (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap)

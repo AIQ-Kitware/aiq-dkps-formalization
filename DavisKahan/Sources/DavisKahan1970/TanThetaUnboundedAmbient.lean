@@ -325,7 +325,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_of_data_of_transversal
     (D : UnboundedCompressionTrialData U)
     (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : SemiboundedAbove D.compression alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : U) : E)),
@@ -389,7 +389,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_of_data
     (D : UnboundedCompressionTrialData U)
     (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hupper : SemiboundedAbove D.compression alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
     (hcross : ∀ z : D.compression.domain,
       (alpha + delta) * ‖Vᗮ.starProjection (((z : U) : E))‖ ^ 2 ≤
         RCLike.re ⟪Vᗮ.starProjection (((z : U) : E)),
@@ -439,7 +439,7 @@ theorem tanTheta_unboundedCompression_ambient_paperUINorm_exact
     (hVcomm : ∀ x : A.domain,
       Vᗮ.starProjection (A.toLinearMap x) =
         A.toLinearMap ⟨Vᗮ.starProjection ((x : E)), hVdom x⟩)
-    (hupper : SemiboundedAbove D.compression alpha)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.compression.toLinearPMap alpha)
     (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
       (alpha + delta) * ‖y‖ ^ 2 ≤
         RCLike.re ⟪A.toLinearMap ⟨y, hy⟩, y⟫_ℂ)
