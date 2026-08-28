@@ -4,7 +4,6 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.InfiniteDimensional.Ideals.CompactIntegral
-import DavisKahan.InfiniteDimensional.Ideals.Rectangular
 import DavisKahan.InfiniteDimensional.Ideals.Symmetric
 
 /-! # `DavisKahan/InfiniteDimensional/Ideals` -/

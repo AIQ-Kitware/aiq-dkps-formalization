@@ -4,10 +4,13 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, GPT 5.6 High
 -/
 import DavisKahan.SpectralTheory.OperatorAngle
-import DavisKahan.InfiniteDimensional.Ideals.Rectangular
 import DavisKahan.OperatorIdeal.ApproximationNumbers.ScalarGeneric
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import ForTauCeti.Analysis.OperatorIdeal.Family.CompactOperator
+import ForTauCeti.Analysis.OperatorIdeal.Family.HilbertSchmidt
+import ForTauCeti.Analysis.OperatorIdeal.Family.KyFan
+import ForTauCeti.Analysis.OperatorIdeal.Family.Schatten
+import ForTauCeti.Analysis.OperatorIdeal.Family.TraceClass
 import DavisKahan.SpectralTheory.AbstractSpectrum
 
 /-!
@@ -75,8 +78,6 @@ open DavisKahan.Foundation
 open DavisKahan
 
 open scoped InnerProductSpace
--- `RectangularSymmetricIdealFamily` and its concrete instances live in the
--- `ExactSinTheta` namespace of the rectangular-family module
 open DavisKahan.ExactSinTheta
 
 variable {𝕜 : Type*} [RCLike 𝕜]
@@ -132,84 +133,18 @@ namespace SymmetricNormIdeal
   Schatten `p = 1` and `p = 2` instead of reproving every structure field.
 -/
 
-/-- Specialize a rectangular symmetric ideal family to the square case on a
-single Hilbert space.  Every field is the corresponding rectangular field at
-`F = E`, except unitary invariance, which the rectangular family only supplies
-as a two-sided norm bound; the equality follows by applying that bound in both
-directions with `‖U‖ ≤ 1`. -/
-noncomputable def ofRectangular
-    (N : RectangularSymmetricIdealFamily (𝕜 := 𝕜)) :
-    SymmetricNormIdeal (𝕜 := 𝕜) (E := E) where
-  mem A := N.Mem A
-  gauge A := N.gauge A
-  zero_mem := N.zero_mem
-  -- point-free assignment, not `field args :=` or `fun args =>`: naming the
-  -- hypothesis binder positionally over a telescope with an interleaved
-  -- implicit `{A}` binds the proof slot to the operator instead
-  add_mem := N.add_mem
-  smul_mem := N.smul_mem
-  ideal_mem := fun L R => N.comp_mem L R
-  adjoint_mem := N.adjoint_mem
-  nonneg := N.gauge_nonneg
-  gauge_zero := N.gauge_zero
-  gauge_eq_zero := N.gauge_eq_zero
-  triangle := N.gauge_add_le
-  gauge_smul := N.gauge_smul
-  gauge_adjoint := N.gauge_adjoint
-  unitary_invariant := fun U Uinv A hU hUinv hUinvU _hUUinv hA => by
-    -- a two-sided conjugation gauge bound, applied in both directions
-    have hUnorm : ‖U‖ ≤ 1 :=
-      ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
-        rw [one_mul]; exact le_of_eq (hU.1 x)
-    have hUinvnorm : ‖Uinv‖ ≤ 1 :=
-      ContinuousLinearMap.opNorm_le_bound _ zero_le_one fun x => by
-        rw [one_mul]; exact le_of_eq (hUinv.1 x)
-    -- `‖L‖ * g * ‖R‖ ≤ g` whenever both norms are ≤ 1 and `g ≥ 0`
-    have shrink : ∀ (a b g : ℝ), a ≤ 1 → b ≤ 1 → 0 ≤ a → 0 ≤ b → 0 ≤ g →
-        a * g * b ≤ g := by
-      intro a b g ha hb ha0 hb0 hg0
-      have h1 : a * g ≤ g := by nlinarith
-      have h2 : 0 ≤ a * g := mul_nonneg ha0 hg0
-      nlinarith
-    have hforward : N.gauge (U ∘L A ∘L Uinv) ≤ N.gauge A :=
-      (N.gauge_comp_le U Uinv hA).trans
-        (shrink _ _ _ hUnorm hUinvnorm (norm_nonneg _) (norm_nonneg _)
-          (N.gauge_nonneg hA))
-    -- `A` is the same conjugation of `U ∘L A ∘L Uinv` by the inverse pair
-    have hAeq : Uinv ∘L (U ∘L A ∘L Uinv) ∘L U = A := by
-      ext x
-      simp only [ContinuousLinearMap.comp_apply]
-      have hx : Uinv (U x) = x := by
-        have := congrArg (fun T : E →L[𝕜] E => T x) hUinvU
-        simpa using this
-      have hy : Uinv (U (A x)) = A x := by
-        have := congrArg (fun T : E →L[𝕜] E => T (A x)) hUinvU
-        simpa using this
-      rw [hx, hy]
-    have hbackward : N.gauge A ≤ N.gauge (U ∘L A ∘L Uinv) := by
-      have h := N.gauge_comp_le Uinv U (N.comp_mem U Uinv hA)
-      rw [hAeq] at h
-      exact h.trans
-        (shrink _ _ _ hUinvnorm hUnorm (norm_nonneg _) (norm_nonneg _)
-          (N.gauge_nonneg (N.comp_mem U Uinv hA)))
-    exact le_antisymm hforward hbackward
-  ideal_bound := fun L R => N.gauge_comp_le L R
-  opNorm_le_gauge := N.opNorm_le_gauge
-  gauge_complete := N.gauge_complete
-
 /-- Specialize a **canonical** operator ideal family to the square case on a
 single Hilbert space.
 
-This is `ofRectangular` with the legacy record removed from the middle.  The
-canonical family's gauge is `ℝ≥0∞`-valued, but `CanonicalRealView` already
+The canonical family's gauge is `ℝ≥0∞`-valued, but `CanonicalRealView` already
 supplies the `ℝ` view — `Mem`, `gaugeReal`, and the fourteen laws in exactly the
 shape this structure's fields ask for — so the transcription is direct rather
 than a re-proof.  `[IsComplete]` is what `gauge_complete` needs, and nothing
 else here does.
 
-Only `unitary_invariant` takes any work, for the same reason as in
-`ofRectangular`: the family supplies a two-sided *bound*, and the equality comes
-from applying it in both directions with `‖U‖, ‖Uinv‖ ≤ 1`. -/
+Only `unitary_invariant` takes any work: the family supplies a two-sided
+*bound*, and the equality comes from applying it in both directions with
+`‖U‖, ‖Uinv‖ ≤ 1`. -/
 noncomputable def ofCanonical
     (N : TauCeti.SymmetricOperatorIdealFamily (𝕜 := 𝕜))
     [N.toOperatorIdealFamily.IsComplete] :
@@ -267,47 +202,40 @@ noncomputable def ofCanonical
 
 /-- The operator norm ideal.
 
-Built from the **canonical** family rather than the legacy rectangular record.
-This is the first catalogue entry to make that move; it can because
-`operatorNormFamily` is currently the only canonical symmetric family carrying
-an `IsComplete` instance.  See the note on the remaining five below. -/
+Built from `TauCeti.operatorNormFamily`, like every other entry in this
+catalogue. -/
 noncomputable def operatorNorm : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofCanonical (TauCeti.operatorNormFamily 𝕜)
 
-/-! Concrete square ideals obtained from the rectangular families. -/
+/-! Concrete square ideals, each the diagonal restriction of the canonical
+rectangular family of the same name. -/
 
-/-- Compact operators with the ordinary operator norm.
-
-Built from the **canonical** family, not the legacy rectangular record.  This is
-the second catalogue entry to make that move (after `operatorNorm`), and it is
-what let `RectangularSymmetricIdealFamily.compactOperatorNorm` be deleted: that
-slot was a `sorry`, and it was this row's only consumer. -/
+/-- Compact operators with the ordinary operator norm. -/
 noncomputable def compactOperator :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
   ofCanonical (TauCeti.compactOperatorFamily 𝕜)
 
-/-- Schatten `p` ideal.  Carries the min--max hypothesis its family now needs: the
-family stopped being a `sorry` on 2026-07-31 and acquired that family's real
-hypotheses along with its real definition. -/
+/-- Schatten `p` ideal.  Carries the min--max hypothesis `schattenIdealFamily`
+needs. -/
 noncomputable def schatten [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]
     {p : ℝ} (hp : 1 ≤ p) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular (RectangularSymmetricIdealFamily.schatten hp)
+  ofCanonical (TauCeti.schattenIdealFamily 𝕜 hp)
 
 /-- Trace-class ideal. -/
 noncomputable def traceClass [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular RectangularSymmetricIdealFamily.traceClass
+  ofCanonical (TauCeti.traceClassIdealFamily 𝕜)
 
 /-- Hilbert--Schmidt ideal. -/
 noncomputable def hilbertSchmidt : SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular RectangularSymmetricIdealFamily.hilbertSchmidt
+  ofCanonical (TauCeti.hilbertSchmidtIdealFamily 𝕜)
 
 /-- Ky Fan `k` gauge for positive `k`. -/
 noncomputable def kyFan [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜]
     (k : ℕ) (hk : 0 < k) :
     SymmetricNormIdeal (𝕜 := 𝕜) (E := E) :=
-  ofRectangular (RectangularSymmetricIdealFamily.kyFan k hk)
+  ofCanonical (TauCeti.kyFanIdealFamily 𝕜 k hk)
 
 /-- Unitary invariance of a symmetric ideal norm.
 
