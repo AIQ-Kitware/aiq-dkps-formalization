@@ -4,7 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
+import DavisKahan.OperatorIdeal.UnitarilyInvariant.FamilyCore
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtBasis
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtTensor
 import ForTauCeti.Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
@@ -18,8 +18,8 @@ import ForTauCeti.Analysis.InnerProductSpace.Sylvester.Generator
 The paper square norm is already defined through approximation singular values
 and is identified with the norm of the canonical Hilbert tensor.  This file
 uses that tensor model to supply the algebraic operations, triangle inequality,
-operator-norm domination, and completeness required by
-`RectangularSymmetricIdealFamily`.
+operator-norm domination, and completeness that
+`SymmetricOperatorIdealFamily.Core` asks for.
 
 The construction is rectangular and basis-free.  Its only scalar restriction
 is complex scalars, inherited from the current Hilbert tensor implementation.
@@ -180,7 +180,7 @@ theorem paperHilbertSchmidt_complete
 /-- The coherent complex rectangular Hilbert--Schmidt ideal family. -/
 noncomputable def hilbertSchmidtComplex :
     SymmetricOperatorIdealFamily (𝕜 := ℂ) :=
-  SymmetricOperatorIdealFamily.ofRectangular <| by
+  SymmetricOperatorIdealFamily.ofCore <| by
   classical
   refine
     { Mem := fun T => IsPaperHilbertSchmidt T
@@ -214,9 +214,6 @@ noncomputable def hilbertSchmidtComplex :
       gauge_zero := by
         intro E F _ _ _ _ _ _
         exact paperHilbertSchmidtNorm_zero
-      gauge_eq_zero := by
-        intro E F _ _ _ _ _ _ A hA hzero
-        exact paperHilbertSchmidtNorm_eq_zero hA hzero
       gauge_add_le := by
         intro E F _ _ _ _ _ _ A B hA hB
         exact paperHilbertSchmidtNorm_add_le hA hB

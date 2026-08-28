@@ -14,7 +14,7 @@ import DavisKahan.TanTheta.Theorem63FiniteSource
 import DavisKahan.TanTheta.Theorem63InfiniteTrial
 import DavisKahan.TanTheta.Theorem63Unbounded
 import DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation
-import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
+import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 import ForTauCeti.Analysis.Normed.Operator.PartialSylvesterBoundedInverse
 

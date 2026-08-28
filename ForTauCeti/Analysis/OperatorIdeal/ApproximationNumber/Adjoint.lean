@@ -152,10 +152,10 @@ approximation numbers are adjoint-invariant (`approximationNumber_adjoint`).  So
 the two operators have the *same* sequence, not merely comparable ones, and the
 transfer is an equality rewrite rather than an estimate.
 
-Recorded in `DavisKahan/InfiniteDimensional/Ideals/Rectangular.lean`
-as an open obligation -- "Schauder's theorem for Hilbert-space adjoints, which the
-pinned Mathlib does not yet provide" -- blocking the adjoint-invariance field of
-the compact-operator ideal family. -/
+Recorded downstream as an open obligation -- "Schauder's theorem for
+Hilbert-space adjoints, which the pinned Mathlib does not yet provide" --
+blocking the adjoint-invariance field of the compact-operator ideal family;
+`TauCeti.compactOperatorFamily` is what that obligation became. -/
 theorem isCompactOperator_adjoint {T : E →L[𝕜] F} (hT : IsCompactOperator T) :
     IsCompactOperator T.adjoint := by
   rw [isCompactOperator_iff_tendsto_approximationNumber, approximationNumber_adjoint_eq]

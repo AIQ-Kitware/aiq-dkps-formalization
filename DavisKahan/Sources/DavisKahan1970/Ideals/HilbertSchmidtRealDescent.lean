@@ -217,7 +217,7 @@ theorem paperHilbertSchmidtNorm_add_le_real
 /-- The complete rectangular Hilbert--Schmidt family over real Hilbert spaces. -/
 noncomputable def hilbertSchmidtReal :
     SymmetricOperatorIdealFamily (𝕜 := ℝ) :=
-  SymmetricOperatorIdealFamily.ofRectangular <| by
+  SymmetricOperatorIdealFamily.ofCore <| by
   classical
   refine
     { Mem := fun T => IsPaperHilbertSchmidt T
@@ -251,12 +251,6 @@ noncomputable def hilbertSchmidtReal :
       gauge_zero := by
         intro E F _ _ _ _ _ _
         exact paperHilbertSchmidtNorm_zero
-      gauge_eq_zero := by
-        intro E F _ _ _ _ _ _ A hA hzero
-        apply norm_eq_zero.mp
-        have hop := opNorm_le_paperHilbertSchmidtNorm hA
-        rw [hzero] at hop
-        exact le_antisymm hop (norm_nonneg A)
       gauge_add_le := by
         intro E F _ _ _ _ _ _ A B hA hB
         exact paperHilbertSchmidtNorm_add_le_real hA hB

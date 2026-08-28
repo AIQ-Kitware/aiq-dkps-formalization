@@ -116,13 +116,16 @@ reads the structure's type, where it is invisible.
 * Extraction class: **redesigned**.  Per the signature-polish backlog the free-data presentation
   (`Mem` plus a total real gauge constrained only on members, one universe,
   hand-rolled completeness, fourteen fields) is replaced here by the
-  single-gauge presentation above.  The legacy structure was derivable from this
-  one through `DavisKahan/Interop/TauCeti/RectangularFamilyAdapter.lean`, which
-  **no longer exists**: it was deleted once the
-  production tree consumed `SymmetricOperatorIdealFamily` directly, which is the
-  condition the adapter's own docstring set for its removal.  The legacy
-  `RectangularSymmetricIdealFamily` is gone with it; this presentation is the only
-  one.
+  single-gauge presentation above, and this is the only presentation of an
+  operator ideal in the library.  The legacy structure was retired downstream on
+  2026-08-27, together with both directions of the conversion between the two and
+  the four concrete ideals that were built by converting a canonical family into a
+  legacy record and back.  Its free data survives only as
+  `SymmetricOperatorIdealFamily.Core` in
+  `DavisKahan/OperatorIdeal/UnitarilyInvariant/FamilyCore.lean`: constructor
+  arguments for `ofCore`, carrying no gauge of their own and used by the two
+  source-facing Hilbert--Schmidt ideals, which are families from the moment they
+  are defined.
 -/
 
 public section

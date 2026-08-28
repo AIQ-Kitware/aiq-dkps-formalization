@@ -249,9 +249,9 @@ section IdealGauge
 /-! ### Gauge transport
 
 A `KyFanDominantIdealFamily` assigns a gauge to rectangular operators
-between Hilbert spaces drawn from a *single* universe: that is how
-`RectangularSymmetricIdealFamily` quantifies its fields, and it is not an
-incidental restriction.  A two-universe variant would be a strictly weaker
+between Hilbert spaces drawn from a *single* universe: that is how a family
+closed under adjoints has to quantify its fields, and it is not an incidental
+restriction.  A two-universe variant would be a strictly weaker
 object, since a family built for the pair `(v, v)` would no longer apply to the
 pair `(v, w)`; there is no single Lean structure carrying one gauge for all
 universe pairs at once.

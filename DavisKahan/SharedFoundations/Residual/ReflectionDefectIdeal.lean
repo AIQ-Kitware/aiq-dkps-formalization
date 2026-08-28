@@ -34,9 +34,9 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 variable {F : Type u} [NormedAddCommGroup F] [InnerProductSpace ℂ F]
   [CompleteSpace F]
 
-/-- A trial residual in a rectangular symmetric ideal forces the associated
+/-- A trial residual in a symmetric operator ideal family forces the associated
 reflection defect into the square member of the same family. -/
-theorem RectangularSymmetricIdealFamily.reflectionDefect_isometricRange_mem
+theorem SymmetricOperatorIdealFamily.reflectionDefect_isometricRange_mem
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →L[ℂ] H) (hA : IsSelfAdjoint A)
@@ -61,9 +61,9 @@ theorem RectangularSymmetricIdealFamily.reflectionDefect_isometricRange_mem
   rw [reflectionDefect_eq_neg_two_smul_offdiag, hblock]
   exact N.smul_mem (-2 : ℂ) (N.add_mem hT hTa)
 
-/-- The basic rectangular ideal axioms yield a factor-four reflection-defect
-bound through the trial residual. -/
-theorem RectangularSymmetricIdealFamily.gauge_reflectionDefect_isometricRange_le_four_mul
+/-- The basic ideal axioms yield a factor-four reflection-defect bound through
+the trial residual. -/
+theorem SymmetricOperatorIdealFamily.gauge_reflectionDefect_isometricRange_le_four_mul
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, u} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (A : H →L[ℂ] H) (hA : IsSelfAdjoint A)
