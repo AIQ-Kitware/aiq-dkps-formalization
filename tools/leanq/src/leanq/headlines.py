@@ -55,12 +55,15 @@ class CensusClaim:
 
 
 def _family_from_path(path: Path) -> str:
+    """Backward-compatible census family inferred from a filename."""
     stem = path.stem
     for suffix in ("-full-source-census", "-source-census", "-census"):
         if stem.endswith(suffix):
             stem = stem[: -len(suffix)]
             break
     low = stem.lower()
+    # Historical aliases keep current reports stable. New censuses should use
+    # top-level ``family`` or ``presentation.family`` instead of adding cases.
     if "davis-kahan" in low:
         return "Davis–Kahan"
     if "yu-wang-samworth" in low:
@@ -68,6 +71,19 @@ def _family_from_path(path: Path) -> str:
     if "quench" in low:
         return "Quench"
     return stem.replace("-", " ").strip().title()
+
+
+def _family_from_census(path: Path, obj: Mapping) -> str:
+    """Read a generic display family from census metadata, with filename fallback."""
+    direct = obj.get("family") if isinstance(obj, Mapping) else None
+    if isinstance(direct, str) and direct.strip():
+        return direct.strip()
+    presentation = obj.get("presentation") if isinstance(obj, Mapping) else None
+    if isinstance(presentation, Mapping):
+        family = presentation.get("family")
+        if isinstance(family, str) and family.strip():
+            return family.strip()
+    return _family_from_path(path)
 
 
 def load_census_claims(
@@ -84,7 +100,7 @@ def load_census_claims(
         items = obj.get("items") if isinstance(obj, dict) else None
         if not isinstance(items, list):
             raise ProjectError(f"census {path} has no items list")
-        family = _family_from_path(path)
+        family = _family_from_census(path, obj)
         for row in items:
             if not isinstance(row, dict):
                 continue
