@@ -221,19 +221,25 @@ or keep extending a parallel local abstraction because doing so is easier.
 Instead, do the migration: introduce a temporary downstream adapter, migrate
 consumers in dependency order, and delete or demote the old foundation.
 
-For unbounded operators the representation decision is **closed**:
+For unbounded operators the representation decision is **closed, and the
+migration is done** (2026-08-28):
 
 ```text
 canonical carrier: Mathlib LinearPMap
 canonical facts:   closedness, dense domain, symmetry, self-adjointness as properties
-temporary only:    DKPS PartialMap compatibility adapter
 ```
 
-Tau Ceti's semigroup generator already uses `LinearPMap`. Migrate local
-consumers toward that representation in dependency order and remove the
-compatibility adapter when its consumers are gone. Historical U1 and Spectra
-migration documents may explain earlier decisions, but they are not current
-execution contracts.
+There is no bundled closed-operator record anywhere in the tree.
+`TauCeti.DavisKahanExt.ClosedOperator` — a `LinearPMap` with dense domain and
+closed graph as *fields* — is deleted, along with its whole forwarding API, the
+`Interop/TauCeti` adapter that existed to carry it, and every name derived from
+it. `DavisKahan/SpectralTheory/PartialMap/` holds the Davis--Kahan additions to
+Mathlib's `LinearPMap`. Do not reintroduce a bundle: an unbounded operator is a
+partial map, and density and closedness are hypotheses.
+
+`docs/planning/closed-operator-to-linearpmap-migration.md` records how it was
+done and what it cost; it is history now, not an execution contract, and the
+same is true of the U1 and Spectra migration documents.
 
 ### `ForTauCeti` is the deliverable, and the bar is the platonic ideal roadmap
 

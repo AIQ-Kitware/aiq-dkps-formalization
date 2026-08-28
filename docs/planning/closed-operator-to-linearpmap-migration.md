@@ -1,117 +1,105 @@
-# `DavisKahanExt.PartialMap` → `LinearPMap`: state and remaining steps
+# `DavisKahanExt.ClosedOperator` → `LinearPMap`: how it was done
 
-**Status 2026-08-27: in progress, steps 1 and 2 landed.**
+**Status 2026-08-28: complete.**  The bundled record, its forwarding API, the
+`Interop/TauCeti` adapter and every name derived from it are gone.  An unbounded
+operator in this repository is a Mathlib `LinearPMap`; density, closedness,
+symmetry and self-adjointness are hypotheses.  This file is the record of the
+migration, not a plan.
 
-`AGENTS.md` closes the representation question: the canonical carrier for an
-unbounded operator is Mathlib's `LinearPMap`, with closedness, dense domain,
-symmetry, and self-adjointness as *properties*; the bundled DKPS
-`PartialMap` is a temporary compatibility adapter. This file records how far
-that migration has got and what the next commits are, so the next agent does not
-have to re-derive the order.
-
-## What the bundle actually is
+## What the bundle was
 
 ```lean
-structure PartialMap where
+structure ClosedOperator where
   domain : Submodule 𝕜 E
   toLinearMap : domain →ₗ[𝕜] E
   dense_domain : Dense (domain : Set E)
   closed_graph : IsClosed (Set.range fun x : domain => ((x : E), toLinearMap x))
 ```
 
-It is a `LinearPMap` plus two properties, and **almost every declaration in
-`SpectralTheory/PartialMap/Basic.lean` is already an `abbrev` forwarding to
-`TauCeti.LinearPMap.*` at `A.toLinearPMap`** — `SameDomain`, `MapsDomainTo`,
-`BoundedExtension`, `Extends`, `IsSymmetric`, `IsSelfAdjoint`, `graphNorm`,
-`RelativelyBounded`, `realResolventSet`, `realSpectrum`, `SpectralSetsSeparated`.
-So the mathematics does not move. What moves is *signatures*, and the work is
-almost entirely mechanical:
+A `LinearPMap` plus two properties — and **almost every declaration in its API
+was already an `abbrev` forwarding to `TauCeti.LinearPMap.*` at
+`A.toLinearPMap`**: `SameDomain`, `MapsDomainTo`, `BoundedExtension`, `Extends`,
+`IsSymmetric`, `IsSelfAdjoint`, `graphNorm`, `RelativelyBounded`,
+`realResolventSet`, `realSpectrum`, `SpectralSetsSeparated`, `ReducesSubspace`,
+`InvariantSubspace`, `reducingRestriction`.  So the mathematics never moved.
+What moved was signatures:
 
 | before | after |
 | --- | --- |
-| `(A : ...PartialMap (𝕜 := 𝕜) (E := E))` | `(A : E →ₗ.[𝕜] E)` |
+| `(A : ...ClosedOperator (𝕜 := 𝕜) (E := E))` | `(A : E →ₗ.[𝕜] E)` |
 | `A.toLinearPMap` | `A` |
 | `A.toLinearMap x` | `A x` |
-| `A.dense_domain` | a `(hA : Dense (A.domain : Set E))` hypothesis |
-| `A.closed_graph` | a `(hA : A.IsClosed)` hypothesis |
-| `A.IsSelfAdjoint` | `IsSelfAdjoint A` (reducibly the same) |
+| `A.dense_domain` | `hA.dense_domain`, from the self-adjointness hypothesis |
+| `A.closed_graph` | `hA.isClosed`, likewise |
+| `A.IsSelfAdjoint` | `IsSelfAdjoint A` |
+| `ClosedOperator.ofBounded A` | `A.toLinearMap.toPMap ⊤` |
+| `A.addBounded V` | `TauCeti.LinearPMap.addBounded A V` |
 
-The last two rows are the only ones that need judgement: most generic statements
-never use density or closedness at all, and gain no hypothesis.
+The density and closedness rows are the only ones needing judgement, and the
+answer was almost always "no new hypothesis": most generic statements never
+touch either, and the ones that do already take self-adjointness.
 
-## Method that worked
+## Order, and what each step actually cost
 
-Do it bottom-up, one predicate/definition family per commit:
+1. **The gap predicates.**  `FormBoundedSylvesterGap`,
+   `RealSpectrumIntervalExteriorGap`, `SpectralSylvesterGap`,
+   `SpectralIntervalExteriorGap`.  Four predicates collapsed to two —
+   `UnboundedSylvesterGapPMap` and `UnboundedIntervalExteriorGapPMap` had become
+   verbatim copies — and six duplicate constructors to three.
+2. **The Sylvester equation and semibounds.**  `SemiboundedBelow`,
+   `SemiboundedAbove`, `ClosedSylvesterEquation`, `HasClosedSylvesterEquation`,
+   `HasBoundedEverywhereInverse`: five shims over canonical predicates, 134 uses
+   renamed.
+3. **The engine, the producers and the data record, together.**  Retyping
+   `selfAdjointSpectralRestriction` alone was attempted first and reverted: the
+   producers, the sine-theta data record and the `BoundedRealization` chain are
+   one cluster.  Done together they cost far less than they looked, because
+   `selfAdjointSpectralRestriction` *is* `LinearPMap.specRestrict`, `ofBounded A`
+   *is* `A.toLinearMap.toPMap ⊤`, and `addBounded` was already in `ForTauCeti`.
 
-1. retype the definition to take raw partial maps;
-2. `lake build`, and at every `Application type mismatch ... but is expected to
-   have type ?m →ₗ.[?m] ?m`, append `.toLinearPMap` to the reported argument.
-   The compiler names file, line and column, so this is scriptable — a throwaway
-   twenty-line patcher driven by the build log converged in four to eight
-   rebuild rounds per step. Do **not** keep such a script; it is a one-off.
-3. `lake build Challenge` and `lake build DavisKahan.Audits.All` before
-   committing. Neither is in `defaultTargets`, and both hold statements that
-   mirror migrated signatures. Step 1 broke the `Challenge` leaderboard and a
-   fully green default build said nothing.
+   The decision that made this step tractable: `UnboundedSinThetaData` and
+   `UnboundedSinThetaDataPMap` were the same record twice, and merging them let
+   the six `A_dense`/`A_closed` fields go — every theorem that needs them already
+   takes self-adjointness.  That removed the constructor burden at all fourteen
+   build sites, and twelve `linearPMap_*` twin theorems with it.
+4. **The names.**  `SpectralTheory/ClosedOperator/` → `PartialMap/`; the fifteen
+   `linearPMap_`-prefixed declarations lost a prefix that no longer
+   distinguished anything; the remaining 230 mentions were renamed.
 
-Each `.toLinearPMap` inserted this way is the temporary adapter, and its count is
-the honest progress measure: **413 before the campaign, 774 now.** It goes down,
-not up, once the *producers* below are migrated; the current rise is the cost of
-having migrated consumers first.
+Two lemmas were added to `ForTauCeti`, both used repeatedly:
+`LinearPMap.isSymmetric_of_isSelfAdjoint` — and that is all.  Everything else
+the migration needed was already there.
 
-## Landed
+## Method, and how it misfires
 
-* **Step 1 — the gap predicates.** `FormBoundedSylvesterGap`,
-  `RealSpectrumIntervalExteriorGap`, `SpectralSylvesterGap` and
-  `SpectralIntervalExteriorGap` take raw partial maps. Four predicates collapsed
-  to two (`UnboundedSylvesterGapPMap` and `UnboundedIntervalExteriorGapPMap` had
-  become verbatim copies), and six duplicate `trial*`/`complement*` constructors
-  to three. `realSpectrum_eq_spectraSpectrum` and
-  `mem_realResolventSet_iff_mem_spectraResolvent` moved with them.
-* **Step 2 — the Sylvester equation and semibounds.** `SemiboundedBelow`,
-  `SemiboundedAbove`, `ClosedSylvesterEquation`, `HasClosedSylvesterEquation` and
-  `HasBoundedEverywhereInverse` are gone; consumers name the canonical
-  `TauCeti.LinearPMap` predicates. `equation_toLinearMap` became
-  `SylvesterEquation.equation_of_mem` over raw partial maps.
+Bottom-up, one predicate or definition family per commit: retype the definition,
+`lake build`, and at every `Application type mismatch ... but is expected to have
+type ?m →ₗ.[?m] ?m` append `.toLinearPMap` to the reported argument; at every
+`Invalid field` rewrite the projection.  The compiler names file, line and
+column, so a throwaway patcher driven by the build log converges in four to eight
+rebuild rounds per step.  Do **not** keep such a script: it is a one-off, and
 
-## Remaining, in dependency order
+**it is blunt.**  Three failure modes cost real time here:
 
-3. **The producers.** These are what keep the bundle alive downstream, and they
-   are the next commits because every one of them removes adapters rather than
-   adding them:
-   * `selfAdjointSpectralRestriction` (103 uses) is
-     `closedOperatorOfSelfAdjointPMap (LinearPMap.specRestrict hA B hB) _`, so
-     its body is already a partial map. **Retyping it was attempted and reverted
-     on 2026-08-27**, because it is not separable from the two items below it:
-     the sine-theta data records hold its result in a `PartialMap` field, and
-     `semibounded_of_spectrum_subset_Icc` →
-     `exists_boundedRealization_of_spectrum_subset_Icc` → `BoundedRealization`
-     carry the bundle all the way into `SpectralTheory/FormMethod/**`. Do this
-     one *together with* steps 4 and the `BoundedRealization` layer, not before
-     them. Two facts learned there are worth keeping: `selfAdjointSpectralSubspace`
-     and `specRange` are definitionally equal so the retype elaborates, and a
-     consumer that genuinely still needs the bundle can wrap with
-     `closedOperatorOfSelfAdjointPMap`, which is the adapter in the correct
-     direction.
-   * `realSelfAdjointSpectralRestriction` (41), `reducingRestriction` (45),
-     `PartialMap.addBounded` (174), `PartialMap.ofBounded` (121).
-     `(ofBounded A).toLinearPMap = A.toLinearMap.toPMap ⊤` by `rfl` already.
-4. **The unbounded sine-theta core.** `SinTheta/Unbounded/Core.lean` carries both
-   `UnboundedSinThetaData` (bundled) and `UnboundedSinThetaDataPMap` (raw) with
-   conversions in both directions. Migrate the consumers to the raw record and
-   delete the bundled one; this is the single largest reduction in the
-   `SinTheta/**` and `Sources/**` counts.
-5. **Tangent, double-angle and source-facing remnants**, then
-   `Specialized/FreeBeam/**`.
-6. **Delete `DavisKahan/Interop/TauCeti/PartialMap.lean`** — its only export,
-   `PartialMap.ofLinearPMap`, has one consumer,
-   `UnboundedSinThetaDataPMap.toClosed`, which step 4 removes — and then
-   `DavisKahan/SpectralTheory/PartialMap/**` itself.
+* it rewrote `R.toLinearMap` where `R` was a `ContinuousLinearMap`, silently
+  breaking a file with nothing to do with the migration.  Restore that file from
+  git and redo it by hand; do not patch the patch.
+* a regex deleting structure fields by name deleted them from an *unrelated*
+  structure that had fields with the same names.
+* `Invalid field` errors report the column of the receiver and Lean counts
+  codepoints, so matching at the exact column silently does nothing about half
+  the time.  Rewrite the whole reported line instead.
 
-## Size
+Each produced a green-looking edit that broke something else, and each was caught
+only by the next full build.  Also: `lake build Challenge` and
+`lake build DavisKahan.Audits.All` before every commit — neither is in
+`defaultTargets`, and step 1 broke the `Challenge` leaderboard while a fully
+green default build said nothing.
 
-Occurrences of the bundle outside `PartialMapComplexification`, by area, at
-the end of step 2:
+## Size, for calibration
+
+Occurrences of the bundle outside its complexification namespace, by area, at the
+point where steps 1 and 2 were done and step 3 began:
 
 ```text
 SpectralTheory 359   Sources 270   SinTheta 154   Sylvester 123
@@ -119,6 +107,4 @@ Specialized 23   TanTheta 26   DoubleAngle 18   TanTwoTheta 8
 Interop 8   InfiniteDimensional 4   OperatorIdeal 1
 ```
 
-`PartialMapComplexification` (113 further mentions in
-`SpectralTheory/Real/SpectralRestriction.lean`) is a namespace prefix, not the
-carrier; it migrates with step 3.
+Step 3 removed all of them, in one working session.
