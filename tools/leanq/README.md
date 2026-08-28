@@ -504,3 +504,40 @@ src/leanq/lean/decl_index.lean   the metaprogram, run via `lake env lean --run`
 
 The Lean side takes a library root and a file of module names, and is toolchain-agnostic — it
 has been run against Lean 4.31 and 4.32 projects.
+
+### Package-first census ancestry/comparison publisher
+
+`graph-compare-html` is an alternative publisher over the same semantic index used by
+`graph-html`. It is generic over the census schema: zero, one, or many loaded census families can
+be active in the browser. Zero active families shows the union of all loaded census ancestry; one
+shows that formalization's ancestor closure; several families split each package internally by exact
+ancestry-membership subsets.
+
+Root Lake libraries remain persistent compound clusters. Cross-package edges are bundled by package
+pair by default, while package-internal group edges are opt-in. Mathlib boundary declarations can be
+hidden, summarized as one package, grouped by namespace root, or shown as a capped set of high-impact
+boundary declarations.
+
+The graph is also manually arrangeable. With `Arrange by drag` enabled, drag any visible declaration
+or module cluster to move it inside its package and immediately reroute its incident edges. Drag a
+package header to move that whole package and all visible contents. Drag empty canvas to pan. Manual
+positions survive zooming, package expansion/collapse, and family changes when the same visible node
+still exists. `Reset moved` returns the graph to automatic placement; the inspector can reset one
+node or package independently.
+
+```bash
+leanq graph-compare-html \
+  build/leanq/project-semantic-graph.json \
+  --census dev/davis-kahan-1970-full-source-census.json \
+  --census dev/yu-wang-samworth-2015-full-source-census.json \
+  --census dev/quench-2026-full-source-census.json \
+  --boundary headline \
+  --family 'Davis–Kahan' \
+  --family 'Quench' \
+  --out build/leanq/proof-comparison.html
+```
+
+`--family` is repeatable and chooses only the initial active set. Omitting it starts with zero active
+families and the all-census ancestry union. A census can provide a stable generic display family with
+`{"presentation": {"family": "My Formalization"}, ...}` or top-level `family`; filename inference is
+only a fallback.

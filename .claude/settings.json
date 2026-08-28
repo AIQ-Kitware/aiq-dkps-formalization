@@ -1,7 +1,4 @@
 {
-  "enabledPlugins": {
-    "mathlib-quality@mathlib-quality-plugins": true
-  },
   "hooks": {
     "PostToolUse": [
       {
@@ -14,5 +11,8 @@
         ]
       }
     ]
+  },
+  "enabledPlugins": {
+    "mathlib-quality@mathlib-quality-plugins": false
   }
 }

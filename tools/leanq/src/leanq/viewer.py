@@ -11,6 +11,7 @@ from pathlib import Path
 _GRAPH_TEMPLATE = "assets/viewer.html"
 _HEADLINE_TEMPLATE = "assets/headline_viewer.html"
 _PROJECT_EXPLORER_TEMPLATE = "assets/project_explorer.html"
+_COMPARISON_TEMPLATE = "assets/comparison_viewer.html"
 
 
 def _safe_json_for_script(payload: dict) -> str:
@@ -58,6 +59,22 @@ def render_graph_html(payload: dict, *, title: str | None = None) -> str:
         "__LEANQ_TITLE__", html.escape(_display_title(payload, title))
     ).replace("__LEANQ_DATA__", _safe_json_for_script(payload))
 
+
+
+def render_comparison_html(payload: dict, *, title: str | None = None) -> str:
+    """Render the generic package-first census ancestry/comparison publisher."""
+    template = files("leanq").joinpath(_COMPARISON_TEMPLATE).read_text(encoding="utf-8")
+    display_title = title or "Proof dependency comparison"
+    return template.replace(
+        "__LEANQ_TITLE__", html.escape(display_title)
+    ).replace("__LEANQ_DATA__", _safe_json_for_script(payload))
+
+
+def write_comparison_html(path: Path, payload: dict, *, title: str | None = None) -> Path:
+    """Write the generic package-first comparison publisher."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(render_comparison_html(payload, title=title), encoding="utf-8")
+    return path
 
 def write_graph_html(path: Path, payload: dict, *, title: str | None = None) -> Path:
     """Write a standalone graph viewer, creating parent directories as needed."""

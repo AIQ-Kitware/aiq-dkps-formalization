@@ -36,7 +36,7 @@ from .graph import (
 )
 from .presentation import build_presentation, load_presentation
 from .headlines import analyze_headlines, prepare_project_explorer
-from .viewer import write_graph_html
+from .viewer import write_comparison_html, write_graph_html
 from .project import ProjectError, find_project
 from .promotion import DEFAULT_TAGS, promotion_report
 
@@ -560,6 +560,94 @@ def cmd_graph_html(args) -> int:
     return 0
 
 
+def _compact_comparison_payload(payload: dict) -> dict:
+    """Keep exactly the union of all loaded census-claim dependency closures."""
+    nodes = list(payload.get("nodes") or ())
+    edges = list(payload.get("edges") or ())
+    by_name = {row.get("id"): row for row in nodes if row.get("id")}
+    analysis = payload.get("headlineAnalysis") or {}
+    seeds: list[str] = []
+    for claim in analysis.get("claims") or ():
+        rows = claim.get("leafDeclarations") or claim.get("canonicalDeclarations") or ()
+        for name in rows:
+            if name in by_name and name not in seeds:
+                seeds.append(name)
+    if not seeds:
+        return payload
+    incoming: dict[str, list[str]] = collections.defaultdict(list)
+    for edge in edges:
+        source, target = edge.get("source"), edge.get("target")
+        if source in by_name and target in by_name:
+            incoming[target].append(source)
+    keep = set(seeds)
+    queue = list(seeds)
+    for name in queue:
+        for dependency in incoming.get(name, ()):
+            if dependency not in keep:
+                keep.add(dependency)
+                queue.append(dependency)
+    result = dict(payload)
+    result["nodes"] = [row for row in nodes if row.get("id") in keep]
+    result["edges"] = [
+        row for row in edges
+        if row.get("source") in keep and row.get("target") in keep
+    ]
+    result["nodeCount"] = len(result["nodes"])
+    result["edgeCount"] = len(result["edges"])
+    result["comparisonScope"] = {
+        "kind": "loaded-census-claim-union",
+        "seedDeclarationCount": len(seeds),
+        "declarationCount": len(result["nodes"]),
+        "edgeCount": len(result["edges"]),
+    }
+    boundary = result.get("boundary")
+    if isinstance(boundary, dict):
+        boundary = dict(boundary)
+        boundary_library = boundary.get("library", "Mathlib")
+        boundary_ids = {
+            row.get("id") for row in result["nodes"]
+            if row.get("library") == boundary_library
+        }
+        boundary["declarationCount"] = len(boundary_ids)
+        boundary["edgeCount"] = sum(
+            row.get("source") in boundary_ids for row in result["edges"]
+        )
+        result["boundary"] = boundary
+    return result
+
+
+@profile
+def cmd_graph_compare_html(args) -> int:
+    """Render the package-first generic census ancestry/comparison publisher."""
+    payload = _read_json_object(Path(args.input))
+    census_paths = [Path(path) for path in (getattr(args, "census", None) or ())]
+    if payload.get("payloadKind") == "semantic-index":
+        if not census_paths:
+            raise ProjectError("graph-compare-html needs --census with a semantic index")
+        payload = prepare_project_explorer(
+            payload,
+            census_paths=census_paths,
+            importances=getattr(args, "importance", None) or ["headline"],
+            targets=getattr(args, "target", None) or (),
+            default_claims=list(getattr(args, "default_claim", None) or ()),
+            boundary=getattr(args, "boundary", None) or "none",
+            foundations=(Path(args.foundations) if getattr(args, "foundations", None) else None),
+        )
+    if payload.get("payloadKind") not in {"project-explorer", "headline-dependencies"}:
+        raise ProjectError(
+            "graph-compare-html needs a semantic index plus censuses, or a saved explorer payload"
+        )
+    payload = _compact_comparison_payload(dict(payload))
+    payload["comparisonPublisher"] = {
+        "initialFamilies": list(dict.fromkeys(getattr(args, "family", None) or ())),
+        "overlayFamily": getattr(args, "overlay_family", None),
+    }
+    out = Path(args.out)
+    write_comparison_html(out, payload, title=args.title)
+    print(out)
+    return 0
+
+
 @profile
 def cmd_graph(args) -> int:
     """Exact project-local declaration graph and optional interactive viewer."""
@@ -997,6 +1085,54 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument("--out", required=True, help="write the self-contained HTML here")
     p.add_argument("--title", help="override the HTML title")
     p.set_defaults(func=cmd_graph_html)
+
+    p = sub.add_parser(
+        "graph-compare-html",
+        help=(
+            "render a package-first generic comparison of census theorem ancestry "
+            "without Lean"
+        ),
+    )
+    add_common(p)
+    p.add_argument("input", help="semantic-index JSON or saved project-explorer JSON")
+    p.add_argument(
+        "--census", action="append",
+        help="annotate a semantic index with census landmarks (repeatable)",
+    )
+    p.add_argument(
+        "--importance", action="append",
+        help="census importance to include (repeatable; default: headline)",
+    )
+    p.add_argument(
+        "--target", action="append",
+        help="optional downstream target annotation for census landmarks",
+    )
+    p.add_argument(
+        "--default-claim", action="append",
+        help="census claim id selected when the viewer loads (repeatable)",
+    )
+    p.add_argument(
+        "--boundary", choices=("none", "headline", "project"), default="none",
+        help="embed the external Mathlib/Lean boundary: none, headline closure, or whole project",
+    )
+    p.add_argument(
+        "--foundations",
+        help="CSV with `module` and `theory_id` columns used to label mathematical foundations",
+    )
+    p.add_argument(
+        "--family", action="append",
+        help=(
+            "initial active census family (repeatable). With none, the viewer starts "
+            "on the union of all loaded census ancestry"
+        ),
+    )
+    p.add_argument(
+        "--overlay-family",
+        help="optional census family whose ancestry is highlighted but not compared",
+    )
+    p.add_argument("--out", required=True, help="write the self-contained HTML here")
+    p.add_argument("--title", help="override the HTML title")
+    p.set_defaults(func=cmd_graph_compare_html)
 
     p = sub.add_parser(
         "graph",
