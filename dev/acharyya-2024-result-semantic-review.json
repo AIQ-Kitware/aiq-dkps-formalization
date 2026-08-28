@@ -349,8 +349,8 @@
       "source_kind": "theorem",
       "title": "Dissimilarity concentration under the covariance-trace rate",
       "importance": "headline",
-      "verdict": "GAP only a specialization is formalized",
-      "literal_source_covered": false,
+      "verdict": "PASS",
+      "literal_source_covered": true,
       "source_claim": "If (1/m) sum_j gamma_ij / r tends to zero for every fixed model, then the empirical dissimilarity matrix converges in Frobenius norm in probability to Delta^(infinity).",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -362,9 +362,13 @@
       "lean_declarations": [
         "Acharyya2024.Consistency.growing_queries_dissimilarity_converges",
         "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma",
+        "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_replicates",
         "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment",
         "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment_growing",
+        "Acharyya2024.Probability.eventually_integral_norm_sq_le_sum_gamma",
+        "Acharyya2024.SecondMoment.integrable_norm_sq_of_coord",
         "Acharyya2024.SecondMoment.integral_norm_sq_eq_sum_query",
+        "Acharyya2024.SecondMoment.integral_norm_sq_matrix_le_sum_row_bounds",
         "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean",
         "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound"
       ],
@@ -386,14 +390,18 @@
           "lean_clause": "integral_norm_sq_eq_sum_query: the Frobenius second moment of a response matrix is the sum over queries of the per-query trace-covariance, so the gamma consumed is the paper's.",
           "relation": "derived_by_composition",
           "note": "The passage from that definition to the sample-mean bound is the source's Appendix A.2 and is compiled separately, not threaded into one endpoint."
+        },
+        {
+          "source_clause": "Let Sigma_ij = cov[g(f_i(q_j)_k)] and gamma_ij = trace(Sigma_ij)  (Appendix A.2)",
+          "lean_clause": "dissimilarity_convergesInProbability_of_replicates takes the replicates themselves and derives the sample-mean second-moment bound, via SecondMoment.integral_norm_sq_matrix_le_sum_row_bounds",
+          "relation": "exact",
+          "note": "The bound is obtained one query at a time and summed over the rows of the response matrix. The row split is an identity, so responses to different queries are never required to be independent; only the replicates of a fixed query are, which is what 'g(f_i(q_j)_k) ~iid F_ij' says. The second-moment bound is no longer an input to the theorem."
         }
       ],
-      "review": "The finite-dimensional Chebyshev/second-moment mechanism and gamma/r sample-mean bound are compiled. The theorem with query dimension m itself growing with r is not assembled; the growing-query consistency layer accepts the resulting sampling convergence as a hypothesis.",
-      "notes": "The probability theorem is mathematically faithful to the concentration mechanism but has fixed type-level response dimension.",
-      "gap_refs": [
-        "growing-query-rate-wiring"
-      ],
-      "next_action": "Thread integral_norm_sq_sampleMean_sub_mean_le_of_bound into the growing-scope theorems so one declaration runs from the paper's iid replicate setup to its conclusion."
+      "review": "The printed theorem is proved from the source's sampling model: replicates, their trace-covariances, and the ((1/m) sum_j gamma_ij)/r condition in; Frobenius convergence in probability out. Appendix A.2 is discharged rather than assumed. The intermediate form that takes the second-moment bound as a hypothesis remains available, and its moment hypothesis is now required only eventually -- at r = 0 the printed rate gamma/r is not a bound on anything.",
+      "notes": "The fixed-m form remains and is what the downstream finite theorems consume.",
+      "gap_refs": [],
+      "next_action": "None."
     },
     {
       "id": "A24-T3",
@@ -658,7 +666,7 @@
           "source_clause": "Let phi_i ~iid P",
           "lean_clause": "the reference models are the coordinates of Measure.infinitePi P, where a point of the model space carries the model together with its response data; integral_absPairErr_eq_of_dissimilarityFactors and measure_absPairErr_sampled_eq are where the iid draw is used, through the law of one coordinate and of a pair of distinct coordinates",
           "relation": "source_repair",
-          "note": "The source writes only that the LATENT vectors phi_i are iid, while leaving the response distributions F_ij attached to the model. The printed conclusion integrates a quantity depending on the estimate, hence on the response data, so it is not defined unless the model is drawn as a complete object. That stronger reading is what is formalized, and it is the minimal one under which the printed display denotes anything."
+          "note": "The source writes only that the LATENT vectors phi_i are iid, while leaving the response distributions F_ij attached to the model. The printed conclusion integrates a quantity depending on the estimate, hence on the response data, so it is not defined unless the model is drawn as a complete object. That stronger reading is what is formalized, and it is the minimal one under which the printed display denotes anything. Augmenting the inner population measure by the response outcome is one repair among possible ones, not demonstrably the minimal one; A24-T5 records the alternative that was not taken."
         },
         {
           "source_clause": "Assume that for all pairs (i, i') in N x N, D_ii' ->P Delta^(infinity)(phi_i, phi_i') as r -> infinity",
@@ -722,8 +730,8 @@
       "source_kind": "theorem",
       "title": "Growing-model pointwise dissimilarity concentration",
       "importance": "headline",
-      "verdict": "GAP only a specialization is formalized",
-      "literal_source_covered": false,
+      "verdict": "PASS",
+      "literal_source_covered": true,
       "source_claim": "When n,m grow with r, the same covariance-trace rate implies pointwise convergence D_ii' -> Delta^(infinity)(phi_i,phi_i') in probability for every fixed pair.",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -736,13 +744,17 @@
         "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
         "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma",
         "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment",
+        "Acharyya2024.Probability.eventually_integral_norm_sq_le_sum_gamma",
         "Acharyya2024.Probability.pairwise_dissimilarity_convergesInProbability_of_gamma",
         "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma",
         "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma_kernel",
         "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma_random",
+        "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_replicates",
         "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing",
         "Acharyya2024.Probability.sourceGammaRate_imp_secondMomentRate",
+        "Acharyya2024.SecondMoment.integrable_norm_sq_of_coord",
         "Acharyya2024.SecondMoment.integral_norm_sq_eq_sum_query",
+        "Acharyya2024.SecondMoment.integral_norm_sq_matrix_le_sum_row_bounds",
         "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound",
         "TauCeti.map_shuffle_prod_compProd",
         "TauCeti.tendsto_measure_compProd_gt_of_ae_tendsto_measure_slice",
@@ -765,13 +777,13 @@
           "source_clause": "if (1/m) sum_j gamma_ij = o(r)",
           "lean_clause": "hgamma, via sourceGammaRate_imp_secondMomentRate",
           "relation": "exact",
-          "note": ""
+          "note": "The bound is indexed by the model, and each model's rate is its own. A single sequence bounding every model in the collection would be a uniformity the source does not state -- the paper attaches (1/m) sum_j gamma_ij to the model i -- and an earlier version of these theorems carried exactly that. It was found in review and removed; the proof uses the hypothesis only at i and i'."
         },
         {
           "source_clause": "Let Sigma_ij be the covariance of the response distribution and gamma_ij = trace(Sigma_ij).",
-          "lean_clause": "integral_norm_sq_eq_sum_query: the Frobenius second moment of a response matrix is the sum over queries of the per-query trace-covariance, so the gamma consumed is the paper's.",
-          "relation": "derived_by_composition",
-          "note": "The passage from that definition to the sample-mean bound is the source's Appendix A.2 and is compiled separately, not threaded into one endpoint."
+          "lean_clause": "pointwise_dissimilarity_convergesInProbability_of_replicates derives the sample-mean second-moment bound from the replicates, via SecondMoment.integral_norm_sq_matrix_le_sum_row_bounds; integral_norm_sq_eq_sum_query is the identity that makes the gamma consumed the paper's",
+          "relation": "exact",
+          "note": "Appendix A.2 is now discharged rather than assumed. The bound is obtained one query at a time and summed over rows, so responses to different queries are never required to be independent."
         },
         {
           "source_clause": "In the setting of Lemma 2 (Theorem 5), where the models phi_i are themselves drawn",
@@ -780,13 +792,10 @@
           "note": "The source's F_ij belong to the model, so a kernel and not a product is the faithful sampling model. The paper's condition is read almost surely in the draw, which is what 'for all i' means once the models are random, and the conditional bad-event probabilities integrate over the draw by domination by 1 (TauCeti.tendsto_measure_compProd_gt_of_ae_tendsto_measure_slice). No bound uniform over the model population is used. TauCeti.map_shuffle_prod_compProd regroups an independent pair of two-stage experiments into one two-stage experiment on the pair, which is what makes the pair form available."
         }
       ],
-      "review": "Lean has the finite-model concentration mechanism, the growing-model pointwise theorem from the source gamma condition with the models fixed, and now the same theorem with the models drawn, which is the form Theorem 5 consumes. What is still assembled from two declarations rather than one is the source's Appendix A.2 passage from the definition of gamma to the sample-mean second-moment bound.",
-      "notes": "The source proof is pointwise in each pair, and the formalization confirms that no uniform-in-n and no uniform-in-model concentration is needed -- neither for the growing model count nor for the passage to a drawn model population.",
-      "gap_refs": [
-        "growing-query-rate-wiring",
-        "growing-n-concentration"
-      ],
-      "next_action": "Thread integral_norm_sq_sampleMean_sub_mean_le_of_bound into the growing-scope theorems so one declaration runs from the paper's iid replicate setup to its conclusion."
+      "review": "The printed theorem is proved from the source's sampling model, with the model count growing, and also in the drawn-model form Theorem 5 consumes. Nothing is shared across the model collection: each model carries its own sum_j gamma_kj and its own rate, and each model's moment bound is required only eventually. Appendix A.2 is discharged rather than assumed.",
+      "notes": "The source proof is pointwise in each pair, and the formalization confirms that no uniform-in-n and no uniform-in-model concentration is needed -- neither for the growing model count, nor for the passage to a drawn model population. An earlier pass asserted the second of these while the fixed-model theorem still imposed one bound on every model index; that hypothesis has been removed, so the assertion is now true of the declarations and not only of the argument.",
+      "gap_refs": [],
+      "next_action": "None."
     },
     {
       "id": "A24-T5",
@@ -810,6 +819,7 @@
         "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile",
         "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
         "Acharyya2024.Consistency.lp_consistency_of_gamma_population",
+        "Acharyya2024.Consistency.lp_consistency_of_replicates_population",
         "Acharyya2024.Consistency.not_unique_min_continuousPointStress",
         "Acharyya2024.Consistency.one_le_continuousPointStress_twoPoint",
         "Acharyya2024.ContinuousMDS.abs_sub_pointStress_le",
@@ -852,10 +862,14 @@
         "Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz",
         "Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension",
         "Acharyya2024.ContinuousMDS.tendsto_pointStress",
+        "Acharyya2024.Probability.eventually_integral_norm_sq_le_sum_gamma",
         "Acharyya2024.Probability.pairwise_dissimilarity_convergesInProbability_of_gamma",
         "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma_kernel",
         "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma_random",
+        "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_replicates",
         "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_random",
+        "Acharyya2024.SecondMoment.integrable_norm_sq_of_coord",
+        "Acharyya2024.SecondMoment.integral_norm_sq_matrix_le_sum_row_bounds",
         "TauCeti.ae_ae_of_forall_ae",
         "TauCeti.integral_doubleSum_pi",
         "TauCeti.integral_prodMk_eval_infinitePi",
@@ -872,13 +886,13 @@
           "source_clause": "In the setting of Lemma 2",
           "lean_clause": "lp_consistency_of_gamma_population draws each model from Pmod and, given it, its response data from a Markov kernel; the model space of Lemma 2 is the model together with its data, and P is the resulting law",
           "relation": "source_repair",
-          "note": "The source's 'phi_i ~iid P' names only the latent vectors, while the response laws F_ij are model-specific. The printed conclusion integrates a quantity depending on the estimate, hence on the response data, so the model must be drawn as a complete object for the display to denote anything. This is the same repair recorded on A24-L2 and it is the only one this theorem adds."
+          "note": "The source's 'phi_i ~iid P' names only the latent vectors, while the response laws F_ij are model-specific. The printed conclusion integrates a quantity depending on the estimate, hence on the response data, so it does not denote anything under a measure carrying only the latent vector: some repair is forced. The repair chosen augments the inner population measure by the response outcome. It is not claimed to be the unique minimal one -- an alternative would keep P on the model space and place a random response field in the outer probability space, which is considerably more cumbersome and is not formalized here. What is recorded is which repaired reading was taken."
         },
         {
           "source_clause": "suppose for all i in N, (1/m) sum_j gamma_ij = o(r)",
           "lean_clause": "the second-moment bound and the o(r) rate, each read for almost every drawn model (hint, hmoment, hgamma)",
           "relation": "exact",
-          "note": "'For all i' with the models random is an almost-sure statement about the draw, and that is how it is taken. No integrated or uniform-in-model version of the condition is assumed: an earlier reading of this row claimed the composition required one, and it does not. The conditional bad-event probabilities lie in [0, 1], so domination by 1 takes the model integral through the limit (TauCeti.tendsto_measure_compProd_gt_of_ae_tendsto_measure_slice)."
+          "note": "'For all i' with the models random is an almost-sure statement about the draw, and that is how it is taken. No integrated or uniform-in-model version of the condition is assumed: an earlier reading of this row claimed the composition required one, and it does not. The conditional bad-event probabilities lie in [0, 1], so domination by 1 takes the model integral through the limit (TauCeti.tendsto_measure_compProd_gt_of_ae_tendsto_measure_slice). The bound is also per model at the fixed-model layer: an earlier pass left one sequence covering every model index there, which was itself a uniformity, and it has been removed."
         },
         {
           "source_clause": "Assumption 2: (1/m)||mu_i - mu_i'|| -> ||phi_i - phi_i'||",
@@ -900,9 +914,9 @@
         },
         {
           "source_clause": "int int | ||psihat_1 - psihat_2|| - ||mds(phi_1) - mds(phi_2)|| |^p P(dphi_1) P(dphi_2) ->P 0",
-          "lean_clause": "ContinuousMDS.lpPairDistErr against the population continuous-MDS map, in probability",
-          "relation": "exact",
-          "note": "P is the population law of a drawn model, not the empirical measure of the sample. The empirical-measure composition lp_consistency_of_gamma_empirical remains and is stronger in one respect: it holds along the full sequence."
+          "lean_clause": "ContinuousMDS.lpPairDistErr against the population continuous-MDS map, in probability, with P the law Pmod (x) kappa of a model together with a realized response-data outcome",
+          "relation": "source_repair",
+          "note": "The paper writes P(dphi_1) P(dphi_2) on the latent/model space. The measure here is the augmented model-and-data law; see the first clause for why some augmentation is forced and why this one is a choice. The empirical-measure composition lp_consistency_of_gamma_empirical remains and is stronger in one respect: it holds along the full sequence."
         },
         {
           "source_clause": "mds(phi), and the standing structure of Lemma 2",
@@ -915,14 +929,18 @@
           "lean_clause": "joint measurability of the estimator is assumed",
           "relation": "lean_stronger_hypothesis",
           "note": "The printed integral needs it to denote anything; it is disclosed rather than hidden."
+        },
+        {
+          "source_clause": "the replicate/gamma assumptions the theorem inherits from Theorem 4",
+          "lean_clause": "lp_consistency_of_replicates_population starts from the sampling model and derives the second-moment bound; lp_consistency_of_gamma_population is the intermediate that takes it",
+          "relation": "exact",
+          "note": "Appendix A.2 is discharged for the drawn model, row by row over its queries."
         }
       ],
-      "review": "The printed theorem is now proved over the population law. The composition the source asserts -- Theorem 4, then Lemma 2 -- needed three passages, and each is a proved theorem rather than an added hypothesis: the conditional bad-event probabilities integrate over the model draw by domination by 1, so no uniformity over the model population is required; a fresh query paired with a drawn reference and two distinct drawn references have the same law P x P, so Theorem 4's conclusion is literally Lemma 2's hypothesis; and the per-index errors have a common mean because the source's D is a statistic of the two models involved. The single repair is in the sampling model: a model is drawn as a complete object, response law included, rather than only its latent vector. The subsequence is independent of the tolerance and the exponent range is wider than printed.",
-      "notes": "The earlier reading of this row -- that the composition needs a uniformity condition over models that the source does not state -- is withdrawn. It was an artifact of routing through an integrated second-moment bound, which does need such a condition; the conditional route does not. pointwise_dissimilarity_convergesInProbability_of_secondMoment_random remains as the integrated-bound form and is not used by this composition.",
-      "gap_refs": [
-        "growing-query-rate-wiring"
-      ],
-      "next_action": "None for the composition. The one assumed step left is the source's Appendix A.2 passage from the definition of gamma to the sample-mean second-moment bound at the growing scope, tracked on A24-T4."
+      "review": "The printed theorem is proved over the population law, from the paper's replicate and gamma assumptions. The composition the source asserts -- Theorem 4, then Lemma 2 -- needed three passages, and each is a proved theorem rather than an added hypothesis: the conditional bad-event probabilities integrate over the model draw by domination by 1, so no uniformity over the model population is required; a fresh query paired with a drawn reference and two distinct drawn references have the same law P x P, so Theorem 4's conclusion is literally Lemma 2's hypothesis; and the per-index errors have a common mean because the source's D is a statistic of the two models involved. The single repair is in the sampling model: the population measure is augmented by the response outcome, because the printed integral does not denote anything without it. That augmentation is a choice among possible repairs and the row says so. The subsequence is independent of the tolerance and the exponent range is wider than printed.",
+      "notes": "The earlier reading of this row -- that the composition needs a uniformity condition over models that the source does not state -- is withdrawn. It was an artifact of routing through an integrated second-moment bound, which does need such a condition; the conditional route does not. pointwise_dissimilarity_convergesInProbability_of_secondMoment_random remains as the integrated-bound form and is not used by this composition. A separate uniformity, one bound covering every model index in the fixed-model Theorem 4, survived that pass and has since been removed.",
+      "gap_refs": [],
+      "next_action": "None."
     },
     {
       "id": "A24-R4",

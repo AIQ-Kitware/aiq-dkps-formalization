@@ -1039,7 +1039,7 @@ theorem lp_consistency_of_gamma_empirical
     (γ : ∀ r, Fin n → Fin (m r) → Real)
     (hγnonneg : ∀ r i j, 0 ≤ γ r i j)
     (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μpop r i‖ ^ 2) P)
-    (hmoment : ∀ r i, ∫ ω, ‖Xbar r ω i - μpop r i‖ ^ 2 ∂P
+    (hmoment : ∀ᶠ r in atTop, ∀ i, ∫ ω, ‖Xbar r ω i - μpop r i‖ ^ 2 ∂P
       ≤ (∑ i', ∑ j, γ r i' j) / (r : Real))
     (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real))
       atTop (𝓝 0))
@@ -1114,7 +1114,7 @@ theorem lp_consistency_of_gamma_ambientLimit
     (γ : ∀ r, Fin n → Fin (m r) → Real)
     (hγnonneg : ∀ r i j, 0 ≤ γ r i j)
     (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μpop r i‖ ^ 2) P)
-    (hmoment : ∀ r i, ∫ ω, ‖Xbar r ω i - μpop r i‖ ^ 2 ∂P
+    (hmoment : ∀ᶠ r in atTop, ∀ i, ∫ ω, ‖Xbar r ω i - μpop r i‖ ^ 2 ∂P
       ≤ (∑ i', ∑ j, γ r i' j) / (r : Real))
     (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real))
       atTop (𝓝 0))
@@ -1283,7 +1283,7 @@ theorem lp_consistency_of_gamma_population
     (hmeasPhi : Measurable phi)
     (hS : ∀ᵐ l ∂Pmod, ∀ r, 0 ≤ S l r)
     (hint : ∀ᵐ l ∂Pmod, ∀ r, Integrable (fun ω => ‖Xbar r (l, ω) - mu r l‖ ^ 2) (κ l))
-    (hmoment : ∀ᵐ l ∂Pmod, ∀ r,
+    (hmoment : ∀ᵐ l ∂Pmod, ∀ᶠ r in atTop,
       ∫ ω, ‖Xbar r (l, ω) - mu r l‖ ^ 2 ∂(κ l) ≤ S l r / (r : Real))
     (hγ : ∀ᵐ l ∂Pmod,
       Tendsto (fun r => ((m r : Real))⁻¹ * S l r / (r : Real)) atTop (𝓝 0))
@@ -1398,5 +1398,91 @@ theorem lp_consistency_of_gamma_population
   have := (ENNReal.tendsto_toReal ENNReal.zero_ne_top).comp (hcomb δ hδ)
   simp only [Function.comp_def, ENNReal.toReal_zero] at this
   exact this.congr fun r => by rw [← hmeasure r]
+
+/--
+**Theorem 5 over the population law, from the source's sampling model.**
+
+`lp_consistency_of_gamma_population` takes the second-moment bound as a hypothesis.  Here it is
+discharged: what is given is the source's sampling model -- for each drawn model, each query, and
+each stage, `r` replicates that are independent for that query and have trace-covariance
+`γ_ij` -- together with the printed rate condition, read for almost every drawn model.  Nothing
+between the replicate assumptions and the `L^p` conclusion is assumed.
+
+Independence is assumed only across the replicates of a fixed query of a fixed model, which is
+what `g(f_i(q_j)_k) ~iid F_ij` says; the responses to different queries are never asked to be
+independent of one another.
+-/
+theorem lp_consistency_of_replicates_population
+    {Lam : Type} [MeasurableSpace Lam]
+    (Pmod : Measure Lam) [IsProbabilityMeasure Pmod]
+    (κ : ProbabilityTheory.Kernel Lam Ω) [ProbabilityTheory.IsMarkovKernel κ]
+    {d qamb pdim : Nat} {p : Real} (hp : 0 < p) (m : Nat → Nat)
+    (Y : ∀ r : Nat, Lam → Fin (m r) → Fin r → Ω → Rvec pdim)
+    (muq : ∀ r : Nat, Lam → Fin (m r) → Rvec pdim)
+    (γ : ∀ r : Nat, Lam → Fin (m r) → Real)
+    (Xbar : ∀ r, Lam × Ω → Mat (m r) pdim) (mu : ∀ r, Lam → Mat (m r) pdim)
+    (phi : Lam → Rvec qamb)
+    (hmeasX : ∀ r, Measurable (Xbar r)) (hmeasMu : ∀ r, Measurable (mu r))
+    (hmeasPhi : Measurable phi)
+    (hXbar : ∀ r l ω (j : Fin (m r)) (c : Fin pdim),
+      Xbar r (l, ω) (j, c) = ((r : Real)⁻¹ • ∑ t, Y r l j t ω) c)
+    (hmu : ∀ r l (j : Fin (m r)) (c : Fin pdim), mu r l (j, c) = muq r l j c)
+    (hγnonneg : ∀ r l j, 0 ≤ γ r l j)
+    (hL2 : ∀ᵐ l ∂Pmod, ∀ r j t, MemLp (Y r l j t) 2 (κ l))
+    (hmean : ∀ᵐ l ∂Pmod, ∀ r j t (c : Fin pdim), ∫ ω, Y r l j t ω c ∂(κ l) = muq r l j c)
+    (hindep : ∀ᵐ l ∂Pmod, ∀ r (j : Fin (m r)), Set.Pairwise (Set.univ : Set (Fin r))
+      fun t t' => ProbabilityTheory.IndepFun (Y r l j t) (Y r l j t') (κ l))
+    (hγbound : ∀ᵐ l ∂Pmod, ∀ r j t,
+      ∫ ω, ‖Y r l j t ω - muq r l j‖ ^ 2 ∂(κ l) ≤ γ r l j)
+    (hintcoord : ∀ᵐ l ∂Pmod, ∀ r (q : Fin (m r) × Fin pdim),
+      Integrable (fun ω => (Xbar r (l, ω) q - mu r l q) ^ 2) (κ l))
+    (hγrate : ∀ᵐ l ∂Pmod,
+      Tendsto (fun r => ((m r : Real))⁻¹ * (∑ j, γ r l j) / (r : Real)) atTop (𝓝 0))
+    (hA2 : ∀ᵐ z ∂((Pmod ⊗ₘ κ).prod (Pmod ⊗ₘ κ)),
+      Tendsto (fun r => ((m r : Real))⁻¹ * ‖mu r z.1.1 - mu r z.2.1‖) atTop
+        (𝓝 ‖phi z.1.1 - phi z.2.1‖))
+    (χ : Lam × Ω → Rvec d) {K : Real} (hχ : Measurable χ) (hχb : ∀ x, ‖χ x‖ ≤ K)
+    (hΔb : ∀ x y : Lam × Ω, |‖phi x.1 - phi y.1‖| ≤ K)
+    (hGb : ∀ (r : Nat) (x y : Lam × Ω),
+      |((m r : Real))⁻¹ * ‖Xbar r x - Xbar r y‖| ≤ K)
+    (χlim : Lam × Ω → Rvec d)
+    (hχlimmin : ∀ x : Lam × Ω, ∀ w : Rvec d,
+      ContinuousMDS.continuousPointStress d (Pmod ⊗ₘ κ) χ (fun y => ‖phi x.1 - phi y.1‖) (χlim x)
+        ≤ ContinuousMDS.continuousPointStress d (Pmod ⊗ₘ κ) χ
+            (fun y => ‖phi x.1 - phi y.1‖) w)
+    (hunique : ∀ x : Lam × Ω, ∀ w : Rvec d,
+      (∀ w' : Rvec d,
+        ContinuousMDS.continuousPointStress d (Pmod ⊗ₘ κ) χ (fun y => ‖phi x.1 - phi y.1‖) w
+          ≤ ContinuousMDS.continuousPointStress d (Pmod ⊗ₘ κ) χ
+              (fun y => ‖phi x.1 - phi y.1‖) w') →
+      w = χlim x)
+    (Ψ : Nat → (Nat → Lam × Ω) → Lam × Ω → Rvec d)
+    (hΨmin : ∀ (r : Nat) (φ : Nat → Lam × Ω) (x : Lam × Ω), ∀ w : Rvec d,
+      ContinuousMDS.pointStress (fun i : Fin (r + 1) => χ (φ i))
+          (fun i : Fin (r + 1) => ((m r : Real))⁻¹ * ‖Xbar r x - Xbar r (φ i)‖) (Ψ r φ x)
+        ≤ ContinuousMDS.pointStress (fun i : Fin (r + 1) => χ (φ i))
+            (fun i : Fin (r + 1) => ((m r : Real))⁻¹ * ‖Xbar r x - Xbar r (φ i)‖) w)
+    (hmeasΨ : ∀ r, Measurable fun z : (Nat → Lam × Ω) × ((Lam × Ω) × (Lam × Ω)) =>
+      ContinuousMDS.pairDiscrepancy d p (Ψ r z.1) χlim z.2) :
+    ∃ ns : Nat → Nat, StrictMono ns ∧ ∀ ε : Real, 0 < ε →
+      Tendsto (fun u => (Measure.infinitePi fun _ : Nat => (Pmod ⊗ₘ κ))
+        {φ | ε < ContinuousMDS.lpPairDistErr d (Pmod ⊗ₘ κ) p (Ψ (ns u) φ) χlim})
+        atTop (𝓝 0) := by
+  refine lp_consistency_of_gamma_population Pmod κ hp m Xbar mu phi
+    (fun l r => ∑ j, γ r l j) hmeasX hmeasMu hmeasPhi
+    (Filter.Eventually.of_forall fun l r => Finset.sum_nonneg fun j _ => hγnonneg r l j)
+    ?_ ?_ hγrate hA2 χ hχ hχb hΔb hGb χlim hχlimmin hunique Ψ hΨmin hmeasΨ
+  · -- integrability of the Frobenius error, from the coordinates
+    filter_upwards [hintcoord] with l hl r
+    exact Acharyya2024.SecondMoment.integrable_norm_sq_of_coord (κ l)
+      (fun ω => Xbar r (l, ω)) (mu r l) (hl r)
+  · -- Appendix A.2 for the drawn model, row by row over its queries
+    filter_upwards [hL2, hmean, hindep, hγbound, hintcoord]
+      with l hL2l hmeanl hindepl hγboundl hintcoordl
+    exact Probability.eventually_integral_norm_sq_le_sum_gamma (κ l) m (fun r => Y r l)
+      (fun r => muq r l) (fun r => γ r l) (fun r ω => Xbar r (l, ω)) (fun r => mu r l)
+      (fun r ω => hXbar r l ω) (fun r => hmu r l) (fun r => hL2l r) (fun r => hmeanl r)
+      (fun r => hindepl r) (fun r => hγboundl r) (fun r => hintcoordl r)
+
 
 end Acharyya2024.Consistency
