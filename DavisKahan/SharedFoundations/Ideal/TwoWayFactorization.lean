@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.InfiniteDimensional.Ideals.Symmetric
 import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
+import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 
 /-!
 # Gauge transport through two-way contraction factorizations
@@ -124,8 +124,8 @@ variable {E F G H : Type u}
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
-/-- Rectangular membership transport through a displayed factorization. -/
-theorem RectangularSymmetricIdealFamily.mem_of_eq_comp_comp
+/-- Membership transport through a displayed rectangular factorization. -/
+theorem SymmetricOperatorIdealFamily.mem_of_eq_comp_comp
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     {A : H →L[𝕜] G} {B : E →L[𝕜] F}
@@ -134,8 +134,8 @@ theorem RectangularSymmetricIdealFamily.mem_of_eq_comp_comp
   rw [hEq]
   exact N.comp_mem L R hB
 
-/-- Rectangular gauge control through a displayed factorization. -/
-theorem RectangularSymmetricIdealFamily.gauge_le_of_eq_comp_comp
+/-- Gauge control through a displayed rectangular factorization. -/
+theorem SymmetricOperatorIdealFamily.gauge_le_of_eq_comp_comp
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     {A : H →L[𝕜] G} {B : E →L[𝕜] F}
@@ -146,7 +146,7 @@ theorem RectangularSymmetricIdealFamily.gauge_le_of_eq_comp_comp
   exact N.gaugeReal_comp_le L R hB
 
 /-- A rectangular contraction factorization does not increase the gauge. -/
-theorem RectangularSymmetricIdealFamily.gauge_le_of_contraction_factorization
+theorem SymmetricOperatorIdealFamily.gauge_le_of_contraction_factorization
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, u} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     {A : H →L[𝕜] G} {B : E →L[𝕜] F}
@@ -154,7 +154,7 @@ theorem RectangularSymmetricIdealFamily.gauge_le_of_contraction_factorization
     (hB : N.Mem B) (hEq : A = L ∘L B ∘L R)
     (hL : ‖L‖ ≤ 1) (hR : ‖R‖ ≤ 1) :
     N.gaugeReal A ≤ N.gaugeReal B := by
-  have hraw := RectangularSymmetricIdealFamily.gauge_le_of_eq_comp_comp N L R hB hEq
+  have hraw := SymmetricOperatorIdealFamily.gauge_le_of_eq_comp_comp N L R hB hEq
   have hnonneg := N.gaugeReal_nonneg hB
   calc
     N.gaugeReal A ≤ ‖L‖ * N.gaugeReal B * ‖R‖ := hraw

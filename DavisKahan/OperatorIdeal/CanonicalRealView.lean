@@ -16,8 +16,8 @@ paper's constants are real, and the proofs run on `linarith`, `nlinarith` and
 `mul_le_mul_of_nonneg_*`, none of which work over `ℝ≥0∞`.
 
 This file supplies the missing `ℝ` view, so that migrating a theorem off the
-historical `RectangularSymmetricIdealFamily` record is a **retype and not a
-re-proof**.
+historical free-data record — a membership predicate plus a real gauge, since
+retired — is a **retype and not a re-proof**.
 
 ## Why this file exists at all
 
@@ -39,8 +39,7 @@ a separate and genuinely optional decision.
 ## Where the `ℝ≥0∞` arithmetic lives
 
 Phase C stated every lemma here over `gaugeReal`/`Mem` but *proved* it through the
-historical `RectangularSymmetricIdealFamily` record, so that retyping the tree cost no
-proof work.  Phase D paid that debt: every proof below now runs on the canonical laws
+historical record, so that retyping the tree cost no proof work.  Phase D paid that debt: every proof below now runs on the canonical laws
 directly, and this file no longer imports the adapter.
 
 The design point is where the bill landed.  Turning an `ℝ≥0∞` law into an `ℝ` one needs

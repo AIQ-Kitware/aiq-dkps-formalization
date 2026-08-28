@@ -4,16 +4,16 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
-import DavisKahan.OperatorIdeal.UnitarilyInvariant.RectangularFamily
+import ForTauCeti.Analysis.OperatorIdeal.Family.OperatorNorm
 import DavisKahan.OperatorIdeal.CanonicalRealView
 import Mathlib.MeasureTheory.Integral.Bochner.ContinuousLinearMap
 
 /-!
 # Banach spaces carried by rectangular symmetric ideals
 
-A `RectangularSymmetricIdealFamily` already contains exactly the analytic data
-needed to regard its members as a Banach space in the ideal gauge.  This file
-packages that observation once and for all.
+A complete `TauCeti.SymmetricOperatorIdealFamily` already contains exactly the
+analytic data needed to regard its members as a Banach space in the ideal gauge.
+This file packages that observation once and for all.
 
 The resulting type has three uses.
 
