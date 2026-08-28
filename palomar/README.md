@@ -10,14 +10,18 @@ configuration, metadata and wrapper skeleton live here.
 
 ## Prepared entries
 
-| entry | Challenge | Solution | compared theorem | status |
-| --- | --- | --- | --- | --- |
-| `yws-2015` | `Palomar/YuWangSamworth2015/Challenge.lean` | `Palomar/YuWangSamworth2015/Solution.lean` | `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap` | locally verified |
+| entry | source result | compared theorem | status |
+| --- | --- | --- | --- |
+| `yws-2015` | Yu–Wang–Samworth 2015, Theorem 2, first conclusion | `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap` | locally verified |
+| `dk-1970` | Davis–Kahan 1970, operator-norm sin-Θ | `TauCeti.norm_starProjection_comp_starProjection_le` | locally verified |
 
-Status words mean what they say. *Locally verified* means the Challenge builds,
-the Solution supplies the compared declaration with a matching type, and its axiom
-closure is exactly `propext`, `Quot.sound`, `Classical.choice`. It does not mean
-Palomar has seen it.
+Each entry's Lean sources are `Palomar/<Name>/{Challenge,Solution}.lean`.
+
+Status words mean what they say. *Locally verified* means the Challenge builds and
+its transitive import closure reaches nothing in this repository, the Solution
+supplies the compared declaration with a matching universe signature and full type,
+and its axiom closure is exactly `propext`, `Quot.sound`, `Classical.choice`. It
+does not mean Palomar has seen it, and it is not acceptance.
 
 ## How an entry is built
 
@@ -36,9 +40,9 @@ libraries. It is not a Palomar submission surface and must not be used as one.
 
 ```bash
 lake build Palomar
-python3 scripts/check_comparator_signatures.py --no-build palomar/yws-2015/comparator.json
-python3 scripts/check_palomar_readiness.py
-scripts/verify_palomar.sh yws-2015          # real Comparator + NanoDa
+python3 scripts/check_palomar_readiness.py --with-axioms
+scripts/verify_palomar.sh                   # every entry, all four stages
+scripts/verify_palomar.sh dk-1970           # one entry
 ```
 
 ## Submitting
