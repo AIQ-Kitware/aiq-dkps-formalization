@@ -1,3 +1,12 @@
+> **CAMPAIGN COMPLETE — 2026-08-27 (Claude Opus 5).**
+>
+> All nine tasks below are done.  `DavisKahan/Frontier/`, `DavisKahan/MathAhead/`,
+> `DavisKahan/Experimental/MathAhead/` and `DavisKahan/Experimental/InfiniteDimensional/`
+> are deleted; no production declaration lives in a `Frontier` namespace; the
+> frontier audit tooling is retired.  Everything below is the handoff as written,
+> kept unedited as the record of what was asked; read the Git log from `270239ac`
+> for what was done, one commit per lane.
+
 You are taking over a Davis–Kahan cleanup and promotion campaign in
 aiq-dkps-formalization.
 
