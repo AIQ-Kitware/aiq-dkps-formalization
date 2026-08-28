@@ -80,12 +80,19 @@ having migrated consumers first.
    are the next commits because every one of them removes adapters rather than
    adding them:
    * `selfAdjointSpectralRestriction` (103 uses) is
-     `closedOperatorOfSelfAdjointPMap (LinearPMap.specRestrict hA B hB) _`, so it
-     is a *duplicate* of `specRestrict` and should be deleted rather than
-     retyped. Check first that `selfAdjointSpectralSubspace` and `specRange`
-     agree as types at the call sites — they are definitionally equal (that is
-     why the current definition elaborates), but `simp` and instance search key
-     on the syntactic head.
+     `closedOperatorOfSelfAdjointPMap (LinearPMap.specRestrict hA B hB) _`, so
+     its body is already a partial map. **Retyping it was attempted and reverted
+     on 2026-08-27**, because it is not separable from the two items below it:
+     the sine-theta data records hold its result in a `ClosedOperator` field, and
+     `semibounded_of_spectrum_subset_Icc` →
+     `exists_boundedRealization_of_spectrum_subset_Icc` → `BoundedRealization`
+     carry the bundle all the way into `SpectralTheory/FormMethod/**`. Do this
+     one *together with* steps 4 and the `BoundedRealization` layer, not before
+     them. Two facts learned there are worth keeping: `selfAdjointSpectralSubspace`
+     and `specRange` are definitionally equal so the retype elaborates, and a
+     consumer that genuinely still needs the bundle can wrap with
+     `closedOperatorOfSelfAdjointPMap`, which is the adapter in the correct
+     direction.
    * `realSelfAdjointSpectralRestriction` (41), `reducingRestriction` (45),
      `ClosedOperator.addBounded` (174), `ClosedOperator.ofBounded` (121).
      `(ofBounded A).toLinearPMap = A.toLinearMap.toPMap ⊤` by `rfl` already.
