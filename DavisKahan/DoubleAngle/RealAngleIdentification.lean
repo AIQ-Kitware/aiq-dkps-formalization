@@ -170,8 +170,8 @@ theorem sinTwoTheta_reflectionResidual_opNorm_real
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA S hS)
-      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ)
+      (realSelfAdjointSpectralRestriction A hA S hS).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : E) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (A.addBounded R).toLinearMap
@@ -201,8 +201,8 @@ theorem sinTwoTheta_addBounded_opNorm_real
     (T : Set ℝ) (hT : MeasurableSet T)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA S hS)
-      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
+      (realSelfAdjointSpectralRestriction A hA S hS).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ) :
     δ * ‖paperSinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA S hS)
         (realSelfAdjointSpectralSubspace (A.addBounded Eop)

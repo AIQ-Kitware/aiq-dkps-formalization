@@ -349,8 +349,8 @@ theorem unbounded_sinTwoTheta_uiNorm_representative_real
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB)
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
     (hEmem : N.Mem Eop)
     (sinTwoTheta₀ : PaperSinThetaRepresentative
       (sinTwoThetaIdealBlock
@@ -378,8 +378,8 @@ theorem unbounded_sinTwoTheta_uiNorm_representative_real_unequalDimension
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB)
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
     (hEmem : N.Mem Eop)
     (_hStrictDimension :
       Module.rank ℝ (realSelfAdjointSpectralSubspace A hA B hB) <
@@ -410,8 +410,8 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative_real
     (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB)
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (A.addBounded R).toLinearMap
@@ -442,8 +442,8 @@ theorem unbounded_sinTwoTheta_residual_uiNorm_representative_real_unequalDimensi
     (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB)
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (A.addBounded R).toLinearMap
@@ -488,8 +488,8 @@ theorem sinTwoTheta_reflectionResidual_paperUINorm_real
     (V : Submodule ℝ Er) [V.HasOrthogonalProjection]
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB)
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
     (hJdom : ∀ x : A.domain, V.reflectionOperator (x : Er) ∈ A.domain)
     (hJintertwines : ∀ x : A.domain,
       (A.addBounded R).toLinearMap
@@ -523,8 +523,8 @@ theorem sinTwoTheta_addBounded_paperUINorm_real
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB)
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
     (hEmem : N.Mem Eop) :
     N.Mem (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB)

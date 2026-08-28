@@ -48,8 +48,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- A `realSpectrum` interval/exterior hypothesis becomes the spectral
 interval/exterior hypothesis after identifying the two spectra. -/
 theorem sylvesterIntervalExteriorGap_of_realSpectrum
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     {β α δ : ℝ}
     (hgap : RealSpectrumIntervalExteriorGap A B β α δ) :
     SpectralIntervalExteriorGap A B β α δ := by
@@ -58,7 +57,7 @@ theorem sylvesterIntervalExteriorGap_of_realSpectrum
     constructor
     · simpa only [realSpectrum_eq_spectraSpectrum] using hgap.1
     · intro lam hlam hlamSpec
-      have hreal : lam ∈ B.realSpectrum := by
+      have hreal : lam ∈ TauCeti.LinearPMap.realSpectrum B := by
         simpa only [realSpectrum_eq_spectraSpectrum, Set.mem_preimage]
           using hlamSpec
       rcases hgap.2 hreal with hleft | hright
@@ -68,7 +67,7 @@ theorem sylvesterIntervalExteriorGap_of_realSpectrum
     constructor
     · simpa only [realSpectrum_eq_spectraSpectrum] using hgap.1
     · intro lam hlam hlamSpec
-      have hreal : lam ∈ A.realSpectrum := by
+      have hreal : lam ∈ TauCeti.LinearPMap.realSpectrum A := by
         simpa only [realSpectrum_eq_spectraSpectrum, Set.mem_preimage]
           using hlamSpec
       rcases hgap.2 hreal with hleft | hright
@@ -80,8 +79,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 spectral all-gap predicate.  Ordered constructors are intentionally handled by
 their form bounds rather than translated into spectral containments. -/
 theorem SpectralSylvesterGap.intervalExterior_of_formBounded
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     {β α δ : ℝ}
     (hβα : β ≤ α)
     (hgap : RealSpectrumIntervalExteriorGap A B β α δ) :
@@ -100,7 +98,7 @@ theorem davisKahan1970_sylvester_complex
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A B δ)
+    (hgap : FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧
@@ -124,8 +122,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- The spectral interval/exterior configuration is the `realSpectrum` one, since
 `realSpectrum_eq_spectraSpectrum` identifies the two spectra. -/
 theorem realSpectrumIntervalExteriorGap_of_spectral
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
+    {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     {β α δ : ℝ}
     (hgap : SpectralIntervalExteriorGap A B β α δ) :
     RealSpectrumIntervalExteriorGap A B β α δ := by
@@ -167,8 +164,8 @@ theorem formBoundedSylvesterGap_of_spectral
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {δ : ℝ}
-    (hgap : SpectralSylvesterGap A B δ) :
-    FormBoundedSylvesterGap A B δ := by
+    (hgap : SpectralSylvesterGap A.toLinearPMap B.toLinearPMap δ) :
+    FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ := by
   cases hgap with
   | intervalExterior hβα hgap =>
       exact .intervalExterior hβα (realSpectrumIntervalExteriorGap_of_spectral hgap)

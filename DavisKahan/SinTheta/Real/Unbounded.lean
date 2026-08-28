@@ -43,7 +43,7 @@ theorem sinTheta_unbounded_real
     (_hX : IsometricEmbedding D.X)
     (hF₁ : IsometricEmbedding D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
     (hR : N.Mem D.residual) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gauge (D.X.adjoint ∘L D.F₁)
@@ -66,7 +66,7 @@ theorem sinTheta_unbounded_real_block
     (hΛ₁ : D.Λ₁.IsSelfAdjoint)
     (hF₁ : IsometricEmbedding D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
     (hR : N.Mem D.residual) :
     N.Mem (D.X.adjoint ∘L D.F₁) ∧
       δ * N.gauge (D.X.adjoint ∘L D.F₁)
@@ -92,7 +92,7 @@ theorem sinTheta_unbounded_exact_real
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : FormBoundedSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
     (hR : N.Mem D.residual) :
     N.Mem
       ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧

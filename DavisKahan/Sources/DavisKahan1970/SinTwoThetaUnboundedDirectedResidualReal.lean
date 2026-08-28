@@ -106,8 +106,8 @@ theorem sinTwoTheta_unbounded_directedResidual_all_kyFan_real
     (hres : ∀ v : V, A.toLinearMap ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB)
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ) :
+      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ) :
     ∀ k : ℕ,
       δ * kyFanApproximationGauge k
           (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ≤
@@ -206,8 +206,8 @@ theorem sinTwoTheta_unbounded_directedResidual_paperUINorm_real
     (hres : ∀ v : V, A.toLinearMap ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (realSelfAdjointSpectralRestriction A hA B hB)
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap δ)
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ∧
       δ * N.gauge
@@ -250,8 +250,8 @@ theorem sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExter
     (hres : ∀ v : V, A.toLinearMap ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
     (hgap : RealSpectrumIntervalExteriorGap
-      (realSelfAdjointSpectralRestriction A hA B hB)
-      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) β α δ)
+      (realSelfAdjointSpectralRestriction A hA B hB).toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl).toLinearPMap β α δ)
     (hRmem : N.Mem R) :
     N.Mem (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ∧
       δ * N.gauge

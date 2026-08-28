@@ -7,13 +7,12 @@ import DavisKahan.SpectralTheory.ClosedOperator.Basic
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
 
 /-!
-# Closed-operator real spectrum and the Spectra spectrum
+# The real resolvent of a partial map, and the ambient spectrum
 
-The low-level closed-operator API defines the real resolvent without importing
-Spectra, so it remains available over every `RCLike` scalar field.  This file
-identifies its complex specialization with the real spectrum used by Spectra.
-The bridge is intentionally kept above both foundations to avoid an import
-cycle.
+`TauCeti.LinearPMap.realResolventSet` is defined without importing the ambient
+spectral theory, so it remains available over every `RCLike` scalar field.  This
+file identifies its complex specialization with the ambient spectrum.  The
+bridge is intentionally kept above both foundations to avoid an import cycle.
 -/
 
 namespace TauCeti
@@ -37,44 +36,43 @@ resolvent core used the `A - z` convention.  They do describe the same set: the 
 differ by a sign, and negating a bounded two-sided inverse gives a bounded two-sided inverse
 of the negated map.  That negation is the whole content of the proof. -/
 theorem mem_realResolventSet_iff_mem_spectraResolvent
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (lam : ℝ) :
-    lam ∈ A.realResolventSet ↔
-      (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A.toLinearPMap := by
+    (A : E →ₗ.[ℂ] E) (lam : ℝ) :
+    lam ∈ TauCeti.LinearPMap.realResolventSet A ↔
+      (lam : ℂ) ∈ TauCeti.LinearPMap.resolventSet A := by
   rw [TauCeti.LinearPMap.mem_realResolventSet_iff, TauCeti.LinearPMap.mem_resolventSet_iff]
   constructor
   · rintro ⟨R, hleft, hright⟩
     refine ⟨-R, fun y => neg_mem (hright y).choose, fun y => ?_, fun x => ?_⟩
     · have h := (hright y).choose_spec
-      have hneg : A.toLinearPMap
-            (⟨(-R) y, neg_mem (hright y).choose⟩ : A.toLinearPMap.domain)
-          = -(A.toLinearPMap ⟨R y, (hright y).choose⟩) :=
-        _root_.LinearPMap.map_neg A.toLinearPMap ⟨R y, (hright y).choose⟩
+      have hneg : A
+            (⟨(-R) y, neg_mem (hright y).choose⟩ : A.domain)
+          = -(A ⟨R y, (hright y).choose⟩) :=
+        _root_.LinearPMap.map_neg A ⟨R y, (hright y).choose⟩
       rw [hneg]
       simp only [_root_.neg_apply]
       linear_combination (norm := module) h
     · have h := hleft x
-      have harg : (lam : ℂ) • (x : E) - A.toLinearPMap x
-          = -(A.toLinearPMap x - (lam : ℂ) • (x : E)) := by module
+      have harg : (lam : ℂ) • (x : E) - A x
+          = -(A x - (lam : ℂ) • (x : E)) := by module
       simp only [_root_.neg_apply, harg, map_neg, neg_neg]
       exact h
   · rintro ⟨R, hR⟩
     refine ⟨-R, fun x => ?_, fun y => ?_⟩
     · -- the scalar is abstracted so that the `RCLike` coercion of `realResolventSet` and the
       -- `ℂ` coercion of `IsResolventAt`, which are defeq but not syntactically equal, unify
-      have hstep : ∀ c : ℂ, R (c • (x : E) - A.toLinearPMap x) = (x : E) →
-          (-R) (A.toLinearPMap x - c • (x : E)) = (x : E) := by
+      have hstep : ∀ c : ℂ, R (c • (x : E) - A x) = (x : E) →
+          (-R) (A x - c • (x : E)) = (x : E) := by
         intro c hc
-        have harg : A.toLinearPMap x - c • (x : E)
-            = -(c • (x : E) - A.toLinearPMap x) := by module
+        have harg : A x - c • (x : E)
+            = -(c • (x : E) - A x) := by module
         rw [_root_.neg_apply, harg, map_neg, hc, neg_neg]
       exact hstep _ (hR.apply_smul_sub x)
     · refine ⟨neg_mem (hR.mem_domain y), ?_⟩
       have h := hR.smul_sub_apply y
-      have hneg : A.toLinearPMap
-            (⟨(-R) y, neg_mem (hR.mem_domain y)⟩ : A.toLinearPMap.domain)
-          = -(A.toLinearPMap ⟨R y, hR.mem_domain y⟩) :=
-        _root_.LinearPMap.map_neg A.toLinearPMap ⟨R y, hR.mem_domain y⟩
+      have hneg : A
+            (⟨(-R) y, neg_mem (hR.mem_domain y)⟩ : A.domain)
+          = -(A ⟨R y, hR.mem_domain y⟩) :=
+        _root_.LinearPMap.map_neg A ⟨R y, hR.mem_domain y⟩
       rw [hneg]
       simp only [_root_.neg_apply]
       linear_combination (norm := module) h
@@ -85,10 +83,9 @@ after specializing the scalar field to `ℂ`.
 
 Complementation of `mem_realResolventSet_iff_mem_spectraResolvent`; like it, this was a
 `rfl` only under the `A - z` convention. -/
-theorem realSpectrum_eq_spectraSpectrum
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E)) :
-    A.realSpectrum
-      = Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap := by
+theorem realSpectrum_eq_spectraSpectrum (A : E →ₗ.[ℂ] E) :
+    TauCeti.LinearPMap.realSpectrum A
+      = Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A := by
   ext lam
   rw [Set.mem_preimage, TauCeti.LinearPMap.mem_spectrum_iff,
     TauCeti.LinearPMap.mem_realSpectrum_iff,

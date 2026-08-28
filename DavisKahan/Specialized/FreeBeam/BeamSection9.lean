@@ -783,7 +783,7 @@ theorem beamOperator_mem_resolventSet_of_mem_lowSet_diff {lam : ℝ}
   -- canonical `resolventSet` inverts `lam • I - A`.  The two agree, but only through the
   -- bridge -- this step used to be `fun hr => hcon hr` by definitional unfolding.
   have hmem : lam ∈ beamOperator.realSpectrum := fun hr =>
-    hcon ((mem_realResolventSet_iff_mem_spectraResolvent beamOperator lam).mp hr)
+    hcon ((mem_realResolventSet_iff_mem_spectraResolvent beamOperator.toLinearPMap lam).mp hr)
   rcases realSpectrum_beamOperator_subset_sharp hmem with h0 | hgt
   · exact hlam.2 h0
   · have hle : lam ≤ (1001 : ℝ) / 2 := hlam.1

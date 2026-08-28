@@ -44,11 +44,11 @@ theorem sinTheta_bounded_spectralSubspace_of_spectrumGap
     (X : F →L[ℂ] E) (hX : IsometricEmbedding X)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectralSylvesterGap
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0).toLinearPMap
       (selfAdjointSpectralRestriction
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-        Sᶜ hS.compl) δ)
+        Sᶜ hS.compl).toLinearPMap δ)
     (hR : N.Mem
       (generalResidual A X A0)) :
     N.Mem
@@ -95,11 +95,11 @@ theorem generalizedSinTheta_bounded_spectralSubspace_of_spectrumGap
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
     (hgap : SpectralSylvesterGap
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0).toLinearPMap
       (selfAdjointSpectralRestriction
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-        Sᶜ hS.compl) δ)
+        Sᶜ hS.compl).toLinearPMap δ)
     (hR : N.Mem
       (generalResidual A X A0)) :
     N.Mem
@@ -147,11 +147,11 @@ theorem sinTheta_bounded_real_spectralSubspace
     (X : F →L[ℝ] E) (hX : IsometricEmbedding X)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0).toLinearPMap
       (realSelfAdjointSpectralRestriction
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-        Sᶜ hS.compl) δ)
+        Sᶜ hS.compl).toLinearPMap δ)
     (hR : N.Mem
       (generalResidual A X A0)) :
     N.Mem
@@ -199,11 +199,11 @@ theorem generalizedSinTheta_bounded_real_spectralSubspace
     {δ ε : ℝ} (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound X ε)
     (hgap : FormBoundedSylvesterGap
-      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0)
+      (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A0).toLinearPMap
       (realSelfAdjointSpectralRestriction
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded A)
         (TauCeti.DavisKahanExt.ClosedOperator.ofBounded_isSelfAdjoint A hA)
-        Sᶜ hS.compl) δ)
+        Sᶜ hS.compl).toLinearPMap δ)
     (hR : N.Mem
       (generalResidual A X A0)) :
     N.Mem

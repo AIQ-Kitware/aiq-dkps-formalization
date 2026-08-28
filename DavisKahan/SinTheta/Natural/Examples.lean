@@ -48,8 +48,8 @@ example
     (hReq : ∀ x : A0.domain,
       A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectralSylvesterGap A0
-      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
+    (hgap : SpectralSylvesterGap A0.toLinearPMap
+      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ) :
     δ * ‖(ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
           (selfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X‖ ≤
@@ -72,8 +72,8 @@ example
     (hReq : ∀ x : A0.domain,
       A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectralSylvesterGap A0
-      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
+    (hgap : SpectralSylvesterGap A0.toLinearPMap
+      (selfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ) :
     δ * kyFanApproximationGauge 2
         ((ContinuousLinearMap.id ℂ E -
           selfAdjointSpectralSubspaceInclusion A hA S hS ∘L
@@ -105,8 +105,8 @@ example
     (hReq : ∀ x : A0.domain,
       A.toLinearMap ⟨X (x : F), hXdom x⟩ - X (A0.toLinearMap x) = Rop (x : F))
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : FormBoundedSylvesterGap A0
-      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
+    (hgap : FormBoundedSylvesterGap A0.toLinearPMap
+      (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl).toLinearPMap δ) :
     δ * ‖(ContinuousLinearMap.id ℝ E -
         realSelfAdjointSpectralSubspaceInclusion A hA S hS ∘L
           (realSelfAdjointSpectralSubspaceInclusion A hA S hS).adjoint) ∘L X‖ ≤
@@ -135,9 +135,9 @@ example
     (X : F →L[ℂ] E) (hX : IsometricEmbedding X)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SpectralSylvesterGap
-      (ClosedOperator.ofBounded A0)
+      (ClosedOperator.ofBounded A0).toLinearPMap
       (selfAdjointSpectralRestriction (ClosedOperator.ofBounded A)
-        (ClosedOperator.ofBounded_isSelfAdjoint A hA) Sᶜ hS.compl) δ) :
+        (ClosedOperator.ofBounded_isSelfAdjoint A hA) Sᶜ hS.compl).toLinearPMap δ) :
     δ * ‖(ContinuousLinearMap.id ℂ E -
         selfAdjointSpectralSubspaceInclusion (ClosedOperator.ofBounded A)
           (ClosedOperator.ofBounded_isSelfAdjoint A hA) S hS ∘L
@@ -203,8 +203,8 @@ theorem realPlane_zeroResidual_model :
     have hx : x = 0 := Subtype.ext (Subtype.ext hzero)
     rw [hx]
     simp
-  have hgap : FormBoundedSylvesterGap A0
-      (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal) 1 := by
+  have hgap : FormBoundedSylvesterGap A0.toLinearPMap
+      (ClosedOperator.reducingRestriction A Uᗮ hred.orthogonal).toLinearPMap 1 := by
     exact FormBoundedSylvesterGap.trialBelow_complementAbove hA0upper
       (by simpa using hcompLower)
   apply sinTheta_unbounded_real_reducingSubspace

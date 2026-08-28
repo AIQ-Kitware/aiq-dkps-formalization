@@ -58,17 +58,16 @@ definition (`SylvesterIntervalExteriorGap` and `SpectralIntervalExteriorGap`).  
 — neither may import the other, since `SinTheta -> Sylvester` is the only permitted direction —
 so the single surviving definition has to live in the module they share. -/
 def SpectralIntervalExteriorGap
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F)
     (β α δ : ℝ) : Prop :=
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
         Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B.toLinearPMap) ∨
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B) ∨
+  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
         Set.Icc β α ∧
     ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A.toLinearPMap)
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
 
 end ExactSinTheta
 

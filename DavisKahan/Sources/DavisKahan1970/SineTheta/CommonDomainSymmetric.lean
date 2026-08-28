@@ -146,13 +146,13 @@ structure PaperCommonDomainSymmetricSinThetaProblem
   gap_pos : 0 < gap
   /-- First application of the one-sided sine theorem. -/
   gap_U_to_Vperp : FormBoundedSylvesterGap
-    (ClosedOperator.reducingRestriction A U reduces_A_U)
-    (ClosedOperator.reducingRestriction B Vᗮ reduces_B_V.orthogonal)
+    (ClosedOperator.reducingRestriction A U reduces_A_U).toLinearPMap
+    (ClosedOperator.reducingRestriction B Vᗮ reduces_B_V.orthogonal).toLinearPMap
     gap
   /-- Second application, with `A` and `B` interchanged. -/
   gap_V_to_Uperp : FormBoundedSylvesterGap
-    (ClosedOperator.reducingRestriction B V reduces_B_V)
-    (ClosedOperator.reducingRestriction A Uᗮ reduces_A_U.orthogonal)
+    (ClosedOperator.reducingRestriction B V reduces_B_V).toLinearPMap
+    (ClosedOperator.reducingRestriction A Uᗮ reduces_A_U.orthogonal).toLinearPMap
     gap
 
 namespace PaperCommonDomainSymmetricSinThetaProblem

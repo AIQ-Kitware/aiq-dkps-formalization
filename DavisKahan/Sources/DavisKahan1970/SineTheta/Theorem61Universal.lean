@@ -53,7 +53,7 @@ structure PaperTheorem61Data where
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
 
 namespace PaperTheorem61Data
 
@@ -156,7 +156,7 @@ structure PaperIsometricTheoremData where
   gap : ℝ
   gap_pos : 0 < gap
   trial_isometry : IsometricEmbedding data.X
-  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
 
 namespace PaperIsometricTheoremData
 
@@ -223,7 +223,7 @@ structure PaperRealTheorem61Data where
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
 
 namespace PaperRealTheorem61Data
 
@@ -321,7 +321,7 @@ structure PaperRealIsometricTheoremData where
   gap : ℝ
   gap_pos : 0 < gap
   trial_isometry : IsometricEmbedding data.X
-  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
 
 namespace PaperRealIsometricTheoremData
 

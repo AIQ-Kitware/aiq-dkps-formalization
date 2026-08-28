@@ -70,15 +70,15 @@ structure PaperSymmetricSinThetaProblem where
   gap_pos : 0 < gap
   gap_U_to_Vperp : FormBoundedSylvesterGap
     (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded A) U
-      (ClosedOperator.ofBounded_reducesSubspace A U reduces_A_U))
+      (ClosedOperator.ofBounded_reducesSubspace A U reduces_A_U)).toLinearPMap
     (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded B) Vᗮ
-      (ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V).orthogonal)
+      (ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V).orthogonal).toLinearPMap
     gap
   gap_V_to_Uperp : FormBoundedSylvesterGap
     (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded B) V
-      (ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V))
+      (ClosedOperator.ofBounded_reducesSubspace B V reduces_B_V)).toLinearPMap
     (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded A) Uᗮ
-      (ClosedOperator.ofBounded_reducesSubspace A U reduces_A_U).orthogonal)
+      (ClosedOperator.ofBounded_reducesSubspace A U reduces_A_U).orthogonal).toLinearPMap
     gap
 
 attribute [instance] PaperSymmetricSinThetaProblem.proj_U

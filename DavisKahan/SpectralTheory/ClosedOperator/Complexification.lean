@@ -736,7 +736,7 @@ theorem realSpectrum_complexify
   -- `realSpectrum` inverts `A - lam` while `spectrum` inverts `lam • I - A`, so this is no
   -- longer a definitional identity; `realSpectrum_eq_spectraSpectrum` is the bridge.
   rw [← closed_realSpectrum_complexify A]
-  exact realSpectrum_eq_spectraSpectrum (complexify A)
+  exact realSpectrum_eq_spectraSpectrum (complexify A).toLinearPMap
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Complexification preserves every constructor of the manuscript gap
@@ -744,8 +744,10 @@ predicate. -/
 theorem unboundedSylvesterGap_complexify
     {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E)}
     {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := F)}
-    {δ : ℝ} (hgap : FormBoundedSylvesterGap A B δ) :
-    FormBoundedSylvesterGap (complexify A) (complexify B) δ := by
+    {δ : ℝ}
+    (hgap : FormBoundedSylvesterGap A.toLinearPMap B.toLinearPMap δ) :
+    FormBoundedSylvesterGap (complexify A).toLinearPMap
+      (complexify B).toLinearPMap δ := by
   cases hgap with
   | intervalExterior hβα hgap =>
       apply FormBoundedSylvesterGap.intervalExterior hβα

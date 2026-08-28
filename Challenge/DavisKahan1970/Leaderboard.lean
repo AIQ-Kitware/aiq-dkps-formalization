@@ -129,15 +129,15 @@ theorem sinTheta_wholeSpace_paperUINorm
     {gap : ℝ} (hgap : 0 < gap)
     (hgapUV : FormBoundedSylvesterGap
       (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded A) U
-        (ClosedOperator.ofBounded_reducesSubspace A U hU))
+        (ClosedOperator.ofBounded_reducesSubspace A U hU)).toLinearPMap
       (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded B) Vᗮ
-        (ClosedOperator.ofBounded_reducesSubspace B V hV).orthogonal)
+        (ClosedOperator.ofBounded_reducesSubspace B V hV).orthogonal).toLinearPMap
       gap)
     (hgapVU : FormBoundedSylvesterGap
       (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded B) V
-        (ClosedOperator.ofBounded_reducesSubspace B V hV))
+        (ClosedOperator.ofBounded_reducesSubspace B V hV)).toLinearPMap
       (ClosedOperator.reducingRestriction (ClosedOperator.ofBounded A) Uᗮ
-        (ClosedOperator.ofBounded_reducesSubspace A U hU).orthogonal)
+        (ClosedOperator.ofBounded_reducesSubspace A U hU).orthogonal).toLinearPMap
       gap)
     (hMem : N.Mem (B - A)) :
     N.Mem (paperSinAngleOperatorC U V) ∧

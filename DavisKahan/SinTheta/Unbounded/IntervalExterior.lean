@@ -31,35 +31,6 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- Raw partial-map presentation of the Spectra interval/exterior boundary.
-The spectrum calls are the remaining Spectra dependency; no bundled operator is
-part of the mathematical input. -/
-def UnboundedIntervalExteriorGapPMap
-    (A : F →ₗ.[ℂ] F) (B : G →ₗ.[ℂ] G)
-    (β α δ : ℝ) : Prop :=
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum B) ∨
-  (Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
-        Set.Icc β α ∧
-    ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum A)
-
-namespace SpectralIntervalExteriorGap
-
-omit [CompleteSpace F] [CompleteSpace G] in
-/-- View a source-facing interval/exterior gap through its canonical partial
-maps. -/
-theorem toPMap
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G)}
-    {β α δ : ℝ} (h : SpectralIntervalExteriorGap A B β α δ) :
-    UnboundedIntervalExteriorGapPMap A.toLinearPMap B.toLinearPMap β α δ := by
-  exact h
-
-end SpectralIntervalExteriorGap
-
 /-- Generalized finite-interval unbounded sine-theta theorem at ideal-gauge
 scope, using Spectra spectrum hypotheses and no ordered half-line dependency. -/
 theorem generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap
@@ -73,7 +44,7 @@ theorem generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap
     {β α δ ε : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : SpectralIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
+    (hgap : SpectralIntervalExteriorGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
@@ -113,7 +84,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_of_intervalExteriorGap
     {β α δ ε : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedIntervalExteriorGapPMap D.A₀ D.Λ₁ β α δ)
+    (hgap : SpectralIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gaugeReal (sinThetaBlock D.X D.F₁ hframe hε)
@@ -136,7 +107,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
     {β α δ ε : ℝ}
     (hβα : β ≤ α) (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedIntervalExteriorGapPMap D.A₀ D.Λ₁ β α δ)
+    (hgap : SpectralIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem (directedSinThetaOperator D.X F₀ hframe hε) ∧
       δ * ε * N.gaugeReal (directedSinThetaOperator D.X F₀ hframe hε)
@@ -162,7 +133,7 @@ theorem linearPMap_sinTheta_unbounded_exact_of_intervalExteriorGap
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hgap : UnboundedIntervalExteriorGapPMap D.A₀ D.Λ₁ β α δ)
+    (hgap : SpectralIntervalExteriorGap D.A₀ D.Λ₁ β α δ)
     (hR : N.Mem D.residual) :
     N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
       δ * N.gaugeReal

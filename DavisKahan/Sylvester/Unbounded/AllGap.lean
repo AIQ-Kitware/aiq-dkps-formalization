@@ -43,8 +43,7 @@ Spectra spectrum -- the form Davis--Kahan 1970 uses.
 `FormBoundedSylvesterGap` states the two ordered configurations as operator-form
 bounds instead; it implies this predicate, and no converse is proved. -/
 inductive SpectralSylvesterGap
-    (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := E))
-    (B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F))
+    (A : E →ₗ.[ℂ] E) (B : F →ₗ.[ℂ] F)
     (δ : ℝ) : Prop where
   | intervalExterior
       {β α : ℝ}
@@ -52,15 +51,15 @@ inductive SpectralSylvesterGap
       (hgap : SpectralIntervalExteriorGap A B β α δ)
   | leftAboveRightBelow
       (c : ℝ)
-      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
         Set.Ici (c + δ))
-      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
         Set.Iic c)
   | leftBelowRightAbove
       (c : ℝ)
-      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A.toLinearPMap ⊆
+      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
         Set.Iic c)
-      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B.toLinearPMap ⊆
+      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
         Set.Ici (c + δ))
 
 /-- Source-facing Theorem 5.2 wrapper with spectral hypotheses in every
@@ -72,7 +71,7 @@ theorem davisKahan1970_sylvester_of_spectrumGap
     (hA : A.IsSelfAdjoint) (hB : B.IsSelfAdjoint)
     {X C : F →L[ℂ] E} {δ : ℝ}
     (hδ : 0 < δ)
-    (hgap : SpectralSylvesterGap A B δ)
+    (hgap : SpectralSylvesterGap A.toLinearPMap B.toLinearPMap δ)
     (hEq : HasClosedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧

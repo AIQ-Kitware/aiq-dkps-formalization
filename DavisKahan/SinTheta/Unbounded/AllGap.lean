@@ -35,60 +35,6 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- Raw partial-map presentation of the three spectral all-gap cases. -/
-inductive UnboundedSylvesterGapPMap
-    (A : F →ₗ.[ℂ] F) (B : G →ₗ.[ℂ] G) (δ : ℝ) : Prop where
-  | intervalExterior {β α : ℝ} (hβα : β ≤ α)
-      (hgap : UnboundedIntervalExteriorGapPMap A B β α δ)
-  | leftAboveRightBelow (c : ℝ)
-      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
-        Set.Ici (c + δ))
-      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
-        Set.Iic c)
-  | leftBelowRightAbove (c : ℝ)
-      (hA : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum A ⊆
-        Set.Iic c)
-      (hB : Complex.ofReal ⁻¹' TauCeti.LinearPMap.spectrum B ⊆
-        Set.Ici (c + δ))
-
-namespace UnboundedSylvesterGapPMap
-
-omit [CompleteSpace E] [CompleteSpace F] [CompleteSpace G] in
-/-- Package a raw all-gap condition at the current Spectra boundary. -/
-theorem toClosed
-    (D : UnboundedSinThetaDataPMap (𝕜 := ℂ) (E := E) (F := F) (G := G))
-    {δ : ℝ} (h : UnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ) :
-    SpectralSylvesterGap D.toClosed.A₀ D.toClosed.Λ₁ δ := by
-  cases h with
-  | intervalExterior hβα hgap =>
-      exact .intervalExterior hβα hgap
-  | leftAboveRightBelow c hA hB =>
-      exact .leftAboveRightBelow c hA hB
-  | leftBelowRightAbove c hA hB =>
-      exact .leftBelowRightAbove c hA hB
-
-end UnboundedSylvesterGapPMap
-
-namespace SpectralSylvesterGap
-
-omit [CompleteSpace F] [CompleteSpace G] in
-/-- View a source-facing spectral all-gap condition through canonical partial
-maps. -/
-theorem toPMap
-    {A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := F)}
-    {B : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℂ) (E := G)}
-    {δ : ℝ} (h : SpectralSylvesterGap A B δ) :
-    UnboundedSylvesterGapPMap A.toLinearPMap B.toLinearPMap δ := by
-  cases h with
-  | intervalExterior hβα hgap =>
-      exact .intervalExterior hβα hgap
-  | leftAboveRightBelow c hA hB =>
-      exact .leftAboveRightBelow c hA hB
-  | leftBelowRightAbove c hA hB =>
-      exact .leftBelowRightAbove c hA hB
-
-end SpectralSylvesterGap
-
 /-- Generalized complementary-block theorem with a spectral all-gap
 hypothesis. -/
 theorem generalizedSinTheta_unbounded_of_spectrumGap
@@ -101,7 +47,7 @@ theorem generalizedSinTheta_unbounded_of_spectrumGap
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : SpectralSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : SpectralSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
     (hR : N.Mem D.residual) :
     N.Mem
         (sinThetaBlock D.X D.F₁ hframe hε) ∧
@@ -135,13 +81,13 @@ theorem linearPMap_generalizedSinTheta_unbounded_of_spectrumGap
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
+    (hgap : SpectralSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem (sinThetaBlock D.X D.F₁ hframe hε) ∧
       δ * ε * N.gauge (sinThetaBlock D.X D.F₁ hframe hε) ≤
         N.gauge D.residual := by
   exact generalizedSinTheta_unbounded_of_spectrumGap N D.toClosed
-    hA hA₀ hΛ₁ hF₁ hδ hε hframe hgap.toClosed hR
+    hA hA₀ hΛ₁ hF₁ hδ hε hframe hgap hR
 
 /-- Exact directed-angle form of the spectral all-gap generalized theorem. -/
 theorem generalizedSinTheta_unbounded_exact_of_spectrumGap
@@ -155,7 +101,7 @@ theorem generalizedSinTheta_unbounded_exact_of_spectrumGap
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : SpectralSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : SpectralSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
     (hR : N.Mem D.residual) :
     N.Mem
         (directedSinThetaOperator D.X F₀ hframe hε) ∧
@@ -184,7 +130,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_spectrumGap
     {δ ε : ℝ}
     (hδ : 0 < δ) (hε : 0 < ε)
     (hframe : LowerFrameBound D.X ε)
-    (hgap : UnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
+    (hgap : SpectralSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         (directedSinThetaOperator D.X F₀ hframe hε) ∧
@@ -212,7 +158,7 @@ theorem linearPMap_sinTheta_unbounded_exact_of_spectrumGap
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : UnboundedSylvesterGapPMap D.A₀ D.Λ₁ δ)
+    (hgap : SpectralSylvesterGap D.A₀ D.Λ₁ δ)
     (hR : N.Mem D.residual) :
     N.Mem
         ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧
@@ -236,7 +182,7 @@ theorem sinTheta_unbounded_exact_of_spectrumGap
     (hX : IsometricEmbedding D.X)
     (hdecomp : OrthogonalExactDecomposition F₀ D.F₁)
     {δ : ℝ} (hδ : 0 < δ)
-    (hgap : SpectralSylvesterGap D.A₀ D.Λ₁ δ)
+    (hgap : SpectralSylvesterGap D.A₀.toLinearPMap D.Λ₁.toLinearPMap δ)
     (hR : N.Mem D.residual) :
     N.Mem
         ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X) ∧

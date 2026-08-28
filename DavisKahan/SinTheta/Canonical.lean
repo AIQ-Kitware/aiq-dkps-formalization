@@ -77,7 +77,7 @@ structure FormBoundedGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
   residual_mem : N.Mem data.residual
 
 namespace FormBoundedGeneralSinThetaProblem
@@ -140,7 +140,7 @@ structure FiniteIntervalGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : SpectralIntervalExteriorGap data.A₀ data.Λ₁
+  spectral_gap : SpectralIntervalExteriorGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap
     intervalLower intervalUpper gap
   residual_mem : N.Mem data.residual
 
@@ -170,7 +170,7 @@ theorem result
         (P.data.toPMap_A₀_isSelfAdjoint P.trial_selfAdjoint)
         (P.data.toPMap_Λ₁_isSelfAdjoint P.complement_selfAdjoint)
         P.exact_decomposition P.interval_order P.gap_pos
-        P.frameLowerBound_pos P.lowerFrame P.spectral_gap.toPMap P.residual_mem
+        P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
 
 /-- Complementary-overlap form of the completed finite interval/exterior
 branch. -/
@@ -196,7 +196,7 @@ theorem complementaryBlock_result
         (P.data.toPMap_A₀_isSelfAdjoint P.trial_selfAdjoint)
         (P.data.toPMap_Λ₁_isSelfAdjoint P.complement_selfAdjoint)
         P.exact_decomposition.isometry₁ P.interval_order P.gap_pos
-        P.frameLowerBound_pos P.lowerFrame P.spectral_gap.toPMap P.residual_mem
+        P.frameLowerBound_pos P.lowerFrame P.spectral_gap P.residual_mem
 
 end FiniteIntervalGeneralSinThetaProblem
 
@@ -229,7 +229,7 @@ structure FormBoundedIsometricSinThetaProblem
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   gap_pos : 0 < gap
-  spectral_gap : FormBoundedSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : FormBoundedSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
   residual_mem : N.Mem data.residual
 
 end GenericIsometric
@@ -320,7 +320,7 @@ structure SpectralGeneralSinThetaProblem
   gap_pos : 0 < gap
   frameLowerBound_pos : 0 < frameLowerBound
   lowerFrame : LowerFrameBound data.X frameLowerBound
-  spectral_gap : SpectralSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : SpectralSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
   residual_mem : N.Mem data.residual
 
 namespace SpectralGeneralSinThetaProblem
@@ -392,7 +392,7 @@ structure SpectralIsometricSinThetaProblem
   exact_decomposition : OrthogonalExactDecomposition exactMap data.F₁
   gap : ℝ
   gap_pos : 0 < gap
-  spectral_gap : SpectralSylvesterGap data.A₀ data.Λ₁ gap
+  spectral_gap : SpectralSylvesterGap data.A₀.toLinearPMap data.Λ₁.toLinearPMap gap
   residual_mem : N.Mem data.residual
 
 namespace SpectralIsometricSinThetaProblem
