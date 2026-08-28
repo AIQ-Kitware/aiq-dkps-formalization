@@ -66,9 +66,10 @@ touch either, and the ones that do already take self-adjointness.
    `linearPMap_`-prefixed declarations lost a prefix that no longer
    distinguished anything; the remaining 230 mentions were renamed.
 
-Two lemmas were added to `ForTauCeti`, both used repeatedly:
-`LinearPMap.isSymmetric_of_isSelfAdjoint` — and that is all.  Everything else
-the migration needed was already there.
+**One** lemma was added to `ForTauCeti`:
+`LinearPMap.isSymmetric_of_isSelfAdjoint`.  `addBounded` was added too and then
+removed again — it was already there, in `LinearPMap/Closed.lean`.  Everything
+else the migration needed existed.
 
 ## Method, and how it misfires
 

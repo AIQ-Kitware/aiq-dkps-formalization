@@ -51,8 +51,8 @@ declarations, and the namespace on these 54 survived it. A reviewer reads
 and it is not one.
 
 **Related and worse, from lane `{lane:DK-EXPCOVER}` the same day:** the structure
-`PartialMap` is *declared* in `TauCeti.DavisKahanExt` from
-`DavisKahan/SpectralTheory/PartialMap/Basic.lean`. A namespace on a theorem
+`ClosedOperator` is *declared* in `TauCeti.DavisKahanExt` from
+`DavisKahan/SpectralTheory/ClosedOperator/Basic.lean`. A namespace on a theorem
 is a naming defect; a namespace on a structure is one every projection inherits.
 
 ## Finding AT-2 — a legacy leaf that nothing uses and nothing compiles `{lane:DK-EXPCOVER}`
@@ -60,7 +60,7 @@ is a naming defect; a namespace on a structure is one every projection inherits.
 `Experimental/InfiniteDimensional/Sylvester/OrderedEngineLegacy.lean` says in its
 own docstring that **"the canonical engine does not import or use this leaf"**,
 and it is right: nothing imports it. It also does not compile — it reaches
-`Core/Unbounded.lean`, which projects eight fields off `PartialMap` that
+`Core/Unbounded.lean`, which projects eight fields off `ClosedOperator` that
 exist nowhere.
 
 **A file that is unused, unbuilt and self-described as superseded is three
@@ -104,12 +104,12 @@ which side of it.
 `linearPMap_sinTheta_unbounded_gauge`; `SinTheta/Unbounded/OpNorm.lean` proves
 `sinTheta_unbounded_opNorm` and `linearPMap_sinTheta_unbounded_opNorm`. The
 `linearPMap_` member of each pair is the same theorem for Mathlib's raw
-`LinearPMap` rather than the bundled `PartialMap`.
+`LinearPMap` rather than the bundled `ClosedOperator`.
 
 **This is not flagged as duplication — it is flagged as a pattern that should be
 one adapter and is currently four theorems.** `ForTauCeti/Analysis/-
 InnerProductSpace/LinearPMap/{Sylvester,GraphCore}.lean` already describe
-themselves as bridging *"bundled DKPS `PartialMap` to raw Mathlib
+themselves as bridging *"bundled DKPS `ClosedOperator` to raw Mathlib
 `LinearPMap`"*. If that bridge is complete, each `linearPMap_` twin is a
 corollary; if it is not, the four twins are the evidence of what it still needs.
 Either way the answer is one place, not two files each with a pair.
