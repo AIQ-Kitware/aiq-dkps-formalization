@@ -36,7 +36,27 @@ import re
 import sys
 from collections import defaultdict
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _external_checkouts import EXIT_UNAVAILABLE, roadmap_root  # noqa: E402
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+
+#: Set from `--roadmap-root` in `main()`; otherwise resolved from the environment.
+_ROADMAP_OVERRIDE: str | None = None
+
+
+def _roadmap_dir() -> pathlib.Path:
+    """The roadmap family directory inside an external TauCetiRoadmap checkout.
+
+    Returns a non-existent path when no checkout is available; callers must ask
+    `roadmap_available()` rather than treating an empty scan as a clean result.
+    """
+    base = roadmap_root(_ROADMAP_OVERRIDE)
+    return (base / "TauCetiRoadmap") if base else (ROOT / "__no_roadmap_checkout__")
+
+
+def roadmap_available() -> bool:
+    return _roadmap_dir().is_dir()
 P = "ForTauCeti."
 A = "Analysis.InnerProductSpace."
 IMPORT_RE = re.compile(r"^\s*(?:public\s+)?import\s+(\S+)\s*$", re.M)
@@ -280,7 +300,7 @@ def roadmap_coverage() -> tuple[list, list, list, list, dict]:
     directory containing `Suggested.lean`; family indexes and `internal/` are not
     roadmaps and are ignored by construction.
     """
-    root = ROOT / "submodules/TauCetiRoadmap/TauCetiRoadmap"
+    root = _roadmap_dir()
     topic_map = ROOT / "dev" / "tauceti" / "roadmap-topic-map.md"
 
     # The topic map covers this repository's family only; the submodule carries 24 other
@@ -421,7 +441,13 @@ def main(argv: list[str] | None = None) -> int:
                     help="which topics have a roadmap, and which do not")
     ap.add_argument("--needs", action="store_true",
                     help="print each topic's exact prerequisite topics")
+    ap.add_argument("--roadmap-root", default=None,
+                    help="path to a TauCetiRoadmap checkout (or set "
+                         "TAUCETI_ROADMAP_ROOT); without one the coverage layer "
+                         "reports UNAVAILABLE instead of guessing")
     args = ap.parse_args(argv)
+    global _ROADMAP_OVERRIDE
+    _ROADMAP_OVERRIDE = args.roadmap_root
     if args.roadmaps:
         covered, missing, orphans, intentional, groups = roadmap_coverage()
         d = analyse()
@@ -487,24 +513,39 @@ def main(argv: list[str] | None = None) -> int:
     bad = len(d["dup"]) + len(d["unknown"]) + len(d["unassigned"]) + len(d["violations"])
 
     # The coverage layer is part of the gate: every topic must belong to exactly
-    # one roadmap directory, and the roadmap-level DAG must be acyclic.
-    covered, missing, orphans, intentional, groups = roadmap_coverage()
-    _, cycles = roadmap_dag(groups, topic_needs(d))
-    for key, title, _dd in missing:
-        print(f"  NO ROADMAP  {key}  {title}")
-    for dd in orphans:
-        print(f"  ORPHAN  {dd} covers no topic in the design")
-    for c in cycles:
-        print(f"  CYCLE  {c}")
-    bad += len(missing) + len(orphans) + len(cycles)
+    # one roadmap directory, and the roadmap-level DAG must be acyclic. It needs an
+    # external TauCetiRoadmap checkout, which this repository no longer vendors. With
+    # none present the scan would find no roadmap directories at all and report every
+    # topic as uncovered -- findings about the missing checkout, not about the design.
+    # Say so instead.
+    coverage_ran = roadmap_available()
+    if coverage_ran:
+        covered, missing, orphans, intentional, groups = roadmap_coverage()
+        _, cycles = roadmap_dag(groups, topic_needs(d))
+        for key, title, _dd in missing:
+            print(f"  NO ROADMAP  {key}  {title}")
+        for dd in orphans:
+            print(f"  ORPHAN  {dd} covers no topic in the design")
+        for c in cycles:
+            print(f"  CYCLE  {c}")
+        bad += len(missing) + len(orphans) + len(cycles)
+    else:
+        print("  SKIP  roadmap coverage and DAG: no TauCetiRoadmap checkout; "
+              "pass --roadmap-root PATH or set TAUCETI_ROADMAP_ROOT. "
+              "This is not a pass -- that layer did not run.")
 
     if not args.check:
         print()
         for key, title, mods in TOPICS:
             print(f"  {key}  {len(mods):3}  {title}")
     if bad:
-        print(f"\nroadmap topics: {bad} violation(s)")
+        print(f"\nroadmap topics: {bad} violation(s)"
+              + ("" if coverage_ran else "  (roadmap coverage layer did not run)"))
         return 1
+    if not coverage_ran:
+        print("\nroadmap topics: module assignment is total, disjoint and acyclic; "
+              "roadmap coverage UNAVAILABLE")
+        return EXIT_UNAVAILABLE
     print("\nroadmap topics: OK — total, disjoint, acyclic in submission order, "
           "and every topic is covered by exactly one roadmap")
     return 0

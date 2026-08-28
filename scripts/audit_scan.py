@@ -75,6 +75,10 @@ LINE_COMMENT = re.compile(r"--.*?$", re.M)
 #: The roadmap lives in a submodule, so `git ls-files` in this repository does not reach
 #: it.  Its `Suggested.lean` files are collected separately, because the mirror filter
 #: below exists to keep them out of the duplicate report.
+# Historical in-repository location of the roadmap checkout. It is no longer a
+# submodule; when a checkout is present at this path the scan includes it, and
+# when it is absent the scan simply has no roadmap files to report. That is a
+# reduction in scope, not a finding, so nothing here fails on its absence.
 ROADMAP_SUB = "submodules/TauCetiRoadmap"
 
 

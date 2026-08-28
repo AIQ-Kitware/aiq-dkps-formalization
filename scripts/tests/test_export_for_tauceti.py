@@ -152,11 +152,19 @@ class EndToEndTest(unittest.TestCase):
         self.assertFalse(r.ok)
         self.assertTrue(any("forbidden import" in ln for ln in r.lines))
 
-    def test_check_missing_target(self) -> None:
+    def test_check_reports_absent_target_as_new(self) -> None:
+        """A module absent upstream is NEW, not drift.
+
+        This assertion used to demand a failure, and went on demanding it after
+        d9a5f7c3 deliberately separated "new" from "drifted" -- so it had been
+        failing unnoticed. Absence upstream is the normal state for a staged
+        module that has not been exported yet, and `--check` must not fail on it,
+        or the gate would be red for every module still in staging.
+        """
         tmp, _, manifest = self._setup()
         r = M.run(manifest, "c", write=False)
-        self.assertFalse(r.ok)
-        self.assertTrue(any("target missing" in ln for ln in r.lines))
+        self.assertTrue(r.ok)
+        self.assertTrue(any(ln.startswith("NEW ") for ln in r.lines))
 
 
 if __name__ == "__main__":

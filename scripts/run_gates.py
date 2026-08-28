@@ -80,6 +80,9 @@ import subprocess
 import sys
 import time
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _external_checkouts import EXIT_UNAVAILABLE  # noqa: E402
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
 
@@ -192,6 +195,7 @@ def main() -> int:
 
     failed: list[tuple[str, str]] = []
     advisories: list[tuple[str, str]] = []
+    unavailable: list[tuple[str, str]] = []
     for gate in to_run:
         print(f"{gate.name:<40} ", end="", flush=True)
         started = time.monotonic()
@@ -204,6 +208,12 @@ def main() -> int:
         elapsed = time.monotonic() - started
         if code == 0:
             print(f"OK    {elapsed:6.1f}s")
+        elif code == EXIT_UNAVAILABLE:
+            # The check did not run: an external input it needs is absent. That is
+            # neither a pass nor a failure, and collapsing it into either is how a
+            # gate starts lying. Reported in its own section below.
+            print(f"SKIP  {elapsed:6.1f}s  (external input unavailable)")
+            unavailable.append((gate.name, output))
         elif gate.advisory:
             print(f"NOTE  {elapsed:6.1f}s  (advisory -- {ADVISORY[gate.name]})")
             advisories.append((gate.name, output))
@@ -219,6 +229,13 @@ def main() -> int:
         print("  the ones a refactor is most likely to have broken.")
         print()
 
+    for name, output in unavailable:
+        print(f"----- {name} (UNAVAILABLE -- did not run, not a pass)")
+        tail = [line for line in output.strip().split("\n") if line.strip()][-4:]
+        for line in tail:
+            print(f"  {line}")
+        print()
+
     for name, output in advisories:
         print(f"----- {name} (advisory, does not fail the run)")
         tail = [line for line in output.strip().split("\n") if line.strip()][-6:]
@@ -227,7 +244,8 @@ def main() -> int:
         print()
 
     if not failed:
-        print(f"gates: OK -- {len(to_run)} of {len(selected)} passed"
+        print(f"gates: OK -- {len(to_run) - len(unavailable)} of {len(selected)} passed"
+              + (f", {len(unavailable)} unavailable" if unavailable else "")
               + (f", {len(skipped)} skipped" if skipped else ""))
         return 0
 
@@ -238,7 +256,9 @@ def main() -> int:
             print(f"  {line}")
         print()
     print(f"gates: {len(failed)} of {len(to_run)} FAILED "
-          f"({', '.join(name for name, _ in failed)})")
+          f"({', '.join(name for name, _ in failed)})"
+          + (f"; {len(unavailable)} UNAVAILABLE "
+             f"({', '.join(name for name, _ in unavailable)})" if unavailable else ""))
     return 1
 
 
