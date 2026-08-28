@@ -11,9 +11,11 @@ import DavisKahan.SpectralTheory.AbstractSpectrum
 /-!
 # The bundled closed-operator record is gone
 
-`TauCeti.DavisKahanExt.PartialMap` was a `LinearPMap` together with dense
+`TauCeti.DavisKahanExt.ClosedOperator` was a `LinearPMap` together with dense
 domain and closed graph as *fields*.  The canonical carrier is Mathlib's
 `LinearPMap`, with those two as properties, and this module held the wrapper.
+The `PartialMap` in this module's path is a directory name, not a second
+carrier: it is where the Davis--Kahan additions to `LinearPMap` live.
 
 Everything it declared has moved:
 
@@ -23,7 +25,7 @@ Everything it declared has moved:
   `IsSelfAdjoint`, `graphNorm`, `RelativelyBounded`, `realResolventSet`,
   `realSpectrum`, `SpectralSetsSeparated` — every one of these was an `abbrev`
   forwarding to the identically named `TauCeti.LinearPMap` declaration at
-  `A`, so consumers name the canonical one;
+  `A.toLinearPMap`, so consumers name the canonical one;
 * `ofBounded A` — the everywhere-defined view of a bounded operator, which is
   `A.toLinearMap.toPMap ⊤`, the spelling `ForTauCeti` already used;
 * `addBounded` — now `TauCeti.LinearPMap.addBounded`, next to the `perturb` and

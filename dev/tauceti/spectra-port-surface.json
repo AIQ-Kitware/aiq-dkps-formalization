@@ -29,7 +29,7 @@
             "Spectra.Operator.SelfAdjointOperator": {
               "consumerModules": [
                 "DavisKahan.Interop.Spectra.Basic",
-                "DavisKahan.SpectralTheory.PartialMap.MathlibBridge",
+                "DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge",
                 "DavisKahan.SpectralTheory.OrderedHalfLine",
                 "DavisKahan.SpectralTheory.SpectralRestrictionOperator",
                 "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
@@ -44,22 +44,22 @@
             },
             "Spectra.Operator.SelfAdjointOperator.dense": {
               "consumerModules": [
-                "DavisKahan.SpectralTheory.PartialMap.MathlibBridge"
+                "DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge"
               ],
               "uses": 1
             },
             "Spectra.Operator.SelfAdjointOperator.domain": {
               "consumerModules": [
                 "DavisKahan.Interop.Spectra.Basic",
-                "DavisKahan.SpectralTheory.PartialMap.MathlibBridge"
+                "DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge"
               ],
               "uses": 5
             },
             "Spectra.Operator.SelfAdjointOperator.mk": {
               "consumerModules": [
-                "DavisKahan.SpectralTheory.PartialMap.MathlibBridge",
+                "DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge",
                 "DavisKahan.SpectralTheory.SpectralRestrictionOperator",
-                "DavisKahan.SpectralTheory.PartialMap.UnitaryConjugation"
+                "DavisKahan.SpectralTheory.ClosedOperator.UnitaryConjugation"
               ],
               "uses": 3
             },
@@ -79,7 +79,7 @@
             "Spectra.Operator.SelfAdjointOperator.toLinearPMap": {
               "consumerModules": [
                 "DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection",
-                "DavisKahan.SpectralTheory.PartialMap.MathlibBridge",
+                "DavisKahan.SpectralTheory.ClosedOperator.MathlibBridge",
                 "DavisKahan.SpectralTheory.CayleySelectorBridge",
                 "DavisKahan.SpectralTheory.SelfAdjointBorelCalculus"
               ],
@@ -99,7 +99,7 @@
           "constants": {
             "Spectra.Operator.unitaryConj": {
               "consumerModules": [
-                "DavisKahan.SpectralTheory.PartialMap.UnitaryConjugation"
+                "DavisKahan.SpectralTheory.ClosedOperator.UnitaryConjugation"
               ],
               "uses": 4
             }

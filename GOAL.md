@@ -229,9 +229,12 @@ The desired end state is;
 
 There are two LARGE migrations that are intentionally OUTSIDE this campaign;
 
-    DavisKahanExt.PartialMap -> LinearPMap
+    DavisKahanExt.ClosedOperator -> LinearPMap
 
 and the retirement of legacy rectangular / old ideal-family abstractions.
+(Both were carried out later: the ideal-family retirement on 2026-08-27 and the
+closed-operator migration on 2026-08-28.  The exclusion below was correct for
+this campaign and is left as written.)
 
 Do not start those while cleaning Frontier/MathAhead/Experimental.
 
@@ -1092,15 +1095,17 @@ OUTSIDE THIS CAMPAIGN — DO NOT START YET
 
 The following remain important, but they are separate campaigns.
 
-1. PartialMap -> LinearPMap
+1. ClosedOperator -> LinearPMap
 
 There are still many production uses of;
 
-    DavisKahanExt.PartialMap
+    DavisKahanExt.ClosedOperator
 
 despite `LinearPMap` being the canonical unbounded carrier.
 
 This migration is large and should have its own roadmap.
+
+(Done 2026-08-28; see `docs/planning/closed-operator-to-linearpmap-migration.md`.)
 
 2. Legacy rectangular / ideal-family cleanup
 

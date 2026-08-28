@@ -32,7 +32,7 @@ Concrete operating principles:
 
 * **General mathematics goes at the lowest reusable layer.** If a proof says nothing about Davis--Kahan, Section numbers, or paper-specific records, it probably belongs in `ForTauCeti/`.
 * **Paper facades should expose paper hypotheses.** Internal records are useful implementation devices, but a source endpoint is not complete if its caller is required to supply a branch selection, spectral orientation, smallness condition, or conclusion-like witness that the paper itself proves.
-* **`LinearPMap` is the canonical carrier for unbounded operators.** The local `PartialMap` compatibility layer is transitional. New foundational work should normally strengthen `LinearPMap`, not deepen the duplicate carrier.
+* **`LinearPMap` is the canonical carrier for unbounded operators, and now the only one.** The bundled `ClosedOperator` record and its compatibility layer were deleted on 2026-08-28. New foundational work strengthens `LinearPMap`; do not introduce a second carrier.
 * **Complexification is a proof technique, not the default architecture.** First determine whether the proof is already scalar-generic. If an essential ingredient is genuinely complex-only, transport the smallest necessary portion and descend the actual mathematical object, not an arbitrary existential witness.
 * **Mission boundaries are planning boundaries, not architectural walls.** It is correct to repair a missing reusable theorem immediately below the current source theorem. It is not necessary to implement an unrelated adjacent roadmap item.
 * **Do not modify `external/TauCeti/` or the roadmap checkout from this repository.** They are references. Reusable mathematics needed here lives in `ForTauCeti/`.
@@ -982,11 +982,13 @@ Search for the Weinberger/lower-bound theorem before reproving it. The point of 
 
 ## 6. Architecture/migration work that affects the credibility of “100%”
 
-### M21: finish the `LinearPMap` migration
+### M21: finish the `LinearPMap` migration — **done 2026-08-28**
 
-Recent work moved spectral reduction and its real companion onto `LinearPMap`; that is the correct foundation. Several source facades still consume the temporary real `PartialMap` adapter. Re-search current HEAD for all consumers before editing, then migrate them dependency-order and delete the duplicate abstraction when the last consumer is gone.
+Recent work moved spectral reduction and its real companion onto `LinearPMap`; that is the correct foundation. Several source facades still consumed the temporary real `ClosedOperator` adapter. Re-search current HEAD for all consumers before editing, then migrate them dependency-order and delete the duplicate abstraction when the last consumer is gone.
 
 This is not merely cosmetic. Remaining unbounded work should not be forced to prove each theorem twice because two domain carriers survive indefinitely.
+
+**Closed.** The bundled record, its forwarding API and the `Interop/TauCeti` adapter are deleted; there is one carrier. See `docs/planning/closed-operator-to-linearpmap-migration.md`.
 
 ### M23: frontier `--check` coverage
 

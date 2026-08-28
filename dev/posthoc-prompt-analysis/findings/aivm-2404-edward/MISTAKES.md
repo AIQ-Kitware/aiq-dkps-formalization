@@ -111,10 +111,10 @@ and, the same week, an explicit triage instruction naming the failure mode:
 
 Two live instances found 2026-07-30 by building a tree nothing builds:
 
-- `Core/Unbounded.lean` defines `PartialMap.adjoint` in terms of six fields
+- `Core/Unbounded.lean` defines `ClosedOperator.adjoint` in terms of six fields
   — `adjointDomain`, `adjointVector`, `adjointVector_inner`, `adjointDomain_dense`,
   `adjoint_graph_closed`, `closed_graph_add_relativelyBounded` — **none of which
-  exist**. `PartialMap` has exactly four fields. 28 errors. In that state for
+  exist**. `ClosedOperator` has exactly four fields. 28 errors. In that state for
   **11 days**, since a commit whose own title is *"Not Compiled - likely broken"*.
 - `ContourReuseBridge.lean` references
   `SpectralContinuationWitness.{sourceSelectedProjection, targetSelectedProjection}`;
@@ -348,7 +348,7 @@ in all six declarations**, needing **five** independent missing APIs — one
 Fixing the adjoint alone would have taken 28 errors to ~20 and unblocked nothing.
 
 - **Caught by:** me, measuring after claiming. Released the claim with no edits.
-- Also found late: `SpectralTheory/PartialMap/Basic.lean` had **already** done
+- Also found late: `SpectralTheory/ClosedOperator/Basic.lean` had **already** done
   the `LinearPMap` bridging I proposed to build.
 
 ### E3. A lemma whose hypothesis did not match the statement it was built for
