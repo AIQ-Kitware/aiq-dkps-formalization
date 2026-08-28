@@ -540,14 +540,18 @@
         "Acharyya2024.ContinuousMDS.exists_min_continuousPointStress",
         "Acharyya2024.ContinuousMDS.exists_min_pointStress",
         "Acharyya2024.ContinuousMDS.exists_subseq_tendsto_measure_lpPairDistErr_of_identical",
+        "Acharyya2024.ContinuousMDS.exists_subseq_tendsto_measure_lpPairDistErr_of_pairwise",
         "Acharyya2024.ContinuousMDS.frameEmbedding",
         "Acharyya2024.ContinuousMDS.frameEmbedding_min",
+        "Acharyya2024.ContinuousMDS.integral_absPairErr_eq_of_dissimilarityFactors",
         "Acharyya2024.ContinuousMDS.lpPairDistErr",
         "Acharyya2024.ContinuousMDS.lpPairDistErr_empiricalPopulation",
         "Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_pairDiscrepancy",
         "Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_prod",
         "Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left",
         "Acharyya2024.ContinuousMDS.lt_pointStress_of_norm_gt",
+        "Acharyya2024.ContinuousMDS.measure_absPairErr_query_eq",
+        "Acharyya2024.ContinuousMDS.measure_absPairErr_sampled_eq",
         "Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress",
         "Acharyya2024.ContinuousMDS.norm_min_continuousPointStress_le",
         "Acharyya2024.ContinuousMDS.norm_min_pointStress_le_of_bounded",
@@ -557,6 +561,7 @@
         "Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz",
         "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding",
         "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto",
+        "Acharyya2024.ContinuousMDS.tendsto_measure_absPairErr_query_of_sampled",
         "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
         "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_outOfSample",
         "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_population",
@@ -571,7 +576,9 @@
         "TauCeti.exists_triangular_array_tendsto_pointwise_average_eq_half",
         "TauCeti.integral_average_of_integral_eq",
         "TauCeti.integral_doubleSum_pi",
+        "TauCeti.integral_prodMk_eval_infinitePi",
         "TauCeti.map_evalPair_pi",
+        "TauCeti.map_prodMk_eval_infinitePi",
         "TauCeti.measurableSet_exists_isMinOn_le",
         "TauCeti.measurableSet_tendsto_isMinOn",
         "TauCeti.tendstoInMeasure_zero_of_nonneg_of_tendsto_integral",
@@ -583,10 +590,10 @@
       ],
       "semantic_alignment": {
         "classification": "source_repair",
-        "detail": "The printed lemma's estimate is fitted to the SAMPLE dissimilarities D under the hypothesis that D approaches the population Delta, and that is what tendsto_measure_lpPairDistErr_sampleTarget proves: the estimate minimizes the one-point stress against a target that changes with the stage, and the L^p(P x P) discrepancy against the population embedding tends to zero in probability along a subsequence. exists_subseq_tendsto_measure_lpPairDistErr_of_identical states the same conclusion from hypotheses on the dissimilarities alone and produces the subsequence itself. One clause is stronger than printed: one statement in p rather than one per p.\n\nThis is a repair, in two places, and both are demonstrated rather than asserted. First, the printed hypothesis -- pointwise convergence in probability at each pair -- does not control a growing collection: TauCeti.exists_triangular_array_tendsto_pointwise_average_eq_half exhibits a bounded array whose entries are eventually zero at every fixed index while the average is exactly one half at every stage. What the sampling model actually supplies, and what is assumed here, is that the errors at a given stage are identically distributed; TauCeti.exists_subseq_ae_tendsto_average_of_tendsto_measure_ge derives the average version from it, and the subsequence in the printed conclusion is exactly what that derivation costs. Second, the limiting one-point stress is assumed to have a unique minimizer; Consistency.not_unique_min_continuousPointStress shows that premise cannot be dropped. Estimator measurability is what the printed integral needs to denote anything.\n\nThe population-target form tendsto_measure_lpPairDistErr_outOfSample remains proved separately, along the full sequence -- that is the continuous-MDS identification the source attributes to its reference [23]."
+        "detail": "The printed lemma's estimate is fitted to the SAMPLE dissimilarities D under the hypothesis that D approaches the population Delta, and that is what tendsto_measure_lpPairDistErr_sampleTarget proves: the estimate minimizes the one-point stress against a target that changes with the stage, and the L^p(P x P) discrepancy against the population embedding tends to zero in probability along a subsequence. exists_subseq_tendsto_measure_lpPairDistErr_of_identical states the same conclusion from hypotheses on the dissimilarities alone and produces the subsequence itself, and the subsequence is independent of the tolerance, as printed. One clause is stronger than printed: one statement in p rather than one per p.\n\nTwo clauses are repairs and each carries a compiled witness of its necessity. First, the printed hypothesis -- pointwise convergence in probability at each pair -- does not control a growing collection: TauCeti.exists_triangular_array_tendsto_pointwise_average_eq_half exhibits a bounded array whose entries are eventually zero at every fixed index while the average is exactly one half at every stage. What repairs it is that the per-stage errors have a common mean, and that is now a THEOREM rather than a hypothesis: integral_absPairErr_eq_of_dissimilarityFactors derives it from the source's own definition of D as a statistic of the two models involved, together with the reference models being drawn independently from a common law; exists_subseq_tendsto_measure_lpPairDistErr_of_pairwise is the lemma with the factorization in place of the identical-distribution assumption. The residual repair is in the sampling model, not in the estimate: the source draws phi_i ~iid P and leaves the response laws F_ij attached to the model, so what the argument needs is that a MODEL is drawn as a complete object, not merely its latent vector. That reading is forced by the printed conclusion, whose integrand depends on the estimate and hence on the response data. Second, the limiting one-point stress is assumed to have a unique minimizer; Consistency.not_unique_min_continuousPointStress shows that premise cannot be dropped. Estimator measurability is what the printed integral needs to denote anything.\n\nThe population-target form tendsto_measure_lpPairDistErr_outOfSample remains proved separately, along the full sequence -- that is the continuous-MDS identification the source attributes to its reference [23]."
       },
-      "notes": "The source attributes this lemma to its reference [23]. Both halves are proved here: the continuous-MDS identification against the population dissimilarities, and the perturbation to the sample dissimilarities that the printed statement actually makes.",
-      "next_action": "None. The estimate is fitted to the sample dissimilarities, the printed subsequence is derived rather than assumed, and both repairs carry compiled witnesses of their necessity."
+      "notes": "The source attributes this lemma to its reference [23]. Both halves are proved here: the continuous-MDS identification against the population dissimilarities, and the perturbation to the sample dissimilarities that the printed statement actually makes. The identically-distributed hypothesis is no longer an assumption of the lemma's usable form; it is derived from the source's definition of D.",
+      "next_action": "None. The estimate is fitted to the sample dissimilarities, the printed subsequence is derived rather than assumed and does not depend on the tolerance, the common-mean hypothesis is derived from the source's own D, and the remaining repair -- drawing a model rather than only its latent vector -- is stated explicitly and is what makes the printed conclusion well defined."
     },
     {
       "id": "A24-T4",
@@ -609,11 +616,17 @@
         "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
         "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_gamma",
         "Acharyya2024.Probability.dissimilarity_convergesInProbability_of_secondMoment",
+        "Acharyya2024.Probability.pairwise_dissimilarity_convergesInProbability_of_gamma",
         "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma",
+        "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma_kernel",
+        "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma_random",
         "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing",
         "Acharyya2024.Probability.sourceGammaRate_imp_secondMomentRate",
         "Acharyya2024.SecondMoment.integral_norm_sq_eq_sum_query",
-        "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound"
+        "Acharyya2024.SecondMoment.integral_norm_sq_sampleMean_sub_mean_le_of_bound",
+        "TauCeti.map_shuffle_prod_compProd",
+        "TauCeti.tendsto_measure_compProd_gt_of_ae_tendsto_measure_slice",
+        "TauCeti.tendsto_measure_compProd_of_ae_tendsto_measure_slice"
       ],
       "planned_declarations": [],
       "gap_refs": [
@@ -622,10 +635,10 @@
       ],
       "semantic_alignment": {
         "classification": "by_composition",
-        "detail": "The printed theorem: models indexed by all of ℕ so their number grows, the number of queries a function of the replicate count, the same trace-covariance condition, and pointwise convergence in probability for a fixed pair. The growing model count costs nothing because the conclusion is pointwise: the union bound is over the two models in the pair, not over n. Reclassified after adversarial review: the theorem takes the sample-mean second-moment bound as a hypothesis, so on its own it assumes the passage from the paper's definition of gamma to that bound, which is the content of the source's Appendix A.2. Both halves are compiled -- integral_norm_sq_sampleMean_sub_mean_le_of_bound for the gamma/r rate from iid replicates, and integral_norm_sq_eq_sum_query showing the gamma consumed is the paper's per-query trace-covariance summed over queries -- but no single declaration runs from the sampling setup to the conclusion at the growing scope."
+        "detail": "The printed theorem: models indexed by all of N so their number grows, the number of queries a function of the replicate count, the same trace-covariance condition, and pointwise convergence in probability for a fixed pair. The growing model count costs nothing because the conclusion is pointwise: the union bound is over the two models in the pair, not over n. The theorem takes the sample-mean second-moment bound as a hypothesis, so on its own it assumes the passage from the paper's definition of gamma to that bound, which is the content of the source's Appendix A.2. Both halves are compiled -- integral_norm_sq_sampleMean_sub_mean_le_of_bound for the gamma/r rate from iid replicates, and integral_norm_sq_eq_sum_query showing the gamma consumed is the paper's per-query trace-covariance summed over queries -- but no single declaration runs from the sampling setup to the conclusion at the growing scope.\n\nThe theorem now also exists in the form Theorem 5 needs, with the models themselves drawn. pointwise_dissimilarity_convergesInProbability_of_gamma_kernel states it under a Markov kernel, which is the source's own sampling model -- the response distributions F_ij belong to the model, so the law of the replicates depends on which models were drawn -- and reads the paper's condition almost surely in the draw, which is what 'for all i, (1/m) sum_j gamma_ij = o(r)' means once the models are random. No bound uniform over the model population enters: the conditional bad-event probabilities lie in [0, 1], so the constant 1 dominates them and the model integral passes through the limit (TauCeti.tendsto_measure_compProd_gt_of_ae_tendsto_measure_slice). pairwise_dissimilarity_convergesInProbability_of_gamma is the two-model form Lemma 2 consumes; the regrouping of an independent pair of two-stage experiments into one two-stage experiment on the pair is TauCeti.map_shuffle_prod_compProd."
       },
-      "notes": "The per-stage consistency theorem that consumes this still takes sampling convergence as a hypothesis; what was missing was the derivation of that hypothesis from the source's gamma condition, and it is now present.",
-      "next_action": "Thread integral_norm_sq_sampleMean_sub_mean_le_of_bound into the growing-scope theorems so one declaration runs from the paper's iid replicate setup to its conclusion."
+      "notes": "The per-stage consistency theorem that consumes this still takes sampling convergence as a hypothesis; what was missing was the derivation of that hypothesis from the source's gamma condition, and it is now present, for fixed models and for drawn models alike.",
+      "next_action": "Thread integral_norm_sq_sampleMean_sub_mean_le_of_bound into the growing-scope theorems so one declaration runs from the paper's iid replicate setup to its conclusion. This is the Appendix A.2 link only; the drawn-model composition needed by Theorem 5 is closed."
     },
     {
       "id": "A24-T5",
@@ -635,7 +648,7 @@
       "source_kind": "theorem",
       "title": "Growing models and queries: L^p consistency",
       "source_claim": "Under the Theorem 4 rate, along a subsequence the pairwise-distance error converges to zero in L^p(P x P) in probability for every p >= 1.",
-      "status": "compiled_specialization",
+      "status": "compiled_source_repair",
       "verification": "proved_in_build",
       "source_locator": {
         "file": "Acharyya2024/prose/consistent-estimation-dkps-2409.17308_transcription.md",
@@ -649,6 +662,7 @@
         "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_sample_limit_uniqueProfile",
         "Acharyya2024.Consistency.growing_models_growing_queries_perStage_consistency_of_uniqueProfile",
         "Acharyya2024.Consistency.lp_consistency_of_gamma_empirical",
+        "Acharyya2024.Consistency.lp_consistency_of_gamma_population",
         "Acharyya2024.Consistency.not_unique_min_continuousPointStress",
         "Acharyya2024.Consistency.one_le_continuousPointStress_twoPoint",
         "Acharyya2024.ContinuousMDS.abs_sub_pointStress_le",
@@ -664,13 +678,17 @@
         "Acharyya2024.ContinuousMDS.exists_min_continuousPointStress",
         "Acharyya2024.ContinuousMDS.exists_min_pointStress",
         "Acharyya2024.ContinuousMDS.exists_subseq_tendsto_measure_lpPairDistErr_of_identical",
+        "Acharyya2024.ContinuousMDS.exists_subseq_tendsto_measure_lpPairDistErr_of_pairwise",
         "Acharyya2024.ContinuousMDS.frameEmbedding",
         "Acharyya2024.ContinuousMDS.frameEmbedding_min",
+        "Acharyya2024.ContinuousMDS.integral_absPairErr_eq_of_dissimilarityFactors",
         "Acharyya2024.ContinuousMDS.lpPairDistErr",
         "Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_pairDiscrepancy",
         "Acharyya2024.ContinuousMDS.lpPairDistErr_eq_integral_prod",
         "Acharyya2024.ContinuousMDS.lpPairDistErr_rigidMotion_left",
         "Acharyya2024.ContinuousMDS.lt_pointStress_of_norm_gt",
+        "Acharyya2024.ContinuousMDS.measure_absPairErr_query_eq",
+        "Acharyya2024.ContinuousMDS.measure_absPairErr_sampled_eq",
         "Acharyya2024.ContinuousMDS.norm_le_of_min_pointStress",
         "Acharyya2024.ContinuousMDS.norm_min_continuousPointStress_le",
         "Acharyya2024.ContinuousMDS.norm_min_pointStress_le_of_bounded",
@@ -680,18 +698,27 @@
         "Acharyya2024.ContinuousMDS.tendsto_argmin_of_tendsto_of_equiLipschitz",
         "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_frameEmbedding",
         "Acharyya2024.ContinuousMDS.tendsto_lpPairDistErr_of_ae_tendsto",
+        "Acharyya2024.ContinuousMDS.tendsto_measure_absPairErr_query_of_sampled",
         "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_gt",
         "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_outOfSample",
         "Acharyya2024.ContinuousMDS.tendsto_measure_lpPairDistErr_population",
         "Acharyya2024.ContinuousMDS.tendsto_of_dense_of_equiLipschitz",
         "Acharyya2024.ContinuousMDS.tendsto_outOfSampleExtension",
         "Acharyya2024.ContinuousMDS.tendsto_pointStress",
+        "Acharyya2024.Probability.pairwise_dissimilarity_convergesInProbability_of_gamma",
+        "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma_kernel",
+        "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_gamma_random",
         "Acharyya2024.Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_random",
         "TauCeti.ae_ae_of_forall_ae",
         "TauCeti.integral_doubleSum_pi",
+        "TauCeti.integral_prodMk_eval_infinitePi",
         "TauCeti.map_evalPair_pi",
+        "TauCeti.map_prodMk_eval_infinitePi",
+        "TauCeti.map_shuffle_prod_compProd",
         "TauCeti.measurableSet_exists_isMinOn_le",
-        "TauCeti.measurableSet_tendsto_isMinOn"
+        "TauCeti.measurableSet_tendsto_isMinOn",
+        "TauCeti.tendsto_measure_compProd_gt_of_ae_tendsto_measure_slice",
+        "TauCeti.tendsto_measure_compProd_of_ae_tendsto_measure_slice"
       ],
       "planned_declarations": [],
       "gap_refs": [
@@ -700,11 +727,11 @@
         "growing-n-concentration"
       ],
       "semantic_alignment": {
-        "classification": "specialized",
-        "detail": "The theorem is now assembled end to end for the empirical model distribution: the source's gamma condition in, the L^p discrepancy vanishing in probability out, with every intermediate link proved -- growing-query dissimilarity concentration, Assumption 1 composed by the triangle inequality, raw-stress stability under the profile-uniqueness premise whose necessity is separately established, and the L^p assembly. Two clauses come out stronger than printed: the full sequence rather than a subsequence, and one statement in p rather than one per p. The specialization is that P is the empirical model measure rather than the population law."
+        "classification": "source_repair",
+        "detail": "Theorem 5 is the composition 'Theorem 4, then Lemma 2', and it is now assembled over the POPULATION law, which is what the printed theorem states: lp_consistency_of_gamma_population takes the source's trace-covariance condition -- read almost surely in the model draw, which is what 'for all i in N' means once the models are random -- together with Assumption 2 and the standing structural hypotheses of Lemma 2, and concludes that along a subsequence the L^p(P x P) discrepancy tends to zero in probability. The subsequence does not depend on the tolerance. Two clauses come out stronger than printed: every positive exponent rather than p >= 1, and, on the empirical-measure route (lp_consistency_of_gamma_empirical), the full sequence rather than a subsequence.\n\nThe three passages that the composition needs are proved rather than assumed. (i) Theorem 4 fixes the models and randomises the replicates while Lemma 2 draws the models; the conditional bad-event probabilities integrate over the draw by domination by 1, so NO uniformity over the model population and no uniform integrability of the gamma condition is required -- an earlier reading of this row asserted such a requirement, and it was an artifact of routing through an integrated second-moment bound. (ii) A fresh query paired with a drawn reference and two distinct drawn references have the same law P x P (measure_absPairErr_query_eq, measure_absPairErr_sampled_eq), so Theorem 4's conclusion is literally Lemma 2's hypothesis. (iii) The per-index errors have a common mean because the source's D is a statistic of the two models involved (integral_absPairErr_eq_of_dissimilarityFactors).\n\nThe repair is in the sampling model and is stated explicitly: a model is drawn as a complete object -- its latent vector and the law of its responses, carried here by a Markov kernel -- rather than only its latent vector, which is all 'phi_i ~iid P' says. The printed conclusion is not well defined under the weaker reading, since its integrand depends on the estimate and hence on the response data."
       },
-      "notes": "Previously the growing-stage consistency theorem took per-stage sampling convergence as a hypothesis; that hypothesis is now discharged from the source's own condition.",
-      "next_action": "Compose the Theorem 4 rate with Lemma 2, which is now closed over the population law. The remaining seam is that Theorem 4 is stated with the model means fixed while Lemma 2 draws the models; Probability.pointwise_dissimilarity_convergesInProbability_of_secondMoment_random supplies the random-mean form. What is still needed is the passage from the paper's per-model gamma rate to a bound after integrating over the model draw, which needs uniformity over models that the source does not state."
+      "notes": "The empirical-measure composition lp_consistency_of_gamma_empirical remains, along the full sequence. lp_consistency_of_gamma_population is the printed statement over the population law. The claim that composing Theorem 4 with Lemma 2 needs a uniformity condition the source does not state has been withdrawn: it is not needed.",
+      "next_action": "None for the composition. What is adjacent is the Appendix A.2 link tracked on A24-T4: the second-moment hypothesis of the composed theorem is the paper's (1/m) sum_j gamma_ij bound, and a single declaration running from the trace-covariance definition to it at the growing scope would remove the last assumed step."
     }
   ]
 }

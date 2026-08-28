@@ -30,6 +30,7 @@ import Acharyya2024.RawStress
 import TauCeti.Probability.Process.EmpiricalMeasure
 import TauCeti.Probability.StrongLaw
 import ForTauCeti.Probability.AverageError
+import ForTauCeti.Probability.VStatistic
 
 open scoped BigOperators Topology
 open MeasureTheory Filter
@@ -2002,6 +2003,68 @@ theorem tendsto_measure_lpPairDistErr_sampleTarget {d : Nat} (P : Measure M)
   exact tendsto_measure_lpPairDistErr_population _ P hp.le Ψ χlim hbdd hmeas hae hε
 
 
+/-! ### Where the identically-distributed hypothesis comes from
+
+`exists_subseq_tendsto_measure_lpPairDistErr_of_identical` assumes `hid`: at each stage the
+expected absolute dissimilarity error is the same for every reference index.  Stated that way it
+looks like an extra assumption, and it is worth being exact about what it costs.
+
+It costs nothing that the source's own definition of `D` does not already supply.  The paper sets
+`D_ii' = (1/m)‖Xbar_i − Xbar_i'‖`, a function of the two models involved and of nothing else; and
+Lemma 2 draws the reference models independently from a common law.  A statistic of the query and
+one independently drawn reference therefore has the same distribution whichever reference it is
+applied to, so its mean cannot depend on the index.  That is
+`integral_absPairErr_eq_of_dissimilarityFactors`, and
+`exists_subseq_tendsto_measure_lpPairDistErr_of_pairwise` is Lemma 2 with `hid` replaced by the
+factorization that delivers it.
+
+What the argument does use, and what the printed lemma does not say in so many words, is that the
+*models* are drawn from a common law -- not merely their latent representations `phi_i`.  The
+source draws `phi_i ~iid P` and lets the response distributions `F_ij` belong to the model, so
+`D` is a statistic of objects whose law is exactly what the paper leaves implicit.  This is the
+minimal reading under which the displayed integral of the printed lemma is defined at all, since
+its integrand depends on the estimate and hence on the response data; the alternative reading, in
+which the response mechanism is index-dependent, is what the triangular-array witness
+`TauCeti.exists_triangular_array_tendsto_pointwise_average_eq_half` shows to be insufficient.
+-/
+
+/--
+**A dissimilarity between a query and a drawn reference has an index-independent mean.**
+
+`hfac` is the source's definition of `D`: the dissimilarity at stage `r` between the query `x`
+and the `i`-th reference is a function `G r` of those two models, not of the rest of the
+collection or of the index.  Since the references are drawn independently from a common law, the
+pair `(x, φ i)` has the same distribution for every `i`, so the expected error does too.
+
+This is the hypothesis `hid` of `exists_subseq_tendsto_measure_lpPairDistErr_of_identical`.
+-/
+theorem integral_absPairErr_eq_of_dissimilarityFactors (P : Measure M) [IsProbabilityMeasure P]
+    (Δ : M → M → Real) (G : Nat → M → M → Real)
+    (hG : ∀ r, Measurable fun q : M × M => G r q.1 q.2)
+    (hΔ2 : Measurable fun q : M × M => Δ q.1 q.2)
+    (D : Nat → (Nat → M) → M → Nat → Real)
+    (hfac : ∀ r φ x i, D r φ x i = G r x (φ i))
+    (r : Nat) (i j : Nat) :
+    ∫ z : M × (Nat → M), |D r z.2 z.1 i - Δ z.1 (z.2 i)|
+        ∂(P.prod (Measure.infinitePi fun _ : Nat => P))
+      = ∫ z : M × (Nat → M), |D r z.2 z.1 j - Δ z.1 (z.2 j)|
+        ∂(P.prod (Measure.infinitePi fun _ : Nat => P)) := by
+  have hf : AEStronglyMeasurable (fun q : M × M => |G r q.1 q.2 - Δ q.1 q.2|) (P.prod P) :=
+    (Measurable.abs ((hG r).sub hΔ2)).aestronglyMeasurable
+  have key : ∀ k : Nat,
+      ∫ z : M × (Nat → M), |D r z.2 z.1 k - Δ z.1 (z.2 k)|
+          ∂(P.prod (Measure.infinitePi fun _ : Nat => P))
+        = ∫ q : M × M, |G r q.1 q.2 - Δ q.1 q.2| ∂(P.prod P) := by
+    intro k
+    have hrw : (fun z : M × (Nat → M) => |D r z.2 z.1 k - Δ z.1 (z.2 k)|)
+        = fun z : M × (Nat → M) => |G r (z.1, z.2 k).1 (z.1, z.2 k).2
+            - Δ (z.1, z.2 k).1 (z.1, z.2 k).2| := by
+      funext z
+      rw [hfac]
+    rw [hrw]
+    exact TauCeti.integral_prodMk_eval_infinitePi (ι := Nat) P P k hf
+  rw [key i, key j]
+
 /--
 **Lemma 2 under the source's own hypothesis on the dissimilarities.**
 
@@ -2047,9 +2110,8 @@ theorem exists_subseq_tendsto_measure_lpPairDistErr_of_identical {d : Nat} (P : 
         ≤ pointStress (fun i : Fin (r + 1) => χ (φ i))
             (fun i : Fin (r + 1) => D r φ x i) w)
     (hmeas : ∀ r, Measurable fun z : (Nat → M) × (M × M) =>
-      pairDiscrepancy d p (Ψ r z.1) χlim z.2)
-    {ε : Real} (hε : 0 < ε) :
-    ∃ ns : Nat → Nat, StrictMono ns ∧
+      pairDiscrepancy d p (Ψ r z.1) χlim z.2) :
+    ∃ ns : Nat → Nat, StrictMono ns ∧ ∀ ε : Real, 0 < ε →
       Tendsto (fun u => (Measure.infinitePi fun _ : Nat => P)
         {φ | ε < lpPairDistErr d P p (Ψ (ns u) φ) χlim}) atTop (𝓝 0) := by
   classical
@@ -2087,9 +2149,153 @@ theorem exists_subseq_tendsto_measure_lpPairDistErr_of_identical {d : Nat} (P : 
     refine hφ.congr fun u => ?_
     push_cast
     rfl
+  intro ε hε
   exact tendsto_measure_lpPairDistErr_sampleTarget P hp Δ χ hχ hΔ hχb hΔb χlim hχlimmin huniq
     (fun u φ x i => D (ns u) φ x i) (fun u φ x i => hDb _ _ _ _) ns hnsmono.tendsto_atTop
     (fun u => Ψ (ns u)) (fun u φ x => hΨmin (ns u) φ x)
     (fun u => hmeas (ns u)) hprod hε
+
+
+/--
+**Lemma 2 from the source's definition of the dissimilarity.**
+
+`exists_subseq_tendsto_measure_lpPairDistErr_of_identical` assumes the per-index errors have a
+common mean.  Here that assumption is replaced by the structural fact that produces it: the
+dissimilarity between the query and a reference is a function `G r` of those two models
+(`hfac`), which is what `D_ii' = (1/m)‖Xbar_i − Xbar_i'‖` is.  The reference models being drawn
+independently from a common law then makes the mean index-independent, by
+`integral_absPairErr_eq_of_dissimilarityFactors`.
+
+Measurability and the uniform bound on `D` likewise come from `G` rather than being assumed
+separately.  What remains as a hypothesis is the printed one: the error at a single pair tends
+to zero in probability.
+-/
+theorem exists_subseq_tendsto_measure_lpPairDistErr_of_pairwise {d : Nat} (P : Measure M)
+    [IsProbabilityMeasure P] {p : Real} (hp : 0 < p)
+    (Δ : M → M → Real) (χ : M → Rvec d) {K : Real}
+    (hχ : Measurable χ) (hΔ : ∀ x, Measurable (Δ x))
+    (hΔ2 : Measurable fun q : M × M => Δ q.1 q.2)
+    (hχb : ∀ m, ‖χ m‖ ≤ K) (hΔb : ∀ x m, |Δ x m| ≤ K)
+    (χlim : M → Rvec d)
+    (hχlimmin : ∀ x : M, ∀ w : Rvec d,
+      continuousPointStress d P χ (Δ x) (χlim x) ≤ continuousPointStress d P χ (Δ x) w)
+    (huniq : ∀ x : M, ∀ w : Rvec d,
+      (∀ w' : Rvec d,
+        continuousPointStress d P χ (Δ x) w ≤ continuousPointStress d P χ (Δ x) w') →
+      w = χlim x)
+    (G : Nat → M → M → Real) (hG : ∀ r, Measurable fun q : M × M => G r q.1 q.2)
+    (hGb : ∀ r x y, |G r x y| ≤ K)
+    (D : Nat → (Nat → M) → M → Nat → Real)
+    (hfac : ∀ r φ x i, D r φ x i = G r x (φ i))
+    (hzero : ∀ ε : Real, 0 < ε → Tendsto (fun r : Nat =>
+      ((P.prod (Measure.infinitePi fun _ : Nat => P))
+        {z : M × (Nat → M) | ε ≤ |D r z.2 z.1 0 - Δ z.1 (z.2 0)|}).toReal) atTop (𝓝 0))
+    (Ψ : Nat → (Nat → M) → M → Rvec d)
+    (hΨmin : ∀ r φ x, ∀ w : Rvec d,
+      pointStress (fun i : Fin (r + 1) => χ (φ i))
+          (fun i : Fin (r + 1) => D r φ x i) (Ψ r φ x)
+        ≤ pointStress (fun i : Fin (r + 1) => χ (φ i))
+            (fun i : Fin (r + 1) => D r φ x i) w)
+    (hmeas : ∀ r, Measurable fun z : (Nat → M) × (M × M) =>
+      pairDiscrepancy d p (Ψ r z.1) χlim z.2) :
+    ∃ ns : Nat → Nat, StrictMono ns ∧ ∀ ε : Real, 0 < ε →
+      Tendsto (fun u => (Measure.infinitePi fun _ : Nat => P)
+        {φ | ε < lpPairDistErr d P p (Ψ (ns u) φ) χlim}) atTop (𝓝 0) := by
+  refine exists_subseq_tendsto_measure_lpPairDistErr_of_identical P hp Δ χ hχ hΔ hΔ2 hχb hΔb
+    χlim hχlimmin huniq D (fun r φ x i => by rw [hfac]; exact hGb r x (φ i)) ?_ ?_ hzero
+    Ψ hΨmin hmeas
+  · -- measurability of the dissimilarity, from that of `G`
+    intro r i
+    have hrw : (fun z : M × (Nat → M) => D r z.2 z.1 i)
+        = fun z : M × (Nat → M) => G r (z.1, z.2 i).1 (z.1, z.2 i).2 := by
+      funext z
+      rw [hfac]
+    rw [hrw]
+    exact (hG r).comp (measurable_fst.prodMk ((measurable_pi_apply i).comp measurable_snd))
+  · -- the common mean, from the factorization
+    intro r i j
+    exact integral_absPairErr_eq_of_dissimilarityFactors P Δ G hG hΔ2 D hfac r i j
+
+/-! ### A fresh query paired with a drawn reference, and two drawn references
+
+The `hzero` hypothesis of Lemma 2 is about a *fresh* query drawn from `P` and paired with the
+reference `phi_0`.  Theorem 4 delivers convergence for a *fixed pair of drawn models*
+`(phi_i, phi_i')`.  These are the same statement, because both pairs have the law `P x P`: the
+first by `TauCeti.map_prodMk_eval_infinitePi`, the second — for distinct indices — by
+`MeasureTheory.Measure.infinitePi_map_eval_prod`.  So no additional hypothesis is needed to pass
+from what Theorem 4 proves to what Lemma 2 consumes; only the pair law is used.
+-/
+
+section PairLaw
+
+variable {G : Nat → M → M → Real} {Δ : M → M → Real}
+
+/-- The tail event of the error, on the product `M x M` where both `G` and `Δ` are defined. -/
+private theorem measurableSet_absPairErr (hG : ∀ r, Measurable fun q : M × M => G r q.1 q.2)
+    (hΔ2 : Measurable fun q : M × M => Δ q.1 q.2) (r : Nat) (ε : Real) :
+    MeasurableSet {q : M × M | ε ≤ |G r q.1 q.2 - Δ q.1 q.2|} :=
+  measurableSet_le measurable_const (Measurable.abs ((hG r).sub hΔ2))
+
+/--
+**A fresh query paired with any drawn reference has the product law**, so the probability of the
+error event is the one computed on `M x M`.
+-/
+theorem measure_absPairErr_query_eq (P : Measure M) [IsProbabilityMeasure P]
+    (hG : ∀ r, Measurable fun q : M × M => G r q.1 q.2)
+    (hΔ2 : Measurable fun q : M × M => Δ q.1 q.2)
+    (D : Nat → (Nat → M) → M → Nat → Real) (hfac : ∀ r φ x i, D r φ x i = G r x (φ i))
+    (r : Nat) (k : Nat) (ε : Real) :
+    (P.prod (Measure.infinitePi fun _ : Nat => P))
+        {z : M × (Nat → M) | ε ≤ |D r z.2 z.1 k - Δ z.1 (z.2 k)|}
+      = (P.prod P) {q : M × M | ε ≤ |G r q.1 q.2 - Δ q.1 q.2|} := by
+  have hg : Measurable fun z : M × (Nat → M) => (z.1, z.2 k) :=
+    measurable_fst.prodMk ((measurable_pi_apply k).comp measurable_snd)
+  rw [← TauCeti.map_prodMk_eval_infinitePi (ι := Nat) P P k,
+    Measure.map_apply hg (measurableSet_absPairErr hG hΔ2 r ε)]
+  congr 1
+  ext z
+  simp [hfac]
+
+/--
+**Two distinct drawn references have the product law**, so the probability of the error event at
+a fixed sampled pair is the same one.
+-/
+theorem measure_absPairErr_sampled_eq (P : Measure M) [IsProbabilityMeasure P]
+    (hG : ∀ r, Measurable fun q : M × M => G r q.1 q.2)
+    (hΔ2 : Measurable fun q : M × M => Δ q.1 q.2)
+    (r : Nat) {i j : Nat} (hij : i ≠ j) (ε : Real) :
+    (Measure.infinitePi fun _ : Nat => P)
+        {φ : Nat → M | ε ≤ |G r (φ i) (φ j) - Δ (φ i) (φ j)|}
+      = (P.prod P) {q : M × M | ε ≤ |G r q.1 q.2 - Δ q.1 q.2|} := by
+  have hg : Measurable fun φ : Nat → M => (φ i, φ j) :=
+    (measurable_pi_apply i).prodMk (measurable_pi_apply j)
+  rw [← Measure.infinitePi_map_eval_prod (P := fun _ : Nat => P) hij,
+    Measure.map_apply hg (measurableSet_absPairErr hG hΔ2 r ε)]
+  rfl
+
+/--
+**Theorem 4's conclusion is Lemma 2's hypothesis.**
+
+Convergence in probability of the dissimilarity error at a fixed pair of drawn reference models
+gives the `hzero` hypothesis of `exists_subseq_tendsto_measure_lpPairDistErr_of_pairwise`, with
+no further assumption.  The passage is the equality of the two pair laws.
+-/
+theorem tendsto_measure_absPairErr_query_of_sampled (P : Measure M) [IsProbabilityMeasure P]
+    (hG : ∀ r, Measurable fun q : M × M => G r q.1 q.2)
+    (hΔ2 : Measurable fun q : M × M => Δ q.1 q.2)
+    (D : Nat → (Nat → M) → M → Nat → Real) (hfac : ∀ r φ x i, D r φ x i = G r x (φ i))
+    {i j : Nat} (hij : i ≠ j)
+    (h : ∀ ε : Real, 0 < ε → Tendsto (fun r : Nat =>
+      ((Measure.infinitePi fun _ : Nat => P)
+        {φ : Nat → M | ε ≤ |G r (φ i) (φ j) - Δ (φ i) (φ j)|}).toReal) atTop (𝓝 0)) :
+    ∀ ε : Real, 0 < ε → Tendsto (fun r : Nat =>
+      ((P.prod (Measure.infinitePi fun _ : Nat => P))
+        {z : M × (Nat → M) | ε ≤ |D r z.2 z.1 0 - Δ z.1 (z.2 0)|}).toReal) atTop (𝓝 0) := by
+  intro ε hε
+  refine (h ε hε).congr fun r => ?_
+  rw [measure_absPairErr_sampled_eq P hG hΔ2 r hij ε,
+    ← measure_absPairErr_query_eq P hG hΔ2 D hfac r 0 ε]
+
+end PairLaw
 
 end Acharyya2024.ContinuousMDS

@@ -15,6 +15,7 @@ public import Mathlib.Probability.Independence.Basic
 public import Mathlib.MeasureTheory.Constructions.Pi
 public import Mathlib.MeasureTheory.Integral.Prod
 public import Mathlib.MeasureTheory.Measure.Prod
+public import Mathlib.Probability.ProductMeasure
 
 /-! # Two-coordinate marginals of a product measure, and the mean of a V-statistic
 
@@ -199,5 +200,38 @@ theorem ae_ae_of_forall_ae {Ω X : Type*} [MeasurableSpace Ω] [MeasurableSpace 
     rw [Filter.Eventually, mem_ae_iff]
     simpa using hmapnull
   exact Measure.ae_ae_of_ae_prod hae
+
+/-! ### One coordinate of an infinite product, alongside an independent parameter
+
+The finite-product statements above have an infinite-product counterpart that is what a growing
+reference collection actually needs: the collection is a point of `ι → β` drawn from a product
+measure, a query is an independent point of `α`, and a statistic evaluated at the `i`-th member
+of the collection sees only the pair `(query, i-th member)`.  That pair has the same law for
+every `i`, which is why a per-member expectation cannot depend on the member.
+-/
+
+/--
+**A query and one member of an independently drawn collection have the product law.**
+
+The map `(x, φ) ↦ (x, φ i)` pushes `μ ⊗ ⨂ P` forward to `μ ⊗ P`, for every index `i`.
+-/
+theorem map_prodMk_eval_infinitePi {ι α β : Type*} [MeasurableSpace α] [MeasurableSpace β]
+    (μ : Measure α) [IsProbabilityMeasure μ] (P : Measure β) [IsProbabilityMeasure P] (i : ι) :
+    (μ.prod (Measure.infinitePi fun _ : ι => P)).map (fun z : α × (ι → β) => (z.1, z.2 i))
+      = μ.prod P :=
+  ((MeasurePreserving.id μ).prod (measurePreserving_eval_infinitePi (fun _ : ι => P) i)).map_eq
+
+/--
+**A statistic of a query and one member of the collection integrates against the product
+measure**, with the same value for every member.
+-/
+theorem integral_prodMk_eval_infinitePi {ι α β : Type*} [MeasurableSpace α] [MeasurableSpace β]
+    (μ : Measure α) [IsProbabilityMeasure μ] (P : Measure β) [IsProbabilityMeasure P] (i : ι)
+    {f : α × β → E} (hf : AEStronglyMeasurable f (μ.prod P)) :
+    ∫ z, f (z.1, z.2 i) ∂(μ.prod (Measure.infinitePi fun _ : ι => P)) = ∫ q, f q ∂(μ.prod P) := by
+  have hg : Measurable fun z : α × (ι → β) => (z.1, z.2 i) :=
+    measurable_fst.prodMk ((measurable_pi_apply i).comp measurable_snd)
+  rw [← map_prodMk_eval_infinitePi (ι := ι) μ P i,
+    integral_map hg.aemeasurable (by rwa [map_prodMk_eval_infinitePi (ι := ι) μ P i])]
 
 end TauCeti
