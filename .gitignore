@@ -24,6 +24,14 @@ __pycache__
 
 # Local reference clones of external Lean repos (not vendored; see dev/external-lean-references.md)
 dev/reference-repos/
+
+# External Tau Ceti checkouts. These were Git submodules until 2026-08-28; the
+# repository must stay submodule-free so it can be fetched as a Lake dependency
+# (see external/README.md and dev/palomar-readiness.md). A local clone at either
+# historical path is still found automatically by scripts/_external_checkouts.py,
+# so keeping one here remains convenient -- it is simply not tracked.
+/external/TauCeti/
+/submodules/
 *.toc
 *.tar.gz
 *.gz

@@ -159,10 +159,23 @@ Mathlib      TauCeti
   Never declare new work in `namespace Spectra` or a `Spectra.*` namespace;
   use the owning Tau Ceti or Davis--Kahan namespace. `SpectraBridge` is the
   established name for an attribution-preserving boundary when one is needed.
-- Treat `external/TauCeti` as a read-only provenance reference and build input
-  during ordinary work. Stage the maintained implementation in `ForTauCeti`.
-  Only an explicit submission task should run
-  `scripts/export_for_tauceti.py --write` or update the submodule pointer;
+- **This repository contains no Git submodules, and must not gain any.** Lake
+  fetches a Git dependency with a plain clone and does not initialise submodules,
+  so a submodule — or a Lake `path` dependency pointing into one — makes this
+  repository unusable as a dependency of anything else, and the Palomar Registry
+  rejects a submitted repository containing them. Tau Ceti is a pinned Git
+  dependency in `lakefile.toml`/`lake-manifest.json`; `lake` materialises it under
+  `.lake/packages/TauCeti`. See `external/README.md` and
+  `dev/palomar-readiness.md`.
+- An editable Tau Ceti or roadmap checkout is an **optional explicit input**, never
+  assumed present: pass `--tauceti-root` / `--roadmap-root`, or set `TAUCETI_ROOT` /
+  `TAUCETI_ROADMAP_ROOT`. `scripts/_external_checkouts.py` is the shared resolver.
+  A checker with no checkout reports `UNAVAILABLE` (exit 3) and `run_gates.py`
+  prints it as `SKIP`, counted as neither passed nor failed — never make a gate
+  green by removing the thing it checks.
+- Stage the maintained implementation in `ForTauCeti`. Only an explicit submission
+  task should run `scripts/export_for_tauceti.py --write`, which requires an
+  editable checkout and refuses the Lake package copy;
   `scripts/export_for_tauceti.py --check` is safe during ordinary work.
 - **`ForTauCeti` is the permanent product.** Maintain it as an elegant package
   with a coherent API, one canonical spelling per concept, and provenance on
@@ -267,10 +280,11 @@ target, one topic per PR, with a green build and the standard axiom allowlist.
 `ForTauCeti` is the local proof of the proposed API; submission packaging lives
 under `dev/tauceti/`.
 
-The roadmap checkout is `submodules/TauCetiRoadmap`. Treat it as an external,
-read-only review and submission surface unless the human explicitly requests a
-roadmap change. A request to prove, refactor, or validate an API in this
-repository does not authorize editing that submodule.
+The roadmap is an external checkout, supplied with `--roadmap-root` or
+`TAUCETI_ROADMAP_ROOT` (historically the `submodules/TauCetiRoadmap` submodule,
+removed 2026-08-28). Treat it as an external, read-only review and submission
+surface unless the human explicitly requests a roadmap change. A request to prove,
+refactor, or validate an API in this repository does not authorize editing it.
 
 Operator-roadmap edits use the condensed authoring guide at
 `dev/hilbert-space-operator-roadmap/roadmap-style.md`. The guide summarizes the
