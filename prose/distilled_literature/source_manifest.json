@@ -1194,7 +1194,7 @@
       "group": "Reference works and modern syntheses",
       "tier": "reference",
       "priority": "P3",
-      "formalization_status": "reference horizon for the unbounded and spectral-projection development, which is `SpectralTheory/ClosedOperator/**` and `ForTauCeti/.../LinearPMap/**` since the experimental scaffolds were deleted 2026-08-27",
+      "formalization_status": "reference horizon for the unbounded and spectral-projection development, which is `SpectralTheory/PartialMap/**` and `ForTauCeti/.../LinearPMap/**` since the experimental scaffolds were deleted 2026-08-27",
       "distilled_status": "missing",
       "primary_url": "https://doi.org/10.1007/978-3-642-66282-9",
       "target_note": "Kato1966_selected_perturbation_theory.tex",

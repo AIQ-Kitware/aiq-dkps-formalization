@@ -138,7 +138,7 @@ theorem extends_to_domain
   have hgraph :
       (X (x : F), R (x : F) + X (A₀ x)) ∈
         Set.range (fun z : A.domain => ((z : E), A z)) :=
-    ((linearPMap_isClosed_iff_range_isClosed A).mp hAclosed).mem_of_tendsto
+    ((isClosed_iff_range_isClosed A).mp hAclosed).mem_of_tendsto
       (hX.prodMk_nhds hAseq)
       (Eventually.of_forall fun n => ⟨xu n, rfl⟩)
   rcases hgraph with ⟨z, hz⟩

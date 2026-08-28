@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 
 import DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic
-import DavisKahan.SpectralTheory.ClosedOperator.Basic
+import DavisKahan.SpectralTheory.PartialMap.Basic
 import Mathlib.Analysis.InnerProductSpace.PiL2
 
 /-!

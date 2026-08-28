@@ -58,7 +58,7 @@ omit [CompleteSpace F] in
 domain satisfies `‖B y - c y‖ ≤ r ‖y‖` there, where `c = (α+β)/2` is the
 center and `r = (α-β)/2` the radius.  Polarization gives the sesquilinear
 bound and density of the domain converts it into the norm bound. -/
-theorem linearPMap_norm_shift_apply_le_of_form_bounds
+theorem norm_shift_apply_le_of_form_bounds
     {B : F →ₗ.[𝕜] F} (hsym : TauCeti.LinearPMap.IsSymmetric B)
     (hBdense : Dense (B.domain : Set F))
     {β α : ℝ} (hβα : β ≤ α)
@@ -224,7 +224,7 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- Constant-one estimate for `A X - X B = C` with the interval block `B`
 (quadratic form in `[β, α]`) and the exterior block `A` (bounded shifted left
 inverse at distance `δ` beyond the interval). -/
-theorem linearPMap_norm_sylvester_le_of_intervalExterior
+theorem norm_sylvester_le_of_intervalExterior
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     (hBsym : TauCeti.LinearPMap.IsSymmetric B)
     (hBdense : Dense (B.domain : Set F))
@@ -263,7 +263,7 @@ theorem linearPMap_norm_sylvester_le_of_intervalExterior
   have hbound : ∀ y : B.domain, ‖X (y : F)‖ ≤
       (r + δ)⁻¹ * (‖C‖ + ‖X‖ * r) * ‖(y : F)‖ := by
     intro y
-    have hshift := linearPMap_norm_shift_apply_le_of_form_bounds
+    have hshift := norm_shift_apply_le_of_form_bounds
       hBsym hBdense hβα hBlow hBhigh y
     calc ‖X (y : F)‖
         = ‖J (C (y : F) + X (B y - ((c : ℝ) : 𝕜) • (y : F)))‖ := by
@@ -308,7 +308,7 @@ theorem linearPMap_norm_sylvester_le_of_intervalExterior
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Raw partial-map form of the constant-one estimate in the swapped
 orientation: the interval block is `A` and the exterior block is `B`. -/
-theorem linearPMap_norm_sylvester_le_of_exteriorInterval
+theorem norm_sylvester_le_of_exteriorInterval
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     (hAsym : TauCeti.LinearPMap.IsSymmetric A)
     (hAdense : Dense (A.domain : Set E))
@@ -344,7 +344,7 @@ theorem linearPMap_norm_sylvester_le_of_exteriorInterval
           ((c : ℝ) : 𝕜) • X (J z)) - C (J z) := by abel
   have hbound : ∀ z : F, ‖X z‖ ≤ (r + δ)⁻¹ * (‖X‖ * r + ‖C‖) * ‖z‖ := by
     intro z
-    have hshift := linearPMap_norm_shift_apply_le_of_form_bounds
+    have hshift := norm_shift_apply_le_of_form_bounds
       hAsym hAdense hβα hAlow hAhigh
         ⟨X (J z), hEq.mapsTo_domain ⟨J z, hJdom z⟩⟩
     have hJz : ‖J z‖ ≤ (r + δ)⁻¹ * ‖z‖ := by

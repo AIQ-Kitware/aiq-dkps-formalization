@@ -21,7 +21,7 @@ that existed only to reach it were deleted rather than left as empty shells.
 and about 4700 lines of an older ambient route, audited declaration by
 declaration before removal: every module was either an explicitly labelled
 "open obligations" interface whose proved part had already moved to
-`SpectralTheory/ClosedOperator/**`, `Sylvester/**` or `ForTauCeti/.../LinearPMap/**`,
+`SpectralTheory/PartialMap/**`, `Sylvester/**` or `ForTauCeti/.../LinearPMap/**`,
 an unimplemented "construction plan", or a "legacy" engine the canonical one
 never imported.  None of the seventeen elaborated any more -- each failed on
 namespaces and identifiers (`DavisKahan.Experimental.Foundation`,

@@ -163,7 +163,7 @@ theorem unbounded_sylvester_mem_and_gauge_le_of_spectra_exteriorLeft_intervalRig
     refine hσA lam ?_
     rw [Set.mem_Ioo] at hlam ⊢
     exact ⟨by linarith [hlam.1], by linarith [hlam.2]⟩
-  exact linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight N
+  exact mem_and_gauge_le_of_exteriorLeft_intervalRight N
     hA.isClosed hB.dense_domain hβα hδ
     (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint hB) hBlow hBhigh hAres hEq hC
 

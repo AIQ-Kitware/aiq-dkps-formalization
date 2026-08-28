@@ -52,7 +52,7 @@ and it is not one.
 
 **Related and worse, from lane `{lane:DK-EXPCOVER}` the same day:** the structure
 `ClosedOperator` is *declared* in `TauCeti.DavisKahanExt` from
-`DavisKahan/SpectralTheory/ClosedOperator/Basic.lean`. A namespace on a theorem
+`DavisKahan/SpectralTheory/PartialMap/Basic.lean`. A namespace on a theorem
 is a naming defect; a namespace on a structure is one every projection inherits.
 
 ## Finding AT-2 — a legacy leaf that nothing uses and nothing compiles `{lane:DK-EXPCOVER}`

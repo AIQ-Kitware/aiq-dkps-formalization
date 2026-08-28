@@ -6,8 +6,8 @@ Authors: Jon Crall, Claude Fable 5
 import ForTauCeti.Analysis.InnerProductSpace.ReducingSubspace
 import DavisKahan.Sylvester.ClosedSylvesterEquation
 import DavisKahan.OperatorIdeal.CanonicalRealView
-import DavisKahan.SpectralTheory.ClosedOperator.Basic
-import DavisKahan.SpectralTheory.ClosedOperator.BoundedRealization
+import DavisKahan.SpectralTheory.PartialMap.Basic
+import DavisKahan.SpectralTheory.PartialMap.BoundedRealization
 import DavisKahan.Sylvester.Gap
 import DavisKahan.Sylvester.Unbounded.Neumann
 import ForTauCeti.Analysis.CStarAlgebra.SelfAdjointGapInverse
@@ -443,7 +443,7 @@ theorem mem_and_gauge_sylvester_le_of_spectrum_intervalExterior
   have hEq' : TauCeti.LinearPMap.SylvesterEquation
       (A₁.toLinearMap.toPMap ⊤) (B₁.toLinearMap.toPMap ⊤) X C :=
     TauCeti.LinearPMap.SylvesterEquation.ofBounded hEq₁
-  refine linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse N
+  refine Sylvester_mem_and_gauge_le_of_unbounded_bound_inverse N
     ⟨J, fun y => Submodule.mem_top, ?_, ?_⟩ B₁ hr0 hd hJnorm hB₁norm hEq' hC
   · intro y
     show A₁ (J y) = y

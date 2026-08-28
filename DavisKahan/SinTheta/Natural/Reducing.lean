@@ -379,7 +379,7 @@ theorem result_real
     simpa only [D, NaturalReducingIsometricSinThetaProblem.toData,
       unboundedSinThetaDataOfReducingSubspace] using
       reducingSubspace_orthogonalExactDecomposition (𝕜 := ℝ) U
-  -- The real engines have no `linearPMap_` twin yet, so the conversion to the
+  -- The real engines have no raw twin yet, so the conversion to the
   -- bundled representation is made explicit here rather than hidden in the record.
   have hmain := sinTheta_unbounded_exact_real
     N D U.subtypeL P.ambient_selfAdjoint P.trial_selfAdjoint hcomp

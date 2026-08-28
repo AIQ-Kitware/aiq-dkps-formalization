@@ -82,7 +82,7 @@ theorem tanTheta_unbounded_ambient_paperUINorm_real_exact
 ```
 
 Note `DKClosedOperator` is a **ℂ-only** abbreviation
-(`DavisKahan/SpectralTheory/ClosedOperator/MathlibBridge.lean:27`); spell the real carrier
+(`DavisKahan/SpectralTheory/PartialMap/MathlibBridge.lean:27`); spell the real carrier
 as `TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ)`. `UnboundedTrialBlock`
 (`DavisKahan/TanTheta/UnboundedSpectrum.lean:44`) is already scalar-generic and its own
 docstring says so.

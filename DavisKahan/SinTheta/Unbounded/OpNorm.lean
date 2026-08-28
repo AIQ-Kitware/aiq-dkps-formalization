@@ -40,7 +40,7 @@ theorem sinTheta_unbounded_opNorm
       ((α - β) / 2 + δ)) :
     δ * ‖D.X.adjoint ∘L D.F₁‖ ≤ ‖D.residual.adjoint ∘L D.F₁‖ := by
   have hEq := unbounded_adjoint_residual_block_identity D hA hA₀ hΛ₁
-  have h := linearPMap_norm_sylvester_le_of_exteriorInterval
+  have h := norm_sylvester_le_of_exteriorInterval
     (A := D.A₀) (B := D.Λ₁)
     (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint hA₀) hA₀.dense_domain hβα hδ hA₀low hA₀high hΛres hEq
   simpa [norm_neg] using h

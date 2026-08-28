@@ -114,11 +114,11 @@
       "spectra_module": "Spectra.Operator.KatoRellich"
     },
     {
-      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/MathlibBridge.lean",
+      "consumer": "DavisKahan/SpectralTheory/PartialMap/MathlibBridge.lean",
       "spectra_module": "Spectra.Operator.SelfAdjoint"
     },
     {
-      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/UnitaryConjugation.lean",
+      "consumer": "DavisKahan/SpectralTheory/PartialMap/UnitaryConjugation.lean",
       "spectra_module": "Spectra.Operator.Unitary.Conjugation"
     },
     {
@@ -166,15 +166,15 @@
       "spectra_module": "Spectra.Resolvent.Identities"
     },
     {
-      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/RealSpectrum.lean",
+      "consumer": "DavisKahan/SpectralTheory/PartialMap/RealSpectrum.lean",
       "spectra_module": "Spectra.Resolvent.Spectrum"
     },
     {
-      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/UnitaryConjugation.lean",
+      "consumer": "DavisKahan/SpectralTheory/PartialMap/UnitaryConjugation.lean",
       "spectra_module": "Spectra.Resolvent.Spectrum"
     },
     {
-      "consumer": "DavisKahan/SpectralTheory/ClosedOperator/Complexification.lean",
+      "consumer": "DavisKahan/SpectralTheory/PartialMap/Complexification.lean",
       "spectra_module": "Spectra.Resolvent.Spectrum"
     },
     {

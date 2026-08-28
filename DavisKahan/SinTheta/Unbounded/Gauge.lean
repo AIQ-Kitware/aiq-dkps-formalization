@@ -47,7 +47,7 @@ theorem sinTheta_unbounded_gauge
       δ * N.gaugeReal (D.X.adjoint ∘L D.F₁) ≤
         N.gaugeReal (D.residual.adjoint ∘L D.F₁) := by
   obtain ⟨S, hSnorm, hSeq⟩ :=
-    linearPMap_exists_bounded_shift_extension
+    exists_bounded_shift_extension
       (TauCeti.LinearPMap.isSymmetric_of_isSelfAdjoint hA₀)
       hA₀.dense_domain hβα hA₀low hA₀high
   obtain ⟨J, hdom, _hleft, hright, hJnorm⟩ := hΛres
