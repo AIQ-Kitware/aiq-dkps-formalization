@@ -165,7 +165,7 @@ Do not rewrite `spectrum ℝ` through complexification. The repository has a rea
 
 ### 2.4 Unbounded operators
 
-The canonical unbounded carrier is Mathlib `LinearPMap`. Existing `DKClosedOperator` / `PartialMap` wrappers are compatibility layers. If a new theorem is fundamentally about domains, graph closure, spectral projections, or self-adjoint partial maps, prefer the `LinearPMap` layer and adapt outward.
+The canonical unbounded carrier is Mathlib `LinearPMap`, and since 2026-08-28 it is the *only* one: the bundled `ClosedOperator` record and its wrappers are deleted. A theorem about domains, graph closure, spectral projections, or self-adjoint partial maps is stated over `LinearPMap`, with density and closedness as hypotheses.
 
 In particular, recent spectral cutoff and spectral reduction work is already `LinearPMap`-native. Reuse it.
 

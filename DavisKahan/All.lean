@@ -11,7 +11,6 @@ import DavisKahan.DoubleAngle.All
 import DavisKahan.FiniteDimensional.All
 import DavisKahan.Geometry.All
 import DavisKahan.InfiniteDimensional.All
-import DavisKahan.Interop.All
 import DavisKahan.OperatorIdeal.All
 import DavisKahan.Riccati.All
 import DavisKahan.SharedFoundations.All

@@ -1644,13 +1644,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.complex_directRotation_reversal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:132`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:131`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.real_directRotation_reversal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:247`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:246`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2222,13 +2222,13 @@ The roles and hypotheses of $A$ and $B$ may be interchanged.  The same proof als
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:266`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:269`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:268`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
