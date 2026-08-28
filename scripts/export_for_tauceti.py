@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """Deterministic staging -> Tau Ceti export tool.
 
-Copies a `ForTauCeti.*` staging cluster into the `external/TauCeti` submodule,
-applying exactly one class of transformation: rewriting sibling module imports
+Copies a `ForTauCeti.*` staging cluster into a Tau Ceti checkout, applying
+exactly one class of transformation: rewriting sibling module imports
 `ForTauCeti.X` -> `TauCeti.X` and mapping the file path
-`ForTauCeti/X.lean` -> `external/TauCeti/TauCeti/X.lean`. Everything else —
+`ForTauCeti/X.lean` -> `<tauceti>/TauCeti/X.lean`. Everything else —
 declaration namespaces, provenance, copyright header, proof bodies — is copied
 verbatim (declarations already carry their final `TauCeti`/`ContinuousLinearMap`
 names, so no body rewrite is needed).
@@ -21,9 +21,16 @@ This is NOT a general Lean source-to-source rewriter. The only edits are on
     staging source) and `--write` (perform the copy);
   * reports every file and declaration name exported.
 
+The Tau Ceti checkout is an explicit, optional input; this repository no longer
+carries one as a submodule. `--check` may read the Lake package copy, but
+`--write` demands an editable checkout the operator controls: Lake's package
+directory is a cache, is not a Git working tree anyone should commit into, and
+`lake update` may replace it without warning.
+
 Usage:
     python3 scripts/export_for_tauceti.py --cluster approximation-number --check
-    python3 scripts/export_for_tauceti.py --cluster approximation-number --write
+    python3 scripts/export_for_tauceti.py --cluster approximation-number --write \
+        --tauceti-root ~/code/TauCeti
 """
 from __future__ import annotations
 
@@ -33,9 +40,15 @@ import pathlib
 import re
 import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _external_checkouts import MissingCheckout, tauceti_root  # noqa: E402
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "dev/tauceti/extraction-manifest.json"
-TAUCETI_ROOT = ROOT / "external/TauCeti"
+
+#: Resolved in `main()`. Rebound by tests. There is no in-repository default: a
+#: Tau Ceti checkout is an explicit optional input, not part of this repository.
+TAUCETI_ROOT: pathlib.Path | None = None
 
 IMPORT_RE = re.compile(r"^(\s*)((?:public\s+|private\s+|meta\s+)*import\s+)([A-Za-z0-9_.]+)(.*)$")
 DECL_RE = re.compile(
@@ -191,12 +204,24 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--cluster", default=None,
                     help="cluster name from the manifest (default: all)")
     ap.add_argument("--manifest", default=str(MANIFEST_PATH))
+    ap.add_argument("--tauceti-root", default=None,
+                    help="path to a Tau Ceti checkout (or set TAUCETI_ROOT); "
+                         "--write requires an editable one")
     mode = ap.add_mutually_exclusive_group(required=True)
     mode.add_argument("--check", action="store_true",
                       help="verify Tau Ceti copies match staging sources")
     mode.add_argument("--write", action="store_true",
                       help="write transformed staging sources into Tau Ceti")
     args = ap.parse_args(argv)
+
+    global TAUCETI_ROOT
+    try:
+        TAUCETI_ROOT = tauceti_root(
+            args.tauceti_root, require_editable=args.write, required=True
+        )
+    except MissingCheckout as exc:
+        print(f"export: FAILED\n{exc}", file=sys.stderr)
+        return 1
 
     manifest = load_manifest(pathlib.Path(args.manifest))
     res = run(manifest, args.cluster, write=args.write)

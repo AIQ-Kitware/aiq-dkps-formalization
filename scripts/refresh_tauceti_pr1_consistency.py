@@ -34,6 +34,9 @@ import subprocess
 import sys
 from typing import Any
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _external_checkouts import MissingCheckout, tauceti_root  # noqa: E402
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "dev/tauceti/extraction-manifest.json"
 CLUSTER = "approximation-number"
@@ -64,23 +67,26 @@ def _git_output(args: list[str], cwd: pathlib.Path) -> str:
     return proc.stdout.strip()
 
 
-def observed_revisions() -> tuple[str, str]:
+def observed_revisions(explicit_tauceti_root=None) -> tuple[str, str]:
     """Return the current repository and Tau Ceti checkout revisions.
 
-    Refuses to guess when `external/TauCeti` is not a populated checkout.  Git
-    walks *up* from a working directory to find a repository, so running
-    ``rev-parse HEAD`` inside an empty submodule directory silently answers with
-    the **superproject's** HEAD.  That is not a detectable error downstream: the
-    value is a well-formed SHA, so `--write` would stamp this repository's own
-    commit into the manifest as the Tau Ceti pin.  Observed 2026-07-29, where it
-    returned the commit that had just been made in this repository.
+    Refuses to guess when no Tau Ceti checkout is available.  Git walks *up* from
+    a working directory to find a repository, so running ``rev-parse HEAD`` inside
+    an empty directory nested in this tree silently answers with **this
+    repository's** HEAD.  That is not a detectable error downstream: the value is a
+    well-formed SHA, so `--write` would stamp this repository's own commit into the
+    manifest as the Tau Ceti pin.  Observed 2026-07-29, where it returned the commit
+    that had just been made in this repository.  The identity guard below stays for
+    that reason even though the checkout is now external.
     """
     dk = _git_output(["rev-parse", "HEAD"], ROOT)
-    tc_root = ROOT / "external/TauCeti"
+    try:
+        tc_root = tauceti_root(explicit_tauceti_root, required=True)
+    except MissingCheckout as exc:
+        raise ConsistencyError(str(exc)) from exc
     if not (tc_root / ".git").exists():
         raise ConsistencyError(
-            f"{tc_root.relative_to(ROOT)} is not a populated checkout; "
-            "run `git submodule update --init external/TauCeti`. "
+            f"{tc_root} is not a Git checkout. "
             "Refusing to record this repository's own HEAD as the Tau Ceti pin."
         )
     tc = _git_output(["rev-parse", "HEAD"], tc_root)
@@ -266,11 +272,16 @@ def check_staging_files(manifest: dict[str, Any]) -> list[str]:
 
 
 def write_json(path: pathlib.Path, data: dict[str, Any]) -> None:
-    path.write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    # `ensure_ascii=False`: this manifest carries mathematical prose in its
+    # provenance strings, and escaping `ℝ≥0∞` to `\u211d\u22650\u221e` makes a
+    # human-readable metadata file unreadable on every refresh.
+    path.write_text(
+        json.dumps(data, indent=2, ensure_ascii=False) + "\n", encoding="utf-8"
+    )
 
 
-def run(mode: str) -> int:
-    dk_commit, tc_commit = observed_revisions()
+def run(mode: str, tauceti_checkout=None) -> int:
+    dk_commit, tc_commit = observed_revisions(tauceti_checkout)
     old_manifest = load_manifest()
     expected_manifest = refresh_manifest(old_manifest, dk_commit, tc_commit)
     staging_errors = check_staging_files(expected_manifest)
@@ -319,10 +330,12 @@ def main(argv: list[str] | None = None) -> int:
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--write", action="store_true", help="refresh integration metadata")
     group.add_argument("--check", action="store_true", help="check current consistency")
+    parser.add_argument("--tauceti-root", default=None,
+                        help="path to a Tau Ceti checkout (or set TAUCETI_ROOT)")
     args = parser.parse_args(argv)
     mode = "write" if args.write else "check"
     try:
-        return run(mode)
+        return run(mode, args.tauceti_root)
     except ConsistencyError as ex:
         print(f"ERROR: {ex}", file=sys.stderr)
         return 2

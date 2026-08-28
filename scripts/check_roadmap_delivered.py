@@ -24,8 +24,16 @@ import pathlib
 import re
 import sys
 
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _external_checkouts import EXIT_UNAVAILABLE, roadmap_root  # noqa: E402
+
 REPO = pathlib.Path(__file__).resolve().parent.parent
-ROADMAP = REPO / "submodules/TauCetiRoadmap/TauCetiRoadmap"
+
+#: The roadmap family directory inside an external TauCetiRoadmap checkout. This
+#: repository does not vendor one; `main()` rebinds this once the flag is parsed,
+#: and refuses to report anything when no checkout is available. An empty scan is
+#: not a clean result.
+ROADMAP = (roadmap_root() or REPO / "__no_roadmap_checkout__") / "TauCetiRoadmap"
 LIBS = ("ForTauCeti", "DavisKahan")
 
 # A declaration head.  Deliberately permissive about everything that precedes the
@@ -157,7 +165,17 @@ def main() -> int:
     ap.add_argument("--ambiguous", action="store_true",
                     help="list signatures whose name is declared in more than one module")
     ap.add_argument("--json", action="store_true", help="machine-readable output")
+    ap.add_argument("--roadmap-root", default=None,
+                    help="path to a TauCetiRoadmap checkout (or set TAUCETI_ROADMAP_ROOT)")
     args = ap.parse_args()
+
+    global ROADMAP
+    base = roadmap_root(args.roadmap_root)
+    if base is None:
+        print("SKIP: no TauCetiRoadmap checkout; pass --roadmap-root PATH or set "
+              "TAUCETI_ROADMAP_ROOT. This is not a pass -- the check did not run.")
+        return EXIT_UNAVAILABLE
+    ROADMAP = base / "TauCetiRoadmap"
 
     results = analyse()
     if args.topic:

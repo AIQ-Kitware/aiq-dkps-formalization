@@ -20,7 +20,8 @@ inventory, not proof equations in the source-fidelity inventory and not the 49
 organizational statement-map rows.
 
 `--clean` removes only this repository's `.lake/build`; dependency caches remain
-intact. `--clean-tauceti` additionally removes `external/TauCeti/.lake/build`.
+intact. `--clean-tauceti` additionally removes the Tau Ceti checkout's
+`.lake/build`, when an explicit checkout is supplied.
 """
 from __future__ import annotations
 
@@ -42,6 +43,9 @@ from check_davis_kahan_1970_result_inventory import (
     completion_summary as formalization_result_completion_summary,
     discover_inventory as discover_result_inventory,
 )
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from _external_checkouts import tauceti_root  # noqa: E402
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 BUILD_ROOT = ROOT / "build"
@@ -377,7 +381,14 @@ def main() -> int:
     parser.add_argument(
         "--clean-tauceti",
         action="store_true",
-        help="also remove external/TauCeti/.lake/build before certification",
+        help="also remove the Tau Ceti checkout's .lake/build before certification "
+             "(requires --tauceti-root or TAUCETI_ROOT)",
+    )
+    parser.add_argument(
+        "--tauceti-root",
+        default=None,
+        help="path to a Tau Ceti checkout for upstream provenance (or set TAUCETI_ROOT); "
+             "omitted, the certificate simply records that none was supplied",
     )
     parser.add_argument(
         "--output-dir",
@@ -415,7 +426,8 @@ def main() -> int:
 
     started = now_utc()
     git = git_info()
-    tau = nested_git_info(ROOT / "external/TauCeti")
+    tau_root = tauceti_root(args.tauceti_root)
+    tau = nested_git_info(tau_root) if tau_root else {"present": False}
     source_before, source_entries_before = source_tree_hash()
 
     cleaned_root = False
@@ -426,7 +438,11 @@ def main() -> int:
             shutil.rmtree(target)
         cleaned_root = True
     if args.clean_tauceti:
-        target = ROOT / "external/TauCeti/.lake/build"
+        if tau_root is None:
+            print("--clean-tauceti needs a Tau Ceti checkout; pass --tauceti-root PATH "
+                  "or set TAUCETI_ROOT.", file=sys.stderr)
+            return 2
+        target = tau_root / ".lake/build"
         if target.exists():
             shutil.rmtree(target)
         cleaned_tau = True
