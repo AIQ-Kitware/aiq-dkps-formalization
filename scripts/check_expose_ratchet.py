@@ -129,6 +129,11 @@ BLANKET = re.compile(r"^@\[expose\]\s*public\s+section", re.M)
 #: written and its consumers migrated, which is the api-design work the rubric
 #: above asks for and not an attribute deletion.  Do not raise this baseline to
 #: make the gate green; the gate is correctly reporting real debt.
+#:
+#: 2026-08-28: the count is 166, not 189.  Nothing was cleaned up -- the
+#: `ClosedOperator` to `LinearPMap` migration deleted the consumers that forced
+#: 23 of them.  That is the shape the reduction takes: exposures go when the
+#: thing needing them goes, not when someone tries to delete attributes.
 PER_DECL_BASELINE = 10
 
 PER_DECL = re.compile(r"^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$", re.M)
