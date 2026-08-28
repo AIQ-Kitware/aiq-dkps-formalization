@@ -1,7 +1,7 @@
 # Semantic alignment review: headline mathematical statements
 
-Generated: `2026-08-13T18:14:02+00:00`
-Repository commit: `276987290e8548156ec684dc336657c4eae32636`
+Generated: `2026-08-28T18:55:51+00:00`
+Repository commit: `b8637ca0d2035c2cab06fc65c7820793e711fdfd`
 Working tree clean: `no`
 Importance threshold: `headline`
 Papers: Davis--Kahan 1970, Yu--Wang--Samworth 2015
@@ -50,9 +50,9 @@ The Section 2 sin-theta theorem: interval/exterior spectral separation controls 
 
 This is the primary Lean text for semantic review.  Relevant ambient `variable` binders inherited by the declaration are shown immediately above it.  The compiler-expanded type is retained below only as verification evidence.
 
-`TauCeti.DavisKahan1970.sinTheta_headline_generic`
+`DavisKahan1970.sinTheta_headline`
 
-Source: `DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean:103`
+Source: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:138`
 
 ~~~~lean
 -- Ambient variables inherited by this declaration
@@ -63,89 +63,70 @@ variable {E F G H : Type v}
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
-theorem sinTheta_headline_generic
+theorem sinTheta_headline
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
-    (N : PaperUnitaryInvariantNorm)
-    (A : PartialMap (𝕜 := 𝕜) (E := E))
-    (A₀ : PartialMap (𝕜 := 𝕜) (E := F))
-    (Λ₁ : PartialMap (𝕜 := 𝕜) (E := G))
+    (N : UnitaryInvariantNorm)
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (E₀ : F →L[𝕜] E)
     (F₀ : H →L[𝕜] E)
     (F₁ : G →L[𝕜] E)
+    (sinTheta₀ : F →L[𝕜] E)
     (R : F →L[𝕜] E)
-    (hA : A.IsSelfAdjoint)
-    (hA₀ : A₀.IsSelfAdjoint)
-    (hΛ₁ : Λ₁.IsSelfAdjoint)
-    (hE₀ : IsometricEmbedding E₀)
-    (hF₀ : IsometricEmbedding F₀)
-    (hF₁ : IsometricEmbedding F₁)
-    (horth : F₀.adjoint ∘L F₁ = 0)
-    (hdecomp :
-      F₀ ∘L F₀.adjoint + F₁ ∘L F₁.adjoint = ContinuousLinearMap.id 𝕜 E)
-    (hE₀dom : ∀ x : A₀.domain, E₀ (x : F) ∈ A.domain)
-    (hF₁dom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain)
-    (hresidual : ∀ x : A₀.domain,
-      A.toLinearMap ⟨E₀ (x : F), hE₀dom x⟩ - E₀ (A₀.toLinearMap x) = R (x : F))
-    (hintertwines : ∀ y : Λ₁.domain,
-      A.toLinearMap ⟨F₁ (y : G), hF₁dom y⟩ = F₁ (Λ₁.toLinearMap y))
+    (hSinTheta₀ :
+      sinTheta₀ =
+        (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀)
+    (hA : IsSelfAdjoint A)
+    (hA₀ : IsSelfAdjoint A₀)
+    (hΛ₁ : IsSelfAdjoint Λ₁)
+    (htrial : IsTrialResidual A A₀ E₀ R)
+    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {β α δ : ℝ}
     (hβα : β ≤ α)
     (hδ : 0 < δ)
     (hspectral :
-      (TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆
+      (LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum Λ₁ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}) ∨
-        (TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆
+        (LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum A₀ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}))
     (hR : N.Mem R) :
-    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
-      δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
-        N.gauge R
+    δ * N.gauge sinTheta₀ ≤ N.gauge R
 ~~~~
 
 <details>
 <summary><strong>Compiler-expanded verification</strong></summary>
 
-`TauCeti.DavisKahan1970.sinTheta_headline_generic`
+`DavisKahan1970.sinTheta_headline`
 
 ~~~~lean
-@TauCeti.DavisKahan1970.sinTheta_headline_generic : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E F G H : Type u_2}
+@DavisKahan1970.sinTheta_headline : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E F G H : Type u_2}
   [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E]
   [inst_4 : NormedAddCommGroup F] [inst_5 : InnerProductSpace 𝕜 F] [inst_6 : CompleteSpace F]
   [inst_7 : NormedAddCommGroup G] [inst_8 : InnerProductSpace 𝕜 G] [inst_9 : CompleteSpace G]
   [inst_10 : NormedAddCommGroup H] [inst_11 : InnerProductSpace 𝕜 H] [inst_12 : CompleteSpace H]
   [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : TauCeti.DavisKahanExt.PartialMap)
-  (A₀ : TauCeti.DavisKahanExt.PartialMap) (Λ₁ : TauCeti.DavisKahanExt.PartialMap) (E₀ : F →L[𝕜] E)
-  (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E),
-  A.IsSelfAdjoint →
-    A₀.IsSelfAdjoint →
-      Λ₁.IsSelfAdjoint →
-        TauCeti.DavisKahan.IsometricEmbedding E₀ →
-          TauCeti.DavisKahan.IsometricEmbedding F₀ →
-            TauCeti.DavisKahan.IsometricEmbedding F₁ →
-              ContinuousLinearMap.adjoint F₀ ∘SL F₁ = 0 →
-                F₀ ∘SL ContinuousLinearMap.adjoint F₀ + F₁ ∘SL ContinuousLinearMap.adjoint F₁ =
-                    ContinuousLinearMap.id 𝕜 E →
-                  ∀ (hE₀dom : ∀ (x : ↥A₀.domain), E₀ ↑x ∈ A.domain) (hF₁dom : ∀ (y : ↥Λ₁.domain), F₁ ↑y ∈ A.domain),
-                    (∀ (x : ↥A₀.domain), A.toLinearMap ⟨E₀ ↑x, ⋯⟩ - E₀ (A₀.toLinearMap x) = R ↑x) →
-                      (∀ (y : ↥Λ₁.domain), A.toLinearMap ⟨F₁ ↑y, ⋯⟩ = F₁ (Λ₁.toLinearMap y)) →
-                        ∀ {β α δ : ℝ},
-                          β ≤ α →
-                            0 < δ →
-                              TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆ Set.Icc β α ∧
-                                    TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} ∨
-                                  TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ Set.Icc β α ∧
-                                    TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} →
-                                N.Mem R →
-                                  N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ∧
-                                    δ *
-                                        N.gauge
-                                          ((ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL
-                                            E₀) ≤
-                                      N.gauge R
+  (N : TauCeti.DavisKahan1970.UnitaryInvariantNorm) (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
+  (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (sinTheta₀ R : F →L[𝕜] E),
+  sinTheta₀ = (ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀ →
+    IsSelfAdjoint A →
+      IsSelfAdjoint A₀ →
+        IsSelfAdjoint Λ₁ →
+          DavisKahan1970.IsTrialResidual A A₀ E₀ R →
+            DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ →
+              ∀ {β α δ : ℝ},
+                β ≤ α →
+                  0 < δ →
+                    TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
+                          TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} ∨
+                        TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
+                          TauCeti.LinearPMap.realSpectrum A₀ ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} →
+                      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem N R →
+                        δ * TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge N sinTheta₀ ≤
+                          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge N R
 ~~~~
 
 </details>
@@ -154,7 +135,117 @@ theorem sinTheta_headline_generic
 
 These are the project-local notions in the canonical theorem type whose mathematical content is relevant to alignment.  The short mathematical gloss is the reading guide; source syntax is shown when it can be located uniquely, and the compiler's complete `#print` output is kept in details.
 
-`TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm` — The literal dimension-coherent unitary-invariant norm quantified over by Davis--Kahan; the generic headline theorem uses this source definition directly.
+`DavisKahan1970.isTrialResidual_iff` — Expands the compact trial-residual hypothesis into the trial isometry, domain transport, and exact residual identity R = A E0 - E0 A0.
+
+Source: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:66`
+
+~~~~lean
+-- Ambient variables in scope
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E F G H : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+
+theorem isTrialResidual_iff
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (E₀ : F →L[𝕜] E)
+    (R : F →L[𝕜] E) :
+    IsTrialResidual A A₀ E₀ R ↔
+      IsometricEmbedding E₀ ∧
+        ∃ hdom : ∀ x : A₀.domain, E₀ (x : F) ∈ A.domain,
+          ∀ x : A₀.domain,
+            A ⟨E₀ (x : F), hdom x⟩ -
+              E₀ (A₀ x) = R (x : F)
+~~~~
+
+<details>
+<summary><strong>Compiler-expanded definition</strong></summary>
+
+~~~~lean
+theorem DavisKahan1970.isTrialResidual_iff.{u, v} : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v}
+  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F]
+  [inst_4 : InnerProductSpace 𝕜 F] (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (E₀ R : F →L[𝕜] E),
+  DavisKahan1970.IsTrialResidual A A₀ E₀ R ↔
+    TauCeti.DavisKahan.IsometricEmbedding E₀ ∧
+      ∃ (hdom : ∀ (x : ↥A₀.domain), E₀ ↑x ∈ A.domain), ∀ (x : ↥A₀.domain), ↑A ⟨E₀ ↑x, ⋯⟩ - E₀ (↑A₀ x) = R ↑x :=
+fun {𝕜} [RCLike 𝕜] {E F} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] A
+    A₀ E₀ R =>
+  { mp := fun h => ⟨h.isometry, Exists.intro h.mapsDomain h.residualEquation⟩,
+    mpr := fun a =>
+      And.casesOn a fun hE₀ right =>
+        Exists.casesOn right fun hdom heq => { isometry := hE₀, mapsDomain := hdom, residualEquation := heq } }
+~~~~
+
+</details>
+
+`DavisKahan1970.isExactSpectralDecomposition_iff` — Expands the compact exact-space hypothesis into isometric F0/F1 coordinates, orthogonality, completeness, domain transport, and A F1 = F1 Lambda1.
+
+Source: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:105`
+
+~~~~lean
+-- Ambient variables in scope
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E F G H : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+
+theorem isExactSpectralDecomposition_iff
+    (A : E →ₗ.[𝕜] E)
+    (Λ₁ : G →ₗ.[𝕜] G)
+    (F₀ : H →L[𝕜] E)
+    (F₁ : G →L[𝕜] E) :
+    IsExactSpectralDecomposition A Λ₁ F₀ F₁ ↔
+      IsometricEmbedding F₀ ∧
+        IsometricEmbedding F₁ ∧
+          F₀.adjoint ∘L F₁ = 0 ∧
+            F₀ ∘L F₀.adjoint + F₁ ∘L F₁.adjoint =
+              ContinuousLinearMap.id 𝕜 E ∧
+            ∃ hdom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain,
+              ∀ y : Λ₁.domain,
+                A ⟨F₁ (y : G), hdom y⟩ =
+                  F₁ (Λ₁ y)
+~~~~
+
+<details>
+<summary><strong>Compiler-expanded definition</strong></summary>
+
+~~~~lean
+theorem DavisKahan1970.isExactSpectralDecomposition_iff.{u, v} : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v}
+  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E]
+  [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G]
+  [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] (A : E →ₗ.[𝕜] E)
+  (Λ₁ : G →ₗ.[𝕜] G) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E),
+  DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ ↔
+    TauCeti.DavisKahan.IsometricEmbedding F₀ ∧
+      TauCeti.DavisKahan.IsometricEmbedding F₁ ∧
+        ContinuousLinearMap.adjoint F₀ ∘SL F₁ = 0 ∧
+          F₀ ∘SL ContinuousLinearMap.adjoint F₀ + F₁ ∘SL ContinuousLinearMap.adjoint F₁ = ContinuousLinearMap.id 𝕜 E ∧
+            ∃ (hdom : ∀ (y : ↥Λ₁.domain), F₁ ↑y ∈ A.domain), ∀ (y : ↥Λ₁.domain), ↑A ⟨F₁ ↑y, ⋯⟩ = F₁ (↑Λ₁ y) :=
+fun {𝕜} [RCLike 𝕜] {E G H} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E] [NormedAddCommGroup G]
+    [InnerProductSpace 𝕜 G] [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H] A Λ₁ F₀
+    F₁ =>
+  {
+    mp := fun h =>
+      ⟨h.desiredIsometry,
+        ⟨h.complementIsometry, ⟨h.orthogonal, ⟨h.complete, Exists.intro h.mapsDomain h.intertwines⟩⟩⟩⟩,
+    mpr := fun a =>
+      And.casesOn a fun hF₀ right =>
+        And.casesOn right fun hF₁ right =>
+          And.casesOn right fun horth right =>
+            And.casesOn right fun hcomplete right =>
+              Exists.casesOn right fun hdom hintertwines =>
+                { desiredIsometry := hF₀, complementIsometry := hF₁, orthogonal := horth, complete := hcomplete,
+                  mapsDomain := hdom, intertwines := hintertwines } }
+~~~~
+
+</details>
+
+`TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm` — Implementation structure behind the public theorem spelling UnitaryInvariantNorm: the dimension-coherent normalized unitary-invariant norm quantified over by Davis--Kahan.
 
 Source: `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:55`
 
@@ -192,7 +283,7 @@ constructor:
 
 </details>
 
-`TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan` — A scalar-field capability used to state one theorem over generic RCLike 𝕜. The repository proves instances for both scalar fields in the paper, ℝ and ℂ; it is implementation evidence, not an additional paper hypothesis.
+`TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan` — Scalar-field proof capability used to keep one theorem generic over RCLike. The repository provides instances for both source scalar fields, R and C; this is implementation evidence rather than an additional paper hypothesis.
 
 Source: `DavisKahan/Sylvester/ScalarGeneric.lean:59`
 
@@ -209,14 +300,13 @@ number of parameters: 2
 fields:
   TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.out : ∀ {E F : Type v} [inst : NormedAddCommGroup E]
       [inst_1 : InnerProductSpace 𝕜 E] [inst_2 : CompleteSpace E] [inst_3 : NormedAddCommGroup F]
-      [inst_4 : InnerProductSpace 𝕜 F] [inst_5 : CompleteSpace F] {A : TauCeti.DavisKahanExt.PartialMap}
-      {B : TauCeti.DavisKahanExt.PartialMap},
-      A.IsSelfAdjoint →
-        B.IsSelfAdjoint →
+      [inst_4 : InnerProductSpace 𝕜 F] [inst_5 : CompleteSpace F] {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F},
+      IsSelfAdjoint A →
+        IsSelfAdjoint B →
           ∀ {X C : F →L[𝕜] E} {δ : ℝ},
             0 < δ →
               TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A B δ →
-                TauCeti.DavisKahan.ExactSinTheta.HasClosedSylvesterEquation A B X C →
+                TauCeti.LinearPMap.SylvesterEquation A B X C →
                   ∀ (k : ℕ),
                     δ * TauCeti.ApproximationNumber.kyFanApproximationGauge k X ≤
                       TauCeti.ApproximationNumber.kyFanApproximationGauge k C
@@ -224,14 +314,14 @@ constructor:
   TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.mk.{u, v} {𝕜 : Type u} [RCLike 𝕜]
     (out :
       ∀ {E F : Type v} [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace 𝕜 E] [inst_2 : CompleteSpace E]
-        [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] [inst_5 : CompleteSpace F]
-        {A : TauCeti.DavisKahanExt.PartialMap} {B : TauCeti.DavisKahanExt.PartialMap},
-        A.IsSelfAdjoint →
-          B.IsSelfAdjoint →
+        [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] [inst_5 : CompleteSpace F] {A : E →ₗ.[𝕜] E}
+        {B : F →ₗ.[𝕜] F},
+        IsSelfAdjoint A →
+          IsSelfAdjoint B →
             ∀ {X C : F →L[𝕜] E} {δ : ℝ},
               0 < δ →
                 TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A B δ →
-                  TauCeti.DavisKahan.ExactSinTheta.HasClosedSylvesterEquation A B X C →
+                  TauCeti.LinearPMap.SylvesterEquation A B X C →
                     ∀ (k : ℕ),
                       δ * TauCeti.ApproximationNumber.kyFanApproximationGauge k X ≤
                         TauCeti.ApproximationNumber.kyFanApproximationGauge k C) :
@@ -240,7 +330,7 @@ constructor:
 
 </details>
 
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` — The approximation-number min--max capability needed by the universal norm machinery. It likewise has proved ℝ and ℂ instances and is not an extra mathematical restriction on the paper theorem.
+`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` — Approximation-number min--max capability needed by the universal norm machinery. It has proved R and C instances and is not an extra source restriction.
 
 Source: `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/FiniteRestriction.lean:228`
 
@@ -269,37 +359,29 @@ constructor:
 
 </details>
 
-`TauCeti.DavisKahanExt.PartialMap` — The repository representation of a densely defined closed operator used for the paper's possibly unbounded self-adjoint operators.
-
-Source: `DavisKahan/SpectralTheory/PartialMap/Basic.lean:40`
-
-~~~~lean
-structure PartialMap
-~~~~
+`LinearPMap` — Mathlib's partial linear map: the repository representation of the paper's possibly unbounded self-adjoint operators. Dense domain, closed graph and self-adjointness are hypotheses of the theorems that need them, not fields of the carrier; the bundled DKPS record that once played this role was deleted on 2026-08-28.
 
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
 ~~~~lean
-structure TauCeti.DavisKahanExt.PartialMap.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {E : Type u_2}
-  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] : Type u_2
-number of parameters: 5
+structure LinearPMap.{u_1, u_2, u_3, u_4} {R : Type u_1} {S : Type u_2} [Ring R] [Ring S] (σ : R →+* S) (E : Type u_3)
+  [AddCommGroup E] [Module R E] (F : Type u_4) [AddCommGroup F] [Module S F] : Type (max u_3 u_4)
+number of parameters: 11
 fields:
-  TauCeti.DavisKahanExt.PartialMap.domain : Submodule 𝕜 E
-  TauCeti.DavisKahanExt.PartialMap.toLinearMap : ↥self.domain →ₗ[𝕜] E
-  TauCeti.DavisKahanExt.PartialMap.dense_domain : Dense ↑self.domain
-  TauCeti.DavisKahanExt.PartialMap.closed_graph : IsClosed (Set.range fun x => (↑x, self.toLinearMap x))
+  LinearPMap.domain : Submodule R E
+  LinearPMap.toFun : ↥self.domain →ₛₗ[σ] F
 constructor:
-  TauCeti.DavisKahanExt.PartialMap.mk.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {E : Type u_2} [NormedAddCommGroup E]
-    [InnerProductSpace 𝕜 E] (domain : Submodule 𝕜 E) (toLinearMap : ↥domain →ₗ[𝕜] E) (dense_domain : Dense ↑domain)
-    (closed_graph : IsClosed (Set.range fun x => (↑x, toLinearMap x))) : TauCeti.DavisKahanExt.PartialMap
+  LinearPMap.mk.{u_1, u_2, u_3, u_4} {R : Type u_1} {S : Type u_2} [Ring R] [Ring S] {σ : R →+* S} {E : Type u_3}
+    [AddCommGroup E] [Module R E] {F : Type u_4} [AddCommGroup F] [Module S F] (domain : Submodule R E)
+    (toFun : ↥domain →ₛₗ[σ] F) : E →ₛₗ.[σ] F
 ~~~~
 
 </details>
 
-`TauCeti.LinearPMap.realSpectrum` — The real spectrum of a self-adjoint partial/closed operator. The interval/exterior alternative is written directly in the canonical theorem rather than hidden behind a local gap structure.
+`TauCeti.LinearPMap.realSpectrum` — Real spectrum of a self-adjoint partial/closed operator; the interval/exterior alternative itself remains literal in the canonical theorem.
 
-Source: `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean:984`
+Source: `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean:996`
 
 ~~~~lean
 -- Ambient variables in scope
@@ -325,16 +407,56 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
 
 | Source clause | Lean realization | Status |
 |---|---|---|
-| The scalar field is real or complex. | The canonical theorem quantifies over 𝕜 with [RCLike 𝕜]. The only extra scalar capability binders are HasUnboundedSylvesterKyFan and HasMinMaxLowerBoundEverywhere, for which the repository has proved ℝ and ℂ instances. | `claimed_exact` |
-| A, A0, and Lambda1 are self-adjoint, with E0 the trial isometry and F0,F1 orthogonal exact-space coordinates. | A, A₀, Λ₁, E₀, F₀, and F₁ are explicit arguments. Self-adjointness, isometry of all three coordinate maps, F₀†F₁=0, and F₀F₀†+F₁F₁†=I are explicit hypotheses rather than fields of a bundled problem structure. | `claimed_exact` |
-| R = A E0 - E0 A0 on the operator domain, while F1 intertwines Lambda1 with A. | hE₀dom, hF₁dom, hresidual, and hintertwines state the domain compatibility, residual equation, and complementary intertwining pointwise in the theorem signature. | `claimed_exact` |
-| For beta <= alpha and delta > 0, one of spec(A0), spec(Lambda1) lies in [beta,alpha] and the other avoids (beta-delta,alpha+delta), with the roles interchangeable. | hβα and hδ are explicit, and hspectral is literally the disjunction of the two real-spectrum inclusions; no named gap predicate hides the interval/exterior condition. | `claimed_exact` |
-| The norm is an arbitrary source unitary-invariant norm and R has finite norm. | N : PaperUnitaryInvariantNorm and hR : N.Mem R appear directly. | `claimed_exact` |
-| delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The conclusion is δ * N.gauge ((I - F₀F₀†) E₀) <= N.gauge R, together with membership of that directed sine operator in the same source norm ideal. | `claimed_exact` |
-| Infinite-dimensional and unbounded self-adjoint scope. | There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are PartialMap values and the residual/intertwining equations carry their domain hypotheses explicitly. | `claimed_exact` |
+| The scalar field is real or complex. | The canonical theorem is generic over 𝕜 with [RCLike 𝕜]. Its two scalar capability binders have proved instances for both source scalar fields ℝ and ℂ. | `claimed_exact` |
+| A, A0, and Lambda1 are self-adjoint; E0 is the trial coordinate map and F0,F1 are orthogonal exact-space coordinates. | A, A₀, Λ₁, E₀, F₀, and F₁ are explicit arguments. Self-adjointness is literal; IsTrialResidual and IsExactSpectralDecomposition are expanded immediately in the local semantic dictionary. | `claimed_exact` |
+| R = A E0 - E0 A0 on the operator domain, while F1 intertwines Lambda1 with A. | These clauses are exactly the residualEquation and intertwines components exposed by isTrialResidual_iff and isExactSpectralDecomposition_iff, together with their domain-transport hypotheses. | `claimed_exact` |
+| sin Theta0 is the directed sine block from the trial subspace to the exact subspace. | sinTheta₀ is an explicit theorem parameter and hSinTheta₀ literally states sinTheta₀ = (I - F₀ F₀†) E₀. No named definition hides this identification. | `claimed_exact` |
+| For beta <= alpha and delta > 0, one spectrum lies in [beta,alpha] and the other avoids (beta-delta,alpha+delta), with the roles interchangeable. | hβα and hδ are explicit, and hspectral is literally the disjunction of the two real-spectrum inclusions. | `claimed_exact` |
+| The norm is an arbitrary source unitary-invariant norm and R has finite norm. | N : UnitaryInvariantNorm and hR : N.Mem R appear directly. UnitaryInvariantNorm is the existing public source-facing name for the audited PaperUnitaryInvariantNorm implementation structure. | `claimed_exact` |
+| delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The text after the theorem colon is exactly δ * N.gauge sinTheta₀ <= N.gauge R. The supporting sinTheta_headline_generic theorem additionally certifies N.Mem sinTheta₀ after rewriting by hSinTheta₀. | `claimed_exact` |
+| Infinite-dimensional and unbounded self-adjoint scope. | There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are `LinearPMap` values and the two expanded setup predicates carry the required domain conditions. | `claimed_exact` |
 
 <details>
 <summary><strong>Supporting scope declarations</strong></summary>
+
+`TauCeti.DavisKahan1970.sinTheta_headline_generic`
+
+~~~~lean
+@TauCeti.DavisKahan1970.sinTheta_headline_generic : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E F G H : Type u_2}
+  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E]
+  [inst_4 : NormedAddCommGroup F] [inst_5 : InnerProductSpace 𝕜 F] [inst_6 : CompleteSpace F]
+  [inst_7 : NormedAddCommGroup G] [inst_8 : InnerProductSpace 𝕜 G] [inst_9 : CompleteSpace G]
+  [inst_10 : NormedAddCommGroup H] [inst_11 : InnerProductSpace 𝕜 H] [inst_12 : CompleteSpace H]
+  [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜]
+  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
+  (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E),
+  IsSelfAdjoint A →
+    IsSelfAdjoint A₀ →
+      IsSelfAdjoint Λ₁ →
+        TauCeti.DavisKahan.IsometricEmbedding E₀ →
+          TauCeti.DavisKahan.IsometricEmbedding F₀ →
+            TauCeti.DavisKahan.IsometricEmbedding F₁ →
+              ContinuousLinearMap.adjoint F₀ ∘SL F₁ = 0 →
+                F₀ ∘SL ContinuousLinearMap.adjoint F₀ + F₁ ∘SL ContinuousLinearMap.adjoint F₁ =
+                    ContinuousLinearMap.id 𝕜 E →
+                  ∀ (hE₀dom : ∀ (x : ↥A₀.domain), E₀ ↑x ∈ A.domain) (hF₁dom : ∀ (y : ↥Λ₁.domain), F₁ ↑y ∈ A.domain),
+                    (∀ (x : ↥A₀.domain), ↑A ⟨E₀ ↑x, ⋯⟩ - E₀ (↑A₀ x) = R ↑x) →
+                      (∀ (y : ↥Λ₁.domain), ↑A ⟨F₁ ↑y, ⋯⟩ = F₁ (↑Λ₁ y)) →
+                        ∀ {β α δ : ℝ},
+                          β ≤ α →
+                            0 < δ →
+                              TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
+                                    TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} ∨
+                                  TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
+                                    TauCeti.LinearPMap.realSpectrum A₀ ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} →
+                                N.Mem R →
+                                  N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ∧
+                                    δ *
+                                        N.gauge
+                                          ((ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL
+                                            E₀) ≤
+                                      N.gauge R
+~~~~
 
 `TauCeti.DavisKahan1970.sinTheta_unbounded_exact_generic`
 
@@ -347,9 +469,9 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
   [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜]
   (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily 𝕜)
   (D : TauCeti.DavisKahan.ExactSinTheta.UnboundedSinThetaData) (F₀ : H →L[𝕜] E),
-  TauCeti.DavisKahanExt.PartialMap.IsSelfAdjoint D.A →
-    TauCeti.DavisKahanExt.PartialMap.IsSelfAdjoint D.A₀ →
-      TauCeti.DavisKahanExt.PartialMap.IsSelfAdjoint D.Λ₁ →
+  IsSelfAdjoint D.A →
+    IsSelfAdjoint D.A₀ →
+      IsSelfAdjoint D.Λ₁ →
         TauCeti.DavisKahan.IsometricEmbedding D.X →
           TauCeti.DavisKahan.ExactSinTheta.OrthogonalExactDecomposition F₀ D.F₁ →
             ∀ {δ : ℝ},
@@ -367,13 +489,13 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
 @TauCeti.DavisKahan1970.sinTheta_spectralSubspace : ∀ {E F : Type u_1} [inst : NormedAddCommGroup E]
   [inst_1 : InnerProductSpace ℂ E] [inst_2 : CompleteSpace E] [inst_3 : NormedAddCommGroup F]
   [inst_4 : InnerProductSpace ℂ F] [inst_5 : CompleteSpace F]
-  (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily ℂ) (A : TauCeti.DavisKahanExt.PartialMap)
-  (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S) (A0 : TauCeti.DavisKahanExt.PartialMap),
-  A0.IsSelfAdjoint →
+  (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily ℂ) (A : E →ₗ.[ℂ] E) (hA : IsSelfAdjoint A) (S : Set ℝ)
+  (hS : MeasurableSet S) (A0 : F →ₗ.[ℂ] F),
+  IsSelfAdjoint A0 →
     ∀ (X Rop : F →L[ℂ] E),
       TauCeti.DavisKahan.IsometricEmbedding X →
         ∀ (hXdom : ∀ (x : ↥A0.domain), X ↑x ∈ A.domain),
-          (∀ (x : ↥A0.domain), A.toLinearMap ⟨X ↑x, ⋯⟩ - X (A0.toLinearMap x) = Rop ↑x) →
+          (∀ (x : ↥A0.domain), ↑A ⟨X ↑x, ⋯⟩ - X (↑A0 x) = Rop ↑x) →
             ∀ {δ : ℝ},
               0 < δ →
                 TauCeti.DavisKahan.ExactSinTheta.SpectralSylvesterGap A0
@@ -401,13 +523,13 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
 @TauCeti.DavisKahan1970.sinTheta_real_spectralSubspace : ∀ {E F : Type u_1} [inst : NormedAddCommGroup E]
   [inst_1 : InnerProductSpace ℝ E] [inst_2 : CompleteSpace E] [inst_3 : NormedAddCommGroup F]
   [inst_4 : InnerProductSpace ℝ F] [inst_5 : CompleteSpace F]
-  (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily ℝ) (A : TauCeti.DavisKahanExt.PartialMap)
-  (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S) (A0 : TauCeti.DavisKahanExt.PartialMap),
-  A0.IsSelfAdjoint →
+  (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily ℝ) (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (S : Set ℝ)
+  (hS : MeasurableSet S) (A0 : F →ₗ.[ℝ] F),
+  IsSelfAdjoint A0 →
     ∀ (X Rop : F →L[ℝ] E),
       TauCeti.DavisKahan.IsometricEmbedding X →
         ∀ (hXdom : ∀ (x : ↥A0.domain), X ↑x ∈ A.domain),
-          (∀ (x : ↥A0.domain), A.toLinearMap ⟨X ↑x, ⋯⟩ - X (A0.toLinearMap x) = Rop ↑x) →
+          (∀ (x : ↥A0.domain), ↑A ⟨X ↑x, ⋯⟩ - X (↑A0 x) = Rop ↑x) →
             ∀ {δ : ℝ},
               0 < δ →
                 TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A0
@@ -446,34 +568,28 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
       TauCeti.DavisKahan.IsometricEmbedding X →
         ∀ {δ : ℝ},
           0 < δ →
-            TauCeti.DavisKahan.ExactSinTheta.SpectralSylvesterGap (TauCeti.DavisKahanExt.PartialMap.ofBounded A0)
-                (TauCeti.DavisKahan.selfAdjointSpectralRestriction (TauCeti.DavisKahanExt.PartialMap.ofBounded A) ⋯
-                  Sᶜ ⋯)
-                δ →
+            TauCeti.DavisKahan.ExactSinTheta.SpectralSylvesterGap ((↑A0).toPMap ⊤)
+                (TauCeti.DavisKahan.selfAdjointSpectralRestriction ((↑A).toPMap ⊤) ⋯ Sᶜ ⋯) δ →
               N.Mem (TauCeti.DavisKahan.ExactSinTheta.generalResidual A X A0) →
                 N.Mem
                     ((ContinuousLinearMap.id ℂ E -
-                        TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion
-                            (TauCeti.DavisKahanExt.PartialMap.ofBounded A) ⋯ S hS ∘SL
+                        TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion ((↑A).toPMap ⊤) ⋯ S hS ∘SL
                           ContinuousLinearMap.adjoint
-                            (TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion
-                              (TauCeti.DavisKahanExt.PartialMap.ofBounded A) ⋯ S hS)) ∘SL
+                            (TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion ((↑A).toPMap ⊤) ⋯ S hS)) ∘SL
                       X) ∧
                   δ *
                       N.gauge
                         ((ContinuousLinearMap.id ℂ E -
-                            TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion
-                                (TauCeti.DavisKahanExt.PartialMap.ofBounded A) ⋯ S hS ∘SL
+                            TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion ((↑A).toPMap ⊤) ⋯ S hS ∘SL
                               ContinuousLinearMap.adjoint
-                                (TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion
-                                  (TauCeti.DavisKahanExt.PartialMap.ofBounded A) ⋯ S hS)) ∘SL
+                                (TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion ((↑A).toPMap ⊤) ⋯ S hS)) ∘SL
                           X) ≤
                     N.gauge (TauCeti.DavisKahan.ExactSinTheta.generalResidual A X A0)
 ~~~~
 
 </details>
 
-**Maintainer note:** The canonical review declaration is now scalar-generic and deliberately unbundled: its type exposes the paper operators, coordinate maps, domain equations, interval/exterior spectral alternative, source unitary-invariant norm, and conclusion directly. Field-specific and more abstract natural-input theorems remain supporting declarations rather than the primary semantic-review object.
+**Maintainer note:** The canonical review declaration is also the intended paper-display declaration. It names sinTheta₀ as a theorem parameter but gives its concrete projection-block formula by a literal equality hypothesis in the same signature, so the claim after the colon is a one-to-one rendering of the printed inequality without an opaque angle definition. Only the domain-heavy trial and exact-coordinate setup is bundled, and both bundles are fully expanded by characteristic theorems in the local semantic dictionary. The stronger generic theorem remains supporting evidence for norm-ideal membership and the implementation proof bridge.
 
 **Independent reviewer verdict:** `PASS exact alignment` / `FAIL mismatch` / `UNCERTAIN`
 
@@ -739,7 +855,7 @@ constructor:
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-> **UNRESOLVED DEFINITION:** build/semantic-review-euquz_d_.lean:83:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.principalTangents`
+> **UNRESOLVED DEFINITION:** build/semantic-review-3b87nc2p.lean:95:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.principalTangents`
 
 </details>
 
@@ -748,13 +864,13 @@ constructor:
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-> **UNRESOLVED DEFINITION:** build/semantic-review-euquz_d_.lean:87:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.ritzResidual`
+> **UNRESOLVED DEFINITION:** build/semantic-review-3b87nc2p.lean:99:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.ritzResidual`
 
 </details>
 
-`TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent` — The paper-wide nonacute direct-rotation existence condition (3.5), needed only for the ambient whole-space tangent semantics in the general infinite-dimensional case.
+`TauCeti.DavisKahan.CrossedDefectsEquivalent` — The paper-wide nonacute direct-rotation existence condition (3.5), needed only for the ambient whole-space tangent semantics in the general infinite-dimensional case.
 
-Source: `DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean:65`
+Source: `DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean:64`
 
 ~~~~lean
 -- Ambient variables in scope
@@ -771,7 +887,7 @@ def CrossedDefectsEquivalent
 <summary><strong>Compiler-expanded definition</strong></summary>
 
 ~~~~lean
-def TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent.{u, u_1} : {𝕜 : Type u_1} →
+def TauCeti.DavisKahan.CrossedDefectsEquivalent.{u, u_1} : {𝕜 : Type u_1} →
   [inst : RCLike 𝕜] →
     {H : Type u} →
       [inst_1 : NormedAddCommGroup H] →
@@ -821,18 +937,17 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
 ~~~~lean
 @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact : ∀ {E : Type u_1} [inst : NormedAddCommGroup E]
   [inst_1 : InnerProductSpace ℂ E] [inst_2 : CompleteSpace E]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : TauCeti.DavisKahan.DKClosedOperator)
-  {U V : Submodule ℂ E} [inst_3 : U.HasOrthogonalProjection] [inst_4 : V.HasOrthogonalProjection]
+  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[ℂ] E) {U V : Submodule ℂ E}
+  [inst_3 : U.HasOrthogonalProjection] [inst_4 : V.HasOrthogonalProjection]
   (D : TauCeti.DavisKahan.TanTheta.UnboundedTrialBlock A U) (H : E →L[ℂ] E),
   IsSelfAdjoint H →
     ∀ {alpha delta : ℝ},
       0 < delta →
         ∀ (hVdom : ∀ (x : ↥A.domain), Vᗮ.starProjection ↑x ∈ A.domain),
-          (∀ (x : ↥A.domain), Vᗮ.starProjection (A.toLinearMap x) = A.toLinearMap ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
+          (∀ (x : ↥A.domain), Vᗮ.starProjection (↑A x) = ↑A ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
             (∀ (z : ↥U), RCLike.re (inner ℂ (D.operator z) z) ≤ alpha * ‖z‖ ^ 2) →
-              (∀ y ∈ Vᗮ,
-                  ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re (inner ℂ (A.toLinearMap ⟨y, hy⟩) y)) →
-                TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+              (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re (inner ℂ (↑A ⟨y, hy⟩) y)) →
+                TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                   D.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL →
                     N.Mem H →
                       N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) ∧
@@ -897,7 +1012,7 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
                   RCLike.re (inner ℂ ((TauCeti.DavisKahan.ExactTanTheta.theorem63Compression T U) z) z) ≤
                     alpha * ‖z‖ ^ 2) →
                 (∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re (inner ℂ (T y) y)) →
-                  TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+                  TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                     N.Mem (T - A) →
                       N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) ∧
                         delta * N.gauge (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) ≤ N.gauge (T - A)
@@ -918,7 +1033,7 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
             0 < delta →
               (∀ (z : ↥U), inner ℝ ((TauCeti.DavisKahan1970.compressOperatorReal U T) z) z ≤ alpha * ‖z‖ ^ 2) →
                 (∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (T y) y) →
-                  TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+                  TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                     N.Mem (T - A) →
                       N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ∧
                         delta * N.gauge (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ≤ N.gauge (T - A)
@@ -930,16 +1045,16 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
 @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact : ∀ {E : Type u_1}
   [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace ℝ E] [inst_2 : CompleteSpace E] {U V : Submodule ℝ E}
   [inst_3 : U.HasOrthogonalProjection] [inst_4 : V.HasOrthogonalProjection]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : TauCeti.DavisKahanExt.PartialMap)
+  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[ℝ] E)
   (D : TauCeti.DavisKahan.TanTheta.UnboundedTrialBlock A U) (H : E →L[ℝ] E),
   IsSelfAdjoint H →
     ∀ {alpha delta : ℝ},
       0 < delta →
         ∀ (hVdom : ∀ (x : ↥A.domain), Vᗮ.starProjection ↑x ∈ A.domain),
-          (∀ (x : ↥A.domain), Vᗮ.starProjection (A.toLinearMap x) = A.toLinearMap ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
+          (∀ (x : ↥A.domain), Vᗮ.starProjection (↑A x) = ↑A ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
             (∀ (z : ↥U), inner ℝ (D.operator z) z ≤ alpha * ‖z‖ ^ 2) →
-              (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (A.toLinearMap ⟨y, hy⟩) y) →
-                TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+              (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (↑A ⟨y, hy⟩) y) →
+                TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                   D.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL →
                     N.Mem H →
                       N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ∧
@@ -953,20 +1068,17 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
   [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace ℂ E] [inst_2 : CompleteSpace E]
   (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {U V : Submodule ℂ E}
   [inst_3 : U.HasOrthogonalProjection] [inst_4 : V.HasOrthogonalProjection]
-  (D : TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData U) (A : TauCeti.DavisKahan.DKClosedOperator)
-  (H : E →L[ℂ] E),
+  (D : TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData U) (A : E →ₗ.[ℂ] E) (H : E →L[ℂ] E),
   IsSelfAdjoint H →
     ∀ {alpha delta : ℝ},
       0 < delta →
         ∀ (hZA : ∀ (z : ↥D.compression.domain), ↑↑z ∈ A.domain),
-          (∀ (z : ↥D.compression.domain), D.action z = A.toLinearMap ⟨↑↑z, ⋯⟩) →
+          (∀ (z : ↥D.compression.domain), D.action z = ↑A ⟨↑↑z, ⋯⟩) →
             ∀ (hVdom : ∀ (x : ↥A.domain), Vᗮ.starProjection ↑x ∈ A.domain),
-              (∀ (x : ↥A.domain), Vᗮ.starProjection (A.toLinearMap x) = A.toLinearMap ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
-                TauCeti.DavisKahan.ExactSinTheta.SemiboundedAbove D.compression alpha →
-                  (∀ y ∈ Vᗮ,
-                      ∀ (hy : y ∈ A.domain),
-                        (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re (inner ℂ (A.toLinearMap ⟨y, hy⟩) y)) →
-                    TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+              (∀ (x : ↥A.domain), Vᗮ.starProjection (↑A x) = ↑A ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
+                TauCeti.LinearPMap.SemiboundedAbove D.compression alpha →
+                  (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re (inner ℂ (↑A ⟨y, hy⟩) y)) →
+                    TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                       D.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL →
                         N.Mem H →
                           N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) ∧
@@ -980,18 +1092,17 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
   [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace ℝ E] [inst_2 : CompleteSpace E] {U V : Submodule ℝ E}
   [inst_3 : U.HasOrthogonalProjection] [inst_4 : V.HasOrthogonalProjection]
   (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm)
-  (D : TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData U) (A : TauCeti.DavisKahanExt.PartialMap)
-  (H : E →L[ℝ] E),
+  (D : TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData U) (A : E →ₗ.[ℝ] E) (H : E →L[ℝ] E),
   IsSelfAdjoint H →
     ∀ {alpha delta : ℝ},
       0 < delta →
         ∀ (hZA : ∀ (z : ↥D.compression.domain), ↑↑z ∈ A.domain),
-          (∀ (z : ↥D.compression.domain), D.action z = A.toLinearMap ⟨↑↑z, ⋯⟩) →
+          (∀ (z : ↥D.compression.domain), D.action z = ↑A ⟨↑↑z, ⋯⟩) →
             ∀ (hVdom : ∀ (x : ↥A.domain), Vᗮ.starProjection ↑x ∈ A.domain),
-              (∀ (x : ↥A.domain), Vᗮ.starProjection (A.toLinearMap x) = A.toLinearMap ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
-                TauCeti.DavisKahan.ExactSinTheta.SemiboundedAbove D.compression alpha →
-                  (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (A.toLinearMap ⟨y, hy⟩) y) →
-                    TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+              (∀ (x : ↥A.domain), Vᗮ.starProjection (↑A x) = ↑A ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
+                TauCeti.LinearPMap.SemiboundedAbove D.compression alpha →
+                  (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (↑A ⟨y, hy⟩) y) →
+                    TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                       D.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL →
                         N.Mem H →
                           N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ∧
@@ -1178,7 +1289,7 @@ def residual : Model →L[ℂ] Model
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-> **UNRESOLVED DEFINITION:** build/semantic-review-euquz_d_.lean:127:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.residual`
+> **UNRESOLVED DEFINITION:** build/semantic-review-3b87nc2p.lean:139:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.residual`
 
 </details>
 
@@ -1281,23 +1392,17 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
 ~~~~lean
 @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm : ∀ {H : Type u_1}
   [inst : NormedAddCommGroup H] [inst_1 : InnerProductSpace ℂ H] [inst_2 : CompleteSpace H] {V : Submodule ℂ H}
-  [inst_3 : V.HasOrthogonalProjection] {M : ↥V →L[ℂ] ↥V} {R : ↥V →L[ℂ] H} {A : TauCeti.DavisKahan.DKClosedOperator}
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm)
-  (hA : TauCeti.DavisKahanExt.PartialMap.IsSelfAdjoint A) (B : Set ℝ) (hB : MeasurableSet B)
-  (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain),
-  (∀ (v : ↥V), A.toLinearMap ⟨↑v, ⋯⟩ = R v + ↑(M v)) →
+  [inst_3 : V.HasOrthogonalProjection] {M : ↥V →L[ℂ] ↥V} {R : ↥V →L[ℂ] H} {A : H →ₗ.[ℂ] H}
+  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (hA : IsSelfAdjoint A) (B : Set ℝ)
+  (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain),
+  (∀ (v : ↥V), ↑A ⟨↑v, ⋯⟩ = R v + ↑(M v)) →
     ∀ {β α δ : ℝ},
       β ≤ α →
         0 < δ →
-          TauCeti.DavisKahan.ExactSinTheta.SemiboundedBelow
-              (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA B hB) β →
-            TauCeti.DavisKahan.ExactSinTheta.SemiboundedAbove
-                (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA B hB) α →
+          TauCeti.LinearPMap.SemiboundedBelow (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA B hB) β →
+            TauCeti.LinearPMap.SemiboundedAbove (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA B hB) α →
               (∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-                  ↑lam ∉
-                    TauCeti.LinearPMap.spectrum
-                      (TauCeti.DavisKahanExt.PartialMap.toLinearPMap
-                        (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ ⋯))) →
+                  ↑lam ∉ TauCeti.LinearPMap.spectrum (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ ⋯)) →
                 N.Mem R →
                   N.Mem
                       (TauCeti.DavisKahan.sinTwoThetaIdealBlock
@@ -1314,10 +1419,10 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
 ~~~~lean
 @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real : ∀ {E : Type u_1}
   [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace ℝ E] [inst_2 : CompleteSpace E] {V : Submodule ℝ E}
-  [inst_3 : V.HasOrthogonalProjection] {M : ↥V →L[ℝ] ↥V} {R : ↥V →L[ℝ] E} {A : TauCeti.DavisKahanExt.PartialMap}
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (hA : A.IsSelfAdjoint) (B : Set ℝ)
+  [inst_3 : V.HasOrthogonalProjection] {M : ↥V →L[ℝ] ↥V} {R : ↥V →L[ℝ] E} {A : E →ₗ.[ℝ] E}
+  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (hA : IsSelfAdjoint A) (B : Set ℝ)
   (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain),
-  (∀ (v : ↥V), A.toLinearMap ⟨↑v, ⋯⟩ = R v + ↑(M v)) →
+  (∀ (v : ↥V), ↑A ⟨↑v, ⋯⟩ = R v + ↑(M v)) →
     ∀ {δ : ℝ},
       0 < δ →
         TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
@@ -1503,7 +1608,7 @@ fun t => 2 * t / |1 - t ^ 2|
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-> **UNRESOLVED DEFINITION:** build/semantic-review-euquz_d_.lean:175:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.approximationSingularValue`
+> **UNRESOLVED DEFINITION:** build/semantic-review-3b87nc2p.lean:187:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.approximationSingularValue`
 
 </details>
 
@@ -1853,55 +1958,61 @@ Theorem 2, first conclusion: the population two-sided exterior gap alone control
 
 *Scope:*
 
-- The headline packet uses the source-shaped consecutive-block theorem; the library also proves an RCLike generalization.
+- The canonical Lean declaration is specialized to Real^p to mirror the real symmetric matrix statement; the supporting implementation theorem is RCLike-generic.
 
 **Canonical Lean statement as written in the source**
 
 This is the primary Lean text for semantic review.  Relevant ambient `variable` binders inherited by the declaration are shown immediately above it.  The compiler-expanded type is retained below only as verification evidence.
 
-`TauCeti.yuWangSamworth_sinTheta_block_le`
+`YuWangSamworth2015.theorem2_sinTheta`
 
-Source: `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/ConsecutiveBlock.lean:212`
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:363`
 
 ~~~~lean
--- Ambient variables inherited by this declaration
-variable {𝕜 : Type*} [RCLike 𝕜]
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-  [FiniteDimensional 𝕜 E]
-
-theorem yuWangSamworth_sinTheta_block_le
-    {A B : E →ₗ[𝕜] E} {hA : A.IsSymmetric} {hB : B.IsSymmetric}
-    {n d r s : ℕ} {hn : finrank 𝕜 E = n} (hsn : s + 1 ≤ n) (hd : r + d = s + 1)
-    {u v : Fin d → E}
-    (hu : IsOrderedEigenframe hA hn (consecutiveEmb (hd.trans_le hsn)) u)
-    (hv : IsOrderedEigenframe hB hn (consecutiveEmb (hd.trans_le hsn)) v)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r s Δ) :
-    sinThetaFrobenius (Submodule.span 𝕜 (Set.range u))
-        (Submodule.span 𝕜 (Set.range v)) ≤
-      2 * min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-        (UnitarilyInvariantSeminorm.frobenius 𝕜 E (B - A)) / Δ
+theorem theorem2_sinTheta
+    {p d r s : Nat}
+    (Sigma SigmaHat :
+      EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
+    (hSigma : Sigma.IsSymmetric) (hSigmaHat : SigmaHat.IsSymmetric)
+    (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
+    (V Vhat : Fin d → EuclideanSpace Real (Fin p))
+    (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
+    (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
+    (sinThetaNorm : Real)
+    (hSinThetaNorm :
+      sinThetaNorm =
+        sinThetaFrobenius (Submodule.span Real (Set.range V))
+          (Submodule.span Real (Set.range Vhat)))
+    (Delta : Real) (hDelta : 0 < Delta)
+    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
+    sinThetaNorm ≤
+      2 * min
+        (Real.sqrt d * ‖SigmaHat - Sigma‖_op)
+        ‖SigmaHat - Sigma‖_F / Delta
 ~~~~
 
 <details>
 <summary><strong>Compiler-expanded verification</strong></summary>
 
-`TauCeti.yuWangSamworth_sinTheta_block_le`
+`YuWangSamworth2015.theorem2_sinTheta`
 
 ~~~~lean
-@TauCeti.yuWangSamworth_sinTheta_block_le : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
-  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E] {A B : E →ₗ[𝕜] E}
-  {hA : A.IsSymmetric} {hB : B.IsSymmetric} {n d r s : ℕ} {hn : Module.finrank 𝕜 E = n} (hsn : s + 1 ≤ n)
-  (hd : r + d = s + 1) {u v : Fin d → E},
-  TauCeti.IsOrderedEigenframe hA hn (TauCeti.consecutiveEmb ⋯) u →
-    TauCeti.IsOrderedEigenframe hB hn (TauCeti.consecutiveEmb ⋯) v →
-      ∀ {Δ : ℝ},
-        0 < Δ →
-          TauCeti.OrderedBlockBoundaryGap hA hn r s Δ →
-            TauCeti.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u)) (Submodule.span 𝕜 (Set.range v)) ≤
-              2 *
-                  min (√↑d * ‖LinearMap.toContinuousLinearMap (B - A)‖)
-                    ((TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (B - A)) /
-                Δ
+@YuWangSamworth2015.theorem2_sinTheta : ∀ {p d r s : ℕ}
+  (Sigma SigmaHat : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)) (hSigma : Sigma.IsSymmetric)
+  (hSigmaHat : SigmaHat.IsSymmetric) (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
+  (V Vhat : Fin d → EuclideanSpace ℝ (Fin p)),
+  YuWangSamworth2015.IsEigenvectorBlock Sigma hSigma hr hs hd V →
+    YuWangSamworth2015.IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat →
+      ∀ (sinThetaNorm : ℝ),
+        sinThetaNorm = TauCeti.sinThetaFrobenius (Submodule.span ℝ (Set.range V)) (Submodule.span ℝ (Set.range Vhat)) →
+          ∀ (Delta : ℝ),
+            0 < Delta →
+              YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta →
+                sinThetaNorm ≤
+                  2 *
+                      min (√↑d * ‖LinearMap.toContinuousLinearMap (SigmaHat - Sigma)‖)
+                        (YuWangSamworth2015.frobeniusNorm (SigmaHat - Sigma)) /
+                    Delta
 ~~~~
 
 </details>
@@ -1910,9 +2021,124 @@ theorem yuWangSamworth_sinTheta_block_le
 
 These are the project-local notions in the canonical theorem type whose mathematical content is relevant to alignment.  The short mathematical gloss is the reading guide; source syntax is shown when it can be located uniquely, and the compiler's complete `#print` output is kept in details.
 
-`TauCeti.OrderedBlockBoundaryGap` — The literal two population boundary gaps around the consecutive block r,...,s; it contains no sample-gap condition.
+`YuWangSamworth2015.isEigenvectorBlock_iff` — Expands IsEigenvectorBlock completely: orthonormal columns and the ordered eigenvector equation at index r+i. This leaves the sample eigenvectors arbitrary inside repeated eigenspaces.
 
-Source: `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/ConsecutiveBlock.lean:115`
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:177`
+
+~~~~lean
+theorem isEigenvectorBlock_iff
+    {p d r s : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric}
+    {hr : r ≤ s} {hs : s < p} {hd : d = s - r + 1}
+    {V : Fin d → EuclideanSpace Real (Fin p)} :
+    IsEigenvectorBlock Sigma hSigma hr hs hd V ↔
+      Orthonormal Real V ∧
+        ∀ i, Sigma (V i) =
+          hSigma.eigenvalues
+            (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp)
+            (Fin.mk (r + (i : Nat)) (by omega)) • V i
+~~~~
+
+<details>
+<summary><strong>Compiler-expanded definition</strong></summary>
+
+~~~~lean
+theorem YuWangSamworth2015.isEigenvectorBlock_iff : ∀ {p d r s : ℕ}
+  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {hr : r ≤ s}
+  {hs : s < p} {hd : d = s - r + 1} {V : Fin d → EuclideanSpace ℝ (Fin p)},
+  YuWangSamworth2015.IsEigenvectorBlock Sigma hSigma hr hs hd V ↔
+    Orthonormal ℝ V ∧ ∀ (i : Fin d), Sigma (V i) = hSigma.eigenvalues ⋯ ⟨r + ↑i, ⋯⟩ • V i :=
+fun {p d r s} {Sigma} {hSigma} {hr} {hs} {hd} {V} => Iff.rfl
+~~~~
+
+</details>
+
+`YuWangSamworth2015.sourcePopulationGap_iff` — Characterizes the source Delta itself: the full-space block is the +infinity endpoint case; otherwise Delta is the greatest real satisfying the two population boundary inequalities, hence exactly their finite minimum.
+
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:301`
+
+~~~~lean
+theorem sourcePopulationGap_iff
+    {p : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric} {r s : Nat} {Delta : Real} :
+    SourcePopulationGap Sigma hSigma r s Delta ↔
+      (r = 0 ∧ s + 1 = p) ∨
+        (PopulationBoundaryGap Sigma hSigma r s Delta ∧
+          ∀ delta : Real,
+            PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta)
+~~~~
+
+<details>
+<summary><strong>Compiler-expanded definition</strong></summary>
+
+~~~~lean
+theorem YuWangSamworth2015.sourcePopulationGap_iff : ∀ {p : ℕ}
+  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {r s : ℕ} {Delta : ℝ},
+  YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta ↔
+    r = 0 ∧ s + 1 = p ∨
+      YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta ∧
+        ∀ (delta : ℝ), YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta :=
+fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
+~~~~
+
+</details>
+
+`YuWangSamworth2015.populationBoundaryGap_iff` — Expands the lower-bound predicate used inside SourcePopulationGap into the two population boundary inequalities, with endpoint conventions represented by vacuity and no condition on SigmaHat.
+
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:245`
+
+~~~~lean
+theorem populationBoundaryGap_iff
+    {p : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric} {r s : Nat} {Delta : Real} :
+    PopulationBoundaryGap Sigma hSigma r s Delta ↔
+      ((∀ q j : Fin p, (q : Nat) + 1 = r → (j : Nat) = r →
+          Delta ≤
+            hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) q -
+              hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) j) ∧
+        (∀ j q : Fin p, (j : Nat) = s → (q : Nat) = s + 1 →
+          Delta ≤
+            hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) j -
+              hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) q))
+~~~~
+
+<details>
+<summary><strong>Compiler-expanded definition</strong></summary>
+
+~~~~lean
+theorem YuWangSamworth2015.populationBoundaryGap_iff : ∀ {p : ℕ}
+  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {r s : ℕ} {Delta : ℝ},
+  YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta ↔
+    (∀ (q j : Fin p), ↑q + 1 = r → ↑j = r → Delta ≤ hSigma.eigenvalues ⋯ q - hSigma.eigenvalues ⋯ j) ∧
+      ∀ (j q : Fin p), ↑j = s → ↑q = s + 1 → Delta ≤ hSigma.eigenvalues ⋯ j - hSigma.eigenvalues ⋯ q :=
+fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
+~~~~
+
+</details>
+
+`YuWangSamworth2015.frobeniusNorm` — Reducible source-facing abbreviation for the existing Frobenius seminorm of a real square operator; in the headline theorem it is applied literally to SigmaHat-Sigma.
+
+<details>
+<summary><strong>Compiler-expanded definition</strong></summary>
+
+~~~~lean
+@[reducible] def YuWangSamworth2015.frobeniusNorm : {p : ℕ} →
+  (EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)) → ℝ :=
+fun {p} A => (TauCeti.UnitarilyInvariantSeminorm.frobenius ℝ (EuclideanSpace ℝ (Fin p))).toFun A
+~~~~
+
+</details>
+
+`TauCeti.sinThetaFrobenius_eq` — Identifies sinThetaFrobenius with the Frobenius norm of the sine/cross-projection operator between the two spanned subspaces.
+
+Source: `ForTauCeti/Analysis/InnerProductSpace/SinTheta/Frobenius.lean:39`
 
 ~~~~lean
 -- Ambient variables in scope
@@ -1920,94 +2146,57 @@ variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
   [FiniteDimensional 𝕜 E]
 
-def OrderedBlockBoundaryGap {n : ℕ} {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
-    (hn : finrank 𝕜 E = n) (r s : ℕ) (Δ : ℝ) : Prop
+theorem sinThetaFrobenius_eq (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    sinThetaFrobenius U V =
+      UnitarilyInvariantSeminorm.frobenius 𝕜 E (sinThetaMap U V)
 ~~~~
 
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
 ~~~~lean
-def TauCeti.OrderedBlockBoundaryGap.{u_1, u_2} : {𝕜 : Type u_1} →
-  [inst : RCLike 𝕜] →
-    {E : Type u_2} →
-      [inst_1 : NormedAddCommGroup E] →
-        [inst_2 : InnerProductSpace 𝕜 E] →
-          [FiniteDimensional 𝕜 E] →
-            {n : ℕ} → {T : E →ₗ[𝕜] E} → T.IsSymmetric → Module.finrank 𝕜 E = n → ℕ → ℕ → ℝ → Prop :=
-fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] {n} {T} hT hn r s Δ =>
-  (∀ (q p : Fin n), ↑q + 1 = r → ↑p = r → Δ ≤ hT.eigenvalues hn q - hT.eigenvalues hn p) ∧
-    ∀ (q p : Fin n), ↑q = s → ↑p = s + 1 → Δ ≤ hT.eigenvalues hn q - hT.eigenvalues hn p
+theorem TauCeti.sinThetaFrobenius_eq.{u_1, u_2} : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
+  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E]
+  (U V : Submodule 𝕜 E) [inst_4 : U.HasOrthogonalProjection] [inst_5 : V.HasOrthogonalProjection],
+  TauCeti.sinThetaFrobenius U V = (TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (TauCeti.sinThetaMap U V) :=
+fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] U V
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => _a = (TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (TauCeti.sinThetaMap U V))
+        (TauCeti.sinThetaFrobenius.eq_1✝ U V)))
+    (Eq.refl ((TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (TauCeti.sinThetaMap U V)))
 ~~~~
 
 </details>
 
-`TauCeti.IsOrderedEigenframe` — Says the supplied frame consists of orthonormal eigenvectors at the specified positions in the sorted eigenvalue list.
+`TauCeti.singularValues_sinThetaMap` — Identifies the singular values of the sine/cross-projection operator with Tau Ceti principalSines, the principal-angle sine sequence.
 
-Source: `ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean:152`
+Source: `ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean:504`
 
 ~~~~lean
 -- Ambient variables in scope
 variable {𝕜 : Type*} [RCLike 𝕜]
 variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-variable [FiniteDimensional 𝕜 E] {n d : ℕ} {T : E →ₗ[𝕜] E}
+  [FiniteDimensional 𝕜 E]
 
-def IsOrderedEigenframe (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n)
-    (e : Fin d ↪ Fin n) (w : Fin d → E) : Prop
+theorem singularValues_sinThetaMap (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    (sinThetaMap U V).singularValues = principalSines U V
 ~~~~
 
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
 ~~~~lean
-def TauCeti.IsOrderedEigenframe.{u_1, u_2} : {𝕜 : Type u_1} →
-  [inst : RCLike 𝕜] →
-    {E : Type u_2} →
-      [inst_1 : NormedAddCommGroup E] →
-        [inst_2 : InnerProductSpace 𝕜 E] →
-          [FiniteDimensional 𝕜 E] →
-            {n d : ℕ} →
-              {T : E →ₗ[𝕜] E} → T.IsSymmetric → Module.finrank 𝕜 E = n → (Fin d ↪ Fin n) → (Fin d → E) → Prop :=
-fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] {n d} {T} hT hn e w =>
-  TauCeti.IsEigenFamily T (fun i => hT.eigenvalues hn (e i)) w
-~~~~
-
-</details>
-
-`TauCeti.consecutiveEmb` — The index embedding selecting exactly the consecutive positions r,...,s.
-
-Source: `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/ConsecutiveBlock.lean:83`
-
-~~~~lean
-def consecutiveEmb {n d r : ℕ} (h : r + d ≤ n) : Fin d ↪ Fin n
-~~~~
-
-<details>
-<summary><strong>Compiler-expanded definition</strong></summary>
-
-~~~~lean
-def TauCeti.consecutiveEmb : {n d r : ℕ} → r + d ≤ n → Fin d ↪ Fin n :=
-fun {n d r} h => { toFun := fun i => ⟨r + ↑i, ⋯⟩, inj' := ⋯ }
-~~~~
-
-</details>
-
-`TauCeti.sinThetaFrobenius` — The Frobenius norm of the sine/cross-projection operator between the two subspaces.
-
-<details>
-<summary><strong>Compiler-expanded definition</strong></summary>
-
-~~~~lean
-def TauCeti.sinThetaFrobenius.{u_1, u_2} : {𝕜 : Type u_1} →
-  [inst : RCLike 𝕜] →
-    {E : Type u_2} →
-      [inst_1 : NormedAddCommGroup E] →
-        [inst_2 : InnerProductSpace 𝕜 E] →
-          [FiniteDimensional 𝕜 E] →
-            (U V : Submodule 𝕜 E) → [U.HasOrthogonalProjection] → [V.HasOrthogonalProjection] → ℝ :=
+@[defeq] theorem TauCeti.singularValues_sinThetaMap.{u_1, u_2} : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
+  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E]
+  (U V : Submodule 𝕜 E) [inst_4 : U.HasOrthogonalProjection] [inst_5 : V.HasOrthogonalProjection],
+  (TauCeti.sinThetaMap U V).singularValues = TauCeti.principalSines U V :=
 fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] U V
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] =>
-  (TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (TauCeti.sinThetaMap U V)
+  rfl
 ~~~~
 
 </details>
@@ -2016,24 +2205,44 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [
 
 | Source clause | Lean realization | Status |
 |---|---|---|
-| The block is the consecutive ordered indices r,...,s and d=s-r+1. | hd : r + d = s + 1 and consecutiveEmb (hd.trans_le hsn) select precisely those indices (0-based Lean indexing). | `claimed_exact` |
-| Only the population exterior gaps enter Delta. | hgap : OrderedBlockBoundaryGap hA hn r s Delta; its printed #print contains only eigenvalues of A (the population operator), never B. | `claimed_exact` |
-| V and V-hat are eigenvector blocks at the same ordered indices. | hu/hv : IsOrderedEigenframe ... (consecutiveEmb ...) u/v. | `claimed_exact` |
-| No sample eigengap. | There is no gap predicate involving hB/B in the canonical theorem type. | `claimed_exact` |
-| Frobenius sine bound with min(sqrt(d)\|\|E\|\|op,\|\|E\|\|F) and constant 2. | The conclusion of yuWangSamworth_sinTheta_block_le is literal up to A/B notation for Sigma/Sigma-hat. | `claimed_exact` |
+| Sigma and Sigma-hat are real symmetric p by p matrices. | Sigma and SigmaHat are symmetric endomorphisms of EuclideanSpace Real (Fin p), the coordinate-free Real^p representation of real symmetric p by p matrices. | `claimed_exact` |
+| The block is the consecutive ordered indices r,...,s with r <= s, s <= p, and d=s-r+1. | The canonical theorem displays hr : r <= s, hs : s < p under zero-based indexing, and hd : d = s - r + 1 literally. | `claimed_exact` |
+| V and V-hat are arbitrary orthonormal eigenvector blocks at those ordered indices. | hV and hVhat use IsEigenvectorBlock, whose displayed definition is orthonormality plus Sigma(V_i)=lambda_(r+i)V_i and SigmaHat(Vhat_i)=lambdaHat_(r+i)Vhat_i. | `claimed_exact` |
+| Only the population exterior gaps enter Delta; no sample eigengap is assumed. | hgap : SourcePopulationGap Sigma hSigma r s Delta. Its displayed characteristic theorem makes Delta the greatest real satisfying the two population boundary inequalities (the printed finite minimum), with an explicit full-space branch for the +infinity endpoint convention. Neither it nor PopulationBoundaryGap mentions SigmaHat. | `claimed_exact` |
+| Frobenius sine bound with 2 min(sqrt(d)\|\|SigmaHat-Sigma\|\|op,\|\|SigmaHat-Sigma\|\|F)/Delta. | The conclusion is `sinThetaNorm <= 2 * min(sqrt d * \|\|SigmaHat-Sigma\|\|op, frobeniusNorm (SigmaHat-Sigma)) / Delta`. Immediately above the colon, hSinThetaNorm identifies sinThetaNorm with sinThetaFrobenius of the spans of V and Vhat. The local semantic dictionary expands the reducible frobeniusNorm abbreviation and then identifies sinThetaFrobenius with the sine cross-projection norm and its singular values with the principal-sine sequence. | `claimed_exact` |
 
 <details>
 <summary><strong>Supporting scope declarations</strong></summary>
 
-`TauCeti.yuWangSamworth_sinTheta_le`
+`YuWangSamworth2015.yuWangSamworth_sinTheta_block_le`
 
 ~~~~lean
-@TauCeti.yuWangSamworth_sinTheta_le : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E]
-  [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E] {A B : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-  (hB : B.IsSymmetric) {U V : Submodule 𝕜 E} [inst_4 : U.HasOrthogonalProjection] [inst_5 : V.HasOrthogonalProjection],
+@YuWangSamworth2015.yuWangSamworth_sinTheta_block_le : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
+  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E] {A B : E →ₗ[𝕜] E}
+  {hA : A.IsSymmetric} {hB : B.IsSymmetric} {n d r s : ℕ} {hn : Module.finrank 𝕜 E = n} (hsn : s + 1 ≤ n)
+  (hd : r + d = s + 1) {u v : Fin d → E},
+  TauCeti.IsOrderedEigenframe hA hn (YuWangSamworth2015.consecutiveEmb ⋯) u →
+    TauCeti.IsOrderedEigenframe hB hn (YuWangSamworth2015.consecutiveEmb ⋯) v →
+      ∀ {Δ : ℝ},
+        0 < Δ →
+          YuWangSamworth2015.OrderedBlockBoundaryGap hA hn r s Δ →
+            TauCeti.sinThetaFrobenius (Submodule.span 𝕜 (Set.range u)) (Submodule.span 𝕜 (Set.range v)) ≤
+              2 *
+                  min (√↑d * ‖LinearMap.toContinuousLinearMap (B - A)‖)
+                    ((TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (B - A)) /
+                Δ
+~~~~
+
+`YuWangSamworth2015.yuWangSamworth_sinTheta_le`
+
+~~~~lean
+@YuWangSamworth2015.yuWangSamworth_sinTheta_le : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
+  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E] {A B : E →ₗ[𝕜] E}
+  (hA : A.IsSymmetric) (hB : B.IsSymmetric) {U V : Submodule 𝕜 E} [inst_4 : U.HasOrthogonalProjection]
+  [inst_5 : V.HasOrthogonalProjection],
   TauCeti.IsInvariant A U →
     TauCeti.IsInvariant B V →
-      TauCeti.CorrespondingEigenblock hA hB U V →
+      YuWangSamworth2015.CorrespondingEigenblock hA hB U V →
         ∀ {d : ℕ},
           Module.finrank 𝕜 ↥U = d →
             ∀ {Δ : ℝ},
@@ -2048,7 +2257,7 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [
 
 </details>
 
-**Maintainer note:** The canonical declaration is the consecutive-block wrapper, not the more abstract CorrespondingEigenblock theorem, so the reviewer sees the paper indices and population boundary gap directly.
+**Maintainer note:** The canonical theorem is both the presentation and audit surface: its claim uses the source-readable sinThetaNorm name and the literal application `frobeniusNorm (SigmaHat - Sigma)`. The equality hypothesis in the same signature exposes the exact Lean meaning of sinThetaNorm, while the semantic dictionary expands frobeniusNorm and closes the sine quantity through to the principal-sine sequence.
 
 #### Source clause `YWS-T2-alignedBasis`
 
@@ -2072,56 +2281,58 @@ Theorem 2, second conclusion: under the same population-gap hypotheses, there is
 
 *Scope:*
 
-- The canonical review declaration is the real-matrix statement so O-hat appears literally as a matrix in the orthogonal group.
+- The canonical review declaration is the Real^p paper-facing wrapper; the older real block theorem and RCLike generalization remain supporting proof surfaces.
 
 **Canonical Lean statement as written in the source**
 
 This is the primary Lean text for semantic review.  Relevant ambient `variable` binders inherited by the declaration are shown immediately above it.  The compiler-expanded type is retained below only as verification evidence.
 
-`TauCeti.yuWangSamworth_alignedFrame_block_real_le`
+`YuWangSamworth2015.theorem2_alignedFrame`
 
-Source: `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/ConsecutiveBlock.lean:296`
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:403`
 
 ~~~~lean
--- Ambient variables inherited by this declaration
-variable {F : Type*} [NormedAddCommGroup F] [InnerProductSpace ℝ F]
-  [FiniteDimensional ℝ F]
-
-theorem yuWangSamworth_alignedFrame_block_real_le
-    {A B : F →ₗ[ℝ] F} {hA : A.IsSymmetric} {hB : B.IsSymmetric}
-    {n d r s : ℕ} {hn : finrank ℝ F = n} (hsn : s + 1 ≤ n) (hd : r + d = s + 1)
-    {u v : Fin d → F}
-    (hu : IsOrderedEigenframe hA hn (consecutiveEmb (hd.trans_le hsn)) u)
-    (hv : IsOrderedEigenframe hB hn (consecutiveEmb (hd.trans_le hsn)) v)
-    {Δ : ℝ} (hΔ : 0 < Δ) (hgap : OrderedBlockBoundaryGap hA hn r s Δ) :
-    ∃ O : Matrix (Fin d) (Fin d) ℝ, O ∈ Matrix.orthogonalGroup (Fin d) ℝ ∧
-      Real.sqrt (∑ i, ‖(∑ j, O j i • v j) - u i‖ ^ 2) ≤
-        2 * Real.sqrt 2 *
-          min (Real.sqrt d * ‖(B - A).toContinuousLinearMap‖)
-            (UnitarilyInvariantSeminorm.frobenius ℝ F (B - A)) / Δ
+theorem theorem2_alignedFrame
+    {p d r s : Nat}
+    (Sigma SigmaHat :
+      EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p))
+    (hSigma : Sigma.IsSymmetric) (hSigmaHat : SigmaHat.IsSymmetric)
+    (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
+    (V Vhat : Fin d → EuclideanSpace Real (Fin p))
+    (hV : IsEigenvectorBlock Sigma hSigma hr hs hd V)
+    (hVhat : IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat)
+    (Delta : Real) (hDelta : 0 < Delta)
+    (hgap : SourcePopulationGap Sigma hSigma r s Delta) :
+    ∃ O : Matrix (Fin d) (Fin d) Real,
+      O ∈ Matrix.orthogonalGroup (Fin d) Real ∧
+        Real.sqrt (∑ i, ‖(∑ j, O j i • Vhat j) - V i‖ ^ 2) ≤
+          2 * Real.sqrt 2 *
+            min
+              (Real.sqrt d * ‖SigmaHat - Sigma‖_op)
+              ‖SigmaHat - Sigma‖_F / Delta
 ~~~~
 
 <details>
 <summary><strong>Compiler-expanded verification</strong></summary>
 
-`TauCeti.yuWangSamworth_alignedFrame_block_real_le`
+`YuWangSamworth2015.theorem2_alignedFrame`
 
 ~~~~lean
-@TauCeti.yuWangSamworth_alignedFrame_block_real_le : ∀ {F : Type u_1} [inst : NormedAddCommGroup F]
-  [inst_1 : InnerProductSpace ℝ F] [inst_2 : FiniteDimensional ℝ F] {A B : F →ₗ[ℝ] F} {hA : A.IsSymmetric}
-  {hB : B.IsSymmetric} {n d r s : ℕ} {hn : Module.finrank ℝ F = n} (hsn : s + 1 ≤ n) (hd : r + d = s + 1)
-  {u v : Fin d → F},
-  TauCeti.IsOrderedEigenframe hA hn (TauCeti.consecutiveEmb ⋯) u →
-    TauCeti.IsOrderedEigenframe hB hn (TauCeti.consecutiveEmb ⋯) v →
-      ∀ {Δ : ℝ},
-        0 < Δ →
-          TauCeti.OrderedBlockBoundaryGap hA hn r s Δ →
+@YuWangSamworth2015.theorem2_alignedFrame : ∀ {p d r s : ℕ}
+  (Sigma SigmaHat : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)) (hSigma : Sigma.IsSymmetric)
+  (hSigmaHat : SigmaHat.IsSymmetric) (hr : r ≤ s) (hs : s < p) (hd : d = s - r + 1)
+  (V Vhat : Fin d → EuclideanSpace ℝ (Fin p)),
+  YuWangSamworth2015.IsEigenvectorBlock Sigma hSigma hr hs hd V →
+    YuWangSamworth2015.IsEigenvectorBlock SigmaHat hSigmaHat hr hs hd Vhat →
+      ∀ (Delta : ℝ),
+        0 < Delta →
+          YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta →
             ∃ O ∈ Matrix.orthogonalGroup (Fin d) ℝ,
-              √(∑ i, ‖∑ j, O j i • v j - u i‖ ^ 2) ≤
+              √(∑ i, ‖∑ j, O j i • Vhat j - V i‖ ^ 2) ≤
                 2 * √2 *
-                    min (√↑d * ‖LinearMap.toContinuousLinearMap (B - A)‖)
-                      ((TauCeti.UnitarilyInvariantSeminorm.frobenius ℝ F).toFun (B - A)) /
-                  Δ
+                    min (√↑d * ‖LinearMap.toContinuousLinearMap (SigmaHat - Sigma)‖)
+                      (YuWangSamworth2015.frobeniusNorm (SigmaHat - Sigma)) /
+                  Delta
 ~~~~
 
 </details>
@@ -2130,84 +2341,117 @@ theorem yuWangSamworth_alignedFrame_block_real_le
 
 These are the project-local notions in the canonical theorem type whose mathematical content is relevant to alignment.  The short mathematical gloss is the reading guide; source syntax is shown when it can be located uniquely, and the compiler's complete `#print` output is kept in details.
 
-`TauCeti.OrderedBlockBoundaryGap` — The two population boundary gaps and no sample gap.
+`YuWangSamworth2015.isEigenvectorBlock_iff` — Expands the supplied population and sample eigenvector blocks into orthonormality plus their ordered eigenvector equations.
 
-Source: `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/ConsecutiveBlock.lean:115`
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:177`
 
 ~~~~lean
--- Ambient variables in scope
-variable {𝕜 : Type*} [RCLike 𝕜]
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-  [FiniteDimensional 𝕜 E]
-
-def OrderedBlockBoundaryGap {n : ℕ} {T : E →ₗ[𝕜] E} (hT : T.IsSymmetric)
-    (hn : finrank 𝕜 E = n) (r s : ℕ) (Δ : ℝ) : Prop
+theorem isEigenvectorBlock_iff
+    {p d r s : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric}
+    {hr : r ≤ s} {hs : s < p} {hd : d = s - r + 1}
+    {V : Fin d → EuclideanSpace Real (Fin p)} :
+    IsEigenvectorBlock Sigma hSigma hr hs hd V ↔
+      Orthonormal Real V ∧
+        ∀ i, Sigma (V i) =
+          hSigma.eigenvalues
+            (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp)
+            (Fin.mk (r + (i : Nat)) (by omega)) • V i
 ~~~~
 
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
 ~~~~lean
-def TauCeti.OrderedBlockBoundaryGap.{u_1, u_2} : {𝕜 : Type u_1} →
-  [inst : RCLike 𝕜] →
-    {E : Type u_2} →
-      [inst_1 : NormedAddCommGroup E] →
-        [inst_2 : InnerProductSpace 𝕜 E] →
-          [FiniteDimensional 𝕜 E] →
-            {n : ℕ} → {T : E →ₗ[𝕜] E} → T.IsSymmetric → Module.finrank 𝕜 E = n → ℕ → ℕ → ℝ → Prop :=
-fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] {n} {T} hT hn r s Δ =>
-  (∀ (q p : Fin n), ↑q + 1 = r → ↑p = r → Δ ≤ hT.eigenvalues hn q - hT.eigenvalues hn p) ∧
-    ∀ (q p : Fin n), ↑q = s → ↑p = s + 1 → Δ ≤ hT.eigenvalues hn q - hT.eigenvalues hn p
+theorem YuWangSamworth2015.isEigenvectorBlock_iff : ∀ {p d r s : ℕ}
+  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {hr : r ≤ s}
+  {hs : s < p} {hd : d = s - r + 1} {V : Fin d → EuclideanSpace ℝ (Fin p)},
+  YuWangSamworth2015.IsEigenvectorBlock Sigma hSigma hr hs hd V ↔
+    Orthonormal ℝ V ∧ ∀ (i : Fin d), Sigma (V i) = hSigma.eigenvalues ⋯ ⟨r + ↑i, ⋯⟩ • V i :=
+fun {p d r s} {Sigma} {hSigma} {hr} {hs} {hd} {V} => Iff.rfl
 ~~~~
 
 </details>
 
-`TauCeti.IsOrderedEigenframe` — The supplied population and sample frames at the same sorted consecutive indices.
+`YuWangSamworth2015.sourcePopulationGap_iff` — Characterizes the source Delta itself as the exact finite population boundary minimum, with an explicit full-space +infinity endpoint case.
 
-Source: `ForTauCeti/Analysis/InnerProductSpace/Spectral/EigenFrame.lean:152`
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:301`
 
 ~~~~lean
--- Ambient variables in scope
-variable {𝕜 : Type*} [RCLike 𝕜]
-variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
-variable [FiniteDimensional 𝕜 E] {n d : ℕ} {T : E →ₗ[𝕜] E}
-
-def IsOrderedEigenframe (hT : T.IsSymmetric) (hn : finrank 𝕜 E = n)
-    (e : Fin d ↪ Fin n) (w : Fin d → E) : Prop
+theorem sourcePopulationGap_iff
+    {p : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric} {r s : Nat} {Delta : Real} :
+    SourcePopulationGap Sigma hSigma r s Delta ↔
+      (r = 0 ∧ s + 1 = p) ∨
+        (PopulationBoundaryGap Sigma hSigma r s Delta ∧
+          ∀ delta : Real,
+            PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta)
 ~~~~
 
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
 ~~~~lean
-def TauCeti.IsOrderedEigenframe.{u_1, u_2} : {𝕜 : Type u_1} →
-  [inst : RCLike 𝕜] →
-    {E : Type u_2} →
-      [inst_1 : NormedAddCommGroup E] →
-        [inst_2 : InnerProductSpace 𝕜 E] →
-          [FiniteDimensional 𝕜 E] →
-            {n d : ℕ} →
-              {T : E →ₗ[𝕜] E} → T.IsSymmetric → Module.finrank 𝕜 E = n → (Fin d ↪ Fin n) → (Fin d → E) → Prop :=
-fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] {n d} {T} hT hn e w =>
-  TauCeti.IsEigenFamily T (fun i => hT.eigenvalues hn (e i)) w
+theorem YuWangSamworth2015.sourcePopulationGap_iff : ∀ {p : ℕ}
+  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {r s : ℕ} {Delta : ℝ},
+  YuWangSamworth2015.SourcePopulationGap Sigma hSigma r s Delta ↔
+    r = 0 ∧ s + 1 = p ∨
+      YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta ∧
+        ∀ (delta : ℝ), YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s delta → delta ≤ Delta :=
+fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
 ~~~~
 
 </details>
 
-`TauCeti.consecutiveEmb` — The consecutive block r,...,s.
+`YuWangSamworth2015.populationBoundaryGap_iff` — Expands the lower-bound predicate used inside SourcePopulationGap into the two population-only boundary inequalities and shows that no sample-gap condition is hidden.
 
-Source: `ForTauCeti/Analysis/InnerProductSpace/YuWangSamworth/ConsecutiveBlock.lean:83`
+Source: `YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:245`
 
 ~~~~lean
-def consecutiveEmb {n d r : ℕ} (h : r + d ≤ n) : Fin d ↪ Fin n
+theorem populationBoundaryGap_iff
+    {p : Nat}
+    {Sigma : EuclideanSpace Real (Fin p) →ₗ[Real] EuclideanSpace Real (Fin p)}
+    {hSigma : Sigma.IsSymmetric} {r s : Nat} {Delta : Real} :
+    PopulationBoundaryGap Sigma hSigma r s Delta ↔
+      ((∀ q j : Fin p, (q : Nat) + 1 = r → (j : Nat) = r →
+          Delta ≤
+            hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) q -
+              hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) j) ∧
+        (∀ j q : Fin p, (j : Nat) = s → (q : Nat) = s + 1 →
+          Delta ≤
+            hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) j -
+              hSigma.eigenvalues
+                (show finrank Real (EuclideanSpace Real (Fin p)) = p by simp) q))
 ~~~~
 
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
 ~~~~lean
-def TauCeti.consecutiveEmb : {n d r : ℕ} → r + d ≤ n → Fin d ↪ Fin n :=
-fun {n d r} h => { toFun := fun i => ⟨r + ↑i, ⋯⟩, inj' := ⋯ }
+theorem YuWangSamworth2015.populationBoundaryGap_iff : ∀ {p : ℕ}
+  {Sigma : EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)} {hSigma : Sigma.IsSymmetric} {r s : ℕ} {Delta : ℝ},
+  YuWangSamworth2015.PopulationBoundaryGap Sigma hSigma r s Delta ↔
+    (∀ (q j : Fin p), ↑q + 1 = r → ↑j = r → Delta ≤ hSigma.eigenvalues ⋯ q - hSigma.eigenvalues ⋯ j) ∧
+      ∀ (j q : Fin p), ↑j = s → ↑q = s + 1 → Delta ≤ hSigma.eigenvalues ⋯ j - hSigma.eigenvalues ⋯ q :=
+fun {p} {Sigma} {hSigma} {r s} {Delta} => Iff.rfl
+~~~~
+
+</details>
+
+`YuWangSamworth2015.frobeniusNorm` — Reducible source-facing abbreviation for the existing Frobenius seminorm, applied directly to SigmaHat-Sigma in the aligned-frame bound.
+
+<details>
+<summary><strong>Compiler-expanded definition</strong></summary>
+
+~~~~lean
+@[reducible] def YuWangSamworth2015.frobeniusNorm : {p : ℕ} →
+  (EuclideanSpace ℝ (Fin p) →ₗ[ℝ] EuclideanSpace ℝ (Fin p)) → ℝ :=
+fun {p} A => (TauCeti.UnitarilyInvariantSeminorm.frobenius ℝ (EuclideanSpace ℝ (Fin p))).toFun A
 ~~~~
 
 </details>
@@ -2216,28 +2460,48 @@ fun {n d r} h => { toFun := fun i => ⟨r + ↑i, ⋯⟩, inj' := ⋯ }
 
 | Source clause | Lean realization | Status |
 |---|---|---|
-| Same population-only gap and consecutive eigenvector blocks as the first conclusion. | The canonical theorem repeats the same hd, hu, hv, hDelta and OrderedBlockBoundaryGap hypotheses. | `claimed_exact` |
-| There exists O-hat in O(d). | The conclusion existentially returns O : Matrix (Fin d) (Fin d) R with O in Matrix.orthogonalGroup. | `claimed_exact` |
-| V-hat O-hat is compared to the supplied V, not to a reselected population basis. | The left side is sqrt(sum_i \|\|sum_j O j i • v j - u i\|\|^2), with u and v exactly the supplied frames from the hypotheses. | `claimed_exact` |
-| Constant 2^(3/2) and the same min numerator. | The conclusion is 2 * sqrt 2 * min(sqrt d * \|\|B-A\|\|op, \|\|B-A\|\|F) / Delta. | `claimed_exact` |
+| The second conclusion has the same real symmetric matrices, consecutive eigenvector blocks, and population-only gap as the first. | theorem2_alignedFrame repeats the same Sigma, SigmaHat, hr, hs, hd, IsEigenvectorBlock, Delta>0, and exact SourcePopulationGap mathematical hypotheses as theorem2_sinTheta. The perturbation Frobenius term is written directly as `frobeniusNorm (SigmaHat - Sigma)`. | `claimed_exact` |
+| There exists O-hat in O(d). | The conclusion existentially returns O : Matrix (Fin d) (Fin d) Real with O in Matrix.orthogonalGroup (Fin d) Real. | `claimed_exact` |
+| V-hat O-hat is compared with the supplied V. | The left side is sqrt(sum_i \|\|sum_j O j i * Vhat j - V i\|\|^2), using exactly the V and Vhat arguments from the hypotheses. | `claimed_exact` |
+| The constant is 2^(3/2) with the same minimum numerator and Delta denominator. | The conclusion is 2 * sqrt 2 * min(sqrt d * \|\|SigmaHat-Sigma\|\|op, frobeniusNorm (SigmaHat-Sigma)) / Delta; the local semantic dictionary expands frobeniusNorm to the existing Frobenius seminorm. | `claimed_exact` |
 
 <details>
 <summary><strong>Supporting scope declarations</strong></summary>
 
-`TauCeti.yuWangSamworth_alignedFrame_block_le`
+`YuWangSamworth2015.yuWangSamworth_alignedFrame_block_real_le`
 
 ~~~~lean
-@TauCeti.yuWangSamworth_alignedFrame_block_le : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
+@YuWangSamworth2015.yuWangSamworth_alignedFrame_block_real_le : ∀ {F : Type u_1} [inst : NormedAddCommGroup F]
+  [inst_1 : InnerProductSpace ℝ F] [inst_2 : FiniteDimensional ℝ F] {A B : F →ₗ[ℝ] F} {hA : A.IsSymmetric}
+  {hB : B.IsSymmetric} {n d r s : ℕ} {hn : Module.finrank ℝ F = n} (hsn : s + 1 ≤ n) (hd : r + d = s + 1)
+  {u v : Fin d → F},
+  TauCeti.IsOrderedEigenframe hA hn (YuWangSamworth2015.consecutiveEmb ⋯) u →
+    TauCeti.IsOrderedEigenframe hB hn (YuWangSamworth2015.consecutiveEmb ⋯) v →
+      ∀ {Δ : ℝ},
+        0 < Δ →
+          YuWangSamworth2015.OrderedBlockBoundaryGap hA hn r s Δ →
+            ∃ O ∈ Matrix.orthogonalGroup (Fin d) ℝ,
+              √(∑ i, ‖∑ j, O j i • v j - u i‖ ^ 2) ≤
+                2 * √2 *
+                    min (√↑d * ‖LinearMap.toContinuousLinearMap (B - A)‖)
+                      ((TauCeti.UnitarilyInvariantSeminorm.frobenius ℝ F).toFun (B - A)) /
+                  Δ
+~~~~
+
+`YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le`
+
+~~~~lean
+@YuWangSamworth2015.yuWangSamworth_alignedFrame_block_le : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E : Type u_2}
   [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E] {A B : E →ₗ[𝕜] E}
   {hA : A.IsSymmetric} {hB : B.IsSymmetric} {n d r s : ℕ} {hn : Module.finrank 𝕜 E = n} (hsn : s + 1 ≤ n)
   (hd : r + d = s + 1) {u v : Fin d → E},
-  TauCeti.IsOrderedEigenframe hA hn (TauCeti.consecutiveEmb ⋯) u →
-    ∀ (hv : TauCeti.IsOrderedEigenframe hB hn (TauCeti.consecutiveEmb ⋯) v) {Δ : ℝ},
+  TauCeti.IsOrderedEigenframe hA hn (YuWangSamworth2015.consecutiveEmb ⋯) u →
+    ∀ (hv : TauCeti.IsOrderedEigenframe hB hn (YuWangSamworth2015.consecutiveEmb ⋯) v) {Δ : ℝ},
       0 < Δ →
-        TauCeti.OrderedBlockBoundaryGap hA hn r s Δ →
+        YuWangSamworth2015.OrderedBlockBoundaryGap hA hn r s Δ →
           ∃ O,
             (∀ (x y : EuclideanSpace 𝕜 (Fin d)), inner 𝕜 (O x) (O y) = inner 𝕜 x y) ∧
-              √(∑ i, ‖TauCeti.frameComp ⋯ O i - u i‖ ^ 2) ≤
+              √(∑ i, ‖YuWangSamworth2015.frameComp ⋯ O i - u i‖ ^ 2) ≤
                 2 * √2 *
                     min (√↑d * ‖LinearMap.toContinuousLinearMap (B - A)‖)
                       ((TauCeti.UnitarilyInvariantSeminorm.frobenius 𝕜 E).toFun (B - A)) /
@@ -2246,7 +2510,7 @@ fun {n d r} h => { toFun := fun i => ⟨r + ↑i, ⋯⟩, inj' := ⋯ }
 
 </details>
 
-**Maintainer note:** Using the real source-shaped wrapper makes every symbol in the printed aligned-frame conclusion visible in the theorem type.
+**Maintainer note:** The aligned headline wrapper exposes the orthogonal matrix and aligned frame distance directly and writes the source perturbation Frobenius norm as the reducible `frobeniusNorm (SigmaHat - Sigma)` application.
 
 **Independent reviewer verdict:** `PASS exact alignment` / `FAIL mismatch` / `UNCERTAIN`
 

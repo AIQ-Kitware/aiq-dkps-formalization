@@ -21,10 +21,11 @@ them; they are not bundled into a parallel operator structure.
 ## Provenance
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
-* Original module: `DavisKahan/SpectralTheory/PartialMap/Basic.lean`.
+* Original module: `DavisKahan/SpectralTheory/ClosedOperator/Basic.lean`.
 * Extraction class: **representation migration**.  The original declarations
-  were methods of a bundled `PartialMap`; this module restates their
-  reusable content directly over Mathlib `LinearPMap`.
+  were methods of a bundled `ClosedOperator` record -- a `LinearPMap` with
+  dense domain and closed graph as fields, since deleted downstream; this
+  module restates their reusable content directly over Mathlib `LinearPMap`.
 * Spectra influence: none.  This module imports only Mathlib.
 -/
 

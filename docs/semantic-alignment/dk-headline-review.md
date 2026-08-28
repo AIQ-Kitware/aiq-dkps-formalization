@@ -1,7 +1,7 @@
 # Semantic alignment review: headline mathematical statements
 
-Generated: `2026-08-17T18:50:37+00:00`
-Repository commit: `448189cd7cd943fbb768a7805f1f577a19e7dd2f`
+Generated: `2026-08-28T18:54:38+00:00`
+Repository commit: `b8637ca0d2035c2cab06fc65c7820793e711fdfd`
 Working tree clean: `no`
 Importance threshold: `headline`
 Papers: Davis--Kahan 1970
@@ -52,7 +52,7 @@ This is the primary Lean text for semantic review.  Relevant ambient `variable` 
 
 `DavisKahan1970.sinTheta_headline`
 
-Source: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:137`
+Source: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:138`
 
 ~~~~lean
 -- Ambient variables inherited by this declaration
@@ -67,9 +67,9 @@ theorem sinTheta_headline
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : UnitaryInvariantNorm)
-    (A : PartialMap (𝕜 := 𝕜) (E := E))
-    (A₀ : PartialMap (𝕜 := 𝕜) (E := F))
-    (Λ₁ : PartialMap (𝕜 := 𝕜) (E := G))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (E₀ : F →L[𝕜] E)
     (F₀ : H →L[𝕜] E)
     (F₁ : G →L[𝕜] E)
@@ -78,20 +78,20 @@ theorem sinTheta_headline
     (hSinTheta₀ :
       sinTheta₀ =
         (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀)
-    (hA : A.IsSelfAdjoint)
-    (hA₀ : A₀.IsSelfAdjoint)
-    (hΛ₁ : Λ₁.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
+    (hA₀ : IsSelfAdjoint A₀)
+    (hΛ₁ : IsSelfAdjoint Λ₁)
     (htrial : IsTrialResidual A A₀ E₀ R)
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {β α δ : ℝ}
     (hβα : β ≤ α)
     (hδ : 0 < δ)
     (hspectral :
-      (TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆
+      (LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum Λ₁ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}) ∨
-        (TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ Set.Icc β α ∧
-          TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆
+        (LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum A₀ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}))
     (hR : N.Mem R) :
     δ * N.gauge sinTheta₀ ≤ N.gauge R
@@ -109,22 +109,21 @@ theorem sinTheta_headline
   [inst_7 : NormedAddCommGroup G] [inst_8 : InnerProductSpace 𝕜 G] [inst_9 : CompleteSpace G]
   [inst_10 : NormedAddCommGroup H] [inst_11 : InnerProductSpace 𝕜 H] [inst_12 : CompleteSpace H]
   [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜]
-  (N : TauCeti.DavisKahan1970.UnitaryInvariantNorm) (A : TauCeti.DavisKahanExt.PartialMap)
-  (A₀ : TauCeti.DavisKahanExt.PartialMap) (Λ₁ : TauCeti.DavisKahanExt.PartialMap) (E₀ : F →L[𝕜] E)
-  (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (sinTheta₀ R : F →L[𝕜] E),
+  (N : TauCeti.DavisKahan1970.UnitaryInvariantNorm) (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
+  (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (sinTheta₀ R : F →L[𝕜] E),
   sinTheta₀ = (ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀ →
-    A.IsSelfAdjoint →
-      A₀.IsSelfAdjoint →
-        Λ₁.IsSelfAdjoint →
+    IsSelfAdjoint A →
+      IsSelfAdjoint A₀ →
+        IsSelfAdjoint Λ₁ →
           DavisKahan1970.IsTrialResidual A A₀ E₀ R →
             DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ →
               ∀ {β α δ : ℝ},
                 β ≤ α →
                   0 < δ →
-                    TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆ Set.Icc β α ∧
-                          TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} ∨
-                        TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ Set.Icc β α ∧
-                          TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} →
+                    TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
+                          TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} ∨
+                        TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
+                          TauCeti.LinearPMap.realSpectrum A₀ ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} →
                       TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem N R →
                         δ * TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge N sinTheta₀ ≤
                           TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge N R
@@ -138,7 +137,7 @@ These are the project-local notions in the canonical theorem type whose mathemat
 
 `DavisKahan1970.isTrialResidual_iff` — Expands the compact trial-residual hypothesis into the trial isometry, domain transport, and exact residual identity R = A E0 - E0 A0.
 
-Source: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:65`
+Source: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:66`
 
 ~~~~lean
 -- Ambient variables in scope
@@ -150,16 +149,16 @@ variable {E F G H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
 theorem isTrialResidual_iff
-    (A : PartialMap (𝕜 := 𝕜) (E := E))
-    (A₀ : PartialMap (𝕜 := 𝕜) (E := F))
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
     (E₀ : F →L[𝕜] E)
     (R : F →L[𝕜] E) :
     IsTrialResidual A A₀ E₀ R ↔
       IsometricEmbedding E₀ ∧
         ∃ hdom : ∀ x : A₀.domain, E₀ (x : F) ∈ A.domain,
           ∀ x : A₀.domain,
-            A.toLinearMap ⟨E₀ (x : F), hdom x⟩ -
-              E₀ (A₀.toLinearMap x) = R (x : F)
+            A ⟨E₀ (x : F), hdom x⟩ -
+              E₀ (A₀ x) = R (x : F)
 ~~~~
 
 <details>
@@ -168,12 +167,10 @@ theorem isTrialResidual_iff
 ~~~~lean
 theorem DavisKahan1970.isTrialResidual_iff.{u, v} : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v}
   [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F]
-  [inst_4 : InnerProductSpace 𝕜 F] (A : TauCeti.DavisKahanExt.PartialMap)
-  (A₀ : TauCeti.DavisKahanExt.PartialMap) (E₀ R : F →L[𝕜] E),
+  [inst_4 : InnerProductSpace 𝕜 F] (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (E₀ R : F →L[𝕜] E),
   DavisKahan1970.IsTrialResidual A A₀ E₀ R ↔
     TauCeti.DavisKahan.IsometricEmbedding E₀ ∧
-      ∃ (hdom : ∀ (x : ↥A₀.domain), E₀ ↑x ∈ A.domain),
-        ∀ (x : ↥A₀.domain), A.toLinearMap ⟨E₀ ↑x, ⋯⟩ - E₀ (A₀.toLinearMap x) = R ↑x :=
+      ∃ (hdom : ∀ (x : ↥A₀.domain), E₀ ↑x ∈ A.domain), ∀ (x : ↥A₀.domain), ↑A ⟨E₀ ↑x, ⋯⟩ - E₀ (↑A₀ x) = R ↑x :=
 fun {𝕜} [RCLike 𝕜] {E F} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] A
     A₀ E₀ R =>
   { mp := fun h => ⟨h.isometry, Exists.intro h.mapsDomain h.residualEquation⟩,
@@ -186,7 +183,7 @@ fun {𝕜} [RCLike 𝕜] {E F} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 
 `DavisKahan1970.isExactSpectralDecomposition_iff` — Expands the compact exact-space hypothesis into isometric F0/F1 coordinates, orthogonality, completeness, domain transport, and A F1 = F1 Lambda1.
 
-Source: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:104`
+Source: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:105`
 
 ~~~~lean
 -- Ambient variables in scope
@@ -198,8 +195,8 @@ variable {E F G H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
 
 theorem isExactSpectralDecomposition_iff
-    (A : PartialMap (𝕜 := 𝕜) (E := E))
-    (Λ₁ : PartialMap (𝕜 := 𝕜) (E := G))
+    (A : E →ₗ.[𝕜] E)
+    (Λ₁ : G →ₗ.[𝕜] G)
     (F₀ : H →L[𝕜] E)
     (F₁ : G →L[𝕜] E) :
     IsExactSpectralDecomposition A Λ₁ F₀ F₁ ↔
@@ -210,8 +207,8 @@ theorem isExactSpectralDecomposition_iff
               ContinuousLinearMap.id 𝕜 E ∧
             ∃ hdom : ∀ y : Λ₁.domain, F₁ (y : G) ∈ A.domain,
               ∀ y : Λ₁.domain,
-                A.toLinearMap ⟨F₁ (y : G), hdom y⟩ =
-                  F₁ (Λ₁.toLinearMap y)
+                A ⟨F₁ (y : G), hdom y⟩ =
+                  F₁ (Λ₁ y)
 ~~~~
 
 <details>
@@ -221,16 +218,14 @@ theorem isExactSpectralDecomposition_iff
 theorem DavisKahan1970.isExactSpectralDecomposition_iff.{u, v} : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v}
   [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E]
   [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G]
-  [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H]
-  (A : TauCeti.DavisKahanExt.PartialMap) (Λ₁ : TauCeti.DavisKahanExt.PartialMap) (F₀ : H →L[𝕜] E)
-  (F₁ : G →L[𝕜] E),
+  [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] (A : E →ₗ.[𝕜] E)
+  (Λ₁ : G →ₗ.[𝕜] G) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E),
   DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ ↔
     TauCeti.DavisKahan.IsometricEmbedding F₀ ∧
       TauCeti.DavisKahan.IsometricEmbedding F₁ ∧
         ContinuousLinearMap.adjoint F₀ ∘SL F₁ = 0 ∧
           F₀ ∘SL ContinuousLinearMap.adjoint F₀ + F₁ ∘SL ContinuousLinearMap.adjoint F₁ = ContinuousLinearMap.id 𝕜 E ∧
-            ∃ (hdom : ∀ (y : ↥Λ₁.domain), F₁ ↑y ∈ A.domain),
-              ∀ (y : ↥Λ₁.domain), A.toLinearMap ⟨F₁ ↑y, ⋯⟩ = F₁ (Λ₁.toLinearMap y) :=
+            ∃ (hdom : ∀ (y : ↥Λ₁.domain), F₁ ↑y ∈ A.domain), ∀ (y : ↥Λ₁.domain), ↑A ⟨F₁ ↑y, ⋯⟩ = F₁ (↑Λ₁ y) :=
 fun {𝕜} [RCLike 𝕜] {E G H} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E] [NormedAddCommGroup G]
     [InnerProductSpace 𝕜 G] [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H] A Λ₁ F₀
     F₁ =>
@@ -305,14 +300,13 @@ number of parameters: 2
 fields:
   TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.out : ∀ {E F : Type v} [inst : NormedAddCommGroup E]
       [inst_1 : InnerProductSpace 𝕜 E] [inst_2 : CompleteSpace E] [inst_3 : NormedAddCommGroup F]
-      [inst_4 : InnerProductSpace 𝕜 F] [inst_5 : CompleteSpace F] {A : TauCeti.DavisKahanExt.PartialMap}
-      {B : TauCeti.DavisKahanExt.PartialMap},
-      A.IsSelfAdjoint →
-        B.IsSelfAdjoint →
+      [inst_4 : InnerProductSpace 𝕜 F] [inst_5 : CompleteSpace F] {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F},
+      IsSelfAdjoint A →
+        IsSelfAdjoint B →
           ∀ {X C : F →L[𝕜] E} {δ : ℝ},
             0 < δ →
               TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A B δ →
-                TauCeti.DavisKahan.ExactSinTheta.HasClosedSylvesterEquation A B X C →
+                TauCeti.LinearPMap.SylvesterEquation A B X C →
                   ∀ (k : ℕ),
                     δ * TauCeti.ApproximationNumber.kyFanApproximationGauge k X ≤
                       TauCeti.ApproximationNumber.kyFanApproximationGauge k C
@@ -320,14 +314,14 @@ constructor:
   TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.mk.{u, v} {𝕜 : Type u} [RCLike 𝕜]
     (out :
       ∀ {E F : Type v} [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace 𝕜 E] [inst_2 : CompleteSpace E]
-        [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] [inst_5 : CompleteSpace F]
-        {A : TauCeti.DavisKahanExt.PartialMap} {B : TauCeti.DavisKahanExt.PartialMap},
-        A.IsSelfAdjoint →
-          B.IsSelfAdjoint →
+        [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] [inst_5 : CompleteSpace F] {A : E →ₗ.[𝕜] E}
+        {B : F →ₗ.[𝕜] F},
+        IsSelfAdjoint A →
+          IsSelfAdjoint B →
             ∀ {X C : F →L[𝕜] E} {δ : ℝ},
               0 < δ →
                 TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A B δ →
-                  TauCeti.DavisKahan.ExactSinTheta.HasClosedSylvesterEquation A B X C →
+                  TauCeti.LinearPMap.SylvesterEquation A B X C →
                     ∀ (k : ℕ),
                       δ * TauCeti.ApproximationNumber.kyFanApproximationGauge k X ≤
                         TauCeti.ApproximationNumber.kyFanApproximationGauge k C) :
@@ -365,37 +359,29 @@ constructor:
 
 </details>
 
-`TauCeti.DavisKahanExt.PartialMap` — Repository representation of a densely defined closed operator used for the possibly unbounded self-adjoint operators in the paper.
-
-Source: `DavisKahan/SpectralTheory/PartialMap/Basic.lean:40`
-
-~~~~lean
-structure PartialMap
-~~~~
+`LinearPMap` — Mathlib's partial linear map: the repository representation of the paper's possibly unbounded self-adjoint operators. Dense domain, closed graph and self-adjointness are hypotheses of the theorems that need them, not fields of the carrier; the bundled DKPS record that once played this role was deleted on 2026-08-28.
 
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
 ~~~~lean
-structure TauCeti.DavisKahanExt.PartialMap.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {E : Type u_2}
-  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] : Type u_2
-number of parameters: 5
+structure LinearPMap.{u_1, u_2, u_3, u_4} {R : Type u_1} {S : Type u_2} [Ring R] [Ring S] (σ : R →+* S) (E : Type u_3)
+  [AddCommGroup E] [Module R E] (F : Type u_4) [AddCommGroup F] [Module S F] : Type (max u_3 u_4)
+number of parameters: 11
 fields:
-  TauCeti.DavisKahanExt.PartialMap.domain : Submodule 𝕜 E
-  TauCeti.DavisKahanExt.PartialMap.toLinearMap : ↥self.domain →ₗ[𝕜] E
-  TauCeti.DavisKahanExt.PartialMap.dense_domain : Dense ↑self.domain
-  TauCeti.DavisKahanExt.PartialMap.closed_graph : IsClosed (Set.range fun x => (↑x, self.toLinearMap x))
+  LinearPMap.domain : Submodule R E
+  LinearPMap.toFun : ↥self.domain →ₛₗ[σ] F
 constructor:
-  TauCeti.DavisKahanExt.PartialMap.mk.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {E : Type u_2} [NormedAddCommGroup E]
-    [InnerProductSpace 𝕜 E] (domain : Submodule 𝕜 E) (toLinearMap : ↥domain →ₗ[𝕜] E) (dense_domain : Dense ↑domain)
-    (closed_graph : IsClosed (Set.range fun x => (↑x, toLinearMap x))) : TauCeti.DavisKahanExt.PartialMap
+  LinearPMap.mk.{u_1, u_2, u_3, u_4} {R : Type u_1} {S : Type u_2} [Ring R] [Ring S] {σ : R →+* S} {E : Type u_3}
+    [AddCommGroup E] [Module R E] {F : Type u_4} [AddCommGroup F] [Module S F] (domain : Submodule R E)
+    (toFun : ↥domain →ₛₗ[σ] F) : E →ₛₗ.[σ] F
 ~~~~
 
 </details>
 
 `TauCeti.LinearPMap.realSpectrum` — Real spectrum of a self-adjoint partial/closed operator; the interval/exterior alternative itself remains literal in the canonical theorem.
 
-Source: `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean:984`
+Source: `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean:996`
 
 ~~~~lean
 -- Ambient variables in scope
@@ -428,7 +414,7 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
 | For beta <= alpha and delta > 0, one spectrum lies in [beta,alpha] and the other avoids (beta-delta,alpha+delta), with the roles interchangeable. | hβα and hδ are explicit, and hspectral is literally the disjunction of the two real-spectrum inclusions. | `claimed_exact` |
 | The norm is an arbitrary source unitary-invariant norm and R has finite norm. | N : UnitaryInvariantNorm and hR : N.Mem R appear directly. UnitaryInvariantNorm is the existing public source-facing name for the audited PaperUnitaryInvariantNorm implementation structure. | `claimed_exact` |
 | delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The text after the theorem colon is exactly δ * N.gauge sinTheta₀ <= N.gauge R. The supporting sinTheta_headline_generic theorem additionally certifies N.Mem sinTheta₀ after rewriting by hSinTheta₀. | `claimed_exact` |
-| Infinite-dimensional and unbounded self-adjoint scope. | There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are PartialMap values and the two expanded setup predicates carry the required domain conditions. | `claimed_exact` |
+| Infinite-dimensional and unbounded self-adjoint scope. | There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are `LinearPMap` values and the two expanded setup predicates carry the required domain conditions. | `claimed_exact` |
 
 <details>
 <summary><strong>Supporting scope declarations</strong></summary>
@@ -442,12 +428,11 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
   [inst_7 : NormedAddCommGroup G] [inst_8 : InnerProductSpace 𝕜 G] [inst_9 : CompleteSpace G]
   [inst_10 : NormedAddCommGroup H] [inst_11 : InnerProductSpace 𝕜 H] [inst_12 : CompleteSpace H]
   [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : TauCeti.DavisKahanExt.PartialMap)
-  (A₀ : TauCeti.DavisKahanExt.PartialMap) (Λ₁ : TauCeti.DavisKahanExt.PartialMap) (E₀ : F →L[𝕜] E)
-  (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E),
-  A.IsSelfAdjoint →
-    A₀.IsSelfAdjoint →
-      Λ₁.IsSelfAdjoint →
+  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
+  (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E),
+  IsSelfAdjoint A →
+    IsSelfAdjoint A₀ →
+      IsSelfAdjoint Λ₁ →
         TauCeti.DavisKahan.IsometricEmbedding E₀ →
           TauCeti.DavisKahan.IsometricEmbedding F₀ →
             TauCeti.DavisKahan.IsometricEmbedding F₁ →
@@ -455,15 +440,15 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
                 F₀ ∘SL ContinuousLinearMap.adjoint F₀ + F₁ ∘SL ContinuousLinearMap.adjoint F₁ =
                     ContinuousLinearMap.id 𝕜 E →
                   ∀ (hE₀dom : ∀ (x : ↥A₀.domain), E₀ ↑x ∈ A.domain) (hF₁dom : ∀ (y : ↥Λ₁.domain), F₁ ↑y ∈ A.domain),
-                    (∀ (x : ↥A₀.domain), A.toLinearMap ⟨E₀ ↑x, ⋯⟩ - E₀ (A₀.toLinearMap x) = R ↑x) →
-                      (∀ (y : ↥Λ₁.domain), A.toLinearMap ⟨F₁ ↑y, ⋯⟩ = F₁ (Λ₁.toLinearMap y)) →
+                    (∀ (x : ↥A₀.domain), ↑A ⟨E₀ ↑x, ⋯⟩ - E₀ (↑A₀ x) = R ↑x) →
+                      (∀ (y : ↥Λ₁.domain), ↑A ⟨F₁ ↑y, ⋯⟩ = F₁ (↑Λ₁ y)) →
                         ∀ {β α δ : ℝ},
                           β ≤ α →
                             0 < δ →
-                              TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆ Set.Icc β α ∧
-                                    TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} ∨
-                                  TauCeti.LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ Set.Icc β α ∧
-                                    TauCeti.LinearPMap.realSpectrum A₀.toLinearPMap ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} →
+                              TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
+                                    TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} ∨
+                                  TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
+                                    TauCeti.LinearPMap.realSpectrum A₀ ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} →
                                 N.Mem R →
                                   N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ∧
                                     δ *
@@ -484,9 +469,9 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
   [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜]
   (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily 𝕜)
   (D : TauCeti.DavisKahan.ExactSinTheta.UnboundedSinThetaData) (F₀ : H →L[𝕜] E),
-  TauCeti.DavisKahanExt.PartialMap.IsSelfAdjoint D.A →
-    TauCeti.DavisKahanExt.PartialMap.IsSelfAdjoint D.A₀ →
-      TauCeti.DavisKahanExt.PartialMap.IsSelfAdjoint D.Λ₁ →
+  IsSelfAdjoint D.A →
+    IsSelfAdjoint D.A₀ →
+      IsSelfAdjoint D.Λ₁ →
         TauCeti.DavisKahan.IsometricEmbedding D.X →
           TauCeti.DavisKahan.ExactSinTheta.OrthogonalExactDecomposition F₀ D.F₁ →
             ∀ {δ : ℝ},
@@ -504,13 +489,13 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
 @TauCeti.DavisKahan1970.sinTheta_spectralSubspace : ∀ {E F : Type u_1} [inst : NormedAddCommGroup E]
   [inst_1 : InnerProductSpace ℂ E] [inst_2 : CompleteSpace E] [inst_3 : NormedAddCommGroup F]
   [inst_4 : InnerProductSpace ℂ F] [inst_5 : CompleteSpace F]
-  (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily ℂ) (A : TauCeti.DavisKahanExt.PartialMap)
-  (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S) (A0 : TauCeti.DavisKahanExt.PartialMap),
-  A0.IsSelfAdjoint →
+  (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily ℂ) (A : E →ₗ.[ℂ] E) (hA : IsSelfAdjoint A) (S : Set ℝ)
+  (hS : MeasurableSet S) (A0 : F →ₗ.[ℂ] F),
+  IsSelfAdjoint A0 →
     ∀ (X Rop : F →L[ℂ] E),
       TauCeti.DavisKahan.IsometricEmbedding X →
         ∀ (hXdom : ∀ (x : ↥A0.domain), X ↑x ∈ A.domain),
-          (∀ (x : ↥A0.domain), A.toLinearMap ⟨X ↑x, ⋯⟩ - X (A0.toLinearMap x) = Rop ↑x) →
+          (∀ (x : ↥A0.domain), ↑A ⟨X ↑x, ⋯⟩ - X (↑A0 x) = Rop ↑x) →
             ∀ {δ : ℝ},
               0 < δ →
                 TauCeti.DavisKahan.ExactSinTheta.SpectralSylvesterGap A0
@@ -538,13 +523,13 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
 @TauCeti.DavisKahan1970.sinTheta_real_spectralSubspace : ∀ {E F : Type u_1} [inst : NormedAddCommGroup E]
   [inst_1 : InnerProductSpace ℝ E] [inst_2 : CompleteSpace E] [inst_3 : NormedAddCommGroup F]
   [inst_4 : InnerProductSpace ℝ F] [inst_5 : CompleteSpace F]
-  (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily ℝ) (A : TauCeti.DavisKahanExt.PartialMap)
-  (hA : A.IsSelfAdjoint) (S : Set ℝ) (hS : MeasurableSet S) (A0 : TauCeti.DavisKahanExt.PartialMap),
-  A0.IsSelfAdjoint →
+  (N : TauCeti.DavisKahan.ExactSinTheta.KyFanDominantIdealFamily ℝ) (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A) (S : Set ℝ)
+  (hS : MeasurableSet S) (A0 : F →ₗ.[ℝ] F),
+  IsSelfAdjoint A0 →
     ∀ (X Rop : F →L[ℝ] E),
       TauCeti.DavisKahan.IsometricEmbedding X →
         ∀ (hXdom : ∀ (x : ↥A0.domain), X ↑x ∈ A.domain),
-          (∀ (x : ↥A0.domain), A.toLinearMap ⟨X ↑x, ⋯⟩ - X (A0.toLinearMap x) = Rop ↑x) →
+          (∀ (x : ↥A0.domain), ↑A ⟨X ↑x, ⋯⟩ - X (↑A0 x) = Rop ↑x) →
             ∀ {δ : ℝ},
               0 < δ →
                 TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A0
@@ -583,27 +568,21 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
       TauCeti.DavisKahan.IsometricEmbedding X →
         ∀ {δ : ℝ},
           0 < δ →
-            TauCeti.DavisKahan.ExactSinTheta.SpectralSylvesterGap (TauCeti.DavisKahanExt.PartialMap.ofBounded A0)
-                (TauCeti.DavisKahan.selfAdjointSpectralRestriction (TauCeti.DavisKahanExt.PartialMap.ofBounded A) ⋯
-                  Sᶜ ⋯)
-                δ →
+            TauCeti.DavisKahan.ExactSinTheta.SpectralSylvesterGap ((↑A0).toPMap ⊤)
+                (TauCeti.DavisKahan.selfAdjointSpectralRestriction ((↑A).toPMap ⊤) ⋯ Sᶜ ⋯) δ →
               N.Mem (TauCeti.DavisKahan.ExactSinTheta.generalResidual A X A0) →
                 N.Mem
                     ((ContinuousLinearMap.id ℂ E -
-                        TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion
-                            (TauCeti.DavisKahanExt.PartialMap.ofBounded A) ⋯ S hS ∘SL
+                        TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion ((↑A).toPMap ⊤) ⋯ S hS ∘SL
                           ContinuousLinearMap.adjoint
-                            (TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion
-                              (TauCeti.DavisKahanExt.PartialMap.ofBounded A) ⋯ S hS)) ∘SL
+                            (TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion ((↑A).toPMap ⊤) ⋯ S hS)) ∘SL
                       X) ∧
                   δ *
                       N.gauge
                         ((ContinuousLinearMap.id ℂ E -
-                            TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion
-                                (TauCeti.DavisKahanExt.PartialMap.ofBounded A) ⋯ S hS ∘SL
+                            TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion ((↑A).toPMap ⊤) ⋯ S hS ∘SL
                               ContinuousLinearMap.adjoint
-                                (TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion
-                                  (TauCeti.DavisKahanExt.PartialMap.ofBounded A) ⋯ S hS)) ∘SL
+                                (TauCeti.DavisKahan.selfAdjointSpectralSubspaceInclusion ((↑A).toPMap ⊤) ⋯ S hS)) ∘SL
                           X) ≤
                     N.gauge (TauCeti.DavisKahan.ExactSinTheta.generalResidual A X A0)
 ~~~~
@@ -876,7 +855,7 @@ constructor:
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-> **UNRESOLVED DEFINITION:** build/semantic-review-2iotzi68.lean:94:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.principalTangents`
+> **UNRESOLVED DEFINITION:** build/semantic-review-gt76q3hc.lean:94:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.principalTangents`
 
 </details>
 
@@ -885,13 +864,13 @@ constructor:
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-> **UNRESOLVED DEFINITION:** build/semantic-review-2iotzi68.lean:98:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.ritzResidual`
+> **UNRESOLVED DEFINITION:** build/semantic-review-gt76q3hc.lean:98:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.ritzResidual`
 
 </details>
 
-`TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent` — The paper-wide nonacute direct-rotation existence condition (3.5), needed only for the ambient whole-space tangent semantics in the general infinite-dimensional case.
+`TauCeti.DavisKahan.CrossedDefectsEquivalent` — The paper-wide nonacute direct-rotation existence condition (3.5), needed only for the ambient whole-space tangent semantics in the general infinite-dimensional case.
 
-Source: `DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean:65`
+Source: `DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean:64`
 
 ~~~~lean
 -- Ambient variables in scope
@@ -908,7 +887,7 @@ def CrossedDefectsEquivalent
 <summary><strong>Compiler-expanded definition</strong></summary>
 
 ~~~~lean
-def TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent.{u, u_1} : {𝕜 : Type u_1} →
+def TauCeti.DavisKahan.CrossedDefectsEquivalent.{u, u_1} : {𝕜 : Type u_1} →
   [inst : RCLike 𝕜] →
     {H : Type u} →
       [inst_1 : NormedAddCommGroup H] →
@@ -958,18 +937,17 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
 ~~~~lean
 @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact : ∀ {E : Type u_1} [inst : NormedAddCommGroup E]
   [inst_1 : InnerProductSpace ℂ E] [inst_2 : CompleteSpace E]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : TauCeti.DavisKahan.DKClosedOperator)
-  {U V : Submodule ℂ E} [inst_3 : U.HasOrthogonalProjection] [inst_4 : V.HasOrthogonalProjection]
+  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[ℂ] E) {U V : Submodule ℂ E}
+  [inst_3 : U.HasOrthogonalProjection] [inst_4 : V.HasOrthogonalProjection]
   (D : TauCeti.DavisKahan.TanTheta.UnboundedTrialBlock A U) (H : E →L[ℂ] E),
   IsSelfAdjoint H →
     ∀ {alpha delta : ℝ},
       0 < delta →
         ∀ (hVdom : ∀ (x : ↥A.domain), Vᗮ.starProjection ↑x ∈ A.domain),
-          (∀ (x : ↥A.domain), Vᗮ.starProjection (A.toLinearMap x) = A.toLinearMap ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
+          (∀ (x : ↥A.domain), Vᗮ.starProjection (↑A x) = ↑A ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
             (∀ (z : ↥U), RCLike.re (inner ℂ (D.operator z) z) ≤ alpha * ‖z‖ ^ 2) →
-              (∀ y ∈ Vᗮ,
-                  ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re (inner ℂ (A.toLinearMap ⟨y, hy⟩) y)) →
-                TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+              (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re (inner ℂ (↑A ⟨y, hy⟩) y)) →
+                TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                   D.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL →
                     N.Mem H →
                       N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) ∧
@@ -1034,7 +1012,7 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
                   RCLike.re (inner ℂ ((TauCeti.DavisKahan.ExactTanTheta.theorem63Compression T U) z) z) ≤
                     alpha * ‖z‖ ^ 2) →
                 (∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re (inner ℂ (T y) y)) →
-                  TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+                  TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                     N.Mem (T - A) →
                       N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) ∧
                         delta * N.gauge (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) ≤ N.gauge (T - A)
@@ -1055,7 +1033,7 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
             0 < delta →
               (∀ (z : ↥U), inner ℝ ((TauCeti.DavisKahan1970.compressOperatorReal U T) z) z ≤ alpha * ‖z‖ ^ 2) →
                 (∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (T y) y) →
-                  TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+                  TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                     N.Mem (T - A) →
                       N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ∧
                         delta * N.gauge (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ≤ N.gauge (T - A)
@@ -1067,16 +1045,16 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
 @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact : ∀ {E : Type u_1}
   [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace ℝ E] [inst_2 : CompleteSpace E] {U V : Submodule ℝ E}
   [inst_3 : U.HasOrthogonalProjection] [inst_4 : V.HasOrthogonalProjection]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : TauCeti.DavisKahanExt.PartialMap)
+  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[ℝ] E)
   (D : TauCeti.DavisKahan.TanTheta.UnboundedTrialBlock A U) (H : E →L[ℝ] E),
   IsSelfAdjoint H →
     ∀ {alpha delta : ℝ},
       0 < delta →
         ∀ (hVdom : ∀ (x : ↥A.domain), Vᗮ.starProjection ↑x ∈ A.domain),
-          (∀ (x : ↥A.domain), Vᗮ.starProjection (A.toLinearMap x) = A.toLinearMap ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
+          (∀ (x : ↥A.domain), Vᗮ.starProjection (↑A x) = ↑A ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
             (∀ (z : ↥U), inner ℝ (D.operator z) z ≤ alpha * ‖z‖ ^ 2) →
-              (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (A.toLinearMap ⟨y, hy⟩) y) →
-                TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+              (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (↑A ⟨y, hy⟩) y) →
+                TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                   D.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL →
                     N.Mem H →
                       N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ∧
@@ -1090,20 +1068,17 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
   [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace ℂ E] [inst_2 : CompleteSpace E]
   (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {U V : Submodule ℂ E}
   [inst_3 : U.HasOrthogonalProjection] [inst_4 : V.HasOrthogonalProjection]
-  (D : TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData U) (A : TauCeti.DavisKahan.DKClosedOperator)
-  (H : E →L[ℂ] E),
+  (D : TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData U) (A : E →ₗ.[ℂ] E) (H : E →L[ℂ] E),
   IsSelfAdjoint H →
     ∀ {alpha delta : ℝ},
       0 < delta →
         ∀ (hZA : ∀ (z : ↥D.compression.domain), ↑↑z ∈ A.domain),
-          (∀ (z : ↥D.compression.domain), D.action z = A.toLinearMap ⟨↑↑z, ⋯⟩) →
+          (∀ (z : ↥D.compression.domain), D.action z = ↑A ⟨↑↑z, ⋯⟩) →
             ∀ (hVdom : ∀ (x : ↥A.domain), Vᗮ.starProjection ↑x ∈ A.domain),
-              (∀ (x : ↥A.domain), Vᗮ.starProjection (A.toLinearMap x) = A.toLinearMap ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
-                TauCeti.DavisKahan.ExactSinTheta.SemiboundedAbove D.compression alpha →
-                  (∀ y ∈ Vᗮ,
-                      ∀ (hy : y ∈ A.domain),
-                        (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re (inner ℂ (A.toLinearMap ⟨y, hy⟩) y)) →
-                    TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+              (∀ (x : ↥A.domain), Vᗮ.starProjection (↑A x) = ↑A ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
+                TauCeti.LinearPMap.SemiboundedAbove D.compression alpha →
+                  (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re (inner ℂ (↑A ⟨y, hy⟩) y)) →
+                    TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                       D.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL →
                         N.Mem H →
                           N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) ∧
@@ -1117,18 +1092,17 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
   [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace ℝ E] [inst_2 : CompleteSpace E] {U V : Submodule ℝ E}
   [inst_3 : U.HasOrthogonalProjection] [inst_4 : V.HasOrthogonalProjection]
   (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm)
-  (D : TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData U) (A : TauCeti.DavisKahanExt.PartialMap)
-  (H : E →L[ℝ] E),
+  (D : TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData U) (A : E →ₗ.[ℝ] E) (H : E →L[ℝ] E),
   IsSelfAdjoint H →
     ∀ {alpha delta : ℝ},
       0 < delta →
         ∀ (hZA : ∀ (z : ↥D.compression.domain), ↑↑z ∈ A.domain),
-          (∀ (z : ↥D.compression.domain), D.action z = A.toLinearMap ⟨↑↑z, ⋯⟩) →
+          (∀ (z : ↥D.compression.domain), D.action z = ↑A ⟨↑↑z, ⋯⟩) →
             ∀ (hVdom : ∀ (x : ↥A.domain), Vᗮ.starProjection ↑x ∈ A.domain),
-              (∀ (x : ↥A.domain), Vᗮ.starProjection (A.toLinearMap x) = A.toLinearMap ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
-                TauCeti.DavisKahan.ExactSinTheta.SemiboundedAbove D.compression alpha →
-                  (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (A.toLinearMap ⟨y, hy⟩) y) →
-                    TauCeti.DavisKahan.Frontier.CrossedDefectsEquivalent U V →
+              (∀ (x : ↥A.domain), Vᗮ.starProjection (↑A x) = ↑A ⟨Vᗮ.starProjection ↑x, ⋯⟩) →
+                TauCeti.LinearPMap.SemiboundedAbove D.compression alpha →
+                  (∀ y ∈ Vᗮ, ∀ (hy : y ∈ A.domain), (alpha + delta) * ‖y‖ ^ 2 ≤ inner ℝ (↑A ⟨y, hy⟩) y) →
+                    TauCeti.DavisKahan.CrossedDefectsEquivalent U V →
                       D.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL →
                         N.Mem H →
                           N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ∧
@@ -1315,7 +1289,7 @@ def residual : Model →L[ℂ] Model
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-> **UNRESOLVED DEFINITION:** build/semantic-review-2iotzi68.lean:138:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.residual`
+> **UNRESOLVED DEFINITION:** build/semantic-review-gt76q3hc.lean:138:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.DavisKahanTheory.residual`
 
 </details>
 
@@ -1418,23 +1392,17 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
 ~~~~lean
 @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm : ∀ {H : Type u_1}
   [inst : NormedAddCommGroup H] [inst_1 : InnerProductSpace ℂ H] [inst_2 : CompleteSpace H] {V : Submodule ℂ H}
-  [inst_3 : V.HasOrthogonalProjection] {M : ↥V →L[ℂ] ↥V} {R : ↥V →L[ℂ] H} {A : TauCeti.DavisKahan.DKClosedOperator}
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm)
-  (hA : TauCeti.DavisKahanExt.PartialMap.IsSelfAdjoint A) (B : Set ℝ) (hB : MeasurableSet B)
-  (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain),
-  (∀ (v : ↥V), A.toLinearMap ⟨↑v, ⋯⟩ = R v + ↑(M v)) →
+  [inst_3 : V.HasOrthogonalProjection] {M : ↥V →L[ℂ] ↥V} {R : ↥V →L[ℂ] H} {A : H →ₗ.[ℂ] H}
+  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (hA : IsSelfAdjoint A) (B : Set ℝ)
+  (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain),
+  (∀ (v : ↥V), ↑A ⟨↑v, ⋯⟩ = R v + ↑(M v)) →
     ∀ {β α δ : ℝ},
       β ≤ α →
         0 < δ →
-          TauCeti.DavisKahan.ExactSinTheta.SemiboundedBelow
-              (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA B hB) β →
-            TauCeti.DavisKahan.ExactSinTheta.SemiboundedAbove
-                (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA B hB) α →
+          TauCeti.LinearPMap.SemiboundedBelow (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA B hB) β →
+            TauCeti.LinearPMap.SemiboundedAbove (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA B hB) α →
               (∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-                  ↑lam ∉
-                    TauCeti.LinearPMap.spectrum
-                      (TauCeti.DavisKahanExt.PartialMap.toLinearPMap
-                        (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ ⋯))) →
+                  ↑lam ∉ TauCeti.LinearPMap.spectrum (TauCeti.DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ ⋯)) →
                 N.Mem R →
                   N.Mem
                       (TauCeti.DavisKahan.sinTwoThetaIdealBlock
@@ -1451,10 +1419,10 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
 ~~~~lean
 @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real : ∀ {E : Type u_1}
   [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace ℝ E] [inst_2 : CompleteSpace E] {V : Submodule ℝ E}
-  [inst_3 : V.HasOrthogonalProjection] {M : ↥V →L[ℝ] ↥V} {R : ↥V →L[ℝ] E} {A : TauCeti.DavisKahanExt.PartialMap}
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (hA : A.IsSelfAdjoint) (B : Set ℝ)
+  [inst_3 : V.HasOrthogonalProjection] {M : ↥V →L[ℝ] ↥V} {R : ↥V →L[ℝ] E} {A : E →ₗ.[ℝ] E}
+  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (hA : IsSelfAdjoint A) (B : Set ℝ)
   (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain),
-  (∀ (v : ↥V), A.toLinearMap ⟨↑v, ⋯⟩ = R v + ↑(M v)) →
+  (∀ (v : ↥V), ↑A ⟨↑v, ⋯⟩ = R v + ↑(M v)) →
     ∀ {δ : ℝ},
       0 < δ →
         TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
@@ -1640,7 +1608,7 @@ fun t => 2 * t / |1 - t ^ 2|
 <details>
 <summary><strong>Compiler-expanded definition</strong></summary>
 
-> **UNRESOLVED DEFINITION:** build/semantic-review-2iotzi68.lean:186:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.approximationSingularValue`
+> **UNRESOLVED DEFINITION:** build/semantic-review-gt76q3hc.lean:186:7: error(lean.unknownIdentifier): Unknown constant `TauCeti.approximationSingularValue`
 
 </details>
 

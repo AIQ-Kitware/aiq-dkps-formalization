@@ -246,7 +246,7 @@ finite arbitrary-UI-norm development.
 
 Treat these as later waves:
 
-1. reconcile the local `PartialMap` scaffold with mathlib's partial-linear
+1. reconcile the local `ClosedOperator` scaffold with mathlib's partial-linear
    map and adjoint infrastructure;
 2. prove graph-norm completeness;
 3. prove Kato--Rellich through relative boundedness and closed graph norms;
