@@ -25,8 +25,9 @@ No added axioms, no open proof obligations.
 
 import Acharyya2024.Common
 import ForTauCeti.Probability.Moments.Variance
+import ForTauCeti.Probability.ProductConvergence
 
-open scoped BigOperators Topology
+open scoped BigOperators Topology ProbabilityTheory
 open Filter MeasureTheory
 
 namespace Acharyya2024.Probability
@@ -637,5 +638,254 @@ theorem pointwise_dissimilarity_convergesInProbability_of_gamma
   pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing P m Xbar μ
     (fun r => S r / (r : Real)) i i' hint hmoment
     (sourceGammaRate_imp_secondMomentRate hSnonneg hγ)
+
+/-! ### Theorem 4 when the models are drawn, without a uniform rate
+
+Lemma 2 draws the models, so composing it with Theorem 4 needs the Theorem 4 conclusion under
+the *joint* law of the model draw and the replicates.  There is a tempting way to get it and a
+correct way to get it, and they do not prove the same theorem.
+
+The tempting way is to bound the second moment `∫ ‖Xbar - μ‖²` after integrating over the model
+draw, which is what `pointwise_dissimilarity_convergesInProbability_of_secondMoment_random` does.
+That theorem is true and its hypothesis is a single bound `v r` valid for every model index; but
+deducing that hypothesis from the paper's condition needs the *expected* value of
+`(1/m) ∑_j γ_ij` to be `o(r)`, and the paper states only that `(1/m) ∑_j γ_ij` is `o(r)` for each
+model -- an almost-sure statement about the drawn models, which does not imply the statement
+about its mean without a uniform integrability assumption the source never makes.
+
+The correct way needs no such assumption.  Theorem 4 already gives, for *each fixed* model
+configuration, that the bad-event probability tends to zero.  Bad-event probabilities lie in
+`[0, 1]`, so the constant `1` dominates them and the model integral may be taken through the
+limit (`TauCeti.tendsto_measure_compProd_gt_of_ae_tendsto_measure_slice`).  What comes out is
+joint convergence in probability from hypotheses that are exactly the printed ones, read almost
+surely in the model draw.
+
+The composition is stated with a *kernel* rather than a product because that is the source's
+sampling model: the response distributions `F_ij` belong to the model `f_i`, so the law of the
+replicates depends on which models were drawn.  A product would assume them independent of the
+draw, which the source does not say.
+-/
+
+/--
+**Theorem 4 with the models drawn, from the source's own condition.**
+
+The model configuration is a point `l` of `Λ`; given it, the replicates are drawn from `κ l`,
+which is how the source's model-specific response distributions `F_ij` enter.  The paper's
+condition becomes a hypothesis holding for almost every drawn configuration, which is how
+"for all `i`, `(1/m) ∑_j γ_ij = o(r)`" reads once the models are random.  The conclusion is
+convergence in probability under the joint law `Pmod ⊗ₘ κ`.
+
+No bound uniform over the model population appears, in the hypotheses or in the proof.  The
+integration over the model draw is justified by domination by `1`, not by a rate.
+-/
+theorem pointwise_dissimilarity_convergesInProbability_of_gamma_kernel
+    {Λ : Type} [MeasurableSpace Λ]
+    (Pmod : Measure Λ) [IsProbabilityMeasure Pmod]
+    (κ : ProbabilityTheory.Kernel Λ Ω) [ProbabilityTheory.IsMarkovKernel κ]
+    {p : Nat} (m : Nat → Nat)
+    (Xbar : ∀ r, Λ → Ω → Nat → Mat (m r) p)
+    (μ : ∀ r, Λ → Nat → Mat (m r) p)
+    (S : Λ → Nat → Real) (i i' : Nat)
+    (hmeasX : ∀ r, Measurable fun z : Λ × Ω =>
+      ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
+        - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖)
+    (hS : ∀ᵐ l ∂Pmod, ∀ r, 0 ≤ S l r)
+    (hint : ∀ᵐ l ∂Pmod, ∀ r k, Integrable (fun ω => ‖Xbar r l ω k - μ r l k‖ ^ 2) (κ l))
+    (hmoment : ∀ᵐ l ∂Pmod, ∀ r k,
+      ∫ ω, ‖Xbar r l ω k - μ r l k‖ ^ 2 ∂(κ l) ≤ S l r / (r : Real))
+    (hγ : ∀ᵐ l ∂Pmod,
+      Tendsto (fun r => ((m r : Real))⁻¹ * S l r / (r : Real)) atTop (𝓝 0)) :
+    ConvergesInProbabilityZero (Pmod ⊗ₘ κ) (fun r z =>
+      ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
+        - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖) := by
+  intro ε hε
+  have key : Tendsto (fun r => (Pmod ⊗ₘ κ)
+      {z : Λ × Ω | ε < |((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
+        - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖|}) atTop (𝓝 0) := by
+    refine TauCeti.tendsto_measure_compProd_gt_of_ae_tendsto_measure_slice Pmod κ
+      (fun r z => ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
+        - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖) hmeasX ?_
+    -- for almost every drawn model configuration, this is Theorem 4 with the models fixed
+    filter_upwards [hS, hint, hmoment, hγ] with l hSl hintl hmomentl hγl
+    have h := pointwise_dissimilarity_convergesInProbability_of_gamma (κ l) m
+      (fun r => Xbar r l) (fun r => μ r l) (S l) i i' hSl hintl hmomentl hγl ε hε
+    refine h.congr fun r => congrArg _ ?_
+    ext ω
+    simp [Real.dist_eq]
+  refine key.congr fun r => congrArg _ ?_
+  ext z
+  simp [Real.dist_eq]
+
+/--
+**Theorem 4 with the models drawn**, in the special case where the replicate law does not depend
+on the draw.
+
+This is `pointwise_dissimilarity_convergesInProbability_of_gamma_kernel` with a constant kernel;
+it is the statement to use when the model draw and the replicate randomness are independent.
+-/
+theorem pointwise_dissimilarity_convergesInProbability_of_gamma_random
+    {Λ : Type} [MeasurableSpace Λ]
+    (Pmod : Measure Λ) [IsProbabilityMeasure Pmod]
+    (P : Measure Ω) [IsProbabilityMeasure P]
+    {p : Nat} (m : Nat → Nat)
+    (Xbar : ∀ r, Λ → Ω → Nat → Mat (m r) p)
+    (μ : ∀ r, Λ → Nat → Mat (m r) p)
+    (S : Λ → Nat → Real) (i i' : Nat)
+    (hmeasX : ∀ r, Measurable fun z : Λ × Ω =>
+      ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
+        - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖)
+    (hS : ∀ᵐ l ∂Pmod, ∀ r, 0 ≤ S l r)
+    (hint : ∀ᵐ l ∂Pmod, ∀ r k, Integrable (fun ω => ‖Xbar r l ω k - μ r l k‖ ^ 2) P)
+    (hmoment : ∀ᵐ l ∂Pmod, ∀ r k,
+      ∫ ω, ‖Xbar r l ω k - μ r l k‖ ^ 2 ∂P ≤ S l r / (r : Real))
+    (hγ : ∀ᵐ l ∂Pmod,
+      Tendsto (fun r => ((m r : Real))⁻¹ * S l r / (r : Real)) atTop (𝓝 0)) :
+    ConvergesInProbabilityZero (Pmod.prod P) (fun r z =>
+      ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
+        - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖) := by
+  have h := pointwise_dissimilarity_convergesInProbability_of_gamma_kernel Pmod
+    (ProbabilityTheory.Kernel.const Λ P) m Xbar μ S i i' hmeasX hS hint hmoment hγ
+  rwa [Measure.compProd_const] at h
+
+/-! ### The two models of a pair, drawn independently
+
+Lemma 2 consumes convergence for a pair of *independently drawn* models.  Both members carry
+their own replicate data, so the joint law on `(model × data) × (model × data)` is a product of
+two two-stage experiments; regrouping it as one two-stage experiment on the pair of models
+(`TauCeti.map_shuffle_prod_compProd`) is what lets the conditioning above be applied, with the
+pair of models as the parameter and the two data sets conditionally independent given it.
+-/
+
+omit [MeasurableSpace Ω] in
+private theorem integral_comp_fst_prod {Λ : Type} [MeasurableSpace Λ] [MeasurableSpace Ω]
+    {μ : Measure Λ} [IsProbabilityMeasure μ] {ν : Measure Ω} [IsProbabilityMeasure ν]
+    {f : Λ → Real} (hf : Integrable f μ) :
+    ∫ z : Λ × Ω, f z.1 ∂(μ.prod ν) = ∫ x, f x ∂μ := by
+  rw [integral_prod _ (hf.comp_fst ν)]
+  simp
+
+omit [MeasurableSpace Ω] in
+private theorem integral_comp_snd_prod {Λ : Type} [MeasurableSpace Λ] [MeasurableSpace Ω]
+    {μ : Measure Λ} [IsProbabilityMeasure μ] {ν : Measure Ω} [IsProbabilityMeasure ν]
+    {f : Ω → Real} (hf : Integrable f ν) :
+    ∫ z : Λ × Ω, f z.2 ∂(μ.prod ν) = ∫ x, f x ∂ν := by
+  rw [integral_prod_symm _ (hf.comp_snd μ)]
+  simp
+
+/--
+**Theorem 4 for an independently drawn pair of models.**
+
+Each model is drawn from `Pmod` and, given it, its replicate data from `κ`; the two draws are
+independent.  The hypotheses are the source's, per model: a second-moment bound with the model's
+own `∑_j γ_ij` and the `o(r)` rate for it.  The conclusion is convergence in probability, under
+the joint law of the two models and their data, of the sample dissimilarity to the dissimilarity
+of the population means.
+
+This is the form Lemma 2 consumes.  As in
+`pointwise_dissimilarity_convergesInProbability_of_gamma_kernel`, no bound uniform over the model
+population is used.
+-/
+theorem pairwise_dissimilarity_convergesInProbability_of_gamma
+    {Λ : Type} [MeasurableSpace Λ]
+    (Pmod : Measure Λ) [IsProbabilityMeasure Pmod]
+    (κ : ProbabilityTheory.Kernel Λ Ω) [ProbabilityTheory.IsMarkovKernel κ]
+    {p : Nat} (m : Nat → Nat)
+    (Xbar : ∀ r, Λ × Ω → Mat (m r) p) (mu : ∀ r, Λ → Mat (m r) p)
+    (S : Λ → Nat → Real)
+    (hmeasX : ∀ r, Measurable (Xbar r)) (hmeasMu : ∀ r, Measurable (mu r))
+    (hS : ∀ᵐ l ∂Pmod, ∀ r, 0 ≤ S l r)
+    (hint : ∀ᵐ l ∂Pmod, ∀ r, Integrable (fun ω => ‖Xbar r (l, ω) - mu r l‖ ^ 2) (κ l))
+    (hmoment : ∀ᵐ l ∂Pmod, ∀ r,
+      ∫ ω, ‖Xbar r (l, ω) - mu r l‖ ^ 2 ∂(κ l) ≤ S l r / (r : Real))
+    (hγ : ∀ᵐ l ∂Pmod,
+      Tendsto (fun r => ((m r : Real))⁻¹ * S l r / (r : Real)) atTop (𝓝 0)) :
+    ConvergesInProbabilityZero ((Pmod ⊗ₘ κ).prod (Pmod ⊗ₘ κ)) (fun r z =>
+      ((m r : Real))⁻¹ * ‖Xbar r z.1 - Xbar r z.2‖
+        - ((m r : Real))⁻¹ * ‖mu r z.1.1 - mu r z.2.1‖) := by
+  classical
+  -- the pair experiment, with the two models as the parameter
+  set X2 : ∀ r, (Λ × Λ) → (Ω × Ω) → Nat → Mat (m r) p :=
+    fun r L W k => if k = 0 then Xbar r (L.1, W.1) else Xbar r (L.2, W.2) with hX2
+  set M2 : ∀ r, (Λ × Λ) → Nat → Mat (m r) p :=
+    fun r L k => if k = 0 then mu r L.1 else mu r L.2 with hM2
+  set S2 : (Λ × Λ) → Nat → Real := fun L r => max (S L.1 r) (S L.2 r) with hS2
+  have hX0 : ∀ (r : Nat) (L : Λ × Λ) (W : Ω × Ω), X2 r L W 0 = Xbar r (L.1, W.1) := by
+    intro r L W; simp [hX2]
+  have hX1 : ∀ (r : Nat) (L : Λ × Λ) (W : Ω × Ω), X2 r L W 1 = Xbar r (L.2, W.2) := by
+    intro r L W; simp [hX2]
+  have hM0 : ∀ (r : Nat) (L : Λ × Λ), M2 r L 0 = mu r L.1 := by intro r L; simp [hM2]
+  have hM1 : ∀ (r : Nat) (L : Λ × Λ), M2 r L 1 = mu r L.2 := by intro r L; simp [hM2]
+  -- the two coordinatewise almost-everywhere hypotheses, on the pair
+  have hfst : ∀ {q : Λ → Prop}, (∀ᵐ l ∂Pmod, q l) → ∀ᵐ L ∂(Pmod.prod Pmod), q L.1 := fun h =>
+    (Measure.quasiMeasurePreserving_fst (μ := Pmod) (ν := Pmod)).ae h
+  have hsnd : ∀ {q : Λ → Prop}, (∀ᵐ l ∂Pmod, q l) → ∀ᵐ L ∂(Pmod.prod Pmod), q L.2 := fun h =>
+    (Measure.quasiMeasurePreserving_snd (μ := Pmod) (ν := Pmod)).ae h
+  have hpair : ∀ (L : Λ × Λ), (ProbabilityTheory.Kernel.parallelComp κ κ) L
+      = (κ L.1).prod (κ L.2) := fun L => ProbabilityTheory.Kernel.parallelComp_apply κ κ L
+  have hkey := pointwise_dissimilarity_convergesInProbability_of_gamma_kernel
+    (Pmod.prod Pmod) (ProbabilityTheory.Kernel.parallelComp κ κ) m X2 M2 S2 0 1 ?_ ?_ ?_ ?_ ?_
+  · -- transport the conclusion back along the regrouping of coordinates
+    intro ε hε
+    have hF : ∀ r, Measurable fun w : (Λ × Λ) × (Ω × Ω) =>
+        ((m r : Real))⁻¹ * ‖X2 r w.1 w.2 0 - X2 r w.1 w.2 1‖
+          - ((m r : Real))⁻¹ * ‖M2 r w.1 0 - M2 r w.1 1‖ := by
+      intro r
+      simp only [hX0, hX1, hM0, hM1]
+      fun_prop
+    have hshuffle : Measurable
+        fun z : (Λ × Ω) × (Λ × Ω) => ((z.1.1, z.2.1), (z.1.2, z.2.2)) :=
+      (measurable_fst.fst.prodMk measurable_snd.fst).prodMk
+        (measurable_fst.snd.prodMk measurable_snd.snd)
+    refine (hkey ε hε).congr fun r => ?_
+    rw [← TauCeti.map_shuffle_prod_compProd Pmod Pmod κ κ,
+      Measure.map_apply hshuffle
+        (measurableSet_lt measurable_const
+          (Measurable.dist (hF r) measurable_const) : MeasurableSet
+            {w : (Λ × Λ) × (Ω × Ω) | dist
+              (((m r : Real))⁻¹ * ‖X2 r w.1 w.2 0 - X2 r w.1 w.2 1‖
+                - ((m r : Real))⁻¹ * ‖M2 r w.1 0 - M2 r w.1 1‖) (0 : Real) > ε})]
+    congr 1
+  · -- measurability of the pair statistic
+    intro r
+    simp only [hX0, hX1, hM0, hM1]
+    fun_prop
+  · filter_upwards [hfst hS, hsnd hS] with L h1 h2
+    intro r
+    exact le_max_of_le_left (h1 r)
+  · filter_upwards [hfst hint, hsnd hint] with L h1 h2
+    intro r k
+    rw [hpair]
+    by_cases hk : k = 0
+    · simp only [hX2, hM2, hk, ↓reduceIte]
+      exact (h1 r).comp_fst _
+    · simp only [hX2, hM2, hk, ↓reduceIte]
+      exact (h2 r).comp_snd _
+  · filter_upwards [hfst hint, hsnd hint, hfst hmoment, hsnd hmoment] with L h1 h2 g1 g2
+    intro r k
+    rw [hpair]
+    by_cases hk : k = 0
+    · simp only [hX2, hM2, hk, ↓reduceIte]
+      rw [integral_comp_fst_prod (h1 r)]
+      refine le_trans (g1 r) ?_
+      simp only [hS2]
+      gcongr
+      exact le_max_left _ _
+    · simp only [hX2, hM2, hk, ↓reduceIte]
+      rw [integral_comp_snd_prod (h2 r)]
+      refine le_trans (g2 r) ?_
+      simp only [hS2]
+      gcongr
+      exact le_max_right _ _
+  · filter_upwards [hfst hγ, hsnd hγ, hfst hS, hsnd hS] with L h1 h2 p1 p2
+    have hmax : ∀ r : Nat, ((m r : Real))⁻¹ * S2 L r / (r : Real)
+        = max (((m r : Real))⁻¹ * S L.1 r / (r : Real))
+            (((m r : Real))⁻¹ * S L.2 r / (r : Real)) := by
+      intro r
+      simp only [hS2]
+      rcases le_total (S L.1 r) (S L.2 r) with h | h
+      · rw [max_eq_right h, max_eq_right (by gcongr <;> positivity)]
+      · rw [max_eq_left h, max_eq_left (by gcongr <;> positivity)]
+    simp only [hmax]
+    simpa using h1.max h2
 
 end Acharyya2024.Probability

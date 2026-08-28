@@ -30,7 +30,7 @@ import Acharyya2024.GrowingModels
 import ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix
 import ForTauCeti.Probability.RigidAlignment
 
-open scoped BigOperators Topology
+open scoped BigOperators Topology ProbabilityTheory
 open Filter MeasureTheory
 
 namespace Acharyya2024.Consistency
@@ -1216,5 +1216,187 @@ theorem not_unique_min_continuousPointStress :
     simp [EuclideanSpace.single_apply] at this
   · rw [h0]; exact one_le_continuousPointStress_twoPoint u
   · rw [h2]; exact one_le_continuousPointStress_twoPoint u
+
+/-! ## Theorem 5 over the population law
+
+`lp_consistency_of_gamma_empirical` proves Theorem 5 with `P` the empirical measure of the
+sampled models.  The printed theorem draws the models from a population law `P` and integrates
+against `P × P`.  What follows is that statement.
+
+The composition the source asserts is "Theorem 4, then Lemma 2", and the two halves are stated on
+different footings: Theorem 4 fixes the models and randomises the replicates, while Lemma 2 draws
+the models.  Passing between them needs three things, all of them now proved rather than assumed:
+
+* the conditional bad-event probabilities integrate over the model draw by domination, so no
+  bound uniform over the model population is required
+  (`Probability.pairwise_dissimilarity_convergesInProbability_of_gamma`);
+* a fresh query paired with a drawn reference, and two distinct drawn references, have the same
+  law `P × P`, so Theorem 4's conclusion is literally Lemma 2's hypothesis
+  (`ContinuousMDS.tendsto_measure_absPairErr_query_of_sampled`, and the two `measure_absPairErr_*`
+  identities behind it);
+* the per-index errors have a common mean because the source's `D` is a statistic of the two
+  models involved (`ContinuousMDS.integral_absPairErr_eq_of_dissimilarityFactors`), which is what
+  the identically-distributed hypothesis of Lemma 2 asked for.
+
+The one place where this is a repair rather than a transcription is the sampling model: a model
+is drawn as a complete object -- its latent vector `phi` *and* the law of its responses, here the
+kernel `κ` -- rather than only its latent vector, which is all the printed lemma says.  That
+reading is forced by the printed conclusion, whose integrand depends on the estimate and hence on
+the response data; and it is what makes `hid` a theorem instead of an assumption.
+-/
+
+omit [MeasurableSpace Ω] in
+private theorem tendsto_measure_ge_of_ae_tendsto {α : Type*} [MeasurableSpace α]
+    (μ : Measure α) [IsFiniteMeasure μ] (f : Nat → α → Real) (g : α → Real)
+    (hf : ∀ r, AEStronglyMeasurable (f r) μ)
+    (hfg : ∀ᵐ x ∂μ, Tendsto (fun r => f r x) atTop (𝓝 (g x)))
+    {ε : Real} (hε : 0 < ε) :
+    Tendsto (fun r => μ {x | ε ≤ |f r x - g x|}) atTop (𝓝 0) := by
+  have h := tendstoInMeasure_of_tendsto_ae hf hfg (ENNReal.ofReal ε) (ENNReal.ofReal_pos.mpr hε)
+  refine h.congr fun r => congrArg _ ?_
+  ext x
+  simp [edist_dist, Real.dist_eq, ENNReal.ofReal_le_ofReal_iff (abs_nonneg _)]
+
+/--
+**Theorem 5 over the population law.**
+
+A model is a point of `Lam`; its latent representation is `phi`, its stage-`r` response matrix is
+`Xbar` and its population means are `mu`, and the law of its response data given the model is the
+Markov kernel `κ`.  Models are drawn independently from `Pmod`, so a model with its data is drawn
+from `P = Pmod ⊗ₘ κ`, and the `L^p(P × P)` discrepancy of the printed conclusion is
+`ContinuousMDS.lpPairDistErr`.
+
+The hypotheses are the source's: the second-moment bound with the model's own `∑_j γ_ij` and the
+`o(r)` rate for it, both read almost surely in the model draw (`hint`, `hmoment`, `hγ`);
+Assumption 2 (`hA2`); and the standing structural hypotheses of Lemma 2 -- bounded dissimilarities
+and a unique minimizer of the limiting one-point stress -- which the source attributes to its
+reference.  Nothing uniform over the model population appears.
+-/
+theorem lp_consistency_of_gamma_population
+    {Lam : Type} [MeasurableSpace Lam]
+    (Pmod : Measure Lam) [IsProbabilityMeasure Pmod]
+    (κ : ProbabilityTheory.Kernel Lam Ω) [ProbabilityTheory.IsMarkovKernel κ]
+    {d qamb pdim : Nat} {p : Real} (hp : 0 < p) (m : Nat → Nat)
+    (Xbar : ∀ r, Lam × Ω → Mat (m r) pdim) (mu : ∀ r, Lam → Mat (m r) pdim)
+    (phi : Lam → Rvec qamb) (S : Lam → Nat → Real)
+    (hmeasX : ∀ r, Measurable (Xbar r)) (hmeasMu : ∀ r, Measurable (mu r))
+    (hmeasPhi : Measurable phi)
+    (hS : ∀ᵐ l ∂Pmod, ∀ r, 0 ≤ S l r)
+    (hint : ∀ᵐ l ∂Pmod, ∀ r, Integrable (fun ω => ‖Xbar r (l, ω) - mu r l‖ ^ 2) (κ l))
+    (hmoment : ∀ᵐ l ∂Pmod, ∀ r,
+      ∫ ω, ‖Xbar r (l, ω) - mu r l‖ ^ 2 ∂(κ l) ≤ S l r / (r : Real))
+    (hγ : ∀ᵐ l ∂Pmod,
+      Tendsto (fun r => ((m r : Real))⁻¹ * S l r / (r : Real)) atTop (𝓝 0))
+    (hA2 : ∀ᵐ z ∂((Pmod ⊗ₘ κ).prod (Pmod ⊗ₘ κ)),
+      Tendsto (fun r => ((m r : Real))⁻¹ * ‖mu r z.1.1 - mu r z.2.1‖) atTop
+        (𝓝 ‖phi z.1.1 - phi z.2.1‖))
+    (χ : Lam × Ω → Rvec d) {K : Real} (hχ : Measurable χ) (hχb : ∀ x, ‖χ x‖ ≤ K)
+    (hΔb : ∀ x y : Lam × Ω, |‖phi x.1 - phi y.1‖| ≤ K)
+    (hGb : ∀ (r : Nat) (x y : Lam × Ω),
+      |((m r : Real))⁻¹ * ‖Xbar r x - Xbar r y‖| ≤ K)
+    (χlim : Lam × Ω → Rvec d)
+    (hχlimmin : ∀ x : Lam × Ω, ∀ w : Rvec d,
+      ContinuousMDS.continuousPointStress d (Pmod ⊗ₘ κ) χ (fun y => ‖phi x.1 - phi y.1‖) (χlim x)
+        ≤ ContinuousMDS.continuousPointStress d (Pmod ⊗ₘ κ) χ
+            (fun y => ‖phi x.1 - phi y.1‖) w)
+    (hunique : ∀ x : Lam × Ω, ∀ w : Rvec d,
+      (∀ w' : Rvec d,
+        ContinuousMDS.continuousPointStress d (Pmod ⊗ₘ κ) χ (fun y => ‖phi x.1 - phi y.1‖) w
+          ≤ ContinuousMDS.continuousPointStress d (Pmod ⊗ₘ κ) χ
+              (fun y => ‖phi x.1 - phi y.1‖) w') →
+      w = χlim x)
+    (Ψ : Nat → (Nat → Lam × Ω) → Lam × Ω → Rvec d)
+    (hΨmin : ∀ (r : Nat) (φ : Nat → Lam × Ω) (x : Lam × Ω), ∀ w : Rvec d,
+      ContinuousMDS.pointStress (fun i : Fin (r + 1) => χ (φ i))
+          (fun i : Fin (r + 1) => ((m r : Real))⁻¹ * ‖Xbar r x - Xbar r (φ i)‖) (Ψ r φ x)
+        ≤ ContinuousMDS.pointStress (fun i : Fin (r + 1) => χ (φ i))
+            (fun i : Fin (r + 1) => ((m r : Real))⁻¹ * ‖Xbar r x - Xbar r (φ i)‖) w)
+    (hmeasΨ : ∀ r, Measurable fun z : (Nat → Lam × Ω) × ((Lam × Ω) × (Lam × Ω)) =>
+      ContinuousMDS.pairDiscrepancy d p (Ψ r z.1) χlim z.2) :
+    ∃ ns : Nat → Nat, StrictMono ns ∧ ∀ ε : Real, 0 < ε →
+      Tendsto (fun u => (Measure.infinitePi fun _ : Nat => (Pmod ⊗ₘ κ))
+        {φ | ε < ContinuousMDS.lpPairDistErr d (Pmod ⊗ₘ κ) p (Ψ (ns u) φ) χlim})
+        atTop (𝓝 0) := by
+  classical
+  set P : Measure (Lam × Ω) := Pmod ⊗ₘ κ with hP
+  set Δ : (Lam × Ω) → (Lam × Ω) → Real := fun x y => ‖phi x.1 - phi y.1‖ with hΔdef
+  set G : Nat → (Lam × Ω) → (Lam × Ω) → Real :=
+    fun r x y => ((m r : Real))⁻¹ * ‖Xbar r x - Xbar r y‖ with hGdef
+  have hΔ2 : Measurable fun q : (Lam × Ω) × (Lam × Ω) => Δ q.1 q.2 := by
+    simp only [hΔdef]
+    fun_prop
+  have hΔmeas : ∀ x, Measurable (Δ x) := by
+    intro x
+    simp only [hΔdef]
+    fun_prop
+  have hG : ∀ r, Measurable fun q : (Lam × Ω) × (Lam × Ω) => G r q.1 q.2 := by
+    intro r
+    simp only [hGdef]
+    exact (((hmeasX r).comp measurable_fst).sub ((hmeasX r).comp measurable_snd)).norm.const_mul _
+  -- Theorem 4 for the drawn pair, with no uniformity over the model population
+  have hpair := Probability.pairwise_dissimilarity_convergesInProbability_of_gamma
+    Pmod κ m Xbar mu S hmeasX hmeasMu hS hint hmoment hγ
+  -- Assumption 2, as convergence in probability of the population dissimilarities
+  have hA2' : ∀ δ : Real, 0 < δ → Tendsto (fun r => (P.prod P)
+      {z : (Lam × Ω) × (Lam × Ω) | δ ≤ |((m r : Real))⁻¹ * ‖mu r z.1.1 - mu r z.2.1‖
+        - ‖phi z.1.1 - phi z.2.1‖|}) atTop (𝓝 0) := by
+    intro δ hδ
+    refine tendsto_measure_ge_of_ae_tendsto (P.prod P) _ _ (fun r => ?_) hA2 hδ
+    exact (((hmeasMu r).comp (measurable_fst.comp measurable_fst)).sub
+      ((hmeasMu r).comp (measurable_fst.comp measurable_snd))).norm.const_mul
+        _ |>.aestronglyMeasurable
+  -- the two halves compose by the triangle inequality
+  have hcomb : ∀ δ : Real, 0 < δ → Tendsto (fun r => (P.prod P)
+      {q : (Lam × Ω) × (Lam × Ω) | δ ≤ |G r q.1 q.2 - Δ q.1 q.2|}) atTop (𝓝 0) := by
+    intro δ hδ
+    have hhalf : (0 : Real) < δ / 2 := by linarith
+    have hsub : ∀ r : Nat,
+        {q : (Lam × Ω) × (Lam × Ω) | δ ≤ |G r q.1 q.2 - Δ q.1 q.2|}
+          ⊆ {q : (Lam × Ω) × (Lam × Ω) | dist (((m r : Real))⁻¹ * ‖Xbar r q.1 - Xbar r q.2‖
+                - ((m r : Real))⁻¹ * ‖mu r q.1.1 - mu r q.2.1‖) (0 : Real) > δ / 2}
+            ∪ {q : (Lam × Ω) × (Lam × Ω) | δ / 2 ≤ |((m r : Real))⁻¹ * ‖mu r q.1.1 - mu r q.2.1‖
+                - ‖phi q.1.1 - phi q.2.1‖|} := by
+      intro r q hq
+      by_contra hcon
+      simp only [Set.mem_union, Set.mem_ofPred_eq, not_or, not_lt, not_le,
+        Real.dist_eq, sub_zero] at hcon
+      simp only [Set.mem_ofPred_eq, hGdef, hΔdef] at hq
+      have habs : |((m r : Real))⁻¹ * ‖Xbar r q.1 - Xbar r q.2‖ - ‖phi q.1.1 - phi q.2.1‖|
+          ≤ |((m r : Real))⁻¹ * ‖Xbar r q.1 - Xbar r q.2‖
+              - ((m r : Real))⁻¹ * ‖mu r q.1.1 - mu r q.2.1‖|
+            + |((m r : Real))⁻¹ * ‖mu r q.1.1 - mu r q.2.1‖ - ‖phi q.1.1 - phi q.2.1‖| := by
+        have : ((m r : Real))⁻¹ * ‖Xbar r q.1 - Xbar r q.2‖ - ‖phi q.1.1 - phi q.2.1‖
+            = (((m r : Real))⁻¹ * ‖Xbar r q.1 - Xbar r q.2‖
+                - ((m r : Real))⁻¹ * ‖mu r q.1.1 - mu r q.2.1‖)
+              + (((m r : Real))⁻¹ * ‖mu r q.1.1 - mu r q.2.1‖
+                - ‖phi q.1.1 - phi q.2.1‖) := by ring
+        rw [this]
+        exact abs_add_le _ _
+      linarith [hcon.1, hcon.2]
+    have hsum : Tendsto (fun r : Nat =>
+        (P.prod P) {q : (Lam × Ω) × (Lam × Ω) |
+            dist (((m r : Real))⁻¹ * ‖Xbar r q.1 - Xbar r q.2‖
+              - ((m r : Real))⁻¹ * ‖mu r q.1.1 - mu r q.2.1‖) (0 : Real) > δ / 2}
+          + (P.prod P) {q : (Lam × Ω) × (Lam × Ω) |
+              δ / 2 ≤ |((m r : Real))⁻¹ * ‖mu r q.1.1 - mu r q.2.1‖
+                - ‖phi q.1.1 - phi q.2.1‖|}) atTop (𝓝 0) := by
+      simpa using (hpair (δ / 2) hhalf).add (hA2' (δ / 2) hhalf)
+    refine tendsto_of_tendsto_of_tendsto_of_le_of_le tendsto_const_nhds hsum
+      (fun r => bot_le) (fun r => ?_)
+    exact le_trans (measure_mono (hsub r)) (measure_union_le _ _)
+  -- Lemma 2, with the identically-distributed hypothesis derived from the factorization
+  refine ContinuousMDS.exists_subseq_tendsto_measure_lpPairDistErr_of_pairwise P hp Δ χ
+    hχ hΔmeas hΔ2 hχb (fun x y => hΔb x y) χlim hχlimmin hunique G hG hGb
+    (fun r φ x i => G r x (φ i)) (fun _ _ _ _ => rfl) ?_ Ψ hΨmin hmeasΨ
+  -- the hypothesis of Lemma 2 is the conclusion of Theorem 4, transported across the pair law
+  intro δ hδ
+  have hmeasure : ∀ r : Nat, (P.prod (Measure.infinitePi fun _ : Nat => P))
+      {z : (Lam × Ω) × (Nat → Lam × Ω) | δ ≤ |G r z.1 (z.2 0) - Δ z.1 (z.2 0)|}
+        = (P.prod P) {q : (Lam × Ω) × (Lam × Ω) | δ ≤ |G r q.1 q.2 - Δ q.1 q.2|} := fun r =>
+    ContinuousMDS.measure_absPairErr_query_eq P hG hΔ2 (fun r φ x i => G r x (φ i))
+      (fun _ _ _ _ => rfl) r 0 δ
+  have := (ENNReal.tendsto_toReal ENNReal.zero_ne_top).comp (hcomb δ hδ)
+  simp only [Function.comp_def, ENNReal.toReal_zero] at this
+  exact this.congr fun r => by rw [← hmeasure r]
 
 end Acharyya2024.Consistency

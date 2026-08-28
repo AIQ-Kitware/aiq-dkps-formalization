@@ -36,6 +36,7 @@ IMPORTS = [
     'Helm2025', 'DkpsQuench2026',
     'ForTauCeti.Probability.AverageError',
     'ForTauCeti.Probability.VStatistic',
+    'ForTauCeti.Probability.ProductConvergence',
 ]
 CANARY = 'DkpsApplicationCensusProbeCanaryMustNotResolve'
 
