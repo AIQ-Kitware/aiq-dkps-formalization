@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SpectralTheory.BoundedSelfAdjointSpectralProjection
 import DavisKahan.SpectralTheory.BoundedFromSpectrum
-import DavisKahan.SpectralTheory.ClosedOperator.RealSpectrum
+import DavisKahan.SpectralTheory.PartialMap.RealSpectrum
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Constructions
 import DavisKahan.SpectralTheory.AbstractSpectrum

@@ -73,7 +73,7 @@ theorem generalizedSinTheta_unbounded_of_spectralIntervalExteriorGap
 /-- Raw partial-map form of the interval/exterior unbounded sine-theta bound.
 The conversion to the historical bundle is confined to the current Spectra
 Sylvester boundary. -/
-theorem linearPMap_generalizedSinTheta_unbounded_of_intervalExteriorGap
+theorem generalizedSinTheta_unbounded_of_intervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
@@ -95,7 +95,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_of_intervalExteriorGap
   · exact hR
 
 /-- Raw exact directed-angle form of the interval/exterior sine-theta bound. -/
-theorem linearPMap_generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
+theorem generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
@@ -112,7 +112,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
     N.Mem (directedSinThetaOperator D.X F₀ hframe hε) ∧
       δ * ε * N.gaugeReal (directedSinThetaOperator D.X F₀ hframe hε)
         ≤ N.gaugeReal D.residual := by
-  have hBlock := linearPMap_generalizedSinTheta_unbounded_of_intervalExteriorGap
+  have hBlock := generalizedSinTheta_unbounded_of_intervalExteriorGap
     N D hA hA₀ hΛ₁ hdecomp.isometry₁ hβα hδ hε hframe hgap hR
   have hAngle := sinThetaBlock_mem_and_gauge_eq_directedSinThetaOperator
     N D.X F₀ D.F₁ hframe hε hdecomp hBlock.1
@@ -122,7 +122,7 @@ theorem linearPMap_generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
 
 /-- Raw partial-map isometric specialization of the interval/exterior
 endpoint, derived from the raw lower-frame theorem at frame bound one. -/
-theorem linearPMap_sinTheta_unbounded_exact_of_intervalExteriorGap
+theorem sinTheta_unbounded_exact_of_intervalExteriorGap
     (N : TauCeti.SymmetricOperatorIdealFamily.{0, v} ℂ)
     [N.toOperatorIdealFamily.IsComplete]
     (D : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G))
@@ -139,7 +139,7 @@ theorem linearPMap_sinTheta_unbounded_exact_of_intervalExteriorGap
       δ * N.gaugeReal
         ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L D.X)
         ≤ N.gaugeReal D.residual := by
-  have hGeneral := linearPMap_generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
+  have hGeneral := generalizedSinTheta_unbounded_exact_of_intervalExteriorGap
     N D F₀ hA hA₀ hΛ₁ hdecomp hβα hδ zero_lt_one
       (lowerFrameBound_one_of_isometry hX) hgap hR
   rw [directedSinThetaOperator_eq_of_isometry D.X F₀ hX] at hGeneral

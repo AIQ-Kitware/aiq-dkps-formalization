@@ -34,7 +34,7 @@ variable {E F G : Type v}
 partial map whose quadratic form lies in `[β, α]` has a bounded shift `B - c`
 on its domain (`c = (α+β)/2`, radius `r = (α-β)/2`), which therefore extends
 to a bounded operator on the whole space with the same norm bound. -/
-theorem linearPMap_exists_bounded_shift_extension
+theorem exists_bounded_shift_extension
     {B : F →ₗ.[𝕜] F} (hsym : TauCeti.LinearPMap.IsSymmetric B)
     (hBdense : Dense (B.domain : Set F)) {β α : ℝ} (hβα : β ≤ α)
     (hlow : TauCeti.LinearPMap.SemiboundedBelow B β)
@@ -62,7 +62,7 @@ theorem linearPMap_exists_bounded_shift_extension
   have hgbound : ∀ y : B.domain, ‖g y‖ ≤ (α - β) / 2 * ‖y‖ := by
     intro y
     rw [hgapply y]
-    exact linearPMap_norm_shift_apply_le_of_form_bounds hsym hBdense hβα hlow hhigh y
+    exact norm_shift_apply_le_of_form_bounds hsym hBdense hβα hlow hhigh y
   set f : B.domain →L[𝕜] F := g.mkContinuous ((α - β) / 2) hgbound with hfdef
   have hrange : Set.range ((B.domain.subtypeL : B.domain →L[𝕜] F)) =
       (B.domain : Set F) := by
@@ -104,7 +104,7 @@ the left.**  The interval block `B` (quadratic form in `[β, α]`) is realized
 bounded through its shift extension and the equation transfers by density;
 the exterior block `A` carries a proof-carrying two-sided shifted inverse.
 Both closed blocks may be genuinely unbounded a priori. -/
-theorem linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight
+theorem mem_and_gauge_le_of_exteriorLeft_intervalRight
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
@@ -120,7 +120,7 @@ theorem linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C := by
   have hr0 : (0 : ℝ) ≤ (α - β) / 2 := by linarith
   obtain ⟨S, hSnorm, hSeq⟩ :=
-    linearPMap_exists_bounded_shift_extension hBsym hBdense hβα hBlow hBhigh
+    exists_bounded_shift_extension hBsym hBdense hβα hBlow hBhigh
   obtain ⟨J, hdom, hleft, hright, hJnorm⟩ := hAres
   -- the bounded realization of `B` and the transferred equation
   set T : F →L[𝕜] F :=
@@ -132,7 +132,7 @@ theorem linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight
     abel
   have hEqT : TauCeti.LinearPMap.SylvesterEquation
       A (T.toLinearMap.toPMap ⊤) X C :=
-    linearPMapSylvesterEquation_boundedRealization hAclosed hBdense hEq hT
+    SylvesterEquation_boundedRealization hAclosed hBdense hEq hT
   -- shift both blocks by the center
   set c𝕜 : 𝕜 := (((α + β) / 2 : ℝ) : 𝕜) with hc𝕜
   set A' : E →ₗ.[𝕜] E :=
@@ -163,7 +163,7 @@ theorem linearPMap_mem_and_gauge_le_of_exteriorLeft_intervalRight
     rw [h2, h3, ← h1]
     abel
   -- the everywhere-defined inverse of the shifted exterior block
-  refine linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse N
+  refine Sylvester_mem_and_gauge_le_of_unbounded_bound_inverse N
     (⟨J, hdom, ?_, ?_⟩ : TauCeti.LinearPMap.HasBoundedEverywhereInverse A') S hr0 hδ
     hJnorm hSnorm hEq' hC
   · intro y

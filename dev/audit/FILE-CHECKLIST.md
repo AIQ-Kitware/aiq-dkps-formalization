@@ -893,11 +893,11 @@ been read. An unrecorded review is indistinguishable from no review.
 
 - [x] `DavisKahan/SpectralTheory/GraphSubspace.lean` — 856 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/CentralBand.lean` — 839 lines · Lean source
-- [x] `DavisKahan/SpectralTheory/ClosedOperator/Complexification.lean` — 790 lines · Lean source
+- [x] `DavisKahan/SpectralTheory/PartialMap/Complexification.lean` — 790 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/Real/SpectralRestriction.lean` — 713 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ReflectionRestriction.lean` — 639 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ResolventOperator.lean` — 617 lines · Lean source
-- [x] `DavisKahan/SpectralTheory/ClosedOperator/Basic.lean` — 560 lines · Lean source
+- [x] `DavisKahan/SpectralTheory/PartialMap/Basic.lean` — 560 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/CircleRieszIntegral.lean` — 551 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/Real/RealCyclicDecomposition.lean` — 548 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/AbstractSpectrum.lean` — 463 lines · Lean source
@@ -911,7 +911,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/SpectralTheory/ContinuationRieszIntegral.lean` — 277 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/Real/BoundedAlmostInvariant.lean` — 270 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/FormMethod/TraceKernelModel.lean` — 240 lines · Lean source
-- [x] `DavisKahan/SpectralTheory/ClosedOperator/UnitaryConjugation.lean` — 230 lines · Lean source
+- [x] `DavisKahan/SpectralTheory/PartialMap/UnitaryConjugation.lean` — 230 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/FormMethod/CoerciveFormResolvent.lean` — 230 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ContinuationContour.lean` — 210 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/FormMethod/ShiftedBeamRealization.lean` — 204 lines · Lean source
@@ -930,7 +930,7 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/SpectralTheory/BoundedTruncation.lean` — 150 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/Complexification/Spectrum.lean` — 148 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/FormSpectrumBounds.lean` — 118 lines · Lean source
-- [x] `DavisKahan/SpectralTheory/ClosedOperator/RealSpectrum.lean` — 117 lines · Lean source
+- [x] `DavisKahan/SpectralTheory/PartialMap/RealSpectrum.lean` — 117 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/Complexification/FormTransport.lean` — 117 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/SpectralRestrictionLocalization.lean` — 111 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/GapResolvent.lean` — 105 lines · Lean source
@@ -941,18 +941,18 @@ been read. An unrecorded review is indistinguishable from no review.
 - [x] `DavisKahan/SpectralTheory/SpectralCutoff.lean` — 97 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/OrderedHalfLine.lean` — 80 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/CircleRieszProjection.lean` — 79 lines · Lean source
-- [x] `DavisKahan/SpectralTheory/ClosedOperator/MathlibBridge.lean` — 71 lines · Lean source
+- [x] `DavisKahan/SpectralTheory/PartialMap/MathlibBridge.lean` — 71 lines · Lean source
 - [ ] `DavisKahan/SpectralTheory/Complexification/LinearPMapSpectralDescent.lean` — 59 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ReducingSubspace/RestrictionExtras.lean` — 59 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/OperatorAngle.lean` — 47 lines · Lean source
-- [x] `DavisKahan/SpectralTheory/ClosedOperator/BoundedRealization.lean` — 42 lines · Lean source
+- [x] `DavisKahan/SpectralTheory/PartialMap/BoundedRealization.lean` — 42 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/All.lean` — 39 lines · Lean source
-- [x] `DavisKahan/SpectralTheory/ClosedOperator/Complex.lean` — 30 lines · Lean source
+- [x] `DavisKahan/SpectralTheory/PartialMap/Complex.lean` — 30 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/Real/ContinuousFunctionalCalculus.lean` — 20 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/FormMethod/All.lean` — 18 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/Complexification/All.lean` — 16 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/Real/All.lean` — 16 lines · Lean source
-- [x] `DavisKahan/SpectralTheory/ClosedOperator/All.lean` — 15 lines · Lean source
+- [x] `DavisKahan/SpectralTheory/PartialMap/All.lean` — 15 lines · Lean source
 - [x] `DavisKahan/SpectralTheory/ReducingSubspace/All.lean` — 10 lines · Lean source
 
 ### DavisKahan/Sylvester

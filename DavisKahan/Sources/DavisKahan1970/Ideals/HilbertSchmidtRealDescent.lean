@@ -6,7 +6,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily
 import DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtFiniteRank
-import DavisKahan.SpectralTheory.ClosedOperator.Complexification
+import DavisKahan.SpectralTheory.PartialMap.Complexification
 
 /-!
 # Real rectangular Hilbert--Schmidt family by complexification

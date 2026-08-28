@@ -41,7 +41,7 @@ variable {E F : Type v}
 
 /-- A bounded homogeneous Sylvester solution for raw self-adjoint partial maps
 vanishes whenever their spectra are disjoint. -/
-theorem linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
+theorem Sylvester_homogeneous_eq_zero_of_disjoint_spectrum
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X : F →L[ℂ] E}
@@ -56,7 +56,7 @@ theorem linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
 
 /-- Positive pairwise spectral distance gives homogeneous uniqueness for raw
 self-adjoint partial maps. -/
-theorem linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
+theorem Sylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X : F →L[ℂ] E} {δ : ℝ}
@@ -64,7 +64,7 @@ theorem linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
     (hgap : LinearPMap.PairwiseSpectrumGap A B δ)
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
-  exact linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
+  exact Sylvester_homogeneous_eq_zero_of_disjoint_spectrum
     hA hB (hgap.disjoint hδ) hEq
 
 /-- **Sylvester--Rosenblum uniqueness for raw self-adjoint partial maps.**  Two bounded
@@ -74,7 +74,7 @@ solutions of the same Sylvester equation coincide as soon as the two spectra are
 The gap version below is this statement composed with
 `PairwiseSpectrumGap.disjoint`, so a positive separation buys nothing here — it is
 needed only where a *bound* on the solution is wanted. -/
-theorem linearPMapSylvester_solution_unique_of_disjoint_spectrum
+theorem Sylvester_solution_unique_of_disjoint_spectrum
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X Y C : F →L[ℂ] E}
@@ -87,12 +87,12 @@ theorem linearPMapSylvester_solution_unique_of_disjoint_spectrum
   have hhom : TauCeti.LinearPMap.SylvesterEquation A B (X - Y) 0 := by
     simpa using hX.sub hY
   exact sub_eq_zero.mp
-    (linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum hA hB hdisj hhom)
+    (Sylvester_homogeneous_eq_zero_of_disjoint_spectrum hA hB hdisj hhom)
 
 /-- Two bounded raw partial-map Sylvester solutions coincide under positive
 pairwise spectral separation.  A corollary of
-`linearPMapSylvester_solution_unique_of_disjoint_spectrum`, which is the sharp form. -/
-theorem linearPMapSylvester_solution_unique_of_pairwiseSpectrumGap
+`Sylvester_solution_unique_of_disjoint_spectrum`, which is the sharp form. -/
+theorem Sylvester_solution_unique_of_pairwiseSpectrumGap
     {A : E →ₗ.[ℂ] E} {B : F →ₗ.[ℂ] F}
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X Y C : F →L[ℂ] E} {δ : ℝ}
@@ -101,7 +101,7 @@ theorem linearPMapSylvester_solution_unique_of_pairwiseSpectrumGap
     (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
     X = Y :=
-  linearPMapSylvester_solution_unique_of_disjoint_spectrum hA hB (hgap.disjoint hδ) hX hY
+  Sylvester_solution_unique_of_disjoint_spectrum hA hB (hgap.disjoint hδ) hX hY
 
 /-- A bounded homogeneous closed Sylvester solution vanishes whenever the two
 self-adjoint spectra are disjoint. -/
@@ -115,7 +115,7 @@ theorem closedSylvester_homogeneous_eq_zero_of_disjoint_spectrum
       (TauCeti.LinearPMap.spectrum B))
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
-  exact linearPMapSylvester_homogeneous_eq_zero_of_disjoint_spectrum
+  exact Sylvester_homogeneous_eq_zero_of_disjoint_spectrum
     hA hB hdisj hEq
 
 /-- Positive pairwise spectral distance implies homogeneous uniqueness. -/
@@ -128,7 +128,7 @@ theorem closedSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
     (hgap : PairwiseSpectrumGap A B δ)
     (hEq : TauCeti.LinearPMap.SylvesterEquation A B X 0) :
     X = 0 := by
-  exact linearPMapSylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
+  exact Sylvester_homogeneous_eq_zero_of_pairwiseSpectrumGap
     hA hB hδ hgap hEq
 
 /-- **Sylvester--Rosenblum uniqueness for closed operators.**  Two bounded solutions of the
@@ -144,7 +144,7 @@ theorem closedSylvester_solution_unique_of_disjoint_spectrum
     (hX : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hY : TauCeti.LinearPMap.SylvesterEquation A B Y C) :
     X = Y :=
-  linearPMapSylvester_solution_unique_of_disjoint_spectrum hA hB hdisj hX hY
+  Sylvester_solution_unique_of_disjoint_spectrum hA hB hdisj hX hY
 
 /-- Two bounded solutions of the same closed Sylvester equation coincide under
 positive pairwise spectral separation.  A corollary of

@@ -87,7 +87,7 @@ The index deliberately separates a paper's **formalization role** from the state
 
 | Key | Year | Work | Role | Formalization status | Literature asset | Priority |
 |---|---:|---|---|---|---|---|
-| `Kato1966` | 1966 | Perturbation Theory for Linear Operators | reference work | reference horizon for the unbounded and spectral-projection development, which is `SpectralTheory/ClosedOperator/**` and `ForTauCeti/.../LinearPMap/**` since the experimental scaffolds were deleted 2026-08-27 | `missing` | P3 |
+| `Kato1966` | 1966 | Perturbation Theory for Linear Operators | reference work | reference horizon for the unbounded and spectral-projection development, which is `SpectralTheory/PartialMap/**` and `ForTauCeti/.../LinearPMap/**` since the experimental scaffolds were deleted 2026-08-27 | `missing` | P3 |
 | `StewartSun1990` | 1990 | Matrix Perturbation Theory | reference work | cross-check source for matrix/subspace perturbation statements | `missing` | P2 |
 | `Bhatia1997` | 1997 | Matrix Analysis | reference work | modern reference for UI norms, Sylvester bounds, and Davis--Kahan | `missing` | P1 |
 | `CoxCox2001` | 2001 | Multidimensional Scaling, Second Edition | reference work | modern classical-MDS reference | `missing` | P2 |

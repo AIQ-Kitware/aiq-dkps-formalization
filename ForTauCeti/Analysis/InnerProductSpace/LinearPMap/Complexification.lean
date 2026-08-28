@@ -7,7 +7,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 
 * Original repository: Davis--Kahan/DKPS formalization (Kitware, Inc.).
 * Generalized from:
-  `DavisKahan/SpectralTheory/ClosedOperator/Complexification.lean`.
+  `DavisKahan/SpectralTheory/PartialMap/Complexification.lean`.
 * Extraction class: **representation migration and generalization**.  The original
   construction was tied to the historical bundled `ClosedOperator` and to square
   operators.  This module defines the coordinatewise complexification directly on

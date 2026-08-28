@@ -348,7 +348,7 @@ in all six declarations**, needing **five** independent missing APIs — one
 Fixing the adjoint alone would have taken 28 errors to ~20 and unblocked nothing.
 
 - **Caught by:** me, measuring after claiming. Released the claim with no edits.
-- Also found late: `SpectralTheory/ClosedOperator/Basic.lean` had **already** done
+- Also found late: `SpectralTheory/PartialMap/Basic.lean` had **already** done
   the `LinearPMap` bridging I proposed to build.
 
 ### E3. A lemma whose hypothesis did not match the statement it was built for

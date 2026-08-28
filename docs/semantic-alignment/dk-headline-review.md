@@ -367,7 +367,7 @@ constructor:
 
 `TauCeti.DavisKahanExt.ClosedOperator` — Repository representation of a densely defined closed operator used for the possibly unbounded self-adjoint operators in the paper.
 
-Source: `DavisKahan/SpectralTheory/ClosedOperator/Basic.lean:40`
+Source: `DavisKahan/SpectralTheory/PartialMap/Basic.lean:40`
 
 ~~~~lean
 structure ClosedOperator

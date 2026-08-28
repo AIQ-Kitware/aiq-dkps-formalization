@@ -20,7 +20,7 @@ structure ClosedOperator where
 ```
 
 It is a `LinearPMap` plus two properties, and **almost every declaration in
-`SpectralTheory/ClosedOperator/Basic.lean` is already an `abbrev` forwarding to
+`SpectralTheory/PartialMap/Basic.lean` is already an `abbrev` forwarding to
 `TauCeti.LinearPMap.*` at `A.toLinearPMap`** — `SameDomain`, `MapsDomainTo`,
 `BoundedExtension`, `Extends`, `IsSymmetric`, `IsSelfAdjoint`, `graphNorm`,
 `RelativelyBounded`, `realResolventSet`, `realSpectrum`, `SpectralSetsSeparated`.
@@ -106,7 +106,7 @@ having migrated consumers first.
 6. **Delete `DavisKahan/Interop/TauCeti/ClosedOperator.lean`** — its only export,
    `ClosedOperator.ofLinearPMap`, has one consumer,
    `UnboundedSinThetaDataPMap.toClosed`, which step 4 removes — and then
-   `DavisKahan/SpectralTheory/ClosedOperator/**` itself.
+   `DavisKahan/SpectralTheory/PartialMap/**` itself.
 
 ## Size
 

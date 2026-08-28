@@ -119,7 +119,7 @@ law, the gauges decay geometrically because `‖J‖ ‖B‖ ≤ ρ / (ρ + δ) 
 operator-norm contraction identifies that limit with `X`.  The gauge estimate
 then follows from the fixed-point identity by absorption, exactly as in the
 operator-norm shift-and-invert argument. -/
-theorem linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse
+theorem Sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
     (N : TauCeti.SymmetricOperatorIdealFamily.{u, v} 𝕜)
     [N.toOperatorIdealFamily.IsComplete]
     {A : E →ₗ.[𝕜] E}
@@ -260,14 +260,14 @@ theorem sylvester_mem_and_gauge_le_of_unbounded_bound_inverse
     (hEq : HasUnboundedBoundedSylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gaugeReal X ≤ N.gaugeReal C :=
-  linearPMapSylvester_mem_and_gauge_le_of_unbounded_bound_inverse N hAinv B
+  Sylvester_mem_and_gauge_le_of_unbounded_bound_inverse N hAinv B
     hρ hδ hInvNorm hB hEq hC
 
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Transfer a partial-map Sylvester equation to a bounded realization of its
 right block.  Agreement on the dense right domain extends through the closed
 graph of the left partial map. -/
-theorem linearPMapSylvesterEquation_boundedRealization
+theorem SylvesterEquation_boundedRealization
     {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F}
     {X C : F →L[𝕜] E} {T : F →L[𝕜] F}
     (hAclosed : A.IsClosed) (hBdense : Dense (B.domain : Set F))

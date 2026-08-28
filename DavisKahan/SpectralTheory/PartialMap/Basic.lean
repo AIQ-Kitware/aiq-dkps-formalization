@@ -29,9 +29,10 @@ Everything it declared has moved:
 * `addBounded` — now `TauCeti.LinearPMap.addBounded`, next to the `perturb` and
   `boundedPerturbation` it is built from.
 
-The file survives as an import boundary: it is named by a dozen modules and
+The file survives as an import boundary -- it is named by a dozen modules and
 supplies the `ForTauCeti` partial-map layer together with the Davis--Kahan
-bounded-operator compatibility layer they also need.
+bounded-operator compatibility layer they also need -- and carries the two
+Davis--Kahan facts about partial maps that had nowhere else to go.
 -/
 
 namespace TauCeti
@@ -56,7 +57,7 @@ theorem ofBounded_isSelfAdjoint (A : E →L[𝕜] E) (hA : A.toLinearMap.IsSymme
 /-- `LinearPMap.IsClosed` is stated on the graph, while the canonical
 reducing-restriction API states closedness as a range.  The two are the same set,
 so this is a reindexing lemma used in both directions. -/
-theorem linearPMap_isClosed_iff_range_isClosed
+theorem isClosed_iff_range_isClosed
     {G : Type*} [NormedAddCommGroup G] [InnerProductSpace 𝕜 G]
     (f : G →ₗ.[𝕜] G) :
     f.IsClosed ↔ IsClosed (Set.range fun x : f.domain => ((x : G), f x)) := by

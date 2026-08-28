@@ -11,7 +11,7 @@ modular operator to an arbitrary densely recoverable positive symmetric
 partial operator.  The original and adapted files are Apache-2.0 licensed.
 -/
 
-import DavisKahan.SpectralTheory.ClosedOperator.Basic
+import DavisKahan.SpectralTheory.PartialMap.Basic
 import Mathlib.Tactic
 
 /-!
