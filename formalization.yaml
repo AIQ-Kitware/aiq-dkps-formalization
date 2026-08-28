@@ -1,242 +1,343 @@
-# formalization.yaml (v0.3): repo-root metadata for an AI-authored formalization project.
-# Schema reference: https://github.com/mathlib-initiative/formalization.yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/mathlib-initiative/formalization.yaml/main/schema/formalization.schema.json
 #
-# Keep commit-sensitive status out of this file. Generated/checkable ledgers and
-# repository gates own current counts and completion state.
-
-version: "v0.3"
+# formalization.yaml v0.4 — repository-root metadata for this formalization.
+#
+# This describes the whole substantive development. A Palomar entry is one
+# Comparator config, not the whole repository; per-entry metadata, when it exists,
+# lives beside that config. See dev/palomar-readiness.md.
+#
+# Keep commit-sensitive status out of this file. Generated and checkable ledgers
+# own current counts and completion state: the source censuses under dev/, the
+# comparator configs, and scripts/run_gates.py. Nothing here should have to be
+# edited because a proof landed.
+version: "v0.4"
 
 project:
-  name: "AIQ DKPS formalization: reusable spectral, MDS, and geometry infrastructure"
+  name: "AIQ DKPS formalization: spectral perturbation theory and the data kernel perspective space"
+  description: >-
+    A Lean 4 formalization of spectral subspace perturbation theory and of its
+    application to representations of generative models. The foundational layer
+    formalizes Davis and Kahan's "The rotation of eigenvectors by a perturbation
+    III" (1970) at its stated scope — a separable Hilbert space, unbounded
+    self-adjoint operators as Mathlib `LinearPMap`s, and arbitrary unitarily
+    invariant norms — together with the Yu–Wang–Samworth (2015) population-gap
+    variant used throughout statistics. Reusable mathematics is packaged
+    separately from paper-facing statements: `ForTauCeti/` holds the general
+    theory, and each source paper has its own package of theorems stated at the
+    printed scope. Four applied papers on the data kernel perspective space
+    (Acharyya et al. 2024 and 2025, Helm et al. 2025, Helm–Johnson–Priebe 2026)
+    are formalized on top of that foundation, with consistency, concentration,
+    query-efficiency and risk-transfer results. Every source paper carries a
+    maintained census that records, result by result, whether the Lean theorem is
+    the printed one, a documented repair of a printed statement that does not
+    stand, or a refutation with a machine-checked counterexample.
   authors:
     - "Jon Crall"
+    - "Edward Wang"
   license: "Apache-2.0"
-  repository: "https://github.com/AIQ-Kitware/aiq-dkps-formalization"
-  validation_note: >
-    Do not copy commit-specific proof counts or green-build claims into this file.
-    Use the source censuses, comparator configs, and scripts/run_gates.py instead.
-    The Davis--Kahan certificate command is intentionally a separate, expensive clean-
-    build audit artifact rather than a normal fast gate.
+  responsible_maintainers:
+    - "Jon Crall"
+
+# `repository` is omitted deliberately: this repository is the substantive proof
+# development, not a thin Comparator wrapper. A wrapper repository extracted from
+# it for submission carries its own metadata declaring
+# `repository.substantive_formalization` pinned at a commit of this repository.
+
+classification:
+  arxiv: ["math.FA", "math.ST"]
+  msc2020:
+    - "47A55"   # Perturbation theory of linear operators
+    - "47A15"   # Invariant subspaces of linear operators
+    - "15A42"   # Inequalities involving eigenvalues and singular values
+    - "65F15"   # Numerical computation of eigenvalues and eigenvectors
+    - "62H25"   # Factor analysis, principal components, correspondence analysis
 
 sources:
-  - title: "Consistent Estimation of Generative Model Representations in the Data Kernel Perspective Space"
-    authors: ["Acharyya", "Trosset", "Priebe", "Helm"]
-    id: "Acharyya et al. 2024"
-    type: "research paper"
-    author_contacted: "yes; ongoing subject-matter discussion"
-    prior_work: "Paper-facing theorem layer in Acharyya2024/; reusable mathematics in ForTauCeti/."
-  - title: "Concentration Bounds on Response-Based Vector Embeddings of Black-Box Generative Models"
-    authors: ["Acharyya", "Agterberg", "Park", "Priebe"]
-    id: "Acharyya et al. 2025"
-    type: "research paper"
-    author_contacted: "yes; ongoing subject-matter discussion"
-    prior_work: "Paper-facing theorem layer in Acharyya2025/; reusable mathematics in ForTauCeti/."
-  - title: "Statistical Inference on Black-Box Generative Models in the Data Kernel Perspective Space"
-    authors: ["Helm", "Acharyya", "Park", "Duderstadt", "Priebe"]
-    id: "Helm et al. 2025"
-    type: "research paper"
-    author_contacted: "yes; ongoing subject-matter discussion"
-    prior_work: "Paper-facing theorem layer in Helm2025/."
-  - title: "Query-efficient model evaluation using cached responses"
-    authors: ["Helm", "Johnson", "Priebe"]
-    id: "Helm et al. 2026"
-    type: "research paper"
-    author_contacted: "yes; ongoing subject-matter discussion"
-    prior_work: "Subject-oriented theorem library in DkpsQuench2026/."
   - title: "The rotation of eigenvectors by a perturbation. III"
-    authors: ["Davis", "Kahan"]
-    id: "Davis and Kahan 1970"
-    type: "research paper"
-    prior_work: "Distributable source-order mathematical specification in prose/distilled_literature/DavisKahan1970_part_III.tex; source-facing formalization in DavisKahan/Sources/DavisKahan1970/; maintained hostile-review census and source-to-Lean statement map in dev/; compiler/audit certificate generated by scripts/certify_davis_kahan_1970.py."
-  - title: "A useful variant of the Davis-Kahan theorem for statisticians"
-    authors: ["Yu", "Wang", "Samworth"]
-    id: "Yu, Wang, and Samworth 2015"
-    type: "research paper"
-    prior_work: "Paper-facing formalization package in YuWangSamworth2015/ with a maintained source census in dev/."
+    authors: ["Chandler Davis", "William M. Kahan"]
+    id: "doi:10.1137/0707001"
+    type: "article"
+    location: "SIAM Journal on Numerical Analysis 7(1), 1970, 1–46"
+    relationship: "formalizes"
+    note: >-
+      Formalized at the printed scope, result by result, against a checked-in
+      source-order specification. One printed result does not stand: Proposition
+      4.4 is refuted by a machine-checked counterexample satisfying its printed
+      hypotheses, and the natural Q-norm repair is proved separately. See
+      `fidelity.divergences`.
+    author_endorsement: "not-contacted"
+
+  - title: "A useful variant of the Davis–Kahan theorem for statisticians"
+    authors: ["Yi Yu", "Tengyao Wang", "Richard J. Samworth"]
+    id: "doi:10.1093/biomet/asv008"
+    type: "article"
+    location: "Biometrika 102(2), 2015, 315–323"
+    relationship: "formalizes"
+    note: >-
+      The population-gap sin-Theta bound is formalized as printed. Printed
+      Equation (4) does not stand as written and is corrected, and the paper's
+      rank-boundary convention required a correction; both are recorded in the
+      census and in `fidelity.divergences`.
+    author_endorsement: "not-contacted"
+
+  - title: >-
+      Consistent estimation of generative model representations in the data
+      kernel perspective space
+    authors: ["Aranyak Acharyya", "Michael W. Trosset", "Carey E. Priebe", "Hayden S. Helm"]
+    id: "arXiv:2409.17308"
+    type: "article"
+    relationship: "adapts"
+    note: >-
+      Theorems 2 and 4 are formalized as printed, from the paper's own replicate
+      and trace-covariance assumptions. Theorem 5 and Lemma 2 required a repair to
+      the sampling model, stated explicitly rather than absorbed: see
+      `fidelity.divergences`. The authors were contacted and subject-matter
+      discussion is ongoing; no endorsement of this formalization has been sought
+      or given.
+    author_endorsement: "other"
+
+  - title: >-
+      Concentration bounds on response-based vector embeddings of black-box
+      generative models
+    authors: ["Aranyak Acharyya", "Joshua Agterberg", "Youngser Park", "Carey E. Priebe"]
+    type: "article"
+    relationship: "adapts"
+    note: >-
+      The printed finite concentration bound omits an entrywise dissimilarity
+      bound that its proof uses, and the printed manifold condition of Proposition
+      1 does not by itself force the nondegeneracy the argument needs. Both are
+      recorded as repairs. Authors contacted; discussion ongoing; no endorsement
+      sought or given.
+    author_endorsement: "other"
+
+  - title: >-
+      Statistical inference on black-box generative models in the data kernel
+      perspective space
+    authors:
+      - "Hayden S. Helm"
+      - "Aranyak Acharyya"
+      - "Youngser Park"
+      - "Brandon Duderstadt"
+      - "Carey E. Priebe"
+    type: "article"
+    relationship: "adapts"
+    note: >-
+      The risk-transfer argument needs a uniform-integrability / dominated-loss
+      hypothesis that the printed statement omits; convergence in probability alone
+      does not give convergence of expected risk, and the repository carries the
+      evidence for that necessity. Authors contacted; discussion ongoing; no
+      endorsement sought or given.
+    author_endorsement: "other"
+
+  - title: "Query-efficient model evaluation using cached responses"
+    authors: ["Hayden S. Helm", "Brandon Johnson", "Carey E. Priebe"]
+    type: "article"
+    relationship: "adapts"
+    note: >-
+      The nearest-neighbour estimator is formalized in a tie-averaged form, and a
+      printed assumption quantified over all compact subsets does not stand as
+      written and is corrected. Authors contacted; discussion ongoing; no
+      endorsement sought or given.
+    author_endorsement: "other"
+
+related_formalizations:
+  - id: "https://github.com/YuanheZ/lean-stat-learning-theory"
+    relationship: "independent"
+    note: >-
+      Independent Lean development of statistical learning theory including
+      Eckart–Young–Mirsky and singular-system material. Excerpts are retained under
+      `vendor/lean/` with provenance for comparison only; nothing in this build
+      imports them.
+  - id: "https://github.com/jbarrcfl/mathlib4"
+    relationship: "independent"
+    note: >-
+      Independent Mathlib branch carrying top-singular-value material. Excerpt
+      retained under `vendor/lean/` for comparison only.
+  - id: "https://github.com/Dronmong/drifting-identifiability"
+    relationship: "independent"
+    note: >-
+      Independent Lean development with a finite frame bound. Excerpt retained
+      under `vendor/lean/` for comparison only.
 
 status:
-  repository_build:
-    validation_commands:
-      - "python3 scripts/check_davis_kahan_1970_statement_map.py"
-      - "python3 scripts/check_davis_kahan_1970_source_census.py"
-      - "python3 scripts/check_yu_wang_samworth_source_census.py"
-      - "python3 scripts/run_gates.py --fast"
-      - "lake build"
-    comparator_configs:
-      - "comparator/candidate-01-gram-rigidity.json"
-      - "comparator/candidate-02-courant-fischer-weyl.json"
-      - "comparator/candidate-03-davis-kahan.json"
-      - "comparator/challenge-berge.json"
-      - "comparator/challenge-cfc-measurable.json"
-      - "comparator/challenge-davis-1963-rotation.json"
-      - "comparator/challenge-davis-kahan-sylvester-pi-over-two.json"
-      - "comparator/challenge-matrix-concentration.json"
-      - "comparator/challenge-near-isometry.json"
-      - "comparator/challenge-probability-qol.json"
-      - "comparator/challenge-rank-factorization.json"
-      - "comparator/challenge-rank-psd-realization.json"
-      - "comparator/challenge-restrict-cover-measurable.json"
-      - "comparator/challenge-sample-mean-mse.json"
-      - "comparator/challenge-tendsto-in-measure.json"
-      - "comparator/challenge-yu-wang-samworth.json"
-  scope: >
-    ForTauCeti is the reusable mathematics package and Tau Ceti is the current
-    integration target. DavisKahan and the paper libraries provide source-facing
-    theorem surfaces. ForMathlib and the maintained Spectra dependency are retired.
-    Challenge/ retains comparator, regression, and exhibition surfaces. Neutral
-    challenges live directly under Challenge/<Name>/; MathlibCandidate remains only
-    as historical provenance for the original candidate surfaces.
-  main_results:
-    - declaration: "TauCeti.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq"
-      file: "ForTauCeti/Analysis/InnerProductSpace/Gram/Matrix.lean"
-      challenge_file: "Challenge/MathlibCandidate/GramRigidity/Conformance.lean"
-      solution_file: "Challenge/MathlibCandidate/GramRigidity/Leaderboard.lean"
-      comparator_config: "comparator/candidate-01-gram-rigidity.json"
-      category: "Gram-matrix rigidity"
-    - declaration: "TauCeti.abs_eigenvalues_sub_le_opNorm"
-      file: "ForTauCeti/Analysis/InnerProductSpace/CourantFischer.lean"
-      challenge_file: "Challenge/MathlibCandidate/CourantFischerWeyl/Conformance.lean"
-      solution_file: "Challenge/MathlibCandidate/CourantFischerWeyl/Leaderboard.lean"
-      comparator_config: "comparator/candidate-02-courant-fischer-weyl.json"
-      category: "Courant-Fischer min-max and Weyl perturbation"
-    - declaration: "TauCeti.sum_norm_sub_starProjection_span_sq_le"
-      file: "DavisKahan/Alternative/FiniteDimensional/EigenbasisFrobenius.lean"
-      challenge_file: "Challenge/MathlibCandidate/DavisKahan/Conformance.lean"
-      solution_file: "Challenge/MathlibCandidate/DavisKahan/Leaderboard.lean"
-      comparator_config: "comparator/candidate-03-davis-kahan.json"
-      category: "Davis-Kahan cross-block / sin-Theta"
-  regression_challenges:
-    note: >
-      Neutral comparator/regression surfaces outside the historical candidate set.
-    configs:
-      - "comparator/challenge-berge.json"
-      - "comparator/challenge-cfc-measurable.json"
-      - "comparator/challenge-davis-1963-rotation.json"
-      - "comparator/challenge-davis-kahan-sylvester-pi-over-two.json"
-      - "comparator/challenge-matrix-concentration.json"
-      - "comparator/challenge-near-isometry.json"
-      - "comparator/challenge-probability-qol.json"
-      - "comparator/challenge-rank-factorization.json"
-      - "comparator/challenge-rank-psd-realization.json"
-      - "comparator/challenge-restrict-cover-measurable.json"
-      - "comparator/challenge-sample-mean-mse.json"
-      - "comparator/challenge-tendsto-in-measure.json"
-      - "comparator/challenge-yu-wang-samworth.json"
+  scope: >-
+    Formalized: the Davis–Kahan 1970 result surface at its printed scope, with a
+    maintained result inventory and source-order census; the Yu–Wang–Samworth 2015
+    result surface; and the four DKPS application papers above, each with its own
+    census and clause-by-clause semantic review. Reusable general mathematics is
+    factored into `ForTauCeti/`, whose declarations already carry the namespaces
+    they would have upstream.
 
-  source_exhibitions:
-    - name: "Davis--Kahan 1970"
-      challenge_file: "Challenge/DavisKahan1970/Conformance.lean"
-      solution_file: "Challenge/DavisKahan1970/Leaderboard.lean"
-      comparator_config: "comparator/davis-kahan-1970.json"
-      expected_status: "green_when_exact_tan_two_theta_directed_and_ambient_wrappers_compile"
-      note: >
-        The challenge includes the literal directed-residual and ambient Section 2 tan-2Theta endpoints
-        without an added pole-exclusion or selected-block placement premise.  The source layer now exposes
-        exact complex and real wrappers for both conclusions; keep the comparator green only while those
-        wrappers compile at the printed scope rather than weakening the paper-faithful target.
+    Not formalized, and not claimed: the numerical experiments in any of these
+    papers; open questions, which are preserved as source material and are not
+    proof obligations; and the informal exposition surrounding the counted results.
+    A green build certifies compilation and declaration resolution, never source
+    fidelity — that is what the censuses and semantic reviews are for, and they
+    record disagreements with the printed papers rather than hiding them.
+  sorry_count: 0
+  sorry_in_definitions: 0
+  axioms: []
+
+automation:
+  methods:
+    - method: "agent"
+      models:
+        - "claude-opus-5"
+        - "claude-opus-4-8"
+        - "claude-fable-5"
+        - "gpt-5.6-terra"
+        - "gpt-5.6-sol"
+      framework: "Claude Code"
+      tool_setup: >-
+        Agents worked directly in the repository with the Lean toolchain, running
+        `lake build` and the repository's own gate suite. Model attribution is
+        recorded per commit in Co-Authored-By trailers and per declaration in
+        module provenance headers, and measured token usage is accounted in the
+        checked-in ledger under `.llm_resource_tally/`.
+      cost:
+        wall_time: >-
+          not tracked as elapsed time; the ledger records 44657 assistant turns
+          across 1591 accounted commits
+        spend_usd: "subscription-based; not tracked per commit"
+        hardware: "API-only"
+      prompting_notes: >-
+        Work was directed by task, not by prompt template: a scope decision from
+        the maintainer, then autonomous proof and audit work against the source
+        censuses. Adversarial review prompts are checked in under `dev/` and are
+        part of the audit record.
+    - method: "manual"
+      framework: "n/a"
+      tool_setup: >-
+        The human maintainer set scope and priorities, ran builds and audits,
+        inspected theorem interfaces, coordinated subject-matter discussion with
+        the applied-paper authors, adjudicated source-fidelity questions, accepted
+        or rejected proposed repairs, and decided repository policy.
+  spend_usd: "subscription-based; not tracked"
+  notes: >-
+    This is a heavily agent-authored formalization with human direction and
+    review. The Lean kernel is the proof checker; the repository's mechanical
+    gates additionally audit dependency layering, axiom closure, census
+    consistency and comparator statement equality. Those checks do not establish
+    that a Lean statement says what a paper says, which is why every source paper
+    carries a separate clause-by-clause semantic review.
 
 fidelity:
-  summary: >
-    Comparator challenges isolate reusable theorem statements and dependency checks;
-    they do not certify fidelity of paper-specific definitions or of the distributable
-    source specification. Davis--Kahan 1970 tracks three independent evidence axes:
-    source-facing implementation status, compiler verification, and hostile semantic
-    completion certification. The checked-in DavisKahan1970_part_III.tex is the
-    distributable source-order audit specification, while
-    dev/davis-kahan-1970-source-atom-inventory.json is the fine-grained source-fidelity
-    inventory; the separate dev/davis-kahan-1970-formalization-result-inventory.json
-    is the 29-result completion denominator. The original paper remains the authority
-    for re-auditing the reconstruction and result selection.
-  known_limitations:
-    - "Comparator success does not substitute for semantic review of paper-specific definitions and theorem statements."
-    - "Generated/checkable status artifacts should be preferred over prose snapshots when they disagree."
-    - "A Davis--Kahan compilation certificate proves elaboration and declaration resolution, not source equivalence; 100% additionally requires terminal exact/refuted evidence and semantic acceptance for every result in the formalization-result inventory."
-    - "The 2026-08-12 hostile re-audit and 272-atom source inventory remain source-fidelity evidence. They are not the completion denominator. The hard 100% denominator is the 29 results Davis--Kahan actually establish; each requires exact source-facing Lean evidence and semantic review."
-    - "One counted result, S2-tan-theta, has a printed statement that is not locally self-contained: the Section 2 ambient tan(Theta) conclusion does not state the crossed-defect condition (3.5), which the source introduces in Section 3, then assumes as standing, and relies on when proving the theorem in Section 6. The row is classified paper-faithful under an accepted, hash-pinned nonlocal source interpretation, NOT as refuted; the bilateral-shift construction is a vacuity/nonvacuity witness rather than a counterexample to it. The generated audit packet discloses the dependency and asks an independent reviewer to adjudicate it."
-    - "Section 10, including Question 10.4, is open-question material and does not contribute completion obligations. Preceding identities remain source-fidelity material unless they are part of a separately designated proved result."
-    - "The exact directed and ambient Section 2 tan(2 Theta) source wrappers are now compiled in real and complex scope; that historical gap is closed and should not be reintroduced."
+  divergences: >-
+    Divergences from the printed sources are recorded per result in the censuses
+    under `dev/` and are summarized here.
+
+    Davis–Kahan 1970. Proposition 4.4 as printed is false; a machine-checked
+    counterexample satisfies its printed hypotheses, and the natural Q-norm repair
+    is proved separately as `directRotation_fullDisplacement_qnorm`. The Section 2
+    ambient tan-Theta theorem is not locally self-contained: its printed statement
+    does not carry the crossed-defect condition (3.5), which the source introduces
+    in Section 3, treats as standing, and uses when proving the theorem in Section
+    6. That row is accepted under an explicit nonlocal source reading, recorded and
+    hash-pinned rather than silently assumed, and it is not classified as refuted.
+
+    Yu–Wang–Samworth 2015. Printed Equation (4) does not stand as written and is
+    corrected. The rank-boundary convention required a correction. The main
+    population-gap theorem is formalized as printed.
+
+    Acharyya et al. 2024. Theorems 2 and 4 are formalized as printed, with the
+    Appendix A.2 second-moment passage discharged rather than assumed and with no
+    rate shared across the model collection. Theorem 5 and Lemma 2 need a repair to
+    the sampling model: the paper draws latent vectors iid while the estimator
+    inside the displayed integral depends on model-specific response laws and on
+    sampled responses, so the display does not denote anything under a measure
+    carrying only the latent vector. The formalization augments the population
+    measure by the response outcome. That is one repair among possible ones and is
+    not claimed to be uniquely minimal; the alternative not taken is recorded in the
+    census.
+
+    Acharyya et al. 2025. The printed finite concentration bound omits an entrywise
+    dissimilarity bound its proof uses. Proposition 1's printed compact-manifold
+    condition does not by itself force the nondegeneracy the argument needs.
+
+    Helm et al. 2025. The risk-transfer step needs a uniform-integrability /
+    dominated-loss hypothesis absent from the printed statement.
+
+    Helm–Johnson–Priebe 2026. The nearest-neighbour estimator is tie-averaged, and a
+    printed assumption quantified over all compact subsets does not stand as written
+    and is corrected.
 
 review:
   status: "self-assessed"
   reviewers:
     - "Jon Crall"
-  notes: >
-    The repository contains comparator, axiom, census, grounding, dependency-layer,
-    and other mechanical checks. Independent mathematical and external-library review
-    remain distinct from those checks. For Davis--Kahan 1970, run
-    `python3 scripts/certify_davis_kahan_1970.py --clean` to generate a self-contained
-    compiler-evidence bundle and source-order audit packet. The 50 rows are organizational
-    groups and the 272 atoms are an exhaustive source-fidelity/disclosure surface; neither is
-    the formalization denominator. Every fidelity atom has an explicit boundary reason and
-    reverse link to any counted result it supports, and all 29 counted results have accepted
-    printed-statement boundary reviews. No private transcription is a certificate input. Add
-    `--require-terminal` only when requesting the hard 100% gate: every one of the 29 results
-    Davis--Kahan actually establish must have exact/refuted source-facing evidence,
-    `proved_in_build` verification, hostile semantic certification `accepted`, and any required
-    refutation repair. Section 10, deferred/unproved claims, proof details, examples, and
-    historical material remain visible fidelity records but are not completion obligations.
-    Current integration policy targets Tau Ceti.
+  notes: >-
+    No external peer review. What has happened, and should be read as exactly
+    that: kernel verification of every claimed declaration by `lake build`;
+    repository gates auditing dependency layers, axiom closure, docstring
+    coverage, comparator statement equality and census consistency; repeated
+    adversarial source audits in which an independent agent was asked to find
+    a discrepancy between a printed statement and its Lean rendering, several of
+    which found real defects that are recorded in the censuses; and human
+    coordinator review of scope, theorem interfaces and repair decisions.
+
+    For Davis–Kahan 1970, `python3 scripts/certify_davis_kahan_1970.py --clean`
+    generates a self-contained compiler-evidence bundle and source-order audit
+    packet. That certificate proves elaboration and declaration resolution. It
+    does not prove source equivalence, and the completion standard is deliberately
+    three independent axes: source-facing implementation, compiler verification,
+    and hostile semantic acceptance.
 
 alignment:
+  namespace: "TauCeti"
   statements:
-    - informal: "Two vector families with equal pairwise inner products have isometrically equivalent generated spans."
-      lean: "TauCeti.linearIsometryEquivSpanOfInnerEq"
-      status: "proved in ForTauCeti"
-    - informal: "Finite configurations with equal pairwise inner products are equivalent up to a linear isometry."
-      lean: "TauCeti.exists_linearIsometryEquiv_map_eq_of_inner_eq"
-      status: "proved in ForTauCeti"
-    - informal: "Equal Gram matrices characterize equality up to linear isometry."
-      lean: "TauCeti.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq"
-      status: "proved in ForTauCeti"
-    - informal: "A PSD matrix of rank at most d is a Gram matrix of d-dimensional vectors."
-      lean: "TauCeti.Matrix.posSemidef_and_rank_le_iff_exists_conjTranspose_mul_self"
-      status: "proved in ForTauCeti"
-    - informal: "Weyl eigenvalue perturbation for finite-dimensional self-adjoint operators."
-      lean: "TauCeti.abs_eigenvalues_sub_le_opNorm"
-      status: "proved in ForTauCeti"
-    - informal: "Source-facing Davis-Kahan Part III sine-theta theorem for unitarily invariant norms."
+    - source: "Davis–Kahan 1970, Section 2, sin-Theta theorem"
       lean: "TauCeti.DavisKahanTheory.partIII_sinTheta_uiNorm"
-      status: "production source surface"
-    - informal: "Source-facing sharp operator-norm tan-two-theta theorem."
+      module: "DavisKahan.Sources.DavisKahan1970"
+      status: "proved"
+      note: >-
+        The domain-aware unbounded self-adjoint statement for an arbitrary
+        unitarily invariant norm, which is the canonical source-facing target;
+        bounded and finite-dimensional forms are specializations of it.
+    - source: "Davis–Kahan 1970, Section 2, tan-2Theta theorem"
       lean: "TauCeti.DavisKahanTheory.partIII_tanTwoTheta_opNorm"
-      status: "production source surface"
+      module: "DavisKahan.Sources.DavisKahan1970"
+      status: "proved"
+      note: "Sharp operator-norm form, at the printed scope."
+    - source: "Davis–Kahan 1970, operator-norm sin-Theta, finite/bounded form"
+      lean: "TauCeti.norm_starProjection_comp_starProjection_le"
+      module: "ForTauCeti.Analysis.InnerProductSpace.SinTheta.OperatorNorm"
+      status: "proved"
+      note: >-
+        Stated entirely in Mathlib vocabulary — symmetric operators, invariant
+        subspaces, orthogonal projections, a quadratic-form separation and a
+        perturbation bound — with the proof in the reusable layer.
+    - source: "Yu–Wang–Samworth 2015, Theorem 2"
+      lean: "YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap"
+      module: "YuWangSamworth2015.Core.Residual"
+      status: "proved"
+      note: >-
+        The Frobenius sin-Theta bound that depends only on the population
+        eigengap, which is the variant the paper exists to provide.
+    - source: "Acharyya et al. 2024, Theorem 5"
+      lean: "Acharyya2024.Consistency.lp_consistency_of_replicates_population"
+      module: "Acharyya2024.Consistency"
+      status: "adapted"
+      note: >-
+        Over the population law, from the paper's replicate and trace-covariance
+        assumptions, under the sampling-model repair recorded in
+        `fidelity.divergences`.
+    - source: "Weyl eigenvalue perturbation (background)"
+      lean: "TauCeti.abs_eigenvalues_sub_le_opNorm"
+      module: "ForTauCeti.Analysis.InnerProductSpace.CourantFischer"
+      status: "proved"
+      note: "Supporting classical result, proved in the reusable layer."
+    - source: "Gram-matrix rigidity (background)"
+      lean: "TauCeti.Matrix.gram_eq_gram_iff_exists_linearIsometryEquiv_map_eq"
+      module: "ForTauCeti.Analysis.InnerProductSpace.Gram.Matrix"
+      status: "proved"
+      note: >-
+        Equal Gram matrices characterize equality up to a linear isometry; the
+        identifiability fact underneath the multidimensional-scaling layer.
 
-challenge_packages:
-  note: >
-    Challenge packages are comparator/regression/exhibition infrastructure under the
-    current Tau Ceti integration policy, not a Mathlib-readiness queue.
-  candidate_configs:
-    - "comparator/candidate-01-gram-rigidity.json"
-    - "comparator/candidate-02-courant-fischer-weyl.json"
-    - "comparator/candidate-03-davis-kahan.json"
-  source_exhibition_configs:
-    - "comparator/davis-kahan-1970.json"
-  source_exhibition_note: >
-    This config intentionally contains unproved exact-paper tan-2Theta targets and is not part
-    of the default green comparator runner.
-  regression_configs:
-    - "comparator/challenge-berge.json"
-    - "comparator/challenge-cfc-measurable.json"
-    - "comparator/challenge-davis-1963-rotation.json"
-    - "comparator/challenge-davis-kahan-sylvester-pi-over-two.json"
-    - "comparator/challenge-matrix-concentration.json"
-    - "comparator/challenge-near-isometry.json"
-    - "comparator/challenge-probability-qol.json"
-    - "comparator/challenge-rank-factorization.json"
-    - "comparator/challenge-rank-psd-realization.json"
-    - "comparator/challenge-restrict-cover-measurable.json"
-    - "comparator/challenge-sample-mean-mse.json"
-    - "comparator/challenge-tendsto-in-measure.json"
-    - "comparator/challenge-yu-wang-samworth.json"
-
-automation:
-  methods:
-    - method: "agent"
-      description: "AI-authored Lean formalization with human coordination and review"
-      human_role: >
-        The human coordinator directs scope, runs builds and audits, inspects theorem
-        interfaces, coordinates subject-matter review, and decides repository policy.
-      soundness_gate: >
-        The Lean kernel is the proof checker. Repository gates additionally audit
-        selected dependency, axiom, census, grounding, and comparator properties.
-        Those mechanical checks do not replace mathematical or source-fidelity review.
+acknowledgements: >-
+  Built on Mathlib. Tau Ceti is the upstream integration target for the reusable
+  layer in `ForTauCeti/`, and is a pinned dependency of this build. The applied
+  papers formalized here are the work of their authors, who are credited under
+  `sources`; discussion with several of them informed the source-fidelity
+  decisions recorded in the censuses. Independent Lean developments consulted for
+  comparison are listed under `related_formalizations`.
