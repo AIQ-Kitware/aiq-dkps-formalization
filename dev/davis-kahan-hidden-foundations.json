@@ -95,29 +95,29 @@
     },
     {
       "id": "schatten-foundation",
-      "title": "Approximation-number Schatten infrastructure contract",
-      "module": "DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation",
-      "file": "DavisKahan/OperatorIdeal/ApproximationNumbers/SchattenApproximationFoundation.lean",
-      "declaration": "TauCeti.DavisKahan.ExactSinTheta.SchattenApproximationFoundation",
-      "kind": "interface",
+      "title": "Approximation-number Schatten infrastructure",
+      "module": "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
+      "file": "ForTauCeti/Analysis/OperatorIdeal/Family/Schatten.lean",
+      "declaration": "TauCeti.schattenIdealFamily",
+      "kind": "construction",
       "dependencies": [],
       "frontier_nodes": [],
       "confidence": "high",
-      "notes": "Lists every theorem needed to turn approximation-number l^p gauges into complete rectangular ideals."
+      "notes": "Closed.  This node used to be a fifteen-field `interface` contract listing every theorem needed to turn approximation-number l^p gauges into complete rectangular ideals, in `DavisKahan/OperatorIdeal/ApproximationNumbers/SchattenApproximationFoundation.lean`.  Nothing ever instantiated that contract; the campaign it described was carried out in ForTauCeti instead, and the file was deleted on 2026-08-27.  The node now points at what discharges it."
     },
     {
       "id": "schatten-family",
-      "title": "Construct a rectangular symmetric ideal family from the Schatten contract",
-      "module": "DavisKahan.OperatorIdeal.ApproximationNumbers.SchattenApproximationFoundation",
-      "file": "DavisKahan/OperatorIdeal/ApproximationNumbers/SchattenApproximationFoundation.lean",
-      "declaration": "ForMathlib.DavisKahan.Experimental.ExactSinTheta.HiddenFoundations.SchattenApproximationFoundation.toFamily",
-      "kind": "bridge",
+      "title": "The Schatten triangle inequality",
+      "module": "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
+      "file": "ForTauCeti/Analysis/OperatorIdeal/Family/Schatten.lean",
+      "declaration": "TauCeti.ContinuousLinearMap.schattenENorm_add_le",
+      "kind": "proof_candidate",
       "dependencies": [
         "schatten-foundation"
       ],
       "frontier_nodes": [],
       "confidence": "high",
-      "notes": ""
+      "notes": "Closed.  Was the bridge from the deleted interface contract to a legacy rectangular record.  The hard field of that contract was the triangle inequality -- the Tomic--Weyl majorization argument -- and this is it; completeness is the separate instance `isComplete_schattenIdealFamily` in the same module."
     },
     {
       "id": "free-beam-mode-ode",
