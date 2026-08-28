@@ -102,6 +102,17 @@ globs = ["YuWangSamworth2015.*"]
 leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500, weak.linter.style.header = false }
 
 
+# Palomar Registry submission surfaces. One directory per prepared entry, each a
+# statement-only `Challenge` and a thin `Solution` that supplies the proof from the
+# ordinary development. A Challenge's transitive imports must stay within Lean core
+# and the allowlisted Mathlib/Tau Ceti closure, which is why these are separate from
+# the internal `Challenge/` calibration tree. Intentionally not default targets: the
+# Challenge modules contain deliberate statement-side holes.
+# See dev/palomar-readiness.md and palomar/README.md.
+[[lean_lib]]
+name = "Palomar"
+globs = ["Palomar.*"]
+
 # Comparator/challenge modules for community calibration of AI-authored
 # upstream candidates. These are intentionally not default targets.
 [[lean_lib]]
