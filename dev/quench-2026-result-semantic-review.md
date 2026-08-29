@@ -14,12 +14,12 @@ Companion coverage census: `dev/quench-2026-full-source-census.json`.
 
 | verdict | rows |
 | --- | ---: |
-| `GAP normalisation mismatch` | 1 |
 | `GAP stronger analytic hypotheses` | 2 |
 | `PASS` | 1 |
 | `PASS equivalent encoding` | 1 |
 | `PASS exact` | 1 |
 | `PASS generalized` | 1 |
+| `PASS source repair` | 1 |
 | `PROOF ROLE REPLACED` | 1 |
 | `REPAIR source mismatch` | 3 |
 | `SUPPLEMENTARY Lean extension` | 3 |
@@ -41,7 +41,7 @@ A `PASS` verdict means the source result follows from the selected Lean surface 
 | `Q26-RAW-FIN` | Theorem 2 and its proof, at the finite model-class scope | SUPPLEMENTARY Lean extension |
 | `Q26-RAW-INF` | Theorem 2 and its proof, at the compact-infinite model-class scope | SUPPLEMENTARY Lean extension |
 | `Q26-Y` | Benchmark scoring function | PASS generalized |
-| `Q26-D` | Response means and the dissimilarity matrix | GAP normalisation mismatch |
+| `Q26-D` | Response means and the dissimilarity matrix | PASS source repair |
 
 ## Relation legend
 
@@ -437,16 +437,18 @@ yFull and yQ are the two displayed evaluations. Lean drops the [0,1] codomain an
 
 ### 13. `Q26-D` — Response means and the dissimilarity matrix: Query-averaged response matrices and their pairwise Frobenius dissimilarities
 
-**Verdict:** GAP normalisation mismatch
+**Verdict:** PASS source repair
 
 **Source:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:50-62`
 
 **Normalized paper statement:** Xbar_{ij.} = (1/r) sum_k g(f_i(q_j))_k, and D is the pairwise distance matrix with entries D_{ii'} = ||Xbar_i - Xbar_{i'}||_F.
 
 **Selected Lean declarations:**
-- `Acharyya2024.responseDistEntry`
 - `Acharyya2024.responseDist`
+- `Acharyya2024.responseDistEntry`
 - `DkpsQuench2026.augmentedSampleResponseDist`
+- `hNNTieAverage_smul`
+- `nnMinimizers_smul`
 
 **Clause-by-clause comparison:**
 
@@ -454,16 +456,17 @@ yFull and yQ are the two displayed evaluations. Lean drops the [0,1] codomain an
 | --- | --- | --- | --- |
 | Xbar_{ij.} = (1/r) sum_k g(f_i(q_j))_k. | The raw-response replicate mean the capstones consume. | `exact` |  |
 | D_{ii'} = \|\|Xbar_i - Xbar_{i'}\|\|_F. | Acharyya2024.responseDistEntry, which is (m)^{-1} * \|\|Xbar i - Xbar j\|\|. | `different_quantifier_encoding` | Differs from the display by the 1/m factor the imported Theorem 1 assumes. |
+| D_{ii'} = \|\|Xbar_i - Xbar_{i'}\|\|_F, printed with no normalising factor | Acharyya2024.responseDistEntry, which carries 1/m -- the convention of the theorem Quench imports -- together with nnMinimizers_smul and hNNTieAverage_smul, which prove the estimator invariant under positive rescaling | `source_repair` | Quench cites Acharyya 2024's Theorem 1, which is stated for the rescaled matrix, so its display and its citation cannot both be read literally. The imported scale is the only reading under which the paper's own argument goes through. The invariance theorems confine the consequence: every query-efficiency conclusion is untouched, because nearest-neighbour regression sees the geometry only through which reference is closest. Assumption 1 is not covered by that invariance -- it bounds a score difference by gamma times a perspective distance, and m is the query budget rather than a fixed constant. |
 
 **Semantic review:**
 
-The replicate average is the raw-response mean the capstones consume. The dissimilarity Lean uses is Acharyya2024.responseDistEntry, which carries a (m)^{-1} factor the Quench display does not; see dissimilarity-normalisation-mismatch for why the estimator is unaffected and Assumption 1 is not.
+The replicate average is the raw-response mean the capstones consume. The dissimilarity is Acharyya2024.responseDistEntry, carrying a 1/m factor the Quench display omits. Adjudicated: the formalization uses the imported convention, because Quench's own citation of Acharyya 2024 Theorem 1 is stated at that scale and the display and the citation cannot both be literal. The estimator's indifference to the choice is now proved rather than asserted; Assumption 1's gamma is the one place where the convention genuinely matters, and that is recorded rather than absorbed.
 
 **Additional note:** This row exists because the displayed D had no census coverage at all, which is how the normalisation mismatch went unrecorded.
 
 **Companion census gap refs:** `dissimilarity-normalisation-divergence`, `dissimilarity-normalisation-mismatch`
 
-**Next action:** Decide whether Quench should state D with the 1/m factor or carry the rescaling explicitly in Assumption 1.
+**Next action:** None. The convention is adjudicated and its consequences are compiled.
 
 ### 14. `Q26-INFER` — Inference in the DKPS: Model-level inference is carried out on perspective-score pairs
 

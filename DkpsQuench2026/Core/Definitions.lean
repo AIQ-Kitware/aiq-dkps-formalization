@@ -359,4 +359,57 @@ noncomputable def hNNTieAverage {n : ℕ} (hn : n > 0)
   let S := nnMinimizers hn ψHat_ref ψHat_target
   (∑ i ∈ S, y_ref i) / (S.card : ℝ)
 
+/-! ### Scale invariance
+
+The four papers in this chain print three different normalisations of the
+dissimilarity matrix: `(1/m)‖·‖_F` in Acharyya 2024 and Helm 2025, `(1/√m)‖·‖_F`
+in Acharyya 2025, and `‖·‖_F` with no factor in Quench. Rescaling every
+dissimilarity by `c > 0` rescales the resulting configuration by `c`, so the
+formalization has to say what that does to the estimator rather than assume it
+does nothing.
+
+For the nearest-neighbour estimator the answer is that it does nothing at all, and
+these are the theorems that say so. The minimising set is unchanged, hence so is
+the tie average: nearest-neighbour regression sees the perspective geometry only
+through which reference is closest, which is a scale-free question.
+
+This is why the normalisation divergence does not reach the query-efficiency
+conclusions. It does not license ignoring the divergence elsewhere -- Assumption 1
+bounds a score difference by `γ` times a perspective distance, and rescaling the
+perspectives rescales that distance, so `γ` means different things under different
+conventions. -/
+
+theorem nnMinimizers_smul {n : ℕ} (hn : n > 0)
+    (ψHat_ref : Fin n → Vec d) (ψHat_target : Vec d) {c : ℝ} (hc : 0 < c) :
+    nnMinimizers hn (fun i => c • ψHat_ref i) (c • ψHat_target)
+      = nnMinimizers hn ψHat_ref ψHat_target := by
+  have hnorm : ∀ i, ‖c • ψHat_ref i - c • ψHat_target‖ = c * ‖ψHat_ref i - ψHat_target‖ := by
+    intro i
+    rw [← smul_sub, norm_smul, Real.norm_eq_abs, abs_of_pos hc]
+  classical
+  have hiff : ∀ i : Fin n,
+      IsArgmin (fun j => ‖c • ψHat_ref j - c • ψHat_target‖) i
+        ↔ IsArgmin (fun j => ‖ψHat_ref j - ψHat_target‖) i := by
+    intro i
+    simp only [IsArgmin, hnorm]
+    exact ⟨fun h j => le_of_mul_le_mul_left (h j) hc,
+           fun h j => mul_le_mul_of_nonneg_left (h j) hc.le⟩
+  unfold nnMinimizers
+  ext i
+  rw [Finset.mem_filter, Finset.mem_filter]
+  exact and_congr_right fun _ => hiff i
+
+/-- **The tie-averaged nearest-neighbour estimator is invariant under a positive
+rescaling of the perspective space.**
+
+Scaling every reference perspective and the target by the same `c > 0` leaves the
+estimate unchanged, because it leaves the set of minimisers unchanged. -/
+theorem hNNTieAverage_smul {n : ℕ} (hn : n > 0)
+    (ψHat_ref : Fin n → Vec d) (ψHat_target : Vec d) (y_ref : Fin n → ℝ)
+    {c : ℝ} (hc : 0 < c) :
+    hNNTieAverage hn (fun i => c • ψHat_ref i) (c • ψHat_target) y_ref
+      = hNNTieAverage hn ψHat_ref ψHat_target y_ref := by
+  unfold hNNTieAverage
+  rw [nnMinimizers_smul hn ψHat_ref ψHat_target hc]
+
 end NN_Definitions
