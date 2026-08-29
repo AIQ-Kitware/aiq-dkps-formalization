@@ -1443,14 +1443,16 @@
       "source_kind": "theorem",
       "source_anchor": "Section 6 equations (6.2)–(6.6), Example 6.1, and Theorem 6.3",
       "completion_obligation": true,
-      "expected_status": "partial_or_wrapper_missing",
+      "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-6.3-thm",
       "review_declarations": [
         "TauCeti.DavisKahan1970.Theorem6_3",
         "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real",
         "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm",
-        "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real"
+        "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real",
+        "TauCeti.DavisKahan1970.Section6Example61.tangent_bound_fails",
+        "TauCeti.DavisKahan1970.Section6Example61.residual_norm"
       ],
       "audit_clauses": [
         {
@@ -1460,18 +1462,15 @@
             "TauCeti.DavisKahan1970.Theorem6_3",
             "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real",
             "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm",
-            "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real"
+            "TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real",
+            "TauCeti.DavisKahan1970.Section6Example61.tangent_bound_fails",
+            "TauCeti.DavisKahan1970.Section6Example61.residual_norm"
           ]
         }
       ],
       "source_specification_sha256": "3cb15263f92a74f7f5bcd986093f2a8113abc206243a8876510705b926d35919",
-      "expected_completion_certification": "reopened_math",
-      "known_completion_holes": [
-        {
-          "kind": "missing_source_facing_statement",
-          "detail": "The generalized tangent theorem itself appears covered, but the same hashed passage preserves Example 6.1: delta=1, tangent quantity 1, residual 1/sqrt(2) when spectral mass lies on the wrong side. The hostile review did not find an exact source-facing formalization of that explicit counterexample."
-        }
-      ],
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: The generalized tangent theorem itself appears covered, but the same hashed passage preserves Example 6.1: delta=1, tangent quantity 1, residual 1/sqrt(2) when spectral mass lies on the wrong side. The hostile review did not find an exact source-facing formalization of that explicit counterexample.",
       "source_atom_ids": [
         "DK-6.3-thm.tangent-setup-identities",
