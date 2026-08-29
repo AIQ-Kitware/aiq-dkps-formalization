@@ -305,7 +305,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This is Section 1 introductory setup/background or an introductory consequence, not one of the four Section 2 headline theorems or a named theorem/proposition/lemma/corollary counted by the project.",
+      "formalization_role_reason": "Section 1 setup, and attributed rather than established. The source introduces it as \"the standard residual-to-eigenvalue consequence\" that the paper \"also records\" -- it is classical Rayleigh--Ritz error theory quoted for the numerical-approximation reading, not a result Davis and Kahan prove here, and no later result of theirs depends on it. It is therefore preserved as source fidelity with an empty reverse link and is not a completion obligation; formalizing it would add a theorem the paper does not claim.",
       "formalization_role_reason_code": "introductory_background_not_designated_result",
       "formalization_result_ids": []
     },
@@ -321,7 +321,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This is Section 1 introductory setup/background or an introductory consequence, not one of the four Section 2 headline theorems or a named theorem/proposition/lemma/corollary counted by the project.",
+      "formalization_role_reason": "The pointwise companion of the previous atom, from the same quoted standard consequence and under the same ordering. Attributed, not established, and outside the completion denominator for the same reason.",
       "formalization_role_reason_code": "introductory_background_not_designated_result",
       "formalization_result_ids": []
     },
