@@ -13,12 +13,12 @@ from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 38 |
+| `compiled_exact` | 39 |
 | `compiled_specialization` | 0 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 8 |
+| `partial_or_wrapper_missing` | 7 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -50,10 +50,10 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 23 |
+| `accepted` | 24 |
 | `reopened_source_spec` | 0 |
 | `reopened_math` | 6 |
-| `reopened_mapping` | 16 |
+| `reopened_mapping` | 15 |
 | `mixed_disposition` | 2 |
 | `not_applicable` | 3 |
 
@@ -120,7 +120,7 @@ Gates: S1-block-residual (proved_in_build), DK-5-hermitian-inequalities (proved_
 
 The 2026-08-12 hostile re-audit found source mathematics omitted or weakened in DavisKahan1970_part_III.tex. These rows must be repaired against the original paper and then re-hashed; a Lean proof cannot compensate for an incomplete public specification.
 
-Gates: DK-4.1-prop (proved_in_build), DK-9-model (proved_in_build), DK-9.8 (proved_in_build)
+Gates: DK-9-model (proved_in_build), DK-9.8 (proved_in_build)
 
 ### `hostile-audit-atomization` -- mechanical
 
@@ -1781,14 +1781,11 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  The former finite-dimensional J gap is clos
 
 - **Kind:** `proposition`
 - **Review importance:** `supporting`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_mapping`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** For any unitary carrying P to Q, an orthonormal sequence experiences angles at least the principal angles; equivalently the singular values of (1-V)|P are minimized by the direct rotation and equal 2 sin(theta_k/2).
-- **Blocked by:** `hostile-source-spec-fidelity`
-- **Known hostile-review holes:**
-  - `mapping`: PDF re-audit restored equations (4.1) and (4.2) explicitly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the minimax and pointwise-angle atoms and the headline proposition are explicitly bound to exact Lean evidence.
-- **Current Lean references:** `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation`, `TauCeti.DavisKahan1970.Proposition4_1`, `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional`, `TauCeti.DavisKahan1970.Proposition4_1_real`, `TauCeti.DavisKahan1970.restrictedDisplacementDominance_real`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional_nonacute`, `TauCeti.positiveApproximationEigenvector`, `TauCeti.orthonormal_positiveApproximationEigenvector`, `TauCeti.apply_positiveApproximationEigenvector`, `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors`, `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real`
+- **Current Lean references:** `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le`, `TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation`, `TauCeti.DavisKahan1970.Proposition4_1`, `TauCeti.DavisKahan1970.Proposition4_1_directRotationValues`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional`, `TauCeti.DavisKahan1970.Proposition4_1_real`, `TauCeti.DavisKahan1970.restrictedDisplacementDominance_real`, `TauCeti.DavisKahan1970.Proposition4_1_infiniteDimensional_nonacute`, `TauCeti.positiveApproximationEigenvector`, `TauCeti.orthonormal_positiveApproximationEigenvector`, `TauCeti.apply_positiveApproximationEigenvector`, `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors`, `TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues`, `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real`, `TauCeti.DavisKahanTheory.principalPlaneChord_eq_two_mul_sin_half`
 - **Assessment:** The finite pointwise singular-value theorem is compiled: every singular value of the restricted displacement (1-V)P is minimized by the direct rotation, whose values are the doubled half-angle sines 2 sin(theta_k/2).  A source-numbered wrapper and the infinite-dimensional scope remain open.
 
 **SOURCE WRAPPER ADDED 2026-08-05**, in `DavisKahan/Sources/DavisKahan1970/Section4.lean` (namespace `TauCeti.DavisKahan1970`), so the facade can cite the paper's numbering directly.  The wrappers are `alias`es over the already-compiled general theorems, so they carry the exact statements.  The infinite-dimensional form is proved in `Experimental/MathAhead/Section4/InfiniteProposition41.lean` by a spectral-cutoff min--max argument; it is NOT aliased here, because no production module may import `Experimental` and `lake build` does not yet guard that chain.
@@ -1817,7 +1814,19 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`
 **RESULT-ONLY SOURCE BRIDGE 2026-08-12.** `Proposition4_1_compact_nonacute_directRotationValues` and its real counterpart expose the printed exact value `a_k((1-U)P) = 2 sin(theta_k/2)` at the same arbitrary-dimensional compact, matched-defect scope as the existing nonacute Proposition 4.1 wrappers. This closes the maintained 29-result Proposition 4.1 obligation while leaving the legacy full-source row's separate bookkeeping for equations (4.1)--(4.2) unchanged.
 
 SECTION 4 STAGING RETIRED 2026-08-27.  The dated notes above locate the infinite-dimensional Proposition 4.1 at `DavisKahan/MathAhead/Section4/InfiniteProposition41.lean`; that directory held only compatibility imports and is deleted.  The stable owner is `DavisKahan/Geometry/Polar/RestrictedDisplacementExtremal.lean` and the source-facing alias `Proposition4_1_infiniteDimensional` on this row is unchanged.
-- **Next action:** PDF re-audit restored equations (4.1) and (4.2) explicitly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the minimax and pointwise-angle atoms and the headline proposition are explicitly bound to exact Lean evidence.
+
+**MAPPING HOLE DISCHARGED 2026-08-29 (Claude Opus 5).  `partial_or_wrapper_missing` -> `compiled_exact`.**
+
+The source-specification defect was already closed by the PDF re-audit, which restored (4.1) and (4.2) to the distributable TeX. What remained was binding the two counted atoms to exact evidence, which the statement map's two audit clauses now do.
+
+`DK-4.1-prop.orthonormal-angle-lower-bounds` -- orthonormal `v_k` in `P` with `angle(v_k, V v_k) >= theta_k` -- is `Proposition4_1_compact_orthonormalVectors` and its real form, which produce exactly an orthonormal family with `principalAngleSequence U V n <= vectorAngle (v n) (W (v n))` for every intertwining unitary `W`.
+
+`DK-4.1-prop.singular-value-minimality` -- each singular value of `(1-V)|P` minimised at `V = U`, with value `2 sin(theta_k/2)` -- needed three pieces, and only two existed. Minimality over all intertwining isometries is `Proposition4_1`, resting on `singularValues_restrictedDisplacement_le`; the attained value is `singularValues_restrictedDisplacement_directRotation`, which returns the principal-plane chord.
+
+The third piece was missing and is new here. `principalPlaneChord` is *defined* as `sqrt (2 (1 - cos))`, because this API carries a principal plane by its sine and cosine and never names an angle; that it equals the printed `2 sin(theta/2)` was asserted only in its docstring. `principalPlaneChord_eq_two_mul_sin_half` proves it, for any `theta` in `[0, pi]` realising the plane's cosine. Small, but it is the difference between the compiled value being the printed value and being claimed to be.
+
+Equations (4.1) and (4.2), the closest-`Q`-vector step and the `V = UZ` factorisation remain `proof_only` and `non_result` in the atom inventory. They are preserved as source fidelity and are not completion obligations, per the census's own rule; nothing here changes that.
+- **Next action:** None. Both counted atoms are bound to exact evidence through the statement map's `.vector` and `.singular` audit clauses, and the half-angle identity `principalPlaneChord_eq_two_mul_sin_half` closes the one place where the compiled value matched the printed `2 sin(theta_k/2)` only by docstring.
 
 #### Corollary 4.1: UI-norm minimality of direct rotation displacement
 
