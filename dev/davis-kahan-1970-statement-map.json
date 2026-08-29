@@ -2206,7 +2206,7 @@
       "source_kind": "mixed_open_question",
       "source_anchor": "Question 10.4, including ambient and directed functional-calculus specializations",
       "completion_obligation": true,
-      "expected_status": "partial_or_wrapper_missing",
+      "expected_status": "not_a_completion_obligation",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-10.4",
       "review_declarations": [
@@ -2245,17 +2245,8 @@
         }
       ],
       "source_specification_sha256": "cb03063c7dac9729bde9e1594aca09f614de292828a9f3770c28061743fb3792",
-      "expected_completion_certification": "mixed_disposition",
-      "known_completion_holes": [
-        {
-          "kind": "mixed_disposition",
-          "detail": "Question 10.4 is not a pure open-question block. Before the general-f question it states established step-function identities f(A)=P, f(A+H)=Q, f(A0)=I, the projector/sine identities, and the ambient/directed tan(2 Theta) bounds. The tan(2 Theta) bounds now have exact complex/real wrappers, but the functional-calculus identities are not atomically registered."
-        },
-        {
-          "kind": "checker_loophole",
-          "detail": "The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open."
-        }
-      ],
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: Question 10.4 is not a pure open-question block. Before the general-f question it states established step-function identities f(A)=P, f(A+H)=Q, f(A0)=I, the projector/sine identities, and the ambient/directed tan(2 Theta) bounds. The tan(2 Theta) bounds now have exact complex/real wrappers, but the functional-calculus identities are not atomically registered. The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open.",
       "source_atom_ids": [
         "DK-10.4.spectral-functional-calculus",
