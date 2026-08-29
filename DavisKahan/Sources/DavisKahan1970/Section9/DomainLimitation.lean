@@ -346,6 +346,97 @@ theorem geometricTrial_hasSum_sq {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1) :
   rw [h]
   exact hasSum_geometric_of_lt_one (by positivity) (by nlinarith)
 
+/-! ### The truncations repair the domain defect, and arbitrarily little is lost
+
+The source's point is not merely that finite truncations lie in the domain, but
+that the repair costs arbitrarily little: the trial vector can be replaced by one
+inside the domain at any prescribed distance.  The truncations converge to it in
+norm, because the discarded tail is a geometric series. -/
+
+/-- Coordinates of the truncation error: zero below the cut, `-μⁿ` above it. -/
+theorem truncatedTrial_sub_geometricTrial_apply {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1)
+    (N n : ℕ) :
+    ((truncatedTrial μ N - geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n
+      = if n < N then 0 else -(μ ^ n) := by
+  rw [lp.coeFn_sub]
+  by_cases hn : n < N <;>
+    simp [hn, truncatedTrial_apply, geometricTrial_apply, truncatedTrialSequence,
+      rawTrialSequence]
+
+/-- The truncation error has squared norm the geometric tail `μ^{2N}/(1-μ²)`. -/
+theorem truncatedTrial_sub_geometricTrial_hasSum_sq {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1)
+    (N : ℕ) :
+    HasSum (fun n =>
+        ((truncatedTrial μ N - geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n ^ 2)
+      ((μ ^ 2) ^ N * (1 - μ ^ 2)⁻¹) := by
+  have hlt : μ ^ 2 < 1 := by nlinarith
+  have hnn : (0 : ℝ) ≤ μ ^ 2 := by positivity
+  set d : ℕ → ℝ := fun n => if n < N then 0 else (μ ^ 2) ^ n with hd
+  have hcoord : (fun n =>
+      ((truncatedTrial μ N - geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n ^ 2)
+      = d := by
+    funext n
+    rw [truncatedTrial_sub_geometricTrial_apply hμ0 hμ1 N n, hd]
+    by_cases hn : n < N
+    · simp [hn]
+    · simp [hn, neg_pow, ← pow_mul, ← pow_mul, mul_comm]
+  rw [hcoord]
+  have hshift : HasSum (fun n => d (n + N)) ((μ ^ 2) ^ N * (1 - μ ^ 2)⁻¹) := by
+    have hgeo := (hasSum_geometric_of_lt_one hnn hlt).mul_left ((μ ^ 2) ^ N)
+    refine hgeo.congr_fun fun n => ?_
+    rw [hd]
+    simp only [add_lt_iff_neg_left, not_lt, Nat.not_lt, if_neg (by omega : ¬ n + N < N)]
+    rw [pow_add, mul_comm]
+  have hzero : ∑ i ∈ Finset.range N, d i = 0 := by
+    refine Finset.sum_eq_zero fun i hi => ?_
+    simp [hd, Finset.mem_range.mp hi]
+  have := (hasSum_nat_add_iff (f := d) N).mp hshift
+  simpa [hzero] using this
+
+/-- The truncation error's norm is `μ^N / sqrt(1-μ²)`, hence tends to zero. -/
+theorem tendsto_norm_truncatedTrial_sub_geometricTrial {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1) :
+    Filter.Tendsto
+      (fun N => ‖truncatedTrial μ N - geometricTrial hμ0 hμ1‖) Filter.atTop (nhds 0) := by
+  have hlt : μ ^ 2 < 1 := by nlinarith
+  have hnn : (0 : ℝ) ≤ μ ^ 2 := by positivity
+  have hsq : ∀ N, ‖truncatedTrial μ N - geometricTrial hμ0 hμ1‖ ^ 2
+      = (μ ^ 2) ^ N * (1 - μ ^ 2)⁻¹ := by
+    intro N
+    rw [← real_inner_self_eq_norm_sq, lp.inner_eq_tsum]
+    have h : (fun n : ℕ => inner ℝ
+          (((truncatedTrial μ N - geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n)
+          (((truncatedTrial μ N - geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n))
+        = fun n : ℕ =>
+          ((truncatedTrial μ N - geometricTrial hμ0 hμ1 : DomainLimitationSpace) : ℕ → ℝ) n ^ 2 := by
+      funext n
+      rw [RCLike.inner_apply', sq]
+      simp
+    rw [h]
+    exact (truncatedTrial_sub_geometricTrial_hasSum_sq hμ0 hμ1 N).tsum_eq
+  have hpow : Filter.Tendsto (fun N => (μ ^ 2) ^ N * (1 - μ ^ 2)⁻¹) Filter.atTop (nhds 0) := by
+    simpa using (tendsto_pow_atTop_nhds_zero_of_lt_one hnn hlt).mul_const (1 - μ ^ 2)⁻¹
+  have hsqtend : Filter.Tendsto
+      (fun N => ‖truncatedTrial μ N - geometricTrial hμ0 hμ1‖ ^ 2) Filter.atTop (nhds 0) := by
+    simpa [hsq] using hpow
+  have := hsqtend.sqrt
+  simpa [Real.sqrt_sq (norm_nonneg _)] using this
+
+/-- **The domain defect is repaired by an arbitrarily small modification.**
+
+For every tolerance there is a truncation of the trial vector that lies in the
+operator's domain and is within that tolerance of the trial vector.  This is the
+source's own reading of the example: the vector's failure to lie in the domain is
+not stable, so it obstructs the residual-based theorems without obstructing the
+lower-bound methods. -/
+theorem exists_truncatedTrial_mem_domain_and_dist_lt {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ N : ℕ, truncatedTrial μ N ∈ diagonalDomain (diagonalMultiplier μ) ∧
+      ‖truncatedTrial μ N - geometricTrial hμ0 hμ1‖ < ε := by
+  obtain ⟨N, hN⟩ :=
+    ((tendsto_norm_truncatedTrial_sub_geometricTrial hμ0 hμ1).eventually
+      (eventually_lt_nhds hε)).exists
+  exact ⟨N, truncatedTrial_mem_diagonalDomain μ N, hN⟩
+
 /-- `e*e = ‖e‖² = 1/(1-μ²)`. -/
 theorem geometricTrial_norm_sq {μ : ℝ} (hμ0 : 0 ≤ μ) (hμ1 : μ < 1) :
     ‖geometricTrial hμ0 hμ1‖ ^ 2 = (1 - μ ^ 2)⁻¹ := by
