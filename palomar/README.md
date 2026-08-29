@@ -12,8 +12,8 @@ configuration, metadata and wrapper skeleton live here.
 
 | entry | source result | compared theorem | status |
 | --- | --- | --- | --- |
-| `yws-2015` | Yu–Wang–Samworth 2015, Theorem 2, first conclusion | `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap` | Comparator PASS |
-| `dk-1970` | Davis–Kahan 1970, operator-norm sin-Θ | `TauCeti.norm_starProjection_comp_starProjection_le` | Comparator PASS |
+| `yws-2015` | Yu–Wang–Samworth 2015, Theorem 2, first conclusion | `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap` | Comparator PASS; extracted 2026-08-29 |
+| `dk-1970` | Davis–Kahan 1970, operator-norm sin-Θ | `TauCeti.norm_starProjection_comp_starProjection_le` | Comparator PASS; extracted 2026-08-29 |
 
 Each entry's Lean sources are `Palomar/<Name>/{Challenge,Solution}.lean`.
 
