@@ -360,11 +360,16 @@ def check_entry(rep: Report, cfg_path: pathlib.Path, *, with_axioms: bool) -> No
     if local_source_for(cfg["challenge_module"]) is not None:
         challenge_closure(rep, entry, cfg["challenge_module"])
 
+    # An entry carries its metadata one of two ways. The superseded thin-wrapper
+    # design put a skeleton under `wrapper/`; the current design (readiness §5.0)
+    # extracts the entry into a repository whose ROOT formalization.yaml describes
+    # it. Absence of a skeleton is therefore not a finding -- warning about it
+    # trained readers to ignore this checker's output.
     meta = cfg_path.parent / "wrapper" / "formalization.yaml"
     if meta.exists():
         check_metadata(rep, meta, wrapper=True)
     else:
-        rep.warn(f"{entry}: no wrapper/formalization.yaml")
+        rep.note(f"{entry}: metadata lives in the extracted entry repository")
 
     if with_axioms:
         check_axioms(rep, entry, cfg)
