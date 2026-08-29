@@ -1,7 +1,8 @@
 # Outstanding work
 
-Written 2026-08-29, from the verified state at `a686dbc6`.  **Lanes A5, B and I
-are done as of 2026-08-29; see the status notes in each.** The previous campaign
+Written 2026-08-29, from the verified state at `a686dbc6`.  **Lanes A5, B, C and I
+are done as of 2026-08-29, and lane A's architecture changed; see the status notes
+in each.** The previous campaign
 brief — the Frontier / MathAhead / Experimental cleanup, completed 2026-08-27 — is
 in Git history; `docs/planning/historical/README.md` is explicit that Git is the
 default archive for completed campaigns.
@@ -27,9 +28,23 @@ repository unusable as one.
 Two entries are prepared and pass the real Comparator (`palomar/yws-2015`,
 `palomar/dk-1970`). Preparation only; **an agent must not submit.**
 
-**A1. Wrapper commit SHAs.** Each `palomar/<entry>/wrapper/` has
+**A0. Superseded 2026-08-29: the entry repos carry the proof.** Maintainer decision.
+Each entry is now an **extraction** rather than a thin wrapper — it contains the
+package directories it needs, copied verbatim, and builds them itself.
+`aiq-davis-kahan-1970-…` carries `ForTauCeti` + `DavisKahan`;
+`aiq-yu-wang-samworth-2015-…` carries those plus `YuWangSamworth2015`, the
+Davis–Kahan library being there for the ideal theory the YWS package uses. Both are
+`repository.role: substantive-development`, both pin the same Mathlib and Tau Ceti as
+this repository, and both were built green from a clean build directory (8739 and
+8732 jobs). The census, source specification, audit apparatus and gates are
+deliberately not extracted, so neither repository makes a completion or coverage
+claim about its paper. `dev/palomar-readiness.md` §5.0 is the record; §5.1 onward is
+the superseded design, kept because its submodule reasoning still holds. **A1 below
+no longer applies** — there is no wrapper SHA to fill.
+
+~~**A1. Wrapper commit SHAs.** Each `palomar/<entry>/wrapper/` has
 `REPLACE_WITH_COMMIT_SHA` in `lakefile.toml` and `formalization.yaml`. Filling them
-is a maintainer step at submission time, against the commit actually verified.
+is a maintainer step at submission time, against the commit actually verified.~~
 
 **A2. Maintainer review before any submission.** The checklist is
 `dev/palomar-readiness.md` §12. Registration is permanent.
@@ -153,7 +168,35 @@ reason to collapse independent proofs.
 
 ---
 
-## C. Acharyya 2024
+## C. Acharyya 2024 — DONE 2026-08-29
+
+The re-audit found the defect class it was told to look for, in a milder form than
+the pass that prompted this lane, and in both of the two shapes named below. Both are
+hypothesis-side, so the fixes strengthen the theorems rather than correct them; no
+conclusion moved and no proof needed new mathematics. Commit `09cdd30a`.
+
+*Quantified over more than the proof uses.* The pointwise theorems are about one pair
+`(i, i')` and their proofs touch no other model, but their integrability, moment and
+rate hypotheses were stated at every model index. They now ask only at `i` and `i'`.
+This runs through the growing, random, gamma, kernel and product variants, so the
+pairwise T5 statement — the one drawing both models of the pair independently — now
+needs its sampling hypotheses only along the pair it is about.
+
+*Eventually-quantifier outside a binder that could hold it.* The finite-collection
+theorems asked for one stage threshold valid for every query at once. There are
+finitely many queries, so per-query thresholds combine; the hypothesis is now the
+per-query one and `Filter.eventually_all` does the combining inside the proof.
+
+The other shapes on the list — a zero-stage artifact, a product measure where a kernel
+is needed, fresh-query versus sampled-pair confusion, an ε-dependent subsequence, an
+integrated assumption stronger than dominated convergence needs — were looked for and
+not found. The kernel route in particular is domination by `1` in kernel generality
+and asks for no uniformity over the model population, which is what it was built to
+avoid.
+
+The original lane text follows, as the record of what was asked.
+
+### Original lane C
 
 Every census row's `next_action` is `None`, and T2/T4/T5 were substantially
 strengthened on 2026-08-28. What remains is a **hostile re-audit of the final
