@@ -13,12 +13,12 @@ from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 37 |
+| `compiled_exact` | 38 |
 | `compiled_specialization` | 0 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 9 |
+| `partial_or_wrapper_missing` | 8 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -50,9 +50,9 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 22 |
+| `accepted` | 23 |
 | `reopened_source_spec` | 0 |
-| `reopened_math` | 7 |
+| `reopened_math` | 6 |
 | `reopened_mapping` | 16 |
 | `mixed_disposition` | 2 |
 | `not_applicable` | 3 |
@@ -112,7 +112,7 @@ mathematics.
 
 The hostile review found a concrete mathematical assertion or scalar/dimension/scope clause for which no exact source-facing declaration was located. Some are likely short wrappers; they still block a 100% statement-level claim until compiled.
 
-Gates: S1-block-residual (proved_in_build), DK-3.2-prop (proved_in_build), DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build), DK-10.4 (proved_in_build)
+Gates: S1-block-residual (proved_in_build), DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build), DK-10.4 (proved_in_build)
 
 ### `hostile-source-spec-fidelity` -- mixed
 
@@ -1174,13 +1174,10 @@ ALSO SUPERSEDED: this row's "`IsUniformlyAcute` enters through clause (a) only" 
 
 - **Kind:** `proposition`
 - **Review importance:** `supporting`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_math`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** A direct rotation exists exactly when the two crossed intersections have equal dimension; it is then nonunique.
-- **Blocked by:** `hostile-source-facing-gap`
-- **Known hostile-review holes:**
-  - `missing_source_facing_statement`: The source passage says that on the two crossing subspaces every direct rotation satisfies U^2 x = -x. The hostile review did not find an exported source-facing theorem with that statement, although related reflection-product ingredients exist.
 - **Current Lean references:** `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent`, `TauCeti.DavisKahan1970.proposition3_2_parameterized_nonuniqueness`, `TauCeti.DavisKahan1970.proposition3_2_not_unique`, `TauCeti.DavisKahan1970.proposition3_2_not_existsUnique`, `TauCeti.DavisKahan1970.proposition3_2_crossing_square_minus_one`, `TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses`, `TauCeti.DavisKahan.halmosSourceDefect_coordinateHalfSpace`, `TauCeti.DavisKahan.halmosTargetDefect_coordinateHalfSpace`, `TauCeti.DavisKahan.halmosSourceDefect_ne_bot_of_not_isAcute`, `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real`, `TauCeti.DavisKahan1970.proposition3_2_parameterized_nonuniqueness_real`, `TauCeti.DavisKahan1970.proposition3_2_not_unique_real`, `TauCeti.DavisKahan1970.proposition3_2_not_existsUnique_real`, `TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses_real`, `TauCeti.DavisKahan.directedGap_asymmetric_coordinateHalfSpace`, `TauCeti.DavisKahan.coordinateHalfSpace_le_coordinateHalfSpace`
 - **Assessment:** No exact general Hilbert-space declaration was found.
 
@@ -1237,9 +1234,17 @@ CORRECTION TO THE COORDINATOR'S OWN FRAMING, recorded because it nearly caused d
 **THE BILATERAL-SHIFT PAIR IS NOW A QUANTITATIVE SEPARATOR, 2026-08-10.**  `directedGap_asymmetric_coordinateHalfSpace` compiles `directedGap (P H) (Q H) = 1`, `directedGap (Q H) (P H) = 0`, and `subspaceGap (Q H) (P H) != directedGap (Q H) (P H)`.  So the pair does not merely fail (3.5) qualitatively -- it exhibits the maximal possible asymmetry between the two directed gaps, and it is the compiled falsifier for any claimed (3.5)-free gap symmetry.
 
 **CAUTION ON USING IT AS A FALSIFIER, learned 2026-08-10.**  The coordinator instructed a subagent that any correct (3.5) theorem `must fail on that pair`.  THAT TEST IS ORDER-DEPENDENT AND GIVES A FALSE NEGATIVE IN ONE ORDER.  Read at `(P H, Q H)` the conclusion `subspaceGap = directedGap` HAPPENS TO BE TRUE -- both sides are 1, because the defect sits on the side that already realizes the max.  The honest refutation is at the SWAPPED pair `(Q H, P H)`, where it would assert `1 = 0`.  `Q H <= P H` (the cut at 1 has more vanishing constraints), which is why the reverse directed gap is exactly 0.  Always state which order you are testing.
-- **Next action:** Hostile re-audit reopened this row. The source passage says that on the two crossing subspaces every direct rotation satisfies U^2 x = -x. The hostile review did not find an exported source-facing theorem with that statement, although related reflection-product ingredients exist.
 
-READY FOR HOSTILE RE-AUDIT 2026-08-27 (Claude Opus 5).  The exported source-facing statement the review looked for exists: `TauCeti.DavisKahan1970.proposition3_2_crossing_square_minus_one` states that every `IsPaperDirectRotation U V T` satisfies `T (T x) = -x` on both crossed defect spaces, with no acuteness and no finite-dimensional hypothesis.  It previously lived in `DavisKahan/Sources/DavisKahan1970/Section3Proposition32Crossing.lean`, which was NOT reachable from the curated `DavisKahan` root -- `scripts/check_library_structure.py` rule 4 reported exactly that -- so a reviewer reading the reachable source surface could not see it.  It now sits in the single Proposition 3.2 source owner, `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean`, which `DavisKahan.All` reaches.  This row's `status` and `blocked_by` are left for the hostile reviewer to settle rather than cleared here.
+**HOSTILE RE-AUDIT SETTLED 2026-08-29 (Claude Opus 5).  `partial_or_wrapper_missing` -> `compiled_exact`; the single completion hole is discharged.**
+
+The 2026-08-27 note left `status` and `blocked_by` for a reviewer rather than clearing them itself, which was the right call and is what is now done. The hole asserted that no exported source-facing theorem states the proof's crossing-space property. Elaborated rather than inferred:
+
+`proposition3_2_crossing_square_minus_one (T : H →L[𝕜] H) (hT : IsPaperDirectRotation U V T) : (∀ x : halmosSourceDefect U V, T (T x) = -x) ∧ (∀ y : halmosTargetDefect U V, T (T y) = -y)` -- which is the printed assertion that every direct rotation squares to minus the identity on the two crossing subspaces.
+
+Four things measured, not assumed. It resolves against `DavisKahan.All`, so it is on the reachable source surface a reviewer actually reads -- that reachability, not the mathematics, is what the hostile review was missing, and `check_library_structure` rule 4 had reported it. Its axiom closure is exactly `propext`, `Classical.choice`, `Quot.sound`. It is `RCLike`-generic, so it covers both scalar fields at once and adds nothing to the scalar axis this row closed on 2026-08-10. And it carries no acuteness, no finite-dimensionality, no separability and no degeneracy hypothesis beyond `IsPaperDirectRotation` itself.
+
+No new mathematics was written for this. The theorem already existed; what was missing was its reachability and then its adjudication.
+- **Next action:** None. The hostile re-audit hole is discharged: `proposition3_2_crossing_square_minus_one` is the exported source-facing statement the review looked for, it resolves from `DavisKahan.All`, it is `RCLike`-generic, and its axiom closure is clean. Both printed sentences of Proposition 3.2, the crossing-space property from its proof, and the Remark's bilateral-shift separator are all compiled over both scalar fields.
 
 #### Section 3, standing convention stated immediately after the proof of Proposition 3.2.: Standing crossing-dimension convention
 
