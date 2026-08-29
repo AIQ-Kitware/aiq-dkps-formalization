@@ -154,9 +154,44 @@ business and must not be "fixed" by lowering baselines or deleting checks:
 
 ---
 
-## 5. Architecture: main, branches, and extracted wrapper repos
+## 5. Architecture: main, branches, and extracted entry repos
 
-### 5.1 Why the submodules must go, even though we extract
+### 5.0 Superseded 2026-08-29: the entry repos carry the proof
+
+Maintainer decision, replacing the thin-wrapper design described in the rest of this
+section. Each entry repository is an **extraction**, not a wrapper: it contains the
+package directories the entry needs, copied verbatim, and builds them itself.
+
+- `AIQ-Kitware/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization`
+  carries `ForTauCeti` and `DavisKahan`.
+- `AIQ-Kitware/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization`
+  carries `ForTauCeti`, `DavisKahan` and `YuWangSamworth2015`. `DavisKahan` is there
+  for its Hilbert-Schmidt/Frobenius ideal theory, which the YWS package uses.
+
+Both set `repository.role: substantive-development` and pin the same Mathlib and Tau
+Ceti revisions as this repository. Both were verified with `lake build Challenge
+Solution` from a clean build directory (8739 and 8732 jobs).
+
+This repository stays authoritative. The census, the distilled source specification,
+the semantic-audit apparatus and the gate scripts are deliberately **not** extracted:
+they are maintenance machinery, and a second copy would be a second thing to keep
+honest. Because they are absent, neither entry repository makes a completion or
+coverage claim about its paper. Changes go upstream here; an extraction is refreshed
+from the packages, so a fix made only downstream is lost.
+
+What this drops from the design below: the wrapper `[[require]]` on this repository
+at a pinned SHA, and `repository.substantive_formalization`. What it keeps, and what
+is still load-bearing: **no Git submodules anywhere**, because Lake clones a
+dependency with a plain clone and does not initialise submodules.
+
+The skeletons under `palomar/<entry>/wrapper/` are kept as the metadata and
+comparator-config source that the extraction copies from. They are no longer a
+description of the submitted repository's shape.
+
+### 5.1 onward: the superseded thin-wrapper design
+
+
+#### Why the submodules must go, even though we extract
 
 Lake fetches a Git dependency with a plain clone — **it does not init submodules**.
 An extracted wrapper repo whose `Solution.lean` requires this repository at a pinned
