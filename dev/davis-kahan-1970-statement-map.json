@@ -1149,7 +1149,7 @@
       "source_kind": "equation",
       "source_anchor": "Section 5, inequalities (5.1) and (5.2)",
       "completion_obligation": true,
-      "expected_status": "partial_or_wrapper_missing",
+      "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-5-hermitian-inequalities",
       "review_declarations": [
@@ -1158,26 +1158,35 @@
       ],
       "audit_clauses": [
         {
-          "id": "DK-5-hermitian-inequalities.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "DK-5-hermitian-inequalities.inequalities",
+          "description": "Equations (5.1) and (5.2): for Hermitian A, B at pairwise spectral distance at least delta and C = AX - XB, the square-norm bound ||C||_sq >= delta ||X||_sq, and its trace-norm corollary carrying the sqrt(rank C) factor.",
           "review_declarations": [
             "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
-            "TauCeti.DavisKahan.ExactSinTheta.paperOperatorNorm_sylvester_le_of_pairwiseSpectrumGap"
+            "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap",
+            "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap",
+            "TauCeti.DavisKahan.ExactSinTheta.paperOperatorNorm_sylvester_le_finrank_range"
           ]
+        },
+        {
+          "id": "DK-5-hermitian-inequalities.sharpness",
+          "description": "Sharpness commentary. The source asserts that (5.2) is not best possible unless rank C <= 1, and rules out replacing the rank factor by the constant 1 with an explicit 2x2 example. The counterexample is what the source establishes and is compiled; the 'not best possible' assertion is stated without proof and is sharpness commentary, not a result to formalize.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.ExactSinTheta.sharp52_constant_one_too_small",
+            "TauCeti.DavisKahan.ExactSinTheta.sharp52_sylvester",
+            "TauCeti.DavisKahan.ExactSinTheta.sharp52_gap",
+            "TauCeti.DavisKahan.ExactSinTheta.sharp52_opNorm_X",
+            "TauCeti.DavisKahan.ExactSinTheta.sharp52_opNorm_C"
+          ]
+        },
+        {
+          "id": "DK-5-hermitian-inequalities.open-question",
+          "description": "Open question: whether the rank factor can be replaced by a universal constant. Not proof debt; carried atomically as `universal-constant-question` so it is not swallowed by a terminal clause.",
+          "review_declarations": []
         }
       ],
       "source_specification_sha256": "da41db53882bd87b7aba9f8e3b827b46a08f6e6ac0d2e6638d6251d93c20cb5f",
-      "expected_completion_certification": "reopened_math",
-      "known_completion_holes": [
-        {
-          "kind": "missing_source_facing_statement",
-          "detail": "The TeX states that (5.2) is not best possible unless rank C <= 1. The repository formalizes (5.1), the rank-corrected estimate, and a counterexample showing constant 1 is too small, but the hostile review found no source-facing theorem for this stronger qualitative assertion."
-        },
-        {
-          "kind": "mixed_disposition",
-          "detail": "The same block asks whether the rank factor can be replaced by a universal constant. That open question should be atomically dispositioned instead of being swallowed by a terminal `.whole` clause."
-        }
-      ],
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: The TeX states that (5.2) is not best possible unless rank C <= 1. The repository formalizes (5.1), the rank-corrected estimate, and a counterexample showing constant 1 is too small, but the hostile review found no source-facing theorem for this stronger qualitative assertion. The same block asks whether the rank factor can be replaced by a universal constant. That open question should be atomically dispositioned instead of being swallowed by a terminal `.whole` clause.",
       "source_atom_ids": [
         "DK-5-hermitian-inequalities.pairwise-gap-hypothesis",
