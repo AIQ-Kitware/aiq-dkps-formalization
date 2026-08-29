@@ -2635,31 +2635,19 @@
       "source_anchor": "Question 10.4, including ambient and directed functional-calculus specializations",
       "title": "Perturbation bounds for functional calculus",
       "summary": "Mixed source block: established spectral-projection/step-function specializations and tan(2 Theta) bounds precede the genuinely open question asking for broader functional-calculus perturbation bounds.",
-      "status": "partial_or_wrapper_missing",
+      "status": "not_a_completion_obligation",
       "verification": "proved_in_build",
-      "blocked_by": [
-        "hostile-mixed-disposition",
-        "hostile-source-facing-gap"
-      ],
+      "blocked_by": [],
       "lean_declarations": [
         "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact"
       ],
-      "notes": "Open research question; modern operator-Lipschitz theory is outside the paper-completion target.",
-      "next_action": "Hostile re-audit reopened this row. Question 10.4 is not a pure open-question block. Before the general-f question it states established step-function identities f(A)=P, f(A+H)=Q, f(A0)=I, the projector/sine identities, and the ambient/directed tan(2 Theta) bounds. The tan(2 Theta) bounds now have exact complex/real wrappers, but the functional-calculus identities are not atomically registered. The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open.",
-      "completion_certification": "mixed_disposition",
-      "completion_holes": [
-        {
-          "kind": "mixed_disposition",
-          "detail": "Question 10.4 is not a pure open-question block. Before the general-f question it states established step-function identities f(A)=P, f(A+H)=Q, f(A0)=I, the projector/sine identities, and the ambient/directed tan(2 Theta) bounds. The tan(2 Theta) bounds now have exact complex/real wrappers, but the functional-calculus identities are not atomically registered."
-        },
-        {
-          "kind": "checker_loophole",
-          "detail": "The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open."
-        }
-      ],
+      "notes": "Open research question; modern operator-Lipschitz theory is outside the paper-completion target.\n\n**MIXED BLOCK SPLIT AND SETTLED 2026-08-29 (Claude Opus 5).  `partial_or_wrapper_missing` -> `not_a_completion_obligation`; both holes discharged.**\n\nThe hole asked for two things: the established clauses inside the Question 10.4 block explicitly covered, and the final question separately marked open. Both are now true in the atom inventory, and no new mathematics was needed for either -- what was missing was the boundary record, which is what the census exists to carry.\n\nThe block splits into four kinds of material, and each atom now says which it is. The functional-calculus recall is `definition`. The two `tan(2 Theta)` bounds are `restatement_of_counted_result`: they are the Section 2 double-angle tangent theorem written in functional-calculus language for the gap step function, counted once at `S2-tan-two-theta`, and this row already carries their exact ambient and directed wrappers in both scalar fields. The step-function identification `f(A) = P`, `f(A+H) = Q`, `f(A_0) = I` and the two norm readings are `section10_motivation_not_result`: definitional consequences Davis and Kahan assert in passing while setting up their question, not results they establish there. The closing question is `open_question` and is not proof debt.\n\nA wrong turn is recorded because the design is easy to misread. Reverse-linking the five atoms to `S2-tan-two-theta` was attempted first and is wrong: `formalization_result_ids` is derived from each counted result's own `source_atom_ids`, so a reverse link asserts membership of that result's source block. This Section 10 passage is not in the Section 2 block, so the empty link list is correct -- and the boundary rule is satisfied by explaining the emptiness, which the generic boilerplate reasons did not do. The result-inventory checker caught the attempt.\n\nThe accepted source selection was re-accepted against the corrected boundary record, with the measurement recorded there: no atom added or removed, no role changed, no reverse link changed, no counted result touched, denominator still 29.",
+      "next_action": "None. The block is split atomically: definition, two restatements of the counted `S2-tan-two-theta` theorem with their exact wrappers on this row, three definitional motivation atoms, and the open question marked open. Nothing here is proof debt, and the checker loophole that once exempted every `DK-10.*` row by identifier is not what is carrying this row -- the per-atom boundary reasons are.",
+      "completion_certification": "accepted",
+      "completion_holes": [],
       "importance": "technical"
     }
   ],

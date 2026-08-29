@@ -18,11 +18,11 @@ from it.
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 7 |
+| `partial_or_wrapper_missing` | 6 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
-| `not_a_completion_obligation` | 2 |
+| `not_a_completion_obligation` | 3 |
 | `refuted_as_transcribed` | 1 |
 | `source_spec_incomplete` | 0 |
 
@@ -50,11 +50,11 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 24 |
+| `accepted` | 25 |
 | `reopened_source_spec` | 0 |
 | `reopened_math` | 6 |
 | `reopened_mapping` | 15 |
-| `mixed_disposition` | 2 |
+| `mixed_disposition` | 1 |
 | `not_applicable` | 3 |
 
 ## Completion-certification meanings
@@ -112,7 +112,7 @@ mathematics.
 
 The hostile review found a concrete mathematical assertion or scalar/dimension/scope clause for which no exact source-facing declaration was located. Some are likely short wrappers; they still block a 100% statement-level claim until compiled.
 
-Gates: S1-block-residual (proved_in_build), DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build), DK-10.4 (proved_in_build)
+Gates: S1-block-residual (proved_in_build), DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build)
 
 ### `hostile-source-spec-fidelity` -- mixed
 
@@ -136,7 +136,7 @@ Gates: S2-sharpness (proved_in_build), S2-unbounded-scope (proved_in_build), DK-
 
 The row contains more than one semantic disposition. Split the established theorem assertions from open questions or source-attributed/unproved assertions so the checker cannot hide proof obligations inside an exempt/open row.
 
-Gates: DK-5-hermitian-inequalities (proved_in_build), DK-9.9-9.11 (proved_in_build), DK-10.4 (proved_in_build)
+Gates: DK-5-hermitian-inequalities (proved_in_build), DK-9.9-9.11 (proved_in_build)
 
 
 ## Source ledger
@@ -3545,17 +3545,23 @@ general-UI-norm question is the paper's own open question.
 
 - **Kind:** `mixed_open_question`
 - **Review importance:** `technical`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `not_a_completion_obligation`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `mixed_disposition`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** Mixed source block: established spectral-projection/step-function specializations and tan(2 Theta) bounds precede the genuinely open question asking for broader functional-calculus perturbation bounds.
-- **Blocked by:** `hostile-mixed-disposition`, `hostile-source-facing-gap`
-- **Known hostile-review holes:**
-  - `mixed_disposition`: Question 10.4 is not a pure open-question block. Before the general-f question it states established step-function identities f(A)=P, f(A+H)=Q, f(A0)=I, the projector/sine identities, and the ambient/directed tan(2 Theta) bounds. The tan(2 Theta) bounds now have exact complex/real wrappers, but the functional-calculus identities are not atomically registered.
-  - `checker_loophole`: The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open.
 - **Current Lean references:** `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`, `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact`
 - **Assessment:** Open research question; modern operator-Lipschitz theory is outside the paper-completion target.
-- **Next action:** Hostile re-audit reopened this row. Question 10.4 is not a pure open-question block. Before the general-f question it states established step-function identities f(A)=P, f(A+H)=Q, f(A0)=I, the projector/sine identities, and the ambient/directed tan(2 Theta) bounds. The tan(2 Theta) bounds now have exact complex/real wrappers, but the functional-calculus identities are not atomically registered. The previous checker exempted every DK-10.* row by identifier. This let established mathematics inside the Question 10.4 block escape the completion count. The row is now a mixed completion obligation until established clauses are explicitly covered and the final question separately marked open.
+
+**MIXED BLOCK SPLIT AND SETTLED 2026-08-29 (Claude Opus 5).  `partial_or_wrapper_missing` -> `not_a_completion_obligation`; both holes discharged.**
+
+The hole asked for two things: the established clauses inside the Question 10.4 block explicitly covered, and the final question separately marked open. Both are now true in the atom inventory, and no new mathematics was needed for either -- what was missing was the boundary record, which is what the census exists to carry.
+
+The block splits into four kinds of material, and each atom now says which it is. The functional-calculus recall is `definition`. The two `tan(2 Theta)` bounds are `restatement_of_counted_result`: they are the Section 2 double-angle tangent theorem written in functional-calculus language for the gap step function, counted once at `S2-tan-two-theta`, and this row already carries their exact ambient and directed wrappers in both scalar fields. The step-function identification `f(A) = P`, `f(A+H) = Q`, `f(A_0) = I` and the two norm readings are `section10_motivation_not_result`: definitional consequences Davis and Kahan assert in passing while setting up their question, not results they establish there. The closing question is `open_question` and is not proof debt.
+
+A wrong turn is recorded because the design is easy to misread. Reverse-linking the five atoms to `S2-tan-two-theta` was attempted first and is wrong: `formalization_result_ids` is derived from each counted result's own `source_atom_ids`, so a reverse link asserts membership of that result's source block. This Section 10 passage is not in the Section 2 block, so the empty link list is correct -- and the boundary rule is satisfied by explaining the emptiness, which the generic boilerplate reasons did not do. The result-inventory checker caught the attempt.
+
+The accepted source selection was re-accepted against the corrected boundary record, with the measurement recorded there: no atom added or removed, no role changed, no reverse link changed, no counted result touched, denominator still 29.
+- **Next action:** None. The block is split atomically: definition, two restatements of the counted `S2-tan-two-theta` theorem with their exact wrappers on this row, three definitional motivation atoms, and the open question marked open. Nothing here is proof debt, and the checker loophole that once exempted every `DK-10.*` row by identifier is not what is carrying this row -- the per-atom boundary reasons are.
 
 ## Completion interpretation
 

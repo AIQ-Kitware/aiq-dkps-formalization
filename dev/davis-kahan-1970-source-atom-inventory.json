@@ -4596,7 +4596,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This atom occurs in Section 10 as motivating/special-case mathematics surrounding an open question, not as a new counted Davis--Kahan result.",
+      "formalization_role_reason": "Section 10 motivating material, not a new counted result. It identifies f(A), f(A+H) and f(A_0) with P, Q and I for the gap step function, which is what turns the already-counted tan(2 Theta) theorem into a statement about a functional calculus. The identification is immediate from the spectral resolution the preceding definitional atom recalls, and Davis and Kahan assert it in passing while setting up their question rather than establishing it.",
       "formalization_role_reason_code": "section10_motivation_not_result",
       "formalization_result_ids": []
     },
@@ -4612,7 +4612,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This atom occurs in Section 10 as motivating/special-case mathematics surrounding an open question, not as a new counted Davis--Kahan result.",
+      "formalization_role_reason": "Section 10 motivating material, not a new counted result. It reads the ambient change ||f(A+H) - f(A)|| as ||Q - P|| = ||sin Theta||, which is the angle vocabulary of `S1-ui-norms` applied to the step-function identification above; the equality is by definition of the quantities involved, not a theorem the paper proves here.",
       "formalization_role_reason_code": "section10_motivation_not_result",
       "formalization_result_ids": []
     },
@@ -4628,7 +4628,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This passage rederives, reapplies, or restates a result already counted at its source theorem statement. It is retained for source fidelity and is not counted a second time.",
+      "formalization_role_reason": "Restates the Section 2 double-angle tangent theorem in functional-calculus language for the gap step function, applying it rather than establishing anything new. Counted once, at its own source statement (`S2-tan-two-theta`), whose exact ambient wrapper `tanTwoTheta_wholeSpace_paperUINorm_exact` this row already carries. The link list is deliberately empty: reverse links mark membership of a counted result's own source block, and this Section 10 passage is not in the Section 2 block.",
       "formalization_role_reason_code": "restatement_of_counted_result",
       "formalization_result_ids": []
     },
@@ -4644,7 +4644,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This atom occurs in Section 10 as motivating/special-case mathematics surrounding an open question, not as a new counted Davis--Kahan result.",
+      "formalization_role_reason": "Section 10 motivating material, not a new counted result. It reads the directed change as ||Q-perp E_0|| = ||sin Theta_0||, the directed companion of the same identification, and is likewise definitional rather than a result established at this point.",
       "formalization_role_reason_code": "section10_motivation_not_result",
       "formalization_result_ids": []
     },
@@ -4660,7 +4660,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "This passage rederives, reapplies, or restates a result already counted at its source theorem statement. It is retained for source fidelity and is not counted a second time.",
+      "formalization_role_reason": "The directed companion of the previous atom: the residual form of the Section 2 double-angle tangent theorem, restated for the step function. Counted once at `S2-tan-two-theta`, whose exact directed wrapper `tanTwoTheta_directedCorner_residual_paperUINorm_exact` this row carries. Empty link list for the same reason.",
       "formalization_role_reason_code": "restatement_of_counted_result",
       "formalization_result_ids": []
     },
