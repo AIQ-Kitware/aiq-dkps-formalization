@@ -1832,7 +1832,7 @@
       "source_kind": "numerical_model",
       "source_anchor": "Section 9, problem setup",
       "completion_obligation": true,
-      "expected_status": "partial_or_wrapper_missing",
+      "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9-model",
       "review_declarations": [
@@ -1841,7 +1841,8 @@
         "TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source",
         "TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source",
         "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source",
-        "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source"
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source",
+        "TauCeti.DavisKahan1970.Section9.real_freeBeam_eigenvalue_ordering_source"
       ],
       "audit_clauses": [
         {
@@ -1853,18 +1854,14 @@
             "TauCeti.DavisKahan1970.Section9.real_freeBeam_zero_mode_source",
             "TauCeti.DavisKahan1970.Section9.real_freeBeam_finiteData_source",
             "TauCeti.DavisKahan1970.Section9.real_freeBeam_trial_and_perturbation_source",
-            "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source"
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_positive_spectrum_source",
+            "TauCeti.DavisKahan1970.Section9.real_freeBeam_eigenvalue_ordering_source"
           ]
         }
       ],
       "source_specification_sha256": "21ee160b940f7d4e04ca80a58a01e674c0e812dd3cc50a27ecc607b60fa22498",
-      "expected_completion_certification": "reopened_math",
-      "known_completion_holes": [
-        {
-          "kind": "math",
-          "detail": "PDF re-audit resolves the source-reading ambiguity: the paper prints alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ... and the distributable TeX now preserves that strict ordering. The source-specification defect is closed; the formalization must now justify that source scope, including the positive-eigenvalue multiplicity/simplicity content, rather than weaken the statement."
-        }
-      ],
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: PDF re-audit resolves the source-reading ambiguity: the paper prints alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ... and the distributable TeX now preserves that strict ordering. The source-specification defect is closed; the formalization must now justify that source scope, including the positive-eigenvalue multiplicity/simplicity content, rather than weaken the statement.",
       "source_atom_ids": [
         "DK-9-model.real-l2-model",

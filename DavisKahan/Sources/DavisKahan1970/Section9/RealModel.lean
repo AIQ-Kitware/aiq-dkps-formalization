@@ -125,6 +125,36 @@ theorem real_freeBeam_zero_mode_source :
           x ∈ DavisKahan.FreeBeam.Model.Real.beamTrial :=
   DavisKahan.FreeBeam.Model.Real.beamRealZeroMode_sourceFacts
 
+/-- **Davis--Kahan 1970, Section 9: the printed eigenvalue ordering
+`alpha_1 = 0 = alpha_2 < alpha_3 < alpha_4 < ...`.**
+
+The paper prints the free-beam spectrum with the zero eigenvalue occurring twice
+and the positive eigenvalues strictly increasing.  Both halves are asserted here in
+one place, because a reviewer checking the printed ordering should not have to
+assemble it from three separate declarations.
+
+The first conjunct is the multiplicity: the kernel of the beam operator is exactly
+the affine trial plane, which is two-dimensional, so `0` is an eigenvalue of
+multiplicity exactly two and `alpha_1 = alpha_2 = 0`.  The second is the strict
+ordering: the positive eigenvalues admit a strictly monotone enumeration whose
+range is all of them, and every one exceeds `500`, so they are separated from the
+zero mode and `alpha_3 < alpha_4 < ...` with `0 < alpha_3`.
+
+Both conjuncts are assembled from existing model facts; nothing new is proved here.
+-/
+theorem real_freeBeam_eigenvalue_ordering_source :
+    (Module.finrank ℝ DavisKahan.FreeBeam.Model.Real.beamTrial = 2 ∧
+      ∀ (x : RealBeamL2) (h : x ∈ realBeamOperator.domain),
+        realBeamOperator ⟨x, h⟩ = 0 ↔
+          x ∈ DavisKahan.FreeBeam.Model.Real.beamTrial) ∧
+    ∃ f : ℕ → ℝ, StrictMono f ∧
+      Set.range f = DavisKahan.FreeBeam.Model.Real.beamEigenvalues ∧
+      ∀ n, 0 < f n := by
+  refine ⟨real_freeBeam_zero_mode_source, ?_⟩
+  obtain ⟨f, hmono, hrange, hgt⟩ :=
+    DavisKahan.FreeBeam.Model.Real.exists_strictMono_range_eq_beamEigenvalues
+  exact ⟨f, hmono, hrange, fun n => by linarith [(hgt n).1]⟩
+
 /-- The exact finite-data certificate for the paper's real Section 9 model. -/
 def real_freeBeam_finiteData_source (ε : ℝ) (hε : 0 < ε) (hε100 : ε < 100) :
     FreeBeamFiniteDataCertificate ε :=
