@@ -26,8 +26,8 @@ A foundation candidate is ready for this route when several of the following hol
 
 ## Workflow
 
-1. **Inventory the available foundation.** Inspect pinned Mathlib, `external/TauCeti`, and
-   `ForTauCeti` before designing a new declaration. Record the strongest existing ingredients and
+1. **Inventory the available foundation.** Inspect pinned Mathlib, the pinned Tau Ceti
+   dependency, and `ForTauCeti` before designing a new declaration. Record the strongest existing ingredients and
    their exact hypotheses.
 2. **State the mathematical foundation independently.** Write the intended public statements
    with paper-independent names, mathematical constants, and library terminology.

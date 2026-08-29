@@ -13,7 +13,7 @@ import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Basic
 /-!
 # Grounded generic direct-rotation predicates for Davis--Kahan 1970
 
-This module collects the sorry-free Section-3 predicate declarations underlying
+This module collects the fully proved Section-3 predicate declarations underlying
 the generic direct-rotation analysis: the paper-style direct-rotation predicate,
 the crossed-defect equivalence, and the compressions of the Halmos cosine and
 sine squares to the reducing generic summand (together with their Pythagorean

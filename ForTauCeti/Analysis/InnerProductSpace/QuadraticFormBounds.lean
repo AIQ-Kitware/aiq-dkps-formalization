@@ -40,7 +40,7 @@ variable [NormedAddCommGroup E] [InnerProductSpace 𝕜 E]
 namespace TauCeti
 
 /-! The Mathlib type namespace is mirrored *inside* `TauCeti`, matching the destination
-library (`external/TauCeti`, e.g. `Analysis/Fredholm/Basic.lean` and
+library (Tau Ceti, e.g. `Analysis/Fredholm/Basic.lean` and
 `LinearAlgebra/TotallyReal.lean`).  Root `ContinuousLinearMap` is deliberately not extended:
 this repository cannot upstream to Mathlib, so a name taken there is a bet that can never be
 settled by coordination.  Consumers get `A.LowerFormBoundOn U c` from `open TauCeti` --

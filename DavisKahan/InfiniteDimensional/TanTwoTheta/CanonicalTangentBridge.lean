@@ -305,7 +305,7 @@ theorem ambient_doubleAngleTangent_eq_extendCoordinate
 -- This proof carries about forty `have`s over operators on `E`, several of them
 -- `Ring.inverse` and `CFC` terms whose defeq checks are expensive; it exhausts the
 -- default heartbeat budget during `whnf`.  The budget is raised rather than the
--- proof weakened -- nothing here is `sorry`ed or `simp`-blasted.
+-- proof weakened -- nothing here is left incomplete or `simp`-blasted.
 set_option maxHeartbeats 1600000 in
 /-- The canonical ambient double-angle tangent is the modulus of the ambient
 extension of the graph-coordinate double-angle tangent. -/

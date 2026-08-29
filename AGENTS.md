@@ -180,7 +180,7 @@ Mathlib      TauCeti
 - **`ForTauCeti` is the permanent product.** Maintain it as an elegant package
   with a coherent API, one canonical spelling per concept, and provenance on
   every module. Roadmaps and submission copies are derived from it; it is not a
-  holding area to drain into `external/TauCeti`.
+  holding area to drain into Tau Ceti.
 - Reusable mathematics is written for extraction: keep paper-specific wrappers
   downstream and record exact provenance.
 - A source claim shown false is completed as a source-fidelity disposition by a
@@ -480,15 +480,20 @@ for the maintained scope ledger and completion standard.
 
 ## Lean source conventions
 
-- **Never write the words `sorry` or `axiom` in comments or docstrings.** A genuine
-  incomplete proof may use the `sorry` term in tactic/term position (that is code, not a
-  comment), but the literal word must not appear in any `--` line, `/- … -/` block, or
-  `/-- … -/` docstring. This keeps `grep`/CI sorry- and axiom-detection free of false
-  positives. When documenting an unfinished obligation or a dead end, describe it without
-  naming the tactic — e.g. "left incomplete", "not yet discharged", "open obligation",
-  "unproved below" — and refer to `#print axioms` as "the axiom audit" only outside Lean
-  sources. To flag work for a stronger agent, write the explanation in the docstring using
-  such wording, never the banned words.
+- **Never write the word `sorry` in a comment or docstring.** A genuine incomplete proof
+  may use the `sorry` term in tactic position — that is code — but the literal word must
+  not appear in any `--` line, `/- … -/` block, or `/-- … -/` docstring, because it makes
+  grep-based detection useless. Say "left incomplete", "not yet discharged", "open
+  obligation", "unproved below".
+
+- **Do not write axiom-status boilerplate.** No "No added axioms", no "axiom-clean", no
+  file-header attestation that a module is audited. `#print axioms` establishes that; a
+  sentence claiming it establishes nothing and is noise in every file that carries it.
+
+  The *word* `axiom` is fine in its ordinary mathematical sense — the axioms of
+  `SymmetricGauge`, the ideal axioms, the classical PVM axioms recovered as theorems. That
+  usage is unavoidable and carries meaning. `#print axioms` commands in `Challenge/**` and
+  `Audits/**` are code, not prose, and are the point of those files.
 
 - **`omit` goes above the docstring, and needs `in`.** The
   `linter.unusedSectionVars` warning ("automatically included section variable(s)

@@ -9,8 +9,8 @@ import ForTauCeti.Analysis.InnerProductSpace.Singular.Values
 /-!
 # Roadmap bridge: `MatrixSpectralStatistics`
 
-**What this file is for.** `submodules/TauCetiRoadmap/**/Suggested.lean` states the signatures the
-roadmap proposes, against `Mathlib` alone, with `sorry` bodies.  `ForTauCeti` proves the
+**What this file is for.** The roadmap checkout's `**/Suggested.lean` states the signatures the
+roadmap proposes, against `Mathlib` alone, with unproved bodies.  `ForTauCeti` proves the
 mathematics.  Nothing connected the two: `scripts/check_roadmap_delivered.py` compares
 *declaration names* between the two trees, and its own output says so --
 

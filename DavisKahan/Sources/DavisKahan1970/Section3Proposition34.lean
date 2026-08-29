@@ -181,7 +181,7 @@ theorem proposition3_4_source_full_complex
 /-! ## The reflected-square form
 
 `proposition3_4_square_is_reflected_directRotation` is the form the development
-reached first: it is true and axiom-clean, but it is not the printed statement.
+reached first: it is true and proved, but it is not the printed statement.
 It exhibits *an* unnamed acute pair, from a whole-space form bound, under an
 extra acuteness hypothesis on the reflected pair.  The printed statement names
 the pair `(Q₋ℋ, Qℋ)`, its hypothesis is `C₀² ≥ ½` on `Pℋ` alone, and it assumes

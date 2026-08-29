@@ -628,7 +628,7 @@ Until 2026-07-30 this position held a leaf obligation asserting the same thing
 for *every symmetric norm ideal* — equal membership and equal gauge — on the
 stated grounds that "their singular values agree".  **They do not.  They agree
 up to a factor of two in multiplicity, and no amount of proof effort was going
-to close that `sorry`.**
+to close that obligation.**
 
 In the generic two-subspace block at angle `θ`, `|P_U - P_W|` for `W = R_V U`
 carries the singular value `sin 2θ` **twice**, once on `U ∩ Wᗮ` and once on

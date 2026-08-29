@@ -77,8 +77,7 @@ automatically is what previously produced status that looked healthy and was not
 ├── comparator/              # per-PR comparator configs
 ├── dev/                     # engineering memory, the source censuses, and audit records
 ├── docs/                    # planning trackers and challenge how-to
-├── external/TauCeti         # submodule: the upstream target repository
-├── submodules/              # read-only mirrors of TauCetiRoadmap and TauCetiReview
+├── external/                # notes on the optional external Tau Ceti checkouts
 ├── retired/                 # provenance for the closed Spectra collaboration
 ├── scripts/                 # the census tools and the build gates (`scripts/run_gates.py`)
 ├── lakefile.toml            # Lake workspace: default targets and explicit opt-in libraries

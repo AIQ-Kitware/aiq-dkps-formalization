@@ -25,8 +25,6 @@ This file is paper-agnostic variance algebra: a plausible Mathlib contribution
 candidate near `Mathlib/Probability/Moments/Variance.lean`.  The scalar engine is
 Mathlib's `ProbabilityTheory.IndepFun.variance_sum`; the work here is the
 coordinatewise reduction on `EuclideanSpace`.
-
-No added axioms, no open proof obligations.
 -/
 
 import Mathlib

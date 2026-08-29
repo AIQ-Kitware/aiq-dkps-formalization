@@ -26,8 +26,10 @@ Mathlib      TauCeti
   and declaration names.
 - Spectra is retired as a maintained dependency. Attribution remains in source
   headers, `retired/Spectra.UPSTREAM.md`, and the historical engineering records.
-- `external/TauCeti` is a read-only provenance/build reference during ordinary
-  work. Maintained implementations are edited here.
+- Tau Ceti is a pinned Lake dependency, materialised under `.lake/packages`. An
+  editable checkout is an optional explicit input (`--tauceti-root` /
+  `TAUCETI_ROOT`); this repository contains no submodules. Maintained
+  implementations are edited here.
 
 The import firewall is enforced by `scripts/check_dependency_layers.py`.
 
@@ -125,10 +127,10 @@ second status system around it.
 
 Roadmaps and submission copies are derived from this maintained package. During
 ordinary work, use `scripts/export_for_tauceti.py --check` to verify deterministic
-mapping without modifying the submodule.
+mapping without modifying any checkout.
 
-Only an explicit Tau Ceti submission task should run `--write` or update the
-`external/TauCeti` submodule pointer. A submission copy is an output; deleting
+Only an explicit Tau Ceti submission task should run `--write`, which requires an
+editable checkout, or advance the pinned Tau Ceti revision in `lake-manifest.json`. A submission copy is an output; deleting
 `ForTauCeti` after export would delete the maintained product rather than finish
 the work.
 
