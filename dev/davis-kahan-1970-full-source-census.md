@@ -13,12 +13,12 @@ from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 44 |
+| `compiled_exact` | 45 |
 | `compiled_specialization` | 0 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 1 |
+| `partial_or_wrapper_missing` | 0 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -50,9 +50,9 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 30 |
+| `accepted` | 31 |
 | `reopened_source_spec` | 0 |
-| `reopened_math` | 1 |
+| `reopened_math` | 0 |
 | `reopened_mapping` | 15 |
 | `mixed_disposition` | 1 |
 | `not_applicable` | 3 |
@@ -105,22 +105,6 @@ in front of it. This includes rows that are already
 the source-numbered wrapper is still missing. Obstructions marked
 `mechanical` need only wiring or a restatement; `hard_math` needs new
 mathematics.
-
-### `hostile-source-facing-gap` -- hard_math
-
-**A preserved source assertion still lacks an exact source-facing Lean statement**
-
-The hostile review found a concrete mathematical assertion or scalar/dimension/scope clause for which no exact source-facing declaration was located. Some are likely short wrappers; they still block a 100% statement-level claim until compiled.
-
-Gates: DK-9.8 (proved_in_build)
-
-### `hostile-source-spec-fidelity` -- mixed
-
-**Distributable source specification still has fidelity defects**
-
-The 2026-08-12 hostile re-audit found source mathematics omitted or weakened in DavisKahan1970_part_III.tex. These rows must be repaired against the original paper and then re-hashed; a Lean proof cannot compensate for an incomplete public specification.
-
-Gates: DK-9.8 (proved_in_build)
 
 ### `hostile-audit-atomization` -- mechanical
 
@@ -3271,13 +3255,10 @@ FOR THIS ROW: does not close.  Its 2-norm sentence of (9.7) needs the same arbit
 
 - **Kind:** `comparison_claim`
 - **Review importance:** `technical`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_math`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** Derive lower-eigenvalue estimates from a 3x3 comparison matrix and compare individual-vector angle bounds.
-- **Blocked by:** `hostile-source-spec-fidelity`, `hostile-source-facing-gap`
-- **Known hostile-review holes:**
-  - `math`: PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition.
 - **Current Lean references:** `TauCeti.DavisKahan1970.Section9.ArrowheadThreeByThree`, `TauCeti.DavisKahan1970.Section9.tangent_sq_le_of_weinberger_sine_sq`, `TauCeti.DavisKahan1970.Section9.equation_9_8_lower`, `TauCeti.DavisKahan1970.Section9.equation_9_8_upper`, `TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_low_lt_printed`, `TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_high_lt_printed`, `TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_low_le`, `TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_high_le`, `TauCeti.DavisKahan.FreeBeam.Model.beamColumn_tangent_le`, `TauCeti.DavisKahan.FreeBeam.Model.norm_beamColumnResidual_low`, `TauCeti.DavisKahan.FreeBeam.Model.norm_beamColumnResidual_high`, `TauCeti.DavisKahan.FreeBeam.Model.beam_equation_9_8_lower`, `TauCeti.DavisKahan.FreeBeam.Model.beam_equation_9_8_upper`, `TauCeti.DavisKahan.FreeBeam.Model.beam_equation_9_8`, `TauCeti.DavisKahan1970.Section9.weinberger_sine_sq_le_of_coupled_energy`, `TauCeti.DavisKahan1970.Section9.naive_second_scalar_lower_bound_tripwire`
 - **Assessment:** The exact arrowhead characteristic polynomial and the algebraic conversion of Weinberger sine-square bounds to tangent bounds are represented. The historical lower-root theorem is deliberately an explicit certificate rather than an informal O(epsilon^4) assertion.
 
@@ -3322,7 +3303,15 @@ Davis--Kahan themselves mark this boundary: "Weinberger's use both Rayleigh--Rit
 TRIPWIRE AGAINST THE TEMPTING FALSE SHORTCUT.  `naive_second_scalar_lower_bound_tripwire` compiles a rational counterexample showing that (a) does NOT follow from "alphacheck_k is some scalar lower bound for lambda_k" plus the exterior threshold.  For `T = diag(0, 10, 100)` with threshold `99`, the orthogonal Ritz vectors `w_1 = (18/35, -6/7, 1/35)` and `w_2 = (3/7, 2/7, 6/7)` are also `T`-orthogonal, with Ritz values `52/7` and `520/7`; the valid bound `alphacheck_2 = 10 = lambda_2` gives `(520/7 - 10)/(99 - 10) = 450/623`, while the actual squared defect of `w_2` is `36/49 > 450/623`.  It holds for `k = 1` and fails for `k = 2` because `P_F w_2` carries a component below `alphacheck_2`.  Do not replace Weinberger's coupled hypotheses by the scalar statement merely because the latter has the right type shape.
 
 **SOURCE-SPEC PDF RE-AUDIT 2026-08-12 (Agent 3).** PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition.
-- **Next action:** PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition.
+
+**EACH ASSERTION DISPOSITIONED 2026-08-29 (Claude Opus 5).  `partial_or_wrapper_missing` -> `compiled_exact`.**
+
+The hole asked for an honest formal disposition of four things: the Weinberger sine-square statement, the Lehmann best-lower-bound assertion, the restored O(epsilon^4) asymptotic, and the (9.8) conclusions. The atom inventory already separated them correctly -- three `historical` with reason code `external_result_not_dk_result`, five `numerical_working` -- but the statement map carried a single terminal `.whole` clause, so a reviewer could not see which declaration answers which assertion, or which assertions are deliberately unanswered.
+
+Five audit clauses now do that. `.weinberger`: the sine-square estimate is compiled (`weinberger_sine_sq_le_of_coupled_energy`, `tangent_sq_le_of_weinberger_sine_sq`), with a tripwire showing the naive second-scalar lower bound does not suffice; the *method* is Weinberger's and stays attributed. `.lehmann`: the 3x3 comparison matrix is compiled as `ArrowheadThreeByThree`; the claim that its two lower eigenvalues are the *best* bounds deducible from the data is Lehmann's, attributed by the source and not established in it, so it is not turned into a local theorem. `.equation-9-8`: the displayed conclusions, in abstract and free-beam form. `.per-vector-bounds`: Theorem 6.3 applied to each trial vector, giving the printed sharper `tan phi_k` bounds with the column residual norms they consume. `.commentary`: the angle-meaning distinction, the sine-square sum identity, the `O(epsilon^4)` asymptotic the source *records*, and the closing remark that the two methods are complementary -- worked-example material carrying no separate obligation.
+
+The asymptotic is the one worth naming explicitly. The source records it rather than proving it, and formalizing an asymptotic the paper does not derive would be inventing a result; it stays source fidelity.
+- **Next action:** None. Every assertion in the block is dispositioned by its own audit clause: the estimates and (9.8) conclusions compiled, the Weinberger and Lehmann attributions left attributed rather than converted into local theorems, and the worked-example commentary carried without obligation.
 
 #### Section 9, l2 example after (9.8): Residual-infinite limitation example
 
