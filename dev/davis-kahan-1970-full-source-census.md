@@ -13,12 +13,12 @@ from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 43 |
+| `compiled_exact` | 44 |
 | `compiled_specialization` | 0 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 2 |
+| `partial_or_wrapper_missing` | 1 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -50,9 +50,9 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 29 |
+| `accepted` | 30 |
 | `reopened_source_spec` | 0 |
-| `reopened_math` | 2 |
+| `reopened_math` | 1 |
 | `reopened_mapping` | 15 |
 | `mixed_disposition` | 1 |
 | `not_applicable` | 3 |
@@ -112,7 +112,7 @@ mathematics.
 
 The hostile review found a concrete mathematical assertion or scalar/dimension/scope clause for which no exact source-facing declaration was located. Some are likely short wrappers; they still block a 100% statement-level claim until compiled.
 
-Gates: DK-5-hermitian-inequalities (proved_in_build), DK-9.8 (proved_in_build)
+Gates: DK-9.8 (proved_in_build)
 
 ### `hostile-source-spec-fidelity` -- mixed
 
@@ -136,7 +136,7 @@ Gates: S2-sharpness (proved_in_build), S2-unbounded-scope (proved_in_build), DK-
 
 The row contains more than one semantic disposition. Split the established theorem assertions from open questions or source-attributed/unproved assertions so the checker cannot hide proof obligations inside an exempt/open row.
 
-Gates: DK-5-hermitian-inequalities (proved_in_build), DK-9.9-9.11 (proved_in_build)
+Gates: DK-9.9-9.11 (proved_in_build)
 
 
 ## Source ledger
@@ -2059,14 +2059,10 @@ scope that the formalization does not carry.
 
 - **Kind:** `equation`
 - **Review importance:** `technical`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_math`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** For Hermitian A and B whose eigenvalues are pairwise at distance at least delta, C = AX - XB satisfies the square-norm bound (5.1); (5.2) is its trace-norm corollary with a sqrt(rank C) factor.
-- **Blocked by:** `hostile-source-facing-gap`, `hostile-mixed-disposition`
-- **Known hostile-review holes:**
-  - `missing_source_facing_statement`: The TeX states that (5.2) is not best possible unless rank C <= 1. The repository formalizes (5.1), the rank-corrected estimate, and a counterexample showing constant 1 is too small, but the hostile review found no source-facing theorem for this stronger qualitative assertion.
-  - `mixed_disposition`: The same block asks whether the rank factor can be replaced by a universal constant. That open question should be atomically dispositioned instead of being swallowed by a terminal `.whole` clause.
 - **Current Lean references:** `TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap`, `TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap`, `TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap`, `TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct`, `TauCeti.DavisKahan.ExactSinTheta.paperOperatorNorm_sylvester_le_of_pairwiseSpectrumGap`, `TauCeti.DavisKahan.ExactSinTheta.paperOperatorNorm_sylvester_real_le_of_pairwiseSpectrumGap`, `TauCeti.DavisKahan.ExactSinTheta.paperOperatorNorm_sylvester_le_finrank_range`, `TauCeti.DavisKahan.ExactSinTheta.sharp52_constant_one_too_small`, `TauCeti.DavisKahan.ExactSinTheta.sharp52_sylvester`, `TauCeti.DavisKahan.ExactSinTheta.sharp52_gap`, `TauCeti.DavisKahan.ExactSinTheta.sharp52_opNorm_X`, `TauCeti.DavisKahan.ExactSinTheta.sharp52_opNorm_C`
 - **Assessment:** **M18 ADJUDICATION 2026-08-09 (Claude Opus 5), against `dev/davis-kahan-1970-final-audit-2026-08-09.md`.**  **ROW ADDED**, closing disagreement 13: inequality (5.1) is proved and no census row claimed it, which is exactly the under-reporting the census exists to prevent.
 
@@ -2081,7 +2077,15 @@ WHY THE ROW IS NOT `compiled_exact`.  Two further printed items of the same pass
 **THE PAPER'S SUBSCRIPT 1 IS THE BOUND (OPERATOR) NORM, NOT A TRACE NORM, AND THE PAPER NEVER WRITES A SUBSCRIPT 2 -- IT WRITES `sq`.**  Determined three independent ways, and the coordinator re-derived the third.  (a) Transcription L544: `In particular, kappa_1 is equal to the bound norm of K, which we write ||K||_1`; L555-566 defines `||.||_sq` as Hilbert-Schmidt and (1.11) gives `||K||_nu = kappa_1 + ... + kappa_nu`.  (5.1) is printed with `_sq`, not `_2`.  (b) THE PAPER'S OWN ARITHMETIC SETTLES IT: for the witness, `C = [[3,3],[3,-3]]` has both singular values `3 sqrt 2`, and the paper records `||AX - XB||_1 = 3 sqrt 2` -- the OPERATOR norm; the trace norm would be `6 sqrt 2`.  Likewise `X = [[3,-3],[-3,1]]` has singular values `2 + sqrt 10` and `sqrt 10 - 2`, and the paper records `||X||_1 = 2 + sqrt 10`, not the trace norm `2 sqrt 10`.  (c) `Ideals/HilbertSchmidtFiniteRank.lean:11` already recorded it: `Davis and Kahan write the bound norm with a subscript one.`
 
 CONSEQUENTLY THE RECORDED ROUTE WAS WRONG: it is NOT Cauchy-Schwarz between Schatten 1 and 2.  It is the two exact comparisons `kappa_1 <= sqrt(sum kappa^2)` and `sum_{k<rank} kappa_k^2 <= rank * kappa_1^2`, BOTH ALREADY COMPILED.
-- **Next action:** Hostile re-audit reopened this row. The TeX states that (5.2) is not best possible unless rank C <= 1. The repository formalizes (5.1), the rank-corrected estimate, and a counterexample showing constant 1 is too small, but the hostile review found no source-facing theorem for this stronger qualitative assertion. The same block asks whether the rank factor can be replaced by a universal constant. That open question should be atomically dispositioned instead of being swallowed by a terminal `.whole` clause.
+
+**BOTH HOLES SETTLED 2026-08-29 (Claude Opus 5).  `partial_or_wrapper_missing` -> `compiled_exact`.**
+
+Neither hole needed mathematics; both were audit structure, and the atom inventory already had the classification right. What was stale was the statement map, which carried a single terminal `.whole` clause -- exactly what the mixed-disposition hole complained about.
+
+The block now has three audit clauses matching the atoms. `.inequalities` carries (5.1) and (5.2), compiled in both scalar fields with the rank-corrected operator-norm form. `.sharpness` carries what the source establishes about optimality: the explicit 2x2 example with `delta ||X||_1 = 2 + sqrt 10 > 3 sqrt 2 = ||AX - XB||_1`, compiled as `sharp52_constant_one_too_small` with its supporting gap and norm computations. `.open-question` carries the question whether the rank factor can be replaced by a universal constant, with no declarations, which is correct: it is a question.
+
+The first hole asked for a source-facing theorem for "(5.2) is not best possible unless rank C <= 1". There should not be one, and the atom already said so with the reason code `sharpness_commentary_not_designated_result`. The source asserts it in a discussion paragraph without proof; formalizing it would mean exhibiting, for every rank at least two, an improvement the paper never gives -- a theorem stronger than the source supports. Sharpness commentary outside a designated result is named in the project's own completion standard as source-fidelity material rather than an obligation. What the source does establish about sharpness is the counterexample, and that is compiled.
+- **Next action:** None. (5.1) and (5.2) are compiled, the source's own sharpness counterexample is compiled, the unproved optimality assertion is dispositioned as sharpness commentary, and the universal-constant question is carried atomically as an open question with its own audit clause.
 
 #### Theorem 5.2: Semibounded self-adjoint Sylvester theorem
 
