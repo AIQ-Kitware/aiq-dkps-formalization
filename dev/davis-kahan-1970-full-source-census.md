@@ -13,12 +13,12 @@ from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 41 |
+| `compiled_exact` | 42 |
 | `compiled_specialization` | 0 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 4 |
+| `partial_or_wrapper_missing` | 3 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -50,9 +50,9 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 27 |
+| `accepted` | 28 |
 | `reopened_source_spec` | 0 |
-| `reopened_math` | 4 |
+| `reopened_math` | 3 |
 | `reopened_mapping` | 15 |
 | `mixed_disposition` | 1 |
 | `not_applicable` | 3 |
@@ -112,7 +112,7 @@ mathematics.
 
 The hostile review found a concrete mathematical assertion or scalar/dimension/scope clause for which no exact source-facing declaration was located. Some are likely short wrappers; they still block a 100% statement-level claim until compiled.
 
-Gates: DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build)
+Gates: DK-5-hermitian-inequalities (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build)
 
 ### `hostile-source-spec-fidelity` -- mixed
 
@@ -2249,14 +2249,11 @@ is itself still absent as a Section 5 statement; that is tracked on `DK-5-hermit
 
 - **Kind:** `theorem`
 - **Review importance:** `major`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_math`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** A strict inequality of source-coordinate Hilbert dimensions, the Rayleigh–Ritz residual condition, and a one-sided gap control a directed rectangular tangent representative defined from the singular values of E₀*F₁.
-- **Blocked by:** `hostile-source-facing-gap`
-- **Known hostile-review holes:**
-  - `missing_source_facing_statement`: The generalized tangent theorem itself appears covered, but the same hashed passage preserves Example 6.1: delta=1, tangent quantity 1, residual 1/sqrt(2) when spectral mass lies on the wrong side. The hostile review did not find an exact source-facing formalization of that explicit counterexample.
-- **Current Lean references:** `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_all_kyFan_core`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`, `TauCeti.DavisKahan.ExactTanTheta.theorem63DirectedTangent`, `TauCeti.DavisKahan.ExactTanTheta.hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_all_kyFan_core_directedTangent`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_directedTangent`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`, `TauCeti.DavisKahan1970.Theorem6_3`, `TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real`, `TauCeti.DavisKahan1970.theorem63DirectedTangentReal`, `TauCeti.DavisKahan1970.exists_hasTheorem63DirectedTangentApproximationNumbersReal`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_source_ideal`, `TauCeti.DavisKahan.ExactTanTheta.hasTheorem63DirectedTangentApproximationNumbers_iff_infinite`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_of_infiniteTrial`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_spectral_exists`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds`, `TauCeti.DavisKahan.ExactTanTheta.exists_hasTheorem63DirectedTangentApproximationNumbersInfinite`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral`
+- **Current Lean references:** `TauCeti.DavisKahan.ExactTanTheta.exists_hasTheorem63DirectedTangentApproximationNumbersInfinite`, `TauCeti.DavisKahan.ExactTanTheta.hasTheorem63DirectedTangentApproximationNumbers_iff_infinite`, `TauCeti.DavisKahan.ExactTanTheta.hasTheorem63DirectedTangentApproximationNumbers_theorem63DirectedTangent`, `TauCeti.DavisKahan.ExactTanTheta.theorem63DirectedTangent`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_all_kyFan_core`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_all_kyFan_core_directedTangent`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_equalRank_spectral`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_of_formBounds_equalRank`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_directedTangent`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_generalizedTanTheta_source_ideal_of_infiniteTrial`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_of_formBounds`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_source_ideal`, `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_infiniteTrial_spectral_exists`, `TauCeti.DavisKahan1970.Section6Example61.T_u`, `TauCeti.DavisKahan1970.Section6Example61.T_w`, `TauCeti.DavisKahan1970.Section6Example61.rayleigh_zero`, `TauCeti.DavisKahan1970.Section6Example61.residual_norm`, `TauCeti.DavisKahan1970.Section6Example61.tangent_bound_fails`, `TauCeti.DavisKahan1970.Section6Example61.tangent_components_equal`, `TauCeti.DavisKahan1970.Theorem6_3`, `TauCeti.DavisKahan1970.exists_hasTheorem63DirectedTangentApproximationNumbersReal`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real`, `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral`, `TauCeti.DavisKahan1970.theorem63DirectedTangentReal`, `TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real`
 - **Assessment:** Bounded finite-source Theorem 6.3 proved axiom-clean in DavisKahan.TanTheta.Theorem63FiniteSource (theorem6_3_all_kyFan_core, theorem6_3_generalizedTanTheta_source_ideal); promoted out of Scratch.
 
 **A HYPOTHESIS WITH NO PRODUCER, FOUND AND DISCHARGED 2026-08-05.** Every compiled form of Theorem 6.3 quantified over a `tanTheta0` satisfying `HasTheorem63DirectedTangentApproximationNumbers Z V tanTheta0`, and a grep for *producers* rather than consumers showed that nothing anywhere in the repository ever constructed one.  The compiled theorem was therefore a conditional whose antecedent had no witness -- strictly weaker than the printed theorem, which takes the tangent representative for granted.  The row said `proved_in_build`, which was true of the declarations and misleading about the mathematics.
@@ -2300,7 +2297,17 @@ ALSO RECORDED, operational: the census and frontier gate scripts shell out to Le
 **CORRECTION TO THIS ROW'S OWN PREVIOUS `scope_gap`, which the coordinator wrote and which was WRONG.**  It named `PaperUnitaryInvariantNorm.prefixGauge_le_of_all_kyFan_le_hetero` as `exactly the bridge the real endpoint uses`.  MEASURED 2026-08-10: the real endpoint `tanTheta_directed_paperUINorm_real` NEVER INVOKES IT -- it uses `N.mul_gauge_le_of_all_mul_kyFan_le` (`DirectedReal.lean:448`, coordinator-verified by reading the line).  The `_hetero` variant is for operators with DIFFERENT CODOMAINS, whereas here both operands are `Z ->L E`; and it could not have been the bridge anyway, being unscaled (no `delta`) and concluding only a `prefixGauge` inequality rather than membership plus the gauge bound.
 
 ALSO CORRECTED: `theorem6_3_all_kyFan_core` is the FINITE-TRIAL core and carries `[FiniteDimensional C Z]` (`Theorem63FiniteSource.lean:787`, coordinator-verified).  Building the complex paper-norm endpoint on it would have produced a statement STRICTLY WEAKER than the real one it was meant to match.  The arbitrary-trial core `theorem6_3_all_kyFan_core_infiniteTrial` is the right one.
-- **Next action:** Hostile re-audit reopened this row. The generalized tangent theorem itself appears covered, but the same hashed passage preserves Example 6.1: delta=1, tangent quantity 1, residual 1/sqrt(2) when spectral mass lies on the wrong side. The hostile review did not find an exact source-facing formalization of that explicit counterexample.
+
+**EXAMPLE 6.1 FORMALIZED 2026-08-29 (Claude Opus 5).  `partial_or_wrapper_missing` -> `compiled_exact`.**
+
+The generalized tangent theorem was already covered; the hole was the worked example in the same hashed passage, which the hostile review found nowhere in Lean. Examples 4.1 and 4.2 are the precedent: these are counterexamples, not exposition, and Example 6.1's job is to show that the one-sided placement of `Lambda_1` in Theorem 6.3 cannot be dropped.
+
+`DavisKahan/Sources/DavisKahan1970/Section6Example61.lean` is the witness, two-dimensional and explicit. `T` is the coordinate swap weighted by `c = 1/sqrt 2`, the trial vector `u` is the first coordinate direction, and the four printed numbers are each a compiled theorem: the Rayleigh quotient `A_0 = ⟪T u, u⟫` is `0`, so `alpha = 0` (`rayleigh_zero`); the residual `R = T u - A_0 u` has norm exactly `1/sqrt 2` (`residual_norm`); the unit eigenvector `w = (u+v)/sqrt 2` has eigenvalue `c` (`T_w`) with equal trial and orthogonal components, both `1/sqrt 2`, so the tangent quantity is `1` (`tangent_components_equal`); and with `delta = 1` the conclusion fails, `‖R‖ < delta * 1` (`tangent_bound_fails`).
+
+The spectral mass is on the wrong side exactly as the source allows: `alpha = 0` and `delta = 1` would demand the complementary spectrum lie in `[1, ∞)`, and both eigenvalues of `T` are `± 1/sqrt 2`, below `1`. That is what the theorem's second hypothesis forbids, and removing it is what breaks the bound.
+
+The tangent is recorded as the equality of the two components rather than through an arctangent: they are both `1/sqrt 2`, so the ratio defining `tan Theta_0` is `1`, which is the printed quantity without needing the angle API.
+- **Next action:** None. The generalized tangent theorem and Example 6.1 are both compiled, the example's four printed numbers each as their own theorem, and the module is reachable from the curated root (`check_library_structure` rule 4).
 
 ### Section 6 appendix
 
