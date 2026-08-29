@@ -54,10 +54,44 @@ overreaching. Three mismatches stand between it and a Palomar statement:
    2026-08-17 so that `SourcePopulationGap` *identifies* `Δ`. Theorem 1 has had no
    equivalent treatment.
 
-**Action required for selection:** a paper-facing `theorem1_uiNorm` on
-`EuclideanSpace ℝ (Fin p)` at the block `r…s`, with the printed mixed separation
-identified, modelled on `theorem2_sinTheta`. Until that exists, Theorem 1 cannot
-be selected without overclaiming.
+**NOT SELECTED, 2026-08-29, and the reason is a source question, not size.**
+
+Writing the printed `δ` exactly requires the paper's endpoint conventions for the
+*sample* spectrum, and as the distilled TeX records them they make Theorem 1
+vacuous at any block touching either end of the spectrum — including the top-`d`
+block, which is the common case in statistics. The TeX prints
+`λ̂₀ = −∞` and `λ̂_{p+1} = ∞`, so at `r = 1` the ray `[λ̂_{r−1}, ∞)` becomes all of
+`ℝ`, the infimum defining `δ` is `0`, and the hypothesis `δ > 0` is unsatisfiable;
+symmetrically at `s = p` for the other ray.
+
+The reading that makes the theorem say what it evidently means is the opposite
+one — `λ̂₀ = +∞` and `λ̂_{p+1} = −∞`, which make the missing ray **empty**, exactly
+as Theorem 2's `λ₀ = +∞`, `λ_{p+1} = −∞` do for the population gaps. Under that
+reading the exterior set is the sample eigenvalues genuinely outside the block,
+which is what the classical Davis–Kahan separation is.
+
+Two possibilities, and this repository cannot distinguish them from what is
+checked in: the distilled transcription swapped the two conventions, or the
+published article prints them as recorded and Theorem 1 is vacuous at end blocks.
+The first is more likely. Resolving it needs a fresh read of the Biometrika
+article, and it is a maintainer decision, not an agent's.
+
+Note that the Lean development is unaffected either way: it never used the printed
+conventions, phrasing the separation as `IntervalExteriorGap`, an intrinsic
+spectral condition. What is blocked is only the claim that a Palomar statement
+*is* the printed `δ`.
+
+Until that is settled, selecting Theorem 1 would mean either asserting a
+convention the source may not have, or comparing a statement that is vacuous
+exactly where the theorem is used. Neither is acceptable, so Theorem 1 is left
+out and the metadata says the substantive development formalizes it.
+
+The remaining work, once the convention is settled, is small: a paper-facing
+`theorem1_uiNorm` on `EuclideanSpace ℝ (Fin p)` at the block `r…s` modelled on
+`theorem2_sinTheta`, plus a Challenge-side unitarily-invariant-norm interface
+(subadditive, absolutely homogeneous, two-sided unitarily invariant — the three
+fields of `UnitarilyInvariantSeminorm`, which carries no positivity requirement)
+and an adapter constructing that structure from the interface.
 
 ---
 
@@ -170,11 +204,20 @@ twin conclude
        √(∑ᵢ ‖ŵ i − w i‖²) ≤ …
 ```
 
-**Disposition: SHAPE GAP — the printed conclusion is not yet stated.** This is the
-basis-free content of the claim and it does prove the numerical bound, but it does
-not say what the paper says: the paper rotates `V̂` by an orthogonal `Ô` and
-compares against **the supplied `V`**, whereas this asserts only that *some* pair
-of frames spanning the two blocks achieves the bound.
+**Disposition: CLOSED 2026-08-29 — the printed shape is now stated.**
+`yuWangSamworth_rightSingularAlignedFrame_block_le` and its left twin conclude the
+printed conclusion: a unitary `Ô` on the block's coordinate space with
+`‖V̂ Ô − V‖_F ≤ …` against the supplied `V`. The alignment half was first factored
+out as `exists_unitary_sqrt_sum_sq_norm_frameComp_sub_le` and its real matrix form
+`exists_orthogonal_sqrt_sum_sq_norm_sub_le`, which need only two orthonormal
+frames and any Frobenius sine bound, so the Procrustes step now exists once
+instead of twice.
+
+The finding that prompted this, recorded for the archive: this was the
+basis-free content of the claim and it did prove the numerical bound, but it did
+not say what the paper says — the paper rotates `V̂` by an orthogonal `Ô` and
+compares against **the supplied `V`**, whereas the old statement asserted only
+that *some* pair of frames spanning the two blocks achieves the bound.
 
 This is exactly the defect that was found and closed for Theorem 2 on 2026-08-13,
 when `yuWangSamworth_alignedBasis_*` was superseded by `yuWangSamworth_alignedFrame_*`
@@ -183,14 +226,11 @@ Theorem 3.** There is no `…AlignedFrame…` declaration for singular blocks; a
 for `Matrix.orthogonalGroup` in the package reaches `Symmetric/Theorem2.lean` and
 `Core/Procrustes.lean` only.
 
-**Action required:** close it in the authoritative library before selecting the
-rectangular entry, by the route Theorem 2 used — `frameComp`,
+It was closed by the route predicted here: `frameComp`,
 `frameAlignMatrix_mem_orthogonalGroup` and
-`exists_unitary_sum_sq_norm_frameComp_sub_le` in `Core/Procrustes.lean` are the
-existing machinery and are stated for arbitrary frames, so this should be a
-transport rather than a new perturbation argument. Until it lands, the rectangular
-entry can carry the two sine conclusions only, and must not claim the aligned
-conclusions.
+`exists_unitary_sum_sq_norm_frameComp_sub_le` in `Core/Procrustes.lean` were
+already stated for arbitrary frames, so it was a transport rather than a new
+perturbation argument.
 
 ---
 
@@ -216,15 +256,18 @@ orthonormal rows. Lean: `yuWangSamworth_lemma5_orthonormalColumns`,
 
 ## Selection consequences
 
-| entry | rows | status if selected today |
+| entry | rows | outcome |
 | --- | --- | --- |
-| A, symmetric | T2-1, T2-2 | exact, ready |
-| A, symmetric | C1-1, C1-2 | needs the exact-denominator and real-presentation wrappers |
-| A, symmetric | T1 | needs a paper-facing wrapper; do not select before it exists |
-| B, rectangular | T3-R-1, T3-L-1 | corrected, ready modulo a paper-facing real wrapper |
-| B, rectangular | T3-R-2, T3-L-2 | **blocked** — printed aligned shape not proved |
+| A, `palomar/yws-symmetric` | T2-1, T2-2 | **selected, exact** |
+| A, `palomar/yws-symmetric` | C1-1, C1-2 | **selected, exact** — `corollary1_sinTheta` and `corollary1_alignedVector` added |
+| — | T1 | **not selected**; source-convention question, see the row |
+| B, `palomar/yws-rectangular` | T3-R-1, T3-L-1 | **selected, corrected**, defect disclosed |
+| B, `palomar/yws-rectangular` | T3-R-2, T3-L-2 | **selected, corrected** — printed aligned shape proved 2026-08-29 |
+| — | A1 | not selected; formalized in the development, recorded in metadata |
 
-The library work this implies is listed above per row. None of it is a
-Palomar-specific convenience: every item is a paper-facing statement the
-authoritative package should carry anyway, which is why it belongs in
-`YuWangSamworth2015/` and not in a Palomar directory.
+Both entries pass the real Comparator, NanoDa and Lean's kernel, with axiom
+closure exactly `propext`, `Classical.choice`, `Quot.sound`.
+
+None of the library work this required was a Palomar-specific convenience: every
+item is a paper-facing statement the authoritative package should carry anyway,
+which is why it landed in `YuWangSamworth2015/` and not in a Palomar directory.
