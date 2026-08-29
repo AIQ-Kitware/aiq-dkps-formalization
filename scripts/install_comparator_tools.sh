@@ -36,7 +36,7 @@ COMPARATOR_URL="${AIQ_COMPARATOR_URL:-https://github.com/leanprover/comparator.g
 NANODA_REPO="${AIQ_NANODA_REPO:-$TOOL_ROOT/nanoda_lib}"
 NANODA_URL="${AIQ_NANODA_URL:-https://github.com/ammkrn/nanoda_lib.git}"
 LANDRUN_GO_REF="${AIQ_LANDRUN_GO_REF:-main}"
-GO_BIN="$(go env GOPATH 2>/dev/null)/bin"
+GO_BIN="$( (go env GOPATH 2>/dev/null) || true )/bin"
 
 need_cmd() {
     if ! command -v "$1" >/dev/null 2>&1; then
@@ -70,7 +70,12 @@ if [ ! -d "$COMPARATOR_REPO/.git" ]; then
     git clone "$COMPARATOR_URL" "$COMPARATOR_REPO"
 else
     echo "Updating existing comparator checkout at $COMPARATOR_REPO"
-    git -C "$COMPARATOR_REPO" fetch origin main
+    # comparator's default branch is `master`, not `main`; ask the remote rather
+    # than assuming, and do not abort the install when the fetch cannot run.
+    default_branch="$(git -C "$COMPARATOR_REPO" remote show origin 2>/dev/null \
+        | sed -n 's/.*HEAD branch: //p' | head -1)"
+    git -C "$COMPARATOR_REPO" fetch origin "${default_branch:-master}" || \
+        echo "note: could not fetch comparator updates; using the existing checkout."
     current_branch="$(git -C "$COMPARATOR_REPO" branch --show-current || true)"
     if [ "$current_branch" = "main" ] || [ "$current_branch" = "master" ]; then
         git -C "$COMPARATOR_REPO" pull --ff-only || {
@@ -97,11 +102,31 @@ echo "Building comparator"
     lake build comparator
 )
 
+# lean4export is the binary that actually reads our oleans, and it is a *nested*
+# Lake package with its own `lean-toolchain`. Pinning only the comparator checkout
+# above leaves that file at comparator's pin -- which is how a tree with matching
+# top-level toolchains still failed with `incompatible header` at export time.
+LEAN4EXPORT_DIR="$COMPARATOR_REPO/.lake/packages/lean4export"
+EXPORT_TOOLCHAIN="$(tr -d '[:space:]' < "$LEAN4EXPORT_DIR/lean-toolchain" 2>/dev/null || echo '')"
+if [ "$EXPORT_TOOLCHAIN" != "$REPO_TOOLCHAIN" ]; then
+    echo "Pinning lean4export to this repository's toolchain: $REPO_TOOLCHAIN"
+    echo "  (lean4export's own pin was: ${EXPORT_TOOLCHAIN:-none})"
+    printf '%s\n' "$REPO_TOOLCHAIN" > "$LEAN4EXPORT_DIR/lean-toolchain"
+fi
+
 echo "Building lean4export from comparator's pinned dependency"
 (
-    cd "$COMPARATOR_REPO/.lake/packages/lean4export"
+    cd "$LEAN4EXPORT_DIR"
     lake build lean4export
 )
+
+# Prove the pin took: the exporter reports the Lean it was built against.
+EXPORT_REPORTED="$("$LEAN4EXPORT_DIR/.lake/build/bin/lean4export" --help 2>/dev/null \
+    | sed -n 's/.*"version":"\([^"]*\)".*/\1/p' | tail -1 || true)"
+if [ -n "$EXPORT_REPORTED" ] && [ "leanprover/lean4:v$EXPORT_REPORTED" != "$REPO_TOOLCHAIN" ]; then
+    echo "warning: lean4export reports Lean $EXPORT_REPORTED but this repository is $REPO_TOOLCHAIN;" >&2
+    echo "         export will fail with 'incompatible header'." >&2
+fi
 
 NANODA_BIN=""
 if have_cmd cargo; then

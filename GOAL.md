@@ -63,13 +63,22 @@ real definitions restated, Quench 5, Acharyya 2025 9 including the classical-MDS
 construction, Helm 15 — which is why Helm is not currently practical. That table is
 the starting point if JHU picks any of these up.
 
-**A5. DONE 2026-08-29.** `scripts/install_comparator_tools.sh` had three gaps, not
-two: it also required `go` and aborted without it, so a machine with no Go could
-install neither Comparator nor NanoDa even though landrun is only the sandbox. All
-three are fixed — `git` and `lake` are now the only hard requirements, the
-comparator checkout is pinned to this repository's toolchain before building, and
-NanoDa is built when cargo is present. `run_challenge_comparator.sh` finds NanoDa
-at the standard tool root. The original note follows.
+**A5. DONE 2026-08-29, and the earlier note here was wrong.** It claimed the
+installer's three gaps were fixed. Running it on a clean machine on 2026-08-29
+showed otherwise, and there were five:
+
+- `go env GOPATH` ran unguarded under `set -e`, so on a machine with no Go the
+  script died at line 39 and never reached the graceful "landrun is only the
+  sandbox" path twenty lines below it;
+- the toolchain pin reached the comparator checkout but **not** its nested
+  `lean4export` package, which is the binary that actually reads our oleans — so
+  a tree whose top-level toolchains matched still failed with `incompatible
+  header`, the exact failure the pin exists to prevent;
+- the update path fetched `origin main`, but comparator's default branch is
+  `master`, so a second run of the installer aborted.
+
+All five are fixed and the installer is idempotent. It now also verifies the pin
+took, by asking `lean4export` which Lean it reports. The original note follows.
 
 ~~`scripts/install_comparator_tools.sh` is incomplete, and both gaps cost real
 time.~~ It does not install NanoDa at all, which is the second independent kernel and
