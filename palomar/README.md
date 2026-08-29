@@ -12,16 +12,23 @@ configuration, metadata and wrapper skeleton live here.
 
 | entry | source result | compared theorem | status |
 | --- | --- | --- | --- |
-| `yws-2015` | Yu–Wang–Samworth 2015, Theorem 2, first conclusion | `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap` | locally verified |
-| `dk-1970` | Davis–Kahan 1970, operator-norm sin-Θ | `TauCeti.norm_starProjection_comp_starProjection_le` | locally verified |
+| `yws-2015` | Yu–Wang–Samworth 2015, Theorem 2, first conclusion | `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap` | Comparator PASS |
+| `dk-1970` | Davis–Kahan 1970, operator-norm sin-Θ | `TauCeti.norm_starProjection_comp_starProjection_le` | Comparator PASS |
 
 Each entry's Lean sources are `Palomar/<Name>/{Challenge,Solution}.lean`.
 
-Status words mean what they say. *Locally verified* means the Challenge builds and
-its transitive import closure reaches nothing in this repository, the Solution
-supplies the compared declaration with a matching universe signature and full type,
-and its axiom closure is exactly `propext`, `Quot.sound`, `Classical.choice`. It
-does not mean Palomar has seen it, and it is not acceptance.
+Status words mean what they say. *Comparator PASS* means the real Comparator ran:
+statements exported with `lean4export` and compared, the independent NanoDa kernel
+accepting the solution, and Lean's own kernel accepting it. Alongside that, each
+Challenge's transitive import closure reaches nothing in this repository, and each
+compared declaration's axiom closure is exactly `propext`, `Quot.sound`,
+`Classical.choice`.
+
+It does **not** mean Palomar has seen these, and it is not acceptance. Palomar runs
+its own verification and an editorial review, and registration is a maintainer
+decision. Setup notes for reproducing the Comparator run — including the toolchain
+pin that must match, or the exporter fails on our oleans — are in
+[`../dev/palomar-readiness.md`](../dev/palomar-readiness.md) §6.4.
 
 ## How an entry is built
 
