@@ -30,7 +30,7 @@ none of it was available for promotion without a rewrite, and nothing was
 checking that, because the whole subtree was excluded from the coverage gate.
 The census had already recorded the sharpest case: `ideal_sinTheta` and
 `ideal_sinTwoTheta` there read exactly like the missing real-scalar `sin 2Theta`
-endpoint and are **not** coverage, because they reach `sorryAx`; the endpoint
+endpoint and are **not** coverage, because their proofs are incomplete; the endpoint
 was closed elsewhere.
 
 The live development is `DavisKahan.All` together with `Geometry.Angle.*`,

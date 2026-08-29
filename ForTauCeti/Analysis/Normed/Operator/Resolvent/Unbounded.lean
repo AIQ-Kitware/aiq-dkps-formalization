@@ -72,8 +72,10 @@ Two bridges keep this from being a parallel universe.
 
 ## Provenance
 
-* **Original repository:** Tau Ceti, checked in here as the `external/TauCeti` build input at
-  commit `f6b7ee2e03b075c1a5a8bcbe0a67932442649b43`.
+* **Original repository:** Tau Ceti, at the time checked in here as the `external/TauCeti`
+  submodule build input, at commit `f6b7ee2e03b075c1a5a8bcbe0a67932442649b43`. That submodule
+  was removed on 2026-08-28; Tau Ceti is now a pinned Lake dependency. The commit is the
+  provenance datum and is unchanged.
 * **Original module:** `TauCeti/Analysis/Normed/Operator/Resolvent/Unbounded.lean`. The
   generalization tracks upstream `main` at commit
   `1b39d420ac84ed9a5a7d536ce19b37818ad29c39`, which adds

@@ -92,6 +92,11 @@ fi
 
 TOOL_ROOT="${AIQ_COMPARATOR_TOOL_ROOT:-$HOME/code/lean-tools}"
 COMPARATOR_REPO="${AIQ_COMPARATOR_REPO:-$TOOL_ROOT/comparator}"
+# nanoda is located by name on PATH, as `nanoda_bin`. It is the second,
+# independent kernel comparator replays the proof through -- a check, not a
+# sandbox -- so scripts/install_comparator_tools.sh puts it here.
+NANODA_REPO="${AIQ_NANODA_REPO:-$TOOL_ROOT/nanoda_lib}"
+NANODA_BIN_DIR="$NANODA_REPO/target/release"
 GO_BIN="$(go env GOPATH 2>/dev/null)/bin"
 
 COMPARATOR_BIN="${AIQ_COMPARATOR_BIN:-$COMPARATOR_REPO/.lake/build/bin/comparator}"
@@ -103,7 +108,7 @@ else
     LANDRUN_BIN="${COMPARATOR_LANDRUN:-$GO_BIN/landrun}"
 fi
 
-export PATH="$GO_BIN:$COMPARATOR_REPO/.lake/build/bin:$PATH"
+export PATH="$NANODA_BIN_DIR:$GO_BIN:$COMPARATOR_REPO/.lake/build/bin:$PATH"
 export COMPARATOR_LANDRUN="$LANDRUN_BIN"
 export COMPARATOR_LEAN4EXPORT="$LEAN4EXPORT_BIN"
 
