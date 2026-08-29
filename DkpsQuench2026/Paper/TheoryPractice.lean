@@ -581,7 +581,11 @@ theorem mseWinCounterexample_baseline_mse :
   norm_num [empiricalMSE, empiricalMean, sqLoss,
     mseWinCounterexampleTruth, mseWinCounterexampleBaseline,
     Fin.sum_univ_succ]
-  native_decide
+  -- `decide`, not `native_decide`: the latter introduces `Lean.ofReduceBool`, which
+  -- is not one of the three axioms a Palomar Solution may depend on, and it would
+  -- sit in the closure of every Quench result reaching this file. Ordinary `decide`
+  -- is permitted and closes this arithmetic goal.
+  decide
 
 /-- In the counterexample, the candidate wins on only one of three replicates. -/
 theorem mseWinCounterexample_winFraction :

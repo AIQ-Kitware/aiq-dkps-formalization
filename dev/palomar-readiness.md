@@ -339,6 +339,48 @@ code before acting, several may already be closed:
 
 ---
 
+## 6.4 Verification status (2026-08-28)
+
+Both entries pass the **real Comparator**, not a proxy for it: statements exported
+with `lean4export` and compared, the independent NanoDa kernel accepting the
+solution, and Lean's own kernel accepting it.
+
+```
+PASS   palomar/yws-2015/comparator.json
+PASS   palomar/dk-1970/comparator.json
+```
+
+Also verified: challenge import closures reach nothing in this repository; both
+compared declarations have axiom closures of exactly `propext`, `Quot.sound`,
+`Classical.choice`; the static preflight passes; and a fresh clone with no
+`git submodule update` resolves every dependency and compiles a Tau Ceti-dependent
+module.
+
+### Running Comparator locally — two things that will bite
+
+**The exporter must match the oleans.** Comparator pins its own Lean toolchain,
+which was `v4.34.0-rc2` while this repository is on `v4.34.0-rc1`. `lean4export`
+built at the wrong version fails with `incompatible header` on our `.olean` files.
+Set the comparator checkout's `lean-toolchain` to this repository's value and
+rebuild before running anything.
+
+**`landrun` needs Go; NanoDa needs Rust.** `landrun` is the sandbox, not a check:
+without Go, `--fake-landrun` runs the same commands unsandboxed and the comparison
+is unaffected. NanoDa *is* a check — the second, independent kernel — and it does
+run: clone `https://github.com/ammkrn/nanoda_lib`, `cargo build --release`, and put
+`target/release` on `PATH`.
+
+```bash
+git clone https://github.com/leanprover/comparator.git
+cd comparator && cp ../lean-toolchain . && lake build && lake build lean4export
+git clone https://github.com/ammkrn/nanoda_lib.git
+cd nanoda_lib && cargo build --release
+PATH=$PWD/target/release:$PATH \
+AIQ_COMPARATOR_TOOL_ROOT=<tools> scripts/verify_palomar.sh --fake-landrun
+```
+
+---
+
 ## 7. Work plan and priorities
 
 **P0 — mandatory**
