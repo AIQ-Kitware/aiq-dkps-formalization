@@ -1,6 +1,7 @@
 # Outstanding work
 
-Written 2026-08-29, from the verified state at `a686dbc6`. The previous campaign
+Written 2026-08-29, from the verified state at `a686dbc6`.  **Lanes A5, B and I
+are done as of 2026-08-29; see the status notes in each.** The previous campaign
 brief — the Frontier / MathAhead / Experimental cleanup, completed 2026-08-27 — is
 in Git history; `docs/planning/historical/README.md` is explicit that Git is the
 default archive for completed campaigns.
@@ -47,8 +48,16 @@ real definitions restated, Quench 5, Acharyya 2025 9 including the classical-MDS
 construction, Helm 15 — which is why Helm is not currently practical. That table is
 the starting point if JHU picks any of these up.
 
-**A5. `scripts/install_comparator_tools.sh` is incomplete, and both gaps cost real
-time.** It does not install NanoDa at all, which is the second independent kernel and
+**A5. DONE 2026-08-29.** `scripts/install_comparator_tools.sh` had three gaps, not
+two: it also required `go` and aborted without it, so a machine with no Go could
+install neither Comparator nor NanoDa even though landrun is only the sandbox. All
+three are fixed — `git` and `lake` are now the only hard requirements, the
+comparator checkout is pinned to this repository's toolchain before building, and
+NanoDa is built when cargo is present. `run_challenge_comparator.sh` finds NanoDa
+at the standard tool root. The original note follows.
+
+~~`scripts/install_comparator_tools.sh` is incomplete, and both gaps cost real
+time.~~ It does not install NanoDa at all, which is the second independent kernel and
 a genuine check rather than a sandbox. And it does not address the toolchain pin:
 Comparator pins its own Lean, which was `v4.34.0-rc2` against this repository's
 `rc1`, and `lean4export` built at the wrong version fails on our oleans with
@@ -59,7 +68,32 @@ installer is small and obviously worthwhile.
 
 ---
 
-## B. Davis–Kahan 1970 — nine non-terminal census rows
+## B. Davis–Kahan 1970 — DONE 2026-08-29
+
+All nine rows are settled. The census now reads 45 `compiled_exact`, 3
+`not_a_completion_obligation`, 1 `refuted_as_transcribed` (the false Proposition
+4.4, with its counterexample and repair preserved) and 1
+`resolved_by_modern_development`. No row is `partial_or_wrapper_missing`, and both
+`hostile-source-facing-gap` and `hostile-source-spec-fidelity` are retired.
+
+Four rows needed new mathematics: `principalPlaneChord_eq_two_mul_sin_half` (the
+half-angle identity that had only been asserted in a docstring, and on which
+DK-4.1's binding of the printed `2 sin(θ/2)` rested), Example 6.1 as a compiled
+counterexample, the arbitrarily small domain repair for the infinite-residual
+example, and the free-beam eigenvalue-ordering assembly. The other five needed the
+boundary record to say what the source actually claims — attributed, sharpness,
+motivation or open-question material, dispositioned rather than converted into
+theorems the paper does not assert.
+
+One correction worth keeping: reverse links in the atom inventory are *derived*
+from each counted result's own `source_atom_ids`, so a reverse link asserts
+membership of that result's source block. Linking a Section 10 restatement to the
+Section 2 theorem it restates is wrong; the empty link plus a specific boundary
+reason is right. The result-inventory checker catches the mistake.
+
+The original lane text follows, as the record of what was asked.
+
+### Original lane B
 
 The 29-result completion inventory is terminal and must stay that way. Do not turn
 exposition, examples or open questions into new denominator results. The rows below
@@ -224,7 +258,19 @@ wrappers earn their place through source correspondence.
 
 ---
 
-## I. Known debt — deliberately not this campaign
+## I. Known debt — partly done 2026-08-29
+
+The four `sorry` comments are fixed, and a fifth was found in
+`RoadmapBridge/MatrixSpectralStatistics.lean`; no Lean source contains the word
+now. Separately, four comments claiming axiom cleanliness were deleted, and the
+AGENTS.md rule that failed to prevent them was narrowed: it banned the word
+`axiom` in any comment, which cannot be complied with, since around forty comments
+use it in its ordinary mathematical sense. It now bans axiom-status boilerplate and
+permits the mathematical usage.
+
+The three gate failures below remain, deliberately.
+
+### Original lane I
 
 Listed so nobody mistakes them for regressions, and so nobody "fixes" them by lowering
 a baseline or deleting a check.
