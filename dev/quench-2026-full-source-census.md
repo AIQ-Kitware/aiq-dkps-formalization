@@ -23,10 +23,10 @@ The argument that measurability is a well-definedness condition of the printed s
 | status | items |
 | --- | ---: |
 | `compiled_exact` | 1 |
-| `compiled_equivalent` | 2 |
+| `compiled_equivalent` | 1 |
 | `compiled_generalized` | 2 |
 | `compiled_stronger_hypotheses` | 4 |
-| `compiled_source_repair` | 3 |
+| `compiled_source_repair` | 4 |
 | `compiled_role_replaced` | 1 |
 | `not_proof_debt` | 1 |
 
@@ -35,10 +35,10 @@ The argument that measurability is a well-definedness condition of the printed s
 | classification | items |
 | --- | ---: |
 | `exact` | 1 |
-| `equivalent_encoding` | 2 |
+| `equivalent_encoding` | 1 |
 | `generalized` | 2 |
 | `stronger_hypotheses` | 4 |
-| `source_repair` | 3 |
+| `source_repair` | 4 |
 | `proof_replaced` | 1 |
 | `out_of_scope` | 1 |
 
@@ -46,7 +46,7 @@ The argument that measurability is a well-definedness condition of the printed s
 
 | id | importance | source anchor | status | alignment | verification |
 | --- | --- | --- | --- | --- | --- |
-| `Q26-D` | `major` | Response means and the dissimilarity matrix | `compiled_equivalent` | `equivalent_encoding` | `proved_in_build` |
+| `Q26-D` | `major` | Response means and the dissimilarity matrix | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `Q26-Y` | `major` | Benchmark scoring function | `compiled_generalized` | `generalized` | `proved_in_build` |
 | `Q26-T1` | `major` | Theorem 1 (inherited Acharyya et al. 2025 Theorem 2) | `compiled_source_repair` | `source_repair` | `proved_in_build` |
 | `Q26-EQ1` | `major` | Equation (1), DKPS definition | `compiled_role_replaced` | `proof_replaced` | `proved_in_build` |
@@ -139,11 +139,13 @@ Equation (1) defines the perspectives as a raw-stress (metric MDS) minimizer, wh
 
 Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate is stated for a fixed collection of n models with the asymptotics in the replicate index. Quench needs the perspective error at every stage of a growing reference sample with the target augmented into the matrix, so the capstones re-derive the concentration in that regime from the same Acharyya2025.ConfigPerturbation machinery rather than instantiating the rate theorem. Two of Q26-T1's three registered declarations are consumed; the rate endpoint is not. The paper's own proof has the same shape -- it applies Theorem 1 to the n reference models and then silently uses the same bound for the target model, whose perspective is not among them.
 
-### `dissimilarity-normalisation-mismatch` — Quench defines D without the 1/m rescaling used by the theorem it imports
+### `dissimilarity-normalisation-mismatch` — RESOLVED -- Quench prints D without the 1/m its own imported theorem requires
 
 **Kind:** `source_audit`
 
 Quench's methods section defines D_{ii'} = ||Xbar_i - Xbar_{i'}||_F. Acharyya 2024 and Helm 2025 both define the same matrix as (1/m)||Xbar_i - Xbar_{i'}||_F, and the Lean dissimilarity the Quench chain uses is Acharyya2024.responseDistEntry, which carries the (m)^{-1} factor. Quench therefore imports a Theorem 1 stated for the rescaled convention while printing the unrescaled one. The tie-averaged nearest-neighbour estimator is unaffected, because scaling every dissimilarity by a positive constant does not change which reference attains the minimum. Assumption 1 is affected: it bounds the score difference by gamma times ||psi(Q) - psi'(Q)||, and rescaling the dissimilarities rescales psi, so the same gamma means different things under the two conventions -- and m is the query budget, so the factor is not a fixed constant. This is one instance of a chain-wide divergence; see dissimilarity-normalisation-divergence.
+
+ADJUDICATED 2026-08-28. The formalization uses the imported convention and records the printed display as omitting the factor. Quench cites Acharyya 2024's Theorem 1, stated for the rescaled matrix, so its display and its citation cannot both be read literally; the imported scale is the only reading that makes the paper's own argument valid. The claim that the tie-averaged estimator is unaffected is now a theorem rather than a remark: nnMinimizers_smul and hNNTieAverage_smul. Assumption 1 remains affected and is not covered by that invariance, for the reason above.
 
 ### `unbounded-score-codomain` — The paper's [0,1] score is not required in Lean; its consequences are now proved separately
 
@@ -186,13 +188,17 @@ Quench states its Theorem 1 as '[Acharyya et al. (2025) Theorem 2] In our settin
 * **source anchor:** Response means and the dissimilarity matrix (definition, section 2)
 * **source locator:** `DkpsQuench2026/prose/quench-icml-nonanon_transcription.md:50-62`
 * **importance:** `major`
-* **status / verification:** `compiled_equivalent` / `proved_in_build`
-* **semantic alignment:** `equivalent_encoding` — The replicate average is the raw-response mean the capstones consume. The dissimilarity Lean uses is Acharyya2024.responseDistEntry, which carries a (m)^{-1} factor the Quench display does not; see dissimilarity-normalisation-mismatch for why the estimator is unaffected and Assumption 1 is not.
+* **status / verification:** `compiled_source_repair` / `proved_in_build`
+* **semantic alignment:** `source_repair` — The replicate average is the raw-response mean the capstones consume. The dissimilarity is Acharyya2024.responseDistEntry, which carries a 1/m factor the Quench display does not.
+
+ADJUDICATED 2026-08-28. Quench is formalized under the imported convention, (1/m)||Xbar_i - Xbar_i'||_F, and the printed display is recorded as omitting that factor. The reason is internal to the paper rather than a preference: Quench cites Acharyya 2024's Theorem 1, which is stated for the rescaled matrix, so the printed display and the printed citation cannot both be taken literally. Reading D at the imported scale is the only reading under which the paper's own argument goes through, and it is therefore the repair, not a choice of units.
+
+What the repair costs is now compiled rather than asserted. The nearest-neighbour estimator is invariant under a positive rescaling of the perspective space -- nnMinimizers_smul shows the minimising set is unchanged and hNNTieAverage_smul that the tie average therefore is too -- so every query-efficiency conclusion downstream is untouched by the convention. Assumption 1 is a different matter and is not covered by that invariance: it bounds a score difference by gamma times a perspective distance, and rescaling the perspectives rescales that distance, so gamma means different things under different conventions. Since m is the query budget rather than a fixed constant, the factor is not absorbable into a constant in any regime where m grows.
 * **source claim:** Xbar_{ij.} = (1/r) sum_k g(f_i(q_j))_k, and D is the pairwise distance matrix with entries D_{ii'} = ||Xbar_i - Xbar_{i'}||_F.
-* **Lean declarations:** `Acharyya2024.responseDistEntry`, `Acharyya2024.responseDist`, `DkpsQuench2026.augmentedSampleResponseDist`
+* **Lean declarations:** `Acharyya2024.responseDist`, `Acharyya2024.responseDistEntry`, `DkpsQuench2026.augmentedSampleResponseDist`, `hNNTieAverage_smul`, `nnMinimizers_smul`
 * **gap refs:** `dissimilarity-normalisation-divergence`, `dissimilarity-normalisation-mismatch`
-* **notes:** This row exists because the displayed D had no census coverage at all, which is how the normalisation mismatch went unrecorded.
-* **next action:** Decide whether Quench should state D with the 1/m factor or carry the rescaling explicitly in Assumption 1.
+* **notes:** This row exists because the displayed D had no census coverage at all, which is how the normalisation mismatch went unrecorded. The invariance theorems are the reason the mismatch can be confined to Assumption 1 rather than propagating.
+* **next action:** None. The convention is adjudicated and its consequences are compiled.
 
 ### `Q26-Y` — The benchmark score is a [0,1]-valued function of a model and a query subset
 
