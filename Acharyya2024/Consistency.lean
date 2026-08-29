@@ -1039,7 +1039,7 @@ theorem lp_consistency_of_gamma_empirical
     (γ : ∀ r, Fin n → Fin (m r) → Real)
     (hγnonneg : ∀ r i j, 0 ≤ γ r i j)
     (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μpop r i‖ ^ 2) P)
-    (hmoment : ∀ᶠ r in atTop, ∀ i, ∫ ω, ‖Xbar r ω i - μpop r i‖ ^ 2 ∂P
+    (hmoment : ∀ i, ∀ᶠ r in atTop, ∫ ω, ‖Xbar r ω i - μpop r i‖ ^ 2 ∂P
       ≤ (∑ i', ∑ j, γ r i' j) / (r : Real))
     (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real))
       atTop (𝓝 0))
@@ -1114,7 +1114,7 @@ theorem lp_consistency_of_gamma_ambientLimit
     (γ : ∀ r, Fin n → Fin (m r) → Real)
     (hγnonneg : ∀ r i j, 0 ≤ γ r i j)
     (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μpop r i‖ ^ 2) P)
-    (hmoment : ∀ᶠ r in atTop, ∀ i, ∫ ω, ‖Xbar r ω i - μpop r i‖ ^ 2 ∂P
+    (hmoment : ∀ i, ∀ᶠ r in atTop, ∫ ω, ‖Xbar r ω i - μpop r i‖ ^ 2 ∂P
       ≤ (∑ i', ∑ j, γ r i' j) / (r : Real))
     (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real))
       atTop (𝓝 0))

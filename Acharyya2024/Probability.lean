@@ -228,10 +228,13 @@ theorem dissimilarity_convergesInProbability_of_secondMoment_growing
     (μ : ∀ r, Fin n → Mat (m r) p)
     (v : Nat → Real)
     (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μ r i‖ ^ 2) P)
-    (hmoment : ∀ᶠ r in atTop, ∀ i, ∫ ω, ‖Xbar r ω i - μ r i‖ ^ 2 ∂P ≤ v r)
+    (hmoment : ∀ i, ∀ᶠ r in atTop, ∫ ω, ‖Xbar r ω i - μ r i‖ ^ 2 ∂P ≤ v r)
     (hv : Tendsto (fun r => v r / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
     ConvergesInProbabilityZero P
       (fun r ω => frobSub (responseDist (Xbar r ω)) (responseDist (μ r))) := by
+  -- the queries are finitely many, so per-query thresholds combine into one
+  replace hmoment : ∀ᶠ r in atTop, ∀ i, ∫ ω, ‖Xbar r ω i - μ r i‖ ^ 2 ∂P ≤ v r :=
+    Filter.eventually_all.2 hmoment
   intro ε hε
   have hfrob_nonneg : ∀ r ω,
       0 ≤ frobSub (responseDist (Xbar r ω)) (responseDist (μ r)) := by
@@ -393,7 +396,7 @@ theorem dissimilarity_convergesInProbability_of_gamma
     (γ : ∀ r, Fin n → Fin (m r) → Real)
     (hγnonneg : ∀ r i j, 0 ≤ γ r i j)
     (hint : ∀ r i, Integrable (fun ω => ‖Xbar r ω i - μ r i‖ ^ 2) P)
-    (hmoment : ∀ᶠ r in atTop, ∀ i, ∫ ω, ‖Xbar r ω i - μ r i‖ ^ 2 ∂P
+    (hmoment : ∀ i, ∀ᶠ r in atTop, ∫ ω, ‖Xbar r ω i - μ r i‖ ^ 2 ∂P
       ≤ (∑ i', ∑ j, γ r i' j) / (r : Real))
     (hγ : Tendsto (fun r => ((m r : Real))⁻¹ * (∑ i, ∑ j, γ r i j) / (r : Real))
       atTop (𝓝 0)) :
@@ -429,9 +432,12 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing
     (Xbar : ∀ r, Ω → Nat → Mat (m r) p)
     (μ : ∀ r, Nat → Mat (m r) p)
     (v : Nat → Nat → Real) (i i' : Nat)
-    (hint : ∀ r k, Integrable (fun ω => ‖Xbar r ω k - μ r k‖ ^ 2) P)
-    (hmoment : ∀ k, ∀ᶠ r in atTop, ∫ ω, ‖Xbar r ω k - μ r k‖ ^ 2 ∂P ≤ v r k)
-    (hv : ∀ k, Tendsto (fun r => v r k / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
+    (hint : ∀ r, ∀ k ∈ ({i, i'} : Set Nat),
+      Integrable (fun ω => ‖Xbar r ω k - μ r k‖ ^ 2) P)
+    (hmoment : ∀ k ∈ ({i, i'} : Set Nat),
+      ∀ᶠ r in atTop, ∫ ω, ‖Xbar r ω k - μ r k‖ ^ 2 ∂P ≤ v r k)
+    (hv : ∀ k ∈ ({i, i'} : Set Nat),
+      Tendsto (fun r => v r k / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
     ConvergesInProbabilityZero P (fun r ω =>
       ((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
         - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) := by
@@ -469,7 +475,7 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing
       P {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
           - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) (0 : Real) > ε}
         ≤ ENNReal.ofReal (v r i / (η r) ^ 2) + ENNReal.ofReal (v r i' / (η r) ^ 2) := by
-    filter_upwards [hmoment i, hmoment i'] with r hri hri'
+    filter_upwards [hmoment i (by simp), hmoment i' (by simp)] with r hri hri'
     rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
     · have hempty : {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
           - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) (0 : Real) > ε} = (∅ : Set Ω) := by
@@ -495,8 +501,8 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing
             measure_union_le _ _
         _ ≤ ENNReal.ofReal (v r i / (η r) ^ 2) + ENNReal.ofReal (v r i' / (η r) ^ 2) :=
             add_le_add
-              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i) hη_pos hri)
-              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i') hη_pos hri')
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i (by simp)) hη_pos hri)
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i' (by simp)) hη_pos hri')
   -- each model's bound vanishes at its own rate; no rate common to the collection is used
   have hratio : ∀ (k r : Nat),
       v r k / (η r) ^ 2 = (4 / ε ^ 2) * (v r k / ((m r : Real)) ^ 2) := by
@@ -505,16 +511,16 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing
     · rw [hη_def]; simp [hm0]
     · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
       rw [hη_def]; field_simp; ring
-  have hone : ∀ k : Nat,
+  have hone : ∀ k ∈ ({i, i'} : Set Nat),
       Tendsto (fun r => ENNReal.ofReal (v r k / (η r) ^ 2)) atTop (𝓝 0) := by
-    intro k
+    intro k hk
     have h1 : Tendsto (fun r => v r k / (η r) ^ 2) atTop (𝓝 0) := by
-      have := (hv k).const_mul (4 / ε ^ 2)
+      have := (hv k hk).const_mul (4 / ε ^ 2)
       simpa only [mul_zero, hratio k] using this
     simpa using ENNReal.tendsto_ofReal h1
   have hub : Tendsto (fun r => ENNReal.ofReal (v r i / (η r) ^ 2)
       + ENNReal.ofReal (v r i' / (η r) ^ 2)) atTop (𝓝 0) := by
-    simpa using (hone i).add (hone i')
+    simpa using (hone i (by simp)).add (hone i' (by simp))
   exact tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hub
     (Filter.Eventually.of_forall fun r => bot_le) hbad
 
@@ -537,9 +543,12 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_random
     (Xbar : ∀ r, Ω → Nat → Mat (m r) p)
     (μ : ∀ r, Ω → Nat → Mat (m r) p)
     (v : Nat → Nat → Real) (i i' : Nat)
-    (hint : ∀ r k, Integrable (fun ω => ‖Xbar r ω k - μ r ω k‖ ^ 2) P)
-    (hmoment : ∀ k, ∀ᶠ r in atTop, ∫ ω, ‖Xbar r ω k - μ r ω k‖ ^ 2 ∂P ≤ v r k)
-    (hv : ∀ k, Tendsto (fun r => v r k / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
+    (hint : ∀ r, ∀ k ∈ ({i, i'} : Set Nat),
+      Integrable (fun ω => ‖Xbar r ω k - μ r ω k‖ ^ 2) P)
+    (hmoment : ∀ k ∈ ({i, i'} : Set Nat),
+      ∀ᶠ r in atTop, ∫ ω, ‖Xbar r ω k - μ r ω k‖ ^ 2 ∂P ≤ v r k)
+    (hv : ∀ k ∈ ({i, i'} : Set Nat),
+      Tendsto (fun r => v r k / ((m r : Real)) ^ 2) atTop (𝓝 0)) :
     ConvergesInProbabilityZero P (fun r ω =>
       ((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
         - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) := by
@@ -577,7 +586,7 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_random
       P {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
           - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) (0 : Real) > ε}
         ≤ ENNReal.ofReal (v r i / (η r) ^ 2) + ENNReal.ofReal (v r i' / (η r) ^ 2) := by
-    filter_upwards [hmoment i, hmoment i'] with r hri hri'
+    filter_upwards [hmoment i (by simp), hmoment i' (by simp)] with r hri hri'
     rcases Nat.eq_zero_or_pos (m r) with hm0 | hmpos
     · have hempty : {ω | dist (((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
           - ((m r : Real))⁻¹ * ‖μ r ω i - μ r ω i'‖) (0 : Real) > ε} = (∅ : Set Ω) := by
@@ -603,8 +612,8 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_random
             measure_union_le _ _
         _ ≤ ENNReal.ofReal (v r i / (η r) ^ 2) + ENNReal.ofReal (v r i' / (η r) ^ 2) :=
             add_le_add
-              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i) hη_pos hri)
-              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i') hη_pos hri')
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i (by simp)) hη_pos hri)
+              (meas_gt_le_ofReal_secondMoment_div_sq P (hint r i' (by simp)) hη_pos hri')
   -- each model's bound vanishes at its own rate
   have hratio : ∀ (k r : Nat),
       v r k / (η r) ^ 2 = (4 / ε ^ 2) * (v r k / ((m r : Real)) ^ 2) := by
@@ -613,16 +622,16 @@ theorem pointwise_dissimilarity_convergesInProbability_of_secondMoment_random
     · rw [hη_def]; simp [hm0]
     · have hm_pos : (0 : Real) < ((m r : Real)) := by exact_mod_cast hmpos
       rw [hη_def]; field_simp; ring
-  have hone : ∀ k : Nat,
+  have hone : ∀ k ∈ ({i, i'} : Set Nat),
       Tendsto (fun r => ENNReal.ofReal (v r k / (η r) ^ 2)) atTop (𝓝 0) := by
-    intro k
+    intro k hk
     have h1 : Tendsto (fun r => v r k / (η r) ^ 2) atTop (𝓝 0) := by
-      have := (hv k).const_mul (4 / ε ^ 2)
+      have := (hv k hk).const_mul (4 / ε ^ 2)
       simpa only [mul_zero, hratio k] using this
     simpa using ENNReal.tendsto_ofReal h1
   have hub : Tendsto (fun r => ENNReal.ofReal (v r i / (η r) ^ 2)
       + ENNReal.ofReal (v r i' / (η r) ^ 2)) atTop (𝓝 0) := by
-    simpa using (hone i).add (hone i')
+    simpa using (hone i (by simp)).add (hone i' (by simp))
   exact tendsto_of_tendsto_of_tendsto_of_le_of_le' tendsto_const_nhds hub
     (Filter.Eventually.of_forall fun r => bot_le) hbad
 
@@ -644,17 +653,19 @@ theorem pointwise_dissimilarity_convergesInProbability_of_gamma
     (Xbar : ∀ r, Ω → Nat → Mat (m r) p)
     (μ : ∀ r, Nat → Mat (m r) p)
     (S : Nat → Nat → Real) (i i' : Nat)
-    (hSnonneg : ∀ k r, 0 ≤ S k r)
-    (hint : ∀ r k, Integrable (fun ω => ‖Xbar r ω k - μ r k‖ ^ 2) P)
-    (hmoment : ∀ k, ∀ᶠ r in atTop,
+    (hSnonneg : ∀ k ∈ ({i, i'} : Set Nat), ∀ r, 0 ≤ S k r)
+    (hint : ∀ r, ∀ k ∈ ({i, i'} : Set Nat),
+      Integrable (fun ω => ‖Xbar r ω k - μ r k‖ ^ 2) P)
+    (hmoment : ∀ k ∈ ({i, i'} : Set Nat), ∀ᶠ r in atTop,
       ∫ ω, ‖Xbar r ω k - μ r k‖ ^ 2 ∂P ≤ S k r / (r : Real))
-    (hγ : ∀ k, Tendsto (fun r => ((m r : Real))⁻¹ * S k r / (r : Real)) atTop (𝓝 0)) :
+    (hγ : ∀ k ∈ ({i, i'} : Set Nat),
+      Tendsto (fun r => ((m r : Real))⁻¹ * S k r / (r : Real)) atTop (𝓝 0)) :
     ConvergesInProbabilityZero P (fun r ω =>
       ((m r : Real))⁻¹ * ‖Xbar r ω i - Xbar r ω i'‖
         - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) :=
   pointwise_dissimilarity_convergesInProbability_of_secondMoment_growing P m Xbar μ
     (fun r k => S k r / (r : Real)) i i' hint hmoment
-    (fun k => sourceGammaRate_imp_secondMomentRate (hSnonneg k) (hγ k))
+    (fun k hk => sourceGammaRate_imp_secondMomentRate (hSnonneg k hk) (hγ k hk))
 
 /-! ### Appendix A.2, as the hypothesis the concentration theorems consume
 
@@ -733,7 +744,8 @@ theorem dissimilarity_convergesInProbability_of_replicates
   refine dissimilarity_convergesInProbability_of_gamma P m Xbar μ γ hγnonneg
     (fun r i => Acharyya2024.SecondMoment.integrable_norm_sq_of_coord P
       (fun ω => Xbar r ω i) (μ r i) (hintcoord r i)) ?_ hγ
-  filter_upwards [eventually_gt_atTop 0] with r hr i
+  intro i
+  filter_upwards [eventually_gt_atTop 0] with r hr
   refine le_trans (Acharyya2024.SecondMoment.integral_norm_sq_matrix_le_sum_row_bounds P hr
     (Y r i) (mu r i) (γ r i) (hL2 r i) (hmean r i) (hindep r i) (hγbound r i)
     (fun ω => Xbar r ω i) (μ r i) (fun ω => hXbar r ω i) (hμ r i) (hintcoord r i)) ?_
@@ -775,14 +787,14 @@ theorem pointwise_dissimilarity_convergesInProbability_of_replicates
         - ((m r : Real))⁻¹ * ‖μ r i - μ r i'‖) :=
   pointwise_dissimilarity_convergesInProbability_of_gamma P m Xbar μ
     (fun k r => ∑ j, γ r k j) i i'
-    (fun k r => Finset.sum_nonneg fun j _ => hγnonneg r k j)
-    (fun r k => Acharyya2024.SecondMoment.integrable_norm_sq_of_coord P
+    (fun k _ r => Finset.sum_nonneg fun j _ => hγnonneg r k j)
+    (fun r k _ => Acharyya2024.SecondMoment.integrable_norm_sq_of_coord P
       (fun ω => Xbar r ω k) (μ r k) (hintcoord r k))
-    (fun k => eventually_integral_norm_sq_le_sum_gamma P m (fun r => Y r k) (fun r => mu r k)
+    (fun k _ => eventually_integral_norm_sq_le_sum_gamma P m (fun r => Y r k) (fun r => mu r k)
       (fun r => γ r k) (fun r ω => Xbar r ω k) (fun r => μ r k)
       (fun r ω => hXbar r ω k) (fun r => hμ r k) (fun r => hL2 r k) (fun r => hmean r k)
       (fun r => hindep r k) (fun r => hγbound r k) (fun r => hintcoord r k))
-    hγ
+    (fun k _ => hγ k)
 
 /-! ### Theorem 4 when the models are drawn, without a uniform rate
 
@@ -833,11 +845,12 @@ theorem pointwise_dissimilarity_convergesInProbability_of_gamma_kernel
     (hmeasX : ∀ r, Measurable fun z : Λ × Ω =>
       ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
         - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖)
-    (hS : ∀ᵐ l ∂Pmod, ∀ k r, 0 ≤ S l k r)
-    (hint : ∀ᵐ l ∂Pmod, ∀ r k, Integrable (fun ω => ‖Xbar r l ω k - μ r l k‖ ^ 2) (κ l))
-    (hmoment : ∀ᵐ l ∂Pmod, ∀ k, ∀ᶠ r in atTop,
+    (hS : ∀ᵐ l ∂Pmod, ∀ k ∈ ({i, i'} : Set Nat), ∀ r, 0 ≤ S l k r)
+    (hint : ∀ᵐ l ∂Pmod, ∀ r, ∀ k ∈ ({i, i'} : Set Nat),
+      Integrable (fun ω => ‖Xbar r l ω k - μ r l k‖ ^ 2) (κ l))
+    (hmoment : ∀ᵐ l ∂Pmod, ∀ k ∈ ({i, i'} : Set Nat), ∀ᶠ r in atTop,
       ∫ ω, ‖Xbar r l ω k - μ r l k‖ ^ 2 ∂(κ l) ≤ S l k r / (r : Real))
-    (hγ : ∀ᵐ l ∂Pmod, ∀ k,
+    (hγ : ∀ᵐ l ∂Pmod, ∀ k ∈ ({i, i'} : Set Nat),
       Tendsto (fun r => ((m r : Real))⁻¹ * S l k r / (r : Real)) atTop (𝓝 0)) :
     ConvergesInProbabilityZero (Pmod ⊗ₘ κ) (fun r z =>
       ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
@@ -878,11 +891,12 @@ theorem pointwise_dissimilarity_convergesInProbability_of_gamma_random
     (hmeasX : ∀ r, Measurable fun z : Λ × Ω =>
       ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
         - ((m r : Real))⁻¹ * ‖μ r z.1 i - μ r z.1 i'‖)
-    (hS : ∀ᵐ l ∂Pmod, ∀ k r, 0 ≤ S l k r)
-    (hint : ∀ᵐ l ∂Pmod, ∀ r k, Integrable (fun ω => ‖Xbar r l ω k - μ r l k‖ ^ 2) P)
-    (hmoment : ∀ᵐ l ∂Pmod, ∀ k, ∀ᶠ r in atTop,
+    (hS : ∀ᵐ l ∂Pmod, ∀ k ∈ ({i, i'} : Set Nat), ∀ r, 0 ≤ S l k r)
+    (hint : ∀ᵐ l ∂Pmod, ∀ r, ∀ k ∈ ({i, i'} : Set Nat),
+      Integrable (fun ω => ‖Xbar r l ω k - μ r l k‖ ^ 2) P)
+    (hmoment : ∀ᵐ l ∂Pmod, ∀ k ∈ ({i, i'} : Set Nat), ∀ᶠ r in atTop,
       ∫ ω, ‖Xbar r l ω k - μ r l k‖ ^ 2 ∂P ≤ S l k r / (r : Real))
-    (hγ : ∀ᵐ l ∂Pmod, ∀ k,
+    (hγ : ∀ᵐ l ∂Pmod, ∀ k ∈ ({i, i'} : Set Nat),
       Tendsto (fun r => ((m r : Real))⁻¹ * S l k r / (r : Real)) atTop (𝓝 0)) :
     ConvergesInProbabilityZero (Pmod.prod P) (fun r z =>
       ((m r : Real))⁻¹ * ‖Xbar r z.1 z.2 i - Xbar r z.1 z.2 i'‖
@@ -996,13 +1010,13 @@ theorem pairwise_dissimilarity_convergesInProbability_of_gamma
     simp only [hX0, hX1, hM0, hM1]
     fun_prop
   · filter_upwards [hfst hS, hsnd hS] with L h1 h2
-    intro k r
+    intro k _ r
     simp only [hS2]
     by_cases hk : k = 0 <;> simp only [hk, ↓reduceIte]
     · exact h1 r
     · exact h2 r
   · filter_upwards [hfst hint, hsnd hint] with L h1 h2
-    intro r k
+    intro r k _
     rw [hpair]
     by_cases hk : k = 0
     · simp only [hX2, hM2, hk, ↓reduceIte]
@@ -1010,7 +1024,7 @@ theorem pairwise_dissimilarity_convergesInProbability_of_gamma
     · simp only [hX2, hM2, hk, ↓reduceIte]
       exact (h2 r).comp_snd _
   · filter_upwards [hfst hint, hsnd hint, hfst hmoment, hsnd hmoment] with L h1 h2 g1 g2
-    intro k
+    intro k _
     by_cases hk : k = 0
     · filter_upwards [g1] with r gr
       rw [hpair]
@@ -1023,7 +1037,7 @@ theorem pairwise_dissimilarity_convergesInProbability_of_gamma
       rw [integral_comp_snd_prod (h2 r)]
       exact gr
   · filter_upwards [hfst hγ, hsnd hγ] with L h1 h2
-    intro k
+    intro k _
     simp only [hS2]
     by_cases hk : k = 0 <;> simp only [hk, ↓reduceIte]
     · exact h1
