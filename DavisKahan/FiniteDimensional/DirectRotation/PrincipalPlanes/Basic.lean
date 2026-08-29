@@ -68,6 +68,28 @@ noncomputable def principalPlaneChord (U V : Submodule 𝕜 E)
     (i : Fin (nontrivialAngleCount U V)) : ℝ :=
   Real.sqrt (2 * (1 - principalPlaneCosine U V i))
 
+/-- **The chord is twice the sine of the half-angle**, which is what the name says
+and what Davis--Kahan write.
+
+This API carries a principal plane by its sine and cosine rather than by an angle,
+so `principalPlaneChord` is defined as `√(2(1 - cos θ))`. Proposition 4.1 states
+the minimal singular value as `2 sin(θ_k / 2)`. The two agree by the half-angle
+identity, and this is that agreement: for any `θ` in `[0, π]` realising the
+plane's sine and cosine, the chord is `2 sin(θ / 2)`.
+
+Without it the identification of the compiled value with the printed one rests on
+a docstring. -/
+theorem principalPlaneChord_eq_two_mul_sin_half (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (i : Fin (nontrivialAngleCount U V)) {θ : ℝ} (hθ0 : 0 ≤ θ) (hθπ : θ ≤ Real.pi)
+    (hcos : Real.cos θ = principalPlaneCosine U V i) :
+    principalPlaneChord U V i = 2 * Real.sin (θ / 2) := by
+  have hpi : (0 : ℝ) ≤ Real.pi := Real.pi_pos.le
+  rw [Real.sin_half_eq_sqrt hθ0 (by linarith), hcos, principalPlaneChord]
+  rw [show (2 : ℝ) * (1 - principalPlaneCosine U V i)
+      = 2 ^ 2 * ((1 - principalPlaneCosine U V i) / 2) by ring,
+    Real.sqrt_mul (by positivity), Real.sqrt_sq (by norm_num)]
+
 /-- The source-orthogonal partner of a principal source vector. -/
 noncomputable def principalOrthogonalVector (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]

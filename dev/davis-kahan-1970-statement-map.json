@@ -893,7 +893,7 @@
       "source_kind": "proposition",
       "source_anchor": "Section 4 setup, Proposition 4.1, and equations (4.1)--(4.2)",
       "completion_obligation": true,
-      "expected_status": "partial_or_wrapper_missing",
+      "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-4.1-prop",
       "review_declarations": [
@@ -901,7 +901,11 @@
         "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real",
         "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute",
         "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
-        "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues"
+        "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues",
+        "TauCeti.DavisKahan1970.Proposition4_1",
+        "TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le",
+        "TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation",
+        "TauCeti.DavisKahanTheory.principalPlaneChord_eq_two_mul_sin_half"
       ],
       "audit_clauses": [
         {
@@ -914,24 +918,23 @@
         },
         {
           "id": "DK-4.1-prop.singular",
-          "description": "Equivalent singular-value/approximation-number minimality formulation, including the direct-rotation value 2 sin(theta_k/2).",
+          "description": "Equivalent singular-value/approximation-number minimality formulation, including the direct-rotation value 2 sin(theta_k/2). Minimality over all intertwining isometries is Proposition4_1 / singularValues_restrictedDisplacement_le; the attained value is singularValues_restrictedDisplacement_directRotation, which gives it as the principal-plane chord; and principalPlaneChord_eq_two_mul_sin_half is the half-angle identity making that chord the printed 2 sin(theta_k/2) rather than a docstring claim.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors",
             "TauCeti.DavisKahan1970.Proposition4_1_compact_orthonormalVectors_real",
             "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute",
             "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
-            "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues"
+            "TauCeti.DavisKahan1970.Proposition4_1_directRotationValues",
+            "TauCeti.DavisKahan1970.Proposition4_1",
+            "TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_le",
+            "TauCeti.DavisKahanTheory.singularValues_restrictedDisplacement_directRotation",
+            "TauCeti.DavisKahanTheory.principalPlaneChord_eq_two_mul_sin_half"
           ]
         }
       ],
       "source_specification_sha256": "2b3c6a4dc471284a2f9e4f7e4f091d30fd00d0c04ef03648ee469d6e9e110cb3",
-      "expected_completion_certification": "reopened_mapping",
-      "known_completion_holes": [
-        {
-          "kind": "mapping",
-          "detail": "PDF re-audit restored equations (4.1) and (4.2) explicitly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the minimax and pointwise-angle atoms and the headline proposition are explicitly bound to exact Lean evidence."
-        }
-      ],
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: PDF re-audit restored equations (4.1) and (4.2) explicitly in the distributable TeX. The source-specification defect is closed; the row remains reopened until the minimax and pointwise-angle atoms and the headline proposition are explicitly bound to exact Lean evidence.",
       "source_atom_ids": [
         "DK-4.1-prop.vz-factorization",
