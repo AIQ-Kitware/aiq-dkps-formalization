@@ -10,10 +10,32 @@ configuration, metadata and wrapper skeleton live here.
 
 ## Prepared entries
 
-| entry | source result | compared theorem | status |
+| entry | source result | compared declarations | status |
 | --- | --- | --- | --- |
-| `yws-2015` | Yu–Wang–Samworth 2015, Theorem 2, first conclusion | `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap` | Comparator PASS; extracted 2026-08-29 |
+| `yws-symmetric` | Yu–Wang–Samworth 2015, Theorem 2 (both conclusions) and Corollary 1 (both displays) | `YWSPalomar.theorem2_sinTheta`, `…theorem2_alignedFrame`, `…corollary1_sinTheta`, `…corollary1_alignedVector` | Comparator PASS; **exact** |
+| `yws-rectangular` | Yu–Wang–Samworth 2015, Theorem 3, right and left, sine and aligned | `YWSRectangular.theorem3_rightSinTheta`, `…rightAlignedFrame`, `…leftSinTheta`, `…leftAlignedFrame` | Comparator PASS; **source-corrected**, see below |
+| `yws-2015` | Yu–Wang–Samworth 2015, Theorem 2, first conclusion, in a general index-set form | `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap` | Comparator PASS; **prototype/regression**, superseded by `yws-symmetric` |
 | `dk-1970` | Davis–Kahan 1970, operator-norm sin-Θ | `TauCeti.norm_starProjection_comp_starProjection_le` | Comparator PASS; extracted 2026-08-29 |
+
+**`yws-symmetric` is the preferred Yu–Wang–Samworth entry.** `yws-2015` compares a
+statement in a convenient shape — an arbitrary `Finset` rather than the source's
+contiguous `r…s` block, canonical eigenbases rather than arbitrary supplied
+frames, no aligned conclusion, and no visible source denominator. It proved the
+Palomar mechanics work and is kept as a regression, not as a paper-facing claim.
+
+**`yws-rectangular` compares the corrected Theorem 3, not the printed one.** The
+paper's convention `σ²_{rank(A)+1} := −∞` is false: it makes the denominator
+infinite at `s = rank(A)`, so the printed bound asserts that two singular
+subspaces which can be orthogonal coincide. The entry's Challenge docstring states
+this, exhibits the counterexample, and says what is proved instead. Its metadata
+must not describe it as exact.
+
+**Theorem 1 and Appendix Lemma A1 are not selected.** Both are formalized in the
+development. Theorem 1 is held back by a source-convention question recorded in
+[`YWS_SOURCE_CONTRACT.md`](YWS_SOURCE_CONTRACT.md), not by size.
+
+The clause-by-clause basis for every selection above is
+[`YWS_SOURCE_CONTRACT.md`](YWS_SOURCE_CONTRACT.md).
 
 Each entry's Lean sources are `Palomar/<Name>/{Challenge,Solution}.lean`.
 
