@@ -381,6 +381,59 @@ AIQ_COMPARATOR_TOOL_ROOT=<tools> scripts/verify_palomar.sh --fake-landrun
 
 ---
 
+## 6.5 DKPS Challenge-feasibility findings (2026-08-28)
+
+Criterion 3 of §6.3 asks whether each package's headline theorem could be *stated*
+in a Palomar Challenge, which may import Mathlib and Tau Ceti but nothing from this
+repository. That is measurable rather than a matter of taste: count the constants a
+statement's type actually mentions whose defining module is a local library. Those
+are exactly what would have to be restated in the Challenge, with a precise
+docstring each, or upstreamed first.
+
+| package | candidate headline | local constants in its type |
+| --- | --- | ---: |
+| Acharyya 2024 | `Consistency.lp_consistency_of_replicates_population` | 6 |
+| Acharyya 2025 | `AlignedPipeline.highProb_aligned_configFrobError_of_entrywise_close` | 9 |
+| Quench 2026 | `highProb_queryEfficient_nn` | 8 |
+| Helm 2025 | `DKPS.Theorem2_bayes` | 15 |
+
+**Acharyya 2024 — feasible, and the closest.** Two of the six are the type
+abbreviations `Rvec` and `Mat`, both `EuclideanSpace` and inlinable at no cost. The
+four that carry content are `pointStress`, `continuousPointStress`,
+`pairDiscrepancy` and `lpPairDistErr` — the one-point raw stress, its population
+form, the pairwise discrepancy and the `L^p(P × P)` error. All four are ordinary
+multidimensional-scaling notions with a one-line mathematical meaning, so they can
+be defined in a Challenge with honest docstrings. The obstacle is not vocabulary
+but hypothesis count: the theorem carries the structural assumptions of Lemma 2,
+and a Challenge would be long. Splitting the statement is the design question, not
+whether it can be posed.
+
+**Quench 2026 — feasible.** Of the eight, `Model`, `ProbMeasure` and `Vec` are
+abbreviations. The rest — `HighProbAtTop`, `MSE`, `yFull`, `yQ`, `yNN_paper` — are
+short and concrete: an eventual-high-probability quantifier, mean squared error,
+the full-benchmark score, its query-restricted version, and the nearest-neighbour
+estimator. This would make a readable Challenge.
+
+**Acharyya 2025 — feasible with more work.** Nine constants, and unlike the others
+several are genuinely structural: `classicalMDSMatrix`, `EntrywiseClose`,
+`ConfigFrobError`, `alignedSpectralConfigFrob`, `configFrobBound`. Restating them
+means putting the classical-MDS construction itself inside the trusted statement
+surface, which is a real design decision rather than transcription.
+
+**Helm 2025 — not currently practical.** Fifteen constants, and they are the
+paper's whole apparatus: learning rules, loss functions, decision functions, risk
+and Bayes risk, plus four separate hypothesis predicates. A Challenge restating all
+of it would be most of a small library, and a reviewer would be asked to trust
+fifteen definitions to check one theorem — the opposite of what a small auditable
+statement is for. The honest disposition is to defer a Helm entry, and to record
+that the obstacle is the size of the statement's vocabulary, not the state of the
+proof.
+
+The measurement is reproducible: elaborate the declaration and classify
+`ConstantInfo.type.getUsedConstants` by defining module.
+
+---
+
 ## 7. Work plan and priorities
 
 **P0 — mandatory**
