@@ -43,7 +43,7 @@ been read. An unrecorded review is indistinguishable from no review.
 
 *4 files, 2,761 lines — 2/4 reviewed*
 
-- [ ] `GOAL.md` — 1,239 lines · documentation
+- [ ] `GOAL.md` — 279 lines · documentation
 - [x] `AGENTS.md` — 615 lines · documentation
 - [ ] `CLAUDE.md` — 615 lines · documentation
 - [x] `README.md` — 292 lines · documentation
