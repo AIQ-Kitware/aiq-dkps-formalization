@@ -1979,7 +1979,7 @@
       "source_kind": "comparison_claim",
       "source_anchor": "Equation (9.8)",
       "completion_obligation": true,
-      "expected_status": "partial_or_wrapper_missing",
+      "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9.8",
       "review_declarations": [
@@ -1988,22 +1988,54 @@
       ],
       "audit_clauses": [
         {
-          "id": "DK-9.8.whole",
-          "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
+          "id": "DK-9.8.weinberger",
+          "description": "The Weinberger sine-square estimate from the Ritz upper and lower bounds and the 500 separation. The method is Weinberger's and the source attributes it; what is compiled is the estimate itself, together with a tripwire showing the naive second-scalar lower bound does not suffice.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section9.weinberger_sine_sq_le_of_coupled_energy",
+            "TauCeti.DavisKahan1970.Section9.tangent_sq_le_of_weinberger_sine_sq",
+            "TauCeti.DavisKahan1970.Section9.naive_second_scalar_lower_bound_tripwire"
+          ]
+        },
+        {
+          "id": "DK-9.8.lehmann",
+          "description": "Lehmann's assertion that the best lower bounds deducible from the stated 2+1 data are the two lower eigenvalues of the displayed 3x3 comparison matrix. The comparison matrix is compiled; the optimality claim is Lehmann's, attributed by the source and not established in it.",
+          "review_declarations": [
+            "TauCeti.DavisKahan1970.Section9.ArrowheadThreeByThree"
+          ]
+        },
+        {
+          "id": "DK-9.8.equation-9-8",
+          "description": "The displayed conclusions of equation (9.8), in both the abstract and free-beam forms.",
           "review_declarations": [
             "TauCeti.DavisKahan1970.Section9.equation_9_8_lower",
-            "TauCeti.DavisKahan1970.Section9.equation_9_8_upper"
+            "TauCeti.DavisKahan1970.Section9.equation_9_8_upper",
+            "TauCeti.DavisKahan.FreeBeam.Model.beam_equation_9_8",
+            "TauCeti.DavisKahan.FreeBeam.Model.beam_equation_9_8_lower",
+            "TauCeti.DavisKahan.FreeBeam.Model.beam_equation_9_8_upper"
           ]
+        },
+        {
+          "id": "DK-9.8.per-vector-bounds",
+          "description": "Theorem 6.3 applied to each trial vector separately, giving the displayed sharper tan phi_k bounds, with the column residual norms they consume.",
+          "review_declarations": [
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_low_lt_printed",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_high_lt_printed",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_low_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamTanPhi_high_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.beamColumn_tangent_le",
+            "TauCeti.DavisKahan.FreeBeam.Model.norm_beamColumnResidual_low",
+            "TauCeti.DavisKahan.FreeBeam.Model.norm_beamColumnResidual_high"
+          ]
+        },
+        {
+          "id": "DK-9.8.commentary",
+          "description": "Worked-example commentary carrying no separate obligation: that phi_k are individual trial-vector angles while theta_1 is the largest subspace angle, the sine-square sum identity relating them, the O(epsilon^4) asymptotic the source records, and the closing remark that the two methods are complementary.",
+          "review_declarations": []
         }
       ],
       "source_specification_sha256": "d07f312692410096396040b41f2fa512775f63b3dd9d52d4b81490409d68368d",
-      "expected_completion_certification": "reopened_math",
-      "known_completion_holes": [
-        {
-          "kind": "math",
-          "detail": "PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition."
-        }
-      ],
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: PDF re-audit restored the lower-bound comparison and O(epsilon^4) asymptotic preceding (9.8). The source-specification defect is closed. Remaining obligations are mathematical: the Weinberger sine-square statement, Lehmann best-lower-bound assertion, restored asymptotic, and the final (9.8) conclusions each require an honest formal disposition.",
       "source_atom_ids": [
         "DK-9.8.weinberger-sine-square",
