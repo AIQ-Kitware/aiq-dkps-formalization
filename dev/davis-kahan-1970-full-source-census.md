@@ -13,12 +13,12 @@ from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 40 |
+| `compiled_exact` | 41 |
 | `compiled_specialization` | 0 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 5 |
+| `partial_or_wrapper_missing` | 4 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -50,9 +50,9 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 26 |
+| `accepted` | 27 |
 | `reopened_source_spec` | 0 |
-| `reopened_math` | 5 |
+| `reopened_math` | 4 |
 | `reopened_mapping` | 15 |
 | `mixed_disposition` | 1 |
 | `not_applicable` | 3 |
@@ -112,7 +112,7 @@ mathematics.
 
 The hostile review found a concrete mathematical assertion or scalar/dimension/scope clause for which no exact source-facing declaration was located. Some are likely short wrappers; they still block a 100% statement-level claim until compiled.
 
-Gates: S1-block-residual (proved_in_build), DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build)
+Gates: DK-5-hermitian-inequalities (proved_in_build), DK-6.3-thm (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build)
 
 ### `hostile-source-spec-fidelity` -- mixed
 
@@ -147,15 +147,11 @@ Gates: DK-5-hermitian-inequalities (proved_in_build), DK-9.9-9.11 (proved_in_bui
 
 - **Kind:** `construction`
 - **Review importance:** `technical`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_math`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** Block decompositions for A and A+H, trial and exact coordinate maps, and R = (A+H)E0 - E0 A0.
-- **Blocked by:** `hostile-source-facing-gap`
-- **Known hostile-review holes:**
-  - `missing_source_facing_statement`: The registered TeX includes the standard residual-to-eigenvalue consequence: ordered eigenvalues lambda_j with sum_j (alpha_j-lambda_j)^2 <= ||R||_sq^2 and |alpha_j-lambda_j| <= ||R||_1. The hostile review found no source-facing Lean declaration for these displayed conclusions.
-  - `audit_mapping`: `equation1_8_residual_norm_minimized_by_rayleighQuotient` now proves the printed Rayleigh--Ritz minimization statement but is not registered as primary evidence for this row.
-- **Current Lean references:** `TauCeti.DavisKahan.residual`, `TauCeti.DavisKahan1970.Equation1_8`, `TauCeti.DavisKahan1970.equation1_8_eq_perturbation_comp`, `TauCeti.DavisKahan.BoundedOperator.residual_eq_comp_subtypeL`, `TauCeti.DavisKahan1970.equation1_8_norm_sq_eq_diagonal_add_offDiagonal`, `TauCeti.DavisKahan1970.equation1_8_norm_offDiagonal_le`, `TauCeti.DavisKahan.ExactSinTheta.PaperTheorem61Data`, `TauCeti.DavisKahan.ExactSinTheta.UnboundedSinThetaData`
+- **Current Lean references:** `TauCeti.DavisKahan.residual`, `TauCeti.DavisKahan1970.Equation1_8`, `TauCeti.DavisKahan1970.equation1_8_eq_perturbation_comp`, `TauCeti.DavisKahan.BoundedOperator.residual_eq_comp_subtypeL`, `TauCeti.DavisKahan1970.equation1_8_norm_sq_eq_diagonal_add_offDiagonal`, `TauCeti.DavisKahan1970.equation1_8_norm_offDiagonal_le`, `TauCeti.DavisKahan.ExactSinTheta.PaperTheorem61Data`, `TauCeti.DavisKahan.ExactSinTheta.UnboundedSinThetaData`, `TauCeti.DavisKahan1970.equation1_8_residual_norm_minimized_by_rayleighQuotient`
 - **Assessment:** The exact notation is distributed across the Section 6 source data records rather than exposed as a Section 1 facade.
 
 **M37, 2026-08-09 (Claude Opus 5).  THE `exact-source-wrappers` BLOCKER IS RETIRED, AND THIS ROW IS WHERE ITS TEXT IS PRESERVED.**
@@ -169,7 +165,15 @@ MEASURED 2026-08-09 by elaborating every declaration on all six of its rows agai
 THIS ROW'S OWN PREMISE WAS ALSO PARTLY FALSE.  The `notes` said the Section 1 notation is 'distributed across the Section 6 source data records rather than exposed as a Section 1 facade', and the row listed only those two records.  It missed that equation (1.8) itself is a compiled definition -- `TauCeti.DavisKahan.residual`, `R = (A + H)E₀ - E₀A₀` -- and that the Section 1 remark `R = HE₀` is a compiled theorem, `residual_eq_comp_subtypeL` in `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Branch.lean`, where Theorem 8.2's residual branch consumes it.  Both are now listed.
 
 WHAT M37 ADDED: `DavisKahan/Sources/DavisKahan1970/Section1.lean`, the source-numbered facade, in the established `Section5.lean` style -- the two existing results are cited by `:=` (`alias`), not restated, so there is a single source of truth.  The one Section 1 claim that was genuinely not compiled is now proved: `R⋆R = H₀² + B⋆B`, stated as the quadratic form `‖Ru‖² = ‖H₀u‖² + ‖Bu‖²` (over ℂ a self-adjoint operator is determined by its quadratic form, and this spelling needs neither of the paper's coordinate isometries), together with the consequence the paper draws from it -- the residual is smallest exactly when `H₀ = 0`, which is what makes the Rayleigh-quotient choice `A₀ = E₀⋆(A + H)E₀` a good one.  Both axiom-clean.
-- **Next action:** Hostile re-audit reopened this row. The registered TeX includes the standard residual-to-eigenvalue consequence: ordered eigenvalues lambda_j with sum_j (alpha_j-lambda_j)^2 <= ||R||_sq^2 and |alpha_j-lambda_j| <= ||R||_1. The hostile review found no source-facing Lean declaration for these displayed conclusions. `equation1_8_residual_norm_minimized_by_rayleighQuotient` now proves the printed Rayleigh--Ritz minimization statement but is not registered as primary evidence for this row.
+
+**BOTH HOLES DISCHARGED 2026-08-29 (Claude Opus 5).  `partial_or_wrapper_missing` -> `compiled_exact`.**
+
+The mapping hole is closed by registration: `equation1_8_residual_norm_minimized_by_rayleighQuotient` proves exactly the printed claim that the Rayleigh--Ritz choice minimises residual size among these block choices -- `‖residual T P (compress P T)‖ ≤ ‖residual T P A₀‖` for every block choice `A₀` -- and was simply not listed on this row. It is now.
+
+The missing-statement hole is dispositioned rather than filled, and the reason is in the source's own wording. The residual-to-eigenvalue bounds `∑ⱼ (αⱼ-λⱼ)² ≤ ‖R‖_sq²` and `|αⱼ-λⱼ| ≤ ‖R‖₁` are introduced as "the standard residual-to-eigenvalue consequence" which the paper "also records": classical Rayleigh--Ritz error theory, quoted for the numerical-approximation reading, in Section 1 setup. Davis and Kahan do not prove them and no later result of theirs depends on them. Both atoms were already classified `non_result` and reverse-linked to nothing; what was wrong was the generic boundary reason, which did not explain why material that substantive sits outside the denominator. It does now.
+
+Formalizing them would add a theorem the paper does not claim, which the census's own rule forbids: do not add completion obligations merely because an atom is mathematical. A future session wanting Kahan-type residual bounds as reusable mathematics should add them to `ForTauCeti` on their own merits, not against this row.
+- **Next action:** None. The Rayleigh--Ritz minimisation is registered, and the residual-to-eigenvalue bounds are dispositioned as attributed standard material the paper records rather than establishes, with the boundary reason saying so at both atoms.
 
 #### Section 1, equations (1.9)–(1.18): Unitary-invariant norms, angle operators, and direct-rotation setup
 

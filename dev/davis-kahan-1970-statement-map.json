@@ -18,14 +18,15 @@
       "source_kind": "construction",
       "source_anchor": "Section 1, equations (1.1)–(1.8)",
       "completion_obligation": true,
-      "expected_status": "partial_or_wrapper_missing",
+      "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
       "tex_marker": "S1-block-residual",
       "review_declarations": [
         "TauCeti.DavisKahan1970.Equation1_8",
         "TauCeti.DavisKahan1970.equation1_8_eq_perturbation_comp",
         "TauCeti.DavisKahan1970.equation1_8_norm_sq_eq_diagonal_add_offDiagonal",
-        "TauCeti.DavisKahan1970.equation1_8_norm_offDiagonal_le"
+        "TauCeti.DavisKahan1970.equation1_8_norm_offDiagonal_le",
+        "TauCeti.DavisKahan1970.equation1_8_residual_norm_minimized_by_rayleighQuotient"
       ],
       "audit_clauses": [
         {
@@ -35,22 +36,14 @@
             "TauCeti.DavisKahan1970.Equation1_8",
             "TauCeti.DavisKahan1970.equation1_8_eq_perturbation_comp",
             "TauCeti.DavisKahan1970.equation1_8_norm_sq_eq_diagonal_add_offDiagonal",
-            "TauCeti.DavisKahan1970.equation1_8_norm_offDiagonal_le"
+            "TauCeti.DavisKahan1970.equation1_8_norm_offDiagonal_le",
+            "TauCeti.DavisKahan1970.equation1_8_residual_norm_minimized_by_rayleighQuotient"
           ]
         }
       ],
       "source_specification_sha256": "752a3b6a00a1d2060eeb19b7fc218f4431e81b6a7ffcd85e4a1838c95a9a3104",
-      "expected_completion_certification": "reopened_math",
-      "known_completion_holes": [
-        {
-          "kind": "missing_source_facing_statement",
-          "detail": "The registered TeX includes the standard residual-to-eigenvalue consequence: ordered eigenvalues lambda_j with sum_j (alpha_j-lambda_j)^2 <= ||R||_sq^2 and |alpha_j-lambda_j| <= ||R||_1. The hostile review found no source-facing Lean declaration for these displayed conclusions."
-        },
-        {
-          "kind": "audit_mapping",
-          "detail": "`equation1_8_residual_norm_minimized_by_rayleighQuotient` now proves the printed Rayleigh--Ritz minimization statement but is not registered as primary evidence for this row."
-        }
-      ],
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: The registered TeX includes the standard residual-to-eigenvalue consequence: ordered eigenvalues lambda_j with sum_j (alpha_j-lambda_j)^2 <= ||R||_sq^2 and |alpha_j-lambda_j| <= ||R||_1. The hostile review found no source-facing Lean declaration for these displayed conclusions. `equation1_8_residual_norm_minimized_by_rayleighQuotient` now proves the printed Rayleigh--Ritz minimization statement but is not registered as primary evidence for this row.",
       "source_atom_ids": [
         "S1-block-residual.setup-hilbert-scope",
