@@ -13,12 +13,12 @@ from it.
 
 | Status | Count |
 | --- | ---: |
-| `compiled_exact` | 42 |
+| `compiled_exact` | 43 |
 | `compiled_specialization` | 0 |
 | `compiled_general_infrastructure` | 0 |
 | `proof_written` | 0 |
 | `candidate_under_repair` | 0 |
-| `partial_or_wrapper_missing` | 3 |
+| `partial_or_wrapper_missing` | 2 |
 | `not_represented` | 0 |
 | `not_started` | 0 |
 | `resolved_by_modern_development` | 1 |
@@ -50,9 +50,9 @@ completion obligations count toward hostile-certified 100% coverage.
 
 | Completion certification | Count |
 | --- | ---: |
-| `accepted` | 28 |
+| `accepted` | 29 |
 | `reopened_source_spec` | 0 |
-| `reopened_math` | 3 |
+| `reopened_math` | 2 |
 | `reopened_mapping` | 15 |
 | `mixed_disposition` | 1 |
 | `not_applicable` | 3 |
@@ -112,7 +112,7 @@ mathematics.
 
 The hostile review found a concrete mathematical assertion or scalar/dimension/scope clause for which no exact source-facing declaration was located. Some are likely short wrappers; they still block a 100% statement-level claim until compiled.
 
-Gates: DK-5-hermitian-inequalities (proved_in_build), DK-9.8 (proved_in_build), DK-9-infinite-residual-counterexample (proved_in_build)
+Gates: DK-5-hermitian-inequalities (proved_in_build), DK-9.8 (proved_in_build)
 
 ### `hostile-source-spec-fidelity` -- mixed
 
@@ -3324,14 +3324,11 @@ TRIPWIRE AGAINST THE TEMPTING FALSE SHORTCUT.  `naive_second_scalar_lower_bound_
 
 - **Kind:** `example`
 - **Review importance:** `supporting`
-- **Status:** `partial_or_wrapper_missing`
+- **Status:** `compiled_exact`
 - **Verification:** `proved_in_build`
-- **Hostile completion certification:** `reopened_math`
+- **Hostile completion certification:** `accepted`
 - **Mathematics:** An l2 trial vector has a useful Rayleigh quotient but lies outside the perturbed operator domain, so residual-based theorems do not apply while lower-bound methods still do.
-- **Blocked by:** `hostile-source-facing-gap`
-- **Known hostile-review holes:**
-  - `missing_source_facing_statement`: The source says an arbitrarily small modification repairs the domain defect. Lean proves finite truncations lie in the operator domain and agree on every fixed prefix, but the hostile review did not find a norm-convergence/arbitrarily-small-perturbation theorem for those truncations.
-- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one`, `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_partial_energy`, `TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy`, `TauCeti.DavisKahan1970.Section9.diagonalOperator`, `TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable`, `TauCeti.DavisKahan1970.Section9.truncatedTrial_mem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_domain`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_isSelfAdjoint`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_isSymmetric`, `TauCeti.DavisKahan1970.Section9.dense_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_sq`, `TauCeti.DavisKahan1970.Section9.geometricTrial_norm_sq`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_form`, `TauCeti.DavisKahan1970.Section9.geometricTrial_rayleighQuotient`, `TauCeti.DavisKahan1970.Section9.geometricTrial_normalizedForm_apply`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_normalizedForm`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_normalizedFormTail`, `TauCeti.DavisKahan1970.Section9.geometricTrial_normalizedForm_zero`, `TauCeti.DavisKahan1970.Section9.geometricTrial_normalizedForm_split`, `TauCeti.DavisKahan1970.Section9.firstEigenvector`, `TauCeti.DavisKahan1970.Section9.firstEigenvector_def`, `TauCeti.DavisKahan1970.Section9.firstEigenvector_apply`, `TauCeti.DavisKahan1970.Section9.norm_firstEigenvector`, `TauCeti.DavisKahan1970.Section9.firstEigenvector_mem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_firstEigenvector`, `TauCeti.DavisKahan1970.Section9.inner_geometricTrial_firstEigenvector`, `TauCeti.DavisKahan1970.Section9.cos_angle_geometricTrial`, `TauCeti.DavisKahan1970.Section9.sin_angle_geometricTrial`, `TauCeti.DavisKahan1970.Section9.geometricTrial_weinberger_sin_sq_le`, `TauCeti.DavisKahan1970.Section9.geometricTrial_weinberger_best_sin_sq_le`, `TauCeti.DavisKahan1970.Section9.geometricTrial_weinberger_best_sin_le`, `TauCeti.LinearPMap.lpDiagonal`, `TauCeti.LinearPMap.lpDiagonal_isSelfAdjoint`, `TauCeti.LinearPMap.lpDiagonal_isSymmetric`, `TauCeti.LinearPMap.dense_lpDiagonal_domain`, `TauCeti.LinearPMap.adjoint_domain_le_lpDiagonal_domain`, `TauCeti.LinearPMap.lpDiagonalDomain`, `TauCeti.LinearPMap.mem_lpDiagonalDomain_iff`, `TauCeti.LinearPMap.lpDiagonal_domain`, `TauCeti.LinearPMap.lpDiagonal_apply`, `TauCeti.LinearPMap.single_mem_lpDiagonal_domain`, `TauCeti.LinearPMap.lpDiagonal_single`
+- **Current Lean references:** `TauCeti.DavisKahan1970.Section9.cos_angle_geometricTrial`, `TauCeti.DavisKahan1970.Section9.dense_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.diagonalOperator`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_domain`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_firstEigenvector`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_isSelfAdjoint`, `TauCeti.DavisKahan1970.Section9.diagonalOperator_isSymmetric`, `TauCeti.DavisKahan1970.Section9.exists_truncatedTrial_mem_domain_and_dist_lt`, `TauCeti.DavisKahan1970.Section9.firstEigenvector`, `TauCeti.DavisKahan1970.Section9.firstEigenvector_apply`, `TauCeti.DavisKahan1970.Section9.firstEigenvector_def`, `TauCeti.DavisKahan1970.Section9.firstEigenvector_mem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_form`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_normalizedForm`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_normalizedFormTail`, `TauCeti.DavisKahan1970.Section9.geometricTrial_hasSum_sq`, `TauCeti.DavisKahan1970.Section9.geometricTrial_norm_sq`, `TauCeti.DavisKahan1970.Section9.geometricTrial_normalizedForm_apply`, `TauCeti.DavisKahan1970.Section9.geometricTrial_normalizedForm_split`, `TauCeti.DavisKahan1970.Section9.geometricTrial_normalizedForm_zero`, `TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.geometricTrial_rayleighQuotient`, `TauCeti.DavisKahan1970.Section9.geometricTrial_weinberger_best_sin_le`, `TauCeti.DavisKahan1970.Section9.geometricTrial_weinberger_best_sin_sq_le`, `TauCeti.DavisKahan1970.Section9.geometricTrial_weinberger_sin_sq_le`, `TauCeti.DavisKahan1970.Section9.inner_geometricTrial_firstEigenvector`, `TauCeti.DavisKahan1970.Section9.norm_firstEigenvector`, `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_eq_one`, `TauCeti.DavisKahan1970.Section9.rawDiagonalImage_partial_energy`, `TauCeti.DavisKahan1970.Section9.sin_angle_geometricTrial`, `TauCeti.DavisKahan1970.Section9.tendsto_norm_truncatedTrial_sub_geometricTrial`, `TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy`, `TauCeti.DavisKahan1970.Section9.truncatedTrial_mem_diagonalDomain`, `TauCeti.DavisKahan1970.Section9.truncatedTrial_sub_geometricTrial_apply`, `TauCeti.DavisKahan1970.Section9.truncatedTrial_sub_geometricTrial_hasSum_sq`, `TauCeti.LinearPMap.adjoint_domain_le_lpDiagonal_domain`, `TauCeti.LinearPMap.dense_lpDiagonal_domain`, `TauCeti.LinearPMap.lpDiagonal`, `TauCeti.LinearPMap.lpDiagonalDomain`, `TauCeti.LinearPMap.lpDiagonal_apply`, `TauCeti.LinearPMap.lpDiagonal_domain`, `TauCeti.LinearPMap.lpDiagonal_isSelfAdjoint`, `TauCeti.LinearPMap.lpDiagonal_isSymmetric`, `TauCeti.LinearPMap.lpDiagonal_single`, `TauCeti.LinearPMap.mem_lpDiagonalDomain_iff`, `TauCeti.LinearPMap.single_mem_lpDiagonal_domain`
 - **Assessment:** The pointwise constant image and divergent finite partial energies are formalized algebraically, together with an explicit finite-support truncation repair that agrees on arbitrary prescribed prefixes.
 
 STATUS CORRECTED 2026-08-04: `candidate_under_repair` -> `compiled_specialization`. The sequence lemmas are compiled, axiom-clean and unconditional, but stated for coordinate sequences rather than in the abstract operator setting the source example describes.
@@ -3374,7 +3371,15 @@ THE WEINBERGER ESTIMATE ALREADY EXISTED and was grounded on rather than reproved
 A COORDINATOR PREMISE WAS WRONG: the brief said to put the diagonal operator in `ForTauCeti`'s `LinearPMap` diagonal/multiplication layer `if it has no such theorem`.  THERE IS NO SUCH LAYER -- none of the 25 modules under `ForTauCeti/.../LinearPMap/` concerns multiplication operators, and the only diagonal layer in `ForTauCeti` is the BOUNDED `diagOpLp` in `ApproximationNumber/DiagonalSequence.lean`, which requires a uniformly bounded multiplier and so cannot serve the unbounded case.  The module was created.
 
 RECORDED, not a regression: this work moves the per-declaration `@[expose]` count from 162 to 164 (two documented api-design carve-outs, `lpDiagonalDomain` and `lpDiagonal`, without which `lpDiagonal_domain`/`lpDiagonal_apply` are not provable as exported theorems).  `check_expose_ratchet.py --check` exits 1 BOTH BEFORE AND AFTER -- the count was already 16x its baseline of 10 at HEAD -- so this is drift in a long-broken ratchet, not a new failure.  The submission ladder was likewise already stale at HEAD (96 findings, 97 after).  Both are recorded for adjudication rather than absorbed silently.
-- **Next action:** Hostile re-audit reopened this row. The source says an arbitrarily small modification repairs the domain defect. Lean proves finite truncations lie in the operator domain and agree on every fixed prefix, but the hostile review did not find a norm-convergence/arbitrarily-small-perturbation theorem for those truncations.
+
+**THE ARBITRARILY-SMALL REPAIR IS COMPILED 2026-08-29 (Claude Opus 5).  `partial_or_wrapper_missing` -> `compiled_exact`.**
+
+The hole was precise: Lean had the truncations lying in the domain and agreeing on every fixed prefix, but not the source's actual claim, that an arbitrarily small modification repairs the domain defect. Prefix agreement is pointwise and does not by itself say the repair is cheap in norm.
+
+`exists_truncatedTrial_mem_domain_and_dist_lt` is that claim: for every tolerance there is a truncation inside `diagonalDomain` within that tolerance of the trial vector. It rests on `tendsto_norm_truncatedTrial_sub_geometricTrial`, and the computation is exact rather than an estimate -- `truncatedTrial_sub_geometricTrial_hasSum_sq` gives the error's squared norm as the geometric tail `mu^(2N)/(1 - mu^2)`, since the difference vanishes below the cut and is `-mu^n` above it.
+
+This is what makes the example say what the source wants. The trial vector's failure to lie in the perturbed operator's domain is not stable: it obstructs the residual-based theorems, which need the vector itself, while leaving the lower-bound methods available, since those tolerate an arbitrarily small move into the domain.
+- **Next action:** None. The domain defect, the useful Rayleigh quotient, the truncations' membership and prefix agreement, and the arbitrarily small norm repair are all compiled, the last with the exact geometric tail rather than a bound.
 
 #### Equations (9.9)–(9.11) and final bounds: Individual eigenvector identification inside a cluster
 

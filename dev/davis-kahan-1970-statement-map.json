@@ -2014,7 +2014,7 @@
       "source_kind": "example",
       "source_anchor": "Section 9, l2 example after (9.8)",
       "completion_obligation": true,
-      "expected_status": "partial_or_wrapper_missing",
+      "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-9-infinite-residual-counterexample",
       "review_declarations": [
@@ -2023,7 +2023,8 @@
         "TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy",
         "TauCeti.DavisKahan1970.Section9.diagonalOperator",
         "TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain",
-        "TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable"
+        "TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable",
+        "TauCeti.DavisKahan1970.Section9.exists_truncatedTrial_mem_domain_and_dist_lt"
       ],
       "audit_clauses": [
         {
@@ -2035,18 +2036,14 @@
             "TauCeti.DavisKahan1970.Section9.truncatedDiagonalImage_energy",
             "TauCeti.DavisKahan1970.Section9.diagonalOperator",
             "TauCeti.DavisKahan1970.Section9.geometricTrial_notMem_diagonalDomain",
-            "TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable"
+            "TauCeti.DavisKahan1970.Section9.geometricTrial_form_summable",
+            "TauCeti.DavisKahan1970.Section9.exists_truncatedTrial_mem_domain_and_dist_lt"
           ]
         }
       ],
       "source_specification_sha256": "2b28098ba69b0cd83e5755b950b4a4eda9cc7e80f3a2a6d95d46921271d8c91f",
-      "expected_completion_certification": "reopened_math",
-      "known_completion_holes": [
-        {
-          "kind": "missing_source_facing_statement",
-          "detail": "The source says an arbitrarily small modification repairs the domain defect. Lean proves finite truncations lie in the operator domain and agree on every fixed prefix, but the hostile review did not find a norm-convergence/arbitrarily-small-perturbation theorem for those truncations."
-        }
-      ],
+      "expected_completion_certification": "accepted",
+      "known_completion_holes": [],
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: The source says an arbitrarily small modification repairs the domain defect. Lean proves finite truncations lie in the operator domain and agree on every fixed prefix, but the hostile review did not find a norm-convergence/arbitrarily-small-perturbation theorem for those truncations.",
       "source_atom_ids": [
         "DK-9-infinite-residual-counterexample.l2-geometric-vector-example",
