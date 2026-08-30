@@ -181,6 +181,12 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.tanTwoTheta_headline_generic
 #check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm
 #check @TauCeti.DavisKahan1970.ReflectionIntertwines
+#check @TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq
+#check @TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart
+#check @TauCeti.DavisKahan.corner_offDiagonalPart_sq
+#check @TauCeti.DavisKahan.gram_unboundedReflectionTangent
+#check @TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal
+#check @TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact

@@ -723,7 +723,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:502`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:511`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1017,7 +1017,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:260`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:261`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1029,13 +1029,49 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.ReflectionIntertwines`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:413`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:414`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:428`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:429`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:180`, `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/ReflectionBlocks.lean:177`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:189`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.corner_offDiagonalPart_sq`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:216`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.gram_unboundedReflectionTangent`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:251`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:323`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:352`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
