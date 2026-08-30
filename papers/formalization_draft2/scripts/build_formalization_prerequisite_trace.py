@@ -2,7 +2,7 @@
 """Trace environment-visible project-local prerequisites of selected declarations.
 
 This tool is intentionally downstream of Lean elaboration. It reuses the repository's
-``tools/leanq/src/leanq/lean/decl_index.lean`` indexer, which records constants exposed by
+``leanq``'s ``decl_index.lean`` indexer, which records constants exposed by
 imported declaration types and retained values. This is substantially more specific than
 import closure, but imported theorem proof terms can be opaque or otherwise omit named
 proof-internal helpers. The resulting reachability graph is therefore a conservative
@@ -34,7 +34,36 @@ HERE = pathlib.Path(__file__).resolve().parent
 PAPER_DIR = HERE.parent
 REPO = PAPER_DIR.parent.parent
 DEFAULT_CONFIG = PAPER_DIR / "data" / "formalization_prerequisite_roots_20260817.json"
-DECL_INDEX = REPO / "tools" / "leanq" / "src" / "leanq" / "lean" / "decl_index.lean"
+def _decl_index_path() -> pathlib.Path:
+    """The Lean declaration exporter, from the installed `leanq` package.
+
+    It used to be vendored at `tools/leanq/src/leanq/lean/decl_index.lean`; that
+    copy was removed when the tooling moved to
+    `aiq-lean-formalization-tools`.  The provenance block below hashes whatever
+    this resolves to, so a manuscript rebuild still records exactly which
+    exporter produced its numbers.
+    """
+    try:
+        from importlib.resources import files
+
+        return pathlib.Path(str(files("leanq") / "lean" / "decl_index.lean"))
+    except Exception as exc:  # pragma: no cover - environment guidance
+        raise SystemExit(
+            "the leanq declaration exporter is unavailable; install the tooling with\n"
+            "  python3 -m pip install -e submodules/aiq-lean-formalization-tools\n"
+            f"({exc})"
+        )
+
+
+DECL_INDEX = _decl_index_path()
+
+
+def _decl_index_provenance() -> str:
+    """How to name the exporter in a provenance block."""
+    try:
+        return DECL_INDEX.relative_to(REPO).as_posix()
+    except ValueError:
+        return "leanq/lean/decl_index.lean (installed aiq-lean-formalization-tools)"
 OUT = PAPER_DIR / "generated"
 DEFAULT_OUTPUT_STEM = "formalization_prerequisite"
 
@@ -153,7 +182,7 @@ def _module_label(row: dict[str, Any]) -> str:
 
 def index_project_declarations(config: dict[str, Any]) -> dict[str, dict[str, Any]]:
     if not DECL_INDEX.exists():
-        raise SystemExit(f"missing compiler indexer: {DECL_INDEX.relative_to(REPO)}")
+        raise SystemExit(f"missing compiler indexer: {DECL_INDEX}")
 
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".modules", delete=False) as f:
         modules_path = pathlib.Path(f.name)
@@ -567,7 +596,7 @@ def main() -> None:
         "lean_toolchain": (REPO / "lean-toolchain").read_text(encoding="utf-8").strip(),
         "config_path": config_path.relative_to(REPO).as_posix(),
         "config_sha256": sha256_file(config_path),
-        "decl_index_path": DECL_INDEX.relative_to(REPO).as_posix(),
+        "decl_index_path": _decl_index_provenance(),
         "decl_index_sha256": sha256_file(DECL_INDEX),
         "project_lean_source_sha256": source_hash,
         "project_lean_source_files_hashed": source_count,

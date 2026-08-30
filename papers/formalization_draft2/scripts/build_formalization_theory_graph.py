@@ -44,7 +44,36 @@ DECL_OVERRIDE_PATH = DATA / "formalization_declaration_theory_overrides_20260817
 MODULE_INVENTORY_PATH = DATA / "formalization_module_inventory_20260817.csv"
 EVIDENCE_PATH = DATA / "formalization_theory_evidence_links_20260817.csv"
 MANIFEST_PATH = DATA / "formalization_trace_manifest_20260817.json"
-DECL_INDEX = REPO / "tools" / "leanq" / "src" / "leanq" / "lean" / "decl_index.lean"
+def _decl_index_path() -> pathlib.Path:
+    """The Lean declaration exporter, from the installed `leanq` package.
+
+    It used to be vendored at `tools/leanq/src/leanq/lean/decl_index.lean`; that
+    copy was removed when the tooling moved to
+    `aiq-lean-formalization-tools`.  The provenance block below hashes whatever
+    this resolves to, so a manuscript rebuild still records exactly which
+    exporter produced its numbers.
+    """
+    try:
+        from importlib.resources import files
+
+        return pathlib.Path(str(files("leanq") / "lean" / "decl_index.lean"))
+    except Exception as exc:  # pragma: no cover - environment guidance
+        raise SystemExit(
+            "the leanq declaration exporter is unavailable; install the tooling with\n"
+            "  python3 -m pip install -e submodules/aiq-lean-formalization-tools\n"
+            f"({exc})"
+        )
+
+
+DECL_INDEX = _decl_index_path()
+
+
+def _decl_index_provenance() -> str:
+    """How to name the exporter in a provenance block."""
+    try:
+        return DECL_INDEX.relative_to(REPO).as_posix()
+    except ValueError:
+        return "leanq/lean/decl_index.lean (installed aiq-lean-formalization-tools)"
 
 
 def read_csv(path: pathlib.Path) -> list[dict[str, str]]:
@@ -120,7 +149,7 @@ def _module_candidates(row: dict[str, Any]) -> list[str]:
 def compiler_index(scope: dict[str, Any]) -> dict[str, dict[str, Any]]:
     """Run the existing leanq indexer and merge benign duplicate module claims."""
     if not DECL_INDEX.exists():
-        raise SystemExit(f"missing compiler indexer: {DECL_INDEX.relative_to(REPO)}")
+        raise SystemExit(f"missing compiler indexer: {DECL_INDEX}")
     with tempfile.NamedTemporaryFile("w", encoding="utf-8", suffix=".modules", delete=False) as f:
         modules_path = pathlib.Path(f.name)
         for module in scope["import_modules"]:
@@ -374,7 +403,7 @@ def refresh_snapshot(scope: dict[str, Any], *, skip_build: bool) -> None:
     manifest = {
         "schema": "formalization-draft2/formalization-trace-snapshot/v1",
         "snapshot_date": scope["snapshot_date"],
-        "source": "Compiler-backed declaration dependencies from tools/leanq decl_index.lean.",
+        "source": "Compiler-backed declaration dependencies from the leanq decl_index.lean exporter.",
         "counts": {
             "source_units": len({(r["corpus"], r["source_id"]) for r in roots}),
             "yws_source_units": len({r["source_id"] for r in roots if r["corpus"] == "YWS2015"}),
@@ -390,7 +419,7 @@ def refresh_snapshot(scope: dict[str, Any], *, skip_build: bool) -> None:
         "compiler_provenance": {
             "git_head": git_value("rev-parse", "HEAD"),
             "lean_toolchain": lean_toolchain,
-            "decl_index_path": DECL_INDEX.relative_to(REPO).as_posix(),
+            "decl_index_path": _decl_index_provenance(),
             "decl_index_sha256": sha256_file(DECL_INDEX),
             "project_lean_source_files_hashed": source_count,
             "project_lean_source_sha256": source_sha,

@@ -151,14 +151,30 @@ lake build DavisKahan.Experimental
 ```
 
 
-The gates are Python and run separately. Do not run `lake` at the same time —
-five gates shell out to it and a concurrent build makes them report failures that
-are not real:
+The gates are Python and run separately. Their engines are the installed
+`aiq-lean-formalization-tools` package, developed in
+`submodules/aiq-lean-formalization-tools` and installed once:
+
+```bash
+python3 -m pip install -e submodules/aiq-lean-formalization-tools
+```
+
+Nothing in the Lean build needs it, so a clone with no submodules initialised
+still builds; a gate that cannot import it says so and exits rather than passing.
+
+Do not run `lake` at the same time as the suite — several gates shell out to it
+and a concurrent build makes them report failures that are not real:
 
 ```bash
 aiq-lean gates run --config dev/policy/gate-suite.yaml          # all of them
 aiq-lean gates run --config dev/policy/gate-suite.yaml --fast   # skip the ones that build Lean
+aiq-lean gates list --config dev/policy/gate-suite.yaml         # what they are
 ```
+
+`dev/policy/` holds what this repository decides — layer and namespace rules,
+ratchet thresholds, accepted findings, the gate list. See
+[`dev/policy/README.md`](dev/policy/README.md) and the tooling section of
+[`AGENTS.md`](AGENTS.md).
 
 ## Formalization scope
 
