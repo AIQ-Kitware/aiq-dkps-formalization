@@ -193,9 +193,19 @@ at a pinned SHA, and `repository.substantive_formalization`. What it keeps, and 
 is still load-bearing: **no Git submodules anywhere**, because Lake clones a
 dependency with a plain clone and does not initialise submodules.
 
-The skeletons under `palomar/<entry>/wrapper/` are kept as the metadata and
+The skeletons under `registry/<entry>/wrapper/` are kept as the metadata and
 comparator-config source that the extraction copies from. They are no longer a
 description of the submitted repository's shape.
+
+**Directory renamed 2026-08-29: `palomar/` became `registry/`.** It sat beside
+the Lean library directory `Palomar/`, and two paths differing only in case are
+one path on a case-insensitive filesystem, so a Windows or default-macOS checkout
+could conflate them or refuse operations. Both repositories now use `Palomar/`
+for Lean source and `registry/` for submission configuration and metadata. The
+rename was done with `git mv palomar registry`, a genuine rename rather than a
+case-only one, precisely because Git handles case-only renames badly on those
+filesystems. Palomar selects both paths explicitly, so nothing about the
+submission depends on the directory name.
 
 ### 5.1 onward: the superseded thin-wrapper design
 
@@ -221,7 +231,7 @@ fetchable and buildable as a Lake git dependency at the submitted commit.**
 - Roadmap/review checkers degrade to an honest `SKIP`/`UNAVAILABLE` when their
   external checkout is absent, rather than silently passing.
 - Root `formalization.yaml` is valid v0.4 describing the whole development.
-- `Palomar/<Entry>/{Challenge,Solution}.lean` and `palomar/<entry>/comparator.json`
+- `Palomar/<Entry>/{Challenge,Solution}.lean` and `registry/<entry>/comparator.json`
   live here so they can be verified locally with real Comparator.
 - Goal: **zero gitlinks on `main`**. If a workflow genuinely still needs one, it
   stays and the branch drops it; the delta is then a `.gitmodules` deletion plus
@@ -248,7 +258,7 @@ README.md              the informal account
 resolves the same whether the library is local or arrives as a Lake dependency. Only
 the lakefile differs. Keep it that way — it is what makes extraction mechanical.
 
-Prepare the wrapper skeletons under `palomar/wrappers/<entry>/` in this repo so the
+Prepare the wrapper skeletons under `registry/wrappers/<entry>/` in this repo so the
 extraction step is a copy, not a rewrite.
 
 Fallback if extraction proves awkward: submitting this repository directly with a
@@ -390,8 +400,8 @@ with `lean4export` and compared, the independent NanoDa kernel accepting the
 solution, and Lean's own kernel accepting it.
 
 ```
-PASS   palomar/yws-2015/comparator.json
-PASS   palomar/dk-1970/comparator.json
+PASS   registry/yws-2015/comparator.json
+PASS   registry/dk-1970/comparator.json
 ```
 
 Also verified: challenge import closures reach nothing in this repository; both
@@ -500,7 +510,7 @@ The measurement is reproducible: elaborate the declaration and classify
    `git ls-files -s | awk '$1 == 160000'` is empty. Full build. Own commit.
 7. Migrate root `formalization.yaml` to v0.4 (§8). Own commit.
 8. `Palomar/YuWangSamworth2015/{Challenge,Solution}.lean` +
-   `palomar/yws-2015/comparator.json` + wrapper skeleton, verified.
+   `registry/yws-2015/comparator.json` + wrapper skeleton, verified.
 9. `scripts/check_palomar_readiness.py` (static) and `scripts/verify_palomar.sh`
    (real Comparator + lean4export + NanoDa + Landrun where supported), per D3.
 10. Clean-clone verification: a fresh checkout at the candidate commit builds with no
@@ -518,7 +528,7 @@ The measurement is reproducible: elaborate the declaration and classify
     - Acharyya 2025 — corrected finite bound with `R` explicit (T1), then the
       one-step spectral-norm wrapper (C1).
     - Helm 2025 — literal Equation (2) wrapper (EQ2), then the bridge hypothesis.
-13. Entry narratives (§9) and `palomar/README.md`.
+13. Entry narratives (§9) and `registry/README.md`.
 
 **P2 — if healthy time remains**
 

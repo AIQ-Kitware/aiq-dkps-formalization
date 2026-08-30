@@ -797,25 +797,25 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:166`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:167`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:254`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:255`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:344`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:345`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:404`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:405`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -839,7 +839,31 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:603`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:604`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC`
+
+Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:262`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers`
+
+Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:295`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock`
+
+Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:335`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_angleOperator`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:664`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

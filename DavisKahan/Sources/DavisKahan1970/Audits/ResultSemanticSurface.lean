@@ -155,6 +155,10 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed
 #check @TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm
+#check @TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_angleOperator
+#check @TauCeti.DavisKahan.sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC
+#check @TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers
+#check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock
 #check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm
 #check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real
 #check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative
