@@ -26,6 +26,14 @@ import pathlib
 import re
 import sys
 
+try:
+    from aiq_lean_tools.lean_source import scan_lean_project, strip_comments
+except ImportError:  # pragma: no cover - environment guidance, not logic
+    raise SystemExit(
+        "aiq_lean_tools is not installed. Run:\n"
+        "  python3 -m pip install -e submodules/aiq-lean-formalization-tools"
+    )
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 # Only DavisKahan uses this reachability policy; ForTauCeti is glob-built.
 LIB_DIRS = ("DavisKahan",)
@@ -45,17 +53,6 @@ AUDITED_TARGET_FLOOR = 43
 # claimed proofs: each one documents its own exclusion in its file header.
 DELIBERATELY_UNBUILT = {}
 
-IMPORT = re.compile(r"^\s*import\s+([A-Za-z0-9_.]+)", re.M)
-BLOCK_COMMENT = re.compile(r"/-.*?-/", re.S)
-LINE_COMMENT = re.compile(r"--.*?$", re.M)
-ADMISSION = re.compile(r"\b(?:sorry|admit)\b")
-# A module with no declaration of its own is an aggregate: a pure import list.
-DECLARATION = re.compile(
-    r"^(?:@\[[^\]]*\]\s*)*"
-    r"(?:noncomputable\s+|private\s+|protected\s+|scoped\s+|unsafe\s+|partial\s+)*"
-    r"(?:theorem|lemma|def|abbrev|instance|structure|class|inductive|opaque|axiom)\b",
-    re.MULTILINE)
-
 STAGING_NAMESPACE_REF = re.compile(
     r"\b(?:Experimental|MathAhead|HiddenFoundations|Scratch)\b"
     r"|^\s*namespace\s+(?:Experimental|MathAhead|HiddenFoundations|Scratch)\b",
@@ -73,20 +70,21 @@ def is_nonproduction(module: str) -> bool:
     return any(part in NONPRODUCTION_SEGMENTS for part in module.split("."))
 
 def load() -> tuple[dict[str, pathlib.Path], dict[str, list[str]], dict[str, bool]]:
-    files: dict[str, pathlib.Path] = {}
-    for directory in LIB_DIRS:
-        for path in ROOT.glob(f"{directory}/**/*.lean"):
-            files[str(path.relative_to(ROOT).with_suffix("")).replace("/", ".")] = path
-        root_file = ROOT / f"{directory}.lean"
-        if root_file.exists():
-            files[directory] = root_file
-    imports: dict[str, list[str]] = {}
-    admitted: dict[str, bool] = {}
-    for module, path in files.items():
-        text = path.read_text()
-        imports[module] = [m for m in IMPORT.findall(text) if m in files]
-        body = LINE_COMMENT.sub("", BLOCK_COMMENT.sub("", text))
-        admitted[module] = bool(ADMISSION.search(body))
+    """Modules, their in-library imports, and whether each carries an admission.
+
+    The index, its comment stripping, and its admission scan come from
+    `aiq_lean_tools`; this script owns only the architecture rules below.
+    """
+    index = scan_lean_project(ROOT)
+    files = {
+        module: path for module, path in index.modules.items()
+        if any(module == d or module.startswith(d + ".") for d in LIB_DIRS)
+    }
+    imports = {
+        module: sorted(dep for dep in index.imports.get(module, ()) if dep in files)
+        for module in files
+    }
+    admitted = {module: module in index.admitted_modules for module in files}
     return files, imports, admitted
 
 
@@ -193,8 +191,7 @@ def main() -> None:
 
     staging_namespace_refs: list[str] = []
     for module in production:
-        text = files[module].read_text()
-        body = LINE_COMMENT.sub("", BLOCK_COMMENT.sub("", text))
+        body = strip_comments(files[module].read_text(encoding="utf-8", errors="replace"))
         if STAGING_NAMESPACE_REF.search(body):
             staging_namespace_refs.append(module)
     check2c = report(

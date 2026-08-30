@@ -1,0 +1,648 @@
+# The proposed Tau Ceti submission decomposition of `ForTauCeti`.
+#
+# Checked by `aiq-lean source module-plan dev/policy/tauceti-module-plan.yaml`.
+# Replaces the `TOPICS` table in `scripts/check_tauceti_roadmap_topics.py` and the
+# `RUNGS` table in `scripts/derive_tauceti_submission_ladder.py`, which held the
+# same editorial decisions as Python literals.
+#
+# `topics` partitions every maintained `ForTauCeti` module into fine-grained
+# topics, ordered so that each is reviewable on its own against a base Tau Ceti has
+# already accepted.  The checker enforces three properties, each of which the first
+# hand-drawn draft violated:
+#
+#   * **total** -- every module is assigned to exactly one topic.  A design that
+#     quietly omits modules is how 115 of 156 modules ended up with no submission
+#     path at all.
+#   * **disjoint** -- no module is claimed by two topics.
+#   * **acyclic in submission order** -- no module imports anything assigned to a
+#     later topic.  A forward reference means the PR cannot compile against what
+#     Tau Ceti has accepted so far.  The first draft had 24 and the second had 12;
+#     each fix was a fact about the mathematics, not a bookkeeping slip.
+#
+# `rungs` are editorial submission seeds.  Each rung is expanded to its cumulative
+# source-import closure before new and off-ladder modules are reported: source
+# import edges are planning evidence, not declaration-level proof dependencies.
+#
+# Topic membership and order, and the rung seeds, are decisions.  Everything
+# derived from them -- prerequisites, closures, forward references -- is not.
+library: ForTauCeti
+source_dir: .
+require_total_topics: true
+require_total_ladder: false
+topics:
+- id: T01
+  title: Positive square root, operator modulus, functional calculus
+  modules:
+  - Analysis.SpecialFunctions.Sqrt
+  - Analysis.InnerProductSpace.BasisSpan
+  - Analysis.InnerProductSpace.CourantFischer
+  - Analysis.InnerProductSpace.PositiveSqrt
+  - Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
+  - Analysis.InnerProductSpace.OperatorModulus
+  - Analysis.InnerProductSpace.Spectrum
+  - Analysis.CStarAlgebra.RealSpectrumFunctionalCalculus
+- id: T02
+  title: Polar decomposition and partial isometries
+  modules:
+  - Analysis.InnerProductSpace.PartialIsometry
+  - Analysis.InnerProductSpace.RectangularPartialIsometry
+  - Analysis.InnerProductSpace.Polar.Decomposition
+  - Analysis.InnerProductSpace.Polar.Isometry
+  - Analysis.InnerProductSpace.Polar.PartialIsometry
+  - Analysis.InnerProductSpace.NearIsometry
+  - Analysis.InnerProductSpace.IntertwiningUnitary
+- id: T03
+  title: Singular values and the singular system
+  modules:
+  - Analysis.InnerProductSpace.Singular.Values
+  - Analysis.InnerProductSpace.RectangularSingularValues
+  - Analysis.InnerProductSpace.Singular.System
+  - Analysis.InnerProductSpace.MoorePenroseInverse
+- id: T26
+  title: Inner-product identities, linear isometries, Gram rigidity, orthogonal series, projection geometry,
+    and reducing subspaces
+  modules:
+  - Analysis.Normed.Operator.LinearIsometry
+  - Analysis.InnerProductSpace.Basic
+  - Analysis.InnerProductSpace.Gram.Matrix
+  - Analysis.InnerProductSpace.OrthogonalSeries
+  - Analysis.InnerProductSpace.Projection.Geometry
+  - Analysis.InnerProductSpace.ReducingSubspace
+- id: T04
+  title: Projection blocks, the projection gap, and spectral subspaces
+  modules:
+  - Analysis.InnerProductSpace.Projection.Blocks
+  - Analysis.InnerProductSpace.Projection.Gap
+  - Analysis.InnerProductSpace.Spectral.Gap
+  - Analysis.InnerProductSpace.Spectral.Subspace
+- id: T05
+  title: Majorization, Schur-Horn, and unitarily invariant norms
+  modules:
+  - Analysis.Convex.Majorization
+  - Analysis.InnerProductSpace.SchurHorn
+  - Analysis.InnerProductSpace.Singular.Subspace
+  - Analysis.InnerProductSpace.KyFan
+  - Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
+- id: T06
+  title: Principal angles, aligned bases, and finite frames
+  modules:
+  - Analysis.InnerProductSpace.PrincipalAngles
+  - Analysis.InnerProductSpace.AlignedBasis
+  - Analysis.InnerProductSpace.FiniteFrame
+- id: T07
+  title: Rectangular unitarily invariant norms
+  modules:
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
+  - Analysis.InnerProductSpace.TwoDimensionalSingularValues
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Basic
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.BlockSum
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Instances
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm.Majorization
+- id: T08
+  title: Angle geometry and eigenvalue perturbation
+  modules:
+  - Analysis.InnerProductSpace.Gram.Operator
+  - Analysis.InnerProductSpace.AngleGeometry
+  - Analysis.InnerProductSpace.FrameFactorization
+  - Analysis.InnerProductSpace.HoffmanWielandt
+  - Analysis.InnerProductSpace.EigenvalueChange
+- id: T09
+  title: Approximation numbers
+  modules:
+  - SetTheory.Cardinal.Lift
+  - LinearAlgebra.Dimension.RankComp
+  - Analysis.Normed.Operator.FiniteRankCompact
+  - Analysis.InnerProductSpace.Spectral.Cutoff
+  - Analysis.OperatorIdeal.ApproximationNumber.Basic
+  - Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+  - Analysis.OperatorIdeal.ApproximationNumber.Compact
+  - Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert
+  - Analysis.OperatorIdeal.ApproximationNumber.Core
+  - Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample
+  - Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
+  - Analysis.OperatorIdeal.ApproximationNumber.Examples
+  - Analysis.OperatorIdeal.ApproximationNumber.PrescribedSequence
+  - Analysis.OperatorIdeal.ApproximationNumber.GramSquare
+  - Analysis.OperatorIdeal.ApproximationNumber.Pinching
+  - Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+  - Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
+  - Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers
+  - Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation
+  - Analysis.OperatorIdeal.ApproximationNumber.KyFan
+  - Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
+  - Analysis.OperatorIdeal.ApproximationNumber.MinMax
+  - Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
+  - Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+- id: T10
+  title: Symmetric operator ideals and Schatten norms
+  modules:
+  - Analysis.OperatorIdeal.Family.Basic
+  - Analysis.OperatorIdeal.Family.CompactOperator
+  - Analysis.OperatorIdeal.Family.HilbertSchmidt
+  - Analysis.OperatorIdeal.Family.KyFan
+  - Analysis.OperatorIdeal.Family.KyFanDominance
+  - Analysis.OperatorIdeal.Family.OperatorNorm
+  - Analysis.OperatorIdeal.Family.Schatten
+  - Analysis.OperatorIdeal.Family.TraceClass
+  - Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison
+  - Analysis.InnerProductSpace.SchattenNorm
+  - Analysis.InnerProductSpace.HilbertSchmidt.Energy
+  - Analysis.Normed.FiniteLpGauge
+  - Topology.ENNRealLiminf
+  - Analysis.OperatorIdeal.SymmetricGauge
+  - Analysis.Normed.SymmetricGauge
+  - Analysis.Normed.SchattenGauge
+  - Analysis.OperatorIdeal.Family.SymmetricGauge
+- id: T11
+  title: Hilbert-Schmidt operators
+  modules:
+  - Analysis.InnerProductSpace.HilbertSchmidt.Lp
+  - Analysis.InnerProductSpace.HilbertSchmidt.Space
+  - Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
+  - Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras
+- id: T12
+  title: The Haagerup-Zsido kernel and its Fourier transform
+  modules:
+  - Analysis.Fourier.HaagerupZsido.Defs
+  - Analysis.Fourier.HaagerupZsido.Fourier
+  - Analysis.Fourier.HaagerupZsido.Integrability
+  - Analysis.Fourier.ExponentialAbs
+  - Analysis.Fourier.HaagerupZsido.Kernel
+  - Analysis.Fourier.Poisson.CauchyLattice
+  - Analysis.SpecialFunctions.Integral.RationalQuadratic
+  - Analysis.SpecialFunctions.Integral.SineLaplace
+- id: T13
+  title: One-parameter unitary groups and Stone's theorem
+  modules:
+  - Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic
+  - Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant
+  - Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
+  - Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
+  - Analysis.InnerProductSpace.SkewAdjointExponential
+- id: T14
+  title: Borel functional calculus and projection-valued measures
+  modules:
+  - Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
+  - Analysis.InnerProductSpace.BorelCalculus.Multiplicative
+  - Analysis.InnerProductSpace.BorelCalculus.Operator
+  - Analysis.InnerProductSpace.BorelCalculus.PVM
+  - Analysis.InnerProductSpace.BorelCalculus.Polarization
+  - Analysis.InnerProductSpace.ProjValMeasure.Basic
+  - Analysis.InnerProductSpace.ProjValMeasure.Additivity
+  - Analysis.InnerProductSpace.ProjValMeasure.Subspace
+  - MeasureTheory.CfcMeasurable
+  - MeasureTheory.CompactExists
+  - MeasureTheory.HellySelection
+- id: T15a
+  title: 'Closed operators on LinearPMap: graphs, constructions and form bounds'
+  modules:
+  - Analysis.InnerProductSpace.LinearPMap.Closed
+  - Analysis.InnerProductSpace.LinearPMap.Constructions
+  - Analysis.InnerProductSpace.LinearPMap.GraphCore
+  - Analysis.InnerProductSpace.LinearPMap.Sylvester
+  - Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint
+  - Analysis.InnerProductSpace.QuadraticFormBounds
+  - Analysis.InnerProductSpace.SpectralOrder.Complex
+- id: T15b
+  title: Resolvents of self-adjoint LinearPMap operators, and semiboundedness
+  modules:
+  - Analysis.InnerProductSpace.LinearPMap.Resolvent
+  - Analysis.InnerProductSpace.LinearPMap.ResolventBound
+  - Analysis.InnerProductSpace.LinearPMap.ResolventOpen
+  - Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
+  - Analysis.InnerProductSpace.LinearPMap.RealLowerBound
+  - Analysis.CStarAlgebra.SelfAdjointGapInverse
+  - Analysis.InnerProductSpace.SeparatedIntertwiner
+- id: T15c
+  title: The spectral measure of an unbounded self-adjoint operator, and Stone
+  modules:
+  - Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
+  - Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction
+  - Analysis.InnerProductSpace.LinearPMap.SpectralGrid
+  - Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+  - Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
+  - Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
+  - Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator
+  - Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
+  - Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal
+  - Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
+  - Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
+  - Analysis.InnerProductSpace.BlockLowerBound
+- id: T23
+  title: Approximation numbers and finite ranks of spectral bands
+  modules:
+  - Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
+  - Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
+  - Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
+- id: T16
+  title: Sylvester equations and the Rosenblum theorem
+  modules:
+  - Analysis.InnerProductSpace.Rosenblum
+  - Analysis.InnerProductSpace.CoerciveUnit
+  - Analysis.InnerProductSpace.Sylvester.Basic
+  - Analysis.InnerProductSpace.Sylvester.Interval
+  - Analysis.InnerProductSpace.Sylvester.SpectralDistance
+  - Analysis.InnerProductSpace.Sylvester.Bound
+  - Analysis.InnerProductSpace.Sylvester.Operator
+  - Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier
+  - Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.OrbitAction
+  - Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.Fourier
+  - Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.DoubledPhase
+  - Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
+- id: T17
+  title: 'Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems'
+  modules:
+  - Analysis.SpecialFunctions.TanArcsin
+  - Analysis.InnerProductSpace.SinTheta.OperatorNorm
+  - Analysis.InnerProductSpace.SinTheta.Perturbation
+  - Analysis.InnerProductSpace.SinTheta.DirectedBounds
+  - Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+  - Analysis.InnerProductSpace.Residual.AngleEmbedding
+  - Analysis.InnerProductSpace.Residual.Ritz
+  - Analysis.InnerProductSpace.Residual.TrialMap
+  - Analysis.InnerProductSpace.DoubleAngle.Vector
+  - Analysis.InnerProductSpace.BoundedOperator.Projector
+  - Analysis.InnerProductSpace.BoundedOperator.SinTheta
+  - Analysis.InnerProductSpace.SpectralOrder.Real
+  - Analysis.InnerProductSpace.Complexification.Basic
+  - Analysis.InnerProductSpace.Complexification.FunctionalCalculus
+  - Analysis.InnerProductSpace.ReducedExtension
+- id: T18
+  title: The Yu-Wang-Samworth statistical variant
+  modules:
+  - Analysis.InnerProductSpace.YuWangSamworth.Residual
+  - Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace
+  - Analysis.InnerProductSpace.YuWangSamworth.Statistics
+- id: T19
+  title: Matrix spectra and spectral measurability
+  modules:
+  - Analysis.Matrix.EntrywiseEigenvalue
+  - Analysis.Matrix.EntrywiseOpNorm
+  - Analysis.Matrix.SpectralFunctionMeasurable
+  - Analysis.Matrix.Spectrum
+  - MeasureTheory.Function.ConvergenceInMeasure
+  - MeasureTheory.Measure.Typeclasses.Probability
+- id: T20
+  title: Sample moments and matrix concentration
+  modules:
+  - Probability.Moments.MatrixConcentration
+  - Probability.Moments.SampleSecondMoment
+  - Probability.Moments.SampleMean
+  - Probability.Moments.Variance
+  - Probability.Moments.CenteredScatter
+- id: T21
+  title: Matrix rank factorization and positive semidefiniteness
+  modules:
+  - LinearAlgebra.Matrix.RankFactorization
+  - LinearAlgebra.Matrix.PosDef
+- id: T22
+  title: Berge's maximum theorem and approximate minimizers
+  modules:
+  - Topology.ApproxMinimizer
+  - Topology.Berge
+- id: T24
+  title: Real approximation numbers by complexification
+  modules:
+  - Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
+- id: T26a
+  title: 'Discrete spectra: compact self-adjoint operators classified by eigenspace dimensions, and the
+    enumeration of an unbounded locally finite set'
+  modules:
+  - Analysis.InnerProductSpace.CompactSelfAdjointClassification
+  - Analysis.InnerProductSpace.CompactApproximationEigenvalues
+  - Analysis.InnerProductSpace.CompactSpectralDecomposition
+  - Analysis.InnerProductSpace.CompactSingularSubspaces
+  - Analysis.InnerProductSpace.PrincipalSineSequence
+  - Analysis.InnerProductSpace.PrincipalAngleSequence
+  - Order.DiscreteEnumeration
+- id: T27
+  title: Measure classes, L-two transport, and the multiplicity normal form
+  modules:
+  - MeasureTheory.MeasureClass
+  - MeasureTheory.RadonNikodymL2
+  - MeasureTheory.LpComp
+  - MeasureTheory.LpRestrict
+  - MeasureTheory.LpStar
+  - MeasureTheory.LpSliceSum
+  - MeasureTheory.MultiplicityLevels
+  - MeasureTheory.LpInfiniteDimensional
+  - MeasureTheory.LpRealPart
+  - Analysis.InnerProductSpace.OperatorUnitaryEquiv
+- id: T28
+  title: Cyclic subspaces, the multiplication model, and Hahn-Hellinger existence
+  modules:
+  - Analysis.InnerProductSpace.BorelCalculus.AlmostInvariant
+  - Analysis.InnerProductSpace.BorelCalculus.CyclicIsometry
+  - Analysis.InnerProductSpace.BorelCalculus.CyclicModel
+  - Analysis.InnerProductSpace.BorelCalculus.CyclicDecomposition
+  - Analysis.InnerProductSpace.BorelCalculus.Restriction
+  - Analysis.InnerProductSpace.BorelCalculus.SeparableCyclic
+  - Analysis.InnerProductSpace.BorelCalculus.MultiplicityModel
+  - Analysis.InnerProductSpace.BorelCalculus.DiagMeasureNatural
+  - Analysis.InnerProductSpace.HilbertSumIntertwine
+  - Analysis.InnerProductSpace.RealSpectrumBorelSymbols
+  - Analysis.InnerProductSpace.RealSpectrumDiagonalMeasure
+  - Analysis.InnerProductSpace.RealSpectrumCyclicModel
+  - Analysis.InnerProductSpace.RealSpectrumIntertwining
+  - Analysis.InnerProductSpace.RealSpectrumCyclicDecomposition
+  - Analysis.InnerProductSpace.BorelCalculus.MultiplicityModelReal
+- id: T25
+  title: The Hilbert-Schmidt Sylvester flow
+  modules:
+  - Analysis.InnerProductSpace.HilbertSchmidt.Block
+  - Analysis.InnerProductSpace.Sylvester.BlockEstimate
+  - Analysis.InnerProductSpace.Sylvester.BlockIdentity
+  - Analysis.InnerProductSpace.Sylvester.Generator
+  - Analysis.InnerProductSpace.Sylvester.Group
+  - Analysis.InnerProductSpace.Sylvester.SpectralGap
+rungs:
+- id: A
+  title: Positive square root, operator modulus, polar decomposition
+  seeds:
+  - Analysis.InnerProductSpace.BasisSpan
+  - Analysis.InnerProductSpace.CourantFischer
+  - Analysis.InnerProductSpace.OperatorModulus
+  - Analysis.InnerProductSpace.PartialIsometry
+  - Analysis.InnerProductSpace.Polar.Decomposition
+  - Analysis.InnerProductSpace.PositiveSqrt
+  - Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
+- id: B
+  title: Singular values (square and rectangular)
+  seeds:
+  - Analysis.InnerProductSpace.RectangularSingularValues
+  - Analysis.InnerProductSpace.Singular.Values
+- id: C
+  title: Rectangular approximation numbers
+  seeds:
+  - Analysis.OperatorIdeal.ApproximationNumber.Basic
+  - LinearAlgebra.Dimension.RankComp
+  - SetTheory.Cardinal.Lift
+- id: D
+  title: Convex majorization and symmetric gauges
+  seeds:
+  - Analysis.Convex.Majorization
+  - Analysis.InnerProductSpace.KyFan
+  - Analysis.InnerProductSpace.Projection.Geometry
+  - Analysis.InnerProductSpace.SchurHorn
+  - Analysis.InnerProductSpace.Singular.Subspace
+  - Analysis.InnerProductSpace.Spectrum
+  - Analysis.InnerProductSpace.UnitarilyInvariantNorm
+- id: E
+  title: Rectangular unitarily invariant norms
+  seeds:
+  - Analysis.InnerProductSpace.AlignedBasis
+  - Analysis.InnerProductSpace.Basic
+  - Analysis.InnerProductSpace.Gram.Matrix
+  - Analysis.InnerProductSpace.PrincipalAngles
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization
+  - Analysis.Normed.Operator.LinearIsometry
+- id: F
+  title: Ky Fan gauges and operator ideal families
+  seeds:
+  - Analysis.InnerProductSpace.Spectral.Cutoff
+  - Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+  - Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+  - Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
+  - Analysis.OperatorIdeal.ApproximationNumber.KyFan
+  - Analysis.OperatorIdeal.ApproximationNumber.MinMax
+  - Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
+  - Analysis.OperatorIdeal.Family.Basic
+  - Analysis.OperatorIdeal.Family.KyFan
+  - Analysis.OperatorIdeal.Family.KyFanDominance
+  - Analysis.OperatorIdeal.Family.OperatorNorm
+  - Analysis.OperatorIdeal.Family.TraceClass
+- id: G
+  title: Foundations completion — the rest of topics T01-T10
+  seeds:
+  - Analysis.CStarAlgebra.RealSpectrumFunctionalCalculus
+  - Analysis.Convex.Majorization
+  - Analysis.OperatorIdeal.ApproximationNumber.CompactHilbert
+  - Analysis.OperatorIdeal.ApproximationNumber.Core
+  - Analysis.OperatorIdeal.ApproximationNumber.DiagonalSequence
+  - Analysis.OperatorIdeal.ApproximationNumber.DiagonalExample
+  - Analysis.InnerProductSpace.AlignedBasis
+  - Analysis.InnerProductSpace.AngleGeometry
+  - Analysis.InnerProductSpace.Basic
+  - Analysis.InnerProductSpace.BasisSpan
+  - Analysis.InnerProductSpace.CourantFischer
+  - Analysis.InnerProductSpace.EigenvalueChange
+  - Analysis.InnerProductSpace.FiniteFrame
+  - Analysis.InnerProductSpace.FrameFactorization
+  - Analysis.InnerProductSpace.Gram.Matrix
+  - Analysis.InnerProductSpace.Gram.Operator
+  - Analysis.InnerProductSpace.HilbertSchmidt.Energy
+  - Analysis.InnerProductSpace.HoffmanWielandt
+  - Analysis.InnerProductSpace.KyFan
+  - Analysis.InnerProductSpace.MoorePenroseInverse
+  - Analysis.InnerProductSpace.NearIsometry
+  - Analysis.InnerProductSpace.OperatorModulus
+  - Analysis.InnerProductSpace.OrthogonalSeries
+  - Analysis.InnerProductSpace.PartialIsometry
+  - Analysis.InnerProductSpace.Polar.Decomposition
+  - Analysis.InnerProductSpace.Polar.Isometry
+  - Analysis.InnerProductSpace.Polar.PartialIsometry
+  - Analysis.InnerProductSpace.PositiveSqrt
+  - Analysis.InnerProductSpace.PrincipalAngles
+  - Analysis.InnerProductSpace.Projection.Blocks
+  - Analysis.InnerProductSpace.Projection.Gap
+  - Analysis.InnerProductSpace.Projection.Geometry
+  - Analysis.InnerProductSpace.RectangularSingularValues
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Basic
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.BlockSum
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Instances
+  - Analysis.InnerProductSpace.RectangularUnitarilyInvariantNorm.Majorization
+  - Analysis.InnerProductSpace.ReducingSubspace
+  - Analysis.InnerProductSpace.SchattenNorm
+  - Analysis.InnerProductSpace.SchurHorn
+  - Analysis.InnerProductSpace.SelfAdjointFunctionalCalculus
+  - Analysis.InnerProductSpace.Singular.Subspace
+  - Analysis.InnerProductSpace.Singular.System
+  - Analysis.InnerProductSpace.Singular.Values
+  - Analysis.InnerProductSpace.Spectral.Cutoff
+  - Analysis.InnerProductSpace.Spectral.Gap
+  - Analysis.InnerProductSpace.Spectral.Subspace
+  - Analysis.InnerProductSpace.Spectrum
+  - Analysis.InnerProductSpace.TwoDimensionalSingularValues
+  - Analysis.InnerProductSpace.UnitarilyInvariantNorm
+  - Analysis.Normed.FiniteLpGauge
+  - Analysis.Normed.Operator.LinearIsometry
+  - Analysis.OperatorIdeal.ApproximationNumber.Adjoint
+  - Analysis.OperatorIdeal.ApproximationNumber.Basic
+  - Analysis.OperatorIdeal.ApproximationNumber.Compact
+  - Analysis.OperatorIdeal.ApproximationNumber.Examples
+  - Analysis.OperatorIdeal.ApproximationNumber.FiniteDimensional
+  - Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction
+  - Analysis.OperatorIdeal.ApproximationNumber.FiniteValueFibers
+  - Analysis.OperatorIdeal.ApproximationNumber.FiniteValueSeparation
+  - Analysis.OperatorIdeal.ApproximationNumber.KyFan
+  - Analysis.OperatorIdeal.ApproximationNumber.LeadingCutoff
+  - Analysis.OperatorIdeal.ApproximationNumber.MinMax
+  - Analysis.OperatorIdeal.ApproximationNumber.MinMaxUpper
+  - Analysis.OperatorIdeal.ApproximationNumber.SameSequence
+  - Analysis.OperatorIdeal.Family.Basic
+  - Analysis.OperatorIdeal.Family.HilbertSchmidt
+  - Analysis.OperatorIdeal.Family.KyFan
+  - Analysis.OperatorIdeal.Family.KyFanDominance
+  - Analysis.OperatorIdeal.Family.OperatorNorm
+  - Analysis.OperatorIdeal.ApproximationNumber.EnergyComparison
+  - Analysis.OperatorIdeal.Family.Schatten
+  - Topology.ENNRealLiminf
+  - Analysis.OperatorIdeal.Family.TraceClass
+  - Analysis.SpecialFunctions.Sqrt
+  - LinearAlgebra.Dimension.RankComp
+  - SetTheory.Cardinal.Lift
+- id: H
+  title: Hilbert-Schmidt operators (T11)
+  seeds:
+  - Analysis.InnerProductSpace.HilbertSchmidt.Conjugation
+  - Analysis.InnerProductSpace.HilbertSchmidt.Lp
+  - Analysis.InnerProductSpace.HilbertSchmidt.Pythagoras
+  - Analysis.InnerProductSpace.HilbertSchmidt.Space
+- id: I
+  title: The Haagerup-Zsido kernel and its Fourier transform (T12)
+  seeds:
+  - Analysis.Fourier.ExponentialAbs
+  - Analysis.Fourier.HaagerupZsido.Defs
+  - Analysis.Fourier.HaagerupZsido.Fourier
+  - Analysis.Fourier.HaagerupZsido.Integrability
+  - Analysis.Fourier.HaagerupZsido.Kernel
+  - Analysis.Fourier.Poisson.CauchyLattice
+  - Analysis.SpecialFunctions.Integral.RationalQuadratic
+  - Analysis.SpecialFunctions.Integral.SineLaplace
+- id: J
+  title: One-parameter unitary groups and Stone's theorem (T13)
+  seeds:
+  - Analysis.InnerProductSpace.IntertwiningUnitary
+  - Analysis.InnerProductSpace.OneParameterUnitaryGroup.Basic
+  - Analysis.InnerProductSpace.OneParameterUnitaryGroup.Commutant
+  - Analysis.InnerProductSpace.OneParameterUnitaryGroup.SemigroupBridge
+  - Analysis.InnerProductSpace.OneParameterUnitaryGroup.Stone
+  - Analysis.InnerProductSpace.SkewAdjointExponential
+- id: K
+  title: Borel functional calculus and projection-valued measures (T14)
+  seeds:
+  - Analysis.InnerProductSpace.BorelCalculus.DiagonalMeasure
+  - Analysis.InnerProductSpace.BorelCalculus.Multiplicative
+  - Analysis.InnerProductSpace.BorelCalculus.Operator
+  - Analysis.InnerProductSpace.BorelCalculus.PVM
+  - Analysis.InnerProductSpace.BorelCalculus.Polarization
+  - Analysis.InnerProductSpace.ProjValMeasure.Additivity
+  - Analysis.InnerProductSpace.ProjValMeasure.Basic
+  - Analysis.InnerProductSpace.ProjValMeasure.Subspace
+  - MeasureTheory.CfcMeasurable
+  - MeasureTheory.CompactExists
+  - MeasureTheory.HellySelection
+- id: L
+  title: 'Closed operators on LinearPMap: graphs, constructions and form bounds (T15a)'
+  seeds:
+  - Analysis.InnerProductSpace.LinearPMap.Closed
+  - Analysis.InnerProductSpace.LinearPMap.Constructions
+  - Analysis.InnerProductSpace.LinearPMap.GraphCore
+  - Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint
+  - Analysis.InnerProductSpace.LinearPMap.Sylvester
+  - Analysis.InnerProductSpace.QuadraticFormBounds
+  - Analysis.InnerProductSpace.SpectralOrder.Complex
+- id: M
+  title: Resolvents of self-adjoint LinearPMap operators, and semiboundedness (T15b)
+  seeds:
+  - Analysis.CStarAlgebra.SelfAdjointGapInverse
+  - Analysis.InnerProductSpace.LinearPMap.RealLowerBound
+  - Analysis.InnerProductSpace.LinearPMap.Resolvent
+  - Analysis.InnerProductSpace.LinearPMap.ResolventBound
+  - Analysis.InnerProductSpace.LinearPMap.ResolventOpen
+  - Analysis.InnerProductSpace.LinearPMap.SelfAdjointResolvent
+  - Analysis.InnerProductSpace.SeparatedIntertwiner
+- id: N
+  title: The spectral measure of an unbounded self-adjoint operator, and Stone (T15c)
+  seeds:
+  - Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
+  - Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
+  - Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
+  - Analysis.InnerProductSpace.BlockLowerBound
+  - Analysis.InnerProductSpace.LinearPMap.SelfAdjointMaximal
+  - Analysis.InnerProductSpace.LinearPMap.SpectralCutOperator
+  - Analysis.InnerProductSpace.LinearPMap.SpectralFormBounds
+  - Analysis.InnerProductSpace.LinearPMap.SpectralGapInverse
+  - Analysis.InnerProductSpace.LinearPMap.SpectralGrid
+  - Analysis.InnerProductSpace.LinearPMap.SpectralMeasure
+  - Analysis.InnerProductSpace.LinearPMap.SpectralMeasure.Construction
+  - Analysis.InnerProductSpace.LinearPMap.SpectralProjectionGroup
+  - Analysis.InnerProductSpace.LinearPMap.SpectralSupport
+  - Analysis.InnerProductSpace.LinearPMap.StoneUniqueness
+  - Analysis.InnerProductSpace.LinearPMap.YosidaApproximation
+- id: O
+  title: Sylvester equations and the Rosenblum theorem (T16)
+  seeds:
+  - Analysis.InnerProductSpace.CoerciveUnit
+  - Analysis.InnerProductSpace.HilbertSchmidt.Block
+  - Analysis.InnerProductSpace.Rosenblum
+  - Analysis.InnerProductSpace.Sylvester.Basic
+  - Analysis.InnerProductSpace.Sylvester.BlockEstimate
+  - Analysis.InnerProductSpace.Sylvester.BlockIdentity
+  - Analysis.InnerProductSpace.Sylvester.Bound
+  - Analysis.InnerProductSpace.Sylvester.Generator
+  - Analysis.InnerProductSpace.Sylvester.Group
+  - Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier
+  - Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.DoubledPhase
+  - Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.Fourier
+  - Analysis.InnerProductSpace.Sylvester.Internal.ReciprocalMultiplier.OrbitAction
+  - Analysis.InnerProductSpace.Sylvester.Internal.SpectralBounds
+  - Analysis.InnerProductSpace.Sylvester.Interval
+  - Analysis.InnerProductSpace.Sylvester.Operator
+  - Analysis.InnerProductSpace.Sylvester.SpectralDistance
+  - Analysis.InnerProductSpace.Sylvester.SpectralGap
+- id: P
+  title: 'Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems (T17)'
+  seeds:
+  - Analysis.InnerProductSpace.BoundedOperator.Projector
+  - Analysis.InnerProductSpace.Complexification.Basic
+  - Analysis.InnerProductSpace.Complexification.FunctionalCalculus
+  - Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
+  - Analysis.InnerProductSpace.SpectralOrder.Real
+  - Analysis.InnerProductSpace.BoundedOperator.SinTheta
+  - Analysis.InnerProductSpace.DoubleAngle.Vector
+  - Analysis.InnerProductSpace.Residual.AngleEmbedding
+  - Analysis.InnerProductSpace.Residual.Ritz
+  - Analysis.InnerProductSpace.Residual.TrialMap
+  - Analysis.InnerProductSpace.SinTheta.DirectedBounds
+  - Analysis.InnerProductSpace.SinTheta.OperatorNorm
+  - Analysis.InnerProductSpace.SinTheta.Perturbation
+  - Analysis.InnerProductSpace.SinTheta.UnitarilyInvariant
+- id: Q
+  title: The Yu-Wang-Samworth statistical variant (T18)
+  seeds:
+  - Analysis.InnerProductSpace.YuWangSamworth.Residual
+  - Analysis.InnerProductSpace.YuWangSamworth.SingularSubspace
+  - Analysis.InnerProductSpace.YuWangSamworth.Statistics
+- id: R
+  title: Matrix spectra and spectral measurability (T19)
+  seeds:
+  - Analysis.Matrix.EntrywiseEigenvalue
+  - Analysis.Matrix.EntrywiseOpNorm
+  - Analysis.Matrix.SpectralFunctionMeasurable
+  - Analysis.Matrix.Spectrum
+  - MeasureTheory.Function.ConvergenceInMeasure
+  - MeasureTheory.Measure.Typeclasses.Probability
+- id: S
+  title: Sample moments and matrix concentration (T20)
+  seeds:
+  - Probability.Moments.CenteredScatter
+  - Probability.Moments.MatrixConcentration
+  - Probability.Moments.SampleMean
+  - Probability.Moments.SampleSecondMoment
+  - Probability.Moments.Variance
+- id: T
+  title: Matrix rank factorization and positive semidefiniteness (T21)
+  seeds:
+  - LinearAlgebra.Matrix.PosDef
+  - LinearAlgebra.Matrix.RankFactorization
+- id: U
+  title: Berge's maximum theorem and approximate minimizers (T22)
+  seeds:
+  - Topology.ApproxMinimizer
+  - Topology.Berge

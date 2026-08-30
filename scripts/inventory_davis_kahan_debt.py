@@ -14,20 +14,15 @@ import argparse
 import json
 import pathlib
 import re
-from collections import Counter, deque
+from collections import Counter
 
-IMPORT_RE = re.compile(r"^import\s+([A-Za-z0-9_'.]+)\s*$", re.MULTILINE)
-INCOMPLETE_RE = re.compile(r"\b(?:sorry|admit)\b")
-BLOCK_COMMENT_RE = re.compile(r"/-.*?-/", re.DOTALL)
-LINE_COMMENT_RE = re.compile(r"--[^\n]*")
-
-
-def strip_comments_preserving_lines(text: str) -> str:
-    def blank_block(match: re.Match[str]) -> str:
-        value = match.group(0)
-        return "\n" * value.count("\n")
-
-    return LINE_COMMENT_RE.sub("", BLOCK_COMMENT_RE.sub(blank_block, text))
+try:
+    from aiq_lean_tools.lean_source import ADMISSION_RE, scan_lean_project, strip_comments
+except ImportError:  # pragma: no cover - environment guidance, not logic
+    raise SystemExit(
+        "aiq_lean_tools is not installed. Run:\n"
+        "  python3 -m pip install -e submodules/aiq-lean-formalization-tools"
+    )
 
 SOURCE_ROOTS = (
     "DavisKahan.Sources.DavisKahan1970.FullPartIII",
@@ -61,34 +56,8 @@ def find_root() -> pathlib.Path:
     raise SystemExit("repository root not found")
 
 
-def source_to_module(root: pathlib.Path, source: pathlib.Path) -> str:
-    return source.relative_to(root).with_suffix("").as_posix().replace("/", ".")
-
-
-def module_graph(root: pathlib.Path) -> tuple[dict[str, pathlib.Path], dict[str, list[str]]]:
-    modules: dict[str, pathlib.Path] = {}
-    for top in ("DavisKahan", "ForMathlib", "Challenge"):
-        path = root / top
-        if not path.exists():
-            continue
-        for source in path.rglob("*.lean"):
-            modules[source_to_module(root, source)] = source
-    graph: dict[str, list[str]] = {}
-    for module, source in modules.items():
-        graph[module] = [name for name in IMPORT_RE.findall(source.read_text(encoding="utf8")) if name in modules]
-    return modules, graph
-
-
-def reachable(graph: dict[str, list[str]], roots: tuple[str, ...]) -> set[str]:
-    seen: set[str] = set()
-    queue = deque(roots)
-    while queue:
-        item = queue.popleft()
-        if item in seen:
-            continue
-        seen.add(item)
-        queue.extend(graph.get(item, ()))
-    return seen
+#: The libraries whose debt this inventory covers.
+SCOPE = ("DavisKahan", "Challenge")
 
 
 def classify(path: str) -> tuple[str, str]:
@@ -109,19 +78,21 @@ def main() -> int:
     args = parser.parse_args()
 
     root = find_root()
-    modules, graph = module_graph(root)
-    source_cone = reachable(graph, SOURCE_ROOTS)
-    default_cone = reachable(graph, DEFAULT_ROOTS)
+    index = scan_lean_project(root)
+    modules = {
+        module: path for module, path in index.modules.items()
+        if any(module == top or module.startswith(top + ".") for top in SCOPE)
+    }
+    source_cone = index.import_closure(SOURCE_ROOTS)
+    default_cone = index.import_closure(DEFAULT_ROOTS)
 
     records: list[dict[str, object]] = []
     for module, source in sorted(modules.items()):
-        stripped = strip_comments_preserving_lines(
-            source.read_text(encoding="utf8", errors="replace")
-        )
+        stripped = strip_comments(source.read_text(encoding="utf8", errors="replace"))
         locations = [
             number
             for number, line in enumerate(stripped.splitlines(), 1)
-            if INCOMPLETE_RE.search(line)
+            if ADMISSION_RE.search(line)
         ]
         if not locations:
             continue

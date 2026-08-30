@@ -1,11 +1,21 @@
 {
   "schema_version": 1,
+  "title": "Davis--Kahan hidden-foundation map",
   "description": "Recursive hidden-foundation map discovered while working ahead on the complete Davis--Kahan 1970 formalization.  Each node names its own production module; the campaign-era aggregate `DavisKahan.Experimental.MathAhead.HiddenFoundations.All` was deleted with `Experimental/MathAhead/` on 2026-08-27 and there is no aggregate module now.",
   "status_meanings": {
     "proof_candidate": "A full mathematical proof attempt is present; elaboration repair may remain.",
     "construction": "A concrete definition or record assembly is present.",
     "bridge": "Connects existing compiled or proof-carrying layers.",
     "interface": "An honest explicit contract for a genuinely missing foundational campaign; fields are not counted as completed mathematics."
+  },
+  "escape_scan": {
+    "_comment": "Proof escapes forbidden in the tracked node files. `axiom` is included because an interface node's whole purpose is to be an honest contract for missing mathematics, and postulating it instead would look identical in the map.",
+    "patterns": {
+      "sorry": "\\bsorry\\b",
+      "admit": "\\badmit\\b",
+      "native_decide": "\\bnative_decide\\b",
+      "axiom": "\\baxiom\\b"
+    }
   },
   "nodes": [
     {
@@ -110,7 +120,7 @@
       "title": "The Schatten triangle inequality",
       "module": "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
       "file": "ForTauCeti/Analysis/OperatorIdeal/Family/Schatten.lean",
-      "declaration": "TauCeti.ContinuousLinearMap.schattenENorm_add_le",
+      "declaration": "ContinuousLinearMap.schattenENorm_add_le",
       "kind": "proof_candidate",
       "dependencies": [
         "schatten-foundation"

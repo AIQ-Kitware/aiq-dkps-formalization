@@ -117,6 +117,15 @@ NONLOCAL_INTERPRETATION_PROSE_FIELDS = (
 )
 
 
+try:
+    from aiq_lean_tools.coverage import load_coverage_bundle
+except ImportError:  # pragma: no cover - environment guidance, not logic
+    raise SystemExit(
+        "aiq_lean_tools is not installed. Run:\n"
+        "  python3 -m pip install -e submodules/aiq-lean-formalization-tools"
+    )
+
+
 def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
     raise SystemExit(1)
@@ -994,6 +1003,18 @@ def main() -> int:
     )
     parser.add_argument("--json", action="store_true", help="emit the completion summary as JSON")
     args = parser.parse_args()
+
+    # The generic layer -- ids, cross-links between counted results and source
+    # atoms, and the structural shape of cited declaration names -- is the
+    # package's; everything below it in this file is Davis--Kahan completion
+    # policy, which is deliberately not generic.
+    inventory = discover_inventory(args.inventory)
+    if inventory is not None:
+        findings = load_coverage_bundle(inventory, root=ROOT).validate()
+        for finding in findings:
+            print(f"{finding.level.upper():8s}{finding.location}: [{finding.code}] {finding.message}")
+        if any(f.level == "error" for f in findings):
+            return 1
 
     summary = completion_summary(args.inventory, require_terminal=args.require_terminal)
     if args.json:
