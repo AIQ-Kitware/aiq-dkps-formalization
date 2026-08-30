@@ -96,18 +96,21 @@ end TauCeti.DavisKahan1970.Audits
 /-! ## S2-sin-theta: Single-angle sine theorem
 
 Status: **TERMINAL EXACT**.
--/
 
+The first two are the canonical source-facing statements: full
+`FormBoundedSylvesterGap`, both conclusions, no capability class.  The rest are
+the presentation declaration, the engine, and the scope companions. -/
+
+#check @DavisKahan1970.sinTheta_complex
+#check @DavisKahan1970.sinTheta_real
+#check @DavisKahan1970.sinTheta_complex_of_intervalExterior
+#check @DavisKahan1970.sinTheta_real_of_intervalExterior
 #check @DavisKahan1970.sinTheta_headline
 #check @TauCeti.DavisKahan1970.sinTheta_headline_generic
 #check @TauCeti.DavisKahan1970.sinTheta
 #check @TauCeti.DavisKahan1970.sinTheta_real_exactPaper
 #check @TauCeti.DavisKahan1970.generalizedSinTheta
 #check @TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper
-#check @DavisKahan1970.sinTheta_complex
-#check @DavisKahan1970.sinTheta_real
-#check @DavisKahan1970.sinTheta_complex_of_intervalExterior
-#check @DavisKahan1970.sinTheta_real_of_intervalExterior
 
 /-! ## S2-tan-theta: Single-angle tangent theorem
 

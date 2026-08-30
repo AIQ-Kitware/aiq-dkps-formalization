@@ -8,11 +8,26 @@ import DavisKahan.SinTheta.Canonical
 import DavisKahan.SinTheta.Real.Canonical
 
 /-!
-# Auditable Davis--Kahan 1970 sine-theta surface
+# The Davis--Kahan 1970 sine-theta source surface
 
-This module gives the Section 2 sine-theta theorem one declaration intended to
-serve both as the paper-facing statement and as the semantic-audit target.  The
-substantive proof remains
+**The canonical source-facing theorems are `sinTheta_complex` and
+`sinTheta_real`**, at the end of this module.  They state the Section 2 result at
+its full proved scope: unbounded self-adjoint `LinearPMap` operators, arbitrary
+Hilbert dimension, the whole `FormBoundedSylvesterGap` rather than one of its
+branches, a `PaperUnitaryInvariantNorm`, and both conclusions -- ideal membership
+and the inequality.  They carry no capability class.  Cite one of those two.
+
+`sinTheta_headline` below is kept for **presentation and compatibility**.  It is
+scalar-generic, which reads well, but it pays for that twice: it carries the
+capability classes `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and
+`HasUnboundedSylvesterKyFan` in its signature, and it inlines the finite
+interval/exterior branch of the separation, so it states a strictly smaller
+theorem than the one that is proved.  It also drops the ideal-membership half of
+the conclusion.  It remains correct and remains the declaration the semantic
+review reads for its explicit `sinTheta₀` parameter; it is no longer the theorem
+to cite.
+
+The substantive proof remains
 `TauCeti.DavisKahan1970.sinTheta_headline_generic`.
 
 The central presentation choice is to name the source object `sinTheta₀` as an
@@ -126,11 +141,17 @@ theorem isExactSpectralDecomposition_iff
   · rintro ⟨hF₀, hF₁, horth, hcomplete, hdom, hintertwines⟩
     exact ⟨hF₀, hF₁, horth, hcomplete, hdom, hintertwines⟩
 
-/-- **Davis--Kahan 1970, Section 2 sine-theta theorem.**
+/-- **Davis--Kahan 1970, Section 2 sine-theta theorem, presentation form.**
 
-This is the canonical presentation-facing and audit-facing declaration.  It is
-generic over `RCLike 𝕜`, so it retains the real/complex and
-infinite-dimensional scope of the proved headline theorem.
+**Not the theorem to cite.**  `sinTheta_complex` and `sinTheta_real` below are the
+canonical source-facing statements; this one is kept because its explicit
+`sinTheta₀` parameter makes the printed inequality legible in the signature, and
+because callers already depend on it.
+
+It is generic over `RCLike 𝕜`, so it retains the real/complex and
+infinite-dimensional scope of the proved headline theorem -- but that genericity
+is why it must carry the two capability classes, and its separation hypothesis is
+only the interval/exterior branch of `FormBoundedSylvesterGap`.
 
 The source object `sinTheta₀` is an explicit parameter, and `hSinTheta₀` states
 its concrete realization `(I - F₀ F₀*) E₀` in the theorem signature.  The

@@ -90,7 +90,7 @@ or the same condition with $A_0$ and $\Lambda_1$ interchanged.  Then, for every 
 
 #### `DavisKahan1970.sinTheta_headline`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:140`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:161`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -126,25 +126,25 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:234`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:255`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:322`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:343`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_complex_of_intervalExterior`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:285`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:306`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_real_of_intervalExterior`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:373`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:394`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
