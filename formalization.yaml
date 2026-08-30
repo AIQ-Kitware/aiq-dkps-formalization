@@ -56,7 +56,7 @@ sources:
   - title: "The rotation of eigenvectors by a perturbation. III"
     authors: ["Chandler Davis", "William M. Kahan"]
     id: "doi:10.1137/0707001"
-    type: "article"
+    type: "paper"
     location: "SIAM Journal on Numerical Analysis 7(1), 1970, 1–46"
     relationship: "formalizes"
     note: >-
@@ -70,7 +70,7 @@ sources:
   - title: "A useful variant of the Davis–Kahan theorem for statisticians"
     authors: ["Yi Yu", "Tengyao Wang", "Richard J. Samworth"]
     id: "doi:10.1093/biomet/asv008"
-    type: "article"
+    type: "paper"
     location: "Biometrika 102(2), 2015, 315–323"
     relationship: "formalizes"
     note: >-
@@ -85,7 +85,7 @@ sources:
       kernel perspective space
     authors: ["Aranyak Acharyya", "Michael W. Trosset", "Carey E. Priebe", "Hayden S. Helm"]
     id: "arXiv:2409.17308"
-    type: "article"
+    type: "paper"
     relationship: "adapts"
     note: >-
       Theorems 2 and 4 are formalized as printed, from the paper's own replicate
@@ -100,7 +100,7 @@ sources:
       Concentration bounds on response-based vector embeddings of black-box
       generative models
     authors: ["Aranyak Acharyya", "Joshua Agterberg", "Youngser Park", "Carey E. Priebe"]
-    type: "article"
+    type: "paper"
     relationship: "adapts"
     note: >-
       The printed finite concentration bound omits an entrywise dissimilarity
@@ -119,7 +119,7 @@ sources:
       - "Youngser Park"
       - "Brandon Duderstadt"
       - "Carey E. Priebe"
-    type: "article"
+    type: "paper"
     relationship: "adapts"
     note: >-
       The risk-transfer argument needs a uniform-integrability / dominated-loss
@@ -131,7 +131,7 @@ sources:
 
   - title: "Query-efficient model evaluation using cached responses"
     authors: ["Hayden S. Helm", "Brandon Johnson", "Carey E. Priebe"]
-    type: "article"
+    type: "paper"
     relationship: "adapts"
     note: >-
       The nearest-neighbour estimator is formalized in a tie-averaged form, and a
