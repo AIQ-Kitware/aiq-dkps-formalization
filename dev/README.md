@@ -396,8 +396,11 @@ lower the corresponding baseline in the same commit.
 
 ## Paper-library grounding audits
 
-`YuWangSamworth2015/scripts/verify_grounding.py` checks that package's recorded
-repository pins. The similarly named `FinishTanTwoTheta` script is legacy: it
+`dev/policy/yu-wang-samworth-grounding.yaml`, checked with `aiq-lean source
+grounding`, states which files and declarations that package must still contain
+and refuses any `sorry`, `admit`, or postulated `axiom` in the lane.  It is the
+floor under the census: a census row records a status, but only this says the
+mathematics is still there. The similarly named `FinishTanTwoTheta` script is legacy: it
 recursively scans the deliberately separate unbounded research file and therefore
 its exit status is not a bounded-target completion gate. The promoted bounded
 tan-two-theta theorem is guarded through the production Davis--Kahan build/gates.

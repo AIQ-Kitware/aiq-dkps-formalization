@@ -1,0 +1,72 @@
+# Grounding contract for the Yu--Wang--Samworth lane.
+#
+# Checked by `aiq-lean source grounding dev/policy/yu-wang-samworth-grounding.yaml`.
+# Replaces `YuWangSamworth2015/scripts/verify_grounding.py`, which held the same
+# lists as Python.
+#
+# The contract is deliberately blunt: these files must exist, these declarations
+# must be in them, and nothing in the lane may reach a theorem through `sorry`,
+# `admit`, or a postulated `axiom`.  It is the floor under the census -- a census
+# row records a status, but only this says the mathematics is still there.
+required_files:
+- YuWangSamworth2015/YuWangSamworth2015/Core/Residual.lean
+- YuWangSamworth2015/YuWangSamworth2015/Core/Statistics.lean
+- YuWangSamworth2015/YuWangSamworth2015/Core/SingularSubspace.lean
+- ForTauCeti/Analysis/InnerProductSpace/SinTheta/Frobenius.lean
+- ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean
+- DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidt.lean
+- DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtFrobenius.lean
+- YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem1.lean
+- YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean
+- YuWangSamworth2015/YuWangSamworth2015/Symmetric/AngleIdentity.lean
+- YuWangSamworth2015/YuWangSamworth2015/Rectangular/FrobeniusGram.lean
+- YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean
+- YuWangSamworth2015/YuWangSamworth2015/Rectangular/RankOne.lean
+- YuWangSamworth2015/YuWangSamworth2015/Appendix/Lemma5.lean
+required_declarations:
+  YuWangSamworth2015/YuWangSamworth2015/Core/Statistics.lean:
+  - yuWangSamworth_sinTheta_le
+  - yuWangSamworth_alignedBasis_le
+  - yuWangSamworth_eigenvector_le
+  ForTauCeti/Analysis/InnerProductSpace/SinTheta/Perturbation.lean:
+  - sinTheta_perturbation_le
+  - opNorm_sinThetaMap_le_of_intervalGap
+  YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem2.lean:
+  - IsEigenvectorBlock
+  - isEigenvectorBlock_iff
+  - PopulationBoundaryGap
+  - populationBoundaryGap_iff
+  - SourcePopulationGap
+  - sourcePopulationGap_iff
+  - toPopulationBoundaryGap
+  - theorem2_sinTheta
+  - theorem2_alignedFrame
+  - yuWangSamworth_sinTheta_block_le
+  - yuWangSamworth_alignedFrame_block_le
+  - yuWangSamworth_alignedFrame_block_real_le
+  YuWangSamworth2015/YuWangSamworth2015/Symmetric/Theorem1.lean:
+  - yuWangSamworth_theorem1_uiNorm_le
+  - yuWangSamworth_theorem1_frobenius_le
+  - yuWangSamworth_theorem1_opNorm_le
+  YuWangSamworth2015/YuWangSamworth2015/Symmetric/AngleIdentity.lean:
+  - yuWangSamworth_equation4
+  - yuWangSamworth_equation4_printed_counterexample
+  YuWangSamworth2015/YuWangSamworth2015/Rectangular/Theorem4.lean:
+  - yuWangSamworth_rightSingularSubspace_le
+  - yuWangSamworth_leftSingularSubspace_le
+  - yuWangSamworth_rightSingularAlignedBasis_le
+  - yuWangSamworth_leftSingularAlignedBasis_le
+  YuWangSamworth2015/YuWangSamworth2015/Rectangular/RankOne.lean:
+  - yuWangSamworth_rightSingularVector_le
+  - yuWangSamworth_leftSingularVector_le
+  YuWangSamworth2015/YuWangSamworth2015/Appendix/Lemma5.lean:
+  - yuWangSamworth_lemma5_columns
+  - yuWangSamworth_lemma5_isometricColumns
+  - yuWangSamworth_lemma5_orthonormalColumns
+  - yuWangSamworth_lemma5_rows
+  - yuWangSamworth_lemma5_orthonormalRows
+forbid:
+  include:
+  - YuWangSamworth2015/**/*.lean
+  admissions: true
+  axioms: true

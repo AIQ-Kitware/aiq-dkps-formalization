@@ -23,8 +23,8 @@ unavailable_exit_code: 3
 
 slow:
   - check_comparator_signatures
-  - check_davis_kahan_hidden_foundations
   - experimental-roots
+  - foundations
 
 # Kept empty deliberately.  A check whose output nobody acts on is worse than no
 # check -- it trains everyone to ignore the suite -- and "advisory" is the
@@ -101,3 +101,18 @@ gates:
   - name: workspace-ledgers
     command: ["aiq-lean", "workspace", "validate", "--static-declarations"]
     description: "every source census, semantic review and coverage inventory, validated together"
+
+  - name: grounding-yws
+    command: ["aiq-lean", "source", "grounding", "dev/policy/yu-wang-samworth-grounding.yaml"]
+    description: "the Yu--Wang--Samworth lane still contains its mathematics, and no placeholders"
+
+  - name: foundations
+    command: ["aiq-lean", "foundations", "validate",
+              "dev/davis-kahan-hidden-foundations.json", "--lean-probe"]
+    description: "the recursive hidden-foundation map, with every tracked declaration resolved by Lean"
+
+  - name: foundations-status
+    command: ["aiq-lean", "foundations", "render",
+              "dev/davis-kahan-hidden-foundations.json",
+              "-o", "dev/davis-kahan-hidden-foundations-status.md", "--check"]
+    description: "the generated foundation-status view is current"

@@ -23,16 +23,19 @@ from typing import Iterable
 
 from check_davis_kahan_1970_statement_map import extract_claims
 
+try:
+    from aiq_lean_tools.lean_source import scan_lean_project
+except ImportError:  # pragma: no cover - environment guidance, not logic
+    raise SystemExit(
+        "aiq_lean_tools is not installed. Run:\n"
+        "  python3 -m pip install -e submodules/aiq-lean-formalization-tools"
+    )
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MAP_PATH = ROOT / "dev/davis-kahan-1970-statement-map.json"
 CENSUS_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.json"
 RESULT_PATH = ROOT / "dev/davis-kahan-1970-formalization-result-inventory.json"
 DEFAULT_OUTPUT = ROOT / "dev/davis-kahan-1970-independent-audit-template.md"
-
-DECL_LINE = re.compile(
-    r"^\s*(?:(?:private|protected|noncomputable)\s+)*"
-    r"(?:theorem|lemma|def|abbrev|structure|class|instance|alias)\s+([A-Za-z0-9_']+)\b"
-)
 
 CHECKLIST = [
     "The selected source atoms are exactly the hypotheses, conclusions, and scope of the printed result statement.",
@@ -65,30 +68,22 @@ def load_json(path: pathlib.Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def production_lean_files() -> Iterable[pathlib.Path]:
-    for path in ROOT.rglob("*.lean"):
-        rel = path.relative_to(ROOT)
-        if any(part.startswith(".") for part in rel.parts):
-            continue
-        if rel.parts and rel.parts[0] == "build":
-            continue
-        yield path
-
-
 def declaration_locations(declarations: set[str]) -> dict[str, list[str]]:
+    """Where each cited declaration is written, by short name.
+
+    Short-name matching is deliberate: a census row may cite a name whose
+    namespace has moved, and the packet's job is to put the reviewer in front of
+    the source rather than to adjudicate the move.
+    """
+    index = scan_lean_project(ROOT)
     by_short: dict[str, list[str]] = {}
-    wanted_short = {decl.rsplit(".", 1)[-1] for decl in declarations}
-    for path in production_lean_files():
-        rel = path.relative_to(ROOT)
-        try:
-            lines = path.read_text(encoding="utf-8", errors="ignore").splitlines()
-        except OSError:
+    wanted = {decl.rsplit(".", 1)[-1] for decl in declarations}
+    for row in index.named_declarations:
+        if row.short_name not in wanted:
             continue
-        for lineno, line in enumerate(lines, start=1):
-            match = DECL_LINE.match(line)
-            if not match or match.group(1) not in wanted_short:
-                continue
-            by_short.setdefault(match.group(1), []).append(f"{rel}:{lineno}")
+        by_short.setdefault(row.short_name, []).append(
+            f"{row.path.relative_to(ROOT)}:{row.line}"
+        )
     return {
         decl: sorted(set(by_short.get(decl.rsplit(".", 1)[-1], [])))
         for decl in declarations

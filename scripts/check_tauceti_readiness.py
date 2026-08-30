@@ -35,13 +35,22 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import importlib.util
 import json
 import pathlib
 import re
 import sys
 
+try:
+    from aiq_lean_tools.lean_source import strip_comments
+    from aiq_lean_tools.module_plan import ModulePlanPolicy, check_module_plan
+except ImportError:  # pragma: no cover - environment guidance, not logic
+    raise SystemExit(
+        "aiq_lean_tools is not installed. Run:\n"
+        "  python3 -m pip install -e submodules/aiq-lean-formalization-tools"
+    )
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+POLICY = ROOT / "dev/policy/tauceti-module-plan.yaml"
 LINE_LIMIT = 1000
 # Written split so this file does not itself trip a repository-wide grep for
 # proof escapes; AGENTS.md forbids naming them in prose.
@@ -62,13 +71,6 @@ LINE_LIMIT = 1000
 # The self-tests below pin both directions, because a green result from this
 # gate is otherwise indistinguishable from a broken pattern.
 ESCAPE_RE = re.compile(r"\b(" + "sor" + "ry|ad" + "mit|nat" + "ive_decide)" + r"\b")
-BLOCK_COMMENT_RE = re.compile(r"/-.*?-/", re.S)
-LINE_COMMENT_RE = re.compile(r"--.*?$", re.M)
-
-
-def strip_comments(text: str) -> str:
-    """Lean source with block and line comments removed."""
-    return LINE_COMMENT_RE.sub("", BLOCK_COMMENT_RE.sub("", text))
 
 
 def has_escape(text: str) -> bool:
@@ -84,21 +86,11 @@ assert not has_escape("-- ad" + "mit is an English word here\n"), \
     "must ignore prose in a line comment"
 
 
-def load_topics():
-    spec = importlib.util.spec_from_file_location(
-        "roadmap_topics", ROOT / "scripts" / "check_tauceti_roadmap_topics.py")
-    mod = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(mod)
-    return mod
-
-
 def measure() -> dict:
-    topics = load_topics()
-    data = topics.analyse()
-    assign = data["assign"]
-    titles = {k: t for k, t, _ in topics.TOPICS}
-    per = {k: {"title": titles[k], "modules": 0, "no_provenance": [],
-               "oversize": [], "escapes": []} for k, _, _ in topics.TOPICS}
+    plan = check_module_plan(ModulePlanPolicy.load(POLICY), root=ROOT)
+    assign = {module: topic.id for topic in plan.topics for module in topic.modules}
+    per = {topic.id: {"title": topic.title, "modules": 0, "no_provenance": [],
+                      "oversize": [], "escapes": []} for topic in plan.topics}
     unplaced = []
     for path in sorted((ROOT / "ForTauCeti").rglob("*.lean")):
         name = str(path.relative_to(ROOT).with_suffix("")).replace("/", ".")
@@ -118,7 +110,7 @@ def measure() -> dict:
         if has_escape(text):
             rec["escapes"].append(rel)
     return {"per_topic": per, "unplaced": unplaced,
-            "order": [k for k, _, _ in topics.TOPICS]}
+            "order": [topic.id for topic in plan.topics]}
 
 
 def main(argv: list[str] | None = None) -> int:

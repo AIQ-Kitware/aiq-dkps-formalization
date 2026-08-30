@@ -88,43 +88,14 @@ import subprocess
 import sys
 from collections import defaultdict
 
-# Lean libraries whose declarations can be pinned. Everything else (vendored
-# Spectra, the Mathlib checkout, build artefacts) is out of scope.
-SOURCE_ROOTS = [
-    "Acharyya2024",
-    "Acharyya2025",
-    "Challenge",
-    "DavisKahan",
-    "DkpsQuench2026",
-    "ForMathlib",
-    "ForTauCeti",
-    "Helm2025",
-    "YuWangSamworth2015",
-]
+try:
+    from aiq_lean_tools.lean_source import scan_lean_project
+except ImportError:  # pragma: no cover - environment guidance, not logic
+    raise SystemExit(
+        "aiq_lean_tools is not installed. Run:\n"
+        "  python3 -m pip install -e submodules/aiq-lean-formalization-tools"
+    )
 
-# `theorem foo`, `lemma foo`, `def foo`, `abbrev foo`, `instance foo`, ... The
-# leading modifiers are optional and may appear in any order in practice, so
-# they are matched as a set rather than a fixed sequence.
-_MODIFIERS = r"(?:@\[[^\]]*\]\s*)*(?:public\s+|private\s+|protected\s+|noncomputable\s+|partial\s+|unsafe\s+|scoped\s+|local\s+)*"
-_KEYWORDS = r"(?:theorem|lemma|def|abbrev|instance|structure|class|inductive|opaque|axiom|alias)"
-DECL_RE = re.compile(
-    rf"^{_MODIFIERS}{_KEYWORDS}\s+(?P<name>_root_\.[A-Za-z_0-9'ₐ-ₜ₀-₉«»\.Ͱ-Ͽ℀-⅏←-⇿∀-⋿]+|[A-Za-z_«][A-Za-z_0-9'«»\.Ͱ-Ͽ₀-ₜ℀-⅏←-⇿∀-⋿]*)",
-    re.MULTILINE,
-)
-# NOTE: horizontal whitespace only. `\s` matches newlines, so `\s*$` under
-# `re.MULTILINE` happily spans a blank line and swallows the next line -- with
-# `\s`, the two lines `end` / `section` parse as a single `end section`, which
-# silently unbalances the namespace stack for the whole file.
-NAMESPACE_RE = re.compile(r"^namespace[ \t]+(\S+)[ \t]*$", re.MULTILINE)
-# `section`, `section Foo`, `noncomputable section`, `@[expose] public section`.
-# A bare `end` closes whichever of these or `namespace` is innermost, so both
-# have to be tracked on one stack -- treating `end` as always closing a
-# namespace silently corrupts every name in a file that opens a section.
-SECTION_RE = re.compile(
-    r"^(?:@\[[^\]]*\][ \t]*)?(?:public[ \t]+|private[ \t]+|noncomputable[ \t]+)*section(?:[ \t]+(\S+))?[ \t]*$",
-    re.MULTILINE,
-)
-END_RE = re.compile(r"^end(?:[ \t]+(\S+))?[ \t]*$", re.MULTILINE)
 PRINT_AXIOMS_RE = re.compile(r"^#print[ \t]+axioms[ \t]+(\S+)[ \t]*$", re.MULTILINE)
 
 
@@ -145,92 +116,24 @@ def module_to_path(module: str) -> str:
     return module.replace(".", os.sep) + ".lean"
 
 
-def declarations_in(path: str) -> set[str]:
-    """Fully-qualified declaration names declared in one Lean file.
+def source_index(root: str):
+    """The structural declaration index, from `aiq_lean_tools`.
 
-    The namespace stack is tracked through ``namespace``/``end``. A bare ``end``
-    closes the innermost open namespace; ``end Foo.Bar`` closes that many
-    components. ``_root_.`` prefixes escape the stack.
+    Name resolution is *syntactic*: fully-qualified names are computed from the
+    `namespace`/`section`/`end` structure and `_root_.` prefixes, with comments
+    stripped.  `export`, `open ... in` abbreviations, and `alias` targets beyond
+    the alias's own name are not expanded.  So a *failure* here is strong evidence
+    of drift and a *pass* is not proof of resolvability; the compiler and
+    `check_comparator_signatures.py` remain ground truth.
     """
-    try:
-        with open(path, encoding="utf-8") as handle:
-            text = handle.read()
-    except (OSError, UnicodeDecodeError):
-        return set()
-
-    names: set[str] = set()
-    # Entries are ("ns", ["Foo", "Bar"]) or ("sec", name-or-None). A bare `end`
-    # pops the innermost entry of either kind.
-    stack: list[tuple[str, object]] = []
-
-    def prefix() -> str:
-        parts: list[str] = []
-        for kind, value in stack:
-            if kind == "ns":
-                parts.extend(value)  # type: ignore[arg-type]
-        return ".".join(parts)
-
-    events = []
-    for match in NAMESPACE_RE.finditer(text):
-        events.append((match.start(), "ns", match.group(1)))
-    for match in SECTION_RE.finditer(text):
-        events.append((match.start(), "sec", match.group(1)))
-    for match in END_RE.finditer(text):
-        events.append((match.start(), "end", match.group(1)))
-    for match in DECL_RE.finditer(text):
-        events.append((match.start(), "decl", match.group("name")))
-    events.sort(key=lambda item: item[0])
-
-    for _, kind, value in events:
-        if kind == "ns":
-            stack.append(("ns", value.split(".")))
-        elif kind == "sec":
-            stack.append(("sec", value))
-        elif kind == "end":
-            if value is None:
-                if stack:
-                    stack.pop()
-            else:
-                # `end Foo.Bar` closes the matching opener; pop until we have
-                # popped an entry whose name matches, so an intervening
-                # anonymous section does not shift the stack.
-                target = value.split(".")
-                while stack:
-                    entry_kind, entry_value = stack.pop()
-                    if entry_kind == "ns" and entry_value == target:
-                        break
-                    if entry_kind == "sec" and entry_value == value:
-                        break
-        else:
-            if value.startswith("_root_."):
-                names.add(value[len("_root_.") :])
-            else:
-                current = prefix()
-                names.add(current + "." + value if current else value)
-    return names
+    return scan_lean_project(root)
 
 
-def collect_declarations(root: str) -> dict[str, list[str]]:
-    """Map fully-qualified declaration name -> files declaring it."""
-    index: dict[str, list[str]] = defaultdict(list)
-    for source_root in SOURCE_ROOTS:
-        base = os.path.join(root, source_root)
-        if not os.path.isdir(base):
-            continue
-        for dirpath, _dirnames, filenames in os.walk(base):
-            for filename in filenames:
-                if not filename.endswith(".lean"):
-                    continue
-                path = os.path.join(dirpath, filename)
-                rel = os.path.relpath(path, root)
-                for name in declarations_in(path):
-                    index[name].append(rel)
-    # Top-level aggregate modules such as `ForMathlib.lean` sit beside the roots.
-    for filename in glob.glob(os.path.join(root, "*.lean")):
-        rel = os.path.relpath(filename, root)
-        for name in declarations_in(filename):
-            index[name].append(rel)
-    return index
+def declarations_by_module(index) -> dict[str, set[str]]:
+    out: dict[str, set[str]] = defaultdict(set)
+    for row in index.named_declarations:
+        out[row.module].add(row.name)
+    return out
 
 
 def main() -> int:
@@ -247,7 +150,9 @@ def main() -> int:
 
     root = git_root()
     os.chdir(root)
-    index = collect_declarations(root)
+    scan = source_index(root)
+    index = scan.by_name
+    by_module = declarations_by_module(scan)
 
     findings: list[dict[str, str]] = []
     notes: list[dict[str, str]] = []
@@ -285,12 +190,7 @@ def main() -> int:
                 }
             )
 
-        challenge_path = module_to_path(challenge_module) if challenge_module else ""
-        challenge_decls = (
-            declarations_in(os.path.join(root, challenge_path))
-            if challenge_path and os.path.isfile(os.path.join(root, challenge_path))
-            else set()
-        )
+        challenge_decls = by_module.get(challenge_module, set())
 
         for name in pinned:
             if name not in index:
@@ -310,7 +210,8 @@ def main() -> int:
                         "check": "pinned-name-in-challenge",
                         "where": rel_config,
                         "detail": (
-                            f"`{name}` exists (in {', '.join(index[name])}) but the "
+                            f"`{name}` exists (in "
+                            f"{', '.join(sorted({row.module for row in index[name]}))}) but the "
                             f"challenge module {challenge_module} does not declare "
                             "it -- the comparator compares the two side by side, so "
                             "this config can never pass"

@@ -1,7 +1,7 @@
 # Grounding ledger
 
 This package is checked by
-`YuWangSamworth2015/scripts/verify_grounding.py` and is part of the default
+`dev/policy/yu-wang-samworth-grounding.yaml` and is part of the default
 build.  The source census is the current paper-coverage authority:
 `dev/yu-wang-samworth-2015-full-source-census.json`.
 
@@ -34,7 +34,7 @@ The grounding audit rejects proof placeholders or ungrounded external results in
 the package closure.  Run it rather than relying on a dated audit statement:
 
 ```bash
-python3 YuWangSamworth2015/scripts/verify_grounding.py
+aiq-lean source grounding dev/policy/yu-wang-samworth-grounding.yaml
 ```
 
 ## Source audit: equation (4)
