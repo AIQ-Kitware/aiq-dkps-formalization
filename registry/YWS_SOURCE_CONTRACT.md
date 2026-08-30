@@ -260,13 +260,12 @@ paper-facing `theorem1_uiNorm` on `EuclideanSpace ℝ (Fin p)` modelled on
 `theorem2_sinTheta`, plus a Challenge-side unitarily-invariant-norm interface —
 but neither is done.
 
-**HUMAN REVIEW ITEM.** The finding above is recorded here and in the two entry
-metadata files' scope fields. It is *not* yet recorded as a gap row in
-`dev/yu-wang-samworth-2015-full-source-census.json`, whose
-`published_source_audit` currently notes only that the published article fixes
-the preprint's wrong *indices* `λ̂_{s−1}`/`λ̂_{r+1}`, without observing that the
-*values* it assigns to `λ̂₀` and `λ̂_{p+1}` are inverted. Adding that row is
-census maintenance and belongs with a maintainer's review of this pass.
+**Recorded.** The finding is in the two entry metadata files' scope fields, and
+in the authoritative repository's census as gap
+`theorem1-sample-endpoint-conventions`, linked from rows `YWS-T1-baseline` and
+`YWS-T1-eq1`; that census's `published_source_audit` now also notes that the
+*values* the article assigns to `λ̂₀` and `λ̂_{p+1}` are inverted, not only that it
+fixes the preprint's wrong *indices* `λ̂_{s−1}`/`λ̂_{r+1}`.
 
 ---
 
