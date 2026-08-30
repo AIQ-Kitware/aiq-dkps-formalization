@@ -90,61 +90,73 @@ or the same condition with $A_0$ and $\Lambda_1$ interchanged.  Then, for every 
 
 #### `DavisKahan1970.sinTheta_headline`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:161`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:163`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:138`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:138`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_headline_generic`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean:102`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean:102`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean:102`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean:102`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:53`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:114`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:53`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:53`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_real_exactPaper`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:98`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:98`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:98`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:98`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.generalizedSinTheta`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:40`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:40`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:40`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:40`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:109`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:109`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:109`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:109`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:255`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:257`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:343`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:65`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:121`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:345`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_complex_of_intervalExterior`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:306`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:308`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_real_of_intervalExterior`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:394`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:396`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:114`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:53`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:53`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:65`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:121`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:345`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -639,67 +651,67 @@ The first is directed and residual-based; the second uses the ambient angle and 
 
 #### `TauCeti.DavisKahan1970.tanTheta_headline_generic_directed`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:73`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:73`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:73`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:73`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIII.lean:119`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIII.lean:119`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/PartIII.lean:119`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/PartIII.lean:119`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section2TanThetaPerturbation.lean:175`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section2TanThetaPerturbation.lean:175`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section2TanThetaPerturbation.lean:175`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section2TanThetaPerturbation.lean:175`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1176`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1176`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1176`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1176`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:210`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:210`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:210`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:210`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:322`, `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1265`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:322`, `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1265`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1265`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:691`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:691`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:691`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:691`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:460`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:460`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:459`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:459`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:212`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:212`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:212`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:212`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:428`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:428`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:427`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:427`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:346`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:346`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:346`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:346`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -724,6 +736,24 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:511`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:392`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:136`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:145`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -803,67 +833,67 @@ Again the source distinguishes the directed residual statement from the ambient 
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:111`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:111`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:111`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:111`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:402`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:606`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:402`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:606`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:606`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:606`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:252`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:252`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:252`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:252`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:167`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:168`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:166`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:166`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:255`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:256`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:254`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:254`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:345`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:346`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:344`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:344`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:405`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:406`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:404`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:404`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:207`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:207`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:207`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:207`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:201`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:201`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:201`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:201`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExterior`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:245`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:245`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:245`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:245`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:604`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:648`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -887,13 +917,49 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_angleOperator`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:664`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:708`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:600`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:647`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_real_angleOperator`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:575`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:667`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:680`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:688`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:156`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:165`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -981,133 +1047,199 @@ Section~7 derives the nonvanishing of the relevant $\cos(2\theta_j)$ factors fro
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_headline_generic`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:180`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:180`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:180`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:180`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:453`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1164`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:453`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1164`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1160`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:362`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:362`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:362`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:362`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:543`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1301`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:543`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1301`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1297`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:433`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:433`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:433`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:433`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExact.lean:77`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExact.lean:77`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExact.lean:77`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExact.lean:77`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:195`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:196`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:195`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:195`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:261`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:262`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:258`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:258`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:343`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.ReflectionIntertwines`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:414`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:344`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:343`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:343`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:429`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:414`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:188`, `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/ReflectionBlocks.lean:177`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:191`, `ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/ReflectionBlocks.lean:177`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/ReflectionBlocks.lean:177`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/ReflectionBlocks.lean:177`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:197`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:200`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.corner_offDiagonalPart_sq`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:224`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:227`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.gram_unboundedReflectionTangent`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:259`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:262`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:331`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:334`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:360`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:363`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:454`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:457`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.paperTanTwoBlockRepresentative_mul_signedCosTwo`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:427`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:430`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:532`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:579`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent`
 
-Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:562`
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:609`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:476`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:466`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.ReflectionIntertwines`
+
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:251`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace`
+
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:129`, `DavisKahan/TanTheta/RitzPair.lean:278`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace`
+
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:180`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:540`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:564`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real`
+
+Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:709`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR`
+
+Source location candidates: `DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:144`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR`
+
+Source location candidates: `DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean:192`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:479`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:525`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:180`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:187`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1169,7 +1301,7 @@ In the acute case, a direct rotation exists and is unique.  Moreover positivity 
 
 #### `TauCeti.DavisKahan1970.proposition3_1_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:170`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:170`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:170`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3AcuteDirectRotation.lean:170`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1244,25 +1376,25 @@ The source appends a remark comparing (3.5) with the earlier matching-dimension 
 
 #### `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:68`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:68`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:68`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:68`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_not_unique`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:102`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:102`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:102`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:102`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:253`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:253`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:253`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:253`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_2_not_unique_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:277`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:277`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:277`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition32.lean:277`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1352,25 +1484,25 @@ Every direct rotation is therefore the principal unitary square root of $(Q-Q^\p
 
 #### `TauCeti.DavisKahan1970.proposition3_3_complex_forward_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:117`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:117`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:117`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:117`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_3_complex_converse_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:140`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:140`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:140`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:140`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_3_real_forward_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:262`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:262`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:262`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:262`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_3_real_converse_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:304`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:304`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:304`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3PrincipalSquareRoot.lean:304`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1435,25 +1567,25 @@ Under the same direct-rotation setup, if
 
 #### `TauCeti.DavisKahan1970.proposition3_4_source_full_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:136`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:136`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:136`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:136`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_4_source_full_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:117`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:117`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:117`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:117`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_4_source_full`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:66`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:66`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:66`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:66`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:217`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:217`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:217`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:217`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1529,19 +1661,19 @@ their domain dimensions sum to $\dim\Hsp$, and their spectral multiplicity funct
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:192`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:192`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:192`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:192`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_realization`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:79`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:79`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:79`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Theorem31Realization.lean:79`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:234`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:234`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:234`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:234`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1607,19 +1739,19 @@ together with a possible eigenvalue $0$; $\Theta_1$ has the same nonzero eigenva
 
 #### `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:159`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:159`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:159`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:159`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_compact_classification_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:482`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:482`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:482`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:482`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_1_realization`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:287`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:287`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:287`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean:287`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1692,43 +1824,43 @@ In the acute case the $\theta$-eigenspace of $\Theta$ is the unique maximal subs
 
 #### `TauCeti.DavisKahan1970.proposition3_5_commutations`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:270`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:270`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:270`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:270`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:305`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:305`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:305`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:305`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:323`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:323`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:323`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:323`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:334`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:334`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:334`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:334`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_commutations_acute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:284`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:284`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:284`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:284`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:315`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:315`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:315`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:315`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply`
 
-Source location candidates: `DavisKahan/Geometry/Angle/Proposition35Nonacute.lean:283`
+Source location candidates: `DavisKahan/Geometry/Angle/Proposition35Nonacute.lean:283`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Geometry/Angle/Proposition35Nonacute.lean:283`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Geometry/Angle/Proposition35Nonacute.lean:283`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1788,37 +1920,37 @@ Interchanging the roles of $P$ and $Q$ leaves the angle operator $\Theta$ unchan
 
 #### `TauCeti.DavisKahan1970.corollary3_2_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:213`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:213`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:213`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:213`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:182`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:182`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:182`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:182`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:163`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:163`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:163`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Proposition35.lean:163`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.complex_directRotation_reversal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:131`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:131`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:131`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:131`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.real_directRotation_reversal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:246`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:246`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:246`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:246`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.corollary3_2_reversal_source_form`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary32.lean:39`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Corollary32.lean:39`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section3Corollary32.lean:39`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section3Corollary32.lean:39`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1909,25 +2041,25 @@ The latter follows by comparing $Vx$ with the closest unit vector in $Q\Hsp$ and
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:311`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:311`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:311`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:311`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1258`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1258`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1258`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1258`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:243`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:243`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:243`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:243`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1180`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1180`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1180`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1180`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1991,19 +2123,19 @@ is minimized among unitaries carrying $P\Hsp$ onto $Q\Hsp$ by the direct rotatio
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:342`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:342`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:342`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:342`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1285`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1285`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1285`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1285`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:373`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:373`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:373`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:373`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2070,13 +2202,13 @@ with the inequality also valid when the right-hand side is infinite.  The proof 
 
 #### `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:418`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:418`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:418`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:418`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:787`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:787`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section4Real.lean:787`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section4Real.lean:787`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2205,13 +2337,13 @@ for every unitary-invariant norm.  They also imply minimality of the operator no
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:509`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:509`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:509`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section4.lean:509`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1300`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1300`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1300`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section4Real.lean:1300`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2287,19 +2419,19 @@ then $\norm{1-V}$ is asserted to be minimized by $V=U$ for every unitary-invaria
 
 #### `TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite`
 
-Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:838`
+Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:838`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:838`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:838`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite`
 
-Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:862`
+Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:862`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:862`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:862`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted`
 
-Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:809`
+Source location candidates: `DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:809`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:809`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/FiniteDimensional/DirectRotation/ShortRotationCounterexample.lean:809`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2384,13 +2516,13 @@ The roles and hypotheses of $A$ and $B$ may be interchanged.  The same proof als
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:265`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:265`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:265`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:268`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:268`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:268`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:268`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2463,13 +2595,13 @@ This is the source's main Sylvester tool for the unbounded self-adjoint passages
 
 #### `TauCeti.DavisKahan1970.Theorem5_2`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:51`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:51`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section5.lean:51`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section5.lean:51`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real`
 
-Source location candidates: `DavisKahan/Sylvester/RealUnbounded.lean:76`
+Source location candidates: `DavisKahan/Sylvester/RealUnbounded.lean:76`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sylvester/RealUnbounded.lean:76`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sylvester/RealUnbounded.lean:76`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2533,7 +2665,7 @@ This cutoff lemma lets finite spectral truncations recover the Ky Fan data requi
 
 #### `TauCeti.DavisKahan1970.Lemma5_1`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:35`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section5.lean:35`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section5.lean:35`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section5.lean:35`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2606,13 +2738,13 @@ for every unitary-invariant norm.  The converse holds when the two diagonal bloc
 
 #### `TauCeti.DavisKahan1970.lemma6_1`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:77`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:77`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:77`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:77`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.lemma6_1_converse`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:78`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:78`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:78`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:78`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2676,7 +2808,7 @@ The proof is the reflection/pinching contraction obtained by averaging $K$ with 
 
 #### `TauCeti.DavisKahan1970.lemma6_2`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:79`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:79`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:79`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:79`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2760,13 +2892,13 @@ The symmetric replacement is Proposition~6.1: if the $A_0$--$\Lambda_1$ spectra 
 
 #### `TauCeti.DavisKahan1970.Proposition6_1`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:115`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:115`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:115`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:115`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:127`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:127`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:127`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:127`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2837,25 +2969,25 @@ If one of $A_0,\Lambda_1$ has spectrum in $[\beta,\alpha]$ and the other has spe
 
 #### `TauCeti.DavisKahan1970.Theorem6_1`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:102`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:102`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:102`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:102`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:105`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:105`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:105`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:105`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:200`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:200`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:200`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:200`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:221`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:221`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:221`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:221`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2930,13 +3062,13 @@ Combining this with (5.2) also yields the rank-corrected operator-norm estimate
 
 #### `TauCeti.DavisKahan1970.Theorem6_2`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:142`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:142`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:142`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:142`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_2_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:146`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:146`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:146`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:146`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3087,25 +3219,25 @@ then the corresponding directed tangent operator satisfies, for every unitary-in
 
 #### `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists`
 
-Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:640`
+Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:640`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:640`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:640`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedUnboundedReal.lean:534`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedUnboundedReal.lean:534`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/DirectedUnboundedReal.lean:534`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/DirectedUnboundedReal.lean:534`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:299`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:122`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:299`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:122`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Directed.lean:122`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Directed.lean:122`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:492`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:492`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:492`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:492`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3173,19 +3305,19 @@ then the leakage outside $\Psi$ obeys
 
 #### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:352`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:352`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:352`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:352`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:372`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:372`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:372`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:372`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakageReal.lean:114`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakageReal.lean:114`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakageReal.lean:114`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakageReal.lean:114`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3304,103 +3436,103 @@ These exclude $\theta=\pi/4$ and then $\theta>\pi/4$ under the chosen spectral p
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:142`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:142`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:142`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:142`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:387`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:387`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:387`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81.lean:387`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81Real.lean:78`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81Real.lean:78`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81Real.lean:78`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81Real.lean:78`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81Real.lean:240`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81Real.lean:240`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81Real.lean:240`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/SourceTheorem81Real.lean:240`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:503`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:503`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:503`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:503`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:551`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:551`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:551`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/BranchRepulsion.lean:551`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:294`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:294`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:294`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:294`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:357`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:357`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:357`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:357`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:217`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:217`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:217`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:217`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:346`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:346`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:346`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81Approximation.lean:346`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:489`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:489`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:489`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:489`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:575`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:575`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:575`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81ApproximationReal.lean:575`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:146`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:146`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:146`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:146`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:436`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:436`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:436`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:436`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:489`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:489`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:489`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:489`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:714`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:714`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:714`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:714`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:769`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:769`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:769`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem81AngleForms.lean:769`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3499,49 +3631,49 @@ The source closes Section~8 by stating that the $\sin2\theta$ theorem extends to
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/PaperSurface.lean:123`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/PaperSurface.lean:123`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/PaperSurface.lean:123`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/PaperSurface.lean:123`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:430`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:430`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:430`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:430`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:506`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:506`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:506`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:506`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:318`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:318`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:318`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:318`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:552`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:552`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:552`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:552`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:607`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:607`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:607`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:607`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:594`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:594`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:594`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82Source.lean:594`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:379`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:379`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:379`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/Section8/Theorem82SourceReal.lean:379`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
