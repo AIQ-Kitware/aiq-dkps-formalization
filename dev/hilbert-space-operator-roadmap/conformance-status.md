@@ -241,7 +241,7 @@ How it went, for whoever does this to another package:
 * Conversion is **all-or-nothing**. A `module` may not import a non-`module`, so no
   downward-closed subset short of the whole package builds. There is no incremental path.
 * The mechanical part is mechanical, and
-  `dev/hilbert-space-operator-roadmap/module-system-conversion.py` does it: insert `module`
+  `aiq-lean source module-migrate --write <paths>` does it: insert `module`
   after the copyright block, `import` → `public import`, add `public section` after the module
   docstring. **114 of the 124 files needed nothing else.**
 * Errors do not fall monotonically. Each fix unblocks a file, which lets the build reach its

@@ -42,7 +42,7 @@ scope = "leanprover-community"
 
 # ForTauCeti: the reusable-mathematics package. Declarations live in their final
 # `TauCeti.*` namespaces. A ForTauCeti module may import only `Mathlib.*`,
-# `TauCeti.*`, and `ForTauCeti.*` (enforced by scripts/check_dependency_layers.py).
+# `TauCeti.*`, and `ForTauCeti.*` (enforced by dev/policy/import-layers.yaml).
 # The glob builds every file even when no aggregate imports it. Current package
 # policy and provenance requirements live in ForTauCeti/README.md.
 [[lean_lib]]

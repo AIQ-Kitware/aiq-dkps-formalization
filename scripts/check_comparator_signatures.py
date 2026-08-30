@@ -32,6 +32,7 @@ from __future__ import annotations
 
 import argparse
 import sys
+from dataclasses import replace
 from pathlib import Path
 
 try:
@@ -58,16 +59,28 @@ def main(argv: list[str] | None = None) -> int:
         print(f"no comparator configs found under {COMPARATOR.relative_to(ROOT)}", file=sys.stderr)
         return 1
 
-    rows = []
-    extra: list[tuple[str, object]] = []
+    # One policy over every config, so the whole set is built once rather than
+    # twice per config.  Every pair is given the same `build_targets`, which is
+    # what makes the runner's target dedup collapse them into a single
+    # `lake build`.
+    pairs = []
     for config in configs:
-        report = compare_signatures(
-            SignaturePolicy.load(config), root=ROOT, build=not args.no_build
-        )
-        rows.extend((config.name, row) for row in report.comparisons)
-        for finding in report.findings:
-            if not any(finding in row.findings for row in report.comparisons):
-                extra.append((config.name, finding))
+        for pair in SignaturePolicy.load(config).pairs:
+            pairs.append((config.name, pair))
+    targets = tuple(sorted({
+        module for _, pair in pairs for module in (pair.left_module, pair.right_module)
+    }))
+    policy = SignaturePolicy(
+        tuple(replace(pair, name=name, build_targets=targets) for name, pair in pairs),
+        build=not args.no_build,
+    )
+    report = compare_signatures(policy, root=ROOT, build=not args.no_build)
+    rows = [(row.pair, row) for row in report.comparisons]
+    extra = [
+        (finding.location or "", finding)
+        for finding in report.findings
+        if not any(finding in row.findings for row in report.comparisons)
+    ]
 
     width = max((len(row.declaration) for _, row in rows), default=10)
     print("=" * 70)
