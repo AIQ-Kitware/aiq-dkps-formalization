@@ -5,6 +5,8 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
 import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
+import DavisKahan.InfiniteDimensional.DoubleAngle
+import DavisKahan.Geometry.Polar.DirectRotation
 
 /-!
 # Exact source-facing unbounded ambient `tan 2Theta`
@@ -381,6 +383,81 @@ theorem tanTwoTheta_unbounded_ambient_paperUINorm_exact
       N.Mem T ∧ (b - a) * N.gauge T ≤ 2 * N.gauge B
   refine ⟨hCC, hUI.1, ?_⟩
   nlinarith [hUI.2]
+
+/-! ### The subspace-first interface
+
+The theorem above asks its caller for a reflection `Z` together with four facts
+about it.  Two of those, self-adjointness and `Z² = 1`, are not hypotheses at
+all: a subspace determines its reflection and the reflection has both properties
+by construction.  The other two are genuine mathematics -- they say the
+reflection intertwines the perturbed operator -- and they belong to the subspace,
+not to a caller-built operator.
+
+`ReflectionIntertwines A B V` carries exactly those two, and the theorem below
+takes the reducing subspace `V`, builds `Z = V.reflectionOperator` internally, and
+supplies the two structural facts itself.
+
+What is *not* internalized here is the conclusion: it still names
+`unboundedReflectionTangent U (V.reflectionOperator)`, the block tangent, rather
+than the paper's canonical double-angle tangent.  Bringing it to the canonical
+object needs the tan-2Θ analogue of
+`DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers`, which is not
+proved here. -/
+
+/-- **The reflection in `V` intertwines the perturbed operator.**
+
+The domain-aware statement that `V.reflectionOperator` maps `A`'s domain into
+itself and that reflecting commutes with `A + B` on that domain.  Self-adjointness
+and involutivity of the reflection are *not* fields: they hold for every
+subspace. -/
+structure ReflectionIntertwines (A : G →ₗ.[ℂ] G) (B : G →L[ℂ] G)
+    (V : Submodule ℂ G) [V.HasOrthogonalProjection] where
+  /-- The reflection preserves the domain of `A`. -/
+  mapsDomain : TauCeti.LinearPMap.MapsDomainTo A A (V.reflectionOperator)
+  /-- Reflecting commutes with the perturbed operator on the domain. -/
+  commutes : ∀ x : A.domain,
+    A ⟨V.reflectionOperator (x : G), mapsDomain x⟩ +
+        B (V.reflectionOperator (x : G))
+      = V.reflectionOperator (A x) + V.reflectionOperator (B (x : G))
+
+/-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form, taking the reducing
+subspace rather than a reflection witness.**
+
+`tanTwoTheta_unbounded_ambient_paperUINorm_exact` with `Z = V.reflectionOperator`
+and with `Z` self-adjoint and involutive supplied by the library. -/
+theorem tanTwoTheta_unbounded_ambient_subspace_paperUINorm
+    (N : PaperUnitaryInvariantNorm)
+    {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G} {a b c : ℝ}
+    (V : Submodule ℂ G) [V.HasOrthogonalProjection]
+    (hA : IsSelfAdjoint A)
+    (hBsa : IsSelfAdjoint B)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hV : ReflectionIntertwines A B V)
+    (hUa : ∀ x : A.domain,
+      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : G) ∈
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
+    (hab : a < b) (hBmem : N.Mem B) :
+    IsUnit
+        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart
+            (V.reflectionOperator) *
+          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart
+            (V.reflectionOperator)) ∧
+      N.Mem (unboundedReflectionTangent
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)
+        (V.reflectionOperator)) ∧
+      (b - a) * N.gauge (unboundedReflectionTangent
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)
+        (V.reflectionOperator)) ≤
+        2 * N.gauge B :=
+  tanTwoTheta_unbounded_ambient_paperUINorm_exact N hA hBsa hB
+    (TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V)
+    (TauCeti.DavisKahan.reflectionOperator_mul_self_complex V)
+    hV.mapsDomain hV.commutes hUa hUb hab hBmem
 
 end
 

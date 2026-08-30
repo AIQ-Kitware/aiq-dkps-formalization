@@ -119,7 +119,11 @@
         "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact",
         "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact",
         "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact",
-        "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact"
+        "TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact",
+        "TauCeti.DavisKahan.UnboundedRitzPair",
+        "TauCeti.DavisKahan.ReducingComplement",
+        "TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock",
+        "TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm"
       ],
       "review_note": "Result-only audit 2026-08-12, superseding the earlier plan to classify this row as refuted-as-transcribed. The printed Section 2 tangent theorem is accepted as a TRUE counted result read under nonlocal source semantics; see `nonlocal_source_interpretation`. The directed conclusion is closed at full source scope (bounded and unbounded, complex and real, arbitrary paper UI norm). The ambient conclusion is closed at bounded scope over both fields in the source-shaped (3.5)-qualified form. The Appendix explicitly strengthens the unbounded scope further: in the ordered case A0 <= alpha and Lambda1 >= alpha + delta, both A0 and Lambda1 may be genuinely unbounded while the residual remains bounded. That Appendix scope is discharged over complex scalars by `tanTheta_unboundedCompression_ambient_paperUINorm_exact` and over real scalars by `tanTheta_unboundedCompression_ambient_paperUINorm_real_exact`; both conclude ideal membership and the sharp factor-one ambient inequality. The older `tanTheta_unbounded_ambient_paperUINorm_exact` and real sibling remain useful specializations in which the ambient operator is unbounded but the Ritz compression is bounded. The bilateral-shift material remains a vacuity/nonvacuity witness proving that (1.5) does not imply (3.5); it is NOT a counterexample to this result and must not be described as one. The transversality-form declarations `tanTheta_wholeSpace_paperUINorm` and its real counterpart are retained as registered specializations: `‖sin Theta‖ < 1` is strictly stronger than the source's standing (3.5), so they are alternative routes rather than the source-shaped statement. Audit-surface update 2026-08-13: `tanTheta_headline_generic_directed` is now the canonical scalar-generic PaperUI directed facade; it exposes the Ritz spectral hypotheses directly and does not alter the separately certified arbitrary-dimensional/unbounded ambient coverage.",
       "boundary_review": {
@@ -211,7 +215,8 @@
         "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
         "source_fidelity_inventory_sha256": "94c06028ae5c58528213decd3938c0794e62de4a41fc94206dc7a2f05d1a81f4",
         "supporting_atom_digest_sha256": "50eb0bd0f9bb87fae3d643b3b4a4c33056d1268e0e058c413c29ea3d4ffc7995"
-      }
+      },
+      "notes": " **Constructor-first interface added 2026-08-29.** The most general unbounded form, `tanTheta_unboundedCompression_ambient_paperUINorm_exact`, asked its caller for four separate facts that are not Davis--Kahan mathematics: two saying the compression data is A's Ritz pair on U (hZA, haction), and two saying V-perp reduces A (hVdom, hVcomm). `UnboundedRitzPair A U` and `ReducingComplement A V` hold those, `UnboundedRitzPair.ofTrialBlock` builds the first from the bounded-compression bundle a caller usually has, and `tanTheta_unbounded_ambient_ritz_paperUINorm` is the theorem taking the two objects. What deliberately stays a hypothesis is what the theorem is about: semiboundedness of the compression, coercivity on the unwanted subspace, and the crossed-defect standing condition (3.5)."
     },
     {
       "id": "S2-sin-two-theta",
@@ -306,7 +311,9 @@
         "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact",
-        "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact"
+        "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact",
+        "TauCeti.DavisKahan1970.ReflectionIntertwines",
+        "TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The bounded complex and real source wrappers already expose both directed and ambient arbitrary-PaperUI conclusions from the printed Section 2 hypotheses with pole exclusion derived internally. The unbounded source surface now closes the advertised global scope as well: `tanTwoTheta_unbounded_directedResidual_paperUINorm_exact` and its real counterpart give the sharp directed residual inequality, while `tanTwoTheta_unbounded_ambient_paperUINorm_exact` and its real counterpart give the sharp ambient factor-two inequality for unbounded self-adjoint A in arbitrary Hilbert dimension. The ambient proof assembles the two reflection-tangent corners using the existing Section 7 directed estimate, skew-adjoint symmetry, Lemma 6.1 block assembly, and Fan dominance; the real endpoints descend exactly through the maintained complexification layer. No quarter-angle assumption, caller-supplied pole certificate, finite-dimensional restriction, compactness premise, or perturbed-Q spectral-placement hypothesis is added. The final implementation was compiler-verified by the user on the 7cc049b4 baseline before this census promotion. Audit-surface update 2026-08-13: the already scalar-generic branch-free PaperUI theorem is promoted under the canonical alias `tanTwoTheta_headline_generic`; source-shaped directed and unbounded endpoints remain registered separately.",
       "boundary_review": {
@@ -334,7 +341,8 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "notes": " **Subspace-first interface added 2026-08-29.** The ambient form asked its caller for a reflection Z together with four facts. Two of them, self-adjointness and Z^2 = 1, are not hypotheses at all: a subspace determines its reflection and the reflection has both by construction. `ReflectionIntertwines A B V` carries only the two that are mathematics -- the reflection preserves A's domain and commutes with A + B on it -- and `tanTwoTheta_unbounded_ambient_subspace_paperUINorm` takes the reducing subspace, builds Z = V.reflectionOperator internally, and supplies the two structural facts itself. Not internalized: the conclusion still names `unboundedReflectionTangent`, the block tangent, rather than the paper's canonical double-angle tangent; bringing it across needs the tan-2Theta analogue of `sinTwoThetaIdealBlock_hasSameApproximationNumbers`, which is not proved."
     },
     {
       "id": "DK-3.1-prop",

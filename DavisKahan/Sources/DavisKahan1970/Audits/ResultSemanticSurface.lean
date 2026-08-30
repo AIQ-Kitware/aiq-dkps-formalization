@@ -131,6 +131,10 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 -/
 
 #check @TauCeti.DavisKahan1970.tanTheta_headline_generic_directed
+#check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm
+#check @TauCeti.DavisKahan.UnboundedRitzPair
+#check @TauCeti.DavisKahan.ReducingComplement
+#check @TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock
 #check @TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm
 #check @TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial
 #check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm
@@ -175,6 +179,8 @@ Status: **TERMINAL EXACT**.
 -/
 
 #check @TauCeti.DavisKahan1970.tanTwoTheta_headline_generic
+#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm
+#check @TauCeti.DavisKahan1970.ReflectionIntertwines
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact

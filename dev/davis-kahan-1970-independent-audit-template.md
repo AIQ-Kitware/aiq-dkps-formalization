@@ -681,7 +681,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:459`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:460`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -693,13 +693,37 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:427`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:428`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:346`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.UnboundedRitzPair`
+
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:58`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.ReducingComplement`
+
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:73`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock`
+
+Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:92`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:502`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -993,13 +1017,25 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:258`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:260`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:343`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.ReflectionIntertwines`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:413`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:428`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
