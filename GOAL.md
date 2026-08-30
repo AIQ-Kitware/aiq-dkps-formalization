@@ -25,8 +25,8 @@ repository unusable as one.
 
 ## A. Palomar
 
-Two entries are prepared and pass the real Comparator (`palomar/yws-2015`,
-`palomar/dk-1970`). Preparation only; **an agent must not submit.**
+Two entries are prepared and pass the real Comparator (`registry/yws-2015`,
+`registry/dk-1970`). Preparation only; **an agent must not submit.**
 
 **A0. Superseded 2026-08-29: the entry repos carry the proof.** Maintainer decision.
 Each entry is now an **extraction** rather than a thin wrapper — it contains the
@@ -42,7 +42,7 @@ claim about its paper. `dev/palomar-readiness.md` §5.0 is the record; §5.1 onw
 the superseded design, kept because its submodule reasoning still holds. **A1 below
 no longer applies** — there is no wrapper SHA to fill.
 
-~~**A1. Wrapper commit SHAs.** Each `palomar/<entry>/wrapper/` has
+~~**A1. Wrapper commit SHAs.** Each `registry/<entry>/wrapper/` has
 `REPLACE_WITH_COMMIT_SHA` in `lakefile.toml` and `formalization.yaml`. Filling them
 is a maintainer step at submission time, against the commit actually verified.~~
 

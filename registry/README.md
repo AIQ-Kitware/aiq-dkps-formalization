@@ -4,6 +4,17 @@
 peer review by the Palomar Registry.** The execution contract is
 [`../dev/palomar-readiness.md`](../dev/palomar-readiness.md).
 
+**Why this directory is `registry/` and not `palomar/`.** It was `palomar/` until
+2026-08-29, alongside the Lean library directory `Palomar/`. Two paths differing
+only in case are the same path on a case-insensitive filesystem — Windows, and
+macOS by default — so a checkout there could conflate them, refuse operations, or
+simply differ from what Linux sees. A formalization advertised as independently
+reproducible must not have a layout that is ambiguous on a common platform. The
+names now differ structurally, and the split is conceptual rather than
+capitalisation-based: `Palomar/` is Lean source, `registry/` is submission
+configuration and metadata. Palomar selects the Comparator and metadata paths
+explicitly, so neither has to live in a directory named after it.
+
 This directory holds one subdirectory per prepared entry. The Lean sources live
 under [`../Palomar/`](../Palomar) so they build and can be verified in place; the
 configuration, per-entry metadata and extraction skeleton live here.
@@ -12,7 +23,7 @@ configuration, per-entry metadata and extraction skeleton live here.
 
 | entry | source result | compared declarations | source relationship | status |
 | --- | --- | --- | --- | --- |
-| `yws-symmetric` | Yu–Wang–Samworth 2015, Theorem 2 (both conclusions) and Corollary 1 (both displays) | `YWSPalomar.theorem2_sinTheta`, `…theorem2_alignedFrame`, `…corollary1_sinTheta`, `…corollary1_alignedVector` | `formalizes` | Comparator PASS; **exact** |
+| `yws-symmetric` | Yu–Wang–Samworth 2015, Theorem 2 (both conclusions) and Corollary 1 (both displays) | `YWSPalomar.theorem2_sinTheta`, `…theorem2_alignedFrame`, `…corollary1_sinTheta`, `…corollary1_alignedVector` | `formalizes` | Comparator PASS; **source-faithful** — Theorem 2 exact, Corollary 1 with one inherited hypothesis written out, see below |
 | `yws-rectangular` | Yu–Wang–Samworth 2015, Theorem 3, right and left, sine and aligned, plus the two singular-frame equivalences | `YWSRectangular.theorem3_rightSinTheta`, `…rightAlignedFrame`, `…leftSinTheta`, `…leftAlignedFrame`, `…isRightSingularBlock_iff_pairedSingularVectors`, `…isLeftSingularBlock_iff_pairedSingularVectors` | `adapts` | Comparator PASS; **source-corrected**, see below |
 | `yws-2015` | Yu–Wang–Samworth 2015, Theorem 2, first conclusion, in a general index-set form | `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap` | — | Comparator PASS; **prototype/regression**, superseded by `yws-symmetric` |
 | `dk-1970` | Davis–Kahan 1970, operator-norm sin-Θ | `TauCeti.norm_starProjection_comp_starProjection_le` | — | Comparator PASS; extracted 2026-08-29 |
@@ -42,6 +53,22 @@ as `s < finrank ℝ (range A)`; the lower-level theorems in the development drop
 which is a valid generalization, but the entry compares at the paper's scope. And
 `Δ` is the paper's exact denominator, identified by `SourceSingularGap`, not an
 arbitrary positive lower bound.
+
+**`yws-symmetric` is source-faithful, and "exact" is the wrong word for it as a
+whole.** Theorem 2's two conclusions are the printed statements with nothing
+added or weakened. Corollary 1's two declarations assume `‖v‖ = ‖v̂‖ = 1`, and the
+*standalone* printed display does not say that — it says only that `v` and `v̂`
+satisfy the two eigenvector equations. Unit vectors are unambiguously meant, since
+the paper introduces the corollary as the `d = 1` case of Theorem 2, whose frames
+have orthonormal columns; but the omission is not harmless, because the second
+printed display is **false** without it. Scaling `v̂` preserves every printed
+hypothesis while `‖v̂ − v‖` does not, so `Σ̂ = Σ`, `v̂ = 2v` gives a zero
+perturbation against a nonzero distance.
+`YuWangSamworth2015.corollary1_printed_unnormalized_counterexample` is the
+machine-checked refutation. The source relationship stays `formalizes` — a
+hypothesis the paper supplies one sentence earlier is written out, not a result
+changed — but no claim of "exactly as printed" or "no added hypothesis" is made
+for Corollary 1.
 
 **Theorem 1 and Appendix Lemma A1 are not selected.** Both are formalized in the
 development. Theorem 1 is held back because the endpoint conventions its printed

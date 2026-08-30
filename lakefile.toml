@@ -108,7 +108,7 @@ leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, we
 # and the allowlisted Mathlib/Tau Ceti closure, which is why these are separate from
 # the internal `Challenge/` calibration tree. Intentionally not default targets: the
 # Challenge modules contain deliberate statement-side holes.
-# See dev/palomar-readiness.md and palomar/README.md.
+# See dev/palomar-readiness.md and registry/README.md.
 [[lean_lib]]
 name = "Palomar"
 globs = ["Palomar.*"]
