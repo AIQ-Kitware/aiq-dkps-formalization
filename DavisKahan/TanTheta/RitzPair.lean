@@ -113,5 +113,52 @@ theorem ofTrialBlock_residual (D : UnboundedTrialBlock A Z) :
 
 end UnboundedRitzPair
 
+namespace ReducingComplement
+
+variable {A : H →ₗ.[𝕜] H} {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
+
+/-- **A reducing subspace gives a reducing complement.**
+
+`TauCeti.LinearPMap.ReducesSubspace A V` is the repository's generic vocabulary
+for "`V` reduces `A`": both projections preserve the domain and both summands are
+invariant.  `ReducingComplement` is the single consequence the tangent theorems
+consume -- that the complementary projection commutes with `A` on the domain --
+and this is the bridge, so a caller who already holds a `ReducesSubspace`, for
+instance from a spectral subspace, does not meet a competing reduction
+vocabulary. -/
+theorem ofReducesSubspace (h : TauCeti.LinearPMap.ReducesSubspace A V) :
+    ReducingComplement A V where
+  mapsDomain x := h.orthogonalProjection_mem_domain x
+  commutes x := by
+    have hVdom : V.starProjection ((x : H)) ∈ A.domain := h.projection_mem_domain x
+    have hVpdom : Vᗮ.starProjection ((x : H)) ∈ A.domain :=
+      h.orthogonalProjection_mem_domain x
+    have hsplit :
+        (⟨V.starProjection ((x : H)), hVdom⟩ : A.domain)
+            + ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ = x := by
+      apply Subtype.ext
+      show V.starProjection ((x : H)) + Vᗮ.starProjection ((x : H)) = (x : H)
+      rw [Submodule.starProjection_orthogonal_apply]
+      abel
+    have hmap : A x = A ⟨V.starProjection ((x : H)), hVdom⟩
+        + A ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ := by
+      have hadd := A.map_add (⟨V.starProjection ((x : H)), hVdom⟩ : A.domain)
+        ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩
+      rwa [hsplit] at hadd
+    have hinV : A (⟨V.starProjection ((x : H)), hVdom⟩ : A.domain) ∈ V :=
+      h.invariant _ (V.starProjection_apply_mem _)
+    have hinVp : A (⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ : A.domain) ∈ Vᗮ :=
+      h.orthogonal_invariant _ (Vᗮ.starProjection_apply_mem _)
+    rw [hmap, map_add]
+    have h0 : Vᗮ.starProjection (A (⟨V.starProjection ((x : H)), hVdom⟩ : A.domain)) = 0 := by
+      rw [Submodule.starProjection_orthogonal_apply,
+        Submodule.starProjection_eq_self_iff.mpr hinV, sub_self]
+    have h1 : Vᗮ.starProjection (A (⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ : A.domain))
+        = A ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ :=
+      Submodule.starProjection_eq_self_iff.mpr hinVp
+    rw [h0, h1, zero_add]
+
+end ReducingComplement
+
 end DavisKahan
 end TauCeti
