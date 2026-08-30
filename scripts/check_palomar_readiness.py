@@ -360,14 +360,21 @@ def check_entry(rep: Report, cfg_path: pathlib.Path, *, with_axioms: bool) -> No
     if local_source_for(cfg["challenge_module"]) is not None:
         challenge_closure(rep, entry, cfg["challenge_module"])
 
-    # An entry carries its metadata one of two ways. The superseded thin-wrapper
-    # design put a skeleton under `wrapper/`; the current design (readiness §5.0)
-    # extracts the entry into a repository whose ROOT formalization.yaml describes
-    # it. Absence of a skeleton is therefore not a finding -- warning about it
-    # trained readers to ignore this checker's output.
-    meta = cfg_path.parent / "wrapper" / "formalization.yaml"
-    if meta.exists():
-        check_metadata(rep, meta, wrapper=True)
+    # An entry carries its metadata one of three ways. Preferred: a per-entry
+    # `formalization.yaml` beside the config, which a submission selects
+    # explicitly alongside the Comparator path -- that is how two entries over the
+    # same paper record different source relationships. Otherwise the extracted
+    # entry repository's ROOT file describes it (readiness §5.0), or, in the
+    # superseded thin-wrapper design, a skeleton under `wrapper/`. Absence of a
+    # skeleton is not a finding -- warning about it trained readers to ignore this
+    # checker's output.
+    entry_meta = cfg_path.parent / "formalization.yaml"
+    wrapper_meta = cfg_path.parent / "wrapper" / "formalization.yaml"
+    if entry_meta.exists():
+        check_metadata(rep, entry_meta, wrapper=False)
+        rep.note(f"{entry}: per-entry metadata at {rel(entry_meta)}")
+    elif wrapper_meta.exists():
+        check_metadata(rep, wrapper_meta, wrapper=True)
     else:
         rep.note(f"{entry}: metadata lives in the extracted entry repository")
 

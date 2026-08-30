@@ -6,16 +6,22 @@ peer review by the Palomar Registry.** The execution contract is
 
 This directory holds one subdirectory per prepared entry. The Lean sources live
 under [`../Palomar/`](../Palomar) so they build and can be verified in place; the
-configuration, metadata and wrapper skeleton live here.
+configuration, per-entry metadata and extraction skeleton live here.
 
 ## Prepared entries
 
-| entry | source result | compared declarations | status |
-| --- | --- | --- | --- |
-| `yws-symmetric` | Yu–Wang–Samworth 2015, Theorem 2 (both conclusions) and Corollary 1 (both displays) | `YWSPalomar.theorem2_sinTheta`, `…theorem2_alignedFrame`, `…corollary1_sinTheta`, `…corollary1_alignedVector` | Comparator PASS; **exact** |
-| `yws-rectangular` | Yu–Wang–Samworth 2015, Theorem 3, right and left, sine and aligned | `YWSRectangular.theorem3_rightSinTheta`, `…rightAlignedFrame`, `…leftSinTheta`, `…leftAlignedFrame` | Comparator PASS; **source-corrected**, see below |
-| `yws-2015` | Yu–Wang–Samworth 2015, Theorem 2, first conclusion, in a general index-set form | `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap` | Comparator PASS; **prototype/regression**, superseded by `yws-symmetric` |
-| `dk-1970` | Davis–Kahan 1970, operator-norm sin-Θ | `TauCeti.norm_starProjection_comp_starProjection_le` | Comparator PASS; extracted 2026-08-29 |
+| entry | source result | compared declarations | source relationship | status |
+| --- | --- | --- | --- | --- |
+| `yws-symmetric` | Yu–Wang–Samworth 2015, Theorem 2 (both conclusions) and Corollary 1 (both displays) | `YWSPalomar.theorem2_sinTheta`, `…theorem2_alignedFrame`, `…corollary1_sinTheta`, `…corollary1_alignedVector` | `formalizes` | Comparator PASS; **exact** |
+| `yws-rectangular` | Yu–Wang–Samworth 2015, Theorem 3, right and left, sine and aligned, plus the two singular-frame equivalences | `YWSRectangular.theorem3_rightSinTheta`, `…rightAlignedFrame`, `…leftSinTheta`, `…leftAlignedFrame`, `…isRightSingularBlock_iff_pairedSingularVectors`, `…isLeftSingularBlock_iff_pairedSingularVectors` | `adapts` | Comparator PASS; **source-corrected**, see below |
+| `yws-2015` | Yu–Wang–Samworth 2015, Theorem 2, first conclusion, in a general index-set form | `YuWangSamworth2015.sqrt_sum_cross_le_of_population_gap` | — | Comparator PASS; **prototype/regression**, superseded by `yws-symmetric` |
+| `dk-1970` | Davis–Kahan 1970, operator-norm sin-Θ | `TauCeti.norm_starProjection_comp_starProjection_le` | — | Comparator PASS; extracted 2026-08-29 |
+
+**The two Yu–Wang–Samworth entries carry their own metadata**, at
+`yws-symmetric/formalization.yaml` and `yws-rectangular/formalization.yaml`,
+because their relationships to the source differ and one `formalization.yaml`
+records one relationship per source. A Palomar submission selects its metadata
+path explicitly alongside its Comparator path.
 
 **`yws-symmetric` is the preferred Yu–Wang–Samworth entry.** `yws-2015` compares a
 statement in a convenient shape — an arbitrary `Finset` rather than the source's
@@ -28,11 +34,22 @@ paper's convention `σ²_{rank(A)+1} := −∞` is false: it makes the denominat
 infinite at `s = rank(A)`, so the printed bound asserts that two singular
 subspaces which can be orthogonal coincide. The entry's Challenge docstring states
 this, exhibits the counterexample, and says what is proved instead. Its metadata
-must not describe it as exact.
+says `relationship: adapts` and must not describe it as exact.
+
+Two things that are *not* changed there, and are easy to conflate with the
+correction. The paper's own block restriction `1 ≤ r ≤ s ≤ rank(A)` is retained,
+as `s < finrank ℝ (range A)`; the lower-level theorems in the development drop it,
+which is a valid generalization, but the entry compares at the paper's scope. And
+`Δ` is the paper's exact denominator, identified by `SourceSingularGap`, not an
+arbitrary positive lower bound.
 
 **Theorem 1 and Appendix Lemma A1 are not selected.** Both are formalized in the
-development. Theorem 1 is held back by a source-convention question recorded in
-[`YWS_SOURCE_CONTRACT.md`](YWS_SOURCE_CONTRACT.md), not by size.
+development. Theorem 1 is held back because the endpoint conventions its printed
+separation uses make it vacuous at any block touching either end of the spectrum;
+the published article was re-read on 2026-08-29 and prints them that way, so
+selecting Theorem 1 would mean a third `adapts` entry with its own disclosed
+correction. See [`YWS_SOURCE_CONTRACT.md`](YWS_SOURCE_CONTRACT.md) row T1. It is
+not held back by size.
 
 The clause-by-clause basis for every selection above is
 [`YWS_SOURCE_CONTRACT.md`](YWS_SOURCE_CONTRACT.md).
@@ -45,6 +62,13 @@ accepting the solution, and Lean's own kernel accepting it. Alongside that, each
 Challenge's transitive import closure reaches nothing in this repository, and each
 compared declaration's axiom closure is exactly `propext`, `Quot.sound`,
 `Classical.choice`.
+
+`definition_names` is empty in both Yu–Wang–Samworth configurations, and that is
+deliberate. Comparator treats a listed name as a *definition hole*: it checks the
+name, type, universe levels and safety level, and stops comparing the definition's
+value. Every helper definition in these Challenges is fully specified, so listing
+them weakened the comparison; with the lists removed Comparator requires the
+Challenge and Solution copies to agree as whole constants, bodies included.
 
 It does **not** mean Palomar has seen these, and it is not acceptance. Palomar runs
 its own verification and an editorial review, and registration is a maintainer
@@ -79,9 +103,13 @@ scripts/verify_palomar.sh dk-1970           # one entry
 An agent must not submit. Registration is permanent and the maintainer reviews the
 prepared commit first; the human-review checklist is in the contract.
 
-Each entry is submitted as its own standalone repository, a Palomar **thin
-wrapper** that pins this repository as the substantive formalization. The skeleton
-is in `<entry>/wrapper/`; extraction is a copy, because `Challenge.lean` and
-`Solution.lean` are byte-identical in both contexts — an `import` resolves the
-same way whether the library is local or arrives as a Lake dependency. Only the
-lakefile and the module names in `comparator.json` differ.
+Each entry is submitted from its own standalone repository. Those repositories are
+**extractions, not thin wrappers**: since 2026-08-29 each one contains the package
+directories its entry needs, copied verbatim, and builds them itself, so it is a
+substantive development in Palomar's sense and carries no `repository` key in its
+metadata. `Challenge.lean` and `Solution.lean` are byte-identical in both contexts
+— an `import` resolves the same way whether the library is local or arrives as a
+Lake dependency — so extraction is a copy. The skeletons under `<entry>/wrapper/`
+survive only as the metadata and comparator-config source the extraction copies
+from; they no longer describe the submitted repository's shape. See
+[`../dev/palomar-readiness.md`](../dev/palomar-readiness.md) §5.0.

@@ -168,9 +168,18 @@ package directories the entry needs, copied verbatim, and builds them itself.
   carries `ForTauCeti`, `DavisKahan` and `YuWangSamworth2015`. `DavisKahan` is there
   for its Hilbert-Schmidt/Frobenius ideal theory, which the YWS package uses.
 
-Both set `repository.role: substantive-development` and pin the same Mathlib and Tau
-Ceti revisions as this repository. Both were verified with `lake build Challenge
-Solution` from a clean build directory (8739 and 8732 jobs).
+Both pin the same Mathlib and Tau Ceti revisions as this repository. Both were
+verified with `lake build Challenge Solution` from a clean build directory (8739
+and 8732 jobs).
+
+**Metadata shape, revised 2026-08-29 against PalomarPolicy `d5a647d`.** Current
+policy omits `repository` entirely when the submitted repository contains the
+substantive development, and records that default as `substantive-development` in
+the mechanical report; the explicit `repository.role: substantive-development`
+spelling is still accepted but unnecessary. The extractions therefore carry no
+`repository` key, and state the extraction lineage in prose in their READMEs
+instead. `repository.substantive_formalization` is for thin wrappers only, and an
+extraction that physically contains the proof source is not one.
 
 This repository stays authoritative. The census, the distilled source specification,
 the semantic-audit apparatus and the gate scripts are deliberately **not** extracted:
