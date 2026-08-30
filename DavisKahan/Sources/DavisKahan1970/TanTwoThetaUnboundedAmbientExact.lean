@@ -460,6 +460,55 @@ theorem tanTwoTheta_unbounded_ambient_subspace_paperUINorm
     (TauCeti.DavisKahan.reflectionOperator_mul_self_complex V)
     hV.mapsDomain hV.commutes hUa hUb hab hBmem
 
+/-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form, on the paper's angle
+operator.**
+
+The same theorem as `tanTwoTheta_unbounded_ambient_subspace_paperUINorm`, with the
+proof's block tangent replaced by the paper's ambient `|tan 2Θ|`.  The two have
+the same approximation numbers -- `unboundedReflectionTangent U J_V = Ξ · J_U`
+with `J_U` a self-adjoint unitary, and `|Ξ| = |tan 2Θ|` -- so every source
+unitarily invariant norm sees them identically; see
+`DavisKahan.extendedGauge_unboundedReflectionTangent`.
+
+The extra hypothesis `hcos` is the paper's own `cos 2θ ≠ 0`, which is what makes
+`tan 2Θ` a bounded operator at all.  No branch is chosen: principal angles may
+exceed `π/4`, and `|tan 2Θ|` is what a norm sees there. -/
+theorem tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm
+    (N : PaperUnitaryInvariantNorm)
+    {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G} {a b c : ℝ}
+    (V : Submodule ℂ G) [V.HasOrthogonalProjection]
+    (hA : IsSelfAdjoint A)
+    (hBsa : IsSelfAdjoint B)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hV : ReflectionIntertwines A B V)
+    (hUa : ∀ x : A.domain,
+      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : G) ∈
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
+    (hab : a < b) (hBmem : N.Mem B)
+    (hcos : ∀ t ∈ spectrum ℝ (TauCeti.DavisKahanExt.paperAngleOperatorC
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V),
+      Real.cos (2 * t) ≠ 0) :
+    N.Mem (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
+      (b - a) * N.gauge (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
+        2 * N.gauge B := by
+  obtain ⟨-, hmem, hle⟩ :=
+    tanTwoTheta_unbounded_ambient_subspace_paperUINorm N V hA hBsa hB hV hUa hUb
+      hab hBmem
+  have hgauge := DavisKahan.extendedGauge_unboundedReflectionTangent
+    (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V N hcos
+  refine ⟨?_, ?_⟩
+  · unfold PaperUnitaryInvariantNorm.Mem at hmem ⊢
+    rwa [← hgauge]
+  · unfold PaperUnitaryInvariantNorm.gauge at hle ⊢
+    rwa [← hgauge]
+
 end
 
 end DavisKahan1970
