@@ -10,3 +10,6 @@
 [submodule "submodules/TauCetiReview"]
 	path = submodules/TauCetiReview
 	url = https://github.com/TauCetiProject/TauCetiReview.git
+[submodule "submodules/aiq-lean-formalization-tools"]
+	path = submodules/aiq-lean-formalization-tools
+	url = https://github.com/AIQ-Kitware/aiq-lean-formalization-tools.git
