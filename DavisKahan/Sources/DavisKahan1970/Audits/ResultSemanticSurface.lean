@@ -163,6 +163,7 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan.sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC
 #check @TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers
 #check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock
+#check @TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm
 #check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real
 #check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative
@@ -187,6 +188,11 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan.gram_unboundedReflectionTangent
 #check @TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal
 #check @TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection
+#check @TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq
+#check @TauCeti.DavisKahan.paperTanTwoBlockRepresentative_mul_signedCosTwo
+#check @TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent
+#check @TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent
+#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact
