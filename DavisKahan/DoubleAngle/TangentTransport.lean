@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.DoubleAngle.AngleTransport
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
+import DavisKahan.DoubleAngle.RealAngleIdentification
 
 /-!
 # The unbounded `tan 2Θ` block, and its transport to the paper's tangent
@@ -568,6 +569,46 @@ theorem extendedGauge_unboundedReflectionTangent
 
 end PaperTangent
 
+
+section RealAngle
+
+open TauCeti.DavisKahanExt TauCeti.ApproximationNumber TauCeti.RealComplexification
+  TauCeti.DavisKahan.Foundation.RealComplexification
+
+variable {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er]
+  [CompleteSpace Er]
+
+/-- **The real `sin 2Θ` block carries the directed angle's singular data.**
+
+The real counterpart of `sinTwoThetaIdealBlock_hasSameApproximationNumbers`.
+`norm_sinTwoThetaIdealBlock_real` gave this at the operator norm only, which is
+one number; this gives every approximation singular value, which is what a
+symmetric ideal actually reads.
+
+The route is the one the norm identification already used: complexification
+preserves approximation singular values, the real block complexifies to the
+complex block of the complexified pair, and the complex transport applies there.
+
+The target is `Real.sinTwoAngleOperatorRC`, the *directed* double-angle sine of the
+real pair read in the complexification, which is where the tree keeps it — there
+is no real directed spelling, only the ambient `paperSinTwoAngleOperatorR`.  As
+in the complex case the directed operator is the block's partner: the block is
+one-sided and carries each principal angle once, where an ambient angle object
+carries it twice.  Turning this into an equality of *real* `PaperUnitaryInvariantNorm`
+gauges would need a real directed `sin 2Θ` operator, which would be a second
+spelling of an existing concept and is deliberately not introduced here. -/
+theorem approximationSingularValue_sinTwoThetaIdealBlock_real
+    (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (n : ℕ) :
+    approximationSingularValue n (sinTwoThetaIdealBlock U V)
+      = approximationSingularValue n (Real.sinTwoAngleOperatorRC U V) := by
+  rw [← ExactSinTheta.ComplexificationApproximation.approximationSingularValue_complexify
+      (sinTwoThetaIdealBlock U V) n,
+    complexify_sinTwoThetaIdealBlock U V]
+  exact sinTwoThetaIdealBlock_hasSameApproximationNumbers
+    (complexifySubmodule U) (complexifySubmodule V) n
+
+end RealAngle
 
 end DavisKahan
 end TauCeti
