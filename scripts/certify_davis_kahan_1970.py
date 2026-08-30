@@ -47,6 +47,18 @@ from check_davis_kahan_1970_result_inventory import (
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 from _external_checkouts import tauceti_root  # noqa: E402
 
+try:
+    from aiq_lean_tools.certification import (
+        git_snapshot,
+        sha256_file,
+        source_tree_hash as package_source_tree_hash,
+    )
+except ImportError:  # pragma: no cover - environment guidance, not logic
+    raise SystemExit(
+        "aiq_lean_tools is not installed. Run:\n"
+        "  python3 -m pip install -e submodules/aiq-lean-formalization-tools"
+    )
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 BUILD_ROOT = ROOT / "build"
 MAP_PATH = ROOT / "dev/davis-kahan-1970-statement-map.json"
@@ -68,14 +80,6 @@ def now_utc() -> str:
     return dt.datetime.now(dt.timezone.utc).isoformat(timespec="seconds")
 
 
-def sha256_file(path: pathlib.Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as file:
-        for chunk in iter(lambda: file.read(1024 * 1024), b""):
-            h.update(chunk)
-    return h.hexdigest()
-
-
 def command_output(argv: list[str], cwd: pathlib.Path = ROOT) -> tuple[int, str]:
     try:
         done = subprocess.run(argv, cwd=cwd, text=True, capture_output=True, check=False)
@@ -85,18 +89,15 @@ def command_output(argv: list[str], cwd: pathlib.Path = ROOT) -> tuple[int, str]
 
 
 def git_info() -> dict:
-    head_rc, head = command_output(["git", "rev-parse", "HEAD"])
-    branch_rc, branch = command_output(["git", "branch", "--show-current"])
-    status_rc, status = command_output(["git", "status", "--porcelain=v1", "--untracked-files=all"])
-    sub_rc, submodules = command_output(["git", "submodule", "status", "--recursive"])
-    return {
-        "available": head_rc == 0,
-        "head": head if head_rc == 0 else None,
-        "branch": branch if branch_rc == 0 else None,
-        "status_porcelain": status.splitlines() if status_rc == 0 and status else [],
-        "clean": status_rc == 0 and not status,
-        "submodule_status": submodules.splitlines() if sub_rc == 0 and submodules else [],
-    }
+    """The repository's Git state, plus the submodule status this bundle records."""
+    snapshot = dict(git_snapshot(ROOT))
+    snapshot["clean"] = snapshot.get("available", False) and not snapshot.get("dirty", True)
+    # The certificate schema names the commit `head`; keep that spelling stable
+    # for readers of already-published bundles.
+    snapshot["head"] = snapshot.get("commit")
+    rc, submodules = command_output(["git", "submodule", "status", "--recursive"])
+    snapshot["submodule_status"] = submodules.splitlines() if rc == 0 and submodules else []
+    return snapshot
 
 
 def nested_git_info(path: pathlib.Path) -> dict:
@@ -141,17 +142,8 @@ def source_file_list() -> list[pathlib.Path]:
 
 
 def source_tree_hash() -> tuple[str, list[dict]]:
-    entries: list[dict] = []
-    aggregate = hashlib.sha256()
-    for path in source_file_list():
-        rel = path.relative_to(ROOT).as_posix()
-        digest = sha256_file(path)
-        entries.append({"path": rel, "sha256": digest, "bytes": path.stat().st_size})
-        aggregate.update(rel.encode("utf-8"))
-        aggregate.update(b"\0")
-        aggregate.update(digest.encode("ascii"))
-        aggregate.update(b"\n")
-    return aggregate.hexdigest(), entries
+    """A stable digest of every file that defines this certification run."""
+    return package_source_tree_hash(ROOT, source_file_list())
 
 
 def tool_version(argv: list[str]) -> dict:
