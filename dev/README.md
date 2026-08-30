@@ -359,8 +359,7 @@ The fast gate validates schema, source ranges, gap references, and cited declara
 ## The `@[expose]` ratchet
 
 The `blanket-expose` ratchet in `dev/policy/ratchet.yaml` enforces the completed
-conversion away from
-file-wide body exposure in `ForTauCeti`.
+conversion away from file-wide body exposure in `ForTauCeti`.
 
 ```sh
 aiq-lean ratchet check dev/policy/ratchet.yaml               # gate
