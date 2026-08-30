@@ -1,0 +1,55 @@
+# Count ratchets over Lean source.
+#
+# Checked by `aiq-lean ratchet check dev/policy/ratchet.yaml`.
+# Replaces `scripts/check_expose_ratchet.py`.  The slice-by-slice reduction log
+# that script carried is in its Git history; what survives here is the rule, the
+# reason, and the measurement that tells the next reader not to game the number.
+rules:
+  # Tau Ceti's `api-design` rubric: "Do not expose bodies to compensate for
+  # missing lemmas: keep bodies unexposed (no `@[expose]`) where possible unless
+  # a consumer must unfold or compute, and ask for the missing lemma instead."
+  # Adopted over this repository's former house rule on 2026-07-30, so
+  # `ForTauCeti/README.md` asks for a plain `public section` with `@[expose]`
+  # only on the individual declarations a consumer must genuinely unfold.
+  #
+  # The count was 68 during one audit pass and 70 during the next, because the
+  # old house rule was telling every new file to add one.  This is the ratchet
+  # that stopped it rising.
+  - id: blanket-expose
+    description: "ForTauCeti modules exposing every body with `@[expose] public section`"
+    paths: ["ForTauCeti/**/*.lean"]
+    pattern: '^@\[expose\]\s*public\s+section'
+    maximum: 0
+    count: files
+
+  # The blanket ratchet alone has an obvious failure mode: convert a module off
+  # `@[expose] public section` and then sprinkle `@[expose]` over its
+  # definitions, which satisfies the count while defeating the point.
+  #
+  # This is NOT zero and should not be: `api-design` permits exposure where a
+  # consumer must unfold or compute.
+  #
+  # **Measured 2026-08-27, so the next reader does not repeat it.**  All 191
+  # `@[expose]` attributes in `ForTauCeti` were deleted and the library rebuilt:
+  # 65 errors in 17 modules.  Restoring only the files an error named and
+  # rebuilding converged after seven rounds with 189 of the 191 still needed.
+  # The measurement is at whole-file granularity, so it bounds necessity from
+  # above rather than proving each attribute load-bearing -- but it does
+  # establish that lowering the count is not a cleanup task.  The failures are
+  # `simp` lemmas whose statement is a definitional unfolding, `rfl` proofs, and
+  # `rw` at a definition name; each needs the missing application or elimination
+  # lemma written and its consumers migrated.
+  #
+  # 2026-08-28: the count fell to 166, and nothing was cleaned up -- the
+  # `ClosedOperator` to `LinearPMap` migration deleted the consumers that forced
+  # 23 of them.  That is the shape the reduction takes: exposures go when the
+  # thing needing them goes, not when someone deletes attributes.
+  #
+  # **This rule is above its maximum today and that is the correct report.**  Do
+  # not raise the maximum to make the suite green.
+  - id: per-declaration-expose
+    description: "individual `@[expose]` attributes in ForTauCeti"
+    paths: ["ForTauCeti/**/*.lean"]
+    pattern: '^@\[expose\]\s*$|^@\[simps![^\]]*,\s*expose\]\s*$'
+    maximum: 10
+    count: matches

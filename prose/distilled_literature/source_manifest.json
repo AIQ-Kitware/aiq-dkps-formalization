@@ -15,6 +15,104 @@
     "transcription_sufficient": "An exact source-order transcription plus a maintained formalization-versus-literature ledger is sufficient; a second distilled note would be duplicative.",
     "source_faithful_audit_specification": "A transformative source-order reconstruction preserves the mathematical source surface closely enough to serve as the checked-in semantic specification for a static source-to-formalization audit."
   },
+  "policy": {
+    "_comment": "Vocabulary and required-field policy for `aiq-lean literature validate`. Previously hard-coded in scripts/check_distilled_literature_index.py.",
+    "required_work_fields": [
+      "authors",
+      "bibliographic_status",
+      "distilled_status",
+      "existing_assets",
+      "formalization_status",
+      "group",
+      "kind",
+      "missing_work",
+      "primary_url",
+      "priority",
+      "repo_evidence",
+      "role",
+      "scope",
+      "target_note",
+      "tier",
+      "title",
+      "year"
+    ],
+    "kinds": [
+      "book",
+      "monograph",
+      "paper"
+    ],
+    "groups": [
+      "DKPS lineage and target papers",
+      "MDS, Euclidean distance geometry, Gram rigidity, and alignment",
+      "Spectral perturbation, principal angles, and matrix inequalities",
+      "Reference works and modern syntheses"
+    ],
+    "priorities": [
+      "P0",
+      "P1",
+      "P2",
+      "P3"
+    ],
+    "note_extension": ".tex"
+  },
+  "reconstruction": {
+    "_comment": "What a `complete` distilled reconstruction must contain. A note claiming completion without these markers is a claim nobody checked.",
+    "complete_statuses": [
+      "complete"
+    ],
+    "note_root": ".",
+    "required_markers": [
+      "Source map and scope",
+      "Formalization map",
+      "Source-faithfulness",
+      "\\end{document}"
+    ],
+    "per_work_markers": {
+      "Davis1963": [
+        "Davis 1.1",
+        "Davis 1.2",
+        "Davis 1.3",
+        "Davis 2.1",
+        "Davis 2.2",
+        "Davis 2.3",
+        "Davis 3.1",
+        "Davis 3.2",
+        "Davis 3.3",
+        "Davis 4.1",
+        "Davis 5.1",
+        "\\tag{2.1}",
+        "\\tag{2.2}",
+        "\\tag{2.3}",
+        "\\tag{2.4}",
+        "\\tag{2.5}",
+        "\\tag{3.1}",
+        "\\tag{3.2}",
+        "\\tag{3.3}",
+        "\\tag{4.1}",
+        "\\tag{4.2}",
+        "\\tag{5.1}",
+        "\\tag{5.2}"
+      ],
+      "YuWangSamworth2015": [
+        "Statistical Davis--Kahan baseline",
+        "Yu--Wang--Samworth population-gap theorem",
+        "Rank-one form",
+        "Yu--Wang--Samworth singular-subspace theorem",
+        "Orthogonal compression",
+        "\\tag{YWS-1}",
+        "\\tag{YWS-2}",
+        "\\tag{YWS-3}",
+        "\\tag{YWS-4}",
+        "\\tag{YWS-5}",
+        "\\tag{YWS-6}",
+        "\\tag{YWS-7}",
+        "\\tag{YWS-8}",
+        "\\tag{YWS-9}",
+        "\\tag{YWS-10}",
+        "\\tag{YWS-11}"
+      ]
+    }
+  },
   "works": {
     "HelmMehtaDuderstadtYangWhiteGeisaVogelsteinPriebe2020": {
       "title": "A Partition-Based Similarity for Classification Distributions",

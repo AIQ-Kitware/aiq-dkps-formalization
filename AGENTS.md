@@ -148,7 +148,7 @@ Mathlib      TauCeti
 ```
 
 - `ForTauCeti` may import only `Mathlib` / `TauCeti` / `ForTauCeti`. Enforced by
-  `scripts/check_dependency_layers.py`.
+  `dev/policy/import-layers.yaml`, checked with `aiq-lean imports check`.
 - `DavisKahan` remains its own package and the paper-facing home of the work; it
   may consume `ForTauCeti`.
 - **Spectra is retired.** No maintained module imports it, its source tree is no
@@ -181,9 +181,9 @@ Mathlib      TauCeti
 - An editable Tau Ceti or roadmap checkout is an **optional explicit input**, never
   assumed present: pass `--tauceti-root` / `--roadmap-root`, or set `TAUCETI_ROOT` /
   `TAUCETI_ROADMAP_ROOT`. `scripts/_external_checkouts.py` is the shared resolver.
-  A checker with no checkout reports `UNAVAILABLE` (exit 3) and `run_gates.py`
-  prints it as `SKIP`, counted as neither passed nor failed — never make a gate
-  green by removing the thing it checks.
+  A checker with no checkout reports `UNAVAILABLE` (exit 3) and `aiq-lean gates run`
+  prints it as `unavailable`, counted as neither passed nor failed — never make a
+  gate green by removing the thing it checks.
 - Stage the maintained implementation in `ForTauCeti`. Only an explicit submission
   task should run `scripts/export_for_tauceti.py --write`, which requires an
   editable checkout and refuses the Lake package copy;
@@ -488,6 +488,86 @@ the source-general theorem in the project roadmap.
 
 See [`docs/planning/davis-kahan-full-paper-goal.md`](docs/planning/davis-kahan-full-paper-goal.md)
 for the maintained scope ledger and completion standard.
+
+## The census and audit tooling lives in one package
+
+**`aiq-lean-formalization-tools` owns every generic mechanism this repository
+uses to check itself.** It is developed in `submodules/aiq-lean-formalization-tools`
+and consumed as an *installed Python package*, never through the submodule path:
+
+```bash
+python3 -m pip install -e submodules/aiq-lean-formalization-tools
+```
+
+That installs `aiq-lean`, `leanq`, `lake-build-report`, and `lean-warning-fix`.
+Nothing in the Lean build needs it, and no checker reads through the gitlink, so
+a clone with no submodules initialised still builds. A checker that cannot import
+`aiq_lean_tools` says so and exits; it does not silently pass.
+
+**This repository owns the data and the policy; the package owns the engine.**
+Source-paper facts stay in `dev/*.json`; architecture decisions stay in
+`dev/policy/*.yaml`; thresholds, baselines, and vocabularies stay next to the
+things they govern. What lives in the package is parsing, validation, rendering,
+graph work, and compiler probing.
+
+Run the suite with:
+
+```bash
+aiq-lean gates run --config dev/policy/gate-suite.yaml          # every gate
+aiq-lean gates run --config dev/policy/gate-suite.yaml --fast   # skip Lean builds
+aiq-lean gates list --config dev/policy/gate-suite.yaml         # show the classification
+```
+
+`dev/policy/gate-suite.yaml` declares the package-command gates and still
+discovers the remaining `scripts/check_*.py`, which are the checks that encode
+Davis--Kahan, Tau Ceti, or Palomar policy and have no generic form.
+
+**Do not run `lake` while the suite is running.** Several gates invoke it, and a
+concurrent build makes them fail with `build failed`, which reads exactly like a
+regression and is not one. `--fast` skips exactly those.
+
+### Where each generic operation now lives
+
+| Need | Command |
+| --- | --- |
+| validate/render/probe a source census | `aiq-lean census …` |
+| validate/render a clause-by-clause review | `aiq-lean review …` |
+| the result/source-atom coverage inventory | `aiq-lean coverage …` |
+| every ledger at once, and cross-paper totals | `aiq-lean workspace status\|validate\|html` |
+| a curated source-to-Lean review packet | `aiq-lean alignment render` |
+| import layering, namespace placement, count ratchets | `aiq-lean imports\|namespaces\|ratchet check` |
+| duplicate names, private shadows, docstrings, admissions, proof length, conflict markers, orphan build products | `aiq-lean source …` |
+| aggregate `All.lean` generation | `aiq-lean source aggregates` |
+| staging registries, module-scope coverage, roadmap delivery | `aiq-lean source staging\|module-coverage\|roadmap` |
+| exact declaration-signature preflight | `aiq-lean signatures check` |
+| the literature inventory | `aiq-lean literature …` |
+| the recursive foundation map | `aiq-lean foundations …` |
+| elaborated declaration/dependency queries and graph viewers | `leanq …` |
+| Lake diagnostics, mechanical warning fixes | `lake-build-report`, `lean-warning-fix` |
+
+`aiq-lean <group> --help` lists the rest.
+
+### Rules for this boundary
+
+- **A generic mechanism belongs in the package.** If you find yourself writing a
+  Lean source parser, a census schema validator, a Markdown renderer, a
+  declaration probe, or a dependency walk in `scripts/`, it is already in
+  `aiq_lean_tools` or it should be. Fix it there, add a test there, and bump the
+  submodule.
+- **A repository script may select inputs and state policy, and nothing else.**
+  It must contain no copied parser, renderer, schema validator, graph engine, or
+  source scanner. The remaining `scripts/check_*.py` are compositions, and they
+  are short for that reason.
+- The rule above about not adding a new `scripts/check_*.py` is unchanged, and is
+  now easier to honour: a new check is usually a few lines of policy in
+  `dev/policy/` plus an entry in the gate suite.
+- **Structural findings are candidates, not conclusions.** Python source scanning
+  does not see the elaborated environment: duplicate, dead, similar, and
+  roadmap-delivery results are review candidates. Use `leanq` or a compiler probe
+  before acting on one.
+- Changing the package is ordinary work when this repository needs it. Nine of
+  its behaviours were wrong or missing until this repository exercised them; that
+  is what a first consumer is for.
 
 ## Lean source conventions
 

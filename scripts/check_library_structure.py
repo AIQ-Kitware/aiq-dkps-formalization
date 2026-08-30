@@ -216,7 +216,7 @@ def main() -> None:
     if rule3:
         print(f"  note  3. Experimental scratch hygiene: {len(rule3)} module(s) are "
               "outside the admission-support closure; run "
-              "scripts/check_experimental_coverage.py for scratch-tree policy")
+              "`aiq-lean source module-coverage dev/policy/experimental-coverage.yaml` for scratch-tree policy")
     else:
         print("  ok    3. Experimental scratch hygiene has no residual findings")
     check3 = True

@@ -80,7 +80,9 @@ automatically is what previously produced status that looked healthy and was not
 ├── external/                # notes on optional editable external checkouts
 ├── submodules/              # coordination/reference/delivery repos; never build inputs
 ├── retired/                 # provenance for the closed Spectra collaboration
-├── scripts/                 # the census tools and the build gates (`scripts/run_gates.py`)
+├── scripts/                 # paper-specific census and submission policy; the
+│                            # generic engines are the installed `aiq-lean` package
+├── dev/policy/              # the architecture and threshold policy the gates read
 ├── lakefile.toml            # Lake workspace: default targets and explicit opt-in libraries
 ├── lake-manifest.json       # pinned dependency manifest
 └── lean-toolchain           # Lean toolchain pin
@@ -154,8 +156,8 @@ five gates shell out to it and a concurrent build makes them report failures tha
 are not real:
 
 ```bash
-python3 scripts/run_gates.py          # all of them
-python3 scripts/run_gates.py --fast   # skip the five that build Lean
+aiq-lean gates run --config dev/policy/gate-suite.yaml          # all of them
+aiq-lean gates run --config dev/policy/gate-suite.yaml --fast   # skip the ones that build Lean
 ```
 
 ## Formalization scope

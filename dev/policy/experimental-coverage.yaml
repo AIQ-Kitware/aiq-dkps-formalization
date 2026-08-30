@@ -1,0 +1,41 @@
+# Every module under `DavisKahan/Experimental/` must be reachable from the
+# `DavisKahan.Experimental` root, or named here with the reason it cannot be.
+#
+# Checked by `aiq-lean source module-coverage dev/policy/experimental-coverage.yaml`.
+# Replaces `scripts/check_experimental_coverage.py`.
+#
+# Why this exists: `lake build DavisKahan.Experimental` printing CLEAN says
+# nothing about modules the root never imports.  On 2026-07-31 that build reached
+# 46 of the 118 files under `DavisKahan/Experimental/`, and six of the other 72
+# did not compile at all -- the oldest projecting five fields off a record that
+# existed nowhere in the repository.  Nothing reported it, because nothing built
+# it: not in `defaultTargets`, not in the root's closure, and
+# `Experimental/All.lean` is curated by hand.  The failure is not "a module is
+# broken"; it is a gate reporting CLEAN over a third of the tree it names.
+#
+# Pair this with the real Lake build.  Source reachability does not prove that a
+# reached module elaborates.
+#
+# Why named lists and not counts: a count lets one module leave the closure as
+# another joins it.  A name is a deliberate, reviewable line.
+roots:
+  - DavisKahan.Experimental
+scope:
+  - DavisKahan.Experimental
+
+# A module that does not compile.  This is a bug with a name, not a policy, so
+# empty is the intended steady state -- and it has been empty since 2026-08-27,
+# when the last two entries (the ideal-family scratch pair) were promoted to
+# `DavisKahan/SharedFoundations/Ideal/` and compiled there.
+excluded_modules: {}
+
+# A subtree the root deliberately does not aggregate.  Read a prefix here as a
+# standing bet that nobody is checking the modules inside it: on 2026-08-27 the
+# `InfiniteDimensional` prefix was removed together with its subtree, because
+# every one of its seventeen modules had stopped elaborating and being excluded
+# here is exactly why nothing said so.
+excluded_prefixes: {}
+
+# A module reaching an excluded one cannot compile either, so it inherits the
+# exclusion.  Listing those explicitly would go stale the moment an import changes.
+inherit_exclusions: true

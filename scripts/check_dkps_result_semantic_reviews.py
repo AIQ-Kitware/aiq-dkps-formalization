@@ -1,148 +1,142 @@
 #!/usr/bin/env python3
-"""Validate and render DKPS result-semantic reviews.
+"""Validate the DKPS result-semantic reviews and render their cross-paper index.
 
-The full-source census answers coverage. These result-semantic reviews answer a different
-question: whether the selected Lean theorem surface has the same hypotheses, conclusion,
-quantifier order, norm, and scope as the retained paper result.
+The full-source census answers coverage. These result-semantic reviews answer a
+different question: whether the selected Lean theorem surface has the same
+hypotheses, conclusion, quantifier order, norm, and scope as the retained paper
+result.
+
+Schema, clause validation, source-locator ranges, drift against the companion
+census, and the per-review Markdown view are generic and live in
+`aiq_lean_tools`.  What stays here is the DKPS composition: which four reviews
+exist, and the cross-paper index that puts every headline/major verdict and its
+first substantive delta on one page.
+
+    python3 scripts/check_dkps_result_semantic_reviews.py
+    python3 scripts/check_dkps_result_semantic_reviews.py --render
+    python3 scripts/check_dkps_result_semantic_reviews.py --probe
 """
-import argparse, json, subprocess, sys, tempfile
-from collections import Counter
+from __future__ import annotations
+
+import argparse
+import subprocess
+import sys
 from pathlib import Path
 
+try:
+    from aiq_lean_tools.semantic_review import load_semantic_review
+except ImportError:  # pragma: no cover - environment guidance, not logic
+    raise SystemExit(
+        "aiq_lean_tools is not installed. Run:\n"
+        "  python3 -m pip install -e submodules/aiq-lean-formalization-tools"
+    )
+
 ROOT = Path(__file__).resolve().parents[1]
-REVIEWS = [
-    ROOT/'dev/acharyya-2024-result-semantic-review.json',
-    ROOT/'dev/acharyya-2025-result-semantic-review.json',
-    ROOT/'dev/helm-2025-result-semantic-review.json',
-    ROOT/'dev/quench-2026-result-semantic-review.json',
+SLUGS = ("acharyya-2024", "acharyya-2025", "helm-2025", "quench-2026")
+REVIEWS = [ROOT / "dev" / f"{slug}-result-semantic-review.json" for slug in SLUGS]
+INDEX = ROOT / "dev/dkps-application-result-semantic-review.md"
+
+#: Which clause relation to show as "the first substantive delta" for a row.
+#: Ordered worst-first, so the index leads with the strongest reason a reader
+#: might disagree with the verdict rather than with an incidental encoding note.
+DELTA_PRIORITY = [
+    "missing", "source_repair", "lean_stronger_hypothesis", "lean_weaker_conclusion",
+    "proof_role_replaced", "lean_stronger_conclusion", "lean_weaker_hypothesis",
+    "different_quantifier_encoding", "derived_by_composition", "supplementary",
 ]
-MD = {p: p.with_suffix('.md') for p in REVIEWS}
-INDEX = ROOT/'dev/dkps-application-result-semantic-review.md'
-VALID_REL = {'exact','equivalent_encoding','lean_weaker_hypothesis','lean_stronger_hypothesis',
- 'lean_stronger_conclusion','lean_weaker_conclusion','different_quantifier_encoding',
- 'derived_by_composition','source_repair','proof_role_replaced','missing','supplementary'}
 
-def load(p): return json.loads(p.read_text())
 
-def validate_one(p):
-    d=load(p); errors=[]
-    cp=ROOT/d['companion_census']; c=load(cp); byid={x['id']:x for x in c['items']}
-    seen=set()
-    for row in d['rows']:
-        rid=row['id']
-        if rid in seen: errors.append(f'{p}: duplicate row {rid}')
-        seen.add(rid)
-        if rid not in byid:
-            errors.append(f'{p}: row {rid} absent from companion census'); continue
-        ci=byid[rid]
-        if row['source_locator'] != ci['source_locator']:
-            errors.append(f'{p}: {rid}: source locator drift from census')
-        if row['lean_declarations'] != ci['lean_declarations']:
-            errors.append(f'{p}: {rid}: declaration list drift from census')
-        loc=row['source_locator']; sf=ROOT/loc['file']
-        if not sf.exists(): errors.append(f'{p}: {rid}: missing source file {loc["file"]}')
-        else:
-            n=sum(1 for _ in sf.open(errors='replace'))
-            a,b=loc['lines']
-            if not (1 <= a <= b <= n): errors.append(f'{p}: {rid}: invalid source range {a}-{b} for {n} lines')
-        if not row['clauses']: errors.append(f'{p}: {rid}: empty clause comparison')
-        for k,cl in enumerate(row['clauses']):
-            if cl.get('relation') not in VALID_REL: errors.append(f'{p}: {rid}: clause {k}: bad relation {cl.get("relation")}')
-            if not cl.get('source_clause') or not cl.get('lean_clause'): errors.append(f'{p}: {rid}: clause {k}: empty side')
-    missing=set(byid)-seen
-    if missing: errors.append(f'{p}: missing census rows: {sorted(missing)}')
-    return errors
-
-def render(p):
-    d=load(p); rows=d['rows']; counts=Counter(r['verdict'] for r in rows)
-    title={'acharyya-2024-result-semantic-review':'Acharyya et al. 2024 result-semantic review',
-           'acharyya-2025-result-semantic-review':'Acharyya et al. 2025 result-semantic review',
-           'helm-2025-result-semantic-review':'Helm et al. 2025 result-semantic review',
-           'quench-2026-result-semantic-review':'Helm--Johnson--Priebe 2026 (Quench) result-semantic review'}[p.stem]
-    out=[]
-    out += ['<!-- generated by scripts/check_dkps_result_semantic_reviews.py --render; edit the JSON, not this file -->','',f'# {title}','']
-    out += [d['paper']['citation'],'',d['purpose'],'',
-      'This document is deliberately different from the companion full-source census. The census asks **what is covered**. This review asks **whether the selected Lean theorem has the same mathematical statement as the paper result**. Each row compares hypotheses, conclusion, quantifier/scope choices, and source repairs clause by clause.','',
-      f"Companion coverage census: `{d['companion_census']}`.", '']
-    out += ['## Verdict summary','', '| verdict | rows |','| --- | ---: |']
-    for k,v in sorted(counts.items()): out.append(f'| `{k}` | {v} |')
-    out += ['', 'A `PASS` verdict means the source result follows from the selected Lean surface at the stated scope. `GAP` means the Lean surface is narrower or assumes more. `REPAIR` means literal source fidelity is intentionally rejected because the retained source statement is inconsistent or incorrect. `PROOF ROLE REPLACED` means the final theorem is proved by another route, but the printed proof lemma itself is not represented literally.','',
-            '## Headline and major surface','', '| id | source anchor | verdict |','| --- | --- | --- |']
-    for r in rows:
-        if r['importance'] in {'headline','major'}:
-            out.append(f"| `{r['id']}` | {r['source_anchor']} | {r['verdict']} |")
-    out += ['', '## Relation legend','']
-    for k,v in d['relation_definitions'].items(): out.append(f'- **`{k}`** — {v}')
-    out += ['', '## Result comparisons','']
-    for idx,row in enumerate(rows,1):
-        loc=row['source_locator']; out += [f"### {idx}. `{row['id']}` — {row['source_anchor']}: {row['title']}",'',f"**Verdict:** {row['verdict']}",'',
-          f"**Source:** `{loc['file']}:{loc['lines'][0]}-{loc['lines'][1]}`",'',
-          f"**Normalized paper statement:** {row['source_claim']}",'', '**Selected Lean declarations:**']
-        if row['lean_declarations']:
-            out += [f"- `{x}`" for x in row['lean_declarations']]
-        else: out += ['- *(none)*']
-        out += ['', '**Clause-by-clause comparison:**','', '| paper clause | Lean clause | relation | assessment |','| --- | --- | --- | --- |']
-        def esc(s): return str(s).replace('|','\\|').replace('\n',' ')
-        for cl in row['clauses']:
-            out.append(f"| {esc(cl['source_clause'])} | {esc(cl['lean_clause'])} | `{cl['relation']}` | {esc(cl.get('note',''))} |")
-        out += ['', '**Semantic review:**', '', row['review']]
-        if row.get('notes') and row['notes']!='No additional note.': out += ['', f"**Additional note:** {row['notes']}"]
-        if row.get('gap_refs'): out += ['', '**Companion census gap refs:** ' + ', '.join(f'`{g}`' for g in row['gap_refs'])]
-        if row.get('next_action') and row['next_action']!='None.': out += ['', f"**Next action:** {row['next_action']}"]
-        out += ['']
-    return '\n'.join(out).rstrip()+'\n'
-
-def render_index():
-    docs=[load(p) for p in REVIEWS]
-    out=['<!-- generated by scripts/check_dkps_result_semantic_reviews.py --render -->','',
-         '# DKPS application-paper result-semantic review index','',
-         'This is the entry point for **paper theorem vs. Lean theorem** comparison. The companion full-source censuses answer coverage; these reviews ask whether the theorem statements themselves agree clause by clause.','',
-         '## Headline/major results across papers','',
-         '| paper | id | source anchor | verdict | first substantive delta |','| --- | --- | --- | --- | --- |']
-    for p,d in zip(REVIEWS,docs):
-        paper=p.stem.replace('-result-semantic-review','')
-        for r in d['rows']:
-            if r['importance'] not in {'headline','major'}: continue
-            delta='No substantive delta recorded.'
-            priority=['missing','source_repair','lean_stronger_hypothesis','lean_weaker_conclusion','proof_role_replaced','lean_stronger_conclusion','lean_weaker_hypothesis','different_quantifier_encoding','derived_by_composition','supplementary']
-            picked=None
-            for rel in priority:
-                picked=next((cl for cl in r['clauses'] if cl['relation']==rel), None)
-                if picked is not None: break
+def render_index(documents) -> str:
+    out = [
+        "<!-- generated by scripts/check_dkps_result_semantic_reviews.py --render -->", "",
+        "# DKPS application-paper result-semantic review index", "",
+        "This is the entry point for **paper theorem vs. Lean theorem** comparison. The "
+        "companion full-source censuses answer coverage; these reviews ask whether the "
+        "theorem statements themselves agree clause by clause.", "",
+        "## Headline/major results across papers", "",
+        "| paper | id | source anchor | verdict | first substantive delta |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    for path, document in zip(REVIEWS, documents):
+        paper = path.stem.replace("-result-semantic-review", "")
+        for row in document.rows:
+            if row.get("importance") not in {"headline", "major"}:
+                continue
+            picked = None
+            for relation in DELTA_PRIORITY:
+                picked = next((c for c in row["clauses"] if c["relation"] == relation), None)
+                if picked is not None:
+                    break
+            delta = "No substantive delta recorded."
             if picked is not None:
-                delta=picked.get('note') or f"{picked['source_clause']} -> {picked['lean_clause']}"
-            out.append(f"| `{paper}` | `{r['id']}` | {r['source_anchor']} | {r['verdict']} | {str(delta).replace('|','\\|')} |")
-    out += ['', '## Detailed reviews','']
-    for p in REVIEWS:
-        out.append(f"- `dev/{p.with_suffix('.md').name}`")
-    out += ['', '## Interpretation','',
-      '- **PASS**: the source result follows from the selected Lean theorem surface at the reviewed scope.',
-      '- **GAP**: the current Lean surface is narrower, assumes more, or omits a literal source clause.',
-      '- **REPAIR**: the retained source statement is internally inconsistent or incorrect and Lean intentionally formalizes a repaired statement.',
-      '- **PROOF ROLE REPLACED**: the final theorem is proved by another route, but the printed auxiliary lemma is not represented literally.',
-      '- **SUPPLEMENTARY**: a Lean strengthening with no printed source theorem counterpart.','']
-    return '\n'.join(out)
+                delta = picked.get("note") or f"{picked['source_clause']} -> {picked['lean_clause']}"
+            delta = str(delta).replace("|", "\\|")
+            out.append(f"| `{paper}` | `{row['id']}` | {row['source_anchor']} | {row['verdict']} | {delta} |")
+    out += ["", "## Detailed reviews", ""]
+    out += [f"- `dev/{path.with_suffix('.md').name}`" for path in REVIEWS]
+    out += [
+        "", "## Interpretation", "",
+        "- **PASS**: the source result follows from the selected Lean theorem surface at the reviewed scope.",
+        "- **GAP**: the current Lean surface is narrower, assumes more, or omits a literal source clause.",
+        "- **REPAIR**: the retained source statement is internally inconsistent or incorrect and Lean intentionally formalizes a repaired statement.",
+        "- **PROOF ROLE REPLACED**: the final theorem is proved by another route, but the printed auxiliary lemma is not represented literally.",
+        "- **SUPPLEMENTARY**: a Lean strengthening with no printed source theorem counterpart.", "",
+    ]
+    return "\n".join(out)
 
-def probe():
-    # The semantic reviews intentionally cite exactly the declaration lists owned by the census.
-    # Delegate the real Lean #check probe to the census checker, avoiding a second declaration resolver.
-    cmd=[sys.executable, str(ROOT/'scripts/check_dkps_application_source_censuses.py'), '--probe']
-    return subprocess.call(cmd, cwd=ROOT)
 
-def main():
-    ap=argparse.ArgumentParser(); ap.add_argument('--render',action='store_true'); ap.add_argument('--probe',action='store_true'); ns=ap.parse_args()
-    errors=[]
-    for p in REVIEWS:
-        if not p.exists(): errors.append(f'missing review {p.relative_to(ROOT)}'); continue
-        errors.extend(validate_one(p))
-    if errors:
-        print('\n'.join('ERROR: '+e for e in errors), file=sys.stderr); return 1
-    if ns.render:
-        for p in REVIEWS: MD[p].write_text(render(p))
-        INDEX.write_text(render_index())
-    nrows=sum(len(load(p)['rows']) for p in REVIEWS)
-    nclauses=sum(sum(len(r['clauses']) for r in load(p)['rows']) for p in REVIEWS)
-    print(f'validated {len(REVIEWS)} result-semantic reviews: {nrows} rows, {nclauses} clause comparisons')
-    if ns.probe: return probe()
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--render", action="store_true", help="rewrite the Markdown views")
+    parser.add_argument("--probe", action="store_true",
+                        help="resolve the cited declarations against the real build")
+    args = parser.parse_args(argv)
+
+    documents = []
+    failed = False
+    for path in REVIEWS:
+        if not path.is_file():
+            print(f"ERROR: missing review {path.relative_to(ROOT)}", file=sys.stderr)
+            failed = True
+            continue
+        document = load_semantic_review(path, root=ROOT)
+        documents.append(document)
+        for finding in document.validate():
+            print(f"{finding.level.upper()}: {path.name} {finding.location}: "
+                  f"[{finding.code}] {finding.message}", file=sys.stderr)
+            failed = failed or finding.level == "error"
+    if failed:
+        return 1
+
+    if args.render:
+        for path, document in zip(REVIEWS, documents):
+            path.with_suffix(".md").write_text(document.render_markdown(), encoding="utf-8")
+        INDEX.write_text(render_index(documents), encoding="utf-8")
+    else:
+        for path, document in zip(REVIEWS, documents):
+            target = path.with_suffix(".md")
+            if not target.is_file() or target.read_text(encoding="utf-8") != document.render_markdown():
+                print(f"ERROR: {target.relative_to(ROOT)} is stale; re-run with --render",
+                      file=sys.stderr)
+                return 1
+        if not INDEX.is_file() or INDEX.read_text(encoding="utf-8") != render_index(documents):
+            print(f"ERROR: {INDEX.relative_to(ROOT)} is stale; re-run with --render", file=sys.stderr)
+            return 1
+
+    rows = sum(len(d.rows) for d in documents)
+    clauses = sum(len(row["clauses"]) for d in documents for row in d.rows)
+    print(f"validated {len(documents)} result-semantic reviews: {rows} rows, "
+          f"{clauses} clause comparisons")
+
+    if args.probe:
+        # The reviews cite exactly the declaration lists owned by the censuses,
+        # and that identity is now enforced above, so one probe covers both.
+        return subprocess.call(
+            [sys.executable, str(ROOT / "scripts/check_dkps_application_source_censuses.py"), "--probe"],
+            cwd=ROOT,
+        )
     return 0
-if __name__=='__main__': raise SystemExit(main())
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

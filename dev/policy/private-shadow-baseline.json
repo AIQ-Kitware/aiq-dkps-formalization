@@ -1,0 +1,6 @@
+{
+  "_comment": "Accepted `module:private name` pairs, read by `aiq-lean source private-shadows --baseline`. A thin wrapper that restates an imported theorem in a different presentation and delegates to it in one line is reuse, not duplication; a private declaration with a real proof body repeating one already available is the defect. This gate lists pairs rather than a count so that adding an accepted wrapper is a deliberate edit naming it, and a new copy fails even if an old wrapper is retired the same day.",
+  "accepted": {
+    "ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.SinTheta:re_inner_reducedExtension_self": "restates `TauCeti.re_inner_reducedExtension_self` for `E →L[𝕜] E` with `Reduces`; the proof is a `rw` then `exact` on the imported theorem. Its sibling in `SinTheta/OperatorNorm.lean` is named with a prime, so it shadows nothing and this gate never sees it -- a prime is enough to make the pattern invisible, which is worth knowing before trusting a clean run."
+  }
+}

@@ -22,7 +22,7 @@ import os
 import pathlib
 
 #: Distinguished exit status meaning "this check did not run: an external input it
-#: needs is absent". `scripts/run_gates.py` reports it separately from pass and
+#: needs is absent". `aiq-lean gates run` reports it separately from pass and
 #: fail, because an unavailable check is neither.
 EXIT_UNAVAILABLE = 3
 

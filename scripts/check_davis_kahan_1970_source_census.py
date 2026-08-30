@@ -1,20 +1,50 @@
 #!/usr/bin/env python3
-"""Validate the Davis--Kahan 1970 full-paper source census."""
+"""Validate the Davis--Kahan 1970 full-paper source census.
+
+Schema, id/status/verification vocabularies, declaration references, the embedded
+curated `semantic_review` contract, Markdown rendering, and the compiler probe are
+all generic census machinery and live in `aiq_lean_tools`.  What stays here is
+Davis--Kahan policy that no other paper shares:
+
+* the exact set of source-claim ids the census must cover, and the sections they
+  may live in;
+* the `completion_holes` contract and its interaction with hostile certification;
+* the blocker taxonomy;
+* the refusal to track private source material;
+* the reported summary, which must say what is *proved* rather than that the file
+  agrees with itself.
+
+Install the tooling once with
+
+    python3 -m pip install -e submodules/aiq-lean-formalization-tools
+
+    python3 scripts/check_davis_kahan_1970_source_census.py
+    python3 scripts/check_davis_kahan_1970_source_census.py --no-probe
+"""
 from __future__ import annotations
 
+import argparse
 import json
-import re
 import shutil
 import subprocess
 import sys
 from pathlib import Path
 
-from source_census_importance import validate_importance_schema
+try:
+    from aiq_lean_tools.census import load_census
+except ImportError:  # pragma: no cover - environment guidance, not logic
+    raise SystemExit(
+        "aiq_lean_tools is not installed. Run:\n"
+        "  python3 -m pip install -e submodules/aiq-lean-formalization-tools"
+    )
 
 ROOT = Path(__file__).resolve().parents[1]
 JSON_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.json"
+MD_PATH = ROOT / "dev/davis-kahan-1970-full-source-census.md"
 MAP_PATH = ROOT / "dev/davis-kahan-1970-statement-map.json"
 
+#: The census must cover exactly these source claims. A count would let one claim
+#: leave as another arrives; the explicit set makes either a deliberate edit.
 REQUIRED_IDS = {
     "S1-block-residual", "S1-ui-norms",
     "S2-sin-theta", "S2-tan-theta", "S2-sin-two-theta", "S2-tan-two-theta",
@@ -33,7 +63,17 @@ REQUIRED_IDS = {
     "DK-10.1", "DK-10.2", "DK-10.3", "DK-10.4",
 }
 ALLOWED_SECTIONS = {"1", "2", "3", "4", "5", "6", "6 appendix", "7", "8", "9", "10"}
-DECL_RE = re.compile(r"\b(?:alias|theorem|lemma|def|structure|abbrev|noncomputable def)\s+([A-Za-z0-9_']+)")
+REQUIRED_TEXT_FIELDS = ("source_kind", "source_anchor", "title", "summary", "notes", "next_action")
+BLOCKER_KINDS = {"hard_math", "mechanical", "mixed"}
+
+#: The build target the census claims its declarations are reachable from.
+#: "Resolved" must mean "reachable from the build", not "exists somewhere on disk".
+PROBE_IMPORT = "DavisKahan.All"
+
+#: Private source material must never become tracked. The paper itself is not
+#: ours to distribute; the checked-in `DavisKahan1970_part_III.tex` reconstruction
+#: is.
+PRIVATE_SOURCE_NAMES = ("modernized-transcription", "DavisKahan1970.pdf", "davis-kahan-1970-modernized")
 
 
 def fail(message: str) -> None:
@@ -41,192 +81,182 @@ def fail(message: str) -> None:
     raise SystemExit(1)
 
 
-def main() -> int:
-    data = json.loads(JSON_PATH.read_text())
-    items = data.get("items")
-    if not isinstance(items, list) or not items:
-        fail("items must be a nonempty list")
-    validate_importance_schema(data, items, fail)
-    statuses = set(data.get("status_definitions", {}))
+def check_davis_kahan_policy(data: dict) -> None:
+    items = data["items"]
     certifications = set(data.get("completion_certification_definitions", {}))
     if not certifications:
         fail("completion_certification_definitions must be nonempty")
-    ids: set[str] = set()
+    if not data.get("verification_definitions"):
+        fail("schema 4 requires verification_definitions")
+
+    ids = {item["id"] for item in items}
+    missing = sorted(REQUIRED_IDS - ids)
+    extra = sorted(ids - REQUIRED_IDS)
+    if missing:
+        fail("missing required source claim ids: " + ", ".join(missing))
+    if extra:
+        fail("unregistered source claim ids in census: " + ", ".join(extra))
+
     for item in items:
-        item_id = item.get("id")
-        if not item_id or item_id in ids:
-            fail(f"missing or duplicate item id: {item_id!r}")
-        ids.add(item_id)
+        item_id = item["id"]
         if item.get("section") not in ALLOWED_SECTIONS:
             fail(f"invalid section for {item_id}: {item.get('section')!r}")
-        if item.get("status") not in statuses:
-            fail(f"invalid status for {item_id}: {item.get('status')!r}")
-        if item.get("completion_certification") not in certifications:
-            fail(f"invalid completion_certification for {item_id}: {item.get('completion_certification')!r}")
         holes = item.get("completion_holes")
         if not isinstance(holes, list):
             fail(f"{item_id} must carry a completion_holes list")
         for hole in holes:
-            if not isinstance(hole, dict) or not isinstance(hole.get("kind"), str) or not hole.get("kind"):
+            if not isinstance(hole, dict) or not isinstance(hole.get("kind"), str) or not hole["kind"]:
                 fail(f"{item_id} has malformed completion_hole kind")
-            if not isinstance(hole.get("detail"), str) or not hole.get("detail").strip():
+            if not isinstance(hole.get("detail"), str) or not hole["detail"].strip():
                 fail(f"{item_id} has malformed completion_hole detail")
         if item.get("completion_certification") == "accepted" and holes:
             fail(f"{item_id} is hostile-certified accepted but still records completion_holes")
-        for key in ("source_kind", "source_anchor", "title", "summary", "notes", "next_action"):
+        for key in REQUIRED_TEXT_FIELDS:
             if not isinstance(item.get(key), str) or not item[key].strip():
                 fail(f"{item_id} has empty {key}")
+        if not isinstance(item.get("blocked_by"), list):
+            fail(f"{item_id} must carry a blocked_by list")
 
-    missing_ids = sorted(REQUIRED_IDS - ids)
-    extra_ids = sorted(ids - REQUIRED_IDS)
-    if missing_ids:
-        fail("missing required source claim ids: " + ", ".join(missing_ids))
-    if extra_ids:
-        fail("unregistered source claim ids in census: " + ", ".join(extra_ids))
-
-    # Skip every dot-directory, not just `.lake`.  This census only *adds* to
-    # `declared`, so a stray checkout inside the repo cannot make it fail -- it
-    # can only satisfy a pin that the real tree no longer satisfies, turning a
-    # missing declaration into a silent pass.  A subagent worktree at
-    # `.claude/worktrees/` put ~1259 extra `.lean` files in range, which is
-    # exactly enough to hide a rename from this check.
-    lean_text = "\n".join(
-        path.read_text(errors="ignore")
-        for path in ROOT.rglob("*.lean")
-        if not any(part.startswith(".") for part in path.relative_to(ROOT).parts)
-    )
-    declared = set(DECL_RE.findall(lean_text))
-    for item in items:
-        for ref in item.get("lean_declarations", []):
-            short = ref.rsplit(".", 1)[-1]
-            if short not in declared:
-                fail(f"unresolved Lean declaration reference for {item['id']}: {ref}")
-        # `planned_declarations` records names the census wants but nobody has
-        # written.  If one starts existing it must be promoted, or the census
-        # keeps under-reporting progress.
-        for ref in item.get("planned_declarations", []):
-            short = ref.rsplit(".", 1)[-1]
-            if short in declared:
-                fail(f"{item['id']} lists {ref} as planned, but it now exists; "
-                     f"move it into lean_declarations")
-
-    # --- schema 4: the compile-backed verification axis --------------------
-    # The textual check above is deliberately weak: it matches only the short
-    # name after the last dot, so a reference in the wrong namespace passes.
-    # `probe_census_declarations.py --verify` is the authoritative check -- it
-    # resolves every name against the real build -- and for months nothing ran
-    # it, because `run_gates.py` discovers `scripts/check_*.py` and the probe is
-    # not named that.  So the weak check was the only one anyone saw, and it
-    # reported CLEAN.  Run the real one here rather than pointing at it.
-    if shutil.which("lake") is not None:
-        probe = subprocess.run(
-            [sys.executable, str(ROOT / "scripts/probe_census_declarations.py"), "--verify"],
-            cwd=ROOT,
-        )
-        if probe.returncode:
-            return probe.returncode
-    else:
-        print("NOTE: lake unavailable; declaration resolution was NOT verified")
-
-    verifications = set(data.get("verification_definitions", {}))
-    if not verifications:
-        fail("schema 4 requires verification_definitions")
+    # An EMPTY blockers table is legal and is the goal state of the campaign.
+    # Requiring a nonempty one, combined with the orphan check below, once made
+    # "no blockers remain" unrepresentable: retiring the last blocker forced a
+    # choice between an orphan failure and keeping a fictional entry.
     blockers = data.get("blockers", {})
-    # An EMPTY blockers table is legal, and is the goal state of the campaign.
-    # This check used to require a nonempty table, which combined with the
-    # orphan check below made "no blockers remain" unrepresentable: retiring the
-    # last blocker forced a choice between an orphan failure and keeping a
-    # fictional entry.  Retired blockers keep their accumulated route notes under
-    # the separate `retired_blockers` key, which nothing is required to reference.
     if not isinstance(blockers, dict):
         fail("schema 4 requires a blockers table")
     for key, blocker in blockers.items():
-        if blocker.get("kind") not in {"hard_math", "mechanical", "mixed"}:
+        if blocker.get("kind") not in BLOCKER_KINDS:
             fail(f"blocker {key} has invalid kind: {blocker.get('kind')!r}")
         for field in ("title", "detail"):
             if not isinstance(blocker.get(field), str) or not blocker[field].strip():
                 fail(f"blocker {key} has empty {field}")
-    referenced: set[str] = set()
-    for item in items:
-        if item.get("verification") not in verifications:
-            fail(f"invalid verification for {item['id']}: "
-                 f"{item.get('verification')!r}")
-        blocked = item.get("blocked_by")
-        if not isinstance(blocked, list):
-            fail(f"{item['id']} must carry a blocked_by list")
-        for key in blocked:
-            if key not in blockers:
-                fail(f"{item['id']} is blocked_by {key!r}, absent from blockers")
-            referenced.add(key)
+    referenced = {key for item in items for key in item.get("blocked_by", [])}
     orphan = sorted(set(blockers) - referenced)
     if orphan:
         fail("blockers referenced by no item: " + ", ".join(orphan))
 
-    private_names = ("modernized-transcription", "DavisKahan1970.pdf", "davis-kahan-1970-modernized")
-    git_dir = ROOT / ".git"
-    tracked = []
-    if git_dir.exists():
-        result = subprocess.run(
-            ["git", "ls-files"], cwd=ROOT, capture_output=True, text=True
-        )
+
+def check_private_source_not_tracked() -> None:
+    tracked: list[str] = []
+    if (ROOT / ".git").exists():
+        result = subprocess.run(["git", "ls-files"], cwd=ROOT, capture_output=True, text=True)
         if result.returncode == 0:
             tracked = result.stdout.splitlines()
     if not tracked:
-        tracked = [str(path.relative_to(ROOT)) for path in ROOT.rglob("*") if path.is_file()]
+        tracked = [str(p.relative_to(ROOT)) for p in ROOT.rglob("*") if p.is_file()]
     for path in tracked:
         lower = path.lower()
-        if any(name.lower() in lower for name in private_names):
+        if any(name.lower() in lower for name in PRIVATE_SOURCE_NAMES):
             fail(f"private source appears tracked: {path}")
 
-    result = subprocess.run(
-        [sys.executable, str(ROOT / "scripts/render_davis_kahan_1970_source_census.py"), "--check"],
-        cwd=ROOT,
-    )
-    if result.returncode:
-        return result.returncode
 
-    # Report the mathematics, not the file's agreement with itself.  This line
-    # used to read "CLEAN (48 items)", which is true of a self-consistent census
-    # in which nothing is proved: it counts rows, and every row is a row whether
-    # its theorem compiles or does not exist.  Theorems 8.1 and 8.2 -- the paper's
-    # headline sin-Theta results -- are `not_compiling`, and the old summary said
-    # CLEAN above them.
+def report(items: list[dict]) -> None:
+    """Report the mathematics, not the file's agreement with itself.
+
+    This summary once read "CLEAN (48 items)", which is true of a self-consistent
+    census in which nothing is proved: it counts rows, and every row is a row
+    whether its theorem compiles or does not exist. Theorems 8.1 and 8.2 -- the
+    paper's headline sin-Theta results -- were `not_compiling` under that line.
+    """
     counts: dict[str, int] = {}
     for item in items:
-        counts[item.get("verification", "unknown")] = (
-            counts.get(item.get("verification", "unknown"), 0) + 1
-        )
-    proved = counts.get("proved_in_build", 0)
+        key = item.get("verification", "unknown")
+        counts[key] = counts.get(key, 0) + 1
     order = ("proved_in_build", "proved_conditional", "partially_in_build",
              "proved_outside_build", "not_compiling", "absent", "not_applicable")
     detail = ", ".join(f"{counts[k]} {k}" for k in order if counts.get(k))
     for k in sorted(counts):
         if k not in order:
             detail += f", {counts[k]} {k}"
-    print(f"Davis--Kahan full source census: {proved}/{len(items)} proved in the "
-          f"default build ({detail})")
+    print(f"Davis--Kahan full source census: {counts.get('proved_in_build', 0)}/{len(items)} "
+          f"proved in the default build ({detail})")
 
     # Name the source results that are not proved, and separately those that are
-    # proved but unguarded.  A reader must not have to cross-reference the JSON,
-    # and the two are different obligations: one needs mathematics, the other
-    # needs a module moved into a default target.
-    at_risk = sorted(
-        item["id"] for item in items
-        if item.get("verification") in {"proved_outside_build", "partially_in_build"}
-    )
+    # proved but unguarded: one needs mathematics, the other needs a module moved
+    # into a default target.
+    at_risk = sorted(i["id"] for i in items
+                     if i.get("verification") in {"proved_outside_build", "partially_in_build"})
     if at_risk:
         print("  proved but unguarded by `lake build`: " + ", ".join(at_risk))
-    unproved = sorted(
-        item["id"] for item in items
-        if item.get("verification") in {"not_compiling", "absent"}
-    )
+    unproved = sorted(i["id"] for i in items
+                      if i.get("verification") in {"not_compiling", "absent"})
     if unproved:
         print("  not proved: " + ", ".join(unproved))
 
-    # Row-level hostile certification remains useful triage, but it is not the
-    # denominator for "100% formalized".  Source-fidelity atoms are likewise not
-    # proof obligations.  Delegate formalization completion to the compact
-    # stated-result inventory checker.
+
+def report_row_triage(items: list[dict]) -> None:
+    """Row-level hostile certification is triage, not the 100% denominator.
+
+    The denominator is the compact stated-result inventory; source-fidelity atoms
+    are not proof obligations either.
+    """
+    statement_map = json.loads(MAP_PATH.read_text(encoding="utf-8"))
+    obligations = {item["id"] for item in statement_map.get("items", [])
+                   if item.get("completion_obligation") is True}
+    by_id = {item["id"]: item for item in items}
+    accepted = [
+        i for i in (by_id[k] for k in obligations)
+        if i.get("completion_certification") == "accepted"
+        and i.get("status") in {"compiled_exact", "refuted_as_transcribed"}
+        and i.get("verification") == "proved_in_build"
+    ]
+    print(f"  organizational-row semantic triage: {len(accepted)}/{len(obligations)} legacy row "
+          "flags accepted (diagnostic only; not the formalization denominator)")
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--no-probe", action="store_true",
+                        help="skip the compiler probe (declaration resolution is then NOT verified)")
+    args = parser.parse_args(argv)
+
+    document = load_census(JSON_PATH, root=ROOT)
+    findings = document.validate()
+    errors = [f for f in findings if f.level == "error"]
+    for finding in findings:
+        print(f"{finding.level.upper():8s}{finding.location}: [{finding.code}] {finding.message}")
+    if errors:
+        return 1
+
+    data = document.data
+    check_davis_kahan_policy(data)
+
+    # The static reference check the package performs matches short names, so a
+    # reference in the wrong namespace passes it. The probe resolves every name
+    # against the real build and is the authoritative check; run it here rather
+    # than pointing at it, because for months nothing ran the separate script.
+    if args.no_probe:
+        print("NOTE: --no-probe given; declaration resolution was NOT verified")
+    elif shutil.which("lake") is None:
+        print("NOTE: lake unavailable; declaration resolution was NOT verified")
+    else:
+        probe = document.probe(imports=[PROBE_IMPORT])
+        if probe.unresolved:
+            print(f"Census declaration probe: {len(probe.unresolved)} unresolved reference(s) "
+                  f"against {PROBE_IMPORT}")
+            for name in probe.unresolved:
+                print(f"  {name}")
+            return 1
+        changed = document.apply_probe(probe)
+        if changed:
+            print(f"Census declaration probe: {changed} row(s) record a `verification` the "
+                  f"build disagrees with; run `aiq-lean census probe {JSON_PATH.relative_to(ROOT)} "
+                  f"--import {PROBE_IMPORT} --write`")
+            return 1
+        print(f"Census declaration probe: {len(probe.resolved)}/{len(probe.results)} resolve "
+              f"against {PROBE_IMPORT}, and every row's `verification` matches the build's view "
+              "of the declarations it names")
+        print("  NOT checked here: whether those statements match the paper's scope, whether "
+              "`status` is accurate, or whether any row omits a declaration for a conclusion "
+              "the paper asserts")
+
+    check_private_source_not_tracked()
+
+    if MD_PATH.read_text(encoding="utf-8") != document.render_markdown():
+        print(f"ERROR: {MD_PATH.relative_to(ROOT)} is stale; regenerate it with "
+              f"`aiq-lean census render {JSON_PATH.relative_to(ROOT)} -o {MD_PATH.relative_to(ROOT)}`")
+        return 1
+
     result_checker = subprocess.run(
         [sys.executable, str(ROOT / "scripts/check_davis_kahan_1970_result_inventory.py")],
         cwd=ROOT,
@@ -234,22 +264,8 @@ def main() -> int:
     if result_checker.returncode:
         return result_checker.returncode
 
-    statement_map = json.loads(MAP_PATH.read_text())
-    row_obligation_ids = {
-        item["id"] for item in statement_map.get("items", [])
-        if item.get("completion_obligation") is True
-    }
-    by_id = {item["id"]: item for item in items}
-    row_accepted = [
-        by_id[item_id] for item_id in row_obligation_ids
-        if by_id[item_id].get("completion_certification") == "accepted"
-        and by_id[item_id].get("status") in {"compiled_exact", "refuted_as_transcribed"}
-        and by_id[item_id].get("verification") == "proved_in_build"
-    ]
-    print(
-        f"  organizational-row semantic triage: {len(row_accepted)}/{len(row_obligation_ids)} legacy row flags accepted "
-        "(diagnostic only; not the formalization denominator)"
-    )
+    report(data["items"])
+    report_row_triage(data["items"])
     return 0
 
 
