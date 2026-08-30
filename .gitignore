@@ -31,7 +31,6 @@ dev/reference-repos/
 # historical path is still found automatically by scripts/_external_checkouts.py,
 # so keeping one here remains convenient -- it is simply not tracked.
 /external/TauCeti/
-/submodules/
 *.toc
 *.tar.gz
 *.gz

@@ -1,0 +1,6 @@
+[submodule "submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization"]
+	path = submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization
+	url = https://github.com/AIQ-Kitware/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization.git
+[submodule "submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization"]
+	path = submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization
+	url = https://github.com/AIQ-Kitware/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization.git
