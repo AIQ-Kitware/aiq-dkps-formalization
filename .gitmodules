@@ -4,3 +4,12 @@
 [submodule "submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization"]
 	path = submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization
 	url = https://github.com/AIQ-Kitware/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization.git
+[submodule "submodules/--force"]
+	path = submodules/--force
+	url = https://github.com/TauCetiProject/TauCetiReview.git
+[submodule "submodules/TauCetiRoadmap"]
+	path = submodules/TauCetiRoadmap
+	url = https://github.com/TauCetiProject/TauCetiRoadmap.git
+[submodule "submodules/TauCetiReview"]
+	path = submodules/TauCetiReview
+	url = https://github.com/TauCetiProject/TauCetiReview.git
