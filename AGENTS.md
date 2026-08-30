@@ -159,14 +159,23 @@ Mathlib      TauCeti
   Never declare new work in `namespace Spectra` or a `Spectra.*` namespace;
   use the owning Tau Ceti or Davis--Kahan namespace. `SpectraBridge` is the
   established name for an attribution-preserving boundary when one is needed.
-- **This repository contains no Git submodules, and must not gain any.** Lake
-  fetches a Git dependency with a plain clone and does not initialise submodules,
-  so a submodule — or a Lake `path` dependency pointing into one — makes this
-  repository unusable as a dependency of anything else, and the Palomar Registry
-  rejects a submitted repository containing them. Tau Ceti is a pinned Git
-  dependency in `lakefile.toml`/`lake-manifest.json`; `lake` materialises it under
-  `.lake/packages/TauCeti`. See `external/README.md` and
+- **No Lake dependency may point into a Git submodule, and the build must never
+  need one initialised.** Lake fetches a Git dependency with a plain clone and does
+  not initialise submodules, so a Lake `path` dependency pointing into a gitlink
+  makes this repository unusable as a dependency of anything else, and the Palomar
+  Registry rejects a submitted repository containing submodules. Tau Ceti is a
+  pinned Git dependency in `lakefile.toml`/`lake-manifest.json`; `lake` materialises
+  it under `.lake/packages/TauCeti`. See `external/README.md` and
   `dev/palomar-readiness.md`.
+
+  `submodules/` holds **coordination and reference checkouts only** — the Tau Ceti
+  roadmap and review repositories, and the standalone Davis--Kahan and
+  Yu--Wang--Samworth Palomar submission repositories (maintainer decision,
+  2026-08-30). Nothing in `defaultTargets`, `lakefile.toml`, `lake-manifest.json`
+  or any gate reads them, and `lake build` in a clone with no submodules
+  initialised is unaffected. Do not add a submodule for anything the build,
+  the census, or a checker consumes; those stay pinned Git dependencies or
+  explicit `--tauceti-root`-style inputs.
 - An editable Tau Ceti or roadmap checkout is an **optional explicit input**, never
   assumed present: pass `--tauceti-root` / `--roadmap-root`, or set `TAUCETI_ROOT` /
   `TAUCETI_ROADMAP_ROOT`. `scripts/_external_checkouts.py` is the shared resolver.
