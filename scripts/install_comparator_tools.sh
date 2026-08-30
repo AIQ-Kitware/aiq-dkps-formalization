@@ -194,13 +194,7 @@ Run the challenge check from the repository root with:
 
   bash scripts/run_challenge_comparator.sh
 
-The Palomar submission entries live in their own repositories, checked out under
-`submodules/`, and each runs its own `scripts/verify_palomar.sh` against the same
-tools. Point them at this installation with:
-
-  source "$ENV_FILE"
-
-Or, for a shell with the tools configured:
+Standalone repositories may reuse this comparator-tool installation by sourcing:
 
   source "$ENV_FILE"
 
