@@ -22,30 +22,30 @@ or peer review by the Palomar Registry.**
 > or an API here, then refresh the extraction. Never fix mathematics in a
 > submission repository.
 >
-> **Still to remove, deliberately deferred on 2026-08-30.** The embedded
-> submission surface — the `Palomar` Lean library and `Palomar.lean`, the
-> `registry/` entry tree, the root `formalization.yaml`, the `Palomar`
-> `lean_lib` block in `lakefile.toml`, `scripts/check_palomar_readiness.py` and
-> `scripts/verify_palomar.sh` — is superseded and should be deleted. It was not
-> deleted in that pass because a concurrent session held uncommitted edits in
-> `Palomar/YWSSymmetric/Challenge.lean`, `Palomar/YWSRectangular/Challenge.lean`,
-> `registry/YWS_SOURCE_CONTRACT.md` and two `registry/*/formalization.yaml`
-> files, and was building `Palomar` in this working tree; removing those paths
-> would have destroyed unsaved work. Do it once the Yu–Wang–Samworth extraction
-> has landed in its standalone repository:
+> **Removed on 2026-08-30.** The embedded submission surface is gone: the
+> `Palomar` Lean library and `Palomar.lean`, the `registry/` entry tree, the root
+> `formalization.yaml`, the `Palomar` `lean_lib` block in `lakefile.toml`, and
+> `scripts/check_palomar_readiness.py` and `scripts/verify_palomar.sh`. This
+> repository is not a Palomar submission and no longer carries the packaging for
+> one.
 >
-> ```bash
-> git rm -r Palomar Palomar.lean registry formalization.yaml \
->           scripts/check_palomar_readiness.py scripts/verify_palomar.sh
-> # then drop the `[[lean_lib]] name = "Palomar"` block from lakefile.toml
-> # and the verify_palomar.sh pointer from scripts/install_comparator_tools.sh
-> ```
+> **The two scripts were ported, not deleted.** Each submission repository now
+> carries its own `scripts/check_palomar_readiness.py` and
+> `scripts/verify_palomar.sh`, adapted to handle both submission layouts —
+> Palomar's ordinary single root `comparator.json`, which is what the Davis–Kahan
+> repository uses, and a `registry/<entry>/` tree with per-entry metadata, which
+> is what Yu–Wang–Samworth uses. They belong there because they ask whether *this*
+> repository is submittable, and here they answered the wrong question: the
+> readiness checker reported the coordination submodules under `submodules/` as a
+> fatal defect, which is correct for a submitted repository and meaningless for
+> this one. Porting them also caught a live defect in the Davis–Kahan metadata —
+> an explicit `repository.role` block and `type: article`, neither of which
+> current policy wants — which the copy here had been silent about because it only
+> ever examined the embedded entries.
 >
-> `scripts/check_palomar_readiness.py` already fails on the current architecture:
-> it asks whether *this* repository is submittable, and answers no because
-> `submodules/` exists. That is the right answer to the wrong question. Delete the
-> checker rather than relaxing it; the question belongs to the standalone
-> repositories, which run their own checks.
+> The prototype entry `yws-2015`, a general-index-set form of Yu–Wang–Samworth
+> Theorem 2's first conclusion, is retired with the surface. It proved the Palomar
+> mechanics worked and `yws-symmetric` superseded it; git history is its archive.
 >
 > What stayed, because it is not submission packaging: `Challenge/` and
 > `comparator/`, the internal comparator calibration tree; the source censuses,
@@ -252,9 +252,11 @@ at a pinned SHA, and `repository.substantive_formalization`. What it keeps, and 
 is still load-bearing: **no Git submodules anywhere**, because Lake clones a
 dependency with a plain clone and does not initialise submodules.
 
-The skeletons under `registry/<entry>/wrapper/` are kept as the metadata and
-comparator-config source that the extraction copies from. They are no longer a
-description of the submitted repository's shape.
+The skeletons under `registry/<entry>/wrapper/` were kept for a while as the
+metadata and comparator-config source the extraction copied from. They stopped
+describing the submitted repositories' shape, and were deleted with the rest of
+the embedded surface on 2026-08-30; each submission repository now owns its own
+metadata.
 
 **Directory renamed 2026-08-29: `palomar/` became `registry/`.** It sat beside
 the Lean library directory `Palomar/`, and two paths differing only in case are
