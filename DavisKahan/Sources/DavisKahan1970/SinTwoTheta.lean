@@ -569,5 +569,78 @@ reflection-residual form at the operator norm**: `δ ‖sin 2Θ‖ ≤ ‖R‖`.
 alias unbounded_sinTwoTheta_reflectionResidual_opNorm_real :=
   DavisKahan.sinTwoTheta_reflectionResidual_opNorm_real
 
+/-! ### The complex source norm, completing the pair
+
+`sinTwoTheta_addBounded_paperUINorm_real` above states the bounded-perturbation
+`sin 2Θ` theorem for a `PaperUnitaryInvariantNorm` over a real Hilbert space.
+The complex counterpart was missing, even though the complex ideal-level theorem
+`DavisKahan.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap` has been
+available: only the adaptation from a Ky-Fan-dominant family to the source norm
+was absent.
+
+The two are not literal mirror images, and the difference is real rather than
+cosmetic.  The real track reaches the ideal layer through
+`FormBoundedSylvesterGap`; the complex track reaches it through the spectrum
+gap -- semiboundedness of the selected spectral restriction together with the
+complementary restriction's spectrum avoiding the open enlargement.  This
+statement takes the hypotheses the complex proof actually has. -/
+
+section ComplexPaperNorm
+
+variable {Hc : Type v}
+  [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
+
+open DavisKahan in
+/-- **Davis--Kahan 1970, `sin 2Θ`, bounded perturbation of an unbounded
+self-adjoint operator, in a source unitarily invariant norm, over `ℂ`.**
+
+`δ · N(sin 2Θ block) ≤ 2 N(E)` for the spectral subspaces selected by `B` from
+`A` and by `S` from `A + E`, under the spectrum gap: the restriction of `A` to
+`B` is semibounded between `β` and `α`, and the restriction to `Bᶜ` has spectrum
+avoiding `(β − δ, α + δ)`.
+
+The complex counterpart of `sinTwoTheta_addBounded_paperUINorm_real`. -/
+theorem sinTwoTheta_addBounded_paperUINorm
+    (N : PaperUnitaryInvariantNorm)
+    (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
+    (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
+      (DavisKahan.selfAdjointSpectralRestriction A hA B hB) β)
+    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
+      (DavisKahan.selfAdjointSpectralRestriction A hA B hB) α)
+    (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
+      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
+        (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
+    (hEmem : N.Mem Eop) :
+    N.Mem (DavisKahan.sinTwoThetaIdealBlock
+        (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
+        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+      δ * N.gauge (DavisKahan.sinTwoThetaIdealBlock
+        (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
+        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        2 * N.gauge Eop := by
+  have hhalf : 0 < δ / 2 := by linarith
+  have hmain := N.mul_gauge_le_of_all_mul_kyFan_le hhalf hEmem
+    (A := DavisKahan.sinTwoThetaIdealBlock
+        (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
+        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) (fun k => ?_)
+  · exact ⟨hmain.1, by linarith [hmain.2]⟩
+  · rcases Nat.eq_zero_or_pos k with rfl | hk
+    · simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+    · have h := DavisKahan.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap
+        (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk) A hA Eop hEop B S hB hS
+        hβα hδ hBlow hBhigh hBcomplSpec
+        (KyFanDominantIdealFamily.kyFan_mem k hk Eop)
+      rw [KyFanDominantIdealFamily.kyFan_gauge,
+        KyFanDominantIdealFamily.kyFan_gauge] at h
+      linarith [h.2]
+
+end ComplexPaperNorm
+
 end DavisKahan1970
 end TauCeti

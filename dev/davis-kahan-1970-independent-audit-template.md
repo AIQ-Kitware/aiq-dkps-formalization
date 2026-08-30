@@ -90,7 +90,7 @@ or the same condition with $A_0$ and $\Lambda_1$ interchanged.  Then, for every 
 
 #### `DavisKahan1970.sinTheta_headline`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:138`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:140`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -121,6 +121,30 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:109`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `DavisKahan1970.sinTheta_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:234`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `DavisKahan1970.sinTheta_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:322`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `DavisKahan1970.sinTheta_complex_of_intervalExterior`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:285`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `DavisKahan1970.sinTheta_real_of_intervalExterior`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:373`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -810,6 +834,12 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExterior`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:245`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:603`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

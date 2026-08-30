@@ -104,6 +104,10 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.sinTheta_real_exactPaper
 #check @TauCeti.DavisKahan1970.generalizedSinTheta
 #check @TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper
+#check @DavisKahan1970.sinTheta_complex
+#check @DavisKahan1970.sinTheta_real
+#check @DavisKahan1970.sinTheta_complex_of_intervalExterior
+#check @DavisKahan1970.sinTheta_real_of_intervalExterior
 
 /-! ## S2-tan-theta: Single-angle tangent theorem
 
@@ -147,6 +151,7 @@ Status: **TERMINAL EXACT**.
 -/
 
 #check @TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed
+#check @TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm
 #check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm
 #check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real
 #check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative
