@@ -11,7 +11,9 @@ import DavisKahan.SinTheta.Real.Canonical
 # The Davis--Kahan 1970 sine-theta source surface
 
 **The canonical source-facing theorems are `sinTheta_complex` and
-`sinTheta_real`**, at the end of this module.  They state the Section 2 result at
+`sinTheta_real`**, at the end of this module, and they are re-exported as
+`TauCeti.DavisKahan1970.SectionTwo.sinTheta` / `…sinTheta_real` alongside the other
+three Section 2 results.  They state the Section 2 result at
 its full proved scope: unbounded self-adjoint `LinearPMap` operators, arbitrary
 Hilbert dimension, the whole `FormBoundedSylvesterGap` rather than one of its
 branches, a `PaperUnitaryInvariantNorm`, and both conclusions -- ideal membership

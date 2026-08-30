@@ -146,6 +146,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-sin-theta",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.SectionTwo.sinTheta",
+        "TauCeti.DavisKahan1970.SectionTwo.sinTheta_real",
         "TauCeti.DavisKahan1970.sinTheta",
         "TauCeti.DavisKahan1970.sinTheta_real_exactPaper",
         "TauCeti.DavisKahan1970.generalizedSinTheta",
@@ -184,6 +186,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-tan-theta",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.SectionTwo.tanTheta",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTheta_real",
         "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
         "TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial",
         "TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm",
@@ -234,6 +238,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-sin-two-theta",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta",
+        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
         "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
         "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm",
         "TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real",
@@ -277,6 +283,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-tan-two-theta",
       "review_declarations": [
+        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta",
+        "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real",
         "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact",
         "TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact",

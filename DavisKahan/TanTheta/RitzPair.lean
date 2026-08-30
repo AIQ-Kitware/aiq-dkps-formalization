@@ -160,5 +160,134 @@ theorem ofReducesSubspace (h : TauCeti.LinearPMap.ReducesSubspace A V) :
 
 end ReducingComplement
 
+/-! ## The reflection in a subspace, as a hypothesis about the subspace
+
+The unbounded `tan 2Θ` theorem is about a self-adjoint involution `Z` that
+commutes with the perturbed operator.  For the source theorem `Z` is the
+reflection in the chosen subspace, and self-adjointness and involutivity are then
+theorems rather than hypotheses.  What genuinely remains is that reflecting
+preserves the domain and commutes with `A + B` there. -/
+
+/-- **A reducing subspace commutes with its own reflection.**
+
+If `V` reduces the partial map `T`, then `J_V = 2 P_V - 1` preserves `T`'s domain
+and `T J_V = J_V T` there.  Stated with the domain fact bound existentially,
+because the commutation cannot be written without it.
+
+This is the generic principal-angle-layer fact behind
+`ReflectionIntertwines.ofReducesSubspace`; nothing in it is specific to a
+perturbed operator or to Davis--Kahan. -/
+theorem reflection_commutes_of_reducesSubspace
+    {T : H →ₗ.[𝕜] H} {V : Submodule 𝕜 H} [V.HasOrthogonalProjection]
+    (h : TauCeti.LinearPMap.ReducesSubspace T V) :
+    ∃ hmaps : TauCeti.LinearPMap.MapsDomainTo T T (V.reflectionOperator),
+      ∀ x : T.domain,
+        T ⟨V.reflectionOperator ((x : H)), hmaps x⟩
+          = V.reflectionOperator (T x) := by
+  have hzeroV : ∀ z : H, z ∈ Vᗮ → V.starProjection z = 0 := by
+    intro z hz
+    have hs := Submodule.starProjection_orthogonal_apply (U := V) z
+    rw [Submodule.starProjection_eq_self_iff.mpr hz] at hs
+    exact sub_eq_self.mp hs.symm
+  have hzeroVp : ∀ z : H, z ∈ V → Vᗮ.starProjection z = 0 := by
+    intro z hz
+    rw [Submodule.starProjection_orthogonal_apply,
+      Submodule.starProjection_eq_self_iff.mpr hz, sub_self]
+  have hrefl : ∀ y : H, V.reflectionOperator y
+      = V.starProjection y - Vᗮ.starProjection y := by
+    intro y
+    rw [Submodule.starProjection_orthogonal_apply,
+      Submodule.reflectionOperator_apply, two_smul]
+    abel
+  have hmaps : TauCeti.LinearPMap.MapsDomainTo T T (V.reflectionOperator) := by
+    intro x
+    rw [hrefl]
+    exact T.domain.sub_mem (h.projection_mem_domain x)
+      (h.orthogonalProjection_mem_domain x)
+  refine ⟨hmaps, fun x => ?_⟩
+  have hVdom : V.starProjection ((x : H)) ∈ T.domain := h.projection_mem_domain x
+  have hVpdom : Vᗮ.starProjection ((x : H)) ∈ T.domain :=
+    h.orthogonalProjection_mem_domain x
+  have hsum :
+      (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain)
+          + ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ = x := by
+    apply Subtype.ext
+    show V.starProjection ((x : H)) + Vᗮ.starProjection ((x : H)) = (x : H)
+    rw [Submodule.starProjection_orthogonal_apply]
+    abel
+  have hsplit :
+      (⟨V.reflectionOperator ((x : H)), hmaps x⟩ : T.domain)
+          = (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain)
+            - ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ := by
+    apply Subtype.ext
+    exact hrefl ((x : H))
+  have hTx : T x = T (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain)
+      + T ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ := by
+    have hadd := T.map_add (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain)
+      ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩
+    rwa [hsum] at hadd
+  have hinV : T (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain) ∈ V :=
+    h.invariant _ (V.starProjection_apply_mem _)
+  have hinVp : T (⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ : T.domain) ∈ Vᗮ :=
+    h.orthogonal_invariant _ (Vᗮ.starProjection_apply_mem _)
+  have hproj : V.starProjection (T x)
+      = T (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain) := by
+    rw [hTx, map_add, Submodule.starProjection_eq_self_iff.mpr hinV,
+      hzeroV _ hinVp, add_zero]
+  have hprojp : Vᗮ.starProjection (T x)
+      = T (⟨Vᗮ.starProjection ((x : H)), hVpdom⟩ : T.domain) := by
+    rw [hTx, map_add, Submodule.starProjection_eq_self_iff.mpr hinVp,
+      hzeroVp _ hinV, zero_add]
+  have hsub := T.map_sub (⟨V.starProjection ((x : H)), hVdom⟩ : T.domain)
+    ⟨Vᗮ.starProjection ((x : H)), hVpdom⟩
+  rw [hsplit, hsub, ← hproj, ← hprojp, hrefl]
+
+/-- **The reflection in `V` intertwines the perturbed operator.**
+
+The domain-aware statement that `V.reflectionOperator` maps `A`'s domain into
+itself and that reflecting commutes with `A + B` on that domain.  Self-adjointness
+and involutivity of the reflection are *not* fields: they hold for every
+subspace. -/
+structure ReflectionIntertwines (A : H →ₗ.[𝕜] H) (B : H →L[𝕜] H)
+    (V : Submodule 𝕜 H) [V.HasOrthogonalProjection] where
+  /-- The reflection preserves the domain of `A`. -/
+  mapsDomain : TauCeti.LinearPMap.MapsDomainTo A A (V.reflectionOperator)
+  /-- Reflecting commutes with the perturbed operator on the domain. -/
+  commutes : ∀ x : A.domain,
+    A ⟨V.reflectionOperator (x : H), mapsDomain x⟩ +
+        B (V.reflectionOperator (x : H))
+      = V.reflectionOperator (A x) + V.reflectionOperator (B (x : H))
+
+namespace ReflectionIntertwines
+
+variable {A : H →ₗ.[𝕜] H} {B : H →L[𝕜] H} {V : Submodule 𝕜 H}
+  [V.HasOrthogonalProjection]
+
+/-- **A subspace that reduces the perturbed operator gives a reflection
+intertwiner.**
+
+`TauCeti.LinearPMap.ReducesSubspace (A.addBounded B) V` is the generic vocabulary
+for "`V` reduces `A + B`", and `A + B` has exactly `A`'s domain, so the reflection
+`2 P_V - 1` preserves that domain.  Commutation is
+`TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace` read through
+`addBounded_apply`.
+
+This is the bridge that keeps the source theorem free of a competing reduction
+vocabulary: a caller holding a `ReducesSubspace` -- from a spectral subspace of the
+perturbed operator, say -- constructs nothing by hand. -/
+theorem ofReducesSubspace
+    (h : TauCeti.LinearPMap.ReducesSubspace
+      (TauCeti.LinearPMap.addBounded A B) V) :
+    ReflectionIntertwines A B V := by
+  obtain ⟨hmaps, hcomm⟩ := reflection_commutes_of_reducesSubspace h
+  refine ⟨hmaps, fun x => ?_⟩
+  have hx := hcomm x
+  simp only [TauCeti.LinearPMap.addBounded_apply] at hx
+  refine hx.trans ?_
+  have hsplit : ((TauCeti.LinearPMap.addBounded A B) x : H) = A x + B ((x : H)) := rfl
+  rw [hsplit, map_add]
+
+end ReflectionIntertwines
+
 end DavisKahan
 end TauCeti

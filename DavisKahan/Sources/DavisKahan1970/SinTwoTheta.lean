@@ -8,6 +8,7 @@ import DavisKahan.DoubleAngle.UnboundedIdeal
 import DavisKahan.DoubleAngle.AngleTransport
 import DavisKahan.DoubleAngle.RealAngleIdentification
 import DavisKahan.DoubleAngle.RealUnboundedIdeal
+import DavisKahan.DoubleAngle.TangentTransport
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Resolvent
@@ -552,6 +553,49 @@ theorem sinTwoTheta_addBounded_paperUINorm_real
       rw [KyFanDominantIdealFamily.kyFan_gauge,
         KyFanDominantIdealFamily.kyFan_gauge] at h
       linarith [h.2]
+
+open DavisKahan DavisKahan.RealSpectralRestriction in
+/-- **Davis--Kahan 1970, `sin 2Θ` over a REAL Hilbert space, bounded-perturbation
+form, stated on the angle operator itself.**
+
+`sinTwoTheta_addBounded_paperUINorm_real` concludes about
+`sinTwoThetaIdealBlock`, the overlap of the selected spectral subspace with the
+reflected complement, which is the proof's vehicle rather than the paper's
+object.  `DavisKahan.gauge_sinTwoAngleOperatorRC` moves it to `2 sin Θ cos Θ`
+for the real pair: the two have the same approximation singular values
+(`DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real`), so every
+source unitarily invariant norm sees them identically.
+
+The real mirror of `sinTwoTheta_addBounded_paperUINorm_angleOperator`.  The angle
+is the *directed* double-angle sine of the real pair, read in the canonical
+complexification, which is where this development keeps the real double-angle
+operators; the ambient spelling `paperSinTwoAngleOperatorR` is a different
+operator, carrying each principal angle twice where the block carries it once,
+and no transport to it is claimed. -/
+theorem sinTwoTheta_addBounded_paperUINorm_real_angleOperator
+    (N : PaperUnitaryInvariantNorm)
+    (A : Er →ₗ.[ℝ] Er)
+    (hA : IsSelfAdjoint A)
+    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hEmem : N.Mem Eop) :
+    N.Mem (TauCeti.DavisKahanExt.Real.sinTwoAngleOperatorRC
+        (realSelfAdjointSpectralSubspace A hA B hB)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+      δ * N.gauge (TauCeti.DavisKahanExt.Real.sinTwoAngleOperatorRC
+        (realSelfAdjointSpectralSubspace A hA B hB)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        2 * N.gauge Eop := by
+  obtain ⟨hmem, hle⟩ := sinTwoTheta_addBounded_paperUINorm_real N A hA Eop hEop
+    B S hB hS hδ hgap hEmem
+  refine ⟨(DavisKahan.mem_sinTwoAngleOperatorRC_iff _ _ N).mpr hmem, ?_⟩
+  rwa [DavisKahan.gauge_sinTwoAngleOperatorRC]
 
 /-! ### The real directed forms at the operator norm, naming the real angle
 

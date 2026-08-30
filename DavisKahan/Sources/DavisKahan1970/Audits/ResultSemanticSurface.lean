@@ -97,10 +97,13 @@ end TauCeti.DavisKahan1970.Audits
 
 Status: **TERMINAL EXACT**.
 
-The first two are the canonical source-facing statements: full
-`FormBoundedSylvesterGap`, both conclusions, no capability class.  The rest are
-the presentation declaration, the engine, and the scope companions. -/
+The first two are the canonical Section 2 inventory names; the two after them are
+the declarations they alias, with the full `FormBoundedSylvesterGap`, both
+conclusions and no capability class.  The rest are the presentation declaration,
+the engine, and the scope companions. -/
 
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTheta
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTheta_real
 #check @DavisKahan1970.sinTheta_complex
 #check @DavisKahan1970.sinTheta_real
 #check @DavisKahan1970.sinTheta_complex_of_intervalExterior
@@ -130,11 +133,15 @@ The transversality-form declarations assume `‖sin Θ‖ < 1`, which is strictl
 than (3.5); they are registered as specializations, not as the source-shaped form.
 -/
 
+#check @TauCeti.DavisKahan1970.SectionTwo.tanTheta
+#check @TauCeti.DavisKahan1970.SectionTwo.tanTheta_real
 #check @TauCeti.DavisKahan1970.tanTheta_headline_generic_directed
 #check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm
+#check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm_real
 #check @TauCeti.DavisKahan.UnboundedRitzPair
 #check @TauCeti.DavisKahan.ReducingComplement
 #check @TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock
+#check @TauCeti.DavisKahan.ReducingComplement.ofReducesSubspace
 #check @TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm
 #check @TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial
 #check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm
@@ -157,13 +164,19 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 Status: **TERMINAL EXACT**.
 -/
 
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed
 #check @TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm
 #check @TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_angleOperator
+#check @TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_real_angleOperator
 #check @TauCeti.DavisKahan.sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC
 #check @TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers
 #check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock
 #check @TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real
+#check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real
+#check @TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff
+#check @TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC
 #check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm
 #check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real
 #check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative
@@ -179,9 +192,14 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
+#check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta
+#check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real
 #check @TauCeti.DavisKahan1970.tanTwoTheta_headline_generic
 #check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm
-#check @TauCeti.DavisKahan1970.ReflectionIntertwines
+#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm_real
+#check @TauCeti.DavisKahan.ReflectionIntertwines
+#check @TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace
+#check @TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace
 #check @TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq
 #check @TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart
 #check @TauCeti.DavisKahan.corner_offDiagonalPart_sq
@@ -192,7 +210,13 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan.paperTanTwoBlockRepresentative_mul_signedCosTwo
 #check @TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent
 #check @TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent
+#check @TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real
+#check @TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq
+#check @TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
+#check @TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+#check @TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR
 #check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm
+#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm_real
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact
 #check @TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact

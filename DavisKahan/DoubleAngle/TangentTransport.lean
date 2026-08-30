@@ -7,6 +7,9 @@ import DavisKahan.DoubleAngle.AngleTransport
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
 import DavisKahan.DoubleAngle.RealAngleIdentification
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
+import DavisKahan.Geometry.Polar.DirectRotationReal
 
 /-!
 # The unbounded `tan 2Θ` block, and its transport to the paper's tangent
@@ -521,6 +524,50 @@ theorem unboundedReflectionTangent_reflection_eq
     _ = paperTanTwoBlockRepresentative U V * U.reflectionOperator := by
         rw [hKinv, one_mul]
 
+/-! ### The pole hypothesis is a consequence, not an assumption
+
+The unbounded `tan 2Θ` theorem's ordered-gap hypotheses already force the
+diagonal block `C = U.diagonalPart J_V` to be invertible; that is the first
+component of its conclusion.  And `C = J_U · (1 - 2(P_V - P_U)²)`, so a unit
+diagonal block *is* a unit signed doubled cosine, which is exactly what excludes
+the quarter-turn poles of `tan 2Θ`.  A caller therefore never has to certify
+`cos 2θ ≠ 0` separately. -/
+
+/-- **A unit diagonal block is a unit signed doubled cosine.**
+
+`U.diagonalPart J_V = J_U · (1 - 2(P_V - P_U)²)` with `J_U` a self-adjoint
+involution, hence a unit; and `IsUnit (C · C)` gives `IsUnit C` in any monoid. -/
+theorem isUnit_signedCosTwo_of_isUnit_diagonalPart_sq
+    (h : IsUnit (U.diagonalPart V.reflectionOperator *
+      U.diagonalPart V.reflectionOperator)) :
+    IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (paperProjectorDifference U V *
+      paperProjectorDifference U V)) := by
+  have hC : IsUnit (U.diagonalPart V.reflectionOperator) := by
+    rw [← pow_two] at h
+    exact (isUnit_pow_iff two_ne_zero).mp h
+  have hJJ := TauCeti.DavisKahan.reflectionOperator_mul_self_complex U
+  have hJU : IsUnit U.reflectionOperator :=
+    ⟨⟨U.reflectionOperator, U.reflectionOperator, hJJ, hJJ⟩, rfl⟩
+  have hK : signedCosTwo U V
+      = U.reflectionOperator * U.diagonalPart V.reflectionOperator := by
+    rw [diagonalPart_reflection_eq_reflection_mul_signedCosTwo, ← mul_assoc, hJJ,
+      one_mul]
+  have hunit : IsUnit (signedCosTwo U V) := by rw [hK]; exact hJU.mul hC
+  simpa only [signedCosTwo] using hunit
+
+/-- **The unbounded theorem's own conclusion excludes every quarter-turn pole.**
+
+Composition of `isUnit_signedCosTwo_of_isUnit_diagonalPart_sq` with
+`cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq`.  This is
+what lets the source-facing `tan 2Θ` theorem state the paper's `|tan 2Θ|` without
+asking its caller for an independent pole certificate. -/
+theorem cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
+    (h : IsUnit (U.diagonalPart V.reflectionOperator *
+      U.diagonalPart V.reflectionOperator)) :
+    ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0 :=
+  cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq
+    (isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V h)
+
 /-- **The reflection tangent and the paper's `|tan 2Θ|` have the same
 approximation numbers.**
 
@@ -607,6 +654,87 @@ theorem approximationSingularValue_sinTwoThetaIdealBlock_real
     complexify_sinTwoThetaIdealBlock U V]
   exact sinTwoThetaIdealBlock_hasSameApproximationNumbers
     (complexifySubmodule U) (complexifySubmodule V) n
+
+/-- **The real `sin 2Θ` block and the real directed `sin 2Θ` have the same gauge
+in every source unitarily invariant norm**, and one lies in the norm's ideal
+exactly when the other does.
+
+`approximationSingularValue_sinTwoThetaIdealBlock_real` in gauge form.  The two
+operators live over different scalar fields -- the block is a real operator, the
+angle is read in the complexification -- so the equality is chained through
+`extendedGauge_complexify` rather than through
+`gauge_eq_of_sameApproximationSingularValues`, which is same-field. -/
+theorem extendedGauge_sinTwoThetaIdealBlock_real
+    (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (N : ExactSinTheta.PaperUnitaryInvariantNorm) :
+    N.extendedGauge (sinTwoThetaIdealBlock U V)
+      = N.extendedGauge (Real.sinTwoAngleOperatorRC U V) := by
+  rw [← ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge_complexify N
+      (sinTwoThetaIdealBlock U V),
+    complexify_sinTwoThetaIdealBlock U V]
+  exact extendedGauge_sinTwoThetaIdealBlock (complexifySubmodule U)
+    (complexifySubmodule V) N
+
+/-- Ideal membership transfers between the real block and the real directed
+`sin 2Θ`. -/
+theorem mem_sinTwoAngleOperatorRC_iff
+    (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (N : ExactSinTheta.PaperUnitaryInvariantNorm) :
+    N.Mem (Real.sinTwoAngleOperatorRC U V) ↔ N.Mem (sinTwoThetaIdealBlock U V) := by
+  unfold ExactSinTheta.PaperUnitaryInvariantNorm.Mem
+  rw [extendedGauge_sinTwoThetaIdealBlock_real U V N]
+
+/-- The gauge transfers between the real block and the real directed `sin 2Θ`. -/
+theorem gauge_sinTwoAngleOperatorRC
+    (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (N : ExactSinTheta.PaperUnitaryInvariantNorm) :
+    N.gauge (Real.sinTwoAngleOperatorRC U V)
+      = N.gauge (sinTwoThetaIdealBlock U V) := by
+  unfold ExactSinTheta.PaperUnitaryInvariantNorm.gauge
+  rw [extendedGauge_sinTwoThetaIdealBlock_real U V N]
+
+/-- **The real reflection tangent and the real `|tan 2Θ|` have the same gauge in
+every source unitarily invariant norm.**
+
+The real counterpart of `extendedGauge_unboundedReflectionTangent`, and, like it,
+it asks for no independent pole certificate: the hypothesis is invertibility of
+the reflection's diagonal block, which is what the unbounded `tan 2Θ` theorem
+already delivers.
+
+Everything descends through the complexification: the reflection in `V`
+complexifies to the reflection in the complexified `V`, the reflection tangent
+complexifies to the complex one, `paperAbsTanTwoAngleOperatorR` complexifies to
+`paperAbsTanTwoAngleOperatorC`, and a source gauge is unchanged by
+complexification.  No second analytic proof is involved. -/
+theorem extendedGauge_unboundedReflectionTangent_real
+    (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (N : ExactSinTheta.PaperUnitaryInvariantNorm)
+    (hCC : IsUnit (U.diagonalPart V.reflectionOperator *
+      U.diagonalPart V.reflectionOperator)) :
+    N.extendedGauge (unboundedReflectionTangent U V.reflectionOperator)
+      = N.extendedGauge (paperAbsTanTwoAngleOperatorR U V) := by
+  have hZ : complexify V.reflectionOperator
+      = (complexifySubmodule V).reflectionOperator :=
+    complexify_reflectionOperator V
+  have hCCc : IsUnit ((complexifySubmodule U).diagonalPart
+        ((complexifySubmodule V).reflectionOperator) *
+      (complexifySubmodule U).diagonalPart
+        ((complexifySubmodule V).reflectionOperator)) := by
+    rw [← hZ, diagonalPart_complexifySubmodule, ← complexify_mul,
+      isUnit_complexify_iff]
+    exact hCC
+  have hcos := cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
+    (complexifySubmodule U) (complexifySubmodule V) hCCc
+  have htrans := extendedGauge_unboundedReflectionTangent
+    (complexifySubmodule U) (complexifySubmodule V) N hcos
+  rw [← ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge_complexify N
+      (unboundedReflectionTangent U V.reflectionOperator),
+    ← ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge_complexify N
+      (paperAbsTanTwoAngleOperatorR U V),
+    complexify_paperAbsTanTwoAngleOperatorR,
+    ← unboundedReflectionTangent_complexifySubmodule U V.reflectionOperator hCC,
+    hZ]
+  exact htrans
 
 end RealAngle
 
