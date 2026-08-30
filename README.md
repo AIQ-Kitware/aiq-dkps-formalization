@@ -77,7 +77,8 @@ automatically is what previously produced status that looked healthy and was not
 ├── comparator/              # per-PR comparator configs
 ├── dev/                     # engineering memory, the source censuses, and audit records
 ├── docs/                    # planning trackers and challenge how-to
-├── external/                # notes on the optional external Tau Ceti checkouts
+├── external/                # notes on optional editable external checkouts
+├── submodules/              # coordination/reference/delivery repos; never build inputs
 ├── retired/                 # provenance for the closed Spectra collaboration
 ├── scripts/                 # the census tools and the build gates (`scripts/run_gates.py`)
 ├── lakefile.toml            # Lake workspace: default targets and explicit opt-in libraries
@@ -88,6 +89,13 @@ automatically is what previously produced status that looked healthy and was not
 The sidecar files such as `Acharyya2025.lean` are normal Lean root modules.  The
 subdirectory files are imported as submodules, for example
 `Acharyya2025.RateChain`.
+
+Git repositories under `submodules/` are a different concept: they are optional
+coordination/reference/delivery checkouts and are not required by `lake build`.
+Standalone delivery repositories own their own submission-specific statements,
+metadata, and verification workflow. Mathematical and public-API fixes are made in
+this repository first, then copied/refreshed into the relevant standalone repository.
+See [`submodules/README.md`](submodules/README.md).
 
 **Agents / contributors:** [`dev/`](dev/README.md) is long-running engineering
 memory — distilled benchmark questions and effortful-debug postmortems from real

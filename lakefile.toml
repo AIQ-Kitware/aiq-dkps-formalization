@@ -20,12 +20,9 @@ autoImplicit = false
 # reusable-math package in this repository; its declarations already live in
 # final `TauCeti.*` namespaces.
 #
-# This is a pinned Git dependency, NOT a submodule path dependency, and that is
-# load-bearing rather than stylistic. Lake fetches a Git dependency with a plain
-# clone and does not initialise submodules, so a path dependency into a gitlink
-# makes this repository unusable as a dependency of anything else -- including a
-# Palomar submission repository extracted from this one. See
-# dev/palomar-readiness.md.
+# This is a pinned Git dependency, NOT a submodule path dependency. That boundary
+# is load-bearing: the ordinary build must work when the coordination repositories
+# under `submodules/` are not initialized.
 #
 # An editable upstream checkout is a separate concern: scripts that need one take
 # an explicit --tauceti-root or TAUCETI_ROOT. Nothing in the build requires it.

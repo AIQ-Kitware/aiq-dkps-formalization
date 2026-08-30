@@ -1,28 +1,20 @@
 #!/usr/bin/env python3
-"""Resolve optional external Tau Ceti checkouts.
+"""Resolve optional external Tau Ceti / roadmap / review checkouts.
 
-This repository used to carry three Git submodules — `external/TauCeti`,
-`submodules/TauCetiRoadmap` and `submodules/TauCetiReview`. They are gone, because
-Lake fetches a Git dependency with a plain clone and does not initialise
-submodules: a path dependency into a gitlink makes this repository unusable as a
-dependency of anything else, including a Palomar submission repository extracted
-from this one.
-See `dev/palomar-readiness.md`.
+The ordinary DKPS build does not depend on any checkout under `external/` or
+`submodules/`. Tau Ceti itself is a pinned Lake dependency. An editable Tau Ceti
+worktree and the tracked roadmap/review coordination repositories are optional
+inputs for export, provenance, and review tooling only.
 
-What the submodules provided is now an *optional* input. The build never needs
-one: Tau Ceti arrives as a pinned Lake dependency. Only three kinds of work need a
-real checkout, and each says so explicitly:
+Resolution order is explicit argument, environment variable, conventional local or
+coordination path, then -- for read-only Tau Ceti uses only -- the Lake package
+checkout. A checker whose optional external input is absent must report
+`SKIP` / `UNAVAILABLE` honestly.
 
-  * exporting staged `ForTauCeti` modules upstream (needs an **editable** checkout);
-  * reading upstream Git provenance for an audit certificate (read-only);
-  * validating this repository against the roadmap / review surfaces (read-only).
-
-Resolution order is the same everywhere: an explicit argument, then an environment
-variable, then the historical in-repository path if someone still has one
-populated, then — for Tau Ceti read-only uses only — the Lake package checkout.
-
-A checker whose external reference is absent must report `SKIP` / `UNAVAILABLE`
-honestly. Making a gate green by deleting the thing it checks is not allowed.
+`external/TauCeti` is retained as an untracked compatibility path for developers who
+already keep an editable checkout there. `submodules/TauCetiRoadmap` and
+`submodules/TauCetiReview` may be tracked coordination checkouts, but nothing in the
+ordinary build requires them initialized.
 """
 from __future__ import annotations
 
@@ -40,8 +32,7 @@ TAUCETI_ENV = "TAUCETI_ROOT"
 ROADMAP_ENV = "TAUCETI_ROADMAP_ROOT"
 REVIEW_ENV = "TAUCETI_REVIEW_ROOT"
 
-#: Where the submodules used to live. Still honoured when populated, so a working
-#: copy that predates the removal keeps working.
+#: Conventional optional checkout paths. The names are retained for compatibility.
 LEGACY_TAUCETI = ROOT / "external/TauCeti"
 LEGACY_ROADMAP = ROOT / "submodules/TauCetiRoadmap"
 LEGACY_REVIEW = ROOT / "submodules/TauCetiReview"

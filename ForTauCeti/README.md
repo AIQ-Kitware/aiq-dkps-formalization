@@ -28,8 +28,8 @@ Mathlib      TauCeti
   headers, `retired/Spectra.UPSTREAM.md`, and the historical engineering records.
 - Tau Ceti is a pinned Lake dependency, materialised under `.lake/packages`. An
   editable checkout is an optional explicit input (`--tauceti-root` /
-  `TAUCETI_ROOT`); this repository contains no submodules. Maintained
-  implementations are edited here.
+  `TAUCETI_ROOT`). Coordination repositories under `submodules/` are not build
+  dependencies. Maintained implementations are edited here.
 
 The import firewall is enforced by `scripts/check_dependency_layers.py`.
 

@@ -159,23 +159,25 @@ Mathlib      TauCeti
   Never declare new work in `namespace Spectra` or a `Spectra.*` namespace;
   use the owning Tau Ceti or Davis--Kahan namespace. `SpectraBridge` is the
   established name for an attribution-preserving boundary when one is needed.
-- **No Lake dependency may point into a Git submodule, and the build must never
-  need one initialised.** Lake fetches a Git dependency with a plain clone and does
-  not initialise submodules, so a Lake `path` dependency pointing into a gitlink
-  makes this repository unusable as a dependency of anything else, and the Palomar
-  Registry rejects a submitted repository containing submodules. Tau Ceti is a
-  pinned Git dependency in `lakefile.toml`/`lake-manifest.json`; `lake` materialises
-  it under `.lake/packages/TauCeti`. See `external/README.md` and
-  `dev/palomar-readiness.md`.
+- **No Lake dependency may point into a Git submodule, and the ordinary build must
+  never need one initialised.** Lake fetches Git dependencies without initializing
+  this repository's coordination checkouts, so build dependencies stay as pinned Git
+  requirements in `lakefile.toml` / `lake-manifest.json`. Tau Ceti is materialized by
+  Lake under `.lake/packages/TauCeti`. See `external/README.md`.
 
-  `submodules/` holds **coordination and reference checkouts only** — the Tau Ceti
-  roadmap and review repositories, and the standalone Davis--Kahan and
-  Yu--Wang--Samworth Palomar submission repositories (maintainer decision,
-  2026-08-30). Nothing in `defaultTargets`, `lakefile.toml`, `lake-manifest.json`
-  or any gate reads them, and `lake build` in a clone with no submodules
-  initialised is unaffected. Do not add a submodule for anything the build,
-  the census, or a checker consumes; those stay pinned Git dependencies or
-  explicit `--tauceti-root`-style inputs.
+  `submodules/` holds **coordination, review, tooling, and standalone delivery
+  repositories only**. The ordinary build must work with all of them uninitialized.
+  Optional review/checking tools may consume a checkout through an explicit path or
+  environment variable and must report `UNAVAILABLE` when it is absent. See
+  `submodules/README.md` for the repository-role boundary.
+- **This repository is authoritative for the mathematics and public APIs.** The
+  standalone Davis--Kahan and Yu--Wang--Samworth submission repositories under
+  `submodules/` own their own Challenge/Solution files, submission metadata,
+  readiness checks, and submission-specific planning. Do not recreate those surfaces
+  here. If work in a standalone repository exposes a mathematical, proof, or API
+  defect, fix and validate it here first; then refresh the standalone repository as a
+  mechanical extraction and update its gitlink separately. Submission scope and
+  packaging policy are documented in the standalone repository, not duplicated here.
 - An editable Tau Ceti or roadmap checkout is an **optional explicit input**, never
   assumed present: pass `--tauceti-root` / `--roadmap-root`, or set `TAUCETI_ROOT` /
   `TAUCETI_ROADMAP_ROOT`. `scripts/_external_checkouts.py` is the shared resolver.
@@ -289,10 +291,10 @@ target, one topic per PR, with a green build and the standard axiom allowlist.
 `ForTauCeti` is the local proof of the proposed API; submission packaging lives
 under `dev/tauceti/`.
 
-The roadmap is an external checkout, supplied with `--roadmap-root` or
-`TAUCETI_ROADMAP_ROOT` (historically the `submodules/TauCetiRoadmap` submodule,
-removed 2026-08-28). Treat it as an external, read-only review and submission
-surface unless the human explicitly requests a roadmap change. A request to prove,
+The roadmap is an external review surface. A coordination checkout may be present
+at `submodules/TauCetiRoadmap`, and tools also accept `--roadmap-root` or
+`TAUCETI_ROADMAP_ROOT`; no ordinary build depends on that checkout. Treat it as
+read-only unless the human explicitly requests a roadmap change. A request to prove,
 refactor, or validate an API in this repository does not authorize editing it.
 
 Operator-roadmap edits use the condensed authoring guide at
