@@ -1,0 +1,88 @@
+# Which namespaces a module may declare into.
+#
+# Checked by `aiq-lean namespaces check dev/policy/namespaces.yaml`.
+# Replaces `scripts/check_namespace_policy.py` and
+# `scripts/check_spectra_namespace.py`, which held these two rules as Python.
+version: 1
+
+rules:
+  # `ForTauCeti/README.md` section 2 permits exactly two forms:
+  #
+  #   1. an extension of the canonical Mathlib namespace of the object being
+  #      extended -- `ContinuousLinearMap.opNorm_...` is a fact about a
+  #      `ContinuousLinearMap`, so it belongs in `ContinuousLinearMap`;
+  #   2. `TauCeti` or a namespace below it, for everything the library owns.
+  #
+  # Nothing checked this until 2026-07-29, when four files had drifted into
+  # namespaces that are Mathlib's but are *not* the namespace of the object being
+  # extended: a spectral functional calculus and a Moore--Penrose inverse are not
+  # facts about `FiniteDimensional`.  That is a misuse of form 1, not a third
+  # form, so the allowlist carries a reason per entry and adding one forces the
+  # author to name the object being extended.
+  #
+  # The test to apply when adding an entry is the one the original audit used:
+  # would the declaration read naturally as a fact about that object?
+  # `ENNReal.tsum_...` stated for arbitrary `f g : iota -> ENNReal` passes;
+  # `FiniteDimensional.moorePenrose...` does not.
+  - id: fortauceti-namespaces
+    modules: ["ForTauCeti"]
+    allow:
+      - "TauCeti"
+      # lifts and inequalities of Mathlib `Cardinal`s
+      - "Cardinal"
+      # facts about a `ContinuousLinearMap` -- norms, adjoints, composition
+      - "ContinuousLinearMap"
+      # inequalities between real-extended-nonneg-valued functions, e.g.
+      # Minkowski at p = 2 for `tsum`
+      - "ENNReal"
+      # counting facts about a `Finset`, in the shape Mathlib leaves them:
+      # `card_filter_lt` is the filter form of `Fin.card_Iio`, which Mathlib does
+      # not have, and it exists because two modules each carried a private copy
+      # differing only by a prime on the name
+      - "Finset"
+      # Parseval-type identities for a Mathlib `HilbertBasis`
+      - "HilbertBasis"
+      # facts about Mathlib's `IsPartialIsometry` predicate
+      - "IsPartialIsometry"
+      # facts about a `LinearMap`, including its `IsPositive` / `IsSymmetric`
+      - "LinearMap"
+      # facts about an unbounded `LinearPMap` -- domain, closure, adjoint
+      - "LinearPMap"
+      # additions to Mathlib's measure theory, stated for its own objects
+      - "MeasureTheory"
+      # facts about a Mathlib `OrthonormalBasis`
+      - "OrthonormalBasis"
+      # facts about `Real`-valued functions, e.g. `Real.abs_sin_...`
+      - "Real"
+      # facts about a `Submodule` -- projections, gaps, block decompositions
+      - "Submodule"
+    message: >-
+      a ForTauCeti declaration belongs in `TauCeti.*`, or in the canonical Mathlib
+      namespace of the object it extends; if it really is a fact about that
+      object, add the root here with the reason
+
+  # A theorem of ours parked in `namespace Spectra.*` is indistinguishable from
+  # donor material by name.  That was survivable while `import Spectra` was in the
+  # build and the file path said `Interop/Spectra/`; it stopped being survivable
+  # when the dependency was removed, because then nothing points at the donor and
+  # the attribution ledger silently credits Spectra for our work.
+  #
+  # `namespace SpectraBridge` is the *correct* pattern and is not a violation: it
+  # is our namespace whose name merely mentions Spectra.  Prefix matching is by
+  # namespace component, so `Spectra` does not match `SpectraBridge`.
+  - id: no-spectra-namespace
+    modules:
+      - "ForTauCeti"
+      - "RoadmapBridge"
+      - "DavisKahan"
+      - "Acharyya2024"
+      - "Acharyya2025"
+      - "DkpsQuench2026"
+      - "Helm2025"
+      - "YuWangSamworth2015"
+      - "Challenge"
+    deny: ["Spectra"]
+    message: >-
+      file the declaration by what it is -- spectral theory under
+      `DavisKahan/SpectralTheory/`, geometry under `DavisKahan/Geometry/` -- not
+      under a donor's name

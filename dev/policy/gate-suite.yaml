@@ -1,0 +1,103 @@
+# The regression suite.
+#
+#     aiq-lean gates run --config dev/policy/gate-suite.yaml
+#     aiq-lean gates run --config dev/policy/gate-suite.yaml --fast   # skip Lean builds
+#     aiq-lean gates list --config dev/policy/gate-suite.yaml
+#
+# Replaces `scripts/run_gates.py`.  Two kinds of gate appear here:
+#
+#   * **declared** gates below -- installed `aiq-lean` commands plus a policy
+#     file in this directory.  These are the generic engines; the repository
+#     owns the policy, the package owns the mechanism.
+#   * **discovered** `scripts/check_*.py`, which are the checks that encode
+#     Davis--Kahan / Tau Ceti / Palomar scientific and release policy and have no
+#     generic form.  The runner reads each one's `argparse` setup to decide
+#     whether `--check` means "be strict" there, so a soft check is strict at the
+#     point of use without every script changing.
+#
+# **Do not run `lake` while this is running.**  Several gates invoke it and a
+# concurrent build makes them fail with `build failed`, which reads exactly like
+# a regression and is not one.  `--fast` skips exactly those.
+pattern: scripts/check_*.py
+unavailable_exit_code: 3
+
+slow:
+  - check_comparator_signatures
+  - check_davis_kahan_hidden_foundations
+  - experimental-roots
+
+# Kept empty deliberately.  A check whose output nobody acts on is worse than no
+# check -- it trains everyone to ignore the suite -- and "advisory" is the
+# mechanism that lets such checks accumulate instead of being removed.  If you
+# find yourself wanting an entry here, delete the check instead.
+advisory: {}
+
+# Gates where `--check` means a stronger, aspirational criterion rather than the
+# soft/strict toggle it is elsewhere, so the runner withholds the flag.  Empty
+# since 2026-08-27; the mechanism costs nothing and documents the limit of
+# deriving strictness from `argparse`.
+check_is_stronger: {}
+
+gates:
+  - name: import-layers
+    command: ["aiq-lean", "imports", "check", "dev/policy/import-layers.yaml"]
+    description: "library layering firewall"
+
+  - name: namespaces
+    command: ["aiq-lean", "namespaces", "check", "dev/policy/namespaces.yaml"]
+    description: "which namespaces a module may declare into"
+
+  - name: ratchets
+    command: ["aiq-lean", "ratchet", "check", "dev/policy/ratchet.yaml"]
+    description: "@[expose] counts in ForTauCeti"
+
+  - name: conflict-markers
+    command: ["aiq-lean", "source", "conflicts", "--check"]
+    description: "committed merge-conflict markers in any tracked file"
+
+  - name: orphan-artifacts
+    command: ["aiq-lean", "source", "orphan-artifacts", "--check"]
+    description: "Lake build products whose Lean source is gone"
+
+  - name: duplicate-names
+    command: ["aiq-lean", "source", "duplicates",
+              "--prefix", "ForTauCeti", "--prefix", "DavisKahan",
+              "--exclude-prefix", "DavisKahan.Experimental",
+              "--check"]
+    description: "one fully-qualified name must come from one module"
+
+  - name: private-shadows
+    command: ["aiq-lean", "source", "private-shadows",
+              "--prefix", "ForTauCeti", "--prefix", "DavisKahan", "--prefix", "Challenge",
+              "--baseline", "dev/policy/private-shadow-baseline.json",
+              "--check"]
+    description: "a private declaration repeating one its module already imports"
+
+  - name: docstring-coverage
+    command: ["aiq-lean", "source", "docstrings",
+              "--prefix", "ForTauCeti", "--prefix", "DavisKahan",
+              "--exclude-prefix", "DavisKahan.Experimental",
+              "--baseline", "dev/policy/docstring-baseline.json",
+              "--check"]
+    description: "every public declaration on the submission surface carries a docstring"
+
+  - name: experimental-coverage
+    command: ["aiq-lean", "source", "module-coverage", "dev/policy/experimental-coverage.yaml"]
+    description: "the Experimental root reaches every module under it"
+
+  - name: experimental-roots
+    command: ["aiq-lean", "source", "staging", "dev/experimental-root-status.json", "--compile"]
+    description: "the Experimental status registry, and the build target it annotates"
+
+  - name: aggregates
+    command: ["aiq-lean", "source", "aggregates",
+              "--base", "DavisKahan", "--library", "DavisKahan",
+              "--skip-dir", "Experimental", "--skip-dir", "MathAhead", "--skip-dir", "Audits",
+              "--root-import", "DavisKahan",
+              "--header-file", "dev/policy/aggregate-header.txt",
+              "--check"]
+    description: "DavisKahan.All reaches the production tree by construction"
+
+  - name: workspace-ledgers
+    command: ["aiq-lean", "workspace", "validate", "--static-declarations"]
+    description: "every source census, semantic review and coverage inventory, validated together"

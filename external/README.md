@@ -29,7 +29,7 @@ These operations accept explicit paths or environment variables:
 | `scripts/export_for_tauceti.py --write` | `--tauceti-root` | `TAUCETI_ROOT` |
 | `scripts/certify_davis_kahan_1970.py` upstream provenance | `--tauceti-root` | `TAUCETI_ROOT` |
 | `scripts/check_tauceti_roadmap_topics.py` | `--roadmap-root` | `TAUCETI_ROADMAP_ROOT` |
-| `scripts/check_roadmap_delivered.py` | `--roadmap-root` | `TAUCETI_ROADMAP_ROOT` |
+| `aiq-lean source roadmap` | `--roadmap-root` | — |
 
 `scripts/_external_checkouts.py` resolves explicit arguments first, then environment
 variables, then conventional local/coordination paths, and finally -- for read-only
@@ -37,7 +37,7 @@ Tau Ceti use -- `.lake/packages/TauCeti`.
 
 An export refuses the Lake package copy because it is a cache, not an editable
 working tree. A checker that requires an absent optional checkout reports
-`UNAVAILABLE`; `scripts/run_gates.py` treats that separately from pass and fail.
+`UNAVAILABLE`; `aiq-lean gates run` treats that separately from pass and fail.
 
 Current coordination checkouts such as `submodules/TauCetiRoadmap` and
 `submodules/TauCetiReview` are allowed because the build does not require them.

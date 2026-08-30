@@ -37,7 +37,7 @@ What was removed, and why:
 
 What remains: nothing.  The tree holds this file and an aggregate that imports
 `DavisKahan.All`.  That is the correct steady state — a staging area is empty
-between campaigns — and `scripts/check_experimental_coverage.py` now has an
+between campaigns — and `aiq-lean source module-coverage dev/policy/experimental-coverage.yaml` now has an
 empty exclusion list, which is the shape to keep it in.  A subtree exclusion
 there is a standing bet that nobody is checking the modules inside it, and the
 `InfiniteDimensional` deletion is what that bet cost.  Prefer promoting or

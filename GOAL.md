@@ -107,7 +107,8 @@ Paper-facing wrappers earn their place through source correspondence.
 Treat the current checker output as authoritative; do not copy mutable counts into this
 file.
 
-- `check_expose_ratchet` tracks upstream API-design debt. Do not lower its baseline to
+- the `per-declaration-expose` ratchet in `dev/policy/ratchet.yaml` tracks upstream
+  API-design debt. Do not lower its maximum to
   make it green.
 - `check_tauceti_readiness` and `check_tauceti_roadmap_topics` include upstream-review
   and roadmap-placement state. An unavailable optional checkout is not a pass, and an

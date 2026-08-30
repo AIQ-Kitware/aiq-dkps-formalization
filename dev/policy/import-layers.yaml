@@ -1,0 +1,90 @@
+# Lean module layering for this repository.
+#
+# Checked by `aiq-lean imports check dev/policy/import-layers.yaml`.
+# This file replaced `scripts/check_dependency_layers.py`, which held the same
+# rules as Python.  The rules are the architecture recorded in `AGENTS.md` and
+# `ForTauCeti/README.md`; nothing here is a mechanism.
+#
+# Build graph:
+#
+#     Mathlib      TauCeti
+#        |            |
+#        +-- ForTauCeti
+#                 |
+#             DavisKahan  ->  the paper libraries
+#
+# Coverage note: the retired per-cluster "extraction closure" rule of the old
+# checker is subsumed by `fortauceti-firewall`.  Every `staging_modules` entry in
+# `dev/tauceti/extraction-manifest.json` is a `ForTauCeti.*` module (209 of 209),
+# so a cluster module importing outside Mathlib/TauCeti/ForTauCeti is already a
+# firewall violation.  Re-check that if a cluster ever stages a module elsewhere.
+version: 1
+
+groups:
+  mathlib: ["Mathlib"]
+  tauceti: ["TauCeti"]
+  fortauceti: ["ForTauCeti"]
+  # Retired 2026-07-29.  The group and its rule are kept so recreating the
+  # library is rejected rather than silently unlayered.
+  formathlib: ["ForMathlib"]
+  # Retired 2026-07-29, and the `DavisKahan.Interop.Spectra` bridge was dissolved
+  # on 2026-07-30.  There is no exempt location any more, which makes the rule
+  # stricter than when it was written, not weaker.
+  spectra: ["Spectra"]
+  dk-source: ["DavisKahan.Sources"]
+  dk-experimental: ["DavisKahan.Experimental"]
+  davis-kahan: ["DavisKahan"]
+  # The generic Davis--Kahan foundation: subject-matter libraries that the
+  # source-facing wrappers are built on, so they must not depend back on them.
+  dk-generic:
+    - "DavisKahan.OperatorIdeal"
+    - "DavisKahan.SpectralTheory"
+    - "DavisKahan.Sylvester"
+    - "DavisKahan.Geometry"
+  paper:
+    - "Acharyya2024"
+    - "Acharyya2025"
+    - "DkpsQuench2026"
+    - "Helm2025"
+    - "YuWangSamworth2015"
+    - "RoadmapBridge"
+    - "Challenge"
+
+rules:
+  - id: fortauceti-firewall
+    from: [fortauceti]
+    allow: [mathlib, tauceti, fortauceti]
+    message: "ForTauCeti may import only Mathlib, TauCeti and ForTauCeti"
+
+  - id: formathlib-firewall
+    from: [formathlib]
+    allow: [mathlib, formathlib]
+    message: "ForMathlib may import only Mathlib and ForMathlib"
+
+  - id: generic-imports-source
+    from: [dk-generic]
+    deny: [dk-source]
+    message: "a generic Davis--Kahan foundation must not import a source facade (backwards dependency)"
+
+  - id: production-imports-experimental
+    from: [fortauceti, tauceti, formathlib, davis-kahan, dk-source, paper]
+    deny: [dk-experimental]
+    message: "production modules must not import DavisKahan.Experimental"
+
+  - id: production-imports-spectra
+    from: [davis-kahan, dk-source, paper]
+    deny: [spectra]
+    message: "Spectra is retired and there is no exempt bridge location"
+
+exceptions:
+  # Ratcheting, and both lists may only shrink.  These capture the state the
+  # architecture was in when the rule was written, so the gate reports new
+  # regressions rather than the whole backlog.
+  #
+  # `DavisKahan.Experimental` is listed because the rule's source groups match
+  # every `DavisKahan.*` module, Experimental included, and an Experimental
+  # module importing Experimental is not a violation.
+  production-imports-experimental:
+    - "DavisKahan.Experimental"
+    - "DavisKahan.FiniteDimensional.Generalized"
+    - "DavisKahan.Sources.DavisKahan1970.Audits.Theorem63Distillation"

@@ -33,6 +33,8 @@ dev/
   external-lean-references.md       # Registry of external Lean repos consulted
   external-literature-references.md # External *mathematics* we cite or must import; source errata
 
+  policy/                     # Architecture, threshold and gate policy the `aiq-lean`
+                              #   commands read; the engines are the installed package
   tauceti/                    # Tau Ceti engineering records and generated status
   journals/                   # Postmortems of bugs that took real effort to diagnose
   benchmark-candidates/       # Hard questions distilled from real formalization mistakes
@@ -45,8 +47,15 @@ Alongside those, `dev/` holds the Davis--Kahan source-fidelity ledgers:
 the maintained census and result-inventory data and their generated views, plus a small number of
 stable historical notes that are still cited by source files or checkers. Dated
 campaign handoffs and status snapshots belong in Git history rather than the
-working tree. Several `.json` files are read or written by `scripts/check_*.py` —
-do not hand-edit one without running its checker.
+working tree. Several `.json` files are read or written by the gate suite --
+do not hand-edit one without running `aiq-lean gates run --config
+dev/policy/gate-suite.yaml`.
+
+The generic engines behind those gates are the installed
+`aiq-lean-formalization-tools` package, not scripts in this repository; see the
+tooling section of [`../AGENTS.md`](../AGENTS.md). `dev/policy/` holds what this
+repository decides -- layer and namespace rules, ratchet thresholds, accepted
+findings, the gate list -- and the package holds the mechanisms that read them.
 
 ### External semantic-alignment review packet
 
@@ -56,9 +65,10 @@ of proof status.  To generate the deliberately small external-review surface
 projector theorem, and Yu--Wang--Samworth Theorem 2), run:
 
 ```bash
-python3 scripts/render_semantic_alignment_review.py \
-    --importance headline \
-    --output build/semantic-alignment/headline-review.md
+aiq-lean alignment render dev/davis-kahan-1970-full-source-census.json \
+    dev/yu-wang-samworth-2015-full-source-census.json \
+    --importance headline --probe \
+    -o build/semantic-alignment/headline-review.md
 ```
 
 The command invokes Lean, but the primary reviewer-facing Lean evidence is the
@@ -171,9 +181,9 @@ dangerous: `apply_spectra_submodule_overlay.py` regenerates the managed
 `Spectra collaboration policy` block in `AGENTS.md`, so running it would have
 reinstated the retired policy over the notice that replaced it.
 
-**One is kept and still has a job:** `scripts/check_spectra_namespace.py`. The
-rule it enforces — never declare into `namespace Spectra` — *outlives* the
-dependency. With the imports gone, a DKPS theorem parked in the donor namespace
+**One rule is kept and still has a job:** the `no-spectra-namespace` rule in
+`dev/policy/namespaces.yaml`. Never declaring into `namespace Spectra` *outlives*
+the dependency. With the imports gone, a DKPS theorem parked in the donor namespace
 is no longer distinguishable from donor material by anything, so the attribution
 ledger would silently credit Spectra for our work. `namespace SpectraBridge` is
 the correct pattern and is not a violation.
@@ -246,24 +256,29 @@ Git; the census and the result inventory own present-tense status.
 Validate with:
 
 ```bash
-python3 scripts/render_davis_kahan_1970_source_census.py --check
-python3 scripts/check_davis_kahan_1970_source_census.py
-python3 scripts/probe_census_declarations.py           # do the names resolve?
+aiq-lean census validate dev/davis-kahan-1970-full-source-census.json
+python3 scripts/check_davis_kahan_1970_source_census.py            # + DK policy + the probe
+python3 scripts/check_davis_kahan_1970_source_census.py --no-probe # structure only
 ```
 
-The first two validate *structure* — generated view in sync, fields present,
-statuses in the allowed set. Neither can tell you the declarations named by
-`lean_declarations` exist; the census reported `CLEAN (48 items)` throughout the
-period when **none of its 87 declarations resolved**. The probe compiles a
-`#check` of every fully-qualified name against `DavisKahan.All` and is the only
-one of the three that answers that question.
+`census validate` checks *structure* — fields present, statuses in the allowed
+set, the embedded review contract, source-locator ranges. It cannot tell you the
+declarations named by `lean_declarations` exist; the census reported
+`CLEAN (48 items)` throughout the period when **none of its 87 declarations
+resolved**.
 
-The fast checker prints the current source-obligation summary and explicitly says
-when Lean/Lake declaration resolution was unavailable. When Lean is available,
-`probe_census_declarations.py --verify` checks the recorded verification state
-against declarations reachable from the production aggregate. Use `--sync` only
-when intentionally refreshing those verification fields, then re-render the
-markdown view. Do not copy the resulting counts into prose here.
+The Davis--Kahan checker adds the paper's own policy — the exact set of source
+claims, the `completion_holes` contract, the blocker taxonomy, the refusal to
+track private source material — and then runs the compiler probe, which compiles
+a `#check` of every fully-qualified name against `DavisKahan.All`. That probe is
+the only part that answers whether the names resolve, and it also compares each
+row's recorded `verification` against what the build says. It says so explicitly
+when Lean/Lake was unavailable rather than reporting a clean run.
+
+To refresh those verification fields deliberately, use
+`aiq-lean census probe dev/davis-kahan-1970-full-source-census.json --import
+DavisKahan.All --write`, then re-render the Markdown view. Do not copy the
+resulting counts into prose here.
 
 ## Yu--Wang--Samworth 2015 full source census
 
@@ -343,13 +358,13 @@ The fast gate validates schema, source ranges, gap references, and cited declara
 
 ## The `@[expose]` ratchet
 
-`scripts/check_expose_ratchet.py` enforces the completed conversion away from
+The `blanket-expose` ratchet in `dev/policy/ratchet.yaml` enforces the completed
+conversion away from
 file-wide body exposure in `ForTauCeti`.
 
 ```sh
-python3 scripts/check_expose_ratchet.py           # report
-python3 scripts/check_expose_ratchet.py --check   # gate; exit 1 above the baseline
-python3 scripts/check_expose_ratchet.py --list    # name the modules
+aiq-lean ratchet check dev/policy/ratchet.yaml               # gate
+aiq-lean ratchet check dev/policy/ratchet.yaml --list-files  # name the modules
 ```
 
 **The conversion is complete.** `BASELINE = 0`, so file-wide `@[expose] public
@@ -389,7 +404,7 @@ tan-two-theta theorem is guarded through the production Davis--Kahan build/gates
 
 ## Namespace policy
 
-`scripts/check_namespace_policy.py` is an older tripwire that still permits a
+The `fortauceti-namespaces` rule in `dev/policy/namespaces.yaml` still permits a
 small allowlist of root Mathlib namespaces. It is not the policy authority. The
 current package direction is owned by `AGENTS.md` and `ForTauCeti/README.md`: new
 reusable declarations should carry their intended `TauCeti.*` names. Do not
@@ -397,15 +412,16 @@ expand the legacy allowlist merely because this checker permits that mechanism.
 
 ## Docstring coverage
 
-`scripts/check_docstring_coverage.py` gates the one quality invariant that had no
+`aiq-lean source docstrings` gates the one quality invariant that had no
 check: every public declaration on the submission surface carries a docstring.
 Docstrings are a Tau Ceti reviewer gate, so this sits on the critical path.
 
 ```sh
-python3 scripts/check_docstring_coverage.py           # gate; exit 1 on new findings
-python3 scripts/check_docstring_coverage.py --list    # show every finding
-python3 scripts/check_docstring_coverage.py --json    # machine-readable
-python3 scripts/check_docstring_coverage.py --write-baseline
+BASE='--prefix ForTauCeti --prefix DavisKahan --exclude-prefix DavisKahan.Experimental'
+aiq-lean source docstrings $BASE --baseline dev/policy/docstring-baseline.json --check
+aiq-lean source docstrings $BASE                     # show every finding
+aiq-lean source docstrings $BASE --json              # machine-readable
+aiq-lean source docstrings $BASE --write-baseline dev/policy/docstring-baseline.json
 ```
 
 **Why a gate rather than another sweep.** Measured 2026-07-29: two sweep lanes drove

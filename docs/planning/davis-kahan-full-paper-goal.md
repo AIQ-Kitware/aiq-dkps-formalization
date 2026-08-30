@@ -36,7 +36,8 @@ Validate the maintained census with:
 
 ```bash
 python3 scripts/check_davis_kahan_1970_source_census.py
-python3 scripts/render_davis_kahan_1970_source_census.py --check
+aiq-lean census render dev/davis-kahan-1970-full-source-census.json \
+    -o dev/davis-kahan-1970-full-source-census.md --check
 ```
 
 When Lean is available, use the repository's compile-backed census probes rather

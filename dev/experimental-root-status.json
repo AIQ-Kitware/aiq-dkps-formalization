@@ -1,6 +1,19 @@
 {
-  "schema_version": 3,
+  "schema_version": 4,
+  "_comment": "Read by `aiq-lean source staging dev/experimental-root-status.json --compile` (previously scripts/check_experimental_root_status.py). The status vocabulary, the aggregate target, and the empty-on-success rule are policy fields here; the mechanism is in the installed package.",
   "as_of_commit": "a4f93fe3",
   "policy": "This registry records compiler status only. The checker compiles every active root and then runs lake build DavisKahan.Experimental, so omitted failures cannot be certified by an empty registry. Emptied 2026-07-31: the single parked root, DavisKahan/Experimental/Sources/DavisKahan1970/Section8/All.lean, compiles on its own and the four modules its reason named as blockers are gone from that path -- three no longer exist (Core.CompatibilitySinTwoTheta, GraphSubspace, Sylvester.Resolvent) and Ideals.Symmetric compiles. The Contour.integral / IsClosed / Rectifiable API it waited on is still absent from the repository, Mathlib and vendored Spectra; what changed is that nothing on this path calls it any more. Re-park by adding a root here if that stops being true.",
+  "allowed_statuses": [
+    "active",
+    "parked"
+  ],
+  "compile_statuses": [
+    "active"
+  ],
+  "aggregate": {
+    "target": "DavisKahan.Experimental",
+    "require_success": true,
+    "require_empty_on_success": false
+  },
   "roots": []
 }

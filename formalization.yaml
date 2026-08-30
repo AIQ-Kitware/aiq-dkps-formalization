@@ -1,0 +1,81 @@
+version: "v0.4"
+
+# Project manifest for `aiq-lean` (aiq-lean-formalization-tools).  Lake does not
+# read this file; `lakefile.toml` remains the build contract.
+project:
+  name: "aiq-dkps-formalization"
+  description: >-
+    Source-faithful Lean 4 formalization of Davis--Kahan (1970) and the DKPS
+    application papers, with `ForTauCeti` as the reusable upstream-facing library.
+  authors: ["Jon Crall"]
+  license: "Apache-2.0"
+
+sources:
+  - title: "The rotation of eigenvectors by a perturbation. III"
+    authors: ["Chandler Davis", "W. M. Kahan"]
+    type: "paper"
+    relationship: "formalizes"
+  - title: "A useful variant of the Davis--Kahan theorem for statisticians"
+    authors: ["Yi Yu", "Tengyao Wang", "Richard J. Samworth"]
+    type: "paper"
+    relationship: "formalizes"
+  - title: "Acharyya 2024 (DKPS application)"
+    type: "paper"
+    relationship: "formalizes"
+  - title: "Acharyya 2025 (DKPS application)"
+    type: "paper"
+    relationship: "formalizes"
+  - title: "Helm 2025 (DKPS application)"
+    type: "paper"
+    relationship: "formalizes"
+  - title: "Quench 2026 (DKPS application)"
+    type: "paper"
+    relationship: "formalizes"
+
+status:
+  scope: >-
+    Implementation status, compiler verification, semantic review, and completion
+    certification are tracked as separate axes in the maintained ledgers under
+    `dev/`.  `AGENTS.md` defines what counts as a completed Davis--Kahan result;
+    a green build is not that.
+  axioms: []
+
+# Which Lean files in this checkout are the project's own source.  Every
+# structural audit reads this, so the exclusions are stated once here rather than
+# re-derived by each check.
+#
+#   `submodules/`  coordination and Palomar submission checkouts.  Two of them
+#                  contain verbatim copies of `ForTauCeti` and `DavisKahan`, so
+#                  scanning them reports thousands of phantom duplicate names.
+#   `retired/`     the Spectra retirement record; deliberately not maintained.
+#   `papers/`      manuscript sources and their generated evidence.
+#   `non-distributable/`  private provenance material.
+#   `vendor/`, `external/`  donor and upstream checkouts.
+#   `tools/`       the Lean exporters shipped with the query tooling.
+source_scope:
+  exclude_dirs:
+    - ".git"
+    - ".lake"
+    - "build"
+    - "vendor"
+    - "external"
+    - "submodules"
+    - "retired"
+    - "papers"
+    - "non-distributable"
+    - "tools"
+  roots:
+    - "ForTauCeti"
+    - "RoadmapBridge"
+    - "DavisKahan"
+    - "Acharyya2024"
+    - "Acharyya2025"
+    - "DkpsQuench2026"
+    - "Helm2025"
+    - "Challenge"
+    # `YuWangSamworth2015` is a Lake `srcDir` library.  The directory *is* the
+    # source root, so module names are relative to it with no prefix -- which is
+    # also how `YuWangSamworth2015/YuWangSamworth2015.lean` becomes the module
+    # `YuWangSamworth2015` rather than `YuWangSamworth2015.YuWangSamworth2015`.
+    - path: "YuWangSamworth2015"
+      module_root: ""

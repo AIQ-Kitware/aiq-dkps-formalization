@@ -451,18 +451,33 @@ def main() -> int:
     result_inventory_command = [sys.executable, "scripts/check_davis_kahan_1970_result_inventory.py"]
     if args.require_terminal:
         result_inventory_command.append("--require-terminal")
+    # The generic gates are installed `aiq-lean` commands over policy files in
+    # `dev/policy/`; only the Davis--Kahan-specific ones are repository scripts.
     commands: list[tuple[str, list[str]]] = [
-        ("01-aggregate-check", [sys.executable, "scripts/generate_all_aggregates.py", "--check"]),
+        ("01-aggregate-check", [
+            "aiq-lean", "source", "aggregates",
+            "--base", "DavisKahan", "--library", "DavisKahan",
+            "--skip-dir", "Experimental", "--skip-dir", "MathAhead", "--skip-dir", "Audits",
+            "--root-import", "DavisKahan",
+            "--header-file", "dev/policy/aggregate-header.txt", "--check",
+        ]),
         ("02-library-structure", [sys.executable, "scripts/check_library_structure.py"]),
-        ("03-namespace-policy", [sys.executable, "scripts/check_namespace_policy.py"]),
-        ("04-duplicate-qualified-names", [sys.executable, "scripts/check_duplicate_qualified_names.py"]),
+        ("02b-import-layers", ["aiq-lean", "imports", "check", "dev/policy/import-layers.yaml"]),
+        ("03-namespace-policy", ["aiq-lean", "namespaces", "check", "dev/policy/namespaces.yaml"]),
+        ("04-duplicate-qualified-names", [
+            "aiq-lean", "source", "duplicates",
+            "--prefix", "ForTauCeti", "--prefix", "DavisKahan",
+            "--exclude-prefix", "DavisKahan.Experimental", "--check",
+        ]),
         ("05-statement-map", statement_map_command),
         ("05b-formalization-result-inventory", result_inventory_command),
         ("06-distilled-literature-index", [sys.executable, "scripts/check_distilled_literature_index.py"]),
         ("07-production-build", ["lake", "build", "DavisKahan.All"]),
         ("07b-result-semantic-surface", ["lake", "env", "lean", str(SEMANTIC_AUDIT_SURFACE_PATH.relative_to(ROOT))]),
+        # The census checker runs the declaration probe itself, so a separate
+        # probe step would compile the same file twice.
         ("08-source-census", [sys.executable, "scripts/check_davis_kahan_1970_source_census.py"]),
-        ("09-census-declaration-probe", [sys.executable, "scripts/probe_census_declarations.py", "--verify"]),
+        ("09-workspace-ledgers", ["aiq-lean", "workspace", "validate", "--static-declarations"]),
     ]
     if args.with_audits:
         commands.append(("10-diagnostic-audits", ["lake", "build", "DavisKahan.Audits.All"]))
