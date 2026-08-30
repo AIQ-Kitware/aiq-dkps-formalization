@@ -129,7 +129,7 @@ theorem cosAngleOperatorC_mul_self (U V : Submodule ℂ E)
 
 omit [CompleteSpace E] in
 /-- `P_{Uᗮ} = 1 - P_U` as bounded operators. -/
-private theorem starProjection_orthogonal_eq (U : Submodule ℂ E)
+theorem starProjection_orthogonal_eq (U : Submodule ℂ E)
     [U.HasOrthogonalProjection] :
     Uᗮ.starProjection = (1 : E →L[ℂ] E) - U.starProjection := by
   ext x

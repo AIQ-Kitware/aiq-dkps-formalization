@@ -7,6 +7,7 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact
 import DavisKahan.Sources.DavisKahan1970.SineTheta.ProjectionBlocks
 import DavisKahan.InfiniteDimensional.DoubleAngle
 import DavisKahan.Geometry.Polar.DirectRotation
+import DavisKahan.DoubleAngle.TangentTransport
 
 /-!
 # Exact source-facing unbounded ambient `tan 2Theta`
