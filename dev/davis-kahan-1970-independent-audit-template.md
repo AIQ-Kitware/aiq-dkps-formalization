@@ -88,6 +88,18 @@ or the same condition with $A_0$ and $\Lambda_1$ interchanged.  Then, for every 
 
 ### Source-facing Lean declarations
 
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:114`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:53`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:53`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:65`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:121`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:345`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 #### `DavisKahan1970.sinTheta_headline`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:163`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:138`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:138`
@@ -145,18 +157,6 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `DavisKahan1970.sinTheta_real_of_intervalExterior`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:396`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:114`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:53`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:53`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:65`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:121`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:345`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -649,6 +649,18 @@ The first is directed and residual-based; the second uses the ambient angle and 
 
 ### Source-facing Lean declarations
 
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:136`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:145`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 #### `TauCeti.DavisKahan1970.tanTheta_headline_generic_directed`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:73`, `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization/DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:73`, `submodules/aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization/DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:73`
@@ -745,18 +757,6 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnbounded
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:136`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:145`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
 ### Independent result audit checklist
 
 - [ ] The selected source atoms are exactly the hypotheses, conclusions, and scope of the printed result statement.
@@ -830,6 +830,18 @@ Again the source distinguishes the directed residual statement from the ambient 
 ~~~~
 
 ### Source-facing Lean declarations
+
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:156`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:165`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed`
 
@@ -951,18 +963,6 @@ Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:688`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:156`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:165`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
 ### Independent result audit checklist
 
 - [ ] The selected source atoms are exactly the hypotheses, conclusions, and scope of the printed result statement.
@@ -1044,6 +1044,18 @@ Section~7 derives the nonvanishing of the relevant $\cos(2\theta_j)$ factors fro
 ~~~~
 
 ### Source-facing Lean declarations
+
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:180`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:187`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_headline_generic`
 
@@ -1228,18 +1240,6 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:525`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:180`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:187`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
