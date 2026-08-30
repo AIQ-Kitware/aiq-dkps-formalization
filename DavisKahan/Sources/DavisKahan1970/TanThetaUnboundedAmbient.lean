@@ -499,6 +499,15 @@ bundle a caller usually has.
 What stays a hypothesis is what the theorem is about: the semiboundedness of the
 compression, the coercivity on the unwanted subspace, and the crossed-defect
 standing condition (3.5). -/
+
+/-- **Davis--Kahan 1970, `tan Θ`, unbounded ambient form, taking the Ritz pair and
+the reducing complement as objects.**
+
+`tanTheta_unboundedCompression_ambient_paperUINorm_exact` with its four
+structural arguments replaced by `DavisKahan.UnboundedRitzPair A U` and
+`DavisKahan.ReducingComplement A V`.  The mathematics -- semiboundedness,
+coercivity on the unwanted subspace, and the crossed-defect condition (3.5) --
+is unchanged and still supplied by the caller. -/
 theorem tanTheta_unbounded_ambient_ritz_paperUINorm
     (N : PaperUnitaryInvariantNorm)
     {A : E →ₗ.[ℂ] E}

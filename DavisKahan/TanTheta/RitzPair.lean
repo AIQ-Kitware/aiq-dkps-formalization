@@ -106,6 +106,7 @@ noncomputable def ofTrialBlock (D : UnboundedTrialBlock A Z) :
     rw [D.residual_apply]
     abel
 
+/-- The Ritz pair built from a trial block keeps the block's residual. -/
 @[simp]
 theorem ofTrialBlock_residual (D : UnboundedTrialBlock A Z) :
     (ofTrialBlock D).trial.residual = D.residual := rfl
