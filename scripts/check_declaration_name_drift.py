@@ -56,11 +56,11 @@ Checks
 Limitations, stated rather than hidden
 --------------------------------------
 
-Name resolution is *syntactic*: this script computes the fully-qualified name of
-each declaration from the ``namespace``/``end``/``section`` structure of the file
-and from ``_root_.`` prefixes. It does not expand ``export``, ``open ... in``
-abbreviations, or ``alias`` targets beyond the alias's own name, and it does not
-know about ``protected``/``private``. So a *failure* is strong evidence of drift
+Name resolution is *syntactic*: the index comes from ``aiq_lean_tools``, which
+computes each fully-qualified name from the ``namespace``/``end``/``section``
+structure of the file and from ``_root_.`` prefixes, with comments stripped. It
+does not expand ``export``, ``open ... in`` abbreviations, or ``alias`` targets
+beyond the alias's own name. So a *failure* is strong evidence of drift
 and a *pass* is not a proof of resolvability -- the compiler and
 ``check_comparator_signatures.py`` remain ground truth. It is a cheap tripwire
 for the specific failure mode that has actually occurred here, not a type
