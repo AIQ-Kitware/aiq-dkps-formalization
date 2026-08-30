@@ -3,6 +3,65 @@
 **Status: preparation only. Nothing here claims registration, approval, acceptance,
 or peer review by the Palomar Registry.**
 
+> **Architecture note, 2026-08-30 — the embedded-submission workflow described
+> below is superseded.**
+>
+> This repository is no longer packaged as a Palomar submission. The submission
+> targets are two standalone repositories, checked out as coordination submodules
+> under `submodules/`:
+>
+> | source | standalone repository |
+> | --- | --- |
+> | Davis–Kahan 1970 | `aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization` |
+> | Yu–Wang–Samworth 2015 | `aiq-yu-wang-samworth-2015-useful-variant-davis-kahan-statisticians-formalization` |
+>
+> Each carries its own `Challenge`/`Solution` pair, `comparator.json`,
+> `formalization.yaml` and `lean-toolchain`, and each is an extraction of the
+> `ForTauCeti` and `DavisKahan` (and, for YWS, `YuWangSamworth2015`) packages from
+> here. **This repository stays authoritative for the mathematics**: fix a theorem
+> or an API here, then refresh the extraction. Never fix mathematics in a
+> submission repository.
+>
+> **Still to remove, deliberately deferred on 2026-08-30.** The embedded
+> submission surface — the `Palomar` Lean library and `Palomar.lean`, the
+> `registry/` entry tree, the root `formalization.yaml`, the `Palomar`
+> `lean_lib` block in `lakefile.toml`, `scripts/check_palomar_readiness.py` and
+> `scripts/verify_palomar.sh` — is superseded and should be deleted. It was not
+> deleted in that pass because a concurrent session held uncommitted edits in
+> `Palomar/YWSSymmetric/Challenge.lean`, `Palomar/YWSRectangular/Challenge.lean`,
+> `registry/YWS_SOURCE_CONTRACT.md` and two `registry/*/formalization.yaml`
+> files, and was building `Palomar` in this working tree; removing those paths
+> would have destroyed unsaved work. Do it once the Yu–Wang–Samworth extraction
+> has landed in its standalone repository:
+>
+> ```bash
+> git rm -r Palomar Palomar.lean registry formalization.yaml \
+>           scripts/check_palomar_readiness.py scripts/verify_palomar.sh
+> # then drop the `[[lean_lib]] name = "Palomar"` block from lakefile.toml
+> # and the verify_palomar.sh pointer from scripts/install_comparator_tools.sh
+> ```
+>
+> `scripts/check_palomar_readiness.py` already fails on the current architecture:
+> it asks whether *this* repository is submittable, and answers no because
+> `submodules/` exists. That is the right answer to the wrong question. Delete the
+> checker rather than relaxing it; the question belongs to the standalone
+> repositories, which run their own checks.
+>
+> What stayed, because it is not submission packaging: `Challenge/` and
+> `comparator/`, the internal comparator calibration tree; the source censuses,
+> semantic audits, distilled source specification and theorem-strength
+> inventories; and the general comparator tooling
+> (`scripts/run_challenge_comparator.sh`,
+> `scripts/check_comparator_signatures.py`,
+> `scripts/check_declaration_name_drift.py`,
+> `scripts/install_comparator_tools.sh`).
+>
+> §1's decisions D1–D5 and everything from §2 on are kept as the record of how the
+> entries were built and of Palomar's requirements as verified on 2026-08-28. Read
+> them as history plus live-policy pointers, not as instructions to re-embed a
+> submission here. **The agent must still not submit** — that prohibition in §1 is
+> unchanged and applies in the standalone repositories too.
+
 This document is the durable execution contract for preparing Palomar Registry
 submissions from this repository. It is written to survive context compaction: an
 agent resuming with no memory of the conversation should be able to read this file
