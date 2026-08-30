@@ -45,7 +45,7 @@ import subprocess
 import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-ENTRY_DIR = ROOT / "palomar"
+ENTRY_DIR = ROOT / "registry"
 
 #: From PalomarSubmission/toolchains.json, read 2026-08-28. Override with
 #: --min-toolchain when Palomar raises it; this is a snapshot, not an authority.
@@ -425,7 +425,7 @@ def rel(p: pathlib.Path) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    ap.add_argument("--entry", default=None, help="check only this palomar/<entry>")
+    ap.add_argument("--entry", default=None, help="check only this registry/<entry>")
     ap.add_argument("--with-axioms", action="store_true",
                     help="also run `lake env lean` to audit each solution's axiom closure")
     ap.add_argument("--min-toolchain", default=None,
@@ -456,7 +456,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"no such entry: {args.entry}", file=sys.stderr)
             return 2
     if not configs:
-        rep.warn("no palomar/*/comparator.json entries found")
+        rep.warn("no registry/*/comparator.json entries found")
     for cfg in configs:
         check_entry(rep, cfg, with_axioms=args.with_axioms)
 

@@ -7,7 +7,7 @@
 # dev/palomar-readiness.md.
 #
 # Usage:
-#   scripts/verify_palomar.sh                 # every entry under palomar/
+#   scripts/verify_palomar.sh                 # every entry under registry/
 #   scripts/verify_palomar.sh yws-2015        # one entry
 #   scripts/verify_palomar.sh --all
 #   scripts/verify_palomar.sh yws-2015 --fake-landrun
@@ -55,18 +55,18 @@ done
 if [[ ${#ENTRIES[@]} -eq 0 ]]; then
     while IFS= read -r cfg; do
         ENTRIES+=("$(basename "$(dirname "$cfg")")")
-    done < <(find palomar -mindepth 2 -maxdepth 2 -name comparator.json | sort)
+    done < <(find registry -mindepth 2 -maxdepth 2 -name comparator.json | sort)
 fi
 
 if [[ ${#ENTRIES[@]} -eq 0 ]]; then
-    echo "no entries found under palomar/*/comparator.json" >&2
+    echo "no entries found under registry/*/comparator.json" >&2
     exit 2
 fi
 
 FAILED=()
 
 for entry in "${ENTRIES[@]}"; do
-    cfg="palomar/$entry/comparator.json"
+    cfg="registry/$entry/comparator.json"
     echo "======================================================================"
     echo "palomar entry: $entry"
     echo "======================================================================"

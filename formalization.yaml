@@ -74,10 +74,14 @@ sources:
     location: "Biometrika 102(2), 2015, 315–323"
     relationship: "formalizes"
     note: >-
-      The population-gap sin-Theta bound is formalized as printed. Printed
-      Equation (4) does not stand as written and is corrected, and the paper's
-      rank-boundary convention required a correction; both are recorded in the
-      census and in `fidelity.divergences`.
+      Theorem 2's two conclusions are formalized as printed. Four printed
+      defects do not stand as written and are recorded rather than absorbed:
+      Equation (4) omits a square; Theorem 3's rank-boundary convention
+      `sigma^2_{rank(A)+1} := -infinity` is false; the standalone Corollary 1
+      omits the unit normalization its own `d = 1` reading supplies, without
+      which its second display is false; and Theorem 1's sample endpoint
+      conventions are inverted, which makes it vacuous at any block touching an
+      end of the spectrum. All are in the census and in `fidelity.divergences`.
     author_endorsement: "not-contacted"
 
   - title: >-
