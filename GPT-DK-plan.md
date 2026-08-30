@@ -544,9 +544,46 @@ and its self-adjointness, involution, domain preservation, and commutation shoul
 
 ## F. Implementation performed
 
-No source changes and no commits.
+**Both commits are done, 2026-08-29, with a compiler.** The analysis below was
+written in a sandbox without Lean; it held up, with two corrections noted at the
+end of this section.
 
-I deliberately stopped before editing because the sandbox cannot run the repo's Lean toolchain. An API redesign of theorem types without a compiler checkpoint would violate the requested workflow.
+1. **Source-facing sin Θ API** — `DavisKahan1970.sinTheta_complex` and
+   `sinTheta_real` in `SineTheta/PaperSurface.lean`. Direct argument lists, the
+   full `FormBoundedSylvesterGap`, both conclusions (ideal membership and the
+   bound), and neither capability class. They route through
+   `FormBoundedIsometricSinThetaProblem.result_complex` / `.result_real`, which
+   are already capability-free, one Ky Fan gauge at a time via
+   `PaperUnitaryInvariantNorm.mul_gauge_le_of_all_mul_kyFan_le`. Axiom closure
+   `propext, Classical.choice, Quot.sound`. `sinTheta_complex_of_intervalExterior`
+   and its real sibling spell out the printed Section 2 separation, as §E
+   proposed. `sinTheta_headline` and `sinTheta_headline_generic` are untouched.
+
+2. **Complex sin 2Θ PaperUI wrapper** — `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm`
+   in `Sources/DavisKahan1970/SinTwoTheta.lean`, adapting
+   `DavisKahan.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap` to the
+   source norm.
+
+   **Correction to §F's expectation:** it is not a literal mirror of the real
+   wrapper. The real track reaches the ideal layer through
+   `FormBoundedSylvesterGap`; the complex track reaches it through the spectrum
+   gap — semiboundedness of the selected restriction plus the complementary
+   restriction's spectrum avoiding the open enlargement. There is no complex
+   `sinTwoTheta_reflectionResidual_gauge`, so the `FormBoundedSylvesterGap`
+   phrasing is not available on that side today. The new statement takes the
+   hypotheses the complex proof actually has.
+
+All five declarations are registered by hand in the 29-result inventory, the
+50-row source census and `Audits/ResultSemanticSurface.lean`; the generated
+census and audit template are re-rendered. Full build green at 9701 jobs, and the
+three Davis–Kahan gates pass.
+
+**Second correction:** §A reports `TauCeti.DavisKahan1970.sinTheta` and
+`sinTheta_real` as existing fixed-field aliases. They do exist, and the names are
+therefore taken — the new declarations live in the `DavisKahan1970` namespace
+rather than `TauCeti.DavisKahan1970`. Also, §A's `UnitaryInvariantNorm` and
+`PaperUnitaryInvariantNorm` are not two spellings to reconcile: the former is an
+`alias` for the latter.
 
 The first two implementation commits I would make in a working checkout are sharply bounded:
 
@@ -600,6 +637,25 @@ They should not need to know `HasUnboundedSylvesterKyFan` or the reflection/bloc
 ## H. Palomar impact
 
 I could not reproduce the earlier compiler-derived transitive constant closure because Lean is unavailable here. I therefore do not present the old approximately-206-constant count as a fresh measurement.
+
+**Measured after the §F work, 2026-08-29.** The restatement cost of a statement is
+the transitive closure of what a Palomar Challenge would have to restate, counting
+released Tau Ceti as available:
+
+| declaration | statement constants | source blocks | their lines |
+| --- | ---: | ---: | ---: |
+| `sinTheta_headline` | 8 | 19 | 207 |
+| **`sinTheta_complex`** | **6** | **15** | **173** |
+| `sinTheta_real` | 6 | 15 | 173 |
+| `sinTwoTheta_addBounded_paperUINorm` | 13 | 43 | 401 |
+
+So task 1 removed a fifth of sin Θ's trusted surface — 19 blocks to 15, 207 lines
+to 173 — by deleting exactly the leakage §B identified, and nothing else. That is
+the first evidence that the API cleanup and the Palomar cost are the same problem.
+
+sin 2Θ remains expensive at 43 blocks, and the reason is §D's: the conclusion is
+`sinTwoThetaIdealBlock` plus the spectral-subspace apparatus, not the paper's
+angle operator. That is the §J transport theorem, not packaging.
 
 I did make fresh source-level measurements at HEAD:
 
