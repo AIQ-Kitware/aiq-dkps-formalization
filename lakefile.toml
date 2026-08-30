@@ -15,8 +15,6 @@ pp.unicode.fun = true
 # Avoid accidental free variables in theorem statements.
 autoImplicit = false
 
-
-
 # BEGIN Tau Ceti dependency
 # Tau Ceti is the upstream integration target. `ForTauCeti` is the maintained
 # reusable-math package in this repository; its declarations already live in
@@ -26,7 +24,8 @@ autoImplicit = false
 # load-bearing rather than stylistic. Lake fetches a Git dependency with a plain
 # clone and does not initialise submodules, so a path dependency into a gitlink
 # makes this repository unusable as a dependency of anything else -- including a
-# Palomar thin-wrapper submission repo. See dev/palomar-readiness.md.
+# Palomar submission repository extracted from this one. See
+# dev/palomar-readiness.md.
 #
 # An editable upstream checkout is a separate concern: scripts that need one take
 # an explicit --tauceti-root or TAUCETI_ROOT. Nothing in the build requires it.
@@ -100,18 +99,6 @@ globs = ["YuWangSamworth2015.*"]
 # upstream PR would be accepted. Mirrors the `ForTauCeti` block above, including
 # `style.header = false` (Tau Ceti disables the copyright-header linter).
 leanOptions = { warningAsError = true, weak.linter.mathlibStandardSet = true, weak.linter.style.longFile = 1500, weak.linter.style.longFileDefValue = 1500, weak.linter.style.header = false }
-
-
-# Palomar Registry submission surfaces. One directory per prepared entry, each a
-# statement-only `Challenge` and a thin `Solution` that supplies the proof from the
-# ordinary development. A Challenge's transitive imports must stay within Lean core
-# and the allowlisted Mathlib/Tau Ceti closure, which is why these are separate from
-# the internal `Challenge/` calibration tree. Intentionally not default targets: the
-# Challenge modules contain deliberate statement-side holes.
-# See dev/palomar-readiness.md and registry/README.md.
-[[lean_lib]]
-name = "Palomar"
-globs = ["Palomar.*"]
 
 # Comparator/challenge modules for community calibration of AI-authored
 # upstream candidates. These are intentionally not default targets.

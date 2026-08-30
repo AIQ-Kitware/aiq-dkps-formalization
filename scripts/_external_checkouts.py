@@ -5,7 +5,8 @@ This repository used to carry three Git submodules — `external/TauCeti`,
 `submodules/TauCetiRoadmap` and `submodules/TauCetiReview`. They are gone, because
 Lake fetches a Git dependency with a plain clone and does not initialise
 submodules: a path dependency into a gitlink makes this repository unusable as a
-dependency of anything else, including a Palomar thin-wrapper submission repo.
+dependency of anything else, including a Palomar submission repository extracted
+from this one.
 See `dev/palomar-readiness.md`.
 
 What the submodules provided is now an *optional* input. The build never needs

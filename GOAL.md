@@ -25,8 +25,11 @@ repository unusable as one.
 
 ## A. Palomar
 
-Two entries are prepared and pass the real Comparator (`registry/yws-2015`,
-`registry/dk-1970`). Preparation only; **an agent must not submit.**
+Two entries are prepared and pass the real Comparator, and both now live in their
+own repositories, checked out under `submodules/`: the Davis–Kahan 1970
+operator-norm sin-Θ theorem, and the two Yu–Wang–Samworth 2015 entries. The
+embedded submission surface was removed from this repository on 2026-08-30; see
+`dev/palomar-readiness.md`. Preparation only; **an agent must not submit.**
 
 **A0. Superseded 2026-08-29: the entry repos carry the proof.** Maintainer decision.
 Each entry is now an **extraction** rather than a thin wrapper — it contains the
