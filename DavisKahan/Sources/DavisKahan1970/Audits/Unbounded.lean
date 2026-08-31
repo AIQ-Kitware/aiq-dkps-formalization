@@ -9,7 +9,7 @@ import DavisKahan.Sylvester.Unbounded.OrderedEngineDirect
 import DavisKahan.Sylvester.RealUnbounded
 import DavisKahan.SinTheta.Real.Specializations
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
-import DavisKahan.Sources.DavisKahan1970.FullPartIII
+import DavisKahan.Sources.DavisKahan1970.PartIIIManuscriptSurface
 
 /-!
 # Full unbounded sine-theta trusted-dependency audit

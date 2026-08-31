@@ -34,7 +34,7 @@ import DavisKahan.DoubleAngle.TanTwoThetaBranchFree
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramBridge
 import DavisKahan.BoundedOperator.TrialResidual
 import DavisKahan.SpectralTheory.ReducingSubspace.RestrictionExtras
-import DavisKahan.Sylvester.Unbounded.LegacyGap
+import DavisKahan.Sylvester.Unbounded.FormBoundedGap
 import DavisKahan.Sylvester.Spectrum
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 import DavisKahan.TanTheta.Theorem63FiniteSource

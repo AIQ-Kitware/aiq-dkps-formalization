@@ -43,9 +43,9 @@ alias unitaryInvariantNorm_nonempty := paperUnitaryInvariantNorm_nonempty
 alias directedCosineBlock := paperCosineBlockC
 alias directedSineBlock := paperSineBlockC
 alias directedCosineOperator := paperCosineModulusC
-alias directedAngle := paperSourceDirectedAngleC
-alias directedSinAngle := paperSourceDirectedSinC
-alias directedCosAngle := paperSourceDirectedCosC
+alias directedAngle_complex := paperSourceDirectedAngleC
+alias directedSinAngle_complex := paperSourceDirectedSinC
+alias directedCosAngle_complex := paperSourceDirectedCosC
 alias directedCosAngle_eq_modulus := paperSourceDirectedCosC_eq
 alias directedSinAngle_eq_modulus :=
   paperSourceDirectedSinC_eq_paperSineModulusC
@@ -58,8 +58,8 @@ alias directedAngle_real_eq_arcsin_sineModulus :=
 alias directedAngle_real := paperSourceDirectedAngleR
 alias directedSinAngle_real := paperSourceDirectedSinR
 alias directedCosAngle_real := paperSourceDirectedCosR
-alias fullAngleCoordinates := paperSourceFullAngleC
-alias fullSinAngleCoordinates := paperSourceFullSinC
+alias fullAngleCoordinates_complex := paperSourceFullAngleC
+alias fullSinAngleCoordinates_complex := paperSourceFullSinC
 alias fullSinAngle_singularValues_projectionDifference :=
   paperSourceFullSin_same_projectionDifference
 alias fullSinAngle_norm_projectionDifference :=
@@ -99,7 +99,7 @@ alias sinTheta_paperData_real :=
   PaperRealIsometricTheoremData.result_every_unitarilyInvariantNorm_across
 
 alias Theorem6_1Data := PaperTheorem61Data
-alias Theorem6_1 :=
+alias Theorem6_1_complex :=
   PaperTheorem61Data.result_every_unitarilyInvariantNorm_across
 alias Theorem6_1RealData := PaperRealTheorem61Data
 alias Theorem6_1_real :=
@@ -112,7 +112,7 @@ alias sinTheta_generalized_paperData_real :=
 /-! ## Proposition 6.1 -/
 
 alias SymmetricSinThetaProblem := PaperSymmetricSinThetaProblem
-alias Proposition6_1 :=
+alias Proposition6_1_complex :=
   PaperSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm
 
 -- The real-scalar form.  A unitarily invariant norm sees only the complete
@@ -139,7 +139,7 @@ alias Proposition6_1_real_representative :=
 
 alias PairwiseSpectrumGap := PairwiseSpectrumGap
 alias Theorem6_2Data := PaperTheorem62Data
-alias Theorem6_2 := PaperTheorem62Data.result_across
+alias Theorem6_2_complex := PaperTheorem62Data.result_across
 alias Theorem6_2_boundNorm_of_finiteRank :=
   PaperTheorem62Data.operatorNorm_result_across_of_rank_le
 alias Theorem6_2RealData := PaperRealTheorem62Data

@@ -34,8 +34,8 @@ permalinks, theorem names, and proof strategies, then independently re-derive th
 A local git-ignored cache under `dev/reference-repos/` may be used during development.
 
 The focused Davis--Kahan reuse analysis is in
-`dev/davis-kahan-existing-work-survey.md`. The arbitrary-Hilbert-space graph-subspace donor audit is
-in `dev/graph-subspace-vendor-survey-2026-07-14.md`. The local rectangular and frame APIs are staged in
+the 2026-07 existing-work survey (Git history). The arbitrary-Hilbert-space graph-subspace donor audit is
+in the 2026-07-14 graph-subspace donor survey (Git history). The local rectangular and frame APIs are staged in
 `ForMathlib/Analysis/InnerProductSpace/RectangularSingularValues.lean`,
 `SingularSystem.lean`, and `FiniteFrame.lean`.
 
@@ -82,7 +82,7 @@ Exact excerpts at pinned Mathlib commit `c368140668f5fa16a1bd977448c1f665d48c3df
 `vendor/lean/mathlib4/`. They are references only; production modules import Mathlib directly.
 
 The complete search history, screened repositories, signature correction, and implementation order
-are recorded in `dev/graph-subspace-vendor-survey-2026-07-14.md`.
+are recorded in the 2026-07-14 graph-subspace donor survey (Git history).
 
 ## Licensed sources vendored in this repository
 
@@ -192,7 +192,7 @@ It is the strongest future vendor candidate found for the spectral-projection, S
 unbounded-operator, and operator-ideal programs. No source is copied in the present pass: the
 immediate graph theorem does not need it, and importing or excerpting a large subtree before a
 theorem-level dependency audit would obscure the toolchain and API adaptation work still required.
-See `dev/graph-subspace-vendor-survey-2026-07-14.md`.
+See the 2026-07-14 graph-subspace donor survey (Git history).
 
 ## Direct Davis--Kahan formalizations found in the 2026-07-12 pass
 
@@ -229,7 +229,7 @@ for theorem-statement comparison.
 `3b554aa38b0d30f13e81262eeef4d4cf3e8696f6` assumes a DK statement rather than proving it.
 It supplies no reusable perturbation argument.
 
-See `dev/davis-kahan-existing-work-survey.md` for the applicability matrix and recommended
+See the 2026-07 existing-work survey (Git history) for the applicability matrix and recommended
 reuse boundaries.
 
 ---
@@ -242,7 +242,7 @@ reuse boundaries.
 - License: Apache-2.0 in the repository and inspected source modules.
 - Integration mode: Git submodule during active collaboration; later a pinned
   Lake Git dependency if the required APIs merge upstream.
-- Full audit: `dev/spectra-integration-survey-2026-07-14.md`.
+- Full audit: the 2026-07-14 Spectra integration survey (Git history).
 
 Spectra is the leading candidate for the complex PVM, spectral-theorem,
 unbounded self-adjoint, bounded polar-decomposition, trace-class, and

@@ -5,13 +5,13 @@
   "candidates": [
     {
       "scratch": "ForMathlib.DavisKahan.Experimental.Scratch.Section6.frontier_lemma6_3_approximationNumber_leakage",
-      "target": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage",
+      "target": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_approximationNumber_leakage_complex",
       "action": "replace the current body if the existing overstrong equation is retained",
       "semantic_status": "grounded but vacuous relative to the paper"
     },
     {
       "scratch": "ForMathlib.DavisKahan.Experimental.Scratch.Section6.frontier_lemma6_3_singularValue_leakage",
-      "target": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_singularValue_leakage",
+      "target": "ForMathlib.DavisKahan.Experimental.Frontier.Section6Appendix.lemma6_3_singularValue_leakage_complex",
       "action": "replace the current body if the existing overstrong equation is retained",
       "semantic_status": "grounded but vacuous relative to the paper"
     },

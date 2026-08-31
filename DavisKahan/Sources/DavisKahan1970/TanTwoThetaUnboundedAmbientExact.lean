@@ -453,7 +453,7 @@ proof's block tangent replaced by the paper's ambient `|tan 2Θ|`.  The two have
 the same approximation numbers -- `unboundedReflectionTangent U J_V = Ξ · J_U`
 with `J_U` a self-adjoint unitary, and `|Ξ| = |tan 2Θ|` -- so every source
 unitarily invariant norm sees them identically; see
-`DavisKahan.extendedGauge_unboundedReflectionTangent`.
+`DavisKahan.extendedGauge_unboundedReflectionTangent_complex`.
 
 **No pole hypothesis is asked of the caller.**  The transport needs `cos 2θ ≠ 0`
 on the angle spectrum, but that is not an independent assumption here: the
@@ -490,7 +490,7 @@ theorem tanTwoTheta_ambient_unbounded_paperUINorm_complex
       hab hBmem
   have hcos := DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
     (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V hunit
-  have hgauge := DavisKahan.extendedGauge_unboundedReflectionTangent
+  have hgauge := DavisKahan.extendedGauge_unboundedReflectionTangent_complex
     (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V N hcos
   refine ⟨?_, ?_⟩
   · unfold PaperUnitaryInvariantNorm.Mem at hmem ⊢

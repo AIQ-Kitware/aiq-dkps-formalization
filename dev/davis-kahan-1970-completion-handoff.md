@@ -8,7 +8,7 @@ State inspected 2026-08-09 from checkpoint HEAD `69d1655a` (`main`, clean workin
 
 This document is for an agent taking over the remaining Davis--Kahan 1970 campaign without prior context. It is intentionally more than a work list: it records the mathematical architecture, the proof routes already discovered, the routes already falsified, and the reusable infrastructure that now exists so that the next agent does not have to rediscover the campaign's hardest lessons.
 
-Read `docs/planning/historical/coordinator-subagent-workflow-2026-08-09.md` for the mechanical coordinator loop and `AGENTS.md` for repository policy. Before substantial work under `ForTauCeti/Analysis/InnerProductSpace/`, also read `dev/lean-proof-engineering-lessons.md`.
+Read `AGENTS.md` for repository policy. Before substantial work under `ForTauCeti/Analysis/InnerProductSpace/`, also read `dev/lean-proof-engineering-lessons.md`.
 
 The source census is `dev/davis-kahan-1970-full-source-census.json`. It is the durable record of source coverage, but do not treat any single status field, blocker name, or prose note as infallible. Re-measure the current declarations and current HEAD before acting. In particular, this checkpoint already contains work newer than the previous completion handoff, and one row (`DK-8.1-thm`) is still marked `compiled_exact` while also carrying a genuine real-scalar scope blocker.
 
@@ -251,7 +251,7 @@ For a self-adjoint `LinearPMap A`, reducing low spectral subspace `U`, gap `δ=b
 
 Thus `|cos 2Θ₀|` is uniformly bounded below before any tangent quotient is formed.
 
-`tanTwoTheta_unbounded_residual_opNorm` packages the `ν=1` consequence
+`tanTwoTheta_unbounded_residual_opNorm_complex` packages the `ν=1` consequence
 
 `δ |tan 2θ| ≤ 2 ‖B‖`
 
@@ -988,7 +988,7 @@ Recent work moved spectral reduction and its real companion onto `LinearPMap`; t
 
 This is not merely cosmetic. Remaining unbounded work should not be forced to prove each theorem twice because two domain carriers survive indefinitely.
 
-**Closed.** The bundled record, its forwarding API and the `Interop/TauCeti` adapter are deleted; there is one carrier. See `docs/planning/closed-operator-to-linearpmap-migration.md`.
+**Closed.** The bundled record, its forwarding API and the `Interop/TauCeti` adapter are deleted; there is one carrier.
 
 ### M23: frontier `--check` coverage
 

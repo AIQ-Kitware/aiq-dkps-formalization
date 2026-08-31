@@ -749,7 +749,7 @@ This is the primary Lean text for semantic review.  Relevant ambient `variable` 
 
 `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike`
 
-Source: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:73`
+Source: `DavisKahan/Sources/DavisKahan1970/ScalarGenericFinite.lean:73`
 
 ~~~~lean
 -- Ambient variables inherited by this declaration
@@ -1156,7 +1156,7 @@ This is the primary Lean text for semantic review.  Relevant ambient `variable` 
 
 `TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike`
 
-Source: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:111`
+Source: `DavisKahan/Sources/DavisKahan1970/ScalarGenericFinite.lean:111`
 
 ~~~~lean
 -- Ambient variables inherited by this declaration
@@ -1488,7 +1488,7 @@ This is the primary Lean text for semantic review.  Relevant ambient `variable` 
 
 `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike`
 
-Source: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:180`
+Source: `DavisKahan/Sources/DavisKahan1970/ScalarGenericFinite.lean:180`
 
 ~~~~lean
 theorem tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike

@@ -10,8 +10,8 @@ import sys
 import tempfile
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-TARGET = "DavisKahan.Sources.DavisKahan1970.FullSineTheta"
-AUDIT = ROOT / "DavisKahan/Sources/DavisKahan1970/Audits/FullPaperSineTheta.lean"
+TARGET = "DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory"
+AUDIT = ROOT / "DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceInventory.lean"
 EXPECTED_AXIOMS = ("propext", "Classical.choice", "Quot.sound")
 AXIOM_REPORT = re.compile(r"'(?P<name>[^']+)' depends on axioms: \[(?P<axioms>[^\]]*)\]")
 
@@ -28,7 +28,7 @@ def run(cmd: list[str]) -> str:
 def static_check() -> None:
     files = [
         *ROOT.glob("DavisKahan/Experimental/InfiniteDimensional/**/*Paper*.lean"),
-        ROOT / "DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean",
+        ROOT / "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean",
     ]
     forbidden = re.compile(r"\b(?:sorry|admit|native_decide)\b")
     failures: list[str] = []

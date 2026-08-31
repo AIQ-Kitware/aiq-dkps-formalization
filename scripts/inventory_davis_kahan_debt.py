@@ -25,7 +25,7 @@ except ImportError:  # pragma: no cover - environment guidance, not logic
     )
 
 SOURCE_ROOTS = (
-    "DavisKahan.Sources.DavisKahan1970.FullPartIII",
+    "DavisKahan.Sources.DavisKahan1970.PartIIIManuscriptSurface",
     "DavisKahan.Sources.DavisKahan1970.GeneralSinTheta",
 )
 DEFAULT_ROOTS = ("DavisKahan",)

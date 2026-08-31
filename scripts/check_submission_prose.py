@@ -91,7 +91,7 @@ LANE_ID = re.compile(
 #: Paths that do not exist in the destination repository, or at all.
 #:
 #: `dev/` is matched as a whole rather than by naming its subdirectories one at a time.
-#: The enumerated version listed the retired lane board, `dev/journals`, and `dev/audit/`, and
+#: The enumerated version listed the retired lane board and a few subdirectories by name, and
 #: missed 15 references to `dev/tauceti/` for no reason other than that nobody had added
 #: it -- a gate that has to be extended every time a directory is created is a gate that
 #: is quietly wrong most of the time.  The whole `dev/` tree is our workflow and none of

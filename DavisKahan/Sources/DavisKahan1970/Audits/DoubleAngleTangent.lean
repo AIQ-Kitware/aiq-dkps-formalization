@@ -23,7 +23,7 @@ namespace DavisKahan1970
 #check @sinTwoTheta_mirrorDefect_eq_perturbationDefect
 #check @sinTwoTheta_mirrorDefect_le_two_mul
 #check @sinTwoTheta_reflectedOverlap_norm
-#check @norm_sinTwoThetaBlock
+#check @norm_sinTwoThetaBlock_complex
 #check @sinTwoTheta_unbounded_perturbation_opNorm_complex
 #check @sinTwoTheta_unbounded_reflectionResidual_opNorm_complex
 #check @sinTwoTheta_unbounded_perturbation_blockRepresentative_idealFamily_complex

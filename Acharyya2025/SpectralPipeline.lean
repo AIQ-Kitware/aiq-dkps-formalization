@@ -78,7 +78,7 @@ classical-MDS embedding: positive semidefiniteness and rank at most `d`.
 
 HARDENED (2026-06-11, WP6): the original scaffold carried bare `Prop` fields
 (`positive_rank_d : Prop`, `eigengap_at_d : Prop`, `nonzero_gap_constant : Prop`)
-that constrained nothing (see planning/acharyya-graveyard.md, known-bad
+that constrained nothing (a known-bad
 patterns).  The structure now carries the actual mathematical content; symmetry
 is implied by positive semidefiniteness.  Quantitative eigengap/floor data is
 deliberately NOT part of this structure — perturbation statements take it as

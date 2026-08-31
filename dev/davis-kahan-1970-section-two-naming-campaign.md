@@ -68,7 +68,7 @@ Two declarations were duplicates and are gone rather than renamed.
   `tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike` with a
   literally identical type and a forwarding proof.
 
-Three `canonical_*` aliases in `FullPartIII.lean` were also removed:
+Three `canonical_*` aliases in `PartIIIManuscriptSurface.lean` were also removed:
 `canonical_sinTheta`, `canonical_generalizedSinTheta` and
 `canonical_generalizedSinTheta_complementaryBlock` claimed canonical status for
 complex-only bundled entry points, which is the claim this campaign reserves for

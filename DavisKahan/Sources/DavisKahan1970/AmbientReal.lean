@@ -4,8 +4,8 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Geometry.Angle.PaperOperatorAngleReal
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaWholeSpace
-import DavisKahan.Sources.DavisKahan1970.TanThetaWholeSpace
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
+import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
 import DavisKahan.SpectralTheory.Complexification.FormTransport
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv

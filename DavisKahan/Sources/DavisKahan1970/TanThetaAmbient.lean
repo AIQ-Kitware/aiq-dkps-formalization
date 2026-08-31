@@ -1024,7 +1024,7 @@ theorem approximationNumber_lowerCorner_le
   have hres := approximationNumber_le_of_gramResolvent (paperDirectedSineAmbient U V)
     (norm_paperDirectedSineAmbient_lt_one htr)
     (gramOperator_lowerCorner_moebius htr) n
-  rw [approximationNumber_gramOperator c n] at hres
+  rw [approximationNumber_gramOperator_complex c n] at hres
   -- the scalar identity `tan (arcsin σ)² = σ²/(1 − σ²)`
   have hden : (0 : ℝ) < 1 - sig ^ 2 := by nlinarith
   have hsqrt : Real.sqrt (1 - sig ^ 2) * Real.sqrt (1 - sig ^ 2) = 1 - sig ^ 2 :=

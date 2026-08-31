@@ -11,7 +11,7 @@ provides the conversion layer:
 * `MatrixL2OperatorClose` — the honest `ℓ² → ℓ²` operator-norm closeness
   predicate via `Matrix.toEuclideanLin` (the older
   `MathlibBridge.MatrixOperatorNormClose` mixes the sup norm on the output with
-  the `ℓ²` norm on the input; see planning/acharyya-graveyard.md watch-list).
+  the `ℓ²` norm on the input).
 * `matrixL2OperatorClose_of_entrywise` — entrywise `ε` control gives `ℓ² → ℓ²`
   operator control with constant `n·ε`.
 * `isSymmetric_toEuclideanLin_of_isHermitian` — transport of symmetry, so that

@@ -16,9 +16,8 @@ closure.  `MathAhead` is a proof-staging tree and `Audits` is an explicit
 diagnostic tree; neither is a library dependency.  Production declarations also
 do not live under a `Scratch` namespace.
 
-Historical migration details live in
-`dev/flawless-sine-theta-reorganization-overnight-plan-2026-07-20.md`; current
-behavior is defined by this script and the present module graph.
+Current behavior is defined by this script and the present module graph; the
+reorganization that created these invariants is in Git history.
 """
 from __future__ import annotations
 
@@ -43,7 +42,7 @@ NONPRODUCTION_SEGMENTS = {"Experimental", "MathAhead", "Audits"}
 CURATED_ROOT = "DavisKahan"
 DEV_ROOT = "DavisKahan.All"
 AUDIT_SCRIPT = ROOT / "scripts/audit_full_paper_sine_theta.py"
-AUDIT_MODULE = ROOT / "DavisKahan/Sources/DavisKahan1970/Audits/FullPaperSineTheta.lean"
+AUDIT_MODULE = ROOT / "DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceInventory.lean"
 # Audited endpoints: 38 at the first clean run (cc7a7fc), plus the five
 # finite-multiplicity reports. Raise this whenever endpoints are added; never
 # lower it.
@@ -128,8 +127,7 @@ def supports_admitted(module: str, consumers: dict[str, set[str]],
     whose only purpose is to support unfinished work.  Those are correctly
     placed, so the rule could never be satisfied by moving files: measured
     2026-07-29, 17 of its 74 findings were modules that should not move.
-    See `docs/planning/historical/tauceti-experimental-scratch-rule3-audit-2026-07-29.md`
-    for the historical rationale behind this rule.
+    The audit behind this rule is in Git history.
     """
     if module in memo:
         return memo[module]

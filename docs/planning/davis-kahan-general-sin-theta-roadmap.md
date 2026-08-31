@@ -35,9 +35,9 @@ engines. It does not depend on the unresolved generic legacy cutoff API.
 
 The authoritative human map is
 `dev/davis-kahan-1970-source-correspondence-matrix.md`.  The executable surface
-is `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean`, and the selected
+is `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean`, and the selected
 trusted-dependency audit is
-`DavisKahan/Sources/DavisKahan1970/Audits/FullPaperSineTheta.lean`.
+`DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceInventory.lean`.
 
 The result is harmlessly more general than the paper in omitting separability.
 It preserves the source hypotheses that matter: domains, self-adjointness,

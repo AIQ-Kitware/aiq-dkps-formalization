@@ -173,7 +173,7 @@ Seven printed inequalities:
 
 | # | Printed conclusion | Lean | Verdict |
 |---|---|---|---|
-| 1 | `sin θ`: `δ‖sin Θ₀‖ ≤ ‖R‖` | `sinTheta` (ℂ), `sinTheta_paperData_real` (ℝ), `Theorem6_1`/`_real` | **EXACT** — real *and* complex, arbitrary dimension, arbitrary UI norm |
+| 1 | `sin θ`: `δ‖sin Θ₀‖ ≤ ‖R‖` | `sinTheta` (ℂ), `sinTheta_paperData_real` (ℝ), `Theorem6_1_complex`/`_real` | **EXACT** — real *and* complex, arbitrary dimension, arbitrary UI norm |
 | 2 | `tan θ`: `δ‖tan Θ₀‖ ≤ ‖R‖` | `theorem6_3_infiniteTrial_spectral_exists` / `…_of_formBounds_exists` (arbitrary trial subspace, `[CompleteSpace ↥Z]` only), `theorem6_3_generalizedTanTheta_equalRank_spectral` | NARROWER: `ℂ` only |
 | 3 | `tan θ`: `δ‖tan Θ‖ ≤ ‖H‖` | `tanTheta_ambient_bounded_paperUINorm_complex_of_transversality`, core `…_all_kyFan` | NARROWER: `ℂ` only; **plus an added `‖sinAngleOperatorC U V‖ < 1`** |
 | 4 | `sin 2θ`: `δ‖sin 2Θ₀‖ ≤ 2‖R‖` | `sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex` (constant **1**, matching the paper's own proof) | NARROWER: `ℂ` only |
@@ -197,7 +197,7 @@ Other Section 2 claims:
 | "constants in all four theorems best possible" (L764) | `sinTheta_model_equality`, `tanTheta_model_equality`, `tanTwoTheta_model_equality` (each for **every** UI seminorm on the plane); `sinTwoTheta_model_operatorNorm_equality`; `sinTheta_constant_optimal`, `sinTwoTheta_constant_optimal` | NARROWER: the `sin 2θ` equality model is **operator-norm only** |
 | "equality attained simultaneously for all UI norms, by direct sums of 2-dim examples" (L765) | the three all-UI-norm plane models | NARROWER: three of four families in dim 2; the direct-sum extension is not formalized |
 | "for `ε→0` the four conclusions agree asymptotically" (L768) | `single_double_sine_tangent_ratios_tendsto_one` | acceptable rendering |
-| unbounded extension of all four (L771–781) | `sinTheta_generalized_bundled_complex`; `sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex`; `theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing` | NARROWER: `tan 2θ` unbounded exists only as `tanTwoTheta_unbounded_residual_opNorm`, a **pointwise operator-norm** residual statement. Census `S2-unbounded-scope` records this correctly (`compiled_specialization`) |
+| unbounded extension of all four (L771–781) | `sinTheta_generalized_bundled_complex`; `sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex`; `theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing` | NARROWER: `tan 2θ` unbounded exists only as `tanTwoTheta_unbounded_residual_opNorm_complex`, a **pointwise operator-norm** residual statement. Census `S2-unbounded-scope` records this correctly (`compiled_specialization`) |
 
 ### Section 3 — separation of two subspaces
 
@@ -214,7 +214,7 @@ Other Section 2 claims:
 | Prop 3.3 forward / converse | `proposition3_3_principalSquareRoot_forward_of_nonneg_blocks`; `…_converse` | **EXACT both directions** (strongest rows in §3) |
 | Prop 3.4 | `proposition3_4_square_is_reflected_directRotation` | NARROWER: existential over an unnamed pair, witness `(PH, R_Q PH)` not the printed `(Q₋H, QH)`; `C₀² ≥ ½` replaced by a symmetrized form bound; extra `IsAcute` |
 | `S₀=J₀ sin Θ₀`, `J`, `U = exp(JΘ)` | — | **ABSENT — headline (D)** |
-| Thm 3.1 classification (both directions) | `twoProjection_operator_classification`; `theorem3_1_spectralMultiplicity_classification` | EXACT in substance; separability faithful (L202); invariant repackaged as Halmos summand dimensions + `genericCosineBlock` multiplicity, and the translation is not itself compiled |
+| Thm 3.1 classification (both directions) | `twoProjection_operator_classification`; `theorem3_1_spectralMultiplicity_classification_complex` | EXACT in substance; separability faithful (L202); invariant repackaged as Halmos summand dimensions + `genericCosineBlock` multiplicity, and the translation is not itself compiled |
 | Thm 3.1 realization | `theorem3_1_realization` | NARROWER: input `HalmosAngleDatum` of `(cos₀,sin₀,cos₁,sin₁,J)` — no `Θ`, no `0 ≤ Θ ≤ π/2`, intertwiner *assumed* not produced from equal multiplicity; the only compiled inhabitant is the all-zero-angle datum |
 | Cor 3.1 classification | `corollary3_1_compact_defectBlock_angleList_classification` | EXACT (compactness on `P(1−Q)P`, as printed) |
 | Cor 3.1 realization (arbitrary decreasing sequence) | — | ABSENT |
@@ -270,9 +270,9 @@ infinite-dimensional aliases exist and are build-guarded, so the mitigation is r
 | (6.1) | `PaperSymmetricSinThetaProblem.forward_all_kyFan` / `.reverse_all_kyFan` | EXACT |
 | `sin θ` proof/conclusion | `sinTheta`, `sinTheta_paperData_real` | EXACT |
 | 2×2 counterexample to `δ‖sinΘ‖ ≤ ‖H‖` (L1815) | `paperOneGap_does_not_imply_symmetric_square_estimate` + the two norm computations | NARROWER: the arithmetic (`√3 < 2·1`) is certified, but `paperCounterexampleA` (`diag(0,1)`) is **defined and never used** — nothing verifies `spec(A₀)={0}`, `spec(Λ₁)={2}`, or that the subspaces are the claimed eigenspaces. The numbers are proved; the hypotheses that make it a counterexample are not |
-| Prop 6.1 | `Proposition6_1`, `Proposition6_1_real` | **EXACT**, genuinely ambient (`\|P_U−P_V\|`), both gap directions as separate fields, no `[FiniteDimensional]` |
-| Thm 6.1 | `Theorem6_1`, `Theorem6_1_real` | **EXACT** (`E₀` non-isometric via `LowerFrameBound`, no dimension hypothesis, arbitrary same-singular-value representative, arbitrary UI norm) |
-| Thm 6.2 | `Theorem6_2`, `Theorem6_2_real` | EXACT |
+| Prop 6.1 | `Proposition6_1_complex`, `Proposition6_1_real` | **EXACT**, genuinely ambient (`\|P_U−P_V\|`), both gap directions as separate fields, no `[FiniteDimensional]` |
+| Thm 6.1 | `Theorem6_1_complex`, `Theorem6_1_real` | **EXACT** (`E₀` non-isometric via `LowerFrameBound`, no dimension hypothesis, arbitrary same-singular-value representative, arbitrary UI norm) |
+| Thm 6.2 | `Theorem6_2_complex`, `Theorem6_2_real` | EXACT |
 | Thm 6.2's rank variant `δε‖sinΘ₀‖₁ ≤ ‖R‖₁√(rank R)` | `PaperTheorem62Data.operatorNorm_result_across_of_rank_le` + real twin | EXACT — **not listed on `DK-6.2-thm`** |
 | (6.2)–(6.5) direct-rotation block form | — | ABSENT as such, deliberately (the Lean tan θ proofs avoid direct-rotation coordinates) |
 | (6.6) | `theorem63ResidualWitness_scalar` | EXACT |
@@ -281,10 +281,10 @@ infinite-dimensional aliases exist and are build-guarded, so the mitigation is r
 | Example 6.1 (one-sidedness of `Λ₁` essential) | — | **ABSENT** |
 | Thm 6.3 | `Theorem6_3` (`[RCLike]`, real+complex, every rectangular UI seminorm, but `[FiniteDimensional]` on both spaces); `theorem6_3_generalizedTanTheta_source_ideal` (`ℂ`, infinite ambient, `[FiniteDimensional ℂ ↥Z]`) | Split; `A₀ = E₀*(A+H)E₀` faithfully rendered |
 | Thm 6.3 at arbitrary trial dimension | `theorem6_3_infiniteTrial_of_formBounds`, `theorem6_3_infiniteTrial_spectral_exists` | **YES** — and it drops `rank Z < rank V` entirely, so the `[FiniteDimensional ℂ ↥Z]` elsewhere is not a real limitation |
-| Appendix: sin θ with infinite interval `(−∞,α]` | `FormBoundedSylvesterGap` constructors feeding `Theorem6_1`/`6_2` | EXACT |
+| Appendix: sin θ with infinite interval `(−∞,α]` | `FormBoundedSylvesterGap` constructors feeding `Theorem6_1_complex`/`6_2` | EXACT |
 | Appendix: bounded continuous extension of `R` on a common dense domain | `Theorem6_{1,2}_common{Domain,Core}` + all four real twins | EXACT |
 | Appendix: relaxation of Prop 6.1 | — | **ABSENT** (`PaperSymmetricSinThetaProblem` requires `A B : E →L[ℂ] E`) |
-| Lemma 6.3 | `lemma6_3_approximationNumber_leakage`, `lemma6_3_singularValue_leakage` | EXACT (more general) |
+| Lemma 6.3 | `lemma6_3_approximationNumber_leakage_complex`, `lemma6_3_singularValue_leakage_complex` | EXACT (more general) |
 | Appendix: full unbounded + noncompact tan θ, (6.7)–(6.11), Γ/Υ truncation | `theorem6_3_unbounded_infiniteTrial_ideal_of_reducing` etc. | **NARROWER — the substantive §6 gap.** The *noncompact* half is done. The *unbounded `A₀`* half is assumed away: `UnboundedTrialBlock.operator : Z →L[ℂ] Z` and `Theorem63TrialData.compression : Z →L[ℂ] Z` are **bounded fields**, so the paper's `Ω(τ)A₀Ω(τ)` truncation — the whole reason (6.10) exists — is not reproduced. Unboundedness is permitted only in the ambient `A`/`Λ₁`. The module doc admits it |
 | Closing claim "same method applies Thm 6.3 to unbounded operators" (L2259) | same | NARROWER, same reason; and the rank/dimension side is absent from the unbounded form |
 
@@ -363,7 +363,7 @@ genuinely gone.
 
 | Source | Lean | Verdict |
 |---|---|---|
-| Q10.1 (distance-only separation) | census cites `Theorem6_2` | The paper poses this as open; Theorem 6.2 is *in the paper*, so it does not "resolve" the question — but Q10.1 is not proof debt either way. Bookkeeping quibble only |
+| Q10.1 (distance-only separation) | census cites `Theorem6_2_complex` | The paper poses this as open; Theorem 6.2 is *in the paper*, so it does not "resolve" the question — but Q10.1 is not proof debt either way. Bookkeeping quibble only |
 | Q10.2, Q10.3, Q10.4 | — | `not_a_completion_obligation` — **correct**, no debt |
 | Added-in-proof bibliographic notes | — | not obligations |
 
@@ -543,7 +543,7 @@ Where census prose disagrees with what elaborates, **the build wins**.
     obstruction.
 25. **`DK-9.1-9.4`** — declaration list omits `S9.equation_9_2` and `S9.equation_9_3`, both load-bearing.
 26. **`DK-9-infinite-residual-counterexample`** — does not record that `α̂ = 1+μ` (L2761) is absent.
-27. **`DK-10.1`** (`resolved_by_modern_development`, citing `Theorem6_2`) — Theorem 6.2 is *in the
+27. **`DK-10.1`** (`resolved_by_modern_development`, citing `Theorem6_2_complex`) — Theorem 6.2 is *in the
     paper*, so it cannot resolve the paper's own open question. Not proof debt either way; a
     classification quibble.
 28. **Missing row**: the last paragraph of Section 8 (L2559, the `sin 2θ` unequal-dimension extension)

@@ -55,11 +55,11 @@ through `DavisKahan.Frontier.All`.
 | 8.1(ii) "natural infinite-dimensional extensions" | the same theorems: the Weyl step used is dimension-free, so neither carries a finite-dimensionality hypothesis |
 | 8.1(iii) upper, every symmetric gauge | `theorem8_1_upperSymmetricGaugeRepulsion_angle_source` (from the stronger `theorem8_1_upperWeightedWeakMajorization_source`) |
 | 8.1(iii) "similar relation for `Λ₀`" | `theorem8_1_lowerSymmetricGaugeRepulsion_angle_source`, `theorem8_1_lowerWeightedWeakMajorization_source` |
-| 8.2: `δ‖sin 2Θ‖ ≤ 2‖H‖` | `theorem8_2_sinTwoTheta_perturbation_source` |
-| 8.2: `δ‖sin 2Θ₀‖ ≤ 2‖R‖` | `theorem8_2_sinTwoTheta_residual_source` |
+| 8.2: `δ‖sin 2Θ‖ ≤ 2‖H‖` | `theorem8_2_sinTwoTheta_perturbation_source_complex` |
+| 8.2: `δ‖sin 2Θ₀‖ ≤ 2‖R‖` | `theorem8_2_sinTwoTheta_residual_source_complex` |
 | 8.2: `Θ < π/4` from `‖H‖₁ < δ/2` | `theorem8_2_perturbationHalfGap_source_maximalAngle_lt` |
 | 8.2: `Θ < π/4` from `‖R‖₁ < δ/2` (Krein) | `theorem8_2_residualHalfGap_source_maximalAngle_lt` |
-| 8.2, whole printed statement | `theorem8_2_source` |
+| 8.2, whole printed statement | `theorem8_2_source_complex` |
 
 Equations (8.1) and (8.2) are steps inside the printed proof of the
 quarter-angle bound.  They are not separately formalized because the repository
@@ -132,7 +132,7 @@ any claim about the cardinal form: "Since we are assuming (1.5), (3.5) will hold
 automatically if either `dim P𝓗` or `dim P̃𝓗` is finite."  The finite form is
 precisely the regime in which the standing (3.5) is free.  Whether the printed
 conclusion holds under the cardinal form together with (3.5) is **not settled
-here** and must not be asserted either way.  `theorem8_2_branch_source_directed`
+here** and must not be asserted either way.  `theorem8_2_branch_source_directed_complex`
 — the strongest statement from the explicit printed hypotheses alone, with no
 dimension convention — is kept and must not be collapsed into the symmetric one.
 

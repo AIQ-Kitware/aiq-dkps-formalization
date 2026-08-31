@@ -411,7 +411,7 @@ theorem approximationNumber_reflectionTangentCorner_le
     lt_of_le_of_lt (ContinuousLinearMap.approximationNumber_le_norm _ n) hX1
   have hres := approximationNumber_le_of_gramResolvent (reflectionSineCorner U Z)
     hX1 (gramOperator_reflectionTangentCorner_moebius hZsa hZ2 hCC) n
-  rw [approximationNumber_gramOperator (reflectionTangentCorner U Z) n] at hres
+  rw [approximationNumber_gramOperator_complex (reflectionTangentCorner U Z) n] at hres
   have hden : (0 : ℝ) < 1 - sig ^ 2 := by nlinarith
   have hsqrt : Real.sqrt (1 - sig ^ 2) * Real.sqrt (1 - sig ^ 2) = 1 - sig ^ 2 :=
     Real.mul_self_sqrt hden.le
