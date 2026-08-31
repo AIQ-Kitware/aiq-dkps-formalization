@@ -166,7 +166,7 @@
         }
       ],
       "source_specification_sha256": "8e5e36e64c718f1cdb002dd3c5a191c8919fa22bad64020bdbf8f22adb6a3f72",
-      "expected_completion_certification": "accepted",
+      "expected_completion_certification": "reopened_mapping",
       "known_completion_holes": [],
       "source_atom_ids": [
         "S2-sin-theta.family-distinctness",
@@ -264,7 +264,7 @@
         }
       ],
       "source_specification_sha256": "7da711fdbd912b64b5aa6f2efc5c4255bcbe796831a18b99c92712024b81c70b",
-      "expected_completion_certification": "accepted",
+      "expected_completion_certification": "reopened_math",
       "known_completion_holes": [],
       "source_atom_ids": [
         "S2-sin-two-theta.gap-hypothesis",
@@ -1403,7 +1403,7 @@
         }
       ],
       "source_specification_sha256": "13e2036a72aaec0c5094f6014d3bfe1933167f1a43cf79f77716d5d7bf9726c7",
-      "expected_completion_certification": "accepted",
+      "expected_completion_certification": "reopened_mapping",
       "known_completion_holes": [],
       "source_atom_ids": [
         "DK-6.1-thm.generalized-sine-hypotheses",
@@ -1549,6 +1549,8 @@
       "audit_warning": "HOSTILE RE-AUDIT REOPENED: The TeX explicitly preserves equations (6.7)-(6.11) and the limiting proof chain. The row maps endpoint/common-domain machinery and historically treats parts of the chain as documentation fidelity; under statement-level 100% coverage, every preserved mathematical equation needs explicit evidence/disposition.",
       "source_atom_ids": [
         "DK-6-appendix.unbounded-sine-extension",
+        "DK-6-appendix.proposition61-common-domain-extension",
+        "DK-6-appendix.theorem61-common-domain-extension",
         "DK-6-appendix.unbounded-tangent-extension",
         "DK-6-appendix.appendix-approximation-chain",
         "DK-6-appendix.appendix-all-ui-limit",

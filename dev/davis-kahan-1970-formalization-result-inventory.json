@@ -22,9 +22,9 @@
   "result_inventory_review": {
     "status": "accepted",
     "policy": "dk_established_results_only",
-    "source_fidelity_inventory_sha256": "abbdcb96216801a0e367c34b64ae291df39ca67efbbf59db86c5f80c4efb0f7a",
+    "source_fidelity_inventory_sha256": "e611179a2cfed378bba832daec2a09f938de70b2c98813050675a44d9a57db95",
     "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
-    "method": "Reviewed the source-fidelity inventory and the exact theorem/proposition/lemma/corollary environments in paper order. Selected exactly the four Section 2 headline theorems plus all named results Davis--Kahan actually establish; for every counted result, partitioned the primary source block into statement atoms versus adjacent setup/proof/example/consequence/remark atoms, and classified every fidelity atom with an explicit inclusion/exclusion reason.  RE-AUDITED 2026-08-12 for the standing post-Proposition-3.2 convention: the source states, immediately after the proof of Proposition 3.2, that (3.5) is assumed as well as (1.5) except where the contrary is stated.  That convention is carried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption`.  It is deliberately NOT a new counted result and the denominator stays at 29.  RE-AUDITED AGAIN 2026-08-12 for nonlocal source semantics: the distributable specification now also carries the Section 1 norm-existence/vacuity convention, the finite-dimensional automatic case of (3.5) from the Proposition 3.2 remark, the Section 3 angle-operator/J_0 construction, and the Section 6 whole-space assembly step of the tangent proof, with five new source-fidelity atoms.  None of that material is a counted result; it is interpretation and proof-context evidence, reverse-linked through `interpretation_support` rather than through the printed-statement boundary.  The denominator stays at 29. HOSTILE APPENDIX SCOPE RE-AUDIT 2026-08-12: the Appendix explicitly says the tangent theorem is treated with A_0 <= alpha and Lambda_1 >= alpha + delta while both may now be unbounded. `DK-6-appendix.unbounded-tangent-extension` is therefore result scope for `S2-tan-theta`, not expository commentary. The denominator remains 29; the scope obligation is discharged by the new complex and real unboundedCompression ambient endpoints.  RE-ACCEPTED 2026-08-29 after a reason-only edit to five Section 10 fidelity atoms. The five `DK-10.4.*` atoms around Question 10.4 carried the generic boilerplate reasons the boundary rule forbids, so a reviewer could not tell why each was excluded. Each now says what it is: the two `restatement_of_counted_result` atoms name the double-angle tangent theorem they restate and the exact wrapper that carries it, and the three motivation atoms say that the step-function identification and the two norm readings are definitional consequences asserted in passing while setting up the question, not results established there. Their empty reverse links are now explained rather than merely present: a reverse link marks membership of a counted result's own source block, and this Section 10 passage is not in the Section 2 block. MEASURED: no atom added or removed, no `formalization_role` changed, no `formalization_result_ids` changed, and no counted result touched. The denominator stays at 29.  RE-ACCEPTED 2026-08-29 (second) after a reason-only edit to the two `S1-block-residual.residual-eigenvalue-*` atoms. They carried the generic `introductory_background_not_designated_result` reason, which does not explain why material this substantive is outside the denominator. The reason now states it: the source introduces these bounds as \"the standard residual-to-eigenvalue consequence\" that the paper \"also records\", so they are classical Rayleigh--Ritz error theory quoted for the numerical-approximation reading rather than results Davis and Kahan establish, and no later result of theirs depends on them. MEASURED: role unchanged, reverse links unchanged and still empty, no atom added or removed, no counted result touched, denominator still 29. RE-ACCEPTED 2026-08-30 after the Section 2 declaration-naming campaign. The source-fidelity inventory changed in exactly two `formalization_role_reason` strings, both under Question 10.4, and in both the change is the Lean declaration name quoted inside the rationale: `tanTwoTheta_wholeSpace_paperUINorm_exact` became `tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex`, and `tanTwoTheta_directedCorner_residual_paperUINorm_exact` became `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex`. MEASURED against the previous accepted revision: no atom added or removed, no `atom_id`, `formalization_role`, `formalization_role_reason_code`, or `formalization_result_ids` changed, no source text touched, and the distributable specification is byte-identical (its hash is unchanged). No counted result was touched and the denominator stays at 29.",
+    "method": "Reviewed the source-fidelity inventory and the exact theorem/proposition/lemma/corollary environments in paper order. Selected exactly the four Section 2 headline theorems plus all named results Davis--Kahan actually establish; for every counted result, partitioned the primary source block into statement atoms versus adjacent setup/proof/example/consequence/remark atoms, and classified every fidelity atom with an explicit inclusion/exclusion reason.  RE-AUDITED 2026-08-12 for the standing post-Proposition-3.2 convention: the source states, immediately after the proof of Proposition 3.2, that (3.5) is assumed as well as (1.5) except where the contrary is stated.  That convention is carried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption`.  It is deliberately NOT a new counted result and the denominator stays at 29.  RE-AUDITED AGAIN 2026-08-12 for nonlocal source semantics: the distributable specification now also carries the Section 1 norm-existence/vacuity convention, the finite-dimensional automatic case of (3.5) from the Proposition 3.2 remark, the Section 3 angle-operator/J_0 construction, and the Section 6 whole-space assembly step of the tangent proof, with five new source-fidelity atoms.  None of that material is a counted result; it is interpretation and proof-context evidence, reverse-linked through `interpretation_support` rather than through the printed-statement boundary.  The denominator stays at 29. HOSTILE APPENDIX SCOPE RE-AUDIT 2026-08-12: the Appendix explicitly says the tangent theorem is treated with A_0 <= alpha and Lambda_1 >= alpha + delta while both may now be unbounded. `DK-6-appendix.unbounded-tangent-extension` is therefore result scope for `S2-tan-theta`, not expository commentary. The denominator remains 29; the scope obligation is discharged by the new complex and real unboundedCompression ambient endpoints.  RE-ACCEPTED 2026-08-29 after a reason-only edit to five Section 10 fidelity atoms. The five `DK-10.4.*` atoms around Question 10.4 carried the generic boilerplate reasons the boundary rule forbids, so a reviewer could not tell why each was excluded. Each now says what it is: the two `restatement_of_counted_result` atoms name the double-angle tangent theorem they restate and the exact wrapper that carries it, and the three motivation atoms say that the step-function identification and the two norm readings are definitional consequences asserted in passing while setting up the question, not results established there. Their empty reverse links are now explained rather than merely present: a reverse link marks membership of a counted result's own source block, and this Section 10 passage is not in the Section 2 block. MEASURED: no atom added or removed, no `formalization_role` changed, no `formalization_result_ids` changed, and no counted result touched. The denominator stays at 29.  RE-ACCEPTED 2026-08-29 (second) after a reason-only edit to the two `S1-block-residual.residual-eigenvalue-*` atoms. They carried the generic `introductory_background_not_designated_result` reason, which does not explain why material this substantive is outside the denominator. The reason now states it: the source introduces these bounds as \"the standard residual-to-eigenvalue consequence\" that the paper \"also records\", so they are classical Rayleigh--Ritz error theory quoted for the numerical-approximation reading rather than results Davis and Kahan establish, and no later result of theirs depends on them. MEASURED: role unchanged, reverse links unchanged and still empty, no atom added or removed, no counted result touched, denominator still 29. RE-ACCEPTED 2026-08-30 after the Section 2 declaration-naming campaign. The source-fidelity inventory changed in exactly two `formalization_role_reason` strings, both under Question 10.4, and in both the change is the Lean declaration name quoted inside the rationale: `tanTwoTheta_wholeSpace_paperUINorm_exact` became `tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex`, and `tanTwoTheta_directedCorner_residual_paperUINorm_exact` became `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex`. MEASURED against the previous accepted revision: no atom added or removed, no `atom_id`, `formalization_role`, `formalization_role_reason_code`, or `formalization_result_ids` changed, no source text touched, and the distributable specification is byte-identical (its hash is unchanged). No counted result was touched and the denominator stays at 29.  SCOPE-ATOM RE-AUDIT 2026-08-31. All 24 source atoms with `kind: \"scope\"` were re-audited against the distributable specification, their surrounding source blocks, the counted-result inventory and the compiled declarations. This is NOT a reason-only edit: four atoms changed role from `non_result` to `result_scope`, one was split into three, and every scope atom now carries a structured `scope_classification` giving one of five categories with a verbatim source quotation. THE DENOMINATOR IS UNCHANGED AT 29: every reclassified atom is scope of an EXISTING counted result, not a new result. MEASURED: atoms 272 -> 274, both additions being the split of `DK-6-appendix.unbounded-sine-extension` into its headline-sine clause and the two sentences naming Proposition 6.1 and Theorem 6.1; no atom removed; no source text touched; the distributable specification is byte-identical. The reclassifications were forced by the inventory's own statement_boundary policy: `DK-5.1-thm.roles-interchange`, `DK-5.1-thm.one-sided-unbounded-extension`, `DK-6-appendix.unbounded-sine-extension` and `DK-8.2-thm.sin2-unequal-dimension-extension` each state an explicit extension of a counted result's proved scope, and each had been excluded with a reason code whose grounds were that it occurs after the theorem environment -- the exact condition the policy says does not exclude an explicit extension. The internal inconsistency was visible: the Appendix's unbounded TANGENT sentence was already `result_scope` for `S2-tan-theta` while the adjacent SINE sentence was `expository_commentary_not_result`.",
     "boundary_review_status": "accepted"
   },
   "result_count": 29,
@@ -43,11 +43,12 @@
         "S2-unbounded-scope.arbitrary-ui-scope",
         "S2-unbounded-scope.unbounded-selfadjoint-scope",
         "S2-unbounded-scope.bounded-residual-needed",
-        "S2-unbounded-scope.half-infinite-gap-intervals"
+        "S2-unbounded-scope.half-infinite-gap-intervals",
+        "DK-6-appendix.unbounded-sine-extension"
       ],
       "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "accepted",
+      "semantic_certification": "reopened_mapping",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.sinTheta_real",
@@ -63,7 +64,7 @@
         "DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real",
         "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike"
       ],
-      "review_note": "Accepted semantic review. **`DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex` and `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real` are the primary source-facing witnesses** (canonicalized 2026-08-29). They state the result at its full proved scope: unbounded self-adjoint `LinearPMap` operators, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` rather than one of its branches, a `PaperUnitaryInvariantNorm`, and both conclusions -- ideal membership of the sine block and the factor-one inequality. They carry neither `HasUnboundedSylvesterKyFan` nor `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`. `sinTheta_unbounded_intervalExterior_paperUINorm_complex` and its real sibling spell out the printed Section 2 separation for callers who want the familiar form.\n\n`DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` is retained as the **presentation and compatibility** declaration, and the review still reads it for the properties that make it legible: it names the source norm with the public `UnitaryInvariantNorm` spelling, makes `sinTheta_0` an explicit parameter tied by a literal equality to `(I - F0 F0-dagger) E0`, writes the interval/exterior alternative literally, has no finite-dimensional hypothesis, and places exactly the factor-one source inequality after the theorem colon. Its costs are now recorded rather than glossed: being generic over `RCLike` forces the two capability classes into its signature, its separation hypothesis is only the interval/exterior branch, so it states a strictly smaller theorem than the one proved, and it drops the ideal-membership half of the conclusion. The two domain-heavy setup predicates have characteristic theorems that fully expand their contents. `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` remains the stronger supporting certificate and the engine both surfaces run through.",
+      "review_note": "Accepted semantic review. **`DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex` and `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real` are the primary source-facing witnesses** (canonicalized 2026-08-29). They state the result at its full proved scope: unbounded self-adjoint `LinearPMap` operators, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` rather than one of its branches, a `PaperUnitaryInvariantNorm`, and both conclusions -- ideal membership of the sine block and the factor-one inequality. They carry neither `HasUnboundedSylvesterKyFan` nor `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`. `sinTheta_unbounded_intervalExterior_paperUINorm_complex` and its real sibling spell out the printed Section 2 separation for callers who want the familiar form.\n\n`DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` is retained as the **presentation and compatibility** declaration, and the review still reads it for the properties that make it legible: it names the source norm with the public `UnitaryInvariantNorm` spelling, makes `sinTheta_0` an explicit parameter tied by a literal equality to `(I - F0 F0-dagger) E0`, writes the interval/exterior alternative literally, has no finite-dimensional hypothesis, and places exactly the factor-one source inequality after the theorem colon. Its costs are now recorded rather than glossed: being generic over `RCLike` forces the two capability classes into its signature, its separation hypothesis is only the interval/exterior branch, so it states a strictly smaller theorem than the one proved, and it drops the ideal-membership half of the conclusion. The two domain-heavy setup predicates have characteristic theorems that fully expand their contents. `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` remains the stronger supporting certificate and the engine both surfaces run through.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-sin-theta",
@@ -80,7 +81,8 @@
           "S2-unbounded-scope.arbitrary-ui-scope",
           "S2-unbounded-scope.unbounded-selfadjoint-scope",
           "S2-unbounded-scope.bounded-residual-needed",
-          "S2-unbounded-scope.half-infinite-gap-intervals"
+          "S2-unbounded-scope.half-infinite-gap-intervals",
+          "DK-6-appendix.unbounded-sine-extension"
         ],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
@@ -170,7 +172,17 @@
           "role": "generalization",
           "note": "The scalar-generic form of the two canonical fixed-field endpoints.  It is not canonical evidence: `RCLike` is an open class, so its two capability binders (`HasMinMaxLowerBoundEverywhere`, `HasUnboundedSylvesterKyFan`) are genuine hypotheses at a field other than the paper's two, and the printed statement carries no such hypothesis.  `PaperSurface.lean` says the same thing.  `..._complex_ofRCLike_conforms` and its real partner tie it to the canonical pair by type equality."
         }
-      ]
+      ],
+      "expected_status": "compiled_exact",
+      "remaining_gap": {
+        "category": "unregistered_evidence",
+        "missing_surface": "Coverage of the Appendix sine sentence: one of A_0, Lambda_1 unbounded, half-infinite separating interval, common dense domain carrying a bounded residual. The existing canonical endpoints already take unbounded `LinearPMap` blocks, the full `FormBoundedSylvesterGap` and a bounded residual, so the mathematics is present and only the atom link is new.",
+        "next_action": "Extend the canonical evidence's covers_source_atoms to the new Appendix scope atom.",
+        "strongest_existing_evidence": [
+          "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex",
+          "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real"
+        ]
+      }
     },
     {
       "id": "S2-tan-theta",
@@ -302,8 +314,9 @@
         ],
         "distinct_from_refutation": "DK-4.4-prop",
         "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
-        "source_fidelity_inventory_sha256": "abbdcb96216801a0e367c34b64ae291df39ca67efbbf59db86c5f80c4efb0f7a",
-        "supporting_atom_digest_sha256": "50eb0bd0f9bb87fae3d643b3b4a4c33056d1268e0e058c413c29ea3d4ffc7995"
+        "source_fidelity_inventory_sha256": "e611179a2cfed378bba832daec2a09f938de70b2c98813050675a44d9a57db95",
+        "supporting_atom_digest_sha256": "a23733f61834f1ffa15a2c13641396999af05a6fbe680ba87281f330b20b843d",
+        "reaudit_note": "RE-ACCEPTED 2026-08-31 after the scope-atom re-audit. The atoms this reading rests on are unchanged in text and role: `S1-block-residual.norm-existence-vacuity-convention` remains a paper-wide convention and `DK-3.2-prop.finite-crossing-automatic` remains automaticity used to read the statement -- both were given substantive reason codes in place of generic ones, with no change to their exclusion from the denominator."
       },
       "notes": " **Constructor-first interface added 2026-08-29.** The most general unbounded form, `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex`, asked its caller for four separate facts that are not Davis--Kahan mathematics: two saying the compression data is A's Ritz pair on U (hZA, haction), and two saying V-perp reduces A (hVdom, hVcomm). `UnboundedRitzPair A U` and `ReducingComplement A V` hold those, `UnboundedRitzPair.ofTrialBlock` builds the first from the bounded-compression bundle a caller usually has, and `tanTheta_ambient_unboundedRitz_paperUINorm_complex` is the theorem taking the two objects. What deliberately stays a hypothesis is what the theorem is about: semiboundedness of the compression, coercivity on the unwanted subspace, and the crossed-defect standing condition (3.5). **Real constructor-first endpoint, 2026-08-30.** `tanTheta_ambient_unboundedRitz_paperUINorm_real` is the real mirror of the complex Ritz-pair form: the four structural facts tying the compression data to the ambient operator and saying that `V`-perp reduces it are replaced by `DavisKahan.UnboundedRitzPair` and `DavisKahan.ReducingComplement`, both scalar-generic, so no real-specific vocabulary is introduced and the real and complex public statements now have the same shape. The mathematics -- semiboundedness of the compression, coercivity on the unwanted subspace, and the standing crossed-defect condition (3.5) -- remains supplied by the caller. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved by a standing rule: a short name is bound only to a declaration that is BOTH scalar-generic over `RCLike` AND at the printed source scope, and is left unbound otherwise. Which of the four currently satisfy that is a property of `SectionTwo.lean`; it is recorded once, structurally, in `section_two_short_names` below and checked against the file, and is deliberately not restated in prose -- a copy of a moving fact goes stale silently, and this sentence did. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately.",
       "canonical_evidence": [
@@ -449,11 +462,12 @@
         "S2-unbounded-scope.arbitrary-ui-scope",
         "S2-unbounded-scope.unbounded-selfadjoint-scope",
         "S2-unbounded-scope.bounded-residual-needed",
-        "S2-unbounded-scope.half-infinite-gap-intervals"
+        "S2-unbounded-scope.half-infinite-gap-intervals",
+        "DK-8.2-thm.sin2-unequal-dimension-extension"
       ],
       "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "accepted",
+      "semantic_certification": "reopened_math",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
@@ -483,7 +497,7 @@
         "TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap",
         "TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap"
       ],
-      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: the registered unbounded directed endpoint `sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex` bounds delta * N(sin 2Theta_0) by the norm of a self-adjoint REFLECTION residual satisfying (A + R) J_V = J_V A, which is not the printed residual (1.8).  The repair is `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` and its real sibling `..._paperUINorm_real`: an unbounded self-adjoint closed operator, an arbitrary closed trial subspace inside its domain, the trial operator M = A_0, the printed trial residual R = A E_0 - E_0 A_0 as the only right-hand side, arbitrary `PaperUnitaryInvariantNorm`, the directed angle Theta_0, and the printed conclusion delta * N(sin 2Theta_0) <= 2 N(R) with membership concluded rather than assumed.  There is no finite-dimensionality, compactness, acuteness, separability, self-adjointness-of-R or reflection hypothesis visible to the caller: the reflected comparison system D = -2 (X + X*) is constructed internally from the trial data by `trialReflection_intertwines`.  The sharp factor two is obtained blockwise from the scalar-generic doubling identity `kyFan_reflectionDefectBlock_le_two_mul`, not from a triangle inequality on the reflection defect, which would give four.  The complex spectral-separation hypotheses are the printed interval/exterior separation stated through semiboundedness plus resolvent-set avoidance; the real endpoint carries the scalar-generic `FormBoundedSylvesterGap`, which is the weaker predicate (hence the stronger theorem) and covers all three printed separation configurations, and `..._paperUINorm_real_of_intervalExterior` restates it at the printed interval/exterior separation itself.  The ambient conclusion delta * N(sin 2Theta) <= 2 N(H) remains covered over both fields by `sinTwoTheta_ambient_bounded_paperUINorm_complex` and `sinTwoTheta_ambient_bounded_paperUINorm_real`. Audit-surface update 2026-08-13: `sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` is now the canonical scalar-generic PaperUI directed facade with interval/exterior placement and the residual visible in its type; the full unbounded companions remain registered.\n\nRE-CLOSED 2026-08-31 at the full source gap.  The 2026-08-31 downgrade was correct: the complex endpoints took a bounded separating interval `[beta, alpha]` while the source allows half-infinite intervals, and only the real endpoints carried `FormBoundedSylvesterGap`.  The repair did NOT generalize the centred `TwoSidedShiftedInverseBound` engine the downgrade traced.  It adopted the REAL track's architecture over `C` instead: `sinTheta_unbounded_complex` already proved the complex single-angle theorem at the full form-bounded gap, so the missing pieces were its block form (`ExactSinTheta.sinTheta_unbounded_complex_block`), the bounded-perturbation adapter (`sinTheta_addBounded_gauge_complex_block_of_formGap`), and the reflected exact system (`sinTwoTheta_reflectionResidual_block_gauge_of_formGap`, `sinTwoTheta_reflectionResidual_gauge_of_formGap`, `sinTwoTheta_addBounded_gauge_of_formGap`).  The reflection geometry also simplifies: the spectrum-gap proof must unitarily conjugate the complementary restriction because its hypothesis is about that operator's SPECTRUM, whereas a form-bounded gap between `A_0` and `Lambda` lets the reflection go into the coordinate map `F_1 = J_V . U^c.subtypeL`, exactly as the real proof does.\n\nBoth printed conclusions are now at the printed gap scope over both fields: the directed residual endpoint `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` and the directed perturbation endpoint `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` both take `FormBoundedSylvesterGap`.  `SectionTwoUsage.sinTwoTheta_from_halfInfinite_separation` is the compiled witness that the half-infinite configuration can actually be called: it supplies only two form bounds, with no finite interval and no spectrum-avoidance certificate.  The earlier bounded-interval statements are retained under `spectrumGap` names as supporting evidence.  They are NOT derived from the new ones: `FormBoundedSylvesterGap.intervalExterior` wants `LinearPMap.realSpectrum A_0 subset Icc beta alpha`, and the tree proves only the converse direction, so the implication would need the `LinearPMap` analogue of `realSpectrum_subset_Ici_of_le_re_inner_generic`, which exists for bounded operators only.",
+      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: the registered unbounded directed endpoint `sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex` bounds delta * N(sin 2Theta_0) by the norm of a self-adjoint REFLECTION residual satisfying (A + R) J_V = J_V A, which is not the printed residual (1.8).  The repair is `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` and its real sibling `..._paperUINorm_real`: an unbounded self-adjoint closed operator, an arbitrary closed trial subspace inside its domain, the trial operator M = A_0, the printed trial residual R = A E_0 - E_0 A_0 as the only right-hand side, arbitrary `PaperUnitaryInvariantNorm`, the directed angle Theta_0, and the printed conclusion delta * N(sin 2Theta_0) <= 2 N(R) with membership concluded rather than assumed.  There is no finite-dimensionality, compactness, acuteness, separability, self-adjointness-of-R or reflection hypothesis visible to the caller: the reflected comparison system D = -2 (X + X*) is constructed internally from the trial data by `trialReflection_intertwines`.  The sharp factor two is obtained blockwise from the scalar-generic doubling identity `kyFan_reflectionDefectBlock_le_two_mul`, not from a triangle inequality on the reflection defect, which would give four.  The complex spectral-separation hypotheses are the printed interval/exterior separation stated through semiboundedness plus resolvent-set avoidance; the real endpoint carries the scalar-generic `FormBoundedSylvesterGap`, which is the weaker predicate (hence the stronger theorem) and covers all three printed separation configurations, and `..._paperUINorm_real_of_intervalExterior` restates it at the printed interval/exterior separation itself.  The ambient conclusion delta * N(sin 2Theta) <= 2 N(H) remains covered over both fields by `sinTwoTheta_ambient_bounded_paperUINorm_complex` and `sinTwoTheta_ambient_bounded_paperUINorm_real`. Audit-surface update 2026-08-13: `sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` is now the canonical scalar-generic PaperUI directed facade with interval/exterior placement and the residual visible in its type; the full unbounded companions remain registered.\n\nRE-CLOSED 2026-08-31 at the full source gap.  The 2026-08-31 downgrade was correct: the complex endpoints took a bounded separating interval `[beta, alpha]` while the source allows half-infinite intervals, and only the real endpoints carried `FormBoundedSylvesterGap`.  The repair did NOT generalize the centred `TwoSidedShiftedInverseBound` engine the downgrade traced.  It adopted the REAL track's architecture over `C` instead: `sinTheta_unbounded_complex` already proved the complex single-angle theorem at the full form-bounded gap, so the missing pieces were its block form (`ExactSinTheta.sinTheta_unbounded_complex_block`), the bounded-perturbation adapter (`sinTheta_addBounded_gauge_complex_block_of_formGap`), and the reflected exact system (`sinTwoTheta_reflectionResidual_block_gauge_of_formGap`, `sinTwoTheta_reflectionResidual_gauge_of_formGap`, `sinTwoTheta_addBounded_gauge_of_formGap`).  The reflection geometry also simplifies: the spectrum-gap proof must unitarily conjugate the complementary restriction because its hypothesis is about that operator's SPECTRUM, whereas a form-bounded gap between `A_0` and `Lambda` lets the reflection go into the coordinate map `F_1 = J_V . U^c.subtypeL`, exactly as the real proof does.\n\nBoth printed conclusions are now at the printed gap scope over both fields: the directed residual endpoint `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` and the directed perturbation endpoint `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` both take `FormBoundedSylvesterGap`.  `SectionTwoUsage.sinTwoTheta_from_halfInfinite_separation` is the compiled witness that the half-infinite configuration can actually be called: it supplies only two form bounds, with no finite interval and no spectrum-avoidance certificate.  The earlier bounded-interval statements are retained under `spectrumGap` names as supporting evidence.  They are NOT derived from the new ones: `FormBoundedSylvesterGap.intervalExterior` wants `LinearPMap.realSpectrum A_0 subset Icc beta alpha`, and the tree proves only the converse direction, so the implication would need the `LinearPMap` analogue of `realSpectrum_subset_Ici_of_le_re_inner_generic`, which exists for bounded operators only.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-sin-two-theta",
@@ -499,7 +513,8 @@
           "S2-unbounded-scope.arbitrary-ui-scope",
           "S2-unbounded-scope.unbounded-selfadjoint-scope",
           "S2-unbounded-scope.bounded-residual-needed",
-          "S2-unbounded-scope.half-infinite-gap-intervals"
+          "S2-unbounded-scope.half-infinite-gap-intervals",
+          "DK-8.2-thm.sin2-unequal-dimension-extension"
         ],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
@@ -689,7 +704,16 @@
           "declaration": "TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap",
           "role": "supporting_theorem"
         }
-      ]
+      ],
+      "remaining_gap": {
+        "category": "missing_wrapper",
+        "missing_surface": "An unequal-dimension sin 2 Theta endpoint at the scope this result is certified at. The existing `sinTwoTheta_unbounded_*_arbitraryRepresentative_unequalDimension_*` declarations carry the strict-dimension hypothesis, but only at a `KyFanDominantIdealFamily` and the bounded-interval spectrum gap, whereas this result's other atoms are certified at an arbitrary `PaperUnitaryInvariantNorm` and the full `FormBoundedSylvesterGap`.",
+        "next_action": "State the unequal-dimension form at `PaperUnitaryInvariantNorm` and `FormBoundedSylvesterGap`. The underlying theorem imposes no dimension comparison at all, so the dimension hypothesis is carried unused exactly as in the existing Ky Fan declarations; no new analysis is required.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex",
+          "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex"
+        ]
+      }
     },
     {
       "id": "S2-tan-two-theta",
@@ -1883,28 +1907,29 @@
       "completion_obligation": true,
       "source_atom_ids": [
         "DK-5.1-thm.banach-hypotheses",
-        "DK-5.1-thm.sylvester-lower-bound"
+        "DK-5.1-thm.sylvester-lower-bound",
+        "DK-5.1-thm.roles-interchange",
+        "DK-5.1-thm.one-sided-unbounded-extension"
       ],
       "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "accepted",
+      "semantic_certification": "reopened_mapping",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm",
         "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12, corrected after rechecking scalar scope. `banach_sylvester_lower_bound_uiNorm` aliases the scalar-generic Banach-space Sylvester lower-bound theorem over an arbitrary nontrivially normed field; its left-inverse hypothesis is weaker than the printed two-sided-inverse hypothesis, so it covers both real and complex source scope. `banach_sylvester_lower_bound_exact` is retained as the literal complex source-shape witness with both inverse equations. The compiler audit surface additionally restates the printed two-sided-inverse theorem over a generic scalar field and proves it directly from the scalar-generic engine. The A/B interchange and one-sided unbounded remarks are outside the counted Theorem 5.1 boundary.",
+      "review_note": "Accepted result-only semantic review 2026-08-12, corrected after rechecking scalar scope. `banach_sylvester_lower_bound_uiNorm` aliases the scalar-generic Banach-space Sylvester lower-bound theorem over an arbitrary nontrivially normed field; its left-inverse hypothesis is weaker than the printed two-sided-inverse hypothesis, so it covers both real and complex source scope. `banach_sylvester_lower_bound_exact` is retained as the literal complex source-shape witness with both inverse equations. The compiler audit surface additionally restates the printed two-sided-inverse theorem over a generic scalar field and proves it directly from the scalar-generic engine. The A/B interchange and one-sided unbounded remarks are outside the counted Theorem 5.1 boundary.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.",
       "parent_claim_id": "DK-5.1-thm",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "DK-5.1-thm",
         "included_same_block_atom_ids": [
           "DK-5.1-thm.banach-hypotheses",
-          "DK-5.1-thm.sylvester-lower-bound"
-        ],
-        "excluded_same_block_atom_ids": [
+          "DK-5.1-thm.sylvester-lower-bound",
           "DK-5.1-thm.roles-interchange",
           "DK-5.1-thm.one-sided-unbounded-extension"
         ],
+        "excluded_same_block_atom_ids": [],
         "cross_block_scope_atom_ids": [],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
@@ -1935,7 +1960,17 @@
           "capability_classes": []
         }
       ],
-      "supporting_evidence": []
+      "supporting_evidence": [],
+      "expected_status": "compiled_exact",
+      "remaining_gap": {
+        "category": "unregistered_evidence",
+        "missing_surface": "Canonical evidence for the two Theorem 5.1 scope extensions the source states: the A/B interchange and the densely-defined unbounded A. Both are compiled -- `theorem5_1_banach_sylvester_interchanged_exact` and `theorem5_1_banach_sylvester_unboundedA` -- but neither was registered against this result, because both atoms were classified `non_result`.",
+        "next_action": "Register the two declarations as canonical evidence covering the two scope atoms.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact",
+          "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA"
+        ]
+      }
     },
     {
       "id": "DK-5.2-thm",
@@ -2156,11 +2191,12 @@
       "title": "Sine proof, ambient limitation, and symmetric sine theorem",
       "completion_obligation": true,
       "source_atom_ids": [
-        "DK-6.1-prop.symmetric-sine-theorem"
+        "DK-6.1-prop.symmetric-sine-theorem",
+        "DK-6-appendix.proposition61-common-domain-extension"
       ],
       "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "accepted",
+      "semantic_certification": "reopened_mapping",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.Proposition6_1_complex",
         "TauCeti.DavisKahan1970.Proposition6_1_real",
@@ -2170,7 +2206,7 @@
         "TauCeti.DavisKahan1970.Proposition6_1_real_representative",
         "TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Proposition 6.1 aliases are direct source-facing PaperUI theorems for the two-sided spectral-placement hypothesis and the ambient sine bound `delta * N(sin Theta) <= N(H)` for every paper unitary-invariant norm. The Sylvester identity (6.1) and the source counterexample explaining why one-sided placement is insufficient are outside the counted proposition statement.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Proposition 6.1 aliases are direct source-facing PaperUI theorems for the two-sided spectral-placement hypothesis and the ambient sine bound `delta * N(sin Theta) <= N(H)` for every paper unitary-invariant norm. The Sylvester identity (6.1) and the source counterexample explaining why one-sided placement is insufficient are outside the counted proposition statement.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.",
       "parent_claim_id": "DK-6.1-prop",
       "boundary_review": {
         "status": "accepted",
@@ -2183,7 +2219,9 @@
           "DK-6.1-prop.source-counterexample-need-two-sided",
           "DK-6.1-prop.eq-6-1"
         ],
-        "cross_block_scope_atom_ids": [],
+        "cross_block_scope_atom_ids": [
+          "DK-6-appendix.proposition61-common-domain-extension"
+        ],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
@@ -2234,7 +2272,17 @@
           "declaration": "TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues",
           "role": "transport_lemma"
         }
-      ]
+      ],
+      "expected_status": "compiled_exact",
+      "remaining_gap": {
+        "category": "unregistered_evidence",
+        "missing_surface": "Canonical evidence for the Appendix common-domain relaxation of Proposition 6.1. `PaperCommonDomainSymmetricSinThetaProblem` and its result methods are compiled but were not registered against this result, and they are record methods rather than component-hypothesis theorems.",
+        "next_action": "Add direct-hypothesis common-domain Proposition 6.1 theorems and register them.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan1970.Proposition6_1_commonDomain",
+          "TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain"
+        ]
+      }
     },
     {
       "id": "DK-6.1-thm",
@@ -2245,11 +2293,12 @@
       "source_atom_ids": [
         "DK-6.1-thm.generalized-sine-hypotheses",
         "DK-6.1-thm.generalized-sine-conclusion",
-        "DK-6.1-thm.unequal-dimension-scope"
+        "DK-6.1-thm.unequal-dimension-scope",
+        "DK-6-appendix.theorem61-common-domain-extension"
       ],
       "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "accepted",
+      "semantic_certification": "reopened_mapping",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.Theorem6_1_complex",
         "TauCeti.DavisKahan1970.Theorem6_1_real",
@@ -2258,7 +2307,7 @@
         "TauCeti.DavisKahan1970.theorem6_1_source_complex",
         "TauCeti.DavisKahan1970.theorem6_1_source_real"
       ],
-      "review_note": "Accepted by the hostile audit at the stated-result level.",
+      "review_note": "Accepted by the hostile audit at the stated-result level.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.",
       "parent_claim_id": "DK-6.1-thm",
       "boundary_review": {
         "status": "accepted",
@@ -2269,7 +2318,9 @@
           "DK-6.1-thm.unequal-dimension-scope"
         ],
         "excluded_same_block_atom_ids": [],
-        "cross_block_scope_atom_ids": [],
+        "cross_block_scope_atom_ids": [
+          "DK-6-appendix.theorem61-common-domain-extension"
+        ],
         "method": "Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.",
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
@@ -2320,7 +2371,17 @@
           "role": "implementation_structure",
           "note": "Superseded as canonical evidence 2026-08-31: it is a method on a `Paper*` record, so a caller had to build the record before invoking the theorem. The canonical declaration is now the component-hypothesis theorem, which builds the record internally. This one is retained as the implementation and compatibility API."
         }
-      ]
+      ],
+      "expected_status": "compiled_exact",
+      "remaining_gap": {
+        "category": "unregistered_evidence",
+        "missing_surface": "Canonical evidence for the Appendix common-domain relaxation of Theorem 6.1. `PaperCommonDomainTheorem61Data` result methods are compiled but were not registered against this result.",
+        "next_action": "Add direct-hypothesis common-domain Theorem 6.1 theorems and register them.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan1970.Theorem6_1_commonDomain",
+          "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain"
+        ]
+      }
     },
     {
       "id": "DK-6.2-thm",
@@ -2890,8 +2951,14 @@
     "method": "Audited each previously nonterminal counted result against only its accepted printed-result boundary; promoted a result only when concrete source-facing Lean declarations expose every counted hypothesis, conclusion, and scalar/dimension/norm scope. Proof-only and theorem-adjacent source atoms were not used as blockers. Proposition 3.3 is closed by the real nonacute principal-square-root bridge on main; Proposition 4.1 is additionally closed here by the compiler-validated arbitrary-dimensional compact/nonacute direct-rotation value bridge over complex and real scalars. Proposition 3.4 is additionally closed by the compiler-validated real full-scope bridge, which transports the exact nonacute source hypotheses and direct-rotation conclusion through canonical complexification.  REOPENED then REPAIRED 2026-08-12: this sweep's earlier acceptance of `S2-sin-two-theta`, `DK-3.4-prop`, and `DK-8.2-thm` was withdrawn and each row was given a structured `remaining_gap` naming the exact source-to-Lean mismatch.  All three mismatches have since been repaired and the printed statements re-audited: a new unbounded directed trial-residual `sin 2Theta_0` endpoint over both fields, a new complex Proposition 3.4 with the genuine Definition 3.1 conclusion, and the standing Section 3 assumption (3.5) inventoried as source scope with the ambient quarter-angle theorems selected as Theorem 8.2's evidence.  The three rows are accepted again on that repaired evidence.  UPDATED 2026-08-12: `S2-tan-theta` is no longer awaiting a formal refutation of a false theorem.  It is accepted as a true counted result read under a documented nonlocal source interpretation (see the row's `nonlocal_source_interpretation`), and it remains nonterminal only for the missing real-scalar unbounded ambient endpoint.  The bilateral-shift construction is recorded as a vacuity/nonvacuity witness separating (1.5) from (3.5), not as a counterexample to the counted result.  CLOSED 2026-08-13: `S2-tan-theta` is accepted terminal.  Its one remaining Lean-coverage blocker, the real-scalar unbounded ambient endpoint, is proved by `tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real`, which carries the printed hypotheses -- reducing subspace, `A_0 <= alpha`, `alpha + delta <= Lambda_1`, `H_0 = 0`, and the standing (3.5) -- at the printed constant and at every paper unitarily invariant norm over a real Hilbert space, deriving uniform transversality instead of assuming it.  All 29 counted results are now terminal on all three axes. HOSTILE APPENDIX SCOPE CORRECTION 2026-08-12: the previous terminalization confused an unbounded ambient operator with an unbounded Ritz compression. The Appendix permits A_0 itself to be unbounded. The new `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` and real sibling consume `UnboundedCompressionTrialData.all_kyFan_core` and close that stronger scope.  REOPENED 2026-08-12 (DK-3.5-prop, mapping): this sweep accepted `DK-3.5-prop` on evidence that required `IsAcute` for the commutation and eigenvector-angle clauses.  Davis and Kahan restrict only the maximal-eigenspace clause to the acute case; the other two are printed under the standing Section 3 hypotheses, which admit the completed nonacute direct rotation.  Both clauses have since been proved at that scope, including the right-angle eigenspace, but the acceptance itself is withdrawn pending an independent re-audit of the repaired signatures.  CLOSED 2026-08-13 (DK-3.5-prop, independent hostile re-audit): the repaired signatures were checked against the printed three-clause structure.  Clauses 1 and 2 are registered at the standing nonacute Section 3 scope, clause 2 includes theta = pi/2, and clause 3 alone retains `IsAcute`.  The row is accepted again; all 29 counted results are terminal.",
     "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-12.md",
-    "terminal_results": 29,
-    "remaining_results": [],
+    "terminal_results": 24,
+    "remaining_results": [
+      "S2-sin-theta",
+      "S2-sin-two-theta",
+      "DK-5.1-thm",
+      "DK-6.1-prop",
+      "DK-6.1-thm"
+    ],
     "note": " 2026-08-31: `S2-sin-two-theta` reopened. Its complex endpoint covers only bounded gap intervals while the row's own source scope includes half-infinite ones, which only the real endpoint carries.",
     "canonical_evidence_sha256": "1b25dd19eeacb12808c7b4a88b08d754c7ce43f09236c553b16fbe913274f57b"
   },

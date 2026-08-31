@@ -72,6 +72,29 @@ SUPPORTING_EVIDENCE_ROLES = {
     "scalar_generic_facade", "supporting_theorem",
 }
 REFUTATION_RESULT_IDS = {"DK-4.4-prop"}
+SCOPE_CLASSIFICATION_CATEGORIES = {
+    # the atom states scope of one or more counted results, and must be covered
+    "counted_result_scope",
+    # ambient setting or convention governing the whole paper
+    "source_wide_setup",
+    # tells a reader how to READ a statement (automaticity, vacuity conventions)
+    "reading_interpretation",
+    # sits inside a proof and describes the argument
+    "proof_context",
+    # commentary, motivation, negative remarks, worked-example choices
+    "non_extending_commentary",
+}
+# Reason codes whose ONLY grounds are "this occurs outside the printed theorem
+# environment".  That is exactly the condition the inventory's statement_boundary
+# policy says does not exclude an explicit scope extension, so for a scope atom
+# stating a mathematical assertion they are not an answer.  Four atoms were
+# excluded from the denominator on these codes while explicitly extending a
+# counted result.
+GENERIC_SCOPE_REASON_CODES = {
+    "post_result_scope_remark_not_in_printed_statement",
+    "expository_commentary_not_result",
+    "introductory_background_not_designated_result",
+}
 COUNTED_RESULT_KINDS = {"unnumbered_theorem", "theorem", "proposition", "lemma", "corollary"}
 RESULT_SUPPORT_ROLES = {
     "result", "stated_result", "result_support", "result_hypothesis", "result_scope"
@@ -354,6 +377,89 @@ def _validate_total_source_classification(
     return True, None
 
 
+def _validate_scope_atom_classification(source_atoms: dict[str, dict[str, Any]]) -> None:
+    """Every scope atom must say WHICH kind of scope it is, and quote the source.
+
+    `dev/davis-kahan-1970-formalization-result-inventory.json` states that a later
+    source passage which explicitly extends the proved scope of a counted result
+    is part of that result's scope and must be covered.  Four scope atoms were
+    nevertheless excluded from the denominator with reason codes whose grounds
+    were that they occur after the theorem environment -- the exact condition the
+    policy says does not exclude an extension.  The inconsistency was visible in
+    the source: the Appendix's unbounded *tangent* sentence was `result_scope`
+    while the adjacent *sine* sentence was expository commentary.
+
+    A generic code is therefore no longer sufficient for a scope atom.  Each must
+    carry a `scope_classification` naming one of five categories, the results it
+    extends (exactly when the category says it extends any), a substantive
+    rationale, and a verbatim quotation from the distributable specification that
+    a reviewer can check against the source.
+    """
+    for atom_id, atom in sorted(source_atoms.items()):
+        if atom.get("kind") != "scope" or atom.get("source_role") != "mathematical_assertion":
+            continue
+        classification = atom.get("scope_classification")
+        if not isinstance(classification, dict):
+            fail(
+                f"{atom_id}: a scope atom stating a mathematical assertion must carry a "
+                "scope_classification"
+            )
+        category = classification.get("category")
+        if category not in SCOPE_CLASSIFICATION_CATEGORIES:
+            fail(
+                f"{atom_id}: scope_classification.category is {category!r}; expected one of "
+                f"{sorted(SCOPE_CLASSIFICATION_CATEGORIES)}"
+            )
+        extends = classification.get("extends_results")
+        if not isinstance(extends, list) or not all(isinstance(x, str) for x in extends):
+            fail(f"{atom_id}: scope_classification.extends_results must be a list of result ids")
+        linked = atom.get("formalization_result_ids") or []
+        if category == "counted_result_scope":
+            if not extends:
+                fail(
+                    f"{atom_id}: classified as counted_result_scope but names no result it extends"
+                )
+            if atom.get("formalization_role") != "result_scope":
+                fail(
+                    f"{atom_id}: classified as counted_result_scope but formalization_role is "
+                    f"{atom.get('formalization_role')!r}"
+                )
+        else:
+            if extends:
+                fail(
+                    f"{atom_id}: category {category!r} must not name results it extends, got {extends!r}"
+                )
+            if atom.get("formalization_role") in RESULT_SUPPORT_ROLES:
+                fail(
+                    f"{atom_id}: category {category!r} is incompatible with the result-support role "
+                    f"{atom.get('formalization_role')!r}"
+                )
+        if sorted(extends) != sorted(linked):
+            fail(
+                f"{atom_id}: scope_classification.extends_results {sorted(extends)!r} disagrees with "
+                f"formalization_result_ids {sorted(linked)!r}"
+            )
+        rationale = classification.get("rationale")
+        if not isinstance(rationale, str) or len(rationale.strip()) < 120:
+            fail(
+                f"{atom_id}: scope_classification.rationale must substantively justify the category "
+                "(at least a couple of sentences)"
+            )
+        quote = classification.get("source_quote")
+        if not isinstance(quote, str) or not quote.strip():
+            fail(
+                f"{atom_id}: scope_classification.source_quote must quote the source passage being "
+                "classified, so a reviewer can check the reading"
+            )
+        code = atom.get("formalization_role_reason_code")
+        if code in GENERIC_SCOPE_REASON_CODES:
+            fail(
+                f"{atom_id}: reason code {code!r} is not sufficient for a scope atom -- its grounds are "
+                "that the passage lies outside the printed statement, which the statement_boundary policy "
+                "says does not exclude an explicit scope extension. Give the substantive reason."
+            )
+
+
 def _validate_boundary_accounting(
     source_atoms: dict[str, dict[str, Any]],
     items: list[dict[str, Any]],
@@ -438,8 +544,23 @@ def _validate_boundary_accounting(
                 fail(f"{result_id}: boundary_review.{key} must be {expected!r}, got {value!r}")
         for atom_id in expected_excluded:
             atom = source_atoms[atom_id]
-            if atom.get("formalization_role") in RESULT_SUPPORT_ROLES:
-                fail(f"{result_id}: excluded same-block atom {atom_id} is still classified as result support")
+            # An atom may be excluded from THIS result's statement and still be
+            # scope of a DIFFERENT counted result: the source states the sin 2 Theta
+            # unequal-dimension extension inside the Theorem 8.2 block, and textual
+            # location is not semantic ownership.  What must not happen is an atom
+            # excluded here while still claiming to support this result.
+            if result_id in (atom.get("formalization_result_ids") or []):
+                fail(
+                    f"{result_id}: excluded same-block atom {atom_id} still claims to support this result"
+                )
+            if (
+                atom.get("formalization_role") in RESULT_SUPPORT_ROLES
+                and atom.get("formalization_role") != "result_scope"
+            ):
+                fail(
+                    f"{result_id}: excluded same-block atom {atom_id} is classified as result support for "
+                    f"{atom.get('formalization_result_ids')!r}; only scope atoms may belong to another result"
+                )
         for key in ("method", "note"):
             value = boundary.get(key)
             if not isinstance(value, str) or not value.strip():
@@ -1374,14 +1495,19 @@ def completion_summary(
 
         parent = item.get("parent_claim_id")
         if isinstance(parent, str):
+            # Cross-block SCOPE atoms are legitimate: the source often states a
+            # result's scope extension in a later block, and the boundary review
+            # lists them under `cross_block_scope_atom_ids`.  Anything else from
+            # another block is a mis-attachment.
             wrong_parent = sorted(
                 atom_id for atom_id in source_ids
                 if source_atoms[atom_id].get("parent_claim_id") != parent
+                and source_atoms[atom_id].get("formalization_role") != "result_scope"
             )
             if wrong_parent:
                 fail(
-                    f"{result_id}: source atoms do not belong to parent_claim_id={parent!r}: "
-                    + ", ".join(wrong_parent)
+                    f"{result_id}: source atoms from another block are not scope atoms, so they do not "
+                    f"belong to parent_claim_id={parent!r}: " + ", ".join(wrong_parent)
                 )
 
         kind = _result_kind(item)
@@ -1454,6 +1580,7 @@ def completion_summary(
     nonlocal_interpretation = _validate_nonlocal_interpretation(
         items, source_atoms, source_inventory_path, census_declarations, audit_text
     )
+    _validate_scope_atom_classification(source_atoms)
     _validate_boundary_accounting(source_atoms, items)
     classification_complete, classification_note = _validate_total_source_classification(
         data, source_atoms, obligation_source_atoms, require_terminal=require_terminal
