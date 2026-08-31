@@ -25,42 +25,65 @@ TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex    sinTwoTheta_real
 TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex    tanTwoTheta_real
 ```
 
-## The unqualified names are reserved, and deliberately unbound
+## `sinTheta` is bound; the other three short names are reserved
 
-`SectionTwo.sinTheta`, `.tanTheta`, `.sinTwoTheta` and `.tanTwoTheta` name
-nothing.  They are reserved for a statement that is generic over `RCLike 𝕜` **and
-at the printed source scope**, and no such declaration exists yet for any of the
-four.  Binding a short name to the complex statement is what previously made
-`SectionTwo.sinTheta` read as the canonical theorem when it was the complex one,
-so the names stay empty.
+`SectionTwo.sinTheta` names the scalar-generic endpoint
+`DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`: the printed
+statement, over an arbitrary `RCLike` field, at the printed scope.
 
-Two things are easy to conflate here, and the gap is measured against the
-*paper*, not against the strongest form the library happens to hold.  The
-distributable source specification fixes the scope: the four results are stated
-"for infinite as well as finite dimensional separable Hilbert spaces", the
-spectral intervals in the gap hypotheses "may be half-infinite", and the
-norm is an arbitrary unitary-invariant norm.  Against that:
+`SectionTwo.tanTheta`, `.sinTwoTheta` and `.tanTwoTheta` name nothing.  They are
+reserved for the same thing -- generic over `RCLike 𝕜` **and** at the printed
+source scope -- and no such declaration exists for those three.  Binding a short
+name to the complex statement is what previously made `SectionTwo.sinTheta` read
+as the canonical theorem when it was the complex one, so the three stay empty.
 
-| result | closest scalar-generic declaration | what the *paper* still asks for |
-| --- | --- | --- |
-| `sin Θ` | `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` | its gap is `Set.Icc β α`, a bounded interval; the source permits half-infinite ones, which is the `leftAboveRightBelow` / `leftBelowRightAbove` half of `FormBoundedSylvesterGap` |
-| `sin Θ` | `sinTheta_unbounded_formGap_idealFamily_rclike` | carries all three gap branches, but over a Fan-dominant `KyFanDominantIdealFamily` rather than the source's `PaperUnitaryInvariantNorm` |
-| `tan Θ` | `tanTheta_directed_finiteDimensional_paperUINorm_rclike` | arbitrary dimension, and the ambient conclusion beside the directed one |
-| `sin 2Θ` | `sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` | arbitrary dimension, and an unbounded ambient operator |
-| `tan 2Θ` | `tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike` | an unbounded ambient operator, and the ambient angle |
+The gap is measured against the *paper*, not against the strongest form the
+library happens to hold.  The distributable source specification fixes the scope:
+the four results are stated "for infinite as well as finite dimensional separable
+Hilbert spaces", the spectral intervals in the gap hypotheses "may be
+half-infinite", and the norm is an arbitrary unitary-invariant norm.  Against
+that, every axis on which the closest scalar-generic declaration differs from the
+fixed-field endpoint it should match:
 
-For `sin Θ` the two rows are complementary and the endpoint is one bridging step
-away: widen the first's gap, or move the second to the paper's norm class.  For
-the other three the distance is real mathematics, not a bridge.
+| axis | `tan Θ` | `sin 2Θ` | `tan 2Θ` |
+| --- | --- | --- | --- |
+| closest `RCLike` declaration | `tanTheta_directed_finiteDimensional_paperUINorm_rclike` | `sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` | `tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike` |
+| ambient dimension | finite `E`, `F` | finite `E`, `F` | arbitrary ✓ |
+| ambient operator | bounded `E →ₗ[𝕜] E` | bounded | bounded `E →L[𝕜] E` |
+| trial subspace | -- | -- | `[FiniteDimensional 𝕜 U]` |
+| Ritz scope | bounded compression | -- | -- |
+| angle in the conclusion | directed tangent supplied as a parameter with a `singularValues` characterization | `sinTwoThetaEmbedding U X`, the trial-coordinate `2S|C|` | an arbitrary representative whose approximation numbers rearrange the branch-free scalars |
+| endpoint's angle | ambient `paperTanAngleOperator` | directed double-angle sine of the spectral pair | ambient `paperAbsTanTwoAngleOperator` |
+| norm | `PaperUnitaryInvariantNorm` ✓ | ✓ | ✓ |
+| gap | interval/exterior | interval/exterior | ordered form `a < b` |
 
-**The capability classes are not part of this gap.**  The scalar-generic sine
-declarations carry `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` and
-`HasUnboundedSylvesterKyFan 𝕜`, and both are *proved instances* for `ℝ` and `ℂ`
-(`hasMinMaxLowerBoundEverywhere_complex`/`_real`,
-`hasUnboundedSylvesterKyFan_complex`/`_real`).  They are hypotheses only because
-`RCLike` is an open class, so a third field would owe the estimates; over the two
-fields Davis and Kahan write about they are theorems.  Do not count them as
-missing mathematics.
+The `sin Θ` bridge that produced the binding above was a repackaging: the
+component theorem already proved the paper-norm statement by applying the
+full-gap ideal-family theorem one Ky Fan index at a time, so taking `hgap`
+directly cost nothing.
+
+**For the other three the first obstacle is definitional, not analytic.**  The
+objects their conclusions name exist only as fixed-field pairs: `...C` is defined
+natively, and `...R` is defined by transport --
+`paperTanAngleOperatorR U V = realPartOperator (paperTanAngleOperatorC
+(complexifySubmodule U) (complexifySubmodule V))`, and likewise for `sin 2Θ`,
+`tan 2Θ` and `|tan 2Θ|`.  There is no `paperTanAngleOperator` over `𝕜`, so a
+scalar-generic statement cannot presently be *written*, let alone proved.
+
+That obstacle does not look like new mathematics.  The complex definitions are
+`cfc Real.arcsin (sinAngleOperatorC U V)` and `cfc Real.tan (paperAngleOperatorC
+U V)`, and Mathlib's continuous functional calculus applies to a self-adjoint
+element of any `RCLike` operator algebra; `Geometry/Angle/Proposition35*.lean`
+already carry `[RCLike 𝕜]` in the same directory.  What it does carry is a real
+obligation: a generic definition owes a theorem that its `ℝ` instance agrees with
+the transport-defined `...R`, or every existing real theorem stops applying to it.
+
+**Whether the analysis then generalizes is a separate question, and this table
+does not answer it.**  What is established is that the current `RCLike` wrappers
+are weaker -- not that the fixed-field proofs resist generalization.
+`tanTwoTheta_branchFree_bounded_paperUINorm_complex` is evidence on the other
+side: it is the arbitrary-trial-subspace form over `ℂ`, so the finite-subspace
+restriction is already known to be removable at one field.
 
 Every one of the eight fixed-field aliases is at the accepted full source scope,
 and its *own* type says so: an unbounded self-adjoint `LinearPMap` ambient operator, a Hilbert space
@@ -138,6 +161,18 @@ namespace DavisKahan1970
 namespace SectionTwo
 
 /-! ## `sin Θ` -/
+
+/-- **Davis--Kahan 1970, the `sin Θ` theorem, over an arbitrary `RCLike` field.**
+
+The scalar-generic endpoint at the printed source scope: unbounded self-adjoint
+ambient `LinearPMap`, arbitrary Hilbert dimension, the whole
+`FormBoundedSylvesterGap`, an arbitrary `PaperUnitaryInvariantNorm`, and both
+printed conclusions.  `sinTheta_complex` and `sinTheta_real` below are the same
+statement at the two fields Davis and Kahan write about, and they are the ones to
+cite when a fixed field is in hand: this one additionally carries the two
+`RCLike` capability classes, which are theorems for `ℝ` and `ℂ` but appear in the
+signature because `RCLike` is an open class. -/
+alias sinTheta := _root_.DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike
 
 /-- **Davis--Kahan 1970, the `sin Θ` theorem, over `ℂ`.**
 
