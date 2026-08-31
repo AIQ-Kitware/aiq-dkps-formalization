@@ -508,6 +508,28 @@ theorem sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike
 
 end FixedFieldReal
 
+
+/-! ### The conformance is tied to the fixed-field declarations by name
+
+`..._ofRCLike` restates a type; on its own that is a *copy*, and a copy cannot
+notice if the declaration it claims to mirror changes.  The two equations below
+close that hole.  An equation between two constants elaborates only if both sides
+have the same type, so `@sinTheta_unbounded_formGap_paperUINorm_complex =
+@sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike` is exactly the assertion
+that the restatement is the endpoint's type; `rfl` then discharges it by proof
+irrelevance.  If either endpoint's statement changes, these stop elaborating.
+
+What they do *not* say: anything about the two proofs.  Proof irrelevance makes
+any two proofs of one `Prop` equal, so this is a type-level check by design. -/
+
+theorem sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike_conforms :
+    @sinTheta_unbounded_formGap_paperUINorm_complex
+      = @sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike := rfl
+
+theorem sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike_conforms :
+    @sinTheta_unbounded_formGap_paperUINorm_real
+      = @sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike := rfl
+
 end
 
 end DavisKahan1970

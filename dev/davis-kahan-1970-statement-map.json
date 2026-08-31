@@ -234,7 +234,7 @@
       "source_kind": "unnumbered_theorem",
       "source_anchor": "Section 2, sin 2 theta theorem",
       "completion_obligation": true,
-      "expected_status": "compiled_exact",
+      "expected_status": "compiled_specialization",
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-sin-two-theta",
       "review_declarations": [
@@ -264,7 +264,7 @@
         }
       ],
       "source_specification_sha256": "7da711fdbd912b64b5aa6f2efc5c4255bcbe796831a18b99c92712024b81c70b",
-      "expected_completion_certification": "accepted",
+      "expected_completion_certification": "reopened_math",
       "known_completion_holes": [],
       "source_atom_ids": [
         "S2-sin-two-theta.gap-hypothesis",
