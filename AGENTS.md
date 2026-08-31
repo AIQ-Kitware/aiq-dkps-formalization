@@ -539,7 +539,7 @@ regression and is not one. `--fast` skips exactly those.
 | staging registries, module-scope coverage, roadmap delivery | `aiq-lean source staging\|module-coverage\|roadmap` |
 | exact declaration-signature preflight | `aiq-lean signatures check` |
 | the literature inventory | `aiq-lean literature …` |
-| the recursive foundation map | `aiq-lean foundations …` |
+| the file/group review checklists under `dev/audit/` | `aiq-lean source checklist` |
 | elaborated declaration/dependency queries and graph viewers | `leanq …` |
 | Lake diagnostics, mechanical warning fixes | `lake-build-report`, `lean-warning-fix` |
 
@@ -563,9 +563,23 @@ regression and is not one. `--fast` skips exactly those.
   does not see the elaborated environment: duplicate, dead, similar, and
   roadmap-delivery results are review candidates. Use `leanq` or a compiler probe
   before acting on one.
+- **A missing `scripts/` path is the expected end state, not a dead tool.** Every
+  generic mechanism moved here, so a document, docstring or README naming
+  `scripts/<something>.py` that no longer exists is almost always a stale
+  sentence rather than orphaned output. **Grep `submodules/aiq-lean-formalization-tools/src/`
+  and run `aiq-lean --help` before concluding anything is unmaintained**, and
+  never delete a file on that reasoning alone. On 2026-08-31 the honesty campaign
+  deleted `dev/audit/FILE-CHECKLIST.md` because its header names
+  `scripts/audit_checklist.py`; the generator had become `aiq-lean source
+  checklist`, and because regeneration preserves the marks it finds in the
+  existing file, the deletion destroyed 795 review marks. They came back from
+  Git, but nothing in the repository would have noticed if they had not.
 - Changing the package is ordinary work when this repository needs it. Nine of
   its behaviours were wrong or missing until this repository exercised them; that
-  is what a first consumer is for.
+  is what a first consumer is for. Two known gaps are open now: `aiq-lean source
+  checklist` does not carry `[x]` marks across a `git mv` even when Git records
+  the rename, and `aiq-lean literature render` writes a different format from
+  `scripts/render_distilled_literature_index.py`, which is the one the gate checks.
 
 ## Lean source conventions
 

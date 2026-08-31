@@ -19,11 +19,27 @@ hand-maintain the lists**, and do not delete them: regeneration preserves the
 Rerun after files move or land; new files appear unchecked and vanished files
 drop out.
 
-Rename detection is not reliable enough to trust blindly.  The 2026-08-31
-honesty campaign renamed twelve modules with `git mv`, committed the renames,
-and regeneration still returned six reviewed files to `[ ]`.  After a rename
-sweep, diff the mark count against the previous revision and restore what the
-regeneration dropped.
+## Renames lose marks
+
+**Assume a rename drops the mark.**  The header claims marks survive
+"Git-detected renames"; measured on 2026-08-31 they do not.  Twelve modules were
+renamed with `git mv` and committed, `git diff -M` records all twelve, and
+regeneration returned every one of them to `[ ]` — six of which had been
+reviewed.  This is an open gap in `aiq-lean source checklist`, recorded in
+`AGENTS.md`; until it is fixed the reconciliation is manual.
+
+After any rename sweep:
+
+```bash
+git diff --numstat -M <before> HEAD | grep '=>'      # the renames
+git show <before>:dev/audit/FILE-CHECKLIST.md        # the marks that existed
+```
+
+and re-tick the new paths whose old paths were `[x]`.  Then check the arithmetic
+closes: `checked-now + checked-files-deleted + checked-files-no-longer-listed`
+should equal the old checked count exactly.  For the 2026-08-31 sweep that was
+712 + 80 + 3 = 795, with no file that still exists at an unchanged path losing
+its mark.
 
 ## What used to be here
 
