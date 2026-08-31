@@ -13,7 +13,9 @@
     "norm_scope",
     "gap_scope",
     "conclusion_representation",
-    "canonical_status"
+    "canonical_status",
+    "section_two_endpoint",
+    "canonical_status_reason"
   ],
   "vocabulary": {
     "trig_family": [
@@ -80,6 +82,11 @@
       "alternative",
       "canonical",
       "derived-facade"
+    ],
+    "section_two_endpoint": [
+      "complex",
+      "real",
+      "none"
     ]
   },
   "token_commitments": {
@@ -309,7 +316,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": "Not the full-source endpoint: its separation hypothesis is only the interval/exterior branch of `FormBoundedSylvesterGap`, so it states a strictly smaller theorem than the one proved."
     },
     {
       "old_name": "sinTheta_unbounded_exact_generic",
@@ -324,11 +333,13 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": "Not the full-source endpoint: it is stated for a Fan-dominant `KyFanDominantIdealFamily` rather than the paper's `PaperUnitaryInvariantNorm`."
     },
     {
       "old_name": "sinTheta_headline",
-      "new_name": "sinTheta_unbounded_intervalExterior_legacyPresentation_rclike",
+      "new_name": "sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
       "trig_family": "sinTheta",
       "paper_role": "presentation-variant",
       "scalar_scope": "rclike",
@@ -336,10 +347,12 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "uiNorm",
+      "norm_scope": "paperUINorm",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "characterizedWitness",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": "Not the endpoint: its separation hypothesis is only the interval/exterior branch, and it drops the ideal-membership half of the conclusion. It names `sinTheta_0` as an explicit parameter tied by a defining equation, which is what makes the printed inequality legible in the signature."
     },
     {
       "old_name": "sinTheta_complex_of_intervalExterior",
@@ -354,7 +367,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": "The `_of_intervalExterior` presentation of the printed separation; `sinTheta_unbounded_formGap_paperUINorm_complex` carries the full gap and is the endpoint."
     },
     {
       "old_name": "sinTheta_real_of_intervalExterior",
@@ -369,7 +384,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": "The `_of_intervalExterior` presentation of the printed separation; `sinTheta_unbounded_formGap_paperUINorm_real` carries the full gap and is the endpoint."
     },
     {
       "old_name": "generalizedSinTheta",
@@ -384,7 +401,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_real",
@@ -399,7 +418,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_complementaryBlock",
@@ -414,7 +435,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_real_complementaryBlock",
@@ -429,7 +452,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_finiteInterval",
@@ -444,7 +469,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_finiteInterval_complementaryBlock",
@@ -459,7 +486,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_boundedSpecialization",
@@ -474,7 +503,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_boundedSpecialization_real",
@@ -489,7 +520,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTheta_spectralSubspace",
@@ -504,7 +537,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTheta_real_spectralSubspace",
@@ -519,7 +554,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_spectralSubspace",
@@ -534,7 +571,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_real_spectralSubspace",
@@ -549,7 +588,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTheta_reducingSubspace_complex",
@@ -564,7 +605,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTheta_reducingSubspace_real",
@@ -579,7 +622,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_reducingSubspace_complex",
@@ -594,7 +639,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_reducingSubspace_real",
@@ -609,7 +656,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTheta_bounded_spectralSubspace",
@@ -624,7 +673,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_bounded_spectralSubspace",
@@ -639,7 +690,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTheta_bounded_real_spectralSubspace",
@@ -654,7 +707,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": "Facade name in `TauCeti.DavisKahan1970` over `ExactSinTheta.sinTheta_bounded_spectralSubspace_real`; symmetric with its complex sibling, which is also a facade."
     },
     {
       "old_name": "generalizedSinTheta_bounded_real_spectralSubspace",
@@ -669,7 +724,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": "Facade name over `ExactSinTheta.generalizedSinTheta_bounded_spectralSubspace_real`, symmetric with its complex sibling."
     },
     {
       "old_name": "sinTheta_idealFamily",
@@ -684,7 +741,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTheta_real_idealFamily",
@@ -699,7 +758,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_idealFamily",
@@ -714,7 +775,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_real_idealFamily",
@@ -729,7 +792,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTheta_exactPaper",
@@ -744,7 +809,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTheta_real_exactPaper",
@@ -759,7 +826,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_exactPaper",
@@ -774,7 +843,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "generalizedSinTheta_real_exactPaper",
@@ -789,7 +860,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTheta_opNorm",
@@ -804,7 +877,9 @@
       "norm_scope": "opNorm",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTheta_opNorm_genuineSpectrum",
@@ -819,7 +894,9 @@
       "norm_scope": "opNorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTheta_uiNorm",
@@ -834,7 +911,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTheta_uiNorm_genuineSpectrum",
@@ -849,7 +928,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_headline_generic_directed",
@@ -864,7 +945,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "characterizedWitness",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_directed_paperUINorm",
@@ -879,7 +962,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "existentialWitness",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_directed_paperUINorm_spectral",
@@ -894,7 +979,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "existentialWitness",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_directed_paperUINorm_real",
@@ -909,7 +996,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "existentialWitness",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_directed_paperUINorm_real_infinite",
@@ -924,7 +1013,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "existentialWitness",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_directed_paperUINorm_real_spectral",
@@ -939,7 +1030,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "existentialWitness",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_directed_perturbation_paperUINorm_real",
@@ -954,7 +1047,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "existentialWitness",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_wholeSpace_all_kyFan",
@@ -969,7 +1064,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_wholeSpace_paperUINorm",
@@ -984,7 +1081,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_wholeSpace_all_kyFan_of_crossedDefectsEquivalent",
@@ -999,7 +1098,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
@@ -1014,7 +1115,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_wholeSpace_paperUINorm_real",
@@ -1029,7 +1132,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent",
@@ -1044,7 +1149,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_ambient_all_kyFan_of_lowerCorner",
@@ -1059,7 +1166,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_ambient_paperUINorm_of_lowerCorner",
@@ -1074,7 +1183,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unbounded_ambient_paperUINorm_of_data_of_transversality",
@@ -1089,7 +1200,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unbounded_ambient_paperUINorm_of_data",
@@ -1104,7 +1217,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unbounded_ambient_paperUINorm_exact",
@@ -1119,7 +1234,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unboundedCompression_ambient_paperUINorm_of_data_of_transversality",
@@ -1134,7 +1251,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unboundedCompression_ambient_paperUINorm_of_data",
@@ -1149,7 +1268,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unboundedCompression_ambient_paperUINorm_exact",
@@ -1164,7 +1285,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unbounded_ambient_ritz_paperUINorm",
@@ -1179,7 +1302,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "complex",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unbounded_ambient_paperUINorm_real_of_data",
@@ -1194,7 +1319,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unbounded_ambient_paperUINorm_real_exact",
@@ -1209,7 +1336,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unboundedCompression_ambient_paperUINorm_real_of_data",
@@ -1224,7 +1353,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unboundedCompression_ambient_paperUINorm_real_exact",
@@ -1239,7 +1370,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTheta_unbounded_ambient_ritz_paperUINorm_real",
@@ -1254,7 +1387,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "real",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_headline_generic_directed",
@@ -1269,7 +1404,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_directedResidual_all_kyFan",
@@ -1284,7 +1421,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_directedResidual_paperUINorm",
@@ -1299,7 +1438,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_wholeSpace_all_kyFan",
@@ -1314,7 +1455,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_wholeSpace_paperUINorm",
@@ -1329,7 +1472,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_wholeSpace_paperUINorm_real",
@@ -1344,7 +1489,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_unbounded_directedResidual_all_kyFan",
@@ -1359,7 +1506,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_unbounded_directedResidual_paperUINorm",
@@ -1374,7 +1523,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_unbounded_directedResidual_all_kyFan_real",
@@ -1389,7 +1540,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_unbounded_directedResidual_paperUINorm_real",
@@ -1404,7 +1557,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExterior",
@@ -1419,7 +1574,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_reflectionResidual_paperUINorm_real",
@@ -1434,7 +1591,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_addBounded_paperUINorm_angleOperator",
@@ -1449,7 +1608,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "complex",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_addBounded_paperUINorm_real_angleOperator",
@@ -1464,7 +1625,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "real",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_addBounded_paperUINorm",
@@ -1479,7 +1642,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "sinTwoTheta_addBounded_paperUINorm_real",
@@ -1494,7 +1659,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_opNorm",
@@ -1509,7 +1676,9 @@
       "norm_scope": "opNorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_opNorm_real",
@@ -1524,7 +1693,9 @@
       "norm_scope": "opNorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_intervalExterior_opNorm",
@@ -1539,7 +1710,9 @@
       "norm_scope": "opNorm",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_uiNorm",
@@ -1554,7 +1727,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_intervalExterior_uiNorm",
@@ -1569,7 +1744,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_reflectionResidual_opNorm",
@@ -1584,7 +1761,9 @@
       "norm_scope": "opNorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_reflectionResidual_opNorm_real",
@@ -1599,7 +1778,9 @@
       "norm_scope": "opNorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_reflectionResidual_gauge",
@@ -1614,7 +1795,9 @@
       "norm_scope": "symmetricIdealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_uiNorm_representative",
@@ -1629,7 +1812,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "arbitraryRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_uiNorm_representative_real",
@@ -1644,7 +1829,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "arbitraryRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_uiNorm_representative_unequalDimension",
@@ -1659,7 +1846,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "arbitraryRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_uiNorm_representative_real_unequalDimension",
@@ -1674,7 +1863,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "arbitraryRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_residual_uiNorm_representative",
@@ -1689,7 +1880,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "arbitraryRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_residual_uiNorm_representative_real",
@@ -1704,7 +1897,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "arbitraryRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_residual_uiNorm_representative_unequalDimension",
@@ -1719,7 +1914,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "arbitraryRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_sinTwoTheta_residual_uiNorm_representative_real_unequalDimension",
@@ -1734,7 +1931,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "formGap",
       "conclusion_representation": "arbitraryRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_branchFree_paperUINorm",
@@ -1749,7 +1948,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "characterizedWitness",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_branchFree_paperUINorm_real",
@@ -1764,7 +1965,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "characterizedWitness",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace",
@@ -1779,7 +1982,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "characterizedWitness",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_branchFree_uiNorm",
@@ -1794,7 +1999,9 @@
       "norm_scope": "uiNorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_branchFree_uiIdeal_infinite",
@@ -1809,7 +2016,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_branchFree_uiIdeal_arbitrarySubspace",
@@ -1824,7 +2033,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_branchFree_kyFan",
@@ -1839,7 +2050,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_branchFree_kyFan_arbitrarySubspace",
@@ -1854,7 +2067,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_uiNorm",
@@ -1869,7 +2084,9 @@
       "norm_scope": "uiNorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_uiIdeal_infinite",
@@ -1884,7 +2101,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_kyFan",
@@ -1899,7 +2118,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_kyFan_infinite",
@@ -1914,7 +2135,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_kyFan_doubleAngleTangent_infinite",
@@ -1929,7 +2152,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_sharp_opNorm",
@@ -1944,7 +2169,9 @@
       "norm_scope": "opNorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_directedCorner_residual_all_kyFan",
@@ -1959,7 +2186,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_directedCorner_residual_all_kyFan_branchFree",
@@ -1974,7 +2203,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_directedCorner_residual_all_kyFan_branchFree_upper",
@@ -1989,7 +2220,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_directedCorner_residual_paperUINorm_branchFree",
@@ -2004,7 +2237,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_directedCorner_residual_paperUINorm_exact",
@@ -2019,7 +2254,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_directedCorner_residual_paperUINorm_real_exact",
@@ -2034,7 +2271,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_wholeSpace_all_kyFan",
@@ -2049,7 +2288,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_wholeSpace_all_kyFan_branchFree",
@@ -2064,7 +2305,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_wholeSpace_all_kyFan_of_corner",
@@ -2079,7 +2322,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_wholeSpace_branchFree_all_kyFan_of_block",
@@ -2094,7 +2339,9 @@
       "norm_scope": "kyFan",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_wholeSpace_branchFree_paperUINorm_of_block",
@@ -2109,7 +2356,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_wholeSpace_paperUINorm",
@@ -2124,7 +2373,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_wholeSpace_paperUINorm_branchFree",
@@ -2139,7 +2390,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_wholeSpace_paperUINorm_of_corner",
@@ -2154,7 +2407,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "alternative"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_wholeSpace_paperUINorm_exact",
@@ -2169,7 +2424,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_wholeSpace_paperUINorm_real",
@@ -2184,7 +2441,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_wholeSpace_paperUINorm_real_exact",
@@ -2199,7 +2458,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_unbounded_directedResidual_paperUINorm_exact",
@@ -2214,7 +2475,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact",
@@ -2229,7 +2492,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_unbounded_ambient_paperUINorm_exact",
@@ -2244,7 +2509,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": "Takes the reflection witness `Z` explicitly; the derived-reflection form below packages it, and `tanTwoTheta_ambient_unbounded_paperUINorm_complex` reaches the paper's angle."
     },
     {
       "old_name": "tanTwoTheta_unbounded_ambient_subspace_paperUINorm",
@@ -2259,7 +2526,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm",
@@ -2274,7 +2543,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "complex",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_unbounded_ambient_paperUINorm_real_exact",
@@ -2289,7 +2560,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": "Takes the reflection witness `Z` explicitly; see the complex sibling."
     },
     {
       "old_name": "tanTwoTheta_unbounded_ambient_subspace_paperUINorm_real",
@@ -2304,7 +2577,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm_real",
@@ -2319,7 +2594,9 @@
       "norm_scope": "paperUINorm",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "canonical"
+      "canonical_status": "canonical",
+      "section_two_endpoint": "real",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_tanTwoTheta_opNorm",
@@ -2334,7 +2611,9 @@
       "norm_scope": "opNorm",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_tanTwoTheta_intervalExterior_opNorm",
@@ -2349,7 +2628,9 @@
       "norm_scope": "opNorm",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "canonicalAngle",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_tanTwoTheta_gauge",
@@ -2364,7 +2645,9 @@
       "norm_scope": "symmetricIdealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_tanTwoTheta_uiNorm",
@@ -2379,7 +2662,9 @@
       "norm_scope": "idealFamily",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     },
     {
       "old_name": "unbounded_tanTwoTheta_intervalExterior_uiNorm",
@@ -2394,7 +2679,83 @@
       "norm_scope": "idealFamily",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "blockRepresentative",
-      "canonical_status": "derived-facade"
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
+    },
+    {
+      "old_name": "sinTheta_complex",
+      "new_name": "sinTheta_unbounded_formGap_paperUINorm_complex",
+      "trig_family": "sinTheta",
+      "paper_role": "section2-canonical",
+      "scalar_scope": "complex",
+      "dimension_scope": "arbitrary",
+      "operator_scope": "unbounded",
+      "ritz_scope": "not-applicable",
+      "angle_scope": "directed",
+      "norm_scope": "paperUINorm",
+      "gap_scope": "formGap",
+      "conclusion_representation": "canonicalAngle",
+      "canonical_status": "canonical",
+      "section_two_endpoint": "complex",
+      "canonical_status_reason": ""
+    },
+    {
+      "old_name": "sinTheta_real",
+      "new_name": "sinTheta_unbounded_formGap_paperUINorm_real",
+      "trig_family": "sinTheta",
+      "paper_role": "section2-canonical",
+      "scalar_scope": "real",
+      "dimension_scope": "arbitrary",
+      "operator_scope": "unbounded",
+      "ritz_scope": "not-applicable",
+      "angle_scope": "directed",
+      "norm_scope": "paperUINorm",
+      "gap_scope": "formGap",
+      "conclusion_representation": "canonicalAngle",
+      "canonical_status": "canonical",
+      "section_two_endpoint": "real",
+      "canonical_status_reason": ""
+    },
+    {
+      "old_name": "sinTheta",
+      "new_name": "sinTheta_bundled_complex",
+      "trig_family": "sinTheta",
+      "paper_role": "section2-canonical",
+      "scalar_scope": "complex",
+      "dimension_scope": "arbitrary",
+      "operator_scope": "unbounded",
+      "ritz_scope": "not-applicable",
+      "angle_scope": "directed",
+      "norm_scope": "idealFamily",
+      "gap_scope": "formGap",
+      "conclusion_representation": "canonicalAngle",
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
+    },
+    {
+      "old_name": "sinTheta_real",
+      "new_name": "sinTheta_bundled_real",
+      "trig_family": "sinTheta",
+      "paper_role": "section2-canonical",
+      "scalar_scope": "real",
+      "dimension_scope": "arbitrary",
+      "operator_scope": "unbounded",
+      "ritz_scope": "not-applicable",
+      "angle_scope": "directed",
+      "norm_scope": "idealFamily",
+      "gap_scope": "formGap",
+      "conclusion_representation": "canonicalAngle",
+      "canonical_status": "derived-facade",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": ""
     }
+  ],
+  "canonical_status_semantics": "`canonical` means: the declaration to cite for THIS EXACT scope combination. It does NOT mean 'one of the paper's four Section 2 theorems'. To find those, filter on `section_two_endpoint != none`: those eight rows, and only those, are the declarations `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` aliases. No scalar-generic `RCLike` endpoint exists for any of the four, so no row carries one.",
+  "invariants": [
+    "at most one row may be `canonical` within a single combination of the nine scope columns",
+    "exactly eight rows have `section_two_endpoint != none`, matching the eight aliases in SectionTwo.lean",
+    "a row that is `canonical` must not be contradicted by SectionTwo.lean's own account of what the endpoint is"
   ]
 }

@@ -441,12 +441,11 @@ already cost a mistake:
 - **It reports anonymous `instance`s** as `<anonymous>`. A scan keyed on declaration
   names cannot see them; six of one lane's 91 were anonymous.
 - **Its exclusions are rules with reasons, not a hand-list**, so they survive tree
-  movement. `DavisKahan/Experimental/**` is outside `defaultTargets`. The other two
-  exclusions are gone, both because their reason was discharged rather than revised:
-  `DavisKahan/Interop/Spectra/**` and `DavisKahan/SpectralTheory/Compatibility.lean`
+  movement. All three exclusions are gone, because each one's reason was discharged
+  rather than revised: `DavisKahan/Experimental/**` (the staging tree, deleted
+  2026-08-31), `DavisKahan/Interop/Spectra/**`, and `DavisKahan/SpectralTheory/Compatibility.lean`
   (the `abbrev` migration shim, excluded so documenting its 45 declarations would not
-  entrench a file scheduled for deletion) have both been deleted, and the rules with
-  them.
+  entrench a file scheduled for deletion) are all gone, and the rules with them.
 
 **The baseline** (`dev/docstring-coverage-baseline.json`) exists only to make the
 gate adoptable without a flag day. Treat any tolerated finding as debt: shrink

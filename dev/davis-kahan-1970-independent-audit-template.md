@@ -100,7 +100,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:1
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `DavisKahan1970.sinTheta_unbounded_intervalExterior_legacyPresentation_rclike`
+#### `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:163`
 

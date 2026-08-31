@@ -108,7 +108,7 @@ the engine, and the scope companions. -/
 #check @DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real
 #check @DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex
 #check @DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real
-#check @DavisKahan1970.sinTheta_unbounded_intervalExterior_legacyPresentation_rclike
+#check @DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
 #check @TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike
 #check @TauCeti.DavisKahan1970.sinTheta_bundled_complex
 #check @TauCeti.DavisKahan1970.sinTheta_paperData_real

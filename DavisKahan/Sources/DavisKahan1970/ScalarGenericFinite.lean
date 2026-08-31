@@ -21,7 +21,7 @@ promote existing scalar-generic Ky Fan/UI-norm engines to the literal
 spectral hypotheses instead of hiding them in local gap structures whenever
 that can be done without weakening the theorem.
 
-The single-angle sine theorem lives in `SineTheta/HeadlineGeneric.lean` because
+The single-angle sine theorem lives in `SineTheta/ScalarGeneric.lean` because
 its unbounded scalar-generic engine is substantial enough to merit its own
 module.
 -/

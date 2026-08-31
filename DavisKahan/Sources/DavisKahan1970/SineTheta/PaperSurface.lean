@@ -19,7 +19,7 @@ Hilbert dimension, the whole `FormBoundedSylvesterGap` rather than one of its
 branches, a `PaperUnitaryInvariantNorm`, and both conclusions -- ideal membership
 and the inequality.  They carry no capability class.  Cite one of those two.
 
-`sinTheta_unbounded_intervalExterior_legacyPresentation_rclike` below is kept for **presentation and compatibility**.  It is
+`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` below is kept for **presentation and compatibility**.  It is
 scalar-generic, which reads well, but it pays for that twice: it carries the
 capability classes `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and
 `HasUnboundedSylvesterKyFan` in its signature, and it inlines the finite
@@ -160,7 +160,7 @@ its concrete realization `(I - F₀ F₀*) E₀` in the theorem signature.  The
 claim after the colon is therefore the printed factor-one inequality itself.
 The stronger supporting theorem `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` additionally
 certifies membership of this operator in the source norm ideal. -/
-theorem sinTheta_unbounded_intervalExterior_legacyPresentation_rclike
+theorem sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : UnitaryInvariantNorm)
@@ -202,7 +202,7 @@ theorem sinTheta_unbounded_intervalExterior_legacyPresentation_rclike
 
 /-! ## The canonical fixed-field statements
 
-`sinTheta_unbounded_intervalExterior_legacyPresentation_rclike` above is the presentation declaration, and it pays for being
+`sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` above is the presentation declaration, and it pays for being
 scalar-generic twice over: it carries the two capability classes
 `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and
 `HasUnboundedSylvesterKyFan`, and its separation hypothesis is only the finite

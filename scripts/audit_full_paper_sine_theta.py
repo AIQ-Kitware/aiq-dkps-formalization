@@ -27,7 +27,6 @@ def run(cmd: list[str]) -> str:
 
 def static_check() -> None:
     files = [
-        *ROOT.glob("DavisKahan/Experimental/InfiniteDimensional/**/*Paper*.lean"),
         ROOT / "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean",
     ]
     forbidden = re.compile(r"\b(?:sorry|admit|native_decide)\b")

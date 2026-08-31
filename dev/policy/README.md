@@ -19,15 +19,12 @@ enforced it were the same file, and the parser was rewritten once per checker.
 | `import-layers.yaml` | `aiq-lean imports check` | the library layering firewall and its ratcheting exceptions |
 | `namespaces.yaml` | `aiq-lean namespaces check` | which namespaces `ForTauCeti` may declare into, and the donor namespace nothing may use |
 | `ratchet.yaml` | `aiq-lean ratchet check` | `@[expose]` counts and why they may not simply be raised |
-| `experimental-coverage.yaml` | `aiq-lean source module-coverage` | which modules the `Experimental` root must reach, and named exclusions |
 | `docstring-baseline.json` | `aiq-lean source docstrings --baseline` | undocumented public declarations accepted today |
 | `private-shadow-baseline.json` | `aiq-lean source private-shadows --baseline` | accepted private-name wrappers, one reason each |
 | `aggregate-header.txt` | `aiq-lean source aggregates --header-file` | the copyright header generated aggregates carry |
 
-Two policy files deliberately live elsewhere, next to the data they govern:
-`dev/experimental-root-status.json` (the staging registry is the policy) and the
-`policy` / `reconstruction` blocks inside
-`prose/distilled_literature/source_manifest.json`.
+One policy lives elsewhere, next to the data it governs: the `policy` /
+`reconstruction` blocks inside `prose/distilled_literature/source_manifest.json`.
 
 ## Conventions
 

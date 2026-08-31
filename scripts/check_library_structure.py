@@ -36,8 +36,6 @@ except ImportError:  # pragma: no cover - environment guidance, not logic
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 # Only DavisKahan uses this reachability policy; ForTauCeti is glob-built.
 LIB_DIRS = ("DavisKahan",)
-EXPERIMENTAL = ".Experimental."
-EXPERIMENTAL_ROOT = "DavisKahan.Experimental"
 NONPRODUCTION_SEGMENTS = {"Experimental", "MathAhead", "Audits"}
 CURATED_ROOT = "DavisKahan"
 DEV_ROOT = "DavisKahan.All"
@@ -60,8 +58,13 @@ STAGING_NAMESPACE_REF = re.compile(
 
 
 
-def is_experimental(module: str) -> bool:
-    return module == EXPERIMENTAL_ROOT or EXPERIMENTAL in module
+#: Directory components that named a staging tree.  All of them are deleted; this
+#: exists so their return is a failure rather than a silent regrowth.
+STAGING_SEGMENTS = ("Experimental", "Scratch", "MathAhead", "Frontier")
+
+
+def is_staging(module: str) -> bool:
+    return any(part in STAGING_SEGMENTS for part in module.split("."))
 
 
 def is_nonproduction(module: str) -> bool:
@@ -99,50 +102,6 @@ def reachable(imports: dict[str, list[str]], roots: list[str]) -> set[str]:
     return seen
 
 
-def in_admission_closure(
-    module: str, imports: dict[str, list[str]], admitted: dict[str, bool],
-    memo: dict[str, bool], stack: frozenset[str] = frozenset()
-) -> bool:
-    if module in memo:
-        return memo[module]
-    if module in stack:
-        return False
-    result = admitted.get(module, False) or any(
-        in_admission_closure(dep, imports, admitted, memo, stack | {module})
-        for dep in imports.get(module, [])
-    )
-    memo[module] = result
-    return result
-
-
-def supports_admitted(module: str, consumers: dict[str, set[str]],
-                      admitted: dict[str, bool], memo: dict[str, bool],
-                      stack: frozenset[str] = frozenset()) -> bool:
-    """Does anything transitively importing `module` still rest on an admission?
-
-    This is the *upward* question, and it is the one that decides whether a
-    module belongs in `Experimental/`.  Rule 3 originally asked the downward
-    one — whether the module's own import closure contains an admission — which
-    flags every fully proved Experimental module, including proved scaffolding
-    whose only purpose is to support unfinished work.  Those are correctly
-    placed, so the rule could never be satisfied by moving files: measured
-    2026-07-29, 17 of its 74 findings were modules that should not move.
-    The audit behind this rule is in Git history.
-    """
-    if module in memo:
-        return memo[module]
-    if module in stack:
-        return False
-    result = any(
-        admitted.get(consumer, False)
-        or supports_admitted(consumer, consumers, admitted, memo,
-                             stack | {module})
-        for consumer in consumers.get(module, ())
-    )
-    memo[module] = result
-    return result
-
-
 def report(name: str, violations: list[str], limit: int = 12) -> bool:
     if not violations:
         print(f"  ok    {name}")
@@ -158,7 +117,6 @@ def report(name: str, violations: list[str], limit: int = 12) -> bool:
 def main() -> None:
     files, imports, admitted = load()
     production = [m for m in files if not is_nonproduction(m)]
-    memo: dict[str, bool] = {}
 
     print(f"Library structure check over {len(files)} modules "
           f"({len(production)} production, {len(files) - len(production)} nonproduction)")
@@ -197,24 +155,15 @@ def main() -> None:
         sorted(staging_namespace_refs),
     )
 
-    consumers: dict[str, set[str]] = {}
-    for module, deps in imports.items():
-        for dep in deps:
-            consumers.setdefault(dep, set()).add(module)
-    up_memo: dict[str, bool] = {}
-    rule3 = sorted(
-        m for m in files
-        if is_experimental(m)
-        and not in_admission_closure(m, imports, admitted, memo)
-        and not supports_admitted(m, consumers, admitted, up_memo)
+    # The staging trees are gone: `Frontier/` and `MathAhead/` on 2026-08-27,
+    # `Experimental/` on 2026-08-31.  AGENTS.md says not to recreate them, so the
+    # live invariant is their absence, and this is the tripwire for it.  The rule
+    # that used to stand here measured admission-support closure *within*
+    # `Experimental/`, and once the tree was empty it could only ever print "ok".
+    check3 = report(
+        "3. no staging tree has been recreated (Experimental/Scratch/MathAhead/Frontier)",
+        sorted(m for m in files if is_staging(m)),
     )
-    if rule3:
-        print(f"  note  3. Experimental scratch hygiene: {len(rule3)} module(s) are "
-              "outside the admission-support closure; run "
-              "`aiq-lean source module-coverage dev/policy/experimental-coverage.yaml` for scratch-tree policy")
-    else:
-        print("  ok    3. Experimental scratch hygiene has no residual findings")
-    check3 = True
 
     curated = reachable(imports, [CURATED_ROOT])
     facades = [m for m in files if m.startswith("DavisKahan.Sources.")

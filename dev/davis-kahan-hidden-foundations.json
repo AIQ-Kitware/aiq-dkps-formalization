@@ -1,0 +1,350 @@
+{
+  "schema_version": 1,
+  "title": "Davis--Kahan hidden-foundation map",
+  "description": "Recursive hidden-foundation map for the Davis--Kahan 1970 formalization. Each node names its own production module. **A green report on this ledger does not mean the foundations are complete.** It means the ledger is internally valid and every declaration it names resolves in the built environment. The `interface` nodes are the opposite of completion: each is an explicit contract for a foundational campaign that has not been done, and its fields are not counted as delivered mathematics. Read the node kinds below before reading the counts.",
+  "status_meanings": {
+    "proof_candidate": "A full mathematical proof attempt is present; elaboration repair may remain.",
+    "construction": "A concrete definition or record assembly is present.",
+    "bridge": "Connects existing compiled or proof-carrying layers.",
+    "interface": "An honest explicit contract for a genuinely missing foundational campaign; fields are not counted as completed mathematics."
+  },
+  "escape_scan": {
+    "_comment": "Proof escapes forbidden in the tracked node files. `axiom` is included because an interface node's whole purpose is to be an honest contract for missing mathematics, and postulating it instead would look identical in the map.",
+    "patterns": {
+      "sorry": "\\bsorry\\b",
+      "admit": "\\badmit\\b",
+      "native_decide": "\\bnative_decide\\b",
+      "axiom": "\\baxiom\\b"
+    }
+  },
+  "nodes": [
+    {
+      "id": "orthogonal-sum-equivalence",
+      "title": "Assemble isometries on complementary orthogonal summands",
+      "module": "DavisKahan.Geometry.Polar.OrthogonalSummandCoordinates",
+      "file": "DavisKahan/Geometry/Polar/OrthogonalSummandCoordinates.lean",
+      "declaration": "TauCeti.DavisKahan.orthogonalSumEquiv",
+      "kind": "proof_candidate",
+      "dependencies": [],
+      "frontier_nodes": [],
+      "confidence": "medium",
+      "notes": "Its underlying decomposition is no longer a hidden foundation: `orthogonal-decomposition-equivalence` tracked a private `orthogonalDecompositionEquiv`, which was deleted on 2026-07-29 in favour of Mathlib's `Submodule.orthogonalDecomposition` (`Analysis/InnerProductSpace/ProdL2.lean`). A foundation Mathlib supplies is discharged, not missing, so the node was removed rather than left permanently absent."
+    },
+    {
+      "id": "two-projection-equivalence-data",
+      "title": "Operator-level equivalence data for two projection pairs",
+      "module": "DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification",
+      "file": "DavisKahan/Geometry/Polar/TwoProjectionOperatorClassification.lean",
+      "declaration": "TauCeti.DavisKahan.TwoProjectionOperatorEquivalence",
+      "kind": "construction",
+      "dependencies": [],
+      "frontier_nodes": [
+        "s3-operator-classification"
+      ],
+      "confidence": "high",
+      "notes": ""
+    },
+    {
+      "id": "two-projection-ambient-unitary",
+      "title": "Assemble the ambient unitary from Halmos summands",
+      "module": "DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification",
+      "file": "DavisKahan/Geometry/Polar/TwoProjectionOperatorClassification.lean",
+      "declaration": "TauCeti.DavisKahan.TwoProjectionOperatorEquivalence.ambient",
+      "kind": "proof_candidate",
+      "dependencies": [
+        "two-projection-equivalence-data",
+        "orthogonal-sum-equivalence"
+      ],
+      "frontier_nodes": [
+        "s3-operator-classification"
+      ],
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "id": "two-projection-classification",
+      "title": "Modern operator-level two-projection classification",
+      "module": "DavisKahan.Geometry.Polar.TwoProjectionOperatorClassification",
+      "file": "DavisKahan/Geometry/Polar/TwoProjectionOperatorClassification.lean",
+      "declaration": "TauCeti.DavisKahan.twoProjection_operator_classification",
+      "kind": "proof_candidate",
+      "dependencies": [
+        "two-projection-ambient-unitary"
+      ],
+      "frontier_nodes": [
+        "s3-operator-classification"
+      ],
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "id": "hs-completeness",
+      "title": "Completeness of the paper Hilbert--Schmidt gauge",
+      "module": "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
+      "file": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
+      "declaration": "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_complete_complex",
+      "kind": "proof_candidate",
+      "dependencies": [],
+      "frontier_nodes": [],
+      "confidence": "low",
+      "notes": ""
+    },
+    {
+      "id": "hs-complex-family",
+      "title": "Complex rectangular Hilbert--Schmidt family",
+      "module": "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
+      "file": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
+      "declaration": "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidtComplex",
+      "kind": "construction",
+      "dependencies": [
+        "hs-completeness"
+      ],
+      "frontier_nodes": [],
+      "confidence": "low",
+      "notes": ""
+    },
+    {
+      "id": "schatten-foundation",
+      "title": "Approximation-number Schatten infrastructure",
+      "module": "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
+      "file": "ForTauCeti/Analysis/OperatorIdeal/Family/Schatten.lean",
+      "declaration": "TauCeti.schattenIdealFamily",
+      "kind": "construction",
+      "dependencies": [],
+      "frontier_nodes": [],
+      "confidence": "high",
+      "notes": "Closed.  This node used to be a fifteen-field `interface` contract listing every theorem needed to turn approximation-number l^p gauges into complete rectangular ideals, in `DavisKahan/OperatorIdeal/ApproximationNumbers/SchattenApproximationFoundation.lean`.  Nothing ever instantiated that contract; the campaign it described was carried out in ForTauCeti instead, and the file was deleted on 2026-08-27.  The node now points at what discharges it."
+    },
+    {
+      "id": "schatten-family",
+      "title": "The Schatten triangle inequality",
+      "module": "ForTauCeti.Analysis.OperatorIdeal.Family.Schatten",
+      "file": "ForTauCeti/Analysis/OperatorIdeal/Family/Schatten.lean",
+      "declaration": "ContinuousLinearMap.schattenENorm_add_le",
+      "kind": "proof_candidate",
+      "dependencies": [
+        "schatten-foundation"
+      ],
+      "frontier_nodes": [],
+      "confidence": "high",
+      "notes": "Closed.  Was the bridge from the deleted interface contract to a legacy rectangular record.  The hard field of that contract was the triangle inequality -- the Tomic--Weyl majorization argument -- and this is it; completeness is the separate instance `isComplete_schattenIdealFamily` in the same module."
+    },
+    {
+      "id": "free-beam-mode-ode",
+      "title": "Explicit fourth-order free-beam mode solves the ODE",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.mode_fourth_derivative",
+      "kind": "proof_candidate",
+      "dependencies": [],
+      "frontier_nodes": [],
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "id": "free-beam-boundary-determinant",
+      "title": "Free-end boundary determinant is 2(1-cos beta cosh beta)",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.boundaryDet_eq",
+      "kind": "proof_candidate",
+      "dependencies": [
+        "free-beam-mode-ode"
+      ],
+      "frontier_nodes": [],
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "id": "free-beam-characteristic",
+      "title": "Nontrivial free mode satisfies cos beta cosh beta = 1",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.characteristic_eq_zero_of_freeBoundary",
+      "kind": "proof_candidate",
+      "dependencies": [
+        "free-beam-boundary-determinant"
+      ],
+      "frontier_nodes": [],
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "id": "free-beam-numeric-bound",
+      "title": "Exact arithmetic 4.73^4 > 500",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.four_seventy_three_pow_four_gt_five_hundred",
+      "kind": "proof_candidate",
+      "dependencies": [],
+      "frontier_nodes": [],
+      "confidence": "high",
+      "notes": ""
+    },
+    {
+      "id": "free-beam-root-localization",
+      "title": "Interface for localizing the first positive characteristic root",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.PositiveRootLocalization",
+      "kind": "interface",
+      "dependencies": [],
+      "frontier_nodes": [],
+      "confidence": "high",
+      "notes": ""
+    },
+    {
+      "id": "free-beam-root-bound",
+      "title": "Positive characteristic root gives beta^4 > 500",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamCharacteristic",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamCharacteristic.lean",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.positive_root_fourth_power_gt_five_hundred",
+      "kind": "proof_candidate",
+      "dependencies": [
+        "free-beam-root-localization",
+        "free-beam-numeric-bound"
+      ],
+      "frontier_nodes": [],
+      "confidence": "high",
+      "notes": ""
+    },
+    {
+      "id": "free-beam-sobolev-foundation",
+      "title": "Interval Sobolev trace, Green identity, self-adjointness, and compactness contract",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.SobolevTraceFoundation",
+      "kind": "interface",
+      "dependencies": [],
+      "frontier_nodes": [
+        "s9-free-beam-operator",
+        "s9-free-beam-selfadjoint",
+        "s9-third-eigenvalue-correct"
+      ],
+      "confidence": "high",
+      "notes": "This is the remaining genuine PDE/functional-analysis construction."
+    },
+    {
+      "id": "free-beam-closed-operator",
+      "title": "Closed fourth-derivative operator derived from the analytic contract",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.SobolevTraceFoundation.operator",
+      "kind": "proof_candidate",
+      "dependencies": [
+        "free-beam-sobolev-foundation"
+      ],
+      "frontier_nodes": [
+        "s9-free-beam-operator"
+      ],
+      "confidence": "medium",
+      "notes": ""
+    },
+    {
+      "id": "free-beam-selfadjoint",
+      "title": "Self-adjointness of the free-beam realization",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.SobolevTraceFoundation.operator_isSelfAdjoint",
+      "kind": "proof_candidate",
+      "dependencies": [
+        "free-beam-closed-operator"
+      ],
+      "frontier_nodes": [
+        "s9-free-beam-selfadjoint"
+      ],
+      "confidence": "high",
+      "notes": ""
+    },
+    {
+      "id": "free-beam-third-eigenvalue",
+      "title": "First positive spectral value is greater than 500",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.SobolevTraceFoundation.firstPositiveSpectralValue_gt_five_hundred",
+      "kind": "proof_candidate",
+      "dependencies": [
+        "free-beam-sobolev-foundation",
+        "free-beam-root-bound"
+      ],
+      "frontier_nodes": [
+        "s9-third-eigenvalue-bound"
+      ],
+      "confidence": "high",
+      "notes": ""
+    },
+    {
+      "id": "free-beam-spectrum-gap",
+      "title": "Spectrum is contained in {0} union (500,infinity)",
+      "module": "DavisKahan.Sources.DavisKahan1970.Section9.FreeBeamAnalyticFoundation",
+      "file": "DavisKahan/Sources/DavisKahan1970/Section9/FreeBeamAnalyticFoundation.lean",
+      "declaration": "TauCeti.DavisKahan.FreeBeam.SobolevTraceFoundation.spectrum_subset_zero_union_Ioi_five_hundred",
+      "kind": "proof_candidate",
+      "dependencies": [
+        "free-beam-third-eigenvalue"
+      ],
+      "frontier_nodes": [
+        "s9-third-eigenvalue-bound",
+        "s9-canonical-model"
+      ],
+      "confidence": "high",
+      "notes": ""
+    }
+  ],
+  "campaigns": [
+    {
+      "id": "section3-nonacute",
+      "title": "Two-projection pair classification foundations",
+      "nodes": [
+        "orthogonal-sum-equivalence",
+        "two-projection-equivalence-data",
+        "two-projection-ambient-unitary",
+        "two-projection-classification"
+      ]
+    },
+    {
+      "id": "section8-circle",
+      "title": "Circle geometry feeding the existing contour continuation engine",
+      "nodes": []
+    },
+    {
+      "id": "sylvester-real-ideals",
+      "title": "Hilbert--Schmidt and Schatten ideal families",
+      "nodes": [
+        "hs-completeness",
+        "hs-complex-family",
+        "schatten-foundation",
+        "schatten-family"
+      ]
+    },
+    {
+      "id": "section9-free-beam",
+      "title": "Free-beam ODE, Sobolev realization, and spectral gap",
+      "nodes": [
+        "free-beam-mode-ode",
+        "free-beam-boundary-determinant",
+        "free-beam-characteristic",
+        "free-beam-numeric-bound",
+        "free-beam-root-localization",
+        "free-beam-root-bound",
+        "free-beam-sobolev-foundation",
+        "free-beam-closed-operator",
+        "free-beam-selfadjoint",
+        "free-beam-third-eigenvalue",
+        "free-beam-spectrum-gap"
+      ]
+    }
+  ],
+  "frontier_alignment": {
+    "source_manifest": null,
+    "policy": "Retired 2026-08-27 with `dev/davis-kahan-1970-frontier.json` and `scripts/check_davis_kahan_frontier.py`.  The frontier graph was the campaign-era map of remaining Davis--Kahan proof obligations; with `DavisKahan/Frontier/` gone and the 29-result inventory and source census carrying certification, it no longer represented anything.  The `frontier_nodes` field on each node below is kept as a historical record of which obligation a node was opened against; it no longer resolves against a live manifest and nothing checks it."
+  },
+  "rebased_on_commit": "53297a486170",
+  "rebased_overlay": "pending-mathahead-rebased-53297a4-gpt56",
+  "notes": [
+    "Promoted polar decomposition and nonacute Section 3 declarations are intentionally absent from this hidden-foundation manifest; their canonical owners are DavisKahan/Geometry/Polar modules.",
+    "PROMOTED AND REMOVED 2026-08-27: the nine Ky Fan / real-descent Sylvester nodes (kyfan-seminorm, kyfan-bochner, kyfan-unitary-invariance, complex-separated-sylvester-kyfan, complexify-sylvester, complexify-spectrum, complexify-separation, real-separated-sylvester-kyfan, real-separated-sylvester) are no longer hidden foundations. The reusable Ky Fan machinery is ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/KyFanBochner.lean (ContinuousLinearMap.kyFanGauge_integral_le, continuous_kyFanGauge, kyFanGauge_unitary_comp_comp); the arbitrary-Hilbert complex and real pi/2 finite-Ky-Fan Sylvester theorems and the ideal-gauge corollary are DavisKahan/InfiniteDimensional/Sylvester/GeneralSeparationKyFan.lean (TauCeti.DavisKahanExt.kyFan_sylvester_le_of_generalSeparation{,_real} and idealGauge_sylvester_le_of_generalSeparation_real); the complexification of full-space spectral separation is TauCeti.DavisKahan.Foundation.RealComplexification.spectraSeparated_top_complexify in DavisKahan/SpectralTheory/Complexification/Spectrum.lean. The invertibility and real-spectrum transports were duplicates of the stable isUnit_complexify_iff / realSpectrum_complexify in that same module and were deleted rather than promoted. The two source files are gone and were not replaced by forwarding modules.",
+    "2026-08-27: the four `SpectralMultiplicityFoundation` / `CompactPositiveListFoundation` interface and bridge nodes were removed with their module.  Both interfaces were superseded by actual theorems -- `TauCeti.sameSpectralMultiplicity_iff_operatorUnitaryEquiv` and `TauCeti.exists_linearIsometryEquiv_intertwining_of_approximationNumber_eq` -- and neither structure had a consumer outside its own file.",
+    "2026-08-27: the eleven MathAhead circle-contour nodes were removed with `DavisKahan/MathAhead/` and `DavisKahan/Experimental/MathAhead/`.  That route is superseded by `DavisKahan/SpectralTheory/CircleContour.lean` (circle path, contour, winding law, separating contour, spectral margin) together with the continuation witness `TauCeti.DavisKahanExt.spectralContinuationWitness_of_circle` in `DavisKahan/InfiniteDimensional/SinTheta/Continuation/CircleWitness.lean`, which builds the witness the MathAhead `RealizedCircleContinuationData` bridge was designed to produce."
+  ]
+}

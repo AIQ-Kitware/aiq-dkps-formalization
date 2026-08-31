@@ -30,10 +30,10 @@ SOURCE_ROOTS = (
 )
 DEFAULT_ROOTS = ("DavisKahan",)
 
-EXPLICIT_SUPERSEDED = {
-    "DavisKahan/Experimental/InfiniteDimensional/Core/UnboundedSpectral.lean":
-        "legacy cutoff facade bypassed by the direct Spectra engine",
-}
+#: Modules this inventory should call superseded even when nothing else does.
+#: Empty since 2026-08-31: the one entry named a module under the deleted
+#: `Experimental/` tree.
+EXPLICIT_SUPERSEDED: dict[str, str] = {}
 
 ROADMAP_PATTERNS = (
     ("direct-rotation", ("DirectRotation",)),
@@ -44,7 +44,7 @@ ROADMAP_PATTERNS = (
     ("ideal-instances", ("Ideals/Symmetric.lean", "Ideals/Rectangular.lean", "Ideals/CompactAndSingular.lean")),
     ("sylvester-alternatives", ("Sylvester/Basic.lean", "Sylvester/Resolvent.lean")),
     ("continuation-branch", ("SinTheta/Continuation",)),
-    ("finite-alternative", ("Experimental/FiniteDimensional",)),
+    ("finite-alternative", ("Alternative/FiniteDimensional",)),
 )
 
 
