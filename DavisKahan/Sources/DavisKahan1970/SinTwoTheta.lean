@@ -897,15 +897,20 @@ theorem sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex
 /-! ### The Section 8 unequal-dimension extension, at this result's certified scope
 
 The closing sentence of Section 8 states that the `sin 2Θ` theorem extends to
-`dim X(E₀) < dim X(F₀)`, analogously to Theorems 6.1 and 6.3.  That is an
-explicit extension of the counted Section 2 result, so it is scope of
-`S2-sin-two-theta` and has to be covered at the scope that result is certified
-at: an arbitrary `PaperUnitaryInvariantNorm` and the whole
-`FormBoundedSylvesterGap`.
+`dim X(E₀) < dim X(F₀)`, analogously to Theorems 6.1 and 6.3.  The repository
+states it at the scope the counted Section 2 result is certified at: an
+arbitrary `PaperUnitaryInvariantNorm` and the whole `FormBoundedSylvesterGap`.
 
 `sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex`
 earlier in this file states the same extension, but only at a
 `KyFanDominantIdealFamily` and the bounded-interval spectrum gap.
+
+**This is a `result_adjacent_extension`, not an obligation of the counted
+result.**  Davis and Kahan state the extension "analogously to Theorems 6.1
+and 6.3" without proving it as a result of its own, so under the repository's
+completion criterion it does not enlarge `S2-sin-two-theta`.  The declarations
+below are stronger coverage held as supporting evidence, which is worth having
+and is not something the certificate depends on.
 
 The strict-dimension hypothesis is carried and **not used**, exactly as in that
 earlier declaration: the underlying theorem imposes no comparison of dimensions

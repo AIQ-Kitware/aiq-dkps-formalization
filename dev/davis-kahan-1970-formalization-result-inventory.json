@@ -44,7 +44,7 @@
   "result_inventory_review": {
     "status": "accepted",
     "policy": "dk_established_results_only",
-    "source_fidelity_inventory_sha256": "0271495b1a36276ba91eb53c12a02305a8c63e91701caa39df705c40e9c77a54",
+    "source_fidelity_inventory_sha256": "2b8591ba62212362c2d89e9ebc68b1bc0ffd9bf37ff87628a11d2ec08f46fa8f",
     "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
     "method": "Reviewed the source-fidelity inventory and the exact theorem/proposition/lemma/corollary environments in paper order. Selected exactly the four Section 2 headline theorems plus all named results Davis--Kahan actually establish; for every counted result, partitioned the primary source block into statement atoms versus adjacent setup/proof/example/consequence/remark atoms, and classified every fidelity atom with an explicit inclusion/exclusion reason.  RE-AUDITED 2026-08-12 for the standing post-Proposition-3.2 convention: the source states, immediately after the proof of Proposition 3.2, that (3.5) is assumed as well as (1.5) except where the contrary is stated.  That convention is carried as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption`.  It is deliberately NOT a new counted result and the denominator stays at 29.  RE-AUDITED AGAIN 2026-08-12 for nonlocal source semantics: the distributable specification now also carries the Section 1 norm-existence/vacuity convention, the finite-dimensional automatic case of (3.5) from the Proposition 3.2 remark, the Section 3 angle-operator/J_0 construction, and the Section 6 whole-space assembly step of the tangent proof, with five new source-fidelity atoms.  None of that material is a counted result; it is interpretation and proof-context evidence, reverse-linked through `interpretation_support` rather than through the printed-statement boundary.  The denominator stays at 29. HOSTILE APPENDIX SCOPE RE-AUDIT 2026-08-12: the Appendix explicitly says the tangent theorem is treated with A_0 <= alpha and Lambda_1 >= alpha + delta while both may now be unbounded. `DK-6-appendix.unbounded-tangent-extension` is therefore result scope for `S2-tan-theta`, not expository commentary. The denominator remains 29; the scope obligation is discharged by the new complex and real unboundedCompression ambient endpoints.  RE-ACCEPTED 2026-08-29 after a reason-only edit to five Section 10 fidelity atoms. The five `DK-10.4.*` atoms around Question 10.4 carried the generic boilerplate reasons the boundary rule forbids, so a reviewer could not tell why each was excluded. Each now says what it is: the two `restatement_of_counted_result` atoms name the double-angle tangent theorem they restate and the exact wrapper that carries it, and the three motivation atoms say that the step-function identification and the two norm readings are definitional consequences asserted in passing while setting up the question, not results established there. Their empty reverse links are now explained rather than merely present: a reverse link marks membership of a counted result's own source block, and this Section 10 passage is not in the Section 2 block. MEASURED: no atom added or removed, no `formalization_role` changed, no `formalization_result_ids` changed, and no counted result touched. The denominator stays at 29.  RE-ACCEPTED 2026-08-29 (second) after a reason-only edit to the two `S1-block-residual.residual-eigenvalue-*` atoms. They carried the generic `introductory_background_not_designated_result` reason, which does not explain why material this substantive is outside the denominator. The reason now states it: the source introduces these bounds as \"the standard residual-to-eigenvalue consequence\" that the paper \"also records\", so they are classical Rayleigh--Ritz error theory quoted for the numerical-approximation reading rather than results Davis and Kahan establish, and no later result of theirs depends on them. MEASURED: role unchanged, reverse links unchanged and still empty, no atom added or removed, no counted result touched, denominator still 29. RE-ACCEPTED 2026-08-30 after the Section 2 declaration-naming campaign. The source-fidelity inventory changed in exactly two `formalization_role_reason` strings, both under Question 10.4, and in both the change is the Lean declaration name quoted inside the rationale: `tanTwoTheta_wholeSpace_paperUINorm_exact` became `tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex`, and `tanTwoTheta_directedCorner_residual_paperUINorm_exact` became `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex`. MEASURED against the previous accepted revision: no atom added or removed, no `atom_id`, `formalization_role`, `formalization_role_reason_code`, or `formalization_result_ids` changed, no source text touched, and the distributable specification is byte-identical (its hash is unchanged). No counted result was touched and the denominator stays at 29.  SCOPE-ATOM RE-AUDIT 2026-08-31. All 24 source atoms with `kind: \"scope\"` were re-audited against the distributable specification, their surrounding source blocks, the counted-result inventory and the compiled declarations. This is NOT a reason-only edit: four atoms changed role from `non_result` to `result_scope`, one was split into three, and every scope atom now carries a structured `scope_classification` giving one of five categories with a verbatim source quotation. THE DENOMINATOR IS UNCHANGED AT 29: every reclassified atom is scope of an EXISTING counted result, not a new result. MEASURED: atoms 272 -> 274, both additions being the split of `DK-6-appendix.unbounded-sine-extension` into its headline-sine clause and the two sentences naming Proposition 6.1 and Theorem 6.1; no atom removed; no source text touched; the distributable specification is byte-identical. The reclassifications were forced by the inventory's own statement_boundary policy: `DK-5.1-thm.roles-interchange`, `DK-5.1-thm.one-sided-unbounded-extension`, `DK-6-appendix.unbounded-sine-extension` and `DK-8.2-thm.sin2-unequal-dimension-extension` each state an explicit extension of a counted result's proved scope, and each had been excluded with a reason code whose grounds were that it occurs after the theorem environment -- the exact condition the policy says does not exclude an explicit extension. The internal inconsistency was visible: the Appendix's unbounded TANGENT sentence was already `result_scope` for `S2-tan-theta` while the adjacent SINE sentence was `expository_commentary_not_result`.",
     "boundary_review_status": "accepted"
@@ -193,7 +193,46 @@
           "note": "The scalar-generic form of the two canonical fixed-field endpoints.  It is not canonical evidence: `RCLike` is an open class, so its two capability binders (`HasMinMaxLowerBoundEverywhere`, `HasUnboundedSylvesterKyFan`) are genuine hypotheses at a field other than the paper's two, and the printed statement carries no such hypothesis.  `PaperSurface.lean` says the same thing.  `..._complex_ofRCLike_conforms` and its real partner tie it to the canonical pair by type equality."
         }
       ],
-      "expected_status": "compiled_exact"
+      "expected_status": "compiled_exact",
+      "result_wide_scope_atoms": [
+        "S2-sin-theta.ui-norm-scope",
+        "S2-sin-theta.gap-hypothesis",
+        "S2-unbounded-scope.infinite-dimensional-scope",
+        "S2-unbounded-scope.arbitrary-ui-scope",
+        "S2-unbounded-scope.unbounded-selfadjoint-scope",
+        "S2-unbounded-scope.bounded-residual-needed",
+        "S2-unbounded-scope.half-infinite-gap-intervals"
+      ],
+      "source_clauses": [
+        {
+          "id": "directed.complex",
+          "conclusion_atoms": [
+            "S2-sin-theta.directed-conclusion"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "delta * N(sin Theta_0) <= N(R) with sin Theta_0 = (I - F0 F0*) E0, ideal membership concluded, unbounded self-adjoint LinearPMap ambient operator, arbitrary Hilbert dimension, arbitrary PaperUnitaryInvariantNorm, whole FormBoundedSylvesterGap.",
+          "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap A_0 Lambda_1 delta`, whose `leftAboveRightBelow` and `leftBelowRightAbove` constructors ARE the two half-infinite configurations; `intervalExterior` is the bounded one. All three are available to a caller."
+        },
+        {
+          "id": "directed.real",
+          "conclusion_atoms": [
+            "S2-sin-theta.directed-conclusion"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "The real sibling of the complex directed clause: delta * N(sin Theta_0) <= N(R), same argument list, same full FormBoundedSylvesterGap scope, same two printed conclusions.",
+          "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap A_0 Lambda_1 delta`, whose `leftAboveRightBelow` and `leftBelowRightAbove` constructors ARE the two half-infinite configurations; `intervalExterior` is the bounded one. All three are available to a caller."
+        }
+      ]
     },
     {
       "id": "S2-tan-theta",
@@ -235,7 +274,10 @@
         "TauCeti.DavisKahan.ReducingComplement",
         "TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock",
         "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real"
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex",
+        "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real",
+        "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal"
       ],
       "review_note": "Result-only audit 2026-08-12, superseding the earlier plan to classify this row as refuted-as-transcribed. The printed Section 2 tangent theorem is accepted as a TRUE counted result read under nonlocal source semantics; see `nonlocal_source_interpretation`. The directed conclusion is closed at full source scope (bounded and unbounded, complex and real, arbitrary paper UI norm). The ambient conclusion is closed at bounded scope over both fields in the source-shaped (3.5)-qualified form. The Appendix explicitly strengthens the unbounded scope further: in the ordered case A0 <= alpha and Lambda1 >= alpha + delta, both A0 and Lambda1 may be genuinely unbounded while the residual remains bounded. That Appendix scope is discharged over complex scalars by `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` and over real scalars by `tanTheta_ambient_unboundedRitz_raw_paperUINorm_real`; both conclude ideal membership and the sharp factor-one ambient inequality. The older `tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex` and real sibling remain useful specializations in which the ambient operator is unbounded but the Ritz compression is bounded. The bilateral-shift material remains a vacuity/nonvacuity witness proving that (1.5) does not imply (3.5); it is NOT a counterexample to this result and must not be described as one. The transversality-form declarations `tanTheta_ambient_bounded_paperUINorm_complex_of_transversality` and its real counterpart are retained as registered specializations: `‖sin Theta‖ < 1` is strictly stronger than the source's standing (3.5), so they are alternative routes rather than the source-shaped statement. Audit-surface update 2026-08-13: `tanTheta_directed_finiteDimensional_paperUINorm_rclike` is now the canonical scalar-generic PaperUI directed facade; it exposes the Ritz spectral hypotheses directly and does not alter the separately certified arbitrary-dimensional/unbounded ambient coverage.",
       "boundary_review": {
@@ -325,7 +367,7 @@
         ],
         "distinct_from_refutation": "DK-4.4-prop",
         "distributable_specification_sha256": "05ef66dd33b497329f745505d3a04b0100f2a0052202a3b7a188d76a545e71fd",
-        "source_fidelity_inventory_sha256": "0271495b1a36276ba91eb53c12a02305a8c63e91701caa39df705c40e9c77a54",
+        "source_fidelity_inventory_sha256": "2b8591ba62212362c2d89e9ebc68b1bc0ffd9bf37ff87628a11d2ec08f46fa8f",
         "supporting_atom_digest_sha256": "a23733f61834f1ffa15a2c13641396999af05a6fbe680ba87281f330b20b843d",
         "reaudit_note": "RE-ACCEPTED 2026-08-31 after the scope-atom re-audit. The atoms this reading rests on are unchanged in text and role: `S1-block-residual.norm-existence-vacuity-convention` remains a paper-wide convention and `DK-3.2-prop.finite-crossing-automatic` remains automaticity used to read the statement -- both were given substantive reason codes in place of generic ones, with no change to their exclusion from the denominator."
       },
@@ -370,7 +412,7 @@
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial",
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex",
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
@@ -381,20 +423,29 @@
             "S2-tan-theta.directed-conclusion",
             "S2-unbounded-scope.infinite-dimensional-scope",
             "S2-unbounded-scope.arbitrary-ui-scope",
-            "S2-unbounded-scope.bounded-residual-needed"
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals",
+            "DK-6-appendix.unbounded-tangent-extension"
           ],
           "capability_classes": []
         },
         {
-          "declaration": "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real",
           "role": "primary_source_witness",
-          "scalar_scope": "rclike",
+          "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
             "S2-sin-theta.ui-norm-scope",
+            "S2-tan-theta.ordered-gap-hypothesis",
             "S2-tan-theta.rayleigh-ritz-hypothesis",
             "S2-tan-theta.directed-conclusion",
-            "S2-unbounded-scope.arbitrary-ui-scope"
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals",
+            "DK-6-appendix.unbounded-tangent-extension"
           ],
           "capability_classes": []
         }
@@ -455,6 +506,90 @@
         {
           "declaration": "TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock",
           "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial",
+          "role": "specialization",
+          "note": "Demoted from canonical evidence 2026-08-31 by the coherent-clause audit: its compiler-printed type does not carry the scope it was credited with. Retained as supporting evidence."
+        },
+        {
+          "declaration": "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
+          "role": "specialization",
+          "note": "Demoted from canonical evidence 2026-08-31 by the coherent-clause audit: its compiler-printed type does not carry the scope it was credited with. Retained as supporting evidence."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal",
+          "role": "supporting_theorem",
+          "note": "The directed clause of the Section 2 tangent theorem at the printed scope, added 2026-08-31. The mathematics was already present as `theorem6_3_unbounded_infiniteTrial_ideal` and its real sibling; what was missing was the promotion to the paper's universal norm quantifier, and the parameterized complex spectral-gap form the promotion needs (the existential form cannot be promoted, since it would return a different representative at each Ky Fan index)."
+        }
+      ],
+      "result_wide_scope_atoms": [
+        "S2-sin-theta.ui-norm-scope",
+        "S2-tan-theta.ordered-gap-hypothesis",
+        "S2-tan-theta.rayleigh-ritz-hypothesis",
+        "S2-unbounded-scope.infinite-dimensional-scope",
+        "S2-unbounded-scope.arbitrary-ui-scope",
+        "S2-unbounded-scope.unbounded-selfadjoint-scope",
+        "S2-unbounded-scope.bounded-residual-needed",
+        "S2-unbounded-scope.half-infinite-gap-intervals",
+        "DK-6-appendix.unbounded-tangent-extension"
+      ],
+      "source_clauses": [
+        {
+          "id": "ambient.complex",
+          "conclusion_atoms": [
+            "S2-tan-theta.ambient-conclusion"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "delta * N(tan Theta) <= N(H) on the ambient paperTanAngleOperatorC, with ideal membership, unbounded self-adjoint LinearPMap ambient operator and unbounded Ritz compression.",
+          "gap_scope_justification": "The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval."
+        },
+        {
+          "id": "ambient.real",
+          "conclusion_atoms": [
+            "S2-tan-theta.ambient-conclusion"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "The real sibling of the complex ambient clause: delta * N(tan Theta) <= N(H) on the ambient paperTanAngleOperatorR, ideal membership concluded, unbounded self-adjoint ambient operator and unbounded Ritz compression, arbitrary PaperUnitaryInvariantNorm.",
+          "gap_scope_justification": "The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval."
+        },
+        {
+          "id": "directed.complex",
+          "conclusion_atoms": [
+            "S2-tan-theta.directed-conclusion"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "delta * N(tan Theta_0) <= N(R) with the trial residual on the right, unbounded self-adjoint ambient operator, arbitrary complete trial subspace, arbitrary PaperUnitaryInvariantNorm. The representative is a parameter characterized by the paper's own instruction that its approximation numbers be tan theta_j, which is why the statement does not depend on which representative the caller holds. ADDED 2026-08-31: the previously registered directed evidence did not carry this scope -- `theorem6_3_perturbation_infiniteTrial` has a BOUNDED ambient operator at a Ky Fan family, and `partIII_tanTheta_ritzResidual_uiNorm` is finite-dimensional at a rectangular seminorm. Both are retained as supporting evidence.",
+          "gap_scope_justification": "The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval."
+        },
+        {
+          "id": "directed.real",
+          "conclusion_atoms": [
+            "S2-tan-theta.directed-conclusion"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "The real sibling of the complex directed clause: delta * N(tan Theta_0) <= N(R) with the trial residual on the right, unbounded self-adjoint ambient operator, arbitrary complete trial subspace, arbitrary PaperUnitaryInvariantNorm, representative characterized by its approximation numbers.",
+          "gap_scope_justification": "The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval."
         }
       ]
     },
@@ -477,7 +612,7 @@
       ],
       "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "accepted",
+      "semantic_certification": "reopened_math",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
@@ -511,7 +646,7 @@
         "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex"
       ],
-      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: the registered unbounded directed endpoint `sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex` bounds delta * N(sin 2Theta_0) by the norm of a self-adjoint REFLECTION residual satisfying (A + R) J_V = J_V A, which is not the printed residual (1.8).  The repair is `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` and its real sibling `..._paperUINorm_real`: an unbounded self-adjoint closed operator, an arbitrary closed trial subspace inside its domain, the trial operator M = A_0, the printed trial residual R = A E_0 - E_0 A_0 as the only right-hand side, arbitrary `PaperUnitaryInvariantNorm`, the directed angle Theta_0, and the printed conclusion delta * N(sin 2Theta_0) <= 2 N(R) with membership concluded rather than assumed.  There is no finite-dimensionality, compactness, acuteness, separability, self-adjointness-of-R or reflection hypothesis visible to the caller: the reflected comparison system D = -2 (X + X*) is constructed internally from the trial data by `trialReflection_intertwines`.  The sharp factor two is obtained blockwise from the scalar-generic doubling identity `kyFan_reflectionDefectBlock_le_two_mul`, not from a triangle inequality on the reflection defect, which would give four.  The complex spectral-separation hypotheses are the printed interval/exterior separation stated through semiboundedness plus resolvent-set avoidance; the real endpoint carries the scalar-generic `FormBoundedSylvesterGap`, which is the weaker predicate (hence the stronger theorem) and covers all three printed separation configurations, and `..._paperUINorm_real_of_intervalExterior` restates it at the printed interval/exterior separation itself.  The ambient conclusion delta * N(sin 2Theta) <= 2 N(H) remains covered over both fields by `sinTwoTheta_ambient_bounded_paperUINorm_complex` and `sinTwoTheta_ambient_bounded_paperUINorm_real`. Audit-surface update 2026-08-13: `sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` is now the canonical scalar-generic PaperUI directed facade with interval/exterior placement and the residual visible in its type; the full unbounded companions remain registered.\n\nRE-CLOSED 2026-08-31 at the full source gap.  The 2026-08-31 downgrade was correct: the complex endpoints took a bounded separating interval `[beta, alpha]` while the source allows half-infinite intervals, and only the real endpoints carried `FormBoundedSylvesterGap`.  The repair did NOT generalize the centred `TwoSidedShiftedInverseBound` engine the downgrade traced.  It adopted the REAL track's architecture over `C` instead: `sinTheta_unbounded_complex` already proved the complex single-angle theorem at the full form-bounded gap, so the missing pieces were its block form (`ExactSinTheta.sinTheta_unbounded_complex_block`), the bounded-perturbation adapter (`sinTheta_addBounded_gauge_complex_block_of_formGap`), and the reflected exact system (`sinTwoTheta_reflectionResidual_block_gauge_of_formGap`, `sinTwoTheta_reflectionResidual_gauge_of_formGap`, `sinTwoTheta_addBounded_gauge_of_formGap`).  The reflection geometry also simplifies: the spectrum-gap proof must unitarily conjugate the complementary restriction because its hypothesis is about that operator's SPECTRUM, whereas a form-bounded gap between `A_0` and `Lambda` lets the reflection go into the coordinate map `F_1 = J_V . U^c.subtypeL`, exactly as the real proof does.\n\nBoth printed conclusions are now at the printed gap scope over both fields: the directed residual endpoint `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` and the directed perturbation endpoint `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` both take `FormBoundedSylvesterGap`.  `SectionTwoUsage.sinTwoTheta_from_halfInfinite_separation` is the compiled witness that the half-infinite configuration can actually be called: it supplies only two form bounds, with no finite interval and no spectrum-avoidance certificate.  The earlier bounded-interval statements are retained under `spectrumGap` names as supporting evidence.  They are NOT derived from the new ones: `FormBoundedSylvesterGap.intervalExterior` wants `LinearPMap.realSpectrum A_0 subset Icc beta alpha`, and the tree proves only the converse direction, so the implication would need the `LinearPMap` analogue of `realSpectrum_subset_Ici_of_le_re_inner_generic`, which exists for bounded operators only.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.",
+      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: the registered unbounded directed endpoint `sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex` bounds delta * N(sin 2Theta_0) by the norm of a self-adjoint REFLECTION residual satisfying (A + R) J_V = J_V A, which is not the printed residual (1.8).  The repair is `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` and its real sibling `..._paperUINorm_real`: an unbounded self-adjoint closed operator, an arbitrary closed trial subspace inside its domain, the trial operator M = A_0, the printed trial residual R = A E_0 - E_0 A_0 as the only right-hand side, arbitrary `PaperUnitaryInvariantNorm`, the directed angle Theta_0, and the printed conclusion delta * N(sin 2Theta_0) <= 2 N(R) with membership concluded rather than assumed.  There is no finite-dimensionality, compactness, acuteness, separability, self-adjointness-of-R or reflection hypothesis visible to the caller: the reflected comparison system D = -2 (X + X*) is constructed internally from the trial data by `trialReflection_intertwines`.  The sharp factor two is obtained blockwise from the scalar-generic doubling identity `kyFan_reflectionDefectBlock_le_two_mul`, not from a triangle inequality on the reflection defect, which would give four.  The complex spectral-separation hypotheses are the printed interval/exterior separation stated through semiboundedness plus resolvent-set avoidance; the real endpoint carries the scalar-generic `FormBoundedSylvesterGap`, which is the weaker predicate (hence the stronger theorem) and covers all three printed separation configurations, and `..._paperUINorm_real_of_intervalExterior` restates it at the printed interval/exterior separation itself.  The ambient conclusion delta * N(sin 2Theta) <= 2 N(H) remains covered over both fields by `sinTwoTheta_ambient_bounded_paperUINorm_complex` and `sinTwoTheta_ambient_bounded_paperUINorm_real`. Audit-surface update 2026-08-13: `sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` is now the canonical scalar-generic PaperUI directed facade with interval/exterior placement and the residual visible in its type; the full unbounded companions remain registered.\n\nRE-CLOSED 2026-08-31 at the full source gap.  The 2026-08-31 downgrade was correct: the complex endpoints took a bounded separating interval `[beta, alpha]` while the source allows half-infinite intervals, and only the real endpoints carried `FormBoundedSylvesterGap`.  The repair did NOT generalize the centred `TwoSidedShiftedInverseBound` engine the downgrade traced.  It adopted the REAL track's architecture over `C` instead: `sinTheta_unbounded_complex` already proved the complex single-angle theorem at the full form-bounded gap, so the missing pieces were its block form (`ExactSinTheta.sinTheta_unbounded_complex_block`), the bounded-perturbation adapter (`sinTheta_addBounded_gauge_complex_block_of_formGap`), and the reflected exact system (`sinTwoTheta_reflectionResidual_block_gauge_of_formGap`, `sinTwoTheta_reflectionResidual_gauge_of_formGap`, `sinTwoTheta_addBounded_gauge_of_formGap`).  The reflection geometry also simplifies: the spectrum-gap proof must unitarily conjugate the complementary restriction because its hypothesis is about that operator's SPECTRUM, whereas a form-bounded gap between `A_0` and `Lambda` lets the reflection go into the coordinate map `F_1 = J_V . U^c.subtypeL`, exactly as the real proof does.\n\nBoth printed conclusions are now at the printed gap scope over both fields: the directed residual endpoint `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` and the directed perturbation endpoint `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` both take `FormBoundedSylvesterGap`.  `SectionTwoUsage.sinTwoTheta_from_halfInfinite_separation` is the compiled witness that the half-infinite configuration can actually be called: it supplies only two form bounds, with no finite interval and no spectrum-avoidance certificate.  The earlier bounded-interval statements are retained under `spectrumGap` names as supporting evidence.  They are NOT derived from the new ones: `FormBoundedSylvesterGap.intervalExterior` wants `LinearPMap.realSpectrum A_0 subset Icc beta alpha`, and the tree proves only the converse direction, so the implication would need the `LinearPMap` analogue of `realSpectrum_subset_Ici_of_le_re_inner_generic`, which exists for bounded operators only.\n\nREOPENED 2026-08-31 by the scope-atom re-audit. The inventory's own statement_boundary policy says a later source passage that explicitly extends the proved scope of a counted result is part of that result's scope and must be covered. Several such passages were classified as generic post-result commentary on the grounds that they occur after the theorem environment -- which is exactly the condition the policy says does not exclude an explicit extension. See the newly attached scope atom(s) and `remaining_gap`.\n\nREOPENING WITHDRAWN 2026-08-31, and the rule that caused it corrected. The scope-atom re-audit attached a later source passage to this result under a `statement_boundary` clause saying that any passage explicitly extending a counted result's proved scope becomes part of that result. That clause contradicted the same field's `does_not_count` entry for scope remarks outside the printed result environment, and it let the atom ledger enlarge the denominator by reclassification. The corrected rule is that a later passage affects a counted result only when it is needed to determine what Davis and Kahan actually claim in that result; an extension, variant or consequence they mention without introducing and proving it as a result of its own does not. The passage is now `result_adjacent_extension` fidelity material. The Lean coverage produced while the result was reopened is kept as SUPPORTING evidence -- it is stronger than the counted statement requires, which is a good thing to hold and not a canonical obligation.\n\nREOPENED 2026-08-31 (third pass) by the coherent-clause audit, on the AMBIENT clause only. The directed clause is established at full scope over both fields and is unaffected. See `remaining_gap` and the two `source_clauses` entries marked `open`.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-sin-two-theta",
@@ -535,7 +670,7 @@
       "semantic_alignment": "locally_exact",
       "local_statement_self_contained": true,
       "notes": " **Complex source-norm wrapper added 2026-08-29.** `sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_paperUINorm_real` had no complex counterpart even though the complex ideal-level theorem `DavisKahan.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap` was available; only the adaptation from a Ky-Fan-dominant family to `PaperUnitaryInvariantNorm` was missing. The two are not literal mirrors: the real track reaches the ideal layer through `FormBoundedSylvesterGap`, the complex track through the spectrum gap (semiboundedness of the selected restriction plus the complementary restriction's spectrum avoiding the open enlargement), and the new statement takes the hypotheses the complex proof actually has. **Ideal-level angle transport proved 2026-08-29.** The unbounded theorems concluded about `sinTwoThetaIdealBlock`, and the only bridge to an angle operator was `norm_starProjection_reflectedComplementary_eq_sinTwoAngle`, an equality of OPERATOR NORMS, which says nothing in any other unitarily invariant norm. The bridge now holds as an operator identity: `sinAngleOperatorDirectedC U (reflectedU U V) = sinTwoAngleOperatorC U V`, i.e. the directed sine of the angle between U and its V-reflection IS the sine of twice the angle between U and V. The proof is one ring identity, `p r p r p = 4t^2 - 4t + p` with r = 2q - 1 and t = pqp, needing only p^2 = p: both sides square to 4(t - t^2) and both are nonnegative, so the positive square roots agree. Consequently the block and the angle operator have the same approximation numbers, hence the same membership and gauge in EVERY symmetric ideal family, and `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` is the unbounded theorem read on `2 sin Theta cos Theta`. Scope note: this is the DIRECTED double-angle operator, and the distinction from the ambient one is a multiplicity. `sinTwoThetaIdealBlock U V = P_U P_{W-perp}` is one-sided, so it carries each principal angle once, which is what the directed `sinTwoAngleOperatorC` does. The ambient spelling `paperSinTwoAngleOperatorC U V` is `|R_V P_U R_V - P_U|` (`paperSinTwoAngleOperatorC_eq_modulus_reflect`), built like every paper angle object on the ambient sine |P_U - P_V|, so it carries every angle TWICE. The two are therefore different operators, equal in operator norm but not in gauge generally, and the transport here is correctly stated for the directed one. Contrast `S2-tan-two-theta`, where the block IS two-sided and the ambient paper object is the right partner. **Real transport added 2026-08-30.** `norm_sinTwoThetaIdealBlock_real` gave the real block-to-angle identification at the operator norm only -- one number. `approximationSingularValue_sinTwoThetaIdealBlock_real` gives every approximation singular value, which is what a symmetric ideal reads, by the route the norm identification already used: complexification preserves approximation singular values, the real block complexifies to the complex block of the complexified pair, and the complex transport applies there. The target is `Real.sinTwoAngleOperatorRC`, the DIRECTED double-angle sine of the real pair read in the complexification, which is where the tree keeps it -- there is no real directed spelling, only the ambient `paperSinTwoAngleOperatorR`. Turning this into an equality of real PaperUnitaryInvariantNorm gauges would need a real directed sin 2Theta operator; that would be a second spelling of an existing concept and is deliberately not introduced. **Real angle-operator endpoint, 2026-08-30.** `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real` states the real bounded-perturbation theorem on the directed double-angle sine of the real pair instead of on `sinTwoThetaIdealBlock`. The transport is `extendedGauge_sinTwoThetaIdealBlock_real`, the gauge form of the approximation-number identity: the two operators live over different scalar fields -- the block is real, the angle is read in the canonical complexification where this development keeps the real double-angle operators -- so the equality is chained through `extendedGauge_complexify` rather than through the same-field `gauge_eq_of_sameApproximationSingularValues`. The ambient real spelling `paperSinTwoAngleOperatorR` is deliberately not the target: it carries each principal angle twice where the one-sided block carries it once. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved by a standing rule: a short name is bound only to a declaration that is BOTH scalar-generic over `RCLike` AND at the printed source scope, and is left unbound otherwise. Which of the four currently satisfy that is a property of `SectionTwo.lean`; it is recorded once, structurally, in `section_two_short_names` below and checked against the file, and is deliberately not restated in prose -- a copy of a moving fact goes stale silently, and this sentence did. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately. GAP SCOPE DOWNGRADED 2026-08-31, on review. The source inventory attaches the half-infinite gap-interval scope to this result, and the real endpoint `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real` genuinely carries it: it takes `FormBoundedSylvesterGap`, whose two semibounded constructors are that scope. The COMPLEX endpoint `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` does not. It requires finite `beta <= alpha` with the selected restriction semibounded both below and above and the complement avoiding `(beta-delta, alpha+delta)` -- a bounded interval. So the complex half of this row was certified beyond what it proves.\n\nTHE MISSING THEOREM, exactly: a complex Paper-UI endpoint taking `hgap : FormBoundedSylvesterGap (selfAdjointSpectralRestriction A hA B hB) (selfAdjointSpectralRestriction A hA Bcompl hB.compl) delta`. It is NOT the one-line bridge the sine case was. Traced: the complex chain runs `..._paperUINorm_complex` -> `..._blockRepresentative_paperUINorm_complex` -> `sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap` -> `sinTheta_addBounded_gauge_block_of_spectrum_gap` -> `sinTheta_unbounded_gauge_of_spectrum_gap` -> `sinTheta_unbounded_gauge`, and that analytic core consumes the interval as `TwoSidedShiftedInverseBound D.Lambda1 ((alpha+beta)/2) ((alpha-beta)/2 + delta)` -- a centre and a radius, which the semibounded branches of `FormBoundedSylvesterGap` do not have. The real route reaches the full gap through a different engine, `sinTwoTheta_reflectionResidual_gauge_real`. Closing the complex side means either giving the complex reflection-residual engine a full-gap route of the kind the real one has, or generalizing `sinTheta_unbounded_gauge` past the centred interval. Until one of those lands, the complex half of this result is a bounded-interval specialization and this row must not be read as full source scope.",
-      "expected_status": "compiled_exact",
+      "expected_status": "compiled_specialization",
       "canonical_evidence": [
         {
           "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
@@ -576,16 +711,7 @@
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
-          "covers_source_atoms": [
-            "S2-sin-theta.ui-norm-scope",
-            "S2-sin-two-theta.gap-hypothesis",
-            "S2-sin-two-theta.directed-conclusion",
-            "S2-unbounded-scope.infinite-dimensional-scope",
-            "S2-unbounded-scope.arbitrary-ui-scope",
-            "S2-unbounded-scope.unbounded-selfadjoint-scope",
-            "S2-unbounded-scope.bounded-residual-needed",
-            "S2-unbounded-scope.half-infinite-gap-intervals"
-          ],
+          "covers_source_atoms": [],
           "capability_classes": []
         },
         {
@@ -593,16 +719,7 @@
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
-          "covers_source_atoms": [
-            "S2-sin-theta.ui-norm-scope",
-            "S2-sin-two-theta.gap-hypothesis",
-            "S2-sin-two-theta.directed-conclusion",
-            "S2-unbounded-scope.infinite-dimensional-scope",
-            "S2-unbounded-scope.arbitrary-ui-scope",
-            "S2-unbounded-scope.unbounded-selfadjoint-scope",
-            "S2-unbounded-scope.bounded-residual-needed",
-            "S2-unbounded-scope.half-infinite-gap-intervals"
-          ],
+          "covers_source_atoms": [],
           "capability_classes": []
         },
         {
@@ -610,12 +727,7 @@
           "role": "primary_source_witness",
           "scalar_scope": "complex",
           "evidence_kind": "proof",
-          "covers_source_atoms": [
-            "S2-sin-theta.ui-norm-scope",
-            "S2-sin-two-theta.ambient-conclusion",
-            "S2-unbounded-scope.infinite-dimensional-scope",
-            "S2-unbounded-scope.arbitrary-ui-scope"
-          ],
+          "covers_source_atoms": [],
           "capability_classes": []
         },
         {
@@ -623,12 +735,7 @@
           "role": "primary_source_witness",
           "scalar_scope": "real",
           "evidence_kind": "proof",
-          "covers_source_atoms": [
-            "S2-sin-theta.ui-norm-scope",
-            "S2-sin-two-theta.ambient-conclusion",
-            "S2-unbounded-scope.infinite-dimensional-scope",
-            "S2-unbounded-scope.arbitrary-ui-scope"
-          ],
+          "covers_source_atoms": [],
           "capability_classes": []
         }
       ],
@@ -737,7 +844,84 @@
           "role": "generalization",
           "note": "Coverage of a `result_adjacent_extension` the source mentions around this result. It is stronger than the counted statement requires and is deliberately supporting rather than canonical evidence."
         }
-      ]
+      ],
+      "result_wide_scope_atoms": [
+        "S2-sin-theta.ui-norm-scope",
+        "S2-sin-two-theta.gap-hypothesis",
+        "S2-unbounded-scope.infinite-dimensional-scope",
+        "S2-unbounded-scope.arbitrary-ui-scope",
+        "S2-unbounded-scope.unbounded-selfadjoint-scope",
+        "S2-unbounded-scope.bounded-residual-needed",
+        "S2-unbounded-scope.half-infinite-gap-intervals"
+      ],
+      "source_clauses": [
+        {
+          "id": "directed.residual.complex",
+          "conclusion_atoms": [
+            "S2-sin-two-theta.directed-conclusion"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "delta * N(sin 2Theta_0) <= 2 N(R) with the printed trial residual, unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm, full FormBoundedSylvesterGap.",
+          "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap` between the two spectral restrictions, so both semibounded constructors are available; the bounded-interval spelling is the separate `..._spectrumGap_...` declaration held as supporting evidence."
+        },
+        {
+          "id": "directed.residual.real",
+          "conclusion_atoms": [
+            "S2-sin-two-theta.directed-conclusion"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "The real sibling of the complex directed residual clause: delta * N(sin 2Theta_0) <= 2 N(R) with the printed trial residual, unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm, full FormBoundedSylvesterGap.",
+          "gap_scope_justification": "The primary takes `FormBoundedSylvesterGap` between the two spectral restrictions, so both semibounded constructors are available; the bounded-interval spelling is the separate `..._spectrumGap_...` declaration held as supporting evidence."
+        },
+        {
+          "id": "ambient.complex",
+          "conclusion_atoms": [
+            "S2-sin-two-theta.ambient-conclusion"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex",
+            "correspondence": []
+          },
+          "status": "open",
+          "justification": "The complex ambient clause: the printed conclusion delta * N(sin 2Theta) <= 2 N(H) on the AMBIENT paperSinTwoAngleOperatorC, at this result's unbounded self-adjoint scope.",
+          "open_reason": "The only paper-norm ambient endpoint is stated for BOUNDED operators (`A B : E ->L[C] E`), so it does not establish the ambient conclusion at this result's unbounded scope; the type-requirement check rejects it for `unbounded-selfadjoint-scope`. This was masked until 2026-08-31 by a checker that unioned atoms across unrelated declarations: the DIRECTED theorems donated the unbounded scope atoms and the BOUNDED ambient theorem donated the ambient conclusion, and no theorem established the conjunction. THE MISSING THEOREM: an unbounded ambient endpoint over each field. THE ROUTE IS IDENTIFIED. `paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub` says the ambient sin 2Theta between U and V is |P_(U.map R_V) - P_U|, i.e. an ambient sin Theta between U and its reflection through V; the bounded proof is exactly `symmetric_sinTheta_spectrum_all_kyFan` applied to the pair (A, R_V A R_V) plus `kyFan_reflectionDisplacement_le` for the factor two. The unbounded symmetric sine theorem needed for the lift now exists -- `PaperCommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm` and `proposition6_1_commonDomain_source_complex`, taking two closed self-adjoint operators on one domain -- and `B := addBounded A (reflectionPerturbation V H)` equals R_V A R_V on dom A when V reduces A + H, which supplies the perturbation identity and the factor two through `reflectionPerturbation_mem_and_gauge_le`. WHAT IS ABSENT is transport of the two structural hypotheses across the reflection unitary: (1) `ReducesSubspace (R_V A R_V) (U.map R_V)` from `ReducesSubspace A U`; (2) an equality identifying `reducingRestriction B (U.map R_V)` with `unitaryConjugate (unitarySubmoduleMapIsometry V.reflection U) (reducingRestriction A U)`; and (3) invariance of `FormBoundedSylvesterGap` under `unitaryConjugate` in each slot, which needs `LinearPMap.realSpectrum` and `SemiboundedBelow`/`SemiboundedAbove` transport. `unitarySubmoduleMapIsometry` and `unitaryConjugate_spectrum_eq` already exist; the restriction equality and the gap transport do not."
+        },
+        {
+          "id": "ambient.real",
+          "conclusion_atoms": [
+            "S2-sin-two-theta.ambient-conclusion"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real",
+            "correspondence": []
+          },
+          "status": "open",
+          "justification": "The real ambient clause: delta * N(sin 2Theta) <= 2 N(H) on the ambient real double-angle sine at the printed unbounded scope.",
+          "open_reason": "As for the complex ambient clause: the only real paper-norm ambient endpoint is stated for bounded operators."
+        }
+      ],
+      "remaining_gap": {
+        "category": "missing_theorem",
+        "missing_surface": "The AMBIENT clause `delta * N(sin 2Theta) <= 2 N(H)` on `paperSinTwoAngleOperatorC` / `...R`, at this result's unbounded self-adjoint scope. The only paper-norm ambient endpoints, `sinTwoTheta_ambient_bounded_paperUINorm_complex` and `..._real`, are stated for BOUNDED operators, so they do not establish the printed conclusion at the scope the rest of the row is certified at.",
+        "next_action": "Lift the bounded ambient reflection argument through the unbounded symmetric sine theorem. `paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub` identifies the ambient sin 2Theta with |P_(U.map R_V) - P_U|, an ambient sin Theta between U and its reflection, and the unbounded symmetric theorem now exists as `PaperCommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm`. With `B := addBounded A (reflectionPerturbation V H)`, which equals R_V A R_V on dom A when V reduces A + H, the perturbation identity and the factor two come from `reflectionPerturbation_mem_and_gauge_le`. THE THREE MISSING LEMMAS: (1) `ReducesSubspace (R_V A R_V) (U.map R_V)` from `ReducesSubspace A U`; (2) `reducingRestriction B (U.map R_V) = unitaryConjugate (unitarySubmoduleMapIsometry V.reflection U) (reducingRestriction A U)`; (3) invariance of `FormBoundedSylvesterGap` under `unitaryConjugate` in each argument, which needs `LinearPMap.realSpectrum` and `SemiboundedBelow`/`SemiboundedAbove` transport. `unitarySubmoduleMapIsometry` and `unitaryConjugate_spectrum_eq` exist; (2) and (3) do not.",
+        "strongest_existing_evidence": [
+          "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex",
+          "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real"
+        ],
+        "how_it_was_masked": "A checker that unioned source atoms across unrelated canonical declarations. The directed theorems donated `unbounded-selfadjoint-scope`, `half-infinite-gap-intervals` and `bounded-residual-needed`; the bounded ambient theorem donated `ambient-conclusion`; the union covered the row and no theorem proved the conjunction."
+      }
     },
     {
       "id": "S2-tan-two-theta",
@@ -1019,6 +1203,75 @@
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_real",
           "role": "presentation_wrapper"
         }
+      ],
+      "result_wide_scope_atoms": [
+        "S2-sin-theta.ui-norm-scope",
+        "S2-tan-two-theta.ordered-gap-hypothesis",
+        "S2-tan-two-theta.strong-offdiagonal-hypothesis",
+        "S2-tan-two-theta.no-extra-pole-hypothesis",
+        "S2-unbounded-scope.infinite-dimensional-scope",
+        "S2-unbounded-scope.arbitrary-ui-scope",
+        "S2-unbounded-scope.unbounded-selfadjoint-scope",
+        "S2-unbounded-scope.bounded-residual-needed",
+        "S2-unbounded-scope.half-infinite-gap-intervals"
+      ],
+      "source_clauses": [
+        {
+          "id": "directed.complex",
+          "conclusion_atoms": [
+            "S2-tan-two-theta.directed-conclusion"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "delta * N(tan 2Theta_0) <= 2 N(R), unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm.",
+          "gap_scope_justification": "The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite."
+        },
+        {
+          "id": "directed.real",
+          "conclusion_atoms": [
+            "S2-tan-two-theta.directed-conclusion"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "The real sibling of the complex directed clause: (b - a) * N(tan 2Theta_0) <= 2 N(R), unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm.",
+          "gap_scope_justification": "The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite."
+        },
+        {
+          "id": "ambient.complex",
+          "conclusion_atoms": [
+            "S2-tan-two-theta.ambient-conclusion"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "(b - a) * N(|tan 2Theta|) <= 2 N(B) on the ambient branch-free paperAbsTanTwoAngleOperatorC, unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm.",
+          "gap_scope_justification": "The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite."
+        },
+        {
+          "id": "ambient.real",
+          "conclusion_atoms": [
+            "S2-tan-two-theta.ambient-conclusion"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "justification": "The real sibling of the complex ambient clause: (b - a) * N(|tan 2Theta|) <= 2 N(B) on the ambient branch-free real double-angle tangent, unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm.",
+          "gap_scope_justification": "The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite."
+        }
       ]
     },
     {
@@ -1069,7 +1322,26 @@
           "capability_classes": []
         }
       ],
-      "supporting_evidence": []
+      "supporting_evidence": [],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "existence.rclike",
+          "conclusion_atoms": [
+            "DK-3.1-prop.existence",
+            "DK-3.1-prop.uniqueness",
+            "DK-3.1-prop.positive-diagonal-characterization"
+          ],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_1_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for existence, uniqueness, positive-diagonal-characterization at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
+      ]
     },
     {
       "id": "DK-3.2-prop",
@@ -1130,7 +1402,8 @@
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
           "covers_source_atoms": [
-            "DK-3.2-prop.nonuniqueness"
+            "DK-3.2-prop.nonuniqueness",
+            "DK-3.2-prop.eq-3-5"
           ],
           "capability_classes": []
         }
@@ -1145,6 +1418,39 @@
           "declaration": "TauCeti.DavisKahan1970.proposition3_2_not_unique_real",
           "role": "specialization",
           "note": "The `ℝ` instance of the canonical `RCLike` theorem; its proof is that theorem applied."
+        }
+      ],
+      "result_wide_scope_atoms": [
+        "DK-3.2-prop.eq-3-5"
+      ],
+      "source_clauses": [
+        {
+          "id": "existence-iff-crossing-dimensions.rclike",
+          "conclusion_atoms": [
+            "DK-3.2-prop.existence-iff-crossing-dimensions"
+          ],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for existence-iff-crossing-dimensions at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "nonuniqueness.rclike",
+          "conclusion_atoms": [
+            "DK-3.2-prop.nonuniqueness"
+          ],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_2_not_unique",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for nonuniqueness at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
         }
       ]
     },
@@ -1230,7 +1536,66 @@
           "capability_classes": []
         }
       ],
-      "supporting_evidence": []
+      "supporting_evidence": [],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "principal-square-root.complex",
+          "conclusion_atoms": [
+            "DK-3.3-prop.principal-square-root"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_complex_forward_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for principal-square-root at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "square-root-converse.complex",
+          "conclusion_atoms": [
+            "DK-3.3-prop.square-root-converse"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_complex_converse_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for square-root-converse at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "principal-square-root.real",
+          "conclusion_atoms": [
+            "DK-3.3-prop.principal-square-root"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_real_forward_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for principal-square-root at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "square-root-converse.real",
+          "conclusion_atoms": [
+            "DK-3.3-prop.square-root-converse"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_3_real_converse_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for square-root-converse at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
+      ]
     },
     {
       "id": "DK-3.4-prop",
@@ -1299,6 +1664,39 @@
         {
           "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation",
           "role": "supporting_theorem"
+        }
+      ],
+      "result_wide_scope_atoms": [
+        "S3-standing-scope.crossed-dimension-standing-assumption"
+      ],
+      "source_clauses": [
+        {
+          "id": "u-square-direct-rotation.complex",
+          "conclusion_atoms": [
+            "DK-3.4-prop.u-square-direct-rotation"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_4_source_full_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for u-square-direct-rotation at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "u-square-direct-rotation.real",
+          "conclusion_atoms": [
+            "DK-3.4-prop.u-square-direct-rotation"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_4_source_full_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for u-square-direct-rotation at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
         }
       ]
     },
@@ -1371,7 +1769,52 @@
           "capability_classes": []
         }
       ],
-      "supporting_evidence": []
+      "supporting_evidence": [],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "complete-invariant.complex",
+          "conclusion_atoms": [
+            "DK-3.1-thm.complete-invariant"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for complete-invariant at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "complete-invariant.real",
+          "conclusion_atoms": [
+            "DK-3.1-thm.complete-invariant"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for complete-invariant at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "converse-angle-data.rclike",
+          "conclusion_atoms": [
+            "DK-3.1-thm.converse-angle-data"
+          ],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.theorem3_1_realization",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for converse-angle-data at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
+      ]
     },
     {
       "id": "DK-3.1-cor",
@@ -1437,6 +1880,38 @@
           "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_classification_real",
           "role": "specialization",
           "note": "The `ℝ` instance of the canonical `RCLike` classification; its proof is that theorem applied."
+        }
+      ],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "compact-complete-invariants.rclike",
+          "conclusion_atoms": [
+            "DK-3.1-cor.compact-complete-invariants",
+            "DK-3.1-cor.theta1-match"
+          ],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for compact-complete-invariants, theta1-match at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "allowed-angle-sequence.rclike",
+          "conclusion_atoms": [
+            "DK-3.1-cor.allowed-angle-sequence"
+          ],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.corollary3_1_realization",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for allowed-angle-sequence at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
         }
       ]
     },
@@ -1532,6 +2007,51 @@
           "declaration": "TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply",
           "role": "supporting_theorem"
         }
+      ],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "commutation.rclike",
+          "conclusion_atoms": [
+            "DK-3.5-prop.commutation"
+          ],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_5_commutations",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for commutation at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "eigenvector-rotation-angle.rclike",
+          "conclusion_atoms": [
+            "DK-3.5-prop.eigenvector-rotation-angle"
+          ],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for eigenvector-rotation-angle at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "acute-maximal-characterization.rclike",
+          "conclusion_atoms": [
+            "DK-3.5-prop.acute-maximal-characterization"
+          ],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for acute-maximal-characterization at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
       ]
     },
     {
@@ -1601,6 +2121,23 @@
         {
           "declaration": "TauCeti.DavisKahan1970.corollary3_2_reversal_source_form",
           "role": "supporting_theorem"
+        }
+      ],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "swap-invariance.rclike",
+          "conclusion_atoms": [
+            "DK-3.2-cor.swap-invariance"
+          ],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.corollary3_2_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for swap-invariance at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
         }
       ]
     },
@@ -1677,6 +2214,39 @@
           "declaration": "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real",
           "role": "supporting_theorem"
         }
+      ],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "orthonormal-angle-lower-bounds.complex",
+          "conclusion_atoms": [
+            "DK-4.1-prop.orthonormal-angle-lower-bounds",
+            "DK-4.1-prop.singular-value-minimality"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for orthonormal-angle-lower-bounds, singular-value-minimality at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "orthonormal-angle-lower-bounds.real",
+          "conclusion_atoms": [
+            "DK-4.1-prop.orthonormal-angle-lower-bounds",
+            "DK-4.1-prop.singular-value-minimality"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for orthonormal-angle-lower-bounds, singular-value-minimality at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
       ]
     },
     {
@@ -1738,6 +2308,37 @@
           "declaration": "TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute",
           "role": "specialization"
         }
+      ],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "ui-minimality-on-p.complex",
+          "conclusion_atoms": [
+            "DK-4.1-cor.ui-minimality-on-p"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for ui-minimality-on-p at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "ui-minimality-on-p.real",
+          "conclusion_atoms": [
+            "DK-4.1-cor.ui-minimality-on-p"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for ui-minimality-on-p at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
       ]
     },
     {
@@ -1756,7 +2357,7 @@
         "TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional",
         "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence"
       ],
-      "review_note": "Accepted result-only semantic review 2026-08-12. `Proposition4_2_infiniteDimensional` proves the paper's infinite-series basis-angle lower bound over `ℂ`, including the divergent right-hand side through the extended summation formulation; the real theorem gives the literal `ℝ` counterpart. The trace identification used in the source proof is proof-only material and is not part of the counted proposition statement.",
+      "review_note": "Accepted result-only semantic review 2026-08-12. `Proposition4_2_infiniteDimensional` proves the paper's infinite-series basis-angle lower bound over `ℂ`, including the divergent right-hand side through the extended summation formulation; the real theorem gives the literal `ℝ` counterpart. The trace identification used in the source proof is proof-only material and is not part of the counted proposition statement.\n\n2026-08-31: the real counterpart was promoted from supporting to canonical evidence. The source states its results for a real OR complex Hilbert space, and the coherent-clause model requires each printed conclusion to be established at both fields (or once, scalar-generically).",
       "parent_claim_id": "DK-4.2-prop",
       "boundary_review": {
         "status": "accepted",
@@ -1783,12 +2384,48 @@
             "DK-4.2-prop.basis-sine-square-lower-bound"
           ],
           "capability_classes": []
-        }
-      ],
-      "supporting_evidence": [
+        },
         {
           "declaration": "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence",
-          "role": "supporting_theorem"
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-4.2-prop.basis-sine-square-lower-bound"
+          ],
+          "capability_classes": []
+        }
+      ],
+      "supporting_evidence": [],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "basis-sine-square-lower-bound.complex",
+          "conclusion_atoms": [
+            "DK-4.2-prop.basis-sine-square-lower-bound"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for basis-sine-square-lower-bound at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "basis-sine-square-lower-bound.real",
+          "conclusion_atoms": [
+            "DK-4.2-prop.basis-sine-square-lower-bound"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "The real counterpart of the infinite-series basis-angle lower bound, over an arbitrary real Hilbert space with the extended (ENNReal) summation that carries the divergent right-hand side. PROMOTED 2026-08-31: the row's review note already described this as the literal real counterpart, but under the flat-union model only the complex theorem was canonical, so the printed result was certified at one scalar field. The coherent model requires both."
         }
       ]
     },
@@ -1854,7 +2491,38 @@
           "capability_classes": []
         }
       ],
-      "supporting_evidence": []
+      "supporting_evidence": [],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "squared-displacement-global-minimum.complex",
+          "conclusion_atoms": [
+            "DK-4.3-prop.squared-displacement-global-minimum"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for squared-displacement-global-minimum at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "squared-displacement-global-minimum.real",
+          "conclusion_atoms": [
+            "DK-4.3-prop.squared-displacement-global-minimum"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for squared-displacement-global-minimum at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
+      ]
     },
     {
       "id": "DK-4.4-prop",
@@ -1920,6 +2588,23 @@
         {
           "declaration": "TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted",
           "role": "supporting_theorem"
+        }
+      ],
+      "result_wide_scope_atoms": [
+        "DK-4.4-prop.printed-proposition4-4"
+      ],
+      "source_clauses": [
+        {
+          "id": "whole.not_visible_in_type",
+          "conclusion_atoms": [],
+          "scalar_scope": "not_visible_in_type",
+          "evidence": {
+            "primary": "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "refutation",
+          "justification": "Canonical witness for the whole printed statement at not_visible_in_type scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
         }
       ]
     },
@@ -2003,7 +2688,40 @@
           "note": "Coverage of a `result_adjacent_extension` the source mentions around this result. It is stronger than the counted statement requires and is deliberately supporting rather than canonical evidence."
         }
       ],
-      "expected_status": "compiled_exact"
+      "expected_status": "compiled_exact",
+      "result_wide_scope_atoms": [
+        "DK-5.1-thm.banach-hypotheses"
+      ],
+      "source_clauses": [
+        {
+          "id": "sylvester-lower-bound.scalar_generic",
+          "conclusion_atoms": [
+            "DK-5.1-thm.sylvester-lower-bound"
+          ],
+          "scalar_scope": "scalar_generic",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for sylvester-lower-bound at scalar_generic scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "sylvester-lower-bound.complex",
+          "conclusion_atoms": [
+            "DK-5.1-thm.sylvester-lower-bound"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for sylvester-lower-bound at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
+      ]
     },
     {
       "id": "DK-5.2-thm",
@@ -2062,7 +2780,40 @@
           "capability_classes": []
         }
       ],
-      "supporting_evidence": []
+      "supporting_evidence": [],
+      "result_wide_scope_atoms": [
+        "DK-5.2-thm.hilbert-unbounded-hypotheses"
+      ],
+      "source_clauses": [
+        {
+          "id": "hilbert-unbounded-conclusion.complex",
+          "conclusion_atoms": [
+            "DK-5.2-thm.hilbert-unbounded-conclusion"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Theorem5_2",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for hilbert-unbounded-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "hilbert-unbounded-conclusion.real",
+          "conclusion_atoms": [
+            "DK-5.2-thm.hilbert-unbounded-conclusion"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for hilbert-unbounded-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
+      ]
     },
     {
       "id": "DK-5.1-lem",
@@ -2108,7 +2859,24 @@
           ]
         }
       ],
-      "supporting_evidence": []
+      "supporting_evidence": [],
+      "result_wide_scope_atoms": [
+        "DK-5.1-lem.strong-cutoff-convergence"
+      ],
+      "source_clauses": [
+        {
+          "id": "whole.rclike",
+          "conclusion_atoms": [],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Lemma5_1",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
+      ]
     },
     {
       "id": "DK-6.1-lem",
@@ -2150,7 +2918,8 @@
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
           "covers_source_atoms": [
-            "DK-6.1-lem.ordered-sylvester-forward"
+            "DK-6.1-lem.ordered-sylvester-forward",
+            "DK-6.1-lem.ordered-sylvester-converse"
           ],
           "capability_classes": [
             "ContinuousLinearMap.HasMinMaxLowerBoundEverywhere"
@@ -2162,6 +2931,7 @@
           "scalar_scope": "rclike",
           "evidence_kind": "proof",
           "covers_source_atoms": [
+            "DK-6.1-lem.ordered-sylvester-forward",
             "DK-6.1-lem.ordered-sylvester-converse"
           ],
           "capability_classes": [
@@ -2169,7 +2939,37 @@
           ]
         }
       ],
-      "supporting_evidence": []
+      "supporting_evidence": [],
+      "result_wide_scope_atoms": [
+        "DK-6.1-lem.ordered-sylvester-forward",
+        "DK-6.1-lem.ordered-sylvester-converse"
+      ],
+      "source_clauses": [
+        {
+          "id": "whole.rclike",
+          "conclusion_atoms": [],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.lemma6_1",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "whole.rclike.2",
+          "conclusion_atoms": [],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.lemma6_1_converse",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
+      ]
     },
     {
       "id": "DK-6.2-lem",
@@ -2215,7 +3015,24 @@
           ]
         }
       ],
-      "supporting_evidence": []
+      "supporting_evidence": [],
+      "result_wide_scope_atoms": [
+        "DK-6.2-lem.pinching-contraction"
+      ],
+      "source_clauses": [
+        {
+          "id": "whole.rclike",
+          "conclusion_atoms": [],
+          "scalar_scope": "rclike",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.lemma6_2",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
+      ]
     },
     {
       "id": "DK-6.1-prop",
@@ -2327,7 +3144,38 @@
           "note": "Coverage of a `result_adjacent_extension` the source mentions around this result. It is stronger than the counted statement requires and is deliberately supporting rather than canonical evidence."
         }
       ],
-      "expected_status": "compiled_exact"
+      "expected_status": "compiled_exact",
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "symmetric-sine-theorem.complex",
+          "conclusion_atoms": [
+            "DK-6.1-prop.symmetric-sine-theorem"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition6_1_source_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for symmetric-sine-theorem at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "symmetric-sine-theorem.real",
+          "conclusion_atoms": [
+            "DK-6.1-prop.symmetric-sine-theorem"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.proposition6_1_source_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for symmetric-sine-theorem at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
+      ]
     },
     {
       "id": "DK-6.1-thm",
@@ -2432,7 +3280,41 @@
           "note": "The source prints the Theorem 6.1 lower-frame hypothesis as the operator inequality `E_0^* E_0 >= epsilon^2 I`; the canonical theorem takes `LowerFrameBound E_0 epsilon`. This is the correspondence lemma the contract's `equivalence_lemmas` clause requires, so a source auditor does not have to supply the equivalence informally."
         }
       ],
-      "expected_status": "compiled_exact"
+      "expected_status": "compiled_exact",
+      "result_wide_scope_atoms": [
+        "DK-6.1-thm.generalized-sine-hypotheses",
+        "DK-6.1-thm.unequal-dimension-scope"
+      ],
+      "source_clauses": [
+        {
+          "id": "generalized-sine-conclusion.complex",
+          "conclusion_atoms": [
+            "DK-6.1-thm.generalized-sine-conclusion"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.theorem6_1_source_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for generalized-sine-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "generalized-sine-conclusion.real",
+          "conclusion_atoms": [
+            "DK-6.1-thm.generalized-sine-conclusion"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.theorem6_1_source_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for generalized-sine-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
+      ]
     },
     {
       "id": "DK-6.2-thm",
@@ -2514,6 +3396,37 @@
           "role": "transport_lemma",
           "note": "The source prints the Theorem 6.1 lower-frame hypothesis as the operator inequality `E_0^* E_0 >= epsilon^2 I`; the canonical theorem takes `LowerFrameBound E_0 epsilon`. This is the correspondence lemma the contract's `equivalence_lemmas` clause requires, so a source auditor does not have to supply the equivalence informally."
         }
+      ],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "second-generalized-sine.complex",
+          "conclusion_atoms": [
+            "DK-6.2-thm.second-generalized-sine"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.theorem6_2_source_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for second-generalized-sine at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "second-generalized-sine.real",
+          "conclusion_atoms": [
+            "DK-6.2-thm.second-generalized-sine"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.theorem6_2_source_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for second-generalized-sine at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
       ]
     },
     {
@@ -2590,6 +3503,37 @@
           "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_real",
           "role": "specialization"
         }
+      ],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "generalized-tangent-theorem.complex",
+          "conclusion_atoms": [
+            "DK-6.3-thm.generalized-tangent-theorem"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for generalized-tangent-theorem at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "generalized-tangent-theorem.real",
+          "conclusion_atoms": [
+            "DK-6.3-thm.generalized-tangent-theorem"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for generalized-tangent-theorem at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
       ]
     },
     {
@@ -2650,6 +3594,35 @@
         {
           "declaration": "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage_complex",
           "role": "supporting_theorem"
+        }
+      ],
+      "result_wide_scope_atoms": [
+        "DK-6.3-lem.approximation-number-leakage"
+      ],
+      "source_clauses": [
+        {
+          "id": "whole.complex",
+          "conclusion_atoms": [],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for the whole printed statement at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "whole.real",
+          "conclusion_atoms": [],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for the whole printed statement at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
         }
       ]
     },
@@ -2880,6 +3853,233 @@
           "declaration": "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive",
           "role": "supporting_theorem"
         }
+      ],
+      "result_wide_scope_atoms": [],
+      "source_clauses": [
+        {
+          "id": "existence-correct-q.complex",
+          "conclusion_atoms": [
+            "DK-8.1-thm.existence-correct-q"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for existence-correct-q at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "existence-correct-q.real",
+          "conclusion_atoms": [
+            "DK-8.1-thm.existence-correct-q"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for existence-correct-q at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "acute-iff-spectral-placement.complex",
+          "conclusion_atoms": [
+            "DK-8.1-thm.acute-iff-spectral-placement"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for acute-iff-spectral-placement at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "acute-iff-spectral-placement.real",
+          "conclusion_atoms": [
+            "DK-8.1-thm.acute-iff-spectral-placement"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for acute-iff-spectral-placement at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-i-compression.complex",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-i-compression"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-i-compression at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-i-compression.complex.2",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-i-compression"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-i-compression at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-i-compression.real",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-i-compression"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-i-compression at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-i-compression.real.2",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-i-compression"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-i-compression at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-ii-eigenvalue.complex",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-ii-eigenvalue"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-ii-eigenvalue at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-ii-eigenvalue.complex.2",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-ii-eigenvalue"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-ii-eigenvalue at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-ii-eigenvalue.real",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-ii-eigenvalue"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-ii-eigenvalue at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-ii-eigenvalue.real.2",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-ii-eigenvalue"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-ii-eigenvalue at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-iii-gauge.complex",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-iii-gauge"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-iii-gauge at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-iii-gauge.complex.2",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-iii-gauge"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-iii-gauge at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-iii-gauge.real",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-iii-gauge"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-iii-gauge at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "part-iii-gauge.real.2",
+          "conclusion_atoms": [
+            "DK-8.1-thm.part-iii-gauge"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for part-iii-gauge at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
       ]
     },
     {
@@ -2961,7 +4161,9 @@
           "scalar_scope": "complex",
           "evidence_kind": "proof",
           "covers_source_atoms": [
-            "DK-8.2-thm.double-angle-bound-retained"
+            "DK-8.2-thm.smallness-alternative",
+            "DK-8.2-thm.double-angle-bound-retained",
+            "S3-standing-scope.crossed-dimension-standing-assumption"
           ],
           "capability_classes": []
         },
@@ -2971,7 +4173,9 @@
           "scalar_scope": "complex",
           "evidence_kind": "proof",
           "covers_source_atoms": [
-            "DK-8.2-thm.double-angle-bound-retained"
+            "DK-8.2-thm.smallness-alternative",
+            "DK-8.2-thm.double-angle-bound-retained",
+            "S3-standing-scope.crossed-dimension-standing-assumption"
           ],
           "capability_classes": []
         },
@@ -2981,7 +4185,9 @@
           "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
-            "DK-8.2-thm.double-angle-bound-retained"
+            "DK-8.2-thm.smallness-alternative",
+            "DK-8.2-thm.double-angle-bound-retained",
+            "S3-standing-scope.crossed-dimension-standing-assumption"
           ],
           "capability_classes": []
         },
@@ -2991,7 +4197,9 @@
           "scalar_scope": "real",
           "evidence_kind": "proof",
           "covers_source_atoms": [
-            "DK-8.2-thm.double-angle-bound-retained"
+            "DK-8.2-thm.smallness-alternative",
+            "DK-8.2-thm.double-angle-bound-retained",
+            "S3-standing-scope.crossed-dimension-standing-assumption"
           ],
           "capability_classes": []
         }
@@ -3005,6 +4213,96 @@
           "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real",
           "role": "supporting_theorem"
         }
+      ],
+      "result_wide_scope_atoms": [
+        "DK-8.2-thm.smallness-alternative",
+        "S3-standing-scope.crossed-dimension-standing-assumption"
+      ],
+      "source_clauses": [
+        {
+          "id": "acute-branch-conclusion.complex",
+          "conclusion_atoms": [
+            "DK-8.2-thm.acute-branch-conclusion"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for acute-branch-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "acute-branch-conclusion.real",
+          "conclusion_atoms": [
+            "DK-8.2-thm.acute-branch-conclusion"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for acute-branch-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "double-angle-bound-retained.complex",
+          "conclusion_atoms": [
+            "DK-8.2-thm.double-angle-bound-retained"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "double-angle-bound-retained.complex.2",
+          "conclusion_atoms": [
+            "DK-8.2-thm.double-angle-bound-retained"
+          ],
+          "scalar_scope": "complex",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "double-angle-bound-retained.real",
+          "conclusion_atoms": [
+            "DK-8.2-thm.double-angle-bound-retained"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        },
+        {
+          "id": "double-angle-bound-retained.real.2",
+          "conclusion_atoms": [
+            "DK-8.2-thm.double-angle-bound-retained"
+          ],
+          "scalar_scope": "real",
+          "evidence": {
+            "primary": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm",
+            "correspondence": []
+          },
+          "status": "established",
+          "evidence_kind": "proof",
+          "justification": "Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model."
+        }
       ]
     }
   ],
@@ -3014,10 +4312,12 @@
     "method": "Audited each previously nonterminal counted result against only its accepted printed-result boundary; promoted a result only when concrete source-facing Lean declarations expose every counted hypothesis, conclusion, and scalar/dimension/norm scope. Proof-only and theorem-adjacent source atoms were not used as blockers. Proposition 3.3 is closed by the real nonacute principal-square-root bridge on main; Proposition 4.1 is additionally closed here by the compiler-validated arbitrary-dimensional compact/nonacute direct-rotation value bridge over complex and real scalars. Proposition 3.4 is additionally closed by the compiler-validated real full-scope bridge, which transports the exact nonacute source hypotheses and direct-rotation conclusion through canonical complexification.  REOPENED then REPAIRED 2026-08-12: this sweep's earlier acceptance of `S2-sin-two-theta`, `DK-3.4-prop`, and `DK-8.2-thm` was withdrawn and each row was given a structured `remaining_gap` naming the exact source-to-Lean mismatch.  All three mismatches have since been repaired and the printed statements re-audited: a new unbounded directed trial-residual `sin 2Theta_0` endpoint over both fields, a new complex Proposition 3.4 with the genuine Definition 3.1 conclusion, and the standing Section 3 assumption (3.5) inventoried as source scope with the ambient quarter-angle theorems selected as Theorem 8.2's evidence.  The three rows are accepted again on that repaired evidence.  UPDATED 2026-08-12: `S2-tan-theta` is no longer awaiting a formal refutation of a false theorem.  It is accepted as a true counted result read under a documented nonlocal source interpretation (see the row's `nonlocal_source_interpretation`), and it remains nonterminal only for the missing real-scalar unbounded ambient endpoint.  The bilateral-shift construction is recorded as a vacuity/nonvacuity witness separating (1.5) from (3.5), not as a counterexample to the counted result.  CLOSED 2026-08-13: `S2-tan-theta` is accepted terminal.  Its one remaining Lean-coverage blocker, the real-scalar unbounded ambient endpoint, is proved by `tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real`, which carries the printed hypotheses -- reducing subspace, `A_0 <= alpha`, `alpha + delta <= Lambda_1`, `H_0 = 0`, and the standing (3.5) -- at the printed constant and at every paper unitarily invariant norm over a real Hilbert space, deriving uniform transversality instead of assuming it.  All 29 counted results are now terminal on all three axes. HOSTILE APPENDIX SCOPE CORRECTION 2026-08-12: the previous terminalization confused an unbounded ambient operator with an unbounded Ritz compression. The Appendix permits A_0 itself to be unbounded. The new `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` and real sibling consume `UnboundedCompressionTrialData.all_kyFan_core` and close that stronger scope.  REOPENED 2026-08-12 (DK-3.5-prop, mapping): this sweep accepted `DK-3.5-prop` on evidence that required `IsAcute` for the commutation and eigenvector-angle clauses.  Davis and Kahan restrict only the maximal-eigenspace clause to the acute case; the other two are printed under the standing Section 3 hypotheses, which admit the completed nonacute direct rotation.  Both clauses have since been proved at that scope, including the right-angle eigenspace, but the acceptance itself is withdrawn pending an independent re-audit of the repaired signatures.  CLOSED 2026-08-13 (DK-3.5-prop, independent hostile re-audit): the repaired signatures were checked against the printed three-clause structure.  Clauses 1 and 2 are registered at the standing nonacute Section 3 scope, clause 2 includes theta = pi/2, and clause 3 alone retains `IsAcute`.  The row is accepted again; all 29 counted results are terminal.",
     "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-12.md",
-    "terminal_results": 29,
-    "remaining_results": [],
+    "terminal_results": 28,
+    "remaining_results": [
+      "S2-sin-two-theta"
+    ],
     "note": " 2026-08-31: `S2-sin-two-theta` reopened. Its complex endpoint covers only bounded gap intervals while the row's own source scope includes half-infinite ones, which only the real endpoint carries.",
-    "canonical_evidence_sha256": "1b25dd19eeacb12808c7b4a88b08d754c7ce43f09236c553b16fbe913274f57b"
+    "canonical_evidence_sha256": "1d8e9a5f6cd4921419c6d67c559e8e6ee9c2cc9aef8b1c3a812448f1a1edfc78"
   },
   "section_two_short_names": {
     "purpose": "The four unqualified `TauCeti.DavisKahan1970.SectionTwo.*` names, and what each is bound to. A short name is bound only to a declaration that is scalar-generic over `RCLike` AND at the printed source scope; `null` means deliberately unbound. This is the single owner of that fact: `check_davis_kahan_1970_result_inventory.py` reads `SectionTwo.lean`'s own `alias` lines and fails if they disagree.",

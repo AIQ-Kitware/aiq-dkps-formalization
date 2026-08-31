@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **29/29 terminal**, **0 awaiting semantic closure**.
+Current result-level status: **28/29 terminal**, **1 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -86,6 +86,25 @@ or the same condition with $A_0$ and $\Lambda_1$ interchanged.  Then, for every 
 \]
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `directed.complex` | complex | `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex` | **PASS** |
+| `directed.real` | real | `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real` | **PASS** |
+
+**`directed.complex`.** delta * N(sin Theta_0) <= N(R) with sin Theta_0 = (I - F0 F0*) E0, ideal membership concluded, unbounded self-adjoint LinearPMap ambient operator, arbitrary Hilbert dimension, arbitrary PaperUnitaryInvariantNorm, whole FormBoundedSylvesterGap.
+
+*Gap scope:* The primary takes `FormBoundedSylvesterGap A_0 Lambda_1 delta`, whose `leftAboveRightBelow` and `leftBelowRightAbove` constructors ARE the two half-infinite configurations; `intervalExterior` is the bounded one. All three are available to a caller.
+
+**`directed.real`.** The real sibling of the complex directed clause: delta * N(sin Theta_0) <= N(R), same argument list, same full FormBoundedSylvesterGap scope, same two printed conclusions.
+
+*Gap scope:* The primary takes `FormBoundedSylvesterGap A_0 Lambda_1 delta`, whose `leftAboveRightBelow` and `leftBelowRightAbove` constructors ARE the two half-infinite configurations; `intervalExterior` is the bounded one. All three are available to a caller.
+
+Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
@@ -111,13 +130,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:218`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:239`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:225`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:246`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -674,14 +693,43 @@ and impose the Rayleigh--Ritz/off-diagonal condition $H_0=0$ (equivalently $A_0=
 The first is directed and residual-based; the second uses the ambient angle and the full perturbation.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex` | **PASS** |
+| `ambient.real` | real | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real` | **PASS** |
+| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex` | **PASS** |
+| `directed.real` | real | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real` | **PASS** |
+
+**`ambient.complex`.** delta * N(tan Theta) <= N(H) on the ambient paperTanAngleOperatorC, with ideal membership, unbounded self-adjoint LinearPMap ambient operator and unbounded Ritz compression.
+
+*Gap scope:* The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval.
+
+**`ambient.real`.** The real sibling of the complex ambient clause: delta * N(tan Theta) <= N(H) on the ambient paperTanAngleOperatorR, ideal membership concluded, unbounded self-adjoint ambient operator and unbounded Ritz compression, arbitrary PaperUnitaryInvariantNorm.
+
+*Gap scope:* The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval.
+
+**`directed.complex`.** delta * N(tan Theta_0) <= N(R) with the trial residual on the right, unbounded self-adjoint ambient operator, arbitrary complete trial subspace, arbitrary PaperUnitaryInvariantNorm. The representative is a parameter characterized by the paper's own instruction that its approximation numbers be tan theta_j, which is why the statement does not depend on which representative the caller holds. ADDED 2026-08-31: the previously registered directed evidence did not carry this scope -- `theorem6_3_perturbation_infiniteTrial` has a BOUNDED ambient operator at a Ky Fan family, and `partIII_tanTheta_ritzResidual_uiNorm` is finite-dimensional at a rectangular seminorm. Both are retained as supporting evidence.
+
+*Gap scope:* The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval.
+
+**`directed.real`.** The real sibling of the complex directed clause: delta * N(tan Theta_0) <= N(R) with the trial residual on the right, unbounded self-adjoint ambient operator, arbitrary complete trial subspace, arbitrary PaperUnitaryInvariantNorm, representative characterized by its approximation numbers.
+
+*Gap scope:* The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval.
+
+Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
-- `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`
-- `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm` — primary_source_witness, rclike scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.arbitrary-ui-scope`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
 
 ### Other registered declarations
 
@@ -699,18 +747,21 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.UnboundedRitzPair` — implementation_structure
 - `TauCeti.DavisKahan.ReducingComplement` — supporting_theorem
 - `TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock` — supporting_theorem
+- `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial` — specialization
+- `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm` — specialization
+- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal` — supporting_theorem
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:240`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:261`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:249`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:270`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -810,6 +861,24 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnbounded
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:92`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:135`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal`
+
+Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:668`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 ### Independent result audit checklist
 
 - [ ] The selected source atoms are exactly the hypotheses, conclusions, and scope of the printed result statement.
@@ -840,7 +909,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Section 2, sin 2 theta theorem
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `accepted`
+- **Hostile semantic certification:** `reopened_math`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -882,16 +951,45 @@ Then for every unitary-invariant norm,
 Again the source distinguishes the directed residual statement from the ambient perturbation statement.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `directed.residual.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` | **PASS** |
+| `directed.residual.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real` | **PASS** |
+| `ambient.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex` | **OPEN** |
+| `ambient.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real` | **OPEN** |
+
+**`directed.residual.complex`.** delta * N(sin 2Theta_0) <= 2 N(R) with the printed trial residual, unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm, full FormBoundedSylvesterGap.
+
+*Gap scope:* The primary takes `FormBoundedSylvesterGap` between the two spectral restrictions, so both semibounded constructors are available; the bounded-interval spelling is the separate `..._spectrumGap_...` declaration held as supporting evidence.
+
+**`directed.residual.real`.** The real sibling of the complex directed residual clause: delta * N(sin 2Theta_0) <= 2 N(R) with the printed trial residual, unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm, full FormBoundedSylvesterGap.
+
+*Gap scope:* The primary takes `FormBoundedSylvesterGap` between the two spectral restrictions, so both semibounded constructors are available; the bounded-interval spelling is the separate `..._spectrumGap_...` declaration held as supporting evidence.
+
+**`ambient.complex`.** The complex ambient clause: the printed conclusion delta * N(sin 2Theta) <= 2 N(H) on the AMBIENT paperSinTwoAngleOperatorC, at this result's unbounded self-adjoint scope.
+
+*OPEN — what is missing:* The only paper-norm ambient endpoint is stated for BOUNDED operators (`A B : E ->L[C] E`), so it does not establish the ambient conclusion at this result's unbounded scope; the type-requirement check rejects it for `unbounded-selfadjoint-scope`. This was masked until 2026-08-31 by a checker that unioned atoms across unrelated declarations: the DIRECTED theorems donated the unbounded scope atoms and the BOUNDED ambient theorem donated the ambient conclusion, and no theorem established the conjunction. THE MISSING THEOREM: an unbounded ambient endpoint over each field. THE ROUTE IS IDENTIFIED. `paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub` says the ambient sin 2Theta between U and V is |P_(U.map R_V) - P_U|, i.e. an ambient sin Theta between U and its reflection through V; the bounded proof is exactly `symmetric_sinTheta_spectrum_all_kyFan` applied to the pair (A, R_V A R_V) plus `kyFan_reflectionDisplacement_le` for the factor two. The unbounded symmetric sine theorem needed for the lift now exists -- `PaperCommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm` and `proposition6_1_commonDomain_source_complex`, taking two closed self-adjoint operators on one domain -- and `B := addBounded A (reflectionPerturbation V H)` equals R_V A R_V on dom A when V reduces A + H, which supplies the perturbation identity and the factor two through `reflectionPerturbation_mem_and_gauge_le`. WHAT IS ABSENT is transport of the two structural hypotheses across the reflection unitary: (1) `ReducesSubspace (R_V A R_V) (U.map R_V)` from `ReducesSubspace A U`; (2) an equality identifying `reducingRestriction B (U.map R_V)` with `unitaryConjugate (unitarySubmoduleMapIsometry V.reflection U) (reducingRestriction A U)`; and (3) invariance of `FormBoundedSylvesterGap` under `unitaryConjugate` in each slot, which needs `LinearPMap.realSpectrum` and `SemiboundedBelow`/`SemiboundedAbove` transport. `unitarySubmoduleMapIsometry` and `unitaryConjugate_spectrum_eq` already exist; the restriction equality and the gap transport do not.
+
+**`ambient.real`.** The real ambient clause: delta * N(sin 2Theta) <= 2 N(H) on the ambient real double-angle sine at the printed unbounded scope.
+
+*OPEN — what is missing:* As for the complex ambient clause: the only real paper-norm ambient endpoint is stated for bounded operators.
+
+Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
-- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
-- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-sin-two-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
-- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`
-- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers 
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real` — primary_source_witness, real scalars, proof; covers 
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers 
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real` — primary_source_witness, real scalars, proof; covers 
 
 ### Other registered declarations
 
@@ -925,13 +1023,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:265`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:286`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:274`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:295`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1087,7 +1185,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:923`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:928`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1189,6 +1287,35 @@ No independent hypothesis excluding the poles of $\tan(2\Theta)$, and no spectra
 Section~7 derives the nonvanishing of the relevant $\cos(2\theta_j)$ factors from these hypotheses during the proof rather than assuming it.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` | **PASS** |
+| `directed.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real` | **PASS** |
+| `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex` | **PASS** |
+| `ambient.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real` | **PASS** |
+
+**`directed.complex`.** delta * N(tan 2Theta_0) <= 2 N(R), unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm.
+
+*Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
+
+**`directed.real`.** The real sibling of the complex directed clause: (b - a) * N(tan 2Theta_0) <= 2 N(R), unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm.
+
+*Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
+
+**`ambient.complex`.** (b - a) * N(|tan 2Theta|) <= 2 N(B) on the ambient branch-free paperAbsTanTwoAngleOperatorC, unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm.
+
+*Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
+
+**`ambient.real`.** The real sibling of the complex ambient clause: (b - a) * N(|tan 2Theta|) <= 2 N(B) on the ambient branch-free real double-angle tangent, unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm.
+
+*Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
+
+Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
@@ -1234,13 +1361,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:289`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:361`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:296`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:368`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1484,6 +1611,18 @@ Boundary method: Compared the printed result environment with the source-fidelit
 In the acute case, a direct rotation exists and is unique.  Moreover positivity of the diagonal blocks, $C_0,C_1\ge0$, already characterizes it among unitaries carrying $P\Hsp$ onto $Q\Hsp$: the polar-decomposition relations force the off-diagonal condition $S_1=S_0^*$ because the relevant kernels vanish in the acute case.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `existence.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_1_source` | **PASS** |
+
+**`existence.rclike`.** Canonical witness for existence, uniqueness, positive-diagonal-characterization at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
@@ -1565,12 +1704,27 @@ When it exists it need not be unique.  On the two crossing subspaces a direct ro
 The source appends a remark comparing (3.5) with the earlier matching-dimension condition (1.5).  Since (1.5) is being assumed, (3.5) holds automatically whenever either $\dim P\Hsp$ or $\dim P^\perp\Hsp$ is finite.  In infinite dimensions it can fail: let $\Hsp$ be the two-sided square-summable sequences $(\ldots,a_{-1},a_0,a_1,\ldots)$, let $P\Hsp$ be those with $a_n=0$ for $n<0$, and let $Q\Hsp$ be those with $a_n=0$ for $n\le0$.  The bilateral shift $V(a_n)=(b_n)$ with $b_n=a_{n-1}$ is a unitary satisfying (1.4), so (1.5) holds; but $PQ^\perp$ is the projector onto the sequences vanishing off $n=0$ while $P^\perp Q=0$, so the two crossing subspaces of (3.5) have dimensions $1$ and $0$ and (3.5) fails.  Hence (1.5) does not imply (3.5), and by this proposition the shift pair admits no direct rotation at all.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `existence-iff-crossing-dimensions.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent` | **PASS** |
+| `nonuniqueness.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_2_not_unique` | **PASS** |
+
+**`existence-iff-crossing-dimensions.rclike`.** Canonical witness for existence-iff-crossing-dimensions at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`nonuniqueness.rclike`.** Canonical witness for nonuniqueness at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: `DK-3.2-prop.eq-3-5`
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
 - `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent` — primary_source_witness, rclike scalars, proof; covers `DK-3.2-prop.existence-iff-crossing-dimensions`, `DK-3.2-prop.eq-3-5`
-- `TauCeti.DavisKahan1970.proposition3_2_not_unique` — primary_source_witness, rclike scalars, proof; covers `DK-3.2-prop.nonuniqueness`
+- `TauCeti.DavisKahan1970.proposition3_2_not_unique` — primary_source_witness, rclike scalars, proof; covers `DK-3.2-prop.nonuniqueness`, `DK-3.2-prop.eq-3-5`
 
 ### Other registered declarations
 
@@ -1685,6 +1839,27 @@ With the reflection $X=P-P^\perp$ and $Q_-=XQX$ one has $U^{-1}=XUX$.  In partic
 Every direct rotation is therefore the principal unitary square root of $(Q-Q^\perp)(P-P^\perp)$, with spectrum in the closed right half-plane.  Conversely, a principal square root of that product is a direct rotation provided it sends $P\Hsp\cap Q^\perp\Hsp$ onto $P^\perp\Hsp\cap Q\Hsp$.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `principal-square-root.complex` | complex | `TauCeti.DavisKahan1970.proposition3_3_complex_forward_source` | **PASS** |
+| `square-root-converse.complex` | complex | `TauCeti.DavisKahan1970.proposition3_3_complex_converse_source` | **PASS** |
+| `principal-square-root.real` | real | `TauCeti.DavisKahan1970.proposition3_3_real_forward_source` | **PASS** |
+| `square-root-converse.real` | real | `TauCeti.DavisKahan1970.proposition3_3_real_converse_source` | **PASS** |
+
+**`principal-square-root.complex`.** Canonical witness for principal-square-root at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`square-root-converse.complex`.** Canonical witness for square-root-converse at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`principal-square-root.real`.** Canonical witness for principal-square-root at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`square-root-converse.real`.** Canonical witness for square-root-converse at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
@@ -1776,6 +1951,21 @@ Under the same direct-rotation setup, if
 \]
 (equivalently, the relevant principal angles do not exceed $\pi/4$), then $U^2$ is itself the direct rotation carrying $Q_-\Hsp$ onto $Q\Hsp$.
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `u-square-direct-rotation.complex` | complex | `TauCeti.DavisKahan1970.proposition3_4_source_full_complex` | **PASS** |
+| `u-square-direct-rotation.real` | real | `TauCeti.DavisKahan1970.proposition3_4_source_full_real` | **PASS** |
+
+**`u-square-direct-rotation.complex`.** Canonical witness for u-square-direct-rotation at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`u-square-direct-rotation.real`.** Canonical witness for u-square-direct-rotation at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: `S3-standing-scope.crossed-dimension-standing-assumption`
 
 ### Canonical evidence
 
@@ -1883,6 +2073,24 @@ A complete invariant of the pair $(P\Hsp,Q\Hsp)$ under isometric equivalence is 
 their domain dimensions sum to $\dim\Hsp$, and their spectral multiplicity functions agree except possibly at the eigenvalue/spectral point $0$.  The proof reconstructs the pair from these angle data and the corresponding partial isometry $J_0$.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `complete-invariant.complex` | complex | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex` | **PASS** |
+| `complete-invariant.real` | real | `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` | **PASS** |
+| `converse-angle-data.rclike` | rclike | `TauCeti.DavisKahan1970.theorem3_1_realization` | **PASS** |
+
+**`complete-invariant.complex`.** Canonical witness for complete-invariant at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`complete-invariant.real`.** Canonical witness for complete-invariant at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`converse-angle-data.rclike`.** Canonical witness for converse-angle-data at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
@@ -1968,6 +2176,21 @@ Under the hypotheses of Theorem~3.1, if $PQ^\perp P$ is compact, the complete in
 \]
 together with a possible eigenvalue $0$; $\Theta_1$ has the same nonzero eigenvalues and may differ only in the multiplicity of $0$.
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `compact-complete-invariants.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification` | **PASS** |
+| `allowed-angle-sequence.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_1_realization` | **PASS** |
+
+**`compact-complete-invariants.rclike`.** Canonical witness for compact-complete-invariants, theta1-match at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`allowed-angle-sequence.rclike`.** Canonical witness for allowed-angle-sequence at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
 
 ### Canonical evidence
 
@@ -2064,6 +2287,24 @@ If $\Theta x=\theta x$, then
 \]
 In the acute case the $\theta$-eigenspace of $\Theta$ is the unique maximal subspace which reduces both $P$ and $Q$ and on which every nonzero $x\in P\Hsp$ has angle $\theta$ from $Qx$, while every nonzero $x\in P^\perp\Hsp$ has angle $\theta$ from $Q^\perp x$.
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `commutation.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_5_commutations` | **PASS** |
+| `eigenvector-rotation-angle.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle` | **PASS** |
+| `acute-maximal-characterization.rclike` | rclike | `TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal` | **PASS** |
+
+**`commutation.rclike`.** Canonical witness for commutation at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`eigenvector-rotation-angle.rclike`.** Canonical witness for eigenvector-rotation-angle at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`acute-maximal-characterization.rclike`.** Canonical witness for acute-maximal-characterization at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
 
 ### Canonical evidence
 
@@ -2175,6 +2416,18 @@ Boundary method: Compared the printed result environment with the source-fidelit
 ~~~~tex
 Interchanging the roles of $P$ and $Q$ leaves the angle operator $\Theta$ unchanged and replaces $J$ by $-J$.
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `swap-invariance.rclike` | rclike | `TauCeti.DavisKahan1970.corollary3_2_source` | **PASS** |
+
+**`swap-invariance.rclike`.** Canonical witness for swap-invariance at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
 
 ### Canonical evidence
 
@@ -2311,6 +2564,21 @@ and the proof selects a corresponding unit vector $x$ for which
 The latter follows by comparing $Vx$ with the closest unit vector in $Q\Hsp$ and using the block formula (3.7).
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `orthonormal-angle-lower-bounds.complex` | complex | `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex` | **PASS** |
+| `orthonormal-angle-lower-bounds.real` | real | `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real` | **PASS** |
+
+**`orthonormal-angle-lower-bounds.complex`.** Canonical witness for orthonormal-angle-lower-bounds, singular-value-minimality at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`orthonormal-angle-lower-bounds.real`.** Canonical witness for orthonormal-angle-lower-bounds, singular-value-minimality at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
@@ -2405,6 +2673,21 @@ For every unitary-invariant norm,
 is minimized among unitaries carrying $P\Hsp$ onto $Q\Hsp$ by the direct rotation $V=U$.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `ui-minimality-on-p.complex` | complex | `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex` | **PASS** |
+| `ui-minimality-on-p.real` | real | `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real` | **PASS** |
+
+**`ui-minimality-on-p.complex`.** Canonical witness for ui-minimality-on-p at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`ui-minimality-on-p.real`.** Canonical witness for ui-minimality-on-p at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
@@ -2495,15 +2778,27 @@ For every unitary $V$ carrying $P\Hsp$ onto $Q\Hsp$ and every orthonormal basis 
 with the inequality also valid when the right-hand side is infinite.  The proof identifies the lower bound with $\operatorname{tr}(S_0^*S_0)$.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `basis-sine-square-lower-bound.complex` | complex | `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional` | **PASS** |
+| `basis-sine-square-lower-bound.real` | real | `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence` | **PASS** |
+
+**`basis-sine-square-lower-bound.complex`.** Canonical witness for basis-sine-square-lower-bound at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`basis-sine-square-lower-bound.real`.** The real counterpart of the infinite-series basis-angle lower bound, over an arbitrary real Hilbert space with the extended (ENNReal) summation that carries the divergent right-hand side. PROMOTED 2026-08-31: the row's review note already described this as the literal real counterpart, but under the flat-union model only the complex theorem was canonical, so the printed result was certified at one scalar field. The coherent model requires both.
+
+Result-wide scope every clause must carry: *(none)*
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
 - `TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional` — primary_source_witness, complex scalars, proof; covers `DK-4.2-prop.basis-sine-square-lower-bound`
-
-### Other registered declarations
-
-- `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence` — supporting_theorem
+- `TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence` — primary_source_witness, real scalars, proof; covers `DK-4.2-prop.basis-sine-square-lower-bound`
 
 ### Source-facing Lean declarations
 
@@ -2640,6 +2935,21 @@ These formulas show term by term that the squared displacement has the source's 
 for every unitary-invariant norm.  They also imply minimality of the operator norm and Hilbert--Schmidt norm of $1-V$, but the source warns that arbitrary unitary-invariant norms of $1-V$ need not be minimized by the direct rotation.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `squared-displacement-global-minimum.complex` | complex | `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge` | **PASS** |
+| `squared-displacement-global-minimum.real` | real | `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge` | **PASS** |
+
+**`squared-displacement-global-minimum.complex`.** Canonical witness for squared-displacement-global-minimum at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`squared-displacement-global-minimum.real`.** Canonical witness for squared-displacement-global-minimum at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
@@ -2728,6 +3038,18 @@ After these examples the paper prints Proposition~4.4: if $\Hsp$ is real, $V$ is
 \]
 then $\norm{1-V}$ is asserted to be minimized by $V=U$ for every unitary-invariant norm.  The paper states the $\pi/3$ threshold is sharp in view of the examples.
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `whole.not_visible_in_type` | not_visible_in_type | `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite` | **PASS** |
+
+**`whole.not_visible_in_type`.** Canonical witness for the whole printed statement at not_visible_in_type scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: `DK-4.4-prop.printed-proposition4-4`
 
 ### Canonical evidence
 
@@ -2836,6 +3158,21 @@ then
 \]
 The roles and hypotheses of $A$ and $B$ may be interchanged.  The same proof also covers densely-defined unbounded $A$ provided the inverse hypothesis is meaningful/bounded while $B$ and $X$ remain bounded; the source then proceeds to a separate result allowing unbounded behavior on both sides in the Hilbert-space setting.
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `sylvester-lower-bound.scalar_generic` | scalar_generic | `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm` | **PASS** |
+| `sylvester-lower-bound.complex` | complex | `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact` | **PASS** |
+
+**`sylvester-lower-bound.scalar_generic`.** Canonical witness for sylvester-lower-bound at scalar_generic scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`sylvester-lower-bound.complex`.** Canonical witness for sylvester-lower-bound at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: `DK-5.1-thm.banach-hypotheses`
 
 ### Canonical evidence
 
@@ -2947,6 +3284,21 @@ then for every unitary-invariant norm
 This is the source's main Sylvester tool for the unbounded self-adjoint passages.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `hilbert-unbounded-conclusion.complex` | complex | `TauCeti.DavisKahan1970.Theorem5_2` | **PASS** |
+| `hilbert-unbounded-conclusion.real` | real | `TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real` | **PASS** |
+
+**`hilbert-unbounded-conclusion.complex`.** Canonical witness for hilbert-unbounded-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`hilbert-unbounded-conclusion.real`.** Canonical witness for hilbert-unbounded-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: `DK-5.2-thm.hilbert-unbounded-hypotheses`
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
@@ -3023,6 +3375,18 @@ If orthogonal projectors $\Omega(\tau)$ converge strongly to the identity and $\
 \]
 This cutoff lemma lets finite spectral truncations recover the Ky Fan data required in the unbounded arguments.
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `whole.rclike` | rclike | `TauCeti.DavisKahan1970.Lemma5_1` | **PASS** |
+
+**`whole.rclike`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: `DK-5.1-lem.strong-cutoff-convergence`
 
 ### Canonical evidence
 
@@ -3103,12 +3467,27 @@ then
 for every unitary-invariant norm.  The converse holds when the two diagonal blocks of $K$ are equisingular and the two diagonal blocks of $L$ are equisingular.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `whole.rclike` | rclike | `TauCeti.DavisKahan1970.lemma6_1` | **PASS** |
+| `whole.rclike.2` | rclike | `TauCeti.DavisKahan1970.lemma6_1_converse` | **PASS** |
+
+**`whole.rclike`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`whole.rclike.2`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: `DK-6.1-lem.ordered-sylvester-forward`, `DK-6.1-lem.ordered-sylvester-converse`
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.lemma6_1` — primary_source_witness, rclike scalars, proof; covers `DK-6.1-lem.ordered-sylvester-forward`
-- `TauCeti.DavisKahan1970.lemma6_1_converse` — primary_source_witness, rclike scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`
+- `TauCeti.DavisKahan1970.lemma6_1` — primary_source_witness, rclike scalars, proof; covers `DK-6.1-lem.ordered-sylvester-forward`, `DK-6.1-lem.ordered-sylvester-converse`
+- `TauCeti.DavisKahan1970.lemma6_1_converse` — primary_source_witness, rclike scalars, proof; covers `DK-6.1-lem.ordered-sylvester-forward`, `DK-6.1-lem.ordered-sylvester-converse`
 
 ### Source-facing Lean declarations
 
@@ -3179,6 +3558,18 @@ For orthogonal projectors $\Omega,\Upsilon$ and every unitary-invariant norm,
 \]
 The proof is the reflection/pinching contraction obtained by averaging $K$ with suitable unitary reflections.
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `whole.rclike` | rclike | `TauCeti.DavisKahan1970.lemma6_2` | **PASS** |
+
+**`whole.rclike`.** Canonical witness for the whole printed statement at rclike scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: `DK-6.2-lem.pinching-contraction`
 
 ### Canonical evidence
 
@@ -3269,6 +3660,21 @@ The symmetric replacement is Proposition~6.1: if the $A_0$--$\Lambda_1$ spectra 
  \boxed{\delta\norm{\sin\Theta}\le\norm{H}.}
 \]
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `symmetric-sine-theorem.complex` | complex | `TauCeti.DavisKahan1970.proposition6_1_source_complex` | **PASS** |
+| `symmetric-sine-theorem.real` | real | `TauCeti.DavisKahan1970.proposition6_1_source_real` | **PASS** |
+
+**`symmetric-sine-theorem.complex`.** Canonical witness for symmetric-sine-theorem at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`symmetric-sine-theorem.real`.** Canonical witness for symmetric-sine-theorem at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
 
 ### Canonical evidence
 
@@ -3420,6 +3826,21 @@ If one of $A_0,\Lambda_1$ has spectrum in $[\beta,\alpha]$ and the other has spe
 \]
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `generalized-sine-conclusion.complex` | complex | `TauCeti.DavisKahan1970.theorem6_1_source_complex` | **PASS** |
+| `generalized-sine-conclusion.real` | real | `TauCeti.DavisKahan1970.theorem6_1_source_real` | **PASS** |
+
+**`generalized-sine-conclusion.complex`.** Canonical witness for generalized-sine-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`generalized-sine-conclusion.real`.** Canonical witness for generalized-sine-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.unequal-dimension-scope`
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
@@ -3559,6 +3980,21 @@ Combining this with (5.2) also yields the rank-corrected operator-norm estimate
  \le\norm{R}_1\sqrt{\operatorname{rank}R}.
 \]
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `second-generalized-sine.complex` | complex | `TauCeti.DavisKahan1970.theorem6_2_source_complex` | **PASS** |
+| `second-generalized-sine.real` | real | `TauCeti.DavisKahan1970.theorem6_2_source_real` | **PASS** |
+
+**`second-generalized-sine.complex`.** Canonical witness for second-generalized-sine at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`second-generalized-sine.real`.** Canonical witness for second-generalized-sine at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
 
 ### Canonical evidence
 
@@ -3755,6 +4191,21 @@ then the corresponding directed tangent operator satisfies, for every unitary-in
 \]
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `generalized-tangent-theorem.complex` | complex | `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists` | **PASS** |
+| `generalized-tangent-theorem.real` | real | `TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real` | **PASS** |
+
+**`generalized-tangent-theorem.complex`.** Canonical witness for generalized-tangent-theorem at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`generalized-tangent-theorem.real`.** Canonical witness for generalized-tangent-theorem at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
@@ -3852,6 +4303,21 @@ then the leakage outside $\Psi$ obeys
  \boxed{\norm{\Gamma K\Psi^\perp}_1\le\eta.}
 \]
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `whole.complex` | complex | `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex` | **PASS** |
+| `whole.real` | real | `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real` | **PASS** |
+
+**`whole.complex`.** Canonical witness for the whole printed statement at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`whole.real`.** Canonical witness for the whole printed statement at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: `DK-6.3-lem.approximation-number-leakage`
 
 ### Canonical evidence
 
@@ -3994,6 +4460,63 @@ and hence
 \end{equation}
 These exclude $\theta=\pi/4$ and then $\theta>\pi/4$ under the chosen spectral placement.  The source interprets parts (ii)--(iii) as quantitative spectral repulsion: an off-diagonal perturbation that rotates all relevant eigenvectors strongly must also move eigenvalues by a definite amount.
 ~~~~
+
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `existence-correct-q.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch` | **PASS** |
+| `existence-correct-q.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real` | **PASS** |
+| `acute-iff-spectral-placement.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn` | **PASS** |
+| `acute-iff-spectral-placement.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real` | **PASS** |
+| `part-i-compression.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source` | **PASS** |
+| `part-i-compression.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source` | **PASS** |
+| `part-i-compression.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real` | **PASS** |
+| `part-i-compression.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real` | **PASS** |
+| `part-ii-eigenvalue.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source` | **PASS** |
+| `part-ii-eigenvalue.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source` | **PASS** |
+| `part-ii-eigenvalue.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real` | **PASS** |
+| `part-ii-eigenvalue.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real` | **PASS** |
+| `part-iii-gauge.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source` | **PASS** |
+| `part-iii-gauge.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source` | **PASS** |
+| `part-iii-gauge.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real` | **PASS** |
+| `part-iii-gauge.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real` | **PASS** |
+
+**`existence-correct-q.complex`.** Canonical witness for existence-correct-q at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`existence-correct-q.real`.** Canonical witness for existence-correct-q at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`acute-iff-spectral-placement.complex`.** Canonical witness for acute-iff-spectral-placement at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`acute-iff-spectral-placement.real`.** Canonical witness for acute-iff-spectral-placement at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-i-compression.complex`.** Canonical witness for part-i-compression at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-i-compression.complex.2`.** Canonical witness for part-i-compression at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-i-compression.real`.** Canonical witness for part-i-compression at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-i-compression.real.2`.** Canonical witness for part-i-compression at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-ii-eigenvalue.complex`.** Canonical witness for part-ii-eigenvalue at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-ii-eigenvalue.complex.2`.** Canonical witness for part-ii-eigenvalue at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-ii-eigenvalue.real`.** Canonical witness for part-ii-eigenvalue at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-ii-eigenvalue.real.2`.** Canonical witness for part-ii-eigenvalue at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-iii-gauge.complex`.** Canonical witness for part-iii-gauge at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-iii-gauge.complex.2`.** Canonical witness for part-iii-gauge at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-iii-gauge.real`.** Canonical witness for part-iii-gauge at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`part-iii-gauge.real.2`.** Canonical witness for part-iii-gauge at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: *(none)*
 
 ### Canonical evidence
 
@@ -4215,16 +4738,43 @@ which propagates closeness from $\sigma=0$ to $1$.  The residual case is reduced
 The source closes Section~8 by stating that the $\sin2\theta$ theorem extends to $\dim\mathcal X(E_0)<\dim\mathcal X(F_0)$ analogously to Theorems~6.1 and~6.3, while no corresponding extension of the $\tan2\theta$ theorem was known.
 ~~~~
 
+### Printed clauses, and the witness for each
+
+One row per printed source clause per scalar field.  A clause is `PASS` only when ONE named theorem, with any declared correspondence lemmas, establishes that clause at every scope the result carries -- scope may not be donated by a sibling declaration.  `OPEN` states what is missing.
+
+| clause | scalar | witness | status |
+| --- | --- | --- | --- |
+| `acute-branch-conclusion.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` | **PASS** |
+| `acute-branch-conclusion.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects` | **PASS** |
+| `double-angle-bound-retained.complex` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm` | **PASS** |
+| `double-angle-bound-retained.complex.2` | complex | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm` | **PASS** |
+| `double-angle-bound-retained.real` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm` | **PASS** |
+| `double-angle-bound-retained.real.2` | real | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm` | **PASS** |
+
+**`acute-branch-conclusion.complex`.** Canonical witness for acute-branch-conclusion at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`acute-branch-conclusion.real`.** Canonical witness for acute-branch-conclusion at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`double-angle-bound-retained.complex`.** Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`double-angle-bound-retained.complex.2`.** Canonical witness for double-angle-bound-retained at complex scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`double-angle-bound-retained.real`.** Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+**`double-angle-bound-retained.real.2`.** Canonical witness for double-angle-bound-retained at real scalar scope, carried over from the pre-clause canonical evidence and re-checked against its compiler-printed type under the coherent model.
+
+Result-wide scope every clause must carry: `DK-8.2-thm.smallness-alternative`, `S3-standing-scope.crossed-dimension-standing-assumption`
+
 ### Canonical evidence
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.acute-branch-conclusion`, `S3-standing-scope.crossed-dimension-standing-assumption`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.acute-branch-conclusion`, `S3-standing-scope.crossed-dimension-standing-assumption`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.double-angle-bound-retained`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.double-angle-bound-retained`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.double-angle-bound-retained`
-- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.double-angle-bound-retained`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm` — primary_source_witness, complex scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm` — primary_source_witness, real scalars, proof; covers `DK-8.2-thm.smallness-alternative`, `DK-8.2-thm.double-angle-bound-retained`, `S3-standing-scope.crossed-dimension-standing-assumption`
 
 ### Other registered declarations
 
@@ -4618,8 +5168,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 274 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **29 currently terminal results independently reconfirmed:** yes / no
-- **0 currently nonterminal/pending results resolved by this audit:** yes / no
+- **28 currently terminal results independently reconfirmed:** yes / no
+- **1 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

@@ -658,6 +658,34 @@ theorem theorem6_3_unbounded_infiniteTrial_ideal_exists
   exact data.ideal_of_formBounds_infinite_exists N hdelta hCompression
     (crossed_lower_of_spectralGap A hA D hgap) hResidual
 
+/-- Spectral-gap specialization with the tangent representative supplied explicitly.
+
+`theorem6_3_unbounded_infiniteTrial_ideal_exists` produces a representative; a
+source-facing statement at an arbitrary unitarily invariant norm cannot use that
+form, because the existential would hand back a possibly different witness at
+each Ky Fan index.  Taking the representative as a parameter is what lets the
+paper-norm promotion quantify one operator over all indices. -/
+theorem theorem6_3_unbounded_infiniteTrial_ideal
+    (N : ExactSinTheta.KyFanDominantIdealFamily (𝕜 := ℂ))
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
+    {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : UnboundedTrialBlock A Z)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo alpha (alpha + delta))
+      measurableSet_Ioo = 0)
+    (hCompression : ∀ z : Z,
+      RCLike.re ⟪D.operator z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (tanTheta0 : Z →L[ℂ] H)
+    (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z
+      (selfAdjointSpectralSubspace A hA (Set.Iic alpha) measurableSet_Iic) tanTheta0)
+    (hResidual : N.Mem D.residual) :
+    N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤ N.gauge D.residual := by
+  let V := selfAdjointSpectralSubspace A hA (Set.Iic alpha) measurableSet_Iic
+  let data := Theorem63TrialData.ofUnbounded D V
+  exact data.ideal_of_formBounds_infinite N hdelta hCompression
+    (crossed_lower_of_spectralGap A hA D hgap) tanTheta0 htan hResidual
+
 end ExactTanTheta
 end DavisKahan
 end TauCeti

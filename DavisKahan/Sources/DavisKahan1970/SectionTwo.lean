@@ -7,6 +7,9 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.PaperSurface
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
 import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
+import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal
 
@@ -102,16 +105,34 @@ operator-theoretic infrastructure, not a rename.
 side: it is the arbitrary-trial-subspace form over `ℂ`, so the finite-subspace
 restriction is already known to be removable at one field.
 
-## What the eight fixed-field aliases say, and what has been reviewed
+## Three of the four printed theorems have TWO clauses
 
-Each of the eight has a type that displays an unbounded self-adjoint `LinearPMap`
-ambient operator, a Hilbert space of arbitrary dimension, a
-`PaperUnitaryInvariantNorm` -- the paper's symmetric gauge, not the operator
-norm -- and both printed conclusions, the ideal membership and the inequality.
-No capability class, no finite-dimensionality hypothesis, no proof-vehicle
-operator in the conclusion, and no branch or pole certificate demanded of the
-caller.  Nothing has to be assembled from a finite-dimensional theorem plus a
-companion plus an audit note.
+`sin Θ` prints one conclusion.  `tan Θ`, `sin 2Θ` and `tan 2Θ` each print two:
+
+```text
+directed:  δ N(tan Θ₀)   ≤ N(R)      -- on the trial residual
+ambient:   δ N(tan Θ)    ≤ N(H)      -- on the whole-space perturbation
+```
+
+They are different quantities with different right-hand sides, and **no single
+alias below is the whole printed theorem for those three.**  Each result
+therefore has an explicit `_directed_` and `_ambient_` alias at each scalar
+field, and the older unqualified `tanTheta_complex`-style names are retained as
+the ambient clause, which is what they always were.
+
+The maintained per-clause witness table is generated from
+`dev/davis-kahan-1970-formalization-result-inventory.json` into the reviewer
+packet; it, not this comment, is where a reviewer checks which theorem
+discharges which clause.
+
+## What each fixed-field alias says, and what has been reviewed
+
+Each has a type that displays an unbounded self-adjoint `LinearPMap` ambient
+operator, a Hilbert space of arbitrary dimension, a `PaperUnitaryInvariantNorm`
+-- the paper's symmetric gauge, not the operator norm -- and the two halves of
+its own printed clause: ideal membership and the inequality.  No capability
+class, no finite-dimensionality hypothesis, no proof-vehicle operator in the
+conclusion, and no branch or pole certificate demanded of the caller.
 
 That is what the *types* say.  Whether each matches the printed result is a
 separate, reviewed question, and the answer lives in the maintained result
@@ -272,6 +293,57 @@ has -- and concluding on the directed double-angle sine of the real pair, read i
 the canonical complexification where this development keeps the real double-angle
 operators. -/
 alias sinTwoTheta_real := sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real
+
+/-! ## The two printed clauses, named
+
+`tanTheta_complex`, `sinTwoTheta_complex` and `tanTwoTheta_complex` (and their
+real siblings) are the AMBIENT clause of their theorem.  The directed clause is a
+different statement -- a different angle object and the trial residual rather than
+the ambient perturbation on the right -- so it gets its own name rather than
+being folded into the ambient one with irrelevant hypotheses. -/
+
+/-- **`tan Θ`, ambient clause, over `ℂ`**: `δ N(tan Θ) ≤ N(H)`. -/
+alias tanTheta_ambient_complex := tanTheta_ambient_unboundedRitz_paperUINorm_complex
+
+/-- **`tan Θ`, ambient clause, over `ℝ`**. -/
+alias tanTheta_ambient_real := tanTheta_ambient_unboundedRitz_paperUINorm_real
+
+/-- **`tan Θ`, directed clause, over `ℂ`**: `δ N(tan Θ₀) ≤ N(R)`, with the trial
+residual on the right and the representative characterized by its approximation
+numbers. -/
+alias tanTheta_directed_complex := tanTheta_directed_unboundedTrial_paperUINorm_complex
+
+/-- **`tan Θ`, directed clause, over `ℝ`**. -/
+alias tanTheta_directed_real := tanTheta_directed_unboundedTrial_paperUINorm_real
+
+/-- **`sin 2Θ`, directed clause, over `ℂ`**: `δ N(sin 2Θ₀) ≤ 2 N(R)`. -/
+alias sinTwoTheta_directed_complex :=
+  sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex
+
+/-- **`sin 2Θ`, directed clause, over `ℝ`**. -/
+alias sinTwoTheta_directed_real :=
+  sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real
+
+/-- **`tan 2Θ`, directed clause, over `ℂ`**: `(b − a) N(tan 2Θ₀) ≤ 2 N(R)`. -/
+alias tanTwoTheta_directed_complex :=
+  tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex
+
+/-- **`tan 2Θ`, directed clause, over `ℝ`**. -/
+alias tanTwoTheta_directed_real :=
+  tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real
+
+/-- **`tan 2Θ`, ambient clause, over `ℂ`**: `(b − a) N(|tan 2Θ|) ≤ 2 N(B)`. -/
+alias tanTwoTheta_ambient_complex := tanTwoTheta_ambient_unbounded_paperUINorm_complex
+
+/-- **`tan 2Θ`, ambient clause, over `ℝ`**. -/
+alias tanTwoTheta_ambient_real := tanTwoTheta_ambient_unbounded_paperUINorm_real
+
+/-! **`sin 2Θ` has no ambient-clause alias.**  Its ambient conclusion is not
+established at this result's unbounded scope: the only paper-norm ambient
+endpoints, `sinTwoTheta_ambient_bounded_paperUINorm_complex` and `..._real`, are
+stated for bounded operators.  Binding a short name to them here would repeat the
+mistake this file exists to prevent -- reading a narrower theorem as the printed
+one.  The gap is recorded as an open clause in the result inventory. -/
 
 /-! ## `tan 2Θ` -/
 

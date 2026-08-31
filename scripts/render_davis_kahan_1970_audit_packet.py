@@ -379,6 +379,37 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
             "",
             md_code_block(source, "tex"),
             "",
+            "### Printed clauses, and the witness for each",
+            "",
+            "One row per printed source clause per scalar field.  A clause is `PASS` only when "
+            "ONE named theorem, with any declared correspondence lemmas, establishes that clause "
+            "at every scope the result carries -- scope may not be donated by a sibling "
+            "declaration.  `OPEN` states what is missing.",
+            "",
+            "| clause | scalar | witness | status |",
+            "| --- | --- | --- | --- |",
+        ]
+        for clause in result.get("source_clauses", []) or []:
+            evidence = clause.get("evidence", {}) or {}
+            witness = f"`{evidence.get('primary', '?')}`"
+            for extra in evidence.get("correspondence", []) or []:
+                witness += f" + `{extra}`"
+            lines.append(
+                f"| `{clause.get('id')}` | {clause.get('scalar_scope')} | {witness} | "
+                f"**{'PASS' if clause.get('status') == 'established' else 'OPEN'}** |"
+            )
+        lines.append("")
+        for clause in result.get("source_clauses", []) or []:
+            lines += [f"**`{clause.get('id')}`.** {clause.get('justification', '')}", ""]
+            if clause.get("gap_scope_justification"):
+                lines += [f"*Gap scope:* {clause['gap_scope_justification']}", ""]
+            if clause.get("open_reason"):
+                lines += [f"*OPEN — what is missing:* {clause['open_reason']}", ""]
+        wide = result.get("result_wide_scope_atoms") or []
+        lines += [
+            "Result-wide scope every clause must carry: "
+            + (", ".join(f"`{a}`" for a in wide) if wide else "*(none)*"),
+            "",
             "### Canonical evidence",
             "",
             "The declarations that carry this result's printed statement, with the source "

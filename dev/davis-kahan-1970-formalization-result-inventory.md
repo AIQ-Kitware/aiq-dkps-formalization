@@ -1,13 +1,13 @@
 # Davis--Kahan 1970 formalization result inventory
 
-**This file, not the 272 source atoms or the 50 organizational rows, is the denominator for 100% formalization.**
+**This file, not the 274 source atoms or the 50 organizational rows, is the denominator for 100% formalization.**
 
 The denominator contains exactly the four Section 2 headline theorems and every named theorem, proposition, lemma, and corollary Davis--Kahan actually establish in the paper. Section 10, explicitly unresolved/deferred claims, proof equations, examples, numerical working, historical/external results, and theorem-adjacent remarks do not count.
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **29**
-- Awaiting closure: **0**
+- Currently hostile-certified terminal: **28**
+- Awaiting closure: **1**
 - Printed statements that are NOT locally self-contained: **1**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
@@ -24,7 +24,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 |---|---|---|---|---|---|---|---|
 | `S2-sin-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-theta` | unnumbered_theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `reopened_math` | `accepted` |
 | `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
