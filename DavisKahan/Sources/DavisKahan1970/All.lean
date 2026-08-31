@@ -19,6 +19,7 @@ import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
 import DavisKahan.Sources.DavisKahan1970.SineTheta.PaperSurface
 import DavisKahan.Sources.DavisKahan1970.PartIII
 import DavisKahan.Sources.DavisKahan1970.PartIIIManuscriptSurface
+import DavisKahan.Sources.DavisKahan1970.Proposition61
 import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface
 import DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite
 import DavisKahan.Sources.DavisKahan1970.Section1
@@ -77,6 +78,7 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedResidual
+import DavisKahan.Sources.DavisKahan1970.Theorem61
 import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 
 /-! # `DavisKahan/Sources/DavisKahan1970` -/

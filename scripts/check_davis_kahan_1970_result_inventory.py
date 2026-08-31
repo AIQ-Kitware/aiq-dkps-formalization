@@ -27,6 +27,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 from pathlib import Path
 import sys
 from typing import Any
@@ -50,7 +51,21 @@ TERMINAL_SEMANTIC_CERTIFICATIONS = {"accepted"}
 TERMINAL_REPAIR_STATUSES = {"proved", "documented_no_satisfactory_repair"}
 CANONICAL_EVIDENCE_ROLES = {"primary_source_witness", "exact_refutation"}
 CANONICAL_EVIDENCE_KINDS = {"proof", "refutation"}
-CANONICAL_SCALAR_SCOPES = {"complex", "real", "rclike", "scalar_generic"}
+CANONICAL_SCALAR_SCOPES = {
+    "complex", "real", "rclike", "scalar_generic", "mixed", "not_visible_in_type",
+}
+PROBE_IMPORT = "DavisKahan.All"
+# Instance binders that are proof *capabilities* rather than printed source
+# hypotheses.  Each has instances for both scalar fields of the paper, so a
+# declaration carrying one still proves the printed result at `ℝ` and at `ℂ`;
+# but `RCLike` is an open class, so the binder is a real hypothesis at any other
+# field, and it is not something Davis and Kahan print.  Canonical evidence must
+# therefore declare which of these it carries.
+CAPABILITY_CLASSES = {
+    "ContinuousLinearMap.HasMinMaxLowerBoundEverywhere",
+    "TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan",
+    "TauCeti.DavisKahan.ExactSinTheta.HasApproximationNumberStrongCutoff",
+}
 SUPPORTING_EVIDENCE_ROLES = {
     "public_alias", "specialization", "alternative_route", "generalization",
     "presentation_wrapper", "implementation_structure", "transport_lemma",
@@ -726,6 +741,96 @@ def _validate_selection_review(
 
 
 
+_SCOPE_IDENT = r"[^\s\(\)\[\],:]+"
+
+
+def _derive_scalar_scope(type_text: str) -> str:
+    """Read a declaration's scalar scope off its compiler-printed type.
+
+    The scalar a theorem is stated over is visible in its type, so it does not
+    have to be asserted by hand -- and asserting it by hand went wrong: nine
+    canonical entries claimed `complex` for declarations whose types quantify
+    over `[RCLike 𝕜]`.
+
+    The field position is read from `InnerProductSpace`/`NormedSpace`, which is
+    where the scalar of the spaces the theorem is about actually appears; `δ : ℝ`
+    and similar real parameters occur in every statement and say nothing about
+    scalar scope.  `not_visible_in_type` is returned rather than guessed when the
+    scalar is hidden inside a predicate, which is a fact about the type and is
+    itself checkable.
+    """
+    rclike = set(re.findall(r"RCLike\s+(" + _SCOPE_IDENT + r")", type_text))
+    generic = set(re.findall(r"NontriviallyNormedField\s+(" + _SCOPE_IDENT + r")", type_text))
+    fields: set[str] = set()
+    for pattern in (
+        r"InnerProductSpace\s+(" + _SCOPE_IDENT + r")",
+        r"NormedSpace\s+(" + _SCOPE_IDENT + r")",
+    ):
+        fields |= set(re.findall(pattern, type_text))
+    if fields & rclike:
+        return "rclike"
+    if fields & (generic - rclike):
+        return "scalar_generic"
+    concrete = fields & {"\u2102", "\u211d"}
+    if concrete == {"\u2102"}:
+        return "complex"
+    if concrete == {"\u211d"}:
+        return "real"
+    if concrete == {"\u2102", "\u211d"}:
+        return "mixed"
+    if rclike:
+        return "rclike"
+    if generic:
+        return "scalar_generic"
+    return "not_visible_in_type"
+
+
+def _derive_capability_classes(type_text: str) -> list[str]:
+    """Which proof-capability instance binders a printed type carries.
+
+    The vocabulary is policy and lives above.  Anything else that *looks* like a
+    capability class -- an instance binder whose head is `…Has<Something>` -- is
+    reported rather than silently ignored, so a new one cannot appear in a
+    canonical signature unclassified.
+    """
+    found = sorted(name for name in CAPABILITY_CLASSES if f"[{name} " in type_text)
+    for match in re.findall(r"\[([A-Za-z_][A-Za-z0-9_.]*Has[A-Z][A-Za-z0-9_]*)\s", type_text):
+        if match not in CAPABILITY_CLASSES:
+            fail(
+                f"unclassified capability-like instance binder {match!r} in a canonical "
+                "signature; add it to CAPABILITY_CLASSES or explain why it is an ordinary "
+                "mathematical hypothesis"
+            )
+    return found
+
+
+def _probe_canonical_types(names: list[str]) -> dict[str, str]:
+    """`#check` every canonical declaration and return its printed type.
+
+    Uses the same compiler probe the source census uses, so a stale snapshot
+    cannot drift: the types are read from the build at check time.
+    """
+    try:
+        from aiq_lean_tools.lean_backend import SubprocessLeanBackend
+    except ModuleNotFoundError:  # pragma: no cover - environment problem, not a data problem
+        fail(
+            "aiq_lean_tools is not installed, so canonical scalar scopes cannot be verified. "
+            "Run `python3 -m pip install -e submodules/aiq-lean-formalization-tools`, or pass "
+            "--no-lean-probe and accept that scalar_scope is unverified."
+        )
+    backend = SubprocessLeanBackend()
+    rows = backend.probe_queries(
+        ROOT, [("check", name) for name in names], [PROBE_IMPORT]
+    )
+    unresolved = sorted(row.name for row in rows if not row.resolved)
+    if unresolved:
+        fail(
+            "canonical evidence did not resolve against "
+            f"{PROBE_IMPORT}: " + ", ".join(unresolved)
+        )
+    return {row.name: row.output for row in rows}
+
+
 def _canonical_evidence_digest(items: list[dict[str, Any]]) -> str:
     """Digest of every result's canonical evidence, in inventory order.
 
@@ -745,6 +850,7 @@ def _canonical_evidence_digest(items: list[dict[str, Any]]) -> str:
                     "scalar_scope": entry.get("scalar_scope"),
                     "evidence_kind": entry.get("evidence_kind"),
                     "covers_source_atoms": entry.get("covers_source_atoms"),
+                    "capability_classes": entry.get("capability_classes"),
                 }
                 for entry in item.get("canonical_evidence", []) or []
             ],
@@ -810,6 +916,51 @@ def _validate_markdown_view(items: list[dict[str, Any]], terminal: int) -> None:
             )
 
 
+SECTION_TWO_SHORT_NAMES = ("sinTheta", "tanTheta", "sinTwoTheta", "tanTwoTheta")
+
+
+def _validate_section_two_short_names(data: dict[str, Any]) -> None:
+    """One owner for "which short Section 2 names are bound".
+
+    Four census rows and four inventory notes each asserted that all four were
+    unbound, and stayed that way after `SectionTwo.sinTheta` was bound.  The
+    prose is gone; the fact now lives here and is compared against
+    `SectionTwo.lean`'s own `alias` lines.
+    """
+    record = data.get("section_two_short_names")
+    if not isinstance(record, dict):
+        fail("formalization-result inventory must record section_two_short_names")
+    rel = record.get("source_file")
+    if not isinstance(rel, str) or not rel.strip():
+        fail("section_two_short_names.source_file must name the Lean inventory module")
+    path = ROOT / rel
+    if not path.exists():
+        fail(f"section_two_short_names.source_file does not exist: {rel}")
+    aliases = dict(
+        re.findall(
+            r"^alias\s+([A-Za-z_][A-Za-z0-9_]*)\s*:=\s*(\S+)\s*$",
+            path.read_text(encoding="utf-8"),
+            re.M,
+        )
+    )
+    bindings = record.get("bindings")
+    if not isinstance(bindings, dict):
+        fail("section_two_short_names.bindings must be an object")
+    if sorted(bindings) != sorted(SECTION_TWO_SHORT_NAMES):
+        fail(
+            "section_two_short_names.bindings must name exactly "
+            f"{sorted(SECTION_TWO_SHORT_NAMES)}, got {sorted(bindings)}"
+        )
+    for name in SECTION_TWO_SHORT_NAMES:
+        recorded = bindings[name]
+        actual = aliases.get(name)
+        if recorded != actual:
+            fail(
+                f"section_two_short_names.bindings[{name!r}] is stale: {rel} says "
+                f"{actual!r}, the inventory says {recorded!r}"
+            )
+
+
 def _validate_census_canonical_agreement(items: list[dict[str, Any]]) -> None:
     """The census reviewer packet must not name a different canonical theorem.
 
@@ -854,6 +1005,7 @@ def _validate_canonical_evidence(
     census_declarations: set[str],
     audit_text: str,
     audit_rel: str,
+    probed_types: dict[str, str] | None,
 ) -> None:
     """Separate what *proves* a counted result from what merely accompanies it.
 
@@ -927,6 +1079,36 @@ def _validate_canonical_evidence(
                     f"{result_id}: canonical evidence {declaration} has scalar_scope "
                     f"{scope!r}; expected one of {sorted(CANONICAL_SCALAR_SCOPES)}"
                 )
+            if scope == "not_visible_in_type":
+                note = entry.get("scalar_scope_note")
+                if not isinstance(note, str) or not note.strip():
+                    fail(
+                        f"{result_id}: canonical evidence {declaration} records "
+                        "scalar_scope 'not_visible_in_type' and must say where the scalar "
+                        "actually lives, in scalar_scope_note"
+                    )
+            recorded_caps = entry.get("capability_classes")
+            if not isinstance(recorded_caps, list) or not all(
+                isinstance(x, str) for x in recorded_caps
+            ):
+                fail(
+                    f"{result_id}: canonical evidence {declaration} must record "
+                    "capability_classes (an empty list when it carries none)"
+                )
+            if probed_types is not None:
+                derived = _derive_scalar_scope(probed_types[declaration])
+                if derived != scope:
+                    fail(
+                        f"{result_id}: canonical evidence {declaration} records scalar_scope "
+                        f"{scope!r}, but its compiler-printed type says {derived!r}"
+                    )
+                derived_caps = _derive_capability_classes(probed_types[declaration])
+                if sorted(recorded_caps) != derived_caps:
+                    fail(
+                        f"{result_id}: canonical evidence {declaration} records "
+                        f"capability_classes {sorted(recorded_caps)!r}, but its "
+                        f"compiler-printed type carries {derived_caps!r}"
+                    )
             atoms = entry.get("covers_source_atoms")
             if not isinstance(atoms, list) or not atoms or not all(isinstance(a, str) for a in atoms):
                 fail(
@@ -1109,10 +1291,21 @@ def _validate_semantic_audit_surface(
         "canonical_evidence_sha256": expected_evidence_digest,
     }
 
+def unique_in_order(values: list[str]) -> list[str]:
+    seen: set[str] = set()
+    out: list[str] = []
+    for value in values:
+        if value not in seen:
+            seen.add(value)
+            out.append(value)
+    return out
+
+
 def completion_summary(
     inventory_path: Path | None = None,
     *,
     require_terminal: bool = False,
+    lean_probe: bool = True,
 ) -> dict[str, Any]:
     source_inventory_path, source_atoms = _load_source_atoms()
     path = discover_inventory(inventory_path)
@@ -1244,10 +1437,19 @@ def completion_summary(
         data, items, terminal=terminal, nonterminal=nonterminal
     )
     audit_text = (ROOT / semantic_audit["compiler_audit_surface"]).read_text(encoding="utf-8")
+    canonical_names = unique_in_order([
+        entry["declaration"]
+        for item in items
+        for entry in item.get("canonical_evidence", []) or []
+        if isinstance(entry, dict) and isinstance(entry.get("declaration"), str)
+    ])
+    probed_types = _probe_canonical_types(canonical_names) if lean_probe else None
     _validate_canonical_evidence(
-        items, census_declarations, audit_text, semantic_audit["compiler_audit_surface"]
+        items, census_declarations, audit_text, semantic_audit["compiler_audit_surface"],
+        probed_types,
     )
     _validate_census_canonical_agreement(items)
+    _validate_section_two_short_names(data)
     _validate_markdown_view(items, terminal)
     nonlocal_interpretation = _validate_nonlocal_interpretation(
         items, source_atoms, source_inventory_path, census_declarations, audit_text
@@ -1300,6 +1502,10 @@ def main() -> int:
         help="require an accepted stated-result selection review and terminal exact/refuted evidence for every result obligation",
     )
     parser.add_argument("--json", action="store_true", help="emit the completion summary as JSON")
+    parser.add_argument(
+        "--no-lean-probe", action="store_true",
+        help="skip the compiler probe; canonical scalar scopes are then NOT verified",
+    )
     args = parser.parse_args()
 
     # The generic layer -- ids, cross-links between counted results and source
@@ -1314,7 +1520,13 @@ def main() -> int:
         if any(f.level == "error" for f in findings):
             return 1
 
-    summary = completion_summary(args.inventory, require_terminal=args.require_terminal)
+    summary = completion_summary(
+        args.inventory, require_terminal=args.require_terminal,
+        lean_probe=not args.no_lean_probe,
+    )
+    if args.no_lean_probe:
+        print("NOTE: --no-lean-probe given; canonical scalar_scope was NOT verified "
+              "against the compiler-printed types")
     if args.json:
         print(json.dumps(summary, indent=2, ensure_ascii=False))
         return 0

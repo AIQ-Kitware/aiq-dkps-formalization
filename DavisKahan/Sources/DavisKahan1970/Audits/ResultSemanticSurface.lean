@@ -413,14 +413,23 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
+#check @TauCeti.DavisKahan1970.proposition6_1_source_complex
+#check @TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex
+#check @TauCeti.DavisKahan1970.proposition6_1_source_real
 #check @TauCeti.DavisKahan1970.Proposition6_1_complex
 #check @TauCeti.DavisKahan1970.Proposition6_1_real
+#check @TauCeti.DavisKahan1970.Proposition6_1_real_representative
+#check @TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues
 
 /-! ## DK-6.1-thm: Generalized sine theorem
 
 Status: **TERMINAL EXACT**.
 -/
 
+#check @TauCeti.DavisKahan1970.theorem6_1_source_complex
+#check @TauCeti.DavisKahan1970.theorem6_1_source_real
+#check @DavisKahan1970.IsTrialResidualEquation
+#check @DavisKahan1970.isTrialResidual_iff_equation_and_isometry
 #check @TauCeti.DavisKahan1970.Theorem6_1_complex
 #check @TauCeti.DavisKahan1970.Theorem6_1_real
 #check @TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain
@@ -431,6 +440,8 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
+#check @TauCeti.DavisKahan1970.theorem6_2_source_complex
+#check @TauCeti.DavisKahan1970.theorem6_2_source_real
 #check @TauCeti.DavisKahan1970.Theorem6_2_complex
 #check @TauCeti.DavisKahan1970.Theorem6_2_real
 

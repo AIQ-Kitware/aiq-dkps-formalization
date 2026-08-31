@@ -80,6 +80,50 @@ structure IsTrialResidual
     A ⟨E₀ (x : F), mapsDomain x⟩ -
       E₀ (A₀ x) = R (x : F)
 
+/-- The trial residual *relation* alone: `E₀` carries `dom A₀` into `dom A`, and
+`R` is the residual `A E₀ − E₀ A₀` there.
+
+This is `IsTrialResidual` with the isometry dropped, and it is the half the
+Section 6 generalized theorems share with the Section 2 sine theorem.  Section 2
+asks for an isometric trial map; Theorems 6.1 and 6.2 ask only for a lower frame
+bound `LowerFrameBound E₀ ε`, which an isometry satisfies with `ε = 1` but which
+a general trial map satisfies with a smaller constant -- and that constant is the
+factor the printed generalized bound carries.  Splitting the predicate is what
+lets both surfaces take the same residual hypothesis without either of them
+being over- or under-strengthened. -/
+structure IsTrialResidualEquation
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (E₀ : F →L[𝕜] E)
+    (R : F →L[𝕜] E) : Prop where
+  mapsDomain : ∀ x : A₀.domain, E₀ (x : F) ∈ A.domain
+  residualEquation : ∀ x : A₀.domain,
+    A ⟨E₀ (x : F), mapsDomain x⟩ -
+      E₀ (A₀ x) = R (x : F)
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- `IsTrialResidual` is exactly the residual relation together with the
+isometry.  The Section 2 API is unchanged; this records the decomposition. -/
+theorem isTrialResidual_iff_equation_and_isometry
+    (A : E →ₗ.[𝕜] E)
+    (A₀ : F →ₗ.[𝕜] F)
+    (E₀ : F →L[𝕜] E)
+    (R : F →L[𝕜] E) :
+    IsTrialResidual A A₀ E₀ R ↔
+      IsTrialResidualEquation A A₀ E₀ R ∧ IsometricEmbedding E₀ := by
+  constructor
+  · intro h
+    exact ⟨⟨h.mapsDomain, h.residualEquation⟩, h.isometry⟩
+  · rintro ⟨he, hiso⟩
+    exact ⟨hiso, he.mapsDomain, he.residualEquation⟩
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The residual relation underlying a Section 2 trial residual. -/
+theorem IsTrialResidual.toEquation
+    {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {E₀ R : F →L[𝕜] E}
+    (h : IsTrialResidual A A₀ E₀ R) : IsTrialResidualEquation A A₀ E₀ R :=
+  ⟨h.mapsDomain, h.residualEquation⟩
+
 omit [CompleteSpace E] [CompleteSpace F] in
 /-- Fully expanded mathematical meaning of `IsTrialResidual`. -/
 theorem isTrialResidual_iff
