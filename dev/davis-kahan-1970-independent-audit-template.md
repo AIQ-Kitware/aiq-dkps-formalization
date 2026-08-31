@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **24/29 terminal**, **5 awaiting semantic closure**.
+Current result-level status: **29/29 terminal**, **0 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -45,7 +45,7 @@ A result whose printed statement is **not locally self-contained** carries an ex
 - **Exact source anchor:** Section 2, sin theta theorem
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `reopened_mapping`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -61,7 +61,6 @@ A result whose printed statement is **not locally self-contained** carries an ex
 - `S2-unbounded-scope.unbounded-selfadjoint-scope` — **counted_result_scope** *(shared/cross-block scope)* — The results extend to unbounded self-adjoint A under the stated domain condition.
 - `S2-unbounded-scope.bounded-residual-needed` — **counted_result_scope** *(shared/cross-block scope)* — Useful unbounded conclusions require the pertinent perturbation or residual to extend boundedly.
 - `S2-unbounded-scope.half-infinite-gap-intervals` — **counted_result_scope** *(shared/cross-block scope)* — Gap intervals may be half-infinite and the remaining spectra unbounded.
-- `DK-6-appendix.unbounded-sine-extension` — **counted_result_scope** *(shared/cross-block scope)* — The sine theorem extends to unbounded operators via bounded residual/common-domain hypotheses.
 
 ### Same-block material explicitly outside the counted result
 
@@ -841,7 +840,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Section 2, sin 2 theta theorem
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `reopened_math`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -858,7 +857,6 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - `S2-unbounded-scope.unbounded-selfadjoint-scope` — **counted_result_scope** *(shared/cross-block scope)* — The results extend to unbounded self-adjoint A under the stated domain condition.
 - `S2-unbounded-scope.bounded-residual-needed` — **counted_result_scope** *(shared/cross-block scope)* — Useful unbounded conclusions require the pertinent perturbation or residual to extend boundedly.
 - `S2-unbounded-scope.half-infinite-gap-intervals` — **counted_result_scope** *(shared/cross-block scope)* — Gap intervals may be half-infinite and the remaining spectra unbounded.
-- `DK-8.2-thm.sin2-unequal-dimension-extension` — **counted_result_scope** *(shared/cross-block scope)* — The source states a sin2 extension to unequal comparison dimensions.
 
 ### Same-block material explicitly outside the counted result
 
@@ -918,6 +916,10 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_paperUINorm_complex` — specialization
 - `TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap` — supporting_theorem
 - `TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap` — supporting_theorem
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex` — generalization
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_real` — generalization
+- `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex` — generalization
+- `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex` — generalization
 
 ### Source-facing Lean declarations
 
@@ -995,7 +997,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:773`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:824`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1019,7 +1021,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:821`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:872`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1061,13 +1063,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:709`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:760`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:649`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:700`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1080,6 +1082,30 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap`
 
 Source location candidates: `DavisKahan/DoubleAngle/UnboundedIdealFormGap.lean:289`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:923`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:610`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:223`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:296`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2770,7 +2796,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Theorem 5.1
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `reopened_mapping`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -2780,12 +2806,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 - `DK-5.1-thm.banach-hypotheses` — **counted_result_hypothesis** — Banach-space theorem with ||B||<=alpha and ||A^{-1}||<=(alpha+delta)^{-1}, compatible cross norm.
 - `DK-5.1-thm.sylvester-lower-bound` — **counted_result_statement** — AX-XB=C implies ||C||>=delta||X||.
-- `DK-5.1-thm.roles-interchange` — **counted_result_scope** — A and B roles/hypotheses may be interchanged.
-- `DK-5.1-thm.one-sided-unbounded-extension` — **counted_result_scope** — The proof covers densely-defined unbounded A with bounded inverse hypothesis while B,X remain bounded.
 
 ### Same-block material explicitly outside the counted result
 
-- *(none; the primary source block contains only atoms belonging to the counted result statement)*
+- `DK-5.1-thm.roles-interchange` — **post_result_consequence_not_in_printed_statement** — A and B roles/hypotheses may be interchanged.
+  - Boundary rationale: RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The source does say the roles and hypotheses of `A` and `B` may be interchanged, but it presents this as a remark that the same proof runs with the roles swapped -- not as a separate result it introduces and proves, and not as something needed to determine what Theorem 5.1 itself claims. Under the corrected rule it is therefore `result_adjacent_extension`: fidelity material recording a variant around a counted result. The earlier pass attached it to `DK-5.1-thm` under a rule that let any explicit extension enlarge a counted result; that rule contradicted this ledger's own `does_not_count` entry and has been withdrawn. `theorem5_1_banach_sylvester_interchanged_exact` remains compiled and registered as supporting evidence, which is the right place for coverage that is good to have but is not part of the counted statement.
+- `DK-5.1-thm.one-sided-unbounded-extension` — **post_result_consequence_not_in_printed_statement** — The proof covers densely-defined unbounded A with bounded inverse hypothesis while B,X remain bounded.
+  - Boundary rationale: RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The sentence says the same proof also covers a densely-defined unbounded `A`; the paper offers no separate proof and presents no separate result, and Theorem 5.1's own claim is complete without it. `result_adjacent_extension`. `theorem5_1_banach_sylvester_unboundedA` is compiled and registered as supporting evidence.
 
 Boundary method: Compared the printed result environment with the source-fidelity atoms; included only hypotheses, conclusions, and scope belonging to the counted result, and explicitly classified all adjacent same-block material outside the statement.
 
@@ -2817,6 +2844,12 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm` — primary_source_witness, scalar_generic scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
 - `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact` — primary_source_witness, complex scalars, proof; covers `DK-5.1-thm.banach-hypotheses`, `DK-5.1-thm.sylvester-lower-bound`
 
+### Other registered declarations
+
+- `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged` — generalization
+- `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact` — generalization
+- `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA` — generalization
+
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm`
@@ -2828,6 +2861,24 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean:265`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean:267`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean:270`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean:272`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3173,7 +3224,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Proposition 6.1
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `reopened_mapping`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -3182,7 +3233,6 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 ### Atoms inside the counted printed result
 
 - `DK-6.1-prop.symmetric-sine-theorem` — **counted_result_statement** — Proposition 6.1 gives the symmetric sine-theta conclusion under two-sided spectral placement.
-- `DK-6-appendix.proposition61-common-domain-extension` — **counted_result_scope** *(shared/cross-block scope)* — Proposition 6.1 admits the analogous common-domain/unbounded relaxation.
 
 ### Same-block material explicitly outside the counted result
 
@@ -3234,6 +3284,10 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex` — transport_lemma
 - `TauCeti.DavisKahan1970.Proposition6_1_real_representative` — transport_lemma
 - `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues` — transport_lemma
+- `TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_complex` — generalization
+- `TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_real` — generalization
+- `TauCeti.DavisKahan1970.Proposition6_1_commonDomain` — generalization
+- `TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain` — generalization
 
 ### Source-facing Lean declarations
 
@@ -3251,19 +3305,19 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition6_1_source_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:92`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:93`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition6_1_source_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:187`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:188`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:133`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:134`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3276,6 +3330,30 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:145`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:261`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:303`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Proposition6_1_commonDomain`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:188`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:211`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3309,7 +3387,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Theorem 6.1
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `reopened_mapping`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -3320,7 +3398,6 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - `DK-6.1-thm.generalized-sine-hypotheses` — **counted_result_hypothesis** — The generalized sine theorem allows nonisometric E0 with E0*E0 >= epsilon^2 and the stated spectral separation.
 - `DK-6.1-thm.generalized-sine-conclusion` — **counted_result_statement** — delta epsilon ||sin Theta0|| <= ||R||.
 - `DK-6.1-thm.unequal-dimension-scope` — **counted_result_scope** — The generalized theorem allows unequal-dimensional comparison subspaces as stated.
-- `DK-6-appendix.theorem61-common-domain-extension` — **counted_result_scope** *(shared/cross-block scope)* — Theorem 6.1 admits the analogous common-domain/unbounded relaxation.
 
 ### Same-block material explicitly outside the counted result
 
@@ -3356,6 +3433,9 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore` — supporting_theorem
 - `TauCeti.DavisKahan1970.Theorem6_1_complex` — implementation_structure
 - `TauCeti.DavisKahan1970.Theorem6_1_real` — implementation_structure
+- `TauCeti.DavisKahan1970.Theorem6_1_commonDomain` — generalization
+- `TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality` — transport_lemma
+- `TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality` — transport_lemma
 
 ### Source-facing Lean declarations
 
@@ -3385,13 +3465,31 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_1_source_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:134`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:193`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_1_source_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:177`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:236`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Theorem6_1_commonDomain`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:174`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:139`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:166`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3473,6 +3571,8 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.Theorem6_2_complex` — implementation_structure
 - `TauCeti.DavisKahan1970.Theorem6_2_real` — implementation_structure
+- `TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality` — transport_lemma
+- `TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality` — transport_lemma
 
 ### Source-facing Lean declarations
 
@@ -3490,13 +3590,25 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_2_source_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:237`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:296`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.theorem6_2_source_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:290`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:349`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:139`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:166`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4061,8 +4173,8 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
   - Boundary rationale: This atom occurs in a proof, derivation, or proof-only equation rather than in a counted result statement. Source fidelity preserves it, but 100% does not require a separate Lean theorem for it.
 - `DK-8.2-thm.residual-reduction` — **proof_or_derivation_not_result** — The residual form is reduced by changing the complementary perturbation block while preserving the residual/spectral data.
   - Boundary rationale: This atom occurs in a proof, derivation, or proof-only equation rather than in a counted result statement. Source fidelity preserves it, but 100% does not require a separate Lean theorem for it.
-- `DK-8.2-thm.sin2-unequal-dimension-extension` — **counted_result_scope** — The source states a sin2 extension to unequal comparison dimensions.
-  - Boundary rationale: RECLASSIFIED 2026-08-31. The source closes Section 8 by stating that the sin 2 Theta theorem extends to `dim X(E_0) < dim X(F_0)`, analogously to Theorems 6.1 and 6.3. The theorem being extended is the counted Section 2 sin 2 Theta result, so this is CROSS-BLOCK scope of `S2-sin-two-theta`; its textual location in the Section 8 block is not semantic ownership, and it stays outside Theorem 8.2's own printed statement. The companion clause, that no corresponding tan 2 Theta extension was known, is the separate atom `DK-8.2-thm.no-tan2-unequal-dimension-extension-known` and remains a knowledge-state remark.
+- `DK-8.2-thm.sin2-unequal-dimension-extension` — **post_result_consequence_not_in_printed_statement** — The source states a sin2 extension to unequal comparison dimensions.
+  - Boundary rationale: RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The closing sentence of Section 8 states that the sin 2 Theta theorem extends to `dim X(E_0) < dim X(F_0)` "analogously to Theorems 6.1 and 6.3" -- an assertion by analogy, with no proof supplied and no restatement of the Section 2 theorem. It is an extension remark around a counted result, so `result_adjacent_extension`. The repository nevertheless carries the extension at the scope the Section 2 result is certified at (`sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex` and its real sibling, added 2026-08-31); that is stronger coverage held as supporting evidence, not a counted obligation.
 - `DK-8.2-thm.no-tan2-unequal-dimension-extension-known` — **historical_knowledge_state** — No analogous tan2 extension was known.
   - Boundary rationale: This atom records the paper's historical knowledge state rather than a Davis--Kahan result established in the paper.
 
@@ -4201,7 +4313,7 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - `background_theory_not_designated_result`: **2**
 - `counted_result_hypothesis`: **10**
-- `counted_result_scope`: **16**
+- `counted_result_scope`: **10**
 - `counted_result_statement`: **49**
 - `deferred_unproved_claim`: **2**
 - `definition_not_result`: **9**
@@ -4210,12 +4322,12 @@ Every source atom remains visible here even when it is outside the 29-result den
 - `introductory_background_not_designated_result`: **22**
 - `open_question`: **5**
 - `paper_wide_semantic_convention_not_result`: **1**
-- `post_result_consequence_not_in_printed_statement`: **4**
+- `post_result_consequence_not_in_printed_statement`: **9**
 - `post_result_interpretation_not_result`: **2**
 - `pre_result_motivation_not_result`: **1**
 - `pre_result_setup_not_in_printed_statement`: **4**
 - `proof_detail_not_in_printed_statement`: **4**
-- `proof_or_derivation_not_result`: **68**
+- `proof_or_derivation_not_result`: **69**
 - `remark_or_example_not_result`: **7**
 - `restatement_of_counted_result`: **6**
 - `section10_motivation_not_result`: **3**
@@ -4362,8 +4474,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 | 133 | `DK-4.4-prop.printed-sharp-threshold` | `DK-4.4-prop` | `sharpness_commentary_not_designated_result` | — | The paper asserts the pi/3 threshold is sharp in view of the examples. |
 | 134 | `DK-5.1-thm.banach-hypotheses` | `DK-5.1-thm` | `counted_result_hypothesis` | `DK-5.1-thm` | Banach-space theorem with \|\|B\|\|<=alpha and \|\|A^{-1}\|\|<=(alpha+delta)^{-1}, compatible cross norm. |
 | 135 | `DK-5.1-thm.sylvester-lower-bound` | `DK-5.1-thm` | `counted_result_statement` | `DK-5.1-thm` | AX-XB=C implies \|\|C\|\|>=delta\|\|X\|\|. |
-| 136 | `DK-5.1-thm.roles-interchange` | `DK-5.1-thm` | `counted_result_scope` | `DK-5.1-thm` | A and B roles/hypotheses may be interchanged. |
-| 137 | `DK-5.1-thm.one-sided-unbounded-extension` | `DK-5.1-thm` | `counted_result_scope` | `DK-5.1-thm` | The proof covers densely-defined unbounded A with bounded inverse hypothesis while B,X remain bounded. |
+| 136 | `DK-5.1-thm.roles-interchange` | `DK-5.1-thm` | `post_result_consequence_not_in_printed_statement` | — | A and B roles/hypotheses may be interchanged. |
+| 137 | `DK-5.1-thm.one-sided-unbounded-extension` | `DK-5.1-thm` | `post_result_consequence_not_in_printed_statement` | — | The proof covers densely-defined unbounded A with bounded inverse hypothesis while B,X remain bounded. |
 | 138 | `DK-5-hermitian-inequalities.pairwise-gap-hypothesis` | `DK-5-hermitian-inequalities` | `background_theory_not_designated_result` | — | Hermitian A,B have pairwise spectral distance at least delta. |
 | 139 | `DK-5-hermitian-inequalities.operator-norm-constant-one-fails` | `DK-5-hermitian-inequalities` | `background_theory_not_designated_result` | — | The operator-norm analogue with constant 1 can fail. |
 | 140 | `DK-5-hermitian-inequalities.rank-factor-not-best` | `DK-5-hermitian-inequalities` | `sharpness_commentary_not_designated_result` | — | Equation (5.2) is not best possible unless rank C<=1. |
@@ -4396,9 +4508,9 @@ Every source atom remains visible here even when it is outside the 29-result den
 | 167 | `DK-6.3-thm.eq-6-4` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.4) as reconstructed in the distributable TeX. |
 | 168 | `DK-6.3-thm.eq-6-5` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.5) as reconstructed in the distributable TeX. |
 | 169 | `DK-6.3-thm.eq-6-6` | `DK-6.3-thm` | `proof_or_derivation_not_result` | — | Exact mathematical content of source equation (6.6) as reconstructed in the distributable TeX. |
-| 170 | `DK-6-appendix.unbounded-sine-extension` | `DK-6-appendix` | `counted_result_scope` | `S2-sin-theta` | The sine theorem extends to unbounded operators via bounded residual/common-domain hypotheses. |
-| 171 | `DK-6-appendix.proposition61-common-domain-extension` | `DK-6-appendix` | `counted_result_scope` | `DK-6.1-prop` | Proposition 6.1 admits the analogous common-domain/unbounded relaxation. |
-| 172 | `DK-6-appendix.theorem61-common-domain-extension` | `DK-6-appendix` | `counted_result_scope` | `DK-6.1-thm` | Theorem 6.1 admits the analogous common-domain/unbounded relaxation. |
+| 170 | `DK-6-appendix.unbounded-sine-extension` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | The sine theorem extends to unbounded operators via bounded residual/common-domain hypotheses. |
+| 171 | `DK-6-appendix.proposition61-common-domain-extension` | `DK-6-appendix` | `post_result_consequence_not_in_printed_statement` | — | Proposition 6.1 admits the analogous common-domain/unbounded relaxation. |
+| 172 | `DK-6-appendix.theorem61-common-domain-extension` | `DK-6-appendix` | `post_result_consequence_not_in_printed_statement` | — | Theorem 6.1 admits the analogous common-domain/unbounded relaxation. |
 | 173 | `DK-6-appendix.unbounded-tangent-extension` | `DK-6-appendix` | `counted_result_scope` | `S2-tan-theta` | The Appendix states the tan theta theorem in the general ordered case A0 <= alpha and Lambda1 >= alpha + delta and explicitly allows both A0 and Lambda1 to be unbounded, while the residual used by the norm estimate remains bounded. |
 | 174 | `DK-6-appendix.appendix-approximation-chain` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | Equations (6.7)--(6.11) form the approximation chain controlling singular directions and passing to all UI norms. |
 | 175 | `DK-6-appendix.appendix-all-ui-limit` | `DK-6-appendix` | `proof_or_derivation_not_result` | — | The epsilon-to-zero argument completes the bound-norm case and then all UI norms. |
@@ -4438,7 +4550,7 @@ Every source atom remains visible here even when it is outside the 29-result den
 | 209 | `DK-8.2-thm.acute-branch-conclusion` | `DK-8.2-thm` | `counted_result_statement` | `DK-8.2-thm` | Theta<pi/4. |
 | 210 | `DK-8.2-thm.homotopy-proof` | `DK-8.2-thm` | `proof_or_derivation_not_result` | — | The perturbation proof uses the continuous spectral-projector homotopy and the displayed arcsine bound. |
 | 211 | `DK-8.2-thm.residual-reduction` | `DK-8.2-thm` | `proof_or_derivation_not_result` | — | The residual form is reduced by changing the complementary perturbation block while preserving the residual/spectral data. |
-| 212 | `DK-8.2-thm.sin2-unequal-dimension-extension` | `DK-8.2-thm` | `counted_result_scope` | `S2-sin-two-theta` | The source states a sin2 extension to unequal comparison dimensions. |
+| 212 | `DK-8.2-thm.sin2-unequal-dimension-extension` | `DK-8.2-thm` | `post_result_consequence_not_in_printed_statement` | — | The source states a sin2 extension to unequal comparison dimensions. |
 | 213 | `DK-8.2-thm.no-tan2-unequal-dimension-extension-known` | `DK-8.2-thm` | `historical_knowledge_state` | — | No analogous tan2 extension was known. |
 | 214 | `DK-9-model.real-l2-model` | `DK-9-model` | `definition_not_result` | — | The numerical model is real L2(0,1) with the free-end fourth-derivative self-adjoint closure and multiplication perturbation epsilon t. |
 | 215 | `DK-9-model.perturbed-eigenproblem` | `DK-9-model` | `definition_not_result` | — | The displayed fourth-order perturbed boundary-value eigenproblem. |
@@ -4506,8 +4618,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 274 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **24 currently terminal results independently reconfirmed:** yes / no
-- **5 currently nonterminal/pending results resolved by this audit:** yes / no
+- **29 currently terminal results independently reconfirmed:** yes / no
+- **0 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

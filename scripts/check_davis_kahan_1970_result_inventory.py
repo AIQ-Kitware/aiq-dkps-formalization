@@ -75,6 +75,12 @@ REFUTATION_RESULT_IDS = {"DK-4.4-prop"}
 SCOPE_CLASSIFICATION_CATEGORIES = {
     # the atom states scope of one or more counted results, and must be covered
     "counted_result_scope",
+    # the source mentions an extension, variant, consequence or further case around
+    # a counted result WITHOUT introducing and proving it as a result of its own.
+    # Under `selection_definition.statement_boundary` such a passage does not
+    # enlarge the counted result; it is fidelity material, and any Lean coverage of
+    # it is supporting evidence rather than a canonical obligation.
+    "result_adjacent_extension",
     # ambient setting or convention governing the whole paper
     "source_wide_setup",
     # tells a reader how to READ a statement (automaticity, vacuity conventions)

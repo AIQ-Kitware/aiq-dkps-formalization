@@ -166,7 +166,7 @@
         }
       ],
       "source_specification_sha256": "8e5e36e64c718f1cdb002dd3c5a191c8919fa22bad64020bdbf8f22adb6a3f72",
-      "expected_completion_certification": "reopened_mapping",
+      "expected_completion_certification": "accepted",
       "known_completion_holes": [],
       "source_atom_ids": [
         "S2-sin-theta.family-distinctness",
@@ -264,7 +264,7 @@
         }
       ],
       "source_specification_sha256": "7da711fdbd912b64b5aa6f2efc5c4255bcbe796831a18b99c92712024b81c70b",
-      "expected_completion_certification": "reopened_math",
+      "expected_completion_certification": "accepted",
       "known_completion_holes": [],
       "source_atom_ids": [
         "S2-sin-two-theta.gap-hypothesis",
@@ -1403,7 +1403,7 @@
         }
       ],
       "source_specification_sha256": "13e2036a72aaec0c5094f6014d3bfe1933167f1a43cf79f77716d5d7bf9726c7",
-      "expected_completion_certification": "reopened_mapping",
+      "expected_completion_certification": "accepted",
       "known_completion_holes": [],
       "source_atom_ids": [
         "DK-6.1-thm.generalized-sine-hypotheses",

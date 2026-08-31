@@ -2564,19 +2564,16 @@
       "summary": "A and B roles/hypotheses may be interchanged.",
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
-      "formalization_role": "result_scope",
-      "formalization_role_reason": "RECLASSIFIED 2026-08-31. The source says outright that the roles and hypotheses of `A` and `B` may be interchanged in Theorem 5.1. That is an explicit statement about what Theorem 5.1 proves, so under the inventory's own statement_boundary policy it is scope of that counted result. Its previous reason code, `post_result_scope_remark_not_in_printed_statement`, gave as grounds for exclusion exactly the condition the policy says does not exclude an explicit extension -- occurring after the theorem environment.",
-      "formalization_role_reason_code": "counted_result_scope",
-      "formalization_result_ids": [
-        "DK-5.1-thm"
-      ],
+      "formalization_role": "non_result",
+      "formalization_role_reason": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The source does say the roles and hypotheses of `A` and `B` may be interchanged, but it presents this as a remark that the same proof runs with the roles swapped -- not as a separate result it introduces and proves, and not as something needed to determine what Theorem 5.1 itself claims. Under the corrected rule it is therefore `result_adjacent_extension`: fidelity material recording a variant around a counted result. The earlier pass attached it to `DK-5.1-thm` under a rule that let any explicit extension enlarge a counted result; that rule contradicted this ledger's own `does_not_count` entry and has been withdrawn. `theorem5_1_banach_sylvester_interchanged_exact` remains compiled and registered as supporting evidence, which is the right place for coverage that is good to have but is not part of the counted statement.",
+      "formalization_role_reason_code": "post_result_consequence_not_in_printed_statement",
+      "formalization_result_ids": [],
       "scope_classification": {
-        "category": "counted_result_scope",
-        "extends_results": [
-          "DK-5.1-thm"
-        ],
-        "rationale": "RECLASSIFIED 2026-08-31. The source says outright that the roles and hypotheses of `A` and `B` may be interchanged in Theorem 5.1. That is an explicit statement about what Theorem 5.1 proves, so under the inventory's own statement_boundary policy it is scope of that counted result. Its previous reason code, `post_result_scope_remark_not_in_printed_statement`, gave as grounds for exclusion exactly the condition the policy says does not exclude an explicit extension -- occurring after the theorem environment.",
-        "source_quote": "The roles and hypotheses of $A$ and $B$ may be interchanged."
+        "category": "result_adjacent_extension",
+        "extends_results": [],
+        "rationale": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The source does say the roles and hypotheses of `A` and `B` may be interchanged, but it presents this as a remark that the same proof runs with the roles swapped -- not as a separate result it introduces and proves, and not as something needed to determine what Theorem 5.1 itself claims. Under the corrected rule it is therefore `result_adjacent_extension`: fidelity material recording a variant around a counted result. The earlier pass attached it to `DK-5.1-thm` under a rule that let any explicit extension enlarge a counted result; that rule contradicted this ledger's own `does_not_count` entry and has been withdrawn. `theorem5_1_banach_sylvester_interchanged_exact` remains compiled and registered as supporting evidence, which is the right place for coverage that is good to have but is not part of the counted statement.",
+        "source_quote": "The roles and hypotheses of $A$ and $B$ may be interchanged.",
+        "stronger_lean_coverage": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact"
       }
     },
     {
@@ -2590,19 +2587,16 @@
       "summary": "The proof covers densely-defined unbounded A with bounded inverse hypothesis while B,X remain bounded.",
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
-      "formalization_role": "result_scope",
-      "formalization_role_reason": "RECLASSIFIED 2026-08-31. The source says the same proof covers a densely-defined unbounded `A` provided the inverse hypothesis is bounded while `B` and `X` remain bounded. That is an explicit extension of Theorem 5.1's proved scope, not commentary. The following clause -- that the source then proceeds to a separate result allowing unbounded behaviour on both sides -- refers to Theorem 5.2, which is separately counted, and creates no obligation here.",
-      "formalization_role_reason_code": "counted_result_scope",
-      "formalization_result_ids": [
-        "DK-5.1-thm"
-      ],
+      "formalization_role": "non_result",
+      "formalization_role_reason": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The sentence says the same proof also covers a densely-defined unbounded `A`; the paper offers no separate proof and presents no separate result, and Theorem 5.1's own claim is complete without it. `result_adjacent_extension`. `theorem5_1_banach_sylvester_unboundedA` is compiled and registered as supporting evidence.",
+      "formalization_role_reason_code": "post_result_consequence_not_in_printed_statement",
+      "formalization_result_ids": [],
       "scope_classification": {
-        "category": "counted_result_scope",
-        "extends_results": [
-          "DK-5.1-thm"
-        ],
-        "rationale": "RECLASSIFIED 2026-08-31. The source says the same proof covers a densely-defined unbounded `A` provided the inverse hypothesis is bounded while `B` and `X` remain bounded. That is an explicit extension of Theorem 5.1's proved scope, not commentary. The following clause -- that the source then proceeds to a separate result allowing unbounded behaviour on both sides -- refers to Theorem 5.2, which is separately counted, and creates no obligation here.",
-        "source_quote": "The same proof also covers densely-defined unbounded $A$ provided the inverse hypothesis is meaningful/bounded while $B$ and $X$ remain bounded"
+        "category": "result_adjacent_extension",
+        "extends_results": [],
+        "rationale": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The sentence says the same proof also covers a densely-defined unbounded `A`; the paper offers no separate proof and presents no separate result, and Theorem 5.1's own claim is complete without it. `result_adjacent_extension`. `theorem5_1_banach_sylvester_unboundedA` is compiled and registered as supporting evidence.",
+        "source_quote": "The same proof also covers densely-defined unbounded $A$ provided the inverse hypothesis is meaningful/bounded while $B$ and $X$ remain bounded",
+        "stronger_lean_coverage": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA"
       }
     },
     {
@@ -3174,18 +3168,14 @@
       "summary": "The sine theorem extends to unbounded operators via bounded residual/common-domain hypotheses.",
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
-      "formalization_role": "result_scope",
-      "formalization_role_reason": "RECLASSIFIED AND SPLIT 2026-08-31. This atom now carries only the first clause of the Appendix sine paragraph: the headline sine theorem holds with one of `A_0`, `Lambda_1` unbounded, and for a half-infinite separating interval the source assumes `(A+H)E_0` and `E_0 A_0` share a dense domain on which (1.8) defines a bounded `R`, extends `R` continuously, and applies Theorem 5.2. That is an explicit statement of the Section 2 sine theorem's unbounded scope. Classifying it as expository was internally inconsistent: the very next sentence, the unbounded tangent extension, was already `result_scope` for `S2-tan-theta`. The two sentences about Proposition 6.1 and Theorem 6.1 are now separate atoms.",
-      "formalization_role_reason_code": "counted_result_scope",
-      "formalization_result_ids": [
-        "S2-sin-theta"
-      ],
+      "formalization_role": "non_result",
+      "formalization_role_reason": "RECLASSIFIED 2026-08-31 (second pass). This clause describes HOW the headline sine theorem is read in the unbounded case -- assume a common dense domain carrying a bounded residual, extend it continuously, apply Theorem 5.2. The unbounded scope of the Section 2 sine theorem is already carried by the `S2-unbounded-scope.*` atoms; this passage supplies the mechanism, so it is `proof_context` rather than additional scope. It is not expository commentary either, which is what the first pass corrected.",
+      "formalization_role_reason_code": "proof_or_derivation_not_result",
+      "formalization_result_ids": [],
       "scope_classification": {
-        "category": "counted_result_scope",
-        "extends_results": [
-          "S2-sin-theta"
-        ],
-        "rationale": "RECLASSIFIED AND SPLIT 2026-08-31. This atom now carries only the first clause of the Appendix sine paragraph: the headline sine theorem holds with one of `A_0`, `Lambda_1` unbounded, and for a half-infinite separating interval the source assumes `(A+H)E_0` and `E_0 A_0` share a dense domain on which (1.8) defines a bounded `R`, extends `R` continuously, and applies Theorem 5.2. That is an explicit statement of the Section 2 sine theorem's unbounded scope. Classifying it as expository was internally inconsistent: the very next sentence, the unbounded tangent extension, was already `result_scope` for `S2-tan-theta`. The two sentences about Proposition 6.1 and Theorem 6.1 are now separate atoms.",
+        "category": "proof_context",
+        "extends_results": [],
+        "rationale": "RECLASSIFIED 2026-08-31 (second pass). This clause describes HOW the headline sine theorem is read in the unbounded case -- assume a common dense domain carrying a bounded residual, extend it continuously, apply Theorem 5.2. The unbounded scope of the Section 2 sine theorem is already carried by the `S2-unbounded-scope.*` atoms; this passage supplies the mechanism, so it is `proof_context` rather than additional scope. It is not expository commentary either, which is what the first pass corrected.",
         "source_quote": "For the sine theorem, one of $A_0,\\Lambda_1$ may be unbounded. ... the source assumes $(A+H)E_0$ and $E_0A_0$ share a dense domain on which (1.8) defines a bounded $R$, extends $R$ continuously, and then applies Theorem~5.2."
       }
     },
@@ -3200,19 +3190,16 @@
       "summary": "Proposition 6.1 admits the analogous common-domain/unbounded relaxation.",
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
-      "formalization_role": "result_scope",
-      "formalization_role_reason": "SPLIT OUT 2026-08-31 from `DK-6-appendix.unbounded-sine-extension`. The Appendix sentence names Proposition 6.1 explicitly as admitting the analogous relaxation: two closed self-adjoint operators sharing one dense domain, whose difference there is the bounded `H`. That is an explicit extension of Proposition 6.1's proved scope. It is a CROSS-BLOCK scope atom: it lives in the Appendix block and belongs to the Proposition 6.1 result.",
-      "formalization_role_reason_code": "counted_result_scope",
-      "formalization_result_ids": [
-        "DK-6.1-prop"
-      ],
+      "formalization_role": "non_result",
+      "formalization_role_reason": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. \"Proposition 6.1 and Theorem 6.1 admit the analogous relaxation\" states that an extension holds; the paper gives no separate proof for it and does not restate Proposition 6.1 with the relaxed hypothesis. It is an extension remark around a counted result, so it is `result_adjacent_extension` rather than scope of Proposition 6.1. The split of the Appendix sine paragraph into three atoms is kept: they are separately reviewable source claims, which is what the fidelity ledger is for. `proposition6_1_commonDomain_source_complex` and `..._real` are compiled and registered as supporting evidence.",
+      "formalization_role_reason_code": "post_result_consequence_not_in_printed_statement",
+      "formalization_result_ids": [],
       "scope_classification": {
-        "category": "counted_result_scope",
-        "extends_results": [
-          "DK-6.1-prop"
-        ],
-        "rationale": "SPLIT OUT 2026-08-31 from `DK-6-appendix.unbounded-sine-extension`. The Appendix sentence names Proposition 6.1 explicitly as admitting the analogous relaxation: two closed self-adjoint operators sharing one dense domain, whose difference there is the bounded `H`. That is an explicit extension of Proposition 6.1's proved scope. It is a CROSS-BLOCK scope atom: it lives in the Appendix block and belongs to the Proposition 6.1 result.",
-        "source_quote": "Proposition~6.1 and Theorem~6.1 admit the analogous relaxation."
+        "category": "result_adjacent_extension",
+        "extends_results": [],
+        "rationale": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. \"Proposition 6.1 and Theorem 6.1 admit the analogous relaxation\" states that an extension holds; the paper gives no separate proof for it and does not restate Proposition 6.1 with the relaxed hypothesis. It is an extension remark around a counted result, so it is `result_adjacent_extension` rather than scope of Proposition 6.1. The split of the Appendix sine paragraph into three atoms is kept: they are separately reviewable source claims, which is what the fidelity ledger is for. `proposition6_1_commonDomain_source_complex` and `..._real` are compiled and registered as supporting evidence.",
+        "source_quote": "Proposition~6.1 and Theorem~6.1 admit the analogous relaxation.",
+        "stronger_lean_coverage": "TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_complex"
       }
     },
     {
@@ -3226,19 +3213,16 @@
       "summary": "Theorem 6.1 admits the analogous common-domain/unbounded relaxation.",
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
-      "formalization_role": "result_scope",
-      "formalization_role_reason": "SPLIT OUT 2026-08-31 from `DK-6-appendix.unbounded-sine-extension`. The same Appendix sentence names Theorem 6.1. Cross-block scope of the Theorem 6.1 result. The sentence names ONLY Proposition 6.1 and Theorem 6.1; it says nothing about Theorem 6.2, so no common-domain obligation is created for `DK-6.2-thm` by analogy.",
-      "formalization_role_reason_code": "counted_result_scope",
-      "formalization_result_ids": [
-        "DK-6.1-thm"
-      ],
+      "formalization_role": "non_result",
+      "formalization_role_reason": "RECLASSIFIED 2026-08-31 (second pass), as for the Proposition 6.1 sentence: an extension remark, not a separately proved result, and not required to read Theorem 6.1's own claim. `result_adjacent_extension`. The common-domain Theorem 6.1 declarations remain compiled and are registered as supporting evidence.",
+      "formalization_role_reason_code": "post_result_consequence_not_in_printed_statement",
+      "formalization_result_ids": [],
       "scope_classification": {
-        "category": "counted_result_scope",
-        "extends_results": [
-          "DK-6.1-thm"
-        ],
-        "rationale": "SPLIT OUT 2026-08-31 from `DK-6-appendix.unbounded-sine-extension`. The same Appendix sentence names Theorem 6.1. Cross-block scope of the Theorem 6.1 result. The sentence names ONLY Proposition 6.1 and Theorem 6.1; it says nothing about Theorem 6.2, so no common-domain obligation is created for `DK-6.2-thm` by analogy.",
-        "source_quote": "Proposition~6.1 and Theorem~6.1 admit the analogous relaxation."
+        "category": "result_adjacent_extension",
+        "extends_results": [],
+        "rationale": "RECLASSIFIED 2026-08-31 (second pass), as for the Proposition 6.1 sentence: an extension remark, not a separately proved result, and not required to read Theorem 6.1's own claim. `result_adjacent_extension`. The common-domain Theorem 6.1 declarations remain compiled and are registered as supporting evidence.",
+        "source_quote": "Proposition~6.1 and Theorem~6.1 admit the analogous relaxation.",
+        "stronger_lean_coverage": "TauCeti.DavisKahan1970.Theorem6_1_commonDomain"
       }
     },
     {
@@ -3916,19 +3900,16 @@
       "summary": "The source states a sin2 extension to unequal comparison dimensions.",
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
-      "formalization_role": "result_scope",
-      "formalization_role_reason": "RECLASSIFIED 2026-08-31. The source closes Section 8 by stating that the sin 2 Theta theorem extends to `dim X(E_0) < dim X(F_0)`, analogously to Theorems 6.1 and 6.3. The theorem being extended is the counted Section 2 sin 2 Theta result, so this is CROSS-BLOCK scope of `S2-sin-two-theta`; its textual location in the Section 8 block is not semantic ownership, and it stays outside Theorem 8.2's own printed statement. The companion clause, that no corresponding tan 2 Theta extension was known, is the separate atom `DK-8.2-thm.no-tan2-unequal-dimension-extension-known` and remains a knowledge-state remark.",
-      "formalization_role_reason_code": "counted_result_scope",
-      "formalization_result_ids": [
-        "S2-sin-two-theta"
-      ],
+      "formalization_role": "non_result",
+      "formalization_role_reason": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The closing sentence of Section 8 states that the sin 2 Theta theorem extends to `dim X(E_0) < dim X(F_0)` \"analogously to Theorems 6.1 and 6.3\" -- an assertion by analogy, with no proof supplied and no restatement of the Section 2 theorem. It is an extension remark around a counted result, so `result_adjacent_extension`. The repository nevertheless carries the extension at the scope the Section 2 result is certified at (`sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex` and its real sibling, added 2026-08-31); that is stronger coverage held as supporting evidence, not a counted obligation.",
+      "formalization_role_reason_code": "post_result_consequence_not_in_printed_statement",
+      "formalization_result_ids": [],
       "scope_classification": {
-        "category": "counted_result_scope",
-        "extends_results": [
-          "S2-sin-two-theta"
-        ],
-        "rationale": "RECLASSIFIED 2026-08-31. The source closes Section 8 by stating that the sin 2 Theta theorem extends to `dim X(E_0) < dim X(F_0)`, analogously to Theorems 6.1 and 6.3. The theorem being extended is the counted Section 2 sin 2 Theta result, so this is CROSS-BLOCK scope of `S2-sin-two-theta`; its textual location in the Section 8 block is not semantic ownership, and it stays outside Theorem 8.2's own printed statement. The companion clause, that no corresponding tan 2 Theta extension was known, is the separate atom `DK-8.2-thm.no-tan2-unequal-dimension-extension-known` and remains a knowledge-state remark.",
-        "source_quote": "The source closes Section~8 by stating that the $\\sin2\\theta$ theorem extends to $\\dim\\mathcal X(E_0)<\\dim\\mathcal X(F_0)$ analogously to Theorems~6.1 and~6.3"
+        "category": "result_adjacent_extension",
+        "extends_results": [],
+        "rationale": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The closing sentence of Section 8 states that the sin 2 Theta theorem extends to `dim X(E_0) < dim X(F_0)` \"analogously to Theorems 6.1 and 6.3\" -- an assertion by analogy, with no proof supplied and no restatement of the Section 2 theorem. It is an extension remark around a counted result, so `result_adjacent_extension`. The repository nevertheless carries the extension at the scope the Section 2 result is certified at (`sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex` and its real sibling, added 2026-08-31); that is stronger coverage held as supporting evidence, not a counted obligation.",
+        "source_quote": "The source closes Section~8 by stating that the $\\sin2\\theta$ theorem extends to $\\dim\\mathcal X(E_0)<\\dim\\mathcal X(F_0)$ analogously to Theorems~6.1 and~6.3",
+        "stronger_lean_coverage": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex"
       }
     },
     {

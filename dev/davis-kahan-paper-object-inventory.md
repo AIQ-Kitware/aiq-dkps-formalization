@@ -158,3 +158,26 @@ their lower-frame factor `ε` exists to avoid.
 
 The remaining `C` row is `PaperUnitaryInvariantNorm`, and it stays: its
 replacement is blocked at the operator-ideal layer, as recorded above.
+
+## The public alias divergence, measured
+
+`SineThetaSourceInventory.lean` now says the canonical source theorems are the
+new component-hypothesis declarations, while the obvious public names
+`Proposition6_1_complex`, `Theorem6_1_complex` and `Theorem6_2_complex` still
+alias the `Paper*` record methods. Re-pointing them is blocked by an import
+cycle: `SineTheta/PaperSurface.lean` imports `SineThetaSourceInventory`, and the
+new theorems sit above `PaperSurface`.
+
+**The cycle is one alias.** Of the 106 alias names the inventory defines,
+`PaperSurface` uses exactly one — `UnitaryInvariantNorm`, itself an alias of
+`PaperUnitaryInvariantNorm` — at a single occurrence. Breaking the cycle is a
+one-line change plus a narrower import.
+
+What is *not* one line is what follows. Re-pointing `Theorem6_1_complex` changes
+the printed type of a name registered in the census, `#check`ed by the audit
+surface, and read by the compiler-derived scalar-scope and capability audit; and
+`UnitaryInvariantNorm` and `PaperUnitaryInvariantNorm` are distinct constants, so
+even the cycle-break edit changes one registered declaration's printed type.
+Each renamed public name needs its own source comparison. Deferred deliberately,
+with the measurement recorded so the next pass starts from a decision rather than
+a rediscovery.

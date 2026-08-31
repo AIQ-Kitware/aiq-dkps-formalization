@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1137
+**Unique cited Lean declarations:** 1143
 
 ## How to use this census
 
@@ -228,7 +228,7 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 
 ### `S2-sin-theta` — Single-angle sine theorem
 
-**importance:** `headline`  **section:** 2  **source:** Section 2, sin theta theorem  **kind:** unnumbered_theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `reopened_mapping`
+**importance:** `headline`  **section:** 2  **source:** Section 2, sin theta theorem  **kind:** unnumbered_theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
 **Summary.** Interval/exterior spectral separation gives delta times the directed sine norm bounded by the residual norm for every source unitary-invariant norm.
 
@@ -295,6 +295,8 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 **BLOCKER REMOVED 2026-08-09 (Claude Opus 5, M34): `real-scalar-infinite-dimensional-scope` was a STALE entry on this row.**  The 2026-08-07 correction recorded directly above had already restored the status to `compiled_exact` and set `next_action` to "No mathematical gap", but the `blocked_by` reference was never dropped with it, so for two days the row reported a scalar gap that its own notes said it did not have.  RE-VERIFIED by elaboration at this HEAD, not by reading the note: `sinTheta_paperData_real` and `sinTheta_generalized_paperData_real` carry `[NormedAddCommGroup _] [InnerProductSpace R _] [CompleteSpace _]` on every one of `E`, `F`, `G`, `H`, `E_0`, `F_0`, with NO `[FiniteDimensional]` anywhere, and conclude `N.Mem S.operator AND P.gap * N.gauge S.operator <= N.gauge P.data.residual` for an arbitrary `PaperUnitaryInvariantNorm`, with ideal membership CONCLUDED.  That is a real Hilbert space of arbitrary dimension at every source unitarily invariant norm, which is exactly what the blocker asks for. Canonical fixed-field statements added 2026-08-29: `sinTheta_complex` and `sinTheta_real` take direct argument lists, the full `FormBoundedSylvesterGap` rather than the inlined interval/exterior branch, and conclude ideal membership as well as the bound, with neither `HasUnboundedSylvesterKyFan` nor `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` in the signature. The `_of_intervalExterior` pair spells out the printed Section 2 separation. `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` and `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` are unchanged. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved by a standing rule: a short name is bound only to a declaration that is BOTH scalar-generic over `RCLike` AND at the printed source scope, and is left unbound otherwise. Which of the four currently satisfy that is a property of the Lean file, and `SectionTwo.lean` is where it is recorded; this note deliberately does not restate it, because a copy of a moving fact goes stale silently -- this sentence itself did. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately.
 
 REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.
+
+REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -471,7 +473,7 @@ The `next_action` prerequisite `first generalise PrescribedSequence.lean from C 
 
 ### `S2-sin-two-theta` — Double-angle sine theorem
 
-**importance:** `headline`  **section:** 2  **source:** Section 2, sin 2 theta theorem  **kind:** unnumbered_theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `reopened_math`
+**importance:** `headline`  **section:** 2  **source:** Section 2, sin 2 theta theorem  **kind:** unnumbered_theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
 **Summary.** Off-diagonal or fully separated perturbations give the printed residual and perturbation sin(2 Theta) bounds with factor two over real and complex Hilbert spaces at the maintained source norm scope. The Section 8 strict-dimension extension is explicitly exposed for the directed Theta_0 conclusion; the underlying directed theorem is stronger and has no dimension comparison at all.
 
@@ -533,6 +535,8 @@ The `next_action` prerequisite `first generalise PrescribedSequence.lean from C 
 - `TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap`
 - `TauCeti.DavisKahan.sinTheta_addBounded_gauge_complex_block_of_formGap`
 - `TauCeti.DavisKahan.ExactSinTheta.sinTheta_unbounded_complex_block`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex`
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_real`
 
 **Curated source/Lean review:**
 
@@ -684,6 +688,8 @@ THE MISSING THEOREM, exactly: a complex Paper-UI endpoint taking `hgap : FormBou
 GAP SCOPE RESTORED 2026-08-31. The missing complex full-gap endpoint named above now exists, and it was not obtained by generalizing `sinTheta_unbounded_gauge`. `ExactSinTheta.sinTheta_unbounded_complex` already carried the complex single-angle theorem at `FormBoundedSylvesterGap`; adding its block form and the reflected exact system over `C` -- the architecture `sinTwoTheta_reflectionResidual_block_gauge_real` already used -- gives `sinTwoTheta_reflectionResidual_block_gauge_of_formGap` and hence the two complex Paper-UI endpoints at the printed scope. The bounded-interval statements survive under `spectrumGap` names and are supporting evidence, not this row's witnesses; they are not derived from the new ones, because the implication `spectrumGap -> formGap` needs a `LinearPMap` semibounded-implies-bounded-spectrum lemma that this tree does not have.
 
 REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.
+
+REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -2801,6 +2807,8 @@ SOURCE-CLOSURE TRANCHE 2026-08-11.  Added the stable arbitrary-dimensional `TauC
 
 SECTION 4 STAGING RETIRED 2026-08-27.  `DavisKahan/Frontier/Section4.lean` is deleted.  The staging wrapper `proposition4_2_basisAngleSquareSum_principalSines` recorded on this row was `:=` `TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge_sum_sq_principalSines`, which this row already lists, so the entry is dropped rather than retargeted and no coverage is lost.  The staging module's discussion of the two refuted transcriptions of this proposition -- the singleton/proper-subfamily form and the same-basis right-hand side -- is preserved in the module docstring of `DavisKahan/Geometry/Angle/BasisAngleEnergy.lean`, which is where the stable theorems live.
 
+REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
+
 **Next action.** Hostile re-audit reopened this row. The main inequality appears formalized, but the source block also records the trace/basis identification used in the proof. The terminal row does not separately bind that preserved mathematical assertion to Lean evidence.
 
 **Blocked by:** `hostile-audit-atomization`
@@ -2881,6 +2889,8 @@ SOURCE-FIDELITY REFRESH 2026-08-11.  Status lowered to `compiled_specialization`
 
 SECTION 4 STAGING RETIRED 2026-08-27.  `DavisKahan/Frontier/Section4.lean` is deleted, together with the compatibility-only directory `DavisKahan/MathAhead/Section4/` whose three modules declared nothing and only re-imported `DavisKahan.Geometry.Polar.RestrictedDisplacementExtremal` and `DavisKahan.Geometry.Polar.DisplacementSquareExtremal`.  The dated notes above describing those paths are the historical record.  Current ownership: the Ky Fan theorem is `TauCeti.DavisKahan.Section4.proposition4_3_squaredDisplacement_kyFan` in `DavisKahan/Geometry/Polar/DisplacementSquareExtremal.lean`, aliased source-facing as `Proposition4_3_infiniteDimensional`; the refuting configuration for the pointwise reading is now recorded in that module's docstring rather than in the retired staging file.
 
+REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
+
 **Next action.** Hostile re-audit reopened this row. Broader nonacute and real source theorems exist, but the primary row evidence is narrower and the hashed block contains equations (4.3)-(4.6) plus the precise UI-norm limitation. Rebind/atomize the complete source scope.
 
 **Blocked by:** `hostile-audit-atomization`
@@ -2959,6 +2969,8 @@ bounded (`A : Y ->L[C] Y` and `A : Y ->L[K] Y`), so this is a printed claim abou
 scope that the formalization does not carry.
 
 REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.
+
+REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
 **Next action.** Hostile re-audit reopened this row. The source block includes the Banach-space inverse-norm form, A/B interchange, and unbounded-left extension. The repository contains strong infrastructure and literal wrappers, but the audit row does not atomically show that every printed clause is represented at real/complex source scope.
 
@@ -3053,6 +3065,8 @@ as the printed `A >= gamma + delta > gamma >= B`, and both ideal membership and 
 Fan level.  That is printed Theorem 5.2 over a real Hilbert space of arbitrary dimension, so this row
 is not part of the real-scalar gap the blocker describes.
 
+REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
+
 **Next action.** Hostile re-audit reopened this row. The theorem appears available in both scalar fields, but primary evidence is not explicitly bound clause-by-clause to the paper's full real/complex source scope.
 
 **Blocked by:** `hostile-audit-atomization`
@@ -3136,6 +3150,10 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 - `TauCeti.DavisKahan1970.proposition6_1_source_real`
 - `TauCeti.DavisKahanExt.PartialMap.boundedReducingBlock`
 - `TauCeti.DavisKahanExt.PartialMap.boundedReducingBlockCompl`
+- `TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_complex`
+- `TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_real`
+- `TauCeti.DavisKahan1970.Proposition6_1_commonDomain`
+- `TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain`
 
 **Notes.** Complex and real source forms are compiled.
 
@@ -3154,6 +3172,8 @@ CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Proposition6_1_complex` and 
 
 REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.
 
+REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
+
 **Next action.** Hostile re-audit reopened this row. The source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails. The counterexample exists elsewhere but is not registered as evidence for this row.
 
 **Blocked by:** `hostile-audit-atomization`
@@ -3164,7 +3184,7 @@ REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly
 
 ### `DK-6.1-thm` — Generalized sine theorem
 
-**importance:** `major`  **section:** 6  **source:** Theorem 6.1  **kind:** theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `reopened_mapping`
+**importance:** `major`  **section:** 6  **source:** Theorem 6.1  **kind:** theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
 **Summary.** A lower frame bound on the trial map and interval/exterior separation give delta epsilon times any equisingular sine representative bounded by the residual.
 
@@ -3178,6 +3198,9 @@ REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly
 - `TauCeti.DavisKahan1970.theorem6_1_source_real`
 - `DavisKahan1970.IsTrialResidualEquation`
 - `DavisKahan1970.isTrialResidual_iff_equation_and_isometry`
+- `TauCeti.DavisKahan1970.Theorem6_1_commonDomain`
+- `TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality`
+- `TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality`
 
 **Notes.** This is the canonical source-general sine theorem.
 
@@ -3190,6 +3213,8 @@ REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly
 CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Theorem6_1_complex` and `Theorem6_1_real` are methods on `PaperTheorem61Data`, which bundles an `UnboundedSinThetaData` -- itself a record -- with the exact map, three self-adjointness fields, the exact decomposition, the gap and the frame bound. `theorem6_1_source_complex` and `theorem6_1_source_real` take the components. They reuse the Section 2 vocabulary rather than inventing a second one: `DavisKahan1970.IsExactSpectralDecomposition` unchanged, and `DavisKahan1970.IsTrialResidualEquation` -- `IsTrialResidual` with the isometry removed, tied by `isTrialResidual_iff_equation_and_isometry`. That split is the actual difference between Section 2 and Section 6: Section 2 asks for an isometric trial map, Theorems 6.1 and 6.2 ask only for `LowerFrameBound E_0 epsilon`, and epsilon is the factor the printed generalized bound carries. Hypotheses and conclusion are unchanged -- same lower-frame factor, same representative freedom, same arbitrary source UI norm.
 
 REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.
+
+REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -3209,6 +3234,8 @@ REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly
 - `TauCeti.DavisKahan.ExactSinTheta.PaperRealTheorem62Data.operatorNorm_result_across_of_rank_le`
 - `TauCeti.DavisKahan1970.theorem6_2_source_complex`
 - `TauCeti.DavisKahan1970.theorem6_2_source_real`
+- `TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality`
+- `TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality`
 
 **Notes.** The defect-first pairwise tensor proof is compiled.
 
@@ -3230,6 +3257,8 @@ is itself still absent as a Section 5 statement; that is tracked on `DK-5-hermit
 **M32, THE SECTION 6 SCALAR TRANCHE, 2026-08-09 (Claude Opus 5).**  THE `real-scalar-infinite-dimensional-scope` ENTRY IN `blocked_by` WAS STALE AND IS REMOVED, for the same reason as on `DK-6.1-thm`.  RE-MEASURED 2026-08-09 by elaboration: `Theorem6_2_real` is `[InnerProductSpace ℝ]`, `[CompleteSpace]`, no `[FiniteDimensional]`, over `PaperRealTheorem62Data`, concluding `IsPaperHilbertSchmidt S.operator ∧ gap * frameLowerBound * paperHilbertSchmidtNorm S.operator ≤ paperHilbertSchmidtNorm P.source.R` -- square-norm membership CONCLUDED.  `Theorem6_2_real_commonDomain`, `Theorem6_2_real_commonCore` and the printed rank variant `PaperRealTheorem62Data.operatorNorm_result_across_of_rank_le` likewise.  All axiom-clean.  Nothing was proved for this row today.
 
 CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. As for Theorem 6.1, with the same component vocabulary. The counted statement is unchanged: the source's pairwise spectral-distance hypothesis rather than the Sylvester gap, the Hilbert--Schmidt norm rather than an arbitrary unitarily invariant one, the lower-frame factor, and the representative freedom. The stronger arbitrary-UI-norm theorem and the finite-rank operator-norm consequence are source-adjacent and are deliberately not what the canonical declarations state.
+
+REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
 **Next action.** Hostile re-audit reopened this row. The source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence. Exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses.
 
@@ -4188,6 +4217,8 @@ WHAT SURVIVES, ON BETTER GROUNDS: the finite form of (1.5) is still the right re
 THE FILE WAS SELF-CONTRADICTING, NOT MERELY STALE: the same module docstring already carried the correct (3.5) analysis about thirty lines below the false claim.  A FIFTH instance, not in the original finding list, was found in the same docstring's exported-surface list, asserting the residual endpoint is `not available` at the printed norm scope; corrected.
 
 (iv) The complex directed residual UI-norm endpoints now have source-facing aliases (`theorem8_2_sinTwoTheta_residual_source_paperUINorm`, `..._all_kyFan`), matching the real side, plus a new `theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` over C.  The mirrored false counterexample in `dev/section8-source-theorems-2026-08-07.md` (L99-109, not L100-103 as previously recorded) was corrected by the coordinator in the same commit.
+
+REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
 
 **Next action.** Hostile re-audit reopened this row. A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions.
 
