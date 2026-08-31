@@ -86,7 +86,7 @@ Standing assumption 1 of the transcription (L202) is "real or complex". Measured
 | family | real endpoint? |
 |---|---|
 | `sin θ` (§2, Prop 6.1, Thm 6.1, Thm 6.2, appendix common-domain forms) | **YES** — `sinTheta_paperData_real`, `Theorem6_1_real`, `Theorem6_2_real`, `Proposition6_1_real`, `Theorem6_{1,2}_real_common{Domain,Core}`, all `[InnerProductSpace ℝ]`, no `[FiniteDimensional]` |
-| `tan 2θ` | **YES** — `tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_real`, `paperFaithful_tanTwoTheta_uiNorm_real` |
+| `tan 2θ` | **YES** — `tanTwoTheta_branchFree_bounded_paperUINorm_real`, `paperFaithful_tanTwoTheta_uiNorm_real` |
 | `tan θ`, both halves | **NO** — `ℂ` only. `Theorem6_3` is `[RCLike]` but `[FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]`; no infinite-dimensional real tan θ declaration exists at all |
 | `sin 2θ`, both halves | **NO** — `ℂ` only |
 | Theorem 5.1, 5.2, (5.1), Lemma 5.1 | **YES / more general** (`NontriviallyNormedField`, `RCLike`, plus explicit `…_real` twins) |

@@ -1955,11 +1955,11 @@
     },
     {
       "old_name": "tanTwoTheta_branchFree_paperUINorm_real",
-      "new_name": "tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_real",
+      "new_name": "tanTwoTheta_branchFree_bounded_paperUINorm_real",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
-      "dimension_scope": "finite-subspace",
+      "dimension_scope": "arbitrary",
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
@@ -1968,7 +1968,7 @@
       "conclusion_representation": "characterizedWitness",
       "canonical_status": "canonical",
       "section_two_endpoint": "none",
-      "canonical_status_reason": ""
+      "canonical_status_reason": "Dimension scope corrected 2026-08-31: the elaborated type carries only `[U.HasOrthogonalProjection]`, with no `FiniteDimensional` hypothesis on the trial subspace, so the name and the row both said `finiteSubspace` of an arbitrary-subspace theorem. Its complex sibling `tanTwoTheta_branchFree_bounded_paperUINorm_complex` has the same scope and now the same name shape."
     },
     {
       "old_name": "tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace",

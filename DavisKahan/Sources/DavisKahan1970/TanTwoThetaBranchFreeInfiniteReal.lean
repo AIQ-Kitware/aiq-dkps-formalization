@@ -117,7 +117,7 @@ Absent from the hypotheses, and this is the point:
 
 `[U.HasOrthogonalProjection]` is the formal encoding of the paper's "closed
 subspace". -/
-theorem tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_real
+theorem tanTwoTheta_branchFree_bounded_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
     {A H T : E →L[ℝ] E} {U : Submodule ℝ E} [U.HasOrthogonalProjection]
     {a b : ℝ}

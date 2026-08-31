@@ -10,50 +10,68 @@ downward, not extrapolated from the weaker `RCLike` wrappers.
 `SectionTwo.sinTheta`.  Conformance to both fixed fields is compiled
 (`..._complex_ofRCLike`, `..._real_ofRCLike`), with no adapter.
 
-## `tan Θ` — API bridge
+## `tan Θ` — generic infrastructure, **not** an API bridge
 
 Target: `tanTheta_ambient_unboundedRitz_paperUINorm_rclike`, the scalar
 abstraction of `tanTheta_ambient_unboundedRitz_paperUINorm_complex`.
 
-**Every structural input is already scalar-generic.**  `DavisKahan.UnboundedRitzPair`,
-`DavisKahan.ReducingComplement` (`DavisKahan/TanTheta/RitzPair.lean`) and
-`DavisKahan.CrossedDefectsEquivalent`
-(`DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean`) all carry
-`{𝕜 : Type u} [RCLike 𝕜]`.  So do `SemiboundedAbove` and the residual identity.
+**Correction, 2026-08-31.**  An earlier revision of this document classified
+`tan Θ` as an API bridge and estimated a ~290-site angle genericization.  That
+was wrong on both the reasoning and the recommendation, and the sweep should not
+be started on it.  Two field-specific layers were missed.
 
-**First field-specific dependency: the angle object in the conclusion.**
+The part that was right: every *structural input* is already scalar-generic.
+`DavisKahan.UnboundedRitzPair`, `DavisKahan.ReducingComplement`
+(`DavisKahan/TanTheta/RitzPair.lean`), `DavisKahan.CrossedDefectsEquivalent`
+(`DavisKahan/Geometry/Halmos/GenericRotationPredicates.lean`), `SemiboundedAbove`
+and the residual identity all carry `[RCLike 𝕜]`.  The blockers are elsewhere.
+
+### Layer 1: the ambient angle, and the functional calculus under it
+
 `paperTanAngleOperatorC` exists only over `ℂ`, and `paperTanAngleOperatorR` is
-defined by transport, not as the `ℝ` instance of one definition:
+defined by transport rather than as the `ℝ` instance of one definition:
 
 ```
 paperTanAngleOperatorR U V
   = realPartOperator (paperTanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 ```
 
-so the generic statement cannot presently be written.
+The chain is `cfc Real.tan (cfc Real.arcsin (ContinuousLinearMap.modulus (P_U - P_V)))`.
+**`modulus` is not unconditionally `RCLike`.**  Its module carries
 
-**Smallest missing generic construction.**  The chain bottoms out generic:
+```
+variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
+  [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]
+```
 
-| definition | built from | already generic? |
-| --- | --- | --- |
-| `paperTanAngleOperatorC` | `cfc Real.tan (paperAngleOperatorC U V)` | `cfc` is Mathlib-generic |
-| `paperAngleOperatorC` | `cfc Real.arcsin (sinAngleOperatorC U V)` | same |
-| `sinAngleOperatorC` | `ContinuousLinearMap.modulus (U.starProjection - V.starProjection)` | **yes** — `modulus` is `[RCLike 𝕜]` in `ForTauCeti/Analysis/InnerProductSpace/OperatorModulus.lean` |
+and says of the third that Mathlib "declines to register [it] as an instance only
+because its hypothesis is unavailable outside `ℂ`".  So the angle chain is generic
+*given a functional-calculus instance that does not exist for `ℝ`* -- which is a
+capability-class problem of the same kind as the sine theorem's, not a free
+restatement.
 
-Nothing in the chain needs `ℂ`; the definitions are over `ℂ` because their files
-fix `ℂ`.  `Geometry/Angle/Proposition35*.lean` already carry `[RCLike 𝕜]` in the
-same directory.
+### Layer 2: the Appendix cutoff, which is where the real content is
 
-**Classification: API BRIDGE.**  Surface: three definitions to restate generically
-plus the theorems named after them — 13 for `sinAngleOperatorC`, 10 for
-`paperAngleOperatorC`, 4 for `paperTanAngleOperatorC` — across
-`Geometry/Angle/{OperatorAngleComplex,PaperOperatorAngle,PaperTanAngle}.lean`,
-with about 290 use sites, most inside that directory.
+The accepted endpoint reaches its estimate through
+`UnboundedCompressionTrialData.all_kyFan_core`, the Appendix spectral truncation
+and release.  `DavisKahan/TanTheta/Theorem63UnboundedCompression.lean`
+deliberately separates two layers: the structure and its algebra are `[RCLike 𝕜]`
+(from line 86), and **the truncation layer is pinned to `[InnerProductSpace ℂ H]`
+from line 213**, because it uses the projection-valued measure.  `all_kyFan_core`
+is in the pinned section.
 
-**The obligation that comes with it**, and it is not optional: a generic
-definition owes a theorem that its `ℝ` instance equals the transport-defined
-`...R`, or every existing real theorem stops applying to the new object.  Do this
-before migrating consumers, not after.
+`TanThetaUnboundedAmbientReal.lean` confirms the architecture in its own words:
+the real route complexifies `UnboundedCompressionTrialData`, runs "the existing
+complex Appendix cutoff/Ky-Fan argument", and descends.
+
+### Classification: GENERIC INFRASTRUCTURE (category B)
+
+Two seams, and the second is the same projection-valued-measure dependency that
+blocks `sin 2Θ` and `tan 2Θ`.  Genericizing the angle chain alone would not
+produce the endpoint; it would produce a statement that cannot be proved.
+
+**The seam to trace first is `UnboundedCompressionTrialData.all_kyFan_core`**, not
+the angle definitions.
 
 ## `sin 2Θ` and `tan 2Θ` — blocked on the spectral-selection layer
 
@@ -85,10 +103,13 @@ but a `𝕜`-generic spectral measure is a substantial piece of operator theory,
 it is not obvious that a generic construction is even the right shape when the
 `ℝ` instance would have to reduce to the descent by a theorem.
 
-**Recommended order.**  Do `tan Θ` first: it is a bridge, it exercises the
-"generic definition plus an `ℝ`-agreement theorem" pattern on the smaller angle
-chain, and that pattern is exactly what the spectral layer would need.  Decide
-`sin 2Θ` / `tan 2Θ` after seeing what `tan Θ` costs.
+**Recommended order.**  All three now bottom out on the same thing: a
+projection-valued spectral measure that exists over `ℂ` and reaches `ℝ` by
+descent.  `tan Θ` additionally needs the real functional-calculus instance for the
+angle chain.  So the question is not which family is cheapest but whether that
+one operator-theory layer is worth making scalar-generic at all, given that the
+`ℝ` instance would have to reduce to the descent by theorem anyway.  Answer that
+before starting any of the three.
 
 ## Not established
 
