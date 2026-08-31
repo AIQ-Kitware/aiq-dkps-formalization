@@ -177,6 +177,8 @@ result's canonical witness.
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex
 #check @TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap
@@ -421,6 +423,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.proposition6_1_source_complex
 #check @TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex
 #check @TauCeti.DavisKahan1970.proposition6_1_source_real
+#check @TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_complex
+#check @TauCeti.DavisKahan1970.proposition6_1_commonDomain_source_real
 #check @TauCeti.DavisKahan1970.Proposition6_1_commonDomain
 #check @TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain
 #check @TauCeti.DavisKahan1970.Proposition6_1_complex
@@ -438,6 +442,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Theorem6_1_commonDomain
 #check @DavisKahan1970.IsTrialResidualEquation
 #check @DavisKahan1970.isTrialResidual_iff_equation_and_isometry
+#check @TauCeti.DavisKahan1970.lowerFrameBound_iff_source_operator_inequality
+#check @TauCeti.DavisKahan1970.lowerFrameBound_of_source_operator_inequality
 #check @TauCeti.DavisKahan1970.Theorem6_1_complex
 #check @TauCeti.DavisKahan1970.Theorem6_1_real
 #check @TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain

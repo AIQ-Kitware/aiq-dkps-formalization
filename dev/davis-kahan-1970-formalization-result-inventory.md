@@ -6,8 +6,8 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 
 - Counted results: **29**
 - Result-boundary reviews accepted: **29/29**
-- Currently hostile-certified terminal: **24**
-- Awaiting closure: **5**
+- Currently hostile-certified terminal: **29**
+- Awaiting closure: **0**
 - Printed statements that are NOT locally self-contained: **1**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
@@ -22,9 +22,9 @@ Each result below explicitly partitions its primary source block into atoms insi
 
 | Result | Kind | Alignment | Self-contained | Disposition | Compiler | Semantic review | Boundary |
 |---|---|---|---|---|---|---|---|
-| `S2-sin-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `reopened_mapping` | `accepted` |
+| `S2-sin-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-theta` | unnumbered_theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `reopened_math` | `accepted` |
+| `S2-sin-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `S2-tan-two-theta` | unnumbered_theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-3.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
@@ -39,13 +39,13 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `DK-4.2-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-4.3-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-4.4-prop` | proposition | `refuted_as_transcribed` | yes | `refuted_as_transcribed` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-5.1-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `reopened_mapping` | `accepted` |
+| `DK-5.1-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-5.2-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-5.1-lem` | lemma | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.1-lem` | lemma | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.2-lem` | lemma | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-6.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `reopened_mapping` | `accepted` |
-| `DK-6.1-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `reopened_mapping` | `accepted` |
+| `DK-6.1-prop` | proposition | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `DK-6.1-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.2-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.3-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.3-lem` | lemma | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |

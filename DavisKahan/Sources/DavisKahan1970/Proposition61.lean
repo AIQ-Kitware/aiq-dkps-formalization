@@ -6,6 +6,7 @@ Authors: Jon Crall, Claude Opus 5
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
 import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
 import DavisKahan.Geometry.Angle.PaperOperatorAngle
+import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric
 
 /-!
 # Davis--Kahan 1970, Proposition 6.1, on ordinary mathematical hypotheses
@@ -226,6 +227,121 @@ theorem proposition6_1_source_real
   simpa [P, PaperRealSymmetricSinThetaProblem.perturbation] using hle
 
 end Real
+
+/-! ## The Appendix common-domain relaxation
+
+The Appendix to Section 6 says, after describing the unbounded reading of the
+sine theorem:
+
+> Proposition 6.1 and Theorem 6.1 admit the analogous relaxation.
+
+That is an explicit extension of Proposition 6.1's proved scope, and it is
+`DK-6-appendix.proposition61-common-domain-extension` in the source-atom ledger.
+The relaxation replaces the two bounded self-adjoint operators by two *closed*
+self-adjoint operators sharing one dense domain, whose difference there is the
+paper's bounded `H`.
+
+The domain hypothesis is `A.domain = B.domain`, not a residual relation, so
+`IsTrialResidualEquation` is deliberately **not** used here: it would express a
+different (weaker, one-sided) condition than the source states. -/
+
+section CommonDomain
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+
+/-- **Davis--Kahan 1970, Proposition 6.1 under the Appendix common-domain
+relaxation, over `ℂ`.**
+
+`A` and `B` are closed self-adjoint operators sharing one domain, `U` reduces
+`A`, `V` reduces `B`, and on the common domain `B − A` is the bounded `H`.  The
+conclusion is the same as in the bounded case, on the paper's literal `sin Θ`.
+
+`Proposition6_1_commonDomain_ofBounded` records that the bounded inputs are an
+instance, so this is a genuine relaxation rather than a parallel statement. -/
+theorem proposition6_1_commonDomain_source_complex
+    (N : PaperUnitaryInvariantNorm)
+    {A B : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (Hop : E →L[ℂ] E)
+    (hdomain : A.domain = B.domain)
+    (hperturbation : ∀ (x : E) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
+      B ⟨x, hxB⟩ - A ⟨x, hxA⟩ = Hop x)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgapUV : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hU)
+      (TauCeti.LinearPMap.reducingRestriction B Vᗮ hV.orthogonal) δ)
+    (hgapVU : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction B V hV)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hU.orthogonal) δ)
+    (hMem : N.Mem Hop) :
+    N.Mem (paperSinAngleOperatorC U V) ∧
+      δ * N.gauge (paperSinAngleOperatorC U V) ≤ N.gauge Hop := by
+  let P : PaperCommonDomainSymmetricSinThetaProblem (𝕜 := ℂ) (E := E) U V :=
+    { A := A
+      B := B
+      selfAdjoint_A := hA
+      selfAdjoint_B := hB
+      reduces_A_U := hU
+      reduces_B_V := hV
+      perturbation := Hop
+      domain_eq := hdomain
+      perturbation_eq := hperturbation
+      gap := δ
+      gap_pos := hδ
+      gap_U_to_Vperp := hgapUV
+      gap_V_to_Uperp := hgapVU }
+  exact P.result_every_unitarilyInvariantNorm N hMem
+
+/-- **Davis--Kahan 1970, Proposition 6.1 under the Appendix common-domain
+relaxation, over `ℝ`.**
+
+The real sibling, with the conclusion on the projector difference `P_V − P_U`,
+matching `proposition6_1_source_real`.  The proof runs through
+`paperCrossSineSum` and transports the conclusion off it. -/
+theorem proposition6_1_commonDomain_source_real
+    {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+    (N : PaperUnitaryInvariantNorm)
+    {A B : Er →ₗ.[ℝ] Er} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {U V : Submodule ℝ Er} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (Hop : Er →L[ℝ] Er)
+    (hdomain : A.domain = B.domain)
+    (hperturbation : ∀ (x : Er) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
+      B ⟨x, hxB⟩ - A ⟨x, hxA⟩ = Hop x)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgapUV : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hU)
+      (TauCeti.LinearPMap.reducingRestriction B Vᗮ hV.orthogonal) δ)
+    (hgapVU : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction B V hV)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hU.orthogonal) δ)
+    (hMem : N.Mem Hop) :
+    N.Mem (V.starProjection - U.starProjection) ∧
+      δ * N.gauge (V.starProjection - U.starProjection) ≤ N.gauge Hop := by
+  let P : PaperCommonDomainSymmetricSinThetaProblem (𝕜 := ℝ) (E := Er) U V :=
+    { A := A
+      B := B
+      selfAdjoint_A := hA
+      selfAdjoint_B := hB
+      reduces_A_U := hU
+      reduces_B_V := hV
+      perturbation := Hop
+      domain_eq := hdomain
+      perturbation_eq := hperturbation
+      gap := δ
+      gap_pos := hδ
+      gap_U_to_Vperp := hgapUV
+      gap_V_to_Uperp := hgapVU }
+  obtain ⟨hmem, hle⟩ := P.result_every_unitarilyInvariantNorm_real N hMem
+  obtain ⟨hiff, hgauge⟩ := P.crossSineSum_paperMem_iff_and_gauge_eq N
+  refine ⟨hiff.mp hmem, ?_⟩
+  rw [hgauge] at hle
+  exact hle
+
+end CommonDomain
 
 end
 

@@ -113,6 +113,65 @@ theorem orthogonalExactDecomposition_of_isExactSpectralDecomposition
 
 end Components
 
+/-! ## The printed lower-frame hypothesis, and the Lean one -/
+
+section LowerFrame
+
+variable {𝕜 : Type*} [RCLike 𝕜]
+variable {E F : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+
+/-- **The source's lower-frame hypothesis is `LowerFrameBound`.**
+
+Davis and Kahan print the Theorem 6.1 hypothesis as the operator inequality
+
+`E₀* E₀ ≥ ε² I`,   `ε > 0`,
+
+read in the usual quadratic-form sense.  The Lean statements take
+`LowerFrameBound E₀ ε`, i.e. `ε ‖x‖ ≤ ‖E₀ x‖`.  The two are the same hypothesis,
+and this is the theorem that says so rather than leaving a reviewer to supply the
+equivalence.
+
+Only `0 ≤ ε` is needed; the source's `ε > 0` is stronger.  The step is
+`re ⟪E₀* E₀ x, x⟫ = ‖E₀ x‖²`, after which the two inequalities differ by squaring
+nonnegative reals. -/
+theorem lowerFrameBound_iff_source_operator_inequality
+    (E₀ : F →L[𝕜] E) {ε : ℝ} (hε : 0 ≤ ε) :
+    (∀ x : F, ε ^ 2 * ‖x‖ ^ 2 ≤
+        RCLike.re (inner 𝕜 ((E₀.adjoint ∘L E₀) x) x)) ↔
+      LowerFrameBound E₀ ε := by
+  have hform : ∀ x : F,
+      RCLike.re (inner 𝕜 ((E₀.adjoint ∘L E₀) x) x) = ‖E₀ x‖ ^ 2 := by
+    intro x
+    rw [ContinuousLinearMap.comp_apply, ContinuousLinearMap.adjoint_inner_left]
+    simp
+  constructor
+  · intro h x
+    have hx := h x
+    rw [hform x] at hx
+    have : (ε * ‖x‖) ^ 2 ≤ ‖E₀ x‖ ^ 2 := by
+      calc (ε * ‖x‖) ^ 2 = ε ^ 2 * ‖x‖ ^ 2 := by ring
+        _ ≤ ‖E₀ x‖ ^ 2 := hx
+    exact (pow_le_pow_iff_left₀ (by positivity) (norm_nonneg _) two_ne_zero).mp this
+  · intro h x
+    have hx := h x
+    rw [hform x]
+    calc ε ^ 2 * ‖x‖ ^ 2 = (ε * ‖x‖) ^ 2 := by ring
+      _ ≤ ‖E₀ x‖ ^ 2 := by
+          exact pow_le_pow_left₀ (by positivity) hx 2
+
+/-- The source's printed hypothesis implies the Lean one, in the direction a
+caller holding the operator inequality needs. -/
+theorem lowerFrameBound_of_source_operator_inequality
+    (E₀ : F →L[𝕜] E) {ε : ℝ} (hε : 0 ≤ ε)
+    (h : ∀ x : F, ε ^ 2 * ‖x‖ ^ 2 ≤
+        RCLike.re (inner 𝕜 ((E₀.adjoint ∘L E₀) x) x)) :
+    LowerFrameBound E₀ ε :=
+  (lowerFrameBound_iff_source_operator_inequality E₀ hε).mp h
+
+end LowerFrame
+
 /-! ## Theorem 6.1 -/
 
 section Theorem61Complex

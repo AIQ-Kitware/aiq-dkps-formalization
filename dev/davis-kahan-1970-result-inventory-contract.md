@@ -2,6 +2,98 @@
 
 This file defines the maintained denominator behind **100% formalized**.
 
+## The formalization criterion
+
+**The fundamental unit is a Davis--Kahan RESULT, not a source atom.**  Source
+atoms exist so a hostile reviewer can audit the source-to-Lean correspondence;
+they do not independently create proof obligations.
+
+### What belongs in the denominator
+
+A source item belongs to the formalization denominator when Davis and Kahan
+present it as a mathematical result of the paper **and provide a proof for it**.
+That is the four unnumbered Section 2 headline theorems plus the paper's proved
+named theorems, propositions, lemmas and corollaries.  A fresh source audit may
+identify another genuinely independent proved result.  Definitions, proof steps,
+intermediate identities, examples, explanatory remarks, immediate consequences,
+restatements, and open or deferred claims do **not** become separate
+formalization obligations merely because they contain mathematical assertions.
+
+### The objective is semantic equivalence of results
+
+Not reproduction of the paper's proofs.  For every counted result the repository
+must identify canonical Lean theorem evidence and support this claim under
+hostile review:
+
+> The hypotheses, mathematical objects, scope and conclusions of this Lean
+> theorem are the same as those of the corresponding Davis--Kahan result, after
+> making explicit any definitions or standing conventions the paper uses.
+
+The Lean proof may use different lemmas, abstractions, representations,
+reductions, proof order, or stronger intermediate results.  An intermediate step
+of the paper need not be separately formalized unless it is itself a counted
+result.
+
+### What hostile review must be able to check
+
+* the mathematical hypotheses;
+* the conclusion or conclusions;
+* constants and inequality direction;
+* the precise angle, subspace, residual, perturbation or operator being bounded;
+* the norm class;
+* finite- versus infinite-dimensional scope;
+* real versus complex scalar scope where applicable;
+* bounded versus unbounded operator scope;
+* spectral-gap assumptions, including any half-infinite cases actually belonging
+  to the result;
+* standing assumptions or nonlocal conventions genuinely required by the paper;
+* representative or multiplicity issues that affect unitarily invariant norms.
+
+Where a source formulation and the Lean formulation are equivalent but the
+equivalence is not apparent from the theorem types, an explicit correspondence
+lemma must be supplied.  `lowerFrameBound_iff_source_operator_inequality` is the
+model: the source prints Theorem 6.1's hypothesis as `E₀* E₀ ≥ ε² I` while the
+Lean statement takes `LowerFrameBound E₀ ε`, and that theorem is why a reviewer
+does not have to accept the equivalence informally.
+
+### When a later passage affects a counted result
+
+Only when it is necessary to determine **what Davis and Kahan actually claim** in
+that result under the paper's own semantics — a standing convention, a
+definition, or a scope sentence the printed statement relies on.  A later passage
+does **not** enlarge the result merely because it discusses a stronger variant,
+an extension, a consequence, or another case.  If such a passage is itself a
+distinct substantive result that Davis and Kahan introduce *and prove*, it
+belongs in the denominator, and that is a decision for a fresh result-selection
+audit — never something the atom ledger may do by reclassifying an atom.
+
+> **Corrected 2026-08-31.**  `selection_definition.statement_boundary` previously
+> ended: *"A later source passage that explicitly extends the proved scope of a
+> counted result is part of that result's scope and must be covered."*  That
+> contradicted the same field's own `does_not_count` entry for scope remarks
+> outside the printed result environment, and under it a scope-atom audit briefly
+> reopened five results and took the certificate to 24/29.  The four passages
+> involved — the Theorem 5.1 `A`/`B` interchange and unbounded-`A` remarks, the
+> Appendix sentence saying Proposition 6.1 and Theorem 6.1 "admit the analogous
+> relaxation", and the Section 8 sentence extending `sin 2Θ` to unequal
+> dimensions — are each an extension the paper *mentions* without introducing and
+> proving it as a result of its own.  They are `result_adjacent_extension`
+> fidelity material.  The Lean coverage written while the results were reopened
+> is kept as **supporting** evidence: stronger than the counted statements
+> require, which is worth holding and is not a canonical obligation.
+
+### A terminal certificate
+
+Every substantive result introduced and proved by Davis and Kahan has canonical
+Lean evidence — a proof, or an exact formal refutation where the printed result
+is false — and every canonical Lean statement has been audited against the
+corresponding source result closely enough to withstand a hostile
+theorem-by-theorem comparison.
+
+The denominator is a set of **source results**, not a count of source assertions
+or proof steps.  The ~274 source atoms are the evidence base for auditing the 29;
+they are deliberately far more exhaustive than the theorem denominator.
+
 ## Two inventories, two jobs
 
 `prose/distilled_literature/DavisKahan1970_part_III.tex` and
@@ -251,6 +343,31 @@ evidence — declaration, role, scalar scope, evidence kind, covered atoms and
 capability classes.  Changing any of them makes the accepted semantic sweep stale
 and the checker fails.  Canonical evidence is the answer to *what proves this
 result*, so editing it must be re-reviewed rather than inherited.
+
+## Scope atoms carry an explicit classification
+
+Every source atom with `kind: "scope"` stating a mathematical assertion carries a
+`scope_classification`: one of
+
+| category | meaning |
+| --- | --- |
+| `counted_result_scope` | needed to determine what a counted result claims; must be covered |
+| `result_adjacent_extension` | an extension, variant, consequence or further case the paper mentions around a counted result without introducing and proving it as a result of its own — fidelity material, and any Lean coverage of it is *supporting* evidence |
+| `source_wide_setup` | ambient setting or convention governing the whole paper |
+| `reading_interpretation` | tells a reader how to read a statement (automaticity, vacuity conventions) |
+| `proof_context` | sits inside a proof and describes the argument |
+| `non_extending_commentary` | motivation, negative remarks, worked-example choices |
+
+together with the results it extends (exactly when the category says it extends
+any), a substantive rationale, and a **verbatim quotation** from the
+distributable specification, so a reviewer checks the classification against the
+source rather than against a summary.
+
+The checker refuses three reason codes for such an atom —
+`post_result_scope_remark_not_in_printed_statement`,
+`expository_commentary_not_result` and
+`introductory_background_not_designated_result` — because each says only that the
+passage lies outside the printed statement, which by itself decides nothing.
 
 ## One owner for mutable status
 
