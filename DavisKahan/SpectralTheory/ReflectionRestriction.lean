@@ -460,6 +460,26 @@ theorem subspaceGap_map_reflection_eq_norm_sinTwoAngle
     norm_sinTwoAngleOperatorC]
   norm_num
 
+/-- The orthogonal projection onto the complementary spectral range is the
+projection onto the orthogonal complement of the selected one.
+
+Stated at the level of projections rather than of subspaces.  Rewriting with
+`selfAdjointSpectralSubspace_compl_eq_orthogonal` below under `starProjection`
+gives "motive is not type correct", because `starProjection` takes a
+`HasOrthogonalProjection` instance derived from the submodule; going through
+the projections is what avoids that. -/
+theorem starProjection_selfAdjointSpectralSubspace_compl
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
+    (B : Set ℝ) (hB : MeasurableSet B) :
+    (selfAdjointSpectralSubspace A hA Bᶜ hB.compl).starProjection =
+      (selfAdjointSpectralSubspace A hA B hB)ᗮ.starProjection := by
+  rw [← selfAdjointSpectralProjection_eq_starProjection A hA Bᶜ hB.compl,
+    show selfAdjointSpectralProjection A hA Bᶜ hB.compl
+        = ContinuousLinearMap.id ℂ H - selfAdjointSpectralProjection A hA B hB from
+      (TauCeti.LinearPMap.spectralPVM hA).proj_compl B hB]
+  rw [selfAdjointSpectralProjection_eq_starProjection A hA B hB]
+  exact (Submodule.starProjection_orthogonal' _).symm
+
 /-- The spectral range of a measurable complement is the orthogonal
 complement of the original spectral range. -/
 theorem selfAdjointSpectralSubspace_compl_eq_orthogonal
@@ -467,15 +487,7 @@ theorem selfAdjointSpectralSubspace_compl_eq_orthogonal
     (B : Set ℝ) (hB : MeasurableSet B) :
     selfAdjointSpectralSubspace A hA Bᶜ hB.compl =
       (selfAdjointSpectralSubspace A hA B hB)ᗮ := by
-  let U := selfAdjointSpectralSubspace A hA B hB
-  let Uc := selfAdjointSpectralSubspace A hA Bᶜ hB.compl
-  have hproj : Uc.starProjection = Uᗮ.starProjection := by
-    rw [← selfAdjointSpectralProjection_eq_starProjection A hA Bᶜ hB.compl,
-      show selfAdjointSpectralProjection A hA Bᶜ hB.compl
-          = ContinuousLinearMap.id ℂ H - selfAdjointSpectralProjection A hA B hB from
-        (TauCeti.LinearPMap.spectralPVM hA).proj_compl B hB]
-    rw [selfAdjointSpectralProjection_eq_starProjection A hA B hB]
-    exact (Submodule.starProjection_orthogonal' U).symm
+  have hproj := starProjection_selfAdjointSpectralSubspace_compl A hA B hB
   apply le_antisymm
   · intro x hx
     apply Submodule.starProjection_eq_self_iff.mp

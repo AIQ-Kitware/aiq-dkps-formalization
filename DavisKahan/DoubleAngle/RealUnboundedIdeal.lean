@@ -160,32 +160,6 @@ section SinTwoTheta
 variable (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
   (S : Set ℝ) (hS : MeasurableSet S)
 
-omit [CompleteSpace E] [CompleteSpace G] in
-/-- The reflection of a subspace is a self-adjoint bounded operator, so
-reflecting an isometric embedding preserves isometry. -/
-theorem isometricEmbedding_reflection_comp
-    (V : Submodule ℝ E) [V.HasOrthogonalProjection]
-    {Y : G →L[ℝ] E} (hY : IsometricEmbedding Y) :
-    IsometricEmbedding (V.reflectionOperator ∘L Y) := by
-  intro y
-  change ‖V.reflection (Y y)‖ = ‖y‖
-  rw [V.reflection.norm_map]
-  exact hY y
-
-/-- The reflection operator is its own adjoint: it is a self-adjoint unitary. -/
-theorem adjoint_reflectionOperator (V : Submodule ℝ E)
-    [V.HasOrthogonalProjection] :
-    (V.reflectionOperator : E →L[ℝ] E).adjoint = V.reflectionOperator := by
-  have hP : ∀ a b : E, ⟪V.starProjection a, b⟫_ℝ = ⟪a, V.starProjection b⟫_ℝ :=
-    ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp
-      (isSelfAdjoint_starProjection V)
-  have hsym : (V.reflectionOperator : E →L[ℝ] E).IsSymmetric := by
-    intro x y
-    change ⟪V.reflectionOperator x, y⟫_ℝ = ⟪x, V.reflectionOperator y⟫_ℝ
-    simp only [Submodule.reflectionOperator_apply, inner_sub_left,
-      inner_sub_right, real_inner_smul_left, real_inner_smul_right, hP]
-  exact (ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hsym).adjoint_eq
-
 /-- The orthogonal projection onto the complementary real spectral range is the
 projection onto the orthogonal complement of the selected one.  Stated at the
 level of projections rather than of subspaces, because rewriting the subspace

@@ -210,26 +210,20 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 /-- `sin 2Θ` over `ℂ`, from a measurable spectral selection and the printed
 separation, through `SectionTwo.sinTwoTheta_complex`.
 
-**This call can only be written at a bounded separating interval.**  The complex
-endpoint takes finite `β ≤ α` with the selected restriction semibounded on both
-sides; the source also permits half-infinite gap intervals, and only the real
-endpoint carries them, through `FormBoundedSylvesterGap`.  The counted result
-`S2-sin-two-theta` is reopened for exactly that reason -- see its
-`remaining_gap` in the result inventory.  When the complex full-gap endpoint
-lands, this example should be restated against it. -/
+The separation is `FormBoundedSylvesterGap` between the two spectral
+restrictions, which is the printed scope: it carries the bounded interval and
+both half-infinite configurations.  `sinTwoTheta_from_halfInfinite_separation`
+below exercises one of the latter, which is the case the endpoint could not be
+written at until the complex full-gap route landed. -/
 theorem sinTwoTheta_from_printed_separation
     (N : PaperUnitaryInvariantNorm)
     (A : E →ₗ.[ℂ] E) (hA : IsSelfAdjoint A)
     (Eop : E →L[ℂ] E) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
-    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
-      (DavisKahan.selfAdjointSpectralRestriction A hA B hB) β)
-    (hBhigh : TauCeti.LinearPMap.SemiboundedAbove
-      (DavisKahan.selfAdjointSpectralRestriction A hA B hB) α)
-    (hBcomplSpec : ∀ lam ∈ Set.Ioo (β - δ) (α + δ),
-      (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
-        (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+      (DavisKahan.selfAdjointSpectralRestriction A hA B hB)
+      (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop) :
     N.Mem (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
@@ -240,8 +234,41 @@ theorem sinTwoTheta_from_printed_separation
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
         2 * N.gauge Eop :=
-  SectionTwo.sinTwoTheta_complex N A hA Eop hEop B S hB hS hβα hδ
-    hBlow hBhigh hBcomplSpec hEmem
+  SectionTwo.sinTwoTheta_complex N A hA Eop hEop B S hB hS hδ hgap hEmem
+
+/-- `sin 2Θ` over `ℂ` at a **half-infinite** separating interval.
+
+The selected restriction is bounded below by `c + δ` in form and the
+complementary restriction is bounded above by `c`; neither is bounded on the
+other side.  Davis and Kahan state the four theorems with intervals that "may be
+half-infinite", and this is that configuration: `[c + δ, ∞)` against `(-∞, c]`.
+
+The caller supplies the two form bounds and nothing else — no finite `β ≤ α`, no
+spectrum-avoidance certificate. -/
+theorem sinTwoTheta_from_halfInfinite_separation
+    (N : PaperUnitaryInvariantNorm)
+    (A : E →ₗ.[ℂ] E) (hA : IsSelfAdjoint A)
+    (Eop : E →L[ℂ] E) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
+    {c δ : ℝ} (hδ : 0 < δ)
+    (hBlow : TauCeti.LinearPMap.SemiboundedBelow
+      (DavisKahan.selfAdjointSpectralRestriction A hA B hB) (c + δ))
+    (hBcomplHigh : TauCeti.LinearPMap.SemiboundedAbove
+      (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) c)
+    (hEmem : N.Mem Eop) :
+    N.Mem (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
+        (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
+        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+      δ * N.gauge (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
+        (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
+        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        2 * N.gauge Eop :=
+  SectionTwo.sinTwoTheta_complex N A hA Eop hEop B S hB hS hδ
+    (DavisKahan.ExactSinTheta.FormBoundedSylvesterGap.leftAboveRightBelow
+      c hBlow hBcomplHigh)
+    hEmem
 
 end SinTwoTheta
 

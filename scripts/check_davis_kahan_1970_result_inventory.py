@@ -48,6 +48,15 @@ TERMINAL_RESULT_DISPOSITIONS = {
 TERMINAL_VERIFICATIONS = {"proved_in_build"}
 TERMINAL_SEMANTIC_CERTIFICATIONS = {"accepted"}
 TERMINAL_REPAIR_STATUSES = {"proved", "documented_no_satisfactory_repair"}
+CANONICAL_EVIDENCE_ROLES = {"primary_source_witness", "exact_refutation"}
+CANONICAL_EVIDENCE_KINDS = {"proof", "refutation"}
+CANONICAL_SCALAR_SCOPES = {"complex", "real", "rclike", "scalar_generic"}
+SUPPORTING_EVIDENCE_ROLES = {
+    "public_alias", "specialization", "alternative_route", "generalization",
+    "presentation_wrapper", "implementation_structure", "transport_lemma",
+    "scalar_generic_facade", "supporting_theorem",
+}
+REFUTATION_RESULT_IDS = {"DK-4.4-prop"}
 COUNTED_RESULT_KINDS = {"unnumbered_theorem", "theorem", "proposition", "lemma", "corollary"}
 RESULT_SUPPORT_ROLES = {
     "result", "stated_result", "result_support", "result_hypothesis", "result_scope"
@@ -717,6 +726,282 @@ def _validate_selection_review(
 
 
 
+def _canonical_evidence_digest(items: list[dict[str, Any]]) -> str:
+    """Digest of every result's canonical evidence, in inventory order.
+
+    Changing which declaration is a result's canonical witness -- or which source
+    atoms it is claimed to cover -- changes this digest, which makes the accepted
+    semantic sweep stale.  That is the point: canonical evidence is the answer to
+    "what proves this result", so an edit to it must be re-reviewed rather than
+    inherited.
+    """
+    payload = [
+        {
+            "id": item["id"],
+            "canonical_evidence": [
+                {
+                    "declaration": entry.get("declaration"),
+                    "role": entry.get("role"),
+                    "scalar_scope": entry.get("scalar_scope"),
+                    "evidence_kind": entry.get("evidence_kind"),
+                    "covers_source_atoms": entry.get("covers_source_atoms"),
+                }
+                for entry in item.get("canonical_evidence", []) or []
+            ],
+        }
+        for item in items
+    ]
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+
+
+def _validate_markdown_view(items: list[dict[str, Any]], terminal: int) -> None:
+    """Gate the hand-maintained Markdown view against the JSON it restates.
+
+    `dev/davis-kahan-1970-formalization-result-inventory.md` is the file the
+    READMEs point reviewers at, and its header counts and status table are a copy
+    of this inventory.  A copy of a moving fact goes stale silently, so the copy
+    is checked rather than trusted.  (The same failure has already happened in
+    the census notes, which asserted for weeks that all four short `SectionTwo.*`
+    names were unbound after one of them was bound.)
+    """
+    view_path = ROOT / "dev/davis-kahan-1970-formalization-result-inventory.md"
+    if not view_path.exists():
+        fail("dev/davis-kahan-1970-formalization-result-inventory.md is missing")
+    text = view_path.read_text(encoding="utf-8")
+
+    obligations = sum(1 for item in items if item.get("completion_obligation") is not False)
+    nonlocal_count = sum(
+        1
+        for item in items
+        if item.get("semantic_alignment") == "paper_faithful_nonlocal_source_interpretation"
+    )
+    for label, value in (
+        ("Counted results", len(items)),
+        ("Result-boundary reviews accepted", f"{obligations}/{obligations}"),
+        ("Currently hostile-certified terminal", terminal),
+        ("Awaiting closure", obligations - terminal),
+        ("Printed statements that are NOT locally self-contained", nonlocal_count),
+    ):
+        line = f"- {label}: **{value}**"
+        if line not in text:
+            fail(
+                "dev/davis-kahan-1970-formalization-result-inventory.md is stale: expected the "
+                f"header line {line!r}"
+            )
+
+    for item in items:
+        result_id = item["id"]
+        cells = [
+            f"`{result_id}`",
+            str(_result_kind(item)),
+            f"`{item.get('semantic_alignment')}`",
+            "yes" if item.get("semantic_alignment") != "paper_faithful_nonlocal_source_interpretation" else "**no**",
+            f"`{_result_disposition(item)}`",
+            f"`{item.get('verification')}`",
+            f"`{_semantic_certification(item)}`",
+        ]
+        row = "| " + " | ".join(cells)
+        if row not in text:
+            fail(
+                "dev/davis-kahan-1970-formalization-result-inventory.md is stale: the status row "
+                f"for {result_id} does not match the inventory; expected a row beginning {row!r}"
+            )
+
+
+def _validate_census_canonical_agreement(items: list[dict[str, Any]]) -> None:
+    """The census reviewer packet must not name a different canonical theorem.
+
+    Each census item carries a `semantic_review` packet with its own
+    `canonical_declarations` list.  When that item is one of the 29 counted
+    results, the two lists are answering the same question, and they have
+    disagreed: the packets for three of the four Section 2 results named a
+    *finite-dimensional* facade as canonical while the inventory certified the
+    result at unbounded infinite-dimensional scope.  The inventory's
+    `canonical_evidence` is the single owner of that answer.
+    """
+    if not CENSUS_PATH.exists():
+        return
+    census = json.loads(CENSUS_PATH.read_text(encoding="utf-8"))
+    canonical_by_id = {
+        item["id"]: {
+            entry.get("declaration") for entry in item.get("canonical_evidence", []) or []
+        }
+        for item in items
+    }
+    for census_item in census.get("items", []):
+        result_id = census_item.get("id")
+        if result_id not in canonical_by_id:
+            continue
+        review = census_item.get("semantic_review")
+        if not isinstance(review, dict):
+            continue
+        declared = review.get("canonical_declarations")
+        if not isinstance(declared, list):
+            continue
+        stray = sorted(set(declared) - canonical_by_id[result_id])
+        if stray:
+            fail(
+                f"{result_id}: the census semantic-review packet names canonical declarations "
+                "that the result inventory does not treat as canonical evidence: "
+                + ", ".join(stray)
+            )
+
+
+def _validate_canonical_evidence(
+    items: list[dict[str, Any]],
+    census_declarations: set[str],
+    audit_text: str,
+    audit_rel: str,
+) -> None:
+    """Separate what *proves* a counted result from what merely accompanies it.
+
+    `lean_declarations` mixes primary witnesses, fixed-field companions,
+    presentation wrappers, stronger generalizations, specializations, and
+    implementation structures.  Agents have repeatedly selected the wrong
+    theorem out of that list by name or by ordering.  `canonical_evidence`
+    names the declarations that carry the printed statement, together with the
+    exact source atoms each one covers; `supporting_evidence` holds the rest.
+    """
+    for item in items:
+        result_id = item["id"]
+        canonical = item.get("canonical_evidence")
+        supporting = item.get("supporting_evidence")
+        if not isinstance(canonical, list) or not canonical:
+            fail(f"{result_id}: must record a nonempty canonical_evidence list")
+        if not isinstance(supporting, list):
+            fail(f"{result_id}: must record a supporting_evidence list (possibly empty)")
+
+        declared = set(_declarations(item))
+        atom_ids = set(_source_atom_ids(item))
+        covered: set[str] = set()
+        seen: set[str] = set()
+        for entry in canonical:
+            if not isinstance(entry, dict):
+                fail(f"{result_id}: canonical_evidence entries must be objects")
+            declaration = entry.get("declaration")
+            if not isinstance(declaration, str) or not declaration.strip():
+                fail(f"{result_id}: canonical_evidence entry must name a declaration")
+            if declaration in seen:
+                fail(f"{result_id}: canonical_evidence names {declaration} twice")
+            seen.add(declaration)
+            if declaration not in declared:
+                fail(
+                    f"{result_id}: canonical evidence {declaration} is not registered in "
+                    "the result's lean_declarations"
+                )
+            if declaration not in census_declarations:
+                fail(
+                    f"{result_id}: canonical evidence {declaration} is not registered in "
+                    "the source census"
+                )
+            if (
+                f"#check @{declaration}" not in audit_text
+                and f"#check {declaration}" not in audit_text
+            ):
+                fail(
+                    f"{result_id}: canonical evidence {declaration} is not #checked by "
+                    f"{audit_rel}; canonical evidence must carry compiler evidence"
+                )
+            role = entry.get("role")
+            if role not in CANONICAL_EVIDENCE_ROLES:
+                fail(
+                    f"{result_id}: canonical evidence {declaration} has role {role!r}; "
+                    f"expected one of {sorted(CANONICAL_EVIDENCE_ROLES)}"
+                )
+            kind = entry.get("evidence_kind")
+            if kind not in CANONICAL_EVIDENCE_KINDS:
+                fail(
+                    f"{result_id}: canonical evidence {declaration} has evidence_kind "
+                    f"{kind!r}; expected one of {sorted(CANONICAL_EVIDENCE_KINDS)}"
+                )
+            if (role == "exact_refutation") != (kind == "refutation"):
+                fail(
+                    f"{result_id}: canonical evidence {declaration} must pair role "
+                    "'exact_refutation' with evidence_kind 'refutation'"
+                )
+            scope = entry.get("scalar_scope")
+            if scope not in CANONICAL_SCALAR_SCOPES:
+                fail(
+                    f"{result_id}: canonical evidence {declaration} has scalar_scope "
+                    f"{scope!r}; expected one of {sorted(CANONICAL_SCALAR_SCOPES)}"
+                )
+            atoms = entry.get("covers_source_atoms")
+            if not isinstance(atoms, list) or not atoms or not all(isinstance(a, str) for a in atoms):
+                fail(
+                    f"{result_id}: canonical evidence {declaration} must list the source "
+                    "atoms it covers"
+                )
+            stray = sorted(set(atoms) - atom_ids)
+            if stray:
+                fail(
+                    f"{result_id}: canonical evidence {declaration} claims source atoms "
+                    "that are not assigned to this result: " + ", ".join(stray)
+                )
+            covered.update(atoms)
+
+        refuting = {e.get("declaration") for e in canonical if e.get("role") == "exact_refutation"}
+        if result_id in REFUTATION_RESULT_IDS:
+            if not refuting:
+                fail(
+                    f"{result_id}: the printed statement is false, so its canonical evidence "
+                    "must be an exact refutation, not a proof"
+                )
+            if _result_disposition(item) != "refuted_as_transcribed":
+                fail(f"{result_id}: refutation evidence requires disposition 'refuted_as_transcribed'")
+        elif refuting:
+            fail(
+                f"{result_id}: canonical evidence claims an exact refutation, but this "
+                "result is not recorded as false as printed"
+            )
+
+        support_seen: set[str] = set()
+        for entry in supporting:
+            if not isinstance(entry, dict):
+                fail(f"{result_id}: supporting_evidence entries must be objects")
+            declaration = entry.get("declaration")
+            if not isinstance(declaration, str) or declaration not in declared:
+                fail(
+                    f"{result_id}: supporting evidence {declaration!r} is not registered in "
+                    "the result's lean_declarations"
+                )
+            if declaration in seen:
+                fail(
+                    f"{result_id}: {declaration} is listed as both canonical and supporting "
+                    "evidence"
+                )
+            support_seen.add(declaration)
+            if entry.get("role") not in SUPPORTING_EVIDENCE_ROLES:
+                fail(
+                    f"{result_id}: supporting evidence {declaration} has role "
+                    f"{entry.get('role')!r}; expected one of {sorted(SUPPORTING_EVIDENCE_ROLES)}"
+                )
+        unpartitioned = sorted(declared - seen - support_seen)
+        if unpartitioned:
+            fail(
+                f"{result_id}: registered declarations are neither canonical nor supporting "
+                "evidence: " + ", ".join(unpartitioned)
+            )
+
+        is_terminal = (
+            _result_disposition(item) in TERMINAL_RESULT_DISPOSITIONS
+            and item.get("verification") in TERMINAL_VERIFICATIONS
+            and _semantic_certification(item) in TERMINAL_SEMANTIC_CERTIFICATIONS
+        )
+        uncovered = sorted(atom_ids - covered)
+        if is_terminal and uncovered:
+            fail(
+                f"{result_id}: terminal result has source atoms covered by no canonical "
+                "evidence: " + ", ".join(uncovered)
+            )
+        if not is_terminal and not uncovered:
+            fail(
+                f"{result_id}: nonterminal result claims complete canonical atom coverage; "
+                "either the coverage or the status is wrong"
+            )
+
+
 def _validate_semantic_audit_surface(
     data: dict[str, Any],
     items: list[dict[str, Any]],
@@ -763,6 +1048,13 @@ def _validate_semantic_audit_surface(
 
     audit_text = audit_path.read_text(encoding="utf-8")
     report_text = report_path.read_text(encoding="utf-8")
+    expected_evidence_digest = _canonical_evidence_digest(items)
+    recorded_evidence_digest = sweep.get("canonical_evidence_sha256")
+    if recorded_evidence_digest != expected_evidence_digest:
+        fail(
+            "semantic_review_sweep.canonical_evidence_sha256 is stale: canonical evidence "
+            f"changed; expected {expected_evidence_digest!r}, got {recorded_evidence_digest!r}"
+        )
     for item in items:
         result_id = item["id"]
         review_note = item.get("review_note")
@@ -814,6 +1106,7 @@ def _validate_semantic_audit_surface(
         "human_report": report_rel,
         "compiler_audit_surface_sha256": sha256_file(audit_path),
         "human_report_sha256": sha256_file(report_path),
+        "canonical_evidence_sha256": expected_evidence_digest,
     }
 
 def completion_summary(
@@ -951,6 +1244,11 @@ def completion_summary(
         data, items, terminal=terminal, nonterminal=nonterminal
     )
     audit_text = (ROOT / semantic_audit["compiler_audit_surface"]).read_text(encoding="utf-8")
+    _validate_canonical_evidence(
+        items, census_declarations, audit_text, semantic_audit["compiler_audit_surface"]
+    )
+    _validate_census_canonical_agreement(items)
+    _validate_markdown_view(items, terminal)
     nonlocal_interpretation = _validate_nonlocal_interpretation(
         items, source_atoms, source_inventory_path, census_declarations, audit_text
     )

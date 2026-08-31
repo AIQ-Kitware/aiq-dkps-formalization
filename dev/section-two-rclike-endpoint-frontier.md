@@ -1,7 +1,35 @@
 # Scalar-generic Section 2 endpoints: what each family still needs
 
-Status at `cb3b330b`.  `sin Θ` is done; this records the traced dependency
-frontier for the other three, from the **accepted fixed-field endpoint proof**
+Status: current as of the `sin 2Θ` full-gap closure (2026-08-31).
+
+## Two different questions, kept apart
+
+This document answers exactly one of them.
+
+**(1) Scalar-generic `RCLike` endpoint construction** — can the Section 2 result
+be *stated and proved once* over an arbitrary `RCLike` field, so that
+`SectionTwo.{tanTheta, sinTwoTheta, tanTwoTheta}` can be bound?  That is what the
+rest of this file traces.  It is an architecture question about this library, not
+about Davis and Kahan.
+
+**(2) Fixed-field exact source-scope completion** — does the `ℂ` endpoint, and
+does the `ℝ` endpoint, cover the scope the paper prints?  That is a source-fidelity
+question, it is owned by
+`dev/davis-kahan-1970-formalization-result-inventory.json`, and it is **not**
+answered here.
+
+Confusing the two is a live failure mode.  On 2026-08-31 `S2-sin-two-theta` was
+reopened for a question of kind (2): both `ℂ` endpoints took a *bounded*
+separating interval while the source allows half-infinite ones, and only the real
+endpoints carried `FormBoundedSylvesterGap`.  That had nothing to do with `RCLike`
+genericity, and was fixed without touching it — by giving the complex track the
+real track's proof architecture (`sinTheta_unbounded_complex_block` →
+`sinTheta_addBounded_gauge_complex_block_of_formGap` →
+`sinTwoTheta_reflectionResidual_block_gauge_of_formGap`).  `sin 2Θ` therefore
+appears below as still open for (1) and closed for (2).
+
+`sin Θ` is done for both; this records the traced dependency frontier for the
+other three on question (1), from the **accepted fixed-field endpoint proof**
 downward, not extrapolated from the weaker `RCLike` wrappers.
 
 ## `sin Θ` — complete
@@ -74,6 +102,12 @@ produce the endpoint; it would produce a statement that cannot be proved.
 the angle definitions.
 
 ## `sin 2Θ` and `tan 2Θ` — blocked on the spectral-selection layer
+
+*(Question (1) only.  `sin 2Θ` is closed on question (2) as of 2026-08-31: both
+fixed-field endpoints now take `FormBoundedSylvesterGap`, and
+`SectionTwoUsage.sinTwoTheta_from_halfInfinite_separation` is the compiled witness
+that the half-infinite branch can be called.  `tan 2Θ` question (2) status is in
+the result inventory, not here.)*
 
 Targets: `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_rclike` and
 `tanTwoTheta_ambient_unbounded_paperUINorm_rclike`.

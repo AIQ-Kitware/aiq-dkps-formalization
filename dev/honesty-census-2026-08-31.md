@@ -265,8 +265,20 @@ one-line consequence of the general one.  Added:
   Classical.choice, Quot.sound]`.  `SectionTwoUsage.sinTheta_from_printed_separation_rclike`
   is the compiled check that it is reachable from ordinary hypotheses.
 
-**For `tan Θ`, `sin 2Θ` and `tan 2Θ` the first obstacle is definitional, not
-analytic**, and the earlier "real distance" wording was too compressed.  Every
+**For `tan Θ`, `sin 2Θ` and `tan 2Θ` the first obstacle is definitional**, and
+the earlier "real distance" wording was too compressed.
+
+> **Corrected later the same day.**  The clause originally read "definitional,
+> not analytic", and the second half was wrong: there is a field-specific
+> *analytic* layer behind the definitional one in all three families.  `tan Θ`
+> runs through `UnboundedCompressionTrialData.all_kyFan_core`, which sits in the
+> `ℂ`-pinned half of `TanTheta/Theorem63UnboundedCompression.lean` because it
+> uses the projection-valued spectral measure; `sin 2Θ` and `tan 2Θ` name
+> spectral subspaces selected by that same measure.  Separately,
+> `ContinuousLinearMap.modulus` -- under the whole angle chain -- carries
+> `[ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]`, which Mathlib
+> declines to register as an instance precisely because it is unavailable outside
+> `ℂ`.  `dev/section-two-rclike-endpoint-frontier.md` carries the traced version.  Every
 differing axis is now tabulated in `SectionTwo.lean`: dimension, bounded versus
 unbounded operator, Ritz scope, the `[FiniteDimensional 𝕜 U]` trial-subspace
 restriction on `tan 2Θ`, the angle or representative in the conclusion, the norm,

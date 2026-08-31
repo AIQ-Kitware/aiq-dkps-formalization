@@ -55,44 +55,76 @@ fixed-field endpoint it should match:
 | angle in the conclusion | directed tangent supplied as a parameter with a `singularValues` characterization | `sinTwoThetaEmbedding U X`, the trial-coordinate `2S|C|` | an arbitrary representative whose approximation numbers rearrange the branch-free scalars |
 | endpoint's angle | ambient `paperTanAngleOperator` | directed double-angle sine of the spectral pair | ambient `paperAbsTanTwoAngleOperator` |
 | norm | `PaperUnitaryInvariantNorm` ✓ | ✓ | ✓ |
-| gap | interval/exterior | interval/exterior | ordered form `a < b` |
+| gap | interval/exterior, against the endpoint's `FormBoundedSylvesterGap` | same | ordered form `a < b` |
 
 The `sin Θ` bridge that produced the binding above was a repackaging: the
 component theorem already proved the paper-norm statement by applying the
 full-gap ideal-family theorem one Ky Fan index at a time, so taking `hgap`
 directly cost nothing.
 
-**For the other three the first obstacle is definitional, not analytic.**  The
-objects their conclusions name exist only as fixed-field pairs: `...C` is defined
-natively, and `...R` is defined by transport --
+### Two obstacles, and they are different
+
+For the other three, a scalar-generic statement meets **a definitional obstacle
+first and a field-specific analytic layer behind it.**  Both are real; neither
+alone is the whole story, and an earlier version of this file claimed only the
+first.
+
+*Definitional.*  The objects the three conclusions name exist only as fixed-field
+pairs: `...C` is defined natively and `...R` by transport --
 `paperTanAngleOperatorR U V = realPartOperator (paperTanAngleOperatorC
 (complexifySubmodule U) (complexifySubmodule V))`, and likewise for `sin 2Θ`,
 `tan 2Θ` and `|tan 2Θ|`.  There is no `paperTanAngleOperator` over `𝕜`, so a
-scalar-generic statement cannot presently be *written*, let alone proved.
+scalar-generic statement cannot presently be *written*.
 
-That obstacle does not look like new mathematics.  The complex definitions are
-`cfc Real.arcsin (sinAngleOperatorC U V)` and `cfc Real.tan (paperAngleOperatorC
-U V)`, and Mathlib's continuous functional calculus applies to a self-adjoint
-element of any `RCLike` operator algebra; `Geometry/Angle/Proposition35*.lean`
-already carry `[RCLike 𝕜]` in the same directory.  What it does carry is a real
-obligation: a generic definition owes a theorem that its `ℝ` instance agrees with
-the transport-defined `...R`, or every existing real theorem stops applying to it.
+*Availability.*  Writing one is not a matter of copying the `ℂ` definition under a
+`[RCLike 𝕜]` binder.  `sinAngleOperatorC` is `ContinuousLinearMap.modulus (P_U -
+P_V)`, and `ContinuousLinearMap.modulus` carries
+`[ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint]` as a hypothesis --
+Mathlib declines to register that as an instance precisely because it is not
+available outside `ℂ`.  So the arcsin/tan layers built on it are not "essentially
+available for arbitrary `RCLike` operator algebras"; they are available where that
+functional calculus is.
 
-**Whether the analysis then generalizes is a separate question, and this table
-does not answer it.**  What is established is that the current `RCLike` wrappers
-are weaker -- not that the fixed-field proofs resist generalization.
+*Analytic.*  Behind both sits a genuine field-specific proof layer.  The `tan Θ`
+route runs through `UnboundedCompressionTrialData.all_kyFan_core`, which lives in
+the `ℂ`-pinned half of `TanTheta/Theorem63UnboundedCompression.lean` -- the file
+splits a scalar-generic algebra layer from a truncation layer fixed to
+`[InnerProductSpace ℂ H]` because the latter uses the projection-valued spectral
+measure -- and `TanThetaUnboundedAmbientReal.lean` says in its own header that the
+real route complexifies the data and reuses that complex Appendix cutoff/Ky-Fan
+argument.  A generic definition would also owe a theorem that its `ℝ` instance
+agrees with the transport-defined `...R`, or every existing real theorem stops
+applying to it.
+
+None of this says the mathematics resists generalization; it says the work is
+operator-theoretic infrastructure, not a rename.
 `tanTwoTheta_branchFree_bounded_paperUINorm_complex` is evidence on the other
 side: it is the arbitrary-trial-subspace form over `ℂ`, so the finite-subspace
 restriction is already known to be removable at one field.
 
-Every one of the eight fixed-field aliases is at the accepted full source scope,
-and its *own* type says so: an unbounded self-adjoint `LinearPMap` ambient operator, a Hilbert space
-of arbitrary dimension, a `PaperUnitaryInvariantNorm` -- the paper's symmetric
-gauge, not the operator norm -- and both printed conclusions, the ideal membership
-and the inequality.  No capability class, no finite-dimensionality hypothesis, no
-proof-vehicle operator in the conclusion, and no branch or pole certificate
-demanded of the caller.  Nothing has to be assembled from a finite-dimensional
-"headline" plus a companion plus an audit note.
+## What the eight fixed-field aliases say, and what has been reviewed
+
+Each of the eight has a type that displays an unbounded self-adjoint `LinearPMap`
+ambient operator, a Hilbert space of arbitrary dimension, a
+`PaperUnitaryInvariantNorm` -- the paper's symmetric gauge, not the operator
+norm -- and both printed conclusions, the ideal membership and the inequality.
+No capability class, no finite-dimensionality hypothesis, no proof-vehicle
+operator in the conclusion, and no branch or pole certificate demanded of the
+caller.  Nothing has to be assembled from a finite-dimensional theorem plus a
+companion plus an audit note.
+
+That is what the *types* say.  Whether each matches the printed result is a
+separate, reviewed question, and the answer lives in the maintained result
+inventory rather than here -- including its one standing qualification, that
+`S2-tan-theta` is accepted under a nonlocal source interpretation because its
+printed statement is not locally self-contained.  Do not read the paragraph above
+as that review's verdict.
+
+Both `sin 2Θ` endpoints now take `FormBoundedSylvesterGap`, so the printed
+half-infinite gap scope is covered over both fields;
+`sinTwoTheta_directed_unbounded_addBounded_spectrumGap_paperUINorm_complex` is the
+earlier complex route, at a bounded separating interval only, and is kept as an
+alternative rather than as this result's witness.
 
 The declarations here are `alias`es, so each has exactly the type of the theorem
 it names; the proofs and the supporting theory stay in the modules where they
@@ -222,9 +254,14 @@ alias tanTheta_real := tanTheta_ambient_unboundedRitz_paperUINorm_real
 
 `δ · N(sin 2Θ) ≤ 2 N(E)`, with the paper's sharp factor two, for the spectral
 subspaces selected by `B` from an unbounded self-adjoint `A` and by `S` from the
-bounded perturbation `A + E`, under the printed spectrum gap.  The conclusion is
-on the directed double-angle sine `2 sin Θ cos Θ`, not on the proof's overlap
-block. -/
+bounded perturbation `A + E`, under the whole `FormBoundedSylvesterGap` -- so the
+separating interval may be half-infinite, as the source permits.  The conclusion
+is on the directed double-angle sine `2 sin Θ cos Θ`, not on the proof's overlap
+block.
+
+`sinTwoTheta_directed_unbounded_addBounded_spectrumGap_paperUINorm_complex` is the
+earlier route, which reads the separation as a bounded interval `[β, α]` whose
+enlargement the complementary restriction's spectrum avoids. -/
 alias sinTwoTheta_complex := sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem, over `ℝ`.**

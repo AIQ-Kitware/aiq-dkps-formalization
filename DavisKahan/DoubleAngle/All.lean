@@ -16,5 +16,6 @@ import DavisKahan.DoubleAngle.TanTwoThetaKyFanFiniteCarrier
 import DavisKahan.DoubleAngle.TangentTransport
 import DavisKahan.DoubleAngle.Unbounded
 import DavisKahan.DoubleAngle.UnboundedIdeal
+import DavisKahan.DoubleAngle.UnboundedIdealFormGap
 
 /-! # `DavisKahan/DoubleAngle` -/
