@@ -15,6 +15,7 @@ The Section 2 sin-theta theorem: interval/exterior spectral separation controls 
 
 **Hypotheses**
 - There are beta <= alpha and delta > 0 such that spec(A0) is contained in [beta, alpha] and spec(Lambda1) avoids (beta-delta, alpha+delta), or the same interval/exterior condition with A0 and Lambda1 interchanged.
+- The separating interval may be half-infinite: the source states that the spectral intervals in the gap hypotheses may be half-infinite and the remaining spectra unbounded, so the ordered semibounded configurations are part of the printed hypothesis and not a later generalization.
 - The norm is an arbitrary source unitary-invariant norm and the residual belongs to its norm ideal whenever that norm is finite.
 
 **Conclusions**
@@ -26,11 +27,11 @@ The Section 2 sin-theta theorem: interval/exterior spectral separation controls 
 
 ### Canonical Lean declarations
 
-#### `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`
+#### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`
 
 **Human-written Lean statement**
 
-`DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:163`
+`DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:253`
 
 ~~~~lean
 variable {𝕜 : Type u} [RCLike 𝕜]
@@ -39,72 +40,57 @@ variable {E F G H : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-theorem sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
+theorem sinTheta_unbounded_formGap_paperUINorm_rclike
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
-    (N : UnitaryInvariantNorm)
-    (A : E →ₗ.[𝕜] E)
-    (A₀ : F →ₗ.[𝕜] F)
-    (Λ₁ : G →ₗ.[𝕜] G)
-    (E₀ : F →L[𝕜] E)
-    (F₀ : H →L[𝕜] E)
-    (F₁ : G →L[𝕜] E)
-    (sinTheta₀ : F →L[𝕜] E)
-    (R : F →L[𝕜] E)
-    (hSinTheta₀ :
-      sinTheta₀ =
-        (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀)
-    (hA : IsSelfAdjoint A)
-    (hA₀ : IsSelfAdjoint A₀)
-    (hΛ₁ : IsSelfAdjoint Λ₁)
+    [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.{u, v} 𝕜]
+    (N : PaperUnitaryInvariantNorm)
+    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
     (htrial : IsTrialResidual A A₀ E₀ R)
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
-    {β α δ : ℝ}
-    (hβα : β ≤ α)
-    (hδ : 0 < δ)
-    (hspectral :
-      (LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
-          LinearPMap.realSpectrum Λ₁ ⊆
-            {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}) ∨
-        (LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
-          LinearPMap.realSpectrum A₀ ⊆
-            {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
     (hR : N.Mem R) :
-    δ * N.gauge sinTheta₀ ≤ N.gauge R
+    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
+      δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+        N.gauge R
 ~~~~
 
 **Compiler-resolved type**
 
 ~~~~lean
-@DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜]
-  {E F G H : Type u_2} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E]
+@DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E F G H : Type u_2}
+  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E]
   [inst_4 : NormedAddCommGroup F] [inst_5 : InnerProductSpace 𝕜 F] [inst_6 : CompleteSpace F]
   [inst_7 : NormedAddCommGroup G] [inst_8 : InnerProductSpace 𝕜 G] [inst_9 : CompleteSpace G]
   [inst_10 : NormedAddCommGroup H] [inst_11 : InnerProductSpace 𝕜 H] [inst_12 : CompleteSpace H]
   [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜]
-  (N : TauCeti.DavisKahan1970.UnitaryInvariantNorm) (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
-  (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (sinTheta₀ R : F →L[𝕜] E),
-  sinTheta₀ = (ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀ →
-    IsSelfAdjoint A →
-      IsSelfAdjoint A₀ →
-        IsSelfAdjoint Λ₁ →
-          DavisKahan1970.IsTrialResidual A A₀ E₀ R →
-            DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ →
-              ∀ {β α δ : ℝ},
-                β ≤ α →
-                  0 < δ →
-                    TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
-                          TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} ∨
-                        TauCeti.LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
-                          TauCeti.LinearPMap.realSpectrum A₀ ⊆ {x | x ≤ β - δ ∨ α + δ ≤ x} →
-                      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem N R →
-                        δ * TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge N sinTheta₀ ≤
-                          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge N R
+  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
+  (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E),
+  IsSelfAdjoint A →
+    IsSelfAdjoint A₀ →
+      IsSelfAdjoint Λ₁ →
+        DavisKahan1970.IsTrialResidual A A₀ E₀ R →
+          DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ →
+            ∀ {δ : ℝ},
+              0 < δ →
+                TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A₀ Λ₁ δ →
+                  N.Mem R →
+                    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ∧
+                      δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ≤
+                        N.gauge R
 ~~~~
 
 ### Supporting scope declarations
 
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex` — resolved; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real` — resolved; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike` — resolved; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike` — resolved; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_ofComponents_rclike` — resolved; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike` — resolved; source located
+- `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` — resolved; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_idealFamily_rclike` — resolved; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_complex` — resolved; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_real` — resolved; source located
@@ -292,7 +278,7 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
 | delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The text after the theorem colon is exactly δ * N.gauge sinTheta₀ <= N.gauge R. The supporting sinTheta_unbounded_intervalExterior_paperUINorm_rclike theorem additionally certifies N.Mem sinTheta₀ after rewriting by hSinTheta₀. | claimed_exact |
 | Infinite-dimensional and unbounded self-adjoint scope. | There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are `LinearPMap` values and the two expanded setup predicates carry the required domain conditions. | claimed_exact |
 
-**Review note.** The canonical review declaration is also the intended paper-display declaration. It names sinTheta₀ as a theorem parameter but gives its concrete projection-block formula by a literal equality hypothesis in the same signature, so the claim after the colon is a one-to-one rendering of the printed inequality without an opaque angle definition. Only the domain-heavy trial and exact-coordinate setup is bundled, and both bundles are fully expanded by characteristic theorems in the local semantic dictionary. The stronger generic theorem remains supporting evidence for norm-ideal membership and the implementation proof bridge.
+**Review note.** The canonical review declaration is also the intended paper-display declaration. It names sinTheta₀ as a theorem parameter but gives its concrete projection-block formula by a literal equality hypothesis in the same signature, so the claim after the colon is a one-to-one rendering of the printed inequality without an opaque angle definition. Only the domain-heavy trial and exact-coordinate setup is bundled, and both bundles are fully expanded by characteristic theorems in the local semantic dictionary. The stronger generic theorem remains supporting evidence for norm-ideal membership and the implementation proof bridge. CANONICAL WITNESS CORRECTED 2026-08-31. The row named `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` as the exact source match. That was wrong on two counts: it carries only the bounded interval/exterior branch of the gap, while the source permits half-infinite separating intervals, and it drops the ideal-membership half of the conclusion. The canonical witness is now `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`, added the same day: scalar-generic over `RCLike`, unbounded `LinearPMap` ambient operator, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` (interval/exterior plus both ordered semibounded configurations), an arbitrary `PaperUnitaryInvariantNorm`, and both conclusions. It is proved by taking the gap directly into the Ky-Fan-to-paper-norm promotion the interval/exterior theorem already ran, so it is a repackaging rather than a new argument, and the interval/exterior form is now a one-line consequence of it. `..._complex_ofRCLike` and `..._real_ofRCLike` are the compiled conformance checks: each restates the corresponding fixed-field endpoint's type verbatim and discharges it by the generic theorem with no adapter. The fixed-field endpoints remain as corroborating full-source witnesses and the interval/exterior theorem as a presentation specialization. The two `RCLike` capability classes in the generic signature are proof capabilities with instances for both source fields, not printed source hypotheses.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 

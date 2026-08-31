@@ -90,13 +90,13 @@ or the same condition with $A_0$ and $\Lambda_1$ interchanged.  Then, for every 
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:151`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:186`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:158`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:193`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -108,7 +108,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/ScalarGeneric.lean:102`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/ScalarGeneric.lean:183`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -138,25 +138,25 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:257`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:299`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:345`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:413`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:308`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:376`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:396`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:464`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -651,13 +651,13 @@ The first is directed and residual-based; the second uses the ambient angle and 
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:173`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:208`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:182`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:217`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -833,13 +833,13 @@ Again the source distinguishes the directed residual statement from the ambient 
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:193`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:228`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:202`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:237`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1047,13 +1047,13 @@ Section~7 derives the nonvanishing of the relevant $\cos(2\theta_j)$ factors fro
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:217`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:252`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:224`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:259`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

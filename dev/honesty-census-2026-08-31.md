@@ -238,40 +238,66 @@ not carry marks across a rename.**  Its header claims marks survive
 `[ ]`, six of them reviewed.  That is an open gap in the package, now recorded in
 `AGENTS.md` and in `dev/audit/README.md` with the reconciliation procedure.
 
-## The scalar-generic endpoint question, answered
+## The scalar-generic endpoint question, answered -- and `sin Θ` closed
 
 Review asked whether "no scalar-generic `RCLike` endpoint exists" means *there is
 no capability-free declaration combining every strongest library generalization*
-or *there is no paper-faithful `RCLike` Section 2 theorem*.  Those are different
-claims and the module said only the first.  Measured against the distributable
-source specification, which states the four results "for infinite as well as
-finite dimensional separable Hilbert spaces" and says the gap intervals "may be
-half-infinite":
+or *there is no paper-faithful `RCLike` Section 2 theorem*.  Measured against the
+distributable source specification, which states the four results "for infinite
+as well as finite dimensional separable Hilbert spaces" and says the gap
+intervals "may be half-infinite":
 
-* **`sin Θ` -- genuinely missing, and one bridging step away.**  The printed
-  hypothesis *is* interval/exterior, so
-  `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` states the printed
-  separation at the printed norm class over `RCLike`.  What it misses is not a
-  library luxury: its gap is `Set.Icc β α`, and the source permits half-infinite
-  intervals -- the two semibounded constructors of `FormBoundedSylvesterGap`.
-  `sinTheta_unbounded_formGap_idealFamily_rclike` has all three branches but sits
-  over a Fan-dominant ideal family instead of `PaperUnitaryInvariantNorm`.  Each
-  holds one half.
-* **`tan Θ`, `sin 2Θ` -- the `RCLike` forms are finite-dimensional**, and the
-  source is explicit that the results hold in infinite dimensions.  Real distance.
-* **`tan 2Θ` -- the `RCLike` form has a bounded ambient operator** and a
-  finite-dimensional trial subspace.  Real distance.
+**`sin Θ` is now closed.**  The printed hypothesis *is* interval/exterior, and
+`sinTheta_unbounded_intervalExterior_paperUINorm_rclike` already proved the
+paper-norm statement by applying the full-gap ideal-family theorem one Ky Fan
+index at a time -- constructing `hgap` from the interval/exterior hypothesis
+immediately before doing so.  Taking `hgap : FormBoundedSylvesterGap A₀ Λ₁ δ`
+directly therefore cost nothing, and the interval/exterior form is now a
+one-line consequence of the general one.  Added:
 
-* **The capability classes are not part of the gap.**
-  `HasMinMaxLowerBoundEverywhere` and `HasUnboundedSylvesterKyFan` are *proved
-  instances* for `ℝ` and `ℂ`.  They are hypotheses only because `RCLike` is open;
-  over the two fields the paper is about they are theorems.
+* `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_ofComponents_rclike`
+  -- the engine, structural hypotheses as components;
+* `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike` -- the same
+  theorem bundled as `IsTrialResidual` / `IsExactSpectralDecomposition`, the
+  shape the fixed-field siblings already use, since both predicates were
+  scalar-generic all along;
+* `SectionTwo.sinTheta`, bound to it.  Axiom-clean: `[propext,
+  Classical.choice, Quot.sound]`.  `SectionTwoUsage.sinTheta_from_printed_separation_rclike`
+  is the compiled check that it is reachable from ordinary hypotheses.
 
-So the module's conclusion survives, but its stated reason did not: it measured
-`sin Θ` against `FormBoundedSylvesterGap` as a library generalization when the
-half-infinite branch is source scope.  `SectionTwo.lean` now says this per family,
-and says which of the four are a bridge away and which are mathematics away.
-**Decide this before deriving `Challenge.lean` from `SectionTwo`.**
+**For `tan Θ`, `sin 2Θ` and `tan 2Θ` the first obstacle is definitional, not
+analytic**, and the earlier "real distance" wording was too compressed.  Every
+differing axis is now tabulated in `SectionTwo.lean`: dimension, bounded versus
+unbounded operator, Ritz scope, the `[FiniteDimensional 𝕜 U]` trial-subspace
+restriction on `tan 2Θ`, the angle or representative in the conclusion, the norm,
+and the gap.  But the binding constraint is upstream of all of them: the objects
+those conclusions name exist only as fixed-field pairs.  `...C` is defined
+natively and `...R` by transport --
+`paperTanAngleOperatorR U V = realPartOperator (paperTanAngleOperatorC
+(complexifySubmodule U) (complexifySubmodule V))` -- so there is no
+`paperTanAngleOperator` over `𝕜` and a generic statement cannot presently be
+written at all.
+
+That obstacle does not look like new mathematics: the complex definitions are
+`cfc Real.arcsin (sinAngleOperatorC U V)` and `cfc Real.tan (paperAngleOperatorC
+U V)`, Mathlib's `cfc` applies to a self-adjoint element over any `RCLike`
+field, and `Geometry/Angle/Proposition35*.lean` are already `[RCLike 𝕜]` in the
+same directory.  It does carry an obligation: a generic definition owes a theorem
+that its `ℝ` instance agrees with the transport-defined `...R`, or the existing
+real theorems stop applying.  **Whether the analysis generalizes after that is a
+separate question this work does not answer** -- what is established is that the
+current `RCLike` wrappers are weaker, not that the fixed-field proofs resist
+generalization.  `tanTwoTheta_branchFree_bounded_paperUINorm_complex` is evidence
+the other way: the finite-subspace restriction is already removable at one field.
+
+**The capability classes are not part of the gap, with one qualification.**
+`HasMinMaxLowerBoundEverywhere` and `HasUnboundedSylvesterKyFan` are proved
+instances for `ℝ` and `ℂ`, so they are not missing Davis--Kahan mathematics.
+They are still implementation-visible hypotheses on a theorem quantified over
+arbitrary `[RCLike 𝕜]`, and for a paper-facing or Palomar type they would be
+better hidden or eliminated.  That is API cleanliness, not source scope, and it
+is the one respect in which `SectionTwo.sinTheta` is less clean than
+`sinTheta_complex` / `sinTheta_real`.
 
 ## Open, and sized
 

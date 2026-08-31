@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1112
+**Unique cited Lean declarations:** 1117
 
 ## How to use this census
 
@@ -250,6 +250,11 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 - `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real`
 - `DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex`
 - `DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real`
+- `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike`
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike`
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_ofComponents_rclike`
 
 **Curated source/Lean review:**
 
@@ -258,6 +263,7 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 
 *Hypotheses*
 - There are beta <= alpha and delta > 0 such that spec(A0) is contained in [beta, alpha] and spec(Lambda1) avoids (beta-delta, alpha+delta), or the same interval/exterior condition with A0 and Lambda1 interchanged.
+- The separating interval may be half-infinite: the source states that the spectral intervals in the gap hypotheses may be half-infinite and the remaining spectra unbounded, so the ordered semibounded configurations are part of the printed hypothesis and not a later generalization.
 - The norm is an arbitrary source unitary-invariant norm and the residual belongs to its norm ideal whenever that norm is finite.
 
 *Conclusions*
