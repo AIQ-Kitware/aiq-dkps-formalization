@@ -24,6 +24,7 @@ from only the printed unbounded hypotheses.
 -/
 import DavisKahan.Sources.DavisKahan1970.PartIII
 import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
+import DavisKahan.Sources.DavisKahan1970.Proposition61
 import DavisKahan.Sources.DavisKahan1970.Directed
 import DavisKahan.Sources.DavisKahan1970.DirectedReal
 import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
@@ -120,46 +121,14 @@ universe v
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
 
-/-- Comparator-facing direct-hypothesis wrapper around source Proposition 6.1. -/
-theorem sinTheta_wholeSpace_paperUINorm
-    (N : PaperUnitaryInvariantNorm)
-    {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
-    {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-    (hU : A.Reduces U) (hV : B.Reduces V)
-    {gap : ℝ} (hgap : 0 < gap)
-    (hgapUV : FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) U
-        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace A U hU))
-      (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) Vᗮ
-        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace B V hV).orthogonal)
-      gap)
-    (hgapVU : FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) V
-        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace B V hV))
-      (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) Uᗮ
-        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace A U hU).orthogonal)
-      gap)
-    (hMem : N.Mem (B - A)) :
-    N.Mem (paperSinAngleOperatorC U V) ∧
-      gap * N.gauge (paperSinAngleOperatorC U V) ≤ N.gauge (B - A) := by
-  let P : PaperSymmetricSinThetaProblem (E := E) :=
-    { A := A
-      B := B
-      selfAdjoint_A := hA
-      selfAdjoint_B := hB
-      U := U
-      V := V
-      proj_U := inferInstance
-      proj_V := inferInstance
-      reduces_A_U := hU
-      reduces_B_V := hV
-      gap := gap
-      gap_pos := hgap
-      gap_U_to_Vperp := hgapUV
-      gap_V_to_Uperp := hgapVU }
-  have hsource := P.result_every_unitarilyInvariantNorm N (by
-    simpa [P, PaperSymmetricSinThetaProblem.perturbation] using hMem)
-  simpa [P, PaperSymmetricSinThetaProblem.perturbation] using hsource
+/-- Comparator-facing name for source Proposition 6.1 over `ℂ`.
+
+This used to be a wrapper that built `PaperSymmetricSinThetaProblem` inline.  The
+direct-hypothesis architecture it demonstrated now lives in production as
+`TauCeti.DavisKahan1970.proposition6_1_source_complex`, so this is an alias: the
+comparator target and the library theorem are the same declaration, not two
+declarations with the same statement. -/
+alias sinTheta_wholeSpace_paperUINorm := proposition6_1_source_complex
 
 end
 end DavisKahan1970

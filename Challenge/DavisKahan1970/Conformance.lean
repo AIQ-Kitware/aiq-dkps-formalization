@@ -253,22 +253,16 @@ theorem sinTheta_wholeSpace_paperUINorm
     {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : A.Reduces U) (hV : B.Reduces V)
-    {gap : ℝ} (hgap : 0 < gap)
+    {δ : ℝ} (hδ : 0 < δ)
     (hgapUV : FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) U
-        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace A U hU))
-      (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) Vᗮ
-        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace B V hV).orthogonal)
-      gap)
+      (TauCeti.DavisKahanExt.PartialMap.boundedReducingBlock A U hU)
+      (TauCeti.DavisKahanExt.PartialMap.boundedReducingBlockCompl B V hV) δ)
     (hgapVU : FormBoundedSylvesterGap
-      (TauCeti.LinearPMap.reducingRestriction ((B.toLinearMap.toPMap ⊤)) V
-        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace B V hV))
-      (TauCeti.LinearPMap.reducingRestriction ((A.toLinearMap.toPMap ⊤)) Uᗮ
-        (TauCeti.DavisKahanExt.PartialMap.ofBounded_reducesSubspace A U hU).orthogonal)
-      gap)
+      (TauCeti.DavisKahanExt.PartialMap.boundedReducingBlock B V hV)
+      (TauCeti.DavisKahanExt.PartialMap.boundedReducingBlockCompl A U hU) δ)
     (hMem : N.Mem (B - A)) :
     N.Mem (paperSinAngleOperatorC U V) ∧
-      gap * N.gauge (paperSinAngleOperatorC U V) ≤ N.gauge (B - A) := by
+      δ * N.gauge (paperSinAngleOperatorC U V) ≤ N.gauge (B - A) := by
   sorry
 
 /-- Theorem 6.3 directed `tan Theta` theorem on arbitrary complete complex

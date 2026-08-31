@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1126
+**Unique cited Lean declarations:** 1137
 
 ## How to use this census
 
@@ -3125,6 +3125,11 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 - `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues`
 - `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_eq_literalFullSinAngle`
 - `TauCeti.DavisKahan1970.Proposition6_1_real_representative`
+- `TauCeti.DavisKahan1970.proposition6_1_source_complex`
+- `TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex`
+- `TauCeti.DavisKahan1970.proposition6_1_source_real`
+- `TauCeti.DavisKahanExt.PartialMap.boundedReducingBlock`
+- `TauCeti.DavisKahanExt.PartialMap.boundedReducingBlockCompl`
 
 **Notes.** Complex and real source forms are compiled.
 
@@ -3138,6 +3143,8 @@ with no finite-dimensionality hypothesis.  `HasMinMaxLowerBoundEverywhere` has i
 * `Proposition6_1_real_representative` states the estimate for an ARBITRARY operator carrying that sequence, which is the precise sense in which only the source singular sequence matters.
 
 The theorem's own statement mentions no complexification, no functional calculus, and no caller-supplied inequality.  Axiom audit on all five real declarations plus the structure: exactly `propext`, `Classical.choice`, `Quot.sound`.  Full `lake build` green (9487 jobs), plus the non-default `FinishTanTwoTheta` and `Challenge` libraries.
+
+CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Proposition6_1_complex` and `Proposition6_1_real` are methods on `PaperSymmetricSinThetaProblem` / its real sibling: a caller had to build the record to invoke the theorem. `proposition6_1_source_complex` and `proposition6_1_source_real` take the mathematics directly -- two bounded self-adjoint operators, two reducing subspaces, the gap, the two separations, membership of `B - A` -- and build the record inside the proof. `DavisKahanExt.PartialMap.boundedReducingBlock` and its complement partner are what made the separation hypotheses readable; the four-line inline composite they replace is most of why the record existed. The complex conclusion is the paper's literal `cfc Real.sin (paperAngleOperatorC U V)`; the real one is the projector difference `P_V - P_U`, whose approximation numbers are the sines of the principal angles, and `proposition6_1_source_projectorDifference_complex` states the complex theorem in that same shape so the two fields are visibly one theorem. `paperCrossSineSum` no longer appears in any Proposition 6.1 statement; it remains what the real proof computes with, and `Proposition6_1_real_sinTheta_singularValues` is the compiled transport off it. The Challenge wrapper `sinTheta_wholeSpace_paperUINorm` is now an alias of the production declaration rather than a second theorem with the same statement.
 
 **Next action.** Hostile re-audit reopened this row. The source block contains the Sylvester identity (6.1), Proposition 6.1, and an explicit 2x2 counterexample showing the ambient one-sided sine conclusion fails. The counterexample exists elsewhere but is not registered as evidence for this row.
 
@@ -3159,6 +3166,10 @@ The theorem's own statement mentions no complexification, no functional calculus
 - `TauCeti.DavisKahan1970.Theorem6_1_real`
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`
+- `TauCeti.DavisKahan1970.theorem6_1_source_complex`
+- `TauCeti.DavisKahan1970.theorem6_1_source_real`
+- `DavisKahan1970.IsTrialResidualEquation`
+- `DavisKahan1970.isTrialResidual_iff_equation_and_isometry`
 
 **Notes.** This is the canonical source-general sine theorem.
 
@@ -3167,6 +3178,8 @@ The theorem's own statement mentions no complexification, no functional calculus
 **AUDIT METHOD CORRECTED 2026-08-07 (Claude Opus 5).**  The scalar-scope audit earlier the same day inspected only the declarations already LISTED on this row, which answers "does this row list a real theorem?" and not "does the repository HAVE one?".  Re-audited by searching the whole stable repo and elaborating candidate signatures.  FALSE POSITIVE, restored to `compiled_exact`.  Theorem 6.1 has a real infinite-dimensional source theorem already: `Theorem6_1_real` elaborates over `[InnerProductSpace ℝ]`, `[CompleteSpace]`, no `[FiniteDimensional]`, and the common-domain and common-core unbounded variants `Theorem6_1_real_commonDomain` / `Theorem6_1_real_commonCore` do too.  The row's declaration list simply omitted them; the mathematics was never missing.
 
 **M32, THE SECTION 6 SCALAR TRANCHE, 2026-08-09 (Claude Opus 5).**  THE `real-scalar-infinite-dimensional-scope` ENTRY IN `blocked_by` WAS STALE AND IS REMOVED.  The 2026-08-07 note above already recorded the false positive and restored the status, but the blocker was left on the row, so the blocker's own tally counted this row.  RE-MEASURED 2026-08-09 by elaborating the signature: `Theorem6_1_real` is `[InnerProductSpace ℝ]` on four spaces with `[CompleteSpace]` and NO `[FiniteDimensional]` anywhere, over `PaperRealTheorem61Data` and an arbitrary `PaperUnitaryInvariantNorm`, concluding `N.Mem S.operator ∧ gap * frameLowerBound * N.gauge S.operator ≤ N.gauge P.data.residual` -- membership CONCLUDED, constant intact.  `Theorem6_1_real_commonDomain` and `Theorem6_1_real_commonCore` likewise.  All axiom-clean (`[propext, Classical.choice, Quot.sound]`).  Nothing was proved for this row today; the row was already correct.
+
+CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. `Theorem6_1_complex` and `Theorem6_1_real` are methods on `PaperTheorem61Data`, which bundles an `UnboundedSinThetaData` -- itself a record -- with the exact map, three self-adjointness fields, the exact decomposition, the gap and the frame bound. `theorem6_1_source_complex` and `theorem6_1_source_real` take the components. They reuse the Section 2 vocabulary rather than inventing a second one: `DavisKahan1970.IsExactSpectralDecomposition` unchanged, and `DavisKahan1970.IsTrialResidualEquation` -- `IsTrialResidual` with the isometry removed, tied by `isTrialResidual_iff_equation_and_isometry`. That split is the actual difference between Section 2 and Section 6: Section 2 asks for an isometric trial map, Theorems 6.1 and 6.2 ask only for `LowerFrameBound E_0 epsilon`, and epsilon is the factor the printed generalized bound carries. Hypotheses and conclusion are unchanged -- same lower-frame factor, same representative freedom, same arbitrary source UI norm.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -3184,6 +3197,8 @@ The theorem's own statement mentions no complexification, no functional calculus
 - `TauCeti.DavisKahan1970.Theorem6_2_real_commonCore`
 - `TauCeti.DavisKahan.ExactSinTheta.PaperTheorem62Data.operatorNorm_result_across_of_rank_le`
 - `TauCeti.DavisKahan.ExactSinTheta.PaperRealTheorem62Data.operatorNorm_result_across_of_rank_le`
+- `TauCeti.DavisKahan1970.theorem6_2_source_complex`
+- `TauCeti.DavisKahan1970.theorem6_2_source_real`
 
 **Notes.** The defect-first pairwise tensor proof is compiled.
 
@@ -3203,6 +3218,8 @@ complex inner product spaces with no dimension hypothesis, axiom-clean, plus the
 is itself still absent as a Section 5 statement; that is tracked on `DK-5-hermitian-inequalities`.
 
 **M32, THE SECTION 6 SCALAR TRANCHE, 2026-08-09 (Claude Opus 5).**  THE `real-scalar-infinite-dimensional-scope` ENTRY IN `blocked_by` WAS STALE AND IS REMOVED, for the same reason as on `DK-6.1-thm`.  RE-MEASURED 2026-08-09 by elaboration: `Theorem6_2_real` is `[InnerProductSpace ℝ]`, `[CompleteSpace]`, no `[FiniteDimensional]`, over `PaperRealTheorem62Data`, concluding `IsPaperHilbertSchmidt S.operator ∧ gap * frameLowerBound * paperHilbertSchmidtNorm S.operator ≤ paperHilbertSchmidtNorm P.source.R` -- square-norm membership CONCLUDED.  `Theorem6_2_real_commonDomain`, `Theorem6_2_real_commonCore` and the printed rank variant `PaperRealTheorem62Data.operatorNorm_result_across_of_rank_le` likewise.  All axiom-clean.  Nothing was proved for this row today.
+
+CANONICAL SURFACE MOVED OFF THE RECORD 2026-08-31. As for Theorem 6.1, with the same component vocabulary. The counted statement is unchanged: the source's pairwise spectral-distance hypothesis rather than the Sylvester gap, the Hilbert--Schmidt norm rather than an arbitrary unitarily invariant one, the lower-frame factor, and the representative freedom. The stronger arbitrary-UI-norm theorem and the finite-rank operator-norm consequence are source-adjacent and are deliberately not what the canonical declarations state.
 
 **Next action.** Hostile re-audit reopened this row. The source passage contains both the Hilbert--Schmidt theorem and its rank-corrected operator-norm consequence. Exact rank-consequence declarations exist but are not mapped into the row's semantic audit clauses.
 

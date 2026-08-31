@@ -92,7 +92,6 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-sin-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 - `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-sin-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike` — primary_source_witness, rclike scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-sin-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 
 ### Other registered declarations
 
@@ -106,6 +105,7 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real` — presentation_wrapper
 - `DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex` — specialization
 - `DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real` — specialization
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike` — generalization
 
 ### Source-facing Lean declarations
 
@@ -123,7 +123,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:163`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:207`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -153,37 +153,37 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:109`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:115`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:299`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:343`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:413`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:457`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:376`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:420`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:464`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:508`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:253`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:297`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -681,7 +681,7 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
 - `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`
-- `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.arbitrary-ui-scope`
+- `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm` — primary_source_witness, rclike scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.arbitrary-ui-scope`
 
 ### Other registered declarations
 
@@ -746,7 +746,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:322`, `DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean:1265`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:316`, `DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean:1265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -939,7 +939,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:402`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbient.lean:606`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:396`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbient.lean:606`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1224,7 +1224,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:453`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1164`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:447`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1164`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1236,7 +1236,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:543`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1301`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:537`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1301`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1543,8 +1543,11 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent` — primary_source_witness, rclike scalars, proof; covers `DK-3.2-prop.existence-iff-crossing-dimensions`, `DK-3.2-prop.eq-3-5`
 - `TauCeti.DavisKahan1970.proposition3_2_not_unique` — primary_source_witness, rclike scalars, proof; covers `DK-3.2-prop.nonuniqueness`
-- `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real` — primary_source_witness, real scalars, proof; covers `DK-3.2-prop.existence-iff-crossing-dimensions`, `DK-3.2-prop.eq-3-5`
-- `TauCeti.DavisKahan1970.proposition3_2_not_unique_real` — primary_source_witness, real scalars, proof; covers `DK-3.2-prop.nonuniqueness`
+
+### Other registered declarations
+
+- `TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real` — specialization
+- `TauCeti.DavisKahan1970.proposition3_2_not_unique_real` — specialization
 
 ### Source-facing Lean declarations
 
@@ -1858,7 +1861,7 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.complete-invariant`
 - `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-thm.complete-invariant`
-- `TauCeti.DavisKahan1970.theorem3_1_realization` — primary_source_witness, complex scalars, proof; covers `DK-3.1-thm.converse-angle-data`
+- `TauCeti.DavisKahan1970.theorem3_1_realization` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-thm.converse-angle-data`
 
 ### Source-facing Lean declarations
 
@@ -1942,9 +1945,12 @@ together with a possible eigenvalue $0$; $\Theta_1$ has the same nonzero eigenva
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification` — primary_source_witness, complex scalars, proof; covers `DK-3.1-cor.compact-complete-invariants`, `DK-3.1-cor.theta1-match`
-- `TauCeti.DavisKahan1970.corollary3_1_compact_classification_real` — primary_source_witness, real scalars, proof; covers `DK-3.1-cor.compact-complete-invariants`, `DK-3.1-cor.theta1-match`
-- `TauCeti.DavisKahan1970.corollary3_1_realization` — primary_source_witness, complex scalars, proof; covers `DK-3.1-cor.allowed-angle-sequence`
+- `TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.compact-complete-invariants`, `DK-3.1-cor.theta1-match`
+- `TauCeti.DavisKahan1970.corollary3_1_realization` — primary_source_witness, rclike scalars, proof; covers `DK-3.1-cor.allowed-angle-sequence`
+
+### Other registered declarations
+
+- `TauCeti.DavisKahan1970.corollary3_1_compact_classification_real` — specialization
 
 ### Source-facing Lean declarations
 
@@ -2699,7 +2705,7 @@ then $\norm{1-V}$ is asserted to be minimized by $V=U$ for every unitary-invaria
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite` — exact_refutation, complex scalars, refutation; covers `DK-4.4-prop.printed-proposition4-4`
+- `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite` — exact_refutation, not_visible_in_type scalars, refutation; covers `DK-4.4-prop.printed-proposition4-4`
 
 ### Other registered declarations
 
@@ -2970,7 +2976,7 @@ This cutoff lemma lets finite spectral truncations recover the Ky Fan data requi
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Lemma5_1` — primary_source_witness, complex scalars, proof; covers `DK-5.1-lem.strong-cutoff-convergence`
+- `TauCeti.DavisKahan1970.Lemma5_1` — primary_source_witness, rclike scalars, proof; covers `DK-5.1-lem.strong-cutoff-convergence`
 
 ### Source-facing Lean declarations
 
@@ -3049,8 +3055,8 @@ for every unitary-invariant norm.  The converse holds when the two diagonal bloc
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.lemma6_1` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-forward`
-- `TauCeti.DavisKahan1970.lemma6_1_converse` — primary_source_witness, complex scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`
+- `TauCeti.DavisKahan1970.lemma6_1` — primary_source_witness, rclike scalars, proof; covers `DK-6.1-lem.ordered-sylvester-forward`
+- `TauCeti.DavisKahan1970.lemma6_1_converse` — primary_source_witness, rclike scalars, proof; covers `DK-6.1-lem.ordered-sylvester-converse`
 
 ### Source-facing Lean declarations
 
@@ -3126,7 +3132,7 @@ The proof is the reflection/pinching contraction obtained by averaging $K$ with 
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.lemma6_2` — primary_source_witness, complex scalars, proof; covers `DK-6.2-lem.pinching-contraction`
+- `TauCeti.DavisKahan1970.lemma6_2` — primary_source_witness, rclike scalars, proof; covers `DK-6.2-lem.pinching-contraction`
 
 ### Source-facing Lean declarations
 
@@ -3216,20 +3222,58 @@ The symmetric replacement is Proposition~6.1: if the $A_0$--$\Lambda_1$ spectra 
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Proposition6_1_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
-- `TauCeti.DavisKahan1970.Proposition6_1_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
+- `TauCeti.DavisKahan1970.proposition6_1_source_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
+- `TauCeti.DavisKahan1970.proposition6_1_source_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-prop.symmetric-sine-theorem`
+
+### Other registered declarations
+
+- `TauCeti.DavisKahan1970.Proposition6_1_complex` — implementation_structure
+- `TauCeti.DavisKahan1970.Proposition6_1_real` — implementation_structure
+- `TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex` — transport_lemma
+- `TauCeti.DavisKahan1970.Proposition6_1_real_representative` — transport_lemma
+- `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues` — transport_lemma
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:115`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:129`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:127`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:141`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition6_1_source_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:92`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition6_1_source_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:187`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Proposition61.lean:133`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Proposition6_1_real_representative`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:149`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.Proposition6_1_real_sinTheta_singularValues`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:145`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3300,37 +3344,51 @@ If one of $A_0,\Lambda_1$ has spectrum in $[\beta,\alpha]$ and the other has spe
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Theorem6_1_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.unequal-dimension-scope`
-- `TauCeti.DavisKahan1970.Theorem6_1_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.unequal-dimension-scope`
+- `TauCeti.DavisKahan1970.theorem6_1_source_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.unequal-dimension-scope`
+- `TauCeti.DavisKahan1970.theorem6_1_source_real` — primary_source_witness, real scalars, proof; covers `DK-6.1-thm.generalized-sine-hypotheses`, `DK-6.1-thm.generalized-sine-conclusion`, `DK-6.1-thm.unequal-dimension-scope`
 
 ### Other registered declarations
 
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain` — supporting_theorem
 - `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore` — supporting_theorem
+- `TauCeti.DavisKahan1970.Theorem6_1_complex` — implementation_structure
+- `TauCeti.DavisKahan1970.Theorem6_1_real` — implementation_structure
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:102`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:108`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:105`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:111`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:200`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:219`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:221`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:240`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem6_1_source_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:134`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem6_1_source_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:177`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3405,20 +3463,37 @@ Combining this with (5.2) also yields the rank-corrected operator-norm estimate
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.Theorem6_2_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.2-thm.second-generalized-sine`
-- `TauCeti.DavisKahan1970.Theorem6_2_real` — primary_source_witness, real scalars, proof; covers `DK-6.2-thm.second-generalized-sine`
+- `TauCeti.DavisKahan1970.theorem6_2_source_complex` — primary_source_witness, complex scalars, proof; covers `DK-6.2-thm.second-generalized-sine`
+- `TauCeti.DavisKahan1970.theorem6_2_source_real` — primary_source_witness, real scalars, proof; covers `DK-6.2-thm.second-generalized-sine`
+
+### Other registered declarations
+
+- `TauCeti.DavisKahan1970.Theorem6_2_complex` — implementation_structure
+- `TauCeti.DavisKahan1970.Theorem6_2_real` — implementation_structure
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.Theorem6_2_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:142`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:161`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_2_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:146`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:165`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem6_2_source_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:237`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem6_2_source_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Theorem61.lean:290`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3593,7 +3668,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:299`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:122`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:293`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:122`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
