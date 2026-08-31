@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1143
+**Unique cited Lean declarations:** 1146
 
 ## How to use this census
 
@@ -20,7 +20,8 @@ The `importance` field is an external-review priority, not a proof-status axis. 
 
 | value | items |
 | --- | ---: |
-| `compiled_exact` | 45 |
+| `compiled_exact` | 44 |
+| `compiled_specialization` | 1 |
 | `refuted_as_transcribed` | 1 |
 | `resolved_by_modern_development` | 1 |
 | `not_a_completion_obligation` | 3 |
@@ -59,7 +60,7 @@ The `importance` field is an external-review priority, not a proof-status axis. 
 | S1-ui-norms | technical | Section 1, equations (1.9)–(1.18) | compiled_exact | proved_in_build |  |
 | S2-sin-theta | headline | Section 2, sin theta theorem | compiled_exact | proved_in_build |  |
 | S2-tan-theta | headline | Section 2, tan theta theorem | compiled_exact | proved_in_build |  |
-| S2-sin-two-theta | headline | Section 2, sin 2 theta theorem | compiled_exact | proved_in_build |  |
+| S2-sin-two-theta | headline | Section 2, sin 2 theta theorem | compiled_specialization | proved_in_build |  |
 | S2-tan-two-theta | headline | Section 2, tan 2 theta theorem | compiled_exact | proved_in_build |  |
 | S2-sharpness | supporting | Section 2, paragraph after four theorems | compiled_exact | proved_in_build |  |
 | S2-unbounded-scope | technical | Section 2, final paragraphs | compiled_exact | proved_in_build |  |
@@ -361,6 +362,9 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock`
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex`
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real`
+- `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal`
 
 **Planned declarations:**
 
@@ -469,13 +473,17 @@ The `next_action` prerequisite `first generalise PrescribedSequence.lean from C 
 
 **HOSTILE APPENDIX SCOPE CORRECTION 2026-08-12.**  The earlier `unbounded ambient` endpoints were still narrower than the Appendix: they allowed the ambient self-adjoint operator to be unbounded but encoded the Ritz compression `A_0` as a bounded continuous operator.  The Appendix explicitly permits `A_0 <= alpha` and `Lambda_1 >= alpha + delta` with BOTH operators unbounded.  This is now closed by `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` and `tanTheta_ambient_unboundedRitz_raw_paperUINorm_real`.  Their data layer is `UnboundedCompressionTrialData`; the lower-corner Ky Fan estimate comes from the Appendix spectral truncation/release theorem, while the existing Lemma-6.1/Lemma-6.2 ambient assembly supplies the factor-one whole-space result.  The older `tanTheta_unbounded_ambient_*_exact` declarations remain bounded-compression specializations. **Constructor-first interface added 2026-08-29.** The most general unbounded form, `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex`, asked its caller for four separate facts that are not Davis--Kahan mathematics: two saying the compression data is A's Ritz pair on U (hZA, haction), and two saying V-perp reduces A (hVdom, hVcomm). `UnboundedRitzPair A U` and `ReducingComplement A V` hold those, `UnboundedRitzPair.ofTrialBlock` builds the first from the bounded-compression bundle a caller usually has, and `tanTheta_ambient_unboundedRitz_paperUINorm_complex` is the theorem taking the two objects. What deliberately stays a hypothesis is what the theorem is about: semiboundedness of the compression, coercivity on the unwanted subspace, and the crossed-defect standing condition (3.5). **Real constructor-first endpoint, 2026-08-30.** `tanTheta_ambient_unboundedRitz_paperUINorm_real` is the real mirror of the complex Ritz-pair form: the four structural facts tying the compression data to the ambient operator and saying that `V`-perp reduces it are replaced by `DavisKahan.UnboundedRitzPair` and `DavisKahan.ReducingComplement`, both scalar-generic, so no real-specific vocabulary is introduced and the real and complex public statements now have the same shape. The mathematics -- semiboundedness of the compression, coercivity on the unwanted subspace, and the standing crossed-defect condition (3.5) -- remains supplied by the caller. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved by a standing rule: a short name is bound only to a declaration that is BOTH scalar-generic over `RCLike` AND at the printed source scope, and is left unbound otherwise. Which of the four currently satisfy that is a property of the Lean file, and `SectionTwo.lean` is where it is recorded; this note deliberately does not restate it, because a copy of a moving fact goes stale silently -- this sentence itself did. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately.
 
+The directed clause of the Section 2 tangent theorem at the printed scope, added 2026-08-31. The mathematics was already present as `theorem6_3_unbounded_infiniteTrial_ideal` and its real sibling; what was missing was the promotion to the paper's universal norm quantifier, and the parameterized complex spectral-gap form the promotion needs (the existential form cannot be promoted, since it would return a different representative at each Ky Fan index).
+
 **Next action.** No counted-result gap remains. Preserve the accepted nonlocal source interpretation and the bounded/unbounded, real/complex source-facing endpoints; re-audit only if the distributable source specification changes.
 
 ### `S2-sin-two-theta` — Double-angle sine theorem
 
-**importance:** `headline`  **section:** 2  **source:** Section 2, sin 2 theta theorem  **kind:** unnumbered_theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
+**importance:** `headline`  **section:** 2  **source:** Section 2, sin 2 theta theorem  **kind:** unnumbered_theorem  **status:** `compiled_specialization`  **verification:** `proved_in_build`  **completion:** `reopened_math`
 
 **Summary.** Off-diagonal or fully separated perturbations give the printed residual and perturbation sin(2 Theta) bounds with factor two over real and complex Hilbert spaces at the maintained source norm scope. The Section 8 strict-dimension extension is explicitly exposed for the directed Theta_0 conclusion; the underlying directed theorem is stronger and has no dimension comparison at all.
+
+**Scope gap.** The AMBIENT conclusion is established only for bounded operators; the result's other clauses are certified at unbounded self-adjoint scope.
 
 **Lean declarations:**
 
@@ -690,6 +698,8 @@ GAP SCOPE RESTORED 2026-08-31. The missing complex full-gap endpoint named above
 REOPENED 2026-08-31 by the scope-atom re-audit: a source passage that explicitly extends this result's proved scope had been classified as generic post-result commentary. See the result inventory's `remaining_gap` for the exact atom and the evidence that must be registered.
 
 REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage enlarges a counted result only when it is needed to determine what Davis and Kahan actually claim in it. An extension, variant or consequence they mention without introducing and proving it as a result of its own is `result_adjacent_extension` fidelity material. The Lean coverage produced during the reopening is kept as supporting evidence.
+
+AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin 2 Theta theorem has a directed and an ambient conclusion. The directed one is established at full unbounded scope over both fields. The ambient one is not: the only paper-norm ambient endpoints are stated for BOUNDED operators. This was masked by a checker that unioned source atoms across unrelated canonical declarations -- the directed theorems donated the unbounded scope and the bounded ambient theorem donated the ambient conclusion, and no theorem proved the conjunction. See the result inventory's `remaining_gap` for the three missing transport lemmas.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 

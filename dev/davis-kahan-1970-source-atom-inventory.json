@@ -947,6 +947,13 @@
         ],
         "rationale": "Every displayed norm in the four Section 2 theorem statements is an arbitrary unitary-invariant norm in the source's sense, not a fixed norm chosen for convenience. This is printed norm scope shared by all four counted results and must be matched by the quantifier in their Lean statements.",
         "source_quote": "Every displayed norm in these theorem statements is an arbitrary unitary-invariant norm in the source sense."
+      },
+      "type_requirements": {
+        "must_contain": [
+          "PaperUnitaryInvariantNorm"
+        ],
+        "must_not_contain": [],
+        "rationale": "The printed norm is an arbitrary unitarily invariant norm. A Ky Fan family, a symmetric ideal family, or the operator norm is a narrower statement."
       }
     },
     {
@@ -1326,6 +1333,13 @@
         ],
         "rationale": "The four Section 2 results are stated as holding for infinite as well as finite dimensional separable Hilbert spaces. This is printed dimension scope of all four counted results: a finite-dimensional Lean statement would be a specialization of the printed one, not a formalization of it.",
         "source_quote": "for infinite as well as finite dimensional separable Hilbert spaces"
+      },
+      "type_requirements": {
+        "must_contain": [],
+        "must_not_contain": [
+          "FiniteDimensional"
+        ],
+        "rationale": "A finite-dimensionality instance binder anywhere in the type contradicts the printed \"infinite as well as finite dimensional\" scope."
       }
     },
     {
@@ -1358,6 +1372,13 @@
         ],
         "rationale": "The four Section 2 results are stated for an arbitrary unitarily invariant norm rather than the operator norm. This is printed norm scope of all four counted results, and it is what forces the Lean endpoints to quantify over `PaperUnitaryInvariantNorm` instead of concluding at a single Ky Fan gauge.",
         "source_quote": "arbitrary unitary-invariant norms"
+      },
+      "type_requirements": {
+        "must_contain": [
+          "PaperUnitaryInvariantNorm"
+        ],
+        "must_not_contain": [],
+        "rationale": "As above: the quantifier must be over the paper's norm object."
       }
     },
     {
@@ -1390,6 +1411,13 @@
         ],
         "rationale": "The results are carried to unbounded self-adjoint operators under the stated domain condition. An explicit extension of the proved scope of all four counted results.",
         "source_quote": "the source explicitly carries the theory to unbounded self-adjoint operators under domain and bounded-residual hypotheses"
+      },
+      "type_requirements": {
+        "must_contain": [
+          "→ₗ.["
+        ],
+        "must_not_contain": [],
+        "rationale": "The ambient operator must be a partial map. A theorem whose ambient operator is a bounded `→L[𝕜]` operator does not establish this scope, however true it is of the paper."
       }
     },
     {
@@ -1422,6 +1450,13 @@
         ],
         "rationale": "In the unbounded scope the source states that no useful conclusion follows unless the pertinent perturbation or residual extends boundedly. It is the hypothesis under which the unbounded extension is asserted, so it is scope of the same four counted results and must appear in their Lean statements as a bounded residual or perturbation.",
         "source_quote": "no useful conclusion follows unless the residual is bounded"
+      },
+      "type_requirements": {
+        "must_contain": [
+          "→L["
+        ],
+        "must_not_contain": [],
+        "rationale": "The residual or perturbation on the right-hand side must be a bounded operator, which is the hypothesis the source attaches to its unbounded scope."
       }
     },
     {
@@ -1454,6 +1489,10 @@
         ],
         "rationale": "The separating spectral intervals may be half-infinite and the remaining spectra unbounded. Printed gap scope of all four results.",
         "source_quote": "For a half-infinite interval such as $(-\\infty,\\alpha]$"
+      },
+      "scope_assertion_mode": {
+        "mode": "clause_justified",
+        "reason": "This scope cannot be decided from a printed type by a substring vocabulary, and a wrong requirement is worse than none. `FormBoundedSylvesterGap` carries the half-infinite configurations explicitly, but so does the tangent family's ORDERED spelling -- `SemiboundedAbove` on the compression with a coercivity bound on the complement -- and so does the `tan 2 Theta` spelling, which uses bare form bounds `re <A x, x> <= a |x|^2` and `b |x|^2 <= re <A x, x>` with `a < b` and no named predicate at all. Requiring the `FormBoundedSylvesterGap` token would have rejected four correct theorems. Each source clause must instead record `gap_scope_justification`, naming the hypotheses in its primary's type that realize the half-infinite scope."
       }
     },
     {

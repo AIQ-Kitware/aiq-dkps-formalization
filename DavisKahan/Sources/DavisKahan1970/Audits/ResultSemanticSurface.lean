@@ -139,6 +139,9 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real
+#check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal
 #check @TauCeti.DavisKahan.UnboundedRitzPair
 #check @TauCeti.DavisKahan.ReducingComplement
 #check @TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock

@@ -134,7 +134,7 @@ separately claiming faithful accounting of the broader mathematical surface.
 
 ## Explicit boundary accounting
 
-Every one of the 272 source-fidelity atoms must carry:
+Every one of the 274 source-fidelity atoms must carry:
 
 1. a `formalization_role`;
 2. a specific `formalization_role_reason_code` and explanatory
@@ -336,6 +336,71 @@ the second.  A declaration that is merely the `ℝ` instance of a canonical
 `RCLike` theorem — proof: that theorem applied — is `supporting_evidence` with
 role `specialization`, not a second primary witness.
 
+### Coherent clauses: one witness per printed clause
+
+`canonical_evidence` alone was not enough, and the way it failed is worth
+stating plainly.  It recorded, per declaration, a set of source atoms that
+declaration covered, and a result was terminal when the **union** over its
+declarations covered the row.  That accepts a certificate assembled from pieces
+no theorem proves together.  It happened, in `S2-sin-two-theta`:
+
+```text
+unbounded DIRECTED theorems  ->  unbounded scope, gap scope, bounded residual
+bounded  AMBIENT  theorem    ->  the ambient conclusion
+union                        ->  "the ambient conclusion at unbounded scope"
+```
+
+No declaration and no proof chain establishes that conjunction.
+
+Every counted result therefore carries:
+
+* `result_wide_scope_atoms` — scope and hypothesis atoms that hold of the printed
+  result as a whole, and that **every** clause's witness must carry;
+* `source_clauses` — one entry per printed clause per scalar field.
+
+Each clause names **one** `evidence.primary`, optionally with
+`evidence.correspondence` lemmas, and records `conclusion_atoms`, an optional
+`clause_hypothesis_atoms` local to it, a `scalar_scope`, a `status`
+(`established` / `open`), and a `justification` naming the printed clause it
+discharges.  An `open` clause must say in `open_reason` exactly what is missing.
+
+The checker then requires:
+
+* the clause's primary satisfies the `type_requirements` of its own conclusion
+  atoms **and of every result-wide scope atom** — so scope cannot be donated by a
+  sibling declaration;
+* every printed conclusion of the result is discharged by some established
+  clause, at **both** of the paper's scalar fields, unless one scalar-generic
+  clause covers them;
+* a terminal result has no open clause and no undischarged conclusion, and a
+  nonterminal result has at least one of them;
+* `canonical_evidence[…].covers_source_atoms` is **derived** from the clauses and
+  must equal the derivation — the hand-authored union is gone.
+
+This is deliberately not the crude rule "every canonical theorem must contain
+every atom on the row".  Clause conclusions stay clause-local, fixed-field
+siblings are separate clauses, a clause may carry hypotheses that belong to it
+alone, and a theorem stronger than the paper is not penalised for omitting a
+printed hypothesis it does not need.  `scripts/tests/test_davis_kahan_coherent_evidence.py`
+pins both directions: the negative test reconstructs the old
+`S2-sin-two-theta` composition and requires rejection *with the right
+diagnosis*; the positive tests pin real/complex siblings, separately discharged
+directed and ambient clauses, a clause-local hypothesis, and a
+primary-plus-correspondence chain.
+
+### Scope that a printed type cannot decide
+
+`type_requirements` on a source atom are a **necessary** condition read off the
+compiler-printed type — `→ₗ.[` for unbounded ambient scope, no
+`FiniteDimensional`, `PaperUnitaryInvariantNorm` for the source norm, `→L[` for a
+bounded residual.  Where no substring decides the question, the atom instead
+carries `scope_assertion_mode: clause_justified` and every clause must record a
+named justification.  `half-infinite-gap-intervals` is the case: the tangent
+family realizes it through an ORDERED spelling (`SemiboundedAbove` plus a
+coercivity bound) and `tan 2Θ` through bare form bounds with `a < b`, so
+requiring the `FormBoundedSylvesterGap` token would have rejected four correct
+theorems.  A wrong requirement is worse than none.
+
 ### Staleness
 
 `semantic_review_sweep.canonical_evidence_sha256` digests every result's canonical
@@ -388,7 +453,7 @@ prose in several places:
 
 A final certificate should make both layers explicit:
 
-- **272/272 source items accounted for** does *not* mean 272 theorems were proved;
+- **274/274 source items accounted for** does *not* mean 274 theorems were proved;
 - **29/29 established results exact/refuted and accepted** is the 100% formalization
   claim; and
 - every excluded source item remains displayed with its boundary rationale so a
@@ -430,5 +495,5 @@ Hard 100% gate:
 python3 scripts/check_davis_kahan_1970_statement_map.py --require-terminal
 ```
 
-A green build, 272/272 source-fidelity atoms, or 50/50 organizational rows cannot
+A green build, 274/274 source-fidelity atoms, or 50/50 organizational rows cannot
 substitute for terminal coverage of the 29 counted results.

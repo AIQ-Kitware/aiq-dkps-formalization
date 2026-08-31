@@ -383,6 +383,208 @@ def _validate_total_source_classification(
     return True, None
 
 
+CLAUSE_STATUSES = {"established", "open"}
+
+
+def _validate_source_clauses(
+    items: list[dict[str, Any]],
+    source_atoms: dict[str, dict[str, Any]],
+    census_declarations: set[str],
+    audit_text: str,
+    audit_rel: str,
+    probed_types: dict[str, str] | None,
+) -> dict[str, list[str]]:
+    """Require every printed source clause to have ONE coherent witness.
+
+    The defect this replaces: canonical evidence recorded, per declaration, a set
+    of source atoms it covered, and a result was terminal when the **union** over
+    all its declarations covered the row.  That accepts a certificate assembled
+    from pieces no theorem proves together.  It really happened, in
+    `S2-sin-two-theta`:
+
+        directed theorems  ->  unbounded scope, gap scope, bounded residual
+        bounded ambient    ->  the ambient conclusion
+        union              ->  "ambient conclusion at unbounded scope"
+
+    No theorem and no proof chain establishes that conjunction.
+
+    The model here is: a result declares `result_wide_scope_atoms` -- scope and
+    hypothesis atoms that hold of the printed result as a whole -- and one
+    `source_clauses` entry per printed clause per scalar field.  Each clause names
+    ONE primary theorem, optionally with compiled correspondence lemmas, and must
+    satisfy the type requirements of **its own conclusion atoms and every
+    result-wide scope atom**.  Scope can no longer be donated by a sibling.
+
+    This is deliberately not the crude rule "every canonical theorem must contain
+    every atom on the row".  Clause conclusions stay clause-local, fixed-field
+    siblings are separate clauses, and a clause may carry
+    `clause_hypothesis_atoms` that belong to it alone.  What is result-wide is
+    what the source states about the result as a whole.
+
+    Returns the per-result list of open clause ids.
+    """
+    open_by_result: dict[str, list[str]] = {}
+    for item in items:
+        result_id = item["id"]
+        atoms = set(_source_atom_ids(item))
+        wide = item.get("result_wide_scope_atoms")
+        if not isinstance(wide, list) or not all(isinstance(x, str) for x in wide):
+            fail(f"{result_id}: must record result_wide_scope_atoms (possibly empty)")
+        stray = sorted(set(wide) - atoms)
+        if stray:
+            fail(
+                f"{result_id}: result_wide_scope_atoms names atoms not assigned to this result: "
+                + ", ".join(stray)
+            )
+        clauses = item.get("source_clauses")
+        if not isinstance(clauses, list) or not clauses:
+            fail(f"{result_id}: must record a nonempty source_clauses list")
+
+        seen_ids: set[str] = set()
+        covered_conclusions: set[str] = set()
+        clause_local: set[str] = set()
+        scalar_by_conclusion: dict[str, set[str]] = {}
+        opens: list[str] = []
+        for clause in clauses:
+            if not isinstance(clause, dict):
+                fail(f"{result_id}: source_clauses entries must be objects")
+            cid = clause.get("id")
+            if not isinstance(cid, str) or not cid.strip():
+                fail(f"{result_id}: every source clause needs an id")
+            if cid in seen_ids:
+                fail(f"{result_id}: duplicate source clause id {cid!r}")
+            seen_ids.add(cid)
+            where = f"{result_id}/{cid}"
+
+            status = clause.get("status")
+            if status not in CLAUSE_STATUSES:
+                fail(f"{where}: status is {status!r}; expected one of {sorted(CLAUSE_STATUSES)}")
+            justification = clause.get("justification")
+            if not isinstance(justification, str) or len(justification.strip()) < 40:
+                fail(f"{where}: justification must state which printed clause this discharges")
+
+            conclusions = clause.get("conclusion_atoms")
+            if not isinstance(conclusions, list) or not all(isinstance(x, str) for x in conclusions):
+                fail(f"{where}: conclusion_atoms must be a list of atom ids")
+            stray = sorted(set(conclusions) - atoms)
+            if stray:
+                fail(f"{where}: conclusion_atoms names atoms outside this result: " + ", ".join(stray))
+            local = clause.get("clause_hypothesis_atoms", [])
+            if not isinstance(local, list) or not all(isinstance(x, str) for x in local):
+                fail(f"{where}: clause_hypothesis_atoms must be a list of atom ids")
+            stray = sorted(set(local) - atoms)
+            if stray:
+                fail(f"{where}: clause_hypothesis_atoms names atoms outside this result: " + ", ".join(stray))
+            clause_local.update(local)
+
+            evidence = clause.get("evidence")
+            if not isinstance(evidence, dict):
+                fail(f"{where}: must record evidence")
+            primary = evidence.get("primary")
+            if not isinstance(primary, str) or not primary.strip():
+                fail(f"{where}: evidence.primary must name ONE theorem")
+            correspondence = evidence.get("correspondence", [])
+            if not isinstance(correspondence, list) or not all(isinstance(x, str) for x in correspondence):
+                fail(f"{where}: evidence.correspondence must be a list of declaration names")
+            for declaration in [primary, *correspondence]:
+                if declaration not in _declarations(item):
+                    fail(f"{where}: {declaration} is not registered in the result's lean_declarations")
+                if declaration not in census_declarations:
+                    fail(f"{where}: {declaration} is not registered in the source census")
+                if (
+                    f"#check @{declaration}" not in audit_text
+                    and f"#check {declaration}" not in audit_text
+                ):
+                    fail(f"{where}: {declaration} is not #checked by {audit_rel}")
+
+            if status == "open":
+                reason = clause.get("open_reason")
+                if not isinstance(reason, str) or len(reason.strip()) < 80:
+                    fail(
+                        f"{where}: an open clause must say exactly what is missing, in open_reason"
+                    )
+                opens.append(cid)
+                continue
+
+            covered_conclusions.update(conclusions)
+            for atom_id in conclusions:
+                scalar_by_conclusion.setdefault(atom_id, set()).add(clause.get("scalar_scope"))
+
+            # THE COHERENCE CHECK: the clause's own primary must satisfy the type
+            # requirements of its conclusions AND of every result-wide scope atom.
+            if probed_types is not None:
+                printed = probed_types.get(primary)
+                if printed is None:
+                    fail(f"{where}: no compiler-printed type was probed for {primary}")
+                for atom_id in [*conclusions, *local, *wide]:
+                    requirement = source_atoms[atom_id].get("type_requirements")
+                    if not requirement:
+                        continue
+                    missing = [t for t in requirement.get("must_contain", []) if t not in printed]
+                    forbidden = [t for t in requirement.get("must_not_contain", []) if t in printed]
+                    if missing or forbidden:
+                        fail(
+                            f"{where}: the clause's primary {primary} does not establish its conclusion at "
+                            f"the scope of {atom_id}: "
+                            + (f"its printed type lacks {missing!r}; " if missing else "")
+                            + (f"its printed type contains the disqualifying {forbidden!r}; " if forbidden else "")
+                            + "a sibling declaration may not donate this scope"
+                        )
+            for atom_id in wide:
+                mode = source_atoms[atom_id].get("scope_assertion_mode")
+                if isinstance(mode, dict) and mode.get("mode") == "clause_justified":
+                    key = "gap_scope_justification"
+                    value = clause.get(key)
+                    if not isinstance(value, str) or len(value.strip()) < 60:
+                        fail(
+                            f"{where}: {atom_id} cannot be decided from a printed type, so this clause must "
+                            f"record {key} naming the hypotheses in {primary} that realize it"
+                        )
+
+        result_conclusions = {
+            atom_id for atom_id in atoms
+            if source_atoms[atom_id].get("kind") == "theorem"
+        }
+        uncovered = sorted(result_conclusions - covered_conclusions)
+        is_terminal = (
+            _result_disposition(item) in TERMINAL_RESULT_DISPOSITIONS
+            and item.get("verification") in TERMINAL_VERIFICATIONS
+            and _semantic_certification(item) in TERMINAL_SEMANTIC_CERTIFICATIONS
+        )
+        if is_terminal and (uncovered or opens):
+            fail(
+                f"{result_id}: recorded as terminal, but "
+                + (f"printed conclusions with no established clause: {uncovered}; " if uncovered else "")
+                + (f"open clauses: {opens}" if opens else "")
+            )
+        if not is_terminal and not uncovered and not opens:
+            fail(
+                f"{result_id}: every printed clause is established, so the result should not be "
+                "recorded as nonterminal"
+            )
+        # both of the paper's scalar fields must be reached for each conclusion
+        for atom_id, scopes in scalar_by_conclusion.items():
+            if scopes & {"rclike", "scalar_generic"}:
+                continue
+            if not {"complex", "real"} <= scopes:
+                fail(
+                    f"{result_id}: conclusion {atom_id} is established only at {sorted(scopes)}; the source "
+                    "states its results for a real OR complex Hilbert space, so both fields are needed "
+                    "unless a single scalar-generic clause covers them"
+                )
+        partition = covered_conclusions | clause_local | set(wide)
+        for clause in clauses:
+            partition.update(clause.get("conclusion_atoms", []))
+        leftover = sorted(atoms - partition)
+        if leftover:
+            fail(
+                f"{result_id}: source atoms belong to no clause and are not result-wide scope: "
+                + ", ".join(leftover)
+            )
+        open_by_result[result_id] = opens
+    return open_by_result
+
+
 def _validate_scope_atom_classification(source_atoms: dict[str, dict[str, Any]]) -> None:
     """Every scope atom must say WHICH kind of scope it is, and quote the source.
 
@@ -396,7 +598,7 @@ def _validate_scope_atom_classification(source_atoms: dict[str, dict[str, Any]])
     while the adjacent *sine* sentence was expository commentary.
 
     A generic code is therefore no longer sufficient for a scope atom.  Each must
-    carry a `scope_classification` naming one of five categories, the results it
+    carry a `scope_classification` naming one of six categories, the results it
     extends (exactly when the category says it extends any), a substantive
     rationale, and a verbatim quotation from the distributable specification that
     a reviewer can check against the source.
@@ -1237,7 +1439,7 @@ def _validate_canonical_evidence(
                         f"compiler-printed type carries {derived_caps!r}"
                     )
             atoms = entry.get("covers_source_atoms")
-            if not isinstance(atoms, list) or not atoms or not all(isinstance(a, str) for a in atoms):
+            if not isinstance(atoms, list) or not all(isinstance(a, str) for a in atoms):
                 fail(
                     f"{result_id}: canonical evidence {declaration} must list the source "
                     "atoms it covers"
@@ -1247,6 +1449,26 @@ def _validate_canonical_evidence(
                 fail(
                     f"{result_id}: canonical evidence {declaration} claims source atoms "
                     "that are not assigned to this result: " + ", ".join(stray)
+                )
+            # `covers_source_atoms` is DERIVED from the source clauses, never authored.
+            # Hand-authored unions are how a certificate was assembled from pieces no
+            # theorem proves together; a declaration covers exactly what the ESTABLISHED
+            # clauses it is the primary of establish.
+            wide = set(item.get("result_wide_scope_atoms") or [])
+            derived: set[str] = set()
+            for clause in item.get("source_clauses") or []:
+                if clause.get("status") != "established":
+                    continue
+                if (clause.get("evidence") or {}).get("primary") != declaration:
+                    continue
+                derived |= set(clause.get("conclusion_atoms") or [])
+                derived |= set(clause.get("clause_hypothesis_atoms") or [])
+                derived |= wide
+            if set(atoms) != derived:
+                fail(
+                    f"{result_id}: canonical evidence {declaration} records covers_source_atoms "
+                    f"{sorted(atoms)!r}, but its established source clauses establish {sorted(derived)!r}. "
+                    "This field is derived from the clauses and must not be authored."
                 )
             covered.update(atoms)
 
@@ -1579,6 +1801,10 @@ def completion_summary(
     _validate_canonical_evidence(
         items, census_declarations, audit_text, semantic_audit["compiler_audit_surface"],
         probed_types,
+    )
+    clause_opens = _validate_source_clauses(
+        items, source_atoms, census_declarations, audit_text,
+        semantic_audit["compiler_audit_surface"], probed_types,
     )
     _validate_census_canonical_agreement(items)
     _validate_section_two_short_names(data)

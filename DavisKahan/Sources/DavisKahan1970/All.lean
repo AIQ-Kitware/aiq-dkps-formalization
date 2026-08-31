@@ -61,6 +61,7 @@ import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
 import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
 import DavisKahan.Sources.DavisKahan1970.TanTheta
 import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
+import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
 import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
