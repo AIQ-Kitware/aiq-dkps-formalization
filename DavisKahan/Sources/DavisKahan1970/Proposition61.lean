@@ -71,7 +71,7 @@ open TauCeti.DavisKahan.ExactSinTheta
 
 noncomputable section
 
-universe v
+universe u v
 
 /-! ## Over a complex Hilbert space -/
 
@@ -340,6 +340,70 @@ theorem proposition6_1_commonDomain_source_real
   refine ⟨hiff.mp hmem, ?_⟩
   rw [hgauge] at hle
   exact hle
+
+/-! ### The common-domain relaxation over any `RCLike` field
+
+The two fixed-field statements above are this one at `ℝ` and at `ℂ`; it is stated
+separately because the conclusion has to be carried by the projector difference,
+the one spelling of the paper's whole-space sine that exists over both fields.
+`crossSineSum_paperMem_iff_and_gauge_eq` is the compiled dictionary saying that
+every source norm evaluates it exactly as it evaluates the paper's `sin Θ`. -/
+
+section CommonDomainGeneric
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+
+/-- **Davis--Kahan 1970, Proposition 6.1 under the Appendix common-domain
+relaxation, over any `RCLike` field, read on the projector difference.**
+
+The two capability binders are the Sylvester estimate and the min--max lower
+bound: both are instances at `ℝ` and at `ℂ`, so at either field they are
+discharged by instance search and nothing is assumed that was not already
+proved. -/
+theorem proposition6_1_commonDomain_source_projectorDifference
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
+    (N : PaperUnitaryInvariantNorm)
+    {A B : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
+    {U V : Submodule 𝕜 E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (hU : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hV : TauCeti.LinearPMap.ReducesSubspace B V)
+    (Hop : E →L[𝕜] E)
+    (hdomain : A.domain = B.domain)
+    (hperturbation : ∀ (x : E) (hxA : x ∈ A.domain) (hxB : x ∈ B.domain),
+      B ⟨x, hxB⟩ - A ⟨x, hxA⟩ = Hop x)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgapUV : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hU)
+      (TauCeti.LinearPMap.reducingRestriction B Vᗮ hV.orthogonal) δ)
+    (hgapVU : FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction B V hV)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hU.orthogonal) δ)
+    (hMem : N.Mem Hop) :
+    N.Mem (V.starProjection - U.starProjection) ∧
+      δ * N.gauge (V.starProjection - U.starProjection) ≤ N.gauge Hop := by
+  let P : PaperCommonDomainSymmetricSinThetaProblem (𝕜 := 𝕜) (E := E) U V :=
+    { A := A
+      B := B
+      selfAdjoint_A := hA
+      selfAdjoint_B := hB
+      reduces_A_U := hU
+      reduces_B_V := hV
+      perturbation := Hop
+      domain_eq := hdomain
+      perturbation_eq := hperturbation
+      gap := δ
+      gap_pos := hδ
+      gap_U_to_Vperp := hgapUV
+      gap_V_to_Uperp := hgapVU }
+  obtain ⟨hmem, hle⟩ := P.result_every_unitarilyInvariantNorm_crossSineSum N hMem
+  obtain ⟨hiff, hgauge⟩ := P.crossSineSum_paperMem_iff_and_gauge_eq N
+  refine ⟨hiff.mp hmem, ?_⟩
+  rw [hgauge] at hle
+  exact hle
+
+end CommonDomainGeneric
 
 end CommonDomain
 
