@@ -19,14 +19,32 @@ and their consequences.  **This module is the public inventory of those four, ov
 both scalar fields, and is the module to cite.**
 
 ```
-TauCeti.DavisKahan1970.SectionTwo.sinTheta       sinTheta_real
-TauCeti.DavisKahan1970.SectionTwo.tanTheta       tanTheta_real
-TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta    sinTwoTheta_real
-TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta    tanTwoTheta_real
+TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex       sinTheta_real
+TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex       tanTheta_real
+TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex    sinTwoTheta_real
+TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex    tanTwoTheta_real
 ```
 
-Every one of the eight is at the accepted full source scope, and its *own* type
-says so: an unbounded self-adjoint `LinearPMap` ambient operator, a Hilbert space
+## The unqualified names are reserved, and deliberately unbound
+
+`SectionTwo.sinTheta`, `.tanTheta`, `.sinTwoTheta` and `.tanTwoTheta` name
+nothing.  They are reserved for the full-source-scope statement that is *also*
+generic over `RCLike 𝕜`, and no such declaration exists yet for any of the four:
+what this module offers is the fixed-field pair.  Binding a short name to the
+complex statement is what previously made `SectionTwo.sinTheta` read as the
+canonical theorem when it was the complex one, so the names stay empty until the
+scalar-generic endpoint is proved.  The nearest existing approximations are
+
+| result | closest scalar-generic declaration | what it still lacks |
+| --- | --- | --- |
+| `sin Θ` | `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` | the full `FormBoundedSylvesterGap`, not only its interval/exterior branch |
+| `sin Θ` | `sinTheta_unbounded_formGap_idealFamily_rclike` | the paper's `PaperUnitaryInvariantNorm` rather than a Fan-dominant ideal family |
+| `tan Θ` | `tanTheta_directed_finiteDimensional_paperUINorm_rclike` | arbitrary dimension, and the ambient rather than directed angle |
+| `sin 2Θ` | `sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` | arbitrary dimension, and an unbounded ambient operator |
+| `tan 2Θ` | `tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike` | an unbounded ambient operator, and the ambient angle |
+
+Every one of the eight fixed-field aliases is at the accepted full source scope,
+and its *own* type says so: an unbounded self-adjoint `LinearPMap` ambient operator, a Hilbert space
 of arbitrary dimension, a `PaperUnitaryInvariantNorm` -- the paper's symmetric
 gauge, not the operator norm -- and both printed conclusions, the ideal membership
 and the inequality.  No capability class, no finite-dimensionality hypothesis, no
@@ -40,10 +58,10 @@ belong.  The implementations they select are, in order:
 
 | result | complex | real |
 | --- | --- | --- |
-| `sin Θ` | `DavisKahan1970.sinTheta_complex` | `DavisKahan1970.sinTheta_real` |
-| `tan Θ` | `tanTheta_unbounded_ambient_ritz_paperUINorm` | `…_real` |
-| `sin 2Θ` | `sinTwoTheta_addBounded_paperUINorm_angleOperator` | `…_real_angleOperator` |
-| `tan 2Θ` | `tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm` | `…_real` |
+| `sin Θ` | `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex` | `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real` |
+| `tan Θ` | `tanTheta_ambient_unboundedRitz_paperUINorm_complex` | `…_real` |
+| `sin 2Θ` | `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` | `…_real` |
+| `tan 2Θ` | `tanTwoTheta_ambient_unbounded_paperUINorm_complex` | `…_real` |
 
 ## What the four ask for, and what they do not
 
@@ -86,7 +104,7 @@ Everything else in the development remains available and is unaffected: the
 scalar-generic presentation forms, the directed and whole-space variants, the
 finite-dimensional specializations, the operator-norm statements, the Ky Fan
 families, and the bundled-problem entry points such as
-`TauCeti.DavisKahan1970.sinTheta`.  Those are useful and are kept; they are simply
+`TauCeti.DavisKahan1970.sinTheta_bundled_complex`.  Those are useful and are kept; they are simply
 not the theorem inventory a reader should have to assemble.
 
 ## References
@@ -109,16 +127,16 @@ namespace SectionTwo
 Hilbert dimension, the whole `FormBoundedSylvesterGap` rather than one of its
 branches, and an arbitrary source unitarily invariant norm.
 
-`DavisKahan1970.sinTheta_complex_of_intervalExterior` states the same theorem with
+`DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex` states the same theorem with
 the gap written out as the printed interval/exterior separation. -/
-alias sinTheta := _root_.DavisKahan1970.sinTheta_complex
+alias sinTheta_complex := _root_.DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex
 
 /-- **Davis--Kahan 1970, the `sin Θ` theorem, over `ℝ`.**
 
 The real sibling of `sinTheta`, with the same argument list, the same full gap
 scope and the same two conclusions.  The descent from the complex case happens
 inside the proof and is not visible in the statement. -/
-alias sinTheta_real := _root_.DavisKahan1970.sinTheta_real
+alias sinTheta_real := _root_.DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real
 
 /-! ## `tan Θ` -/
 
@@ -133,7 +151,7 @@ The caller supplies the mathematics -- semiboundedness of the compression above
 condition (3.5) of Section 3, and the Rayleigh--Ritz residual identity -- and
 nothing else: the structural facts live in `DavisKahan.UnboundedRitzPair` and
 `DavisKahan.ReducingComplement`. -/
-alias tanTheta := tanTheta_unbounded_ambient_ritz_paperUINorm
+alias tanTheta_complex := tanTheta_ambient_unboundedRitz_paperUINorm_complex
 
 /-- **Davis--Kahan 1970, the `tan Θ` theorem, over `ℝ`.**
 
@@ -142,7 +160,7 @@ The real sibling of `tanTheta`, on the real ambient tangent
 gauge are all real; only the Appendix Ky Fan passage is proved by
 complexification, at the level where approximation numbers are preserved
 exactly. -/
-alias tanTheta_real := tanTheta_unbounded_ambient_ritz_paperUINorm_real
+alias tanTheta_real := tanTheta_ambient_unboundedRitz_paperUINorm_real
 
 /-! ## `sin 2Θ` -/
 
@@ -153,7 +171,7 @@ subspaces selected by `B` from an unbounded self-adjoint `A` and by `S` from the
 bounded perturbation `A + E`, under the printed spectrum gap.  The conclusion is
 on the directed double-angle sine `2 sin Θ cos Θ`, not on the proof's overlap
 block. -/
-alias sinTwoTheta := sinTwoTheta_addBounded_paperUINorm_angleOperator
+alias sinTwoTheta_complex := sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex
 
 /-- **Davis--Kahan 1970, the `sin 2Θ` theorem, over `ℝ`.**
 
@@ -162,7 +180,7 @@ The real sibling of `sinTwoTheta`, reaching the ideal layer through
 has -- and concluding on the directed double-angle sine of the real pair, read in
 the canonical complexification where this development keeps the real double-angle
 operators. -/
-alias sinTwoTheta_real := sinTwoTheta_addBounded_paperUINorm_real_angleOperator
+alias sinTwoTheta_real := sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real
 
 /-! ## `tan 2Θ` -/
 
@@ -177,14 +195,14 @@ subspace `V` whose reflection intertwines `A + B`
 
 No pole certificate is asked for: the ordered gap forces the reflection's diagonal
 block to be a unit, and that unit excludes the quarter-turn poles. -/
-alias tanTwoTheta := tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm
+alias tanTwoTheta_complex := tanTwoTheta_ambient_unbounded_paperUINorm_complex
 
 /-- **Davis--Kahan 1970, the `tan 2Θ` theorem, over `ℝ`.**
 
 The real sibling of `tanTwoTheta`, on the real ambient `|tan 2Θ|`.  The real
 statement is transported from the complex one through the complexification, with
 no loss of constant or norm class and no second analytic proof. -/
-alias tanTwoTheta_real := tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm_real
+alias tanTwoTheta_real := tanTwoTheta_ambient_unbounded_paperUINorm_real
 
 end SectionTwo
 end DavisKahan1970

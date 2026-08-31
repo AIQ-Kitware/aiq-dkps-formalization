@@ -88,73 +88,73 @@ or the same condition with $A_0$ and $\Lambda_1$ interchanged.  Then, for every 
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.SectionTwo.sinTheta`
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:114`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:132`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:65`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:121`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:345`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:139`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `DavisKahan1970.sinTheta_headline`
+#### `DavisKahan1970.sinTheta_unbounded_intervalExterior_legacyPresentation_rclike`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:163`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTheta_headline_generic`
+#### `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean:102`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTheta`
+#### `TauCeti.DavisKahan1970.sinTheta_bundled_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:114`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:57`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTheta_real_exactPaper`
+#### `TauCeti.DavisKahan1970.sinTheta_paperData_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:98`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.generalizedSinTheta`
+#### `TauCeti.DavisKahan1970.sinTheta_generalized_bundled_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:40`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper`
+#### `TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:109`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `DavisKahan1970.sinTheta_complex`
+#### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:61`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:257`
-
-Compiler-printed type: *inserted when a compiler certificate is supplied.*
-
-#### `DavisKahan1970.sinTheta_real`
-
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:65`, `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:121`, `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:345`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:257`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `DavisKahan1970.sinTheta_complex_of_intervalExterior`
+#### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:345`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:308`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `DavisKahan1970.sinTheta_real_of_intervalExterior`
+#### `DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:396`
 
@@ -555,17 +555,17 @@ The theorem is printed in Section 2, before (3.5) exists in the exposition, and 
 
 #### 5. What Lean says, and exactly where the implicit semantics became explicit
 
-- `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects`
   - Carries `h35 : CrossedDefectsEquivalent U V`, the constructive form of (3.5) (an isometric equivalence of the two crossed defect spaces), and concludes both `N.Mem (paperTanAngleOperatorC U V)` and the sharp inequality. Membership in the norm's ideal is a conclusion, which is the explicit form of the source's vacuity convention.
-- `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex`
   - Appendix-complete complex ambient endpoint. The Ritz compression is a genuinely unbounded self-adjoint closed operator semibounded above in form; the residual and perturbation are bounded. The lower-corner Ky Fan estimate is supplied by the Appendix truncation/release theorem, (3.5) supplies ambient transversality, and norm-ideal membership is concluded.
-- `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_real`
   - Real Appendix-complete ambient endpoint with a genuinely unbounded Ritz compression. The unbounded compression data are complexified only for the spectral-cutoff/Ky-Fan proof, while the source angle operator, perturbation, crossed-defect condition, and final PaperUI statement are real; the sharp factor-one inequality and ideal membership descend exactly.
-- `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex`
   - Complex specialization with an unbounded ambient self-adjoint operator but bounded Ritz compression. It retains the same (3.5) explicitation and sharp ambient conclusion; the stronger Appendix case is certified separately by the unboundedCompression endpoint.
-- `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real`
   - Real specialization with an unbounded ambient self-adjoint operator but bounded Ritz compression. Uniform transversality is derived from the form bounds and (3.5); the stronger Appendix case is certified separately by the real unboundedCompression endpoint.
-- `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_transversality`
   - Alternative bounded route assuming uniform transversality `‖sin Theta‖ < 1` instead of (3.5). This is a strictly stronger hypothesis than the source's standing condition and is registered as a specialization, not as the source-shaped form.
 - `TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses`
   - Machine-checked witness that (1.5) does not imply (3.5) in infinite dimension, so the omitted qualification is substantive. It is a vacuity/nonvacuity witness, not a counterexample to the counted result.
@@ -584,7 +584,7 @@ In that configuration tan Theta is not a bounded operator and the displayed unit
 
 #### 9. Semantic conclusion recorded by the repository
 
-S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. Mathematical coverage now also includes the Appendix's genuinely unbounded Ritz-compression scope over both complex and real scalars through `tanTheta_unboundedCompression_ambient_paperUINorm_exact` and its real sibling.
+S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. Mathematical coverage now also includes the Appendix's genuinely unbounded Ritz-compression scope over both complex and real scalars through `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` and its real sibling.
 
 #### Independent interpretation checklist
 
@@ -649,19 +649,19 @@ The first is directed and residual-based; the second uses the ambient angle and 
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta`
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:136`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:154`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:145`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:163`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_headline_generic_directed`
+#### `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:73`
 
@@ -679,49 +679,49 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section2TanThetaP
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_transversality`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1176`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_transversality`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:210`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects`
 
 Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:322`, `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_crossedDefects`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:691`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:460`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:212`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:428`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:346`
 
@@ -745,13 +745,13 @@ Source location candidates: `DavisKahan/TanTheta/RitzPair.lean:92`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:511`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:392`
 
@@ -831,79 +831,79 @@ Again the source distinguishes the directed residual statement from the ambient 
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta`
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:156`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:174`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:165`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:183`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:111`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex`
 
 Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:402`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:606`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:252`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:168`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:256`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:346`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:406`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:207`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:201`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExterior`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:245`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_paperUINorm_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:648`
 
@@ -927,7 +927,7 @@ Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:335`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_angleOperator`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:708`
 
@@ -939,7 +939,7 @@ Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:647`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_real_angleOperator`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:575`
 
@@ -1045,73 +1045,73 @@ Section~7 derives the nonvanishing of the relevant $\cos(2\theta_j)$ factors fro
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta`
+#### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:180`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:198`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:187`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:205`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_headline_generic`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:180`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFree.lean:86`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex`
 
 Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:453`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1164`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:362`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex`
 
 Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:543`, `DavisKahan/Sources/DavisKahan1970/TanTwoThetaReflectionAmbient.lean:1301`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:433`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exact`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExact.lean:77`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:196`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:262`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:344`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:414`
 
@@ -1177,7 +1177,7 @@ Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:609`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:466`
 
@@ -1231,13 +1231,13 @@ Source location candidates: `DavisKahan/Geometry/Angle/PaperOperatorAngleReal.le
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:479`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:525`
 
@@ -1938,13 +1938,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.complex_directRotation_reversal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:131`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:128`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.real_directRotation_reversal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:246`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:243`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2516,13 +2516,13 @@ The roles and hypotheses of $A$ and $B$ may be interchanged.  The same proof als
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:265`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:262`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:268`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3229,13 +3229,13 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedUnbounded
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral`
+#### `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_complex`
 
 Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:299`, `DavisKahan/Sources/DavisKahan1970/Directed.lean:122`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral`
+#### `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_real`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/DirectedReal.lean:492`
 

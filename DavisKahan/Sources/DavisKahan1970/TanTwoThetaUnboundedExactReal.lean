@@ -193,7 +193,7 @@ private theorem complexified_reducing_commutation
 The caller sees exactly the real source data.  The complexification used in the
 proof is discharged completely: the conclusion is a real directed corner, its
 real pole certificate, and the same paper unitarily invariant norm. -/
-theorem tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact
+theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
     {A : E →ₗ.[ℝ] E} {B Z : E →L[ℝ] E} {a b c : ℝ}
     (hA : _root_.IsSelfAdjoint A)
@@ -289,7 +289,7 @@ theorem tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact
         (complexify B)) :=
     (reflectionResidualCorner_mem_congr_unboundedExactReal
       N hUeq (complexify B)).1 hRmem0
-  have hc := tanTwoTheta_unbounded_directedResidual_paperUINorm_exact
+  have hc := tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex
     N hAc hB' hZsa' hZ2' hZdom' hZcomm' hUa' hUb' hab hRmem'
   have hCCc := hc.1
   have hdiag :
@@ -341,7 +341,7 @@ theorem tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact
 This is a genuine real-Hilbert-space statement.  The complex ambient theorem is
 used only internally; its reflection tangent and source norm descend exactly to
 the real operators. -/
-theorem tanTwoTheta_unbounded_ambient_paperUINorm_real_exact
+theorem tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
     {A : E →ₗ.[ℝ] E} {B Z : E →L[ℝ] E} {a b c : ℝ}
     (hA : _root_.IsSelfAdjoint A)
@@ -429,7 +429,7 @@ theorem tanTwoTheta_unbounded_ambient_paperUINorm_real_exact
   have hZ2' : complexify Z * complexify Z = 1 := by
     rw [← complexify_mul, hZ2, complexify_one]
   have hBmem' : N.Mem (complexify B) := (N.mem_complexify_iff B).2 hBmem
-  have hc := tanTwoTheta_unbounded_ambient_paperUINorm_exact
+  have hc := tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex
     N hAc hBsa' hB' hZsa' hZ2' hZdom' hZcomm' hUa' hUb' hab hBmem'
   have hCCc := hc.1
   have hdiag :
@@ -465,8 +465,8 @@ theorem tanTwoTheta_unbounded_ambient_paperUINorm_real_exact
 /-! ## The subspace-taking real endpoints
 
 The two theorems below are the real mirror of
-`tanTwoTheta_unbounded_ambient_subspace_paperUINorm` and
-`tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm`.  A caller supplies the
+`tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex` and
+`tanTwoTheta_ambient_unbounded_paperUINorm_complex`.  A caller supplies the
 operator, the perturbation, the selected subspace, the ordered gap and the ideal
 membership; the reflection, its self-adjointness, its involutivity and the block
 tangent are all supplied by the library, and no pole certificate is asked for. -/
@@ -474,9 +474,9 @@ tangent are all supplied by the library, and no pole certificate is asked for. -
 /-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form over `ℝ`, taking the
 reducing subspace rather than a reflection witness.**
 
-`tanTwoTheta_unbounded_ambient_paperUINorm_real_exact` with `Z = V.reflectionOperator`
+`tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real` with `Z = V.reflectionOperator`
 and with `Z` self-adjoint and involutive supplied by the library. -/
-theorem tanTwoTheta_unbounded_ambient_subspace_paperUINorm_real
+theorem tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
     {A : E →ₗ.[ℝ] E} {B : E →L[ℝ] E} {a b c : ℝ}
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
@@ -505,7 +505,7 @@ theorem tanTwoTheta_unbounded_ambient_subspace_paperUINorm_real
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)
         (V.reflectionOperator)) ≤
         2 * N.gauge B :=
-  tanTwoTheta_unbounded_ambient_paperUINorm_real_exact N hA hBsa hB
+  tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real N hA hBsa hB
     (TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V)
     (TauCeti.DavisKahan.reflectionOperator_mul_self_complex V)
     hV.mapsDomain hV.commutes hUa hUb hab hBmem
@@ -513,7 +513,7 @@ theorem tanTwoTheta_unbounded_ambient_subspace_paperUINorm_real
 /-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form over `ℝ`, on the paper's
 angle operator.**
 
-The same theorem as `tanTwoTheta_unbounded_ambient_subspace_paperUINorm_real`,
+The same theorem as `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_real`,
 with the proof's block tangent replaced by the paper's real ambient `|tan 2Θ|`;
 see `DavisKahan.extendedGauge_unboundedReflectionTangent_real`.
 
@@ -522,7 +522,7 @@ reflection's diagonal block to be invertible -- the first component of the theor
 above -- and that unit is exactly what excludes the quarter-turn poles.  No branch
 is chosen either: principal angles may exceed `π/4`, and `|tan 2Θ|` is what a norm
 sees there. -/
-theorem tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm_real
+theorem tanTwoTheta_ambient_unbounded_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
     {A : E →ₗ.[ℝ] E} {B : E →L[ℝ] E} {a b c : ℝ}
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
@@ -545,7 +545,7 @@ theorem tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm_real
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
-    tanTwoTheta_unbounded_ambient_subspace_paperUINorm_real N V hA hBsa hB hV hUa
+    tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_real N V hA hBsa hB hV hUa
       hUb hab hBmem
   have hgauge := DavisKahan.extendedGauge_unboundedReflectionTangent_real
     (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V N hunit

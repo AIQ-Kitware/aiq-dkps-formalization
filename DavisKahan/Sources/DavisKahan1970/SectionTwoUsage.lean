@@ -76,7 +76,7 @@ variable {E F G H : Type v}
 inside `[β, α]`, the complementary spectrum outside `(β - δ, α + δ)`.
 
 `FormBoundedSylvesterGap.intervalExterior` turns that into the gap the theorem
-takes, and `_root_.DavisKahan1970.sinTheta_complex_of_intervalExterior` packages
+takes, and `_root_.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex` packages
 the same step; this spells it out so the seam is visible. -/
 theorem sinTheta_from_printed_separation
     (N : PaperUnitaryInvariantNorm)
@@ -93,7 +93,7 @@ theorem sinTheta_from_printed_separation
     N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
       δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
         N.gauge R :=
-  SectionTwo.sinTheta N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
+  SectionTwo.sinTheta_complex N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
     (FormBoundedSylvesterGap.intervalExterior hβα (Or.inl ⟨htrialSpec, hcomplSpec⟩))
     hR
 
@@ -128,7 +128,7 @@ theorem tanTheta_from_reducingSubspace
     (hMem : N.Mem Hop) :
     N.Mem (paperTanAngleOperatorC U V) ∧
       delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge Hop :=
-  SectionTwo.tanTheta N D (DavisKahan.ReducingComplement.ofReducesSubspace hVred)
+  SectionTwo.tanTheta_complex N D (DavisKahan.ReducingComplement.ofReducesSubspace hVred)
     Hop hH hdelta hupper hUnwanted h35 hResidual hMem
 
 /-- The same reading with a bounded Ritz compression, which is the common case.
@@ -154,7 +154,7 @@ theorem tanTheta_from_trialBlock
     (hMem : N.Mem Hop) :
     N.Mem (paperTanAngleOperatorC U V) ∧
       delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge Hop :=
-  SectionTwo.tanTheta N (DavisKahan.UnboundedRitzPair.ofTrialBlock D)
+  SectionTwo.tanTheta_complex N (DavisKahan.UnboundedRitzPair.ofTrialBlock D)
     (DavisKahan.ReducingComplement.ofReducesSubspace hVred) Hop hH hdelta hupper
     hUnwanted h35 hResidual hMem
 
@@ -196,7 +196,7 @@ theorem tanTwoTheta_from_reducingSubspace
       (b - a) * N.gauge (paperAbsTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B :=
-  SectionTwo.tanTwoTheta N V hA hBsa hB
+  SectionTwo.tanTwoTheta_complex N V hA hBsa hB
     (DavisKahan.ReflectionIntertwines.ofReducesSubspace hVred) hUa hUb hab hBmem
 
 end TanTwoTheta

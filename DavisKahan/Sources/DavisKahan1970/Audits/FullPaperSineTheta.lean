@@ -27,10 +27,10 @@ dependencies in every result.
 #print axioms TauCeti.DavisKahan1970.directedSinAngle_real
 #print axioms TauCeti.DavisKahan1970.lemma6_1
 #print axioms TauCeti.DavisKahan1970.lemma6_2
-#print axioms TauCeti.DavisKahan1970.sinTheta_exactPaper
-#print axioms TauCeti.DavisKahan1970.generalizedSinTheta_exactPaper
-#print axioms TauCeti.DavisKahan1970.sinTheta_real_exactPaper
-#print axioms TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper
+#print axioms TauCeti.DavisKahan1970.sinTheta_paperData_complex
+#print axioms TauCeti.DavisKahan1970.sinTheta_generalized_paperData_complex
+#print axioms TauCeti.DavisKahan1970.sinTheta_paperData_real
+#print axioms TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real
 #print axioms TauCeti.DavisKahan1970.Theorem6_1
 #print axioms TauCeti.DavisKahan1970.Theorem6_1_real
 #print axioms TauCeti.DavisKahan1970.Proposition6_1

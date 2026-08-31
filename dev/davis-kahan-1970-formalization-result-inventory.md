@@ -87,11 +87,11 @@ Each result below explicitly partitions its primary source block into atoms insi
 
 **Where Lean makes the implicit semantics explicit.**
 
-- `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects`
   - Carries `h35 : CrossedDefectsEquivalent U V`, the constructive form of (3.5) (an isometric equivalence of the two crossed defect spaces), and concludes both `N.Mem (paperTanAngleOperatorC U V)` and the sharp inequality. Membership in the norm's ideal is a conclusion, which is the explicit form of the source's vacuity convention.
-- `TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex`
   - Same (3.5) hypothesis at unbounded self-adjoint scope over complex scalars, with the norm-ideal membership again concluded.
-- `TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm`
+- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_transversality`
   - Alternative bounded route assuming uniform transversality `‖sin Theta‖ < 1` instead of (3.5). This is a strictly stronger hypothesis than the source's standing condition and is registered as a specialization, not as the source-shaped form.
 - `TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses`
   - Machine-checked witness that (1.5) does not imply (3.5) in infinite dimension, so the omitted qualification is substantive. It is a vacuity/nonvacuity witness, not a counterexample to the counted result.
@@ -102,7 +102,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 
 **Why this is not a refutation.** In that configuration tan Theta is not a bounded operator and the displayed unitarily invariant norm does not exist, so the witness exhibits a missing nonvacuity qualification rather than a finite-valued failure of the inequality. The paper declares such cases vacuous in advance. The literal reading would equally convict the Section 1 angle-doubling sentence and later developments that silently use the direct rotation. This is therefore deliberately not classified as refuted_as_transcribed; contrast DK-4.4-prop, where all objects exist, the compared quantities are finite, and the printed conclusion is false.
 
-**Semantic conclusion.** S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. A later hostile scope audit found that the first pair of `unbounded ambient` endpoints still kept the Ritz compression bounded; the Appendix explicitly allows both `A_0` and `Lambda_1` to be unbounded. That stronger scope is now represented by `tanTheta_unboundedCompression_ambient_paperUINorm_exact` and `tanTheta_unboundedCompression_ambient_paperUINorm_real_exact`.
+**Semantic conclusion.** S2-tan-theta is a true counted result whose exact formal representation requires nonlocal source semantics that the repository makes explicit rather than assumes silently. The interpretation is accepted. A later hostile scope audit found that the first pair of `unbounded ambient` endpoints still kept the Ritz compression bounded; the Appendix explicitly allows both `A_0` and `Lambda_1` to be unbounded. That stronger scope is now represented by `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` and `tanTheta_ambient_unboundedRitz_raw_paperUINorm_real`.
 
 The accepted reading is hash-pinned to the distributable specification, the source-fidelity inventory, and the cited atoms; any edit to that material makes it stale and the result checker fails closed.
 
@@ -110,7 +110,7 @@ The accepted reading is hash-pinned to the distributable specification, the sour
 
 Empty. All 29 counted results are terminal on all three axes.
 
-`S2-tan-theta` is terminal after a hostile Appendix-scope correction. The earlier `tanTheta_unbounded_ambient_*_exact` declarations cover an unbounded ambient operator with a bounded Ritz compression. The Appendix-complete declarations `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact` and `..._real_exact` additionally allow the Ritz compression `A_0` itself to be a genuinely unbounded self-adjoint closed operator semibounded above in form, while retaining a bounded residual/perturbation and the sharp factor-one ambient inequality.
+`S2-tan-theta` is terminal after a hostile Appendix-scope correction. The earlier `tanTheta_unbounded_ambient_*_exact` declarations cover an unbounded ambient operator with a bounded Ritz compression. The Appendix-complete declarations `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` and `..._real_exact` additionally allow the Ritz compression `A_0` itself to be a genuinely unbounded self-adjoint closed operator semibounded above in form, while retaining a bounded residual/perturbation and the sharp factor-one ambient inequality.
 
 ## Printed-statement boundary reviews
 

@@ -43,7 +43,7 @@ Verified by elaboration and by reading the definitions:
 `sinAngleOperatorDirectedC U V := |P_{Vᗮ} P_U|` — range inside `U` (the repo's own compiled
 `range_sinTwoAngleOperatorC_le`). `paperTanTwoThetaRepresentative : U →L[ℂ] Uᗮ` and
 `doubleAngleTangentOperator : E0 →L[ℂ] E1` are rectangular, i.e. `Θ₀`-shaped. The branch-free
-endpoints `tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace` / `_real` state the representative
+endpoints `tanTwoTheta_branchFree_bounded_paperUINorm_complex` / `_real` state the representative
 condition as `approximationSingularValue (π n) tanTwoTheta = absDoubleAngleTangent
 (approximationSingularValue n T)` for a rearrangement `π : ℕ ≃ ℕ` — one copy of each value, i.e.
 `Θ₀`.
@@ -53,9 +53,9 @@ returns nothing, and no `cfc` of `fun t => Real.tan (2 * t)` exists.
 
 This is a *pointed* omission, because the same axis was closed for the other three theorems: the
 ambient `sin 2Θ` object `paperSinTwoAngleOperatorC := cfc (sin 2·) (arcsin |P_U − P_V|)` was
-introduced on 2026-08-08 and its half proved (`sinTwoTheta_wholeSpace_paperUINorm`); the ambient
+introduced on 2026-08-08 and its half proved (`sinTwoTheta_ambient_bounded_paperUINorm_complex`); the ambient
 `tan Θ` object `paperTanAngleOperatorC := cfc Real.tan (arcsin |P_U − P_V|)` was introduced and its
-half proved yesterday (`tanTheta_wholeSpace_paperUINorm`). The paper's own §7 proof says "The
+half proved yesterday (`tanTheta_ambient_bounded_paperUINorm_complex_of_transversality`). The paper's own §7 proof says "The
 whole-space estimate follows by Lemma 6.1" — and `lemma6_1`, `lemma6_1_converse` and `lemma6_2` are
 all compiled and EXACT.
 
@@ -85,8 +85,8 @@ Standing assumption 1 of the transcription (L202) is "real or complex". Measured
 
 | family | real endpoint? |
 |---|---|
-| `sin θ` (§2, Prop 6.1, Thm 6.1, Thm 6.2, appendix common-domain forms) | **YES** — `sinTheta_real_exactPaper`, `Theorem6_1_real`, `Theorem6_2_real`, `Proposition6_1_real`, `Theorem6_{1,2}_real_common{Domain,Core}`, all `[InnerProductSpace ℝ]`, no `[FiniteDimensional]` |
-| `tan 2θ` | **YES** — `tanTwoTheta_branchFree_paperUINorm_real`, `paperFaithful_tanTwoTheta_uiNorm_real` |
+| `sin θ` (§2, Prop 6.1, Thm 6.1, Thm 6.2, appendix common-domain forms) | **YES** — `sinTheta_paperData_real`, `Theorem6_1_real`, `Theorem6_2_real`, `Proposition6_1_real`, `Theorem6_{1,2}_real_common{Domain,Core}`, all `[InnerProductSpace ℝ]`, no `[FiniteDimensional]` |
+| `tan 2θ` | **YES** — `tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_real`, `paperFaithful_tanTwoTheta_uiNorm_real` |
 | `tan θ`, both halves | **NO** — `ℂ` only. `Theorem6_3` is `[RCLike]` but `[FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]`; no infinite-dimensional real tan θ declaration exists at all |
 | `sin 2θ`, both halves | **NO** — `ℂ` only |
 | Theorem 5.1, 5.2, (5.1), Lemma 5.1 | **YES / more general** (`NontriviallyNormedField`, `RCLike`, plus explicit `…_real` twins) |
@@ -173,11 +173,11 @@ Seven printed inequalities:
 
 | # | Printed conclusion | Lean | Verdict |
 |---|---|---|---|
-| 1 | `sin θ`: `δ‖sin Θ₀‖ ≤ ‖R‖` | `sinTheta` (ℂ), `sinTheta_real_exactPaper` (ℝ), `Theorem6_1`/`_real` | **EXACT** — real *and* complex, arbitrary dimension, arbitrary UI norm |
+| 1 | `sin θ`: `δ‖sin Θ₀‖ ≤ ‖R‖` | `sinTheta` (ℂ), `sinTheta_paperData_real` (ℝ), `Theorem6_1`/`_real` | **EXACT** — real *and* complex, arbitrary dimension, arbitrary UI norm |
 | 2 | `tan θ`: `δ‖tan Θ₀‖ ≤ ‖R‖` | `theorem6_3_infiniteTrial_spectral_exists` / `…_of_formBounds_exists` (arbitrary trial subspace, `[CompleteSpace ↥Z]` only), `theorem6_3_generalizedTanTheta_equalRank_spectral` | NARROWER: `ℂ` only |
-| 3 | `tan θ`: `δ‖tan Θ‖ ≤ ‖H‖` | `tanTheta_wholeSpace_paperUINorm`, core `…_all_kyFan` | NARROWER: `ℂ` only; **plus an added `‖sinAngleOperatorC U V‖ < 1`** |
-| 4 | `sin 2θ`: `δ‖sin 2Θ₀‖ ≤ 2‖R‖` | `unbounded_sinTwoTheta_residual_uiNorm_representative` (constant **1**, matching the paper's own proof) | NARROWER: `ℂ` only |
-| 5 | `sin 2θ`: `δ‖sin 2Θ‖ ≤ 2‖H‖` | `sinTwoTheta_wholeSpace_paperUINorm`, `…_all_kyFan` | NARROWER: `ℂ` only |
+| 3 | `tan θ`: `δ‖tan Θ‖ ≤ ‖H‖` | `tanTheta_ambient_bounded_paperUINorm_complex_of_transversality`, core `…_all_kyFan` | NARROWER: `ℂ` only; **plus an added `‖sinAngleOperatorC U V‖ < 1`** |
+| 4 | `sin 2θ`: `δ‖sin 2Θ₀‖ ≤ 2‖R‖` | `sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex` (constant **1**, matching the paper's own proof) | NARROWER: `ℂ` only |
+| 5 | `sin 2θ`: `δ‖sin 2Θ‖ ≤ 2‖H‖` | `sinTwoTheta_ambient_bounded_paperUINorm_complex`, `…_all_kyFan` | NARROWER: `ℂ` only |
 | 6 | `tan 2θ`: `δ‖tan 2Θ₀‖ ≤ 2‖R‖` | `sharp_paperUnitaryInvariantNorm`, `…_selectedBranch` | NARROWER: `ℂ`; **selected branch** — see headline (B) |
 | 7 | `tan 2θ`: `δ‖tan 2Θ‖ ≤ 2‖H‖` | — | **ABSENT** — see headline (A) |
 
@@ -197,7 +197,7 @@ Other Section 2 claims:
 | "constants in all four theorems best possible" (L764) | `sinTheta_model_equality`, `tanTheta_model_equality`, `tanTwoTheta_model_equality` (each for **every** UI seminorm on the plane); `sinTwoTheta_model_operatorNorm_equality`; `sinTheta_constant_optimal`, `sinTwoTheta_constant_optimal` | NARROWER: the `sin 2θ` equality model is **operator-norm only** |
 | "equality attained simultaneously for all UI norms, by direct sums of 2-dim examples" (L765) | the three all-UI-norm plane models | NARROWER: three of four families in dim 2; the direct-sum extension is not formalized |
 | "for `ε→0` the four conclusions agree asymptotically" (L768) | `single_double_sine_tangent_ratios_tendsto_one` | acceptable rendering |
-| unbounded extension of all four (L771–781) | `canonical_generalizedSinTheta`; `unbounded_sinTwoTheta_uiNorm_representative`; `theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing` | NARROWER: `tan 2θ` unbounded exists only as `tanTwoTheta_unbounded_residual_opNorm`, a **pointwise operator-norm** residual statement. Census `S2-unbounded-scope` records this correctly (`compiled_specialization`) |
+| unbounded extension of all four (L771–781) | `sinTheta_generalized_bundled_complex`; `sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex`; `theorem6_3_unbounded_infiniteTrial_ideal_exists_of_reducing` | NARROWER: `tan 2θ` unbounded exists only as `tanTwoTheta_unbounded_residual_opNorm`, a **pointwise operator-norm** residual statement. Census `S2-unbounded-scope` records this correctly (`compiled_specialization`) |
 
 ### Section 3 — separation of two subspaces
 
@@ -268,7 +268,7 @@ infinite-dimensional aliases exist and are build-guarded, so the mitigation is r
 | Lemma 6.1, and its converse | `lemma6_1`, `lemma6_1_converse` | **EXACT**, in fact more general; the equisingularity hypothesis is genuinely present |
 | Lemma 6.2 | `lemma6_2` | EXACT |
 | (6.1) | `PaperSymmetricSinThetaProblem.forward_all_kyFan` / `.reverse_all_kyFan` | EXACT |
-| `sin θ` proof/conclusion | `sinTheta`, `sinTheta_real_exactPaper` | EXACT |
+| `sin θ` proof/conclusion | `sinTheta`, `sinTheta_paperData_real` | EXACT |
 | 2×2 counterexample to `δ‖sinΘ‖ ≤ ‖H‖` (L1815) | `paperOneGap_does_not_imply_symmetric_square_estimate` + the two norm computations | NARROWER: the arithmetic (`√3 < 2·1`) is certified, but `paperCounterexampleA` (`diag(0,1)`) is **defined and never used** — nothing verifies `spec(A₀)={0}`, `spec(Λ₁)={2}`, or that the subspaces are the claimed eigenspaces. The numbers are proved; the hypotheses that make it a counterexample are not |
 | Prop 6.1 | `Proposition6_1`, `Proposition6_1_real` | **EXACT**, genuinely ambient (`\|P_U−P_V\|`), both gap directions as separate fields, no `[FiniteDimensional]` |
 | Thm 6.1 | `Theorem6_1`, `Theorem6_1_real` | **EXACT** (`E₀` non-isometric via `LowerFrameBound`, no dimension hypothesis, arbitrary same-singular-value representative, arbitrary UI norm) |
@@ -277,7 +277,7 @@ infinite-dimensional aliases exist and are build-guarded, so the mitigation is r
 | (6.2)–(6.5) direct-rotation block form | — | ABSENT as such, deliberately (the Lean tan θ proofs avoid direct-rotation coordinates) |
 | (6.6) | `theorem63ResidualWitness_scalar` | EXACT |
 | `tan θ` directed | `theorem6_3_generalizedTanTheta_equalRank_spectral`, `theorem6_3_all_kyFan_core` | EXACT (acuteness **derived**, `isTransverse_of_tanThetaIntervalGap`) |
-| `tan θ` ambient | `tanTheta_wholeSpace_paperUINorm` | NARROWER (acuteness assumed) |
+| `tan θ` ambient | `tanTheta_ambient_bounded_paperUINorm_complex_of_transversality` | NARROWER (acuteness assumed) |
 | Example 6.1 (one-sidedness of `Λ₁` essential) | — | **ABSENT** |
 | Thm 6.3 | `Theorem6_3` (`[RCLike]`, real+complex, every rectangular UI seminorm, but `[FiniteDimensional]` on both spaces); `theorem6_3_generalizedTanTheta_source_ideal` (`ℂ`, infinite ambient, `[FiniteDimensional ℂ ↥Z]`) | Split; `A₀ = E₀*(A+H)E₀` faithfully rendered |
 | Thm 6.3 at arbitrary trial dimension | `theorem6_3_infiniteTrial_of_formBounds`, `theorem6_3_infiniteTrial_spectral_exists` | **YES** — and it drops `rank Z < rank V` entirely, so the `[FiniteDimensional ℂ ↥Z]` elsewhere is not a real limitation |
@@ -294,7 +294,7 @@ infinite-dimensional aliases exist and are build-guarded, so the mitigation is r
 |---|---|---|
 | (7.1)–(7.3), `(A+H)U² = U²(A+XHX)` | `sinTwoTheta_mirrorDefect_eq_perturbationDefect`, `…_le_two_mul` | EXACT |
 | (7.4)–(7.5), reflected overlap | `sinTwoTheta_reflectedOverlap_norm` | EXACT |
-| `sin 2θ` both halves | `unbounded_sinTwoTheta_{,residual_}uiNorm_representative`, `sinTwoTheta_wholeSpace_paperUINorm` | see §2 rows 4–5 |
+| `sin 2θ` both halves | `unbounded_sinTwoTheta_{,residual_}uiNorm_representative`, `sinTwoTheta_ambient_bounded_paperUINorm_complex` | see §2 rows 4–5 |
 | Remark: `δ‖sin2Θ‖ ≤ 2‖H‖` also from gaps in `A` instead of `Λ` (L2346) | this **is** the form the Lean statement takes (gap on `A` at `U`); the census documents the convention swap | EXACT (equivalent by relabelling) |
 | Counterexample: the residual inference is asymmetric (`A = diag(0,δ)`, `H = [[0,1],[1,−δ]]`) | — | **ABSENT** |
 | (7.6) and the paired-singular-vector argument | `tanTwoTheta_equation_7_6_approximate`, `paired_singularVector_gap_inequality`, `singularValue_ne_one` | EXACT (branch-free, `RCLike`, dimension-free) |

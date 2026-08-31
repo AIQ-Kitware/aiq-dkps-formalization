@@ -85,17 +85,17 @@ alias GeneralSinThetaIdealFamilyProblem := PaperGeneralSinThetaProblem
 alias IsometricSinThetaIdealFamilyProblem := PaperIsometricSinThetaProblem
 alias RealGeneralSinThetaIdealFamilyProblem := PaperRealGeneralSinThetaProblem
 alias RealIsometricSinThetaIdealFamilyProblem := PaperRealIsometricSinThetaProblem
-alias generalizedSinTheta_idealFamily := PaperGeneralSinThetaProblem.result
-alias sinTheta_idealFamily := PaperIsometricSinThetaProblem.result
-alias generalizedSinTheta_real_idealFamily :=
+alias sinTheta_generalized_idealFamily_complex := PaperGeneralSinThetaProblem.result
+alias sinTheta_idealFamily_complex := PaperIsometricSinThetaProblem.result
+alias sinTheta_generalized_idealFamily_real :=
   PaperRealGeneralSinThetaProblem.result
-alias sinTheta_real_idealFamily := PaperRealIsometricSinThetaProblem.result
+alias sinTheta_idealFamily_real := PaperRealIsometricSinThetaProblem.result
 
 alias IsometricSinThetaPaperData := PaperIsometricTheoremData
-alias sinTheta_exactPaper :=
+alias sinTheta_paperData_complex :=
   PaperIsometricTheoremData.result_every_unitarilyInvariantNorm_across
 alias RealIsometricSinThetaPaperData := PaperRealIsometricTheoremData
-alias sinTheta_real_exactPaper :=
+alias sinTheta_paperData_real :=
   PaperRealIsometricTheoremData.result_every_unitarilyInvariantNorm_across
 
 alias Theorem6_1Data := PaperTheorem61Data
@@ -104,9 +104,9 @@ alias Theorem6_1 :=
 alias Theorem6_1RealData := PaperRealTheorem61Data
 alias Theorem6_1_real :=
   PaperRealTheorem61Data.result_every_unitarilyInvariantNorm_across
-alias generalizedSinTheta_exactPaper :=
+alias sinTheta_generalized_paperData_complex :=
   PaperTheorem61Data.result_every_unitarilyInvariantNorm_across
-alias generalizedSinTheta_real_exactPaper :=
+alias sinTheta_generalized_paperData_real :=
   PaperRealTheorem61Data.result_every_unitarilyInvariantNorm_across
 
 /-! ## Proposition 6.1 -/

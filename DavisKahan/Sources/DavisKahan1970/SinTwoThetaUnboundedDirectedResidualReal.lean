@@ -53,7 +53,7 @@ is the *weaker* of the tree's two spellings of separation.  A theorem stated
 over it is therefore the stronger theorem, exactly as on the complex side, where
 the printed spectral containment likewise implies the hypotheses used.
 
-`sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExterior`
+`sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_paperUINorm_real`
 restates the endpoint at the printed interval/exterior separation itself, so the
 source hypothesis is visible without unfolding the gap predicate.
 -/
@@ -99,7 +99,7 @@ is the printed residual `R = A E₀ - E₀ A₀`.  The conclusion is
 `δ · kyFan_k (sin 2Θ₀) ≤ 2 · kyFan_k R`
 
 with the printed factor two. -/
-theorem sinTwoTheta_unbounded_directedResidual_all_kyFan_real
+theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_real
     (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
     (hVdom : ∀ v : V, (v : E) ∈ A.domain)
@@ -198,7 +198,7 @@ for a useful unbounded conclusion.
 
 The reflected system is built internally from the trial data; no reflection
 residual appears in the statement. -/
-theorem sinTwoTheta_unbounded_directedResidual_paperUINorm_real
+theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
     (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
@@ -226,7 +226,7 @@ theorem sinTwoTheta_unbounded_directedResidual_paperUINorm_real
         kyFanApproximationGauge k ((2 : ℝ) • R0) := by
     intro k
     rw [kyFanApproximationGauge_smul, htwo, hsameR.kyFanApproximationGauge_eq k]
-    exact sinTwoTheta_unbounded_directedResidual_all_kyFan_real hA B hB hVdom hres
+    exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_real hA B hB hVdom hres
       hδ hgap k
   have hMem2 : N.Mem ((2 : ℝ) • R0) := by
     intro htop
@@ -242,7 +242,7 @@ theorem sinTwoTheta_unbounded_directedResidual_paperUINorm_real
 /-- The real directed endpoint restated at the **printed** separation
 hypothesis: the exact block has real spectrum inside `[β,α]` and the
 complementary block has real spectrum outside `]β-δ, α+δ[`. -/
-theorem sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExterior
+theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
     (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
@@ -257,7 +257,7 @@ theorem sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExter
       δ * N.gauge
           (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ≤
         2 * N.gauge R :=
-  sinTwoTheta_unbounded_directedResidual_paperUINorm_real N hA B hB hVdom hres hδ
+  sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real N hA B hB hVdom hres hδ
     (FormBoundedSylvesterGap.intervalExterior hβα hgap) hRmem
 
 end MainEstimate

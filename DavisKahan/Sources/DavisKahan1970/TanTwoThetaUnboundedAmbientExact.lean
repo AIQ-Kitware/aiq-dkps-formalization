@@ -259,7 +259,7 @@ reducing reflection `Z` of `A+B`, and the separated form bounds.  Membership of
 
 The canonical spectral cutoffs, pole exclusion, directed residual estimate,
 and both-corner Lemma-6.1 assembly are all internal. -/
-theorem tanTwoTheta_unbounded_ambient_paperUINorm_exact
+theorem tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     {A : G →ₗ.[ℂ] G} {B Z : G →L[ℂ] G} {a b c : ℝ}
     (hA : IsSelfAdjoint A)
@@ -409,9 +409,9 @@ proved here. -/
 /-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form, taking the reducing
 subspace rather than a reflection witness.**
 
-`tanTwoTheta_unbounded_ambient_paperUINorm_exact` with `Z = V.reflectionOperator`
+`tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex` with `Z = V.reflectionOperator`
 and with `Z` self-adjoint and involutive supplied by the library. -/
-theorem tanTwoTheta_unbounded_ambient_subspace_paperUINorm
+theorem tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G} {a b c : ℝ}
     (V : Submodule ℂ G) [V.HasOrthogonalProjection]
@@ -440,7 +440,7 @@ theorem tanTwoTheta_unbounded_ambient_subspace_paperUINorm
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)
         (V.reflectionOperator)) ≤
         2 * N.gauge B :=
-  tanTwoTheta_unbounded_ambient_paperUINorm_exact N hA hBsa hB
+  tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex N hA hBsa hB
     (TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V)
     (TauCeti.DavisKahan.reflectionOperator_mul_self_complex V)
     hV.mapsDomain hV.commutes hUa hUb hab hBmem
@@ -448,7 +448,7 @@ theorem tanTwoTheta_unbounded_ambient_subspace_paperUINorm
 /-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form, on the paper's angle
 operator.**
 
-The same theorem as `tanTwoTheta_unbounded_ambient_subspace_paperUINorm`, with the
+The same theorem as `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex`, with the
 proof's block tangent replaced by the paper's ambient `|tan 2Θ|`.  The two have
 the same approximation numbers -- `unboundedReflectionTangent U J_V = Ξ · J_U`
 with `J_U` a self-adjoint unitary, and `|Ξ| = |tan 2Θ|` -- so every source
@@ -459,11 +459,11 @@ unitarily invariant norm sees them identically; see
 on the angle spectrum, but that is not an independent assumption here: the
 ordered gap already forces the reflection's diagonal block to be invertible --
 that is the first component of
-`tanTwoTheta_unbounded_ambient_subspace_paperUINorm` -- and
+`tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex` -- and
 `DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq` turns that unit
 into pole exclusion.  No branch is chosen either: principal angles may exceed
 `π/4`, and `|tan 2Θ|` is what a norm sees there. -/
-theorem tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm
+theorem tanTwoTheta_ambient_unbounded_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G} {a b c : ℝ}
     (V : Submodule ℂ G) [V.HasOrthogonalProjection]
@@ -486,7 +486,7 @@ theorem tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
-    tanTwoTheta_unbounded_ambient_subspace_paperUINorm N V hA hBsa hB hV hUa hUb
+    tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex N V hA hBsa hB hV hUa hUb
       hab hBmem
   have hcos := DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
     (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V hunit

@@ -58,7 +58,7 @@ ingredients do that, and no perturbation theory is re-run for either:
   projections, each of which complexifies, so the operator-norm estimates
   transport;
 * the paper's own unitarily invariant norm scope needs no new transport at all:
-  `sinTwoTheta_wholeSpace_paperUINorm_real` is already stated over `ℝ`, and the
+  `sinTwoTheta_ambient_bounded_paperUINorm_real` is already stated over `ℝ`, and the
   only missing piece was the real spectral dictionary
   `spectrum_compressOperatorReal_subset_of_spectrumIn`, the real counterpart of
   `spectrum_compressOperator_subset_of_spectrumIn`.
@@ -503,7 +503,7 @@ theorem theorem8_2_sinTwoTheta_residual_source_real
 
 /-! ### 5. The same estimate at every source unitarily invariant norm, over `ℝ`
 
-`sinTwoTheta_wholeSpace_paperUINorm_real` is equation (7.5) over a real Hilbert
+`sinTwoTheta_ambient_bounded_paperUINorm_real` is equation (7.5) over a real Hilbert
 space, for every norm in the paper's own class.  Reading it at Theorem 8.2's
 configuration needs exactly one thing the complex descent also needed: the
 dictionary between `Foundation.SpectrumIn` and `spectrum ℝ` of the compression.
@@ -541,7 +541,7 @@ the same inheritance, and `theorem8_2_sinTwoTheta_perturbation_source_paperUINor
 is the complex one.
 
 Nothing is re-proved.  This is equation (7.5) over a real Hilbert space,
-`DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real`, read with `A + K`
+`DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real`, read with `A + K`
 carrying the printed gap on `Q` and with `A` — which `P` reduces by hypothesis —
 as the comparison operator, so that the displacement is `-K`.
 
@@ -585,7 +585,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm
     · exact absurd h (by simp)
   have hgaugeNeg : N.gauge (A - (A + K)) = N.gauge K := by
     rw [hneg, N.gauge_smul _ hKmem, hone, one_mul]
-  obtain ⟨hmem, hle⟩ := DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real N
+  obtain ⟨hmem, hle⟩ := DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real N
     hAKsa hAsa hQred hPred hdelta hab hUspec hUspec' hMemNeg
   exact ⟨hmem, by rwa [hgaugeNeg] at hle⟩
 

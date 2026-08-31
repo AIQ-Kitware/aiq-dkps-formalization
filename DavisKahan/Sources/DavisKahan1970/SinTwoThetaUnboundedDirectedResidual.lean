@@ -27,7 +27,7 @@ The directed conclusion at that unbounded scope is what this module proves.  The
 repository already had
 
 * the bounded directed trial-residual theorem
-  `sinTwoTheta_directedResidual_paperUINorm`, and
+  `sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_complex`, and
 * an unbounded directed theorem whose right-hand side is a **reflection**
   residual — a bounded self-adjoint `R` with `(A + R) J_V = J_V A` — which is a
   different operator from the printed `R` and therefore does not certify the
@@ -95,7 +95,7 @@ spectrum in `]β-δ, α+δ[`.  The conclusion is
 `δ · kyFan_k (sin 2Θ₀) ≤ 2 · kyFan_k R`
 
 with the printed factor two. -/
-theorem sinTwoTheta_unbounded_directedResidual_all_kyFan
+theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex
     (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
@@ -204,7 +204,7 @@ requirement for a useful unbounded conclusion.
 
 The reflected system is built internally from the trial data; no reflection
 residual appears in the statement. -/
-theorem sinTwoTheta_unbounded_directedResidual_paperUINorm
+theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
@@ -234,7 +234,7 @@ theorem sinTwoTheta_unbounded_directedResidual_paperUINorm
         kyFanApproximationGauge k (((2 : ℝ) : ℂ) • R0) := by
     intro k
     rw [kyFanApproximationGauge_smul, htwo, hsameR.kyFanApproximationGauge_eq k]
-    exact sinTwoTheta_unbounded_directedResidual_all_kyFan hA B hB hVdom hres
+    exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_kyFan_complex hA B hB hVdom hres
       hβα hδ hBlow hBhigh hBcomplSpec k
   have hMem2 : N.Mem (((2 : ℝ) : ℂ) • R0) := by
     intro htop

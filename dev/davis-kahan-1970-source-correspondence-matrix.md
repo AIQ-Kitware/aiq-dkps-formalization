@@ -83,10 +83,10 @@ matching "let `sin Θ₀` be **any** operator with the same singular values as
 | --- | --- | --- |
 | Theorem 6.1, complex | `Theorem6_1` | `PaperTheorem61Data.result_every_unitarilyInvariantNorm_across` |
 | Theorem 6.1, real | `Theorem6_1_real` | `PaperRealTheorem61Data.result_every_unitarilyInvariantNorm_across` |
-| isometric-trial form, complex | `sinTheta_exactPaper` | `PaperIsometricTheoremData.result_every_unitarilyInvariantNorm_across` |
-| isometric-trial form, real | `sinTheta_real_exactPaper` | `PaperRealIsometricTheoremData.result_every_unitarilyInvariantNorm_across` |
-| generalized (lower-frame) form, complex | `generalizedSinTheta_exactPaper` | `PaperTheorem61Data.result_every_unitarilyInvariantNorm_across` |
-| generalized (lower-frame) form, real | `generalizedSinTheta_real_exactPaper` | `PaperRealTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| isometric-trial form, complex | `sinTheta_paperData_complex` | `PaperIsometricTheoremData.result_every_unitarilyInvariantNorm_across` |
+| isometric-trial form, real | `sinTheta_paperData_real` | `PaperRealIsometricTheoremData.result_every_unitarilyInvariantNorm_across` |
+| generalized (lower-frame) form, complex | `sinTheta_generalized_paperData_complex` | `PaperTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| generalized (lower-frame) form, real | `sinTheta_generalized_paperData_real` | `PaperRealTheorem61Data.result_every_unitarilyInvariantNorm_across` |
 
 ## Proposition 6.1
 
