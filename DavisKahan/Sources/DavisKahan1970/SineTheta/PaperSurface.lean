@@ -229,6 +229,48 @@ The two declarations below are the canonical source-facing statements: direct
 argument lists, the full gap, both conclusions, and no capability class.  The
 scalar-generic `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` remains the engine underneath. -/
 
+/-- **Davis--Kahan 1970, the `sin Theta` theorem, over an arbitrary `RCLike` field.**
+
+This is the Section 2 sine theorem at the printed source scope, generic over the
+scalar field, in the same shape as its fixed-field siblings below: an unbounded
+self-adjoint ambient `LinearPMap`, a separable Hilbert space of arbitrary
+dimension, the whole `FormBoundedSylvesterGap` -- the printed interval/exterior
+separation together with the half-infinite configurations the source also
+permits -- an arbitrary `PaperUnitaryInvariantNorm`, and both printed
+conclusions.
+
+`IsTrialResidual` and `IsExactSpectralDecomposition` are the same two structural
+predicates the complex and real statements take, and they were already
+scalar-generic; `isTrialResidual_iff` and `isExactSpectralDecomposition_iff`
+expand them.
+
+The two class hypotheses are analytic capabilities of `𝕜`, proved for `ℝ`
+(`hasMinMaxLowerBoundEverywhere_real`, `hasUnboundedSylvesterKyFan_real`) and for
+`ℂ`.  They carry no Davis--Kahan mathematics: they are present only because
+`RCLike` is an open class, so a third field would owe the same two estimates.
+They are the one respect in which this statement is less clean than the
+fixed-field pair. -/
+theorem sinTheta_unbounded_formGap_paperUINorm_rclike
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
+    [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.{u, v} 𝕜]
+    (N : PaperUnitaryInvariantNorm)
+    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+    (htrial : IsTrialResidual A A₀ E₀ R)
+    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
+    (hR : N.Mem R) :
+    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
+      δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+        N.gauge R :=
+  TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_ofComponents_rclike
+    N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial.isometry hexact.desiredIsometry
+    hexact.complementIsometry hexact.orthogonal hexact.complete
+    htrial.mapsDomain hexact.mapsDomain htrial.residualEquation
+    hexact.intertwines hδ hgap hR
+
 section FixedField
 
 variable {E F G H : Type v}
@@ -297,6 +339,32 @@ theorem sinTheta_unbounded_formGap_paperUINorm_complex
           spectral_gap := hgap
           residual_mem := KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hkpos R }
     simpa only [KyFanDominantIdealFamily.kyFan_gauge] using hmain.2
+
+/-- **Conformance: the complex endpoint is the scalar-generic one at `𝕜 = ℂ`.**
+
+This restates `sinTheta_unbounded_formGap_paperUINorm_complex`'s type verbatim --
+same data, same structural predicates, same full `FormBoundedSylvesterGap`, same
+`PaperUnitaryInvariantNorm`, same ideal membership, same factor-one inequality --
+and discharges it by applying `sinTheta_unbounded_formGap_paperUINorm_rclike`
+with no adapter.  If any hypothesis or the conclusion differed mathematically,
+this would not elaborate.
+
+The capability classes do not appear: `ℂ` satisfies both by instance. -/
+theorem sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike
+    (N : PaperUnitaryInvariantNorm)
+    (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
+    (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+    (htrial : IsTrialResidual A A₀ E₀ R)
+    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
+    (hR : N.Mem R) :
+    N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
+      δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+        N.gauge R :=
+  sinTheta_unbounded_formGap_paperUINorm_rclike N A A₀ Λ₁ E₀ F₀ F₁ R
+    hA hA₀ hΛ₁ htrial hexact hδ hgap hR
 
 /-- **The familiar Section 2 interval form, over `ℂ`.**
 
@@ -414,6 +482,29 @@ theorem sinTheta_unbounded_intervalExterior_paperUINorm_real
         N.gauge R :=
   sinTheta_unbounded_formGap_paperUINorm_real N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
     (FormBoundedSylvesterGap.intervalExterior hβα hspectral) hR
+
+/-- **Conformance: the real endpoint is the scalar-generic one at `𝕜 = ℝ`.**
+
+The real twin of `sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike`, and
+the more informative of the two: the real endpoint's own proof descends from the
+complex one by complexification, while this one reaches the same statement
+directly from the scalar-generic engine.  Both routes therefore land on the same
+type. -/
+theorem sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike
+    (N : PaperUnitaryInvariantNorm)
+    (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)
+    (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+    (htrial : IsTrialResidual A A₀ E₀ R)
+    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
+    (hR : N.Mem R) :
+    N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
+      δ * N.gauge ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+        N.gauge R :=
+  sinTheta_unbounded_formGap_paperUINorm_rclike N A A₀ Λ₁ E₀ F₀ F₁ R
+    hA hA₀ hΛ₁ htrial hexact hδ hgap hR
 
 end FixedFieldReal
 
