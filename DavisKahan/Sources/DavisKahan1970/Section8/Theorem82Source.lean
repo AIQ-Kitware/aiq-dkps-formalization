@@ -340,7 +340,7 @@ The printed `sin 2Θ` theorem concludes "for every unitary-invariant norm", so
 that is the scope at which Theorem 8.2 inherits it; the two theorems above are
 its operator-norm reading.  The perturbation alternative is restated here over
 the paper's own class `PaperUnitaryInvariantNorm`, inherited from equation (7.5)
-(`DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`) with nothing re-proved.
+(`DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex`) with nothing re-proved.
 
 The conclusion names the paper's literal `sin 2Θ`, the positive operator
 `paperSinTwoAngleOperatorC Q P`, rather than the modulus-free
@@ -369,7 +369,7 @@ the reflection defect have the *same* operator norm -- that is
 fails.  Writing `C` for the `P`-to-`Pᗮ` block of `A + K`, the singular values of
 `C + C⋆` are those of `C` doubled, so a symmetric gauge sees
 `N(C + C⋆) = 2 N(C)` in general (the trace norm does).  Every route through
-`sinTwoTheta_wholeSpace_paperUINorm` has to supply a comparison operator reduced
+`sinTwoTheta_ambient_bounded_paperUINorm_complex` has to supply a comparison operator reduced
 by `P`, i.e. block-diagonal, so its displacement from `A + K` is exactly
 `-(C + C⋆)` for the best such choice; with `N(C) ≤ N(R)` this yields the
 constant `4`, not the printed `2`.  So the **ambient** `sin 2Θ` at a general
@@ -382,7 +382,7 @@ printed constant needs the singular-value identification of `sin 2Θ₀` with
 decomposition.  It does not.  The printed conclusion is about `Θ₀`, so the route
 that works never forms the ambient sum at all: state the conclusion at the
 canonical directed block `sinTwoThetaIdealBlock Q P`, and the constant `2` comes
-out of `sinTwoTheta_directedResidual_paperUINorm`'s own chain -- the paper
+out of `sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_complex`'s own chain -- the paper
 projection block dominates `δ` times the ideal block, the block defect costs the
 factor `2`, and the residual is extended by zero along `P.subtypeL.adjoint`,
 which preserves the whole approximation-singular sequence and hence every paper
@@ -424,7 +424,7 @@ at Theorem 8.2's own hypotheses.  `theorem8_2_sinTwoTheta_perturbation_source`
 is the operator-norm reading of the same inheritance.
 
 Nothing is re-proved.  This is equation (7.5) of the paper's Section 7,
-`DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm`, read with `A + K` carrying
+`DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex`, read with `A + K` carrying
 the printed gap on `Q` and with `A` — which `P` reduces by hypothesis — as the
 comparison operator, so that the displacement is `-K`. -/
 theorem theorem8_2_sinTwoTheta_perturbation_source_paperUINorm
@@ -462,7 +462,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_source_paperUINorm
     · exact absurd h (by simp)
   have hgaugeNeg : N.gauge (A - (A + K)) = N.gauge K := by
     rw [hneg, N.gauge_smul _ hKmem, hone, one_mul]
-  obtain ⟨hmem, hle⟩ := DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm N
+  obtain ⟨hmem, hle⟩ := DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex N
     hAKsa hAsa hQred hPred hdelta hab hUspec hUspec' hMemNeg
   exact ⟨hmem, by rwa [hgaugeNeg] at hle⟩
 
@@ -492,7 +492,7 @@ theorem theorem8_2_sinTwoTheta_residual_source_all_kyFan
   have hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Qᗮ (A + K)),
       x ≤ beta - delta ∨ alpha + delta ≤ x :=
     fun _ hx => spectrum_compressOperator_subset_of_spectrumIn hQperp hx
-  exact DavisKahan1970.sinTwoTheta_directedResidual_all_kyFan
+  exact DavisKahan1970.sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex
     (A := A + K) (U := Q) (V := P)
     hAKsa hQred hdelta hab hUspec hUspec' (compressOperator P A)
 
@@ -526,7 +526,7 @@ theorem theorem8_2_sinTwoTheta_residual_source_paperUINorm
   have hUspec' : ∀ x ∈ spectrum ℝ (compressOperator Qᗮ (A + K)),
       x ≤ beta - delta ∨ alpha + delta ≤ x :=
     fun _ hx => spectrum_compressOperator_subset_of_spectrumIn hQperp hx
-  exact DavisKahan1970.sinTwoTheta_directedResidual_paperUINorm
+  exact DavisKahan1970.sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_complex
     (A := A + K) (U := Q) (V := P) N hAKsa hQred hdelta hab
     hUspec hUspec' (compressOperator P A) hRmem
 

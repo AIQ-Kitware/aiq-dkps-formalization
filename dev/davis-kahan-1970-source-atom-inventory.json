@@ -4628,7 +4628,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "Restates the Section 2 double-angle tangent theorem in functional-calculus language for the gap step function, applying it rather than establishing anything new. Counted once, at its own source statement (`S2-tan-two-theta`), whose exact ambient wrapper `tanTwoTheta_wholeSpace_paperUINorm_exact` this row already carries. The link list is deliberately empty: reverse links mark membership of a counted result's own source block, and this Section 10 passage is not in the Section 2 block.",
+      "formalization_role_reason": "Restates the Section 2 double-angle tangent theorem in functional-calculus language for the gap step function, applying it rather than establishing anything new. Counted once, at its own source statement (`S2-tan-two-theta`), whose exact ambient wrapper `tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex` this row already carries. The link list is deliberately empty: reverse links mark membership of a counted result's own source block, and this Section 10 passage is not in the Section 2 block.",
       "formalization_role_reason_code": "restatement_of_counted_result",
       "formalization_result_ids": []
     },
@@ -4660,7 +4660,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "The directed companion of the previous atom: the residual form of the Section 2 double-angle tangent theorem, restated for the step function. Counted once at `S2-tan-two-theta`, whose exact directed wrapper `tanTwoTheta_directedCorner_residual_paperUINorm_exact` this row carries. Empty link list for the same reason.",
+      "formalization_role_reason": "The directed companion of the previous atom: the residual form of the Section 2 double-angle tangent theorem, restated for the step function. Counted once at `S2-tan-two-theta`, whose exact directed wrapper `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex` this row carries. Empty link list for the same reason.",
       "formalization_role_reason_code": "restatement_of_counted_result",
       "formalization_result_ids": []
     },

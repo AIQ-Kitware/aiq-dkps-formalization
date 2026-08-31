@@ -463,7 +463,7 @@ Section8/SourceSurface.lean
 Once `SineTheta/PaperSurface.lean` is canonical, the old supporting theorem name is misleading:
 
 ```text
-TauCeti.DavisKahan1970.sinTheta_headline_generic
+TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike
     -> TauCeti.DavisKahan1970.sinTheta_generic_certificate
 ```
 
@@ -582,7 +582,7 @@ Move `RemainingSourceSurface.lean` to `DavisKahan/Frontier/SourceEndpoints.lean`
 Rename only:
 
 ```text
-sinTheta_headline_generic -> sinTheta_generic_certificate
+sinTheta_unbounded_intervalExterior_paperUINorm_rclike -> sinTheta_generic_certificate
 ```
 
 and update the audit/census references. Leave the canonical `PaperSurface` theorem unchanged.

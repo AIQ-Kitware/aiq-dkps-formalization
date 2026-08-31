@@ -166,7 +166,7 @@ alone: `unboundedReflectionTangent = S·(C·C)⁻¹·C`.
 
 ### 2.5 The Theorem 8.2 sine result as a template — **MEASURED: does not transfer**
 
-`sinTwoTheta_directedResidual_all_kyFan` is stated for **bounded** `A : E →L[ℂ] E`, not for
+`sinTwoTheta_directed_boundedResidual_blockRepresentative_kyFan_complex` is stated for **bounded** `A : E →L[ℂ] E`, not for
 `A : H →ₗ.[ℂ] H`. The Ky-Fan-to-arbitrary-UI-norm passage is a generic bridge and needed no 8.2
 material at all.
 

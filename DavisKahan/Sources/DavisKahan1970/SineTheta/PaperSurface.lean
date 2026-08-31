@@ -10,16 +10,16 @@ import DavisKahan.SinTheta.Real.Canonical
 /-!
 # The Davis--Kahan 1970 sine-theta source surface
 
-**The canonical source-facing theorems are `sinTheta_complex` and
-`sinTheta_real`**, at the end of this module, and they are re-exported as
-`TauCeti.DavisKahan1970.SectionTwo.sinTheta` / `…sinTheta_real` alongside the other
+**The canonical source-facing theorems are `sinTheta_unbounded_formGap_paperUINorm_complex` and
+`sinTheta_unbounded_formGap_paperUINorm_real`**, at the end of this module, and they are re-exported as
+`TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex` / `…sinTheta_unbounded_formGap_paperUINorm_real` alongside the other
 three Section 2 results.  They state the Section 2 result at
 its full proved scope: unbounded self-adjoint `LinearPMap` operators, arbitrary
 Hilbert dimension, the whole `FormBoundedSylvesterGap` rather than one of its
 branches, a `PaperUnitaryInvariantNorm`, and both conclusions -- ideal membership
 and the inequality.  They carry no capability class.  Cite one of those two.
 
-`sinTheta_headline` below is kept for **presentation and compatibility**.  It is
+`sinTheta_unbounded_intervalExterior_legacyPresentation_rclike` below is kept for **presentation and compatibility**.  It is
 scalar-generic, which reads well, but it pays for that twice: it carries the
 capability classes `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and
 `HasUnboundedSylvesterKyFan` in its signature, and it inlines the finite
@@ -30,7 +30,7 @@ review reads for its explicit `sinTheta₀` parameter; it is no longer the theor
 to cite.
 
 The substantive proof remains
-`TauCeti.DavisKahan1970.sinTheta_headline_generic`.
+`TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike`.
 
 The central presentation choice is to name the source object `sinTheta₀` as an
 explicit theorem parameter and state its concrete realization by an equality
@@ -145,7 +145,7 @@ theorem isExactSpectralDecomposition_iff
 
 /-- **Davis--Kahan 1970, Section 2 sine-theta theorem, presentation form.**
 
-**Not the theorem to cite.**  `sinTheta_complex` and `sinTheta_real` below are the
+**Not the theorem to cite.**  `sinTheta_unbounded_formGap_paperUINorm_complex` and `sinTheta_unbounded_formGap_paperUINorm_real` below are the
 canonical source-facing statements; this one is kept because its explicit
 `sinTheta₀` parameter makes the printed inequality legible in the signature, and
 because callers already depend on it.
@@ -158,9 +158,9 @@ only the interval/exterior branch of `FormBoundedSylvesterGap`.
 The source object `sinTheta₀` is an explicit parameter, and `hSinTheta₀` states
 its concrete realization `(I - F₀ F₀*) E₀` in the theorem signature.  The
 claim after the colon is therefore the printed factor-one inequality itself.
-The stronger supporting theorem `sinTheta_headline_generic` additionally
+The stronger supporting theorem `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` additionally
 certifies membership of this operator in the source norm ideal. -/
-theorem sinTheta_headline
+theorem sinTheta_unbounded_intervalExterior_legacyPresentation_rclike
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : UnitaryInvariantNorm)
@@ -192,7 +192,7 @@ theorem sinTheta_headline
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}))
     (hR : N.Mem R) :
     δ * N.gauge sinTheta₀ ≤ N.gauge R := by
-  have hfull := TauCeti.DavisKahan1970.sinTheta_headline_generic
+  have hfull := TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike
     N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁
     htrial.isometry hexact.desiredIsometry hexact.complementIsometry
     hexact.orthogonal hexact.complete htrial.mapsDomain hexact.mapsDomain
@@ -202,7 +202,7 @@ theorem sinTheta_headline
 
 /-! ## The canonical fixed-field statements
 
-`sinTheta_headline` above is the presentation declaration, and it pays for being
+`sinTheta_unbounded_intervalExterior_legacyPresentation_rclike` above is the presentation declaration, and it pays for being
 scalar-generic twice over: it carries the two capability classes
 `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and
 `HasUnboundedSylvesterKyFan`, and its separation hypothesis is only the finite
@@ -227,7 +227,7 @@ that is proved.
 
 The two declarations below are the canonical source-facing statements: direct
 argument lists, the full gap, both conclusions, and no capability class.  The
-scalar-generic `sinTheta_headline_generic` remains the engine underneath. -/
+scalar-generic `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` remains the engine underneath. -/
 
 section FixedField
 
@@ -254,7 +254,7 @@ infinite dimension is part of the statement rather than a side condition.
 This is the full gap scope: `FormBoundedSylvesterGap` covers the interval and
 exterior configuration of Section 2 and the ordered half-line configurations of
 the Appendix alike. -/
-theorem sinTheta_complex
+theorem sinTheta_unbounded_formGap_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
     (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
@@ -300,12 +300,12 @@ theorem sinTheta_complex
 
 /-- **The familiar Section 2 interval form, over `ℂ`.**
 
-`sinTheta_complex` with the gap spelled out as the printed separation: the
+`sinTheta_unbounded_formGap_paperUINorm_complex` with the gap spelled out as the printed separation: the
 trial spectrum inside `[β, α]` and the complementary spectrum outside
 `(β − δ, α + δ)`, or the same with the two roles exchanged.  This is one
 constructor of `FormBoundedSylvesterGap`; the Appendix's ordered half-line
 configurations are others, and they reach the theorem above directly. -/
-theorem sinTheta_complex_of_intervalExterior
+theorem sinTheta_unbounded_intervalExterior_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
     (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
@@ -324,7 +324,7 @@ theorem sinTheta_complex_of_intervalExterior
     N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
       δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
         N.gauge R :=
-  sinTheta_complex N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
+  sinTheta_unbounded_formGap_paperUINorm_complex N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
     (FormBoundedSylvesterGap.intervalExterior hβα hspectral) hR
 
 end FixedField
@@ -339,10 +339,10 @@ variable {E F G H : Type v}
 
 /-- **Davis--Kahan 1970, the sine-theta theorem, over `ℝ`.**
 
-The real-scalar sibling of `sinTheta_complex`, with the same argument list and
+The real-scalar sibling of `sinTheta_unbounded_formGap_paperUINorm_complex`, with the same argument list and
 the same full gap scope.  The real proof descends from the complex one by
 complexification inside `result_real`; the descent is not visible here. -/
-theorem sinTheta_real
+theorem sinTheta_unbounded_formGap_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
     (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)
     (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)
@@ -388,12 +388,12 @@ theorem sinTheta_real
 
 /-- **The familiar Section 2 interval form, over `ℝ`.**
 
-`sinTheta_real` with the gap spelled out as the printed separation: the
+`sinTheta_unbounded_formGap_paperUINorm_real` with the gap spelled out as the printed separation: the
 trial spectrum inside `[β, α]` and the complementary spectrum outside
 `(β − δ, α + δ)`, or the same with the two roles exchanged.  This is one
 constructor of `FormBoundedSylvesterGap`; the Appendix's ordered half-line
 configurations are others, and they reach the theorem above directly. -/
-theorem sinTheta_real_of_intervalExterior
+theorem sinTheta_unbounded_intervalExterior_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
     (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)
     (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)
@@ -412,7 +412,7 @@ theorem sinTheta_real_of_intervalExterior
     N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
       δ * N.gauge ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
         N.gauge R :=
-  sinTheta_real N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
+  sinTheta_unbounded_formGap_paperUINorm_real N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
     (FormBoundedSylvesterGap.intervalExterior hβα hspectral) hR
 
 end FixedFieldReal

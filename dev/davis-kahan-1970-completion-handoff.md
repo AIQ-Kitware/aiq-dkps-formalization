@@ -2,7 +2,7 @@
 
 > **Historical checkpoint, retained as source-audit evidence.** Current status and policy live in `AGENTS.md`, the maintained Davis--Kahan census/frontier, and the distributable source specification. Re-measure current HEAD before acting on any status claim below.
 >
-> **Superseded on the completion question, updated after the hostile Appendix-scope audit.** All 29 counted results of the maintained denominator are terminal on all three axes. The first `S2-tan-theta` closure still kept the Ritz compression bounded; the Appendix-complete closure is now `TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact` plus its real sibling, which allow `A_0` itself to be unbounded. The work-list sections below are historical. The architectural sections — complexification as a proof technique, `LinearPMap` as the canonical unbounded carrier, paper facades exposing paper hypotheses — remain current guidance.
+> **Superseded on the completion question, updated after the hostile Appendix-scope audit.** All 29 counted results of the maintained denominator are terminal on all three axes. The first `S2-tan-theta` closure still kept the Ritz compression bounded; the Appendix-complete closure is now `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` plus its real sibling, which allow `A_0` itself to be unbounded. The work-list sections below are historical. The architectural sections — complexification as a proof technique, `LinearPMap` as the canonical unbounded carrier, paper facades exposing paper hypotheses — remain current guidance.
 
 State inspected 2026-08-09 from checkpoint HEAD `69d1655a` (`main`, clean working tree).
 
@@ -197,10 +197,10 @@ Use these exact bridges before inventing new transport records.
 
 The bounded infinite-dimensional double-angle tangent problem is solved. The important public chain is:
 
-* `tanTwoTheta_directedCorner_residual_all_kyFan_branchFree`;
-* `tanTwoTheta_directedCorner_residual_all_kyFan_branchFree_upper`;
-* `tanTwoTheta_wholeSpace_all_kyFan_branchFree`;
-* `tanTwoTheta_wholeSpace_paperUINorm_branchFree`.
+* `tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_kyFan_complex`;
+* `tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_kyFan_complex_upperCorner`;
+* `tanTwoTheta_ambient_bounded_branchFree_orderedForm_kyFan_complex`;
+* `tanTwoTheta_ambient_bounded_branchFree_orderedForm_paperUINorm_complex_of_poleExclusion`.
 
 The proof is a model for the unbounded Ky Fan problem. Its essential ingredients are:
 

@@ -273,7 +273,7 @@ theorem sinTheta_wholeSpace_paperUINorm
 
 /-- Theorem 6.3 directed `tan Theta` theorem on arbitrary complete complex
 Hilbert spaces and arbitrary complete trial subspaces, for every source UI norm. -/
-theorem tanTheta_directed_paperUINorm
+theorem tanTheta_directed_bounded_paperUINorm_complex
     {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     [CompleteSpace H]
     (N : PaperUnitaryInvariantNorm)
@@ -296,7 +296,7 @@ theorem tanTheta_directed_paperUINorm
 the trial/Ritz compression lies in `[beta, alpha]` and the unwanted exact
 restriction lies in `[alpha + delta, infinity)`.  Unlike the form-bound wrapper
 above, this is the source-facing spectral telescope used by the audit. -/
-theorem tanTheta_directed_paperUINorm_spectral
+theorem tanTheta_directed_bounded_spectralGap_paperUINorm_complex
     {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     [CompleteSpace H]
     (N : PaperUnitaryInvariantNorm)
@@ -319,7 +319,7 @@ theorem tanTheta_directed_paperUINorm_spectral
 
 /-- Ambient `tan Theta` theorem under the paper's standing crossed-defect
 condition (3.5), which supplies transversality rather than assuming it separately. -/
-theorem tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent
+theorem tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects
     (N : PaperUnitaryInvariantNorm)
     {T A : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -381,7 +381,7 @@ theorem tanTheta_literalSection2_admits_ambientRightAngle
   sorry
 
 /-- Full-Hilbert directed residual `sin 2Theta` theorem for every source UI norm. -/
-theorem sinTwoTheta_directedResidual_paperUINorm
+theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
@@ -399,7 +399,7 @@ theorem sinTwoTheta_directedResidual_paperUINorm
   sorry
 
 /-- Full-Hilbert ambient `sin 2Theta` theorem for every source UI norm. -/
-theorem sinTwoTheta_wholeSpace_paperUINorm
+theorem sinTwoTheta_ambient_bounded_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     {A B : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -420,7 +420,7 @@ theorem sinTwoTheta_wholeSpace_paperUINorm
 This is valuable infrastructure at arbitrary Hilbert/source-UI scope, but its
 right-hand side is the whole off-diagonal perturbation `H`; it is not used as a
 substitute for the paper's separate directed residual conclusion below. -/
-theorem tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace
+theorem tanTwoTheta_branchFree_bounded_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     {A H T : E →L[ℂ] E} {U : Submodule ℂ E} [U.HasOrthogonalProjection]
     {a b : ℝ}
@@ -450,7 +450,7 @@ compressed blocks of `A` satisfy the printed interval/half-line separation,
 caller-supplied quarter-angle branch, pole-exclusion hypothesis, or perturbed
 block spectral-placement premise.  The left side is the canonical directed
 projection-block representative used by the source norm. -/
-theorem tanTwoTheta_directedCorner_residual_paperUINorm_exact
+theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -520,7 +520,7 @@ theorem tanTwoTheta_unbounded_directedResidual_paperUINorm_exactPaper
 /-- Best currently proved ambient branch-free `tan 2Theta` endpoint.  The
 explicit `hcos` premise records the remaining gap to the literal Section 2
 hypothesis surface. -/
-theorem tanTwoTheta_wholeSpace_paperUINorm_branchFree
+theorem tanTwoTheta_ambient_bounded_branchFree_orderedForm_paperUINorm_complex_of_poleExclusion
     (N : PaperUnitaryInvariantNorm)
     {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -540,7 +540,7 @@ theorem tanTwoTheta_wholeSpace_paperUINorm_branchFree
 /-- The newly compiled ambient Section 2 `tan 2Theta` inequality from
 exactly the printed ordered spectral gap and fully off-diagonal perturbation
 hypotheses.  This mirrors the production theorem signature exactly. -/
-theorem tanTwoTheta_wholeSpace_paperUINorm_exact
+theorem tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -559,7 +559,7 @@ theorem tanTwoTheta_wholeSpace_paperUINorm_exact
 /-- **Intentional red static-semantic certificate:** pole exclusion for the
 ambient Section 2 `tan 2Theta` theorem from only the printed hypotheses.
 
-The production proof of `tanTwoTheta_wholeSpace_paperUINorm_exact` derives this
+The production proof of `tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex` derives this
 fact internally, but the deriving lemma is private.  Because Lean totalizes
 `Real.tan` at its poles, a signature-only paper audit cannot infer from the
 inequality theorem alone that the formal tangent has the source's intended

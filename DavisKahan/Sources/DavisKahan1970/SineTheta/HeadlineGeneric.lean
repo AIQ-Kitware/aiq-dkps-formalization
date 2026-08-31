@@ -15,7 +15,7 @@ paper-facing production surface.  The analytic engine is scalar-generic through
 `HasUnboundedSylvesterKyFan`; that class has instances for both scalar fields of
 the paper, `R` and `C`.
 
-The public theorem `sinTheta_headline_generic` avoids the historical bundled
+The public theorem `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` avoids the historical bundled
 problem records.  It displays the operators, coordinate maps, residual
 identity, exact-space decomposition, interval/exterior spectral separation,
 and universal source unitary-invariant norm directly in its type.
@@ -45,7 +45,7 @@ variable {E F G H : Type v}
 /-- Scalar-generic exact unbounded `sin Theta` endpoint at the canonical
 Ky-Fan-dominant ideal-family layer.  This is the reusable engine behind the
 paper-facing theorem below. -/
-theorem sinTheta_unbounded_exact_generic
+theorem sinTheta_unbounded_formGap_idealFamily_rclike
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : KyFanDominantIdealFamily (𝕜 := 𝕜))
@@ -99,7 +99,7 @@ explicitly instead of hiding it in a local problem structure.
 The interval/exterior hypothesis is written literally: one of `A0` and
 `Lambda1` has real spectrum in `[beta, alpha]`, while the other avoids the open
 `delta`-neighborhood of that interval. -/
-theorem sinTheta_headline_generic
+theorem sinTheta_unbounded_intervalExterior_paperUINorm_rclike
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
     [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
     (N : PaperUnitaryInvariantNorm)
@@ -163,7 +163,7 @@ theorem sinTheta_headline_generic
   · subst k
     simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
   · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
-    have hmain := sinTheta_unbounded_exact_generic
+    have hmain := sinTheta_unbounded_formGap_idealFamily_rclike
       (KyFanDominantIdealFamily.kyFan (𝕜 := 𝕜) k hkpos)
       D F₀ hA hA₀ hΛ₁ hE₀ hExact hδ hgap
       (KyFanDominantIdealFamily.kyFan_mem (𝕜 := 𝕜) k hkpos R)

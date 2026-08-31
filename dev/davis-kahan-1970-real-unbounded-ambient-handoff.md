@@ -1,13 +1,13 @@
 # Handoff: the real unbounded ambient `tan Θ` endpoint (closes `S2-tan-theta`)
 
-> **DISCHARGED 2026-08-13.** `tanTheta_unbounded_ambient_paperUINorm_real_exact` is proved in
+> **DISCHARGED 2026-08-13.** `tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real` is proved in
 > `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean`, with the required
 > signature and standard axioms, and `S2-tan-theta` is accepted terminal — the denominator is
 > 29/29. This document is retained as the record of the plan and of what the execution
 > actually needed. Two deviations from the plan below are worth carrying forward:
 >
 > - **Step 6 was not needed.** Rather than rebuilding the complex lower-corner Ky Fan
->   estimate, the complex `tanTheta_unbounded_ambient_paperUINorm_of_data` was split into
+>   estimate, the complex `tanTheta_ambient_unboundedOperator_boundedRitzData_paperUINorm_complex` was split into
 >   `..._of_data_of_transversality` (the assembly half, taking `‖sin Θ‖ < 1` directly) plus
 >   the unchanged original, which now derives transversality from (3.5) and calls it. The
 >   real endpoint consumes the assembly half. No corner argument is duplicated.
@@ -59,7 +59,7 @@ audited explicitation of (3.5). Do not drop it to make the Section 2 display loo
 ## Required endpoint
 
 ```lean
-theorem tanTheta_unbounded_ambient_paperUINorm_real_exact
+theorem tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
     (A : TauCeti.DavisKahanExt.ClosedOperator (𝕜 := ℝ) (E := E))
     {U V : Submodule ℝ E}
@@ -129,9 +129,9 @@ Every entry below was resolved in the tree at `5bfa2624`.
 
 | Declaration | Location |
 |---|---|
-| `tanTheta_unbounded_ambient_paperUINorm_exact` | `Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:268` |
-| `tanTheta_unbounded_ambient_paperUINorm_of_data` | `Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:194` |
-| `tanTheta_ambient_paperUINorm_of_lowerCorner` | `Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:166` |
+| `tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex` | `Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:268` |
+| `tanTheta_ambient_unboundedOperator_boundedRitzData_paperUINorm_complex` | `Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:194` |
+| `tanTheta_ambient_bounded_paperUINorm_complex_of_lowerCorner` | `Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:166` |
 | `kyFan_lowerCorner_le` | `Sources/DavisKahan1970/TanThetaWholeSpace.lean:1047` |
 
 ### Real-side inputs
@@ -164,7 +164,7 @@ Every entry below was resolved in the tree at `5bfa2624`.
 ## Proof steps
 
 1. **Real data-level theorem, kept public.** Prove
-   `tanTheta_unbounded_ambient_paperUINorm_real_of_data`, taking
+   `tanTheta_ambient_unboundedOperator_boundedRitzData_paperUINorm_real`, taking
    `data : Theorem63TrialData U V`, real form bounds, `h35`, the residual identity, and
    `N.Mem H`, concluding on `paperTanAngleOperatorR U V`. It is the real counterpart of the
    complex `..._of_data` and makes the final wrapper trivial.
@@ -187,7 +187,7 @@ Every entry below was resolved in the tree at `5bfa2624`.
    complex `..._of_data` proof, using `kyFan_lowerCorner_le` and
    `all_kyFan_core_of_formBounds_infinite`. If a new double-corner lemma seems necessary,
    stop — that means the work has dropped below the intended abstraction.
-7. **Apply `tanTheta_ambient_paperUINorm_of_lowerCorner`** over `RealComplexification E`.
+7. **Apply `tanTheta_ambient_bounded_paperUINorm_complex_of_lowerCorner`** over `RealComplexification E`.
 8. **Descend** with `complexify_paperTanAngleOperatorR`, `mem_complexify_iff`, and
    `gauge_complexify`. The final statement must be about `paperTanAngleOperatorR U V` and
    `H : E →L[ℝ] E`, never left on `RealComplexification E`.
@@ -268,9 +268,9 @@ it; if the checker says stale, re-review deliberately rather than pasting a new 
   `DavisKahan.SpectralTheory.FormMethod.Beam*` into Section 9 source facades.
 - `python3 scripts/check_comparator_signatures.py --no-build comparator/davis-kahan-1970.json`
   reports five statement mismatches: `partIII_sinTheta_residual_uiNorm`,
-  `tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent`,
-  `sinTwoTheta_directedResidual_paperUINorm`, `sinTwoTheta_wholeSpace_paperUINorm`,
-  `tanTwoTheta_directedCorner_residual_paperUINorm_exact`. These were unreachable while the
+  `tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects`,
+  `sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_complex`, `sinTwoTheta_ambient_bounded_paperUINorm_complex`,
+  `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex`. These were unreachable while the
   `Challenge` library did not compile; the build is green as of `5bfa2624`, so they are now
   visible. Repairing them means aligning each challenge statement to the source-faithful
   target, not to whichever production theorem happens to typecheck. Separate task.

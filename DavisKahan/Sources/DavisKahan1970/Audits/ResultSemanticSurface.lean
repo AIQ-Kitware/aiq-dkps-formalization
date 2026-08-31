@@ -102,18 +102,18 @@ the declarations they alias, with the full `FormBoundedSylvesterGap`, both
 conclusions and no capability class.  The rest are the presentation declaration,
 the engine, and the scope companions. -/
 
-#check @TauCeti.DavisKahan1970.SectionTwo.sinTheta
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTheta_real
-#check @DavisKahan1970.sinTheta_complex
-#check @DavisKahan1970.sinTheta_real
-#check @DavisKahan1970.sinTheta_complex_of_intervalExterior
-#check @DavisKahan1970.sinTheta_real_of_intervalExterior
-#check @DavisKahan1970.sinTheta_headline
-#check @TauCeti.DavisKahan1970.sinTheta_headline_generic
-#check @TauCeti.DavisKahan1970.sinTheta
-#check @TauCeti.DavisKahan1970.sinTheta_real_exactPaper
-#check @TauCeti.DavisKahan1970.generalizedSinTheta
-#check @TauCeti.DavisKahan1970.generalizedSinTheta_real_exactPaper
+#check @DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex
+#check @DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real
+#check @DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex
+#check @DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real
+#check @DavisKahan1970.sinTheta_unbounded_intervalExterior_legacyPresentation_rclike
+#check @TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike
+#check @TauCeti.DavisKahan1970.sinTheta_bundled_complex
+#check @TauCeti.DavisKahan1970.sinTheta_paperData_real
+#check @TauCeti.DavisKahan1970.sinTheta_generalized_bundled_complex
+#check @TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real
 
 /-! ## S2-tan-theta: Single-angle tangent theorem
 
@@ -133,29 +133,29 @@ The transversality-form declarations assume `‖sin Θ‖ < 1`, which is strictl
 than (3.5); they are registered as specializations, not as the source-shaped form.
 -/
 
-#check @TauCeti.DavisKahan1970.SectionTwo.tanTheta
+#check @TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex
 #check @TauCeti.DavisKahan1970.SectionTwo.tanTheta_real
-#check @TauCeti.DavisKahan1970.tanTheta_headline_generic_directed
-#check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm
-#check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_ritz_paperUINorm_real
+#check @TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real
 #check @TauCeti.DavisKahan.UnboundedRitzPair
 #check @TauCeti.DavisKahan.ReducingComplement
 #check @TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock
 #check @TauCeti.DavisKahan.ReducingComplement.ofReducesSubspace
 #check @TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm
 #check @TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial
-#check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm
-#check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real
-#check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent
-#check @TauCeti.DavisKahan1970.tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent
-#check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_exact
-#check @TauCeti.DavisKahan1970.tanTheta_unbounded_ambient_paperUINorm_real_exact
-#check @TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_exact
-#check @TauCeti.DavisKahan1970.tanTheta_unboundedCompression_ambient_paperUINorm_real_exact
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_transversality
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_transversality
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_crossedDefects
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_real
 #check @TauCeti.DavisKahan.directedGap_asymmetric_coordinateHalfSpace
 #check @TauCeti.DavisKahan1970.remark3_2_bilateralShift_separates_dimensionHypotheses
-#check @TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral
-#check @TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral
+#check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_real
 #check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
 #check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real
 
@@ -164,12 +164,12 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real
-#check @TauCeti.DavisKahan1970.sinTwoTheta_headline_generic_directed
-#check @TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm
-#check @TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_angleOperator
-#check @TauCeti.DavisKahan1970.sinTwoTheta_addBounded_paperUINorm_real_angleOperator
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real
 #check @TauCeti.DavisKahan.sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC
 #check @TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers
 #check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock
@@ -177,26 +177,26 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real
 #check @TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff
 #check @TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC
-#check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm
-#check @TauCeti.DavisKahan1970.sinTwoTheta_wholeSpace_paperUINorm_real
-#check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative
-#check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative
-#check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_uiNorm_representative_real
-#check @TauCeti.DavisKahan1970.unbounded_sinTwoTheta_residual_uiNorm_representative_real
-#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm
-#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real
-#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExterior
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_paperUINorm_real
 
 /-! ## S2-tan-two-theta: Double-angle tangent theorem
 
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta
+#check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex
 #check @TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real
-#check @TauCeti.DavisKahan1970.tanTwoTheta_headline_generic
-#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm
-#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_subspace_paperUINorm_real
+#check @TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_real
 #check @TauCeti.DavisKahan.ReflectionIntertwines
 #check @TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace
 #check @TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace
@@ -215,16 +215,16 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
 #check @TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
 #check @TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR
-#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm
-#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm_real
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_exact
-#check @TauCeti.DavisKahan1970.tanTwoTheta_directedCorner_residual_paperUINorm_real_exact
-#check @TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_exact
-#check @TauCeti.DavisKahan1970.tanTwoTheta_wholeSpace_paperUINorm_real_exact
-#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_exact
-#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact
-#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_exact
-#check @TauCeti.DavisKahan1970.tanTwoTheta_unbounded_ambient_paperUINorm_real_exact
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real
+#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real
+#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real
 
 /-! ## DK-3.1-prop: Acute direct rotation existence and uniqueness
 
@@ -429,8 +429,8 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
 #check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real
-#check @TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_spectral
-#check @TauCeti.DavisKahan1970.tanTheta_directed_paperUINorm_real_spectral
+#check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_real
 
 /-! ## DK-6.3-lem: Finite-rank near-maximizer leakage estimate
 
