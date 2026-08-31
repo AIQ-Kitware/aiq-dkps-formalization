@@ -379,9 +379,34 @@ def render(output: pathlib.Path, certificate_path: pathlib.Path | None = None) -
             "",
             md_code_block(source, "tex"),
             "",
-            "### Source-facing Lean declarations",
+            "### Canonical evidence",
+            "",
+            "The declarations that carry this result's printed statement, with the source "
+            "atoms each one covers.  Everything under *Other registered declarations* below "
+            "accompanies the result without establishing it.",
             "",
         ]
+        canonical = result.get("canonical_evidence", []) or []
+        if not canonical:
+            lines.append("**No canonical evidence is recorded. This is a blocking defect.**")
+            lines.append("")
+        canonical_names = []
+        for entry in canonical:
+            decl = entry.get("declaration", "?")
+            canonical_names.append(decl)
+            lines += [
+                f"- `{decl}` — {entry.get('role', '?')}, {entry.get('scalar_scope', '?')} scalars, "
+                f"{entry.get('evidence_kind', '?')}; covers "
+                + ", ".join(f"`{a}`" for a in entry.get("covers_source_atoms", []) or []),
+            ]
+        lines.append("")
+        supporting = result.get("supporting_evidence", []) or []
+        if supporting:
+            lines += ["### Other registered declarations", ""]
+            for entry in supporting:
+                lines.append(f"- `{entry.get('declaration', '?')}` — {entry.get('role', '?')}")
+            lines.append("")
+        lines += ["### Source-facing Lean declarations", ""]
         declarations = result.get("lean_declarations", [])
         if not declarations:
             lines.append("**No source-facing declaration is registered. This is a blocking defect.**")

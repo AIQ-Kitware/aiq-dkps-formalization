@@ -34,10 +34,15 @@ TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex    sinTwoTheta_real
 TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex    tanTwoTheta_real
 ```
 
-Each is at the accepted full source scope in its own type: unbounded self-adjoint
-`LinearPMap` ambient operator, arbitrary Hilbert dimension, a
-`PaperUnitaryInvariantNorm`, and both printed conclusions. `SectionTwoUsage.lean`
-shows each being called from ordinary operator-theory hypotheses.
+Each *type* displays an unbounded self-adjoint `LinearPMap` ambient operator,
+arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, and both printed
+conclusions. `SectionTwoUsage.lean` shows each being called from ordinary
+operator-theory hypotheses.
+
+Whether each matches the printed result is a separate, reviewed question, and
+`dev/davis-kahan-1970-formalization-result-inventory.json` owns the answer --
+including its standing qualification for `S2-tan-theta`. Do not read the sentence
+above as that review's verdict; it describes the signatures, not the audit.
 
 The scalar-generic presentation forms, directed and whole-space variants, finite
 specializations, operator-norm statements and bundled-problem entry points remain

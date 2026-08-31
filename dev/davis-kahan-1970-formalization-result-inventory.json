@@ -60,7 +60,8 @@
         "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex",
         "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real",
         "DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex",
-        "DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real"
+        "DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real",
+        "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike"
       ],
       "review_note": "Accepted semantic review. **`DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex` and `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real` are the primary source-facing witnesses** (canonicalized 2026-08-29). They state the result at its full proved scope: unbounded self-adjoint `LinearPMap` operators, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` rather than one of its branches, a `PaperUnitaryInvariantNorm`, and both conclusions -- ideal membership of the sine block and the factor-one inequality. They carry neither `HasUnboundedSylvesterKyFan` nor `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`. `sinTheta_unbounded_intervalExterior_paperUINorm_complex` and its real sibling spell out the printed Section 2 separation for callers who want the familiar form.\n\n`DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` is retained as the **presentation and compatibility** declaration, and the review still reads it for the properties that make it legible: it names the source norm with the public `UnitaryInvariantNorm` spelling, makes `sinTheta_0` an explicit parameter tied by a literal equality to `(I - F0 F0-dagger) E0`, writes the interval/exterior alternative literally, has no finite-dimensional hypothesis, and places exactly the factor-one source inequality after the theorem colon. Its costs are now recorded rather than glossed: being generic over `RCLike` forces the two capability classes into its signature, its separation hypothesis is only the interval/exterior branch, so it states a strictly smaller theorem than the one proved, and it drops the ideal-membership half of the conclusion. The two domain-heavy setup predicates have characteristic theorems that fully expand their contents. `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` remains the stronger supporting certificate and the engine both surfaces run through.",
       "boundary_review": {
@@ -86,7 +87,99 @@
       },
       "semantic_alignment": "locally_exact",
       "local_statement_self_contained": true,
-      "notes": " **Canonical fixed-field statements added 2026-08-29.** `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` is the presentation declaration and pays twice for being scalar-generic: it carries the capability classes `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and `HasUnboundedSylvesterKyFan`, and it inlines the finite interval/exterior branch of the separation, which fixes a strictly smaller theorem than the one proved. Neither cost is Davis--Kahan mathematics: the capability classes package the unbounded Sylvester Ky Fan estimate and a min-max lower bound, both proved here for both scalar fields, and they appear only because RCLike is an open abstraction. `sinTheta_complex` and `sinTheta_real` take direct argument lists, the full `FormBoundedSylvesterGap`, and conclude both ideal membership and the bound, with no capability class; they route through the already capability-free `FormBoundedIsometricSinThetaProblem.result_complex`/`.result_real` one Ky Fan gauge at a time. The `_of_intervalExterior` pair spells out the printed Section 2 separation. `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` remains the engine and is unchanged. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved for the scalar-generic `RCLike` statement and are deliberately bound to nothing, because no such declaration exists yet for any of the four. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately."
+      "notes": " **Canonical fixed-field statements added 2026-08-29.** `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` is the presentation declaration and pays twice for being scalar-generic: it carries the capability classes `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere` and `HasUnboundedSylvesterKyFan`, and it inlines the finite interval/exterior branch of the separation, which fixes a strictly smaller theorem than the one proved. Neither cost is Davis--Kahan mathematics: the capability classes package the unbounded Sylvester Ky Fan estimate and a min-max lower bound, both proved here for both scalar fields, and they appear only because RCLike is an open abstraction. `sinTheta_complex` and `sinTheta_real` take direct argument lists, the full `FormBoundedSylvesterGap`, and conclude both ideal membership and the bound, with no capability class; they route through the already capability-free `FormBoundedIsometricSinThetaProblem.result_complex`/`.result_real` one Ky Fan gauge at a time. The `_of_intervalExterior` pair spells out the printed Section 2 separation. `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` remains the engine and is unchanged. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved for the scalar-generic `RCLike` statement and are deliberately bound to nothing, because no such declaration exists yet for any of the four. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately.",
+      "canonical_evidence": [
+        {
+          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-sin-theta.gap-hypothesis",
+            "S2-sin-theta.directed-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals"
+          ]
+        },
+        {
+          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-sin-theta.gap-hypothesis",
+            "S2-sin-theta.directed-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals"
+          ]
+        },
+        {
+          "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike",
+          "role": "primary_source_witness",
+          "scalar_scope": "rclike",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-sin-theta.gap-hypothesis",
+            "S2-sin-theta.directed-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex",
+          "role": "public_alias"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTheta_real",
+          "role": "public_alias"
+        },
+        {
+          "declaration": "DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike",
+          "role": "scalar_generic_facade"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike",
+          "role": "scalar_generic_facade"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_bundled_complex",
+          "role": "presentation_wrapper"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_paperData_real",
+          "role": "presentation_wrapper"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_generalized_bundled_complex",
+          "role": "presentation_wrapper"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real",
+          "role": "presentation_wrapper"
+        },
+        {
+          "declaration": "DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex",
+          "role": "specialization"
+        },
+        {
+          "declaration": "DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real",
+          "role": "specialization"
+        }
+      ]
     },
     {
       "id": "S2-tan-theta",
@@ -221,7 +314,130 @@
         "source_fidelity_inventory_sha256": "abbdcb96216801a0e367c34b64ae291df39ca67efbbf59db86c5f80c4efb0f7a",
         "supporting_atom_digest_sha256": "50eb0bd0f9bb87fae3d643b3b4a4c33056d1268e0e058c413c29ea3d4ffc7995"
       },
-      "notes": " **Constructor-first interface added 2026-08-29.** The most general unbounded form, `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex`, asked its caller for four separate facts that are not Davis--Kahan mathematics: two saying the compression data is A's Ritz pair on U (hZA, haction), and two saying V-perp reduces A (hVdom, hVcomm). `UnboundedRitzPair A U` and `ReducingComplement A V` hold those, `UnboundedRitzPair.ofTrialBlock` builds the first from the bounded-compression bundle a caller usually has, and `tanTheta_ambient_unboundedRitz_paperUINorm_complex` is the theorem taking the two objects. What deliberately stays a hypothesis is what the theorem is about: semiboundedness of the compression, coercivity on the unwanted subspace, and the crossed-defect standing condition (3.5). **Real constructor-first endpoint, 2026-08-30.** `tanTheta_ambient_unboundedRitz_paperUINorm_real` is the real mirror of the complex Ritz-pair form: the four structural facts tying the compression data to the ambient operator and saying that `V`-perp reduces it are replaced by `DavisKahan.UnboundedRitzPair` and `DavisKahan.ReducingComplement`, both scalar-generic, so no real-specific vocabulary is introduced and the real and complex public statements now have the same shape. The mathematics -- semiboundedness of the compression, coercivity on the unwanted subspace, and the standing crossed-defect condition (3.5) -- remains supplied by the caller. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved for the scalar-generic `RCLike` statement and are deliberately bound to nothing, because no such declaration exists yet for any of the four. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately."
+      "notes": " **Constructor-first interface added 2026-08-29.** The most general unbounded form, `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex`, asked its caller for four separate facts that are not Davis--Kahan mathematics: two saying the compression data is A's Ritz pair on U (hZA, haction), and two saying V-perp reduces A (hVdom, hVcomm). `UnboundedRitzPair A U` and `ReducingComplement A V` hold those, `UnboundedRitzPair.ofTrialBlock` builds the first from the bounded-compression bundle a caller usually has, and `tanTheta_ambient_unboundedRitz_paperUINorm_complex` is the theorem taking the two objects. What deliberately stays a hypothesis is what the theorem is about: semiboundedness of the compression, coercivity on the unwanted subspace, and the crossed-defect standing condition (3.5). **Real constructor-first endpoint, 2026-08-30.** `tanTheta_ambient_unboundedRitz_paperUINorm_real` is the real mirror of the complex Ritz-pair form: the four structural facts tying the compression data to the ambient operator and saying that `V`-perp reduces it are replaced by `DavisKahan.UnboundedRitzPair` and `DavisKahan.ReducingComplement`, both scalar-generic, so no real-specific vocabulary is introduced and the real and complex public statements now have the same shape. The mathematics -- semiboundedness of the compression, coercivity on the unwanted subspace, and the standing crossed-defect condition (3.5) -- remains supplied by the caller. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved for the scalar-generic `RCLike` statement and are deliberately bound to nothing, because no such declaration exists yet for any of the four. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately.",
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-tan-theta.ordered-gap-hypothesis",
+            "S2-tan-theta.rayleigh-ritz-hypothesis",
+            "S2-tan-theta.ambient-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals",
+            "DK-6-appendix.unbounded-tangent-extension"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-tan-theta.ordered-gap-hypothesis",
+            "S2-tan-theta.rayleigh-ritz-hypothesis",
+            "S2-tan-theta.ambient-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals",
+            "DK-6-appendix.unbounded-tangent-extension"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-tan-theta.ordered-gap-hypothesis",
+            "S2-tan-theta.rayleigh-ritz-hypothesis",
+            "S2-tan-theta.directed-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.bounded-residual-needed"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-tan-theta.rayleigh-ritz-hypothesis",
+            "S2-tan-theta.directed-conclusion",
+            "S2-unbounded-scope.arbitrary-ui-scope"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex",
+          "role": "public_alias"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTheta_real",
+          "role": "public_alias"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike",
+          "role": "scalar_generic_facade"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_transversality",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_transversality",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_crossedDefects",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_real",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.UnboundedRitzPair",
+          "role": "implementation_structure"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ReducingComplement",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock",
+          "role": "supporting_theorem"
+        }
+      ]
     },
     {
       "id": "S2-sin-two-theta",
@@ -242,7 +458,7 @@
       ],
       "disposition": "proved_exact",
       "verification": "proved_in_build",
-      "semantic_certification": "reopened",
+      "semantic_certification": "accepted",
       "lean_declarations": [
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
@@ -265,9 +481,14 @@
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real",
         "TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real",
         "TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff",
-        "TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC"
+        "TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC",
+        "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_paperUINorm_complex",
+        "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_paperUINorm_complex",
+        "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_paperUINorm_complex",
+        "TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap",
+        "TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap"
       ],
-      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: the registered unbounded directed endpoint `sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex` bounds delta * N(sin 2Theta_0) by the norm of a self-adjoint REFLECTION residual satisfying (A + R) J_V = J_V A, which is not the printed residual (1.8).  The repair is `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` and its real sibling `..._paperUINorm_real`: an unbounded self-adjoint closed operator, an arbitrary closed trial subspace inside its domain, the trial operator M = A_0, the printed trial residual R = A E_0 - E_0 A_0 as the only right-hand side, arbitrary `PaperUnitaryInvariantNorm`, the directed angle Theta_0, and the printed conclusion delta * N(sin 2Theta_0) <= 2 N(R) with membership concluded rather than assumed.  There is no finite-dimensionality, compactness, acuteness, separability, self-adjointness-of-R or reflection hypothesis visible to the caller: the reflected comparison system D = -2 (X + X*) is constructed internally from the trial data by `trialReflection_intertwines`.  The sharp factor two is obtained blockwise from the scalar-generic doubling identity `kyFan_reflectionDefectBlock_le_two_mul`, not from a triangle inequality on the reflection defect, which would give four.  The complex spectral-separation hypotheses are the printed interval/exterior separation stated through semiboundedness plus resolvent-set avoidance; the real endpoint carries the scalar-generic `FormBoundedSylvesterGap`, which is the weaker predicate (hence the stronger theorem) and covers all three printed separation configurations, and `..._paperUINorm_real_of_intervalExterior` restates it at the printed interval/exterior separation itself.  The ambient conclusion delta * N(sin 2Theta) <= 2 N(H) remains covered over both fields by `sinTwoTheta_ambient_bounded_paperUINorm_complex` and `sinTwoTheta_ambient_bounded_paperUINorm_real`. Audit-surface update 2026-08-13: `sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` is now the canonical scalar-generic PaperUI directed facade with interval/exterior placement and the residual visible in its type; the full unbounded companions remain registered.",
+      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: the registered unbounded directed endpoint `sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex` bounds delta * N(sin 2Theta_0) by the norm of a self-adjoint REFLECTION residual satisfying (A + R) J_V = J_V A, which is not the printed residual (1.8).  The repair is `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` and its real sibling `..._paperUINorm_real`: an unbounded self-adjoint closed operator, an arbitrary closed trial subspace inside its domain, the trial operator M = A_0, the printed trial residual R = A E_0 - E_0 A_0 as the only right-hand side, arbitrary `PaperUnitaryInvariantNorm`, the directed angle Theta_0, and the printed conclusion delta * N(sin 2Theta_0) <= 2 N(R) with membership concluded rather than assumed.  There is no finite-dimensionality, compactness, acuteness, separability, self-adjointness-of-R or reflection hypothesis visible to the caller: the reflected comparison system D = -2 (X + X*) is constructed internally from the trial data by `trialReflection_intertwines`.  The sharp factor two is obtained blockwise from the scalar-generic doubling identity `kyFan_reflectionDefectBlock_le_two_mul`, not from a triangle inequality on the reflection defect, which would give four.  The complex spectral-separation hypotheses are the printed interval/exterior separation stated through semiboundedness plus resolvent-set avoidance; the real endpoint carries the scalar-generic `FormBoundedSylvesterGap`, which is the weaker predicate (hence the stronger theorem) and covers all three printed separation configurations, and `..._paperUINorm_real_of_intervalExterior` restates it at the printed interval/exterior separation itself.  The ambient conclusion delta * N(sin 2Theta) <= 2 N(H) remains covered over both fields by `sinTwoTheta_ambient_bounded_paperUINorm_complex` and `sinTwoTheta_ambient_bounded_paperUINorm_real`. Audit-surface update 2026-08-13: `sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` is now the canonical scalar-generic PaperUI directed facade with interval/exterior placement and the residual visible in its type; the full unbounded companions remain registered.\n\nRE-CLOSED 2026-08-31 at the full source gap.  The 2026-08-31 downgrade was correct: the complex endpoints took a bounded separating interval `[beta, alpha]` while the source allows half-infinite intervals, and only the real endpoints carried `FormBoundedSylvesterGap`.  The repair did NOT generalize the centred `TwoSidedShiftedInverseBound` engine the downgrade traced.  It adopted the REAL track's architecture over `C` instead: `sinTheta_unbounded_complex` already proved the complex single-angle theorem at the full form-bounded gap, so the missing pieces were its block form (`ExactSinTheta.sinTheta_unbounded_complex_block`), the bounded-perturbation adapter (`sinTheta_addBounded_gauge_complex_block_of_formGap`), and the reflected exact system (`sinTwoTheta_reflectionResidual_block_gauge_of_formGap`, `sinTwoTheta_reflectionResidual_gauge_of_formGap`, `sinTwoTheta_addBounded_gauge_of_formGap`).  The reflection geometry also simplifies: the spectrum-gap proof must unitarily conjugate the complementary restriction because its hypothesis is about that operator's SPECTRUM, whereas a form-bounded gap between `A_0` and `Lambda` lets the reflection go into the coordinate map `F_1 = J_V . U^c.subtypeL`, exactly as the real proof does.\n\nBoth printed conclusions are now at the printed gap scope over both fields: the directed residual endpoint `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` and the directed perturbation endpoint `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` both take `FormBoundedSylvesterGap`.  `SectionTwoUsage.sinTwoTheta_from_halfInfinite_separation` is the compiled witness that the half-infinite configuration can actually be called: it supplies only two form bounds, with no finite interval and no spectrum-avoidance certificate.  The earlier bounded-interval statements are retained under `spectrumGap` names as supporting evidence.  They are NOT derived from the new ones: `FormBoundedSylvesterGap.intervalExterior` wants `LinearPMap.realSpectrum A_0 subset Icc beta alpha`, and the tree proves only the converse direction, so the implication would need the `LinearPMap` analogue of `realSpectrum_subset_Ici_of_le_re_inner_generic`, which exists for bounded operators only.",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "S2-sin-two-theta",
@@ -291,16 +512,183 @@
       "semantic_alignment": "locally_exact",
       "local_statement_self_contained": true,
       "notes": " **Complex source-norm wrapper added 2026-08-29.** `sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_paperUINorm_real` had no complex counterpart even though the complex ideal-level theorem `DavisKahan.sinTwoTheta_addBounded_unitaryInvariant_of_spectrum_gap` was available; only the adaptation from a Ky-Fan-dominant family to `PaperUnitaryInvariantNorm` was missing. The two are not literal mirrors: the real track reaches the ideal layer through `FormBoundedSylvesterGap`, the complex track through the spectrum gap (semiboundedness of the selected restriction plus the complementary restriction's spectrum avoiding the open enlargement), and the new statement takes the hypotheses the complex proof actually has. **Ideal-level angle transport proved 2026-08-29.** The unbounded theorems concluded about `sinTwoThetaIdealBlock`, and the only bridge to an angle operator was `norm_starProjection_reflectedComplementary_eq_sinTwoAngle`, an equality of OPERATOR NORMS, which says nothing in any other unitarily invariant norm. The bridge now holds as an operator identity: `sinAngleOperatorDirectedC U (reflectedU U V) = sinTwoAngleOperatorC U V`, i.e. the directed sine of the angle between U and its V-reflection IS the sine of twice the angle between U and V. The proof is one ring identity, `p r p r p = 4t^2 - 4t + p` with r = 2q - 1 and t = pqp, needing only p^2 = p: both sides square to 4(t - t^2) and both are nonnegative, so the positive square roots agree. Consequently the block and the angle operator have the same approximation numbers, hence the same membership and gauge in EVERY symmetric ideal family, and `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` is the unbounded theorem read on `2 sin Theta cos Theta`. Scope note: this is the DIRECTED double-angle operator, and the distinction from the ambient one is a multiplicity. `sinTwoThetaIdealBlock U V = P_U P_{W-perp}` is one-sided, so it carries each principal angle once, which is what the directed `sinTwoAngleOperatorC` does. The ambient spelling `paperSinTwoAngleOperatorC U V` is `|R_V P_U R_V - P_U|` (`paperSinTwoAngleOperatorC_eq_modulus_reflect`), built like every paper angle object on the ambient sine |P_U - P_V|, so it carries every angle TWICE. The two are therefore different operators, equal in operator norm but not in gauge generally, and the transport here is correctly stated for the directed one. Contrast `S2-tan-two-theta`, where the block IS two-sided and the ambient paper object is the right partner. **Real transport added 2026-08-30.** `norm_sinTwoThetaIdealBlock_real` gave the real block-to-angle identification at the operator norm only -- one number. `approximationSingularValue_sinTwoThetaIdealBlock_real` gives every approximation singular value, which is what a symmetric ideal reads, by the route the norm identification already used: complexification preserves approximation singular values, the real block complexifies to the complex block of the complexified pair, and the complex transport applies there. The target is `Real.sinTwoAngleOperatorRC`, the DIRECTED double-angle sine of the real pair read in the complexification, which is where the tree keeps it -- there is no real directed spelling, only the ambient `paperSinTwoAngleOperatorR`. Turning this into an equality of real PaperUnitaryInvariantNorm gauges would need a real directed sin 2Theta operator; that would be a second spelling of an existing concept and is deliberately not introduced. **Real angle-operator endpoint, 2026-08-30.** `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real` states the real bounded-perturbation theorem on the directed double-angle sine of the real pair instead of on `sinTwoThetaIdealBlock`. The transport is `extendedGauge_sinTwoThetaIdealBlock_real`, the gauge form of the approximation-number identity: the two operators live over different scalar fields -- the block is real, the angle is read in the canonical complexification where this development keeps the real double-angle operators -- so the equality is chained through `extendedGauge_complexify` rather than through the same-field `gauge_eq_of_sameApproximationSingularValues`. The ambient real spelling `paperSinTwoAngleOperatorR` is deliberately not the target: it carries each principal angle twice where the one-sided block carries it once. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved for the scalar-generic `RCLike` statement and are deliberately bound to nothing, because no such declaration exists yet for any of the four. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately. GAP SCOPE DOWNGRADED 2026-08-31, on review. The source inventory attaches the half-infinite gap-interval scope to this result, and the real endpoint `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real` genuinely carries it: it takes `FormBoundedSylvesterGap`, whose two semibounded constructors are that scope. The COMPLEX endpoint `sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex` does not. It requires finite `beta <= alpha` with the selected restriction semibounded both below and above and the complement avoiding `(beta-delta, alpha+delta)` -- a bounded interval. So the complex half of this row was certified beyond what it proves.\n\nTHE MISSING THEOREM, exactly: a complex Paper-UI endpoint taking `hgap : FormBoundedSylvesterGap (selfAdjointSpectralRestriction A hA B hB) (selfAdjointSpectralRestriction A hA Bcompl hB.compl) delta`. It is NOT the one-line bridge the sine case was. Traced: the complex chain runs `..._paperUINorm_complex` -> `..._blockRepresentative_paperUINorm_complex` -> `sinTwoTheta_reflectionResidual_block_gauge_of_spectrum_gap` -> `sinTheta_addBounded_gauge_block_of_spectrum_gap` -> `sinTheta_unbounded_gauge_of_spectrum_gap` -> `sinTheta_unbounded_gauge`, and that analytic core consumes the interval as `TwoSidedShiftedInverseBound D.Lambda1 ((alpha+beta)/2) ((alpha-beta)/2 + delta)` -- a centre and a radius, which the semibounded branches of `FormBoundedSylvesterGap` do not have. The real route reaches the full gap through a different engine, `sinTwoTheta_reflectionResidual_gauge_real`. Closing the complex side means either giving the complex reflection-residual engine a full-gap route of the kind the real one has, or generalizing `sinTheta_unbounded_gauge` past the centred interval. Until one of those lands, the complex half of this result is a bounded-interval specialization and this row must not be read as full source scope.",
-      "expected_status": "compiled_specialization",
-      "remaining_gap": {
-        "category": "scalar-scope specialization",
-        "missing_surface": "A complex Paper-UI endpoint taking `hgap : FormBoundedSylvesterGap (selfAdjointSpectralRestriction A hA B hB) (selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ` instead of finite `β ≤ α` with `SemiboundedBelow β`, `SemiboundedAbove α` and the complement avoiding `(β-δ, α+δ)`. The real endpoint already takes the full gap; the complex one does not, so the half-infinite gap scope this result is certified against is carried at one field only.",
-        "next_action": "Give the complex reflection-residual engine a full-gap route of the kind `sinTwoTheta_reflectionResidual_gauge_real` has, or generalize `sinTheta_unbounded_gauge` past its centred `TwoSidedShiftedInverseBound D.Λ₁ ((α+β)/2) ((α-β)/2 + δ)`, which is where the complex chain consumes the bounded interval and which the semibounded branches cannot supply.",
-        "strongest_existing_evidence": [
-          "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real",
-          "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex"
-        ]
-      }
+      "expected_status": "compiled_exact",
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-sin-two-theta.gap-hypothesis",
+            "S2-sin-two-theta.directed-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-sin-two-theta.gap-hypothesis",
+            "S2-sin-two-theta.directed-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-sin-two-theta.gap-hypothesis",
+            "S2-sin-two-theta.directed-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-sin-two-theta.gap-hypothesis",
+            "S2-sin-two-theta.directed-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-sin-two-theta.ambient-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-sin-two-theta.ambient-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex",
+          "role": "public_alias"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
+          "role": "public_alias"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike",
+          "role": "scalar_generic_facade"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex",
+          "role": "generalization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex",
+          "role": "generalization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real",
+          "role": "generalization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real",
+          "role": "generalization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_paperUINorm_real",
+          "role": "specialization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_paperUINorm_complex",
+          "role": "presentation_wrapper"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_complex",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_paperUINorm_complex",
+          "role": "specialization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_paperUINorm_complex",
+          "role": "specialization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_paperUINorm_complex",
+          "role": "specialization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap",
+          "role": "supporting_theorem"
+        }
+      ]
     },
     {
       "id": "S2-tan-two-theta",
@@ -386,7 +774,199 @@
       },
       "semantic_alignment": "locally_exact",
       "local_statement_self_contained": true,
-      "notes": " **Subspace-first interface added 2026-08-29.** The ambient form asked its caller for a reflection Z together with four facts. Two of them, self-adjointness and Z^2 = 1, are not hypotheses at all: a subspace determines its reflection and the reflection has both by construction. `ReflectionIntertwines A B V` carries only the two that are mathematics -- the reflection preserves A's domain and commutes with A + B on it -- and `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex` takes the reducing subspace, builds Z = V.reflectionOperator internally, and supplies the two structural facts itself. Not internalized: the conclusion still names `unboundedReflectionTangent`, the block tangent, rather than the paper's canonical double-angle tangent; bringing it across needs the tan-2Theta analogue of `sinTwoThetaIdealBlock_hasSameApproximationNumbers`, which is not proved. **What the tangent block is, and its transport, proved 2026-08-29/30.** The unbounded theorems concluded about `unboundedReflectionTangent U Z = S (C^2)^{-1} C`, with C and S the diagonal and off-diagonal blocks of a self-adjoint involution relative to U + U-perp. Two elementary identities, both Z* = Z and Z^2 = 1 read on and off the diagonal, are `C^2 + S^2 = 1` and `C S + S C = 0`; the anticommutation makes S^2 commute with C and hence with (C^2)^{-1}, and the Gram computation collapses to `T*T = S^2 (1 - S^2)^{-1}` -- the diagonal block cancels entirely, so the tangent is a function of S alone. `starProjection_offDiagonal_sq_reflection` identifies the U block of S^2 for the reflection as (sin 2Theta)^2. **The transport to the paper's tangent then holds, contrary to what this row said on 2026-08-29.** For the reflection, `unboundedReflectionTangent U J_V = paperTanTwoBlockRepresentative U V * J_U`: the tangent's (C^2)^{-1} C factor carries the signed doubled cosine 1 - 2(P_V - P_U)^2, which is exactly what the block representative's secant inverts, and the reflection J_U is what is left over. J_U is a self-adjoint unitary, so the two have the same approximation numbers, and `paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative` closes the chain to the paper's ambient |tan 2Theta|. Hence equal gauge and membership in every PaperUnitaryInvariantNorm, and `tanTwoTheta_ambient_unbounded_paperUINorm_complex` is the unbounded theorem on the paper object. The extra hypothesis is the paper's own cos 2theta != 0, which is what makes tan 2Theta bounded at all. **The retracted claim, recorded so the mistake is not repeated:** this row previously said the transport could not hold because `paperAbsTanTwoAngleOperatorC` is supported on U alone while the tangent has both off-diagonal blocks. That was wrong. `paperAngleOperatorC` is `cfc arcsin (sinAngleOperatorC U V)` built on the AMBIENT sine |P_U - P_V|, so the paper's |tan 2Theta| carries every principal angle twice -- the same multiplicity as the two-sided tangent. The error was reading the ambient angle object as the directed one. **Pole hypothesis removed from the public statement, 2026-08-30.** `tanTwoTheta_ambient_unbounded_paperUINorm_complex` previously asked its caller for `cos (2 t) != 0` on the angle spectrum. That is not an independent Section 2 assumption: the ordered gap already forces the reflection's diagonal block to be invertible, which is the first component of `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex`, and `C = J_U (1 - 2 (P_V - P_U)^2)` with `J_U` a unit, so a unit `C` is a unit signed doubled cosine. `isUnit_signedCosTwo_of_isUnit_diagonalPart_sq` and `cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq` are the two-step bridge, factored in the generic reflection layer rather than inlined in the source wrapper; the second composes with the pre-existing `cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq`. **Real endpoints, 2026-08-30.** `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_real` and `tanTwoTheta_ambient_unbounded_paperUINorm_real` mirror the cleaned complex API over a real Hilbert space, concluding on the new real ambient `paperAbsTanTwoAngleOperatorR` -- the real member of the existing family of `realPartOperator`-of-`cfc` paper angle operators. The transport `extendedGauge_unboundedReflectionTangent_real` descends through the complexification, with no second analytic proof and no loss of constant or norm class. **`ReflectionIntertwines` moved and generalized, 2026-08-30.** It was `TauCeti.DavisKahan1970.ReflectionIntertwines`, complex-only; it is now `TauCeti.DavisKahan.ReflectionIntertwines`, scalar-generic, beside `UnboundedRitzPair` and `ReducingComplement`, and it gains `ofReducesSubspace`: a caller holding `TauCeti.LinearPMap.ReducesSubspace (A.addBounded B) V` -- the generic reducing-subspace vocabulary -- constructs nothing by hand. The underlying generic fact is `reflection_commutes_of_reducesSubspace`, that a reducing subspace commutes with its own reflection, which mentions neither perturbation nor Davis--Kahan. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved for the scalar-generic `RCLike` statement and are deliberately bound to nothing, because no such declaration exists yet for any of the four. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately."
+      "notes": " **Subspace-first interface added 2026-08-29.** The ambient form asked its caller for a reflection Z together with four facts. Two of them, self-adjointness and Z^2 = 1, are not hypotheses at all: a subspace determines its reflection and the reflection has both by construction. `ReflectionIntertwines A B V` carries only the two that are mathematics -- the reflection preserves A's domain and commutes with A + B on it -- and `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex` takes the reducing subspace, builds Z = V.reflectionOperator internally, and supplies the two structural facts itself. Not internalized: the conclusion still names `unboundedReflectionTangent`, the block tangent, rather than the paper's canonical double-angle tangent; bringing it across needs the tan-2Theta analogue of `sinTwoThetaIdealBlock_hasSameApproximationNumbers`, which is not proved. **What the tangent block is, and its transport, proved 2026-08-29/30.** The unbounded theorems concluded about `unboundedReflectionTangent U Z = S (C^2)^{-1} C`, with C and S the diagonal and off-diagonal blocks of a self-adjoint involution relative to U + U-perp. Two elementary identities, both Z* = Z and Z^2 = 1 read on and off the diagonal, are `C^2 + S^2 = 1` and `C S + S C = 0`; the anticommutation makes S^2 commute with C and hence with (C^2)^{-1}, and the Gram computation collapses to `T*T = S^2 (1 - S^2)^{-1}` -- the diagonal block cancels entirely, so the tangent is a function of S alone. `starProjection_offDiagonal_sq_reflection` identifies the U block of S^2 for the reflection as (sin 2Theta)^2. **The transport to the paper's tangent then holds, contrary to what this row said on 2026-08-29.** For the reflection, `unboundedReflectionTangent U J_V = paperTanTwoBlockRepresentative U V * J_U`: the tangent's (C^2)^{-1} C factor carries the signed doubled cosine 1 - 2(P_V - P_U)^2, which is exactly what the block representative's secant inverts, and the reflection J_U is what is left over. J_U is a self-adjoint unitary, so the two have the same approximation numbers, and `paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative` closes the chain to the paper's ambient |tan 2Theta|. Hence equal gauge and membership in every PaperUnitaryInvariantNorm, and `tanTwoTheta_ambient_unbounded_paperUINorm_complex` is the unbounded theorem on the paper object. The extra hypothesis is the paper's own cos 2theta != 0, which is what makes tan 2Theta bounded at all. **The retracted claim, recorded so the mistake is not repeated:** this row previously said the transport could not hold because `paperAbsTanTwoAngleOperatorC` is supported on U alone while the tangent has both off-diagonal blocks. That was wrong. `paperAngleOperatorC` is `cfc arcsin (sinAngleOperatorC U V)` built on the AMBIENT sine |P_U - P_V|, so the paper's |tan 2Theta| carries every principal angle twice -- the same multiplicity as the two-sided tangent. The error was reading the ambient angle object as the directed one. **Pole hypothesis removed from the public statement, 2026-08-30.** `tanTwoTheta_ambient_unbounded_paperUINorm_complex` previously asked its caller for `cos (2 t) != 0` on the angle spectrum. That is not an independent Section 2 assumption: the ordered gap already forces the reflection's diagonal block to be invertible, which is the first component of `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex`, and `C = J_U (1 - 2 (P_V - P_U)^2)` with `J_U` a unit, so a unit `C` is a unit signed doubled cosine. `isUnit_signedCosTwo_of_isUnit_diagonalPart_sq` and `cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq` are the two-step bridge, factored in the generic reflection layer rather than inlined in the source wrapper; the second composes with the pre-existing `cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq`. **Real endpoints, 2026-08-30.** `tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_real` and `tanTwoTheta_ambient_unbounded_paperUINorm_real` mirror the cleaned complex API over a real Hilbert space, concluding on the new real ambient `paperAbsTanTwoAngleOperatorR` -- the real member of the existing family of `realPartOperator`-of-`cfc` paper angle operators. The transport `extendedGauge_unboundedReflectionTangent_real` descends through the complexification, with no second analytic proof and no loss of constant or norm class. **`ReflectionIntertwines` moved and generalized, 2026-08-30.** It was `TauCeti.DavisKahan1970.ReflectionIntertwines`, complex-only; it is now `TauCeti.DavisKahan.ReflectionIntertwines`, scalar-generic, beside `UnboundedRitzPair` and `ReducingComplement`, and it gains `ofReducesSubspace`: a caller holding `TauCeti.LinearPMap.ReducesSubspace (A.addBounded B) V` -- the generic reducing-subspace vocabulary -- constructs nothing by hand. The underlying generic fact is `reflection_commutes_of_reducesSubspace`, that a reducing subspace commutes with its own reflection, which mentions neither perturbation nor Davis--Kahan. **Canonical Section 2 inventory, 2026-08-30.** `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` is the public inventory of the paper's four unnumbered headline theorems over both scalar fields: `TauCeti.DavisKahan1970.SectionTwo.{sinTheta_complex, tanTheta_complex, sinTwoTheta_complex, tanTwoTheta_complex}` and their `_real` siblings. The unqualified `SectionTwo.{sinTheta, tanTheta, sinTwoTheta, tanTwoTheta}` are reserved for the scalar-generic `RCLike` statement and are deliberately bound to nothing, because no such declaration exists yet for any of the four. They are `alias`es, so each carries exactly the type of the declaration it names -- unbounded self-adjoint `LinearPMap` ambient operator, arbitrary Hilbert dimension, a `PaperUnitaryInvariantNorm`, both printed conclusions, no capability class, no finite-dimensional hypothesis, no proof vehicle in the conclusion. `SectionTwoUsage.lean` calls each from ordinary operator-theory hypotheses, so the advertised entry points are compiler-checked to be reachable without building Sylvester witnesses, reflection blocks, or spectral reflections by hand. The scalar-generic presentation forms, directed and whole-space variants, finite specializations, operator-norm statements and bundled-problem entry points are unchanged and remain registered separately.",
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-tan-two-theta.ordered-gap-hypothesis",
+            "S2-tan-two-theta.strong-offdiagonal-hypothesis",
+            "S2-tan-two-theta.no-extra-pole-hypothesis",
+            "S2-tan-two-theta.directed-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-tan-two-theta.ordered-gap-hypothesis",
+            "S2-tan-two-theta.strong-offdiagonal-hypothesis",
+            "S2-tan-two-theta.no-extra-pole-hypothesis",
+            "S2-tan-two-theta.directed-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-tan-two-theta.ordered-gap-hypothesis",
+            "S2-tan-two-theta.strong-offdiagonal-hypothesis",
+            "S2-tan-two-theta.no-extra-pole-hypothesis",
+            "S2-tan-two-theta.ambient-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "S2-sin-theta.ui-norm-scope",
+            "S2-tan-two-theta.ordered-gap-hypothesis",
+            "S2-tan-two-theta.strong-offdiagonal-hypothesis",
+            "S2-tan-two-theta.no-extra-pole-hypothesis",
+            "S2-tan-two-theta.ambient-conclusion",
+            "S2-unbounded-scope.infinite-dimensional-scope",
+            "S2-unbounded-scope.arbitrary-ui-scope",
+            "S2-unbounded-scope.unbounded-selfadjoint-scope",
+            "S2-unbounded-scope.bounded-residual-needed",
+            "S2-unbounded-scope.half-infinite-gap-intervals"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex",
+          "role": "public_alias"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real",
+          "role": "public_alias"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike",
+          "role": "scalar_generic_facade"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex",
+          "role": "specialization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real",
+          "role": "specialization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex",
+          "role": "specialization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real",
+          "role": "specialization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex",
+          "role": "presentation_wrapper"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real",
+          "role": "presentation_wrapper"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex",
+          "role": "presentation_wrapper"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.diagonalPart_sq_add_offDiagonalPart_sq",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.diagonalPart_anticommute_offDiagonalPart",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.corner_offDiagonalPart_sq",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.gram_unboundedReflectionTangent",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.paperTanTwoBlockRepresentative_mul_signedCosTwo",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ReflectionIntertwines",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.reflection_commutes_of_reducesSubspace",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_real",
+          "role": "presentation_wrapper"
+        }
+      ]
     },
     {
       "id": "DK-3.1-prop",
@@ -421,7 +1001,21 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_1_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "rclike",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.1-prop.existence",
+            "DK-3.1-prop.uniqueness",
+            "DK-3.1-prop.positive-diagonal-characterization"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-3.2-prop",
@@ -463,7 +1057,48 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent",
+          "role": "primary_source_witness",
+          "scalar_scope": "rclike",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.2-prop.existence-iff-crossing-dimensions",
+            "DK-3.2-prop.eq-3-5"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_2_not_unique",
+          "role": "primary_source_witness",
+          "scalar_scope": "rclike",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.2-prop.nonuniqueness"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_2_exists_iff_crossedDefectsEquivalent_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.2-prop.existence-iff-crossing-dimensions",
+            "DK-3.2-prop.eq-3-5"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_2_not_unique_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.2-prop.nonuniqueness"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-3.3-prop",
@@ -504,7 +1139,46 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_forward_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.3-prop.principal-square-root"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_complex_converse_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.3-prop.square-root-converse"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_forward_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.3-prop.principal-square-root"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_3_real_converse_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.3-prop.square-root-converse"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-3.4-prop",
@@ -540,7 +1214,39 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_full_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.4-prop.u-square-direct-rotation",
+            "S3-standing-scope.crossed-dimension-standing-assumption"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_full_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.4-prop.u-square-direct-rotation",
+            "S3-standing-scope.crossed-dimension-standing-assumption"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_full_bundled_complex",
+          "role": "presentation_wrapper"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation",
+          "role": "supporting_theorem"
+        }
+      ]
     },
     {
       "id": "DK-3.1-thm",
@@ -578,7 +1284,37 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.1-thm.complete-invariant"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.1-thm.complete-invariant"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem3_1_realization",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.1-thm.converse-angle-data"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-3.1-cor",
@@ -615,7 +1351,39 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_defectBlock_angleList_classification",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.1-cor.compact-complete-invariants",
+            "DK-3.1-cor.theta1-match"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_compact_classification_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.1-cor.compact-complete-invariants",
+            "DK-3.1-cor.theta1-match"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_1_realization",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.1-cor.allowed-angle-sequence"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-3.5-prop",
@@ -659,7 +1427,54 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_commutations",
+          "role": "primary_source_witness",
+          "scalar_scope": "rclike",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.5-prop.commutation"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle",
+          "role": "primary_source_witness",
+          "scalar_scope": "rclike",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.5-prop.eigenvector-rotation-angle"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_uniqueMaximal",
+          "role": "primary_source_witness",
+          "scalar_scope": "rclike",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.5-prop.acute-maximal-characterization"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_angleEigenspace_eq_fixedCosineSubspace",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_commutations_acute",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.proposition3_5_eigenvector_angle_acute",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.Proposition35.vectorAngle_nonacuteDirectRotation_eq_of_angleOperator_apply",
+          "role": "supporting_theorem"
+        }
+      ]
     },
     {
       "id": "DK-3.2-cor",
@@ -695,7 +1510,40 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_2_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "rclike",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-3.2-cor.swap-invariance"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_2_paperQuarterTurn_symm",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_2_nonacute_directRotation_resolution",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.complex_directRotation_reversal",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.real_directRotation_reversal",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.corollary3_2_reversal_source_form",
+          "role": "supporting_theorem"
+        }
+      ]
     },
     {
       "id": "DK-4.1-prop",
@@ -736,7 +1584,39 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-4.1-prop.orthonormal-angle-lower-bounds",
+            "DK-4.1-prop.singular-value-minimality"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-4.1-prop.orthonormal-angle-lower-bounds",
+            "DK-4.1-prop.singular-value-minimality"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_complex",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real",
+          "role": "supporting_theorem"
+        }
+      ]
     },
     {
       "id": "DK-4.1-cor",
@@ -769,7 +1649,33 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-4.1-cor.ui-minimality-on-p"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-4.1-cor.ui-minimality-on-p"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute",
+          "role": "specialization"
+        }
+      ]
     },
     {
       "id": "DK-4.2-prop",
@@ -803,7 +1709,24 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-4.2-prop.basis-sine-square-lower-bound"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence",
+          "role": "supporting_theorem"
+        }
+      ]
     },
     {
       "id": "DK-4.3-prop",
@@ -844,7 +1767,28 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-4.3-prop.squared-displacement-global-minimum"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-4.3-prop.squared-displacement-global-minimum"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-4.4-prop",
@@ -888,7 +1832,28 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "refuted_as_transcribed",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite",
+          "role": "exact_refutation",
+          "scalar_scope": "complex",
+          "evidence_kind": "refutation",
+          "covers_source_atoms": [
+            "DK-4.4-prop.printed-proposition4-4"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted",
+          "role": "supporting_theorem"
+        }
+      ]
     },
     {
       "id": "DK-5.1-thm",
@@ -925,7 +1890,30 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm",
+          "role": "primary_source_witness",
+          "scalar_scope": "scalar_generic",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-5.1-thm.banach-hypotheses",
+            "DK-5.1-thm.sylvester-lower-bound"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-5.1-thm.banach-hypotheses",
+            "DK-5.1-thm.sylvester-lower-bound"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-5.2-thm",
@@ -959,7 +1947,30 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Theorem5_2",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-5.2-thm.hilbert-unbounded-hypotheses",
+            "DK-5.2-thm.hilbert-unbounded-conclusion"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-5.2-thm.hilbert-unbounded-hypotheses",
+            "DK-5.2-thm.hilbert-unbounded-conclusion"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-5.1-lem",
@@ -990,7 +2001,19 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Lemma5_1",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-5.1-lem.strong-cutoff-convergence"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-6.1-lem",
@@ -1024,7 +2047,28 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.1-lem.ordered-sylvester-forward"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.lemma6_1_converse",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.1-lem.ordered-sylvester-converse"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-6.2-lem",
@@ -1055,7 +2099,19 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.lemma6_2",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.2-lem.pinching-contraction"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-6.1-prop",
@@ -1091,7 +2147,28 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Proposition6_1_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.1-prop.symmetric-sine-theorem"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Proposition6_1_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.1-prop.symmetric-sine-theorem"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-6.1-thm",
@@ -1129,7 +2206,41 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Theorem6_1_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.1-thm.generalized-sine-hypotheses",
+            "DK-6.1-thm.generalized-sine-conclusion",
+            "DK-6.1-thm.unequal-dimension-scope"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Theorem6_1_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.1-thm.generalized-sine-hypotheses",
+            "DK-6.1-thm.generalized-sine-conclusion",
+            "DK-6.1-thm.unequal-dimension-scope"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
+          "role": "supporting_theorem"
+        }
+      ]
     },
     {
       "id": "DK-6.2-thm",
@@ -1163,7 +2274,28 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Theorem6_2_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.2-thm.second-generalized-sine"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Theorem6_2_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.2-thm.second-generalized-sine"
+          ]
+        }
+      ],
+      "supporting_evidence": []
     },
     {
       "id": "DK-6.3-thm",
@@ -1207,7 +2339,37 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.3-thm.generalized-tangent-theorem"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.3-thm.generalized-tangent-theorem"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_complex",
+          "role": "specialization"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_real",
+          "role": "specialization"
+        }
+      ]
     },
     {
       "id": "DK-6.3-lem",
@@ -1240,7 +2402,33 @@
         "note": "Every atom in the primary source block belongs to the counted result statement; any cross-block atoms record shared Section 2 source scope."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.3-lem.approximation-number-leakage"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-6.3-lem.approximation-number-leakage"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage_complex",
+          "role": "supporting_theorem"
+        }
+      ]
     },
     {
       "id": "DK-8.1-thm",
@@ -1301,7 +2489,159 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.existence-correct-q"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_canonicalBranch_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.existence-correct-q"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.acute-iff-spectral-placement"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_maximalAngle_le_iff_spectrumIn_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.acute-iff-spectral-placement"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-i-compression"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-i-compression"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperCompressionRepulsion_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-i-compression"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerCompressionRepulsion_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-i-compression"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-ii-eigenvalue"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-ii-eigenvalue"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperApproximationRepulsion_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-ii-eigenvalue"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerApproximationRepulsion_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-ii-eigenvalue"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-iii-gauge"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_source",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-iii-gauge"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_upperSymmetricGaugeRepulsion_angle_rev_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-iii-gauge"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_1_lowerSymmetricGaugeRepulsion_angle_rev_real",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.1-thm.part-iii-gauge"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.approximationNumber_eq_eigenvalues_of_isPositive",
+          "role": "supporting_theorem"
+        }
+      ]
     },
     {
       "id": "DK-8.2-thm",
@@ -1350,7 +2690,77 @@
         "note": "The primary source block is fully partitioned between the counted result statement and explicitly classified adjacent fidelity material."
       },
       "semantic_alignment": "locally_exact",
-      "local_statement_self_contained": true
+      "local_statement_self_contained": true,
+      "canonical_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.2-thm.smallness-alternative",
+            "DK-8.2-thm.acute-branch-conclusion",
+            "S3-standing-scope.crossed-dimension-standing-assumption"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.2-thm.smallness-alternative",
+            "DK-8.2-thm.acute-branch-conclusion",
+            "S3-standing-scope.crossed-dimension-standing-assumption"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.2-thm.double-angle-bound-retained"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm",
+          "role": "primary_source_witness",
+          "scalar_scope": "complex",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.2-thm.double-angle-bound-retained"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.2-thm.double-angle-bound-retained"
+          ]
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm",
+          "role": "primary_source_witness",
+          "scalar_scope": "real",
+          "evidence_kind": "proof",
+          "covers_source_atoms": [
+            "DK-8.2-thm.double-angle-bound-retained"
+          ]
+        }
+      ],
+      "supporting_evidence": [
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex",
+          "role": "supporting_theorem"
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real",
+          "role": "supporting_theorem"
+        }
+      ]
     }
   ],
   "semantic_review_sweep": {
@@ -1359,10 +2769,9 @@
     "method": "Audited each previously nonterminal counted result against only its accepted printed-result boundary; promoted a result only when concrete source-facing Lean declarations expose every counted hypothesis, conclusion, and scalar/dimension/norm scope. Proof-only and theorem-adjacent source atoms were not used as blockers. Proposition 3.3 is closed by the real nonacute principal-square-root bridge on main; Proposition 4.1 is additionally closed here by the compiler-validated arbitrary-dimensional compact/nonacute direct-rotation value bridge over complex and real scalars. Proposition 3.4 is additionally closed by the compiler-validated real full-scope bridge, which transports the exact nonacute source hypotheses and direct-rotation conclusion through canonical complexification.  REOPENED then REPAIRED 2026-08-12: this sweep's earlier acceptance of `S2-sin-two-theta`, `DK-3.4-prop`, and `DK-8.2-thm` was withdrawn and each row was given a structured `remaining_gap` naming the exact source-to-Lean mismatch.  All three mismatches have since been repaired and the printed statements re-audited: a new unbounded directed trial-residual `sin 2Theta_0` endpoint over both fields, a new complex Proposition 3.4 with the genuine Definition 3.1 conclusion, and the standing Section 3 assumption (3.5) inventoried as source scope with the ambient quarter-angle theorems selected as Theorem 8.2's evidence.  The three rows are accepted again on that repaired evidence.  UPDATED 2026-08-12: `S2-tan-theta` is no longer awaiting a formal refutation of a false theorem.  It is accepted as a true counted result read under a documented nonlocal source interpretation (see the row's `nonlocal_source_interpretation`), and it remains nonterminal only for the missing real-scalar unbounded ambient endpoint.  The bilateral-shift construction is recorded as a vacuity/nonvacuity witness separating (1.5) from (3.5), not as a counterexample to the counted result.  CLOSED 2026-08-13: `S2-tan-theta` is accepted terminal.  Its one remaining Lean-coverage blocker, the real-scalar unbounded ambient endpoint, is proved by `tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real`, which carries the printed hypotheses -- reducing subspace, `A_0 <= alpha`, `alpha + delta <= Lambda_1`, `H_0 = 0`, and the standing (3.5) -- at the printed constant and at every paper unitarily invariant norm over a real Hilbert space, deriving uniform transversality instead of assuming it.  All 29 counted results are now terminal on all three axes. HOSTILE APPENDIX SCOPE CORRECTION 2026-08-12: the previous terminalization confused an unbounded ambient operator with an unbounded Ritz compression. The Appendix permits A_0 itself to be unbounded. The new `tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` and real sibling consume `UnboundedCompressionTrialData.all_kyFan_core` and close that stronger scope.  REOPENED 2026-08-12 (DK-3.5-prop, mapping): this sweep accepted `DK-3.5-prop` on evidence that required `IsAcute` for the commutation and eigenvector-angle clauses.  Davis and Kahan restrict only the maximal-eigenspace clause to the acute case; the other two are printed under the standing Section 3 hypotheses, which admit the completed nonacute direct rotation.  Both clauses have since been proved at that scope, including the right-angle eigenspace, but the acceptance itself is withdrawn pending an independent re-audit of the repaired signatures.  CLOSED 2026-08-13 (DK-3.5-prop, independent hostile re-audit): the repaired signatures were checked against the printed three-clause structure.  Clauses 1 and 2 are registered at the standing nonacute Section 3 scope, clause 2 includes theta = pi/2, and clause 3 alone retains `IsAcute`.  The row is accepted again; all 29 counted results are terminal.",
     "compiler_audit_surface": "DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean",
     "human_report": "dev/davis-kahan-1970-result-semantic-review-2026-08-12.md",
-    "terminal_results": 28,
-    "remaining_results": [
-      "S2-sin-two-theta"
-    ],
-    "note": " 2026-08-31: `S2-sin-two-theta` reopened. Its complex endpoint covers only bounded gap intervals while the row's own source scope includes half-infinite ones, which only the real endpoint carries."
+    "terminal_results": 29,
+    "remaining_results": [],
+    "note": " 2026-08-31: `S2-sin-two-theta` reopened. Its complex endpoint covers only bounded gap intervals while the row's own source scope includes half-infinite ones, which only the real endpoint carries.",
+    "canonical_evidence_sha256": "889ea9a3d9d6f2e70ed3365903b7ee63880613e6065a165e6e845e25bd3df602"
   }
 }

@@ -80,9 +80,9 @@ theorem theorem5_2_real_ordered_sourceAudit
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
     {X C : F →L[ℝ] E} {c δ : ℝ}
     (hδ : 0 < δ)
-    (hAc : TauCeti.DavisKahan.ExactSinTheta.SemiboundedBelow A (c + δ))
-    (hBc : TauCeti.DavisKahan.ExactSinTheta.SemiboundedAbove B c)
-    (hEq : TauCeti.DavisKahan.ExactSinTheta.HasClosedSylvesterEquation A B X C)
+    (hAc : TauCeti.LinearPMap.SemiboundedBelow A (c + δ))
+    (hBc : TauCeti.LinearPMap.SemiboundedAbove B c)
+    (hEq : TauCeti.LinearPMap.SylvesterEquation A B X C)
     (hC : N.Mem C) :
     N.Mem X ∧ δ * N.gauge X ≤ N.gauge C := by
   exact TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real
@@ -109,6 +109,7 @@ the engine, and the scope companions. -/
 #check @DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_complex
 #check @DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_real
 #check @DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
+#check @DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike
 #check @TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike
 #check @TauCeti.DavisKahan1970.sinTheta_bundled_complex
 #check @TauCeti.DavisKahan1970.sinTheta_paperData_real
@@ -161,7 +162,11 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 
 /-! ## S2-sin-two-theta: Double-angle sine theorem
 
-Status: **TERMINAL EXACT**.
+Status: **TERMINAL EXACT**.  Both fixed-field endpoints take
+`FormBoundedSylvesterGap`, so the printed half-infinite gap scope is covered on
+both.  The two `spectrumGap` declarations are the earlier complex route, at a
+bounded separating interval only; they are supporting evidence, not the
+result's canonical witness.
 -/
 
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex
@@ -169,7 +174,13 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real
+#check @TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap
+#check @TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap
+#check @TauCeti.DavisKahan.sinTheta_addBounded_gauge_complex_block_of_formGap
+#check @TauCeti.DavisKahan.ExactSinTheta.sinTheta_unbounded_complex_block
 #check @TauCeti.DavisKahan.sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC
 #check @TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers
 #check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_complex
@@ -184,6 +195,7 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_paperUINorm_real
 

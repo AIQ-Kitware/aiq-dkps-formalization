@@ -17,6 +17,8 @@ This audit separates three independent axes:
 
 The 49 rows are organizational groups and the 266 atoms are a source-fidelity inventory. The 100% completion denominator is the separate 29-result inventory. The broader row/atom findings below remain useful adversarial evidence, but only defects in the exact statement or scope of one of those 29 results block the formalization claim.
 
+**Status numbers in this file are a dated snapshot, not the live count.** The live terminal count is owned by `dev/davis-kahan-1970-formalization-result-inventory.json` and gated by `scripts/check_davis_kahan_1970_result_inventory.py`; read it there.
+
 Current maintained result denominator: **29**. Exact printed-result boundary reviews: **29/29 accepted**. Current result-level semantic terminality: **29/29** (closed 2026-08-13 by the real unbounded ambient tangent endpoint). The old 46-row/32-reopened counts below are retained only as historical evidence from the broader pre-pivot hostile audit and are not the current completion metric.
 `DK-3.4-prop` is now result-level terminal: the existing complex full-scope theorem is paired with `TauCeti.DavisKahan1970.proposition3_4_source_full_real`, which transports the printed nonacute hypotheses through canonical complexification and descends the exact real direct-rotation clauses.
 
