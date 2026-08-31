@@ -3,7 +3,7 @@
 Every row names a declaration that compiles and whose `#print axioms` reports
 exactly `propext, Classical.choice, Quot.sound`.  That is checked mechanically
 by `scripts/audit_full_paper_sine_theta.py`, which elaborates
-`DavisKahan/Sources/DavisKahan1970/Audits/FullPaperSineTheta.lean` and requires
+`DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceInventory.lean` and requires
 an exact axiom-set match for all 43 targets, one report per target, and no
 other output.  The matrix below is the human-readable face of that audit; if
 the two ever disagree, the audit is authoritative.
@@ -81,7 +81,7 @@ matching "let `sin Θ₀` be **any** operator with the same singular values as
 
 | paper item | source name | target |
 | --- | --- | --- |
-| Theorem 6.1, complex | `Theorem6_1` | `PaperTheorem61Data.result_every_unitarilyInvariantNorm_across` |
+| Theorem 6.1, complex | `Theorem6_1_complex` | `PaperTheorem61Data.result_every_unitarilyInvariantNorm_across` |
 | Theorem 6.1, real | `Theorem6_1_real` | `PaperRealTheorem61Data.result_every_unitarilyInvariantNorm_across` |
 | isometric-trial form, complex | `sinTheta_paperData_complex` | `PaperIsometricTheoremData.result_every_unitarilyInvariantNorm_across` |
 | isometric-trial form, real | `sinTheta_paperData_real` | `PaperRealIsometricTheoremData.result_every_unitarilyInvariantNorm_across` |
@@ -97,13 +97,13 @@ rows below show cannot be weakened to a single gap.
 
 | paper item | source name | target |
 | --- | --- | --- |
-| Proposition 6.1 | `Proposition6_1` | `PaperSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm` |
+| Proposition 6.1 | `Proposition6_1_complex` | `PaperSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm` |
 
 ## Theorem 6.2
 
 | paper item | source name | target |
 | --- | --- | --- |
-| Theorem 6.2, complex | `Theorem6_2` | `PaperTheorem62Data.result_across` |
+| Theorem 6.2, complex | `Theorem6_2_complex` | `PaperTheorem62Data.result_across` |
 | Theorem 6.2, real | `Theorem6_2_real` | `PaperRealTheorem62Data.result_across` |
 | printed finite-rank operator-norm consequence, complex | `Theorem6_2_boundNorm_of_finiteRank` | `PaperTheorem62Data.operatorNorm_result_across_of_rank_le` |
 | the same over ℝ | `Theorem6_2_real_boundNorm_of_finiteRank` | `PaperRealTheorem62Data.operatorNorm_result_across_of_rank_le` |
@@ -151,7 +151,7 @@ homogeneity.
 ## Audit selection note
 
 The 43-target executable audit covers the principal endpoints above, not every
-theorem-valued alias exported by `FullSineTheta.lean`.  In particular, the
+theorem-valued alias exported by `SineThetaSourceInventory.lean`.  In particular, the
 converse direction of Lemma 6.1 is proved as `lemma6_1_converse` but is not yet
 printed as a separate audit target.  The same is true of several finite-Ky-Fan
 forms, source-norm law aliases, and common-domain finite-rank corollaries.

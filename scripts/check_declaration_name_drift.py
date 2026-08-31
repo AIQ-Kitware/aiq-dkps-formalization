@@ -18,8 +18,8 @@ have silently broken during namespace migrations:
    ``Challenge.RankPsdRealization.Leaderboard`` failing with
    ``Unknown constant``.
 
-Section 13 of ``dev/tauceti-signature-polish-todo.md`` asks for "a grep gate for
-old fully qualified names" after each rename. This is that gate. It is
+The Tau Ceti signature-polish campaign asked for "a grep gate for old fully
+qualified names" after each rename. This is that gate. It is
 deliberately **build-free** -- it resolves names by parsing declarations out of
 the Lean sources rather than by asking Lean -- so it is fast enough to run on
 every commit, and it can be run when the tree does not compile.

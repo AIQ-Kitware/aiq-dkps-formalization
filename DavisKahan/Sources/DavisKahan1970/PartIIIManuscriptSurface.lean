@@ -33,7 +33,7 @@ manuscript components that are still open are named separately, in
 unproved result into a production build.
 
 The mathematical dependency order and per-declaration repair ledger are in
-`dev/davis-kahan-1970-one-shot-proof-manuscript.md`.
+`dev/davis-kahan-1970-full-sine-theta-proof-manuscript-2026-07-19.md`.
 -/
 
 namespace TauCeti

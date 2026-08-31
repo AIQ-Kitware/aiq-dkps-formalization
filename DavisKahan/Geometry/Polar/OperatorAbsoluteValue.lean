@@ -27,7 +27,7 @@ rather than square) — and this module already carried the two bridge theorems
 proving the constructions *equal*: `spectraOperatorAbsoluteValue = T.modulus`
 and `spectraPolarIsometry = T.polarPartial`.
 
-Phase S1 of `dev/tauceti/spectra-removal-plan.md` takes the obvious next step:
+Phase S1 of the completed Spectra removal took the obvious next step:
 the definitions now *are* the `ForTauCeti` ones, so those two bridge theorems
 collapse to `rfl` and the Spectra import is gone.  Cluster C of the port surface
 (`absOp`, `polarIsometry`, `polarRange`) is closed by this file.

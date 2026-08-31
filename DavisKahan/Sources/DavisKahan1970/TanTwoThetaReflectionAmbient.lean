@@ -5,7 +5,7 @@ Authors: Jon Crall, GPT-5.6 Sol
 -/
 import DavisKahan.DoubleAngle.ReflectionTangentKyFan
 import DavisKahan.InfiniteDimensional.DoubleAngle
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaWholeSpace
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.ReflectionBlocks
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
 import ForTauCeti.Analysis.InnerProductSpace.SpectralOrder.Complex

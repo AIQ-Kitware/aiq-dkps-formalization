@@ -5,7 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Thinking
 -/
 import DavisKahan.SinTheta.Unbounded.IntervalExterior
 import DavisKahan.SinTheta.Unbounded.AllGap
-import DavisKahan.SinTheta.Unbounded.LegacyGap
+import DavisKahan.SinTheta.Unbounded.FormBoundedGap
 
 /-!
 # Source-shaped generalized and isometric problems over the form-bounded gap

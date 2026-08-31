@@ -127,10 +127,7 @@ removed. Attribution and exact recovery material remain under `retired/`,
 including `Spectra.UPSTREAM.md`, `Spectra.SHA256SUMS`, and the complete-fork
 patch; the live provenance map is `dev/tauceti/spectra-provenance-map.md`.
 
-For the record of the completed campaign see
-[`dev/spectra-integration-survey-2026-07-14.md`](dev/spectra-integration-survey-2026-07-14.md)
-and [`dev/tauceti/spectra-removal-plan.md`](dev/tauceti/spectra-removal-plan.md);
-both describe finished work.
+The record of the completed campaign is in Git history.
 <!-- END Spectra collaboration checkout -->
 
 ## Build

@@ -915,12 +915,12 @@
       "archival_locator": "https://ia600108.us.archive.org/view_archive.php?archive=/24/items/wikipedia-scholarly-sources-corpus/10.1137.zip&file=10.1137%252F0707001.pdf",
       "target_note": "DavisKahan1970_part_III.tex",
       "repo_evidence": [
-        "DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean",
-        "DavisKahan/Sources/DavisKahan1970/FullPartIII.lean",
+        "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean",
+        "DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean",
         "dev/davis-kahan-1970-full-source-census.json",
         "prose/distilled_literature/DavisKahan1970_part_III.tex",
         "DavisKahan/Sources/DavisKahan1970/Section9/All.lean",
-        "DavisKahan/Sources/DavisKahan1970/Section9/FullExample.lean",
+        "DavisKahan/Sources/DavisKahan1970/Section9/ExampleCertificateSurface.lean",
         "prose/distilled_literature/DavisKahan1970_section9_numerical_example.tex",
         "DavisKahan/Sources/DavisKahan1970/Section8/All.lean",
         "DavisKahan/Sources/DavisKahan1970/Section8/SourceSurface.lean",
@@ -989,7 +989,6 @@
       "target_note": "BhatiaDavisMcIntosh1983_spectral_subspaces_sylvester.tex",
       "repo_evidence": [
         "DavisKahan/Alternative/FiniteDimensional/Sylvester/ContinuousLinearMapBridge.lean",
-        "dev/davis-kahan-expert-completion-plan.md",
         "dev/lean-proof-engineering-lessons.md",
         "prose/distilled_literature/AlbeverioMakarovMotovilov2001_sylvester_fourier_pi_over_two.tex"
       ],
@@ -1145,8 +1144,7 @@
       "primary_url": "",
       "target_note": "KnyazevJujunashviliArgentati2010_infinite_subspace_angles.tex",
       "repo_evidence": [
-        "DavisKahan/SpectralTheory/OperatorAngle.lean",
-        "docs/planning/historical/davis-kahan-pre-reorganization/infinite-proof-plan.md"
+        "DavisKahan/SpectralTheory/OperatorAngle.lean"
       ],
       "existing_assets": [],
       "scope": "Infinite-dimensional principal angles and alternating projections.",
@@ -1292,18 +1290,17 @@
       "group": "Reference works and modern syntheses",
       "tier": "reference",
       "priority": "P3",
-      "formalization_status": "reference horizon for the unbounded and spectral-projection development, which is `SpectralTheory/PartialMap/**` and `ForTauCeti/.../LinearPMap/**` since the experimental scaffolds were deleted 2026-08-27",
+      "formalization_status": "reference horizon for the unbounded and spectral-projection development, which is `DavisKahan/SpectralTheory/PartialMap/**` and `ForTauCeti/.../LinearPMap/**`",
       "distilled_status": "missing",
       "primary_url": "https://doi.org/10.1007/978-3-642-66282-9",
       "target_note": "Kato1966_selected_perturbation_theory.tex",
       "repo_evidence": [
-        "DavisKahan/Experimental/README.md",
-        "ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean",
-        "docs/planning/historical/davis-kahan-pre-reorganization/infinite-proof-plan.md"
+        "DavisKahan/SpectralTheory/PartialMap/Basic.lean",
+        "ForTauCeti/Analysis/InnerProductSpace/LinearPMap/Closed.lean"
       ],
       "existing_assets": [],
-      "scope": "Selected spectral-projection, graph-subspace, bounded/unbounded perturbation, and Kato--Rellich results corresponding to retained experimental targets.",
-      "missing_work": "Do not distill the whole monograph; first map each retained experimental declaration to an exact chapter/theorem and exclude aspirational scaffolds without a source match.",
+      "scope": "Selected spectral-projection, graph-subspace, bounded/unbounded perturbation, and Kato--Rellich results corresponding to the maintained LinearPMap development.",
+      "missing_work": "Do not distill the whole monograph; first map each unbounded-operator declaration to an exact chapter/theorem and exclude anything without a source match.",
       "role": "reference_work",
       "bibliographic_status": "verified"
     },
@@ -1323,7 +1320,6 @@
       "primary_url": "",
       "target_note": "StewartSun1990_selected_matrix_perturbation.tex",
       "repo_evidence": [
-        "dev/davis-kahan-expert-completion-plan.md",
         "papers/DavisKahan-formalized-vs-literature.tex"
       ],
       "existing_assets": [],

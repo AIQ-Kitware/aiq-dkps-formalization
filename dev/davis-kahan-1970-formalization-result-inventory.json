@@ -259,7 +259,7 @@
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_paperUINorm_complex",
         "TauCeti.DavisKahan.sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC",
         "TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers",
-        "TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock",
+        "TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex",
         "TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real",
         "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real",
@@ -336,7 +336,7 @@
         "TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq",
         "TauCeti.DavisKahan.paperTanTwoBlockRepresentative_mul_signedCosTwo",
         "TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent",
-        "TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent",
+        "TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex",
         "TauCeti.DavisKahan.ReflectionIntertwines",
         "TauCeti.DavisKahan.ReflectionIntertwines.ofReducesSubspace",
@@ -512,10 +512,10 @@
       "lean_declarations": [
         "TauCeti.DavisKahan1970.proposition3_4_source_full_complex",
         "TauCeti.DavisKahan1970.proposition3_4_source_full_real",
-        "TauCeti.DavisKahan1970.proposition3_4_source_full",
+        "TauCeti.DavisKahan1970.proposition3_4_source_full_bundled_complex",
         "TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation"
       ],
-      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: `proposition3_4_source_full` concludes only `IsPaperDirectRotation`, whose diagonal clauses are `0 <= re inner x (P T P) x`, which over C does not even force self-adjointness of the compression, whereas Definition 3.1 asks for genuine operator positivity.  The repair is `proposition3_4_source_full_complex`: printed hypothesis C_0^2 >= 1/2 together with the Definition 3.1 data for U, concluding the genuine Definition 3.1 statement for U^2 from Q_- to Q -- unitarity, intertwining Q_- to Q, `IsPositive` for both diagonal compressions, and the crossed-block adjoint/sign relation.  No acuteness, compactness, finite-dimensional or separability hypothesis is added, and the positivity upgrade reuses the real development's `positiveDiagonalBlocks_of_sq` (promoted to a public declaration) rather than reproving it.  Evidence for the row is now the new complex theorem together with `proposition3_4_source_full_real`; the `IsPaperDirectRotation` statements are retained as supporting material, not as primary evidence.  The row also now carries the standing Section 3 scope atom (3.5).",
+      "review_note": "RE-CLOSED 2026-08-12 after repair (reopened earlier the same day; the reopening is retained in git history).  The defect was real: `proposition3_4_source_full_bundled_complex` concludes only `IsPaperDirectRotation`, whose diagonal clauses are `0 <= re inner x (P T P) x`, which over C does not even force self-adjointness of the compression, whereas Definition 3.1 asks for genuine operator positivity.  The repair is `proposition3_4_source_full_complex`: printed hypothesis C_0^2 >= 1/2 together with the Definition 3.1 data for U, concluding the genuine Definition 3.1 statement for U^2 from Q_- to Q -- unitarity, intertwining Q_- to Q, `IsPositive` for both diagonal compressions, and the crossed-block adjoint/sign relation.  No acuteness, compactness, finite-dimensional or separability hypothesis is added, and the positivity upgrade reuses the real development's `positiveDiagonalBlocks_of_sq` (promoted to a public declaration) rather than reproving it.  Evidence for the row is now the new complex theorem together with `proposition3_4_source_full_real`; the `IsPaperDirectRotation` statements are retained as supporting material, not as primary evidence.  The row also now carries the standing Section 3 scope atom (3.5).",
       "boundary_review": {
         "status": "accepted",
         "primary_source_block": "DK-3.4-prop",
@@ -546,7 +546,7 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification",
+        "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex",
         "TauCeti.DavisKahan1970.theorem3_1_realization",
         "TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real"
       ],
@@ -701,9 +701,9 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute",
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex",
         "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real",
-        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues",
+        "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_complex",
         "TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12, contingent only on compiler validation of the candidate source bridge. The complex and real compact/nonacute Proposition 4.1 wrappers now bundle both counted printed conclusions: the orthonormal-vector pointwise angle lower bounds and approximation-number extremality of the direct rotation. The new directRotationValues declarations expose the printed exact value a_k((1-U)P) = 2*sin(theta_k/2) at that same arbitrary-dimensional compact matched-defect scope. Equations (4.1), (4.2), the VZ factorization, and the closest-vector proof step remain fidelity-only material outside the counted proposition statement.",
@@ -741,7 +741,7 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute",
+        "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex",
         "TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real",
         "TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute"
       ],
@@ -1060,7 +1060,7 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Proposition6_1",
+        "TauCeti.DavisKahan1970.Proposition6_1_complex",
         "TauCeti.DavisKahan1970.Proposition6_1_real"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Proposition 6.1 aliases are direct source-facing PaperUI theorems for the two-sided spectral-placement hypothesis and the ambient sine bound `delta * N(sin Theta) <= N(H)` for every paper unitary-invariant norm. The Sylvester identity (6.1) and the source counterexample explaining why one-sided placement is insufficient are outside the counted proposition statement.",
@@ -1098,7 +1098,7 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_1",
+        "TauCeti.DavisKahan1970.Theorem6_1_complex",
         "TauCeti.DavisKahan1970.Theorem6_1_real",
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain",
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore"
@@ -1134,7 +1134,7 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Theorem6_2",
+        "TauCeti.DavisKahan1970.Theorem6_2_complex",
         "TauCeti.DavisKahan1970.Theorem6_2_real"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The complex and real Theorem 6.2 wrappers state the pairwise-gap Hilbert-Schmidt sine inequality with the source lower-frame factor epsilon at the unbounded/common-domain source scope. The rank-corrected operator-norm consequence is an immediate post-theorem consequence in the source and is explicitly outside the 29-result denominator.",
@@ -1212,8 +1212,8 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage",
-        "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage",
+        "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex",
+        "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage_complex",
         "TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real"
       ],
       "review_note": "Accepted by the hostile audit at the stated-result level.",
@@ -1309,7 +1309,7 @@
       "verification": "proved_in_build",
       "semantic_certification": "accepted",
       "lean_declarations": [
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real",

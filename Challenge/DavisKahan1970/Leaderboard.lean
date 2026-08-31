@@ -23,12 +23,12 @@ one arbitrary-source-UI wrapper that derives its cutoff/denominator assembly
 from only the printed unbounded hypotheses.
 -/
 import DavisKahan.Sources.DavisKahan1970.PartIII
-import DavisKahan.Sources.DavisKahan1970.FullSineTheta
+import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
 import DavisKahan.Sources.DavisKahan1970.Directed
 import DavisKahan.Sources.DavisKahan1970.DirectedReal
-import DavisKahan.Sources.DavisKahan1970.TanThetaWholeSpace
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaWholeSpace
-import DavisKahan.Sources.DavisKahan1970.WholeSpaceReal
+import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
+import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient
 import DavisKahan.BoundedOperator.Spectral.Complex
@@ -197,7 +197,7 @@ the false printed Proposition 4.4, Section 8 branch selection, and a source-
 numbered Section 9 numerical consequence.
 -/
 
-#print axioms TauCeti.DavisKahan1970.Theorem6_1
+#print axioms TauCeti.DavisKahan1970.Theorem6_1_complex
 #print axioms TauCeti.DavisKahan1970.Theorem6_1_real
 #print axioms TauCeti.DavisKahan1970.tanTheta_directed_bounded_paperUINorm_real
 #print axioms TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_crossedDefects

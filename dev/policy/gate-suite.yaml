@@ -4,7 +4,7 @@
 #     aiq-lean gates run --config dev/policy/gate-suite.yaml --fast   # skip Lean builds
 #     aiq-lean gates list --config dev/policy/gate-suite.yaml
 #
-# Replaces `scripts/run_gates.py`.  Two kinds of gate appear here:
+# Two kinds of gate appear here:
 #
 #   * **declared** gates below -- installed `aiq-lean` commands plus a policy
 #     file in this directory.  These are the generic engines; the repository
@@ -81,18 +81,10 @@ gates:
               "--check"]
     description: "every public declaration on the submission surface carries a docstring"
 
-  - name: experimental-coverage
-    command: ["aiq-lean", "source", "module-coverage", "dev/policy/experimental-coverage.yaml"]
-    description: "the Experimental root reaches every module under it"
-
-  - name: experimental-roots
-    command: ["aiq-lean", "source", "staging", "dev/experimental-root-status.json", "--compile"]
-    description: "the Experimental status registry, and the build target it annotates"
-
   - name: aggregates
     command: ["aiq-lean", "source", "aggregates",
               "--base", "DavisKahan", "--library", "DavisKahan",
-              "--skip-dir", "Experimental", "--skip-dir", "MathAhead", "--skip-dir", "Audits",
+              "--skip-dir", "Audits",
               "--root-import", "DavisKahan",
               "--header-file", "dev/policy/aggregate-header.txt",
               "--check"]
@@ -106,13 +98,3 @@ gates:
     command: ["aiq-lean", "source", "grounding", "dev/policy/yu-wang-samworth-grounding.yaml"]
     description: "the Yu--Wang--Samworth lane still contains its mathematics, and no placeholders"
 
-  - name: foundations
-    command: ["aiq-lean", "foundations", "validate",
-              "dev/davis-kahan-hidden-foundations.json", "--lean-probe"]
-    description: "the recursive hidden-foundation map, with every tracked declaration resolved by Lean"
-
-  - name: foundations-status
-    command: ["aiq-lean", "foundations", "render",
-              "dev/davis-kahan-hidden-foundations.json",
-              "-o", "dev/davis-kahan-hidden-foundations-status.md", "--check"]
-    description: "the generated foundation-status view is current"

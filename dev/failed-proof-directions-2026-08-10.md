@@ -40,7 +40,7 @@ which the tree is green.
 ### 1.2 A real-parameter `MultiplicityDatum` as the lever — **MEASURED, and it is the wrong lever**
 
 - **No consumer in the repository needs one. Zero.** `SameSpectralMultiplicity` has exactly one
-  consumer (`theorem3_1_spectralMultiplicity_classification`); that consumer has none.
+  consumer (`theorem3_1_spectralMultiplicity_classification_complex`); that consumer has none.
 - The blocking hardcode is **not** `base : Measure ℂ` but `operator`'s `Lp ℂ 2` / `→L[ℂ]`, and
   `Lp ℝ 2` over a `Measure ℂ` is type-legal. So a real parameter is neither necessary nor
   sufficient.

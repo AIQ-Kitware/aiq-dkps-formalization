@@ -172,7 +172,7 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real
 #check @TauCeti.DavisKahan.sinAngleOperatorDirectedC_reflected_eq_sinTwoAngleOperatorC
 #check @TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers
-#check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock
+#check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_complex
 #check @TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real
 #check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real
 #check @TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff
@@ -209,7 +209,7 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq
 #check @TauCeti.DavisKahan.paperTanTwoBlockRepresentative_mul_signedCosTwo
 #check @TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent
-#check @TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent
+#check @TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex
 #check @TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real
 #check @TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq
 #check @TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
@@ -260,7 +260,7 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.proposition3_4_source_full_complex
 #check @TauCeti.DavisKahan1970.proposition3_4_source_full_real
-#check @TauCeti.DavisKahan1970.proposition3_4_source_full
+#check @TauCeti.DavisKahan1970.proposition3_4_source_full_bundled_complex
 #check @TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation
 
 /-! ## DK-3.1-thm: Classification of pairs of subspaces
@@ -268,7 +268,7 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification
+#check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex
 #check @TauCeti.DavisKahan1970.theorem3_1_realization
 #check @TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_real
 
@@ -316,9 +316,9 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute
+#check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex
 #check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_real
-#check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues
+#check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_complex
 #check @TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_real
 
 /-! ## DK-4.1-cor: UI-norm minimality of direct rotation displacement
@@ -326,7 +326,7 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute
+#check @TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex
 #check @TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real
 #check @TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute
 
@@ -401,7 +401,7 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Proposition6_1
+#check @TauCeti.DavisKahan1970.Proposition6_1_complex
 #check @TauCeti.DavisKahan1970.Proposition6_1_real
 
 /-! ## DK-6.1-thm: Generalized sine theorem
@@ -409,7 +409,7 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Theorem6_1
+#check @TauCeti.DavisKahan1970.Theorem6_1_complex
 #check @TauCeti.DavisKahan1970.Theorem6_1_real
 #check @TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain
 #check @TauCeti.DavisKahan1970.Theorem6_1_real_commonCore
@@ -419,7 +419,7 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Theorem6_2
+#check @TauCeti.DavisKahan1970.Theorem6_2_complex
 #check @TauCeti.DavisKahan1970.Theorem6_2_real
 
 /-! ## DK-6.3-thm: Tangent proof machinery, Example 6.1, and generalized tangent theorem
@@ -437,8 +437,8 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage
-#check @TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage
+#check @TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex
+#check @TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage_complex
 #check @TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_real
 
 /-! ## DK-8.1-thm: Branch selection and spectral repulsion
@@ -469,7 +469,7 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
-#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed
+#check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_real

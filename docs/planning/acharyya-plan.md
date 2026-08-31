@@ -17,7 +17,7 @@
 > current checked metadata for present-day work. The historical body below is
 > retained because source files cite this path as the Acharyya formalization map.
 
-Companion: `acharyya-graveyard.md` (approaches tried and abandoned, so we and
+Approaches tried and abandoned are in Git history, so we and
 other agents don't re-visit them).
 
 Last updated: 2026-06-11 (Claude Fable 5 session, model id claude-fable-5[1m]).
@@ -96,7 +96,7 @@ ability.
 Ordering ≈ (value × tractability). Each WP ends in one commit.
 
 ### WP0 — Planning docs (this commit)
-`planning/acharyya-plan.md`, `planning/acharyya-graveyard.md`.
+`planning/acharyya-plan.md`.
 
 ### WP1 — entrywise → operator norm  ✅ proved, ready to commit
 `operatorNormClose_of_entrywiseClose`: per-coordinate `|xⱼ| ≤ ‖x‖₂` then sum;

@@ -228,9 +228,8 @@ difference to hide behind a forwarding facade.
 
 Temporary adapters may keep intermediate commits buildable, but completion of
 the migration includes removing them. Namespace aliases and forwarding
-re-exports are not the final architecture. `Experimental/**` and diagnostic
-`Audits/**` modules remain outside `DavisKahan.All`; production code never
-imports them.
+re-exports are not the final architecture. Diagnostic `Audits/**` modules remain
+outside `DavisKahan.All`; production code never imports them.
 
 Planning inventories under `dev/tauceti/` record earlier campaigns and may be
 useful evidence, but the current source tree and pinned Mathlib/Tau Ceti APIs are
@@ -261,9 +260,8 @@ it. `DavisKahan/SpectralTheory/PartialMap/` holds the Davis--Kahan additions to
 Mathlib's `LinearPMap`. Do not reintroduce a bundle: an unbounded operator is a
 partial map, and density and closedness are hypotheses.
 
-`docs/planning/closed-operator-to-linearpmap-migration.md` records how it was
-done and what it cost; it is history now, not an execution contract, and the
-same is true of the U1 and Spectra migration documents.
+How that migration was done, and what it cost, is in Git history; it is not an
+execution contract, and the same is true of the U1 and Spectra migrations.
 
 ### `ForTauCeti` is the deliverable, and the bar is the platonic ideal roadmap
 
@@ -621,9 +619,8 @@ regression and is not one. `--fast` skips exactly those.
 
 ## Scratch overlays are proof sketches to be promoted, not fixed in place
 
-Files under `DavisKahan/Experimental/Scratch/**` (and analogous overlay drops)
-are **proof sketches**, usually authored by an external agent without a
-compiler. Their only job is to give a compiler-equipped agent a good
+An overlay dropped into the tree by an external agent is a **proof sketch**,
+usually authored without a compiler. Their only job is to give a compiler-equipped agent a good
 first-guess at proof *structure* so the real work is easier. A scratch file is
 **not required to build**, and making the scratch file itself compile is not the
 task.
@@ -634,31 +631,29 @@ The task is to **promote** the sketch:
    land, and the likely elaboration seams — the sketch's own docstrings are the
    only guide, and they are frequently wrong about names and APIs, so check
    every one against the current tree before believing it.
-2. Take the proof **out** of the scratch file and put it in its correct home
-   module — the source-facing location the statement actually belongs to — then
-   fix it *there* until it compiles. Do not repair it inside `Scratch/`.
+2. Take the proof **out** of the sketch and put it in its correct home module —
+   the source-facing location the statement actually belongs to — then fix it
+   *there* until it compiles. Do not repair it where it landed.
 3. The source-facing home is the statement under `DavisKahan/Sources/DavisKahan1970/**`
    that the sketch is about; reusable mathematics beneath it belongs to its
    natural stable owner — `Geometry/`, `SpectralTheory/`, `BoundedOperator/`,
    `Sylvester/`, `InfiniteDimensional/` or `ForTauCeti/`. *Promotion* means
    moving the proof to that owner and proving the source statement directly
    against it, not repairing the sketch where it sits. The staging trees this
-   step used to name — `Frontier/**` and `MathAhead/**` — were deleted on
-   2026-08-27; do not recreate them.
+   step used to name — `Frontier/**`, `MathAhead/**` and `Experimental/**` — are
+   all deleted; do not recreate them.
 4. Prefer the **source-faithful** signature over whatever the scratch happened to
    state. A sketch may carry an accidentally overstrong hypothesis that
    trivializes the conclusion; correct the statement to match the paper before
    grounding it (retain the paper's hypotheses even if the Lean proof does not
    consume all of them, for source correspondence).
-5. After promotion, leave the staging module as scratch-only source or delete it
-   when it no longer carries useful history. A declaration used by a
-   source-facing theorem or counted by the source census has its canonical owner
-   outside `Experimental` and `HiddenFoundations` staging paths. Production
-   consumers import only that canonical owner.
+5. After promotion, delete the sketch. A declaration used by a source-facing
+   theorem or counted by the source census has a canonical owner in the
+   production tree, and production consumers import only that owner.
 
 `DavisKahan.All` contains production mathematics only. Directories named
-`Experimental` and `Audits` are excluded from generated production
-aggregates. Run `lake build DavisKahan.Audits.All` explicitly for diagnostics.
+`Audits` are excluded from generated production aggregates. Run
+`lake build DavisKahan.Audits.All` explicitly for diagnostics.
 A production import of a staging or audit module is an architecture error.
 Production declarations also do not live under a `Scratch` namespace; once a proof
 is admitted to the production tree, give it the stable namespace matching its
@@ -716,9 +711,13 @@ Prefer one strong leaf over a long inventory of supporting declarations.
 
 Before changing the single-angle API, read
 `docs/planning/davis-kahan-general-sin-theta-roadmap.md` and
-`dev/davis-kahan-1970-one-shot-proof-manuscript.md`. The canonical target is the
+`dev/davis-kahan-1970-full-sine-theta-proof-manuscript-2026-07-19.md`. The canonical target is the
 domain-aware unbounded theorem; bounded and finite results are specializations
-or alternative proofs. (`DavisKahan/Experimental/InfiniteDimensional/SinTheta/README.md`
-was a third entry here until that tree was deleted on 2026-08-27.)
+or alternative proofs.
 
-Production theorem names use stable namespaces. Promoted declarations leave `Experimental` and `HiddenFoundations` namespaces when they enter the production API.
+Production theorem names use stable namespaces, and they say their scope. A
+declaration whose statement is fixed to one scalar field says `_complex` or
+`_real`; the unqualified name is reserved for the `RCLike`-generic statement and
+is left unbound when none exists yet. `dev/davis-kahan-1970-section-two-naming-classification.json`
+records the vocabulary and the token-to-scope commitments this rests on, and
+`dev/honesty-census-2026-08-31.md` records what was measured and renamed.

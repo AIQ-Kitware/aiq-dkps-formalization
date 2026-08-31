@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.Section8.Theorem82Source
 import DavisKahan.DoubleAngle.RealAngleIdentification
-import DavisKahan.Sources.DavisKahan1970.WholeSpaceReal
+import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.SingularValueTransport
 import DavisKahan.SpectralTheory.Complexification.SubmoduleEquiv
 
@@ -275,7 +275,7 @@ theorem theorem8_2_perturbationHalfGap_source_real
     directedGap P Q < Real.sqrt 2 / 2 := by
   have hsmallc : ‖complexify K‖ < delta / 2 := by
     rw [norm_complexify]; exact hsmall
-  have hmain := theorem8_2_perturbationHalfGap_source
+  have hmain := theorem8_2_perturbationHalfGap_source_complex
     (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
     hdelta hab (spectrumIn_complexify_add hQ)
     (spectrumIn_orthogonal_complexify_add hQperp)
@@ -305,7 +305,7 @@ theorem theorem8_2_residualHalfGap_source_real
       (compressOperator (complexifySubmodule P) (complexify A))‖ < delta / 2 := by
     rw [norm_residual_complexify A K P hPred.1]
     exact hRsmall
-  have hmain := theorem8_2_residualHalfGap_source
+  have hmain := theorem8_2_residualHalfGap_source_complex
     (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
     hdelta hab (spectrumIn_complexify_add hQ)
     (spectrumIn_orthogonal_complexify_add hQperp)
@@ -456,7 +456,7 @@ theorem norm_sinTwoAngleOperator_complexifySubmodule (U V : Submodule ℝ E)
 /-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, perturbation form, over
 a REAL Hilbert space**: `δ ‖sin 2Θ‖ ≤ 2 ‖H‖`.
 
-The real reading of `theorem8_2_sinTwoTheta_perturbation_source`.  Nothing is
+The real reading of `theorem8_2_sinTwoTheta_perturbation_source_complex`.  Nothing is
 re-proved: the configuration is complexified, the complex estimate applied, and
 both sides read back by `norm_sinTwoAngleOperator_complexifySubmodule` and
 `norm_complexify`. -/
@@ -468,7 +468,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_source_real
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : A.Reduces P) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤ 2 * ‖K‖ := by
-  have hmain := theorem8_2_sinTwoTheta_perturbation_source
+  have hmain := theorem8_2_sinTwoTheta_perturbation_source_complex
     (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
     hdelta hab (spectrumIn_complexify_add hQ)
     (spectrumIn_orthogonal_complexify_add hQperp)
@@ -478,7 +478,7 @@ theorem theorem8_2_sinTwoTheta_perturbation_source_real
 /-- **The `sin 2Θ` estimate at Theorem 8.2's hypotheses, residual form, over a
 REAL Hilbert space**: `δ ‖sin 2Θ‖ ≤ 2 ‖R‖` with `R` the printed residual (1.8).
 
-The real reading of `theorem8_2_sinTwoTheta_residual_source`, transported the
+The real reading of `theorem8_2_sinTwoTheta_residual_source_complex`, transported the
 same way, with the residual norm carried by `norm_residual_complexify`.
 
 As over `ℂ`, the conclusion names the **ambient** `sin 2Θ` of the pair, not the
@@ -493,7 +493,7 @@ theorem theorem8_2_sinTwoTheta_residual_source_real
     (hPred : A.Reduces P) :
     delta * ‖DavisKahanExt.sinTwoAngleOperator Q P‖ ≤
       2 * ‖residual (A + K) P.subtypeL (compressOperator P A)‖ := by
-  have hmain := theorem8_2_sinTwoTheta_residual_source
+  have hmain := theorem8_2_sinTwoTheta_residual_source_complex
     (complexify_isSelfAdjointOperator hA) (complexify_isSelfAdjointOperator hK)
     hdelta hab (spectrumIn_complexify_add hQ)
     (spectrumIn_orthogonal_complexify_add hQperp)
@@ -665,7 +665,7 @@ theorem theorem8_2_sinTwoTheta_residual_source_real_paperUINorm
 > `[β - δ/2, α + δ/2]`.  Then, in addition to `δ‖sin 2Θ‖ ≤ 2‖H‖` or
 > `δ‖sin 2Θ₀‖ ≤ 2‖R‖`, we have `Θ < π/4`.
 
-The real reading of `theorem8_2_source`, hypothesis for hypothesis and
+The real reading of `theorem8_2_source_complex`, hypothesis for hypothesis and
 conclusion for conclusion: standing assumption 1 of the source admits a real or
 complex Hilbert space, and Theorem 8.2 supplies both subspaces as data, so the
 descent introduces no hypothesis of its own.

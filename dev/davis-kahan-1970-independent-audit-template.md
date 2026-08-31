@@ -108,7 +108,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean:102`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/ScalarGeneric.lean:102`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -120,7 +120,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_paperData_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:98`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:98`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -132,7 +132,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTheta_generalized_paperData_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:109`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:109`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -663,7 +663,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:73`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/ScalarGenericFinite.lean:73`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -681,19 +681,19 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_transversality`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1176`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean:1176`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_transversality`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:210`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:210`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:322`, `DavisKahan/Sources/DavisKahan1970/TanThetaWholeSpace.lean:1265`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:322`, `DavisKahan/Sources/DavisKahan1970/TanThetaAmbient.lean:1265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -845,19 +845,19 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean:111`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/ScalarGenericFinite.lean:111`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex`
 
-Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:402`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaWholeSpace.lean:606`
+Source location candidates: `Challenge/DavisKahan1970/Conformance.lean:402`, `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbient.lean:606`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:252`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:252`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -921,7 +921,7 @@ Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:295`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock`
+#### `TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_complex`
 
 Source location candidates: `DavisKahan/DoubleAngle/AngleTransport.lean:335`
 
@@ -1071,7 +1071,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:362`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:362`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1083,7 +1083,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/WholeSpaceReal.lean:433`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean:433`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1171,7 +1171,7 @@ Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:579`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent`
+#### `TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex`
 
 Source location candidates: `DavisKahan/DoubleAngle/TangentTransport.lean:609`
 
@@ -1577,7 +1577,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Propositi
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.proposition3_4_source_full`
+#### `TauCeti.DavisKahan1970.proposition3_4_source_full_bundled_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:66`
 
@@ -1659,7 +1659,7 @@ their domain dimensions sum to $\dim\Hsp$, and their spectral multiplicity funct
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification`
+#### `TauCeti.DavisKahan1970.theorem3_1_spectralMultiplicity_classification_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Classification.lean:192`
 
@@ -1938,13 +1938,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.complex_directRotation_reversal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:128`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean:128`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.real_directRotation_reversal`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:243`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean:243`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2039,7 +2039,7 @@ The latter follows by comparing $Vx$ with the closest unit vector in $Q\Hsp$ and
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute`
+#### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:311`
 
@@ -2051,7 +2051,7 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4Real.lean
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues`
+#### `TauCeti.DavisKahan1970.Proposition4_1_compact_nonacute_directRotationValues_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:243`
 
@@ -2121,7 +2121,7 @@ is minimized among unitaries carrying $P\Hsp$ onto $Q\Hsp$ by the direct rotatio
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute`
+#### `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section4.lean:342`
 
@@ -2516,13 +2516,13 @@ The roles and hypotheses of $A$ and $B$ may be interchanged.  The same proof als
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:262`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean:262`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean:265`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean:265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2738,13 +2738,13 @@ for every unitary-invariant norm.  The converse holds when the two diagonal bloc
 
 #### `TauCeti.DavisKahan1970.lemma6_1`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:77`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:77`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.lemma6_1_converse`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:78`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:78`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2808,7 +2808,7 @@ The proof is the reflection/pinching contraction obtained by averaging $K$ with 
 
 #### `TauCeti.DavisKahan1970.lemma6_2`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:79`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:79`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2890,15 +2890,15 @@ The symmetric replacement is Proposition~6.1: if the $A_0$--$\Lambda_1$ spectra 
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Proposition6_1`
+#### `TauCeti.DavisKahan1970.Proposition6_1_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:115`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:115`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Proposition6_1_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:127`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:127`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2967,27 +2967,27 @@ If one of $A_0,\Lambda_1$ has spectrum in $[\beta,\alpha]$ and the other has spe
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Theorem6_1`
+#### `TauCeti.DavisKahan1970.Theorem6_1_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:102`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:102`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:105`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:105`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real_commonDomain`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:200`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:200`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_1_real_commonCore`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:221`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:221`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3060,15 +3060,15 @@ Combining this with (5.2) also yields the rank-corrected operator-norm estimate
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Theorem6_2`
+#### `TauCeti.DavisKahan1970.Theorem6_2_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:142`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:142`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.Theorem6_2_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean:146`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:146`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -3303,13 +3303,13 @@ then the leakage outside $\Psi$ obeys
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage`
+#### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_approximationNumber_leakage_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:352`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
-#### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage`
+#### `TauCeti.DavisKahan1970.Section6Appendix.lemma6_3_singularValue_leakage_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section6AppendixLeakage.lean:372`
 
@@ -3629,7 +3629,7 @@ The source closes Section~8 by stating that the $\sin2\theta$ theorem extends to
 
 ### Source-facing Lean declarations
 
-#### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed`
+#### `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section8/PaperSurface.lean:123`
 

@@ -105,8 +105,8 @@ alias sinTwoThetaBlock :=
   DavisKahan.sinTwoThetaIdealBlock
 
 /-- The canonical block has operator norm exactly `‖sin 2Θ‖`. -/
-alias norm_sinTwoThetaBlock :=
-  DavisKahan.norm_sinTwoThetaIdealBlock
+alias norm_sinTwoThetaBlock_complex :=
+  DavisKahan.norm_sinTwoThetaIdealBlock_complex
 
 /-- Equations (7.4)--(7.5) over a **real** Hilbert space: the canonical block
 has operator norm exactly `‖sin 2Θ‖` of the real pair. -/

@@ -9,19 +9,18 @@ import DavisKahan.Sources.DavisKahan1970.Section9.All
 import DavisKahan.Sources.DavisKahan1970.SineTheta.All
 import DavisKahan.Sources.DavisKahan1970.Sylvester.All
 import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
+import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.Sources.DavisKahan1970.Directed
 import DavisKahan.Sources.DavisKahan1970.DirectedReal
 import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
 import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
-import DavisKahan.Sources.DavisKahan1970.FullPartIII
-import DavisKahan.Sources.DavisKahan1970.FullPartIIIExtensions
-import DavisKahan.Sources.DavisKahan1970.FullSineTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
-import DavisKahan.Sources.DavisKahan1970.HeadlineGeneric
 import DavisKahan.Sources.DavisKahan1970.SineTheta.PaperSurface
 import DavisKahan.Sources.DavisKahan1970.PartIII
+import DavisKahan.Sources.DavisKahan1970.PartIIIManuscriptSurface
 import DavisKahan.Sources.DavisKahan1970.RemainingSourceSurface
+import DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite
 import DavisKahan.Sources.DavisKahan1970.Section1
 import DavisKahan.Sources.DavisKahan1970.Section10FunctionalCalculus
 import DavisKahan.Sources.DavisKahan1970.Section1UnitaryInvariantNorms
@@ -54,15 +53,17 @@ import DavisKahan.Sources.DavisKahan1970.SectionTwoUsage
 import DavisKahan.Sources.DavisKahan1970.SharpIdeal
 import DavisKahan.Sources.DavisKahan1970.SharpKyFan
 import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
-import DavisKahan.Sources.DavisKahan1970.SinTwoThetaWholeSpace
+import DavisKahan.Sources.DavisKahan1970.SineThetaSourceInventory
 import DavisKahan.Sources.DavisKahan1970.StableRiccatiPair
 import DavisKahan.Sources.DavisKahan1970.TanTheta
+import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
-import DavisKahan.Sources.DavisKahan1970.TanThetaWholeSpace
 import DavisKahan.Sources.DavisKahan1970.TanTwoTheta
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbient
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaAmbientBranchFree
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFreeInfinite
@@ -76,8 +77,6 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramMiddle
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedKyFan
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedResidual
-import DavisKahan.Sources.DavisKahan1970.TanTwoThetaWholeSpace
 import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
-import DavisKahan.Sources.DavisKahan1970.WholeSpaceReal
 
 /-! # `DavisKahan/Sources/DavisKahan1970` -/

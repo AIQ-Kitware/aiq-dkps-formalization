@@ -2,6 +2,17 @@
 
 **Purpose:** execution plan for a coding agent. This is a decision document, not a brainstorming document.
 
+**Status, 2026-08-31.** Partly executed.  The Davis--Kahan half of rule 4 is done:
+`FullPartIII` is `PartIIIManuscriptSurface`, `FullSineTheta` is
+`SineThetaSourceInventory`, `Section9/FullExample` is
+`Section9/ExampleCertificateSurface`, and `FullPartIIIExtensions` is deleted
+rather than folded, because it declared nothing.  **Rule 5 is superseded on one
+word:** it lists `WholeSpace` as a mathematical adjective to keep, and the
+Section 2 naming campaign of 2026-08-30 ruled the opposite -- `wholeSpace` means
+*ambient*, and every module and declaration carrying it was renamed.  Treat
+`dev/honesty-census-2026-08-31.md` as the current authority where the two
+disagree.
+
 **Audit basis:** repository snapshot `d6f1efbfe648` from 2026-08-17, plus the package-boundary and paper-surface decisions made immediately afterward. Before executing, the agent should inspect `HEAD` only to confirm that the named files/declarations still exist; it should not reopen the design questions settled here.
 
 ## 1. Desired end state
@@ -394,21 +405,21 @@ The DK tree contains much more deep implementation history than YWS. The goal he
 
 | Current | Target | Disposition | Reason |
 |---|---|---|---|
-| `DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean` | `DavisKahan/Sources/DavisKahan1970/HeadlineTheorems.lean` | rename | It contains the remaining headline theorem surfaces. “Generic” is an implementation property, not the module's role. |
-| `DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean` | `DavisKahan/Sources/DavisKahan1970/SineTheta/GenericEngine.lean` | rename | After `PaperSurface.lean`, this is the supporting scalar-generic proof/certificate engine, not the canonical headline surface. |
-| `DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean` | `DavisKahan/Sources/DavisKahan1970/SineTheta/SourceAPI.lean` | rename/move | It is a source-vocabulary/API alias facade. “Full” records completion history. |
+| `DavisKahan/Sources/DavisKahan1970/ScalarGenericFinite.lean` | `DavisKahan/Sources/DavisKahan1970/HeadlineTheorems.lean` | rename | It contains the remaining headline theorem surfaces. “Generic” is an implementation property, not the module's role. |
+| `DavisKahan/Sources/DavisKahan1970/SineTheta/ScalarGeneric.lean` | `DavisKahan/Sources/DavisKahan1970/SineTheta/GenericEngine.lean` | rename | After `PaperSurface.lean`, this is the supporting scalar-generic proof/certificate engine, not the canonical headline surface. |
+| `DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean` | `DavisKahan/Sources/DavisKahan1970/SineTheta/SourceAPI.lean` | rename/move | It is a source-vocabulary/API alias facade. “Full” records completion history. |
 | `DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean` | `DavisKahan/Sources/DavisKahan1970/SineTheta/Generalized.lean` | rename/move | The file owns generalized sine-theta source aliases. |
 | `DavisKahan/Sources/DavisKahan1970/GeneralSinThetaExtensions.lean` | fold into `SineTheta/Generalized.lean`, then delete | fold/delete | It is already in the production aggregate; “optional extensions” is stale staging vocabulary. |
 | `DavisKahan/Sources/DavisKahan1970/PartIII.lean` | `DavisKahan/Sources/DavisKahan1970/PartIII/FiniteSpecialization.lean` | rename/move | The current file explicitly says it is only the finite specialization. Unqualified `PartIII` should not mean the weaker specialization. |
-| `DavisKahan/Sources/DavisKahan1970/FullPartIII.lean` | `DavisKahan/Sources/DavisKahan1970/PartIII.lean` | rename into canonical slot | This is the broader source API and should own the unqualified name. Update its import of old `PartIII` to `PartIII.FiniteSpecialization`. |
+| `DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean` | `DavisKahan/Sources/DavisKahan1970/PartIII.lean` | rename into canonical slot | This is the broader source API and should own the unqualified name. Update its import of old `PartIII` to `PartIII.FiniteSpecialization`. |
 | `DavisKahan/Sources/DavisKahan1970/FullPartIIIExtensions.lean` | fold into canonical `PartIII.lean`, then delete | fold/delete | Its own header says it is temporary until extensions are accepted; the production aggregate already imports it. |
 | `DavisKahan/Sources/DavisKahan1970/RemainingSourceSurface.lean` | `DavisKahan/Frontier/SourceEndpoints.lean` | move out of production source tree | The file contains open/frontier endpoint signatures and already declares `Frontier.RemainingSourceSurface`; it should not be a production source aggregate member. |
 | `DavisKahan/Sources/DavisKahan1970/Section4FiniteSurface.lean` | `DavisKahan/Sources/DavisKahan1970/Section4FiniteSpecialization.lean` | rename | Its header explicitly says this is a finite specialization, not the Section 4 completion boundary. |
-| `DavisKahan/Sources/DavisKahan1970/Section9/FullExample.lean` | `DavisKahan/Sources/DavisKahan1970/Section9/Certificate.lean` | rename | The header calls it an end-to-end certificate surface; “FullExample” is completion-state vocabulary. |
+| `DavisKahan/Sources/DavisKahan1970/Section9/ExampleCertificateSurface.lean` | `DavisKahan/Sources/DavisKahan1970/Section9/Certificate.lean` | rename | The header calls it an end-to-end certificate surface; “FullExample” is completion-state vocabulary. |
 | `DavisKahan/Sources/DavisKahan1970/Section9/PaperNumericalResults.lean` | `DavisKahan/Sources/DavisKahan1970/Section9/NumericalResults.lean` | rename | The enclosing package is already the paper source package. |
 | `DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean` | `DavisKahan/Sources/DavisKahan1970/Sylvester/Section5HilbertSchmidt.lean` | rename | It implements source inequality (5.1); section identity is more informative than `Paper`. |
 | `DavisKahan/Sources/DavisKahan1970/Sylvester/PaperOperatorNorm.lean` | `DavisKahan/Sources/DavisKahan1970/Sylvester/Section5OperatorNorm.lean` | rename | It implements source inequality (5.2). |
-| `DavisKahan/Sources/DavisKahan1970/Audits/FullPaperSineTheta.lean` | `DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceCoverage.lean` | rename | Audit role, not completion state. |
+| `DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceInventory.lean` | `DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceCoverage.lean` | rename | Audit role, not completion state. |
 | `DavisKahan/Sources/DavisKahan1970/Audits/GeneralSinThetaExtensions.lean` | `DavisKahan/Sources/DavisKahan1970/Audits/SineThetaNaturalInputs.lean` | rename | It audits the natural-input conveniences, no longer an “extension campaign.” |
 
 
@@ -417,21 +428,21 @@ The DK tree contains much more deep implementation history than YWS. The goal he
 Use `git mv` for the one-to-one moves. For the two `*Extensions` files, copy/fold the declarations into the target module first and delete the leaf only after the target builds.
 
 ```bash
-git mv DavisKahan/Sources/DavisKahan1970/HeadlineGeneric.lean   DavisKahan/Sources/DavisKahan1970/HeadlineTheorems.lean
+git mv DavisKahan/Sources/DavisKahan1970/ScalarGenericFinite.lean   DavisKahan/Sources/DavisKahan1970/HeadlineTheorems.lean
 
-git mv DavisKahan/Sources/DavisKahan1970/SineTheta/HeadlineGeneric.lean   DavisKahan/Sources/DavisKahan1970/SineTheta/GenericEngine.lean
+git mv DavisKahan/Sources/DavisKahan1970/SineTheta/ScalarGeneric.lean   DavisKahan/Sources/DavisKahan1970/SineTheta/GenericEngine.lean
 
-git mv DavisKahan/Sources/DavisKahan1970/FullSineTheta.lean   DavisKahan/Sources/DavisKahan1970/SineTheta/SourceAPI.lean
+git mv DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean   DavisKahan/Sources/DavisKahan1970/SineTheta/SourceAPI.lean
 
 git mv DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean   DavisKahan/Sources/DavisKahan1970/SineTheta/Generalized.lean
 
 mkdir -p DavisKahan/Sources/DavisKahan1970/PartIII
 git mv DavisKahan/Sources/DavisKahan1970/PartIII.lean   DavisKahan/Sources/DavisKahan1970/PartIII/FiniteSpecialization.lean
-git mv DavisKahan/Sources/DavisKahan1970/FullPartIII.lean   DavisKahan/Sources/DavisKahan1970/PartIII.lean
+git mv DavisKahan/Sources/DavisKahan1970/PartIIIManuscriptSurface.lean   DavisKahan/Sources/DavisKahan1970/PartIII.lean
 
 git mv DavisKahan/Sources/DavisKahan1970/Section4FiniteSurface.lean   DavisKahan/Sources/DavisKahan1970/Section4FiniteSpecialization.lean
 
-git mv DavisKahan/Sources/DavisKahan1970/Section9/FullExample.lean   DavisKahan/Sources/DavisKahan1970/Section9/Certificate.lean
+git mv DavisKahan/Sources/DavisKahan1970/Section9/ExampleCertificateSurface.lean   DavisKahan/Sources/DavisKahan1970/Section9/Certificate.lean
 
 git mv DavisKahan/Sources/DavisKahan1970/Section9/PaperNumericalResults.lean   DavisKahan/Sources/DavisKahan1970/Section9/NumericalResults.lean
 
@@ -439,7 +450,7 @@ git mv DavisKahan/Sources/DavisKahan1970/Sylvester/PaperHilbertSchmidt.lean   Da
 
 git mv DavisKahan/Sources/DavisKahan1970/Sylvester/PaperOperatorNorm.lean   DavisKahan/Sources/DavisKahan1970/Sylvester/Section5OperatorNorm.lean
 
-git mv DavisKahan/Sources/DavisKahan1970/Audits/FullPaperSineTheta.lean   DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceCoverage.lean
+git mv DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceInventory.lean   DavisKahan/Sources/DavisKahan1970/Audits/SineThetaSourceCoverage.lean
 
 git mv DavisKahan/Sources/DavisKahan1970/Audits/GeneralSinThetaExtensions.lean   DavisKahan/Sources/DavisKahan1970/Audits/SineThetaNaturalInputs.lean
 ```

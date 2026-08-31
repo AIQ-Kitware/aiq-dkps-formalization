@@ -9,7 +9,7 @@ import DavisKahan.InfiniteDimensional.TanTwoTheta.CanonicalTangentBridge
 import DavisKahan.InfiniteDimensional.TanTwoTheta.PaperFaithfulUINorm
 import DavisKahan.InfiniteDimensional.TanTwoTheta.QuarterAcuteFormGap
 import DavisKahan.Sources.DavisKahan1970.SharpIdeal
-import DavisKahan.Sources.DavisKahan1970.TanThetaWholeSpace
+import DavisKahan.Sources.DavisKahan1970.TanThetaAmbient
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
 /-!

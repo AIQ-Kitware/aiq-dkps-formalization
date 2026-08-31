@@ -172,7 +172,7 @@ variable {H : Type v}
 
 /-- The operator norm of the ambient ideal block is exactly the norm of sine
 of twice the complex operator angle. -/
-theorem norm_sinTwoThetaIdealBlock
+theorem norm_sinTwoThetaIdealBlock_complex
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖sinTwoThetaIdealBlock U V‖ = ‖sinTwoAngleOperatorC U V‖ := by
@@ -598,7 +598,7 @@ theorem sinTwoTheta_reflectionResidual_of_spectrum_gap
     (TauCeti.SymmetricOperatorIdealFamily.mem_operatorNormFamily R)).2
   rwa [TauCeti.SymmetricOperatorIdealFamily.gaugeReal_operatorNormFamily,
     TauCeti.SymmetricOperatorIdealFamily.gaugeReal_operatorNormFamily,
-    norm_sinTwoThetaIdealBlock] at h
+    norm_sinTwoThetaIdealBlock_complex] at h
 
 /-- Canonical complex operator-norm unbounded sine-two-theta theorem for a
 bounded self-adjoint perturbation. -/
