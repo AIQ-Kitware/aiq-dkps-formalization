@@ -86,6 +86,7 @@
     "section_two_endpoint": [
       "complex",
       "real",
+      "rclike",
       "none"
     ]
   },
@@ -2750,12 +2751,46 @@
       "canonical_status": "derived-facade",
       "section_two_endpoint": "none",
       "canonical_status_reason": ""
+    },
+    {
+      "old_name": "(new 2026-08-31)",
+      "new_name": "sinTheta_unbounded_formGap_paperUINorm_ofComponents_rclike",
+      "trig_family": "sinTheta",
+      "paper_role": "section2-result",
+      "scalar_scope": "rclike",
+      "dimension_scope": "arbitrary",
+      "operator_scope": "unbounded",
+      "ritz_scope": "not-applicable",
+      "angle_scope": "directed",
+      "norm_scope": "paperUINorm",
+      "gap_scope": "formGap",
+      "conclusion_representation": "canonicalAngle",
+      "canonical_status": "alternative",
+      "section_two_endpoint": "none",
+      "canonical_status_reason": "The scalar-generic endpoint with the structural hypotheses spelled out as components rather than bundled; `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike` is the same theorem in the shape the fixed-field siblings use, and is the one to cite."
+    },
+    {
+      "old_name": "(new 2026-08-31)",
+      "new_name": "sinTheta_unbounded_formGap_paperUINorm_rclike",
+      "trig_family": "sinTheta",
+      "paper_role": "section2-result",
+      "scalar_scope": "rclike",
+      "dimension_scope": "arbitrary",
+      "operator_scope": "unbounded",
+      "ritz_scope": "not-applicable",
+      "angle_scope": "directed",
+      "norm_scope": "paperUINorm",
+      "gap_scope": "formGap",
+      "conclusion_representation": "canonicalAngle",
+      "canonical_status": "canonical",
+      "section_two_endpoint": "rclike",
+      "canonical_status_reason": "The scalar-generic Section 2 sine endpoint at the printed source scope. Bound as `SectionTwo.sinTheta` on 2026-08-31."
     }
   ],
-  "canonical_status_semantics": "`canonical` means: the declaration to cite for THIS EXACT scope combination. It does NOT mean 'one of the paper's four Section 2 theorems'. To find those, filter on `section_two_endpoint != none`: those eight rows, and only those, are the declarations `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` aliases. No scalar-generic `RCLike` endpoint exists for any of the four, so no row carries one.",
+  "canonical_status_semantics": "`canonical` means: the declaration to cite for THIS EXACT scope combination. It does NOT mean 'one of the paper's four Section 2 theorems'. To find those, filter on `section_two_endpoint != none`: those eight rows, and only those, are the declarations `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean` aliases. `sin Theta` has carried a scalar-generic endpoint since 2026-08-31 (`section_two_endpoint: rclike`); the other three families have not.",
   "invariants": [
     "at most one row may be `canonical` within a single combination of the nine scope columns",
-    "exactly eight rows have `section_two_endpoint != none`, matching the eight aliases in SectionTwo.lean",
+    "every row with `section_two_endpoint != none` is aliased by SectionTwo.lean, and every SectionTwo alias target is such a row",
     "a row that is `canonical` must not be contradicted by SectionTwo.lean's own account of what the endpoint is"
   ],
   "paper_role_semantics": "`section2-result` means: this declaration states one of the paper's four Section 2 results. It is a family-membership fact and carries NO claim that the declaration is the one to cite -- many rows are `section2-result` with `canonical_status: alternative`, because they hold a weaker gap, a different norm class, or a proof representative in the conclusion. Filtering on this field to find 'the four theorems' is the mistake `section_two_endpoint` exists to prevent."

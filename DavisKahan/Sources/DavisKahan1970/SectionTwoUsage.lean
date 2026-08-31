@@ -52,6 +52,8 @@ below, and none is needed.
 
 namespace TauCeti
 namespace DavisKahan1970
+
+universe u₁ v₁
 namespace SectionTwoUsage
 
 open scoped InnerProductSpace
@@ -94,6 +96,40 @@ theorem sinTheta_from_printed_separation
       δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
         N.gauge R :=
   SectionTwo.sinTheta_complex N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
+    (FormBoundedSylvesterGap.intervalExterior hβα (Or.inl ⟨htrialSpec, hcomplSpec⟩))
+    hR
+
+/-- The same call over an arbitrary `RCLike` field, through the newly bound
+`SectionTwo.sinTheta`.
+
+This is the reachability check for the scalar-generic endpoint: ordinary
+operator-theory hypotheses in, printed conclusion out, with no problem record
+assembled by hand.  The two class hypotheses are the field capabilities, which
+`ℝ` and `ℂ` both satisfy by instance. -/
+theorem sinTheta_from_printed_separation_rclike
+    {𝕜 : Type u₁} [RCLike 𝕜]
+    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u₁, v₁} 𝕜]
+    [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.{u₁, v₁} 𝕜]
+    {E F G H : Type v₁}
+    [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+    [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+    [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
+    (N : PaperUnitaryInvariantNorm)
+    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
+    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+    (htrial : _root_.DavisKahan1970.IsTrialResidual A A₀ E₀ R)
+    (hexact : _root_.DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
+    (htrialSpec : TauCeti.LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α)
+    (hcomplSpec : TauCeti.LinearPMap.realSpectrum Λ₁ ⊆
+      {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x})
+    (hR : N.Mem R) :
+    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
+      δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+        N.gauge R :=
+  SectionTwo.sinTheta N A A₀ Λ₁ E₀ F₀ F₁ R hA hA₀ hΛ₁ htrial hexact hδ
     (FormBoundedSylvesterGap.intervalExterior hβα (Or.inl ⟨htrialSpec, hcomplSpec⟩))
     hR
 
