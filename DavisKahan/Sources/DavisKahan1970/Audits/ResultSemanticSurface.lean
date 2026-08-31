@@ -177,6 +177,8 @@ result's canonical witness.
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_spectrumGap_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex
 #check @TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap
 #check @TauCeti.DavisKahan.sinTwoTheta_reflectionResidual_gauge_of_formGap
 #check @TauCeti.DavisKahan.sinTheta_addBounded_gauge_complex_block_of_formGap
@@ -375,6 +377,9 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_uiNorm
 #check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_exact
+#check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged
+#check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_interchanged_exact
+#check @TauCeti.DavisKahan1970.banach_sylvester_lower_bound_unboundedA
 #check @TauCeti.DavisKahan1970.Audits.theorem5_1_scalarGeneric_sourceAudit
 
 /-! ## DK-5.2-thm: Semibounded self-adjoint Sylvester theorem
@@ -416,6 +421,8 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.proposition6_1_source_complex
 #check @TauCeti.DavisKahan1970.proposition6_1_source_projectorDifference_complex
 #check @TauCeti.DavisKahan1970.proposition6_1_source_real
+#check @TauCeti.DavisKahan1970.Proposition6_1_commonDomain
+#check @TauCeti.DavisKahan1970.Proposition6_1_real_commonDomain
 #check @TauCeti.DavisKahan1970.Proposition6_1_complex
 #check @TauCeti.DavisKahan1970.Proposition6_1_real
 #check @TauCeti.DavisKahan1970.Proposition6_1_real_representative
@@ -428,6 +435,7 @@ Status: **TERMINAL EXACT**.
 
 #check @TauCeti.DavisKahan1970.theorem6_1_source_complex
 #check @TauCeti.DavisKahan1970.theorem6_1_source_real
+#check @TauCeti.DavisKahan1970.Theorem6_1_commonDomain
 #check @DavisKahan1970.IsTrialResidualEquation
 #check @DavisKahan1970.isTrialResidual_iff_equation_and_isometry
 #check @TauCeti.DavisKahan1970.Theorem6_1_complex
