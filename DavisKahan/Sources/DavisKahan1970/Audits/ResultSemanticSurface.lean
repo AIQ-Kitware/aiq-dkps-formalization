@@ -170,6 +170,11 @@ Status: **TERMINAL EXACT**.  Both fixed-field endpoints take
 both.  The two `spectrumGap` declarations are the earlier complex route, at a
 bounded separating interval only; they are supporting evidence, not the
 result's canonical witness.
+
+The **ambient** clause is discharged by
+`sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` and its real
+sibling, at the same unbounded scope as the directed clause.  The bounded ambient
+endpoints below them are their specializations, retained as an alternative proof.
 -/
 
 #check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex
@@ -195,6 +200,12 @@ result's canonical witness.
 #check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real
 #check @TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff
 #check @TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex
+#check @TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real
+#check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm
+#check @TauCeti.DavisKahan1970.sinTheta_ambient_unitaryConj_projectorDifference_paperUINorm
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real
 #check @TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex

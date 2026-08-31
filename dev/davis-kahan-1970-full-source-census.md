@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1146
+**Unique cited Lean declarations:** 1152
 
 ## How to use this census
 
@@ -20,8 +20,7 @@ The `importance` field is an external-review priority, not a proof-status axis. 
 
 | value | items |
 | --- | ---: |
-| `compiled_exact` | 44 |
-| `compiled_specialization` | 1 |
+| `compiled_exact` | 45 |
 | `refuted_as_transcribed` | 1 |
 | `resolved_by_modern_development` | 1 |
 | `not_a_completion_obligation` | 3 |
@@ -60,7 +59,7 @@ The `importance` field is an external-review priority, not a proof-status axis. 
 | S1-ui-norms | technical | Section 1, equations (1.9)–(1.18) | compiled_exact | proved_in_build |  |
 | S2-sin-theta | headline | Section 2, sin theta theorem | compiled_exact | proved_in_build |  |
 | S2-tan-theta | headline | Section 2, tan theta theorem | compiled_exact | proved_in_build |  |
-| S2-sin-two-theta | headline | Section 2, sin 2 theta theorem | compiled_specialization | proved_in_build |  |
+| S2-sin-two-theta | headline | Section 2, sin 2 theta theorem | compiled_exact | proved_in_build |  |
 | S2-tan-two-theta | headline | Section 2, tan 2 theta theorem | compiled_exact | proved_in_build |  |
 | S2-sharpness | supporting | Section 2, paragraph after four theorems | compiled_exact | proved_in_build |  |
 | S2-unbounded-scope | technical | Section 2, final paragraphs | compiled_exact | proved_in_build |  |
@@ -479,9 +478,9 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 
 ### `S2-sin-two-theta` — Double-angle sine theorem
 
-**importance:** `headline`  **section:** 2  **source:** Section 2, sin 2 theta theorem  **kind:** unnumbered_theorem  **status:** `compiled_specialization`  **verification:** `proved_in_build`  **completion:** `reopened_math`
+**importance:** `headline`  **section:** 2  **source:** Section 2, sin 2 theta theorem  **kind:** unnumbered_theorem  **status:** `compiled_exact`  **verification:** `proved_in_build`  **completion:** `accepted`
 
-**Summary.** Off-diagonal or fully separated perturbations give the printed residual and perturbation sin(2 Theta) bounds with factor two over real and complex Hilbert spaces at the maintained source norm scope. The Section 8 strict-dimension extension is explicitly exposed for the directed Theta_0 conclusion; the underlying directed theorem is stronger and has no dimension comparison at all.
+**Summary.** Off-diagonal or fully separated perturbations give the printed residual and perturbation sin(2 Theta) bounds with factor two over real and complex Hilbert spaces at the maintained source norm scope.  Both printed conclusions are now at the printed unbounded scope: the directed one through the trial-residual endpoints, the ambient one through `sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` and its real sibling, which lift the reflection argument through the common-domain Proposition 6.1.  The Section 8 strict-dimension extension is explicitly exposed for the directed Theta_0 conclusion; the underlying directed theorem is stronger and has no dimension comparison at all.
 
 **Scope gap.** The AMBIENT conclusion is established only for bounded operators; the result's other clauses are certified at unbounded self-adjoint scope.
 
@@ -545,6 +544,12 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 - `TauCeti.DavisKahan.ExactSinTheta.sinTheta_unbounded_complex_block`
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex`
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_real`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real`
+- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex`
+- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`
+- `TauCeti.DavisKahan1970.sinTheta_ambient_unitaryConj_projectorDifference_paperUINorm`
 
 **Curated source/Lean review:**
 

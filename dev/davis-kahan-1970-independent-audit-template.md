@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **28/29 terminal**, **1 awaiting semantic closure**.
+Current result-level status: **29/29 terminal**, **0 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -130,13 +130,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:239`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:243`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:246`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:250`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -755,13 +755,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:261`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:265`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:270`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:274`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -909,7 +909,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Section 2, sin 2 theta theorem
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `reopened_math`
+- **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -959,8 +959,8 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | --- | --- | --- | --- |
 | `directed.residual.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` | **PASS** |
 | `directed.residual.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real` | **PASS** |
-| `ambient.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex` | **OPEN** |
-| `ambient.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real` | **OPEN** |
+| `ambient.complex` | complex | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` | **PASS** |
+| `ambient.real` | real | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real` | **PASS** |
 
 **`directed.residual.complex`.** delta * N(sin 2Theta_0) <= 2 N(R) with the printed trial residual, unbounded self-adjoint ambient operator, arbitrary PaperUnitaryInvariantNorm, full FormBoundedSylvesterGap.
 
@@ -970,13 +970,13 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 *Gap scope:* The primary takes `FormBoundedSylvesterGap` between the two spectral restrictions, so both semibounded constructors are available; the bounded-interval spelling is the separate `..._spectrumGap_...` declaration held as supporting evidence.
 
-**`ambient.complex`.** The complex ambient clause: the printed conclusion delta * N(sin 2Theta) <= 2 N(H) on the AMBIENT paperSinTwoAngleOperatorC, at this result's unbounded self-adjoint scope.
+**`ambient.complex`.** The complex ambient clause: delta * N(sin 2Theta) <= 2 N(H) on the AMBIENT paperSinTwoAngleOperatorC, with an unbounded self-adjoint LinearPMap ambient operator, a bounded self-adjoint perturbation, arbitrary Hilbert dimension, arbitrary PaperUnitaryInvariantNorm, ideal membership concluded, and the exact factor 2.
 
-*OPEN — what is missing:* The only paper-norm ambient endpoint is stated for BOUNDED operators (`A B : E ->L[C] E`), so it does not establish the ambient conclusion at this result's unbounded scope; the type-requirement check rejects it for `unbounded-selfadjoint-scope`. This was masked until 2026-08-31 by a checker that unioned atoms across unrelated declarations: the DIRECTED theorems donated the unbounded scope atoms and the BOUNDED ambient theorem donated the ambient conclusion, and no theorem established the conjunction. THE MISSING THEOREM: an unbounded ambient endpoint over each field. THE ROUTE IS IDENTIFIED. `paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub` says the ambient sin 2Theta between U and V is |P_(U.map R_V) - P_U|, i.e. an ambient sin Theta between U and its reflection through V; the bounded proof is exactly `symmetric_sinTheta_spectrum_all_kyFan` applied to the pair (A, R_V A R_V) plus `kyFan_reflectionDisplacement_le` for the factor two. The unbounded symmetric sine theorem needed for the lift now exists -- `PaperCommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm` and `proposition6_1_commonDomain_source_complex`, taking two closed self-adjoint operators on one domain -- and `B := addBounded A (reflectionPerturbation V H)` equals R_V A R_V on dom A when V reduces A + H, which supplies the perturbation identity and the factor two through `reflectionPerturbation_mem_and_gauge_le`. WHAT IS ABSENT is transport of the two structural hypotheses across the reflection unitary: (1) `ReducesSubspace (R_V A R_V) (U.map R_V)` from `ReducesSubspace A U`; (2) an equality identifying `reducingRestriction B (U.map R_V)` with `unitaryConjugate (unitarySubmoduleMapIsometry V.reflection U) (reducingRestriction A U)`; and (3) invariance of `FormBoundedSylvesterGap` under `unitaryConjugate` in each slot, which needs `LinearPMap.realSpectrum` and `SemiboundedBelow`/`SemiboundedAbove` transport. `unitarySubmoduleMapIsometry` and `unitaryConjugate_spectrum_eq` already exist; the restriction equality and the gap transport do not.
+*Gap scope:* The primary takes `FormBoundedSylvesterGap` between the two reducing restrictions of the unperturbed operator, so both semibounded constructors -- the two half-infinite configurations -- are available to a caller, and `intervalExterior` is the bounded one. The reflection transport preserves the constructor: `FormBoundedSylvesterGap.unitaryConj_left` and `.unitaryConj_right` case on all three, so nothing collapses to the bounded interval on the way to Proposition 6.1's crossed gaps.
 
-**`ambient.real`.** The real ambient clause: delta * N(sin 2Theta) <= 2 N(H) on the ambient real double-angle sine at the printed unbounded scope.
+**`ambient.real`.** The real sibling of the complex ambient clause, at the same strength: delta * N(sin 2Theta) <= 2 N(H) on the real ambient paperSinTwoAngleOperatorR, unbounded self-adjoint real LinearPMap, bounded self-adjoint perturbation, arbitrary real Hilbert dimension, arbitrary PaperUnitaryInvariantNorm, and the exact factor 2.
 
-*OPEN — what is missing:* As for the complex ambient clause: the only real paper-norm ambient endpoint is stated for bounded operators.
+*Gap scope:* The primary takes `FormBoundedSylvesterGap` between the two reducing restrictions of the unperturbed operator, so both semibounded constructors -- the two half-infinite configurations -- are available to a caller, and `intervalExterior` is the bounded one. The reflection transport preserves the constructor: `FormBoundedSylvesterGap.unitaryConj_left` and `.unitaryConj_right` case on all three, so nothing collapses to the bounded interval on the way to Proposition 6.1's crossed gaps.
 
 Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 
@@ -990,6 +990,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real` — primary_source_witness, real scalars, proof; covers 
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers 
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real` — primary_source_witness, real scalars, proof; covers 
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-two-theta.ambient-conclusion`, `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real` — primary_source_witness, real scalars, proof; covers `S2-sin-two-theta.ambient-conclusion`, `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 
 ### Other registered declarations
 
@@ -1018,18 +1020,22 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_real` — generalization
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimension_complex` — generalization
 - `TauCeti.DavisKahan1970.sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequalDimension_complex` — generalization
+- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex` — public_alias
+- `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real` — public_alias
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm` — generalization
+- `TauCeti.DavisKahan1970.sinTheta_ambient_unitaryConj_projectorDifference_paperUINorm` — supporting_theorem
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:286`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:290`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:295`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:299`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1207,6 +1213,42 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
+#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:287`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:426`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:353`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:357`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:216`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.sinTheta_ambient_unitaryConj_projectorDifference_paperUINorm`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:119`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 ### Independent result audit checklist
 
 - [ ] The selected source atoms are exactly the hypotheses, conclusions, and scope of the printed result statement.
@@ -1361,13 +1403,13 @@ The declarations that carry this result's printed statement, with the source ato
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:361`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:373`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:368`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SectionTwo.lean:380`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -5168,8 +5210,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 274 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **28 currently terminal results independently reconfirmed:** yes / no
-- **1 currently nonterminal/pending results resolved by this audit:** yes / no
+- **29 currently terminal results independently reconfirmed:** yes / no
+- **0 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

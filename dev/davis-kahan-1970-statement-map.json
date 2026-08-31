@@ -234,7 +234,7 @@
       "source_kind": "unnumbered_theorem",
       "source_anchor": "Section 2, sin 2 theta theorem",
       "completion_obligation": true,
-      "expected_status": "compiled_specialization",
+      "expected_status": "compiled_exact",
       "expected_verification": "proved_in_build",
       "tex_marker": "S2-sin-two-theta",
       "review_declarations": [
@@ -244,7 +244,11 @@
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real",
         "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex",
-        "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real"
+        "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real",
+        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex",
+        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real",
+        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex",
+        "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real"
       ],
       "audit_clauses": [
         {
@@ -258,13 +262,15 @@
           "id": "S2-sin-two-theta.ambient",
           "description": "Ambient conclusion: delta * ||sin(2 Theta)|| <= 2 ||H||.",
           "review_declarations": [
+            "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex",
+            "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real",
             "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex",
             "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real"
           ]
         }
       ],
       "source_specification_sha256": "7da711fdbd912b64b5aa6f2efc5c4255bcbe796831a18b99c92712024b81c70b",
-      "expected_completion_certification": "reopened_math",
+      "expected_completion_certification": "accepted",
       "known_completion_holes": [],
       "source_atom_ids": [
         "S2-sin-two-theta.gap-hypothesis",

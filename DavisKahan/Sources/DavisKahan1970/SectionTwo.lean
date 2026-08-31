@@ -7,6 +7,7 @@ import DavisKahan.Sources.DavisKahan1970.SineTheta.PaperSurface
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient
 import DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal
 import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
+import DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual
 import DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal
 import DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded
@@ -145,7 +146,10 @@ Both `sin 2Θ` endpoints now take `FormBoundedSylvesterGap`, so the printed
 half-infinite gap scope is covered over both fields;
 `sinTwoTheta_directed_unbounded_addBounded_spectrumGap_paperUINorm_complex` is the
 earlier complex route, at a bounded separating interval only, and is kept as an
-alternative rather than as this result's witness.
+alternative rather than as this result's witness.  The `sin 2Θ` *ambient* clause
+is covered at the same scope by
+`sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` and its real
+sibling; the bounded ambient endpoints are their specializations.
 
 The declarations here are `alias`es, so each has exactly the type of the theorem
 it names; the proofs and the supporting theory stay in the modules where they
@@ -338,12 +342,20 @@ alias tanTwoTheta_ambient_complex := tanTwoTheta_ambient_unbounded_paperUINorm_c
 /-- **`tan 2Θ`, ambient clause, over `ℝ`**. -/
 alias tanTwoTheta_ambient_real := tanTwoTheta_ambient_unbounded_paperUINorm_real
 
-/-! **`sin 2Θ` has no ambient-clause alias.**  Its ambient conclusion is not
-established at this result's unbounded scope: the only paper-norm ambient
-endpoints, `sinTwoTheta_ambient_bounded_paperUINorm_complex` and `..._real`, are
-stated for bounded operators.  Binding a short name to them here would repeat the
-mistake this file exists to prevent -- reading a narrower theorem as the printed
-one.  The gap is recorded as an open clause in the result inventory. -/
+/-- **`sin 2Θ`, ambient clause, over `ℂ`**: `δ N(sin 2Θ) ≤ 2 N(H)` on the paper's
+*ambient* double-angle sine `paperSinTwoAngleOperatorC`, at this result's unbounded
+scope.
+
+This alias was deliberately absent until 2026-08-31, because the only paper-norm
+ambient endpoint was `sinTwoTheta_ambient_bounded_paperUINorm_complex`, whose
+ambient operator is bounded.  It now names the theorem at the printed scope; the
+bounded statement is retained as an alternative proof of its own specialization. -/
+alias sinTwoTheta_ambient_complex :=
+  sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex
+
+/-- **`sin 2Θ`, ambient clause, over `ℝ`**. -/
+alias sinTwoTheta_ambient_real :=
+  sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real
 
 /-! ## `tan 2Θ` -/
 
