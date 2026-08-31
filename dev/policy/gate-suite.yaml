@@ -23,7 +23,6 @@ unavailable_exit_code: 3
 
 slow:
   - check_comparator_signatures
-  - experimental-roots
   - foundations
 
 # Kept empty deliberately.  A check whose output nobody acts on is worse than no
@@ -93,6 +92,17 @@ gates:
   - name: workspace-ledgers
     command: ["aiq-lean", "workspace", "validate", "--static-declarations"]
     description: "every source census, semantic review and coverage inventory, validated together"
+
+  - name: foundations
+    command: ["aiq-lean", "foundations", "validate",
+              "dev/davis-kahan-hidden-foundations.json", "--lean-probe"]
+    description: "the hidden-foundation ledger is internally valid and Lean resolves every declaration it names -- NOT a completeness claim; its `interface` nodes are open campaigns"
+
+  - name: foundations-status
+    command: ["aiq-lean", "foundations", "render",
+              "dev/davis-kahan-hidden-foundations.json",
+              "-o", "dev/davis-kahan-hidden-foundations-status.md", "--check"]
+    description: "the generated foundation-status view is current"
 
   - name: grounding-yws
     command: ["aiq-lean", "source", "grounding", "dev/policy/yu-wang-samworth-grounding.yaml"]

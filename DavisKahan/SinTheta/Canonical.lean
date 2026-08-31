@@ -23,7 +23,7 @@ surface selects the complex proof here and the real proof in `Real.Canonical`.
 and the same `result` statements, differing **only** in `spectral_gap`: those
 take `SpectralSylvesterGap`, these take `FormBoundedSylvesterGap`.
 
-`formBoundedSylvesterGap_of_spectral` (`Sylvester/Unbounded/LegacyGap.lean`)
+`formBoundedSylvesterGap_of_spectral` (`Sylvester/Unbounded/FormBoundedGap.lean`)
 turns a spectral gap into a form-bounded one in every configuration, so **the
 structures here are the more general pair**: every spectral package yields one of
 these, and `SpectralGeneralSinThetaProblem.result` is therefore a corollary of

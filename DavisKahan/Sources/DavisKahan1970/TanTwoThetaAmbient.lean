@@ -30,7 +30,7 @@ block operator whose corners are `J₀ tan 2Θ₀` and `J₀⋆ tan 2Θ₁`, bou
 corner by `2‖R‖/δ`, couples the two corners with Lemma 6.1 and contracts with
 the Lemma 6.2 pinch.
 
-As in `TanThetaWholeSpace.lean`, the formalisation follows that shape but
+As in `TanThetaAmbient.lean`, the formalisation follows that shape but
 builds the off-diagonal representative *explicitly*, which removes both the
 direct-rotation polar factor `J₀` and the complementary angle `Θ₁`.  Writing
 `p` for the orthogonal projection onto `U`, `D = P_V − P_U` and `s = D²`

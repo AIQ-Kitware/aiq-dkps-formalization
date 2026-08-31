@@ -22,7 +22,7 @@ files each gate reads.
 | 5 | Finished-campaign plans still named as plans | 14 documents | remove |
 | 6 | Superseded audit sweeps under `dev/audit/` | 18 documents | remove |
 | 7 | Unqualified names bound to the complex statement | 66 of 113 candidates | renamed `_complex` |
-| 8 | `hidden-foundations` reports 0 findings over a deleted tree | 3 artifacts | retired |
+| 8 | `hidden-foundations` — **census finding withdrawn** | 3 artifacts | kept, reframed |
 | 9 | The audit corpus is a July 2026 review sweep nothing reads | 21 documents | removed |
 
 Not a finding: declaration names containing `generic`, `complete`, `final`,
@@ -135,28 +135,67 @@ Renaming the 41 `RCLike` declarations to `_complex` would have introduced 41 new
 lies.  The `SectionTwo` rule reserves the bare name for the scalar-generic form,
 and these already hold it.
 
+The classification table records every row's scope, and two invariants now hold
+mechanically: **at most one row is `canonical` within a single scope
+combination**, and **exactly eight rows carry `section_two_endpoint != none`** --
+the eight declarations `SectionTwo.lean` actually aliases.  That second column
+exists because `canonical` was being read as "one of the paper's four", which it
+never meant: review found `sinTheta_unbounded_intervalExterior_paperUINorm_rclike`
+and `sinTheta_unbounded_formGap_idealFamily_rclike` marked `canonical` even
+though `SectionTwo.lean` says in as many words that neither is the endpoint --
+the first has only the interval/exterior branch of the gap, the second the
+generalized ideal-family norm.  Both are now `alternative` with the reason
+recorded, along with six other rows, and the two sin-theta endpoints -- absent
+from the table entirely, because they came through the namespace-disambiguation
+path rather than the bulk map -- are added.
+
 The 66 renamed include the paper's numbered results: `Theorem6_1`, `Theorem6_2`,
 `Proposition6_1`, `Proposition4_1_compact_*`, the `Question10_4_*` family, and
 `theorem8_2_*_source`.  The bare numbers are now unbound, reserved for a
-scalar-generic statement, exactly as `SectionTwo.sinTheta` is.  `proposition3_4_source_full`
+scalar-generic statement, exactly as `SectionTwo.sinTheta` is.  `sinTheta_unbounded_intervalExterior_legacyPresentation_rclike` was renamed again,
+to `..._characterizedWitness_rclike`: `legacyPresentation` encodes history, which
+is the same objection that retired `LegacyGap`, and what actually distinguishes
+the statement is that it names `sin Theta_0` as an explicit parameter tied by a
+defining equation.  The same review found its `norm_scope` recorded as `uiNorm`
+when `UnitaryInvariantNorm` is an alias for `PaperUnitaryInvariantNorm`; the row
+says `paperUINorm` now.  `proposition3_4_source_full`
 became `proposition3_4_source_full_bundled_complex`, because a
 `proposition3_4_source_full_complex` already existed in another namespace and the
 two differ in whether the conclusion is the bundled `IsPaperDirectRotation`
 predicate or its clauses spelled out.
 
-## 8. `hidden-foundations`
+## 8. `hidden-foundations` -- this finding was wrong, and is withdrawn
 
-`dev/davis-kahan-hidden-foundations.json`, its rendered
-`dev/davis-kahan-hidden-foundations-status.md`, and the `foundations` /
-`foundations-status` gates track 19 nodes and report **0 errors, 0 warnings**.
-The status document opens by explaining that the aggregate module it was built
-around was deleted on 2026-08-27.  Its check is that declarations are
-"textually present" -- the name-matching machinery `AGENTS.md` says produced
-reports of theorems as delivered when they were not.
+The census claimed a green gate "over a deleted tree, using a method the
+repository has disowned", and deleted the ledger and its two gates.  Review
+found the claim false on both halves, and it is restored.
 
-`AGENTS.md` separately warns: never infer completion from "a recursively
-grounded frontier graph".  A green gate over a deleted tree, using a method the
-repository has disowned, was retired rather than repaired.
+*"Over a deleted tree"* misread the ledger's own first sentence.  It says the
+campaign-era **aggregate** `DavisKahan.Experimental.MathAhead.HiddenFoundations.All`
+was deleted and that **each node now names its own production module** -- the
+opposite of what the census took it to mean.  Every one of the 19 nodes points
+into the live tree.
+
+*"Textually present"* was read off the rendered summary line; the gate itself
+ran `aiq-lean foundations validate --lean-probe`, which resolves each
+declaration in the built environment.
+
+And the ledger was never a completeness report.  Its `interface` kind is defined
+as *"an honest explicit contract for a genuinely missing foundational campaign;
+fields are not counted as completed mathematics"*, and two nodes carry it --
+including `SobolevTraceFoundation`, the interval Sobolev trace, self-adjointness
+and compact-graph-embedding construction that `FreeBeamAnalyticFoundation.lean`
+still calls a missing layer.  Deleting the ledger deleted the repository's
+record of that open PDE work.
+
+On restore the gate immediately failed, which settles the question of whether it
+is live: the Section 2 campaign had renamed `paperHilbertSchmidt_complete` to
+`paperHilbertSchmidt_complete_complex`, and the ledger caught the drift the
+moment it ran.  The node is repointed and the gate is green again.
+
+The gate description now says what green means -- the ledger is internally valid
+and Lean resolves every declaration it names -- and the ledger's own description
+says, first, that this is not a completeness claim.
 
 ## 9. The audit corpus
 
@@ -198,6 +237,15 @@ not carry marks across a rename.**  Its header claims marks survive
 `git diff -M` records every one, and regeneration still returned all twelve to
 `[ ]`, six of them reviewed.  That is an open gap in the package, now recorded in
 `AGENTS.md` and in `dev/audit/README.md` with the reconciliation procedure.
+
+## Open, and sized
+
+`spectra*`-prefixed declarations are misnomers: they are named after the retired
+vendored Spectra package and have nothing to do with it.
+`Geometry/Polar/OperatorAbsoluteValue.lean` says so itself.  Measured:
+**100 declarations, about 1 400 call sites** across `Geometry/Polar/**`,
+`SpectralTheory/**` and `Sources/**`.  That is a larger sweep than the Section 2
+campaign and is left as the next one.
 
 ## Left for a later pass
 

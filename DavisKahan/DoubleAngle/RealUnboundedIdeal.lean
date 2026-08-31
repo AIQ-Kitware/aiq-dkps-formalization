@@ -13,7 +13,7 @@ import DavisKahan.SpectralTheory.Real.SpectralRestriction
 Standing assumption 1 of Davis--Kahan 1970 is that the Hilbert space is "real or
 complex".  The ambient (whole-space) half of the Section 2 `sin 2Θ` theorem,
 `δ ‖sin 2Θ‖ ≤ 2‖H‖`, is available over the reals in
-`Sources/DavisKahan1970/WholeSpaceReal.lean`.  This module supplies the other
+`Sources/DavisKahan1970/AmbientReal.lean`.  This module supplies the other
 printed conclusion, the **directed** half `δ ‖sin 2Θ₀‖ ≤ 2‖R‖`, over a real
 Hilbert space, for an unbounded self-adjoint closed operator and its genuine
 spectral subspaces, and for every real Ky-Fan-dominant unitarily invariant ideal
