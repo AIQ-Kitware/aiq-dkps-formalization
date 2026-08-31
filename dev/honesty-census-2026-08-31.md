@@ -184,10 +184,20 @@ checked against the package before it is used as grounds for deletion.**
 
 Restoring cost something.  Regeneration preserves `[x]` marks found in the
 existing file, so the file *is* the review state, and deleting it destroyed 795
-of them.  They came back from Git, but regeneration after the twelve committed
-`git mv` renames still returned six reviewed files to `[ ]` despite the
-documented rename detection, and those were restored by hand from the old
-revision.  The current count is 712/1453 under the tool's present defaults.
+of them.  They came back from Git, and the reconciliation closes exactly:
+
+    712 checked now + 80 checked-and-deleted + 3 no longer listed = 795
+
+with no file that still exists at an unchanged path having lost its mark.  The
+80 are documents this campaign removed; the 3 (`.gitignore`, `.gitmodules`,
+`dev/audit/README.md`) fall outside the tool's current include set.
+
+Getting there needed a manual pass, because **`aiq-lean source checklist` does
+not carry marks across a rename.**  Its header claims marks survive
+"Git-detected renames"; all twelve `git mv` renames were committed and
+`git diff -M` records every one, and regeneration still returned all twelve to
+`[ ]`, six of them reviewed.  That is an open gap in the package, now recorded in
+`AGENTS.md` and in `dev/audit/README.md` with the reconciliation procedure.
 
 ## Left for a later pass
 
