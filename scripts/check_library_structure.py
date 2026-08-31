@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Structural checks for the Davis--Kahan production/Experimental boundary.
+"""Structural checks for the Davis--Kahan production boundary.
 
 The checker enforces durable repository invariants that originated in the July
 2026 sine-theta reorganization and are now part of the maintained architecture:
@@ -7,14 +7,15 @@ The checker enforces durable repository invariants that originated in the July
 1. production modules are reachable from `DavisKahan.All` or the curated root;
 2. production modules do not import staging or diagnostic modules;
 2c. production source does not declare or reference staging/scratch namespaces;
-3. Experimental scratch health is delegated to its dedicated checker;
+3. no staging tree has been recreated;
 4. source facades are reachable from the curated root; and
 5. the full-paper sine-theta audit still points at existing endpoints.
 
-`Experimental`, `MathAhead`, and `Audits` are outside the production build
-closure.  `MathAhead` is a proof-staging tree and `Audits` is an explicit
-diagnostic tree; neither is a library dependency.  Production declarations also
-do not live under a `Scratch` namespace.
+Every staging tree is now deleted -- `Frontier/` and `MathAhead/` on 2026-08-27,
+`Experimental/` on 2026-08-31 -- so rule 3 guards their absence rather than
+their internal health.  `Audits` remains: it is an explicit diagnostic tree
+outside the production build closure, not a library dependency.  Production
+declarations also do not live under a `Scratch` namespace.
 
 Current behavior is defined by this script and the present module graph; the
 reorganization that created these invariants is in Git history.

@@ -238,6 +238,41 @@ not carry marks across a rename.**  Its header claims marks survive
 `[ ]`, six of them reviewed.  That is an open gap in the package, now recorded in
 `AGENTS.md` and in `dev/audit/README.md` with the reconciliation procedure.
 
+## The scalar-generic endpoint question, answered
+
+Review asked whether "no scalar-generic `RCLike` endpoint exists" means *there is
+no capability-free declaration combining every strongest library generalization*
+or *there is no paper-faithful `RCLike` Section 2 theorem*.  Those are different
+claims and the module said only the first.  Measured against the distributable
+source specification, which states the four results "for infinite as well as
+finite dimensional separable Hilbert spaces" and says the gap intervals "may be
+half-infinite":
+
+* **`sin Θ` -- genuinely missing, and one bridging step away.**  The printed
+  hypothesis *is* interval/exterior, so
+  `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` states the printed
+  separation at the printed norm class over `RCLike`.  What it misses is not a
+  library luxury: its gap is `Set.Icc β α`, and the source permits half-infinite
+  intervals -- the two semibounded constructors of `FormBoundedSylvesterGap`.
+  `sinTheta_unbounded_formGap_idealFamily_rclike` has all three branches but sits
+  over a Fan-dominant ideal family instead of `PaperUnitaryInvariantNorm`.  Each
+  holds one half.
+* **`tan Θ`, `sin 2Θ` -- the `RCLike` forms are finite-dimensional**, and the
+  source is explicit that the results hold in infinite dimensions.  Real distance.
+* **`tan 2Θ` -- the `RCLike` form has a bounded ambient operator** and a
+  finite-dimensional trial subspace.  Real distance.
+
+* **The capability classes are not part of the gap.**
+  `HasMinMaxLowerBoundEverywhere` and `HasUnboundedSylvesterKyFan` are *proved
+  instances* for `ℝ` and `ℂ`.  They are hypotheses only because `RCLike` is open;
+  over the two fields the paper is about they are theorems.
+
+So the module's conclusion survives, but its stated reason did not: it measured
+`sin Θ` against `FormBoundedSylvesterGap` as a library generalization when the
+half-infinite branch is source scope.  `SectionTwo.lean` now says this per family,
+and says which of the four are a bridge away and which are mathematics away.
+**Decide this before deriving `Challenge.lean` from `SectionTwo`.**
+
 ## Open, and sized
 
 `spectra*`-prefixed declarations are misnomers: they are named after the retired

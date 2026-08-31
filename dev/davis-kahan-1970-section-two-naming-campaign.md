@@ -74,10 +74,21 @@ Three `canonical_*` aliases in `PartIIIManuscriptSurface.lean` were also removed
 complex-only bundled entry points, which is the claim this campaign reserves for
 the scalar-generic form.  Their consumers now name the declarations directly.
 
-## Not done
+## Left to the honesty campaign, and since completed
 
-Module *paths* still carry the banned words -- `SineTheta/HeadlineGeneric.lean`,
-`HeadlineGeneric.lean`, `TanThetaWholeSpace.lean`, `SinTwoThetaWholeSpace.lean`,
-`WholeSpaceReal.lean`, `TanTwoThetaWholeSpace.lean`.  Renaming modules moves
-imports, generated aggregates, staging registries and census module paths, and is
-a separate change from renaming declarations.
+This campaign renamed declarations only, leaving six module *paths* carrying the
+banned words.  The honesty campaign of 2026-08-31 renamed all of them, and
+`sinTheta_unbounded_intervalExterior_legacyPresentation_rclike` with them:
+
+| was | is |
+| --- | --- |
+| `SineTheta/HeadlineGeneric.lean` | `SineTheta/ScalarGeneric.lean` |
+| `HeadlineGeneric.lean` | `ScalarGenericFinite.lean` |
+| `TanThetaWholeSpace.lean` | `TanThetaAmbient.lean` |
+| `SinTwoThetaWholeSpace.lean` | `SinTwoThetaAmbient.lean` |
+| `TanTwoThetaWholeSpace.lean` | `TanTwoThetaAmbient.lean` |
+| `WholeSpaceReal.lean` | `AmbientReal.lean` |
+
+`dev/honesty-census-2026-08-31.md` is the record of that work.  **This document is
+a historical campaign record from 2026-08-30**; where it and the census disagree
+about the current tree, the census is later.

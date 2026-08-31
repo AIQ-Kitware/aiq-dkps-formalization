@@ -28,20 +28,39 @@ TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex    tanTwoTheta_real
 ## The unqualified names are reserved, and deliberately unbound
 
 `SectionTwo.sinTheta`, `.tanTheta`, `.sinTwoTheta` and `.tanTwoTheta` name
-nothing.  They are reserved for the full-source-scope statement that is *also*
-generic over `RCLike 𝕜`, and no such declaration exists yet for any of the four:
-what this module offers is the fixed-field pair.  Binding a short name to the
-complex statement is what previously made `SectionTwo.sinTheta` read as the
-canonical theorem when it was the complex one, so the names stay empty until the
-scalar-generic endpoint is proved.  The nearest existing approximations are
+nothing.  They are reserved for a statement that is generic over `RCLike 𝕜` **and
+at the printed source scope**, and no such declaration exists yet for any of the
+four.  Binding a short name to the complex statement is what previously made
+`SectionTwo.sinTheta` read as the canonical theorem when it was the complex one,
+so the names stay empty.
 
-| result | closest scalar-generic declaration | what it still lacks |
+Two things are easy to conflate here, and the gap is measured against the
+*paper*, not against the strongest form the library happens to hold.  The
+distributable source specification fixes the scope: the four results are stated
+"for infinite as well as finite dimensional separable Hilbert spaces", the
+spectral intervals in the gap hypotheses "may be half-infinite", and the
+norm is an arbitrary unitary-invariant norm.  Against that:
+
+| result | closest scalar-generic declaration | what the *paper* still asks for |
 | --- | --- | --- |
-| `sin Θ` | `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` | the full `FormBoundedSylvesterGap`, not only its interval/exterior branch |
-| `sin Θ` | `sinTheta_unbounded_formGap_idealFamily_rclike` | the paper's `PaperUnitaryInvariantNorm` rather than a Fan-dominant ideal family |
-| `tan Θ` | `tanTheta_directed_finiteDimensional_paperUINorm_rclike` | arbitrary dimension, and the ambient rather than directed angle |
+| `sin Θ` | `sinTheta_unbounded_intervalExterior_paperUINorm_rclike` | its gap is `Set.Icc β α`, a bounded interval; the source permits half-infinite ones, which is the `leftAboveRightBelow` / `leftBelowRightAbove` half of `FormBoundedSylvesterGap` |
+| `sin Θ` | `sinTheta_unbounded_formGap_idealFamily_rclike` | carries all three gap branches, but over a Fan-dominant `KyFanDominantIdealFamily` rather than the source's `PaperUnitaryInvariantNorm` |
+| `tan Θ` | `tanTheta_directed_finiteDimensional_paperUINorm_rclike` | arbitrary dimension, and the ambient conclusion beside the directed one |
 | `sin 2Θ` | `sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` | arbitrary dimension, and an unbounded ambient operator |
 | `tan 2Θ` | `tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike` | an unbounded ambient operator, and the ambient angle |
+
+For `sin Θ` the two rows are complementary and the endpoint is one bridging step
+away: widen the first's gap, or move the second to the paper's norm class.  For
+the other three the distance is real mathematics, not a bridge.
+
+**The capability classes are not part of this gap.**  The scalar-generic sine
+declarations carry `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` and
+`HasUnboundedSylvesterKyFan 𝕜`, and both are *proved instances* for `ℝ` and `ℂ`
+(`hasMinMaxLowerBoundEverywhere_complex`/`_real`,
+`hasUnboundedSylvesterKyFan_complex`/`_real`).  They are hypotheses only because
+`RCLike` is an open class, so a third field would owe the estimates; over the two
+fields Davis and Kahan write about they are theorems.  Do not count them as
+missing mathematics.
 
 Every one of the eight fixed-field aliases is at the accepted full source scope,
 and its *own* type says so: an unbounded self-adjoint `LinearPMap` ambient operator, a Hilbert space
