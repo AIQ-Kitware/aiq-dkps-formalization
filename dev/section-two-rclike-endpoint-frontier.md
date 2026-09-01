@@ -73,10 +73,29 @@ variable [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)
 ```
 
 and says of the third that Mathlib "declines to register [it] as an instance only
-because its hypothesis is unavailable outside `ℂ`".  So the angle chain is generic
-*given a functional-calculus instance that does not exist for `ℝ`* -- which is a
-capability-class problem of the same kind as the sine theorem's, not a free
-restatement.
+because its hypothesis is unavailable outside `ℂ`".
+
+**Correction, 2026-08-31.**  That instance is no longer unavailable for `ℝ`.
+`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`
+registers `ContinuousFunctionalCalculus ℝ (E →L[ℝ] E) IsSelfAdjoint` for **every**
+real Hilbert space at unrestricted dimension, and
+
+```lean
+example : ContinuousFunctionalCalculus ℝ (E →L[ℝ] E) IsSelfAdjoint := inferInstance
+noncomputable example (T : E →L[ℝ] E) : E →L[ℝ] E := ContinuousLinearMap.modulus T
+noncomputable example (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
+    [V.HasOrthogonalProjection] : E →L[ℝ] E :=
+  cfc Real.sin (cfc Real.arcsin
+    (ContinuousLinearMap.modulus (U.starProjection - V.starProjection)))
+```
+
+all elaborate.  So the angle chain is generic behind a capability binder that has
+instances at **both** of the paper's fields -- exactly the situation of
+`HasMinMaxLowerBoundEverywhere` in the sine theorem, and not a blocker of its own.
+`paperTanAngleOperatorR` is defined by transport for historical reasons, not
+because a direct real definition is unavailable.
+
+Layer 1 is therefore no longer where `tan Θ` is stuck.  Layer 2 is.
 
 ### Layer 2: the Appendix cutoff, which is where the real content is
 
@@ -99,7 +118,8 @@ blocks `sin 2Θ` and `tan 2Θ`.  Genericizing the angle chain alone would not
 produce the endpoint; it would produce a statement that cannot be proved.
 
 **The seam to trace first is `UnboundedCompressionTrialData.all_kyFan_core`**, not
-the angle definitions.
+the angle definitions -- and after the 2026-08-31 correction above, that is the
+*only* seam for `tan Θ`.
 
 ## `sin 2Θ` and `tan 2Θ` — blocked on the spectral-selection layer
 
@@ -163,12 +183,15 @@ however, **not** what unblocks the three families, for two reasons.
 
 *The blocker is in the statement, not the proof.*  Dispatch would let a proof
 branch, but the theorem has to be **stated** over `𝕜` first, and its conclusion
-names `paperTanAngleOperator`, `paperSinTwoAngleOperator`, `paperAbsTanTwoAngleOperator`
-and the spectral selection.  Those live on the Hilbert space, exist over `ℂ`, and
-reach `ℝ` by descent.  There is nothing to dispatch until a `𝕜`-generic angle
-vocabulary exists, and that is the functional-calculus and spectral-measure
-question the rest of this file traces.  `sin Θ` is generic precisely because its
-conclusion is a scalar-generic operator expression, `(I - F₀F₀⋆)E₀`.
+names the angle operators and the spectral selection.  The **angle** half of that
+is no longer blocked: with the real calculus registered (see the `tan Θ`
+correction above), `modulus` and the `cfc` chain are available at both fields, so
+a `𝕜`-generic angle vocabulary is writable behind a capability binder with
+instances at `ℝ` and `ℂ`.  The **spectral-selection** half is still blocked, and
+it is the harder one: `specRange` and `selfAdjointSpectralSubspace` exist over
+`ℂ` and reach `ℝ` by descent through the complexification.  `sin Θ` is generic
+without any of this precisely because its conclusion is a scalar-generic operator
+expression, `(I - F₀F₀⋆)E₀`, naming no angle and no selection.
 
 *The transport is a development, not a facade.*  Even with a
 `𝕜 ≃ₗᵢ[ℝ] ℂ`, using it means carrying an `InnerProductSpace 𝕜 E` structure, its
