@@ -2,7 +2,7 @@
 
 This packet is generated from curated semantic-review fields in the source censuses. Human-written Lean headers are structural source evidence. Compiler output, when present, is elaborator-backed evidence about the Lean surface. The source-to-Lean correspondence remains the census author's explicit review claim.
 
-**Elaborator evidence:** statement sidecar with 915 record(s), toolchain `leanprover/lean4:v4.34.0-rc1`. Signatures, hashes and closures below are read from the elaborated environment, not from source text.
+**Elaborator evidence:** statement sidecar with 914 record(s), toolchain `leanprover/lean4:v4.34.0-rc1`. Signatures, hashes and closures below are read from the elaborated environment, not from source text.
 
 ## C. Davis and W. M. Kahan, The Rotation of Eigenvectors by a Perturbation. III, SIAM J. Numer. Anal. 7(1), 1970, 1–46.: Davis--Kahan single-angle sin theta theorem
 
@@ -27,7 +27,7 @@ The Section 2 sin-theta theorem: interval/exterior spectral separation controls 
 
 ### Canonical Lean declarations
 
-#### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex`
+#### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex`
 
 **Human-written Lean statement**
 
@@ -39,8 +39,8 @@ variable {E F G H : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-theorem sinTheta_unbounded_formGap_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem sinTheta_unbounded_formGap_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
     (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
     (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
@@ -57,13 +57,13 @@ theorem sinTheta_unbounded_formGap_paperUINorm_complex
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex.{v} {E F G H : Type v}
+DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex.{v} {E F G H : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] [NormedAddCommGroup F]
   [InnerProductSpace ℂ F] [CompleteSpace F] [NormedAddCommGroup G] [InnerProductSpace ℂ G]
   [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[ℂ] E)
-  (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G) (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E)
-  (R : F →L[ℂ] E) (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F)
+  (Λ₁ : G →ₗ.[ℂ] G) (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
+  (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
   (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
   (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
   (hgap : TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A₀ Λ₁ δ) (hR : N.Mem R) :
@@ -72,36 +72,36 @@ DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex.{v} {E F G H : Typ
       N.gauge R
 ~~~~
 
-Structural type hash `2183094929`, printed-type hash `149645de4f06d6be`.
+Structural type hash `3277617206`, printed-type hash `6abf61c51dee3066`.
 
 Statement closure: 22 project constant(s) unfolded, 0 project leaf/leaves, 51 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.approximationNumber`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.approximationNumber`
 Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan`, `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `IsSelfAdjoint`, `Real`, `And`, `ContinuousLinearMap.comp`, `ContinuousLinearMap.id`, `LinearIsometryEquiv`, `starRingEnd`, `ContinuousLinearMap.adjoint`, `Nat`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `Subtype`, `Submodule`, `LinearPMap.toFun'`, `Ne`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `Or`, `Set`, `Set.Icc`, `Set.ofPred`, `AddMonoidHom`, `iSup`, `ENNReal.ofReal`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `InnerProductSpace.rankOne`, `Exists`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `NormedSpace`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:326)
-    DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex.{v} {E F G H : Type v}
+DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:326)
+    DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex.{v} {E F G H : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] [NormedAddCommGroup F]
       [InnerProductSpace ℂ F] [CompleteSpace F] [NormedAddCommGroup G] [InnerProductSpace ℂ G]
       [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[ℂ] E)
-      (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G) (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E)
-      (R : F →L[ℂ] E) (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F)
+      (Λ₁ : G →ₗ.[ℂ] G) (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
+      (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
       (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
       (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
       (hgap : TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A₀ Λ₁ δ) (hR : N.Mem R) :
       N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ∧
         δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ≤
           N.gauge R
-    hash: expr=2183094929 text=149645de4f06d6be
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=3277617206 text=6abf61c51dee3066
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -122,8 +122,8 @@ DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex  (theorem, DavisKa
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] DavisKahan1970.IsTrialResidual  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:67)
       DavisKahan1970.IsTrialResidual.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E]
@@ -177,35 +177,35 @@ DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex  (theorem, DavisKa
         TauCeti.LinearPMap.SemiboundedAbove.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E : Type v}
           [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (A : E →ₗ.[𝕜] E) (c : ℝ) : Prop
         hash: expr=2572923451 text=35989daa25bdd1c4
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -220,14 +220,14 @@ DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex  (theorem, DavisKa
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 22 project constant(s) unfolded, 0 project leaf/leaves, 51 boundary constant(s), 170 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearPMap, RingHom.id, ContinuousLinearMap, IsSelfAdjoint, Real, And, ContinuousLinearMap.comp, ContinuousLinearMap.id, LinearIsometryEquiv, starRingEnd, ContinuousLinearMap.adjoint, Nat, EuclideanSpace, Fin, ENNReal, Eq, EuclideanSpace.basisFun, RCLike, Subtype, Submodule, LinearPMap.toFun', Ne, ENNReal.toReal, FiniteDimensional, LinearMap, LinearMap.comp, OrthonormalBasis, Fin.lastCases, Or, Set, Set.Icc, Set.ofPred, AddMonoidHom, iSup, ENNReal.ofReal, Finset.sum, Finset.univ, RCLike.ofReal, InnerProductSpace.rankOne, Exists, NontriviallyNormedField, SeminormedAddCommGroup, NormedSpace, iInf, Cardinal, LinearMap.rank, Nat.cast
@@ -235,7 +235,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 
 </details>
 
-#### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real`
+#### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real`
 
 **Human-written Lean statement**
 
@@ -247,8 +247,8 @@ variable {E F G H : Type v}
   [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
   [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
   [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-theorem sinTheta_unbounded_formGap_paperUINorm_real
-    (N : PaperUnitaryInvariantNorm)
+theorem sinTheta_unbounded_formGap_symmetricNorming_real
+    (N : SymmetricNormingFunction)
     (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)
     (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)
     (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
@@ -265,13 +265,13 @@ theorem sinTheta_unbounded_formGap_paperUINorm_real
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real.{v} {E F G H : Type v}
+DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real.{v} {E F G H : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [NormedAddCommGroup F]
   [InnerProductSpace ℝ F] [CompleteSpace F] [NormedAddCommGroup G] [InnerProductSpace ℝ G]
   [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[ℝ] E)
-  (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G) (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E)
-  (R : F →L[ℝ] E) (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F)
+  (Λ₁ : G →ₗ.[ℝ] G) (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)
+  (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
   (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
   (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
   (hgap : TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A₀ Λ₁ δ) (hR : N.Mem R) :
@@ -280,36 +280,36 @@ DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real.{v} {E F G H : Type v
       N.gauge R
 ~~~~
 
-Structural type hash `4282488892`, printed-type hash `606590a0f4d9d945`.
+Structural type hash `295553877`, printed-type hash `356c5a6af70fc875`.
 
 Statement closure: 22 project constant(s) unfolded, 0 project leaf/leaves, 51 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.approximationNumber`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.approximationNumber`
 Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan`, `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `IsSelfAdjoint`, `And`, `ContinuousLinearMap.comp`, `ContinuousLinearMap.id`, `LinearIsometryEquiv`, `starRingEnd`, `ContinuousLinearMap.adjoint`, `Nat`, `Complex`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `Subtype`, `Submodule`, `LinearPMap.toFun'`, `Ne`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `Or`, `Set`, `Set.Icc`, `Set.ofPred`, `AddMonoidHom`, `iSup`, `ENNReal.ofReal`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `InnerProductSpace.rankOne`, `Exists`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `NormedSpace`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:452)
-    DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real.{v} {E F G H : Type v}
+DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:452)
+    DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real.{v} {E F G H : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] [NormedAddCommGroup F]
       [InnerProductSpace ℝ F] [CompleteSpace F] [NormedAddCommGroup G] [InnerProductSpace ℝ G]
       [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[ℝ] E)
-      (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G) (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E)
-      (R : F →L[ℝ] E) (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F)
+      (Λ₁ : G →ₗ.[ℝ] G) (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)
+      (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
       (htrial : DavisKahan1970.IsTrialResidual A A₀ E₀ R)
       (hexact : DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁) {δ : ℝ} (hδ : 0 < δ)
       (hgap : TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A₀ Λ₁ δ) (hR : N.Mem R) :
       N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ∧
         δ * N.gauge ((ContinuousLinearMap.id ℝ E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ≤
           N.gauge R
-    hash: expr=4282488892 text=606590a0f4d9d945
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=295553877 text=356c5a6af70fc875
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -330,8 +330,8 @@ DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real  (theorem, DavisKahan
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] DavisKahan1970.IsTrialResidual  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:67)
       DavisKahan1970.IsTrialResidual.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E]
@@ -385,35 +385,35 @@ DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real  (theorem, DavisKahan
         TauCeti.LinearPMap.SemiboundedAbove.{u, v} {𝕜 : Type u} [RCLike 𝕜] {E : Type v}
           [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (A : E →ₗ.[𝕜] E) (c : ℝ) : Prop
         hash: expr=2572923451 text=35989daa25bdd1c4
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -428,14 +428,14 @@ DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real  (theorem, DavisKahan
                   {E : Type v} {F : Type w} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E] [SeminormedAddCommGroup F]
                   [NormedSpace 𝕜 F] (T : E →L[𝕜] F) (n : ℕ) : ℝ
                 hash: expr=2527437639 text=7dc5679d2ff68267
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 22 project constant(s) unfolded, 0 project leaf/leaves, 51 boundary constant(s), 171 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap, RingHom.id, ContinuousLinearMap, IsSelfAdjoint, And, ContinuousLinearMap.comp, ContinuousLinearMap.id, LinearIsometryEquiv, starRingEnd, ContinuousLinearMap.adjoint, Nat, Complex, EuclideanSpace, Fin, ENNReal, Eq, EuclideanSpace.basisFun, RCLike, Subtype, Submodule, LinearPMap.toFun', Ne, ENNReal.toReal, FiniteDimensional, LinearMap, LinearMap.comp, OrthonormalBasis, Fin.lastCases, Or, Set, Set.Icc, Set.ofPred, AddMonoidHom, iSup, ENNReal.ofReal, Finset.sum, Finset.univ, RCLike.ofReal, InnerProductSpace.rankOne, Exists, NontriviallyNormedField, SeminormedAddCommGroup, NormedSpace, iInf, Cardinal, LinearMap.rank, Nat.cast
@@ -445,18 +445,18 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap
 
 ### Supporting scope declarations
 
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike` — elaborated; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike` — elaborated; source located
-- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_ofComponents_rclike` — elaborated; source located
-- `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike` — elaborated; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike` — elaborated; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_rclike` — elaborated; source located
 - `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` — elaborated; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_idealFamily_rclike` — elaborated; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_complex` — not in environment; source located
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_real` — elaborated; source located
 - `TauCeti.DavisKahan1970.sinTheta_bounded_spectralSubspace_complex` — not in environment; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike_conforms` — elaborated; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike_conforms` — elaborated; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike` — elaborated; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike_conforms` — elaborated; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms` — elaborated; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` — elaborated; source located
 
 ### Local semantic dictionary
 
@@ -468,7 +468,7 @@ Expands the compact trial-residual hypothesis into the trial isometry, domain tr
 
 Expands the compact exact-space hypothesis into isometric F0/F1 coordinates, orthogonality, completeness, domain transport, and A F1 = F1 Lambda1.
 
-#### `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm`
+#### `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction`
 
 Implementation structure behind the public theorem spelling UnitaryInvariantNorm: the dimension-coherent normalized unitary-invariant norm quantified over by Davis--Kahan.
 
@@ -497,13 +497,13 @@ Real spectrum of a self-adjoint partial/closed operator; the interval/exterior a
 | R = A E0 - E0 A0 on the operator domain, while F1 intertwines Lambda1 with A. | These clauses are exactly the residualEquation and intertwines components exposed by isTrialResidual_iff and isExactSpectralDecomposition_iff, together with their domain-transport hypotheses. | claimed_exact |
 | sin Theta0 is the directed sine block from the trial subspace to the exact subspace. | sinTheta₀ is an explicit theorem parameter and hSinTheta₀ literally states sinTheta₀ = (I - F₀ F₀†) E₀. No named definition hides this identification. | claimed_exact |
 | For beta <= alpha and delta > 0, one spectrum lies in [beta,alpha] and the other avoids (beta-delta,alpha+delta), with the roles interchangeable. | hβα and hδ are explicit, and hspectral is literally the disjunction of the two real-spectrum inclusions. | claimed_exact |
-| The norm is an arbitrary source unitary-invariant norm and R has finite norm. | N : UnitaryInvariantNorm and hR : N.Mem R appear directly. UnitaryInvariantNorm is the existing public source-facing name for the audited PaperUnitaryInvariantNorm implementation structure. | claimed_exact |
-| delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The text after the theorem colon is exactly δ * N.gauge sinTheta₀ <= N.gauge R. The supporting sinTheta_unbounded_intervalExterior_paperUINorm_rclike theorem additionally certifies N.Mem sinTheta₀ after rewriting by hSinTheta₀. | claimed_exact |
+| The norm is an arbitrary source unitary-invariant norm and R has finite norm. | N : UnitaryInvariantNorm and hR : N.Mem R appear directly. UnitaryInvariantNorm is the existing public source-facing name for the audited SymmetricNormingFunction implementation structure. | claimed_exact |
+| delta \|\|sin Theta0\|\| <= \|\|R\|\|. | The text after the theorem colon is exactly δ * N.gauge sinTheta₀ <= N.gauge R. The supporting sinTheta_unbounded_intervalExterior_symmetricNorming_rclike theorem additionally certifies N.Mem sinTheta₀ after rewriting by hSinTheta₀. | claimed_exact |
 | Infinite-dimensional and unbounded self-adjoint scope. | There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are `LinearPMap` values and the two expanded setup predicates carry the required domain conditions. | claimed_exact |
 
-**Review note.** The canonical review declaration is also the intended paper-display declaration. It names sinTheta₀ as a theorem parameter but gives its concrete projection-block formula by a literal equality hypothesis in the same signature, so the claim after the colon is a one-to-one rendering of the printed inequality without an opaque angle definition. Only the domain-heavy trial and exact-coordinate setup is bundled, and both bundles are fully expanded by characteristic theorems in the local semantic dictionary. The stronger generic theorem remains supporting evidence for norm-ideal membership and the implementation proof bridge. CANONICAL WITNESS CORRECTED 2026-08-31. The row named `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` as the exact source match. That was wrong on two counts: it carries only the bounded interval/exterior branch of the gap, while the source permits half-infinite separating intervals, and it drops the ideal-membership half of the conclusion. The canonical witness is now `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`, added the same day: scalar-generic over `RCLike`, unbounded `LinearPMap` ambient operator, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` (interval/exterior plus both ordered semibounded configurations), an arbitrary `PaperUnitaryInvariantNorm`, and both conclusions. It is proved by taking the gap directly into the Ky-Fan-to-paper-norm promotion the interval/exterior theorem already ran, so it is a repackaging rather than a new argument, and the interval/exterior form is now a one-line consequence of it. `..._complex_ofRCLike` and `..._real_ofRCLike` are the compiled conformance checks: each restates the corresponding fixed-field endpoint's type verbatim and discharges it by the generic theorem with no adapter. The fixed-field endpoints remain as corroborating full-source witnesses and the interval/exterior theorem as a presentation specialization. The two `RCLike` capability classes in the generic signature are proof capabilities with instances for both source fields, not printed source hypotheses. CONFORMANCE TIED BY NAME 2026-08-31. The `_ofRCLike` wrappers restate a type, and a restatement cannot notice if the declaration it mirrors changes. `..._ofRCLike_conforms` closes that: an equation between two constants elaborates only when both sides have the same type, so it asserts exactly that the restatement is the fixed-field endpoint's type, and `rfl` discharges it by proof irrelevance. It is a type-level check by design and says nothing about the two proofs.
+**Review note.** The canonical review declaration is also the intended paper-display declaration. It names sinTheta₀ as a theorem parameter but gives its concrete projection-block formula by a literal equality hypothesis in the same signature, so the claim after the colon is a one-to-one rendering of the printed inequality without an opaque angle definition. Only the domain-heavy trial and exact-coordinate setup is bundled, and both bundles are fully expanded by characteristic theorems in the local semantic dictionary. The stronger generic theorem remains supporting evidence for norm-ideal membership and the implementation proof bridge. CANONICAL WITNESS CORRECTED 2026-08-31. The row named `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` as the exact source match. That was wrong on two counts: it carries only the bounded interval/exterior branch of the gap, while the source permits half-infinite separating intervals, and it drops the ideal-membership half of the conclusion. The canonical witness is now `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`, added the same day: scalar-generic over `RCLike`, unbounded `LinearPMap` ambient operator, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` (interval/exterior plus both ordered semibounded configurations), an arbitrary `SymmetricNormingFunction`, and both conclusions. It is proved by taking the gap directly into the Ky-Fan-to-paper-norm promotion the interval/exterior theorem already ran, so it is a repackaging rather than a new argument, and the interval/exterior form is now a one-line consequence of it. `..._complex_ofRCLike` and `..._real_ofRCLike` are the compiled conformance checks: each restates the corresponding fixed-field endpoint's type verbatim and discharges it by the generic theorem with no adapter. The fixed-field endpoints remain as corroborating full-source witnesses and the interval/exterior theorem as a presentation specialization. The two `RCLike` capability classes in the generic signature are proof capabilities with instances for both source fields, not printed source hypotheses. CONFORMANCE TIED BY NAME 2026-08-31. The `_ofRCLike` wrappers restate a type, and a restatement cannot notice if the declaration it mirrors changes. `..._ofRCLike_conforms` closes that: an equation between two constants elaborates only when both sides have the same type, so it asserts exactly that the restatement is the fixed-field endpoint's type, and `rfl` discharges it by proof irrelevance. It is a type-level check by design and says nothing about the two proofs.
 
-2026-08-31 (second pass): canonical declarations follow the result inventory's `canonical_evidence`. Demoted to supporting: DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike -- the scalar-generic form carries proof-capability instance binders that the printed statement does not, and the two fixed-field endpoints state the result at the paper's two fields with no such binder.
+2026-08-31 (second pass): canonical declarations follow the result inventory's `canonical_evidence`. Demoted to supporting: DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike -- the scalar-generic form carries proof-capability instance binders that the printed statement does not, and the two fixed-field endpoints state the result at the paper's two fields with no such binder.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -630,7 +630,7 @@ The Section 2 tan-theta theorem: an ordered one-sided gap plus the Rayleigh--Rit
 
 ### Canonical Lean declarations
 
-#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex`
 
 **Human-written Lean statement**
 
@@ -639,8 +639,8 @@ The Section 2 tan-theta theorem: an ordered one-sided gap plus the Rayleigh--Rit
 ~~~~lean
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
   [CompleteSpace E]
-theorem tanTheta_ambient_unboundedRitz_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTheta_ambient_unboundedRitz_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     {A : E →ₗ.[ℂ] E}
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace U]
@@ -662,9 +662,9 @@ theorem tanTheta_ambient_unboundedRitz_paperUINorm_complex
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex.{u} {E : Type u}
+TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex.{u} {E : Type u}
   [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ.[ℂ] E}
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : E →ₗ.[ℂ] E}
   {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace ↥U]
   (D : TauCeti.DavisKahan.UnboundedRitzPair A U) (hV : TauCeti.DavisKahan.ReducingComplement A V)
   (H : E →L[ℂ] E) (hH : IsSelfAdjoint H) {alpha delta : ℝ} (hdelta : 0 < delta)
@@ -677,20 +677,20 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex.{u} {E
     delta * N.gauge (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) ≤ N.gauge H
 ~~~~
 
-Structural type hash `772294417`, printed-type hash `b474a63b9958a5ff`.
+Structural type hash `3755748480`, printed-type hash `3ea82407819fc25d`.
 
 Statement closure: 25 project constant(s) unfolded, 0 project leaf/leaves, 58 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.DavisKahan.halmosSourceDefect`, `TauCeti.DavisKahan.halmosTargetDefect`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.approximationNumber`
-Dictionary definitions this statement never reaches: `TauCeti.ritzResidual`, `TauCeti.principalTangents`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.DavisKahan.halmosSourceDefect`, `TauCeti.DavisKahan.halmosTargetDefect`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.approximationNumber`
+Dictionary definitions this statement never reaches: `TauCeti.principalTangents`, `TauCeti.ritzResidual`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `Submodule`, `Submodule.HasOrthogonalProjection`, `Subtype`, `ContinuousLinearMap`, `IsSelfAdjoint`, `Real`, `Submodule.orthogonal`, `Nat`, `AddMonoidHom`, `LinearPMap.toFun'`, `Eq`, `ContinuousLinearMap.comp`, `Submodule.starProjection`, `Submodule.subtypeL`, `And`, `EuclideanSpace`, `Fin`, `ENNReal`, `EuclideanSpace.basisFun`, `RCLike`, `Nonempty`, `LinearIsometryEquiv`, `Ne`, `cfc`, `Real.tan`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `iSup`, `ENNReal.ofReal`, `Real.arcsin`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.adjoint`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `NormedSpace`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex  (theorem, DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:535)
-    TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex.{u} {E : Type u}
+TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:535)
+    TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex.{u} {E : Type u}
       [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ.[ℂ] E}
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : E →ₗ.[ℂ] E}
       {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace ↥U]
       (D : TauCeti.DavisKahan.UnboundedRitzPair A U) (hV : TauCeti.DavisKahan.ReducingComplement A V)
       (H : E →L[ℂ] E) (hH : IsSelfAdjoint H) {alpha delta : ℝ} (hdelta : 0 < delta)
@@ -701,12 +701,12 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex  (theo
       (hResidual : D.trial.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL) (hMem : N.Mem H) :
       N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) ∧
         delta * N.gauge (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) ≤ N.gauge H
-    hash: expr=772294417 text=b474a63b9958a5ff
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=3755748480 text=3ea82407819fc25d
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -727,8 +727,8 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex  (theo
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.DavisKahan.UnboundedRitzPair  (structure, DavisKahan/TanTheta/RitzPair.lean:53)
       TauCeti.DavisKahan.UnboundedRitzPair.{u, v} {𝕜 : Type u} [RCLike 𝕜] {H : Type v}
@@ -779,35 +779,35 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex  (theo
         TauCeti.DavisKahan.halmosTargetDefect.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {H : Type u_2}
           [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] (U V : Submodule 𝕜 H) : Submodule 𝕜 H
         hash: expr=1773535531 text=175b124071948810
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -843,14 +843,14 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex  (theo
               [InnerProductSpace 𝕜 F] [CompleteSpace F] [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
               [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] (T : E →L[𝕜] F) : E →L[𝕜] E
             hash: expr=299460441 text=f21cf18f7b7963ad
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 25 project constant(s) unfolded, 0 project leaf/leaves, 58 boundary constant(s), 213 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearPMap, RingHom.id, Submodule, Submodule.HasOrthogonalProjection, Subtype, ContinuousLinearMap, IsSelfAdjoint, Real, Submodule.orthogonal, Nat, AddMonoidHom, LinearPMap.toFun', Eq, ContinuousLinearMap.comp, Submodule.starProjection, Submodule.subtypeL, And, EuclideanSpace, Fin, ENNReal, EuclideanSpace.basisFun, RCLike, Nonempty, LinearIsometryEquiv, Ne, cfc, Real.tan, ENNReal.toReal, FiniteDimensional, LinearMap, LinearMap.comp, OrthonormalBasis, Fin.lastCases, iSup, ENNReal.ofReal, Real.arcsin, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, Algebra, IsScalarTower, ContinuousFunctionalCalculus, CFC.sqrt, ContinuousLinearMap.instStarOrderedRingRCLike, ContinuousLinearMap.adjoint, NontriviallyNormedField, SeminormedAddCommGroup, NormedSpace, iInf, Cardinal, LinearMap.rank, Nat.cast
@@ -858,7 +858,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 
 </details>
 
-#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real`
 
 **Human-written Lean statement**
 
@@ -868,8 +868,8 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
 variable {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-theorem tanTheta_ambient_unboundedRitz_paperUINorm_real
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTheta_ambient_unboundedRitz_symmetricNorming_real
+    (N : SymmetricNormingFunction)
     {A : E →ₗ.[ℝ] E}
     (D : DavisKahan.UnboundedRitzPair A U)
     (hV : DavisKahan.ReducingComplement A V)
@@ -888,10 +888,10 @@ theorem tanTheta_ambient_unboundedRitz_paperUINorm_real
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real.{v} {E : Type v}
+TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real.{v} {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] {U V : Submodule ℝ E}
   [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ.[ℝ] E}
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : E →ₗ.[ℝ] E}
   (D : TauCeti.DavisKahan.UnboundedRitzPair A U) (hV : TauCeti.DavisKahan.ReducingComplement A V)
   (H : E →L[ℝ] E) (hH : IsSelfAdjoint H) {alpha delta : ℝ} (hdelta : 0 < delta)
   (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
@@ -902,21 +902,21 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real.{v} {E : 
     delta * N.gauge (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ≤ N.gauge H
 ~~~~
 
-Structural type hash `694556491`, printed-type hash `eb6ae80f4d945a14`.
+Structural type hash `632860847`, printed-type hash `2b99dabf29e4fb9b`.
 
 Statement closure: 33 project constant(s) unfolded, 1 project leaf/leaves, 67 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahanExt.paperTanAngleOperatorR`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.DavisKahan.halmosSourceDefect`, `TauCeti.DavisKahan.halmosTargetDefect`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.modulus`, `ContinuousLinearMap.approximationNumber`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedAmbientReal`
-Dictionary definitions this statement never reaches: `TauCeti.ritzResidual`, `TauCeti.principalTangents`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.paperTanAngleOperatorR`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.DavisKahan.halmosSourceDefect`, `TauCeti.DavisKahan.halmosTargetDefect`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.modulus`, `ContinuousLinearMap.approximationNumber`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedAmbientReal`
+Dictionary definitions this statement never reaches: `TauCeti.principalTangents`, `TauCeti.ritzResidual`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `Submodule`, `Submodule.HasOrthogonalProjection`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `IsSelfAdjoint`, `Subtype`, `Submodule.orthogonal`, `Nat`, `LinearPMap.toFun'`, `Eq`, `ContinuousLinearMap.comp`, `Submodule.starProjection`, `Submodule.subtypeL`, `And`, `Complex`, `EuclideanSpace`, `Fin`, `ENNReal`, `EuclideanSpace.basisFun`, `RCLike`, `AddMonoidHom`, `Nonempty`, `LinearIsometryEquiv`, `Ne`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `iSup`, `ENNReal.ofReal`, `LinearIsometry`, `LinearMap.mkContinuous`, `cfc`, `Real.tan`, `WithLp`, `Prod`, `Set.ofPred`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `AddCommGroup`, `Module`, `Module.ofMinimalAxioms`, `NormedSpace`, `Real.arcsin`, `SMul`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.adjoint`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real  (theorem, DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:381)
-    TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real.{v} {E : Type v}
+TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:381)
+    TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real.{v} {E : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] {U V : Submodule ℝ E}
       [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ.[ℝ] E}
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : E →ₗ.[ℝ] E}
       (D : TauCeti.DavisKahan.UnboundedRitzPair A U) (hV : TauCeti.DavisKahan.ReducingComplement A V)
       (H : E →L[ℝ] E) (hH : IsSelfAdjoint H) {alpha delta : ℝ} (hdelta : 0 < delta)
       (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
@@ -925,12 +925,12 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real  (theorem
       (hResidual : D.trial.residual = Uᗮ.starProjection ∘SL H ∘SL U.subtypeL) (hMem : N.Mem H) :
       N.Mem (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ∧
         delta * N.gauge (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) ≤ N.gauge H
-    hash: expr=694556491 text=eb6ae80f4d945a14
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=632860847 text=2b99dabf29e4fb9b
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -951,8 +951,8 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real  (theorem
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.DavisKahan.UnboundedRitzPair  (structure, DavisKahan/TanTheta/RitzPair.lean:53)
       TauCeti.DavisKahan.UnboundedRitzPair.{u, v} {𝕜 : Type u} [RCLike 𝕜] {H : Type v}
@@ -1008,35 +1008,35 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real  (theorem
         TauCeti.DavisKahan.halmosTargetDefect.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {H : Type u_2}
           [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] (U V : Submodule 𝕜 H) : Submodule 𝕜 H
         hash: expr=1773535531 text=175b124071948810
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -1110,14 +1110,14 @@ TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real  (theorem
           TauCeti.RealComplexification.im.{u_1} {E : Type u_1} (z : TauCeti.RealComplexification E) : E
           hash: expr=2897469443 text=1ee09de9c3b20d00
         [type] TauCeti.RealComplexification  (above)
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 33 project constant(s) unfolded, 1 project leaf/leaves, 67 boundary constant(s), 273 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, Submodule, Submodule.HasOrthogonalProjection, LinearPMap, RingHom.id, ContinuousLinearMap, IsSelfAdjoint, Subtype, Submodule.orthogonal, Nat, LinearPMap.toFun', Eq, ContinuousLinearMap.comp, Submodule.starProjection, Submodule.subtypeL, And, Complex, EuclideanSpace, Fin, ENNReal, EuclideanSpace.basisFun, RCLike, AddMonoidHom, Nonempty, LinearIsometryEquiv, Ne, ENNReal.toReal, FiniteDimensional, LinearMap, LinearMap.comp, OrthonormalBasis, Fin.lastCases, iSup, ENNReal.ofReal, LinearIsometry, LinearMap.mkContinuous, cfc, Real.tan, WithLp, Prod, Set.ofPred, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, AddCommGroup, Module, Module.ofMinimalAxioms, NormedSpace, Real.arcsin, SMul, Algebra, IsScalarTower, ContinuousFunctionalCalculus, CFC.sqrt, ContinuousLinearMap.instStarOrderedRingRCLike, ContinuousLinearMap.adjoint, NontriviallyNormedField, SeminormedAddCommGroup, iInf, Cardinal, LinearMap.rank, Nat.cast
@@ -1125,7 +1125,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, Submodule,
 
 </details>
 
-#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex`
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex`
 
 **Human-written Lean statement**
 
@@ -1133,8 +1133,8 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, Submodule,
 
 ~~~~lean
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-theorem tanTheta_directed_unboundedRitz_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTheta_directed_unboundedRitz_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     {A : H →ₗ.[ℂ] H}
     {Z V : Submodule ℂ H}
     [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
@@ -1154,9 +1154,9 @@ theorem tanTheta_directed_unboundedRitz_paperUINorm_complex
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex.{v} {H : Type v}
+TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex.{v} {H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : H →ₗ.[ℂ] H}
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : H →ₗ.[ℂ] H}
   {Z V : Submodule ℂ H} [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace ↥Z]
   (D : TauCeti.DavisKahan.UnboundedRitzPair A Z) (hV : TauCeti.DavisKahan.ReducingComplement A V)
   {alpha delta : ℝ} (hdelta : 0 < delta)
@@ -1171,20 +1171,20 @@ TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex.{v} {
   N.Mem tanTheta0 ∧ delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual
 ~~~~
 
-Structural type hash `3675758434`, printed-type hash `4a3b75e8d4ef1f2a`.
+Structural type hash `2428269602`, printed-type hash `2c050cb47b0c8013`.
 
 Statement closure: 20 project constant(s) unfolded, 0 project leaf/leaves, 50 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactTanTheta.HasTheorem63DirectedTangentApproximationNumbersInfinite`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.DavisKahan.ExactTanTheta.theorem63DirectedSineBlock`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.diagOp`, `ContinuousLinearMap.approximationNumber`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`
-Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.CrossedDefectsEquivalent`, `TauCeti.DavisKahanExt.paperTanAngleOperatorC`, `TauCeti.ritzResidual`, `TauCeti.principalTangents`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.ExactTanTheta.HasTheorem63DirectedTangentApproximationNumbersInfinite`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.DavisKahan.ExactTanTheta.theorem63DirectedSineBlock`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.diagOp`, `ContinuousLinearMap.approximationNumber`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`
+Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.CrossedDefectsEquivalent`, `TauCeti.principalTangents`, `TauCeti.DavisKahanExt.paperTanAngleOperatorC`, `TauCeti.ritzResidual`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `Submodule`, `Submodule.HasOrthogonalProjection`, `Subtype`, `Real`, `Submodule.orthogonal`, `Nat`, `AddMonoidHom`, `LinearPMap.toFun'`, `ContinuousLinearMap`, `And`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `Submodule.starProjection`, `Real.tan`, `Real.arcsin`, `Ne`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `IsSelfAdjoint`, `ContinuousLinearMap.comp`, `Submodule.subtypeL`, `iSup`, `ENNReal.ofReal`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `NormedSpace`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex  (theorem, DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:193)
-    TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex.{v} {H : Type v}
+TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:193)
+    TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex.{v} {H : Type v}
       [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : H →ₗ.[ℂ] H}
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : H →ₗ.[ℂ] H}
       {Z V : Submodule ℂ H} [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace ↥Z]
       (D : TauCeti.DavisKahan.UnboundedRitzPair A Z) (hV : TauCeti.DavisKahan.ReducingComplement A V)
       {alpha delta : ℝ} (hdelta : 0 < delta)
@@ -1197,12 +1197,12 @@ TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex  (the
           tanTheta0)
       (hResidual : N.Mem D.trial.residual) :
       N.Mem tanTheta0 ∧ delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual
-    hash: expr=3675758434 text=4a3b75e8d4ef1f2a
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=2428269602 text=2c050cb47b0c8013
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -1223,8 +1223,8 @@ TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex  (the
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.DavisKahan.UnboundedRitzPair  (structure, DavisKahan/TanTheta/RitzPair.lean:53)
       TauCeti.DavisKahan.UnboundedRitzPair.{u, v} {𝕜 : Type u} [RCLike 𝕜] {H : Type v}
@@ -1282,48 +1282,48 @@ TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex  (the
           [InnerProductSpace ℂ H] (Z V : Submodule ℂ H) [Z.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : ↥Z →L[ℂ] H
         hash: expr=3283385770 text=19c6cfa8216f894f
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
             hash: expr=3116985227 text=6f425b5ba0cf5e43
           [body] TauCeti.ApproximationNumber.approximationSingularValue  (above)
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 20 project constant(s) unfolded, 0 project leaf/leaves, 50 boundary constant(s), 155 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearPMap, RingHom.id, Submodule, Submodule.HasOrthogonalProjection, Subtype, Real, Submodule.orthogonal, Nat, AddMonoidHom, LinearPMap.toFun', ContinuousLinearMap, And, EuclideanSpace, Fin, ENNReal, Eq, EuclideanSpace.basisFun, RCLike, Submodule.starProjection, Real.tan, Real.arcsin, Ne, ENNReal.toReal, FiniteDimensional, LinearMap, LinearIsometryEquiv, LinearMap.comp, OrthonormalBasis, Fin.lastCases, IsSelfAdjoint, ContinuousLinearMap.comp, Submodule.subtypeL, iSup, ENNReal.ofReal, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, NontriviallyNormedField, SeminormedAddCommGroup, NormedSpace, iInf, Cardinal, LinearMap.rank, Nat.cast
@@ -1331,7 +1331,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 
 </details>
 
-#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real`
 
 **Human-written Lean statement**
 
@@ -1339,8 +1339,8 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 
 ~~~~lean
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-theorem tanTheta_directed_unboundedRitz_paperUINorm_real
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTheta_directed_unboundedRitz_symmetricNorming_real
+    (N : SymmetricNormingFunction)
     {A : E →ₗ.[ℝ] E}
     {Z V : Submodule ℝ E}
     [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
@@ -1360,9 +1360,9 @@ theorem tanTheta_directed_unboundedRitz_paperUINorm_real
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real.{v} {E : Type v}
+TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real.{v} {E : Type v}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ.[ℝ] E}
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : E →ₗ.[ℝ] E}
   {Z V : Submodule ℝ E} [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace ↥Z]
   (D : TauCeti.DavisKahan.UnboundedRitzPair A Z) (hV : TauCeti.DavisKahan.ReducingComplement A V)
   {alpha delta : ℝ} (hdelta : 0 < delta)
@@ -1376,20 +1376,20 @@ TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real.{v} {E :
   N.Mem tanTheta0 ∧ delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual
 ~~~~
 
-Structural type hash `3076268778`, printed-type hash `9ab42fad57dcd9b6`.
+Structural type hash `3110891221`, printed-type hash `e50b6b1077d11587`.
 
 Statement closure: 20 project constant(s) unfolded, 0 project leaf/leaves, 50 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan1970.HasTheorem63DirectedTangentApproximationNumbersInfiniteReal`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.diagOp`, `ContinuousLinearMap.approximationNumber`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`
-Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.CrossedDefectsEquivalent`, `TauCeti.DavisKahanExt.paperTanAngleOperatorC`, `TauCeti.ritzResidual`, `TauCeti.principalTangents`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.UnboundedRitzPair`, `TauCeti.DavisKahan.ReducingComplement`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan1970.HasTheorem63DirectedTangentApproximationNumbersInfiniteReal`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData`, `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.action`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.diagOp`, `ContinuousLinearMap.approximationNumber`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`
+Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.CrossedDefectsEquivalent`, `TauCeti.principalTangents`, `TauCeti.DavisKahanExt.paperTanAngleOperatorC`, `TauCeti.ritzResidual`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `Submodule`, `Submodule.HasOrthogonalProjection`, `Subtype`, `Submodule.orthogonal`, `Nat`, `LinearPMap.toFun'`, `ContinuousLinearMap`, `And`, `Complex`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `Submodule.starProjection`, `AddMonoidHom`, `Real.tan`, `Real.arcsin`, `Ne`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `IsSelfAdjoint`, `ContinuousLinearMap.comp`, `Submodule.subtypeL`, `iSup`, `ENNReal.ofReal`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `NormedSpace`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real  (theorem, DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:250)
-    TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real.{v} {E : Type v}
+TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:250)
+    TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real.{v} {E : Type v}
       [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ.[ℝ] E}
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : E →ₗ.[ℝ] E}
       {Z V : Submodule ℝ E} [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace ↥Z]
       (D : TauCeti.DavisKahan.UnboundedRitzPair A Z) (hV : TauCeti.DavisKahan.ReducingComplement A V)
       {alpha delta : ℝ} (hdelta : 0 < delta)
@@ -1401,12 +1401,12 @@ TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real  (theore
           tanTheta0)
       (hResidual : N.Mem D.trial.residual) :
       N.Mem tanTheta0 ∧ delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual
-    hash: expr=3076268778 text=9ab42fad57dcd9b6
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=3110891221 text=e50b6b1077d11587
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -1427,8 +1427,8 @@ TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real  (theore
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.DavisKahan.UnboundedRitzPair  (structure, DavisKahan/TanTheta/RitzPair.lean:53)
       TauCeti.DavisKahan.UnboundedRitzPair.{u, v} {𝕜 : Type u} [RCLike 𝕜] {H : Type v}
@@ -1486,48 +1486,48 @@ TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real  (theore
           [InnerProductSpace ℝ E] (Z V : Submodule ℝ E) [Z.HasOrthogonalProjection]
           [V.HasOrthogonalProjection] : ↥Z →L[ℝ] E
         hash: expr=1438324023 text=13f16495f4efac5e
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
             hash: expr=3116985227 text=6f425b5ba0cf5e43
           [body] TauCeti.ApproximationNumber.approximationSingularValue  (above)
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 20 project constant(s) unfolded, 0 project leaf/leaves, 50 boundary constant(s), 156 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap, RingHom.id, Submodule, Submodule.HasOrthogonalProjection, Subtype, Submodule.orthogonal, Nat, LinearPMap.toFun', ContinuousLinearMap, And, Complex, EuclideanSpace, Fin, ENNReal, Eq, EuclideanSpace.basisFun, RCLike, Submodule.starProjection, AddMonoidHom, Real.tan, Real.arcsin, Ne, ENNReal.toReal, FiniteDimensional, LinearMap, LinearIsometryEquiv, LinearMap.comp, OrthonormalBasis, Fin.lastCases, IsSelfAdjoint, ContinuousLinearMap.comp, Submodule.subtypeL, iSup, ENNReal.ofReal, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, NontriviallyNormedField, SeminormedAddCommGroup, NormedSpace, iInf, Cardinal, LinearMap.rank, Nat.cast
@@ -1537,24 +1537,24 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap
 
 ### Supporting scope declarations
 
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_real` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_crossedDefects` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_real` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_symmetricNorming_real` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_real` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike` — elaborated; source located
 - `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial` — elaborated; source located
 - `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm` — not in environment; source located
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real` — elaborated; source located
 - `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds` — elaborated; source located
 - `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real` — elaborated; source located
 
 ### Local semantic dictionary
 
-#### `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm`
+#### `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction`
 
 The literal dimension-coherent source unitary-invariant norm. The new generic directed headline theorem uses it directly over arbitrary RCLike scalars.
 
@@ -1579,15 +1579,15 @@ The canonical complex ambient tan(Theta) operator used by the unbounded whole-sp
 | source clause | Lean realization | status |
 | --- | --- | --- |
 | The scalar field is real or complex. | The canonical directed theorem quantifies over 𝕜 with [RCLike 𝕜]; no ℂ specialization appears in that headline type. Field-specific unbounded ambient declarations remain scope companions. | claimed_exact |
-| spec(A0) subset [beta,alpha] and unwanted exact spectrum subset [alpha+delta,infinity). | hCompressionSpectrum and hUnwantedSpectrum are literal SpectrumIn hypotheses in tanTheta_directed_finiteDimensional_paperUINorm_rclike; TanThetaIntervalGap is constructed only inside the proof and is not part of the public signature. | claimed_exact |
+| spec(A0) subset [beta,alpha] and unwanted exact spectrum subset [alpha+delta,infinity). | hCompressionSpectrum and hUnwantedSpectrum are literal SpectrumIn hypotheses in tanTheta_directed_finiteDimensional_symmetricNorming_rclike; TanThetaIntervalGap is constructed only inside the proof and is not part of the public signature. | claimed_exact |
 | H0=0 / Rayleigh--Ritz choice. | The public conclusion is written directly in terms of ritzResidual A X, where X is the trial isometry and the coordinate compression is the Rayleigh--Ritz compression. | claimed_exact |
-| delta \|\|tan Theta0\|\| <= \|\|R\|\|. | tanTheta_directed_finiteDimensional_paperUINorm_rclike concludes δ * N.gauge tanTheta0.toContinuousLinearMap <= N.gauge (ritzResidual A X).toContinuousLinearMap, with tanTheta0 constrained to have the principal-tangent singular values. | claimed_exact |
+| delta \|\|tan Theta0\|\| <= \|\|R\|\|. | tanTheta_directed_finiteDimensional_symmetricNorming_rclike concludes δ * N.gauge tanTheta0.toContinuousLinearMap <= N.gauge (ritzResidual A X).toContinuousLinearMap, with tanTheta0 constrained to have the principal-tangent singular values. | claimed_exact |
 | delta \|\|tan Theta\|\| <= \|\|H\|\|. | The unbounded ambient source companion concludes the factor-one estimate for paperTanAngleOperatorC; its real sibling is compiler-checked as supporting scalar scope. | scope_companion |
 | No separately assumed tangent-pole exclusion in the printed theorem. | The scalar-generic directed theorem assumes only the spectral placement and derives transversality in its engine. The ambient source companion uses the accepted nonlocal (3.5) semantics rather than a numerical pole hypothesis. | claimed_exact |
 
-**Review note.** The directed residual half now has a scalar-generic, PaperUnitaryInvariantNorm, source-shaped canonical theorem whose public signature exposes the Ritz spectral placement instead of TanThetaIntervalGap. The harder ambient/unbounded half remains represented by the accepted source-shaped complex theorem plus its real companion because the current whole-space angle-operator implementation is field-specific. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.
+**Review note.** The directed residual half now has a scalar-generic, SymmetricNormingFunction, source-shaped canonical theorem whose public signature exposes the Ritz spectral placement instead of TanThetaIntervalGap. The harder ambient/unbounded half remains represented by the accepted source-shaped complex theorem plus its real companion because the current whole-space angle-operator implementation is field-specific. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.
 
-2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.
+2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.
 
 2026-08-31 (coherent-clause audit): demoted to supporting because the compiler-printed type does not carry the scope the declaration was credited with: TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial, TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm.
 
@@ -1614,7 +1614,7 @@ The Section 2 sin(2 theta) theorem: interval/exterior separation gives directed 
 
 ### Canonical Lean declarations
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex`
 
 **Human-written Lean statement**
 
@@ -1626,8 +1626,8 @@ variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 variable {V : Submodule ℂ H} [V.HasOrthogonalProjection]
   {M : V →L[ℂ] V} {R : V →L[ℂ] H}
   {A : H →ₗ.[ℂ] H}
-theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
     (hVdom : ∀ v : V, (v : H) ∈ A.domain)
@@ -1646,11 +1646,11 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_c
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex.{v}
+TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex.{v}
   {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] {V : Submodule ℂ H}
   [V.HasOrthogonalProjection] {M : ↥V →L[ℂ] ↥V} {R : ↥V →L[ℂ] H} {A : H →ₗ.[ℂ] H}
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (hA : IsSelfAdjoint A)
-  (B : Set ℝ) (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain)
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (hA : IsSelfAdjoint A) (B : Set ℝ)
+  (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain)
   (hres : ∀ (v : ↥V), ↑A ⟨↑v, ⋯⟩ = R v + ↑(M v)) {δ : ℝ} (hδ : 0 < δ)
   (hgap :
     TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
@@ -1667,22 +1667,22 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentativ
       2 * N.gauge R
 ~~~~
 
-Structural type hash `2563483418`, printed-type hash `41db070a6ca03334`.
+Structural type hash `414547591`, printed-type hash `0c92903ffa5097fc`.
 
 Statement closure: 45 project constant(s) unfolded, 7 project leaf/leaves, 88 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.selfAdjointSpectralSubspace`, `TauCeti.DavisKahan.selfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahan.sinTwoThetaIdealBlock`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.pvmRangeSubspace`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.specRestrict`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionDirectedResidual`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.selfAdjointSpectralSubspace`, `TauCeti.DavisKahan.selfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.sinTwoThetaIdealBlock`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.pvmRangeSubspace`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.specRestrict`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionDirectedResidual`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
 Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.residual`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC`, `TauCeti.DavisKahanTheory.sinTwoThetaEmbedding`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `Submodule`, `Submodule.HasOrthogonalProjection`, `ContinuousLinearMap`, `RingHom.id`, `Subtype`, `LinearPMap`, `IsSelfAdjoint`, `Set`, `Real`, `MeasurableSet`, `Eq`, `LinearPMap.toFun'`, `MeasurableSet.compl`, `And`, `Nat`, `EuclideanSpace`, `Fin`, `ENNReal`, `EuclideanSpace.basisFun`, `RCLike`, `Ne`, `ContinuousLinearMap.comp`, `Submodule.starProjection`, `Submodule.map`, `Submodule.reflection`, `Submodule.orthogonal`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `Or`, `Set.Icc`, `Set.ofPred`, `AddMonoidHom`, `LinearMap.range`, `Submodule.comap`, `Submodule.subtype`, `iSup`, `ENNReal.ofReal`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Exists`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `NormedSpace`, `Exists.choose`, `LinearMap.mkContinuous`, `RealRMK.rieszMeasure`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:356)
-    TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex.{v}
+TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:356)
+    TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex.{v}
       {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] {V : Submodule ℂ H}
       [V.HasOrthogonalProjection] {M : ↥V →L[ℂ] ↥V} {R : ↥V →L[ℂ] H} {A : H →ₗ.[ℂ] H}
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (hA : IsSelfAdjoint A)
-      (B : Set ℝ) (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain)
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (hA : IsSelfAdjoint A) (B : Set ℝ)
+      (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain)
       (hres : ∀ (v : ↥V), ↑A ⟨↑v, ⋯⟩ = R v + ↑(M v)) {δ : ℝ} (hδ : 0 < δ)
       (hgap :
         TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
@@ -1697,12 +1697,12 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentativ
               (TauCeti.DavisKahan.sinTwoThetaIdealBlock
                 (TauCeti.DavisKahan.selfAdjointSpectralSubspace A hA B hB) V) ≤
           2 * N.gauge R
-    hash: expr=2563483418 text=41db070a6ca03334
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=414547591 text=0c92903ffa5097fc
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -1723,8 +1723,8 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentativ
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap  (inductive, DavisKahan/Sylvester/Gap.lean:89)
       TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap.{u, v} {𝕜 : Type u} [RCLike 𝕜]
@@ -1930,35 +1930,35 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentativ
               (hB : MeasurableSet B) : H →L[ℂ] H
             hash: expr=1748688050 text=b7b417789e21c33b
           [body] TauCeti.LinearPMap.spectralPVM  (above)
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -1983,14 +1983,14 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentativ
         [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : H →L[𝕜] H
       hash: expr=2613108218 text=65547104dca1b58d
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 45 project constant(s) unfolded, 7 project leaf/leaves, 88 boundary constant(s), 275 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, Submodule, Submodule.HasOrthogonalProjection, ContinuousLinearMap, RingHom.id, Subtype, LinearPMap, IsSelfAdjoint, Set, Real, MeasurableSet, Eq, LinearPMap.toFun', MeasurableSet.compl, And, Nat, EuclideanSpace, Fin, ENNReal, EuclideanSpace.basisFun, RCLike, Ne, ContinuousLinearMap.comp, Submodule.starProjection, Submodule.map, Submodule.reflection, Submodule.orthogonal, ENNReal.toReal, FiniteDimensional, LinearMap, LinearIsometryEquiv, LinearMap.comp, OrthonormalBasis, Fin.lastCases, Or, Set.Icc, Set.ofPred, AddMonoidHom, LinearMap.range, Submodule.comap, Submodule.subtype, iSup, ENNReal.ofReal, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, MeasureTheory.Measure, MeasureTheory.IsFiniteMeasure, Complex.ofReal, Set.univ, MeasurableSet.univ, ContinuousLinearMap.id, MeasurableSet.inter, IsStarNormal, Set.Elem, spectrum, Measurable, Complex.I, Exists, Set.indicator, Set.preimage, MeasureTheory.Measure.map, NontriviallyNormedField, NormedSpace, Exists.choose, LinearMap.mkContinuous, RealRMK.rieszMeasure, StrongDual, LinearIsometryEquiv.symm, InnerProductSpace.toDual, PositiveLinearMap, CompactlySupportedContinuousMap, StarAlgHom, ContinuousMap, cfcHom, SeminormedAddCommGroup, iInf, Cardinal, LinearMap.rank, Nat.cast, RingHom, TopologicalSpace, MeasureTheory.integral
@@ -1998,7 +1998,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, Submodu
 
 </details>
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real`
 
 **Human-written Lean statement**
 
@@ -2010,8 +2010,8 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
 variable {V : Submodule ℝ E} [V.HasOrthogonalProjection]
   {M : V →L[ℝ] V} {R : V →L[ℝ] E}
   {A : E →ₗ.[ℝ] E}
-theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real
-    (N : PaperUnitaryInvariantNorm)
+theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
+    (N : SymmetricNormingFunction)
     (hA : IsSelfAdjoint A)
     (B : Set ℝ) (hB : MeasurableSet B)
     (hVdom : ∀ v : V, (v : E) ∈ A.domain)
@@ -2030,11 +2030,11 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_r
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real.{v}
+TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real.{v}
   {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] {V : Submodule ℝ E}
   [V.HasOrthogonalProjection] {M : ↥V →L[ℝ] ↥V} {R : ↥V →L[ℝ] E} {A : E →ₗ.[ℝ] E}
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (hA : IsSelfAdjoint A)
-  (B : Set ℝ) (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain)
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (hA : IsSelfAdjoint A) (B : Set ℝ)
+  (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain)
   (hres : ∀ (v : ↥V), ↑A ⟨↑v, ⋯⟩ = R v + ↑(M v)) {δ : ℝ} (hδ : 0 < δ)
   (hgap :
     TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
@@ -2052,22 +2052,22 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentativ
       2 * N.gauge R
 ~~~~
 
-Structural type hash `4127165135`, printed-type hash `93671a28e25ada48`.
+Structural type hash `1121034465`, printed-type hash `7731a2da05b1706e`.
 
 Statement closure: 62 project constant(s) unfolded, 9 project leaf/leaves, 93 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahan.sinTwoThetaIdealBlock`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralProjection`, `TauCeti.LinearPMap.reducingRestriction`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.DavisKahan.selfAdjointSpectralProjection`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.complexify`, `TauCeti.LinearPMap.ReducesSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomain`, `TauCeti.LinearPMap.reducingRestrictionLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.LinearPMap.specProjection`, `TauCeti.RealComplexification.im`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domain`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.linearMap`, `TauCeti.LinearPMap.InvariantSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomainToAmbient`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainRe`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainIm`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionDirectedResidualReal`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.sinTwoThetaIdealBlock`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralProjection`, `TauCeti.LinearPMap.reducingRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.DavisKahan.selfAdjointSpectralProjection`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.complexify`, `TauCeti.LinearPMap.ReducesSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomain`, `TauCeti.LinearPMap.reducingRestrictionLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.LinearPMap.specProjection`, `TauCeti.RealComplexification.im`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domain`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.linearMap`, `TauCeti.LinearPMap.InvariantSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomainToAmbient`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainRe`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainIm`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionDirectedResidualReal`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
 Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.residual`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC`, `TauCeti.DavisKahanTheory.sinTwoThetaEmbedding`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `Submodule`, `Submodule.HasOrthogonalProjection`, `ContinuousLinearMap`, `RingHom.id`, `Subtype`, `LinearPMap`, `IsSelfAdjoint`, `Set`, `MeasurableSet`, `Eq`, `LinearPMap.toFun'`, `MeasurableSet.compl`, `And`, `Nat`, `Complex`, `EuclideanSpace`, `Fin`, `ENNReal`, `EuclideanSpace.basisFun`, `RCLike`, `LinearMap.range`, `Ne`, `ContinuousLinearMap.comp`, `Submodule.starProjection`, `Submodule.map`, `Submodule.reflection`, `Submodule.orthogonal`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `Or`, `Set.Icc`, `Set.ofPred`, `AddMonoidHom`, `iSup`, `ENNReal.ofReal`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `LinearIsometry`, `LinearMap.mkContinuous`, `WithLp`, `Prod`, `Exists`, `AddCommGroup`, `Module`, `Module.ofMinimalAxioms`, `NormedSpace`, `SMul`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `Exists.choose`, `RealRMK.rieszMeasure`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:185)
-    TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real.{v}
+TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:185)
+    TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real.{v}
       {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E] {V : Submodule ℝ E}
       [V.HasOrthogonalProjection] {M : ↥V →L[ℝ] ↥V} {R : ↥V →L[ℝ] E} {A : E →ₗ.[ℝ] E}
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (hA : IsSelfAdjoint A)
-      (B : Set ℝ) (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain)
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (hA : IsSelfAdjoint A) (B : Set ℝ)
+      (hB : MeasurableSet B) (hVdom : ∀ (v : ↥V), ↑v ∈ A.domain)
       (hres : ∀ (v : ↥V), ↑A ⟨↑v, ⋯⟩ = R v + ↑(M v)) {δ : ℝ} (hδ : 0 < δ)
       (hgap :
         TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
@@ -2083,12 +2083,12 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentativ
                 (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)
                 V) ≤
           2 * N.gauge R
-    hash: expr=4127165135 text=93671a28e25ada48
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=1121034465 text=7731a2da05b1706e
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -2109,8 +2109,8 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentativ
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap  (inductive, DavisKahan/Sylvester/Gap.lean:89)
       TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap.{u, v} {𝕜 : Type u} [RCLike 𝕜]
@@ -2425,35 +2425,35 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentativ
           TauCeti.LinearPMap.ReducesSubspace A
             (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA S hS)
         hash: expr=2538579909 text=bc3b439bb5002b58
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -2478,14 +2478,14 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentativ
         [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection]
         [V.HasOrthogonalProjection] : H →L[𝕜] H
       hash: expr=2613108218 text=65547104dca1b58d
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 62 project constant(s) unfolded, 9 project leaf/leaves, 93 boundary constant(s), 327 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, Submodule, Submodule.HasOrthogonalProjection, ContinuousLinearMap, RingHom.id, Subtype, LinearPMap, IsSelfAdjoint, Set, MeasurableSet, Eq, LinearPMap.toFun', MeasurableSet.compl, And, Nat, Complex, EuclideanSpace, Fin, ENNReal, EuclideanSpace.basisFun, RCLike, LinearMap.range, Ne, ContinuousLinearMap.comp, Submodule.starProjection, Submodule.map, Submodule.reflection, Submodule.orthogonal, ENNReal.toReal, FiniteDimensional, LinearMap, LinearIsometryEquiv, LinearMap.comp, OrthonormalBasis, Fin.lastCases, Or, Set.Icc, Set.ofPred, AddMonoidHom, iSup, ENNReal.ofReal, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, LinearIsometry, LinearMap.mkContinuous, WithLp, Prod, Exists, AddCommGroup, Module, Module.ofMinimalAxioms, NormedSpace, SMul, MeasureTheory.Measure, MeasureTheory.IsFiniteMeasure, Complex.ofReal, Set.univ, MeasurableSet.univ, ContinuousLinearMap.id, MeasurableSet.inter, IsStarNormal, Set.Elem, spectrum, Measurable, Complex.I, NontriviallyNormedField, SeminormedAddCommGroup, iInf, Cardinal, LinearMap.rank, Nat.cast, Set.indicator, Set.preimage, MeasureTheory.Measure.map, Exists.choose, RealRMK.rieszMeasure, StrongDual, LinearIsometryEquiv.symm, InnerProductSpace.toDual, PositiveLinearMap, CompactlySupportedContinuousMap, StarAlgHom, ContinuousMap, cfcHom, RingHom, TopologicalSpace, MeasureTheory.integral
@@ -2493,7 +2493,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, Submodule,
 
 </details>
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex`
 
 **Human-written Lean statement**
 
@@ -2502,8 +2502,8 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, Submodule,
 ~~~~lean
 variable {Hc : Type v}
   [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
-theorem sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
     (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -2526,9 +2526,9 @@ theorem sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex.{v}
+TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex.{v}
   {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : Hc →ₗ.[ℂ] Hc)
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : Hc →ₗ.[ℂ] Hc)
   (hA : IsSelfAdjoint A) (Eop : Hc →L[ℂ] Hc) (hEop : TauCeti.DavisKahan.IsSelfAdjointOperator Eop)
   (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S) {δ : ℝ} (hδ : 0 < δ)
   (hgap :
@@ -2550,20 +2550,20 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_com
       2 * N.gauge Eop
 ~~~~
 
-Structural type hash `1018532517`, printed-type hash `2be64255b07e531b`.
+Structural type hash `1578888031`, printed-type hash `a765a31cf24794cd`.
 
 Statement closure: 50 project constant(s) unfolded, 7 project leaf/leaves, 94 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.selfAdjointSpectralSubspace`, `TauCeti.DavisKahan.selfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahanExt.sinTwoAngleOperatorC`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.pvmRangeSubspace`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.specRestrict`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorDirectedC`, `TauCeti.DavisKahanExt.cosAngleOperatorC`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `ContinuousLinearMap.modulus`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.selfAdjointSpectralSubspace`, `TauCeti.DavisKahan.selfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.sinTwoAngleOperatorC`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.pvmRangeSubspace`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.specRestrict`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorDirectedC`, `TauCeti.DavisKahanExt.cosAngleOperatorC`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `ContinuousLinearMap.modulus`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
 Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.residual`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC`, `TauCeti.DavisKahanTheory.sinTwoThetaEmbedding`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `IsSelfAdjoint`, `ContinuousLinearMap`, `Set`, `Real`, `MeasurableSet`, `Subtype`, `Submodule`, `MeasurableSet.compl`, `And`, `Nat`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `LinearMap.IsSymmetric`, `Ne`, `Submodule.HasOrthogonalProjection`, `LinearMap`, `LinearMap.domRestrict`, `ENNReal.toReal`, `FiniteDimensional`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `Or`, `Set.Icc`, `Set.ofPred`, `AddMonoidHom`, `LinearPMap.toFun'`, `LinearMap.range`, `Submodule.comap`, `Submodule.subtype`, `iSup`, `ENNReal.ofReal`, `ContinuousLinearMap.comp`, `Submodule.starProjection`, `Submodule.orthogonal`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.adjoint`, `Exists`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `NormedSpace`, `Exists.choose`, `LinearMap.mkContinuous`, `RealRMK.rieszMeasure`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:860)
-    TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex.{v}
+TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:860)
+    TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex.{v}
       {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : Hc →ₗ.[ℂ] Hc)
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : Hc →ₗ.[ℂ] Hc)
       (hA : IsSelfAdjoint A) (Eop : Hc →L[ℂ] Hc) (hEop : TauCeti.DavisKahan.IsSelfAdjointOperator Eop)
       (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S) {δ : ℝ} (hδ : 0 < δ)
       (hgap :
@@ -2583,12 +2583,12 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_com
                 (TauCeti.DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop) ⋯
                   S hS)) ≤
           2 * N.gauge Eop
-    hash: expr=1018532517 text=2be64255b07e531b
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=1578888031 text=a765a31cf24794cd
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -2609,8 +2609,8 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_com
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.DavisKahan.IsSelfAdjointOperator  (def, DavisKahan/BoundedOperator/Compat.lean:64)
       TauCeti.DavisKahan.IsSelfAdjointOperator.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {E : Type u_2}
@@ -2820,35 +2820,35 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_com
               (hB : MeasurableSet B) : H →L[ℂ] H
             hash: expr=1748688050 text=b7b417789e21c33b
           [body] TauCeti.LinearPMap.spectralPVM  (above)
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -2895,14 +2895,14 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_com
         (hA : IsSelfAdjoint A) (V : H →L[𝕜] H) (hV : TauCeti.DavisKahan.IsSelfAdjointOperator V) :
         IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
       hash: expr=611105799 text=2114ceedd875afc0
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 50 project constant(s) unfolded, 7 project leaf/leaves, 94 boundary constant(s), 295 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearPMap, RingHom.id, IsSelfAdjoint, ContinuousLinearMap, Set, Real, MeasurableSet, Subtype, Submodule, MeasurableSet.compl, And, Nat, EuclideanSpace, Fin, ENNReal, Eq, EuclideanSpace.basisFun, RCLike, LinearMap.IsSymmetric, Ne, Submodule.HasOrthogonalProjection, LinearMap, LinearMap.domRestrict, ENNReal.toReal, FiniteDimensional, LinearIsometryEquiv, LinearMap.comp, OrthonormalBasis, Fin.lastCases, Or, Set.Icc, Set.ofPred, AddMonoidHom, LinearPMap.toFun', LinearMap.range, Submodule.comap, Submodule.subtype, iSup, ENNReal.ofReal, ContinuousLinearMap.comp, Submodule.starProjection, Submodule.orthogonal, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, MeasureTheory.Measure, MeasureTheory.IsFiniteMeasure, Complex.ofReal, Set.univ, MeasurableSet.univ, ContinuousLinearMap.id, MeasurableSet.inter, IsStarNormal, Set.Elem, spectrum, Measurable, Complex.I, Algebra, IsScalarTower, ContinuousFunctionalCalculus, CFC.sqrt, ContinuousLinearMap.instStarOrderedRingRCLike, ContinuousLinearMap.adjoint, Exists, Set.indicator, Set.preimage, MeasureTheory.Measure.map, NontriviallyNormedField, NormedSpace, Exists.choose, LinearMap.mkContinuous, RealRMK.rieszMeasure, StrongDual, LinearIsometryEquiv.symm, InnerProductSpace.toDual, PositiveLinearMap, CompactlySupportedContinuousMap, StarAlgHom, ContinuousMap, cfcHom, SeminormedAddCommGroup, iInf, Cardinal, LinearMap.rank, Nat.cast, RingHom, TopologicalSpace, MeasureTheory.integral
@@ -2910,7 +2910,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 
 </details>
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real`
 
 **Human-written Lean statement**
 
@@ -2919,8 +2919,8 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 ~~~~lean
 variable {Er : Type v}
   [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
-theorem sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real
-    (N : PaperUnitaryInvariantNorm)
+theorem sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real
+    (N : SymmetricNormingFunction)
     (A : Er →ₗ.[ℝ] Er)
     (hA : IsSelfAdjoint A)
     (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
@@ -2944,9 +2944,9 @@ theorem sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real.{v} {Er : Type v}
-  [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : Er →ₗ.[ℝ] Er)
+TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real.{v}
+  {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : Er →ₗ.[ℝ] Er)
   (hA : IsSelfAdjoint A) (Eop : Er →L[ℝ] Er) (hEop : TauCeti.DavisKahan.IsSelfAdjointOperator Eop)
   (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S) {δ : ℝ} (hδ : 0 < δ)
   (hgap :
@@ -2968,20 +2968,20 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_rea
       2 * N.gauge Eop
 ~~~~
 
-Structural type hash `3663350705`, printed-type hash `8c5f951c1f14289e`.
+Structural type hash `649378079`, printed-type hash `ec98148251647147`.
 
 Statement closure: 68 project constant(s) unfolded, 9 project leaf/leaves, 99 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.RealComplexification`, `TauCeti.DavisKahanExt.Real.sinTwoAngleOperatorRC`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralProjection`, `TauCeti.LinearPMap.reducingRestriction`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.im`, `TauCeti.DavisKahanExt.sinTwoAngleOperatorC`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.DavisKahan.selfAdjointSpectralProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.complexify`, `TauCeti.LinearPMap.ReducesSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomain`, `TauCeti.LinearPMap.reducingRestrictionLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorDirectedC`, `TauCeti.DavisKahanExt.cosAngleOperatorC`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.RealComplexification.ofReal`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domain`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.linearMap`, `TauCeti.LinearPMap.InvariantSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomainToAmbient`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `TauCeti.RealComplexification.mk`, `ContinuousLinearMap.modulus`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainRe`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainIm`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.RealComplexification`, `TauCeti.DavisKahanExt.Real.sinTwoAngleOperatorRC`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralProjection`, `TauCeti.LinearPMap.reducingRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.im`, `TauCeti.DavisKahanExt.sinTwoAngleOperatorC`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.DavisKahan.selfAdjointSpectralProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.complexify`, `TauCeti.LinearPMap.ReducesSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomain`, `TauCeti.LinearPMap.reducingRestrictionLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorDirectedC`, `TauCeti.DavisKahanExt.cosAngleOperatorC`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.RealComplexification.ofReal`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domain`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.linearMap`, `TauCeti.LinearPMap.InvariantSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomainToAmbient`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `ContinuousLinearMap.modulus`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainRe`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainIm`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
 Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.residual`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC`, `TauCeti.DavisKahanTheory.sinTwoThetaEmbedding`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `IsSelfAdjoint`, `ContinuousLinearMap`, `Set`, `MeasurableSet`, `Subtype`, `Submodule`, `MeasurableSet.compl`, `And`, `Complex`, `Nat`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `LinearMap.IsSymmetric`, `LinearMap.range`, `Ne`, `WithLp`, `Prod`, `Submodule.HasOrthogonalProjection`, `LinearMap`, `LinearMap.domRestrict`, `ENNReal.toReal`, `FiniteDimensional`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `Or`, `Set.Icc`, `Set.ofPred`, `AddMonoidHom`, `LinearPMap.toFun'`, `iSup`, `ENNReal.ofReal`, `AddCommGroup`, `NormedSpace`, `Module`, `Module.ofMinimalAxioms`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `LinearIsometry`, `LinearMap.mkContinuous`, `Submodule.starProjection`, `Submodule.orthogonal`, `SMul`, `ContinuousLinearMap.comp`, `Exists`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.adjoint`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `Exists.choose`, `RealRMK.rieszMeasure`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:559)
-    TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real.{v} {Er : Type v}
-      [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : Er →ₗ.[ℝ] Er)
+TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:559)
+    TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real.{v}
+      {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : Er →ₗ.[ℝ] Er)
       (hA : IsSelfAdjoint A) (Eop : Er →L[ℝ] Er) (hEop : TauCeti.DavisKahan.IsSelfAdjointOperator Eop)
       (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S) {δ : ℝ} (hδ : 0 < δ)
       (hgap :
@@ -3001,12 +3001,12 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_rea
                 (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace
                   (TauCeti.LinearPMap.addBounded A Eop) ⋯ S hS)) ≤
           2 * N.gauge Eop
-    hash: expr=3663350705 text=8c5f951c1f14289e
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=649378079 text=ec98148251647147
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -3027,8 +3027,8 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_rea
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.DavisKahan.IsSelfAdjointOperator  (def, DavisKahan/BoundedOperator/Compat.lean:64)
       TauCeti.DavisKahan.IsSelfAdjointOperator.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {E : Type u_2}
@@ -3347,35 +3347,35 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_rea
           TauCeti.LinearPMap.ReducesSubspace A
             (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA S hS)
         hash: expr=2538579909 text=bc3b439bb5002b58
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -3430,14 +3430,14 @@ TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_rea
         (hA : IsSelfAdjoint A) (V : H →L[𝕜] H) (hV : TauCeti.DavisKahan.IsSelfAdjointOperator V) :
         IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
       hash: expr=611105799 text=2114ceedd875afc0
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 68 project constant(s) unfolded, 9 project leaf/leaves, 99 boundary constant(s), 347 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap, RingHom.id, IsSelfAdjoint, ContinuousLinearMap, Set, MeasurableSet, Subtype, Submodule, MeasurableSet.compl, And, Complex, Nat, EuclideanSpace, Fin, ENNReal, Eq, EuclideanSpace.basisFun, RCLike, LinearMap.IsSymmetric, LinearMap.range, Ne, WithLp, Prod, Submodule.HasOrthogonalProjection, LinearMap, LinearMap.domRestrict, ENNReal.toReal, FiniteDimensional, LinearIsometryEquiv, LinearMap.comp, OrthonormalBasis, Fin.lastCases, Or, Set.Icc, Set.ofPred, AddMonoidHom, LinearPMap.toFun', iSup, ENNReal.ofReal, AddCommGroup, NormedSpace, Module, Module.ofMinimalAxioms, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, LinearIsometry, LinearMap.mkContinuous, Submodule.starProjection, Submodule.orthogonal, SMul, ContinuousLinearMap.comp, Exists, Algebra, IsScalarTower, ContinuousFunctionalCalculus, CFC.sqrt, ContinuousLinearMap.instStarOrderedRingRCLike, ContinuousLinearMap.adjoint, MeasureTheory.Measure, MeasureTheory.IsFiniteMeasure, Complex.ofReal, Set.univ, MeasurableSet.univ, ContinuousLinearMap.id, MeasurableSet.inter, IsStarNormal, Set.Elem, spectrum, Measurable, Complex.I, NontriviallyNormedField, SeminormedAddCommGroup, iInf, Cardinal, LinearMap.rank, Nat.cast, Set.indicator, Set.preimage, MeasureTheory.Measure.map, Exists.choose, RealRMK.rieszMeasure, StrongDual, LinearIsometryEquiv.symm, InnerProductSpace.toDual, PositiveLinearMap, CompactlySupportedContinuousMap, StarAlgHom, ContinuousMap, cfcHom, RingHom, TopologicalSpace, MeasureTheory.integral
@@ -3445,7 +3445,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap
 
 </details>
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex`
 
 **Human-written Lean statement**
 
@@ -3454,8 +3454,8 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap
 ~~~~lean
 variable {Hc : Type v}
   [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
-theorem sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
     (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -3478,9 +3478,9 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex.{v}
+TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex.{v}
   {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : Hc →ₗ.[ℂ] Hc)
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : Hc →ₗ.[ℂ] Hc)
   (hA : IsSelfAdjoint A) (Eop : Hc →L[ℂ] Hc) (hEop : TauCeti.DavisKahan.IsSelfAdjointOperator Eop)
   (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S) {δ : ℝ} (hδ : 0 < δ)
   (hgap :
@@ -3502,20 +3502,20 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_comp
       2 * N.gauge Eop
 ~~~~
 
-Structural type hash `3673620785`, printed-type hash `ddec768caefb7b73`.
+Structural type hash `2000542141`, printed-type hash `b0e505a8268c9814`.
 
 Statement closure: 50 project constant(s) unfolded, 7 project leaf/leaves, 96 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.selfAdjointSpectralSubspace`, `TauCeti.DavisKahan.selfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.pvmRangeSubspace`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.specRestrict`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.selfAdjointSpectralSubspace`, `TauCeti.DavisKahan.selfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.pvmRangeSubspace`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.specRestrict`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.ApproximationNumber.approximationSingularValue`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
 Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.residual`, `TauCeti.DavisKahanTheory.sinTwoThetaEmbedding`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `IsSelfAdjoint`, `ContinuousLinearMap`, `Set`, `Real`, `MeasurableSet`, `Subtype`, `Submodule`, `MeasurableSet.compl`, `And`, `Nat`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `LinearMap.IsSymmetric`, `Ne`, `Submodule.HasOrthogonalProjection`, `cfc`, `Real.sin`, `LinearMap`, `LinearMap.domRestrict`, `ENNReal.toReal`, `FiniteDimensional`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `Or`, `Set.Icc`, `Set.ofPred`, `AddMonoidHom`, `LinearPMap.toFun'`, `LinearMap.range`, `Submodule.comap`, `Submodule.subtype`, `iSup`, `ENNReal.ofReal`, `Real.arcsin`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Submodule.starProjection`, `Exists`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `NormedSpace`, `Exists.choose`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.comp`, `ContinuousLinearMap.adjoint`, `LinearMap.mkContinuous`, `RealRMK.rieszMeasure`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:271)
-    TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex.{v}
+TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:271)
+    TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex.{v}
       {Hc : Type v} [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : Hc →ₗ.[ℂ] Hc)
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : Hc →ₗ.[ℂ] Hc)
       (hA : IsSelfAdjoint A) (Eop : Hc →L[ℂ] Hc) (hEop : TauCeti.DavisKahan.IsSelfAdjointOperator Eop)
       (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S) {δ : ℝ} (hδ : 0 < δ)
       (hgap :
@@ -3535,12 +3535,12 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_comp
                 (TauCeti.DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop) ⋯
                   S hS)) ≤
           2 * N.gauge Eop
-    hash: expr=3673620785 text=ddec768caefb7b73
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=2000542141 text=b0e505a8268c9814
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -3561,8 +3561,8 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_comp
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.DavisKahan.IsSelfAdjointOperator  (def, DavisKahan/BoundedOperator/Compat.lean:64)
       TauCeti.DavisKahan.IsSelfAdjointOperator.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {E : Type u_2}
@@ -3772,35 +3772,35 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_comp
               (hB : MeasurableSet B) : H →L[ℂ] H
             hash: expr=1748688050 text=b7b417789e21c33b
           [body] TauCeti.LinearPMap.spectralPVM  (above)
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -3846,14 +3846,14 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_comp
         (hA : IsSelfAdjoint A) (V : H →L[𝕜] H) (hV : TauCeti.DavisKahan.IsSelfAdjointOperator V) :
         IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
       hash: expr=611105799 text=2114ceedd875afc0
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 50 project constant(s) unfolded, 7 project leaf/leaves, 96 boundary constant(s), 294 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearPMap, RingHom.id, IsSelfAdjoint, ContinuousLinearMap, Set, Real, MeasurableSet, Subtype, Submodule, MeasurableSet.compl, And, Nat, EuclideanSpace, Fin, ENNReal, Eq, EuclideanSpace.basisFun, RCLike, LinearMap.IsSymmetric, Ne, Submodule.HasOrthogonalProjection, cfc, Real.sin, LinearMap, LinearMap.domRestrict, ENNReal.toReal, FiniteDimensional, LinearIsometryEquiv, LinearMap.comp, OrthonormalBasis, Fin.lastCases, Or, Set.Icc, Set.ofPred, AddMonoidHom, LinearPMap.toFun', LinearMap.range, Submodule.comap, Submodule.subtype, iSup, ENNReal.ofReal, Real.arcsin, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, MeasureTheory.Measure, MeasureTheory.IsFiniteMeasure, Complex.ofReal, Set.univ, MeasurableSet.univ, ContinuousLinearMap.id, MeasurableSet.inter, IsStarNormal, Set.Elem, spectrum, Measurable, Complex.I, Submodule.starProjection, Exists, Set.indicator, Set.preimage, MeasureTheory.Measure.map, NontriviallyNormedField, NormedSpace, Exists.choose, Algebra, IsScalarTower, ContinuousFunctionalCalculus, CFC.sqrt, ContinuousLinearMap.instStarOrderedRingRCLike, ContinuousLinearMap.comp, ContinuousLinearMap.adjoint, LinearMap.mkContinuous, RealRMK.rieszMeasure, StrongDual, LinearIsometryEquiv.symm, InnerProductSpace.toDual, PositiveLinearMap, CompactlySupportedContinuousMap, StarAlgHom, ContinuousMap, cfcHom, SeminormedAddCommGroup, iInf, Cardinal, LinearMap.rank, Nat.cast, RingHom, TopologicalSpace, MeasureTheory.integral
@@ -3861,7 +3861,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 
 </details>
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real`
 
 **Human-written Lean statement**
 
@@ -3870,8 +3870,8 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 ~~~~lean
 variable {Er : Type v}
   [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
-theorem sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real
-    (N : PaperUnitaryInvariantNorm)
+theorem sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real
+    (N : SymmetricNormingFunction)
     (A : Er →ₗ.[ℝ] Er) (hA : IsSelfAdjoint A)
     (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
     (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
@@ -3894,9 +3894,9 @@ theorem sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real.{v} {Er : Type v}
-  [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : Er →ₗ.[ℝ] Er)
+TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real.{v}
+  {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : Er →ₗ.[ℝ] Er)
   (hA : IsSelfAdjoint A) (Eop : Er →L[ℝ] Er) (hEop : TauCeti.DavisKahan.IsSelfAdjointOperator Eop)
   (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S) {δ : ℝ} (hδ : 0 < δ)
   (hgap :
@@ -3918,20 +3918,20 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real
       2 * N.gauge Eop
 ~~~~
 
-Structural type hash `127662455`, printed-type hash `8a4fc16ea176bf45`.
+Structural type hash `369870179`, printed-type hash `52bfefcf38cbbebd`.
 
 Statement closure: 68 project constant(s) unfolded, 9 project leaf/leaves, 102 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralProjection`, `TauCeti.LinearPMap.reducingRestriction`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.DavisKahan.selfAdjointSpectralProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.complexify`, `TauCeti.LinearPMap.ReducesSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomain`, `TauCeti.LinearPMap.reducingRestrictionLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domain`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.linearMap`, `TauCeti.LinearPMap.InvariantSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomainToAmbient`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainRe`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainIm`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.modulus`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.DavisKahan.IsSelfAdjointOperator`, `TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR`, `TauCeti.LinearPMap.addBounded`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.DavisKahan.ExactSinTheta.RealSpectrumIntervalExteriorGap`, `TauCeti.LinearPMap.SemiboundedBelow`, `TauCeti.LinearPMap.SemiboundedAbove`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralProjection`, `TauCeti.LinearPMap.reducingRestriction`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.LinearPMap.realSpectrum`, `TauCeti.DavisKahan.selfAdjointSpectralProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.complexify`, `TauCeti.LinearPMap.ReducesSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomain`, `TauCeti.LinearPMap.reducingRestrictionLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.realResolventSet`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domain`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.linearMap`, `TauCeti.LinearPMap.InvariantSubspace`, `TauCeti.LinearPMap.reducingRestrictionDomainToAmbient`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainRe`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.domainIm`, `TauCeti.ApproximationNumber.approximationSingularValue`, `ContinuousLinearMap.modulus`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan.addBounded_isSelfAdjoint`, `TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace_reducing`, `TauCeti.DavisKahan.ExactSinTheta.PartialMapComplexification.isSelfAdjoint_complexify`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
 Dictionary definitions this statement never reaches: `TauCeti.DavisKahan.residual`, `TauCeti.DavisKahanTheory.sinTwoThetaEmbedding`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `IsSelfAdjoint`, `ContinuousLinearMap`, `Set`, `MeasurableSet`, `Subtype`, `Submodule`, `MeasurableSet.compl`, `And`, `Nat`, `Complex`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `LinearMap.IsSymmetric`, `LinearMap.range`, `Ne`, `Submodule.HasOrthogonalProjection`, `LinearMap`, `LinearMap.domRestrict`, `ENNReal.toReal`, `FiniteDimensional`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `Or`, `Set.Icc`, `Set.ofPred`, `AddMonoidHom`, `LinearPMap.toFun'`, `iSup`, `ENNReal.ofReal`, `LinearIsometry`, `LinearMap.mkContinuous`, `cfc`, `Real.sin`, `WithLp`, `Prod`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `Submodule.starProjection`, `Submodule.orthogonal`, `AddCommGroup`, `Module`, `Module.ofMinimalAxioms`, `NormedSpace`, `Real.arcsin`, `Exists`, `SMul`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.comp`, `ContinuousLinearMap.adjoint`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `NontriviallyNormedField`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `Exists.choose`, `RealRMK.rieszMeasure`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:405)
-    TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real.{v} {Er : Type v}
-      [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : Er →ₗ.[ℝ] Er)
+TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:405)
+    TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real.{v}
+      {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : Er →ₗ.[ℝ] Er)
       (hA : IsSelfAdjoint A) (Eop : Er →L[ℝ] Er) (hEop : TauCeti.DavisKahan.IsSelfAdjointOperator Eop)
       (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S) {δ : ℝ} (hδ : 0 < δ)
       (hgap :
@@ -3951,12 +3951,12 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real
                 (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace
                   (TauCeti.LinearPMap.addBounded A Eop) ⋯ S hS)) ≤
           2 * N.gauge Eop
-    hash: expr=127662455 text=8a4fc16ea176bf45
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=369870179 text=52bfefcf38cbbebd
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -3977,8 +3977,8 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.DavisKahan.IsSelfAdjointOperator  (def, DavisKahan/BoundedOperator/Compat.lean:64)
       TauCeti.DavisKahan.IsSelfAdjointOperator.{u_1, u_2} {𝕜 : Type u_1} [RCLike 𝕜] {E : Type u_2}
@@ -4297,35 +4297,35 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real
           TauCeti.LinearPMap.ReducesSubspace A
             (TauCeti.DavisKahan.RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA S hS)
         hash: expr=2538579909 text=bc3b439bb5002b58
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -4379,14 +4379,14 @@ TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real
         (hA : IsSelfAdjoint A) (V : H →L[𝕜] H) (hV : TauCeti.DavisKahan.IsSelfAdjointOperator V) :
         IsSelfAdjoint (TauCeti.LinearPMap.addBounded A V)
       hash: expr=611105799 text=2114ceedd875afc0
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 68 project constant(s) unfolded, 9 project leaf/leaves, 102 boundary constant(s), 347 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap, RingHom.id, IsSelfAdjoint, ContinuousLinearMap, Set, MeasurableSet, Subtype, Submodule, MeasurableSet.compl, And, Nat, Complex, EuclideanSpace, Fin, ENNReal, Eq, EuclideanSpace.basisFun, RCLike, LinearMap.IsSymmetric, LinearMap.range, Ne, Submodule.HasOrthogonalProjection, LinearMap, LinearMap.domRestrict, ENNReal.toReal, FiniteDimensional, LinearIsometryEquiv, LinearMap.comp, OrthonormalBasis, Fin.lastCases, Or, Set.Icc, Set.ofPred, AddMonoidHom, LinearPMap.toFun', iSup, ENNReal.ofReal, LinearIsometry, LinearMap.mkContinuous, cfc, Real.sin, WithLp, Prod, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, Submodule.starProjection, Submodule.orthogonal, AddCommGroup, Module, Module.ofMinimalAxioms, NormedSpace, Real.arcsin, Exists, SMul, Algebra, IsScalarTower, ContinuousFunctionalCalculus, CFC.sqrt, ContinuousLinearMap.instStarOrderedRingRCLike, ContinuousLinearMap.comp, ContinuousLinearMap.adjoint, MeasureTheory.Measure, MeasureTheory.IsFiniteMeasure, Complex.ofReal, Set.univ, MeasurableSet.univ, ContinuousLinearMap.id, MeasurableSet.inter, IsStarNormal, Set.Elem, spectrum, Measurable, Complex.I, NontriviallyNormedField, SeminormedAddCommGroup, iInf, Cardinal, LinearMap.rank, Nat.cast, Set.indicator, Set.preimage, MeasureTheory.Measure.map, Exists.choose, RealRMK.rieszMeasure, StrongDual, LinearIsometryEquiv.symm, InnerProductSpace.toDual, PositiveLinearMap, CompactlySupportedContinuousMap, StarAlgHom, ContinuousMap, cfcHom, RingHom, TopologicalSpace, MeasureTheory.integral
@@ -4396,14 +4396,14 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap
 
 ### Supporting scope declarations
 
-- `TauCeti.DavisKahan1970.sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_complex` — elaborated; source located
-- `TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` — elaborated; source located
-- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex` — elaborated; source located
-- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNorming_complex` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex` — elaborated; source located
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real` — elaborated; source located
 
 ### Local semantic dictionary
 
-#### `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm`
+#### `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction`
 
 The literal source unitary-invariant norm. The new directed headline theorem evaluates it over generic RCLike scalars.
 
@@ -4423,17 +4423,17 @@ The complex whole-space sin(2 Theta) operator used by the ambient perturbation s
 
 | source clause | Lean realization | status |
 | --- | --- | --- |
-| The scalar field is real or complex. | The canonical directed theorem quantifies over 𝕜 with [RCLike 𝕜] and uses PaperUnitaryInvariantNorm directly. | claimed_exact |
+| The scalar field is real or complex. | The canonical directed theorem quantifies over 𝕜 with [RCLike 𝕜] and uses SymmetricNormingFunction directly. | claimed_exact |
 | Interval/exterior spectral separation by delta. | hCompressionSpectrum places M in [beta,alpha] and hUnwantedSpectrum literally places the unwanted A-spectrum outside (beta-delta,alpha+delta); no local gap structure is visible in the headline type. | claimed_exact |
-| delta \|\|sin(2 Theta0)\|\| <= 2 \|\|R\|\|. | sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike concludes the factor-two PaperUnitaryInvariantNorm estimate for sinTwoThetaEmbedding U X against residual A X M. | claimed_exact |
-| delta \|\|sin(2 Theta)\|\| <= 2 \|\|H\|\|. | sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex and its real sibling supply the ambient endpoint at the result's own unbounded scope: unbounded self-adjoint LinearPMap ambient operator, bounded self-adjoint perturbation, genuine spectral subspaces, the whole FormBoundedSylvesterGap, an arbitrary PaperUnitaryInvariantNorm and the exact factor two.  The bounded ambient theorems are their specialization. | claimed_exact |
+| delta \|\|sin(2 Theta0)\|\| <= 2 \|\|R\|\|. | sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike concludes the factor-two SymmetricNormingFunction estimate for sinTwoThetaEmbedding U X against residual A X M. | claimed_exact |
+| delta \|\|sin(2 Theta)\|\| <= 2 \|\|H\|\|. | sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex and its real sibling supply the ambient endpoint at the result's own unbounded scope: unbounded self-adjoint LinearPMap ambient operator, bounded self-adjoint perturbation, genuine spectral subspaces, the whole FormBoundedSylvesterGap, an arbitrary SymmetricNormingFunction and the exact factor two.  The bounded ambient theorems are their specialization. | claimed_exact |
 | Infinite-dimensional and unbounded directed-residual scope. | Both printed conclusions are now witnessed at unbounded infinite-dimensional scope over each field.  The scalar-generic facade is finite-dimensional and is supporting evidence only; it is not this result's witness. | claimed_exact |
 
-**Review note.** The directed residual conclusion now has a scalar-generic PaperUnitaryInvariantNorm facade with the interval/exterior hypotheses and residual written directly in its type. The ambient whole-space endpoint remains field-specific internally, so the complex source-shaped theorem stays as the second canonical declaration and its real sibling is a supporting scalar companion. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.
+**Review note.** The directed residual conclusion now has a scalar-generic SymmetricNormingFunction facade with the interval/exterior hypotheses and residual written directly in its type. The ambient whole-space endpoint remains field-specific internally, so the complex source-shaped theorem stays as the second canonical declaration and its real sibling is a supporting scalar companion. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.
 
-2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.
+2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.
 
-2026-08-31 (later the same day): the AMBIENT clause is no longer a scope companion.  `sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` and its real sibling prove it at the row's own unbounded scope, by identifying the ambient double angle between U and V with an ambient SINGLE angle between U and its mirror image through V and applying the common-domain Proposition 6.1.  The bounded ambient endpoints are demoted to supporting evidence as their own specialization.
+2026-08-31 (later the same day): the AMBIENT clause is no longer a scope companion.  `sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` and its real sibling prove it at the row's own unbounded scope, by identifying the ambient double angle between U and V with an ambient SINGLE angle between U and its mirror image through V and applying the common-domain Proposition 6.1.  The bounded ambient endpoints are demoted to supporting evidence as their own specialization.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -4460,7 +4460,7 @@ The Section 2 tan(2 theta) theorem: an ordered gap and a fully off-diagonal pert
 
 ### Canonical Lean declarations
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex`
 
 **Human-written Lean statement**
 
@@ -4469,8 +4469,8 @@ The Section 2 tan(2 theta) theorem: an ordered gap and a fully off-diagonal pert
 ~~~~lean
 variable {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
   [CompleteSpace G]
-theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     {A : G →ₗ.[ℂ] G} {B Z : G →L[ℂ] G} {a b c : ℝ}
     (hA : IsSelfAdjoint A)
     (hB : TauCeti.IsOddFor
@@ -4505,10 +4505,10 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_c
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex.{u}
+TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex.{u}
   {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : G →ₗ.[ℂ] G}
-  {B Z : G →L[ℂ] G} {a b c : ℝ} (hA : IsSelfAdjoint A)
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : G →ₗ.[ℂ] G} {B Z : G →L[ℂ] G}
+  {a b c : ℝ} (hA : IsSelfAdjoint A)
   (hB : TauCeti.IsOddFor (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) B) (hZsa : IsSelfAdjoint Z)
   (hZ2 : Z * Z = 1) (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
   (hZcomm : ∀ (x : ↥A.domain), ↑A ⟨Z ↑x, ⋯⟩ + B (Z ↑x) = Z (↑A x) + Z (B ↑x))
@@ -4543,21 +4543,21 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
               (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) B)
 ~~~~
 
-Structural type hash `3368818851`, printed-type hash `41f74b85d40335c6`.
+Structural type hash `2946508179`, printed-type hash `2f3a4e1c99e9c08f`.
 
 Statement closure: 41 project constant(s) unfolded, 8 project leaf/leaves, 87 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.specRange`, `TauCeti.LinearPMap.MapsDomainTo`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression`, `Submodule.diagonalPart`, `TauCeti.DavisKahan1970.reflectionTangentCorner`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.DavisKahan1970.unboundedReflectionTangent`, `TauCeti.diagOp`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `Submodule.offDiagonalPart`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedExact`, `TauCeti.DavisKahan.ExactSinTheta.instCompleteSpaceCoeOfHasOrthogonalProjectionLemma61`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
-Dictionary definitions this statement never reaches: `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.paperProjectorDifference`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.specRange`, `TauCeti.LinearPMap.MapsDomainTo`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression`, `Submodule.diagonalPart`, `TauCeti.DavisKahan1970.reflectionTangentCorner`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.specProjection`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahan1970.unboundedReflectionTangent`, `TauCeti.diagOp`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `Submodule.offDiagonalPart`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.DavisKahan1970.instCompleteSpaceCoeOfHasOrthogonalProjectionUnboundedExact`, `TauCeti.DavisKahan.ExactSinTheta.instCompleteSpaceCoeOfHasOrthogonalProjectionLemma61`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+Dictionary definitions this statement never reaches: `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperProjectorDifference`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `Real`, `IsSelfAdjoint`, `Set.Iic`, `measurableSet_Iic`, `Eq`, `Subtype`, `Submodule`, `LinearPMap.toFun'`, `AddMonoidHom`, `Nat`, `Submodule.orthogonal`, `And`, `IsUnit`, `EuclideanSpace`, `Fin`, `ENNReal`, `EuclideanSpace.basisFun`, `RCLike`, `Set`, `MeasurableSet`, `LinearMap.range`, `Ne`, `Submodule.HasOrthogonalProjection`, `ContinuousLinearMap.comp`, `LinearIsometryEquiv`, `starRingEnd`, `ContinuousLinearMap.adjoint`, `Submodule.subtypeL`, `Submodule.starProjection`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `iSup`, `ENNReal.ofReal`, `Ring.inverse`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `InnerProductSpace.rankOne`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `NormedSpace`, `Exists.choose`, `LinearMap.mkContinuous`, `RealRMK.rieszMeasure`, `Set.ofPred`, `Exists`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex  (theorem, DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExact.lean:60)
-    TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex.{u}
+TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExact.lean:60)
+    TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex.{u}
       {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : G →ₗ.[ℂ] G}
-      {B Z : G →L[ℂ] G} {a b c : ℝ} (hA : IsSelfAdjoint A)
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : G →ₗ.[ℂ] G} {B Z : G →L[ℂ] G}
+      {a b c : ℝ} (hA : IsSelfAdjoint A)
       (hB : TauCeti.IsOddFor (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) B) (hZsa : IsSelfAdjoint Z)
       (hZ2 : Z * Z = 1) (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
       (hZcomm : ∀ (x : ↥A.domain), ↑A ⟨Z ↑x, ⋯⟩ + B (Z ↑x) = Z (↑A x) + Z (B ↑x))
@@ -4590,12 +4590,12 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
                 (TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression
                   (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯)ᗮ
                   (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) B)
-    hash: expr=3368818851 text=41f74b85d40335c6
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=2946508179 text=2f3a4e1c99e9c08f
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -4616,8 +4616,8 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.IsOddFor  (def, ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/UnboundedReflection.lean:76)
       TauCeti.IsOddFor.{u_1, u_2} {𝕜 : Type u_1} {H : Type u_2} [RCLike 𝕜] [NormedAddCommGroup H]
@@ -4781,35 +4781,35 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
         [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {F : Type w} [NormedAddCommGroup F]
         [InnerProductSpace 𝕜 F] (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (X : F →L[𝕜] E) : Prop
       hash: expr=3340400931 text=044bcad4674dfaf8
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -4862,14 +4862,14 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
           hash: expr=3532409979 text=8ec1b7535939660f
         [body] Submodule.diagonalPart  (above)
       [body] Submodule.diagonalPart  (above)
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 41 project constant(s) unfolded, 8 project leaf/leaves, 87 boundary constant(s), 283 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearPMap, RingHom.id, ContinuousLinearMap, Real, IsSelfAdjoint, Set.Iic, measurableSet_Iic, Eq, Subtype, Submodule, LinearPMap.toFun', AddMonoidHom, Nat, Submodule.orthogonal, And, IsUnit, EuclideanSpace, Fin, ENNReal, EuclideanSpace.basisFun, RCLike, Set, MeasurableSet, LinearMap.range, Ne, Submodule.HasOrthogonalProjection, ContinuousLinearMap.comp, LinearIsometryEquiv, starRingEnd, ContinuousLinearMap.adjoint, Submodule.subtypeL, Submodule.starProjection, ENNReal.toReal, FiniteDimensional, LinearMap, LinearMap.comp, OrthonormalBasis, Fin.lastCases, iSup, ENNReal.ofReal, Ring.inverse, Finset.sum, Finset.univ, RCLike.ofReal, InnerProductSpace.rankOne, MeasureTheory.Measure, MeasureTheory.IsFiniteMeasure, Complex.ofReal, Set.univ, MeasurableSet.univ, ContinuousLinearMap.id, MeasurableSet.inter, IsStarNormal, Set.Elem, spectrum, Measurable, Complex.I, Set.indicator, Set.preimage, MeasureTheory.Measure.map, NontriviallyNormedField, NormedSpace, Exists.choose, LinearMap.mkContinuous, RealRMK.rieszMeasure, Set.ofPred, Exists, SeminormedAddCommGroup, iInf, Cardinal, LinearMap.rank, Nat.cast, StrongDual, LinearIsometryEquiv.symm, InnerProductSpace.toDual, PositiveLinearMap, CompactlySupportedContinuousMap, StarAlgHom, ContinuousMap, cfcHom, RingHom, TopologicalSpace, MeasureTheory.integral
@@ -4877,7 +4877,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 
 </details>
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real`
 
 **Human-written Lean statement**
 
@@ -4886,8 +4886,8 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 ~~~~lean
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
-theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real
+    (N : SymmetricNormingFunction)
     {A : E →ₗ.[ℝ] E} {B Z : E →L[ℝ] E} {a b c : ℝ}
     (hA : _root_.IsSelfAdjoint A)
     (hB : TauCeti.IsOddFor
@@ -4920,10 +4920,10 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_r
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real.{u}
+TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real.{u}
   {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ.[ℝ] E}
-  {B Z : E →L[ℝ] E} {a b c : ℝ} (hA : IsSelfAdjoint A)
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : E →ₗ.[ℝ] E} {B Z : E →L[ℝ] E}
+  {a b c : ℝ} (hA : IsSelfAdjoint A)
   (hB : TauCeti.IsOddFor (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯) B)
   (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1) (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
   (hZcomm : ∀ (x : ↥A.domain), ↑A ⟨Z ↑x, ⋯⟩ + B (Z ↑x) = Z (↑A x) + Z (B ↑x))
@@ -4954,21 +4954,21 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
               (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯) B)
 ~~~~
 
-Structural type hash `288436744`, printed-type hash `b1660b47094510fb`.
+Structural type hash `3512068222`, printed-type hash `20562477f7339ac9`.
 
 Statement closure: 54 project constant(s) unfolded, 8 project leaf/leaves, 93 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.realSpecRange`, `TauCeti.LinearPMap.MapsDomainTo`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahan1970.reflectionResidualCorner`, `Submodule.diagonalPart`, `TauCeti.DavisKahan1970.reflectionTangentCorner`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.LinearPMap.realSpecProjection`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression`, `TauCeti.DavisKahan1970.unboundedReflectionTangent`, `TauCeti.diagOp`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.LinearPMap.specProjection`, `TauCeti.RealComplexification`, `TauCeti.LinearPMap.complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `Submodule.offDiagonalPart`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.complexificationDomain`, `TauCeti.LinearPMap.complexificationLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.complexificationDomainRe`, `TauCeti.LinearPMap.complexificationDomainIm`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.isSelfAdjoint_complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.instCompleteSpaceCoeOfHasOrthogonalProjectionLemma61`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
-Dictionary definitions this statement never reaches: `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.paperProjectorDifference`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.realSpecRange`, `TauCeti.LinearPMap.MapsDomainTo`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahan1970.reflectionResidualCorner`, `Submodule.diagonalPart`, `TauCeti.DavisKahan1970.reflectionTangentCorner`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.realSpecProjection`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression`, `TauCeti.DavisKahan1970.unboundedReflectionTangent`, `TauCeti.diagOp`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.LinearPMap.specProjection`, `TauCeti.RealComplexification`, `TauCeti.LinearPMap.complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `Submodule.offDiagonalPart`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.complexificationDomain`, `TauCeti.LinearPMap.complexificationLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.complexificationDomainRe`, `TauCeti.LinearPMap.complexificationDomainIm`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.isSelfAdjoint_complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.instCompleteSpaceCoeOfHasOrthogonalProjectionLemma61`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+Dictionary definitions this statement never reaches: `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperProjectorDifference`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `IsSelfAdjoint`, `Set.Iic`, `measurableSet_Iic`, `Eq`, `Subtype`, `Submodule`, `LinearPMap.toFun'`, `Nat`, `Submodule.orthogonal`, `And`, `IsUnit`, `Complex`, `EuclideanSpace`, `Fin`, `ENNReal`, `EuclideanSpace.basisFun`, `RCLike`, `Set`, `MeasurableSet`, `LinearMap.range`, `Ne`, `Submodule.HasOrthogonalProjection`, `ContinuousLinearMap.comp`, `Submodule.starProjection`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `iSup`, `ENNReal.ofReal`, `starRingEnd`, `ContinuousLinearMap.adjoint`, `Submodule.subtypeL`, `Ring.inverse`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `InnerProductSpace.rankOne`, `LinearIsometry`, `LinearMap.mkContinuous`, `WithLp`, `Prod`, `AddCommGroup`, `Module`, `Module.ofMinimalAxioms`, `NormedSpace`, `Set.ofPred`, `SMul`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `Exists.choose`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `RealRMK.rieszMeasure`, `Exists`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real  (theorem, DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:193)
-    TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real.{u}
+TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:193)
+    TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real.{u}
       {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ.[ℝ] E}
-      {B Z : E →L[ℝ] E} {a b c : ℝ} (hA : IsSelfAdjoint A)
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : E →ₗ.[ℝ] E} {B Z : E →L[ℝ] E}
+      {a b c : ℝ} (hA : IsSelfAdjoint A)
       (hB : TauCeti.IsOddFor (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯) B)
       (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1) (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
       (hZcomm : ∀ (x : ↥A.domain), ↑A ⟨Z ↑x, ⋯⟩ + B (Z ↑x) = Z (↑A x) + Z (B ↑x))
@@ -4997,12 +4997,12 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
               N.gauge
                 (TauCeti.DavisKahan1970.reflectionResidualCorner
                   (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯) B)
-    hash: expr=288436744 text=b1660b47094510fb
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=3512068222 text=20562477f7339ac9
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -5023,8 +5023,8 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.IsOddFor  (def, ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/UnboundedReflection.lean:76)
       TauCeti.IsOddFor.{u_1, u_2} {𝕜 : Type u_1} {H : Type u_2} [RCLike 𝕜] [NormedAddCommGroup H]
@@ -5262,35 +5262,35 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
         [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {F : Type w} [NormedAddCommGroup F]
         [InnerProductSpace 𝕜 F] (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (X : F →L[𝕜] E) : Prop
       hash: expr=3340400931 text=044bcad4674dfaf8
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -5343,14 +5343,14 @@ TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentativ
           hash: expr=3532409979 text=8ec1b7535939660f
         [body] Submodule.diagonalPart  (above)
       [body] Submodule.diagonalPart  (above)
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 54 project constant(s) unfolded, 8 project leaf/leaves, 93 boundary constant(s), 328 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap, RingHom.id, ContinuousLinearMap, IsSelfAdjoint, Set.Iic, measurableSet_Iic, Eq, Subtype, Submodule, LinearPMap.toFun', Nat, Submodule.orthogonal, And, IsUnit, Complex, EuclideanSpace, Fin, ENNReal, EuclideanSpace.basisFun, RCLike, Set, MeasurableSet, LinearMap.range, Ne, Submodule.HasOrthogonalProjection, ContinuousLinearMap.comp, Submodule.starProjection, ENNReal.toReal, FiniteDimensional, LinearMap, LinearIsometryEquiv, LinearMap.comp, OrthonormalBasis, Fin.lastCases, iSup, ENNReal.ofReal, starRingEnd, ContinuousLinearMap.adjoint, Submodule.subtypeL, Ring.inverse, Finset.sum, Finset.univ, RCLike.ofReal, InnerProductSpace.rankOne, LinearIsometry, LinearMap.mkContinuous, WithLp, Prod, AddCommGroup, Module, Module.ofMinimalAxioms, NormedSpace, Set.ofPred, SMul, MeasureTheory.Measure, MeasureTheory.IsFiniteMeasure, Complex.ofReal, Set.univ, MeasurableSet.univ, ContinuousLinearMap.id, MeasurableSet.inter, IsStarNormal, Set.Elem, spectrum, Measurable, Complex.I, Set.indicator, Set.preimage, MeasureTheory.Measure.map, NontriviallyNormedField, Exists.choose, SeminormedAddCommGroup, iInf, Cardinal, LinearMap.rank, Nat.cast, RealRMK.rieszMeasure, Exists, StrongDual, LinearIsometryEquiv.symm, InnerProductSpace.toDual, PositiveLinearMap, CompactlySupportedContinuousMap, StarAlgHom, ContinuousMap, cfcHom, RingHom, TopologicalSpace, MeasureTheory.integral
@@ -5358,7 +5358,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap
 
 </details>
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex`
 
 **Human-written Lean statement**
 
@@ -5367,8 +5367,8 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap
 ~~~~lean
 variable {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
   [CompleteSpace G]
-theorem tanTwoTheta_ambient_unbounded_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTwoTheta_ambient_unbounded_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G} {a b c : ℝ}
     (V : Submodule ℂ G) [V.HasOrthogonalProjection]
     (hA : IsSelfAdjoint A)
@@ -5394,9 +5394,9 @@ theorem tanTwoTheta_ambient_unbounded_paperUINorm_complex
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex.{u} {G : Type u}
+TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex.{u} {G : Type u}
   [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G}
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G}
   {a b c : ℝ} (V : Submodule ℂ G) [V.HasOrthogonalProjection] (hA : IsSelfAdjoint A)
   (hBsa : IsSelfAdjoint B) (hB : TauCeti.IsOddFor (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) B)
   (hV : TauCeti.DavisKahan.ReflectionIntertwines A B V)
@@ -5419,20 +5419,20 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex.{u} {G 
       2 * N.gauge B
 ~~~~
 
-Structural type hash `1260267635`, printed-type hash `278668da2b47f8fb`.
+Structural type hash `1374896681`, printed-type hash `19ff5f0e26acf116`.
 
 Statement closure: 42 project constant(s) unfolded, 6 project leaf/leaves, 96 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ReflectionIntertwines`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.LinearPMap.specProjection`, `TauCeti.LinearPMap.MapsDomainTo`, `Submodule.reflectionOperator`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.diagOp`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
-Dictionary definitions this statement never reaches: `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.paperProjectorDifference`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.specRange`, `TauCeti.DavisKahan.ReflectionIntertwines`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.specProjection`, `TauCeti.LinearPMap.MapsDomainTo`, `Submodule.reflectionOperator`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.diagOp`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+Dictionary definitions this statement never reaches: `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperProjectorDifference`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Complex`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `Real`, `Submodule`, `Submodule.HasOrthogonalProjection`, `IsSelfAdjoint`, `Set.Iic`, `measurableSet_Iic`, `Subtype`, `AddMonoidHom`, `LinearPMap.toFun'`, `Nat`, `Submodule.orthogonal`, `And`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `Set`, `MeasurableSet`, `LinearMap.range`, `Ne`, `cfc`, `abs`, `Real.tan`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `LinearIsometry.toContinuousLinearMap`, `LinearIsometryEquiv.toLinearIsometry`, `Submodule.reflection`, `iSup`, `ENNReal.ofReal`, `Real.arcsin`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `Submodule.starProjection`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.comp`, `ContinuousLinearMap.adjoint`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `NormedSpace`, `Exists.choose`, `LinearMap.mkContinuous`, `RealRMK.rieszMeasure`, `Set.ofPred`, `Exists`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex  (theorem, DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:612)
-    TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex.{u} {G : Type u}
+TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex  (theorem, DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:612)
+    TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex.{u} {G : Type u}
       [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G}
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G}
       {a b c : ℝ} (V : Submodule ℂ G) [V.HasOrthogonalProjection] (hA : IsSelfAdjoint A)
       (hBsa : IsSelfAdjoint B) (hB : TauCeti.IsOddFor (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) B)
       (hV : TauCeti.DavisKahan.ReflectionIntertwines A B V)
@@ -5453,12 +5453,12 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex  (theor
               (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
                 (TauCeti.LinearPMap.specRange hA (Set.Iic c) ⋯) V) ≤
           2 * N.gauge B
-    hash: expr=1260267635 text=278668da2b47f8fb
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=1374896681 text=19ff5f0e26acf116
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -5479,8 +5479,8 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex  (theor
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.IsOddFor  (def, ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/UnboundedReflection.lean:76)
       TauCeti.IsOddFor.{u_1, u_2} {𝕜 : Type u_1} {H : Type u_2} [RCLike 𝕜] [NormedAddCommGroup H]
@@ -5656,35 +5656,35 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex  (theor
           [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
           E →L[𝕜] E
         hash: expr=3177136020 text=e88d9a7941fbe63e
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -5720,14 +5720,14 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex  (theor
               [InnerProductSpace 𝕜 F] [CompleteSpace F] [Algebra ℝ (E →L[𝕜] E)] [IsScalarTower ℝ 𝕜 (E →L[𝕜] E)]
               [ContinuousFunctionalCalculus ℝ (E →L[𝕜] E) IsSelfAdjoint] (T : E →L[𝕜] F) : E →L[𝕜] E
             hash: expr=299460441 text=f21cf18f7b7963ad
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 42 project constant(s) unfolded, 6 project leaf/leaves, 96 boundary constant(s), 293 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearPMap, RingHom.id, ContinuousLinearMap, Real, Submodule, Submodule.HasOrthogonalProjection, IsSelfAdjoint, Set.Iic, measurableSet_Iic, Subtype, AddMonoidHom, LinearPMap.toFun', Nat, Submodule.orthogonal, And, EuclideanSpace, Fin, ENNReal, Eq, EuclideanSpace.basisFun, RCLike, Set, MeasurableSet, LinearMap.range, Ne, cfc, abs, Real.tan, ENNReal.toReal, FiniteDimensional, LinearMap, LinearIsometryEquiv, LinearMap.comp, OrthonormalBasis, Fin.lastCases, LinearIsometry.toContinuousLinearMap, LinearIsometryEquiv.toLinearIsometry, Submodule.reflection, iSup, ENNReal.ofReal, Real.arcsin, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, Submodule.starProjection, MeasureTheory.Measure, MeasureTheory.IsFiniteMeasure, Complex.ofReal, Set.univ, MeasurableSet.univ, ContinuousLinearMap.id, MeasurableSet.inter, IsStarNormal, Set.Elem, spectrum, Measurable, Complex.I, Algebra, IsScalarTower, ContinuousFunctionalCalculus, CFC.sqrt, ContinuousLinearMap.instStarOrderedRingRCLike, ContinuousLinearMap.comp, ContinuousLinearMap.adjoint, Set.indicator, Set.preimage, MeasureTheory.Measure.map, NontriviallyNormedField, NormedSpace, Exists.choose, LinearMap.mkContinuous, RealRMK.rieszMeasure, Set.ofPred, Exists, SeminormedAddCommGroup, iInf, Cardinal, LinearMap.rank, Nat.cast, StrongDual, LinearIsometryEquiv.symm, InnerProductSpace.toDual, PositiveLinearMap, CompactlySupportedContinuousMap, StarAlgHom, ContinuousMap, cfcHom, RingHom, TopologicalSpace, MeasureTheory.integral
@@ -5735,7 +5735,7 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 
 </details>
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real`
 
 **Human-written Lean statement**
 
@@ -5744,8 +5744,8 @@ boundary: NormedAddCommGroup, InnerProductSpace, Complex, CompleteSpace, LinearP
 ~~~~lean
 variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
   [CompleteSpace E]
-theorem tanTwoTheta_ambient_unbounded_paperUINorm_real
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTwoTheta_ambient_unbounded_symmetricNorming_real
+    (N : SymmetricNormingFunction)
     {A : E →ₗ.[ℝ] E} {B : E →L[ℝ] E} {a b c : ℝ}
     (V : Submodule ℝ E) [V.HasOrthogonalProjection]
     (hA : _root_.IsSelfAdjoint A)
@@ -5771,9 +5771,9 @@ theorem tanTwoTheta_ambient_unbounded_paperUINorm_real
 **Elaborated signature** (statement pin: current)
 
 ~~~~lean
-TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real.{u} {E : Type u}
+TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real.{u} {E : Type u}
   [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ.[ℝ] E} {B : E →L[ℝ] E}
+  (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : E →ₗ.[ℝ] E} {B : E →L[ℝ] E}
   {a b c : ℝ} (V : Submodule ℝ E) [V.HasOrthogonalProjection] (hA : IsSelfAdjoint A)
   (hBsa : IsSelfAdjoint B)
   (hB : TauCeti.IsOddFor (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯) B)
@@ -5795,20 +5795,20 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real.{u} {E : T
       2 * N.gauge B
 ~~~~
 
-Structural type hash `300124182`, printed-type hash `dc3d73d9a82feaaf`.
+Structural type hash `2282470164`, printed-type hash `81828007b92d34da`.
 
 Statement closure: 56 project constant(s) unfolded, 7 project leaf/leaves, 102 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.realSpecRange`, `TauCeti.DavisKahan.ReflectionIntertwines`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.paperZeroPad`, `TauCeti.LinearPMap.realSpecProjection`, `TauCeti.LinearPMap.MapsDomainTo`, `Submodule.reflectionOperator`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.LinearPMap.specProjection`, `TauCeti.LinearPMap.complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.complexificationDomain`, `TauCeti.LinearPMap.complexificationLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.complexificationDomainRe`, `TauCeti.LinearPMap.complexificationDomainIm`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.isSelfAdjoint_complexifyReal`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
-Dictionary definitions this statement never reaches: `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent`, `TauCeti.DavisKahan1970.paperProjectorDifference`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.IsOddFor`, `TauCeti.LinearPMap.realSpecRange`, `TauCeti.DavisKahan.ReflectionIntertwines`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.UnitarilyInvariantSeminorm.gauge`, `TauCeti.DavisKahan.ExactSinTheta.zeroPad`, `TauCeti.LinearPMap.realSpecProjection`, `TauCeti.LinearPMap.MapsDomainTo`, `Submodule.reflectionOperator`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge`, `TauCeti.RealComplexification.realPartOperator`, `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC`, `TauCeti.RealComplexification`, `TauCeti.DavisKahan.Foundation.RealComplexification.complexifySubmodule`, `TauCeti.diagOp`, `TauCeti.LinearPMap.specProjection`, `TauCeti.LinearPMap.complexifyReal`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge`, `TauCeti.RealComplexification.re`, `TauCeti.RealComplexification.ofReal`, `TauCeti.DavisKahanExt.paperAngleOperatorC`, `TauCeti.RealComplexification.im`, `TauCeti.LinearPMap.spectralPVM`, `TauCeti.LinearPMap.complexificationDomain`, `TauCeti.LinearPMap.complexificationLinearMap`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge`, `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix`, `TauCeti.RealComplexification.mk`, `TauCeti.DavisKahanExt.sinAngleOperatorC`, `TauCeti.ProjValMeasure`, `TauCeti.BorelCalculus.toProjValMeasure`, `TauCeti.LinearPMap.cayley`, `TauCeti.LinearPMap.cayleyInv`, `TauCeti.LinearPMap.complexificationDomainRe`, `TauCeti.LinearPMap.complexificationDomainIm`, `ContinuousLinearMap.modulus`, `TauCeti.BorelCalculus.specProj`, `TauCeti.BorelCalculus.specDiag`, `TauCeti.LinearPMap.resolvent`, `ContinuousLinearMap.approximationNumber`, `TauCeti.BorelCalculus.borelCalculus`, `TauCeti.BorelCalculus.diagMeasure`, `TauCeti.LinearPMap.resolventSet`, `TauCeti.LinearPMap.IsResolventAt`, `TauCeti.BorelCalculus.IsBddMeasurable`, `TauCeti.BorelCalculus.borelVector`, `TauCeti.BorelCalculus.IsBddMeasurable.chooseBound`, `TauCeti.BorelCalculus.diagFunctional`, `TauCeti.BorelCalculus.pairFunctional`, `TauCeti.BorelCalculus.ofRealLM`, `TauCeti.BorelCalculus.pair`, `TauCeti.LinearPMap.isSelfAdjoint_complexifyReal`, `TauCeti.LinearPMap.measurable_cayleyInv`, `TauCeti.BorelCalculus.isFiniteMeasure_specDiag`, `TauCeti.BorelCalculus.inner_specProj_self`, `TauCeti.BorelCalculus.specProj_univ`, `TauCeti.BorelCalculus.specProj_inter`, `TauCeti.BorelCalculus.norm_borelVector_le`
+Dictionary definitions this statement never reaches: `TauCeti.DavisKahan1970.paperDoubleSecant`, `TauCeti.DavisKahan1970.paperProjectorDifference`, `TauCeti.DavisKahanTheory.absDoubleAngleTangent`
 Boundary vocabulary: `NormedAddCommGroup`, `InnerProductSpace`, `Real`, `CompleteSpace`, `LinearPMap`, `RingHom.id`, `ContinuousLinearMap`, `Submodule`, `Submodule.HasOrthogonalProjection`, `IsSelfAdjoint`, `Set.Iic`, `measurableSet_Iic`, `Subtype`, `LinearPMap.toFun'`, `Nat`, `Submodule.orthogonal`, `And`, `Complex`, `EuclideanSpace`, `Fin`, `ENNReal`, `Eq`, `EuclideanSpace.basisFun`, `RCLike`, `Set`, `MeasurableSet`, `LinearMap.range`, `Ne`, `ENNReal.toReal`, `FiniteDimensional`, `LinearMap`, `LinearIsometryEquiv`, `LinearMap.comp`, `OrthonormalBasis`, `Fin.lastCases`, `LinearIsometry.toContinuousLinearMap`, `LinearIsometryEquiv.toLinearIsometry`, `Submodule.reflection`, `iSup`, `ENNReal.ofReal`, `LinearIsometry`, `LinearMap.mkContinuous`, `cfc`, `abs`, `Real.tan`, `WithLp`, `Prod`, `Set.ofPred`, `Finset.sum`, `Finset.univ`, `RCLike.ofReal`, `starRingEnd`, `InnerProductSpace.rankOne`, `AddCommGroup`, `Module`, `Module.ofMinimalAxioms`, `NormedSpace`, `Real.arcsin`, `SMul`, `Submodule.starProjection`, `MeasureTheory.Measure`, `MeasureTheory.IsFiniteMeasure`, `Complex.ofReal`, `Set.univ`, `MeasurableSet.univ`, `ContinuousLinearMap.id`, `MeasurableSet.inter`, `IsStarNormal`, `Set.Elem`, `spectrum`, `Measurable`, `Complex.I`, `Algebra`, `IsScalarTower`, `ContinuousFunctionalCalculus`, `CFC.sqrt`, `ContinuousLinearMap.instStarOrderedRingRCLike`, `ContinuousLinearMap.comp`, `ContinuousLinearMap.adjoint`, `Set.indicator`, `Set.preimage`, `MeasureTheory.Measure.map`, `NontriviallyNormedField`, `Exists.choose`, `SeminormedAddCommGroup`, `iInf`, `Cardinal`, `LinearMap.rank`, `Nat.cast`, `RealRMK.rieszMeasure`, `Exists`, `StrongDual`, `LinearIsometryEquiv.symm`, `InnerProductSpace.toDual`, `PositiveLinearMap`, `CompactlySupportedContinuousMap`, `StarAlgHom`, `ContinuousMap`, `cfcHom`, `RingHom`, `TopologicalSpace`, `MeasureTheory.integral`
 
 <details><summary>Statement closure tree</summary>
 
 ~~~~text
-TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real  (theorem, DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:515)
-    TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real.{u} {E : Type u}
+TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real  (theorem, DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:515)
+    TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real.{u} {E : Type u}
       [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-      (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ.[ℝ] E} {B : E →L[ℝ] E}
+      (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {A : E →ₗ.[ℝ] E} {B : E →L[ℝ] E}
       {a b c : ℝ} (V : Submodule ℝ E) [V.HasOrthogonalProjection] (hA : IsSelfAdjoint A)
       (hBsa : IsSelfAdjoint B)
       (hB : TauCeti.IsOddFor (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯) B)
@@ -5828,12 +5828,12 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real  (theorem,
               (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
                 (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) ⋯) V) ≤
           2 * N.gauge B
-    hash: expr=300124182 text=dc3d73d9a82feaaf
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
-      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
+    hash: expr=2282470164 text=81828007b92d34da
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (structure, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:47)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction : Type
+      field finiteNorm : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction → (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
+      field normalized : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction), ((self.finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1
+      field zero_pad : ∀ (self : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) {n : ℕ} (x : Fin n → ℝ), (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ) (TauCeti.DavisKahan.ExactSinTheta.zeroPad x) = (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
       hash: expr=3931117990 text=baaddf70fb5d432b
     [body] TauCeti.UnitarilyInvariantSeminorm  (structure, ForTauCeti/Analysis/InnerProductSpace/UnitarilyInvariantSeminorm.lean:251)
         TauCeti.UnitarilyInvariantSeminorm.{u_3, u_4} (𝕜 : Type u_3) (E : Type u_4) [RCLike 𝕜]
@@ -5854,8 +5854,8 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real  (theorem,
           TauCeti.diagOp.{u_1, u_2} {𝕜 : Type u_1} {E : Type u_2} [RCLike 𝕜] [NormedAddCommGroup E]
             [InnerProductSpace 𝕜 E] {n : ℕ} (b : OrthonormalBasis (Fin n) 𝕜 E) (x : Fin n → ℝ) : E →ₗ[𝕜] E
           hash: expr=4166364711 text=47942ef11e9bbfe7
-    [body] TauCeti.DavisKahan.ExactSinTheta.paperZeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
-        TauCeti.DavisKahan.ExactSinTheta.paperZeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
+    [body] TauCeti.DavisKahan.ExactSinTheta.zeroPad  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:43)
+        TauCeti.DavisKahan.ExactSinTheta.zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ
         hash: expr=135628739 text=485d6568d5290806
   [type] TauCeti.IsOddFor  (def, ForTauCeti/Analysis/InnerProductSpace/DoubleAngle/UnboundedReflection.lean:76)
       TauCeti.IsOddFor.{u_1, u_2} {𝕜 : Type u_1} {H : Type u_2} [RCLike 𝕜] [NormedAddCommGroup H]
@@ -6105,35 +6105,35 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real  (theorem,
           [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
           E →L[𝕜] E
         hash: expr=3177136020 text=e88d9a7941fbe63e
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:102)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Mem.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : Prop
-      hash: expr=2006409429 text=bbcbd1a47e6bf933
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
-        TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge.{u, v} {𝕜 : Type u}
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : Prop
+      hash: expr=1327221734 text=dc252aae0969961d
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:92)
+        TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge.{u, v} {𝕜 : Type u}
           [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
           [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-          (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ENNReal
-        hash: expr=3083291847 text=e37577a80f7b2392
-      [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-      [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
-          TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge.{u, v} {𝕜 : Type u}
-            [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+          (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ENNReal
+        hash: expr=3870263571 text=019df4fe0eed0f53
+      [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+      [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:83)
+          TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.prefixGauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+            {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
             [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-            (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (A : E →L[𝕜] F) : ℝ
-          hash: expr=4007958677 text=568e250b69fbf2e3
-        [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteGauge
-              (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (n : ℕ) (x : Fin n → ℝ) : ℝ
-            hash: expr=2994778623 text=2bba8413315209ad
-          [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
+            (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (A : E →L[𝕜] F) : ℝ
+          hash: expr=3234483192 text=78b88ec54f5dc4a2
+        [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:68)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.finiteGauge
+              (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (n : ℕ) (x : Fin n → ℝ) : ℝ
+            hash: expr=1989020631 text=8bff7666e96d3c25
+          [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
           [body] TauCeti.UnitarilyInvariantSeminorm.gauge  (above)
-        [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
-            TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.approximationPrefix.{u, v} {𝕜 : Type u}
+        [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:73)
+            TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.approximationPrefix.{u, v} {𝕜 : Type u}
               [RCLike 𝕜] {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
               [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F] (n : ℕ) (A : E →L[𝕜] F) :
               Fin n → ℝ
@@ -6184,14 +6184,14 @@ TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real  (theorem,
       [type] TauCeti.RealComplexification  (above)
       [body] TauCeti.RealComplexification.re  (above)
       [body] TauCeti.RealComplexification.im  (above)
-  [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
-      TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
+  [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge  (def, DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/UnitaryInvariantNorm.lean:112)
+      TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.gauge.{u, v} {𝕜 : Type u} [RCLike 𝕜]
         {E F : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
         [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-        (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →L[𝕜] F) : ℝ
-      hash: expr=3886363529 text=c5190f6d34740613
-    [type] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm  (above)
-    [body] TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.extendedGauge  (above)
+        (N : TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction) (A : E →L[𝕜] F) : ℝ
+      hash: expr=1680327561 text=57303bb0d50c9d09
+    [type] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction  (above)
+    [body] TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.extendedGauge  (above)
 
 56 project constant(s) unfolded, 7 project leaf/leaves, 102 boundary constant(s), 340 instance/projection constant(s)
 boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap, RingHom.id, ContinuousLinearMap, Submodule, Submodule.HasOrthogonalProjection, IsSelfAdjoint, Set.Iic, measurableSet_Iic, Subtype, LinearPMap.toFun', Nat, Submodule.orthogonal, And, Complex, EuclideanSpace, Fin, ENNReal, Eq, EuclideanSpace.basisFun, RCLike, Set, MeasurableSet, LinearMap.range, Ne, ENNReal.toReal, FiniteDimensional, LinearMap, LinearIsometryEquiv, LinearMap.comp, OrthonormalBasis, Fin.lastCases, LinearIsometry.toContinuousLinearMap, LinearIsometryEquiv.toLinearIsometry, Submodule.reflection, iSup, ENNReal.ofReal, LinearIsometry, LinearMap.mkContinuous, cfc, abs, Real.tan, WithLp, Prod, Set.ofPred, Finset.sum, Finset.univ, RCLike.ofReal, starRingEnd, InnerProductSpace.rankOne, AddCommGroup, Module, Module.ofMinimalAxioms, NormedSpace, Real.arcsin, SMul, Submodule.starProjection, MeasureTheory.Measure, MeasureTheory.IsFiniteMeasure, Complex.ofReal, Set.univ, MeasurableSet.univ, ContinuousLinearMap.id, MeasurableSet.inter, IsStarNormal, Set.Elem, spectrum, Measurable, Complex.I, Algebra, IsScalarTower, ContinuousFunctionalCalculus, CFC.sqrt, ContinuousLinearMap.instStarOrderedRingRCLike, ContinuousLinearMap.comp, ContinuousLinearMap.adjoint, Set.indicator, Set.preimage, MeasureTheory.Measure.map, NontriviallyNormedField, Exists.choose, SeminormedAddCommGroup, iInf, Cardinal, LinearMap.rank, Nat.cast, RealRMK.rieszMeasure, Exists, StrongDual, LinearIsometryEquiv.symm, InnerProductSpace.toDual, PositiveLinearMap, CompactlySupportedContinuousMap, StarAlgHom, ContinuousMap, cfcHom, RingHom, TopologicalSpace, MeasureTheory.integral
@@ -6201,19 +6201,19 @@ boundary: NormedAddCommGroup, InnerProductSpace, Real, CompleteSpace, LinearPMap
 
 ### Supporting scope declarations
 
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real` — elaborated; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real` — elaborated; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike` — elaborated; source located
 
 ### Local semantic dictionary
 
-#### `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm`
+#### `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction`
 
-The literal source unitary-invariant norm; tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike is already generic over RCLike 𝕜 at this norm scope.
+The literal source unitary-invariant norm; tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike is already generic over RCLike 𝕜 at this norm scope.
 
 #### `TauCeti.DavisKahanTheory.absDoubleAngleTangent`
 
@@ -6235,16 +6235,16 @@ The projector-difference factor used to build the source-shaped directed tan(2 T
 
 | source clause | Lean realization | status |
 | --- | --- | --- |
-| The scalar field is real or complex. | tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike is an alias of the already proved branch-free theorem quantified over 𝕜 with [RCLike 𝕜] and the literal PaperUnitaryInvariantNorm. | claimed_exact |
+| The scalar field is real or complex. | tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike is an alias of the already proved branch-free theorem quantified over 𝕜 with [RCLike 𝕜] and the literal SymmetricNormingFunction. | claimed_exact |
 | A has an ordered block gap and H is fully off diagonal. | The generic theorem writes the form bounds hUb/hUa and the two literal off-diagonal mapping hypotheses hHU/hHUperp directly; no named gap or oddness predicate hides them. | claimed_exact |
 | The perturbed invariant subspace is arbitrary and no independent tan(2 Theta) pole hypothesis is assumed. | The generic theorem describes the invariant perturbed graph by hTmem, hTzero and hinv and uses the branch-free absDoubleAngleTangent singular values; it has no T<1, IsQuarterAcute, or cos(2 theta) premise. | claimed_exact |
-| delta \|\|tan(2 Theta)\|\| <= 2 \|\|H\|\|. | With delta = b-a, tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike concludes (b-a) * N.gauge tanTwoTheta <= 2 * N.gauge H for every source norm. | claimed_exact |
+| delta \|\|tan(2 Theta)\|\| <= 2 \|\|H\|\|. | With delta = b-a, tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike concludes (b-a) * N.gauge tanTwoTheta <= 2 * N.gauge H for every source norm. | claimed_exact |
 | delta \|\|tan(2 Theta0)\|\| <= 2 \|\|R\|\| in the source-shaped U,V corner notation. | The second canonical declaration gives the literal compression-spectrum/off-diagonal directed-corner theorem with no caller-supplied pole certificate. | claimed_exact |
 | Infinite-dimensional/unbounded scope. | The generic branch-free canonical theorem removes ambient finite-dimensionality but still assumes a finite-dimensional graph base U; the full arbitrary-dimensional and unbounded real/complex endpoints remain compiler-checked supporting declarations. | scope_companion |
 
 **Review note.** Unlike tan Theta and sin 2Theta, the branch-free tan 2Theta paper-norm theorem was already scalar-generic. The review now promotes it to the canonical headline name. Its generic proof is necessarily graph-coordinate shaped, so the source-shaped U,V directed-corner theorem remains canonical alongside it and the report prints absDoubleAngleTangent/approximationSingularValue context explicitly. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.
 
-2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.
+2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 

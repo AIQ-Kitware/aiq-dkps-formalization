@@ -45,7 +45,7 @@ allowed a defect of that kind to pass unnoticed.
 conclusion `delta ||sin 2Theta|| <= 2 ||H||` had no witness at the row's own
 unbounded scope; the only paper-norm ambient endpoints took bounded ambient
 operators.  *Repaired* by
-`sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` and its real
+`sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` and its real
 sibling, proved in this pass.  This is a mathematical repair, not a registration
 repair.
 
@@ -54,7 +54,7 @@ Corollary 4.1, Proposition 4.3, Theorem 5.2 and Theorem 6.3 are printed "for
 every unitary-invariant norm"; their canonical witnesses quantified over
 `KyFanDominantIdealFamily`, an implementation abstraction.  That is a genuine
 theorem and a different quantifier.  *Repaired* by
-`paperUINorm_of_kyFanDominant` -- Fan dominance, instantiating at the finite Ky
+`symmetricNorming_of_kyFanDominant` -- Fan dominance, instantiating at the finite Ky
 Fan gauges, which are themselves such families -- and six new paper-norm
 endpoints derived through it.  The ideal-gauge forms are retained as supporting
 evidence: they are stronger in their own quantifier.
@@ -63,7 +63,7 @@ evidence: they are stronger in their own quantifier.
 returned `exists tanTheta0, ...` *inside* the ideal quantifier, so the
 representative could differ from ideal to ideal and the statement could not be
 promoted to one arbitrary norm.  *Repaired* by using the parameterized
-paper-norm endpoints `tanTheta_directed_unboundedTrial_paperUINorm_complex` and
+paper-norm endpoints `tanTheta_directed_unboundedTrial_symmetricNorming_complex` and
 `..._real`, whose representative is a parameter characterized by its
 approximation numbers.  (Those two were themselves replaced later the same day
 as the `S2-tan-theta` directed witnesses -- see F9 -- but they remain Theorem
@@ -142,7 +142,7 @@ all -- the only scope atom on any Section 2 row that carried none.
 ### F9 — `S2-tan-theta`, directed clause, both fields
 
 The registered primaries were
-`tanTheta_directed_unboundedTrial_paperUINorm_{complex,real}`.  They take
+`tanTheta_directed_unboundedTrial_symmetricNorming_{complex,real}`.  They take
 
 ```lean
 TanTheta.UnboundedTrialBlock A Z   -- with   operator : Z →L[𝕜] Z
@@ -157,7 +157,7 @@ real unboundedCompression **ambient** endpoints" -- and then the row-level prose
 said the directed conclusion was "closed at full source scope".  Nothing checked
 the directed half against the atom it was credited with.
 
-*Repaired* by `tanTheta_directed_unboundedRitz_paperUINorm_{complex,real}`,
+*Repaired* by `tanTheta_directed_unboundedRitz_symmetricNorming_{complex,real}`,
 which take `DavisKahan.UnboundedRitzPair A Z` -- whose
 `trial.compression : Z →ₗ.[𝕜] Z` is a densely defined self-adjoint **partial
 map** -- together with `ReducingComplement A V`, in the same vocabulary the
@@ -188,12 +188,12 @@ obligation.  Measured against the actual compiler-printed types:
 
 | declaration | ambient `→ₗ.` | residual `→L` | Appendix scope |
 |---|---|---|---|
-| `tanTheta_directed_unboundedRitz_paperUINorm_complex` | yes | yes | **PASS** |
-| `tanTheta_directed_unboundedRitz_paperUINorm_real` | yes | yes | **PASS** |
-| `tanTheta_directed_unboundedTrial_paperUINorm_complex` | yes | yes | **FAIL** |
-| `tanTheta_directed_unboundedTrial_paperUINorm_real` | yes | yes | **FAIL** |
-| `tanTheta_ambient_unboundedRitz_paperUINorm_complex` | yes | yes | **PASS** |
-| `tanTheta_ambient_unboundedRitz_paperUINorm_real` | yes | yes | **PASS** |
+| `tanTheta_directed_unboundedRitz_symmetricNorming_complex` | yes | yes | **PASS** |
+| `tanTheta_directed_unboundedRitz_symmetricNorming_real` | yes | yes | **PASS** |
+| `tanTheta_directed_unboundedTrial_symmetricNorming_complex` | yes | yes | **FAIL** |
+| `tanTheta_directed_unboundedTrial_symmetricNorming_real` | yes | yes | **FAIL** |
+| `tanTheta_ambient_unboundedRitz_symmetricNorming_complex` | yes | yes | **PASS** |
+| `tanTheta_ambient_unboundedRitz_symmetricNorming_real` | yes | yes | **PASS** |
 
 The two `FAIL` rows are the point: they satisfy both older axes.  A single
 generic `unbounded` token would have called them compliant, which is what
@@ -272,7 +272,7 @@ so that it is challengeable rather than invisible:
    framework rather than a proved-scope extension of any theorem.  A reviewer may
    disagree with that classification; it is recorded, not silent.  A strictly
    more general **ambient** `sin 2Θ` theorem does already exist in the tree,
-   `sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`, at arbitrary
+   `sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming`, at arbitrary
    reducing `U` and `V`; it is not the registered canonical witness because the
    registered one concludes on the paper's `sin 2Θ` angle operator directly.
 
@@ -297,8 +297,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `directed.complex` | complex | `S2-sin-theta.directed-conclusion` | `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex` | **PASS** |
-  | `directed.real` | real | `S2-sin-theta.directed-conclusion` | `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real` | **PASS** |
+  | `directed.complex` | complex | `S2-sin-theta.directed-conclusion` | `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex` | **PASS** |
+  | `directed.real` | real | `S2-sin-theta.directed-conclusion` | `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `S2-sin-theta.ui-norm-scope`, `S2-sin-theta.gap-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 
@@ -310,10 +310,10 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `ambient.complex` | complex | `S2-tan-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex` | **PASS** |
-  | `ambient.real` | real | `S2-tan-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real` | **PASS** |
-  | `directed.complex` | complex | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex` | **PASS** (F9) |
-  | `directed.real` | real | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real` | **PASS** (F9) |
+  | `ambient.complex` | complex | `S2-tan-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_complex` | **PASS** |
+  | `ambient.real` | real | `S2-tan-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_symmetricNorming_real` | **PASS** |
+  | `directed.complex` | complex | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_complex` | **PASS** (F9) |
+  | `directed.real` | real | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_symmetricNorming_real` | **PASS** (F9) |
 
 - Result-wide scope atoms carried by every clause's own primary: `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
 
@@ -325,10 +325,10 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `directed.residual.complex` | complex | `S2-sin-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` | **PASS** |
-  | `directed.residual.real` | real | `S2-sin-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real` | **PASS** |
-  | `ambient.complex` | complex | `S2-sin-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` | **PASS** |
-  | `ambient.real` | real | `S2-sin-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real` | **PASS** |
+  | `directed.residual.complex` | complex | `S2-sin-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` | **PASS** |
+  | `directed.residual.real` | real | `S2-sin-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` | **PASS** |
+  | `ambient.complex` | complex | `S2-sin-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` | **PASS** |
+  | `ambient.real` | real | `S2-sin-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real` | **PASS** |
 
 - Correspondence lemmas registered: `TauCeti.DavisKahan.mem_sinTwoAngleOperatorC_iff`, `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorC`, `TauCeti.DavisKahan.sinTwoThetaIdealBlock_hasSameApproximationNumbers`, `TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff`, `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC`
 - Result-wide scope atoms carried by every clause's own primary: `S2-sin-theta.ui-norm-scope`, `S2-sin-two-theta.gap-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
@@ -341,10 +341,10 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `directed.complex` | complex | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` | **PASS** |
-  | `directed.real` | real | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real` | **PASS** |
-  | `ambient.complex` | complex | `S2-tan-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex` | **PASS** |
-  | `ambient.real` | real | `S2-tan-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real` | **PASS** |
+  | `directed.complex` | complex | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` | **PASS** |
+  | `directed.real` | real | `S2-tan-two-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` | **PASS** |
+  | `ambient.complex` | complex | `S2-tan-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex` | **PASS** |
+  | `ambient.real` | real | `S2-tan-two-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
 
@@ -468,8 +468,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `ui-minimality-on-p.complex` | complex | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_paperUINorm_complex` | **PASS** |
-  | `ui-minimality-on-p.real` | real | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_paperUINorm_real` | **PASS** |
+  | `ui-minimality-on-p.complex` | complex | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_complex` | **PASS** |
+  | `ui-minimality-on-p.real` | real | `DK-4.1-cor.ui-minimality-on-p` | `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_symmetricNorming_real` | **PASS** |
 
 
 ### `DK-4.2-prop` — Basis-angle square-sum extremality
@@ -492,8 +492,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `squared-displacement-global-minimum.complex` | complex | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_paperUINorm_complex` | **PASS** |
-  | `squared-displacement-global-minimum.real` | real | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_paperUINorm_real` | **PASS** |
+  | `squared-displacement-global-minimum.complex` | complex | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_complex` | **PASS** |
+  | `squared-displacement-global-minimum.real` | real | `DK-4.3-prop.squared-displacement-global-minimum` | `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_symmetricNorming_real` | **PASS** |
 
 
 ### `DK-4.4-prop` — Full-displacement counterexamples and Proposition 4.4 as printed
@@ -529,8 +529,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `hilbert-unbounded-conclusion.complex` | complex | `DK-5.2-thm.hilbert-unbounded-conclusion` | `TauCeti.DavisKahan1970.theorem5_2_paperUINorm_complex` | **PASS** |
-  | `hilbert-unbounded-conclusion.real` | real | `DK-5.2-thm.hilbert-unbounded-conclusion` | `TauCeti.DavisKahan1970.theorem5_2_paperUINorm_real` | **PASS** |
+  | `hilbert-unbounded-conclusion.complex` | complex | `DK-5.2-thm.hilbert-unbounded-conclusion` | `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_complex` | **PASS** |
+  | `hilbert-unbounded-conclusion.real` | real | `DK-5.2-thm.hilbert-unbounded-conclusion` | `TauCeti.DavisKahan1970.theorem5_2_symmetricNorming_real` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-5.2-thm.hilbert-unbounded-hypotheses`
 
@@ -616,8 +616,8 @@ angle scope, with no clause open.
 
   | clause | field | conclusion atom(s) | canonical witness | disposition |
   |---|---|---|---|---|
-  | `generalized-tangent-theorem.complex` | complex | `DK-6.3-thm.generalized-tangent-theorem` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex` | **PASS** |
-  | `generalized-tangent-theorem.real` | real | `DK-6.3-thm.generalized-tangent-theorem` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real` | **PASS** |
+  | `generalized-tangent-theorem.complex` | complex | `DK-6.3-thm.generalized-tangent-theorem` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_complex` | **PASS** |
+  | `generalized-tangent-theorem.real` | real | `DK-6.3-thm.generalized-tangent-theorem` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_symmetricNorming_real` | **PASS** |
 
 
 ### `DK-6.3-lem` — Finite-rank near-maximizer leakage estimate
@@ -669,10 +669,10 @@ angle scope, with no clause open.
   |---|---|---|---|---|
   | `acute-branch-conclusion.complex` | complex | `DK-8.2-thm.acute-branch-conclusion` | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` | **PASS** |
   | `acute-branch-conclusion.real` | real | `DK-8.2-thm.acute-branch-conclusion` | `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects` | **PASS** |
-  | `double-angle-bound-retained.complex` | complex | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm` | **PASS** |
-  | `double-angle-bound-retained.complex.2` | complex | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm` | **PASS** |
-  | `double-angle-bound-retained.real` | real | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm` | **PASS** |
-  | `double-angle-bound-retained.real.2` | real | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_paperUINorm` | **PASS** |
+  | `double-angle-bound-retained.complex` | complex | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming` | **PASS** |
+  | `double-angle-bound-retained.complex.2` | complex | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming` | **PASS** |
+  | `double-angle-bound-retained.real` | real | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming` | **PASS** |
+  | `double-angle-bound-retained.real.2` | real | `DK-8.2-thm.double-angle-bound-retained` | `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming` | **PASS** |
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-8.2-thm.smallness-alternative`, `S3-standing-scope.crossed-dimension-standing-assumption`
 
@@ -745,3 +745,40 @@ aₙ(sin 2Θ) = sin (2 arcsin aₙ(sin Θ)).
 `t ↦ sin 2t` is not a Möbius map, so the two Gram estimates do not reach it; it
 needs either the monotone functional-calculus transfer in general or an argument
 specific to the doubled angle.
+
+
+## Fourth pass: the norm-abstraction rename, accepted 2026-09-01
+
+The source-facing norm class was renamed from `PaperUnitaryInvariantNorm` to
+`SymmetricNormingFunction`, its axiomatic presentation from
+`PaperSymmetricNormingFunction` to `SymmetricNormingFunction.Axiomatic`, and the
+`_paperUINorm` norm-scope token to `_symmetricNorming`.  The witness tables above
+name the current declarations; the narrative around them is unchanged, because
+every declaration it discusses still exists under its new name.
+
+This pass was reviewed independently against `6ce4088 → a905bd4` and **accepted**.
+What the comparison found:
+
+* all 29 result IDs unchanged;
+* exactly **9** canonical-evidence rows changed, and **30** canonical witness
+  declarations renamed;
+* after applying the intended `PaperUnitaryInvariantNorm → SymmetricNormingFunction`
+  and `_paperUINorm → _symmetricNorming` substitutions, all 30 theorem signatures
+  are identical;
+* no canonical-evidence `role`, `scalar_scope`, `evidence_kind`,
+  `covers_source_atoms` or `capability_classes` changed;
+* the 274 source atoms are structurally identical after inverse substitution;
+* the canonical three-field norm structure is unchanged apart from naming
+  (`paperZeroPad → zeroPad`), and the ten-field axiomatic presentation apart from
+  naming and nesting;
+* all four Palomar theorem statements are unchanged apart from the norm type name;
+* all 16 pinned Section 2 declaration source signatures are rename-only.  The two
+  `sinTwoTheta_directed_unboundedResidual_blockRepresentative_*` pins whose stored
+  hashes were *already* stale before the rename were checked separately: their
+  actual source signatures are rename-only too.
+
+The accepted canonical-evidence digest is
+`c977a802c49447103ae1492ff864b10f3728f11b45413e126565bfd4f8be1e52`.
+
+**No result disposition and no source-fidelity judgement changed.**  This is a
+naming pass; it does not reopen any of the 29 result judgements recorded above.

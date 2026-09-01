@@ -4534,7 +4534,7 @@
     "terminal_results": 29,
     "remaining_results": [],
     "note": " The previous note recorded the 2026-08-31 reopening of `S2-sin-two-theta` and its repair; that history is now in the human report together with the seven further findings of the same day's result-by-result review.  The second 2026-08-31 pass changed canonical evidence for `S2-tan-theta` only: the directed primaries are now the Appendix-scope `tanTheta_directed_unboundedRitz_symmetricNorming_{complex,real}`.",
-    "canonical_evidence_sha256": "3449a8b5031d7fc09f15574a6213ccb8926c548bf73cf49faff084d26c874b95"
+    "canonical_evidence_sha256": "c977a802c49447103ae1492ff864b10f3728f11b45413e126565bfd4f8be1e52"
   },
   "section_two_short_names": {
     "purpose": "The four unqualified `TauCeti.DavisKahan1970.SectionTwo.*` names, and what each is bound to. A short name is bound only to a declaration that is scalar-generic over `RCLike` AND at the printed source scope; `null` means deliberately unbound. This is the single owner of that fact: `check_davis_kahan_1970_result_inventory.py` reads `SectionTwo.lean`'s own `alias` lines and fails if they disagree.",
