@@ -37,6 +37,9 @@ SPEC.loader.exec_module(M)
 
 UNBOUNDED = "→ₗ.["
 PAPER_NORM = "PaperUnitaryInvariantNorm"
+# The carriers that separate the ambient-operator axis from the compression axis.
+RITZ_PAIR = "UnboundedRitzPair"      # `trial.compression : Z →ₗ.[𝕜] Z`
+TRIAL_BLOCK = "UnboundedTrialBlock"  # `operator : Z →L[𝕜] Z` -- BOUNDED
 
 
 def atoms() -> dict[str, dict]:
@@ -55,6 +58,16 @@ def atoms() -> dict[str, dict]:
             "type_requirements": {"must_contain": [PAPER_NORM], "must_not_contain": []},
         },
         "R.ritz": {"kind": "hypothesis", "source_role": "mathematical_assertion"},
+        # The THIRD unbounded axis: the trial/Ritz COMPRESSION may itself be unbounded.
+        # Distinct from `R.unbounded`, which is only about the ambient operator.
+        "R.unbounded_compression": {
+            "kind": "scope",
+            "source_role": "mathematical_assertion",
+            "type_requirements": {
+                "must_contain": [RITZ_PAIR],
+                "must_not_contain": [TRIAL_BLOCK],
+            },
+        },
         "R.lemma": {"kind": "lemma", "source_role": "mathematical_assertion"},
         "R.halfinfinite": {
             "kind": "scope",
@@ -352,6 +365,67 @@ class CoherentEvidenceTest(unittest.TestCase):
         message = run(item, printed)
         self.assertIsNotNone(message)
         self.assertIn("do not occur in the compiler-printed type", message)
+
+    # ---- the unbounded-compression axis, found by the 2026-08-31 Palomar audit ----
+
+    def test_rejects_a_bounded_compression_under_an_unbounded_ambient_operator(self) -> None:
+        """THE REGRESSION.  `unbounded ambient A` + `bounded A_0` is not `A_0 may be unbounded`.
+
+        This is what the certificate accepted for the `S2-tan-theta` directed clause.  Its
+        primaries took a `TanTheta.UnboundedTrialBlock`, whose Ritz compression
+        `operator : Z ->L Z` is bounded and everywhere defined; the bundle's *name* records
+        only that the ambient operator is unbounded.  The witness satisfied the
+        ambient-unbounded axis and the bounded-residual axis, and the Appendix scope atom
+        carried no requirement at all, so nothing objected.
+        """
+        printed = {
+            "thm.directed.c": (
+                f"(N : {PAPER_NORM}) (A : H {UNBOUNDED}\u2102] H) "
+                f"(D : {TRIAL_BLOCK} A Z) (R : Z \u2192L[\u2102] H) : directed"
+            ),
+            "thm.directed.r": (
+                f"(N : {PAPER_NORM}) (A : E {UNBOUNDED}\u211d] E) "
+                f"(D : {TRIAL_BLOCK} A Z) (R : Z \u2192L[\u211d] E) : directed"
+            ),
+        }
+        item = result(
+            [
+                clause("directed.complex", ["R.directed"], "complex", "thm.directed.c"),
+                clause("directed.real", ["R.directed"], "real", "thm.directed.r"),
+            ],
+            wide=("R.unbounded", "R.uinorm", "R.unbounded_compression"),
+            decls=["thm.directed.c", "thm.directed.r"],
+            atom_ids=["R.directed", "R.unbounded", "R.uinorm", "R.unbounded_compression"],
+        )
+        message = run(item, printed)
+        self.assertIsNotNone(
+            message, "a bounded Ritz compression satisfied the unbounded-compression scope"
+        )
+        self.assertIn("R.unbounded_compression", message)
+        self.assertIn(TRIAL_BLOCK, message)
+
+    def test_accepts_a_genuinely_unbounded_compression(self) -> None:
+        """The positive side: an `UnboundedRitzPair` carries the Appendix scope."""
+        printed = {
+            "thm.directed.c": (
+                f"(N : {PAPER_NORM}) (A : H {UNBOUNDED}\u2102] H) "
+                f"(D : {RITZ_PAIR} A Z) (R : Z \u2192L[\u2102] H) : directed"
+            ),
+            "thm.directed.r": (
+                f"(N : {PAPER_NORM}) (A : E {UNBOUNDED}\u211d] E) "
+                f"(D : {RITZ_PAIR} A Z) (R : Z \u2192L[\u211d] E) : directed"
+            ),
+        }
+        item = result(
+            [
+                clause("directed.complex", ["R.directed"], "complex", "thm.directed.c"),
+                clause("directed.real", ["R.directed"], "real", "thm.directed.r"),
+            ],
+            wide=("R.unbounded", "R.uinorm", "R.unbounded_compression"),
+            decls=["thm.directed.c", "thm.directed.r"],
+            atom_ids=["R.directed", "R.unbounded", "R.uinorm", "R.unbounded_compression"],
+        )
+        self.assertIsNone(run(item, printed))
 
 
 if __name__ == "__main__":  # pragma: no cover

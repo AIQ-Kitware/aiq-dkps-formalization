@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1161
+**Unique cited Lean declarations:** 1163
 
 ## How to use this census
 
@@ -364,6 +364,10 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex`
 - `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real`
 - `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real`
+- `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
+- `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real`
 
 **Planned declarations:**
 
@@ -384,7 +388,7 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - delta * ||tan Theta|| <= ||H||.
 
 *Scope*
-- Every source unitary-invariant norm; finite/infinite dimensional and real/complex scope, with the appendix unbounded extension when the residual/perturbation is bounded.
+- Every source unitary-invariant norm; finite/infinite dimensional and real/complex scope, with the appendix unbounded extension when the residual/perturbation is bounded.  The Appendix's tangent extension is specifically that BOTH A0 and Lambda1 may be unbounded, so the canonical directed and ambient witnesses must both carry a Ritz compression that is itself a densely defined partial map; a bounded compression under an unbounded ambient operator is a specialization, not this scope.
 
 | source clause | Lean realization | status |
 | --- | --- | --- |

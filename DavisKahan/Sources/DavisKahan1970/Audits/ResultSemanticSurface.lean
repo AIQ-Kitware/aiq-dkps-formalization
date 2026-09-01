@@ -139,9 +139,13 @@ than (3.5); they are registered as specializations, not as the source-shaped for
 #check @TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real
 #check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal
+#check @TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds
+#check @TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real
 #check @TauCeti.DavisKahan.UnboundedRitzPair
 #check @TauCeti.DavisKahan.ReducingComplement
 #check @TauCeti.DavisKahan.UnboundedRitzPair.ofTrialBlock
@@ -491,6 +495,8 @@ theorem serves every norm.  The existential ideal-gauge forms below select a
 representative per Ky Fan index and are supporting evidence.
 -/
 
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex
 #check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real
 #check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal
