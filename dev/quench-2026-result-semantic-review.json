@@ -75,7 +75,30 @@
         "inherited-acharyya-v1-norm",
         "theorem1-rate-not-instantiated"
       ],
-      "next_action": "Either generalize the rate theorem to a growing sample with an augmented target, or keep the divergence recorded; the capstones do not depend on the choice."
+      "next_action": "Either generalize the rate theorem to a growing sample with an augmented target, or keep the divergence recorded; the capstones do not depend on the choice.",
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.exists_isometry_configFrobError_spectralConfig_le",
+          "type_expr_hash": "1731088773",
+          "type_text_sha256": "70885d4787cd5bca5b9e56255b5de6411e474625f8ecb99bb981f77b3ff9eea4",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "Acharyya2025.RateChain.highProb_aligned_configFrobError_endToEndFrobRate",
+          "type_expr_hash": "3424988596",
+          "type_text_sha256": "a10fe4e4ad6f911f8a63beca24b3c7473440a794bae0ea4703cec6001975fc3e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "Acharyya2025.ConfigPerturbation.norm_config_le_ConfigFrobError",
+          "type_expr_hash": "4018734014",
+          "type_text_sha256": "6021b499825d93fb34f299f39d3d5662d790ff112f5f34097891b044b056270c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-EQ1",
@@ -118,7 +141,30 @@
         "dissimilarity-normalisation-mismatch",
         "dkps-definition-raw-stress-vs-cmds"
       ],
-      "next_action": "None; recorded as a source-fidelity divergence."
+      "next_action": "None; recorded as a source-fidelity divergence.",
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2024.rawStress",
+          "type_expr_hash": "2718416109",
+          "type_text_sha256": "088c46fd1aa1bfd0c3b5c943a9328dc9d58ce1f4bbf1557c576b65ca56321423",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "Acharyya2024.MDS",
+          "type_expr_hash": "1508648721",
+          "type_text_sha256": "4d626be994cd94ac4fb40f62c405a3ad76e607d86906b36b0942761b679e364b",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "Acharyya2025.AlignedPipeline.isHermitian_disMatToMatrix_classicalMDSMatrix_responseDist",
+          "type_expr_hash": "270442549",
+          "type_text_sha256": "cc1599d4f03b01c5ecad7a925b2b4d1b5ac96cacb6f1abcf4fff33ba16f812f9",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-QDEF",
@@ -167,7 +213,51 @@
       "review": "The deterministic source predicates and their high-probability analogues are explicit. The all-subset lift preserves the source quantifier order.",
       "notes": "No additional note.",
       "gap_refs": [],
-      "next_action": "None."
+      "next_action": "None.",
+      "statement_pins": [
+        {
+          "declaration": "QQueryEfficient",
+          "type_expr_hash": "439709518",
+          "type_text_sha256": "4a717cc5f9eb8d245f79e156f2df67251b43b6f57676012ec30fb6b5f77ec655",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "mQueryEfficient",
+          "type_expr_hash": "3978882786",
+          "type_text_sha256": "39bb1576a124ec9a10798c3c2c705785f476e01aa2e2a11a3dece1f39b3d8ad9",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "HighProbQQueryEfficient",
+          "type_expr_hash": "3475268689",
+          "type_text_sha256": "84c9a7d525727d750d0454d3f28f35aea366ec18726e12b151153dbcc73dbccd",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "HighProbMQueryEfficient",
+          "type_expr_hash": "3299762051",
+          "type_text_sha256": "50aea865473614d022690a5d3af1fa52f1a5e3089c18d52179cdb7b807128305",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "HighProbQueryEfficientBelow",
+          "type_expr_hash": "3299762051",
+          "type_text_sha256": "50aea865473614d022690a5d3af1fa52f1a5e3089c18d52179cdb7b807128305",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "HighProbQueryEfficient",
+          "type_expr_hash": "3082697833",
+          "type_text_sha256": "20488e204ee7b1d7467130a6568a21465fa4fc814a5eed31ca36e0290465f39d",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-NN",
@@ -210,7 +300,37 @@
       "gap_refs": [
         "tie-display-proof-mismatch"
       ],
-      "next_action": "None."
+      "next_action": "None.",
+      "statement_pins": [
+        {
+          "declaration": "yNN_paper",
+          "type_expr_hash": "1499370246",
+          "type_text_sha256": "8c88439b084228365dbeb1830b959556d84ea578ae2630ea00ed9aad6a970de3",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "tieAverageNN",
+          "type_expr_hash": "1178661615",
+          "type_text_sha256": "d0c7e51fbbc319c37618d4d3c1d8846cba23e16cf2187f7d613006fce7bba070",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "yNNTieAverage_paper",
+          "type_expr_hash": "387699283",
+          "type_text_sha256": "a1424a8722533aa1d1cc3e389babd0c6a77be67cd20ef1aa4d1218138196e15c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "hNNTieAverage",
+          "type_expr_hash": "2643428071",
+          "type_text_sha256": "cf62456488b2d5525823443cbf409458e9cfd8cf22aa6c95d5bbc00ebb4420dc",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-A1",
@@ -251,7 +371,23 @@
       "gap_refs": [
         "dissimilarity-normalisation-mismatch"
       ],
-      "next_action": "None."
+      "next_action": "None.",
+      "statement_pins": [
+        {
+          "declaration": "LipschitzScore",
+          "type_expr_hash": "868936744",
+          "type_text_sha256": "0f5470d9651db9583f81dc1445d668444695eb396486ed6a62889473330eadee",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.lipschitz_le_max_one",
+          "type_expr_hash": "2790693099",
+          "type_text_sha256": "bf98153b70d7b5e315e67a4ba808405dac7387adc77821215d4c92f15d03717b",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-A2",
@@ -300,7 +436,37 @@
       "gap_refs": [
         "support-wording-repair"
       ],
-      "next_action": "None."
+      "next_action": "None.",
+      "statement_pins": [
+        {
+          "declaration": "PerspectiveFullSupport",
+          "type_expr_hash": "905227151",
+          "type_text_sha256": "ac1c16d62e6806b75648dce12834cfaec32566b701c7e19ead7a54c07d74e76a",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "IIDReferenceSampler",
+          "type_expr_hash": "15968711",
+          "type_text_sha256": "6584aac22b1fe8aaae56f2ed17cadbb66f93f698922b666f549949b47806bd7d",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "coverageSubevents_of_compact_iid_fullSupport",
+          "type_expr_hash": "105125703",
+          "type_text_sha256": "06fdb7504e18dda7a98c835da1fe7a3817a858fa149cbc34a79e70e3cbbe1064",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "highProb_uniformCoverage_of_compact_iid_fullSupport",
+          "type_expr_hash": "3867677925",
+          "type_text_sha256": "ede1f028783829d8cab355a88c7e6bffe8615d81a39ad9d684bc5e94db32ecde",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-T2A",
@@ -390,7 +556,86 @@
         "theorem1-rate-not-instantiated",
         "tie-display-proof-mismatch"
       ],
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side."
+      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.",
+      "statement_pins": [
+        {
+          "declaration": "DkpsQuench2026.NetReplicateRate",
+          "type_expr_hash": "1855135052",
+          "type_text_sha256": "ea3ab76b4038912b354ef6ed81e3356f4c735bf8177ed11517d231886ffc0a5e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE",
+          "type_expr_hash": "3261695836",
+          "type_text_sha256": "9bfe5b34faf74f3c1a95ee50394a3b4291fc5b9a04bd752af87a045a4d9ae9ce",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE",
+          "type_expr_hash": "190981147",
+          "type_text_sha256": "b864a60bdc1cfe44d7e57eb29620bc8a3ea3a48225fd2dcad70a09f02cd1ca35",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.SourceReplicateRate",
+          "type_expr_hash": "2647906922",
+          "type_text_sha256": "13cc52744839cef3524015f285a90f56edf429b40934d6dee205f382168e429c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "highProbQQueryEfficient_tieAverage_of_compact_iid_fullSupport",
+          "type_expr_hash": "280604005",
+          "type_text_sha256": "e8393fd8e555c6970a0bb92edef9f37e13a746e01d9ea9299879c706d543d888",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "highProb_mse_nn_le",
+          "type_expr_hash": "186632104",
+          "type_text_sha256": "0c9717a09ac3c909821a7db548a9070fc484863b3e01e378b6688f30b03cc131",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "highProb_mse_nn_le_of_subevent",
+          "type_expr_hash": "1524675546",
+          "type_text_sha256": "18a0edaab1b2d64d46d531a49a60c4adce48389a98bbe82ba2fad3cd54fc0622",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "highProb_mse_tieAverage_of_subevents",
+          "type_expr_hash": "2764675694",
+          "type_text_sha256": "dcddb538433563bec2ed1b75e28d2ca7be1fac1ebe2e89e2a7257e0bfc8174b1",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "integrable_sqLoss_of_bounded",
+          "type_expr_hash": "1035880803",
+          "type_text_sha256": "d744a3e6b3bc20fd3753f8cf770e135acc5feca0c0d268e7d6ce8147661a5ffa",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "mse_le_one_of_unit_range",
+          "type_expr_hash": "3477588666",
+          "type_text_sha256": "62e718e3255232737619154f5879141a14aca2de7f8cb7da5d8f24eea347c3c3",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "radialTieAverage_mem_Icc",
+          "type_expr_hash": "413189078",
+          "type_text_sha256": "05daaafd5ed14c1ce68e803363ec798778892c84f7f040057ed776c9431ea6c1",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-T2B",
@@ -467,7 +712,86 @@
         "technical-assumptions-are-acharyya-1-and-2",
         "theorem1-rate-not-instantiated"
       ],
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side."
+      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.",
+      "statement_pins": [
+        {
+          "declaration": "DkpsQuench2026.NetReplicateRate",
+          "type_expr_hash": "1855135052",
+          "type_text_sha256": "ea3ab76b4038912b354ef6ed81e3356f4c735bf8177ed11517d231886ffc0a5e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.finiteAllQueries",
+          "type_expr_hash": "2810533127",
+          "type_text_sha256": "452cfb4470481313d1732b1b792084b144b8d1c901a7217031dc4bad1f16097f",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.finiteFixedSubset",
+          "type_expr_hash": "579838256",
+          "type_text_sha256": "a99e5351041692765082df4e9b1d6e26cebcc4e9a8450f26a7973ef928e6ffb0",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.infiniteAllQueries",
+          "type_expr_hash": "385862597",
+          "type_text_sha256": "827d3dd3f3feb4d0a1c7f7c50b52051cfb6295084549099d6587849918c3e19c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.infiniteFixedSubset",
+          "type_expr_hash": "2478579723",
+          "type_text_sha256": "4930e22d7ee8447fa976e8b22d0a3827ee0a862195fd4c9070e591347e4d038e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.SourceReplicateRate",
+          "type_expr_hash": "2647906922",
+          "type_text_sha256": "13cc52744839cef3524015f285a90f56edf429b40934d6dee205f382168e429c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "highProbMQueryEfficient_tieAverage_of_certificates",
+          "type_expr_hash": "7764170",
+          "type_text_sha256": "972eb221d8c17ab076ad138025cb0d603a4a7be563530dc8f608503836fe67cc",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "highProbQQueryEfficient_tieAverage_of_subevents",
+          "type_expr_hash": "1720040064",
+          "type_text_sha256": "5365d2e2460939562c62f751e0aa078dc14628bd53caa6917585fa14b1708d1b",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "highProbQueryEfficient_tieAverage_of_certificates",
+          "type_expr_hash": "1406520703",
+          "type_text_sha256": "d27f4ff74506232ec529dbc27bedeafb0ec2c4db722b7a5840ff4f2352533ae3",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "highProb_queryEfficient_nn",
+          "type_expr_hash": "3120590598",
+          "type_text_sha256": "896f8bea7199503975ab76a721ecf23287a3a3cdf68b62c5779da437b4975bcc",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "highProb_queryEfficient_nn_of_subevent",
+          "type_expr_hash": "2586371947",
+          "type_text_sha256": "d9f58f383a59e98fada5dbc45113cc159bfeff7baaa9782fad95161b5da42771",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-RAW-FIN",
@@ -522,7 +846,58 @@
         "technical-assumptions-are-acharyya-1-and-2",
         "theorem1-rate-not-instantiated"
       ],
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side."
+      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.",
+      "statement_pins": [
+        {
+          "declaration": "DkpsQuench2026.NetReplicateRate",
+          "type_expr_hash": "1855135052",
+          "type_text_sha256": "ea3ab76b4038912b354ef6ed81e3356f4c735bf8177ed11517d231886ffc0a5e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.FiniteSubsetAssumptions",
+          "type_expr_hash": "2976515841",
+          "type_text_sha256": "4e93eeb669f7615794c9dbd4b52690c186018b9d3135e06e6a6f129a1b4f585e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.FiniteSubsetData",
+          "type_expr_hash": "1162098204",
+          "type_text_sha256": "162e95950c9a24e626de519dbf27881d7b8a36b4ac690ede477d1e25391bddf6",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.finiteAllQueries",
+          "type_expr_hash": "2810533127",
+          "type_text_sha256": "452cfb4470481313d1732b1b792084b144b8d1c901a7217031dc4bad1f16097f",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.finiteFixedSubset",
+          "type_expr_hash": "579838256",
+          "type_text_sha256": "a99e5351041692765082df4e9b1d6e26cebcc4e9a8450f26a7973ef928e6ffb0",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.finiteFixedSubsetMSE",
+          "type_expr_hash": "3261695836",
+          "type_text_sha256": "9bfe5b34faf74f3c1a95ee50394a3b4291fc5b9a04bd752af87a045a4d9ae9ce",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.SourceReplicateRate",
+          "type_expr_hash": "2647906922",
+          "type_text_sha256": "13cc52744839cef3524015f285a90f56edf429b40934d6dee205f382168e429c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-RAW-INF",
@@ -571,7 +946,58 @@
         "technical-assumptions-are-acharyya-1-and-2",
         "theorem1-rate-not-instantiated"
       ],
-      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side."
+      "next_action": "Finite route: none, it runs at the source rate. Infinite route: remove the perspective net, which is the continuum treatment recorded on the Acharyya 2024 side.",
+      "statement_pins": [
+        {
+          "declaration": "DkpsQuench2026.NetReplicateRate",
+          "type_expr_hash": "1855135052",
+          "type_text_sha256": "ea3ab76b4038912b354ef6ed81e3356f4c735bf8177ed11517d231886ffc0a5e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.InfiniteSubsetAssumptions",
+          "type_expr_hash": "3031080959",
+          "type_text_sha256": "9775fc5a343ba3b4180f89a9d23e10eb100d1fef983c57bbdc6d2fc81f25161c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.InfiniteSubsetData",
+          "type_expr_hash": "1162098204",
+          "type_text_sha256": "162e95950c9a24e626de519dbf27881d7b8a36b4ac690ede477d1e25391bddf6",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.infiniteAllQueries",
+          "type_expr_hash": "385862597",
+          "type_text_sha256": "827d3dd3f3feb4d0a1c7f7c50b52051cfb6295084549099d6587849918c3e19c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.infiniteFixedSubset",
+          "type_expr_hash": "2478579723",
+          "type_text_sha256": "4930e22d7ee8447fa976e8b22d0a3827ee0a862195fd4c9070e591347e4d038e",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.QueryEfficiency.infiniteFixedSubsetMSE",
+          "type_expr_hash": "190981147",
+          "type_text_sha256": "b864a60bdc1cfe44d7e57eb29620bc8a3ea3a48225fd2dcad70a09f02cd1ca35",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.SourceReplicateRate",
+          "type_expr_hash": "2647906922",
+          "type_text_sha256": "13cc52744839cef3524015f285a90f56edf429b40934d6dee205f382168e429c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-OLS",
@@ -647,7 +1073,44 @@
       "gap_refs": [
         "unbounded-score-codomain"
       ],
-      "next_action": "None."
+      "next_action": "None.",
+      "statement_pins": [
+        {
+          "declaration": "integrable_sqLoss_of_bounded",
+          "type_expr_hash": "1035880803",
+          "type_text_sha256": "d744a3e6b3bc20fd3753f8cf770e135acc5feca0c0d268e7d6ce8147661a5ffa",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "mse_le_one_of_unit_range",
+          "type_expr_hash": "3477588666",
+          "type_text_sha256": "62e718e3255232737619154f5879141a14aca2de7f8cb7da5d8f24eea347c3c3",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "radialTieAverage_mem_Icc",
+          "type_expr_hash": "413189078",
+          "type_text_sha256": "05daaafd5ed14c1ce68e803363ec798778892c84f7f040057ed776c9431ea6c1",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "yFull",
+          "type_expr_hash": "2704891388",
+          "type_text_sha256": "aff74e6cc8d1f44d1290915578bd00448c8ec39cd76fa9ef322265da52bdbf5a",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "yQ",
+          "type_expr_hash": "2704891388",
+          "type_text_sha256": "aff74e6cc8d1f44d1290915578bd00448c8ec39cd76fa9ef322265da52bdbf5a",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-D",
@@ -698,7 +1161,44 @@
         "dissimilarity-normalisation-divergence",
         "dissimilarity-normalisation-mismatch"
       ],
-      "next_action": "None. The convention is adjudicated and its consequences are compiled."
+      "next_action": "None. The convention is adjudicated and its consequences are compiled.",
+      "statement_pins": [
+        {
+          "declaration": "Acharyya2024.responseDist",
+          "type_expr_hash": "1372540492",
+          "type_text_sha256": "697b011fd352f5ba93737d5faa17892cb19a02867f83a9478ead9bdfe5b0e332",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "Acharyya2024.responseDistEntry",
+          "type_expr_hash": "2624069128",
+          "type_text_sha256": "1e0f0f92bb1808a2b5b3a3c6a881dd93d7b05d6c8bce7cb015ae5493fdc5a650",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "DkpsQuench2026.augmentedSampleResponseDist",
+          "type_expr_hash": "1773516663",
+          "type_text_sha256": "f84591c44d931bc218cf1c8f208510ef687b77437452b1b639264966a307b30f",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "hNNTieAverage_smul",
+          "type_expr_hash": "1548539122",
+          "type_text_sha256": "7b4633134352871d7a18ccf23eba3b2800cea36ddcde0ac2d8f6bdc60dc7e304",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "nnMinimizers_smul",
+          "type_expr_hash": "3050102474",
+          "type_text_sha256": "e6c74d2d9b49da7209e9e2af44339a9e55044cf8b8decb9606ef4e900079900a",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     },
     {
       "id": "Q26-INFER",
@@ -731,7 +1231,23 @@
       "review": "Risk is the expected loss over Pf and MSE its squared-loss instance. Lean composes the decision function with the perspective map directly at each use site rather than naming h_n^Q, which is the same object with the composition inlined.",
       "notes": "No additional note.",
       "gap_refs": [],
-      "next_action": "None."
+      "next_action": "None.",
+      "statement_pins": [
+        {
+          "declaration": "Risk",
+          "type_expr_hash": "203843477",
+          "type_text_sha256": "ba3459aa97dddc51d02b04a7ca5314d61ad8a8af420f5dff2a5d55694503582b",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        },
+        {
+          "declaration": "MSE",
+          "type_expr_hash": "1665247011",
+          "type_text_sha256": "af6423b2cdc45b8d2840b274f187f8742a9f32ff7a1cb6fa7df7cc948e05b73c",
+          "toolchain": "leanprover/lean4:v4.34.0-rc1",
+          "pinned_on": "2026-09-01"
+        }
+      ]
     }
   ]
 }
