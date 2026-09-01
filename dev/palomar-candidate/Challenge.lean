@@ -391,19 +391,21 @@ noncomputable def directedDoubleSine (U V : Submodule 𝕜 E)
   U.starProjection ∘L
     (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E)).starProjection
 
-/-- `sin Θ₀` again, as the directed *ambient* block `P_U P_{Vᗮ}`, whose singular
-values are the sines of the principal angles once over: the sine whose doubled
-tangent the `tan 2Θ` directed clause bounds. -/
-noncomputable def directedSineCorner (U V : Submodule 𝕜 E)
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
-  U.starProjection ∘L Vᗮ.starProjection
-
 /-! ### Tangents of an angle presented by its sine
 
 The argument of `tanSeq` is always a sine: `tan Θ₀` is a trigonometric function
 of the *angle*, presented here by an operator whose singular values are its
 sines.  The residual is the right-hand side and has nothing to do with the
-left. -/
+left.
+
+**A doubled angle is presented by its own sine, never by doubling the ordered
+sines of the single angle.**  `θ ↦ sin 2θ` is not monotone on `[0, π/2]`, so
+`n ↦ sin (2 arcsin (aₙ(sin Θ)))` need not be the ordered singular-value sequence
+of `sin 2Θ` -- at principal angles `75°` and `30°` the two sequences are in
+opposite order.  The `tan 2Θ` clauses below therefore read the doubled tangent
+off `ambientDoubleSine` and `directedDoubleSine`, through the same monotone
+`u ↦ tan (arcsin u)` that `tan Θ` uses, and `|tan 2θ| = tan (arcsin |sin 2θ|)`
+supplies the source's absolute value with no branch choice. -/
 
 /-- The sequence `tan θ₀, tan θ₁, …`, where `sin θₙ` is the `n`-th singular value
 of the sine operator `S`. -/
@@ -413,33 +415,17 @@ noncomputable def tanSeq {X Y : Type v}
     (S : X →L[𝕜] Y) (n : ℕ) : ℝ :=
   Real.tan (Real.arcsin (singularValue S n))
 
-/-- The sequence `|tan 2θ₀|, |tan 2θ₁|, …`.  The absolute value is the source's
-own choice: a unitarily invariant norm cannot see the sign, and `|tan 2Θ|` needs
-no quarter-turn branch hypothesis. -/
-noncomputable def absTanTwoSeq {X Y : Type v}
-    [NormedAddCommGroup X] [InnerProductSpace 𝕜 X]
-    [NormedAddCommGroup Y] [InnerProductSpace 𝕜 Y]
-    (S : X →L[𝕜] Y) (n : ℕ) : ℝ :=
-  |Real.tan (2 * Real.arcsin (singularValue S n))|
-
 /-- **No principal angle of `S` is a right angle**, so every `tan θₙ` is a
 genuine tangent rather than the value Lean's field division assigns at a pole.
-Davis and Kahan derive this rather than assuming it, so it appears below as a
-conclusion. -/
+Equivalently `‖S‖ < 1`, since `a₀ S = ‖S‖`.  Davis and Kahan derive this rather
+than assuming it, so it appears below as a conclusion -- for the double-angle
+clauses too, where `S` is the double-angle sine and the condition is the
+quarter-turn exclusion `‖sin 2Θ‖ < 1`. -/
 def TangentDefined {X Y : Type v}
     [NormedAddCommGroup X] [InnerProductSpace 𝕜 X]
     [NormedAddCommGroup Y] [InnerProductSpace 𝕜 Y]
     (S : X →L[𝕜] Y) : Prop :=
   ∀ n, Real.cos (Real.arcsin (singularValue S n)) ≠ 0
-
-/-- **No principal angle of `S` is `π/4`**, so every `|tan 2θₙ|` is a genuine
-tangent.  Section 7 derives the nonvanishing of these `cos 2θⱼ` during the proof,
-so it too appears below as a conclusion. -/
-def DoubleTangentDefined {X Y : Type v}
-    [NormedAddCommGroup X] [InnerProductSpace 𝕜 X]
-    [NormedAddCommGroup Y] [InnerProductSpace 𝕜 Y]
-    (S : X →L[𝕜] Y) : Prop :=
-  ∀ n, Real.cos (2 * Real.arcsin (singularValue S n)) ≠ 0
 
 /-- The crossed defect subspaces are isometrically isomorphic: the source's
 standing condition (3.5), assumed from Section 3 onward, which is what makes the
@@ -571,7 +557,10 @@ self-adjoint perturbation off-diagonal for that splitting -- the source's
 that corner in the ideal, and `δ ‖tan 2Θ‖ ≤ 2 ‖H‖` with the whole perturbation.
 
 No hypothesis excluding the poles of `tan 2Θ` is part of the printed theorem:
-Section 7 derives the nonvanishing of the relevant `cos 2θⱼ`. -/
+Section 7 derives the nonvanishing of the relevant `cos 2θⱼ`, which appears here
+as `TangentDefined` of the double-angle sine -- the quarter-turn exclusion
+`‖sin 2Θ‖ < 1`, uniform over the whole angle rather than read off a
+singular-value sequence of the single angle. -/
 structure TanTwoThetaResult (N : UINorm) (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (H : E →L[𝕜] E) (δ : ℝ) : Prop where
@@ -579,16 +568,16 @@ structure TanTwoThetaResult (N : UINorm) (A : E →ₗ.[𝕜] E)
   directed : ∀ {V : Submodule 𝕜 E} [V.HasOrthogonalProjection],
       Reduces (addBounded A H) V →
       N.Finite (Uᗮ.starProjection ∘L H ∘L U.starProjection) →
-        DoubleTangentDefined (directedSineCorner U V) ∧
-          N.SeqFinite (absTanTwoSeq (directedSineCorner U V)) ∧
-          δ * N.seqNorm (absTanTwoSeq (directedSineCorner U V)) ≤
+        TangentDefined (directedDoubleSine U V) ∧
+          N.SeqFinite (tanSeq (directedDoubleSine U V)) ∧
+          δ * N.seqNorm (tanSeq (directedDoubleSine U V)) ≤
             2 * N.norm (Uᗮ.starProjection ∘L H ∘L U.starProjection)
   /-- `δ ‖tan 2Θ‖ ≤ 2 ‖H‖`: the ambient conclusion, on the whole perturbation. -/
   ambient : ∀ {V : Submodule 𝕜 E} [V.HasOrthogonalProjection],
       Reduces (addBounded A H) V → N.Finite H →
-        DoubleTangentDefined (ambientSine U V) ∧
-          N.SeqFinite (absTanTwoSeq (ambientSine U V)) ∧
-          δ * N.seqNorm (absTanTwoSeq (ambientSine U V)) ≤ 2 * N.norm H
+        TangentDefined (ambientDoubleSine U V) ∧
+          N.SeqFinite (tanSeq (ambientDoubleSine U V)) ∧
+          δ * N.seqNorm (tanSeq (ambientDoubleSine U V)) ≤ 2 * N.norm H
 
 /-- **The `tan 2Θ` theorem**, both printed conclusions.  The separation is
 ordered on the two blocks of `A` and the perturbation is *off-diagonal* for the
