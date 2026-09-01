@@ -758,7 +758,47 @@ theorem tanTwoTheta_ambient_proof_complex (N : UINorm)
 
 end TanTwoThetaClauses
 
-/-! ## 10. The two capability classes, at every `RCLike` field -/
+/-! ## 10. The directed clause of `sin 2Θ`, over `ℂ`
+
+The clause the Appendix bounds by a **bounded** trial compression: `V` sits
+inside `dom A`, so `M` is bounded by the closed-graph theorem and the two are the
+same hypothesis.  What is *not* assumed is that `U` was selected spectrally --
+`sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_paperUINorm_complex`
+takes any subspace reducing `A`, which is the source's own hypothesis. -/
+
+section SinTwoThetaDirected
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+
+/-- **The directed clause of the Challenge's `sin 2Θ` theorem, discharged from
+the development over `ℂ`.**
+
+`δ ‖sin 2Θ₀‖ ≤ 2 ‖R‖` on the residual alone, at an arbitrary reducing `U` and
+the full form-bounded gap, so the separating interval may be half-infinite. -/
+theorem sinTwoTheta_directed_proof_complex
+    (N : UINorm) {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
+    {U : Submodule ℂ E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : SylvesterGap (block A U hU) (block A Uᗮ hU.orthogonal) δ)
+    {V : Submodule ℂ E} [V.HasOrthogonalProjection] (D : BoundedTrialBlock A V)
+    (hRmem : N.Finite D.residual) :
+    N.Finite (directedDoubleSine U V) ∧
+      δ * N.norm (directedDoubleSine U V) ≤ 2 * N.norm D.residual := by
+  have hUred : TauCeti.LinearPMap.ReducesSubspace A U := (reduces_iff A U).1 hU
+  have hgap' : TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hUred)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hUred.orthogonal) δ := by
+    rw [block_eq A U hU, block_eq A Uᗮ hU.orthogonal] at hgap
+    exact (sylvesterGap_iff _ _ _).1 hgap
+  have hres : ∀ v : V, A ⟨(v : E), D.mem_domain v⟩ =
+      D.residual v + ((D.compression v : V) : E) := fun v =>
+    (D.action_eq v).trans (add_comm _ _)
+  exact TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_paperUINorm_complex
+    N.toPaper hA hUred D.mem_domain hres hδ hgap' hRmem
+
+end SinTwoThetaDirected
+
+/-! ## 11. The two capability classes, at every `RCLike` field -/
 
 section Capabilities
 
@@ -771,7 +811,7 @@ example (𝕜 : Type u) [RCLike 𝕜] : HasUnboundedSylvesterKyFan.{u, v} 𝕜 :
 
 end Capabilities
 
-/-! ## 11. Status
+/-! ## 12. Status
 
 This file is a **feasibility candidate**, not a finished submission.  The honest
 state of each printed clause is recorded here and, clause by clause with the
