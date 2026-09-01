@@ -330,6 +330,13 @@ topics:
   - Analysis.RCLike.ScalarTransport
   - Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
   - Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
+  # The rest of the dictionary the transport needs to carry a Davis--Kahan
+  # statement across a change of scalar field: reducing subspaces and bounded
+  # perturbations of a partial map, reflections and the mirror image of one
+  # subspace in another, and linear isometric equivalences with intersections.
+  - Analysis.InnerProductSpace.LinearPMap.ScalarTransport
+  - Analysis.InnerProductSpace.Projection.ScalarTransport
+  - Analysis.RCLike.ScalarTransportIsometry
 - id: T26a
   title: 'Discrete spectra: compact self-adjoint operators classified by eigenspace dimensions, and the
     enumeration of an unbounded locally finite set'
