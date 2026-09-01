@@ -67,15 +67,36 @@ projector theorem, and Yu--Wang--Samworth Theorem 2), run:
 ```bash
 aiq-lean alignment render dev/davis-kahan-1970-full-source-census.json \
     dev/yu-wang-samworth-2015-full-source-census.json \
-    --importance headline --probe \
+    --importance headline --statements \
     -o build/semantic-alignment/headline-review.md
 ```
 
-The command invokes Lean, but the primary reviewer-facing Lean evidence is the
-canonical theorem declaration exactly as written in the repository, together
-with the relevant ambient `variable` binders inherited from its source section.
-The fully elaborated `#check` output is retained in a collapsible verification
-block.  Headline census rows also carry a curated semantic-review contract: a
+The command invokes Lean once, through a `leanq` statement sidecar under
+`.leanq/`, and the packet then carries elaborator evidence next to the
+human-written statement: the `#check`-style signature, the statement closure
+(every project definition and structure the type unfolds through, down to the
+Mathlib boundary), and the project constants in that closure that the row's
+hand-written semantic dictionary does not disclose.  That last list is the one
+an auditor cannot produce by reading; it is what `--statements` is for.
+
+The same evidence renders as one self-contained page, with the proof
+dependencies of each canonical declaration when a saved project graph is given:
+
+```bash
+leanq graph-index --out build/leanq/project-semantic-graph.json      # ~10 min, Lean
+aiq-lean alignment html dev/yu-wang-samworth-2015-full-source-census.json \
+    --importance major --statements \
+    --graph build/leanq/project-semantic-graph.json \
+    -o build/semantic-alignment/yws-alignment.html
+```
+
+A review is a claim about a type on the day it was read.  `aiq-lean alignment
+pin <census-or-review>` records the elaborated-type hashes of every declaration
+a review claims (`statement_pins` on the review), and `aiq-lean alignment check`
+fails when one has moved; the `statement-pins-*` gates run that check.  Re-pin
+only after re-reviewing the statement.
+
+Headline census rows also carry a curated semantic-review contract: a
 normalized source statement, canonical and supporting Lean declarations, a
 clause-by-clause source/Lean map, and the small set of project-local definitions
 needed to interpret the theorem.  For those definitions the renderer shows the

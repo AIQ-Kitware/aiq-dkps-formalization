@@ -24,6 +24,8 @@ unavailable_exit_code: 3
 slow:
   - check_comparator_signatures
   - foundations
+  - statement-pins-yws
+  - statement-pins-quench
 
 # Kept empty deliberately.  A check whose output nobody acts on is worse than no
 # check -- it trains everyone to ignore the suite -- and "advisory" is the
@@ -103,6 +105,16 @@ gates:
               "dev/davis-kahan-hidden-foundations.json",
               "-o", "dev/davis-kahan-hidden-foundations-status.md", "--check"]
     description: "the generated foundation-status view is current"
+
+  - name: statement-pins-yws
+    command: ["aiq-lean", "alignment", "check",
+              "dev/yu-wang-samworth-2015-full-source-census.json"]
+    description: "every Yu--Wang--Samworth declaration a semantic review accepted still has the elaborated type it accepted -- a moved structural hash means the review is describing a statement that is no longer there"
+
+  - name: statement-pins-quench
+    command: ["aiq-lean", "alignment", "check",
+              "dev/quench-2026-result-semantic-review.json"]
+    description: "the same for the Quench 2026 standalone review, which pins every declaration its rows cite"
 
   - name: grounding-yws
     command: ["aiq-lean", "source", "grounding", "dev/policy/yu-wang-samworth-grounding.yaml"]

@@ -153,7 +153,23 @@
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem1_frobenius_le",
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem1_opNorm_le"
         ],
-        "note": "Expanded major-review surface."
+        "note": "Expanded major-review surface.",
+        "statement_pins": [
+          {
+            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem1_frobenius_le",
+            "type_expr_hash": "1338269361",
+            "type_text_sha256": "2d072c50811520b0a39a82dbde1937f062ab1779b133736ecc0a0635048c78d3",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem1_opNorm_le",
+            "type_expr_hash": "2995040074",
+            "type_text_sha256": "1aa31e2175022a85eba092d7287967685d21b166e7d539255cc194ee91caf541",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
@@ -322,7 +338,16 @@
             "status": "claimed_exact"
           }
         ],
-        "note": "The canonical theorem is both the presentation and audit surface: its claim uses the source-readable sinThetaNorm name and the literal application `frobeniusNorm (SigmaHat - Sigma)`. The equality hypothesis in the same signature exposes the exact Lean meaning of sinThetaNorm, while the semantic dictionary expands frobeniusNorm and closes the sine quantity through to the principal-sine sequence."
+        "note": "The canonical theorem is both the presentation and audit surface: its claim uses the source-readable sinThetaNorm name and the literal application `frobeniusNorm (SigmaHat - Sigma)`. The equality hypothesis in the same signature exposes the exact Lean meaning of sinThetaNorm, while the semantic dictionary expands frobeniusNorm and closes the sine quantity through to the principal-sine sequence.",
+        "statement_pins": [
+          {
+            "declaration": "YuWangSamworth2015.theorem2_sinTheta",
+            "type_expr_hash": "3500685691",
+            "type_text_sha256": "61df0a9f00908bbe9c9eb1af11e51608dc48c7f4508cab0c3ee844e7bab510c9",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
@@ -424,7 +449,16 @@
             "status": "claimed_exact"
           }
         ],
-        "note": "The aligned headline wrapper exposes the orthogonal matrix and aligned frame distance directly and writes the source perturbation Frobenius norm as the reducible `frobeniusNorm (SigmaHat - Sigma)` application."
+        "note": "The aligned headline wrapper exposes the orthogonal matrix and aligned frame distance directly and writes the source perturbation Frobenius norm as the reducible `frobeniusNorm (SigmaHat - Sigma)` application.",
+        "statement_pins": [
+          {
+            "declaration": "YuWangSamworth2015.theorem2_alignedFrame",
+            "type_expr_hash": "1136898647",
+            "type_text_sha256": "eca00f43b9afb1ead1c2232799e280588dbaa6b23bc32345d13d5c8564ac4bdd",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
@@ -460,7 +494,23 @@
           "YuWangSamworth2015.yuWangSamworth_sinTheta_le_residual",
           "YuWangSamworth2015.yuWangSamworth_alignedBasis_le_residual"
         ],
-        "note": "This row is one clause or proof-strength refinement of the paper's central Theorem 2; the renderer groups all headline Theorem 2 rows into one review section."
+        "note": "This row is one clause or proof-strength refinement of the paper's central Theorem 2; the renderer groups all headline Theorem 2 rows into one review section.",
+        "statement_pins": [
+          {
+            "declaration": "YuWangSamworth2015.yuWangSamworth_sinTheta_le_residual",
+            "type_expr_hash": "123395032",
+            "type_text_sha256": "f5efdb63322d64ca5adeebc78f9bde66b4ce6d7d050afff13fb32d4115da8197",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "YuWangSamworth2015.yuWangSamworth_alignedBasis_le_residual",
+            "type_expr_hash": "1017917795",
+            "type_text_sha256": "bd0bcd8febbaa578fbfdae7aeefec4b9a945a7d83529b9ed37da16c4a854479a",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
@@ -603,7 +653,23 @@
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_corollary1_sinTheta_le",
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_corollary1_real_le"
         ],
-        "note": "Expanded major-review surface."
+        "note": "Expanded major-review surface.",
+        "statement_pins": [
+          {
+            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_corollary1_sinTheta_le",
+            "type_expr_hash": "3155878752",
+            "type_text_sha256": "72babffd6726a85ca28baf3fc3bca5915a129d375c432aa31b6ab7f51cdb4204",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_corollary1_real_le",
+            "type_expr_hash": "251535040",
+            "type_text_sha256": "b902a191cbe85235394560aa97848f6a34a12229b837450a0b55a984e3e61b7a",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
@@ -666,7 +732,16 @@
         "declarations": [
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le"
         ],
-        "note": "Theorem 3 is grouped across its right, left, aligned-frame, and printed-rank-boundary rows; the rank-boundary row is a machine-checked refutation of the printed convention rather than a silent repair."
+        "note": "Theorem 3 is grouped across its right, left, aligned-frame, and printed-rank-boundary rows; the rank-boundary row is a machine-checked refutation of the printed convention rather than a silent repair.",
+        "statement_pins": [
+          {
+            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularSubspace_le",
+            "type_expr_hash": "4116281150",
+            "type_text_sha256": "12d5a138d10aa196a3a8aec6aaeb39ae542485e55b10c041ffe511900852936a",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
@@ -705,7 +780,16 @@
         "declarations": [
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le"
         ],
-        "note": "Theorem 3 is grouped across its right, left, aligned-frame, and printed-rank-boundary rows; the rank-boundary row is a machine-checked refutation of the printed convention rather than a silent repair."
+        "note": "Theorem 3 is grouped across its right, left, aligned-frame, and printed-rank-boundary rows; the rank-boundary row is a machine-checked refutation of the printed convention rather than a silent repair.",
+        "statement_pins": [
+          {
+            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularSubspace_le",
+            "type_expr_hash": "2233517435",
+            "type_text_sha256": "7372d51ce48898e19e20ca77d2b11068114bd431188492b035184924b7162d9d",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
@@ -744,7 +828,23 @@
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularAlignedBasis_le",
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularAlignedBasis_le"
         ],
-        "note": "Theorem 3 is grouped across its right, left, aligned-frame, and printed-rank-boundary rows; the rank-boundary row is a machine-checked refutation of the printed convention rather than a silent repair."
+        "note": "Theorem 3 is grouped across its right, left, aligned-frame, and printed-rank-boundary rows; the rank-boundary row is a machine-checked refutation of the printed convention rather than a silent repair.",
+        "statement_pins": [
+          {
+            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_rightSingularAlignedBasis_le",
+            "type_expr_hash": "1666893734",
+            "type_text_sha256": "18de9226c582e1630ded550c55f56810724854ce536e924273d9986ca0943d24",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_leftSingularAlignedBasis_le",
+            "type_expr_hash": "3295553349",
+            "type_text_sha256": "89b706ea2411e3c53dcfd9fbd0213bd5c9cb09a0ca79a02532c3c720c99e2b2d",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
@@ -776,7 +876,16 @@
         "declarations": [
           "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem3_printed_rankBoundary_refutation"
         ],
-        "note": "Theorem 3 is grouped across its right, left, aligned-frame, and printed-rank-boundary rows; the rank-boundary row is a machine-checked refutation of the printed convention rather than a silent repair."
+        "note": "Theorem 3 is grouped across its right, left, aligned-frame, and printed-rank-boundary rows; the rank-boundary row is a machine-checked refutation of the printed convention rather than a silent repair.",
+        "statement_pins": [
+          {
+            "declaration": "YuWangSamworth2015.DavisKahanTheory.yuWangSamworth_theorem3_printed_rankBoundary_refutation",
+            "type_expr_hash": "1910726253",
+            "type_text_sha256": "082809e2eb2392ce0b6c926046483d198bd9cf8f1509ce94b80a49cf40166a69",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
