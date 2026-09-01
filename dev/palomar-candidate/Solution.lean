@@ -120,6 +120,7 @@ theorem tangentDefined_of_approximationNumber_lt_one (S : E →L[𝕜] F)
   have h1 : singularValue S n < 1 := h n
   exact ne_of_gt (Real.sqrt_pos.mpr (by nlinarith))
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- **Everything the Challenge measures is a function of the singular-value
 sequence.**  Two operators -- over different fields, between different spaces --
 with the same sequence are indistinguishable to a unitarily invariant norm, to
@@ -132,6 +133,7 @@ theorem tangentDefined_congr {𝕂 : Type w} [RCLike 𝕂] {X Y : Type v}
     (h : ∀ n, singularValue S' n = singularValue S n) (hS' : TangentDefined S') :
     TangentDefined S := fun n => by rw [← h n]; exact hS' n
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The tangent sequence depends only on the singular values. -/
 theorem tanSeq_congr {𝕂 : Type w} [RCLike 𝕂] {X Y : Type v}
     [NormedAddCommGroup X] [InnerProductSpace 𝕂 X]
@@ -140,6 +142,7 @@ theorem tanSeq_congr {𝕂 : Type w} [RCLike 𝕂] {X Y : Type v}
     (h : ∀ n, singularValue S' n = singularValue S n) : tanSeq S' = tanSeq S :=
   funext fun n => congrArg (fun r => Real.tan (Real.arcsin r)) (h n)
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The norm's extended value depends only on the singular values. -/
 theorem UINorm.eval_congr (N : UINorm) {𝕂 : Type w} [RCLike 𝕂] {X Y : Type v}
     [NormedAddCommGroup X] [InnerProductSpace 𝕂 X]
@@ -934,32 +937,35 @@ omit [CompleteSpace E] [CompleteSpace F] in
 /-- The transport of the zero operator. -/
 theorem clm_zero : clm (e := e) (0 : E →L[𝕜] F) = 0 := rfl
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The transport preserves every value a unitarily invariant norm takes.**
 Both sides read the same singular-value sequence. -/
 theorem UINorm.eval_clm (N : UINorm) (T : E →L[𝕜] F) :
     N.eval (clm (e := e) T) = N.eval T :=
   congrArg N.evalSeq (funext fun n => approximationNumber_clm (e := e) T n)
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Ideal membership is unchanged by the transport. -/
 theorem UINorm.finite_clm_iff (N : UINorm) (T : E →L[𝕜] F) :
     N.Finite (clm (e := e) T) ↔ N.Finite T := by
   unfold UINorm.Finite
   rw [UINorm.eval_clm]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The real-valued norm is unchanged by the transport. -/
 theorem UINorm.norm_clm (N : UINorm) (T : E →L[𝕜] F) :
     N.norm (clm (e := e) T) = N.norm T := by
   unfold UINorm.norm
   rw [UINorm.eval_clm]
 
-omit [CompleteSpace F] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Challenge's reducing predicate transports. -/
 theorem reduces_pmap_iff {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] :
     Reduces (pmap (e := e) A) (submodule (e := e) U) ↔ Reduces A U := by
   rw [reduces_iff, reduces_iff, reducesSubspace_pmap_iff]
 
-omit [CompleteSpace F] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The Challenge's bounded perturbation transports. -/
 theorem addBounded_pmap {A : E →ₗ.[𝕜] E} (T : E →L[𝕜] E) :
     pmap (e := e) (addBounded A T) =
@@ -967,6 +973,7 @@ theorem addBounded_pmap {A : E →ₗ.[𝕜] E} (T : E →L[𝕜] E) :
   rw [addBounded_eq, addBounded_eq, pmap_addBounded]
 
 omit [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- The ambient double-angle sine transports. -/
 theorem ambientDoubleSine_pmap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
@@ -979,6 +986,7 @@ theorem ambientDoubleSine_pmap (U V : Submodule 𝕜 E)
   rfl
 
 omit [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- The directed double-angle sine transports. -/
 theorem directedDoubleSine_pmap (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
@@ -997,6 +1005,7 @@ theorem directedDoubleSine_pmap (U V : Submodule 𝕜 E)
   rfl
 
 omit [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- `TangentDefined` reads only the singular-value sequence, so it transports. -/
 theorem tangentDefined_clm_iff (T : E →L[𝕜] F) :
     TangentDefined (clm (e := e) T) ↔ TangentDefined T := by
@@ -1009,6 +1018,7 @@ theorem tangentDefined_clm_iff (T : E →L[𝕜] F) :
       approximationNumber_clm (e := e) T n]
 
 omit [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- and so does the tangent sequence itself. -/
 theorem tanSeq_clm (T : E →L[𝕜] F) :
     tanSeq (clm (e := e) T) = tanSeq T :=
@@ -1046,6 +1056,7 @@ theorem semiboundedBelow_pmap' {G : Type v} [NormedAddCommGroup G]
   exact h'
 
 omit [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- The Challenge's block of a reducing subspace transports. -/
 theorem block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (hU : Reduces A U)
@@ -1055,6 +1066,7 @@ theorem block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
   LinearPMap.ext rfl fun _ _ _ => rfl
 
 omit [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- The Challenge's semibounded-above predicate transports along the block. -/
 theorem semiboundedAbove_block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] {hU : Reduces A U}
@@ -1065,6 +1077,7 @@ theorem semiboundedAbove_block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 
   exact semiboundedAbove_pmap' h
 
 omit [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- and so does the semibounded-below predicate. -/
 theorem semiboundedBelow_block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] {hU : Reduces A U}
@@ -1140,7 +1153,7 @@ theorem subtypeL_pmap (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
       (clm (e := e) U.subtypeL : ↥(submodule (e := e) U) →L[𝕂] ScalarTransport e E) :=
   rfl
 
-omit [CompleteSpace F] in
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- **The crossed-defect standing condition (3.5) transports.**
 
 It says two defect subspaces are isometrically isomorphic, and neither the
@@ -1161,12 +1174,14 @@ theorem crossedDefectsEquivalent_pmap {U V : Submodule 𝕜 E}
 
 
 omit [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- The Challenge's real spectrum transports. -/
 theorem realSpectrum_pmap' (A : E →ₗ.[𝕜] E) :
     realSpectrum (pmap (e := e) A) = realSpectrum A := by
   rw [realSpectrum_eq, realSpectrum_eq, TauCeti.ScalarTransport.realSpectrum_pmap]
 
 omit [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- The Challenge's real spectrum transports for an operator on a subspace,
 stated at the transported subspace's own instance path. -/
 theorem realSpectrum_pmap_subspace (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
@@ -1177,6 +1192,7 @@ theorem realSpectrum_pmap_subspace (U : Submodule 𝕜 E) [U.HasOrthogonalProjec
   realSpectrum_pmap' (e := e) M
 
 omit [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- The Challenge's real spectrum of a block transports. -/
 theorem realSpectrum_block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] {hU : Reduces A U}
@@ -1201,6 +1217,7 @@ theorem sylvesterGap_congr_right {X : Type v} [NormedAddCommGroup X]
   exact h
 
 omit [CompleteSpace F] in
+omit [CompleteSpace E] in
 /-- **The Challenge's separation transports**, constructor by constructor. -/
 theorem sylvesterGap_block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] {hU : Reduces A U}
@@ -1835,6 +1852,11 @@ theorem sinTheta_solution (N : UINorm)
       δ * N.norm (directedSine E₀ F₀) ≤ N.norm R :=
   sinTheta_proof N hA hA₀ hΛ₁ hres hdec hδ hgap hR
 
+-- `hA` is the source's own hypothesis that the ambient operator is self-adjoint.
+-- Neither clause proof consumes it -- the directed clause gets what it needs from
+-- the Ritz data and the reducing complement -- but it is a printed hypothesis and
+-- the statement keeps it.
+set_option linter.unusedVariables false in
 /-- **Davis--Kahan 1970, Section 2, the `tan Θ` theorem**, both printed
 conclusions. -/
 theorem tanTheta_solution (N : UINorm)
@@ -1843,10 +1865,10 @@ theorem tanTheta_solution (N : UINorm)
     {α δ : ℝ} (hδ : 0 < δ)
     (hunwanted : SemiboundedBelow (block A Vᗮ hV.orthogonal) (α + δ)) :
     TanThetaResult N A V α δ where
-  directed := fun {U} _ D hupper hR =>
+  directed := fun {_U} _ D hupper hR =>
     tanTheta_directed_proof N hV hδ
       (fun y hyV hy => hunwanted ⟨⟨y, hyV⟩, hy⟩) D hupper hR
-  ambient := fun {U} _ D hupper H hH hres h35 hHmem =>
+  ambient := fun {_U} _ D hupper H hH hres h35 hHmem =>
     tanTheta_ambient_proof N hV hδ
       (fun y hyV hy => hunwanted ⟨⟨y, hyV⟩, hy⟩) D hupper H hH hres h35 hHmem
 
@@ -1858,8 +1880,8 @@ theorem sinTwoTheta_solution (N : UINorm)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : SylvesterGap (block A U hU) (block A Uᗮ hU.orthogonal) δ) :
     SinTwoThetaResult N A U δ where
-  directed := fun {V} _ D hR => sinTwoTheta_directed_proof N hA hU hδ hgap D hR
-  ambient := fun H hH {V} _ hV hHmem =>
+  directed := fun {_V} _ D hR => sinTwoTheta_directed_proof N hA hU hδ hgap D hR
+  ambient := fun H hH {_V} _ hV hHmem =>
     sinTwoTheta_ambient_proof N hA hU hδ hgap H hH hV hHmem
 
 /-- **Davis--Kahan 1970, Section 2, the `tan 2Θ` theorem**, both printed
@@ -1874,11 +1896,11 @@ theorem tanTwoTheta_solution (N : UINorm)
     (hlow : SemiboundedAbove (block A U hU) α)
     (hhigh : SemiboundedBelow (block A Uᗮ hU.orthogonal) (α + δ)) :
     TanTwoThetaResult N A U H δ where
-  directed := fun {V} _ hV hRmem =>
+  directed := fun {_V} _ hV hRmem =>
     tanTwoTheta_directed_proof N hA hU H hoffdiag₀ hoffdiag₁ hδ
       (formBound_upper_of_semiboundedAbove hU hlow)
       (formBound_lower_of_semiboundedBelow hU hhigh) hV hRmem
-  ambient := fun {V} _ hV hHmem =>
+  ambient := fun {_V} _ hV hHmem =>
     tanTwoTheta_ambient_proof N hA hU H hH hoffdiag₀ hoffdiag₁ hδ
       (formBound_upper_of_semiboundedAbove hU hlow)
       (formBound_lower_of_semiboundedBelow hU hhigh) hV hHmem
