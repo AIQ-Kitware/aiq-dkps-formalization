@@ -701,24 +701,24 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 | --- | --- | --- | --- |
 | `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex` | **PASS** |
 | `ambient.real` | real | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real` | **PASS** |
-| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex` | **PASS** |
-| `directed.real` | real | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real` | **PASS** |
+| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex` | **PASS** |
+| `directed.real` | real | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real` | **PASS** |
 
 **`ambient.complex`.** delta * N(tan Theta) <= N(H) on the ambient paperTanAngleOperatorC, with ideal membership, unbounded self-adjoint LinearPMap ambient operator and unbounded Ritz compression.
 
-*Gap scope:* The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval.
+*Gap scope:* The printed tangent gap is the ORDERED one, and the Appendix drops the lower bound beta entirely, so both configurations are half-infinite: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the trial compression bounded above by alpha, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the reducing complement, which is bounded below by alpha + delta and unbounded above.  Neither side is confined to a finite interval.
 
 **`ambient.real`.** The real sibling of the complex ambient clause: delta * N(tan Theta) <= N(H) on the ambient paperTanAngleOperatorR, ideal membership concluded, unbounded self-adjoint ambient operator and unbounded Ritz compression, arbitrary PaperUnitaryInvariantNorm.
 
-*Gap scope:* The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval.
+*Gap scope:* The printed tangent gap is the ORDERED one, and the Appendix drops the lower bound beta entirely, so both configurations are half-infinite: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the trial compression bounded above by alpha, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the reducing complement, which is bounded below by alpha + delta and unbounded above.  Neither side is confined to a finite interval.
 
-**`directed.complex`.** delta * N(tan Theta_0) <= N(R) with the trial residual on the right, unbounded self-adjoint ambient operator, arbitrary complete trial subspace, arbitrary PaperUnitaryInvariantNorm. The representative is a parameter characterized by the paper's own instruction that its approximation numbers be tan theta_j, which is why the statement does not depend on which representative the caller holds. ADDED 2026-08-31: the previously registered directed evidence did not carry this scope -- `theorem6_3_perturbation_infiniteTrial` has a BOUNDED ambient operator at a Ky Fan family, and `partIII_tanTheta_ritzResidual_uiNorm` is finite-dimensional at a rectangular seminorm. Both are retained as supporting evidence.
+**`directed.complex`.** delta * N(tan Theta_0) <= N(R) with the trial residual on the right, an unbounded self-adjoint LinearPMap ambient operator, and -- the Appendix's own scope -- a Ritz compression `D.trial.compression : Z ->L. Z` that is itself a densely defined self-adjoint PARTIAL map rather than a bounded operator, at an arbitrary PaperUnitaryInvariantNorm and arbitrary Hilbert dimension.  The representative is a parameter characterized by the paper's own instruction that its approximation numbers be tan theta_j.  REPLACED 2026-08-31: the previous primary `tanTheta_directed_unboundedTrial_paperUINorm_complex` takes a `TanTheta.UnboundedTrialBlock`, whose `operator : Z ->L Z` is BOUNDED; its name records only that the ambient operator is unbounded, and it therefore did not carry `DK-6-appendix.unbounded-tangent-extension`.  It is retained as a bounded-compression specialization.
 
-*Gap scope:* The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval.
+*Gap scope:* The printed tangent gap is the ORDERED one, and the Appendix drops the lower bound beta entirely, so both configurations are half-infinite: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the trial compression bounded above by alpha, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the reducing complement, which is bounded below by alpha + delta and unbounded above.  Neither side is confined to a finite interval.
 
-**`directed.real`.** The real sibling of the complex directed clause: delta * N(tan Theta_0) <= N(R) with the trial residual on the right, unbounded self-adjoint ambient operator, arbitrary complete trial subspace, arbitrary PaperUnitaryInvariantNorm, representative characterized by its approximation numbers.
+**`directed.real`.** The real sibling of the complex directed clause, at the Appendix scope: delta * N(tan Theta_0) <= N(R) with the trial residual on the right, an unbounded self-adjoint ambient partial map, a densely defined self-adjoint PARTIAL Ritz compression, arbitrary PaperUnitaryInvariantNorm, and a representative characterized by its approximation numbers.  REPLACED 2026-08-31 for the same reason as the complex clause: the previous primary's trial bundle carried a bounded compression.
 
-*Gap scope:* The printed tangent gap is the ORDERED one, and it is half-infinite by construction: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the selected block bounded above, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the unwanted subspace -- bounded below, unbounded above. Neither side is confined to a finite interval.
+*Gap scope:* The printed tangent gap is the ORDERED one, and the Appendix drops the lower bound beta entirely, so both configurations are half-infinite: the primary takes `SemiboundedAbove D.trial.compression alpha` -- the trial compression bounded above by alpha, unbounded below -- against a coercivity bound `(alpha + delta) * |y|^2 <= re <A y, y>` on the reducing complement, which is bounded below by alpha + delta and unbounded above.  Neither side is confined to a finite interval.
 
 Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
 
@@ -728,8 +728,8 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
 - `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
-- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-tan-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
 
 ### Other registered declarations
 
@@ -750,6 +750,10 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial` — specialization
 - `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm` — specialization
 - `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal` — supporting_theorem
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex` — specialization
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real` — specialization
+- `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds` — supporting_theorem
+- `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real` — supporting_theorem
 
 ### Source-facing Lean declarations
 
@@ -861,21 +865,45 @@ Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaUnbounded
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:212`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:256`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
 #### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:92`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:94`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:135`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:137`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal`
 
 Source location candidates: `DavisKahan/TanTheta/Theorem63UnboundedInfiniteTrial.lean:668`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds`
+
+Source location candidates: `DavisKahan/TanTheta/Theorem63TrialData.lean:556`, `DavisKahan/TanTheta/Theorem63UnboundedCompression.lean:763`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/UnboundedCompressionReal.lean:345`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4373,13 +4401,13 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:92`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:94`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:135`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:137`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

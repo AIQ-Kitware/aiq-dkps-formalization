@@ -65,7 +65,9 @@ representative could differ from ideal to ideal and the statement could not be
 promoted to one arbitrary norm.  *Repaired* by using the parameterized
 paper-norm endpoints `tanTheta_directed_unboundedTrial_paperUINorm_complex` and
 `..._real`, whose representative is a parameter characterized by its
-approximation numbers.
+approximation numbers.  (Those two were themselves replaced later the same day
+as the `S2-tan-theta` directed witnesses -- see F9 -- but they remain Theorem
+6.3's own witnesses, where the printed compression is bounded.)
 
 **F4 — the `sin 2Theta` directed clauses cited no correspondence.**  Their
 witnesses conclude on `sinTwoThetaIdealBlock`, the paper's reflected overlap
@@ -115,6 +117,172 @@ field refutes it; requiring two would be requiring two counterexamples for one
 false claim.  The checker now records that exemption explicitly rather than
 leaving the row outside the scalar rule by accident.
 
+## Second pass, same day: the unbounded-*compression* axis
+
+The pass above separated "bounded ambient operator" from "unbounded ambient
+operator" and found F1.  It did **not** separate a third scope from those two,
+and the Palomar Section 2 Challenge audit -- written afterwards, against the
+printed statements rather than against this certificate -- exposed it.
+
+The three scopes are distinct:
+
+| axis | source sentence | compiler-visible as |
+|---|---|---|
+| the ambient operator may be unbounded | S2: "also intended for unbounded self-adjoint `A`" | `→ₗ.[` in the printed type |
+| the residual/perturbation must be bounded | S2: "no useful conclusion follows unless the residual is bounded" | `→L[` in the printed type |
+| **the trial/Ritz compression may itself be unbounded** | Appendix to Section 6: "allows *both* `A₀` and `Λ₁` to be unbounded" | the carrier of the compression |
+
+The source states the third one in as many words, and our own reconstruction
+already spelled out the consequence: *"Thus the unbounded scope is stronger than
+merely allowing the ambient self-adjoint operator to be unbounded while keeping
+the Ritz compression bounded."*  The certificate could not check it, because
+`DK-6-appendix.unbounded-tangent-extension` carried no `type_requirements` at
+all -- the only scope atom on any Section 2 row that carried none.
+
+### F9 — `S2-tan-theta`, directed clause, both fields
+
+The registered primaries were
+`tanTheta_directed_unboundedTrial_paperUINorm_{complex,real}`.  They take
+
+```lean
+TanTheta.UnboundedTrialBlock A Z   -- with   operator : Z →L[𝕜] Z
+```
+
+whose Ritz compression is **bounded and everywhere defined on the trial space**.
+The bundle's name records only that the *ambient* operator is unbounded.  Both
+theorems satisfy the first axis (`A : H →ₗ.[ℂ] H`) and the second (`residual :
+Z →L[ℂ] H`), and neither establishes the third.  The 2026-08-12 acceptance note
+is explicit that the Appendix obligation "is discharged by the new complex and
+real unboundedCompression **ambient** endpoints" -- and then the row-level prose
+said the directed conclusion was "closed at full source scope".  Nothing checked
+the directed half against the atom it was credited with.
+
+*Repaired* by `tanTheta_directed_unboundedRitz_paperUINorm_{complex,real}`,
+which take `DavisKahan.UnboundedRitzPair A Z` -- whose
+`trial.compression : Z →ₗ.[𝕜] Z` is a densely defined self-adjoint **partial
+map** -- together with `ReducingComplement A V`, in the same vocabulary the
+ambient clause already used.  This is a promotion, not new analysis: the
+Appendix-scope Ky Fan estimates already existed on both fields
+(`UnboundedCompressionTrialData.ideal_of_formBounds` over `ℂ`, proved through the
+spectral cutoff `Ω(τ)` of the unbounded compression that the Appendix's own proof
+uses at (6.9)--(6.10), and `theorem6_3_unboundedCompression_ideal_real` over
+`ℝ` through the maintained complexification).  What was missing was the promotion
+to the paper's universal norm quantifier.  The tangent representative stays a
+parameter characterized by its approximation numbers, for the reason recorded on
+the earlier endpoints: the promotion evaluates the estimate at every Ky Fan
+index, and an existential could return a different representative at each one.
+
+The bounded-compression declarations are retained as specializations.
+
+### F10 — the certificate could not see the axis
+
+*Repaired* by giving the atom
+
+```json
+"must_contain":     ["UnboundedRitzPair"],
+"must_not_contain": ["UnboundedTrialBlock"]
+```
+
+so a bounded-compression bundle can no longer satisfy an Appendix-scope
+obligation.  Measured against the actual compiler-printed types:
+
+| declaration | ambient `→ₗ.` | residual `→L` | Appendix scope |
+|---|---|---|---|
+| `tanTheta_directed_unboundedRitz_paperUINorm_complex` | yes | yes | **PASS** |
+| `tanTheta_directed_unboundedRitz_paperUINorm_real` | yes | yes | **PASS** |
+| `tanTheta_directed_unboundedTrial_paperUINorm_complex` | yes | yes | **FAIL** |
+| `tanTheta_directed_unboundedTrial_paperUINorm_real` | yes | yes | **FAIL** |
+| `tanTheta_ambient_unboundedRitz_paperUINorm_complex` | yes | yes | **PASS** |
+| `tanTheta_ambient_unboundedRitz_paperUINorm_real` | yes | yes | **PASS** |
+
+The two `FAIL` rows are the point: they satisfy both older axes.  A single
+generic `unbounded` token would have called them compliant, which is what
+happened.  `scripts/tests/test_davis_kahan_coherent_evidence.py` carries the
+negative regression (`unbounded ambient` + bounded compression must be rejected,
+naming `UnboundedTrialBlock`) and the positive one.
+
+### The narrow seven-clause audit on this axis
+
+Every printed Section 2 clause, read off its canonical witness's
+compiler-printed type.  "Block/compression unbounded" asks whether the operator
+whose spectrum the gap hypothesis constrains is itself allowed to be a partial
+map.
+
+| clause | ambient unbounded | block/compression unbounded | how it is carried |
+|---|---|---|---|
+| `sin Θ` directed | yes | **yes** | `A₀ : F →ₗ.[𝕜] F` and `Λ₁ : G →ₗ.[𝕜] G` are both partial maps, and the residual `R : F →L[𝕜] E` is the only bounded object |
+| `tan Θ` directed | yes | **yes**, after F9 | `UnboundedRitzPair.trial.compression : Z →ₗ.[𝕜] Z` |
+| `tan Θ` ambient | yes | **yes** | same carrier |
+| `sin 2Θ` directed | yes | **no** — see below | `M : ↥V →L[ℂ] ↥V` |
+| `sin 2Θ` ambient | yes | n/a | no trial compression appears; the perturbation `Eop : Hc →L[ℂ] Hc` is bounded, as the source requires |
+| `tan 2Θ` directed | yes | **yes** | there is no separate compression object: the blocks are `A` itself restricted to `specRange hA (Set.Iic c)` and its complement, and the hypotheses are form bounds `re ⟪A x, x⟫ ≤ a‖x‖²` quantified over `x : A.domain` |
+| `tan 2Θ` ambient | yes | **yes** | same |
+
+Two remarks on that table.
+
+*`sin Θ` is stronger than the Appendix sentence.*  The Appendix says "one of
+`A₀`, `Λ₁` may be unbounded"; the witness allows both, independently.  The
+carrier `IsExactSpectralDecomposition` is, despite its name, **not** a
+spectrality assumption -- its fields are two complementary isometries and an
+intertwining, i.e. an arbitrary reducing decomposition.
+
+*`tan 2Θ` has no hidden bounded compression.*  The suspicion was worth checking
+and does not apply: nothing plays the role `UnboundedTrialBlock.operator` played
+for `tan Θ`.  Its exact subspace is spectral (`specRange hA (Set.Iic c)`), but
+for the **ordered** families that is forced rather than assumed: `spec(A₀) ⊆
+[β,α]` and `spec(A₁) ⊆ [α+δ,∞)` leave `A` no spectrum in `(α, α+δ)`, so `P` is
+the spectral projector for `(-∞,α]`.  The same argument covers the ordered
+`tan Θ` families.
+
+### `sin 2Θ` directed: why the compression stays bounded
+
+The Appendix enumerates which results get which relaxation, and the enumeration
+is exhaustive where it is stated:
+
+> For the sine theorem, one of `A₀,Λ₁` may be unbounded. […] **Proposition 6.1
+> and Theorem 6.1 admit the analogous relaxation.**
+>
+> For the tangent theorem the Appendix explicitly returns to the ordered
+> hypotheses […] and allows *both* `A₀` and `Λ₁` to be unbounded […] The same
+> method is stated to extend **Theorem 6.3** to unbounded operators.
+
+Proposition 6.1 and Theorem 6.1 are the generalized **sine** results; Theorem 6.3
+is the **tangent** one.  Neither the `sin 2Θ` nor the `tan 2Θ` theorem is named
+anywhere in the Appendix, and no other source passage extends a double-angle
+result to an unbounded compression.  What does apply to all four is the general
+`S2-unbounded-scope` paragraph -- unbounded self-adjoint `A`, bounded
+perturbation or residual -- and the `sin 2Θ` witnesses satisfy it.
+
+So no counted obligation is open here, and no atom is added.  What is recorded,
+so that it is challengeable rather than invisible:
+
+1. `hVdom : ∀ v : ↥V, ↑v ∈ A.domain` puts the **whole** trial subspace inside the
+   domain.  Given that, `M` being bounded is not a further restriction: `A` is
+   closed and `V` is complete, so `A|_V` is bounded by the closed graph theorem.
+   The single restriction is `hVdom` itself, against the source's own preferred
+   spelling for the unbounded sine passage, where `(A+H)E₀` and `E₀A₀` "share a
+   dense domain" and `R` is extended by continuity.  The source uses that
+   spelling for the sine theorem and does not use it for `sin 2Θ`.
+2. `sin 2Θ`'s exact subspace is built spectrally
+   (`selfAdjointSpectralSubspace A hA B hB`), whereas Section 1 says "No
+   assumption is made here that `P` or `Q` is a spectral projector".  That
+   sentence is atom `S1-block-residual.no-spectral-projector-assumption`, which
+   the accepted boundary review classifies `source_wide_setup` / `non_result`
+   and links to no counted result -- the standing generality of the block
+   framework rather than a proved-scope extension of any theorem.  A reviewer may
+   disagree with that classification; it is recorded, not silent.  A strictly
+   more general **ambient** `sin 2Θ` theorem does already exist in the tree,
+   `sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`, at arbitrary
+   reducing `U` and `V`; it is not the registered canonical witness because the
+   registered one concludes on the paper's `sin 2Θ` angle operator directly.
+
+### Effect on the count
+
+29/29, unchanged.  One clause's canonical evidence was replaced, no result was
+added, removed, or reclassified, and no boundary review changed.  The count was
+provisionally suspect for the duration of this pass and is restored on the
+repair, not on the argument.
+
 ## Disposition of every counted result
 
 Every row below is **PASS**: each printed clause has one coherent
@@ -144,8 +312,8 @@ angle scope, with no clause open.
   |---|---|---|---|---|
   | `ambient.complex` | complex | `S2-tan-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex` | **PASS** |
   | `ambient.real` | real | `S2-tan-theta.ambient-conclusion` | `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real` | **PASS** |
-  | `directed.complex` | complex | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex` | **PASS** |
-  | `directed.real` | real | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real` | **PASS** |
+  | `directed.complex` | complex | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex` | **PASS** (F9) |
+  | `directed.real` | real | `S2-tan-theta.directed-conclusion` | `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real` | **PASS** (F9) |
 
 - Result-wide scope atoms carried by every clause's own primary: `S2-sin-theta.ui-norm-scope`, `S2-tan-theta.ordered-gap-hypothesis`, `S2-tan-theta.rayleigh-ritz-hypothesis`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `DK-6-appendix.unbounded-tangent-extension`
 

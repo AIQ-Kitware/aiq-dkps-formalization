@@ -4,7 +4,9 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.TanTheta.Theorem63UnboundedInfiniteTrial
+import DavisKahan.TanTheta.RitzPair
 import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
+import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm
 
 /-!
@@ -162,6 +164,128 @@ theorem tanTheta_directed_unboundedTrial_paperUINorm_real
     exact h.2
 
 end Real
+
+/-! ## The Appendix scope: the Ritz compression may itself be unbounded
+
+The two endpoints above take a `TanTheta.UnboundedTrialBlock`, whose Ritz
+compression `operator : Z →L[𝕜] Z` is **bounded and everywhere defined on the
+trial space**.  Its name records only that the *ambient* operator is unbounded.
+
+That is not the Appendix's scope.  The Appendix to Section 6 states, of the
+tangent theorem specifically, that it
+
+> returns to the ordered hypotheses `A₀ ≤ α` and `Λ₁ ≥ α + δ` in the general case
+> and allows *both* `A₀` and `Λ₁` to be unbounded; the residual entering the
+> displayed norm estimate is still required to be bounded
+
+-- so the compression `A₀` is a densely defined self-adjoint operator on the trial
+space, and only the residual is bounded.  `UnboundedCompressionTrialData` is the
+carrier for that, `UnboundedRitzPair` ties it to the ambient operator, and the
+Ky-Fan-level estimate at that scope already exists on both scalar fields.  What
+follows is the promotion to the paper's universal norm quantifier, in the same
+`UnboundedRitzPair`/`ReducingComplement` vocabulary the *ambient* clause already uses.
+-/
+
+section AppendixComplex
+
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-- **Davis--Kahan 1970, the Section 2 `tan Θ` directed clause at the Appendix's
+own scope, over `ℂ`, at every source unitarily invariant norm.**
+
+`δ N(tan Θ₀) ≤ N(R)` where the Ritz compression `A₀` is itself a densely defined
+self-adjoint operator on the trial space -- **not** a bounded one -- the ambient
+operator `A` is an unbounded self-adjoint partial map, only the residual `R` is
+bounded, the Hilbert dimension is arbitrary, and `N` is an arbitrary
+`PaperUnitaryInvariantNorm`.
+
+The hypotheses are the printed ordered ones with both intervals half-infinite:
+`hupper` is `A₀ ≤ α` as a form bound on the *partial* compression, and
+`hUnwanted` is `Λ₁ ≥ α + δ` as a form bound on the reducing complement `Vᗮ`.
+There is no `β`; the Appendix drops it, and this is the Appendix's statement.
+
+`tanTheta0` is a parameter rather than an existential because the promotion
+evaluates the Ky Fan estimate at every index and an existential could return a
+different representative at each one; `htan` is the paper's own characterization
+of `tan Θ₀`, that its approximation numbers are `tan θⱼ` of the directed sine
+block. -/
+theorem tanTheta_directed_unboundedRitz_paperUINorm_complex
+    (N : PaperUnitaryInvariantNorm)
+    {A : H →ₗ.[ℂ] H}
+    {Z V : Submodule ℂ H}
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : DavisKahan.UnboundedRitzPair A Z)
+    (hV : DavisKahan.ReducingComplement A V)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
+    (tanTheta0 : Z →L[ℂ] H)
+    (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0)
+    (hResidual : N.Mem D.trial.residual) :
+    N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual := by
+  have hcross := D.trial.crossed_lower_of_reducing V A D.mem_domain D.action_eq
+    hV.mapsDomain hV.commutes hUnwanted
+  apply N.mul_gauge_le_of_all_mul_kyFan_le hdelta hResidual
+  intro k
+  by_cases hk : k = 0
+  · subst hk
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+  · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
+    have h := D.trial.ideal_of_formBounds V
+      (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hkpos) hdelta hupper hcross
+      tanTheta0 htan
+      (KyFanDominantIdealFamily.kyFan_mem k hkpos D.trial.residual)
+    rw [KyFanDominantIdealFamily.kyFan_gauge,
+      KyFanDominantIdealFamily.kyFan_gauge] at h
+    exact h.2
+
+end AppendixComplex
+
+section AppendixReal
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+
+/-- **Davis--Kahan 1970, the Section 2 `tan Θ` directed clause at the Appendix's
+own scope, over `ℝ`.**  The real sibling of
+`tanTheta_directed_unboundedRitz_paperUINorm_complex`: the Ritz compression is a
+densely defined self-adjoint *partial* operator on the trial space, the ambient
+operator is an unbounded self-adjoint partial map, only the residual is bounded,
+and the norm is an arbitrary `PaperUnitaryInvariantNorm`. -/
+theorem tanTheta_directed_unboundedRitz_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    {A : E →ₗ.[ℝ] E}
+    {Z V : Submodule ℝ E}
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : DavisKahan.UnboundedRitzPair A Z)
+    (hV : DavisKahan.ReducingComplement A V)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
+    (tanTheta0 : Z →L[ℝ] E)
+    (htan : HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0)
+    (hResidual : N.Mem D.trial.residual) :
+    N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual := by
+  have hcross := D.trial.crossed_lower_of_reducing V A D.mem_domain D.action_eq
+    hV.mapsDomain hV.commutes hUnwanted
+  apply N.mul_gauge_le_of_all_mul_kyFan_le hdelta hResidual
+  intro k
+  by_cases hk : k = 0
+  · subst hk
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+  · have hkpos : 0 < k := Nat.pos_of_ne_zero hk
+    have h := theorem6_3_unboundedCompression_ideal_real
+      (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) k hkpos) D.trial V hdelta hupper
+      hcross tanTheta0 htan
+      (KyFanDominantIdealFamily.kyFan_mem k hkpos D.trial.residual)
+    rw [KyFanDominantIdealFamily.kyFan_gauge,
+      KyFanDominantIdealFamily.kyFan_gauge] at h
+    exact h.2
+
+end AppendixReal
 
 end
 

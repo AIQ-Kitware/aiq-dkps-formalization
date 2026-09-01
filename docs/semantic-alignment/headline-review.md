@@ -2,7 +2,7 @@
 
 This packet is generated from curated semantic-review fields in the source censuses. Human-written Lean headers are structural source evidence. Compiler output, when present, is elaborator-backed evidence about the Lean surface. The source-to-Lean correspondence remains the census author's explicit review claim.
 
-**Compiler imports:** `DavisKahan.Sources.DavisKahan1970.SineTheta.PaperSurface`, `DavisKahan.Sources.DavisKahan1970.SineTheta.ScalarGeneric`, `DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions`, `DavisKahan.Sources.DavisKahan1970.GeneralSinTheta`, `DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm`, `DavisKahan.Sylvester.ScalarGeneric`, `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction`, `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed`, `DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient`, `DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal`, `DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded`, `DavisKahan.Sources.DavisKahan1970.DirectedReal`, `Challenge.DavisKahan1970.Conformance`, `DavisKahan.Sources.DavisKahan1970.TanThetaAmbient`, `DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite`, `DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation`, `DavisKahan.Sources.DavisKahan1970.PartIII`, `ForTauCeti.Analysis.InnerProductSpace.AngleGeometry`, `ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz`, `DavisKahan.Geometry.Halmos.GenericRotationPredicates`, `DavisKahan.Geometry.Angle.PaperTanAngle`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal`, `DavisKahan.Sources.DavisKahan1970.SinTwoTheta`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient`, `DavisKahan.Sources.DavisKahan1970.AmbientReal`, `DavisKahan.FiniteDimensional.Residual.AngleEmbeddings`, `DavisKahan.BoundedOperator.Compat`, `DavisKahan.Geometry.Angle.PaperDoubleAngle`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree`, `DavisKahan.DoubleAngle.TanTwoThetaBranchFree`, `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core`, `DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary`, `YuWangSamworth2015.Symmetric.Theorem2`, `YuWangSamworth2015.Core.Statistics`, `ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius`, `ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector`, `ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds`
+**Compiler imports:** `DavisKahan.Sources.DavisKahan1970.SineTheta.PaperSurface`, `DavisKahan.Sources.DavisKahan1970.SineTheta.ScalarGeneric`, `DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions`, `DavisKahan.Sources.DavisKahan1970.GeneralSinTheta`, `DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm`, `DavisKahan.Sylvester.ScalarGeneric`, `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction`, `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed`, `DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient`, `DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal`, `DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded`, `DavisKahan.Sources.DavisKahan1970.DirectedReal`, `Challenge.DavisKahan1970.Conformance`, `DavisKahan.Sources.DavisKahan1970.TanThetaAmbient`, `DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite`, `DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation`, `DavisKahan.Sources.DavisKahan1970.PartIII`, `DavisKahan.TanTheta.Theorem63UnboundedCompression`, `DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal`, `ForTauCeti.Analysis.InnerProductSpace.AngleGeometry`, `ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz`, `DavisKahan.Geometry.Halmos.GenericRotationPredicates`, `DavisKahan.Geometry.Angle.PaperTanAngle`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal`, `DavisKahan.Sources.DavisKahan1970.SinTwoTheta`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient`, `DavisKahan.Sources.DavisKahan1970.AmbientReal`, `DavisKahan.FiniteDimensional.Residual.AngleEmbeddings`, `DavisKahan.BoundedOperator.Compat`, `DavisKahan.Geometry.Angle.PaperDoubleAngle`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree`, `DavisKahan.DoubleAngle.TanTwoThetaBranchFree`, `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core`, `DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary`, `YuWangSamworth2015.Symmetric.Theorem2`, `YuWangSamworth2015.Core.Statistics`, `ForTauCeti.Analysis.InnerProductSpace.SinTheta.Frobenius`, `ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector`, `ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds`
 
 ## C. Davis and W. M. Kahan, The Rotation of Eigenvectors by a Perturbation. III, SIAM J. Numer. Anal. 7(1), 1970, 1–46.: Davis--Kahan single-angle sin theta theorem
 
@@ -239,7 +239,7 @@ The Section 2 tan-theta theorem: an ordered one-sided gap plus the Rayleigh--Rit
 - delta * ||tan Theta|| <= ||H||.
 
 **Scope**
-- Every source unitary-invariant norm; finite/infinite dimensional and real/complex scope, with the appendix unbounded extension when the residual/perturbation is bounded.
+- Every source unitary-invariant norm; finite/infinite dimensional and real/complex scope, with the appendix unbounded extension when the residual/perturbation is bounded.  The Appendix's tangent extension is specifically that BOTH A0 and Lambda1 may be unbounded, so the canonical directed and ambient witnesses must both carry a Ritz compression that is itself a densely defined partial map; a bounded compression under an unbounded ambient operator is a specialization, not this scope.
 
 ### Canonical Lean declarations
 
@@ -303,57 +303,58 @@ theorem tanTheta_ambient_unboundedRitz_paperUINorm_real
 
 **Compiler probe failed to resolve this declaration.**
 
-#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex`
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex`
 
 **Human-written Lean statement**
 
-`DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:92`
+`DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:212`
 
 ~~~~lean
 variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
-theorem tanTheta_directed_unboundedTrial_paperUINorm_complex
+theorem tanTheta_directed_unboundedRitz_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
-    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
-    {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (D : TanTheta.UnboundedTrialBlock A Z)
+    {A : H →ₗ.[ℂ] H}
+    {Z V : Submodule ℂ H}
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : DavisKahan.UnboundedRitzPair A Z)
+    (hV : DavisKahan.ReducingComplement A V)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo alpha (alpha + delta))
-      measurableSet_Ioo = 0)
-    (hCompression : ∀ z : Z,
-      RCLike.re ⟪D.operator z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     (tanTheta0 : Z →L[ℂ] H)
-    (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z
-      (selfAdjointSpectralSubspace A hA (Set.Iic alpha) measurableSet_Iic) tanTheta0)
-    (hResidual : N.Mem D.residual) :
+    (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0)
+    (hResidual : N.Mem D.trial.residual) :
     N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge D.residual
+      delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual
 ~~~~
 
 **Compiler probe failed to resolve this declaration.**
 
-#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real`
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real`
 
 **Human-written Lean statement**
 
-`DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:135`
+`DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:256`
 
 ~~~~lean
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
-theorem tanTheta_directed_unboundedTrial_paperUINorm_real
+theorem tanTheta_directed_unboundedRitz_paperUINorm_real
     (N : PaperUnitaryInvariantNorm)
-    (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
-    {Z : Submodule ℝ E} [Z.HasOrthogonalProjection] [CompleteSpace Z]
-    (D : TanTheta.UnboundedTrialBlock A Z)
+    {A : E →ₗ.[ℝ] E}
+    {Z V : Submodule ℝ E}
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : DavisKahan.UnboundedRitzPair A Z)
+    (hV : DavisKahan.ReducingComplement A V)
     {alpha delta : ℝ} (hdelta : 0 < delta)
-    (hgap : realSelfAdjointSpectralProjection A hA (Set.Ioo alpha (alpha + delta))
-      measurableSet_Ioo = 0)
-    (hCompression : ∀ z : Z, ⟪D.operator z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
     (tanTheta0 : Z →L[ℝ] E)
-    (htan : HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z
-      (realSelfAdjointSpectralSubspace A hA (Set.Iic alpha) measurableSet_Iic) tanTheta0)
-    (hResidual : N.Mem D.residual) :
+    (htan : HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0)
+    (hResidual : N.Mem D.trial.residual) :
     N.Mem tanTheta0 ∧
-      delta * N.gauge tanTheta0 ≤ N.gauge D.residual
+      delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual
 ~~~~
 
 **Compiler probe failed to resolve this declaration.**
@@ -370,6 +371,10 @@ theorem tanTheta_directed_unboundedTrial_paperUINorm_real
 - `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike` — unresolved; source located
 - `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial` — unresolved; source located
 - `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real` — unresolved; source located
+- `TauCeti.DavisKahan.ExactTanTheta.UnboundedCompressionTrialData.ideal_of_formBounds` — unresolved; source located
+- `TauCeti.DavisKahan1970.theorem6_3_unboundedCompression_ideal_real` — unresolved; source located
 
 ### Local semantic dictionary
 

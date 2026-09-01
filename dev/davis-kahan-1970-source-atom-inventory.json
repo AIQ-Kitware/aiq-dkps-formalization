@@ -3288,6 +3288,15 @@
         ],
         "rationale": "The Appendix returns to the ordered hypotheses in the general case and allows BOTH `A_0` and `Lambda_1` to be unbounded while the residual entering the estimate stays bounded. An explicit extension of the Section 2 tangent theorem's proved scope.",
         "source_quote": "allows \\emph{both} $A_0$ and $\\Lambda_1$ to be unbounded; the residual entering the displayed norm estimate is still required to be bounded"
+      },
+      "type_requirements": {
+        "must_contain": [
+          "UnboundedRitzPair"
+        ],
+        "must_not_contain": [
+          "UnboundedTrialBlock"
+        ],
+        "rationale": "This atom is a THIRD scope axis, distinct from `S2-unbounded-scope.unbounded-selfadjoint-scope` (the AMBIENT operator may be unbounded, checked by `→ₗ.[`) and from `S2-unbounded-scope.bounded-residual-needed` (the residual must be bounded, checked by `→L[`).  Here the RITZ COMPRESSION `A_0` itself may be unbounded.  A theorem can satisfy the other two and still fail this one, and one did: `tanTheta_directed_unboundedTrial_paperUINorm_complex` takes an ambient `A : H →ₗ.[ℂ] H` and a bounded residual, but its `TanTheta.UnboundedTrialBlock` carries `operator : Z →L[𝕜] Z` -- a BOUNDED compression, the name recording only that the ambient operator is unbounded.  `UnboundedRitzPair.trial.compression : Z →ₗ.[𝕜] Z` is the carrier that actually realizes the Appendix scope, and `UnboundedTrialBlock` is the bounded-compression bundle that must not be mistaken for it."
       }
     },
     {
