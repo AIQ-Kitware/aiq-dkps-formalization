@@ -385,6 +385,18 @@ def _validate_total_source_classification(
 
 CLAUSE_STATUSES = {"established", "open"}
 
+# The atom kinds that carry a counted result's PRINTED STATEMENT, as opposed to
+# its hypotheses (`hypothesis`, `numbered-equation`) or its scope (`scope`).
+#
+# This was `{"theorem"}` until 2026-08-31, and that was a hole: five counted
+# results state their conclusion under a different kind -- the four Section 6
+# lemmas under `lemma`, and Proposition 4.4 under `source-assertion`, because it
+# is false as printed.  For those five the "every printed conclusion has an
+# established clause" check was vacuous, so a clause could name no conclusion at
+# all and the row still counted as terminal.  Found by the 2026-08-31 hostile
+# re-review, which is exactly the kind of gap it was looking for.
+CONCLUSION_ATOM_KINDS = {"theorem", "lemma", "source-assertion"}
+
 
 def _validate_source_clauses(
     items: list[dict[str, Any]],
@@ -444,6 +456,7 @@ def _validate_source_clauses(
         covered_conclusions: set[str] = set()
         clause_local: set[str] = set()
         scalar_by_conclusion: dict[str, set[str]] = {}
+        refuted_conclusions: set[str] = set()
         opens: list[str] = []
         for clause in clauses:
             if not isinstance(clause, dict):
@@ -486,6 +499,30 @@ def _validate_source_clauses(
             correspondence = evidence.get("correspondence", [])
             if not isinstance(correspondence, list) or not all(isinstance(x, str) for x in correspondence):
                 fail(f"{where}: evidence.correspondence must be a list of declaration names")
+            # A clause's primary IS this result's canonical evidence for that clause.
+            # Without this, a primary could be a `supporting_evidence` declaration --
+            # a specialization, a presentation wrapper, an alternative route -- and the
+            # coherence check below would then have no compiler-printed type to work
+            # with.  Stated as its own rule so the failure names the real problem.
+            canonical_scopes = {
+                entry.get("declaration"): entry.get("scalar_scope")
+                for entry in item.get("canonical_evidence", []) or []
+                if isinstance(entry, dict)
+            }
+            if primary not in canonical_scopes:
+                fail(
+                    f"{where}: evidence.primary {primary} is not canonical evidence of this result; "
+                    "a clause's primary witness is by definition canonical evidence, not supporting "
+                    "evidence"
+                )
+            # The clause's own scalar field must be the primary's, and the primary's is
+            # compiler-derived.  Otherwise a row could claim both of the paper's scalar
+            # fields while both clauses are witnessed over the same one.
+            if clause.get("scalar_scope") != canonical_scopes[primary]:
+                fail(
+                    f"{where}: clause scalar_scope {clause.get('scalar_scope')!r} disagrees with the "
+                    f"compiler-derived scalar scope {canonical_scopes[primary]!r} of its primary {primary}"
+                )
             for declaration in [primary, *correspondence]:
                 if declaration not in _declarations(item):
                     fail(f"{where}: {declaration} is not registered in the result's lean_declarations")
@@ -507,8 +544,15 @@ def _validate_source_clauses(
                 continue
 
             covered_conclusions.update(conclusions)
+            is_refutation = any(
+                entry.get("declaration") == primary and entry.get("role") == "exact_refutation"
+                for entry in item.get("canonical_evidence", []) or []
+                if isinstance(entry, dict)
+            )
             for atom_id in conclusions:
                 scalar_by_conclusion.setdefault(atom_id, set()).add(clause.get("scalar_scope"))
+                if is_refutation:
+                    refuted_conclusions.add(atom_id)
 
             # THE COHERENCE CHECK: the clause's own primary must satisfy the type
             # requirements of its conclusions AND of every result-wide scope atom.
@@ -540,10 +584,32 @@ def _validate_source_clauses(
                             f"{where}: {atom_id} cannot be decided from a printed type, so this clause must "
                             f"record {key} naming the hypotheses in {primary} that realize it"
                         )
+                    # Prose alone is an escape hatch, so the clause must also NAME the
+                    # hypotheses, and every name must actually occur in the primary's
+                    # printed type.  A justification may then still be wrong about what
+                    # those hypotheses mean, but it can no longer claim a scope realized
+                    # by hypotheses the theorem does not have.
+                    tokens = clause.get("gap_scope_hypothesis_tokens")
+                    if not isinstance(tokens, list) or not tokens or not all(
+                        isinstance(t, str) and t.strip() for t in tokens
+                    ):
+                        fail(
+                            f"{where}: {atom_id} is clause-justified, so this clause must list the "
+                            "hypothesis tokens realizing it, in gap_scope_hypothesis_tokens"
+                        )
+                    if probed_types is not None:
+                        printed = probed_types.get(primary)
+                        absent = [t for t in tokens if t not in (printed or "")]
+                        if absent:
+                            fail(
+                                f"{where}: gap_scope_hypothesis_tokens {absent!r} do not occur in the "
+                                f"compiler-printed type of {primary}, so the recorded justification for "
+                                f"{atom_id} describes hypotheses this theorem does not have"
+                            )
 
         result_conclusions = {
             atom_id for atom_id in atoms
-            if source_atoms[atom_id].get("kind") == "theorem"
+            if source_atoms[atom_id].get("kind") in CONCLUSION_ATOM_KINDS
         }
         uncovered = sorted(result_conclusions - covered_conclusions)
         is_terminal = (
@@ -565,6 +631,12 @@ def _validate_source_clauses(
         # both of the paper's scalar fields must be reached for each conclusion
         for atom_id, scopes in scalar_by_conclusion.items():
             if scopes & {"rclike", "scalar_generic"}:
+                continue
+            # A refutation is discharged by ONE counterexample.  The paper asserts the
+            # printed statement over a real or complex space, so a counterexample in
+            # either field already refutes it; demanding both would be demanding two
+            # counterexamples for one false claim.
+            if atom_id in refuted_conclusions:
                 continue
             if not {"complex", "real"} <= scopes:
                 fail(

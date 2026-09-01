@@ -16,6 +16,7 @@ import DavisKahan.Sources.DavisKahan1970.DirectedUnboundedReal
 import DavisKahan.Sources.DavisKahan1970.DoubleAngleTangentOperator
 import DavisKahan.Sources.DavisKahan1970.GeneralSinTheta
 import DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions
+import DavisKahan.Sources.DavisKahan1970.PaperNormFanDominance
 import DavisKahan.Sources.DavisKahan1970.SineTheta.PaperSurface
 import DavisKahan.Sources.DavisKahan1970.PartIII
 import DavisKahan.Sources.DavisKahan1970.PartIIIManuscriptSurface

@@ -198,6 +198,8 @@ endpoints below them are their specializations, retained as an alternative proof
 #check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_complex
 #check @TauCeti.DavisKahan.approximationSingularValue_sinTwoThetaIdealBlock_real
 #check @TauCeti.DavisKahan.extendedGauge_sinTwoThetaIdealBlock_real
+#check @TauCeti.DavisKahan.mem_sinTwoAngleOperatorC_iff
+#check @TauCeti.DavisKahan.gauge_sinTwoAngleOperatorC
 #check @TauCeti.DavisKahan.mem_sinTwoAngleOperatorRC_iff
 #check @TauCeti.DavisKahan.gauge_sinTwoAngleOperatorRC
 #check @TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex
@@ -356,6 +358,9 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
+#check @TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_paperUINorm_real
+#check @TauCeti.DavisKahan1970.paperUINorm_of_kyFanDominant
 #check @TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex
 #check @TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real
 #check @TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute
@@ -373,6 +378,8 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
+#check @TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_paperUINorm_real
 #check @TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge
 #check @TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge
 
@@ -403,6 +410,8 @@ Status: **TERMINAL EXACT**.
 Status: **TERMINAL EXACT**.
 -/
 
+#check @TauCeti.DavisKahan1970.theorem5_2_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.theorem5_2_paperUINorm_real
 #check @TauCeti.DavisKahan1970.Theorem5_2
 #check @TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real
 #check @TauCeti.DavisKahan1970.Audits.theorem5_2_real_ordered_sourceAudit
@@ -475,9 +484,16 @@ Status: **TERMINAL EXACT**.
 
 /-! ## DK-6.3-thm: Tangent proof machinery, Example 6.1, and generalized tangent theorem
 
-Status: **TERMINAL EXACT**.
+Status: **TERMINAL EXACT**.  The canonical witnesses are the two paper-norm
+endpoints: Theorem 6.3 is printed "for every unitary-invariant norm", and the
+representative is a parameter characterised by its approximation numbers, so one
+theorem serves every norm.  The existential ideal-gauge forms below select a
+representative per Ky Fan index and are supporting evidence.
 -/
 
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex
+#check @TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real
+#check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal
 #check @TauCeti.DavisKahan.ExactTanTheta.theorem6_3_unbounded_infiniteTrial_ideal_exists
 #check @TauCeti.DavisKahan1970.theorem6_3_unbounded_infiniteTrial_ideal_exists_real
 #check @TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_complex
