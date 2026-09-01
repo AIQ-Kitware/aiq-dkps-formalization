@@ -762,6 +762,86 @@ theorem tanTwoTheta_ambient_proof_complex (N : UINorm)
 
 end TanTwoThetaClauses
 
+section TanTwoThetaDirectedReal
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+
+/-- **The directed clause of the Challenge's `tan 2Θ` theorem, discharged from
+the development over `ℝ`.**
+
+`δ ‖tan 2Θ₀‖ ≤ 2 ‖R‖` on the residual corner alone, with the pole exclusion as a
+conclusion and each directed principal angle counted once.  The trial subspace is
+any subspace reducing `A` with the ordered separation; no spectral selection. -/
+theorem tanTwoTheta_directed_proof_real (N : UINorm)
+    {A : E →ₗ.[ℝ] E} (hA : IsSelfAdjoint A)
+    {U : Submodule ℝ E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (H : E →L[ℝ] E)
+    (hoffdiag₀ : U.starProjection ∘L H ∘L U.starProjection = 0)
+    (hoffdiag₁ : Uᗮ.starProjection ∘L H ∘L Uᗮ.starProjection = 0)
+    {α δ : ℝ} (hδ : 0 < δ)
+    (hlow : ∀ x : A.domain, (x : E) ∈ U →
+      RCLike.re ⟪A x, (x : E)⟫_ℝ ≤ α * ‖(x : E)‖ ^ 2)
+    (hhigh : ∀ x : A.domain, (x : E) ∈ Uᗮ →
+      (α + δ) * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℝ)
+    {V : Submodule ℝ E} [V.HasOrthogonalProjection]
+    (hV : Reduces (addBounded A H) V)
+    (hRmem : N.Finite (Uᗮ.starProjection ∘L H ∘L U.starProjection)) :
+    TangentDefined (directedDoubleSine U V) ∧
+      N.SeqFinite (tanSeq (directedDoubleSine U V)) ∧
+      δ * N.seqNorm (tanSeq (directedDoubleSine U V)) ≤
+        2 * N.norm (Uᗮ.starProjection ∘L H ∘L U.starProjection) := by
+  have hblk : TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock Uᗮ U H =
+      Uᗮ.starProjection ∘L H ∘L U.starProjection := rfl
+  have hgap : N.toPaper.extendedGauge
+      (TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock Uᗮ U H) =
+      N.toPaper.extendedGauge (TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression Uᗮ U H) :=
+    N.toPaper.extendedGauge_eq_of_hasSameApproximationNumbers
+      (TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock_same_compression Uᗮ U H)
+  have hRmem0 : N.toPaper.Mem
+      (TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock Uᗮ U H) := by
+    rw [hblk]
+    exact (N.finite_iff _).1 hRmem
+  have hRmem' : N.toPaper.Mem
+      (TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression Uᗮ U H) := by
+    unfold PaperUnitaryInvariantNorm.Mem at hRmem0 ⊢
+    rwa [← hgap]
+  have hlow' : ∀ x : A.domain, (x : E) ∈ U →
+      ⟪A x, (x : E)⟫_ℝ ≤ α * ‖(x : E)‖ ^ 2 := by
+    intro x hx; simpa using hlow x hx
+  have hhigh' : ∀ x : A.domain, (x : E) ∈ Uᗮ →
+      (α + δ) * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ := by
+    intro x hx; simpa using hhigh x hx
+  obtain ⟨hlt, hseq, hmem, hle⟩ :=
+    TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_paperUINorm_real
+      N.toPaper V hA ((reduces_iff A U).1 hU)
+      (isOddFor_of_offDiagonal hoffdiag₀ hoffdiag₁)
+      (reflectionIntertwines_of_reduces hV)
+      hlow' hhigh' (by linarith) hRmem'
+  have heval : N.evalSeq (tanSeq (directedDoubleSine U V)) =
+      N.toPaper.extendedGauge (TauCeti.DavisKahan1970.reflectionTangentCorner U
+        V.reflectionOperator) :=
+    N.evalSeq_eq_of_approximationNumber _ _ hseq
+  refine ⟨tangentDefined_of_approximationNumber_lt_one _ hlt, ?_, ?_⟩
+  · show N.evalSeq (tanSeq (directedDoubleSine U V)) ≠ ⊤
+    rw [heval]; exact hmem
+  · have hg : N.toPaper.gauge (TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock Uᗮ U H) =
+        N.toPaper.gauge (TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression Uᗮ U H) := by
+      unfold PaperUnitaryInvariantNorm.gauge
+      rw [hgap]
+    have hδeq : α + δ - α = δ := by ring
+    rw [hδeq] at hle
+    have hgoal : δ * (N.evalSeq (tanSeq (directedDoubleSine U V))).toReal ≤
+        2 * N.toPaper.gauge
+          (TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock Uᗮ U H) := by
+      rw [heval, hg]
+      exact hle
+    rw [← hblk]
+    exact hgoal
+
+
+end TanTwoThetaDirectedReal
+
+
 /-! ## 10. The directed clause of `sin 2Θ`, over `ℂ`
 
 The clause the Appendix bounds by a **bounded** trial compression: `V` sits
@@ -971,6 +1051,74 @@ theorem tanTwoTheta_ambient_proof_real (N : UINorm)
     exact hgoal
 
 open TauCeti.ScalarTransport in
+/-- **The shared hypothesis package of the ordered-gap clauses, transported.**
+
+Self-adjointness, reducing, the two vanishing diagonal blocks, the two ordered
+form bounds and the reduction of the perturbed operator, all read at the
+transported field.  Nothing here is specific to a single clause: it is the
+Section 2 ordered-gap data. -/
+theorem orderedGap_hypotheses_pmap {𝕜 : Type u} {𝕂 : Type} [RCLike 𝕜] [RCLike 𝕂]
+    (e : TauCeti.RCLikeIso 𝕜 𝕂)
+    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (H : E →L[𝕜] E)
+    (hoffdiag₀ : U.starProjection ∘L H ∘L U.starProjection = 0)
+    (hoffdiag₁ : Uᗮ.starProjection ∘L H ∘L Uᗮ.starProjection = 0)
+    {α δ : ℝ}
+    (hlow : ∀ x : A.domain, (x : E) ∈ U →
+      RCLike.re ⟪A x, (x : E)⟫_𝕜 ≤ α * ‖(x : E)‖ ^ 2)
+    (hhigh : ∀ x : A.domain, (x : E) ∈ Uᗮ →
+      (α + δ) * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_𝕜)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection]
+    (hV : Reduces (addBounded A H) V) :
+      IsSelfAdjoint (pmap (e := e) A) ∧
+      Reduces (pmap (e := e) A) (submodule (e := e) U) ∧
+      ((submodule (e := e) U).starProjection ∘L clm (e := e) H ∘L
+        (submodule (e := e) U).starProjection = 0) ∧
+      ((submodule (e := e) U)ᗮ.starProjection ∘L clm (e := e) H ∘L
+        (submodule (e := e) U)ᗮ.starProjection = 0) ∧
+      (∀ y : (pmap (e := e) A).domain,
+        (y : ScalarTransport e E) ∈ submodule (e := e) U →
+        RCLike.re ⟪pmap (e := e) A y, (y : ScalarTransport e E)⟫_𝕂 ≤
+          α * ‖(y : ScalarTransport e E)‖ ^ 2) ∧
+      (∀ y : (pmap (e := e) A).domain,
+        (y : ScalarTransport e E) ∈ (submodule (e := e) U)ᗮ →
+        (α + δ) * ‖(y : ScalarTransport e E)‖ ^ 2 ≤
+          RCLike.re ⟪pmap (e := e) A y, (y : ScalarTransport e E)⟫_𝕂) ∧
+      Reduces (addBounded (pmap (e := e) A) (clm (e := e) H))
+        (submodule (e := e) V) := by
+  refine ⟨(isSelfAdjoint_pmap_iff (e := e)).mpr hA,
+    (reduces_pmap_iff (e := e)).mpr hU, ?_, ?_, ?_, ?_, ?_⟩
+  · rw [starProjection_clm, ← clm_comp, ← clm_comp, hoffdiag₀, clm_zero]
+  · rw [Submodule.starProjection_congr (submodule_orthogonal (e := e) U),
+      starProjection_clm, ← clm_comp, ← clm_comp, hoffdiag₁, clm_zero]
+  · intro y hy
+    have hmem : out (e := e) (y : ScalarTransport e E) ∈ A.domain := y.2
+    have h := hlow ⟨out (e := e) (y : ScalarTransport e E), hmem⟩
+      ((mem_submodule (e := e)).mp hy)
+    show RCLike.re (inner 𝕂
+        (of (e := e) (A ⟨out (e := e) (y : ScalarTransport e E), hmem⟩))
+        (of (e := e) (out (e := e) (y : ScalarTransport e E)))) ≤
+      α * ‖out (e := e) (y : ScalarTransport e E)‖ ^ 2
+    rw [re_inner_of]
+    exact h
+  · intro y hy
+    have hmem : out (e := e) (y : ScalarTransport e E) ∈ A.domain := y.2
+    have hy' : out (e := e) (y : ScalarTransport e E) ∈ Uᗮ := by
+      rw [← mem_submodule (e := e), ← submodule_orthogonal (e := e) U]
+      exact hy
+    have h := hhigh ⟨out (e := e) (y : ScalarTransport e E), hmem⟩ hy'
+    show (α + δ) * ‖out (e := e) (y : ScalarTransport e E)‖ ^ 2 ≤
+      RCLike.re (inner 𝕂
+        (of (e := e) (A ⟨out (e := e) (y : ScalarTransport e E), hmem⟩))
+        (of (e := e) (out (e := e) (y : ScalarTransport e E))))
+    rw [re_inner_of]
+    exact h
+  · rw [← addBounded_pmap (e := e) H]
+    exact (reduces_pmap_iff (e := e)).mpr hV
+
+open TauCeti.ScalarTransport in
 /-- **The ambient clause of the Challenge's `tan 2Θ` theorem, at an arbitrary
 `RCLike` field.**
 
@@ -1012,67 +1160,89 @@ theorem tanTwoTheta_ambient_proof (N : UINorm)
     rw [ambientDoubleSine_pmap (e := e) U V, tanSeq_clm, tangentDefined_clm_iff,
       UINorm.norm_clm] at h
     exact h
-  -- and the transported hypotheses
-  have push : ∀ {𝕂 : Type} [RCLike 𝕂] (e : TauCeti.RCLikeIso 𝕜 𝕂),
-      IsSelfAdjoint (pmap (e := e) A) ∧
-      Reduces (pmap (e := e) A) (submodule (e := e) U) ∧
-      IsSelfAdjoint (clm (e := e) H) ∧
-      ((submodule (e := e) U).starProjection ∘L clm (e := e) H ∘L
-        (submodule (e := e) U).starProjection = 0) ∧
-      ((submodule (e := e) U)ᗮ.starProjection ∘L clm (e := e) H ∘L
-        (submodule (e := e) U)ᗮ.starProjection = 0) ∧
-      (∀ y : (pmap (e := e) A).domain,
-        (y : ScalarTransport e E) ∈ submodule (e := e) U →
-        RCLike.re ⟪pmap (e := e) A y, (y : ScalarTransport e E)⟫_𝕂 ≤
-          α * ‖(y : ScalarTransport e E)‖ ^ 2) ∧
-      (∀ y : (pmap (e := e) A).domain,
-        (y : ScalarTransport e E) ∈ (submodule (e := e) U)ᗮ →
-        (α + δ) * ‖(y : ScalarTransport e E)‖ ^ 2 ≤
-          RCLike.re ⟪pmap (e := e) A y, (y : ScalarTransport e E)⟫_𝕂) ∧
-      Reduces (addBounded (pmap (e := e) A) (clm (e := e) H))
-        (submodule (e := e) V) ∧
-      N.Finite (clm (e := e) H) := by
-    intro 𝕂 _ e
-    refine ⟨(isSelfAdjoint_pmap_iff (e := e)).mpr hA,
-      (reduces_pmap_iff (e := e)).mpr hU,
-      (isSelfAdjoint_clm_iff (e := e)).mpr hH, ?_, ?_, ?_, ?_, ?_,
-      (UINorm.finite_clm_iff (e := e) N H).mpr hHmem⟩
-    · rw [starProjection_clm, ← clm_comp, ← clm_comp, hoffdiag₀, clm_zero]
-    · rw [Submodule.starProjection_congr (submodule_orthogonal (e := e) U),
-        starProjection_clm, ← clm_comp, ← clm_comp, hoffdiag₁, clm_zero]
-    · intro y hy
-      have hmem : out (e := e) (y : ScalarTransport e E) ∈ A.domain := y.2
-      have h := hlow ⟨out (e := e) (y : ScalarTransport e E), hmem⟩
-        ((mem_submodule (e := e)).mp hy)
-      show RCLike.re (inner 𝕂
-          (of (e := e) (A ⟨out (e := e) (y : ScalarTransport e E), hmem⟩))
-          (of (e := e) (out (e := e) (y : ScalarTransport e E)))) ≤
-        α * ‖out (e := e) (y : ScalarTransport e E)‖ ^ 2
-      rw [re_inner_of]
-      exact h
-    · intro y hy
-      have hmem : out (e := e) (y : ScalarTransport e E) ∈ A.domain := y.2
-      have hy' : out (e := e) (y : ScalarTransport e E) ∈ Uᗮ := by
-        rw [← mem_submodule (e := e), ← submodule_orthogonal (e := e) U]
-        exact hy
-      have h := hhigh ⟨out (e := e) (y : ScalarTransport e E), hmem⟩ hy'
-      show (α + δ) * ‖out (e := e) (y : ScalarTransport e E)‖ ^ 2 ≤
-        RCLike.re (inner 𝕂
-          (of (e := e) (A ⟨out (e := e) (y : ScalarTransport e E), hmem⟩))
-          (of (e := e) (out (e := e) (y : ScalarTransport e E))))
-      rw [re_inner_of]
-      exact h
-    · rw [← addBounded_pmap (e := e) H]
-      exact (reduces_pmap_iff (e := e)).mpr hV
   rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with hI | hI
   · set e := TauCeti.RCLikeIso.real (𝕜 := 𝕜) hI with he
-    obtain ⟨h1, h2, h3, h4, h5, h6, h7, h8, h9⟩ := push (𝕂 := ℝ) e
+    obtain ⟨h1, h2, h4, h5, h6, h7, h8⟩ :=
+      orderedGap_hypotheses_pmap e hA hU H hoffdiag₀ hoffdiag₁ hlow hhigh hV
     exact key (𝕂 := ℝ) e
-      (tanTwoTheta_ambient_proof_real N h1 h2 _ h3 h4 h5 hδ h6 h7 h8 h9)
+      (tanTwoTheta_ambient_proof_real N h1 h2 _ ((isSelfAdjoint_clm_iff (e := e)).mpr hH)
+        h4 h5 hδ h6 h7 h8 ((UINorm.finite_clm_iff (e := e) N H).mpr hHmem))
   · set e := TauCeti.RCLikeIso.complex (𝕜 := 𝕜) hI with he
-    obtain ⟨h1, h2, h3, h4, h5, h6, h7, h8, h9⟩ := push (𝕂 := ℂ) e
+    obtain ⟨h1, h2, h4, h5, h6, h7, h8⟩ :=
+      orderedGap_hypotheses_pmap e hA hU H hoffdiag₀ hoffdiag₁ hlow hhigh hV
     exact key (𝕂 := ℂ) e
-      (tanTwoTheta_ambient_proof_complex N h1 h2 _ h3 h4 h5 hδ h6 h7 h8 h9)
+      (tanTwoTheta_ambient_proof_complex N h1 h2 _ ((isSelfAdjoint_clm_iff (e := e)).mpr hH)
+        h4 h5 hδ h6 h7 h8 ((UINorm.finite_clm_iff (e := e) N H).mpr hHmem))
+
+
+open TauCeti.ScalarTransport in
+/-- The residual corner `P_{Uᗮ} H P_U` transports. -/
+theorem residualCorner_pmap {𝕜 : Type u} {𝕂 : Type} [RCLike 𝕜] [RCLike 𝕂]
+    {e : TauCeti.RCLikeIso 𝕜 𝕂} {E : Type v} [NormedAddCommGroup E]
+    [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (H : E →L[𝕜] E) :
+    (submodule (e := e) U)ᗮ.starProjection ∘L clm (e := e) H ∘L
+        (submodule (e := e) U).starProjection =
+      clm (e := e) (Uᗮ.starProjection ∘L H ∘L U.starProjection) := by
+  rw [Submodule.starProjection_congr (submodule_orthogonal (e := e) U),
+    starProjection_clm, starProjection_clm, ← clm_comp, ← clm_comp]
+
+open TauCeti.ScalarTransport in
+/-- **The directed clause of the Challenge's `tan 2Θ` theorem, at an arbitrary
+`RCLike` field.** -/
+theorem tanTwoTheta_directed_proof (N : UINorm)
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (H : E →L[𝕜] E)
+    (hoffdiag₀ : U.starProjection ∘L H ∘L U.starProjection = 0)
+    (hoffdiag₁ : Uᗮ.starProjection ∘L H ∘L Uᗮ.starProjection = 0)
+    {α δ : ℝ} (hδ : 0 < δ)
+    (hlow : ∀ x : A.domain, (x : E) ∈ U →
+      RCLike.re ⟪A x, (x : E)⟫_𝕜 ≤ α * ‖(x : E)‖ ^ 2)
+    (hhigh : ∀ x : A.domain, (x : E) ∈ Uᗮ →
+      (α + δ) * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_𝕜)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection]
+    (hV : Reduces (addBounded A H) V)
+    (hRmem : N.Finite (Uᗮ.starProjection ∘L H ∘L U.starProjection)) :
+    TangentDefined (directedDoubleSine U V) ∧
+      N.SeqFinite (tanSeq (directedDoubleSine U V)) ∧
+      δ * N.seqNorm (tanSeq (directedDoubleSine U V)) ≤
+        2 * N.norm (Uᗮ.starProjection ∘L H ∘L U.starProjection) := by
+  have key : ∀ {𝕂 : Type} [RCLike 𝕂] (e : TauCeti.RCLikeIso 𝕜 𝕂),
+      (TangentDefined (directedDoubleSine (submodule (e := e) U) (submodule (e := e) V)) ∧
+        N.SeqFinite (tanSeq (directedDoubleSine (submodule (e := e) U)
+          (submodule (e := e) V))) ∧
+        δ * N.seqNorm (tanSeq (directedDoubleSine (submodule (e := e) U)
+          (submodule (e := e) V))) ≤
+          2 * N.norm ((submodule (e := e) U)ᗮ.starProjection ∘L clm (e := e) H ∘L
+            (submodule (e := e) U).starProjection)) →
+      TangentDefined (directedDoubleSine U V) ∧
+        N.SeqFinite (tanSeq (directedDoubleSine U V)) ∧
+        δ * N.seqNorm (tanSeq (directedDoubleSine U V)) ≤
+          2 * N.norm (Uᗮ.starProjection ∘L H ∘L U.starProjection) := by
+    intro 𝕂 _ e h
+    rw [directedDoubleSine_pmap (e := e) U V, tanSeq_clm, tangentDefined_clm_iff,
+      residualCorner_pmap (e := e) U H, UINorm.norm_clm] at h
+    exact h
+  have pushR : ∀ {𝕂 : Type} [RCLike 𝕂] (e : TauCeti.RCLikeIso 𝕜 𝕂),
+      N.Finite ((submodule (e := e) U)ᗮ.starProjection ∘L clm (e := e) H ∘L
+        (submodule (e := e) U).starProjection) := by
+    intro 𝕂 _ e
+    rw [residualCorner_pmap (e := e) U H]
+    exact (UINorm.finite_clm_iff (e := e) N _).mpr hRmem
+  rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with hI | hI
+  · set e := TauCeti.RCLikeIso.real (𝕜 := 𝕜) hI with he
+    obtain ⟨h1, h2, h4, h5, h6, h7, h8⟩ :=
+      orderedGap_hypotheses_pmap e hA hU H hoffdiag₀ hoffdiag₁ hlow hhigh hV
+    exact key (𝕂 := ℝ) e
+      (tanTwoTheta_directed_proof_real N h1 h2 _ h4 h5 hδ h6 h7 h8 (pushR (𝕂 := ℝ) e))
+  · set e := TauCeti.RCLikeIso.complex (𝕜 := 𝕜) hI with he
+    obtain ⟨h1, h2, h4, h5, h6, h7, h8⟩ :=
+      orderedGap_hypotheses_pmap e hA hU H hoffdiag₀ hoffdiag₁ hlow hhigh hV
+    exact key (𝕂 := ℂ) e
+      (tanTwoTheta_directed_proof_complex N h1 h2 _ h4 h5 hδ h6 h7 h8 (pushR (𝕂 := ℂ) e))
 
 end TanTwoThetaAmbientGeneric
 

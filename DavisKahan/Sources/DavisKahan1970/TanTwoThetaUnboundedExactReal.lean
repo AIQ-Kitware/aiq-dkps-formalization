@@ -5,6 +5,7 @@ Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
+import DavisKahan.DoubleAngle.RealAngleIdentification
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 import DavisKahan.DoubleAngle.TangentTransport
@@ -699,6 +700,102 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_paperUINorm_real
     exact hle
 
 end ReducingReal
+
+section DirectedReducingReal
+
+variable {A : E →ₗ.[ℝ] E} {B : E →L[ℝ] E} {U : Submodule ℝ E}
+  [U.HasOrthogonalProjection] {a b : ℝ}
+
+/-- **Davis--Kahan 1970, `tan 2Θ`, unbounded directed residual form over `ℝ`, at
+an arbitrary reducing subspace, with the doubled tangent read off the doubled
+sine.**
+
+`(b − a) N(tan 2Θ₀) ≤ 2 N(R)` on the residual corner, together with the two facts
+that make the left-hand side a statement about the sequence `|tan 2θⱼ|`: no
+directed doubled angle is a quarter turn, and the corner's singular values are
+exactly `tan (arcsin aₙ(sin 2Θ₀))`, each directed principal angle once. -/
+theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    (V : Submodule ℝ E) [V.HasOrthogonalProjection]
+    (hA : _root_.IsSelfAdjoint A)
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hB : TauCeti.IsOddFor U B)
+    (hV : DavisKahan.ReflectionIntertwines A B V)
+    (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
+    (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
+    (hab : a < b)
+    (hRmem : N.Mem (paperBlockCompression Uᗮ U B)) :
+    (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
+      (∀ n : ℕ,
+        (reflectionTangentCorner U V.reflectionOperator).approximationNumber n =
+          Real.tan (Real.arcsin
+            ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))) ∧
+      N.Mem (reflectionTangentCorner U V.reflectionOperator) ∧
+      (b - a) * N.gauge (reflectionTangentCorner U V.reflectionOperator) ≤
+        2 * N.gauge (paperBlockCompression Uᗮ U B) := by
+  classical
+  have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
+  have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
+  obtain ⟨hCC, hmem, hle⟩ :=
+    tanTwoTheta_directed_unboundedResidual_reducing_paperUINorm_real hA hred hB
+      hZsa hZ2 hV.mapsDomain hV.commutes hUa hUb hab N hRmem
+  have hAc : _root_.IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
+    TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
+  have hZsaC : IsSelfAdjoint (complexify V.reflectionOperator) :=
+    (complexify_isSelfAdjoint_iff _).2 hZsa
+  have hZ2C : complexify V.reflectionOperator * complexify V.reflectionOperator = 1 := by
+    rw [← complexify_mul, hZ2, complexify_one]
+  have hS1C : ‖(complexifySubmodule U).offDiagonalPart
+      (complexify V.reflectionOperator)‖ < 1 :=
+    norm_offDiagonalPart_lt_one_reducing_exact hAc (reducesSubspace_complexifyReal hred)
+      (isOddFor_complexifySubmodule hB) hZsaC hZ2C
+      (mapsDomainTo_complexifyReal hV.mapsDomain)
+      (complexified_reducing_commutation hV.mapsDomain hV.commutes)
+      (complexified_upper_form_bound_reducing hA hred hB hZsa hZ2 hV.mapsDomain
+        hV.commutes hUa hUb hab)
+      (complexified_lower_form_bound_reducing hA hred hB hZsa hZ2 hV.mapsDomain
+        hV.commutes hUa hUb hab) hab
+  have hrefl : complexify V.reflectionOperator =
+      (complexifySubmodule V).reflectionOperator :=
+    DavisKahan.complexify_reflectionOperator V
+  -- the directed sine corner and the ideal block, over `ℂ`
+  have hsameC := hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock
+    (complexifySubmodule U) (complexifySubmodule V)
+  -- the ideal block's approximation numbers are the real ones
+  have hblock : ∀ n : ℕ,
+      (DavisKahan.sinTwoThetaIdealBlock (complexifySubmodule U)
+          (complexifySubmodule V)).approximationNumber n =
+        (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n := by
+    intro n
+    rw [← DavisKahan.complexify_sinTwoThetaIdealBlock U V]
+    exact ComplexificationApproximation.approximationSingularValue_complexify
+      (DavisKahan.sinTwoThetaIdealBlock U V) n
+  -- the tangent corner's approximation numbers are the real ones
+  have hcorner : ∀ n : ℕ,
+      (reflectionTangentCorner (complexifySubmodule U)
+          (complexify V.reflectionOperator)).approximationNumber n =
+        (reflectionTangentCorner U V.reflectionOperator).approximationNumber n := by
+    intro n
+    rw [reflectionTangentCorner, reflectionTangentCorner,
+      unboundedReflectionTangent_complexifySubmodule U V.reflectionOperator hCC]
+    exact approximationSingularValue_directedCorner_complexify U
+      (unboundedReflectionTangent U V.reflectionOperator) n
+  refine ⟨fun n => ?_, fun n => ?_, hmem, hle⟩
+  · rw [← hblock n, ← hsameC n]
+    exact lt_of_le_of_lt
+      ((reflectionSineCorner (complexifySubmodule U)
+        (complexifySubmodule V).reflectionOperator).approximationNumber_le_norm n)
+      (lt_of_le_of_lt norm_reflectionSineCorner_le (hrefl ▸ hS1C))
+  · rw [← hcorner n, ← hblock n, ← hsameC n, hrefl]
+    have hZsaC' : IsSelfAdjoint (complexifySubmodule V).reflectionOperator := hrefl ▸ hZsaC
+    have hZ2C' : (complexifySubmodule V).reflectionOperator *
+        (complexifySubmodule V).reflectionOperator = 1 := hrefl ▸ hZ2C
+    have hS1C' : ‖(complexifySubmodule U).offDiagonalPart
+        (complexifySubmodule V).reflectionOperator‖ < 1 := hrefl ▸ hS1C
+    exact approximationNumber_reflectionTangentCorner hZsaC' hZ2C' hS1C' n
+
+end DirectedReducingReal
+
 
 end
 
