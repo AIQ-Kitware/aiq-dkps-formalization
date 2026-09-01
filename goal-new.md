@@ -1305,14 +1305,30 @@ mathematics.
   Deciding feasibility from the development's dependency graph, instead of by
   building the candidate, was the error the brief warned against.
 
-**Item 23--30 (Palomar): the candidate has been built.**
+**Item 23--30 (Palomar): the candidate has been built, and then repaired.**
 `dev/palomar-candidate/Challenge.lean` compiles against `import Mathlib` alone,
-at **511 lines / 23,579 bytes** -- inside the 1000-line / 100 KiB cap -- with four
-`[RCLike 𝕜]` headline theorems and no functional calculus.  `Solution.lean`
-proves the `sin Θ` statement from the development, outright at `ℂ` and at `ℝ`,
-and proves that the Challenge's unitarily invariant norm *is* the development's
-`PaperUnitaryInvariantNorm`, by `rfl`.  What made it small was naming the angle
-quantities by their singular values instead of constructing them.
+at **684 lines / 32,765 bytes** -- inside the 1000-line / 100 KiB cap -- with four
+`[RCLike 𝕜]` headline theorems and no functional calculus.  What made it small
+was naming the angle quantities by their singular values instead of constructing
+them.
+
+**The first draft's four statements were not the paper's.**  A clause-by-clause
+re-audit against the printed Section 2 blocks found that `tan Θ₀` had been
+defined from the *residual*; that the Ritz compression had been forced to be
+bounded, losing the source's Appendix scope; that the ambient ideal-membership
+premise was shared with the directed clauses, so each directed clause carried its
+neighbour's hypothesis; and that the tangents could be made vacuous, with a pole
+reading as a numerical zero.  All four are repaired, and
+`dev/palomar-section-two-challenge-statement-audit.md` is the maintained
+clause-by-clause record.  Section 1 of the source settles the
+reducing-versus-spectral question in the Challenge's favour -- it says in as many
+words that neither decomposition is assumed spectral.
+
+`Solution.lean` (474 lines, no `sorry`) proves the vocabulary correspondence --
+the norm by `rfl`, the separation constructor by constructor, the Ritz data field
+for field with the compression still a partial map -- and discharges two of the
+seven printed clauses: `sin Θ`, and the **ambient `sin 2Θ` clause at an arbitrary
+reducing subspace**.
 
 **Item 21 (generic `[RCLike 𝕜]`): the same single obstruction.**  Both the
 Challenge's `[RCLike 𝕜]` statements and the development's generic Section 2
@@ -1320,9 +1336,10 @@ surface need the same two capability classes at an arbitrary `RCLike` field.
 That is one scalar-field transport, for which Mathlib supplies the dispatch, and
 it would serve every theorem at once.
 
-Remaining, all named in `dev/palomar-candidate/README.md`: the transport; one
-development lemma for the ambient `sin 2Θ` clause; the `tan Θ` and `tan 2Θ`
-correspondences.  None is a policy or dependency obstruction.
+Remaining, named per clause in the statement audit: the transport; the `sin 2Θ`
+directed clause at a reducing subspace with an unbounded compression; and tangent
+representatives with their derived no-pole facts for `tan Θ` and `tan 2Θ`.  None
+is a policy or dependency obstruction.
 
 ## Standing constraint honoured
 
@@ -1331,4 +1348,6 @@ was created in this repository.
 
 ## Verdict
 
-`PRODUCTION COMPLETE / PALOMAR FEASIBILITY OPEN` — the Challenge is built and compiling; the Solution is partial.
+`PRODUCTION COMPLETE / PALOMAR FEASIBILITY OPEN` — the Challenge is built,
+statement-audited against the printed source, and compiling; the Solution
+discharges two of the seven printed clauses and names the rest per clause.

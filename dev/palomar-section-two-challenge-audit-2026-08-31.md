@@ -18,13 +18,20 @@ value the Solution supplies.  Inferring a blockage from where the *development's
 definitions live was a category error.
 
 The candidate is `dev/palomar-candidate/`.  It compiles, against `import Mathlib`
-alone, at **511 lines / 23,579 bytes** -- inside the 1000-line / 100 KiB hard cap
--- with four `[RCLike 𝕜]` headline theorems and **no functional calculus
-anywhere**.  `Solution.lean` proves the `sin Θ` statement from the development,
-and proves that the Challenge's unitarily invariant norm is the development's
-`PaperUnitaryInvariantNorm` **by `rfl`**.
+alone, at **684 lines / 32,765 bytes** -- inside the 1000-line / 100 KiB hard cap
+and, after a statement-repair pass, inside the preferred 32 KiB as well -- with
+four `[RCLike 𝕜]` headline theorems and **no functional calculus anywhere**.
+`Solution.lean` proves the `sin Θ` statement and the ambient clause of `sin 2Θ`
+from the development, and proves that the Challenge's unitarily invariant norm is
+the development's `PaperUnitaryInvariantNorm` **by `rfl`**.
 
-What remains is named precisely in `dev/palomar-candidate/README.md`; the
+**The first draft's statements were not the paper's, in four ways**, and a proof
+of an inaccurate Challenge would have been worse than an unfinished accurate one.
+`dev/palomar-section-two-challenge-statement-audit.md` is the clause-by-clause
+audit that found and fixed them, and is now the maintained record of what each
+Challenge clause claims and what its correspondence still owes.
+
+What remains is named there and in `dev/palomar-candidate/README.md`; the
 headline item is a scalar-field transport that would discharge two development
 capability classes at once.  None of it is a Palomar policy obstruction.
 
