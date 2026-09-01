@@ -6,13 +6,30 @@ carries (`submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-fo
 2026-08-28), the pinned Tau Ceti at
 `1b39d420ac84ed9a5a7d536ce19b37818ad29c39`, and the Mathlib this workspace pins.
 
-**Answer: no, not without loss of generality, and the blocker is in the
-*statement*, not the proof.**  The four theorems can be *stated* over `ℂ` inside
-a Challenge; they cannot be stated over `ℝ`, because Mathlib's real continuous
-functional calculus for bounded operators does not exist, and the paper states
-its results for a real *or* complex space.  A complex-only Challenge would be
-exactly the "loss of generality introduced for packaging convenience" the entry
-is supposed to avoid.
+**Answer: not today, and the reason is *location*, not missing mathematics.**
+Every object the four statements need exists — in `ForTauCeti`, in this
+repository.  None of them is upstream, and a Challenge may import only Lean core,
+allowlisted Mathlib, upstream Tau Ceti and CSLib.  Most of them are already
+targets on the Tau Ceti operator roadmap, so this is a sequencing problem: the
+Challenge becomes writable as those topics are accepted and delivered.
+
+**Correction, same day.**  An earlier revision of this audit said the blocker was
+that the *real* angle operators cannot be named, because Mathlib's real
+continuous functional calculus for bounded operators does not exist.  The claim
+about Mathlib is true; the conclusion drawn from it was wrong.
+`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`
+registers
+
+```
+ContinuousFunctionalCalculus ℝ (E →L[ℝ] E) IsSelfAdjoint
+```
+
+for **every** real Hilbert space at unrestricted dimension, and with it
+`ContinuousLinearMap.modulus` and the whole angle chain
+`cfc Real.sin (cfc Real.arcsin (modulus (P_U − P_V)))` elaborate over `ℝ`
+directly, with no complexification.  That was checked by elaborating all three,
+not inferred.  The real angle operators in this repository are defined by
+transport for historical reasons, not because a direct definition is unavailable.
 
 This document is the audit.  It is **not** a submission surface: the Challenge,
 the Solution, the comparator configuration and the submission metadata belong to
@@ -54,36 +71,27 @@ Adding the four statements themselves (~120 lines), a complex-only Challenge
 lands around 350–450 lines: **inside** the 1000-line hard cap, over the 300-line
 preferred one.  Size is therefore not the blocker.
 
-## The blocker: the real angle operators cannot be named
+## Where each needed object actually is
 
-Every one of the four angle objects is built from
-`ContinuousLinearMap.modulus (P_V − P_U)` and a real continuous functional
-calculus on top of it.  In Mathlib that calculus reaches `E →L[𝕜] E` through
+| concept | Mathlib | upstream Tau Ceti (pinned) | Tau Ceti operator roadmap | `ForTauCeti` |
+| --- | --- | --- | --- | --- |
+| infinite-dimensional approximation numbers | no (`LinearMap.singularValues` is `finrank`-based) | no | **yes** — `OI-A01`, `OI-A06` | yes |
+| Ky Fan gauge and Fan dominance | no | no | **yes** — `OI-B74`, `OI-B75` | yes |
+| operator ideal families | no | no | **yes** — `OperatorIdeals` | yes |
+| symmetric gauge, i.e. the paper's UI norm class | no | no | **yes** — `OI-B56`, `OI-B59`, `OI-B64`–`OI-B71` | yes |
+| `modulus`, positive square root, polar factors | `ℂ` only | no | **yes** — `PD-A36`, `RCLike`-generic | yes |
+| ambient `sin Θ` / `cos Θ` angle operators | no | no | **yes** — `PA-B10`, `PA-B11` | yes |
+| directed `sin 2Θ` block | no | no | **yes** — `PA-B09` | yes |
+| `LinearPMap` resolvent set and resolvent | no | partial | **yes** — `SelfAdjointSpectralTheory` | yes |
+| spectral PVM of an unbounded self-adjoint operator | no | no | **yes, over `ℂ`** — `SA-E01` | yes |
+| Sylvester equation, `MapsDomainTo`, `perturb` | no | no | **yes** | yes |
+| real continuous functional calculus for `E →L[ℝ] E` | **no** | no | **no — proposed, not yet on it** | **yes** |
+| spectral *subspace* and reducing restriction of an unbounded operator | no | no | **no** | yes |
+| `FormBoundedSylvesterGap` (three-constructor, over `LinearPMap` semibounds) | no | no | **no** | yes |
+| ambient `tan Θ` and `tan 2Θ` **operators** | no | no | **no** (roadmap has tangents as finite-dimensional singular-value sequences, `PA-B15`) | yes |
 
-```
-IsSelfAdjoint.instContinuousFunctionalCalculus :
-    ContinuousFunctionalCalculus ℝ A IsSelfAdjoint
-```
-
-whose hypothesis is `[ContinuousFunctionalCalculus ℂ A IsStarNormal]`
-(`Mathlib/Analysis/CStarAlgebra/ContinuousFunctionalCalculus/Instances.lean`).
-`A` therefore has to be a **complex** C⋆-algebra.  For a real Hilbert space `E`,
-`E →L[ℝ] E` is a real Banach ⋆-algebra and Mathlib provides no such instance —
-Mathlib's own library note records generalization to real C⋆-algebras as a design
-goal, not a fact.
-
-This repository reaches the real angles by *complexifying*: `paperSinTwoAngleOperatorR U V`
-is `realPartOperator (paperSinTwoAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))`.
-That complexification layer — the real-to-complex transport of Hilbert spaces,
-bounded and partial operators, subspaces, spectral projections and approximation
-numbers — is thousands of lines of `ForTauCeti` and `DavisKahan`.  It cannot be
-imported (the import rule forbids it) and cannot be inlined (the cap forbids it,
-and inlining it would put the whole transport inside the trusted statement
-surface, which is what a Challenge exists to prevent).
-
-**Consequence.**  A policy-valid Challenge for the four Section 2 theorems is
-complex-only.  The paper states its results for a real *or* complex space, so
-that is a loss of generality, and this audit does not recommend it.
+So the Challenge is blocked on the last four rows, and on the first eleven only
+until the roadmap topics land.
 
 ## The second, softer objection: what a Challenge-local norm class would mean
 
@@ -101,21 +109,23 @@ general ones.
 
 ## What would unblock it
 
-In descending order of leverage:
+In dependency order, and none of it is research:
 
-1. **A real continuous functional calculus for `E →L[ℝ] E`**, or Mathlib's
-   generalization of the C⋆ calculus to real C⋆-algebras.  This alone turns the
-   four statements from complex-only into real-and-complex.
-2. **Infinite-dimensional approximation numbers in Mathlib**, generalizing
-   `LinearMap.singularValues` off `finrank`.
-3. **A unitarily invariant norm / symmetric gauge class upstream** — the natural
-   Tau Ceti contribution, and the one this repository is already positioned to
-   make: `ForTauCeti` carries the class, the Fan dominance theorem, and the
-   approximation-number theory it rests on.
+1. **Land the `OperatorIdeals` and `PolarDecomposition` roadmap topics upstream.**
+   They carry the approximation numbers, the symmetric gauge, Fan dominance and
+   the modulus — eleven of the fifteen rows above.
+2. **Propose the real continuous functional calculus.**  It is written, it is
+   self-contained, and its own module docstring already says it is not on the
+   roadmap and is proposed for it.  Registering it upstream also supplies
+   `StarOrderedRing (E →L[ℝ] E)`, which Mathlib currently declines to register
+   for exactly this reason.
+3. **Propose the unbounded spectral *subspace* and reducing restriction**, on top
+   of the roadmap's `spectralPVM`, and the form-bounded gap predicate.
+4. **Propose the ambient tangent operators**, which then follow from (2) and the
+   roadmap's modulus.
 
-(3) is the item this repository can act on, and it is already the Tau Ceti track.
-Until at least (1) and (3) exist upstream, the four Section 2 theorems are not a
-Challenge; the operator-norm `sin Θ` theorem the standalone entry compares is.
+Only after (1)–(4) does the question "should the Challenge be the four Section 2
+theorems?" become a packaging question rather than a dependency one.
 
 ## Standing constraint
 

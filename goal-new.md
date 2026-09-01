@@ -1291,20 +1291,35 @@ nine sections specified above.  Commits: `9ccb2a8a`, `cc824790`, `8d8f2de3`.
 
 ## The two blocked items, and why
 
-Both are the same missing upstream layer, and it is in the **statement**, not the
-proof.  Mathlib reaches a real continuous functional calculus only through
-`IsSelfAdjoint.instContinuousFunctionalCalculus`, whose hypothesis is
-`[ContinuousFunctionalCalculus ℂ A IsStarNormal]` — a *complex* C⋆-algebra.  This
-repository names the real angle operators by complexifying, which a Challenge may
-neither import nor inline, and which a generic `[RCLike 𝕜]` statement cannot
-reference at all.  So there is nothing to dispatch and nothing to import until a
-scalar-generic angle vocabulary exists.  `sin Θ` is the exception in both places
-for the same reason: its conclusion is a scalar-generic operator expression.
+**Corrected after checking the Tau Ceti operator roadmap.**  The first answer
+given for these two was that Mathlib has no real continuous functional calculus,
+so the real angle operators cannot be named.  The Mathlib half is true; the
+conclusion was wrong.  `ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`
+registers `ContinuousFunctionalCalculus ℝ (E →L[ℝ] E) IsSelfAdjoint` for every
+real Hilbert space at unrestricted dimension, and `modulus` and the whole chain
+`cfc Real.sin (cfc Real.arcsin (modulus (P_U − P_V)))` elaborate over `ℝ`
+directly.
 
-The earlier reasoning that `RCLike` admits no real/complex dispatch was wrong
-about Mathlib and is corrected in the frontier document;
+The real position:
+
+* **Item 23–30 (Palomar).**  A dependency-*location* problem, not missing
+  mathematics.  Every object the four statements need exists in `ForTauCeti`;
+  none is upstream, and a Challenge may import only upstream.  Eleven of the
+  fifteen needed concepts are already targets on the operator roadmap
+  (`OperatorIdeals`, `PolarDecomposition`, `PrincipalAngles`,
+  `SelfAdjointSpectralTheory`).  Four are not: the real calculus, the unbounded
+  spectral *subspace* and reducing restriction, `FormBoundedSylvesterGap`, and the
+  ambient tangent operators.
+* **Item 21 (generic `[RCLike 𝕜]`).**  Narrower than first reported.  The angle
+  half is writable over `𝕜` behind a capability binder with instances at both of
+  the paper's fields.  What remains open is the `𝕜`-generic **spectral
+  selection**: `specRange` and `selfAdjointSpectralSubspace` exist over `ℂ` and
+  reach `ℝ` by descent, and the roadmap's own `spectralPVM` is stated over `ℂ`.
+
+Also corrected: the earlier reasoning that `RCLike` admits no real/complex
+dispatch was wrong about Mathlib —
 `RCLike.I_eq_zero_or_im_I_eq_one` with `realLinearIsometryEquiv` and
-`complexLinearIsometryEquiv` is that dispatch.  It does not help here.
+`complexLinearIsometryEquiv` is that dispatch.  It is not what these two need.
 
 ## Standing constraint honoured
 
