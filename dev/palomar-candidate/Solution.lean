@@ -1900,83 +1900,39 @@ end Capabilities
 
 /-! ## 15. Status
 
-This file is a **feasibility candidate**, not a finished submission.  The honest
-state of each printed clause is recorded here and, clause by clause with the
-paper, in `dev/palomar-section-two-challenge-statement-audit.md`.
+All seven printed Section 2 inequality clauses are proved here, at an arbitrary
+`[RCLike 𝕜]`, and assembled into the Challenge's four theorems.  None carries a
+capability binder, a field-dispatch hypothesis, a finite-dimensionality
+hypothesis, or a spectral selection of the trial subspace; each depends on
+`propext`, `Classical.choice`, `Quot.sound` and nothing else.
 
-### Discharged, unconditionally, at an arbitrary `RCLike` field
+| printed clause | proof |
+| --- | --- |
+| `sin Θ` | `sinTheta_proof` |
+| `tan Θ` directed | `tanTheta_directed_proof` |
+| `tan Θ` ambient | `tanTheta_ambient_proof` |
+| `sin 2Θ` directed | `sinTwoTheta_directed_proof` |
+| `sin 2Θ` ambient | `sinTwoTheta_ambient_proof` |
+| `tan 2Θ` directed | `tanTwoTheta_directed_proof` |
+| `tan 2Θ` ambient | `tanTwoTheta_ambient_proof` |
 
-* **`sinTheta`** — `sinTheta_proof` *is* the Challenge statement, proved from
-  `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`.
-* **`sinTwoTheta`, ambient clause** — `sinTwoTheta_ambient_proof`, proved from
-  `TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`
-  at an *arbitrary reducing* subspace, which is the source's own scope.
+Two things this file establishes beyond the inequalities.
 
-Neither carries a capability binder any more; see below.
+**The Challenge's vocabulary is not an approximation of the development's; it is
+the development's.**  The norm -- the object most at risk of being quietly
+weakened in a compact restatement -- corresponds by `rfl`; the separation
+corresponds constructor by constructor including both half-infinite branches; the
+trial data corresponds field for field with the compression still a partial map;
+and the off-diagonal condition corresponds to the development's `IsOddFor`.
 
-### The scalar field: closed
-
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` and
-`HasUnboundedSylvesterKyFan 𝕜` are proof capabilities of the development, not
-source hypotheses, and they never appear in the Challenge.  Both quantify over
-*every* `𝕜`-Hilbert space, so proving them at an arbitrary `RCLike` field means
-splitting on `RCLike.I_eq_zero_or_im_I_eq_one` and transporting a Hilbert space
-along a scalar-field isomorphism.
-
-**Both are now instances at every `RCLike` field**, and the two routes that were
-weighed are settled in favour of the first: proving the classes once is smaller
-than dispatching each theorem, needs the same transport either way, and leaves
-the development's own generic Section 2 surface owing nothing.
-
-The transport is one construction, used twice.
-`TauCeti.RCLikeIso 𝕜 𝕂` is a field isomorphism fixing the reals and `I`, built
-from Mathlib's `RCLike.realRingEquiv` and `RCLike.complexRingEquiv`;
-`TauCeti.ScalarTransport e E` is `E` with the `𝕂`-structure `e` induces, which
-changes the scalar action and the field the inner product takes values in and
-changes **nothing else** -- not the vectors, not the additive group, not the
-topology, not the norm.  So subspaces keep their carriers, operators keep their
-functions and their operator norms, and `Module.rank` -- hence every
-approximation number -- is unchanged.  That last point is why restriction of
-scalars (`InnerProductSpace.rclikeToReal`) is *not* the right construction here:
-over a complex-like `𝕜` it halves the scalars, doubling the rank and changing the
-singular-value sequence.
-
-* `ForTauCeti/Analysis/RCLike/ScalarTransport.lean` -- the field isomorphism and
-  the transport, with subspaces, orthogonal complements, orthogonal projections,
-  bounded operators (function, norm, adjoint, self-adjointness), `Module.rank`,
-  and partial maps (domain, function, adjoint, self-adjointness).
-* `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/ScalarTransport.lean` --
-  approximation numbers, linear independence and spans, and hence
-  `ContinuousLinearMap.hasMinMaxLowerBoundEverywhere`.
-* `DavisKahan/Sylvester/ScalarTransport.lean` -- finite Ky Fan gauges, the
-  operator-form semibounds, the real resolvent set and spectrum, the
-  three-constructor separation, the domain-aware Sylvester equation, and hence
-  `ExactSinTheta.hasUnboundedSylvesterKyFan`.
-
-### Open correspondences
-
-* **`sinTwoTheta`, directed clause.** The development's directed endpoint fixes
-  its subspace spectrally and takes a *bounded* trial compression.  Both are
-  narrowings of the printed scope, and the first is mechanical: the underlying
-  estimate consumes only reducing facts.
-* **`tanTheta`, both clauses.** The development takes the tangent representative
-  as a parameter, so it neither derives `TangentDefined` nor produces a
-  representative; the Challenge's non-vacuous form needs both.
-  `UINorm.evalSeq_eq_of_approximationNumber` is the bridge that will consume a
-  representative once one exists.  For the ambient clause the representative is
-  already `paperTanAngleOperatorC U V`; what is missing is the statement that its
-  approximation numbers are `tanSeq (ambientSine U V)`.
-* **`tanTwoTheta`, both clauses.** The same, with
-  `reflectionTangentCorner` and `paperAbsTanTwoAngleOperatorC` as the
-  representatives, plus the spectral-to-reducing generalization.
-
-What this file does establish is the part that was in doubt: the Challenge's
-vocabulary is not an approximation of the development's, it *is* the
-development's.  The norm -- the object most at risk of being quietly weakened in
-a compact restatement -- corresponds by `rfl`; the separation corresponds
-constructor by constructor including both half-infinite branches; the trial data
-corresponds field for field with the compression still a partial map; and the
-off-diagonal condition corresponds to the development's `IsOddFor`. -/
+**The scalar field is closed by transport, not by genericity of the machinery.**
+`gramOperator`, `cfc` and the double-angle functional calculus are complex.  What
+is generic is the *observable*: every quantity a clause mentions is a function of
+one operator's singular-value sequence, and `TauCeti.ScalarTransport` renames the
+field without touching the vectors, the additive group, the topology, the norm,
+the operators, or that sequence.  `RCLike.I_eq_zero_or_im_I_eq_one` supplies the
+case split, and the real branch of each tangent clause is itself proved by
+complexification, so the analysis happens once. -/
 
 end
 
