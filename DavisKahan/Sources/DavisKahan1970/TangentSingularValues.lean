@@ -201,6 +201,42 @@ theorem approximationNumber_paperSinTwoAngleOperatorC (n : ℕ) :
   rw [paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub]
   exact ContinuousLinearMap.modulus_hasSameApproximationNumbers _ n
 
+/-- **The ambient doubled tangent, read off the ambient double-angle sine.**
+
+`aₙ(|tan 2Θ|) = tan (arcsin aₙ(sin 2Θ))` with the double-angle sine presented as
+the projector difference between `U` and its mirror image in `V` -- the very
+operator the `sin 2Θ` theorem bounds, so a `tan 2Θ` statement and a `sin 2Θ`
+statement speak about the same angle with the same multiplicity.
+
+**The doubled angle must be presented by its own sine.**  It is *not* true in
+general that `aₙ(sin 2Θ) = sin (2 arcsin aₙ(sin Θ))`: `θ ↦ sin 2θ` is not
+monotone on `[0, π/2]`, so applying it index by index to the ordered sequence of
+`sin Θ` need not produce an ordered sequence.  Principal angles `75°` and `30°`
+already break it -- `sin 75° > sin 30°` while `sin 150° < sin 60°`.  Only the
+monotone `u ↦ tan (arcsin u)` may be applied to an approximation-number
+sequence, and here it is applied to the doubled sine, not the single one. -/
+theorem approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference
+    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0)
+    (n : ℕ) :
+    (paperAbsTanTwoAngleOperatorC U V).approximationNumber n =
+      Real.tan (Real.arcsin
+        (((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
+          U.starProjection).approximationNumber n)) := by
+  rw [approximationNumber_paperAbsTanTwoAngleOperatorC U V hcos n,
+    approximationNumber_paperSinTwoAngleOperatorC U V n]
+
+/-- Under the derived pole exclusion the ambient double-angle sine is a strict
+contraction, so each `tan (arcsin aₙ)` above is a genuine tangent and not the
+value Lean's field division assigns at a pole. -/
+theorem approximationNumber_projectorDifference_lt_one
+    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0)
+    (n : ℕ) :
+    ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
+      U.starProjection).approximationNumber n < 1 := by
+  rw [← approximationNumber_paperSinTwoAngleOperatorC U V n]
+  exact lt_of_le_of_lt (ContinuousLinearMap.approximationNumber_le_norm _ n)
+    (norm_paperSinTwoAngleOperatorC_lt_one U V hcos)
+
 end DoubleAngle
 
 end

@@ -576,7 +576,189 @@ theorem tanTheta_ambient_proof_complex (N : UINorm)
 
 end AmbientTangentClause
 
-/-! ## 9. The two capability classes, at every `RCLike` field -/
+/-! ## 9. The two `tan 2Θ` clauses, over `ℂ`
+
+Both clauses read the doubled tangent off the **double-angle sine**, through the
+same monotone `u ↦ tan (arcsin u)` that `tan Θ` uses.  That is forced: the map
+`θ ↦ sin 2θ` is not monotone on `[0, π/2]`, so `n ↦ sin (2 arcsin aₙ(sin Θ))` is
+not in general the ordered singular-value sequence of `sin 2Θ` — principal angles
+`75°` and `30°` already invert the order — and no indexwise theorem can carry a
+doubled angle from the single-angle sine at arbitrary dimension.
+
+The development supplies both halves.  For the ambient clause,
+`approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference` says the
+paper's `|tan 2Θ|` has exactly the sequence `tan (arcsin aₙ(sin 2Θ))`; for the
+directed clause,
+`tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_paperUINorm_complex`
+says the same of the directed corner against `sin 2Θ₀`, with each directed
+principal angle counted once. -/
+
+section TanTwoThetaClauses
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+
+omit [CompleteSpace E] in
+/-- The Challenge's directed double-angle sine *is* the development's directed
+`sin 2Θ₀` block. -/
+theorem directedDoubleSine_eq (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    directedDoubleSine U V = TauCeti.DavisKahan.sinTwoThetaIdealBlock U V := rfl
+
+omit [CompleteSpace E] in
+/-- The Challenge's ambient double-angle sine is the development's projector
+difference between `U` and its mirror image in `V`. -/
+theorem ambientDoubleSine_eq (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    ambientDoubleSine U V =
+      (U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
+        U.starProjection := rfl
+
+omit [CompleteSpace E] in
+/-- `TangentDefined S` is `‖S‖ < 1` read off the singular-value sequence: the
+`n`-th cosine vanishes exactly when the `n`-th singular value is one. -/
+theorem tangentDefined_of_approximationNumber_lt_one {F : Type v}
+    [NormedAddCommGroup F] [InnerProductSpace ℂ F] (S : E →L[ℂ] F)
+    (h : ∀ n, S.approximationNumber n < 1) : TangentDefined S := by
+  intro n
+  rw [Real.cos_arcsin]
+  have h0 : 0 ≤ singularValue S n := S.approximationNumber_nonneg n
+  have h1 : singularValue S n < 1 := h n
+  exact ne_of_gt (Real.sqrt_pos.mpr (by nlinarith))
+
+omit [CompleteSpace E] in
+/-- The ordered form bound on the trial block, in the ambient indexing the
+development's `tan 2Θ` endpoints take. -/
+theorem formBound_upper_of_semiboundedAbove {A : E →ₗ.[ℂ] E} {U : Submodule ℂ E}
+    [U.HasOrthogonalProjection] (hU : Reduces A U) {α : ℝ}
+    (hlow : SemiboundedAbove (block A U hU) α) :
+    ∀ x : A.domain, (x : E) ∈ U →
+      RCLike.re ⟪A x, (x : E)⟫_ℂ ≤ α * ‖(x : E)‖ ^ 2 := by
+  intro x hxU
+  exact hlow ⟨⟨(x : E), hxU⟩, x.2⟩
+
+omit [CompleteSpace E] in
+/-- The ordered form bound on the complementary block, likewise. -/
+theorem formBound_lower_of_semiboundedBelow {A : E →ₗ.[ℂ] E} {U : Submodule ℂ E}
+    [U.HasOrthogonalProjection] (hU : Reduces A U) {c : ℝ}
+    (hhigh : SemiboundedBelow (block A Uᗮ hU.orthogonal) c) :
+    ∀ x : A.domain, (x : E) ∈ Uᗮ → c * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ := by
+  intro x hxU
+  exact hhigh ⟨⟨(x : E), hxU⟩, x.2⟩
+
+/-- **The directed clause of the Challenge's `tan 2Θ` theorem, discharged from
+the development over `ℂ`.**
+
+`δ ‖tan 2Θ₀‖ ≤ 2 ‖R‖` on the residual corner alone, with the pole exclusion as a
+conclusion and each directed principal angle counted once.  The trial subspace is
+any subspace reducing `A` with the ordered separation; no spectral selection. -/
+theorem tanTwoTheta_directed_proof_complex (N : UINorm)
+    {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
+    {U : Submodule ℂ E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (H : E →L[ℂ] E)
+    (hoffdiag₀ : U.starProjection ∘L H ∘L U.starProjection = 0)
+    (hoffdiag₁ : Uᗮ.starProjection ∘L H ∘L Uᗮ.starProjection = 0)
+    {α δ : ℝ} (hδ : 0 < δ)
+    (hlow : SemiboundedAbove (block A U hU) α)
+    (hhigh : SemiboundedBelow (block A Uᗮ hU.orthogonal) (α + δ))
+    {V : Submodule ℂ E} [V.HasOrthogonalProjection]
+    (hV : Reduces (addBounded A H) V)
+    (hRmem : N.Finite (Uᗮ.starProjection ∘L H ∘L U.starProjection)) :
+    TangentDefined (directedDoubleSine U V) ∧
+      N.SeqFinite (tanSeq (directedDoubleSine U V)) ∧
+      δ * N.seqNorm (tanSeq (directedDoubleSine U V)) ≤
+        2 * N.norm (Uᗮ.starProjection ∘L H ∘L U.starProjection) := by
+  have hblk : TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock Uᗮ U H =
+      Uᗮ.starProjection ∘L H ∘L U.starProjection := rfl
+  have hgap : N.toPaper.extendedGauge
+      (TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock Uᗮ U H) =
+      N.toPaper.extendedGauge (TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression Uᗮ U H) :=
+    N.toPaper.extendedGauge_eq_of_hasSameApproximationNumbers
+      (TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock_same_compression Uᗮ U H)
+  have hRmem0 : N.toPaper.Mem
+      (TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock Uᗮ U H) := by
+    rw [hblk]
+    exact (N.finite_iff _).1 hRmem
+  have hRmem' : N.toPaper.Mem
+      (TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression Uᗮ U H) := by
+    unfold PaperUnitaryInvariantNorm.Mem at hRmem0 ⊢
+    rwa [← hgap]
+  obtain ⟨hlt, hseq, hmem, hle⟩ :=
+    TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_paperUINorm_complex
+      N.toPaper V hA ((reduces_iff A U).1 hU)
+      (isOddFor_of_offDiagonal hoffdiag₀ hoffdiag₁)
+      (reflectionIntertwines_of_reduces hV)
+      (formBound_upper_of_semiboundedAbove hU hlow)
+      (formBound_lower_of_semiboundedBelow hU hhigh) (by linarith) hRmem'
+  have heval : N.evalSeq (tanSeq (directedDoubleSine U V)) =
+      N.toPaper.extendedGauge (TauCeti.DavisKahan1970.reflectionTangentCorner U
+        V.reflectionOperator) :=
+    N.evalSeq_eq_of_approximationNumber _ _ hseq
+  refine ⟨tangentDefined_of_approximationNumber_lt_one _ hlt, ?_, ?_⟩
+  · show N.evalSeq (tanSeq (directedDoubleSine U V)) ≠ ⊤
+    rw [heval]; exact hmem
+  · have hg : N.toPaper.gauge (TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock Uᗮ U H) =
+        N.toPaper.gauge (TauCeti.DavisKahan.ExactSinTheta.paperBlockCompression Uᗮ U H) := by
+      unfold PaperUnitaryInvariantNorm.gauge
+      rw [hgap]
+    have hδeq : α + δ - α = δ := by ring
+    rw [hδeq] at hle
+    have hgoal : δ * (N.evalSeq (tanSeq (directedDoubleSine U V))).toReal ≤
+        2 * N.toPaper.gauge
+          (TauCeti.DavisKahan.ExactSinTheta.paperProjectionBlock Uᗮ U H) := by
+      rw [heval, hg]
+      exact hle
+    rw [← hblk]
+    exact hgoal
+
+/-- **The ambient clause of the Challenge's `tan 2Θ` theorem, discharged from the
+development over `ℂ`.**
+
+`δ ‖tan 2Θ‖ ≤ 2 ‖H‖` on the whole perturbation, with each ambient principal angle
+counted with its ambient multiplicity, and the quarter-turn exclusion derived. -/
+theorem tanTwoTheta_ambient_proof_complex (N : UINorm)
+    {A : E →ₗ.[ℂ] E} (hA : IsSelfAdjoint A)
+    {U : Submodule ℂ E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
+    (hoffdiag₀ : U.starProjection ∘L H ∘L U.starProjection = 0)
+    (hoffdiag₁ : Uᗮ.starProjection ∘L H ∘L Uᗮ.starProjection = 0)
+    {α δ : ℝ} (hδ : 0 < δ)
+    (hlow : SemiboundedAbove (block A U hU) α)
+    (hhigh : SemiboundedBelow (block A Uᗮ hU.orthogonal) (α + δ))
+    {V : Submodule ℂ E} [V.HasOrthogonalProjection]
+    (hV : Reduces (addBounded A H) V) (hHmem : N.Finite H) :
+    TangentDefined (ambientDoubleSine U V) ∧
+      N.SeqFinite (tanSeq (ambientDoubleSine U V)) ∧
+      δ * N.seqNorm (tanSeq (ambientDoubleSine U V)) ≤ 2 * N.norm H := by
+  obtain ⟨hcos, hmem, hle⟩ :=
+    TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_reducing_paperUINorm_complex
+      N.toPaper V hA ((reduces_iff A U).1 hU) hH
+      (isOddFor_of_offDiagonal hoffdiag₀ hoffdiag₁)
+      (reflectionIntertwines_of_reduces hV)
+      (formBound_upper_of_semiboundedAbove hU hlow)
+      (formBound_lower_of_semiboundedBelow hU hhigh) (by linarith) hHmem
+  have hseq : ∀ n,
+      (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC U V).approximationNumber n =
+        tanSeq (ambientDoubleSine U V) n := fun n =>
+    TauCeti.DavisKahan1970.approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference
+      U V hcos n
+  have heval : N.evalSeq (tanSeq (ambientDoubleSine U V)) =
+      N.toPaper.extendedGauge
+        (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC U V) :=
+    N.evalSeq_eq_of_approximationNumber _ _ hseq
+  refine ⟨tangentDefined_of_approximationNumber_lt_one _ (fun n =>
+    TauCeti.DavisKahan1970.approximationNumber_projectorDifference_lt_one U V hcos n), ?_, ?_⟩
+  · show N.evalSeq (tanSeq (ambientDoubleSine U V)) ≠ ⊤
+    rw [heval]; exact hmem
+  · have hδeq : α + δ - α = δ := by ring
+    rw [hδeq] at hle
+    have hgoal : δ * (N.evalSeq (tanSeq (ambientDoubleSine U V))).toReal ≤
+        2 * N.toPaper.gauge H := by
+      rw [heval]; exact hle
+    exact hgoal
+
+end TanTwoThetaClauses
+
+/-! ## 10. The two capability classes, at every `RCLike` field -/
 
 section Capabilities
 
@@ -589,7 +771,7 @@ example (𝕜 : Type u) [RCLike 𝕜] : HasUnboundedSylvesterKyFan.{u, v} 𝕜 :
 
 end Capabilities
 
-/-! ## 10. Status
+/-! ## 11. Status
 
 This file is a **feasibility candidate**, not a finished submission.  The honest
 state of each printed clause is recorded here and, clause by clause with the
