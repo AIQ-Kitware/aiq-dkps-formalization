@@ -408,6 +408,148 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_c
   rw [N.gauge_smul _ hMem0, htwo, hgauge] at hle
   exact hle
 
+/-! ### The same two estimates at an arbitrary reducing subspace
+
+Section 1 of the source assumes only that the decomposition *reduces* the
+operator and that the two blocks are separated; the spectral selection above was
+an artefact of the cutoff machinery, which
+`DavisKahan.sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing` now
+removes.  These two are the same statements with the same proofs. -/
+
+theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_complex
+    (hA : IsSelfAdjoint A)
+    {U : Submodule ℂ H} [U.HasOrthogonalProjection]
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hVdom : ∀ v : V, (v : H) ∈ A.domain)
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hred)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ) :
+    ∀ k : ℕ,
+      δ * kyFanApproximationGauge k
+          (sinTwoThetaIdealBlock U V) ≤
+        2 * kyFanApproximationGauge k R := by
+  intro k
+  by_cases hk0 : k = 0
+  · subst hk0
+    simp [kyFanApproximationGauge, ContinuousLinearMap.kyFanGauge]
+  have hk : 0 < k := Nat.pos_of_ne_zero hk0
+  have hSsa : IsSelfAdjoint (trialOffDiagonalPart V M R) :=
+    isSelfAdjoint_trialOffDiagonalPart
+  have hDsa : IsSelfAdjointOperator ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
+    refine ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mp ?_
+    rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
+    norm_num
+  have hraw := DavisKahan.sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing
+    hA hred
+    (KyFanDominantIdealFamily.kyFan (𝕜 := ℂ) k hk)
+    ((-2 : ℂ) • trialOffDiagonalPart V M R) hDsa V hδ hgap
+    (reflectionOperator_mem_domain hVdom)
+    (trialReflection_intertwines hA hVdom hres)
+    (KyFanDominantIdealFamily.kyFan_mem (𝕜 := ℂ) k hk _)
+  rw [KyFanDominantIdealFamily.kyFan_gauge,
+    KyFanDominantIdealFamily.kyFan_gauge] at hraw
+  have hDsa' : IsSelfAdjoint ((-2 : ℂ) • trialOffDiagonalPart V M R) := by
+    rw [IsSelfAdjoint, star_smul, hSsa.star_eq]
+    norm_num
+  have hflip : kyFanApproximationGauge k
+        (U.starProjection ∘L
+          ((-2 : ℂ) • trialOffDiagonalPart V M R) ∘L
+          (Uᗮ.map
+            (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection) =
+      kyFanApproximationGauge k
+        ((Uᗮ.map
+            (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection ∘L
+          ((-2 : ℂ) • trialOffDiagonalPart V M R) ∘L
+          U.starProjection) := by
+    rw [← kyFanApproximationGauge_adjoint]
+    congr 1
+    rw [ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
+      (isSelfAdjoint_starProjection _).adjoint_eq,
+      (isSelfAdjoint_starProjection _).adjoint_eq,
+      ContinuousLinearMap.isSelfAdjoint_iff'.mp hDsa']
+    rfl
+  have hdefectEq : conjByIsometryEquiv V.reflection (trialOffDiagonalPart V M R) -
+      trialOffDiagonalPart V M R = (-2 : ℂ) • trialOffDiagonalPart V M R := by
+    rw [conjByReflection_sub_eq_reflectionDefect,
+      reflectionDefect_trialOffDiagonalPart]
+  have hdouble := kyFan_reflectedDefectBlock_le_two_mul_offDiagonalBlock hSsa
+    U V k
+  rw [hdefectEq, trialOffDiagonalPart_upper] at hdouble
+  have hblockR : kyFanApproximationGauge k (trialOffDiagonalBlock V M R) ≤
+      kyFanApproximationGauge k R := by
+    rw [trialOffDiagonalBlock_eq]
+    refine (kyFanApproximationGauge_comp_le k Vᗮ.starProjection R
+      V.subtypeL.adjoint).trans ?_
+    have hQ : ‖(Vᗮ.starProjection : H →L[ℂ] H)‖ ≤ 1 := Submodule.starProjection_norm_le _
+    have hI : ‖(V.subtypeL.adjoint : H →L[ℂ] V)‖ ≤ 1 := by
+      rw [ContinuousLinearMap.adjoint.norm_map]
+      exact opNorm_le_one_of_isometry (fun _ => rfl)
+    have hnn : 0 ≤ kyFanApproximationGauge k R := kyFanApproximationGauge_nonneg k R
+    calc ‖(Vᗮ.starProjection : H →L[ℂ] H)‖ * kyFanApproximationGauge k R *
+          ‖(V.subtypeL.adjoint : H →L[ℂ] V)‖
+        ≤ 1 * kyFanApproximationGauge k R * 1 := by gcongr
+      _ = kyFanApproximationGauge k R := by ring
+  calc δ * kyFanApproximationGauge k
+        (sinTwoThetaIdealBlock U V)
+      ≤ kyFanApproximationGauge k
+          (U.starProjection ∘L
+            ((-2 : ℂ) • trialOffDiagonalPart V M R) ∘L
+            (Uᗮ.map
+              (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection) := hraw.2
+    _ = kyFanApproximationGauge k
+          ((Uᗮ.map
+              (V.reflection.toLinearEquiv : H →ₗ[ℂ] H)).starProjection ∘L
+            ((-2 : ℂ) • trialOffDiagonalPart V M R) ∘L
+            U.starProjection) := hflip
+    _ ≤ 2 * kyFanApproximationGauge k (trialOffDiagonalBlock V M R) := hdouble
+    _ ≤ 2 * kyFanApproximationGauge k R := by gcongr
+
+
+theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_paperUINorm_complex
+    (N : PaperUnitaryInvariantNorm)
+    (hA : IsSelfAdjoint A)
+    {U : Submodule ℂ H} [U.HasOrthogonalProjection]
+    (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+    (hVdom : ∀ v : V, (v : H) ∈ A.domain)
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hred)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hred.orthogonal) δ)
+    (hRmem : N.Mem R) :
+    N.Mem (sinTwoThetaIdealBlock U V) ∧
+      δ * N.gauge
+          (sinTwoThetaIdealBlock U V) ≤
+        2 * N.gauge R := by
+  let R0 : H →L[ℂ] H := R ∘L V.subtypeL.adjoint
+  have hsameR : SameApproximationSingularSequence R0 R :=
+    sameApproximationSingularValues_extendDomainByZero V R
+  have htransport := hsameR.paperMem_iff_and_gauge_eq N
+  have hMem0 : N.Mem R0 := htransport.1.mpr hRmem
+  have hgauge : N.gauge R0 = N.gauge R := htransport.2
+  have htwo : ‖((2 : ℝ) : ℂ)‖ = 2 := by norm_num
+  have hscaled : ∀ k : ℕ,
+      δ * kyFanApproximationGauge k
+          (sinTwoThetaIdealBlock U V) ≤
+        kyFanApproximationGauge k (((2 : ℝ) : ℂ) • R0) := by
+    intro k
+    rw [kyFanApproximationGauge_smul, htwo, hsameR.kyFanApproximationGauge_eq k]
+    exact sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_complex
+      hA hred hVdom hres hδ hgap k
+  have hMem2 : N.Mem (((2 : ℝ) : ℂ) • R0) := by
+    intro htop
+    rw [N.extendedGauge_smul, htwo] at htop
+    rcases ENNReal.mul_eq_top.mp htop with ⟨_, h⟩ | ⟨h, _⟩
+    · exact hMem0 h
+    · exact absurd h (by simp)
+  obtain ⟨hmem, hle⟩ := N.mul_gauge_le_of_all_mul_kyFan_le hδ hMem2 hscaled
+  refine ⟨hmem, ?_⟩
+  rw [N.gauge_smul _ hMem0, htwo, hgauge] at hle
+  exact hle
+
+
 end MainEstimate
 
 end
