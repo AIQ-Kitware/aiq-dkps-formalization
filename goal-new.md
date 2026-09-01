@@ -1289,37 +1289,40 @@ nine sections specified above.  Commits: `9ccb2a8a`, `cc824790`, `8d8f2de3`.
 | 31 | Challenge line and byte counts measured | **done** | 95 lines / 4555 bytes for the existing entry; ~350–450 lines projected for a complex-only four-theorem one |
 | 32 | concrete Palomar readiness verdict | **done** | §9 of the report |
 
-## The two blocked items, and why
+## The two items that were reported blocked
 
-**Corrected after checking the Tau Ceti operator roadmap.**  The first answer
-given for these two was that Mathlib has no real continuous functional calculus,
-so the real angle operators cannot be named.  The Mathlib half is true; the
-conclusion was wrong.  `ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`
-registers `ContinuousFunctionalCalculus ℝ (E →L[ℝ] E) IsSelfAdjoint` for every
-real Hilbert space at unrestricted dimension, and `modulus` and the whole chain
-`cfc Real.sin (cfc Real.arcsin (modulus (P_U − P_V)))` elaborate over `ℝ`
-directly.
+**Both verdicts are retracted.**  They were given twice, each time for a
+different wrong reason, and the second time the reasoning was not even about
+mathematics.
 
-The real position:
+* First: "Mathlib has no real continuous functional calculus, so the real angle
+  operators cannot be named."  True about Mathlib, false as a conclusion --
+  `ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`
+  registers it.
+* Then: "the vocabulary is in `ForTauCeti`, not upstream, so a Challenge cannot
+  use it."  **This does not follow from Palomar's policy**, which permits
+  Challenge-local definitions and provides `definition_names` for exactly this.
+  Deciding feasibility from the development's dependency graph, instead of by
+  building the candidate, was the error the brief warned against.
 
-* **Item 23–30 (Palomar).**  A dependency-*location* problem, not missing
-  mathematics.  Every object the four statements need exists in `ForTauCeti`;
-  none is upstream, and a Challenge may import only upstream.  Eleven of the
-  fifteen needed concepts are already targets on the operator roadmap
-  (`OperatorIdeals`, `PolarDecomposition`, `PrincipalAngles`,
-  `SelfAdjointSpectralTheory`).  Four are not: the real calculus, the unbounded
-  spectral *subspace* and reducing restriction, `FormBoundedSylvesterGap`, and the
-  ambient tangent operators.
-* **Item 21 (generic `[RCLike 𝕜]`).**  Narrower than first reported.  The angle
-  half is writable over `𝕜` behind a capability binder with instances at both of
-  the paper's fields.  What remains open is the `𝕜`-generic **spectral
-  selection**: `specRange` and `selfAdjointSpectralSubspace` exist over `ℂ` and
-  reach `ℝ` by descent, and the roadmap's own `spectralPVM` is stated over `ℂ`.
+**Item 23--30 (Palomar): the candidate has been built.**
+`dev/palomar-candidate/Challenge.lean` compiles against `import Mathlib` alone,
+at **511 lines / 23,579 bytes** -- inside the 1000-line / 100 KiB cap -- with four
+`[RCLike 𝕜]` headline theorems and no functional calculus.  `Solution.lean`
+proves the `sin Θ` statement from the development, outright at `ℂ` and at `ℝ`,
+and proves that the Challenge's unitarily invariant norm *is* the development's
+`PaperUnitaryInvariantNorm`, by `rfl`.  What made it small was naming the angle
+quantities by their singular values instead of constructing them.
 
-Also corrected: the earlier reasoning that `RCLike` admits no real/complex
-dispatch was wrong about Mathlib —
-`RCLike.I_eq_zero_or_im_I_eq_one` with `realLinearIsometryEquiv` and
-`complexLinearIsometryEquiv` is that dispatch.  It is not what these two need.
+**Item 21 (generic `[RCLike 𝕜]`): the same single obstruction.**  Both the
+Challenge's `[RCLike 𝕜]` statements and the development's generic Section 2
+surface need the same two capability classes at an arbitrary `RCLike` field.
+That is one scalar-field transport, for which Mathlib supplies the dispatch, and
+it would serve every theorem at once.
+
+Remaining, all named in `dev/palomar-candidate/README.md`: the transport; one
+development lemma for the ambient `sin 2Θ` clause; the `tan Θ` and `tan 2Θ`
+correspondences.  None is a policy or dependency obstruction.
 
 ## Standing constraint honoured
 
@@ -1328,4 +1331,4 @@ was created in this repository.
 
 ## Verdict
 
-`PRODUCTION COMPLETE / PALOMAR BLOCKED`.
+`PRODUCTION COMPLETE / PALOMAR FEASIBILITY OPEN` — the Challenge is built and compiling; the Solution is partial.

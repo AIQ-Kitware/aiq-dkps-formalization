@@ -212,56 +212,69 @@ Measured there:
 
 No Challenge symbol comes from DKPS-local or unmerged Tau Ceti code.
 
-**Can the four Section 2 theorems replace it?**  Not today, and the reason is
-**location, not missing mathematics**.
-`dev/palomar-section-two-challenge-audit-2026-08-31.md` is the audit, against the
-policy snapshot the submission repository carries, the pinned Tau Ceti
-(`1b39d420…`), this workspace's Mathlib, and the operator roadmap on branch
-`hilbert-space-operator-theory`.  Size is not the blocker: a Challenge measures at
-roughly 350–450 lines.
+**Can the four Section 2 theorems replace it?**  **Yes -- the candidate has been
+built.**  `dev/palomar-candidate/` contains a compiling `Challenge.lean` with
+four `[RCLike 𝕜]` headline declarations and a `Solution.lean` that discharges the
+first of them from the development.
 
-Every object the four statements need exists in `ForTauCeti`.  None is upstream,
-and a Challenge may import only Lean core, allowlisted Mathlib, upstream Tau Ceti
-and CSLib.  Eleven of the fifteen needed concepts — approximation numbers, Ky Fan
-gauges, operator ideal families, the symmetric gauge that is the paper's UI norm
-class, Fan dominance, the `RCLike`-generic modulus, the ambient `sin Θ` operator,
-the `LinearPMap` resolvent, the unbounded spectral PVM, the Sylvester equation —
-are **already targets on the operator roadmap**.  Four are not: the real
-continuous functional calculus, the unbounded spectral *subspace* and reducing
-restriction, `FormBoundedSylvesterGap`, and the ambient tangent operators.
+| measurement | value | policy |
+| --- | --- | --- |
+| `Challenge.lean` | **511 lines / 23,579 bytes** | hard 1000 / 100 KiB |
+| imports | **1** (`import Mathlib`) | Lean core + allowlisted closure |
+| local definitions | 27 | permitted |
+| headline theorems | 4 | — |
+| functional calculus | **none** | — |
 
-**Correction to an earlier revision of this report.**  It said the blocker was
-that the real angle operators cannot be named, because Mathlib's real continuous
-functional calculus for bounded operators does not exist.  The claim about
-Mathlib is true; the conclusion was wrong.
-`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`
-registers `ContinuousFunctionalCalculus ℝ (E →L[ℝ] E) IsSelfAdjoint` for every
-real Hilbert space at unrestricted dimension, and `modulus` together with the
-whole chain `cfc Real.sin (cfc Real.arcsin (modulus (P_U − P_V)))` elaborates
-over `ℝ` directly — checked by elaborating it, not inferred.  The real angle
-operators in this repository are defined by transport for historical reasons, not
-because a direct definition is unavailable.
+**Correction to two earlier revisions of this report.**  The first said the
+blocker was that the real angle operators cannot be named, because Mathlib has no
+real continuous functional calculus for bounded operators.  The claim about
+Mathlib is true; the conclusion was wrong -- `ForTauCeti` registers that
+calculus.  The second then said the blocker was that the development's vocabulary
+is not upstream, and that a Challenge may import only upstream.  **That does not
+follow from Palomar's policy**, which permits Challenge-local definitions and
+provides `definition_names` for exactly this purpose.  Both verdicts are
+retracted.
 
-**Nothing has been submitted to or registered with Palomar.**
+What actually made the Challenge small was dropping the functional calculus from
+the *statement*.  A unitarily invariant norm sees only singular values, so the
+angle operators need only be named, not constructed: `sin Θ₀` is the paper's own
+`(I − F₀F₀⋆)E₀`, the double-angle sines are explicit projection blocks, and the
+tangents are characterised by their singular values -- which is how Davis and
+Kahan introduce them.
+
+The Challenge's unitarily invariant norm is the dimension-coherent symmetric
+norming function, and `Solution.lean` proves it *is* the development's
+`PaperUnitaryInvariantNorm`, by `rfl`.
 
 ---
 
 ## 7. Palomar correspondence and Solution
 
-Not built, because the Challenge it would compare against is blocked (§6).  The
-existing entry's correspondence is trivial by construction: its Challenge
-statement is the production declaration's own type, and its Solution imports the
-module that proves it, so there is no separate vocabulary to reconcile.
+`dev/palomar-candidate/Solution.lean` (291 lines) proves:
 
-The remaining Palomar policy issue is the dependency one in §6, and it is an
-upstreaming problem, not a research one: land the `OperatorIdeals` and
-`PolarDecomposition` roadmap topics; propose the real continuous functional
-calculus (written, self-contained, and already flagged in its own docstring as a
-roadmap proposal); propose the unbounded spectral subspace, the form-bounded gap
-predicate and the ambient tangent operators.  All four are work this repository is
-positioned to do, because it already carries the mathematics.
+* the Challenge's singular values **are** the development's approximation
+  numbers (`rfl`);
+* a Challenge unitarily invariant norm **is** a `PaperUnitaryInvariantNorm`,
+  field for field, with matching value, ideal and real norm (`rfl`);
+* the Challenge's trial-residual and exact-decomposition data are the
+  development's;
+* the Challenge's separation is `FormBoundedSylvesterGap`, constructor by
+  constructor, **including both half-infinite configurations**;
+* the Challenge's `sin Θ` statement, from
+  `sinTheta_unbounded_formGap_paperUINorm_rclike` -- outright at `ℂ` and at `ℝ`.
 
----
+Three things remain, named exactly in that file and in the candidate README:
+
+1. the two development capability classes at an arbitrary `RCLike` field, which
+   is one scalar-field transport and would serve all four theorems;
+2. one missing development lemma for the ambient `sin 2Θ` clause (reflection
+   through a *reducing* rather than *spectral* subspace);
+3. the `tan Θ` and `tan 2Θ` correspondences, not yet carried out.
+
+The experiment also found a defect in its own Challenge: the `sin 2Θ` directed
+clause is stated for an arbitrary reducing subspace while the development's
+directed endpoint uses a spectral selection, so the Challenge is currently
+*stronger* than what is proved.  Recorded, not hidden.
 
 ## 8. Validation
 
@@ -304,24 +317,16 @@ placeholders in `Challenge/DavisKahan1970/Conformance.lean`.
 ## 9. Verdict
 
 ```
-PRODUCTION COMPLETE / PALOMAR BLOCKED
+PRODUCTION COMPLETE / PALOMAR FEASIBILITY OPEN
 ```
 
 All source mathematics and the 29/29 certification are complete, reviewed result
-by result against the printed statements and against compiler-printed types.
+by result.
 
-The Palomar obstruction is external and is a **dependency-location** fact, not a
-mathematical one: the four Section 2 statements need a unitarily-invariant-norm
-class, infinite-dimensional approximation numbers, an `RCLike`-generic modulus,
-an unbounded spectral subspace and a real continuous functional calculus, all of
-which this repository has and none of which is upstream, while a Challenge may
-import only upstream.  Most are already operator-roadmap targets; the audit lists
-the four that are not.
-
-The generic `[RCLike 𝕜]` surface for the other three headline results is a
-narrower question than this report earlier suggested.  With the real calculus in
-hand, `tan Θ`'s angle chain is writable over `𝕜` behind the same kind of
-capability binder the `sin Θ` endpoint already carries, with instances at both of
-the paper's fields.  What remains genuinely open is the `𝕜`-generic *spectral
-selection*: the roadmap's `spectralPVM` is stated over `ℂ`, and the `ℝ` case is a
-descent.
+Palomar is **not blocked** -- that verdict, twice given and twice for a different
+wrong reason, is retracted.  A four-theorem Challenge compiles inside the policy
+caps with a single `import Mathlib`, and the vocabulary correspondence that was
+most at risk of hiding a weakening -- the unitarily invariant norm -- holds by
+`rfl`.  What is open is finishing the Solution: one scalar-field transport, one
+development lemma, and two correspondences.  None of them is a policy or
+dependency obstruction.

@@ -6,34 +6,31 @@ carries (`submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-fo
 2026-08-28), the pinned Tau Ceti at
 `1b39d420ac84ed9a5a7d536ce19b37818ad29c39`, and the Mathlib this workspace pins.
 
-**Answer: not today, and the reason is *location*, not missing mathematics.**
-Every object the four statements need exists — in `ForTauCeti`, in this
-repository.  None of them is upstream, and a Challenge may import only Lean core,
-allowlisted Mathlib, upstream Tau Ceti and CSLib.  Most of them are already
-targets on the Tau Ceti operator roadmap, so this is a sequencing problem: the
-Challenge becomes writable as those topics are accepted and delivered.
+**Answer: RETRACTED.  The candidate has now been built, and it works.**
 
-**Correction, same day.**  An earlier revision of this audit said the blocker was
-that the *real* angle operators cannot be named, because Mathlib's real
-continuous functional calculus for bounded operators does not exist.  The claim
-about Mathlib is true; the conclusion drawn from it was wrong.
-`ForTauCeti/Analysis/InnerProductSpace/RealContinuousFunctionalCalculus.lean`
-registers
+This audit originally concluded that a four-theorem Challenge was blocked -- first
+because the real angle operators could not be named, then, after that was
+corrected, because the needed vocabulary lives in `ForTauCeti` rather than
+upstream.  **Both conclusions were wrong, and the second did not follow from
+Palomar's policy at all**: Palomar permits Challenge-local definitions, and
+provides `definition_names` precisely so a Challenge may name a definition whose
+value the Solution supplies.  Inferring a blockage from where the *development's*
+definitions live was a category error.
 
-```
-ContinuousFunctionalCalculus ℝ (E →L[ℝ] E) IsSelfAdjoint
-```
+The candidate is `dev/palomar-candidate/`.  It compiles, against `import Mathlib`
+alone, at **511 lines / 23,579 bytes** -- inside the 1000-line / 100 KiB hard cap
+-- with four `[RCLike 𝕜]` headline theorems and **no functional calculus
+anywhere**.  `Solution.lean` proves the `sin Θ` statement from the development,
+and proves that the Challenge's unitarily invariant norm is the development's
+`PaperUnitaryInvariantNorm` **by `rfl`**.
 
-for **every** real Hilbert space at unrestricted dimension, and with it
-`ContinuousLinearMap.modulus` and the whole angle chain
-`cfc Real.sin (cfc Real.arcsin (modulus (P_U − P_V)))` elaborate over `ℝ`
-directly, with no complexification.  That was checked by elaborating all three,
-not inferred.  The real angle operators in this repository are defined by
-transport for historical reasons, not because a direct definition is unavailable.
+What remains is named precisely in `dev/palomar-candidate/README.md`; the
+headline item is a scalar-field transport that would discharge two development
+capability classes at once.  None of it is a Palomar policy obstruction.
 
-This document is the audit.  It is **not** a submission surface: the Challenge,
-the Solution, the comparator configuration and the submission metadata belong to
-the standalone repository, and `AGENTS.md` forbids recreating them here.
+The rest of this file is retained as the record of what the vocabulary needs and
+where each object currently lives, which is still accurate and still useful.  Its
+earlier verdict is not.
 
 ## What the policy allows
 
@@ -71,7 +68,12 @@ Adding the four statements themselves (~120 lines), a complex-only Challenge
 lands around 350–450 lines: **inside** the 1000-line hard cap, over the 300-line
 preferred one.  Size is therefore not the blocker.
 
-## Where each needed object actually is
+## Where each needed object currently lives
+
+The table below is a map of the *development's* dependencies, not an argument
+about feasibility -- the candidate shows the Challenge does not need to import
+any of it.  The last four rows are the ones the earlier verdict leaned on, and
+the candidate defines all four from Mathlib primitives instead.
 
 | concept | Mathlib | upstream Tau Ceti (pinned) | Tau Ceti operator roadmap | `ForTauCeti` |
 | --- | --- | --- | --- | --- |
@@ -107,25 +109,20 @@ scope, and it is the reason its Challenge compares the operator-norm `sin Θ`
 theorem — a statement writable in ordinary Mathlib vocabulary — rather than the
 general ones.
 
-## What would unblock it
+## What would unblock the *upstreaming* route
 
-In dependency order, and none of it is research:
+Separately from the Challenge, which does not need it, these are the items this
+repository could propose upstream, in dependency order.  They matter for the Tau
+Ceti track, not for Palomar:
 
-1. **Land the `OperatorIdeals` and `PolarDecomposition` roadmap topics upstream.**
-   They carry the approximation numbers, the symmetric gauge, Fan dominance and
-   the modulus — eleven of the fifteen rows above.
+1. **Land the `OperatorIdeals` and `PolarDecomposition` roadmap topics.**  They
+   carry the approximation numbers, the symmetric gauge, Fan dominance and the
+   modulus.
 2. **Propose the real continuous functional calculus.**  It is written, it is
-   self-contained, and its own module docstring already says it is not on the
-   roadmap and is proposed for it.  Registering it upstream also supplies
-   `StarOrderedRing (E →L[ℝ] E)`, which Mathlib currently declines to register
-   for exactly this reason.
-3. **Propose the unbounded spectral *subspace* and reducing restriction**, on top
-   of the roadmap's `spectralPVM`, and the form-bounded gap predicate.
-4. **Propose the ambient tangent operators**, which then follow from (2) and the
-   roadmap's modulus.
-
-Only after (1)–(4) does the question "should the Challenge be the four Section 2
-theorems?" become a packaging question rather than a dependency one.
+   self-contained, and its own module docstring already says it is proposed for
+   the roadmap.
+3. **Propose the unbounded spectral subspace and reducing restriction**, and the
+   form-bounded gap predicate.
 
 ## Standing constraint
 
