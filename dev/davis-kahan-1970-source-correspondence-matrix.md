@@ -41,8 +41,8 @@ appendix forms are specializations rather than parallel proofs.
 
 | paper item | source name | target |
 | --- | --- | --- |
-| unitarily invariant norms ↔ symmetric norming functions | `unitaryInvariantNorm_equiv_symmetricNormingFunction` | `PaperSymmetricNormingFunction.paperNormEquiv` |
-| the class is nonempty | `unitaryInvariantNorm_nonempty` | `paperUnitaryInvariantNorm_nonempty` |
+| the coherent-family and axiomatic presentations agree | `symmetricNormingFunction_equiv_axiomatic` | `SymmetricNormingFunction.Axiomatic.equiv` |
+| the class is nonempty | `sourceNormClass_nonempty` | `symmetricNormingFunction_nonempty` |
 
 ## Angle objects
 

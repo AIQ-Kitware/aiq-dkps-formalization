@@ -950,7 +950,7 @@
       },
       "type_requirements": {
         "must_contain": [
-          "PaperUnitaryInvariantNorm"
+          "SymmetricNormingFunction"
         ],
         "must_not_contain": [],
         "rationale": "The printed norm is an arbitrary unitarily invariant norm. A Ky Fan family, a symmetric ideal family, or the operator norm is a narrower statement."
@@ -1354,7 +1354,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "result_scope",
-      "formalization_role_reason": "The four Section 2 results are stated for an arbitrary unitarily invariant norm rather than the operator norm. This is printed norm scope of all four counted results, and it is what forces the Lean endpoints to quantify over `PaperUnitaryInvariantNorm` instead of concluding at a single Ky Fan gauge.",
+      "formalization_role_reason": "The four Section 2 results are stated for an arbitrary unitarily invariant norm rather than the operator norm. This is printed norm scope of all four counted results, and it is what forces the Lean endpoints to quantify over `SymmetricNormingFunction` instead of concluding at a single Ky Fan gauge.",
       "formalization_role_reason_code": "counted_result_scope",
       "formalization_result_ids": [
         "S2-sin-theta",
@@ -1370,12 +1370,12 @@
           "S2-sin-two-theta",
           "S2-tan-two-theta"
         ],
-        "rationale": "The four Section 2 results are stated for an arbitrary unitarily invariant norm rather than the operator norm. This is printed norm scope of all four counted results, and it is what forces the Lean endpoints to quantify over `PaperUnitaryInvariantNorm` instead of concluding at a single Ky Fan gauge.",
+        "rationale": "The four Section 2 results are stated for an arbitrary unitarily invariant norm rather than the operator norm. This is printed norm scope of all four counted results, and it is what forces the Lean endpoints to quantify over `SymmetricNormingFunction` instead of concluding at a single Ky Fan gauge.",
         "source_quote": "arbitrary unitary-invariant norms"
       },
       "type_requirements": {
         "must_contain": [
-          "PaperUnitaryInvariantNorm"
+          "SymmetricNormingFunction"
         ],
         "must_not_contain": [],
         "rationale": "As above: the quantifier must be over the paper's norm object."
@@ -3296,7 +3296,7 @@
         "must_not_contain": [
           "UnboundedTrialBlock"
         ],
-        "rationale": "This atom is a THIRD scope axis, distinct from `S2-unbounded-scope.unbounded-selfadjoint-scope` (the AMBIENT operator may be unbounded, checked by `→ₗ.[`) and from `S2-unbounded-scope.bounded-residual-needed` (the residual must be bounded, checked by `→L[`).  Here the RITZ COMPRESSION `A_0` itself may be unbounded.  A theorem can satisfy the other two and still fail this one, and one did: `tanTheta_directed_unboundedTrial_paperUINorm_complex` takes an ambient `A : H →ₗ.[ℂ] H` and a bounded residual, but its `TanTheta.UnboundedTrialBlock` carries `operator : Z →L[𝕜] Z` -- a BOUNDED compression, the name recording only that the ambient operator is unbounded.  `UnboundedRitzPair.trial.compression : Z →ₗ.[𝕜] Z` is the carrier that actually realizes the Appendix scope, and `UnboundedTrialBlock` is the bounded-compression bundle that must not be mistaken for it."
+        "rationale": "This atom is a THIRD scope axis, distinct from `S2-unbounded-scope.unbounded-selfadjoint-scope` (the AMBIENT operator may be unbounded, checked by `→ₗ.[`) and from `S2-unbounded-scope.bounded-residual-needed` (the residual must be bounded, checked by `→L[`).  Here the RITZ COMPRESSION `A_0` itself may be unbounded.  A theorem can satisfy the other two and still fail this one, and one did: `tanTheta_directed_unboundedTrial_symmetricNorming_complex` takes an ambient `A : H →ₗ.[ℂ] H` and a bounded residual, but its `TanTheta.UnboundedTrialBlock` carries `operator : Z →L[𝕜] Z` -- a BOUNDED compression, the name recording only that the ambient operator is unbounded.  `UnboundedRitzPair.trial.compression : Z →ₗ.[𝕜] Z` is the carrier that actually realizes the Appendix scope, and `UnboundedTrialBlock` is the bounded-compression bundle that must not be mistaken for it."
       }
     },
     {
@@ -3949,15 +3949,15 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The closing sentence of Section 8 states that the sin 2 Theta theorem extends to `dim X(E_0) < dim X(F_0)` \"analogously to Theorems 6.1 and 6.3\" -- an assertion by analogy, with no proof supplied and no restatement of the Section 2 theorem. It is an extension remark around a counted result, so `result_adjacent_extension`. The repository nevertheless carries the extension at the scope the Section 2 result is certified at (`sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex` and its real sibling, added 2026-08-31); that is stronger coverage held as supporting evidence, not a counted obligation.",
+      "formalization_role_reason": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The closing sentence of Section 8 states that the sin 2 Theta theorem extends to `dim X(E_0) < dim X(F_0)` \"analogously to Theorems 6.1 and 6.3\" -- an assertion by analogy, with no proof supplied and no restatement of the Section 2 theorem. It is an extension remark around a counted result, so `result_adjacent_extension`. The repository nevertheless carries the extension at the scope the Section 2 result is certified at (`sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex` and its real sibling, added 2026-08-31); that is stronger coverage held as supporting evidence, not a counted obligation.",
       "formalization_role_reason_code": "post_result_consequence_not_in_printed_statement",
       "formalization_result_ids": [],
       "scope_classification": {
         "category": "result_adjacent_extension",
         "extends_results": [],
-        "rationale": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The closing sentence of Section 8 states that the sin 2 Theta theorem extends to `dim X(E_0) < dim X(F_0)` \"analogously to Theorems 6.1 and 6.3\" -- an assertion by analogy, with no proof supplied and no restatement of the Section 2 theorem. It is an extension remark around a counted result, so `result_adjacent_extension`. The repository nevertheless carries the extension at the scope the Section 2 result is certified at (`sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex` and its real sibling, added 2026-08-31); that is stronger coverage held as supporting evidence, not a counted obligation.",
+        "rationale": "RECLASSIFIED 2026-08-31 (second pass), under the corrected statement_boundary. The closing sentence of Section 8 states that the sin 2 Theta theorem extends to `dim X(E_0) < dim X(F_0)` \"analogously to Theorems 6.1 and 6.3\" -- an assertion by analogy, with no proof supplied and no restatement of the Section 2 theorem. It is an extension remark around a counted result, so `result_adjacent_extension`. The repository nevertheless carries the extension at the scope the Section 2 result is certified at (`sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex` and its real sibling, added 2026-08-31); that is stronger coverage held as supporting evidence, not a counted obligation.",
         "source_quote": "The source closes Section~8 by stating that the $\\sin2\\theta$ theorem extends to $\\dim\\mathcal X(E_0)<\\dim\\mathcal X(F_0)$ analogously to Theorems~6.1 and~6.3",
-        "stronger_lean_coverage": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_paperUINorm_complex"
+        "stronger_lean_coverage": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorming_complex"
       }
     },
     {
@@ -4906,7 +4906,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "Restates the Section 2 double-angle tangent theorem in functional-calculus language for the gap step function, applying it rather than establishing anything new. Counted once, at its own source statement (`S2-tan-two-theta`), whose exact ambient wrapper `tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex` this row already carries. The link list is deliberately empty: reverse links mark membership of a counted result's own source block, and this Section 10 passage is not in the Section 2 block.",
+      "formalization_role_reason": "Restates the Section 2 double-angle tangent theorem in functional-calculus language for the gap step function, applying it rather than establishing anything new. Counted once, at its own source statement (`S2-tan-two-theta`), whose exact ambient wrapper `tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex` this row already carries. The link list is deliberately empty: reverse links mark membership of a counted result's own source block, and this Section 10 passage is not in the Section 2 block.",
       "formalization_role_reason_code": "restatement_of_counted_result",
       "formalization_result_ids": []
     },
@@ -4938,7 +4938,7 @@
       "present_in_distributable_spec": true,
       "restored_in_2026_08_12_pdf_reaudit": false,
       "formalization_role": "non_result",
-      "formalization_role_reason": "The directed companion of the previous atom: the residual form of the Section 2 double-angle tangent theorem, restated for the step function. Counted once at `S2-tan-two-theta`, whose exact directed wrapper `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex` this row carries. Empty link list for the same reason.",
+      "formalization_role_reason": "The directed companion of the previous atom: the residual form of the Section 2 double-angle tangent theorem, restated for the step function. Counted once at `S2-tan-two-theta`, whose exact directed wrapper `tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex` this row carries. Empty link list for the same reason.",
       "formalization_role_reason_code": "restatement_of_counted_result",
       "formalization_result_ids": []
     },

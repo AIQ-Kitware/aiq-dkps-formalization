@@ -78,7 +78,7 @@ may import and the real one lives in the development.
 * `sin 2Θ` is the projector difference between `U` and its mirror image in `V` —
   reflecting doubles every principal angle.
 * `sin 2Θ₀` is `U`'s overlap with the mirror of its own complement.
-* The **tangents are sequences**: `UINorm.evalSeq` measures a unitarily invariant
+* The **tangents are sequences**: `SymmetricNormingFunction.evalSeq` measures a unitarily invariant
   norm on `tan θ₁, tan θ₂, …` directly. No representative operator is quantified
   over, so no tangent conclusion can be made vacuous.
 
@@ -152,18 +152,18 @@ This is no longer only an argument. **Every clause is now proved at an arbitrary
 reducing subspace, and none rests on a spectral endpoint.**
 
 * `sin 2Θ` ambient was the first: `Solution.sinTwoTheta_ambient_proof` applies
-  `sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`, which the
+  `sinTwoTheta_ambient_reflection_projectorDifference_symmetricNorming`, which the
   development already stated at that scope.
 * `sin 2Θ` directed followed, through
-  `sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_paperUINorm_complex`
+  `sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_symmetricNorming_complex`
   and its real mirror.
 * Both `tan 2Θ` clauses were the last, and they needed new mathematics rather
   than a restatement. `ReducingCutoff` obtains the Appendix cutoff approximation
   `Ω_τ → I` for an arbitrary reducing subspace from the spectral bands of the
   operator *restricted to that subspace*; that is what removed the spectral
   half-line specialization. The endpoints are
-  `tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_paperUINorm_complex`,
-  `tanTwoTheta_ambient_unbounded_reducing_paperUINorm_complex` and their real
+  `tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex`,
+  `tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex` and their real
   siblings.
 
 ## What is proved
@@ -194,7 +194,7 @@ selection of the trial subspace**, and each depends on exactly `propext`,
 `Classical.choice`, `Quot.sound`.
 
 Also proved here, as the bridge the four theorems rest on: the norm
-correspondence by `rfl` (`UINorm.toPaper`, `eval_eq`, `finite_iff`, `norm_eq`);
+correspondence by `rfl` (`SymmetricNormingFunction.toSourceNorm`, `eval_eq`, `finite_iff`, `norm_eq`);
 the separation constructor by constructor, both half-infinite branches;
 reduction, blocks and the bounded perturbation of a partial map; the trial data
 field for field with the compression still a partial map
@@ -289,7 +289,7 @@ byte-identical to the file here, `Palomar/DKSectionTwo/Solution.lean` imports
 repository carries a mechanical extraction of `ForTauCeti` and `DavisKahan`
 alongside it.  The standalone Solution's `import Mathlib` is load-bearing and must
 not be narrowed without rerunning the Comparator: a narrower environment
-elaborated `UINorm.evalSeq`'s `⨆` against a different `SupSet ℝ≥0∞` instance,
+elaborated `SymmetricNormingFunction.evalSeq`'s `⨆` against a different `SupSet ℝ≥0∞` instance,
 which every local build accepted and the exporter did not.
 
 **This directory stays authoritative for the two Lean files.**  Fix a statement
