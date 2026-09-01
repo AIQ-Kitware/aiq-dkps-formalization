@@ -16,22 +16,22 @@ repaired statements and the audit that will keep them honest.
 
 | | Challenge.lean | limit |
 | --- | --- | --- |
-| lines | **600** | hard 1000, preferred 300 |
-| bytes | **29,683** | hard 102,400, preferred 32,768 |
+| lines | **624** | hard 1000, preferred 300 |
+| bytes | **31,268** | hard 102,400, preferred 32,768 |
 | imports | **`Mathlib` only** | Lean core + allowlisted Mathlib/Tau Ceti/CSLib |
 | definitions and structures | 37 | ordinary concrete definitions; **not** `definition_names` |
 | headline theorems | 4 | `sorry`-bodied, per the Comparator convention |
 | supporting theorems | 1 (`Reduces.orthogonal`) | proved; needed for the `sin 2Θ` statement to typecheck |
 | functional calculus | **absent** | — |
 
-`Solution.lean` is 1,983 lines and contains no `sorry`, no `admit` and no `axiom`.
+`Solution.lean` is 1,961 lines and contains no `sorry`, no `admit` and no `axiom`.
 
 The line count is over Palomar's *preferred* 300 and under its hard 1000, so
 `check_palomar_readiness.py` would warn, not fail. Four full theorems with their
-own vocabulary do not fit in 300 lines. The byte count is now **2,784 bytes below
-the preferred 32 KiB**, where it used to sit three bytes under it; the margin came
-entirely out of prose that belongs in this file and in the statement audit, not
-out of any definition or statement.
+own vocabulary do not fit in 300 lines. The byte count is **1,500 bytes below the
+preferred 32 KiB**.  It had been 2,784 below; the 2026-09-01 pass spent 1,585 of
+that margin on the (3.5) disclosure described below, which is the one place a
+reader must not have to leave the Challenge to understand a hypothesis.
 
 ## Comparator configuration
 
@@ -105,8 +105,8 @@ and all four are now fixed:
    membership premise. The directed `tan 2Θ` premise is membership of the
    residual *corner*.
 4. **The tangents could be vacuous, and a pole read as zero.** `Real.tan (π/2)`
-   is `0` in Lean. Each tangent theorem now *concludes* `TangentDefined` /
-   `DoubleTangentDefined` — there is no pole — which is what Section 7 of the
+   is `0` in Lean. Each tangent theorem now *concludes* `TangentDefined` —
+   there is no pole — which is what Section 7 of the
    source derives rather than assumes, and what the development's own `tan 2Θ`
    endpoints conclude with `IsUnit …`.
 
@@ -148,12 +148,23 @@ blocks; a separated reducing decomposition then *is* spectral, but that is a
 theorem and not a hypothesis. So the reducing formulation is the printed one, and
 the Challenge keeps it.
 
-For `sin 2Θ` this is not just an argument: `Solution.sinTwoTheta_ambient_of_capabilities`
-**proves** the ambient clause at an arbitrary reducing subspace, from
-`sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`, which the
-development already states at that scope. The remaining spectral-only endpoints
-(`sin 2Θ` directed, both `tan 2Θ` clauses) are recorded as *production*
-narrowings rather than Challenge defects.
+This is no longer only an argument. **Every clause is now proved at an arbitrary
+reducing subspace, and none rests on a spectral endpoint.**
+
+* `sin 2Θ` ambient was the first: `Solution.sinTwoTheta_ambient_proof` applies
+  `sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`, which the
+  development already stated at that scope.
+* `sin 2Θ` directed followed, through
+  `sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_paperUINorm_complex`
+  and its real mirror.
+* Both `tan 2Θ` clauses were the last, and they needed new mathematics rather
+  than a restatement. `ReducingCutoff` obtains the Appendix cutoff approximation
+  `Ω_τ → I` for an arbitrary reducing subspace from the spectral bands of the
+  operator *restricted to that subspace*; that is what removed the spectral
+  half-line specialization. The endpoints are
+  `tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_paperUINorm_complex`,
+  `tanTwoTheta_ambient_unbounded_reducing_paperUINorm_complex` and their real
+  siblings.
 
 ## What is proved
 
@@ -238,16 +249,51 @@ had been stated over `ℂ`, and the whole `Solution.lean` then stalled at `whnf`
 inside the real branch.  A fixed-field helper inside a scalar-generic proof is
 not merely inelegant here; it is a hang.
 
-## The Comparator layout this is not yet in
+## The one added hypothesis, and where it is disclosed
+
+Six of the seven printed clauses state exactly the printed hypotheses.  The
+**ambient `tan Θ`** clause states one more: `CrossedDefectsEquivalent U V`, the
+constructive form of the source's condition (3.5).
+
+(3.5) is not written in the Section 2 display — it is introduced in Section 3,
+made standing there for the rest of the paper, and used by the Section 6 proof of
+this very clause.  It is imported from the paper's later scope, and it is
+consumed rather than decorative: the production endpoint takes it, and so does
+the transversality fact the clause's `TangentDefined` conclusion rests on.  A
+reading that took only the printed hypotheses and valued a missing norm at `+∞`
+would make the printed ambient clause *false* in infinite dimension; this
+formalization instead reads the display under the paper's own global semantics,
+in which Section 1 declares such results vacuous when a displayed norm does not
+exist.  See §2c of `dev/palomar-section-two-challenge-statement-audit.md` for the
+four layers kept apart, the competing literal reading, and why it is rejected.
+
+The qualification is disclosed in the Challenge itself (a prose block above
+`TanThetaResult`, plus pointers on the `ambient` field and on
+`CrossedDefectsEquivalent`), in the distilled source TeX, in the result
+inventory, in that audit, and in the standalone entry's `formalization.yaml`.
+The submission metadata does **not** say "no added hypothesis".
+
+## The Comparator layout, and the standalone repository
 
 `Solution.lean` here imports `Challenge` for its vocabulary.  That is right for a
 bridge file inside the development and wrong for a submission: the Comparator
 compares two independently exported environments, so the submitted `Solution.lean`
 must **not** import `Challenge`, and must redeclare the Challenge's definitions
 verbatim and then the four advertised names, at the same types, with these proofs.
-The conversion is mechanical — the definitions are copied and the four theorem
-bodies are the `*_solution` terms above — and it belongs in the standalone
-submission repository under `submodules/`, together with a refreshed mechanical
-extraction of the development, a `registry/` entry, and the real Comparator run.
+
+That conversion has been done.  It lives in the standalone submission repository
+under `submodules/aiq-davis-kahan-1970-rotation-eigenvectgors-perturbation-formalization`,
+as the entry `registry/dk-section-two/`: `Palomar/DKSectionTwo/Challenge.lean` is
+byte-identical to the file here, `Palomar/DKSectionTwo/Solution.lean` imports
+`Mathlib` rather than `Challenge` and redeclares the vocabulary verbatim, and the
+repository carries a mechanical extraction of `ForTauCeti` and `DavisKahan`
+alongside it.  The standalone Solution's `import Mathlib` is load-bearing and must
+not be narrowed without rerunning the Comparator: a narrower environment
+elaborated `UINorm.evalSeq`'s `⨆` against a different `SupSet ℝ≥0∞` instance,
+which every local build accepted and the exporter did not.
+
+**This directory stays authoritative for the two Lean files.**  Fix a statement
+here, then refresh the standalone repository mechanically; do not edit the two
+copies independently.
 
 Nothing has been submitted or registered.

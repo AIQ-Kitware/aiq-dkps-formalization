@@ -72,6 +72,11 @@ SEMANTIC_AUDIT_SURFACE_PATH = ROOT / "DavisKahan/Sources/DavisKahan1970/Audits/R
 HASH_EXTENSIONS = {".lean", ".py", ".yaml", ".yml", ".toml", ".json", ".tex", ".md"}
 HASH_BASENAMES = {"lean-toolchain", "lake-manifest.json"}
 WARNING_RE = re.compile(r"\bwarning:", re.IGNORECASE)
+# The production build has to run before any stage that probes declarations,
+# because those stages read this repository's `.olean` files and `--clean`
+# has just deleted them.  The label is a constant so the certificate can
+# name the stage it took its warning count from.
+PRODUCTION_BUILD_LABEL = "04b-production-build"
 BEGIN_TOKEN = "DKCERT|BEGIN|"
 END_TOKEN = "DKCERT|END|"
 
@@ -461,11 +466,15 @@ def main() -> int:
             "--prefix", "ForTauCeti", "--prefix", "DavisKahan",
             "--exclude-prefix", "DavisKahan.Experimental", "--check",
         ]),
+        # Everything above is static: Python and `aiq-lean` reading sources.
+        # Everything below needs compiled `.olean` files, so the production build
+        # separates the two halves.  It is built exactly once; the later Lean
+        # stages reuse its output.
+        (PRODUCTION_BUILD_LABEL, ["lake", "build", "DavisKahan.All"]),
         ("05-statement-map", statement_map_command),
         ("05b-formalization-result-inventory", result_inventory_command),
         ("06-distilled-literature-index", [sys.executable, "scripts/check_distilled_literature_index.py"]),
-        ("07-production-build", ["lake", "build", "DavisKahan.All"]),
-        ("07b-result-semantic-surface", ["lake", "env", "lean", str(SEMANTIC_AUDIT_SURFACE_PATH.relative_to(ROOT))]),
+        ("07-result-semantic-surface", ["lake", "env", "lean", str(SEMANTIC_AUDIT_SURFACE_PATH.relative_to(ROOT))]),
         # The census checker runs the declaration probe itself, so a separate
         # probe step would compile the same file twice.
         ("08-source-census", [sys.executable, "scripts/check_davis_kahan_1970_source_census.py"]),
@@ -509,7 +518,7 @@ def main() -> int:
     source_stable = source_before == source_after
     input_hashes = snapshot_inputs(outdir)
 
-    build_result = next(x for x in results if x["label"] == "07-production-build")
+    build_result = next(x for x in results if x["label"] == PRODUCTION_BUILD_LABEL)
     command_failures = [x["label"] for x in results if x["returncode"] != 0]
     build_warning_failure = build_result["warning_count"] > 0 and not args.allow_warnings
     dirty_failure = args.require_clean_git and not git["clean"]
@@ -540,6 +549,8 @@ def main() -> int:
         "clean_root_build": cleaned_root,
         "clean_tauceti_build": cleaned_tau,
         "warnings_allowed": args.allow_warnings,
+        "production_build_stage": PRODUCTION_BUILD_LABEL,
+        "production_build_command": build_result["command"],
         "production_build_warning_count": build_result["warning_count"],
         "git": git,
         "external_tauceti": tau,

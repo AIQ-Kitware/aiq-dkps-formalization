@@ -57,6 +57,16 @@ rules:
   # measured the way the 2026-08-27 entry describes: deleted, rebuilt, and
   # restored only where the compiler named them.  It named all ten.
   #
+  # 2026-09-01, later the same day: the count had reached 178, the extra two
+  # being `linearIsometryEquiv` and `submoduleEquivOfEq` in
+  # `Analysis/RCLike/ScalarTransportIsometry.lean`.  Those two were measured the
+  # same way -- deleted, `ForTauCeti` and `DavisKahan.All` rebuilt, and the
+  # Palomar candidate `Challenge`/`Solution` pair, which is their only consumer
+  # outside the module, re-elaborated.  Nothing named them.  Unlike the ten in
+  # `ScalarTransport.lean` they are bundled structures consumed only through
+  # their `LinearIsometryEquiv` API, never unfolded, so the attributes were
+  # removed and the count is back at 176.
+  #
   # This is a rise, not a cleanup debt, and the alternative was to put reusable
   # Tau-Ceti-bound mathematics in the paper package to keep a number still.  If
   # the maintainer prefers that trade, moving the file is a one-line change.

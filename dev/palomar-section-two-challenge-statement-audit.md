@@ -1,6 +1,7 @@
 # Palomar Section 2 Challenge: clause-by-clause statement audit
 
-**Date.** 2026-08-31.
+**Date.** 2026-08-31; revised 2026-09-01 to record the correspondences that were
+carried out after the first pass, and the production endpoints they actually use.
 **Subject.** `dev/palomar-candidate/Challenge.lean` and `dev/palomar-candidate/Solution.lean`.
 **Question.** Does each printed Davis–Kahan Section 2 clause appear in the Challenge at
 its printed scope, with its own hypotheses, and with a quantity that is the one the
@@ -75,13 +76,13 @@ separation `A|Vᗮ ≥ α + δ` in form.
 | --- | --- |
 | **paper clause** | `δ‖tan Θ₀‖ ≤ ‖R‖`, `Θ₀` the angle between trial and exact subspaces, `R` the Rayleigh–Ritz residual |
 | **Challenge** | `TanThetaResult.directed` |
-| **production witness** | `tanTheta_directed_unboundedRitz_paperUINorm_complex` / `…_real` (2026-08-31; the previously named `…_unboundedTrial_…` pair carries a **bounded** compression and is now a specialization — see `dev/davis-kahan-1970-result-semantic-review-2026-08-31.md`, F9) |
-| **correspondence** | **not carried out** |
-| **real/complex** | `[RCLike 𝕜]`; production fixed-field |
+| **production witness** | `tanTheta_directed_unboundedRitz_paperUINorm_exists_complex` / `…_exists_real` (2026-08-31; the previously named `…_unboundedTrial_…` pair carries a **bounded** compression and is now a specialization — see `dev/davis-kahan-1970-result-semantic-review-2026-08-31.md`, F9) |
+| **correspondence** | **`Solution.tanTheta_directed_proof` — proved**, at arbitrary `[RCLike 𝕜]`; the two fixed-field branches are `tanTheta_directed_proof_complex` and `…_real`, joined by `TauCeti.ScalarTransport` |
+| **real/complex** | `[RCLike 𝕜]` ✓, by scalar transport from the two fixed-field endpoints |
 | **bounded/unbounded** | `RitzData.compression : U →ₗ.[𝕜] U` — partial map ✓ (production: `UnboundedRitzPair`, whose `trial.compression : Z →ₗ.[𝕜] Z` is also partial ✓) |
 | **dimension** | arbitrary ✓ |
 | **norm** | `UINorm` ✓ |
-| **gap** | ordered, `SemiboundedAbove D.compression α` and `SemiboundedBelow (block A Vᗮ) (α+δ)`; production uses `specProjection (Ioo α (α+δ)) = 0` on a **spectral** `V` |
+| **gap** | ordered, `SemiboundedAbove D.compression α` and `SemiboundedBelow (block A Vᗮ) (α+δ)`; production takes the same form bound on an **arbitrary reducing** `V`, as `DavisKahan.ReducingComplement A V`, which `ReducingComplement.ofReducesSubspace` builds from the Challenge's `Reduces A V`. There is no spectral selection in this clause |
 | **RHS quantity** | `N.norm D.residual` — the residual alone; **no `N.Finite H`** ✓ |
 | **angle multiplicity** | directed, once: `tanSeq (directedSineBlock U V)`, `directedSineBlock U V = P_{Vᗮ}∘ι_U` — the same operator as production's `theorem63DirectedSineBlock` ✓ |
 | **constant** | `1` ✓ |
@@ -94,17 +95,71 @@ separation `A|Vᗮ ≥ α + δ` in form.
 | **paper clause** | `δ‖tan Θ‖ ≤ ‖H‖`, `Θ` the ambient angle, `H` the whole perturbation, under `H₀ = 0` |
 | **Challenge** | `TanThetaResult.ambient` |
 | **production witness** | `tanTheta_ambient_unboundedRitz_paperUINorm_complex` / `…_real` |
-| **correspondence** | **not carried out** |
-| **real/complex** | `[RCLike 𝕜]`; production fixed-field |
+| **correspondence** | **`Solution.tanTheta_ambient_proof` — proved**, at arbitrary `[RCLike 𝕜]`; fixed-field branches `tanTheta_ambient_proof_complex` / `…_real`, joined by `TauCeti.ScalarTransport` |
+| **real/complex** | `[RCLike 𝕜]` ✓, by scalar transport from the two fixed-field endpoints |
 | **bounded/unbounded** | `RitzData` partial compression ✓ (production: `UnboundedRitzPair`, matching field for field — `Solution.RitzData.toUnboundedRitzPair` is **proved**) |
 | **dimension** | arbitrary ✓ |
 | **norm** | `UINorm` ✓ |
-| **gap** | ordered; production's `hUnwanted` is the same form bound, its `ReducingComplement A V` is implied by the Challenge's `Reduces A V` |
+| **gap** | ordered; production's `hUnwanted` is the same form bound, its `ReducingComplement A V` is implied by the Challenge's `Reduces A V` — arbitrary reducing, not spectral |
+| **(3.5)** | **`CrossedDefectsEquivalent U V`, an added hypothesis that the Section 2 display does not print.** It is the source's condition (3.5), introduced in Section 3 and standing from there on, and it is consumed rather than decorative: the production endpoint takes it, and so does `norm_sinAngleOperatorC_lt_one_of_unboundedRitz`, the transversality fact the pole conclusion rests on. See §2c |
 | **RHS quantity** | `N.norm H` — its own hypothesis `N.Finite H`, not shared with 2a ✓ |
 | **angle multiplicity** | ambient, twice: `tanSeq (ambientSine U V)`, `ambientSine U V = P_V − P_U`. Production concludes on `paperTanAngleOperatorC U V = cfc tan (cfc arcsin (modulus (P_U − P_V)))`, whose approximation numbers are `tan(arcsin sₙ(P_U − P_V))` ✓ |
 | **constant** | `1` ✓ |
 | **status** | **proved, at arbitrary `[RCLike 𝕜]`** (`Solution.tanTheta_ambient_proof`). `Solution.tanTheta_ambient_proof_complex` **is** this Challenge clause over `ℂ`, all three conjuncts. Three pieces came together on 2026-09-01: `DavisKahan1970.approximationNumber_paperTanAngleOperatorC` identifies the operator's approximation numbers with the Challenge's sequence; `Solution.evalSeq_tanSeq_ambientSine` turns that into the norm identity; and `DavisKahan1970.norm_sinAngleOperatorC_lt_one_of_unboundedRitz` exposes the uniform transversality the tangent theorem's proof already derived inline, which is what both of the first two need. What remains is the scalar field alone. |
 | **note** | `H₀ = 0` is carried twice, by `RitzData.residual_orthogonal` and by `D.residual = P_{Uᗮ}∘H∘ι_U`; this is the source's own double presentation in `(1.8)`. |
+
+### 2c. The one added hypothesis in the whole Challenge, and how it is disclosed
+
+Of the seven printed clauses, six state exactly the printed hypotheses.  **The
+ambient `tan Θ` clause states one more**: `CrossedDefectsEquivalent U V`.  It is
+the constructive form of the source's condition (3.5) — the two crossing
+subspaces `U ⊓ Vᗮ` and `Uᗮ ⊓ V` are isometrically isomorphic — and it is
+consumed, not decorative: both `tanTheta_ambient_unboundedRitz_paperUINorm_complex`
+and `norm_sinAngleOperatorC_lt_one_of_unboundedRitz`, which is where the clause's
+`TangentDefined` conclusion comes from, take it.
+
+The audit records the four layers separately, because collapsing them is how a
+reviewer gets misled.
+
+| layer | what it says |
+| --- | --- |
+| the local Section 2 display | `spec(A₀) ⊂ [β,α]`, `spec(Λ₁) ⊂ [α+δ,∞)`, `δ > 0`, `H₀ = 0`. **Neither (1.5) nor (3.5) appears**, and (3.5) does not exist in the exposition yet |
+| the paper's later standing scope | Section 3, immediately after Proposition 3.2, assumes (3.5) as well as (1.5) for the rest of the paper except where the contrary is stated |
+| what the source proof uses | the ambient conclusion is proved in Section 6, inside that standing scope, by comparing the two tangent corners through the partial isometry `J₀` that the direct rotation supplies |
+| what this formalization adopts | the nonlocal reading: the printed theorem is read under the paper's own global semantics, with the Section 1 vacuity convention governing the existence of the displayed norms and (3.5) in force where the theorem is proved |
+
+The competing literal reading is real and is not dismissed.  Take only the
+printed Section 2 hypotheses and value `‖tan Θ‖` at `+∞` when `tan Θ` is
+unbounded.  Nothing printed constrains `Uᗮ ⊓ V`; the nested half-spaces of the
+Proposition 3.2 remark put a line there while `Θ₀` vanishes, so the ambient angle
+has a right angle, `tan Θ` is unbounded, and the ambient conclusion fails with
+`‖H‖` finite — indeed zero.  This is an infinite-dimensional configuration only:
+(3.5) is automatic when `U` or `Uᗮ` is finite-dimensional.
+
+The repository rejects the literal reading for a reason internal to the source:
+Section 1 announces in advance that results of this kind are vacuous when the
+norms they display fail to exist, and the literal reading would equally convict
+the Section 1 angle-doubling sentence and every later development that silently
+uses the direct rotation.  That is why this is classified
+`paper_faithful_nonlocal_source_interpretation` and kept distinct from the
+repository's one genuine refutation, Proposition 4.4, where every object exists,
+the compared quantities are finite, and the printed conclusion is false.
+
+**Where the qualification is disclosed**, so that no reader meets the hypothesis
+without the explanation:
+
+| surface | disclosure |
+| --- | --- |
+| `prose/distilled_literature/DavisKahan1970_part_III.tex` | the editorial audit note "nonlocal source semantics of the Section 2 ambient tangent conclusion", deliberately outside every hashed claim passage |
+| `dev/davis-kahan-1970-formalization-result-inventory.json` | `S2-tan-theta.nonlocal_source_interpretation`, with the accepted reading, the alternative literal reading, and why it is not a refutation |
+| `dev/palomar-candidate/Challenge.lean` | a prose block immediately above `TanThetaResult`, plus pointers on the `ambient` field and on `CrossedDefectsEquivalent` |
+| the standalone `registry/dk-section-two/formalization.yaml` | `sources[].note`, `fidelity.divergences` and `review.notes` — the three places a Palomar reviewer reads |
+| this audit | the row above and this subsection |
+
+The theorem is **not** changed to remove the hypothesis.  Doing so would state a
+clause the source's own Section 6 proof does not establish, and the repository's
+position is that the printed theorem is true under the paper's semantics rather
+than false under a reading the paper disclaims.
 
 ---
 
@@ -156,7 +211,9 @@ reader will find them:
   compression is automatically bounded by the closed graph theorem, so the
   bounded-compression and inside-the-domain hypotheses are the same hypothesis.
 * Nothing here reopens the reducing-versus-spectral question; that is a separate
-  row, and it is still open for this clause.
+  row, and it was discharged for this clause later the same day by
+  `sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing` and its real
+  mirror, which state the base estimate at an arbitrary reducing subspace.
 
 ### 3a. directed — `δ‖sin 2Θ₀‖ ≤ 2‖R‖`
 
@@ -207,13 +264,13 @@ above `α + δ`, `H` bounded self-adjoint with `H₀ = H₁ = 0`.
 | --- | --- |
 | **paper clause** | `δ‖tan(2Θ₀)‖ ≤ 2‖R‖`, no independent pole hypothesis |
 | **Challenge** | `TanTwoThetaResult.directed` |
-| **production witness** | `tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` / `…_real` |
-| **correspondence** | **not carried out** |
-| **real/complex** | `[RCLike 𝕜]`; production fixed-field |
+| **production witness** | `tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_paperUINorm_complex` / `tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_paperUINorm_real` — the **reducing** endpoints, which superseded the `…_blockRepresentative_…` pair this row used to name |
+| **correspondence** | **`Solution.tanTwoTheta_directed_proof` — proved**, at arbitrary `[RCLike 𝕜]`; fixed-field branches `tanTwoTheta_directed_proof_complex` / `…_real`, joined by `TauCeti.ScalarTransport` |
+| **real/complex** | `[RCLike 𝕜]` ✓, by scalar transport from the two fixed-field endpoints |
 | **bounded/unbounded** | `A` a partial map, `H` bounded ✓ (production the same) |
 | **dimension** | arbitrary ✓ |
 | **norm** | `UINorm` ✓ |
-| **gap** | ordered form bounds on `block A U` / `block A Uᗮ`; production fixes `U = specRange hA (Iic c)` — the same narrowing as 3a |
+| **gap** | ordered form bounds on `block A U` / `block A Uᗮ`; production takes `TauCeti.LinearPMap.ReducesSubspace A U` — an **arbitrary reducing** `U`, no spectral selection. The earlier `U = specRange hA (Iic c)` narrowing is gone: `ReducingCutoff` obtains the Appendix cutoff approximation `Ω_τ → I` from the spectral bands of `A` restricted to the reducing subspace, so the cutoff no longer forces `U` to be a spectral projector |
 | **off-diagonal** | `P_U H P_U = 0` **and** `P_{Uᗮ} H P_{Uᗮ} = 0`; `Solution.isOddFor_of_offDiagonal` **proves** this is production's `IsOddFor U H` ✓ |
 | **RHS quantity** | `2 * N.norm (P_{Uᗮ} H P_U)` with hypothesis `N.Finite (P_{Uᗮ} H P_U)` — the **corner**, not `H` ✓ (production requires membership of exactly the corner `paperBlockCompression Uᗮ U B`) |
 | **angle multiplicity** | directed, once: `tanSeq (directedDoubleSine U V)`, `directedDoubleSine U V = P_U P_{J_V Uᗮ}`, whose singular values are `sin 2θⱼ` once. `hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock` proves the production corner `reflectionSineCorner U J_V` has that same sequence, and `approximationNumber_reflectionTangentCorner` turns it into `tan (arcsin ·)` ✓ |
@@ -227,13 +284,13 @@ above `α + δ`, `H` bounded self-adjoint with `H₀ = H₁ = 0`.
 | --- | --- |
 | **paper clause** | `δ‖tan(2Θ)‖ ≤ 2‖H‖` |
 | **Challenge** | `TanTwoThetaResult.ambient` |
-| **production witness** | `tanTwoTheta_ambient_unbounded_paperUINorm_complex` / `…_real` |
-| **correspondence** | **not carried out** |
-| **real/complex** | `[RCLike 𝕜]`; production fixed-field |
+| **production witness** | `tanTwoTheta_ambient_unbounded_reducing_paperUINorm_complex` / `tanTwoTheta_ambient_unbounded_reducing_sineSequence_paperUINorm_real` — the **reducing** endpoints, which superseded the `tanTwoTheta_ambient_unbounded_paperUINorm_…` pair this row used to name |
+| **correspondence** | **`Solution.tanTwoTheta_ambient_proof` — proved**, at arbitrary `[RCLike 𝕜]`; fixed-field branches `tanTwoTheta_ambient_proof_complex` / `…_real`, joined by `TauCeti.ScalarTransport` |
+| **real/complex** | `[RCLike 𝕜]` ✓, by scalar transport from the two fixed-field endpoints |
 | **bounded/unbounded** | `A` a partial map, `H` bounded ✓ |
 | **dimension** | arbitrary ✓ |
 | **norm** | `UINorm` ✓ |
-| **gap** | ordered form bounds; production fixes `U` spectrally (same narrowing) |
+| **gap** | ordered form bounds; production takes `TauCeti.LinearPMap.ReducesSubspace A U`, an **arbitrary reducing** `U`, by the same `ReducingCutoff` route as 4a |
 | **RHS quantity** | `2 * N.norm H`, hypothesis `N.Finite H` ✓ |
 | **angle multiplicity** | ambient, with the ambient multiplicity: `tanSeq (ambientDoubleSine U V)`, `ambientDoubleSine U V = P_{J_V U} − P_U`. Production concludes on `paperAbsTanTwoAngleOperatorC U V`, and `approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference` proves the two sequences agree ✓ |
 | **constant** | `2` ✓ |
@@ -250,7 +307,7 @@ above `α + δ`, `H` bounded self-adjoint with `H₀ = H₁ = 0`.
 | 1 | tangent defined from the **residual**: the first draft's `tanTheta` said `∀ T, IsTangentOf R T → …`, taking `tan(arcsin sₙ(R))` — a different and false quantity | reviewer | **fixed.** `tanSeq` now takes a *sine*, and its docstring says so in a paragraph that names the mistake. `directedSineBlock`, `ambientSine`, `directedDoubleSine` and `ambientDoubleSine` are the only arguments used, and each is a sine. |
 | 2 | bounded Ritz compression substituted for unbounded: `M : U →L[𝕜] U` | reviewer | **fixed, then bounded again where the source bounds it.** `TrialBlock.compression : U →ₗ.[𝕜] U` is a partial map and `RitzData` adds only the orthogonality; but the `sin 2Θ` directed clause uses `BoundedTrialBlock`, because the Appendix grants "both unbounded" to the tangent theorem alone. See §3.0. |
 | 3 | ambient ideal membership imposed on the directed clause: `N.Finite H` in the common telescope of `tanTheta` and `tanTwoTheta` | reviewer | **fixed.** The three two-clause theorems now conclude in `TanThetaResult` / `SinTwoThetaResult` / `TanTwoThetaResult`, whose fields carry their own data and their own membership premise. The directed `tan 2Θ` premise is membership of the **corner**. |
-| 4 | arbitrary reducing subspace substituted for spectral selection without proof | prior pass, self-found | **resolved in the Challenge's favour, and proved for `sin 2Θ` ambient.** Section 1 of the source assumes reduction, not spectral selection, so the reducing formulation is the printed one; the remaining spectral-only production endpoints are recorded above as *production* obligations, not Challenge defects. |
+| 4 | arbitrary reducing subspace substituted for spectral selection without proof | prior pass, self-found | **resolved in the Challenge's favour, and now proved for every clause.** Section 1 of the source assumes reduction, not spectral selection, so the reducing formulation is the printed one. As of 2026-09-01 no clause rests on a spectral endpoint: `ReducingCutoff` derives the Appendix cutoff from the spectral bands of the operator *restricted to the reducing subspace*, which is what removed the spectral-half-line specialization from directed `sin 2Θ` and from both `tan 2Θ` clauses. |
 | 5 | tangent-witness vacuity: `∀ T, IsTangentOf S T → …` says nothing when no `T` exists | reviewer | **fixed.** `UINorm.evalSeq` measures the tangent sequence directly. `IsTangentOf` and `IsDoubleTangentOf` are deleted. |
 | 6 | pole encoded as a harmless numerical zero (`Real.tan (π/2) = 0` in Lean) | reviewer | **fixed by the second permitted route:** `TangentDefined` is stated as a **conclusion**, so a pole is not silently valued at zero — the theorem asserts there is none. This matches the source (Section 7 derives it) and production (`IsUnit …` in the conclusion). |
 | 7 | the printed lower bound `β` on `spec(A₀)` is dropped from the ordered-gap clauses (`tan Θ`, `tan 2Θ`) | this audit | **resolved as source-exact, 2026-09-01 — see §5.1.** The Appendix to Section 6 drops `β` itself. |
@@ -313,7 +370,8 @@ bounded-compression trial block.
 
 It certifies that each Challenge clause *states* the printed clause at the printed scope.
 It does not certify that the Challenge theorems are true — four are `sorry`-bodied by the
-Comparator convention — and it does not certify the correspondences marked *open*.
+Comparator convention, and their proofs live in `Solution.lean`.  As of 2026-09-01 no
+correspondence in this audit is marked open; the scoreboard below is the record.
 
 **Clause scoreboard, 2026-09-01.**
 
