@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, OpenAI GPT-5.6 Sol
 -/
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact
+import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedGramReal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.ComplexificationGauge
 import DavisKahan.DoubleAngle.TangentTransport
@@ -555,7 +556,154 @@ theorem tanTwoTheta_ambient_unbounded_paperUINorm_real
   · unfold PaperUnitaryInvariantNorm.gauge at hle ⊢
     rwa [← hgauge]
 
+
+/-! ## The same endpoints at an arbitrary reducing subspace, over `ℝ`
+
+The complexification argument never needed the trial subspace to be spectral: it
+needed `complexifySubmodule U` to reduce `complexifyReal A`, which
+`reducesSubspace_complexifyReal` gives for any reducing `U`.  Removing the
+spectral selection therefore *shortens* these proofs -- the `hUeq` rewriting
+between `complexifySubmodule U` and the complex spectral subspace disappears. -/
+
+section ReducingReal
+
+variable {A : E →ₗ.[ℝ] E} {B Z : E →L[ℝ] E} {U : Submodule ℝ E}
+  [U.HasOrthogonalProjection] {a b : ℝ}
+
+variable (hA : _root_.IsSelfAdjoint A)
+  (hred : TauCeti.LinearPMap.ReducesSubspace A U)
+  (hB : TauCeti.IsOddFor U B)
+  (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+  (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+  (hZcomm : ∀ x : A.domain,
+    A ⟨Z (x : E), hZdom x⟩ + B (Z (x : E)) = Z (A x) + Z (B (x : E)))
+  (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
+  (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
+  (hab : a < b)
+
+include hA hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab
+
+/-- The complexified upper form bound on the trial subspace. -/
+private theorem complexified_upper_form_bound_reducing :
+    ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
+      (y : RealComplexification E) ∈ complexifySubmodule U →
+      (⟪TauCeti.LinearPMap.complexifyReal A y,
+          (y : RealComplexification E)⟫_ℂ).re ≤
+        a * ‖(y : RealComplexification E)‖ ^ 2 := by
+  intro y hy
+  rw [mem_complexifySubmodule] at hy
+  have hcoord := (TauCeti.LinearPMap.mem_complexifyReal_domain_iff A
+    (y : RealComplexification E)).mp y.2
+  have h1 := hUa ⟨re (y : RealComplexification E), hcoord.1⟩ hy.1
+  have h2 := hUa ⟨im (y : RealComplexification E), hcoord.2⟩ hy.2
+  have hsplit : (⟪TauCeti.LinearPMap.complexifyReal A y,
+        (y : RealComplexification E)⟫_ℂ).re =
+      ⟪A ⟨re (y : RealComplexification E), hcoord.1⟩,
+          re (y : RealComplexification E)⟫_ℝ +
+        ⟪A ⟨im (y : RealComplexification E), hcoord.2⟩,
+          im (y : RealComplexification E)⟫_ℝ := rfl
+  rw [hsplit, RealComplexification.norm_sq, mul_add]
+  linarith
+
+/-- The complexified lower form bound on the complementary subspace. -/
+private theorem complexified_lower_form_bound_reducing :
+    ∀ y : (TauCeti.LinearPMap.complexifyReal A).domain,
+      (y : RealComplexification E) ∈ (complexifySubmodule U)ᗮ →
+      b * ‖(y : RealComplexification E)‖ ^ 2 ≤
+        (⟪TauCeti.LinearPMap.complexifyReal A y,
+          (y : RealComplexification E)⟫_ℂ).re := by
+  intro y hy
+  rw [← complexifySubmodule_orthogonal, mem_complexifySubmodule] at hy
+  have hcoord := (TauCeti.LinearPMap.mem_complexifyReal_domain_iff A
+    (y : RealComplexification E)).mp y.2
+  have h1 := hUb ⟨re (y : RealComplexification E), hcoord.1⟩ hy.1
+  have h2 := hUb ⟨im (y : RealComplexification E), hcoord.2⟩ hy.2
+  have hsplit : (⟪TauCeti.LinearPMap.complexifyReal A y,
+        (y : RealComplexification E)⟫_ℂ).re =
+      ⟪A ⟨re (y : RealComplexification E), hcoord.1⟩,
+          re (y : RealComplexification E)⟫_ℝ +
+        ⟪A ⟨im (y : RealComplexification E), hcoord.2⟩,
+          im (y : RealComplexification E)⟫_ℝ := rfl
+  rw [hsplit, RealComplexification.norm_sq, mul_add]
+  linarith
+
+/-- **Davis--Kahan 1970, `tan 2Θ`, unbounded ambient form over `ℝ`, at an
+arbitrary reducing subspace**, on the block representative. -/
+theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm) (hBsa : IsSelfAdjoint B) (hBmem : N.Mem B) :
+    IsUnit (U.diagonalPart Z * U.diagonalPart Z) ∧
+      N.Mem (unboundedReflectionTangent U Z) ∧
+      (b - a) * N.gauge (unboundedReflectionTangent U Z) ≤ 2 * N.gauge B := by
+  classical
+  have hAc : _root_.IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
+    TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
+  have hc := tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_paperUINorm_complex
+    hAc (reducesSubspace_complexifyReal hred) (isOddFor_complexifySubmodule hB)
+    ((complexify_isSelfAdjoint_iff Z).2 hZsa)
+    (by rw [← complexify_mul, hZ2, complexify_one])
+    (mapsDomainTo_complexifyReal hZdom)
+    (complexified_reducing_commutation hZdom hZcomm)
+    (complexified_upper_form_bound_reducing hA hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab)
+    (complexified_lower_form_bound_reducing hA hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab)
+    hab N ((complexify_isSelfAdjoint_iff B).2 hBsa) ((N.mem_complexify_iff B).2 hBmem)
+  have hCCc := hc.1
+  rw [diagonalPart_complexifySubmodule U Z, ← complexify_mul,
+    isUnit_complexify_iff] at hCCc
+  have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := hCCc
+  have hTcomplex : unboundedReflectionTangent (complexifySubmodule U) (complexify Z) =
+      complexify (unboundedReflectionTangent U Z) :=
+    unboundedReflectionTangent_complexifySubmodule U Z hCC
+  have hTmemc := hc.2.1
+  rw [hTcomplex] at hTmemc
+  have hineq := hc.2.2
+  rw [hTcomplex, N.gauge_complexify, N.gauge_complexify] at hineq
+  exact ⟨hCC, (N.mem_complexify_iff (unboundedReflectionTangent U Z)).1 hTmemc, hineq⟩
+
+/-- **Davis--Kahan 1970, `tan 2Θ`, unbounded directed residual form over `ℝ`, at
+an arbitrary reducing subspace.** -/
+theorem tanTwoTheta_directed_unboundedResidual_reducing_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    (hRmem : N.Mem (paperBlockCompression Uᗮ U B)) :
+    IsUnit (U.diagonalPart Z * U.diagonalPart Z) ∧
+      N.Mem (reflectionTangentCorner U Z) ∧
+      (b - a) * N.gauge (reflectionTangentCorner U Z) ≤
+        2 * N.gauge (paperBlockCompression Uᗮ U B) := by
+  classical
+  have hAc : _root_.IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
+    TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
+  have hc := tanTwoTheta_directed_unboundedResidual_reducing_paperUINorm_complex
+    hAc (reducesSubspace_complexifyReal hred) (isOddFor_complexifySubmodule hB)
+    ((complexify_isSelfAdjoint_iff Z).2 hZsa)
+    (by rw [← complexify_mul, hZ2, complexify_one])
+    (mapsDomainTo_complexifyReal hZdom)
+    (complexified_reducing_commutation hZdom hZcomm)
+    (complexified_upper_form_bound_reducing hA hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab)
+    (complexified_lower_form_bound_reducing hA hred hB hZsa hZ2 hZdom hZcomm hUa hUb hab)
+    hab N ((directedCorner_mem_complexify_iff N U B).2 hRmem)
+  have hCCc := hc.1
+  rw [diagonalPart_complexifySubmodule U Z, ← complexify_mul,
+    isUnit_complexify_iff] at hCCc
+  have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := hCCc
+  have hTcorner : reflectionTangentCorner (complexifySubmodule U) (complexify Z) =
+      paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+        (complexify (unboundedReflectionTangent U Z)) := by
+    rw [reflectionTangentCorner,
+      unboundedReflectionTangent_complexifySubmodule U Z hCC]
+  refine ⟨hCC, ?_, ?_⟩
+  · have hmem := hc.2.1
+    rw [hTcorner] at hmem
+    exact (directedCorner_mem_complexify_iff N U (unboundedReflectionTangent U Z)).1 hmem
+  · have hle := hc.2.2
+    rw [hTcorner, directedCorner_gauge_complexify N U (unboundedReflectionTangent U Z),
+      directedCorner_gauge_complexify N U B] at hle
+    exact hle
+
+end ReducingReal
+
 end
+
+
+
 
 end DavisKahan1970
 end TauCeti
