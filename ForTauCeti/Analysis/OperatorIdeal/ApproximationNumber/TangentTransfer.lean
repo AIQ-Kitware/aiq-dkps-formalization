@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 module
 
-public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramContraction
+public import ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.GramInverseResolvent
 public import ForTauCeti.Analysis.SpecialFunctions.TanArcsin
 
 /-!

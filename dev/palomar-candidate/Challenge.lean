@@ -8,26 +8,16 @@ import Mathlib
 /-!
 # Davis--Kahan 1970: the four Section 2 theorems
 
-Candidate Challenge.  The namespace is `RotationOfEigenvectors`, after the
-paper's title.  Everything below is ordinary Mathlib vocabulary; the only
-non-Mathlib names are the source objects defined here, each an ordinary
-mathematical definition rather than a re-export of a proof abstraction.
+The namespace is `RotationOfEigenvectors`, after the paper's title.  Everything
+below is ordinary Mathlib vocabulary; the only non-Mathlib names are the source
+objects defined here.
 
-## Deliberately no functional calculus
-
-Davis and Kahan's angle operators are usually built by a continuous functional
-calculus.  Nothing here needs one: a unitarily invariant norm sees only the
-singular-value sequence, so every angle quantity is either an explicit block of
-orthogonal projections or a *sequence* of trigonometric functions of singular
-values, measured by the norm's own symmetric gauge.
-
-## The tangents are quantities, not hypothetical witnesses
-
-Davis and Kahan write `‖tan Θ‖`, an actual number.  Quantifying instead over an
-operator whose singular values happen to be the tangents says nothing when no
-such operator exists.  Sections 2 and 6 evaluate the norm on the tangent
-*sequence* directly, and each tangent theorem *concludes* that the tangent has no
-pole rather than assuming it away -- which is what the source does.
+Two conventions, stated once.  There is no functional calculus anywhere: a
+unitarily invariant norm sees only the singular-value sequence, so every angle
+quantity is either an explicit block of orthogonal projections or a sequence of
+trigonometric functions of singular values.  And `‖tan Θ‖` is evaluated on the
+tangent *sequence*, with each tangent theorem *concluding* that the tangent has
+no pole rather than assuming it away.
 -/
 
 namespace RotationOfEigenvectors
@@ -45,10 +35,8 @@ variable {E : Type v} [SeminormedAddCommGroup E] [NormedSpace 𝕜 E]
 variable {F : Type w} [SeminormedAddCommGroup F] [NormedSpace 𝕜 F]
 
 /-- The `n`-th singular value of a bounded operator, zero-based: the
-operator-norm distance from `T` to the operators of rank at most `n`.
-
-`a₀ T = ‖T‖`, and for a compact operator this is the usual decreasing sequence
-of singular values. -/
+operator-norm distance from `T` to the operators of rank at most `n`.  `a₀ T =
+‖T‖`, and for a compact operator this is the usual decreasing sequence. -/
 noncomputable def singularValue (T : E →L[𝕜] F) (n : ℕ) : ℝ :=
   ⨅ R : {R : E →L[𝕜] F // LinearMap.rank (R.1 : E →ₗ[𝕜] F) ≤ (n : Cardinal)},
     ‖T - R.1‖
@@ -57,12 +45,12 @@ end SingularValues
 
 /-! ## 2. Unitarily invariant norms
 
-Davis and Kahan quantify over an arbitrary unitarily invariant norm: a symmetric
-norming function on singular values, in the dimension-coherent form of a
-two-sided unitarily invariant seminorm on `n × n` complex matrices for every `n`,
-normalised on a rank-one matrix and unchanged by appending a zero singular value.
-Its value on a sequence is the supremum over the sequence's prefixes, and on an
-operator is its value on the singular-value sequence. -/
+An arbitrary unitarily invariant norm in Davis and Kahan's sense: a symmetric
+norming function on singular values, given as a two-sided unitarily invariant
+seminorm on `n × n` complex matrices for every `n`, normalised on a rank-one
+matrix and unchanged by appending a zero singular value.  Its value on a sequence
+is the supremum over prefixes, and on an operator its value on the
+singular-value sequence. -/
 
 section Norms
 
@@ -86,8 +74,7 @@ structure UISeminorm (E : Type v) [NormedAddCommGroup E] [InnerProductSpace ℂ 
   invariant : ∀ (U V : E ≃ₗᵢ[ℂ] E) (A),
     toFun (U.toLinearMap ∘ₗ A ∘ₗ V.toLinearMap) = toFun A
 
-/-- The symmetric gauge of a unitarily invariant seminorm: its value on the
-diagonal operator with diagonal `x`. -/
+/-- The symmetric gauge: the seminorm's value on the diagonal operator. -/
 noncomputable def UISeminorm.gauge {n : ℕ} {E : Type v} [NormedAddCommGroup E]
     [InnerProductSpace ℂ E] [FiniteDimensional ℂ E] (N : UISeminorm E)
     (b : OrthonormalBasis (Fin n) ℂ E) (x : Fin n → ℝ) : ℝ :=
@@ -97,8 +84,7 @@ noncomputable def UISeminorm.gauge {n : ℕ} {E : Type v} [NormedAddCommGroup E]
 def zeroPad {n : ℕ} (x : Fin n → ℝ) : Fin (n + 1) → ℝ :=
   Fin.lastCases 0 x
 
-/-- **A unitarily invariant norm in Davis and Kahan's sense**: a normalised,
-dimension-coherent symmetric norming function. -/
+/-- **A unitarily invariant norm in Davis and Kahan's sense.** -/
 structure UINorm where
   /-- A unitarily invariant seminorm in each finite dimension. -/
   finiteNorm : ∀ n : ℕ, UISeminorm (EuclideanSpace ℂ (Fin n))
@@ -112,11 +98,8 @@ structure UINorm where
       (finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
 
 /-- **The extended value of a unitarily invariant norm on a scalar sequence**:
-the supremum over the sequence's prefixes.
-
-This is the primitive.  Davis and Kahan's norms are symmetric norming functions
-of singular-value sequences, so a norm of `tan Θ` is the norm of the sequence
-`tan θ₁, tan θ₂, …` and needs no operator carrying those singular values. -/
+the supremum over the sequence's prefixes.  This is the primitive; a norm of
+`tan Θ` is the norm of the sequence `tan θ₁, tan θ₂, …`. -/
 noncomputable def UINorm.evalSeq (N : UINorm) (s : ℕ → ℝ) : ℝ≥0∞ :=
   ⨆ n : ℕ, ENNReal.ofReal
     ((N.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ)
@@ -135,9 +118,8 @@ variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
-/-- The extended value of a unitarily invariant norm on a bounded operator: its
-value on the operator's singular-value sequence.  It is `⊤` exactly off the
-norm's ideal. -/
+/-- The norm's extended value on an operator: its value on the singular-value
+sequence, and `⊤` exactly off the norm's ideal. -/
 noncomputable def UINorm.eval (N : UINorm) (T : E →L[𝕜] F) : ℝ≥0∞ :=
   N.evalSeq (fun n => singularValue T n)
 
@@ -151,14 +133,7 @@ end NormEval
 
 end Norms
 
-/-! ### Subspaces of a complete space
-
-Every subspace named below carries an orthogonal projection, hence is closed,
-hence is complete -- which is what lets an operator on it have singular values
-and lets a partial map on it have an adjoint. -/
-
-/-- A subspace with an orthogonal projection inside a complete space is
-complete. -/
+/-- A subspace with an orthogonal projection is closed, hence complete. -/
 local instance instCompleteSpaceOfHasOrthogonalProjection {𝕜 : Type u} [RCLike 𝕜]
     {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
     (W : Submodule 𝕜 E) [W.HasOrthogonalProjection] : CompleteSpace W := by
@@ -172,11 +147,8 @@ local instance instCompleteSpaceOfHasOrthogonalProjection {𝕜 : Type u} [RCLik
 Section 1 fixes a self-adjoint `A`, a bounded self-adjoint perturbation `H`, and
 two reducing decompositions: `E₀` spans the trial subspace with block `A₀`, and
 `F₀, F₁` span the exact subspaces of `A + H` with complementary block `Λ₁`.  The
-residual is `R = (A + H) E₀ − E₀ A₀`.
-
-The source is explicit that neither decomposition is assumed spectral, and that
-the trial block `A₀` may be unbounded when the ambient operator is; both are
-respected below. -/
+residual is `R = (A + H) E₀ − E₀ A₀`.  Neither decomposition is assumed
+spectral. -/
 
 section BlockData
 
@@ -191,8 +163,8 @@ variable {E F G K : Type v}
 def IsIsometric (T : E →L[𝕜] F) : Prop := ∀ x, ‖T x‖ = ‖x‖
 
 /-- The trial-coordinate half of the setup: `E₀` is an isometric coordinate map
-for the trial subspace, and `R` is the residual `A E₀ − E₀ A₀`.  The trial block
-`A₀` is a partial map, so it may be unbounded. -/
+for the trial subspace and `R` the residual `A E₀ − E₀ A₀`; `A₀` is a partial
+map, so it may be unbounded. -/
 structure IsTrialResidual (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F)
     (E₀ : F →L[𝕜] E) (R : F →L[𝕜] E) : Prop where
   /-- The trial coordinate map is isometric. -/
@@ -204,8 +176,7 @@ structure IsTrialResidual (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F)
     A ⟨E₀ (x : F), mapsDomain x⟩ - E₀ (A₀ x) = R (x : F)
 
 /-- The exact-coordinate half: `F₀` and `F₁` are complementary exhaustive
-isometries, and `F₁` intertwines the ambient operator with the complementary
-block `Λ₁`. -/
+isometries and `F₁` intertwines `A` with the complementary block `Λ₁`. -/
 structure IsExactDecomposition (A : E →ₗ.[𝕜] E) (Λ₁ : G →ₗ.[𝕜] G)
     (F₀ : K →L[𝕜] E) (F₁ : G →L[𝕜] E) : Prop where
   /-- The desired coordinate map is isometric. -/
@@ -223,12 +194,9 @@ structure IsExactDecomposition (A : E →ₗ.[𝕜] E) (Λ₁ : G →ₗ.[𝕜] 
 
 /-- **The trial data of a subspace**, in the source's own shape `(1.8)`:
 a trial operator `A₀` on the subspace, possibly unbounded, and a *bounded*
-residual `R` with `A z = A₀ z + R z` on the trial domain.
-
-Davis and Kahan's scope paragraph is explicit that useful unbounded conclusions
-require the residual, not the compression, to extend boundedly.  Restricting the
-compression to a bounded everywhere-defined operator would lose the Appendix
-scope of the `tan Θ` theorem, so the compression here is a partial map. -/
+residual `R` with `A z = A₀ z + R z` on the trial domain.  The compression is a
+partial map because the Appendix to Section 6 allows the tangent theorem's `A₀`
+to be unbounded. -/
 structure TrialBlock (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] where
   /-- The trial block `A₀`, a partial map on the trial subspace. -/
@@ -244,11 +212,31 @@ structure TrialBlock (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
     A ⟨((z : U) : E), mem_domain z⟩ =
       ((compression z : U) : E) + residual ((z : U))
 
-/-- **Rayleigh--Ritz trial data**: trial data whose residual is orthogonal to the
-trial subspace.
+/-- **The trial data of a subspace with a bounded compression**, in the source's
+shape `(1.8)`: a bounded self-adjoint `A₀` on a trial subspace inside `dom A`,
+and a bounded residual `R` with `A z = A₀ z + R z` there.
 
-This is the source's `H₀ = 0` in the form `(1.8)` takes when `A₀ = E₀^*(A+H)E₀`,
-and it is exactly the extra hypothesis the `tan Θ` theorem imposes and the
+The Appendix to Section 6 relaxes the sine family -- the `sin Θ` theorem,
+Proposition 6.1 and Theorem 6.1 -- to allow **one** of `A₀`, `Λ₁` to be
+unbounded, and reserves "both may be unbounded" for the tangent theorem.  Here
+the unwanted exact block is the unbounded one. -/
+structure BoundedTrialBlock (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] where
+  /-- The trial block `A₀`, bounded on the trial subspace. -/
+  compression : U →L[𝕜] U
+  /-- `A₀` is self-adjoint. -/
+  compression_selfAdjoint : IsSelfAdjoint compression
+  /-- The bounded residual `R`. -/
+  residual : U →L[𝕜] E
+  /-- The trial subspace lies inside the ambient domain. -/
+  mem_domain : ∀ z : U, ((z : U) : E) ∈ A.domain
+  /-- and there `A z = A₀ z + R z`, which is `(1.8)`. -/
+  action_eq : ∀ z : U,
+    A ⟨((z : U) : E), mem_domain z⟩ = ((compression z : U) : E) + residual z
+
+/-- **Rayleigh--Ritz trial data**: trial data whose residual is orthogonal to the
+trial subspace.  This is the source's `H₀ = 0` in the form `(1.8)` takes when
+`A₀ = E₀^*(A+H)E₀`, the extra hypothesis the `tan Θ` theorem imposes and the
 `sin Θ` and `sin 2Θ` theorems do not. -/
 structure RitzData (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] extends TrialBlock A U where
@@ -257,13 +245,7 @@ structure RitzData (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E)
 
 end BlockData
 
-/-! ## 4. The source separation
-
-Davis and Kahan separate two blocks either by a compact interval whose
-enlargement the other block's spectrum avoids, or -- and they say so explicitly --
-by half-infinite intervals, in which case both blocks may be unbounded.  Those
-are the three constructors below; the ordered two are stated as quadratic-form
-bounds, which is how an unbounded semibounded operator is separated. -/
+/-! ## 4. The source separation -/
 
 section Separation
 
@@ -291,11 +273,9 @@ def SemiboundedAbove (A : E →ₗ.[𝕜] E) (c : ℝ) : Prop :=
   ∀ x : A.domain, RCLike.re ⟪A x, (x : E)⟫_𝕜 ≤ c * ‖(x : E)‖ ^ 2
 
 /-- **The source separation of two blocks by a gap of width `δ`.**
-
 `intervalExterior` is the printed interval/exterior condition, symmetric in the
-two blocks.  The two ordered constructors are the half-infinite configurations
-the source explicitly permits, in which both blocks may have unbounded
-spectrum. -/
+two blocks; the two ordered constructors are the half-infinite configurations the
+source explicitly permits, in which both blocks may have unbounded spectrum. -/
 inductive SylvesterGap (A : E →ₗ.[𝕜] E) (B : F →ₗ.[𝕜] F) (δ : ℝ) : Prop where
   | intervalExterior {β α : ℝ} (hβα : β ≤ α)
       (hgap :
@@ -313,18 +293,16 @@ end Separation
 /-! ## 5. Reducing subspaces and their blocks
 
 Section 1 says in as many words that neither `P` nor `Q` is assumed to be a
-spectral projector.  What the theorems assume of a decomposition is that it
-*reduces* the operator and that its two blocks are separated; the separation is
-what makes the decomposition spectral, and it is a hypothesis rather than a
-construction. -/
+spectral projector: what the theorems assume is that the decomposition *reduces*
+the operator and that its two blocks are separated. -/
 
 section Reducing
 
 variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 
-/-- A subspace reduces a partial map when both orthogonal projections preserve
-its domain and both summands are invariant. -/
+/-- A subspace reduces a partial map when both projections preserve its domain
+and both summands are invariant. -/
 def Reduces (A : E →ₗ.[𝕜] E) (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
     Prop :=
   (∀ x : A.domain, U.starProjection (x : E) ∈ A.domain) ∧
@@ -357,8 +335,8 @@ noncomputable def addBounded (A : E →ₗ.[𝕜] E) (V : E →L[𝕜] E) : E �
   toFun := A.toFun + V.toLinearMap.domRestrict A.domain
 
 omit [CompleteSpace E] in
-/-- The orthogonal complement of a reducing subspace reduces the operator too,
-so the separation hypothesis of the ambient theorems can name both blocks. -/
+/-- The orthogonal complement of a reducing subspace also reduces the operator,
+so the ambient separation hypothesis can name both blocks. -/
 theorem Reduces.orthogonal {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
     [U.HasOrthogonalProjection] (h : Reduces A U) : Reduces A Uᗮ := by
   obtain ⟨h₁, h₂, h₃, h₄⟩ := h
@@ -373,16 +351,8 @@ end Reducing
 
 /-! ## 6. The angle quantities
 
-None of these needs a functional calculus.
-
-The *sines* are explicit operators: the paper's own `(I − F₀F₀⋆)E₀` for the
-directed single angle, the projector difference `P_V − P_U` for the ambient
-single angle, and two explicit projection blocks for the double angles.
-
-The *tangents* are not operators at all here.  A unitarily invariant norm is a
-symmetric norming function of a singular-value sequence, so `‖tan Θ‖` is the
-norm's value on the sequence `tan θ₁, tan θ₂, …`, and Section 2's `UINorm.seqNorm`
-evaluates exactly that. -/
+The *sines* are explicit operators; the *tangents* are sequences, `‖tan Θ‖` being
+the norm's value on `tan θ₁, tan θ₂, …`. -/
 
 section Angles
 
@@ -392,53 +362,48 @@ variable {E F K : Type v}
   [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
   [NormedAddCommGroup K] [InnerProductSpace 𝕜 K] [CompleteSpace K]
 
-/-- `sin Θ₀`, the directed sine in coordinates: the part of the trial coordinate
-map that misses the exact subspace.  This is the source's `Q^⊥E₀`. -/
+/-- `sin Θ₀` in coordinates: the part of the trial coordinate map that misses the
+exact subspace, the source's `Q^⊥E₀`. -/
 noncomputable def directedSine (E₀ : F →L[𝕜] E) (F₀ : K →L[𝕜] E) : F →L[𝕜] E :=
   (ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀
 
-/-- `sin Θ₀` for a trial *subspace*: the same operator with the inclusion of `U`
-as the coordinate map and `V` as the exact subspace, so `Q^⊥E₀ = P_{Vᗮ}|_U`. -/
+/-- `sin Θ₀` for a trial *subspace*: `Q^⊥E₀ = P_{Vᗮ}|_U`. -/
 noncomputable def directedSineBlock (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : U →L[𝕜] E :=
   Vᗮ.starProjection ∘L U.subtypeL
 
-/-- `sin Θ`, the ambient sine: the projector difference.  Its singular values are
-the sines of the principal angles, each occurring twice. -/
+/-- `sin Θ`, the ambient sine: the projector difference, whose singular values
+are the sines of the principal angles, each occurring twice. -/
 noncomputable def ambientSine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   V.starProjection - U.starProjection
 
-/-- `sin 2Θ`, the ambient double-angle sine: the projector difference between
-`U` and its mirror image in `V`.
-
-Reflecting `U` in `V` doubles every principal angle, so this is the ambient sine
-of the doubled angle. -/
+/-- `sin 2Θ`, the ambient double-angle sine: the projector difference between `U`
+and its mirror image in `V`.  Reflecting `U` in `V` doubles every principal
+angle. -/
 noncomputable def ambientDoubleSine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   (U.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E)).starProjection - U.starProjection
 
-/-- `sin 2Θ₀`, the directed double-angle sine: the overlap of `U` with the mirror
-image of its own complement. -/
+/-- `sin 2Θ₀`, the directed double-angle sine. -/
 noncomputable def directedDoubleSine (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   U.starProjection ∘L
     (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E)).starProjection
 
 /-- `sin Θ₀` again, as the directed *ambient* block `P_U P_{Vᗮ}`, whose singular
-values are the sines of the principal angles once over.  This is the sine whose
-doubled tangent the `tan 2Θ` directed clause bounds. -/
+values are the sines of the principal angles once over: the sine whose doubled
+tangent the `tan 2Θ` directed clause bounds. -/
 noncomputable def directedSineCorner (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[𝕜] E :=
   U.starProjection ∘L Vᗮ.starProjection
 
 /-! ### Tangents of an angle presented by its sine
 
-**The argument of `tanSeq` is a sine, never a residual.**  `tan Θ₀` is a
-trigonometric function of the *angle*, and the angle is presented here by an
-operator whose singular values are its sines; the residual is the right-hand
-side of the inequality and has nothing to do with the left.  Writing
-`tanSeq R` for a residual `R` would state a different -- and false -- theorem. -/
+The argument of `tanSeq` is always a sine: `tan Θ₀` is a trigonometric function
+of the *angle*, presented here by an operator whose singular values are its
+sines.  The residual is the right-hand side and has nothing to do with the
+left. -/
 
 /-- The sequence `tan θ₀, tan θ₁, …`, where `sin θₙ` is the `n`-th singular value
 of the sine operator `S`. -/
@@ -448,10 +413,9 @@ noncomputable def tanSeq {X Y : Type v}
     (S : X →L[𝕜] Y) (n : ℕ) : ℝ :=
   Real.tan (Real.arcsin (singularValue S n))
 
-/-- The sequence `|tan 2θ₀|, |tan 2θ₁|, …`.
-
-The absolute value is the source's own choice: a unitarily invariant norm cannot
-see the sign, and `|tan 2Θ|` needs no quarter-turn branch hypothesis. -/
+/-- The sequence `|tan 2θ₀|, |tan 2θ₁|, …`.  The absolute value is the source's
+own choice: a unitarily invariant norm cannot see the sign, and `|tan 2Θ|` needs
+no quarter-turn branch hypothesis. -/
 noncomputable def absTanTwoSeq {X Y : Type v}
     [NormedAddCommGroup X] [InnerProductSpace 𝕜 X]
     [NormedAddCommGroup Y] [InnerProductSpace 𝕜 Y]
@@ -460,9 +424,8 @@ noncomputable def absTanTwoSeq {X Y : Type v}
 
 /-- **No principal angle of `S` is a right angle**, so every `tan θₙ` is a
 genuine tangent rather than the value Lean's field division assigns at a pole.
-
-Davis and Kahan do not assume this; they derive it.  It therefore appears in the
-`tan Θ` theorem as a *conclusion*. -/
+Davis and Kahan derive this rather than assuming it, so it appears below as a
+conclusion. -/
 def TangentDefined {X Y : Type v}
     [NormedAddCommGroup X] [InnerProductSpace 𝕜 X]
     [NormedAddCommGroup Y] [InnerProductSpace 𝕜 Y]
@@ -470,19 +433,17 @@ def TangentDefined {X Y : Type v}
   ∀ n, Real.cos (Real.arcsin (singularValue S n)) ≠ 0
 
 /-- **No principal angle of `S` is `π/4`**, so every `|tan 2θₙ|` is a genuine
-tangent.  Section 7 of the source derives the nonvanishing of these `cos 2θⱼ`
-during the proof rather than assuming it, so it appears below as a conclusion. -/
+tangent.  Section 7 derives the nonvanishing of these `cos 2θⱼ` during the proof,
+so it too appears below as a conclusion. -/
 def DoubleTangentDefined {X Y : Type v}
     [NormedAddCommGroup X] [InnerProductSpace 𝕜 X]
     [NormedAddCommGroup Y] [InnerProductSpace 𝕜 Y]
     (S : X →L[𝕜] Y) : Prop :=
   ∀ n, Real.cos (2 * Real.arcsin (singularValue S n)) ≠ 0
 
-/-- The crossed defect subspaces are isometrically isomorphic.
-
-This is the source's standing condition (3.5), assumed from Section 3 onward;
-it is what makes the ambient angle between two subspaces meaningful when they
-are not acute. -/
+/-- The crossed defect subspaces are isometrically isomorphic: the source's
+standing condition (3.5), assumed from Section 3 onward, which is what makes the
+ambient angle meaningful when the subspaces are not acute. -/
 def CrossedDefectsEquivalent (U V : Submodule 𝕜 E) : Prop :=
   Nonempty ((U ⊓ Vᗮ : Submodule 𝕜 E) ≃ₗᵢ[𝕜] (Uᗮ ⊓ V : Submodule 𝕜 E))
 
@@ -493,15 +454,10 @@ end Angles
 Davis and Kahan open with four unnumbered theorems.  Three of them print two
 conclusions -- one *directed*, comparing the trial subspace with the exact one
 through the residual, and one *ambient*, comparing the two subspaces through the
-whole perturbation.
-
-**Each printed clause quantifies its own data and its own hypotheses.**  The
-directed clause of `tan Θ` needs the residual to lie in the norm's ideal; the
-ambient clause needs the whole perturbation to.  Sharing one membership premise
-across both would make each clause carry the other's hypothesis, and in
-particular would make the directed clauses weaker than what the source states.
-The three two-clause theorems therefore conclude in a record whose fields are the
-printed clauses. -/
+whole perturbation.  Each printed clause quantifies its own data and its own
+hypotheses, so the three two-clause theorems conclude in a record whose fields
+are the printed clauses; sharing a membership premise across both would make each
+clause carry the other's. -/
 
 section Theorems
 
@@ -512,15 +468,11 @@ variable {E F G K : Type v}
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
   [NormedAddCommGroup K] [InnerProductSpace 𝕜 K] [CompleteSpace K]
 
-/-- **The `sin Θ` theorem.**
-
-If the trial block `A₀` and the complementary exact block `Λ₁` are separated by a
-gap of width `δ`, then `δ ‖sin Θ₀‖ ≤ ‖R‖` in every unitarily invariant norm.
-
-The ambient operator may be unbounded, the trial block may be unbounded, the
-space may have any dimension, the separating interval may be half-infinite, and
-the norm is arbitrary.  This is the one Section 2 theorem with a single printed
-conclusion. -/
+/-- **The `sin Θ` theorem.**  If the trial block `A₀` and the complementary exact
+block `Λ₁` are separated by a gap `δ`, then `δ ‖sin Θ₀‖ ≤ ‖R‖` in every unitarily
+invariant norm.  The ambient operator may be unbounded, the trial block may be
+unbounded, the space may have any dimension, and the separating interval may be
+half-infinite.  This is the one Section 2 theorem with a single conclusion. -/
 theorem sinTheta (N : UINorm)
     {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {Λ₁ : G →ₗ.[𝕜] G}
     {E₀ : F →L[𝕜] E} {F₀ : K →L[𝕜] E} {F₁ : G →L[𝕜] E} {R : F →L[𝕜] E}
@@ -534,19 +486,11 @@ theorem sinTheta (N : UINorm)
 /-! ### `tan Θ` -/
 
 /-- **The two printed conclusions of the `tan Θ` theorem**, each with its own
-data and its own hypotheses.
-
-`A` is the ambient self-adjoint operator, `V` the exact subspace reducing it, and
-`α, δ` the ordered separation: the trial block sits at or below `α` and the
-unwanted exact block at or above `α + δ`.
-
-* `directed` -- `δ ‖tan Θ₀‖ ≤ ‖R‖`, for every trial subspace with Rayleigh--Ritz
-  data, needing only the *residual* in the norm's ideal;
-* `ambient` -- `δ ‖tan Θ‖ ≤ ‖H‖`, for a bounded self-adjoint perturbation whose
-  trial diagonal block vanishes, needing the *perturbation* in the ideal.
-
-Each clause also concludes that its tangent has no pole, which is derived and not
-assumed. -/
+data and hypotheses: `δ ‖tan Θ₀‖ ≤ ‖R‖` for every trial subspace with
+Rayleigh--Ritz data, needing only the *residual* in the norm's ideal, and
+`δ ‖tan Θ‖ ≤ ‖H‖` for a bounded self-adjoint perturbation with vanishing trial
+diagonal block, needing the *perturbation*.  Each clause also concludes that its
+tangent has no pole. -/
 structure TanThetaResult (N : UINorm) (A : E →ₗ.[𝕜] E)
     (V : Submodule 𝕜 E) [V.HasOrthogonalProjection] (α δ : ℝ) : Prop where
   /-- `δ ‖tan Θ₀‖ ≤ ‖R‖`: the directed conclusion, on the residual alone. -/
@@ -569,14 +513,11 @@ structure TanThetaResult (N : UINorm) (A : E →ₗ.[𝕜] E)
 
 /-- **The `tan Θ` theorem**, both printed conclusions.
 
-The separation is *ordered* -- the trial block sits at or below `α` and the
-unwanted exact block at or above `α + δ` -- and the perturbation has vanishing
-trial diagonal block, which is the Rayleigh--Ritz condition `H₀ = 0` carried by
-`RitzData` and by `D.residual = P_{Uᗮ} H|_U`.  Then `δ ‖tan Θ₀‖ ≤ ‖R‖` and
-`δ ‖tan Θ‖ ≤ ‖H‖`, with the sharp factor one.
-
-The exact subspace `V` is any subspace reducing `A`; the source assumes no
-spectral selection, only reduction together with the separation. -/
+The separation is *ordered* -- the trial block at or below `α`, the unwanted
+exact block at or above `α + δ` -- and the perturbation has vanishing trial
+diagonal block, the Rayleigh--Ritz condition `H₀ = 0` carried by `RitzData` and
+by `D.residual = P_{Uᗮ} H|_U`.  Then `δ ‖tan Θ₀‖ ≤ ‖R‖` and `δ ‖tan Θ‖ ≤ ‖H‖`,
+with the sharp factor one.  `V` is any subspace reducing `A`. -/
 theorem tanTheta (N : UINorm)
     {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
     {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
@@ -587,24 +528,20 @@ theorem tanTheta (N : UINorm)
 
 /-! ### `sin 2Θ` -/
 
-/-- **The two printed conclusions of the `sin 2Θ` theorem.**
+/-- **The two printed conclusions of the `sin 2Θ` theorem**, for a subspace `U`
+reducing `A` whose two blocks are separated by `δ`: `δ ‖sin 2Θ₀‖ ≤ 2 ‖R‖` for
+every trial subspace with a residual, needing only the residual in the ideal, and
+`δ ‖sin 2Θ‖ ≤ 2 ‖H‖` for every bounded self-adjoint perturbation and every
+subspace reducing the perturbed operator, needing the perturbation.
 
-`U` is a subspace reducing `A` whose two blocks are separated by `δ`.
-
-* `directed` -- `δ ‖sin 2Θ₀‖ ≤ 2 ‖R‖` for every trial subspace with a residual,
-  needing only the residual in the norm's ideal;
-* `ambient` -- `δ ‖sin 2Θ‖ ≤ 2 ‖H‖` for every bounded self-adjoint perturbation
-  and every subspace reducing the perturbed operator, needing the perturbation
-  in the ideal.
-
-The factor two is the paper's, and is sharp.  Unlike `tan Θ`, no Rayleigh--Ritz
-condition is imposed, so the trial data is a `TrialBlock` and not a
-`RitzData`. -/
+The factor two is the paper's, and is sharp.  Unlike `tan Θ` no Rayleigh--Ritz
+condition is imposed, and unlike `tan Θ` the Appendix does not extend this
+theorem to an unbounded trial compression. -/
 structure SinTwoThetaResult (N : UINorm) (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] (δ : ℝ) : Prop where
   /-- `δ ‖sin 2Θ₀‖ ≤ 2 ‖R‖`: the directed conclusion, on the residual alone. -/
   directed : ∀ {V : Submodule 𝕜 E} [V.HasOrthogonalProjection]
-      (D : TrialBlock A V), N.Finite D.residual →
+      (D : BoundedTrialBlock A V), N.Finite D.residual →
         N.Finite (directedDoubleSine U V) ∧
           δ * N.norm (directedDoubleSine U V) ≤ 2 * N.norm D.residual
   /-- `δ ‖sin 2Θ‖ ≤ 2 ‖H‖`: the ambient conclusion, on the whole perturbation. -/
@@ -614,11 +551,9 @@ structure SinTwoThetaResult (N : UINorm) (A : E →ₗ.[𝕜] E)
         N.Finite (ambientDoubleSine U V) ∧
           δ * N.norm (ambientDoubleSine U V) ≤ 2 * N.norm H
 
-/-- **The `sin 2Θ` theorem**, both printed conclusions.
-
-The separating interval may be half-infinite, the ambient operator may be
-unbounded, and `U` is any subspace reducing `A` whose two blocks the source
-separation puts a gap `δ` between. -/
+/-- **The `sin 2Θ` theorem**, both printed conclusions.  The separating interval
+may be half-infinite, the ambient operator may be unbounded, and `U` is any
+subspace reducing `A` whose two blocks the separation puts a gap `δ` between. -/
 theorem sinTwoTheta (N : UINorm)
     {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
@@ -629,21 +564,14 @@ theorem sinTwoTheta (N : UINorm)
 
 /-! ### `tan 2Θ` -/
 
-/-- **The two printed conclusions of the `tan 2Θ` theorem.**
+/-- **The two printed conclusions of the `tan 2Θ` theorem**, for `U` reducing `A`
+ordered below `α` with its complement above `α + δ` and `H` a bounded
+self-adjoint perturbation off-diagonal for that splitting -- the source's
+`H₀ = H₁ = 0`: `δ ‖tan 2Θ₀‖ ≤ 2 ‖R‖` with `R` the corner `P_{Uᗮ} H P_U` and only
+that corner in the ideal, and `δ ‖tan 2Θ‖ ≤ 2 ‖H‖` with the whole perturbation.
 
-`U` is a subspace reducing `A`, ordered below `α` with its complement above
-`α + δ`, and `H` is a bounded self-adjoint perturbation that is off-diagonal for
-that splitting -- the source's `H₀ = H₁ = 0`.
-
-* `directed` -- `δ ‖tan 2Θ₀‖ ≤ 2 ‖R‖`, where the residual is the corner
-  `P_{Uᗮ} H P_U`; this clause needs only that *corner* in the norm's ideal;
-* `ambient` -- `δ ‖tan 2Θ‖ ≤ 2 ‖H‖`, which needs the whole perturbation in the
-  ideal.
-
-Each clause also concludes that its tangent has no pole.  The source is explicit
-that no independent hypothesis excluding the poles of `tan 2Θ` is part of the
-printed theorem and that Section 7 derives the nonvanishing of the relevant
-`cos 2θⱼ`, so the pole exclusion is stated here as a conclusion. -/
+No hypothesis excluding the poles of `tan 2Θ` is part of the printed theorem:
+Section 7 derives the nonvanishing of the relevant `cos 2θⱼ`. -/
 structure TanTwoThetaResult (N : UINorm) (A : E →ₗ.[𝕜] E)
     (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
     (H : E →L[𝕜] E) (δ : ℝ) : Prop where
@@ -662,11 +590,10 @@ structure TanTwoThetaResult (N : UINorm) (A : E →ₗ.[𝕜] E)
           N.SeqFinite (absTanTwoSeq (ambientSine U V)) ∧
           δ * N.seqNorm (absTanTwoSeq (ambientSine U V)) ≤ 2 * N.norm H
 
-/-- **The `tan 2Θ` theorem**, both printed conclusions.
-
-The separation is ordered on the two blocks of `A`, and the perturbation is
-*off-diagonal* for the splitting -- `H₀ = H₁ = 0`.  Then
-`δ ‖tan 2Θ₀‖ ≤ 2 ‖R‖` and `δ ‖tan 2Θ‖ ≤ 2 ‖H‖`. -/
+/-- **The `tan 2Θ` theorem**, both printed conclusions.  The separation is
+ordered on the two blocks of `A` and the perturbation is *off-diagonal* for the
+splitting -- `H₀ = H₁ = 0`.  Then `δ ‖tan 2Θ₀‖ ≤ 2 ‖R‖` and
+`δ ‖tan 2Θ‖ ≤ 2 ‖H‖`. -/
 theorem tanTwoTheta (N : UINorm)
     {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)

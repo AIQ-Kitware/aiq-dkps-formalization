@@ -16,19 +16,40 @@ repaired statements and the audit that will keep them honest.
 
 | | Challenge.lean | limit |
 | --- | --- | --- |
-| lines | **684** | hard 1000, preferred 300 |
-| bytes | **32,765** | hard 102,400, preferred 32,768 |
+| lines | **611** | hard 1000, preferred 300 |
+| bytes | **29,984** | hard 102,400, preferred 32,768 |
 | imports | **`Mathlib` only** | Lean core + allowlisted Mathlib/Tau Ceti/CSLib |
-| definitions and structures | 39 | supplied to the Comparator as `definition_names` |
+| definitions and structures | 40 | ordinary concrete definitions; **not** `definition_names` |
 | headline theorems | 4 | `sorry`-bodied, per the Comparator convention |
 | supporting theorems | 1 (`Reduces.orthogonal`) | proved; needed for the `sin 2Θ` statement to typecheck |
 | functional calculus | **absent** | — |
 
-`Solution.lean` is 471 lines and contains no `sorry`, no `admit` and no `axiom`.
+`Solution.lean` is 674 lines and contains no `sorry`, no `admit` and no `axiom`.
 
 The line count is over Palomar's *preferred* 300 and under its hard 1000, so
 `check_palomar_readiness.py` would warn, not fail. Four full theorems with their
-own vocabulary do not fit in 300 lines.
+own vocabulary do not fit in 300 lines. The byte count is now **2,784 bytes below
+the preferred 32 KiB**, where it used to sit three bytes under it; the margin came
+entirely out of prose that belongs in this file and in the statement audit, not
+out of any definition or statement.
+
+## Comparator configuration
+
+```json
+"theorem_names": [
+  "RotationOfEigenvectors.sinTheta",
+  "RotationOfEigenvectors.tanTheta",
+  "RotationOfEigenvectors.sinTwoTheta",
+  "RotationOfEigenvectors.tanTwoTheta"
+],
+"definition_names": []
+```
+
+`definition_names` is Palomar's mechanism for definitions whose *value* the
+Challenge leaves unspecified and the Solution supplies. Every definition here is
+concrete, so none of them belongs in that list; an earlier draft of this file
+said all 39 would be listed, which was a misreading of the policy. A definition
+hole would have to be justified on its own terms, and none is.
 
 ## Reproducing
 
@@ -73,9 +94,9 @@ and all four are now fixed:
    right-hand side of the inequality, not the left. `tanSeq` now takes a *sine*,
    and its docstring names the mistake so it is hard to make again.
 2. **The Ritz compression was forced to be bounded.** `M : U →L[𝕜] U` loses the
-   Appendix scope the source explicitly allows. `TrialBlock.compression` is now a
-   partial map `U →ₗ.[𝕜] U`, with only the residual bounded — which is exactly
-   what the source's scope paragraph requires.
+   Appendix scope the source explicitly allows *for the tangent theorem*.
+   `TrialBlock.compression` is now a partial map `U →ₗ.[𝕜] U`, with only the
+   residual bounded. See the next section for where that relaxation stops.
 3. **The directed clauses inherited the ambient clause's ideal membership.**
    `N.Finite H` sat outside the conjunction, so `δ‖tan Θ₀‖ ≤ ‖R‖` could only be
    invoked when the whole perturbation lay in the ideal. The three two-clause
@@ -88,6 +109,36 @@ and all four are now fixed:
    `DoubleTangentDefined` — there is no pole — which is what Section 7 of the
    source derives rather than assumes, and what the development's own `tan 2Θ`
    endpoints conclude with `IsUnit …`.
+
+## Where the unbounded compression stops: `sin 2Θ` is bounded
+
+A second pass found the mirror image of defect 2: having learned that the
+compression may be unbounded, the draft made it unbounded everywhere. The
+Appendix to Section 6 is specific about which theorems get which relaxation:
+
+> For the sine theorem, one of `A₀, Λ₁` may be unbounded. … Proposition 6.1 and
+> Theorem 6.1 admit the analogous relaxation.
+>
+> For the tangent theorem the Appendix explicitly returns to the ordered
+> hypotheses `A₀ ≤ α` and `Λ₁ ≥ α+δ` in the general case and allows *both* `A₀`
+> and `Λ₁` to be unbounded.
+
+So the sine family — the `sin Θ` theorem, Proposition 6.1, Theorem 6.1 — gets
+"one of the two", and only the tangent theorem gets "both". **No double-angle
+result is named in the Appendix at all.** In the directed `sin 2Θ` configuration
+the unwanted exact block is the unbounded one, which is exactly the allowed
+shape, so the trial compression there stays bounded.
+
+The Challenge therefore has two trial-data structures, and the difference between
+them is the source's:
+
+* `TrialBlock` / `RitzData` — partial compression, for `tan Θ`, where the
+  Appendix asks for it;
+* `BoundedTrialBlock` — bounded compression, for `sin 2Θ`.
+
+This also removes the inconsistency the repository was carrying: the production
+semantic audit had already concluded that directed `sin 2Θ` is not extended to an
+unbounded compression, while this Challenge went on demanding it.
 
 ## The reducing-versus-spectral question, resolved
 
@@ -118,13 +169,33 @@ Proved in `Solution.lean`:
 * **`sin Θ`**, and **the ambient clause of `sin 2Θ`** — both modulo the two
   development capability classes, which are instances at `ℝ` and at `ℂ`.
 
-Open, and named per clause in
+* **the ambient `tan Θ` clause**, over `ℂ` — `tanTheta_ambient_proof_complex`,
+  all three printed conjuncts.  Three new production facts make it possible:
+  `approximationNumber_paperTanAngleOperatorC` (the operator's singular values
+  *are* the tangent sequence), `evalSeq_tanSeq_ambientSine` (hence the norms
+  agree), and `norm_sinAngleOperatorC_lt_one_of_unboundedRitz` (uniform
+  transversality, which the tangent theorem's own proof already derived inline
+  and which both of the others need);
+* **the directed `tan Θ` clause itself**, over `ℂ` —
+  `tanTheta_directed_proof_complex`, all three printed conjuncts, from the new
+  `DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_exists_complex`,
+  which exhibits a representative with the paper's approximation numbers and
+  derives the pole exclusion from the two form bounds rather than assuming it.
+
+Three of the seven printed clauses remain, and are named per clause in
 [`../palomar-section-two-challenge-statement-audit.md`](../palomar-section-two-challenge-statement-audit.md):
 
-* the `sin 2Θ` directed clause at a reducing subspace and an unbounded
-  compression;
-* tangent representatives and the derived no-pole facts for `tan Θ` and
-  `tan 2Θ`.
+* the `sin 2Θ` directed clause at a reducing subspace — the production endpoint
+  selects its subspace spectrally, and the reducing version of
+  `sinTwoTheta_reflectionResidual_block_gauge_of_formGap` has not been written;
+* both `tan 2Θ` clauses, for the same reason plus the two items below;
+* the scalar field for every clause whose production endpoint is fixed-field:
+  `ScalarTransport` exists and discharges the two capability classes, but the
+  Section 2 `tan`-family endpoints themselves are still stated over `ℂ` and `ℝ`
+  separately;
+* one sharp remaining analytic obligation, the **sine-doubling transfer**
+  `aₙ(sin 2Θ) = sin (2 arcsin aₙ(sin Θ))`, which is what would let the `tan 2Θ`
+  clauses read their sequences off `ambientSine` rather than off `ambientDoubleSine`.
 
 ## The scalar field is no longer one of them
 

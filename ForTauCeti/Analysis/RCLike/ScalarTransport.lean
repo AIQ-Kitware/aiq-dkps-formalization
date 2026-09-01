@@ -70,8 +70,8 @@ no scalars — it renames the field.
   `TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan` stopped being
   hypotheses.
 * Namespace: `TauCeti`, per `ForTauCeti/README.md` section 2.
-* `@[expose]` on ten definitional carriers; see `dev/policy/ratchet.yaml`, which
-  records the measurement that all ten are load-bearing.
+* `@[expose]` on ten definitional carriers, each measured load-bearing by
+  deleting the attribute and reading the compiler's complaint.
 * Original authors / copyright: Jon Crall, Claude Opus 5; Copyright (c) 2026
   Kitware, Inc.; Apache 2.0.
 * Spectra influence: **none**.

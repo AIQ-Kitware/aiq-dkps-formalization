@@ -51,12 +51,14 @@ variable {𝕜 : Type u} {𝕂 : Type w} [RCLike 𝕜] [RCLike 𝕂] {e : RCLike
 variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
 variable {F : Type v} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- Finite Ky Fan gauges are unchanged by the transport, term by term. -/
 theorem kyFanApproximationGauge_clm (k : ℕ) (T : E →L[𝕜] F) :
     kyFanApproximationGauge k (clm (e := e) T) = kyFanApproximationGauge k T := by
   unfold kyFanApproximationGauge ContinuousLinearMap.kyFanGauge
   exact Finset.sum_congr rfl fun n _ => approximationNumber_clm (e := e) T n
 
+omit [CompleteSpace E] in
 /-- An operator-form upper bound transports, and reflects. -/
 theorem semiboundedAbove_pmap_iff {A : E →ₗ.[𝕜] E} {c : ℝ} :
     TauCeti.LinearPMap.SemiboundedAbove (pmap (e := e) A) c ↔
@@ -72,6 +74,7 @@ theorem semiboundedAbove_pmap_iff {A : E →ₗ.[𝕜] E} {c : ℝ} :
       ((domainOut (e := e) A x : E)))) ≤ c * ‖(domainOut (e := e) A x : E)‖ ^ 2
     rwa [e.re_map]
 
+omit [CompleteSpace E] in
 /-- An operator-form lower bound transports, and reflects. -/
 theorem semiboundedBelow_pmap_iff {A : E →ₗ.[𝕜] E} {c : ℝ} :
     TauCeti.LinearPMap.SemiboundedBelow (pmap (e := e) A) c ↔
@@ -87,6 +90,7 @@ theorem semiboundedBelow_pmap_iff {A : E →ₗ.[𝕜] E} {c : ℝ} :
       RCLike.re (e (inner 𝕜 (A (domainOut (e := e) A x)) ((domainOut (e := e) A x : E))))
     rwa [e.re_map]
 
+omit [CompleteSpace E] in
 /-- The real resolvent set is unchanged: an inverse on one side is an inverse on the other. -/
 theorem realResolventSet_pmap (A : E →ₗ.[𝕜] E) :
     TauCeti.LinearPMap.realResolventSet (pmap (e := e) A) =
@@ -118,12 +122,14 @@ theorem realResolventSet_pmap (A : E →ₗ.[𝕜] E) :
           ofReal_smul_of (e := e) (E := E) lam (R (out y))]
       exact congrArg (of (e := e)) hh
 
+omit [CompleteSpace E] in
 /-- and hence so is the real spectrum. -/
 theorem realSpectrum_pmap (A : E →ₗ.[𝕜] E) :
     TauCeti.LinearPMap.realSpectrum (pmap (e := e) A) = TauCeti.LinearPMap.realSpectrum A := by
   unfold TauCeti.LinearPMap.realSpectrum
   rw [realResolventSet_pmap]
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- The three-constructor separation transports, constructor by constructor. -/
 theorem formBoundedSylvesterGap_pmap {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {δ : ℝ}
     (h : FormBoundedSylvesterGap A B δ) :
@@ -140,6 +146,7 @@ theorem formBoundedSylvesterGap_pmap {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜
       exact FormBoundedSylvesterGap.leftBelowRightAbove c
         (semiboundedAbove_pmap_iff.mpr hA) (semiboundedBelow_pmap_iff.mpr hB)
 
+omit [CompleteSpace E] [CompleteSpace F] in
 /-- A domain-aware Sylvester equation transports. -/
 theorem sylvesterEquation_pmap {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F} {X C : F →L[𝕜] E}
     (h : TauCeti.LinearPMap.SylvesterEquation A B X C) :
