@@ -121,10 +121,40 @@ Proved in `Solution.lean`:
 Open, and named per clause in
 [`../palomar-section-two-challenge-statement-audit.md`](../palomar-section-two-challenge-statement-audit.md):
 
-* the scalar-field transport that discharges
-  `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` and
-  `HasUnboundedSylvesterKyFan 𝕜` at an arbitrary `RCLike` field;
 * the `sin 2Θ` directed clause at a reducing subspace and an unbounded
   compression;
 * tangent representatives and the derived no-pole facts for `tan Θ` and
   `tan 2Θ`.
+
+## The scalar field is no longer one of them
+
+`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` and
+`ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜` were the two development
+capabilities the Challenge's `[RCLike 𝕜]` genericity waited on.  **Both are now
+instances at every `RCLike` field**, so the two discharged clauses carry no
+binders at all.
+
+`RCLike` is an open class with exactly two models, and the transport that closes
+the gap is one construction used twice:
+
+| module | carries |
+| --- | --- |
+| `ForTauCeti/Analysis/RCLike/ScalarTransport.lean` | the field isomorphism `RCLikeIso`, and `ScalarTransport e E` — `E` with the induced `𝕂`-structure — together with subspaces, `ᗮ`, orthogonal projections, bounded operators (function, norm, adjoint, self-adjointness), `Module.rank`, and partial maps (domain, function, adjoint, self-adjointness) |
+| `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/ScalarTransport.lean` | approximation numbers, linear independence, spans — hence the min–max instance |
+| `DavisKahan/Sylvester/ScalarTransport.lean` | finite Ky Fan gauges, operator-form semibounds, the real resolvent set and spectrum, the three-constructor separation, the domain-aware Sylvester equation — hence the Sylvester instance |
+
+The transport moves the scalar action and the field the inner product takes
+values in, and nothing else — not the vectors, the additive group, the topology
+or the norm.  That is why ranks and singular values survive it, and why
+restriction of scalars (`InnerProductSpace.rclikeToReal`) is the wrong tool: over
+a complex-like `𝕜` it halves the scalars, doubling the rank.
+
+## The Comparator layout this is not yet in
+
+`Solution.lean` here imports `Challenge` and proves *helper* correspondences.
+That is right for a bridge file and wrong for a submission: the Comparator
+compares two independently exported environments, so the final `Solution.lean`
+must **not** import `Challenge` and must redeclare the four advertised names, at
+the same types, with real proofs.  Converting to that layout is mechanical and is
+deliberately deferred until the four theorems are actually proved — until then
+the redeclarations would only relocate the four holes.

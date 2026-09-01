@@ -75,7 +75,7 @@ separation `A|Vᗮ ≥ α + δ` in form.
 | --- | --- |
 | **paper clause** | `δ‖tan Θ₀‖ ≤ ‖R‖`, `Θ₀` the angle between trial and exact subspaces, `R` the Rayleigh–Ritz residual |
 | **Challenge** | `TanThetaResult.directed` |
-| **production witness** | `tanTheta_directed_unboundedTrial_paperUINorm_complex` / `…_real` |
+| **production witness** | `tanTheta_directed_unboundedRitz_paperUINorm_complex` / `…_real` (2026-08-31; the previously named `…_unboundedTrial_…` pair carries a **bounded** compression and is now a specialization — see `dev/davis-kahan-1970-result-semantic-review-2026-08-31.md`, F9) |
 | **correspondence** | **not carried out** |
 | **real/complex** | `[RCLike 𝕜]`; production fixed-field |
 | **bounded/unbounded** | `RitzData.compression : U →ₗ.[𝕜] U` — partial map ✓ (production: `UnboundedTrialBlock`, also partial ✓) |
@@ -208,14 +208,65 @@ above `α + δ`, `H` bounded self-adjoint with `H₀ = H₁ = 0`.
 | 4 | arbitrary reducing subspace substituted for spectral selection without proof | prior pass, self-found | **resolved in the Challenge's favour, and proved for `sin 2Θ` ambient.** Section 1 of the source assumes reduction, not spectral selection, so the reducing formulation is the printed one; the remaining spectral-only production endpoints are recorded above as *production* obligations, not Challenge defects. |
 | 5 | tangent-witness vacuity: `∀ T, IsTangentOf S T → …` says nothing when no `T` exists | reviewer | **fixed.** `UINorm.evalSeq` measures the tangent sequence directly. `IsTangentOf` and `IsDoubleTangentOf` are deleted. |
 | 6 | pole encoded as a harmless numerical zero (`Real.tan (π/2) = 0` in Lean) | reviewer | **fixed by the second permitted route:** `TangentDefined` / `DoubleTangentDefined` are stated as **conclusions**, so a pole is not silently valued at zero — the theorem asserts there is none. This matches the source (Section 7 derives it) and production (`IsUnit …` in the conclusion). |
-| 7 | the printed lower bound `β` on `spec(A₀)` is dropped from the ordered-gap clauses (`tan Θ`, `tan 2Θ`) | this audit | **accepted, and recorded.** The Challenge assumes only the upper form bound. The resulting statement is strictly stronger than the printed one and implies it; the production endpoints make the same choice. A reviewer may disagree — this row is the place to. |
+| 7 | the printed lower bound `β` on `spec(A₀)` is dropped from the ordered-gap clauses (`tan Θ`, `tan 2Θ`) | this audit | **resolved as source-exact, 2026-09-01 — see §5.1.** The Appendix to Section 6 drops `β` itself. |
 | 8 | `sinAngleOperatorC` is `modulus (P_U − P_V)` while the Challenge's `ambientSine` is `P_V − P_U` | this audit | **benign, and recorded.** Sign and modulus do not change singular values; every correspondence goes through approximation numbers. |
+
+### 5.1 The dropped `β`, resolved
+
+The previous pass recorded the missing `β` as "strictly stronger, accepted", and
+that was the wrong disposition: a statement is not *exact* while it also carries
+an unexplained stronger variant.  The resolution is **Route A** — the β-free
+spelling is the source's own, and the source says so.
+
+The Section 2 tangent theorem is printed with a two-sided hypothesis:
+
+> `spec(A₀) ⊂ [β,α]`,  `spec(Λ₁) ⊂ [α+δ,∞)`,  `δ > 0`.
+
+The Appendix to Section 6 then returns to the same theorem in the general case
+and states its hypotheses without `β`:
+
+> For the tangent theorem the Appendix explicitly returns to the ordered
+> hypotheses `A₀ ≤ α` and `Λ₁ ≥ α + δ` in the general case and allows *both*
+> `A₀` and `Λ₁` to be unbounded; the residual entering the displayed norm
+> estimate is still required to be bounded.
+
+`A₀ ≤ α` is a form bound with no lower end, and it is asserted *of the tangent
+theorem*, not of some other result.  A lower bound `β` would contradict the
+sentence it appears in: an operator confined to `[β,α]` is bounded, and the
+Appendix is saying `A₀` need not be.  So the β-free ordered hypothesis is the
+scope the source claims for this theorem, and the finite-interval spelling in
+Section 2 is the special case the main exposition works in.
+
+Three consequences, recorded so this is checkable rather than asserted:
+
+| | |
+|---|---|
+| printed finite-interval spelling | `spec(A₀) ⊂ [β,α]`, `spec(Λ₁) ⊂ [α+δ,∞)` |
+| half-infinite source extension | `A₀ ≤ α`, `Λ₁ ≥ α+δ`, both possibly unbounded (Appendix to Section 6) |
+| Challenge spelling | `SemiboundedAbove D.compression α`, `SemiboundedBelow (block A Vᗮ …) (α+δ)` |
+| relation | the Challenge spelling **is** the Appendix spelling; it implies the printed one by `spec(A₀) ⊂ [β,α] → A₀ ≤ α` |
+
+The `tan Θ` rows above are therefore **EXACT at the paper's full scope**, not
+"Lean strictly stronger".  The same argument covers `tan 2Θ`, whose printed
+ordered hypothesis `spec(A₀) ⊂ [β,α]`, `spec(A₁) ⊂ [α+δ,∞)` the Challenge states
+as the two form bounds; there the source's own `S2-unbounded-scope` sentence
+("The spectral intervals in the gap hypotheses may be half-infinite") does the
+same work without needing the Appendix.
+
+This is also the disposition the production endpoints take, and as of 2026-08-31
+the production certificate checks it: the source atom
+`DK-6-appendix.unbounded-tangent-extension` now requires the witness to carry an
+`UnboundedRitzPair`, whose compression is a partial map, and forbids the
+bounded-compression `UnboundedTrialBlock`.
 
 ## 6. What the audit does not certify
 
 It certifies that each Challenge clause *states* the printed clause at the printed scope.
 It does not certify that the Challenge theorems are true — four are `sorry`-bodied by the
 Comparator convention — and it does not certify the correspondences marked *open*. Two of
-the seven clauses have a discharged correspondence:
-`Solution.sinTheta_of_capabilities` and `Solution.sinTwoTheta_ambient_of_capabilities`,
-both modulo the two development capability classes at an arbitrary `RCLike` field.
+the seven clauses have a discharged correspondence: `Solution.sinTheta_proof` and
+`Solution.sinTwoTheta_ambient_proof`, and as of 2026-09-01 **neither carries a
+capability binder**: `ContinuousLinearMap.hasMinMaxLowerBoundEverywhere` and
+`ExactSinTheta.hasUnboundedSylvesterKyFan` are instances at every `RCLike` field, proved
+by transport (`TauCeti.ScalarTransport`).  Those two clauses are therefore discharged at
+exactly the Challenge's scalar scope, with nothing assumed beyond the source hypotheses.

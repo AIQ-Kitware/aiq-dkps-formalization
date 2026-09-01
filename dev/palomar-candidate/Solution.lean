@@ -314,15 +314,15 @@ variable {E F G K : Type v}
   [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
   [NormedAddCommGroup K] [InnerProductSpace 𝕜 K] [CompleteSpace K]
 
-/-- **The Challenge's `sin Θ` statement, discharged from the development.**
+/-- **The Challenge's `sin Θ` statement, discharged from the development at an
+arbitrary `RCLike` field.**
 
-The two binders are the development's proof capabilities, not source hypotheses:
-the unbounded Sylvester Ky Fan estimate and the min--max lower bound.  Both are
-instances at `ℝ` and at `ℂ`, so at either of the paper's fields this theorem is
-the Challenge statement with nothing assumed. -/
-theorem sinTheta_of_capabilities
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
+There are no capability binders: `ContinuousLinearMap.hasMinMaxLowerBoundEverywhere`
+and `ExactSinTheta.hasUnboundedSylvesterKyFan` are now instances at every `RCLike`
+field, proved by transport through `TauCeti.ScalarTransport`.  So this is the
+Challenge's `sinTheta` statement with nothing assumed beyond the source
+hypotheses. -/
+theorem sinTheta_proof
     (N : UINorm)
     {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {Λ₁ : G →ₗ.[𝕜] G}
     {E₀ : F →L[𝕜] E} {F₀ : K →L[𝕜] E} {F₁ : G →L[𝕜] E} {R : F →L[𝕜] E}
@@ -359,9 +359,7 @@ development**, at an arbitrary reducing subspace and the full source gap.
 `δ ‖sin 2Θ‖ ≤ 2 ‖H‖`, with the angle read as the projector difference between
 `U` and its mirror image in `V` -- which is exactly the Challenge's
 `ambientDoubleSine`. -/
-theorem sinTwoTheta_ambient_of_capabilities
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [HasUnboundedSylvesterKyFan.{u, v} 𝕜]
+theorem sinTwoTheta_ambient_proof
     (N : UINorm) {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
     {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
     {δ : ℝ} (hδ : 0 < δ)
@@ -398,19 +396,16 @@ theorem sinTwoTheta_ambient_of_capabilities
 
 end SinTwoThetaAmbient
 
-/-! ## 6. The two capability classes at the paper's fields -/
+/-! ## 6. The two capability classes, at every `RCLike` field -/
 
 section Capabilities
 
-/-- Both capabilities are instances at `ℂ`. -/
-example : ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} ℂ := inferInstance
+/-- The min--max lower bound, at an arbitrary `RCLike` field. -/
+example (𝕜 : Type u) [RCLike 𝕜] :
+    ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜 := inferInstance
 
-example : HasUnboundedSylvesterKyFan.{0, v} ℂ := inferInstance
-
-/-- And at `ℝ`. -/
-example : ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{0, v} ℝ := inferInstance
-
-example : HasUnboundedSylvesterKyFan.{0, v} ℝ := inferInstance
+/-- The unbounded Sylvester Ky Fan estimate, likewise. -/
+example (𝕜 : Type u) [RCLike 𝕜] : HasUnboundedSylvesterKyFan.{u, v} 𝕜 := inferInstance
 
 end Capabilities
 
@@ -420,17 +415,17 @@ This file is a **feasibility candidate**, not a finished submission.  The honest
 state of each printed clause is recorded here and, clause by clause with the
 paper, in `dev/palomar-section-two-challenge-statement-audit.md`.
 
-### Discharged
+### Discharged, unconditionally, at an arbitrary `RCLike` field
 
-* **`sinTheta`** — `sinTheta_of_capabilities` *is* the Challenge statement,
-  proved from `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`.
-* **`sinTwoTheta`, ambient clause** — `sinTwoTheta_ambient_of_capabilities`,
-  proved from `TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`
+* **`sinTheta`** — `sinTheta_proof` *is* the Challenge statement, proved from
+  `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`.
+* **`sinTwoTheta`, ambient clause** — `sinTwoTheta_ambient_proof`, proved from
+  `TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`
   at an *arbitrary reducing* subspace, which is the source's own scope.
 
-Both carry the two capability binders, which are instances at `ℝ` and at `ℂ`.
+Neither carries a capability binder any more; see below.
 
-### The scalar field
+### The scalar field: closed
 
 `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` and
 `HasUnboundedSylvesterKyFan 𝕜` are proof capabilities of the development, not
@@ -439,23 +434,35 @@ source hypotheses, and they never appear in the Challenge.  Both quantify over
 splitting on `RCLike.I_eq_zero_or_im_I_eq_one` and transporting a Hilbert space
 along a scalar-field isomorphism.
 
-* `I = 0` branch: `InnerProductSpace.rclikeToReal 𝕜 E` already supplies the real
-  structure, and `𝕜`-linearity and `ℝ`-linearity coincide because the `𝕜`-scalars
-  *are* the real ones, so ranks -- hence approximation numbers -- agree.
-* `im I = 1` branch: Mathlib has no counterpart.  The `ℂ`-module structure has to
-  be built from `RCLike.complexRingEquiv` through `Module.compHom`, and the
-  branch cannot be routed through `ℝ` instead: real and complex rank differ by a
-  factor two, so approximation numbers would not agree.
+**Both are now instances at every `RCLike` field**, and the two routes that were
+weighed are settled in favour of the first: proving the classes once is smaller
+than dispatching each theorem, needs the same transport either way, and leaves
+the development's own generic Section 2 surface owing nothing.
 
-Either way, what must transport is the same list -- `→L`, `→ₗ.`, rank and
-approximation numbers, `IsSelfAdjoint`, the quadratic-form bounds,
-`realSpectrum`, and the Ky Fan gauge.
+The transport is one construction, used twice.
+`TauCeti.RCLikeIso 𝕜 𝕂` is a field isomorphism fixing the reals and `I`, built
+from Mathlib's `RCLike.realRingEquiv` and `RCLike.complexRingEquiv`;
+`TauCeti.ScalarTransport e E` is `E` with the `𝕂`-structure `e` induces, which
+changes the scalar action and the field the inner product takes values in and
+changes **nothing else** -- not the vectors, not the additive group, not the
+topology, not the norm.  So subspaces keep their carriers, operators keep their
+functions and their operator norms, and `Module.rank` -- hence every
+approximation number -- is unchanged.  That last point is why restriction of
+scalars (`InnerProductSpace.rclikeToReal`) is *not* the right construction here:
+over a complex-like `𝕜` it halves the scalars, doubling the rank and changing the
+singular-value sequence.
 
-**Of the two routes for the Challenge, proving the two class instances once is
-the smaller.**  Dispatching each Challenge theorem to its fixed-field endpoints
-instead needs exactly the same transport, repeated per theorem and specialized to
-each theorem's data, and it would leave the development's own generic Section 2
-surface still owing it.
+* `ForTauCeti/Analysis/RCLike/ScalarTransport.lean` -- the field isomorphism and
+  the transport, with subspaces, orthogonal complements, orthogonal projections,
+  bounded operators (function, norm, adjoint, self-adjointness), `Module.rank`,
+  and partial maps (domain, function, adjoint, self-adjointness).
+* `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/ScalarTransport.lean` --
+  approximation numbers, linear independence and spans, and hence
+  `ContinuousLinearMap.hasMinMaxLowerBoundEverywhere`.
+* `DavisKahan/Sylvester/ScalarTransport.lean` -- finite Ky Fan gauges, the
+  operator-form semibounds, the real resolvent set and spectrum, the
+  three-constructor separation, the domain-aware Sylvester equation, and hence
+  `ExactSinTheta.hasUnboundedSylvesterKyFan`.
 
 ### Open correspondences
 

@@ -301,10 +301,18 @@ topics:
   modules:
   - Topology.ApproxMinimizer
   - Topology.Berge
+# T24 carried one module -- the min--max property over `ℝ`, obtained by
+# complexification.  The two `ScalarTransport` modules finish the same job: they
+# take that property from `ℝ` and `ℂ` to EVERY `RCLike` field, so the class
+# `HasMinMaxLowerBoundEverywhere` stops being a hypothesis.  They sit here rather
+# than in a topic of their own because a new topic has no roadmap entry, and
+# roadmap entries are the maintainer's to add.
 - id: T24
-  title: Real approximation numbers by complexification
+  title: Approximation numbers at every RCLike field, by complexification and scalar transport
   modules:
+  - Analysis.RCLike.ScalarTransport
   - Analysis.OperatorIdeal.ApproximationNumber.MinMaxReal
+  - Analysis.OperatorIdeal.ApproximationNumber.ScalarTransport
 - id: T26a
   title: 'Discrete spectra: compact self-adjoint operators classified by eigenspace dimensions, and the
     enumeration of an unbounded locally finite set'

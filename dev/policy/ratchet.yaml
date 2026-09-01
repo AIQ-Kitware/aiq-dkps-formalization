@@ -45,6 +45,25 @@ rules:
   # 23 of them.  That is the shape the reduction takes: exposures go when the
   # thing needing them goes, not when someone deletes attributes.
   #
+  # 2026-09-01: the count rose to 176, and the ten are named here because a rise
+  # is the thing this ratchet exists to notice.  They are in
+  # `Analysis/RCLike/ScalarTransport.lean`, which transports a Hilbert space
+  # along an isomorphism of `RCLike` fields.  Every one is on a definitional
+  # carrier -- the type synonym `ScalarTransport` and the identity maps `of` and
+  # `out` into it, and the six object transfers `submodule`, `submoduleSymm`,
+  # `clm`, `clmEquiv`, `addEquiv`, `domainOut`, `pmap`, `homeomorph` -- and the
+  # module's exported facts about them are `rfl`, which is the whole content of
+  # a transport: the transported object *is* the original.  All ten were
+  # measured the way the 2026-08-27 entry describes: deleted, rebuilt, and
+  # restored only where the compiler named them.  It named all ten.
+  #
+  # This is a rise, not a cleanup debt, and the alternative was to put reusable
+  # Tau-Ceti-bound mathematics in the paper package to keep a number still.  If
+  # the maintainer prefers that trade, moving the file is a one-line change.
+  # It is the only baseline this pass moved: the other two red gates
+  # (`check_tauceti_readiness`, `check_tauceti_roadmap_topics`) are back at
+  # exactly their prior counts.
+  #
   # **This rule is above its maximum today and that is the correct report.**  Do
   # not raise the maximum to make the suite green.
   - id: per-declaration-expose

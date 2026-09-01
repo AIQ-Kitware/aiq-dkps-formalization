@@ -336,11 +336,27 @@ placeholders in `Challenge/DavisKahan1970/Conformance.lean`.
 ## 9. Verdict
 
 ```
-PRODUCTION COMPLETE / PALOMAR FEASIBILITY OPEN
+PRODUCTION COMPLETE (one clause repaired 2026-08-31) / PALOMAR IN PROGRESS
 ```
 
 All source mathematics and the 29/29 certification are complete, reviewed result
 by result.
+
+**Amended 2026-08-31.**  Section 8 of this report said the review was finished.
+It was not: the Palomar statement audit, written afterwards against the printed
+statements rather than against this certificate, found a defect this review had
+missed.  `S2-tan-theta`'s directed clause was witnessed by theorems whose Ritz
+compression is **bounded**, and the Appendix to Section 6 says of the tangent
+theorem specifically that both `A₀` and `Λ₁` may be unbounded.  The certificate
+could not see it because that scope atom carried no `type_requirements` -- the
+only Section 2 scope atom that carried none.  Repaired by
+`tanTheta_directed_unboundedRitz_paperUINorm_{complex,real}`, promoted from the
+Appendix-scope Ky Fan estimates that already existed on both fields; the atom now
+requires an `UnboundedRitzPair` and forbids the bounded-compression
+`UnboundedTrialBlock`; regressions both ways are in the checker tests.  29/29 is
+restored on the repair, not on the argument.  The lesson is recorded because it
+generalizes: *a scope atom with no compiler-checkable requirement is not
+certified, it is asserted.*
 
 Palomar is **not blocked** -- that verdict, twice given and twice for a different
 wrong reason, is retracted.  A four-theorem Challenge compiles inside the policy
@@ -349,7 +365,46 @@ most at risk of hiding a weakening -- the unitarily invariant norm -- holds by
 `rfl`.  The first draft's four statements were *not* the paper's, and the
 clause-by-clause audit that found that is now maintained alongside the candidate;
 the repaired statements compile, and two of the seven printed clauses are
-discharged from the development.  What is open is finishing the Solution: one
-scalar-field transport, one production generalization from a spectral to a
-reducing subspace, and the tangent correspondences.  None of them is a policy or
-dependency obstruction.
+discharged from the development.
+
+What is open is finishing the Solution, and it is three named pieces of
+mathematics, none of them a policy or dependency obstruction:
+
+1. **The `sin 2Θ` directed generalization**, from a spectral subspace and a
+   bounded trial compression to an arbitrary reducing subspace and a partial one.
+2. **The tangent correspondences** for `tan Θ` and `tan 2Θ`, with their derived
+   no-pole facts.
+
+The third — the scalar-field transport — is **done**.  `RCLike` is an open class
+with exactly two models, and the two development capabilities that every generic
+Section 2 statement carried as binders,
+`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` and
+`ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜`, are now **instances at every
+`RCLike` field**, each depending only on `propext`, `Classical.choice` and
+`Quot.sound`.  Three new modules carry it:
+
+| module | carries |
+| --- | --- |
+| `ForTauCeti/Analysis/RCLike/ScalarTransport.lean` | `RCLikeIso`, and `ScalarTransport e E` — `E` with the induced `𝕂`-structure — with subspaces, `ᗮ`, orthogonal projections, bounded operators (function, norm, adjoint, self-adjointness), `Module.rank`, partial maps (domain, function, adjoint, self-adjointness) |
+| `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/ScalarTransport.lean` | approximation numbers, linear independence, spans; the min–max instance |
+| `DavisKahan/Sylvester/ScalarTransport.lean` | finite Ky Fan gauges, operator-form semibounds, the real resolvent set and spectrum, the three-constructor separation, the domain-aware Sylvester equation; the Sylvester instance |
+
+The construction moves the scalar action and the field the inner product takes
+values in and nothing else — not the vectors, the additive group, the topology or
+the norm — which is exactly why ranks and singular values survive it.
+Restriction of scalars (`InnerProductSpace.rclikeToReal`) would not do: over a
+complex-like `𝕜` it halves the scalars, doubling `Module.rank` and changing every
+approximation number.
+
+The immediate effect on the Palomar candidate is that its two discharged
+clauses, `sinTheta_proof` and `sinTwoTheta_ambient_proof`, now carry **no**
+capability binders: they are the Challenge statements at an arbitrary `RCLike`
+field with nothing assumed beyond the source hypotheses.
+
+And then the Comparator layout: the candidate's `Solution.lean` imports
+`Challenge`, which is right for a bridge file and wrong for a submission.  A
+Comparator submission needs the Solution to redeclare the four advertised names
+independently, at the same types, with real proofs.
+
+**Nothing has been submitted to or registered with Palomar, and nothing will be
+until the Comparator is green.**
