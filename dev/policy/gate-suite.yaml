@@ -24,6 +24,7 @@ unavailable_exit_code: 3
 slow:
   - check_comparator_signatures
   - foundations
+  - statement-pins-dk
   - statement-pins-yws
   - statement-pins-quench
 
@@ -105,6 +106,11 @@ gates:
               "dev/davis-kahan-hidden-foundations.json",
               "-o", "dev/davis-kahan-hidden-foundations-status.md", "--check"]
     description: "the generated foundation-status view is current"
+
+  - name: statement-pins-dk
+    command: ["aiq-lean", "alignment", "check",
+              "dev/davis-kahan-1970-full-source-census.json"]
+    description: "every Davis--Kahan declaration a headline semantic review accepted still has the elaborated type it accepted"
 
   - name: statement-pins-yws
     command: ["aiq-lean", "alignment", "check",

@@ -82,7 +82,8 @@ YuWangSamworth2015.theorem2_sinTheta {p d r s : ℕ}
 Structural type hash `3500685691`, printed-type hash `61df0a9f00908bbe`.
 
 Statement closure: 10 project constant(s) unfolded, 0 project leaf/leaves, 36 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `YuWangSamworth2015.IsEigenvectorBlock`, `TauCeti.sinThetaFrobenius`, `YuWangSamworth2015.SourcePopulationGap`, `TauCeti.UnitarilyInvariantSeminorm.frobenius`, `TauCeti.sinThetaMap`, `YuWangSamworth2015.PopulationBoundaryGap`, `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.complementaryProjection`, `TauCeti.projection`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.UnitarilyInvariantSeminorm`, `TauCeti.complementaryProjection`, `TauCeti.projection`
+Dictionary definitions this statement never reaches: `TauCeti.principalSines`
 Boundary vocabulary: `Nat`, `LinearMap`, `Real`, `RingHom.id`, `EuclideanSpace`, `Fin`, `ENNReal`, `LinearMap.IsSymmetric`, `Eq`, `Submodule.span`, `Set.range`, `Subtype`, `Submodule`, `Real.sqrt`, `Nat.cast`, `ContinuousLinearMap`, `LinearEquiv`, `LinearMap.toContinuousLinearMap`, `And`, `Orthonormal`, `LinearMap.IsSymmetric.eigenvalues`, `RCLike`, `NormedAddCommGroup`, `InnerProductSpace`, `FiniteDimensional`, `Submodule.HasOrthogonalProjection`, `Or`, `Finset.sum`, `Module.finrank`, `Finset.univ`, `OrthonormalBasis`, `stdOrthonormalBasis`, `LinearIsometryEquiv`, `LinearMap.comp`, `Submodule.orthogonal`, `Submodule.starProjection`
 
 <details><summary>Statement closure tree</summary>
@@ -279,7 +280,7 @@ YuWangSamworth2015.theorem2_alignedFrame {p d r s : ℕ}
 Structural type hash `1136898647`, printed-type hash `eca00f43b9afb1ea`.
 
 Statement closure: 6 project constant(s) unfolded, 0 project leaf/leaves, 33 boundary constant(s).
-**Project constants in the statement closure that the local semantic dictionary does not disclose:** `YuWangSamworth2015.IsEigenvectorBlock`, `YuWangSamworth2015.SourcePopulationGap`, `YuWangSamworth2015.PopulationBoundaryGap`, `TauCeti.UnitarilyInvariantSeminorm.frobenius`, `TauCeti.UnitarilyInvariantSeminorm`
+**Project constants in the statement closure that the local semantic dictionary does not disclose:** `TauCeti.UnitarilyInvariantSeminorm.frobenius`, `TauCeti.UnitarilyInvariantSeminorm`
 Boundary vocabulary: `Nat`, `LinearMap`, `Real`, `RingHom.id`, `EuclideanSpace`, `Fin`, `ENNReal`, `LinearMap.IsSymmetric`, `Eq`, `Exists`, `Matrix`, `And`, `Submonoid`, `Matrix.orthogonalGroup`, `Real.sqrt`, `Finset.sum`, `Finset.univ`, `Nat.cast`, `ContinuousLinearMap`, `LinearEquiv`, `LinearMap.toContinuousLinearMap`, `Orthonormal`, `LinearMap.IsSymmetric.eigenvalues`, `Or`, `RCLike`, `NormedAddCommGroup`, `InnerProductSpace`, `FiniteDimensional`, `Module.finrank`, `OrthonormalBasis`, `stdOrthonormalBasis`, `LinearIsometryEquiv`, `LinearMap.comp`
 
 <details><summary>Statement closure tree</summary>
