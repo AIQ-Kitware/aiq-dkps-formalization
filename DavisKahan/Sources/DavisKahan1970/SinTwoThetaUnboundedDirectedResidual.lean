@@ -416,6 +416,13 @@ an artefact of the cutoff machinery, which
 `DavisKahan.sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing` now
 removes.  These two are the same statements with the same proofs. -/
 
+/-- **Davis--Kahan 1970, the directed half of the `sin 2Θ` theorem for an
+unbounded self-adjoint operator, Ky Fan form, at an arbitrary reducing
+subspace.**
+
+`δ · kyFan_k (sin 2Θ₀) ≤ 2 · kyFan_k R` with `R = A E₀ - E₀ A₀` the printed
+residual, `U` any subspace reducing `A`, and the separating interval allowed to
+be half-infinite. -/
 theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFan_complex
     (hA : IsSelfAdjoint A)
     {U : Submodule ℂ H} [U.HasOrthogonalProjection]
@@ -507,6 +514,12 @@ theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_kyFa
     _ ≤ 2 * kyFanApproximationGauge k R := by gcongr
 
 
+/-- **Davis--Kahan 1970, the directed half of the `sin 2Θ` theorem for an
+unbounded self-adjoint operator, at every source unitarily invariant norm and at
+an arbitrary reducing subspace.**
+
+`δ N(sin 2Θ₀) ≤ 2 N(R)` with the printed residual and the printed factor two.
+The trial subspace need only reduce `A`; nothing selects it spectrally. -/
 theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
     (hA : IsSelfAdjoint A)

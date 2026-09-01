@@ -270,6 +270,15 @@ topics:
   - Analysis.InnerProductSpace.Residual.Ritz
   - Analysis.InnerProductSpace.Residual.TrialMap
   - Analysis.InnerProductSpace.DoubleAngle.Vector
+  # The Appendix to Section 6 pole exclusion, and the cutoff families that supply
+  # its `Omega_tau -> I`.  `SpectralCutoff` gives the family of a spectral
+  # half-line; `ReducingCutoff` gives it for an arbitrary reducing subspace, from
+  # the spectral bands of that subspace's own restriction, which is what removes
+  # the spectral selection from the unbounded sin-2-Theta and tan-2-Theta
+  # endpoints.
+  - Analysis.InnerProductSpace.DoubleAngle.UnboundedPole
+  - Analysis.InnerProductSpace.DoubleAngle.SpectralCutoff
+  - Analysis.InnerProductSpace.DoubleAngle.ReducingCutoff
   - Analysis.InnerProductSpace.BoundedOperator.Projector
   - Analysis.InnerProductSpace.BoundedOperator.SinTheta
   - Analysis.InnerProductSpace.SpectralOrder.Real

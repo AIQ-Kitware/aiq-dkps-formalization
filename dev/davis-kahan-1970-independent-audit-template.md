@@ -1209,7 +1209,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan.sinTwoTheta_addBounded_gauge_of_formGap`
 
-Source location candidates: `DavisKahan/DoubleAngle/UnboundedIdealFormGap.lean:325`
+Source location candidates: `DavisKahan/DoubleAngle/UnboundedIdealFormGap.lean:502`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1499,7 +1499,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:262`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:263`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1511,7 +1511,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:414`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:578`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1577,7 +1577,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:466`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:630`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

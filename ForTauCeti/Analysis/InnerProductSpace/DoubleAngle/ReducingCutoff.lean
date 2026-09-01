@@ -228,6 +228,8 @@ section Reducing
 
 variable {A : H →ₗ.[ℂ] H} {U : Submodule ℂ H} [U.HasOrthogonalProjection]
 
+/-- A subspace admitting an orthogonal projection inside a complete ambient space
+is itself complete; reinstalled in this section over `ℂ`. -/
 local instance instCompleteSpaceCoeReducingCutoffC
     (W : Submodule ℂ H) [W.HasOrthogonalProjection] : CompleteSpace W :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
