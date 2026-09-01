@@ -145,6 +145,44 @@ one operator-theory layer is worth making scalar-generic at all, given that the
 `ℝ` instance would have to reduce to the descent by theorem anyway.  Answer that
 before starting any of the three.
 
+## What Mathlib's `RCLike` dispatch API does and does not buy (checked 2026-08-31)
+
+The obvious idea for removing the capability classes is to **dispatch**: given
+`[RCLike 𝕜]`, split into the real and the complex case and call the fixed-field
+theorem.  Current Mathlib does support the scalar half of that:
+
+* `RCLike.I_eq_zero_or_im_I_eq_one : (I : K) = 0 ∨ im (I : K) = 1`;
+* `RCLike.realRingEquiv` / `RCLike.realLinearIsometryEquiv` on the first branch
+  (`Mathlib/Analysis/RCLike/Basic.lean`);
+* `RCLike.complexRingEquiv` / `RCLike.complexLinearIsometryEquiv` on the second
+  (`Mathlib/Analysis/Complex/Basic.lean`).
+
+So the earlier reading -- "`RCLike` is open, therefore no dispatch exists" -- was
+wrong about Mathlib, and it is recorded here so it is not repeated.  It is,
+however, **not** what unblocks the three families, for two reasons.
+
+*The blocker is in the statement, not the proof.*  Dispatch would let a proof
+branch, but the theorem has to be **stated** over `𝕜` first, and its conclusion
+names `paperTanAngleOperator`, `paperSinTwoAngleOperator`, `paperAbsTanTwoAngleOperator`
+and the spectral selection.  Those live on the Hilbert space, exist over `ℂ`, and
+reach `ℝ` by descent.  There is nothing to dispatch until a `𝕜`-generic angle
+vocabulary exists, and that is the functional-calculus and spectral-measure
+question the rest of this file traces.  `sin Θ` is generic precisely because its
+conclusion is a scalar-generic operator expression, `(I - F₀F₀⋆)E₀`.
+
+*The transport is a development, not a facade.*  Even with a
+`𝕜 ≃ₗᵢ[ℝ] ℂ`, using it means carrying an `InnerProductSpace 𝕜 E` structure, its
+`LinearPMap`s, its spectral subspaces, its `PaperUnitaryInvariantNorm` membership
+and gauge, and its `FormBoundedSylvesterGap` across a scalar-field isomorphism.
+That is a second complexification-scale layer, alongside the `ℝ → ℂ` one this
+repository already has -- and the `ℝ` branch would then reach the fixed-field
+theorem through *two* transports rather than one.
+
+Neither observation says the generic endpoints are impossible.  Both say the
+recommended order above is unchanged: settle whether one scalar-generic
+projection-valued spectral measure is worth building, before starting any of the
+three.
+
 ## Not established
 
 That the *analysis* generalizes once the objects do.  These are the first

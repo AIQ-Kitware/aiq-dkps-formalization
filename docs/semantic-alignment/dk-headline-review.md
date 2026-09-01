@@ -2,7 +2,7 @@
 
 This packet is generated from curated semantic-review fields in the source censuses. Human-written Lean headers are structural source evidence. Compiler output, when present, is elaborator-backed evidence about the Lean surface. The source-to-Lean correspondence remains the census author's explicit review claim.
 
-**Compiler imports:** `DavisKahan.All`, `ForTauCeti.Analysis.InnerProductSpace.AngleGeometry`, `ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz`, `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core`
+**Compiler imports:** `DavisKahan.Sources.DavisKahan1970.SineTheta.PaperSurface`, `DavisKahan.Sources.DavisKahan1970.SineTheta.ScalarGeneric`, `DavisKahan.Sources.DavisKahan1970.GeneralSinThetaExtensions`, `DavisKahan.Sources.DavisKahan1970.GeneralSinTheta`, `DavisKahan.Sources.DavisKahan1970.SineTheta.Norms.UnitaryInvariantNorm`, `DavisKahan.Sylvester.ScalarGeneric`, `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.FiniteRestriction`, `ForTauCeti.Analysis.InnerProductSpace.LinearPMap.Closed`, `DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbient`, `DavisKahan.Sources.DavisKahan1970.TanThetaUnboundedAmbientReal`, `DavisKahan.Sources.DavisKahan1970.TanThetaDirectedUnbounded`, `DavisKahan.Sources.DavisKahan1970.DirectedReal`, `Challenge.DavisKahan1970.Conformance`, `DavisKahan.Sources.DavisKahan1970.TanThetaAmbient`, `DavisKahan.Sources.DavisKahan1970.ScalarGenericFinite`, `DavisKahan.Sources.DavisKahan1970.Section2TanThetaPerturbation`, `DavisKahan.Sources.DavisKahan1970.PartIII`, `ForTauCeti.Analysis.InnerProductSpace.AngleGeometry`, `ForTauCeti.Analysis.InnerProductSpace.Residual.Ritz`, `DavisKahan.Geometry.Halmos.GenericRotationPredicates`, `DavisKahan.Geometry.Angle.PaperTanAngle`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidual`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaUnboundedDirectedResidualReal`, `DavisKahan.Sources.DavisKahan1970.SinTwoTheta`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbientUnbounded`, `DavisKahan.Sources.DavisKahan1970.SinTwoThetaAmbient`, `DavisKahan.Sources.DavisKahan1970.AmbientReal`, `DavisKahan.FiniteDimensional.Residual.AngleEmbeddings`, `DavisKahan.BoundedOperator.Compat`, `DavisKahan.Geometry.Angle.PaperDoubleAngle`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExact`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedExactReal`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedAmbientExact`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaReflectionAmbient`, `DavisKahan.Sources.DavisKahan1970.TanTwoThetaBranchFree`, `DavisKahan.DoubleAngle.TanTwoThetaBranchFree`, `ForTauCeti.Analysis.OperatorIdeal.ApproximationNumber.Core`, `DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary`, `ForTauCeti.Analysis.InnerProductSpace.BoundedOperator.Projector`, `ForTauCeti.Analysis.InnerProductSpace.SinTheta.DirectedBounds`
 
 ## C. Davis and W. M. Kahan, The Rotation of Eigenvectors by a Perturbation. III, SIAM J. Numer. Anal. 7(1), 1970, 1–46.: Davis--Kahan single-angle sin theta theorem
 
@@ -27,76 +27,78 @@ The Section 2 sin-theta theorem: interval/exterior spectral separation controls 
 
 ### Canonical Lean declarations
 
-#### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`
+#### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex`
 
 **Human-written Lean statement**
 
-`DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:253`
+`DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:343`
 
 ~~~~lean
-variable {𝕜 : Type u} [RCLike 𝕜]
 variable {E F G H : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
-  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
-  [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H]
-theorem sinTheta_unbounded_formGap_paperUINorm_rclike
-    [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} 𝕜]
-    [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.{u, v} 𝕜]
+  [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℂ G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+theorem sinTheta_unbounded_formGap_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
-    (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
-    (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E)
+    (A : E →ₗ.[ℂ] E) (A₀ : F →ₗ.[ℂ] F) (Λ₁ : G →ₗ.[ℂ] G)
+    (E₀ : F →L[ℂ] E) (F₀ : H →L[ℂ] E) (F₁ : G →L[ℂ] E) (R : F →L[ℂ] E)
     (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
     (htrial : IsTrialResidual A A₀ E₀ R)
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {δ : ℝ} (hδ : 0 < δ)
     (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
     (hR : N.Mem R) :
-    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
-      δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+    N.Mem ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
+      δ * N.gauge ((ContinuousLinearMap.id ℂ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
         N.gauge R
 ~~~~
 
-**Compiler-resolved type**
+**Compiler probe failed to resolve this declaration.**
+
+#### `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:457`
 
 ~~~~lean
-@DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜] {E F G H : Type u_2}
-  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E]
-  [inst_4 : NormedAddCommGroup F] [inst_5 : InnerProductSpace 𝕜 F] [inst_6 : CompleteSpace F]
-  [inst_7 : NormedAddCommGroup G] [inst_8 : InnerProductSpace 𝕜 G] [inst_9 : CompleteSpace G]
-  [inst_10 : NormedAddCommGroup H] [inst_11 : InnerProductSpace 𝕜 H] [inst_12 : CompleteSpace H]
-  [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜] [TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (Λ₁ : G →ₗ.[𝕜] G)
-  (E₀ : F →L[𝕜] E) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E) (R : F →L[𝕜] E),
-  IsSelfAdjoint A →
-    IsSelfAdjoint A₀ →
-      IsSelfAdjoint Λ₁ →
-        DavisKahan1970.IsTrialResidual A A₀ E₀ R →
-          DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ →
-            ∀ {δ : ℝ},
-              0 < δ →
-                TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A₀ Λ₁ δ →
-                  N.Mem R →
-                    N.Mem ((ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ∧
-                      δ * N.gauge ((ContinuousLinearMap.id 𝕜 E - F₀ ∘SL ContinuousLinearMap.adjoint F₀) ∘SL E₀) ≤
-                        N.gauge R
+variable {E F G H : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace ℝ G] [CompleteSpace G]
+  [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
+theorem sinTheta_unbounded_formGap_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    (A : E →ₗ.[ℝ] E) (A₀ : F →ₗ.[ℝ] F) (Λ₁ : G →ₗ.[ℝ] G)
+    (E₀ : F →L[ℝ] E) (F₀ : H →L[ℝ] E) (F₁ : G →L[ℝ] E) (R : F →L[ℝ] E)
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+    (htrial : IsTrialResidual A A₀ E₀ R)
+    (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap A₀ Λ₁ δ)
+    (hR : N.Mem R) :
+    N.Mem ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ∧
+      δ * N.gauge ((ContinuousLinearMap.id ℝ E - F₀ ∘L F₀.adjoint) ∘L E₀) ≤
+        N.gauge R
 ~~~~
+
+**Compiler probe failed to resolve this declaration.**
 
 ### Supporting scope declarations
 
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex` — resolved; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real` — resolved; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike` — resolved; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike` — resolved; source located
-- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_ofComponents_rclike` — resolved; source located
-- `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike` — resolved; source located
-- `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` — resolved; source located
-- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_idealFamily_rclike` — resolved; source located
-- `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_complex` — resolved; source located
-- `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_real` — resolved; source located
-- `TauCeti.DavisKahan1970.sinTheta_bounded_spectralSubspace_complex` — resolved; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike_conforms` — resolved; source located
-- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike_conforms` — resolved; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike` — unresolved; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike` — unresolved; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_ofComponents_rclike` — unresolved; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_intervalExterior_paperUINorm_rclike` — unresolved; source located
+- `DavisKahan1970.sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` — unresolved; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_idealFamily_rclike` — unresolved; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_complex` — unresolved; source located
+- `TauCeti.DavisKahan1970.sinTheta_unbounded_spectralSubspace_real` — unresolved; source located
+- `TauCeti.DavisKahan1970.sinTheta_bounded_spectralSubspace_complex` — unresolved; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike_conforms` — unresolved; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike_conforms` — unresolved; source located
+- `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike` — unresolved; source located
 
 ### Local semantic dictionary
 
@@ -104,168 +106,43 @@ theorem sinTheta_unbounded_formGap_paperUINorm_rclike
 
 Expands the compact trial-residual hypothesis into the trial isometry, domain transport, and exact residual identity R = A E0 - E0 A0.
 
-~~~~lean
-theorem DavisKahan1970.isTrialResidual_iff.{u, v} : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E F : Type v}
-  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : NormedAddCommGroup F]
-  [inst_4 : InnerProductSpace 𝕜 F] (A : E →ₗ.[𝕜] E) (A₀ : F →ₗ.[𝕜] F) (E₀ R : F →L[𝕜] E),
-  DavisKahan1970.IsTrialResidual A A₀ E₀ R ↔
-    TauCeti.DavisKahan.IsometricEmbedding E₀ ∧
-      ∃ (hdom : ∀ (x : ↥A₀.domain), E₀ ↑x ∈ A.domain), ∀ (x : ↥A₀.domain), ↑A ⟨E₀ ↑x, ⋯⟩ - E₀ (↑A₀ x) = R ↑x :=
-fun {𝕜} [RCLike 𝕜] {E F} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] A
-    A₀ E₀ R =>
-  { mp := fun h => ⟨h.isometry, Exists.intro h.mapsDomain h.residualEquation⟩,
-    mpr := fun a =>
-      And.casesOn a fun hE₀ right =>
-        Exists.casesOn right fun hdom heq => { isometry := hE₀, mapsDomain := hdom, residualEquation := heq } }
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `DavisKahan1970.isExactSpectralDecomposition_iff`
 
 Expands the compact exact-space hypothesis into isometric F0/F1 coordinates, orthogonality, completeness, domain transport, and A F1 = F1 Lambda1.
 
-~~~~lean
-theorem DavisKahan1970.isExactSpectralDecomposition_iff.{u, v} : ∀ {𝕜 : Type u} [inst : RCLike 𝕜] {E G H : Type v}
-  [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : CompleteSpace E]
-  [inst_4 : NormedAddCommGroup G] [inst_5 : InnerProductSpace 𝕜 G] [inst_6 : CompleteSpace G]
-  [inst_7 : NormedAddCommGroup H] [inst_8 : InnerProductSpace 𝕜 H] [inst_9 : CompleteSpace H] (A : E →ₗ.[𝕜] E)
-  (Λ₁ : G →ₗ.[𝕜] G) (F₀ : H →L[𝕜] E) (F₁ : G →L[𝕜] E),
-  DavisKahan1970.IsExactSpectralDecomposition A Λ₁ F₀ F₁ ↔
-    TauCeti.DavisKahan.IsometricEmbedding F₀ ∧
-      TauCeti.DavisKahan.IsometricEmbedding F₁ ∧
-        ContinuousLinearMap.adjoint F₀ ∘SL F₁ = 0 ∧
-          F₀ ∘SL ContinuousLinearMap.adjoint F₀ + F₁ ∘SL ContinuousLinearMap.adjoint F₁ = ContinuousLinearMap.id 𝕜 E ∧
-            ∃ (hdom : ∀ (y : ↥Λ₁.domain), F₁ ↑y ∈ A.domain), ∀ (y : ↥Λ₁.domain), ↑A ⟨F₁ ↑y, ⋯⟩ = F₁ (↑Λ₁ y) :=
-fun {𝕜} [RCLike 𝕜] {E G H} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E] [NormedAddCommGroup G]
-    [InnerProductSpace 𝕜 G] [CompleteSpace G] [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] [CompleteSpace H] A Λ₁ F₀
-    F₁ =>
-  {
-    mp := fun h =>
-      ⟨h.desiredIsometry,
-        ⟨h.complementIsometry, ⟨h.orthogonal, ⟨h.complete, Exists.intro h.mapsDomain h.intertwines⟩⟩⟩⟩,
-    mpr := fun a =>
-      And.casesOn a fun hF₀ right =>
-        And.casesOn right fun hF₁ right =>
-          And.casesOn right fun horth right =>
-            And.casesOn right fun hcomplete right =>
-              Exists.casesOn right fun hdom hintertwines =>
-                { desiredIsometry := hF₀, complementIsometry := hF₁, orthogonal := horth, complete := hcomplete,
-                  mapsDomain := hdom, intertwines := hintertwines } }
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm`
 
 Implementation structure behind the public theorem spelling UnitaryInvariantNorm: the dimension-coherent normalized unitary-invariant norm quantified over by Davis--Kahan.
 
-~~~~lean
-structure TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-number of parameters: 0
-fields:
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteNorm : (n : ℕ) →
-      TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.normalized : ((self.finiteNorm 1).gauge
-        (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) =
-      1
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.zero_pad : ∀ {n : ℕ} (x : Fin n → ℝ),
-      (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-          (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) =
-        (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
-constructor:
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.mk
-    (finiteNorm : (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)))
-    (normalized : ((finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1)
-    (zero_pad :
-      ∀ {n : ℕ} (x : Fin n → ℝ),
-        (finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-            (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) =
-          (finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x) :
-    TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan`
 
 Scalar-field proof capability used to keep one theorem generic over RCLike. The repository provides instances for both source scalar fields, R and C; this is implementation evidence rather than an additional paper hypothesis.
 
-~~~~lean
-class TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.{u, v} (𝕜 : Type u) [RCLike 𝕜] : Prop
-number of parameters: 2
-fields:
-  TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.out : ∀ {E F : Type v} [inst : NormedAddCommGroup E]
-      [inst_1 : InnerProductSpace 𝕜 E] [inst_2 : CompleteSpace E] [inst_3 : NormedAddCommGroup F]
-      [inst_4 : InnerProductSpace 𝕜 F] [inst_5 : CompleteSpace F] {A : E →ₗ.[𝕜] E} {B : F →ₗ.[𝕜] F},
-      IsSelfAdjoint A →
-        IsSelfAdjoint B →
-          ∀ {X C : F →L[𝕜] E} {δ : ℝ},
-            0 < δ →
-              TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A B δ →
-                TauCeti.LinearPMap.SylvesterEquation A B X C →
-                  ∀ (k : ℕ),
-                    δ * TauCeti.ApproximationNumber.kyFanApproximationGauge k X ≤
-                      TauCeti.ApproximationNumber.kyFanApproximationGauge k C
-constructor:
-  TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan.mk.{u, v} {𝕜 : Type u} [RCLike 𝕜]
-    (out :
-      ∀ {E F : Type v} [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace 𝕜 E] [inst_2 : CompleteSpace E]
-        [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] [inst_5 : CompleteSpace F] {A : E →ₗ.[𝕜] E}
-        {B : F →ₗ.[𝕜] F},
-        IsSelfAdjoint A →
-          IsSelfAdjoint B →
-            ∀ {X C : F →L[𝕜] E} {δ : ℝ},
-              0 < δ →
-                TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap A B δ →
-                  TauCeti.LinearPMap.SylvesterEquation A B X C →
-                    ∀ (k : ℕ),
-                      δ * TauCeti.ApproximationNumber.kyFanApproximationGauge k X ≤
-                        TauCeti.ApproximationNumber.kyFanApproximationGauge k C) :
-    TauCeti.DavisKahan.ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere`
 
 Approximation-number min--max capability needed by the universal norm machinery. It has proved R and C instances and is not an extra source restriction.
 
-~~~~lean
-class ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} (𝕜 : Type u) [RCLike 𝕜] : Prop
-number of parameters: 2
-fields:
-  ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.out : ∀ {E F : Type v} [inst : NormedAddCommGroup E]
-      [inst_1 : InnerProductSpace 𝕜 E] [CompleteSpace E] [inst_3 : NormedAddCommGroup F]
-      [inst_4 : InnerProductSpace 𝕜 F] [CompleteSpace F], ContinuousLinearMap.HasMinMaxLowerBound 𝕜 E F
-constructor:
-  ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.mk.{u, v} {𝕜 : Type u} [RCLike 𝕜]
-    (out :
-      ∀ {E F : Type v} [inst : NormedAddCommGroup E] [inst_1 : InnerProductSpace 𝕜 E] [CompleteSpace E]
-        [inst_3 : NormedAddCommGroup F] [inst_4 : InnerProductSpace 𝕜 F] [CompleteSpace F],
-        ContinuousLinearMap.HasMinMaxLowerBound 𝕜 E F) :
-    ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `LinearPMap`
 
 Mathlib's partial linear map: the repository representation of the paper's possibly unbounded self-adjoint operators. Dense domain, closed graph and self-adjointness are hypotheses of the theorems that need them, not fields of the carrier; the bundled DKPS record that once played this role was deleted on 2026-08-28.
 
-~~~~lean
-structure LinearPMap.{u_1, u_2, u_3, u_4} {R : Type u_1} {S : Type u_2} [Ring R] [Ring S] (σ : R →+* S) (E : Type u_3)
-  [AddCommGroup E] [Module R E] (F : Type u_4) [AddCommGroup F] [Module S F] : Type (max u_3 u_4)
-number of parameters: 11
-fields:
-  LinearPMap.domain : Submodule R E
-  LinearPMap.toFun : ↥self.domain →ₛₗ[σ] F
-constructor:
-  LinearPMap.mk.{u_1, u_2, u_3, u_4} {R : Type u_1} {S : Type u_2} [Ring R] [Ring S] {σ : R →+* S} {E : Type u_3}
-    [AddCommGroup E] [Module R E] {F : Type u_4} [AddCommGroup F] [Module S F] (domain : Submodule R E)
-    (toFun : ↥domain →ₛₗ[σ] F) : E →ₛₗ.[σ] F
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.LinearPMap.realSpectrum`
 
 Real spectrum of a self-adjoint partial/closed operator; the interval/exterior alternative itself remains literal in the canonical theorem.
 
-~~~~lean
-def TauCeti.LinearPMap.realSpectrum.{u, v} : {𝕜 : Type u} →
-  [inst : RCLike 𝕜] →
-    {E : Type v} → [inst_1 : NormedAddCommGroup E] → [inst_2 : InnerProductSpace 𝕜 E] → (E →ₗ.[𝕜] E) → Set ℝ :=
-fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A => (TauCeti.LinearPMap.realResolventSet A)ᶜ
-~~~~
+**Compiler probe failed to print this declaration.**
 
 ### Clause correspondence
 
@@ -281,6 +158,8 @@ fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] A
 | Infinite-dimensional and unbounded self-adjoint scope. | There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are `LinearPMap` values and the two expanded setup predicates carry the required domain conditions. | claimed_exact |
 
 **Review note.** The canonical review declaration is also the intended paper-display declaration. It names sinTheta₀ as a theorem parameter but gives its concrete projection-block formula by a literal equality hypothesis in the same signature, so the claim after the colon is a one-to-one rendering of the printed inequality without an opaque angle definition. Only the domain-heavy trial and exact-coordinate setup is bundled, and both bundles are fully expanded by characteristic theorems in the local semantic dictionary. The stronger generic theorem remains supporting evidence for norm-ideal membership and the implementation proof bridge. CANONICAL WITNESS CORRECTED 2026-08-31. The row named `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` as the exact source match. That was wrong on two counts: it carries only the bounded interval/exterior branch of the gap, while the source permits half-infinite separating intervals, and it drops the ideal-membership half of the conclusion. The canonical witness is now `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`, added the same day: scalar-generic over `RCLike`, unbounded `LinearPMap` ambient operator, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` (interval/exterior plus both ordered semibounded configurations), an arbitrary `PaperUnitaryInvariantNorm`, and both conclusions. It is proved by taking the gap directly into the Ky-Fan-to-paper-norm promotion the interval/exterior theorem already ran, so it is a repackaging rather than a new argument, and the interval/exterior form is now a one-line consequence of it. `..._complex_ofRCLike` and `..._real_ofRCLike` are the compiled conformance checks: each restates the corresponding fixed-field endpoint's type verbatim and discharges it by the generic theorem with no adapter. The fixed-field endpoints remain as corroborating full-source witnesses and the interval/exterior theorem as a presentation specialization. The two `RCLike` capability classes in the generic signature are proof capabilities with instances for both source fields, not printed source hypotheses. CONFORMANCE TIED BY NAME 2026-08-31. The `_ofRCLike` wrappers restate a type, and a restatement cannot notice if the declaration it mirrors changes. `..._ofRCLike_conforms` closes that: an equation between two constants elaborates only when both sides have the same type, so it asserts exactly that the restatement is the fixed-field endpoint's type, and `rfl` discharges it by proof irrelevance. It is a type-level check by design and says nothing about the two proofs.
+
+2026-08-31 (second pass): canonical declarations follow the result inventory's `canonical_evidence`. Demoted to supporting: DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike -- the scalar-generic form carries proof-capability instance binders that the printed statement does not, and the two fixed-field endpoints state the result at the paper's two fields with no such binder.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -328,28 +207,11 @@ theorem opNorm_starProjection_sub_le_of_coercive
     ‖(U.starProjection - W.starProjection : H →L[𝕜] H)‖ ≤ ‖B - A‖ / g
 ~~~~
 
-**Compiler-resolved type**
-
-~~~~lean
-@Submodule.opNorm_starProjection_sub_le_of_coercive : ∀ {𝕜 : Type u_1} {H : Type u_2} [inst : RCLike 𝕜]
-  [inst_1 : NormedAddCommGroup H] [inst_2 : InnerProductSpace 𝕜 H] [CompleteSpace H] {A B : H →L[𝕜] H},
-  (↑A).IsSymmetric →
-    (↑B).IsSymmetric →
-      ∀ {U W : Submodule 𝕜 H} [inst_4 : U.HasOrthogonalProjection] [inst_5 : W.HasOrthogonalProjection],
-        A.Reduces U →
-          B.Reduces W →
-            ∀ {c g : ℝ},
-              0 < g →
-                (∀ x ∈ U, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re (inner 𝕜 (A x) x)) →
-                  (∀ x ∈ Uᗮ, RCLike.re (inner 𝕜 (A x) x) ≤ c * ‖x‖ ^ 2) →
-                    (∀ x ∈ W, (c + g) * ‖x‖ ^ 2 ≤ RCLike.re (inner 𝕜 (B x) x)) →
-                      (∀ x ∈ Wᗮ, RCLike.re (inner 𝕜 (B x) x) ≤ c * ‖x‖ ^ 2) →
-                        ‖U.starProjection - W.starProjection‖ ≤ ‖B - A‖ / g
-~~~~
+**Compiler probe failed to resolve this declaration.**
 
 ### Supporting scope declarations
 
-- `TauCeti.opNorm_spectralSubspace_sub_le` — resolved; source located
+- `TauCeti.opNorm_spectralSubspace_sub_le` — unresolved; source located
 
 ### Clause correspondence
 
@@ -381,72 +243,133 @@ The Section 2 tan-theta theorem: an ordered one-sided gap plus the Rayleigh--Rit
 
 ### Canonical Lean declarations
 
-#### `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike`
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex`
 
 **Human-written Lean statement**
 
-`DavisKahan/Sources/DavisKahan1970/ScalarGenericFinite.lean:73`
+`DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean:511`
 
 ~~~~lean
-variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E F : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
-theorem tanTheta_directed_finiteDimensional_paperUINorm_rclike
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
+  [CompleteSpace E]
+theorem tanTheta_ambient_unboundedRitz_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
-    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : IsInvariant A U)
-    (X : F →ₗᵢ[𝕜] E)
-    (_hrank : Module.finrank 𝕜 F = Module.finrank 𝕜 U)
-    {β α δ : ℝ} (hβα : β ≤ α) (hδ : 0 < δ)
-    (hCompressionSpectrum :
-      SpectrumIn (compression A X) ⊤ (Set.Icc β α))
-    (hUnwantedSpectrum : SpectrumIn A Uᗮ (Set.Ici (α + δ)))
-    (tanTheta0 : F →ₗ[𝕜] E)
-    (htan : tanTheta0.singularValues =
-      principalTangents (approximateSubspace X) U)
-    (hR : N.Mem (ritzResidual A X).toContinuousLinearMap) :
-    N.Mem tanTheta0.toContinuousLinearMap ∧
-      δ * N.gauge tanTheta0.toContinuousLinearMap ≤
-        N.gauge (ritzResidual A X).toContinuousLinearMap
+    {A : E →ₗ.[ℂ] E}
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace U]
+    (D : DavisKahan.UnboundedRitzPair A U)
+    (hV : DavisKahan.ReducingComplement A V)
+    (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤
+        RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
+    (hResidual : D.trial.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (hMem : N.Mem H) :
+    N.Mem (paperTanAngleOperatorC U V) ∧
+      delta * N.gauge (paperTanAngleOperatorC U V) ≤ N.gauge H
 ~~~~
 
-**Compiler-resolved type**
+**Compiler probe failed to resolve this declaration.**
+
+#### `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbientReal.lean:392`
 
 ~~~~lean
-@TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜]
-  {E F : Type u_2} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E]
-  [inst_4 : NormedAddCommGroup F] [inst_5 : InnerProductSpace 𝕜 F] [inst_6 : FiniteDimensional 𝕜 F]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ[𝕜] E},
-  A.IsSymmetric →
-    ∀ {U : Submodule 𝕜 E} [inst_7 : U.HasOrthogonalProjection],
-      TauCeti.IsInvariant A U →
-        ∀ (X : F →ₗᵢ[𝕜] E),
-          Module.finrank 𝕜 F = Module.finrank 𝕜 ↥U →
-            ∀ {β α δ : ℝ},
-              β ≤ α →
-                0 < δ →
-                  TauCeti.SpectrumIn (TauCeti.compression A X) ⊤ (Set.Icc β α) →
-                    TauCeti.SpectrumIn A Uᗮ (Set.Ici (α + δ)) →
-                      ∀ (tanTheta0 : F →ₗ[𝕜] E),
-                        tanTheta0.singularValues = TauCeti.principalTangents (TauCeti.approximateSubspace X) U →
-                          N.Mem (LinearMap.toContinuousLinearMap (TauCeti.ritzResidual A X)) →
-                            N.Mem (LinearMap.toContinuousLinearMap tanTheta0) ∧
-                              δ * N.gauge (LinearMap.toContinuousLinearMap tanTheta0) ≤
-                                N.gauge (LinearMap.toContinuousLinearMap (TauCeti.ritzResidual A X))
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [CompleteSpace E]
+variable {U V : Submodule ℝ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+theorem tanTheta_ambient_unboundedRitz_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    {A : E →ₗ.[ℝ] E}
+    (D : DavisKahan.UnboundedRitzPair A U)
+    (hV : DavisKahan.ReducingComplement A V)
+    (H : E →L[ℝ] E) (hH : IsSelfAdjoint H)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V)
+    (hResidual : D.trial.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (hMem : N.Mem H) :
+    N.Mem (paperTanAngleOperatorR U V) ∧
+      delta * N.gauge (paperTanAngleOperatorR U V) ≤ N.gauge H
 ~~~~
+
+**Compiler probe failed to resolve this declaration.**
+
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:92`
+
+~~~~lean
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+theorem tanTheta_directed_unboundedTrial_paperUINorm_complex
+    (N : PaperUnitaryInvariantNorm)
+    (A : H →ₗ.[ℂ] H) (hA : IsSelfAdjoint A)
+    {Z : Submodule ℂ H} [Z.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : TanTheta.UnboundedTrialBlock A Z)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hgap : TauCeti.LinearPMap.specProjection hA (Set.Ioo alpha (alpha + delta))
+      measurableSet_Ioo = 0)
+    (hCompression : ∀ z : Z,
+      RCLike.re ⟪D.operator z, z⟫_ℂ ≤ alpha * ‖z‖ ^ 2)
+    (tanTheta0 : Z →L[ℂ] H)
+    (htan : HasTheorem63DirectedTangentApproximationNumbersInfinite Z
+      (selfAdjointSpectralSubspace A hA (Set.Iic alpha) measurableSet_Iic) tanTheta0)
+    (hResidual : N.Mem D.residual) :
+    N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤ N.gauge D.residual
+~~~~
+
+**Compiler probe failed to resolve this declaration.**
+
+#### `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/TanThetaDirectedUnbounded.lean:135`
+
+~~~~lean
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+theorem tanTheta_directed_unboundedTrial_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    (A : E →ₗ.[ℝ] E) (hA : IsSelfAdjoint A)
+    {Z : Submodule ℝ E} [Z.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : TanTheta.UnboundedTrialBlock A Z)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hgap : realSelfAdjointSpectralProjection A hA (Set.Ioo alpha (alpha + delta))
+      measurableSet_Ioo = 0)
+    (hCompression : ∀ z : Z, ⟪D.operator z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
+    (tanTheta0 : Z →L[ℝ] E)
+    (htan : HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z
+      (realSelfAdjointSpectralSubspace A hA (Set.Iic alpha) measurableSet_Iic) tanTheta0)
+    (hResidual : N.Mem D.residual) :
+    N.Mem tanTheta0 ∧
+      delta * N.gauge tanTheta0 ≤ N.gauge D.residual
+~~~~
+
+**Compiler probe failed to resolve this declaration.**
 
 ### Supporting scope declarations
 
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex` — resolved; source located
-- `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_real` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_crossedDefects` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_real` — resolved; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_real` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_crossedDefects` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_real` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike` — unresolved; source located
+- `TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial` — unresolved; source located
+- `TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm` — unresolved; source located
 
 ### Local semantic dictionary
 
@@ -454,97 +377,31 @@ theorem tanTheta_directed_finiteDimensional_paperUINorm_rclike
 
 The literal dimension-coherent source unitary-invariant norm. The new generic directed headline theorem uses it directly over arbitrary RCLike scalars.
 
-~~~~lean
-structure TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-number of parameters: 0
-fields:
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteNorm : (n : ℕ) →
-      TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.normalized : ((self.finiteNorm 1).gauge
-        (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) =
-      1
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.zero_pad : ∀ {n : ℕ} (x : Fin n → ℝ),
-      (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-          (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) =
-        (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
-constructor:
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.mk
-    (finiteNorm : (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)))
-    (normalized : ((finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1)
-    (zero_pad :
-      ∀ {n : ℕ} (x : Fin n → ℝ),
-        (finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-            (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) =
-          (finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x) :
-    TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.principalTangents`
 
 The directed principal-tangent singular-value sequence used in the paper definition of tan Theta0.
 
-~~~~lean
-def TauCeti.principalTangents.{u_1, u_2} : {𝕜 : Type u_1} →
-  [inst : RCLike 𝕜] →
-    {E : Type u_2} →
-      [inst_1 : NormedAddCommGroup E] →
-        [inst_2 : InnerProductSpace 𝕜 E] →
-          [FiniteDimensional 𝕜 E] →
-            (U V : Submodule 𝕜 E) → [U.HasOrthogonalProjection] → [V.HasOrthogonalProjection] → ℕ →₀ ℝ :=
-fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] U V
-    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] =>
-  Finsupp.mapRange Real.tan Real.tan_zero (TauCeti.principalAngles U V)
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.ritzResidual`
 
 The Rayleigh--Ritz residual. In the generic headline theorem it appears directly on the right-hand side rather than through a bundled problem record.
 
-~~~~lean
-def TauCeti.ritzResidual.{u_1, u_2, u_3} : {𝕜 : Type u_1} →
-  [inst : RCLike 𝕜] →
-    {E : Type u_2} →
-      [inst_1 : NormedAddCommGroup E] →
-        [inst_2 : InnerProductSpace 𝕜 E] →
-          [FiniteDimensional 𝕜 E] →
-            {F : Type u_3} →
-              [inst_4 : NormedAddCommGroup F] →
-                [inst_5 : InnerProductSpace 𝕜 F] → [FiniteDimensional 𝕜 F] → (E →ₗ[𝕜] E) → (F →ₗᵢ[𝕜] E) → F →ₗ[𝕜] E :=
-fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] {F} [NormedAddCommGroup F]
-    [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F] A X =>
-  TauCeti.residual A X (TauCeti.compression A X)
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.DavisKahan.CrossedDefectsEquivalent`
 
 The paper-wide nonacute direct-rotation existence condition (3.5), needed only for the ambient whole-space tangent semantics in the general infinite-dimensional case.
 
-~~~~lean
-def TauCeti.DavisKahan.CrossedDefectsEquivalent.{u, u_1} : {𝕜 : Type u_1} →
-  [inst : RCLike 𝕜] →
-    {H : Type u} →
-      [inst_1 : NormedAddCommGroup H] →
-        [inst_2 : InnerProductSpace 𝕜 H] →
-          (U V : Submodule 𝕜 H) → [U.HasOrthogonalProjection] → [V.HasOrthogonalProjection] → Prop :=
-fun {𝕜} [RCLike 𝕜] {H} [NormedAddCommGroup H] [InnerProductSpace 𝕜 H] U V [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] =>
-  Nonempty (↥(TauCeti.DavisKahan.halmosSourceDefect U V) ≃ₗᵢ[𝕜] ↥(TauCeti.DavisKahan.halmosTargetDefect U V))
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.DavisKahanExt.paperTanAngleOperatorC`
 
 The canonical complex ambient tan(Theta) operator used by the unbounded whole-space scope companion.
 
-~~~~lean
-def TauCeti.DavisKahanExt.paperTanAngleOperatorC.{u_1} : {E : Type u_1} →
-  [inst : NormedAddCommGroup E] →
-    [inst_1 : InnerProductSpace ℂ E] →
-      [CompleteSpace E] →
-        (U V : Submodule ℂ E) → [U.HasOrthogonalProjection] → [V.HasOrthogonalProjection] → E →L[ℂ] E :=
-fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] =>
-  cfc Real.tan (TauCeti.DavisKahanExt.paperAngleOperatorC U V)
-~~~~
+**Compiler probe failed to print this declaration.**
 
 ### Clause correspondence
 
@@ -558,6 +415,10 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
 | No separately assumed tangent-pole exclusion in the printed theorem. | The scalar-generic directed theorem assumes only the spectral placement and derives transversality in its engine. The ambient source companion uses the accepted nonlocal (3.5) semantics rather than a numerical pole hypothesis. | claimed_exact |
 
 **Review note.** The directed residual half now has a scalar-generic, PaperUnitaryInvariantNorm, source-shaped canonical theorem whose public signature exposes the Ritz spectral placement instead of TanThetaIntervalGap. The harder ambient/unbounded half remains represented by the accepted source-shaped complex theorem plus its real companion because the current whole-space angle-operator implementation is field-specific. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.
+
+2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.
+
+2026-08-31 (coherent-clause audit): demoted to supporting because the compiler-printed type does not carry the scope the declaration was credited with: TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial, TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm.
 
 **Next action.** No counted-result gap remains. Preserve the accepted nonlocal source interpretation and the bounded/unbounded, real/complex source-facing endpoints; re-audit only if the distributable source specification changes.
 
@@ -582,66 +443,203 @@ The Section 2 sin(2 theta) theorem: interval/exterior separation gives directed 
 
 ### Canonical Lean declarations
 
-#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike`
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex`
 
 **Human-written Lean statement**
 
-`DavisKahan/Sources/DavisKahan1970/ScalarGenericFinite.lean:111`
+`DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidual.lean:370`
 
 ~~~~lean
-variable {𝕜 : Type u} [RCLike 𝕜]
-variable {E F : Type v}
-  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E]
-  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F]
-theorem sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
+  [CompleteSpace H]
+variable {V : Submodule ℂ H} [V.HasOrthogonalProjection]
+  {M : V →L[ℂ] V} {R : V →L[ℂ] H}
+  {A : H →ₗ.[ℂ] H}
+theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
-    {A : E →ₗ[𝕜] E} (hA : A.IsSymmetric)
-    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
-    (hU : IsInvariant A U)
-    (X : F →ₗᵢ[𝕜] E)
-    {M : F →ₗ[𝕜] F} (hM : M.IsSymmetric)
-    {β α δ : ℝ} (_hβα : β ≤ α) (hδ : 0 < δ)
-    (hCompressionSpectrum : SpectrumIn M ⊤ (Set.Icc β α))
-    (hUnwantedSpectrum :
-      SpectrumIn A Uᗮ {lam : ℝ | lam ≤ β - δ ∨ α + δ ≤ lam})
-    (hR : N.Mem (residual A X M).toContinuousLinearMap) :
-    N.Mem (sinTwoThetaEmbedding U X).toContinuousLinearMap ∧
-      δ * N.gauge (sinTwoThetaEmbedding U X).toContinuousLinearMap ≤
-        2 * N.gauge (residual A X M).toContinuousLinearMap
+    (hA : IsSelfAdjoint A)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (hVdom : ∀ v : V, (v : H) ∈ A.domain)
+    (hres : ∀ v : V, A ⟨(v : H), hVdom v⟩ = R v + ((M v : V) : H))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+      (selfAdjointSpectralRestriction A hA B hB)
+      (selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hRmem : N.Mem R) :
+    N.Mem (sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V) ∧
+      δ * N.gauge
+          (sinTwoThetaIdealBlock (selfAdjointSpectralSubspace A hA B hB) V) ≤
+        2 * N.gauge R
 ~~~~
 
-**Compiler-resolved type**
+**Compiler probe failed to resolve this declaration.**
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/SinTwoThetaUnboundedDirectedResidualReal.lean:201`
 
 ~~~~lean
-@TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike : ∀ {𝕜 : Type u_1} [inst : RCLike 𝕜]
-  {E F : Type u_2} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E] [inst_3 : FiniteDimensional 𝕜 E]
-  [inst_4 : NormedAddCommGroup F] [inst_5 : InnerProductSpace 𝕜 F] [inst_6 : FiniteDimensional 𝕜 F]
-  (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A : E →ₗ[𝕜] E},
-  A.IsSymmetric →
-    ∀ {U : Submodule 𝕜 E} [inst_7 : U.HasOrthogonalProjection],
-      TauCeti.IsInvariant A U →
-        ∀ (X : F →ₗᵢ[𝕜] E) {M : F →ₗ[𝕜] F},
-          M.IsSymmetric →
-            ∀ {β α δ : ℝ},
-              β ≤ α →
-                0 < δ →
-                  TauCeti.SpectrumIn M ⊤ (Set.Icc β α) →
-                    TauCeti.SpectrumIn A Uᗮ {lam | lam ≤ β - δ ∨ α + δ ≤ lam} →
-                      N.Mem (LinearMap.toContinuousLinearMap (TauCeti.residual A X M)) →
-                        N.Mem (LinearMap.toContinuousLinearMap (TauCeti.DavisKahanTheory.sinTwoThetaEmbedding U X)) ∧
-                          δ *
-                              N.gauge
-                                (LinearMap.toContinuousLinearMap (TauCeti.DavisKahanTheory.sinTwoThetaEmbedding U X)) ≤
-                            2 * N.gauge (LinearMap.toContinuousLinearMap (TauCeti.residual A X M))
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [CompleteSpace E]
+variable {V : Submodule ℝ E} [V.HasOrthogonalProjection]
+  {M : V →L[ℝ] V} {R : V →L[ℝ] E}
+  {A : E →ₗ.[ℝ] E}
+theorem sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    (hA : IsSelfAdjoint A)
+    (B : Set ℝ) (hB : MeasurableSet B)
+    (hVdom : ∀ v : V, (v : E) ∈ A.domain)
+    (hres : ∀ v : V, A ⟨(v : E), hVdom v⟩ = R v + ((M v : V) : E))
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hRmem : N.Mem R) :
+    N.Mem (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ∧
+      δ * N.gauge
+          (sinTwoThetaIdealBlock (realSelfAdjointSpectralSubspace A hA B hB) V) ≤
+        2 * N.gauge R
 ~~~~
+
+**Compiler probe failed to resolve this declaration.**
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:872`
+
+~~~~lean
+variable {Hc : Type v}
+  [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
+theorem sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex
+    (N : PaperUnitaryInvariantNorm)
+    (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
+    (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (DavisKahan.selfAdjointSpectralRestriction A hA B hB)
+      (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hEmem : N.Mem Eop) :
+    N.Mem (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
+        (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
+        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+      δ * N.gauge (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
+        (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
+        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        2 * N.gauge Eop
+~~~~
+
+**Compiler probe failed to resolve this declaration.**
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/SinTwoTheta.lean:576`
+
+~~~~lean
+variable {Er : Type v}
+  [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+theorem sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    (A : Er →ₗ.[ℝ] Er)
+    (hA : IsSelfAdjoint A)
+    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hEmem : N.Mem Eop) :
+    N.Mem (TauCeti.DavisKahanExt.Real.sinTwoAngleOperatorRC
+        (realSelfAdjointSpectralSubspace A hA B hB)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+      δ * N.gauge (TauCeti.DavisKahanExt.Real.sinTwoAngleOperatorRC
+        (realSelfAdjointSpectralSubspace A hA B hB)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        2 * N.gauge Eop
+~~~~
+
+**Compiler probe failed to resolve this declaration.**
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:286`
+
+~~~~lean
+variable {Hc : Type v}
+  [NormedAddCommGroup Hc] [InnerProductSpace ℂ Hc] [CompleteSpace Hc]
+theorem sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex
+    (N : PaperUnitaryInvariantNorm)
+    (A : Hc →ₗ.[ℂ] Hc) (hA : IsSelfAdjoint A)
+    (Eop : Hc →L[ℂ] Hc) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (DavisKahan.selfAdjointSpectralRestriction A hA B hB)
+      (DavisKahan.selfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hEmem : N.Mem Eop) :
+    N.Mem (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC
+        (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
+        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+      δ * N.gauge (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC
+        (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
+        (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        2 * N.gauge Eop
+~~~~
+
+**Compiler probe failed to resolve this declaration.**
+
+#### `TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/SinTwoThetaAmbientUnbounded.lean:421`
+
+~~~~lean
+variable {Er : Type v}
+  [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
+theorem sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    (A : Er →ₗ.[ℝ] Er) (hA : IsSelfAdjoint A)
+    (Eop : Er →L[ℝ] Er) (hEop : DavisKahan.IsSelfAdjointOperator Eop)
+    (B S : Set ℝ) (hB : MeasurableSet B) (hS : MeasurableSet S)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : FormBoundedSylvesterGap
+      (realSelfAdjointSpectralRestriction A hA B hB)
+      (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
+    (hEmem : N.Mem Eop) :
+    N.Mem (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR
+        (realSelfAdjointSpectralSubspace A hA B hB)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
+      δ * N.gauge (TauCeti.DavisKahanExt.paperSinTwoAngleOperatorR
+        (realSelfAdjointSpectralSubspace A hA B hB)
+        (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
+          (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ≤
+        2 * N.gauge Eop
+~~~~
+
+**Compiler probe failed to resolve this declaration.**
 
 ### Supporting scope declarations
 
-- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex` — resolved; source located
-- `TauCeti.DavisKahan1970.sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_complex` — resolved; source located
-- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real` — resolved; source located
-- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` — resolved; source located
-- `TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real` — resolved; source located
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_complex` — unresolved; source located
+- `TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike` — unresolved; source located
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex` — unresolved; source located
+- `TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real` — unresolved; source located
 
 ### Local semantic dictionary
 
@@ -649,84 +647,25 @@ theorem sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike
 
 The literal source unitary-invariant norm. The new directed headline theorem evaluates it over generic RCLike scalars.
 
-~~~~lean
-structure TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-number of parameters: 0
-fields:
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteNorm : (n : ℕ) →
-      TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.normalized : ((self.finiteNorm 1).gauge
-        (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) =
-      1
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.zero_pad : ∀ {n : ℕ} (x : Fin n → ℝ),
-      (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-          (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) =
-        (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
-constructor:
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.mk
-    (finiteNorm : (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)))
-    (normalized : ((finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1)
-    (zero_pad :
-      ∀ {n : ℕ} (x : Fin n → ℝ),
-        (finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-            (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) =
-          (finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x) :
-    TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.DavisKahanTheory.sinTwoThetaEmbedding`
 
 The rectangular directed sin(2 Theta0) representative used by the scalar-generic headline theorem.
 
-~~~~lean
-def TauCeti.DavisKahanTheory.sinTwoThetaEmbedding.{u_1, u_2, u_3} : {𝕜 : Type u_1} →
-  [inst : RCLike 𝕜] →
-    {E : Type u_2} →
-      [inst_1 : NormedAddCommGroup E] →
-        [inst_2 : InnerProductSpace 𝕜 E] →
-          [FiniteDimensional 𝕜 E] →
-            {F : Type u_3} →
-              [inst_4 : NormedAddCommGroup F] →
-                [inst_5 : InnerProductSpace 𝕜 F] →
-                  [FiniteDimensional 𝕜 F] →
-                    (U : Submodule 𝕜 E) → [U.HasOrthogonalProjection] → (F →ₗᵢ[𝕜] E) → F →ₗ[𝕜] E :=
-fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [FiniteDimensional 𝕜 E] {F} [NormedAddCommGroup F]
-    [InnerProductSpace 𝕜 F] [FiniteDimensional 𝕜 F] U [U.HasOrthogonalProjection] X =>
-  2 • TauCeti.sinThetaEmbedding U X ∘ₗ TauCeti.cosThetaMagnitude U X
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.DavisKahan.residual`
 
 The literal residual A X - X M appearing on the right-hand side of the directed theorem.
 
-~~~~lean
-def TauCeti.DavisKahan.residual.{u_1, u_2, u_3} : {𝕜 : Type u_1} →
-  [inst : RCLike 𝕜] →
-    {E : Type u_2} →
-      [inst_1 : NormedAddCommGroup E] →
-        [inst_2 : InnerProductSpace 𝕜 E] →
-          {F : Type u_3} →
-            [inst_3 : NormedAddCommGroup F] →
-              [inst_4 : InnerProductSpace 𝕜 F] → (E →L[𝕜] E) → (F →L[𝕜] E) → (F →L[𝕜] F) → F →L[𝕜] E :=
-fun {𝕜} [RCLike 𝕜] {E} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] {F} [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-    A X M =>
-  A ∘SL X - X ∘SL M
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC`
 
 The complex whole-space sin(2 Theta) operator used by the ambient perturbation scope companion.
 
-~~~~lean
-def TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC.{u_1} : {E : Type u_1} →
-  [inst : NormedAddCommGroup E] →
-    [inst_1 : InnerProductSpace ℂ E] →
-      [CompleteSpace E] →
-        (U V : Submodule ℂ E) → [U.HasOrthogonalProjection] → [V.HasOrthogonalProjection] → E →L[ℂ] E :=
-fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [U.HasOrthogonalProjection]
-    [V.HasOrthogonalProjection] =>
-  cfc (fun t => Real.sin (2 * t)) (TauCeti.DavisKahanExt.paperAngleOperatorC U V)
-~~~~
+**Compiler probe failed to print this declaration.**
 
 ### Clause correspondence
 
@@ -735,10 +674,14 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E] U V [
 | The scalar field is real or complex. | The canonical directed theorem quantifies over 𝕜 with [RCLike 𝕜] and uses PaperUnitaryInvariantNorm directly. | claimed_exact |
 | Interval/exterior spectral separation by delta. | hCompressionSpectrum places M in [beta,alpha] and hUnwantedSpectrum literally places the unwanted A-spectrum outside (beta-delta,alpha+delta); no local gap structure is visible in the headline type. | claimed_exact |
 | delta \|\|sin(2 Theta0)\|\| <= 2 \|\|R\|\|. | sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike concludes the factor-two PaperUnitaryInvariantNorm estimate for sinTwoThetaEmbedding U X against residual A X M. | claimed_exact |
-| delta \|\|sin(2 Theta)\|\| <= 2 \|\|H\|\|. | sinTwoTheta_ambient_bounded_paperUINorm_complex supplies the ambient source endpoint, with the real whole-space theorem compiler-checked as a scalar companion. | scope_companion |
-| Infinite-dimensional and unbounded directed-residual scope. | The generic headline facade is finite-dimensional; the real and complex unbounded directed-residual theorems remain explicit supporting declarations and carry the full source scope. | scope_companion |
+| delta \|\|sin(2 Theta)\|\| <= 2 \|\|H\|\|. | sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex and its real sibling supply the ambient endpoint at the result's own unbounded scope: unbounded self-adjoint LinearPMap ambient operator, bounded self-adjoint perturbation, genuine spectral subspaces, the whole FormBoundedSylvesterGap, an arbitrary PaperUnitaryInvariantNorm and the exact factor two.  The bounded ambient theorems are their specialization. | claimed_exact |
+| Infinite-dimensional and unbounded directed-residual scope. | Both printed conclusions are now witnessed at unbounded infinite-dimensional scope over each field.  The scalar-generic facade is finite-dimensional and is supporting evidence only; it is not this result's witness. | claimed_exact |
 
 **Review note.** The directed residual conclusion now has a scalar-generic PaperUnitaryInvariantNorm facade with the interval/exterior hypotheses and residual written directly in its type. The ambient whole-space endpoint remains field-specific internally, so the complex source-shaped theorem stays as the second canonical declaration and its real sibling is a supporting scalar companion. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.
+
+2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.
+
+2026-08-31 (later the same day): the AMBIENT clause is no longer a scope companion.  `sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` and its real sibling prove it at the row's own unbounded scope, by identifying the ambient double angle between U and V with an ambient SINGLE angle between U and its mirror image through V and applying the common-domain Proposition 6.1.  The bounded ambient endpoints are demoted to supporting evidence as their own specialization.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.
 
@@ -765,71 +708,171 @@ The Section 2 tan(2 theta) theorem: an ordered gap and a fully off-diagonal pert
 
 ### Canonical Lean declarations
 
-#### `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike`
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex`
 
 **Human-written Lean statement**
 
-`DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFree.lean:86`
+`DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExact.lean:77`
 
 ~~~~lean
-theorem tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike
-    {𝕜 : Type u} [RCLike 𝕜] {E : Type v} [NormedAddCommGroup E]
-    [InnerProductSpace 𝕜 E] [CompleteSpace E]
+variable {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
+  [CompleteSpace G]
+theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex
     (N : PaperUnitaryInvariantNorm)
-    {A H T : E →L[𝕜] E} {U : Submodule 𝕜 E} [FiniteDimensional 𝕜 U]
-    {a b : ℝ}
-    (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
-    (hAU : ∀ x ∈ U, A x ∈ U)
-    (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
-    (hTmem : ∀ x, T x ∈ Uᗮ) (hTzero : ∀ x ∈ Uᗮ, T x = 0)
+    {A : G →ₗ.[ℂ] G} {B Z : G →L[ℂ] G} {a b c : ℝ}
+    (hA : IsSelfAdjoint A)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : G), hZdom x⟩ + B (Z (x : G)) = Z (A x) + Z (B (x : G)))
+    (hUa : ∀ x : A.domain,
+      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : G) ∈
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b)
-    (hUb : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_𝕜)
-    (hUa : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_𝕜 ≤ a * ‖x‖ ^ 2)
-    (hinv : ∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y)
-    (tanTwoTheta : E →L[𝕜] E) (π : ℕ ≃ ℕ)
-    (htan : ∀ n, approximationSingularValue (π n) tanTwoTheta =
-      DavisKahanTheory.absDoubleAngleTangent (approximationSingularValue n T))
-    (hHmem : N.Mem H) :
-    N.Mem tanTwoTheta ∧
-      (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H
+    (hRmem : N.Mem (paperBlockCompression
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)) :
+    IsUnit
+        ((TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z *
+          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z) ∧
+      N.Mem (reflectionTangentCorner
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ∧
+      (b - a) * N.gauge (reflectionTangentCorner
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ≤
+        2 * N.gauge (paperBlockCompression
+          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
+          (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
 ~~~~
 
-**Compiler-resolved type**
+**Compiler probe failed to resolve this declaration.**
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:196`
 
 ~~~~lean
-@TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike : ∀ {𝕜 : Type u_1}
-  [inst : RCLike 𝕜] {E : Type u_2} [inst_1 : NormedAddCommGroup E] [inst_2 : InnerProductSpace 𝕜 E]
-  [inst_3 : CompleteSpace E] (N : TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm) {A H T : E →L[𝕜] E}
-  {U : Submodule 𝕜 E} [FiniteDimensional 𝕜 ↥U] {a b : ℝ},
-  IsSelfAdjoint A →
-    IsSelfAdjoint H →
-      (∀ x ∈ U, A x ∈ U) →
-        (∀ x ∈ U, H x ∈ Uᗮ) →
-          (∀ x ∈ Uᗮ, H x ∈ U) →
-            (∀ (x : E), T x ∈ Uᗮ) →
-              (∀ x ∈ Uᗮ, T x = 0) →
-                a < b →
-                  (∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re (inner 𝕜 (A x) x)) →
-                    (∀ x ∈ Uᗮ, RCLike.re (inner 𝕜 (A x) x) ≤ a * ‖x‖ ^ 2) →
-                      (∀ x ∈ U, ∃ y ∈ U, (A + H) (x + T x) = y + T y) →
-                        ∀ (tanTwoTheta : E →L[𝕜] E) (π : ℕ ≃ ℕ),
-                          (∀ (n : ℕ),
-                              TauCeti.ApproximationNumber.approximationSingularValue (π n) tanTwoTheta =
-                                TauCeti.DavisKahanTheory.absDoubleAngleTangent
-                                  (TauCeti.ApproximationNumber.approximationSingularValue n T)) →
-                            N.Mem H → N.Mem tanTwoTheta ∧ (b - a) * N.gauge tanTwoTheta ≤ 2 * N.gauge H
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [CompleteSpace E]
+theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    {A : E →ₗ.[ℝ] E} {B Z : E →L[ℝ] E} {a b c : ℝ}
+    (hA : _root_.IsSelfAdjoint A)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hZsa : IsSelfAdjoint Z) (hZ2 : Z * Z = 1)
+    (hZdom : TauCeti.LinearPMap.MapsDomainTo A A Z)
+    (hZcomm : ∀ x : A.domain,
+      A ⟨Z (x : E), hZdom x⟩ + B (Z (x : E)) = Z (A x) + Z (B (x : E)))
+    (hUa : ∀ x : A.domain,
+      (x : E) ∈ TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic →
+      ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : E) ∈
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
+    (hab : a < b)
+    (hRmem : N.Mem (reflectionResidualCorner
+      (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) B)) :
+    IsUnit
+        ((TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z *
+          (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic).diagonalPart Z) ∧
+      N.Mem (reflectionTangentCorner
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) Z) ∧
+      (b - a) * N.gauge (reflectionTangentCorner
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) Z) ≤
+        2 * N.gauge (reflectionResidualCorner
+          (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) B)
 ~~~~
+
+**Compiler probe failed to resolve this declaration.**
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:466`
+
+~~~~lean
+variable {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
+  [CompleteSpace G]
+theorem tanTwoTheta_ambient_unbounded_paperUINorm_complex
+    (N : PaperUnitaryInvariantNorm)
+    {A : G →ₗ.[ℂ] G} {B : G →L[ℂ] G} {a b c : ℝ}
+    (V : Submodule ℂ G) [V.HasOrthogonalProjection]
+    (hA : IsSelfAdjoint A)
+    (hBsa : IsSelfAdjoint B)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hV : DavisKahan.ReflectionIntertwines A B V)
+    (hUa : ∀ x : A.domain,
+      (x : G) ∈ TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic →
+      RCLike.re ⟪A x, (x : G)⟫_ℂ ≤ a * ‖(x : G)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : G) ∈
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
+    (hab : a < b) (hBmem : N.Mem B) :
+    N.Mem (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
+      (b - a) * N.gauge (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+        (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
+        2 * N.gauge B
+~~~~
+
+**Compiler probe failed to resolve this declaration.**
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real`
+
+**Human-written Lean statement**
+
+`DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean:525`
+
+~~~~lean
+variable {E : Type u} [NormedAddCommGroup E] [InnerProductSpace ℝ E]
+  [CompleteSpace E]
+theorem tanTwoTheta_ambient_unbounded_paperUINorm_real
+    (N : PaperUnitaryInvariantNorm)
+    {A : E →ₗ.[ℝ] E} {B : E →L[ℝ] E} {a b c : ℝ}
+    (V : Submodule ℝ E) [V.HasOrthogonalProjection]
+    (hA : _root_.IsSelfAdjoint A)
+    (hBsa : IsSelfAdjoint B)
+    (hB : TauCeti.IsOddFor
+      (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) B)
+    (hV : DavisKahan.ReflectionIntertwines A B V)
+    (hUa : ∀ x : A.domain,
+      (x : E) ∈ TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic →
+      ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
+    (hUb : ∀ x : A.domain,
+      (x : E) ∈
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
+      b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
+    (hab : a < b) (hBmem : N.Mem B) :
+    N.Mem (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ∧
+      (b - a) * N.gauge (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+        (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ≤
+        2 * N.gauge B
+~~~~
+
+**Compiler probe failed to resolve this declaration.**
 
 ### Supporting scope declarations
 
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex` — resolved; source located
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real` — resolved; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real` — unresolved; source located
+- `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike` — unresolved; source located
 
 ### Local semantic dictionary
 
@@ -837,84 +880,31 @@ theorem tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike
 
 The literal source unitary-invariant norm; tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike is already generic over RCLike 𝕜 at this norm scope.
 
-~~~~lean
-structure TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm : Type
-number of parameters: 0
-fields:
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.finiteNorm : (n : ℕ) →
-      TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n))
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.normalized : ((self.finiteNorm 1).gauge
-        (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) =
-      1
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.zero_pad : ∀ {n : ℕ} (x : Fin n → ℝ),
-      (self.finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-          (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) =
-        (self.finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x
-constructor:
-  TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm.mk
-    (finiteNorm : (n : ℕ) → TauCeti.UnitarilyInvariantSeminorm ℂ (EuclideanSpace ℂ (Fin n)))
-    (normalized : ((finiteNorm 1).gauge (EuclideanSpace.basisFun (Fin 1) ℂ) fun x => 1) = 1)
-    (zero_pad :
-      ∀ {n : ℕ} (x : Fin n → ℝ),
-        (finiteNorm (n + 1)).gauge (EuclideanSpace.basisFun (Fin (n + 1)) ℂ)
-            (TauCeti.DavisKahan.ExactSinTheta.paperZeroPad x) =
-          (finiteNorm n).gauge (EuclideanSpace.basisFun (Fin n) ℂ) x) :
-    TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.DavisKahanTheory.absDoubleAngleTangent`
 
 The branch-free scalar function 2 t / |1-t^2| applied to graph-coordinate singular values; this is the generic theorem’s representation of |tan(2 Theta)|.
 
-~~~~lean
-def TauCeti.DavisKahanTheory.absDoubleAngleTangent : ℝ → ℝ :=
-fun t => 2 * t / |1 - t ^ 2|
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.ApproximationNumber.approximationSingularValue`
 
 The approximation-number singular-value sequence used to express the branch-free tangent representative in arbitrary Hilbert space.
 
-~~~~lean
-def TauCeti.ApproximationNumber.approximationSingularValue.{u, v, vF} : {𝕜 : Type u} →
-  [inst : RCLike 𝕜] →
-    {E : Type v} →
-      {F : Type vF} →
-        [inst_1 : NormedAddCommGroup E] →
-          [inst_2 : InnerProductSpace 𝕜 E] →
-            [inst_3 : NormedAddCommGroup F] → [inst_4 : InnerProductSpace 𝕜 F] → ℕ → (E →L[𝕜] F) → ℝ :=
-fun {𝕜} [RCLike 𝕜] {E} {F} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [NormedAddCommGroup F] [InnerProductSpace 𝕜 F]
-    n K =>
-  K.approximationNumber n
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.DavisKahan1970.paperDoubleSecant`
 
 The source-shaped U,V directed-corner implementation used by the second canonical theorem; its invertibility is derived internally rather than assumed.
 
-~~~~lean
-def TauCeti.DavisKahan1970.paperDoubleSecant.{v} : {E : Type v} →
-  [inst : NormedAddCommGroup E] →
-    [inst_1 : InnerProductSpace ℂ E] →
-      (U V : Submodule ℂ E) → [U.HasOrthogonalProjection] → [V.HasOrthogonalProjection] → E →L[ℂ] E :=
-fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] U V [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] =>
-  Ring.inverse
-    (1 -
-      2 * (TauCeti.DavisKahan1970.paperProjectorDifference U V * TauCeti.DavisKahan1970.paperProjectorDifference U V))
-~~~~
+**Compiler probe failed to print this declaration.**
 
 #### `TauCeti.DavisKahan1970.paperProjectorDifference`
 
 The projector-difference factor used to build the source-shaped directed tan(2 Theta0) representative.
 
-~~~~lean
-def TauCeti.DavisKahan1970.paperProjectorDifference.{v} : {E : Type v} →
-  [inst : NormedAddCommGroup E] →
-    [inst_1 : InnerProductSpace ℂ E] →
-      (U V : Submodule ℂ E) → [U.HasOrthogonalProjection] → [V.HasOrthogonalProjection] → E →L[ℂ] E :=
-fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] U V [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] =>
-  V.starProjection - U.starProjection
-~~~~
+**Compiler probe failed to print this declaration.**
 
 ### Clause correspondence
 
@@ -928,5 +918,7 @@ fun {E} [NormedAddCommGroup E] [InnerProductSpace ℂ E] U V [U.HasOrthogonalPro
 | Infinite-dimensional/unbounded scope. | The generic branch-free canonical theorem removes ambient finite-dimensionality but still assumes a finite-dimensional graph base U; the full arbitrary-dimensional and unbounded real/complex endpoints remain compiler-checked supporting declarations. | scope_companion |
 
 **Review note.** Unlike tan Theta and sin 2Theta, the branch-free tan 2Theta paper-norm theorem was already scalar-generic. The review now promotes it to the canonical headline name. Its generic proof is necessarily graph-coordinate shaped, so the source-shaped U,V directed-corner theorem remains canonical alongside it and the report prints absDoubleAngleTangent/approximationSingularValue context explicitly. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.
+
+2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.
 
 **Next action.** No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.

@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1152
+**Unique cited Lean declarations:** 1161
 
 ## How to use this census
 
@@ -482,8 +482,6 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 
 **Summary.** Off-diagonal or fully separated perturbations give the printed residual and perturbation sin(2 Theta) bounds with factor two over real and complex Hilbert spaces at the maintained source norm scope.  Both printed conclusions are now at the printed unbounded scope: the directed one through the trial-residual endpoints, the ambient one through `sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` and its real sibling, which lift the reflection argument through the common-domain Proposition 6.1.  The Section 8 strict-dimension extension is explicitly exposed for the directed Theta_0 conclusion; the underlying directed theorem is stronger and has no dimension comparison at all.
 
-**Scope gap.** The AMBIENT conclusion is established only for bounded operators; the result's other clauses are certified at unbounded self-adjoint scope.
-
 **Lean declarations:**
 
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex`
@@ -550,6 +548,8 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 - `TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real`
 - `TauCeti.DavisKahan1970.sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`
 - `TauCeti.DavisKahan1970.sinTheta_ambient_unitaryConj_projectorDifference_paperUINorm`
+- `TauCeti.DavisKahan.mem_sinTwoAngleOperatorC_iff`
+- `TauCeti.DavisKahan.gauge_sinTwoAngleOperatorC`
 
 **Curated source/Lean review:**
 
@@ -571,8 +571,8 @@ The directed clause of the Section 2 tangent theorem at the printed scope, added
 | The scalar field is real or complex. | The canonical directed theorem quantifies over 𝕜 with [RCLike 𝕜] and uses PaperUnitaryInvariantNorm directly. | claimed_exact |
 | Interval/exterior spectral separation by delta. | hCompressionSpectrum places M in [beta,alpha] and hUnwantedSpectrum literally places the unwanted A-spectrum outside (beta-delta,alpha+delta); no local gap structure is visible in the headline type. | claimed_exact |
 | delta \|\|sin(2 Theta0)\|\| <= 2 \|\|R\|\|. | sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike concludes the factor-two PaperUnitaryInvariantNorm estimate for sinTwoThetaEmbedding U X against residual A X M. | claimed_exact |
-| delta \|\|sin(2 Theta)\|\| <= 2 \|\|H\|\|. | sinTwoTheta_ambient_bounded_paperUINorm_complex supplies the ambient source endpoint, with the real whole-space theorem compiler-checked as a scalar companion. | scope_companion |
-| Infinite-dimensional and unbounded directed-residual scope. | The generic headline facade is finite-dimensional; the real and complex unbounded directed-residual theorems remain explicit supporting declarations and carry the full source scope. | scope_companion |
+| delta \|\|sin(2 Theta)\|\| <= 2 \|\|H\|\|. | sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex and its real sibling supply the ambient endpoint at the result's own unbounded scope: unbounded self-adjoint LinearPMap ambient operator, bounded self-adjoint perturbation, genuine spectral subspaces, the whole FormBoundedSylvesterGap, an arbitrary PaperUnitaryInvariantNorm and the exact factor two.  The bounded ambient theorems are their specialization. | claimed_exact |
+| Infinite-dimensional and unbounded directed-residual scope. | Both printed conclusions are now witnessed at unbounded infinite-dimensional scope over each field.  The scalar-generic facade is finite-dimensional and is supporting evidence only; it is not this result's witness. | claimed_exact |
 
 **Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `S2-sin-two-theta`).  The reopening was correct: the registered unbounded directed endpoint bounded delta * N(sin 2Theta_0) by the norm of a REFLECTION residual, not by the printed trial residual R = (A+H)E_0 - E_0 A_0.  Repaired by `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` (complex) and `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real` (real): unbounded self-adjoint scope, arbitrary closed trial subspace inside the domain, the printed trial residual as the only right-hand side, arbitrary `PaperUnitaryInvariantNorm`, directed angle Theta_0, and the printed factor two.  The reflected comparison system is built internally from the trial data by `trialReflection_intertwines`, so no reflection residual and no extra hypothesis is visible to the caller; the sharp factor two comes from the scalar-generic doubling identity `kyFan_reflectionDefectBlock_le_two_mul`, not from a triangle inequality.
 
@@ -2703,6 +2703,9 @@ Equations (4.1) and (4.2), the closest-`Q`-vector step and the `V = UZ` factoris
 - `TauCeti.DavisKahan1970.Corollary4_1_infiniteDimensional_nonacute`
 - `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_complex`
 - `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_real`
+- `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_paperUINorm_complex`
+- `TauCeti.DavisKahan1970.Corollary4_1_compact_nonacute_paperUINorm_real`
+- `TauCeti.DavisKahan1970.paperUINorm_of_kyFanDominant`
 
 **Notes.** Compiled without any angle restriction, for every unitarily invariant norm, over every RCLike field (finite dimension).  The earlier note conflating this row with Proposition 4.4 is resolved: the corollary concerns the restricted displacement and needs no angle hypothesis.
 
@@ -2857,6 +2860,9 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahan1970.Proposition4_3_nonacute_real_idealGauge`
 - `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_idealGauge`
 - `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_real_idealGauge`
+- `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_paperUINorm_complex`
+- `TauCeti.DavisKahan1970.Proposition4_3_compact_nonacute_paperUINorm_real`
+- `TauCeti.DavisKahan1970.paperUINorm_of_kyFanDominant`
 
 **Notes.** Compiled for every unitarily invariant norm over every RCLike field (finite dimension), via Fan-Hoffman majorization of the pinched competitor and two-block pinching contraction.
 
@@ -3055,6 +3061,9 @@ The first hole asked for a source-facing theorem for "(5.2) is not best possible
 - `TauCeti.DavisKahan1970.Theorem5_2`
 - `TauCeti.DavisKahan.ExactSinTheta.davisKahan1970_sylvester_real`
 - `TauCeti.DavisKahan.ExactSinTheta.real_unbounded_sylvester_kyFan`
+- `TauCeti.DavisKahan1970.theorem5_2_paperUINorm_complex`
+- `TauCeti.DavisKahan1970.theorem5_2_paperUINorm_real`
+- `TauCeti.DavisKahan1970.paperUINorm_of_kyFanDominant`
 
 **Notes.** The completed Section 6 route contains the needed constant-one engines, while the exact source theorem alias is still in the full Part III repair campaign.
 
@@ -3324,6 +3333,9 @@ Residue, and not a gap: `[CompleteSpace Z]`, which `Theorem63InfiniteTrial.lean`
 - `TauCeti.DavisKahan1970.tanTheta_directed_bounded_spectralGap_paperUINorm_complex`
 - `TauCeti.DavisKahan1970.theorem63DirectedTangentReal`
 - `TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_complex`
+- `TauCeti.DavisKahan1970.tanTheta_directed_unboundedTrial_paperUINorm_real`
+- `TauCeti.DavisKahan1970.paperUINorm_of_kyFanDominant`
 
 **Notes.** Bounded finite-source Theorem 6.3 proved axiom-clean in DavisKahan.TanTheta.Theorem63FiniteSource (theorem6_3_all_kyFan_core, theorem6_3_generalizedTanTheta_source_ideal); promoted out of Scratch.
 
