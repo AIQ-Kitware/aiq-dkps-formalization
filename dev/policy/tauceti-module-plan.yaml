@@ -201,6 +201,7 @@ topics:
   - Analysis.InnerProductSpace.LinearPMap.GraphCore
   - Analysis.InnerProductSpace.LinearPMap.Sylvester
   - Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint
+  - Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
   - Analysis.InnerProductSpace.QuadraticFormBounds
   - Analysis.InnerProductSpace.SpectralOrder.Complex
 - id: T15b
@@ -545,6 +546,7 @@ rungs:
   - Analysis.InnerProductSpace.LinearPMap.GraphCore
   - Analysis.InnerProductSpace.LinearPMap.SubmoduleAdjoint
   - Analysis.InnerProductSpace.LinearPMap.Sylvester
+  - Analysis.InnerProductSpace.LinearPMap.UnitaryTransport
   - Analysis.InnerProductSpace.QuadraticFormBounds
   - Analysis.InnerProductSpace.SpectralOrder.Complex
 - id: M

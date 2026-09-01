@@ -588,12 +588,14 @@
           "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real",
           "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex",
           "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real",
-          "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex",
-          "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real"
+          "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex",
+          "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real"
         ],
         "supporting_declarations": [
           "TauCeti.DavisKahan1970.sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_complex",
-          "TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike"
+          "TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike",
+          "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex",
+          "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real"
         ],
         "context_declarations": [
           {
@@ -631,18 +633,17 @@
           },
           {
             "source_clause": "delta ||sin(2 Theta)|| <= 2 ||H||.",
-            "lean_realization": "sinTwoTheta_ambient_bounded_paperUINorm_complex supplies the ambient source endpoint, with the real whole-space theorem compiler-checked as a scalar companion.",
-            "status": "scope_companion"
+            "lean_realization": "sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex and its real sibling supply the ambient endpoint at the result's own unbounded scope: unbounded self-adjoint LinearPMap ambient operator, bounded self-adjoint perturbation, genuine spectral subspaces, the whole FormBoundedSylvesterGap, an arbitrary PaperUnitaryInvariantNorm and the exact factor two.  The bounded ambient theorems are their specialization.",
+            "status": "claimed_exact"
           },
           {
             "source_clause": "Infinite-dimensional and unbounded directed-residual scope.",
-            "lean_realization": "The generic headline facade is finite-dimensional; the real and complex unbounded directed-residual theorems remain explicit supporting declarations and carry the full source scope.",
-            "status": "scope_companion"
+            "lean_realization": "Both printed conclusions are now witnessed at unbounded infinite-dimensional scope over each field.  The scalar-generic facade is finite-dimensional and is supporting evidence only; it is not this result's witness.",
+            "status": "claimed_exact"
           }
         ],
-        "note": "The directed residual conclusion now has a scalar-generic PaperUnitaryInvariantNorm facade with the interval/exterior hypotheses and residual written directly in its type. The ambient whole-space endpoint remains field-specific internally, so the complex source-shaped theorem stays as the second canonical declaration and its real sibling is a supporting scalar companion. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.\n\n2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope."
-      },
-      "scope_gap": "The AMBIENT conclusion is established only for bounded operators; the result's other clauses are certified at unbounded self-adjoint scope."
+        "note": "The directed residual conclusion now has a scalar-generic PaperUnitaryInvariantNorm facade with the interval/exterior hypotheses and residual written directly in its type. The ambient whole-space endpoint remains field-specific internally, so the complex source-shaped theorem stays as the second canonical declaration and its real sibling is a supporting scalar companion. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.\n\n2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.\n\n2026-08-31 (later the same day): the AMBIENT clause is no longer a scope companion.  `sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` and its real sibling prove it at the row's own unbounded scope, by identifying the ambient double angle between U and V with an ambient SINGLE angle between U and its mirror image through V and applying the common-domain Proposition 6.1.  The bounded ambient endpoints are demoted to supporting evidence as their own specialization."
+      }
     },
     {
       "id": "S2-tan-two-theta",

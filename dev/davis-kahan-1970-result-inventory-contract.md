@@ -366,16 +366,30 @@ discharges.  An `open` clause must say in `open_reason` exactly what is missing.
 
 The checker then requires:
 
+* the clause's primary is **canonical evidence of that result** — not a
+  specialization or a presentation wrapper held as supporting evidence, which
+  would leave the coherence check with no compiler-printed type to work with;
+* the clause's `scalar_scope` equals the primary's, and the primary's is
+  **compiler-derived** — so a result cannot claim both of the paper's scalar
+  fields from one theorem;
 * the clause's primary satisfies the `type_requirements` of its own conclusion
   atoms **and of every result-wide scope atom** — so scope cannot be donated by a
   sibling declaration;
 * every printed conclusion of the result is discharged by some established
   clause, at **both** of the paper's scalar fields, unless one scalar-generic
-  clause covers them;
+  clause covers them or the conclusion is discharged by an `exact_refutation`
+  (one counterexample refutes a claim the source makes over either field);
 * a terminal result has no open clause and no undischarged conclusion, and a
   nonterminal result has at least one of them;
 * `canonical_evidence[…].covers_source_atoms` is **derived** from the clauses and
   must equal the derivation — the hand-authored union is gone.
+
+A *printed conclusion* is a source atom of kind `theorem`, `lemma` or
+`source-assertion`.  That list was `theorem` alone until 2026-08-31, and the
+omission was a hole: the four Section 6 lemmas state their conclusions under
+`lemma`, and Proposition 4.4 — false as printed — under `source-assertion`, so
+for those five results the coverage rule was vacuous and a clause could name no
+conclusion at all.
 
 This is deliberately not the crude rule "every canonical theorem must contain
 every atom on the row".  Clause conclusions stay clause-local, fixed-field
@@ -386,7 +400,10 @@ pins both directions: the negative test reconstructs the old
 `S2-sin-two-theta` composition and requires rejection *with the right
 diagnosis*; the positive tests pin real/complex siblings, separately discharged
 directed and ambient clauses, a clause-local hypothesis, and a
-primary-plus-correspondence chain.
+primary-plus-correspondence chain.  Four further negative tests, added by the
+2026-08-31 result-by-result review, pin the four rules that review found missing:
+a supporting-evidence primary, a clause scalar field contradicting its primary, a
+conclusion stated under `lemma`, and gap tokens absent from the printed type.
 
 ### Scope that a printed type cannot decide
 
@@ -400,6 +417,12 @@ family realizes it through an ORDERED spelling (`SemiboundedAbove` plus a
 coercivity bound) and `tan 2Θ` through bare form bounds with `a < b`, so
 requiring the `FormBoundedSylvesterGap` token would have rejected four correct
 theorems.  A wrong requirement is worse than none.
+
+Prose alone would be an escape hatch, so such a clause must also record
+`gap_scope_hypothesis_tokens`, and **every token must occur in the primary's
+compiler-printed type**.  A justification can still be wrong about what those
+hypotheses mean; it can no longer claim a scope realized by hypotheses the
+theorem does not have.
 
 ### Staleness
 
