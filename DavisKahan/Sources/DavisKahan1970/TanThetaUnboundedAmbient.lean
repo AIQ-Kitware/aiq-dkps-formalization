@@ -500,6 +500,38 @@ What stays a hypothesis is what the theorem is about: the semiboundedness of the
 compression, the coercivity on the unwanted subspace, and the crossed-defect
 standing condition (3.5). -/
 
+/-- **Uniform transversality is a consequence of the Appendix hypotheses, not an
+extra assumption.**
+
+`‖sin Θ‖ < 1` for the ambient angle, from the two printed form bounds together with the
+standing condition (3.5).  The tangent theorem's proof derives this inline; exposing it is
+what lets a caller read the *sequence* `tan θ₀, tan θ₁, …` off `paperTanAngleOperatorC`,
+which needs the transversality separately from the estimate. -/
+theorem norm_sinAngleOperatorC_lt_one_of_unboundedRitz
+    {A : E →ₗ.[ℂ] E}
+    {U V : Submodule ℂ E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace U]
+    (D : DavisKahan.UnboundedRitzPair A U)
+    (hV : DavisKahan.ReducingComplement A V)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
+    (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
+    ‖sinAngleOperatorC U V‖ < 1 := by
+  have hcross := D.trial.crossed_lower_of_reducing V A D.mem_domain D.action_eq
+    hV.mapsDomain hV.commutes hUnwanted
+  have hdirected :
+      approximationSingularValue 0 (theorem63DirectedSineBlock U V) < 1 :=
+    D.trial.approximationSingularValue_sineBlock_lt_one V hdelta hupper hcross 0
+  have hambient : ‖paperDirectedSineAmbient U V‖ < 1 := by
+    have h := approximationNumber_paperDirectedSineAmbient_le (U := U) (V := V) 0
+    rw [(paperDirectedSineAmbient U V).approximationNumber_index_zero] at h
+    exact lt_of_le_of_lt h hdirected
+  rw [norm_sinAngleOperatorC U V,
+    DavisKahan.subspaceGap_eq_directedGap_of_crossedDefectsEquivalent U V h35]
+  exact hambient
+
 /-- **Davis--Kahan 1970, `tan Θ`, unbounded ambient form, taking the Ritz pair and
 the reducing complement as objects.**
 

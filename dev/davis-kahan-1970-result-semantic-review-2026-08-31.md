@@ -676,3 +676,72 @@ angle scope, with no clause open.
 
 - Result-wide scope atoms carried by every clause's own primary: `DK-8.2-thm.smallness-alternative`, `S3-standing-scope.crossed-dimension-standing-assumption`
 
+
+## Third pass, 2026-09-01: the Challenge now says what this audit says, and the tangent identity is proved
+
+Two things closed since the second pass.
+
+### The `sin 2Θ` compression reading is no longer contradicted downstream
+
+The second pass concluded, from the Appendix enumeration above, that the
+double-angle sine theorem is *not* extended to an unbounded trial compression,
+and left the production witness with its bounded `M : V →L[ℂ] V`. The Palomar
+Section 2 Challenge, written the same day, went on quantifying its directed
+`sin 2Θ` clause over a partial compression and recorded "bounded `M` → partial
+compression" as an open obligation *against production*. Both could not be right.
+
+Re-reading the passage settles it in favour of this audit, and the Challenge has
+been narrowed: `dev/palomar-candidate/Challenge.lean` now carries a separate
+`BoundedTrialBlock` for the `sin 2Θ` directed clause, keeping the partial
+`TrialBlock` for `tan Θ` where the Appendix genuinely asks for it.
+`dev/palomar-section-two-challenge-statement-audit.md` §3.0 records the passage
+and both residual narrowings. Nothing in the production certificate changes: no
+atom is added or reclassified, and the 29-result inventory is untouched.
+
+### The paper's tangents are now *proved* to carry the tangent singular values
+
+Davis and Kahan's `‖tan Θ‖` is a symmetric norming function of the sequence
+`tan θ₀, tan θ₁, …`. Until now the repository proved only
+
+```
+aₙ(tan Θ) ≤ tan (arcsin aₙ(sin Θ))
+```
+
+— the direction an operator-level Section 2 estimate consumes — and
+`ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/GramResolvent.lean`
+recorded the reverse as needing "the full spectral-order theory of monotone
+functional calculus". That was too pessimistic. The reverse inequality for a
+monotone transfer is the *forward* inequality for its inverse, and the inverse of
+`u ↦ u/(1−u)` is `u ↦ u/(1+u)`, which has no pole on `[0,∞)` and therefore needs
+no contraction hypothesis at all.
+
+| declaration | statement |
+|---|---|
+| `TauCeti.ApproximationNumber.approximationNumber_le_of_gramContraction` | `Q = T − T Q` with `T = Y⋆Y` ⟹ `aₙ(Q) ≤ aₙ(Y)²/(1 + aₙ(Y)²)` |
+| `TauCeti.ApproximationNumber.approximationNumber_eq_tanArcsin` | `Tg²(1 − S²) = S²`, `S` a self-adjoint strict contraction ⟹ `aₙ(Tg) = tan (arcsin aₙ(S))` |
+| `TauCeti.DavisKahan1970.approximationNumber_paperTanAngleOperatorC` | the single ambient angle, under the uniform transversality Section 2 derives |
+| `TauCeti.DavisKahan1970.approximationNumber_paperAbsTanTwoAngleOperatorC` | the doubled ambient angle, under the Section 7 pole exclusion `cos 2θ ≠ 0` |
+| `TauCeti.DavisKahan1970.approximationNumber_paperSinTwoAngleOperatorC` | `aₙ(sin 2Θ) = aₙ(P_{J_V U} − P_U)` |
+
+The only input either identity needs is the Pythagorean *operator* relation
+`tan²Θ (1 − sin²Θ) = sin²Θ`, which the repository already had. No functional
+calculus, no spectral mapping theorem and no operator monotonicity enters.
+
+This does not change any counted result's disposition: every Section 2 tangent
+row was already `PASS` on its operator-level statement, and these theorems say
+what that operator *is*, at the singular-value level a unitarily invariant norm
+actually sees. It is recorded here because a hostile reader is entitled to ask
+"why is that operator the paper's `tan Θ`?", and until now the answer was a
+docstring rather than a theorem.
+
+One sharp obligation is left in this neighbourhood, and it is worth stating
+because it is now the *only* thing between the ambient `tan 2Θ` clause and its
+sequence form: the **sine-doubling transfer**
+
+```
+aₙ(sin 2Θ) = sin (2 arcsin aₙ(sin Θ)).
+```
+
+`t ↦ sin 2t` is not a Möbius map, so the two Gram estimates do not reach it; it
+needs either the monotone functional-calculus transfer in general or an argument
+specific to the doubled angle.

@@ -235,6 +235,11 @@ topics:
   - Analysis.OperatorIdeal.ApproximationNumber.GramSpectralRank
   - Analysis.OperatorIdeal.ApproximationNumber.FinitePVMSelection
   - Analysis.OperatorIdeal.ApproximationNumber.GramBandPolar
+  # The two Moebius transfers of approximation numbers along the spectral cut this
+  # topic supplies: `u |-> u/(1-u)` forward, and its inverse `u |-> u/(1+u)`.
+  # `GramResolvent` had never been placed; it belongs here with the estimate it uses.
+  - Analysis.OperatorIdeal.ApproximationNumber.GramResolvent
+  - Analysis.OperatorIdeal.ApproximationNumber.GramInverseResolvent
 - id: T16
   title: Sylvester equations and the Rosenblum theorem
   modules:
@@ -254,6 +259,9 @@ topics:
   title: 'Spectral subspace perturbation: the Davis-Kahan sin-Theta theorems'
   modules:
   - Analysis.SpecialFunctions.TanArcsin
+  # `aₙ(tan Θ) = tan (arcsin aₙ(sin Θ))`: the two transfers of T23 composed, which is
+  # what makes a Davis--Kahan tangent statement about a singular-value sequence.
+  - Analysis.OperatorIdeal.ApproximationNumber.TangentTransfer
   - Analysis.InnerProductSpace.SinTheta.OperatorNorm
   - Analysis.InnerProductSpace.SinTheta.Perturbation
   - Analysis.InnerProductSpace.SinTheta.DirectedBounds

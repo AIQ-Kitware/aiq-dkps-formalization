@@ -287,6 +287,127 @@ theorem tanTheta_directed_unboundedRitz_paperUINorm_real
 
 end AppendixReal
 
+/-! ## The Appendix clause with the representative exhibited and the pole excluded
+
+Davis and Kahan's directed tangent conclusion is an inequality about the *sequence*
+`tan θ₀, tan θ₁, …`.  The two endpoints above take a representative of that sequence as a
+parameter, deliberately: an existential inside the Ky Fan quantifier could return a
+different operator at every index.  What the printed statement additionally needs is that
+such a representative exists at all, and that every `tan θⱼ` is a genuine tangent rather
+than the value Lean's totalised `Real.tan` assigns at a pole.  Both follow from the same
+form bounds, and neither is a hypothesis. -/
+
+section AppendixExistsComplex
+
+variable {H : Type v} [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+
+/-- **No principal angle between the trial and exact subspaces is a right angle**, under
+the Appendix's own ordered form bounds and an unbounded Ritz compression.  This is the
+directed tangent theorem's pole exclusion, derived rather than assumed. -/
+theorem approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex
+    {A : H →ₗ.[ℂ] H}
+    {Z V : Submodule ℂ H}
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : DavisKahan.UnboundedRitzPair A Z)
+    (hV : DavisKahan.ReducingComplement A V)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
+    (n : ℕ) :
+    approximationSingularValue n (theorem63DirectedSineBlock Z V) < 1 :=
+  D.trial.approximationSingularValue_sineBlock_lt_one V hdelta hupper
+    (D.trial.crossed_lower_of_reducing V A D.mem_domain D.action_eq
+      hV.mapsDomain hV.commutes hUnwanted) n
+
+/-- **The Section 2 `tan Θ` directed clause at the Appendix's scope, over `ℂ`, with the
+tangent representative exhibited and the pole excluded.**
+
+Everything the printed clause asserts, with nothing assumed beyond the source hypotheses:
+every principal angle is strictly acute, a bounded operator with exactly the paper's
+approximation numbers `tan θⱼ` exists, and it satisfies `δ N(tan Θ₀) ≤ N(R)` in every
+source unitarily invariant norm.  The Ritz compression is a densely defined self-adjoint
+partial operator, the ambient operator is an unbounded self-adjoint partial map, and only
+the residual is bounded. -/
+theorem tanTheta_directed_unboundedRitz_paperUINorm_exists_complex
+    (N : PaperUnitaryInvariantNorm)
+    {A : H →ₗ.[ℂ] H}
+    {Z V : Submodule ℂ H}
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : DavisKahan.UnboundedRitzPair A Z)
+    (hV : DavisKahan.ReducingComplement A V)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
+    (hResidual : N.Mem D.trial.residual) :
+    (∀ n, approximationSingularValue n (theorem63DirectedSineBlock Z V) < 1) ∧
+      ∃ tanTheta0 : Z →L[ℂ] H,
+        HasTheorem63DirectedTangentApproximationNumbersInfinite Z V tanTheta0 ∧
+        N.Mem tanTheta0 ∧
+        delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual := by
+  have hlt := approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex
+    D hV hdelta hupper hUnwanted
+  obtain ⟨tanTheta0, htan⟩ :=
+    exists_hasTheorem63DirectedTangentApproximationNumbersInfinite Z V hlt
+  obtain ⟨hmem, hbound⟩ := tanTheta_directed_unboundedRitz_paperUINorm_complex N D hV
+    hdelta hupper hUnwanted tanTheta0 htan hResidual
+  exact ⟨hlt, tanTheta0, htan, hmem, hbound⟩
+
+end AppendixExistsComplex
+
+section AppendixExistsReal
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+
+/-- The real sibling of
+`approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_complex`. -/
+theorem approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real
+    {A : E →ₗ.[ℝ] E}
+    {Z V : Submodule ℝ E}
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : DavisKahan.UnboundedRitzPair A Z)
+    (hV : DavisKahan.ReducingComplement A V)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
+    (n : ℕ) :
+    approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1 :=
+  approximationSingularValue_sineBlockReal_lt_one_unboundedCompression
+    D.trial V hdelta hupper
+    (D.trial.crossed_lower_of_reducing V A D.mem_domain D.action_eq
+      hV.mapsDomain hV.commutes hUnwanted) n
+
+/-- **The Section 2 `tan Θ` directed clause at the Appendix's scope, over `ℝ`, with the
+tangent representative exhibited and the pole excluded.** -/
+theorem tanTheta_directed_unboundedRitz_paperUINorm_exists_real
+    (N : PaperUnitaryInvariantNorm)
+    {A : E →ₗ.[ℝ] E}
+    {Z V : Submodule ℝ E}
+    [Z.HasOrthogonalProjection] [V.HasOrthogonalProjection] [CompleteSpace Z]
+    (D : DavisKahan.UnboundedRitzPair A Z)
+    (hV : DavisKahan.ReducingComplement A V)
+    {alpha delta : ℝ} (hdelta : 0 < delta)
+    (hupper : TauCeti.LinearPMap.SemiboundedAbove D.trial.compression alpha)
+    (hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ)
+    (hResidual : N.Mem D.trial.residual) :
+    (∀ n, approximationSingularValue n (theorem63DirectedSineBlockReal Z V) < 1) ∧
+      ∃ tanTheta0 : Z →L[ℝ] E,
+        HasTheorem63DirectedTangentApproximationNumbersInfiniteReal Z V tanTheta0 ∧
+        N.Mem tanTheta0 ∧
+        delta * N.gauge tanTheta0 ≤ N.gauge D.trial.residual := by
+  have hlt := approximationSingularValue_directedSineBlock_lt_one_unboundedRitz_real
+    D hV hdelta hupper hUnwanted
+  obtain ⟨tanTheta0, htan⟩ :=
+    exists_hasTheorem63DirectedTangentApproximationNumbersReal Z V hlt
+  obtain ⟨hmem, hbound⟩ := tanTheta_directed_unboundedRitz_paperUINorm_real N D hV
+    hdelta hupper hUnwanted tanTheta0 htan hResidual
+  exact ⟨hlt, tanTheta0, htan, hmem, hbound⟩
+
+end AppendixExistsReal
+
 end
 
 end DavisKahan1970

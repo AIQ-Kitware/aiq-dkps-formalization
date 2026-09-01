@@ -22,6 +22,8 @@ open TauCeti.DavisKahan
 open TauCeti.DavisKahan.ExactSinTheta
 open TauCeti.ApproximationNumber
 
+open scoped InnerProductSpace
+
 noncomputable section
 
 universe u v
@@ -396,7 +398,185 @@ theorem sinTwoTheta_ambient_proof
 
 end SinTwoThetaAmbient
 
-/-! ## 6. The two capability classes, at every `RCLike` field -/
+/-! ## 6. The ambient tangent correspondence
+
+The Challenge's ambient `tan Θ` quantity is `N.seqNorm (tanSeq (ambientSine U V))`: the
+norm's value on the sequence `tan θ₀, tan θ₁, …` of tangents of the principal angles.  The
+development's ambient `tan Θ` estimate is about the *operator*
+`paperTanAngleOperatorC U V`.  These carry the same content exactly when the operator's
+approximation numbers are that sequence, which
+`DavisKahan1970.approximationNumber_paperTanAngleOperatorC` now proves.
+
+That closes the correspondence over `ℂ`; only the scalar field separates it from the
+Challenge's clause. -/
+
+section AmbientTangentBridge
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+variable (U V : Submodule ℂ E) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
+/-- **The Challenge's ambient tangent sequence is the development's tangent operator's
+singular-value sequence.** -/
+theorem tanSeq_ambientSine_eq_approximationNumber
+    (htr : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ < 1) (n : ℕ) :
+    tanSeq (ambientSine U V) n =
+      (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V).approximationNumber n := by
+  rw [TauCeti.DavisKahan1970.approximationNumber_paperTanAngleOperatorC U V htr n,
+    TauCeti.DavisKahan1970.approximationNumber_sinAngleOperatorC U V n]
+  rfl
+
+/-- **Under uniform transversality no principal angle is a right angle**, so the
+Challenge's `TangentDefined` conclusion holds. -/
+theorem tangentDefined_ambientSine
+    (htr : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ < 1) :
+    TangentDefined (ambientSine U V) := by
+  intro n
+  have hnorm : ‖ambientSine U V‖ < 1 := by
+    have h : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ = ‖ambientSine U V‖ := by
+      rw [TauCeti.DavisKahanExt.sinAngleOperatorC, ContinuousLinearMap.norm_modulus,
+        norm_sub_rev]
+      rfl
+    rwa [h] at htr
+  have hle : singularValue (ambientSine U V) n ≤ ‖ambientSine U V‖ :=
+    (ambientSine U V).approximationNumber_le_norm n
+  have h0 : 0 ≤ singularValue (ambientSine U V) n :=
+    (ambientSine U V).approximationNumber_nonneg n
+  have hlt : singularValue (ambientSine U V) n < 1 := lt_of_le_of_lt hle hnorm
+  rw [Real.cos_arcsin]
+  exact ne_of_gt (Real.sqrt_pos.mpr (by nlinarith))
+
+/-- **The Challenge's ambient tangent sequence norm is the development's paper norm of
+`tan Θ`.**  This is the bridge the ambient `tan Θ` clause consumes. -/
+theorem evalSeq_tanSeq_ambientSine (N : UINorm)
+    (htr : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ < 1) :
+    N.evalSeq (tanSeq (ambientSine U V)) =
+      N.toPaper.extendedGauge (TauCeti.DavisKahanExt.paperTanAngleOperatorC U V) :=
+  N.evalSeq_eq_of_approximationNumber _ _
+    (fun n => (tanSeq_ambientSine_eq_approximationNumber U V htr n).symm)
+
+end AmbientTangentBridge
+
+/-! ## 7. The directed `tan Θ` clause, over `ℂ`
+
+The directed clause is the one whose left-hand side is a *sequence* norm with no operator
+in sight, so it is the clearest test of the Challenge's tangent convention.  The
+development supplies all three parts of it at the Appendix's own scope — the pole
+exclusion, a representative with exactly the paper's approximation numbers, and the
+inequality — in `tanTheta_directed_unboundedRitz_paperUINorm_exists_complex`.  What is
+left here is the translation, and the scalar field. -/
+
+section DirectedTangent
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+
+omit [CompleteSpace E] in
+/-- The Challenge's directed sine block *is* the development's. -/
+theorem directedSineBlock_eq (U V : Submodule ℂ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    directedSineBlock U V = TauCeti.DavisKahan.ExactTanTheta.theorem63DirectedSineBlock U V :=
+  rfl
+
+/-- **The directed clause of the Challenge's `tan Θ` theorem, discharged from the
+development over `ℂ`.**
+
+All three printed parts: the tangent has no pole, the tangent sequence lies in the norm's
+ideal, and `δ ‖tan Θ₀‖ ≤ ‖R‖`.  The compression is a partial map, the ambient operator is
+an unbounded self-adjoint partial map, only the residual is bounded, the dimension is
+arbitrary, the separation is the half-infinite ordered one, and the norm is arbitrary. -/
+theorem tanTheta_directed_proof_complex (N : UINorm)
+    {A : E →ₗ.[ℂ] E} {V : Submodule ℂ E} [V.HasOrthogonalProjection]
+    (hV : Reduces A V) {α δ : ℝ} (hδ : 0 < δ)
+    (hunwanted : SemiboundedBelow (block A Vᗮ hV.orthogonal) (α + δ))
+    {U : Submodule ℂ E} [U.HasOrthogonalProjection] (D : RitzData A U)
+    (hupper : SemiboundedAbove D.compression α) (hR : N.Finite D.residual) :
+    TangentDefined (directedSineBlock U V) ∧
+      N.SeqFinite (tanSeq (directedSineBlock U V)) ∧
+      δ * N.seqNorm (tanSeq (directedSineBlock U V)) ≤ N.norm D.residual := by
+  -- the ordered lower bound, read off the reducing complement rather than the block
+  have hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ := by
+    intro y hyV hy
+    exact hunwanted ⟨⟨y, hyV⟩, hy⟩
+  obtain ⟨hlt, tanTheta0, htan, hmem, hbound⟩ :=
+    TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_exists_complex
+      N.toPaper D.toUnboundedRitzPair
+      (TauCeti.DavisKahan.ReducingComplement.ofReducesSubspace ((reduces_iff A V).1 hV))
+      hδ ((semiboundedAbove_iff _ _).1 hupper) hUnwanted hR
+  -- the Challenge's sequence is the representative's approximation-number sequence
+  have hseq : ∀ n, (tanTheta0.approximationNumber n) = tanSeq (directedSineBlock U V) n :=
+    fun n => htan n
+  have heval : N.evalSeq (tanSeq (directedSineBlock U V)) =
+      N.toPaper.extendedGauge tanTheta0 :=
+    N.evalSeq_eq_of_approximationNumber _ _ hseq
+  refine ⟨?_, ?_, ?_⟩
+  · intro n
+    have h := hlt n
+    rw [Real.cos_arcsin]
+    have h0 : 0 ≤ singularValue (directedSineBlock U V) n :=
+      (directedSineBlock U V).approximationNumber_nonneg n
+    exact ne_of_gt (Real.sqrt_pos.mpr (by
+      have : singularValue (directedSineBlock U V) n < 1 := h
+      nlinarith))
+  · show N.evalSeq (tanSeq (directedSineBlock U V)) ≠ ⊤
+    rw [heval]
+    exact hmem
+  · show δ * (N.evalSeq (tanSeq (directedSineBlock U V))).toReal ≤ N.norm D.residual
+    rw [heval]
+    exact hbound
+
+end DirectedTangent
+
+/-! ## 8. The ambient `tan Θ` clause, over `ℂ` -/
+
+section AmbientTangentClause
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
+
+/-- **The ambient clause of the Challenge's `tan Θ` theorem, discharged from the
+development over `ℂ`.**
+
+`δ ‖tan Θ‖ ≤ ‖H‖` on the tangent *sequence* of the ambient angle, with the pole exclusion
+as a conclusion.  Uniform transversality is derived from the two form bounds and the
+standing condition (3.5) by
+`DavisKahan1970.norm_sinAngleOperatorC_lt_one_of_unboundedRitz`, and the sequence is
+identified with the development's operator `tan Θ` by
+`DavisKahan1970.approximationNumber_paperTanAngleOperatorC`. -/
+theorem tanTheta_ambient_proof_complex (N : UINorm)
+    {A : E →ₗ.[ℂ] E} {V : Submodule ℂ E} [V.HasOrthogonalProjection]
+    (hV : Reduces A V) {α δ : ℝ} (hδ : 0 < δ)
+    (hunwanted : SemiboundedBelow (block A Vᗮ hV.orthogonal) (α + δ))
+    {U : Submodule ℂ E} [U.HasOrthogonalProjection] (D : RitzData A U)
+    (hupper : SemiboundedAbove D.compression α)
+    (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
+    (hres : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (h35 : CrossedDefectsEquivalent U V) (hHmem : N.Finite H) :
+    TangentDefined (ambientSine U V) ∧
+      N.SeqFinite (tanSeq (ambientSine U V)) ∧
+      δ * N.seqNorm (tanSeq (ambientSine U V)) ≤ N.norm H := by
+  have hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ := by
+    intro y hyV hy
+    exact hunwanted ⟨⟨y, hyV⟩, hy⟩
+  have hVc : TauCeti.DavisKahan.ReducingComplement A V :=
+    TauCeti.DavisKahan.ReducingComplement.ofReducesSubspace ((reduces_iff A V).1 hV)
+  have hupper' : TauCeti.LinearPMap.SemiboundedAbove
+      D.toUnboundedRitzPair.trial.compression α := (semiboundedAbove_iff _ _).1 hupper
+  have htr : ‖TauCeti.DavisKahanExt.sinAngleOperatorC U V‖ < 1 :=
+    TauCeti.DavisKahan1970.norm_sinAngleOperatorC_lt_one_of_unboundedRitz
+      D.toUnboundedRitzPair hVc hδ hupper' hUnwanted h35
+  obtain ⟨hmem, hbound⟩ :=
+    TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex
+      N.toPaper D.toUnboundedRitzPair hVc H hH hδ hupper' hUnwanted h35 hres hHmem
+  have heval := evalSeq_tanSeq_ambientSine U V N htr
+  refine ⟨tangentDefined_ambientSine U V htr, ?_, ?_⟩
+  · show N.evalSeq (tanSeq (ambientSine U V)) ≠ ⊤
+    rw [heval]; exact hmem
+  · show δ * (N.evalSeq (tanSeq (ambientSine U V))).toReal ≤ N.norm H
+    rw [heval]; exact hbound
+
+end AmbientTangentClause
+
+/-! ## 9. The two capability classes, at every `RCLike` field -/
 
 section Capabilities
 
@@ -409,7 +589,7 @@ example (𝕜 : Type u) [RCLike 𝕜] : HasUnboundedSylvesterKyFan.{u, v} 𝕜 :
 
 end Capabilities
 
-/-! ## 7. Status
+/-! ## 10. Status
 
 This file is a **feasibility candidate**, not a finished submission.  The honest
 state of each printed clause is recorded here and, clause by clause with the
