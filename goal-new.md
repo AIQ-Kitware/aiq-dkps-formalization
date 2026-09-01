@@ -1330,16 +1330,33 @@ for field with the compression still a partial map -- and discharges two of the
 seven printed clauses: `sin Θ`, and the **ambient `sin 2Θ` clause at an arbitrary
 reducing subspace**.
 
-**Item 21 (generic `[RCLike 𝕜]`): the same single obstruction.**  Both the
-Challenge's `[RCLike 𝕜]` statements and the development's generic Section 2
-surface need the same two capability classes at an arbitrary `RCLike` field.
-That is one scalar-field transport, for which Mathlib supplies the dispatch, and
-it would serve every theorem at once.
+**Item 21 (generic `[RCLike 𝕜]`): CLOSED, 2026-09-01.**  Both capability classes
+--- `ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` and
+`ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜` --- are now instances at **every**
+`RCLike` field, each on `propext`, `Classical.choice`, `Quot.sound` alone.  Three
+modules carry the transport: `ForTauCeti/Analysis/RCLike/ScalarTransport.lean`
+(the field isomorphism and the Hilbert-structure transport, with subspaces,
+orthogonal complements, orthogonal projections, bounded operators, `Module.rank`
+and partial maps), `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/ScalarTransport.lean`
+(approximation numbers, linear independence, spans) and
+`DavisKahan/Sylvester/ScalarTransport.lean` (Ky Fan gauges, semibounds, the real
+spectrum, the separation, the Sylvester equation).  The candidate Solution's two
+discharged clauses now carry no binders at all.
 
-Remaining, named per clause in the statement audit: the transport; the `sin 2Θ`
-directed clause at a reducing subspace with an unbounded compression; and tangent
-representatives with their derived no-pole facts for `tan Θ` and `tan 2Θ`.  None
-is a policy or dependency obstruction.
+**Newly found and repaired, 2026-08-31: a defect in the production certificate.**
+`S2-tan-theta`'s directed clause was witnessed by theorems taking a
+`TanTheta.UnboundedTrialBlock`, whose Ritz compression is **bounded**; the
+Appendix to Section 6 says of the tangent theorem that both `A₀` and `Λ₁` may be
+unbounded.  Repaired by `tanTheta_directed_unboundedRitz_paperUINorm_{complex,real}`,
+and the scope atom now carries a `type_requirements` that a bounded-compression
+bundle cannot satisfy.  29/29 restored on the repair.
+
+Remaining, named per clause in the statement audit: the `sin 2Θ` directed clause
+at a reducing subspace with an unbounded compression; and tangent representatives
+with their derived no-pole facts for `tan Θ` and `tan 2Θ`.  Then the Comparator
+layout, which needs `Solution.lean` to stop importing `Challenge` and to
+redeclare the four advertised names independently.  None is a policy or
+dependency obstruction.
 
 ## Standing constraint honoured
 
@@ -1348,6 +1365,8 @@ was created in this repository.
 
 ## Verdict
 
-`PRODUCTION COMPLETE / PALOMAR FEASIBILITY OPEN` — the Challenge is built,
-statement-audited against the printed source, and compiling; the Solution
-discharges two of the seven printed clauses and names the rest per clause.
+`PRODUCTION COMPLETE (one clause repaired) / PALOMAR IN PROGRESS` — the Challenge
+is built, statement-audited against the printed source, and compiling; the
+scalar-field transport is done and both capability classes are instances at every
+`RCLike` field; the Solution discharges two of the seven printed clauses
+unconditionally and names the rest per clause.
