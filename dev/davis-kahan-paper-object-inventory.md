@@ -49,8 +49,8 @@ future row is D, the canonical theorem naming it is the thing to fix.
 
 | object | class | results whose canonical evidence names it | why |
 | --- | --- | --- | --- |
-| `PaperUnitaryInvariantNorm` | **C** | S2 ×4, DK-6.1-lem, DK-6.1-prop, DK-6.1-thm, DK-6.2-lem, DK-8.2-thm | See "The norm layer" below. It is the operational adapter from Ky Fan estimates to the source's universal norm quantifier, and it is the single most load-bearing `Paper*` object in the tree. |
-| `PaperSymmetricNormingFunction` | **B** | (not in a canonical type; reached through the equivalence) | The finite-list symmetric norming function Davis and Kahan actually define. `TauCeti.DavisKahan.ExactSinTheta.paperNormEquiv` is a full `Equiv` to `PaperUnitaryInvariantNorm`, with `ofPaperNorm_toPaperNorm` and `toPaperNorm_ofPaperNorm_finite_apply` as the two round trips. |
+| `SymmetricNormingFunction` | **B** | S2 ×4, DK-6.1-lem, DK-6.1-prop, DK-6.1-thm, DK-6.2-lem, DK-8.2-thm | Renamed from `PaperUnitaryInvariantNorm` on 2026-09-01; see "The norm layer" below. It is a normalized symmetric norming function in dimension-coherent form -- the class the source quantifies over -- and no longer a `Paper*` object. It remains the single most load-bearing object in the tree. |
+| `SymmetricNormingFunction.Axiomatic` | **B** | (not in a canonical type; reached through the equivalence) | The finite-list presentation with the printed axioms written out, renamed from `PaperSymmetricNormingFunction` and demoted into the canonical type's namespace, which is what it is: a characterisation plus the constructor every concrete instance is built through. `SymmetricNormingFunction.Axiomatic.equiv` is a full `Equiv` to `SymmetricNormingFunction`, with `ofNormingFunction_toNormingFunction` and `toNormingFunction_ofNormingFunction_finite_apply` as the two round trips. |
 | `paperSinAngleOperatorC` | **B** | DK-6.1-prop | The paper's *ambient* sine-angle operator. `paperSinAngleOperatorC_eq` characterizes it. Distinct from the directed `sinAngleOperatorC`. |
 | `paperTanAngleOperatorC` / `…R` | **B** | S2-tan-theta | The paper's ambient tangent. `paperTanAngleOperatorC_eq_cfc` gives the functional-calculus form under transversality; `paperTanAngleOperatorC_eq_modulus_blockRepresentative` gives the block form. `…R` is defined by transport through complexification. |
 | `paperSinTwoAngleOperatorC` / `…R` | **B** | S2-sin-two-theta, DK-8.2-thm | The paper's ambient `sin 2Θ`. `norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC` relates it to the directed operator **in operator norm only**; the approximation-number identification is claimed for the directed operator, not this one. That is a real distinction: an ambient angle object carries each principal angle twice where the directed block carries it once. |
@@ -71,22 +71,22 @@ future row is D, the canonical theorem naming it is the thing to fix.
 
 The three objects in play are:
 
-* `TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm` — a *sequence* of
+* `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction` — a *sequence* of
   finite unitarily invariant seminorms `TauCeti.UnitarilyInvariantSeminorm ℂ
   (EuclideanSpace ℂ (Fin n))`, plus `normalized` and `zero_pad`, extended to
   operators by `extendedGauge A = ⨆ n, ofReal (prefixGauge n A)` over the
   approximation-number prefixes, with `Mem A ↔ extendedGauge A ≠ ⊤`.
-* `TauCeti.DavisKahan.ExactSinTheta.PaperSymmetricNormingFunction` — the
+* `TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction.Axiomatic` — the
   finite-list object, `gauge : ∀ n, (Fin n → ℝ) → ℝ` with the printed axioms.
 * `TauCeti.SymmetricGauge` (`ForTauCeti/Analysis/Normed/SymmetricGauge.lean`) —
   Calkin's symmetric norming function on `(ℕ →₀ ℝ≥0)`, with `extend` to
   `ℕ → ℝ≥0∞`.
 
-The first two are already tied: `paperNormEquiv : PaperUnitaryInvariantNorm ≃
-PaperSymmetricNormingFunction`, both round trips proved. So the *source*
-correspondence is closed, and the open architectural question is only whether
-`TauCeti.SymmetricGauge` can replace `PaperUnitaryInvariantNorm` as the durable
-abstraction underneath.
+The first two are already tied: `SymmetricNormingFunction.Axiomatic.equiv :
+SymmetricNormingFunction ≃ SymmetricNormingFunction.Axiomatic`, both round trips
+proved. So the *source* correspondence is closed, and the open architectural
+question is only whether `TauCeti.SymmetricGauge` can replace
+`SymmetricNormingFunction` as the durable abstraction underneath.
 
 **It cannot today, and the blocker is at the operator-ideal layer, not at the
 gauge layer.** `TauCeti.symmetricGaugeFamily`, the construction that turns a
@@ -156,8 +156,11 @@ Copying the Section 2 architecture unchanged would have strengthened Theorems
 6.1 and 6.2 by requiring an isometric trial map, which is exactly the hypothesis
 their lower-frame factor `ε` exists to avoid.
 
-The remaining `C` row is `PaperUnitaryInvariantNorm`, and it stays: its
-replacement is blocked at the operator-ideal layer, as recorded above.
+No `C` row remains. `PaperUnitaryInvariantNorm` was the last one, and the
+2026-09-01 rename resolved it the other way: rather than replacing the object,
+the object was given the name of the mathematics it already encodes. Whether
+`TauCeti.SymmetricGauge` should become the durable carrier underneath is still
+open, and is still blocked at the operator-ideal layer as recorded above.
 
 ## The public alias divergence, measured
 
@@ -168,16 +171,17 @@ alias the `Paper*` record methods. Re-pointing them is blocked by an import
 cycle: `SineTheta/PaperSurface.lean` imports `SineThetaSourceInventory`, and the
 new theorems sit above `PaperSurface`.
 
-**The cycle is one alias.** Of the 106 alias names the inventory defines,
-`PaperSurface` uses exactly one — `UnitaryInvariantNorm`, itself an alias of
-`PaperUnitaryInvariantNorm` — at a single occurrence. Breaking the cycle is a
-one-line change plus a narrower import.
+**The cycle was one alias, and it is gone.** Of the alias names the inventory
+defines, `PaperSurface` used exactly one — `UnitaryInvariantNorm`, itself an
+alias of `PaperUnitaryInvariantNorm` — at a single occurrence. The 2026-09-01
+rename deleted that alias and had `PaperSurface` name `SymmetricNormingFunction`
+directly, so `PaperSurface` no longer depends on `SineThetaSourceInventory` for
+the norm type.
 
-What is *not* one line is what follows. Re-pointing `Theorem6_1_complex` changes
-the printed type of a name registered in the census, `#check`ed by the audit
-surface, and read by the compiler-derived scalar-scope and capability audit; and
-`UnitaryInvariantNorm` and `PaperUnitaryInvariantNorm` are distinct constants, so
-even the cycle-break edit changes one registered declaration's printed type.
+What remains is the part that was never one line. Re-pointing
+`Theorem6_1_complex` changes the printed type of a name registered in the census,
+`#check`ed by the audit surface, and read by the compiler-derived scalar-scope
+and capability audit. That work is still open.
 Each renamed public name needs its own source comparison. Deferred deliberately,
 with the measurement recorded so the next pass starts from a decision rather than
 a rediscovery.

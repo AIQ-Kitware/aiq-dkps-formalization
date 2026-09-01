@@ -125,7 +125,6 @@
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.RealIsometricSinThetaIdealFamilyProblem": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.RealIsometricSinThetaPaperData": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.RealSymmetricSinThetaProblem": "",
-    "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.SymmetricNormingFunction": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.SymmetricSinThetaProblem": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.Theorem6_1_complex": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.Theorem6_1Data": "",
@@ -148,7 +147,6 @@
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.Theorem6_2_real_commonCore": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain_boundNorm_of_finiteRank": "",
-    "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.UnitaryInvariantNorm": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.ambientEquivalentAngle": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.ambientEquivalentSinAngle": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.ambientEquivalentSinAngle_eq_projectionDifferenceSine": "",
@@ -191,10 +189,6 @@
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.sinTheta_paperData_real": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.sinTheta_idealFamily_real": "",
     "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.sineTheta_constant_one_optimal": "",
-    "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.unitaryInvariantNorm_definite": "",
-    "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.unitaryInvariantNorm_equiv_symmetricNormingFunction": "",
-    "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.unitaryInvariantNorm_nonempty": "",
-    "DavisKahan/Sources/DavisKahan1970/SineThetaSourceInventory.lean:TauCeti.DavisKahan1970.unitaryInvariantNorm_operator_laws": "",
     "DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:TauCeti.DavisKahan1970.FormBoundedIsometricSinThetaProblem": "",
     "DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:TauCeti.DavisKahan1970.sinTheta_generalized_bundled_complex": "",
     "DavisKahan/Sources/DavisKahan1970/GeneralSinTheta.lean:TauCeti.DavisKahan1970.sinTheta_generalized_complementaryBlock_complex": "",
@@ -215,7 +209,7 @@
     "DavisKahan/TanTheta/Spectrum.lean:TauCeti.DavisKahanExt.instCStarAlgebraSubspaceCoordinateGenuineTanTheta": "",
     "DavisKahan/TanTheta/Spectrum.lean:TauCeti.DavisKahanExt.instCompleteSpaceCoeOfHasOrthogonalProjectionGenuineTanTheta": "",
     "ForTauCeti/Analysis/InnerProductSpace/PrincipalSineSequence.lean:TauCeti.sourceCompleteSpace": "",
-    "DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex_ofRCLike_conforms": "Type-equality check; its meaning is the `/-! ### ... -/` section docstring immediately above.",
-    "DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real_ofRCLike_conforms": "Type-equality check; its meaning is the `/-! ### ... -/` section docstring immediately above."
+    "DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike_conforms": "Type-equality check; its meaning is the `/-! ### ... -/` section docstring immediately above.",
+    "DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms": "Type-equality check; its meaning is the `/-! ### ... -/` section docstring immediately above."
   }
 }

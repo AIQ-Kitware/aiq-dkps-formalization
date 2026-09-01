@@ -36,7 +36,7 @@ SPEC.loader.exec_module(M)
 
 
 UNBOUNDED = "→ₗ.["
-PAPER_NORM = "PaperUnitaryInvariantNorm"
+PAPER_NORM = "SymmetricNormingFunction"
 # The carriers that separate the ambient-operator axis from the compression axis.
 RITZ_PAIR = "UnboundedRitzPair"      # `trial.compression : Z →ₗ.[𝕜] Z`
 TRIAL_BLOCK = "UnboundedTrialBlock"  # `operator : Z →L[𝕜] Z` -- BOUNDED

@@ -59,7 +59,7 @@
       "idealFamily",
       "kyFan",
       "opNorm",
-      "paperUINorm",
+      "symmetricNorming",
       "symmetricIdealFamily",
       "uiNorm"
     ],
@@ -200,10 +200,10 @@
         "ambient"
       ]
     },
-    "paperUINorm": {
+    "symmetricNorming": {
       "column": "norm_scope",
       "permits": [
-        "paperUINorm"
+        "symmetricNorming"
       ]
     },
     "kyFan": {
@@ -306,7 +306,7 @@
   "rows": [
     {
       "old_name": "sinTheta_headline_generic",
-      "new_name": "sinTheta_unbounded_intervalExterior_paperUINorm_rclike",
+      "new_name": "sinTheta_unbounded_intervalExterior_symmetricNorming_rclike",
       "trig_family": "sinTheta",
       "paper_role": "section2-result",
       "scalar_scope": "rclike",
@@ -314,7 +314,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -336,7 +336,7 @@
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
       "section_two_endpoint": "none",
-      "canonical_status_reason": "Not the full-source endpoint: it is stated for a Fan-dominant `KyFanDominantIdealFamily` rather than the paper's `PaperUnitaryInvariantNorm`."
+      "canonical_status_reason": "Not the full-source endpoint: it is stated for a Fan-dominant `KyFanDominantIdealFamily` rather than the paper's `SymmetricNormingFunction`."
     },
     {
       "old_name": "sinTheta_headline",
@@ -348,7 +348,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "characterizedWitness",
       "canonical_status": "alternative",
@@ -357,7 +357,7 @@
     },
     {
       "old_name": "sinTheta_complex_of_intervalExterior",
-      "new_name": "sinTheta_unbounded_intervalExterior_paperUINorm_complex",
+      "new_name": "sinTheta_unbounded_intervalExterior_symmetricNorming_complex",
       "trig_family": "sinTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -365,16 +365,16 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
       "section_two_endpoint": "none",
-      "canonical_status_reason": "The `_of_intervalExterior` presentation of the printed separation; `sinTheta_unbounded_formGap_paperUINorm_complex` carries the full gap and is the endpoint."
+      "canonical_status_reason": "The `_of_intervalExterior` presentation of the printed separation; `sinTheta_unbounded_formGap_symmetricNorming_complex` carries the full gap and is the endpoint."
     },
     {
       "old_name": "sinTheta_real_of_intervalExterior",
-      "new_name": "sinTheta_unbounded_intervalExterior_paperUINorm_real",
+      "new_name": "sinTheta_unbounded_intervalExterior_symmetricNorming_real",
       "trig_family": "sinTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -382,12 +382,12 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
       "section_two_endpoint": "none",
-      "canonical_status_reason": "The `_of_intervalExterior` presentation of the printed separation; `sinTheta_unbounded_formGap_paperUINorm_real` carries the full gap and is the endpoint."
+      "canonical_status_reason": "The `_of_intervalExterior` presentation of the printed separation; `sinTheta_unbounded_formGap_symmetricNorming_real` carries the full gap and is the endpoint."
     },
     {
       "old_name": "generalizedSinTheta",
@@ -807,7 +807,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "derived-facade",
@@ -824,7 +824,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "derived-facade",
@@ -841,7 +841,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "derived-facade",
@@ -858,7 +858,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "derived-facade",
@@ -935,7 +935,7 @@
     },
     {
       "old_name": "tanTheta_headline_generic_directed",
-      "new_name": "tanTheta_directed_finiteDimensional_paperUINorm_rclike",
+      "new_name": "tanTheta_directed_finiteDimensional_symmetricNorming_rclike",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "rclike",
@@ -943,7 +943,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "characterizedWitness",
       "canonical_status": "canonical",
@@ -951,8 +951,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_directed_paperUINorm",
-      "new_name": "tanTheta_directed_bounded_paperUINorm_complex",
+      "old_name": "tanTheta_directed_symmetricNorming",
+      "new_name": "tanTheta_directed_bounded_symmetricNorming_complex",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -960,7 +960,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "existentialWitness",
       "canonical_status": "canonical",
@@ -968,8 +968,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_directed_paperUINorm_spectral",
-      "new_name": "tanTheta_directed_bounded_spectralGap_paperUINorm_complex",
+      "old_name": "tanTheta_directed_symmetricNorming_spectral",
+      "new_name": "tanTheta_directed_bounded_spectralGap_symmetricNorming_complex",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -977,7 +977,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "existentialWitness",
       "canonical_status": "canonical",
@@ -985,8 +985,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_directed_paperUINorm_real",
-      "new_name": "tanTheta_directed_bounded_paperUINorm_real",
+      "old_name": "tanTheta_directed_symmetricNorming_real",
+      "new_name": "tanTheta_directed_bounded_symmetricNorming_real",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -994,7 +994,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "existentialWitness",
       "canonical_status": "canonical",
@@ -1002,8 +1002,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_directed_paperUINorm_real_infinite",
-      "new_name": "tanTheta_directed_bounded_arbitraryDimension_paperUINorm_real",
+      "old_name": "tanTheta_directed_symmetricNorming_real_infinite",
+      "new_name": "tanTheta_directed_bounded_arbitraryDimension_symmetricNorming_real",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1011,7 +1011,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "existentialWitness",
       "canonical_status": "alternative",
@@ -1019,8 +1019,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_directed_paperUINorm_real_spectral",
-      "new_name": "tanTheta_directed_bounded_spectralGap_paperUINorm_real",
+      "old_name": "tanTheta_directed_symmetricNorming_real_spectral",
+      "new_name": "tanTheta_directed_bounded_spectralGap_symmetricNorming_real",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1028,7 +1028,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "existentialWitness",
       "canonical_status": "canonical",
@@ -1036,8 +1036,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_directed_perturbation_paperUINorm_real",
-      "new_name": "tanTheta_directed_bounded_perturbation_paperUINorm_real",
+      "old_name": "tanTheta_directed_perturbation_symmetricNorming_real",
+      "new_name": "tanTheta_directed_bounded_perturbation_symmetricNorming_real",
       "trig_family": "tanTheta",
       "paper_role": "specialization",
       "scalar_scope": "real",
@@ -1045,7 +1045,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "existentialWitness",
       "canonical_status": "alternative",
@@ -1070,8 +1070,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_wholeSpace_paperUINorm",
-      "new_name": "tanTheta_ambient_bounded_paperUINorm_complex_of_transversality",
+      "old_name": "tanTheta_wholeSpace_symmetricNorming",
+      "new_name": "tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1079,7 +1079,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -1104,8 +1104,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_wholeSpace_paperUINorm_of_crossedDefectsEquivalent",
-      "new_name": "tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects",
+      "old_name": "tanTheta_wholeSpace_symmetricNorming_of_crossedDefectsEquivalent",
+      "new_name": "tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1113,7 +1113,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -1121,8 +1121,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_wholeSpace_paperUINorm_real",
-      "new_name": "tanTheta_ambient_bounded_paperUINorm_real_of_transversality",
+      "old_name": "tanTheta_wholeSpace_symmetricNorming_real",
+      "new_name": "tanTheta_ambient_bounded_symmetricNorming_real_of_transversality",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1130,7 +1130,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -1138,8 +1138,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_wholeSpace_paperUINorm_real_of_crossedDefectsEquivalent",
-      "new_name": "tanTheta_ambient_bounded_paperUINorm_real_of_crossedDefects",
+      "old_name": "tanTheta_wholeSpace_symmetricNorming_real_of_crossedDefectsEquivalent",
+      "new_name": "tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1147,7 +1147,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -1172,8 +1172,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_ambient_paperUINorm_of_lowerCorner",
-      "new_name": "tanTheta_ambient_bounded_paperUINorm_complex_of_lowerCorner",
+      "old_name": "tanTheta_ambient_symmetricNorming_of_lowerCorner",
+      "new_name": "tanTheta_ambient_bounded_symmetricNorming_complex_of_lowerCorner",
       "trig_family": "tanTheta",
       "paper_role": "assembly-step",
       "scalar_scope": "complex",
@@ -1181,7 +1181,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -1189,8 +1189,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unbounded_ambient_paperUINorm_of_data_of_transversality",
-      "new_name": "tanTheta_ambient_unboundedOperator_boundedRitzData_paperUINorm_complex_of_transversality",
+      "old_name": "tanTheta_unbounded_ambient_symmetricNorming_of_data_of_transversality",
+      "new_name": "tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex_of_transversality",
       "trig_family": "tanTheta",
       "paper_role": "assembly-step",
       "scalar_scope": "complex",
@@ -1198,7 +1198,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -1206,8 +1206,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unbounded_ambient_paperUINorm_of_data",
-      "new_name": "tanTheta_ambient_unboundedOperator_boundedRitzData_paperUINorm_complex",
+      "old_name": "tanTheta_unbounded_ambient_symmetricNorming_of_data",
+      "new_name": "tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_complex",
       "trig_family": "tanTheta",
       "paper_role": "assembly-step",
       "scalar_scope": "complex",
@@ -1215,7 +1215,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -1223,8 +1223,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unbounded_ambient_paperUINorm_exact",
-      "new_name": "tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex",
+      "old_name": "tanTheta_unbounded_ambient_symmetricNorming_exact",
+      "new_name": "tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1232,7 +1232,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -1240,8 +1240,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unboundedCompression_ambient_paperUINorm_of_data_of_transversality",
-      "new_name": "tanTheta_ambient_unboundedRitzData_paperUINorm_complex_of_transversality",
+      "old_name": "tanTheta_unboundedCompression_ambient_symmetricNorming_of_data_of_transversality",
+      "new_name": "tanTheta_ambient_unboundedRitzData_symmetricNorming_complex_of_transversality",
       "trig_family": "tanTheta",
       "paper_role": "assembly-step",
       "scalar_scope": "complex",
@@ -1249,7 +1249,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "unbounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "transversality-supplied",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -1257,8 +1257,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unboundedCompression_ambient_paperUINorm_of_data",
-      "new_name": "tanTheta_ambient_unboundedRitzData_paperUINorm_complex",
+      "old_name": "tanTheta_unboundedCompression_ambient_symmetricNorming_of_data",
+      "new_name": "tanTheta_ambient_unboundedRitzData_symmetricNorming_complex",
       "trig_family": "tanTheta",
       "paper_role": "assembly-step",
       "scalar_scope": "complex",
@@ -1266,7 +1266,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "unbounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -1274,8 +1274,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unboundedCompression_ambient_paperUINorm_exact",
-      "new_name": "tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex",
+      "old_name": "tanTheta_unboundedCompression_ambient_symmetricNorming_exact",
+      "new_name": "tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1283,7 +1283,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "unbounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -1291,8 +1291,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unbounded_ambient_ritz_paperUINorm",
-      "new_name": "tanTheta_ambient_unboundedRitz_paperUINorm_complex",
+      "old_name": "tanTheta_unbounded_ambient_ritz_symmetricNorming",
+      "new_name": "tanTheta_ambient_unboundedRitz_symmetricNorming_complex",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1300,7 +1300,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "unbounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -1308,8 +1308,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unbounded_ambient_paperUINorm_real_of_data",
-      "new_name": "tanTheta_ambient_unboundedOperator_boundedRitzData_paperUINorm_real",
+      "old_name": "tanTheta_unbounded_ambient_symmetricNorming_real_of_data",
+      "new_name": "tanTheta_ambient_unboundedOperator_boundedRitzData_symmetricNorming_real",
       "trig_family": "tanTheta",
       "paper_role": "assembly-step",
       "scalar_scope": "real",
@@ -1317,7 +1317,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -1325,8 +1325,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unbounded_ambient_paperUINorm_real_exact",
-      "new_name": "tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real",
+      "old_name": "tanTheta_unbounded_ambient_symmetricNorming_real_exact",
+      "new_name": "tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_real",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1334,7 +1334,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -1342,8 +1342,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unboundedCompression_ambient_paperUINorm_real_of_data",
-      "new_name": "tanTheta_ambient_unboundedRitzData_paperUINorm_real",
+      "old_name": "tanTheta_unboundedCompression_ambient_symmetricNorming_real_of_data",
+      "new_name": "tanTheta_ambient_unboundedRitzData_symmetricNorming_real",
       "trig_family": "tanTheta",
       "paper_role": "assembly-step",
       "scalar_scope": "real",
@@ -1351,7 +1351,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "unbounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -1359,8 +1359,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unboundedCompression_ambient_paperUINorm_real_exact",
-      "new_name": "tanTheta_ambient_unboundedRitz_raw_paperUINorm_real",
+      "old_name": "tanTheta_unboundedCompression_ambient_symmetricNorming_real_exact",
+      "new_name": "tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1368,7 +1368,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "unbounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -1376,8 +1376,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTheta_unbounded_ambient_ritz_paperUINorm_real",
-      "new_name": "tanTheta_ambient_unboundedRitz_paperUINorm_real",
+      "old_name": "tanTheta_unbounded_ambient_ritz_symmetricNorming_real",
+      "new_name": "tanTheta_ambient_unboundedRitz_symmetricNorming_real",
       "trig_family": "tanTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1385,7 +1385,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "unbounded-ritz",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "crossedDefects",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -1394,7 +1394,7 @@
     },
     {
       "old_name": "sinTwoTheta_headline_generic_directed",
-      "new_name": "sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike",
+      "new_name": "sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "rclike",
@@ -1402,7 +1402,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -1427,8 +1427,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "sinTwoTheta_directedResidual_paperUINorm",
-      "new_name": "sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_complex",
+      "old_name": "sinTwoTheta_directedResidual_symmetricNorming",
+      "new_name": "sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNorming_complex",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1436,7 +1436,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "bounded-ritz",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "canonical",
@@ -1461,8 +1461,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "sinTwoTheta_wholeSpace_paperUINorm",
-      "new_name": "sinTwoTheta_ambient_bounded_paperUINorm_complex",
+      "old_name": "sinTwoTheta_wholeSpace_symmetricNorming",
+      "new_name": "sinTwoTheta_ambient_bounded_symmetricNorming_complex",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1470,7 +1470,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -1478,8 +1478,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "sinTwoTheta_wholeSpace_paperUINorm_real",
-      "new_name": "sinTwoTheta_ambient_bounded_paperUINorm_real",
+      "old_name": "sinTwoTheta_wholeSpace_symmetricNorming_real",
+      "new_name": "sinTwoTheta_ambient_bounded_symmetricNorming_real",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1487,7 +1487,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -1512,8 +1512,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "sinTwoTheta_unbounded_directedResidual_paperUINorm",
-      "new_name": "sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
+      "old_name": "sinTwoTheta_unbounded_directedResidual_symmetricNorming",
+      "new_name": "sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1521,7 +1521,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "canonical",
@@ -1546,8 +1546,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "sinTwoTheta_unbounded_directedResidual_paperUINorm_real",
-      "new_name": "sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real",
+      "old_name": "sinTwoTheta_unbounded_directedResidual_symmetricNorming_real",
+      "new_name": "sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1555,7 +1555,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "canonical",
@@ -1563,8 +1563,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "sinTwoTheta_unbounded_directedResidual_paperUINorm_real_of_intervalExterior",
-      "new_name": "sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_paperUINorm_real",
+      "old_name": "sinTwoTheta_unbounded_directedResidual_symmetricNorming_real_of_intervalExterior",
+      "new_name": "sinTwoTheta_directed_unboundedResidual_blockRepresentative_intervalExterior_symmetricNorming_real",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1572,7 +1572,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "intervalExterior",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "canonical",
@@ -1580,8 +1580,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "sinTwoTheta_reflectionResidual_paperUINorm_real",
-      "new_name": "sinTwoTheta_directed_unboundedReflectionResidual_blockRepresentative_paperUINorm_real",
+      "old_name": "sinTwoTheta_reflectionResidual_symmetricNorming_real",
+      "new_name": "sinTwoTheta_directed_unboundedReflectionResidual_blockRepresentative_symmetricNorming_real",
       "trig_family": "sinTwoTheta",
       "paper_role": "specialization",
       "scalar_scope": "real",
@@ -1589,7 +1589,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "alternative",
@@ -1597,8 +1597,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "sinTwoTheta_addBounded_paperUINorm_angleOperator",
-      "new_name": "sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex",
+      "old_name": "sinTwoTheta_addBounded_symmetricNorming_angleOperator",
+      "new_name": "sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1606,7 +1606,7 @@
       "operator_scope": "unbounded-with-bounded-perturbation",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -1614,8 +1614,8 @@
       "canonical_status_reason": "Re-proved at `FormBoundedSylvesterGap` on 2026-08-31, so the unqualified name now carries the printed half-infinite gap scope; the bounded-interval statement it used to name moved to `..._spectrumGap_...`."
     },
     {
-      "old_name": "sinTwoTheta_addBounded_paperUINorm_real_angleOperator",
-      "new_name": "sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real",
+      "old_name": "sinTwoTheta_addBounded_symmetricNorming_real_angleOperator",
+      "new_name": "sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1623,7 +1623,7 @@
       "operator_scope": "unbounded-with-bounded-perturbation",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -1631,8 +1631,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "sinTwoTheta_addBounded_paperUINorm",
-      "new_name": "sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_paperUINorm_complex",
+      "old_name": "sinTwoTheta_addBounded_symmetricNorming",
+      "new_name": "sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_complex",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1640,7 +1640,7 @@
       "operator_scope": "unbounded-with-bounded-perturbation",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "alternative",
@@ -1648,8 +1648,8 @@
       "canonical_status_reason": "Re-proved at `FormBoundedSylvesterGap` on 2026-08-31, so the unqualified name now carries the printed half-infinite gap scope; the bounded-interval statement it used to name moved to `..._spectrumGap_...`."
     },
     {
-      "old_name": "sinTwoTheta_addBounded_paperUINorm_real",
-      "new_name": "sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_paperUINorm_real",
+      "old_name": "sinTwoTheta_addBounded_symmetricNorming_real",
+      "new_name": "sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_real",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1657,7 +1657,7 @@
       "operator_scope": "unbounded-with-bounded-perturbation",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "alternative",
@@ -1937,8 +1937,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_branchFree_paperUINorm",
-      "new_name": "tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike",
+      "old_name": "tanTwoTheta_branchFree_symmetricNorming",
+      "new_name": "tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "rclike",
@@ -1946,7 +1946,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "characterizedWitness",
       "canonical_status": "canonical",
@@ -1954,8 +1954,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_branchFree_paperUINorm_real",
-      "new_name": "tanTwoTheta_branchFree_bounded_paperUINorm_real",
+      "old_name": "tanTwoTheta_branchFree_symmetricNorming_real",
+      "new_name": "tanTwoTheta_branchFree_bounded_symmetricNorming_real",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -1963,16 +1963,16 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "characterizedWitness",
       "canonical_status": "canonical",
       "section_two_endpoint": "none",
-      "canonical_status_reason": "Dimension scope corrected 2026-08-31: the elaborated type carries only `[U.HasOrthogonalProjection]`, with no `FiniteDimensional` hypothesis on the trial subspace, so the name and the row both said `finiteSubspace` of an arbitrary-subspace theorem. Its complex sibling `tanTwoTheta_branchFree_bounded_paperUINorm_complex` has the same scope and now the same name shape."
+      "canonical_status_reason": "Dimension scope corrected 2026-08-31: the elaborated type carries only `[U.HasOrthogonalProjection]`, with no `FiniteDimensional` hypothesis on the trial subspace, so the name and the row both said `finiteSubspace` of an arbitrary-subspace theorem. Its complex sibling `tanTwoTheta_branchFree_bounded_symmetricNorming_complex` has the same scope and now the same name shape."
     },
     {
-      "old_name": "tanTwoTheta_branchFree_paperUINorm_arbitrarySubspace",
-      "new_name": "tanTwoTheta_branchFree_bounded_paperUINorm_complex",
+      "old_name": "tanTwoTheta_branchFree_symmetricNorming_arbitrarySubspace",
+      "new_name": "tanTwoTheta_branchFree_bounded_symmetricNorming_complex",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -1980,7 +1980,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "characterizedWitness",
       "canonical_status": "canonical",
@@ -2226,8 +2226,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_directedCorner_residual_paperUINorm_branchFree",
-      "new_name": "tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_paperUINorm_complex",
+      "old_name": "tanTwoTheta_directedCorner_residual_symmetricNorming_branchFree",
+      "new_name": "tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_symmetricNorming_complex",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2235,7 +2235,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "alternative",
@@ -2243,8 +2243,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_directedCorner_residual_paperUINorm_exact",
-      "new_name": "tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex",
+      "old_name": "tanTwoTheta_directedCorner_residual_symmetricNorming_exact",
+      "new_name": "tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2252,7 +2252,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "canonical",
@@ -2260,8 +2260,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_directedCorner_residual_paperUINorm_real_exact",
-      "new_name": "tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real",
+      "old_name": "tanTwoTheta_directedCorner_residual_symmetricNorming_real_exact",
+      "new_name": "tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -2269,7 +2269,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "canonical",
@@ -2345,8 +2345,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_wholeSpace_branchFree_paperUINorm_of_block",
-      "new_name": "tanTwoTheta_ambient_bounded_paperUINorm_complex_of_block",
+      "old_name": "tanTwoTheta_wholeSpace_branchFree_symmetricNorming_of_block",
+      "new_name": "tanTwoTheta_ambient_bounded_symmetricNorming_complex_of_block",
       "trig_family": "tanTwoTheta",
       "paper_role": "assembly-step",
       "scalar_scope": "complex",
@@ -2354,7 +2354,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -2362,8 +2362,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_wholeSpace_paperUINorm",
-      "new_name": "tanTwoTheta_ambient_bounded_orderedForm_paperUINorm_complex",
+      "old_name": "tanTwoTheta_wholeSpace_symmetricNorming",
+      "new_name": "tanTwoTheta_ambient_bounded_orderedForm_symmetricNorming_complex",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2371,7 +2371,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -2379,8 +2379,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_wholeSpace_paperUINorm_branchFree",
-      "new_name": "tanTwoTheta_ambient_bounded_branchFree_orderedForm_paperUINorm_complex_of_poleExclusion",
+      "old_name": "tanTwoTheta_wholeSpace_symmetricNorming_branchFree",
+      "new_name": "tanTwoTheta_ambient_bounded_branchFree_orderedForm_symmetricNorming_complex_of_poleExclusion",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2388,7 +2388,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -2396,8 +2396,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_wholeSpace_paperUINorm_of_corner",
-      "new_name": "tanTwoTheta_ambient_bounded_branchFree_paperUINorm_complex_of_corner",
+      "old_name": "tanTwoTheta_wholeSpace_symmetricNorming_of_corner",
+      "new_name": "tanTwoTheta_ambient_bounded_branchFree_symmetricNorming_complex_of_corner",
       "trig_family": "tanTwoTheta",
       "paper_role": "assembly-step",
       "scalar_scope": "complex",
@@ -2405,7 +2405,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -2413,8 +2413,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_wholeSpace_paperUINorm_exact",
-      "new_name": "tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex",
+      "old_name": "tanTwoTheta_wholeSpace_symmetricNorming_exact",
+      "new_name": "tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2422,7 +2422,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -2430,8 +2430,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_wholeSpace_paperUINorm_real",
-      "new_name": "tanTwoTheta_ambient_bounded_orderedForm_paperUINorm_real",
+      "old_name": "tanTwoTheta_wholeSpace_symmetricNorming_real",
+      "new_name": "tanTwoTheta_ambient_bounded_orderedForm_symmetricNorming_real",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -2439,7 +2439,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -2447,8 +2447,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_wholeSpace_paperUINorm_real_exact",
-      "new_name": "tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real",
+      "old_name": "tanTwoTheta_wholeSpace_symmetricNorming_real_exact",
+      "new_name": "tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -2456,7 +2456,7 @@
       "operator_scope": "bounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -2464,8 +2464,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_unbounded_directedResidual_paperUINorm_exact",
-      "new_name": "tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
+      "old_name": "tanTwoTheta_unbounded_directedResidual_symmetricNorming_exact",
+      "new_name": "tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2473,7 +2473,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "canonical",
@@ -2481,8 +2481,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_unbounded_directedResidual_paperUINorm_real_exact",
-      "new_name": "tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real",
+      "old_name": "tanTwoTheta_unbounded_directedResidual_symmetricNorming_real_exact",
+      "new_name": "tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -2490,7 +2490,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "canonical",
@@ -2498,8 +2498,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_unbounded_ambient_paperUINorm_exact",
-      "new_name": "tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex",
+      "old_name": "tanTwoTheta_unbounded_ambient_symmetricNorming_exact",
+      "new_name": "tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2507,16 +2507,16 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "alternative",
       "section_two_endpoint": "none",
-      "canonical_status_reason": "Takes the reflection witness `Z` explicitly; the derived-reflection form below packages it, and `tanTwoTheta_ambient_unbounded_paperUINorm_complex` reaches the paper's angle."
+      "canonical_status_reason": "Takes the reflection witness `Z` explicitly; the derived-reflection form below packages it, and `tanTwoTheta_ambient_unbounded_symmetricNorming_complex` reaches the paper's angle."
     },
     {
-      "old_name": "tanTwoTheta_unbounded_ambient_subspace_paperUINorm",
-      "new_name": "tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_complex",
+      "old_name": "tanTwoTheta_unbounded_ambient_subspace_symmetricNorming",
+      "new_name": "tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_complex",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2524,7 +2524,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "canonical",
@@ -2532,8 +2532,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm",
-      "new_name": "tanTwoTheta_ambient_unbounded_paperUINorm_complex",
+      "old_name": "tanTwoTheta_unbounded_ambient_paperAngle_symmetricNorming",
+      "new_name": "tanTwoTheta_ambient_unbounded_symmetricNorming_complex",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2541,7 +2541,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -2549,8 +2549,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_unbounded_ambient_paperUINorm_real_exact",
-      "new_name": "tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real",
+      "old_name": "tanTwoTheta_unbounded_ambient_symmetricNorming_real_exact",
+      "new_name": "tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -2558,7 +2558,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "alternative",
@@ -2566,8 +2566,8 @@
       "canonical_status_reason": "Takes the reflection witness `Z` explicitly; see the complex sibling."
     },
     {
-      "old_name": "tanTwoTheta_unbounded_ambient_subspace_paperUINorm_real",
-      "new_name": "tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_paperUINorm_real",
+      "old_name": "tanTwoTheta_unbounded_ambient_subspace_symmetricNorming_real",
+      "new_name": "tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -2575,7 +2575,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "canonical",
@@ -2583,8 +2583,8 @@
       "canonical_status_reason": ""
     },
     {
-      "old_name": "tanTwoTheta_unbounded_ambient_paperAngle_paperUINorm_real",
-      "new_name": "tanTwoTheta_ambient_unbounded_paperUINorm_real",
+      "old_name": "tanTwoTheta_unbounded_ambient_paperAngle_symmetricNorming_real",
+      "new_name": "tanTwoTheta_ambient_unbounded_symmetricNorming_real",
       "trig_family": "tanTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -2592,7 +2592,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "ambient",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "orderedForm",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -2686,7 +2686,7 @@
     },
     {
       "old_name": "sinTheta_complex",
-      "new_name": "sinTheta_unbounded_formGap_paperUINorm_complex",
+      "new_name": "sinTheta_unbounded_formGap_symmetricNorming_complex",
       "trig_family": "sinTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2694,7 +2694,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -2703,7 +2703,7 @@
     },
     {
       "old_name": "sinTheta_real",
-      "new_name": "sinTheta_unbounded_formGap_paperUINorm_real",
+      "new_name": "sinTheta_unbounded_formGap_symmetricNorming_real",
       "trig_family": "sinTheta",
       "paper_role": "section2-result",
       "scalar_scope": "real",
@@ -2711,7 +2711,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -2754,7 +2754,7 @@
     },
     {
       "old_name": "(new 2026-08-31)",
-      "new_name": "sinTheta_unbounded_formGap_paperUINorm_ofComponents_rclike",
+      "new_name": "sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike",
       "trig_family": "sinTheta",
       "paper_role": "section2-result",
       "scalar_scope": "rclike",
@@ -2762,16 +2762,16 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
       "section_two_endpoint": "none",
-      "canonical_status_reason": "The scalar-generic endpoint with the structural hypotheses spelled out as components rather than bundled; `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike` is the same theorem in the shape the fixed-field siblings use, and is the one to cite."
+      "canonical_status_reason": "The scalar-generic endpoint with the structural hypotheses spelled out as components rather than bundled; `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` is the same theorem in the shape the fixed-field siblings use, and is the one to cite."
     },
     {
       "old_name": "(new 2026-08-31)",
-      "new_name": "sinTheta_unbounded_formGap_paperUINorm_rclike",
+      "new_name": "sinTheta_unbounded_formGap_symmetricNorming_rclike",
       "trig_family": "sinTheta",
       "paper_role": "section2-result",
       "scalar_scope": "rclike",
@@ -2779,7 +2779,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "formGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "canonical",
@@ -2787,8 +2787,8 @@
       "canonical_status_reason": "The scalar-generic Section 2 sine endpoint at the printed source scope. Bound as `SectionTwo.sinTheta` on 2026-08-31."
     },
     {
-      "old_name": "sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex",
-      "new_name": "sinTwoTheta_directed_unbounded_addBounded_spectrumGap_paperUINorm_complex",
+      "old_name": "sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_complex",
+      "new_name": "sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2796,7 +2796,7 @@
       "operator_scope": "unbounded-with-bounded-perturbation",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "canonicalAngle",
       "canonical_status": "alternative",
@@ -2804,8 +2804,8 @@
       "canonical_status_reason": "The bounded-interval route: finite `beta <= alpha` with the selected spectral restriction semibounded on both sides and the complementary restriction's spectrum avoiding `(beta - delta, alpha + delta)`. It kept the unqualified name until 2026-08-31, when the full-gap statement was proved and took it. It is retained rather than derived: `FormBoundedSylvesterGap.intervalExterior` wants `LinearPMap.realSpectrum A_0 subset Icc beta alpha`, and only the converse direction is proved in this tree, so the implication would need the `LinearPMap` analogue of `realSpectrum_subset_Ici_of_le_re_inner_generic`."
     },
     {
-      "old_name": "sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_paperUINorm_complex",
-      "new_name": "sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_paperUINorm_complex",
+      "old_name": "sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_symmetricNorming_complex",
+      "new_name": "sinTwoTheta_directed_unbounded_addBounded_blockRepresentative_spectrumGap_symmetricNorming_complex",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2813,7 +2813,7 @@
       "operator_scope": "unbounded-with-bounded-perturbation",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "alternative",
@@ -2821,8 +2821,8 @@
       "canonical_status_reason": "The bounded-interval route: finite `beta <= alpha` with the selected spectral restriction semibounded on both sides and the complementary restriction's spectrum avoiding `(beta - delta, alpha + delta)`. It kept the unqualified name until 2026-08-31, when the full-gap statement was proved and took it. It is retained rather than derived: `FormBoundedSylvesterGap.intervalExterior` wants `LinearPMap.realSpectrum A_0 subset Icc beta alpha`, and only the converse direction is proved in this tree, so the implication would need the `LinearPMap` analogue of `realSpectrum_subset_Ici_of_le_re_inner_generic`."
     },
     {
-      "old_name": "sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
-      "new_name": "sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_paperUINorm_complex",
+      "old_name": "sinTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
+      "new_name": "sinTwoTheta_directed_unboundedResidual_blockRepresentative_spectrumGap_symmetricNorming_complex",
       "trig_family": "sinTwoTheta",
       "paper_role": "section2-result",
       "scalar_scope": "complex",
@@ -2830,7 +2830,7 @@
       "operator_scope": "unbounded",
       "ritz_scope": "not-applicable",
       "angle_scope": "directed",
-      "norm_scope": "paperUINorm",
+      "norm_scope": "symmetricNorming",
       "gap_scope": "spectrumGap",
       "conclusion_representation": "blockRepresentative",
       "canonical_status": "alternative",

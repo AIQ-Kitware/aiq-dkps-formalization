@@ -81,8 +81,8 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "S1-ui-norms",
       "review_declarations": [
-        "TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm",
-        "TauCeti.DavisKahan.ExactSinTheta.paperKyFanNorm",
+        "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction",
+        "TauCeti.DavisKahan.ExactSinTheta.kyFanNormingFunction",
         "TauCeti.DavisKahan1970.equation1_12",
         "TauCeti.DavisKahan1970.equation1_13_compressions",
         "TauCeti.DavisKahan1970.equation1_13_reSum",
@@ -94,8 +94,8 @@
           "id": "S1-ui-norms.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan.ExactSinTheta.PaperUnitaryInvariantNorm",
-            "TauCeti.DavisKahan.ExactSinTheta.paperKyFanNorm",
+            "TauCeti.DavisKahan.ExactSinTheta.SymmetricNormingFunction",
+            "TauCeti.DavisKahan.ExactSinTheta.kyFanNormingFunction",
             "TauCeti.DavisKahan1970.equation1_12",
             "TauCeti.DavisKahan1970.equation1_13_compressions",
             "TauCeti.DavisKahan1970.equation1_13_reSum",
@@ -190,12 +190,12 @@
         "TauCeti.DavisKahan1970.SectionTwo.tanTheta_real",
         "TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm",
         "TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_transversality",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_transversality",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_real"
+        "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real"
       ],
       "audit_clauses": [
         {
@@ -209,11 +209,11 @@
           "id": "S2-tan-theta.ambient",
           "description": "Ambient conclusion: delta * ||tan Theta|| <= ||H||, including the Appendix scope in which the Ritz compression A0 and the unwanted block may both be genuinely unbounded while the residual/perturbation norm remains bounded.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_complex_of_transversality",
-            "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_paperUINorm_real_of_transversality",
-            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_real"
+            "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_complex_of_transversality",
+            "TauCeti.DavisKahan1970.tanTheta_ambient_bounded_symmetricNorming_real_of_transversality",
+            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedOperator_boundedRitz_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real"
           ]
         }
       ],
@@ -241,12 +241,12 @@
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_real",
         "TauCeti.DavisKahanTheory.partIII_sinTwoTheta_uiNorm",
-        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real",
+        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real",
         "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex",
         "TauCeti.DavisKahan1970.sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real",
-        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real",
+        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real",
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_complex",
         "TauCeti.DavisKahan1970.SectionTwo.sinTwoTheta_ambient_real"
       ],
@@ -262,10 +262,10 @@
           "id": "S2-sin-two-theta.ambient",
           "description": "Ambient conclusion: delta * ||sin(2 Theta)|| <= 2 ||H||.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real",
-            "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_paperUINorm_real"
+            "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_real",
+            "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.sinTwoTheta_ambient_bounded_symmetricNorming_real"
           ]
         }
       ],
@@ -291,51 +291,51 @@
       "review_declarations": [
         "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_complex",
         "TauCeti.DavisKahan1970.SectionTwo.tanTwoTheta_real",
-        "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real",
-        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real",
-        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real",
-        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real"
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real"
       ],
       "audit_clauses": [
         {
           "id": "S2-tan-two-theta.hypotheses",
           "description": "Printed source hypotheses only: ordered spectral gap plus the fully off-diagonal perturbation condition; no independent pole-exclusion, quarter-angle, finite-dimensionality, or perturbed-Q-block placement hypothesis. The bounded and unbounded exact wrappers derive the needed pole/invertibility facts internally.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real",
-            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real",
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real",
-            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real"
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real",
+            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
+            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real"
           ]
         },
         {
           "id": "S2-tan-two-theta.directed",
           "description": "Directed conclusion: delta * ||tan(2 Theta_0)|| <= 2 ||R|| for every source unitarily invariant norm. Exact complex and real wrappers cover both the bounded source notation and the advertised infinite-dimensional unbounded-self-adjoint scope, with canonical cutoffs and pole exclusion internal to the theorem.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real",
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_paperUINorm_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_branchFree_blockRepresentative_symmetricNorming_complex",
             "TauCeti.DavisKahan1970.paperTanTwoDirectedCornerR",
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real"
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real"
           ]
         },
         {
           "id": "S2-tan-two-theta.ambient",
           "description": "Ambient conclusion: delta * ||tan(2 Theta)|| <= 2 ||H|| for every source unitarily invariant norm. Exact complex and real wrappers cover the bounded functional-calculus statement and the unbounded self-adjoint scope; the unbounded ambient theorem assembles the two reflection-tangent corners without a quarter-angle or extra denominator loss.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real",
+            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real",
             "TauCeti.DavisKahan1970.paperAbsTanTwoAngleOperatorC_eq_modulus_paperTanTwoAngleOperatorC",
-            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_paperUINorm_real"
+            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_real"
           ]
         }
       ],
@@ -1168,7 +1168,7 @@
       "tex_marker": "DK-5-hermitian-inequalities",
       "review_declarations": [
         "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
-        "TauCeti.DavisKahan.ExactSinTheta.paperOperatorNorm_sylvester_le_of_pairwiseSpectrumGap"
+        "TauCeti.DavisKahan.ExactSinTheta.operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap"
       ],
       "audit_clauses": [
         {
@@ -1178,7 +1178,7 @@
             "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap",
             "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap",
             "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap",
-            "TauCeti.DavisKahan.ExactSinTheta.paperOperatorNorm_sylvester_le_finrank_range"
+            "TauCeti.DavisKahan.ExactSinTheta.operatorNormingFunction_sylvester_le_finrank_range"
           ]
         },
         {
@@ -1472,8 +1472,8 @@
       "review_declarations": [
         "TauCeti.DavisKahan1970.Theorem6_3",
         "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real",
-        "TauCeti.DavisKahan1970.tanTheta_directed_bounded_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.tanTheta_directed_bounded_paperUINorm_real",
+        "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_real",
         "TauCeti.DavisKahan1970.Section6Example61.tangent_bound_fails",
         "TauCeti.DavisKahan1970.Section6Example61.residual_norm"
       ],
@@ -1484,8 +1484,8 @@
           "review_declarations": [
             "TauCeti.DavisKahan1970.Theorem6_3",
             "TauCeti.DavisKahan1970.theorem6_3_all_kyFan_core_infiniteTrial_real",
-            "TauCeti.DavisKahan1970.tanTheta_directed_bounded_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTheta_directed_bounded_paperUINorm_real",
+            "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTheta_directed_bounded_symmetricNorming_real",
             "TauCeti.DavisKahan1970.Section6Example61.tangent_bound_fails",
             "TauCeti.DavisKahan1970.Section6Example61.residual_norm"
           ]
@@ -1525,8 +1525,8 @@
         "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
         "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
         "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_real"
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real"
       ],
       "audit_clauses": [
         {
@@ -1539,8 +1539,8 @@
             "TauCeti.DavisKahan1970.Theorem6_1_real_commonCore",
             "TauCeti.DavisKahan1970.Theorem6_2_real_commonDomain",
             "TauCeti.DavisKahan1970.Theorem6_2_real_commonCore",
-            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_paperUINorm_real"
+            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_raw_symmetricNorming_real"
           ]
         }
       ],
@@ -1806,9 +1806,9 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-8.2-thm",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm",
-        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming",
+        "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming",
         "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex"
       ],
       "audit_clauses": [
@@ -1816,9 +1816,9 @@
           "id": "DK-8.2-thm.whole",
           "description": "Audit the complete registered source passage as one semantic unit; split further if the independent reviewer finds separable mathematical clauses.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_paperUINorm",
-            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_paperUINorm",
-            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_paperUINorm",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming",
+            "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming",
             "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex"
           ]
         }
@@ -2253,10 +2253,10 @@
       "expected_verification": "proved_in_build",
       "tex_marker": "DK-10.4",
       "review_declarations": [
-        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real",
-        "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex",
-        "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real"
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real"
       ],
       "audit_clauses": [
         {
@@ -2268,16 +2268,16 @@
           "id": "DK-10.4.ambient-tan2",
           "description": "Established ambient model-case bound delta * ||tan(2 Theta)|| <= 2 ||H||.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_real"
+            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_real"
           ]
         },
         {
           "id": "DK-10.4.directed-tan2",
           "description": "Established directed model-case bound delta * ||tan(2 Theta_0)|| <= 2 ||R||.",
           "review_declarations": [
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex",
-            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_real"
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex",
+            "TauCeti.DavisKahan1970.tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_real"
           ]
         },
         {

@@ -29,6 +29,10 @@ under the rename, on real builds of both trees.
   `unbounded`, `boundedRitz`, `unboundedRitz`.
 * The norm layer is exposed outside the canonical interface: `paperUINorm`,
   `idealFamily`, `symmetricIdealFamily`, `kyFan`, `opNorm`, `uiNorm`.
+  (**Superseded 2026-09-01**: the `paperUINorm` token is now `symmetricNorming`,
+  because the type it names is now `SymmetricNormingFunction`.  The token still
+  discriminates and was renamed rather than dropped; the classification JSON's
+  `vocabulary.norm_scope` and `token_commitments` are the current record.)
 * `of_transversality` means the caller supplies `‖sin Θ‖ < 1`; `of_crossedDefects`
   means the caller supplies the standing condition (3.5); `of_poleExclusion` means
   the caller supplies `cos 2θ ≠ 0` on the angle spectrum.

@@ -41,7 +41,7 @@
     ext,funext,cases,rcases,obtain,constructor,left,right,classical,by_contra,
     contrapose,convert,using,suffices,calc},
   morekeywords=[3]{Prop,Type,Nat,Int,Real,Fin,Set,Submodule,Matrix,EuclideanSpace,
-    LinearMap,ContinuousLinearMap,ClosedOperator,UnitaryInvariantNorm,LinearPMap,
+    LinearMap,ContinuousLinearMap,SymmetricNormingFunction,LinearPMap,
     IsTrialResidual,IsExactSpectralDecomposition,IsEigenvectorBlock,
     SourcePopulationGap},
 }
@@ -306,13 +306,13 @@ formalizations.
   \texttt{IsExactSpectralDecomposition} supplies the exact-subspace conditions,
   and \texttt{N.Mem R} states that the residual belongs to the norm ideal.},
   label={lst:dk-sintheta-headline}]
-theorem sinTheta_headline
+theorem sinTheta_unbounded_intervalExterior_characterizedWitness_rclike
     [ContinuousLinearMap.HasMinMaxLowerBoundEverywhere.{u, v} \KField]
     [HasUnboundedSylvesterKyFan.{u, v} \KField]
-    (N : UnitaryInvariantNorm)
-    (A : ClosedOperator (\KField := \KField) (E := E))
-    (A₀ : ClosedOperator (\KField := \KField) (E := F))
-    (Λ₁ : ClosedOperator (\KField := \KField) (E := G))
+    (N : SymmetricNormingFunction)
+    (A : E →ₗ.[\KField] E)
+    (A₀ : F →ₗ.[\KField] F)
+    (Λ₁ : G →ₗ.[\KField] G)
     (E₀ : F →L[\KField] E)
     (F₀ : H →L[\KField] E)
     (F₁ : G →L[\KField] E)
@@ -321,20 +321,20 @@ theorem sinTheta_headline
     (hSinTheta₀ :
       sinTheta₀ =
         (ContinuousLinearMap.id \KField E - F₀ ∘L F₀.adjoint) ∘L E₀)
-    (hA : A.IsSelfAdjoint)
-    (hA₀ : A₀.IsSelfAdjoint)
-    (hΛ₁ : Λ₁.IsSelfAdjoint)
+    (hA : IsSelfAdjoint A)
+    (hA₀ : IsSelfAdjoint A₀)
+    (hΛ₁ : IsSelfAdjoint Λ₁)
     (htrial : IsTrialResidual A A₀ E₀ R)
     (hexact : IsExactSpectralDecomposition A Λ₁ F₀ F₁)
     {β α δ : ℝ}
     (hβα : β ≤ α)
     (hδ : 0 < δ)
     (hspectral :
-      (LinearPMap.realSpectrum A₀.toLinearPMap ⊆ Set.Icc β α ∧
-          LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆
+      (LinearPMap.realSpectrum A₀ ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum Λ₁ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}) ∨
-        (LinearPMap.realSpectrum Λ₁.toLinearPMap ⊆ Set.Icc β α ∧
-          LinearPMap.realSpectrum A₀.toLinearPMap ⊆
+        (LinearPMap.realSpectrum Λ₁ ⊆ Set.Icc β α ∧
+          LinearPMap.realSpectrum A₀ ⊆
             {x : ℝ | x ≤ β - δ ∨ α + δ ≤ x}))
     (hR : N.Mem R) :
     δ * N.gauge sinTheta₀ ≤ N.gauge R := by
@@ -805,17 +805,21 @@ The notation \texttt{Fin n} is an $n$-element index type, and \texttt{Nat} and
 \texttt{Real} are the natural and real numbers.  In Lean, a type of the form
 \lstinline[style=leanpaper]!F →L[\KField] E! is a continuous linear map and
 \lstinline[style=leanpaper]!E →ₗ[\KField] E! is a linear map.
-\texttt{ClosedOperator} is a possibly unbounded closed linear operator;
-\texttt{.IsSelfAdjoint} asserts self-adjointness; \texttt{.adjoint} is the
+A type of the form \lstinline[style=leanpaper]!E →ₗ.[\KField] E! is a
+\texttt{LinearPMap}: a linear map defined on a submodule, which is how a possibly
+unbounded operator is presented.  \texttt{IsSelfAdjoint} asserts
+self-adjointness; \texttt{.adjoint} is the
 adjoint; and \lstinline[style=leanpaper]!F₀ ∘L F₀.adjoint! denotes composition
 with an adjoint continuous linear map.  In the YWS formalizations,
 \texttt{EuclideanSpace Real (Fin p)} is $\mathbb{R}^p$,
 \texttt{Matrix (Fin d) (Fin d) Real} is a real $d\times d$ matrix,
 \texttt{Matrix.orthogonalGroup} is $O(d)$, \texttt{\ensuremath{\bullet}} is
 scalar multiplication, and \texttt{\ensuremath{\sum}} is finite summation.
-For the Davis--Kahan norm, \texttt{N : UnitaryInvariantNorm} specifies the norm,
-\texttt{N.Mem T} asserts that $T$ lies in its norm ideal, and \texttt{N.gauge T}
-is its value on $T$.  Standard logical and set symbols retain their usual
+For the Davis--Kahan norm, \texttt{N : SymmetricNormingFunction} is a normalized
+symmetric norming function --- the object the paper quantifies over in (1.9).  It
+induces a unitarily invariant norm on singular values, and with it a symmetrically
+normed ideal: \texttt{N.Mem T} asserts that $T$ lies in that ideal, and
+\texttt{N.gauge T} is its value on $T$.  Standard logical and set symbols retain their usual
 mathematical meanings.
 
 Lean treats proofs of the same proposition as definitionally equal.  Thus a

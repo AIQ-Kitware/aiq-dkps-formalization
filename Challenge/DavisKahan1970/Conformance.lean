@@ -248,8 +248,8 @@ local instance instCompleteSpaceCoeOfHasOrthogonalProjectionChallenge
 
 /-- Arbitrary-Hilbert-space/source-UI ambient `sin Theta` theorem, with the two
 source gap applications written explicitly. -/
-theorem sinTheta_wholeSpace_paperUINorm
-    (N : PaperUnitaryInvariantNorm)
+theorem sinTheta_wholeSpace_symmetricNorming
+    (N : SymmetricNormingFunction)
     {A B : E →L[ℂ] E} (hA : A.IsSymmetric) (hB : B.IsSymmetric)
     {U V : Submodule ℂ E} [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hU : A.Reduces U) (hV : B.Reduces V)
@@ -267,10 +267,10 @@ theorem sinTheta_wholeSpace_paperUINorm
 
 /-- Theorem 6.3 directed `tan Theta` theorem on arbitrary complete complex
 Hilbert spaces and arbitrary complete trial subspaces, for every source UI norm. -/
-theorem tanTheta_directed_bounded_paperUINorm_complex
+theorem tanTheta_directed_bounded_symmetricNorming_complex
     {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     [CompleteSpace H]
-    (N : PaperUnitaryInvariantNorm)
+    (N : SymmetricNormingFunction)
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
@@ -290,10 +290,10 @@ theorem tanTheta_directed_bounded_paperUINorm_complex
 the trial/Ritz compression lies in `[beta, alpha]` and the unwanted exact
 restriction lies in `[alpha + delta, infinity)`.  Unlike the form-bound wrapper
 above, this is the source-facing spectral telescope used by the audit. -/
-theorem tanTheta_directed_bounded_spectralGap_paperUINorm_complex
+theorem tanTheta_directed_bounded_spectralGap_symmetricNorming_complex
     {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
     [CompleteSpace H]
-    (N : PaperUnitaryInvariantNorm)
+    (N : SymmetricNormingFunction)
     (T : H →L[ℂ] H) (hT : T.IsSymmetric)
     (V Z : Submodule ℂ H) [V.HasOrthogonalProjection] [Z.HasOrthogonalProjection]
     [CompleteSpace Z]
@@ -313,8 +313,8 @@ theorem tanTheta_directed_bounded_spectralGap_paperUINorm_complex
 
 /-- Ambient `tan Theta` theorem under the paper's standing crossed-defect
 condition (3.5), which supplies transversality rather than assuming it separately. -/
-theorem tanTheta_ambient_bounded_paperUINorm_complex_of_crossedDefects
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTheta_ambient_bounded_symmetricNorming_complex_of_crossedDefects
+    (N : SymmetricNormingFunction)
     {T A : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hT : T.IsSymmetric) (hA : IsSelfAdjoint A)
@@ -375,8 +375,8 @@ theorem tanTheta_literalSection2_admits_ambientRightAngle
   sorry
 
 /-- Full-Hilbert directed residual `sin 2Theta` theorem for every source UI norm. -/
-theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     {A : E →L[ℂ] E} (hA : IsSelfAdjoint A)
     {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -393,8 +393,8 @@ theorem sinTwoTheta_directed_boundedResidual_blockRepresentative_paperUINorm_com
   sorry
 
 /-- Full-Hilbert ambient `sin 2Theta` theorem for every source UI norm. -/
-theorem sinTwoTheta_ambient_bounded_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem sinTwoTheta_ambient_bounded_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     {A B : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hA : IsSelfAdjoint A) (hB : IsSelfAdjoint B)
@@ -414,8 +414,8 @@ theorem sinTwoTheta_ambient_bounded_paperUINorm_complex
 This is valuable infrastructure at arbitrary Hilbert/source-UI scope, but its
 right-hand side is the whole off-diagonal perturbation `H`; it is not used as a
 substitute for the paper's separate directed residual conclusion below. -/
-theorem tanTwoTheta_branchFree_bounded_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTwoTheta_branchFree_bounded_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     {A H T : E →L[ℂ] E} {U : Submodule ℂ E} [U.HasOrthogonalProjection]
     {a b : ℝ}
     (hA : IsSelfAdjoint A) (hH : IsSelfAdjoint H)
@@ -444,8 +444,8 @@ compressed blocks of `A` satisfy the printed interval/half-line separation,
 caller-supplied quarter-angle branch, pole-exclusion hypothesis, or perturbed
 block spectral-placement premise.  The left side is the canonical directed
 projection-block representative used by the source norm. -/
-theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {beta alpha delta : ℝ}
@@ -476,10 +476,10 @@ repository proves the corresponding operator-norm estimate and the general
 ideal inequality once cutoff convergence and denominator control are supplied,
 but it does not yet expose one source-facing arbitrary-UI wrapper deriving that
 assembly from only the paper data. -/
-theorem tanTwoTheta_unbounded_directedResidual_paperUINorm_exactPaper
+theorem tanTwoTheta_unbounded_directedResidual_symmetricNorming_exactPaper
     {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
     [CompleteSpace G]
-    (N : PaperUnitaryInvariantNorm)
+    (N : SymmetricNormingFunction)
     {A : G →ₗ.[ℂ] G} {B Z : G →L[ℂ] G} {a b c : ℝ}
     (hA : IsSelfAdjoint A)
     (hB : TauCeti.IsOddFor
@@ -514,8 +514,8 @@ theorem tanTwoTheta_unbounded_directedResidual_paperUINorm_exactPaper
 /-- Best currently proved ambient branch-free `tan 2Theta` endpoint.  The
 explicit `hcos` premise records the remaining gap to the literal Section 2
 hypothesis surface. -/
-theorem tanTwoTheta_ambient_bounded_branchFree_orderedForm_paperUINorm_complex_of_poleExclusion
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTwoTheta_ambient_bounded_branchFree_orderedForm_symmetricNorming_complex_of_poleExclusion
+    (N : SymmetricNormingFunction)
     {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {a b : ℝ}
@@ -534,8 +534,8 @@ theorem tanTwoTheta_ambient_bounded_branchFree_orderedForm_paperUINorm_complex_o
 /-- The newly compiled ambient Section 2 `tan 2Theta` inequality from
 exactly the printed ordered spectral gap and fully off-diagonal perturbation
 hypotheses.  This mirrors the production theorem signature exactly. -/
-theorem tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex
-    (N : PaperUnitaryInvariantNorm)
+theorem tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex
+    (N : SymmetricNormingFunction)
     {A H : E →L[ℂ] E} {U V : Submodule ℂ E}
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     {β α δ : ℝ}
@@ -553,7 +553,7 @@ theorem tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex
 /-- **Intentional red static-semantic certificate:** pole exclusion for the
 ambient Section 2 `tan 2Theta` theorem from only the printed hypotheses.
 
-The production proof of `tanTwoTheta_ambient_bounded_spectralGap_paperUINorm_complex` derives this
+The production proof of `tanTwoTheta_ambient_bounded_spectralGap_symmetricNorming_complex` derives this
 fact internally, but the deriving lemma is private.  Because Lean totalizes
 `Real.tan` at its poles, a signature-only paper audit cannot infer from the
 inequality theorem alone that the formal tangent has the source's intended
