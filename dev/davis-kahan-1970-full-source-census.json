@@ -264,7 +264,23 @@
             "status": "claimed_exact"
           }
         ],
-        "note": "The canonical review declaration is also the intended paper-display declaration. It names sinTheta₀ as a theorem parameter but gives its concrete projection-block formula by a literal equality hypothesis in the same signature, so the claim after the colon is a one-to-one rendering of the printed inequality without an opaque angle definition. Only the domain-heavy trial and exact-coordinate setup is bundled, and both bundles are fully expanded by characteristic theorems in the local semantic dictionary. The stronger generic theorem remains supporting evidence for norm-ideal membership and the implementation proof bridge. CANONICAL WITNESS CORRECTED 2026-08-31. The row named `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` as the exact source match. That was wrong on two counts: it carries only the bounded interval/exterior branch of the gap, while the source permits half-infinite separating intervals, and it drops the ideal-membership half of the conclusion. The canonical witness is now `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`, added the same day: scalar-generic over `RCLike`, unbounded `LinearPMap` ambient operator, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` (interval/exterior plus both ordered semibounded configurations), an arbitrary `PaperUnitaryInvariantNorm`, and both conclusions. It is proved by taking the gap directly into the Ky-Fan-to-paper-norm promotion the interval/exterior theorem already ran, so it is a repackaging rather than a new argument, and the interval/exterior form is now a one-line consequence of it. `..._complex_ofRCLike` and `..._real_ofRCLike` are the compiled conformance checks: each restates the corresponding fixed-field endpoint's type verbatim and discharges it by the generic theorem with no adapter. The fixed-field endpoints remain as corroborating full-source witnesses and the interval/exterior theorem as a presentation specialization. The two `RCLike` capability classes in the generic signature are proof capabilities with instances for both source fields, not printed source hypotheses. CONFORMANCE TIED BY NAME 2026-08-31. The `_ofRCLike` wrappers restate a type, and a restatement cannot notice if the declaration it mirrors changes. `..._ofRCLike_conforms` closes that: an equation between two constants elaborates only when both sides have the same type, so it asserts exactly that the restatement is the fixed-field endpoint's type, and `rfl` discharges it by proof irrelevance. It is a type-level check by design and says nothing about the two proofs.\n\n2026-08-31 (second pass): canonical declarations follow the result inventory's `canonical_evidence`. Demoted to supporting: DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike -- the scalar-generic form carries proof-capability instance binders that the printed statement does not, and the two fixed-field endpoints state the result at the paper's two fields with no such binder."
+        "note": "The canonical review declaration is also the intended paper-display declaration. It names sinTheta₀ as a theorem parameter but gives its concrete projection-block formula by a literal equality hypothesis in the same signature, so the claim after the colon is a one-to-one rendering of the printed inequality without an opaque angle definition. Only the domain-heavy trial and exact-coordinate setup is bundled, and both bundles are fully expanded by characteristic theorems in the local semantic dictionary. The stronger generic theorem remains supporting evidence for norm-ideal membership and the implementation proof bridge. CANONICAL WITNESS CORRECTED 2026-08-31. The row named `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` as the exact source match. That was wrong on two counts: it carries only the bounded interval/exterior branch of the gap, while the source permits half-infinite separating intervals, and it drops the ideal-membership half of the conclusion. The canonical witness is now `DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike`, added the same day: scalar-generic over `RCLike`, unbounded `LinearPMap` ambient operator, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` (interval/exterior plus both ordered semibounded configurations), an arbitrary `PaperUnitaryInvariantNorm`, and both conclusions. It is proved by taking the gap directly into the Ky-Fan-to-paper-norm promotion the interval/exterior theorem already ran, so it is a repackaging rather than a new argument, and the interval/exterior form is now a one-line consequence of it. `..._complex_ofRCLike` and `..._real_ofRCLike` are the compiled conformance checks: each restates the corresponding fixed-field endpoint's type verbatim and discharges it by the generic theorem with no adapter. The fixed-field endpoints remain as corroborating full-source witnesses and the interval/exterior theorem as a presentation specialization. The two `RCLike` capability classes in the generic signature are proof capabilities with instances for both source fields, not printed source hypotheses. CONFORMANCE TIED BY NAME 2026-08-31. The `_ofRCLike` wrappers restate a type, and a restatement cannot notice if the declaration it mirrors changes. `..._ofRCLike_conforms` closes that: an equation between two constants elaborates only when both sides have the same type, so it asserts exactly that the restatement is the fixed-field endpoint's type, and `rfl` discharges it by proof irrelevance. It is a type-level check by design and says nothing about the two proofs.\n\n2026-08-31 (second pass): canonical declarations follow the result inventory's `canonical_evidence`. Demoted to supporting: DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_rclike -- the scalar-generic form carries proof-capability instance binders that the printed statement does not, and the two fixed-field endpoints state the result at the paper's two fields with no such binder.",
+        "statement_pins": [
+          {
+            "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_complex",
+            "type_expr_hash": "2183094929",
+            "type_text_sha256": "149645de4f06d6be65faf036d31770f1555e7d581e399094f30e2ff077e62ee6",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "DavisKahan1970.sinTheta_unbounded_formGap_paperUINorm_real",
+            "type_expr_hash": "4282488892",
+            "type_text_sha256": "606590a0f4d9d9451594c6e027d7eeb982a7b624d9212fac24ed38cd26dfa9a8",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       },
       "semantic_review_variants": [
         {
@@ -486,7 +502,37 @@
             "status": "claimed_exact"
           }
         ],
-        "note": "The directed residual half now has a scalar-generic, PaperUnitaryInvariantNorm, source-shaped canonical theorem whose public signature exposes the Ritz spectral placement instead of TanThetaIntervalGap. The harder ambient/unbounded half remains represented by the accepted source-shaped complex theorem plus its real companion because the current whole-space angle-operator implementation is field-specific. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.\n\n2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.\n\n2026-08-31 (coherent-clause audit): demoted to supporting because the compiler-printed type does not carry the scope the declaration was credited with: TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial, TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm."
+        "note": "The directed residual half now has a scalar-generic, PaperUnitaryInvariantNorm, source-shaped canonical theorem whose public signature exposes the Ritz spectral placement instead of TanThetaIntervalGap. The harder ambient/unbounded half remains represented by the accepted source-shaped complex theorem plus its real companion because the current whole-space angle-operator implementation is field-specific. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.\n\n2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.\n\n2026-08-31 (coherent-clause audit): demoted to supporting because the compiler-printed type does not carry the scope the declaration was credited with: TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial, TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm.",
+        "statement_pins": [
+          {
+            "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_complex",
+            "type_expr_hash": "772294417",
+            "type_text_sha256": "b474a63b9958a5ff3c52f96194d373af1bac5e7a00e39254865ebb82938251f1",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real",
+            "type_expr_hash": "694556491",
+            "type_text_sha256": "eb6ae80f4d945a14382b7ceca9888fa7c1791328047bf2b6dd3d83480b2522c4",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_complex",
+            "type_expr_hash": "3675758434",
+            "type_text_sha256": "4a3b75e8d4ef1f2aef8175cd3294c9bc7811dcfdd3d9c5e4ec1e80875726fbcd",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_real",
+            "type_expr_hash": "3076268778",
+            "type_text_sha256": "9ab42fad57dcd9b60739d5c4cf81a1980b207cb607772222540086496c4c3657",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
@@ -650,7 +696,51 @@
             "status": "claimed_exact"
           }
         ],
-        "note": "The directed residual conclusion now has a scalar-generic PaperUnitaryInvariantNorm facade with the interval/exterior hypotheses and residual written directly in its type. The ambient whole-space endpoint remains field-specific internally, so the complex source-shaped theorem stays as the second canonical declaration and its real sibling is a supporting scalar companion. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.\n\n2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.\n\n2026-08-31 (later the same day): the AMBIENT clause is no longer a scope companion.  `sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` and its real sibling prove it at the row's own unbounded scope, by identifying the ambient double angle between U and V with an ambient SINGLE angle between U and its mirror image through V and applying the common-domain Proposition 6.1.  The bounded ambient endpoints are demoted to supporting evidence as their own specialization."
+        "note": "The directed residual conclusion now has a scalar-generic PaperUnitaryInvariantNorm facade with the interval/exterior hypotheses and residual written directly in its type. The ambient whole-space endpoint remains field-specific internally, so the complex source-shaped theorem stays as the second canonical declaration and its real sibling is a supporting scalar companion. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.\n\n2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.\n\n2026-08-31 (later the same day): the AMBIENT clause is no longer a scope companion.  `sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` and its real sibling prove it at the row's own unbounded scope, by identifying the ambient double angle between U and V with an ambient SINGLE angle between U and its mirror image through V and applying the common-domain Proposition 6.1.  The bounded ambient endpoints are demoted to supporting evidence as their own specialization.",
+        "statement_pins": [
+          {
+            "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
+            "type_expr_hash": "2563483418",
+            "type_text_sha256": "41db070a6ca03334d793b0f67b10919c3322f709c77a4aaca9c5bfcf8b9cb529",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real",
+            "type_expr_hash": "4127165135",
+            "type_text_sha256": "93671a28e25ada48143e187f503e2e76ec945086159f76834a5bcaa35486b30c",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_complex",
+            "type_expr_hash": "1018532517",
+            "type_text_sha256": "2be64255b07e531b6c76c973d96c72d767a84158ef2c6c18fd1ec112053cacb8",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_directed_unbounded_addBounded_paperUINorm_real",
+            "type_expr_hash": "3663350705",
+            "type_text_sha256": "8c5f951c1f14289eb305877f25c127968838013fdfc61fd6cc16b66d5487aa73",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex",
+            "type_expr_hash": "3673620785",
+            "type_text_sha256": "ddec768caefb7b73fc470dcb75de3ebbc233af315780f23f2569dbe618a6a68a",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_real",
+            "type_expr_hash": "127662455",
+            "type_text_sha256": "8a4fc16ea176bf4543133300ef33b6c6c90cb6f5af4fed1a54cb7a14b7939edf",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
@@ -844,7 +934,37 @@
             "status": "scope_companion"
           }
         ],
-        "note": "Unlike tan Theta and sin 2Theta, the branch-free tan 2Theta paper-norm theorem was already scalar-generic. The review now promotes it to the canonical headline name. Its generic proof is necessarily graph-coordinate shaped, so the source-shaped U,V directed-corner theorem remains canonical alongside it and the report prints absDoubleAngleTangent/approximationSingularValue context explicitly. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.\n\n2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope."
+        "note": "Unlike tan Theta and sin 2Theta, the branch-free tan 2Theta paper-norm theorem was already scalar-generic. The review now promotes it to the canonical headline name. Its generic proof is necessarily graph-coordinate shaped, so the source-shaped U,V directed-corner theorem remains canonical alongside it and the report prints absDoubleAngleTangent/approximationSingularValue context explicitly. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.\n\n2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_paperUINorm_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.",
+        "statement_pins": [
+          {
+            "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex",
+            "type_expr_hash": "3368818851",
+            "type_text_sha256": "41f74b85d40335c6a5a8d698248c94f954cb3794777a40017275d3bd84f91f36",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_real",
+            "type_expr_hash": "288436744",
+            "type_text_sha256": "b1660b47094510fb74b22d22f093747f431ef96880b5a562b8c6fc1fc5d5ca3e",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_complex",
+            "type_expr_hash": "1260267635",
+            "type_text_sha256": "278668da2b47f8fb0cc84e0e856dc3f662e338a678972f2a1ea0d20112cfd696",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_paperUINorm_real",
+            "type_expr_hash": "300124182",
+            "type_text_sha256": "dc3d73d9a82feaafea0a074a78d904cc0a6ba77c977a89763c2f240fca9ec98d",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-01"
+          }
+        ]
       }
     },
     {
