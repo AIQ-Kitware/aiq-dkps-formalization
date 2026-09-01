@@ -62,6 +62,9 @@ universe u
 variable {G : Type u} [NormedAddCommGroup G] [InnerProductSpace ℂ G]
   [CompleteSpace G]
 
+/-- A subspace admitting an orthogonal projection inside a complete ambient space
+is itself complete.  `local instance` does not propagate through imports, so it
+is reinstalled here. -/
 local instance instCompleteSpaceCoeOfHasOrthogonalProjectionTanTwoReducing
     (W : Submodule ℂ G) [W.HasOrthogonalProjection] : CompleteSpace W :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
