@@ -84,6 +84,7 @@ import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducing
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedReducingReal
 import DavisKahan.Sources.DavisKahan1970.TanTwoThetaUnboundedResidual
 import DavisKahan.Sources.DavisKahan1970.TangentSingularValues
+import DavisKahan.Sources.DavisKahan1970.TangentSingularValuesReal
 import DavisKahan.Sources.DavisKahan1970.Theorem61
 import DavisKahan.Sources.DavisKahan1970.UnboundedCompressionReal
 

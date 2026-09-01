@@ -68,6 +68,13 @@ noncomputable def linearIsometryEquiv (f : X ≃ₗᵢ[𝕜] Y) :
     rfl
   norm_map' x := f.norm_map _
 
+/-- The transport commutes with intersection of subspaces. -/
+theorem submodule_inf (S T : Submodule 𝕜 X) :
+    submodule (e := e) (S ⊓ T) =
+      submodule (e := e) S ⊓ submodule (e := e) T := by
+  ext x
+  simp only [mem_submodule, Submodule.mem_inf]
+
 /-- Two subspaces with the same carrier give isometric coercions. -/
 @[expose]
 noncomputable def submoduleEquivOfEq {S T : Submodule 𝕜 X} (h : S = T) :
