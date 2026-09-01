@@ -219,9 +219,9 @@ first of them from the development.
 
 | measurement | value | policy |
 | --- | --- | --- |
-| `Challenge.lean` | **511 lines / 23,579 bytes** | hard 1000 / 100 KiB |
+| `Challenge.lean` | **684 lines / 32,765 bytes** | hard 1000 / 100 KiB; preferred 300 / 32 KiB |
 | imports | **1** (`import Mathlib`) | Lean core + allowlisted closure |
-| local definitions | 27 | permitted |
+| local definitions | 39 | permitted, via `definition_names` |
 | headline theorems | 4 | — |
 | functional calculus | **none** | — |
 
@@ -250,7 +250,7 @@ norming function, and `Solution.lean` proves it *is* the development's
 
 ## 7. Palomar correspondence and Solution
 
-`dev/palomar-candidate/Solution.lean` (291 lines) proves:
+`dev/palomar-candidate/Solution.lean` (474 lines, no `sorry`) proves:
 
 * the Challenge's singular values **are** the development's approximation
   numbers (`rfl`);
@@ -260,21 +260,40 @@ norming function, and `Solution.lean` proves it *is* the development's
   development's;
 * the Challenge's separation is `FormBoundedSylvesterGap`, constructor by
   constructor, **including both half-infinite configurations**;
+* the Challenge's reduction predicate, block, and bounded perturbation of a
+  partial map are `ReducesSubspace`, `reducingRestriction` and `addBounded`;
+* the Challenge's Rayleigh--Ritz data is `UnboundedRitzPair`, field for field,
+  with the compression still a *partial map*;
+* the Challenge's two vanishing diagonal blocks are the development's `IsOddFor`;
 * the Challenge's `sin Θ` statement, from
-  `sinTheta_unbounded_formGap_paperUINorm_rclike` -- outright at `ℂ` and at `ℝ`.
+  `sinTheta_unbounded_formGap_paperUINorm_rclike`;
+* the Challenge's **ambient `sin 2Θ` clause**, from
+  `sinTwoTheta_ambient_reflection_projectorDifference_paperUINorm`, at an
+  *arbitrary reducing* subspace -- which is the source's own scope.
 
-Three things remain, named exactly in that file and in the candidate README:
+The last two hold outright at `ℂ` and at `ℝ`.
 
-1. the two development capability classes at an arbitrary `RCLike` field, which
-   is one scalar-field transport and would serve all four theorems;
-2. one missing development lemma for the ambient `sin 2Θ` clause (reflection
-   through a *reducing* rather than *spectral* subspace);
-3. the `tan Θ` and `tan 2Θ` correspondences, not yet carried out.
+**A statement-repair pass corrected four defects in the first draft's
+Challenge**, all of which would have made a proof worse than useless:
 
-The experiment also found a defect in its own Challenge: the `sin 2Θ` directed
-clause is stated for an arbitrary reducing subspace while the development's
-directed endpoint uses a spectral selection, so the Challenge is currently
-*stronger* than what is proved.  Recorded, not hidden.
+1. `tan Θ₀` was defined from the *residual* rather than from the sine of the
+   principal angle;
+2. the Ritz compression was forced to be bounded, losing the Appendix scope;
+3. the ambient ideal-membership premise was shared with the directed clauses,
+   so each directed clause carried its neighbour's hypothesis;
+4. the tangents could be vacuous, and a pole read as a numerical zero.
+
+`dev/palomar-section-two-challenge-statement-audit.md` records all four with
+their dispositions, plus a clause-by-clause scope table.
+
+The earlier claim that a *development lemma was missing* for the ambient
+`sin 2Θ` clause was wrong: `ReflectionIntertwines.ofReducesSubspace` already
+supplies it, and that clause is now proved.
+
+Open, per clause: the scalar-field transport for the two capability classes; the
+`sin 2Θ` directed clause at a reducing subspace with an unbounded compression;
+and tangent representatives with their derived no-pole facts for `tan Θ` and
+`tan 2Θ`.
 
 ## 8. Validation
 
@@ -327,6 +346,10 @@ Palomar is **not blocked** -- that verdict, twice given and twice for a differen
 wrong reason, is retracted.  A four-theorem Challenge compiles inside the policy
 caps with a single `import Mathlib`, and the vocabulary correspondence that was
 most at risk of hiding a weakening -- the unitarily invariant norm -- holds by
-`rfl`.  What is open is finishing the Solution: one scalar-field transport, one
-development lemma, and two correspondences.  None of them is a policy or
+`rfl`.  The first draft's four statements were *not* the paper's, and the
+clause-by-clause audit that found that is now maintained alongside the candidate;
+the repaired statements compile, and two of the seven printed clauses are
+discharged from the development.  What is open is finishing the Solution: one
+scalar-field transport, one production generalization from a spectral to a
+reducing subspace, and the tangent correspondences.  None of them is a policy or
 dependency obstruction.
