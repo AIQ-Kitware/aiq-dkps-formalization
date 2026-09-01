@@ -1250,3 +1250,67 @@ For Section 2, that same reviewer should then be able to open the Palomar Challe
 
 Finish that state.
 
+
+---
+
+# COMPLETION RECORD — 2026-08-31
+
+This brief was worked in full.  The record below is the delivery side of it; the
+report it asks for is `dev/davis-kahan-1970-final-report-2026-08-31.md`, in the
+nine sections specified above.  Commits: `9ccb2a8a`, `cc824790`, `8d8f2de3`.
+
+## End-state items
+
+| # | requirement | status | where |
+| --- | --- | --- | --- |
+| 1 | ambient `sin 2Θ` over `ℂ` | **done** | `sinTwoTheta_ambient_unbounded_addBounded_paperUINorm_complex` |
+| 2 | the same over `ℝ` | **done** | `…_real` |
+| 3 | genuine ambient object, not the directed surrogate | **done** | conclusion on `paperSinTwoAngleOperatorC` / `…R` |
+| 4 | arbitrary `PaperUnitaryInvariantNorm` | **done** | in the printed type |
+| 5 | unbounded self-adjoint source scope | **done** | `A : H →ₗ.[𝕜] H` |
+| 6 | half-infinite configurations preserved | **done** | `FormBoundedSylvesterGap.unitaryConj_left/_right` case on every constructor |
+| 7 | ideal membership concluded | **done** | first conjunct of the conclusion |
+| 8 | factor exactly `2` | **done** | from `N(H − J H J) ≤ 2 N(H)` |
+| 9 | no implementation-only hypothesis | **done** | no capability class, no `FiniteDimensional` |
+| 10 | no norm/dimension specialization substituted | **done** | — |
+| 11 | 81/81 clauses established | **done** | count unchanged at 81 |
+| 12 | hostile audit of every counted result | **done** | `dev/davis-kahan-1970-result-semantic-review-2026-08-31.md` |
+| 13 | denominator still 29 | **done** | unchanged |
+| 14 | 29/29 advertised only after the audit | **done** | advertised in the same commit as the audit |
+| 15 | old Frankenstein composition still rejected | **done** | negative regression test, asserting the diagnosis |
+| 16 | scalar, clause, operator, norm, gap and correspondence scope compiler-auditable | **done, strengthened** | four new rules, four new tests |
+| 17 | each headline has a source-facing representation of the complete result | **done** | clause aliases for all four; `sinTwoTheta_source_*` certificate |
+| 18 | directed and ambient named explicitly | **done** | eight aliases |
+| 19 | `sin 2Θ` gains its ambient aliases | **done** | `sinTwoTheta_ambient_complex` / `…_real` |
+| 20 | no short name documented as the whole theorem while naming one clause | **done** | docstrings and table corrected |
+| 21 | generic `[RCLike 𝕜]` public surface for all four | **NOT DELIVERED — blocked** | `dev/section-two-rclike-endpoint-frontier.md` |
+| 22 | fixed-field endpoints retained | **done** | — |
+| 23–30 | four-theorem Palomar Challenge, comparator, Solution | **NOT DELIVERED — blocked** | `dev/palomar-section-two-challenge-audit-2026-08-31.md` |
+| 31 | Challenge line and byte counts measured | **done** | 95 lines / 4555 bytes for the existing entry; ~350–450 lines projected for a complex-only four-theorem one |
+| 32 | concrete Palomar readiness verdict | **done** | §9 of the report |
+
+## The two blocked items, and why
+
+Both are the same missing upstream layer, and it is in the **statement**, not the
+proof.  Mathlib reaches a real continuous functional calculus only through
+`IsSelfAdjoint.instContinuousFunctionalCalculus`, whose hypothesis is
+`[ContinuousFunctionalCalculus ℂ A IsStarNormal]` — a *complex* C⋆-algebra.  This
+repository names the real angle operators by complexifying, which a Challenge may
+neither import nor inline, and which a generic `[RCLike 𝕜]` statement cannot
+reference at all.  So there is nothing to dispatch and nothing to import until a
+scalar-generic angle vocabulary exists.  `sin Θ` is the exception in both places
+for the same reason: its conclusion is a scalar-generic operator expression.
+
+The earlier reasoning that `RCLike` admits no real/complex dispatch was wrong
+about Mathlib and is corrected in the frontier document;
+`RCLike.I_eq_zero_or_im_I_eq_one` with `realLinearIsometryEquiv` and
+`complexLinearIsometryEquiv` is that dispatch.  It does not help here.
+
+## Standing constraint honoured
+
+Nothing was submitted to or registered with Palomar, and no submission surface
+was created in this repository.
+
+## Verdict
+
+`PRODUCTION COMPLETE / PALOMAR BLOCKED`.
