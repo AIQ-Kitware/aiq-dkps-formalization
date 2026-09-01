@@ -16,15 +16,15 @@ repaired statements and the audit that will keep them honest.
 
 | | Challenge.lean | limit |
 | --- | --- | --- |
-| lines | **611** | hard 1000, preferred 300 |
-| bytes | **29,984** | hard 102,400, preferred 32,768 |
+| lines | **600** | hard 1000, preferred 300 |
+| bytes | **29,683** | hard 102,400, preferred 32,768 |
 | imports | **`Mathlib` only** | Lean core + allowlisted Mathlib/Tau Ceti/CSLib |
-| definitions and structures | 40 | ordinary concrete definitions; **not** `definition_names` |
+| definitions and structures | 37 | ordinary concrete definitions; **not** `definition_names` |
 | headline theorems | 4 | `sorry`-bodied, per the Comparator convention |
 | supporting theorems | 1 (`Reduces.orthogonal`) | proved; needed for the `sin 2Θ` statement to typecheck |
 | functional calculus | **absent** | — |
 
-`Solution.lean` is 674 lines and contains no `sorry`, no `admit` and no `axiom`.
+`Solution.lean` is 1,983 lines and contains no `sorry`, no `admit` and no `axiom`.
 
 The line count is over Palomar's *preferred* 300 and under its hard 1000, so
 `check_palomar_readiness.py` would warn, not fail. Four full theorems with their
@@ -155,77 +155,99 @@ development already states at that scope. The remaining spectral-only endpoints
 (`sin 2Θ` directed, both `tan 2Θ` clauses) are recorded as *production*
 narrowings rather than Challenge defects.
 
-## What is proved, and what is open
+## What is proved
 
-Proved in `Solution.lean`:
+Everything, at the Challenge's own scalar scope.  `Solution.lean` proves all seven
+printed clauses and assembles them into the Challenge's four theorems:
 
-* the norm correspondence, by `rfl` — `UINorm.toPaper`, `eval_eq`, `finite_iff`,
-  `norm_eq`;
-* the separation, constructor by constructor, both half-infinite branches;
-* reduction, blocks, and the bounded perturbation of a partial map;
-* the trial data, field for field, with the compression still a partial map
-  (`RitzData.toUnboundedRitzPair`);
-* the off-diagonal condition as the development's `IsOddFor`;
-* **`sin Θ`**, and **the ambient clause of `sin 2Θ`** — both modulo the two
-  development capability classes, which are instances at `ℝ` and at `ℂ`.
+| Challenge theorem | `Solution.lean` |
+| --- | --- |
+| `sinTheta` | `sinTheta_solution` |
+| `tanTheta` | `tanTheta_solution` |
+| `sinTwoTheta` | `sinTwoTheta_solution` |
+| `tanTwoTheta` | `tanTwoTheta_solution` |
 
-* **the ambient `tan Θ` clause**, over `ℂ` — `tanTheta_ambient_proof_complex`,
-  all three printed conjuncts.  Three new production facts make it possible:
-  `approximationNumber_paperTanAngleOperatorC` (the operator's singular values
-  *are* the tangent sequence), `evalSeq_tanSeq_ambientSine` (hence the norms
-  agree), and `norm_sinAngleOperatorC_lt_one_of_unboundedRitz` (uniform
-  transversality, which the tangent theorem's own proof already derived inline
-  and which both of the others need);
-* **the directed `tan Θ` clause itself**, over `ℂ` —
-  `tanTheta_directed_proof_complex`, all three printed conjuncts, from the new
-  `DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_exists_complex`,
-  which exhibits a representative with the paper's approximation numbers and
-  derives the pole exclusion from the two form bounds rather than assuming it.
+| printed clause | proof |
+| --- | --- |
+| `sin Θ` | `sinTheta_proof` |
+| `tan Θ` directed | `tanTheta_directed_proof` |
+| `tan Θ` ambient | `tanTheta_ambient_proof` |
+| `sin 2Θ` directed | `sinTwoTheta_directed_proof` |
+| `sin 2Θ` ambient | `sinTwoTheta_ambient_proof` |
+| `tan 2Θ` directed | `tanTwoTheta_directed_proof` |
+| `tan 2Θ` ambient | `tanTwoTheta_ambient_proof` |
 
-Three of the seven printed clauses remain, and are named per clause in
-[`../palomar-section-two-challenge-statement-audit.md`](../palomar-section-two-challenge-statement-audit.md):
+Each is stated at an arbitrary `[RCLike 𝕜]` with **no capability binder, no
+field-dispatch hypothesis, no finite-dimensionality hypothesis and no spectral
+selection of the trial subspace**, and each depends on exactly `propext`,
+`Classical.choice`, `Quot.sound`.
 
-* the `sin 2Θ` directed clause at a reducing subspace — the production endpoint
-  selects its subspace spectrally, and the reducing version of
-  `sinTwoTheta_reflectionResidual_block_gauge_of_formGap` has not been written;
-* both `tan 2Θ` clauses, for the same reason plus the two items below;
-* the scalar field for every clause whose production endpoint is fixed-field:
-  `ScalarTransport` exists and discharges the two capability classes, but the
-  Section 2 `tan`-family endpoints themselves are still stated over `ℂ` and `ℝ`
-  separately;
-* one sharp remaining analytic obligation, the **sine-doubling transfer**
-  `aₙ(sin 2Θ) = sin (2 arcsin aₙ(sin Θ))`, which is what would let the `tan 2Θ`
-  clauses read their sequences off `ambientSine` rather than off `ambientDoubleSine`.
+Also proved here, as the bridge the four theorems rest on: the norm
+correspondence by `rfl` (`UINorm.toPaper`, `eval_eq`, `finite_iff`, `norm_eq`);
+the separation constructor by constructor, both half-infinite branches;
+reduction, blocks and the bounded perturbation of a partial map; the trial data
+field for field with the compression still a partial map
+(`RitzData.toUnboundedRitzPair`); and the off-diagonal condition as the
+development's `IsOddFor`.
 
-## The scalar field is no longer one of them
+## Two corrections this pass made to the mathematics
 
-`ContinuousLinearMap.HasMinMaxLowerBoundEverywhere 𝕜` and
-`ExactSinTheta.HasUnboundedSylvesterKyFan 𝕜` were the two development
-capabilities the Challenge's `[RCLike 𝕜]` genericity waited on.  **Both are now
-instances at every `RCLike` field**, so the two discharged clauses carry no
-binders at all.
+**The doubled tangent must be read off the doubled sine.**  An earlier draft
+applied `|tan (2 arcsin ·)|` index by index to the approximation numbers of the
+*single*-angle sine.  That is wrong at arbitrary dimension: `θ ↦ sin 2θ` is not
+monotone on `[0, π/2]`, so the transformed sequence need not be ordered.
+Principal angles `75°` and `30°` already invert it — `sin 75° > sin 30°` while
+`sin 150° < sin 60°`.  Both `tan 2Θ` clauses now read the doubled tangent off
+`directedDoubleSine` / `ambientDoubleSine` through the *monotone*
+`u ↦ tan (arcsin u)`, and `absTanTwoSeq`, `DoubleTangentDefined` and
+`directedSineCorner` are gone.
 
-`RCLike` is an open class with exactly two models, and the transport that closes
-the gap is one construction used twice:
+**The pole certificate had to move with it.**  `DoubleTangentDefined` looked only
+at the single-angle sine's approximation numbers, which a noncompact operator's
+interior spectral value can evade.  The certificate is now `TangentDefined` of
+the double-angle sine, whose `a₀` is `‖sin 2Θ‖`: the uniform quarter-turn
+exclusion that production derives from the ordered gap.
+
+## How the scalar field was closed
+
+Not by making the machinery generic — `gramOperator`, `cfc` and the double-angle
+functional calculus are complex — but by **transport**.  Every quantity a
+Challenge clause mentions is a function of one operator's singular-value
+sequence, and `TauCeti.ScalarTransport` renames the field without touching the
+vectors, the additive group, the topology, the norm, the operators, or that
+sequence.  `RCLike.I_eq_zero_or_im_I_eq_one` supplies the case split; the real
+branch of each `tan` clause is itself proved by complexification, so the analysis
+happens once, over `ℂ`.
 
 | module | carries |
 | --- | --- |
-| `ForTauCeti/Analysis/RCLike/ScalarTransport.lean` | the field isomorphism `RCLikeIso`, and `ScalarTransport e E` — `E` with the induced `𝕂`-structure — together with subspaces, `ᗮ`, orthogonal projections, bounded operators (function, norm, adjoint, self-adjointness), `Module.rank`, and partial maps (domain, function, adjoint, self-adjointness) |
+| `ForTauCeti/Analysis/RCLike/ScalarTransport.lean` | the field isomorphism `RCLikeIso`, and `ScalarTransport e E` — `E` with the induced `𝕂`-structure — with subspaces, `ᗮ`, orthogonal projections, bounded operators (function, norm, adjoint, self-adjointness), `Module.rank`, and partial maps |
 | `ForTauCeti/Analysis/OperatorIdeal/ApproximationNumber/ScalarTransport.lean` | approximation numbers, linear independence, spans — hence the min–max instance |
+| `ForTauCeti/Analysis/InnerProductSpace/LinearPMap/ScalarTransport.lean` | reducing subspaces, and adding a bounded operator to a partial map |
+| `ForTauCeti/Analysis/InnerProductSpace/Projection/ScalarTransport.lean` | reflections, and the mirror image of one subspace in another |
+| `ForTauCeti/Analysis/RCLike/ScalarTransportIsometry.lean` | linear isometric equivalences, and intersections — hence the crossed-defect condition (3.5) |
 | `DavisKahan/Sylvester/ScalarTransport.lean` | finite Ky Fan gauges, operator-form semibounds, the real resolvent set and spectrum, the three-constructor separation, the domain-aware Sylvester equation — hence the Sylvester instance |
 
-The transport moves the scalar action and the field the inner product takes
-values in, and nothing else — not the vectors, the additive group, the topology
-or the norm.  That is why ranks and singular values survive it, and why
-restriction of scalars (`InnerProductSpace.rclikeToReal`) is the wrong tool: over
-a complex-like `𝕜` it halves the scalars, doubling the rank.
+Restriction of scalars (`InnerProductSpace.rclikeToReal`) is the wrong tool here:
+over a complex-like `𝕜` it halves the scalars, doubling `Module.rank` and
+changing the singular-value sequence.  The transport changes no ranks because it
+changes no scalars — it renames the field.
+
+One diagnostic worth keeping: a helper that only reads a singular-value sequence
+had been stated over `ℂ`, and the whole `Solution.lean` then stalled at `whnf`
+inside the real branch.  A fixed-field helper inside a scalar-generic proof is
+not merely inelegant here; it is a hang.
 
 ## The Comparator layout this is not yet in
 
-`Solution.lean` here imports `Challenge` and proves *helper* correspondences.
-That is right for a bridge file and wrong for a submission: the Comparator
-compares two independently exported environments, so the final `Solution.lean`
-must **not** import `Challenge` and must redeclare the four advertised names, at
-the same types, with real proofs.  Converting to that layout is mechanical and is
-deliberately deferred until the four theorems are actually proved — until then
-the redeclarations would only relocate the four holes.
+`Solution.lean` here imports `Challenge` for its vocabulary.  That is right for a
+bridge file inside the development and wrong for a submission: the Comparator
+compares two independently exported environments, so the submitted `Solution.lean`
+must **not** import `Challenge`, and must redeclare the Challenge's definitions
+verbatim and then the four advertised names, at the same types, with these proofs.
+The conversion is mechanical — the definitions are copied and the four theorem
+bodies are the `*_solution` terms above — and it belongs in the standalone
+submission repository under `submodules/`, together with a refreshed mechanical
+extraction of the development, a `registry/` entry, and the real Comparator run.
+
+Nothing has been submitted or registered.

@@ -85,7 +85,7 @@ separation `A|Vᗮ ≥ α + δ` in form.
 | **RHS quantity** | `N.norm D.residual` — the residual alone; **no `N.Finite H`** ✓ |
 | **angle multiplicity** | directed, once: `tanSeq (directedSineBlock U V)`, `directedSineBlock U V = P_{Vᗮ}∘ι_U` — the same operator as production's `theorem63DirectedSineBlock` ✓ |
 | **constant** | `1` ✓ |
-| **status** | **statement exact; correspondence proved over `ℂ`, scalar field open.** Both obligations this row carried are discharged as of 2026-09-01. (i) *`V` reducing, not spectral* — the production endpoint takes `ReducingComplement A V`, and `ReducingComplement.ofReducesSubspace` builds it from the Challenge's `Reduces A V`; there was never a spectral selection in this clause. (ii) *the representative and the pole* — `tanTheta_directed_unboundedRitz_paperUINorm_exists_complex` exhibits a representative with exactly the paper's approximation numbers and derives `∀ n, aₙ(sin Θ₀) < 1` from the two form bounds, neither assumed. `Solution.tanTheta_directed_proof_complex` **is** this Challenge clause over `ℂ`, all three conjuncts. What remains is the scalar field alone. |
+| **status** | **proved, at arbitrary `[RCLike 𝕜]`** (`Solution.tanTheta_directed_proof`). Both obligations this row carried are discharged as of 2026-09-01. (i) *`V` reducing, not spectral* — the production endpoint takes `ReducingComplement A V`, and `ReducingComplement.ofReducesSubspace` builds it from the Challenge's `Reduces A V`; there was never a spectral selection in this clause. (ii) *the representative and the pole* — `tanTheta_directed_unboundedRitz_paperUINorm_exists_complex` exhibits a representative with exactly the paper's approximation numbers and derives `∀ n, aₙ(sin Θ₀) < 1` from the two form bounds, neither assumed. `Solution.tanTheta_directed_proof_complex` **is** this Challenge clause over `ℂ`, all three conjuncts. What remains is the scalar field alone. |
 
 ### 2b. ambient — `δ‖tan Θ‖ ≤ ‖H‖`
 
@@ -103,7 +103,7 @@ separation `A|Vᗮ ≥ α + δ` in form.
 | **RHS quantity** | `N.norm H` — its own hypothesis `N.Finite H`, not shared with 2a ✓ |
 | **angle multiplicity** | ambient, twice: `tanSeq (ambientSine U V)`, `ambientSine U V = P_V − P_U`. Production concludes on `paperTanAngleOperatorC U V = cfc tan (cfc arcsin (modulus (P_U − P_V)))`, whose approximation numbers are `tan(arcsin sₙ(P_U − P_V))` ✓ |
 | **constant** | `1` ✓ |
-| **status** | **statement exact; the clause is proved over `ℂ`, scalar field open.** `Solution.tanTheta_ambient_proof_complex` **is** this Challenge clause over `ℂ`, all three conjuncts. Three pieces came together on 2026-09-01: `DavisKahan1970.approximationNumber_paperTanAngleOperatorC` identifies the operator's approximation numbers with the Challenge's sequence; `Solution.evalSeq_tanSeq_ambientSine` turns that into the norm identity; and `DavisKahan1970.norm_sinAngleOperatorC_lt_one_of_unboundedRitz` exposes the uniform transversality the tangent theorem's proof already derived inline, which is what both of the first two need. What remains is the scalar field alone. |
+| **status** | **proved, at arbitrary `[RCLike 𝕜]`** (`Solution.tanTheta_ambient_proof`). `Solution.tanTheta_ambient_proof_complex` **is** this Challenge clause over `ℂ`, all three conjuncts. Three pieces came together on 2026-09-01: `DavisKahan1970.approximationNumber_paperTanAngleOperatorC` identifies the operator's approximation numbers with the Challenge's sequence; `Solution.evalSeq_tanSeq_ambientSine` turns that into the norm identity; and `DavisKahan1970.norm_sinAngleOperatorC_lt_one_of_unboundedRitz` exposes the uniform transversality the tangent theorem's proof already derived inline, which is what both of the first two need. What remains is the scalar field alone. |
 | **note** | `H₀ = 0` is carried twice, by `RitzData.residual_orthogonal` and by `D.residual = P_{Uᗮ}∘H∘ι_U`; this is the source's own double presentation in `(1.8)`. |
 
 ---
@@ -164,17 +164,17 @@ reader will find them:
 | --- | --- |
 | **paper clause** | `δ‖sin(2Θ₀)‖ ≤ 2‖R‖` |
 | **Challenge** | `SinTwoThetaResult.directed` |
-| **production witness** | `sinTwoTheta_directed_unboundedResidual_blockRepresentative_paperUINorm_complex` / `…_real` |
-| **correspondence** | **not carried out** |
-| **real/complex** | `[RCLike 𝕜]`; production fixed-field |
+| **production witness** | `sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_paperUINorm_complex` / `…_real` |
+| **correspondence** | **`Solution.sinTwoTheta_directed_proof` — proved** |
+| **real/complex** | `[RCLike 𝕜]` ✓, by `TauCeti.ScalarTransport` from the two fixed-field endpoints |
 | **bounded/unbounded** | `BoundedTrialBlock A V` — **bounded** compression `M : V →L[𝕜] V`, `V ≤ dom A`, bounded residual, matching production exactly. Narrowed from `TrialBlock` on 2026-09-01; see §3.0 |
 | **dimension** | arbitrary ✓ |
 | **norm** | `UINorm` ✓ |
-| **gap** | full `SylvesterGap` on `block A U` / `block A Uᗮ` ✓ (production: the same predicate on **spectral** restrictions) |
+| **gap** | full `SylvesterGap` on `block A U` / `block A Uᗮ` ✓ (production: the same predicate on the two **reducing** restrictions, since 2026-09-01) |
 | **RHS quantity** | `2 * N.norm D.residual`, hypothesis `N.Finite D.residual` only ✓ |
 | **angle multiplicity** | directed, once: `directedDoubleSine U V = P_U ∘ P_{J_V Uᗮ}` = production's `sinTwoThetaIdealBlock U V`, name for name ✓ |
 | **constant** | `2` ✓ |
-| **status** | **statement exact, one correspondence obligation.** The compression obligation is **withdrawn**: it was not a source obligation, and demanding it contradicted the production semantic audit (§3.0). What remains is the subspace: production selects `U` spectrally, the Challenge only reduces it. That step is mechanical — `sinTwoTheta_reflectionResidual_block_gauge_of_formGap` consumes only the reducing facts (`selfAdjointSpectralRestriction_inclusion_mem_domain` / `_intertwines` and `starProjection_selfAdjointSpectralSubspace_compl`), and the last of those becomes `rfl` when the complement is literally `Uᗮ` — plus the scalar field. |
+| **status** | **proved, at arbitrary `[RCLike 𝕜]`** (`Solution.sinTwoTheta_directed_proof`). Two obligations closed. The compression obligation is **withdrawn**: it was not a source obligation, and demanding it contradicted the production semantic audit (§3.0). The spectral-versus-reducing obligation is **discharged**, not deferred: `sinTwoTheta_reflectionResidual_block_gauge_of_formGap_reducing` and its real mirror state the base estimate at an arbitrary reducing subspace, because the three spectral ingredients each have a reducing analogue and the third is literal once the complement is `Uᗮ`. |
 
 ### 3b. ambient — `δ‖sin 2Θ‖ ≤ 2‖H‖`
 
@@ -216,10 +216,10 @@ above `α + δ`, `H` bounded self-adjoint with `H₀ = H₁ = 0`.
 | **gap** | ordered form bounds on `block A U` / `block A Uᗮ`; production fixes `U = specRange hA (Iic c)` — the same narrowing as 3a |
 | **off-diagonal** | `P_U H P_U = 0` **and** `P_{Uᗮ} H P_{Uᗮ} = 0`; `Solution.isOddFor_of_offDiagonal` **proves** this is production's `IsOddFor U H` ✓ |
 | **RHS quantity** | `2 * N.norm (P_{Uᗮ} H P_U)` with hypothesis `N.Finite (P_{Uᗮ} H P_U)` — the **corner**, not `H` ✓ (production requires membership of exactly the corner `paperBlockCompression Uᗮ U B`) |
-| **angle multiplicity** | directed, once: `absTanTwoSeq (directedSineCorner U V)`, `directedSineCorner U V = P_U P_{Vᗮ}`, singular values `sin θⱼ` once, so the sequence is `|tan 2θⱼ|` once. Production concludes on `reflectionTangentCorner U J_V` |
+| **angle multiplicity** | directed, once: `tanSeq (directedDoubleSine U V)`, `directedDoubleSine U V = P_U P_{J_V Uᗮ}`, whose singular values are `sin 2θⱼ` once. `hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock` proves the production corner `reflectionSineCorner U J_V` has that same sequence, and `approximationNumber_reflectionTangentCorner` turns it into `tan (arcsin ·)` ✓ |
 | **constant** | `2` ✓ |
-| **pole handling** | `DoubleTangentDefined` is a **conclusion**, matching production's `IsUnit (diagonalPart J · diagonalPart J)` conclusion and the source's “Section 7 derives the nonvanishing … rather than assuming it” ✓ |
-| **status** | **statement repaired, correspondence open.** Obligations: spectral `U` → reducing `U`; the scalar field; and `(reflectionTangentCorner U J_V).approximationNumber n = absTanTwoSeq (directedSineCorner U V) n`. Note that production's `sameApproximationSingularValues_unboundedReflectionTangent` relates the *uncornered* `unboundedReflectionTangent U J_V` to the **ambient** `paperAbsTanTwoAngleOperatorC U V`; the directed multiplicity of the cornered operator has not been checked against `directedSineCorner` here, and this row must not be closed until it has. |
+| **pole handling** | `TangentDefined (directedDoubleSine U V)` is a **conclusion**, matching production's `IsUnit (diagonalPart J · diagonalPart J)` conclusion and the source's “Section 7 derives the nonvanishing … rather than assuming it” ✓.  Read on the *doubled* sine it is the uniform `‖sin 2Θ₀‖ < 1`, not a sequence check on the single angle; see §6.1 |
+| **status** | **proved, at arbitrary `[RCLike 𝕜]`** (`Solution.tanTwoTheta_directed_proof`). The multiplicity question this row was held open for is settled the other way round from the way it was posed: the doubled tangent is read off the *doubled* sine, and `hasSameApproximationNumbers_reflectionSineCorner_sinTwoThetaIdealBlock` proves the production corner carries exactly that sequence, each directed angle once. `sameApproximationSingularValues_unboundedReflectionTangent` — which concerns the **uncornered ambient** tangent and so carries doubled ambient multiplicity — is not used. |
 
 ### 4b. ambient — `δ‖tan 2Θ‖ ≤ 2‖H‖`
 
@@ -235,10 +235,10 @@ above `α + δ`, `H` bounded self-adjoint with `H₀ = H₁ = 0`.
 | **norm** | `UINorm` ✓ |
 | **gap** | ordered form bounds; production fixes `U` spectrally (same narrowing) |
 | **RHS quantity** | `2 * N.norm H`, hypothesis `N.Finite H` ✓ |
-| **angle multiplicity** | ambient, twice: `absTanTwoSeq (ambientSine U V)`. Production concludes on `paperAbsTanTwoAngleOperatorC U V = cfc \|tan 2·\| (cfc arcsin (modulus (P_U − P_V)))` ✓ |
+| **angle multiplicity** | ambient, with the ambient multiplicity: `tanSeq (ambientDoubleSine U V)`, `ambientDoubleSine U V = P_{J_V U} − P_U`. Production concludes on `paperAbsTanTwoAngleOperatorC U V`, and `approximationNumber_paperAbsTanTwoAngleOperatorC_projectorDifference` proves the two sequences agree ✓ |
 | **constant** | `2` ✓ |
 | **pole handling** | conclusion, as in 4a; production's docstring says explicitly that no pole hypothesis is asked of the caller ✓ |
-| **status** | **statement repaired, correspondence open, and the analytic obligation is now sharp.** As of 2026-09-01, `DavisKahan1970.approximationNumber_paperAbsTanTwoAngleOperatorC` proves `(paperAbsTanTwoAngleOperatorC U V).approximationNumber n = tan (arcsin ((paperSinTwoAngleOperatorC U V).approximationNumber n))` under exactly the pole exclusion this clause concludes, and `approximationNumber_paperSinTwoAngleOperatorC` identifies the right-hand argument with `ambientDoubleSine U V`. So the whole remaining analytic gap between this clause and production is one statement — the **sine-doubling transfer** `aₙ(sin 2Θ) = sin (2 arcsin aₙ(sin Θ))` — together with spectral `U` → reducing `U` and the scalar field. |
+| **status** | **proved, at arbitrary `[RCLike 𝕜]`** (`Solution.tanTwoTheta_ambient_proof`). |
 | **note** | `V` is quantified inside each clause rather than shared, which is strictly stronger and matches “each clause quantifies its own data”. |
 
 ---
@@ -247,18 +247,21 @@ above `α + δ`, `H` bounded self-adjoint with `H₀ = H₁ = 0`.
 
 | # | defect | where found | disposition |
 | --- | --- | --- | --- |
-| 1 | tangent defined from the **residual**: the first draft's `tanTheta` said `∀ T, IsTangentOf R T → …`, taking `tan(arcsin sₙ(R))` — a different and false quantity | reviewer | **fixed.** `tanSeq` now takes a *sine*, and its docstring says so in a paragraph that names the mistake. `directedSineBlock`/`ambientSine`/`directedSineCorner` are the only arguments used. |
+| 1 | tangent defined from the **residual**: the first draft's `tanTheta` said `∀ T, IsTangentOf R T → …`, taking `tan(arcsin sₙ(R))` — a different and false quantity | reviewer | **fixed.** `tanSeq` now takes a *sine*, and its docstring says so in a paragraph that names the mistake. `directedSineBlock`, `ambientSine`, `directedDoubleSine` and `ambientDoubleSine` are the only arguments used, and each is a sine. |
 | 2 | bounded Ritz compression substituted for unbounded: `M : U →L[𝕜] U` | reviewer | **fixed, then bounded again where the source bounds it.** `TrialBlock.compression : U →ₗ.[𝕜] U` is a partial map and `RitzData` adds only the orthogonality; but the `sin 2Θ` directed clause uses `BoundedTrialBlock`, because the Appendix grants "both unbounded" to the tangent theorem alone. See §3.0. |
 | 3 | ambient ideal membership imposed on the directed clause: `N.Finite H` in the common telescope of `tanTheta` and `tanTwoTheta` | reviewer | **fixed.** The three two-clause theorems now conclude in `TanThetaResult` / `SinTwoThetaResult` / `TanTwoThetaResult`, whose fields carry their own data and their own membership premise. The directed `tan 2Θ` premise is membership of the **corner**. |
 | 4 | arbitrary reducing subspace substituted for spectral selection without proof | prior pass, self-found | **resolved in the Challenge's favour, and proved for `sin 2Θ` ambient.** Section 1 of the source assumes reduction, not spectral selection, so the reducing formulation is the printed one; the remaining spectral-only production endpoints are recorded above as *production* obligations, not Challenge defects. |
 | 5 | tangent-witness vacuity: `∀ T, IsTangentOf S T → …` says nothing when no `T` exists | reviewer | **fixed.** `UINorm.evalSeq` measures the tangent sequence directly. `IsTangentOf` and `IsDoubleTangentOf` are deleted. |
-| 6 | pole encoded as a harmless numerical zero (`Real.tan (π/2) = 0` in Lean) | reviewer | **fixed by the second permitted route:** `TangentDefined` / `DoubleTangentDefined` are stated as **conclusions**, so a pole is not silently valued at zero — the theorem asserts there is none. This matches the source (Section 7 derives it) and production (`IsUnit …` in the conclusion). |
+| 6 | pole encoded as a harmless numerical zero (`Real.tan (π/2) = 0` in Lean) | reviewer | **fixed by the second permitted route:** `TangentDefined` is stated as a **conclusion**, so a pole is not silently valued at zero — the theorem asserts there is none. This matches the source (Section 7 derives it) and production (`IsUnit …` in the conclusion). |
 | 7 | the printed lower bound `β` on `spec(A₀)` is dropped from the ordered-gap clauses (`tan Θ`, `tan 2Θ`) | this audit | **resolved as source-exact, 2026-09-01 — see §5.1.** The Appendix to Section 6 drops `β` itself. |
 | 8 | `sinAngleOperatorC` is `modulus (P_U − P_V)` while the Challenge's `ambientSine` is `P_V − P_U` | this audit | **benign, and recorded.** Sign and modulus do not change singular values; every correspondence goes through approximation numbers, and `DavisKahan1970.approximationNumber_sinAngleOperatorC` now proves the equality outright. |
 | 9 | the unbounded compression demanded of `sin 2Θ` directed, in contradiction with the production semantic audit of the same day | reviewer | **fixed.** `BoundedTrialBlock`; see §3.0 for the Appendix passage that decides it. |
 | 10 | a tangent clause whose operator is only *claimed* to have the tangent singular values | this audit | **closed for the ambient single angle, sharpened for the doubled one.** `DavisKahan1970.approximationNumber_paperTanAngleOperatorC` and `…_paperAbsTanTwoAngleOperatorC` prove the identity from the Pythagorean operator relation alone, by pairing the Gram resolvent transfer with its inverse (`TauCeti.ApproximationNumber.approximationNumber_le_of_gramContraction`). |
 
-### 5.1 The dropped `β`, resolved
+#| 11 | the doubled tangent read off the **single**-angle sine, by applying the non-monotone `\|tan (2 arcsin ·)\|` index by index to `aₙ(sin Θ)` | reviewer | **fixed, 2026-09-01.** `θ ↦ sin 2θ` is not monotone on `[0, π/2]`; principal angles `75°` and `30°` order the two sequences oppositely. Both `tan 2Θ` clauses now read the doubled tangent off the double-angle sine through the monotone `u ↦ tan (arcsin u)`. See §6.1. |
+| 12 | pole certificate that a noncompact operator's interior spectrum can evade: `DoubleTangentDefined` looked only at `aₙ(sin Θ)` | reviewer | **fixed, 2026-09-01.** The certificate is `TangentDefined` of the double-angle sine, whose `a₀` is `‖sin 2Θ‖`; that is the uniform quarter-turn exclusion production derives. |
+
+## 5.1 The dropped `β`, resolved
 
 The previous pass recorded the missing `β` as "strictly stronger, accepted", and
 that was the wrong disposition: a statement is not *exact* while it also carries
@@ -304,7 +307,7 @@ This is also the disposition the production endpoints take, and as of 2026-08-31
 the production certificate checks it: the source atom
 `DK-6-appendix.unbounded-tangent-extension` now requires the witness to carry an
 `UnboundedRitzPair`, whose compression is a partial map, and forbids the
-bounded-compression `UnboundedTrialBlock`.
+bounded-compression trial block.
 
 ## 6. What the audit does not certify
 
@@ -316,17 +319,71 @@ Comparator convention — and it does not certify the correspondences marked *op
 
 | clause | correspondence |
 | --- | --- |
-| `sin Θ` | **proved, at arbitrary `[RCLike 𝕜]`** (`Solution.sinTheta_proof`) |
-| `tan Θ` directed | **proved over `ℂ`** (`Solution.tanTheta_directed_proof_complex`) |
-| `tan Θ` ambient | **proved over `ℂ`** (`Solution.tanTheta_ambient_proof_complex`) |
-| `sin 2Θ` directed | open: spectral `U` → reducing `U`, and the scalar field |
-| `sin 2Θ` ambient | **proved, at arbitrary `[RCLike 𝕜]`** (`Solution.sinTwoTheta_ambient_proof`) |
-| `tan 2Θ` directed | open: spectral `U` → reducing `U`, the multiplicity check of §4a, and the scalar field |
-| `tan 2Θ` ambient | open: the sine-doubling transfer, spectral `U` → reducing `U`, and the scalar field |
+| `sin Θ` | **proved, arbitrary `[RCLike 𝕜]`** (`Solution.sinTheta_proof`) |
+| `tan Θ` directed | **proved, arbitrary `[RCLike 𝕜]`** (`Solution.tanTheta_directed_proof`) |
+| `tan Θ` ambient | **proved, arbitrary `[RCLike 𝕜]`** (`Solution.tanTheta_ambient_proof`) |
+| `sin 2Θ` directed | **proved, arbitrary `[RCLike 𝕜]`** (`Solution.sinTwoTheta_directed_proof`) |
+| `sin 2Θ` ambient | **proved, arbitrary `[RCLike 𝕜]`** (`Solution.sinTwoTheta_ambient_proof`) |
+| `tan 2Θ` directed | **proved, arbitrary `[RCLike 𝕜]`** (`Solution.tanTwoTheta_directed_proof`) |
+| `tan 2Θ` ambient | **proved, arbitrary `[RCLike 𝕜]`** (`Solution.tanTwoTheta_ambient_proof`) |
 
-Four of the seven clauses now have a proof; two of those are at the Challenge's own scalar
-scope: `Solution.sinTheta_proof` and `Solution.sinTwoTheta_ambient_proof`, and as of
-2026-09-01 **neither carries a capability binder**: `ContinuousLinearMap.hasMinMaxLowerBoundEverywhere` and
-`ExactSinTheta.hasUnboundedSylvesterKyFan` are instances at every `RCLike` field, proved
-by transport (`TauCeti.ScalarTransport`).  Those two clauses are therefore discharged at
-exactly the Challenge's scalar scope, with nothing assumed beyond the source hypotheses.
+All seven printed inequality clauses are proved at the Challenge's own scalar scope.
+None of the seven carries a capability binder, a field-dispatch hypothesis, a
+finite-dimensionality hypothesis, or a spectral selection of the trial subspace.
+`Solution.sinTheta_solution`, `tanTheta_solution`, `sinTwoTheta_solution` and
+`tanTwoTheta_solution` assemble them into the Challenge's four statements; each
+depends on `propext`, `Classical.choice`, `Quot.sound` and nothing else.
+
+**How the scalar field was closed.**  Not by making the machinery generic —
+`gramOperator`, `cfc` and the double-angle functional calculus are complex — but by
+transport.  Every quantity a Challenge clause mentions is a function of one
+operator's singular-value sequence, and `TauCeti.ScalarTransport` renames the field
+without touching the vectors, the norm, the operators, or that sequence.
+`RCLike.I_eq_zero_or_im_I_eq_one` supplies the case split, and the two fixed-field
+proofs supply the content.  The real branch of each `tan` clause is itself proved by
+complexification, so the mathematics happens once, over `ℂ`.
+
+**What this audit still does not certify.**  It does not certify that the Challenge
+theorems are true — four are `sorry`-bodied by the Comparator convention, and the
+proofs live in `Solution.lean`.  It certifies that each Challenge clause *states* the
+printed clause at the printed scope, and it now records, clause by clause, the
+`Solution` declaration that discharges it.
+
+### 6.1 The identity that is false, and must not be retried
+
+An earlier pass named the remaining `tan 2Θ` obligation as
+
+```text
+aₙ(sin 2Θ) = sin (2 arcsin aₙ(sin Θ)).
+```
+
+**That identity is false in general.**  `θ ↦ sin 2θ` is not monotone on `[0, π/2]`,
+so applying it index by index to an ordered singular-value sequence need not give an
+ordered sequence.  Principal angles `75°` and `30°` already break it:
+
+```text
+sin 75° > sin 30°     while     sin 150° = 1/2 < √3/2 = sin 60°.
+```
+
+The transformed sequence is in the opposite order from `aₙ(sin 2Θ)`, so no indexwise
+theorem of that shape exists without an acute restriction the source does not impose.
+
+The `tan 2Θ` clauses accordingly read the doubled tangent off the **double-angle
+sine** — `directedDoubleSine`, `ambientDoubleSine` — through the *monotone*
+`u ↦ tan (arcsin u)`, which is `|tan 2θ| = tan (arcsin |sin 2θ|)` and needs no branch
+choice.  `absTanTwoSeq`, `DoubleTangentDefined` and `directedSineCorner` are gone from
+the Challenge; the pole certificate is `TangentDefined` of the double-angle sine,
+which at `a₀ = ‖·‖` is the uniform quarter-turn exclusion `‖sin 2Θ‖ < 1` rather than a
+sequence-only check that an interior spectral value of a noncompact operator can evade.
+
+### 6.2 What `TangentDefined` is, and is not
+
+`TangentDefined S` is **not** an eighth printed inequality clause.  It is a derived
+semantic/domain certificate, made explicit because Lean's `Real.tan` is total and
+therefore assigns a value at a pole where the paper's `tan Θ` has none.  Davis and
+Kahan derive the corresponding non-vanishing rather than assuming it, so it appears
+in the Challenge as a *conclusion*.  The audit counts **seven printed inequality
+clauses**; `TangentDefined` and the singular-value correspondences beneath it are the
+derived domain facts needed to formalize the paper's notation, not additional
+printed content.
+
