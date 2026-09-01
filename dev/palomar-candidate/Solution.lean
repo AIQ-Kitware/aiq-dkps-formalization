@@ -119,6 +119,34 @@ theorem tangentDefined_of_approximationNumber_lt_one (S : E →L[𝕜] F)
   have h1 : singularValue S n < 1 := h n
   exact ne_of_gt (Real.sqrt_pos.mpr (by nlinarith))
 
+/-- **Everything the Challenge measures is a function of the singular-value
+sequence.**  Two operators -- over different fields, between different spaces --
+with the same sequence are indistinguishable to a unitarily invariant norm, to
+`tanSeq`, and to `TangentDefined`.  This is what makes the scalar transport a
+one-line argument at each clause. -/
+theorem tangentDefined_congr {𝕂 : Type w} [RCLike 𝕂] {X Y : Type v}
+    [NormedAddCommGroup X] [InnerProductSpace 𝕂 X]
+    [NormedAddCommGroup Y] [InnerProductSpace 𝕂 Y]
+    {S : E →L[𝕜] F} {S' : X →L[𝕂] Y}
+    (h : ∀ n, singularValue S' n = singularValue S n) (hS' : TangentDefined S') :
+    TangentDefined S := fun n => by rw [← h n]; exact hS' n
+
+/-- The tangent sequence depends only on the singular values. -/
+theorem tanSeq_congr {𝕂 : Type w} [RCLike 𝕂] {X Y : Type v}
+    [NormedAddCommGroup X] [InnerProductSpace 𝕂 X]
+    [NormedAddCommGroup Y] [InnerProductSpace 𝕂 Y]
+    {S : E →L[𝕜] F} {S' : X →L[𝕂] Y}
+    (h : ∀ n, singularValue S' n = singularValue S n) : tanSeq S' = tanSeq S :=
+  funext fun n => congrArg (fun r => Real.tan (Real.arcsin r)) (h n)
+
+/-- The norm's extended value depends only on the singular values. -/
+theorem UINorm.eval_congr (N : UINorm) {𝕂 : Type w} [RCLike 𝕂] {X Y : Type v}
+    [NormedAddCommGroup X] [InnerProductSpace 𝕂 X]
+    [NormedAddCommGroup Y] [InnerProductSpace 𝕂 Y]
+    {S : E →L[𝕜] F} {S' : X →L[𝕂] Y}
+    (h : ∀ n, singularValue S' n = singularValue S n) : N.eval S' = N.eval S :=
+  congrArg N.evalSeq (funext h)
+
 /-- The two ideals are the same ideal. -/
 theorem UINorm.finite_iff (N : UINorm) (T : E →L[𝕜] F) :
     N.Finite T ↔ N.toPaper.Mem T := Iff.rfl
@@ -520,17 +548,14 @@ arbitrary, the separation is the half-infinite ordered one, and the norm is arbi
 theorem tanTheta_directed_proof_complex (N : UINorm)
     {A : E →ₗ.[ℂ] E} {V : Submodule ℂ E} [V.HasOrthogonalProjection]
     (hV : Reduces A V) {α δ : ℝ} (hδ : 0 < δ)
-    (hunwanted : SemiboundedBelow (block A Vᗮ hV.orthogonal) (α + δ))
+    (hunwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     {U : Submodule ℂ E} [U.HasOrthogonalProjection] (D : RitzData A U)
     (hupper : SemiboundedAbove D.compression α) (hR : N.Finite D.residual) :
     TangentDefined (directedSineBlock U V) ∧
       N.SeqFinite (tanSeq (directedSineBlock U V)) ∧
       δ * N.seqNorm (tanSeq (directedSineBlock U V)) ≤ N.norm D.residual := by
-  -- the ordered lower bound, read off the reducing complement rather than the block
-  have hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ := by
-    intro y hyV hy
-    exact hunwanted ⟨⟨y, hyV⟩, hy⟩
+  have hUnwanted := hunwanted
   obtain ⟨hlt, tanTheta0, htan, hmem, hbound⟩ :=
     TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_exists_complex
       N.toPaper D.toUnboundedRitzPair
@@ -578,7 +603,8 @@ identified with the development's operator `tan Θ` by
 theorem tanTheta_ambient_proof_complex (N : UINorm)
     {A : E →ₗ.[ℂ] E} {V : Submodule ℂ E} [V.HasOrthogonalProjection]
     (hV : Reduces A V) {α δ : ℝ} (hδ : 0 < δ)
-    (hunwanted : SemiboundedBelow (block A Vᗮ hV.orthogonal) (α + δ))
+    (hunwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ)
     {U : Submodule ℂ E} [U.HasOrthogonalProjection] (D : RitzData A U)
     (hupper : SemiboundedAbove D.compression α)
     (H : E →L[ℂ] E) (hH : IsSelfAdjoint H)
@@ -587,10 +613,7 @@ theorem tanTheta_ambient_proof_complex (N : UINorm)
     TangentDefined (ambientSine U V) ∧
       N.SeqFinite (tanSeq (ambientSine U V)) ∧
       δ * N.seqNorm (tanSeq (ambientSine U V)) ≤ N.norm H := by
-  have hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
-      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℂ := by
-    intro y hyV hy
-    exact hunwanted ⟨⟨y, hyV⟩, hy⟩
+  have hUnwanted := hunwanted
   have hVc : TauCeti.DavisKahan.ReducingComplement A V :=
     TauCeti.DavisKahan.ReducingComplement.ofReducesSubspace ((reduces_iff A V).1 hV)
   have hupper' : TauCeti.LinearPMap.SemiboundedAbove
@@ -991,6 +1014,123 @@ theorem tanSeq_clm (T : E →L[𝕜] F) :
   funext fun n => congrArg (fun r => Real.tan (Real.arcsin r))
     (approximationNumber_clm (e := e) T n)
 
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The Challenge's semibounded-above predicate transports across any partial
+map: both sides read the same real part of the same inner product. -/
+theorem semiboundedAbove_pmap' {G : Type v} [NormedAddCommGroup G]
+    [InnerProductSpace 𝕜 G] {M : G →ₗ.[𝕜] G} {c : ℝ}
+    (h : SemiboundedAbove M c) : SemiboundedAbove (pmap (e := e) M) c := by
+  intro y
+  have h' := h ⟨out (e := e) (y : ScalarTransport e G), y.2⟩
+  show RCLike.re (inner 𝕂
+      (of (e := e) (M ⟨out (e := e) (y : ScalarTransport e G), y.2⟩))
+      (of (e := e) (out (e := e) (y : ScalarTransport e G)))) ≤
+    c * ‖out (e := e) (y : ScalarTransport e G)‖ ^ 2
+  rw [re_inner_of]
+  exact h'
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- and so does the semibounded-below predicate. -/
+theorem semiboundedBelow_pmap' {G : Type v} [NormedAddCommGroup G]
+    [InnerProductSpace 𝕜 G] {M : G →ₗ.[𝕜] G} {c : ℝ}
+    (h : SemiboundedBelow M c) : SemiboundedBelow (pmap (e := e) M) c := by
+  intro y
+  have h' := h ⟨out (e := e) (y : ScalarTransport e G), y.2⟩
+  show c * ‖out (e := e) (y : ScalarTransport e G)‖ ^ 2 ≤
+    RCLike.re (inner 𝕂
+      (of (e := e) (M ⟨out (e := e) (y : ScalarTransport e G), y.2⟩))
+      (of (e := e) (out (e := e) (y : ScalarTransport e G))))
+  rw [re_inner_of]
+  exact h'
+
+omit [CompleteSpace F] in
+/-- The Challenge's block of a reducing subspace transports. -/
+theorem block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (hU' : Reduces (pmap (e := e) A) (submodule (e := e) U)) :
+    pmap (e := e) (block A U hU) =
+      block (pmap (e := e) A) (submodule (e := e) U) hU' :=
+  LinearPMap.ext rfl fun _ _ _ => rfl
+
+omit [CompleteSpace F] in
+/-- The Challenge's semibounded-above predicate transports along the block. -/
+theorem semiboundedAbove_block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] {hU : Reduces A U}
+    {hU' : Reduces (pmap (e := e) A) (submodule (e := e) U)} {c : ℝ}
+    (h : SemiboundedAbove (block A U hU) c) :
+    SemiboundedAbove (block (pmap (e := e) A) (submodule (e := e) U) hU') c := by
+  rw [← block_pmap (e := e) hU hU']
+  exact semiboundedAbove_pmap' h
+
+omit [CompleteSpace F] in
+/-- and so does the semibounded-below predicate. -/
+theorem semiboundedBelow_block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] {hU : Reduces A U}
+    {hU' : Reduces (pmap (e := e) A) (submodule (e := e) U)} {c : ℝ}
+    (h : SemiboundedBelow (block A U hU) c) :
+    SemiboundedBelow (block (pmap (e := e) A) (submodule (e := e) U) hU') c := by
+  rw [← block_pmap (e := e) hU hU']
+  exact semiboundedBelow_pmap' h
+
+omit [CompleteSpace F] in
+/-- **A Rayleigh--Ritz bundle transports.**
+
+The compression is a partial map on the trial subspace and the residual a bounded
+map out of it.  The trial subspace needs no separate carrier: `ScalarTransport e
+↥U` and `↥(ScalarTransport.submodule e U)` are the same space with the same
+structure. -/
+def RitzData.pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E} [U.HasOrthogonalProjection]
+    (D : RitzData A U) :
+    RitzData (TauCeti.ScalarTransport.pmap (e := e) A)
+      (TauCeti.ScalarTransport.submodule (e := e) U) where
+  compression := TauCeti.ScalarTransport.pmap (e := e) D.compression
+  compression_selfAdjoint :=
+    (isSelfAdjoint_pmap_iff (e := e)).mpr D.compression_selfAdjoint
+  residual := clm (e := e) D.residual
+  mem_domain := fun z => D.mem_domain z
+  action_eq := fun z => congrArg (of (e := e)) (D.action_eq z)
+  residual_orthogonal := fun z z' => by
+    show inner 𝕂 (of (e := e) (D.residual (out (e := e) z)))
+      (of (e := e) (((out (e := e) z' : ↥U) : E))) = 0
+    rw [inner_of, D.residual_orthogonal (out (e := e) z) (out (e := e) z'), map_zero]
+
+omit [CompleteSpace F] in
+/-- **A bounded trial block transports**, likewise. -/
+def BoundedTrialBlock.pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] (D : BoundedTrialBlock A U) :
+    BoundedTrialBlock (TauCeti.ScalarTransport.pmap (e := e) A)
+      (TauCeti.ScalarTransport.submodule (e := e) U) where
+  compression := clm (e := e) D.compression
+  compression_selfAdjoint :=
+    (isSelfAdjoint_clm_iff (e := e)).mpr D.compression_selfAdjoint
+  residual := clm (e := e) D.residual
+  mem_domain := fun z => D.mem_domain z
+  action_eq := fun z => congrArg (of (e := e)) (D.action_eq z)
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The directed sine block transports. -/
+theorem directedSineBlock_pmap (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    directedSineBlock (submodule (e := e) U) (submodule (e := e) V) =
+      clm (e := e) (directedSineBlock U V) := by
+  show (submodule (e := e) V)ᗮ.starProjection ∘L
+    (submodule (e := e) U).subtypeL = _
+  rw [Submodule.starProjection_congr (submodule_orthogonal (e := e) V),
+    starProjection_clm]
+  rfl
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The ambient sine transports. -/
+theorem ambientSine_pmap (U V : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    ambientSine (submodule (e := e) U) (submodule (e := e) V) =
+      clm (e := e) (ambientSine U V) := by
+  show (submodule (e := e) V).starProjection -
+    (submodule (e := e) U).starProjection = _
+  rw [starProjection_clm, starProjection_clm, ← clm_sub]
+  rfl
+
 end Transport
 
 /-! ## 12. The ambient `tan 2Θ` clause over `ℝ`, and at every `RCLike` field -/
@@ -1245,6 +1385,125 @@ theorem tanTwoTheta_directed_proof (N : UINorm)
       (tanTwoTheta_directed_proof_complex N h1 h2 _ h4 h5 hδ h6 h7 h8 (pushR (𝕂 := ℂ) e))
 
 end TanTwoThetaAmbientGeneric
+
+
+/-! ## The two `tan Θ` clauses over `ℝ`, and at every `RCLike` field -/
+
+section TanThetaReal
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+
+omit [CompleteSpace E] in
+/-- The Challenge's directed sine block is the development's, over `ℝ`. -/
+theorem directedSineBlock_eq_real (U V : Submodule ℝ E)
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
+    directedSineBlock U V =
+      TauCeti.DavisKahan1970.theorem63DirectedSineBlockReal U V := rfl
+
+/-- **The directed clause of the Challenge's `tan Θ` theorem, over `ℝ`.** -/
+theorem tanTheta_directed_proof_real (N : UINorm)
+    {A : E →ₗ.[ℝ] E} {V : Submodule ℝ E} [V.HasOrthogonalProjection]
+    (hV : Reduces A V) {α δ : ℝ} (hδ : 0 < δ)
+    (hunwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℝ)
+    {U : Submodule ℝ E} [U.HasOrthogonalProjection] (D : RitzData A U)
+    (hupper : SemiboundedAbove D.compression α) (hR : N.Finite D.residual) :
+    TangentDefined (directedSineBlock U V) ∧
+      N.SeqFinite (tanSeq (directedSineBlock U V)) ∧
+      δ * N.seqNorm (tanSeq (directedSineBlock U V)) ≤ N.norm D.residual := by
+  have hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ := by
+    intro y hyV hy; simpa using hunwanted y hyV hy
+  obtain ⟨hlt, tanTheta0, htan, hmem, hbound⟩ :=
+    TauCeti.DavisKahan1970.tanTheta_directed_unboundedRitz_paperUINorm_exists_real
+      N.toPaper D.toUnboundedRitzPair
+      (TauCeti.DavisKahan.ReducingComplement.ofReducesSubspace ((reduces_iff A V).1 hV))
+      hδ ((semiboundedAbove_iff _ _).1 hupper) hUnwanted hR
+  have hseq : ∀ n, tanTheta0.approximationNumber n = tanSeq (directedSineBlock U V) n :=
+    fun n => htan n
+  have heval : N.evalSeq (tanSeq (directedSineBlock U V)) =
+      N.toPaper.extendedGauge tanTheta0 :=
+    N.evalSeq_eq_of_approximationNumber _ _ hseq
+  refine ⟨tangentDefined_of_approximationNumber_lt_one _ (fun n => hlt n), ?_, ?_⟩
+  · show N.evalSeq (tanSeq (directedSineBlock U V)) ≠ ⊤
+    rw [heval]; exact hmem
+  · show δ * (N.evalSeq (tanSeq (directedSineBlock U V))).toReal ≤ N.norm D.residual
+    rw [heval]; exact hbound
+
+end TanThetaReal
+
+open TauCeti.ScalarTransport in
+/-- **The directed clause of the Challenge's `tan Θ` theorem, at an arbitrary
+`RCLike` field.** -/
+theorem tanTheta_directed_proof (N : UINorm)
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    {A : E →ₗ.[𝕜] E} {V : Submodule 𝕜 E} [V.HasOrthogonalProjection]
+    (hV : Reduces A V) {α δ : ℝ} (hδ : 0 < δ)
+    (hunwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_𝕜)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (D : RitzData A U)
+    (hupper : SemiboundedAbove D.compression α) (hR : N.Finite D.residual) :
+    TangentDefined (directedSineBlock U V) ∧
+      N.SeqFinite (tanSeq (directedSineBlock U V)) ∧
+      δ * N.seqNorm (tanSeq (directedSineBlock U V)) ≤ N.norm D.residual := by
+  have key : ∀ {𝕂 : Type} [RCLike 𝕂] (e : TauCeti.RCLikeIso 𝕜 𝕂),
+      (TangentDefined (directedSineBlock (submodule (e := e) U) (submodule (e := e) V)) ∧
+        N.SeqFinite (tanSeq (directedSineBlock (submodule (e := e) U)
+          (submodule (e := e) V))) ∧
+        δ * N.seqNorm (tanSeq (directedSineBlock (submodule (e := e) U)
+          (submodule (e := e) V))) ≤ N.norm (clm (e := e) D.residual)) →
+      TangentDefined (directedSineBlock U V) ∧
+        N.SeqFinite (tanSeq (directedSineBlock U V)) ∧
+        δ * N.seqNorm (tanSeq (directedSineBlock U V)) ≤ N.norm D.residual := by
+    intro 𝕂 _ e h
+    obtain ⟨h1, h2, h3⟩ := h
+    have hsv : ∀ n,
+        singularValue (directedSineBlock (submodule (e := e) U)
+          (submodule (e := e) V)) n = singularValue (directedSineBlock U V) n := by
+      intro n
+      rw [directedSineBlock_pmap (e := e) U V]
+      exact approximationNumber_clm (e := e) (directedSineBlock U V) n
+    have hres : ∀ n,
+        singularValue (clm (e := e) D.residual) n = singularValue D.residual n :=
+      fun n => approximationNumber_clm (e := e) D.residual n
+    have htan := tanSeq_congr hsv
+    refine ⟨tangentDefined_congr hsv h1, ?_, ?_⟩
+    · show N.evalSeq (tanSeq (directedSineBlock U V)) ≠ ⊤
+      rw [← htan]; exact h2
+    · show δ * (N.evalSeq (tanSeq (directedSineBlock U V))).toReal ≤ N.norm D.residual
+      have hn : N.norm (clm (e := e) D.residual) = N.norm D.residual := by
+        unfold UINorm.norm
+        rw [N.eval_congr hres]
+      rw [← htan, ← hn]
+      exact h3
+  have unw : ∀ {𝕂 : Type} [RCLike 𝕂] (e : TauCeti.RCLikeIso 𝕜 𝕂),
+      ∀ y ∈ (submodule (e := e) V)ᗮ, ∀ hy : y ∈ (pmap (e := e) A).domain,
+        (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪pmap (e := e) A ⟨y, hy⟩, y⟫_𝕂 := by
+    intro 𝕂 _ e y hyV hy
+    have hyV' : out (e := e) y ∈ Vᗮ := by
+      rw [← mem_submodule (e := e), ← submodule_orthogonal (e := e) V]
+      exact hyV
+    have hmem : out (e := e) y ∈ A.domain := hy
+    have h := hunwanted (out (e := e) y) hyV' hmem
+    show (α + δ) * ‖out (e := e) y‖ ^ 2 ≤
+      RCLike.re (inner 𝕂 (of (e := e) (A ⟨out (e := e) y, hmem⟩))
+        (of (e := e) (out (e := e) y)))
+    rw [re_inner_of]
+    exact h
+  rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with hI | hI
+  · set e := TauCeti.RCLikeIso.real (𝕜 := 𝕜) hI with he
+    exact key (𝕂 := ℝ) e
+      (tanTheta_directed_proof_real N ((reduces_pmap_iff (e := e)).mpr hV) hδ
+        (unw (𝕂 := ℝ) e) (RitzData.pmap (e := e) D)
+        (semiboundedAbove_pmap' (e := e) hupper)
+        ((UINorm.finite_clm_iff (e := e) N D.residual).mpr hR))
+  · set e := TauCeti.RCLikeIso.complex (𝕜 := 𝕜) hI with he
+    exact key (𝕂 := ℂ) e
+      (tanTheta_directed_proof_complex N ((reduces_pmap_iff (e := e)).mpr hV) hδ
+        (unw (𝕂 := ℂ) e) (RitzData.pmap (e := e) D)
+        (semiboundedAbove_pmap' (e := e) hupper)
+        ((UINorm.finite_clm_iff (e := e) N D.residual).mpr hR))
 
 /-! ## 13. The two capability classes, at every `RCLike` field -/
 

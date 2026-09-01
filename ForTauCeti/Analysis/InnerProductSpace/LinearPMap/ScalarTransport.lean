@@ -127,6 +127,7 @@ theorem reducesSubspace_pmap_iff {A : E →ₗ.[𝕜] E} (S : Submodule 𝕜 E)
         from starProjection_orthogonal_of (e := e) S _]
       exact hx
 
+
 /-- The transport commutes with adding a bounded operator. -/
 theorem pmap_addBounded (A : E →ₗ.[𝕜] E) (T : E →L[𝕜] E) :
     pmap (e := e) (LinearPMap.addBounded A T) =
