@@ -7,6 +7,7 @@ import Challenge
 import DavisKahan.All
 import ForTauCeti.Analysis.InnerProductSpace.LinearPMap.ScalarTransport
 import ForTauCeti.Analysis.InnerProductSpace.Projection.ScalarTransport
+import ForTauCeti.Analysis.RCLike.ScalarTransportIsometry
 
 /-!
 # Solution: the four Section 2 theorems
@@ -1131,6 +1132,98 @@ theorem ambientSine_pmap (U V : Submodule 𝕜 E)
   rw [starProjection_clm, starProjection_clm, ← clm_sub]
   rfl
 
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- The inclusion of a transported subspace is the transport of the inclusion. -/
+theorem subtypeL_pmap (U : Submodule 𝕜 E) [U.HasOrthogonalProjection] :
+    (submodule (e := e) U).subtypeL =
+      (clm (e := e) U.subtypeL : ↥(submodule (e := e) U) →L[𝕂] ScalarTransport e E) :=
+  rfl
+
+omit [CompleteSpace F] in
+/-- **The crossed-defect standing condition (3.5) transports.**
+
+It says two defect subspaces are isometrically isomorphic, and neither the
+subspaces nor an isometry between them sees the scalar field. -/
+theorem crossedDefectsEquivalent_pmap {U V : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h35 : CrossedDefectsEquivalent U V) :
+    CrossedDefectsEquivalent (submodule (e := e) U) (submodule (e := e) V) := by
+  obtain ⟨f⟩ := h35
+  have hL : submodule (e := e) (U ⊓ Vᗮ) =
+      submodule (e := e) U ⊓ (submodule (e := e) V)ᗮ := by
+    rw [submodule_inf, submodule_orthogonal]
+  have hR : submodule (e := e) (Uᗮ ⊓ V) =
+      (submodule (e := e) U)ᗮ ⊓ submodule (e := e) V := by
+    rw [submodule_inf, submodule_orthogonal]
+  exact ⟨((submoduleEquivOfEq hL).symm.trans
+    (linearIsometryEquiv (e := e) f)).trans (submoduleEquivOfEq hR)⟩
+
+
+omit [CompleteSpace F] in
+/-- The Challenge's real spectrum transports. -/
+theorem realSpectrum_pmap' (A : E →ₗ.[𝕜] E) :
+    realSpectrum (pmap (e := e) A) = realSpectrum A := by
+  rw [realSpectrum_eq, realSpectrum_eq, TauCeti.ScalarTransport.realSpectrum_pmap]
+
+omit [CompleteSpace F] in
+/-- The Challenge's real spectrum transports for an operator on a subspace,
+stated at the transported subspace's own instance path. -/
+theorem realSpectrum_pmap_subspace (U : Submodule 𝕜 E) [U.HasOrthogonalProjection]
+    (M : ↥U →ₗ.[𝕜] ↥U) :
+    realSpectrum ((pmap (e := e) M :
+        ↥(submodule (e := e) U) →ₗ.[𝕂] ↥(submodule (e := e) U))) =
+      realSpectrum M :=
+  realSpectrum_pmap' (e := e) M
+
+omit [CompleteSpace F] in
+/-- The Challenge's real spectrum of a block transports. -/
+theorem realSpectrum_block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] {hU : Reduces A U}
+    {hU' : Reduces (pmap (e := e) A) (submodule (e := e) U)} :
+    realSpectrum (block (pmap (e := e) A) (submodule (e := e) U) hU') =
+      realSpectrum (block A U hU) := by
+  rw [← block_pmap (e := e) hU hU']
+  exact realSpectrum_pmap_subspace (e := e) U (block A U hU)
+
+omit [CompleteSpace E] [CompleteSpace F] in
+/-- Replacing a block's subspace by an equal one leaves the separation
+unchanged: the two blocks are the same partial map, and the reducing witness and
+the projection instance are propositions. -/
+theorem sylvesterGap_congr_right {X : Type v} [NormedAddCommGroup X]
+    [InnerProductSpace 𝕜 X] {A' : X →ₗ.[𝕜] X} {G : Type v} [NormedAddCommGroup G]
+    [InnerProductSpace 𝕜 G] {B : G →ₗ.[𝕜] G}
+    {W W' : Submodule 𝕜 X} [W.HasOrthogonalProjection] [W'.HasOrthogonalProjection]
+    (hWW : W = W') {hW : Reduces A' W} {hW' : Reduces A' W'} {δ : ℝ}
+    (h : SylvesterGap B (block A' W hW) δ) :
+    SylvesterGap B (block A' W' hW') δ := by
+  subst hWW
+  exact h
+
+omit [CompleteSpace F] in
+/-- **The Challenge's separation transports**, constructor by constructor. -/
+theorem sylvesterGap_block_pmap {A : E →ₗ.[𝕜] E} {U : Submodule 𝕜 E}
+    [U.HasOrthogonalProjection] {hU : Reduces A U}
+    {hU' : Reduces (pmap (e := e) A) (submodule (e := e) U)}
+    {hUc' : Reduces (pmap (e := e) A) (submodule (e := e) Uᗮ)} {δ : ℝ}
+    (h : SylvesterGap (block A U hU) (block A Uᗮ hU.orthogonal) δ) :
+    SylvesterGap (block (pmap (e := e) A) (submodule (e := e) U) hU')
+      (block (pmap (e := e) A) (submodule (e := e) Uᗮ) hUc') δ := by
+  cases h with
+  | intervalExterior hβα hgap =>
+      refine SylvesterGap.intervalExterior hβα ?_
+      rw [realSpectrum_block_pmap (e := e) (hU := hU) (hU' := hU'),
+        realSpectrum_block_pmap (e := e) (hU := hU.orthogonal) (hU' := hUc')]
+      exact hgap
+  | leftAboveRightBelow c hA' hB' =>
+      exact SylvesterGap.leftAboveRightBelow c
+        (semiboundedBelow_block_pmap (e := e) (hU := hU) (hU' := hU') hA')
+        (semiboundedAbove_block_pmap (e := e) (hU := hU.orthogonal) (hU' := hUc') hB')
+  | leftBelowRightAbove c hA' hB' =>
+      exact SylvesterGap.leftBelowRightAbove c
+        (semiboundedAbove_block_pmap (e := e) (hU := hU) (hU' := hU') hA')
+        (semiboundedBelow_block_pmap (e := e) (hU := hU.orthogonal) (hU' := hUc') hB')
+
 end Transport
 
 /-! ## 12. The ambient `tan 2Θ` clause over `ℝ`, and at every `RCLike` field -/
@@ -1430,6 +1523,52 @@ theorem tanTheta_directed_proof_real (N : UINorm)
   · show δ * (N.evalSeq (tanSeq (directedSineBlock U V))).toReal ≤ N.norm D.residual
     rw [heval]; exact hbound
 
+
+/-- **The ambient clause of the Challenge's `tan Θ` theorem, over `ℝ`.** -/
+theorem tanTheta_ambient_proof_real (N : UINorm)
+    {A : E →ₗ.[ℝ] E} {V : Submodule ℝ E} [V.HasOrthogonalProjection]
+    (hV : Reduces A V) {α δ : ℝ} (hδ : 0 < δ)
+    (hunwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_ℝ)
+    {U : Submodule ℝ E} [U.HasOrthogonalProjection] (D : RitzData A U)
+    (hupper : SemiboundedAbove D.compression α)
+    (H : E →L[ℝ] E) (hH : IsSelfAdjoint H)
+    (hres : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (h35 : CrossedDefectsEquivalent U V) (hHmem : N.Finite H) :
+    TangentDefined (ambientSine U V) ∧
+      N.SeqFinite (tanSeq (ambientSine U V)) ∧
+      δ * N.seqNorm (tanSeq (ambientSine U V)) ≤ N.norm H := by
+  have hUnwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ ⟪A ⟨y, hy⟩, y⟫_ℝ := by
+    intro y hyV hy; simpa using hunwanted y hyV hy
+  have hVc : TauCeti.DavisKahan.ReducingComplement A V :=
+    TauCeti.DavisKahan.ReducingComplement.ofReducesSubspace ((reduces_iff A V).1 hV)
+  have hupper' : TauCeti.LinearPMap.SemiboundedAbove
+      D.toUnboundedRitzPair.trial.compression α := (semiboundedAbove_iff _ _).1 hupper
+  have htr : ‖TauCeti.DavisKahanExt.paperSinAngleOperatorR U V‖ < 1 :=
+    TauCeti.DavisKahan1970.norm_paperSinAngleOperatorR_lt_one_of_unboundedCompression_crossedDefectsEquivalent
+      D.toUnboundedRitzPair.trial hδ hupper'
+      (D.toUnboundedRitzPair.trial.crossed_lower_of_reducing V A
+        D.toUnboundedRitzPair.mem_domain D.toUnboundedRitzPair.action_eq
+        hVc.mapsDomain hVc.commutes hUnwanted) h35
+  obtain ⟨hmem, hbound⟩ :=
+    TauCeti.DavisKahan1970.tanTheta_ambient_unboundedRitz_paperUINorm_real
+      N.toPaper D.toUnboundedRitzPair hVc H hH hδ hupper' hUnwanted h35 hres hHmem
+  have hseq : ∀ n,
+      (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V).approximationNumber n =
+        tanSeq (ambientSine U V) n := fun n =>
+    TauCeti.DavisKahan1970.approximationNumber_paperTanAngleOperatorR U V htr n
+  have heval : N.evalSeq (tanSeq (ambientSine U V)) =
+      N.toPaper.extendedGauge (TauCeti.DavisKahanExt.paperTanAngleOperatorR U V) :=
+    N.evalSeq_eq_of_approximationNumber _ _ hseq
+  refine ⟨tangentDefined_of_approximationNumber_lt_one _ (fun n =>
+    TauCeti.DavisKahan1970.approximationNumber_projectorDifference_lt_one_real U V htr n),
+    ?_, ?_⟩
+  · show N.evalSeq (tanSeq (ambientSine U V)) ≠ ⊤
+    rw [heval]; exact hmem
+  · show δ * (N.evalSeq (tanSeq (ambientSine U V))).toReal ≤ N.norm H
+    rw [heval]; exact hbound
+
 end TanThetaReal
 
 open TauCeti.ScalarTransport in
@@ -1505,7 +1644,248 @@ theorem tanTheta_directed_proof (N : UINorm)
         (semiboundedAbove_pmap' (e := e) hupper)
         ((UINorm.finite_clm_iff (e := e) N D.residual).mpr hR))
 
-/-! ## 13. The two capability classes, at every `RCLike` field -/
+
+open TauCeti.ScalarTransport in
+/-- **The ambient clause of the Challenge's `tan Θ` theorem, at an arbitrary
+`RCLike` field.** -/
+theorem tanTheta_ambient_proof (N : UINorm)
+    {𝕜 : Type u} [RCLike 𝕜]
+    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    {A : E →ₗ.[𝕜] E} {V : Submodule 𝕜 E} [V.HasOrthogonalProjection]
+    (hV : Reduces A V) {α δ : ℝ} (hδ : 0 < δ)
+    (hunwanted : ∀ y ∈ Vᗮ, ∀ hy : y ∈ A.domain,
+      (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪A ⟨y, hy⟩, y⟫_𝕜)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (D : RitzData A U)
+    (hupper : SemiboundedAbove D.compression α)
+    (H : E →L[𝕜] E) (hH : IsSelfAdjoint H)
+    (hres : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
+    (h35 : CrossedDefectsEquivalent U V) (hHmem : N.Finite H) :
+    TangentDefined (ambientSine U V) ∧
+      N.SeqFinite (tanSeq (ambientSine U V)) ∧
+      δ * N.seqNorm (tanSeq (ambientSine U V)) ≤ N.norm H := by
+  have key : ∀ {𝕂 : Type} [RCLike 𝕂] (e : TauCeti.RCLikeIso 𝕜 𝕂),
+      (TangentDefined (ambientSine (submodule (e := e) U) (submodule (e := e) V)) ∧
+        N.SeqFinite (tanSeq (ambientSine (submodule (e := e) U) (submodule (e := e) V))) ∧
+        δ * N.seqNorm (tanSeq (ambientSine (submodule (e := e) U)
+          (submodule (e := e) V))) ≤ N.norm (clm (e := e) H)) →
+      TangentDefined (ambientSine U V) ∧
+        N.SeqFinite (tanSeq (ambientSine U V)) ∧
+        δ * N.seqNorm (tanSeq (ambientSine U V)) ≤ N.norm H := by
+    intro 𝕂 _ e h
+    rw [ambientSine_pmap (e := e) U V, tanSeq_clm, tangentDefined_clm_iff,
+      UINorm.norm_clm] at h
+    exact h
+  have unw : ∀ {𝕂 : Type} [RCLike 𝕂] (e : TauCeti.RCLikeIso 𝕜 𝕂),
+      ∀ y ∈ (submodule (e := e) V)ᗮ, ∀ hy : y ∈ (pmap (e := e) A).domain,
+        (α + δ) * ‖y‖ ^ 2 ≤ RCLike.re ⟪pmap (e := e) A ⟨y, hy⟩, y⟫_𝕂 := by
+    intro 𝕂 _ e y hyV hy
+    have hyV' : out (e := e) y ∈ Vᗮ := by
+      rw [← mem_submodule (e := e), ← submodule_orthogonal (e := e) V]
+      exact hyV
+    have hmem : out (e := e) y ∈ A.domain := hy
+    have h := hunwanted (out (e := e) y) hyV' hmem
+    show (α + δ) * ‖out (e := e) y‖ ^ 2 ≤
+      RCLike.re (inner 𝕂 (of (e := e) (A ⟨out (e := e) y, hmem⟩))
+        (of (e := e) (out (e := e) y)))
+    rw [re_inner_of]
+    exact h
+  have hres' : ∀ {𝕂 : Type} [RCLike 𝕂] (e : TauCeti.RCLikeIso 𝕜 𝕂),
+      (RitzData.pmap (e := e) D).residual =
+        (submodule (e := e) U)ᗮ.starProjection ∘L clm (e := e) H ∘L
+          (submodule (e := e) U).subtypeL := by
+    intro 𝕂 _ e
+    refine ContinuousLinearMap.ext fun z => ?_
+    show of (e := e) (D.residual (out (e := e) z)) =
+      (submodule (e := e) U)ᗮ.starProjection
+        (of (e := e) (H (((out (e := e) z : ↥U) : E))))
+    rw [starProjection_orthogonal_of, hres]
+    rfl
+  rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with hI | hI
+  · set e := TauCeti.RCLikeIso.real (𝕜 := 𝕜) hI with he
+    exact key (𝕂 := ℝ) e
+      (tanTheta_ambient_proof_real N ((reduces_pmap_iff (e := e)).mpr hV) hδ
+        (unw (𝕂 := ℝ) e) (RitzData.pmap (e := e) D)
+        (semiboundedAbove_pmap' (e := e) hupper) _
+        ((isSelfAdjoint_clm_iff (e := e)).mpr hH) (hres' (𝕂 := ℝ) e)
+        (crossedDefectsEquivalent_pmap (e := e) h35)
+        ((UINorm.finite_clm_iff (e := e) N H).mpr hHmem))
+  · set e := TauCeti.RCLikeIso.complex (𝕜 := 𝕜) hI with he
+    exact key (𝕂 := ℂ) e
+      (tanTheta_ambient_proof_complex N ((reduces_pmap_iff (e := e)).mpr hV) hδ
+        (unw (𝕂 := ℂ) e) (RitzData.pmap (e := e) D)
+        (semiboundedAbove_pmap' (e := e) hupper) _
+        ((isSelfAdjoint_clm_iff (e := e)).mpr hH) (hres' (𝕂 := ℂ) e)
+        (crossedDefectsEquivalent_pmap (e := e) h35)
+        ((UINorm.finite_clm_iff (e := e) N H).mpr hHmem))
+
+
+section SinTwoThetaDirectedReal
+
+variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
+
+/-- **The directed clause of the Challenge's `sin 2Θ` theorem, discharged from
+the development over `ℝ`.**
+
+`δ ‖sin 2Θ₀‖ ≤ 2 ‖R‖` on the residual alone, at an arbitrary reducing `U` and
+the full form-bounded gap, so the separating interval may be half-infinite. -/
+theorem sinTwoTheta_directed_proof_real
+    (N : UINorm) {A : E →ₗ.[ℝ] E} (hA : IsSelfAdjoint A)
+    {U : Submodule ℝ E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : SylvesterGap (block A U hU) (block A Uᗮ hU.orthogonal) δ)
+    {V : Submodule ℝ E} [V.HasOrthogonalProjection] (D : BoundedTrialBlock A V)
+    (hRmem : N.Finite D.residual) :
+    N.Finite (directedDoubleSine U V) ∧
+      δ * N.norm (directedDoubleSine U V) ≤ 2 * N.norm D.residual := by
+  have hUred : TauCeti.LinearPMap.ReducesSubspace A U := (reduces_iff A U).1 hU
+  have hgap' : TauCeti.DavisKahan.ExactSinTheta.FormBoundedSylvesterGap
+      (TauCeti.LinearPMap.reducingRestriction A U hUred)
+      (TauCeti.LinearPMap.reducingRestriction A Uᗮ hUred.orthogonal) δ := by
+    rw [block_eq A U hU, block_eq A Uᗮ hU.orthogonal] at hgap
+    exact (sylvesterGap_iff _ _ _).1 hgap
+  have hres : ∀ v : V, A ⟨(v : E), D.mem_domain v⟩ =
+      D.residual v + ((D.compression v : V) : E) := fun v =>
+    (D.action_eq v).trans (add_comm _ _)
+  exact TauCeti.DavisKahan1970.sinTwoTheta_directed_unboundedResidual_blockRepresentative_reducing_paperUINorm_real
+    N.toPaper hA hUred D.mem_domain hres hδ hgap' hRmem
+
+
+end SinTwoThetaDirectedReal
+
+open TauCeti.ScalarTransport in
+/-- **The directed clause of the Challenge's `sin 2Θ` theorem, at an arbitrary
+`RCLike` field.** -/
+theorem sinTwoTheta_directed_proof
+    (N : UINorm) {𝕜 : Type u} [RCLike 𝕜]
+    {E : Type v} [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+    {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : SylvesterGap (block A U hU) (block A Uᗮ hU.orthogonal) δ)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (D : BoundedTrialBlock A V)
+    (hRmem : N.Finite D.residual) :
+    N.Finite (directedDoubleSine U V) ∧
+      δ * N.norm (directedDoubleSine U V) ≤ 2 * N.norm D.residual := by
+  have key : ∀ {𝕂 : Type} [RCLike 𝕂] (e : TauCeti.RCLikeIso 𝕜 𝕂),
+      (N.Finite (directedDoubleSine (submodule (e := e) U) (submodule (e := e) V)) ∧
+        δ * N.norm (directedDoubleSine (submodule (e := e) U)
+          (submodule (e := e) V)) ≤ 2 * N.norm (clm (e := e) D.residual)) →
+      N.Finite (directedDoubleSine U V) ∧
+        δ * N.norm (directedDoubleSine U V) ≤ 2 * N.norm D.residual := by
+    intro 𝕂 _ e h
+    obtain ⟨h1, h2⟩ := h
+    have hsv : ∀ n,
+        singularValue (directedDoubleSine (submodule (e := e) U)
+          (submodule (e := e) V)) n = singularValue (directedDoubleSine U V) n := by
+      intro n
+      rw [directedDoubleSine_pmap (e := e) U V]
+      exact approximationNumber_clm (e := e) (directedDoubleSine U V) n
+    have hres : ∀ n,
+        singularValue (clm (e := e) D.residual) n = singularValue D.residual n :=
+      fun n => approximationNumber_clm (e := e) D.residual n
+    have hev := N.eval_congr hsv
+    have hevR := N.eval_congr hres
+    refine ⟨?_, ?_⟩
+    · show N.eval (directedDoubleSine U V) ≠ ⊤
+      rw [← hev]; exact h1
+    · show δ * (N.eval (directedDoubleSine U V)).toReal ≤
+        2 * (N.eval D.residual).toReal
+      rw [← hev, ← hevR]; exact h2
+  rcases RCLike.I_eq_zero_or_im_I_eq_one (K := 𝕜) with hI | hI
+  · set e := TauCeti.RCLikeIso.real (𝕜 := 𝕜) hI with he
+    refine key (𝕂 := ℝ) e (sinTwoTheta_directed_proof_real N
+      ((isSelfAdjoint_pmap_iff (e := e)).mpr hA) ((reduces_pmap_iff (e := e)).mpr hU) hδ
+      (sylvesterGap_congr_right (submodule_orthogonal (e := e) U).symm
+        (sylvesterGap_block_pmap (e := e) (hU := hU)
+          (hU' := (reduces_pmap_iff (e := e)).mpr hU)
+          (hUc' := (reduces_pmap_iff (e := e)).mpr hU.orthogonal) hgap))
+      (BoundedTrialBlock.pmap (e := e) D)
+      ((UINorm.finite_clm_iff (e := e) N D.residual).mpr hRmem))
+  · set e := TauCeti.RCLikeIso.complex (𝕜 := 𝕜) hI with he
+    refine key (𝕂 := ℂ) e (sinTwoTheta_directed_proof_complex N
+      ((isSelfAdjoint_pmap_iff (e := e)).mpr hA) ((reduces_pmap_iff (e := e)).mpr hU) hδ
+      (sylvesterGap_congr_right (submodule_orthogonal (e := e) U).symm
+        (sylvesterGap_block_pmap (e := e) (hU := hU)
+          (hU' := (reduces_pmap_iff (e := e)).mpr hU)
+          (hUc' := (reduces_pmap_iff (e := e)).mpr hU.orthogonal) hgap))
+      (BoundedTrialBlock.pmap (e := e) D)
+      ((UINorm.finite_clm_iff (e := e) N D.residual).mpr hRmem))
+
+/-! ## 13. The four theorems
+
+The seven printed clauses, assembled into the Challenge's four statements. -/
+
+section FourTheorems
+
+variable {𝕜 : Type u} [RCLike 𝕜]
+variable {E F G K : Type v}
+  [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
+  [NormedAddCommGroup F] [InnerProductSpace 𝕜 F] [CompleteSpace F]
+  [NormedAddCommGroup G] [InnerProductSpace 𝕜 G] [CompleteSpace G]
+  [NormedAddCommGroup K] [InnerProductSpace 𝕜 K] [CompleteSpace K]
+
+/-- **Davis--Kahan 1970, Section 2, the `sin Θ` theorem.** -/
+theorem sinTheta_solution (N : UINorm)
+    {A : E →ₗ.[𝕜] E} {A₀ : F →ₗ.[𝕜] F} {Λ₁ : G →ₗ.[𝕜] G}
+    {E₀ : F →L[𝕜] E} {F₀ : K →L[𝕜] E} {F₁ : G →L[𝕜] E} {R : F →L[𝕜] E}
+    (hA : IsSelfAdjoint A) (hA₀ : IsSelfAdjoint A₀) (hΛ₁ : IsSelfAdjoint Λ₁)
+    (hres : IsTrialResidual A A₀ E₀ R) (hdec : IsExactDecomposition A Λ₁ F₀ F₁)
+    {δ : ℝ} (hδ : 0 < δ) (hgap : SylvesterGap A₀ Λ₁ δ) (hR : N.Finite R) :
+    N.Finite (directedSine E₀ F₀) ∧
+      δ * N.norm (directedSine E₀ F₀) ≤ N.norm R :=
+  sinTheta_proof N hA hA₀ hΛ₁ hres hdec hδ hgap hR
+
+/-- **Davis--Kahan 1970, Section 2, the `tan Θ` theorem**, both printed
+conclusions. -/
+theorem tanTheta_solution (N : UINorm)
+    {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
+    {V : Submodule 𝕜 E} [V.HasOrthogonalProjection] (hV : Reduces A V)
+    {α δ : ℝ} (hδ : 0 < δ)
+    (hunwanted : SemiboundedBelow (block A Vᗮ hV.orthogonal) (α + δ)) :
+    TanThetaResult N A V α δ where
+  directed := fun {U} _ D hupper hR =>
+    tanTheta_directed_proof N hV hδ
+      (fun y hyV hy => hunwanted ⟨⟨y, hyV⟩, hy⟩) D hupper hR
+  ambient := fun {U} _ D hupper H hH hres h35 hHmem =>
+    tanTheta_ambient_proof N hV hδ
+      (fun y hyV hy => hunwanted ⟨⟨y, hyV⟩, hy⟩) D hupper H hH hres h35 hHmem
+
+/-- **Davis--Kahan 1970, Section 2, the `sin 2Θ` theorem**, both printed
+conclusions. -/
+theorem sinTwoTheta_solution (N : UINorm)
+    {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    {δ : ℝ} (hδ : 0 < δ)
+    (hgap : SylvesterGap (block A U hU) (block A Uᗮ hU.orthogonal) δ) :
+    SinTwoThetaResult N A U δ where
+  directed := fun {V} _ D hR => sinTwoTheta_directed_proof N hA hU hδ hgap D hR
+  ambient := fun H hH {V} _ hV hHmem =>
+    sinTwoTheta_ambient_proof N hA hU hδ hgap H hH hV hHmem
+
+/-- **Davis--Kahan 1970, Section 2, the `tan 2Θ` theorem**, both printed
+conclusions. -/
+theorem tanTwoTheta_solution (N : UINorm)
+    {A : E →ₗ.[𝕜] E} (hA : IsSelfAdjoint A)
+    {U : Submodule 𝕜 E} [U.HasOrthogonalProjection] (hU : Reduces A U)
+    (H : E →L[𝕜] E) (hH : IsSelfAdjoint H)
+    (hoffdiag₀ : U.starProjection ∘L H ∘L U.starProjection = 0)
+    (hoffdiag₁ : Uᗮ.starProjection ∘L H ∘L Uᗮ.starProjection = 0)
+    {α δ : ℝ} (hδ : 0 < δ)
+    (hlow : SemiboundedAbove (block A U hU) α)
+    (hhigh : SemiboundedBelow (block A Uᗮ hU.orthogonal) (α + δ)) :
+    TanTwoThetaResult N A U H δ where
+  directed := fun {V} _ hV hRmem =>
+    tanTwoTheta_directed_proof N hA hU H hoffdiag₀ hoffdiag₁ hδ
+      (formBound_upper_of_semiboundedAbove hU hlow)
+      (formBound_lower_of_semiboundedBelow hU hhigh) hV hRmem
+  ambient := fun {V} _ hV hHmem =>
+    tanTwoTheta_ambient_proof N hA hU H hH hoffdiag₀ hoffdiag₁ hδ
+      (formBound_upper_of_semiboundedAbove hU hlow)
+      (formBound_lower_of_semiboundedBelow hU hhigh) hV hHmem
+
+end FourTheorems
+
+/-! ## 14. The two capability classes, at every `RCLike` field -/
 
 section Capabilities
 
@@ -1518,7 +1898,7 @@ example (𝕜 : Type u) [RCLike 𝕜] : HasUnboundedSylvesterKyFan.{u, v} 𝕜 :
 
 end Capabilities
 
-/-! ## 14. Status
+/-! ## 15. Status
 
 This file is a **feasibility candidate**, not a finished submission.  The honest
 state of each printed clause is recorded here and, clause by clause with the
