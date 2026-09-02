@@ -2939,6 +2939,28 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 - `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite`
 - `TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm`
 
+**Curated source/Lean review:**
+
+*Setup*
+- H is a real Hilbert space, P and Q are subspaces, U is the direct rotation carrying P onto Q, and V ranges over unitaries carrying P onto Q.
+
+*Hypotheses*
+- The space is real.
+- V is a unitary carrying P H onto Q H.
+- Theta <= pi/3.
+
+*Conclusions*
+- ||1 - V|| is minimized by V = U for every unitary-invariant norm.
+
+*Scope*
+- The paper states that the pi/3 threshold is sharp in view of Examples 4.1 and 4.2.
+
+| source clause | Lean realization | status |
+| --- | --- | --- |
+| if $\Hsp$ is real, $V$ is a unitary carrying $P\Hsp$ onto $Q\Hsp$, and $\Theta\le\pi/3$ | The three printed hypotheses are the binders of DavisKahanProposition4_4_Finite: real scalars, U.map W.toLinearMap = V, and principalAngles U V 0 <= pi/3. | claimed_exact |
+| then $\norm{1-V}$ is minimized by $V=U$ for every unitary-invariant norm | not_davisKahanProposition4_4_Finite : ¬ DavisKahanProposition4_4_Finite. The refutation is inside the printed scope: a real R^4 configuration with both principal angles pi/4 <= pi/3, and a competitor unitary whose full displacement has strictly smaller Ky Fan 4 norm. | claimed_exact |
+| The repair obligation: the strongest natural corrected statement the evidence supports. | directRotation_fullDisplacement_qnorm proves the minimality for every Q-norm. This is not evidence that the printed conclusion is true; it is the narrower norm class on which the source's intent survives. | scope_companion |
+
 **Notes.** The transcribed claim is false: a compiled R^4 counterexample exhibits an acute pair with both principal angles pi/4 and a competitor unitary carrying P to Q whose full displacement 1-V has trace norm 2 sqrt 2, strictly below the direct rotation value 4 sqrt(2 - sqrt 2).  The competitor mixes the equal-angle multiplicity space (rotation angles 0 and pi/2), an obstruction available at every angle threshold; the same family refutes the closing conjecture of Davis 1958.  Operator-norm and squared-displacement consequences survive via 4.1/4.3.
 
 **SOURCE-VERIFIED AGAINST THE FULL TRANSCRIPTION 2026-08-07 (Claude Opus 5).**  The refutation is INSIDE the printed scope, which matters because `refuted_as_transcribed` is the strongest claim in this census.  Proposition 4.4 is printed "in a real space `H`" with `Theta <= pi/3`; the counterexample is in `R^4` with both principal angles `pi/4 <= pi/3`, so it meets both printed hypotheses.  The printed proof reduces to the 2-by-2 blocks (`e = f = 0` because the space is real, then a `pi/3` trigonometric inequality on `mu_1 + mu_2`) and then sums over blocks -- which is exactly the invalid step this row already localizes at equation (4.3).  The paper itself notes the conclusion fails beyond `pi/3` by Example 4.1 and fails in complex space by Example 4.2, so the real-space and `pi/3` restrictions are deliberate and the counterexample is not exploiting an unintended reading.
@@ -4067,6 +4089,33 @@ At the OPERATOR norm the compiled residual statement is sound and in fact STRONG
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_all_kyFan`
 - `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects`
+
+**Curated source/Lean review:**
+
+*Setup*
+- A is self-adjoint, A + H is the perturbation, R is the residual, Q is the exact spectral subspace and P the trial subspace, and Theta is the ambient angle between them.
+
+*Hypotheses*
+- All hypotheses of the sin(2 theta) theorem, imported by reference.
+- Either ||H||_1 < delta/2 or ||R||_1 < delta/2.
+- spec(A_0) is contained in the enlarged interval [beta - delta/2, alpha + delta/2].
+- The standing dimension conditions (1.5) and (3.5), in force from Sections 1 and 3 and not restated here.
+
+*Conclusions*
+- The corresponding double-angle estimate remains valid: delta ||sin 2 Theta|| <= 2 ||H||, respectively delta ||sin 2 Theta_0|| <= 2 ||R||.
+- Theta < pi/4: the comparison is on the acute branch.
+
+*Scope*
+- Every source unitary-invariant norm; the branch conclusion is available under either the finite form of (1.5) or the standing (3.5), with no dimension hypothesis in the second form.
+
+| source clause | Lean realization | status |
+| --- | --- | --- |
+| Add to the hypotheses of the $\sin 2\theta$ theorem … | The spectral hypotheses hQ, hQperp and hPred of theorem8_2_source_complex are the sin(2 theta) hypotheses written out; the row does not have a Lean object standing for "the hypotheses of the previous theorem". | claimed_exact |
+| either $\norm{H}_1<\delta/2$ or $\norm{R}_1<\delta/2$ | hsmall is literally the disjunction ‖K‖ < delta/2 ∨ ‖residual …‖ < delta/2. | claimed_exact |
+| and assume $\spec(A_0)\subset[\beta-\delta/2,\alpha+\delta/2]$ | hP : SpectrumIn A P (Set.Icc (beta - delta/2) (alpha + delta/2)). | claimed_exact |
+| The two crossed subspaces have equal dimension — condition (3.5), never restated in Theorem 8.2. | theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects takes CrossedDefectsEquivalent P Q and no dimension hypothesis of any kind; theorem8_2_source_complex instead takes the finite form of (1.5), finrank ℂ P = finrank ℂ Q, which the source says makes (3.5) automatic. | claimed_exact |
+| the corresponding double-angle estimate remains valid | The first two conjuncts of theorem8_2_source_complex: the perturbation and residual factor-two estimates for sinTwoAngleOperator Q P. | claimed_exact |
+| $\Theta<\pi/4$ | maximalAngle P Q < Real.pi / 4, the third conjunct of theorem8_2_source_complex and the whole conclusion of the crossed-defect form. | claimed_exact |
 
 **Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `DK-8.2-thm`).  The reopening was correct on both counts.  (a) The standing post-Proposition-3.2 convention -- (3.5) is assumed as well as (1.5) except where the contrary is stated -- is now represented as the source SCOPE atom `S3-standing-scope.crossed-dimension-standing-assumption` and linked to the two counted results it genuinely governs, Theorem 8.2 and Proposition 3.4.  It is scope, not a new counted result, so the denominator is unchanged at 29.  (b) The printed quarter-angle conclusion is the AMBIENT Theta < pi/4, and the selected evidence is now `theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects` and `theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`, which conclude `maximalAngle P Q < pi/4` from either printed smallness alternative under (3.5) in its constructive `CrossedDefectsEquivalent` form, with no finite-dimensionality and no rank hypothesis.  No new Lean mathematics was needed once the scope was right.
 

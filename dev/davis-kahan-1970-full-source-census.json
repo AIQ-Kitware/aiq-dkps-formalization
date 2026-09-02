@@ -226,42 +226,85 @@
           {
             "source_clause": "The scalar field is real or complex.",
             "lean_realization": "The canonical theorem is generic over 𝕜 with [RCLike 𝕜]. Its two scalar capability binders have proved instances for both source scalar fields ℝ and ℂ.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "scope",
+            "relation": "literal",
+            "source_fragment": "printed"
           },
           {
             "source_clause": "A, A0, and Lambda1 are self-adjoint; E0 is the trial coordinate map and F0,F1 are orthogonal exact-space coordinates.",
             "lean_realization": "A, A₀, Λ₁, E₀, F₀, and F₁ are explicit arguments. Self-adjointness is literal; IsTrialResidual and IsExactSpectralDecomposition are expanded immediately in the local semantic dictionary.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "setup",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "or the same condition with A_0 and \\Lambda_1 interchanged"
           },
           {
             "source_clause": "R = A E0 - E0 A0 on the operator domain, while F1 intertwines Lambda1 with A.",
             "lean_realization": "These clauses are exactly the residualEquation and intertwines components exposed by isTrialResidual_iff and isExactSpectralDecomposition_iff, together with their domain-transport hypotheses.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "setup",
+            "relation": "definitional",
+            "source_fragment": "printed",
+            "lean_declarations": [
+              "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex"
+            ],
+            "correspondence_declarations": [
+              "DavisKahan1970.isTrialResidual_iff",
+              "DavisKahan1970.isExactSpectralDecomposition_iff"
+            ],
+            "note": "The two compact setup predicates are unfolded by the two characterization lemmas, so no substantive condition is hidden inside them."
           },
           {
             "source_clause": "sin Theta0 is the directed sine block from the trial subspace to the exact subspace.",
             "lean_realization": "sinTheta₀ is an explicit theorem parameter and hSinTheta₀ literally states sinTheta₀ = (I - F₀ F₀†) E₀. No named definition hides this identification.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "setup",
+            "relation": "literal",
+            "source_fragment": "printed"
           },
           {
             "source_clause": "For beta <= alpha and delta > 0, one spectrum lies in [beta,alpha] and the other avoids (beta-delta,alpha+delta), with the roles interchangeable.",
             "lean_realization": "hβα and hδ are explicit, and hspectral is literally the disjunction of the two real-spectrum inclusions.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "Assume that for some interval",
+            "lean_declarations": [
+              "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex"
+            ]
           },
           {
             "source_clause": "The norm is an arbitrary source unitary-invariant norm and R has finite norm.",
             "lean_realization": "N : UnitaryInvariantNorm and hR : N.Mem R appear directly. UnitaryInvariantNorm is the existing public source-facing name for the audited SymmetricNormingFunction implementation structure.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "ui-norms",
+            "source_excerpt": "denotes an arbitrary normalized unitary-invariant norm"
           },
           {
             "source_clause": "delta ||sin Theta0|| <= ||R||.",
             "lean_realization": "The text after the theorem colon is exactly δ * N.gauge sinTheta₀ <= N.gauge R. The supporting sinTheta_unbounded_intervalExterior_symmetricNorming_rclike theorem additionally certifies N.Mem sinTheta₀ after rewriting by hSinTheta₀.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "conclusion",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "lean_declarations": [
+              "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex",
+              "DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real"
+            ]
           },
           {
             "source_clause": "Infinite-dimensional and unbounded self-adjoint scope.",
             "lean_realization": "There is no FiniteDimensional hypothesis; A, A₀, and Λ₁ are `LinearPMap` values and the two expanded setup predicates carry the required domain conditions.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "scope",
+            "relation": "literal",
+            "source_fragment": "scope",
+            "source_excerpt": "The paper states the four main results for infinite as well as finite dimensional separable Hilbert spaces"
           }
         ],
         "note": "The canonical review declaration is also the intended paper-display declaration. It names sinTheta₀ as a theorem parameter but gives its concrete projection-block formula by a literal equality hypothesis in the same signature, so the claim after the colon is a one-to-one rendering of the printed inequality without an opaque angle definition. Only the domain-heavy trial and exact-coordinate setup is bundled, and both bundles are fully expanded by characteristic theorems in the local semantic dictionary. The stronger generic theorem remains supporting evidence for norm-ideal membership and the implementation proof bridge. CANONICAL WITNESS CORRECTED 2026-08-31. The row named `sinTheta_unbounded_intervalExterior_characterizedWitness_rclike` as the exact source match. That was wrong on two counts: it carries only the bounded interval/exterior branch of the gap, while the source permits half-infinite separating intervals, and it drops the ideal-membership half of the conclusion. The canonical witness is now `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`, added the same day: scalar-generic over `RCLike`, unbounded `LinearPMap` ambient operator, arbitrary Hilbert dimension, the whole `FormBoundedSylvesterGap` (interval/exterior plus both ordered semibounded configurations), an arbitrary `SymmetricNormingFunction`, and both conclusions. It is proved by taking the gap directly into the Ky-Fan-to-paper-norm promotion the interval/exterior theorem already ran, so it is a repackaging rather than a new argument, and the interval/exterior form is now a one-line consequence of it. `..._complex_ofRCLike` and `..._real_ofRCLike` are the compiled conformance checks: each restates the corresponding fixed-field endpoint's type verbatim and discharges it by the generic theorem with no adapter. The fixed-field endpoints remain as corroborating full-source witnesses and the interval/exterior theorem as a presentation specialization. The two `RCLike` capability classes in the generic signature are proof capabilities with instances for both source fields, not printed source hypotheses. CONFORMANCE TIED BY NAME 2026-08-31. The `_ofRCLike` wrappers restate a type, and a restatement cannot notice if the declaration it mirrors changes. `..._ofRCLike_conforms` closes that: an equation between two constants elaborates only when both sides have the same type, so it asserts exactly that the restatement is the fixed-field endpoint's type, and `rfl` discharges it by proof irrelevance. It is a type-level check by design and says nothing about the two proofs.\n\n2026-08-31 (second pass): canonical declarations follow the result inventory's `canonical_evidence`. Demoted to supporting: DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike -- the scalar-generic form carries proof-capability instance binders that the printed statement does not, and the two fixed-field endpoints state the result at the paper's two fields with no such binder.",
@@ -271,7 +314,7 @@
             "type_expr_hash": "3277617206",
             "type_text_sha256": "6abf61c51dee30667acbf3cc2d1281dce72c5ccf550f6b07a31e0a72e5d9a7b3",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -279,8 +322,99 @@
             "type_expr_hash": "295553877",
             "type_text_sha256": "356c5a6af70fc8758c5f914f443d1ef5ed01571d1dee61b52eef76ade569794d",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
+          }
+        ],
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-sin-theta",
+              "section": "2",
+              "result": "Section 2, first unnumbered theorem"
+            }
+          },
+          {
+            "id": "ui-norms",
+            "role": "definition",
+            "why": "The norm class the conclusion quantifies over is defined here, not in the theorem passage.",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-ui-norms",
+              "section": "1",
+              "result": "Unitary-invariant norms and singular values"
+            }
+          },
+          {
+            "id": "scope",
+            "role": "context",
+            "why": "The passage states the four theorems for infinite dimension and unbounded self-adjoint A; the canonical Lean theorem is stated at that scope.",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-unbounded-scope",
+              "section": "2",
+              "result": "Scope of the four theorems"
+            }
+          }
+        ],
+        "source_interpretation": "local",
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "cf1358cea685474efeb5d8e178d7704319356f27ba61de8cf9b8b65a0809cac0",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-sin-theta",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                196,
+                207
+              ],
+              "section": "2",
+              "result": "Section 2, first unnumbered theorem"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
+          },
+          {
+            "fragment": "ui-norms",
+            "document": "DavisKahan1970",
+            "sha256": "1cf01699d78a53a8beff5c7b2f51dc572e78a942cdf0565b085795b870333578",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-ui-norms",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                108,
+                186
+              ],
+              "section": "1",
+              "result": "Unitary-invariant norms and singular values"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
+          },
+          {
+            "fragment": "scope",
+            "document": "DavisKahan1970",
+            "sha256": "373da5c27d116b626590ff5f1745d4efbea68d36df5fd07506860c31d834cb39",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-unbounded-scope",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                289,
+                289
+              ],
+              "section": "2",
+              "result": "Scope of the four theorems"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
           }
         ]
       },
@@ -476,32 +610,55 @@
           {
             "source_clause": "The scalar field is real or complex.",
             "lean_realization": "The canonical directed theorem quantifies over 𝕜 with [RCLike 𝕜]; no ℂ specialization appears in that headline type. Field-specific unbounded ambient declarations remain scope companions.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "scope",
+            "relation": "literal",
+            "source_fragment": "printed"
           },
           {
             "source_clause": "spec(A0) subset [beta,alpha] and unwanted exact spectrum subset [alpha+delta,infinity).",
             "lean_realization": "hCompressionSpectrum and hUnwantedSpectrum are literal SpectrumIn hypotheses in tanTheta_directed_finiteDimensional_symmetricNorming_rclike; TanThetaIntervalGap is constructed only inside the proof and is not part of the public signature.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "Assume"
           },
           {
             "source_clause": "H0=0 / Rayleigh--Ritz choice.",
             "lean_realization": "The public conclusion is written directly in terms of ritzResidual A X, where X is the trial isometry and the coordinate compression is the Rayleigh--Ritz compression.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "impose the Rayleigh--Ritz/off-diagonal condition"
           },
           {
             "source_clause": "delta ||tan Theta0|| <= ||R||.",
             "lean_realization": "tanTheta_directed_finiteDimensional_symmetricNorming_rclike concludes δ * N.gauge tanTheta0.toContinuousLinearMap <= N.gauge (ritzResidual A X).toContinuousLinearMap, with tanTheta0 constrained to have the principal-tangent singular values.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "conclusion",
+            "relation": "literal",
+            "source_fragment": "printed"
           },
           {
             "source_clause": "delta ||tan Theta|| <= ||H||.",
             "lean_realization": "The unbounded ambient source companion concludes the factor-one estimate for paperTanAngleOperatorC; its real sibling is compiler-checked as supporting scalar scope.",
-            "status": "scope_companion"
+            "status": "scope_companion",
+            "kind": "conclusion",
+            "relation": "inherited_standing_assumption",
+            "source_fragment": "standing-3-5",
+            "source_excerpt": "(3.5) is assumed as well as (1.5), except where the contrary is stated",
+            "note": "The ambient tangent conclusion is stated under the crossed-dimension condition the source has standing from Section 3 onward, not under the Section 2 display alone."
           },
           {
             "source_clause": "No separately assumed tangent-pole exclusion in the printed theorem.",
             "lean_realization": "The scalar-generic directed theorem assumes only the spectral placement and derives transversality in its engine. The ambient source companion uses the accepted nonlocal (3.5) semantics rather than a numerical pole hypothesis.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "The first is directed and residual-based; the second uses the ambient angle and the full perturbation."
           }
         ],
         "note": "The directed residual half now has a scalar-generic, SymmetricNormingFunction, source-shaped canonical theorem whose public signature exposes the Ritz spectral placement instead of TanThetaIntervalGap. The harder ambient/unbounded half remains represented by the accepted source-shaped complex theorem plus its real companion because the current whole-space angle-operator implementation is field-specific. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.\n\n2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTheta_directed_finiteDimensional_symmetricNorming_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.\n\n2026-08-31 (coherent-clause audit): demoted to supporting because the compiler-printed type does not carry the scope the declaration was credited with: TauCeti.DavisKahan.Section2.theorem6_3_perturbation_infiniteTrial, TauCeti.DavisKahanTheory.partIII_tanTheta_ritzResidual_uiNorm.",
@@ -511,7 +668,7 @@
             "type_expr_hash": "3755748480",
             "type_text_sha256": "3ea82407819fc25d84c609643948591402593e28f926e05f302f489706c15472",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -519,7 +676,7 @@
             "type_expr_hash": "632860847",
             "type_text_sha256": "2b99dabf29e4fb9b38e396001d5f2bc239dc60140f58641b29321c62acddf933",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -527,7 +684,7 @@
             "type_expr_hash": "2428269602",
             "type_text_sha256": "2c050cb47b0c801383d6db524a79c640f822781cf3be00406b5612df3c4e813c",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -535,8 +692,79 @@
             "type_expr_hash": "3110891221",
             "type_text_sha256": "e50b6b1077d11587e8e9a259fae6a489b2dc7a67ab6b49d7cd45ac4dc1b40b8b",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
+          }
+        ],
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-tan-theta",
+              "section": "2",
+              "result": "Section 2, second unnumbered theorem"
+            }
+          },
+          {
+            "id": "standing-3-5",
+            "role": "standing_assumption",
+            "why": "The ambient tangent statement is proved in Section 6, where (3.5) has been standing since Section 3. The printed Section 2 display does not restate it.",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S3-standing-scope",
+              "section": "3",
+              "result": "Standing convention after Proposition 3.2",
+              "equations": [
+                "(3.5)",
+                "(1.5)"
+              ]
+            }
+          }
+        ],
+        "source_interpretation": "nonlocal",
+        "nonlocal_rationale": "The tan theta theorem is printed in Section 2, before (3.5) exists in the exposition, and proved in Section 6, where (3.5) has been standing since the sentence closing the proof of Proposition 3.2. The repository reads the ambient conclusion under the paper's own global semantics, so the Lean statement carries a crossed-defect hypothesis corresponding to (3.5). On the competing literal reading -- only the printed Section 2 hypotheses, with the norm read as +infinity when tan Theta is unbounded -- the printed ambient statement is false as transcribed and the (3.5)-qualified theorem is its repair. A reviewer who prefers that reading should challenge this row, not the sine rows.",
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "f6596195258b1d94fa3c02fd62ec4e8d45e4fd373913d0c972c1b99e3b33bbf6",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-tan-theta",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                215,
+                228
+              ],
+              "section": "2",
+              "result": "Section 2, second unnumbered theorem"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
+          },
+          {
+            "fragment": "standing-3-5",
+            "document": "DavisKahan1970",
+            "sha256": "6a61756db9adf99e76f079bcc9aa86ee0d6458dc47f30c63a1128f99d5b4496f",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S3-standing-scope",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                387,
+                387
+              ],
+              "section": "3",
+              "result": "Standing convention after Proposition 3.2",
+              "equations": [
+                "(3.5)",
+                "(1.5)"
+              ]
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
           }
         ]
       }
@@ -679,27 +907,44 @@
           {
             "source_clause": "The scalar field is real or complex.",
             "lean_realization": "The canonical directed theorem quantifies over 𝕜 with [RCLike 𝕜] and uses SymmetricNormingFunction directly.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "scope",
+            "relation": "literal",
+            "source_fragment": "printed"
           },
           {
             "source_clause": "Interval/exterior spectral separation by delta.",
             "lean_realization": "hCompressionSpectrum places M in [beta,alpha] and hUnwantedSpectrum literally places the unwanted A-spectrum outside (beta-delta,alpha+delta); no local gap structure is visible in the headline type.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "Assume that for some"
           },
           {
             "source_clause": "delta ||sin(2 Theta0)|| <= 2 ||R||.",
             "lean_realization": "sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike concludes the factor-two SymmetricNormingFunction estimate for sinTwoThetaEmbedding U X against residual A X M.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "conclusion",
+            "relation": "literal",
+            "source_fragment": "printed"
           },
           {
             "source_clause": "delta ||sin(2 Theta)|| <= 2 ||H||.",
             "lean_realization": "sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex and its real sibling supply the ambient endpoint at the result's own unbounded scope: unbounded self-adjoint LinearPMap ambient operator, bounded self-adjoint perturbation, genuine spectral subspaces, the whole FormBoundedSylvesterGap, an arbitrary SymmetricNormingFunction and the exact factor two.  The bounded ambient theorems are their specialization.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "conclusion",
+            "relation": "literal",
+            "source_fragment": "printed"
           },
           {
             "source_clause": "Infinite-dimensional and unbounded directed-residual scope.",
             "lean_realization": "Both printed conclusions are now witnessed at unbounded infinite-dimensional scope over each field.  The scalar-generic facade is finite-dimensional and is supporting evidence only; it is not this result's witness.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "scope",
+            "relation": "literal",
+            "source_fragment": "scope",
+            "source_excerpt": "Useful unbounded conclusions require the pertinent perturbation or residual to extend boundedly"
           }
         ],
         "note": "The directed residual conclusion now has a scalar-generic SymmetricNormingFunction facade with the interval/exterior hypotheses and residual written directly in its type. The ambient whole-space endpoint remains field-specific internally, so the complex source-shaped theorem stays as the second canonical declaration and its real sibling is a supporting scalar companion. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.\n\n2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.sinTwoTheta_directed_finiteDimensional_symmetricNorming_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.\n\n2026-08-31 (later the same day): the AMBIENT clause is no longer a scope companion.  `sinTwoTheta_ambient_unbounded_addBounded_symmetricNorming_complex` and its real sibling prove it at the row's own unbounded scope, by identifying the ambient double angle between U and V with an ambient SINGLE angle between U and its mirror image through V and applying the common-domain Proposition 6.1.  The bounded ambient endpoints are demoted to supporting evidence as their own specialization.",
@@ -709,7 +954,7 @@
             "type_expr_hash": "414547591",
             "type_text_sha256": "0c92903ffa5097fcddf33623664c4f5d2b051b12fab635eddb320eb1ce8cb13c",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -717,7 +962,7 @@
             "type_expr_hash": "1121034465",
             "type_text_sha256": "7731a2da05b1706e2ece4e43a54b1b39902dfab4df14f82cf462662e075b4570",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -725,7 +970,7 @@
             "type_expr_hash": "1578888031",
             "type_text_sha256": "a765a31cf24794cdde6e036b2201e75d306c363b64181d569d114a130f1dbf00",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -733,7 +978,7 @@
             "type_expr_hash": "649378079",
             "type_text_sha256": "ec98148251647147a319ed14c35ee8cf115f7742a454b302427052b016730bd9",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -741,7 +986,7 @@
             "type_expr_hash": "2000542141",
             "type_text_sha256": "b0e505a8268c9814952ff9401e0438c07d529d2e8262345690e1e5ee274b2b18",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -749,8 +994,70 @@
             "type_expr_hash": "369870179",
             "type_text_sha256": "52bfefcf38cbbebd47f52947264a7ae9d63db78733edee3060935a51a1ffd681",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
+          }
+        ],
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-sin-two-theta",
+              "section": "2",
+              "result": "Section 2, third unnumbered theorem"
+            }
+          },
+          {
+            "id": "scope",
+            "role": "context",
+            "why": "The unbounded and infinite-dimensional scope of the four theorems is declared here.",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-unbounded-scope",
+              "section": "2",
+              "result": "Scope of the four theorems"
+            }
+          }
+        ],
+        "source_interpretation": "local",
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "e6a0fa6442809c9c9e100e6f7cebfc7b0c5b7b695d7fd2b643d2f2e8bbd4e9e9",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-sin-two-theta",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                236,
+                248
+              ],
+              "section": "2",
+              "result": "Section 2, third unnumbered theorem"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
+          },
+          {
+            "fragment": "scope",
+            "document": "DavisKahan1970",
+            "sha256": "373da5c27d116b626590ff5f1745d4efbea68d36df5fd07506860c31d834cb39",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-unbounded-scope",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                289,
+                289
+              ],
+              "section": "2",
+              "result": "Scope of the four theorems"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
           }
         ]
       }
@@ -918,32 +1225,63 @@
           {
             "source_clause": "The scalar field is real or complex.",
             "lean_realization": "tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike is an alias of the already proved branch-free theorem quantified over 𝕜 with [RCLike 𝕜] and the literal SymmetricNormingFunction.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "scope",
+            "relation": "literal",
+            "source_fragment": "printed"
           },
           {
             "source_clause": "A has an ordered block gap and H is fully off diagonal.",
             "lean_realization": "The generic theorem writes the form bounds hUb/hUa and the two literal off-diagonal mapping hypotheses hHU/hHUperp directly; no named gap or oddness predicate hides them.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "Assume the ordered gap"
           },
           {
             "source_clause": "The perturbed invariant subspace is arbitrary and no independent tan(2 Theta) pole hypothesis is assumed.",
             "lean_realization": "The generic theorem describes the invariant perturbed graph by hTmem, hTzero and hinv and uses the branch-free absDoubleAngleTangent singular values; it has no T<1, IsQuarterAcute, or cos(2 theta) premise.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "No independent hypothesis excluding the poles of"
           },
           {
             "source_clause": "delta ||tan(2 Theta)|| <= 2 ||H||.",
             "lean_realization": "With delta = b-a, tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike concludes (b-a) * N.gauge tanTwoTheta <= 2 * N.gauge H for every source norm.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "conclusion",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "lean_declarations": [
+              "TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike"
+            ]
           },
           {
             "source_clause": "delta ||tan(2 Theta0)|| <= 2 ||R|| in the source-shaped U,V corner notation.",
             "lean_realization": "The second canonical declaration gives the literal compression-spectrum/off-diagonal directed-corner theorem with no caller-supplied pole certificate.",
-            "status": "claimed_exact"
+            "status": "claimed_exact",
+            "kind": "conclusion",
+            "relation": "representation_change",
+            "source_fragment": "printed",
+            "lean_declarations": [
+              "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
+              "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real"
+            ],
+            "correspondence_declarations": [
+              "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner"
+            ],
+            "note": "The paper writes the left-hand side as a unitary-invariant norm of tan(2 Theta_0). The canonical Lean theorem takes the gauge of reflectionTangentCorner, a corner of the reflection pair. The two agree because the corner's singular values are exactly the sequence |tan 2 theta_j|, each directed angle appearing once, which is what the cited correspondence theorem states; no unitarily invariant norm can distinguish two operators with the same singular values."
           },
           {
             "source_clause": "Infinite-dimensional/unbounded scope.",
             "lean_realization": "The generic branch-free canonical theorem removes ambient finite-dimensionality but still assumes a finite-dimensional graph base U; the full arbitrary-dimensional and unbounded real/complex endpoints remain compiler-checked supporting declarations.",
-            "status": "scope_companion"
+            "status": "scope_companion",
+            "kind": "scope",
+            "relation": "specialization",
+            "source_fragment": "printed"
           }
         ],
         "note": "Unlike tan Theta and sin 2Theta, the branch-free tan 2Theta paper-norm theorem was already scalar-generic. The review now promotes it to the canonical headline name. Its generic proof is necessarily graph-coordinate shaped, so the source-shaped U,V directed-corner theorem remains canonical alongside it and the report prints absDoubleAngleTangent/approximationSingularValue context explicitly. The packet presents one source-shaped declaration as the primary alignment object; field-, ambient-, unbounded-, and implementation-specific companions are retained under supporting scope.\n\n2026-08-31: the canonical declaration list here is now the counted result's `canonical_evidence` in `dev/davis-kahan-1970-formalization-result-inventory.json`, and the checker enforces that. Demoted to supporting: TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike -- a finite-dimensional or capability-class facade cannot be the canonical witness for a result certified at unbounded infinite-dimensional scope.",
@@ -953,7 +1291,7 @@
             "type_expr_hash": "2946508179",
             "type_text_sha256": "2f3a4e1c99e9c08fb2957127fb5d02379331c881acec1cb80cd5ccd7a3fb59f5",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -961,7 +1299,7 @@
             "type_expr_hash": "3512068222",
             "type_text_sha256": "20562477f7339ac90217f473835966260ac6e2cb9312092000d4a78d50400718",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -969,7 +1307,7 @@
             "type_expr_hash": "1374896681",
             "type_text_sha256": "19ff5f0e26acf116b95a91a5969f97c8eab4bf28f20b862298aaba443bdbfdcb",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
           },
           {
@@ -977,8 +1315,70 @@
             "type_expr_hash": "2282470164",
             "type_text_sha256": "81828007b92d34dab83fcaa893dc68fcd7c1b0ba84d180431676644c8e8a71b8",
             "toolchain": "leanprover/lean4:v4.34.0-rc1",
-            "pinned_on": "2026-09-01",
+            "pinned_on": "2026-09-02",
             "note": "re-pinned after the PaperUnitaryInvariantNorm -> SymmetricNormingFunction rename; 14/16 verified rename-only by inverse-substitution hash, 2 (sinTwoTheta directed blockRepresentative) were already stale before the rename"
+          }
+        ],
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-tan-two-theta",
+              "section": "2",
+              "result": "Section 2, fourth unnumbered theorem"
+            }
+          },
+          {
+            "id": "ui-norms",
+            "role": "definition",
+            "why": "The norm class, the singular-value convention, and Fan dominance are fixed here.",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-ui-norms",
+              "section": "1",
+              "result": "Unitary-invariant norms and singular values"
+            }
+          }
+        ],
+        "source_interpretation": "local",
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "afa8ed70b4098a1774c3743484f4a3a29b645736e2051d561ee9928743300e97",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-tan-two-theta",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                256,
+                273
+              ],
+              "section": "2",
+              "result": "Section 2, fourth unnumbered theorem"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
+          },
+          {
+            "fragment": "ui-norms",
+            "document": "DavisKahan1970",
+            "sha256": "1cf01699d78a53a8beff5c7b2f51dc572e78a942cdf0565b085795b870333578",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S1-ui-norms",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                108,
+                186
+              ],
+              "section": "1",
+              "result": "Unitary-invariant norms and singular values"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
           }
         ]
       }
@@ -1762,7 +2162,128 @@
       "next_action": "No hostile-review hole is currently recorded for this source passage. Preserve exact source scope and re-audit if the distributable source specification changes.",
       "completion_certification": "accepted",
       "completion_holes": [],
-      "importance": "supporting"
+      "importance": "supporting",
+      "semantic_review": {
+        "group": "DK-4.4",
+        "group_title": "Proposition 4.4 as printed, and its refutation",
+        "claim": "Proposition 4.4 asserts that in a real space with $\\Theta\\le\\pi/3$ the direct rotation minimizes $\\norm{1-V}$ in every unitary-invariant norm. The printed proposition is false, and this row is terminal by counterexample rather than by proof.",
+        "source_interpretation": "local",
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-4.4-prop",
+              "section": "4",
+              "result": "Examples 4.1--4.2 and Proposition 4.4"
+            }
+          }
+        ],
+        "source_statement": {
+          "setup": [
+            "H is a real Hilbert space, P and Q are subspaces, U is the direct rotation carrying P onto Q, and V ranges over unitaries carrying P onto Q."
+          ],
+          "hypotheses": [
+            "The space is real.",
+            "V is a unitary carrying P H onto Q H.",
+            "Theta <= pi/3."
+          ],
+          "conclusions": [
+            "||1 - V|| is minimized by V = U for every unitary-invariant norm."
+          ],
+          "scope": [
+            "The paper states that the pi/3 threshold is sharp in view of Examples 4.1 and 4.2."
+          ]
+        },
+        "canonical_declarations": [
+          "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite"
+        ],
+        "supporting_declarations": [
+          "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite",
+          "TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted",
+          "TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm"
+        ],
+        "context_declarations": [
+          {
+            "name": "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite",
+            "mathematical_role": "The printed proposition written as a single Prop, so that what is refuted is a named statement a reader can compare with the paper rather than a paraphrase inside a negation."
+          }
+        ],
+        "clause_map": [
+          {
+            "source_clause": "if $\\Hsp$ is real, $V$ is a unitary carrying $P\\Hsp$ onto $Q\\Hsp$, and $\\Theta\\le\\pi/3$",
+            "lean_realization": "The three printed hypotheses are the binders of DavisKahanProposition4_4_Finite: real scalars, U.map W.toLinearMap = V, and principalAngles U V 0 <= pi/3.",
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "After these examples the paper prints Proposition 4.4",
+            "lean_declarations": [],
+            "correspondence_declarations": [
+              "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite"
+            ]
+          },
+          {
+            "source_clause": "then $\\norm{1-V}$ is minimized by $V=U$ for every unitary-invariant norm",
+            "lean_realization": "not_davisKahanProposition4_4_Finite : ¬ DavisKahanProposition4_4_Finite. The refutation is inside the printed scope: a real R^4 configuration with both principal angles pi/4 <= pi/3, and a competitor unitary whose full displacement has strictly smaller Ky Fan 4 norm.",
+            "status": "claimed_exact",
+            "kind": "conclusion",
+            "relation": "refutation",
+            "source_fragment": "printed",
+            "source_excerpt": "is asserted to be minimized by",
+            "lean_declarations": [
+              "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite"
+            ],
+            "correspondence_declarations": [
+              "TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted",
+              "TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite"
+            ],
+            "note": "The competitor mixes the equal-angle multiplicity space, an obstruction available at every angle threshold, so the failure is not an artefact of the pi/3 boundary."
+          },
+          {
+            "source_clause": "The repair obligation: the strongest natural corrected statement the evidence supports.",
+            "lean_realization": "directRotation_fullDisplacement_qnorm proves the minimality for every Q-norm. This is not evidence that the printed conclusion is true; it is the narrower norm class on which the source's intent survives.",
+            "status": "scope_companion",
+            "kind": "note",
+            "relation": "weaker_than_source",
+            "source_fragment": "printed",
+            "lean_declarations": [
+              "TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm"
+            ]
+          }
+        ],
+        "note": "Row status is refuted_as_transcribed. The Lean development contains no proof of the printed proposition and must not be read as containing one.",
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "27fc1f9abe140e63c18b2c30de2ee6442f71fd4a88f3d1409601b3a469624b6b",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-4.4-prop",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                614,
+                625
+              ],
+              "section": "4",
+              "result": "Examples 4.1--4.2 and Proposition 4.4"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
+          }
+        ],
+        "statement_pins": [
+          {
+            "declaration": "TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite",
+            "type_expr_hash": "3412674011",
+            "type_text_sha256": "0e99a3d4138ab0456a1b723ca4bf3ac286e379601c3bed91c1d735a10decb701",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-02"
+          }
+        ]
+      }
     },
     {
       "id": "DK-5.1-thm",
@@ -2407,7 +2928,303 @@
           "detail": "A single `.whole` clause covers two alternative half-gap hypotheses, branch selection, homotopy, perturbation and residual forms, unequal-dimensional extension, and the source statement that no analogous tan(2 Theta) extension is known. These need atomic evidence/dispositions."
         }
       ],
-      "importance": "major"
+      "importance": "major",
+      "semantic_review": {
+        "group": "DK-8.2",
+        "group_title": "Theorem 8.2: smallness selects the acute branch",
+        "claim": "Theorem 8.2 adds a half-gap smallness hypothesis to the $\\sin 2\\theta$ theorem and concludes, besides the double-angle estimate, that the comparison is on the acute branch: $\\Theta<\\pi/4$.",
+        "source_interpretation": "nonlocal",
+        "nonlocal_rationale": "Read as a self-contained passage, Theorem 8.2 is false: with only its printed hypotheses in scope the symmetric projector gap can be 1, and `P = bottom`, `Q = top` on a one-dimensional space is a counterexample (recorded in Section8Perturbation.lean). The passage is not self-contained. It opens \"Add to the hypotheses of the sin 2 theta theorem\", and it is printed in Section 8, where both (1.5) and (3.5) have been standing -- (1.5) since Section 1, where it is what makes Theta definable at all, and (3.5) since the sentence closing the proof of Proposition 3.2. Neither is restated in Theorem 8.2, and the source says the standing assumptions hold \"except where the contrary is stated\". Under (3.5) the symmetric and directed gaps coincide and the printed conclusion follows with no dimension hypothesis of any kind. A reviewer who rejects this reading should say which of the two standing conditions Theorem 8.2 is meant to have dropped.",
+        "source_fragments": [
+          {
+            "id": "printed",
+            "role": "primary",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-8.2-thm",
+              "section": "8",
+              "result": "Theorem 8.2",
+              "equations": [
+                "θ(σ) homotopy bound"
+              ]
+            }
+          },
+          {
+            "id": "standing-3-5",
+            "role": "standing_assumption",
+            "why": "Section 3 puts (3.5) in force for the rest of the paper. Theorem 8.2 does not state otherwise, so it is a hypothesis of Theorem 8.2 that the passage does not print.",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S3-standing-scope",
+              "section": "3",
+              "result": "Standing convention after Proposition 3.2",
+              "equations": [
+                "(3.5)",
+                "(1.5)"
+              ]
+            }
+          },
+          {
+            "id": "crossing-3-5",
+            "role": "definition",
+            "why": "What (3.5) says, and the source's own example of a configuration satisfying (1.5) and failing (3.5) -- the bilateral shift pair.",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-3.2-prop",
+              "section": "3",
+              "result": "Proposition 3.2",
+              "equations": [
+                "(3.5)"
+              ]
+            }
+          },
+          {
+            "id": "sin-two-theta",
+            "role": "context",
+            "why": "Theorem 8.2 imports the hypotheses and the estimate of the sin 2 theta theorem by reference rather than restating them.",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-sin-two-theta",
+              "section": "2",
+              "result": "Section 2, third unnumbered theorem"
+            }
+          }
+        ],
+        "source_statement": {
+          "setup": [
+            "A is self-adjoint, A + H is the perturbation, R is the residual, Q is the exact spectral subspace and P the trial subspace, and Theta is the ambient angle between them."
+          ],
+          "hypotheses": [
+            "All hypotheses of the sin(2 theta) theorem, imported by reference.",
+            "Either ||H||_1 < delta/2 or ||R||_1 < delta/2.",
+            "spec(A_0) is contained in the enlarged interval [beta - delta/2, alpha + delta/2].",
+            "The standing dimension conditions (1.5) and (3.5), in force from Sections 1 and 3 and not restated here."
+          ],
+          "conclusions": [
+            "The corresponding double-angle estimate remains valid: delta ||sin 2 Theta|| <= 2 ||H||, respectively delta ||sin 2 Theta_0|| <= 2 ||R||.",
+            "Theta < pi/4: the comparison is on the acute branch."
+          ],
+          "scope": [
+            "Every source unitary-invariant norm; the branch conclusion is available under either the finite form of (1.5) or the standing (3.5), with no dimension hypothesis in the second form."
+          ]
+        },
+        "canonical_declarations": [
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming"
+        ],
+        "supporting_declarations": [
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_source_complex",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_source_real",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_complex",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_complex",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_directed_complex",
+          "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt",
+          "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
+          "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_finrank_eq",
+          "TauCeti.DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects"
+        ],
+        "context_declarations": [
+          {
+            "name": "TauCeti.DavisKahan.CrossedDefectsEquivalent",
+            "mathematical_role": "The repository's constructive form of (3.5): a linear isometry between the two crossed defects P ⊓ Qᴿ and Pᴿ ⊓ Q. Equality of their dimensions is what the paper writes; a unitary identification is what a dimension-free statement can carry."
+          },
+          {
+            "name": "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
+            "mathematical_role": "Why (3.5) is the hypothesis that is doing the work: under it the symmetric projector gap and the directed gap agree, which is exactly what the printed Theta < pi/4 needs."
+          }
+        ],
+        "clause_map": [
+          {
+            "source_clause": "Add to the hypotheses of the $\\sin 2\\theta$ theorem …",
+            "lean_realization": "The spectral hypotheses hQ, hQperp and hPred of theorem8_2_source_complex are the sin(2 theta) hypotheses written out; the row does not have a Lean object standing for \"the hypotheses of the previous theorem\".",
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "sin-two-theta",
+            "source_excerpt": "Assume that for some",
+            "lean_declarations": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_source_complex"
+            ]
+          },
+          {
+            "source_clause": "either $\\norm{H}_1<\\delta/2$ or $\\norm{R}_1<\\delta/2$",
+            "lean_realization": "hsmall is literally the disjunction ‖K‖ < delta/2 ∨ ‖residual …‖ < delta/2.",
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "Add to the hypotheses of the",
+            "lean_declarations": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_source_complex"
+            ],
+            "lean_binder": "hsmall"
+          },
+          {
+            "source_clause": "and assume $\\spec(A_0)\\subset[\\beta-\\delta/2,\\alpha+\\delta/2]$",
+            "lean_realization": "hP : SpectrumIn A P (Set.Icc (beta - delta/2) (alpha + delta/2)).",
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "lean_declarations": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_source_complex"
+            ],
+            "lean_binder": "hP"
+          },
+          {
+            "source_clause": "The two crossed subspaces have equal dimension — condition (3.5), never restated in Theorem 8.2.",
+            "lean_realization": "theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects takes CrossedDefectsEquivalent P Q and no dimension hypothesis of any kind; theorem8_2_source_complex instead takes the finite form of (1.5), finrank ℂ P = finrank ℂ Q, which the source says makes (3.5) automatic.",
+            "status": "claimed_exact",
+            "kind": "hypothesis",
+            "relation": "inherited_standing_assumption",
+            "source_fragment": "standing-3-5",
+            "source_excerpt": "(3.5) is assumed as well as (1.5), except where the contrary is stated",
+            "lean_declarations": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects",
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_source_complex"
+            ],
+            "correspondence_declarations": [
+              "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_crossedDefects",
+              "TauCeti.DavisKahan1970.Section8.subspaceGap_eq_directedGap_of_finrank_eq"
+            ],
+            "note": "This is the row's whole difficulty. Without (3.5) the printed conclusion is false; the repository's own witness is Section3.directedGap_asymmetric_coordinateHalfSpace, which is the paper's bilateral-shift pair -- (1.5) holds, (3.5) fails."
+          },
+          {
+            "source_clause": "the corresponding double-angle estimate remains valid",
+            "lean_realization": "The first two conjuncts of theorem8_2_source_complex: the perturbation and residual factor-two estimates for sinTwoAngleOperator Q P.",
+            "status": "claimed_exact",
+            "kind": "conclusion",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "Then the corresponding double-angle estimate remains valid",
+            "lean_declarations": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_perturbation_source_symmetricNorming",
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_symmetricNorming"
+            ]
+          },
+          {
+            "source_clause": "$\\Theta<\\pi/4$",
+            "lean_realization": "maximalAngle P Q < Real.pi / 4, the third conjunct of theorem8_2_source_complex and the whole conclusion of the crossed-defect form.",
+            "status": "claimed_exact",
+            "kind": "conclusion",
+            "relation": "literal",
+            "source_fragment": "printed",
+            "source_excerpt": "and in addition the comparison is on the acute branch",
+            "lean_declarations": [
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects",
+              "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects"
+            ],
+            "correspondence_declarations": [
+              "TauCeti.DavisKahan1970.Section8.maximalAngle_lt_pi_div_four_of_crossedDefects"
+            ]
+          }
+        ],
+        "note": "Theorem 8.2 is the repository's regression case for nonlocal source semantics: a `local` reading of this passage would classify a false statement as exact.",
+        "source_pins": [
+          {
+            "fragment": "printed",
+            "document": "DavisKahan1970",
+            "sha256": "8b6f4b24ba6c69be934a480394ab5e3e69b26d153c4ec6c4f82d81721da3999f",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-8.2-thm",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                1103,
+                1132
+              ],
+              "section": "8",
+              "result": "Theorem 8.2",
+              "equations": [
+                "θ(σ) homotopy bound"
+              ]
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
+          },
+          {
+            "fragment": "standing-3-5",
+            "document": "DavisKahan1970",
+            "sha256": "6a61756db9adf99e76f079bcc9aa86ee0d6458dc47f30c63a1128f99d5b4496f",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S3-standing-scope",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                387,
+                387
+              ],
+              "section": "3",
+              "result": "Standing convention after Proposition 3.2",
+              "equations": [
+                "(3.5)",
+                "(1.5)"
+              ]
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
+          },
+          {
+            "fragment": "crossing-3-5",
+            "document": "DavisKahan1970",
+            "sha256": "7f231167466fdf4e68989398cba663cebd6451a905f07cd11df3b714bff0f340",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "DK-3.2-prop",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                371,
+                379
+              ],
+              "section": "3",
+              "result": "Proposition 3.2",
+              "equations": [
+                "(3.5)"
+              ]
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
+          },
+          {
+            "fragment": "sin-two-theta",
+            "document": "DavisKahan1970",
+            "sha256": "e6a0fa6442809c9c9e100e6f7cebfc7b0c5b7b695d7fd2b643d2f2e8bbd4e9e9",
+            "locator": {
+              "document": "DavisKahan1970",
+              "marker": "S2-sin-two-theta",
+              "file": "prose/distilled_literature/DavisKahan1970_part_III.tex",
+              "lines": [
+                236,
+                248
+              ],
+              "section": "2",
+              "result": "Section 2, third unnumbered theorem"
+            },
+            "visibility": "public_reconstruction",
+            "pinned_on": "2026-09-02"
+          }
+        ],
+        "statement_pins": [
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_source_complex",
+            "type_expr_hash": "956432324",
+            "type_text_sha256": "adc57c443a7a3454b2044b4ded3ce51ffc316b98d7028f7728446a184369c42f",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-02"
+          },
+          {
+            "declaration": "TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects",
+            "type_expr_hash": "1107277007",
+            "type_text_sha256": "d605fec06e36b10b1c87d08f6603f1e3dfe887a9d30769a950b92dcbd5f53050",
+            "toolchain": "leanprover/lean4:v4.34.0-rc1",
+            "pinned_on": "2026-09-02"
+          }
+        ]
+      }
     },
     {
       "id": "DK-9-model",
