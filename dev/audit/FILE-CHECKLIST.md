@@ -628,13 +628,13 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `DavisKahan/Geometry/Halmos/CompactClassification.lean` — 368 lines · Lean source
 - [x] `DavisKahan/Geometry/Polar/Section3Elementary.lean` — 363 lines · Lean source
 - [ ] `DavisKahan/Geometry/Halmos/BilateralShiftExample.lean` — 361 lines · Lean source
-- [x] `DavisKahan/Geometry/Angle/PaperOperatorAngle.lean` — 322 lines · Lean source
+- [x] `DavisKahan/Geometry/Angle/AngleFunctionalCalculus.lean` — 322 lines · Lean source
 - [ ] `DavisKahan/Geometry/Angle/Proposition35Nonacute.lean` — 310 lines · Lean source
-- [ ] `DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean` — 300 lines · Lean source
+- [ ] `DavisKahan/Geometry/Angle/AngleFunctionalCalculusReal.lean` — 300 lines · Lean source
 - [x] `DavisKahan/Geometry/Polar/TwoProjectionOperatorClassification.lean` — 297 lines · Lean source
-- [ ] `DavisKahan/Geometry/Angle/PaperTanAngle.lean` — 249 lines · Lean source
+- [ ] `DavisKahan/Geometry/Angle/TanAngleFunctionalCalculus.lean` — 249 lines · Lean source
 - [x] `DavisKahan/Geometry/Polar/PolarIntertwining.lean` — 223 lines · Lean source
-- [ ] `DavisKahan/Geometry/Angle/PaperDoubleAngle.lean` — 208 lines · Lean source
+- [ ] `DavisKahan/Geometry/Angle/DoubleAngleFunctionalCalculus.lean` — 208 lines · Lean source
 - [x] `DavisKahan/Geometry/Halmos/Classification.lean` — 203 lines · Lean source
 - [x] `DavisKahan/Geometry/Angle/OperatorAngleReal.lean` — 193 lines · Lean source
 - [x] `DavisKahan/Geometry/Polar/PolarIsometryFinal.lean` — 183 lines · Lean source
@@ -664,7 +664,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `DavisKahan/InfiniteDimensional/DoubleAngleSpectrum.lean` — 576 lines · Lean source
 - [ ] `DavisKahan/InfiniteDimensional/SinTheta/Continuation/SharpSchurComplement.lean` — 569 lines · Lean source
 - [ ] `DavisKahan/InfiniteDimensional/SinTheta/Continuation/SpectralIdentification.lean` — 471 lines · Lean source
-- [ ] `DavisKahan/InfiniteDimensional/TanTwoTheta/PaperFaithfulUINorm.lean` — 460 lines · Lean source
+- [ ] `DavisKahan/InfiniteDimensional/TanTwoTheta/SelectedBranchSymmetricNorming.lean` — 460 lines · Lean source
 - [ ] `DavisKahan/InfiniteDimensional/Ideals/Symmetric.lean` — 432 lines · Lean source
 - [ ] `DavisKahan/InfiniteDimensional/SinTheta/RestrictionCompat.lean` — 425 lines · Lean source
 - [ ] `DavisKahan/InfiniteDimensional/Riccati/UnboundedDiagonalRestrictions.lean` — 420 lines · Lean source
@@ -701,7 +701,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [ ] `DavisKahan/InfiniteDimensional/Riccati/UnboundedSelectedGraphBridge.lean` — 161 lines · Lean source
 - [ ] `DavisKahan/InfiniteDimensional/SinTheta/Continuation/SharpSourceSpectrum.lean` — 157 lines · Lean source
 - [ ] `DavisKahan/InfiniteDimensional/Riccati/UnboundedRotationTransport.lean` — 156 lines · Lean source
-- [ ] `DavisKahan/InfiniteDimensional/TanTwoTheta/RealPaperFaithful.lean` — 149 lines · Lean source
+- [ ] `DavisKahan/InfiniteDimensional/TanTwoTheta/SelectedBranchSymmetricNormingReal.lean` — 149 lines · Lean source
 - [ ] `DavisKahan/InfiniteDimensional/SinTheta/Continuation/SharpRadius.lean` — 148 lines · Lean source
 - [ ] `DavisKahan/InfiniteDimensional/Riccati/UnboundedPublic.lean` — 140 lines · Lean source
 - [ ] `DavisKahan/InfiniteDimensional/TanTwoTheta/BoundedOffDiagonalOrderedGap.lean` — 133 lines · Lean source
@@ -867,7 +867,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/WeinbergerComparison.lean` — 587 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/DirectedUnboundedReal.lean` — 586 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/Section3Corollary31.lean` — 583 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean` — 580 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/SineTheta/Presentation.lean` — 580 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/RemainingSourceSurface.lean` — 565 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedExactReal.lean` — 562 lines · Lean source
 - [ ] `DavisKahan/Sources/DavisKahan1970/TanThetaUnboundedAmbient.lean` — 537 lines · Lean source
@@ -986,7 +986,7 @@ Mark a file complete only after its findings are recorded or fixed.
 - [x] `DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtDefectFirst.lean` — 143 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/SineTheta/AngleIdentity.lean` — 138 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Sylvester/HilbertSchmidtPairwise.lean` — 138 lines · Lean source
-- [ ] `DavisKahan/Sources/DavisKahan1970/Section8/PaperSurface.lean` — 137 lines · Lean source
+- [ ] `DavisKahan/Sources/DavisKahan1970/Section8/Presentation.lean` — 137 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section9/RankOneCorrection.lean` — 131 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Section4FiniteSurface.lean` — 127 lines · Lean source
 - [x] `DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtTensor.lean` — 122 lines · Lean source

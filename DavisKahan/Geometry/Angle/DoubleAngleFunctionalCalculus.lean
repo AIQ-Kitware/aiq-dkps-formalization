@@ -3,14 +3,14 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.PaperOperatorAngle
+import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Reflection
 import ForTauCeti.Analysis.InnerProductSpace.DoubleAngle.Gram
 
 /-!
 # The literal ambient `sin 2Θ` of Davis--Kahan, and the reflection identity
 
-`DavisKahan/Geometry/Angle/PaperOperatorAngle.lean` builds the paper's literal
+`DavisKahan/Geometry/Angle/AngleFunctionalCalculus.lean` builds the paper's literal
 Hermitian angle `Θ = arcsin |P_U - P_V|` between two closed subspaces.  This
 module applies `t ↦ sin 2t` to it and identifies the result *as an operator*
 with the displacement of `P_U` under the reflection through `V`:

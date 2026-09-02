@@ -3,7 +3,7 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.PaperTanAngle
+import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 import DavisKahan.Sources.DavisKahan1970.AmbientBlockVocabulary
 import DavisKahan.Geometry.Halmos.CrossedDefectGap
 -- supplies the standing assumption (3.5) and the gap identity it buys, which is what

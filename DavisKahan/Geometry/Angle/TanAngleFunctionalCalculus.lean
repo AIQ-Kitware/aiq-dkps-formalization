@@ -3,13 +3,13 @@ Copyright (c) 2026 Kitware, Inc. All rights reserved.
 Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
-import DavisKahan.Geometry.Angle.PaperOperatorAngle
+import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Arctan
 
 /-!
 # The literal ambient `tan Θ` of Davis--Kahan
 
-`DavisKahan/Geometry/Angle/PaperOperatorAngle.lean` builds the paper's literal
+`DavisKahan/Geometry/Angle/AngleFunctionalCalculus.lean` builds the paper's literal
 Hermitian angle `Θ = arcsin |P_U - P_V|` between two closed subspaces and its
 sine and cosine.  This module adds the tangent, which is the object the second
 conclusion of the Section 2 `tan θ` theorem is about.
@@ -49,7 +49,7 @@ conclusion of the `tan θ` theorem; derived at Section 7 lines around equation
 `tan 2Θ` estimate in
 `DavisKahan/Sources/DavisKahan1970/TanTwoThetaAmbient.lean`.  The real-scalar
 forms of both, and the real counterparts of the operators defined here, are in
-`DavisKahan/Geometry/Angle/PaperOperatorAngleReal.lean` and
+`DavisKahan/Geometry/Angle/AngleFunctionalCalculusReal.lean` and
 `DavisKahan/Sources/DavisKahan1970/AmbientReal.lean`.
 
 ## References

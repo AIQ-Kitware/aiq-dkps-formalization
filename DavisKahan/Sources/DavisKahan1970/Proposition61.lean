@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Symmetric
 import DavisKahan.Sources.DavisKahan1970.SineTheta.SymmetricReal
-import DavisKahan.Geometry.Angle.PaperOperatorAngle
+import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
 import DavisKahan.Sources.DavisKahan1970.SineTheta.CommonDomainSymmetric
 
 /-!

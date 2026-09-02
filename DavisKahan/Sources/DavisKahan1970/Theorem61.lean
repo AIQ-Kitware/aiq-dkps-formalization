@@ -5,7 +5,7 @@ Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem61Universal
 import DavisKahan.Sources.DavisKahan1970.SineTheta.Theorem62
-import DavisKahan.Sources.DavisKahan1970.SineTheta.PaperSurface
+import DavisKahan.Sources.DavisKahan1970.SineTheta.Presentation
 
 /-!
 # Davis--Kahan 1970, Theorems 6.1 and 6.2, on ordinary mathematical hypotheses

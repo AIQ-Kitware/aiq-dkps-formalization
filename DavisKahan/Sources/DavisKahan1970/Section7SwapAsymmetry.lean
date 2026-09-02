@@ -36,7 +36,7 @@ noncomputable section
 
 /-- The two-dimensional model space in which the Section 7 swap asymmetry is
 exhibited. -/
-abbrev Plane := PaperPlane ℂ
+abbrev Plane := PlanarModelSpace ℂ
 
 /-- The source unperturbed operator `diag(0, delta)`. -/
 def section7SwapA (delta : ℝ) : Plane →L[ℂ] Plane :=

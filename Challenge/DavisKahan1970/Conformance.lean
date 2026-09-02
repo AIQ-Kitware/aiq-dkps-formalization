@@ -24,9 +24,9 @@ import ForTauCeti.Analysis.InnerProductSpace.Residual.AngleEmbedding
 import ForTauCeti.Analysis.InnerProductSpace.RectangularUnitarilyInvariantSeminorm
 import ForTauCeti.Analysis.InnerProductSpace.UnitarilyInvariantSeminorm
 import DavisKahan.BoundedOperator.Compat
-import DavisKahan.Geometry.Angle.PaperOperatorAngle
-import DavisKahan.Geometry.Angle.PaperDoubleAngle
-import DavisKahan.Geometry.Angle.PaperTanAngle
+import DavisKahan.Geometry.Angle.AngleFunctionalCalculus
+import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
+import DavisKahan.Geometry.Angle.TanAngleFunctionalCalculus
 import DavisKahan.Geometry.Halmos.CrossedDefectGap
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
 import DavisKahan.DoubleAngle.UnboundedIdeal

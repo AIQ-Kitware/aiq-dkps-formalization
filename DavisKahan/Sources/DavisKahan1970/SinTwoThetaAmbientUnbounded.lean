@@ -7,7 +7,7 @@ import DavisKahan.Sources.DavisKahan1970.Proposition61
 import DavisKahan.Sources.DavisKahan1970.SinTwoTheta
 import DavisKahan.Sources.DavisKahan1970.AmbientReal
 import DavisKahan.SpectralTheory.ReflectionRestriction
-import DavisKahan.Geometry.Angle.PaperDoubleAngle
+import DavisKahan.Geometry.Angle.DoubleAngleFunctionalCalculus
 
 /-!
 # The ambient `sin 2Θ` conclusion at the source's unbounded scope

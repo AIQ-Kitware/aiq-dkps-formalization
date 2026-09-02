@@ -553,7 +553,7 @@ Where census prose disagrees with what elaborates, **the build wins**.
     * `DavisKahan/Sources/DavisKahan1970/TanTheta.lean:50` says the general-Hilbert-space
       unitary-invariant-ideal conclusion of Theorem 6.3 *"is not yet compiled"*. It is
       (`theorem6_3_generalizedTanTheta_source_ideal`, `theorem6_3_infiniteTrial_of_formBounds`).
-    * `DavisKahan/Geometry/Angle/PaperTanAngle.lean` carries an "## Open obligation" section saying the
+    * `DavisKahan/Geometry/Angle/TanAngleFunctionalCalculus.lean` carries an "## Open obligation" section saying the
       whole-space `tan Θ` estimate *"is **not** proved here"* — landed yesterday in
       `Sources/DavisKahan1970/TanThetaWholeSpace.lean`.
     * `ForTauCeti/Analysis/InnerProductSpace/AngleGeometry.lean:202` promises
