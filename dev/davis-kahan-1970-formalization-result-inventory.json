@@ -1112,7 +1112,9 @@
         "TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real",
         "TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real",
-        "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner"
+        "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner",
+        "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner",
+        "TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The bounded complex and real source wrappers already expose both directed and ambient arbitrary-PaperUI conclusions from the printed Section 2 hypotheses with pole exclusion derived internally. The unbounded source surface now closes the advertised global scope as well: `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp directed residual inequality, while `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp ambient factor-two inequality for unbounded self-adjoint A in arbitrary Hilbert dimension. The ambient proof assembles the two reflection-tangent corners using the existing Section 7 directed estimate, skew-adjoint symmetry, Lemma 6.1 block assembly, and Fan dominance; the real endpoints descend exactly through the maintained complexification layer. No quarter-angle assumption, caller-supplied pole certificate, finite-dimensional restriction, compactness premise, or perturbed-Q spectral-placement hypothesis is added. The final implementation was compiler-verified by the user on the 7cc049b4 baseline before this census promotion. Audit-surface update 2026-08-13: the already scalar-generic branch-free PaperUI theorem is promoted under the canonical alias `tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike`; source-shaped directed and unbounded endpoints remain registered separately.",
       "boundary_review": {
@@ -1315,6 +1317,16 @@
           "declaration": "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner",
           "role": "source_correspondence",
           "note": "Identifies the directed tangent corner's approximation numbers in closed form. Registered so it carries a statement pin: it is the strongest correspondence evidence that exists, and is not sufficient to close the corner-to-paper-object obligation."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner",
+          "role": "source_correspondence",
+          "note": "The canonical directed object IS the U -> U-perp corner of the paper's own double-angle block representative -- an equality, not a cospectrality claim. This is the corner-to-paper-object step the hostile-review obligation named."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator",
+          "role": "transport_lemma",
+          "note": "A compression out of U feeds its operator only vectors of U, which the reflection through U fixes; this is what makes the reflection invisible to the corner."
         }
       ],
       "result_wide_scope_atoms": [
@@ -1409,11 +1421,12 @@
       "semantic_certification_note": "Blocked by open hostile-review obligation `tan2theta-directed-correspondence`. The directed clauses conclude on `N.gauge (reflectionTangentCorner U Z)` while Davis--Kahan state the bound on the norm of tan 2Theta_0, and the corner-to-paper-object correspondence does not exist. The bound itself is proved; what is missing is registered evidence that the object it is proved about is the paper's.",
       "remaining_gap": {
         "category": "missing_source_correspondence",
-        "missing_surface": "A registered correspondence from the canonical directed object `reflectionTangentCorner U Z` -- the U -> U-perp corner of the reflection tangent -- to the paper's directed tan 2Theta_0 object, at the level of approximation numbers or of the symmetric gauge. The bound itself is proved; what is unregistered is that the object it is proved about is the paper's.",
-        "next_action": "Prove the corner-to-operator link (same approximation numbers, or equal extendedGauge) and chain it through the existing full-operator transport, then register it as `source_correspondence` evidence on the directed clauses; or state source-shaped directed theorems concluding literally on the paper object and make those the clause primaries, keeping the block theorems as supporting evidence.",
+        "missing_surface": "NARROWED 2026-09-02. The corner-to-paper-object step is now proved: `reflectionTangentCorner_reflection_eq_paperTanTwoCorner` shows the canonical directed object equals `paperBlockCompression Uᗮ U (paperTanTwoBlockRepresentative U V)`, the U -> U-perp corner of the paper's own double-angle representative, under the standing invertibility hypothesis. What remains is the last spelling step: that this compression has the same symmetric gauge as the paper's directed corner object in the ambient `paperProjectionBlock` spelling used by `paperTanTwoDirectedCornerR`, and hence that the printed norm is the one the canonical theorems bound.",
+        "next_action": "Prove `paperBlockCompression Γᗮ Γ (paperDiagonalPair Γᗮ Γ K) = paperBlockCompression Γᗮ Γ K` -- the compression out of Γ kills the diagonal pair's second summand, since it begins by projecting onto Γᗮ -- and chain it with the existing ambient-block/compression bridge to reach the paper's directed corner. An attempt on 2026-09-02 was withdrawn rather than left unproved: the algebra is routine but the Mathlib projection API route used was wrong. Then register the chain as correspondence on the directed clauses and reopen them.",
         "strongest_existing_evidence": [
-          "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex",
-          "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real"
+          "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner",
+          "TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator",
+          "TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner"
         ]
       }
     },
@@ -4819,7 +4832,8 @@
         "required": [
           "Prove the corner-to-operator link (same approximation numbers, or equal extendedGauge), then register the chain as `source_correspondence` evidence on the directed.complex and directed.real clauses; or",
           "add source-shaped wrappers concluding literally on the paper tangent object, make them the clause primaries, and keep the block theorems as supporting evidence."
-        ]
+        ],
+        "progress_2026_09_02": "The corner-to-paper-object step is PROVED and registered. The earlier assessment -- that the bridge was corner-to-full-operator and needed same-approximation-numbers -- was wrong, and the right statement is stronger and simpler: the canonical directed object is EQUAL to the corner of the paper's double-angle representative. Two facts give it, both compiled: the reflection tangent is that representative composed with the reflection through U, and a compression out of U cannot see that reflection. What remains is one spelling lemma between the compressed and ambient block forms; see the row's remaining_gap."
       }
     ],
     "closed_obligations": [

@@ -119,6 +119,17 @@ theorem reflectionOperator_apply (U : Submodule 𝕜 E)
   rw [Submodule.reflection_apply, ← Nat.cast_smul_eq_nsmul 𝕜]
   norm_num
 
+/-- **Reflection fixes the subspace it reflects through.**
+
+The pointwise formula gives `2 • P x - x`, which is `x` exactly on `U`.  Stated
+separately because the useful form is the fixed-point one: a compression whose
+input is restricted to `U` does not see the reflection at all. -/
+theorem reflectionOperator_apply_of_mem (U : Submodule 𝕜 E)
+    [U.HasOrthogonalProjection] {x : E} (hx : x ∈ U) :
+    U.reflectionOperator x = x := by
+  change U.reflection x = x
+  exact Submodule.reflection_mem_subspace_eq_self hx
+
 /-- Reflection is involutive. -/
 theorem reflectionOperator_involutive (U : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] :
