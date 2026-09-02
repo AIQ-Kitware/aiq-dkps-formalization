@@ -8,7 +8,7 @@ The denominator contains exactly the four Section 2 headline theorems and every 
 - Result-boundary reviews accepted: **29/29**
 - Currently hostile-certified terminal: **29**
 - Awaiting closure: **0**
-- Printed statements that are NOT locally self-contained: **1**
+- Printed statements that are NOT locally self-contained: **2**
 - Result-only semantic sweep: `dev/davis-kahan-1970-result-semantic-review-2026-08-12.md`
 - Compiler-checkable theorem surface: `DavisKahan/Sources/DavisKahan1970/Audits/ResultSemanticSurface.lean`
 
@@ -50,7 +50,7 @@ Each result below explicitly partitions its primary source block into atoms insi
 | `DK-6.3-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-6.3-lem` | lemma | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 | `DK-8.1-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
-| `DK-8.2-thm` | theorem | `locally_exact` | yes | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
+| `DK-8.2-thm` | theorem | `paper_faithful_nonlocal_source_interpretation` | **no** | `proved_exact` | `proved_in_build` | `accepted` | `accepted` |
 
 ## Results whose printed statement is not locally self-contained
 

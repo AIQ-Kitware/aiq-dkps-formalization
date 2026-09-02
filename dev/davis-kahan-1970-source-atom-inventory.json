@@ -33,15 +33,15 @@
     "numbered_equation_atoms": 64,
     "total_atoms": 274,
     "formalization_result_obligations": 29,
-    "result_support_atoms": 75,
-    "fidelity_only_atoms": 199,
+    "result_support_atoms": 69,
+    "fidelity_only_atoms": 205,
     "open_question_atoms": 5,
     "restored_atoms_this_audit": 7,
     "boundary_classified_atoms": 274,
     "boundary_reason_counts": {
       "background_theory_not_designated_result": 2,
       "counted_result_hypothesis": 10,
-      "counted_result_scope": 16,
+      "counted_result_scope": 10,
       "counted_result_statement": 49,
       "deferred_unproved_claim": 2,
       "definition_not_result": 9,
@@ -50,12 +50,12 @@
       "introductory_background_not_designated_result": 22,
       "open_question": 5,
       "paper_wide_semantic_convention_not_result": 1,
-      "post_result_consequence_not_in_printed_statement": 4,
+      "post_result_consequence_not_in_printed_statement": 9,
       "post_result_interpretation_not_result": 2,
       "pre_result_motivation_not_result": 1,
       "pre_result_setup_not_in_printed_statement": 4,
       "proof_detail_not_in_printed_statement": 4,
-      "proof_or_derivation_not_result": 68,
+      "proof_or_derivation_not_result": 69,
       "remark_or_example_not_result": 7,
       "restatement_of_counted_result": 6,
       "section10_motivation_not_result": 3,
@@ -1826,10 +1826,11 @@
       ],
       "interpretation_support": {
         "result_ids": [
-          "S2-tan-theta"
+          "S2-tan-theta",
+          "DK-8.2-thm"
         ],
         "role": "later_standing_assumption",
-        "note": "From immediately after Proposition 3.2 onward, (3.5) as well as (1.5) is assumed except where the contrary is stated; the Section 6 proof of the printed tangent theorem is inside that scope."
+        "note": "From immediately after Proposition 3.2 onward, (3.5) as well as (1.5) is assumed except where the contrary is stated; the Section 6 proof of the printed tangent theorem is inside that scope.  Theorem 8.2 is inside the same scope: its printed statement compares maximal angles without restating (3.5), and the source-facing Lean theorem carries the condition explicitly as `hcross`."
       },
       "scope_classification": {
         "category": "counted_result_scope",

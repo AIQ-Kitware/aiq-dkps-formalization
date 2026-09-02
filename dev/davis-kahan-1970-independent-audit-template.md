@@ -37,7 +37,7 @@ A hostile reviewer should challenge both layers independently: (1) whether the f
 
 Use one of: **PASS exact**, **PASS refuted + repair**, **FAIL boundary**, **FAIL scope**, **FAIL conclusion**, **FAIL missing clause**, **FAIL evidence**, or **UNCERTAIN**.
 
-A result whose printed statement is **not locally self-contained** carries an extra section headed **NONLOCAL SOURCE-SEMANTICS DEPENDENCY**, with its own verdict: **PASS paper-faithful nonlocal interpretation**, **FAIL illicit strengthening**, or **UNCERTAIN source interpretation**. That section discloses, before you read the Lean evidence, exactly which qualification the printed statement omits and which nonlocal source material the repository used to read it. Those results are listed here so they cannot be missed: `S2-tan-theta`.
+A result whose printed statement is **not locally self-contained** carries an extra section headed **NONLOCAL SOURCE-SEMANTICS DEPENDENCY**, with its own verdict: **PASS paper-faithful nonlocal interpretation**, **FAIL illicit strengthening**, or **UNCERTAIN source interpretation**. That section discloses, before you read the Lean evidence, exactly which qualification the printed statement omits and which nonlocal source material the repository used to read it. Those results are listed here so they cannot be missed: `S2-tan-theta`, `DK-8.2-thm`.
 
 ## 1. S2-sin-theta — Single-angle sine theorem
 
@@ -2062,18 +2062,20 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahan1970.proposition3_4_source_full_bundled_complex` — presentation_wrapper
 - `TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation` — supporting_theorem
+- `TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_complex` — standing_assumption_discharge
+- `TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_real` — standing_assumption_discharge
 
 ### Source-facing Lean declarations
 
 #### `TauCeti.DavisKahan1970.proposition3_4_source_full_complex`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:136`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:176`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.proposition3_4_source_full_real`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:117`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:147`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -2086,6 +2088,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.proposition3_4_source_eq_directRotation`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Printed.lean:217`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34.lean:139`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_real`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/Section3Proposition34Real.lean:116`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -4846,9 +4860,95 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Compiler verification:** `proved_in_build`
 - **Hostile semantic certification:** `accepted`
 - **Boundary review:** `accepted`
-- **Source alignment:** `locally_exact`
-- **Printed statement locally self-contained:** `True`
+- **Source alignment:** `paper_faithful_nonlocal_source_interpretation`
+- **Printed statement locally self-contained:** `False`
 - **Organizational source-block hash:** `8af6a38667dbf398e65e1b4460763ab627b559607ac519214c35402797c1b48e`
+
+### ⚠ NONLOCAL SOURCE-SEMANTICS DEPENDENCY
+
+**This printed result is not locally self-contained. Read this section before the Lean evidence.**
+
+- **Interpretation review status:** `accepted`
+- **Classification:** `paper_faithful_nonlocal_source_interpretation`
+- **Reviewed on:** 2026-09-02
+- **Kept distinct from the repository's canonical refutation:** `DK-4.4-prop`
+
+#### 1. What the printed statement actually says
+
+The full registered source block appears below under *Full registered source block*. The clause at issue and the qualification it does not carry:
+
+The printed Theorem 8.2 states that smallness of the perturbation selects the acute branch, comparing the maximal angle against pi/4, and it does not restate the crossed-dimension condition (3.5). The source-facing Lean theorems nevertheless take `hcross : CrossedDefectsEquivalent P Q` as an explicit hypothesis. A reviewer must decide whether that hypothesis formalizes semantics the paper already imposes on Section 8, or strengthens the printed result beyond what Davis and Kahan claim.
+
+#### 2. Where the paper supplies the missing semantics
+
+- Section 3 standing convention, fixed immediately after the proof of Proposition 3.2, that (3.5) as well as (1.5) is assumed for the remainder of the paper except where the contrary is explicitly stated.
+- Proposition 3.2: (3.5) is equivalent to the existence of a direct rotation outside the acute case, so without it the angle objects Theorem 8.2 compares need not be realized by a direct rotation at all.
+- Section 8 states no contrary convention, so it inherits the Section 3 scope unchanged.
+
+#### 3. Exact source atoms used to interpret the statement
+
+| Atom | Interpretive role | Source location | Content |
+|---|---|---|---|
+| `S3-standing-scope.crossed-dimension-standing-assumption` | `later_standing_assumption` | Section 3, standing convention stated immediately after the proof of Proposition 3.2. | Standing convention: (3.5) is assumed as well as (1.5) for the remainder of the paper, except where the contrary is explicitly stated, so a direct rotation always exists and the development uses its direct special case (3.6). |
+
+The source passages that carry these atoms are reproduced verbatim here so the reading can be checked without the original paper:
+
+<details><summary>Source block <code>S3-standing-scope</code></summary>
+
+~~~~tex
+Immediately after the proof of Proposition~3.2 the source fixes a standing convention for the remainder of the paper: (3.5) is assumed as well as (1.5), except where the contrary is stated.  Consequently a direct rotation always exists, and rather than the more general unitary $V$ of (1.6) the development deals mostly with its direct special case (3.6).  Every later result that does not restate the dimension conditions is therefore read under both (1.5) and (3.5).
+~~~~
+
+</details>
+
+#### 4. The chronological mismatch
+
+The row previously declared itself locally self-contained while simultaneously linking the Section 3 standing scope atom, so the inventory asserted both that the result depends on the inherited convention and that it has no nonlocal dependency. Nothing in the checker compared those two claims, so the contradiction survived review.
+
+#### 5. What Lean says, and exactly where the implicit semantics became explicit
+
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects`
+  - The hypothesis `hcross : CrossedDefectsEquivalent P Q` carries the inherited Section 3 condition (3.5); the printed Theorem 8.2 does not restate it, and the conclusion `maximalAngle P Q < Real.pi / 4` is the printed acute-branch claim.
+- `TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects`
+  - The real-scalar analogue: the same `hcross : CrossedDefectsEquivalent P Q` hypothesis carries the inherited (3.5) condition that the printed statement leaves to the standing convention.
+
+#### 6. The repository's accepted reading
+
+Davis and Kahan fix (3.5), together with (1.5), as a standing assumption immediately after the proof of Proposition 3.2, for the remainder of the paper except where the contrary is explicitly stated. Section 8 states no contrary, so Theorem 8.2 is printed inside that scope and the crossed-defect condition is part of its hypotheses even though the local display omits it.
+
+#### 7. The strongest competing literal reading
+
+Read Theorem 8.2 using only the hypotheses printed in Section 8, with no inherited convention. On that reading the Lean statement carries a hypothesis the printed theorem does not impose, and the formalization would be an illicit strengthening rather than an exact witness.
+
+#### 8. Why this is not classified as a refutation
+
+The printed claim is not false under either reading. Without (3.5) the paper's angle comparison need not be well posed in infinite dimension, because the direct rotation whose existence (3.5) is equivalent to may fail to exist; that is a well-posedness gap in the literal reading, not a counterexample to the printed inequality.
+
+#### 9. Semantic conclusion recorded by the repository
+
+DK-8.2-thm is a true counted result whose exact formal representation requires the Section 3 standing convention to be made explicit. It is terminal as an accepted nonlocal source interpretation, not as a locally exact statement, and the certificate must report it in that category.
+
+#### Independent interpretation checklist
+
+- [ ] The printed statement really does omit the qualification the repository says it omits.
+- [ ] The cited earlier/later source passages really say what the repository reports them as saying.
+- [ ] The paper-wide existence/vacuity convention plausibly governs the displayed norm in this statement.
+- [ ] The later standing assumption is genuinely in force where the source proves this result.
+- [ ] The extra Lean hypothesis corresponds to the omitted source qualification and to nothing stronger.
+- [ ] The competing literal reading is stated at its strongest, not as a straw man.
+- [ ] The decision not to classify this result as refuted is justified by the source's own semantics.
+- [ ] The distinction from the repository's canonical refutation is real, not a softening of it.
+
+#### Interpretation question put to the independent reviewer
+
+> Is the extra explicit Lean structure a faithful formalization of nonlocal semantics already imposed by the paper, or an unjustified strengthening of the printed result?
+
+- **Interpretation verdict** (choose one): `PASS paper-faithful nonlocal interpretation` / `FAIL illicit strengthening` / `UNCERTAIN source interpretation`
+- **Verdict:** _fill in_
+- **If FAIL or UNCERTAIN, which specific source passage or Lean hypothesis is the problem:** _fill in_
+- **Would you instead classify this printed result as false as transcribed? Why:** _fill in_
+
+---
 
 ### Atoms inside the counted printed result
 

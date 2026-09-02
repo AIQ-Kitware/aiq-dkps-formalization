@@ -105,6 +105,36 @@ private theorem halfAngle_complexify
   simp only [norm_sq, re_complexify, im_complexify]
   linarith
 
+/-- **Proposition 3.4's explicit direct rotation discharges the Section 3
+standing assumption, over `ℝ`.**
+
+The real analogue of `proposition3_4_source_crossedDefectsEquivalent_complex`:
+the printed hypotheses exhibit a direct rotation, and by Proposition 3.2 that is
+equivalent to the inherited crossed-defect condition (3.5), so the standing
+assumption is a consequence of this result's own hypotheses rather than an extra
+one it silently relies on. -/
+theorem proposition3_4_source_crossedDefectsEquivalent_real
+    (W : E →L[ℝ] E)
+    (hunitary : W ∈ unitary (E →L[ℝ] E))
+    (hintertwines : W * U.starProjection = V.starProjection * W)
+    (hcrossed : Uᗮ.starProjection * W * U.starProjection =
+      -star (U.starProjection * W * Uᗮ.starProjection))
+    (hsource_pos : (U.starProjection * W * U.starProjection).IsPositive)
+    (hcomplement_pos : (Uᗮ.starProjection * W * Uᗮ.starProjection).IsPositive) :
+    CrossedDefectsEquivalent U V :=
+  (proposition3_2_exists_iff_crossedDefectsEquivalent U V).mp
+    ⟨W,
+      { unitary_mem := hunitary
+        intertwines := hintertwines
+        source_compression_nonnegative := fun x => by
+          have h := (ContinuousLinearMap.isPositive_def'.mp hsource_pos).2 x
+          rwa [ContinuousLinearMap.reApplyInnerSelf_apply, inner_re_symm (𝕜 := ℝ)] at h
+        complement_compression_nonnegative := fun x => by
+          have h := (ContinuousLinearMap.isPositive_def'.mp hcomplement_pos).2 x
+          rwa [ContinuousLinearMap.reApplyInnerSelf_apply, inner_re_symm (𝕜 := ℝ)] at h
+        crossed_blocks := hcrossed }⟩
+
+
 /-- **Davis--Kahan 1970, Proposition 3.4, full nonacute real source scope.**
 
 If `W` is an arbitrary real direct rotation from `U` to `V` in the printed
