@@ -4,6 +4,7 @@ Released under Apache 2.0 license as described in the file LICENSE.
 Authors: Jon Crall, Claude Opus 5
 -/
 import DavisKahan.Sources.DavisKahan1970.Section3Proposition34Printed
+import DavisKahan.Sources.DavisKahan1970.Section3Proposition32
 
 /-!
 # Davis--Kahan 1970, Proposition 3.4 over complex Hilbert spaces
@@ -118,6 +119,45 @@ theorem positiveDiagonalBlocks_of_sq
   · refine ContinuousLinearMap.isPositive_def'.mpr ⟨hcomplement_sa, fun x => ?_⟩
     rw [ContinuousLinearMap.reApplyInnerSelf_apply, inner_re_symm (𝕜 := ℂ)]
     exact hT.complement_compression_nonnegative x
+
+/-- **Proposition 3.4's explicit direct rotation discharges the Section 3
+standing assumption, over `ℂ`.**
+
+After Proposition 3.2 the paper assumes (3.5) -- equality of the crossed defect
+dimensions -- henceforth unless otherwise stated, so every later result inherits
+it, Proposition 3.4 included.  Proposition 3.4 is nonetheless *not* a nonlocal
+result: its printed hypotheses already hand us a direct rotation `W` from `Uℋ`
+to `Vℋ`, and by Proposition 3.2 such a rotation exists exactly when the crossed
+defects are equivalent.  The inherited assumption is therefore implied by the
+result's own hypotheses rather than added to them.
+
+This is the machine-checkable form of that claim: the exact hypothesis list of
+`proposition3_4_source_full_complex` yields `CrossedDefectsEquivalent U V`.  The
+census cites it as the discharge of the inherited scope, so the row can hold the
+standing source atom and still be locally self-contained without the two facts
+contradicting each other. -/
+theorem proposition3_4_source_crossedDefectsEquivalent_complex
+    (U V : Submodule ℂ H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (W : H →L[ℂ] H)
+    (hunitary : W ∈ unitary (H →L[ℂ] H))
+    (hintertwines : W * U.starProjection = V.starProjection * W)
+    (hcrossed : Uᗮ.starProjection * W * U.starProjection =
+      -star (U.starProjection * W * Uᗮ.starProjection))
+    (hsource_pos : (U.starProjection * W * U.starProjection).IsPositive)
+    (hcomplement_pos : (Uᗮ.starProjection * W * Uᗮ.starProjection).IsPositive) :
+    CrossedDefectsEquivalent U V :=
+  (proposition3_2_exists_iff_crossedDefectsEquivalent U V).mp
+    ⟨W,
+      { unitary_mem := hunitary
+        intertwines := hintertwines
+        source_compression_nonnegative := fun x => by
+          have h := (ContinuousLinearMap.isPositive_def'.mp hsource_pos).2 x
+          rwa [ContinuousLinearMap.reApplyInnerSelf_apply, inner_re_symm (𝕜 := ℂ)] at h
+        complement_compression_nonnegative := fun x => by
+          have h := (ContinuousLinearMap.isPositive_def'.mp hcomplement_pos).2 x
+          rwa [ContinuousLinearMap.reApplyInnerSelf_apply, inner_re_symm (𝕜 := ℂ)] at h
+        crossed_blocks := hcrossed }⟩
+
 
 /-- **Davis--Kahan 1970, Proposition 3.4, complex source scope, with the genuine
 Definition 3.1 conclusion.**

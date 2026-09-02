@@ -45,6 +45,33 @@ TERMINAL_COMPLETION_CERTIFICATIONS = {"accepted"}
 NUMBERED_EQUATION_RE = re.compile(r"\\tag\{([^}]+)\}")
 
 
+def derived_coverage_summary(atoms, numbered) -> dict:
+    """Every aggregate `coverage_summary` field, computed from the atom records.
+
+    The atom records are the source of truth; the summary is a projection of
+    them.  Keeping the derivation in one function is what lets the checker
+    reject a stale summary and the writer regenerate it, without the two ever
+    disagreeing about what a field means.
+    """
+    linked = [a for a in atoms if a.get("formalization_result_ids")]
+    reason_counts: dict[str, int] = {}
+    for atom in atoms:
+        code = atom.get("formalization_role_reason_code")
+        if code:
+            reason_counts[code] = reason_counts.get(code, 0) + 1
+    return {
+        "total_atoms": len(atoms),
+        "numbered_equation_atoms": len(numbered),
+        "result_support_atoms": len(linked),
+        "fidelity_only_atoms": len(atoms) - len(linked),
+        "open_question_atoms": sum(1 for a in atoms if a.get("formalization_role") == "open_question"),
+        "boundary_classified_atoms": sum(1 for a in atoms if a.get("formalization_role_reason_code")),
+        "boundary_reason_counts": dict(sorted(reason_counts.items())),
+    }
+
+
+
+
 def fail(message: str) -> None:
     print(f"ERROR: {message}", file=sys.stderr)
     raise SystemExit(1)
@@ -217,14 +244,24 @@ def validate_source_fidelity_inventory(
         )
 
     summary = data.get("coverage_summary", {})
+    numbered = [atom for atom in atoms if atom.get("kind") == "numbered-equation"]
     if summary.get("source_blocks") != len(map_items):
         fail("source-fidelity coverage_summary.source_blocks disagrees with statement-map group count")
-    if summary.get("total_atoms") != len(atoms):
-        fail("source-fidelity coverage_summary.total_atoms disagrees with atoms list")
 
-    numbered = [atom for atom in atoms if atom.get("kind") == "numbered-equation"]
-    if summary.get("numbered_equation_atoms") != len(numbered):
-        fail("source-fidelity numbered-equation summary disagrees with atoms list")
+    # Every aggregate is recomputed from the atom records, which are the only
+    # source of truth.  Previously only `source_blocks` and `total_atoms` were
+    # checked -- the two that happened to be right -- so the rest drifted
+    # silently: an audit artifact that disagreed with its own data and still
+    # reported clean.
+    for field, expected in derived_coverage_summary(atoms, numbered).items():
+        stored = summary.get(field)
+        if stored != expected:
+            fail(
+                f"source-fidelity coverage_summary.{field} disagrees with the atom records: "
+                f"stored={stored}, recomputed={expected}. "
+                "Regenerate with `python3 scripts/check_davis_kahan_1970_statement_map.py "
+                "--write-coverage-summary`; do not hand-edit the aggregate."
+            )
     tex_tags = NUMBERED_EQUATION_RE.findall(tex_path.read_text(encoding="utf-8"))
     if len(tex_tags) != len(numbered):
         fail(
@@ -238,6 +275,39 @@ def validate_source_fidelity_inventory(
         "numbered_equations": len(numbered),
     }
 
+
+def write_coverage_summary() -> int:
+    """Regenerate the aggregate from the atom records, in place.
+
+    The counts are derived data, so they are generated rather than maintained.
+    Fields the derivation does not own (audit provenance, for instance) are left
+    exactly as they are.
+    """
+    path = ROOT / "dev/davis-kahan-1970-source-atom-inventory.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    atoms = data["atoms"]
+    numbered = [atom for atom in atoms if atom.get("kind") == "numbered-equation"]
+    derived = derived_coverage_summary(atoms, numbered)
+
+    summary = data.setdefault("coverage_summary", {})
+    changed = {k: (summary.get(k), v) for k, v in derived.items() if summary.get(k) != v}
+    summary.update(derived)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    if not changed:
+        print(f"coverage_summary already matches the atom records: {path.relative_to(ROOT)}")
+        return 0
+    print(f"regenerated coverage_summary in {path.relative_to(ROOT)}")
+    for field, (was, now) in sorted(changed.items()):
+        if isinstance(now, dict):
+            for key in sorted(set(now) | set(was or {})):
+                if (was or {}).get(key) != now.get(key):
+                    print(f"  {field}.{key}: {(was or {}).get(key)} -> {now.get(key)}")
+        else:
+            print(f"  {field}: {was} -> {now}")
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -245,7 +315,15 @@ def main() -> int:
         action="store_true",
         help="require the compact stated-result inventory (not source-fidelity atoms or row labels) to be terminal",
     )
+    parser.add_argument(
+        "--write-coverage-summary",
+        action="store_true",
+        help="regenerate the source-fidelity coverage_summary from the atom records and exit",
+    )
     args = parser.parse_args()
+
+    if args.write_coverage_summary:
+        return write_coverage_summary()
 
     statement_map = json.loads(MAP_PATH.read_text(encoding="utf-8"))
     census = json.loads(CENSUS_PATH.read_text(encoding="utf-8"))
@@ -440,7 +518,13 @@ def main() -> int:
                 )
 
     result_checker = ROOT / "scripts/check_davis_kahan_1970_result_inventory.py"
-    result_command = [sys.executable, str(result_checker)]
+    # This gate advertises itself as compiler-free, so the subordinate checker
+    # must stay static too.  Without propagating the flag it ran a Lean probe,
+    # and on a machine with no usable `lake` every declaration came back
+    # unresolved -- reporting "canonical evidence did not resolve" when the real
+    # condition was "no compiler here", which is the most misleading answer an
+    # audit gate can give.
+    result_command = [sys.executable, str(result_checker), "--no-lean-probe"]
     if args.require_terminal:
         result_command.append("--require-terminal")
     result_check = subprocess.run(result_command, cwd=ROOT)

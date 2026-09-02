@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1163
+**Unique cited Lean declarations:** 1165
 
 ## How to use this census
 
@@ -1956,6 +1956,8 @@ The self-adjointness hypotheses on the two diagonal compressions are *not* a spe
 - `TauCeti.DavisKahan1970.complex_directRotation_sq`
 - `TauCeti.DavisKahan1970.proposition3_4_square_is_reflected_directRotation`
 - `TauCeti.DavisKahan1970.proposition3_4_source_full_complex`
+- `TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_complex`
+- `TauCeti.DavisKahan1970.proposition3_4_source_crossedDefectsEquivalent_real`
 
 **Notes.** REPAIRED AND RE-CLOSED 2026-08-12 (result inventory row `DK-3.4-prop`).  The reopening was correct: the complex endpoint concluded only the `IsPaperDirectRotation` numerical-range predicate.  Repaired by `proposition3_4_source_full_complex`, which takes exactly the printed hypothesis C_0^2 >= 1/2 together with the Definition 3.1 direct-rotation data for U, and concludes the genuine Definition 3.1 statement for U^2 from Q_- to Q: unitarity, intertwining, `IsPositive` for both diagonal compressions, and the crossed-block adjoint/sign relation.  It adds no acuteness, compactness, finite-dimensional or separability hypothesis, and reuses the real development's `positiveDiagonalBlocks_of_sq` rather than reproving the positivity upgrade.
 

@@ -257,10 +257,13 @@ def main(argv: list[str] | None = None) -> int:
               f"`aiq-lean census render {JSON_PATH.relative_to(ROOT)} -o {MD_PATH.relative_to(ROOT)}`")
         return 1
 
-    result_checker = subprocess.run(
-        [sys.executable, str(ROOT / "scripts/check_davis_kahan_1970_result_inventory.py")],
-        cwd=ROOT,
-    )
+    # `--no-probe` is a promise about the whole run, not just this script's own
+    # probe: a subordinate checker that still shells out to Lean makes the
+    # advertised static mode fail wherever no compiler is installed.
+    result_command = [sys.executable, str(ROOT / "scripts/check_davis_kahan_1970_result_inventory.py")]
+    if args.no_probe:
+        result_command.append("--no-lean-probe")
+    result_checker = subprocess.run(result_command, cwd=ROOT)
     if result_checker.returncode:
         return result_checker.returncode
 

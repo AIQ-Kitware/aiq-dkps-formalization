@@ -70,8 +70,19 @@ SUPPORTING_EVIDENCE_ROLES = {
     "public_alias", "specialization", "alternative_route", "generalization",
     "presentation_wrapper", "implementation_structure", "transport_lemma",
     "scalar_generic_facade", "supporting_theorem",
+    # Proves that a standing source assumption a result inherits is implied by
+    # that result's own printed hypotheses.  Without this category the only way
+    # to hold a standing-scope atom was to claim no nonlocal dependency and
+    # leave the contradiction unexplained.
+    "standing_assumption_discharge",
+    # Proves that a paper object and the object a canonical theorem is stated on
+    # are the same, where the theorem's own type does not make that apparent.
+    "source_correspondence",
 }
 REFUTATION_RESULT_IDS = {"DK-4.4-prop"}
+#: Marks an atom that records a standing/section-wide assumption rather than a
+#: hypothesis printed with an individual result.
+STANDING_SCOPE_MARKER = "standing-scope"
 SCOPE_CLASSIFICATION_CATEGORIES = {
     # the atom states scope of one or more counted results, and must be covered
     "counted_result_scope",
@@ -846,6 +857,104 @@ def _validate_boundary_accounting(
             if not isinstance(value, str) or not value.strip():
                 fail(f"{result_id}: boundary_review.{key} must explain the boundary audit")
 
+
+def _standing_scope_atoms(item: dict[str, Any], source_atoms: dict[str, dict[str, Any]]) -> list[str]:
+    """Standing/section-wide scope atoms this result inherits.
+
+    A standing assumption is a property of the *source*, not of a row: Davis and
+    Kahan write "assume (3.5) as well as (1.5) henceforth", and every later
+    result is inside that scope whether or not its row remembers to say so.  The
+    atoms carry the scope, so they are what gets read.
+    """
+    out: list[str] = []
+    for atom_id in item.get("source_atom_ids", []) or []:
+        atom = source_atoms.get(atom_id)
+        if atom is None:
+            continue
+        classification = atom.get("scope_classification") or {}
+        inherits = (
+            atom.get("kind") == "scope"
+            and result_id_in(item, classification.get("extends_results"))
+        )
+        if inherits and STANDING_SCOPE_MARKER in atom_id:
+            out.append(atom_id)
+    return out
+
+
+def result_id_in(item: dict[str, Any], extends: Any) -> bool:
+    return isinstance(extends, list) and item["id"] in extends
+
+
+def _check_standing_scope_consistency(
+    item: dict[str, Any],
+    source_atoms: dict[str, dict[str, Any]],
+    census_declarations: set[str],
+) -> None:
+    """A locally self-contained row may not silently inherit a standing assumption.
+
+    Theorem 8.2 held the Section 3 standing-scope atom for (3.5) while declaring
+    no nonlocal dependency, and nothing compared the two claims -- the row
+    asserted both that the paper imposes the condition over it and that its
+    printed statement needs nothing from elsewhere.  Proposition 3.4 was in the
+    same state for a different reason: there the explicit direct rotation makes
+    (3.5) a consequence rather than an assumption.
+
+    Both are now expressible, and neither is expressible by silence: a row that
+    inherits a standing assumption must either be classified nonlocal, or carry
+    a discharge naming registered declarations that prove the inherited
+    condition follows from the result's own hypotheses.
+    """
+    inherited = _standing_scope_atoms(item, source_atoms)
+    if not inherited:
+        return
+    result_id = item["id"]
+    discharge = item.get("standing_assumption_discharge")
+    if not isinstance(discharge, dict):
+        fail(
+            f"{result_id}: inherits standing source scope {inherited} but declares "
+            "local_statement_self_contained=true with no standing_assumption_discharge. "
+            "Either classify it as paper_faithful_nonlocal_source_interpretation with a structured "
+            "record, or register declarations proving the inherited assumption follows from this "
+            "result's own printed hypotheses."
+        )
+    if discharge.get("status") != "accepted":
+        fail(f"{result_id}: standing_assumption_discharge.status must be 'accepted'")
+    covered = discharge.get("atom_ids")
+    if not isinstance(covered, list) or sorted(set(covered)) != sorted(set(inherited)):
+        fail(
+            f"{result_id}: standing_assumption_discharge.atom_ids must be exactly the inherited "
+            f"standing-scope atoms {sorted(set(inherited))}; got {covered!r}"
+        )
+    for field in ("reviewer_issue", "rationale"):
+        value = discharge.get(field)
+        if not isinstance(value, str) or len(value.split()) < 12:
+            fail(
+                f"{result_id}: standing_assumption_discharge.{field} must be a substantive "
+                "reviewer-facing explanation"
+            )
+    proofs = discharge.get("discharged_by")
+    if not isinstance(proofs, list) or not proofs:
+        fail(
+            f"{result_id}: standing_assumption_discharge.discharged_by must name the declarations that "
+            "prove the inherited assumption is implied by this result's hypotheses"
+        )
+    for entry in proofs:
+        if not isinstance(entry, dict):
+            fail(f"{result_id}: standing_assumption_discharge.discharged_by entries must be objects")
+        declaration = entry.get("declaration")
+        if not isinstance(declaration, str) or declaration not in census_declarations:
+            fail(
+                f"{result_id}: standing_assumption_discharge declaration {declaration!r} is not registered "
+                "in the source census, so nothing checks that it exists or says what is claimed"
+            )
+        proves = entry.get("proves")
+        if not isinstance(proves, str) or len(proves.split()) < 8:
+            fail(
+                f"{result_id}: standing_assumption_discharge for {declaration} must state exactly what it "
+                "proves about the inherited assumption"
+            )
+
+
 def _supporting_atom_digest(atom_ids: list[str], source_atoms: dict[str, dict[str, Any]]) -> str:
     """Digest the exact interpretation evidence an accepted reading was built on.
 
@@ -924,6 +1033,7 @@ def _validate_nonlocal_interpretation(
                     f"{result_id}: nonlocal-interpretation alignment requires "
                     "local_statement_self_contained=false"
                 )
+            _check_standing_scope_consistency(item, source_atoms, census_declarations)
             continue
 
         exceptional.append(result_id)
