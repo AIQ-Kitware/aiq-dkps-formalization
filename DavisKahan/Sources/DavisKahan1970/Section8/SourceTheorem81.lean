@@ -189,7 +189,7 @@ theorem theorem8_1_canonicalBranch
   have hQperpperp : (Qᗮ)ᗮ = Q := Submodule.orthogonal_orthogonal Q
   -- The strict quarter-angle branch, via the complementary pair.
   have hquarterPerp : IsQuarterAcute Pᗮ Qᗮ := by
-    refine isQuarterAcute_of_paper_form_gap_infinite A H Pᗮ Qᗮ hA hH hAPperp
+    refine isQuarterAcute_of_orderedFormGap A H Pᗮ Qᗮ hA hH hAPperp
       ?_ (by linarith) hPhigh ?_ ?_ ?_ ?_ ?_
     · intro x hx
       exact hQreduces.2 x hx
@@ -439,7 +439,7 @@ theorem theorem8_1_maximalAngle_le_iff_spectrumIn
       exact hMhigh.2 ⟨hMreduces.2, hr⟩
     have hMperpperp : (Mᗮ)ᗮ = M := Submodule.orthogonal_orthogonal M
     have hquarterPerp : IsQuarterAcute Pᗮ Mᗮ := by
-      refine isQuarterAcute_of_paper_form_gap_infinite A H Pᗮ Mᗮ hA hH hAPperp
+      refine isQuarterAcute_of_orderedFormGap A H Pᗮ Mᗮ hA hH hAPperp
         ?_ (by linarith) hPhigh ?_ hformHigh ?_ ?_ ?_
       · intro x hx
         exact hMreduces.2 x hx

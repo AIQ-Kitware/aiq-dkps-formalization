@@ -45,7 +45,7 @@ theorem and is not this one.
 
 The remaining scope difference from the printed statement is the
 finite-dimensional trial subspace; the selected-branch endpoints
-`sharp_symmetricNormingFunction` and `faithful_tanTwoTheta_uiNorm`
+`sharp_symmetricNormingFunction` and `tanTwoTheta_selectedBranch_symmetricNorming`
 remove that restriction, at the cost of selecting the branch.
 
 ## Representative freedom

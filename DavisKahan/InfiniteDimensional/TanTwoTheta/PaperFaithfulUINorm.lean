@@ -20,7 +20,7 @@ This module now has two deliberately distinct results.
   finite-dimensional Riccati/approximation-number derivation.  The main
   Davis--Kahan tree already proves the finite Section 7 theorem, so this result
   is explicitly a duplicate regression proof rather than the completion target.
-* `faithful_tanTwoTheta_uiNorm` states the unrestricted bounded target used
+* `tanTwoTheta_selectedBranch_symmetricNorming` states the unrestricted bounded target used
   by this package: no finite-dimensional or finite-carrier hypothesis, the
   quarter-acute branch derived from the original form-gap/off-diagonal data,
   and the sharp source-ideal estimate for the canonical ambient
@@ -106,7 +106,7 @@ private theorem isOffDiagonal_of_maps_orthogonal
 
 /-- The finite-dimensional sharp operator-norm theorem gives the strict
 quarter-turn branch from the source hypotheses. -/
-private theorem isQuarterAcute_of_paper_form_gap
+private theorem isQuarterAcute_of_orderedFormGap_finiteDimensional
     [FiniteDimensional ℂ E]
     (A H : E →L[ℂ] E)
     (U V : Submodule ℂ E)
@@ -201,7 +201,7 @@ private theorem ambientUpperRightBlock_eq
 part of the proof: once the strict quarter-acute graph branch is known, the
 Riccati equation, approximation-number Ky Fan estimate, and Fan-dominance
 promotion require no finite-dimensional hypothesis. -/
-private theorem graphCoordinate_paper_bound_of_quarterAcute
+private theorem tanTwoThetaGraphCoordinate_bound_of_quarterAcute
     (N : SymmetricNormingFunction)
     (A H : E →L[ℂ] E)
     (U V : Submodule ℂ E)
@@ -398,10 +398,10 @@ theorem tanTwoTheta_uiNorm_finite_alternate
         (b - a) * N.gauge (tanTwoThetaGraphCoordinateOperator U V hquarter) ≤
           2 * N.gauge H := by
   have hquarter : IsQuarterAcute U V :=
-    isQuarterAcute_of_paper_form_gap A H U V hA hH hAU hAplusH_V hab
+    isQuarterAcute_of_orderedFormGap_finiteDimensional A H U V hA hH hAU hAplusH_V hab
       hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp
   exact ⟨hquarter,
-    graphCoordinate_paper_bound_of_quarterAcute N A H U V hA hH hAU
+    tanTwoThetaGraphCoordinate_bound_of_quarterAcute N A H U V hA hH hAU
       hAplusH_V hab hUhigh hUperpLow hHU hHUperp hHmem hquarter⟩
 
 /-- **Full bounded Davis--Kahan 1970 `tan 2Theta` theorem.**
@@ -409,9 +409,9 @@ theorem tanTwoTheta_uiNorm_finite_alternate
 No finite-dimensional or finite-carrier hypothesis is present.  The theorem
 starts from the two reducing subspaces and the fully off-diagonal perturbation,
 derives the strict quarter-angle branch, and proves the sharp estimate for the
-canonical ambient `directedTanTwoAngleOperatorC` in every source unitary-invariant norm.
+directed `directedTanTwoAngleOperatorC` in every symmetric norming function.
 -/
-theorem faithful_tanTwoTheta_uiNorm
+theorem tanTwoTheta_selectedBranch_symmetricNorming
     (N : SymmetricNormingFunction)
     (A H : E →L[ℂ] E)
     (U V : Submodule ℂ E)
@@ -438,9 +438,9 @@ theorem faithful_tanTwoTheta_uiNorm
         (b - a) * N.gauge (directedTanTwoAngleOperatorC U V hquarter) ≤
           2 * N.gauge H := by
   have hquarter : IsQuarterAcute U V :=
-    isQuarterAcute_of_paper_form_gap_infinite A H U V hA hH hAU hAplusH_V
+    isQuarterAcute_of_orderedFormGap A H U V hA hH hAU hAplusH_V
       hab hUhigh hUperpLow hVhigh hVperpLow hHU hHUperp
-  have hgraph := graphCoordinate_paper_bound_of_quarterAcute
+  have hgraph := tanTwoThetaGraphCoordinate_bound_of_quarterAcute
     N A H U V hA hH hAU hAplusH_V hab hUhigh hUperpLow
       hHU hHUperp hHmem hquarter
   have hseq : SameApproximationSingularSequence

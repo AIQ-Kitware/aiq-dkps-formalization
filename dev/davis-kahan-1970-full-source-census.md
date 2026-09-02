@@ -729,7 +729,7 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 - `TauCeti.DavisKahanExt.tanTwoTheta_offDiagonalC_of_weighted_sine`
 - `TauCeti.DavisKahan.sharp_symmetricNormingFunction`
 - `TauCeti.DavisKahan.sharp_symmetricNormingFunction_selectedBranch`
-- `TauCeti.DavisKahan.faithful_tanTwoTheta_uiNorm_real`
+- `TauCeti.DavisKahan.tanTwoTheta_selectedBranch_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike`
 - `TauCeti.DavisKahanTheory.paired_singularVector_gap_inequality`
 - `TauCeti.DavisKahanTheory.singularValue_ne_one`
@@ -860,27 +860,27 @@ The form bounds the endpoint runs on are read off from the spectral containments
 
 **BLOCKER CLEARED 2026-08-06.**  This row carried `exact-source-wrappers`, but its own `next_action` records that nothing remains for the bounded arbitrary-UI-norm theorem with selected branch -- that is `sharp_symmetricNormingFunction_selectedBranch` -- and that the residue is tracked on S2-unbounded-scope and on the Section 8 rows.  Both are now discharged: S2-unbounded-scope is `compiled_exact` / `proved_in_build` with no blockers, and DK-8.1-thm and DK-8.2-thm are guarded by `lake build`.  So the wrapper blocker on this row pointed at work that has since been done elsewhere, and is removed.
 
-**REAL SCALAR SCOPE CLOSED 2026-08-07 (Claude Opus 5).**  `faithful_tanTwoTheta_uiNorm_real` is the tan 2Theta theorem over a REAL Hilbert space of arbitrary dimension, for every source unitarily-invariant norm, with the sharp constant `b - a`.  Elaborated: `[InnerProductSpace ℝ E] [CompleteSpace E]`, operators `E →L[ℝ] E`, subspaces `Submodule ℝ E`, no `[FiniteDimensional]`.  Quarter-acuteness is CONCLUDED (`∃ hquarter : IsQuarterAcute U V`), not assumed.  Axiom-clean: [propext, Classical.choice, Quot.sound].
+**REAL SCALAR SCOPE CLOSED 2026-08-07 (Claude Opus 5).**  `tanTwoTheta_selectedBranch_symmetricNorming_real` is the tan 2Theta theorem over a REAL Hilbert space of arbitrary dimension, for every source unitarily-invariant norm, with the sharp constant `b - a`.  Elaborated: `[InnerProductSpace ℝ E] [CompleteSpace E]`, operators `E →L[ℝ] E`, subspaces `Submodule ℝ E`, no `[FiniteDimensional]`.  Quarter-acuteness is CONCLUDED (`∃ hquarter : IsQuarterAcute U V`), not assumed.  Axiom-clean: [propext, Classical.choice, Quot.sound].
 
-No perturbation theory was repeated.  The proof complexifies the configuration, applies `faithful_tanTwoTheta_uiNorm` verbatim, and transports back.  Two new reusable layers make that mechanical and are the reason the other real lifts should now be cheap:
+No perturbation theory was repeated.  The proof complexifies the configuration, applies `tanTwoTheta_selectedBranch_symmetricNorming` verbatim, and transports back.  Two new reusable layers make that mechanical and are the reason the other real lifts should now be cheap:
 * `DavisKahan/Sources/DavisKahan1970/SineTheta/Norms/ComplexificationGauge.lean` -- `SymmetricNormingFunction.{approximationPrefix,prefixGauge,extendedGauge}_complexify`, `mem_complexify_iff` and `gauge_complexify`.  `N.gauge (complexify T) = N.gauge T` for EVERY source UI norm at once, because an operator only enters a `SymmetricNormingFunction` through its approximation singular values and `approximationSingularValue_complexify` preserves those exactly.
 * `DavisKahan/SpectralTheory/Complexification/FormTransport.lean` -- `re_inner_complexify` (which is `rfl`), `re_inner_le_of_mem_complexifySubmodule`, `le_re_inner_of_mem_complexifySubmodule`, `mapsTo_complexifySubmodule`, `mapsTo_orthogonal_complexifySubmodule`, `mapsTo_of_mem_orthogonal_complexifySubmodule`.  Form constants are preserved EXACTLY, which matters because these feed ordered-gap hypotheses where a lossy transport would not close the gap.
 
 The conclusion names `directedTanTwoAngleOperatorRC U V`, which is by definition `directedTanTwoAngleOperatorC` of the two complexified subspaces.  That is faithful rather than a workaround: the source bounds a unitarily-invariant norm, such a norm sees only approximation singular values, and those are preserved.  A literally `E →L[ℝ] E`-typed angle operator is extractable via `complexify_realPartOperator` and would have the same singular values, hence the same value under every `N`.
 
-**OVER-CLAIM CORRECTED 2026-08-07 (Claude Opus 5).**  Earlier the same day I upgraded this row to `compiled_exact` on the strength of `faithful_tanTwoTheta_uiNorm_real`.  That was wrong, and the row is restored to `compiled_specialization`.  The real lift is genuine and is retained -- it closes the SCALAR axis -- but it inherits the branch restriction of its complex donor `faithful_tanTwoTheta_uiNorm`, so closing the scalar axis did not close the row.
+**OVER-CLAIM CORRECTED 2026-08-07 (Claude Opus 5).**  Earlier the same day I upgraded this row to `compiled_exact` on the strength of `tanTwoTheta_selectedBranch_symmetricNorming_real`.  That was wrong, and the row is restored to `compiled_specialization`.  The real lift is genuine and is retained -- it closes the SCALAR axis -- but it inherits the branch restriction of its complex donor `tanTwoTheta_selectedBranch_symmetricNorming`, so closing the scalar axis did not close the row.
 
 The paper is explicit that the restriction is a real difference, at the head of Section 8: "The double-angle conclusions also allow angles close to pi/2. ... The explanation is that the double-angle theorems imposed no special choice of the reducing subspace QH of A+H."  `Theta < pi/4` is Theorem 8.1's conclusion, earned from the extra hypothesis that `P` and `Q` are the spectral projectors of `A` and `A + H` for the same interval.  A CLEAN census must not be read as evidence that branch-free tan 2Theta is done.
 
 WHERE THE BRANCH-FREE THEOREM STANDS: `DavisKahan/DoubleAngle/TanTwoThetaKyFan.lean` is close to the printed Section 7 argument, but its graph-coordinate theorem assumes `hT1 : T.singularValues 0 < 1`, i.e. the strict quarter-acute branch, which the printed theorem does not.  The printed proof instead chooses a sign according to `cos 2 theta_j` and derives `2 Re(y_j* B x_j) >= delta * |tan 2 theta_j|`, so the branch-free statement needs an `|tan 2Theta|` representation.  Follow printed equation (7.6); do NOT try to infer the unrestricted theorem from the quarter-acute Riccati API, and do not route it through Theorem 8.1, which selects one particular `Q`.
 
-`faithful_tanTwoTheta_uiNorm_real` and its complex donor are now documented as selected-branch in their module docstrings and in `Sources/DavisKahan1970/TanTwoTheta.lean`, whose 'Audited source scope' section had itself asserted that the source conclusion includes `Theta < pi/4`.  It does not.
+`tanTwoTheta_selectedBranch_symmetricNorming_real` and its complex donor are now documented as selected-branch in their module docstrings and in `Sources/DavisKahan1970/TanTwoTheta.lean`, whose 'Audited source scope' section had itself asserted that the source conclusion includes `Theta < pi/4`.  It does not.
 
 **THE BRANCH-FREE THEOREM IS PROVED 2026-08-07 (Claude Opus 5), at every source unitarily invariant norm, for real and complex scalars, on an arbitrary Hilbert space with a finite-dimensional trial subspace.**  The row stays `compiled_specialization`, and the reason is now a DIFFERENT and much smaller one: only `[FiniteDimensional 𝕜 U]` remains.  The branch axis, which was the conceptual gap, is closed.
 
 The endpoint is `TauCeti.DavisKahan1970.tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike` (`DavisKahan/Sources/DavisKahan1970/TanTwoThetaBranchFree.lean`): `N.Mem H -> N.Mem (tan 2Theta) /\ (b - a) * N.gauge (tan 2Theta) <= 2 * N.gauge H` for an arbitrary `SymmetricNormingFunction`, `[RCLike k]`, `[CompleteSpace E]`, no `[FiniteDimensional k E]`.  Axiom-clean: [propext, Classical.choice, Quot.sound].  Checked at the elaborator, not by grep.
 
-WHAT IS ABSENT FROM ITS HYPOTHESES, and this is the point: no `T.singularValues 0 < 1`, no `IsQuarterAcute`, no `hVhigh`/`hVperpLow` spectral placement on the blocks of `A + H`.  The perturbed subspace is an arbitrary invariant graph over `U` and may make angles arbitrarily close to `pi/2`.  The conclusion does not assert `Theta < pi/4`.  Contrast `faithful_tanTwoTheta_uiNorm`, which assumes the four ordered form bounds -- two of them on `A + H` -- and concludes `IsQuarterAcute`: that is the Theorem 8.1 configuration.
+WHAT IS ABSENT FROM ITS HYPOTHESES, and this is the point: no `T.singularValues 0 < 1`, no `IsQuarterAcute`, no `hVhigh`/`hVperpLow` spectral placement on the blocks of `A + H`.  The perturbed subspace is an arbitrary invariant graph over `U` and may make angles arbitrarily close to `pi/2`.  The conclusion does not assert `Theta < pi/4`.  Contrast `tanTwoTheta_selectedBranch_symmetricNorming`, which assumes the four ordered form bounds -- two of them on `A + H` -- and concludes `IsQuarterAcute`: that is the Theorem 8.1 configuration.
 
 HOW THE BRANCH WAS REMOVED, following printed equation (7.6) rather than the Riccati API:
 
@@ -892,7 +892,7 @@ HOW THE BRANCH WAS REMOVED, following printed equation (7.6) rather than the Ric
 
 WHY THE CONCLUSION IS UP TO A REARRANGEMENT, and why that is not a weakening.  `t -> 2t/|1 - t^2|` increases on `[0,1)` and decreases on `(1,inf)`, so along the antitone graph-coordinate singular values the branch-free tangents are NOT antitone, while approximation numbers always are.  The Ky Fan root is therefore proved for an ARBITRARY finite index set (`sum_absDoubleAngleTangent_le`), which is strictly stronger than a prefix statement, and the representative hypothesis is `approximationSingularValue (pi n) tanTwoTheta = absDoubleAngleTangent (approximationSingularValue n T)` for a rearrangement `pi : N =~ N`.  A unitarily invariant norm sees only the multiset of singular values; this is the paper's own `tan 2Theta_0` representative freedom.
 
-REAL SCALARS CAME FREE.  The whole chain is `[RCLike k]`-generic, so unlike `faithful_tanTwoTheta_uiNorm_real` no complexification transport was needed at this scope.
+REAL SCALARS CAME FREE.  The whole chain is `[RCLike k]`-generic, so unlike `tanTwoTheta_selectedBranch_symmetricNorming_real` no complexification transport was needed at this scope.
 
 ONE COMPRESSION, NOT TWO.  `kyFan_doubleAngleTangent_offDiagonal_le_of_finiteDimensional_invariantSubspace` is now DERIVED from the branch-free carrier theorem (`absDoubleAngleTangent = doubleAngleTangent` on the acute quarter, plus a trivial no-gap case), so the finite-carrier compression proof exists once.
 
@@ -992,9 +992,9 @@ ENDPOINTS.
 SCOPE.  Arbitrary complete COMPLEX Hilbert space, `[U.HasOrthogonalProjection]`,
 NO `[FiniteDimensional]` on `E` or on `U`, no compactness.  `IsQuarterAcute U V`
 is CONCLUDED from the paper's four ordered form bounds via
-`isQuarterAcute_of_paper_form_gap_infinite`, not assumed.  Real scalars are not
+`isQuarterAcute_of_orderedFormGap`, not assumed.  Real scalars are not
 covered on the ambient half; the complexification transport used for
-`faithful_tanTwoTheta_uiNorm_real` should apply unchanged but was not run.
+`tanTwoTheta_selectedBranch_symmetricNorming_real` should apply unchanged but was not run.
 
 **THE PRINTED RESIDUAL FORM OF THE DIRECTED HALF IS PROVED TOO, AND THE AMBIENT
 HALF REQUIRES IT.  THIS CORRECTS THE 2026-08-08 NOTE ABOVE.**
