@@ -4,13 +4,13 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1167
+**Unique cited Lean declarations:** 1170
 
 ## How to use this census
 
-Independent statement audit and Lean-evidence registry. `prose/distilled_literature/DavisKahan1970_part_III.tex` is the checked-in distributable source-order mathematical specification. Its `DK-CERT` passages are independently worded, source-faithful reconstructions; `dev/davis-kahan-1970-statement-map.json` hashes those passages and binds the 49 organizational rows to Lean evidence. `scripts/check_davis_kahan_1970_statement_map.py` validates that checked-in relationship without any private transcription, and `scripts/certify_davis_kahan_1970.py --clean` adds compiler-printed declaration types. A private transcription or lawful copy of the paper may be used separately to re-audit the distillation itself, but is not a repository-check dependency.
+Independent statement audit and Lean-evidence registry. `prose/distilled_literature/DavisKahan1970_part_III.tex` is the checked-in distributable source-order mathematical specification. Its `DK-CERT` passages are independently worded, source-faithful reconstructions; `dev/davis-kahan-1970-statement-map.json` hashes those passages and binds the 50 organizational rows to Lean evidence. `scripts/check_davis_kahan_1970_statement_map.py` validates that checked-in relationship without any private transcription, and `scripts/certify_davis_kahan_1970.py --clean` adds compiler-printed declaration types. A private transcription or lawful copy of the paper may be used separately to re-audit the distillation itself, but is not a repository-check dependency.
 
-The 49 row statuses and completion_certification fields below are retained as legacy diagnostic triage from the broader hostile audit; they DO NOT define the 100% denominator. The exhaustive disclosure surface is `dev/davis-kahan-1970-source-atom-inventory.json` (266 atoms, including all 64 numbered equations). Every atom has a specific boundary reason and reverse link to counted results. The sole completion denominator is `dev/davis-kahan-1970-formalization-result-inventory.json`: exactly 29 results Davis--Kahan actually establish (four Section 2 headline theorems plus every named theorem/proposition/lemma/corollary in Sections 3--8). Each result has an accepted printed-statement boundary review.
+The 50 row statuses and completion_certification fields below are retained as legacy diagnostic triage from the broader hostile audit; they DO NOT define the 100% denominator. The exhaustive disclosure surface is `dev/davis-kahan-1970-source-atom-inventory.json` (275 atoms, including all 64 numbered equations). Every atom has a specific boundary reason and reverse link to counted results. The sole completion denominator is `dev/davis-kahan-1970-formalization-result-inventory.json`: exactly 29 results Davis--Kahan actually establish (four Section 2 headline theorems plus every named theorem/proposition/lemma/corollary in Sections 3--8). Each result has an accepted printed-statement boundary review.
 
 For the 100% claim, only those 29 result entries matter. A true result must have exact source-facing Lean evidence at full printed scope, `proved_in_build`, and hostile semantic acceptance. A false counted result requires exact formal refutation plus the repository best-effort repair disposition. Definitions, proof equations, examples, Section 9 worked calculations, historical/external claims, Section 10 questions, and explicitly unresolved/deferred assertions remain visible source-fidelity material but are not additional proof obligations. Question 10.4 is therefore fidelity-only despite the established identities in its motivating discussion. Use `scripts/check_davis_kahan_1970_result_inventory.py` for the maintained denominator and boundary accounting; use `--require-terminal` on the statement-map checker for the final hard 29-result gate.
 
@@ -257,6 +257,8 @@ THREE NEW REUSABLE DECLARATIONS underwrite it, each grounding the next by `:=`, 
 - `TauCeti.DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_ofComponents_rclike`
 - `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_complex_ofRCLike_conforms`
 - `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_real_ofRCLike_conforms`
+- `DavisKahan1970.isTrialResidual_iff`
+- `DavisKahan1970.isExactSpectralDecomposition_iff`
 
 **Curated source/Lean review:**
 
@@ -2936,6 +2938,7 @@ REOPENING WITHDRAWN 2026-08-31 and the rule corrected: a later source passage en
 
 **Lean declarations:**
 
+- `TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute`
 - `TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted`
 - `TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite`
 - `TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite`

@@ -129,5 +129,40 @@ theorem halmosSourceDefect_ne_bot_of_not_isAcute
   exact hnonacute (TauCeti.isAcute_iff_inf_orthogonal_eq_bot.mpr
     ⟨hbot, (halmosSourceDefect_eq_bot_iff_halmosTargetDefect_eq_bot U V hdefect).mp hbot⟩)
 
+omit [CompleteSpace H] in
+/-- **An acute pair satisfies the crossed-dimension condition (3.5).**
+
+Acuteness says exactly that neither crossed intersection contains a nonzero
+vector: a vector of `U` killed by `P_V` must be zero, and symmetrically.  Both
+`halmosSourceDefect` and `halmosTargetDefect` are therefore trivial, and the
+identification (3.5) asks for is the one between two zero spaces.
+
+This is the discharge Section 4 needs for the Proposition 4.4 counterexample.
+That counterexample is acute by construction, so it satisfies the section's
+standing setup rather than escaping it -- which is what makes it a refutation of
+the printed proposition rather than of a statement the paper never made. -/
+theorem crossedDefectsEquivalent_of_isAcute
+    (U V : Submodule 𝕜 H) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+    (h : TauCeti.IsAcute U V) :
+    CrossedDefectsEquivalent U V := by
+  have hzero : ∀ (W : Submodule 𝕜 H) [W.HasOrthogonalProjection] (x : H),
+      x ∈ Wᗮ → W.starProjection x = 0 := by
+    intro W _ x hx
+    refine Submodule.eq_starProjection_of_mem_of_inner_eq_zero W.zero_mem ?_
+    intro w hw
+    simpa [inner_eq_zero_symm] using (Submodule.mem_orthogonal W x).mp hx w hw
+  have hs : halmosSourceDefect U V = ⊥ := by
+    refine (Submodule.eq_bot_iff _).2 ?_
+    rintro x ⟨hxU, hxV⟩
+    exact h.1 x hxU (hzero V x hxV)
+  have ht : halmosTargetDefect U V = ⊥ := by
+    refine (Submodule.eq_bot_iff _).2 ?_
+    rintro y ⟨hyU, hyV⟩
+    exact h.2 y hyV (hzero U y hyU)
+  refine ⟨?_⟩
+  rw [hs, ht]
+  exact LinearIsometryEquiv.refl 𝕜 _
+
+
 end DavisKahan
 end TauCeti

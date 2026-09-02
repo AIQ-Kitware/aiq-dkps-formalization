@@ -14,8 +14,8 @@ build of the exact-paper modules and require only Lean's standard foundational
 dependencies in every result.
 -/
 
-#print axioms TauCeti.DavisKahan1970.unitaryInvariantNorm_equiv_symmetricNormingFunction
-#print axioms TauCeti.DavisKahan1970.unitaryInvariantNorm_nonempty
+#print axioms TauCeti.DavisKahan1970.symmetricNormingFunction_equiv_axiomatic
+#print axioms TauCeti.DavisKahan1970.sourceNormClass_nonempty
 #print axioms TauCeti.DavisKahan1970.directedCosAngle_eq_modulus
 #print axioms TauCeti.DavisKahan1970.directedSinAngle_eq_modulus
 #print axioms TauCeti.DavisKahan1970.directedSinAngle_singularValues

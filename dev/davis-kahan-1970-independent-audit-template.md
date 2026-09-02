@@ -19,7 +19,7 @@ Each counted result carries a **source-alignment classification**, and the three
 
 Category 2 is never a softened category 3. If a reviewer concludes that a category 2 result is actually false as printed, that is a FAIL and the repository is asking to be told.
 
-Current result-level status: **29/29 terminal**, **0 awaiting semantic closure**.
+Current result-level status: **27/29 terminal**, **2 awaiting semantic closure**.
 Result-selection/boundary review: **accepted** under policy `dk_established_results_only`.
 
 A hostile reviewer should challenge both layers independently: (1) whether the fidelity inventory omitted source material or misclassified an exclusion, and (2) whether each of the 29 counted result statements is represented exactly in Lean.
@@ -125,6 +125,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_complex` — specialization
 - `DavisKahan1970.sinTheta_unbounded_intervalExterior_symmetricNorming_real` — specialization
 - `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike` — generalization
+- `DavisKahan1970.isTrialResidual_iff` — source_correspondence
+- `DavisKahan1970.isExactSpectralDecomposition_iff` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -203,6 +205,18 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `DavisKahan1970.sinTheta_unbounded_formGap_symmetricNorming_rclike`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:297`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `DavisKahan1970.isTrialResidual_iff`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:129`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `DavisKahan1970.isExactSpectralDecomposition_iff`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/SineTheta/PaperSurface.lean:168`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
@@ -1321,7 +1335,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Section 2, tan 2 theta theorem
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `accepted`
+- **Hostile semantic certification:** `hostile_review_blocked`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -1377,8 +1391,8 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 | clause | scalar | witness | status |
 | --- | --- | --- | --- |
-| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` | **PASS** |
-| `directed.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` | **PASS** |
+| `directed.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` | **OPEN** |
+| `directed.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` | **OPEN** |
 | `ambient.complex` | complex | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex` | **PASS** |
 | `ambient.real` | real | `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real` | **PASS** |
 
@@ -1386,9 +1400,13 @@ One row per printed source clause per scalar field.  A clause is `PASS` only whe
 
 *Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
 
+*OPEN — what is missing:* The correspondence from `reflectionTangentCorner` to the paper's tan 2Theta_0 object is not registered and does not exist; see open obligation `tan2theta-directed-correspondence`.
+
 **`directed.real`.** (b - a) * N(tan 2Theta_0) <= 2 N(R) over real, unbounded self-adjoint ambient operator, arbitrary SymmetricNormingFunction.  Both sides are the paper's own block spelling: `reflectionTangentCorner U Z` is the U -> U-perp corner of the reflection tangent, which is the source's `J_0 tan 2Theta_0`, and `paperBlockCompression U-perp U B` is the off-diagonal residual `R = P_(U-perp) B P_U`.  The source compares the corner with the angle through the same partial isometry J_0 and observes that a unitarily invariant norm cannot tell them apart. THAT PROSE IS NOT SUFFICIENT under this repository's correspondence contract, which requires registered machine-checkable evidence whenever the equivalence is not apparent from the canonical theorem's type. HOSTILE REVIEW 2026-09-02: this correspondence is NOT yet sufficient, and the three audit layers were telling three different stories. `approximationNumber_reflectionTangentCorner` gives the corner's singular values in closed form, and `extendedGauge_unboundedReflectionTangent_{complex,real}` gives the FULL reflection tangent the same gauge as the paper object; the missing link is between the corner and the paper object, and it does not exist. Tracked as open obligation `tan2theta-directed-correspondence`; until it closes this clause must not be read as having registered correspondence evidence.
 
 *Gap scope:* The printed double-tangent gap is ordered. The primary takes bare form bounds `re <A x, x> <= a |x|^2` on the selected spectral range and `b |x|^2 <= re <A x, x>` on its complement with `a < b`; neither bound confines a spectrum to a finite interval, so both separating regions are half-infinite.
+
+*OPEN — what is missing:* The correspondence from `reflectionTangentCorner` to the paper's tan 2Theta_0 object is not registered and does not exist; see open obligation `tan2theta-directed-correspondence`.
 
 **`ambient.complex`.** (b - a) * N(|tan 2Theta|) <= 2 N(B) on the ambient branch-free paperAbsTanTwoAngleOperatorC, unbounded self-adjoint ambient operator, arbitrary SymmetricNormingFunction.
 
@@ -1404,10 +1422,8 @@ Result-wide scope every clause must carry: `S2-sin-theta.ui-norm-scope`, `S2-tan
 
 The declarations that carry this result's printed statement, with the source atoms each one covers.  Everything under *Other registered declarations* below accompanies the result without establishing it.
 
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
-- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.directed-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
-- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ambient-conclusion`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex` — primary_source_witness, complex scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ambient-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
+- `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real` — primary_source_witness, real scalars, proof; covers `S2-sin-theta.ui-norm-scope`, `S2-tan-two-theta.ambient-conclusion`, `S2-tan-two-theta.no-extra-pole-hypothesis`, `S2-tan-two-theta.ordered-gap-hypothesis`, `S2-tan-two-theta.strong-offdiagonal-hypothesis`, `S2-unbounded-scope.arbitrary-ui-scope`, `S2-unbounded-scope.bounded-residual-needed`, `S2-unbounded-scope.half-infinite-gap-intervals`, `S2-unbounded-scope.infinite-dimensional-scope`, `S2-unbounded-scope.unbounded-selfadjoint-scope`
 
 ### Other registered declarations
 
@@ -1440,6 +1456,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR` — supporting_theorem
 - `TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR` — supporting_theorem
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real` — presentation_wrapper
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` — alternative_route
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` — alternative_route
 
 ### Source-facing Lean declarations
 
@@ -1751,7 +1769,7 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 - **Exact source anchor:** Proposition 3.2
 - **Result disposition:** `proved_exact`
 - **Compiler verification:** `proved_in_build`
-- **Hostile semantic certification:** `accepted`
+- **Hostile semantic certification:** `reviewer_decision_open`
 - **Boundary review:** `accepted`
 - **Source alignment:** `locally_exact`
 - **Printed statement locally self-contained:** `True`
@@ -3548,8 +3566,15 @@ The declarations that carry this result's printed statement, with the source ato
 
 - `TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite` — supporting_theorem
 - `TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted` — supporting_theorem
+- `TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute` — standing_assumption_discharge
 
 ### Source-facing Lean declarations
+
+#### `TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute`
+
+Source location candidates: `DavisKahan/Geometry/Halmos/CrossedDefectGap.lean:144`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite`
 
@@ -5780,8 +5805,8 @@ Every source atom remains visible here even when it is outside the 29-result den
 
 - **All 275 source-fidelity atoms reviewed for omission/classification:** yes / no
 - **All 29 counted DK-established results reviewed against their exact printed boundaries:** yes / no
-- **29 currently terminal results independently reconfirmed:** yes / no
-- **0 currently nonterminal/pending results resolved by this audit:** yes / no
+- **27 currently terminal results independently reconfirmed:** yes / no
+- **2 currently nonterminal/pending results resolved by this audit:** yes / no
 - **Any excluded fidelity atom that actually belongs to a counted result statement:** yes / no
 - **Any Davis--Kahan-established named/headline result missing from the 29-result inventory:** yes / no
 - **Any non-established/open/deferred material incorrectly included in the denominator:** yes / no

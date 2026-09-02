@@ -398,6 +398,7 @@ Status: **TERMINAL REFUTED + REPAIR**.
 
 #check @TauCeti.DavisKahanTheory.DavisKahanProposition4_4_Finite
 #check @TauCeti.DavisKahanTheory.not_davisKahanProposition4_4_Finite
+#check @TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute
 #check @TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted
 #check @TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm
 
@@ -554,4 +555,5 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_sinTwoTheta_residual_source_real_symmetricNorming
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_maximalAngle_lt_of_crossedDefects
 #check @TauCeti.DavisKahan1970.Section8.theorem8_2_branch_source_real_maximalAngle_lt_of_crossedDefects
-
+#check @DavisKahan1970.isTrialResidual_iff
+#check @DavisKahan1970.isExactSpectralDecomposition_iff
