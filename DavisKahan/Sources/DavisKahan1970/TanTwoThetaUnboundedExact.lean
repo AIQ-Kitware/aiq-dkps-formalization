@@ -92,7 +92,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b)
-    (hRmem : N.Mem (paperBlockCompression
+    (hRmem : N.Mem (blockCompression
       (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
       (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)) :
     IsUnit
@@ -102,7 +102,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ∧
       (b - a) * N.gauge (reflectionTangentCorner
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ≤
-        2 * N.gauge (paperBlockCompression
+        2 * N.gauge (blockCompression
           (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
           (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B) := by
   let U : Submodule ℂ G :=

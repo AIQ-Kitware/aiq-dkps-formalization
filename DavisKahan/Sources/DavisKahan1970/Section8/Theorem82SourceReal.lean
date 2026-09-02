@@ -546,7 +546,7 @@ carrying the printed gap on `Q` and with `A` — which `P` reduces by hypothesis
 as the comparison operator, so that the displacement is `-K`.
 
 The conclusion names the paper's literal `sin 2Θ`, the real positive operator
-`paperSinTwoAngleOperatorR Q P`, rather than the modulus-free
+`sinTwoAngleOperatorR Q P`, rather than the modulus-free
 `sinTwoAngleOperator` of the operator-norm statement: only the former carries the
 whole singular-value list that a general unitarily invariant norm reads. -/
 theorem theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming
@@ -558,8 +558,8 @@ theorem theorem8_2_sinTwoTheta_perturbation_source_real_symmetricNorming
     (hQperp : Foundation.SpectrumIn (A + K) Qᗮ (gapExterior beta alpha delta))
     (hPred : A.Reduces P)
     (hKmem : N.Mem K) :
-    N.Mem (paperSinTwoAngleOperatorR Q P) ∧
-      delta * N.gauge (paperSinTwoAngleOperatorR Q P) ≤ 2 * N.gauge K := by
+    N.Mem (sinTwoAngleOperatorR Q P) ∧
+      delta * N.gauge (sinTwoAngleOperatorR Q P) ≤ 2 * N.gauge K := by
   have hAsa : IsSelfAdjoint A :=
     ContinuousLinearMap.isSelfAdjoint_iff_isSymmetric.mpr hA
   have hKsa : IsSelfAdjoint K :=

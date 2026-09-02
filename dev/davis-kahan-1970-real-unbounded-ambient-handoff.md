@@ -77,8 +77,8 @@ theorem tanTheta_ambient_unboundedOperator_boundedRitz_paperUINorm_real
     (h35 : DavisKahan.Frontier.CrossedDefectsEquivalent U V)
     (hResidual : D.residual = Uᗮ.starProjection ∘L H ∘L U.subtypeL)
     (hMem : N.Mem H) :
-    N.Mem (paperTanAngleOperatorR U V) ∧
-      delta * N.gauge (paperTanAngleOperatorR U V) ≤ N.gauge H
+    N.Mem (tanAngleOperatorR U V) ∧
+      delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge H
 ```
 
 Note (superseded 2026-08-28): this paragraph named a `DKClosedOperator` abbreviation for
@@ -90,7 +90,7 @@ docstring says so.
 
 **Hostile signature check before promoting.** Reject the theorem if its elaborated type
 gained any of: `FiniteDimensional`, compactness, a caller-supplied
-`‖paperSinAngleOperatorR U V‖ < 1`, acuteness, a stronger spectral gap, a complexified
+`‖sinAngleOperatorR U V‖ < 1`, acuteness, a stronger spectral gap, a complexified
 residual or perturbation, an operator-norm-only specialization, a scalar-fixed
 `KyFanDominantIdealFamily` in place of `PaperUnitaryInvariantNorm`, a domain hypothesis
 absent from the real unbounded directed setup, or a factor above one.
@@ -116,7 +116,7 @@ real unbounded A
   → real transversality from real directed no-pole data + (3.5)
   → complexify ONLY the bounded trial data and bounded H
   → reuse the existing complex bounded ambient assembly
-  → descend paperTanAngleOperatorR and the PaperUI gauge to ℝ
+  → descend tanAngleOperatorR and the PaperUI gauge to ℝ
 ```
 
 Do not build a second theory of complexifying unbounded closed operators.
@@ -141,7 +141,7 @@ Every entry below was resolved in the tree at `5bfa2624`.
 | `norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent` | `Sources/DavisKahan1970/DirectedReal.lean:659` |
 | `approximationSingularValue_sineBlockReal_lt_one_infiniteData` | `Sources/DavisKahan1970/DirectedUnboundedReal.lean:269` |
 | `theorem63DirectedSineBlockReal` | `Sources/DavisKahan1970/DirectedReal.lean:54` |
-| `paperTanAngleOperatorR` | `Geometry/Angle/PaperOperatorAngleReal.lean:127` |
+| `tanAngleOperatorR` | `Geometry/Angle/PaperOperatorAngleReal.lean:127` |
 | `crossed_lower_of_reducing` | `TanTheta/Theorem63UnboundedCompression.lean:178` |
 | `Theorem63TrialData.ofUnbounded` (real use sites) | `Sources/DavisKahan1970/DirectedUnboundedReal.lean:385,410` |
 
@@ -166,7 +166,7 @@ Every entry below was resolved in the tree at `5bfa2624`.
 1. **Real data-level theorem, kept public.** Prove
    `tanTheta_ambient_unboundedOperator_boundedRitzData_paperUINorm_real`, taking
    `data : Theorem63TrialData U V`, real form bounds, `h35`, the residual identity, and
-   `N.Mem H`, concluding on `paperTanAngleOperatorR U V`. It is the real counterpart of the
+   `N.Mem H`, concluding on `tanAngleOperatorR U V`. It is the real counterpart of the
    complex `..._of_data` and makes the final wrapper trivial.
 2. **Real transversality, derived natively.** A private helper
    `norm_paperSinAngleOperatorR_lt_one_of_data_crossedDefects` following the proof shape of
@@ -189,7 +189,7 @@ Every entry below was resolved in the tree at `5bfa2624`.
    stop — that means the work has dropped below the intended abstraction.
 7. **Apply `tanTheta_ambient_bounded_paperUINorm_complex_of_lowerCorner`** over `RealComplexification E`.
 8. **Descend** with `complexify_paperTanAngleOperatorR`, `mem_complexify_iff`, and
-   `gauge_complexify`. The final statement must be about `paperTanAngleOperatorR U V` and
+   `gauge_complexify`. The final statement must be about `tanAngleOperatorR U V` and
    `H : E →L[ℝ] E`, never left on `RealComplexification E`.
 9. **Wrapper**: mirror the complex exact theorem, with
    `Theorem63TrialData.ofUnbounded D V` and `crossed_lower_of_reducing (𝕜 := ℝ)`.
@@ -200,7 +200,7 @@ Every entry below was resolved in the tree at `5bfa2624`.
 2. real data-level no-pole does not give ambient transversality under (3.5);
 3. the real residual block cannot reach the complexified projection block with its
    approximation-singular data intact;
-4. `paperTanAngleOperatorR` does not descend exactly from the complex ambient tangent;
+4. `tanAngleOperatorR` does not descend exactly from the complex ambient tangent;
 5. PaperUI membership or gauge is not preserved by real complexification;
 6. the real unbounded hypotheses cannot produce the same `Theorem63TrialData` form bounds.
 

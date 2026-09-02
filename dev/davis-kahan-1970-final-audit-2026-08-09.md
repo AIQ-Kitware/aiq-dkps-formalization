@@ -41,7 +41,7 @@ Verified by elaboration and by reading the definitions:
 `tanTwoAngleOperatorC U V h := sinTwoAngleOperatorC U V ∘L (cos 2Θ + P_{Uᗮ})⁻¹`, and
 `sinTwoAngleOperatorC U V := 2 • (sinAngleOperatorDirectedC U V * cosAngleOperatorC U V)` with
 `sinAngleOperatorDirectedC U V := |P_{Vᗮ} P_U|` — range inside `U` (the repo's own compiled
-`range_sinTwoAngleOperatorC_le`). `paperTanTwoThetaRepresentative : U →L[ℂ] Uᗮ` and
+`range_sinTwoAngleOperatorC_le`). `tanTwoThetaGraphCoordinateOperator : U →L[ℂ] Uᗮ` and
 `doubleAngleTangentOperator : E0 →L[ℂ] E1` are rectangular, i.e. `Θ₀`-shaped. The branch-free
 endpoints `tanTwoTheta_branchFree_bounded_paperUINorm_complex` / `_real` state the representative
 condition as `approximationSingularValue (π n) tanTwoTheta = absDoubleAngleTangent
@@ -59,10 +59,10 @@ half proved yesterday (`tanTheta_ambient_bounded_paperUINorm_complex_of_transver
 whole-space estimate follows by Lemma 6.1" — and `lemma6_1`, `lemma6_1_converse` and `lemma6_2` are
 all compiled and EXACT.
 
-**Actionable:** define `paperTanTwoAngleOperatorC := cfc (fun t => Real.tan (2*t)) (paperAngleOperatorC U V)`
+**Actionable:** define `paperTanTwoAngleOperatorC := cfc (fun t => Real.tan (2*t)) (angleOperatorC U V)`
 (or its branch-free modulus `cfc (|tan(2·)|)`), prove the block-representative modulus identity in the
-style of `paperTanAngleOperatorC_eq_modulus_blockRepresentative` /
-`paperTanBlockRepresentative`, and pinch against `H` with `lemma6_1` + `paperDiagonalPair_all_kyFan_le`.
+style of `tanAngleOperatorC_eq_modulus_blockRepresentative` /
+`tanBlockRepresentative`, and pinch against `H` with `lemma6_1` + `diagonalPair_all_kyFan_le`.
 That is exactly the route `TanThetaWholeSpace.lean` used yesterday.
 
 Census row **`S2-tan-two-theta`** is `compiled_exact` with `next_action`: *"No mathematical gap and
@@ -86,7 +86,7 @@ Standing assumption 1 of the transcription (L202) is "real or complex". Measured
 | family | real endpoint? |
 |---|---|
 | `sin θ` (§2, Prop 6.1, Thm 6.1, Thm 6.2, appendix common-domain forms) | **YES** — `sinTheta_paperData_real`, `Theorem6_1_real`, `Theorem6_2_real`, `Proposition6_1_real`, `Theorem6_{1,2}_real_common{Domain,Core}`, all `[InnerProductSpace ℝ]`, no `[FiniteDimensional]` |
-| `tan 2θ` | **YES** — `tanTwoTheta_branchFree_bounded_paperUINorm_real`, `paperFaithful_tanTwoTheta_uiNorm_real` |
+| `tan 2θ` | **YES** — `tanTwoTheta_branchFree_bounded_paperUINorm_real`, `faithful_tanTwoTheta_uiNorm_real` |
 | `tan θ`, both halves | **NO** — `ℂ` only. `Theorem6_3` is `[RCLike]` but `[FiniteDimensional 𝕜 E] [FiniteDimensional 𝕜 F]`; no infinite-dimensional real tan θ declaration exists at all |
 | `sin 2θ`, both halves | **NO** — `ℂ` only |
 | Theorem 5.1, 5.2, (5.1), Lemma 5.1 | **YES / more general** (`NontriviallyNormedField`, `RCLike`, plus explicit `…_real` twins) |
@@ -161,7 +161,7 @@ Both rows are `compiled_general_infrastructure` blocked by `exact-source-wrapper
 | Ky Fan's theorem, "all UI norms ⟺ all `ν`-norms" (L646) | `…ExactSinTheta.PaperUnitaryInvariantNorm.prefixGauge_le_of_all_kyFan_le_hetero` (⇐), `…all_mul_kyFan_le_of_every_paperNorm_gauge_le` (⇒) | EXACT for the paper's use |
 | (1.13) `‖K‖_ν ≥ Re Σ y_k*Kx_k` | `…re_sum_inner_map_le_kyFanApproximationGauge` | EXACT (direction used) |
 | "arbitrary unitarily invariant norm" | `PaperUnitaryInvariantNorm` (normalized, zero-pad-coherent family of finite UI seminorms — von Neumann's symmetric gauge, with Fan dominance *proved*); `KyFanDominantIdealFamily` (Gohberg–Krein symmetrically normed ideal, with Fan dominance *assumed as a field*) | Both faithful; see §5 caveat |
-| `‖P − Q‖ = ‖sin Θ‖`, all norms (L697) | `paperSinAngleOperatorC_eq : cfc sin (arcsin \|P_U−P_V\|) = \|P_U−P_V\|` | EXACT (operator identity) |
+| `‖P − Q‖ = ‖sin Θ‖`, all norms (L697) | `sinAngleOperatorC_eq : cfc sin (arcsin \|P_U−P_V\|) = \|P_U−P_V\|` | EXACT (operator identity) |
 | `‖Q̃P‖ = ‖Q̃E₀‖ = ‖sin Θ₀‖`, all norms | `sinAngleOperatorDirectedC U V := \|P_{Vᗮ}P_U\|` | EXACT by definition |
 | `sup{‖Qp−p‖ : p unit ∈ PH} = ‖sin Θ‖₁` (L695) | — | ABSENT |
 | `sup inf ‖q−p‖ = 2‖sin ½Θ‖₁` (L696) | — | ABSENT (no half-angle machinery anywhere) |
@@ -203,7 +203,7 @@ Other Section 2 claims:
 
 | Source | Lean | Verdict |
 |---|---|---|
-| Def 3.1 | `Frontier.IsPaperDirectRotation`, `DavisKahanTheory.directRotation` | NARROWER: clause (i) `C_j ≥ 0` rendered as numerical-range accretivity `0 ≤ re⟪x,PTPx⟫`, strictly weaker over ℂ (module docstring concedes it); RCLike form is `[FiniteDimensional]` |
+| Def 3.1 | `Frontier.IsDirectRotation`, `DavisKahanTheory.directRotation` | NARROWER: clause (i) `C_j ≥ 0` rendered as numerical-range accretivity `0 ≤ re⟪x,PTPx⟫`, strictly weaker over ℂ (module docstring concedes it); RCLike form is `[FiniteDimensional]` |
 | Def 3.2 | `DavisKahan.IsAcute := subspaceGap < 1` | **NARROWER — headline (D)** |
 | Prop 3.1 existence / uniqueness | `complex_directRotation`, `complex_directRotation_unique` | EXACT modulo Def 3.2 |
 | Prop 3.1 "characterized by (i) alone" | — | **ABSENT**: both compiled characterizations put (ii) or (3.8) on the left of the iff |
@@ -255,7 +255,7 @@ infinite-dimensional aliases exist and are build-guarded, so the mitigation is r
 | Thm 5.1 with the paper's literal contraction-compatibility | `Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester` (`CompatibleCrossOperatorNorm`) | **EXACT** (ℂ), axiom-clean, default build |
 | Remark: `A`/`B` roles interchangeable (L1607) | — | ABSENT (one-line `symm` companion) |
 | Remark: Thm 5.1 encompasses unbounded densely-defined `A` (L1648) | — | **ABSENT** — both Lean forms take `A` bounded. This is a printed claim, not a "left to the reader" |
-| (5.1) Hermitian / HS norm / distance-only separation | `…ExactSinTheta.paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap` + real companion | **EXACT / more general** — and **not listed on any census row** |
+| (5.1) Hermitian / HS norm / distance-only separation | `…ExactSinTheta.hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap` + real companion | **EXACT / more general** — and **not listed on any census row** |
 | (5.2) `‖C‖₁√(rank C) ≥ δ‖X‖₁` | — | ABSENT (nearest brick is a `√dim`, not `√rank`, bound) |
 | The 2×2 counterexample showing constant 1 too small | — | ABSENT |
 | Thm 5.2 (semibounded self-adjoint, both possibly unbounded, every UI norm) | `Theorem5_2`; real: `davisKahan1970_sylvester_real`, `real_unbounded_sylvester_kyFan` | **EXACT** over ℝ *and* ℂ; `FormBoundedSylvesterGap.leftAboveRightBelow` **is** the printed `A ≥ γ+δ > γ ≥ B` |
@@ -267,13 +267,13 @@ infinite-dimensional aliases exist and are build-guarded, so the mitigation is r
 |---|---|---|
 | Lemma 6.1, and its converse | `lemma6_1`, `lemma6_1_converse` | **EXACT**, in fact more general; the equisingularity hypothesis is genuinely present |
 | Lemma 6.2 | `lemma6_2` | EXACT |
-| (6.1) | `PaperSymmetricSinThetaProblem.forward_all_kyFan` / `.reverse_all_kyFan` | EXACT |
+| (6.1) | `SymmetricSinThetaProblem.forward_all_kyFan` / `.reverse_all_kyFan` | EXACT |
 | `sin θ` proof/conclusion | `sinTheta`, `sinTheta_paperData_real` | EXACT |
-| 2×2 counterexample to `δ‖sinΘ‖ ≤ ‖H‖` (L1815) | `paperOneGap_does_not_imply_symmetric_square_estimate` + the two norm computations | NARROWER: the arithmetic (`√3 < 2·1`) is certified, but `paperCounterexampleA` (`diag(0,1)`) is **defined and never used** — nothing verifies `spec(A₀)={0}`, `spec(Λ₁)={2}`, or that the subspaces are the claimed eigenspaces. The numbers are proved; the hypotheses that make it a counterexample are not |
+| 2×2 counterexample to `δ‖sinΘ‖ ≤ ‖H‖` (L1815) | `oneGap_does_not_imply_symmetric_square_estimate` + the two norm computations | NARROWER: the arithmetic (`√3 < 2·1`) is certified, but `counterexampleA` (`diag(0,1)`) is **defined and never used** — nothing verifies `spec(A₀)={0}`, `spec(Λ₁)={2}`, or that the subspaces are the claimed eigenspaces. The numbers are proved; the hypotheses that make it a counterexample are not |
 | Prop 6.1 | `Proposition6_1_complex`, `Proposition6_1_real` | **EXACT**, genuinely ambient (`\|P_U−P_V\|`), both gap directions as separate fields, no `[FiniteDimensional]` |
 | Thm 6.1 | `Theorem6_1_complex`, `Theorem6_1_real` | **EXACT** (`E₀` non-isometric via `LowerFrameBound`, no dimension hypothesis, arbitrary same-singular-value representative, arbitrary UI norm) |
 | Thm 6.2 | `Theorem6_2_complex`, `Theorem6_2_real` | EXACT |
-| Thm 6.2's rank variant `δε‖sinΘ₀‖₁ ≤ ‖R‖₁√(rank R)` | `PaperTheorem62Data.operatorNorm_result_across_of_rank_le` + real twin | EXACT — **not listed on `DK-6.2-thm`** |
+| Thm 6.2's rank variant `δε‖sinΘ₀‖₁ ≤ ‖R‖₁√(rank R)` | `Theorem62Data.operatorNorm_result_across_of_rank_le` + real twin | EXACT — **not listed on `DK-6.2-thm`** |
 | (6.2)–(6.5) direct-rotation block form | — | ABSENT as such, deliberately (the Lean tan θ proofs avoid direct-rotation coordinates) |
 | (6.6) | `theorem63ResidualWitness_scalar` | EXACT |
 | `tan θ` directed | `theorem6_3_generalizedTanTheta_equalRank_spectral`, `theorem6_3_all_kyFan_core` | EXACT (acuteness **derived**, `isTransverse_of_tanThetaIntervalGap`) |
@@ -283,7 +283,7 @@ infinite-dimensional aliases exist and are build-guarded, so the mitigation is r
 | Thm 6.3 at arbitrary trial dimension | `theorem6_3_infiniteTrial_of_formBounds`, `theorem6_3_infiniteTrial_spectral_exists` | **YES** — and it drops `rank Z < rank V` entirely, so the `[FiniteDimensional ℂ ↥Z]` elsewhere is not a real limitation |
 | Appendix: sin θ with infinite interval `(−∞,α]` | `FormBoundedSylvesterGap` constructors feeding `Theorem6_1_complex`/`6_2` | EXACT |
 | Appendix: bounded continuous extension of `R` on a common dense domain | `Theorem6_{1,2}_common{Domain,Core}` + all four real twins | EXACT |
-| Appendix: relaxation of Prop 6.1 | — | **ABSENT** (`PaperSymmetricSinThetaProblem` requires `A B : E →L[ℂ] E`) |
+| Appendix: relaxation of Prop 6.1 | — | **ABSENT** (`SymmetricSinThetaProblem` requires `A B : E →L[ℂ] E`) |
 | Lemma 6.3 | `lemma6_3_approximationNumber_leakage_complex`, `lemma6_3_singularValue_leakage_complex` | EXACT (more general) |
 | Appendix: full unbounded + noncompact tan θ, (6.7)–(6.11), Γ/Υ truncation | `theorem6_3_unbounded_infiniteTrial_ideal_of_reducing` etc. | **NARROWER — the substantive §6 gap.** The *noncompact* half is done. The *unbounded `A₀`* half is assumed away: `UnboundedTrialBlock.operator : Z →L[ℂ] Z` and `Theorem63TrialData.compression : Z →L[ℂ] Z` are **bounded fields**, so the paper's `Ω(τ)A₀Ω(τ)` truncation — the whole reason (6.10) exists — is not reproduced. Unboundedness is permitted only in the ambient `A`/`Λ₁`. The module doc admits it |
 | Closing claim "same method applies Thm 6.3 to unbounded operators" (L2259) | same | NARROWER, same reason; and the rank/dimension side is absent from the unbounded form |
@@ -397,9 +397,9 @@ genuinely gone.
 9. **Section 5, inequality (5.2)** and its 2×2 counterexample; and **Theorem 5.1's unbounded-`A`
    claim** (L1648–1649), which the paper states as covered by its own statement and proof.
 10. **Section 6, Example 6.1** (one-sidedness of `Λ₁` essential) and the **missing spectral
-    certificates for the §6 sin θ counterexample** (`paperCounterexampleA` is dead code).
+    certificates for the §6 sin θ counterexample** (`counterexampleA` is dead code).
 11. **Section 6 Appendix, unbounded Proposition 6.1** (the appendix explicitly relaxes it;
-    `PaperSymmetricSinThetaProblem` is bounded-only).
+    `SymmetricSinThetaProblem` is bounded-only).
 12. **Section 8, Theorem 8.2's inherited `sin 2θ` conclusion at every UI norm**, restated at 8.2's own
     hypotheses (currently operator norm only).
 13. **Section 8, Theorem 8.2's `Θ < π/4` without `[FiniteDimensional]`** — see the census disagreement
@@ -501,12 +501,12 @@ Where census prose disagrees with what elaborates, **the build wins**.
     `tsum_…_of_mem` forms have no `[FiniteDimensional]`; only the real-scalar half is open.
 13. **`DK-5.1-thm`** — declaration list omits `Frontier.RemainingSourceSurface.theorem5_1_banach_sylvester`,
     the version carrying the paper's *literal* compatibility axiom. Separately, **no row anywhere claims
-    inequality (5.1)**, yet `paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap` and its real
+    inequality (5.1)**, yet `hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap` and its real
     companion prove it — the census under-claims.
 14. **`DK-5.2-thm`** — still lists `blocked_by: ["real-scalar-infinite-dimensional-scope"]`, which
     contradicts its own removed `scope_gap`; the real endpoint `davisKahan1970_sylvester_real` exists.
 15. **`DK-6.2-thm`** — omits the printed rank variant, which *is* compiled
-    (`PaperTheorem62Data.operatorNorm_result_across_of_rank_le` + real twin).
+    (`Theorem62Data.operatorNorm_result_across_of_rank_le` + real twin).
 16. **`DK-6.3-thm`** — omits `TauCeti.DavisKahan1970.Theorem6_3`, the literal source surface, which is
     `[RCLike]`; the `real-scalar-infinite-dimensional-scope` blocker is therefore only half true (the
     real gap is infinite-dimensional only).

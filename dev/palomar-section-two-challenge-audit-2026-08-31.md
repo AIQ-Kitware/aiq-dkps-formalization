@@ -67,7 +67,7 @@ Lean core + Mathlib + upstream Tau Ceti + compact Challenge-local definitions?**
 | unitarily invariant norm | `PaperUnitaryInvariantNorm` | **no** | **no** | **yes**, ~40 lines as an ideal gauge with the two-sided bound and normalization |
 | `sin Θ` over `ℂ` | `paperSinAngleOperatorC` | statable: `cfc` on `E →L[ℂ] E` is available | — | yes, ~15 lines |
 | `tan Θ`, `sin 2Θ`, `|tan 2Θ|` over `ℂ` | `paperTanAngleOperatorC`, … | statable, same way | — | yes, ~45 lines |
-| the same four angles over `ℝ` | `paperTanAngleOperatorR`, … | **no** | **no** | **no — see below** |
+| the same four angles over `ℝ` | `tanAngleOperatorR`, … | **no** | **no** | **no — see below** |
 | Ritz pair, reducing complement, condition (3.5) | `UnboundedRitzPair`, `ReducingComplement`, `CrossedDefectsEquivalent` | no | no | yes, ~40 lines |
 | reflection intertwiner, odd-for, diagonal part | `ReflectionIntertwines`, `IsOddFor`, `Submodule.diagonalPart` | no | no | yes, ~35 lines |
 

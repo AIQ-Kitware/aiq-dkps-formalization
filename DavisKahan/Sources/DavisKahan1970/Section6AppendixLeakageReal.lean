@@ -24,7 +24,7 @@ else has to be redone:
 
 * real complexification preserves the whole approximation singular-value
   sequence, hence the square energy exactly
-  (`paperHilbertSchmidtEnergy_complexify`);
+  (`hilbertSchmidtEnergy_complexify`);
 * the orthogonal projection onto a complexified real subspace is the
   complexification of the real orthogonal projection
   (`starProjection_complexifySubmodule`);
@@ -74,10 +74,10 @@ theorem complexify_one_sub_starProjection
 
 /-- **The real Pythagorean splitting of the rectangular square energy.**
 
-The real form of `paperHilbertSchmidtEnergy_domain_projection_add_complex`, obtained by
+The real form of `hilbertSchmidtEnergy_domain_projection_add_complex`, obtained by
 reading the complex splitting at the complexified operator and the complexified
 subspace.  No complex object survives in the statement. -/
-theorem paperHilbertSchmidtEnergy_domain_projection_add_real
+theorem hilbertSchmidtEnergy_domain_projection_add_real
     (L : E →L[ℝ] F)
     (P : Submodule ℝ E) [P.HasOrthogonalProjection]
     -- carried for source fidelity, exactly as in the complex form
@@ -87,7 +87,7 @@ theorem paperHilbertSchmidtEnergy_domain_projection_add_real
       paperHilbertSchmidtEnergy
         (L ∘L (1 - P.starProjection)) := by
   have hc :=
-    paperHilbertSchmidtEnergy_domain_projection_add_complex (complexify L)
+    hilbertSchmidtEnergy_domain_projection_add_complex (complexify L)
       (complexifySubmodule P) ((isPaperHilbertSchmidt_complexify_iff L).2 hfinite)
   have h1 :
       complexify L ∘L (complexifySubmodule P).starProjection =
@@ -97,9 +97,9 @@ theorem paperHilbertSchmidtEnergy_domain_projection_add_real
       complexify L ∘L (1 - (complexifySubmodule P).starProjection) =
         complexify (L ∘L (1 - P.starProjection)) := by
     rw [complexify_comp, complexify_one_sub_starProjection]
-  rw [h1, h2, paperHilbertSchmidtEnergy_complexify,
-    paperHilbertSchmidtEnergy_complexify,
-    paperHilbertSchmidtEnergy_complexify] at hc
+  rw [h1, h2, hilbertSchmidtEnergy_complexify,
+    hilbertSchmidtEnergy_complexify,
+    hilbertSchmidtEnergy_complexify] at hc
   exact hc
 
 /-- **Davis--Kahan 1970, Lemma 6.3, over a real Hilbert space of arbitrary
@@ -124,7 +124,7 @@ theorem lemma6_3_approximationNumber_leakage_real
     ‖Q.starProjection ∘L K ∘L (1 - P.starProjection)‖ < η := by
   refine lemma6_3_approximationNumber_leakage_of_energySplit
     K P Q n hn η hη hKP hrankQ ?_ hnear
-  refine paperHilbertSchmidtEnergy_domain_projection_add_real
+  refine hilbertSchmidtEnergy_domain_projection_add_real
     (Q.starProjection ∘L K) P ?_
   exact isPaperHilbertSchmidt_of_rank_le
     ((rank_starProjection_comp_le K Q).trans hrankQ)

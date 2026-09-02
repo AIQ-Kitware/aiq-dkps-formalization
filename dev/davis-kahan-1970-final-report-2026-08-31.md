@@ -28,10 +28,10 @@ class, no implementation-only hypothesis.
 ### Proof route
 
 The ambient double angle is an ambient **single** angle.
-`paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub` identifies
+`sinTwoAngleOperatorC_eq_modulus_starProjection_sub` identifies
 `sin 2Θ(U, V)` with `|P_{J U} − P_U|`, where `J` is the reflection through `V`,
 so the theorem to apply is Proposition 6.1 on a common dense domain — which
-already existed as `PaperCommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm`
+already existed as `CommonDomainSymmetricSinThetaProblem.result_every_unitarilyInvariantNorm`
 and `proposition6_1_commonDomain_source_projectorDifference`.  The reflected
 operator `J A J` shares `dom A`, because `V` reduces `A + H` and `H` is bounded,
 so `P_V` and hence `J` preserve `dom A`.
@@ -61,7 +61,7 @@ transport is in `DavisKahan/Sylvester/Gap.lean`.
 `reflectionPerturbation_paperMem_and_gauge_le` (new) gives membership and the
 factor two at an arbitrary source norm, by Fan dominance from the ideal-family
 result.  Over `ℝ`, `sameSingular_paperSinTwoAngleOperatorR_reflectedProjectorDifference`
-identifies `paperSinTwoAngleOperatorR U V` with the reflected projector
+identifies `sinTwoAngleOperatorR U V` with the reflected projector
 difference through the complexification, so the real endpoint is the
 scalar-generic reflected-pair theorem at `ℝ`, not a complexification of the
 complex endpoint; complexification enters only to *name* the real angle.
@@ -109,7 +109,7 @@ Full record: `dev/davis-kahan-1970-result-semantic-review-2026-08-31.md`.
 | --- | --- |
 | `S2-tan-theta` | unchanged.  Registration repair in the previous pass, not this one; both clauses at both fields, accepted under its documented nonlocal reading. |
 | `S2-sin-two-theta` | **mathematical repair.**  Both ambient clauses were open at a bounded ambient theorem; both are now proved at the printed scope.  `SectionTwo.sinTwoTheta_ambient_complex`/`_real` bind the aliases deliberately withheld until a theorem existed. |
-| `S2-tan-two-theta` | unchanged; verified.  Its directed conclusion is in the paper's own block spelling — `reflectionTangentCorner` is `J₀ tan 2Θ₀`, `paperBlockCompression Uᗮ U B` is `R` — now said so in the clause justification. |
+| `S2-tan-two-theta` | unchanged; verified.  Its directed conclusion is in the paper's own block spelling — `reflectionTangentCorner` is `J₀ tan 2Θ₀`, `blockCompression Uᗮ U B` is `R` — now said so in the clause justification. |
 | `DK-4.2-prop` | unchanged; the previous pass's scalar promotion holds and was re-checked. |
 | `DK-8.2-thm` | unchanged; four clauses over both fields, verified against the printed statement. |
 

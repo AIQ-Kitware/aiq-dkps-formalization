@@ -63,7 +63,7 @@ Three parameters occur and the order in which they are released is load bearing.
   Fan-dominant unitarily invariant ideal gauge.
 
 Both Ky Fan pairings are charged to the **typed** directed residual corner
-`reflectionResidualCorner U B = paperBlockCompression Uᗮ U B`, through
+`reflectionResidualCorner U B = blockCompression Uᗮ U B`, through
 `sum_le_kyFanApproximationGauge_reflectionResidualCorner_of_contraction`.  That
 keeps tangent and residual in one space pair, which is what the Fan-dominance
 bridge needs, and it is also what pins the sharp constant: the two pairings are
@@ -94,7 +94,7 @@ variable {H : Type u} [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 /-- An orthogonally complemented subspace of a complete space is complete.  The
 instance is `local` in every module that declares it, so it does not propagate
 through imports and has to be reinstalled here; without it the adjoints inside
-`paperBlockCompression` do not elaborate. -/
+`blockCompression` do not elaborate. -/
 local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramMiddle
     (W : Submodule ℂ H) [W.HasOrthogonalProjection] : CompleteSpace W :=
   (Submodule.isComplete_coe_of_hasOrthogonalProjection W).completeSpace_coe
@@ -414,7 +414,7 @@ local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramMiddleGeneric
 /-- The directed residual corner `R₀ : U → Uᗮ`, the companion of
 `reflectionSineCorner` and `reflectionTangentCorner`. -/
 abbrev reflectionResidualCorner (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
-    (B : G →L[𝕜] G) : U →L[𝕜] Uᗮ := paperBlockCompression Uᗮ U B
+    (B : G →L[𝕜] G) : U →L[𝕜] Uᗮ := blockCompression Uᗮ U B
 
 end ScalarGenericResidualCorner
 
@@ -445,7 +445,7 @@ theorem norm_sum_smul_coe {W : Submodule ℂ H} [W.HasOrthogonalProjection]
 
 `sum_le_kyFanApproximationGauge_of_contraction` for an ambient operator `K`, two
 ambient contraction systems lying in `Uᗮ` and `U` respectively, and the *typed*
-gauge of `paperBlockCompression Uᗮ U K`.  Charging to the corner rather than to
+gauge of `blockCompression Uᗮ U K`.  Charging to the corner rather than to
 the ambient operator is what keeps the endpoint inside a single space pair, so
 that the Fan-dominance bridge applies. -/
 theorem sum_le_kyFanApproximationGauge_reflectionResidualCorner_of_contraction

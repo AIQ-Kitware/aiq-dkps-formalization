@@ -82,9 +82,9 @@ private theorem reflectedDefectBlocks_same
     {S : E →L[𝕜] E} (hS : IsSelfAdjoint S) (U V : Submodule 𝕜 E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     SameApproximationSingularValues
-      (paperProjectionBlock (U.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E))ᗮ U
+      (projectionBlock (U.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E))ᗮ U
         (reflectionDefect V S))
-      (paperProjectionBlock
+      (projectionBlock
         ((U.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E))ᗮ)ᗮ Uᗮ
         (reflectionDefect V S)) := by
   set W := U.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E) with hW
@@ -99,21 +99,21 @@ private theorem reflectedDefectBlocks_same
       V.reflectionOperator ∘L Uᗮ.starProjection ∘L V.reflectionOperator := by
     rw [← Submodule.starProjection_congr hperp]
     exact starProjection_map_reflectionOperator Uᗮ V
-  have hB₀adj : (paperProjectionBlock Wᗮ U D).adjoint =
+  have hB₀adj : (projectionBlock Wᗮ U D).adjoint =
       U.starProjection ∘L D ∘L Wᗮ.starProjection := by
-    rw [paperProjectionBlock, ContinuousLinearMap.adjoint_comp,
+    rw [projectionBlock, ContinuousLinearMap.adjoint_comp,
       ContinuousLinearMap.adjoint_comp,
       (isSelfAdjoint_starProjection Wᗮ).adjoint_eq,
       hDsa.adjoint_eq, (isSelfAdjoint_starProjection U).adjoint_eq]
     rfl
   have hanti : V.reflectionOperator ∘L D = -(D ∘L V.reflectionOperator) :=
     reflectionOperator_comp_reflectionDefect V S
-  have hblock : paperProjectionBlock Wᗮᗮ Uᗮ D =
-      -(V.reflectionOperator ∘L (paperProjectionBlock Wᗮ U D).adjoint ∘L
+  have hblock : projectionBlock Wᗮᗮ Uᗮ D =
+      -(V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint ∘L
         V.reflectionOperator) := by
     have hWW : Wᗮᗮ.starProjection = W.starProjection :=
       Submodule.starProjection_congr (Submodule.orthogonal_orthogonal W)
-    rw [hB₀adj, paperProjectionBlock, hWW, hWproj, hWperpProj]
+    rw [hB₀adj, projectionBlock, hWW, hWproj, hWperpProj]
     ext x
     simp only [ContinuousLinearMap.comp_apply, neg_apply]
     rw [reflectionOperator_apply_apply V x]
@@ -125,17 +125,17 @@ private theorem reflectedDefectBlocks_same
   intro n
   rw [hblock, ContinuousLinearMap.approximationNumber_neg]
   have hright := sameApproximationSingularValues_comp_reflection_right V
-    (V.reflectionOperator ∘L (paperProjectionBlock Wᗮ U D).adjoint)
+    (V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint)
   have hleft := sameApproximationSingularValues_comp_reflection_left V
-    (paperProjectionBlock Wᗮ U D).adjoint
+    (projectionBlock Wᗮ U D).adjoint
   calc
-    (paperProjectionBlock Wᗮ U D).approximationNumber n =
-        (paperProjectionBlock Wᗮ U D).adjoint.approximationNumber n :=
+    (projectionBlock Wᗮ U D).approximationNumber n =
+        (projectionBlock Wᗮ U D).adjoint.approximationNumber n :=
       (ContinuousLinearMap.approximationNumber_adjoint _ n).symm
     _ = (V.reflectionOperator ∘L
-          (paperProjectionBlock Wᗮ U D).adjoint).approximationNumber n :=
+          (projectionBlock Wᗮ U D).adjoint).approximationNumber n :=
       (hleft n).symm
-    _ = (V.reflectionOperator ∘L (paperProjectionBlock Wᗮ U D).adjoint ∘L
+    _ = (V.reflectionOperator ∘L (projectionBlock Wᗮ U D).adjoint ∘L
           V.reflectionOperator).approximationNumber n :=
       (hright n).symm
 
@@ -146,28 +146,28 @@ private theorem offDiagonalBlocks_same
     {S : E →L[𝕜] E} (hS : IsSelfAdjoint S) (V : Submodule 𝕜 E)
     [V.HasOrthogonalProjection] :
     SameApproximationSingularValues
-      (paperProjectionBlock Vᗮ V S)
-      (paperProjectionBlock Vᗮᗮ Vᗮ S) := by
-  have hadj : (paperProjectionBlock Vᗮ V S).adjoint =
-      paperProjectionBlock V Vᗮ S := by
-    rw [paperProjectionBlock, paperProjectionBlock,
+      (projectionBlock Vᗮ V S)
+      (projectionBlock Vᗮᗮ Vᗮ S) := by
+  have hadj : (projectionBlock Vᗮ V S).adjoint =
+      projectionBlock V Vᗮ S := by
+    rw [projectionBlock, projectionBlock,
       ContinuousLinearMap.adjoint_comp, ContinuousLinearMap.adjoint_comp,
       (isSelfAdjoint_starProjection Vᗮ).adjoint_eq, hS.adjoint_eq,
       (isSelfAdjoint_starProjection V).adjoint_eq]
     rfl
-  have hperpBlock : paperProjectionBlock Vᗮᗮ Vᗮ S =
-      paperProjectionBlock V Vᗮ S := by
+  have hperpBlock : projectionBlock Vᗮᗮ Vᗮ S =
+      projectionBlock V Vᗮ S := by
     have hp : Vᗮᗮ.starProjection = V.starProjection :=
       Submodule.starProjection_congr (Submodule.orthogonal_orthogonal V)
-    unfold paperProjectionBlock
+    unfold projectionBlock
     rw [hp]
   intro n
   calc
-    (paperProjectionBlock Vᗮ V S).approximationNumber n =
-        (paperProjectionBlock Vᗮ V S).adjoint.approximationNumber n :=
+    (projectionBlock Vᗮ V S).approximationNumber n =
+        (projectionBlock Vᗮ V S).adjoint.approximationNumber n :=
       (ContinuousLinearMap.approximationNumber_adjoint _ n).symm
-    _ = (paperProjectionBlock V Vᗮ S).approximationNumber n := by rw [hadj]
-    _ = (paperProjectionBlock Vᗮᗮ Vᗮ S).approximationNumber n := by
+    _ = (projectionBlock V Vᗮ S).approximationNumber n := by rw [hadj]
+    _ = (projectionBlock Vᗮᗮ Vᗮ S).approximationNumber n := by
       rw [hperpBlock]
 
 /-- **The sharp factor two for a reflection defect, at every Ky Fan gauge.**
@@ -191,23 +191,23 @@ theorem kyFan_reflectionDefectBlock_le_two_mul
     Submodule.map_orthogonal_equiv U V.reflection
   have hstart :
       (Uᗮ.map (V.reflection.toLinearEquiv : E →ₗ[𝕜] E)).starProjection ∘L D ∘L
-          U.starProjection = paperProjectionBlock Wᗮ U D := by
-    unfold paperProjectionBlock
+          U.starProjection = projectionBlock Wᗮ U D := by
+    unfold projectionBlock
     rw [Submodule.starProjection_congr hperp]
   rw [hstart]
-  have hpairD := paperDiagonalPair_even_kyFan_eq_two_mul_of_same Wᗮ U D
+  have hpairD := diagonalPair_even_kyFan_eq_two_mul_of_same Wᗮ U D
     (reflectedDefectBlocks_same hS U V) k
-  have hpinchD := paperDiagonalPair_all_kyFan_le Wᗮ U D (2 * k)
-  have hpairA := paperDiagonalPair_even_kyFan_eq_two_mul_of_same Vᗮ V S
+  have hpinchD := diagonalPair_all_kyFan_le Wᗮ U D (2 * k)
+  have hpairA := diagonalPair_even_kyFan_eq_two_mul_of_same Vᗮ V S
     (offDiagonalBlocks_same hS V) k
-  have hpairAdef : paperDiagonalPair Vᗮ V S =
+  have hpairAdef : diagonalPair Vᗮ V S =
       Vᗮ.starProjection ∘L S ∘L V.starProjection +
         V.starProjection ∘L S ∘L Vᗮ.starProjection := by
     have hp : Vᗮᗮ.starProjection = V.starProjection :=
       Submodule.starProjection_congr (Submodule.orthogonal_orthogonal V)
-    unfold paperDiagonalPair
+    unfold diagonalPair
     rw [hp]
-  have hoffdiag : D = (-2 : 𝕜) • paperDiagonalPair Vᗮ V S := by
+  have hoffdiag : D = (-2 : 𝕜) • diagonalPair Vᗮ V S := by
     rw [hD, reflectionDefect_eq_neg_two_smul_offdiag, hpairAdef]
   have hDgauge : kyFanApproximationGauge (2 * k) D =
       4 * kyFanApproximationGauge k
@@ -217,7 +217,7 @@ theorem kyFan_reflectionDefectBlock_le_two_mul
       rw [norm_neg]
       simp
     rw [hnorm, hpairA]
-    simp only [paperProjectionBlock]
+    simp only [projectionBlock]
     ring_nf
   rw [hpairD] at hpinchD
   rw [hDgauge] at hpinchD

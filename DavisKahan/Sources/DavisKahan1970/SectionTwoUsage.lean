@@ -33,7 +33,7 @@ What the four ask for, in the vocabulary of the subject:
   is a statement, not a side condition;
 * **the angle** in the conclusion is a paper object:
   `(I - F₀F₀⋆) E₀` for `sin Θ`, `paperTanAngleOperatorC` for `tan Θ`,
-  `sinTwoAngleOperatorC` for `sin 2Θ`, `paperAbsTanTwoAngleOperatorC` for
+  `sinTwoAngleOperatorC` for `sin 2Θ`, `absTanTwoAngleOperatorC` for
   `tan 2Θ`.
 
 Structural facts are carried by objects with constructors, so they never become
@@ -305,9 +305,9 @@ theorem tanTwoTheta_from_reducingSubspace
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : E)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : E)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
-    N.Mem (paperAbsTanTwoAngleOperatorC
+    N.Mem (absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
-      (b - a) * N.gauge (paperAbsTanTwoAngleOperatorC
+      (b - a) * N.gauge (absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B :=
   SectionTwo.tanTwoTheta_complex N V hA hBsa hB

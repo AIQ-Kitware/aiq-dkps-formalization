@@ -11,7 +11,7 @@ import DavisKahan.BoundedOperator.TrialResidual
 Section 1 is almost all notation: the isometries `E₀, E₁` and `F₀, F₁` of (1.1), the block
 representations (1.2)--(1.3), the unitaries `V` of (1.4)--(1.7).  Those are definitions, and
 they are carried in this repository by the data records the theorems consume
-(`UnboundedSinThetaData`, `PaperTheorem61Data`), whose fields *are* the trial map, the
+(`UnboundedSinThetaData`, `Theorem61Data`), whose fields *are* the trial map, the
 compression and the residual.
 
 Section 1 does make three claims, and this file gives them the paper's numbering:

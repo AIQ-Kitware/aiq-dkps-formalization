@@ -119,7 +119,7 @@ theorem is about the special case `Z = V.reflectionOperator`; and the same
 complex theorem was registered as the witness for the REAL clause, whose primary
 is over a real Hilbert space. Closing it means source-shaped directed endpoints
 that take an actual reducing subspace and conclude on the paper objects —
-`paperTanTwoDirectedCornerR U V` on the real side — made canonical, with the
+`tanTwoDirectedCornerR U V` on the real side — made canonical, with the
 arbitrary-`Z` theorems retained as supporting generalizations.
 
 This section lists exactly the results the machine state reports as

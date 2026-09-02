@@ -75,7 +75,7 @@ first.
 
 *Definitional.*  The objects the three conclusions name exist only as fixed-field
 pairs: `...C` is defined natively and `...R` by transport --
-`paperTanAngleOperatorR U V = realPartOperator (paperTanAngleOperatorC
+`tanAngleOperatorR U V = realPartOperator (paperTanAngleOperatorC
 (complexifySubmodule U) (complexifySubmodule V))`, and likewise for `sin 2Θ`,
 `tan 2Θ` and `|tan 2Θ|`.  There is no `paperTanAngleOperator` over `𝕜`, so a
 scalar-generic statement cannot presently be *written*.
@@ -283,7 +283,7 @@ alias tanTheta_complex := tanTheta_ambient_unboundedRitz_symmetricNorming_comple
 Its directed partner is `tanTheta_directed_real`.
 
 The real sibling of `tanTheta_ambient_complex`, on the real ambient tangent
-`paperTanAngleOperatorR U V`.  Space, operator, subspaces, perturbation, angle and
+`tanAngleOperatorR U V`.  Space, operator, subspaces, perturbation, angle and
 gauge are all real; only the Appendix Ky Fan passage is proved by
 complexification, at the level where approximation numbers are preserved
 exactly. -/
@@ -503,12 +503,12 @@ theorem sinTwoTheta_source_real
               2 * N.gauge R) ∧
       (∀ (Eop : Er →L[ℝ] Er) (hEop : IsSelfAdjointOperator Eop)
         (S : Set ℝ) (hS : MeasurableSet S), N.Mem Eop →
-          N.Mem (paperSinTwoAngleOperatorR
+          N.Mem (sinTwoAngleOperatorR
               (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)
               (RealSpectralRestriction.realSelfAdjointSpectralSubspace
                 (TauCeti.LinearPMap.addBounded A Eop)
                 (addBounded_isSelfAdjoint A hA Eop hEop) S hS)) ∧
-            δ * N.gauge (paperSinTwoAngleOperatorR
+            δ * N.gauge (sinTwoAngleOperatorR
                 (RealSpectralRestriction.realSelfAdjointSpectralSubspace A hA B hB)
                 (RealSpectralRestriction.realSelfAdjointSpectralSubspace
                   (TauCeti.LinearPMap.addBounded A Eop)

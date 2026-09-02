@@ -34,7 +34,7 @@ universe v
 
 /-- Pairwise spectral distance gives the squared Hilbert--Schmidt energy
 inequality, including the case of infinite defect energy. -/
-theorem paperHilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap
+theorem hilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -49,14 +49,14 @@ theorem paperHilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap
       paperHilbertSchmidtEnergy C := by
   by_cases hC : IsPaperHilbertSchmidt C
   · have hmain :=
-      paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
+      hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
         hA hB hδ hgap hEq hC
     have hsq :
         (δ * paperHilbertSchmidtNorm X) ^ 2 ≤
           paperHilbertSchmidtNorm C ^ 2 :=
       (sq_le_sq₀
-        (mul_nonneg hδ.le (paperHilbertSchmidtNorm_nonneg X))
-        (paperHilbertSchmidtNorm_nonneg C)).2 hmain.2
+        (mul_nonneg hδ.le (hilbertSchmidtNorm_nonneg X))
+        (hilbertSchmidtNorm_nonneg C)).2 hmain.2
     have hreal :
         (ENNReal.ofReal (δ ^ 2) * paperHilbertSchmidtEnergy X).toReal ≤
           (paperHilbertSchmidtEnergy C).toReal := by
@@ -74,7 +74,7 @@ theorem paperHilbertSchmidtEnergy_sylvester_le_of_pairwiseSpectrumGap
     exact le_top
 
 /-- **Davis--Kahan inequality (5.1), closed-operator square-norm form.** -/
-theorem paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap
+theorem hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℂ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℂ F] [CompleteSpace F]
@@ -88,11 +88,11 @@ theorem paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap
     (hC : IsPaperHilbertSchmidt C) :
     IsPaperHilbertSchmidt X ∧
       δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C :=
-  paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
+  hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
     hA hB hδ hgap hEq hC
 
 /-- Real closed-operator form, obtained by exact complexification. -/
-theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap
+theorem hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap
     {E F : Type v}
     [NormedAddCommGroup E] [InnerProductSpace ℝ E] [CompleteSpace E]
     [NormedAddCommGroup F] [InnerProductSpace ℝ F] [CompleteSpace F]
@@ -107,7 +107,7 @@ theorem paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap
     (hC : IsPaperHilbertSchmidt C) :
     IsPaperHilbertSchmidt X ∧
       δ * paperHilbertSchmidtNorm X ≤ paperHilbertSchmidtNorm C :=
-  paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
+  hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     hA hB hδ hgap hEq hC
 
 end

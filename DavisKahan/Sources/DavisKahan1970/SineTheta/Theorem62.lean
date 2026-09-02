@@ -39,7 +39,7 @@ variable {E F G H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
 /-- Exact inputs of Davis--Kahan Theorem 6.2. -/
-structure PaperTheorem62Data where
+structure Theorem62Data where
   data : UnboundedSinThetaData (𝕜 := ℂ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℂ] E
   ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
@@ -53,12 +53,12 @@ structure PaperTheorem62Data where
   lowerFrame : LowerFrameBound data.X frameLowerBound
   spectral_distance : PairwiseSpectrumGap data.A₀ data.Λ₁ gap
 
-namespace PaperTheorem62Data
+namespace Theorem62Data
 
 /-- The normalized complementary block whose singular values are the paper's
 `sin Theta_0`. -/
 noncomputable def canonicalSinTheta
-    (P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
+    (P : Theorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℂ] F :=
   sinThetaBlockOfPolarData
     (lowerFramePolarData P.data.X P.lowerFrame P.frameLowerBound_pos)
@@ -66,19 +66,19 @@ noncomputable def canonicalSinTheta
 
 /-- The raw Sylvester unknown `E_0^* F_1`. -/
 def rawOverlap
-    (P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
+    (P : Theorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℂ] F :=
   P.data.X.adjoint ∘L P.data.F₁
 
 /-- The projected residual in the adjoint Sylvester equation. -/
 def projectedResidual
-    (P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
+    (P : Theorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℂ] F :=
   -(P.data.residual.adjoint ∘L P.data.F₁)
 
 /-- The projected residual is Hilbert--Schmidt whenever the full residual is. -/
 theorem projectedResidual_isPaperHilbertSchmidt
-    (P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H))
+    (P : Theorem62Data (E := E) (F := F) (G := G) (H := H))
     (hR : IsPaperHilbertSchmidt P.data.residual) :
     IsPaperHilbertSchmidt P.projectedResidual := by
   have hRadj : IsPaperHilbertSchmidt P.data.residual.adjoint :=
@@ -93,7 +93,7 @@ theorem projectedResidual_isPaperHilbertSchmidt
 /-- Projection onto the complementary exact block cannot enlarge the square
 norm of the residual. -/
 theorem projectedResidual_norm_le
-    (P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H))
+    (P : Theorem62Data (E := E) (F := F) (G := G) (H := H))
     (hR : IsPaperHilbertSchmidt P.data.residual) :
     paperHilbertSchmidtNorm P.projectedResidual ≤
       paperHilbertSchmidtNorm P.data.residual := by
@@ -110,28 +110,28 @@ theorem projectedResidual_norm_le
           (ContinuousLinearMap.id ℂ F ∘L P.data.residual.adjoint ∘L
             P.data.F₁) := by simp
     _ ≤ paperHilbertSchmidtNorm P.data.residual.adjoint :=
-      paperHilbertSchmidtNorm_comp_isometries_le
+      hilbertSchmidtNorm_comp_isometries_le
         (ContinuousLinearMap.id ℂ F) hRadj P.data.F₁
         ContinuousLinearMap.norm_id_le hF₁
     _ = paperHilbertSchmidtNorm P.data.residual :=
-      paperHilbertSchmidtNorm_adjoint P.data.residual
+      hilbertSchmidtNorm_adjoint P.data.residual
 
 /-- The weaker spectral hypothesis gives the raw square-norm estimate. -/
 theorem rawOverlap_bound
-    (P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H))
+    (P : Theorem62Data (E := E) (F := F) (G := G) (H := H))
     (hR : IsPaperHilbertSchmidt P.data.residual) :
     IsPaperHilbertSchmidt P.rawOverlap ∧
       P.gap * paperHilbertSchmidtNorm P.rawOverlap ≤
         paperHilbertSchmidtNorm P.projectedResidual := by
   have hEq := unbounded_adjoint_residual_block_identity P.data
     P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
-  exact paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
+  exact hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap_direct
     P.trial_selfAdjoint P.complement_selfAdjoint P.gap_pos
     P.spectral_distance hEq (P.projectedResidual_isPaperHilbertSchmidt hR)
 
 /-- Whitening introduces exactly the source factor `epsilon^(-1)`. -/
 theorem canonicalSinTheta_frame_bound
-    (P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H))
+    (P : Theorem62Data (E := E) (F := F) (G := G) (H := H))
     (hraw : IsPaperHilbertSchmidt P.rawOverlap) :
     IsPaperHilbertSchmidt P.canonicalSinTheta ∧
       P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta ≤
@@ -150,12 +150,12 @@ theorem canonicalSinTheta_frame_bound
     simpa using Q.invSqrt_norm_le
   have hcomp : paperHilbertSchmidtNorm P.canonicalSinTheta ≤
       ‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap := by
-    have h := paperHilbertSchmidtNorm_comp_le
+    have h := hilbertSchmidtNorm_comp_le
       Q.invSqrt.adjoint hraw (ContinuousLinearMap.id ℂ G)
     rw [ContinuousLinearMap.comp_id] at h
     rw [hblock]
     exact h.trans (mul_le_of_le_one_right
-      (mul_nonneg (norm_nonneg _) (paperHilbertSchmidtNorm_nonneg _))
+      (mul_nonneg (norm_nonneg _) (hilbertSchmidtNorm_nonneg _))
       ContinuousLinearMap.norm_id_le)
   refine ⟨hmem, ?_⟩
   calc
@@ -168,15 +168,15 @@ theorem canonicalSinTheta_frame_bound
             paperHilbertSchmidtNorm P.rawOverlap) :=
       mul_le_mul_of_nonneg_left
         (mul_le_mul_of_nonneg_right hnorm
-          (paperHilbertSchmidtNorm_nonneg P.rawOverlap))
+          (hilbertSchmidtNorm_nonneg P.rawOverlap))
         P.frameLowerBound_pos.le
     _ = paperHilbertSchmidtNorm P.rawOverlap := by
       rw [← mul_assoc, mul_inv_cancel₀ P.frameLowerBound_pos.ne', one_mul]
 
 /-- **Davis--Kahan 1970, Theorem 6.2, complex square-norm form.** -/
 theorem result
-    (P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H))
-    (S : PaperSinThetaRepresentative P.canonicalSinTheta)
+    (P : Theorem62Data (E := E) (F := F) (G := G) (H := H))
+    (S : SinThetaRepresentative P.canonicalSinTheta)
     (hR : IsPaperHilbertSchmidt P.data.residual) :
     IsPaperHilbertSchmidt S.operator ∧
       P.gap * P.frameLowerBound * paperHilbertSchmidtNorm S.operator ≤
@@ -202,8 +202,8 @@ theorem result
 
 The subscript-one norm in the source is the operator norm. -/
 theorem operatorNorm_result_of_rank_le
-    (P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H))
-    (S : PaperSinThetaRepresentative P.canonicalSinTheta)
+    (P : Theorem62Data (E := E) (F := F) (G := G) (H := H))
+    (S : SinThetaRepresentative P.canonicalSinTheta)
     {r : ℕ} (hRank : P.data.residual.rank ≤ (r : Cardinal)) :
     P.gap * P.frameLowerBound * ‖S.operator‖ ≤
       ‖P.data.residual‖ * Real.sqrt r := by
@@ -219,7 +219,7 @@ theorem operatorNorm_result_of_rank_le
         (mul_nonneg P.gap_pos.le P.frameLowerBound_pos.le)
     _ ≤ paperHilbertSchmidtNorm P.data.residual := hmain.2
     _ ≤ Real.sqrt r * ‖P.data.residual‖ :=
-      paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
+      hilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
     _ = ‖P.data.residual‖ * Real.sqrt r := mul_comm _ _
 
 /-- Theorem 6.2 with the source representative allowed to use arbitrary
@@ -228,15 +228,15 @@ theorem result_across
     {E₀ F₀ : Type v}
     [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
-    (P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H))
-    (S : PaperSinThetaRepresentativeAcross
+    (P : Theorem62Data (E := E) (F := F) (G := G) (H := H))
+    (S : SinThetaRepresentativeAcross
       (E₀ := E₀) (F₀ := F₀) P.canonicalSinTheta)
     (hR : IsPaperHilbertSchmidt P.data.residual) :
     IsPaperHilbertSchmidt S.operator ∧
       P.gap * P.frameLowerBound * paperHilbertSchmidtNorm S.operator ≤
         paperHilbertSchmidtNorm P.data.residual := by
   have hcanonical := P.result
-    (PaperSinThetaRepresentative.canonical P.canonicalSinTheta) hR
+    (SinThetaRepresentative.canonical P.canonicalSinTheta) hR
   have hmem := S.same_singular_sequence.isPaperHilbertSchmidt_iff
   have hnorm := S.same_singular_sequence.paperHilbertSchmidtNorm_eq
   refine ⟨hmem.mpr hcanonical.1, ?_⟩
@@ -249,18 +249,18 @@ theorem operatorNorm_result_across_of_rank_le
     {E₀ F₀ : Type v}
     [NormedAddCommGroup E₀] [InnerProductSpace ℂ E₀] [CompleteSpace E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace ℂ F₀] [CompleteSpace F₀]
-    (P : PaperTheorem62Data (E := E) (F := F) (G := G) (H := H))
-    (S : PaperSinThetaRepresentativeAcross
+    (P : Theorem62Data (E := E) (F := F) (G := G) (H := H))
+    (S : SinThetaRepresentativeAcross
       (E₀ := E₀) (F₀ := F₀) P.canonicalSinTheta)
     {r : ℕ} (hRank : P.data.residual.rank ≤ (r : Cardinal)) :
     P.gap * P.frameLowerBound * ‖S.operator‖ ≤
       ‖P.data.residual‖ * Real.sqrt r := by
   have hcanonical := P.operatorNorm_result_of_rank_le
-    (PaperSinThetaRepresentative.canonical P.canonicalSinTheta) hRank
+    (SinThetaRepresentative.canonical P.canonicalSinTheta) hRank
   rw [S.same_singular_sequence.opNorm_eq]
   exact hcanonical
 
-end PaperTheorem62Data
+end Theorem62Data
 
 end Complex
 
@@ -273,7 +273,7 @@ variable {E F G H : Type v}
   [NormedAddCommGroup H] [InnerProductSpace ℝ H] [CompleteSpace H]
 
 /-- Real exact inputs of Theorem 6.2. -/
-structure PaperRealTheorem62Data where
+structure RealTheorem62Data where
   data : UnboundedSinThetaData (𝕜 := ℝ) (E := E) (F := F) (G := G)
   exactMap : H →L[ℝ] E
   ambient_selfAdjoint : _root_.IsSelfAdjoint data.A
@@ -289,11 +289,11 @@ structure PaperRealTheorem62Data where
     ∀ lam ∈ TauCeti.LinearPMap.realSpectrum data.A₀, ∀ α ∈ TauCeti.LinearPMap.realSpectrum data.Λ₁,
       gap ≤ |lam - α|
 
-namespace PaperRealTheorem62Data
+namespace RealTheorem62Data
 
 /-- The canonical sine-theta operator of a Theorem 6.2 configuration. -/
 noncomputable def canonicalSinTheta
-    (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
+    (P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℝ] F :=
   sinThetaBlockOfPolarData
     (lowerFramePolarDataReal P.data.X P.lowerFrame P.frameLowerBound_pos)
@@ -301,21 +301,21 @@ noncomputable def canonicalSinTheta
 
 /-- The raw overlap block `X⋆ F₁`, before any frame normalization. -/
 def rawOverlap
-    (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
+    (P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℝ] F := P.data.X.adjoint ∘L P.data.F₁
 
 /-- The residual projected onto the complementary block. -/
 def projectedResidual
-    (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
+    (P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H)) :
     G →L[ℝ] F := -(P.data.residual.adjoint ∘L P.data.F₁)
 
 /-- Whitening introduces exactly the source factor `epsilon^(-1)`.
 
-The real mirror of `PaperTheorem62Data.canonicalSinTheta_frame_bound`.  The complex section
+The real mirror of `Theorem62Data.canonicalSinTheta_frame_bound`.  The complex section
 factors this out and its `result` cites it; the real section had inlined the same
 derivation into `result`, which is the only reason the two sections looked different. -/
 theorem canonicalSinTheta_frame_bound
-    (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H))
+    (P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H))
     (hraw : IsPaperHilbertSchmidt P.rawOverlap) :
     IsPaperHilbertSchmidt P.canonicalSinTheta ∧
       P.frameLowerBound * paperHilbertSchmidtNorm P.canonicalSinTheta ≤
@@ -333,12 +333,12 @@ theorem canonicalSinTheta_frame_bound
     simpa using Q.invSqrt_norm_le
   have hcomp : paperHilbertSchmidtNorm P.canonicalSinTheta ≤
       ‖Q.invSqrt.adjoint‖ * paperHilbertSchmidtNorm P.rawOverlap := by
-    have h := paperHilbertSchmidtNorm_comp_le
+    have h := hilbertSchmidtNorm_comp_le
       Q.invSqrt.adjoint hraw (ContinuousLinearMap.id ℝ G)
     rw [ContinuousLinearMap.comp_id] at h
     rw [hcanonical]
     exact h.trans (mul_le_of_le_one_right
-      (mul_nonneg (norm_nonneg _) (paperHilbertSchmidtNorm_nonneg _))
+      (mul_nonneg (norm_nonneg _) (hilbertSchmidtNorm_nonneg _))
       ContinuousLinearMap.norm_id_le)
   refine ⟨hmem, ?_⟩
   calc
@@ -350,7 +350,7 @@ theorem canonicalSinTheta_frame_bound
           (P.frameLowerBound⁻¹ * paperHilbertSchmidtNorm P.rawOverlap) :=
       mul_le_mul_of_nonneg_left
         (mul_le_mul_of_nonneg_right hnorm
-          (paperHilbertSchmidtNorm_nonneg P.rawOverlap))
+          (hilbertSchmidtNorm_nonneg P.rawOverlap))
         P.frameLowerBound_pos.le
     _ = paperHilbertSchmidtNorm P.rawOverlap := by
       rw [← mul_assoc, mul_inv_cancel₀ P.frameLowerBound_pos.ne', one_mul]
@@ -358,8 +358,8 @@ theorem canonicalSinTheta_frame_bound
 /-- Real Theorem 6.2, proved by exact complexification of the square-norm
 Sylvester step and the scalar-generic lower-frame algebra. -/
 theorem result
-    (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H))
-    (S : PaperSinThetaRepresentative P.canonicalSinTheta)
+    (P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H))
+    (S : SinThetaRepresentative P.canonicalSinTheta)
     (hR : IsPaperHilbertSchmidt P.data.residual) :
     IsPaperHilbertSchmidt S.operator ∧
       P.gap * P.frameLowerBound * paperHilbertSchmidtNorm S.operator ≤
@@ -373,7 +373,7 @@ theorem result
         (P.data.residual.adjoint ∘L P.data.F₁)).2 (by simpa using hcomp)
   have hEq := unbounded_adjoint_residual_block_identity P.data
     P.ambient_selfAdjoint P.trial_selfAdjoint P.complement_selfAdjoint
-  have hraw := paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
+  have hraw := hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap_direct
     P.trial_selfAdjoint P.complement_selfAdjoint P.gap_pos
     P.spectral_distance hEq hProjected
   have hrawHS : IsPaperHilbertSchmidt P.rawOverlap := hraw.1
@@ -390,11 +390,11 @@ theorem result
             (ContinuousLinearMap.id ℝ F ∘L P.data.residual.adjoint ∘L
               P.data.F₁) := by simp
       _ ≤ paperHilbertSchmidtNorm P.data.residual.adjoint :=
-        paperHilbertSchmidtNorm_comp_isometries_le
+        hilbertSchmidtNorm_comp_isometries_le
           (ContinuousLinearMap.id ℝ F) hRadj P.data.F₁
           ContinuousLinearMap.norm_id_le hF₁
       _ = paperHilbertSchmidtNorm P.data.residual :=
-        paperHilbertSchmidtNorm_adjoint P.data.residual
+        hilbertSchmidtNorm_adjoint P.data.residual
   have hS : IsPaperHilbertSchmidt S.operator :=
     (S.same_singular_values.isPaperHilbertSchmidt_iff).2 hcanonmem
   refine ⟨hS, ?_⟩
@@ -410,8 +410,8 @@ theorem result
 
 /-- Real finite-rank bound-norm fallback printed after Theorem 6.2. -/
 theorem operatorNorm_result_of_rank_le
-    (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H))
-    (S : PaperSinThetaRepresentative P.canonicalSinTheta)
+    (P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H))
+    (S : SinThetaRepresentative P.canonicalSinTheta)
     {r : ℕ} (hRank : P.data.residual.rank ≤ (r : Cardinal)) :
     P.gap * P.frameLowerBound * ‖S.operator‖ ≤
       ‖P.data.residual‖ * Real.sqrt r := by
@@ -427,7 +427,7 @@ theorem operatorNorm_result_of_rank_le
         (mul_nonneg P.gap_pos.le P.frameLowerBound_pos.le)
     _ ≤ paperHilbertSchmidtNorm P.data.residual := hmain.2
     _ ≤ Real.sqrt r * ‖P.data.residual‖ :=
-      paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
+      hilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
     _ = ‖P.data.residual‖ * Real.sqrt r := mul_comm _ _
 
 /-- Real Theorem 6.2 with arbitrary representative coordinate spaces. -/
@@ -435,15 +435,15 @@ theorem result_across
     {E₀ F₀ : Type v}
     [NormedAddCommGroup E₀] [InnerProductSpace ℝ E₀] [CompleteSpace E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace ℝ F₀] [CompleteSpace F₀]
-    (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H))
-    (S : PaperSinThetaRepresentativeAcross
+    (P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H))
+    (S : SinThetaRepresentativeAcross
       (E₀ := E₀) (F₀ := F₀) P.canonicalSinTheta)
     (hR : IsPaperHilbertSchmidt P.data.residual) :
     IsPaperHilbertSchmidt S.operator ∧
       P.gap * P.frameLowerBound * paperHilbertSchmidtNorm S.operator ≤
         paperHilbertSchmidtNorm P.data.residual := by
   have hcanonical := P.result
-    (PaperSinThetaRepresentative.canonical P.canonicalSinTheta) hR
+    (SinThetaRepresentative.canonical P.canonicalSinTheta) hR
   have hmem := S.same_singular_sequence.isPaperHilbertSchmidt_iff
   have hnorm := S.same_singular_sequence.paperHilbertSchmidtNorm_eq
   refine ⟨hmem.mpr hcanonical.1, ?_⟩
@@ -456,18 +456,18 @@ theorem operatorNorm_result_across_of_rank_le
     {E₀ F₀ : Type v}
     [NormedAddCommGroup E₀] [InnerProductSpace ℝ E₀] [CompleteSpace E₀]
     [NormedAddCommGroup F₀] [InnerProductSpace ℝ F₀] [CompleteSpace F₀]
-    (P : PaperRealTheorem62Data (E := E) (F := F) (G := G) (H := H))
-    (S : PaperSinThetaRepresentativeAcross
+    (P : RealTheorem62Data (E := E) (F := F) (G := G) (H := H))
+    (S : SinThetaRepresentativeAcross
       (E₀ := E₀) (F₀ := F₀) P.canonicalSinTheta)
     {r : ℕ} (hRank : P.data.residual.rank ≤ (r : Cardinal)) :
     P.gap * P.frameLowerBound * ‖S.operator‖ ≤
       ‖P.data.residual‖ * Real.sqrt r := by
   have hcanonical := P.operatorNorm_result_of_rank_le
-    (PaperSinThetaRepresentative.canonical P.canonicalSinTheta) hRank
+    (SinThetaRepresentative.canonical P.canonicalSinTheta) hRank
   rw [S.same_singular_sequence.opNorm_eq]
   exact hcanonical
 
-end PaperRealTheorem62Data
+end RealTheorem62Data
 
 end Real
 

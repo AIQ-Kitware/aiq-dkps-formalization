@@ -243,13 +243,13 @@ Status: **TERMINAL EXACT**.
 #check @TauCeti.DavisKahan.gram_unboundedReflectionTangent_eq_offDiagonal
 #check @TauCeti.DavisKahan.starProjection_offDiagonal_sq_reflection
 #check @TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq
-#check @TauCeti.DavisKahan.paperTanTwoBlockRepresentative_mul_signedCosTwo
+#check @TauCeti.DavisKahan.tanTwoBlockRepresentative_mul_signedCosTwo
 #check @TauCeti.DavisKahan.sameApproximationSingularValues_unboundedReflectionTangent
 #check @TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_complex
 #check @TauCeti.DavisKahan.extendedGauge_unboundedReflectionTangent_real
 #check @TauCeti.DavisKahan.isUnit_signedCosTwo_of_isUnit_diagonalPart_sq
 #check @TauCeti.DavisKahan.cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
-#check @TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+#check @TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
 #check @TauCeti.DavisKahanExt.complexify_paperAbsTanTwoAngleOperatorR
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_complex
 #check @TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real
@@ -404,8 +404,8 @@ Status: **TERMINAL REFUTED + REPAIR**.
 #check @TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner
 #check @TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner
 #check @TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex
-#check @TauCeti.DavisKahan1970.paperBlockCompression_paperDiagonalPair
-#check @TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator
+#check @TauCeti.DavisKahan1970.blockCompression_diagonalPair
+#check @TauCeti.DavisKahan1970.blockCompression_mul_reflectionOperator
 #check @TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted
 #check @TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm
 

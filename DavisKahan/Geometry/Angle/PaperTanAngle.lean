@@ -25,16 +25,16 @@ theory but a statement of where the theory lives.
 ## Main results
 
 * `TauCeti.DavisKahanExt.paperTanAngleOperatorC`: the literal `tan Θ`.
-* `TauCeti.DavisKahanExt.paperTanAngleOperatorC_nonneg`.
-* `TauCeti.DavisKahanExt.paperCos_mul_paperTan`: `cos Θ · tan Θ = sin Θ` under
+* `TauCeti.DavisKahanExt.tanAngleOperatorC_nonneg`.
+* `TauCeti.DavisKahanExt.cosAngleOperatorC_mul_tanAngleOperatorC`: `cos Θ · tan Θ = sin Θ` under
   uniform transversality.
 * `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC`: the literal ambient
   `tan 2Θ`, the object of the second conclusion of the Section 2 `tan 2θ`
   theorem.
 * `TauCeti.DavisKahanExt.spectrum_paperAngleOperatorC_lt_pi_div_four` and
-  `TauCeti.DavisKahanExt.paperTanTwoAngleOperatorC_nonneg`: under uniform
+  `TauCeti.DavisKahanExt.tanTwoAngleOperatorC_nonneg`: under uniform
   *quarter* transversality the doubled angle stays inside the principal branch.
-* `TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC`: the **branch-free**
+* `TauCeti.DavisKahanExt.absTanTwoAngleOperatorC`: the **branch-free**
   ambient `|tan 2Θ|`, which is nonnegative with no hypothesis at all and agrees
   with `paperTanTwoAngleOperatorC` on the quarter-acute branch.  A unitarily
   invariant norm sees a self-adjoint operator through its singular values, so
@@ -75,18 +75,18 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 Hermitian operator angle. -/
 noncomputable def paperTanAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  cfc Real.tan (paperAngleOperatorC U V)
+  cfc Real.tan (angleOperatorC U V)
 
 /-- `tan Θ` is self-adjoint. -/
 theorem isSelfAdjoint_paperTanAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (paperTanAngleOperatorC U V) :=
-  cfc_predicate _ (paperAngleOperatorC U V)
+  cfc_predicate _ (angleOperatorC U V)
 
 /-- `tan Θ` is nonnegative: the angle has spectrum in `[0, π/2]`, where the
 tangent is nonnegative (and, at the endpoint, is `0` by Mathlib's totalisation
 of `Real.tan`). -/
-theorem paperTanAngleOperatorC_nonneg (U V : Submodule ℂ E)
+theorem tanAngleOperatorC_nonneg (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     0 ≤ paperTanAngleOperatorC U V := by
   refine cfc_nonneg fun t ht => ?_
@@ -98,9 +98,9 @@ theorem spectrum_paperAngleOperatorC_lt_pi_div_two
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hlt : ‖sinAngleOperatorC U V‖ < 1)
-    {t : ℝ} (ht : t ∈ spectrum ℝ (paperAngleOperatorC U V)) :
+    {t : ℝ} (ht : t ∈ spectrum ℝ (angleOperatorC U V)) :
     0 ≤ t ∧ t < Real.pi / 2 := by
-  rw [paperAngleOperatorC,
+  rw [angleOperatorC,
     cfc_map_spectrum (R := ℝ) (f := Real.arcsin)
       (a := sinAngleOperatorC U V) (isSelfAdjoint_sinAngleOperatorC U V)
       Real.continuous_arcsin.continuousOn] at ht
@@ -126,13 +126,13 @@ the Section 2 `tan 2θ` theorem is about; it carries every principal angle
 *twice*, so it is not a relabelling of the directed `tan 2Θ₀`. -/
 noncomputable def paperTanTwoAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  cfc (fun t : ℝ => Real.tan (2 * t)) (paperAngleOperatorC U V)
+  cfc (fun t : ℝ => Real.tan (2 * t)) (angleOperatorC U V)
 
 /-- `tan 2Θ` is self-adjoint. -/
 theorem isSelfAdjoint_paperTanTwoAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (paperTanTwoAngleOperatorC U V) :=
-  cfc_predicate _ (paperAngleOperatorC U V)
+  cfc_predicate _ (angleOperatorC U V)
 
 /-- Under uniform *quarter* transversality the angle stays strictly below
 `π / 4`, so the doubled angle stays inside the principal branch of the
@@ -142,9 +142,9 @@ theorem spectrum_paperAngleOperatorC_lt_pi_div_four
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hlt : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2)
-    {t : ℝ} (ht : t ∈ spectrum ℝ (paperAngleOperatorC U V)) :
+    {t : ℝ} (ht : t ∈ spectrum ℝ (angleOperatorC U V)) :
     0 ≤ t ∧ t < Real.pi / 4 := by
-  rw [paperAngleOperatorC,
+  rw [angleOperatorC,
     cfc_map_spectrum (R := ℝ) (f := Real.arcsin)
       (a := sinAngleOperatorC U V) (isSelfAdjoint_sinAngleOperatorC U V)
       Real.continuous_arcsin.continuousOn] at ht
@@ -167,7 +167,7 @@ theorem spectrum_paperAngleOperatorC_lt_pi_div_four
 
 /-- `tan 2Θ` is nonnegative under uniform quarter transversality: every angle
 lies in `[0, π/4)`, so the doubled angle lies in `[0, π/2)`. -/
-theorem paperTanTwoAngleOperatorC_nonneg (U V : Submodule ℂ E)
+theorem tanTwoAngleOperatorC_nonneg (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hlt : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
     0 ≤ paperTanTwoAngleOperatorC U V := by
@@ -185,32 +185,32 @@ norm sees an operator only through its singular values, so for the self-adjoint
 conclusion.  They differ exactly when some principal angle exceeds `π/4`, where
 `tan 2θ` turns negative — which is precisely the situation the quarter-acute
 branch excludes and the printed theorem does not. -/
-noncomputable def paperAbsTanTwoAngleOperatorC (U V : Submodule ℂ E)
+noncomputable def absTanTwoAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  cfc (fun t : ℝ => |Real.tan (2 * t)|) (paperAngleOperatorC U V)
+  cfc (fun t : ℝ => |Real.tan (2 * t)|) (angleOperatorC U V)
 
 /-- `|tan 2Θ|` is self-adjoint. -/
 theorem isSelfAdjoint_paperAbsTanTwoAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    IsSelfAdjoint (paperAbsTanTwoAngleOperatorC U V) :=
-  cfc_predicate _ (paperAngleOperatorC U V)
+    IsSelfAdjoint (absTanTwoAngleOperatorC U V) :=
+  cfc_predicate _ (angleOperatorC U V)
 
 /-- `|tan 2Θ|` is nonnegative, with **no** branch hypothesis: unlike
-`paperTanTwoAngleOperatorC_nonneg`, this holds however far the principal angles
+`tanTwoAngleOperatorC_nonneg`, this holds however far the principal angles
 run past `π/4`. -/
-theorem paperAbsTanTwoAngleOperatorC_nonneg (U V : Submodule ℂ E)
+theorem absTanTwoAngleOperatorC_nonneg (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    0 ≤ paperAbsTanTwoAngleOperatorC U V :=
+    0 ≤ absTanTwoAngleOperatorC U V :=
   cfc_nonneg fun _ _ => abs_nonneg _
 
 /-- In the quarter-acute branch the branch-free ambient tangent is the literal
 one: every principal angle is below `π/4`, so `tan 2θ ≥ 0` throughout the
 spectrum. -/
-theorem paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC
+theorem absTanTwoAngleOperatorC_eq_tanTwoAngleOperatorC
     (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hlt : ‖sinAngleOperatorC U V‖ < Real.sqrt 2 / 2) :
-    paperAbsTanTwoAngleOperatorC U V = paperTanTwoAngleOperatorC U V := by
+    absTanTwoAngleOperatorC U V = paperTanTwoAngleOperatorC U V := by
   refine cfc_congr fun t ht => ?_
   have h := spectrum_paperAngleOperatorC_lt_pi_div_four U V hlt ht
   exact abs_of_nonneg (Real.tan_nonneg_of_nonneg_of_le_pi_div_two
@@ -220,13 +220,13 @@ theorem paperAbsTanTwoAngleOperatorC_eq_paperTanTwoAngleOperatorC
 subspaces.  This is what makes `paperTanAngleOperatorC` the tangent rather than
 an arbitrary functional calculus: it is the operator identity the paper uses
 whenever it divides a sine block by a cosine block. -/
-theorem paperCos_mul_paperTan (U V : Submodule ℂ E)
+theorem cosAngleOperatorC_mul_tanAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
     (hlt : ‖sinAngleOperatorC U V‖ < 1) :
     paperCosAngleOperatorC U V * paperTanAngleOperatorC U V =
       paperSinAngleOperatorC U V := by
   rw [paperCosAngleOperatorC, paperTanAngleOperatorC, paperSinAngleOperatorC,
-    ← cfc_mul Real.cos Real.tan (paperAngleOperatorC U V)
+    ← cfc_mul Real.cos Real.tan (angleOperatorC U V)
       Real.continuous_cos.continuousOn
       (Real.continuousOn_tan.mono (by
         intro t ht

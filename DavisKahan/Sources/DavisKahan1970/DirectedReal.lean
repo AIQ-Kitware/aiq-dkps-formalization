@@ -663,7 +663,7 @@ theorem norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent
     (hCompressionUpper : ∀ z : U, ⟪compressOperatorReal U T z, z⟫_ℝ ≤ alpha * ‖z‖ ^ 2)
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V) :
-    ‖paperSinAngleOperatorR U V‖ < 1 := by
+    ‖sinAngleOperatorR U V‖ < 1 := by
   have hdirected := approximationSingularValue_sineBlock_lt_one_infiniteTrial_real
     T hT V U hV hdelta hCompressionUpper hUnwantedLower 0
   rw [approximationSingularValue_zero] at hdirected
@@ -699,8 +699,8 @@ theorem tanTheta_ambient_bounded_symmetricNorming_real_of_crossedDefects
     (hUnwantedLower : ∀ y ∈ Vᗮ, (alpha + delta) * ‖y‖ ^ 2 ≤ ⟪T y, y⟫_ℝ)
     (h35 : DavisKahan.CrossedDefectsEquivalent U V)
     (hMem : N.Mem (T - A)) :
-    N.Mem (paperTanAngleOperatorR U V) ∧
-      delta * N.gauge (paperTanAngleOperatorR U V) ≤ N.gauge (T - A) :=
+    N.Mem (tanAngleOperatorR U V) ∧
+      delta * N.gauge (tanAngleOperatorR U V) ≤ N.gauge (T - A) :=
   tanTheta_ambient_bounded_symmetricNorming_real_of_transversality N hT hA hV hAU hdelta hCompressionUpper
     hUnwantedLower
     (norm_paperSinAngleOperatorR_lt_one_of_crossedDefectsEquivalent T hT U V hV hdelta

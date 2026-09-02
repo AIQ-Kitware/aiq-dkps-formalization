@@ -121,7 +121,7 @@ Lean difficulty.** It is the live obstruction on all three rows.
 The refutation above is unchanged and still governs: `IsCompressedDoubleAngleEigenbasis` must
 never be attacked directly. What changed is that the clause can be *removed from the proof*
 rather than discharged. Target chain, on the **typed** directed corners
-(`paperBlockCompression Uᗮ U`, never the ambient `unboundedReflectionTangent : H →L[ℂ] H`,
+(`blockCompression Uᗮ U`, never the ambient `unboundedReflectionTangent : H →L[ℂ] H`,
 which carries both adjoint corners and would risk double-counting the sharp `2`):
 
 ```

@@ -123,7 +123,7 @@ variable {E : Type v} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 
 /-- Comparator-facing name for source Proposition 6.1 over `ℂ`.
 
-This used to be a wrapper that built `PaperSymmetricSinThetaProblem` inline.  The
+This used to be a wrapper that built `SymmetricSinThetaProblem` inline.  The
 direct-hypothesis architecture it demonstrated now lives in production as
 `TauCeti.DavisKahan1970.proposition6_1_source_complex`, so this is an alias: the
 comparator target and the library theorem are the same declaration, not two

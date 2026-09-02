@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "proposed_amended",
+  "status": "stage_a_applied",
   "generated_on": "2026-09-02",
   "purpose": "A census of the `paper`-prefixed declaration names in DavisKahan, and a mechanically applicable rename proposal. Nothing here has been applied. The intent is that a reviewer accepts or amends this document, and the rename is then a mechanical application of `renames[].current -> renames[].proposed` rather than a judgement call taken 238 times.",
   "motivation": "The 2026-09-01 rename replaced `PaperUnitaryInvariantNorm` with `SymmetricNormingFunction` because the name recorded provenance where the mathematics had its own name. That decision was never generalised, and `paper` is not in the naming classification's banned-token list, so the rest of the family was left in place. Measured here: of the declarations carrying the token, the great majority contrast with nothing -- there is no other `blockCompression`, `diagonalPair`, or `projectorDifference` in the tree -- so the prefix distinguishes nothing and reads as unfinished. ForTauCeti, the permanent product, already carries none of these names.",
@@ -6410,6 +6410,37 @@
           "action": "rename"
         }
       ]
+    }
+  ],
+  "application_log": [
+    {
+      "stage": "A",
+      "applied_on": "2026-09-02",
+      "scope": "257 provenance-only renames whose target name was free, plus the embedded-token repairs.",
+      "result": "4331 replacements across 120 files. `ForTauCeti`, `DavisKahan.All`, `DavisKahan.Audits.All` green in 4745 jobs; `Challenge` green in 9345. Declaration-name drift clean at 1233 census declarations. All four DK checkers pass and 39 tests pass. Statement pins refreshed: 19 pins, 0 drifted, 0 warnings. The canonical-evidence digest recomputed UNCHANGED, because no canonical witness carried the prefix.",
+      "two_bugs_found_and_fixed": [
+        "The first attempt applied the map to `dev/*.json`, which includes THIS document, rewriting the `current` fields it is keyed on and destroying the record of the rename. The proposal is now excluded from the target set.",
+        "The first attempt renamed `IsPaperHilbertSchmidt.comp` to `IsHilbertSchmidt.comp` while the structure itself is deferred, taking the theorem out of its namespace and breaking every `h.comp` that used dot notation. Members of a deferred namespace are now excluded, and the build caught it."
+      ]
+    },
+    {
+      "stage": "B",
+      "status": "not applied",
+      "scope": "7 renames blocked by an occupied target name: the angle-family two-sided move. Applying these requires first renaming the EXISTING unprefixed declarations to their `directed*` names to vacate the target, so it is its own pass with a build after it.",
+      "blocked": [
+        "paperCosAngleOperatorC",
+        "paperSinTwoAngleOperatorC",
+        "paperSinTwoAngleOperatorC_nonneg",
+        "paperTanAngleOperatorC",
+        "paperTanTwoAngleOperatorC",
+        "paperHilbertSchmidtEnergy_smul",
+        "paperHilbertSchmidtEnergy_zero"
+      ]
+    },
+    {
+      "stage": "C",
+      "status": "not applied",
+      "scope": "7 delete/migrate decisions -- Hilbert--Schmidt into the canonical ForTauCeti API, the plane aliases into `PlanarModelSpace`, and two angle duplicates. These remove concepts rather than move names, so they are migrations with their own review, not part of a rename pass."
     }
   ]
 }

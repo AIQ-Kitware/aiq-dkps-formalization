@@ -29,7 +29,7 @@ The block is a composition of a projection, a reflection, a complementary
 projection and the same reflection — see `sinTwoThetaIdealBlock_eq_comp`, which
 is scalar-generic.  Each factor complexifies to its complex counterpart, so the
 whole block does (`complexify_sinTwoThetaIdealBlock`).  On the other side
-`paperSinTwoAngleOperatorR` complexifies to `paperSinTwoAngleOperatorC` by
+`sinTwoAngleOperatorR` complexifies to `paperSinTwoAngleOperatorC` by
 construction.  What remains is a purely complex fact: the two complex spellings
 of `sin 2Θ` have the same norm, because both equal the projection gap between
 `U` and its reflection through `V`
@@ -69,7 +69,7 @@ theorem norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC
     (U V : Submodule ℂ H)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     ‖paperSinTwoAngleOperatorC U V‖ = ‖sinTwoAngleOperatorC U V‖ := by
-  rw [paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub,
+  rw [sinTwoAngleOperatorC_eq_modulus_starProjection_sub,
     ContinuousLinearMap.norm_modulus, norm_sub_rev]
   exact DavisKahan.subspaceGap_map_reflection_eq_norm_sinTwoAngle U V
 
@@ -140,9 +140,9 @@ This is the real counterpart of `norm_sinTwoThetaIdealBlock_complex`, whose stat
 about `sinTwoAngleOperatorC` and therefore never left the complex scalars. -/
 theorem norm_sinTwoThetaIdealBlock_real (U V : Submodule ℝ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
-    ‖sinTwoThetaIdealBlock U V‖ = ‖paperSinTwoAngleOperatorR U V‖ := by
+    ‖sinTwoThetaIdealBlock U V‖ = ‖sinTwoAngleOperatorR U V‖ := by
   rw [← norm_complexify (sinTwoThetaIdealBlock U V),
-    ← norm_complexify (paperSinTwoAngleOperatorR U V),
+    ← norm_complexify (sinTwoAngleOperatorR U V),
     complexify_sinTwoThetaIdealBlock, complexify_paperSinTwoAngleOperatorR,
     norm_sinTwoThetaIdealBlock_complex,
     norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC]
@@ -177,7 +177,7 @@ theorem sinTwoTheta_reflectionResidual_opNorm_real
       (TauCeti.LinearPMap.addBounded A R)
           ⟨V.reflectionOperator (x : E), hJdom x⟩ =
         V.reflectionOperator (A x)) :
-    δ * ‖paperSinTwoAngleOperatorR
+    δ * ‖sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA S hS) V‖ ≤ ‖R‖ := by
   have h := sinTwoTheta_reflectionResidual_gauge_real A hA S hS
     (KyFanDominantIdealFamily.kyFan (𝕜 := ℝ) 1 Nat.one_pos) R hR V hδ hgap
@@ -203,7 +203,7 @@ theorem sinTwoTheta_addBounded_opNorm_real
     (hgap : FormBoundedSylvesterGap
       (realSelfAdjointSpectralRestriction A hA S hS)
       (realSelfAdjointSpectralRestriction A hA Sᶜ hS.compl) δ) :
-    δ * ‖paperSinTwoAngleOperatorR
+    δ * ‖sinTwoAngleOperatorR
         (realSelfAdjointSpectralSubspace A hA S hS)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) T hT)‖ ≤ 2 * ‖Eop‖ := by

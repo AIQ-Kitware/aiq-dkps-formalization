@@ -57,25 +57,25 @@ projection block so no dependent subtype rewrite is needed. -/
 private theorem approximationSingularValue_directedCorner_complexify
     (U : Submodule ℝ E) [U.HasOrthogonalProjection] (K : E →L[ℝ] E) (n : ℕ) :
     approximationSingularValue n
-        (paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+        (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
           (complexify K)) =
-      approximationSingularValue n (paperBlockCompression Uᗮ U K) := by
-  have hc := paperProjectionBlock_same_compression (complexifySubmodule U)ᗮ
+      approximationSingularValue n (blockCompression Uᗮ U K) := by
+  have hc := projectionBlock_same_compression (complexifySubmodule U)ᗮ
     (complexifySubmodule U) (complexify K)
-  have hr := paperProjectionBlock_same_compression Uᗮ U K
+  have hr := projectionBlock_same_compression Uᗮ U K
   calc
     approximationSingularValue n
-        (paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+        (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
           (complexify K)) =
         approximationSingularValue n
-          (paperProjectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
+          (projectionBlock (complexifySubmodule U)ᗮ (complexifySubmodule U)
             (complexify K)) := (hc n).symm
-    _ = approximationSingularValue n (complexify (paperProjectionBlock Uᗮ U K)) := by
-      rw [paperProjectionBlock_complexifySubmodule U K]
-    _ = approximationSingularValue n (paperProjectionBlock Uᗮ U K) :=
+    _ = approximationSingularValue n (complexify (projectionBlock Uᗮ U K)) := by
+      rw [projectionBlock_complexifySubmodule U K]
+    _ = approximationSingularValue n (projectionBlock Uᗮ U K) :=
       ComplexificationApproximation.approximationSingularValue_complexify
-        (paperProjectionBlock Uᗮ U K) n
-    _ = approximationSingularValue n (paperBlockCompression Uᗮ U K) := hr n
+        (projectionBlock Uᗮ U K) n
+    _ = approximationSingularValue n (blockCompression Uᗮ U K) := hr n
 
 /-- Every paper norm gives the same extended value to a real directed corner
 and to the corresponding corner of the complexified subspace. -/
@@ -83,9 +83,9 @@ private theorem directedCorner_extendedGauge_complexify
     (N : SymmetricNormingFunction)
     (U : Submodule ℝ E) [U.HasOrthogonalProjection] (K : E →L[ℝ] E) :
     N.extendedGauge
-        (paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+        (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
           (complexify K)) =
-      N.extendedGauge (paperBlockCompression Uᗮ U K) := by
+      N.extendedGauge (blockCompression Uᗮ U K) := by
   unfold SymmetricNormingFunction.extendedGauge
   apply iSup_congr
   intro n
@@ -99,9 +99,9 @@ private theorem directedCorner_mem_complexify_iff
     (N : SymmetricNormingFunction)
     (U : Submodule ℝ E) [U.HasOrthogonalProjection] (K : E →L[ℝ] E) :
     N.Mem
-        (paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+        (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
           (complexify K)) ↔
-      N.Mem (paperBlockCompression Uᗮ U K) := by
+      N.Mem (blockCompression Uᗮ U K) := by
   unfold SymmetricNormingFunction.Mem
   rw [directedCorner_extendedGauge_complexify N U K]
 
@@ -109,9 +109,9 @@ private theorem directedCorner_gauge_complexify
     (N : SymmetricNormingFunction)
     (U : Submodule ℝ E) [U.HasOrthogonalProjection] (K : E →L[ℝ] E) :
     N.gauge
-        (paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+        (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
           (complexify K)) =
-      N.gauge (paperBlockCompression Uᗮ U K) := by
+      N.gauge (blockCompression Uᗮ U K) := by
   unfold SymmetricNormingFunction.gauge
   rw [directedCorner_extendedGauge_complexify N U K]
 
@@ -310,7 +310,7 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
         complexify (unboundedReflectionTangent U Z) :=
     unboundedReflectionTangent_complexifySubmodule U Z hCC
   change N.Mem
-      (paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+      (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
         (unboundedReflectionTangent (complexifySubmodule U) (complexify Z))) at hTmemc
   rw [hTcomplex] at hTmemc
   have hTmem : N.Mem (reflectionTangentCorner U Z) :=
@@ -322,10 +322,10 @@ theorem tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorm
     N hUeq (complexify B)
   rw [← htangauge, ← hresgauge] at hineqc
   change (b - a) * N.gauge
-      (paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+      (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
         (unboundedReflectionTangent (complexifySubmodule U) (complexify Z))) ≤
     2 * N.gauge
-      (paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+      (blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
         (complexify B)) at hineqc
   rw [hTcomplex,
     directedCorner_gauge_complexify N U (unboundedReflectionTangent U Z),
@@ -541,9 +541,9 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_real
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
     (hab : a < b) (hBmem : N.Mem B) :
-    N.Mem (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+    N.Mem (TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ∧
-      (b - a) * N.gauge (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorR
+      (b - a) * N.gauge (TauCeti.DavisKahanExt.absTanTwoAngleOperatorR
         (TauCeti.LinearPMap.realSpecRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
@@ -664,11 +664,11 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
 an arbitrary reducing subspace.** -/
 theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real
     (N : SymmetricNormingFunction)
-    (hRmem : N.Mem (paperBlockCompression Uᗮ U B)) :
+    (hRmem : N.Mem (blockCompression Uᗮ U B)) :
     IsUnit (U.diagonalPart Z * U.diagonalPart Z) ∧
       N.Mem (reflectionTangentCorner U Z) ∧
       (b - a) * N.gauge (reflectionTangentCorner U Z) ≤
-        2 * N.gauge (paperBlockCompression Uᗮ U B) := by
+        2 * N.gauge (blockCompression Uᗮ U B) := by
   classical
   have hAc : _root_.IsSelfAdjoint (TauCeti.LinearPMap.complexifyReal A) :=
     TauCeti.LinearPMap.isSelfAdjoint_complexifyReal hA
@@ -686,7 +686,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_symmetricNorming_real
     isUnit_complexify_iff] at hCCc
   have hCC : IsUnit (U.diagonalPart Z * U.diagonalPart Z) := hCCc
   have hTcorner : reflectionTangentCorner (complexifySubmodule U) (complexify Z) =
-      paperBlockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
+      blockCompression (complexifySubmodule U)ᗮ (complexifySubmodule U)
         (complexify (unboundedReflectionTangent U Z)) := by
     rw [reflectionTangentCorner,
       unboundedReflectionTangent_complexifySubmodule U Z hCC]
@@ -724,7 +724,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNo
     (hUa : ∀ x : A.domain, (x : E) ∈ U → ⟪A x, (x : E)⟫_ℝ ≤ a * ‖(x : E)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : E) ∈ Uᗮ → b * ‖(x : E)‖ ^ 2 ≤ ⟪A x, (x : E)⟫_ℝ)
     (hab : a < b)
-    (hRmem : N.Mem (paperBlockCompression Uᗮ U B)) :
+    (hRmem : N.Mem (blockCompression Uᗮ U B)) :
     (∀ n : ℕ, (DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n < 1) ∧
       (∀ n : ℕ,
         (reflectionTangentCorner U V.reflectionOperator).approximationNumber n =
@@ -732,7 +732,7 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_sineSequence_symmetricNo
             ((DavisKahan.sinTwoThetaIdealBlock U V).approximationNumber n))) ∧
       N.Mem (reflectionTangentCorner U V.reflectionOperator) ∧
       (b - a) * N.gauge (reflectionTangentCorner U V.reflectionOperator) ≤
-        2 * N.gauge (paperBlockCompression Uᗮ U B) := by
+        2 * N.gauge (blockCompression Uᗮ U B) := by
   classical
   have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
   have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V

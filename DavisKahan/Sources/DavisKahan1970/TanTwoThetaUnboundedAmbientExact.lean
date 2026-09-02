@@ -58,19 +58,19 @@ omit [CompleteSpace G] in
 private theorem projectionBlock_lower_unboundedAmbientExact
     {U : Submodule ℂ G} [U.HasOrthogonalProjection]
     (K : G →L[ℂ] G) :
-    paperProjectionBlock Uᗮ U K =
+    projectionBlock Uᗮ U K =
       (1 - U.starProjection) * K * U.starProjection := by
-  rw [paperProjectionBlock, Submodule.starProjection_orthogonal',
+  rw [projectionBlock, Submodule.starProjection_orthogonal',
     comp_eq_mul_unboundedAmbientExact, comp_eq_mul_unboundedAmbientExact, mul_assoc]
 
 omit [CompleteSpace G] in
 private theorem projectionBlock_upper_unboundedAmbientExact
     {U : Submodule ℂ G} [U.HasOrthogonalProjection]
     (K : G →L[ℂ] G) :
-    paperProjectionBlock Uᗮᗮ Uᗮ K =
+    projectionBlock Uᗮᗮ Uᗮ K =
       U.starProjection * K * (1 - U.starProjection) := by
   have hUperp : Uᗮᗮ = U := Submodule.orthogonal_orthogonal U
-  rw [paperProjectionBlock]
+  rw [projectionBlock]
   simp only [hUperp, Submodule.starProjection_orthogonal',
     comp_eq_mul_unboundedAmbientExact]
   rw [mul_assoc]
@@ -80,17 +80,17 @@ private theorem projectionBlock_smul_unboundedAmbientExact
     (Ω Γ : Submodule ℂ G)
     [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
     (c : ℂ) (K : G →L[ℂ] G) :
-    paperProjectionBlock Ω Γ (c • K) = c • paperProjectionBlock Ω Γ K := by
+    projectionBlock Ω Γ (c • K) = c • projectionBlock Ω Γ K := by
   ext x
-  simp [paperProjectionBlock]
+  simp [projectionBlock]
 
 private theorem kyFan_upper_eq_lower_of_selfAdjoint_unboundedAmbientExact
     {U : Submodule ℂ G} [U.HasOrthogonalProjection]
     (K : G →L[ℂ] G) (hK : IsSelfAdjoint K) (k : ℕ) :
-    kyFanApproximationGauge k (paperProjectionBlock Uᗮᗮ Uᗮ K) =
-      kyFanApproximationGauge k (paperProjectionBlock Uᗮ U K) := by
-  have hadj : paperProjectionBlock Uᗮᗮ Uᗮ K =
-      (paperProjectionBlock Uᗮ U K).adjoint := by
+    kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ K) =
+      kyFanApproximationGauge k (projectionBlock Uᗮ U K) := by
+  have hadj : projectionBlock Uᗮᗮ Uᗮ K =
+      (projectionBlock Uᗮ U K).adjoint := by
     rw [projectionBlock_upper_unboundedAmbientExact,
       projectionBlock_lower_unboundedAmbientExact]
     show _ = star _
@@ -102,10 +102,10 @@ private theorem kyFan_upper_eq_lower_of_selfAdjoint_unboundedAmbientExact
 private theorem kyFan_upper_eq_lower_of_skewAdjoint_unboundedAmbientExact
     {U : Submodule ℂ G} [U.HasOrthogonalProjection]
     (K : G →L[ℂ] G) (hK : K.adjoint = -K) (k : ℕ) :
-    kyFanApproximationGauge k (paperProjectionBlock Uᗮᗮ Uᗮ K) =
-      kyFanApproximationGauge k (paperProjectionBlock Uᗮ U K) := by
-  have hadj : paperProjectionBlock Uᗮᗮ Uᗮ K =
-      -(paperProjectionBlock Uᗮ U K).adjoint := by
+    kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ K) =
+      kyFanApproximationGauge k (projectionBlock Uᗮ U K) := by
+  have hadj : projectionBlock Uᗮᗮ Uᗮ K =
+      -(projectionBlock Uᗮ U K).adjoint := by
     rw [projectionBlock_upper_unboundedAmbientExact,
       projectionBlock_lower_unboundedAmbientExact]
     show _ = -star _
@@ -134,10 +134,10 @@ private theorem diagonalPart_eq_zero_of_isOddFor_unboundedAmbientExact
   rfl
 
 omit [CompleteSpace G] in
-private theorem paperDiagonalPair_orthogonal_eq_offDiagonalPart_unboundedAmbientExact
+private theorem diagonalPair_orthogonal_eq_offDiagonalPart_unboundedAmbientExact
     (U : Submodule ℂ G) [U.HasOrthogonalProjection] (K : G →L[ℂ] G) :
-    paperDiagonalPair Uᗮ U K = U.offDiagonalPart K := by
-  rw [paperDiagonalPair, Submodule.offDiagonalPart_eq, Submodule.diagonalPart_eq]
+    diagonalPair Uᗮ U K = U.offDiagonalPart K := by
+  rw [diagonalPair, Submodule.offDiagonalPart_eq, Submodule.diagonalPart_eq]
   simp only [Submodule.orthogonal_orthogonal, Submodule.starProjection_orthogonal',
     comp_eq_mul_unboundedAmbientExact]
   have hp : U.starProjection * U.starProjection = U.starProjection :=
@@ -145,10 +145,10 @@ private theorem paperDiagonalPair_orthogonal_eq_offDiagonalPart_unboundedAmbient
   noncomm_ring [hp]
 
 omit [CompleteSpace G] in
-private theorem paperDiagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact
+private theorem diagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact
     {U : Submodule ℂ G} [U.HasOrthogonalProjection] {K : G →L[ℂ] G}
-    (hK : TauCeti.IsOddFor U K) : paperDiagonalPair Uᗮ U K = K := by
-  rw [paperDiagonalPair_orthogonal_eq_offDiagonalPart_unboundedAmbientExact]
+    (hK : TauCeti.IsOddFor U K) : diagonalPair Uᗮ U K = K := by
+  rw [diagonalPair_orthogonal_eq_offDiagonalPart_unboundedAmbientExact]
   rw [Submodule.offDiagonalPart_eq,
     diagonalPart_eq_zero_of_isOddFor_unboundedAmbientExact hK, sub_zero]
 
@@ -328,21 +328,21 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
   have hcnorm : ‖((((b - a) / 2 : ℝ)) : ℂ)‖ = (b - a) / 2 := by
     rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos hhalf]
   have h₀ : ∀ k : ℕ,
-      kyFanApproximationGauge k (paperProjectionBlock Uᗮ U
+      kyFanApproximationGauge k (projectionBlock Uᗮ U
           (((((b - a) / 2 : ℝ)) : ℂ) • T)) ≤
-        kyFanApproximationGauge k (paperProjectionBlock Uᗮ U B) := by
+        kyFanApproximationGauge k (projectionBlock Uᗮ U B) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm]
-    rw [(paperProjectionBlock_same_compression Uᗮ U T).kyFanApproximationGauge_eq k,
-      (paperProjectionBlock_same_compression Uᗮ U B).kyFanApproximationGauge_eq k]
+    rw [(projectionBlock_same_compression Uᗮ U T).kyFanApproximationGauge_eq k,
+      (projectionBlock_same_compression Uᗮ U B).kyFanApproximationGauge_eq k]
     change ((b - a) / 2) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
       kyFanApproximationGauge k (reflectionResidualCorner U B)
     linarith [hcorner k]
   have h₁ : ∀ k : ℕ,
-      kyFanApproximationGauge k (paperProjectionBlock Uᗮᗮ Uᗮ
+      kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ
           (((((b - a) / 2 : ℝ)) : ℂ) • T)) ≤
-        kyFanApproximationGauge k (paperProjectionBlock Uᗮᗮ Uᗮ B) := by
+        kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ B) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm,
@@ -352,28 +352,28 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_compl
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm] at hk
     exact hk
-  have hcombine := paperLemma61_all_kyFan Uᗮ U
+  have hcombine := lemma61_all_kyFan Uᗮ U
     (((((b - a) / 2 : ℝ)) : ℂ) • T)
     (((((b - a) / 2 : ℝ)) : ℂ) • T) B B h₀ h₁
-  have hpairT : paperDiagonalPair Uᗮ U T = T :=
-    paperDiagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact hTodd
-  have hpairB : paperDiagonalPair Uᗮ U B = B :=
-    paperDiagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact hB
+  have hpairT : diagonalPair Uᗮ U T = T :=
+    diagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact hTodd
+  have hpairB : diagonalPair Uᗮ U B = B :=
+    diagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact hB
   have hwhole : ∀ k : ℕ,
       (b - a) * kyFanApproximationGauge k T ≤ 2 * kyFanApproximationGauge k B := by
     intro k
     have h := hcombine k
     have hsumT :
-        paperProjectionBlock Uᗮ U (((((b - a) / 2 : ℝ)) : ℂ) • T) +
-          paperProjectionBlock Uᗮᗮ Uᗮ (((((b - a) / 2 : ℝ)) : ℂ) • T) =
+        projectionBlock Uᗮ U (((((b - a) / 2 : ℝ)) : ℂ) • T) +
+          projectionBlock Uᗮᗮ Uᗮ (((((b - a) / 2 : ℝ)) : ℂ) • T) =
         ((((b - a) / 2 : ℝ)) : ℂ) • T := by
       rw [projectionBlock_smul_unboundedAmbientExact,
         projectionBlock_smul_unboundedAmbientExact, ← smul_add]
-      change (((((b - a) / 2 : ℝ)) : ℂ) • paperDiagonalPair Uᗮ U T) = _
+      change (((((b - a) / 2 : ℝ)) : ℂ) • diagonalPair Uᗮ U T) = _
       rw [hpairT]
     have hsumB :
-        paperProjectionBlock Uᗮ U B + paperProjectionBlock Uᗮᗮ Uᗮ B = B := by
-      change paperDiagonalPair Uᗮ U B = B
+        projectionBlock Uᗮ U B + projectionBlock Uᗮᗮ Uᗮ B = B := by
+      change diagonalPair Uᗮ U B = B
       exact hpairB
     rw [hsumT, hsumB, kyFanApproximationGauge_smul, hcnorm] at h
     linarith
@@ -439,21 +439,21 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
   have hcnorm : ‖((((b - a) / 2 : ℝ)) : ℂ)‖ = (b - a) / 2 := by
     rw [Complex.norm_real, Real.norm_eq_abs, abs_of_pos hhalf]
   have h₀ : ∀ k : ℕ,
-      kyFanApproximationGauge k (paperProjectionBlock Uᗮ U
+      kyFanApproximationGauge k (projectionBlock Uᗮ U
           (((((b - a) / 2 : ℝ)) : ℂ) • T)) ≤
-        kyFanApproximationGauge k (paperProjectionBlock Uᗮ U B) := by
+        kyFanApproximationGauge k (projectionBlock Uᗮ U B) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm]
-    rw [(paperProjectionBlock_same_compression Uᗮ U T).kyFanApproximationGauge_eq k,
-      (paperProjectionBlock_same_compression Uᗮ U B).kyFanApproximationGauge_eq k]
+    rw [(projectionBlock_same_compression Uᗮ U T).kyFanApproximationGauge_eq k,
+      (projectionBlock_same_compression Uᗮ U B).kyFanApproximationGauge_eq k]
     change ((b - a) / 2) * kyFanApproximationGauge k (reflectionTangentCorner U Z) ≤
       kyFanApproximationGauge k (reflectionResidualCorner U B)
     linarith [hcorner k]
   have h₁ : ∀ k : ℕ,
-      kyFanApproximationGauge k (paperProjectionBlock Uᗮᗮ Uᗮ
+      kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ
           (((((b - a) / 2 : ℝ)) : ℂ) • T)) ≤
-        kyFanApproximationGauge k (paperProjectionBlock Uᗮᗮ Uᗮ B) := by
+        kyFanApproximationGauge k (projectionBlock Uᗮᗮ Uᗮ B) := by
     intro k
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm,
@@ -463,28 +463,28 @@ theorem tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorm
     rw [projectionBlock_smul_unboundedAmbientExact,
       kyFanApproximationGauge_smul, hcnorm] at hk
     exact hk
-  have hcombine := paperLemma61_all_kyFan Uᗮ U
+  have hcombine := lemma61_all_kyFan Uᗮ U
     (((((b - a) / 2 : ℝ)) : ℂ) • T)
     (((((b - a) / 2 : ℝ)) : ℂ) • T) B B h₀ h₁
-  have hpairT : paperDiagonalPair Uᗮ U T = T :=
-    paperDiagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact hTodd
-  have hpairB : paperDiagonalPair Uᗮ U B = B :=
-    paperDiagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact hB
+  have hpairT : diagonalPair Uᗮ U T = T :=
+    diagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact hTodd
+  have hpairB : diagonalPair Uᗮ U B = B :=
+    diagonalPair_orthogonal_eq_self_of_isOddFor_unboundedAmbientExact hB
   have hwhole : ∀ k : ℕ,
       (b - a) * kyFanApproximationGauge k T ≤ 2 * kyFanApproximationGauge k B := by
     intro k
     have h := hcombine k
     have hsumT :
-        paperProjectionBlock Uᗮ U (((((b - a) / 2 : ℝ)) : ℂ) • T) +
-          paperProjectionBlock Uᗮᗮ Uᗮ (((((b - a) / 2 : ℝ)) : ℂ) • T) =
+        projectionBlock Uᗮ U (((((b - a) / 2 : ℝ)) : ℂ) • T) +
+          projectionBlock Uᗮᗮ Uᗮ (((((b - a) / 2 : ℝ)) : ℂ) • T) =
         ((((b - a) / 2 : ℝ)) : ℂ) • T := by
       rw [projectionBlock_smul_unboundedAmbientExact,
         projectionBlock_smul_unboundedAmbientExact, ← smul_add]
-      change (((((b - a) / 2 : ℝ)) : ℂ) • paperDiagonalPair Uᗮ U T) = _
+      change (((((b - a) / 2 : ℝ)) : ℂ) • diagonalPair Uᗮ U T) = _
       rw [hpairT]
     have hsumB :
-        paperProjectionBlock Uᗮ U B + paperProjectionBlock Uᗮᗮ Uᗮ B = B := by
-      change paperDiagonalPair Uᗮ U B = B
+        projectionBlock Uᗮ U B + projectionBlock Uᗮᗮ Uᗮ B = B := by
+      change diagonalPair Uᗮ U B = B
       exact hpairB
     rw [hsumT, hsumB, kyFanApproximationGauge_smul, hcnorm] at h
     linarith
@@ -529,11 +529,11 @@ theorem tanTwoTheta_ambient_unbounded_reducing_symmetricNorming_complex
     (hUb : ∀ x : A.domain, (x : G) ∈ Uᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
-    (∀ t ∈ spectrum ℝ (TauCeti.DavisKahanExt.paperAngleOperatorC U V),
+    (∀ t ∈ spectrum ℝ (TauCeti.DavisKahanExt.angleOperatorC U V),
         Real.cos (2 * t) ≠ 0) ∧
-      N.Mem (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC U V) ∧
+      N.Mem (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC U V) ∧
       (b - a) * N.gauge
-          (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC U V) ≤
+          (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC U V) ≤
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
     tanTwoTheta_ambient_unbounded_blockRepresentative_reducing_symmetricNorming_complex
@@ -644,9 +644,9 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_complex
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b) (hBmem : N.Mem B) :
-    N.Mem (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+    N.Mem (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ∧
-      (b - a) * N.gauge (TauCeti.DavisKahanExt.paperAbsTanTwoAngleOperatorC
+      (b - a) * N.gauge (TauCeti.DavisKahanExt.absTanTwoAngleOperatorC
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) V) ≤
         2 * N.gauge B := by
   obtain ⟨hunit, hmem, hle⟩ :=
@@ -688,7 +688,7 @@ They are not merely cospectral; they are equal.  Two facts do it:
 
 * `unboundedReflectionTangent_reflection_eq` -- the reflection tangent is the
   paper's block representative composed with the reflection through `U`;
-* `paperBlockCompression_mul_reflectionOperator` -- a compression out of `U`
+* `blockCompression_mul_reflectionOperator` -- a compression out of `U`
   feeds its operator only vectors of `U`, which that reflection fixes.
 
 So the reflection is invisible to the corner, and what remains on the right is
@@ -696,12 +696,12 @@ the paper's directed corner.  Every symmetric gauge of the two therefore agrees,
 which is what the source-facing bound needs. -/
 theorem reflectionTangentCorner_reflection_eq_paperTanTwoCorner
     (hinv : IsUnit ((1 : Ea →L[ℂ] Ea) - 2 *
-      (paperProjectorDifference U V * paperProjectorDifference U V))) :
+      (projectorDifference U V * projectorDifference U V))) :
     reflectionTangentCorner U V.reflectionOperator
-      = paperBlockCompression Uᗮ U (paperTanTwoBlockRepresentative U V) := by
+      = blockCompression Uᗮ U (tanTwoBlockRepresentative U V) := by
   unfold reflectionTangentCorner
   rw [TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq U V hinv,
-    paperBlockCompression_mul_reflectionOperator]
+    blockCompression_mul_reflectionOperator]
 
 /-- **The canonical directed object and the paper's directed `tan 2Θ₀` corner
 have the same approximation singular sequence.**
@@ -712,26 +712,26 @@ or cannot distinguish:
 
 1. the canonical object is the compressed corner of the paper's double-angle
    block representative (`reflectionTangentCorner_reflection_eq_paperTanTwoCorner`);
-2. that representative is a `paperDiagonalPair`, whose complementary summand a
+2. that representative is a `diagonalPair`, whose complementary summand a
    compression out of `U` does not see
-   (`paperBlockCompression_paperDiagonalPair`), leaving the compressed corner of
+   (`blockCompression_diagonalPair`), leaving the compressed corner of
    the doubled tangent expression itself;
 3. an ambient projection block and its compression have the same approximation
-   singular sequence (`paperProjectionBlock_same_compression`).
+   singular sequence (`projectionBlock_same_compression`).
 
 The right-hand side is the ambient block spelling the paper-facing directed
 object uses, so a symmetric gauge of the two agrees and the printed norm is the
 one the canonical theorems bound. -/
 theorem reflectionTangentCorner_same_paperTanTwoDirectedCorner
     (hinv : IsUnit ((1 : Ea →L[ℂ] Ea) - 2 *
-      (paperProjectorDifference U V * paperProjectorDifference U V))) :
+      (projectorDifference U V * projectorDifference U V))) :
     SameApproximationSingularSequence
-      (paperProjectionBlock Uᗮ U
-        (2 * (paperProjectorDifference U V * paperDoubleSecant U V)))
+      (projectionBlock Uᗮ U
+        (2 * (projectorDifference U V * doubleSecant U V)))
       (reflectionTangentCorner U V.reflectionOperator) := by
   rw [reflectionTangentCorner_reflection_eq_paperTanTwoCorner U V hinv,
-    paperTanTwoBlockRepresentative, paperBlockCompression_paperDiagonalPair]
-  exact paperProjectionBlock_same_compression Uᗮ U _
+    tanTwoBlockRepresentative, blockCompression_diagonalPair]
+  exact projectionBlock_same_compression Uᗮ U _
 
 /-- **Davis--Kahan 1970, the directed `tan 2Θ₀` bound, stated on the paper's own
 object, over `ℂ`.**
@@ -756,10 +756,10 @@ theorem tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNor
       RCLike.re ⟪A x, (x : Ea)⟫_ℂ ≤ a * ‖(x : Ea)‖ ^ 2)
     (hUb : ∀ x : A.domain, (x : Ea) ∈ Uᗮ →
       b * ‖(x : Ea)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : Ea)⟫_ℂ)
-    (hab : a < b) (hRmem : N.Mem (paperBlockCompression Uᗮ U B)) :
-    N.Mem (paperBlockCompression Uᗮ U (paperTanTwoBlockRepresentative U V)) ∧
-      (b - a) * N.gauge (paperBlockCompression Uᗮ U (paperTanTwoBlockRepresentative U V)) ≤
-        2 * N.gauge (paperBlockCompression Uᗮ U B) := by
+    (hab : a < b) (hRmem : N.Mem (blockCompression Uᗮ U B)) :
+    N.Mem (blockCompression Uᗮ U (tanTwoBlockRepresentative U V)) ∧
+      (b - a) * N.gauge (blockCompression Uᗮ U (tanTwoBlockRepresentative U V)) ≤
+        2 * N.gauge (blockCompression Uᗮ U B) := by
   have hZsa := TauCeti.DavisKahanExt.isSelfAdjoint_reflectionOperator V
   have hZ2 := TauCeti.DavisKahan.reflectionOperator_mul_self_complex V
   have hS1 : ‖U.offDiagonalPart V.reflectionOperator‖ < 1 :=

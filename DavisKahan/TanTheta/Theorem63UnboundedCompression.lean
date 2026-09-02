@@ -94,7 +94,7 @@ above by `α` but otherwise unbounded; the paper's `R` is bounded.  Only the res
 bounded map here — the compression, and hence the ambient action of the trial space, is
 not.
 
-The field layout mirrors `ExactSinTheta.PaperCommonDomainSinThetaData`, where the sine half
+The field layout mirrors `ExactSinTheta.CommonDomainSinThetaData`, where the sine half
 of the Appendix already reaches this generality. -/
 structure UnboundedCompressionTrialData (Z : Submodule 𝕜 H)
     [Z.HasOrthogonalProjection] [CompleteSpace Z] where

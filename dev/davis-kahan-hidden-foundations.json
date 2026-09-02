@@ -82,7 +82,7 @@
       "title": "Completeness of the paper Hilbert--Schmidt gauge",
       "module": "DavisKahan.Sources.DavisKahan1970.Ideals.HilbertSchmidtComplexFamily",
       "file": "DavisKahan/Sources/DavisKahan1970/Ideals/HilbertSchmidtComplexFamily.lean",
-      "declaration": "TauCeti.DavisKahan.ExactSinTheta.paperHilbertSchmidt_complete_complex",
+      "declaration": "TauCeti.DavisKahan.ExactSinTheta.hilbertSchmidt_complete_complex",
       "kind": "proof_candidate",
       "dependencies": [],
       "frontier_nodes": [],

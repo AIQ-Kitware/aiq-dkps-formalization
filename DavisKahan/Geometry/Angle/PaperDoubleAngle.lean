@@ -34,9 +34,9 @@ ordinary `sin Θ` theorem applied to the reflected pair.
 * `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC_nonneg`.
 * `TauCeti.DavisKahanExt.starProjection_map_reflection_eq`: the reflected
   subspace has projection `J_V P_U J_V`.
-* `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC_eq_modulus_reflect`:
+* `TauCeti.DavisKahanExt.sinTwoAngleOperatorC_eq_modulus_reflect`:
   `sin 2Θ = |J_V P_U J_V - P_U|`.
-* `TauCeti.DavisKahanExt.paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub`:
+* `TauCeti.DavisKahanExt.sinTwoAngleOperatorC_eq_modulus_starProjection_sub`:
   `sin 2Θ = |P_{J_V U} - P_U|`.
 
 ## References
@@ -61,13 +61,13 @@ variable {E : Type*} [NormedAddCommGroup E] [InnerProductSpace ℂ E]
 the Hermitian operator angle. -/
 noncomputable def paperSinTwoAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] : E →L[ℂ] E :=
-  cfc (fun t : ℝ => Real.sin (2 * t)) (paperAngleOperatorC U V)
+  cfc (fun t : ℝ => Real.sin (2 * t)) (angleOperatorC U V)
 
 /-- `sin 2Θ` is self-adjoint. -/
 theorem isSelfAdjoint_paperSinTwoAngleOperatorC (U V : Submodule ℂ E)
     [U.HasOrthogonalProjection] [V.HasOrthogonalProjection] :
     IsSelfAdjoint (paperSinTwoAngleOperatorC U V) :=
-  cfc_predicate _ (paperAngleOperatorC U V)
+  cfc_predicate _ (angleOperatorC U V)
 
 /-- `sin 2Θ` is nonnegative: the angle has spectrum in `[0, π/2]`, so the doubled
 angle has spectrum in `[0, π]`. -/
@@ -112,7 +112,7 @@ The proof is by uniqueness of the positive square root: both sides are
 nonnegative, and both have Gram operator `4 (sin²Θ - sin⁴Θ)` — the left by the
 scalar identity `sin (2 arcsin s)² = 4 s² (1 - s²)`, the right by the algebraic
 commutator identity for a pair of orthogonal projections. -/
-theorem paperSinTwoAngleOperatorC_eq_modulus_reflect :
+theorem sinTwoAngleOperatorC_eq_modulus_reflect :
     paperSinTwoAngleOperatorC U V =
       (V.reflectionOperator * U.starProjection * V.reflectionOperator -
         U.starProjection).modulus := by
@@ -149,7 +149,7 @@ theorem paperSinTwoAngleOperatorC_eq_modulus_reflect :
       paperSinTwoAngleOperatorC U V * paperSinTwoAngleOperatorC U V =
         (4 : ℂ) • (S * S - (S * S) * (S * S)) := by
     have hcont : ContinuousOn (fun t : ℝ => Real.sin (2 * t))
-        (spectrum ℝ (paperAngleOperatorC U V)) := by fun_prop
+        (spectrum ℝ (angleOperatorC U V)) := by fun_prop
     have harcsin : ContinuousOn Real.arcsin (spectrum ℝ S) :=
       Real.continuous_arcsin.continuousOn
     have hcomp : ContinuousOn
@@ -157,8 +157,8 @@ theorem paperSinTwoAngleOperatorC_eq_modulus_reflect :
         (Real.arcsin '' spectrum ℝ S) := by fun_prop
     rw [paperSinTwoAngleOperatorC,
       ← cfc_mul (fun t : ℝ => Real.sin (2 * t)) (fun t : ℝ => Real.sin (2 * t))
-        (paperAngleOperatorC U V) hcont hcont]
-    rw [paperAngleOperatorC, ← hS,
+        (angleOperatorC U V) hcont hcont]
+    rw [angleOperatorC, ← hS,
       ← cfc_comp (fun t : ℝ => Real.sin (2 * t) * Real.sin (2 * t))
         Real.arcsin S hSsa hcomp harcsin]
     have hcongr : cfc
@@ -192,11 +192,11 @@ theorem paperSinTwoAngleOperatorC_eq_modulus_reflect :
 /-- **The reflection double-angle identity, in subspace form.**  `sin 2Θ` is the
 modulus of the difference of the projections onto `U` and its reflection through
 `V`. -/
-theorem paperSinTwoAngleOperatorC_eq_modulus_starProjection_sub :
+theorem sinTwoAngleOperatorC_eq_modulus_starProjection_sub :
     paperSinTwoAngleOperatorC U V =
       ((U.map (V.reflection.toLinearEquiv : E →ₗ[ℂ] E)).starProjection -
         U.starProjection).modulus := by
-  rw [paperSinTwoAngleOperatorC_eq_modulus_reflect,
+  rw [sinTwoAngleOperatorC_eq_modulus_reflect,
     starProjection_map_reflection_eq]
 
 end Identity

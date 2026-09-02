@@ -19,7 +19,7 @@ every source unitarily invariant norm.
 ## What changed, and why
 
 The canonical Proposition 6.1 declarations used to be *methods on a record*:
-a caller had to build `PaperSymmetricSinThetaProblem` (or its real sibling) and
+a caller had to build `SymmetricSinThetaProblem` (or its real sibling) and
 then invoke `result_every_unitarilyInvariantNorm`.  That record is good proof
 organisation -- it names the two directed applications of the single-angle
 theorem that the paper's proof makes -- but it is not something a reader of the
@@ -36,7 +36,7 @@ why the record existed.
 ## The two conclusions, and why they are the same theorem
 
 Over `ℂ` the conclusion is the paper's literal object,
-`paperSinAngleOperatorC U V = cfc Real.sin (paperAngleOperatorC U V)`.
+`paperSinAngleOperatorC U V = cfc Real.sin (angleOperatorC U V)`.
 
 Over `ℝ` there is no continuous functional calculus in this development, and
 building one would be the wrong response: a unitarily invariant norm sees an
@@ -44,14 +44,14 @@ operator only through its complete singular-value sequence.  The real conclusion
 is therefore stated on the **projector difference** `P_V − P_U`, whose
 approximation numbers are the sines of the principal angles.  That is not a
 weaker statement, and it is not a different one:
-`paperSinAngleOperatorC_eq` and `sinAngleOperatorC` identify the complex angle
+`sinAngleOperatorC_eq` and `sinAngleOperatorC` identify the complex angle
 operator with `|P_U − P_V|`, so `proposition6_1_source_projectorDifference_complex`
 below states the *same* conclusion over `ℂ`, and the complex and real surfaces
 are visibly one theorem.
 
-`paperCrossSineSum` -- the implementation representative `P_Uᗮ P_V + P_U P_Vᗮ` --
+`crossSineSum` -- the implementation representative `P_Uᗮ P_V + P_U P_Vᗮ` --
 does not appear in any statement here.  It remains the object the real proof
-computes with, and `PaperRealSymmetricSinThetaProblem.crossSineSum_normingMem_iff_and_gauge_eq`
+computes with, and `RealSymmetricSinThetaProblem.crossSineSum_normingMem_iff_and_gauge_eq`
 is the compiled transport from it to the projector difference.
 
 ## References
@@ -87,8 +87,8 @@ block.  Then the ambient `sin Θ` between `U` and `V` lies in the ideal of every
 source unitarily invariant norm and satisfies `δ · N(sin Θ) ≤ N(B − A)`.
 
 The conclusion is on the paper's literal `sin Θ`,
-`cfc Real.sin (paperAngleOperatorC U V)`.  Nothing about the proof's
-organisation is visible: no `PaperSymmetricSinThetaProblem`, no
+`cfc Real.sin (angleOperatorC U V)`.  Nothing about the proof's
+organisation is visible: no `SymmetricSinThetaProblem`, no
 `UnboundedSinThetaData`, no Ky Fan family. -/
 theorem proposition6_1_source_complex
     (N : SymmetricNormingFunction)
@@ -105,7 +105,7 @@ theorem proposition6_1_source_complex
     (hMem : N.Mem (B - A)) :
     N.Mem (paperSinAngleOperatorC U V) ∧
       δ * N.gauge (paperSinAngleOperatorC U V) ≤ N.gauge (B - A) := by
-  let P : PaperSymmetricSinThetaProblem (E := E) :=
+  let P : SymmetricSinThetaProblem (E := E) :=
     { A := A
       B := B
       selfAdjoint_A := hA
@@ -121,13 +121,13 @@ theorem proposition6_1_source_complex
       gap_U_to_Vperp := hgapUV
       gap_V_to_Uperp := hgapVU }
   have hsource := P.result_every_unitarilyInvariantNorm N (by
-    simpa [P, PaperSymmetricSinThetaProblem.perturbation] using hMem)
-  simpa [P, PaperSymmetricSinThetaProblem.perturbation] using hsource
+    simpa [P, SymmetricSinThetaProblem.perturbation] using hMem)
+  simpa [P, SymmetricSinThetaProblem.perturbation] using hsource
 
 /-- **Proposition 6.1 over `ℂ`, read on the projector difference.**
 
 `paperSinAngleOperatorC U V` is `|P_U − P_V|`
-(`paperSinAngleOperatorC_eq`, `sinAngleOperatorC`), and a modulus has the
+(`sinAngleOperatorC_eq`, `sinAngleOperatorC`), and a modulus has the
 singular values of its argument, so this is the same estimate on `P_V − P_U`.
 It is stated because it is the shape the real theorem below has, which is what
 makes the two fields visibly one theorem. -/
@@ -153,7 +153,7 @@ theorem proposition6_1_source_projectorDifference_complex
   have hext : N.extendedGauge (paperSinAngleOperatorC U V)
       = N.extendedGauge (V.starProjection - U.starProjection) := by
     rw [N.gauge_eq_of_sameApproximationSingularValues
-      (paperSin_same_projectionDiff U V), hflip]
+      (sin_same_projectionDiff U V), hflip]
     exact N.gauge_eq_of_sameApproximationSingularValues
       (sameApproximationSingularValues_neg _)
   have hmem' : N.Mem (V.starProjection - U.starProjection) := by
@@ -183,7 +183,7 @@ the principal angles between `U` and `V`.
 
 No functional calculus, no complexification and no representative supplied by
 the caller occurs in the statement.  The proof runs through
-`paperCrossSineSum`, which the source real development computes with, and
+`crossSineSum`, which the source real development computes with, and
 transports the conclusion off it. -/
 theorem proposition6_1_source_real
     (N : SymmetricNormingFunction)
@@ -200,7 +200,7 @@ theorem proposition6_1_source_real
     (hMem : N.Mem (B - A)) :
     N.Mem (V.starProjection - U.starProjection) ∧
       δ * N.gauge (V.starProjection - U.starProjection) ≤ N.gauge (B - A) := by
-  let P : PaperRealSymmetricSinThetaProblem (E := E) :=
+  let P : RealSymmetricSinThetaProblem (E := E) :=
     { A := A
       B := B
       selfAdjoint_A := hA
@@ -216,7 +216,7 @@ theorem proposition6_1_source_real
       gap_U_to_Vperp := hgapUV
       gap_V_to_Uperp := hgapVU }
   have hsource := P.result_every_unitarilyInvariantNorm_real N (by
-    simpa [P, PaperRealSymmetricSinThetaProblem.perturbation] using hMem)
+    simpa [P, RealSymmetricSinThetaProblem.perturbation] using hMem)
   obtain ⟨hiff, hgauge⟩ := P.crossSineSum_normingMem_iff_and_gauge_eq N
   have hmem : N.Mem (V.starProjection - U.starProjection) := by
     have := hiff.mp (by simpa [P] using hsource.1)
@@ -224,7 +224,7 @@ theorem proposition6_1_source_real
   refine ⟨hmem, ?_⟩
   have hle := hsource.2
   rw [hgauge] at hle
-  simpa [P, PaperRealSymmetricSinThetaProblem.perturbation] using hle
+  simpa [P, RealSymmetricSinThetaProblem.perturbation] using hle
 
 end Real
 
@@ -278,7 +278,7 @@ theorem proposition6_1_commonDomain_source_complex
     (hMem : N.Mem Hop) :
     N.Mem (paperSinAngleOperatorC U V) ∧
       δ * N.gauge (paperSinAngleOperatorC U V) ≤ N.gauge Hop := by
-  let P : PaperCommonDomainSymmetricSinThetaProblem (𝕜 := ℂ) (E := E) U V :=
+  let P : CommonDomainSymmetricSinThetaProblem (𝕜 := ℂ) (E := E) U V :=
     { A := A
       B := B
       selfAdjoint_A := hA
@@ -299,7 +299,7 @@ relaxation, over `ℝ`.**
 
 The real sibling, with the conclusion on the projector difference `P_V − P_U`,
 matching `proposition6_1_source_real`.  The proof runs through
-`paperCrossSineSum` and transports the conclusion off it. -/
+`crossSineSum` and transports the conclusion off it. -/
 theorem proposition6_1_commonDomain_source_real
     {Er : Type v} [NormedAddCommGroup Er] [InnerProductSpace ℝ Er] [CompleteSpace Er]
     (N : SymmetricNormingFunction)
@@ -321,7 +321,7 @@ theorem proposition6_1_commonDomain_source_real
     (hMem : N.Mem Hop) :
     N.Mem (V.starProjection - U.starProjection) ∧
       δ * N.gauge (V.starProjection - U.starProjection) ≤ N.gauge Hop := by
-  let P : PaperCommonDomainSymmetricSinThetaProblem (𝕜 := ℝ) (E := Er) U V :=
+  let P : CommonDomainSymmetricSinThetaProblem (𝕜 := ℝ) (E := Er) U V :=
     { A := A
       B := B
       selfAdjoint_A := hA
@@ -383,7 +383,7 @@ theorem proposition6_1_commonDomain_source_projectorDifference
     (hMem : N.Mem Hop) :
     N.Mem (V.starProjection - U.starProjection) ∧
       δ * N.gauge (V.starProjection - U.starProjection) ≤ N.gauge Hop := by
-  let P : PaperCommonDomainSymmetricSinThetaProblem (𝕜 := 𝕜) (E := E) U V :=
+  let P : CommonDomainSymmetricSinThetaProblem (𝕜 := 𝕜) (E := E) U V :=
     { A := A
       B := B
       selfAdjoint_A := hA

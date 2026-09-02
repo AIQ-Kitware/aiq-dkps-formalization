@@ -84,12 +84,12 @@ theorem operatorNormingFunction_sylvester_le_of_pairwiseSpectrumGap
     δ * ‖X‖ ≤ ‖C‖ * Real.sqrt r := by
   have hC : IsPaperHilbertSchmidt C := isPaperHilbertSchmidt_of_rank_le hRank
   have hmain :=
-    paperHilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap hA hB hδ hgap hEq hC
+    hilbertSchmidt_sylvester_le_of_pairwiseSpectrumGap hA hB hδ hgap hEq hC
   calc
     δ * ‖X‖ ≤ δ * paperHilbertSchmidtNorm X :=
       mul_le_mul_of_nonneg_left (opNorm_le_paperHilbertSchmidtNorm hmain.1) hδ.le
     _ ≤ paperHilbertSchmidtNorm C := hmain.2
-    _ ≤ Real.sqrt r * ‖C‖ := paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
+    _ ≤ Real.sqrt r * ‖C‖ := hilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
     _ = ‖C‖ * Real.sqrt r := mul_comm _ _
 
 /-- **Inequality (5.2) over real Hilbert spaces.** -/
@@ -108,12 +108,12 @@ theorem operatorNormingFunction_sylvester_real_le_of_pairwiseSpectrumGap
     δ * ‖X‖ ≤ ‖C‖ * Real.sqrt r := by
   have hC : IsPaperHilbertSchmidt C := isPaperHilbertSchmidt_of_rank_le hRank
   have hmain :=
-    paperHilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap hA hB hδ hgap hEq hC
+    hilbertSchmidt_sylvester_real_le_of_pairwiseSpectrumGap hA hB hδ hgap hEq hC
   calc
     δ * ‖X‖ ≤ δ * paperHilbertSchmidtNorm X :=
       mul_le_mul_of_nonneg_left (opNorm_le_paperHilbertSchmidtNorm hmain.1) hδ.le
     _ ≤ paperHilbertSchmidtNorm C := hmain.2
-    _ ≤ Real.sqrt r * ‖C‖ := paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
+    _ ≤ Real.sqrt r * ‖C‖ := hilbertSchmidtNorm_le_sqrt_rank_mul_opNorm hRank
     _ = ‖C‖ * Real.sqrt r := mul_comm _ _
 
 /-- **Inequality (5.2) with the genuine `rank C`.**

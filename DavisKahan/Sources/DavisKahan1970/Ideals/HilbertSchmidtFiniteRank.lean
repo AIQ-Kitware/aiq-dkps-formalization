@@ -60,7 +60,7 @@ theorem approximationSingularValue_eq_zero_of_rank_le_nat
   exact hA.trans (by exact_mod_cast hrn)
 
 /-- The extended square energy of a rank-at-most-`r` operator is a finite sum. -/
-theorem paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le
+theorem hilbertSchmidtEnergy_eq_sum_range_of_rank_le
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type v} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -87,11 +87,11 @@ theorem isPaperHilbertSchmidt_of_rank_le
     (hA : A.rank ≤ (r : Cardinal)) :
     IsPaperHilbertSchmidt A := by
   unfold IsPaperHilbertSchmidt
-  rw [paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le hA]
+  rw [hilbertSchmidtEnergy_eq_sum_range_of_rank_le hA]
   exact ENNReal.sum_ne_top.mpr fun _ _ => ENNReal.ofReal_ne_top
 
 /-- Finite-rank square energy is bounded by rank times squared operator norm. -/
-theorem paperHilbertSchmidtEnergy_le_rank_mul_opNorm_sq
+theorem hilbertSchmidtEnergy_le_rank_mul_opNorm_sq
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type v} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -100,7 +100,7 @@ theorem paperHilbertSchmidtEnergy_le_rank_mul_opNorm_sq
     (hA : A.rank ≤ (r : Cardinal)) :
     paperHilbertSchmidtEnergy A ≤
       (r : ENNReal) * ENNReal.ofReal (‖A‖ ^ 2) := by
-  rw [paperHilbertSchmidtEnergy_eq_sum_range_of_rank_le hA]
+  rw [hilbertSchmidtEnergy_eq_sum_range_of_rank_le hA]
   calc
     (∑ n ∈ Finset.range r,
         ENNReal.ofReal ((approximationSingularValue n A) ^ 2))
@@ -115,7 +115,7 @@ theorem paperHilbertSchmidtEnergy_le_rank_mul_opNorm_sq
       simp [Finset.card_range, nsmul_eq_mul]
 
 /-- The paper square norm is bounded by `sqrt rank` times operator norm. -/
-theorem paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm
+theorem hilbertSchmidtNorm_le_sqrt_rank_mul_opNorm
     {𝕜 : Type u} [RCLike 𝕜]
     {E : Type v} {F : Type vF}
     [NormedAddCommGroup E] [InnerProductSpace 𝕜 E] [CompleteSpace E]
@@ -124,7 +124,7 @@ theorem paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm
     (hA : A.rank ≤ (r : Cardinal)) :
     paperHilbertSchmidtNorm A ≤ Real.sqrt r * ‖A‖ := by
   have hmem := isPaperHilbertSchmidt_of_rank_le hA
-  have henergy := paperHilbertSchmidtEnergy_le_rank_mul_opNorm_sq hA
+  have henergy := hilbertSchmidtEnergy_le_rank_mul_opNorm_sq hA
   have hreal :
       (paperHilbertSchmidtEnergy A).toReal ≤ (r : ℝ) * ‖A‖ ^ 2 := by
     have := ENNReal.toReal_mono
@@ -138,7 +138,7 @@ theorem paperHilbertSchmidtNorm_le_sqrt_rank_mul_opNorm
     simpa [pow_two] using hreal
   have hb : (0 : ℝ) ≤ Real.sqrt r * ‖A‖ :=
     mul_nonneg (Real.sqrt_nonneg _) (norm_nonneg A)
-  nlinarith [hsq, paperHilbertSchmidtNorm_nonneg A, hb]
+  nlinarith [hsq, hilbertSchmidtNorm_nonneg A, hb]
 
 /-- Operator norm is the first square-summable singular value. -/
 theorem opNorm_le_paperHilbertSchmidtNorm
@@ -157,7 +157,7 @@ theorem opNorm_le_paperHilbertSchmidtNorm
     have := ENNReal.toReal_mono hA hterm
     simpa [ENNReal.toReal_ofReal (sq_nonneg ‖A‖)] using this
   rw [← sq_paperHilbertSchmidtNorm hA] at hreal
-  nlinarith [norm_nonneg A, paperHilbertSchmidtNorm_nonneg A]
+  nlinarith [norm_nonneg A, hilbertSchmidtNorm_nonneg A]
 
 end
 

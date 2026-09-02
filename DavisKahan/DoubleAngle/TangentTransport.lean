@@ -26,9 +26,9 @@ to a reflection:
 
 `unboundedReflectionTangent U (J_V) = Ξ · J_U`,
 
-where `Ξ = paperTanTwoBlockRepresentative U V`.  `J_U` is a self-adjoint unitary,
+where `Ξ = tanTwoBlockRepresentative U V`.  `J_U` is a self-adjoint unitary,
 so the two have the same approximation numbers, and
-`paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative` says `|Ξ|` is the
+`absTanTwoAngleOperatorC_eq_modulus_blockRepresentative` says `|Ξ|` is the
 paper's ambient `|tan 2Θ|`.  Hence
 
 `N(unboundedReflectionTangent U J_V) = N(|tan 2Θ|)`
@@ -409,11 +409,11 @@ variable (U V : Submodule ℂ Ec) [U.HasOrthogonalProjection] [V.HasOrthogonalPr
 theorem offDiagonalPart_reflection_eq :
     U.offDiagonalPart V.reflectionOperator
       = 2 * (((1 : Ec →L[ℂ] Ec) - U.starProjection) *
-            paperProjectorDifference U V * U.starProjection
-          + U.starProjection * paperProjectorDifference U V *
+            projectorDifference U V * U.starProjection
+          + U.starProjection * projectorDifference U V *
             ((1 : Ec →L[ℂ] Ec) - U.starProjection)) := by
   have hp : U.starProjection * U.starProjection = U.starProjection := proj_sq U
-  have hQ : paperProjectorDifference U V = V.starProjection - U.starProjection := rfl
+  have hQ : projectorDifference U V = V.starProjection - U.starProjection := rfl
   rw [Submodule.offDiagonalPart_eq, Submodule.diagonalPart_eq,
     Submodule.reflectionOperator_eq_two_smul_sub_id V]
   simp only [two_smul, Submodule.starProjection_orthogonal',
@@ -427,24 +427,24 @@ The paper's block representative, multiplied on the right by the signed doubled
 cosine, is exactly the off-diagonal block of the reflection.  The secant in the
 representative cancels against the cosine; no commutation is needed because the
 cancellation happens on the same side. -/
-theorem paperTanTwoBlockRepresentative_mul_signedCosTwo
-    (hinv : IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (paperProjectorDifference U V *
-      paperProjectorDifference U V))) :
-    paperTanTwoBlockRepresentative U V * signedCosTwo U V
+theorem tanTwoBlockRepresentative_mul_signedCosTwo
+    (hinv : IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (projectorDifference U V *
+      projectorDifference U V))) :
+    tanTwoBlockRepresentative U V * signedCosTwo U V
       = U.offDiagonalPart V.reflectionOperator := by
-  have hsec : paperDoubleSecant U V * signedCosTwo U V = 1 :=
+  have hsec : doubleSecant U V * signedCosTwo U V = 1 :=
     Ring.inverse_mul_cancel _ hinv
-  rw [paperTanTwoBlockRepresentative_eq hinv, offDiagonalPart_reflection_eq]
+  rw [tanTwoBlockRepresentative_eq hinv, offDiagonalPart_reflection_eq]
   calc 2 * ((((1 : Ec →L[ℂ] Ec) - U.starProjection) *
-          paperProjectorDifference U V * U.starProjection
-        + U.starProjection * paperProjectorDifference U V *
-          ((1 : Ec →L[ℂ] Ec) - U.starProjection)) * paperDoubleSecant U V)
+          projectorDifference U V * U.starProjection
+        + U.starProjection * projectorDifference U V *
+          ((1 : Ec →L[ℂ] Ec) - U.starProjection)) * doubleSecant U V)
         * signedCosTwo U V
       = 2 * ((((1 : Ec →L[ℂ] Ec) - U.starProjection) *
-            paperProjectorDifference U V * U.starProjection
-          + U.starProjection * paperProjectorDifference U V *
+            projectorDifference U V * U.starProjection
+          + U.starProjection * projectorDifference U V *
             ((1 : Ec →L[ℂ] Ec) - U.starProjection)) *
-              (paperDoubleSecant U V * signedCosTwo U V)) := by noncomm_ring
+              (doubleSecant U V * signedCosTwo U V)) := by noncomm_ring
     _ = _ := by rw [hsec, mul_one]
 
 /-- **The unbounded reflection tangent is the paper's block representative, times
@@ -455,21 +455,21 @@ exactly the one the block representative's secant inverts, and what is left over
 is the reflection in `U` -- a self-adjoint unitary, so it changes nothing a
 unitarily invariant norm can see. -/
 theorem unboundedReflectionTangent_reflection_eq
-    (hinv : IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (paperProjectorDifference U V *
-      paperProjectorDifference U V))) :
+    (hinv : IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (projectorDifference U V *
+      projectorDifference U V))) :
     unboundedReflectionTangent U V.reflectionOperator
-      = paperTanTwoBlockRepresentative U V * U.reflectionOperator := by
+      = tanTwoBlockRepresentative U V * U.reflectionOperator := by
   have hRU : U.reflectionOperator * U.reflectionOperator = 1 :=
     U.reflectionOperator_involutive
-  have hK : signedCosTwo U V = (1 : Ec →L[ℂ] Ec) - 2 * (paperProjectorDifference U V *
-      paperProjectorDifference U V) := rfl
+  have hK : signedCosTwo U V = (1 : Ec →L[ℂ] Ec) - 2 * (projectorDifference U V *
+      projectorDifference U V) := rfl
   have hKunit : IsUnit (signedCosTwo U V) := by rw [hK]; exact hinv
   have hdiag : U.diagonalPart V.reflectionOperator
       = U.reflectionOperator * signedCosTwo U V :=
     diagonalPart_reflection_eq_reflection_mul_signedCosTwo
   have hoff : U.offDiagonalPart V.reflectionOperator
-      = paperTanTwoBlockRepresentative U V * signedCosTwo U V :=
-    (paperTanTwoBlockRepresentative_mul_signedCosTwo U V hinv).symm
+      = tanTwoBlockRepresentative U V * signedCosTwo U V :=
+    (tanTwoBlockRepresentative_mul_signedCosTwo U V hinv).symm
   -- the signed cosine commutes with the reflection in `U`
   have hKP : signedCosTwo U V * U.starProjection
       = U.starProjection * signedCosTwo U V := signedCosTwo_comm_starProjection
@@ -511,17 +511,17 @@ theorem unboundedReflectionTangent_reflection_eq
             (signedCosTwo U V * signedCosTwo U V) := by noncomm_ring
       _ = 1 := Ring.inverse_mul_cancel _ hKKunit
   rw [unboundedReflectionTangent, hCC, hoff, hdiag]
-  calc paperTanTwoBlockRepresentative U V * signedCosTwo U V *
+  calc tanTwoBlockRepresentative U V * signedCosTwo U V *
         Ring.inverse (signedCosTwo U V * signedCosTwo U V) *
           (U.reflectionOperator * signedCosTwo U V)
-      = paperTanTwoBlockRepresentative U V * (signedCosTwo U V *
+      = tanTwoBlockRepresentative U V * (signedCosTwo U V *
           Ring.inverse (signedCosTwo U V * signedCosTwo U V) *
             (signedCosTwo U V * U.reflectionOperator)) := by
         rw [← hKR]; noncomm_ring
-    _ = paperTanTwoBlockRepresentative U V * ((signedCosTwo U V *
+    _ = tanTwoBlockRepresentative U V * ((signedCosTwo U V *
           Ring.inverse (signedCosTwo U V * signedCosTwo U V) *
             signedCosTwo U V) * U.reflectionOperator) := by noncomm_ring
-    _ = paperTanTwoBlockRepresentative U V * U.reflectionOperator := by
+    _ = tanTwoBlockRepresentative U V * U.reflectionOperator := by
         rw [hKinv, one_mul]
 
 /-! ### The pole hypothesis is a consequence, not an assumption
@@ -540,8 +540,8 @@ involution, hence a unit; and `IsUnit (C · C)` gives `IsUnit C` in any monoid. 
 theorem isUnit_signedCosTwo_of_isUnit_diagonalPart_sq
     (h : IsUnit (U.diagonalPart V.reflectionOperator *
       U.diagonalPart V.reflectionOperator)) :
-    IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (paperProjectorDifference U V *
-      paperProjectorDifference U V)) := by
+    IsUnit ((1 : Ec →L[ℂ] Ec) - 2 * (projectorDifference U V *
+      projectorDifference U V)) := by
   have hC : IsUnit (U.diagonalPart V.reflectionOperator) := by
     rw [← pow_two] at h
     exact (isUnit_pow_iff two_ne_zero).mp h
@@ -564,7 +564,7 @@ asking its caller for an independent pole certificate. -/
 theorem cos_two_ne_zero_of_isUnit_diagonalPart_reflection_sq
     (h : IsUnit (U.diagonalPart V.reflectionOperator *
       U.diagonalPart V.reflectionOperator)) :
-    ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0 :=
+    ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0 :=
   cos_two_ne_zero_of_isUnit_one_sub_two_mul_paperProjectorDifference_sq
     (isUnit_signedCosTwo_of_isUnit_diagonalPart_sq U V h)
 
@@ -573,44 +573,44 @@ approximation numbers.**
 
 `T = Ξ · J_U` with `J_U` a self-adjoint unitary, so `T` and `Ξ` have the same
 singular data; `|Ξ| = |tan 2Θ|` is
-`paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative`, and a modulus has
+`absTanTwoAngleOperatorC_eq_modulus_blockRepresentative`, and a modulus has
 the same approximation numbers as its operator.  Chaining the three gives the
 transport. -/
 theorem sameApproximationSingularValues_unboundedReflectionTangent
-    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0) :
+    (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
     ExactSinTheta.SameApproximationSingularValues
       (unboundedReflectionTangent U V.reflectionOperator)
-      (paperAbsTanTwoAngleOperatorC U V) := by
+      (absTanTwoAngleOperatorC U V) := by
   have hinv := isUnit_one_sub_two_mul_paperProjectorDifference_sq_of_cos_two_ne_zero hcos
   have hrefl : U.reflectionOperator
       = U.reflection.toContinuousLinearEquiv.toContinuousLinearMap := by
     ext x; rfl
   have hcomp :
       (LinearIsometryEquiv.refl ℂ Ec).toContinuousLinearEquiv.toContinuousLinearMap ∘L
-          paperTanTwoBlockRepresentative U V ∘L
+          tanTwoBlockRepresentative U V ∘L
             U.reflection.toContinuousLinearEquiv.toContinuousLinearMap
         = unboundedReflectionTangent U V.reflectionOperator := by
     rw [unboundedReflectionTangent_reflection_eq U V hinv, hrefl]
     ext x; rfl
   have h1 : ExactSinTheta.SameApproximationSingularValues
       (unboundedReflectionTangent U V.reflectionOperator)
-      (paperTanTwoBlockRepresentative U V) := by
+      (tanTwoBlockRepresentative U V) := by
     rw [← hcomp]
     exact ExactSinTheta.SameApproximationSingularValues.comp_isometricEquiv
       (LinearIsometryEquiv.refl ℂ Ec) U.reflection
   intro n
-  rw [h1 n, paperAbsTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
+  rw [h1 n, absTanTwoAngleOperatorC_eq_modulus_blockRepresentative hcos]
   exact (ContinuousLinearMap.modulus_hasSameApproximationNumbers
-    (paperTanTwoBlockRepresentative U V) n).symm
+    (tanTwoBlockRepresentative U V) n).symm
 
 /-- **The reflection tangent and the paper's `|tan 2Θ|` have the same gauge in
 every source unitarily invariant norm**, and one lies in the norm's ideal exactly
 when the other does. -/
 theorem extendedGauge_unboundedReflectionTangent_complex
     (N : ExactSinTheta.SymmetricNormingFunction)
-    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0) :
+    (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0) :
     N.extendedGauge (unboundedReflectionTangent U V.reflectionOperator)
-      = N.extendedGauge (paperAbsTanTwoAngleOperatorC U V) :=
+      = N.extendedGauge (absTanTwoAngleOperatorC U V) :=
   N.gauge_eq_of_sameApproximationSingularValues
     (sameApproximationSingularValues_unboundedReflectionTangent U V hcos)
 
@@ -638,7 +638,7 @@ complex block of the complexified pair, and the complex transport applies there.
 
 The target is `Real.sinTwoAngleOperatorRC`, the *directed* double-angle sine of the
 real pair read in the complexification, which is where the tree keeps it — there
-is no real directed spelling, only the ambient `paperSinTwoAngleOperatorR`.  As
+is no real directed spelling, only the ambient `sinTwoAngleOperatorR`.  As
 in the complex case the directed operator is the block's partner: the block is
 one-sided and carries each principal angle once, where an ambient angle object
 carries it twice.  Turning this into an equality of *real* `SymmetricNormingFunction`
@@ -703,8 +703,8 @@ already delivers.
 
 Everything descends through the complexification: the reflection in `V`
 complexifies to the reflection in the complexified `V`, the reflection tangent
-complexifies to the complex one, `paperAbsTanTwoAngleOperatorR` complexifies to
-`paperAbsTanTwoAngleOperatorC`, and a source gauge is unchanged by
+complexifies to the complex one, `absTanTwoAngleOperatorR` complexifies to
+`absTanTwoAngleOperatorC`, and a source gauge is unchanged by
 complexification.  No second analytic proof is involved. -/
 theorem extendedGauge_unboundedReflectionTangent_real
     (U V : Submodule ℝ Er) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
@@ -712,7 +712,7 @@ theorem extendedGauge_unboundedReflectionTangent_real
     (hCC : IsUnit (U.diagonalPart V.reflectionOperator *
       U.diagonalPart V.reflectionOperator)) :
     N.extendedGauge (unboundedReflectionTangent U V.reflectionOperator)
-      = N.extendedGauge (paperAbsTanTwoAngleOperatorR U V) := by
+      = N.extendedGauge (absTanTwoAngleOperatorR U V) := by
   have hZ : complexify V.reflectionOperator
       = (complexifySubmodule V).reflectionOperator :=
     complexify_reflectionOperator V
@@ -730,7 +730,7 @@ theorem extendedGauge_unboundedReflectionTangent_real
   rw [← ExactSinTheta.SymmetricNormingFunction.extendedGauge_complexify N
       (unboundedReflectionTangent U V.reflectionOperator),
     ← ExactSinTheta.SymmetricNormingFunction.extendedGauge_complexify N
-      (paperAbsTanTwoAngleOperatorR U V),
+      (absTanTwoAngleOperatorR U V),
     complexify_paperAbsTanTwoAngleOperatorR,
     ← unboundedReflectionTangent_complexifySubmodule U V.reflectionOperator hCC,
     hZ]

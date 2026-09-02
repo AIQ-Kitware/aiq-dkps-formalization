@@ -56,11 +56,11 @@ and the residual identity all carry `[RCLike 𝕜]`.  The blockers are elsewhere
 
 ### Layer 1: the ambient angle, and the functional calculus under it
 
-`paperTanAngleOperatorC` exists only over `ℂ`, and `paperTanAngleOperatorR` is
+`paperTanAngleOperatorC` exists only over `ℂ`, and `tanAngleOperatorR` is
 defined by transport rather than as the `ℝ` instance of one definition:
 
 ```
-paperTanAngleOperatorR U V
+tanAngleOperatorR U V
   = realPartOperator (paperTanAngleOperatorC (complexifySubmodule U) (complexifySubmodule V))
 ```
 
@@ -92,7 +92,7 @@ noncomputable example (U V : Submodule ℝ E) [U.HasOrthogonalProjection]
 all elaborate.  So the angle chain is generic behind a capability binder that has
 instances at **both** of the paper's fields -- exactly the situation of
 `HasMinMaxLowerBoundEverywhere` in the sine theorem, and not a blocker of its own.
-`paperTanAngleOperatorR` is defined by transport for historical reasons, not
+`tanAngleOperatorR` is defined by transport for historical reasons, not
 because a direct real definition is unavailable.
 
 Layer 1 is therefore no longer where `tan Θ` is stuck.  Layer 2 is.

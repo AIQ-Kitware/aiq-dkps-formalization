@@ -180,7 +180,7 @@ theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_complex
       (lam : ℂ) ∉ TauCeti.LinearPMap.spectrum
         (selfAdjointSpectralRestriction A hA Bᶜ hB.compl))
     (hEmem : N.Mem E)
-    (sinTwoTheta₀ : PaperSinThetaRepresentative
+    (sinTwoTheta₀ : SinThetaRepresentative
       (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
@@ -238,7 +238,7 @@ theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimens
       Module.rank ℂ (selfAdjointSpectralSubspace A hA B hB) <
         Module.rank ℂ (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
           (addBounded_isSelfAdjoint A hA E hE) S hS))
-    (sinTwoTheta₀ : PaperSinThetaRepresentative
+    (sinTwoTheta₀ : SinThetaRepresentative
       (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB)
         (selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A E)
@@ -274,7 +274,7 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_complex
           ⟨V.reflectionOperator (x : H), hJdom x⟩ =
         V.reflectionOperator (A x))
     (hRmem : N.Mem R)
-    (sinTwoTheta₀ : PaperSinThetaRepresentative
+    (sinTwoTheta₀ : SinThetaRepresentative
       (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB) V)) :
     N.Mem sinTwoTheta₀.operator ∧
@@ -315,7 +315,7 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequal
     (hRmem : N.Mem R)
     (_hStrictDimension :
       Module.rank ℂ (selfAdjointSpectralSubspace A hA B hB) < Module.rank ℂ V)
-    (sinTwoTheta₀ : PaperSinThetaRepresentative
+    (sinTwoTheta₀ : SinThetaRepresentative
       (sinTwoThetaIdealBlock
         (selfAdjointSpectralSubspace A hA B hB) V)) :
     N.Mem sinTwoTheta₀.operator ∧
@@ -355,7 +355,7 @@ theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_real
       (realSelfAdjointSpectralRestriction A hA B hB)
       (realSelfAdjointSpectralRestriction A hA Bᶜ hB.compl) δ)
     (hEmem : N.Mem Eop)
-    (sinTwoTheta₀ : PaperSinThetaRepresentative
+    (sinTwoTheta₀ : SinThetaRepresentative
       (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
@@ -388,7 +388,7 @@ theorem sinTwoTheta_unbounded_perturbation_arbitraryRepresentative_unequalDimens
       Module.rank ℝ (realSelfAdjointSpectralSubspace A hA B hB) <
         Module.rank ℝ (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS))
-    (sinTwoTheta₀ : PaperSinThetaRepresentative
+    (sinTwoTheta₀ : SinThetaRepresentative
       (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
@@ -421,7 +421,7 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_real
           ⟨V.reflectionOperator (x : Er), hJdom x⟩ =
         V.reflectionOperator (A x))
     (hRmem : N.Mem R)
-    (sinTwoTheta₀ : PaperSinThetaRepresentative
+    (sinTwoTheta₀ : SinThetaRepresentative
       (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB) V)) :
     N.Mem sinTwoTheta₀.operator ∧
@@ -455,7 +455,7 @@ theorem sinTwoTheta_unbounded_reflectionResidual_arbitraryRepresentative_unequal
     (hRmem : N.Mem R)
     (_hStrictDimension :
       Module.rank ℝ (realSelfAdjointSpectralSubspace A hA B hB) < Module.rank ℝ V)
-    (sinTwoTheta₀ : PaperSinThetaRepresentative
+    (sinTwoTheta₀ : SinThetaRepresentative
       (sinTwoThetaIdealBlock
         (realSelfAdjointSpectralSubspace A hA B hB) V)) :
     N.Mem sinTwoTheta₀.operator ∧
@@ -570,7 +570,7 @@ source unitarily invariant norm sees them identically.
 The real mirror of `sinTwoTheta_directed_unbounded_addBounded_spectrumGap_symmetricNorming_complex`.  The angle
 is the *directed* double-angle sine of the real pair, read in the canonical
 complexification, which is where this development keeps the real double-angle
-operators; the ambient spelling `paperSinTwoAngleOperatorR` is a different
+operators; the ambient spelling `sinTwoAngleOperatorR` is a different
 operator, carrying each principal angle twice where the block carries it once,
 and no transport to it is claimed. -/
 theorem sinTwoTheta_directed_unbounded_addBounded_symmetricNorming_real
@@ -623,7 +623,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorm
         Module.rank ℝ (realSelfAdjointSpectralSubspace
           (TauCeti.LinearPMap.addBounded A Eop)
           (addBounded_isSelfAdjoint A hA Eop hEop) S hS))
-    (sinTwoTheta₀ : PaperSinThetaRepresentative
+    (sinTwoTheta₀ : SinThetaRepresentative
       (TauCeti.DavisKahanExt.Real.sinTwoAngleOperatorRC
         (realSelfAdjointSpectralSubspace A hA B hB)
         (realSelfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)
@@ -752,7 +752,7 @@ and this statement is the same theorem read on `2 sin Θ cos Θ`.
 
 Note that this is the *directed* double-angle operator.  The paper's ambient
 spelling `paperSinTwoAngleOperatorC U V` is
-`|R_V P_U R_V − P_U|` (`paperSinTwoAngleOperatorC_eq_modulus_reflect`), a
+`|R_V P_U R_V − P_U|` (`sinTwoAngleOperatorC_eq_modulus_reflect`), a
 different operator: it agrees in operator norm
 (`norm_paperSinTwoAngleOperatorC_eq_norm_sinTwoAngleOperatorC`) but its
 approximation-number sequence is not identified with this one here, so the
@@ -940,7 +940,7 @@ theorem sinTwoTheta_directed_unbounded_addBounded_unequalDimension_symmetricNorm
         Module.rank ℂ (DavisKahan.selfAdjointSpectralSubspace
           (TauCeti.LinearPMap.addBounded A Eop)
           (DavisKahan.addBounded_isSelfAdjoint A hA Eop hEop) S hS))
-    (sinTwoTheta₀ : PaperSinThetaRepresentative
+    (sinTwoTheta₀ : SinThetaRepresentative
       (TauCeti.DavisKahanExt.sinTwoAngleOperatorC
         (DavisKahan.selfAdjointSpectralSubspace A hA B hB)
         (DavisKahan.selfAdjointSpectralSubspace (TauCeti.LinearPMap.addBounded A Eop)

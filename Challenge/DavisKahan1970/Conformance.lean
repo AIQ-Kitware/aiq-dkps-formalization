@@ -371,7 +371,7 @@ theorem tanTheta_literalSection2_admits_ambientRightAngle
       spectrum ℝ (compressOperator Qᗮ (A + K)) ⊆ Set.Ici 1 ∧
       (∀ x ∈ P, K x ∈ Pᗮ) ∧
       sinAngleOperatorDirectedC P Q = 0 ∧
-      ∃ t ∈ spectrum ℝ (paperAngleOperatorC P Q), Real.cos t = 0 := by
+      ∃ t ∈ spectrum ℝ (angleOperatorC P Q), Real.cos t = 0 := by
   sorry
 
 /-- Full-Hilbert directed residual `sin 2Theta` theorem for every source UI norm. -/
@@ -455,14 +455,14 @@ theorem tanTwoTheta_directed_boundedResidual_blockRepresentative_spectralGap_sym
     (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc beta alpha)
     (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (alpha + delta))
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
-    (hRmem : N.Mem (paperProjectionBlock Uᗮ U H)) :
+    (hRmem : N.Mem (projectionBlock Uᗮ U H)) :
     N.Mem
-        (paperProjectionBlock Uᗮ U
-          (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ∧
+        (projectionBlock Uᗮ U
+          (2 * (projectorDifference U V * doubleSecant U V))) ∧
       delta * N.gauge
-          (paperProjectionBlock Uᗮ U
-            (2 * (paperProjectorDifference U V * paperDoubleSecant U V))) ≤
-        2 * N.gauge (paperProjectionBlock Uᗮ U H) := by
+          (projectionBlock Uᗮ U
+            (2 * (projectorDifference U V * doubleSecant U V))) ≤
+        2 * N.gauge (projectionBlock Uᗮ U H) := by
   sorry
 
 
@@ -496,7 +496,7 @@ theorem tanTwoTheta_unbounded_directedResidual_symmetricNorming_exactPaper
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ →
       b * ‖(x : G)‖ ^ 2 ≤ RCLike.re ⟪A x, (x : G)⟫_ℂ)
     (hab : a < b)
-    (hRmem : N.Mem (paperBlockCompression
+    (hRmem : N.Mem (blockCompression
       (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
       (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B)) :
     IsUnit
@@ -506,7 +506,7 @@ theorem tanTwoTheta_unbounded_directedResidual_symmetricNorming_exactPaper
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ∧
       (b - a) * N.gauge (reflectionTangentCorner
         (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) Z) ≤
-        2 * N.gauge (paperBlockCompression
+        2 * N.gauge (blockCompression
           (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic)ᗮ
           (TauCeti.LinearPMap.specRange hA (Set.Iic c) measurableSet_Iic) B) := by
   sorry
@@ -525,10 +525,10 @@ theorem tanTwoTheta_ambient_bounded_branchFree_orderedForm_symmetricNorming_comp
     (hUhigh : ∀ x ∈ U, b * ‖x‖ ^ 2 ≤ RCLike.re ⟪A x, x⟫_ℂ)
     (hUperpLow : ∀ x ∈ Uᗮ, RCLike.re ⟪A x, x⟫_ℂ ≤ a * ‖x‖ ^ 2)
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U)
-    (hcos : ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0)
+    (hcos : ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0)
     (hHmem : N.Mem H) :
-    N.Mem (paperAbsTanTwoAngleOperatorC U V) ∧
-      (b - a) * N.gauge (paperAbsTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
+    N.Mem (absTanTwoAngleOperatorC U V) ∧
+      (b - a) * N.gauge (absTanTwoAngleOperatorC U V) ≤ 2 * N.gauge H := by
   sorry
 
 /-- The newly compiled ambient Section 2 `tan 2Theta` inequality from
@@ -569,7 +569,7 @@ theorem tanTwoTheta_poleExclusion_exactPaper
     (hA0spec : spectrum ℝ (compressOperator U A) ⊆ Set.Icc beta alpha)
     (hA1spec : spectrum ℝ (compressOperator Uᗮ A) ⊆ Set.Ici (alpha + delta))
     (hHU : ∀ x ∈ U, H x ∈ Uᗮ) (hHUperp : ∀ x ∈ Uᗮ, H x ∈ U) :
-    ∀ t ∈ spectrum ℝ (paperAngleOperatorC U V), Real.cos (2 * t) ≠ 0 := by
+    ∀ t ∈ spectrum ℝ (angleOperatorC U V), Real.cos (2 * t) ≠ 0 := by
   sorry
 
 end
