@@ -664,5 +664,41 @@ theorem tanTwoTheta_ambient_unbounded_symmetricNorming_complex
 
 end
 
+section DirectedCornerCorrespondence
+
+variable {Ea : Type*} [NormedAddCommGroup Ea] [InnerProductSpace ℂ Ea] [CompleteSpace Ea]
+variable (U V : Submodule ℂ Ea) [U.HasOrthogonalProjection] [V.HasOrthogonalProjection]
+
+/-- **The canonical directed tangent corner IS the paper's directed corner.**
+
+The Section 2 directed `tan 2Θ` theorems conclude on
+`reflectionTangentCorner U V.reflectionOperator`, while Davis and Kahan state the
+bound on the directed `tan 2Θ₀` object, whose block spelling is the `U → Uᗮ`
+corner of the paper's own double-angle representative.  Hostile review asked for
+registered evidence that these are the same thing rather than prose asserting
+that a unitarily invariant norm cannot tell them apart.
+
+They are not merely cospectral; they are equal.  Two facts do it:
+
+* `unboundedReflectionTangent_reflection_eq` -- the reflection tangent is the
+  paper's block representative composed with the reflection through `U`;
+* `paperBlockCompression_mul_reflectionOperator` -- a compression out of `U`
+  feeds its operator only vectors of `U`, which that reflection fixes.
+
+So the reflection is invisible to the corner, and what remains on the right is
+the paper's directed corner.  Every symmetric gauge of the two therefore agrees,
+which is what the source-facing bound needs. -/
+theorem reflectionTangentCorner_reflection_eq_paperTanTwoCorner
+    (hinv : IsUnit ((1 : Ea →L[ℂ] Ea) - 2 *
+      (paperProjectorDifference U V * paperProjectorDifference U V))) :
+    reflectionTangentCorner U V.reflectionOperator
+      = paperBlockCompression Uᗮ U (paperTanTwoBlockRepresentative U V) := by
+  unfold reflectionTangentCorner
+  rw [TauCeti.DavisKahan.unboundedReflectionTangent_reflection_eq U V hinv,
+    paperBlockCompression_mul_reflectionOperator]
+
+end DirectedCornerCorrespondence
+
+
 end DavisKahan1970
 end TauCeti

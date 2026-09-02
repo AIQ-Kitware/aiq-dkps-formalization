@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1172
+**Unique cited Lean declarations:** 1174
 
 ## How to use this census
 
@@ -806,6 +806,8 @@ AMBIENT CLAUSE REOPENED 2026-08-31 by the coherent-clause audit. The printed sin
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_blockRepresentative_derivedReflection_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.tanTwoTheta_ambient_unbounded_symmetricNorming_real`
 - `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner`
+- `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner`
+- `TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator`
 
 **Curated source/Lean review:**
 

@@ -267,6 +267,22 @@ local instance instCompleteSpaceCoeOfHasOrthogonalProjectionGramBridgeGeneric
 abbrev reflectionSineCorner (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
     (Z : G →L[𝕜] G) : U →L[𝕜] Uᗮ := paperBlockCompression Uᗮ U Z
 
+/-- **A compression out of `Γ` does not see the reflection through `Γ`.**
+
+`paperBlockCompression Ω Γ K` feeds `K` only vectors of `Γ`, and the reflection
+through `Γ` fixes those, so post-composing `K` with it changes nothing.  This is
+what lets a corner of the reflection tangent be read as a corner of the paper's
+own double-angle representative. -/
+theorem paperBlockCompression_mul_reflectionOperator
+    (Ω Γ : Submodule 𝕜 G) [Ω.HasOrthogonalProjection] [Γ.HasOrthogonalProjection]
+    (K : G →L[𝕜] G) :
+    paperBlockCompression Ω Γ (K * Γ.reflectionOperator)
+      = paperBlockCompression Ω Γ K := by
+  ext x
+  simp only [paperBlockCompression, ContinuousLinearMap.coe_comp', Function.comp_apply,
+    ContinuousLinearMap.mul_apply, Submodule.subtypeL_apply]
+  rw [Submodule.reflectionOperator_apply_of_mem Γ x.2]
+
 /-- The directed tangent corner `T₀ : U → Uᗮ`. -/
 abbrev reflectionTangentCorner (U : Submodule 𝕜 G) [U.HasOrthogonalProjection]
     (Z : G →L[𝕜] G) : U →L[𝕜] Uᗮ :=

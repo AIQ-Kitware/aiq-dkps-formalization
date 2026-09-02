@@ -1459,6 +1459,8 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` — alternative_route
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` — alternative_route
 - `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner` — source_correspondence
+- `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner` — source_correspondence
+- `TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator` — transport_lemma
 
 ### Source-facing Lean declarations
 
@@ -1662,7 +1664,19 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 
 #### `TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner`
 
-Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:451`
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:467`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:691`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:276`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

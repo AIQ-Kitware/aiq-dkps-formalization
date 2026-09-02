@@ -401,6 +401,8 @@ Status: **TERMINAL REFUTED + REPAIR**.
 #check @TauCeti.DavisKahan.crossedDefectsEquivalent_of_isAcute
 #check @TauCeti.DavisKahan.crossedDefectsEquivalent_iff_finrank_eq
 #check @TauCeti.DavisKahan1970.approximationNumber_reflectionTangentCorner
+#check @TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner
+#check @TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator
 #check @TauCeti.DavisKahanTheory.shortRotation_fullDisplacement_refuted
 #check @TauCeti.DavisKahanTheory.directRotation_fullDisplacement_qnorm
 
