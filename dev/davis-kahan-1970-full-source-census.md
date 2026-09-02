@@ -4,7 +4,7 @@
 
 **Census family:** `source-completion-census`  
 **Items:** 50  
-**Unique cited Lean declarations:** 1165
+**Unique cited Lean declarations:** 1167
 
 ## How to use this census
 
@@ -2747,6 +2747,8 @@ SECTION 4 STAGING RETIRED 2026-08-27.  `DavisKahan/Frontier/Section4.lean` is de
 
 **Lean declarations:**
 
+- `TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute_real`
+- `TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute`
 - `TauCeti.DavisKahan.Section4.sum_displacementAngleSineSq_ge`
 - `TauCeti.DavisKahan.Section4.displacementAngleSineSq_directRotation_eq_of_smul`
 - `TauCeti.DavisKahan.Section4.norm_absoluteValue_apply_eq_norm_projection`

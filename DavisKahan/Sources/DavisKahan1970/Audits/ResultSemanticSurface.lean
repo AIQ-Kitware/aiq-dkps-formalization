@@ -377,6 +377,8 @@ Status: **TERMINAL EXACT**.
 -/
 
 #check @TauCeti.DavisKahan1970.Proposition4_2_infiniteDimensional
+#check @TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute
+#check @TauCeti.DavisKahan1970.Proposition4_2_source_compact_nonacute_real
 #check @TauCeti.DavisKahan1970.tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence
 
 /-! ## DK-4.3-prop: Squared displacement UI-norm minimality

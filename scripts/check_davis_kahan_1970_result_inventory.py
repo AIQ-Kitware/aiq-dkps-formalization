@@ -81,9 +81,10 @@ SUPPORTING_EVIDENCE_ROLES = {
     "source_correspondence",
 }
 REFUTATION_RESULT_IDS = {"DK-4.4-prop"}
-#: Marks an atom that records a standing/section-wide assumption rather than a
-#: hypothesis printed with an individual result.
-STANDING_SCOPE_MARKER = "standing-scope"
+#: Kinds of `scope_inheritance` that make a result inherit an assumption it does
+#: not print.  Matching on atom ids instead was brittle: an atom named without
+#: the expected substring simply escaped the check.
+STANDING_SCOPE_KINDS = {"paper_standing", "section_standing"}
 SCOPE_CLASSIFICATION_CATEGORIES = {
     # the atom states scope of one or more counted results, and must be covered
     "counted_result_scope",
@@ -884,22 +885,18 @@ def _standing_scope_atoms(item: dict[str, Any], source_atoms: dict[str, dict[str
     atoms carry the scope, so they are what gets read.
     """
     out: list[str] = []
-    for atom_id in item.get("source_atom_ids", []) or []:
-        atom = source_atoms.get(atom_id)
-        if atom is None:
+    for atom in source_atoms.values():
+        inheritance = atom.get("scope_inheritance")
+        if not isinstance(inheritance, dict):
             continue
-        classification = atom.get("scope_classification") or {}
-        inherits = (
-            atom.get("kind") == "scope"
-            and result_id_in(item, classification.get("extends_results"))
-        )
-        if inherits and STANDING_SCOPE_MARKER in atom_id:
-            out.append(atom_id)
-    return out
-
-
-def result_id_in(item: dict[str, Any], extends: Any) -> bool:
-    return isinstance(extends, list) and item["id"] in extends
+        if inheritance.get("kind") not in STANDING_SCOPE_KINDS:
+            continue
+        # `inherited_by` is the scope's own claim about which results sit under
+        # it, so a result cannot fall out of scope by forgetting an atom id --
+        # which is precisely how Section 4's setup went unrepresented.
+        if item["id"] in (inheritance.get("inherited_by") or []):
+            out.append(atom["id"])
+    return sorted(out)
 
 
 def _check_standing_scope_consistency(
@@ -982,6 +979,36 @@ def _normalize_source_text(text: str) -> str:
 def _normalized_specification() -> str:
     """The distributable specification, whitespace-normalized, read once."""
     return _normalize_source_text(TEX_PATH.read_text(encoding="utf-8"))
+
+
+
+def _open_hostile_obligations(data: dict[str, Any], items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Hostile-review findings the repository has recorded as still open.
+
+    Recorded findings are evidence about the certificate, so the certificate has
+    to read them.  Any result named by an open obligation is not hostile-
+    certified however clean its own row looks.
+    """
+    block = data.get("open_hostile_review_obligations")
+    if not isinstance(block, dict):
+        return []
+    if block.get("status") not in {"open", "closed"}:
+        fail("open_hostile_review_obligations.status must be 'open' or 'closed'")
+    obligations = block.get("obligations") or []
+    if not isinstance(obligations, list):
+        fail("open_hostile_review_obligations.obligations must be a list")
+    known = {item["id"] for item in items}
+    for entry in obligations:
+        if not isinstance(entry, dict) or not str(entry.get("id", "")).strip():
+            fail("each open hostile-review obligation must be an object with an id")
+        for result_id in entry.get("results") or []:
+            if result_id not in known:
+                fail(
+                    f"open hostile-review obligation {entry.get('id')!r} names unknown result {result_id!r}"
+                )
+    if obligations and block.get("status") != "open":
+        fail("open_hostile_review_obligations lists obligations but its status is not 'open'")
+    return [e for e in obligations if isinstance(e, dict)]
 
 
 def _supporting_atom_digest(atom_ids: list[str], source_atoms: dict[str, dict[str, Any]]) -> str:
@@ -1826,6 +1853,33 @@ def _validate_semantic_audit_surface(
             f"expected {expected_remaining!r}, got {sweep.get('remaining_results')!r}"
         )
 
+    # The sweep may not report itself accepted while substantive hostile-review
+    # findings are open.  A green build and a full row of terminal dispositions
+    # say what compiled and what the repository decided; neither says a hostile
+    # reader agreed, and the certificate advertises the stronger claim.
+    open_block = data.get("open_hostile_review_obligations") or {}
+    open_ids = [
+        str(entry.get("id"))
+        for entry in (open_block.get("obligations") or [])
+        if isinstance(entry, dict)
+    ]
+    hostile_status = sweep.get("hostile_review_status")
+    if hostile_status not in {"open", "accepted"}:
+        fail(
+            "semantic_review_sweep.hostile_review_status must be 'open' or 'accepted'; the sweep may not "
+            "leave the question unanswered"
+        )
+    if open_ids and hostile_status != "open":
+        fail(
+            "semantic_review_sweep.hostile_review_status must be 'open' while "
+            f"open_hostile_review_obligations lists {open_ids}"
+        )
+    if not open_ids and hostile_status == "open":
+        fail(
+            "semantic_review_sweep.hostile_review_status is 'open' but no open_hostile_review_obligations "
+            "remain; either record the obligation that is still open, or accept the sweep deliberately"
+        )
+
     audit_text = audit_path.read_text(encoding="utf-8")
     report_text = report_path.read_text(encoding="utf-8")
     expected_evidence_digest = _canonical_evidence_digest(items)
@@ -2066,8 +2120,20 @@ def completion_summary(
     classification_complete, classification_note = _validate_total_source_classification(
         data, source_atoms, obligation_source_atoms, require_terminal=require_terminal
     )
+    # Hostile-review obligations are part of terminality, not advisory metadata
+    # beside it.  `--require-terminal` is documented as the gate to add once
+    # every stated result has passed hostile semantic review, and
+    # `certify_davis_kahan_1970.py` prints this field as "Hostile-certified
+    # stated-result terminality" -- so a repository that records open
+    # obligations and still computes green is asserting exactly what its own
+    # inventory says it must not.
+    open_obligations = _open_hostile_obligations(data, items)
+    hostile_review_clear = not open_obligations
     source_coverage_terminal = (
-        selection_review_accepted and classification_complete and terminal == obligations
+        selection_review_accepted
+        and classification_complete
+        and terminal == obligations
+        and hostile_review_clear
     )
     if require_terminal and not source_coverage_terminal:
         first = nonterminal[0] if nonterminal else None
@@ -2076,6 +2142,16 @@ def completion_summary(
                 "formalization-result inventory is nonterminal: "
                 f"{terminal}/{obligations} obligations complete; first open result {first['id']}: "
                 + "; ".join(first["reasons"])
+            )
+        if not hostile_review_clear:
+            blocked = sorted({r for o in open_obligations for r in (o.get("results") or [])})
+            fail(
+                "formalization-result inventory is not hostile-certified: "
+                f"{len(open_obligations)} open hostile-review obligation(s) "
+                + ", ".join(sorted(str(o.get("id")) for o in open_obligations))
+                + (f"; blocking result(s) {', '.join(blocked)}" if blocked else "")
+                + ". Close them, or drop --require-terminal: this flag asserts that every stated result has "
+                "passed hostile semantic review, which is a stronger claim than a terminal disposition."
             )
         fail(
             "formalization-result inventory is nonterminal because its source-selection review is not accepted"
@@ -2095,6 +2171,9 @@ def completion_summary(
         "completion_obligations": obligations,
         "terminal_completion_obligations": terminal,
         "source_coverage_terminal": source_coverage_terminal,
+        "hostile_review_clear": hostile_review_clear,
+        "open_hostile_obligations": [str(o.get("id")) for o in open_obligations],
+        "hostile_blocked_results": sorted({r for o in open_obligations for r in (o.get("results") or [])}),
         "semantic_audit": semantic_audit,
         "nonlocal_source_interpretation": nonlocal_interpretation,
         "census_interpretation_disagreements": _census_interpretation_disagreements(items),

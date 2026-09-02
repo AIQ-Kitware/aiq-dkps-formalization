@@ -795,6 +795,27 @@ theorem tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence
   exact tsum_displacementAngleSineSqR_ge_tsum_sq_principalSineSequence
     U V b W hWunitary hWmap
 
+/-- **Davis--Kahan 1970, Proposition 4.2, real scalars, carrying the Section 4
+setup it is printed under.**
+
+The real analogue of `Proposition4_2_source_compact_nonacute`.  Section 4 opens
+by fixing the compact/classification setup, and Proposition 4.2 is printed under
+it without restating it; the inherited hypotheses are carried here explicitly and
+discharged by the stronger theorem, which needs neither.  They are underscored
+because the proof does not consume them, following this tree's convention for
+retained source hypotheses. -/
+theorem Proposition4_2_source_compact_nonacute_real
+    (_hcompact : IsCompactOperator (TauCeti.principalSineOperator U V))
+    (_J : halmosSourceDefect U V ≃ₗᵢ[ℝ] halmosTargetDefect U V)
+    {ι : Type v} (b : HilbertBasis ι ℝ U) (W : E →L[ℝ] E)
+    (hWunitary : W ∈ unitary (E →L[ℝ] E))
+    (hWmap : W * DavisKahan.projection U = DavisKahan.projection V * W) :
+    (∑' n : ℕ, ENNReal.ofReal
+        (Real.sin (TauCeti.principalAngleSequence U V n)) ^ 2) ≤
+      ∑' i, ENNReal.ofReal (displacementAngleSineSqR W ((b i : U) : E)) :=
+  tsum_displacementAngleSineSqR_ge_tsum_sq_sin_principalAngleSequence
+    U V b W hWunitary hWmap
+
 /-! ### Proposition 4.3 -/
 
 /-- The Gram operator of a real bounded map. -/
