@@ -1463,6 +1463,7 @@ The declarations that carry this result's printed statement, with the source ato
 - `TauCeti.DavisKahan1970.paperBlockCompression_paperDiagonalPair` — transport_lemma
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` — alternative_route
 - `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real` — alternative_route
+- `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex` — source_correspondence
 
 ### Source-facing Lean declarations
 
@@ -1691,6 +1692,12 @@ Compiler-printed type: *inserted when a compiler certificate is supplied.*
 #### `TauCeti.DavisKahan1970.paperBlockCompression_paperDiagonalPair`
 
 Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedGramBridge.lean:295`
+
+Compiler-printed type: *inserted when a compiler certificate is supplied.*
+
+#### `TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex`
+
+Source location candidates: `DavisKahan/Sources/DavisKahan1970/TanTwoThetaUnboundedAmbientExact.lean:749`
 
 Compiler-printed type: *inserted when a compiler certificate is supplied.*
 

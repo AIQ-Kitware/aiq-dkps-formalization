@@ -1116,7 +1116,8 @@
         "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner",
         "TauCeti.DavisKahan1970.paperBlockCompression_mul_reflectionOperator",
         "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner",
-        "TauCeti.DavisKahan1970.paperBlockCompression_paperDiagonalPair"
+        "TauCeti.DavisKahan1970.paperBlockCompression_paperDiagonalPair",
+        "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex"
       ],
       "review_note": "Accepted result-only semantic review 2026-08-12. The bounded complex and real source wrappers already expose both directed and ambient arbitrary-PaperUI conclusions from the printed Section 2 hypotheses with pole exclusion derived internally. The unbounded source surface now closes the advertised global scope as well: `tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp directed residual inequality, while `tanTwoTheta_ambient_unbounded_blockRepresentative_symmetricNorming_complex` and its real counterpart give the sharp ambient factor-two inequality for unbounded self-adjoint A in arbitrary Hilbert dimension. The ambient proof assembles the two reflection-tangent corners using the existing Section 7 directed estimate, skew-adjoint symmetry, Lemma 6.1 block assembly, and Fan dominance; the real endpoints descend exactly through the maintained complexification layer. No quarter-angle assumption, caller-supplied pole certificate, finite-dimensional restriction, compactness premise, or perturbed-Q spectral-placement hypothesis is added. The final implementation was compiler-verified by the user on the 7cc049b4 baseline before this census promotion. Audit-surface update 2026-08-13: the already scalar-generic branch-free PaperUI theorem is promoted under the canonical alias `tanTwoTheta_branchFree_bounded_finiteSubspace_symmetricNorming_rclike`; source-shaped directed and unbounded endpoints remain registered separately.",
       "boundary_review": {
@@ -1339,6 +1340,11 @@
           "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_real",
           "role": "alternative_route",
           "note": "Proves the directed bound for an arbitrary self-adjoint involution `Z` on the block/corner representation. It is the strongest existing evidence for the directed clauses, which are open until a source-shaped endpoint concludes on the paper object for an actual reducing subspace."
+        },
+        {
+          "declaration": "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex",
+          "role": "source_correspondence",
+          "note": "Source-shaped complex directed endpoint: takes the actual reducing subspace V, derives its reflection internally, and concludes on the U -> U-perp corner of the paper's own double-angle block representative. This removes the arbitrary-Z mismatch hostile review found on the complex clause. It is not yet the clause primary because one spelling step remains."
         }
       ],
       "result_wide_scope_atoms": [
@@ -1453,12 +1459,12 @@
       "semantic_certification_note": "Reopened 2026-09-02 on hostile review after the previous day's closure was found not to compose. The corner-to-paper-object step is genuinely proved for the complex reflection corner; what is missing is that the canonical directed primaries are stated on an arbitrary involution `Z`, and over both scalar fields, so neither clause's primary is bridged by the theorem registered against it.",
       "remaining_gap": {
         "category": "missing_source_correspondence",
-        "missing_surface": "Source-shaped directed endpoints whose conclusions are literally on the paper objects. The complex clause needs one taking the reducing subspace `V` and concluding on the paper projection-block spelling of tan 2Theta_0, rather than on `reflectionTangentCorner U Z` for arbitrary `Z`. The real clause needs the corresponding endpoint on `paperTanTwoDirectedCornerR U V`, the repository's own named real paper object, which no current correspondence theorem mentions.",
-        "next_action": "Add the two source-shaped endpoints and make them the canonical directed witnesses, keeping the arbitrary-`Z` theorems as supporting generalizations. The complex one can build on `tanTwoTheta_directed_unboundedResidual_reducing_derivedReflection_symmetricNorming_complex`, which already takes an actual subspace and derives its reflection; the real one on the existing complexification gauge transport. That removes the arbitrary-`Z` mismatch and the complex-witness-for-real error at once, and leaves clause types a reviewer can compare directly with the source.",
+        "missing_surface": "NARROWED 2026-09-02. The complex side now has a source-shaped endpoint, `tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex`, which takes the actual reducing subspace `V` rather than an arbitrary involution `Z` and concludes on `paperBlockCompression Uᗮ U (paperTanTwoBlockRepresentative U V)` -- the corner of the paper's own double-angle representative. Two steps remain. (1) The same bound in the AMBIENT `paperProjectionBlock` spelling, which is what `paperTanTwoDirectedCornerR` is definitionally; the mathematics is `paperBlockCompression_paperDiagonalPair` plus `paperProjectionBlock_same_compression`, both proved, but rewriting through the `paperDiagonalPair` definition at this point makes the elaborator time out at `whnf` even at a million heartbeats, so the assembly needs a route that does not unfold that definition in place. (2) The REAL endpoint on `paperTanTwoDirectedCornerR U V`, which should then be a complexification of (1), following the template in `AmbientReal.lean` where the real object is reached by `change` from the complex ambient block.",
+        "next_action": "Assemble (1) without unfolding `paperDiagonalPair` in place -- state the compression-of-diagonal-pair step as a standalone equation about the named objects and rewrite with that, rather than unfolding the definition inside a goal that already carries the full doubled-tangent expression. Then complexify for (2) and make both endpoints the clause primaries.",
         "strongest_existing_evidence": [
-          "TauCeti.DavisKahan1970.reflectionTangentCorner_same_paperTanTwoDirectedCorner",
+          "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_reducing_paperCorner_symmetricNorming_complex",
           "TauCeti.DavisKahan1970.reflectionTangentCorner_reflection_eq_paperTanTwoCorner",
-          "TauCeti.DavisKahan1970.tanTwoTheta_directed_unboundedResidual_blockRepresentative_symmetricNorming_complex"
+          "TauCeti.DavisKahan1970.paperBlockCompression_paperDiagonalPair"
         ]
       }
     },
